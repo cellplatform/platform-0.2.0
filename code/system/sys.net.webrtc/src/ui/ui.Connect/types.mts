@@ -32,6 +32,7 @@ export type ConnectReadyHandler = (e: ConnectReadyHandlerArgs) => void;
 export type ConnectReadyHandlerArgs = {
   readonly client: t.WebRtcEvents;
   readonly info: t.WebRtcInfo;
+  readonly network: t.NetworkDocSharedRef;
 };
 
 export type ConnectChangedHandler = (e: ConnectChangedHandlerArgs) => void;
@@ -42,6 +43,7 @@ export type ConnectChangedHandlerArgs = {
 
 export type ConnectNetworkHandler = (e: ConnectNetworkHandlerArgs) => void;
 export type ConnectNetworkHandlerArgs = {
+  readonly network: t.NetworkDocSharedRef;
   readonly current: t.NetworkDocShared;
 };
 
