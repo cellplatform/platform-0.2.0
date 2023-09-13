@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev } from '../../test.ui';
 
 type T = {};
 const initial: T = {};
@@ -66,8 +66,22 @@ export default Dev.describe(name, (e) => {
         );
       });
 
-    dev.hr(0, 20);
-    dev.TODO();
+    dev.row(async (e) => {
+      const { Auth } = await import('ext.driver.auth.privy');
+      return (
+        <Auth.Info
+          data={{ provider: Auth.Env.provider }}
+          fields={[
+            'Auth.Login',
+            'Id.User.Phone',
+            'Auth.Link.Wallet',
+            'Wallet.List',
+            'Chain.List',
+            'Chain.List.Title',
+          ]}
+        />
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {
