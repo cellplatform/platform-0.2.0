@@ -1,4 +1,4 @@
-import { Dev, type t, PropList, Filesize } from '../../test.ui';
+import { Dev, Filesize, PropList, type t } from '../../test.ui';
 import { SpecUpload, type SpecUploadProps } from './-SPEC.DropTarget';
 
 import { type ListBlobResult } from '@vercel/blob';
@@ -43,7 +43,7 @@ export default Dev.describe(name, (e) => {
     const url = Endpoint.read(state.current);
     const res = await fetch(url);
 
-    console.log('url', url);
+    console.log('blob/fetch → url:', url);
 
     await state.change(async (d) => {
       d.debug.listSpinning = false;
@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.debug.local = local.local;
     });
-    fetchList(state);
+    // fetchList(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -74,6 +74,53 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.button('tmp', async (e) => {
+      const { usePrivy, PrivyProvider, Chain, Wallet, Balance } = await import(
+        'ext.driver.auth.privy'
+      );
+
+      const { Info } = await import('ext.driver.automerge');
+
+      console.group('🌳 ');
+      console.log('usePrivy', usePrivy);
+      console.log('PrivyProvider', PrivyProvider);
+      console.groupEnd();
+
+      console.group('🌳 ');
+      console.log('Chain', Chain);
+      console.log('Wallet', Wallet);
+      console.log('Balance', Balance);
+      console.log('Info', Info);
+      console.groupEnd();
+
+      const el = (
+        <PrivyProvider appId="hello">
+          <div>foo</div>
+        </PrivyProvider>
+      );
+
+      console.log('el', el);
+      // const { Specs } = await import('ext.driver.auth.privy/specs');
+      // console.log('Specs', Specs);
+
+      // const { init } = await import('ext.driver.auth.privy.2');
+      // const res = await init(PrivyProvider);
+      // console.log('res', res);
+      // // import { Auth } from 'ext.driver.auth.privy';
+      // console.log('Auth', Auth);
+
+      // console.log('load', load);
+
+      // const m = Specs['ext.driver.auth.privy.ui.Info'];
+      // const res = await m();
+
+      // console.log('Foo', Foo);
+      // import { Auth } from 'ext.driver.auth.privy';
+      // console.log('Auth', Auth);
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
