@@ -99,7 +99,8 @@ export const Config = {
 
       if (addPolyfill()) {
         const dirname = fs.basename(fs.dirname(modulePath));
-        console.log(`${pc.yellow('[TMP]')} node polyfills added for: ${dirname}`);
+        const moduleName = `← ${pc.yellow('vite-plugin-node-polyfills')}`;
+        console.log(`${pc.yellow('[TMP]')} polyfills added to ${pc.cyan(dirname)} ${moduleName}`);
         config.plugins?.push(nodePolyfills({ include: ['process'] }));
       }
 
