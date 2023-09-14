@@ -1,6 +1,9 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, Hash, Delete } from '../../test.ui';
 
-type T = { selected?: string };
+type T = {
+  selected?: string;
+  accessToken?: string;
+};
 const initial: T = {};
 
 /**
@@ -67,12 +70,15 @@ export default Dev.describe(name, (e) => {
           data={{ provider: Auth.Env.provider }}
           fields={[
             'Auth.Login',
+            'Id.User',
             'Id.User.Phone',
             'Auth.Link.Wallet',
             'Wallet.List',
             'Chain.List',
             'Chain.List.Title',
           ]}
+          margin={[10, 20]}
+          onChange={(e) => state.change((d) => (d.accessToken = e.accessToken))}
         />
       );
     });
@@ -87,9 +93,7 @@ export default Dev.describe(name, (e) => {
           btn
             .label(label)
             .right(() => `${current()} ${by < 0 ? '-' : '+'} ${Math.abs(by)}`)
-            .onClick((e) => {
-              network?.change((d) => (d.tmp.count = next()));
-            });
+            .onClick((e) => network?.change((d) => (d.tmp.count = next())));
         });
       };
 
@@ -102,8 +106,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {};
-      return <Dev.Object name={name} data={data} expand={1} />;
+      const data = {
+        'jwt:accessToken': Hash.shorten(e.state.accessToken ?? '', 7),
+      };
+      return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
     });
   });
 });
