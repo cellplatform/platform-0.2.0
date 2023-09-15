@@ -33,6 +33,6 @@ jobs:
 
       - run: yarn install
       - run: yarn audit
-      # - run: yarn build
-      # - run: yarn test
-      # - run: yarn audit && yarn count
+      - run: yarn build
+      - run: yarn test
+      - run: yarn audit && yarn count
