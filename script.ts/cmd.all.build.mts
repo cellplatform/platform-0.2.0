@@ -10,9 +10,10 @@ await Builder.Dependencies.syncVersions({ save: true });
 const pkg = await Builder.PackageJson.load(fs.resolve('.'));
 
 const filter = (path: string) => {
-  if (path.includes('code/compiler.samples/')) return false;
   if (path.includes('code/spikes/dev.000')) return true;
   if (path.includes('code/spikes/slc.000')) return true;
+
+  if (path.includes('code/compiler.samples/')) return false;
   if (path.includes('code/spikes/')) return false;
   if (path.includes('code/templates/')) return false;
   if (path.includes('_legacy')) return false;
