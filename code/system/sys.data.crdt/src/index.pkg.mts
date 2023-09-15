@@ -17,7 +17,7 @@ export const Pkg: ModuleDef = {
     'sys.fs': '0.0.0',
     'sys.text': '0.0.0',
     'sys.util': '0.0.0',
-    '@automerge/automerge': '2.0.3',
+    '@automerge/automerge': '2.1.1',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

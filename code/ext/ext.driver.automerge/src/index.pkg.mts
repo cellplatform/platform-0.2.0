@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.driver.automerge',
   version: '0.0.0',
   dependencies: {
-    '@automerge/automerge-repo': '1.0.0-alpha.4',
+    '@automerge/automerge-repo': '1.0.2',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
