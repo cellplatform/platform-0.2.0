@@ -75,12 +75,13 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    /**
+     * TODO 🐷 tmp
+     */
     dev.button('tmp', async (e) => {
       const { usePrivy, PrivyProvider, Chain, Wallet, Balance } = await import(
         'ext.driver.auth.privy'
       );
-
-      const { Info } = await import('ext.driver.automerge');
 
       console.group('🌳 ');
       console.log('usePrivy', usePrivy);
@@ -91,7 +92,6 @@ export default Dev.describe(name, (e) => {
       console.log('Chain', Chain);
       console.log('Wallet', Wallet);
       console.log('Balance', Balance);
-      console.log('Info', Info);
       console.groupEnd();
 
       const el = (
