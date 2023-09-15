@@ -40,6 +40,7 @@
     "@vime/core": "5.4.1",
     "@vime/react": "5.4.1",
     "@vimeo/player": "2.20.1",
+    "@web3-storage/w3up-client": "8.0.3",
     "approx-string-match": "2.0.0",
     "akahu": "1.14.0",
     "cli-table3": "0.6.3",
