@@ -57,7 +57,7 @@
     "jss-plugin-global": "10.10.0",
     "minimist": "1.2.8",
     "monaco-editor": "0.43.0",
-    "nanoid": "5.0.1",
+    "nanoid": "4.0.2",
     "nostr-tools": "1.15.0",
     "openai": "4.7.0",
     "ora": "7.0.1",
