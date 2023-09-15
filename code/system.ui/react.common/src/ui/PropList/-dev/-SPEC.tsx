@@ -4,7 +4,7 @@ import { BuilderSample, SampleFields, sampleItems, type MyField } from '.';
 import { PropList } from '..';
 import { Wrangle } from '../util.mjs';
 
-type SampleKind = 'Samples' | 'Builder' | 'Empty';
+type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type T = {
   props: t.PropListProps;
   debug: {
@@ -16,16 +16,8 @@ type T = {
 };
 
 const initial: T = {
-  props: {
-    title: 'MyTitle',
-    defaults: { clipboard: false },
-    theme: 'Light',
-  },
-  debug: {
-    source: 'Samples',
-    header: true,
-    footer: true,
-  },
+  props: { title: 'MyTitle', defaults: { clipboard: false }, theme: 'Light' },
+  debug: { source: 'Samples', header: true, footer: true },
 };
 
 export default Dev.describe('PropList', (e) => {
@@ -223,11 +215,14 @@ export default Dev.describe('PropList', (e) => {
 
     dev.section('Items', (dev) => {
       const button = (kind: SampleKind) => {
-        dev.button(`${kind}`, (e) => Util.setSample(e.ctx, kind));
+        dev.button(kind, (e) => Util.setSample(e.ctx, kind));
       };
       button('Empty');
       dev.hr(-1, 5);
+      button('One Item');
+      button('Two Items');
       button('Samples');
+      dev.hr(-1, 5);
       button('Builder');
     });
 
@@ -263,7 +258,6 @@ export default Dev.describe('PropList', (e) => {
 /**
  * [Helpers]
  */
-
 const Util = {
   async setSample(ctx: t.DevCtx, source: SampleKind) {
     const state = await ctx.state<T>(initial);
@@ -277,6 +271,12 @@ const Util = {
     const { source, fields } = state.debug;
     if (source === 'Empty') return [];
     if (source === 'Samples') return sampleItems;
+    if (source === 'One Item') return [{ label: 'hello', value: '123' }];
+    if (source === 'Two Items')
+      return [
+        { label: 'one', value: '123' },
+        { label: 'two', value: '456' },
+      ];
     if (source === 'Builder') return BuilderSample.toItems({ fields });
     return [];
   },
@@ -284,4 +284,4 @@ const Util = {
   defaults(props: t.PropListProps) {
     return props.defaults ?? (props.defaults = {});
   },
-};
+} as const;

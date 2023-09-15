@@ -12,7 +12,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "nostr-tools": "1.14.2",
+    "nostr-tools": "1.15.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {

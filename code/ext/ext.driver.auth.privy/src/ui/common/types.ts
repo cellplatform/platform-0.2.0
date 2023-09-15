@@ -13,4 +13,4 @@ export type {
 /**
  * @local
  */
-export type * from '../../common/types.mjs';
+export type * from '../../common/types';

@@ -1,0 +1,20 @@
+{
+  "name": "ext.vercel.blob.edge",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vc dev",
+    "deploy": "vc deploy --prod",
+    "ngrok": "ngrok http 3000 --domain=meet-frog-naturally.ngrok-free.app"
+  },
+  "dependencies": {
+    "@vercel/blob": "0.12.1",
+    "@vercel/edge": "1.0.2"
+  },
+  "devDependencies": {
+    "typescript": "5.2.2"
+  },
+  "sideEffects": false,
+  "private": true,
+  "license": "MIT"
+}

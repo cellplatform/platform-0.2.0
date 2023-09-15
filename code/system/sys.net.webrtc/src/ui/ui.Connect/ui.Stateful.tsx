@@ -7,8 +7,9 @@ export const Stateful: React.FC<t.ConnectStatefulProps> = (props) => {
   const controller = useController({
     self,
     showInfo: props.showInfo,
-    onChange: props.onChange,
     onReady: props.onReady,
+    onChange: props.onChange,
+    onNetwork: props.onNetwork,
   });
 
   return (

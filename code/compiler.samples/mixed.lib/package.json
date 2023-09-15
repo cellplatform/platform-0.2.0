@@ -23,7 +23,7 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js",
+    ".": "./dist/node/index.js",
     "./node": "./dist/node/index.js",
     "./web": "./dist/web/index.js"
   },

@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Delete, Dev, Hash, Time, appId, walletConnectId, type t } from '../../test.ui';
+import { Delete, Dev, Hash, Time, AuthEnv, type t } from '../../test.ui';
 
 type T = {
   props: t.InfoProps;
@@ -41,7 +41,7 @@ export default Dev.describe(name, (e) => {
       d.props.useAuthProvider = local.useAuthProvider;
 
       d.props.data = {
-        provider: { appId, walletConnectId },
+        provider: AuthEnv.provider,
         chain: {
           selected: local.selectedChain,
           onSelected(e) {

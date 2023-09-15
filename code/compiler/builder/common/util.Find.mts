@@ -17,8 +17,10 @@ export const FindUtil = {
     options: {
       filter?: t.PathFilter;
       sortBy?: 'Topological' | 'Alpha' | 'None';
+      hasViteConfig?: boolean;
     } = {},
   ) {
+    const { hasViteConfig } = options;
     const pkg = await PackageJsonUtil.load(Paths.rootDir);
 
     const findPattern = async (pattern: string) => fs.glob(fs.join(Paths.rootDir, pattern));
@@ -28,6 +30,7 @@ export const FindUtil = {
     let dirs = await asyncFilter(paths, async (path) => {
       if (path.includes('/code/compiler/')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
+      if (hasViteConfig && !(await fs.pathExists(fs.join(path, 'vite.config.mts')))) return false;
       return options.filter ? options.filter(path.substring(Paths.rootDir.length)) : true;
     });
 

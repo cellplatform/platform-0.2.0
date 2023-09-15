@@ -10,6 +10,7 @@ export function FieldChainList(args: {
 }): t.PropListItem[] {
   const { privy, modifiers, fields, data } = args;
   const enabled = privy.ready ? args.enabled : false;
+  if (!privy.authenticated) return [];
 
   let chains = data.chain?.names ?? DEFAULTS.data.chain!.names!;
   if (!fields.includes('Chain.List.Testnets')) {

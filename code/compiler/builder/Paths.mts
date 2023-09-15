@@ -56,11 +56,11 @@ export const Paths = {
       'src/common/libs.ts',
       'src/common/types.ts',
 
-      'src/test/-TEST.v.mts',
+      'src/test/-TEST.v.ts',
       'src/test/index.ts',
 
-      'src/test.ui/-TEST.mts',
-      'src/test.ui/-TestRunner.TESTS.mts',
+      'src/test.ui/-TEST.ts',
+      'src/test.ui/-TestRunner.TESTS.ts',
       'src/test.ui/-TestRunner.tsx',
       'src/test.ui/common.ts',
       'src/test.ui/entry.Specs.mts',

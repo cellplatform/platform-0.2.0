@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.net.nostr',
   version: '0.0.0',
   dependencies: {
-    'nostr-tools': '1.14.2',
+    'nostr-tools': '1.15.0',
     'sys.util': '0.0.0',
   },
   toString() {

@@ -1,5 +1,5 @@
 import { Info } from '../ui/ui.Info';
-import { Dev, appId, walletConnectId, type t } from './common';
+import { AuthEnv, Dev, type t } from './common';
 
 type T = {
   ready?: boolean;
@@ -41,7 +41,7 @@ export default Dev.describe('TestRunner', (e) => {
     dev.row((e) => {
       return (
         <Info
-          data={{ provider: { appId, walletConnectId } }}
+          data={{ provider: AuthEnv.provider }}
           fields={['Module', 'Id.User', 'Auth.Login']}
           clipboard={false}
           onChange={(e) => {

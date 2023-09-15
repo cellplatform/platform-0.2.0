@@ -23,17 +23,11 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
       borderRadius: 4,
       display: 'grid',
       placeItems: 'center',
-
       fontSize: 11,
-      color: COLORS.WHITE,
       userSelect: 'none',
     }),
-    inner: css({ position: 'relative', transition }),
-    label: css({
-      Padding: [4, 14],
-      opacity: isSpinning ? 0 : 1,
-      fontSize: 10,
-    }),
+    inner: css({ position: 'relative', color: COLORS.WHITE, transition }),
+    label: css({ Padding: [4, 14], opacity: isSpinning ? 0 : 1, fontSize: 10 }),
     spinner: css({
       Absolute: 0,
       transition,

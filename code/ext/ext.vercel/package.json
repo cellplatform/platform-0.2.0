@@ -13,7 +13,7 @@
     "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "dependencies": {
-    "@vercel/edge": "1.0.1",
+    "@vercel/edge": "1.0.2",
     "sys.fs": "0.0.0",
     "sys.fs.indexeddb": "0.0.0",
     "sys.net.http": "0.0.0",

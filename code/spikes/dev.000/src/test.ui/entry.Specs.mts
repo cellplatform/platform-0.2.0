@@ -1,9 +1,4 @@
 /**
- * RainbowKit
- */
-// import '@rainbow-me/rainbowkit/styles.css';
-
-/**
  * Vime.js
  * https://vimejs.com/4.x/getting-started/installation#react
  */
@@ -27,8 +22,11 @@ const { Specs: ExtStripe } = await import('ext.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 // const { Specs: ProtocolHats } = await import('ext.driver.protocol.hats/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
+// const { Specs: ExtVercelBlob } = await import('ext.vercel.blob/specs');
 
 export const Specs = {
+  App: () => import('../ui/App/-SPEC'),
+
   ...WebRtc,
   ...Crdt,
   ...Monaco,
@@ -46,4 +44,5 @@ export const Specs = {
   ...ExtVimeo,
 
   ...ExtAuthPrivy,
+  // ...ExtVercelBlob,
 };
