@@ -1,9 +1,13 @@
+# TEMP 🐷
+script.ts.01
+
 tmp
 .tmp
 .builder
 .env
 .vercel
 *.local
+
 
 # Logs
 logs
