@@ -20,13 +20,13 @@ export const SpecUpload: React.FC<SpecUploadProps> = (props) => {
       const baseUrl = 'https://blob.dev.db.team';
       const handleBlobUploadUrl = `${baseUrl}/api/write`;
 
-      setUploading(true);
-      const newBlob = await put(file.path, file.data, {
-        access: 'public',
-        handleBlobUploadUrl,
-      });
+      // setUploading(true);
+      // const newBlob = await put(file.path, file.data, {
+      //   access: 'public',
+      //   handleBlobUploadUrl,
+      // });
 
-      setBlob(newBlob);
+      // setBlob(newBlob);
       setUploading(false);
       props.onUploaded?.();
     },
