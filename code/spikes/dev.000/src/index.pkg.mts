@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.497',
   dependencies: {
     'ext.driver.auth.privy': '0.0.0',
+    'ext.driver.ipfs.w3s': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
     'ext.stripe': '0.0.0',
     'ext.ui.react.vimeo': '0.0.0',
