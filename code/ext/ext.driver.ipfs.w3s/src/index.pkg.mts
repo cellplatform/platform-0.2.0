@@ -10,9 +10,11 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.ipfs.pinning',
+  name: 'ext.driver.ipfs.w3s',
   version: '0.0.0',
   dependencies: {
+    '@web3-storage/w3up-client': '8.0.3',
+    'web3.storage': '4.5.5',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
