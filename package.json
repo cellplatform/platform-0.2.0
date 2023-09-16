@@ -99,6 +99,7 @@
     "unist-util-select": "5.0.0",
     "viem": "1.10.14",
     "wagmi": "1.4.1",
+    "web3.storage": "4.5.5",
     "yaml": "2.3.2",
     "zod": "3.22.2"
   },
