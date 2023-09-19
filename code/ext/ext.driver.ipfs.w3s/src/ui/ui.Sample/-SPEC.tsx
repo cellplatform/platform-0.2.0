@@ -1,14 +1,15 @@
-import { Dev, Icons, css } from '../../test.ui';
-import type { Web3Storage, Upload } from 'web3.storage';
+import { Dev, Icons } from '../../test.ui';
 import { Grid, type GridProps } from './-SPEC.Grid';
-import { Wrangle } from './Wrangle';
+import { Storage } from './Storage';
+
+import type { Web3Storage } from 'web3.storage';
 
 type T = {
   props: GridProps;
   running__TMP?: boolean;
   debug: {
     editApiKey?: string;
-    spinning?: 'List';
+    spinning?: 'List' | 'Write';
   };
 };
 const initial: T = {
@@ -59,26 +60,15 @@ export default Dev.describe(name, (e) => {
      * https://web3.storage/account/
      */
     dev.section(['web3.storage', '(current)'], (dev) => {
-      const Storage = {
-        async import() {
-          const { Web3Storage } = await import('web3.storage');
-          const token = local.apiKey ?? '';
-          return new Web3Storage({ token });
-        },
-
-        async list(storage: Web3Storage) {
-          const res: Upload[] = [];
-          const list = storage.list();
-          for await (const item of list) res.push(item);
-          return res;
-        },
-      } as const;
-
-      const Url = {
-        from(cid: string, name: string) {
-          return `https://${cid}.ipfs.w3s.link/${name}`;
-        },
-      } as const;
+      const getList = async (store?: Web3Storage) => {
+        await state.change((d) => (d.debug.spinning = 'List'));
+        const list = await Storage.list(store ?? (await Storage.import(local.apiKey)));
+        await state.change((d) => {
+          local.list = list;
+          d.props.list = list;
+          d.debug.spinning = undefined;
+        });
+      };
 
       dev.textbox((txt) => {
         const editValue = () => state.current.debug.editApiKey ?? '';
@@ -111,72 +101,36 @@ export default Dev.describe(name, (e) => {
 
       dev.button((btn) => {
         btn
-          .label(`sample`)
-          .spinner((e) => Boolean(e.state.running__TMP))
-          .onClick((e) => runSample());
-      });
-
-      const runSample = async () => {
-        const { Web3Storage, getFilesFromPath } = await import('web3.storage');
-
-        await state.change((d) => (d.running__TMP = true));
-        const m = await import('web3.storage');
-
-        const token = local.apiKey ?? '';
-        const storage = new Web3Storage({ token });
-
-        const printList = async () => {
-          const uploads = [];
-          const list = storage.list();
-          for await (const item of list) {
-            uploads.push(item);
-          }
-          uploads.forEach((item) => {
-            const url = Url.from(item.cid, item.name);
-            console.log('url', url);
-          });
-        };
-
-        const toFile = (text: string, path: string) => {
-          const binary = new TextEncoder().encode(text);
-          const file = new File([binary], path, { type: 'text/plain' });
-          return file;
-        };
-
-        const put = async (dir: string, ...files: [string, string][]) => {
-          const list = files.map(([text, path]) => toFile(text, path)); // const file = ;
-          await storage.put(list, { name: dir });
-        };
-
-        // await put('hello-1', 'foo/hello-1.txt');
-        // await put('hello-2', 'foo/hello-2.txt');
-
-        await put('my-dir', ['hello-1', 'foo/hello-1.txt'], ['hello-2', 'foo/hello-2.txt']);
-
-        await printList();
-        await state.change((d) => (d.running__TMP = false));
-      };
-
-      dev.button((btn) => {
-        btn
           .label(`list`)
           .enabled((e) => Boolean(local.apiKey))
           .spinner((e) => e.state.debug.spinning === 'List')
+          .onClick(() => getList());
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) => {
+        btn
+          .label(`write`)
+          .enabled((e) => Boolean(local.apiKey))
+          .spinner((e) => e.state.debug.spinning === 'Write')
+
           .onClick(async (e) => {
-            await e.change((d) => (d.debug.spinning = 'List'));
-            const storage = await Storage.import();
-            const list = await Storage.list(storage);
-            await e.change((d) => {
-              local.list = list;
-              d.props.list = list;
-              d.debug.spinning = undefined;
-            });
+            await state.change((d) => (d.debug.spinning = 'Write'));
+            const store = await Storage.import(local.apiKey);
+            await Storage.put(
+              store,
+              'my-dir',
+              ['hello-1', 'foo/hello-1.txt'],
+              ['hello-2', 'foo/hello-2.txt'],
+            );
+            await state.change((d) => (d.debug.spinning = 'Write'));
+            await getList();
           });
       });
     });
 
     dev.hr(0, 50);
-
     dev.hr(5, 20);
 
     /**
@@ -186,7 +140,6 @@ export default Dev.describe(name, (e) => {
      */
     dev.section(['w3up-client', '(pre-release)'], (dev) => {
       dev.TODO();
-      // dev.hr(0, 5);
 
       dev.button((btn) => {
         const github = 'https://github.com/web3-storage/w3up/tree/main/packages/w3up-client';

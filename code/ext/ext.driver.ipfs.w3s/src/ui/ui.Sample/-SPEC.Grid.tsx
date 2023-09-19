@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, Fragment } from 'react';
-import { Color, COLORS, css, FC, rx, type t, Hash, Filesize } from './common';
-import type { Web3Storage, Upload } from 'web3.storage';
-import { Wrangle, Url } from './Wrangle';
+import { Fragment } from 'react';
+import { Url } from './Wrangle';
+import { Filesize, Hash, css, type t } from './common';
+
+import type { Upload } from 'web3.storage';
 
 export type GridProps = {
   list?: Upload[];
@@ -9,7 +10,6 @@ export type GridProps = {
 };
 
 export const Grid: React.FC<GridProps> = (props) => {
-  console.log('props.list', props.list);
   const { list = [] } = props;
 
   /**
@@ -18,7 +18,7 @@ export const Grid: React.FC<GridProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      padding: 8,
+      Padding: [8, 12],
       minHeight: 10,
       boxSizing: 'border-box',
       fontSize: 14,
@@ -32,7 +32,7 @@ export const Grid: React.FC<GridProps> = (props) => {
 
   const elRows = list.map((item, i) => {
     const cid = item.cid;
-
+    const bytes = item.dagSize;
     return (
       <Fragment key={i}>
         <div>
@@ -41,7 +41,7 @@ export const Grid: React.FC<GridProps> = (props) => {
         <div>
           <Link url={Url.name(cid, item.name)}>{item.name}</Link>
         </div>
-        <div>{`${Filesize(item.dagSize)}`}</div>
+        <div>{`${Filesize(bytes)}`}</div>
       </Fragment>
     );
   });
