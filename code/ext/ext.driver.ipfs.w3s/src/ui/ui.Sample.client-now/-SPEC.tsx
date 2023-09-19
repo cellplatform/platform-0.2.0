@@ -1,5 +1,6 @@
 import { Dev, Icons } from '../../test.ui';
-import { Grid, type GridProps } from './Grid';
+import { Grid, type GridProps } from './ui.Grid';
+import { DropTarget, type DropTargetProps } from './ui.DropTarget';
 import { Storage } from './Wrangle';
 
 import type { Web3Storage } from 'web3.storage';
@@ -126,6 +127,10 @@ export default Dev.describe(name, (e) => {
             await state.change((d) => (d.debug.spinning = 'Write'));
             await getList();
           });
+      });
+
+      dev.row((e) => {
+        return <DropTarget style={{ marginTop: 20 }} />;
       });
     });
 
