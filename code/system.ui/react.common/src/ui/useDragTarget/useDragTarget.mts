@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { type t } from '../common';
 import { readDropEvent } from './util.mjs';
 
-type Args<T extends HTMLElement> = {
-  ref?: React.RefObject<T>;
-  enabled?: boolean;
-  suppressGlobalDrops?: boolean;
-  onDrop?: t.DragTargetDropHandler;
-  onDragOver?: (e: { isOver: boolean }) => void;
-};
-type Input<T extends HTMLElement> = Partial<Args<T>> | t.DragTargetDropHandler;
+type Input<T extends HTMLElement> = Partial<t.DragTargetHookArgs<T>> | t.DragTargetDropHandler;
 
 /**
  * Provides hooks for treating a DIV element as a "drag-n-drop" target.
