@@ -5,5 +5,5 @@ export * from '../common';
  */
 export const DEFAULTS = {
   enabled: true,
-  suppressGlobal: false,
+  suppressGlobal: true,
 } as const;
