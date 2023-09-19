@@ -1,4 +1,4 @@
-import { Dev, Icons, type t } from '../../test.ui';
+import { COLORS, Dev, Icons, type t } from '../../test.ui';
 import { Storage } from './Wrangle';
 import { DropTarget } from './ui.DropTarget';
 import { Grid, type GridProps } from './ui.Grid';
@@ -71,7 +71,7 @@ export default Dev.describe(name, (e) => {
         const localValue = () => local.apiKey;
         const icon = () => {
           if (editValue()) return <Icons.Edit size={14} />;
-          if (localValue()) return <Icons.Verified size={16} />;
+          if (localValue()) return <Icons.Verified size={16} color={COLORS.GREEN} />;
           return;
         };
         txt
