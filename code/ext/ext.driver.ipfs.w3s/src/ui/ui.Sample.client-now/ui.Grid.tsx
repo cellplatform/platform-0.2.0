@@ -12,6 +12,7 @@ import {
   ObjectView,
   Spinner,
   css,
+  Path,
   type t,
 } from './common';
 
@@ -98,6 +99,7 @@ export const Grid: React.FC<GridProps> = (props) => {
     const bytes = item.dagSize;
     const isPulling = cid === pulling;
     const isAnyPulling = pulling !== '';
+    const filename = Path.parts(item.name).filename;
 
     const elPullButton = (
       <div {...styles.grid.pull}>
@@ -120,7 +122,7 @@ export const Grid: React.FC<GridProps> = (props) => {
           <Link url={Url.cid(cid)}>{`cid:${Hash.shorten(cid, [3, 5])}`}</Link>
         </div>
         <div {...styles.mono}>
-          <Link url={Url.name(cid, item.name)}>{item.name}</Link>
+          <Link url={Url.name(cid, filename)}>{item.name}</Link>
         </div>
         <div>{`${Filesize(bytes)}`}</div>
         <div>{elPullButton}</div>

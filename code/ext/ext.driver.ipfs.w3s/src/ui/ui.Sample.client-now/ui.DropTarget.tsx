@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Spinner } from './common';
+import { COLORS, Color, Spinner, css, type t } from './common';
 import { useDropFile } from './use.DropFile';
 
 export type DropTargetProps = {
   apiKey?: string;
   style?: t.CssValue;
+  onDropPut?: t.SampleDropPutHandler;
 };
 
 export const DropTarget: React.FC<DropTargetProps> = (props) => {
-  const { apiKey } = props;
-  const drop = useDropFile({ apiKey });
+  const { apiKey, onDropPut } = props;
+  const drop = useDropFile({ apiKey, onDropPut });
   const { is } = drop;
 
   /**
    * [Render]
    */
-
   const borderColor = is.over ? COLORS.MAGENTA : Color.alpha(COLORS.DARK, 0.1);
 
   const styles = {

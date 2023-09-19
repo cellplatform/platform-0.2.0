@@ -136,7 +136,13 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.row((e) => {
-        return <DropTarget style={{ marginTop: 20 }} apiKey={local.apiKey} />;
+        return (
+          <DropTarget
+            style={{ marginTop: 20 }}
+            apiKey={local.apiKey}
+            onDropPut={(e) => pullList()}
+          />
+        );
       });
     });
   });

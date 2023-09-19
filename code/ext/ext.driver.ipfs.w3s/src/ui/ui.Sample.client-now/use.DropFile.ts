@@ -1,47 +1,41 @@
 import { useState } from 'react';
 import { Storage } from './Wrangle';
-import { Time, useDragTarget, type t } from './common';
+import { Path, useDragTarget, type t } from './common';
+
+type Args = {
+  apiKey?: string;
+  onDropPut?: t.SampleDropPutHandler;
+};
 
 /**
  * Upload a file when dropped.
  */
-export function useDropFile(args: { apiKey?: string }) {
+export function useDropFile(args: Args) {
   const [spinning, setSpinning] = useState(false);
 
   const drag = useDragTarget({
+    suppressGlobal: true,
     async onDrop(e) {
       setSpinning(true);
-
-      console.log('args.apiKey', args.apiKey);
-
       const store = await Storage.import(args.apiKey);
+      const rootDir = 'my-dropped';
 
-      console.log('e', e);
-      console.log('store', store);
+      if (e.files.length === 1) {
+        const file = e.files[0].toFile();
+        const name = Path.join(rootDir, file.name);
+        const cid = await store.put([file], { name });
+        args.onDropPut?.({ cid });
+      }
 
-      /**
-       * TODO 🐷
-       * put on t.DroppedFile as method(??)
-       */
-      const toFile = (dropped: t.DroppedFile) => {
-        const { data, path, mimetype: type } = dropped;
-        return new File([data], path, { type });
-      };
+      if (e.files.length > 1) {
+        const dir = Path.parts(e.files[0].path).dir;
+        const name = Path.join(rootDir, dir);
+        const files = e.toFiles();
+        const cid = await store.put(files, { name });
+        args.onDropPut?.({ cid });
+      }
 
-      // const file = e.files[0];
-      // console.log('file', file);
-
-      const dir = 'my-dropped';
-      const file = toFile(e.files[0]);
-      const res = await store.put([file], { name: dir });
-
-      console.log('res', res);
-
-      // store.put()
-
-      await Time.delay(1000, () => {
-        setSpinning(false);
-      });
+      setSpinning(false);
     },
   });
 
