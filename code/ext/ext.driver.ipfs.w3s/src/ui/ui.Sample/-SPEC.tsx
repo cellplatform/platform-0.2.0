@@ -1,11 +1,18 @@
 import { Dev, Icons, css } from '../../test.ui';
+import type { Web3Storage, Upload } from 'web3.storage';
+import { Grid, type GridProps } from './-SPEC.Grid';
+import { Wrangle } from './Wrangle';
 
 type T = {
-  running?: boolean;
-  url?: string;
-  debug: { editApiKey?: string };
+  props: GridProps;
+  running__TMP?: boolean;
+  debug: {
+    editApiKey?: string;
+    spinning?: 'List';
+  };
 };
 const initial: T = {
+  props: {},
   debug: {},
 };
 
@@ -15,10 +22,11 @@ const initial: T = {
 const name = 'Sample';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = { apiKey?: string };
+  type LocalStore = { apiKey?: string; list?: any[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.ipfs.w3s');
   const local = localstore.object({
     apiKey: undefined,
+    list: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -26,27 +34,17 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.props.list = local.list;
+    });
 
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([null, null])
+      .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const url = e.state.url;
-
-        const styles = {
-          base: css({
-            padding: 10,
-            backgroundImage: url ? `url(${url})` : undefined,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-          }),
-        };
-
-        return <div {...styles.base}>{`🐷 ${name}`}</div>;
+        return <Grid {...e.state.props} />;
       });
   });
 
@@ -54,7 +52,34 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    /**
+     * https://github.com/web3-storage/web3.storage
+     * https://web3.storage/docs/reference/js-client-library
+     * https://web3.storage/docs/how-tos/retrieve/
+     * https://web3.storage/account/
+     */
     dev.section(['web3.storage', '(current)'], (dev) => {
+      const Storage = {
+        async import() {
+          const { Web3Storage } = await import('web3.storage');
+          const token = local.apiKey ?? '';
+          return new Web3Storage({ token });
+        },
+
+        async list(storage: Web3Storage) {
+          const res: Upload[] = [];
+          const list = storage.list();
+          for await (const item of list) res.push(item);
+          return res;
+        },
+      } as const;
+
+      const Url = {
+        from(cid: string, name: string) {
+          return `https://${cid}.ipfs.w3s.link/${name}`;
+        },
+      } as const;
+
       dev.textbox((txt) => {
         const editValue = () => state.current.debug.editApiKey ?? '';
         const localValue = () => local.apiKey;
@@ -84,31 +109,21 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(0, 20);
 
-      /**
-       * https://github.com/web3-storage/web3.storage
-       * https://web3.storage/docs/reference/js-client-library
-       * https://web3.storage/docs/how-tos/retrieve/
-       * https://web3.storage/account/
-       */
       dev.button((btn) => {
         btn
-          .label(`lib: web3.storage`)
-          .spinner((e) => Boolean(e.state.running))
+          .label(`sample`)
+          .spinner((e) => Boolean(e.state.running__TMP))
           .onClick((e) => runSample());
       });
 
       const runSample = async () => {
         const { Web3Storage, getFilesFromPath } = await import('web3.storage');
 
-        await state.change((d) => (d.running = true));
+        await state.change((d) => (d.running__TMP = true));
         const m = await import('web3.storage');
 
         const token = local.apiKey ?? '';
         const storage = new Web3Storage({ token });
-
-        const Url = {
-          from: (cid: string, filename: string) => `https://${cid}.ipfs.w3s.link/${filename}`,
-        };
 
         const printList = async () => {
           const uploads = [];
@@ -139,8 +154,25 @@ export default Dev.describe(name, (e) => {
         await put('my-dir', ['hello-1', 'foo/hello-1.txt'], ['hello-2', 'foo/hello-2.txt']);
 
         await printList();
-        await state.change((d) => (d.running = false));
+        await state.change((d) => (d.running__TMP = false));
       };
+
+      dev.button((btn) => {
+        btn
+          .label(`list`)
+          .enabled((e) => Boolean(local.apiKey))
+          .spinner((e) => e.state.debug.spinning === 'List')
+          .onClick(async (e) => {
+            await e.change((d) => (d.debug.spinning = 'List'));
+            const storage = await Storage.import();
+            const list = await Storage.list(storage);
+            await e.change((d) => {
+              local.list = list;
+              d.props.list = list;
+              d.debug.spinning = undefined;
+            });
+          });
+      });
     });
 
     dev.hr(0, 50);
