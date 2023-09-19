@@ -1,16 +1,11 @@
-import { Dev, Icons } from '../../test.ui';
+import { Dev, Icons, type t } from '../../test.ui';
 import { Storage } from './Wrangle';
 import { DropTarget } from './ui.DropTarget';
 import { Grid, type GridProps } from './ui.Grid';
 
-import type { Web3Storage } from 'web3.storage';
-
 type T = {
   props: GridProps;
-  debug: {
-    editApiKey?: string;
-    spinning?: 'List' | 'Write';
-  };
+  debug: { editApiKey?: string; spinning?: 'List' | 'Write' };
 };
 const initial: T = {
   props: {},
@@ -60,9 +55,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('web3.storage', (dev) => {
-      const getList = async (store?: Web3Storage) => {
+      const getList = async (input?: t.Web3Storage) => {
         await state.change((d) => (d.debug.spinning = 'List'));
-        const list = await Storage.list(store ?? (await Storage.import(local.apiKey)));
+        const store = input ?? (await Storage.import(local.apiKey));
+        const list = await Storage.list(store);
         await state.change((d) => {
           local.list = list;
           d.props.list = list;
@@ -111,7 +107,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button((btn) => {
         btn
-          .label(`write`)
+          .label('put (write)')
           .right('foo/hello.txt')
           .enabled((e) => Boolean(local.apiKey))
           .spinner((e) => e.state.debug.spinning === 'Write')
@@ -131,7 +127,7 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.row((e) => {
-        return <DropTarget style={{ marginTop: 20 }} />;
+        return <DropTarget style={{ marginTop: 20 }} apiKey={local.apiKey} />;
       });
     });
   });

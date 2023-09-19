@@ -3,12 +3,13 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Spinner } from './common'
 import { useDropFile } from './use.DropFile';
 
 export type DropTargetProps = {
+  apiKey?: string;
   style?: t.CssValue;
 };
 
 export const DropTarget: React.FC<DropTargetProps> = (props) => {
-  const drop = useDropFile({});
-
+  const { apiKey } = props;
+  const drop = useDropFile({ apiKey });
   const { is } = drop;
 
   /**
