@@ -1,24 +1,19 @@
 import type { Web3File, Web3Response } from 'web3.storage';
+import { Storage } from './Wrangle.Storage';
+import { Url } from './Wrangle.Url';
 import { type t } from './common';
+
+export { Storage, Url };
 
 /**
  * Wrangle URL
  */
-export const Url = {
-  cid(cid: string) {
-    return `https://${cid}.ipfs.w3s.link`;
-  },
-
-  name(cid: string, name?: string) {
-    if (!name) return Url.cid(cid);
-    return `https://${cid}.ipfs.w3s.link/${name}`;
-  },
-} as const;
 
 /**
  * Wrangle Helpers
  */
 export const Wrangle = {
+  Storage,
   Url,
 
   async toFiles(res?: Web3Response | null) {

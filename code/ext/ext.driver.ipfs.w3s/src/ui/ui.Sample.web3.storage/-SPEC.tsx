@@ -1,6 +1,6 @@
 import { Dev, Icons } from '../../test.ui';
-import { Grid, type GridProps } from './-SPEC.Grid';
-import { Storage } from './Storage';
+import { Grid, type GridProps } from './Grid';
+import { Storage } from './Wrangle';
 
 import type { Web3Storage } from 'web3.storage';
 
@@ -21,6 +21,12 @@ const initial: T = {
  */
 const name = 'Sample';
 
+/**
+ * https://github.com/web3-storage/web3.storage
+ * https://web3.storage/docs/reference/js-client-library
+ * https://web3.storage/docs/how-tos/retrieve/
+ * https://web3.storage/account/
+ */
 export default Dev.describe(name, (e) => {
   type LocalStore = { apiKey?: string; list?: any[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.ipfs.w3s');
@@ -52,12 +58,6 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    /**
-     * https://github.com/web3-storage/web3.storage
-     * https://web3.storage/docs/reference/js-client-library
-     * https://web3.storage/docs/how-tos/retrieve/
-     * https://web3.storage/account/
-     */
     dev.section(['web3.storage', '(current)'], (dev) => {
       const getList = async (store?: Web3Storage) => {
         await state.change((d) => (d.debug.spinning = 'List'));
@@ -131,32 +131,6 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(0, 50);
     dev.hr(5, 20);
-
-    /**
-     * NOTE:
-     *    This is the "new" client, which is still in development.
-     *    https://github.com/web3-storage/w3up/tree/main/packages/w3up-client#basic-usage
-     */
-    dev.section(['w3up-client', '(pre-release)'], (dev) => {
-      dev.TODO();
-
-      dev.button((btn) => {
-        const github = 'https://github.com/web3-storage/w3up/tree/main/packages/w3up-client';
-        btn
-          .label(`lib`)
-          .right((e) => (
-            <a href={github} target={'_blank'}>
-              {'github'}
-            </a>
-          ))
-          .enabled((e) => true)
-          .onClick(async (e) => {
-            const { create } = await import('@web3-storage/w3up-client');
-            const client = await create();
-            console.log('client', client);
-          });
-      });
-    });
   });
 
   e.it('ui:footer', async (e) => {
