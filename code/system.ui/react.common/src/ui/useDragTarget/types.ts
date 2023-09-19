@@ -6,11 +6,10 @@ export type DroppedFile = { path: string; data: Uint8Array; mimetype: string };
 /**
  * Hook
  */
-
 export type DragTargetHookArgs<T extends HTMLElement> = {
   ref?: React.RefObject<T>;
   enabled?: boolean;
-  suppressGlobalDrops?: boolean;
+  suppressGlobal?: boolean; // Prevent drops anywhere else on the screen.
   onDrop?: DragTargetDropHandler;
   onDragOver?: (e: { isOver: boolean }) => void;
 };

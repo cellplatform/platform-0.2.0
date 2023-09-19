@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { type t } from '../common';
+import { DEFAULTS, type t } from './common';
 import { readDropEvent } from './util.mjs';
 
 type Input<T extends HTMLElement> = Partial<t.DragTargetHookArgs<T>> | t.DragTargetDropHandler;
@@ -12,7 +12,12 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
   input?: Input<T>,
 ): t.DragTargetHook<T> {
   const args = wrangle<T>(useRef<T>(null), input);
-  const { ref, onDrop, enabled = true } = args;
+  const {
+    ref,
+    onDrop,
+    enabled = DEFAULTS.enabled,
+    suppressGlobal = DEFAULTS.suppressGlobal,
+  } = args;
 
   const [isDragOver, setDragOver] = useState<boolean>(false);
   const [dropped, setDropped] = useState<t.Dropped | undefined>();
@@ -35,11 +40,10 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
 
     const dragHandler = (fn?: (e: Event) => void) => {
       return (e: Event) => {
-        if (enabled) {
-          fn?.(e);
-          e.preventDefault();
-          changeDragOver(count > 0);
-        }
+        if (!enabled) return;
+        fn?.(e);
+        e.preventDefault();
+        changeDragOver(count > 0);
       };
     };
 
@@ -49,15 +53,19 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
     const handleMouseLeave = dragHandler(() => (count = 0));
 
     const handleDrop = async (e: DragEvent) => {
-      if (enabled) {
-        e.preventDefault();
-        changeDragOver(false);
-        count = 0;
-        const { files, urls } = await readDropEvent(e);
-        const dropped: t.Dropped = { files, urls };
-        setDropped(dropped);
-        onDrop?.(dropped);
-      }
+      if (!enabled) return;
+      e.preventDefault();
+      changeDragOver(false);
+      count = 0;
+      const { files, urls } = await readDropEvent(e);
+      const dropped: t.Dropped = { files, urls };
+      setDropped(dropped);
+      onDrop?.(dropped);
+    };
+
+    const handleGlobalDrop = (e: Event) => {
+      if (!enabled) return;
+      e.preventDefault(); // Suppress dropping outside the target.
     };
 
     el.addEventListener('dragenter', handleDragEnter);
@@ -65,6 +73,10 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
     el.addEventListener('dragleave', handleDragLeave);
     el.addEventListener('mouseleave', handleMouseLeave);
     el.addEventListener('drop', handleDrop);
+    if (suppressGlobal) {
+      document.addEventListener('drop', handleGlobalDrop);
+      document.addEventListener('dragover', handleGlobalDrop);
+    }
 
     return () => {
       el.removeEventListener('dragenter', handleDragEnter);
@@ -72,8 +84,10 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
       el.removeEventListener('dragleave', handleDragLeave);
       el.removeEventListener('mouseleave', handleMouseLeave);
       el.removeEventListener('drop', handleDrop);
+      document.removeEventListener('drop', handleGlobalDrop);
+      document.removeEventListener('dragover', handleGlobalDrop);
     };
-  }, [ref, enabled, onDrop]); // eslint-disable-line
+  }, [ref, enabled, suppressGlobal, onDrop]); // eslint-disable-line
 
   return {
     ref,

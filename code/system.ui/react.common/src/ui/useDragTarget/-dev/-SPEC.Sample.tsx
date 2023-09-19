@@ -12,14 +12,16 @@ const stripBinary = (dropped: t.Dropped) => {
 };
 
 export type SampleProps = {
-  isEnabled: boolean;
+  enabled?: boolean;
+  suppressGlobal?: boolean;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  const { isEnabled } = props;
+  const { enabled, suppressGlobal } = props;
 
   const drag = useDragTarget({
-    enabled: isEnabled,
+    enabled,
+    suppressGlobal,
     onDrop: (e) => console.log('⚡️ onDropped (optional)', e),
     onDragOver: (e) => console.log('⚡️ onDragOver (optional)', e),
   });
