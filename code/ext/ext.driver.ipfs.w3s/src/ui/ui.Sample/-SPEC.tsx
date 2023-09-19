@@ -6,7 +6,6 @@ import type { Web3Storage } from 'web3.storage';
 
 type T = {
   props: GridProps;
-  running__TMP?: boolean;
   debug: {
     editApiKey?: string;
     spinning?: 'List' | 'Write';
@@ -45,7 +44,7 @@ export default Dev.describe(name, (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        return <Grid {...e.state.props} />;
+        return <Grid {...e.state.props} apiKey={local.apiKey} />;
       });
   });
 

@@ -1,4 +1,4 @@
-import { MdEdit, MdVerifiedUser } from 'react-icons/md';
+import { MdArrowDownward, MdEdit, MdVerifiedUser } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -9,4 +9,5 @@ const icon = Icon.renderer;
 export const Icons = {
   Edit: icon(MdEdit),
   Verified: icon(MdVerifiedUser),
+  Arrow: { Down: icon(MdArrowDownward) },
 } as const;

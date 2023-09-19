@@ -7,5 +7,5 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { Hash, rx } from 'sys.util';
+export { Hash, rx, Time } from 'sys.util';
 export { Filesize } from 'sys.fs';
