@@ -12,7 +12,8 @@
     "bundle": "ts-node-esm -T ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
-    "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
+    "deploy__": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
+    "deploy": "yarn audit && yarn patch && yarn build && vc --prod",
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
