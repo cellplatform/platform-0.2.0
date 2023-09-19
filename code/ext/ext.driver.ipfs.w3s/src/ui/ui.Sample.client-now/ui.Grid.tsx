@@ -82,6 +82,15 @@ export const Grid: React.FC<GridProps> = (props) => {
         padding: 8,
       }),
     },
+    empty: css({
+      Absolute: 0,
+      pointerEvents: 'none',
+      fontSize: 14,
+      fontStyle: 'italic',
+      opacity: 0.3,
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
 
   const elRows = list.map((item, i) => {
@@ -119,9 +128,11 @@ export const Grid: React.FC<GridProps> = (props) => {
     );
   });
 
+  const elEmpty = elRows.length === 0 && <div {...styles.empty}>Nothing to display.</div>;
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.grid.base}>{elRows}</div>
+      <div {...styles.grid.base}>{elEmpty || elRows}</div>
       <div {...styles.file.base}>
         <ObjectView data={data} expand={1} fontSize={12} />
       </div>

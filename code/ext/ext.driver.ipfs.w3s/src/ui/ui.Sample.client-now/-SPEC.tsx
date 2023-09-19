@@ -55,7 +55,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('web3.storage', (dev) => {
-      const getList = async (input?: t.Web3Storage) => {
+      const pullList = async (input?: t.Web3Storage) => {
         await state.change((d) => (d.debug.spinning = 'List'));
         const store = input ?? (await Storage.import(local.apiKey));
         const list = await Storage.list(store);
@@ -84,12 +84,21 @@ export default Dev.describe(name, (e) => {
           )
           .onChange((e) => e.change((d) => (d.debug.editApiKey = e.to.value)))
           .right((e) => icon())
-          .onEnter((e) => {
-            e.change((d) => {
+          .onEnter(async (e) => {
+            let isClear = false;
+            await e.change((d) => {
               const value = d.debug.editApiKey ?? '';
-              local.apiKey = value.toLowerCase() === 'clear' ? undefined : value;
+              isClear = value.toLowerCase() === 'clear';
               d.debug.editApiKey = undefined;
+              if (isClear) {
+                d.props.list = undefined;
+                local.apiKey = undefined;
+                local.list = undefined;
+              } else {
+                local.apiKey = value;
+              }
             });
+            if (!isClear) await pullList();
           });
       });
 
@@ -100,7 +109,7 @@ export default Dev.describe(name, (e) => {
           .label(`list`)
           .enabled((e) => Boolean(local.apiKey))
           .spinner((e) => e.state.debug.spinning === 'List')
-          .onClick(() => getList());
+          .onClick(() => pullList());
       });
 
       dev.hr(-1, 5);
@@ -108,7 +117,7 @@ export default Dev.describe(name, (e) => {
       dev.button((btn) => {
         btn
           .label('put (write)')
-          .right('foo/hello.txt')
+          .right('"foo/hello.txt"')
           .enabled((e) => Boolean(local.apiKey))
           .spinner((e) => e.state.debug.spinning === 'Write')
 
@@ -122,7 +131,7 @@ export default Dev.describe(name, (e) => {
               ['hello-2', 'foo/hello-2.txt'],
             );
             await state.change((d) => (d.debug.spinning = 'Write'));
-            await getList();
+            await pullList();
           });
       });
 
