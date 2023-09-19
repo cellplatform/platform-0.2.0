@@ -1,7 +1,12 @@
 import type { RefObject } from 'react';
 
 export type Dropped = { files: DroppedFile[]; urls: string[] };
-export type DroppedFile = { path: string; data: Uint8Array; mimetype: string };
+export type DroppedFile = {
+  path: string;
+  data: Uint8Array;
+  mimetype: string;
+  toFile(path?: string): File;
+};
 
 /**
  * Hook

@@ -1,7 +1,5 @@
 import { type t } from './common';
 
-type F = t.DroppedFile;
-
 /**
  * HTML5 File-System Types.
  */
@@ -35,7 +33,7 @@ type DirectoryReader = {
  * Read out file data from a drag-drop-event.
  */
 export async function readDropEvent(e: DragEvent) {
-  const files: F[] = [];
+  const files: t.DroppedFile[] = [];
   const urls: string[] = [];
 
   const process = async (item: DataTransferItem) => {
@@ -97,10 +95,18 @@ function toDataTransferItemArray(items?: DataTransferItemList): DataTransferItem
 }
 
 async function toFilePayload(file: File, name?: string) {
-  const filename = name || file.name;
+  const path = name || file.name;
   const mimetype = file.type || 'application/octet-stream';
   const data = new Uint8Array(await (file as any).arrayBuffer());
-  const payload: F = { path: filename, data, mimetype };
+  const payload: t.DroppedFile = {
+    path,
+    data,
+    mimetype,
+    toFile(path?: string) {
+      const filename = path ?? payload.path;
+      return new File([data], filename, { type: mimetype });
+    },
+  };
   return payload;
 }
 
@@ -111,7 +117,7 @@ function readString(item: DataTransferItem) {
 }
 
 function readFile(entry: FileEntry) {
-  return new Promise<F>((resolve, reject) => {
+  return new Promise<t.DroppedFile>((resolve, reject) => {
     entry.file(
       async (file) => resolve(await toFilePayload(file, entry.fullPath)),
       (error) => reject(error),
@@ -120,7 +126,7 @@ function readFile(entry: FileEntry) {
 }
 
 function readDir(entry: DirectoryEntry) {
-  return new Promise<F[]>(async (resolve, reject) => {
+  return new Promise<t.DroppedFile[]>(async (resolve, reject) => {
     try {
       const files = await readEntries(entry);
       const result = await Promise.all(files.map((file) => readFile(file)));
