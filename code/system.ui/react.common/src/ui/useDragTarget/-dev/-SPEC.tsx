@@ -1,5 +1,5 @@
 import { Dev } from '../../../test.ui';
-import { Sample } from './-Sample';
+import { Sample } from './-SPEC.Sample';
 
 type T = { enabled: boolean };
 const initial: T = { enabled: true };
