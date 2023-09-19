@@ -1,4 +1,4 @@
-import { Dev, css, useMouse, type t } from '../../../test.ui';
+import { Dev, css, useMouse, type t } from '../../test.ui';
 
 type TDebug = { dragEnabled: boolean; cancelOnFirstMove: boolean };
 type T = { debug: TDebug };
