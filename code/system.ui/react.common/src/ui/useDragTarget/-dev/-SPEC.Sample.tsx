@@ -34,8 +34,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
       base: css({
         flex: 1,
         position: 'relative',
-        filter: drag.is.over ? `blur(1px)` : undefined,
-        opacity: drag.is.over ? 0.5 : 1,
+        opacity: drag.is.over ? 0.3 : 1,
         Flex: 'vertical-stretch-stretch',
       }),
       toolbar: {

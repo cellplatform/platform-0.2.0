@@ -8,6 +8,8 @@ export default Dev.describe('useDragTarget', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size('fill')

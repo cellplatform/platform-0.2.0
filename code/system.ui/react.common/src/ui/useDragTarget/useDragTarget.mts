@@ -5,6 +5,7 @@ import { readDropEvent } from './util.mjs';
 type Args<T extends HTMLElement> = {
   ref?: React.RefObject<T>;
   enabled?: boolean;
+  suppressGlobalDrops?: boolean;
   onDrop?: t.DragTargetDropHandler;
   onDragOver?: (e: { isOver: boolean }) => void;
 };
