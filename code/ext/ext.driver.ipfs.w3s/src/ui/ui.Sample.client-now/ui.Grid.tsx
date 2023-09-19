@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Fragment } from 'react';
-import { Wrangle, Url, Storage } from './Wrangle';
+import { Storage, Url, Wrangle } from './Wrangle';
 import {
   Button,
   COLORS,
