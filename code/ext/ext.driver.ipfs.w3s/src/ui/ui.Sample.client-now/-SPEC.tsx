@@ -1,7 +1,7 @@
 import { Dev, Icons } from '../../test.ui';
-import { Grid, type GridProps } from './ui.Grid';
-import { DropTarget, type DropTargetProps } from './ui.DropTarget';
 import { Storage } from './Wrangle';
+import { DropTarget } from './ui.DropTarget';
+import { Grid, type GridProps } from './ui.Grid';
 
 import type { Web3Storage } from 'web3.storage';
 
@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section(['web3.storage', '(current)'], (dev) => {
+    dev.section('web3.storage', (dev) => {
       const getList = async (store?: Web3Storage) => {
         await state.change((d) => (d.debug.spinning = 'List'));
         const list = await Storage.list(store ?? (await Storage.import(local.apiKey)));
@@ -84,7 +84,7 @@ export default Dev.describe(name, (e) => {
           .placeholder(() =>
             local.apiKey
               ? 'stored locally (type "clear" to remove)'
-              : 'enter key (see web3.storage account)',
+              : 'paste key (see web3.storage account)',
           )
           .onChange((e) => e.change((d) => (d.debug.editApiKey = e.to.value)))
           .right((e) => icon())
@@ -112,6 +112,7 @@ export default Dev.describe(name, (e) => {
       dev.button((btn) => {
         btn
           .label(`write`)
+          .right('foo/hello.txt')
           .enabled((e) => Boolean(local.apiKey))
           .spinner((e) => e.state.debug.spinning === 'Write')
 
@@ -133,9 +134,6 @@ export default Dev.describe(name, (e) => {
         return <DropTarget style={{ marginTop: 20 }} />;
       });
     });
-
-    dev.hr(0, 50);
-    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {

@@ -28,7 +28,9 @@ export const Grid: React.FC<GridProps> = (props) => {
 
   const [pulling, setPulling] = useState('');
   const [files, setFiles] = useState<t.SampleFile[]>([]);
-  const data = files.length === 1 ? files[0] : files;
+
+  const displayFiles = Wrangle.toDisplayFiles(files);
+  const data = files.length === 1 ? displayFiles[0] : displayFiles;
 
   /**
    * Handlers
@@ -36,8 +38,10 @@ export const Grid: React.FC<GridProps> = (props) => {
   const handlePull = async (cid: string) => {
     setPulling(cid);
     const store = await Storage.import(apiKey);
-    const res = await store.get(cid);
-    setFiles(await Wrangle.toFiles(res));
+    const pullResponse = await store.get(cid);
+    const files = await Wrangle.toFiles(pullResponse);
+    console.info(`pulled files:`, files);
+    setFiles(files);
     setPulling('');
   };
 
@@ -47,21 +51,26 @@ export const Grid: React.FC<GridProps> = (props) => {
   const styles = {
     base: css({
       minHeight: 10,
+      fontSize: 14,
       display: 'grid',
       gridTemplateColumns: '1fr 280px',
+    }),
+    mono: css({
+      fontFamily: 'monospace',
+      letterSpacing: -0.5,
+      fontSize: 13,
+      fontWeight: 400,
     }),
     grid: {
       base: css({
         position: 'relative',
         boxSizing: 'border-box',
         Padding: [8, 12],
-        fontSize: 14,
         display: 'grid',
         gridTemplateColumns: 'auto 1fr auto auto',
         columnGap: '15px',
         rowGap: '8px',
       }),
-      cid: css({ fontFamily: 'monospace', letterSpacing: -0.5 }),
       pull: css({ Size: 18, display: 'grid', placeItems: 'center' }),
       pullButton: css({ Size: 18, display: 'grid', placeItems: 'center' }),
     },
@@ -69,8 +78,8 @@ export const Grid: React.FC<GridProps> = (props) => {
       base: css({
         borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
         boxSizing: 'border-box',
-        padding: 8,
         overflow: 'hidden',
+        padding: 8,
       }),
     },
   };
@@ -81,7 +90,7 @@ export const Grid: React.FC<GridProps> = (props) => {
     const isPulling = cid === pulling;
     const isAnyPulling = pulling !== '';
 
-    const elPull = (
+    const elPullButton = (
       <div {...styles.grid.pull}>
         {isPulling && <Spinner.Bar width={18} />}
         {!isPulling && (
@@ -98,14 +107,14 @@ export const Grid: React.FC<GridProps> = (props) => {
 
     return (
       <Fragment key={i}>
-        <div {...styles.grid.cid}>
+        <div {...styles.mono}>
           <Link url={Url.cid(cid)}>{`cid:${Hash.shorten(cid, [3, 5])}`}</Link>
         </div>
-        <div>
+        <div {...styles.mono}>
           <Link url={Url.name(cid, item.name)}>{item.name}</Link>
         </div>
-        <div>{elPull}</div>
         <div>{`${Filesize(bytes)}`}</div>
+        <div>{elPullButton}</div>
       </Fragment>
     );
   });
@@ -126,11 +135,15 @@ export const Grid: React.FC<GridProps> = (props) => {
 
 function Link(props: { children?: React.ReactNode; url?: string }) {
   const styles = {
-    base: css({ color: COLORS.BLUE }),
+    a: css({
+      color: COLORS.BLUE,
+      textDecoration: 'none',
+      ':hover': { textDecoration: 'underline' },
+    }),
   };
 
   return (
-    <a {...styles.base} href={props.url} target={'_blank'} rel={'noopener noreferrer'}>
+    <a {...styles.a} href={props.url} target={'_blank'} rel={'noopener noreferrer'}>
       {props.children}
     </a>
   );
