@@ -1,6 +1,10 @@
 import type { RefObject } from 'react';
 
-export type Dropped = { files: DroppedFile[]; urls: string[] };
+export type Dropped = {
+  urls: string[];
+  files: DroppedFile[];
+  toFiles(): File[];
+};
 export type DroppedFile = {
   path: string;
   data: Uint8Array;

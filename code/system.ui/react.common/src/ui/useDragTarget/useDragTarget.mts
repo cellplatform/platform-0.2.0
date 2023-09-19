@@ -58,7 +58,11 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
       changeDragOver(false);
       count = 0;
       const { files, urls } = await readDropEvent(e);
-      const dropped: t.Dropped = { files, urls };
+      const dropped: t.Dropped = {
+        files,
+        urls,
+        toFiles: () => files.map((item) => item.toFile()),
+      };
       setDropped(dropped);
       onDrop?.(dropped);
     };
