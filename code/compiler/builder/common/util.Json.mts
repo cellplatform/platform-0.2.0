@@ -5,19 +5,6 @@ import { VersionUtil } from './util.Version.mjs';
 import type * as t from '../types.mjs';
 
 /**
- * General JSON helpers.
- */
-export const JsonUtil = {
-  async load<T>(file: t.PathString) {
-    return (await fs.readJson(fs.resolve(file))) as T;
-  },
-
-  stringify(input: any) {
-    return `${JSON.stringify(input, null, '  ')}\n`;
-  },
-};
-
-/**
  * [package.json] file specific operations.
  */
 export const PackageJsonUtil = {
@@ -68,4 +55,19 @@ export const PackageJsonUtil = {
       return pkg;
     },
   },
-};
+} as const;
+
+/**
+ * General JSON helpers.
+ */
+export const JsonUtil = {
+  Pkg: PackageJsonUtil,
+
+  async load<T>(file: t.PathString) {
+    return (await fs.readJson(fs.resolve(file))) as T;
+  },
+
+  stringify(input: any) {
+    return `${JSON.stringify(input, null, '  ')}\n`;
+  },
+} as const;
