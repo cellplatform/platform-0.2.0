@@ -1,11 +1,28 @@
 import type { RefObject } from 'react';
 
-export type Dropped = { files: DroppedFile[]; urls: string[] };
-export type DroppedFile = { path: string; data: Uint8Array; mimetype: string };
+export type Dropped = {
+  urls: string[];
+  files: DroppedFile[];
+  toFiles(): File[];
+};
+export type DroppedFile = {
+  path: string;
+  data: Uint8Array;
+  mimetype: string;
+  toFile(path?: string): File;
+};
 
 /**
  * Hook
  */
+export type DragTargetHookArgs<T extends HTMLElement> = {
+  ref?: React.RefObject<T>;
+  enabled?: boolean;
+  suppressGlobal?: boolean; // Prevent drops anywhere else on the screen.
+  onDrop?: DragTargetDropHandler;
+  onDragOver?: (e: { isOver: boolean }) => void;
+};
+
 export type DragTargetHook<T extends HTMLElement> = {
   readonly ref: RefObject<T>;
   readonly is: DragTargetFlags;

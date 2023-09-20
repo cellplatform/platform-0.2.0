@@ -1,7 +1,8 @@
-import { Dev, css, useMouse, type t } from '../../../test.ui';
+import { Dev, css, useMouse, type t } from '../../test.ui';
 
-type TDebug = { dragEnabled: boolean; cancelOnFirstMove: boolean };
-type T = { debug: TDebug };
+type T = {
+  debug: { dragEnabled: boolean; cancelOnFirstMove: boolean };
+};
 const initial: T = {
   debug: { dragEnabled: true, cancelOnFirstMove: false },
 };
@@ -63,7 +64,7 @@ export default Dev.describe(name, (e) => {
 /**
  * Component
  */
-function Sample(props: TDebug) {
+function Sample(props: T['debug']) {
   const handleDrag: t.UseMouseDragHandler = (e) => {
     console.info('⚡️ onDrag', e);
     if (props.cancelOnFirstMove) e.cancel();

@@ -22,6 +22,7 @@ const { Specs: ExtStripe } = await import('ext.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 // const { Specs: ProtocolHats } = await import('ext.driver.protocol.hats/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
+const { Specs: ExtIpfsW3s } = await import('ext.driver.ipfs.w3s/specs');
 // const { Specs: ExtVercelBlob } = await import('ext.vercel.blob/specs');
 
 export const Specs = {
@@ -44,5 +45,5 @@ export const Specs = {
   ...ExtVimeo,
 
   ...ExtAuthPrivy,
-  // ...ExtVercelBlob,
+  ...ExtIpfsW3s,
 };

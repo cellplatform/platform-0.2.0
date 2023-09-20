@@ -5,6 +5,7 @@ tmp
 .vercel
 *.local
 
+
 # Logs
 logs
 *.log

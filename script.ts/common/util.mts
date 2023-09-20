@@ -44,4 +44,20 @@ export const Util = {
     );
     return { dir, paths, bytes, toString: () => filesize(bytes) };
   },
+
+  /**
+   * Change the filename extension of all files within a directly (deep).
+   */
+  async changeFileExtension(dir: string, from: string, to: string) {
+    const formatExtension = (ext: string) => ext.replace(/^\./, '');
+    const ext = { from: formatExtension(from), to: formatExtension(to) };
+    dir = fs.resolve(dir);
+
+    const pattern = fs.join(dir, `**/*.${ext.from}`);
+    const paths = await Util.glob(pattern);
+    for (const from of paths) {
+      const to = `${from.slice(0, 0 - ext.from.length)}${ext.to}`;
+      await fs.rename(from, to);
+    }
+  },
 };

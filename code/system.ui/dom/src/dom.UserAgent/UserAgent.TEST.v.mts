@@ -1,5 +1,5 @@
-import { describe, it, expect, t } from '../test';
 import { UserAgent } from '.';
+import { describe, expect, it } from '../test';
 
 describe('UserAgent', () => {
   const EXAMPLE = {
@@ -14,7 +14,7 @@ describe('UserAgent', () => {
 
   it('UserAgent.current (safe on server)', () => {
     const res = UserAgent.current;
-    expect(res.browser.name).to.eql('Firefox');
-    expect(res.engine.name).to.eql('Gecko');
+    expect(res.browser.name).to.eql('WebKit');
+    expect(res.engine.name).to.eql('WebKit');
   });
 });

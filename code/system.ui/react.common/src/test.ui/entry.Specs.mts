@@ -39,7 +39,7 @@ export const HookSpecs = {
   'sys.ui.common.useFocus': () => import('../ui/useFocus/-SPEC'),
   'sys.ui.common.useSizeObserver': () => import('../ui/useSizeObserver/-SPEC'),
   'sys.ui.common.useDragTarget': () => import('../ui/useDragTarget/-dev/-SPEC'),
-  'sys.ui.common.useMouse': () => import('../ui/use/-dev/-SPEC.useMouse'),
+  'sys.ui.common.useMouse': () => import('../ui/use/-SPEC.useMouse'),
 };
 
 export const DevSpecs = {

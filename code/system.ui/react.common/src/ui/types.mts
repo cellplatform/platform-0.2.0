@@ -27,7 +27,7 @@ export type * from './Text.Secret/types.mjs';
 export type * from './Text.Syntax/types.mjs';
 export type * from './Text/types.mjs';
 
-export type * from './use/types.mjs';
-export type * from './useDragTarget/types.mjs';
-export type * from './useFocus/types.mjs';
-export type * from './useSizeObserver/types.mjs';
+export type * from './use/types';
+export type * from './useDragTarget/types';
+export type * from './useFocus/types';
+export type * from './useSizeObserver/types';
