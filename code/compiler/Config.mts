@@ -62,6 +62,7 @@ export const Config = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
         assetsDir: 'lib',
+        target: 'esnext',
       };
 
       let config: UserConfig = {
@@ -80,7 +81,11 @@ export const Config = {
            *    wrapper has a module level variable to track JS side heap
            *    allocations, initializing this twice causes horrible breakage
            */
-          exclude: ['@automerge/automerge-wasm'],
+          exclude: [
+            '@automerge/automerge-wasm',
+            '@automerge/automerge-wasm/bundler/bindgen_bg.wasm',
+            '@syntect/wasm',
+          ],
         },
         server: { port: 1234 },
         base: './',
