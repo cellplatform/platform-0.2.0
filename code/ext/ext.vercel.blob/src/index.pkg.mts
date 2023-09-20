@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.vercel.blob',
   version: '0.0.0',
   dependencies: {
-    '@vercel/blob': '0.12.3',
+    '@vercel/blob': '0.12.4',
     '@privy-io/react-auth': '1.38.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
@@ -21,7 +21,7 @@ export const Pkg: ModuleDef = {
     'sys.fs': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'ext.driver.auth.privy': '0.0.0',
-    'viem': '1.10.14',
+    'viem': '1.11.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
