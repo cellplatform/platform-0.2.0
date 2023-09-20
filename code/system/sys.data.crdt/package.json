@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "echo no-op",
     "test__": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
