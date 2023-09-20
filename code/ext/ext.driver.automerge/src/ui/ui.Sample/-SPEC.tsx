@@ -5,6 +5,7 @@ const initial: T = {};
 
 /**
  * Spec
+ * https://github.com/automerge/automerge-repo
  */
 const name = 'Sample';
 
