@@ -1,5 +1,9 @@
-import { Import } from './common';
 import { Peer } from './Peer';
+
+const Import = {
+  Repo: () => import('@automerge/automerge-repo'),
+  MessageChannel: () => import('@automerge/automerge-repo-network-messagechannel'),
+} as const;
 
 /**
  * Sample:
