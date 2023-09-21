@@ -7,6 +7,7 @@ export { Pkg };
 /**
  * Library
  */
+export { Repo } from './repo';
 export { Info } from './ui/ui.Info';
 
 /**

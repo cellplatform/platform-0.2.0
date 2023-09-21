@@ -1,4 +1,4 @@
-import { slug, type t } from '../common';
+import { slug, type t } from './common';
 
 /**
  * Helpers for generating typed peer ID strings.

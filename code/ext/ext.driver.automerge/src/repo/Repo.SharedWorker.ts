@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { Import } from './Import';
+import { Import } from './common';
 import { Peer } from './Peer';
 
 declare const self: SharedWorkerGlobalScope;
