@@ -1,5 +1,8 @@
 export const TESTS = {
   get all() {
-    return [import('./-TEST')];
+    return [
+      //
+      import('./-TEST'),
+    ];
   },
 };
