@@ -22,8 +22,7 @@ export { RepoContext } from '@automerge/automerge-repo-react-hooks';
  * In Safari it's
  *    Develop > Show Web Inspector > Storage > IndexedDB > automerge-repo-demo-counter.
  */
-
-const url = new URL('../workers/SharedWorker.ts', import.meta.url);
+const url = new URL('../repo/Repo.SharedWorker.ts', import.meta.url);
 const sharedWorker = new SharedWorker(url, {
   type: 'module',
   name: 'automerge-repo-shared-worker',

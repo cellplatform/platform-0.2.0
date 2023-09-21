@@ -5,7 +5,8 @@ import { createRoot } from 'react-dom/client';
 import { Dev } from 'sys.ui.react.common';
 import { Pkg } from '../index.pkg.mjs';
 
-import { repo, RepoContext } from './repo';
+import { repo } from '../repo';
+import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 
 /**
  * Initialize

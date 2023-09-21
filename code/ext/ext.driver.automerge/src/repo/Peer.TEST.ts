@@ -1,25 +1,54 @@
-import { expect, Test } from '../test.ui';
+import { expect, Test, type t } from '../test.ui';
 import { Peer } from '.';
 
 export default Test.describe('Peer', (e) => {
-  e.it('Peer.prefix', (e) => {
-    expect(Peer.prefix('SharedWorker')).to.eql('crdt:shared-worker.');
-    const fn = () => Peer.prefix('foobar' as any);
-    expect(fn).to.throw(/'foobar' not supported/);
-  });
+  e.describe('Peer.id', (e) => {
+    e.it('.prefix', (e) => {
+      expect(Peer.id.prefix('SharedWorker')).to.eql('shared-worker');
+      const fn = () => Peer.id.prefix('foobar' as any);
+      expect(fn).to.throw(/'foobar' not supported/);
+    });
 
-  e.it('Peer.id (random)', (e) => {
-    const id1 = Peer.id('SharedWorker');
-    const id2 = Peer.id('SharedWorker');
-    expect(id1).to.not.eql(id2);
-  });
+    e.it('.is', (e) => {
+      const test = (kind: t.PeerIdKind, id: any, expected: boolean) => {
+        const res = Peer.id.is(kind, id);
+        expect(res).to.eql(expected, id);
+      };
+      test('SharedWorker', 'shared-worker', true);
+      test('SharedWorker', 'shared-worker.', true);
+      test('SharedWorker', 'shared-worker-abc', true);
 
-  e.it('Peer.is', (e) => {
-    expect(Peer.is('SharedWorker', 'crdt:shared-worker.')).to.eql(true);
-    expect(Peer.is('SharedWorker', 'foo')).to.eql(false);
-    expect(Peer.is('SharedWorker', 'shared-worker')).to.eql(false);
-    [null, true, [], {}, '', 123].forEach((value) => {
-      expect(Peer.is('SharedWorker', value)).to.eql(false);
+      test('StorageServer', 'storage-server', true);
+      test('StorageServer', 'storage-server-', true);
+      test('StorageServer', 'storage-server-abc', true);
+
+      [null, true, [], {}, '', 'foobar', 123].forEach((value) => {
+        test('SharedWorker', value, false);
+        test('StorageServer', value, false);
+      });
+    });
+
+    e.describe('.generate', (e) => {
+      e.it('SharedWorker: random suffix', (e) => {
+        const id1 = Peer.id.generate('SharedWorker');
+        const id2 = Peer.id.generate('SharedWorker');
+        expect(id1).to.not.eql(id2);
+      });
+
+      e.it('StorageServer: no suffix', (e) => {
+        const id = Peer.id.generate('StorageServer', '');
+        expect(id).to.eql('storage-server');
+      });
+
+      e.it('StorageServer: explicit suffix', (e) => {
+        const id = Peer.id.generate('StorageServer', 'myhost');
+        expect(id).to.eql('storage-server-myhost');
+      });
+
+      e.it('StorageServer: random suffix', (e) => {
+        const id = Peer.id.generate('StorageServer');
+        expect(id.startsWith('storage-server-')).to.eql(true);
+      });
     });
   });
 });

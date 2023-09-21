@@ -1,21 +1,26 @@
 import { slug, type t } from '../common';
 
-type PeerIdKind = 'SharedWorker';
-
 /**
  * Helpers for generating typed peer ID strings.
  */
 export const Peer = {
-  prefix(kind: PeerIdKind) {
-    if (kind === 'SharedWorker') return 'crdt:shared-worker.';
-    throw new Error(`ID kind '${kind}' not supported`);
-  },
+  id: {
+    prefix(kind: t.PeerIdKind) {
+      if (kind === 'SharedWorker') return 'shared-worker';
+      if (kind === 'StorageServer') return 'storage-server';
+      throw new Error(`ID kind '${kind}' not supported`);
+    },
 
-  id(kind: PeerIdKind) {
-    return `${Peer.prefix(kind)}${slug()}` as t.PeerId;
-  },
+    generate(kind: t.PeerIdKind, suffix?: string) {
+      let id = Peer.id.prefix(kind);
+      if (typeof suffix === 'string' && suffix) id = `${id}-${suffix}`;
+      if (suffix === undefined) id = `${id}-${slug()}`;
+      return id as t.PeerId;
+    },
 
-  is(kind: PeerIdKind, id: any): id is t.PeerId {
-    return typeof id === 'string' ? id.startsWith(Peer.prefix(kind)) : false;
+    is(kind: t.PeerIdKind, id: any): id is t.PeerId {
+      if (typeof id !== 'string') return false;
+      return id.startsWith(Peer.id.prefix(kind));
+    },
   },
 } as const;
