@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { PeerId } from '@automerge/automerge-repo';
 
 /**
  * @system
