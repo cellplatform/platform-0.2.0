@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, Repo } from '../../test.ui';
 import { App } from './-SPEC.App';
 
 type T = {};
@@ -23,8 +23,16 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .size([300, null])
       .display('grid')
-      .render<T>((e) => {
-        return <App />;
+      .render<T>(async (e) => {
+        const { repo, Provider } = await Repo.ui();
+
+        console.log('repo', repo);
+
+        return (
+          <Provider>
+            <App />
+          </Provider>
+        );
       });
   });
 
