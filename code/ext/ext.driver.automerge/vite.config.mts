@@ -9,6 +9,7 @@ export default Config.vite(import.meta.url, (e) => {
     entry: {
       index: 'src/index.mts',
       specs: 'src/test.ui/entry.Specs.mts',
+      Peer: 'src/repo/Peer.ts',
     },
   });
   e.target('web');

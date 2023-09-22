@@ -33,10 +33,14 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
+    "./Peer": "./dist/web/Peer.js",
     "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
+      "Peer": [
+        "./dist/types.d/repo/Peer.d.ts"
+      ],
       "specs": [
         "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
