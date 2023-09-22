@@ -4,6 +4,7 @@ export const TESTS = {
       //
       import('./-TEST.mjs'),
       import('../repo/Peer.TEST'),
+      import('../repo/Repo.TEST'),
     ];
   },
 };

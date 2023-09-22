@@ -17,6 +17,10 @@ export const App: React.FC<AppProps> = (props) => {
   });
   const [doc, changeDoc] = useDocument<Doc>(url);
 
+  console.log('-');
+  console.log('App::useBootstrap.url:', url);
+  console.log('App::useBootstrap.doc:', doc);
+
   if (!doc) return null;
 
   const increment = () => {

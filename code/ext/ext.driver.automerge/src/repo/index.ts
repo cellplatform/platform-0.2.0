@@ -1,2 +1,2 @@
-export * from './Repo';
 export * from './Peer';
+export * from './Repo';

@@ -1,4 +1,4 @@
-import { Dev, type t, Repo } from '../../test.ui';
+import { Dev, Repo } from '../../test.ui';
 import { App } from './-SPEC.App';
 
 type T = {};
@@ -24,9 +24,10 @@ export default Dev.describe(name, (e) => {
       .size([300, null])
       .display('grid')
       .render<T>(async (e) => {
-        const { repo, Provider } = await Repo.ui();
+        const { Provider, repo, workerUrl } = await Repo.ui();
 
-        console.log('repo', repo);
+        console.log('render/workerUrl:', workerUrl);
+        console.log('render/repo:', repo);
 
         return (
           <Provider>

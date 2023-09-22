@@ -9,7 +9,7 @@ declare const self: SharedWorkerGlobalScope;
 self.addEventListener('connect', (e: MessageEvent) => configureChannel(e.ports[0]));
 
 const Import = {
-  Peer: () => import('ext.driver.automerge'),
+  Peer: () => import('../repo/Peer'), // Peer: () => import('ext.driver.automerge'),
   Repo: () => import('@automerge/automerge-repo'),
   IndexedDB: () => import('@automerge/automerge-repo-storage-indexeddb'),
   MessageChannel: () => import('@automerge/automerge-repo-network-messagechannel'),

@@ -6,11 +6,28 @@ const Import = {
   RepoContext: () => import('@automerge/automerge-repo-react-hooks'),
 } as const;
 
+type Url = string | URL;
+let _workerUrl: Url = '';
+
+/**
+ * Singleton state related to the [SharedWorker].
+ */
+const WorkerSingleton = {
+  get url(): Url {
+    return _workerUrl;
+  },
+  register(url: Url) {
+    _workerUrl = url;
+  },
+} as const;
+
 /**
  * Sample:
  *  https://github.com/automerge/automerge-repo/blob/main/examples/automerge-repo-demo-counter
  */
 export const Repo = {
+  worker: WorkerSingleton,
+
   /**
    * Configure a repo to run on the browser with a [SharedWorker].
    *
@@ -22,32 +39,37 @@ export const Repo = {
    *
    * 🐷
    * In Chrome-derived browsers the URL is:
-   *    chrome://inspect/#workers.
+   *    chrome://inspect/#workers
    *
    * In Firefox:
-   *    about:debugging#workers.
+   *    about:debugging#workers
    *
    * In Safari:
    *    Develop > Show Web Inspector > Storage > IndexedDB > automerge-repo-demo-counter.
    *
    */
-  async ui() {
+  async ui(workerUrl?: Url) {
     const { Repo } = await Import.Repo();
     const { MessageChannelNetworkAdapter } = await Import.MessageChannel();
     const { RepoContext: Context } = await Import.RepoContext();
 
-    const url = new URL('./Repo.SharedWorker.ts', import.meta.url);
-    const sharedWorker = new SharedWorker(url, {
+    const url = workerUrl || WorkerSingleton.url;
+    const worker = new SharedWorker(url, {
       type: 'module',
       name: 'automerge-repo-shared-worker',
     });
+
+    if (!url) {
+      const msg = `Ensure the [Repo.worker.register(url)] has been called for the shared-worker.`;
+      throw new Error(msg);
+    }
 
     /**
      * Create a repo and share any documents we create with our
      * local in-browser storage worker.
      */
     const repo = new Repo({
-      network: [new MessageChannelNetworkAdapter(sharedWorker.port)],
+      network: [new MessageChannelNetworkAdapter(worker.port)],
       sharePolicy: async (peerId) => Peer.id.is('SharedWorker', peerId),
     });
 
@@ -61,6 +83,21 @@ export const Repo = {
     /**
      * API
      */
-    return { repo, Provider } as const;
+    return {
+      repo,
+      Provider,
+      workerUrl: url,
+    } as const;
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  get global() {
+    const key = 'ext.driver.automerge';
+    const win = window as any;
+    return win[key] || (win[key] = {});
   },
 } as const;
