@@ -8,7 +8,7 @@
   /**
    * Start worker.
    */
-  import('./workers/worker.main.mjs');
+  import('./workers/worker.main');
   //   const bus = rx.bus();
   //   const store = await Filesystem.client({ bus });
   //   const fs = store.fs;

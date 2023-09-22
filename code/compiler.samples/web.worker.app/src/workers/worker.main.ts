@@ -1,5 +1,13 @@
-import { rx, slug, Time, WorkerBus } from '../common/index.mjs';
-import workerUrl from './worker.thread.mjs?worker&url';
+import { rx, slug, Time, WorkerBus } from '../common';
+import workerUrl from './worker.thread.js?worker&url';
+
+/**
+ * https://vitejs.dev/guide/features.html#web-workers
+ * https://vitejs.dev/config/worker-options.html
+ */
+
+import WorkerImport from './worker.thread.js?worker';
+console.info('WorkerImport', WorkerImport);
 
 /**
  * Sample worker instantiation.
