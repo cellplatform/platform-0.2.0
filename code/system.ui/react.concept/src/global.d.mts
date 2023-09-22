@@ -1,1 +1,2 @@
-declare module '*.mjs?worker&url';
+declare module '*.js?worker';
+declare module '*.js?worker&url';
