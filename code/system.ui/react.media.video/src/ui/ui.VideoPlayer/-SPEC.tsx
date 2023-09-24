@@ -1,5 +1,5 @@
-import { VideoPlayer } from '..';
-import { SAMPLE, Dev, Icons, Video, type t } from '../../../test.ui';
+import { VideoPlayer } from '.';
+import { SAMPLE, Dev, Icons, Video, type t } from '../../test.ui';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
