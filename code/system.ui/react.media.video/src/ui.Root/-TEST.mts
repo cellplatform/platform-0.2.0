@@ -13,10 +13,12 @@ export default Test.describe('Video', (e) => {
 
     e.it('input is already { src } object', (e) => {
       const unknown: t.VideoSrcUnknown = { kind: 'Unknown', src: '' };
+      const video: t.VideoSrcVideo = { kind: 'Video', src: '/media/video.mp4' };
       const vimeo: t.VideoSrcVimeo = { kind: 'Vimeo', src: '123' };
       const youtube: t.VideoSrcYoutube = { kind: 'YouTube', src: '123' };
 
       expect(Video.src(unknown)).to.eql(unknown);
+      expect(Video.src(video)).to.eql(video);
       expect(Video.src(vimeo)).to.eql(vimeo);
       expect(Video.src(youtube)).to.eql(youtube);
     });

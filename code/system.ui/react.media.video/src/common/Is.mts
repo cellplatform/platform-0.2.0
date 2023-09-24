@@ -1,6 +1,6 @@
 import type * as t from './types.mjs';
 
-const srcKinds: t.VideoSrcKind[] = ['Unknown', 'Vimeo', 'YouTube'];
+export const srcKinds: t.VideoSrcKind[] = ['Unknown', 'Video', 'Vimeo', 'YouTube'];
 
 /**
  * Flags

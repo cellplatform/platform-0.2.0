@@ -4,10 +4,12 @@ import { Is } from './Is.mjs';
 export default Test.describe('Is (flags)', (e) => {
   e.it('Is.srcObject', (e) => {
     const unknown: t.VideoSrcUnknown = { kind: 'Unknown', src: '' };
+    const video: t.VideoSrcVideo = { kind: 'Video', src: '/media/video.mp4' };
     const vimeo: t.VideoSrcVimeo = { kind: 'Vimeo', src: '123' };
     const youtube: t.VideoSrcYoutube = { kind: 'YouTube', src: '123' };
 
     expect(Is.srcObject(unknown)).to.eql(true);
+    expect(Is.srcObject(video)).to.eql(true);
     expect(Is.srcObject(vimeo)).to.eql(true);
     expect(Is.srcObject(youtube)).to.eql(true);
   });
@@ -22,7 +24,7 @@ export default Test.describe('Is (flags)', (e) => {
       [],
       {},
       { kind: 'Vimeo' },
-      { kind: 'foo', id: '123' },
+      { kind: 'foo', src: '123' },
     ].forEach((input) => expect(Is.srcObject(input)).to.eql(false, `${input}`));
   });
 });

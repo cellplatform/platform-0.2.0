@@ -9,6 +9,7 @@ export type * from './ui/ui.VideoPlayer/types.mjs';
  * Common Video resource definition
  */
 export type VideoId = string;
+export type VideoAddress = string;
 export type VideoKind = VideoSrc['kind'];
 
 export type VideoSrcInput = VideoSrc | string | number;
@@ -18,7 +19,7 @@ export type VideoSrcKind = VideoSrc['kind'];
 export type VideoSrcUnknown = { kind: 'Unknown'; src: '' };
 export type VideoSrcVimeo = { kind: 'Vimeo'; src: VideoId };
 export type VideoSrcYoutube = { kind: 'YouTube'; src: VideoId };
-export type VideoSrcVideo = { kind: 'Video'; src: string };
+export type VideoSrcVideo = { kind: 'Video'; src: VideoAddress };
 
 /**
  * Common status of a playing video.
