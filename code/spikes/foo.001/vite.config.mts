@@ -22,11 +22,7 @@ export default Config.vite(import.meta.url, (e) => {
 
   e.chunk('ext.lib.crdt.repo', '@automerge/automerge-repo');
   e.chunk('ext.lib.crdt.repo.idb', '@automerge/automerge-repo-storage-indexeddb');
+  e.chunk('ext.lib.crdt.repo.bc', '@automerge/automerge-repo-network-broadcastchannel');
   e.chunk('ext.lib.crdt.repo.msg', '@automerge/automerge-repo-network-messagechannel');
   e.chunk('ext.lib.crdt.repo.ws', '@automerge/automerge-repo-network-websocket');
-
-  // e.chunk('@automerge/automerge-repo-storage-indexeddb', 'ext.lib.automerge-idb');
-  // e.chunk('@automerge/automerge-repo-network-messagechannel', 'ext.lib.automerge-mc');
-  // e.chunk('@automerge/automerge-repo-network-websocket', 'ext.lib.automerge-ns');
-  // e.chunk('ext.driver.automerge', 'ext.driver.automerge');
 });

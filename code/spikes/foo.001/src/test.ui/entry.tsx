@@ -9,9 +9,9 @@ import { Dev } from 'sys.ui.react.common';
   console.info(`Pkg:`, Pkg);
   const { Specs } = await import('./entry.Specs.mjs');
 
-  const { Repo } = await import('ext.driver.automerge');
-  const url = await import('./entry.worker.js?sharedworker&url');
-  Repo.sharedWorkerUrl = url.default;
+  // const { Repo } = await import('ext.driver.automerge');
+  // const url = await import('./entry.worker.js?sharedworker&url');
+  // Repo.worker.register(url.default);
 
   const el = await Dev.render(Pkg, Specs, { hrDepth: 3 });
   const root = createRoot(document.getElementById('root')!);
