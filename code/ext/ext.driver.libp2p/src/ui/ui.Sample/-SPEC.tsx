@@ -1,5 +1,4 @@
 import { css, Dev, type t, ObjectView } from '../../test.ui';
-
 import { createLibp2p } from 'libp2p';
 
 type T = {};
@@ -17,8 +16,6 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
-
-    // const libp2p = await createLibp2p({});
 
     ctx.debug.width(330);
     ctx.subject
