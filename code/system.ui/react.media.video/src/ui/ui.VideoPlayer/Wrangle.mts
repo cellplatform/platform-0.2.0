@@ -9,7 +9,7 @@ export const Wrangle = {
   toYouTube: (id: string): t.VideoSrc => Wrangle.toDef('YouTube', id),
   toVimeo: (id: string | number): t.VideoSrc => Wrangle.toDef('Vimeo', id),
   toDef(kind: t.VideoKind, id: string | number) {
-    return { kind, id: id.toString() } as t.VideoSrc;
+    return { kind, src: id.toString() } as t.VideoSrc;
   },
 
   clampPercent(value: t.Percent) {

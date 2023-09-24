@@ -12,12 +12,13 @@ export type VideoId = string;
 export type VideoKind = VideoSrc['kind'];
 
 export type VideoSrcInput = VideoSrc | string | number;
-export type VideoSrc = VideoSrcVimeo | VideoSrcYoutube | VideoSrcUnknown;
+export type VideoSrc = VideoSrcVideo | VideoSrcVimeo | VideoSrcYoutube | VideoSrcUnknown;
 
 export type VideoSrcKind = VideoSrc['kind'];
-export type VideoSrcVimeo = { kind: 'Vimeo'; id: VideoId };
-export type VideoSrcYoutube = { kind: 'YouTube'; id: VideoId };
-export type VideoSrcUnknown = { kind: 'Unknown'; id: '' };
+export type VideoSrcUnknown = { kind: 'Unknown'; src: '' };
+export type VideoSrcVimeo = { kind: 'Vimeo'; src: VideoId };
+export type VideoSrcYoutube = { kind: 'YouTube'; src: VideoId };
+export type VideoSrcVideo = { kind: 'Video'; src: string };
 
 /**
  * Common status of a playing video.

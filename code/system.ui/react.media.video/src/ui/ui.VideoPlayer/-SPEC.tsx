@@ -142,9 +142,9 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     dev.section(['Video', '(Source)'], (dev) => {
       const def = (def: t.VideoSrc, hint?: string) => {
-        const isCurrent = () => def.id === state.current.props.video?.id;
+        const isCurrent = () => def.src === state.current.props.video?.src;
 
-        const id = def.id ? `${def.id.substring(0, 4)}...` : 'empty';
+        const id = def.src ? `${def.src.substring(0, 4)}...` : 'empty';
         let label = `${def.kind}:${id} ${hint ? `← ${hint}` : ''}`;
 
         dev.button((btn) => {

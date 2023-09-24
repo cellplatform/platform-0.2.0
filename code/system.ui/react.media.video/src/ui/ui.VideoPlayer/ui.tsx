@@ -36,7 +36,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     onStatus,
   });
 
-  if (!video || video.kind === 'Unknown' || !video.id) return null;
+  if (!video || video.kind === 'Unknown' || !video.src) return null;
 
   /**
    * [Render]
@@ -72,8 +72,8 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    */
   const elVimeo = video.kind === 'Vimeo' && (
     <Vimeo
-      key={`${video.kind}:${video.id}`}
-      videoId={video.id}
+      key={`${video.kind}:${video.src}`}
+      videoId={video.src}
       byline={false}
       cookies={false}
       portrait={false}
@@ -87,9 +87,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    */
   const elYouTube = video.kind === 'YouTube' && (
     <Youtube
-      key={`${video.kind}:${video.id}`}
+      key={`${video.kind}:${video.src}`}
       //
-      videoId={video.id}
+      videoId={video.src}
       cookies={false}
       showFullscreenControl={false}
     />
