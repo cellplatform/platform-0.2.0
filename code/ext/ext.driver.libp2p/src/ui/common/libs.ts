@@ -6,6 +6,7 @@ export {
   Color,
   FC,
   Keyboard,
+  ObjectView,
   PropList,
   TestRunner,
   css,
