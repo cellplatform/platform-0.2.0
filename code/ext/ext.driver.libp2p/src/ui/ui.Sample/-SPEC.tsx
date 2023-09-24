@@ -1,5 +1,5 @@
-import { css, Dev, type t, ObjectView } from '../../test.ui';
 import { createLibp2p } from 'libp2p';
+import { Dev, ObjectView, css } from '../../test.ui';
 
 type T = {};
 const initial: T = {};
