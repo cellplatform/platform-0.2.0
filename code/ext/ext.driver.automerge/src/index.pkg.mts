@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     '@automerge/automerge': '2.1.2',
     '@automerge/automerge-repo': '1.0.2',
+    '@automerge/automerge-repo-network-broadcastchannel': '1.0.2',
     '@automerge/automerge-repo-network-messagechannel': '1.0.2',
     '@automerge/automerge-repo-network-websocket': '1.0.2',
     '@automerge/automerge-repo-react-hooks': '1.0.2',
