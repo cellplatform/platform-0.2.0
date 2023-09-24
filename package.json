@@ -61,6 +61,7 @@
     "glob": "10.3.4",
     "immer": "10.0.2",
     "jss-plugin-global": "10.10.0",
+    "libp2p": "0.46.11",
     "minimist": "1.2.8",
     "monaco-editor": "0.43.0",
     "nanoid": "4.0.2",

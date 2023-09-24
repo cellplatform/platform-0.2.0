@@ -7575,7 +7575,7 @@ libp2p-crypto@^0.21.0, libp2p-crypto@^0.21.2:
     protobufjs "^6.11.2"
     uint8arrays "^3.0.0"
 
-libp2p@:
+libp2p@0.46.11:
   version "0.46.11"
   resolved "https://registry.yarnpkg.com/libp2p/-/libp2p-0.46.11.tgz#298bac21b3e85a982ee82b8368b9955c617e0a68"
   integrity sha512-8SHmYA3etA3EGMQ81URhs7z14U8TOT16zmGjivNa25Vj/UpV8O3yNE4gpk5Ybt37zMzHzI8IxVdai6Sn+jXYvw==
