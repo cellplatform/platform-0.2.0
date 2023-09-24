@@ -1,20 +1,6 @@
 import { expect, describe, it } from '../test';
 import { Value } from '.';
 
-describe('isStatusOk', () => {
-  it('is ok', async () => {
-    expect(Value.isStatusOk(200)).to.eql(true);
-    expect(Value.isStatusOk(201)).to.eql(true);
-  });
-
-  it('is not ok', async () => {
-    expect(Value.isStatusOk(404)).to.eql(false);
-    expect(Value.isStatusOk(500)).to.eql(false);
-    expect(Value.isStatusOk(0)).to.eql(false);
-    expect(Value.isStatusOk(undefined as any)).to.eql(false);
-  });
-});
-
 describe('plural', () => {
   it('singular', async () => {
     expect(Value.plural(1, 'item')).to.eql('item');

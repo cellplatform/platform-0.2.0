@@ -20,4 +20,5 @@ export type IsMethods = {
   json(input?: any): boolean;
   email(input?: any): boolean;
   url(input?: any): boolean;
+  statusOK(input?: any): boolean;
 };

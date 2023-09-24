@@ -135,4 +135,11 @@ export const Is: t.Is = {
     }
     return true;
   },
+
+  /**
+   * Determines whether an HTTP status is OK.
+   */
+  statusOK(status: number) {
+    return status === undefined ? false : status.toString().startsWith('2');
+  },
 };

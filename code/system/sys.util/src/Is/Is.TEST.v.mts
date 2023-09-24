@@ -257,4 +257,18 @@ describe('Is', () => {
       test('foo.com');
     });
   });
+
+  describe('Is.statusOK', () => {
+    it('is ok', async () => {
+      expect(Is.statusOK(200)).to.eql(true);
+      expect(Is.statusOK(201)).to.eql(true);
+    });
+
+    it('is not ok', async () => {
+      expect(Is.statusOK(404)).to.eql(false);
+      expect(Is.statusOK(500)).to.eql(false);
+      expect(Is.statusOK(0)).to.eql(false);
+      expect(Is.statusOK(undefined as any)).to.eql(false);
+    });
+  });
 });
