@@ -13,4 +13,9 @@ export const SAMPLE = {
     AlanKay: Video.src('N9c7_8Gp7gI'),
     LocalFirst: Video.src('KrPsyr8Ig6M'),
   },
+  VIDEO: {
+    GmFarcaster: Video.src(
+      'https://ipfs.decentralized-content.com/ipfs/bafybeidhpqhjepfpmfzqmh7n4eplgd5otrzka3ep5t6iwhp47omodxb7rm',
+    ),
+  },
 } as const;

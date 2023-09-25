@@ -1,5 +1,5 @@
 import { Test, expect, type t } from '../test.ui';
-import { Is } from './Is.mjs';
+import { Is } from './Is';
 
 export default Test.describe('Is (flags)', (e) => {
   e.it('Is.srcObject', (e) => {
@@ -26,5 +26,12 @@ export default Test.describe('Is (flags)', (e) => {
       { kind: 'Vimeo' },
       { kind: 'foo', src: '123' },
     ].forEach((input) => expect(Is.srcObject(input)).to.eql(false, `${input}`));
+  });
+
+  e.it('Is.numeric', (e) => {
+    expect(Is.numeric('0')).to.eql(true);
+    expect(Is.numeric('123')).to.eql(true);
+    expect(Is.numeric('-0.1')).to.eql(true);
+    expect(Is.numeric('hello')).to.eql(false);
   });
 });
