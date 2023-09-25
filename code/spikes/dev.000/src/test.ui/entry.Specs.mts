@@ -22,7 +22,6 @@ const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
 const { Specs: ExtIpfsW3s } = await import('ext.driver.ipfs.w3s/specs');
-// const { Specs: ExtAutomerge } = await import('ext.driver.automerge/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 

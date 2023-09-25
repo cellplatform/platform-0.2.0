@@ -24,7 +24,6 @@
     "@automerge/automerge-repo-react-hooks": "1.0.2",
     "@automerge/automerge-repo-storage-indexeddb": "1.0.2",
     "ext.driver.auth.privy": "0.0.0",
-    "ext.driver.automerge": "0.0.0",
     "ext.driver.ipfs.w3s": "0.0.0",
     "ext.driver.protocol.hats": "0.0.0",
     "ext.lib.peerjs": "0.0.0",
