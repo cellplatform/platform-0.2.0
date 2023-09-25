@@ -1,5 +1,5 @@
 {
-  "name": "ext.wallet.rainbow",
+  "name": "ext.lib.wallet.rainbow",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,
