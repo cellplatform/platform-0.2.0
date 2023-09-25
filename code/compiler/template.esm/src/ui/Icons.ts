@@ -1,4 +1,4 @@
-import { MdFace } from 'react-icons/md';
+import { MdRefresh } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -7,5 +7,5 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
-  Face: icon(MdFace),
+  Refresh: icon(MdRefresh),
 } as const;
