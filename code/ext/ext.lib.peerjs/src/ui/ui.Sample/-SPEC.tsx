@@ -86,13 +86,15 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('' /* local peer ID */, (dev) => {
+    dev.section('Peers', (dev) => {
+      const placeholder = 'enter peer-id';
+
       dev.textbox((txt) => {
         const copy = () => navigator.clipboard.writeText(state.current.peerid.local);
         const regenerate = () => initPeer(state, cuid());
         txt
-          .label((e) => 'local')
-          .placeholder('enter peer-id')
+          .label((e) => 'local id')
+          .placeholder(placeholder)
           .value((e) => e.state.peerid.local)
           .right((e) => (
             <div>
@@ -113,8 +115,8 @@ export default Dev.describe(name, (e) => {
       dev.textbox((txt) => {
         const copy = () => navigator.clipboard.writeText(state.current.peerid.remote);
         txt
-          .label((e) => 'remote')
-          .placeholder('enter peer-id')
+          .label((e) => 'remote id')
+          .placeholder(placeholder)
           .value((e) => e.state.peerid.remote)
           .right((e) => (
             <div>
