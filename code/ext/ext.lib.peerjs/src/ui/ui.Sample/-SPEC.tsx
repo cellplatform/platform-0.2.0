@@ -4,8 +4,12 @@ import { Button, DEFAULTS, Dev, Icons, ObjectView, Path, css, cuid, type t } fro
 type T = {
   peerid: { local: string; remote: string };
   options?: PeerOptions;
+  debug: { connectingData?: boolean };
 };
-const initial: T = { peerid: { local: '', remote: '' } };
+const initial: T = {
+  peerid: { local: '', remote: '' },
+  debug: {},
+};
 
 /**
  * Spec
@@ -135,7 +139,9 @@ export default Dev.describe(name, (e) => {
         btn
           .label(`connect`)
           .enabled((e) => canConnect())
-          .onClick((e) => {
+          .spinner((e) => Boolean(e.state.debug.connectingData))
+          .onClick(async (e) => {
+            await e.change((d) => (d.debug.connectingData = true));
             const { local, remote } = e.state.current.peerid;
             const conn = peer.connect(remote);
             conn.on('open', () => {
@@ -144,6 +150,7 @@ export default Dev.describe(name, (e) => {
               connections.push(conn);
               dev.redraw();
             });
+            await e.change((d) => (d.debug.connectingData = false));
           });
       });
     });
