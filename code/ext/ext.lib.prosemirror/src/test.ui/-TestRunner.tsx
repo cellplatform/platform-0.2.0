@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
-        .localstore('dev:ext.prosemirror')
+        .localstore('dev:ext.lib.prosemirror')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );

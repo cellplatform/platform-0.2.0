@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.prosemirror',
+  name: 'ext.lib.prosemirror',
   version: '0.0.0',
   dependencies: {
     'prosemirror-state': '1.4.3',

@@ -10,7 +10,7 @@ const initial: T = { props: {} };
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.prosemirror.ui.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.prosemirror.ui.Info');
   const local = localstore.object({
     selectedFields: Info.DEFAULTS.fields,
   });
