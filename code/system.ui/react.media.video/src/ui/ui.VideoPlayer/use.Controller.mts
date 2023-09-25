@@ -26,7 +26,7 @@ export function useController(args: Args) {
     muted = DEFAULTS.muted,
     timestamp,
   } = args;
-  const videoDef = args.video ? `${args.video.kind}.${args.video.src}` : 'empty';
+  const videoDef = args.video ? `${args.video.kind}.${args.video.ref}` : 'empty';
 
   const ref = useRef<HTMLVmPlayerElement>(null);
   const [video, setVideo] = useState<t.VideoSrc>(DEFAULTS.unknown);

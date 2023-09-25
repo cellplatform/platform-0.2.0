@@ -4,7 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-const sampleVideo: t.VideoSrcVimeo = { kind: 'Vimeo', src: '499921561' }; // Tubes.
+const sampleVideo: t.VideoSrcVimeo = { kind: 'Vimeo', ref: '499921561' }; // Tubes.
 
 export const DEFAULTS = {
   sampleVideo,
@@ -17,7 +17,7 @@ export const DEFAULTS = {
   aspectRatio: '16:9',
 
   get unknown(): t.VideoSrcUnknown {
-    return { kind: 'Unknown', src: '' };
+    return { kind: 'Unknown', ref: '' };
   },
 
   get emptyStatus(): t.VideoStatus {

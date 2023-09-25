@@ -3,10 +3,10 @@ import { Is } from './Is';
 
 export default Test.describe('Is (flags)', (e) => {
   e.it('Is.srcObject', (e) => {
-    const unknown: t.VideoSrcUnknown = { kind: 'Unknown', src: '' };
-    const video: t.VideoSrcVideo = { kind: 'Video', src: '/media/video.mp4' };
-    const vimeo: t.VideoSrcVimeo = { kind: 'Vimeo', src: '123' };
-    const youtube: t.VideoSrcYoutube = { kind: 'YouTube', src: '123' };
+    const unknown: t.VideoSrcUnknown = { kind: 'Unknown', ref: '' };
+    const video: t.VideoSrcVideo = { kind: 'Video', ref: '/media/video.mp4' };
+    const vimeo: t.VideoSrcVimeo = { kind: 'Vimeo', ref: '123' };
+    const youtube: t.VideoSrcYoutube = { kind: 'YouTube', ref: '123' };
 
     expect(Is.srcObject(unknown)).to.eql(true);
     expect(Is.srcObject(video)).to.eql(true);

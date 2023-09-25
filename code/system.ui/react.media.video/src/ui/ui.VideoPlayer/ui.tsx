@@ -36,7 +36,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     onStatus,
   });
 
-  if (!video || video.kind === 'Unknown' || !video.src) return null;
+  if (!video || video.kind === 'Unknown' || !video.ref) return null;
 
   /**
    * [Render]
@@ -70,8 +70,8 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    * https://vimejs.com/components/providers/video
    */
   const elVideo = video.kind === 'Video' && (
-    <Video key={`${video.kind}:${video.src}`}>
-      <source src={video.src} type={'video/mp4'} />
+    <Video key={`${video.kind}:${video.ref}`}>
+      <source src={video.ref} type={'video/mp4'} />
     </Video>
   );
 
@@ -81,8 +81,8 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    */
   const elVimeo = video.kind === 'Vimeo' && (
     <Vimeo
-      key={`${video.kind}:${video.src}`}
-      videoId={video.src}
+      key={`${video.kind}:${video.ref}`}
+      videoId={video.ref}
       byline={false}
       cookies={false}
       portrait={false}
@@ -96,9 +96,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    */
   const elYouTube = video.kind === 'YouTube' && (
     <Youtube
-      key={`${video.kind}:${video.src}`}
+      key={`${video.kind}:${video.ref}`}
       //
-      videoId={video.src}
+      videoId={video.ref}
       cookies={false}
       showFullscreenControl={false}
     />

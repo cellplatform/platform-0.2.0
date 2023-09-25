@@ -16,10 +16,10 @@ export type VideoSrcInput = VideoSrc | string | number;
 export type VideoSrc = VideoSrcVideo | VideoSrcVimeo | VideoSrcYoutube | VideoSrcUnknown;
 
 export type VideoSrcKind = VideoSrc['kind'];
-export type VideoSrcUnknown = { kind: 'Unknown'; src: '' };
-export type VideoSrcVimeo = { kind: 'Vimeo'; src: VideoId };
-export type VideoSrcYoutube = { kind: 'YouTube'; src: VideoId };
-export type VideoSrcVideo = { kind: 'Video'; src: VideoAddress };
+export type VideoSrcUnknown = { kind: 'Unknown'; ref: '' };
+export type VideoSrcVimeo = { kind: 'Vimeo'; ref: VideoId };
+export type VideoSrcYoutube = { kind: 'YouTube'; ref: VideoId };
+export type VideoSrcVideo = { kind: 'Video'; ref: VideoAddress };
 
 /**
  * Common status of a playing video.

@@ -6,17 +6,17 @@ import { type t, Is } from '../common';
 export function src(input?: t.VideoSrcInput): t.VideoSrc {
   if (Is.srcObject(input)) return input;
 
-  if (typeof input === 'number') return { kind: 'Vimeo', src: `${input}` };
+  if (typeof input === 'number') return { kind: 'Vimeo', ref: `${input}` };
 
   if (typeof input === 'string') {
-    const src = input.trim();
-    if (!src) return Wrangle.unknown;
-    if (Is.numeric(src)) return { kind: 'Vimeo', src };
-    if (Is.http(src)) {
-      if (!Is.http(src, true)) throw new Error(`Only https supported.`);
-      return { kind: 'Video', src };
+    const ref = input.trim();
+    if (!ref) return Wrangle.unknown;
+    if (Is.numeric(ref)) return { kind: 'Vimeo', ref };
+    if (Is.http(ref)) {
+      if (!Is.http(ref, true)) throw new Error(`Only https supported.`);
+      return { kind: 'Video', ref };
     }
-    return { kind: 'YouTube', src };
+    return { kind: 'YouTube', ref };
   }
 
   return Wrangle.unknown;
@@ -27,6 +27,6 @@ export function src(input?: t.VideoSrcInput): t.VideoSrc {
  */
 const Wrangle = {
   get unknown(): t.VideoSrcUnknown {
-    return { kind: 'Unknown', src: '' };
+    return { kind: 'Unknown', ref: '' };
   },
 } as const;
