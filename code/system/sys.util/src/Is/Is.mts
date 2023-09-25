@@ -138,4 +138,18 @@ export const Is: t.Is = {
   statusOK(status: number) {
     return status === undefined ? false : status.toString().startsWith('2');
   },
+
+  /**
+   * Determine if the given string is an HTTP url.
+   */
+  http(input: string, forceHttps: boolean = false) {
+    if (typeof input !== 'string') return false;
+    input = input.trim().toLowerCase();
+
+    const isHttps = input.startsWith('https://');
+    if (forceHttps && !isHttps) return false;
+
+    const isHttp = input.startsWith('http://');
+    return isHttps || isHttp;
+  },
 };

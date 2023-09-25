@@ -21,4 +21,5 @@ export type IsMethods = {
   email(input?: any): boolean;
   url(input?: any): boolean;
   statusOK(input?: any): boolean;
+  http(input: string, forceHttps?: boolean): boolean;
 };

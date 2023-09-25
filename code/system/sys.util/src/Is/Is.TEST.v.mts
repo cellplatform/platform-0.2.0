@@ -259,16 +259,38 @@ describe('Is', () => {
   });
 
   describe('Is.statusOK', () => {
-    it('is ok', async () => {
+    it('is ok', () => {
       expect(Is.statusOK(200)).to.eql(true);
       expect(Is.statusOK(201)).to.eql(true);
     });
 
-    it('is not ok', async () => {
+    it('is not ok', () => {
       expect(Is.statusOK(404)).to.eql(false);
       expect(Is.statusOK(500)).to.eql(false);
       expect(Is.statusOK(0)).to.eql(false);
       expect(Is.statusOK(undefined as any)).to.eql(false);
+    });
+  });
+
+  describe('Is.http', () => {
+    it('http', () => {
+      expect(Is.http('  http://foo.com  ')).to.eql(true);
+      expect(Is.http('  https://foo.com  ')).to.eql(true);
+
+      expect(Is.http(' ')).to.eql(false);
+      expect(Is.http('foo')).to.eql(false);
+      expect(Is.http('//foo.com')).to.eql(false);
+    });
+
+    it('forceHttps', () => {
+      expect(Is.http('https://foo.com', true)).to.eql(true);
+      expect(Is.http('http://foo.com', true)).to.eql(false);
+    });
+
+    it('not string', () => {
+      [123, null, undefined, {}, [], true].forEach((v) => {
+        expect(Is.http(v as any)).to.eql(false);
+      });
     });
   });
 });
