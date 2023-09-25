@@ -20,7 +20,7 @@ describe('timer', () => {
 
   it('waits', async () => {
     const timer = time.timer();
-    expect(timer.elapsed.msec).to.lessThan(5); // NB: 'msecs' default unit for 'elapsed.
+    expect(timer.elapsed.msec).to.lessThan(5); // NB: 'msecs' default unit for 'elapsed'.
     await time.wait(10);
     expect(timer.elapsed.msec).to.greaterThan(6);
     expect(timer.elapsed.msec).to.greaterThan(6);
