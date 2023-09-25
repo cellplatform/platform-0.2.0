@@ -75,9 +75,19 @@ describe('timer', () => {
       .subtract(123, 'ms')
       .toDate();
 
-    expect(time.timer(start).elapsed.day).to.eql(4.7 || 4.8);
-    expect(time.timer(start, { round: 1 }).elapsed.day).to.eql(4.7 || 4.8); // NB: hack for variation between MacOS and Linux.
-    expect(time.timer(start, { round: 0 }).elapsed.day).to.eql(5);
+    const test = (round: undefined | number, ...expected: number[]) => {
+      // NB: multiple round values → hack for variation between MacOS and Linux.
+      const res =
+        round === undefined
+          ? time.timer(start).elapsed.day
+          : time.timer(start, { round }).elapsed.day;
+      const expectedMatch = expected.some((value) => res === value);
+      expect(expectedMatch).to.eql(true);
+    };
+
+    test(undefined, 4.7, 4.8);
+    test(1, 4.7, 4.8);
+    test(0, 5);
 
     const timer = time.timer(start);
     expect(timer.elapsed.toString('d')).to.eql('5d');
