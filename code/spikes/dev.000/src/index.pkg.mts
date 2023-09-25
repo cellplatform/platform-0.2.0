@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.503',
+  version: '0.0.504',
   dependencies: {
     '@automerge/automerge': '2.1.2',
     '@automerge/automerge-repo': '1.0.2',
@@ -23,6 +23,7 @@ export const Pkg: ModuleDef = {
     'ext.driver.automerge': '0.0.0',
     'ext.driver.ipfs.w3s': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
+    'ext.lib.peerjs': '0.0.0',
     'ext.stripe': '0.0.0',
     'ext.ui.react.vimeo': '0.0.0',
     'ext.vercel.blob': '0.0.0',
