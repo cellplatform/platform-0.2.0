@@ -91,6 +91,7 @@ export const Is: t.Is = {
    */
   numeric(value: any | string | number) {
     if (Is.blank(value)) return false;
+    if (typeof value === 'string') value = value.trim();
 
     const num = parseFloat(value);
     if (num === undefined) return false;

@@ -169,6 +169,7 @@ describe('Is', () => {
 
     it('from (string)', () => {
       expect(Is.numeric('0')).to.equal(true);
+      expect(Is.numeric(' 0 ')).to.equal(true);
       expect(Is.numeric('1')).to.equal(true);
       expect(Is.numeric('-1')).to.equal(true);
       expect(Is.numeric('0.5')).to.equal(true);
