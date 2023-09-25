@@ -2,10 +2,12 @@
  * @system
  */
 export {
+  Button,
   COLORS,
   Color,
   FC,
   Keyboard,
+  ObjectView,
   PropList,
   TestRunner,
   css,
