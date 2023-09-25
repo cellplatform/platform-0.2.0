@@ -11,7 +11,11 @@ export function src(input?: t.VideoSrcInput): t.VideoSrc {
   if (typeof input === 'string') {
     const src = input.trim();
     if (!src) return Wrangle.unknown;
-    if (Wrangle.isNumeric(input)) return { kind: 'Vimeo', src };
+    if (Is.numeric(src)) return { kind: 'Vimeo', src };
+    if (Is.http(src)) {
+      if (!Is.http(src, true)) throw new Error(`Only https supported.`);
+      return { kind: 'Video', src };
+    }
     return { kind: 'YouTube', src };
   }
 
@@ -24,9 +28,5 @@ export function src(input?: t.VideoSrcInput): t.VideoSrc {
 const Wrangle = {
   get unknown(): t.VideoSrcUnknown {
     return { kind: 'Unknown', src: '' };
-  },
-
-  isNumeric(input: string) {
-    return !isNaN(Number(input));
   },
 } as const;
