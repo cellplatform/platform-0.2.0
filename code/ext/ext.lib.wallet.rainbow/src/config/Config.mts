@@ -26,7 +26,7 @@ export async function configure(args: {
    *
    */
   const { chains, publicClient } = evm.configureChains(
-    ChainNameMapping.filterAndOrder(evm.chains, args.chains, 'EVM.L1.mainnet'),
+    ChainNameMapping.filterAndOrder(evm.chains, args.chains, 'EVM.L1.Mainnet'),
     [
       // Eth.alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
       evm.publicProvider(),

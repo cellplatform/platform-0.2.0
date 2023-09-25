@@ -3,10 +3,10 @@ export * from '../common';
 
 export const ChainNameMapping = {
   mapping: [
-    ['EVM.L1.mainnet', 'Ethereum'],
-    ['EVM.L2.optimism', 'OP Mainnet'],
-    ['EVM.L2.polygon', 'Polygon'],
-    ['EVM.L2.arbitrum', 'Arbitrum One'],
+    ['EVM.L1.Mainnet', 'Ethereum'],
+    ['EVM.L2.Optimism', 'OP Mainnet'],
+    ['EVM.L2.Polygon', 'Polygon'],
+    ['EVM.L2.Arbitrum', 'Arbitrum One'],
   ] as [t.ChainName, string][],
 
   find(chains: t.WagmiChain[], name: t.ChainName) {
@@ -20,7 +20,7 @@ export const ChainNameMapping = {
   },
 
   mainnet(chains: t.WagmiChain[]) {
-    return ChainNameMapping.find(chains, 'EVM.L1.mainnet')!;
+    return ChainNameMapping.find(chains, 'EVM.L1.Mainnet')!;
   },
 
   filterAndOrder(chains: t.WagmiChain[], names: t.ChainName[], defaultChain?: t.ChainName) {
