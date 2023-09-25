@@ -4,7 +4,7 @@ export * from '../common';
 export const ChainNameMapping = {
   mapping: [
     ['EVM.L1.mainnet', 'Ethereum'],
-    ['EVM.L2.optimism', 'Optimism'],
+    ['EVM.L2.optimism', 'OP Mainnet'],
     ['EVM.L2.polygon', 'Polygon'],
     ['EVM.L2.arbitrum', 'Arbitrum One'],
   ] as [t.ChainName, string][],
