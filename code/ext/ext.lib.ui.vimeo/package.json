@@ -1,5 +1,5 @@
 {
-  "name": "ext.ui.react.vimeo",
+  "name": "ext.lib.vimeo",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,

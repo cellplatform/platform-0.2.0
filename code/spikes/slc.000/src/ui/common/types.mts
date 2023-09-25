@@ -6,7 +6,7 @@ export type {
   VimeoInstance,
   VimeoPlayer,
   VimeoStatus,
-} from 'ext.ui.react.vimeo/src/types.mjs';
+} from 'ext.lib.vimeo/src/types.mjs';
 
 /**
  * @system

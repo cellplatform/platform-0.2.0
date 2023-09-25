@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.ui.react.vimeo',
+  name: 'ext.lib.vimeo',
   version: '0.0.0',
   dependencies: {
     '@vimeo/player': '2.20.1',
