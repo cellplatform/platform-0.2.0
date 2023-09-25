@@ -4,4 +4,4 @@ export type { t };
 export * from '../../../test.ui';
 export * from '../common';
 
-export { MonacoEditor } from '../../../ui/MonacoEditor';
+export { MonacoEditor } from '../../../ui/ui.MonacoEditor';

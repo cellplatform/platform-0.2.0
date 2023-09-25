@@ -1,5 +1,5 @@
-import { MonacoEditor, MonacoEditorProps } from '..';
-import { Dev, Wrangle, t, EditorCarets } from '../../../test.ui';
+import { MonacoEditor, MonacoEditorProps } from '.';
+import { Dev, Wrangle, t, EditorCarets } from '../../test.ui';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
