@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'ext.driver.libp2p.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.libp2p.tests');
       return url.href;
     },
 

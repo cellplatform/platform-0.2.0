@@ -10,11 +10,11 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.driver.libp2p',
+  name: 'ext.lib.libp2p',
   version: '0.0.0',
   dependencies: {
-    'libp2p': '0.46.11',
-    'react': '18.2.0',
+    libp2p: '0.46.11',
+    react: '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',

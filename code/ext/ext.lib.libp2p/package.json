@@ -1,5 +1,5 @@
 {
-  "name": "ext.driver.libp2p",
+  "name": "ext.lib.libp2p",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
