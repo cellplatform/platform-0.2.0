@@ -1,8 +1,8 @@
 import { Peer, type PeerOptions } from 'peerjs';
 import { Button, DEFAULTS, Dev, Icons, ObjectView, Path, css, cuid, type t } from '../../test.ui';
 
-type T = { peerid: string; options?: PeerOptions };
-const initial: T = { peerid: '' };
+type T = { peerid: { local: string; remote: string }; options?: PeerOptions };
+const initial: T = { peerid: { local: '', remote: '' } };
 
 /**
  * Spec
@@ -31,18 +31,19 @@ export default Dev.describe(name, (e) => {
     const options = Wrangle.toPeerOptions(DEFAULTS.signal);
     peer = new Peer(peerid, options);
 
-    local.peerid = peerid;
     state.change((d) => {
-      d.peerid = peerid;
+      local.localPeer = peerid;
+      d.peerid.local = peerid;
       d.options = options;
     });
     return peer;
   };
 
-  type LocalStore = { peerid: string };
+  type LocalStore = { localPeer: string; remotePeer: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
   const local = localstore.object({
-    peerid: cuid(),
+    localPeer: cuid(),
+    remotePeer: '',
   });
 
   e.it('ui:init', async (e) => {
@@ -51,10 +52,13 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.peerid = local.peerid;
+      d.peerid.local = local.localPeer;
+      d.peerid.remote = local.remotePeer;
+
+      console.log('local.remotePeer', local.remotePeer);
     });
 
-    initPeer(state, state.current.peerid);
+    initPeer(state, state.current.peerid.local);
 
     ctx.debug.width(330);
     ctx.subject
@@ -77,22 +81,67 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.textbox((txt) => {
-      txt
-        .label((e) => 'peerid')
-        .value((e) => e.state.peerid)
-        .right((e) => (
-          <Button onClick={() => initPeer(state, cuid())}>
-            <Icons.Refresh size={16} />
-          </Button>
-        ))
-        .onChange((e) => e.change((d) => (d.peerid = e.to.value)))
-        .onEnter((e) => initPeer(state, state.current.peerid));
+    dev.section('' /* local peer ID */, (dev) => {
+      dev.textbox((txt) => {
+        const copy = () => navigator.clipboard.writeText(state.current.peerid.local);
+        const regenerate = () => initPeer(state, cuid());
+        txt
+          .label((e) => 'local')
+          .placeholder('enter peer-id')
+          .value((e) => e.state.peerid.local)
+          .right((e) => (
+            <div>
+              <Button onClick={regenerate} margin={[0, 5, 0, 0]}>
+                <Icons.Refresh size={16} tooltip={'New Peer ID'} />
+              </Button>
+              <Button onClick={copy}>
+                <Icons.Copy size={16} tooltip={'Copy'} />
+              </Button>
+            </div>
+          ))
+          .onChange((e) => e.change((d) => (d.peerid.local = e.to.value)))
+          .onEnter((e) => initPeer(state, state.current.peerid.local));
+      });
+
+      dev.hr(0, 10);
+
+      dev.textbox((txt) => {
+        const copy = () => navigator.clipboard.writeText(state.current.peerid.remote);
+        txt
+          .label((e) => 'remote')
+          .placeholder('enter peer-id')
+          .value((e) => e.state.peerid.remote)
+          .right((e) => (
+            <div>
+              <Button onClick={copy}>
+                <Icons.Copy size={16} tooltip={'Copy'} />
+              </Button>
+            </div>
+          ))
+          .onChange((e) => e.change((d) => (local.remotePeer = d.peerid.remote = e.to.value)));
+      });
     });
 
-    // dev.button((btn) => {
-    //   btn.label(``).right((e) => `←`).enabled((e) => true).onClick((e) => {})
-    // });
+    dev.hr(0, 20);
+
+    dev.section('Connect', (dev) => {
+      const canConnect = () => {
+        const ids = state.current.peerid;
+        return Boolean(ids.local && ids.remote);
+      };
+
+      dev.button((btn) => {
+        btn
+          .label(`data`)
+          // .right((e) => `←`)
+          .enabled((e) => canConnect())
+          .onClick((e) => {
+            const { local, remote } = e.state.current.peerid;
+            console.log('local', local);
+            console.log('remote', remote);
+          });
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
