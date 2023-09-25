@@ -52,7 +52,7 @@ export default Dev.describe('MonacoEditor', (e) => {
               editor = e.editor;
               monaco = e.monaco;
               carets = EditorCarets(editor);
-              carets.$.subscribe((e) => ctx.redraw());
+              // carets.$.subscribe((e) => ctx.redraw());
 
               const asRange = Wrangle.asRange;
               if (local.selection) editor.setSelection(local.selection);
@@ -62,7 +62,7 @@ export default Dev.describe('MonacoEditor', (e) => {
             }}
             onChange={(e) => {
               local.text = e.text;
-              ctx.redraw();
+              // ctx.redraw();
             }}
           />
         );
