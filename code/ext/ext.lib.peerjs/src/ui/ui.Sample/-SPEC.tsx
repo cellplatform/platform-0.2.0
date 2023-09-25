@@ -1,7 +1,10 @@
-import { Peer, type PeerOptions } from 'peerjs';
+import { Peer, type PeerOptions, type DataConnection } from 'peerjs';
 import { Button, DEFAULTS, Dev, Icons, ObjectView, Path, css, cuid, type t } from '../../test.ui';
 
-type T = { peerid: { local: string; remote: string }; options?: PeerOptions };
+type T = {
+  peerid: { local: string; remote: string };
+  options?: PeerOptions;
+};
 const initial: T = { peerid: { local: '', remote: '' } };
 
 /**
@@ -26,6 +29,14 @@ export const Wrangle = {
 } as const;
 
 export default Dev.describe(name, (e) => {
+  type LocalStore = { localPeer: string; remotePeer: string };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
+  const local = localstore.object({
+    localPeer: cuid(),
+    remotePeer: '',
+  });
+
+  const connections: DataConnection[] = [];
   let peer: Peer;
   const initPeer = (state: t.DevCtxState<T>, peerid: string) => {
     const options = Wrangle.toPeerOptions(DEFAULTS.signal);
@@ -39,13 +50,6 @@ export default Dev.describe(name, (e) => {
     return peer;
   };
 
-  type LocalStore = { localPeer: string; remotePeer: string };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
-  const local = localstore.object({
-    localPeer: cuid(),
-    remotePeer: '',
-  });
-
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -54,8 +58,6 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.peerid.local = local.localPeer;
       d.peerid.remote = local.remotePeer;
-
-      console.log('local.remotePeer', local.remotePeer);
     });
 
     initPeer(state, state.current.peerid.local);
@@ -66,12 +68,11 @@ export default Dev.describe(name, (e) => {
       .size([450, null])
       .display('grid')
       .render<T>((e) => {
-        const styles = {
-          base: css({ padding: 15, overflow: 'hidden' }),
-        };
+        const styles = { base: css({ padding: 15, overflow: 'hidden' }) };
+        const data = { peer, connections };
         return (
           <div {...styles.base}>
-            <ObjectView name={'ext.lib.peerjs'} data={{ peer }} expand={2} />
+            <ObjectView name={'ext.lib.peerjs'} data={data} expand={1} />
           </div>
         );
       });
@@ -124,7 +125,7 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(0, 20);
 
-    dev.section('Connect', (dev) => {
+    dev.section('Data', (dev) => {
       const canConnect = () => {
         const ids = state.current.peerid;
         return Boolean(ids.local && ids.remote);
@@ -132,13 +133,17 @@ export default Dev.describe(name, (e) => {
 
       dev.button((btn) => {
         btn
-          .label(`data`)
-          // .right((e) => `←`)
+          .label(`connect`)
           .enabled((e) => canConnect())
           .onClick((e) => {
             const { local, remote } = e.state.current.peerid;
-            console.log('local', local);
-            console.log('remote', remote);
+            const conn = peer.connect(remote);
+            conn.on('open', () => {
+              console.log('open', conn);
+              conn.send(`hi from ${local}!`);
+              connections.push(conn);
+              dev.redraw();
+            });
           });
       });
     });
