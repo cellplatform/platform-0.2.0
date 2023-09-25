@@ -7,4 +7,4 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { cuid, rx } from 'sys.util';
+export { Path, cuid, rx } from 'sys.util';

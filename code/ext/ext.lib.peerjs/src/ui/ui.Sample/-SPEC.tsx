@@ -1,7 +1,7 @@
-import { css, Dev, type t, cuid, ObjectView, Icons, Button } from '../../test.ui';
-import { Peer } from 'peerjs';
+import { Peer, type PeerOptions } from 'peerjs';
+import { Button, DEFAULTS, Dev, Icons, ObjectView, Path, css, cuid, type t } from '../../test.ui';
 
-type T = { peerid: string };
+type T = { peerid: string; options?: PeerOptions };
 const initial: T = { peerid: '' };
 
 /**
@@ -11,12 +11,31 @@ const initial: T = { peerid: '' };
  */
 const name = 'Sample';
 
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  toPeerOptions(args: { host: string; path: string; key: string }): PeerOptions {
+    const host = Path.trimHttpPrefix(args.host);
+    const path = `/${Path.trimSlashes(args.path)}`;
+    const key = args.key;
+    const port = 443;
+    const secure = true;
+    return { host, path, key, port, secure };
+  },
+} as const;
+
 export default Dev.describe(name, (e) => {
   let peer: Peer;
   const initPeer = (state: t.DevCtxState<T>, peerid: string) => {
-    state.change((d) => (d.peerid = peerid));
+    const options = Wrangle.toPeerOptions(DEFAULTS.signal);
+    peer = new Peer(peerid, options);
+
     local.peerid = peerid;
-    peer = new Peer(peerid);
+    state.change((d) => {
+      d.peerid = peerid;
+      d.options = options;
+    });
     return peer;
   };
 
