@@ -71,7 +71,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
    */
   const elVideo = video.kind === 'Video' && (
     <Video key={`${video.kind}:${video.ref}`}>
-      <source src={video.ref} type={'video/mp4'} />
+      <source src={video.ref} type={video.mimetype} />
     </Video>
   );
 
@@ -97,10 +97,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
   const elYouTube = video.kind === 'YouTube' && (
     <Youtube
       key={`${video.kind}:${video.ref}`}
-      //
       videoId={video.ref}
-      cookies={false}
       showFullscreenControl={false}
+      cookies={false}
     />
   );
 

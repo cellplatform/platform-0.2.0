@@ -4,7 +4,11 @@ import { Is } from './Is';
 export default Test.describe('Is (flags)', (e) => {
   e.it('Is.srcObject', (e) => {
     const unknown: t.VideoSrcUnknown = { kind: 'Unknown', ref: '' };
-    const video: t.VideoSrcVideo = { kind: 'Video', ref: '/media/video.mp4' };
+    const video: t.VideoSrcFile = {
+      kind: 'Video',
+      ref: './media/video.mp4',
+      mimetype: 'video/mp4',
+    };
     const vimeo: t.VideoSrcVimeo = { kind: 'Vimeo', ref: '123' };
     const youtube: t.VideoSrcYoutube = { kind: 'YouTube', ref: '123' };
 
