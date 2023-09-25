@@ -11,7 +11,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE.Info');
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
   });
