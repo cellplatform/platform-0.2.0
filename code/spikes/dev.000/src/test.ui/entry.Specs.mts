@@ -18,7 +18,7 @@ const { Specs: MediaVideo } = await import('sys.ui.react.media.video/specs');
 const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 
 const { Specs: ExtProtocolHats } = await import('ext.driver.protocol.hats/specs');
-const { Specs: ExtStripe } = await import('ext.stripe/specs');
+const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
 const { Specs: ExtIpfsW3s } = await import('ext.driver.ipfs.w3s/specs');

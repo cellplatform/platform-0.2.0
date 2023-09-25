@@ -24,7 +24,7 @@ export const Pkg: ModuleDef = {
     'ext.driver.ipfs.w3s': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
-    'ext.stripe': '0.0.0',
+    'ext.lib.stripe': '0.0.0',
     'ext.ui.react.vimeo': '0.0.0',
     'ext.vercel.blob': '0.0.0',
     'react': '18.2.0',
