@@ -6,7 +6,7 @@ const initial: T = { props: {} };
 
 export default Dev.describe('Info', (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.codemirror.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.codemirror.Info');
   const local = localstore.object({
     selectedFields: Info.DEFAULTS.fields,
   });
