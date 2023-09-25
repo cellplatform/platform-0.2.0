@@ -1,4 +1,4 @@
-import { Player, Vimeo, Youtube } from '@vime/react';
+import { Player, Vimeo, Youtube, Video } from '@vime/react';
 
 import { DEFAULTS, css, type t } from './common';
 import { useController } from './use.Controller.mjs';
@@ -67,6 +67,15 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
   };
 
   /**
+   * https://vimejs.com/components/providers/video
+   */
+  const elVideo = video.kind === 'Video' && (
+    <Video key={`${video.kind}:${video.src}`}>
+      <source src={video.src} type={'video/mp4'} />
+    </Video>
+  );
+
+  /**
    * https://vimejs.com/components/providers/vimeo
    * ↑ https://vimejs.com/components/core/embed
    */
@@ -107,6 +116,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
       style={customCssOverrides as any}
       {...controller.handlers}
     >
+      {elVideo}
       {elVimeo}
       {elYouTube}
     </Player>

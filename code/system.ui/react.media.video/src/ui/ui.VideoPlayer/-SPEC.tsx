@@ -144,7 +144,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       const def = (def: t.VideoSrc, hint?: string) => {
         const isCurrent = () => def.src === state.current.props.video?.src;
 
-        const id = def.src ? `${def.src.substring(0, 4)}...` : 'empty';
+        let id = def.src ? `${def.src.substring(0, 4)}..` : 'empty';
         let label = `${def.kind}:${id} ${hint ? `← ${hint}` : ''}`;
 
         dev.button((btn) => {
@@ -160,6 +160,8 @@ export default Dev.describe('Player (Vime)', (e) => {
       dev.hr(-1, 5);
       def(SAMPLE.YOUTUBE.AlanKay, 'Alan Kay');
       def(SAMPLE.YOUTUBE.LocalFirst, 'Local First @pvh');
+      dev.hr(-1, 5);
+      def(SAMPLE.VIDEO.GmFarcaster, 'IPFS: GM Farcaster');
       dev.hr(-1, 5);
       def(DEFAULTS.unknown);
     });
