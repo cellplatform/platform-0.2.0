@@ -98,7 +98,7 @@ export const Config = {
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        const modules = ['ext.driver.auth.privy', 'ext.vercel.blob', 'dev.000'];
+        const modules = ['ext.driver.auth.privy', 'dev.000'];
         return modules.some((item) => modulePath.includes(item));
       };
 
