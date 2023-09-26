@@ -10,14 +10,11 @@ export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
  * Manage an Automerge repo.
  */
 export const Store = {
-  init() {
-    const repo = new Repo({
-      network: [new BroadcastChannelNetworkAdapter()],
-      storage: new IndexedDBStorageAdapter(),
-    });
+  init(repo?: t.Repo) {
+    const store = repo ?? new Repo({ network: [] });
 
     const api = {
-      repo,
+      repo: store,
 
       /**
        * Create a factory for docs.
@@ -30,7 +27,7 @@ export const Store = {
        * Find or create a new CRDT document from the repo.
        */
       async docRef<T>(args: DocRefArgs<T>) {
-        const res = StoreDoc.getOrCreate<T>(repo, args);
+        const res = StoreDoc.getOrCreate<T>(store, args);
         await res.handle.whenReady();
         return res;
       },

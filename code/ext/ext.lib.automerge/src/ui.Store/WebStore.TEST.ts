@@ -1,10 +1,10 @@
-import { Store } from '.';
+import { WebStore } from '.';
 import { type t, Is, Test, expect, A } from '../test.ui';
 
 export type D = { count?: t.A.Counter };
 
 export default Test.describe('Store', (e) => {
-  const store = Store.init();
+  const store = WebStore.init();
   const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
 
   e.it('has repo', (e) => {

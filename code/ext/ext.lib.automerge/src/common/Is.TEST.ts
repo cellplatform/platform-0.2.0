@@ -3,7 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
 import { Test, expect } from '../test.ui';
-import { Store } from '../crdt.Store';
+import { Store } from '../Store';
 import { Is } from '.';
 
 export default Test.describe('Is', (e) => {

@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../crdt.Store/-TEST'),
+      import('../ui.Store/WebStore.TEST'),
       import('../common/Is.TEST'),
     ];
   },

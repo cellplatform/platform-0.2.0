@@ -7,7 +7,8 @@ export { Pkg };
 /**
  * Library
  */
-export { Store } from './crdt.Store';
+export { Store } from './Store';
+export { WebStore } from './ui.Store';
 
 /**
  * Dev

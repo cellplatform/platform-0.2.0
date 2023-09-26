@@ -4,4 +4,4 @@ export { type t };
 export * from '../../common';
 export * from './libs';
 export * from '../Icons';
-export * from '../../crdt.Store';
+export * from '../../Store';
