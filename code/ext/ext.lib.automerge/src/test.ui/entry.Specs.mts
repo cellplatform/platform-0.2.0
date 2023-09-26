@@ -1,9 +1,9 @@
 export { Pkg } from '../index.pkg.mjs';
 
 export const Specs = {
-  'spike.automerge-repo.tests': () => import('./-TestRunner'),
-  'spike.automerge-repo.ui.Info': () => import('../ui/ui.Info/-SPEC'),
-  'spike.automerge-repo.ui.Sample': () => import('../ui/ui.Sample/-SPEC'),
+  'ext.lib.automerge.tests': () => import('./-TestRunner'),
+  'ext.lib.automerge.ui.Info': () => import('../ui/ui.Info/-SPEC'),
+  'ext.lib.automerge.ui.Sample': () => import('../ui/ui.Sample/-SPEC'),
 };
 
 export default Specs;

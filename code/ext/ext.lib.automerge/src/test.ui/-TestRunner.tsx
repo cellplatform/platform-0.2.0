@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
-        .localstore('dev:spike.automerge-repo')
+        .localstore('dev:ext.lib.automerge')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );

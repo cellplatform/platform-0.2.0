@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'spike.automerge-repo.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.automerge.tests');
       return url.href;
     },
 
