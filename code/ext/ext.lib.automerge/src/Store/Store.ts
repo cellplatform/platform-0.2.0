@@ -2,8 +2,6 @@ import { Repo } from '@automerge/automerge-repo';
 import { Doc } from './Doc';
 import { type t } from './common';
 
-export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
-
 /**
  * Manage an Automerge repo.
  */
