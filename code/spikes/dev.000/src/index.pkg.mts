@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.dev',
   version: '0.0.505',
   dependencies: {
-    '@automerge/automerge': '2.1.2',
+    '@automerge/automerge': '2.1.3',
     '@automerge/automerge-repo': '1.0.2',
     '@automerge/automerge-repo-network-messagechannel': '1.0.2',
     '@automerge/automerge-repo-network-websocket': '1.0.2',

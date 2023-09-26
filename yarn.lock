@@ -119,6 +119,14 @@
     "@automerge/automerge-wasm" "^0.2.14"
     uuid "^9.0.0"
 
+"@automerge/automerge@2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.1.3.tgz#7ead93762274cc88e2f6c32c5c06f0389c6445e4"
+  integrity sha512-SNRlLdFdwcMDBhe9a2LWgldXQT0VAZFnekyPx63U8DwdPCqr7Bk2Bg2Hk+bqOJvwsKB1rnzyFBL8hVqzC6elDQ==
+  dependencies:
+    "@automerge/automerge-wasm" "^0.2.14"
+    uuid "^9.0.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.22.13":
   version "7.22.13"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.22.13.tgz#e3c1c099402598483b7a8c46a721d1038803755e"
