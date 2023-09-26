@@ -2,7 +2,7 @@ import { Color, COLORS, type t } from '../common';
 import { Flip } from '../Flip';
 
 export const Wrangle = {
-  userSelect(props: t.CardProps) {
+  userSelect(props: t.CardProps): React.CSSProperties['userSelect'] {
     let value = props.userSelect;
     value = value ?? false;
     value = value === true ? 'auto' : value;

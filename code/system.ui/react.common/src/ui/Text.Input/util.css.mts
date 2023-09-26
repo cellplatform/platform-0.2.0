@@ -5,7 +5,7 @@ export const CssUtil = {
   /**
    * Convert TextInput props to placeholder style.
    */
-  toPlaceholder(props: t.TextInputProps) {
+  toPlaceholder(props: t.TextInputProps): t.CssValue {
     const { isEnabled = true, valueStyle = DEFAULTS.prop.valueStyle, placeholderStyle } = props;
     const styles = { ...R.clone(valueStyle), ...placeholderStyle };
     return CssUtil.toTextInput(isEnabled, styles);
@@ -28,7 +28,6 @@ export const CssUtil = {
     const {
       fontSize,
       color,
-      fontWeight,
       fontFamily,
       align,
       italic,
@@ -43,7 +42,7 @@ export const CssUtil = {
       color: Color.format(color),
       fontFamily,
       fontSize,
-      fontWeight: DEFAULTS.systemFont.weights[fontWeight],
+      fontWeight: CssUtil.fontWeight(props.fontWeight),
       fontStyle: italic ? 'italic' : undefined,
       textAlign: align,
       opacity,
@@ -54,7 +53,15 @@ export const CssUtil = {
     };
   },
 
-  pluckText(props: t.TextStyle) {
+  fontWeight(value?: t.TextStyle['fontWeight']): number {
+    const weights = DEFAULTS.systemFont.weights;
+    if (value === 'light') return weights.light;
+    if (value === 'normal') return weights.normal;
+    if (value === 'bold') return weights.bold;
+    return weights.normal;
+  },
+
+  pluckText(props: t.TextStyle): any {
     const {
       color = -0.7,
       align = 'left',
@@ -75,7 +82,7 @@ export const CssUtil = {
     };
   },
 
-  pluckFont(props: t.TextStyle) {
+  pluckFont(props: t.TextStyle): t.CssValue {
     const {
       fontSize = DEFAULTS.prop.valueStyle.fontSize,
       fontFamily = DEFAULTS.systemFont.sans.family,
@@ -90,7 +97,7 @@ export const CssUtil = {
       fontWeight,
       lineHeight,
       letterSpacing,
-    };
+    } as any;
   },
 
   /**

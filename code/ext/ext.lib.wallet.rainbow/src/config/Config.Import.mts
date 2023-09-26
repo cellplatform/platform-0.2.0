@@ -1,11 +1,23 @@
 import { type t } from './common';
 
 /**
+ * 🐷 Hack: avoid type export error.
+ */
+type ImportType = {
+  walletModules: () => Promise<any>;
+  wagmi: () => Promise<any>;
+  chains: () => Promise<any>;
+  alchemy: () => Promise<any>;
+  public: () => Promise<any>;
+  rainbow: () => Promise<any>;
+};
+
+/**
  * Dynamic importing of dependencies (code-splitting).
  * See:
  *    https://www.rainbowkit.com/docs/installation#manual-setup
  */
-export const Import = {
+export const Import: ImportType = {
   async walletModules() {
     // Load all dependencies in parallel
     const promise = {
