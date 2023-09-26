@@ -26,6 +26,13 @@ export const Store = {
         factory<T>(initial: t.DocChange<T>) {
           return (uri?: t.AutomergeUrl) => api.doc.findOrCreate<T>(initial, uri);
         },
+
+        /**
+         * Determine if the given document exists within the repo.
+         */
+        exists(uri?: string) {
+          return Doc.exists(api.repo, uri);
+        },
       },
     } as const;
     return api;

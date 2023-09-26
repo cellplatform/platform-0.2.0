@@ -1,7 +1,17 @@
 import { DocEvents } from './Doc.Events';
-import { A, Is, R, type t } from './common';
+import { Is, R, type t } from './common';
 
 export const Doc = {
+  /**
+   * Check for the existence of the specified document.
+   */
+  exists(repo: t.Repo, uri?: string) {
+    return Is.automergeUrl(uri) ? Boolean(repo.find(uri)) : false;
+  },
+
+  /**
+   * Find of initialize a new document from the repo.
+   */
   findOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();

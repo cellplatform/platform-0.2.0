@@ -6,6 +6,7 @@ export const DocEvents = {
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;
 
+    dispose$.subscribe(() => fire$?.complete());
     const fire$ = new rx.Subject<t.DocEvent<T>>();
     const fire = (e: t.DocEvent<T>) => fire$.next(e);
     const $ = fire$.pipe(rx.takeUntil(dispose$));

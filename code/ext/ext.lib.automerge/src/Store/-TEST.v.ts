@@ -12,7 +12,7 @@ describe('Store', async () => {
     expect(store.kind).to.eql('crdt:store');
   });
 
-  describe('Doc', () => {
+  describe('store.doc', () => {
     it('create and change', async () => {
       const doc1 = await generator();
       const doc2 = await generator();
@@ -28,9 +28,22 @@ describe('Store', async () => {
       expect(A.isAutomerge(doc.toObject())).to.eql(false);
       expect(doc.toObject()).to.eql({ count: { value: 0 } });
     });
+
+    it('does not exist', () => {
+      const store = Store.init();
+      ['404', true, null, undefined, [], {}]
+        //
+        .forEach((uri: any) => expect(store.doc.exists(uri)).to.eql(false));
+    });
+
+    it('does exist', async () => {
+      const store = Store.init();
+      const doc = await store.doc.findOrCreate<D>(initial);
+      expect(store.doc.exists(doc.uri)).to.eql(true);
+    });
   });
 
-  describe('Doc.events', () => {
+  describe('store.doc.events', () => {
     describe('lifecycle', async () => {
       const doc = await generator();
 
