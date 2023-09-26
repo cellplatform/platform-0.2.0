@@ -12,12 +12,12 @@ export const Store = {
     const api = {
       kind: 'crdt:store',
       repo: repo ?? new Repo({ network: [] }),
-      docs: {
+      doc: {
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async get<T>(initial: t.DocChange<T>, uri?: t.AutomergeUrl) {
-          const res = Doc.getOrCreate<T>(api.repo, { initial, uri });
+        async findOrCreate<T>(initial: t.DocChange<T>, uri?: t.AutomergeUrl) {
+          const res = Doc.findOrCreate<T>(api.repo, { initial, uri });
           await res.handle.whenReady();
           return res;
         },
@@ -26,7 +26,7 @@ export const Store = {
          * Create an "initial constructor" factory for docs.
          */
         factory<T>(initial: t.DocChange<T>) {
-          return (uri?: t.AutomergeUrl) => api.docs.get<T>(initial, uri);
+          return (uri?: t.AutomergeUrl) => api.doc.findOrCreate<T>(initial, uri);
         },
       },
     } as const;

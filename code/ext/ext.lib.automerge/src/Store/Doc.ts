@@ -2,7 +2,7 @@ import { DocEvents } from './Doc.Events';
 import { Is, type t } from './common';
 
 export const Doc = {
-  getOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
+  findOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();
       doc.change((d: any) => args.initial(d));

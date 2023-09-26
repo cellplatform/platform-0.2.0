@@ -6,7 +6,7 @@ export type D = { count?: t.A.Counter };
 describe('Store', async () => {
   const store = Store.init();
   const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
-  const generator = store.docs.factory<D>(initial);
+  const generator = store.doc.factory<D>(initial);
 
   it('kind: "crdt:store"', () => {
     expect(store.kind).to.eql('crdt:store');
@@ -33,10 +33,13 @@ describe('Store', async () => {
         expect(events1).to.not.equal(events2);
       });
 
+      it('findOrCreate: "ready" (default)', async () => {
+        const doc = await store.doc.findOrCreate(initial);
+        expect(doc.handle.state).to.eql('ready');
       });
 
       describe('dispose', () => {
-        it('via .dispose() method', () => {
+        it('via .dispose()', () => {
           const events = doc.events();
           let fired = 0;
           events.dispose$.subscribe(() => fired++);
