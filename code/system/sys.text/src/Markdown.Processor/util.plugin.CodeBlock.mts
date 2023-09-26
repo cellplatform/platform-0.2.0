@@ -76,6 +76,7 @@ export const CodeBlock = {
       return {
         type: 'element',
         tagName: 'div',
+        properties: {},
         children: [{ type: 'text', value: `code:${id}` }],
       };
     },

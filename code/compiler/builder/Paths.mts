@@ -77,6 +77,8 @@ export const Paths = {
       'src/ui/ui.Info/index.ts',
       'src/ui/ui.Info/Root.tsx',
       'src/ui/ui.Info/types.ts',
+      'src/ui/ui.Sample/-SPEC.tsx',
+      'src/ui/Icons.ts',
     ],
   },
 };

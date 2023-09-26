@@ -61,9 +61,9 @@ import type {
   Element as HastElement,
   Text as HastText,
   Comment as HastComment,
-  DocType as HastDocType,
+  Doctype as HastDoctype,
 } from 'hast';
 import type { Raw as HastRaw } from 'mdast-util-to-hast';
 
-export type { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
-export type HastNode = HastRoot | HastElement | HastText | HastComment | HastDocType | HastRaw;
+export type { HastRoot, HastElement, HastText, HastComment, HastDoctype, HastRaw };
+export type HastNode = HastRoot | HastElement | HastText | HastComment | HastDoctype | HastRaw;

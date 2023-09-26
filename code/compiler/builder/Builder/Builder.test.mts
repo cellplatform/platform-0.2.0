@@ -1,4 +1,4 @@
-import { execa, type t } from '../common/index.mjs';
+import { JsonUtil, execa, type t } from '../common/index.mjs';
 
 /**
  * Execute unit-tests within the target module directory.
@@ -26,6 +26,10 @@ export async function test(
     silent = false,
   } = options;
 
+  const pkg = await JsonUtil.Pkg.load(dir);
+  const scripts = pkg.scripts ?? {};
+  const hasTestScript = Boolean(scripts.test);
+
   // Filters.
   const args: string[] = [];
   (options.filter ?? []).forEach((filter) => args.push(filter));
@@ -41,19 +45,30 @@ export async function test(
 
   const cmd = `vitest`;
   const cwd = dir;
-  const res = await execa(cmd, args, { cwd, stdio: silent ? 'pipe' : 'inherit' });
+  let exitCode = 0;
+  let stdout = '';
 
-  const { exitCode, stdout } = res;
+  if (hasTestScript) {
+    const res = await execa(cmd, args, { cwd, stdio: silent ? 'pipe' : 'inherit' });
+    exitCode = res.exitCode;
+    stdout = res.stdout;
+  }
+
   const ok = exitCode === 0;
   const stats = reporter === 'json' ? parseStats(stdout) : undefined;
-
-  return { ok, exitCode, cmd, args, stats };
+  return {
+    ok,
+    exitCode,
+    cmd,
+    cwd,
+    args,
+    stats,
+  } as const;
 }
 
 /**
  * Helpers
  */
-
 function parseStats(json: string): t.TestStats {
   const data = JSON.parse(json);
 

@@ -1,6 +1,6 @@
 import type { t } from './common.t';
 
-export * from './ui/MonacoEditor/types.mjs';
+export * from './ui/ui.MonacoEditor/types.mjs';
 export * from './ui.logic/EditorCarets/types.mjs';
 export * from './ui.logic/MonacoCrdt/types.mjs';
 

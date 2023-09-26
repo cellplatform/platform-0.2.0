@@ -62,6 +62,7 @@ export const Config = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
         assetsDir: 'lib',
+        target: 'esnext',
       };
 
       let config: UserConfig = {
@@ -80,7 +81,11 @@ export const Config = {
            *    wrapper has a module level variable to track JS side heap
            *    allocations, initializing this twice causes horrible breakage
            */
-          exclude: ['@automerge/automerge-wasm'],
+          exclude: [
+            '@automerge/automerge-wasm',
+            '@automerge/automerge-wasm/bundler/bindgen_bg.wasm',
+            '@syntect/wasm',
+          ],
         },
         server: { port: 1234 },
         base: './',
@@ -93,7 +98,7 @@ export const Config = {
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        const modules = ['ext.driver.auth.privy', 'ext.vercel.blob', 'dev.000'];
+        const modules = ['ext.driver.auth.privy', 'dev.000'];
         return modules.some((item) => modulePath.includes(item));
       };
 

@@ -196,7 +196,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section(/* Video Settings */ '', (dev) => {
       dev.textbox((txt) => {
-        const value = () => Selected.slug.item?.video?.src?.id ?? '';
+        const value = () => Selected.slug.item?.video?.src?.ref ?? '';
         txt
           .label((e) => 'video')
           .placeholder('video source id')

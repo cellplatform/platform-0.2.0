@@ -51,7 +51,7 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
           .use(remarkStringify);
 
         const res = await pipeline.process(`1. Hello`);
-        expect(res.toString()).to.eql(`*   Hello\n`);
+        expect(res.toString()).to.eql(`* Hello\n`);
       });
     });
 
@@ -77,7 +77,7 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
           .use(remarkStringify);
 
         const res = await pipeline.process(`1. Hello`);
-        expect(res.toString()).to.eql('1.  Hello\n');
+        expect(res.toString()).to.eql('1. Hello\n');
 
         expect(_parents.length).to.eql(2);
         expect(_parents[0].type).to.eql('root');

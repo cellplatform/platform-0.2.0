@@ -97,6 +97,7 @@ export type PkgJson = {
   types?: string;
   typesVersions?: PkgJsonTypesVersions;
   exports?: PkgJsonExports;
+  scripts?: PkgJsonScripts;
   dependencies?: PkgDeps;
   devDependencies?: PkgDeps;
   workspaces?: { packages: string[] }; // Yarn workspaces.
@@ -104,6 +105,8 @@ export type PkgJson = {
 
 export type PkgDeps = { [name: string]: VersionString };
 export type PkgDep = { name: string; version: VersionString; isDev: boolean };
+
+export type PkgJsonScripts = { [name: string]: string };
 
 /**
  * Ref:

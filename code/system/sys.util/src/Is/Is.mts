@@ -90,16 +90,13 @@ export const Is: t.Is = {
    * NOTE: Examines string values to see if they are numeric.
    */
   numeric(value: any | string | number) {
-    if (Is.blank(value)) {
-      return false;
-    }
+    if (Is.blank(value)) return false;
+    if (typeof value === 'string') value = value.trim();
+
     const num = parseFloat(value);
-    if (num === undefined) {
-      return false;
-    }
-    if (num.toString().length !== value.toString().length) {
-      return false;
-    }
+    if (num === undefined) return false;
+    if (num.toString().length !== value.toString().length) return false;
+
     return !Number.isNaN(num);
   },
 
@@ -134,5 +131,26 @@ export const Is: t.Is = {
       return !(error instanceof TypeError);
     }
     return true;
+  },
+
+  /**
+   * Determines whether an HTTP status is OK.
+   */
+  statusOK(status: number) {
+    return status === undefined ? false : status.toString().startsWith('2');
+  },
+
+  /**
+   * Determine if the given string is an HTTP url.
+   */
+  http(input: string, forceHttps: boolean = false) {
+    if (typeof input !== 'string') return false;
+    input = input.trim().toLowerCase();
+
+    const isHttps = input.startsWith('https://');
+    if (forceHttps && !isHttps) return false;
+
+    const isHttp = input.startsWith('http://');
+    return isHttps || isHttp;
   },
 };

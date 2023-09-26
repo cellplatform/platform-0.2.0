@@ -1,6 +1,6 @@
-import { expect, describe, it } from '../test';
+import { describe, expect, it } from '../test';
 
-import { Id, slug, cuid } from '.';
+import { Id, cuid, slug } from '.';
 import { R } from '../common';
 
 describe('Id', () => {

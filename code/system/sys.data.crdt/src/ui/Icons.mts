@@ -1,5 +1,5 @@
 import { GoGitCommit } from 'react-icons/go';
-import { LuDownload, LuEdit2 } from 'react-icons/lu';
+import { LuDownload } from 'react-icons/lu';
 import {
   MdDataObject,
   MdDoneAll,
@@ -21,7 +21,6 @@ const icon = Icon.renderer;
 export const Icons = {
   Info: icon(MdInfoOutline),
   Repo: icon(VscRepo),
-  Editing: icon(LuEdit2),
   Commit: icon(GoGitCommit),
   Download: {
     ArrowTray: icon(LuDownload),

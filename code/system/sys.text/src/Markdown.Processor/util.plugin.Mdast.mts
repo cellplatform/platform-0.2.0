@@ -25,7 +25,7 @@ export const Mdast = {
           visit(tree, (node, i, parent) => {
             const e: t.MutateMdastVisitorArgs = {
               ...CONTINUATION,
-              index: i === null ? -1 : i,
+              index: i === undefined ? -1 : i,
               node: node as t.MdastNode,
               parent: parent as t.MdastNode,
 

@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export { Vimeo } from 'ext.ui.react.vimeo';
+export { Vimeo } from 'ext.lib.vimeo';
 
 /**
  * @system
