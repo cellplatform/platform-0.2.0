@@ -3,10 +3,12 @@ import { type t } from './common';
 /**
  * A reference-handle to a CRDT document.
  */
-export type DocRefHandle<T> = {
+export type DocRef<T> = {
   readonly uri: t.AutomergeUrl;
   readonly current: T;
   readonly change: DocChanger<T>;
+};
+export type DocRefHandle<T> = DocRef<T> & {
   readonly handle: t.DocHandle<T>;
 };
 

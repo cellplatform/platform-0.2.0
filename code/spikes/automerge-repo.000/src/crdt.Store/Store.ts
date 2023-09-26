@@ -3,48 +3,56 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Is, type t } from './common';
 
-const repo = new Repo({
-  network: [new BroadcastChannelNetworkAdapter()],
-  storage: new IndexedDBStorageAdapter(),
-});
-
 /**
  * Manage an Automerge repo.
  */
 export const Store = {
-  repo,
+  init() {
+    const repo = new Repo({
+      network: [new BroadcastChannelNetworkAdapter()],
+      storage: new IndexedDBStorageAdapter(),
+    });
 
+    const api = {
+      repo,
 
-  /**
-   *
-   */
-  async docRef<T>(args: { initial: t.DocChange<T>; url?: t.AutomergeUrl }) {
-    const { url = '' } = args;
-
-    const createDoc = () => {
-      const doc = repo.create<T>();
-      doc.change((d: any) => args.initial(d));
-      return doc;
-    };
-
-    const handle = Is.automergeUrl(url) ? repo.find<T>(url) : createDoc();
-    const uri = handle.url;
-
-    /**
-     * API
-     */
-    const api: t.DocRefHandle<T> = {
-      uri,
-      handle,
-      get current() {
-        return handle.docSync();
+      /**
+       * Create a factory for docs.
+       */
+      docType<T>(initial: t.DocHandle<T>) {
+        //
+        /**
+         * TODO 🐷
+         */
       },
-      change(fn) {
-        handle.change((d: any) => fn(d));
+
+      /**
+       * Find or create a new CRDT document from the repo.
+       */
+      async docRef<T>(args: { initial: t.DocChange<T>; uri?: t.AutomergeUrl }) {
+        const createDoc = () => {
+          const doc = repo.create<T>();
+          doc.change((d: any) => args.initial(d));
+          return doc;
+        };
+
+        const handle = Is.automergeUrl(args.uri) ? repo.find<T>(args.uri) : createDoc();
+        const uri = handle.url;
+        const api: t.DocRefHandle<T> = {
+          uri,
+          handle,
+          get current() {
+            return handle.docSync();
+          },
+          change(fn) {
+            handle.change((d: any) => fn(d));
+          },
+        };
+
+        await handle.whenReady();
+        return api;
       },
     } as const;
-
-    await handle.whenReady();
     return api;
   },
 } as const;

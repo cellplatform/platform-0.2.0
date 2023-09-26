@@ -21,7 +21,6 @@ export default Test.describe('Is', (e) => {
     expect(Is.repo(repo1)).to.eql(true);
     expect(Is.repo(repo2)).to.eql(true);
     expect(Is.repo(repo3)).to.eql(true);
-    expect(Is.repo(Store.repo)).to.eql(true);
   });
 
   e.it('Is.networkSubsystem', (e) => {
@@ -40,7 +39,8 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.automergeUrl', (e) => {
-    const doc = Store.repo.create();
+    const store = Store.init();
+    const doc = store.repo.create();
     expect(Is.automergeUrl(doc.url)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
   });
