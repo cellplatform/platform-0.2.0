@@ -1,5 +1,5 @@
 import { Repo } from '@automerge/automerge-repo';
-import { Handle } from './Store.Handle';
+import { Doc } from './Doc';
 import { type t } from './common';
 
 export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
@@ -26,7 +26,7 @@ export const Store = {
        * Find or create a new CRDT document from the repo.
        */
       async docRef<T>(args: DocRefArgs<T>) {
-        const res = Handle.getOrCreate<T>(store, args);
+        const res = Doc.getOrCreate<T>(store, args);
         await res.handle.whenReady();
         return res;
       },

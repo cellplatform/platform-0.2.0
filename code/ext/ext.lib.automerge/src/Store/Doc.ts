@@ -1,6 +1,7 @@
+import { DocEvents } from './Doc.Events';
 import { Is, type t } from './common';
 
-export const Handle = {
+export const Doc = {
   getOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();
@@ -10,6 +11,7 @@ export const Handle = {
 
     const handle = Is.automergeUrl(args.uri) ? repo.find<T>(args.uri) : create();
     const uri = handle.url;
+
     const api: t.DocRefHandle<T> = {
       uri,
       handle,
@@ -18,6 +20,9 @@ export const Handle = {
       },
       change(fn) {
         handle.change((d: any) => fn(d));
+      },
+      events(dispose$) {
+        return DocEvents.init<T>(handle, { dispose$ });
       },
     };
     return api;

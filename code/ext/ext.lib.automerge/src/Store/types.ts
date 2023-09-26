@@ -1,3 +1,4 @@
+export type * from './types.events';
 import { type t } from './common';
 
 export type DocUri = t.AutomergeUrl;
@@ -7,13 +8,14 @@ export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
  * A reference-handle to a CRDT document.
  */
 export type DocRef<T> = {
-  readonly uri: t.DocUri;
   readonly current: T;
   change(fn: DocChange<T>): void;
 };
 
-export type DocRefHandle<T> = DocRef<T> & {
+export type DocRefHandle<T> = t.DocRef<T> & {
+  readonly uri: t.DocUri;
   readonly handle: t.DocHandle<T>;
+  events(dispose?: t.Observable<any>): t.DocEvents<T>;
 };
 
 /**
