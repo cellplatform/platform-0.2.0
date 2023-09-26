@@ -1,22 +1,8 @@
-import { customAlphabet } from 'nanoid';
+import { init } from '@paralleldrive/cuid2';
 import '../Value/Value.Random.mjs';
 
-/**
- * Random generator.
- */
-type Generator = (size?: number | undefined) => string;
-type Lazy = { slug?: Generator; cuid?: Generator };
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const lazy: Lazy = {};
-
-const cuid = () => {
-  const fn = lazy.cuid || (lazy.cuid = customAlphabet(alphabet, 30));
-  return fn();
-};
-const slug = () => {
-  const fn = lazy.slug || (lazy.slug = customAlphabet(alphabet, 6));
-  return fn();
-};
+const slug = init({ length: 6 });
+const cuid = init({ length: 25 });
 
 /**
  * Random ID (identifier) generators.
@@ -34,6 +20,6 @@ export const Id = {
    *    Use the long "cuid" for that.
    */
   slug,
-};
+} as const;
 
-export { slug, cuid };
+export { cuid, slug };
