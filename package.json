@@ -4,7 +4,7 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "ci": "yarn audit && yarn build && yarn test && yarn count",
+    "ci": "pnpm audit && pnpm build && pnpm test && pnpm count",
     "prepare": "cp code/compiler/tsconfig/tsconfig.json ./tsconfig.json",
     "build": "ts-node-esm   -T script.ts/cmd.all.build.mts",
     "test": "ts-node-esm    -T script.ts/cmd.all.test.mts",
