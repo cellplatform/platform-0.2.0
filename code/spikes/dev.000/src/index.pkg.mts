@@ -22,6 +22,7 @@ export const Pkg: ModuleDef = {
     'ext.driver.auth.privy': '0.0.0',
     'ext.driver.ipfs.w3s': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
+    'ext.lib.codemirror': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
     'ext.lib.stripe': '0.0.0',
     'ext.lib.vimeo': '0.0.0',

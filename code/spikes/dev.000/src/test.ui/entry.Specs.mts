@@ -24,6 +24,7 @@ const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
 const { Specs: ExtIpfsW3s } = await import('ext.driver.ipfs.w3s/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
+const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
 
 export const Specs = {
   App: () => import('../ui/App/-SPEC'),
@@ -46,7 +47,7 @@ export const Specs = {
 
   ...ExtAuthPrivy,
   ...ExtIpfsW3s,
-  // ...ExtAutomerge,
   ...ExtPeerJs,
+  ...ExtAutomerge,
   ...ExtCodeMirror,
 };
