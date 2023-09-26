@@ -1,7 +1,12 @@
 import { Dev } from '../../test.ui';
-import { t } from './common';
+import { type t, Store, A } from './common';
 
-type T = {};
+import { RepoContext } from '@automerge/automerge-repo-react-hooks';
+import { Sample } from './-SPEC.Sample';
+
+type T = {
+  docUri?: t.DocUri;
+};
 const initial: T = {};
 
 /**
@@ -9,13 +14,29 @@ const initial: T = {};
  */
 const name = 'Sample';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
+  type LocalStore = { docUri?: t.DocUri };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Sample');
+  const local = localstore.object({ docUri: undefined });
+
+  const store = Store.init();
+  let doc: t.DocRefHandle<t.SampleDoc>;
+  const initDoc = async (state: t.DevCtxState<T>) => {
+    const docType = await store.docType<t.SampleDoc>((d) => (d.count = new A.Counter()));
+    doc = await docType(local.docUri);
+    state.change((d) => (local.docUri = d.docUri = doc.uri));
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.docUri = local.docUri;
+    });
+
+    await initDoc(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -23,7 +44,11 @@ export default Dev.describe(name, (e) => {
       .size([350, 300])
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        return (
+          <RepoContext.Provider value={store.repo}>
+            <Sample docUri={doc.uri} />
+          </RepoContext.Provider>
+        );
       });
   });
 
@@ -31,6 +56,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.TODO();
+
+    dev.button('new doc', async (e) => {
+      local.docUri = undefined;
+      await initDoc(state);
+    });
   });
 
   e.it('ui:footer', async (e) => {
