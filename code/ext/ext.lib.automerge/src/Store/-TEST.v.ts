@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { A, describe, expect, it, rx, type t } from '../test';
+import { A, Is, describe, expect, it, rx, type t } from '../test';
 
 export type D = { count?: t.A.Counter };
 
@@ -34,6 +34,9 @@ describe('Store', async () => {
       ['404', true, null, undefined, [], {}]
         //
         .forEach((uri: any) => expect(store.doc.exists(uri)).to.eql(false));
+      const dummy = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
+      expect(Is.automergeUrl(dummy)).to.eql(true);
+      expect(store.doc.exists(dummy)).to.eql(false);
     });
 
     it('does exist', async () => {

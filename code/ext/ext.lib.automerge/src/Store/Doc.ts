@@ -6,7 +6,8 @@ export const Doc = {
    * Check for the existence of the specified document.
    */
   exists(repo: t.Repo, uri?: string) {
-    return Is.automergeUrl(uri) ? Boolean(repo.find(uri)) : false;
+    if (!Is.automergeUrl(uri)) return false;
+    return repo.find(uri).state === 'ready';
   },
 
   /**

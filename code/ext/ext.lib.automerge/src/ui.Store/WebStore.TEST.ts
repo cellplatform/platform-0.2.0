@@ -6,6 +6,9 @@ export type D = { count?: t.A.Counter };
 export default Test.describe('WebStore', (e) => {
   const store = WebStore.init();
   const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
+  const assertCount = (doc: t.DocRefHandle<D>, expected: number) => {
+    expect(doc.current.count?.value).to.eql(expected);
+  };
 
   e.describe('init', (e) => {
     e.it('kind: "crdt:store.web"', (e) => {
@@ -37,7 +40,8 @@ export default Test.describe('WebStore', (e) => {
 
       expect(doc1.handle.state).to.eql('ready');
       expect(doc1.uri).to.eql(doc1.handle.url);
-      expect(doc1.current.count?.value).to.eql(0);
+      assertCount(doc1, 0);
+      assertCount(doc2, 0);
 
       expect(doc1.uri).to.not.eql(doc2.uri); // NB: A new document retrieved.
       expect(doc1.current).to.not.equal(doc2.current);
@@ -77,18 +81,13 @@ export default Test.describe('WebStore', (e) => {
 
     e.it('change', async (e) => {
       const doc = await generator();
-      expect(doc.current.count?.value).to.eql(0);
-
+      assertCount(doc, 0);
       doc.change((d) => d.count?.increment(5));
-      expect(doc.current.count?.value).to.eql(5);
+      assertCount(doc, 5);
     });
   });
 
   e.describe('sync: BroadcastChannelNetworkAdapter', (e) => {
-    const assertCount = (doc: t.DocRefHandle<D>, expected: number) => {
-      expect(doc.current.count?.value).to.eql(expected);
-    };
-
     e.it('sync between two documents', async (e) => {
       const store1 = WebStore.init();
       const store2 = WebStore.init();
@@ -119,6 +118,35 @@ export default Test.describe('WebStore', (e) => {
 
       assertCount(doc1, 5);
       assertCount(doc2, 0);
+    });
+  });
+
+  e.describe('storage: IndexedDBStorageAdapter', (e) => {
+    e.it('is persistent', async (e) => {
+      const store1 = WebStore.init({ network: false });
+      const store2 = WebStore.init({ network: false });
+
+      const doc1 = await store1.doc.findOrCreate(initial);
+      doc1.change((d) => d.count?.increment(5));
+      assertCount(doc1, 5);
+
+      const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
+      assertCount(doc2, 5); // NB: different store - from IndexedDB.
+
+      expect(store1.doc.exists(doc1.uri)).to.eql(true);
+      expect(store2.doc.exists(doc2.uri)).to.eql(true);
+    });
+
+    e.it('not persistent', async (e) => {
+      const store1 = WebStore.init({ network: false, storage: false });
+      const store2 = WebStore.init({ network: false, storage: false });
+
+      const doc = await store1.doc.findOrCreate(initial);
+      doc.change((d) => d.count?.increment(5));
+      assertCount(doc, 5);
+
+      expect(store1.doc.exists(doc.uri)).to.eql(true);
+      expect(store2.doc.exists(doc.uri)).to.eql(false);
     });
   });
 });
