@@ -1,3 +1,5 @@
+import { isValidAutomergeUrl, Repo } from '@automerge/automerge-repo';
+
 import type * as t from './types';
 
 export const Is = {
@@ -26,6 +28,10 @@ export const Is = {
       typeof input.saveDoc === 'function' &&
       typeof input.remove === 'function'
     );
+  },
+
+  automergeUrl(input: any): input is t.AutomergeUrl {
+    return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
   },
 } as const;
 

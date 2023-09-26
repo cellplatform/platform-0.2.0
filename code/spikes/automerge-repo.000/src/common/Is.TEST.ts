@@ -38,4 +38,10 @@ export default Test.describe('Is', (e) => {
     expect(Is.storageSubsystem(repo2.storageSubsystem)).to.eql(false);
     expect(Is.storageSubsystem(repo3.storageSubsystem)).to.eql(true);
   });
+
+  e.it('Is.automergeUrl', (e) => {
+    const doc = Store.repo.create();
+    expect(Is.automergeUrl(doc.url)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
+  });
 });
