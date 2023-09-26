@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export type { next as A } from '@automerge/automerge';
+export type { next as A, Patch, PatchInfo } from '@automerge/automerge';
 export type {
   AutomergeUrl,
   DocHandle,
