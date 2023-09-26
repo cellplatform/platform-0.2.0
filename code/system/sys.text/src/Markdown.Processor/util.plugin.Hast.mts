@@ -24,9 +24,9 @@ export const Hast = {
           visit(tree, (node, i, parent) => {
             const e: t.MutateHastVisitorArgs = {
               ...CONTINUATION,
-              index: i === null ? -1 : i,
+              index: i === undefined ? -1 : i,
               node,
-              parent,
+              parent: parent || null,
 
               data<T>() {
                 const data = e.node.data || (e.node.data = {});
