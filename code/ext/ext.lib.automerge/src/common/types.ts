@@ -5,8 +5,10 @@ export type { next as A, Patch, PatchInfo } from '@automerge/automerge';
 export type {
   AutomergeUrl,
   DocHandle,
+  NetworkAdapter,
   NetworkSubsystem,
   Repo,
+  StorageAdapter,
   StorageSubsystem,
 } from '@automerge/automerge-repo';
 export type { Observable } from 'rxjs';

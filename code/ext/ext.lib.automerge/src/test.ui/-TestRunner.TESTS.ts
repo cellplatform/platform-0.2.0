@@ -3,8 +3,8 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../ui.Store/WebStore.TEST'),
       import('../common/Is.TEST'),
+      import('../ui.Store/WebStore.TEST'),
     ];
   },
 };
