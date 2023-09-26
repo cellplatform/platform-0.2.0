@@ -1,12 +1,10 @@
 import { Dev } from '../../test.ui';
-import { type t, Store, A } from './common';
+import { type t, WebStore, A } from './common';
 
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { Sample } from './-SPEC.Sample';
 
-type T = {
-  docUri?: t.DocUri;
-};
+type T = { docUri?: t.DocUri };
 const initial: T = {};
 
 /**
@@ -19,11 +17,12 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Sample');
   const local = localstore.object({ docUri: undefined });
 
-  const store = Store.init();
+  const store = WebStore.init();
+  const generator = store.docType<t.SampleDoc>((d) => (d.count = new A.Counter()));
+
   let doc: t.DocRefHandle<t.SampleDoc>;
   const initDoc = async (state: t.DevCtxState<T>) => {
-    const docType = await store.docType<t.SampleDoc>((d) => (d.count = new A.Counter()));
-    doc = await docType(local.docUri);
+    doc = await generator(local.docUri);
     state.change((d) => (local.docUri = d.docUri = doc.uri));
   };
 

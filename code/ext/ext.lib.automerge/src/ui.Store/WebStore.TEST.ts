@@ -7,8 +7,12 @@ export default Test.describe('Store', (e) => {
   const store = WebStore.init();
   const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
 
-  e.it('has repo', (e) => {
+  e.it('Is.repo', (e) => {
     expect(Is.repo(store.repo)).to.eql(true);
+  });
+
+  e.it('kind: "crdt:store.web"', (e) => {
+    expect(store.kind).to.eql('crdt:store.web');
   });
 
   e.describe('docRef', (e) => {

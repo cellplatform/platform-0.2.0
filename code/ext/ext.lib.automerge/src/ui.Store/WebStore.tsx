@@ -14,6 +14,8 @@ export const WebStore = {
       storage: new IndexedDBStorageAdapter(),
     });
 
-    return Store.init(repo);
+    console.log('repo', repo);
+
+    return { ...Store.init(repo), kind: 'crdt:store.web' };
   },
 } as const;

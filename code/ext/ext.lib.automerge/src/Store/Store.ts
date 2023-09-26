@@ -14,12 +14,13 @@ export const Store = {
     const store = repo ?? new Repo({ network: [] });
 
     const api = {
+      kind: 'crdt:store',
       repo: store,
 
       /**
        * Create a factory for docs.
        */
-      async docType<T>(initial: t.DocChange<T>) {
+      docType<T>(initial: t.DocChange<T>) {
         return (uri?: t.AutomergeUrl) => api.docRef<T>({ initial, uri });
       },
 
