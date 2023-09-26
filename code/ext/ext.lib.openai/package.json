@@ -12,7 +12,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "openai": "4.8.0",
+    "openai": "4.10.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
