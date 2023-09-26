@@ -1,6 +1,6 @@
 import { Is, type t } from './common';
 
-export const StoreDoc = {
+export const Handle = {
   getOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();

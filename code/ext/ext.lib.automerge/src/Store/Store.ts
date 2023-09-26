@@ -1,8 +1,6 @@
 import { Repo } from '@automerge/automerge-repo';
-import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
-import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
-import { Is, type t } from './common';
-import { StoreDoc } from './Store.Doc';
+import { Handle } from './Store.Handle';
+import { type t } from './common';
 
 export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
 
@@ -28,7 +26,7 @@ export const Store = {
        * Find or create a new CRDT document from the repo.
        */
       async docRef<T>(args: DocRefArgs<T>) {
-        const res = StoreDoc.getOrCreate<T>(store, args);
+        const res = Handle.getOrCreate<T>(store, args);
         await res.handle.whenReady();
         return res;
       },
