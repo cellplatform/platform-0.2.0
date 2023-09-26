@@ -6,7 +6,7 @@ export type D = { count?: t.A.Counter };
 describe('Store', async () => {
   const store = Store.init();
   const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
-  const generator = store.docType<D>(initial);
+  const generator = store.docs.factory<D>(initial);
 
   it('kind: "crdt:store"', () => {
     expect(store.kind).to.eql('crdt:store');
@@ -33,29 +33,34 @@ describe('Store', async () => {
         expect(events1).to.not.equal(events2);
       });
 
-      it('dispose', async () => {
-        const events = doc.events();
-        let fired = 0;
-        events.dispose$.subscribe(() => fired++);
-
-        expect(events.disposed).to.eql(false);
-        events.dispose();
-        events.dispose();
-        expect(events.disposed).to.eql(true);
-        expect(fired).to.eql(1);
       });
 
-      it('lifecycle: dispose$', async () => {
-        const dispose$ = new rx.Subject<void>();
-        const events = doc.events(dispose$);
+      describe('dispose', () => {
+        it('via .dispose() method', () => {
+          const events = doc.events();
+          let fired = 0;
+          events.dispose$.subscribe(() => fired++);
 
-        let fired = 0;
-        events.dispose$.subscribe(() => fired++);
+          expect(events.disposed).to.eql(false);
+          events.dispose();
+          events.dispose();
+          expect(events.disposed).to.eql(true);
+          expect(fired).to.eql(1);
+        });
 
-        expect(events.disposed).to.eql(false);
-        dispose$.next();
-        expect(events.disposed).to.eql(true);
-        expect(fired).to.eql(1);
+        it('via { dispose$ }', () => {
+          const dispose$ = new rx.Subject<void>();
+          const events = doc.events(dispose$);
+
+          let fired = 0;
+          events.dispose$.subscribe(() => fired++);
+
+          expect(events.disposed).to.eql(false);
+          dispose$.next();
+          dispose$.next();
+          expect(events.disposed).to.eql(true);
+          expect(fired).to.eql(1);
+        });
       });
     });
 

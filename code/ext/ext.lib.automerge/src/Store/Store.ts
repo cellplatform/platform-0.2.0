@@ -9,32 +9,26 @@ export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
  */
 export const Store = {
   init(repo?: t.Repo) {
-    const store = repo ?? new Repo({ network: [] });
-
     const api = {
       kind: 'crdt:store',
-      repo: store,
+      repo: repo ?? new Repo({ network: [] }),
+      docs: {
+        /**
+         * Find or create a new CRDT document from the repo.
+         */
+        async get<T>(initial: t.DocChange<T>, uri?: t.AutomergeUrl) {
+          const res = Doc.getOrCreate<T>(api.repo, { initial, uri });
+          await res.handle.whenReady();
+          return res;
+        },
 
-      /**
-       * Create a factory for docs.
-       */
-      docType<T>(initial: t.DocChange<T>) {
-        return (uri?: t.AutomergeUrl) => api.docRef<T>({ initial, uri });
+        /**
+         * Create an "initial constructor" factory for docs.
+         */
+        factory<T>(initial: t.DocChange<T>) {
+          return (uri?: t.AutomergeUrl) => api.docs.get<T>(initial, uri);
+        },
       },
-
-      /**
-       * Find or create a new CRDT document from the repo.
-       */
-      async docRef<T>(args: DocRefArgs<T>) {
-        const res = Doc.getOrCreate<T>(store, args);
-        await res.handle.whenReady();
-        return res;
-      },
-
-      /**
-       * Find or create a new CRDT document from the repo.
-       */
-      docRefSync<T>(args: DocRefArgs<T>) {},
     } as const;
     return api;
   },

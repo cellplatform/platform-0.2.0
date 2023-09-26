@@ -17,8 +17,8 @@ export default Test.describe('Store', (e) => {
 
   e.describe('docRef', (e) => {
     e.it('create (initial)', async (e) => {
-      const doc1 = await store.docRef<D>({ initial });
-      const doc2 = await store.docRef<D>({ initial });
+      const doc1 = await store.docs.get<D>(initial);
+      const doc2 = await store.docs.get<D>(initial);
 
       expect(doc1.handle.state).to.eql('ready');
       expect(doc1.uri).to.eql(doc1.handle.url);
@@ -30,14 +30,14 @@ export default Test.describe('Store', (e) => {
     });
 
     e.it('retrieve (from URI)', async (e) => {
-      const doc1 = await store.docRef<D>({ initial });
-      const doc2 = await store.docRef<D>({ initial, uri: doc1.uri });
+      const doc1 = await store.docs.get<D>(initial);
+      const doc2 = await store.docs.get<D>(initial, doc1.uri);
       expect(doc1.uri).to.eql(doc2.uri);
       expect(doc1.current).to.equal(doc2.current);
     });
 
     e.it('change', async (e) => {
-      const doc = await store.docRef<D>({ initial });
+      const doc = await store.docs.get<D>(initial);
       expect(doc.current.count?.value).to.eql(0);
 
       doc.change((d) => d.count?.increment(5));
@@ -47,7 +47,7 @@ export default Test.describe('Store', (e) => {
 
   e.describe('docType (generator)', (e) => {
     e.it('unique docs', async (e) => {
-      const generator = await store.docType<D>(initial);
+      const generator = store.docs.factory<D>(initial);
       const doc1 = await generator();
       const doc2 = await generator();
 
@@ -57,7 +57,7 @@ export default Test.describe('Store', (e) => {
     });
 
     e.it('retrieve same doc via URI', async (e) => {
-      const generator = await store.docType<D>(initial);
+      const generator = store.docs.factory<D>(initial);
       const doc1 = await generator();
       const doc2 = await generator(doc1.uri);
       expect(doc1.uri).to.eql(doc2.uri);
