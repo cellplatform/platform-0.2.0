@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.automerge-repo.000',
+  name: 'ext.lib.automerge',
   version: '0.0.0',
   dependencies: {
     '@automerge/automerge': '2.1.3',

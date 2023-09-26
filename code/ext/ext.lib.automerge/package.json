@@ -1,5 +1,5 @@
 {
-  "name": "spike.automerge-repo.000",
+  "name": "ext.lib.automerge",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
