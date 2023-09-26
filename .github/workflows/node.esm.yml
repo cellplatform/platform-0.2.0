@@ -29,10 +29,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          cache: 'yarn'
 
-      - run: pnpm install
-      - run: pnpm audit
-      - run: pnpm build
-      - run: pnpm test
-      - run: pnpm audit && pnpm count
+      - run: yarn install
+      - run: yarn audit
+      - run: yarn build
+      - run: yarn test
+      - run: yarn audit && yarn count

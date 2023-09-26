@@ -31,6 +31,5 @@ console.info();
  */
 await remove('./node_modules');
 await remove('./yarn.lock');
-await remove('./pnpm-lock.yaml');
 
 console.info(pc.cyan('root repository nuked'));
