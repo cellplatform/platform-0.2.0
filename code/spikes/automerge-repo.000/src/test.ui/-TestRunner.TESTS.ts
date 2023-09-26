@@ -3,6 +3,8 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
+      import('../crdt.Store/Store.TEST'),
+      import('../common/Is.TEST'),
     ];
   },
 };

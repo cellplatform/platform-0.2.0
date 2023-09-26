@@ -1,9 +1,15 @@
 /**
  * @external
  */
-export type { Observable } from 'rxjs';
-export type { DocHandle, AutomergeUrl } from '@automerge/automerge-repo';
 export type { next as A } from '@automerge/automerge';
+export type {
+  AutomergeUrl,
+  DocHandle,
+  NetworkSubsystem,
+  Repo,
+  StorageSubsystem,
+} from '@automerge/automerge-repo';
+export type { Observable } from 'rxjs';
 
 /**
  * @system
