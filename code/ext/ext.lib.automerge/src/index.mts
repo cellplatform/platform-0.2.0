@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+export { Store } from './crdt.Store';
+
+/**
  * Dev
  */
 export const dev = async () => {
