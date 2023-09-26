@@ -28,7 +28,6 @@
     "@automerge/automerge-repo-network-websocket": "1.0.2",
     "@automerge/automerge-repo-react-hooks": "1.0.2",
     "@automerge/automerge-repo-storage-indexeddb": "1.0.2",
-    "@codemirror/highlight": "0.19.8",
     "@farcaster/core": "0.12.8",
     "@farcaster/hub-web": "0.6.4",
     "@hatsprotocol/sdk-v1-core": "0.6.0",
