@@ -1,5 +1,5 @@
 import { DocEvents } from './Doc.Events';
-import { Is, type t } from './common';
+import { A, Is, R, type t } from './common';
 
 export const Doc = {
   findOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
@@ -23,6 +23,9 @@ export const Doc = {
       },
       events(dispose$) {
         return DocEvents.init<T>(handle, { dispose$ });
+      },
+      toObject() {
+        return R.clone(api.current);
       },
     };
     return api;

@@ -16,6 +16,7 @@ export type DocRefHandle<T> = t.DocRef<T> & {
   readonly uri: t.DocUri;
   readonly handle: t.DocHandle<T>;
   events(dispose?: t.Observable<any>): t.DocEvents<T>;
+  toObject(): T;
 };
 
 /**

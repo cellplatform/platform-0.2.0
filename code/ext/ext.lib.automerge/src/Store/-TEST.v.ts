@@ -21,6 +21,13 @@ describe('Store', async () => {
       expect(doc1.current.count?.value).to.eql(0);
       expect(doc2.current.count?.value).to.eql(5);
     });
+
+    it('toObject (POJO)', async () => {
+      const doc = await generator();
+      expect(A.isAutomerge(doc.current)).to.eql(true);
+      expect(A.isAutomerge(doc.toObject())).to.eql(false);
+      expect(doc.toObject()).to.eql({ count: { value: 0 } });
+    });
   });
 
   describe('Doc.events', () => {
