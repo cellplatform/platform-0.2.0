@@ -116,7 +116,7 @@
     "@types/minimist": "1.2.2",
     "@types/node": "20.7.0",
     "@types/qrcode": "1.5.2",
-    "@types/ramda": "0.29.4",
+    "@types/ramda": "0.29.5",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "@types/sanitize-html": "2.9.1",
