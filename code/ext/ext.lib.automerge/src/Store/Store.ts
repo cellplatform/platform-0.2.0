@@ -21,7 +21,7 @@ export const Store = {
         },
 
         /**
-         * Create an "initial constructor" factory for docs.
+         * Create an "initial constructor" factory for typed docs.
          */
         factory<T>(initial: t.DocChange<T>) {
           return (uri?: t.AutomergeUrl) => api.doc.findOrCreate<T>(initial, uri);
