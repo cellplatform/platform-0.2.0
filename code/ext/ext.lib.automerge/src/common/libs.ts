@@ -9,4 +9,4 @@ export { next as A } from '@automerge/automerge';
 /**
  * @system
  */
-export { Time, rx } from 'sys.util';
+export { Time, cuid, rx } from 'sys.util';

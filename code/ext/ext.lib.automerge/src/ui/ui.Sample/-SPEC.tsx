@@ -2,7 +2,7 @@ import { Dev } from '../../test.ui';
 import { type t, WebStore, A } from './common';
 
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
-import { Sample } from './-SPEC.Sample';
+import { Sample } from './ui.Sample';
 
 type T = { docUri?: t.DocUri };
 const initial: T = {};
