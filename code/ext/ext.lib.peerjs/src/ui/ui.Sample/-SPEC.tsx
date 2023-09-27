@@ -1,4 +1,4 @@
-import { Dev, ObjectView, css, cuid, type t, PeerDev } from '../../test.ui';
+import { Dev, ObjectView, PeerDev, css, cuid, type t } from '../../test.ui';
 
 type T = {
   peerid: { local: string; remote: string };
@@ -16,10 +16,6 @@ const initial: T = {
  * - https://github.com/peers/peerjs
  */
 const name = 'Sample';
-
-/**
- * Helpers
- */
 
 export default Dev.describe(name, (e) => {
   type LocalStore = { localPeer: string; remotePeer: string };
@@ -81,13 +77,13 @@ export default Dev.describe(name, (e) => {
             await e.change((d) => (d.debug.connectingData = true));
             const { local, remote } = e.state.current.peerid;
             const conn = peer.connect(remote);
-            conn.on('open', () => {
+            conn.on('open', async () => {
               console.log('open', conn);
               conn.send(`hi from ${local}!`);
               connections.push(conn);
               dev.redraw();
+              await e.change((d) => (d.debug.connectingData = false));
             });
-            await e.change((d) => (d.debug.connectingData = false));
           });
       });
     });

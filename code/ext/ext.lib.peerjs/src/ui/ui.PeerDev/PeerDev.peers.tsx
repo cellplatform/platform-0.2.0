@@ -30,15 +30,15 @@ export function peersSection(
         .label((e) => 'local id')
         .placeholder(placeholder)
         .value((e) => state.current.peerid.local)
+        .left((e) => (
+          <Button onClick={regenerate} margin={[0, 5, 0, 0]}>
+            <Icons.Refresh size={16} tooltip={'New Peer ID'} />
+          </Button>
+        ))
         .right((e) => (
-          <div>
-            <Button onClick={regenerate} margin={[0, 5, 0, 0]}>
-              <Icons.Refresh size={16} tooltip={'New Peer ID'} />
-            </Button>
-            <Button onClick={copy}>
-              <Icons.Copy size={16} tooltip={'Copy'} />
-            </Button>
-          </div>
+          <Button onClick={copy}>
+            <Icons.Copy size={16} tooltip={'Copy'} />
+          </Button>
         ))
         .onChange((e) => state.change((d) => (d.peerid.local = e.to.value)))
         .onEnter((e) => initPeer(state, state.current.peerid.local));
@@ -53,11 +53,9 @@ export function peersSection(
         .placeholder(placeholder)
         .value((e) => state.current.peerid.remote)
         .right((e) => (
-          <div>
-            <Button onClick={copy}>
-              <Icons.Copy size={16} tooltip={'Copy'} />
-            </Button>
-          </div>
+          <Button onClick={copy}>
+            <Icons.Copy size={16} tooltip={'Copy'} />
+          </Button>
         ))
         .onChange((e) => state.change((d) => (local.remotePeer = d.peerid.remote = e.to.value)));
     });
