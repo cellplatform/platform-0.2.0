@@ -1,5 +1,4 @@
-import { Dev, ObjectView, css, cuid, type t } from '../../test.ui';
-import { peersSection } from './-SPEC.Dev.PeerInput';
+import { Dev, ObjectView, css, cuid, type t, DevPeer } from '../../test.ui';
 
 type T = {
   peerid: { local: string; remote: string };
@@ -32,17 +31,6 @@ export default Dev.describe(name, (e) => {
 
   const connections: t.DataConnection[] = [];
   let peer: t.Peer;
-  //   const initPeer = (state: t.DevCtxState<T>, peerid: string) => {
-  //     const options = WebRtc.Peer.options(DEFAULTS.signal);
-  //     peer = new Peer(peerid, options);
-  //
-  //     state.change((d) => {
-  //       local.localPeer = peerid;
-  //       d.peerid.local = peerid;
-  //       d.options = options;
-  //     });
-  //     return peer;
-  //   };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -53,8 +41,6 @@ export default Dev.describe(name, (e) => {
       d.peerid.local = local.localPeer;
       d.peerid.remote = local.remotePeer;
     });
-
-    // initPeer(state, state.current.peerid.local);
 
     ctx.debug.width(330);
     ctx.subject
@@ -76,7 +62,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    peersSection(dev, state, local, (p) => (peer = p));
+    DevPeer.peersSection(dev, state, local, (p) => (peer = p));
 
     dev.hr(0, 20);
 
