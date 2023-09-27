@@ -1,5 +1,4 @@
-import { isValidAutomergeUrl, Repo } from '@automerge/automerge-repo';
-
+import { isValidAutomergeUrl } from '@automerge/automerge-repo';
 import type * as t from './types';
 
 export const Is = {
@@ -11,7 +10,7 @@ export const Is = {
     return true;
   },
 
-  networkSubsystem(input: any): input is t.NetworkSubsystem {
+  networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {
     if (!isObject(input)) return false;
     return (
       typeof input.peerId === 'string' &&
@@ -21,7 +20,7 @@ export const Is = {
     );
   },
 
-  storageSubsystem(input: any): input is t.StorageSubsystem {
+  storageSubsystem(input: any): input is Required<t.Repo['storageSubsystem']> {
     if (!isObject(input)) return false;
     return (
       typeof input.loadDoc === 'function' &&

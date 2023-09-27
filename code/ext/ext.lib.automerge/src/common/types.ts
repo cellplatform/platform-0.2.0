@@ -6,10 +6,8 @@ export type {
   AutomergeUrl,
   DocHandle,
   NetworkAdapter,
-  NetworkSubsystem,
   Repo,
   StorageAdapter,
-  StorageSubsystem,
 } from '@automerge/automerge-repo';
 export type { Observable } from 'rxjs';
 
