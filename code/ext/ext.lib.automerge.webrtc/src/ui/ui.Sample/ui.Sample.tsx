@@ -1,4 +1,4 @@
-import { Button, css, useDocument, type t } from './-common';
+import { Button, css, useDocument, type t } from './common';
 
 export type SampleProps = {
   docUri: t.DocUri;

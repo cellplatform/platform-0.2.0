@@ -1,5 +1,5 @@
 import { Dev } from '../../test.ui';
-import { A, RepoContext, WebStore, cuid, type t } from './-common';
+import { A, RepoContext, WebStore, cuid, type t, WebrtcNetworkAdapter } from './common';
 import { Sample } from './ui.Sample';
 
 import type * as P from 'ext.lib.peerjs/src/types';
@@ -38,7 +38,8 @@ export default Dev.describe(name, (e) => {
   /**
    * CRDT (Automerge)
    */
-  const store = WebStore.init({ network: [] });
+  const webrtc = new WebrtcNetworkAdapter();
+  const store = WebStore.init({ network: [webrtc] });
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
   let doc: t.DocRefHandle<t.SampleDoc>;
@@ -78,34 +79,6 @@ export default Dev.describe(name, (e) => {
 
     const { PeerDev } = await import('ext.lib.peerjs');
     PeerDev.peersSection(dev, state, local, (p) => (peer = p));
-
-    dev.hr(0, 20);
-
-    dev.section('Data', (dev) => {
-      const canConnect = () => {
-        const ids = state.current.peerid;
-        return Boolean(ids.local && ids.remote);
-      };
-
-      dev.button((btn) => {
-        btn
-          .label(`connect`)
-          .enabled((e) => canConnect())
-          .spinner((e) => Boolean(e.state.debug.connectingData))
-          .onClick(async (e) => {
-            await e.change((d) => (d.debug.connectingData = true));
-            const { local, remote } = e.state.current.peerid;
-            const conn = peer.connect(remote);
-            conn.on('open', async () => {
-              console.log('open', conn);
-              conn.send(`hi from ${local}!`);
-              connections.push(conn);
-              dev.redraw();
-              await e.change((d) => (d.debug.connectingData = false));
-            });
-          });
-      });
-    });
   });
 
   e.it('ui:footer', async (e) => {
