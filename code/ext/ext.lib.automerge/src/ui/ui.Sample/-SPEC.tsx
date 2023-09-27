@@ -42,9 +42,9 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         if (!doc) return null;
         return (
-          <WebStore.Provider value={store.repo}>
+          <store.Provider>
             <Sample docUri={doc.uri} />
-          </WebStore.Provider>
+          </store.Provider>
         );
       });
   });
