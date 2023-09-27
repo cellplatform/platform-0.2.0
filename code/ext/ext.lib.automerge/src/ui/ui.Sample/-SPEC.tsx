@@ -1,7 +1,5 @@
 import { Dev } from '../../test.ui';
-import { type t, WebStore, A } from './common';
-
-import { RepoContext } from '@automerge/automerge-repo-react-hooks';
+import { A, RepoContext, WebStore, type t } from './-common';
 import { Sample } from './ui.Sample';
 
 type T = { docUri?: t.DocUri };
@@ -34,15 +32,15 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.docUri = local.docUri;
     });
-
     await initDoc(state);
 
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([350, 300])
+      .size([350, 150])
       .display('grid')
       .render<T>((e) => {
+        if (!doc) return null;
         return (
           <RepoContext.Provider value={store.repo}>
             <Sample docUri={doc.uri} />

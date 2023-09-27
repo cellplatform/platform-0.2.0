@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export { useDocument } from '@automerge/automerge-repo-react-hooks';
+export { useDocument, RepoContext } from '@automerge/automerge-repo-react-hooks';
 
 /**
  * @system
