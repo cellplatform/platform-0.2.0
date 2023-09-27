@@ -1,3 +1,3 @@
 import { Peer } from './Webrtc.Peer';
 
-export const WebRtc = { Peer } as const;
+export const Webrtc = { Peer } as const;

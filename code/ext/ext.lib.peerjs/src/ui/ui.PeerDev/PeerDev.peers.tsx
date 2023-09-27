@@ -1,4 +1,4 @@
-import { WebRtc } from '../../Webrtc';
+import { Webrtc } from '../../Webrtc';
 import { Button, DEFAULTS, Icons, Peer, cuid, type t } from '../common';
 
 export function peersSection(
@@ -11,7 +11,7 @@ export function peersSection(
     const placeholder = 'enter peer-id';
 
     const initPeer = (state: t.DevCtxState<t.PeerDevCtx>, peerid: string) => {
-      const options = WebRtc.Peer.options(DEFAULTS.signal);
+      const options = Webrtc.Peer.options(DEFAULTS.signal);
       const peer = new Peer(peerid, options);
 
       state.change((d) => {

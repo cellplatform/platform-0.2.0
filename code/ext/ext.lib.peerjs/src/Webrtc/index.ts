@@ -1,1 +1,1 @@
-export { WebRtc } from './Webrtc';
+export { Webrtc } from './Webrtc';
