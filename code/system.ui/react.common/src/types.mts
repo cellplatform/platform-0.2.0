@@ -16,10 +16,11 @@ export type {
 } from 'sys.types/src/types.mjs';
 export type {
   KeyboardKeypress,
-  KeyboardState,
-  KeyboardStateCurrent,
   KeyboardModifierFlags,
   KeyboardModifierKeys,
+  KeyboardState,
+  KeyboardStateCurrent,
+  LocalStorage,
 } from 'sys.ui.dom/src/types.mjs';
 export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types.mjs';
 
