@@ -2,6 +2,9 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { next as A } from '@automerge/automerge';
+
+export type { DocUri, DocRefHandle } from 'ext.lib.automerge/src/types';
 
 /**
  * @system

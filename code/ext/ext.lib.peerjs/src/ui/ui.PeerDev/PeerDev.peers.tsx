@@ -27,7 +27,7 @@ export function peersSection(
       const copy = () => navigator.clipboard.writeText(state.current.peerid.local);
       const regenerate = () => initPeer(state, cuid());
       txt
-        .label((e) => 'local id')
+        .label((e) => 'local peer-id')
         .placeholder(placeholder)
         .value((e) => state.current.peerid.local)
         .left((e) => (
@@ -49,7 +49,7 @@ export function peersSection(
     dev.textbox((txt) => {
       const copy = () => navigator.clipboard.writeText(state.current.peerid.remote);
       txt
-        .label((e) => 'remote id')
+        .label((e) => 'remote peer-id')
         .placeholder(placeholder)
         .value((e) => state.current.peerid.remote)
         .right((e) => (
