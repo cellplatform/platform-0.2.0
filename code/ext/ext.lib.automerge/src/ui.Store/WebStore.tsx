@@ -2,7 +2,7 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { type t } from './common';
+import { RepoContext, type t } from './common';
 
 export type InitArgs = {
   network?: boolean | t.NetworkAdapter[];
@@ -13,6 +13,11 @@ export type InitArgs = {
  * Manage an Automerge repo on the browser.
  */
 export const WebStore = {
+  Provider: RepoContext.Provider,
+
+  /**
+   * Initialize a new instance of a CRDT repo.
+   */
   init(options: InitArgs = {}) {
     const repo = new Repo({
       network: Wrangle.network(options),

@@ -1,5 +1,5 @@
 import { Dev } from '../../test.ui';
-import { A, RepoContext, WebStore, type t } from './-common';
+import { A, WebStore, type t } from './-common';
 import { Sample } from './ui.Sample';
 
 type T = { docUri?: t.DocUri };
@@ -42,9 +42,9 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         if (!doc) return null;
         return (
-          <RepoContext.Provider value={store.repo}>
+          <WebStore.Provider value={store.repo}>
             <Sample docUri={doc.uri} />
-          </RepoContext.Provider>
+          </WebStore.Provider>
         );
       });
   });
