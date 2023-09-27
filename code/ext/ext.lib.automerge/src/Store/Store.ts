@@ -6,6 +6,9 @@ import { type t } from './common';
  * Manage an Automerge repo.
  */
 export const Store = {
+  /**
+   * Initialize a new instance of a CRDT repo.
+   */
   init(repo?: t.Repo) {
     const api = {
       kind: 'crdt:store',

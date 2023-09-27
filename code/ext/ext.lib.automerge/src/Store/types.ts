@@ -2,7 +2,6 @@ export type * from './types.events';
 import { type t } from './common';
 
 export type DocUri = t.AutomergeUrl;
-export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
 
 /**
  * A reference-handle to a CRDT document.

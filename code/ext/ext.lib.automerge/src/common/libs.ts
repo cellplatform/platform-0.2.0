@@ -3,7 +3,6 @@
  */
 import { clone, equals } from 'ramda';
 export const R = { clone, equals } as const;
-
 export { next as A } from '@automerge/automerge';
 
 /**

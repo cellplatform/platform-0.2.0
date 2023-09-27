@@ -1,6 +1,8 @@
 import { DocEvents } from './Doc.Events';
 import { Is, R, type t } from './common';
 
+export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
+
 export const Doc = {
   /**
    * Check for the existence of the specified document.
@@ -13,7 +15,7 @@ export const Doc = {
   /**
    * Find of initialize a new document from the repo.
    */
-  findOrCreate<T>(repo: t.Repo, args: t.DocRefArgs<T>) {
+  findOrCreate<T>(repo: t.Repo, args: DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();
       doc.change((d: any) => args.initial(d));
