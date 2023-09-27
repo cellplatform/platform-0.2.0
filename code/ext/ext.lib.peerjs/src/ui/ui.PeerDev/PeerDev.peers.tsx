@@ -1,4 +1,4 @@
-import { WebRtc } from '../../Webrtc_';
+import { WebRtc } from '../../Webrtc';
 import { Button, DEFAULTS, Icons, Peer, cuid, type t } from '../common';
 
 export function peersSection(
