@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../WebRtc/WebRtc.Peer.TEST'),
+      import('../Webrtc_/Webrtc.Peer.TEST'),
     ];
   },
 };

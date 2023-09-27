@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-export { WebRtc } from './WebRtc';
+export { WebRtc } from './Webrtc_';
 export { PeerDev } from './ui/ui.PeerDev';
 
 /**
