@@ -1,8 +1,9 @@
 import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
+import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { RepoContext, type t } from './common';
+import { type t } from './common';
 
 export type InitArgs = {
   network?: boolean | t.NetworkAdapter[];
