@@ -1,4 +1,4 @@
-import { Button, css, useDocument, type t } from './-common';
+import { Button, css, useDocument, type t } from './common';
 
 export type SampleProps = {
   docUri: t.DocUri;
@@ -12,9 +12,6 @@ export const Sample: React.FC<SampleProps> = (props) => {
     changeDoc((d: any) => d.count?.increment(1));
   };
 
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({ padding: 10 }),
   };

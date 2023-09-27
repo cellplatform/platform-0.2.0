@@ -1,5 +1,5 @@
 import { Dev } from '../../test.ui';
-import { A, WebStore, type t } from './-common';
+import { A, WebStore, type t } from './common';
 import { Sample } from './ui.Sample';
 
 type T = { docUri?: t.DocUri };
