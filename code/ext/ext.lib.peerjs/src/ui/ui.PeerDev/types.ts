@@ -1,11 +1,11 @@
 import { type t } from './common';
 
-export type DevPeerCtx = {
+export type PeerDevCtx = {
   peerid: { local: string; remote: string };
   options?: t.PeerOptions;
 };
 
-export type DevPeerLocalStore = {
+export type PeerDevLocalStore = {
   localPeer: string;
   remotePeer: string;
 };

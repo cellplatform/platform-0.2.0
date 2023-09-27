@@ -1,4 +1,4 @@
-import { Dev, ObjectView, css, cuid, type t, DevPeer } from '../../test.ui';
+import { Dev, ObjectView, css, cuid, type t, PeerDev } from '../../test.ui';
 
 type T = {
   peerid: { local: string; remote: string };
@@ -62,7 +62,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    DevPeer.peersSection(dev, state, local, (p) => (peer = p));
+    PeerDev.peersSection(dev, state, local, (p) => (peer = p));
 
     dev.hr(0, 20);
 

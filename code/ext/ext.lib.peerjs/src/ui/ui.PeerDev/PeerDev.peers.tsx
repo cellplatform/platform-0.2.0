@@ -3,14 +3,14 @@ import { Button, DEFAULTS, Icons, Peer, cuid, type t } from '../common';
 
 export function peersSection(
   dev: t.DevTools,
-  state: t.DevCtxState<t.DevPeerCtx>,
-  local: t.DevPeerLocalStore,
+  state: t.DevCtxState<t.PeerDevCtx>,
+  local: t.PeerDevLocalStore,
   fn?: (peer: t.Peer) => void,
 ) {
   dev.section('Peers', (dev) => {
     const placeholder = 'enter peer-id';
 
-    const initPeer = (state: t.DevCtxState<t.DevPeerCtx>, peerid: string) => {
+    const initPeer = (state: t.DevCtxState<t.PeerDevCtx>, peerid: string) => {
       const options = WebRtc.Peer.options(DEFAULTS.signal);
       const peer = new Peer(peerid, options);
 
