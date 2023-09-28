@@ -1,13 +1,13 @@
-/**
- * @external
- */
 import { equals } from 'ramda';
 export const R = { equals } as const;
 export { next as A } from '@automerge/automerge';
 
+/**
+ * @ext
+ */
 export { WebStore } from 'ext.lib.automerge';
 
 /**
  * @system
  */
-export { cuid, rx } from 'sys.util';
+export { Time, cuid, rx } from 'sys.util';
