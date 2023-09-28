@@ -25,6 +25,7 @@ const { Specs: ExtIpfsW3s } = await import('ext.driver.ipfs.w3s/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
+const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
 
 export const Specs = {
   App: () => import('../ui/App/-SPEC'),
@@ -50,4 +51,5 @@ export const Specs = {
   ...ExtPeerJs,
   ...ExtAutomerge,
   ...ExtCodeMirror,
+  ...ExtAutomergeWebrtc,
 };
