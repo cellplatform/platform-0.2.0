@@ -5,7 +5,6 @@ import {
   type PeerId,
 } from '@automerge/automerge-repo';
 import type { DataConnection, Peer } from 'peerjs';
-import { Time } from '../common';
 
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
@@ -36,20 +35,18 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
       conn.on('close', () => this.emit('close'));
       conn.on('data', (data) => {
         const message = data as NetworkAdapterMessage;
-        const { type, senderId } = message;
-
-        switch (type) {
+        switch (message.type) {
           case 'arrive':
             conn.send({
               type: 'welcome',
               senderId: this.peerId,
-              targetId: senderId,
+              targetId: message.senderId,
             });
-            this.#announceConnection(senderId);
+            this.#announceConnection(message.senderId);
             break;
 
           case 'welcome':
-            this.#announceConnection(senderId);
+            this.#announceConnection(message.senderId);
             break;
 
           default:
@@ -64,16 +61,27 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
 
       /**
        * Mark this channel as ready after 100ms, at this point there
-       * must be something weird going on on the other end to cause us
+       * must be something weird going on at the other end to cause us
        * to receive no response.
        */
-      Time.delay(100, () => this.#setAsReady());
+      setTimeout(() => this.#setAsReady(), 100);
     };
 
     this.#peer.on('connection', (conn) => setupConnection(conn));
     if (this.#remoteId) {
       // If the remote-id is known start the connection now.
       setupConnection(this.#peer.connect(this.#remoteId));
+    }
+  }
+
+  send(message: Message) {
+    const conn = this.#conn;
+    if (!conn) throw new Error('Connection not ready');
+
+    if ('data' in message) {
+      conn.send({ ...message, data: toUint8Array(message.data) });
+    } else {
+      conn.send(message);
     }
   }
 
@@ -86,17 +94,6 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #announceConnection(peerId: PeerId) {
     this.#setAsReady();
     this.emit('peer-candidate', { peerId });
-  }
-
-  send(message: Message) {
-    const conn = this.#conn;
-    if (!conn) throw new Error('Connection not ready');
-
-    if ('data' in message) {
-      conn.send({ ...message, data: toUint8Array(message.data) });
-    } else {
-      conn.send(message);
-    }
   }
 
   disconnect() {
