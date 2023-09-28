@@ -1,11 +1,12 @@
 import { Dev } from '../../test.ui';
-import { A, RepoContext, WebStore, cuid, type t, WebrtcNetworkAdapter } from './common';
+import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
 
 import type * as P from 'ext.lib.peerjs/src/types';
 
 type T = {
-  docUri?: t.DocUri;
+  user?: string;
+  docUri?: string;
   peerid: { local: string; remote: string };
   options?: P.PeerOptions;
   debug: { connectingData?: boolean };
@@ -21,7 +22,7 @@ const initial: T = {
 const name = 'Sample.WebRtc';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = { localPeer: string; remotePeer: string; docUri?: t.DocUri };
+  type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
   const local = localstore.object({
     localPeer: cuid(),
@@ -38,14 +39,14 @@ export default Dev.describe(name, (e) => {
   /**
    * CRDT (Automerge)
    */
-  const webrtc = new WebrtcNetworkAdapter();
-  const store = WebStore.init({ network: [webrtc] });
+  const store = WebStore.init({ network: [] });
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
   let doc: t.DocRefHandle<t.SampleDoc>;
   const initDoc = async (state: t.DevCtxState<T>) => {
     doc = await generator(local.docUri);
-    state.change((d) => (local.docUri = d.docUri = doc.uri));
+    local.docUri = doc.uri;
+    state.change((d) => (d.docUri = doc.uri));
   };
 
   e.it('ui:init', async (e) => {
@@ -55,6 +56,8 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.docUri = local.docUri;
+      d.peerid.local = local.localPeer;
+      d.peerid.remote = local.remotePeer;
     });
     await initDoc(state);
 
@@ -64,11 +67,10 @@ export default Dev.describe(name, (e) => {
       .size([350, 150])
       .display('grid')
       .render<T>((e) => {
-        if (!doc) return null;
         return (
-          <RepoContext.Provider value={store.repo}>
-            <Sample docUri={doc.uri} />
-          </RepoContext.Provider>
+          <store.Provider>
+            <Sample user={e.state.user} docUri={doc?.uri} />
+          </store.Provider>
         );
       });
   });
@@ -78,7 +80,51 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     const { PeerDev } = await import('ext.lib.peerjs');
-    PeerDev.peersSection(dev, state, local, (p) => (peer = p));
+    PeerDev.peersSection({
+      dev,
+      state,
+      local,
+      onPeer: (p) => (peer = p),
+    });
+
+    dev.hr(0, 20);
+
+    const addNetworkAdapter = (adapter: t.NetworkAdapter) => {
+      store.repo.networkSubsystem.addNetworkAdapter(adapter);
+      state.change((d) => (d.user = adapter.peerId));
+    };
+
+    dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
+      if (!(peer && local.remotePeer)) return;
+      const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
+      addNetworkAdapter(webrtc);
+    });
+
+    dev.button(['addNetworkAdapter', '<undefined>'], (e) => {
+      if (!peer) return;
+      const webrtc = new WebrtcNetworkAdapter(peer);
+      addNetworkAdapter(webrtc);
+    });
+
+    dev.hr(5, 20);
+
+    dev.textbox((txt) => {
+      txt
+        .label((e) => 'docUri')
+        .value((e) => e.state.docUri ?? '')
+        .onChange((e) => e.change((d) => (d.docUri = e.to.value)))
+        .onEnter((e) => {
+          local.docUri = e.state.current.docUri || undefined;
+          initDoc(state);
+        });
+    });
+
+    dev.hr(0, 5);
+
+    dev.button('new doc', async (e) => {
+      local.docUri = undefined;
+      await initDoc(state);
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -86,6 +132,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
+        user: e.state.user,
         docUri: e.state.docUri,
         peer,
         connections,
