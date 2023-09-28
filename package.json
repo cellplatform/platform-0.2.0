@@ -25,7 +25,6 @@
     "@automerge/automerge-repo": "1.0.3",
     "@automerge/automerge-repo-network-broadcastchannel": "1.0.3",
     "@automerge/automerge-repo-network-messagechannel": "1.0.3",
-    "@automerge/automerge-repo-network-websocket": "1.0.3",
     "@automerge/automerge-repo-react-hooks": "1.0.3",
     "@automerge/automerge-repo-storage-indexeddb": "1.0.3",
     "@farcaster/core": "0.12.9",
