@@ -50,7 +50,7 @@ export const Is: t.Is = {
   /**
    * Determines whether the value is a simple object (ie. not a class instance).
    */
-  plainObject(value?: any): boolean {
+  plainObject(value?: any): value is Object {
     if (typeof value !== 'object' || value === null) return false;
 
     // Not plain if it has a modified constructor.
