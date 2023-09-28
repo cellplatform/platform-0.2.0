@@ -73,8 +73,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     this.#peer.on('connection', (conn) => setupConnection(conn));
     if (this.#remoteId) {
       // If the remote-id is known start the connection now.
-      const conn = this.#peer.connect(this.#remoteId);
-      setupConnection(conn);
+      setupConnection(this.#peer.connect(this.#remoteId));
     }
   }
 
@@ -108,7 +107,6 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
 /**
  * Helpers
  */
-
 function toUint8Array(input: ArrayBufferLike): Uint8Array {
   return input instanceof Uint8Array ? input : new Uint8Array(input);
 }
