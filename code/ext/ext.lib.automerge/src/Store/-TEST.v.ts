@@ -44,6 +44,26 @@ describe('Store', async () => {
       const doc = await store.doc.findOrCreate<D>(initial);
       expect(store.doc.exists(doc.uri)).to.eql(true);
     });
+
+    describe('factory (generator)', () => {
+      it('different documents (generate)', async () => {
+        const doc1 = await generator();
+        const doc2 = await generator();
+        expect(doc1.uri).to.not.eql(doc2.uri);
+      });
+
+      it('same document (find via DocUri)', async () => {
+        const doc1 = await generator();
+        const doc2 = await generator(doc1.uri);
+        expect(doc1.uri).to.eql(doc2.uri);
+      });
+
+      it('same document (find via DocUri as string)', async () => {
+        const doc1 = await generator();
+        const doc2 = await generator(`${doc1.uri}`);
+        expect(doc1.uri).to.eql(doc2.uri);
+      });
+    });
   });
 
   describe('store.doc.events', () => {

@@ -17,7 +17,7 @@ export const Store = {
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async findOrCreate<T>(initial: t.DocChange<T>, uri?: t.AutomergeUrl) {
+        async findOrCreate<T>(initial: t.DocChange<T>, uri?: t.DocUri | string) {
           const res = Doc.findOrCreate<T>(api.repo, { initial, uri });
           await res.handle.whenReady();
           return res;
@@ -27,13 +27,13 @@ export const Store = {
          * Create an "initial constructor" factory for typed docs.
          */
         factory<T>(initial: t.DocChange<T>) {
-          return (uri?: t.AutomergeUrl) => api.doc.findOrCreate<T>(initial, uri);
+          return (uri?: t.DocUri | string) => api.doc.findOrCreate<T>(initial, uri);
         },
 
         /**
          * Determine if the given document exists within the repo.
          */
-        exists(uri?: string) {
+        exists(uri?: t.DocUri | string) {
           return Doc.exists(api.repo, uri);
         },
       },

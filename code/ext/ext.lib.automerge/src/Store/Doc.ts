@@ -1,13 +1,13 @@
 import { DocEvents } from './Doc.Events';
 import { Is, R, type t } from './common';
 
-export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.AutomergeUrl };
+export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.DocUri | string };
 
 export const Doc = {
   /**
    * Check for the existence of the specified document.
    */
-  exists(repo: t.Repo, uri?: string) {
+  exists(repo: t.Repo, uri?: t.DocUri | string) {
     if (!Is.automergeUrl(uri)) return false;
     return repo.find(uri).state === 'ready';
   },
