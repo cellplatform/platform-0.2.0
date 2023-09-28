@@ -58,7 +58,12 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    PeerDev.peersSection(dev, state, local, (p) => (peer = p));
+    PeerDev.peersSection({
+      dev,
+      state,
+      local,
+      onPeer: (p) => (peer = p),
+    });
 
     dev.hr(0, 20);
 

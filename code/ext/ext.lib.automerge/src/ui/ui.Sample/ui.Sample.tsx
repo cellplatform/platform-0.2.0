@@ -1,7 +1,7 @@
 import { Button, css, useDocument, type t } from './common';
 
 export type SampleProps = {
-  docUri: t.DocUri;
+  docUri?: t.DocUri;
   style?: t.CssValue;
 };
 

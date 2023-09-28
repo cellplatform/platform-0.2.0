@@ -1,12 +1,13 @@
 import { Webrtc } from '../../Webrtc';
 import { Button, DEFAULTS, Icons, Peer, cuid, type t } from '../common';
 
-export function peersSection(
-  dev: t.DevTools,
-  state: t.DevCtxState<t.PeerDevCtx>,
-  local: t.PeerDevLocalStore,
-  fn?: (peer: t.Peer) => void,
-) {
+export function peersSection(args: {
+  dev: t.DevTools;
+  state: t.DevCtxState<t.PeerDevCtx>;
+  local: t.PeerDevLocalStore;
+  onPeer?: (peer: t.Peer) => void;
+}) {
+  const { dev, state, local } = args;
   dev.section('Peers', (dev) => {
     const placeholder = 'enter peer-id';
 
@@ -20,7 +21,7 @@ export function peersSection(
         d.options = options;
       });
 
-      fn?.(peer);
+      args.onPeer?.(peer);
     };
 
     dev.textbox((txt) => {

@@ -40,10 +40,9 @@ export default Dev.describe(name, async (e) => {
       .size([350, 150])
       .display('grid')
       .render<T>((e) => {
-        if (!doc) return null;
         return (
           <store.Provider>
-            <Sample docUri={doc.uri} />
+            <Sample docUri={doc?.uri} />
           </store.Provider>
         );
       });
