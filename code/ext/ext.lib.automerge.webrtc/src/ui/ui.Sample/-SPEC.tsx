@@ -113,7 +113,8 @@ export default Dev.describe(name, (e) => {
         .label((e) => 'docUri')
         .value((e) => e.state.docUri ?? '')
         .onChange((e) => e.change((d) => (d.docUri = e.to.value)))
-        .onEnter((e) => {
+        .onEnter(async (e) => {
+          // 🐷 Hack
           local.docUri = e.state.current.docUri || undefined;
           initDoc(state);
         });
