@@ -32,10 +32,8 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     const setupConnection = (conn: DataConnection) => {
       this.#conn = conn;
 
-      conn.on('open', () => {
-        conn.send({ type: 'arrive', senderId: this.peerId });
-      });
-
+      conn.on('open', () => conn.send({ type: 'arrive', senderId: this.peerId }));
+      conn.on('close', () => this.emit('close'));
       conn.on('data', (data) => {
         const message = data as NetworkAdapterMessage;
         const { type, senderId } = message;
@@ -64,13 +62,10 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
         }
       });
 
-      conn.on('close', () => this.emit('close'));
-      conn.send({ type: 'arrive', senderId: this.peerId });
-
       /**
-       * Mark this messagechannel as ready after 100ms, at this point there
-       * must be something weird going on on the other end to cause us to
-       * receive no response.
+       * Mark this channel as ready after 100ms, at this point there
+       * must be something weird going on on the other end to cause us
+       * to receive no response.
        */
       Time.delay(100, () => this.#setAsReady());
     };
