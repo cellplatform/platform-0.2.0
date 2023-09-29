@@ -3,8 +3,7 @@ import { Test, Time, expect, rx } from '../test.ui';
 
 export default Test.describe('Webrtc.Peer → connect', (e) => {
   e.timeout(9999);
-
-  e.it('skipped', async (e) => {});
+  e.it('skipped', (e) => {});
 
   e.it.skip('start data connection', async (e) => {
     const peer1 = Webrtc.Peer.create();

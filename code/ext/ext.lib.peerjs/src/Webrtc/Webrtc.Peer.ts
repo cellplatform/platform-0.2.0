@@ -16,11 +16,6 @@ export const Peer: t.WebRtcPeer = {
     const port = 443;
     const secure = true;
     return { host, path, key, port, secure } as const;
-
-    /**
-     * TODO 🐷
-     * change "key" >> "token"
-     */
   },
 
   /**
