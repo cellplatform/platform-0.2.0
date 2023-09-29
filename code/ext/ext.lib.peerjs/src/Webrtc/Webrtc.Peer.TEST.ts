@@ -1,5 +1,5 @@
 import { Webrtc } from '.';
-import { DEFAULTS, Id, Test, expect, type t } from '../test.ui';
+import { DEFAULTS, Id, Test, expect, type t, Time } from '../test.ui';
 
 export default Test.describe('Webrtc.Peer', (e) => {
   e.describe('options', (e) => {
@@ -40,7 +40,7 @@ export default Test.describe('Webrtc.Peer', (e) => {
 
     e.it('Peer.create({ options }) ← explicit options', (e) => {
       const options = DEFAULTS.signal as any;
-      delete options.host;
+      delete options.host; // Test hack.
       const peer = Webrtc.Peer.create(options);
 
       expect(Id.is.cuid(peer.id)).to.eql(true);
@@ -50,17 +50,16 @@ export default Test.describe('Webrtc.Peer', (e) => {
     e.it('Peer.create(peerid, { options }) ← explicit id and options', (e) => {
       const id1 = Id.slug();
       const id2 = Id.cuid();
-      const options = DEFAULTS.signal as any;
-      delete options.host;
+      const options = Webrtc.Peer.options();
 
-      const peer1 = Webrtc.Peer.create(id1, options);
+      const peer1 = Webrtc.Peer.create(id1, DEFAULTS.signal);
       const peer2 = Webrtc.Peer.create(id2);
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2);
 
-      expect(peer1.options.host?.includes('peerjs.com')).to.be.true;
-      expect(peer2.options.host).to.eql(Webrtc.Peer.options().host);
+      expect(peer1.options.host).to.eql(options.host);
+      expect(peer2.options.host).to.eql(options.host);
     });
   });
 });

@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs';
+
 /**
  * Common RXJS
  */
@@ -50,3 +52,10 @@ export {
  */
 export { merge } from 'rxjs';
 export { takeUntil } from 'rxjs/operators';
+
+/**
+ * Factory function for a subject.
+ */
+export function subject<T = void>() {
+  return new Subject<T>();
+}

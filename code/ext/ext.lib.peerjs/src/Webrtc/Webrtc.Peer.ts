@@ -30,7 +30,7 @@ export const Peer: t.WebRtcPeer = {
     if (args.length === 0) return new PeerJs(cuid(), Peer.options());
     if (isObject(args[0])) return new PeerJs(cuid(), args[0]);
     if (typeof args[0] === 'string') {
-      const options = isObject(args[1]) ? args[1] : Peer.options();
+      const options = isObject(args[1]) ? Peer.options(args[1]) : Peer.options();
       return new PeerJs(args[0], options);
     }
     throw new Error('Could not resolve Peer creation args');
