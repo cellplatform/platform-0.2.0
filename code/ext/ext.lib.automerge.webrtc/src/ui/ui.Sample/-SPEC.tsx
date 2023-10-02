@@ -94,15 +94,15 @@ export default Dev.describe(name, (e) => {
       state.change((d) => (d.user = adapter.peerId));
     };
 
-    dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
-      if (!(peer && local.remotePeer)) return;
-      const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
-      addNetworkAdapter(webrtc);
-    });
-
     dev.button(['addNetworkAdapter', '<undefined>'], (e) => {
       if (!peer) return;
       const webrtc = new WebrtcNetworkAdapter(peer);
+      addNetworkAdapter(webrtc);
+    });
+
+    dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
+      if (!(peer && local.remotePeer)) return;
+      const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
       addNetworkAdapter(webrtc);
     });
 
