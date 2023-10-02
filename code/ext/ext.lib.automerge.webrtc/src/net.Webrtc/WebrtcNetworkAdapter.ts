@@ -1,7 +1,7 @@
 import {
   Message,
   NetworkAdapter,
-  NetworkAdapterMessage,
+  type NetworkAdapterMessage,
   type PeerId,
 } from '@automerge/automerge-repo';
 import type { DataConnection, Peer } from 'peerjs';
@@ -68,10 +68,9 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     };
 
     this.#peer.on('connection', (conn) => setupConnection(conn));
-    if (this.#remoteId) {
-      // If the remote-id is known start the connection now.
-      setupConnection(this.#peer.connect(this.#remoteId));
-    }
+
+    // If the remote-id is known start the connection now.
+    if (this.#remoteId) setupConnection(this.#peer.connect(this.#remoteId));
   }
 
   send(message: Message) {
