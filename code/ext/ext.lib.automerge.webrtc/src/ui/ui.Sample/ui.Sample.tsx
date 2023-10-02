@@ -8,25 +8,44 @@ export type SampleProps = {
 
 export const Sample: React.FC<SampleProps> = (props) => {
   const [doc, changeDoc] = useDocument<t.SampleDoc>(props.docUri);
+  const count = doc?.count?.value ?? 0;
 
   const increment = () => {
     changeDoc((d: any) => d.count?.increment(1));
   };
 
   const styles = {
-    base: css({ padding: 10, lineHeight: 1.5 }),
-    user: css({ fontWeight: 'bold' }),
+    base: css({
+      padding: 10,
+      lineHeight: 1.5,
+    }),
+    body: css({
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+    }),
+    title: css({ fontWeight: 'bold' }),
     icon: css({ opacity: props.user ? 1 : 0.3, marginRight: 5 }),
+    right: css({
+      display: 'grid',
+      placeItems: 'center',
+      fontSize: 64,
+      fontWeight: 900,
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.user}>
+      <div {...styles.title}>
         <span {...styles.icon}>🌳</span>
         <span>{props.user && `network ${props.user}`}</span>
       </div>
-      <div>count: {doc?.count?.value ?? 0}</div>
-      <Button.Blue label={'increment'} onClick={increment} />
+      <div {...styles.body}>
+        <div>
+          <div>count: {count}</div>
+          <Button.Blue label={'increment'} onClick={increment} />
+        </div>
+        <div {...styles.right}>{count ? count : ''}</div>
+      </div>
     </div>
   );
 };
