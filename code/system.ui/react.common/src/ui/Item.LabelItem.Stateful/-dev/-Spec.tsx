@@ -68,8 +68,10 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
               list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
-              onChange={(e) => console.info(`⚡️ onChange[${i}]`, e)}
               renderCount={{ absolute: [0, -55, null, null] }}
+              onChange={(e) => {
+                console.info(`⚡️ onChange[${i}]`, e);
+              }}
             />
           );
         });

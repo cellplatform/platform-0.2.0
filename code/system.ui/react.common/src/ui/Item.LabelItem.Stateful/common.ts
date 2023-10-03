@@ -1,8 +1,9 @@
 import { type t } from '../common';
+export * from '../common';
 
 export { FieldSelector } from '../PropList.FieldSelector';
 export { Keyboard } from '../Text.Keyboard';
-export * from '../common';
+export { Focus } from '../useFocus';
 
 /**
  * Constants
