@@ -5,7 +5,7 @@ import { TextInputHint } from './ui.TextInput.Hint';
 import { HtmlInput } from './ui.TextInput.Html';
 import { Util } from './util.mjs';
 
-import type { TextInputProps } from '../types.mjs';
+import type { TextInputProps } from './types.mjs';
 export type { TextInputProps };
 
 type Props = t.TextInputProps & {
