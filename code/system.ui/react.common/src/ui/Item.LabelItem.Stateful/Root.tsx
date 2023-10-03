@@ -7,7 +7,7 @@ import {
   useItemSelectionController,
   useListController,
   useListNavigationController,
-} from './use.mjs';
+} from './use';
 
 /**
  * Export

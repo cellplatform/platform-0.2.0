@@ -1,7 +1,7 @@
 import { DEFAULTS, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
 
-import { useListNavigationController } from './use.List.Navigation.Controller.mjs';
+import { Wrangle } from './Wrangle';
+import { useListNavigationController } from './use.List.Navigation.Controller';
 
 type Args = {
   enabled?: boolean;
