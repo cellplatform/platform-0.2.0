@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type InstanceId = string;
 export type LabelItemBehaviorKind =
@@ -24,6 +24,7 @@ export type LabelItem = {
   editing?: boolean;
   enabled?: boolean;
   focused?: boolean;
+  selected?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
 };
@@ -38,7 +39,7 @@ export type LabelItemListCtxState = t.Immutable<LabelItemListCtx>;
 export type LabelItemListCtxStateChanger = (draft: t.LabelItemListCtx) => void;
 
 /**
- * Controller API
+ * Controller API's
  */
 export type LabelItemController<Kind extends string> = {
   readonly kind: Kind;
@@ -77,6 +78,7 @@ export type LabelItemChangeAction =
   | 'data:label'
   | 'view:focus'
   | 'view:blur'
+  | 'view:selected'
   | 'edit:start'
   | 'edit:accept'
   | 'edit:cancel';
