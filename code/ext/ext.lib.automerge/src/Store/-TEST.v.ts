@@ -5,7 +5,7 @@ export type D = { count?: t.A.Counter };
 
 describe('Store', async () => {
   const store = Store.init();
-  const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
+  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const generator = store.doc.factory<D>(initial);
 
   it('kind: "crdt:store"', () => {

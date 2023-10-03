@@ -5,7 +5,7 @@ export type D = { count?: t.A.Counter };
 
 export default Test.describe('WebStore', (e) => {
   const store = WebStore.init();
-  const initial: t.DocChange<D> = (d) => (d.count = new A.Counter(0));
+  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const assertCount = (doc: t.DocRefHandle<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };

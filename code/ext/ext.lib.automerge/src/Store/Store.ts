@@ -17,7 +17,7 @@ export const Store = {
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async findOrCreate<T>(initial: t.DocChange<T>, uri?: t.DocUri | string) {
+        async findOrCreate<T>(initial: t.ImmutableNext<T>, uri?: t.DocUri | string) {
           const res = Doc.findOrCreate<T>(api.repo, { initial, uri });
           await res.handle.whenReady();
           return res;
@@ -26,7 +26,7 @@ export const Store = {
         /**
          * Create an "initial constructor" factory for typed docs.
          */
-        factory<T>(initial: t.DocChange<T>) {
+        factory<T>(initial: t.ImmutableNext<T>) {
           return (uri?: t.DocUri | string) => api.doc.findOrCreate<T>(initial, uri);
         },
 

@@ -1,7 +1,7 @@
 import { DocEvents } from './Doc.Events';
 import { Is, R, type t } from './common';
 
-export type DocRefArgs<T> = { initial: t.DocChange<T>; uri?: t.DocUri | string };
+export type DocRefArgs<T> = { initial: t.ImmutableNext<T>; uri?: t.DocUri | string };
 
 export const Doc = {
   /**
