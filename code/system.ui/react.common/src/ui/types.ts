@@ -11,7 +11,6 @@ export type * from './IFrame/types.mjs';
 export type * from './Icon/types.mjs';
 export type * from './Item.LabelItem.Stateful/types';
 export type * from './Item.LabelItem/types';
-export type * from './Item/types.mjs';
 export type * from './Layout.Split/types.mjs';
 export type * from './Layout/types.mjs';
 export type * from './ObjectView/types.mjs';

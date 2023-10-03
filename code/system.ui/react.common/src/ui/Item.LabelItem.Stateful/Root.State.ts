@@ -8,7 +8,7 @@ type Options = {
 /**
  * Simple safe/immutable memory state for a single item.
  */
-export const LabelItemState = {
+export const State = {
   DEFAULTS,
 
   list(): t.LabelItemListState {

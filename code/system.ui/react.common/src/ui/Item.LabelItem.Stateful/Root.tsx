@@ -8,12 +8,14 @@ import {
   useListController,
   useListNavigationController,
 } from './use';
+import { State } from './Root.State';
 
 /**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  State: typeof State;
   BehaviorSelector: typeof BehaviorSelector;
 
   useController: typeof useItemController;
@@ -28,6 +30,7 @@ export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
   {
     DEFAULTS,
+    State,
     BehaviorSelector,
 
     useController: useItemController,
