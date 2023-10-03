@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type Id = string;
 type Doc = t.CrdtDocRef<any>;
@@ -14,7 +14,7 @@ const store = new Map<Id, RegistryEntry>();
  *    within the lens so that when changing, the lens
  *    knows how many times it needs to run it's initial
  *    "get" function to ensure that within the entire
- *    sub-tree that all lens's may constructing accurately
+ *    sub-tree that all lens's may construct accurately
  *    complete.
  */
 export const Registry = {
