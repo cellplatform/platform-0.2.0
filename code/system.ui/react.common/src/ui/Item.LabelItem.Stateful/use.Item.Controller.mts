@@ -1,8 +1,8 @@
 import { DEFAULTS, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
-import { useItemEditController } from './use.Item.EditController.mjs';
-import { useItemSelectionController } from './use.Item.SelectionController.mjs';
+import { useItemEditController } from './use.Item.Edit.Controller.mjs';
+import { useItemSelectionController } from './use.Item.Selection.Controller.mjs';
 
 type Args = {
   useBehaviors?: t.LabelItemBehaviorKind[];
@@ -21,7 +21,7 @@ export function useItemController(args: Args) {
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
-  const itemSelection = useItemSelectionController({
+  const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
     ctx,
     item,
@@ -29,12 +29,12 @@ export function useItemController(args: Args) {
     handlers: {}, // NB: passed in from prior controller (if there was one).
   });
 
-  const itemEdit = useItemEditController({
+  const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
     ctx,
     item,
     onChange,
-    handlers: itemSelection.handlers,
+    handlers: selection.handlers,
   });
 
   /**
@@ -43,7 +43,7 @@ export function useItemController(args: Args) {
   const api: t.LabelItemController<'controller:Item'> = {
     kind: 'controller:Item',
     enabled,
-    handlers: itemEdit.handlers,
+    handlers: edit.handlers,
     get data() {
       return item?.current ?? DEFAULTS.data;
     },

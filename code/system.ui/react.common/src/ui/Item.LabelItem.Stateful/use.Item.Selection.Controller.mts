@@ -13,7 +13,7 @@ type Args = {
  * HOOK: selection behavior controller for a single <Item>.
  */
 export function useItemSelectionController(args: Args) {
-  const { ctx, item, onChange, enabled = true } = args;
+  const { ctx, item, enabled = true } = args;
 
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
@@ -43,6 +43,17 @@ export function useItemSelectionController(args: Args) {
       change(action, (d) => (d.focused = e.focused));
       args.handlers?.onFocusChange?.(e);
     },
+
+    onClick(e) {
+      /**
+       * TODO 🐷
+       */
+      // change('view:selected', (d) => (d.selected = true));
+
+      console.log('ctx', ctx);
+
+      args.handlers?.onClick?.(e);
+    },
   };
 
   /**
@@ -53,6 +64,9 @@ export function useItemSelectionController(args: Args) {
     enabled,
     handlers,
     get data() {
+      const d = item?.current ?? DEFAULTS.data;
+      console.log('d', d);
+
       return item?.current ?? DEFAULTS.data;
     },
   };
