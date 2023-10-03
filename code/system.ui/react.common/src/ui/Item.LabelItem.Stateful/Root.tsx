@@ -1,14 +1,8 @@
+import { State } from './Root.State';
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 import { BehaviorSelector } from './ui.BehaviorSelector';
-import {
-  useItemController,
-  useItemEditController,
-  useItemSelectionController,
-  useListController,
-  useListNavigationController,
-} from './use';
-import { State } from './Root.State';
+import { useItemController, useListController } from './use';
 
 /**
  * Export
@@ -17,29 +11,21 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   State: typeof State;
   BehaviorSelector: typeof BehaviorSelector;
-
-  useController: typeof useItemController;
-  useItemEditController: typeof useItemEditController;
-  useItemSelectionController: typeof useItemSelectionController;
-
+  useItemController: typeof useItemController;
   useListController: typeof useListController;
-  useListNavigationController: typeof useListNavigationController;
 };
 
+/**
+ * A stateful version of the <LabelItem> component.
+ */
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
   {
     DEFAULTS,
     State,
     BehaviorSelector,
-
-    useController: useItemController,
-
-    useItemEditController,
-    useItemSelectionController,
-
+    useItemController,
     useListController,
-    useListNavigationController,
   },
   { displayName: 'LabelItem.Stateful' },
 );

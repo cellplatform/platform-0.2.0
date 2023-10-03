@@ -1,8 +1,8 @@
 import { Dev, Value, type t } from '../../../test.ui';
 
 import { LabelItemStateful } from '..';
-import { Item } from '../../Item';
 import { Sample } from './-Sample';
+import { SampleList } from './-Sample.List';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -25,18 +25,18 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     useBehaviors: DEFAULTS.useBehaviors.defaults,
   });
 
-  const State = {
-    ctx: undefined as t.LabelItemListCtxState | undefined,
+  const TestState = {
+    list: undefined as t.LabelItemListState | undefined,
     items: [] as t.LabelItemState[],
   };
 
   const Init = {
     items(state: T) {
       const length = state.debug.total ?? 0;
-      State.ctx = length > 1 ? Item.Label.State.ctx() : undefined;
-      State.items = Array.from({ length }).map(() => {
-        const initial = Sample.data();
-        return Item.Label.State.item(initial);
+      TestState.list = length > 1 ? LabelItemStateful.State.list() : undefined;
+      TestState.items = Array.from({ length }).map(() => {
+        const initial = Sample.item();
+        return LabelItemStateful.State.item(initial);
       });
     },
   };
@@ -59,12 +59,14 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         const length = debug.total ?? 0;
-        const elList = Array.from({ length }).map((v, i) => {
+        const isList = length > 1;
+
+        const elements = Array.from({ length }).map((_, i) => {
           return (
             <LabelItemStateful
               key={`item.${i}`}
-              ctx={State.ctx}
-              item={State.items[i]}
+              list={TestState.list}
+              item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
@@ -73,7 +75,16 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
             />
           );
         });
-        return <>{elList}</>;
+
+        if (!isList) return <>{elements}</>;
+        return (
+          <SampleList
+            //
+            elements={elements}
+            useBehaviors={debug.useBehaviors}
+            list={TestState.list}
+          />
+        );
       });
   });
 
@@ -122,14 +133,14 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const items = State.items.reduce((acc, next, i) => {
+      const items = TestState.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
         acc[key] = next;
         return acc;
       }, {} as Record<string, t.LabelItemState>);
 
       const data = {
-        ctx: State.ctx?.current,
+        ctx: TestState.list?.current,
         items,
       };
 
