@@ -6,7 +6,7 @@ import {
   useItemEditController,
   useItemSelectionController,
   useListController,
-  useListSelectionController,
+  useListNavigationController,
 } from './use.mjs';
 
 /**
@@ -16,12 +16,12 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   BehaviorSelector: typeof BehaviorSelector;
 
-  useItemController: typeof useItemController;
+  useController: typeof useItemController;
   useItemEditController: typeof useItemEditController;
   useItemSelectionController: typeof useItemSelectionController;
 
   useListController: typeof useListController;
-  useListSelectionController: typeof useListSelectionController;
+  useListNavigationController: typeof useListNavigationController;
 };
 
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
@@ -30,12 +30,13 @@ export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
     DEFAULTS,
     BehaviorSelector,
 
-    useItemController,
+    useController: useItemController,
+
     useItemEditController,
     useItemSelectionController,
 
     useListController,
-    useListSelectionController,
+    useListNavigationController,
   },
   { displayName: 'LabelItem.Stateful' },
 );

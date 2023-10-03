@@ -3,7 +3,7 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  ctx?: t.LabelItemListCtxState;
+  ctx?: t.LabelItemListState;
   item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
@@ -23,7 +23,7 @@ export function useItemSelectionController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const change = (action: A, fn: t.LabelItemStateChanger) => {
+  const change = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
       args.onChange?.({ action, data: api.data });
@@ -59,14 +59,11 @@ export function useItemSelectionController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelItemController<'controller:Item.Edit'> = {
-    kind: 'controller:Item.Edit',
+  const api: t.LabelItemController<'controller:Item.Selection'> = {
+    kind: 'controller:Item.Selection',
     enabled,
     handlers,
     get data() {
-      const d = item?.current ?? DEFAULTS.data;
-      console.log('d', d);
-
       return item?.current ?? DEFAULTS.data;
     },
   };

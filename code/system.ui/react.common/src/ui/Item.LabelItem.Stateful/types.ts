@@ -3,16 +3,16 @@ import type { t } from './common';
 type InstanceId = string;
 export type LabelItemBehaviorKind =
   | 'Item'
-  | 'Item.Edit'
   | 'Item.Selection'
+  | 'Item.Edit'
   | 'List'
-  | 'List.Selection';
+  | 'List.Navigation';
 
 /**
  * Context for when an item exists
  * within the context of a list.
  */
-export type LabelItemListCtx = {
+export type LabelItemList = {
   selected?: InstanceId;
 };
 
@@ -33,10 +33,10 @@ export type LabelItem = {
  * Simple safe/immutable state wrapper for the data object.
  */
 export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: InstanceId };
-export type LabelItemStateChanger = (draft: t.LabelItem) => void;
+export type LabelItemStateNext = t.ImmutableNext<t.LabelItem>;
 
-export type LabelItemListCtxState = t.Immutable<LabelItemListCtx>;
-export type LabelItemListCtxStateChanger = (draft: t.LabelItemListCtx) => void;
+export type LabelItemListState = t.Immutable<t.LabelItemList>;
+export type LabelItemListStateNext = t.ImmutableNext<t.LabelItemList>;
 
 /**
  * Controller API's
@@ -58,7 +58,7 @@ export type LabelListController<Kind extends string> = {
  * Component (View).
  */
 export type LabelItemStatefulProps = {
-  ctx?: LabelItemListCtxState;
+  ctx?: LabelItemListState;
   item?: LabelItemState;
   useBehaviors?: t.LabelItemBehaviorKind[];
   style?: t.CssValue;
@@ -70,8 +70,8 @@ export type LabelItemStatefulProps = {
  */
 export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;
 export type LabelItemStateChangeHandlerArgs = {
-  action: LabelItemChangeAction;
-  data: LabelItem;
+  readonly action: LabelItemChangeAction;
+  readonly data: LabelItem;
 };
 export type LabelItemChangeAction =
   | 'ready'

@@ -11,9 +11,9 @@ type Options = {
 export const LabelItemState = {
   DEFAULTS,
 
-  ctx(): t.LabelItemListCtxState {
-    const initial: t.LabelItemListCtx = {};
-    return PatchState.init<t.LabelItemListCtx>({ initial });
+  ctx(): t.LabelItemListState {
+    const initial: t.LabelItemList = {};
+    return PatchState.init<t.LabelItemList>({ initial });
   },
 
   item(initial = DEFAULTS.data, options: Options = {}): t.LabelItemState {

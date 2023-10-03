@@ -1,15 +1,15 @@
-import { useEffect, useState, useRef } from 'react';
-import { type t, Keyboard, rx } from './common';
+import { useEffect, useRef } from 'react';
+import { Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  ctx?: t.LabelItemListCtxState;
+  ctx?: t.LabelItemListState;
 };
 
 /**
  * HOOK: Selection behavior for a <List> of <Items>.
  */
-export function useListSelectionController(args: Args) {
+export function useListNavigationController(args: Args) {
   const { enabled = true } = args;
 
   /**

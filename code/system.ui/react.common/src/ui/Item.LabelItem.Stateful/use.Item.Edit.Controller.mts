@@ -3,7 +3,6 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  ctx?: t.LabelItemListCtxState;
   item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
@@ -13,7 +12,7 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { ctx, item, enabled = true } = args;
+  const { item, enabled = true } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [_, setCount] = useState(0);
@@ -23,7 +22,7 @@ export function useItemEditController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const change = (action: A, fn: t.LabelItemStateChanger) => {
+  const change = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
       args.onChange?.({ action, data: api.data });

@@ -1,12 +1,12 @@
 import { DEFAULTS, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
-import { useListSelectionController } from './use.List.Selection.Controller.mjs';
+import { useListNavigationController } from './use.List.Navigation.Controller.mjs';
 
 type Args = {
   enabled?: boolean;
   useBehaviors?: t.LabelItemBehaviorKind[];
-  ctx?: t.LabelItemListCtxState;
+  ctx?: t.LabelItemListState;
 };
 
 /**
@@ -16,11 +16,11 @@ export function useListController(args: Args) {
   const { ctx, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
   const enabled = args.enabled ?? true;
 
-  const listSelection = useListSelectionController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Selection'),
+  const navigation = useListNavigationController({
+    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation'),
   });
 
-  console.log('useListController 💦', listSelection);
+  console.log('useListNavigationController 💦', navigation);
 
   /**
    * TODO 🐷

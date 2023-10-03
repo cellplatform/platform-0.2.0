@@ -7,14 +7,14 @@ import { useItemSelectionController } from './use.Item.Selection.Controller.mjs'
 type Args = {
   useBehaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
-  ctx?: t.LabelItemListCtxState;
+  ctx?: t.LabelItemListState;
   item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
 
 /**
- * HOOK: roll-up of all controllers related to a <Item>.
+ * HOOK: roll-up of all controllers related to an <Item>.
  */
 export function useItemController(args: Args) {
   const { ctx, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
@@ -26,12 +26,11 @@ export function useItemController(args: Args) {
     ctx,
     item,
     onChange,
-    handlers: {}, // NB: passed in from prior controller (if there was one).
+    handlers: args.handlers ?? {}, // NB: passed in from prior controller (if there was one).
   });
 
   const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
-    ctx,
     item,
     onChange,
     handlers: selection.handlers,
