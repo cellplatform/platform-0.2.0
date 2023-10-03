@@ -34,6 +34,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       enabled={data.enabled}
       editing={data.editing}
       focused={data.focused}
+      selected={data.selected}
       focusOnEdit={true}
     />
   );

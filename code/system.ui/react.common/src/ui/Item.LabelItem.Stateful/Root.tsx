@@ -1,7 +1,6 @@
 import { DEFAULTS, FC, type t } from './common';
+import { View } from './ui';
 import { BehaviorSelector } from './ui.BehaviorSelector';
-import { Item } from './ui.Item';
-import { List } from './ui.List';
 import {
   useItemController,
   useItemEditController,
@@ -15,7 +14,6 @@ import {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  List: typeof List;
   BehaviorSelector: typeof BehaviorSelector;
 
   useItemController: typeof useItemController;
@@ -27,11 +25,10 @@ type Fields = {
 };
 
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
-  Item,
+  View,
   {
     DEFAULTS,
     BehaviorSelector,
-    List,
 
     useItemController,
     useItemEditController,
