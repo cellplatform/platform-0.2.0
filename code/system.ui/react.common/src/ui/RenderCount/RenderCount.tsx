@@ -40,6 +40,6 @@ const Wrangle = {
   absolute(input: RenderCountProps['absolute']): t.CssValue['Absolute'] {
     if (!input || !Array.isArray(input)) return [3, 4, null, null];
     if (input.length === 2) return [input[0], input[1], null, null];
-    return input.slice(0, 3) as t.CssValue['Absolute'];
+    return input.slice(0, 4) as t.CssValue['Absolute'];
   },
 };
