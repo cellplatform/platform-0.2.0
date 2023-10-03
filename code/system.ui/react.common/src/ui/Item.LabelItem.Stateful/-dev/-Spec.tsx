@@ -31,12 +31,13 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   };
 
   const Init = {
-    items(state: T) {
-      const length = state.debug.total ?? 0;
-      TestState.items = Array.from({ length }).map(() => {
-        const initial = Sample.item();
-        return LabelItemStateful.State.item(initial);
-      });
+    item() {
+      const initial = Sample.item();
+      return LabelItemStateful.State.item(initial);
+    },
+
+    items(length: number = 0) {
+      TestState.items = Array.from({ length }).map(() => Init.item());
     },
   };
 
@@ -48,7 +49,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       d.debug.total = local.total;
       d.debug.useBehaviors = local.useBehaviors;
     });
-    Init.items(state.current);
+    Init.items(state.current.debug.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -77,6 +78,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         return (
           <SampleList
             //
+            items={TestState.items}
             elements={elements}
             useBehaviors={debug.useBehaviors}
             list={TestState.list}
@@ -111,10 +113,8 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
             .label(label)
             .right((e) => (e.state.debug.total === total ? '←' : ''))
             .onClick(async (e) => {
-              await e.change((d) => (d.debug.total = total));
-              Init.items(state.current);
-              local.total = total;
-              dev.redraw();
+              Init.items(total);
+              await e.change((d) => (local.total = d.debug.total = total));
             }),
         );
       };
@@ -123,6 +123,12 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       total(1);
       total(3);
       total(10);
+      dev.hr(-1, 5);
+      dev.button('add', async (e) => {
+        TestState.items.push(Init.item());
+        const total = (e.state.current.debug.total ?? 0) + 1;
+        await e.change((d) => (local.total = d.debug.total = total));
+      });
     });
 
     dev.hr(5, 20);
