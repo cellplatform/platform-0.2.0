@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-type InstanceId = string;
+type ItemId = string;
 export type LabelItemBehaviorKind =
   | 'Item'
   | 'Item.Selection'
@@ -13,7 +13,7 @@ export type LabelItemBehaviorKind =
  * within the context of a list.
  */
 export type LabelItemList = {
-  selected?: InstanceId;
+  selected?: ItemId;
 };
 
 /**
@@ -24,7 +24,6 @@ export type LabelItem = {
   editing?: boolean;
   enabled?: boolean;
   focused?: boolean;
-  selected?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
 };
@@ -32,7 +31,7 @@ export type LabelItem = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: InstanceId };
+export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: ItemId };
 export type LabelItemStateNext = t.ImmutableNext<t.LabelItem>;
 
 export type LabelItemListState = t.Immutable<t.LabelItemList>;

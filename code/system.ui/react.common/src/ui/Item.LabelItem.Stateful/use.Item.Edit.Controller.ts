@@ -22,7 +22,7 @@ export function useItemEditController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const change = (action: A, fn: t.LabelItemStateNext) => {
+  const changeItem = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
       args.onChange?.({ action, data: api.data });
@@ -37,17 +37,17 @@ export function useItemEditController(args: Args) {
 
     start() {
       if (EditMode.isEditing) return;
-      change('edit:start', (draft) => (draft.editing = true));
+      changeItem('edit:start', (draft) => (draft.editing = true));
     },
 
     accept() {
       if (!EditMode.isEditing) return;
-      change('edit:accept', (draft) => (draft.editing = false));
+      changeItem('edit:accept', (draft) => (draft.editing = false));
     },
 
     cancel() {
       if (!EditMode.isEditing) return;
-      change('edit:cancel', (draft) => (draft.editing = false));
+      changeItem('edit:cancel', (draft) => (draft.editing = false));
     },
 
     toggle() {
@@ -68,11 +68,11 @@ export function useItemEditController(args: Args) {
     onReady(e) {
       setRef(e.ref);
       args.handlers?.onReady?.(e);
-      change('ready', (d) => null);
+      changeItem('ready', (d) => null);
     },
 
     onEditChange(e) {
-      change('data:label', (draft) => (draft.label = e.label));
+      changeItem('data:label', (draft) => (draft.label = e.label));
       args.handlers?.onEditChange?.(e);
     },
 

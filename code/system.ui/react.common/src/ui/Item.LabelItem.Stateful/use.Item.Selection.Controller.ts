@@ -23,7 +23,7 @@ export function useItemSelectionController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const change = (action: A, fn: t.LabelItemStateNext) => {
+  const changeItem = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
       args.onChange?.({ action, data: api.data });
@@ -40,7 +40,7 @@ export function useItemSelectionController(args: Args) {
     onFocusChange(e) {
       if (isEditing()) return; // NB: Hack to reduce irrelevant focus/blur events.
       const action = e.focused ? 'view:focus' : 'view:blur';
-      change(action, (d) => (d.focused = e.focused));
+      changeItem(action, (d) => (d.focused = e.focused));
       args.handlers?.onFocusChange?.(e);
     },
 
