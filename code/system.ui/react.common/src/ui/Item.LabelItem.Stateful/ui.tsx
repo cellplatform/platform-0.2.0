@@ -7,14 +7,14 @@ import { useItemController } from './use';
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const { ctx, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const { list, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
 
   /**
    * Roll-up controller.
    */
   const controller = useItemController({
-    ctx,
     item,
+    list,
     onChange,
     useBehaviors,
   });

@@ -3,8 +3,8 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  ctx?: t.LabelItemListState;
   item?: t.LabelItemState;
+  list?: t.LabelItemListState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
@@ -13,7 +13,7 @@ type Args = {
  * HOOK: selection behavior controller for a single <Item>.
  */
 export function useItemSelectionController(args: Args) {
-  const { ctx, item, enabled = true } = args;
+  const { list, item, enabled = true } = args;
 
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
@@ -50,7 +50,7 @@ export function useItemSelectionController(args: Args) {
        */
       // change('view:selected', (d) => (d.selected = true));
 
-      console.log('ctx', ctx);
+      console.log('onclick // list (state)', list);
 
       args.handlers?.onClick?.(e);
     },

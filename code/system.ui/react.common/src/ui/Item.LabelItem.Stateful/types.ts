@@ -58,8 +58,8 @@ export type LabelListController<Kind extends string> = {
  * Component (View).
  */
 export type LabelItemStatefulProps = {
-  ctx?: LabelItemListState;
   item?: LabelItemState;
+  list?: LabelItemListState;
   useBehaviors?: t.LabelItemBehaviorKind[];
   style?: t.CssValue;
   onChange?: LabelItemStateChangeHandler;

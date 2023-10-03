@@ -3,7 +3,7 @@ import { Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  ctx?: t.LabelItemListState;
+  list?: t.LabelItemListState;
 };
 
 /**
@@ -23,7 +23,7 @@ export function useListNavigationController(args: Args) {
   /**
    * TODO 🐷
    */
-  console.log('💦 useListSelectionController', args);
+  console.log('💦 useListNavigationController', args);
 
   /**
    * Keyboard.
@@ -56,8 +56,8 @@ export function useListNavigationController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelListController<'controller:List.Selection'> = {
-    kind: 'controller:List.Selection',
+  const api: t.LabelListController<'controller:List.Navigation'> = {
+    kind: 'controller:List.Navigation',
     enabled,
     listRef,
   } as const;

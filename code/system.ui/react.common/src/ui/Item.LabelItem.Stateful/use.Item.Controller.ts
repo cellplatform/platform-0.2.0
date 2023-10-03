@@ -7,8 +7,8 @@ import { useItemSelectionController } from './use.Item.Selection.Controller';
 type Args = {
   useBehaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
-  ctx?: t.LabelItemListState;
   item?: t.LabelItemState;
+  list?: t.LabelItemListState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
@@ -17,13 +17,13 @@ type Args = {
  * HOOK: roll-up of all controllers related to an <Item>.
  */
 export function useItemController(args: Args) {
-  const { ctx, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
+  const { item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
-    ctx,
+    list: args.list,
     item,
     onChange,
     handlers: args.handlers ?? {}, // NB: passed in from prior controller (if there was one).

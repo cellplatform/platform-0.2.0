@@ -6,14 +6,14 @@ import { useListNavigationController } from './use.List.Navigation.Controller';
 type Args = {
   enabled?: boolean;
   useBehaviors?: t.LabelItemBehaviorKind[];
-  ctx?: t.LabelItemListState;
+  list?: t.LabelItemListState;
 };
 
 /**
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
 export function useListController(args: Args) {
-  const { ctx, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
+  const { list, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
   const enabled = args.enabled ?? true;
 
   const navigation = useListNavigationController({
@@ -33,7 +33,7 @@ export function useListController(args: Args) {
   const api = {
     kind: 'controller:List',
     enabled,
-    ctx,
+    list,
   } as const;
 
   return api;
