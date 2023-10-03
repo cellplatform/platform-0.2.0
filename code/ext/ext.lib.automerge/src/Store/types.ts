@@ -6,7 +6,7 @@ export type DocUri = t.AutomergeUrl;
 /**
  * A reference-handle to a CRDT document.
  */
-export type DocRefHandle<T> = t.Immutable<T> & {
+export type DocRef<T> = t.Immutable<T> & {
   readonly uri: t.DocUri;
   readonly handle: t.DocHandle<T>;
   events(dispose?: t.Observable<any>): t.DocEvents<T>;

@@ -25,7 +25,7 @@ export const Doc = {
     const handle = Is.automergeUrl(args.uri) ? repo.find<T>(args.uri) : create();
     const uri = handle.url;
 
-    const api: t.DocRefHandle<T> = {
+    const api: t.DocRef<T> = {
       uri,
       handle,
       get current() {

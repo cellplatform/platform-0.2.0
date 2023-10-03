@@ -18,7 +18,7 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init();
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
-  let doc: t.DocRefHandle<t.SampleDoc>;
+  let doc: t.DocRef<t.SampleDoc>;
   const initDoc = async (state: t.DevCtxState<T>) => {
     doc = await generator(local.docUri);
     state.change((d) => (local.docUri = d.docUri = doc.uri));
