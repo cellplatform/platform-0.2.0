@@ -23,10 +23,11 @@ export function useItemSelectionController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
+  const fire = (action: A) => args.onChange?.({ action, data: api.data });
   const changeItem = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
-      args.onChange?.({ action, data: api.data });
+      fire(action);
       increment();
     }
   };
@@ -38,20 +39,19 @@ export function useItemSelectionController(args: Args) {
     ...args.handlers,
 
     onFocusChange(e) {
-      if (isEditing()) return; // NB: Hack to reduce irrelevant focus/blur events.
-      const action = e.focused ? 'view:focus' : 'view:blur';
-      changeItem(action, (d) => (d.focused = e.focused));
+      // NB: [If] statement → Hack to reduce irrelevant focus/blur events.
+      if (!isEditing()) {
+        const action = e.focused ? 'view:focus' : 'view:blur';
+        changeItem(action, (d) => (d.focused = e.focused));
+      }
       args.handlers?.onFocusChange?.(e);
     },
 
     onClick(e) {
-      /**
-       * TODO 🐷
-       */
-      // change('view:selected', (d) => (d.selected = true));
-
-      console.log('onclick // list (state)', list);
-
+      if (enabled && list) {
+        list.change((d) => (d.selected = item?.instance));
+        fire('view:selected');
+      }
       args.handlers?.onClick?.(e);
     },
   };
@@ -64,7 +64,7 @@ export function useItemSelectionController(args: Args) {
     enabled,
     handlers,
     get data() {
-      return item?.current ?? DEFAULTS.data;
+      return item?.current ?? DEFAULTS.data.item;
     },
   };
   return api;

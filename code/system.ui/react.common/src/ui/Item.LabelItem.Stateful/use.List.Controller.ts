@@ -14,13 +14,12 @@ type Args = {
  */
 export function useListController(args: Args) {
   const { list, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
-  const enabled = args.enabled ?? true;
+  const enabled =
+    (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation');
 
   const navigation = useListNavigationController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation'),
+    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List.Navigation'),
   });
-
-  console.log('useListNavigationController 💦', navigation);
 
   /**
    * TODO 🐷
@@ -33,7 +32,9 @@ export function useListController(args: Args) {
   const api = {
     kind: 'controller:List',
     enabled,
-    list,
+    get data() {
+      return list?.current ?? DEFAULTS.data.list;
+    },
   } as const;
 
   return api;

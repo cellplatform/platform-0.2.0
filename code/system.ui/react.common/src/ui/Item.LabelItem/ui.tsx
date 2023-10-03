@@ -1,4 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
+import { RenderCount } from '../RenderCount';
 import { css, DEFAULTS, Keyboard, rx, Style, useClickOutside, type t } from './common';
 
 import { Label } from './ui.Label';
@@ -133,6 +134,7 @@ export const View: React.FC<Props> = (props) => {
       onMouseLeave={over(false)}
       onMouseDown={clickHandler(props.onClick)}
     >
+      {props.renderCount && <RenderCount {...props.renderCount} />}
       <div {...styles.body}>
         <Left {...props} />
         <Label

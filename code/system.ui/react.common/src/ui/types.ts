@@ -17,6 +17,7 @@ export type * from './ObjectView/types.mjs';
 export type * from './ProgressBar/types.mjs';
 export type * from './PropList.FieldSelector/types.mjs';
 export type * from './PropList/types.mjs';
+export type * from './RenderCount/types';
 export type * from './Slider/types.mjs';
 export type * from './Spinner/types.mjs';
 export type * from './Text.Font/types.mjs';

@@ -26,14 +26,13 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   });
 
   const TestState = {
-    list: undefined as t.LabelItemListState | undefined,
+    list: LabelItemStateful.State.list(),
     items: [] as t.LabelItemState[],
   };
 
   const Init = {
     items(state: T) {
       const length = state.debug.total ?? 0;
-      TestState.list = length > 1 ? LabelItemStateful.State.list() : undefined;
       TestState.items = Array.from({ length }).map(() => {
         const initial = Sample.item();
         return LabelItemStateful.State.item(initial);
@@ -65,13 +64,11 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
           return (
             <LabelItemStateful
               key={`item.${i}`}
-              list={TestState.list}
+              list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
-              onChange={(e) => {
-                console.info(`⚡️ onChange[${i}]`, e);
-                state.change((d) => (d.data = e.data));
-              }}
+              onChange={(e) => console.info(`⚡️ onChange[${i}]`, e)}
+              renderCount={{ absolute: [0, -55, null, null] }}
             />
           );
         });
@@ -125,6 +122,13 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       dev.hr(-1, 5);
       total(1);
       total(3);
+      total(10);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 
@@ -135,12 +139,12 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const items = TestState.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
-        acc[key] = next;
+        acc[key] = next.current;
         return acc;
-      }, {} as Record<string, t.LabelItemState>);
+      }, {} as Record<string, t.LabelItemState['current']>);
 
       const data = {
-        ctx: TestState.list?.current,
+        list: TestState.list.current,
         items,
       };
 

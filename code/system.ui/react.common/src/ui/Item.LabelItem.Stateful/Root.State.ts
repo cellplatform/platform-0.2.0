@@ -12,11 +12,11 @@ export const State = {
   DEFAULTS,
 
   list(): t.LabelItemListState {
-    const initial: t.LabelItemList = {};
+    const initial: t.LabelItemList = DEFAULTS.data.list;
     return PatchState.init<t.LabelItemList>({ initial });
   },
 
-  item(initial = DEFAULTS.data, options: Options = {}): t.LabelItemState {
+  item(initial = DEFAULTS.data.item, options: Options = {}): t.LabelItemState {
     const { onChange } = options;
     return PatchState.init<t.LabelItem>({ initial, onChange });
   },

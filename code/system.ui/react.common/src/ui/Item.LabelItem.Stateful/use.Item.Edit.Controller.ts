@@ -16,16 +16,19 @@ export function useItemEditController(args: Args) {
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [_, setCount] = useState(0);
-  const increment = () => setCount((prev) => prev + 1);
+  const increment = () => {
+    setCount((prev) => prev + 1);
+  };
 
   /**
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
+  const fire = (action: A) => args.onChange?.({ action, data: api.data });
   const changeItem = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
-      args.onChange?.({ action, data: api.data });
+      fire(action);
       increment();
     }
   };
@@ -127,7 +130,7 @@ export function useItemEditController(args: Args) {
     enabled,
     handlers,
     get data() {
-      return item?.current ?? DEFAULTS.data;
+      return item?.current ?? DEFAULTS.data.item;
     },
   };
   return api;
