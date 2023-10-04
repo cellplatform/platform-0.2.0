@@ -41,19 +41,19 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
       };
     };
 
-    const element = Focus.listen(ref, {
+    const elementMonitor = Focus.listen(ref, {
       onFocus: changeHandler(true),
       onBlur: changeHandler(false),
     });
 
-    const activeElement = ActiveElement.listen((e) => {
+    const activeElementMonitor = ActiveElement.listen((e) => {
       onFocus(e.focus);
       maybeRedraw();
     });
 
     return () => {
-      activeElement.dispose();
-      element.dispose();
+      activeElementMonitor.dispose();
+      elementMonitor.dispose();
     };
   }, [ref, options.redraw]);
 
