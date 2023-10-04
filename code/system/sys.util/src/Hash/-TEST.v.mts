@@ -77,6 +77,14 @@ describe('hash', () => {
     test((i: number) => i, '40de1fa8e1');
   });
 
+  it('asString (converter option)', () => {
+    const value = 1234;
+    const asString = (input: any) => `foo-${input}`;
+    const res = Hash.sha256(value, { asString });
+    const alt = new TextEncoder().encode(asString(value));
+    expect(res).to.eql(Hash.sha256(alt));
+  });
+
   it('shorten', () => {
     const hash = 'sha256-1234567890';
     const res = Hash.shorten(hash, 3, { trimPrefix: true });
