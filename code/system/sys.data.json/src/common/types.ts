@@ -10,8 +10,9 @@ export type {
   Disposable,
   Event,
   EventBus,
-  ImmutableNext,
   Immutable,
+  ImmutableNext,
+  Lifecycle,
   NpmPackageJson,
 } from 'sys.types/src/types';
 
