@@ -119,12 +119,12 @@ describe('Patch', () => {
   describe('change (aka "produce" patches)', () => {
     it('change (op: "update" change)', () => {
       const obj = { msg: 'hello', child: { foo: [123] } };
-
       const res = Patch.change(obj, (draft) => {
         draft.msg = 'foobar';
         draft.child.foo.push(456);
       });
 
+      expect(res.from).to.eql(obj);
       expect(res.to.msg).to.eql('foobar');
       expect(res.to.child.foo).to.eql([123, 456]);
 
@@ -140,6 +140,7 @@ describe('Patch', () => {
       const res = Patch.change(obj1, obj2);
 
       expect(res.op).to.eql('replace');
+      expect(res.from).to.eql(obj1);
       expect(res.to).to.eql(obj2);
 
       expect(res.patches.prev).to.eql([{ op: 'replace', path: '', value: obj1 }]);
@@ -155,6 +156,7 @@ describe('Patch', () => {
         draft.child.foo.push(456);
       });
 
+      expect(res.from).to.eql(obj);
       expect(res.to.msg).to.eql('foobar');
       expect(res.to.child.foo).to.eql([123, 456]);
 
@@ -183,6 +185,7 @@ describe('Patch', () => {
 
       expect(obj.child.foo).to.eql([123]); // NB: No change.
       expect(res.op).to.eql('update');
+      expect(res.from).to.eql(obj);
       expect(res.to.child.foo).to.eql([123, 456]);
 
       // NB: PatchSet passed, [next] set of patches assumed.

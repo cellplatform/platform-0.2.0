@@ -58,12 +58,12 @@ export const Patch: t.Patch = {
       });
       const patches = Patch.toPatchSet(forward, backward);
       const op: t.PatchOperationKind = 'update';
-      return { op, to: to as T, patches };
+      return { op, from, to: to as T, patches };
     } else {
       const [to, forward, backward] = produceWithPatches<T>(from, () => fn as any);
       const patches = Patch.toPatchSet(forward, backward);
       const op: t.PatchOperationKind = 'replace';
-      return { op, to: to as T, patches };
+      return { op, from, to: to as T, patches };
     }
   },
 
@@ -76,7 +76,7 @@ export const Patch: t.Patch = {
     const to = finishDraft(draft, (next, prev) => (patches = Patch.toPatchSet(next, prev))) as T;
 
     const op: t.PatchOperationKind = 'update';
-    return { op, to, patches };
+    return { op, from, to, patches };
   },
 
   apply<T extends O>(from: T, patches: t.PatchOperation[] | t.PatchSet) {
