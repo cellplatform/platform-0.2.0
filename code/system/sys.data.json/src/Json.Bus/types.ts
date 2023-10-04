@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type * as t from '../common/types';
 
 type O = Record<string, unknown>;
 type Id = string;

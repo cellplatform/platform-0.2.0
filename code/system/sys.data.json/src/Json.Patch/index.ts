@@ -1,1 +1,1 @@
-export * from './Patch.mjs';
+export * from './Patch';

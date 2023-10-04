@@ -13,9 +13,9 @@ export type {
   ImmutableNext,
   Immutable,
   NpmPackageJson,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 /**
  * @local
  */
-export type * from '../types.mjs';
+export type * from '../types';

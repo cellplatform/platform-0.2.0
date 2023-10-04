@@ -1,5 +1,5 @@
 import { DEFAULT, Patch, Pkg, rx, t } from './common';
-import { JsonBusEvents } from './JsonBus.Events.mjs';
+import { JsonBusEvents } from './JsonBus.Events';
 
 type J = Record<string, unknown>;
 type Cache = { [key: string]: any };

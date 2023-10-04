@@ -1,3 +1,3 @@
-export { JsonBus } from './JsonBus.mjs';
-export { JsonBusController } from './JsonBus.Controller.mjs';
-export { JsonBusEvents } from './JsonBus.Events.mjs';
+export { JsonBus } from './JsonBus';
+export { JsonBusController } from './JsonBus.Controller';
+export { JsonBusEvents } from './JsonBus.Events';
