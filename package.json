@@ -115,7 +115,7 @@
     "@types/node": "20.8.2",
     "@types/qrcode": "1.5.2",
     "@types/ramda": "0.29.6",
-    "@types/react": "18.2.24",
+    "@types/react": "18.2.25",
     "@types/react-dom": "18.2.10",
     "@types/sanitize-html": "2.9.1",
     "@types/semver": "7.5.3",
