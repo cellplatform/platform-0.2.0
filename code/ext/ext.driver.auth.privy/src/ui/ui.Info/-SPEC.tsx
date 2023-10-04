@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Delete, Dev, Hash, Time, AuthEnv, type t } from '../../test.ui';
+import { AuthEnv, Delete, Dev, Hash, Time, type t } from '../../test.ui';
 
 type T = {
   props: t.InfoProps;
@@ -65,11 +65,12 @@ export default Dev.describe(name, (e) => {
             margin={24}
             onReady={(e) => console.info(`⚡️ onReady`, e)}
             onChange={(e) => {
-              console.info(`⚡️ onChange`, e);
+              const accessToken = Hash.shorten(e.accessToken ?? '', 7);
+              console.info(`⚡️ onChange`, { ...e, accessToken });
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
-                d.accessToken = e.accessToken;
+                d.accessToken = accessToken;
               });
             }}
           />
@@ -181,7 +182,7 @@ export default Dev.describe(name, (e) => {
                 description: `Sign to attest that you have seen the current state`,
                 buttonText: `Sign Message`,
               });
-              await e.change((d) => (d.signature = signature));
+              await e.change((d) => (d.signature = Hash.shorten(signature ?? '', 4)));
             } catch (error) {
               console.log('error', error);
             }
@@ -203,8 +204,8 @@ export default Dev.describe(name, (e) => {
         props: e.state.props,
         status: e.state.status,
         'status:user': user,
-        signature: Hash.shorten(e.state.signature ?? '', 4),
-        accessToken: Hash.shorten(e.state.accessToken ?? '', 7),
+        signature: e.state.signature,
+        accessToken: e.state.accessToken,
       };
 
       return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
