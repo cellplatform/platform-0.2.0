@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.net.fc',
   version: '0.0.0',
   dependencies: {
-    '@farcaster/core': '0.12.9',
+    '@farcaster/core': '0.12.10',
     '@farcaster/hub-web': '0.6.5',
     '@improbable-eng/grpc-web': '0.15.0',
     '@improbable-eng/grpc-web-node-http-transport': '0.15.0',
