@@ -23,7 +23,7 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
   };
 
   return (
-    <div ref={controller.ref} {...css(styles.base, props.style)}>
+    <div ref={controller.ref} {...css(styles.base, props.style)} tabIndex={0}>
       <RenderCount absolute={[-18, 0, null, null]} />
       <div>{props.elements}</div>
     </div>

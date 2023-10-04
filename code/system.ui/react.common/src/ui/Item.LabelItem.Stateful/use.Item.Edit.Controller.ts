@@ -4,6 +4,7 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 type Args = {
   enabled?: boolean;
   item?: t.LabelItemState;
+  list?: t.LabelItemListState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
@@ -12,24 +13,22 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { item, enabled = true } = args;
+  const { item, list, enabled = true } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
-  const [_, setCount] = useState(0);
-  const increment = () => {
-    setCount((prev) => prev + 1);
-  };
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
 
   /**
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
   const fire = (action: A) => args.onChange?.({ action, data: api.data });
-  const changeItem = (action: A, fn: t.LabelItemStateNext) => {
+  const change = (action: A, fn: t.LabelItemStateNext) => {
     if (item && enabled) {
       item.change(fn);
       fire(action);
-      increment();
+      redraw();
     }
   };
 
@@ -40,17 +39,17 @@ export function useItemEditController(args: Args) {
 
     start() {
       if (EditMode.isEditing) return;
-      changeItem('edit:start', (draft) => (draft.editing = true));
+      change('edit:start', (draft) => (draft.editing = true));
     },
 
     accept() {
       if (!EditMode.isEditing) return;
-      changeItem('edit:accept', (draft) => (draft.editing = false));
+      change('edit:accept', (draft) => (draft.editing = false));
     },
 
     cancel() {
       if (!EditMode.isEditing) return;
-      changeItem('edit:cancel', (draft) => (draft.editing = false));
+      change('edit:cancel', (draft) => (draft.editing = false));
     },
 
     toggle() {
@@ -60,7 +59,7 @@ export function useItemEditController(args: Args) {
         EditMode.start();
       }
     },
-  };
+  } as const;
 
   /**
    * View component events.
@@ -71,11 +70,11 @@ export function useItemEditController(args: Args) {
     onReady(e) {
       setRef(e.ref);
       args.handlers?.onReady?.(e);
-      changeItem('ready', (d) => null);
+      change('ready', (d) => null);
     },
 
     onEditChange(e) {
-      changeItem('data:label', (draft) => (draft.label = e.label));
+      change('data:label', (draft) => (draft.label = e.label));
       args.handlers?.onEditChange?.(e);
     },
 
@@ -97,7 +96,7 @@ export function useItemEditController(args: Args) {
   /**
    * Reset when state instance changes.
    */
-  useEffect(() => increment(), [item?.instance]);
+  useEffect(() => redraw(), [item?.instance]);
 
   /**
    * Keyboard.
@@ -105,15 +104,15 @@ export function useItemEditController(args: Args) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
     const keyboard = Keyboard.until(dispose$);
-    const isFocused = () => item?.current.focused ?? false;
+    const isSelected = () => list && item && list?.current.selected === item?.instance;
 
     keyboard.on({
       Escape(e) {
-        if (!isFocused()) return;
+        if (!isSelected()) return;
         EditMode.cancel();
       },
       Enter(e) {
-        if (!isFocused()) return;
+        if (!isSelected()) return;
         EditMode.toggle();
       },
     });

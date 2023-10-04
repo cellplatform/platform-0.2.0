@@ -17,14 +17,14 @@ type Args = {
  * HOOK: roll-up of all controllers related to an <Item>.
  */
 export function useItemController(args: Args) {
-  const { item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
+  const { item, list, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item.Selection'),
-    list: args.list,
     item,
+    list,
     onChange,
     handlers: args.handlers ?? {}, // NB: passed in from prior controller (if there was one).
   });
@@ -32,6 +32,7 @@ export function useItemController(args: Args) {
   const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item.Edit'),
     item,
+    list,
     onChange,
     handlers: selection.handlers,
   });

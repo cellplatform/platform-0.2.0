@@ -9,6 +9,7 @@ import { useItemController } from './use';
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   const { list, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
   const isSelected = item && list && item.instance === list.current.selected;
+  const isFocused = isSelected && list?.current.focused;
 
   /**
    * Roll-up controller.
@@ -34,8 +35,8 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       right={data.right}
       enabled={data.enabled}
       editing={data.editing}
-      focused={data.focused}
       selected={isSelected}
+      focused={isFocused}
       focusOnEdit={true}
       renderCount={props.renderCount}
     />

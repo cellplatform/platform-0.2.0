@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, rx, type t } from './common';
+import { DEFAULTS, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
@@ -15,20 +15,33 @@ type Args = {
 export function useItemSelectionController(args: Args) {
   const { list, item, enabled = true } = args;
 
-  const [_, setCount] = useState(0);
-  const increment = () => setCount((prev) => prev + 1);
-  const isEditing = () => Boolean(item?.current.editing);
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
+
+  /**
+   * Redraw on selection/focus change.
+   */
+  useEffect(() => {
+    type T = t.PatchChange<t.LabelItemList>;
+    const focusChange = (prev: T, next: T) => prev.to.focused === next.to.focused;
+    const selectionChange = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
+    const isSelected = (list: t.LabelItemList) => list.selected === item?.instance;
+    const events = list?.events();
+    events?.$.pipe(rx.distinctUntilChanged(focusChange)).subscribe(redraw);
+    events?.$.pipe(rx.distinctUntilChanged(selectionChange)).subscribe(redraw);
+    return events?.dispose;
+  }, [Boolean(list), Boolean(item?.instance), item?.instance]);
 
   /**
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
   const fire = (action: A) => args.onChange?.({ action, data: api.data });
-  const changeItem = (action: A, fn: t.LabelItemStateNext) => {
-    if (item && enabled) {
-      item.change(fn);
-      fire(action);
-      increment();
+
+  const select = () => {
+    if (enabled && list) {
+      list.change((d) => (d.selected = item?.instance));
+      fire('view:selected');
     }
   };
 
@@ -37,21 +50,8 @@ export function useItemSelectionController(args: Args) {
    */
   const handlers: t.LabelItemPropsHandlers = {
     ...args.handlers,
-
-    onFocusChange(e) {
-      // NB: [If] statement → Hack to reduce irrelevant focus/blur events.
-      if (!isEditing()) {
-        const action = e.focused ? 'view:focus' : 'view:blur';
-        changeItem(action, (d) => (d.focused = e.focused));
-      }
-      args.handlers?.onFocusChange?.(e);
-    },
-
     onClick(e) {
-      if (enabled && list) {
-        list.change((d) => (d.selected = item?.instance));
-        fire('view:selected');
-      }
+      select();
       args.handlers?.onClick?.(e);
     },
   };

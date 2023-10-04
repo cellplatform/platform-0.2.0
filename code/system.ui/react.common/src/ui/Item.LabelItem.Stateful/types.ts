@@ -14,6 +14,7 @@ export type LabelItemBehaviorKind =
  */
 export type LabelItemList = {
   selected?: ItemId;
+  focused?: boolean;
 };
 
 /**
@@ -23,7 +24,6 @@ export type LabelItem = {
   label?: string;
   editing?: boolean;
   enabled?: boolean;
-  focused?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
 };
@@ -31,10 +31,10 @@ export type LabelItem = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: ItemId };
+export type LabelItemState = t.PatchState<t.LabelItem> & { readonly instance: ItemId };
 export type LabelItemStateNext = t.ImmutableNext<t.LabelItem>;
 
-export type LabelItemListState = t.Immutable<t.LabelItemList>;
+export type LabelItemListState = t.PatchState<t.LabelItemList>;
 export type LabelItemListStateNext = t.ImmutableNext<t.LabelItemList>;
 
 /**
@@ -47,9 +47,9 @@ export type LabelItemController<Kind extends string> = {
   readonly handlers: t.LabelItemPropsHandlers;
 };
 
-export type LabelListController<Kind extends string> = {
+export type LabelListController<Kind extends string, H extends HTMLElement> = {
   readonly kind: Kind;
-  readonly ref: React.RefObject<HTMLDivElement>;
+  readonly ref: React.RefObject<H>;
   readonly enabled: boolean;
 };
 
@@ -76,8 +76,6 @@ export type LabelItemStateChangeHandlerArgs = {
 export type LabelItemChangeAction =
   | 'ready'
   | 'data:label'
-  | 'view:focus'
-  | 'view:blur'
   | 'view:selected'
   | 'edit:start'
   | 'edit:accept'

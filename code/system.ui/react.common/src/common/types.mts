@@ -25,15 +25,15 @@ export type {
   JsonU,
   Milliseconds,
   ModuleDef,
+  PartialDeep,
   Percent,
   Pixels,
   Point,
-  PartialDeep,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';
 
-export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';
+export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
 export type {
   BundleImport,
   SpecImport,

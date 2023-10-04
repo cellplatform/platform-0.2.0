@@ -1,29 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Keyboard, rx, type t } from './common';
-
-type Args = {
+type Args<H extends HTMLElement = HTMLDivElement> = {
+  ref: React.RefObject<H>;
   enabled?: boolean;
   list?: t.LabelItemListState;
+  items?: t.LabelItemState[];
 };
 
 /**
  * HOOK: Selection behavior for a <List> of <Items>.
  */
-export function useListNavigationController(args: Args) {
-  const { enabled = true } = args;
-
-  /**
-   * TODO 🐷
-   * - pass-through in args
-   * - attach to "list container" div
-   * - used for focusing
-   */
-  const listRef = useRef<HTMLDivElement>();
-
-  /**
-   * TODO 🐷
-   */
-  console.log('💦 useListNavigationController', args);
+export function useListNavigationController<H extends HTMLElement = HTMLDivElement>(args: Args<H>) {
+  const { ref, enabled = true, list, items = [] } = args;
 
   /**
    * Keyboard.
@@ -32,34 +20,48 @@ export function useListNavigationController(args: Args) {
     const { dispose, dispose$ } = rx.disposable();
     const keyboard = Keyboard.until(dispose$);
 
-    // const isFocused = () => item?.current.focused ?? false;
-    console.log('keyboard', keyboard);
+    const List = {
+      get focused() {
+        return Boolean(list?.current.focused);
+      },
+      get selectedIndex() {
+        const selected = list?.current.selected;
+        return items.findIndex((item) => item.instance === selected);
+      },
+      select(index: number) {
+        if (!list || !List.focused) return;
+        index = Math.max(0, Math.min(index, items.length - 1));
+        const item = items[index];
+        list.change((d) => (d.selected = item?.instance));
+      },
+    } as const;
 
     keyboard.on({
       ArrowUp(e) {
-        console.log('arrow up', e);
+        List.select(e.state.modifiers.meta ? 0 : List.selectedIndex - 1);
       },
-      Escape(e) {
-        // if (!isFocused()) return;
-        // EditMode.cancel();
+      ArrowDown(e) {
+        List.select(e.state.modifiers.meta ? 0 : List.selectedIndex + 1);
       },
-      Enter(e) {
-        // if (!isFocused()) return;
-        // EditMode.toggle();
+      Home(e) {
+        List.select(0);
+      },
+      End(e) {
+        List.select(items.length - 1);
       },
     });
 
     if (!enabled) dispose();
     return dispose;
-  }, [enabled, listRef]);
+  }, [enabled, items, list]);
 
   /**
    * API
    */
-  const api: t.LabelListController<'controller:List.Navigation'> = {
+  const api: t.LabelListController<'controller:List.Navigation', H> = {
     kind: 'controller:List.Navigation',
+    ref,
     enabled,
-    listRef,
   } as const;
   return api;
 }

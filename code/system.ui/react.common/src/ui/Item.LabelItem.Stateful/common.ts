@@ -3,7 +3,7 @@ export * from '../common';
 
 export { FieldSelector } from '../PropList.FieldSelector';
 export { Keyboard } from '../Text.Keyboard';
-export { Focus } from '../useFocus';
+export { ActiveElement, Focus } from '../useFocus';
 
 /**
  * Constants
