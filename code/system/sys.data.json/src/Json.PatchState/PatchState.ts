@@ -1,4 +1,4 @@
-import { Patch, slug, type t } from './common';
+import { Patch, rx, slug, type t } from './common';
 
 type O = Record<string, unknown>;
 type Args<T extends O = {}> = {
@@ -10,14 +10,9 @@ type Args<T extends O = {}> = {
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
-  /**
-   * TODO 🐷 API
-   * - init
-   * - init$  <<  initializes: init → observable → init$:<response>
-   * - observable( state, options? )
-   */
   init<T extends O>(args: Args<T>): t.PatchState<T> {
     const { onChange } = args;
+    const $ = rx.subject<t.PatchChange<T>>();
     let _current = { ...args.initial };
     return {
       /**
@@ -39,9 +34,25 @@ export const PatchState = {
        * Immutable mutator.
        */
       change(fn) {
-        const res = Patch.change<T>(_current, fn);
-        _current = res.to;
-        onChange?.(res);
+        const e = Patch.change<T>(_current, fn);
+        _current = e.to;
+        onChange?.(e);
+        $.next(e);
+      },
+
+      /**
+       * Observable listener.
+       */
+      events(dispose$?: t.Observable<any>) {
+        const life = rx.lifecycle(dispose$);
+        return {
+          $: $.pipe(rx.takeUntil(life.dispose$)),
+          dispose: life.dispose,
+          dispose$: life.dispose$,
+          get disposed() {
+            return life.disposed;
+          },
+        };
       },
     } as const;
   },
