@@ -30,7 +30,9 @@ export const ActiveElement = {
 
     initialized = true;
     return {
-      dispose: () => handlers.delete(handler),
+      dispose() {
+        handlers.delete(handler);
+      },
     };
   },
 };

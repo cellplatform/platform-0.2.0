@@ -17,14 +17,14 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
   const ref = input || _ref;
 
   const [, setCount] = useState(0);
-  const increment = () => setCount((prev) => prev + 1);
+  const redraw = () => setCount((prev) => prev + 1);
 
   /**
    * Lifecycle
    */
   useEffect(() => {
     const maybeRedraw = () => {
-      if (options.redraw ?? true) increment();
+      if (options.redraw ?? true) redraw();
     };
 
     let _last: t.FocusHandlerArgs | undefined;
@@ -40,21 +40,20 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
         maybeRedraw();
       };
     };
-    const focusHandler = changeHandler(true);
-    const blurHandler = changeHandler(false);
 
-    const el = ref.current;
-    el?.addEventListener('focus', focusHandler);
-    el?.addEventListener('blur', blurHandler);
+    const listener = Focus.listen(ref, {
+      onFocus: changeHandler(true),
+      onBlur: changeHandler(false),
+    });
+
     const monitor = ActiveElement.listen((e) => {
       onFocus(e.focus);
       maybeRedraw();
     });
 
     return () => {
-      el?.removeEventListener('focus', focusHandler);
-      el?.removeEventListener('blur', blurHandler);
       monitor.dispose();
+      listener.dispose();
     };
   }, [ref, options.redraw]);
 
