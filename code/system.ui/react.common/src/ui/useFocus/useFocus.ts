@@ -1,9 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-
+import { ActiveElement, Focus } from '../Focus';
 import { R, type t } from '../common';
-import { ActiveElement } from './ActiveElement.mjs';
-import { Focus } from './Focus.mjs';
-import { Wrangle } from './util.mjs';
 
 /**
  * Monitors focus state for an element,
@@ -29,7 +26,7 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
 
     let _last: t.FocusHandlerArgs | undefined;
     const onFocus = (focus: boolean) => {
-      const args = Wrangle.args(focus);
+      const args = Focus.args(focus);
       if (options.onFocus && !R.equals(args, _last)) options.onFocus(args);
       _last = args;
     };

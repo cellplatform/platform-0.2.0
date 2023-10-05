@@ -6,6 +6,7 @@ export type * from './ContainerQuery/types.mjs';
 export type * from './EdgePosition.Selector/types.mjs';
 export type * from './EdgePosition/types.mjs';
 export type * from './Event/types.mjs';
+export type * from './Focus/types';
 export type * from './Grid/types.mjs';
 export type * from './IFrame/types.mjs';
 export type * from './Icon/types.mjs';

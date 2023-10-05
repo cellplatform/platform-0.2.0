@@ -1,18 +1,30 @@
 import type { RefObject } from 'react';
+import { Wrangle } from './Wrangle';
 
 type FocusEventHandler = (e: FocusEvent) => void;
 
 export const Focus = {
+  args: Wrangle.args,
+
+  /**
+   * Determine if the given element contains the focused item.
+   */
   containsFocus(ref: RefObject<HTMLElement>) {
     const active = document.activeElement;
     return active && ref.current ? ref.current.contains(active) : false;
   },
 
+  /**
+   * Determine if the given element is within the currently focused item.
+   */
   withinFocus(ref: RefObject<HTMLElement>) {
     const active = document.activeElement;
     return active && ref.current ? active.contains(ref.current) : false;
   },
 
+  /**
+   * Setup a disposable set of focus/blur event handlers./
+   */
   listen<H extends HTMLElement = HTMLDivElement>(
     ref: RefObject<H>,
     handlers: { onFocus?: FocusEventHandler; onBlur?: FocusEventHandler } = {},
@@ -31,4 +43,4 @@ export const Focus = {
       },
     } as const;
   },
-};
+} as const;

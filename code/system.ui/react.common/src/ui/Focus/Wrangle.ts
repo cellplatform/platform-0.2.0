@@ -1,4 +1,4 @@
-import type { t } from '../../common.t';
+import { type t } from '../common';
 
 /**
  * [Helpers]
