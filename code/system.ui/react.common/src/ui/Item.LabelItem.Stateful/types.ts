@@ -62,6 +62,7 @@ export type LabelItemStatefulProps = {
   list?: t.LabelItemListState;
   useBehaviors?: t.LabelItemBehaviorKind[];
   renderCount?: t.RenderCountProps;
+  debug?: boolean;
   style?: t.CssValue;
   onChange?: LabelItemStateChangeHandler;
 };

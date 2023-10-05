@@ -40,6 +40,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       focused={isFocused}
       focusOnEdit={true}
       renderCount={props.renderCount}
+      debug={props.debug}
     />
   );
 };

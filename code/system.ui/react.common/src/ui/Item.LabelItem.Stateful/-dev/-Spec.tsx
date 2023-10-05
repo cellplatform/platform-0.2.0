@@ -8,6 +8,7 @@ const DEFAULTS = LabelItem.Stateful.DEFAULTS;
 type T = {
   data?: t.LabelItem;
   debug: {
+    debug?: boolean;
     total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
@@ -20,12 +21,13 @@ const initial: T = {
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount'>;
+  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
     renderCount: true,
+    debug: false,
   });
 
   const TestState = {
@@ -50,6 +52,7 @@ export default Dev.describe(name, (e) => {
       d.debug.total = local.total;
       d.debug.useBehaviors = local.useBehaviors;
       d.debug.renderCount = local.renderCount;
+      d.debug.debug = local.debug;
     });
     TestState.init.items(state.current.debug.total);
 
@@ -71,6 +74,7 @@ export default Dev.describe(name, (e) => {
               item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
               renderCount={debug.renderCount ? { absolute: [0, -55, null, null] } : undefined}
+              debug={debug.debug}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
               }}
@@ -148,6 +152,16 @@ export default Dev.describe(name, (e) => {
             e.change((d) => (local.renderCount = Dev.toggle(d.debug, 'renderCount')));
           });
       });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.debug);
+        btn
+          .label((e) => `debug`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.debug, 'debug'))));
+      });
+
+      dev.hr(-1, 5);
 
       dev.button('redraw', (e) => dev.redraw());
     });
