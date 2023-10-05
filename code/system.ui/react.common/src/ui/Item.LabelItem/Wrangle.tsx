@@ -46,7 +46,7 @@ export const Wrangle = {
   borderColor(args: { selected?: boolean; focused?: boolean }) {
     const { selected = DEFAULTS.selected, focused = DEFAULTS.focused } = args;
     if (!focused) return Color.format(0);
-    const color = selected ? Color.format(0) : COLORS.BLUE;
+    const color = selected ? Color.format(0) : Color.alpha(COLORS.BLUE, 0.3);
     return color;
   },
 
