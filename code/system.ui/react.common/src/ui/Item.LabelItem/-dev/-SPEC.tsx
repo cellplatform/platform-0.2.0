@@ -212,7 +212,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['States', 'changes ↑'], (dev) => {
+    dev.section(['Samples', 'props ↑'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.props.enabled;
