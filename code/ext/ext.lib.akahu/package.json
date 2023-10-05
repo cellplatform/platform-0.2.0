@@ -1,5 +1,5 @@
 {
-  "name": "ext.akahu",
+  "name": "ext.lib.akahu",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,
