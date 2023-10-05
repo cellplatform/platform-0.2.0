@@ -15,7 +15,7 @@ const initial: T = {
 /**
  * Spec
  */
-const name = 'Sample';
+const name = 'Sample.web3storage';
 
 /**
  * https://github.com/web3-storage/web3.storage

@@ -1,6 +1,6 @@
 import { Dev, type t } from '../../test.ui';
 import { create } from '@web3-storage/w3up-client';
-import { Wrangle } from '../ui.Sample.web3storage';
+import { Wrangle } from '../ui.Sample.old.w3storage';
 
 type T = {};
 const initial: T = {};
@@ -8,7 +8,7 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'Sample.Web3Up-Client';
+const name = 'Sample.w3up';
 
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
