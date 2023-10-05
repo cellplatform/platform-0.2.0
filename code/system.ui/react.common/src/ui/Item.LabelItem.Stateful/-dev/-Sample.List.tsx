@@ -8,6 +8,7 @@ export type SampleListProps = {
   useBehaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelItemListState;
   items?: t.LabelItemState[];
+  renderCount?: t.RenderCountProps;
   style?: t.CssValue;
 };
 
@@ -24,7 +25,7 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
 
   return (
     <div ref={controller.ref} {...css(styles.base, props.style)} tabIndex={0}>
-      <RenderCount absolute={[-18, 0, null, null]} />
+      {props.renderCount && <RenderCount {...props.renderCount} />}
       <div>{props.elements}</div>
     </div>
   );

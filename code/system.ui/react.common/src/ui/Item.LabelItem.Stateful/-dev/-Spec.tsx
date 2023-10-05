@@ -11,6 +11,7 @@ type T = {
   debug: {
     total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
+    renderCount?: boolean;
   };
 };
 const initial: T = {
@@ -18,11 +19,12 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors'>;
+  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
+    renderCount: true,
   });
 
   const TestState = {
@@ -48,6 +50,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     await state.change((d) => {
       d.debug.total = local.total;
       d.debug.useBehaviors = local.useBehaviors;
+      d.debug.renderCount = local.renderCount;
     });
     Init.items(state.current.debug.total);
 
@@ -68,7 +71,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
               list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
-              renderCount={{ absolute: [0, -55, null, null] }}
+              renderCount={debug.renderCount ? { absolute: [0, -55, null, null] } : undefined}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
               }}
@@ -84,6 +87,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
             elements={elements}
             useBehaviors={debug.useBehaviors}
             list={TestState.list}
+            renderCount={debug.renderCount ? { absolute: [-18, 0, null, null] } : undefined}
           />
         );
       });
@@ -136,6 +140,16 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.renderCount);
+        btn
+          .label((e) => `render count`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.renderCount = Dev.toggle(d.debug, 'renderCount')));
+          });
+      });
+
       dev.button('redraw', (e) => dev.redraw());
     });
   });
