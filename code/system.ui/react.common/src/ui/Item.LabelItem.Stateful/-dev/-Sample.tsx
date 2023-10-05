@@ -4,6 +4,7 @@ export const Sample = {
   item(): t.LabelItem {
     return {
       label: 'hello 👋',
+      // placeholder: 'foobar',
       right: {
         kind: 'foobar',
         enabled(e) {

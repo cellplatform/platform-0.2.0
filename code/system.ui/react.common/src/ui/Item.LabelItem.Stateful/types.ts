@@ -9,23 +9,24 @@ export type LabelItemBehaviorKind =
   | 'List.Navigation';
 
 /**
+ * Item (Data Model)
+ */
+export type LabelItem = {
+  label?: string;
+  placeholder?: string;
+  editing?: boolean;
+  enabled?: boolean;
+  left?: t.LabelAction | t.LabelAction[];
+  right?: t.LabelAction | t.LabelAction[];
+};
+
+/**
  * Context for when an item exists
  * within the context of a list.
  */
 export type LabelItemList = {
   selected?: ItemId;
   focused?: boolean;
-};
-
-/**
- * Item (Data Model)
- */
-export type LabelItem = {
-  label?: string;
-  editing?: boolean;
-  enabled?: boolean;
-  left?: t.LabelAction | t.LabelAction[];
-  right?: t.LabelAction | t.LabelAction[];
 };
 
 /**
