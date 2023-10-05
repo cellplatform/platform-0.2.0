@@ -1,5 +1,5 @@
-import { TextSyntax, TextSyntaxProps } from '.';
-import { Dev, css } from '../../test.ui';
+import { TextSyntax } from '.';
+import { Dev, css, type t } from '../../test.ui';
 
 type T = {
   debug: {
@@ -8,7 +8,7 @@ type T = {
     fixedWidth: boolean;
     textAsChildren: boolean;
   };
-  props: TextSyntaxProps;
+  props: t.TextSyntaxProps;
 };
 const initial: T = {
   debug: {

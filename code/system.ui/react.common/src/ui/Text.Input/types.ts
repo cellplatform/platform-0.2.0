@@ -1,5 +1,5 @@
 import type { MouseEventHandler } from 'react';
-import type { t } from '../common.t';
+import type { t } from './common';
 
 type Id = string;
 type Milliseconds = number;

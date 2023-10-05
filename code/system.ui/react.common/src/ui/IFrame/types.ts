@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import type { t } from './common';
 import type { HTMLAttributeReferrerPolicy } from 'react';
 
 type HttpPermissionsPolicy = string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy

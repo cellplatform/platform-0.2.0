@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type RenderValue = JSX.Element | null | undefined | false;
 type SizeValue = number | string;

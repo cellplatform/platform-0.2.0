@@ -1,10 +1,8 @@
-import { COLORS, css, Dev } from '../../test.ui';
+import { COLORS, css, Dev, type t } from '../../test.ui';
 import { Icons } from '../Icons.mjs';
 
-import type { IconProps } from '.';
-
 type T = {
-  props: IconProps;
+  props: t.IconProps;
   debug: { inheritColor: boolean };
 };
 const initial: T = {

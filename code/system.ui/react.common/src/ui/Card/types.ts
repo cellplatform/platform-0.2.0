@@ -1,4 +1,4 @@
-import type { t } from '../../common.t';
+import type { t } from './common';
 
 type ElementInput = JSX.Element | null | false;
 type Milliseconds = number;

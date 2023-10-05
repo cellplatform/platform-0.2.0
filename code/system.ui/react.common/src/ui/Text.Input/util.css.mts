@@ -1,5 +1,4 @@
 import { Color, DEFAULTS, R, type t } from './common';
-import type { TextInputStyle } from './types.mjs';
 
 export const CssUtil = {
   /**
@@ -14,7 +13,7 @@ export const CssUtil = {
   /**
    * Converts a set of TextInput styles into CSS.
    */
-  toTextInput(isEnabled: boolean, styles: TextInputStyle): t.CssValue {
+  toTextInput(isEnabled: boolean, styles: t.TextInputStyle): t.CssValue {
     return {
       ...CssUtil.toText(styles),
       color: isEnabled ? Color.format(styles.color) : Color.format(styles.disabledColor),

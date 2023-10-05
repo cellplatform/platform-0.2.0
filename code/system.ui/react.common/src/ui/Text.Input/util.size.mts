@@ -1,5 +1,4 @@
-import { Measure, Color, DEFAULTS, R, type t } from './common';
-import type { TextInputStyle } from './types.mjs';
+import { DEFAULTS, Measure, type t } from './common';
 import { CssUtil } from './util.css.mjs';
 
 export function measureInput(props: t.TextInputProps) {
