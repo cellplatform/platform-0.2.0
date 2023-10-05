@@ -24,10 +24,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      display: 'grid',
-      Flex: 'x-center-center',
-    }),
+    base: css({ Flex: 'x-center-center' }),
   };
 
   const elements = actions.map((action, i) => {

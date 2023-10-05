@@ -14,7 +14,7 @@ type K = 'left:default';
 
 const leftAction: t.LabelAction<K> = {
   kind: 'left:default',
-  icon: (e) => <Icons.Repo size={18} color={e.color} />,
+  icon: (e) => <Icons.Repo size={18} color={e.color} offset={[0, 1]} />,
 };
 
 const rightAction: t.LabelAction<K> | undefined = undefined;

@@ -104,7 +104,7 @@ export const View: React.FC<Props> = (props) => {
       boxSizing: 'border-box',
       marginLeft: indent,
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      gridTemplateColumns: `${autoOrEmpty(props.left)} 1fr ${autoOrEmpty(props.right || null)}`,
       columnGap: 3,
     }),
     focusBorder: css({
@@ -136,17 +136,24 @@ export const View: React.FC<Props> = (props) => {
     >
       {props.renderCount && <RenderCount {...props.renderCount} />}
       <div {...styles.body}>
-        <Left {...props} />
+        {props.left !== null && <Left {...props} />}
         <Label
           {...props}
           inputRef={inputRef}
           onDoubleClick={clickHandler(props.onLabelDoubleClick)}
           debug={debug}
         />
-        <Right {...props} />
+        {props.right !== null && <Right {...props} />}
       </div>
       {elDisabled}
       {elFocusBorder}
     </div>
   );
 };
+
+/**
+ * [Helpers]
+ */
+function autoOrEmpty(value: any) {
+  return value === null ? '' : 'auto';
+}

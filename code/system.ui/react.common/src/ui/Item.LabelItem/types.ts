@@ -40,8 +40,8 @@ export type LabelItemProps = {
   placeholder?: string;
   maxLength?: number;
 
-  left?: LabelAction | LabelAction[];
-  right?: LabelAction | LabelAction[];
+  left?: LabelAction | LabelAction[] | null;
+  right?: LabelAction | LabelAction[] | null;
 
   enabled?: boolean;
   selected?: boolean;

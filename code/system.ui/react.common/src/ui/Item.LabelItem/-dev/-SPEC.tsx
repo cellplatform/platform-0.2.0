@@ -298,6 +298,11 @@ export default Dev.describe(name, (e) => {
         });
       });
 
+      dev.button('actions: (left) null', async (e) => {
+        const sample = Sample.actions();
+        await e.change((d) => (d.props.left = null));
+      });
+
       dev.button('actions: (left) single', async (e) => {
         const sample = Sample.actions();
         await e.change((d) => (d.props.left = sample.left[0]));
@@ -306,6 +311,11 @@ export default Dev.describe(name, (e) => {
       dev.button('actions: (left) multiple', async (e) => {
         const sample = Sample.actions();
         await e.change((d) => (d.props.left = sample.left));
+      });
+
+      dev.button('actions: (right) single', async (e) => {
+        const sample = Sample.actions();
+        await e.change((d) => (d.props.right = sample.right[1]));
       });
 
       dev.button('actions: (right) multiple', async (e) => {
