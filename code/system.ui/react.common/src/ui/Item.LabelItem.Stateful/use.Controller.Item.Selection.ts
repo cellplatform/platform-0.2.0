@@ -23,12 +23,15 @@ export function useItemSelectionController(args: Args) {
    */
   useEffect(() => {
     type T = t.PatchChange<t.LabelItemList>;
-    const focusChange = (prev: T, next: T) => prev.to.focused === next.to.focused;
-    const selectionChange = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
+    const focusChanged = (prev: T, next: T) => prev.to.focused === next.to.focused;
+    const selectionChanged = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
     const isSelected = (list: t.LabelItemList) => list.selected === item?.instance;
     const events = list?.events();
-    events?.$.pipe(rx.distinctUntilChanged(focusChange)).subscribe(redraw);
-    events?.$.pipe(rx.distinctUntilChanged(selectionChange)).subscribe(redraw);
+    events?.$.pipe(rx.distinctUntilChanged(focusChanged)).subscribe(redraw);
+    events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe(() => {
+      fire('view:selected');
+      redraw();
+    });
     return events?.dispose;
   }, [Boolean(list), Boolean(item?.instance), item?.instance]);
 
@@ -38,20 +41,13 @@ export function useItemSelectionController(args: Args) {
   type A = t.LabelItemChangeAction;
   const fire = (action: A) => args.onChange?.({ action, data: api.data });
 
-  const select = () => {
-    if (enabled && list) {
-      list.change((d) => (d.selected = item?.instance));
-      fire('view:selected');
-    }
-  };
-
   /**
    * View component events.
    */
   const handlers: t.LabelItemPropsHandlers = {
     ...args.handlers,
     onClick(e) {
-      select();
+      if (enabled) list?.change((d) => (d.selected = item?.instance));
       args.handlers?.onClick?.(e);
     },
   };
