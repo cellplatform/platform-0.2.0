@@ -1,5 +1,4 @@
-import { Crdt, CrdtViews, Dev, rx, type t } from '../../test.ui';
-import { LabelItem, LabelItemStateful } from './common';
+import { Crdt, CrdtViews, Dev, rx, type t, LabelItem } from '../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -118,7 +117,7 @@ export default Dev.describe('Namespace', (e) => {
 
     dev.row((e) => {
       return (
-        <LabelItemStateful.BehaviorSelector
+        <LabelItem.BehaviorSelector
           selected={e.state.props.useBehaviors}
           onChange={(e) => {
             state.change((d) => (local.useBehaviors = d.props.useBehaviors = e.next));

@@ -16,8 +16,6 @@ export {
   Grid,
   IFrame,
   Keyboard,
-  // LabelItem,
-  // LabelItemStateful,
   ProgressBar,
   PropList,
   Style,

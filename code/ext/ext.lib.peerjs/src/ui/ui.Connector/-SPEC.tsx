@@ -1,4 +1,4 @@
-import { Dev, type t, LabelItemStateful } from '../../test.ui';
+import { Dev, type t, LabelItem } from '../../test.ui';
 import { Root } from '.';
 import { Sample } from './-SPEC.Sample';
 import { SampleList } from './-SPEC.Sample.List';
@@ -9,12 +9,12 @@ const name = Root.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const TestState = {
-    list: LabelItemStateful.State.list(),
+    list: LabelItem.State.list(),
     items: [] as t.LabelItemState[],
     init: {
       item() {
         const initial = Sample.item();
-        return LabelItemStateful.State.item(initial);
+        return LabelItem.State.item(initial);
       },
       items(length: number = 0) {
         TestState.items = Array.from({ length }).map(() => TestState.init.item());
@@ -39,7 +39,7 @@ export default Dev.describe(name, (e) => {
         const length = TestState.items.length;
         const elements = Array.from({ length }).map((_, i) => {
           return (
-            <LabelItemStateful
+            <LabelItem.Stateful
               key={`item.${i}`}
               list={TestState.list}
               item={TestState.items[i]}
