@@ -17,9 +17,6 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
    * Keyboard.
    */
   useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-    const keyboard = Keyboard.until(dispose$);
-
     const List = {
       is: {
         get focused() {
@@ -46,12 +43,12 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
       },
     } as const;
 
-    const meta = (e: t.KeyMatchSubscriberHandlerArgs) => e.state.modifiers.meta;
-    keyboard.on({
-      ArrowUp: (e) => List.select(meta(e) ? 0 : List.index.selected - 1),
-      ArrowDown: (e) => List.select(meta(e) ? List.index.last : List.index.selected + 1),
-      Home: (e) => List.select(0),
-      End: (e) => List.select(List.index.last),
+    const { dispose } = Keyboard.onKeydown((e) => {
+      const index = List.index;
+      if (e.key === 'ArrowUp') List.select(e.metaKey ? 0 : index.selected - 1);
+      if (e.key === 'ArrowDown') List.select(e.metaKey ? index.last : index.selected + 1);
+      if (e.key === 'Home') List.select(0);
+      if (e.key === 'End') List.select(index.last);
     });
 
     if (!enabled) dispose();
