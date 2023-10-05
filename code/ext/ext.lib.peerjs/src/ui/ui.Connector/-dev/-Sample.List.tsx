@@ -1,4 +1,4 @@
-import { LabelItem, css, type t } from './common';
+import { LabelItem, css, type t } from '../common';
 
 export type SampleListProps = {
   elements?: JSX.Element[];

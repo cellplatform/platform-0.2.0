@@ -1,7 +1,7 @@
-import { Dev, type t, LabelItem } from '../../test.ui';
-import { Root } from '.';
-import { Sample } from './-SPEC.Sample';
-import { SampleList } from './-SPEC.Sample.List';
+import { Dev, type t, LabelItem } from '../../../test.ui';
+import { Root } from '..';
+import { Sample } from './-Sample';
+import { SampleList } from './-Sample.List';
 
 type T = { props: t.RootProps };
 const initial: T = { props: {} };
