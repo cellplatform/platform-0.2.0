@@ -33,10 +33,11 @@ export const Action: React.FC<ActionProps> = (props) => {
    */
   const styles = {
     base: css({
-      width,
       position: 'relative',
       pointerEvents: spinning ? 'none' : 'auto',
       backgroundColor: debug ? DEFAULTS.RUBY : undefined,
+      width,
+      display: 'grid',
     }),
     body: css({
       width,
@@ -45,10 +46,7 @@ export const Action: React.FC<ActionProps> = (props) => {
       opacity: spinning ? 0 : 1,
       transition: 'opacity 0.2s',
     }),
-    button: css({
-      display: 'grid',
-      placeItems: 'center',
-    }),
+    button: css({ display: 'grid' }),
   };
 
   const elIcon = Wrangle.icon({ action, selected, enabled, focused, editing });
