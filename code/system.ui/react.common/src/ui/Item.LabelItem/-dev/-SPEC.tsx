@@ -154,19 +154,19 @@ export default Dev.describe('Namespace.Item', (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.selected);
-        btn
-          .label((e) => `selected`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected'))));
-      });
-
-      dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.editing);
         btn
           .label((e) => `editing`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.selected);
+        btn
+          .label((e) => `selected`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected'))));
       });
 
       dev.boolean((btn) => {

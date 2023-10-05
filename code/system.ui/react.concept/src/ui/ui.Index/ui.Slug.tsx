@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Item, Is } from './common';
+import { useState } from 'react';
+import { DEFAULTS, LabelItem, css, type t } from './common';
 
 export type SlugProps = {
   index: t.Index;
@@ -51,7 +51,7 @@ export const Slug: React.FC<SlugProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Item.Label.View
+      <LabelItem
         style={styles.item}
         borderRadius={3}
         label={text}

@@ -2,9 +2,10 @@ import { Dev } from '../../test.ui';
 import { css, type t } from '../common';
 import { RenderCount } from '.';
 
-import type { RenderCountProps } from '.';
-
-type T = { count: number; props: RenderCountProps };
+type T = {
+  count: number;
+  props: t.RenderCountProps;
+};
 const initial: T = { count: 0, props: {} };
 
 export default Dev.describe('RenderCount', (e) => {
@@ -33,7 +34,7 @@ export default Dev.describe('RenderCount', (e) => {
     });
 
     dev.section('Properties', (dev) => {
-      const absolute = (value?: RenderCountProps['absolute']) => {
+      const absolute = (value?: t.RenderCountProps['absolute']) => {
         const label = `absolute: \`${value ?? 'undefined'}\``;
         dev.button(label, (e) => e.change((d) => (d.props.absolute = value)));
       };

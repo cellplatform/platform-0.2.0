@@ -7,6 +7,7 @@ export {
   Color,
   FC,
   Keyboard,
+  LabelItemStateful,
   ObjectView,
   PropList,
   TestRunner,

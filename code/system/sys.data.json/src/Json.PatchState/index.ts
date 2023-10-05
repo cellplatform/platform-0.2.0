@@ -1,1 +1,1 @@
-export * from './PatchState.mjs';
+export * from './PatchState';

@@ -80,7 +80,6 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       filter: `blur(${isBlurred ? 3 : 0}px) grayscale(${isBlurred ? 100 : 0}%)`,
       transition: 'opacity 0.1s ease',
     }),
-    label: css({}),
     spinner: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
     overlay: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
   };
@@ -109,7 +108,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       onDoubleClick={props.onDoubleClick}
     >
       <div {...styles.body}>
-        {props.label && <div {...styles.label}>{props.label}</div>}
+        {props.label && <div>{props.label}</div>}
         {props.children}
       </div>
       {elSpinner}

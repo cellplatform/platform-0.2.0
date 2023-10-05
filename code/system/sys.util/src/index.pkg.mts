@@ -14,8 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@noble/hashes': '1.3.2',
-    'nanoid': '4.0.2',
-    'sys.util': '0.0.0',
+    '@paralleldrive/cuid2': '2.2.2',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

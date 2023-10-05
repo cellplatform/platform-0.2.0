@@ -52,11 +52,6 @@ export const Label: React.FC<Props> = (props) => {
       textOverflow: 'ellipsis',
     }),
     labelEmpty: css({ opacity: placeholderStyle.opacity }),
-    underline: css({
-      pointerEvents: 'none',
-      borderBottom: `dashed 1.2px ${underlineColor}`,
-      Absolute: [null, 0, 0, -3],
-    }),
   };
 
   const elTextbox = editing && (
@@ -84,7 +79,6 @@ export const Label: React.FC<Props> = (props) => {
 
   return (
     <div {...styles.base} onDoubleClick={props.onDoubleClick}>
-      {editing && <div {...styles.underline} />}
       {elTextbox}
       {elLabel}
     </div>

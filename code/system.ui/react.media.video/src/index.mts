@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Components
  */
-export { Video } from './ui.Root';
+export { Video } from './ui.Video';
 
 export { PlayBar } from './ui/ui.PlayBar';
 export { PlayButton } from './ui/ui.PlayButton';

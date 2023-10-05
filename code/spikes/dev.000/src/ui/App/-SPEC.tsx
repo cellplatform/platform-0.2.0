@@ -64,7 +64,7 @@ export default Dev.describe(name, (e) => {
       });
 
     dev.row(async (e) => {
-      const { Auth } = await import('ext.driver.auth.privy');
+      const { Auth } = await import('ext.lib.auth.privy');
       return (
         <Auth.Info
           data={{ provider: Auth.Env.provider }}

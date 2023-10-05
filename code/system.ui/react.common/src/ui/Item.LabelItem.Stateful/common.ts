@@ -1,23 +1,23 @@
 import { type t } from '../common';
-
-export { Keyboard } from '../Text.Keyboard';
-export { FieldSelector } from '../PropList.FieldSelector';
 export * from '../common';
+
+export { FieldSelector } from '../PropList.FieldSelector';
+export { Keyboard } from '../Text.Keyboard';
+export { ActiveElement, Focus } from '../Focus';
 
 /**
  * Constants
  */
-
 import { DEFAULTS as item } from '../Item.LabelItem/common';
 
 type K = t.LabelItemBehaviorKind;
 const useBehaviorAll: K[] = [
   //
   'Item',
-  'Item.Edit',
   'Item.Selection',
+  'Item.Edit',
   'List',
-  'List.Selection',
+  'List.Navigation',
 ];
 const useBehaviorDefaults: K[] = ['Item', 'List'];
 
@@ -29,7 +29,12 @@ export const DEFAULTS = {
     all: useBehaviorAll,
     defaults: useBehaviorDefaults,
   },
-  get data(): t.LabelItem {
-    return {};
+  data: {
+    get item(): t.LabelItem {
+      return {};
+    },
+    get list(): t.LabelItemList {
+      return {};
+    },
   },
 } as const;

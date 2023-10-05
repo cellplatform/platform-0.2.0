@@ -5,7 +5,7 @@ const DEFAULTS = VideoPlayer.DEFAULTS;
 
 type T = {
   props: t.VideoPlayerProps;
-  debug: {};
+  debug: { textboxUrl?: string };
   status?: t.VideoStatus;
 };
 const initial: T = {
@@ -21,7 +21,8 @@ export default Dev.describe('Player (Vime)', (e) => {
   type LocalStore = Pick<
     t.VideoPlayerProps,
     'video' | 'playing' | 'loop' | 'borderRadius' | 'muted' | 'enabled' | 'width' | 'height'
-  >;
+  > &
+    Pick<T['debug'], 'textboxUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     video: SAMPLE.VIMEO.Tubes,
@@ -32,6 +33,7 @@ export default Dev.describe('Player (Vime)', (e) => {
     borderRadius: DEFAULTS.borderRadius,
     width: 500,
     height: undefined,
+    textboxUrl: '',
   });
 
   e.it('ui:init', async (e) => {
@@ -48,6 +50,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.enabled = local.enabled;
       d.props.width = local.width;
       d.props.height = local.height;
+      d.debug.textboxUrl = local.textboxUrl;
     });
 
     ctx.debug.width(330);
@@ -141,6 +144,11 @@ export default Dev.describe('Player (Vime)', (e) => {
     });
 
     dev.section(['Video', '(Source)'], (dev) => {
+      const changeVideo = async (src: t.VideoSrc) => {
+        await state.change((d) => (d.props.video = src));
+        local.video = src;
+      };
+
       const def = (def: t.VideoSrc, hint?: string) => {
         const isCurrent = () => def.ref === state.current.props.video?.ref;
 
@@ -151,7 +159,7 @@ export default Dev.describe('Player (Vime)', (e) => {
           btn
             .label(label)
             .right((e) => isCurrent() && <Icons.Photo size={16} />)
-            .onClick((e) => e.change((d) => (local.video = d.props.video = def)));
+            .onClick((e) => changeVideo(def));
         });
       };
 
@@ -165,6 +173,22 @@ export default Dev.describe('Player (Vime)', (e) => {
       def(SAMPLE.VIDEO.GroupScale, 'IPFS: Group Scale');
       dev.hr(-1, 5);
       def(DEFAULTS.unknown);
+
+      dev.hr(0, 5);
+
+      dev.textbox((txt) => {
+        txt
+          .label((e) => 'url')
+          .value((e) => e.state.debug.textboxUrl ?? '')
+          .onChange((e) => e.change((d) => (d.debug.textboxUrl = e.to.value)))
+          .onEnter((e) => {
+            const url = (local.textboxUrl = state.current.debug.textboxUrl);
+            const src = Video.src(url);
+            console.log('src', src);
+            // e.change((d) => )
+            changeVideo(src);
+          });
+      });
     });
 
     dev.hr(5, 20);

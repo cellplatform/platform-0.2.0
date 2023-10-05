@@ -1,8 +1,8 @@
 import { Dev, Value, type t } from '../../../test.ui';
 
 import { LabelItemStateful } from '..';
-import { Item } from '../../Item';
 import { Sample } from './-Sample';
+import { SampleList } from './-Sample.List';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -11,6 +11,7 @@ type T = {
   debug: {
     total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
+    renderCount?: boolean;
   };
 };
 const initial: T = {
@@ -18,27 +19,26 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors'>;
+  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
+    renderCount: true,
   });
 
-  const State = {
-    ctx: undefined as t.LabelItemListCtxState | undefined,
+  const TestState = {
+    list: LabelItemStateful.State.list(),
     items: [] as t.LabelItemState[],
-  };
-
-  const Init = {
-    items(state: T) {
-      const length = state.debug.total ?? 0;
-      State.ctx = length > 1 ? Item.Label.State.ctx() : undefined;
-      State.items = Array.from({ length }).map(() => {
-        const initial = Sample.data();
-        return Item.Label.State.item(initial);
-      });
-    },
+    init: {
+      item() {
+        const initial = Sample.item();
+        return LabelItemStateful.State.item(initial);
+      },
+      items(length: number = 0) {
+        TestState.items = Array.from({ length }).map(() => TestState.init.item());
+      },
+    } as const,
   };
 
   e.it('ui:init', async (e) => {
@@ -48,8 +48,9 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     await state.change((d) => {
       d.debug.total = local.total;
       d.debug.useBehaviors = local.useBehaviors;
+      d.debug.renderCount = local.renderCount;
     });
-    Init.items(state.current);
+    TestState.init.items(state.current.debug.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -59,21 +60,34 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         const length = debug.total ?? 0;
-        const elList = Array.from({ length }).map((v, i) => {
+        const isList = length > 1;
+
+        const elements = Array.from({ length }).map((_, i) => {
           return (
             <LabelItemStateful
               key={`item.${i}`}
-              ctx={State.ctx}
-              item={State.items[i]}
+              list={isList ? TestState.list : undefined}
+              item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}
+              renderCount={debug.renderCount ? { absolute: [0, -55, null, null] } : undefined}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
-                state.change((d) => (d.data = e.data));
               }}
             />
           );
         });
-        return <>{elList}</>;
+
+        if (!isList) return <>{elements}</>;
+        return (
+          <SampleList
+            //
+            items={TestState.items}
+            elements={elements}
+            useBehaviors={debug.useBehaviors}
+            list={TestState.list}
+            renderCount={debug.renderCount ? { absolute: [-18, 0, null, null] } : undefined}
+          />
+        );
       });
   });
 
@@ -103,10 +117,8 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
             .label(label)
             .right((e) => (e.state.debug.total === total ? '←' : ''))
             .onClick(async (e) => {
-              await e.change((d) => (d.debug.total = total));
-              Init.items(state.current);
-              local.total = total;
-              dev.redraw();
+              TestState.init.items(total);
+              await e.change((d) => (local.total = d.debug.total = total));
             }),
         );
       };
@@ -114,6 +126,29 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       dev.hr(-1, 5);
       total(1);
       total(3);
+      total(10);
+      dev.hr(-1, 5);
+      dev.button('add', async (e) => {
+        TestState.items.push(TestState.init.item());
+        const total = (e.state.current.debug.total ?? 0) + 1;
+        await e.change((d) => (local.total = d.debug.total = total));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.renderCount);
+        btn
+          .label((e) => `render count`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.renderCount = Dev.toggle(d.debug, 'renderCount')));
+          });
+      });
+
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 
@@ -122,14 +157,14 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const items = State.items.reduce((acc, next, i) => {
+      const items = TestState.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
-        acc[key] = next;
+        acc[key] = next.current;
         return acc;
-      }, {} as Record<string, t.LabelItemState>);
+      }, {} as Record<string, t.LabelItemState['current']>);
 
       const data = {
-        ctx: State.ctx?.current,
+        list: TestState.list.current,
         items,
       };
 

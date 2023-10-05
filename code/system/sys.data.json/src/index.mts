@@ -10,11 +10,3 @@ export { Pkg };
 export { Json } from './Json';
 export { Patch } from './Json.Patch';
 export { PatchState } from './Json.PatchState';
-
-/**
- * Dev
- */
-export const dev = async () => {
-  // const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Pkg };
-};

@@ -1,6 +1,6 @@
-import type { ObjectViewTheme } from './types.mjs';
+import { type t } from '../common';
 
-const theme: ObjectViewTheme = 'Light';
+const theme: t.ObjectViewTheme = 'Light';
 
 export const DEFAULTS = {
   theme,

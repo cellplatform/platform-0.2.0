@@ -1,9 +1,7 @@
 import { ObjectView } from '.';
-import { Dev } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
 
-import type { ObjectViewProps } from '.';
-
-type T = ObjectViewProps;
+type T = t.ObjectViewProps;
 const initial: T = {
   name: 'Foo',
   data: { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123, foo: false },

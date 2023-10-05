@@ -23,6 +23,16 @@ describe('Id', () => {
     it('function export', () => {
       expect(Id.cuid).to.equal(cuid);
     });
+
+    it('Id.is.cuid( )', () => {
+      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.is.cuid(v)).to.eql(false));
+      Array.from({ length: 50 }).forEach(() => {
+        const cuid = Id.cuid();
+        const slug = Id.slug();
+        expect(Id.is.cuid(cuid)).to.eql(true);
+        expect(Id.is.cuid(slug)).to.eql(false);
+      });
+    });
   });
 
   describe('slug (short id)', () => {
@@ -49,6 +59,16 @@ describe('Id', () => {
 
     it('function export', () => {
       expect(Id.slug).to.equal(slug);
+    });
+
+    it('Id.is.slug( )', () => {
+      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.is.cuid(v)).to.eql(false));
+      Array.from({ length: 50 }).forEach(() => {
+        const cuid = Id.cuid();
+        const slug = Id.slug();
+        expect(Id.is.slug(cuid)).to.eql(false);
+        expect(Id.is.slug(slug)).to.eql(true);
+      });
     });
   });
 });

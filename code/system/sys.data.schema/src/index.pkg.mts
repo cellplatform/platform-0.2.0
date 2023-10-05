@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'sys.util': '0.0.0',
-    'zod': '3.22.2',
+    'zod': '3.22.4',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

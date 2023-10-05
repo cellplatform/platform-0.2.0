@@ -16,10 +16,11 @@ export type {
 } from 'sys.types/src/types.mjs';
 export type {
   KeyboardKeypress,
-  KeyboardState,
-  KeyboardStateCurrent,
   KeyboardModifierFlags,
   KeyboardModifierKeys,
+  KeyboardState,
+  KeyboardStateCurrent,
+  LocalStorage,
 } from 'sys.ui.dom/src/types.mjs';
 export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types.mjs';
 
@@ -29,7 +30,7 @@ export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/s
 export type { DevCtx, DevCtxState } from './common/types.mjs';
 export type * from './ui.dev/types.mjs';
 export type * from './ui.tools/types.mjs';
-export type * from './ui/types.mjs';
+export type * from './ui/types';
 
 /**
  * Common Types

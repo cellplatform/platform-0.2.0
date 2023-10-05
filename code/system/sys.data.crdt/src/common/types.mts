@@ -14,7 +14,7 @@ export type {
   Lifecycle,
 } from 'sys.types/src/types.mjs';
 
-export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';
+export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types';
 export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types.mjs';
 export type {
   SpecImport,

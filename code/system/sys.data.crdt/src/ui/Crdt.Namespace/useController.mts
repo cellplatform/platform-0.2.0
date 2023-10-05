@@ -1,4 +1,4 @@
-import { DEFAULTS, Item, type t } from './common';
+import { DEFAULTS, LabelItemStateful, type t } from './common';
 
 type Args = {
   enabled?: boolean;
@@ -10,7 +10,7 @@ type Args = {
  * TODO 🐷
  * - Temporary state until item/group refactor.
  */
-const itemState_TMP = Item.Label.State.item();
+const itemState_TMP = LabelItemStateful.State.item();
 
 export function useController(args: Args) {
   const { ns, useBehaviors = DEFAULTS.useBehaviors } = args;
@@ -20,7 +20,7 @@ export function useController(args: Args) {
    * TODO 🐷
    * - change this to [useController] ← (full list)
    */
-  const controller = Item.Label.State.useItemController({
+  const controller = LabelItemStateful.useItemController({
     // enabled: enabled && useBehaviors.includes('Edit'),
     useBehaviors,
     item: itemState_TMP,

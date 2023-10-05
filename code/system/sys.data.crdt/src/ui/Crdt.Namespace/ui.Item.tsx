@@ -30,7 +30,7 @@ export const Item: React.FC<ItemProps> = (props) => {
   };
 
   return (
-    <LabelItem.View
+    <LabelItem
       {...state.handlers}
       label={state.data.label}
       style={css(styles.base, props.style)}

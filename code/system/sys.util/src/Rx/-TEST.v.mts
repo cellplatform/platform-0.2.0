@@ -5,6 +5,30 @@ import { disposable } from './Rx.disposable.mjs';
 import { rx } from '.';
 
 describe('rx', () => {
+  describe('rx.subject (factory)', () => {
+    it('void', () => {
+      let fired = 0;
+      const subject = rx.subject();
+
+      subject.subscribe(() => fired++);
+      subject.next();
+      expect(fired).to.eql(1);
+
+      subject.complete();
+      subject.next();
+      expect(fired).to.eql(1);
+    });
+
+    it('<T>', () => {
+      type T = { type: string };
+      const subject = rx.subject<T>();
+      const fired: T[] = [];
+      subject.subscribe((e) => fired.push(e));
+      subject.next({ type: 'foo' });
+      expect(fired[0]).to.eql({ type: 'foo' });
+    });
+  });
+
   describe('rx.event | rx.payload', () => {
     type FooEvent = { type: 'TYPE/foo'; payload: Foo };
     type Foo = { count: number };

@@ -1,0 +1,41 @@
+{
+  "name": "ext.lib.protocol.hats",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist && serve",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "@hatsprotocol/sdk-v1-core": "0.6.0",
+    "sys.fs.indexeddb": "0.0.0",
+    "sys.util": "0.0.0",
+    "sys.ui.react.common": "0.0.0"
+  },
+  "devDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sys.test": "0.0.0",
+    "sys.test.spec": "0.0.0",
+    "sys.types": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
+  }
+}

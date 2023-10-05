@@ -4,21 +4,7 @@ import { css, FC, type t } from '../common';
 import { DEFAULTS } from './DEFAULT.mjs';
 import { renderer } from './Renderer';
 
-import type { ObjectViewTheme } from './types.mjs';
-
-export type ObjectViewProps = {
-  name?: string;
-  data?: any;
-  expand?: number | { level?: number; paths?: string[] | boolean };
-  showNonenumerable?: boolean;
-  showRootSummary?: boolean;
-  sortObjectKeys?: boolean;
-  fontSize?: number;
-  theme?: ObjectViewTheme;
-  style?: t.CssValue;
-};
-
-const View: React.FC<ObjectViewProps> = (props) => {
+const View: React.FC<t.ObjectViewProps> = (props) => {
   const {
     name,
     data,
@@ -58,7 +44,7 @@ const View: React.FC<ObjectViewProps> = (props) => {
  */
 
 const Wrangle = {
-  theme(props: ObjectViewProps) {
+  theme(props: t.ObjectViewProps) {
     const fontSize = `${props.fontSize ?? DEFAULTS.font.size}px`;
     const lineHeight = '1.5em';
     return {
@@ -71,14 +57,14 @@ const Wrangle = {
     };
   },
 
-  baseTheme(theme?: ObjectViewTheme) {
+  baseTheme(theme?: t.ObjectViewTheme) {
     theme = theme ?? DEFAULTS.theme;
     if (theme === 'Light') return chromeLight;
     if (theme === 'Dark') return chromeDark;
     throw new Error(`Theme '${theme}' not supported.`);
   },
 
-  expand(props: ObjectViewProps) {
+  expand(props: t.ObjectViewProps) {
     const { expand } = props;
     let expandLevel: number | undefined = undefined;
     let expandPaths: string[] | undefined;
@@ -101,7 +87,7 @@ const Wrangle = {
  */
 
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const ObjectView = FC.decorate<ObjectViewProps, Fields>(
+export const ObjectView = FC.decorate<t.ObjectViewProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'ObjectView' },

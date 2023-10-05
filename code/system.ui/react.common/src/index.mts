@@ -15,10 +15,12 @@ export { Chip } from './ui/Chip';
 export { EdgePosition } from './ui/EdgePosition';
 export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';
+export { Focus } from './ui/Focus';
 export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
-export { Item } from './ui/Item';
+export { LabelItem } from './ui/Item.LabelItem';
+export { LabelItemStateful } from './ui/Item.LabelItem.Stateful';
 export { Layout } from './ui/Layout';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
@@ -38,7 +40,7 @@ export { TextSyntax } from './ui/Text.Syntax';
  */
 export { useClickInside, useClickOutside, useMouse } from './common';
 export { useDragTarget } from './ui/useDragTarget';
-export { Focus, useFocus } from './ui/useFocus';
+export { useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';
 
 /**
