@@ -13,7 +13,9 @@ describe('visual specs', () => {
       const { Dev, expect } = await import('../test.ui');
       const { Specs } = await import('../test.ui/entry.Specs.mjs');
       const res = await Dev.headless(Specs);
-      expect(res.ok).to.eql(true);
+
+      const failed = res.specs.filter((e) => !e.ok).map((e) => e.name);
+      expect(res.ok).to.eql(true, failed.join('|'));
     },
     { timeout: 1000 * 10 },
   );
