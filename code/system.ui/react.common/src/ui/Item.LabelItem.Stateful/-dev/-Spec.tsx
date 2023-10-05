@@ -1,10 +1,10 @@
 import { Dev, Value, type t } from '../../../test.ui';
 
-import { LabelItemStateful } from '..';
+import { LabelItem } from '../../Item.LabelItem';
 import { Sample } from './-Sample';
 import { SampleList } from './-Sample.List';
 
-const DEFAULTS = LabelItemStateful.DEFAULTS;
+const DEFAULTS = LabelItem.Stateful.DEFAULTS;
 
 type T = {
   data?: t.LabelItem;
@@ -28,12 +28,12 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   });
 
   const TestState = {
-    list: LabelItemStateful.State.list(),
+    list: LabelItem.Stateful.State.list(),
     items: [] as t.LabelItemState[],
     init: {
       item() {
         const initial = Sample.item();
-        return LabelItemStateful.State.item(initial);
+        return LabelItem.Stateful.State.item(initial);
       },
       items(length: number = 0) {
         TestState.items = Array.from({ length }).map(() => TestState.init.item());
@@ -64,7 +64,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
         const elements = Array.from({ length }).map((_, i) => {
           return (
-            <LabelItemStateful
+            <LabelItem.Stateful
               key={`item.${i}`}
               list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
@@ -77,7 +77,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
           );
         });
 
-        if (!isList) return <>{elements}</>;
+        // if (!isList) return <>{elements}</>;
         return (
           <SampleList
             //
@@ -97,7 +97,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
     dev.row((e) => {
       return (
-        <LabelItemStateful.BehaviorSelector
+        <LabelItem.BehaviorSelector
           selected={e.state.debug.useBehaviors}
           onChange={(e) => {
             state.change((d) => (d.debug.useBehaviors = e.next));

@@ -20,7 +20,6 @@ export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { LabelItem } from './ui/Item.LabelItem';
-export { LabelItemStateful } from './ui/Item.LabelItem.Stateful';
 export { Layout } from './ui/Layout';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';

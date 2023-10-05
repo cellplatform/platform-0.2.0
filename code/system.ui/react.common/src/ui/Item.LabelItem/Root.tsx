@@ -1,32 +1,18 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Time, type t } from './common';
+import { DEFAULTS, FC, type t } from './common';
+import { ForwardRef } from './Root.ForwardRef';
+import { State } from '../Item.LabelItem.Stateful/State';
+import { LabelItemStateful as Stateful } from '../Item.LabelItem.Stateful/Root';
 
-import { Ref } from './Ref';
-import { View } from './ui';
+const BehaviorSelector = Stateful.BehaviorSelector;
 
-export const LabelItem = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
-  const [itemRef, setItemRef] = useState<t.LabelItemRef>();
-  const inputRef = useRef<t.TextInputRef>(null);
-  useImperativeHandle(ref, () => Ref(inputRef));
-
-  const focusTextbox = () => Time.delay(0, () => itemRef?.focus());
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    const ref = Ref(inputRef);
-    setItemRef(ref);
-    if (props.focusOnReady) focusTextbox();
-    props.onReady?.({ ref });
-  }, []);
-
-  useEffect(() => {
-    if (props.focusOnEdit && Boolean(props.editing)) focusTextbox();
-  }, [props.editing]);
-
-  /**
-   * Render
-   */
-  return <View {...props} inputRef={inputRef} />;
-});
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  State: typeof State;
+  Stateful: typeof Stateful;
+  BehaviorSelector: typeof BehaviorSelector;
+};
+export const LabelItem = FC.decorate<t.LabelItemProps, Fields>(
+  ForwardRef,
+  { DEFAULTS, State, Stateful, BehaviorSelector },
+  { displayName: 'LabelItem' },
+);

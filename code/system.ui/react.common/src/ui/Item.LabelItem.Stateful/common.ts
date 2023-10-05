@@ -8,10 +8,8 @@ export { ActiveElement, Focus } from '../Focus';
 /**
  * Constants
  */
-import { DEFAULTS as item } from '../Item.LabelItem/common';
-
-type K = t.LabelItemBehaviorKind;
-const useBehaviorAll: K[] = [
+type B = t.LabelItemBehaviorKind;
+const useBehaviorAll: B[] = [
   //
   'Item',
   'Item.Selection',
@@ -19,10 +17,9 @@ const useBehaviorAll: K[] = [
   'List',
   'List.Navigation',
 ];
-const useBehaviorDefaults: K[] = ['Item', 'List'];
+const useBehaviorDefaults: B[] = ['Item', 'List'];
 
 export const DEFAULTS = {
-  item,
   enabled: true,
   editing: false,
   useBehaviors: {

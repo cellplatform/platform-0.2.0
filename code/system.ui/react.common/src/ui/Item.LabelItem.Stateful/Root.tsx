@@ -1,4 +1,4 @@
-import { State } from './Root.State';
+import { State } from './State';
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 import { BehaviorSelector } from './ui.BehaviorSelector';
