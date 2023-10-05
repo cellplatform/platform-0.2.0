@@ -20,7 +20,7 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge-repo-storage-indexeddb': '1.0.6',
     'ext.lib.auth.privy': '0.0.0',
     'ext.lib.ipfs.w3s': '0.0.0',
-    'ext.driver.protocol.hats': '0.0.0',
+    'ext.lib.protocol.hats': '0.0.0',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',
     'ext.lib.codemirror': '0.0.0',

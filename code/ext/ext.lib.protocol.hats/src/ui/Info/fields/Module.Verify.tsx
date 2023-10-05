@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'ext.driver.protocol.hats.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.protocol.hats.tests');
       return url.href;
     },
 
