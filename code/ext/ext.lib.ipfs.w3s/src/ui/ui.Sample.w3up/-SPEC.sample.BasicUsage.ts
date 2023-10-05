@@ -8,23 +8,32 @@ import { Wrangle } from '../ui.Sample.old.w3storage';
  */
 export async function sampleBasicUsage() {
   const client = await create();
-  console.log('client', client);
+
+  const email = 'philcockfield@gmail.com';
+  const name = 'my-foo';
+
+  console.log('email:', email);
+  console.log('space:', name);
+  console.log('-------------------------------------------');
 
   /**
    * Create and register space.
    */
-  const name = 'my-sample-space';
-  if (client.spaces().length === 0) {
-    await client.createSpace(name);
-  }
+  const findSpace = (name: string) => client.spaces().find((s) => s.name() === name)!;
+  if (!findSpace(name)) await client.createSpace(name);
 
-  const space = client.spaces().find((s) => s.name() === name)!;
+  const space = findSpace(name);
   await client.setCurrentSpace(space.did());
 
+  // client.capability
+  // console.info(`check for email sent to: ${email}`);
+  // await client.authorize(email);
+  // return;
+
+  console.log('space', space);
+  console.log('space.registered()', space.registered());
   if (!space.registered()) {
     try {
-      const email = 'phil@cockfield.net';
-      console.info(`check for email sent to: ${email}`);
       await client.registerSpace(email, { provider: 'did:web:web3.storage' });
     } catch (err) {
       console.error('registration failed: ', err);
@@ -34,26 +43,36 @@ export async function sampleBasicUsage() {
   /**
    * Upload file.
    */
-  const binary = new TextEncoder().encode('boom');
-  const files = [
-    new File(['# Hello World 👋'], 'README.md'),
-    new File(['console.info("🌳")'], 'src/main.ts'),
-    new File([binary], 'data/binary.dat'),
-  ];
+  //   const binary = new TextEncoder().encode('boom');
+  //   const files = [
+  //     new File(['# Hello World 👋'], 'README.md'),
+  //     new File(['console.info("🌳")'], 'src/main.ts'),
+  //     new File([binary], 'data/binary.dat'),
+  //   ];
+  //
+  //   console.log('files', files);
+  //   const directoryCid = await client.uploadDirectory(files);
+  //
+  //   console.log('directoryCid', directoryCid);
+  //   console.log('directoryCid', directoryCid.toString());
+  //   const cid = directoryCid.toString();
 
-  console.log('files', files);
-  const directoryCid = await client.uploadDirectory(files);
+  // const url = Wrangle.Url.cid(cid);
+  // const url2 = Wrangle.Url.name(cid, 'README.md');
+  // console.log('url', url);
+  // console.log('directoryCid.link', directoryCid.link());
 
-  console.log('directoryCid', directoryCid);
-  console.log('directoryCid', directoryCid.toString());
-  const cid = directoryCid.toString();
+  // console.log('url2', url2);
 
-  // bafybeiaqylpxvbovgpw6owvsgba4grfdv4hlpekxu7wwfwqvwpu4kduj7y
-  const url = Wrangle.Url.cid(cid);
-  console.log('url', url);
+  const storeList = await client.capability.store.list();
+  // const uploadList = await client.capability.upload.list();
 
-  console.log('directoryCid.link', directoryCid.link());
+  console.log('storeList', storeList);
+  // console.log('uploadList', uploadList);
 
-  const list = await client.capability.store.list();
-  console.log('list', list);
+  storeList.results.forEach((item) => {
+    // console.log('item.link.toString();', item.link.toString());
+    const url = Wrangle.Url.cid(item.link.toString());
+    console.log('url', url);
+  });
 }
