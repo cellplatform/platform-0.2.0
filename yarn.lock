@@ -1445,18 +1445,6 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@rainbow-me/rainbowkit@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-1.0.11.tgz#5d03a8b1f8b8d7f8b3dee14dae378574ea3e6f8b"
-  integrity sha512-+cm6+WUPG9iPgkfJKbvlowcrSHu266Zk20LVRsYLcmb6v29gVMHcWQvyI4T6EVC9TxNjnyq/jIlen++uiUBmmQ==
-  dependencies:
-    "@vanilla-extract/css" "1.9.1"
-    "@vanilla-extract/dynamic" "2.0.2"
-    "@vanilla-extract/sprinkles" "1.5.0"
-    clsx "1.1.1"
-    qrcode "1.5.0"
-    react-remove-scroll "2.5.4"
-
 "@rainbow-me/rainbowkit@1.0.12":
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-1.0.12.tgz#64c93817aa9e3f41cac328d055605e7965d03993"
@@ -10255,21 +10243,6 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@1.15.1, viem@^1.0.0:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-1.15.1.tgz#030fb900d8099e6a1bd16164fa4e1e5b8e24607a"
-  integrity sha512-lxk8wwUK7ZivYAUZ6pH+9Y6jjrfXXjafCOoASa4lw3ULUCT2BajU4SELarlxJQimpsFd7OZD4m4iEXYLF/bt6w==
-  dependencies:
-    "@adraffy/ens-normalize" "1.9.4"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    "@types/ws" "^8.5.5"
-    abitype "0.9.8"
-    isomorphic-ws "5.0.0"
-    ws "8.13.0"
-
 viem@1.15.2:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.15.2.tgz#13c76728122882877f612b2f6c36422b083eed66"
@@ -10299,6 +10272,21 @@ viem@1.9.5:
     abitype "0.9.3"
     isomorphic-ws "5.0.0"
     ws "8.12.0"
+
+viem@^1.0.0:
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.15.1.tgz#030fb900d8099e6a1bd16164fa4e1e5b8e24607a"
+  integrity sha512-lxk8wwUK7ZivYAUZ6pH+9Y6jjrfXXjafCOoASa4lw3ULUCT2BajU4SELarlxJQimpsFd7OZD4m4iEXYLF/bt6w==
+  dependencies:
+    "@adraffy/ens-normalize" "1.9.4"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    "@types/ws" "^8.5.5"
+    abitype "0.9.8"
+    isomorphic-ws "5.0.0"
+    ws "8.13.0"
 
 vite-node@0.34.6:
   version "0.34.6"
@@ -10936,7 +10924,7 @@ yocto-queue@^1.0.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-1.0.0.tgz#7f816433fb2cbc511ec8bf7d263c3b58a1a3c251"
   integrity sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==
 
-zod@3.22.3, zod@3.22.4, zod@^3.20.2:
+zod@3.22.4, zod@^3.20.2:
   version "3.22.4"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==

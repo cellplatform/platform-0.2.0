@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.driver.ipfs.w3s',
+  name: 'ext.lib.ipfs.w3s',
   version: '0.0.0',
   dependencies: {
     '@web3-storage/w3up-client': '8.0.3',
