@@ -18,7 +18,9 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('LabelItem.Stateful', (e) => {
+const name = LabelItem.Stateful.displayName ?? '';
+
+export default Dev.describe(name, (e) => {
   type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
@@ -168,13 +170,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         items,
       };
 
-      return (
-        <Dev.Object
-          name={'LabelItem.Stateful'}
-          data={data}
-          expand={{ level: 1, paths: ['$', '$.items'] }}
-        />
-      );
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.items'] }} />;
     });
   });
 });

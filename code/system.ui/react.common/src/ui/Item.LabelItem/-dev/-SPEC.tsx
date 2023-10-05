@@ -12,7 +12,9 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('Namespace.Item', (e) => {
+const name = LabelItem.displayName ?? '';
+
+export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
     Pick<
       t.LabelItemProps,
@@ -392,7 +394,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const props = State.toDisplayProps(state);
       const data = { props };
-      return <Dev.Object name={'<Namespace.Item>'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });
