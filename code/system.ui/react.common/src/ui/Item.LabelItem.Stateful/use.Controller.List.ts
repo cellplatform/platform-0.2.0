@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ActiveElement, DEFAULTS, Focus, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { useListNavigationController } from './use.List.Navigation.Controller';
+import { useListNavigationController } from './use.Controller.List.Navigation';
 
 type Args = {
   enabled?: boolean;

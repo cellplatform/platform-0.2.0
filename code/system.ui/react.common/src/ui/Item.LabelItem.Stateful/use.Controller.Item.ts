@@ -1,8 +1,8 @@
 import { DEFAULTS, type t } from './common';
 import { Wrangle } from './Wrangle';
 
-import { useItemEditController } from './use.Item.Edit.Controller';
-import { useItemSelectionController } from './use.Item.Selection.Controller';
+import { useItemEditController } from './use.Controller.Item.Edit';
+import { useItemSelectionController } from './use.Controller.Item.Selection';
 
 type Args = {
   useBehaviors?: t.LabelItemBehaviorKind[];
