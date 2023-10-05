@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { ActiveElement, DEFAULTS, type t } from './common';
+import { useEffect, useRef } from 'react';
+import { ActiveElement, DEFAULTS, Focus, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { useListNavigationController } from './use.List.Navigation.Controller';
@@ -26,9 +26,8 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
    */
   useEffect(() => {
     const monitor = ActiveElement.listen((e) => {
-      list?.change((d) => (d.focused = e.focus));
+      list?.change((d) => (d.focused = Focus.containsFocus(ref)));
     });
-
     return monitor.dispose;
   }, [ref.current]);
 
@@ -37,15 +36,10 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
    */
   const navigation = useListNavigationController({
     ref,
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List.Navigation'),
+    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation'),
     items,
     list,
   });
-
-  /**
-   * TODO 🐷
-   * - handle list of <Item>'s.
-   */
 
   /**
    * API

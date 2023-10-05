@@ -22,7 +22,7 @@ export function useItemController(args: Args) {
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const selection = useItemSelectionController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item.Selection'),
+    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
     item,
     list,
     onChange,
@@ -30,7 +30,7 @@ export function useItemController(args: Args) {
   });
 
   const edit = useItemEditController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item.Edit'),
+    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
     item,
     list,
     onChange,
