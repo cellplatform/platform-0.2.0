@@ -93,12 +93,12 @@ export const Config = {
 
       /**
        * TODO 🐷 - Temporary ←[DELETE]
-       * Temporary requirement of module: ext.driver.auth.privy
+       * Temporary requirement of module: ext.lib.auth.privy
        * https://privy-developers.slack.com/archives/C059ABLSB47/p1692753366943129?thread_ts=1692753043.728049&cid=C059ABLSB47
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        const modules = ['ext.driver.auth.privy', 'dev.000'];
+        const modules = ['ext.lib.auth.privy', 'dev.000'];
         return modules.some((item) => modulePath.includes(item));
       };
 

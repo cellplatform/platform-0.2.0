@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.driver.auth.privy',
+  name: 'ext.lib.auth.privy',
   version: '0.0.0',
   dependencies: {
     '@privy-io/react-auth': '1.42.0',

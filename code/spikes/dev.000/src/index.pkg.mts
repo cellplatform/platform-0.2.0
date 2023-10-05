@@ -18,7 +18,7 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge-repo-network-messagechannel': '1.0.6',
     '@automerge/automerge-repo-react-hooks': '1.0.6',
     '@automerge/automerge-repo-storage-indexeddb': '1.0.6',
-    'ext.driver.auth.privy': '0.0.0',
+    'ext.lib.auth.privy': '0.0.0',
     'ext.lib.ipfs.w3s': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
     'ext.lib.automerge': '0.0.0',

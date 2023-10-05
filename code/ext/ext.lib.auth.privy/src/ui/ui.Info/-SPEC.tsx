@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
     t.InfoProps,
     'enabled' | 'useAuthProvider' | 'clipboard'
   >;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.auth.privy.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.auth.privy.Info');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,
