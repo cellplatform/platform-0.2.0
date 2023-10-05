@@ -21,15 +21,20 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
     const keyboard = Keyboard.until(dispose$);
 
     const List = {
-      get focused() {
-        return Boolean(list?.current.focused);
+      is: {
+        get focused() {
+          return Boolean(list?.current.focused);
+        },
+        get editing() {
+          return items.some((item) => item.current.editing);
+        },
       },
       get selectedIndex() {
         const selected = list?.current.selected;
         return items.findIndex((item) => item.instance === selected);
       },
       select(index: number) {
-        if (!list || !List.focused) return;
+        if (!list || !List.is.focused || List.is.editing) return;
         index = Math.max(0, Math.min(index, items.length - 1));
         const item = items[index];
         list.change((d) => (d.selected = item?.instance));
