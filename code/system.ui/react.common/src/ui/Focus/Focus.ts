@@ -1,7 +1,7 @@
 import type { RefObject } from 'react';
 import { Wrangle } from './Wrangle';
 
-type FocusEventHandler = (e: FocusEvent) => void;
+type ElementFocusHandler = (e: FocusEvent) => void;
 
 export const Focus = {
   args: Wrangle.args,
@@ -27,7 +27,7 @@ export const Focus = {
    */
   listen<H extends HTMLElement = HTMLDivElement>(
     ref: RefObject<H>,
-    handlers: { onFocus?: FocusEventHandler; onBlur?: FocusEventHandler } = {},
+    handlers: { onFocus?: ElementFocusHandler; onBlur?: ElementFocusHandler } = {},
   ) {
     const { onFocus, onBlur } = handlers;
     const el = ref.current;

@@ -26,7 +26,8 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
 
     let _last: t.FocusHandlerArgs | undefined;
     const onFocus = (focus: boolean) => {
-      const args = Focus.args(focus);
+      const el = ref.current || undefined;
+      const args = Focus.args(focus, el);
       if (options.onFocus && !R.equals(args, _last)) options.onFocus(args);
       _last = args;
     };

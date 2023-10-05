@@ -18,8 +18,9 @@ export const ActiveElement = {
 
     if (!initialized) {
       const onChange = (focus: boolean) => {
-        return () => {
-          handlers.forEach((fn) => fn(Wrangle.args(focus)));
+        return (e: FocusEvent) => {
+          const el = document.activeElement || undefined;
+          handlers.forEach((fn) => fn(Wrangle.args(focus, el)));
         };
       };
 
