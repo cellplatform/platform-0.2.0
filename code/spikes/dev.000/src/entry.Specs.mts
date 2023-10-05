@@ -28,7 +28,7 @@ const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
 const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
 
 export const Specs = {
-  App: () => import('../ui/App/-SPEC'),
+  App: () => import('./ui/App/-SPEC'),
 
   ...WebRtc,
   ...Crdt,
