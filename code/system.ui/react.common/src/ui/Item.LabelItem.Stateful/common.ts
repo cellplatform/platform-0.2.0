@@ -19,7 +19,7 @@ const useBehaviorAll: K[] = [
   'List',
   'List.Navigation',
 ];
-const useBehaviorDefaults: K[] = ['Item', 'Item.Selection'];
+const useBehaviorDefaults: K[] = ['Item', 'List'];
 
 export const DEFAULTS = {
   item,

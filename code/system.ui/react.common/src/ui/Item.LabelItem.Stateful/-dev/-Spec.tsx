@@ -30,17 +30,15 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   const TestState = {
     list: LabelItemStateful.State.list(),
     items: [] as t.LabelItemState[],
-  };
-
-  const Init = {
-    item() {
-      const initial = Sample.item();
-      return LabelItemStateful.State.item(initial);
-    },
-
-    items(length: number = 0) {
-      TestState.items = Array.from({ length }).map(() => Init.item());
-    },
+    Init: {
+      item() {
+        const initial = Sample.item();
+        return LabelItemStateful.State.item(initial);
+      },
+      items(length: number = 0) {
+        TestState.items = Array.from({ length }).map(() => TestState.Init.item());
+      },
+    } as const,
   };
 
   e.it('ui:init', async (e) => {
@@ -52,7 +50,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       d.debug.useBehaviors = local.useBehaviors;
       d.debug.renderCount = local.renderCount;
     });
-    Init.items(state.current.debug.total);
+    TestState.Init.items(state.current.debug.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -119,7 +117,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
             .label(label)
             .right((e) => (e.state.debug.total === total ? '←' : ''))
             .onClick(async (e) => {
-              Init.items(total);
+              TestState.Init.items(total);
               await e.change((d) => (local.total = d.debug.total = total));
             }),
         );
@@ -131,7 +129,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       total(10);
       dev.hr(-1, 5);
       dev.button('add', async (e) => {
-        TestState.items.push(Init.item());
+        TestState.items.push(TestState.Init.item());
         const total = (e.state.current.debug.total ?? 0) + 1;
         await e.change((d) => (local.total = d.debug.total = total));
       });
