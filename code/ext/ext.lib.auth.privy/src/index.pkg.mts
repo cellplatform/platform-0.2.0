@@ -18,7 +18,7 @@ export const Pkg: ModuleDef = {
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'viem': '1.15.2',
+    'viem': '1.15.3',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
