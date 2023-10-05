@@ -29,9 +29,14 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
           return items.some((item) => item.current.editing);
         },
       },
-      get selectedIndex() {
-        const selected = list?.current.selected;
-        return items.findIndex((item) => item.instance === selected);
+      index: {
+        get selected() {
+          const selected = list?.current.selected;
+          return items.findIndex((item) => item.instance === selected);
+        },
+        get last() {
+          return items.length - 1;
+        },
       },
       select(index: number) {
         if (!list || !List.is.focused || List.is.editing) return;
@@ -41,19 +46,12 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
       },
     } as const;
 
+    const meta = (e: t.KeyMatchSubscriberHandlerArgs) => e.state.modifiers.meta;
     keyboard.on({
-      ArrowUp(e) {
-        List.select(e.state.modifiers.meta ? 0 : List.selectedIndex - 1);
-      },
-      ArrowDown(e) {
-        List.select(e.state.modifiers.meta ? 0 : List.selectedIndex + 1);
-      },
-      Home(e) {
-        List.select(0);
-      },
-      End(e) {
-        List.select(items.length - 1);
-      },
+      ArrowUp: (e) => List.select(meta(e) ? 0 : List.index.selected - 1),
+      ArrowDown: (e) => List.select(meta(e) ? List.index.last : List.index.selected + 1),
+      Home: (e) => List.select(0),
+      End: (e) => List.select(List.index.last),
     });
 
     if (!enabled) dispose();

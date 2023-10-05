@@ -22,19 +22,18 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   const ref = useRef<H>(null);
 
   /**
-   *
+   * Monitor and sync the list's focus state.
    */
   useEffect(() => {
-    const monitor = ActiveElement.listen((e) => {
-      list?.change((d) => (d.focused = Focus.containsFocus(ref)));
-    });
+    const isFocused = () => Focus.containsFocus(ref);
+    const monitor = ActiveElement.listen(() => list?.change((d) => (d.focused = isFocused())));
     return monitor.dispose;
   }, [ref.current]);
 
   /**
    * Sub-controllers.
    */
-  const navigation = useListNavigationController({
+  useListNavigationController({
     ref,
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation'),
     items,
@@ -44,7 +43,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   /**
    * API
    */
-  const api = {
+  return {
     kind: 'controller:List',
     ref,
     enabled,
@@ -53,6 +52,4 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
       return list?.current ?? DEFAULTS.data.list;
     },
   } as const;
-
-  return api;
 }
