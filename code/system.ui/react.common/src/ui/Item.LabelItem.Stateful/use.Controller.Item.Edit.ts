@@ -32,34 +32,41 @@ export function useItemEditController(args: Args) {
     }
   };
 
-  const EditMode = {
+  const Edit = {
+    previousLabel: '',
+
     get isEditing() {
       return Boolean(item?.current.editing);
     },
 
     start() {
-      if (EditMode.isEditing) return;
+      if (Edit.isEditing) return;
+      Edit.previousLabel = item?.current.label ?? '';
       change('edit:start', (draft) => (draft.editing = true));
     },
 
     accept() {
-      if (!EditMode.isEditing) return;
+      if (!Edit.isEditing) return;
+      Edit.previousLabel = '';
       change('edit:accept', (draft) => (draft.editing = false));
     },
 
     cancel() {
-      if (!EditMode.isEditing) return;
-      change('edit:cancel', (draft) => (draft.editing = false));
+      if (!Edit.isEditing) return;
+      change('edit:cancel', (draft) => {
+        draft.label = Edit.previousLabel;
+        draft.editing = false;
+      });
     },
 
     toggle() {
-      if (EditMode.isEditing) {
-        EditMode.accept();
+      if (Edit.isEditing) {
+        Edit.accept();
       } else {
-        EditMode.start();
+        Edit.start();
       }
     },
-  } as const;
+  };
 
   /**
    * View component events.
@@ -79,12 +86,12 @@ export function useItemEditController(args: Args) {
     },
 
     onLabelDoubleClick(e) {
-      EditMode.start();
+      Edit.start();
       args.handlers?.onLabelDoubleClick?.(e);
     },
 
     onEditClickAway(e) {
-      EditMode.cancel();
+      Edit.cancel();
       args.handlers?.onEditClickAway?.(e);
     },
 
@@ -109,11 +116,11 @@ export function useItemEditController(args: Args) {
     keyboard.on({
       Escape(e) {
         if (!isSelected()) return;
-        EditMode.cancel();
+        Edit.cancel();
       },
       Enter(e) {
         if (!isSelected()) return;
-        EditMode.toggle();
+        Edit.toggle();
       },
     });
 
