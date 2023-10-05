@@ -25,7 +25,7 @@ const name = 'Sample';
  */
 export default Dev.describe(name, (e) => {
   type LocalStore = { apiKey?: string; list?: any[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.ipfs.w3s');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.ipfs.w3s.Sample');
   const local = localstore.object({
     apiKey: undefined,
     list: undefined,

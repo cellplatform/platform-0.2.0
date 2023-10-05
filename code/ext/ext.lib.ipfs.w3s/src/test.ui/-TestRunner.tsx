@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
-        .localstore('dev:ext.driver.ipfs.w3s')
+        .localstore('dev:ext.lib.ipfs.w3s')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );

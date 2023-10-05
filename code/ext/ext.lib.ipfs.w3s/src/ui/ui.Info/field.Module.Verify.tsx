@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'ext.driver.ipfs.w3s.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.ipfs.w3s.tests');
       return url.href;
     },
 
