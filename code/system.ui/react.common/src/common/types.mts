@@ -62,7 +62,7 @@ export type {
   LocalStorage,
   UIEventBase,
   UIModifierKeys,
-} from 'sys.ui.dom/src/types.mjs';
+} from 'sys.ui.dom/src/types';
 export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/types.mjs';
 export type {
   DevCtx,
