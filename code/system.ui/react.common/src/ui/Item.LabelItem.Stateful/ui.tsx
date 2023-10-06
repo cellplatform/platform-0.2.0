@@ -1,13 +1,12 @@
-import { DEFAULTS, type t } from './common';
-
 import { LabelItem } from '../Item.LabelItem/Root';
+import { DEFAULTS, type t } from './common';
 import { useItemController } from './use';
 
 /**
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const { list, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const { index, list, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
   const isSelected = item && list && item.instance === list.current.selected;
   const isFocused = isSelected && list?.current.focused;
 
@@ -15,6 +14,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
    * Roll-up controller.
    */
   const controller = useItemController({
+    index,
     item,
     list,
     onChange,
@@ -30,6 +30,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
     <LabelItem
       {...handlers}
       style={props.style}
+      index={props.index}
       label={data.label}
       placeholder={data.placeholder}
       left={data.left}

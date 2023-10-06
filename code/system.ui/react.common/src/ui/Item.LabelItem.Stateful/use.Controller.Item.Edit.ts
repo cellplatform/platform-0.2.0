@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, rx, type t } from './common';
+import { Wrangle } from './Wrangle';
 
 type Args = {
+  index: number;
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelItemListState;
@@ -13,7 +15,7 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { item, list, enabled = true } = args;
+  const { item, list, enabled = true, index } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -32,6 +34,11 @@ export function useItemEditController(args: Args) {
     }
   };
 
+  const valuesOrDefault = () => {
+    const current = item?.current ?? {};
+    return Wrangle.valuesOrDefault({ ...current, index });
+  };
+
   const Edit = {
     previousLabel: '',
 
@@ -39,8 +46,18 @@ export function useItemEditController(args: Args) {
       return Boolean(item?.current.editing);
     },
 
+    get canEdit() {
+      const current = item?.current;
+      const is = current?.is;
+      if (is && 'editable' in is) {
+        if (typeof is.editable === 'function') return is.editable(valuesOrDefault());
+        return is.editable;
+      }
+      return true;
+    },
+
     start() {
-      if (Edit.isEditing) return;
+      if (Edit.isEditing || !Edit.canEdit) return;
       Edit.previousLabel = item?.current.label ?? '';
       change('edit:start', (draft) => (draft.editing = true));
     },

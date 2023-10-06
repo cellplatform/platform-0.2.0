@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, rx, type t } from './common';
 
 type Args = {
+  index: number;
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelItemListState;

@@ -25,6 +25,7 @@ export type LabelActionRenderArgs = LabelItemDynamicValueArgs & { color: string 
 export type LabelItemValue<T> = T | LabelItemDynamicValue<T>;
 export type LabelItemDynamicValue<T> = (e: LabelItemDynamicValueArgs) => T;
 export type LabelItemDynamicValueArgs = {
+  index: number;
   label: string;
   enabled: boolean;
   selected: boolean;
@@ -36,6 +37,7 @@ export type LabelItemDynamicValueArgs = {
  * Component (View)
  */
 export type LabelItemProps = {
+  index?: number;
   label?: string;
   placeholder?: string;
   maxLength?: number;

@@ -70,6 +70,7 @@ export default Dev.describe(name, (e) => {
           return (
             <LabelItem.Stateful
               key={`item.${i}`}
+              index={i}
               list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
               useBehaviors={debug.useBehaviors}

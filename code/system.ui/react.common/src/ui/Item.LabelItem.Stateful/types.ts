@@ -18,6 +18,9 @@ export type LabelItem = {
   enabled?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
+  is?: {
+    editable?: t.LabelItemValue<boolean>;
+  };
 };
 
 /**
@@ -58,6 +61,7 @@ export type LabelListController<Kind extends string, H extends HTMLElement> = {
  * Component (View).
  */
 export type LabelItemStatefulProps = {
+  index?: number;
   item?: t.LabelItemState;
   list?: t.LabelItemListState;
   useBehaviors?: t.LabelItemBehaviorKind[];

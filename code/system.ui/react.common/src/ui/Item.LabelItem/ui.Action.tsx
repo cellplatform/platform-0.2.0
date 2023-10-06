@@ -3,6 +3,7 @@ import { ActionSpinner } from './ui.Action.Spinner';
 import { Wrangle } from './Wrangle';
 
 export type ActionProps = {
+  index: number;
   action: t.LabelAction;
   label?: string;
   enabled?: boolean;
@@ -14,7 +15,7 @@ export type ActionProps = {
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, selected, focused, editing, debug } = props;
+  const { action, selected, focused, editing, debug, index } = props;
   const { kind, width, onClick } = action;
 
   const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
@@ -49,7 +50,7 @@ export const Action: React.FC<ActionProps> = (props) => {
     button: css({ display: 'grid' }),
   };
 
-  const elIcon = Wrangle.icon({ action, selected, enabled, focused, editing });
+  const elIcon = Wrangle.icon({ index, action, selected, enabled, focused, editing });
 
   const elButton = is.button && (
     <Button

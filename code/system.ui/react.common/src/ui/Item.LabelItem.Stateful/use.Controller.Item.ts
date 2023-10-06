@@ -1,10 +1,10 @@
-import { DEFAULTS, type t } from './common';
 import { Wrangle } from './Wrangle';
-
+import { DEFAULTS, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
 
 type Args = {
+  index?: number;
   useBehaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
   item?: t.LabelItemState;
@@ -17,12 +17,19 @@ type Args = {
  * HOOK: roll-up of all controllers related to an <Item>.
  */
 export function useItemController(args: Args) {
-  const { item, list, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
+  const {
+    index = DEFAULTS.index,
+    useBehaviors = DEFAULTS.useBehaviors.defaults,
+    item,
+    list,
+    onChange,
+  } = args;
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
+    index,
     item,
     list,
     onChange,
@@ -31,6 +38,7 @@ export function useItemController(args: Args) {
 
   const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
+    index,
     item,
     list,
     onChange,
@@ -48,6 +56,5 @@ export function useItemController(args: Args) {
       return item?.current ?? DEFAULTS.data.item;
     },
   };
-
   return api;
 }
