@@ -1,11 +1,14 @@
 import { Match } from './Match.mjs';
-import { DEFAULTS, R, rx, type t } from './common';
 import { Util } from './Util.mjs';
+import { DEFAULTS, R, rx, type t } from './common';
 
-let _isListening = false;
-let _state: t.KeyboardState = R.clone(DEFAULTS.state);
+const current = {
+  isListening: false,
+  state: R.clone<t.KeyboardState>(DEFAULTS.state),
+};
+
 const { dispose, dispose$ } = rx.disposable();
-const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(_state);
+const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(current.state);
 
 /**
  * Global keyboard monitor.
@@ -16,7 +19,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
   },
 
   get isListening() {
-    return _isListening;
+    return current.isListening;
   },
 
   get $() {
@@ -26,7 +29,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
   get state() {
     ensureStarted();
-    return _state;
+    return current.state;
   },
 
   subscribe(fn: (e: t.KeyboardState) => void) {
@@ -61,11 +64,11 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    */
   start() {
     if (!KeyboardMonitor.isSupported) return KeyboardMonitor;
-    if (!_isListening) {
+    if (!current.isListening) {
       document.addEventListener('keydown', keypressHandler);
       document.addEventListener('keyup', keypressHandler);
       window.addEventListener('blur', blurHandler);
-      _isListening = true;
+      current.isListening = true;
     }
     return KeyboardMonitor;
   },
@@ -75,13 +78,13 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    */
   stop() {
     if (!KeyboardMonitor.isSupported) return;
-    if (_isListening) {
+    if (current.isListening) {
       document.removeEventListener('keydown', keypressHandler);
       document.removeEventListener('keyup', keypressHandler);
       window.removeEventListener('blur', blurHandler);
       reset({ hard: true });
       dispose();
-      _isListening = false;
+      current.isListening = false;
     }
   },
 };
@@ -92,7 +95,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
 function ensureStarted() {
   if (!KeyboardMonitor.isSupported) return;
-  if (!_isListening) KeyboardMonitor.start();
+  if (!current.isListening) KeyboardMonitor.start();
 }
 
 function blurHandler() {
@@ -100,32 +103,32 @@ function blurHandler() {
 }
 
 function keypressHandler(event: KeyboardEvent) {
-  if (!_isListening) return;
+  if (!current.isListening) return;
 
   const e = Util.toKeypress(event);
   updateModifierKeys(e);
   updatePressedKeys(e);
   change((state) => (state.last = e));
-  fireNext();
+  fireNext(e);
 }
 
-function fireNext() {
-  if (_isListening) singleton$.next(_state);
+function fireNext(e?: t.KeyboardKeypress) {
+  if (current.isListening) singleton$.next(current.state);
 }
 
 function change(fn: (state: t.KeyboardState) => void) {
-  const state = R.clone(_state);
-  fn(state);
-  _state = state;
+  const next = R.clone(current.state);
+  fn(next);
+  current.state = next;
 }
 
 function reset(options: { hard?: boolean } = {}) {
   const clone = R.clone(DEFAULTS.state);
   if (options.hard) {
-    _state = clone; // NB: A hard reset 💥. Drop all existing state.
+    current.state = clone; // NB: A hard reset 💥. Drop all existing state.
   } else {
-    const last = _state.last;
-    _state = { ...clone, last }; // NB: Retain the "last" event history item.
+    const last = current.state.last;
+    current.state = { ...clone, last }; // NB: Retain the "last" event history item.
   }
   fireNext();
 }
@@ -176,7 +179,7 @@ function updatePressedKeys(e: t.KeyboardKeypress) {
 
   if (is.modifier && is.down) return;
   if (is.modifier && is.up) {
-    const hasModifiers = Object.values(_state.current.modifiers).some((v) => Boolean(v));
+    const hasModifiers = Object.values(current.state.current.modifiers).some((v) => Boolean(v));
     if (!hasModifiers) {
       // NB: The last modifier-key has been released, clear any down keys.
       //     These pressed keys will not have been reporting their "on keyup" updates while the modifier-keys are in use.

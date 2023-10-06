@@ -34,6 +34,5 @@ export function until(until$?: t.UntilObservable) {
       return lifecycle.disposed;
     },
   } as const;
-
   return api;
 }
