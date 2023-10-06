@@ -41,10 +41,10 @@ export const Util = {
   },
 
   toKeypress(e: KeyboardEvent): t.KeyboardKeypress {
-    const { key } = e;
+    const { code } = e;
     return {
       stage: e.type === 'keydown' ? 'Down' : 'Up',
-      key,
+      code,
       get keypress() {
         return Util.toKeypressProps(e);
       },

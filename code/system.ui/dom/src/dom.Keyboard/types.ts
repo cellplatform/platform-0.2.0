@@ -89,7 +89,7 @@ export type KeyboardModifierFlags = {
  */
 export type KeyboardKeypress = {
   readonly stage: KeyPressStage;
-  readonly key: string;
+  readonly code: string;
   readonly keypress: KeyboardKeypressProps;
   readonly is: KeyboardKeyFlags;
   handled(): void;
