@@ -67,7 +67,8 @@ export type LabelItemProps = {
 export type LabelItemPropsHandlers = {
   onReady?: LabelItemReadyHandler;
   onEditChange?: LabelItemChangeHandler;
-  onEnter?: LabelItemEnterKeyHandler;
+  onKeyDown?: LabelItemKeyHandler;
+  onKeyUp?: LabelItemKeyHandler;
   onFocusChange?: LabelItemFocusHandler;
   onClick?: LabelItemClickHandler;
   onLabelDoubleClick?: LabelItemClickHandler;
@@ -104,10 +105,13 @@ export type LabelItemActionHandlerArgs = {
   kind: LabelActionKind;
 };
 
-export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
+export type LabelItemKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
 export type LabelItemEnterKeyHandlerArgs = {
-  editing: boolean;
   label: string;
+  editing: boolean;
+  code: string;
+  is: t.KeyboardKeyFlags;
+  keypress: t.KeyboardKeypressProps;
 };
 
 export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;

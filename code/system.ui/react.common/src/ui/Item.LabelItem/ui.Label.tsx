@@ -25,7 +25,6 @@ export const Label: React.FC<Props> = (props) => {
    * [Render]
    */
   const color = Wrangle.foreColor(props);
-  const underlineColor = Color.alpha(color, selected ? 0.5 : 0.2);
   const fontSize = 13;
   const valueStyle = { fontSize, color, disabledColor: color };
   const placeholderStyle = { ...valueStyle, opacity: 0.3 };
@@ -68,7 +67,6 @@ export const Label: React.FC<Props> = (props) => {
       focusOnReady={focusOnReady}
       focusAction={'Select'}
       onChanged={(e) => props.onEditChange?.({ label: e.to })}
-      onEnter={(e) => props.onEnter?.({ label: label.text, editing: true })}
     />
   );
 

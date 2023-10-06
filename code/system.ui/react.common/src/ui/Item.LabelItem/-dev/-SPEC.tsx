@@ -53,6 +53,7 @@ export default Dev.describe(name, (e) => {
         },
         onFocusChange(e) {
           console.info('⚡️ onFocusChange', e);
+          state.change((d) => (d.props.focused = e.focused));
         },
         onClick(e) {
           console.info('⚡️ onClick', e);
@@ -64,9 +65,11 @@ export default Dev.describe(name, (e) => {
           console.info('⚡️ onEditChange', e);
           state.change((d) => (local.label = d.props.label = e.label));
         },
-        onEnter(e) {
-          console.info('⚡️ onEnter', e);
-          state.change((d) => (local.editing = d.props.editing = !e.editing));
+        onKeyDown(e) {
+          console.info('⚡️ onKeyDown', e);
+        },
+        onKeyUp(e) {
+          console.info('⚡️ onKeyUp', e);
         },
       };
     },

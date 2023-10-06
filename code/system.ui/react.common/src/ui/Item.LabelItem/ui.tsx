@@ -69,17 +69,16 @@ export const View: React.FC<Props> = (props) => {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
-    // NB: The "is editing" version of this event happens within the <TextInput> component.
-    const fire = () => {
-      if (!focused || editing) return;
-      /**
-       * TODO 🐷
-       * - fire the "not editing" version of the event
-       * - BUG: this currently causes a feedback loop.
-       */
-      // props.onEnter?.({ label: label.text, editing });
+    const fire = (e: t.KeyboardState, handler?: t.LabelItemKeyHandler) => {
+      if (!e.last || !handler) return;
+      const { is, keypress } = e.last;
+      const code = keypress.code;
+      handler({ label: label.text, editing, code, is, keypress });
     };
-    Keyboard.until(dispose$).on('Enter', fire);
+
+    const $ = Keyboard.until(dispose$).$.pipe(rx.filter(() => focused));
+    $.pipe(rx.filter((e) => e.last?.stage === 'Down')).subscribe((e) => fire(e, props.onKeyDown));
+    $.pipe(rx.filter((e) => e.last?.stage === 'Up')).subscribe((e) => fire(e, props.onKeyUp));
 
     return dispose;
   }, [editing, focused]);
