@@ -38,40 +38,40 @@ export function useItemEditController(args: Args) {
     const current = item?.current ?? {};
     return Wrangle.valuesOrDefault({ ...current, index });
   };
+  const resolve = <T>(input: t.LabelItemValue<T>): T => {
+    return typeof input === 'function' ? (input as Function)(valuesOrDefault()) : input;
+  };
 
   const Edit = {
-    previousLabel: '',
-
     get isEditing() {
       return Boolean(item?.current.editing);
     },
 
     get canEdit() {
-      const current = item?.current;
-      const is = current?.is;
-      if (is && 'editable' in is) {
-        if (typeof is.editable === 'function') return is.editable(valuesOrDefault());
-        return is.editable;
-      }
-      return true;
+      const is = item?.current.is;
+      return is?.editable ? resolve(is.editable) : true;
     },
 
     start() {
       if (Edit.isEditing || !Edit.canEdit) return;
-      Edit.previousLabel = item?.current.label ?? '';
-      change('edit:start', (draft) => (draft.editing = true));
+      change('edit:start', (draft) => {
+        draft.editing = true;
+        (draft.revert || (draft.revert = {})).label = draft.label;
+      });
     },
 
     accept() {
       if (!Edit.isEditing) return;
-      Edit.previousLabel = '';
-      change('edit:accept', (draft) => (draft.editing = false));
+      change('edit:accept', (draft) => {
+        draft.editing = false;
+        draft.revert = undefined;
+      });
     },
 
     cancel() {
       if (!Edit.isEditing) return;
       change('edit:cancel', (draft) => {
-        draft.label = Edit.previousLabel;
+        if (draft.revert) draft.label = draft.revert.label;
         draft.editing = false;
       });
     },
