@@ -30,7 +30,7 @@ export function useItemSelectionController(args: Args) {
     const events = list?.events();
     events?.$.pipe(rx.distinctUntilChanged(focusChanged)).subscribe(redraw);
     events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe(() => {
-      fire('view:selected');
+      fire('selected');
       redraw();
     });
     return events?.dispose;

@@ -83,8 +83,8 @@ export type LabelItemStateChangeHandlerArgs = {
 };
 export type LabelItemChangeAction =
   | 'ready'
-  | 'data:label'
-  | 'view:selected'
+  | 'label'
+  | 'selected'
   | 'edit:start'
   | 'edit:accept'
   | 'edit:cancel';

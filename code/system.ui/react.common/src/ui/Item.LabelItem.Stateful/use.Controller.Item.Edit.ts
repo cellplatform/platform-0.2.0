@@ -100,7 +100,7 @@ export function useItemEditController(args: Args) {
     },
 
     onEditChange(e) {
-      change('data:label', (draft) => (draft.label = e.label));
+      change('label', (draft) => (draft.label = e.label));
       args.handlers?.onEditChange?.(e);
     },
 
