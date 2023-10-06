@@ -12,6 +12,8 @@ type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 export const View: React.FC<Props> = (props) => {
   const {
     inputRef,
+    index = DEFAULTS.index,
+    total = DEFAULTS.total,
     indent = DEFAULTS.indent,
     padding = DEFAULTS.padding,
     tabIndex = DEFAULTS.tabIndex,
@@ -22,13 +24,15 @@ export const View: React.FC<Props> = (props) => {
     debug,
   } = props;
   const label = Wrangle.labelText(props);
+  const pos = { index, total };
+
   const ref = useRef<HTMLDivElement>(null);
 
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
   const clickArgs = (): t.LabelItemClickHandlerArgs => {
-    return { label: label.text, focused, editing };
+    return { position: pos, label: label.text, focused, editing };
   };
 
   useClickOutside({
@@ -46,10 +50,7 @@ export const View: React.FC<Props> = (props) => {
    */
   const onFocusHandler = (focused: boolean) => {
     return () => {
-      props.onFocusChange?.({
-        focused,
-        label: label.text,
-      });
+      props.onFocusChange?.({ position: pos, focused, label: label.text });
     };
   };
 
@@ -73,7 +74,7 @@ export const View: React.FC<Props> = (props) => {
       if (!e.last || !handler) return;
       const { is, keypress } = e.last;
       const code = keypress.code;
-      handler({ label: label.text, editing, code, is, keypress });
+      handler({ position: pos, label: label.text, editing, code, is, keypress });
     };
 
     const $ = Keyboard.until(dispose$).$.pipe(rx.filter(() => focused));

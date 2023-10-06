@@ -45,13 +45,26 @@ export function useItemController(args: Args) {
     handlers: selection.handlers,
   });
 
+  const base = edit.handlers;
+  const handlers: t.LabelItemPropsHandlers = {
+    ...base,
+    onKeyDown(e) {
+      item?.current.onKeyDown?.(e);
+      base.onKeyDown?.(e);
+    },
+    onKeyUp(e) {
+      item?.current.onKeyUp?.(e);
+      base.onKeyUp?.(e);
+    },
+  };
+
   /**
    * API
    */
   const api: t.LabelItemController<'controller:Item'> = {
     kind: 'controller:Item',
     enabled,
-    handlers: edit.handlers,
+    handlers,
     get data() {
       return item?.current ?? DEFAULTS.data.item;
     },

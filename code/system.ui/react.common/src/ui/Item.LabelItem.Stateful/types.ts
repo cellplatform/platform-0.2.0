@@ -19,6 +19,9 @@ export type LabelItem = {
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
   is?: { editable?: t.LabelItemValue<boolean> };
+
+  onKeyDown?: t.LabelItemKeyHandler;
+  onKeyUp?: t.LabelItemKeyHandler;
 };
 
 /**

@@ -11,6 +11,8 @@ type Props = t.LabelItemProps & {
 export const Label: React.FC<Props> = (props) => {
   const {
     inputRef,
+    index = DEFAULTS.index,
+    total = DEFAULTS.total,
     enabled = DEFAULTS.enabled,
     editing = DEFAULTS.editing,
     selected = DEFAULTS.selected,
@@ -66,7 +68,7 @@ export const Label: React.FC<Props> = (props) => {
       isReadOnly={!editing}
       focusOnReady={focusOnReady}
       focusAction={'Select'}
-      onChanged={(e) => props.onEditChange?.({ label: e.to })}
+      onChanged={(e) => props.onEditChange?.({ label: e.to, position: { index, total } })}
     />
   );
 

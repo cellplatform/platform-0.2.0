@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+export type LabelItemPosition = { index: number; total: number };
+
 /**
  * An "action" represented as a clickable icon button.
  */
@@ -92,21 +94,25 @@ export type LabelItemRef = {
  */
 export type LabelItemReadyHandler = (e: LabelItemReadyHandlerArgs) => void;
 export type LabelItemReadyHandlerArgs = {
+  position: LabelItemPosition;
   ref: LabelItemRef;
 };
 
 export type LabelItemChangeHandler = (e: LabelItemChangeHandlerArgs) => void;
 export type LabelItemChangeHandlerArgs = {
+  position: LabelItemPosition;
   label: string;
 };
 
 export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
 export type LabelItemActionHandlerArgs = {
+  position: LabelItemPosition;
   kind: LabelActionKind;
 };
 
-export type LabelItemKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
-export type LabelItemEnterKeyHandlerArgs = {
+export type LabelItemKeyHandler = (e: LabelItemKeyHandlerArgs) => void;
+export type LabelItemKeyHandlerArgs = {
+  position: LabelItemPosition;
   label: string;
   editing: boolean;
   code: string;
@@ -116,12 +122,14 @@ export type LabelItemEnterKeyHandlerArgs = {
 
 export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;
 export type LabelItemFocusHandlerArgs = {
+  position: LabelItemPosition;
   label: string;
   focused: boolean;
 };
 
 export type LabelItemClickHandler = (e: LabelItemFocusHandlerArgs) => void;
 export type LabelItemClickHandlerArgs = {
+  position: LabelItemPosition;
   label: string;
   focused: boolean;
   editing: boolean;

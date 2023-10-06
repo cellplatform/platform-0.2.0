@@ -1,10 +1,13 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Time, type t } from './common';
+import { Wrangle } from './Wrangle';
 
 import { Ref } from './Ref';
 import { View } from './ui';
 
 export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
+  const { index, total } = Wrangle.valuesOrDefault(props);
+
   const [itemRef, setItemRef] = useState<t.LabelItemRef>();
   const inputRef = useRef<t.TextInputRef>(null);
   useImperativeHandle(ref, () => Ref(inputRef));
@@ -17,7 +20,7 @@ export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, r
     const ref = Ref(inputRef);
     setItemRef(ref);
     if (props.focusOnReady) focusTextbox();
-    props.onReady?.({ ref });
+    props.onReady?.({ ref, position: { index, total } });
   }, []);
 
   useEffect(() => {

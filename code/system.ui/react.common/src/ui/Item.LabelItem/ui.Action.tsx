@@ -28,7 +28,7 @@ export const Action: React.FC<ActionProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handleClick = () => onClick?.({ kind });
+  const handleClick = () => onClick?.({ kind, position: { index, total } });
 
   /**
    * [Render]
