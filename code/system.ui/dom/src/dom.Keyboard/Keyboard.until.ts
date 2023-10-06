@@ -1,4 +1,4 @@
-import { KeyboardMonitor as Monitor } from './Keyboard.Monitor.mjs';
+import { KeyboardMonitor as Monitor } from './Keyboard.Monitor';
 import { rx, type t } from './common';
 
 /**

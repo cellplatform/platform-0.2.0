@@ -1,5 +1,5 @@
 import { slug, t } from './common';
-import { Util } from './Util.mjs';
+import { Util } from './Util';
 
 export const Match = {
   /**

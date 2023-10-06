@@ -1,5 +1,5 @@
-import { Match } from './Match.mjs';
-import { Util } from './Util.mjs';
+import { Match } from './Match';
+import { Util } from './Util';
 import { DEFAULTS, R, rx, type t } from './common';
 
 const current = {
