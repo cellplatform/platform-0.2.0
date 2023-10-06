@@ -19,9 +19,7 @@ export type LabelItem = {
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
   is?: { editable?: t.LabelItemValue<boolean> };
-
-  onKeyDown?: t.LabelItemKeyHandler;
-  onKeyUp?: t.LabelItemKeyHandler;
+  command?: LabelItemCommand; // Causes an event stream of commands when changed.
 };
 
 /**
@@ -36,7 +34,7 @@ export type LabelItemList = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.PatchState<t.LabelItem> & { readonly instance: ItemId };
+export type LabelItemState = t.PatchState<t.LabelItem>;
 export type LabelItemStateNext = t.ImmutableNext<t.LabelItem>;
 
 export type LabelItemListState = t.PatchState<t.LabelItemList>;
@@ -88,3 +86,10 @@ export type LabelItemChangeAction =
   | 'edit:start'
   | 'edit:accept'
   | 'edit:cancel';
+
+/**
+ * Commands (events as property stream)
+ */
+export type LabelItemCommand = LabelItemCommandKeydown | LabelItemCommandKeyup;
+export type LabelItemCommandKeydown = { type: 'Item:Keydown'; payload: t.LabelItemKeyHandlerArgs };
+export type LabelItemCommandKeyup = { type: 'Item:Keyup'; payload: t.LabelItemKeyHandlerArgs };

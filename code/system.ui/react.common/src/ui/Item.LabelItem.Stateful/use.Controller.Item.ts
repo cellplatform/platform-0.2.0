@@ -49,11 +49,11 @@ export function useItemController(args: Args) {
   const handlers: t.LabelItemPropsHandlers = {
     ...base,
     onKeyDown(e) {
-      item?.current.onKeyDown?.(e);
+      item?.change((d) => (d.command = { type: 'Item:Keydown', payload: e }));
       base.onKeyDown?.(e);
     },
     onKeyUp(e) {
-      item?.current.onKeyUp?.(e);
+      item?.change((d) => (d.command = { type: 'Item:Keyup', payload: e }));
       base.onKeyUp?.(e);
     },
   };
