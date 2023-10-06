@@ -22,8 +22,8 @@ const rightAction: t.LabelAction<K> | undefined = undefined;
 export const DEFAULTS = {
   RUBY: 'rgba(255, 0, 0, 0.1)',
   debug: false,
-  index: 0,
-  total: 1,
+  index: -1,
+  total: -1,
   enabled: true,
   selected: false,
   editing: false,

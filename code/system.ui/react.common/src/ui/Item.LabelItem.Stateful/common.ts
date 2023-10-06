@@ -20,8 +20,8 @@ const useBehaviorAll: B[] = [
 const useBehaviorDefaults: B[] = ['Item', 'List'];
 
 export const DEFAULTS = {
-  index: 0,
-  total: 1,
+  index: -1,
+  total: -1,
   enabled: true,
   editing: false,
   useBehaviors: {

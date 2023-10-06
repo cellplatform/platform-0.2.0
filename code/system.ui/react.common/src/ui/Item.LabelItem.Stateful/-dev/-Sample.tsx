@@ -23,7 +23,7 @@ export const Sample = {
       is: {
         editable(e) {
           console.log('is.editable:', e);
-          return true;
+          return e.index > 0;
         },
       },
     };

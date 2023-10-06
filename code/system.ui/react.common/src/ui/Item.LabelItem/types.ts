@@ -26,6 +26,7 @@ export type LabelItemValue<T> = T | LabelItemDynamicValue<T>;
 export type LabelItemDynamicValue<T> = (e: LabelItemDynamicValueArgs) => T;
 export type LabelItemDynamicValueArgs = {
   index: number;
+  total: number;
   label: string;
   enabled: boolean;
   selected: boolean;
@@ -38,6 +39,7 @@ export type LabelItemDynamicValueArgs = {
  */
 export type LabelItemProps = {
   index?: number;
+  total?: number;
   label?: string;
   placeholder?: string;
   maxLength?: number;

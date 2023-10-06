@@ -31,6 +31,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       {...handlers}
       style={props.style}
       index={props.index}
+      total={props.total}
       label={data.label}
       placeholder={data.placeholder}
       left={data.left}

@@ -2,7 +2,9 @@ import { DEFAULTS, asArray, css, type t } from './common';
 import { Action } from './ui.Action';
 
 export type ActionsProps = {
-  index: number;
+  index?: number;
+  total?: number;
+
   action?: t.LabelAction | t.LabelAction[];
   edge: 'Left' | 'Right';
   spacing?: number;
@@ -20,6 +22,7 @@ export type ActionsProps = {
 export const Actions: React.FC<ActionsProps> = (props) => {
   const {
     index = DEFAULTS.index,
+    total = DEFAULTS.total,
     enabled = DEFAULTS.enabled,
     selected,
     focused,
@@ -42,6 +45,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
       <Action
         key={`${i}:${action.kind}`}
         index={index}
+        total={total}
         style={margins}
         action={action}
         label={label}

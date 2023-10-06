@@ -62,6 +62,7 @@ export type LabelListController<Kind extends string, H extends HTMLElement> = {
  */
 export type LabelItemStatefulProps = {
   index?: number;
+  total?: number;
   item?: t.LabelItemState;
   list?: t.LabelItemListState;
   useBehaviors?: t.LabelItemBehaviorKind[];
