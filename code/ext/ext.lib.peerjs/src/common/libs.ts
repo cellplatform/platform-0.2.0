@@ -9,4 +9,4 @@ export { Peer } from 'peerjs';
 /**
  * @system
  */
-export { Id, Is, Path, Time, cuid, rx } from 'sys.util';
+export { Hash, Id, Is, Path, Time, cuid, rx } from 'sys.util';
