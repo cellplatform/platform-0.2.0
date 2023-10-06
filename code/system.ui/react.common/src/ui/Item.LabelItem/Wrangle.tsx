@@ -64,15 +64,23 @@ export const Wrangle = {
   }) {
     const { index, total, action, label = '' } = args;
     const { enabled, selected, focused, editing } = Wrangle.valuesOrDefault(args);
-    const { icon } = action;
 
-    if (!icon) {
+    if (!action.element) {
       return Wrangle.defaultIcon(args);
     }
 
-    if (typeof action.icon === 'function') {
+    if (typeof action.element === 'function') {
       const color = Wrangle.foreColor(args);
-      const el = action.icon({ index, total, enabled, selected, focused, editing, color, label });
+      const el = action.element({
+        index,
+        total,
+        enabled,
+        selected,
+        focused,
+        editing,
+        color,
+        label,
+      });
       return el ?? Wrangle.defaultIcon(args);
     }
 

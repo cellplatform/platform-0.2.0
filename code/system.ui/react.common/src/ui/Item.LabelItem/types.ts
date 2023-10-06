@@ -9,7 +9,7 @@ export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
   width?: number;
-  icon?: LabelActionRender | JSX.Element | false;
+  element?: LabelActionRender | JSX.Element | false;
   enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
   onClick?: LabelItemActionHandler;
