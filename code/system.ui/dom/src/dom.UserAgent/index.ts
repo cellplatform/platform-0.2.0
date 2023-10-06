@@ -1,1 +1,1 @@
-export * from './UserAgent.mjs';
+export * from './UserAgent';

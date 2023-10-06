@@ -1,1 +1,1 @@
-export * from './File.mjs';
+export * from './File';
