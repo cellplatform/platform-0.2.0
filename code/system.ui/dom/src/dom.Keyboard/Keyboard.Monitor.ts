@@ -2,13 +2,12 @@ import { Match } from './Match';
 import { Util } from './Util';
 import { DEFAULTS, R, rx, type t } from './common';
 
-const current = {
+const singleton = {
   isListening: false,
   state: R.clone<t.KeyboardState>(DEFAULTS.state),
 };
-
 const { dispose, dispose$ } = rx.disposable();
-const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(current.state);
+const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(singleton.state);
 
 /**
  * Global keyboard monitor.
@@ -19,7 +18,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
       return typeof document === 'object';
     },
     get listening() {
-      return current.isListening;
+      return singleton.isListening;
     },
   },
 
@@ -30,7 +29,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
   get state() {
     ensureStarted();
-    return current.state;
+    return singleton.state;
   },
 
   subscribe(fn: (e: t.KeyboardState) => void) {
@@ -65,11 +64,11 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    */
   start() {
     if (!KeyboardMonitor.is.supported) return KeyboardMonitor;
-    if (!current.isListening) {
+    if (!singleton.isListening) {
       document.addEventListener('keydown', keypressHandler);
       document.addEventListener('keyup', keypressHandler);
       window.addEventListener('blur', blurHandler);
-      current.isListening = true;
+      singleton.isListening = true;
     }
     return KeyboardMonitor;
   },
@@ -79,13 +78,13 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    */
   stop() {
     if (!KeyboardMonitor.is.supported) return;
-    if (current.isListening) {
+    if (singleton.isListening) {
       document.removeEventListener('keydown', keypressHandler);
       document.removeEventListener('keyup', keypressHandler);
       window.removeEventListener('blur', blurHandler);
       reset({ hard: true });
       dispose();
-      current.isListening = false;
+      singleton.isListening = false;
     }
   },
 };
@@ -96,7 +95,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
 function ensureStarted() {
   if (!KeyboardMonitor.is.supported) return;
-  if (!current.isListening) KeyboardMonitor.start();
+  if (!singleton.isListening) KeyboardMonitor.start();
 }
 
 function blurHandler() {
@@ -104,32 +103,33 @@ function blurHandler() {
 }
 
 function keypressHandler(event: KeyboardEvent) {
-  if (!current.isListening) return;
+  if (!singleton.isListening) return;
 
   const e = Util.toKeypress(event);
   updateModifierKeys(e);
   updatePressedKeys(e);
+
   change((state) => (state.last = e));
   fireNext(e);
 }
 
 function fireNext(e?: t.KeyboardKeypress) {
-  if (current.isListening) singleton$.next(current.state);
+  if (singleton.isListening) singleton$.next(singleton.state);
 }
 
 function change(fn: (state: t.KeyboardState) => void) {
-  const next = R.clone(current.state);
+  const next = R.clone(singleton.state);
   fn(next);
-  current.state = next;
+  singleton.state = next;
 }
 
 function reset(options: { hard?: boolean } = {}) {
   const clone = R.clone(DEFAULTS.state);
   if (options.hard) {
-    current.state = clone; // NB: A hard reset 💥. Drop all existing state.
+    singleton.state = clone; // NB: A hard reset 💥. Drop all existing state.
   } else {
-    const last = current.state.last;
-    current.state = { ...clone, last }; // NB: Retain the "last" event history item.
+    const last = singleton.state.last;
+    singleton.state = { ...clone, last }; // NB: Retain the "last" event history item.
   }
   fireNext();
 }
@@ -180,11 +180,11 @@ function updatePressedKeys(e: t.KeyboardKeypress) {
 
   if (is.modifier && is.down) return;
   if (is.modifier && is.up) {
-    const hasModifiers = Object.values(current.state.current.modifiers).some((v) => Boolean(v));
+    const hasModifiers = Object.values(singleton.state.current.modifiers).some((v) => Boolean(v));
     if (!hasModifiers) {
       // NB: The last modifier-key has been released, clear any down keys.
       //     These pressed keys will not have been reporting their "on keyup" updates while the modifier-keys are in use.
-      reset();
+      reset({ hard: true });
     }
     return;
   }
