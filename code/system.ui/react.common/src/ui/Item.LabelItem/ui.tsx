@@ -78,8 +78,9 @@ export const View: React.FC<Props> = (props) => {
     };
 
     const $ = Keyboard.until(dispose$).$.pipe(rx.filter(() => focused));
-    $.pipe(rx.filter((e) => e.last?.stage === 'Down')).subscribe((e) => fire(e, props.onKeyDown));
-    $.pipe(rx.filter((e) => e.last?.stage === 'Up')).subscribe((e) => fire(e, props.onKeyUp));
+    const stage = (stage: t.KeyPressStage) => $.pipe(rx.filter((e) => e.last?.stage === stage));
+    stage('Down').subscribe((e) => fire(e, props.onKeyDown));
+    stage('Up').subscribe((e) => fire(e, props.onKeyUp));
 
     return dispose;
   }, [editing, focused]);

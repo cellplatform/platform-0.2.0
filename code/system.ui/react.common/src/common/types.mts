@@ -53,6 +53,7 @@ export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types.mjs';
 export type {
   KeyMatchSubscriberHandler,
   KeyMatchSubscriberHandlerArgs,
+  KeyPressStage,
   KeyboardKeyFlags,
   KeyboardKeypress,
   KeyboardKeypressProps,
