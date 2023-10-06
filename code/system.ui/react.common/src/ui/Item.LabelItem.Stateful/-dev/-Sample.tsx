@@ -26,6 +26,16 @@ export const Sample = {
           return e.index > 0;
         },
       },
+
+      /**
+       * Handlers
+       */
+      onKeyDown(e) {
+        // console.log('item.onKeyDown', e);
+      },
+      onKeyUp(e) {
+        // console.log('item.onKeyUp', e);
+      },
     };
   },
 };
