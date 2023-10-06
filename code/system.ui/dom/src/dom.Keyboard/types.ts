@@ -27,10 +27,12 @@ export type KeyboardKeyFlags = {
  * Keyboard Monitor.
  */
 export type KeyboardMonitor = {
-  readonly isSupported: boolean;
-  readonly isListening: boolean;
   readonly $: t.Observable<t.KeyboardState>;
   readonly state: t.KeyboardState;
+  readonly is: {
+    readonly supported: boolean;
+    readonly listening: boolean;
+  };
   start(): KeyboardMonitor;
   stop(): void;
   subscribe(fn: (e: t.KeyboardState) => void): KeyListenerHandle;

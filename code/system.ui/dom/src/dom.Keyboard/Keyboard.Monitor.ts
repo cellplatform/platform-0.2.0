@@ -14,12 +14,13 @@ const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(current.state);
  * Global keyboard monitor.
  */
 export const KeyboardMonitor: t.KeyboardMonitor = {
-  get isSupported() {
-    return typeof document === 'object';
-  },
-
-  get isListening() {
-    return current.isListening;
+  is: {
+    get supported() {
+      return typeof document === 'object';
+    },
+    get listening() {
+      return current.isListening;
+    },
   },
 
   get $() {
@@ -34,7 +35,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
   subscribe(fn: (e: t.KeyboardState) => void) {
     const disposable = rx.disposable();
-    if (KeyboardMonitor.isSupported) {
+    if (KeyboardMonitor.is.supported) {
       const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$));
       $.subscribe(fn);
     }
@@ -63,7 +64,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    *       to the global keyboard events.
    */
   start() {
-    if (!KeyboardMonitor.isSupported) return KeyboardMonitor;
+    if (!KeyboardMonitor.is.supported) return KeyboardMonitor;
     if (!current.isListening) {
       document.addEventListener('keydown', keypressHandler);
       document.addEventListener('keyup', keypressHandler);
@@ -77,7 +78,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
    * Detach event listeners.
    */
   stop() {
-    if (!KeyboardMonitor.isSupported) return;
+    if (!KeyboardMonitor.is.supported) return;
     if (current.isListening) {
       document.removeEventListener('keydown', keypressHandler);
       document.removeEventListener('keyup', keypressHandler);
@@ -94,7 +95,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
  */
 
 function ensureStarted() {
-  if (!KeyboardMonitor.isSupported) return;
+  if (!KeyboardMonitor.is.supported) return;
   if (!current.isListening) KeyboardMonitor.start();
 }
 
@@ -207,7 +208,7 @@ function on(
   options: { dispose$?: t.Observable<any> } = {},
 ) {
   const disposable = rx.disposable(options.dispose$);
-  if (!KeyboardMonitor.isSupported) return disposable;
+  if (!KeyboardMonitor.is.supported) return disposable;
 
   ensureStarted();
   const matcher = Match.pattern(pattern);
