@@ -17,6 +17,10 @@ export type KeyboardKeyFlags = {
   readonly escape: boolean;
   readonly arrow: boolean;
   readonly handled: boolean;
+  readonly alt: boolean;
+  readonly ctrl: boolean;
+  readonly meta: boolean;
+  readonly shift: boolean;
 };
 
 /**

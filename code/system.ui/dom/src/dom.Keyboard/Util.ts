@@ -27,6 +27,10 @@ export const Util = {
       enter: e.code === 'Enter',
       escape: e.code === 'Escape',
       handled: e.defaultPrevented,
+      alt: e.altKey,
+      ctrl: e.ctrlKey,
+      meta: e.metaKey,
+      shift: e.shiftKey,
     };
   },
 
