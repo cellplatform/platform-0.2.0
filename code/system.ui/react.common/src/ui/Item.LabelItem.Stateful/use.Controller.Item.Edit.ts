@@ -51,7 +51,7 @@ export function useItemEditController(args: Args) {
 
     get canEdit() {
       const is = item?.current.is;
-      return is?.editable ? resolve(is.editable) : true;
+      return is?.editable !== undefined ? resolve(is.editable) : true;
     },
 
     start() {

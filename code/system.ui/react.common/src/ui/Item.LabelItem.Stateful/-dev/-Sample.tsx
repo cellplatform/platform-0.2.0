@@ -21,6 +21,7 @@ export const Sample = {
       },
 
       is: {
+        // editable: false,
         editable(e) {
           console.log('is.editable:', e);
           return e.index > 0;
