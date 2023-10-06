@@ -19,7 +19,6 @@ export type LabelItem = {
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
   is?: { editable?: t.LabelItemValue<boolean> };
-  revert?: { label?: string };
 };
 
 /**

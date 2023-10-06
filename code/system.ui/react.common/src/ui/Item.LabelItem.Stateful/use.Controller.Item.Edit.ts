@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, rx, type t } from './common';
 import { Wrangle } from './Wrangle';
 
+type Revertible = t.LabelItem & { _revert?: { label?: string } };
+type RevertibleNext = t.ImmutableNext<Revertible>;
+
 type Args = {
   index: number;
   enabled?: boolean;
@@ -26,12 +29,11 @@ export function useItemEditController(args: Args) {
    */
   type A = t.LabelItemChangeAction;
   const fire = (action: A) => args.onChange?.({ action, data: api.data });
-  const change = (action: A, fn: t.LabelItemStateNext) => {
-    if (item && enabled) {
-      item.change(fn);
-      fire(action);
-      redraw();
-    }
+  const change = (action: A, fn: RevertibleNext) => {
+    if (!item || !enabled) return;
+    item.change(fn as t.LabelItemStateNext);
+    fire(action);
+    redraw();
   };
 
   const valuesOrDefault = () => {
@@ -56,7 +58,7 @@ export function useItemEditController(args: Args) {
       if (Edit.isEditing || !Edit.canEdit) return;
       change('edit:start', (draft) => {
         draft.editing = true;
-        (draft.revert || (draft.revert = {})).label = draft.label;
+        (draft._revert || (draft._revert = {})).label = draft.label;
       });
     },
 
@@ -64,14 +66,14 @@ export function useItemEditController(args: Args) {
       if (!Edit.isEditing) return;
       change('edit:accept', (draft) => {
         draft.editing = false;
-        draft.revert = undefined;
+        delete draft._revert;
       });
     },
 
     cancel() {
       if (!Edit.isEditing) return;
       change('edit:cancel', (draft) => {
-        if (draft.revert) draft.label = draft.revert.label;
+        if (draft._revert) draft.label = draft._revert.label;
         draft.editing = false;
       });
     },
