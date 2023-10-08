@@ -6,7 +6,14 @@ import { useItemController } from './use';
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const { index, list, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const {
+    index,
+    total,
+    list,
+    item,
+    onChange,
+    useBehaviors = DEFAULTS.useBehaviors.defaults,
+  } = props;
   const isSelected = item && list && item.instance === list.current.selected;
   const isFocused = isSelected && list?.current.focused;
 
@@ -15,6 +22,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
    */
   const controller = useItemController({
     index,
+    total,
     item,
     list,
     onChange,

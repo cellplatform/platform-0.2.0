@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, rx, type t } from './common';
 import { Wrangle } from './Wrangle';
+import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Revertible = t.LabelItem & { _revert?: { label?: string } };
 type RevertibleNext = t.ImmutableNext<Revertible>;
 
 type Args = {
   index: number;
+  total: number;
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelItemListState;
@@ -18,7 +19,7 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { item, list, enabled = true, index } = args;
+  const { item, list, enabled = true, index, total } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -31,17 +32,20 @@ export function useItemEditController(args: Args) {
   const fire = (action: A) => args.onChange?.({ action, data: api.data });
   const change = (action: A, fn: RevertibleNext) => {
     if (!item || !enabled) return;
-    item.change(fn as t.LabelItemStateNext);
+    item.change(fn);
     fire(action);
     redraw();
   };
 
   const valuesOrDefault = () => {
     const current = item?.current ?? {};
-    return Wrangle.valuesOrDefault({ ...current, index });
+    return Wrangle.valuesOrDefault({ ...current, index, total });
   };
   const resolve = <T>(input: t.LabelItemValue<T>): T => {
-    return typeof input === 'function' ? (input as Function)(valuesOrDefault()) : input;
+    if (typeof input !== 'function') return input;
+    const fn = input as Function;
+    const args: t.LabelItemDynamicValueArgs = valuesOrDefault();
+    return fn(args);
   };
 
   const Edit = {

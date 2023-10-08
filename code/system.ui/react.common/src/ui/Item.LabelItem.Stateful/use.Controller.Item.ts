@@ -5,6 +5,7 @@ import { useItemSelectionController } from './use.Controller.Item.Selection';
 
 type Args = {
   index?: number;
+  total?: number;
   useBehaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
   item?: t.LabelItemState;
@@ -19,6 +20,7 @@ type Args = {
 export function useItemController(args: Args) {
   const {
     index = DEFAULTS.index,
+    total = DEFAULTS.total,
     useBehaviors = DEFAULTS.useBehaviors.defaults,
     item,
     list,
@@ -38,6 +40,7 @@ export function useItemController(args: Args) {
 
   const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
+    total,
     index,
     item,
     list,
@@ -49,11 +52,11 @@ export function useItemController(args: Args) {
   const handlers: t.LabelItemPropsHandlers = {
     ...base,
     onKeyDown(e) {
-      item?.change((d) => (d.command = { type: 'Item:Keydown', payload: e }));
+      item?.change((d) => (d.cmd = { type: 'Item:Keydown', payload: e }));
       base.onKeyDown?.(e);
     },
     onKeyUp(e) {
-      item?.change((d) => (d.command = { type: 'Item:Keyup', payload: e }));
+      item?.change((d) => (d.cmd = { type: 'Item:Keyup', payload: e }));
       base.onKeyUp?.(e);
     },
   };

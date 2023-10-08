@@ -17,7 +17,7 @@ const useBehaviorAll: B[] = [
   'List',
   'List.Navigation',
 ];
-const useBehaviorDefaults: B[] = ['Item', 'List'];
+const useBehaviorDefaults: B[] = useBehaviorAll;
 
 export const DEFAULTS = {
   index: -1,

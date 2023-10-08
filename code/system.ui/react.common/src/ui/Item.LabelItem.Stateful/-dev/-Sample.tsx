@@ -19,10 +19,10 @@ export const Sample = {
       },
 
       is: {
-        // editable: false,
+        // editable: true,
         editable(e) {
-          console.log('is.editable:', e);
-          return e.index > 0;
+          console.log('is.editable: (e):', e);
+          return true;
         },
       },
     };

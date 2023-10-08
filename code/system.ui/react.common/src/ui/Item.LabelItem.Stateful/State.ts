@@ -1,4 +1,5 @@
 import { DEFAULTS, PatchState, type t } from './common';
+import { events } from './State.Events';
 
 /**
  * Safe/immutable/observable memory state [Model]'s.
@@ -20,6 +21,10 @@ export const State = {
     options: { onChange?: t.PatchChangeHandler<t.LabelItem> } = {},
   ): t.LabelItemState {
     const { onChange } = options;
-    return PatchState.init<t.LabelItem>({ initial, onChange });
+    return PatchState.init<t.LabelItem, t.LabelItemStateEvents>({
+      initial,
+      events,
+      onChange,
+    });
   },
 } as const;

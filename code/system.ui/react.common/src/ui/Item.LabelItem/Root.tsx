@@ -1,12 +1,11 @@
 import { DEFAULTS, FC, type t } from './common';
-import { ForwardRef } from './Root.ForwardRef';
-import { LabelItemStateful as Stateful } from '../Item.LabelItem.Stateful';
 
-const { State, BehaviorSelector } = Stateful;
+import { LabelItemStateful as Stateful } from '../Item.LabelItem.Stateful/Root';
+import { BehaviorSelector } from '../Item.LabelItem.Stateful/ui.Config.BehaviorSelector';
+import { ForwardRef } from './Root.ForwardRef';
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  State: typeof State;
   Stateful: typeof Stateful;
   BehaviorSelector: typeof BehaviorSelector;
 };
@@ -14,7 +13,6 @@ export const LabelItem = FC.decorate<t.LabelItemProps, Fields>(
   ForwardRef,
   {
     DEFAULTS,
-    State,
     Stateful,
     BehaviorSelector,
   },

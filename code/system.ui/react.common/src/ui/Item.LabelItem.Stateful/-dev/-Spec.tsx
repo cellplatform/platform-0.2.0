@@ -34,9 +34,21 @@ export default Dev.describe(name, (e) => {
     list: LabelItem.Stateful.State.list(),
     items: [] as t.LabelItemState[],
     init: {
-      item() {
+      item(dispose$?: t.Observable<any>) {
+        const State = LabelItem.Stateful.State;
+
         const initial = Sample.item();
-        return LabelItem.Stateful.State.item(initial);
+        const state = State.item(initial);
+
+        const events = state.events(dispose$);
+        events.keyboard.copy$.subscribe((e) => {
+          console.info('🌳 copy', state.current);
+        });
+        events.keyboard.paste$.subscribe((e) => {
+          console.info('💥 paste', state.current);
+        });
+
+        return state;
       },
       items(length: number = 0) {
         TestState.items = Array.from({ length }).map(() => TestState.init.item());
@@ -65,7 +77,6 @@ export default Dev.describe(name, (e) => {
         const { debug } = e.state;
         const length = debug.total ?? 0;
         const isList = length > 1;
-
         const elements = Array.from({ length }).map((_, i) => {
           return (
             <LabelItem.Stateful
@@ -84,7 +95,6 @@ export default Dev.describe(name, (e) => {
           );
         });
 
-        // if (!isList) return <>{elements}</>;
         return (
           <SampleList
             //

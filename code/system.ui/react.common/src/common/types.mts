@@ -21,6 +21,7 @@ export type {
   IgnoredResponse,
   Immutable,
   ImmutableNext,
+  ImmutableRef,
   JsonMapU,
   JsonU,
   Lifecycle,
@@ -32,6 +33,7 @@ export type {
   Point,
   Seconds,
   Size,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
