@@ -1,4 +1,4 @@
-import { MdContentCopy, MdEmojiPeople, MdRefresh } from 'react-icons/md';
+import { MdContentCopy, MdEmojiPeople, MdRefresh, MdAdd } from 'react-icons/md';
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
 
@@ -12,4 +12,5 @@ export const Icons = {
   Copy: icon(MdContentCopy),
   Person: icon(MdEmojiPeople),
   ObjectTree: icon(VscSymbolClass),
+  Add: icon(MdAdd),
 } as const;
