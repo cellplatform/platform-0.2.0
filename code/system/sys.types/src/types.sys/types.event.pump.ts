@@ -1,4 +1,4 @@
-import { Event } from './types.event.mjs';
+import type { Event } from './types.event';
 
 /**
  * A two-way message pump that can ferry events IN and OUT between buses.

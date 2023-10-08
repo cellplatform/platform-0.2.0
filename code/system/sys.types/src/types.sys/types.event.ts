@@ -1,4 +1,4 @@
-import type { Observable } from 'rxjs';
+import type { t } from '../common';
 
 type O = Record<string, unknown>;
 
@@ -16,6 +16,6 @@ export type FireEvent<E extends Event = Event> = (event: E) => void;
  * A structure that exposes an observable and can fire events.
  */
 export type EventBus<E extends Event = Event> = {
-  readonly $: Observable<E>;
+  readonly $: t.Observable<E>;
   fire: FireEvent<E>;
 };
