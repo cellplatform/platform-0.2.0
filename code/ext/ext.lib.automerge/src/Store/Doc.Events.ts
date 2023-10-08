@@ -1,7 +1,7 @@
 import { rx, type t } from './common';
 
 export const DocEvents = {
-  init<T>(handle: t.DocHandle<T>, options: { dispose$?: t.Observable<any> } = {}) {
+  init<T>(handle: t.DocHandle<T>, options: { dispose$?: t.UntilObservable } = {}) {
     const uri = handle.url;
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;

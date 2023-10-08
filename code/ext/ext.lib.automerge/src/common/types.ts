@@ -21,6 +21,7 @@ export type {
   Immutable,
   ImmutableNext,
   Lifecycle,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 /**

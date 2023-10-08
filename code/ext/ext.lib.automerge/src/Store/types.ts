@@ -8,10 +8,15 @@ export type * from './types.events';
 export type DocUri = t.AutomergeUrl;
 
 /**
+ * TODO 🐷
+ * - t.ImmutableRef<T, E>
+ */
+
+/**
  * An immutable/observable CRDT document reference.
  */
 export type DocRef<T> = t.Immutable<T> & {
-  events(dispose?: t.Observable<any>): t.DocEvents<T>;
+  events(dispose?: t.UntilObservable): t.DocEvents<T>;
   toObject(): T;
 };
 
