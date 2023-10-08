@@ -106,8 +106,8 @@ export type LabelItemCommand =
   | LabelItemKeyupCommand;
 
 export type LabelItemTestCommand = {
-  type: 'Item:Test';
-  payload: { msg?: string; count: number };
+  type: 'Item:Test'; // Used for testing purposes.
+  payload: { msg?: string; count?: number };
 };
 export type LabelItemKeydownCommand = {
   type: 'Item:Keydown';
