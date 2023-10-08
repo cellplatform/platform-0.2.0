@@ -18,7 +18,7 @@ export type {
   JsonMap,
   Manifest,
   ModuleManifest,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 /**
  * @local

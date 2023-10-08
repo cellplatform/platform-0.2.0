@@ -21,7 +21,7 @@ export type {
   Immutable,
   ImmutableNext,
   Lifecycle,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 /**
  * @local

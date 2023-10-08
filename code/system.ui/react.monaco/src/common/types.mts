@@ -8,7 +8,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
+export type { EventBus, Disposable } from 'sys.types/src/types';
 export type { CssValue, DevCtx } from 'sys.ui.react.common/src/types.mjs';
 export type {
   TestSuiteRunResponse,

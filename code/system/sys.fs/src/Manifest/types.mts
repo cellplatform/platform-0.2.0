@@ -5,4 +5,4 @@ export type {
   DirManifestInfo,
   ModuleManifestHash,
   ModuleManifestInfo,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';

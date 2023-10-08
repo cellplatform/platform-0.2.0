@@ -21,7 +21,7 @@ export type {
   Pixels,
   Seconds,
   Size,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 export type { CrdtDocFile, CrdtDocRef, CrdtDocSync } from 'sys.data.crdt/src/types.mjs';
 export type { Fs } from 'sys.fs';

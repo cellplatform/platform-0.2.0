@@ -11,7 +11,7 @@ export type { DocUri, DocRefHandle } from 'ext.lib.automerge/src/types';
  * @system
  */
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
-export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types.mjs';
+export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types';
 
 /**
  * @local

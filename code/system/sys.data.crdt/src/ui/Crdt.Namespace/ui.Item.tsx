@@ -20,7 +20,7 @@ export const Item: React.FC<ItemProps> = (props) => {
    */
   const download: t.LabelAction = {
     kind: 'Pull:Namespace',
-    icon: (e) => <Icons.Download.ArrowTray color={e.color} size={16} offset={[0, 2]} />,
+    element: (e) => <Icons.Download.ArrowTray color={e.color} size={16} offset={[0, 2]} />,
     onClick(e) {
       /**
        * TODO 🐷

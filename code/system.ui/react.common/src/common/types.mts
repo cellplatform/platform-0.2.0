@@ -23,6 +23,7 @@ export type {
   ImmutableNext,
   JsonMapU,
   JsonU,
+  Lifecycle,
   Milliseconds,
   ModuleDef,
   PartialDeep,
@@ -31,7 +32,7 @@ export type {
   Point,
   Seconds,
   Size,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
 export type {

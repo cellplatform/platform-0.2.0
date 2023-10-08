@@ -13,7 +13,7 @@ export type {
   Json,
   JsonMap,
   IgnoredResponse,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 export type {
   TestModel,

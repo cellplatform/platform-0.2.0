@@ -10,7 +10,7 @@ type Args = {
  * TODO 🐷
  * - Temporary state until item/group refactor.
  */
-const itemState_TMP = LabelItem.State.item();
+const itemState_TMP = LabelItem.Stateful.State.item();
 
 export function useController(args: Args) {
   const { ns, useBehaviors = DEFAULTS.useBehaviors } = args;
