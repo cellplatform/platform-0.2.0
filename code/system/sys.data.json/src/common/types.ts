@@ -12,8 +12,10 @@ export type {
   EventBus,
   Immutable,
   ImmutableNext,
+  ImmutableRef,
   Lifecycle,
   NpmPackageJson,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 /**

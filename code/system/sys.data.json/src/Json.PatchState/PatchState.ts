@@ -1,8 +1,10 @@
 import { Patch, rx, slug, type t } from './common';
+import { defaultEvents } from './PatchState.events';
 
 type O = Record<string, unknown>;
-type Args<T extends O = {}> = {
+type Args<T extends O, E> = {
   initial: T;
+  events?: t.PatchStateEventFactory<T, E>;
   onChange?: t.PatchChangeHandler<T>;
 };
 
@@ -10,7 +12,7 @@ type Args<T extends O = {}> = {
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
-  init<T extends O>(args: Args<T>): t.PatchState<T> {
+  init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): t.PatchState<T, E> {
     const { onChange } = args;
     const $ = rx.subject<t.PatchChange<T>>();
     let _current = { ...args.initial };
@@ -43,16 +45,9 @@ export const PatchState = {
       /**
        * Observable listener.
        */
-      events(dispose$?: t.Observable<any>) {
-        const life = rx.lifecycle(dispose$);
-        return {
-          $: $.pipe(rx.takeUntil(life.dispose$)),
-          dispose: life.dispose,
-          dispose$: life.dispose$,
-          get disposed() {
-            return life.disposed;
-          },
-        };
+      events(dispose$?: t.UntilObservable) {
+        const factory = args.events ?? defaultEvents;
+        return factory($, dispose$) as E;
       },
     } as const;
   },

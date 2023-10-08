@@ -1,17 +1,27 @@
 import type { t } from './common';
 
 type O = Record<string, unknown>;
-type Id = string;
 
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type PatchState<T extends O> = t.Immutable<T> & {
-  readonly instance: Id;
-  events(dispose?: t.Observable<any>): t.PatchStateEvents<T>;
-};
+export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T, E>;
 
 /**
  * Event API
+ *    Basic observable/disposable event provider firing
+ *    the core stream of JSON-Patches emitted when the
+ *    change(fn) method updates the current immutable state.
  */
-export type PatchStateEvents<T extends O> = t.Lifecycle & { $: t.Observable<t.PatchChange<T>> };
+export type PatchStateEvents<T extends O> = t.Lifecycle & {
+  readonly $: t.Observable<t.PatchChange<T>>;
+};
+
+/**
+ * Injection factory for producing observable event objects
+ * with a discreet lifetime.
+ */
+export type PatchStateEventFactory<T extends O, E> = (
+  $: t.Observable<t.PatchChange<T>>,
+  dispose$?: t.UntilObservable,
+) => E;

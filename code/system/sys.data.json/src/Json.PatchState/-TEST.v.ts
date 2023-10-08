@@ -1,4 +1,4 @@
-import { describe, expect, it, type t, rx } from '../test';
+import { Is, describe, expect, it, type t, rx } from '../test';
 import { PatchState } from '.';
 
 describe('PatchState', () => {
@@ -57,7 +57,7 @@ describe('PatchState', () => {
     });
   });
 
-  describe('events', () => {
+  describe('events → default', () => {
     it('distinct instances', () => {
       const state = PatchState.init({ initial });
       const events1 = state.events();
@@ -65,7 +65,7 @@ describe('PatchState', () => {
       expect(events1).to.not.equal(events2);
     });
 
-    it('fires change event', () => {
+    it('fires patch/change event', () => {
       const state = PatchState.init({ initial });
       const fired: t.PatchChange<T>[] = [];
       const events = state.events();
@@ -98,6 +98,67 @@ describe('PatchState', () => {
       dispose$.next();
       state.change((draft) => (draft.label = 'hello'));
       expect(fired.length).to.eql(0);
+    });
+  });
+
+  describe('events → injected', () => {
+    type E = {
+      disposed: boolean;
+      change$: t.Observable<T>;
+    };
+
+    type TFactory = t.PatchStateEventFactory<T, E>;
+    const exampleFactory: TFactory = ($, dispose$) => {
+      const life = rx.lifecycle(dispose$);
+      return {
+        change$: $.pipe(rx.map((e) => e.to)),
+        get disposed() {
+          return life.disposed; // NB: typically you'd implement a complete [t.Lifecycle] interface.
+        },
+      };
+    };
+
+    it('init (via injected factory)', () => {
+      let count = 0;
+      const events: TFactory = ($, dispose$) => {
+        count++;
+        return exampleFactory($, dispose$);
+      };
+
+      const state = PatchState.init<T, E>({ initial, events });
+      const res = state.events();
+
+      expect(count).to.eql(1);
+      expect(Is.observable(res.change$)).to.eql(true);
+      expect(res.disposed).to.eql(false);
+
+      expect(state.events()).to.not.equal(res); // NB: different instances.
+      expect(state.events()).to.not.equal(res);
+      expect(count).to.eql(3);
+    });
+
+    it('dispose', () => {
+      const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
+      const state = PatchState.init<T, E>({ initial, events });
+
+      const dispose$ = rx.subject();
+      const res = state.events(dispose$);
+
+      expect(res.disposed).to.eql(false);
+      dispose$.next();
+      expect(res.disposed).to.eql(true);
+    });
+
+    it('change$', () => {
+      const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
+      const state = PatchState.init<T, E>({ initial, events });
+      const res = state.events();
+
+      const fired: T[] = [];
+      res.change$.subscribe((e) => fired.push(e));
+
+      state.change((d) => (d.label = 'hello'));
+      expect(fired[0].label).to.eql('hello');
     });
   });
 });
