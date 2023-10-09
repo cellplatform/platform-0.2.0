@@ -1,4 +1,4 @@
-import { command } from './State.Command';
+import { commands } from './State.Commands';
 import { events } from './State.Events';
 import { DEFAULTS, PatchState, type t } from './common';
 
@@ -32,5 +32,5 @@ export const State = {
   /**
    * Issue a command against the item.
    */
-  command,
+  commands,
 } as const;

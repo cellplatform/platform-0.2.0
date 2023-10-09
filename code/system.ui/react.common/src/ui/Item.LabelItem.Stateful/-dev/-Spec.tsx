@@ -34,18 +34,22 @@ export default Dev.describe(name, (e) => {
     list: LabelItem.Stateful.State.list(),
     items: [] as t.LabelItemState[],
     init: {
+      items(length: number = 0) {
+        TestState.items = Array.from({ length }).map(() => TestState.init.item());
+      },
       item(dispose$?: t.Observable<any>) {
         const State = LabelItem.Stateful.State;
+
         const initial = Sample.item();
         const state = State.item(initial);
-        const command = State.command(state);
+        const dispatch = State.commands(state);
         const events = state.events(dispose$);
 
         events.keyboard.enter$.subscribe((e) => console.info('Enter', e));
         events.keyboard.escape$.subscribe((e) => console.info('Escape', e));
 
         events.keyboard.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {
-          command.redraw();
+          dispatch.redraw();
         });
 
         events.command.clipboard.cut$.subscribe((e) => {
@@ -59,9 +63,6 @@ export default Dev.describe(name, (e) => {
         });
 
         return state;
-      },
-      items(length: number = 0) {
-        TestState.items = Array.from({ length }).map(() => TestState.init.item());
       },
     } as const,
   };

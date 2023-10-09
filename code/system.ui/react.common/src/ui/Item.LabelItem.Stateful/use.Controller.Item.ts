@@ -54,16 +54,16 @@ export function useItemController(args: Args) {
     handlers: selection.handlers,
   });
 
-  const command = State.command(item);
+  const dispatch = State.commands(item);
   const base = edit.handlers;
   const handlers: t.LabelItemPropsHandlers = {
     ...base,
     onKeyDown(e) {
-      command.keydown(e);
+      dispatch.key.down(e);
       base.onKeyDown?.(e);
     },
     onKeyUp(e) {
-      command.keyup(e);
+      dispatch.key.up(e);
       base.onKeyUp?.(e);
     },
   };

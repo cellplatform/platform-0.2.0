@@ -33,7 +33,7 @@ describe('LabelItem: State', () => {
 
   it('events.cmd$ (command stream)', () => {
     const state = State.item({ label: 'foo' });
-    const command = State.command(state);
+    const dispatch = State.commands(state);
     const events = state.events();
 
     const fired: t.LabelItemCommand[] = [];
@@ -43,7 +43,7 @@ describe('LabelItem: State', () => {
     expect(fired.length).to.eql(1);
     expect(state.current.command).to.eql({ type: 'Item:Clipboard', payload: { action: 'Copy' } });
 
-    command.clipboard('Paste');
+    dispatch.clipboard('Paste');
     expect(fired.length).to.eql(2);
     expect(state.current.command).to.eql({ type: 'Item:Clipboard', payload: { action: 'Paste' } });
 
