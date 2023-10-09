@@ -31,6 +31,12 @@ export const Label: React.FC<Props> = (props) => {
   /**
    * Render
    */
+  const renderElement = (renderer?: t.LabelItemRenderer, text?: string) => {
+    return typeof renderer === 'function'
+      ? Wrangle.element(renderer, { index, total, enabled, selected, focused, editing, item })
+      : text;
+  };
+
   const color = Wrangle.foreColor(props);
   const fontSize = 13;
   const valueStyle = { fontSize, color, disabledColor: color };
@@ -64,7 +70,7 @@ export const Label: React.FC<Props> = (props) => {
     <TextInput
       ref={inputRef}
       value={label.text}
-      placeholder={placeholder}
+      placeholder={renderElement(renderers.placeholder, placeholder)}
       valueStyle={valueStyle}
       placeholderStyle={placeholderStyle}
       maxLength={maxLength}
@@ -76,12 +82,6 @@ export const Label: React.FC<Props> = (props) => {
       onChanged={(e) => props.onEditChange?.({ label: e.to, position: { index, total } })}
     />
   );
-
-  const renderElement = (renderer?: t.LabelItemRenderer, text?: string) => {
-    return typeof renderer === 'function'
-      ? Wrangle.element(renderer, { index, total, enabled, selected, focused, editing, item })
-      : text;
-  };
 
   const elLabel = !editing && (
     <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
