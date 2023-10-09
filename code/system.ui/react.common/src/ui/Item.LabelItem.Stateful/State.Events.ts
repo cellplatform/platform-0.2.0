@@ -22,13 +22,13 @@ export function events(
   const keydown$ = rx.payload<t.LabelItemKeydownCommand>(cmd$, 'Item:Keydown');
 
   const cache = {
-    keyboard: undefined as E['keyboard'] | undefined,
+    keyboard: undefined as E['key'] | undefined,
     command: undefined as E['command'] | undefined,
   };
 
   const api: t.LabelItemStateEvents = {
     $,
-    get keyboard() {
+    get key() {
       if (!cache.keyboard) {
         const filterOnKey = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
         cache.keyboard = {

@@ -45,7 +45,7 @@ export type LabelItemList = {
 export type LabelItemState = t.ImmutableRef<t.LabelItem, t.LabelItemStateEvents>;
 export type LabelItemStateEvents = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelItem>>;
-  readonly keyboard: {
+  readonly key: {
     readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly enter$: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly escape$: t.Observable<t.LabelItemKeyHandlerArgs>;
