@@ -18,13 +18,22 @@ export type LabelAction<K extends LabelActionKind = string> = {
  * JSX Renderer (data → visuals)
  */
 export type LabelItemRendered = JSX.Element | undefined | false;
-export type LabelItemRenderer = (args: LabelItemRendererArgs) => LabelItemRendered;
+export type LabelItemRenderer = (e: LabelItemRendererArgs) => LabelItemRendered;
 export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
 
 export type LabelItemRenderers<A extends LabelActionKind = string> = {
   label?: t.LabelItemRenderer;
   placeholder?: t.LabelItemRenderer;
-  action?(kind: A): t.LabelItemRenderer | void;
+  action?(kind: A, helpers: LabelItemActionRenderHelpers): t.LabelItemRenderer | void;
+};
+
+export type LabelItemActionRenderHelpers = {
+  opacity(e: t.LabelItemRendererArgs): number;
+  icon(
+    e: t.LabelItemRendererArgs,
+    size?: t.IconProps['size'],
+    offset?: t.IconProps['offset'],
+  ): t.IconProps;
 };
 
 /**

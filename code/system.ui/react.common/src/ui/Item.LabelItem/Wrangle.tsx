@@ -64,11 +64,12 @@ export const Wrangle = {
 
   renderer(renderers: t.LabelItemRenderers, kind: t.LabelActionKind) {
     const done = (res?: t.LabelItemRenderer | void) => res ?? undefined;
+
     if (typeof renderers.action === 'function') {
-      const res = renderers.action?.(kind);
+      const res = renderers.action?.(kind, actionHelpers);
       if (res) return done(res);
     }
-    return done(DEFAULTS.renderers.action?.(kind));
+    return done(DEFAULTS.renderers.action?.(kind, actionHelpers));
   },
 
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
@@ -104,3 +105,14 @@ export const Wrangle = {
     return <Icons.Face size={18} color={color} offset={[0, 0]} />;
   },
 } as const;
+
+/**
+ * Helpers
+ */
+
+const actionHelpers: t.LabelItemActionRenderHelpers = {
+  opacity: (e: t.LabelItemRendererArgs) => (e.enabled ? 0.9 : e.selected ? 0.5 : 0.3),
+  icon(e: t.LabelItemRendererArgs, size, offset): t.IconProps {
+    return { color: e.color, opacity: actionHelpers.opacity(e), size, offset };
+  },
+};

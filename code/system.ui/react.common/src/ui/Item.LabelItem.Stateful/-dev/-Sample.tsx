@@ -35,7 +35,6 @@ export const Sample = {
   },
 
   get renderers(): t.LabelItemRenderers<SampleAction> {
-    const opacity = (e: t.LabelItemRendererArgs) => (e.enabled ? 0.9 : e.selected ? 0.5 : 0.3);
     return {
       label(e) {
         return <>{`prefix-${e.item.label || 'empty'}`}</>;
@@ -43,17 +42,12 @@ export const Sample = {
       placeholder(e) {
         return <>{`placeholder:${e.item.placeholder || 'none'}`}</>;
       },
-
-      action(kind) {
-        const props = (e: t.LabelItemRendererArgs): t.IconProps => ({
-          color: e.color,
-          opacity: opacity(e),
-        });
+      action(kind, helpers) {
         switch (kind) {
           case 'left':
-            return (e) => <Icons.Repo {...props(e)} size={17} offset={[0, 1]} />;
+            return (e) => <Icons.Repo {...helpers.icon(e, 17, [0, 1])} />;
           case 'foobar':
-            return (e) => <Icons.ObjectTree {...props(e)} size={17} />;
+            return (e) => <Icons.ObjectTree {...helpers.icon(e, 17)} />;
         }
       },
     };
