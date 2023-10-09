@@ -90,14 +90,16 @@ export default Dev.describe(name, (e) => {
     state.change((d) => {
       d.item.label = local.label;
       d.item.placeholder = local.placeholder;
+      d.item.right = Sample.actions().right;
+
       d.props.enabled = local.enabled;
       d.props.selected = local.selected;
       d.props.indent = local.indent;
       d.props.padding = local.padding;
       d.props.editing = local.editing;
       d.props.focused = local.focused;
-      d.props.right = Sample.actions().right;
       d.props.debug = local.debug;
+
       d.debug.subjectBg = local.subjectBg;
     });
 
@@ -306,47 +308,44 @@ export default Dev.describe(name, (e) => {
 
       dev.button('actions: undefined', async (e) => {
         await e.change((d) => {
-          d.props.left = undefined;
-          d.props.right = undefined;
+          d.item.left = undefined;
+          d.item.right = undefined;
         });
       });
 
-      dev.button('actions: (left) null', async (e) => {
+      dev.button('actions: (left) undefined', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.left = null));
+        await e.change((d) => (d.item.left = undefined));
       });
 
       dev.button('actions: (left) single', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.left = sample.left[0]));
+        await e.change((d) => (d.item.left = sample.left[0]));
       });
 
       dev.button('actions: (left) multiple', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.left = sample.left));
+        await e.change((d) => (d.item.left = sample.left));
       });
 
       dev.button('actions: (right) single', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.right = sample.right[1]));
+        await e.change((d) => (d.item.right = sample.right[1]));
       });
 
       dev.button('actions: (right) multiple', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.right = sample.right));
+        await e.change((d) => (d.item.right = sample.right));
       });
 
       dev.button((btn) =>
-        btn
-          .label('actions: spinning')
-          // .right('←')
-          .onClick(async (e) => {
-            const sample = Sample.actions({ spinning: true });
-            await e.change((d) => {
-              d.props.left = sample.left;
-              d.props.right = sample.right;
-            });
-          }),
+        btn.label('actions: spinning').onClick(async (e) => {
+          const sample = Sample.actions({ spinning: true });
+          await e.change((d) => {
+            d.item.left = sample.left;
+            d.item.right = sample.right;
+          });
+        }),
       );
 
       dev.hr(-1, 5);
@@ -354,8 +353,8 @@ export default Dev.describe(name, (e) => {
       dev.button(['reset', '🌳'], async (e) => {
         await e.change((d) => {
           d.item.label = undefined;
-          d.props.left = undefined;
-          d.props.right = undefined;
+          d.item.left = undefined;
+          d.item.right = undefined;
           d.props.enabled = true;
           d.props.focused = false;
           d.props.selected = false;

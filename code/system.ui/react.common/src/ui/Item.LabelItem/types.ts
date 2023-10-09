@@ -44,9 +44,6 @@ export type LabelItemProps = {
   item?: t.LabelItem;
   maxLength?: number;
 
-  left?: LabelAction | LabelAction[] | null;
-  right?: LabelAction | LabelAction[] | null;
-
   enabled?: boolean;
   selected?: boolean;
   editing?: boolean;

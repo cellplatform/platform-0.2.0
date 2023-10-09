@@ -4,7 +4,7 @@ import { Wrangle } from './Wrangle';
 import { Actions } from './ui.Actions';
 
 export const Right: React.FC<t.LabelItemProps> = (props) => {
-  const flags = Wrangle.valuesOrDefault(props);
-  const action = props.right ?? DEFAULTS.rightAction;
-  return <Actions {...flags} edge={'Right'} action={action} debug={props.debug} />;
+  const args = Wrangle.valuesOrDefault(props);
+  const action = args.item.right ?? DEFAULTS.rightAction;
+  return <Actions {...args} edge={'Right'} action={action} debug={props.debug} />;
 };

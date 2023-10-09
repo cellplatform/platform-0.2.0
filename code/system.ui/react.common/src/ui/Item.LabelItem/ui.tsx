@@ -105,7 +105,7 @@ export const View: React.FC<Props> = (props) => {
       boxSizing: 'border-box',
       marginLeft: indent,
       display: 'grid',
-      gridTemplateColumns: `${autoOrEmpty(props.left)} 1fr ${autoOrEmpty(props.right || null)}`,
+      gridTemplateColumns: `${autoOrEmpty(item.left)} 1fr ${autoOrEmpty(item.right)}`,
       columnGap: 3,
     }),
     focusBorder: css({
@@ -137,14 +137,14 @@ export const View: React.FC<Props> = (props) => {
     >
       {props.renderCount && <RenderCount {...props.renderCount} />}
       <div {...styles.body}>
-        {props.left !== null && <Left {...props} />}
+        {item.left && <Left {...props} />}
         <Label
           {...props}
           inputRef={inputRef}
           onDoubleClick={clickHandler(props.onLabelDoubleClick)}
           debug={debug}
         />
-        {props.right !== null && <Right {...props} />}
+        {item.right && <Right {...props} />}
       </div>
       {elDisabled}
       {elFocusBorder}
@@ -156,5 +156,5 @@ export const View: React.FC<Props> = (props) => {
  * [Helpers]
  */
 function autoOrEmpty(value: any) {
-  return value === null ? '' : 'auto';
+  return value === undefined ? '' : 'auto';
 }
