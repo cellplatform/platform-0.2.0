@@ -9,16 +9,7 @@ type T = {
   debug: { subjectBg?: boolean };
 };
 const initial: T = {
-  item: {
-    // labelRender(e) {
-    //   return <div style={{ backgroundColor: 'rgba(255, 0, 0, 0.1)' }}>{e.item.label}</div>;
-    // },
-    // placeholderRender(e) {
-    //   return (
-    //     <div style={{ backgroundColor: 'rgba(255, 0, 0, 0.1)' }}>{e.item.placeholder || 'foo'}</div>
-    //   );
-    // },
-  },
+  item: {},
   props: { focusOnReady: true },
   debug: {},
 };
@@ -50,6 +41,7 @@ export default Dev.describe(name, (e) => {
       return {
         ...state.current.props,
         item: state.current.item,
+        renderers: Sample.renderers,
 
         onReady(e) {
           console.info('⚡️ onReady', e);
@@ -308,8 +300,11 @@ export default Dev.describe(name, (e) => {
         });
       });
 
+      dev.button('actions: (left) null', async (e) => {
+        await e.change((d) => (d.item.left = null));
+      });
+
       dev.button('actions: (left) undefined', async (e) => {
-        const sample = Sample.actions();
         await e.change((d) => (d.item.left = undefined));
       });
 
@@ -410,7 +405,10 @@ export default Dev.describe(name, (e) => {
 
     dev.footer.border(-0.1).render<T>((e) => {
       const props = State.toDisplayProps(state);
-      const data = { props };
+      const data = {
+        item: e.state.item,
+        props,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

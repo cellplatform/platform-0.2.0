@@ -2,7 +2,7 @@ import { Icons, type t } from '../../../test.ui';
 
 export const Sample = {
   /**
-   * Actions
+   * Action (Model)
    */
   actions(options: { spinning?: boolean } = {}) {
     const { spinning } = options;
@@ -17,9 +17,6 @@ export const Sample = {
         width,
         enabled,
         spinning: options.spinning ?? spinning,
-        render(e) {
-          return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;
-        },
         onClick: (e) => console.info('⚡️ action → onClick:', e),
       };
     };
@@ -35,5 +32,27 @@ export const Sample = {
     ];
 
     return { left, right };
+  },
+
+  /**
+   * Visual Renderers
+   */
+  get renderers(): t.LabelItemRenderers {
+    return {
+      action(kind) {
+        const treeRenderer: t.LabelItemRenderer = (e) => {
+          return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />;
+        };
+        const fooRenderer: t.LabelItemRenderer = (e) => {
+          return (
+            <Icons.Keyboard.outline size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />
+          );
+        };
+        if (kind === 'right:foo') return treeRenderer;
+        if (kind === 'right:bar') return treeRenderer;
+        if (kind === 'left:sample') return fooRenderer;
+        return;
+      },
+    };
   },
 };

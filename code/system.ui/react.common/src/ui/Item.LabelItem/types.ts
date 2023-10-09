@@ -23,7 +23,7 @@ export type LabelItemRenderers = {
   label?: t.LabelItemRenderer;
   placeholder?: t.LabelItemRenderer;
   actions?: { [kind: LabelActionKind]: t.LabelItemRenderer };
-  action?(kind: LabelActionKind): t.LabelItemRenderer | undefined;
+  action?<K extends LabelActionKind>(kind: K): t.LabelItemRenderer | undefined;
 };
 
 /**

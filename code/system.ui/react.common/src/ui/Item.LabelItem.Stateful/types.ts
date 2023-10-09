@@ -19,8 +19,8 @@ export type LabelItem = {
   enabled?: boolean;
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
   is?: { editable?: t.LabelItemValue<boolean> };
-  left?: t.LabelAction | t.LabelAction[];
-  right?: t.LabelAction | t.LabelAction[];
+  left?: t.LabelAction | t.LabelAction[] | null;
+  right?: t.LabelAction | t.LabelAction[] | null;
 };
 
 /**
