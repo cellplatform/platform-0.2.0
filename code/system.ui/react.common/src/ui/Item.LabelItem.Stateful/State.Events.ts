@@ -1,5 +1,11 @@
 import { R, rx, type t } from './common';
 
+type K = t.LabelItemKeyHandlerArgs;
+type E = t.LabelItemStateEvents;
+
+/**
+ * Event wrapper factory.
+ */
 export function events(
   $: t.Observable<t.PatchChange<t.LabelItem>>,
   dispose$?: t.UntilObservable,
@@ -15,8 +21,6 @@ export function events(
 
   const keydown$ = rx.payload<t.LabelItemKeydownCommand>(cmd$, 'Item:Keydown');
 
-  type K = t.LabelItemKeyHandlerArgs;
-  type E = t.LabelItemStateEvents;
   const cache = {
     keyboard: undefined as E['keyboard'] | undefined,
     command: undefined as E['command'] | undefined,
