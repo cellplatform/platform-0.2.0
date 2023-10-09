@@ -1,5 +1,7 @@
-import { type t } from './common';
+import { LabelItem, type t } from './common';
+
 export * from '../common';
+export const State = LabelItem.Stateful.State;
 
 /**
  * Constants

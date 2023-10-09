@@ -1,4 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
+import { Model } from './state';
 import { View } from './ui';
 
 /**
@@ -6,5 +7,10 @@ import { View } from './ui';
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Model: typeof Model;
 };
-export const Root = FC.decorate<t.RootProps, Fields>(View, { DEFAULTS }, { displayName: 'Root' });
+export const Connector = FC.decorate<t.RootProps, Fields>(
+  View,
+  { DEFAULTS, Model },
+  { displayName: 'Connector' },
+);

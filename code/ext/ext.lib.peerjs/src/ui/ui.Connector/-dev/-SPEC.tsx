@@ -1,23 +1,31 @@
 import { Dev, type t, LabelItem } from '../../../test.ui';
-import { Root } from '..';
-import { Sample } from './-Sample';
+import { Connector } from '..';
 import { SampleList } from './-Sample.List';
+import { Info } from '../../ui.Info';
 
 type T = { props: t.RootProps };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
+const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
+  const State = LabelItem.Stateful.State;
   const TestState = {
-    list: LabelItem.State.list(),
+    list: State.list(),
     items: [] as t.LabelItemState[],
     init: {
       item() {
-        const initial = Sample.item();
-        return LabelItem.State.item(initial);
+        const initial = {}; // TEMP 🐷
+        return State.item(initial);
       },
-      items(length: number = 0) {
-        TestState.items = Array.from({ length }).map(() => TestState.init.item());
+      items() {
+        // TestState.items = Array.from({ length }).map(() => TestState.init.item());
+        // TestState.items.unshift(Connector.Model.self());
+
+        TestState.items = [
+          //
+          Connector.Model.self(),
+          Connector.Model.remote(),
+        ];
       },
     } as const,
   };
@@ -28,7 +36,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
-    TestState.init.items(5);
+    TestState.init.items();
 
     ctx.debug.width(330);
     ctx.subject
@@ -41,8 +49,11 @@ export default Dev.describe(name, (e) => {
           return (
             <LabelItem.Stateful
               key={`item.${i}`}
+              index={i}
+              total={length}
               list={TestState.list}
               item={TestState.items[i]}
+              // debug={true}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
               }}
@@ -58,6 +69,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.TODO();
+
+    dev.hr(5, 20);
+
+    dev.row((e) => <Info fields={['Module']} />);
   });
 
   e.it('ui:footer', async (e) => {
