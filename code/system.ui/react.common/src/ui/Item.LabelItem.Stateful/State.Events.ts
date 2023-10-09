@@ -46,6 +46,9 @@ export function events(
         const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
         cache.command = {
           $: cmd$,
+          redraw$: rx
+            .payload<t.LabelItemRedrawCommand>(cmd$, 'Item:Redraw')
+            .pipe(rx.map((e) => e.id)),
           clipboard: {
             $: clipboard$,
             cut$: clipboard('Cut'),

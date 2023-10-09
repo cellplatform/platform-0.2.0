@@ -38,10 +38,15 @@ export default Dev.describe(name, (e) => {
         const State = LabelItem.Stateful.State;
         const initial = Sample.item();
         const state = State.item(initial);
+        const command = State.command(state);
         const events = state.events(dispose$);
 
         events.keyboard.enter$.subscribe((e) => console.info('Enter', e));
         events.keyboard.escape$.subscribe((e) => console.info('Escape', e));
+
+        events.keyboard.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {
+          command.redraw();
+        });
 
         events.command.clipboard.cut$.subscribe((e) => {
           console.info('🌳 cut', state.current);

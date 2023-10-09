@@ -8,7 +8,7 @@ export const Sample = {
       right: {
         kind: 'foobar',
         enabled(e) {
-          return !e.editing && Boolean(e.label.trim());
+          return !e.editing;
         },
         element(e) {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;

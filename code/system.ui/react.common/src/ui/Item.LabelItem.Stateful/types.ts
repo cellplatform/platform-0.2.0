@@ -1,6 +1,8 @@
 import type { t } from './common';
 
 type ItemId = string;
+type O = Record<string, unknown>;
+
 export type LabelItemBehaviorKind =
   | 'Item'
   | 'Item.Selection'
@@ -45,6 +47,7 @@ export type LabelItemStateEvents = t.Lifecycle & {
   };
   readonly command: {
     readonly $: t.Observable<t.LabelItemCommand>;
+    readonly redraw$: t.Observable<string>;
     readonly clipboard: {
       readonly $: t.Observable<t.LabelItemClipboard>;
       readonly cut$: t.Observable<t.LabelItemClipboard>;
@@ -112,10 +115,14 @@ export type LabelItemChangeAction =
 export type LabelItemCommand =
   | LabelItemKeydownCommand
   | LabelItemKeyupCommand
-  | LabelItemClipboardCommand;
+  | LabelItemClipboardCommand
+  | LabelItemRedrawCommand;
 
 export type LabelItemKeydownCommand = { type: 'Item:Keydown'; payload: t.LabelItemKeyHandlerArgs };
 export type LabelItemKeyupCommand = { type: 'Item:Keyup'; payload: t.LabelItemKeyHandlerArgs };
 
 export type LabelItemClipboardCommand = { type: 'Item:Clipboard'; payload: LabelItemClipboard };
 export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste' };
+
+export type LabelItemRedrawCommand = { type: 'Item:Redraw'; payload: LabelItemRedraw };
+export type LabelItemRedraw = { id: string };

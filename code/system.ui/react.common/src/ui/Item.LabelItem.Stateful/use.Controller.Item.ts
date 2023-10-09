@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
+
+import { State } from './State';
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
-import { State } from './State';
 
 type Args = {
   index?: number;
@@ -29,6 +31,9 @@ export function useItemController(args: Args) {
   } = args;
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
+
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
 
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
@@ -62,6 +67,19 @@ export function useItemController(args: Args) {
       base.onKeyUp?.(e);
     },
   };
+
+  /**
+   * Monitor commands
+   */
+  useEffect(() => {
+    const events = item?.events();
+    if (events) {
+      events.command.redraw$.subscribe(redraw);
+      events.$.subscribe(redraw);
+    }
+
+    return events?.dispose;
+  }, [item?.instance]);
 
   /**
    * API

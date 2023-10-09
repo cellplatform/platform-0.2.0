@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+type O = Record<string, unknown>;
+
 export type LabelItemPosition = { index: number; total: number };
 
 /**
@@ -29,11 +31,10 @@ export type LabelItemDynamicValue<T> = (e: LabelItemDynamicValueArgs) => T;
 export type LabelItemDynamicValueArgs = {
   index: number;
   total: number;
-  label: string;
-  enabled: boolean;
-  selected: boolean;
-  editing: boolean;
   focused: boolean;
+  selected: boolean;
+  enabled: boolean;
+  editing: boolean;
 };
 
 /**

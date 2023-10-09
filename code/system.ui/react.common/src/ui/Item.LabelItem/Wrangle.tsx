@@ -3,7 +3,6 @@ import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 export const Wrangle = {
   valuesOrDefault(props: Partial<t.LabelItemDynamicValueArgs>): t.LabelItemDynamicValueArgs {
     const {
-      label = '',
       index = DEFAULTS.index,
       total = DEFAULTS.total,
       enabled = DEFAULTS.enabled,
@@ -11,7 +10,7 @@ export const Wrangle = {
       focused = DEFAULTS.focused,
       editing = DEFAULTS.editing,
     } = props;
-    return { index, total, label, enabled, selected, focused, editing } as const;
+    return { index, total, enabled, selected, focused, editing } as const;
   },
 
   dynamicValue<T>(
@@ -56,13 +55,12 @@ export const Wrangle = {
     index: number;
     total: number;
     action: t.LabelAction;
-    label?: string;
     selected?: boolean;
     enabled?: boolean;
     focused?: boolean;
     editing?: boolean;
   }) {
-    const { index, total, action, label = '' } = args;
+    const { index, total, action } = args;
     const { enabled, selected, focused, editing } = Wrangle.valuesOrDefault(args);
 
     if (!action.element) {
@@ -79,7 +77,6 @@ export const Wrangle = {
         focused,
         editing,
         color,
-        label,
       });
       return el ?? Wrangle.defaultIcon(args);
     }
