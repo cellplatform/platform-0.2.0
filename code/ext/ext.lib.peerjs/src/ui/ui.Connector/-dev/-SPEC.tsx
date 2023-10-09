@@ -3,7 +3,7 @@ import { Connector } from '..';
 import { SampleList } from './-Sample.List';
 import { Info } from '../../ui.Info';
 
-type T = { props: t.RootProps };
+type T = { props: t.ConnectorProps };
 const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
@@ -15,12 +15,13 @@ export default Dev.describe(name, (e) => {
     init: {
       items() {
         TestState.items = [];
+        const { Self, Remote } = Connector.Model;
 
         type S = t.LabelItemState;
         type R = t.LabelItemRenderers;
         const push = (state: S, renderers: R) => TestState.items.push({ state, renderers });
-        push(Connector.Model.Self.state(), Connector.Model.Self.renderers);
-        push(Connector.Model.Remote.state(), Connector.Model.Self.renderers);
+        push(Self.state(), Self.renderers);
+        push(Remote.state(), Remote.renderers);
       },
     } as const,
   };

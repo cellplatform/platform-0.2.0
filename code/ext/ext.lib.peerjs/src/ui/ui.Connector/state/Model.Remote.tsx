@@ -29,23 +29,25 @@ export const RemoteModel = {
   /**
    * Base model.
    */
-  initial(options: RemoteModelOptions = {}): t.LabelItem {
+  initial(options: RemoteModelOptions = {}): t.ConnectorItem {
     return {
       placeholder: 'paste remote peer',
       is: { editable: false },
-      left: {
-        kind: 'local:self',
-        render(e) {
-          return <Icons.Add size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;
-        },
-      },
+      left: { kind: 'remote:left' },
     };
   },
 
-  get renderers(): t.LabelItemRenderers {
+  get renderers(): t.ConnectorItemRenderers {
     return {
       label(e) {
         return <div>{`remote:${e.item.label}`}</div>;
+      },
+
+      action(kind, helpers) {
+        if (kind === 'remote:left') {
+          return (e) => <Icons.Add {...helpers.icon(e, 17)} />;
+        }
+        return;
       },
     };
   },

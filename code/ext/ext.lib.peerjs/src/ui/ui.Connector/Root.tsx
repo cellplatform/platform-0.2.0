@@ -9,7 +9,7 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Model: typeof Model;
 };
-export const Connector = FC.decorate<t.RootProps, Fields>(
+export const Connector = FC.decorate<t.ConnectorProps, Fields>(
   View,
   { DEFAULTS, Model },
   { displayName: 'Connector' },

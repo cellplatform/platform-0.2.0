@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-export const View: React.FC<t.RootProps> = (props) => {
+export const View: React.FC<t.ConnectorProps> = (props) => {
   /**
    * [Render]
    */

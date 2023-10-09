@@ -1,4 +1,4 @@
-import { State, Hash, Icons, cuid, type t, COLORS, Time, slug } from '../common';
+import { COLORS, Icons, State, Time, cuid, slug, type t } from '../common';
 
 export type SelfModelOptions = {
   peerid?: string;
@@ -27,42 +27,16 @@ export const SelfModel = {
       });
     };
 
-    const initial: t.LabelItem = {
+    const initial: t.ConnectorItem = {
       is: { editable: false },
       placeholder: 'peer id',
-
-      // label: `me:${Hash.shorten(peerid, [0, 5])}`,
       label: peerid,
 
-      left: {
-        kind: 'local:self',
-        render(e) {
-          return (
-            <Icons.Person
-              size={17}
-              color={e.selected ? e.color : COLORS.BLUE}
-              opacity={e.enabled ? 1 : 0.3}
-            />
-          );
-        },
-      },
+      left: { kind: 'local:left' },
 
       right: {
         kind: 'local:copy',
         onClick: copyClipboard,
-        render(e) {
-          if (transient.justCopied) {
-            return <Icons.Done size={18} color={e.color} offset={[0, -1]} />;
-          }
-          return (
-            <Icons.Copy
-              size={16}
-              color={e.color}
-              opacity={e.enabled ? 1 : 0.3}
-              tooltip={'Copy to clipboard'}
-            />
-          );
-        },
       },
     };
 
@@ -80,10 +54,26 @@ export const SelfModel = {
   /**
    * Element Renderers
    */
-  get renderers(): t.LabelItemRenderers {
+  get renderers(): t.ConnectorItemRenderers {
     return {
       label(e) {
         return <div>{`me:${e.item.label}`}</div>;
+      },
+
+      action(kind, helpers) {
+        if (kind === 'local:left') {
+          return (e) => {
+            const color = e.selected ? e.color : COLORS.BLUE;
+            return <Icons.Person {...helpers.icon(e, 17)} color={color} />;
+          };
+        }
+
+        if (kind === 'local:copy') {
+          const tooltip = 'Copy to clipboard';
+          return (e) => <Icons.Copy {...helpers.icon(e, 16)} tooltip={tooltip} />;
+        }
+
+        return;
       },
     };
   },
