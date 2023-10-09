@@ -27,13 +27,8 @@ const name = LabelItem.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<
-      t.LabelItemProps,
-      // | 'label'
-
-      'enabled' | 'selected' | 'indent' | 'padding' | 'editing' | 'focused' | 'debug'
-    > &
-    Pick<t.LabelItem, 'label' | 'placeholder'>;
+    Pick<t.LabelItemProps, 'selected' | 'indent' | 'padding' | 'editing' | 'focused' | 'debug'> &
+    Pick<t.LabelItem, 'label' | 'placeholder' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
     label: '',
@@ -91,8 +86,8 @@ export default Dev.describe(name, (e) => {
       d.item.label = local.label;
       d.item.placeholder = local.placeholder;
       d.item.right = Sample.actions().right;
+      d.item.enabled = local.enabled;
 
-      d.props.enabled = local.enabled;
       d.props.selected = local.selected;
       d.props.indent = local.indent;
       d.props.padding = local.padding;
@@ -163,11 +158,11 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.enabled);
+        const value = (state: T) => Boolean(state.item.enabled);
         btn
           .label((e) => `enabled`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.item, 'enabled'))));
       });
 
       dev.boolean((btn) => {
@@ -232,7 +227,7 @@ export default Dev.describe(name, (e) => {
     dev.section(['Samples', 'props ↑'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
-        local.enabled = data.props.enabled;
+        local.enabled = data.item.enabled;
         local.selected = data.props.selected;
         local.editing = data.props.editing;
         local.padding = data.props.padding;
@@ -243,7 +238,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('default', async (e) => {
         await e.change((d) => {
-          d.props.enabled = DEFAULTS.enabled;
+          d.item.enabled = DEFAULTS.enabled;
           d.props.selected = DEFAULTS.selected;
           d.props.editing = DEFAULTS.editing;
           d.props.padding = DEFAULTS.padding;
@@ -355,7 +350,7 @@ export default Dev.describe(name, (e) => {
           d.item.label = undefined;
           d.item.left = undefined;
           d.item.right = undefined;
-          d.props.enabled = true;
+          d.item.enabled = true;
           d.props.focused = false;
           d.props.selected = false;
           d.props.editing = false;

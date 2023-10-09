@@ -17,13 +17,14 @@ export const View: React.FC<Props> = (props) => {
     indent = DEFAULTS.indent,
     padding = DEFAULTS.padding,
     tabIndex = DEFAULTS.tabIndex,
-    enabled = DEFAULTS.enabled,
+
     focused = DEFAULTS.focused,
     editing = DEFAULTS.editing,
     borderRadius = DEFAULTS.borderRadius,
     debug,
     item = {},
   } = props;
+  const { enabled = DEFAULTS.enabled } = item;
   const label = Wrangle.labelText(item);
   const position = { index, total };
   const ref = useRef<HTMLDivElement>(null);

@@ -41,7 +41,6 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       index={props.index}
       total={props.total}
       item={data}
-      enabled={data.enabled}
       editing={data.editing}
       selected={isSelected}
       focused={isFocused}

@@ -13,7 +13,6 @@ export const Label: React.FC<Props> = (props) => {
     inputRef,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
-    enabled = DEFAULTS.enabled,
     editing = DEFAULTS.editing,
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
@@ -22,12 +21,11 @@ export const Label: React.FC<Props> = (props) => {
     debug,
     item = {},
   } = props;
-
+  const { placeholder = DEFAULTS.placeholder, enabled = DEFAULTS.enabled } = item;
   const label = Wrangle.labelText(item);
-  const placeholder = item.placeholder ?? DEFAULTS.placeholder;
 
   /**
-   * [Render]
+   * Render
    */
   const color = Wrangle.foreColor(props);
   const fontSize = 13;

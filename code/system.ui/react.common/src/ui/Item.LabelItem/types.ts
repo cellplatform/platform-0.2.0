@@ -44,9 +44,9 @@ export type LabelItemProps = {
   item?: t.LabelItem;
   maxLength?: number;
 
-  enabled?: boolean;
-  selected?: boolean;
   editing?: boolean;
+
+  selected?: boolean;
   focused?: boolean;
 
   focusOnReady?: boolean;
