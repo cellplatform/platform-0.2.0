@@ -39,18 +39,17 @@ export default Dev.describe(name, (e) => {
         const initial = Sample.item();
         const state = State.item(initial);
         const events = state.events(dispose$);
-        const clipboard$ = events.command.clipboard$;
 
         events.keyboard.enter$.subscribe((e) => console.info('Enter', e));
         events.keyboard.escape$.subscribe((e) => console.info('Escape', e));
 
-        clipboard$.pipe(rx.filter((e) => e.action === 'Cut')).subscribe((e) => {
+        events.command.clipboard.cut$.subscribe((e) => {
           console.info('🌳 cut', state.current);
         });
-        clipboard$.pipe(rx.filter((e) => e.action === 'Copy')).subscribe((e) => {
+        events.command.clipboard.copy$.subscribe((e) => {
           console.info('🌳 copy', state.current);
         });
-        clipboard$.pipe(rx.filter((e) => e.action === 'Paste')).subscribe((e) => {
+        events.command.clipboard.paste$.subscribe((e) => {
           console.info('💥 paste', state.current);
         });
 

@@ -41,9 +41,17 @@ export function events(
     },
     get command() {
       if (!cache.command) {
+        type C = t.LabelItemClipboard;
+        const clipboard$ = rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard');
+        const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
         cache.command = {
           $: cmd$,
-          clipboard$: rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard'),
+          clipboard: {
+            $: clipboard$,
+            cut$: clipboard('Cut'),
+            copy$: clipboard('Copy'),
+            paste$: clipboard('Paste'),
+          },
         };
       }
       return cache.command;

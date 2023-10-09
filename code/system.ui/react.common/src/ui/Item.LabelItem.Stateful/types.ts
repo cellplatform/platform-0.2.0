@@ -45,7 +45,12 @@ export type LabelItemStateEvents = t.Lifecycle & {
   };
   readonly command: {
     readonly $: t.Observable<t.LabelItemCommand>;
-    readonly clipboard$: t.Observable<t.LabelItemClipboard>;
+    readonly clipboard: {
+      readonly $: t.Observable<t.LabelItemClipboard>;
+      readonly cut$: t.Observable<t.LabelItemClipboard>;
+      readonly copy$: t.Observable<t.LabelItemClipboard>;
+      readonly paste$: t.Observable<t.LabelItemClipboard>;
+    };
   };
 };
 
