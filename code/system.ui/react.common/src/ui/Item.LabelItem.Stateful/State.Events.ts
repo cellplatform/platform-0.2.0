@@ -14,22 +14,35 @@ export function events(
   );
 
   const keydown$ = rx.payload<t.LabelItemKeydownCommand>(cmd$, 'Item:Keydown');
-  const meta$ = keydown$.pipe(rx.filter((e) => e.is.meta));
 
   type K = t.LabelItemKeyHandlerArgs;
-  const filterOnKey = (code: string) => rx.filter<K>((e) => e.code === code);
-  const filterOnMetaKey = (code: string) => meta$.pipe(filterOnKey(code));
+  type E = t.LabelItemStateEvents;
+  const cache = {
+    keyboard: undefined as E['keyboard'] | undefined,
+    command: undefined as E['command'] | undefined,
+  };
 
   const api: t.LabelItemStateEvents = {
     $,
-    keyboard: {
-      $: keydown$,
-      enter$: filterOnMetaKey('Enter'),
-      escape$: filterOnMetaKey('Escape'),
+    get keyboard() {
+      if (!cache.keyboard) {
+        const filterOnKey = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
+        cache.keyboard = {
+          $: keydown$,
+          enter$: filterOnKey('Enter'),
+          escape$: filterOnKey('Escape'),
+        };
+      }
+      return cache.keyboard;
     },
-    command: {
-      $: cmd$,
-      clipboard$: rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard'),
+    get command() {
+      if (!cache.command) {
+        cache.command = {
+          $: cmd$,
+          clipboard$: rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard'),
+        };
+      }
+      return cache.command;
     },
 
     /**
