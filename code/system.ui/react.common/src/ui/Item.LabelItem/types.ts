@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 
 export type LabelItemPosition = { index: number; total: number };
 

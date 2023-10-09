@@ -64,13 +64,22 @@ export const Wrangle = {
 
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
     const { index, total } = args;
-    const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
+    const { enabled, selected, focused, editing, item: item } = Wrangle.valuesOrDefault(args);
 
     if (typeof renderer === 'string') return renderer;
 
     if (typeof renderer === 'function') {
       const color = Wrangle.foreColor(args);
-      const el = renderer({ index, total, item, enabled, selected, focused, editing, color });
+      const el = renderer({
+        index,
+        total,
+        item,
+        enabled,
+        selected,
+        focused,
+        editing,
+        color,
+      });
       return el ?? Wrangle.defaultIcon(args);
     }
 
