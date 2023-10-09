@@ -15,19 +15,12 @@ export type LabelItemBehaviorKind =
 export type LabelItem = {
   label?: string;
   placeholder?: string;
-  readonly placeholderRender?: t.LabelItemRenderer;
-
   editing?: boolean;
   enabled?: boolean;
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
   is?: { editable?: t.LabelItemValue<boolean> };
-
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
-};
-
-export type LabelItemRenderers = {
-  readonly label?: t.LabelItemRenderer;
 };
 
 /**

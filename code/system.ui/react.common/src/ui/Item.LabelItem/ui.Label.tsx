@@ -34,7 +34,7 @@ export const Label: React.FC<Props> = (props) => {
   const color = Wrangle.foreColor(props);
   const fontSize = 13;
   const valueStyle = { fontSize, color, disabledColor: color };
-  const placeholderStyle = { ...valueStyle, opacity: 0.3 };
+  const placeholderStyle = { ...valueStyle, opacity: selected && focused ? 0.5 : 0.3 };
   const styles = {
     base: css({
       position: 'relative',
@@ -86,7 +86,7 @@ export const Label: React.FC<Props> = (props) => {
   const elLabel = !editing && (
     <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
       {label.isEmpty
-        ? renderElement(item.placeholderRender, placeholder)
+        ? renderElement(renderers.placeholder, placeholder)
         : renderElement(renderers.label, label.text)}
     </div>
   );

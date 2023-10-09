@@ -20,6 +20,10 @@ export type LabelAction<K extends LabelActionKind = string> = {
  */
 export type LabelItemRenderer = (args: LabelItemRendererArgs) => JSX.Element;
 export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
+export type LabelItemRenderers = {
+  readonly label?: t.LabelItemRenderer;
+  readonly placeholder?: t.LabelItemRenderer;
+};
 
 /**
  * Values (explicit or dynamic).

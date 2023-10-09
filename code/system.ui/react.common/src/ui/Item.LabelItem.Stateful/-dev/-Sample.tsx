@@ -1,4 +1,4 @@
-import { Icons, type t } from '../common';
+import { DEFAULTS, Icons, type t } from '../common';
 
 export const Sample = {
   item() {
@@ -45,6 +45,9 @@ export const Sample = {
     return {
       label(e) {
         return <div>{`🌳:${e.item.label || 'empty'}`}</div>;
+      },
+      placeholder(e) {
+        return <div>{`placeholder:${e.item.placeholder || 'none'}`}</div>;
       },
     };
   },
