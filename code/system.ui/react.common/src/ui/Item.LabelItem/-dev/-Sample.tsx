@@ -1,12 +1,13 @@
 import { Icons, type t } from '../../../test.ui';
 
+type K = 'left:sample' | 'right:foo' | 'right:bar' | '🌳';
+
 export const Sample = {
   /**
    * Action (Model)
    */
   actions(options: { spinning?: boolean } = {}) {
     const { spinning } = options;
-    type K = 'left:sample' | 'right:foo' | 'right:bar' | '🌳';
     const action = (
       kind: K,
       options: { width?: number; enabled?: boolean; spinning?: boolean } = {},
@@ -37,9 +38,11 @@ export const Sample = {
   /**
    * Visual Renderers
    */
-  get renderers(): t.LabelItemRenderers {
+  get renderers(): t.LabelItemRenderers<K> {
     return {
       action(kind) {
+        return;
+
         const treeRenderer: t.LabelItemRenderer = (e) => {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />;
         };

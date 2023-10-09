@@ -15,15 +15,15 @@ export type LabelAction<K extends LabelActionKind = string> = {
 };
 
 /**
- * JSX Renderer.
+ * JSX Renderer (data → visuals)
  */
 export type LabelItemRenderer = (args: LabelItemRendererArgs) => JSX.Element;
 export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
-export type LabelItemRenderers = {
+
+export type LabelItemRenderers<A extends LabelActionKind = string> = {
   label?: t.LabelItemRenderer;
   placeholder?: t.LabelItemRenderer;
-  actions?: { [kind: LabelActionKind]: t.LabelItemRenderer };
-  action?<K extends LabelActionKind>(kind: K): t.LabelItemRenderer | undefined;
+  action?(kind: A): t.LabelItemRenderer | undefined;
 };
 
 /**

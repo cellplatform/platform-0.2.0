@@ -4,7 +4,6 @@ export const Sample = {
   item() {
     const initial: t.LabelItem = {
       label: 'hello 👋',
-
       // placeholder: 'foobar',
 
       left: {
@@ -36,10 +35,10 @@ export const Sample = {
   get renderers(): t.LabelItemRenderers {
     return {
       label(e) {
-        return <div>{`🌳:${e.item.label || 'empty'}`}</div>;
+        return <>{`prefix-${e.item.label || 'empty'}`}</>;
       },
       placeholder(e) {
-        return <div>{`placeholder:${e.item.placeholder || 'none'}`}</div>;
+        return <>{`placeholder:${e.item.placeholder || 'none'}`}</>;
       },
     };
   },

@@ -328,21 +328,28 @@ export default Dev.describe(name, (e) => {
         await e.change((d) => (d.item.right = sample.right));
       });
 
-      dev.button((btn) =>
-        btn.label('actions: spinning').onClick(async (e) => {
-          const sample = Sample.actions({ spinning: true });
-          await e.change((d) => {
-            d.item.left = sample.left;
-            d.item.right = sample.right;
-          });
-        }),
-      );
+      dev.hr(-1, 5);
+
+      const spinning = (label: string, spinning: boolean) => {
+        dev.button((btn) =>
+          btn.label(label).onClick(async (e) => {
+            const sample = Sample.actions({ spinning });
+            await e.change((d) => {
+              d.item.left = sample.left;
+              d.item.right = sample.right;
+            });
+          }),
+        );
+      };
+      spinning('actions: spinning (start)', true);
+      spinning('actions: spinning (stop)', false);
 
       dev.hr(-1, 5);
 
       dev.button(['reset', '🌳'], async (e) => {
         await e.change((d) => {
           d.item.label = undefined;
+          d.item.placeholder = undefined;
           d.item.left = undefined;
           d.item.right = undefined;
           d.item.enabled = true;
