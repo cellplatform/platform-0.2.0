@@ -15,11 +15,12 @@ type TLabelAction = t.LabelAction<TActions>;
 const leftAction: TLabelAction = { kind: 'left:default' };
 const rightAction: TLabelAction | undefined = undefined;
 
+const opacity = (e: t.LabelItemRendererArgs) => (e.enabled ? 0.9 : e.selected ? 0.5 : 0.3);
 const renderers: t.LabelItemRenderers = {
   action(kind) {
     return kind === leftAction.kind
-      ? (e) => <Icons.Repo size={18} color={e.color} offset={[0, 1]} />
-      : (e) => <Icons.Face size={18} color={e.color} />;
+      ? (e) => <Icons.Repo size={18} color={e.color} opacity={opacity(e)} offset={[0, 1]} />
+      : (e) => <Icons.Face size={18} color={e.color} opacity={opacity(e)} />;
   },
 };
 

@@ -41,17 +41,17 @@ export const Sample = {
   get renderers(): t.LabelItemRenderers<K> {
     return {
       action(kind) {
-        const treeRenderer: t.LabelItemRenderer = (e) => {
+        const tree: t.LabelItemRenderer = (e) => {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />;
         };
-        const fooRenderer: t.LabelItemRenderer = (e) => {
+        const keyboard: t.LabelItemRenderer = (e) => {
           return (
             <Icons.Keyboard.outline size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />
           );
         };
-        if (kind === 'right:foo') return treeRenderer;
-        if (kind === 'right:bar') return treeRenderer;
-        if (kind === 'left:sample') return fooRenderer;
+        if (kind === 'right:foo') return tree;
+        if (kind === 'right:bar') return tree;
+        if (kind === 'left:sample') return keyboard;
         return;
       },
     };
