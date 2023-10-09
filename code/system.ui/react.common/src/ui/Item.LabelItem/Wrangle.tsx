@@ -62,6 +62,15 @@ export const Wrangle = {
     return color;
   },
 
+  renderer(renderers: t.LabelItemRenderers, kind: t.LabelActionKind) {
+    if (renderers.actions?.[kind]) return renderers.actions[kind];
+    if (typeof renderers.action === 'function') {
+      const res = renderers.action?.(kind);
+      if (res) return res;
+    }
+    return DEFAULTS.renderers.actions?.[kind];
+  },
+
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
     const { index, total } = args;
     const { enabled, selected, focused, editing, item: item } = Wrangle.valuesOrDefault(args);
@@ -92,6 +101,6 @@ export const Wrangle = {
 
   defaultIcon(args: { selected?: boolean }) {
     const color = Wrangle.foreColor(args);
-    return <Icons.Repo size={18} color={color} offset={[0, 1]} />;
+    return <Icons.Face size={18} color={color} offset={[0, 0]} />;
   },
 } as const;

@@ -5,6 +5,7 @@ export type ActionsProps = {
   index: number;
   total: number;
   item: t.LabelItem;
+  renderers?: t.LabelItemRenderers;
 
   action?: t.LabelAction | t.LabelAction[];
   edge: 'Left' | 'Right';
@@ -25,11 +26,12 @@ export const Actions: React.FC<ActionsProps> = (props) => {
     index = DEFAULTS.index,
     total = DEFAULTS.total,
     enabled = DEFAULTS.enabled,
+    renderers = DEFAULTS.renderers,
+    item,
     selected,
     focused,
     editing,
     label,
-    item,
     debug,
   } = props;
   const actions = Wrangle.actions(props);
@@ -49,6 +51,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         index={index}
         total={total}
         item={item}
+        renderers={renderers}
         style={margins}
         action={action}
         label={label}

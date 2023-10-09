@@ -6,6 +6,7 @@ export type ActionProps = {
   index: number;
   total: number;
   item: t.LabelItem;
+  renderers: t.LabelItemRenderers;
   action: t.LabelAction;
   label?: string;
   enabled?: boolean;
@@ -17,7 +18,7 @@ export type ActionProps = {
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, selected, focused, editing, debug, index, total, item } = props;
+  const { action, selected, focused, editing, debug, index, total, item, renderers } = props;
   const { kind, width, onClick } = action;
 
   const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
@@ -52,7 +53,8 @@ export const Action: React.FC<ActionProps> = (props) => {
     button: css({ display: 'grid' }),
   };
 
-  const elIcon = Wrangle.icon(action.render, {
+  const renderer = Wrangle.renderer(renderers, kind);
+  const elBody = Wrangle.icon(renderer, {
     index,
     total,
     selected,
@@ -69,13 +71,13 @@ export const Action: React.FC<ActionProps> = (props) => {
       enabled={enabled}
       disabledOpacity={1}
     >
-      <div {...styles.button}>{elIcon}</div>
+      <div {...styles.button}>{elBody}</div>
     </Button>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.body}>{elButton || elIcon}</div>
+      <div {...styles.body}>{elButton || elBody}</div>
       {spinning && <ActionSpinner action={action} selected={selected} focused={focused} />}
     </div>
   );

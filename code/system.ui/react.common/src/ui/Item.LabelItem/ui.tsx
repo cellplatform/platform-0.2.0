@@ -137,14 +137,14 @@ export const View: React.FC<Props> = (props) => {
     >
       {props.renderCount && <RenderCount {...props.renderCount} />}
       <div {...styles.body}>
-        {item.left && <Left {...props} />}
+        {item.left !== null && <Left {...props} />}
         <Label
           {...props}
           inputRef={inputRef}
           onDoubleClick={clickHandler(props.onLabelDoubleClick)}
           debug={debug}
         />
-        {item.right && <Right {...props} />}
+        {item.right !== null && <Right {...props} />}
       </div>
       {elDisabled}
       {elFocusBorder}
@@ -156,5 +156,5 @@ export const View: React.FC<Props> = (props) => {
  * [Helpers]
  */
 function autoOrEmpty(value: any) {
-  return value === undefined ? '' : 'auto';
+  return value === null ? '' : 'auto';
 }

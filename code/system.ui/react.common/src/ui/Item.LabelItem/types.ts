@@ -11,7 +11,6 @@ export type LabelAction<K extends LabelActionKind = string> = {
   width?: number;
   enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
-  render?: LabelItemRenderer;
   onClick?: LabelItemActionHandler; // TEMP 🐷 via cmd events
 };
 
@@ -21,8 +20,10 @@ export type LabelAction<K extends LabelActionKind = string> = {
 export type LabelItemRenderer = (args: LabelItemRendererArgs) => JSX.Element;
 export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
 export type LabelItemRenderers = {
-  readonly label?: t.LabelItemRenderer;
-  readonly placeholder?: t.LabelItemRenderer;
+  label?: t.LabelItemRenderer;
+  placeholder?: t.LabelItemRenderer;
+  actions?: { [kind: LabelActionKind]: t.LabelItemRenderer };
+  action?(kind: LabelActionKind): t.LabelItemRenderer | undefined;
 };
 
 /**
