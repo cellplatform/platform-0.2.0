@@ -1,7 +1,5 @@
 import { type t } from './common';
 
-type O = Record<string, unknown>;
-
 export type LabelItemPosition = { index: number; total: number };
 
 /**
@@ -11,10 +9,9 @@ export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
   width?: number;
-  element?: LabelItemRender;
   enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
-  onClick?: LabelItemActionHandler;
+  render?: LabelItemRender;
 };
 
 /**
@@ -35,6 +32,7 @@ export type LabelItemDynamicValueArgs = {
   selected: boolean;
   enabled: boolean;
   editing: boolean;
+  item: t.LabelItem;
 };
 
 /**
@@ -43,8 +41,7 @@ export type LabelItemDynamicValueArgs = {
 export type LabelItemProps = {
   index?: number;
   total?: number;
-  label?: string;
-  placeholder?: string;
+  item?: t.LabelItem;
   maxLength?: number;
 
   left?: LabelAction | LabelAction[] | null;

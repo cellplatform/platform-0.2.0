@@ -4,13 +4,19 @@ export const Sample = {
   item(): t.LabelItem {
     return {
       label: 'hello 👋',
+
+      labelRender(e) {
+        return <div>{`foo:${e.item.label || 'empty'}`}</div>;
+      },
+
       // placeholder: 'foobar',
+
       right: {
         kind: 'foobar',
         enabled(e) {
           return !e.editing;
         },
-        element(e) {
+        render(e) {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;
         },
         onClick(e) {

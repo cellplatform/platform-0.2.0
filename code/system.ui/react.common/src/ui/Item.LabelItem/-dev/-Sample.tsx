@@ -17,7 +17,7 @@ export const Sample = {
         width,
         enabled,
         spinning: options.spinning ?? spinning,
-        element(e) {
+        render(e) {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;
         },
         onClick: (e) => console.info('⚡️ action → onClick:', e),

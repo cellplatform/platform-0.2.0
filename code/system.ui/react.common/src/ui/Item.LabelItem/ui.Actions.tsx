@@ -2,8 +2,9 @@ import { DEFAULTS, asArray, css, type t } from './common';
 import { Action } from './ui.Action';
 
 export type ActionsProps = {
-  index?: number;
-  total?: number;
+  index: number;
+  total: number;
+  item: t.LabelItem;
 
   action?: t.LabelAction | t.LabelAction[];
   edge: 'Left' | 'Right';
@@ -28,6 +29,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
     focused,
     editing,
     label,
+    item,
     debug,
   } = props;
   const actions = Wrangle.actions(props);
@@ -46,6 +48,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         key={`${i}:${action.kind}`}
         index={index}
         total={total}
+        item={item}
         style={margins}
         action={action}
         label={label}

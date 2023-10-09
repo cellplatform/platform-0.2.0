@@ -5,6 +5,7 @@ import { Wrangle } from './Wrangle';
 export type ActionProps = {
   index: number;
   total: number;
+  item: t.LabelItem;
   action: t.LabelAction;
   label?: string;
   enabled?: boolean;
@@ -16,7 +17,7 @@ export type ActionProps = {
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, selected, focused, editing, debug, index, total } = props;
+  const { action, selected, focused, editing, debug, index, total, item } = props;
   const { kind, width, onClick } = action;
 
   const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
@@ -51,13 +52,14 @@ export const Action: React.FC<ActionProps> = (props) => {
     button: css({ display: 'grid' }),
   };
 
-  const elIcon = Wrangle.element(action.element, {
+  const elIcon = Wrangle.icon(action.render, {
     index,
     total,
     selected,
     enabled,
     focused,
     editing,
+    item,
   });
 
   const elButton = is.button && (

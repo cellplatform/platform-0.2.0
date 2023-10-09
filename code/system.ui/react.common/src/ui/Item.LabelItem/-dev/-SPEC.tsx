@@ -4,10 +4,21 @@ import { Sample } from './-Sample';
 
 type T = {
   ref?: t.LabelItemRef;
+  item: t.LabelItem;
   props: t.LabelItemProps;
   debug: { subjectBg?: boolean };
 };
 const initial: T = {
+  item: {
+    // labelRender(e) {
+    //   return <div style={{ backgroundColor: 'rgba(255, 0, 0, 0.1)' }}>{e.item.label}</div>;
+    // },
+    // placeholderRender(e) {
+    //   return (
+    //     <div style={{ backgroundColor: 'rgba(255, 0, 0, 0.1)' }}>{e.item.placeholder || 'foo'}</div>
+    //   );
+    // },
+  },
   props: { focusOnReady: true },
   debug: {},
 };
@@ -18,19 +29,15 @@ export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
     Pick<
       t.LabelItemProps,
-      | 'label'
-      | 'placeholder'
-      | 'enabled'
-      | 'selected'
-      | 'indent'
-      | 'padding'
-      | 'editing'
-      | 'focused'
-      | 'debug'
-    >;
+      // | 'label'
+
+      'enabled' | 'selected' | 'indent' | 'padding' | 'editing' | 'focused' | 'debug'
+    > &
+    Pick<t.LabelItem, 'label' | 'placeholder'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
     label: '',
+    placeholder: '',
     enabled: DEFAULTS.enabled,
     selected: DEFAULTS.selected,
     indent: DEFAULTS.indent,
@@ -47,6 +54,7 @@ export default Dev.describe(name, (e) => {
 
       return {
         ...state.current.props,
+        item: state.current.item,
 
         onReady(e) {
           console.info('⚡️ onReady', e);
@@ -63,7 +71,7 @@ export default Dev.describe(name, (e) => {
         },
         onEditChange(e) {
           console.info('⚡️ onEditChange', e);
-          state.change((d) => (local.label = d.props.label = e.label));
+          state.change((d) => (local.label = d.item.label = e.label));
         },
         onKeyDown(e) {
           console.info('⚡️ onKeyDown', e);
@@ -80,7 +88,8 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.label = local.label;
+      d.item.label = local.label;
+      d.item.placeholder = local.placeholder;
       d.props.enabled = local.enabled;
       d.props.selected = local.selected;
       d.props.indent = local.indent;
@@ -123,29 +132,30 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       dev.textbox((txt) => {
-        const change = (to: string) => state.change((d) => (local.label = d.props.label = to));
+        const change = (to: string) =>
+          state.change((d) => (local.label = d.item.label = to || undefined));
         txt
           .placeholder('label text')
-          .value((e) => e.state.props.label)
+          .value((e) => e.state.item.label)
           .margin([0, 0, 10, 0])
           .onChange((e) => change(e.to.value))
           .onEnter((e) => {
-            const text = (e.state.current.props.label ?? '').trim().toLowerCase();
+            const text = (e.state.current.item.label ?? '').trim().toLowerCase();
             if (text === 'lorem') change(Dev.Lorem.toString());
           });
       });
 
       dev.textbox((txt) => {
         const change = (to: string) => {
-          state.change((d) => (local.placeholder = d.props.placeholder = to));
+          state.change((d) => (local.placeholder = d.item.placeholder = to || undefined));
         };
         txt
           .placeholder('placeholder')
-          .value((e) => e.state.props.placeholder)
+          .value((e) => e.state.item.placeholder)
           .margin([0, 0, 10, 0])
           .onChange((e) => change(e.to.value))
           .onEnter((e) => {
-            const text = (e.state.current.props.placeholder ?? '').trim().toLowerCase();
+            const text = (e.state.current.item.placeholder ?? '').trim().toLowerCase();
             if (text === 'lorem') change(Dev.Lorem.toString());
           });
       });
@@ -343,7 +353,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button(['reset', '🌳'], async (e) => {
         await e.change((d) => {
-          d.props.label = undefined;
+          d.item.label = undefined;
           d.props.left = undefined;
           d.props.right = undefined;
           d.props.enabled = true;

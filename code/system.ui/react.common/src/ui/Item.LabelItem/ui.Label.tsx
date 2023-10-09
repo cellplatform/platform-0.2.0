@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 import { Wrangle } from './Wrangle';
-import { Color, DEFAULTS, TextInput, css, type t } from './common';
+import { DEFAULTS, TextInput, css, type t } from './common';
 
 type Props = t.LabelItemProps & {
   inputRef: RefObject<t.TextInputRef>;
@@ -17,11 +17,14 @@ export const Label: React.FC<Props> = (props) => {
     editing = DEFAULTS.editing,
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
-    placeholder = DEFAULTS.placeholder,
+    focused = DEFAULTS.focused,
     focusOnReady = DEFAULTS.focusOnReady,
     debug,
+    item = {},
   } = props;
-  const label = Wrangle.labelText(props);
+
+  const label = Wrangle.labelText(item);
+  const placeholder = item.placeholder ?? DEFAULTS.placeholder;
 
   /**
    * [Render]
@@ -52,7 +55,9 @@ export const Label: React.FC<Props> = (props) => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     }),
-    labelEmpty: css({ opacity: placeholderStyle.opacity }),
+    labelEmpty: css({
+      opacity: placeholderStyle.opacity,
+    }),
   };
 
   const elTextbox = editing && (
@@ -72,9 +77,18 @@ export const Label: React.FC<Props> = (props) => {
     />
   );
 
-  const labelText = label.isEmpty ? placeholder : label.text;
+  const renderElement = (renderer?: t.LabelItemRender, text?: string) => {
+    return typeof renderer === 'function'
+      ? Wrangle.element(renderer, { index, total, enabled, selected, focused, editing, item })
+      : text;
+  };
+
   const elLabel = !editing && (
-    <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>{labelText}</div>
+    <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
+      {label.isEmpty
+        ? renderElement(item.placeholderRender, placeholder)
+        : renderElement(item.labelRender, label.text)}
+    </div>
   );
 
   return (

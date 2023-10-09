@@ -75,7 +75,6 @@ export function useItemController(args: Args) {
     const events = item?.events();
     if (events) {
       events.command.redraw$.subscribe(redraw);
-      events.$.subscribe(redraw);
     }
 
     return events?.dispose;

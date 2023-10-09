@@ -1,5 +1,15 @@
 import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 
+type RenderArgs = {
+  index: number;
+  total: number;
+  item: t.LabelItem;
+  selected?: boolean;
+  enabled?: boolean;
+  focused?: boolean;
+  editing?: boolean;
+};
+
 export const Wrangle = {
   valuesOrDefault(props: Partial<t.LabelItemDynamicValueArgs>): t.LabelItemDynamicValueArgs {
     const {
@@ -9,8 +19,9 @@ export const Wrangle = {
       selected = DEFAULTS.selected,
       focused = DEFAULTS.focused,
       editing = DEFAULTS.editing,
+      item = {},
     } = props;
-    return { index, total, enabled, selected, focused, editing } as const;
+    return { index, total, enabled, selected, focused, editing, item } as const;
   },
 
   dynamicValue<T>(
@@ -51,27 +62,23 @@ export const Wrangle = {
     return color;
   },
 
-  element(
-    renderer: t.LabelItemRender | undefined,
-    args: {
-      index: number;
-      total: number;
-      selected?: boolean;
-      enabled?: boolean;
-      focused?: boolean;
-      editing?: boolean;
-    },
-  ) {
+  element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
     const { index, total } = args;
-    const { enabled, selected, focused, editing } = Wrangle.valuesOrDefault(args);
+    const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
+
+    if (typeof renderer === 'string') return renderer;
 
     if (typeof renderer === 'function') {
       const color = Wrangle.foreColor(args);
-      const el = renderer({ index, total, enabled, selected, focused, editing, color });
+      const el = renderer({ index, total, item, enabled, selected, focused, editing, color });
       return el ?? Wrangle.defaultIcon(args);
     }
 
-    return Wrangle.defaultIcon(args);
+    return undefined;
+  },
+
+  icon(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
+    return Wrangle.element(renderer, args) ?? Wrangle.defaultIcon(args);
   },
 
   defaultIcon(args: { selected?: boolean }) {

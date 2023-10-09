@@ -1,7 +1,6 @@
 import type { t } from './common';
 
 type ItemId = string;
-type O = Record<string, unknown>;
 
 export type LabelItemBehaviorKind =
   | 'Item'
@@ -15,12 +14,15 @@ export type LabelItemBehaviorKind =
  */
 export type LabelItem = {
   label?: string;
-  labelElement?: t.LabelItemRender | JSX.Element | false;
   placeholder?: string;
+  readonly labelRender?: t.LabelItemRender;
+  readonly placeholderRender?: t.LabelItemRender;
+
   editing?: boolean;
   enabled?: boolean;
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
   is?: { editable?: t.LabelItemValue<boolean> };
+
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
 };
