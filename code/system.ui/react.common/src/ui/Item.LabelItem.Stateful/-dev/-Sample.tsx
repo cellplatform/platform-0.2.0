@@ -1,13 +1,9 @@
 import { Icons, type t } from '../common';
 
 export const Sample = {
-  item(): t.LabelItem {
-    return {
+  item() {
+    const initial: t.LabelItem = {
       label: 'hello 👋',
-
-      labelRender(e) {
-        return <div>{`foo:${e.item.label || 'empty'}`}</div>;
-      },
 
       // placeholder: 'foobar',
 
@@ -39,6 +35,16 @@ export const Sample = {
           console.log('is.editable: (e):', e);
           return true;
         },
+      },
+    };
+
+    return { initial } as const;
+  },
+
+  get renderers(): t.LabelItemRenderers {
+    return {
+      label(e) {
+        return <div>{`🌳:${e.item.label || 'empty'}`}</div>;
       },
     };
   },

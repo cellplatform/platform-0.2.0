@@ -33,6 +33,7 @@ export default Dev.describe(name, (e) => {
   const TestState = {
     list: LabelItem.Stateful.State.list(),
     items: [] as t.LabelItemState[],
+    renderers: Sample.renderers,
     init: {
       items(length: number = 0) {
         TestState.items = Array.from({ length }).map(() => TestState.init.item());
@@ -40,27 +41,20 @@ export default Dev.describe(name, (e) => {
       item(dispose$?: t.Observable<any>) {
         const State = LabelItem.Stateful.State;
 
-        const initial = Sample.item();
+        const { initial } = Sample.item();
         const state = State.item(initial);
         const dispatch = State.commands(state);
         const events = state.events(dispose$);
 
         events.keyboard.enter$.subscribe((e) => console.info('Enter', e));
         events.keyboard.escape$.subscribe((e) => console.info('Escape', e));
-
         events.keyboard.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {
           dispatch.redraw();
         });
 
-        events.command.clipboard.cut$.subscribe((e) => {
-          console.info('🌳 cut', state.current);
-        });
-        events.command.clipboard.copy$.subscribe((e) => {
-          console.info('🌳 copy', state.current);
-        });
-        events.command.clipboard.paste$.subscribe((e) => {
-          console.info('💥 paste', state.current);
-        });
+        events.command.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
+        events.command.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
+        events.command.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
 
         return state;
       },
@@ -96,6 +90,7 @@ export default Dev.describe(name, (e) => {
               total={length}
               list={isList ? TestState.list : undefined}
               item={TestState.items[i]}
+              renderers={TestState.renderers}
               useBehaviors={debug.useBehaviors}
               renderCount={debug.renderCount ? { absolute: [0, -55, null, null] } : undefined}
               debug={debug.debug}

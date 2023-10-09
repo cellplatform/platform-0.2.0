@@ -19,8 +19,9 @@ export const View: React.FC<Props> = (props) => {
     tabIndex = DEFAULTS.tabIndex,
     focused = DEFAULTS.focused,
     borderRadius = DEFAULTS.borderRadius,
-    debug,
+    renderers = DEFAULTS.renderers,
     item = {},
+    debug,
   } = props;
   const { enabled = DEFAULTS.enabled, editing = DEFAULTS.editing } = item;
   const label = Wrangle.labelText(item);

@@ -13,18 +13,18 @@ export const Label: React.FC<Props> = (props) => {
     inputRef,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
-
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
     focused = DEFAULTS.focused,
     focusOnReady = DEFAULTS.focusOnReady,
-    debug,
+    renderers = DEFAULTS.renderers,
     item = {},
+    debug,
   } = props;
   const {
-    placeholder = DEFAULTS.placeholder,
     enabled = DEFAULTS.enabled,
     editing = DEFAULTS.editing,
+    placeholder = DEFAULTS.placeholder,
   } = item;
   const label = Wrangle.labelText(item);
 
@@ -57,9 +57,7 @@ export const Label: React.FC<Props> = (props) => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     }),
-    labelEmpty: css({
-      opacity: placeholderStyle.opacity,
-    }),
+    labelEmpty: css({ opacity: placeholderStyle.opacity }),
   };
 
   const elTextbox = editing && (
@@ -89,7 +87,7 @@ export const Label: React.FC<Props> = (props) => {
     <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
       {label.isEmpty
         ? renderElement(item.placeholderRender, placeholder)
-        : renderElement(item.labelRender, label.text)}
+        : renderElement(renderers.label, label.text)}
     </div>
   );
 

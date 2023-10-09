@@ -15,7 +15,6 @@ export type LabelItemBehaviorKind =
 export type LabelItem = {
   label?: string;
   placeholder?: string;
-  readonly labelRender?: t.LabelItemRenderer;
   readonly placeholderRender?: t.LabelItemRenderer;
 
   editing?: boolean;
@@ -25,6 +24,10 @@ export type LabelItem = {
 
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
+};
+
+export type LabelItemRenderers = {
+  readonly label?: t.LabelItemRenderer;
 };
 
 /**
@@ -86,8 +89,9 @@ export type LabelListController<Kind extends string, H extends HTMLElement> = {
 export type LabelItemStatefulProps = {
   index?: number;
   total?: number;
-  item?: t.LabelItemState;
   list?: t.LabelItemListState;
+  item?: t.LabelItemState;
+  renderers?: t.LabelItemRenderers;
   useBehaviors?: t.LabelItemBehaviorKind[];
   renderCount?: t.RenderCountProps;
   debug?: boolean;

@@ -44,6 +44,8 @@ export type LabelItemProps = {
   total?: number;
 
   item?: t.LabelItem;
+  renderers?: t.LabelItemRenderers;
+
   maxLength?: number;
   selected?: boolean;
   focused?: boolean;

@@ -19,6 +19,8 @@ const leftAction: t.LabelAction<K> = {
 
 const rightAction: t.LabelAction<K> | undefined = undefined;
 
+const renderers: t.LabelItemRenderers = {};
+
 export const DEFAULTS = {
   RUBY: 'rgba(255, 0, 0, 0.1)',
   debug: false,
@@ -38,4 +40,5 @@ export const DEFAULTS = {
   spinner: { width: 15 },
   leftAction,
   rightAction,
+  renderers,
 } as const;
