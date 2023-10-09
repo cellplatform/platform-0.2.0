@@ -4,7 +4,7 @@ import { describe, expect, it, type t } from '../../test';
 type O = Record<string, unknown>;
 const State = LabelItemStateful.State;
 
-describe('LabelItem: State', () => {
+describe('LabelItem: State', async () => {
   it('init', () => {
     const state = State.item({ label: 'foo' });
     expect(state.current.label).to.eql('foo'); // NB: initial value.
@@ -31,15 +31,19 @@ describe('LabelItem: State', () => {
     expect(fired.length).to.eql(1); // NB: no change because disposed.
   });
 
-  it('events.cmd$ (command stream)', () => {
+  it('events.cmd.$ (command stream)', () => {
     const state = State.item({ label: 'foo' });
-    const command = State.command(state);
     const events = state.events();
+    const command = State.command(state);
 
     const fired: t.LabelItemCommand[] = [];
     events.command.$.subscribe((e) => fired.push(e));
 
-    state.change((d) => (d.command = { type: 'Item:Clipboard', payload: { action: 'Copy' } }));
+    const sample = (action: t.LabelItemClipboard['action']): t.LabelItemCommand => ({
+      type: 'Item:Clipboard',
+      payload: { action },
+    });
+    state.change((d) => (d.command = sample('Copy')));
     expect(fired.length).to.eql(1);
     expect(state.current.command).to.eql({ type: 'Item:Clipboard', payload: { action: 'Copy' } });
 

@@ -7,13 +7,13 @@ export function events(
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
-  const command$ = $.pipe(
-    rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-    rx.filter((e) => Boolean(e.to.cmd)),
-    rx.map((e) => e.to.cmd!),
+  const cmd$ = $.pipe(
+    rx.distinctUntilChanged((prev, next) => R.equals(prev.to.command, next.to.command)),
+    rx.filter((e) => Boolean(e.to.command)),
+    rx.map((e) => e.to.command!),
   );
 
-  const keydown$ = rx.payload<t.LabelItemKeydownCommand>(command$, 'Item:Keydown');
+  const keydown$ = rx.payload<t.LabelItemKeydownCommand>(cmd$, 'Item:Keydown');
   const meta$ = keydown$.pipe(rx.filter((e) => e.is.meta));
 
   type K = t.LabelItemKeyHandlerArgs;
@@ -22,11 +22,14 @@ export function events(
 
   const api: t.LabelItemStateEvents = {
     $,
-    cmd$: command$,
-    keydown$,
     keyboard: {
-      copy$: filterOnMetaKey('KeyC'),
-      paste$: filterOnMetaKey('KeyV'),
+      $: keydown$,
+      enter$: filterOnMetaKey('Enter'),
+      escape$: filterOnMetaKey('Escape'),
+    },
+    command: {
+      $: cmd$,
+      clipboard$: rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard'),
     },
 
     /**

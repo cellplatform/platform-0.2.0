@@ -1,4 +1,4 @@
-import { Dev, Value, type t } from '../../../test.ui';
+import { rx, Dev, Value, type t } from '../../../test.ui';
 import { LabelItem } from '../../Item.LabelItem';
 import { Sample } from './-Sample';
 import { SampleList } from './-Sample.List';
@@ -36,15 +36,18 @@ export default Dev.describe(name, (e) => {
     init: {
       item(dispose$?: t.Observable<any>) {
         const State = LabelItem.Stateful.State;
-
         const initial = Sample.item();
         const state = State.item(initial);
-
         const events = state.events(dispose$);
-        events.keyboard.copy$.subscribe((e) => {
+        const clipboard$ = events.command.clipboard$;
+
+        clipboard$.pipe(rx.filter((e) => e.action === 'Cut')).subscribe((e) => {
           console.info('🌳 copy', state.current);
         });
-        events.keyboard.paste$.subscribe((e) => {
+        clipboard$.pipe(rx.filter((e) => e.action === 'Copy')).subscribe((e) => {
+          console.info('🌳 copy', state.current);
+        });
+        clipboard$.pipe(rx.filter((e) => e.action === 'Paste')).subscribe((e) => {
           console.info('💥 paste', state.current);
         });
 

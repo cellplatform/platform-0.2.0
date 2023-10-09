@@ -2,6 +2,7 @@ import { Wrangle } from './Wrangle';
 import { DEFAULTS, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
+import { State } from './State';
 
 type Args = {
   index?: number;
@@ -48,15 +49,16 @@ export function useItemController(args: Args) {
     handlers: selection.handlers,
   });
 
+  const command = State.command(item);
   const base = edit.handlers;
   const handlers: t.LabelItemPropsHandlers = {
     ...base,
     onKeyDown(e) {
-      item?.change((d) => (d.cmd = { type: 'Item:Keydown', payload: e }));
+      command.keydown(e);
       base.onKeyDown?.(e);
     },
     onKeyUp(e) {
-      item?.change((d) => (d.cmd = { type: 'Item:Keyup', payload: e }));
+      command.keyup(e);
       base.onKeyUp?.(e);
     },
   };

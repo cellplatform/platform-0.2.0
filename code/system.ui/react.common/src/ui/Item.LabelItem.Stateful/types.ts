@@ -19,7 +19,7 @@ export type LabelItem = {
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
   is?: { editable?: t.LabelItemValue<boolean> };
-  cmd?: LabelItemCommand; // Produces an event stream of commands when changed.
+  command?: LabelItemCommand; // Produces an event stream of commands when changed.
 };
 
 /**
@@ -35,13 +35,17 @@ export type LabelItemList = {
  * Simple safe/immutable state wrapper for the data object.
  */
 export type LabelItemState = t.ImmutableRef<t.LabelItem, t.LabelItemStateEvents>;
+
 export type LabelItemStateEvents = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelItem>>;
-  readonly cmd$: t.Observable<t.LabelItemCommand>;
-  readonly keydown$: t.Observable<t.LabelItemKeyHandlerArgs>;
   readonly keyboard: {
-    readonly copy$: t.Observable<t.LabelItemKeyHandlerArgs>;
-    readonly paste$: t.Observable<t.LabelItemKeyHandlerArgs>;
+    readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
+    readonly enter$: t.Observable<t.LabelItemKeyHandlerArgs>;
+    readonly escape$: t.Observable<t.LabelItemKeyHandlerArgs>;
+  };
+  readonly command: {
+    readonly $: t.Observable<t.LabelItemCommand>;
+    readonly clipboard$: t.Observable<t.LabelItemClipboard>;
   };
 };
 
@@ -101,19 +105,12 @@ export type LabelItemChangeAction =
  * Commands (events as property stream)
  */
 export type LabelItemCommand =
-  | LabelItemTestCommand
   | LabelItemKeydownCommand
-  | LabelItemKeyupCommand;
+  | LabelItemKeyupCommand
+  | LabelItemClipboardCommand;
 
-export type LabelItemTestCommand = {
-  type: 'Item:Test'; // Used for testing purposes.
-  payload: { msg?: string; count?: number };
-};
-export type LabelItemKeydownCommand = {
-  type: 'Item:Keydown';
-  payload: t.LabelItemKeyHandlerArgs;
-};
-export type LabelItemKeyupCommand = {
-  type: 'Item:Keyup';
-  payload: t.LabelItemKeyHandlerArgs;
-};
+export type LabelItemKeydownCommand = { type: 'Item:Keydown'; payload: t.LabelItemKeyHandlerArgs };
+export type LabelItemKeyupCommand = { type: 'Item:Keyup'; payload: t.LabelItemKeyHandlerArgs };
+
+export type LabelItemClipboardCommand = { type: 'Item:Clipboard'; payload: LabelItemClipboard };
+export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste' };
