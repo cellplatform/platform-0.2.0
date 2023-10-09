@@ -41,8 +41,6 @@ export const Sample = {
   get renderers(): t.LabelItemRenderers<K> {
     return {
       action(kind) {
-        return;
-
         const treeRenderer: t.LabelItemRenderer = (e) => {
           return <Icons.ObjectTree size={17} color={e.color} opacity={e.enabled ? 0.9 : 0.3} />;
         };
