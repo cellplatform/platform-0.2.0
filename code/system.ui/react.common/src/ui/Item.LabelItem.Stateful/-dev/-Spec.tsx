@@ -46,6 +46,10 @@ export default Dev.describe(name, (e) => {
         const dispatch = State.commands(state);
         const events = state.events(dispose$);
 
+        events.command.$.subscribe((e) => {
+          console.info('🌳 command:', e);
+        });
+
         events.key.enter$.subscribe((e) => console.info('Enter', e));
         events.key.escape$.subscribe((e) => console.info('Escape', e));
         events.key.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {

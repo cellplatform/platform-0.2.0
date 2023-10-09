@@ -115,13 +115,28 @@ export type LabelItemCommand =
   | LabelItemKeydownCommand
   | LabelItemKeyupCommand
   | LabelItemClipboardCommand
-  | LabelItemRedrawCommand;
+  | LabelItemRedrawCommand
+  | LabelItemActionInvokedCommand;
 
-export type LabelItemKeydownCommand = { type: 'Item:Keydown'; payload: t.LabelItemKeyHandlerArgs };
-export type LabelItemKeyupCommand = { type: 'Item:Keyup'; payload: t.LabelItemKeyHandlerArgs };
+export type LabelItemKeydownCommand = { type: 'Item:Keydown'; payload: LabelItemKeypress };
+export type LabelItemKeyupCommand = { type: 'Item:Keyup'; payload: LabelItemKeypress };
+export type LabelItemKeypress = t.LabelItemKeyHandlerArgs & { tx: string };
 
 export type LabelItemClipboardCommand = { type: 'Item:Clipboard'; payload: LabelItemClipboard };
-export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste' };
+export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste'; tx: string };
 
 export type LabelItemRedrawCommand = { type: 'Item:Redraw'; payload: LabelItemRedraw };
 export type LabelItemRedraw = { tx: string };
+
+export type LabelItemActionInvokedCommand<K extends t.LabelActionKind = string> = {
+  type: 'Item:Action';
+  payload: LabelItemActionInvoked<K>;
+};
+export type LabelItemActionInvoked<K extends t.LabelActionKind = string> = {
+  kind: K;
+  position: t.LabelItemPosition;
+  focused: boolean;
+  selected: boolean;
+  editing: boolean;
+  tx: string;
+};

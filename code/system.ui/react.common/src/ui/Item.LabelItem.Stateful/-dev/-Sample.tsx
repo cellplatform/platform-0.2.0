@@ -17,9 +17,6 @@ export const Sample = {
         enabled(e) {
           return !e.editing;
         },
-        onClick(e) {
-          console.info('⚡️ action → onClick:', e);
-        },
       },
 
       is: {

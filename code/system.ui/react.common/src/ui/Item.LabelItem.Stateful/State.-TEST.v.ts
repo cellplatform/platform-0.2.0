@@ -1,5 +1,5 @@
 import { LabelItemStateful } from '.';
-import { describe, expect, it, type t } from '../../test';
+import { describe, expect, it, slug, type t } from '../../test';
 
 type O = Record<string, unknown>;
 const State = LabelItemStateful.State;
@@ -39,13 +39,17 @@ describe('LabelItem: State', () => {
     const fired: t.LabelItemCommand[] = [];
     events.command.$.subscribe((e) => fired.push(e));
 
-    state.change((d) => (d.command = { type: 'Item:Clipboard', payload: { action: 'Copy' } }));
+    const tx = slug();
+    state.change((d) => (d.command = { type: 'Item:Clipboard', payload: { action: 'Copy', tx } }));
     expect(fired.length).to.eql(1);
-    expect(state.current.command).to.eql({ type: 'Item:Clipboard', payload: { action: 'Copy' } });
+    expect(state.current.command).to.eql({
+      type: 'Item:Clipboard',
+      payload: { action: 'Copy', tx },
+    });
 
     dispatch.clipboard('Paste');
     expect(fired.length).to.eql(2);
-    expect(state.current.command).to.eql({ type: 'Item:Clipboard', payload: { action: 'Paste' } });
+    expect((state.current.command?.payload as any).action).to.eql('Paste');
 
     events.dispose();
   });

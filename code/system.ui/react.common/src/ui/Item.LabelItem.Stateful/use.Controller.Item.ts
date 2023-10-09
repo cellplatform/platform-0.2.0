@@ -54,6 +54,9 @@ export function useItemController(args: Args) {
     handlers: selection.handlers,
   });
 
+  /**
+   * Tap into component event handlers
+   */
   const dispatch = State.commands(item);
   const base = edit.handlers;
   const handlers: t.LabelItemPropsHandlers = {
@@ -65,6 +68,10 @@ export function useItemController(args: Args) {
     onKeyUp(e) {
       dispatch.key.up(e);
       base.onKeyUp?.(e);
+    },
+    onActionClick(e) {
+      dispatch.action.invoke(e);
+      base.onActionClick?.(e);
     },
   };
 
