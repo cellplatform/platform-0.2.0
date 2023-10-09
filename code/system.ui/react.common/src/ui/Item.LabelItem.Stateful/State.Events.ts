@@ -48,7 +48,7 @@ export function events(
           $: cmd$,
           redraw$: rx
             .payload<t.LabelItemRedrawCommand>(cmd$, 'Item:Redraw')
-            .pipe(rx.map((e) => e.id)),
+            .pipe(rx.map((e) => e.tx)),
           clipboard: {
             $: clipboard$,
             cut$: clipboard('Cut'),

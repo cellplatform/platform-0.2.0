@@ -124,4 +124,4 @@ export type LabelItemClipboardCommand = { type: 'Item:Clipboard'; payload: Label
 export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste' };
 
 export type LabelItemRedrawCommand = { type: 'Item:Redraw'; payload: LabelItemRedraw };
-export type LabelItemRedraw = { id: string };
+export type LabelItemRedraw = { tx: string };

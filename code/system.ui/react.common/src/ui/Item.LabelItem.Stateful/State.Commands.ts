@@ -20,7 +20,7 @@ export function commands(item?: t.LabelItemState) {
       up: (e: t.LabelItemKeyHandlerArgs) => dispatch({ type: 'Item:Keyup', payload: e }),
     },
     redraw() {
-      dispatch({ type: 'Item:Redraw', payload: { id: slug() } });
+      dispatch({ type: 'Item:Redraw', payload: { tx: slug() } });
     },
   } as const;
   return api;
