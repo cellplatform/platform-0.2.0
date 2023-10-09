@@ -51,37 +51,27 @@ export const Wrangle = {
     return color;
   },
 
-  icon(args: {
-    index: number;
-    total: number;
-    action: t.LabelAction;
-    selected?: boolean;
-    enabled?: boolean;
-    focused?: boolean;
-    editing?: boolean;
-  }) {
-    const { index, total, action } = args;
+  element(
+    renderer: t.LabelItemRender | undefined,
+    args: {
+      index: number;
+      total: number;
+      selected?: boolean;
+      enabled?: boolean;
+      focused?: boolean;
+      editing?: boolean;
+    },
+  ) {
+    const { index, total } = args;
     const { enabled, selected, focused, editing } = Wrangle.valuesOrDefault(args);
 
-    if (!action.element) {
-      return Wrangle.defaultIcon(args);
-    }
-
-    if (typeof action.element === 'function') {
+    if (typeof renderer === 'function') {
       const color = Wrangle.foreColor(args);
-      const el = action.element({
-        index,
-        total,
-        enabled,
-        selected,
-        focused,
-        editing,
-        color,
-      });
+      const el = renderer({ index, total, enabled, selected, focused, editing, color });
       return el ?? Wrangle.defaultIcon(args);
     }
 
-    return;
+    return Wrangle.defaultIcon(args);
   },
 
   defaultIcon(args: { selected?: boolean }) {

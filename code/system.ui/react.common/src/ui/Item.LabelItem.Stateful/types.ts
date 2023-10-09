@@ -15,13 +15,14 @@ export type LabelItemBehaviorKind =
  */
 export type LabelItem = {
   label?: string;
+  labelElement?: t.LabelItemRender | JSX.Element | false;
   placeholder?: string;
   editing?: boolean;
   enabled?: boolean;
+  command?: LabelItemCommand; // Produces an event stream of commands when changed.
+  is?: { editable?: t.LabelItemValue<boolean> };
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
-  is?: { editable?: t.LabelItemValue<boolean> };
-  command?: LabelItemCommand; // Produces an event stream of commands when changed.
 };
 
 /**
@@ -37,7 +38,6 @@ export type LabelItemList = {
  * Simple safe/immutable state wrapper for the data object.
  */
 export type LabelItemState = t.ImmutableRef<t.LabelItem, t.LabelItemStateEvents>;
-
 export type LabelItemStateEvents = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelItem>>;
   readonly keyboard: {

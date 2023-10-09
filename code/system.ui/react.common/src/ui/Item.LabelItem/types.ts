@@ -11,7 +11,7 @@ export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
   width?: number;
-  element?: LabelActionRender | JSX.Element | false;
+  element?: LabelItemRender;
   enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
   onClick?: LabelItemActionHandler;
@@ -20,8 +20,8 @@ export type LabelAction<K extends LabelActionKind = string> = {
 /**
  * JSX Renderer.
  */
-export type LabelActionRender = (args: LabelActionRenderArgs) => JSX.Element;
-export type LabelActionRenderArgs = LabelItemDynamicValueArgs & { color: string };
+export type LabelItemRender = (args: LabelItemRenderArgs) => JSX.Element;
+export type LabelItemRenderArgs = LabelItemDynamicValueArgs & { color: string };
 
 /**
  * Values (explicit or dynamic).

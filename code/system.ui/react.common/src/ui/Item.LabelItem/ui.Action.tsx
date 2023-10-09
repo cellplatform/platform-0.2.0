@@ -51,7 +51,14 @@ export const Action: React.FC<ActionProps> = (props) => {
     button: css({ display: 'grid' }),
   };
 
-  const elIcon = Wrangle.icon({ index, total, action, selected, enabled, focused, editing });
+  const elIcon = Wrangle.element(action.element, {
+    index,
+    total,
+    selected,
+    enabled,
+    focused,
+    editing,
+  });
 
   const elButton = is.button && (
     <Button
