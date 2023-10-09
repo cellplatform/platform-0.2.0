@@ -30,11 +30,11 @@ export function events(
     $,
     get key() {
       if (!cache.keyboard) {
-        const filterOnKey = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
+        const filterOn = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
         cache.keyboard = {
           $: keydown$,
-          enter$: filterOnKey('Enter'),
-          escape$: filterOnKey('Escape'),
+          enter$: filterOn('Enter'),
+          escape$: filterOn('Escape'),
         };
       }
       return cache.keyboard;
