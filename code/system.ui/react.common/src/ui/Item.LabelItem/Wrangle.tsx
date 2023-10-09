@@ -63,11 +63,12 @@ export const Wrangle = {
   },
 
   renderer(renderers: t.LabelItemRenderers, kind: t.LabelActionKind) {
+    const done = (res?: t.LabelItemRenderer | void) => res ?? undefined;
     if (typeof renderers.action === 'function') {
-      const factory = renderers.action?.(kind);
-      if (factory) return factory;
+      const res = renderers.action?.(kind);
+      if (res) return done(res);
     }
-    return DEFAULTS.renderers.action?.(kind);
+    return done(DEFAULTS.renderers.action?.(kind));
   },
 
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {

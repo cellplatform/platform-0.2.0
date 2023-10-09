@@ -23,7 +23,7 @@ export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string 
 export type LabelItemRenderers<A extends LabelActionKind = string> = {
   label?: t.LabelItemRenderer;
   placeholder?: t.LabelItemRenderer;
-  action?(kind: A): t.LabelItemRenderer | undefined;
+  action?(kind: A): t.LabelItemRenderer | undefined | void;
 };
 
 /**
