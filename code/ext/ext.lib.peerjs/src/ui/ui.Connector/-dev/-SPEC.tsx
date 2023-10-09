@@ -11,21 +11,16 @@ export default Dev.describe(name, (e) => {
   const State = LabelItem.Stateful.State;
   const TestState = {
     list: State.list(),
-    items: [] as t.LabelItemState[],
+    items: [] as { state: t.LabelItemState; renderers: t.LabelItemRenderers }[],
     init: {
-      item() {
-        const initial = {}; // TEMP 🐷
-        return State.item(initial);
-      },
       items() {
-        // TestState.items = Array.from({ length }).map(() => TestState.init.item());
-        // TestState.items.unshift(Connector.Model.self());
+        TestState.items = [];
 
-        TestState.items = [
-          //
-          Connector.Model.self(),
-          Connector.Model.remote(),
-        ];
+        type S = t.LabelItemState;
+        type R = t.LabelItemRenderers;
+        const push = (state: S, renderers: R) => TestState.items.push({ state, renderers });
+        push(Connector.Model.Self.state(), Connector.Model.Self.renderers);
+        push(Connector.Model.Remote.state(), Connector.Model.Self.renderers);
       },
     } as const,
   };
@@ -52,7 +47,8 @@ export default Dev.describe(name, (e) => {
               index={i}
               total={length}
               list={TestState.list}
-              item={TestState.items[i]}
+              item={TestState.items[i].state}
+              renderers={TestState.items[i].renderers}
               // debug={true}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
@@ -61,7 +57,13 @@ export default Dev.describe(name, (e) => {
           );
         });
 
-        return <SampleList items={TestState.items} elements={elements} list={TestState.list} />;
+        return (
+          <SampleList
+            items={TestState.items.map((m) => m.state)}
+            elements={elements}
+            list={TestState.list}
+          />
+        );
       });
   });
 

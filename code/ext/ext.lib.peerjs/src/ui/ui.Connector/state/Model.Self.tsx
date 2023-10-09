@@ -76,6 +76,17 @@ export const SelfModel = {
 
     return state;
   },
+
+  /**
+   * Element Renderers
+   */
+  get renderers(): t.LabelItemRenderers {
+    return {
+      label(e) {
+        return <div>{`me:${e.item.label}`}</div>;
+      },
+    };
+  },
 } as const;
 
 /**

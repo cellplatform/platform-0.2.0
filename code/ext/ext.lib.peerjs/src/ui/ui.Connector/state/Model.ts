@@ -1,12 +1,7 @@
-import { SelfModel, type SelfModelOptions } from './Model.Self';
-import { RemoteModel, type RemoteModelOptions } from './Model.Remote';
+import { RemoteModel } from './Model.Remote';
+import { SelfModel } from './Model.Self';
 
 export const Model = {
-  self(options?: SelfModelOptions) {
-    return SelfModel.state(options);
-  },
-
-  remote(options?: RemoteModelOptions) {
-    return RemoteModel.state(options);
-  },
+  Self: SelfModel,
+  Remote: RemoteModel,
 } as const;

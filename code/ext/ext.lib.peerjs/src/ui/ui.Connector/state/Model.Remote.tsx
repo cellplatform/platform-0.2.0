@@ -31,10 +31,6 @@ export const RemoteModel = {
    */
   initial(options: RemoteModelOptions = {}): t.LabelItem {
     return {
-      labelRender(e) {
-        return <div>{`remote:${e.item.label}`}</div>;
-      },
-
       placeholder: 'paste remote peer',
       is: { editable: false },
       left: {
@@ -42,6 +38,14 @@ export const RemoteModel = {
         render(e) {
           return <Icons.Add size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} />;
         },
+      },
+    };
+  },
+
+  get renderers(): t.LabelItemRenderers {
+    return {
+      label(e) {
+        return <div>{`remote:${e.item.label}`}</div>;
       },
     };
   },

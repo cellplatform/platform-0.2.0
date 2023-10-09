@@ -8,6 +8,7 @@ export type {
   DevTools,
   LabelItem,
   LabelItemListState,
+  LabelItemRenderers,
   LabelItemState,
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';

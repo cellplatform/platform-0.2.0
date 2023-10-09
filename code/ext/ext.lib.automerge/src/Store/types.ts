@@ -10,6 +10,7 @@ export type DocUri = t.AutomergeUrl;
 /**
  * TODO 🐷
  * - t.ImmutableRef<T, E>
+ * - URI (change type ImmutableRef<T>.instance → uri ?)
  */
 
 /**
