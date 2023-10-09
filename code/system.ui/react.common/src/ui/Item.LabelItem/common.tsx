@@ -28,7 +28,7 @@ export const DEFAULTS = {
   selected: false,
   editing: false,
   focused: false,
-  focusOnReady: false,
+  focusOnReady: true,
   maxLength: 120,
   tabIndex: 0,
   indent: 0,

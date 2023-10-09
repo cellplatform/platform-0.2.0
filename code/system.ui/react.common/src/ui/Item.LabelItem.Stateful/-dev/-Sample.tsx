@@ -11,6 +11,15 @@ export const Sample = {
 
       // placeholder: 'foobar',
 
+      left: {
+        kind: 'left',
+        render(e) {
+          return (
+            <Icons.Repo size={17} color={e.color} opacity={e.enabled ? 1 : 0.3} offset={[0, 1]} />
+          );
+        },
+      },
+
       right: {
         kind: 'foobar',
         enabled(e) {

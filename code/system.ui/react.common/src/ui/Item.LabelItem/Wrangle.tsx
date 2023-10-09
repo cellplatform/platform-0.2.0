@@ -15,12 +15,12 @@ export const Wrangle = {
     const {
       index = DEFAULTS.index,
       total = DEFAULTS.total,
-      enabled = DEFAULTS.enabled,
       selected = DEFAULTS.selected,
       focused = DEFAULTS.focused,
-      editing = DEFAULTS.editing,
       item = {},
     } = props;
+    const enabled = item.enabled ?? props.enabled ?? DEFAULTS.enabled;
+    const editing = item.editing ?? props.editing ?? DEFAULTS.editing;
     return { index, total, enabled, selected, focused, editing, item } as const;
   },
 

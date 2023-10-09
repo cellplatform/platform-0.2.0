@@ -41,11 +41,9 @@ export type LabelItemDynamicValueArgs = {
 export type LabelItemProps = {
   index?: number;
   total?: number;
+
   item?: t.LabelItem;
   maxLength?: number;
-
-  editing?: boolean;
-
   selected?: boolean;
   focused?: boolean;
 

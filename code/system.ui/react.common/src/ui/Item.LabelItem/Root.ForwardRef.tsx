@@ -6,7 +6,7 @@ import { Ref } from './Ref';
 import { View } from './ui';
 
 export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
-  const { index, total } = Wrangle.valuesOrDefault(props);
+  const { index, total, editing } = Wrangle.valuesOrDefault(props);
 
   const [itemRef, setItemRef] = useState<t.LabelItemRef>();
   const inputRef = useRef<t.TextInputRef>(null);
@@ -24,8 +24,8 @@ export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, r
   }, []);
 
   useEffect(() => {
-    if (props.focusOnEdit && props.editing) focusTextbox();
-  }, [props.focusOnEdit, props.editing]);
+    if (props.focusOnEdit && editing) focusTextbox();
+  }, [props.focusOnEdit, editing]);
 
   /**
    * Render

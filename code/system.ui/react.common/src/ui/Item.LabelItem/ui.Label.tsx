@@ -13,7 +13,7 @@ export const Label: React.FC<Props> = (props) => {
     inputRef,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
-    editing = DEFAULTS.editing,
+
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
     focused = DEFAULTS.focused,
@@ -21,7 +21,11 @@ export const Label: React.FC<Props> = (props) => {
     debug,
     item = {},
   } = props;
-  const { placeholder = DEFAULTS.placeholder, enabled = DEFAULTS.enabled } = item;
+  const {
+    placeholder = DEFAULTS.placeholder,
+    enabled = DEFAULTS.enabled,
+    editing = DEFAULTS.editing,
+  } = item;
   const label = Wrangle.labelText(item);
 
   /**
