@@ -53,6 +53,9 @@ export default Dev.describe(name, (e) => {
         onClick(e) {
           console.info('⚡️ onClick', e);
         },
+        onActionClick(e) {
+          console.info('⚡️ onActionClick', e);
+        },
         onLabelDoubleClick(e) {
           console.info('⚡️ onLabelDoubleClick', e);
         },

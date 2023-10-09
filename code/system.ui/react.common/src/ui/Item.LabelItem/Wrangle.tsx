@@ -19,8 +19,8 @@ export const Wrangle = {
       focused = DEFAULTS.focused,
       item = {},
     } = props;
-    const enabled = item.enabled ?? props.enabled ?? DEFAULTS.enabled;
-    const editing = item.editing ?? props.editing ?? DEFAULTS.editing;
+    const enabled = props.enabled ?? item.enabled ?? DEFAULTS.enabled;
+    const editing = props.editing ?? item.editing ?? DEFAULTS.editing;
     return { index, total, enabled, selected, focused, editing, item } as const;
   },
 
@@ -73,12 +73,11 @@ export const Wrangle = {
   },
 
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
-    const { index, total } = args;
-    const { enabled, selected, focused, editing, item: item } = Wrangle.valuesOrDefault(args);
-
     if (typeof renderer === 'string') return renderer;
 
     if (typeof renderer === 'function') {
+      const { index, total } = args;
+      const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
       const color = Wrangle.foreColor(args);
       const el = renderer({
         index,
@@ -111,8 +110,16 @@ export const Wrangle = {
  */
 
 const actionHelpers: t.LabelItemActionRenderHelpers = {
-  opacity: (e: t.LabelItemRendererArgs) => (e.enabled ? 0.9 : e.selected ? 0.5 : 0.3),
+  opacity(e: t.LabelItemRendererArgs) {
+    if (e.enabled) return 0.9;
+    return e.selected && e.focused ? 0.5 : 0.3;
+  },
   icon(e: t.LabelItemRendererArgs, size, offset): t.IconProps {
-    return { color: e.color, opacity: actionHelpers.opacity(e), size, offset };
+    return {
+      color: e.color,
+      opacity: actionHelpers.opacity(e),
+      size,
+      offset,
+    };
   },
 };

@@ -11,8 +11,9 @@ export const Right: React.FC<t.LabelItemProps> = (props) => {
       {...args}
       edge={'Right'}
       action={action}
-      renderers={props.renderers}
       debug={props.debug}
+      renderers={props.renderers}
+      onActionClick={props.onActionClick}
     />
   );
 };

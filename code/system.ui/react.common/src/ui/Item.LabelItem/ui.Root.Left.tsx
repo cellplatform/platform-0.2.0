@@ -10,8 +10,9 @@ export const Left: React.FC<t.LabelItemProps> = (props) => {
       {...args}
       edge={'Left'}
       action={action}
-      renderers={props.renderers}
       debug={props.debug}
+      renderers={props.renderers}
+      onActionClick={props.onActionClick}
     />
   );
 };

@@ -9,9 +9,9 @@ export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
   width?: number;
-  enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
-  onClick?: LabelItemActionHandler; // TEMP 🐷 via cmd events
+  enabled?: LabelItemValue<boolean>;
+  button?: boolean;
 };
 
 /**
@@ -86,6 +86,7 @@ export type LabelItemPropsHandlers = {
   onClick?: LabelItemClickHandler;
   onLabelDoubleClick?: LabelItemClickHandler;
   onEditClickAway?: LabelItemClickHandler;
+  onActionClick?: t.LabelItemActionHandler;
 };
 
 /**
@@ -119,12 +120,16 @@ export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
 export type LabelItemActionHandlerArgs = {
   position: LabelItemPosition;
   kind: LabelActionKind;
+  focused: boolean;
+  selected: boolean;
+  editing: boolean;
 };
 
 export type LabelItemKeyHandler = (e: LabelItemKeyHandlerArgs) => void;
 export type LabelItemKeyHandlerArgs = {
   position: LabelItemPosition;
-  label: string;
+  focused: boolean;
+  selected: boolean;
   editing: boolean;
   code: string;
   is: t.KeyboardKeyFlags;
@@ -134,14 +139,13 @@ export type LabelItemKeyHandlerArgs = {
 export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;
 export type LabelItemFocusHandlerArgs = {
   position: LabelItemPosition;
-  label: string;
   focused: boolean;
 };
 
 export type LabelItemClickHandler = (e: LabelItemFocusHandlerArgs) => void;
 export type LabelItemClickHandlerArgs = {
   position: LabelItemPosition;
-  label: string;
   focused: boolean;
+  selected: boolean;
   editing: boolean;
 };

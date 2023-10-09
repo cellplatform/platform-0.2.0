@@ -15,22 +15,30 @@ export type ActionProps = {
   editing?: boolean;
   debug?: boolean;
   style?: t.CssValue;
+  onClick?: t.LabelItemActionHandler;
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
   const { action, selected, focused, editing, debug, index, total, item, renderers } = props;
-  const { kind, width, onClick } = action;
+  const { kind, width } = action;
 
   const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
   const spinning = Wrangle.dynamicValue(action.spinning, props, false);
   const is = {
-    button: Boolean(onClick && enabled),
-  };
+    button: Boolean(enabled && (action.button ?? true)),
+  } as const;
 
   /**
    * [Handlers]
    */
-  const handleClick = () => onClick?.({ kind, position: { index, total } });
+  const handleClick = () =>
+    props.onClick?.({
+      kind,
+      position: { index, total },
+      focused: Boolean(focused),
+      selected: Boolean(selected),
+      editing: Boolean(editing),
+    });
 
   /**
    * [Render]

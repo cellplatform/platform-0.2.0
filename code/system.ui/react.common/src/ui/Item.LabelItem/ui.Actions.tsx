@@ -19,6 +19,7 @@ export type ActionsProps = {
   debug?: boolean;
 
   style?: t.CssValue;
+  onActionClick?: t.LabelItemActionHandler;
 };
 
 export const Actions: React.FC<ActionsProps> = (props) => {
@@ -60,6 +61,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         focused={focused}
         editing={editing}
         debug={debug}
+        onClick={props.onActionClick}
       />
     );
   });
