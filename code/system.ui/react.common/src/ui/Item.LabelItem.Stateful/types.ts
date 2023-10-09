@@ -15,8 +15,8 @@ export type LabelItemBehaviorKind =
 export type LabelItem = {
   label?: string;
   placeholder?: string;
-  readonly labelRender?: t.LabelItemRender;
-  readonly placeholderRender?: t.LabelItemRender;
+  readonly labelRender?: t.LabelItemRenderer;
+  readonly placeholderRender?: t.LabelItemRenderer;
 
   editing?: boolean;
   enabled?: boolean;

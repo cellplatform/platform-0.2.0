@@ -62,7 +62,7 @@ export const Wrangle = {
     return color;
   },
 
-  element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
+  element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
     const { index, total } = args;
     const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
 
@@ -77,7 +77,7 @@ export const Wrangle = {
     return undefined;
   },
 
-  icon(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
+  icon(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
     return Wrangle.element(renderer, args) ?? Wrangle.defaultIcon(args);
   },
 

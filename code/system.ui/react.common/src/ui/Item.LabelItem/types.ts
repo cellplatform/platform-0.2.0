@@ -11,14 +11,15 @@ export type LabelAction<K extends LabelActionKind = string> = {
   width?: number;
   enabled?: LabelItemValue<boolean>;
   spinning?: LabelItemValue<boolean>;
-  render?: LabelItemRender;
+  render?: LabelItemRenderer;
+  onClick?: LabelItemActionHandler; // TEMP 🐷 via cmd events
 };
 
 /**
  * JSX Renderer.
  */
-export type LabelItemRender = (args: LabelItemRenderArgs) => JSX.Element;
-export type LabelItemRenderArgs = LabelItemDynamicValueArgs & { color: string };
+export type LabelItemRenderer = (args: LabelItemRendererArgs) => JSX.Element;
+export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
 
 /**
  * Values (explicit or dynamic).
