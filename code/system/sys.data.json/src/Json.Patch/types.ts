@@ -24,6 +24,7 @@ export type Patch = {
   toObject<T extends O>(input: any): T;
   toPatchSet(forward?: A | A[], backward?: A | A[]): t.PatchSet;
   isEmpty(patches: t.PatchSet): boolean;
+  isProxy(value: any): boolean;
   change<T extends O>(from: T, fn: t.PatchMutation<T> | T): t.PatchChange<T>;
   changeAsync<T extends O>(from: T, fn: t.PatchMutationAsync<T>): Promise<t.PatchChange<T>>;
   apply<T extends O>(from: T, patches: t.PatchOperation[] | t.PatchSet): T;

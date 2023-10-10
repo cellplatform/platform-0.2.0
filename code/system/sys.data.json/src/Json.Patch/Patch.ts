@@ -49,6 +49,10 @@ export const Patch: t.Patch = {
       : isEmptyArray(input.prev) && isEmptyArray(input.next);
   },
 
+  isProxy(input) {
+    return isDraft(input);
+  },
+
   change<T extends O>(from: T, fn: t.PatchMutation<T> | T) {
     if (typeof fn === 'function') {
       const [to, forward, backward] = produceWithPatches<T>(from, (draft) => {

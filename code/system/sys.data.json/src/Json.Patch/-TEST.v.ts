@@ -116,6 +116,29 @@ describe('Patch', () => {
     });
   });
 
+  describe('isProxy', () => {
+    it('is not proxy', () => {
+      const obj = { foo: 123 };
+      let res = false;
+      Patch.change(obj, (draft) => (res = Patch.isProxy(draft)));
+      expect(res).to.eql(true);
+    });
+
+    it('is not proxy', () => {
+      const test = (input: any, expected: boolean) => {
+        const res = Patch.isProxy(input);
+        expect(res).to.eql(expected);
+      };
+
+      test(undefined, false);
+      test(null, false);
+      test({}, false);
+      test(' ', false);
+      test(123, false);
+      test(true, false);
+    });
+  });
+
   describe('change (aka "produce" patches)', () => {
     it('change (op: "update" change)', () => {
       const obj = { msg: 'hello', child: { foo: [123] } };
