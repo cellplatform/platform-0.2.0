@@ -5,6 +5,8 @@ export type SelfModelOptions = {
   dispose$?: t.UntilObservable;
 };
 
+type D = { copied?: string };
+
 export const SelfModel = {
   /**
    * State wrapper.
@@ -12,16 +14,17 @@ export const SelfModel = {
   state(options: SelfModelOptions = {}) {
     const { dispose$ } = options;
     const peerid = Wrangle.peerid(options);
-    const transient = { justCopied: '' };
 
     const copyClipboard = async () => {
       await navigator.clipboard.writeText(`peer:${peerid}`);
 
-      const justCopied = (transient.justCopied = slug());
+      const copied = slug();
+      state.change((d) => (State.data<D>(d).copied = copied));
       dispatch.redraw();
+
       Time.delay(1200, () => {
-        if (transient.justCopied !== justCopied) return;
-        transient.justCopied = '';
+        if (State.data<D>(state.current).copied !== copied) return;
+        state.change((d) => (State.data<D>(d).copied = undefined));
         dispatch.redraw();
       });
     };
@@ -62,8 +65,13 @@ export const SelfModel = {
         }
 
         if (kind === 'local:copy') {
-          const tooltip = 'Copy to clipboard';
-          return (e) => <Icons.Copy {...helpers.icon(e, 16)} tooltip={tooltip} />;
+          return (e) => {
+            if (State.data<D>(e.item).copied) {
+              return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
+            } else {
+              return <Icons.Copy {...helpers.icon(e, 16)} tooltip={'Copy to clipboard'} />;
+            }
+          };
         }
 
         return;
