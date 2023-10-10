@@ -11,7 +11,7 @@ type RenderArgs = {
 };
 
 export const Wrangle = {
-  valuesOrDefault(props: Partial<t.LabelItemDynamicValueArgs>): t.LabelItemDynamicValueArgs {
+  valuesOrDefault(props: Partial<t.LabelItemValueArgs>): t.LabelItemValueArgs {
     const {
       index = DEFAULTS.index,
       total = DEFAULTS.total,
@@ -22,19 +22,6 @@ export const Wrangle = {
     const enabled = props.enabled ?? item.enabled ?? DEFAULTS.enabled;
     const editing = props.editing ?? item.editing ?? DEFAULTS.editing;
     return { index, total, enabled, selected, focused, editing, item } as const;
-  },
-
-  dynamicValue<T>(
-    value: t.LabelItemValue<T> | undefined,
-    flags: Partial<t.LabelItemDynamicValueArgs>,
-    defaultValue: T,
-  ) {
-    if (typeof value === 'function') {
-      const fn = value as t.LabelItemDynamicValue<T>;
-      const args = Wrangle.valuesOrDefault(flags);
-      return fn(args);
-    }
-    return value ?? defaultValue;
   },
 
   labelText(args: { label?: string }) {

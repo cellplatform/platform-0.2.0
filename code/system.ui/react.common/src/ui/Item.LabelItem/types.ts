@@ -9,8 +9,8 @@ export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
   width?: number;
-  spinning?: LabelItemValue<boolean>;
-  enabled?: LabelItemValue<boolean>;
+  enabled?: boolean;
+  spinning?: boolean;
   button?: boolean;
 };
 
@@ -19,7 +19,17 @@ export type LabelAction<K extends LabelActionKind = string> = {
  */
 export type LabelItemRendered = JSX.Element | undefined | false;
 export type LabelItemRenderer = (e: LabelItemRendererArgs) => LabelItemRendered;
-export type LabelItemRendererArgs = LabelItemDynamicValueArgs & { color: string };
+export type LabelItemRendererArgs = LabelItemValueArgs & { color: string };
+
+export type LabelItemValueArgs = {
+  index: number;
+  total: number;
+  enabled: boolean;
+  editing: boolean;
+  selected: boolean;
+  focused: boolean;
+  item: t.LabelItem;
+};
 
 export type LabelItemRenderers<A extends LabelActionKind = string> = {
   label?: t.LabelItemRenderer;
@@ -34,21 +44,6 @@ export type LabelItemActionRenderHelpers = {
     size?: t.IconProps['size'],
     offset?: t.IconProps['offset'],
   ): t.IconProps;
-};
-
-/**
- * Values (explicit or dynamic).
- */
-export type LabelItemValue<T> = T | LabelItemDynamicValue<T>;
-export type LabelItemDynamicValue<T> = (e: LabelItemDynamicValueArgs) => T;
-export type LabelItemDynamicValueArgs = {
-  index: number;
-  total: number;
-  focused: boolean;
-  selected: boolean;
-  enabled: boolean;
-  editing: boolean;
-  item: t.LabelItem;
 };
 
 /**

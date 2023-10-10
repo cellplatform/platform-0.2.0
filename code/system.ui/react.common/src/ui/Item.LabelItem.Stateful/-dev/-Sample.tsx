@@ -6,18 +6,8 @@ export const Sample = {
   item() {
     const initial: t.LabelItem<SampleActionKind> = {
       label: 'hello 👋',
-      // placeholder: 'foobar',
-
       left: { kind: 'left' },
-
-      right: {
-        kind: 'foobar',
-        enabled(e) {
-          return !e.editing;
-        },
-      },
-
-      // editable: false,
+      right: { kind: 'foobar' },
     };
 
     return { initial } as const;

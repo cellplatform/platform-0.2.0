@@ -7,11 +7,10 @@ import { View } from './ui';
 
 export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
   const { index, total, editing } = Wrangle.valuesOrDefault(props);
-
   const [itemRef, setItemRef] = useState<t.LabelItemRef>();
   const inputRef = useRef<t.TextInputRef>(null);
-  useImperativeHandle(ref, () => Ref(inputRef));
   const focusTextbox = () => Time.delay(0, () => itemRef?.focus());
+  useImperativeHandle(ref, () => Ref(inputRef));
 
   /**
    * Lifecycle

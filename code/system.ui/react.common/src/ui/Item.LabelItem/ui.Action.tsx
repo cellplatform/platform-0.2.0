@@ -21,9 +21,9 @@ export type ActionProps = {
 export const Action: React.FC<ActionProps> = (props) => {
   const { action, selected, focused, editing, debug, index, total, item, renderers } = props;
   const { kind, width } = action;
+  const enabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;
+  const spinning = action.spinning ?? false;
 
-  const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
-  const spinning = Wrangle.dynamicValue(action.spinning, props, false);
   const is = {
     button: Boolean(enabled && (action.button ?? true)),
   } as const;
