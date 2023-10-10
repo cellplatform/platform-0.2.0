@@ -27,9 +27,9 @@ export const SelfModel = {
     };
 
     const initial: t.ConnectorItem = {
+      editable: false,
       placeholder: 'peer id',
       label: peerid,
-      is: { editable: false },
       left: { kind: 'local:left' },
       right: { kind: 'local:copy' },
     };

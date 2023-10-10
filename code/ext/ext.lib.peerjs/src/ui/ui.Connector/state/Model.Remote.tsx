@@ -31,8 +31,8 @@ export const RemoteModel = {
    */
   initial(options: RemoteModelOptions = {}): t.ConnectorItem {
     return {
+      editable: false,
       placeholder: 'paste remote peer',
-      is: { editable: false },
       left: { kind: 'remote:left' },
     };
   },
