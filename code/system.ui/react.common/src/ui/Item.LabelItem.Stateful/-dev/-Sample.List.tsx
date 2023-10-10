@@ -20,7 +20,10 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      outline: 'none',
+    }),
   };
 
   return (

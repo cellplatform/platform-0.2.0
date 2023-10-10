@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ActiveElement, DEFAULTS, Focus, type t } from './common';
 
+import { State } from './State';
 import { Wrangle } from './Wrangle';
 import { useListNavigationController } from './use.Controller.List.Navigation';
 
@@ -15,11 +16,13 @@ type Args = {
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
 export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
-  const { list, items = [], useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
+  const { items = [], useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
+  const listRef = useRef(args.list ?? State.list());
+  const list = listRef.current;
 
   /**
    * Monitor and sync the list's focus state.
@@ -47,6 +50,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     kind: 'controller:List',
     ref,
     enabled,
+    list,
     items,
     get data() {
       return list?.current ?? DEFAULTS.data.list;
