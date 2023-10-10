@@ -17,9 +17,7 @@ export const Sample = {
         },
       },
 
-      is: {
-        // editable: false,
-      },
+      // editable: false,
     };
 
     return { initial } as const;

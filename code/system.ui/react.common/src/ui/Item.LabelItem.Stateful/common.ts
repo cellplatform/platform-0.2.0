@@ -24,6 +24,7 @@ export const DEFAULTS = {
   total: -1,
   enabled: true,
   editing: false,
+  editable: true,
   useBehaviors: {
     all: useBehaviorAll,
     defaults: useBehaviorDefaults,

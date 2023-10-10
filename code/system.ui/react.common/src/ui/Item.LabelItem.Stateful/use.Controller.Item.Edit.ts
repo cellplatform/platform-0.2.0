@@ -37,29 +37,19 @@ export function useItemEditController(args: Args) {
     redraw();
   };
 
-  const valuesOrDefault = () => {
-    const current = item?.current ?? {};
-    return Wrangle.valuesOrDefault({ ...current, index, total });
-  };
-  const resolve = <T>(input: t.LabelItemValue<T>): T => {
-    if (typeof input !== 'function') return input;
-    const fn = input as Function;
-    const args: t.LabelItemDynamicValueArgs = valuesOrDefault();
-    return fn(args);
-  };
-
   const Edit = {
-    get isEditing() {
-      return Boolean(item?.current.editing);
-    },
+    is: {
+      get editing() {
+        return Boolean(item?.current.editing);
+      },
 
-    get canEdit() {
-      const is = item?.current.is;
-      return is?.editable !== undefined ? resolve(is.editable) : true;
+      get editable() {
+        return item?.current?.editable ?? DEFAULTS.editable;
+      },
     },
 
     start() {
-      if (Edit.isEditing || !Edit.canEdit) return;
+      if (Edit.is.editing || !Edit.is.editable) return;
       change('edit:start', (draft) => {
         draft.editing = true;
         (draft._revert || (draft._revert = {})).label = draft.label;
@@ -67,7 +57,7 @@ export function useItemEditController(args: Args) {
     },
 
     accept() {
-      if (!Edit.isEditing) return;
+      if (!Edit.is.editing) return;
       change('edit:accept', (draft) => {
         draft.editing = false;
         delete draft._revert;
@@ -75,7 +65,7 @@ export function useItemEditController(args: Args) {
     },
 
     cancel() {
-      if (!Edit.isEditing) return;
+      if (!Edit.is.editing) return;
       change('edit:cancel', (draft) => {
         if (draft._revert) draft.label = draft._revert.label;
         draft.editing = false;
@@ -83,7 +73,7 @@ export function useItemEditController(args: Args) {
     },
 
     toggle() {
-      if (Edit.isEditing) {
+      if (Edit.is.editing) {
         Edit.accept();
       } else {
         Edit.start();
