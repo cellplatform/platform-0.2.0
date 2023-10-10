@@ -11,7 +11,6 @@ export const SelfModel = {
    */
   state(options: SelfModelOptions = {}) {
     const { dispose$ } = options;
-
     const peerid = Wrangle.peerid(options);
     const transient = { justCopied: '' };
 

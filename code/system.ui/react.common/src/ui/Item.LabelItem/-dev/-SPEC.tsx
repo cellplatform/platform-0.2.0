@@ -22,8 +22,8 @@ export default Dev.describe(name, (e) => {
     Pick<t.LabelItem, 'label' | 'placeholder' | 'enabled' | 'editing'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
-    label: '',
-    placeholder: '',
+    label: undefined,
+    placeholder: undefined,
     enabled: DEFAULTS.enabled,
     selected: DEFAULTS.selected,
     indent: DEFAULTS.indent,
