@@ -1,6 +1,6 @@
 import { rx, Dev, Value, type t } from '../../../test.ui';
 import { LabelItem } from '../../Item.LabelItem';
-import { Sample } from './-Sample';
+import { Sample, type SampleActionKind } from './-Sample';
 import { SampleList } from './-Sample.List';
 
 const DEFAULTS = LabelItem.Stateful.DEFAULTS;
@@ -14,9 +14,7 @@ type T = {
     renderCount?: boolean;
   };
 };
-const initial: T = {
-  debug: {},
-};
+const initial: T = { debug: {} };
 
 const name = LabelItem.Stateful.displayName ?? '';
 
@@ -46,10 +44,6 @@ export default Dev.describe(name, (e) => {
         const dispatch = State.commands(state);
         const events = state.events(dispose$);
 
-        events.command.$.subscribe((e) => {
-          console.info('🌳 command:', e);
-        });
-
         events.key.enter$.subscribe((e) => console.info('Enter', e));
         events.key.escape$.subscribe((e) => console.info('Escape', e));
         events.key.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {
@@ -59,6 +53,11 @@ export default Dev.describe(name, (e) => {
         events.command.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
         events.command.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
         events.command.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
+
+        events.command.action.$.subscribe((e) => console.info('🔥 command/action:', e));
+        events.command.action.filter<SampleActionKind>('left').subscribe((e) => {
+          console.info('🔥🔎 command/action filtered:', e);
+        });
 
         return state;
       },

@@ -52,6 +52,10 @@ export type LabelItemStateEvents = t.Lifecycle & {
       readonly copy$: t.Observable<t.LabelItemClipboard>;
       readonly paste$: t.Observable<t.LabelItemClipboard>;
     };
+    readonly action: {
+      $: t.Observable<t.LabelItemActionInvoked>;
+      filter<K extends t.LabelActionKind>(...kind: K[]): t.Observable<t.LabelItemActionInvoked<K>>;
+    };
   };
 };
 

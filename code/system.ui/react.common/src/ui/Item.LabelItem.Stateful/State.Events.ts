@@ -42,8 +42,11 @@ export function events(
     get command() {
       if (!cache.command) {
         type C = t.LabelItemClipboard;
+
+        const action$ = rx.payload<t.LabelItemActionInvokedCommand>(cmd$, 'Item:Action');
         const clipboard$ = rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard');
         const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
+
         cache.command = {
           $: cmd$,
           redraw$: rx
@@ -54,6 +57,15 @@ export function events(
             cut$: clipboard('Cut'),
             copy$: clipboard('Copy'),
             paste$: clipboard('Paste'),
+          },
+          action: {
+            $: action$,
+            filter<K extends t.LabelActionKind>(kind: K) {
+              return action$.pipe(
+                rx.filter((e) => kind.includes(e.kind)),
+                rx.map((e) => e as t.LabelItemActionInvoked<K>),
+              );
+            },
           },
         };
       }

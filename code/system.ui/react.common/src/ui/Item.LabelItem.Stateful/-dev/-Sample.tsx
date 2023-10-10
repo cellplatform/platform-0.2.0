@@ -1,10 +1,10 @@
 import { DEFAULTS, Icons, type t } from '../common';
 
-export type SampleAction = 'left' | 'foobar';
+export type SampleActionKind = 'left' | 'foobar';
 
 export const Sample = {
   item() {
-    const initial: t.LabelItem<SampleAction> = {
+    const initial: t.LabelItem<SampleActionKind> = {
       label: 'hello 👋',
       // placeholder: 'foobar',
 
@@ -31,7 +31,7 @@ export const Sample = {
     return { initial } as const;
   },
 
-  get renderers(): t.LabelItemRenderers<SampleAction> {
+  get renderers(): t.LabelItemRenderers<SampleActionKind> {
     return {
       label(e) {
         return <>{`prefix-${e.item.label || 'empty'}`}</>;
