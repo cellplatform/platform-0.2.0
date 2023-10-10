@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.509',
+  version: '0.0.511',
   dependencies: {
     '@automerge/automerge': '2.1.3',
     '@automerge/automerge-repo': '1.0.6',
@@ -19,12 +19,12 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge-repo-react-hooks': '1.0.6',
     '@automerge/automerge-repo-storage-indexeddb': '1.0.6',
     'ext.lib.auth.privy': '0.0.0',
-    'ext.lib.ipfs.w3s': '0.0.0',
-    'ext.lib.protocol.hats': '0.0.0',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',
     'ext.lib.codemirror': '0.0.0',
+    'ext.lib.ipfs.w3s': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
+    'ext.lib.protocol.hats': '0.0.0',
     'ext.lib.stripe': '0.0.0',
     'ext.lib.vimeo': '0.0.0',
     'react': '18.2.0',
