@@ -1,11 +1,9 @@
-import { COLORS, Icons, State, type t } from './common';
-
-export type TData = { copied?: string };
-export const getData = (item: t.LabelItem) => State.data<TData>(item);
+import { COLORS, Icons, type t } from './common';
+import { Data } from './Model.Data';
 
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {
-    const data = getData(e.item);
+    const data = Data.self(e.item);
     const label = data.copied ? 'copied' : `me:${e.item.label}`;
     return <>{label}</>;
   },
@@ -20,7 +18,7 @@ export const renderers: t.ConnectorItemRenderers = {
 
     if (kind === 'local:copy') {
       return (e) => {
-        const data = getData(e.item);
+        const data = Data.self(e.item);
         if (data.copied) {
           return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
         } else {

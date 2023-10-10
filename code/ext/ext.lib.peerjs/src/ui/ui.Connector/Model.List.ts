@@ -7,7 +7,10 @@ export const List = {
     const ctx: t.GetConnectorCtx = () => ({ list });
     const self = Self.init({ ...options.self, ctx });
     const first = Remote.init({ ...options.remote, ctx });
-    const initial: t.ConnectorList = { list: State.list(), items: [self, first] };
+    const initial: t.ConnectorList = {
+      list: State.list(),
+      items: [self, first],
+    };
     const list = PatchState.init<t.ConnectorList>({ initial });
     return list;
   },

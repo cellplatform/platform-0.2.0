@@ -1,7 +1,5 @@
 import { State, Icons, type t } from './common';
-
-export type TData = {};
-export const getData = (item: t.LabelItem) => State.data<TData>(item);
+import { Data } from './Model.Data';
 
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {

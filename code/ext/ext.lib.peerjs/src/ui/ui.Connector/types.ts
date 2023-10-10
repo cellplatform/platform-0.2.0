@@ -29,3 +29,9 @@ export type ConnectorList = {
   list: t.LabelItemListState;
   items: t.ConnectorListItem[];
 };
+
+/**
+ * Model Data
+ */
+export type ConnectorDataRemote = {};
+export type ConnectorDataSelf = { copied?: string };

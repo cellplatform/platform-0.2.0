@@ -1,12 +1,9 @@
 import { State, type t } from './common';
-import { renderers, type TData } from './Model.Remote.renderers';
+import { renderers } from './Model.Remote.renderers';
+import { Data } from './Model.Data';
 
-export type { TData };
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
-export type RemoteOptions = {
-  peerid?: string;
-  dispose$?: t.UntilObservable;
-};
+export type RemoteOptions = { dispose$?: t.UntilObservable };
 
 export const Remote = {
   renderers,
