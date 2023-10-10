@@ -2,6 +2,8 @@ import { commands } from './State.Commands';
 import { events } from './State.Events';
 import { DEFAULTS, Patch, PatchState, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Safe/immutable/observable memory state [Model]'s.
  */
