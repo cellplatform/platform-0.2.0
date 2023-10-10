@@ -7,7 +7,7 @@ export const PeerUri: t.WebrtcPeerUri = {
   /**
    * Generate a new peer-id.
    */
-  generate(prefix) {
+  generate(prefix = true) {
     return `${Wrangle.formatPrefix(prefix)}${cuid()}`;
   },
 

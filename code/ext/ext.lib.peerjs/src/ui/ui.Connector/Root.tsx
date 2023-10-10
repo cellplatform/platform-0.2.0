@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
-import { Model } from './state';
+import { Model } from './Model';
 import { View } from './ui';
 
 /**

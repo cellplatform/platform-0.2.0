@@ -8,6 +8,7 @@ export type {
   DevTools,
   LabelItem,
   LabelItemListState,
+  LabelItemRendererArgs,
   LabelItemRenderers,
   LabelItemState,
   PropListProps,

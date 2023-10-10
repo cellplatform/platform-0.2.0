@@ -1,4 +1,4 @@
-import { Icons, State, type t } from '../common';
+import { Icons, State, type t } from './common';
 
 export type RemoteModelOptions = {
   peerid?: string;

@@ -16,3 +16,5 @@ export {
   useFocus,
   useMouse,
 } from 'sys.ui.react.common';
+
+export { Webrtc, PeerUri } from '../../Webrtc';

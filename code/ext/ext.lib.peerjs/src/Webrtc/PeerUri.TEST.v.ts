@@ -8,9 +8,12 @@ describe('PeerUri', () => {
   });
 
   describe('generate', () => {
-    it('default: simple cuid', () => {
-      const res = PeerUri.generate();
-      expect(Id.is.cuid(res)).to.eql(true);
+    it('default', () => {
+      const res1 = PeerUri.generate();
+      const res2 = PeerUri.generate(false);
+      expect(res1.startsWith('peer:')).to.eql(true);
+      expect(Id.is.cuid(res1.split(':')[1])).to.eql(true);
+      expect(Id.is.cuid(res2)).to.eql(true);
     });
 
     it('prefix: true → "peer:"', () => {
@@ -19,17 +22,24 @@ describe('PeerUri', () => {
       expect(Id.is.cuid(res.split(':')[1])).to.eql(true);
     });
 
-    it('prefix: string → "foo:"', () => {
-      const assert = (uri: string, prefix: string) => {
-        expect(res.startsWith(`${prefix}:`)).to.eql(true);
-        expect(Id.is.cuid(res.split(':')[1])).to.eql(true);
+    it('prefix: string → empty ("")', () => {
+      const test = (uri: string) => {
+        expect(Id.is.cuid(uri)).to.eql(true);
       };
-      const res = PeerUri.generate('  foo  ');
-      assert(PeerUri.generate('  foo  '), 'foo');
-      assert(PeerUri.generate('foo'), 'foo');
-      assert(PeerUri.generate('foo:'), 'foo');
-      assert(PeerUri.generate('foo::'), 'foo');
-      assert(PeerUri.generate(' ::foo:: '), 'foo');
+      test(PeerUri.generate(''));
+      test(PeerUri.generate('  '));
+    });
+
+    it('prefix: string → "foo:"', () => {
+      const test = (uri: string, prefix: string) => {
+        expect(uri.startsWith(`${prefix}:`)).to.eql(true);
+        expect(Id.is.cuid(uri.split(':')[1])).to.eql(true);
+      };
+      test(PeerUri.generate('  foo  '), 'foo');
+      test(PeerUri.generate('foo'), 'foo');
+      test(PeerUri.generate('foo:'), 'foo');
+      test(PeerUri.generate('foo::'), 'foo');
+      test(PeerUri.generate(' ::foo:: '), 'foo');
     });
   });
 
