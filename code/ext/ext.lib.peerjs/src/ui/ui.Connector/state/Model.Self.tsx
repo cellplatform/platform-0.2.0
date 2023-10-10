@@ -31,22 +31,16 @@ export const SelfModel = {
       is: { editable: false },
       placeholder: 'peer id',
       label: peerid,
-
       left: { kind: 'local:left' },
-
-      right: {
-        kind: 'local:copy',
-        onClick: copyClipboard,
-      },
+      right: { kind: 'local:copy' },
     };
 
     const state = State.item(initial);
     const dispatch = State.commands(state);
     const events = state.events(dispose$);
 
-    events.command.clipboard.copy$.subscribe((e) => {
-      copyClipboard();
-    });
+    events.command.clipboard.copy$.subscribe(copyClipboard);
+    events.command.action.filter<t.ConnectorActionKind>('local:copy').subscribe(copyClipboard);
 
     return state;
   },
