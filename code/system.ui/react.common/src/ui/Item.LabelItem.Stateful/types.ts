@@ -54,7 +54,7 @@ export type LabelItemStateEvents = t.Lifecycle & {
     };
     readonly action: {
       $: t.Observable<t.LabelItemActionInvoked>;
-      filter<K extends t.LabelActionKind>(...kind: K[]): t.Observable<t.LabelItemActionInvoked<K>>;
+      kind<K extends t.LabelActionKind>(...kind: K[]): t.Observable<t.LabelItemActionInvoked<K>>;
     };
   };
 };

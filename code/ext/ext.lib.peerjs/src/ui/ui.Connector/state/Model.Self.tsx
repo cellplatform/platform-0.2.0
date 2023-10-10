@@ -28,9 +28,9 @@ export const SelfModel = {
     };
 
     const initial: t.ConnectorItem = {
-      is: { editable: false },
       placeholder: 'peer id',
       label: peerid,
+      is: { editable: false },
       left: { kind: 'local:left' },
       right: { kind: 'local:copy' },
     };
@@ -40,7 +40,7 @@ export const SelfModel = {
     const events = state.events(dispose$);
 
     events.command.clipboard.copy$.subscribe(copyClipboard);
-    events.command.action.filter<t.ConnectorActionKind>('local:copy').subscribe(copyClipboard);
+    events.command.action.kind<t.ConnectorActionKind>('local:copy').subscribe(copyClipboard);
 
     return state;
   },
