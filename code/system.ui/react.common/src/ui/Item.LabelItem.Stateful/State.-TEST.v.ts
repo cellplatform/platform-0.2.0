@@ -57,4 +57,37 @@ describe('LabelItem: State', () => {
       events.dispose();
     });
   });
+
+  describe('State.data', () => {
+    it('undefined (by default)', () => {
+      const state = State.item();
+      expect(state.current.data).to.eql(undefined);
+    });
+
+    it('State.data', () => {
+      type T = { count?: number };
+      const state = State.item();
+
+      state.change((d) => State.data<T>(d));
+      expect(state.current.data).to.eql({});
+
+      state.change((d) => (State.data<T>(d).count = 123));
+      expect(state.current.data?.count).to.eql(123);
+    });
+
+    it('State.data → default object', () => {
+      type T = { count: number };
+      const state = State.item();
+      state.change((d) => State.data<T>(d, { count: 123 }));
+      expect(state.current.data?.count).to.eql(123);
+    });
+
+    it('throw: input not a proxy/draft', () => {
+      const inputs = [null, undefined, '', 123, false, [], {}];
+      inputs.forEach((value) => {
+        const fn = () => State.data(value as any);
+        expect(fn).to.throw(/Input not an immutable proxy/);
+      });
+    });
+  });
 });

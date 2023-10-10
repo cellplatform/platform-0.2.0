@@ -1,5 +1,6 @@
 import type { t } from './common';
 
+type O = Record<string, unknown>;
 type ItemId = string;
 
 export type LabelItemBehaviorKind =
@@ -21,6 +22,7 @@ export type LabelItem<A extends t.LabelActionKind = string> = {
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
   left?: t.LabelAction<A> | t.LabelAction<A>[] | null;
   right?: t.LabelAction<A> | t.LabelAction<A>[] | null;
+  data?: O;
 };
 
 /**

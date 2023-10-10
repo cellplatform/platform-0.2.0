@@ -1,11 +1,13 @@
 import { commands } from './State.Commands';
 import { events } from './State.Events';
-import { DEFAULTS, PatchState, type t } from './common';
+import { DEFAULTS, Patch, PatchState, type t } from './common';
 
 /**
  * Safe/immutable/observable memory state [Model]'s.
  */
 export const State = {
+  commands,
+
   /**
    * An observable list state.
    */
@@ -30,7 +32,11 @@ export const State = {
   },
 
   /**
-   * Issue a command against the item.
+   * Ensures the {data} object exists on the given draft/proxy object.
    */
-  commands,
+  data<T extends O>(input: t.LabelItem, defaultValue?: T): T {
+    if (!Patch.isProxy(input)) throw new Error('Input not an immutable proxy');
+    input.data = defaultValue ?? {};
+    return input.data as T;
+  },
 } as const;
