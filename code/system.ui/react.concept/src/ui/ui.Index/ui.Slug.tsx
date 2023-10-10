@@ -54,9 +54,8 @@ export const Slug: React.FC<SlugProps> = (props) => {
       <LabelItem
         style={styles.item}
         borderRadius={3}
-        label={text}
+        item={{ label: text, editing: isEditing }}
         selected={isSelected}
-        editing={isEditing}
         focused={isFocused}
         focusOnEdit={true}
         onClick={(e) => props.onSelect?.({ index })}
