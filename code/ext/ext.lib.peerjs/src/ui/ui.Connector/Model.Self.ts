@@ -1,6 +1,8 @@
 import { PeerUri, slug, State, Time, type t } from './common';
 import { renderers, getData, type TData } from './Model.Self.renderers';
 
+export type { TData };
+export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = {
   peerid?: string;
   dispose$?: t.UntilObservable;
@@ -9,12 +11,19 @@ export type SelfOptions = {
 export const Self = {
   renderers,
 
+  init(args: SelfArgs): t.ConnectorListItem {
+    return {
+      state: Self.state(args),
+      renderers,
+    };
+  },
+
   /**
    * State wrapper.
    */
-  state(options: SelfOptions = {}) {
-    const { dispose$ } = options;
-    const peerid = PeerUri.id(options.peerid) || PeerUri.generate('');
+  state(args: SelfArgs) {
+    const { dispose$ } = args;
+    const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
     const peeruri = PeerUri.prepend(peerid);
 
     const copyClipboard = async () => {

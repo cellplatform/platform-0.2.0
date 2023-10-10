@@ -9,29 +9,18 @@ const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const TestState = {
-    items: [] as { state: t.LabelItemState; renderers: t.LabelItemRenderers }[],
-    init: {
-      items() {
-        TestState.items = [];
-        const { Self, Remote } = Connector.Model;
-
-        type S = t.LabelItemState;
-        type R = t.LabelItemRenderers;
-        const push = (state: S, renderers: R) => TestState.items.push({ state, renderers });
-        push(Self.state(), Self.renderers);
-        push(Remote.state(), Remote.renderers);
-      },
-    } as const,
-  };
-
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
-    TestState.init.items();
+
+    const model = Connector.Model.List.init();
+
+    model.events().$.subscribe((e) => {
+      console.log('e', e);
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -39,7 +28,8 @@ export default Dev.describe(name, (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        return <List items={TestState.items} />;
+        const current = model.current;
+        return <List list={current.list} items={current.items} />;
       });
   });
 

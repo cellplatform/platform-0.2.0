@@ -1,9 +1,9 @@
+import { List } from './Model.List';
 import { Remote } from './Model.Remote';
 import { Self } from './Model.Self';
-import { List } from './Model.List';
 
 export const Model = {
+  List,
   Self,
   Remote,
-  List,
 } as const;

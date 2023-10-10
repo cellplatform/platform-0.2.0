@@ -1,6 +1,8 @@
-import { Icons, State, type t } from './common';
+import { State, type t } from './common';
 import { renderers, type TData } from './Model.Remote.renderers';
 
+export type { TData };
+export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = {
   peerid?: string;
   dispose$?: t.UntilObservable;
@@ -9,41 +11,37 @@ export type RemoteOptions = {
 export const Remote = {
   renderers,
 
-  /**
-   * State wrapper.
-   */
-  state(options: RemoteOptions = {}) {
-    const { dispose$ } = options;
+  init(args: RemoteArgs): t.ConnectorListItem {
+    return {
+      state: Remote.state(args),
+      renderers,
+    };
+  },
 
+  state(args: RemoteArgs) {
+    const { dispose$ } = args;
     const initial: t.ConnectorItem = {
       editable: false,
       placeholder: 'paste remote peer',
       left: { kind: 'remote:left' },
     };
 
-    // const model = Remote.initial(options);
     const state = State.item(initial);
     const dispatch = State.commands(state);
     const events = state.events(dispose$);
 
+    /**
+     * Behavior: Paste
+     */
     events.command.clipboard.paste$.subscribe(async (e) => {
-      console.log('💥 paste');
       const id = await navigator.clipboard.readText();
       state.change((d) => (d.label = id));
       dispatch.redraw();
+
+      const ctx = args.ctx();
+      console.log('ctx', ctx);
     });
 
     return state;
   },
-
-  // /**
-  //  * Base model.
-  //  */
-  // initial(options: RemoteOptions = {}): t.ConnectorItem {
-  //   return {
-  //     editable: false,
-  //     placeholder: 'paste remote peer',
-  //     left: { kind: 'remote:left' },
-  //   };
-  // },
 } as const;

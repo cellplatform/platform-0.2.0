@@ -1,14 +1,15 @@
-import { LabelItem, css, type t, RenderCount } from './common';
+import { LabelItem, RenderCount, css, type t } from './common';
 
-export type ListItem = { state: t.LabelItemState; renderers: t.LabelItemRenderers };
 export type ListProps = {
-  items?: ListItem[];
+  items?: t.ConnectorListItem[];
+  list?: t.LabelItemListState;
   style?: t.CssValue;
 };
 
 export const List: React.FC<ListProps> = (props) => {
   const { items = [] } = props;
   const controller = LabelItem.Stateful.useListController({
+    list: props.list,
     items: items.map(({ state }) => state),
   });
 
