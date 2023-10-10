@@ -15,10 +15,10 @@ export type LabelItemBehaviorKind =
 export type LabelItem<A extends t.LabelActionKind = string> = {
   label?: string;
   placeholder?: string;
-  editing?: boolean;
   enabled?: boolean;
+  editing?: boolean;
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
-  is?: { editable?: t.LabelItemValue<boolean> };
+  is?: { editable?: boolean };
   left?: t.LabelAction<A> | t.LabelAction<A>[] | null;
   right?: t.LabelAction<A> | t.LabelAction<A>[] | null;
 };

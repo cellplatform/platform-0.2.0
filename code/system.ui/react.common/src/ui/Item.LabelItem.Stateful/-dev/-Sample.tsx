@@ -8,9 +8,7 @@ export const Sample = {
       label: 'hello 👋',
       // placeholder: 'foobar',
 
-      left: {
-        kind: 'left',
-      },
+      left: { kind: 'left' },
 
       right: {
         kind: 'foobar',
@@ -20,11 +18,7 @@ export const Sample = {
       },
 
       is: {
-        // editable: true,
-        editable(e) {
-          console.log('is.editable: (e):', e);
-          return true;
-        },
+        // editable: false,
       },
     };
 
