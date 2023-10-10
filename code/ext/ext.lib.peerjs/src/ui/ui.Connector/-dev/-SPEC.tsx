@@ -1,6 +1,6 @@
 import { Dev, type t, LabelItem } from '../../../test.ui';
 import { Connector } from '..';
-import { SampleList } from './-Sample.List';
+import { List } from '../ui.List';
 import { Info } from '../../ui.Info';
 
 type T = { props: t.ConnectorProps };
@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
         });
 
         return (
-          <SampleList
+          <List
             items={TestState.items.map((m) => m.state)}
             elements={elements}
             list={TestState.list}

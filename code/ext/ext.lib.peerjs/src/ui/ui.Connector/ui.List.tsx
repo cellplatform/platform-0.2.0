@@ -1,13 +1,13 @@
-import { LabelItem, css, type t } from '../common';
+import { LabelItem, css, type t } from './common';
 
-export type SampleListProps = {
+export type ListProps = {
   elements?: JSX.Element[];
   list?: t.LabelItemListState;
   items?: t.LabelItemState[];
   style?: t.CssValue;
 };
 
-export const SampleList: React.FC<SampleListProps> = (props) => {
+export const List: React.FC<ListProps> = (props) => {
   const { list, items } = props;
   const controller = LabelItem.Stateful.useListController({ list, items });
 
