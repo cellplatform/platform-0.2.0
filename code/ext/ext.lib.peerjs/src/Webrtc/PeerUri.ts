@@ -1,12 +1,51 @@
-import { type t } from '../common';
+import { cuid, type t } from '../common';
 
 /**
  * Helper for formatting peer ids.
  */
-export const PeerUri = {
+export const PeerUri: t.WebrtcPeerUri = {
   /**
-   * generate
-   * id → <id> (strip)
-   * prefix → prepend
+   * Generate a new peer-id.
    */
+  generate(prefix) {
+    return `${Wrangle.formatPrefix(prefix)}${cuid()}`;
+  },
+
+  /**
+   * Strip the given string down from a URI to the peer-id.
+   */
+  id(input) {
+    if (typeof input !== 'string') return '';
+    const parts = input.trim().split(':');
+    return parts[parts.length - 1].trim();
+  },
+
+  /**
+   * Prepend the default, or given prefix(es).
+   */
+  prepend(input, ...prefix) {
+    const parts = input
+      .trim()
+      .split(':')
+      .map((part) => part.trim());
+    prefix = prefix.length === 0 ? ['peer'] : prefix;
+    const prefixes = prefix.map((prefix) => Wrangle.stripColons(prefix));
+    return `${prefixes.join(':')}:${parts.join(':')}`;
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+
+export const Wrangle = {
+  formatPrefix(input?: boolean | string) {
+    let prefix = '';
+    if (input === true) prefix = 'peer';
+    if (typeof input === 'string') prefix = Wrangle.stripColons(input);
+    return prefix ? `${prefix}:` : prefix;
+  },
+  stripColons(input: string) {
+    return input.trim().replace(/^\:*/, '').replace(/\:*$/, '').trim();
+  },
 } as const;
