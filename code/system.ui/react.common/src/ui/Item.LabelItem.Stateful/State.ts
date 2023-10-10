@@ -1,6 +1,6 @@
 import { commands } from './State.Commands';
 import { events } from './State.Events';
-import { DEFAULTS, Patch, PatchState, type t } from './common';
+import { DEFAULTS, Patch, PatchState, type t, Is } from './common';
 
 type O = Record<string, unknown>;
 
@@ -36,9 +36,10 @@ export const State = {
   /**
    * Ensures the {data} object exists on the given draft/proxy object.
    */
-  data<T extends O>(input: t.LabelItem, defaultValue?: T): T {
-    if (!Patch.isProxy(input)) throw new Error('Input not an immutable proxy');
-    input.data = defaultValue ?? {};
-    return input.data as T;
+  data<T extends O>(input: t.LabelItem, initial?: T): T {
+    if (!Is.plainObject(input)) throw new Error('Not an object');
+    const res = (input.data ?? { ...initial } ?? {}) as T;
+    if (Patch.isProxy(input) && !input.data) input.data = res;
+    return res;
   },
 } as const;

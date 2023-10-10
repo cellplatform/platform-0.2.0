@@ -64,7 +64,19 @@ describe('LabelItem: State', () => {
       expect(state.current.data).to.eql(undefined);
     });
 
-    it('State.data', () => {
+    it('no mutation ← read a non-proxy', () => {
+      type T = { count?: number };
+
+      const state = State.item();
+      const res1 = State.data<T>(state.current);
+      const res2 = State.data<T>(state.current, { count: 123 });
+
+      expect(state.current.data).to.eql(undefined); // NB: no chance to underlying object.
+      expect(res1).to.eql({});
+      expect(res2).to.eql({ count: 123 });
+    });
+
+    it('mutates: State.data', () => {
       type T = { count?: number };
       const state = State.item();
 
@@ -75,18 +87,24 @@ describe('LabelItem: State', () => {
       expect(state.current.data?.count).to.eql(123);
     });
 
-    it('State.data → default object', () => {
+    it('mutates: State.data → default {object}', () => {
       type T = { count: number };
-      const state = State.item();
-      state.change((d) => State.data<T>(d, { count: 123 }));
-      expect(state.current.data?.count).to.eql(123);
+      const initial: T = { count: 0 };
+      const state1 = State.item();
+      const state2 = State.item();
+
+      state1.change((d) => State.data<T>(d, initial));
+      state2.change((d) => (State.data<T>(d, initial).count = 123));
+
+      expect(state1.current.data?.count).to.eql(0);
+      expect(state2.current.data?.count).to.eql(123);
     });
 
-    it('throw: input not a proxy/draft', () => {
-      const inputs = [null, undefined, '', 123, false, [], {}];
+    it('throw: input not object', () => {
+      const inputs = [null, undefined, '', 123, false, []];
       inputs.forEach((value) => {
         const fn = () => State.data(value as any);
-        expect(fn).to.throw(/Input not an immutable proxy/);
+        expect(fn).to.throw(/Not an object/);
       });
     });
   });
