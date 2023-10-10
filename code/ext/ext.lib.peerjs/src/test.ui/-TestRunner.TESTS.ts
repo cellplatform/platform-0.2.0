@@ -3,9 +3,11 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../Webrtc/Webrtc.Peer.TEST'),
+      import('../Webrtc/Peer.TEST'),
+
+      //
       'Integration Tests',
-      import('../Webrtc/Webrtc.Peer.TEST.integration'),
+      import('../Webrtc/Peer.TEST.integration'),
     ];
   },
 };
