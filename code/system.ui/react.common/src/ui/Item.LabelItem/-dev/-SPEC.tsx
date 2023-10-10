@@ -155,7 +155,7 @@ export default Dev.describe(name, (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.item.enabled);
         btn
-          .label((e) => `enabled`)
+          .label((e) => `item.enabled`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.item, 'enabled'))));
       });
@@ -163,7 +163,7 @@ export default Dev.describe(name, (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.item.editing);
         btn
-          .label((e) => `editing`)
+          .label((e) => `item.editing`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.item, 'editing'))));
       });

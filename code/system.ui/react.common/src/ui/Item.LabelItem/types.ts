@@ -56,13 +56,13 @@ export type LabelItemProps = {
   item?: t.LabelItem;
   renderers?: t.LabelItemRenderers;
 
-  maxLength?: number;
   selected?: boolean;
   focused?: boolean;
 
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
   tabIndex?: number;
+  maxLength?: number;
   debug?: boolean;
 
   style?: t.CssValue;
