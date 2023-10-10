@@ -10,6 +10,7 @@ export {
   LabelItem,
   ObjectView,
   PropList,
+  RenderCount,
   TestRunner,
   css,
   useDragTarget,
@@ -17,4 +18,4 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
-export { Webrtc, PeerUri } from '../../Webrtc';
+export { PeerUri, Webrtc } from '../../Webrtc';

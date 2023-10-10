@@ -1,16 +1,15 @@
-import { Dev, type t, LabelItem } from '../../../test.ui';
+import { Dev, type t } from '../../../test.ui';
+
 import { Connector } from '..';
-import { List } from '../ui.List';
 import { Info } from '../../ui.Info';
+import { List } from '../ui.List';
 
 type T = { props: t.ConnectorProps };
 const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const State = LabelItem.Stateful.State;
   const TestState = {
-    list: State.list(),
     items: [] as { state: t.LabelItemState; renderers: t.LabelItemRenderers }[],
     init: {
       items() {
@@ -40,31 +39,7 @@ export default Dev.describe(name, (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        const length = TestState.items.length;
-        const elements = Array.from({ length }).map((_, i) => {
-          return (
-            <LabelItem.Stateful
-              key={`item.${i}`}
-              index={i}
-              total={length}
-              list={TestState.list}
-              item={TestState.items[i].state}
-              renderers={TestState.items[i].renderers}
-              // debug={true}
-              onChange={(e) => {
-                console.info(`⚡️ onChange[${i}]`, e);
-              }}
-            />
-          );
-        });
-
-        return (
-          <List
-            items={TestState.items.map((m) => m.state)}
-            elements={elements}
-            list={TestState.list}
-          />
-        );
+        return <List items={TestState.items} />;
       });
   });
 

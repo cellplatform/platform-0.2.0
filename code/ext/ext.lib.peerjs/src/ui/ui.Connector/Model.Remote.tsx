@@ -1,18 +1,28 @@
 import { Icons, State, type t } from './common';
+import { renderers, type TData } from './Model.Remote.renderers';
 
-export type RemoteModelOptions = {
+export type RemoteOptions = {
   peerid?: string;
   dispose$?: t.UntilObservable;
 };
 
-export const RemoteModel = {
+export const Remote = {
+  renderers,
+
   /**
    * State wrapper.
    */
-  state(options: RemoteModelOptions = {}) {
+  state(options: RemoteOptions = {}) {
     const { dispose$ } = options;
-    const model = RemoteModel.initial(options);
-    const state = State.item(model);
+
+    const initial: t.ConnectorItem = {
+      editable: false,
+      placeholder: 'paste remote peer',
+      left: { kind: 'remote:left' },
+    };
+
+    // const model = Remote.initial(options);
+    const state = State.item(initial);
     const dispatch = State.commands(state);
     const events = state.events(dispose$);
 
@@ -26,29 +36,14 @@ export const RemoteModel = {
     return state;
   },
 
-  /**
-   * Base model.
-   */
-  initial(options: RemoteModelOptions = {}): t.ConnectorItem {
-    return {
-      editable: false,
-      placeholder: 'paste remote peer',
-      left: { kind: 'remote:left' },
-    };
-  },
-
-  get renderers(): t.ConnectorItemRenderers {
-    return {
-      label(e) {
-        return <div>{`remote:${e.item.label}`}</div>;
-      },
-
-      action(kind, helpers) {
-        if (kind === 'remote:left') {
-          return (e) => <Icons.Add {...helpers.icon(e, 17)} />;
-        }
-        return;
-      },
-    };
-  },
+  // /**
+  //  * Base model.
+  //  */
+  // initial(options: RemoteOptions = {}): t.ConnectorItem {
+  //   return {
+  //     editable: false,
+  //     placeholder: 'paste remote peer',
+  //     left: { kind: 'remote:left' },
+  //   };
+  // },
 } as const;

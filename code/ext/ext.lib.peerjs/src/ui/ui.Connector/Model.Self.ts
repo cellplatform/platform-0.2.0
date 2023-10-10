@@ -1,18 +1,18 @@
 import { PeerUri, slug, State, Time, type t } from './common';
-import { renderers, type TData } from './Model.Self.renderers';
+import { renderers, getData, type TData } from './Model.Self.renderers';
 
-export type SelfModelOptions = {
+export type SelfOptions = {
   peerid?: string;
   dispose$?: t.UntilObservable;
 };
 
-export const SelfModel = {
+export const Self = {
   renderers,
 
   /**
    * State wrapper.
    */
-  state(options: SelfModelOptions = {}) {
+  state(options: SelfOptions = {}) {
     const { dispose$ } = options;
     const peerid = PeerUri.id(options.peerid) || PeerUri.generate('');
     const peeruri = PeerUri.prepend(peerid);
@@ -21,12 +21,12 @@ export const SelfModel = {
       await navigator.clipboard.writeText(peeruri);
 
       const copied = slug();
-      state.change((d) => (State.data<TData>(d).copied = copied));
+      state.change((d) => (getData(d).copied = copied));
       dispatch.redraw();
 
       Time.delay(1200, () => {
-        if (State.data<TData>(state.current).copied !== copied) return;
-        state.change((d) => (State.data<TData>(d).copied = undefined));
+        if (getData(state.current).copied !== copied) return;
+        state.change((d) => (getData(d).copied = undefined));
         dispatch.redraw();
       });
     };

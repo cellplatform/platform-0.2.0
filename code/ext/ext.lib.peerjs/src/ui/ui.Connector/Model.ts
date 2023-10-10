@@ -1,7 +1,9 @@
-import { RemoteModel } from './Model.Remote';
-import { SelfModel } from './Model.Self';
+import { Remote } from './Model.Remote';
+import { Self } from './Model.Self';
+import { List } from './Model.List';
 
 export const Model = {
-  Self: SelfModel,
-  Remote: RemoteModel,
+  Self,
+  Remote,
+  List,
 } as const;

@@ -1,10 +1,11 @@
 import { COLORS, Icons, State, type t } from './common';
 
 export type TData = { copied?: string };
+export const getData = (item: t.LabelItem) => State.data<TData>(item);
 
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {
-    const data = Wrangle.data(e);
+    const data = getData(e.item);
     const label = data.copied ? 'copied' : `me:${e.item.label}`;
     return <>{label}</>;
   },
@@ -19,7 +20,7 @@ export const renderers: t.ConnectorItemRenderers = {
 
     if (kind === 'local:copy') {
       return (e) => {
-        const data = Wrangle.data(e);
+        const data = getData(e.item);
         if (data.copied) {
           return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
         } else {
@@ -29,14 +30,5 @@ export const renderers: t.ConnectorItemRenderers = {
     }
 
     return;
-  },
-} as const;
-
-/**
- * Helpers
- */
-export const Wrangle = {
-  data(e: t.LabelItemRendererArgs) {
-    return State.data<TData>(e.item);
   },
 } as const;
