@@ -20,21 +20,21 @@ export const Item: React.FC<ItemProps> = (props) => {
    */
   const download: t.LabelAction = {
     kind: 'Pull:Namespace',
-    element: (e) => <Icons.Download.ArrowTray color={e.color} size={16} offset={[0, 2]} />,
-    onClick(e) {
-      /**
-       * TODO 🐷
-       */
-      console.log('💧', e.kind, '→ Item.onClick ⚡️⚡️⚡️');
-    },
+    // element: (e) => <Icons.Download.ArrowTray color={e.color} size={16} offset={[0, 2]} />,
+    // onClick(e) {
+    //   /**
+    //    * TODO 🐷
+    //    */
+    //   console.log('💧', e.kind, '→ Item.onClick ⚡️⚡️⚡️');
+    // },
   };
 
   return (
     <LabelItem
       {...state.handlers}
-      label={state.data.label}
+      // label={state.data.label}
       style={css(styles.base, props.style)}
-      right={[download]}
+      // right={[download]}
       focusOnEdit={true}
     />
   );
