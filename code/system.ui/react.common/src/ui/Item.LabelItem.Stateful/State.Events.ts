@@ -1,12 +1,14 @@
 import { R, rx, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Event wrapper factory.
  */
-export function events<A extends t.LabelActionKind = string>(
-  $: t.Observable<t.PatchChange<t.LabelItem<A>>>,
+export function events<A extends t.LabelActionKind = string, D extends O = O>(
+  $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>,
   dispose$?: t.UntilObservable,
-): t.LabelItemStateEvents<A> {
+): t.LabelItemStateEvents<A, D> {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
@@ -24,7 +26,7 @@ export function events<A extends t.LabelActionKind = string>(
   };
 
   type K = t.LabelItemKeyHandlerArgs;
-  type E = t.LabelItemStateEvents<A>;
+  type E = t.LabelItemStateEvents<A, D>;
   const api: E = {
     $,
     get key() {

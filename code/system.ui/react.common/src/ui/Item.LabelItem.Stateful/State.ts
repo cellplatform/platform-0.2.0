@@ -1,6 +1,6 @@
 import { commands } from './State.Commands';
 import { events } from './State.Events';
-import { DEFAULTS, Patch, PatchState, type t, Is } from './common';
+import { DEFAULTS, Is, Patch, PatchState, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -21,12 +21,12 @@ export const State = {
   /**
    * An obvservable list item.
    */
-  item<A extends t.LabelActionKind = string>(
-    initial: t.LabelItem<A> = DEFAULTS.data.item as t.LabelItem<A>,
-    options: { onChange?: t.PatchChangeHandler<t.LabelItem> } = {},
-  ): t.LabelItemState<A> {
+  item<A extends t.LabelActionKind = string, D extends O = O>(
+    initial: t.LabelItem<A, D> = DEFAULTS.data.item as t.LabelItem<A, D>,
+    options: { onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
+  ): t.LabelItemState<A, D> {
     const { onChange } = options;
-    return PatchState.init<t.LabelItem<A>, t.LabelItemStateEvents<A>>({
+    return PatchState.init<t.LabelItem<A, D>, t.LabelItemStateEvents<A, D>>({
       initial,
       events,
       onChange,

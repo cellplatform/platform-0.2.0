@@ -1,7 +1,6 @@
 import type { t } from './common';
 
 type O = Record<string, unknown>;
-type ItemId = string;
 
 export type LabelItemBehaviorKind =
   | 'Item'
@@ -13,7 +12,7 @@ export type LabelItemBehaviorKind =
 /**
  * Item (Data Model)
  */
-export type LabelItem<A extends t.LabelActionKind = string> = {
+export type LabelItem<A extends t.LabelActionKind = string, D extends O = O> = {
   label?: string;
   placeholder?: string;
   enabled?: boolean;
@@ -22,20 +21,22 @@ export type LabelItem<A extends t.LabelActionKind = string> = {
   command?: LabelItemCommand; // Produces an event stream of commands when changed.
   left?: t.LabelAction<A> | t.LabelAction<A>[] | null;
   right?: t.LabelAction<A> | t.LabelAction<A>[] | null;
-  data?: O;
+  data?: D;
 };
 
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-
-export type LabelItemState<A extends t.LabelActionKind = string> = t.ImmutableRef<
-  t.LabelItem<A>,
-  t.LabelItemStateEvents<A>
+export type LabelItemState<A extends t.LabelActionKind = string, D extends O = O> = t.ImmutableRef<
+  t.LabelItem<A, D>,
+  t.LabelItemStateEvents<A, D>
 >;
 
-export type LabelItemStateEvents<A extends t.LabelActionKind = string> = t.Lifecycle & {
-  readonly $: t.Observable<t.PatchChange<t.LabelItem<A>>>;
+export type LabelItemStateEvents<
+  A extends t.LabelActionKind = string,
+  D extends O = O,
+> = t.Lifecycle & {
+  readonly $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>;
   readonly key: {
     readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly enter$: t.Observable<t.LabelItemKeyHandlerArgs>;
