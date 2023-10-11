@@ -59,6 +59,19 @@ export const Remote = {
       });
     });
 
+    /**
+     * Behavior: Connect
+     */
+    events.cmd.action.on('remote:right').subscribe((e) => {
+      /**
+       * TODO 🐷
+       */
+      console.log('connect', e);
+    });
+
+    /**
+     * Export
+     */
     return state;
   },
 

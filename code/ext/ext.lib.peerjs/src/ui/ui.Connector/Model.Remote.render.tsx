@@ -35,6 +35,12 @@ export const renderers: t.ConnectorItemRenderers = {
           );
         }
 
+        /**
+         * TODO 🐷
+         */
+        if (e.selected && data.peerid) {
+          const spinning = false;
+          return <ConnectButton selected={e.selected} focused={e.focused} spinning={spinning} />;
         }
 
         return null;
