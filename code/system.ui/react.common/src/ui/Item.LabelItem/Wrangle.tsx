@@ -61,7 +61,6 @@ export const Wrangle = {
 
   element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
     if (typeof renderer === 'string') return renderer;
-
     if (typeof renderer === 'function') {
       const { index, total } = args;
       const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
@@ -76,14 +75,15 @@ export const Wrangle = {
         editing,
         color,
       });
-      return el ?? Wrangle.defaultIcon(args);
+      return el;
     }
-
     return undefined;
   },
 
   icon(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
-    return Wrangle.element(renderer, args) ?? Wrangle.defaultIcon(args);
+    const el = Wrangle.element(renderer, args);
+    if (el === null || el === false) return null;
+    return el || Wrangle.defaultIcon(args);
   },
 
   defaultIcon(args: { selected?: boolean }) {

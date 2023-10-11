@@ -17,7 +17,7 @@ export type LabelAction<K extends LabelActionKind = string> = {
 /**
  * JSX Renderer (data → visuals)
  */
-export type LabelItemRendered = JSX.Element | undefined | false;
+export type LabelItemRendered = JSX.Element | undefined | false | null;
 export type LabelItemRenderer = (e: LabelItemRendererArgs) => LabelItemRendered;
 export type LabelItemRendererArgs = LabelItemValueArgs & { color: string };
 
