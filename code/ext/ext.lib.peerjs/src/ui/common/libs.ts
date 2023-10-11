@@ -11,6 +11,7 @@ export {
   ObjectView,
   PropList,
   RenderCount,
+  Spinner,
   TestRunner,
   css,
   useDragTarget,
