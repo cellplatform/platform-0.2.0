@@ -66,7 +66,6 @@ describe('LabelItem: State', () => {
 
     it('no mutation ← read a non-proxy', () => {
       type T = { count?: number };
-
       const state = State.item();
       const res1 = State.data<T>(state.current);
       const res2 = State.data<T>(state.current, { count: 123 });
@@ -74,6 +73,16 @@ describe('LabelItem: State', () => {
       expect(state.current.data).to.eql(undefined); // NB: no chance to underlying object.
       expect(res1).to.eql({});
       expect(res2).to.eql({ count: 123 });
+    });
+
+    it('no mutation ← convert from [ItemState] → [Item]', () => {
+      type T = { count?: number };
+      const state = State.item();
+      state.change((d) => (d.data = { count: 123 }));
+      expect(state.current.data).to.eql({ count: 123 });
+
+      const res = State.data<T>(state);
+      expect(res).to.eql({ count: 123 });
     });
 
     it('mutates: State.data', () => {

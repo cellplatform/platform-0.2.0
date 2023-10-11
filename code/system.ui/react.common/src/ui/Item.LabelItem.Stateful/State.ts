@@ -36,10 +36,11 @@ export const State = {
   /**
    * Ensures the {data} object exists on the given draft/proxy object.
    */
-  data<T extends O>(input: t.LabelItem, initial?: T): T {
+  data<T extends O>(input: t.LabelItem | t.LabelItemState, initial?: T): T {
     if (!Is.plainObject(input)) throw new Error('Not an object');
-    const res = (input.data ?? { ...initial } ?? {}) as T;
-    if (Patch.isProxy(input) && !input.data) input.data = res;
+    const item = PatchState.is.state(input) ? input.current : input;
+    const res = (item.data ?? { ...initial } ?? {}) as T;
+    if (Patch.isProxy(item) && !item.data) item.data = res;
     return res;
   },
 } as const;
