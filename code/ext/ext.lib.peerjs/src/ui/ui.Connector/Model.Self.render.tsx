@@ -1,11 +1,12 @@
 import { COLORS, Icons, type t } from './common';
 import { Data } from './Model.Data';
+import { PeerLabel } from './ui.PeerLabel';
 
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {
     const data = Data.self(e.item);
-    const label = data.copied ? 'copied' : `me:${data.peerid}`;
-    return <>{label}</>;
+    const uri = `me:${data.peerid}`;
+    return data.copied ? <>{'copied'}</> : <PeerLabel uri={uri} />;
   },
 
   action(kind, helpers) {

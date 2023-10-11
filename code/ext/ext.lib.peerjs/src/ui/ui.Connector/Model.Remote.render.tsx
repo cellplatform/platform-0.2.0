@@ -1,12 +1,13 @@
 import { Icons, type t, PeerUri } from './common';
 import { Data } from './Model.Data';
 import { ConnectButton } from './ui.ConnectButton';
+import { PeerLabel } from './ui.PeerLabel';
 
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {
     const data = Data.remote(e.item);
     const uri = PeerUri.uri(data.peerid);
-    return <>{uri}</>;
+    return <PeerLabel uri={uri} />;
   },
 
   placeholder(e) {
@@ -29,7 +30,11 @@ export const renderers: t.ConnectorItemRenderers = {
         const data = Data.remote(e.item);
 
         if (data.error) {
-          return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} />;
+          return (
+            <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} style={{ marginRight: 2 }} />
+          );
+        }
+
         }
 
         return null;
