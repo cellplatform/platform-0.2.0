@@ -1,6 +1,6 @@
-import { Icons, type t, PeerUri } from './common';
+import { LabelItem, Icons, type t, PeerUri } from './common';
 import { Data } from './Model.Data';
-import { ConnectButton } from './ui.ConnectButton';
+
 import { PeerLabel } from './ui.PeerLabel';
 
 export const renderers: t.ConnectorItemRenderers = {
@@ -40,7 +40,7 @@ export const renderers: t.ConnectorItemRenderers = {
          */
         if (e.selected && data.peerid) {
           const spinning = false;
-          return <ConnectButton selected={e.selected} focused={e.focused} spinning={spinning} />;
+          return <LabelItem.Button selected={e.selected} focused={e.focused} spinning={spinning} />;
         }
 
         return null;
