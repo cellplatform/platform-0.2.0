@@ -72,6 +72,29 @@ describe('PeerUri', () => {
     });
   });
 
+  describe('uri', () => {
+    it('empty', () => {
+      expect(PeerUri.uri()).to.eql('');
+      expect(PeerUri.uri('')).to.eql('');
+      expect(PeerUri.uri('   ')).to.eql('');
+    });
+
+    it('uri', () => {
+      expect(PeerUri.uri('foo')).to.eql('peer:foo');
+      expect(PeerUri.uri(' foo  ')).to.eql('peer:foo');
+      expect(PeerUri.uri('peer:foo')).to.eql('peer:foo');
+      expect(PeerUri.uri(' peer:foo ')).to.eql('peer:foo');
+      expect(PeerUri.uri(' peer: foo ')).to.eql('peer:foo');
+      expect(PeerUri.uri(' peer:local: self:foo')).to.eql('peer:foo');
+    });
+
+    it('non-string → empty ("")', () => {
+      [123, true, {}, [], undefined, null].forEach((input) => {
+        expect(PeerUri.id(input as any)).to.eql('');
+      });
+    });
+  });
+
   describe('prepend', () => {
     it('prepend (default)', () => {
       expect(PeerUri.prepend('foo')).to.eql('peer:foo');

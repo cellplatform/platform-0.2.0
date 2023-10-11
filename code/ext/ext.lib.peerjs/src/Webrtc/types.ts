@@ -25,6 +25,7 @@ export type WebrtcPeer = {
  */
 export type WebrtcPeerUri = {
   generate(prefix?: boolean | string): string;
-  id(input?: string): string;
   prepend(uri: string, ...prefix: string[]): string;
+  id(input?: string): string;
+  uri(input?: string): string;
 };

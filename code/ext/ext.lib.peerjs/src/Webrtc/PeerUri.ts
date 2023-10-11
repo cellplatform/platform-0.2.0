@@ -20,6 +20,12 @@ export const PeerUri: t.WebrtcPeerUri = {
     return parts[parts.length - 1].trim();
   },
 
+  uri(input) {
+    if (typeof input !== 'string') return '';
+    input = input.trim();
+    return input ? `peer:${PeerUri.id(input)}` : '';
+  },
+
   /**
    * Prepend the default, or given prefix(es).
    */
