@@ -1,5 +1,5 @@
-import { Id, Webrtc, cuid, describe, expect, it } from '../test';
-import { PeerUri } from './PeerUri';
+import { slug, Id, Webrtc, cuid, describe, expect, it } from '../test';
+import { PeerUri } from './Peer.Uri';
 
 describe('PeerUri', () => {
   it('exports', () => {

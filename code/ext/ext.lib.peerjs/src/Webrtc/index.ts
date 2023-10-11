@@ -1,2 +1,2 @@
 export { Webrtc } from './Webrtc';
-export { PeerUri } from './PeerUri';
+export { PeerUri } from './Peer.Uri';
