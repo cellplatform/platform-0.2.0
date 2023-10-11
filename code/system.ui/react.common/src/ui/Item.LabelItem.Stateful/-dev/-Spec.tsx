@@ -55,7 +55,7 @@ export default Dev.describe(name, (e) => {
         events.cmd.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
 
         events.cmd.action.$.subscribe((e) => console.info('🔥 command/action:', e));
-        events.cmd.action.kind('left').subscribe((e) => {
+        events.cmd.action.on('left').subscribe((e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
 

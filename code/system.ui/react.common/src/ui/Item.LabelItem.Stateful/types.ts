@@ -55,7 +55,7 @@ export type LabelItemStateEvents<A extends t.LabelActionKind = string> = t.Lifec
     readonly redraw$: t.Observable<string>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
-      kind(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
+      on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
     };
     readonly clipboard: {
       readonly $: t.Observable<t.LabelItemClipboard>;

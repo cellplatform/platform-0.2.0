@@ -59,7 +59,7 @@ export function events<A extends t.LabelActionKind = string>(
           },
           action: {
             $: action$,
-            kind<K extends t.LabelActionKind>(kind: K) {
+            on<K extends t.LabelActionKind>(kind: K) {
               return action$.pipe(
                 rx.filter((e) => kind.includes(e.kind)),
                 rx.map((e) => e as t.LabelItemActionInvoked<K>),
