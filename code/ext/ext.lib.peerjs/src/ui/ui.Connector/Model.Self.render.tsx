@@ -4,7 +4,7 @@ import { Data } from './Model.Data';
 export const renderers: t.ConnectorItemRenderers = {
   label(e) {
     const data = Data.self(e.item);
-    const label = data.copied ? 'copied' : `me:${e.item.label}`;
+    const label = data.copied ? 'copied' : `me:${data.peerid}`;
     return <>{label}</>;
   },
 

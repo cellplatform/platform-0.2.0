@@ -1,5 +1,6 @@
 import { describe, it, expect, type t } from '../../test';
 import { Model } from './Model';
+import { Data } from './Model.Data';
 
 describe('Connector.Model', () => {
   const list = Model.List.init();
@@ -9,7 +10,8 @@ describe('Connector.Model', () => {
     it('state', () => {
       const peerid = 'foo';
       const model = Model.Self.state({ peerid, ctx });
-      expect(model.current.label).to.eql(peerid);
+      const data = Data.self(model);
+      expect(data.peerid).to.eql(peerid);
     });
   });
 

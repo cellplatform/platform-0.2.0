@@ -33,5 +33,5 @@ export type ConnectorList = {
 /**
  * Model Data
  */
+export type ConnectorDataSelf = { copied?: string; peerid: string };
 export type ConnectorDataRemote = {};
-export type ConnectorDataSelf = { copied?: string };

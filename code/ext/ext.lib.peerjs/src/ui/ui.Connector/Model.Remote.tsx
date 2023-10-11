@@ -1,5 +1,5 @@
 import { State, type t } from './common';
-import { renderers } from './Model.Remote.renderers';
+import { renderers } from './Model.Remote.render';
 import { Data } from './Model.Data';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
@@ -16,7 +16,6 @@ export const Remote = {
   },
 
   state(args: RemoteArgs) {
-    const { dispose$ } = args;
     const initial: t.ConnectorItem = {
       editable: false,
       placeholder: 'paste remote peer',
@@ -25,7 +24,7 @@ export const Remote = {
 
     const state = State.item(initial);
     const dispatch = State.commands(state);
-    const events = state.events(dispose$);
+    const events = state.events(args.dispose$);
 
     /**
      * Behavior: Paste
