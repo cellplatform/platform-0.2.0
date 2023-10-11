@@ -35,26 +35,25 @@ export const Self = {
     };
 
     const initial = Self.initial(args);
-    const state = State.item(initial);
+    const state = State.item<t.ConnectorActionKind>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
 
-    events.command.clipboard.copy$.subscribe(copyClipboard);
-    events.command.action.kind<t.ConnectorActionKind>('local:right').subscribe(copyClipboard);
+    events.cmd.clipboard.copy$.subscribe(copyClipboard);
+    events.cmd.action.on('local:right').subscribe(copyClipboard);
 
     return state;
   },
 
-  initial(args: SelfArgs) {
+  initial(args: SelfArgs): t.ConnectorItem {
     const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
     const data: t.ConnectorDataSelf = { peerid };
-    const initial: t.ConnectorItem = {
+    return {
       editable: false,
-      label: '-', // NB: supress placeholder.
-      left: { kind: 'local:left' },
+      label: 'self', // NB: display value overridden in renderer.
+      left: { kind: 'local:left', button: false },
       right: { kind: 'local:right' },
       data: data,
     };
-    return initial;
   },
 } as const;

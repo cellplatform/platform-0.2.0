@@ -17,14 +17,14 @@ export const Remote = {
 
   state(args: RemoteArgs) {
     const initial = Remote.initial(args);
-    const state = State.item(initial);
+    const state = State.item<t.ConnectorActionKind>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
 
     /**
      * Behavior: Paste
      */
-    events.command.clipboard.paste$.subscribe(async (e) => {
+    events.cmd.clipboard.paste$.subscribe(async (e) => {
       const ctx = args.ctx();
       const tx = slug();
 
@@ -43,15 +43,18 @@ export const Remote = {
         else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
         else data.error = undefined;
 
-        d.label = undefined;
+        d.label = peerid;
         if (data.error) d.label = undefined;
-        else d.label = peerid;
       });
       dispatch.redraw();
 
-      Time.delay(2500, () => {
+      Time.delay(3000, () => {
         if (Data.remote(state).error?.tx !== tx) return;
-        state.change((d) => (Data.remote(d).error = undefined));
+        state.change((d) => {
+          const data = Data.remote(d);
+          if (data.error) data.peerid = undefined;
+          data.error = undefined;
+        });
         dispatch.redraw();
       });
     });
@@ -59,13 +62,12 @@ export const Remote = {
     return state;
   },
 
-  initial(args: RemoteArgs) {
-    const initial: t.ConnectorItem = {
+  initial(args: RemoteArgs): t.ConnectorItem {
+    return {
       editable: false,
       placeholder: 'paste remote peer',
-      left: { kind: 'remote:left' },
+      left: { kind: 'remote:left', button: false },
       right: { kind: 'remote:right' },
     };
-    return initial;
   },
 } as const;
