@@ -40,7 +40,7 @@ export default Dev.describe(name, (e) => {
         const State = LabelItem.Stateful.State;
 
         const { initial } = Sample.item();
-        const state = State.item(initial);
+        const state = State.item<SampleActionKind>(initial);
         const dispatch = State.commands(state);
         const events = state.events(dispose$);
 
@@ -50,12 +50,12 @@ export default Dev.describe(name, (e) => {
           dispatch.redraw();
         });
 
-        events.command.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
-        events.command.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
-        events.command.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
+        events.cmd.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
+        events.cmd.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
+        events.cmd.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
 
-        events.command.action.$.subscribe((e) => console.info('🔥 command/action:', e));
-        events.command.action.kind<SampleActionKind>('left').subscribe((e) => {
+        events.cmd.action.$.subscribe((e) => console.info('🔥 command/action:', e));
+        events.cmd.action.kind('left').subscribe((e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
 

@@ -37,26 +37,31 @@ export type LabelItemList = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.ImmutableRef<t.LabelItem, t.LabelItemStateEvents>;
-export type LabelItemStateEvents = t.Lifecycle & {
-  readonly $: t.Observable<t.PatchChange<t.LabelItem>>;
+
+export type LabelItemState<A extends t.LabelActionKind = string> = t.ImmutableRef<
+  t.LabelItem<A>,
+  t.LabelItemStateEvents<A>
+>;
+
+export type LabelItemStateEvents<A extends t.LabelActionKind = string> = t.Lifecycle & {
+  readonly $: t.Observable<t.PatchChange<t.LabelItem<A>>>;
   readonly key: {
     readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly enter$: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly escape$: t.Observable<t.LabelItemKeyHandlerArgs>;
   };
-  readonly command: {
+  readonly cmd: {
     readonly $: t.Observable<t.LabelItemCommand>;
     readonly redraw$: t.Observable<string>;
+    readonly action: {
+      readonly $: t.Observable<t.LabelItemActionInvoked>;
+      kind(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
+    };
     readonly clipboard: {
       readonly $: t.Observable<t.LabelItemClipboard>;
       readonly cut$: t.Observable<t.LabelItemClipboard>;
       readonly copy$: t.Observable<t.LabelItemClipboard>;
       readonly paste$: t.Observable<t.LabelItemClipboard>;
-    };
-    readonly action: {
-      $: t.Observable<t.LabelItemActionInvoked>;
-      kind<K extends t.LabelActionKind>(...kind: K[]): t.Observable<t.LabelItemActionInvoked<K>>;
     };
   };
 };

@@ -1,15 +1,12 @@
 import { R, rx, type t } from './common';
 
-type K = t.LabelItemKeyHandlerArgs;
-type E = t.LabelItemStateEvents;
-
 /**
  * Event wrapper factory.
  */
-export function events(
-  $: t.Observable<t.PatchChange<t.LabelItem>>,
+export function events<A extends t.LabelActionKind = string>(
+  $: t.Observable<t.PatchChange<t.LabelItem<A>>>,
   dispose$?: t.UntilObservable,
-): t.LabelItemStateEvents {
+): t.LabelItemStateEvents<A> {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
@@ -23,10 +20,12 @@ export function events(
 
   const cache = {
     keyboard: undefined as E['key'] | undefined,
-    command: undefined as E['command'] | undefined,
+    command: undefined as E['cmd'] | undefined,
   };
 
-  const api: t.LabelItemStateEvents = {
+  type K = t.LabelItemKeyHandlerArgs;
+  type E = t.LabelItemStateEvents<A>;
+  const api: E = {
     $,
     get key() {
       if (!cache.keyboard) {
@@ -39,7 +38,7 @@ export function events(
       }
       return cache.keyboard;
     },
-    get command() {
+    get cmd() {
       if (!cache.command) {
         type C = t.LabelItemClipboard;
 

@@ -21,12 +21,12 @@ export const State = {
   /**
    * An obvservable list item.
    */
-  item(
-    initial = DEFAULTS.data.item,
+  item<A extends t.LabelActionKind = string>(
+    initial: t.LabelItem<A> = DEFAULTS.data.item as t.LabelItem<A>,
     options: { onChange?: t.PatchChangeHandler<t.LabelItem> } = {},
-  ): t.LabelItemState {
+  ): t.LabelItemState<A> {
     const { onChange } = options;
-    return PatchState.init<t.LabelItem, t.LabelItemStateEvents>({
+    return PatchState.init<t.LabelItem<A>, t.LabelItemStateEvents<A>>({
       initial,
       events,
       onChange,

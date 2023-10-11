@@ -38,7 +38,7 @@ describe('LabelItem: State', () => {
       const events = state.events();
 
       const fired: t.LabelItemCommand[] = [];
-      events.command.$.subscribe((e) => fired.push(e));
+      events.cmd.$.subscribe((e) => fired.push(e));
 
       const tx = slug();
       state.change(

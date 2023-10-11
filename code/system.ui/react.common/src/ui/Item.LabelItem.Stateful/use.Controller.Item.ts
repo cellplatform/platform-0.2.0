@@ -81,7 +81,7 @@ export function useItemController(args: Args) {
   useEffect(() => {
     const events = item?.events();
     if (events) {
-      events.command.redraw$.subscribe(redraw);
+      events.cmd.redraw$.subscribe(redraw);
     }
 
     return events?.dispose;
