@@ -1,9 +1,10 @@
-import { Data } from './Model.Data';
+import { Data } from './Data';
 import { renderers } from './Model.Remote.render';
-import { PeerUri, State, slug, type t, Time } from './common';
+import { PeerUri, State, Time, slug, type t } from './common';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = { dispose$?: t.UntilObservable };
+type D = t.ConnectorDataRemote;
 
 export const Remote = {
   init(args: RemoteArgs): t.ConnectorListItem {
@@ -14,11 +15,23 @@ export const Remote = {
     };
   },
 
+  initial(args: RemoteArgs): t.ConnectorItem<D> {
+    const data: D = { kind: 'peer:remote' };
+    return {
+      editable: false,
+      placeholder: 'paste remote peer',
+      left: { kind: 'remote:left', button: false },
+      right: { kind: 'remote:right' },
+      data,
+    };
+  },
+
   state(args: RemoteArgs) {
     const initial = Remote.initial(args);
-    const state = State.item<t.ConnectorAction>(initial);
+    const state = State.item<t.ConnectorAction, D>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
+    const redraw = () => dispatch.redraw();
 
     /**
      * Behavior: Paste
@@ -45,7 +58,8 @@ export const Remote = {
         d.label = peerid;
         if (data.error) d.label = undefined;
       });
-      dispatch.redraw();
+      redraw();
+      // Time.delay(10, redraw);
 
       Time.delay(3000, () => {
         if (Data.remote(state).error?.tx !== tx) return;
@@ -54,7 +68,7 @@ export const Remote = {
           if (data.error) data.peerid = undefined;
           data.error = undefined;
         });
-        dispatch.redraw();
+        redraw();
       });
     });
 
@@ -72,14 +86,5 @@ export const Remote = {
      * Export
      */
     return state;
-  },
-
-  initial(args: RemoteArgs): t.ConnectorItem {
-    return {
-      editable: false,
-      placeholder: 'paste remote peer',
-      left: { kind: 'remote:left', button: false },
-      right: { kind: 'remote:right' },
-    };
   },
 } as const;

@@ -1,6 +1,6 @@
-import { describe, it, expect, type t } from '../../test';
+import { describe, expect, it, type t } from '../../test';
+import { Data } from './Data';
 import { Model } from './Model';
-import { Data } from './Model.Data';
 
 describe('Connector.Model', () => {
   const list = Model.List.init();

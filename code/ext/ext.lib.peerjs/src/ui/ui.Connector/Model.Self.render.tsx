@@ -1,13 +1,22 @@
 import { COLORS, Icons, type t } from './common';
-import { Data } from './Model.Data';
+import { Data } from './Data';
 import { PeerLabel } from './ui.PeerLabel';
 
 export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
   return {
     label(e) {
+      const ctx = args.ctx();
+      const remotes = Data.list(ctx.list).remotes.data;
+      const totalRemotes = remotes.filter((d) => d.peerid).length;
+      const peerWidth = totalRemotes === 0 ? undefined : 30;
+
       const data = Data.self(e.item);
       const uri = `me:${data.peerid}`;
-      return data.copied ? <>{'copied'}</> : <PeerLabel uri={uri} />;
+      return data.copied ? (
+        <>{'copied'}</>
+      ) : (
+        <PeerLabel uri={uri} prefixWidth={peerWidth} selected={e.selected} focused={e.focused} />
+      );
     },
 
     action(kind, helpers) {

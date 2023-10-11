@@ -9,14 +9,14 @@ const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
+  const model = Connector.Model.List.init();
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
-
-    const model = Connector.Model.List.init();
 
     model.events().$.subscribe((e) => {
       console.log('List.$:', e); // TEMP 🐷
@@ -50,6 +50,8 @@ export default Dev.describe(name, (e) => {
         const peeruri = Webrtc.Peer.Uri.generate();
         navigator.clipboard.writeText(peeruri);
       });
+
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 
@@ -57,7 +59,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        props: e.state.props,
+        'model.state': model.current.state.current,
+        'model.items': model.current.items.map(({ state }) => state.current),
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

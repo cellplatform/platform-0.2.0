@@ -17,25 +17,33 @@ export type ConnectorCtx = { list: ConnectorListState };
  * Item
  */
 export type ConnectorAction = 'local:left' | 'local:right' | 'remote:left' | 'remote:right';
-export type ConnectorItem = t.LabelItem<t.ConnectorAction>;
+export type ConnectorItem<T extends D = D> = t.LabelItem<t.ConnectorAction, T>;
 export type ConnectorItemRenderers = t.LabelItemRenderers<t.ConnectorAction>;
-export type ConnectorItemState = t.LabelItemState<ConnectorAction>;
+export type ConnectorItemState<T extends D = D> = t.LabelItemState<ConnectorAction, T>;
 
 /**
  * List
  */
 export type ConnectorListState = t.PatchState<t.ConnectorList>;
-export type ConnectorListItem = { state: t.LabelItemState; renderers: t.LabelItemRenderers };
+export type ConnectorListItem = { state: t.ConnectorItemState; renderers: t.LabelItemRenderers };
 export type ConnectorList = {
   state: t.LabelListState;
   items: t.ConnectorListItem[];
 };
 
 /**
- * Model Data
+ * Data Models
  */
-export type ConnectorDataSelf = { copied?: string; peerid: string };
+type D = ConnectorData;
+export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
+export type ConnectorDataSelf = {
+  kind: 'peer:self';
+  copied?: string;
+  peerid: string;
+};
+
 export type ConnectorDataRemote = {
+  kind: 'peer:remote';
   peerid?: string;
   error?: { type: ConnectorDataRemoteError; tx: string };
 };

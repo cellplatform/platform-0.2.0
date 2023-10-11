@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { css, type t } from './common';
 
 export type PeerLabelProps = {
   uri?: string;
   prefixWidth?: number;
+  selected?: boolean;
+  focused?: boolean;
   style?: t.CssValue;
 };
 
 export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
-  const { uri = '', prefixWidth = 32 } = props;
+  const { uri = '', selected, focused } = props;
 
   let error = '';
   const [prefix, peerid = ''] = uri.split(':');
@@ -27,9 +28,9 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
     body: css({
       Flex: 'x-center-start',
     }),
-    prefix: css({ minWidth: prefixWidth, marginRight: 2 }),
+    prefix: css({ minWidth: props.prefixWidth, marginRight: 3 }),
     hashLeft: css({}),
-    hashRight: css({ opacity: 0.3 }),
+    hashRight: css({ opacity: selected && focused ? 0.3 : 0.15 }),
   };
 
   const elError = error && <div {...styles.error}>{error}</div>;

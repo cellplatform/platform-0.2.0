@@ -1,9 +1,10 @@
-import { Data } from './Model.Data';
+import { Data } from './Data';
 import { renderers } from './Model.Self.render';
 import { PeerUri, State, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
+type D = t.ConnectorDataSelf;
 
 export const Self = {
   init(args: SelfArgs): t.ConnectorListItem {
@@ -11,6 +12,18 @@ export const Self = {
     return {
       state: Self.state(args),
       renderers: renderers({ ctx }),
+    };
+  },
+
+  initial(args: SelfArgs): t.ConnectorItem<D> {
+    const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
+    const data: D = { kind: 'peer:self', peerid };
+    return {
+      editable: false,
+      label: 'self', // NB: display value overridden in renderer.
+      left: { kind: 'local:left', button: false },
+      right: { kind: 'local:right' },
+      data,
     };
   },
 
@@ -34,7 +47,7 @@ export const Self = {
     };
 
     const initial = Self.initial(args);
-    const state = State.item<t.ConnectorAction>(initial);
+    const state = State.item<t.ConnectorAction, D>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
 
@@ -42,17 +55,5 @@ export const Self = {
     events.cmd.action.on('local:right').subscribe(copyClipboard);
 
     return state;
-  },
-
-  initial(args: SelfArgs): t.ConnectorItem {
-    const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
-    const data: t.ConnectorDataSelf = { peerid };
-    return {
-      editable: false,
-      label: 'self', // NB: display value overridden in renderer.
-      left: { kind: 'local:left', button: false },
-      right: { kind: 'local:right' },
-      data: data,
-    };
   },
 } as const;

@@ -1,5 +1,5 @@
 import { Icons, LabelItem, PeerUri, type t } from './common';
-import { Data } from './Model.Data';
+import { Data } from './Data';
 import { PeerLabel } from './ui.PeerLabel';
 
 export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
@@ -7,7 +7,7 @@ export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRend
     label(e) {
       const data = Data.remote(e.item);
       const uri = PeerUri.uri(data.peerid);
-      return <PeerLabel uri={uri} />;
+      return <PeerLabel uri={uri} selected={e.selected} focused={e.focused} />;
     },
 
     placeholder(e) {
@@ -41,7 +41,12 @@ export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRend
           if (e.selected && data.peerid) {
             const spinning = false;
             return (
-              <LabelItem.Button selected={e.selected} focused={e.focused} spinning={spinning} />
+              <LabelItem.Button
+                selected={e.selected}
+                focused={e.focused}
+                spinning={spinning}
+                label={'Connect'}
+              />
             );
           }
 
