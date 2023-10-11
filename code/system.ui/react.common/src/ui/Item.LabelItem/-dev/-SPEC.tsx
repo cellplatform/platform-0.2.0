@@ -1,10 +1,10 @@
 import { DEFAULTS, LabelItem } from '..';
 import { Dev, Time, type t } from '../../../test.ui';
-import { Sample } from './-Sample';
+import { Sample, type A } from './-Sample';
 
 type T = {
   ref?: t.LabelItemRef;
-  item: t.LabelItem;
+  item: t.LabelItem<A>;
   props: t.LabelItemProps;
   debug: { subjectBg?: boolean };
 };
@@ -329,6 +329,10 @@ export default Dev.describe(name, (e) => {
       dev.button('actions: (right) multiple', async (e) => {
         const sample = Sample.actions();
         await e.change((d) => (d.item.right = sample.right));
+      });
+
+      dev.button('actions: (right) button', async (e) => {
+        await e.change((d) => (d.item.right = { kind: 'right:button' }));
       });
 
       dev.hr(-1, 5);
