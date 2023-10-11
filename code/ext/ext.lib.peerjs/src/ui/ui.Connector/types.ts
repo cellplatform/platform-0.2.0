@@ -14,7 +14,7 @@ export type GetConnectorCtx = () => ConnectorCtx;
 export type ConnectorCtx = { list: ConnectorListState };
 
 /**
- * Item
+ * Model: Item
  */
 export type ConnectorAction = 'local:left' | 'local:right' | 'remote:left' | 'remote:right';
 export type ConnectorItem<T extends D = D> = t.LabelItem<t.ConnectorAction, T>;
@@ -22,7 +22,7 @@ export type ConnectorItemRenderers = t.LabelItemRenderers<t.ConnectorAction>;
 export type ConnectorItemState<T extends D = D> = t.LabelItemState<ConnectorAction, T>;
 
 /**
- * List
+ * Model: List
  */
 export type ConnectorListState = t.PatchState<t.ConnectorList>;
 export type ConnectorListItem = { state: t.ConnectorItemState; renderers: t.LabelItemRenderers };
@@ -32,7 +32,7 @@ export type ConnectorList = {
 };
 
 /**
- * Data Models
+ * Model: Data
  */
 type D = ConnectorData;
 export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
