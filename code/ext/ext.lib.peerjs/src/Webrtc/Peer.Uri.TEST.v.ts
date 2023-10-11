@@ -1,4 +1,4 @@
-import { slug, Id, Webrtc, cuid, describe, expect, it } from '../test';
+import { Id, Webrtc, cuid, describe, expect, it } from '../test';
 import { PeerUri } from './Peer.Uri';
 
 describe('PeerUri', () => {

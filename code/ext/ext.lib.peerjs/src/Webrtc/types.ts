@@ -14,6 +14,7 @@ export type Webrtc = {
  */
 type OptionsArgs = { host: string; path: string; key: string };
 export type WebrtcPeer = {
+  readonly Is: WebrtcIs;
   readonly Uri: WebrtcPeerUri;
   options(input?: OptionsArgs): t.PeerOptions;
   create(): t.Peer;
@@ -25,7 +26,6 @@ export type WebrtcPeer = {
  * Helpers for working with Peer ids.
  */
 export type WebrtcPeerUri = {
-  readonly Is: WebrtcIs;
   generate(prefix?: boolean | string): string;
   prepend(uri: string, ...prefix: string[]): string;
   id(input?: string): string;
@@ -34,4 +34,5 @@ export type WebrtcPeerUri = {
 
 export type WebrtcIs = {
   peerid(input?: any): boolean;
+  uri(input?: any): boolean;
 };

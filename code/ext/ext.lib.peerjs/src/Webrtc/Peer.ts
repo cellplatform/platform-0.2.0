@@ -1,5 +1,6 @@
 import { DEFAULTS, Path, Peer as PeerJs, cuid, type t } from '../common';
 import { PeerUri as Uri } from './Peer.Uri';
+import { Is } from './Is';
 
 export type OptionsArgs = { host: string; path: string; key: string };
 
@@ -9,6 +10,7 @@ export type OptionsArgs = { host: string; path: string; key: string };
  *    https://github.com/peers/peerjs
  */
 export const Peer: t.WebrtcPeer = {
+  Is,
   Uri,
 
   options(input?: OptionsArgs): t.PeerOptions {

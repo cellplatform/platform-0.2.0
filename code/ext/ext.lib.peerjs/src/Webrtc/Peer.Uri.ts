@@ -1,12 +1,9 @@
 import { Id, type t } from '../common';
-import { Is } from './Is';
 
 /**
  * Helper for formatting peer ids.
  */
 export const PeerUri: t.WebrtcPeerUri = {
-  Is,
-
   /**
    * Generate a new peer-id.
    */
