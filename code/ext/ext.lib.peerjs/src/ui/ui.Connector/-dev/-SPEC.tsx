@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../../test.ui';
+import { Dev, type t, Webrtc } from '../../../test.ui';
 
 import { Connector } from '..';
 import { Info } from '../../ui.Info';
@@ -42,11 +42,15 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
-
+    dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
     dev.hr(5, 20);
 
-    dev.row((e) => <Info fields={['Module']} />);
+    dev.section('Debug', (dev) => {
+      dev.button(['peer:uri → generate → copy', '🌳'], (e) => {
+        const peeruri = Webrtc.Peer.Uri.generate();
+        navigator.clipboard.writeText(peeruri);
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

@@ -12,6 +12,7 @@ export type {
   LabelItemRenderers,
   LabelItemState,
   PropListProps,
+  RenderCountProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
