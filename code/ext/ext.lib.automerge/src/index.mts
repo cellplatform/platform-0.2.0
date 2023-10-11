@@ -8,7 +8,7 @@ export { Pkg };
  * Library
  */
 export { Store } from './Store';
-export { WebStore } from './ui.Store';
+export { WebStore } from './Store.Web';
 
 /**
  * Dev
