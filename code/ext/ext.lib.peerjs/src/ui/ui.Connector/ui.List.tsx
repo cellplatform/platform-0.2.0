@@ -1,8 +1,8 @@
 import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
-  items?: t.ConnectorListItem[];
   list?: t.LabelItemListState;
+  items?: t.ConnectorListItem[];
   style?: t.CssValue;
   renderCount?: t.RenderCountProps;
 };
