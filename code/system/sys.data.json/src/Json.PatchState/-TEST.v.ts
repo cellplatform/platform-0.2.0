@@ -1,5 +1,6 @@
-import { Is, describe, expect, it, type t, rx } from '../test';
 import { PatchState } from '.';
+import { Patch } from '../Json.Patch';
+import { Is, describe, expect, it, rx, type t } from '../test';
 
 describe('PatchState', () => {
   type T = { label: string };
@@ -159,6 +160,31 @@ describe('PatchState', () => {
 
       state.change((d) => (d.label = 'hello'));
       expect(fired[0].label).to.eql('hello');
+    });
+  });
+
+  describe('is', () => {
+    it('is.proxy ← true', () => {
+      let proxy = false;
+      Patch.change({ foo: 123 }, (draft) => (proxy = PatchState.is.proxy(draft)));
+      expect(proxy).to.eql(true);
+    });
+
+    it('is.proxy ← false', () => {
+      [undefined, null, {}, '', 123, true].forEach((value) => {
+        expect(PatchState.is.proxy(value)).to.eql(false);
+      });
+    });
+
+    it('is.state ← true', () => {
+      const state = PatchState.init<T>({ initial });
+      expect(PatchState.is.state(state)).to.eql(true);
+    });
+
+    it('is.state ← false', () => {
+      [undefined, null, {}, '', 123, true].forEach((value) => {
+        expect(PatchState.is.state(value)).to.eql(false);
+      });
     });
   });
 });
