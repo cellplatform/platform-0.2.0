@@ -19,7 +19,7 @@ export default Dev.describe(name, (e) => {
     const model = Connector.Model.List.init();
 
     model.events().$.subscribe((e) => {
-      console.log('e', e);
+      console.log('List.$:', e); // TEMP 🐷
     });
 
     ctx.debug.width(330);
@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
           <List
             list={current.list}
             items={current.items}
-            renderCount={{ absolute: [-20, 0, null, null], opacity: 0.2, prefix: 'list.render-' }}
+            renderCount={{ absolute: [-20, 2, null, null], opacity: 0.2, prefix: 'list.render-' }}
           />
         );
       });
