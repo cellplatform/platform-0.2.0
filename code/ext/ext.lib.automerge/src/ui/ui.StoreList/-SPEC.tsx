@@ -1,12 +1,9 @@
-import { css, Dev, type t } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
+import { Root } from '.';
 
-type T = {};
-const initial: T = {};
-
-/**
- * Spec
- */
-const name = 'Store.List';
+type T = { props: t.StoreListProps };
+const initial: T = { props: {} };
+const name = Root.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
@@ -19,10 +16,10 @@ export default Dev.describe(name, (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        return <Root {...e.state.props} />;
       });
   });
 
