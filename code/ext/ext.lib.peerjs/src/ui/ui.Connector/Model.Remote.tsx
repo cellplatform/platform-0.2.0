@@ -6,12 +6,11 @@ export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = { dispose$?: t.UntilObservable };
 
 export const Remote = {
-  renderers,
-
   init(args: RemoteArgs): t.ConnectorListItem {
+    const { ctx } = args;
     return {
       state: Remote.state(args),
-      renderers,
+      renderers: renderers({ ctx }),
     };
   },
 

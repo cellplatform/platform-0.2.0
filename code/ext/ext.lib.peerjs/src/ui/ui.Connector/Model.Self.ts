@@ -6,12 +6,11 @@ export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
 
 export const Self = {
-  renderers,
-
   init(args: SelfArgs): t.ConnectorListItem {
+    const { ctx } = args;
     return {
       state: Self.state(args),
-      renderers,
+      renderers: renderers({ ctx }),
     };
   },
 
