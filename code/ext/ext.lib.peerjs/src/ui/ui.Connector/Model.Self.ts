@@ -21,15 +21,14 @@ export const Self = {
   state(args: SelfArgs) {
     const copyClipboard = async () => {
       const peerid = Data.self(state).peerid;
-      // const uri = PeerUri.
       await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
-      const copied = `tmp.${slug()}`;
-      state.change((d) => (Data.self(d).copied = copied));
+      const tx = slug();
+      state.change((d) => (Data.self(d).copied = tx));
       dispatch.redraw();
 
       Time.delay(1200, () => {
-        if (Data.self(state).copied !== copied) return;
+        if (Data.self(state).copied !== tx) return;
         state.change((d) => (Data.self(d).copied = undefined));
         dispatch.redraw();
       });
@@ -41,7 +40,7 @@ export const Self = {
     const events = state.events(args.dispose$);
 
     events.command.clipboard.copy$.subscribe(copyClipboard);
-    events.command.action.kind<t.ConnectorActionKind>('local:copy').subscribe(copyClipboard);
+    events.command.action.kind<t.ConnectorActionKind>('local:right').subscribe(copyClipboard);
 
     return state;
   },
@@ -53,7 +52,7 @@ export const Self = {
       editable: false,
       label: '-', // NB: supress placeholder.
       left: { kind: 'local:left' },
-      right: { kind: 'local:copy' },
+      right: { kind: 'local:right' },
       data: data,
     };
     return initial;

@@ -16,7 +16,7 @@ export type ConnectorCtx = { list: ConnectorListState };
 /**
  * Item
  */
-export type ConnectorActionKind = 'local:left' | 'local:copy' | 'remote:left';
+export type ConnectorActionKind = 'local:left' | 'local:right' | 'remote:left' | 'remote:right';
 export type ConnectorItem = t.LabelItem<t.ConnectorActionKind>;
 export type ConnectorItemRenderers = t.LabelItemRenderers<t.ConnectorActionKind>;
 
@@ -34,4 +34,9 @@ export type ConnectorList = {
  * Model Data
  */
 export type ConnectorDataSelf = { copied?: string; peerid: string };
-export type ConnectorDataRemote = {};
+export type ConnectorDataRemote = {
+  peerid?: string;
+  error?: { type: ConnectorDataRemoteError; tx: string };
+};
+
+export type ConnectorDataRemoteError = 'InvalidPeer' | 'PeerIsSelf';

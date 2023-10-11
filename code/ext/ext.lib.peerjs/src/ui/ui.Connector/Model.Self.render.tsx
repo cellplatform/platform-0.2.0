@@ -16,9 +16,11 @@ export const renderers: t.ConnectorItemRenderers = {
       };
     }
 
-    if (kind === 'local:copy') {
+    if (kind === 'local:right') {
       return (e) => {
         const data = Data.self(e.item);
+        if (!(e.selected && e.focused)) return null;
+
         if (data.copied) {
           return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
         } else {
