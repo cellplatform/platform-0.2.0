@@ -6,12 +6,14 @@ describe('Is', () => {
   it('exports', () => {
     expect(Webrtc.Is).to.equal(Is);
     expect(Webrtc.Peer.Is).to.equal(Is);
+    expect(PeerUri.Is).to.equal(Is);
   });
 
   describe('Is.peerid', () => {
     it('true', () => {
       const test = (input: any) => expect(Is.peerid(input)).to.eql(true);
       test(cuid());
+      test(` ${cuid()}  `);
       test(PeerUri.generate(false));
       test(PeerUri.generate('  '));
     });
@@ -29,6 +31,7 @@ describe('Is', () => {
       const test = (input: any) => expect(Is.uri(input)).to.eql(true);
       test(PeerUri.generate(true));
       test(PeerUri.generate());
+      test(`  ${PeerUri.generate()}  `);
     });
 
     it('false', () => {

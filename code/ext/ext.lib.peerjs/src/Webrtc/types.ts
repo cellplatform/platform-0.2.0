@@ -26,6 +26,7 @@ export type WebrtcPeer = {
  * Helpers for working with Peer ids.
  */
 export type WebrtcPeerUri = {
+  readonly Is: WebrtcIs;
   generate(prefix?: boolean | string): string;
   prepend(uri: string, ...prefix: string[]): string;
   id(input?: string): string;
