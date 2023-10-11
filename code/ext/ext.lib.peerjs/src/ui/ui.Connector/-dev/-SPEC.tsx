@@ -29,7 +29,13 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const current = model.current;
-        return <List list={current.list} items={current.items} />;
+        return (
+          <List
+            list={current.list}
+            items={current.items}
+            renderCount={{ absolute: [-20, 0, null, null], opacity: 0.2, prefix: 'list.render-' }}
+          />
+        );
       });
   });
 

@@ -4,6 +4,7 @@ export type ListProps = {
   items?: t.ConnectorListItem[];
   list?: t.LabelItemListState;
   style?: t.CssValue;
+  renderCount?: t.RenderCountProps;
 };
 
 export const List: React.FC<ListProps> = (props) => {
@@ -38,7 +39,7 @@ export const List: React.FC<ListProps> = (props) => {
 
   return (
     <div ref={controller.ref} {...css(styles.base, props.style)} tabIndex={0}>
-      <RenderCount absolute={[-20, 0, null, null]} />
+      {props.renderCount && <RenderCount {...props.renderCount} />}
       <div>{elements}</div>
     </div>
   );
