@@ -6,6 +6,7 @@ export type {
   CssValue,
   DevCtxState,
   PropListProps,
+  RenderCountProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
