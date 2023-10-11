@@ -3,7 +3,7 @@ import { Keyboard, rx, type t } from './common';
 type Args<H extends HTMLElement = HTMLDivElement> = {
   ref: React.RefObject<H>;
   enabled?: boolean;
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   items?: t.LabelItemState[];
 };
 

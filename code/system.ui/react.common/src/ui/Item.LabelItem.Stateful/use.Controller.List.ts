@@ -8,7 +8,7 @@ import { useListNavigationController } from './use.Controller.List.Navigation';
 type Args = {
   enabled?: boolean;
   useBehaviors?: t.LabelItemBehaviorKind[];
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   items?: t.LabelItemState[];
 };
 

@@ -12,7 +12,7 @@ type Args = {
   useBehaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
   item?: t.LabelItemState;
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };

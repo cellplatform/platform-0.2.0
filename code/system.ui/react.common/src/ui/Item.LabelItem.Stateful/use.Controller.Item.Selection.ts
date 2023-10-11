@@ -5,7 +5,7 @@ type Args = {
   index: number;
   enabled?: boolean;
   item?: t.LabelItemState;
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
@@ -23,10 +23,10 @@ export function useItemSelectionController(args: Args) {
    * Redraw on selection/focus change.
    */
   useEffect(() => {
-    type T = t.PatchChange<t.LabelItemList>;
+    type T = t.PatchChange<t.LabeList>;
     const focusChanged = (prev: T, next: T) => prev.to.focused === next.to.focused;
     const selectionChanged = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
-    const isSelected = (list: t.LabelItemList) => list.selected === item?.instance;
+    const isSelected = (list: t.LabeList) => list.selected === item?.instance;
     const events = list?.events();
     events?.$.pipe(rx.distinctUntilChanged(focusChanged)).subscribe(redraw);
     events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe(() => {

@@ -33,7 +33,7 @@ export const DEFAULTS = {
     get item(): t.LabelItem {
       return {};
     },
-    get list(): t.LabelItemList {
+    get list(): t.LabeList {
       return {};
     },
   },

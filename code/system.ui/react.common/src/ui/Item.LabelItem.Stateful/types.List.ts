@@ -1,9 +1,21 @@
 import type { t } from './common';
 
+type ItemId = string;
+
 /**
  * List
  */
-export type LabelItemListState = t.PatchState<t.LabelItemList>;
+
+/**
+ * Context for when an item exists
+ * within the context of a list.
+ */
+export type LabeList = {
+  selected?: ItemId;
+  focused?: boolean;
+};
+
+export type LabelListState = t.PatchState<t.LabeList>;
 
 /**
  * Controller API's

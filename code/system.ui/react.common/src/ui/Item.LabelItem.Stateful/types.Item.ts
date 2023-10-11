@@ -26,15 +26,6 @@ export type LabelItem<A extends t.LabelActionKind = string> = {
 };
 
 /**
- * Context for when an item exists
- * within the context of a list.
- */
-export type LabelItemList = {
-  selected?: ItemId;
-  focused?: boolean;
-};
-
-/**
  * Simple safe/immutable state wrapper for the data object.
  */
 
@@ -82,7 +73,7 @@ export type LabelItemController<Kind extends string> = {
 export type LabelItemStatefulProps = {
   index?: number;
   total?: number;
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   item?: t.LabelItemState;
   renderers?: t.LabelItemRenderers;
   useBehaviors?: t.LabelItemBehaviorKind[];

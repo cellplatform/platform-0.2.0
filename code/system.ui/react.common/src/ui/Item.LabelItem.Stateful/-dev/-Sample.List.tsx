@@ -6,7 +6,7 @@ import { LabelItemStateful } from '..';
 export type SampleListProps = {
   elements?: JSX.Element[];
   useBehaviors?: t.LabelItemBehaviorKind[];
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   items?: t.LabelItemState[];
   renderCount?: t.RenderCountProps;
   style?: t.CssValue;

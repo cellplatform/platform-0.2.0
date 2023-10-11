@@ -13,9 +13,9 @@ export const State = {
   /**
    * An observable list state.
    */
-  list(): t.LabelItemListState {
+  list(): t.LabelListState {
     const initial = DEFAULTS.data.list;
-    return PatchState.init<t.LabelItemList>({ initial });
+    return PatchState.init<t.LabeList>({ initial });
   },
 
   /**
