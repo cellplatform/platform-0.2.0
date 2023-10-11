@@ -9,6 +9,7 @@ export type ListProps = {
 
 export const List: React.FC<ListProps> = (props) => {
   const { items = [] } = props;
+
   const controller = LabelItem.Stateful.useListController({
     list: props.list,
     items: items.map(({ state }) => state),

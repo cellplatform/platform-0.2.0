@@ -1,8 +1,8 @@
-import { Dev, type t, Webrtc } from '../../../test.ui';
+import { Dev, type t, Webrtc } from '../../test.ui';
 
-import { Connector } from '..';
-import { Info } from '../../ui.Info';
-import { List } from '../ui.List';
+import { Connector } from '.';
+import { Info } from '../ui.Info';
+import { List } from './ui.List';
 
 type T = { props: t.ConnectorProps };
 const initial: T = { props: {} };
