@@ -27,7 +27,7 @@ describe('Connector.Model', () => {
       const model = Model.List.init();
       const current = model.current;
       expect(current.items.length).to.eql(2);
-      expect(current.list.current).to.eql({});
+      expect(current.state.current).to.eql({});
     });
   });
 });

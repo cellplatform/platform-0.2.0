@@ -1,7 +1,7 @@
 import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
-  list?: t.LabelItemListState;
+  list?: t.LabelListState;
   items?: t.ConnectorListItem[];
   style?: t.CssValue;
   renderCount?: t.RenderCountProps;
@@ -18,10 +18,7 @@ export const List: React.FC<ListProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      outline: 'none',
-    }),
+    base: css({ position: 'relative', outline: 'none' }),
   };
 
   const elements = items.map((item, i) => {

@@ -7,10 +7,10 @@ export type {
   DevCtxState,
   DevTools,
   LabelItem,
-  LabelItemListState,
   LabelItemRendererArgs,
   LabelItemRenderers,
   LabelItemState,
+  LabelListState,
   PropListProps,
   RenderCountProps,
 } from 'sys.ui.react.common/src/types.mjs';

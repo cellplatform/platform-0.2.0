@@ -35,7 +35,7 @@ export const Self = {
     };
 
     const initial = Self.initial(args);
-    const state = State.item<t.ConnectorActionKind>(initial);
+    const state = State.item<t.ConnectorAction>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
 
