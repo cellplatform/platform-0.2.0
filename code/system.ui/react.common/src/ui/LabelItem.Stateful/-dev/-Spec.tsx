@@ -1,5 +1,5 @@
 import { rx, Dev, Value, type t } from '../../../test.ui';
-import { LabelItem } from '../../Item.LabelItem';
+import { LabelItem } from '../../LabelItem';
 import { Sample, type SampleActionKind } from './-Sample';
 import { SampleList } from './-Sample.List';
 

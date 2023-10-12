@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
 
-import { LabelItemStateful as Stateful } from '../Item.LabelItem.Stateful/Root';
-import { BehaviorSelector } from '../Item.LabelItem.Stateful/ui.Config.BehaviorSelector';
+import { LabelItemStateful as Stateful } from '../LabelItem.Stateful/Root';
+import { BehaviorSelector } from '../LabelItem.Stateful/ui.Config.BehaviorSelector';
 import { ForwardRef } from './Root.ForwardRef';
 import { Button } from './ui.Button';
 

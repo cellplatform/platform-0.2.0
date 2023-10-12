@@ -1,4 +1,4 @@
-import { LabelItem } from '../Item.LabelItem/Root';
+import { LabelItem } from '../LabelItem/Root';
 import { DEFAULTS, type t } from './common';
 import { useItemController } from './use';
 
