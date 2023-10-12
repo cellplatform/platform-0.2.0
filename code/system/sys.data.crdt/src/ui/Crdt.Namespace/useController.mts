@@ -37,7 +37,7 @@ export function useController(args: Args) {
       console.log('item.current', item.current);
       console.groupEnd();
 
-      const namespace = e.data.label ?? '';
+      const namespace = e.item.label ?? '';
 
       if (e.action === 'edit:accept') {
         if (namespace && ns) {
@@ -54,11 +54,11 @@ export function useController(args: Args) {
    * - take root useController, not the editCongtroller
    */
 
-  const { data, handlers } = controller;
+  const { current, handlers } = controller;
   const api: t.LabelItemController<'controller:Crdt:Namespace'> = {
     kind: 'controller:Crdt:Namespace',
     enabled,
-    current: data,
+    current,
     handlers,
   };
 
