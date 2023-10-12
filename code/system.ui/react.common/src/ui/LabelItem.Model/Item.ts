@@ -1,5 +1,5 @@
-import { commands } from './Model.Item.commands';
-import { events } from './Model.Item.events';
+import { commands } from './Item.commands';
+import { events } from './Item.events';
 import { DEFAULTS, PatchState, type t } from './common';
 
 type O = Record<string, unknown>;

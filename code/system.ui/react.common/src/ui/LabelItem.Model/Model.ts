@@ -1,6 +1,6 @@
-import { Item } from './Model.Item';
+import { Item } from './Item';
+import { List } from './List';
 import { Is, Patch, PatchState, type t } from './common';
-import { List } from './Model.List';
 
 type O = Record<string, unknown>;
 
