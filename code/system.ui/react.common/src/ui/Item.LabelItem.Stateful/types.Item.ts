@@ -66,7 +66,7 @@ export type LabelItemStateEvents<
 export type LabelItemController<Kind extends string> = {
   readonly kind: Kind;
   readonly enabled: boolean;
-  readonly data: t.LabelItem;
+  readonly current: t.LabelItem;
   readonly handlers: t.LabelItemPropsHandlers;
 };
 

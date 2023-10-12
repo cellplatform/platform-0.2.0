@@ -58,7 +58,7 @@ export function useController(args: Args) {
   const api: t.LabelItemController<'controller:Crdt:Namespace'> = {
     kind: 'controller:Crdt:Namespace',
     enabled,
-    data,
+    current: data,
     handlers,
   };
 

@@ -108,7 +108,7 @@ export function useItemController(args: Args) {
     kind: 'controller:Item',
     enabled,
     handlers,
-    get data() {
+    get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
   };

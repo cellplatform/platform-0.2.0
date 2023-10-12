@@ -29,19 +29,17 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
     useBehaviors,
   });
 
-  const { data, handlers } = controller;
-
   /**
    * Render
    */
   return (
     <LabelItem
-      {...handlers}
+      {...controller.handlers}
       style={props.style}
       index={props.index}
       total={props.total}
       renderers={props.renderers}
-      item={data}
+      item={controller.current}
       selected={isSelected}
       focused={isFocused}
       focusOnEdit={true}

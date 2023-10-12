@@ -28,7 +28,7 @@ export function useItemEditController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const fire = (action: A) => args.onChange?.({ action, position, item: api.data });
+  const fire = (action: A) => args.onChange?.({ action, position, item: api.current });
   const change = (action: A, fn: RevertibleNext) => {
     if (!item || !enabled) return;
     item.change(fn);
@@ -147,7 +147,7 @@ export function useItemEditController(args: Args) {
     kind: 'controller:Item.Edit',
     enabled,
     handlers,
-    get data() {
+    get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
   };

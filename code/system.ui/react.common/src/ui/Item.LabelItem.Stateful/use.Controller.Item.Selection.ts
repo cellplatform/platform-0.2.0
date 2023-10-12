@@ -41,7 +41,7 @@ export function useItemSelectionController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const fire = (action: A) => args.onChange?.({ action, position, item: api.data });
+  const fire = (action: A) => args.onChange?.({ action, position, item: api.current });
 
   /**
    * View component events.
@@ -61,7 +61,7 @@ export function useItemSelectionController(args: Args) {
     kind: 'controller:Item.Selection',
     enabled,
     handlers,
-    get data() {
+    get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
   };

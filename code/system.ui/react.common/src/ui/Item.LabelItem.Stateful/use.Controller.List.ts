@@ -52,7 +52,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     enabled,
     list,
     items,
-    get data() {
+    get current() {
       return list?.current ?? DEFAULTS.data.list;
     },
   } as const;
