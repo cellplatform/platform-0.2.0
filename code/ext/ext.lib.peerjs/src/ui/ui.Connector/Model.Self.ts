@@ -1,6 +1,6 @@
 import { Data } from './Data';
 import { renderers } from './Model.Self.render';
-import { PeerUri, State, Time, slug, type t } from './common';
+import { PeerUri, Model, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
@@ -47,8 +47,8 @@ export const Self = {
     };
 
     const initial = Self.initial(args);
-    const state = State.item<t.ConnectorAction, D>(initial);
-    const dispatch = State.commands(state);
+    const state = Model.item<t.ConnectorAction, D>(initial);
+    const dispatch = Model.commands(state);
     const events = state.events(args.dispose$);
 
     events.cmd.clipboard.copy$.subscribe(copyClipboard);

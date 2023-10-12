@@ -1,7 +1,7 @@
 import { LabelItem } from './common';
 
 export * from '../common';
-export const State = LabelItem.Stateful.State;
+export const Model = LabelItem.Stateful.Model;
 
 /**
  * Constants

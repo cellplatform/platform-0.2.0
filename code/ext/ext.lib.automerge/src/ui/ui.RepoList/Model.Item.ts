@@ -1,6 +1,6 @@
 import { Data } from './Data';
 import { renderers } from './Model.Item.render';
-import { State, rx, type t } from './common';
+import { Model, rx, type t } from './common';
 
 export type ItemModelArgs = { store: t.Store; ctx: t.GetRepoListCtx; dispose$?: t.UntilObservable };
 
@@ -31,8 +31,8 @@ export const ItemModel = {
   state(args: ItemModelArgs) {
     const { store } = args;
     const initial = ItemModel.initial(args);
-    const state = State.item<t.RepoListAction, D>(initial);
-    const dispatch = State.commands(state);
+    const state = Model.item<t.RepoListAction, D>(initial);
+    const dispatch = Model.commands(state);
     const events = state.events(args.dispose$);
 
     /**

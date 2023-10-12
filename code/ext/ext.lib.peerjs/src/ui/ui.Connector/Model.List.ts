@@ -1,4 +1,4 @@
-import { State, type t, PatchState } from './common';
+import { Model, type t, PatchState } from './common';
 import { Remote, type RemoteOptions } from './Model.Remote';
 import { Self, type SelfOptions } from './Model.Self';
 
@@ -8,7 +8,7 @@ export const List = {
     const self = Self.init({ ...options.self, ctx });
     const first = Remote.init({ ...options.remote, ctx });
     const initial: t.ConnectorList = {
-      state: State.list(),
+      state: Model.list(),
       items: [self, first],
     };
     const list = PatchState.init<t.ConnectorList>({ initial });

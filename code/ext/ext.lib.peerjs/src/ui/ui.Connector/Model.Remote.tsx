@@ -1,6 +1,6 @@
 import { Data } from './Data';
 import { renderers } from './Model.Remote.render';
-import { PeerUri, State, Time, slug, type t } from './common';
+import { PeerUri, Model, Time, slug, type t } from './common';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = { dispose$?: t.UntilObservable };
@@ -28,8 +28,8 @@ export const Remote = {
 
   state(args: RemoteArgs) {
     const initial = Remote.initial(args);
-    const state = State.item<t.ConnectorAction, D>(initial);
-    const dispatch = State.commands(state);
+    const state = Model.item<t.ConnectorAction, D>(initial);
+    const dispatch = Model.commands(state);
     const events = state.events(args.dispose$);
     const redraw = () => dispatch.redraw();
 

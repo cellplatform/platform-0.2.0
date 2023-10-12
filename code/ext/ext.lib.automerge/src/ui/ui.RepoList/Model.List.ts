@@ -1,4 +1,4 @@
-import { PatchState, State, type t } from './common';
+import { PatchState, Model, type t } from './common';
 import { ItemModel } from './Model.Item';
 
 export const List = {
@@ -10,7 +10,7 @@ export const List = {
     const first = ItemModel.init({ store, ctx });
     const renderers = first.renderers;
     const initial: t.RepoList = {
-      state: State.list(),
+      state: Model.list(),
       items: [first.state],
     };
     const list = PatchState.init<t.RepoList>({ initial });
