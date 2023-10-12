@@ -2,7 +2,7 @@ import { describe, expect, it, slug, type t } from '../../test';
 
 import { Model } from '.';
 
-describe('LabelItem: Model', () => {
+describe('LabelItem.Model', () => {
   describe('Model.item', () => {
     it('init', () => {
       const state = Model.item({ label: 'foo' });
@@ -56,55 +56,79 @@ describe('LabelItem: Model', () => {
     });
   });
 
-  describe('State.data', () => {
-    it('undefined (by default)', () => {
-      const state = Model.item();
-      expect(state.current.data).to.eql(undefined);
+  describe('Model.list', () => {
+    it('init', () => {
+      const state = Model.list();
+      expect(state.current).to.eql({});
+    });
+  });
+
+  describe('Model.data', () => {
+    type StateRef = t.ImmutableRef<any, any>;
+
+    it('field undefined (by default)', () => {
+      const item = Model.item();
+      const list = Model.list();
+      expect(item.current.data).to.eql(undefined);
+      expect(list.current.data).to.eql(undefined);
     });
 
     it('no mutation ← read a non-proxy', () => {
-      type T = { count?: number };
-      const state = Model.item();
-      const res1 = Model.data<T>(state.current);
-      const res2 = Model.data<T>(state.current, { count: 123 });
+      const test = (state: StateRef) => {
+        type T = { count?: number };
+        const res1 = Model.data<T>(state.current);
+        const res2 = Model.data<T>(state.current, { count: 123 });
+        const res3 = Model.data<T>(state, { count: 123 });
+        expect(state.current.data).to.eql(undefined); // NB: no chance to underlying object.
+        expect(res1).to.eql({});
+        expect(res2).to.eql({ count: 123 });
+        expect(res3).to.eql({ count: 123 });
+      };
 
-      expect(state.current.data).to.eql(undefined); // NB: no chance to underlying object.
-      expect(res1).to.eql({});
-      expect(res2).to.eql({ count: 123 });
+      test(Model.item());
+      test(Model.list());
     });
 
     it('no mutation ← convert from [ItemState] → [Item]', () => {
-      type T = { count?: number };
-      const state = Model.item();
-      state.change((d) => (d.data = { count: 123 }));
-      expect(state.current.data).to.eql({ count: 123 });
+      const test = (state: StateRef) => {
+        type T = { count?: number };
+        state.change((d) => (d.data = { count: 123 }));
+        expect(state.current.data).to.eql({ count: 123 });
+        expect(Model.data<T>(state)).to.eql({ count: 123 });
+      };
 
-      const res = Model.data<T>(state);
-      expect(res).to.eql({ count: 123 });
+      test(Model.item());
+      test(Model.list());
     });
 
     it('mutates: State.data', () => {
-      type T = { count?: number };
-      const state = Model.item();
+      const test = (state: StateRef) => {
+        type T = { count?: number };
+        state.change((d) => Model.data<T>(d));
+        expect(state.current.data).to.eql({});
 
-      state.change((d) => Model.data<T>(d));
-      expect(state.current.data).to.eql({});
+        state.change((d) => (Model.data<T>(d).count = 123));
+        expect(state.current.data?.count).to.eql(123);
+      };
 
-      state.change((d) => (Model.data<T>(d).count = 123));
-      expect(state.current.data?.count).to.eql(123);
+      test(Model.item());
+      test(Model.list());
     });
 
     it('mutates: State.data → default {object}', () => {
-      type T = { count: number };
-      const initial: T = { count: 0 };
-      const state1 = Model.item();
-      const state2 = Model.item();
+      const test = (state1: StateRef, state2: StateRef) => {
+        type T = { count: number };
+        const initial: T = { count: 0 };
 
-      state1.change((d) => Model.data<T>(d, initial));
-      state2.change((d) => (Model.data<T>(d, initial).count = 123));
+        state1.change((d) => Model.data<T>(d, initial));
+        state2.change((d) => (Model.data<T>(d, initial).count = 123));
 
-      expect(state1.current.data?.count).to.eql(0);
-      expect(state2.current.data?.count).to.eql(123);
+        expect(state1.current.data?.count).to.eql(0);
+        expect(state2.current.data?.count).to.eql(123);
+      };
+
+      test(Model.item(), Model.item());
+      test(Model.list(), Model.list());
     });
 
     it('throw: input not object', () => {

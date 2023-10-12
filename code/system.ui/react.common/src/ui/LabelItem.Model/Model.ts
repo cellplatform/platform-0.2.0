@@ -13,9 +13,9 @@ export const Model = {
   /**
    * An observable list state.
    */
-  list(): t.LabelListState {
-    const initial = DEFAULTS.data.list;
-    return PatchState.init<t.LabeList>({ initial });
+  list<D extends O = O>(): t.LabelListState {
+    const initial = DEFAULTS.data.list as t.LabeList<D>;
+    return PatchState.init<t.LabeList<D>>({ initial });
   },
 
   /**
@@ -36,7 +36,10 @@ export const Model = {
   /**
    * Ensures the {data} object exists on the given draft/proxy object.
    */
-  data<T extends O>(input: t.LabelItem | t.LabelItemState, initial?: T): T {
+  data<T extends O>(
+    input: t.LabelItem | t.LabelItemState | t.LabeList | t.LabelListState,
+    initial?: T,
+  ): T {
     if (!Is.plainObject(input)) throw new Error('Not an object');
     const item = PatchState.is.state(input) ? input.current : input;
     const res = (item.data ?? { ...initial } ?? {}) as T;

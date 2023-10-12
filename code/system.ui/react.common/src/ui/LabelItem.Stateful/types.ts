@@ -33,6 +33,12 @@ export type LabelItemController<Kind extends string> = {
   readonly handlers: t.LabelItemPropsHandlers;
 };
 
+export type LabelListController<Kind extends string, H extends HTMLElement> = {
+  readonly kind: Kind;
+  readonly ref: React.RefObject<H>;
+  readonly enabled: boolean;
+};
+
 /**
  * Events.
  */

@@ -1,5 +1,6 @@
 import type { t } from './common';
 
+type O = Record<string, unknown>;
 type ItemId = string;
 
 /**
@@ -10,18 +11,10 @@ type ItemId = string;
  * Context for when an item exists
  * within the context of a list.
  */
-export type LabeList = {
+export type LabeList<D extends O = O> = {
   selected?: ItemId;
   focused?: boolean;
+  data?: D;
 };
 
 export type LabelListState = t.PatchState<t.LabeList>;
-
-/**
- * Controller API's
- */
-export type LabelListController<Kind extends string, H extends HTMLElement> = {
-  readonly kind: Kind;
-  readonly ref: React.RefObject<H>;
-  readonly enabled: boolean;
-};
