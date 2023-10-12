@@ -52,5 +52,5 @@ export const Is = {
  * Helpers
  */
 export function isObject(input: any): input is Object {
-  return typeof input === 'object' && input !== null;
+  return input !== null && typeof input === 'object';
 }
