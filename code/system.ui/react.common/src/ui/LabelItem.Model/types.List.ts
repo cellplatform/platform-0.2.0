@@ -18,7 +18,10 @@ export type LabelList<D extends O = O> = {
   data?: D;
 };
 
-export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>>;
+export type LabelListState<D extends O = O> = t.PatchState<
+  t.LabelList<D>,
+  t.LabelListStateEvents<D>
+>;
 
 /**
  * Events API
@@ -34,7 +37,9 @@ export type LabelListStateEvents<D extends O = O> = t.Lifecycle & {
  * Commands
  * (events as a property stream)
  */
-export type LabelListCmd = FOO__;
+export type LabelListCmd = LabelListCmdFocus;
+
+export type LabelListCmdFocus = { type: 'List:Focus'; payload: { tx: string } };
 
 // TEMP 🐷
 type FOO__ = { type: 'TMP:FOO'; payload: {} };

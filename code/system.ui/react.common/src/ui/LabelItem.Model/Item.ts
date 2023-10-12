@@ -14,11 +14,9 @@ export const Item = {
     initial: t.LabelItem<A, D> = DEFAULTS.data.item as t.LabelItem<A, D>,
     options: { onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
   ): t.LabelItemState<A, D> {
+    type T = t.LabelItem<A, D>;
+    type E = t.LabelItemStateEvents<A, D>;
     const { onChange } = options;
-    return PatchState.init<t.LabelItem<A, D>, t.LabelItemStateEvents<A, D>>({
-      initial,
-      events,
-      onChange,
-    });
+    return PatchState.init<T, E>({ initial, events, onChange });
   },
 } as const;

@@ -11,7 +11,9 @@ export const List = {
    * An observable list state.
    */
   state<D extends O = O>(): t.LabelListState {
+    type T = t.LabelList<D>;
+    type E = t.LabelListStateEvents<D>;
     const initial = DEFAULTS.data.list as t.LabelList<D>;
-    return PatchState.init<t.LabelList<D>>({ initial });
+    return PatchState.init<T, E>({ initial, events });
   },
 } as const;
