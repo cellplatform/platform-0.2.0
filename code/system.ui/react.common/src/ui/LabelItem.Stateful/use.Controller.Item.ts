@@ -61,7 +61,7 @@ export function useItemController(args: Args) {
    * Tap into component event handlers
    * and bubble through Observable
    */
-  const dispatch = Model.commands(item);
+  const dispatch = Model.Item.commands(item);
   const base = edit.handlers;
   const handlers: t.LabelItemPropsHandlers = {
     ...base,

@@ -29,7 +29,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const TestState = {
-    list: LabelItem.Stateful.Model.list(),
+    list: LabelItem.Model.List.state(),
     items: [] as t.LabelItemState[],
     renderers: Sample.renderers,
     init: {
@@ -37,11 +37,11 @@ export default Dev.describe(name, (e) => {
         TestState.items = Array.from({ length }).map(() => TestState.init.item());
       },
       item(dispose$?: t.Observable<any>) {
-        const State = LabelItem.Stateful.Model;
+        const Model = LabelItem.Stateful.Model;
 
         const { initial } = Sample.item();
-        const state = State.item<SampleActionKind>(initial);
-        const dispatch = State.commands(state);
+        const state = Model.Item.state<SampleActionKind>(initial);
+        const dispatch = Model.Item.commands(state);
         const events = state.events(dispose$);
 
         events.key.enter$.subscribe((e) => console.info('Enter', e));

@@ -10,7 +10,7 @@ export const List = {
     const first = ItemModel.init({ store, ctx });
     const renderers = first.renderers;
     const initial: t.RepoList = {
-      state: Model.list(),
+      state: Model.List.state(),
       items: [first.state],
     };
     const list = PatchState.init<t.RepoList>({ initial });

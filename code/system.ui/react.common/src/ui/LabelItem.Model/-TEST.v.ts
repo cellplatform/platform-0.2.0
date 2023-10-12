@@ -4,7 +4,7 @@ import { describe, expect, it, slug, type t } from '../../test';
 describe('LabelItem.Model', () => {
   describe('Model.item', () => {
     it('init', () => {
-      const state = Model.item({ label: 'foo' });
+      const state = Model.Item.state({ label: 'foo' });
       expect(state.current.label).to.eql('foo'); // NB: initial value.
 
       state.change((d) => (d.label = 'hello'));
@@ -13,7 +13,7 @@ describe('LabelItem.Model', () => {
 
     describe('events', () => {
       it('init', () => {
-        const state = Model.item({ label: 'foo' });
+        const state = Model.Item.state({ label: 'foo' });
         const events = state.events();
         expect(state.current.label).to.eql('foo'); // NB: initial value.
 
@@ -30,9 +30,9 @@ describe('LabelItem.Model', () => {
         expect(fired.length).to.eql(1); // NB: no change because disposed.
       });
 
-      it('events.cmd$ (command stream)', () => {
-        const state = Model.item({ label: 'foo' });
-        const dispatch = Model.commands(state);
+      it('events.cmd.$ (command stream)', () => {
+        const state = Model.Item.state({ label: 'foo' });
+        const dispatch = Model.Item.commands(state);
         const events = state.events();
 
         const fired: t.LabelItemCmd[] = [];
@@ -55,10 +55,35 @@ describe('LabelItem.Model', () => {
     });
   });
 
-  describe('Model.list', () => {
+  describe('Model.List.state', () => {
     it('init', () => {
-      const state = Model.list();
+      const state = Model.List.state();
       expect(state.current).to.eql({});
+    });
+
+    describe('events', () => {
+      it('init', () => {
+        const state = Model.List.state();
+        const events = state.events();
+
+        const fired: t.PatchChange<t.LabelList>[] = [];
+        events.$.subscribe((e) => fired.push(e));
+
+        state.change((d) => (d.selected = 'abc'));
+        expect(fired.length).to.eql(1);
+        expect(fired[0].from.selected).to.eql(undefined);
+        expect(fired[0].to.selected).to.eql('abc');
+
+        events.dispose();
+        state.change((d) => (d.selected = '...def'));
+        expect(fired.length).to.eql(1); // NB: no change because disposed.
+      });
+
+      it('events.cmd.$ (command stream)', () => {
+        /**
+         * TODO 🐷
+         */
+      });
     });
   });
 
@@ -66,8 +91,8 @@ describe('LabelItem.Model', () => {
     type StateRef = t.ImmutableRef<any, any>;
 
     it('field undefined (by default)', () => {
-      const item = Model.item();
-      const list = Model.list();
+      const item = Model.Item.state();
+      const list = Model.List.state();
       expect(item.current.data).to.eql(undefined);
       expect(list.current.data).to.eql(undefined);
     });
@@ -84,8 +109,8 @@ describe('LabelItem.Model', () => {
         expect(res3).to.eql({ count: 123 });
       };
 
-      test(Model.item());
-      test(Model.list());
+      test(Model.Item.state());
+      test(Model.List.state());
     });
 
     it('no mutation ← convert from [ItemState] → [Item]', () => {
@@ -96,8 +121,8 @@ describe('LabelItem.Model', () => {
         expect(Model.data<T>(state)).to.eql({ count: 123 });
       };
 
-      test(Model.item());
-      test(Model.list());
+      test(Model.Item.state());
+      test(Model.List.state());
     });
 
     it('mutates: State.data', () => {
@@ -110,8 +135,8 @@ describe('LabelItem.Model', () => {
         expect(state.current.data?.count).to.eql(123);
       };
 
-      test(Model.item());
-      test(Model.list());
+      test(Model.Item.state());
+      test(Model.List.state());
     });
 
     it('mutates: State.data → default {object}', () => {
@@ -126,8 +151,8 @@ describe('LabelItem.Model', () => {
         expect(state2.current.data?.count).to.eql(123);
       };
 
-      test(Model.item(), Model.item());
-      test(Model.list(), Model.list());
+      test(Model.Item.state(), Model.Item.state());
+      test(Model.List.state(), Model.List.state());
     });
 
     it('throw: input not object', () => {

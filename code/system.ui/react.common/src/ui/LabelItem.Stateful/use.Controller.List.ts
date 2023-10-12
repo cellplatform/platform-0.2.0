@@ -20,7 +20,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
-  const listRef = useRef(args.list ?? Model.list());
+  const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
   /**

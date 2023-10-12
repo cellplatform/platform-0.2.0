@@ -47,8 +47,8 @@ export const Self = {
     };
 
     const initial = Self.initial(args);
-    const state = Model.item<t.ConnectorAction, D>(initial);
-    const dispatch = Model.commands(state);
+    const state = Model.Item.state<t.ConnectorAction, D>(initial);
+    const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
 
     events.cmd.clipboard.copy$.subscribe(copyClipboard);

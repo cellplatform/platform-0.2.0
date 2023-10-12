@@ -31,8 +31,8 @@ export const ItemModel = {
   state(args: ItemModelArgs) {
     const { store } = args;
     const initial = ItemModel.initial(args);
-    const state = Model.item<t.RepoListAction, D>(initial);
-    const dispatch = Model.commands(state);
+    const state = Model.Item.state<t.RepoListAction, D>(initial);
+    const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
 
     /**

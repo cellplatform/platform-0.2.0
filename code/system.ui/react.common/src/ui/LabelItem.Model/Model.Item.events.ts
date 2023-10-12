@@ -20,28 +20,27 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
 
   const keydown$ = rx.payload<t.LabelItemKeydownCmd>(cmd$, 'Item:Keydown');
 
-  const cache = {
-    keyboard: undefined as E['key'] | undefined,
-    command: undefined as E['cmd'] | undefined,
-  };
-
   type K = t.LabelItemKeyHandlerArgs;
   type E = t.LabelItemStateEvents<A, D>;
+  const cache = {
+    key: undefined as E['key'] | undefined,
+    cmd: undefined as E['cmd'] | undefined,
+  };
   const api: E = {
     $,
     get key() {
-      if (!cache.keyboard) {
+      if (!cache.key) {
         const filterOn = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
-        cache.keyboard = {
+        cache.key = {
           $: keydown$,
           enter$: filterOn('Enter'),
           escape$: filterOn('Escape'),
         };
       }
-      return cache.keyboard;
+      return cache.key;
     },
     get cmd() {
-      if (!cache.command) {
+      if (!cache.cmd) {
         type C = t.LabelItemClipboard;
 
         const mapVoid = rx.map(() => undefined);
@@ -49,7 +48,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
         const clipboard$ = rx.payload<t.LabelItemClipboardCmd>(cmd$, 'Item:Clipboard');
         const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
 
-        cache.command = {
+        cache.cmd = {
           $: cmd$,
           redraw$: rx.payload<t.LabelItemRedrawCmd>(cmd$, 'Item:Redraw').pipe(mapVoid),
           click$: rx.payload<t.LabelItemClickCmd>(cmd$, 'Item:Click'),
@@ -71,7 +70,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
           },
         };
       }
-      return cache.command;
+      return cache.cmd;
     },
 
     /**

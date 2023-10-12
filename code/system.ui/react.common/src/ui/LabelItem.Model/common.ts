@@ -9,7 +9,7 @@ export const DEFAULTS = {
     get item(): t.LabelItem {
       return {};
     },
-    get list(): t.LabeList {
+    get list(): t.LabelList {
       return {};
     },
   },

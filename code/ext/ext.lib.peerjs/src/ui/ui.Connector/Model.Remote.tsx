@@ -28,8 +28,8 @@ export const Remote = {
 
   state(args: RemoteArgs) {
     const initial = Remote.initial(args);
-    const state = Model.item<t.ConnectorAction, D>(initial);
-    const dispatch = Model.commands(state);
+    const state = Model.Item.state<t.ConnectorAction, D>(initial);
+    const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
     const redraw = () => dispatch.redraw();
 
