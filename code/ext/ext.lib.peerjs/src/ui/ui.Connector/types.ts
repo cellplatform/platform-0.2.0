@@ -8,7 +8,7 @@ export type ConnectorProps = {
 };
 
 /**
- * Model
+ * Model: Context
  */
 export type GetConnectorCtx = () => ConnectorCtx;
 export type ConnectorCtx = { list: ConnectorListState };
@@ -25,7 +25,10 @@ export type ConnectorItemState<T extends D = D> = t.LabelItemState<ConnectorActi
  * Model: List
  */
 export type ConnectorListState = t.PatchState<t.ConnectorList>;
-export type ConnectorListItem = { state: t.ConnectorItemState; renderers: t.LabelItemRenderers };
+export type ConnectorListItem = {
+  state: t.ConnectorItemState;
+  renderers: t.ConnectorItemRenderers;
+};
 export type ConnectorList = {
   state: t.LabelListState;
   items: t.ConnectorListItem[];
