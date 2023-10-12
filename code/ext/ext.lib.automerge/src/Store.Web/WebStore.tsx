@@ -24,13 +24,14 @@ export const WebStore = {
       network: Wrangle.network(options),
       storage: Wrangle.storage(options),
     });
-    return {
+    const store: t.WebStore = {
       ...Store.init(repo),
       kind: 'crdt:store.web',
-      Provider(props: { children?: React.ReactNode | undefined }) {
+      Provider(props: { children?: React.ReactNode }) {
         return <WebStore.Provider value={repo}>{props.children}</WebStore.Provider>;
       },
-    } as const;
+    };
+    return store;
   },
 } as const;
 
