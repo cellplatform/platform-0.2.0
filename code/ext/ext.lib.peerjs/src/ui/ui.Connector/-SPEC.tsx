@@ -46,7 +46,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button(['peer:uri → generate → copy', '🌳'], (e) => {
+      dev.button(['generate → peer:uri → copy', '🌳'], (e) => {
         const peeruri = Webrtc.Peer.Uri.generate();
         navigator.clipboard.writeText(peeruri);
       });
