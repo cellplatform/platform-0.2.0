@@ -2,52 +2,57 @@ import { describe, expect, it, slug, type t } from '../../test';
 
 import { Model } from '.';
 
-describe('LabelItem: State', () => {
-  it('init', () => {
-    const state = Model.item({ label: 'foo' });
-    expect(state.current.label).to.eql('foo'); // NB: initial value.
-
-    state.change((d) => (d.label = 'hello'));
-    expect(state.current.label).to.eql('hello'); // NB: initial value.
-  });
-
-  describe('events', () => {
+describe('LabelItem: Model', () => {
+  describe('Model.item', () => {
     it('init', () => {
       const state = Model.item({ label: 'foo' });
-      const events = state.events();
       expect(state.current.label).to.eql('foo'); // NB: initial value.
 
-      const fired: t.PatchChange<t.LabelItem>[] = [];
-      events.$.subscribe((e) => fired.push(e));
-
       state.change((d) => (d.label = 'hello'));
-      expect(fired.length).to.eql(1);
-      expect(fired[0].from.label).to.eql('foo');
-      expect(fired[0].to.label).to.eql('hello');
-
-      events.dispose();
-      state.change((d) => (d.label = 'foobar'));
-      expect(fired.length).to.eql(1); // NB: no change because disposed.
+      expect(state.current.label).to.eql('hello'); // NB: initial value.
     });
 
-    it('events.cmd$ (command stream)', () => {
-      const state = Model.item({ label: 'foo' });
-      const dispatch = Model.commands(state);
-      const events = state.events();
+    describe('events', () => {
+      it('init', () => {
+        const state = Model.item({ label: 'foo' });
+        const events = state.events();
+        expect(state.current.label).to.eql('foo'); // NB: initial value.
 
-      const fired: t.LabelItemCommand[] = [];
-      events.cmd.$.subscribe((e) => fired.push(e));
+        const fired: t.PatchChange<t.LabelItem>[] = [];
+        events.$.subscribe((e) => fired.push(e));
 
-      const tx = slug();
-      state.change((d) => (d.cmd = { type: 'Item:Clipboard', payload: { action: 'Copy', tx } }));
-      expect(fired.length).to.eql(1);
-      expect(state.current.cmd).to.eql({ type: 'Item:Clipboard', payload: { action: 'Copy', tx } });
+        state.change((d) => (d.label = 'hello'));
+        expect(fired.length).to.eql(1);
+        expect(fired[0].from.label).to.eql('foo');
+        expect(fired[0].to.label).to.eql('hello');
 
-      dispatch.clipboard('Paste');
-      expect(fired.length).to.eql(2);
-      expect((state.current.cmd?.payload as t.LabelItemClipboard).action).to.eql('Paste');
+        events.dispose();
+        state.change((d) => (d.label = 'foobar'));
+        expect(fired.length).to.eql(1); // NB: no change because disposed.
+      });
 
-      events.dispose();
+      it('events.cmd$ (command stream)', () => {
+        const state = Model.item({ label: 'foo' });
+        const dispatch = Model.commands(state);
+        const events = state.events();
+
+        const fired: t.LabelItemCommand[] = [];
+        events.cmd.$.subscribe((e) => fired.push(e));
+
+        const tx = slug();
+        state.change((d) => (d.cmd = { type: 'Item:Clipboard', payload: { action: 'Copy', tx } }));
+        expect(fired.length).to.eql(1);
+        expect(state.current.cmd).to.eql({
+          type: 'Item:Clipboard',
+          payload: { action: 'Copy', tx },
+        });
+
+        dispatch.clipboard('Paste');
+        expect(fired.length).to.eql(2);
+        expect((state.current.cmd?.payload as t.LabelItemClipboard).action).to.eql('Paste');
+
+        events.dispose();
+      });
     });
   });
 
