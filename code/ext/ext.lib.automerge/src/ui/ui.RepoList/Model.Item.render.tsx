@@ -1,7 +1,7 @@
 import { COLORS, Icons, type t } from './common';
 import { Data } from './Data';
 
-export function renderers(args: { ctx: t.GetStoreCtx }): t.StoreItemRenderers {
+export function renderers(args: { ctx: t.GetRepoListCtx }): t.RepoItemRenderers {
   return {
     label(e) {
       return <>{e.item.label ?? 'Unnamed'}</>;

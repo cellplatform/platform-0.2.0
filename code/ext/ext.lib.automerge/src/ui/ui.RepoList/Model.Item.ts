@@ -2,9 +2,9 @@ import { Data } from './Data';
 import { renderers } from './Model.Item.render';
 import { State, rx, type t } from './common';
 
-export type ItemModelArgs = { store: t.Store; ctx: t.GetStoreCtx; dispose$?: t.UntilObservable };
+export type ItemModelArgs = { store: t.Store; ctx: t.GetRepoListCtx; dispose$?: t.UntilObservable };
 
-type D = t.StoreItemData;
+type D = t.RepoItemData;
 
 export const ItemModel = {
   init(args: ItemModelArgs) {
@@ -15,7 +15,7 @@ export const ItemModel = {
     };
   },
 
-  initial(args: ItemModelArgs): t.StoreItem {
+  initial(args: ItemModelArgs): t.RepoItem {
     const data: D = { mode: 'Add' };
     return {
       editable: false,
@@ -31,7 +31,7 @@ export const ItemModel = {
   state(args: ItemModelArgs) {
     const { store } = args;
     const initial = ItemModel.initial(args);
-    const state = State.item<t.StoreAction, D>(initial);
+    const state = State.item<t.RepoListAction, D>(initial);
     const dispatch = State.commands(state);
     const events = state.events(args.dispose$);
 

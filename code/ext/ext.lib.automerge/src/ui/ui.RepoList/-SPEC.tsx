@@ -1,15 +1,15 @@
 import { Dev, type t, WebStore } from '../../test.ui';
-import { StoreList } from '.';
+import { RepoList } from '.';
 import { List } from './ui.List';
 import { Info } from '../ui.Info';
 
-type T = { props: t.StoreListProps };
+type T = { props: t.RepoListProps };
 const initial: T = { props: {} };
-const name = StoreList.displayName ?? '';
+const name = RepoList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const store = WebStore.init();
-  const model = StoreList.Model.init(store);
+  const model = RepoList.Model.init(store);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

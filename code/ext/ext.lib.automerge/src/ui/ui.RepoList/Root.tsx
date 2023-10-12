@@ -9,8 +9,8 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Model: typeof Model;
 };
-export const StoreList = FC.decorate<t.StoreListProps, Fields>(
+export const RepoList = FC.decorate<t.RepoListProps, Fields>(
   View,
   { DEFAULTS, Model },
-  { displayName: 'StoreList' },
+  { displayName: 'RepoList' },
 );

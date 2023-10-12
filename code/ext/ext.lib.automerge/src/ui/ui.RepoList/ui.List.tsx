@@ -2,8 +2,8 @@ import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
   list?: t.LabelListState;
-  items?: t.StoreItemState[];
-  renderers?: t.StoreItemRenderers;
+  items?: t.RepoItemState[];
+  renderers?: t.RepoItemRenderers;
   style?: t.CssValue;
   renderCount?: t.RenderCountProps;
 };

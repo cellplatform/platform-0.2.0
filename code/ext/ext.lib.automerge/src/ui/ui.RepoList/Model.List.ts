@@ -6,14 +6,14 @@ export const List = {
    * Initialise a new state model for a Repo.
    */
   init(store: t.Store) {
-    const ctx: t.GetStoreCtx = () => ({ list });
+    const ctx: t.GetRepoListCtx = () => ({ list });
     const first = ItemModel.init({ store, ctx });
     const renderers = first.renderers;
-    const initial: t.StoreList = {
+    const initial: t.RepoList = {
       state: State.list(),
       items: [first.state],
     };
-    const list = PatchState.init<t.StoreList>({ initial });
+    const list = PatchState.init<t.RepoList>({ initial });
     return { list, renderers };
   },
 } as const;
