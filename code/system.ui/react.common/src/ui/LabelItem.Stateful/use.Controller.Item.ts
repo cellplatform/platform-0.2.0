@@ -74,7 +74,7 @@ export function useItemController(args: Args) {
       base.onKeyUp?.(e);
     },
     onActionClick(e) {
-      dispatch.action.invoke(e);
+      dispatch.action(e);
       base.onActionClick?.(e);
     },
     onClick(e) {

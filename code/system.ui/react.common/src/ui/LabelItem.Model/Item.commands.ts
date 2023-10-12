@@ -36,10 +36,8 @@ export function commands(item?: t.LabelItemState) {
       },
     },
 
-    action: {
-      invoke(e: t.LabelItemActionHandlerArgs) {
-        dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
-      },
+    action(e: t.LabelItemActionHandlerArgs) {
+      dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
     },
 
     click(e: t.LabelItemClickHandlerArgs) {
