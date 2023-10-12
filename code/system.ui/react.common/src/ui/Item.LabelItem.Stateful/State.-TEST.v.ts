@@ -41,18 +41,13 @@ describe('LabelItem: State', () => {
       events.cmd.$.subscribe((e) => fired.push(e));
 
       const tx = slug();
-      state.change(
-        (d) => (d.command = { type: 'Item:Clipboard', payload: { action: 'Copy', tx } }),
-      );
+      state.change((d) => (d.cmd = { type: 'Item:Clipboard', payload: { action: 'Copy', tx } }));
       expect(fired.length).to.eql(1);
-      expect(state.current.command).to.eql({
-        type: 'Item:Clipboard',
-        payload: { action: 'Copy', tx },
-      });
+      expect(state.current.cmd).to.eql({ type: 'Item:Clipboard', payload: { action: 'Copy', tx } });
 
       dispatch.clipboard('Paste');
       expect(fired.length).to.eql(2);
-      expect((state.current.command?.payload as any).action).to.eql('Paste');
+      expect((state.current.cmd?.payload as t.LabelItemClipboard).action).to.eql('Paste');
 
       events.dispose();
     });

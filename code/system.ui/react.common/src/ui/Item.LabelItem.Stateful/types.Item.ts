@@ -18,7 +18,7 @@ export type LabelItem<A extends t.LabelActionKind = string, D extends O = O> = {
   enabled?: boolean;
   editing?: boolean;
   editable?: boolean;
-  command?: LabelItemCommand; // Produces an event stream of commands when changed.
+  cmd?: LabelItemCommand; // Produces an event stream of commands when changed.
   left?: t.LabelAction<A> | t.LabelAction<A>[] | null;
   right?: t.LabelAction<A> | t.LabelAction<A>[] | null;
   data?: D;
