@@ -15,7 +15,8 @@ export type ActionProps = {
   editing?: boolean;
   debug?: boolean;
   style?: t.CssValue;
-  onClick?: t.LabelItemActionHandler;
+  onItemClick?: t.LabelItemClickHandler;
+  onActionClick?: t.LabelItemActionHandler;
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
@@ -31,14 +32,24 @@ export const Action: React.FC<ActionProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handleClick = () =>
-    props.onClick?.({
+  const handleClick = () => {
+    const position = { index, total };
+    props.onActionClick?.({
       kind,
-      position: { index, total },
+      position,
       focused: Boolean(focused),
       selected: Boolean(selected),
       editing: Boolean(editing),
     });
+    props.onItemClick?.({
+      position,
+      focused: Boolean(focused),
+      selected: Boolean(selected),
+      editing: Boolean(editing),
+      target: 'Item:Action',
+      kind: 'Single',
+    });
+  };
 
   /**
    * [Render]

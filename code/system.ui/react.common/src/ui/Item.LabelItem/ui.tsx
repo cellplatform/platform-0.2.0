@@ -41,7 +41,7 @@ export const View: React.FC<Props> = (props) => {
     callback(e) {
       if (editing) {
         inputRef.current?.blur();
-        props.onEditClickAway?.(clickArgs('Single', 'Outside'));
+        props.onEditClickAway?.(clickArgs('Single', 'Away'));
       }
     },
   });
@@ -147,7 +147,7 @@ export const View: React.FC<Props> = (props) => {
         <Label
           {...props}
           inputRef={inputRef}
-          onDoubleClick={clickHandler('Double', 'Label', props.onLabelDoubleClick)}
+          onDoubleClick={clickHandler('Double', 'Item:Label', props.onLabelDoubleClick)}
           debug={debug}
         />
         {item.right !== null && <Right {...props} />}

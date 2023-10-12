@@ -144,6 +144,6 @@ export type LabelItemClickHandlerArgs = {
   focused: boolean;
   selected: boolean;
   editing: boolean;
-  target: 'Item' | 'Label' | 'Outside';
+  target: 'Item' | 'Item:Label' | 'Item:Action' | 'Away';
   kind: 'Single' | 'Double';
 };

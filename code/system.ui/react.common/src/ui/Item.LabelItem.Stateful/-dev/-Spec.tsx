@@ -60,7 +60,7 @@ export default Dev.describe(name, (e) => {
         });
 
         events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
-        // events.cmd.click$.subscribe((e) => console.info('click', e));
+        // events.cmd.click$.subscribe((e) => console.info(`⚡️ click$ [${e.position.index}]`, e));
 
         return state;
       },

@@ -12,6 +12,7 @@ export const Left: React.FC<t.LabelItemProps> = (props) => {
       action={action}
       debug={props.debug}
       renderers={props.renderers}
+      onItemClick={props.onClick}
       onActionClick={props.onActionClick}
     />
   );
