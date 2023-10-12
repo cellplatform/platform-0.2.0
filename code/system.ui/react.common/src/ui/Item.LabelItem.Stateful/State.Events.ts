@@ -44,15 +44,14 @@ export function events<A extends t.LabelActionKind = string, D extends O = O>(
       if (!cache.command) {
         type C = t.LabelItemClipboard;
 
+        const mapVoid = rx.map(() => undefined);
         const action$ = rx.payload<t.LabelItemActionInvokedCommand>(cmd$, 'Item:Action');
         const clipboard$ = rx.payload<t.LabelItemClipboardCommand>(cmd$, 'Item:Clipboard');
         const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
 
         cache.command = {
           $: cmd$,
-          redraw$: rx
-            .payload<t.LabelItemRedrawCommand>(cmd$, 'Item:Redraw')
-            .pipe(rx.map(() => undefined)),
+          redraw$: rx.payload<t.LabelItemRedrawCommand>(cmd$, 'Item:Redraw').pipe(mapVoid),
           click$: rx.payload<t.LabelItemClickCommand>(cmd$, 'Item:Click'),
           changed$: rx.payload<t.LabelItemChangedCommand>(cmd$, 'Item:Changed'),
           clipboard: {

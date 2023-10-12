@@ -99,7 +99,7 @@ export default Dev.describe(name, (e) => {
               renderers={TestState.renderers}
               useBehaviors={debug.useBehaviors}
               renderCount={
-                debug.renderCount ? { absolute: [0, -55, null, null], opacity: 0.3 } : undefined
+                debug.renderCount ? { absolute: [0, -55, null, null], opacity: 0.2 } : undefined
               }
               debug={debug.debug}
               onChange={(e) => {
@@ -117,7 +117,7 @@ export default Dev.describe(name, (e) => {
             useBehaviors={debug.useBehaviors}
             list={TestState.list}
             renderCount={
-              debug.renderCount ? { absolute: [-18, 0, null, null], opacity: 0.3 } : undefined
+              debug.renderCount ? { absolute: [-18, 0, null, null], opacity: 0.2 } : undefined
             }
           />
         );

@@ -16,7 +16,7 @@ export const Sample = {
   get renderers(): t.LabelItemRenderers<SampleActionKind> {
     return {
       label(e) {
-        return <>{`prefix-${e.item.label || 'empty'}`}</>;
+        return <>{`foo-${e.item.label || 'empty'}`}</>;
       },
       placeholder(e) {
         return <>{`placeholder:${e.item.placeholder || 'none'}`}</>;

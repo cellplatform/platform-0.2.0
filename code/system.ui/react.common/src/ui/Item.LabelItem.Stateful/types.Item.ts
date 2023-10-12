@@ -45,8 +45,8 @@ export type LabelItemStateEvents<
   readonly cmd: {
     readonly $: t.Observable<t.LabelItemCommand>;
     readonly redraw$: t.Observable<void>;
-    readonly click$: t.Observable<t.LabelItemClick>;
     readonly changed$: t.Observable<t.LabelItemChanged>;
+    readonly click$: t.Observable<t.LabelItemClick>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
       on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
