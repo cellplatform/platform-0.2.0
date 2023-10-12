@@ -8,14 +8,28 @@ export type StoreListProps = {
 };
 
 /**
+ * Model: Context
+ */
+export type GetStoreCtx = () => StoreCtx;
+export type StoreCtx = { list: StoreListState };
+
+/**
  * Model: Item
  */
-export type StoreAction = 'store:left';
+export type StoreAction = 'Store:Left';
 export type StoreItem = t.LabelItem<t.StoreAction, StoreItemData>;
 export type StoreItemState = t.LabelItemState<StoreAction, StoreItemData>;
 export type StoreItemRenderers = t.LabelItemRenderers<t.StoreAction>;
 
 /**
+ * Model: List
+ */
+export type StoreListState = t.PatchState<t.StoreList>;
+export type StoreList = { state: t.LabelListState; items: t.StoreItemState[] };
+
+/**
  * Model: Data
  */
-export type StoreItemData = {};
+export type StoreItemData = {
+  mode: 'Add' | 'Doc';
+};

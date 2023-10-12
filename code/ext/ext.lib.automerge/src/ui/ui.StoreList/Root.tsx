@@ -1,4 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
+import { Model } from './Model';
 import { View } from './ui';
 
 /**
@@ -6,9 +7,10 @@ import { View } from './ui';
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Model: typeof Model;
 };
-export const Root = FC.decorate<t.StoreListProps, Fields>(
+export const StoreList = FC.decorate<t.StoreListProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, Model },
   { displayName: 'StoreList' },
 );
