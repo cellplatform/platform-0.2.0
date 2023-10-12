@@ -2,6 +2,20 @@ import { isValidAutomergeUrl } from '@automerge/automerge-repo';
 import type * as t from './types';
 
 export const Is = {
+  store(input: any): input is t.Store {
+    if (!isObject(input) || !isObject(input.doc)) return false;
+    if (!Is.repo(input.repo)) return false;
+    return (
+      typeof input.doc.findOrCreate === 'function' &&
+      typeof input.doc.factory === 'function' &&
+      typeof input.doc.exists === 'function'
+    );
+  },
+
+  webStore(input: any): input is t.WebStore {
+    return typeof input.Provider === 'function' && Is.store(input);
+  },
+
   repo(input: any): input is t.Repo {
     if (!isObject(input)) return false;
     const { networkSubsystem, storageSubsystem } = input;

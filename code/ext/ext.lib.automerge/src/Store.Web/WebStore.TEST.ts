@@ -11,8 +11,8 @@ export default Test.describe('WebStore', (e) => {
   };
 
   e.describe('init', (e) => {
-    e.it('kind: "crdt:store.web"', (e) => {
-      expect(store.kind).to.eql('crdt:store.web');
+    e.it('Is.webStore', (e) => {
+      expect(Is.webStore(store)).to.eql(true);
     });
 
     e.it('Is.repo', (e) => {

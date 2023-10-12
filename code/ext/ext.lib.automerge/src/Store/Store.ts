@@ -11,7 +11,6 @@ export const Store = {
    */
   init(repo?: t.Repo) {
     const api: t.Store = {
-      kind: 'crdt:store',
       repo: repo ?? new Repo({ network: [] }),
       doc: {
         /**

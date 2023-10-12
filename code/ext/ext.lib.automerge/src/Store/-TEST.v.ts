@@ -8,8 +8,11 @@ describe('Store', async () => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const generator = store.doc.factory<D>(initial);
 
-  it('kind: "crdt:store"', () => {
-    expect(store.kind).to.eql('crdt:store');
+  it('Is.store', () => {
+    expect(Is.store(store)).to.eql(true);
+    [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      expect(Is.store(value)).to.eql(false);
+    });
   });
 
   describe('store.doc', () => {

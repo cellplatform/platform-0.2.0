@@ -4,6 +4,7 @@ import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-index
 
 import { Test, expect } from '../test.ui';
 import { Store } from '../Store';
+import { WebStore } from '../Store.Web';
 import { Is } from '.';
 
 export default Test.describe('Is', (e) => {
@@ -14,6 +15,18 @@ export default Test.describe('Is', (e) => {
   const repo3 = new Repo({
     network: [new BroadcastChannelNetworkAdapter()],
     storage: new IndexedDBStorageAdapter(),
+  });
+
+  e.it('Is.store', (e) => {
+    const store = Store.init();
+    expect(Is.store(store)).to.eql(true);
+    NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
+  });
+
+  e.it('Is.webStore', (e) => {
+    expect(Is.webStore(WebStore.init())).to.eql(true);
+    expect(Is.webStore(Store.init())).to.eql(false);
+    NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
   });
 
   e.it('Is.repo', (e) => {
