@@ -21,6 +21,7 @@ export type {
   EventBus,
   Immutable,
   ImmutableNext,
+  ImmutableRef,
   Lifecycle,
   UntilObservable,
 } from 'sys.types/src/types';
