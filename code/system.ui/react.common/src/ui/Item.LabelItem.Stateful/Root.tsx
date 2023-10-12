@@ -1,5 +1,4 @@
-import { State } from './Model';
-import { DEFAULTS, FC, type t } from './common';
+import { DEFAULTS, FC, State, type t } from './common';
 import { View } from './ui';
 import { BehaviorSelector } from './ui.Config.BehaviorSelector';
 import { useItemController, useListController } from './use';

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { State } from './Model';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, State, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
 

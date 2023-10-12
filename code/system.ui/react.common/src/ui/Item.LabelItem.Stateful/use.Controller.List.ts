@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { ActiveElement, DEFAULTS, Focus, type t } from './common';
+import { ActiveElement, DEFAULTS, Focus, State, type t } from './common';
 
-import { State } from './Model';
 import { Wrangle } from './Wrangle';
 import { useListNavigationController } from './use.Controller.List.Navigation';
 

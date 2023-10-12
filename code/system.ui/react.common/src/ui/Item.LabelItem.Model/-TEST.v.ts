@@ -1,7 +1,6 @@
-import { LabelItemStateful } from '.';
 import { describe, expect, it, slug, type t } from '../../test';
 
-const State = LabelItemStateful.State;
+import { State } from '.';
 
 describe('LabelItem: State', () => {
   it('init', () => {

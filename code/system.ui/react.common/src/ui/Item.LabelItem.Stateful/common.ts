@@ -1,6 +1,9 @@
 import { type t } from '../common';
 export * from '../common';
 
+import { DEFAULTS as MODEL_DEFAULTS } from '../Item.LabelItem.Model';
+
+export { State } from '../Item.LabelItem.Model';
 export { FieldSelector } from '../PropList.FieldSelector';
 export { Keyboard } from '../Text.Keyboard';
 export { ActiveElement, Focus } from '../Focus';
@@ -29,12 +32,5 @@ export const DEFAULTS = {
     all: useBehaviorAll,
     defaults: useBehaviorDefaults,
   },
-  data: {
-    get item(): t.LabelItem {
-      return {};
-    },
-    get list(): t.LabeList {
-      return {};
-    },
-  },
+  data: MODEL_DEFAULTS.data,
 } as const;

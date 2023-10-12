@@ -10,6 +10,7 @@ export type * from './Focus/types';
 export type * from './Grid/types';
 export type * from './IFrame/types';
 export type * from './Icon/types';
+export type * from './Item.LabelItem.Model/types';
 export type * from './Item.LabelItem.Stateful/types';
 export type * from './Item.LabelItem/types';
 export type * from './Layout.Split/types';
