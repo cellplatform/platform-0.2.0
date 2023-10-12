@@ -1,3 +1,3 @@
 export * from './Root';
-export * from './State';
+export * from './Model';
 export { DEFAULTS } from './common';

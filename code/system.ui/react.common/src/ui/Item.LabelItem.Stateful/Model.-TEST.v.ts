@@ -1,7 +1,6 @@
 import { LabelItemStateful } from '.';
 import { describe, expect, it, slug, type t } from '../../test';
 
-type O = Record<string, unknown>;
 const State = LabelItemStateful.State;
 
 describe('LabelItem: State', () => {
