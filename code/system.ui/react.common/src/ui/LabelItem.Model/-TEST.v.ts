@@ -1,6 +1,5 @@
-import { describe, expect, it, slug, type t } from '../../test';
-
 import { Model } from '.';
+import { describe, expect, it, slug, type t } from '../../test';
 
 describe('LabelItem.Model', () => {
   describe('Model.item', () => {
@@ -36,7 +35,7 @@ describe('LabelItem.Model', () => {
         const dispatch = Model.commands(state);
         const events = state.events();
 
-        const fired: t.LabelItemCommand[] = [];
+        const fired: t.LabelItemCmd[] = [];
         events.cmd.$.subscribe((e) => fired.push(e));
 
         const tx = slug();

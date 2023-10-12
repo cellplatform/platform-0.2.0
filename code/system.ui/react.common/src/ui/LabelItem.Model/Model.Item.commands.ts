@@ -4,7 +4,7 @@ import { slug, type t } from './common';
  * Dispatcher of "command" events for the given item.
  */
 export function commands(item?: t.LabelItemState) {
-  const dispatch = (cmd: t.LabelItemCommand) => item?.change((d) => (d.cmd = cmd));
+  const dispatch = (cmd: t.LabelItemCmd) => item?.change((d) => (d.cmd = cmd));
   const api = {
     /**
      * Re-render item.
