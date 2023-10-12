@@ -7,7 +7,7 @@ export type ActionsProps = {
   item: t.LabelItem;
   renderers?: t.LabelItemRenderers;
 
-  action?: t.LabelAction | t.LabelAction[];
+  action?: t.LabelItemAction | t.LabelItemAction[];
   edge: 'Left' | 'Right';
   spacing?: number;
 

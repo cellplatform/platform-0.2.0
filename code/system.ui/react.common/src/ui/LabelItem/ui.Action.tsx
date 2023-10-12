@@ -7,7 +7,7 @@ export type ActionProps = {
   total: number;
   item: t.LabelItem;
   renderers: t.LabelItemRenderers;
-  action: t.LabelAction;
+  action: t.LabelItemAction;
   label?: string;
   enabled?: boolean;
   selected?: boolean;

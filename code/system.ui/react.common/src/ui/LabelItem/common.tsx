@@ -10,7 +10,7 @@ export * from '../common';
  * Constants.
  */
 type TActions = 'left:default';
-type TLabelAction = t.LabelAction<TActions>;
+type TLabelAction = t.LabelItemAction<TActions>;
 
 const leftAction: TLabelAction = { kind: 'left:default' };
 const rightAction: TLabelAction | undefined = undefined;

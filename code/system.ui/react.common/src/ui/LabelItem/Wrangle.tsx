@@ -49,7 +49,7 @@ export const Wrangle = {
     return color;
   },
 
-  renderer(renderers: t.LabelItemRenderers, kind: t.LabelActionKind) {
+  renderer(renderers: t.LabelItemRenderers, kind: t.LabelItemActionKind) {
     const done = (res?: t.LabelItemRenderer | void) => res ?? undefined;
 
     if (typeof renderers.action === 'function') {

@@ -5,7 +5,7 @@ type O = Record<string, unknown>;
 /**
  * Event wrapper factory.
  */
-export function events<A extends t.LabelActionKind = string, D extends O = O>(
+export function events<A extends t.LabelItemActionKind = string, D extends O = O>(
   $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>,
   dispose$?: t.UntilObservable,
 ): t.LabelItemStateEvents<A, D> {
@@ -62,7 +62,7 @@ export function events<A extends t.LabelActionKind = string, D extends O = O>(
           },
           action: {
             $: action$,
-            on<K extends t.LabelActionKind>(kind: K) {
+            on<K extends t.LabelItemActionKind>(kind: K) {
               return action$.pipe(
                 rx.filter((e) => kind.includes(e.kind)),
                 rx.map((e) => e as t.LabelItemActionInvoked<K>),

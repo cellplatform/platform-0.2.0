@@ -12,7 +12,7 @@ export const Sample = {
     const action = (
       kind: A,
       options: { width?: number; enabled?: boolean; spinning?: boolean; button?: boolean } = {},
-    ): t.LabelAction<A> => {
+    ): t.LabelItemAction<A> => {
       const { width, enabled, button } = options;
       return {
         kind,

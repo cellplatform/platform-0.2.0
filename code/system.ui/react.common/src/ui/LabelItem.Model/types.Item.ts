@@ -5,28 +5,28 @@ type O = Record<string, unknown>;
 /**
  * Item (Data Model)
  */
-export type LabelItem<A extends t.LabelActionKind = string, D extends O = O> = {
+export type LabelItem<A extends t.LabelItemActionKind = string, D extends O = O> = {
   label?: string;
   placeholder?: string;
   enabled?: boolean;
   editing?: boolean;
   editable?: boolean;
   cmd?: t.LabelItemCommand; // Produces an event stream of commands when changed.
-  left?: t.LabelAction<A> | t.LabelAction<A>[] | null;
-  right?: t.LabelAction<A> | t.LabelAction<A>[] | null;
+  left?: t.LabelItemAction<A> | t.LabelItemAction<A>[] | null;
+  right?: t.LabelItemAction<A> | t.LabelItemAction<A>[] | null;
   data?: D;
 };
 
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState<A extends t.LabelActionKind = string, D extends O = O> = t.ImmutableRef<
-  t.LabelItem<A, D>,
-  t.LabelItemStateEvents<A, D>
->;
+export type LabelItemState<
+  A extends t.LabelItemActionKind = string,
+  D extends O = O,
+> = t.ImmutableRef<t.LabelItem<A, D>, t.LabelItemStateEvents<A, D>>;
 
 export type LabelItemStateEvents<
-  A extends t.LabelActionKind = string,
+  A extends t.LabelItemActionKind = string,
   D extends O = O,
 > = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>;
@@ -75,11 +75,11 @@ export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste'; tx: string 
 export type LabelItemRedrawCommand = { type: 'Item:Redraw'; payload: LabelItemRedraw };
 export type LabelItemRedraw = { tx: string };
 
-export type LabelItemActionInvokedCommand<K extends t.LabelActionKind = string> = {
+export type LabelItemActionInvokedCommand<K extends t.LabelItemActionKind = string> = {
   type: 'Item:Action';
   payload: LabelItemActionInvoked<K>;
 };
-export type LabelItemActionInvoked<K extends t.LabelActionKind = string> = {
+export type LabelItemActionInvoked<K extends t.LabelItemActionKind = string> = {
   kind: K;
   position: t.LabelItemPosition;
   focused: boolean;

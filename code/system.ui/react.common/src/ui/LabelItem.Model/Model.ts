@@ -21,7 +21,7 @@ export const Model = {
   /**
    * An obvservable list item.
    */
-  item<A extends t.LabelActionKind = string, D extends O = O>(
+  item<A extends t.LabelItemActionKind = string, D extends O = O>(
     initial: t.LabelItem<A, D> = DEFAULTS.data.item as t.LabelItem<A, D>,
     options: { onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
   ): t.LabelItemState<A, D> {

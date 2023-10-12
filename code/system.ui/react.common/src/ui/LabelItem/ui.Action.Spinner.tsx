@@ -1,7 +1,7 @@
 import { COLORS, DEFAULTS, Spinner, css, type t } from './common';
 
 export type ActionSpinnerProps = {
-  action: t.LabelAction;
+  action: t.LabelItemAction;
   selected?: boolean;
   focused?: boolean;
   style?: t.CssValue;

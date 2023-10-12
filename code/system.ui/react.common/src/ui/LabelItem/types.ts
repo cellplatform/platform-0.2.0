@@ -5,8 +5,8 @@ export type LabelItemPosition = { index: number; total: number };
 /**
  * An "action" represented as a clickable icon button.
  */
-export type LabelActionKind = string;
-export type LabelAction<K extends LabelActionKind = string> = {
+export type LabelItemActionKind = string;
+export type LabelItemAction<K extends LabelItemActionKind = string> = {
   kind: K;
   width?: number;
   enabled?: boolean;
@@ -31,7 +31,7 @@ export type LabelItemValueArgs = {
   item: t.LabelItem;
 };
 
-export type LabelItemRenderers<A extends LabelActionKind = string> = {
+export type LabelItemRenderers<A extends LabelItemActionKind = string> = {
   label?: t.LabelItemRenderer;
   placeholder?: t.LabelItemRenderer;
   action?(kind: A, helpers: LabelItemActionRenderHelpers): t.LabelItemRenderer | void;
@@ -115,7 +115,7 @@ export type LabelItemChangeHandlerArgs = {
 export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
 export type LabelItemActionHandlerArgs = {
   position: LabelItemPosition;
-  kind: LabelActionKind;
+  kind: LabelItemActionKind;
   focused: boolean;
   selected: boolean;
   editing: boolean;
