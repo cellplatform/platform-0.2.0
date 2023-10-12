@@ -59,6 +59,9 @@ export default Dev.describe(name, (e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
 
+        events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
+        // events.cmd.click$.subscribe((e) => console.info('click', e));
+
         return state;
       },
     } as const,
@@ -100,7 +103,7 @@ export default Dev.describe(name, (e) => {
               }
               debug={debug.debug}
               onChange={(e) => {
-                console.info(`⚡️ onChange[${i}]`, e);
+                // console.info(`⚡️ onChange[${i}]`, e);
               }}
             />
           );

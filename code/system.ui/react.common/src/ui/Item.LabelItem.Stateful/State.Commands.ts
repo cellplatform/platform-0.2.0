@@ -41,6 +41,14 @@ export function commands(item?: t.LabelItemState) {
         dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
       },
     },
+
+    click(e: t.LabelItemClickHandlerArgs) {
+      dispatch({ type: 'Item:Click', payload: { ...e, tx: slug() } });
+    },
+
+    changed(e: t.LabelItemStateChangeHandlerArgs) {
+      dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
+    },
   } as const;
   return api;
 }

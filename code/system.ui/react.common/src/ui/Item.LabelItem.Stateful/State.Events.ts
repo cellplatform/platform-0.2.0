@@ -52,7 +52,9 @@ export function events<A extends t.LabelActionKind = string, D extends O = O>(
           $: cmd$,
           redraw$: rx
             .payload<t.LabelItemRedrawCommand>(cmd$, 'Item:Redraw')
-            .pipe(rx.map((e) => e.tx)),
+            .pipe(rx.map(() => undefined)),
+          click$: rx.payload<t.LabelItemClickCommand>(cmd$, 'Item:Click'),
+          changed$: rx.payload<t.LabelItemChangedCommand>(cmd$, 'Item:Changed'),
           clipboard: {
             $: clipboard$,
             cut$: clipboard('Cut'),

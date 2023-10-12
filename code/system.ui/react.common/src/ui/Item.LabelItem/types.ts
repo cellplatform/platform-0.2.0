@@ -79,6 +79,7 @@ export type LabelItemPropsHandlers = {
   onKeyUp?: LabelItemKeyHandler;
   onFocusChange?: LabelItemFocusHandler;
   onClick?: LabelItemClickHandler;
+  onDoubleClick?: LabelItemClickHandler;
   onLabelDoubleClick?: LabelItemClickHandler;
   onEditClickAway?: LabelItemClickHandler;
   onActionClick?: t.LabelItemActionHandler;
@@ -137,10 +138,12 @@ export type LabelItemFocusHandlerArgs = {
   focused: boolean;
 };
 
-export type LabelItemClickHandler = (e: LabelItemFocusHandlerArgs) => void;
+export type LabelItemClickHandler = (e: LabelItemClickHandlerArgs) => void;
 export type LabelItemClickHandlerArgs = {
   position: LabelItemPosition;
   focused: boolean;
   selected: boolean;
   editing: boolean;
+  target: 'Item' | 'Label' | 'Outside';
+  kind: 'Single' | 'Double';
 };

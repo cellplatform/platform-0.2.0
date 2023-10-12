@@ -6,8 +6,7 @@ type Revertible = t.LabelItem & { _revert?: { label?: string } };
 type RevertibleNext = t.ImmutableNext<Revertible>;
 
 type Args = {
-  index: number;
-  total: number;
+  position: t.LabelItemPosition;
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelListState;
@@ -19,7 +18,7 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { item, list, enabled = true, index, total } = args;
+  const { item, list, enabled = true, position } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -29,7 +28,7 @@ export function useItemEditController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const fire = (action: A) => args.onChange?.({ action, data: api.data });
+  const fire = (action: A) => args.onChange?.({ action, position, item: api.data });
   const change = (action: A, fn: RevertibleNext) => {
     if (!item || !enabled) return;
     item.change(fn);

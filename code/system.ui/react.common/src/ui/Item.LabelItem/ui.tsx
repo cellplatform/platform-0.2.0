@@ -30,8 +30,10 @@ export const View: React.FC<Props> = (props) => {
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
-  const clickArgs = (): t.LabelItemClickHandlerArgs => {
-    return { position, focused, selected, editing };
+  type ClickTarget = t.LabelItemClickHandlerArgs['target'];
+  type ClickKind = t.LabelItemClickHandlerArgs['kind'];
+  const clickArgs = (kind: ClickKind, target: ClickTarget): t.LabelItemClickHandlerArgs => {
+    return { position, focused, selected, editing, target, kind };
   };
 
   useClickOutside({
@@ -39,7 +41,7 @@ export const View: React.FC<Props> = (props) => {
     callback(e) {
       if (editing) {
         inputRef.current?.blur();
-        props.onEditClickAway?.(clickArgs());
+        props.onEditClickAway?.(clickArgs('Single', 'Outside'));
       }
     },
   });
@@ -53,8 +55,12 @@ export const View: React.FC<Props> = (props) => {
     };
   };
 
-  const clickHandler = (handler?: t.LabelItemClickHandler) => {
-    return () => handler?.(clickArgs());
+  const clickHandler = (
+    kind: ClickKind,
+    target: ClickTarget,
+    handler?: t.LabelItemClickHandler,
+  ) => {
+    return () => handler?.(clickArgs(kind, target));
   };
 
   /**
@@ -132,7 +138,8 @@ export const View: React.FC<Props> = (props) => {
       onBlur={onFocusHandler(false)}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
-      onMouseDown={clickHandler(props.onClick)}
+      onMouseDown={clickHandler('Single', 'Item', props.onClick)}
+      onDoubleClick={clickHandler('Double', 'Item', props.onDoubleClick)}
     >
       {props.renderCount && <RenderCount {...props.renderCount} />}
       <div {...styles.body}>
@@ -140,7 +147,7 @@ export const View: React.FC<Props> = (props) => {
         <Label
           {...props}
           inputRef={inputRef}
-          onDoubleClick={clickHandler(props.onLabelDoubleClick)}
+          onDoubleClick={clickHandler('Double', 'Label', props.onLabelDoubleClick)}
           debug={debug}
         />
         {item.right !== null && <Right {...props} />}

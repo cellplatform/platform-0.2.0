@@ -27,17 +27,22 @@ export function useItemController(args: Args) {
     useBehaviors = DEFAULTS.useBehaviors.defaults,
     item,
     list,
-    onChange,
   } = args;
+  const position = { index, total };
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
+  const onChange: t.LabelItemStateChangeHandler = (e) => {
+    dispatch.changed(e);
+    args.onChange?.(e);
+  };
+
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
-    index,
+    position,
     item,
     list,
     onChange,
@@ -46,8 +51,7 @@ export function useItemController(args: Args) {
 
   const edit = useItemEditController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
-    total,
-    index,
+    position,
     item,
     list,
     onChange,
@@ -56,6 +60,7 @@ export function useItemController(args: Args) {
 
   /**
    * Tap into component event handlers
+   * and bubble through Observable
    */
   const dispatch = State.commands(item);
   const base = edit.handlers;
@@ -73,17 +78,26 @@ export function useItemController(args: Args) {
       dispatch.action.invoke(e);
       base.onActionClick?.(e);
     },
+    onClick(e) {
+      dispatch.click(e);
+      base.onClick?.(e);
+    },
+    onDoubleClick(e) {
+      dispatch.click(e);
+      base.onDoubleClick?.(e);
+    },
+    onLabelDoubleClick(e) {
+      dispatch.click(e);
+      base.onLabelDoubleClick?.(e);
+    },
   };
 
   /**
-   * Monitor commands
+   * Monitor commands.
    */
   useEffect(() => {
     const events = item?.events();
-    if (events) {
-      events.cmd.redraw$.subscribe(redraw);
-    }
-
+    if (events) events.cmd.redraw$.subscribe(redraw);
     return events?.dispose;
   }, [item?.instance]);
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, rx, type t } from './common';
 
 type Args = {
-  index: number;
+  position: t.LabelItemPosition;
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelListState;
@@ -14,7 +14,7 @@ type Args = {
  * HOOK: selection behavior controller for a single <Item>.
  */
 export function useItemSelectionController(args: Args) {
-  const { list, item, enabled = true } = args;
+  const { list, item, enabled = true, position } = args;
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -29,8 +29,9 @@ export function useItemSelectionController(args: Args) {
     const isSelected = (list: t.LabeList) => list.selected === item?.instance;
     const events = list?.events();
     events?.$.pipe(rx.distinctUntilChanged(focusChanged)).subscribe(redraw);
-    events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe(() => {
-      fire('selected');
+    events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe((e) => {
+      const isSelected = e.to.selected === item?.instance;
+      fire(isSelected ? 'selected' : 'unselected');
       redraw();
     });
     return events?.dispose;
@@ -40,7 +41,7 @@ export function useItemSelectionController(args: Args) {
    * Handlers.
    */
   type A = t.LabelItemChangeAction;
-  const fire = (action: A) => args.onChange?.({ action, data: api.data });
+  const fire = (action: A) => args.onChange?.({ action, position, item: api.data });
 
   /**
    * View component events.

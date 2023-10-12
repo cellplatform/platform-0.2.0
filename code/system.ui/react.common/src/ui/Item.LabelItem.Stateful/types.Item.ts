@@ -44,7 +44,9 @@ export type LabelItemStateEvents<
   };
   readonly cmd: {
     readonly $: t.Observable<t.LabelItemCommand>;
-    readonly redraw$: t.Observable<string>;
+    readonly redraw$: t.Observable<void>;
+    readonly click$: t.Observable<t.LabelItemClick>;
+    readonly changed$: t.Observable<t.LabelItemChanged>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
       on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
@@ -90,12 +92,14 @@ export type LabelItemStatefulProps = {
 export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;
 export type LabelItemStateChangeHandlerArgs = {
   readonly action: LabelItemChangeAction;
-  readonly data: LabelItem;
+  readonly position: t.LabelItemPosition;
+  readonly item: LabelItem;
 };
 export type LabelItemChangeAction =
   | 'ready'
   | 'label'
   | 'selected'
+  | 'unselected'
   | 'edit:start'
   | 'edit:accept'
   | 'edit:cancel';
@@ -108,7 +112,9 @@ export type LabelItemCommand =
   | LabelItemKeyupCommand
   | LabelItemClipboardCommand
   | LabelItemRedrawCommand
-  | LabelItemActionInvokedCommand;
+  | LabelItemActionInvokedCommand
+  | LabelItemClickCommand
+  | LabelItemChangedCommand;
 
 export type LabelItemKeydownCommand = { type: 'Item:Keydown'; payload: LabelItemKeypress };
 export type LabelItemKeyupCommand = { type: 'Item:Keyup'; payload: LabelItemKeypress };
@@ -132,3 +138,9 @@ export type LabelItemActionInvoked<K extends t.LabelActionKind = string> = {
   editing: boolean;
   tx: string;
 };
+
+export type LabelItemClickCommand = { type: 'Item:Click'; payload: LabelItemClick };
+export type LabelItemClick = t.LabelItemClickHandlerArgs & { tx: string };
+
+export type LabelItemChangedCommand = { type: 'Item:Changed'; payload: LabelItemChanged };
+export type LabelItemChanged = t.LabelItemStateChangeHandlerArgs & { tx: string };
