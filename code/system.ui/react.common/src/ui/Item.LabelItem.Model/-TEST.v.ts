@@ -1,10 +1,10 @@
 import { describe, expect, it, slug, type t } from '../../test';
 
-import { State } from '.';
+import { Model } from '.';
 
 describe('LabelItem: State', () => {
   it('init', () => {
-    const state = State.item({ label: 'foo' });
+    const state = Model.item({ label: 'foo' });
     expect(state.current.label).to.eql('foo'); // NB: initial value.
 
     state.change((d) => (d.label = 'hello'));
@@ -13,7 +13,7 @@ describe('LabelItem: State', () => {
 
   describe('events', () => {
     it('init', () => {
-      const state = State.item({ label: 'foo' });
+      const state = Model.item({ label: 'foo' });
       const events = state.events();
       expect(state.current.label).to.eql('foo'); // NB: initial value.
 
@@ -31,8 +31,8 @@ describe('LabelItem: State', () => {
     });
 
     it('events.cmd$ (command stream)', () => {
-      const state = State.item({ label: 'foo' });
-      const dispatch = State.commands(state);
+      const state = Model.item({ label: 'foo' });
+      const dispatch = Model.commands(state);
       const events = state.events();
 
       const fired: t.LabelItemCommand[] = [];
@@ -53,15 +53,15 @@ describe('LabelItem: State', () => {
 
   describe('State.data', () => {
     it('undefined (by default)', () => {
-      const state = State.item();
+      const state = Model.item();
       expect(state.current.data).to.eql(undefined);
     });
 
     it('no mutation ← read a non-proxy', () => {
       type T = { count?: number };
-      const state = State.item();
-      const res1 = State.data<T>(state.current);
-      const res2 = State.data<T>(state.current, { count: 123 });
+      const state = Model.item();
+      const res1 = Model.data<T>(state.current);
+      const res2 = Model.data<T>(state.current, { count: 123 });
 
       expect(state.current.data).to.eql(undefined); // NB: no chance to underlying object.
       expect(res1).to.eql({});
@@ -70,33 +70,33 @@ describe('LabelItem: State', () => {
 
     it('no mutation ← convert from [ItemState] → [Item]', () => {
       type T = { count?: number };
-      const state = State.item();
+      const state = Model.item();
       state.change((d) => (d.data = { count: 123 }));
       expect(state.current.data).to.eql({ count: 123 });
 
-      const res = State.data<T>(state);
+      const res = Model.data<T>(state);
       expect(res).to.eql({ count: 123 });
     });
 
     it('mutates: State.data', () => {
       type T = { count?: number };
-      const state = State.item();
+      const state = Model.item();
 
-      state.change((d) => State.data<T>(d));
+      state.change((d) => Model.data<T>(d));
       expect(state.current.data).to.eql({});
 
-      state.change((d) => (State.data<T>(d).count = 123));
+      state.change((d) => (Model.data<T>(d).count = 123));
       expect(state.current.data?.count).to.eql(123);
     });
 
     it('mutates: State.data → default {object}', () => {
       type T = { count: number };
       const initial: T = { count: 0 };
-      const state1 = State.item();
-      const state2 = State.item();
+      const state1 = Model.item();
+      const state2 = Model.item();
 
-      state1.change((d) => State.data<T>(d, initial));
-      state2.change((d) => (State.data<T>(d, initial).count = 123));
+      state1.change((d) => Model.data<T>(d, initial));
+      state2.change((d) => (Model.data<T>(d, initial).count = 123));
 
       expect(state1.current.data?.count).to.eql(0);
       expect(state2.current.data?.count).to.eql(123);
@@ -105,7 +105,7 @@ describe('LabelItem: State', () => {
     it('throw: input not object', () => {
       const inputs = [null, undefined, '', 123, false, []];
       inputs.forEach((value) => {
-        const fn = () => State.data(value as any);
+        const fn = () => Model.data(value as any);
         expect(fn).to.throw(/Not an object/);
       });
     });

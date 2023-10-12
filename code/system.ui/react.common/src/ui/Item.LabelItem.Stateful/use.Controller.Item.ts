@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, State, type t } from './common';
+import { DEFAULTS, Model, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
 
@@ -61,7 +61,7 @@ export function useItemController(args: Args) {
    * Tap into component event handlers
    * and bubble through Observable
    */
-  const dispatch = State.commands(item);
+  const dispatch = Model.commands(item);
   const base = edit.handlers;
   const handlers: t.LabelItemPropsHandlers = {
     ...base,

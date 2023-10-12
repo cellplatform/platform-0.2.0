@@ -7,7 +7,7 @@ type O = Record<string, unknown>;
 /**
  * Safe/immutable/observable memory state [Model]'s.
  */
-export const State = {
+export const Model = {
   commands,
 
   /**

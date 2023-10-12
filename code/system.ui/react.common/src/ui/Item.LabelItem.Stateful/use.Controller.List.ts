@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ActiveElement, DEFAULTS, Focus, State, type t } from './common';
+import { ActiveElement, DEFAULTS, Focus, Model, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { useListNavigationController } from './use.Controller.List.Navigation';
@@ -20,7 +20,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
-  const listRef = useRef(args.list ?? State.list());
+  const listRef = useRef(args.list ?? Model.list());
   const list = listRef.current;
 
   /**

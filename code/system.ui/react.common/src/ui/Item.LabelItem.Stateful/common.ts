@@ -3,7 +3,7 @@ export * from '../common';
 
 import { DEFAULTS as MODEL_DEFAULTS } from '../Item.LabelItem.Model';
 
-export { State } from '../Item.LabelItem.Model';
+export { Model } from '../Item.LabelItem.Model';
 export { FieldSelector } from '../PropList.FieldSelector';
 export { Keyboard } from '../Text.Keyboard';
 export { ActiveElement, Focus } from '../Focus';
