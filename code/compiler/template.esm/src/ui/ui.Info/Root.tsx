@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, Pkg, PropList, t } from './common';
+import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
 import { FieldModuleVerify } from './field.Module.Verify';
 
 export type InfoProps = {
