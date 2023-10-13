@@ -1,4 +1,4 @@
-import { R, rx, type t } from './common';
+import { R, rx, type t, mapVoid } from './common';
 
 type O = Record<string, unknown>;
 
@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
 export function events<D extends O = O>(
   $: t.Observable<t.PatchChange<t.LabelList<D>>>,
   dispose$?: t.UntilObservable,
-): t.LabelListStateEvents<D> {
+): t.LabelListEvents<D> {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
@@ -18,10 +18,11 @@ export function events<D extends O = O>(
     rx.map((e) => e.to.cmd!),
   );
 
-  const api: t.LabelListStateEvents<D> = {
+  const api: t.LabelListEvents<D> = {
     $,
     cmd: {
       $: cmd$,
+      focus$: rx.payload<t.LabelListCmdFocus>(cmd$, 'List:Focus').pipe(mapVoid),
     },
 
     /**

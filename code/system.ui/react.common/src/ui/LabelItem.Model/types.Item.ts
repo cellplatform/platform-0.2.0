@@ -23,12 +23,12 @@ export type LabelItem<A extends t.LabelItemActionKind = string, D extends O = O>
 export type LabelItemState<
   A extends t.LabelItemActionKind = string,
   D extends O = O,
-> = t.ImmutableRef<t.LabelItem<A, D>, t.LabelItemStateEvents<A, D>>;
+> = t.ImmutableRef<t.LabelItem<A, D>, t.LabelItemEvents<A, D>>;
 
 /**
  * Events API
  */
-export type LabelItemStateEvents<
+export type LabelItemEvents<
   A extends t.LabelItemActionKind = string,
   D extends O = O,
 > = t.Lifecycle & {
@@ -60,6 +60,15 @@ export type LabelItemStateEvents<
  * Commands
  * (events as a property stream)
  */
+export type LabelItemDispatch = {
+  redraw(): void;
+  changed(e: t.LabelItemStateChangeHandlerArgs): void;
+  action(e: t.LabelItemActionHandlerArgs): void;
+  click(e: t.LabelItemClickHandlerArgs): void;
+  clipboard(e: t.LabelItemClipboard['action']): void;
+  key: { down(e: t.LabelItemKeyHandlerArgs): void; up(e: t.LabelItemKeyHandlerArgs): void };
+};
+
 export type LabelItemCmd =
   | LabelItemKeydownCmd
   | LabelItemKeyupCmd

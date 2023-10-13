@@ -5,12 +5,24 @@ import { slug, type t } from './common';
  */
 export function commands(item?: t.LabelItemState) {
   const dispatch = (cmd: t.LabelItemCmd) => item?.change((d) => (d.cmd = cmd));
-  const api = {
+  const api: t.LabelItemDispatch = {
     /**
      * Re-render item.
      */
     redraw() {
       dispatch({ type: 'Item:Redraw', payload: { tx: slug() } });
+    },
+
+    changed(e: t.LabelItemStateChangeHandlerArgs) {
+      dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
+    },
+
+    action(e: t.LabelItemActionHandlerArgs) {
+      dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
+    },
+
+    click(e: t.LabelItemClickHandlerArgs) {
+      dispatch({ type: 'Item:Click', payload: { ...e, tx: slug() } });
     },
 
     /**
@@ -34,18 +46,6 @@ export function commands(item?: t.LabelItemState) {
       up(e: t.LabelItemKeyHandlerArgs) {
         dispatch({ type: 'Item:Keyup', payload: { ...e, tx: slug() } });
       },
-    },
-
-    action(e: t.LabelItemActionHandlerArgs) {
-      dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
-    },
-
-    click(e: t.LabelItemClickHandlerArgs) {
-      dispatch({ type: 'Item:Click', payload: { ...e, tx: slug() } });
-    },
-
-    changed(e: t.LabelItemStateChangeHandlerArgs) {
-      dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
     },
   } as const;
   return api;
