@@ -2,7 +2,7 @@ import { useEffect, useRef, createContext } from 'react';
 import { ActiveElement, DEFAULTS, Focus, Model, type t, ListContext } from './common';
 
 import { Wrangle } from './Wrangle';
-import { useListNavigationController } from './use.Controller.List.Navigation';
+import { useListNavigationController } from './use.ListNavigationController';
 
 type Args = {
   enabled?: boolean;
@@ -48,11 +48,8 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
    * Initialize
    */
   useEffect(() => {
-    // const events = list.events();
-
     const events = (eventsRef.current = list.events());
     const dispatch = (dispatchRef.current = Model.List.commands(list));
-
     return events.dispose;
   }, []);
 
