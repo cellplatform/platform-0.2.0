@@ -32,6 +32,9 @@ export default Dev.describe(name, (e) => {
   });
 
   const State = {
+    get first() {
+      return State.items[0];
+    },
     get last() {
       return State.items[State.items.length - 1];
     },
@@ -96,10 +99,7 @@ export default Dev.describe(name, (e) => {
         const length = debug.total ?? 0;
         const elements = Array.from({ length }).map((_, i) => {
           const item = State.items[i];
-          const renderCount: t.RenderCountProps = {
-            absolute: [0, -55, null, null],
-            opacity: 0.2,
-          };
+          const renderCount: t.RenderCountProps = { absolute: [0, -55, null, null], opacity: 0.2 };
           return (
             <LabelItem.Stateful
               key={`item.${i}`}
@@ -118,16 +118,14 @@ export default Dev.describe(name, (e) => {
           );
         });
 
+        const renderCount: t.RenderCountProps = { absolute: [-18, 0, null, null], opacity: 0.2 };
         return (
           <SampleList
-            //
             items={State.items}
             elements={elements}
             useBehaviors={debug.useBehaviors}
             list={State.list}
-            renderCount={
-              debug.renderCount ? { absolute: [-18, 0, null, null], opacity: 0.2 } : undefined
-            }
+            renderCount={debug.renderCount ? renderCount : undefined}
           />
         );
       });
@@ -196,8 +194,14 @@ export default Dev.describe(name, (e) => {
       };
       dev.button(['select: first', 'by index'], (e) => select(0));
       dev.button(['select: first, focus', 'by index'], (e) => select(0, true));
-      dev.button(['select: first, focus', 'by id'], (e) => select(State.items[0].instance, true));
+      dev.button(['select: first, focus', 'by id'], (e) => select(State.first.instance, true));
       dev.button(['select: last, focus', 'by id'], (e) => select(State.last.instance, true));
+
+      dev.hr(-1, 5);
+
+      dev.button('redraw: all', (e) => dispatch.redraw());
+      dev.button(['redraw: first', 'by index'], (e) => dispatch.redraw(0));
+      dev.button(['redraw: first', 'by id'], (e) => dispatch.redraw(State.first.instance));
     });
 
     dev.hr(5, 20);
@@ -231,7 +235,7 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('redraw', (e) => dev.redraw());
+      dev.button('redraw (harness)', (e) => dev.redraw());
     });
   });
 

@@ -24,6 +24,7 @@ export function events<D extends O = O>(
     $,
     cmd: {
       $: cmd$,
+      redraw$: rx.payload<t.LabelListRedrawCmd>(cmd$, 'List:Redraw'),
       select$: rx.payload<t.LabelListSelectCmd>(cmd$, 'List:Select'),
       focus$: focus$.pipe(
         rx.filter((e) => e.focus),

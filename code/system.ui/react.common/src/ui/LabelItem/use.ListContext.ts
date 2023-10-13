@@ -1,4 +1,4 @@
-import { RefObject, useContext, useEffect } from 'react';
+import { RefObject, useContext, useEffect, useState } from 'react';
 import { ListContext } from './Context.List';
 import { rx, type t } from './common';
 
@@ -10,6 +10,9 @@ export function useListContext(args: {
   const { id, ref, position } = args;
   const { index } = position;
   const ctx = useContext(ListContext);
+
+  const [_, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
 
   /**
    * Monitor events.
@@ -30,7 +33,7 @@ export function useListContext(args: {
     };
 
     /**
-     * Selection.
+     * Selection
      */
     events.cmd.select$.pipe(rx.filter((e) => is.item(e.item))).subscribe((e) => {
       ref.current?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
@@ -38,10 +41,17 @@ export function useListContext(args: {
     });
 
     /**
-     * Focus.
+     * Focus
      */
     events.cmd.focus$.pipe(rx.filter(() => is.selected)).subscribe(focus);
     events.cmd.blur$.pipe(rx.filter(() => is.selected)).subscribe(blur);
+
+    /**
+     * Redraw
+     */
+    events.cmd.redraw$
+      .pipe(rx.filter((e) => e.item === undefined || is.item(e.item)))
+      .subscribe(redraw);
 
     return dispose;
   }, [index]);

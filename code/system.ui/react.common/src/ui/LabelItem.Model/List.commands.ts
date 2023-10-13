@@ -15,6 +15,9 @@ export function commands(list?: t.LabelListState) {
     select(item, focus = false) {
       dispatch({ type: 'List:Select', payload: { item, focus, tx: slug() } });
     },
+    redraw(item) {
+      dispatch({ type: 'List:Redraw', payload: { item, tx: slug() } });
+    },
   } as const;
   return api;
 }

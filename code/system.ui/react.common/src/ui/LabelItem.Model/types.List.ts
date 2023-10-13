@@ -28,9 +28,10 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelList<D>>>;
   readonly cmd: {
     readonly $: t.Observable<t.LabelListCmd>;
+    readonly redraw$: t.Observable<t.LabelListRedraw>;
+    readonly select$: t.Observable<t.LabelListSelect>;
     readonly focus$: t.Observable<void>;
     readonly blur$: t.Observable<void>;
-    readonly select$: t.Observable<t.LabelListSelect>;
   };
 };
 
@@ -39,15 +40,19 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  * (events as a property stream)
  */
 export type LabelListDispatch = {
+  select(item: Index | ItemId, focus?: boolean): void;
+  redraw(item?: Index | ItemId): void;
   focus(focus?: boolean): void;
   blur(): void;
-  select(item: Index | ItemId, focus?: boolean): void;
 };
 
-export type LabelListCmd = LabelListFocusCmd | LabelListSelectCmd;
+export type LabelListCmd = LabelListFocusCmd | LabelListSelectCmd | LabelListRedrawCmd;
 
 export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocus };
 export type LabelListFocus = { focus: boolean; tx: string };
 
 export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelect };
 export type LabelListSelect = { item: Index | ItemId; focus: boolean; tx: string };
+
+export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedraw };
+export type LabelListRedraw = { item?: Index | ItemId; tx: string };
