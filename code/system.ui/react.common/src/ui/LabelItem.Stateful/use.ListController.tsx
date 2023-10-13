@@ -1,5 +1,5 @@
-import { useEffect, useRef, createContext } from 'react';
-import { ActiveElement, DEFAULTS, Focus, Model, type t, ListContext } from './common';
+import { useEffect, useRef } from 'react';
+import { ActiveElement, DEFAULTS, Focus, ListContext, Model, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { useListNavigationController } from './use.ListNavigationController';
@@ -54,21 +54,6 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   }, []);
 
   /**
-   * Commands
-   */
-  useEffect(() => {
-    const events = eventsRef.current;
-    if (!events) return;
-
-    events.cmd.focus$.subscribe((e) => {
-      console.log('------------------focus-------------------------'); // TEMP 🐷
-      ref.current?.focus();
-    });
-
-    // return events.dispose;
-  }, [eventsRef.current]);
-
-  /**
    * API
    */
   const api = {
@@ -79,13 +64,16 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     get current() {
       return list?.current ?? DEFAULTS.data.list;
     },
-    list: {
-      dispatch: dispatchRef.current!,
-      events: eventsRef.current!,
-    },
     Provider(props: { children?: React.ReactNode }) {
       const Provider = ListContext.Provider;
-      return <Provider value={api.list}>{props.children}</Provider>;
+      const value: t.LabelListContext = {
+        dispatch: dispatchRef.current!,
+        events: list.events,
+        get list() {
+          return list.current;
+        },
+      };
+      return <Provider value={value}>{props.children}</Provider>;
     },
   } as const;
   return api;

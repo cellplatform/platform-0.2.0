@@ -50,9 +50,9 @@ export type LabelItemActionRenderHelpers = {
  * Component (View)
  */
 export type LabelItemProps = {
-  index?: number;
   total?: number;
-
+  index?: number;
+  id?: string;
   item?: t.LabelItem;
   renderers?: t.LabelItemRenderers;
 

@@ -35,7 +35,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   return (
     <LabelItem
       {...controller.handlers}
-      style={props.style}
+      id={item?.instance}
       index={props.index}
       total={props.total}
       renderers={props.renderers}
@@ -45,6 +45,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       focusOnEdit={true}
       renderCount={props.renderCount}
       debug={props.debug}
+      style={props.style}
     />
   );
 };

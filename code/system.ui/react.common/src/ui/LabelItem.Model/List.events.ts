@@ -1,4 +1,4 @@
-import { R, rx, type t, mapVoid } from './common';
+import { R, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -18,11 +18,21 @@ export function events<D extends O = O>(
     rx.map((e) => e.to.cmd!),
   );
 
+  const focus$ = rx.payload<t.LabelListFocusCmd>(cmd$, 'List:Focus');
+
   const api: t.LabelListEvents<D> = {
     $,
     cmd: {
       $: cmd$,
-      focus$: rx.payload<t.LabelListCmdFocus>(cmd$, 'List:Focus').pipe(mapVoid),
+      select$: rx.payload<t.LabelListSelectCmd>(cmd$, 'List:Select'),
+      focus$: focus$.pipe(
+        rx.filter((e) => e.focus),
+        mapVoid,
+      ),
+      blur$: focus$.pipe(
+        rx.filter((e) => !e.focus),
+        mapVoid,
+      ),
     },
 
     /**

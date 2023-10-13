@@ -62,12 +62,6 @@ export function useItemController(args: Args) {
   const handlers = useBubbleEvents(edit.handlers, item);
 
   /**
-   * TODO 🐷
-   */
-  const ctx = useContext(ListContext);
-  console.log('ctx', ctx);
-
-  /**
    * Monitor commands.
    */
   useEffect(() => {

@@ -13,6 +13,7 @@ type T = {
     total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
+    isList?: boolean;
   };
 };
 const initial: T = { debug: {} };
@@ -20,22 +21,26 @@ const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug'>;
+  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug' | 'isList'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
     renderCount: true,
     debug: false,
+    isList: true,
   });
 
-  const TestState = {
-    list: Model.List.state(),
+  const State = {
+    get last() {
+      return State.items[State.items.length - 1];
+    },
     items: [] as t.LabelItemState[],
+    list: Model.List.state(),
     renderers: Sample.renderers,
     init: {
       items(length: number = 0) {
-        TestState.items = Array.from({ length }).map(() => TestState.init.item());
+        State.items = Array.from({ length }).map(() => State.init.item());
       },
       item(dispose$?: t.Observable<any>) {
         const Model = LabelItem.Stateful.Model;
@@ -77,8 +82,9 @@ export default Dev.describe(name, (e) => {
       d.debug.useBehaviors = local.useBehaviors;
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
+      d.debug.isList = local.isList;
     });
-    TestState.init.items(state.current.debug.total);
+    State.init.items(state.current.debug.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -88,20 +94,22 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         const length = debug.total ?? 0;
-        const isList = length > 1;
         const elements = Array.from({ length }).map((_, i) => {
+          const item = State.items[i];
+          const renderCount: t.RenderCountProps = {
+            absolute: [0, -55, null, null],
+            opacity: 0.2,
+          };
           return (
             <LabelItem.Stateful
               key={`item.${i}`}
               index={i}
               total={length}
-              list={isList ? TestState.list : undefined}
-              item={TestState.items[i]}
-              renderers={TestState.renderers}
+              list={debug.isList ? State.list : undefined}
+              item={item}
+              renderers={State.renderers}
               useBehaviors={debug.useBehaviors}
-              renderCount={
-                debug.renderCount ? { absolute: [0, -55, null, null], opacity: 0.2 } : undefined
-              }
+              renderCount={debug.renderCount ? renderCount : undefined}
               debug={debug.debug}
               onChange={(e) => {
                 // console.info(`⚡️ onChange[${i}]`, e);
@@ -113,10 +121,10 @@ export default Dev.describe(name, (e) => {
         return (
           <SampleList
             //
-            items={TestState.items}
+            items={State.items}
             elements={elements}
             useBehaviors={debug.useBehaviors}
-            list={TestState.list}
+            list={State.list}
             renderCount={
               debug.renderCount ? { absolute: [-18, 0, null, null], opacity: 0.2 } : undefined
             }
@@ -151,7 +159,7 @@ export default Dev.describe(name, (e) => {
             .label(label)
             .right((e) => (e.state.debug.total === total ? '←' : ''))
             .onClick(async (e) => {
-              TestState.init.items(total);
+              State.init.items(total);
               await e.change((d) => (local.total = d.debug.total = total));
             }),
         );
@@ -163,7 +171,7 @@ export default Dev.describe(name, (e) => {
       total(10);
       dev.hr(-1, 5);
       dev.button('add', async (e) => {
-        TestState.items.push(TestState.init.item());
+        State.items.push(State.init.item());
         const total = (e.state.current.debug.total ?? 0) + 1;
         await e.change((d) => (local.total = d.debug.total = total));
       });
@@ -172,13 +180,37 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Commands', (dev) => {
-      const dispatch = Model.List.commands(TestState.list);
-      dev.button('focus', (e) => Time.delay(0, () => dispatch.focus()));
+      const dispatch = Model.List.commands(State.list);
+      dev.button('focus', (e) => Time.delay(0, dispatch.focus));
+      dev.button('focus → blur', (e) =>
+        Time.delay(0, () => {
+          dispatch.focus();
+          Time.delay(500, dispatch.blur);
+        }),
+      );
+
+      dev.hr(-1, 5);
+
+      const select = (item: number | string, focus?: boolean) => {
+        Time.delay(0, () => dispatch.select(item, focus));
+      };
+      dev.button(['select: first', 'by index'], (e) => select(0));
+      dev.button(['select: first, focus', 'by index'], (e) => select(0, true));
+      dev.button(['select: first, focus', 'by id'], (e) => select(State.items[0].instance, true));
+      dev.button(['select: last, focus', 'by id'], (e) => select(State.last.instance, true));
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.debug);
+        btn
+          .label((e) => `debug`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.debug, 'debug'))));
+      });
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.renderCount);
         btn
@@ -190,11 +222,11 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.debug);
+        const value = (state: T) => Boolean(state.debug.isList);
         btn
-          .label((e) => `debug`)
+          .label((e) => `is list`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.debug, 'debug'))));
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isList')));
       });
 
       dev.hr(-1, 5);
@@ -208,14 +240,14 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const items = TestState.items.reduce((acc, next, i) => {
+      const items = State.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
         acc[key] = next.current;
         return acc;
       }, {} as Record<string, t.LabelItemState['current']>);
 
       const data = {
-        list: TestState.list.current,
+        list: State.list.current,
         items,
       };
 

@@ -24,8 +24,9 @@ export type LabelItemStatefulProps = {
 };
 
 export type LabelListContext = {
-  events: t.LabelListEvents;
-  dispatch: t.LabelListDispatch;
+  readonly list: t.LabelList;
+  readonly dispatch: t.LabelListDispatch;
+  events(dispose$?: t.UntilObservable): t.LabelListEvents;
 };
 
 /**

@@ -1,6 +1,7 @@
 import { Icons, type t } from '../common';
 
 export { Button } from '../Button';
+export { RenderCount } from '../RenderCount';
 export { Spinner } from '../Spinner';
 export { TextInput } from '../Text.Input';
 export { Keyboard } from '../Text.Keyboard';

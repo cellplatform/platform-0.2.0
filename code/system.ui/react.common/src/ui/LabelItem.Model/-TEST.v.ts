@@ -87,10 +87,10 @@ describe('LabelItem.Model', () => {
         const fired: t.LabelListCmd[] = [];
         events.cmd.$.subscribe((e) => fired.push(e));
 
-        const tx = slug();
-        state.change((d) => (d.cmd = { type: 'List:Focus', payload: { tx } }));
+        const payload = { focus: true, tx: slug() };
+        state.change((d) => (d.cmd = { type: 'List:Focus', payload }));
         expect(fired.length).to.eql(1);
-        expect(state.current.cmd).to.eql({ type: 'List:Focus', payload: { tx } });
+        expect(state.current.cmd).to.eql({ type: 'List:Focus', payload });
 
         dispatch.focus();
         expect(fired.length).to.eql(2);

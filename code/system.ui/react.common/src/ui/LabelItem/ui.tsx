@@ -1,17 +1,18 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { RenderCount } from '../RenderCount';
-import { css, DEFAULTS, Keyboard, rx, Style, useClickOutside, type t } from './common';
+import { DEFAULTS, Keyboard, RenderCount, Style, css, rx, useClickOutside, type t } from './common';
 
+import { Wrangle } from './Wrangle';
 import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
-import { Wrangle } from './Wrangle';
+import { useListContext } from './use.ListContext';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 
 export const View: React.FC<Props> = (props) => {
   const {
     inputRef,
+    id,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
     indent = DEFAULTS.indent,
@@ -25,8 +26,9 @@ export const View: React.FC<Props> = (props) => {
   } = props;
   const { enabled = DEFAULTS.enabled, editing = DEFAULTS.editing } = item;
   const position = { index, total };
-  const ref = useRef<HTMLDivElement>(null);
 
+  const ref = useRef<HTMLDivElement>(null);
+  const ctx = useListContext({ ref, id, position });
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
@@ -39,10 +41,9 @@ export const View: React.FC<Props> = (props) => {
   useClickOutside({
     ref,
     callback(e) {
-      if (editing) {
-        inputRef.current?.blur();
-        props.onEditClickAway?.(clickArgs('Single', 'Away'));
-      }
+      if (!editing) return;
+      inputRef.current?.blur();
+      props.onEditClickAway?.(clickArgs('Single', 'Away'));
     },
   });
 

@@ -2,6 +2,7 @@ import type { t } from './common';
 
 type O = Record<string, unknown>;
 type ItemId = string;
+type Index = number;
 
 /**
  * List
@@ -28,6 +29,8 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
   readonly cmd: {
     readonly $: t.Observable<t.LabelListCmd>;
     readonly focus$: t.Observable<void>;
+    readonly blur$: t.Observable<void>;
+    readonly select$: t.Observable<t.LabelListSelect>;
   };
 };
 
@@ -36,8 +39,15 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  * (events as a property stream)
  */
 export type LabelListDispatch = {
-  focus(): void;
+  focus(focus?: boolean): void;
+  blur(): void;
+  select(item: Index | ItemId, focus?: boolean): void;
 };
 
-export type LabelListCmd = LabelListCmdFocus;
-export type LabelListCmdFocus = { type: 'List:Focus'; payload: { tx: string } };
+export type LabelListCmd = LabelListFocusCmd | LabelListSelectCmd;
+
+export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocus };
+export type LabelListFocus = { focus: boolean; tx: string };
+
+export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelect };
+export type LabelListSelect = { item: Index | ItemId; focus: boolean; tx: string };
