@@ -3,10 +3,11 @@ export * from '../common';
 
 import { DEFAULTS as MODEL_DEFAULTS } from '../LabelItem.Model';
 
+export { ActiveElement, Focus } from '../Focus';
 export { Model } from '../LabelItem.Model';
+export { ListContext } from '../LabelItem/Context.List';
 export { FieldSelector } from '../PropList.FieldSelector';
 export { Keyboard } from '../Text.Keyboard';
-export { ActiveElement, Focus } from '../Focus';
 
 /**
  * Constants

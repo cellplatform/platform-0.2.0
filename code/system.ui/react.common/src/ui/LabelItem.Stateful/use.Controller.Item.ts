@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, Model, type t } from './common';
+import { DEFAULTS, ListContext, Model, type t } from './common';
 import { useItemEditController } from './use.Controller.Item.Edit';
 import { useItemSelectionController } from './use.Controller.Item.Selection';
+import { useBubbleEvents } from './use.Controller.Item.bubble';
 
 type Args = {
   index?: number;
@@ -28,6 +29,7 @@ export function useItemController(args: Args) {
     list,
   } = args;
   const position = { index, total };
+  const dispatch = Model.Item.commands(item);
   const enabled =
     (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
@@ -57,39 +59,10 @@ export function useItemController(args: Args) {
     handlers: selection.handlers,
   });
 
-  /**
-   * Tap into component event handlers
-   * and bubble through Observable
-   */
-  const dispatch = Model.Item.commands(item);
-  const base = edit.handlers;
-  const handlers: t.LabelItemPropsHandlers = {
-    ...base,
-    onKeyDown(e) {
-      dispatch.key.down(e);
-      base.onKeyDown?.(e);
-    },
-    onKeyUp(e) {
-      dispatch.key.up(e);
-      base.onKeyUp?.(e);
-    },
-    onActionClick(e) {
-      dispatch.action(e);
-      base.onActionClick?.(e);
-    },
-    onClick(e) {
-      dispatch.click(e);
-      base.onClick?.(e);
-    },
-    onDoubleClick(e) {
-      dispatch.click(e);
-      base.onDoubleClick?.(e);
-    },
-    onLabelDoubleClick(e) {
-      dispatch.click(e);
-      base.onLabelDoubleClick?.(e);
-    },
-  };
+  const handlers = useBubbleEvents(edit.handlers, item);
+
+  const ctx = useContext(ListContext);
+  console.log('ctx', ctx);
 
   /**
    * Monitor commands.

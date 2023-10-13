@@ -1,8 +1,9 @@
-import { rx, Dev, Value, type t } from '../../../test.ui';
+import { Time, rx, Dev, Value, type t } from '../../../test.ui';
 import { LabelItem } from '../../LabelItem';
 import { Sample, type SampleActionKind } from './-Sample';
 import { SampleList } from './-Sample.List';
 
+const Model = LabelItem.Model;
 const DEFAULTS = LabelItem.Stateful.DEFAULTS;
 
 type T = {
@@ -29,7 +30,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const TestState = {
-    list: LabelItem.Model.List.state(),
+    list: Model.List.state(),
     items: [] as t.LabelItemState[],
     renderers: Sample.renderers,
     init: {
@@ -166,6 +167,13 @@ export default Dev.describe(name, (e) => {
         const total = (e.state.current.debug.total ?? 0) + 1;
         await e.change((d) => (local.total = d.debug.total = total));
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Commands', (dev) => {
+      const dispatch = Model.List.commands(TestState.list);
+      dev.button('focus', (e) => Time.delay(0, () => dispatch.focus()));
     });
 
     dev.hr(5, 20);
