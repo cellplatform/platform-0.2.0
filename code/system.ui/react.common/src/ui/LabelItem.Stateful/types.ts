@@ -23,6 +23,11 @@ export type LabelItemStatefulProps = {
   onChange?: LabelItemStateChangeHandler;
 };
 
+export type LabelListContext = {
+  events: t.LabelListEvents;
+  dispatch: t.LabelListDispatch;
+};
+
 /**
  * Controller API's
  */

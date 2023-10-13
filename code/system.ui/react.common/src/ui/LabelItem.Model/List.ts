@@ -12,7 +12,7 @@ export const List = {
    */
   state<D extends O = O>(): t.LabelListState {
     type T = t.LabelList<D>;
-    type E = t.LabelListStateEvents<D>;
+    type E = t.LabelListEvents<D>;
     const initial = DEFAULTS.data.list as t.LabelList<D>;
     return PatchState.init<T, E>({ initial, events });
   },

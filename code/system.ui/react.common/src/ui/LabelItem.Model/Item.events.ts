@@ -1,4 +1,4 @@
-import { R, rx, type t } from './common';
+import { R, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
 export function events<A extends t.LabelItemActionKind = string, D extends O = O>(
   $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>,
   dispose$?: t.UntilObservable,
-): t.LabelItemStateEvents<A, D> {
+): t.LabelItemEvents<A, D> {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
@@ -21,7 +21,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
   const keydown$ = rx.payload<t.LabelItemKeydownCmd>(cmd$, 'Item:Keydown');
 
   type K = t.LabelItemKeyHandlerArgs;
-  type E = t.LabelItemStateEvents<A, D>;
+  type E = t.LabelItemEvents<A, D>;
   const cache = {
     key: undefined as E['key'] | undefined,
     cmd: undefined as E['cmd'] | undefined,
@@ -43,7 +43,6 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
       if (!cache.cmd) {
         type C = t.LabelItemClipboard;
 
-        const mapVoid = rx.map(() => undefined);
         const action$ = rx.payload<t.LabelItemActionInvokedCmd>(cmd$, 'Item:Action');
         const clipboard$ = rx.payload<t.LabelItemClipboardCmd>(cmd$, 'Item:Clipboard');
         const clipboard = (a: C['action']) => clipboard$.pipe(rx.filter((e) => e.action === a));
