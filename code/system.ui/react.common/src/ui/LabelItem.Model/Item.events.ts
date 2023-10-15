@@ -50,8 +50,8 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
         cache.cmd = {
           $: cmd$,
           redraw$: rx.payload<t.LabelItemRedrawCmd>(cmd$, 'Item:Redraw').pipe(mapVoid),
-          click$: rx.payload<t.LabelItemClickCmd>(cmd$, 'Item:Click'),
           changed$: rx.payload<t.LabelItemChangedCmd>(cmd$, 'Item:Changed'),
+          click$: rx.payload<t.LabelItemClickCmd>(cmd$, 'Item:Click'),
           clipboard: {
             $: clipboard$,
             cut$: clipboard('Cut'),
