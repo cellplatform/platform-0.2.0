@@ -2,13 +2,20 @@ import { Model } from '.';
 import { describe, expect, it, slug, type t } from '../../test';
 
 describe('LabelItem.Model', () => {
-  describe('Model.item', () => {
-    it('init', () => {
-      const state = Model.Item.state({ label: 'foo' });
-      expect(state.current.label).to.eql('foo'); // NB: initial value.
+  describe('Model.Item.state', () => {
+    describe('init', () => {
+      it('defaults', () => {
+        const state = Model.Item.state();
+        expect(state.current).to.eql({});
 
-      state.change((d) => (d.label = 'hello'));
-      expect(state.current.label).to.eql('hello'); // NB: initial value.
+        state.change((d) => (d.label = 'hello'));
+        expect(state.current.label).to.eql('hello'); // NB: initial value.
+      });
+
+      it('{initial}', () => {
+        const state = Model.Item.state({ label: 'foo' });
+        expect(state.current.label).to.eql('foo'); // NB: initial value.
+      });
     });
 
     describe('events', () => {
@@ -56,9 +63,57 @@ describe('LabelItem.Model', () => {
   });
 
   describe('Model.List.state', () => {
-    it('init', () => {
-      const state = Model.List.state();
-      expect(state.current).to.eql({ items: [] });
+    const { List } = Model;
+
+    function getItemsSample() {
+      const items: t.LabelItemState[] = [];
+      const getItem: t.GetLabelListItem = (index) => {
+        return items[index] ?? (items[index] = Model.Item.state());
+      };
+      return { items, getItem };
+    }
+
+    describe('init', () => {
+      it('defaults', () => {
+        const state = Model.List.state();
+        expect(state.current).to.eql({ total: 0 });
+      });
+
+      it('{initial}', () => {
+        const getItem: t.GetLabelListItem = (index) => undefined;
+        const state = Model.List.state({ total: 123, getItem });
+        expect(state.current).to.eql({ total: 123, getItem });
+      });
+    });
+
+    describe('items (fn)', () => {
+      it('returns nothing when no getter function', () => {
+        const state = Model.List.state();
+        expect(state.current.getItem).to.eql(undefined);
+        expect(List.item(state, 0)).to.eql(undefined);
+        expect(List.item(state.current, 0)).to.eql(undefined);
+      });
+
+      it('returns item from getter function', () => {
+        const { items, getItem } = getItemsSample();
+        const state = Model.List.state({ total: 2, getItem });
+
+        const item1 = List.item(state, 0);
+        const item2 = List.item(state.current, 1);
+
+        expect(item1).to.eql(items[0]);
+        expect(item2).to.eql(items[1]);
+
+        expect(List.item(state.current, 0)).to.eql(item1);
+        expect(List.item(state, 1)).to.eql(item2);
+      });
+
+      it('out of bounds', () => {
+        const { items, getItem } = getItemsSample();
+        const state = Model.List.state({ total: 1, getItem });
+        expect(List.item(state, 2)).to.eql(undefined);
+        expect(items).to.eql([]);
+      });
     });
 
     describe('events', () => {

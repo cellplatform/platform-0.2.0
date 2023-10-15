@@ -13,12 +13,15 @@ type Index = number;
  * within the context of a list.
  */
 export type LabelList<D extends O = O> = {
+  total: number;
   selected?: ItemId;
   focused?: boolean;
   cmd?: t.LabelListCmd; // Used to produce an event stream of commands.
   data?: D;
-  items: t.LabelItemState[];
+  getItem?: GetLabelListItem;
 };
+
+export type GetLabelListItem = (index: Index) => t.LabelItemState | undefined;
 
 export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.LabelListEvents<D>>;
 
