@@ -17,6 +17,7 @@ export type LabelList<D extends O = O> = {
   focused?: boolean;
   cmd?: t.LabelListCmd; // Used to produce an event stream of commands.
   data?: D;
+  items: t.LabelItemState[];
 };
 
 export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.LabelListEvents<D>>;

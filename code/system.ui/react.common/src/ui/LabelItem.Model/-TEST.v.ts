@@ -58,7 +58,7 @@ describe('LabelItem.Model', () => {
   describe('Model.List.state', () => {
     it('init', () => {
       const state = Model.List.state();
-      expect(state.current).to.eql({});
+      expect(state.current).to.eql({ items: [] });
     });
 
     describe('events', () => {

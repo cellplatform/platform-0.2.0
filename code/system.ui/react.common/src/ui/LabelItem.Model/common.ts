@@ -13,7 +13,7 @@ export const DEFAULTS = {
       return {};
     },
     get list(): t.LabelList {
-      return {};
+      return { items: [] };
     },
   },
 } as const;
