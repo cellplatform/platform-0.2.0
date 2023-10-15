@@ -6,9 +6,6 @@ import { slug, type t } from './common';
 export function commands(item?: t.LabelItemState) {
   const dispatch = (cmd: t.LabelItemCmd) => item?.change((d) => (d.cmd = cmd));
   const api: t.LabelItemDispatch = {
-    /**
-     * Re-render item.
-     */
     redraw() {
       dispatch({ type: 'Item:Redraw', payload: { tx: slug() } });
     },
