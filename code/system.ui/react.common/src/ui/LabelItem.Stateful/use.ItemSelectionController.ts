@@ -4,8 +4,8 @@ import { DEFAULTS, rx, type t } from './common';
 type Args = {
   position: t.LabelItemPosition;
   enabled?: boolean;
-  item?: t.LabelItemState;
   list?: t.LabelListState;
+  item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
 };
@@ -34,6 +34,7 @@ export function useItemSelectionController(args: Args) {
       fire(isSelected ? 'selected' : 'unselected');
       redraw();
     });
+
     return events?.dispose;
   }, [Boolean(list), Boolean(item?.instance), item?.instance]);
 
