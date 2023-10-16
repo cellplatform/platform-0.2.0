@@ -5,6 +5,6 @@ import { init } from './PatchState.init';
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
-  init,
   Is,
+  init,
 } as const;

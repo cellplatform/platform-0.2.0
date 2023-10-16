@@ -12,7 +12,6 @@ type Args<T extends O, E> = {
  * Initialize a new [PatchState] object.
  */
 export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): t.PatchState<T, E> {
-  const { onChange } = args;
   const $ = rx.subject<t.PatchChange<T>>();
   let _current = { ...args.initial };
   return {
@@ -37,12 +36,12 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
     change(fn) {
       const e = Patch.change<T>(_current, fn);
       _current = e.to;
-      onChange?.(e);
+      args.onChange?.(e);
       $.next(e);
     },
 
     /**
-     * Observable listener.
+     * Observable event listener with controllable lifetime.
      */
     events(dispose$?: t.UntilObservable) {
       const factory = args.events ?? defaultEvents;
