@@ -1,4 +1,4 @@
-import { Time, rx, Dev, Value, type t } from '../../../test.ui';
+import { Dev, Time, Value, rx, type t } from '../../../test.ui';
 import { LabelItem } from '../../LabelItem';
 import { Sample, type SampleActionKind } from './-Sample';
 import { SampleList } from './-Sample.List';
@@ -24,28 +24,29 @@ export default Dev.describe(name, (e) => {
   type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug' | 'isList'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
-    renderCount: true,
+    total: 1,
     debug: false,
+    renderCount: true,
     isList: true,
   });
 
-  const State = {
-    get first() {
-      return State.items[0];
-    },
-    get last() {
-      return State.items[State.items.length - 1];
-    },
-    items: [] as t.LabelItemState[],
-    list: Model.List.state(),
+  const TestState = {
+    array: Model.List.array(), // NB: simple container of Item models.
+    list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
     renderers: Sample.renderers,
     init: {
-      items(length: number = 0) {
-        State.items = Array.from({ length }).map(() => State.init.item());
+      items(dev: t.DevCtxState<T>, length: number = 0) {
+        TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
+        TestState.array.getItem(length - 1);
+        TestState.list.change((d) => {
+          d.total = length;
+          d.getItem = TestState.array.getItem;
+        });
       },
-      item(dispose$?: t.Observable<any>) {
+      item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
+        console.log('init item', index);
+
         const Model = LabelItem.Stateful.Model;
 
         const { initial } = Sample.item();
@@ -68,12 +69,27 @@ export default Dev.describe(name, (e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
 
+        events.cmd.action.on('foobar').subscribe((e) => {
+          TestState.add(dev);
+          const dispatch = Model.List.commands(TestState.list);
+          // Time.delay(100, () => dispatch.focus);
+        });
+
         events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
         // events.cmd.click$.subscribe((e) => console.info(`⚡️ click$ [${e.position.index}]`, e));
 
         return state;
       },
     } as const,
+
+    async add(dev: t.DevCtxState<T>) {
+      TestState.list.change((d) => (d.total += 1));
+      const total = TestState.list.current.total;
+      await dev.change((d) => (local.total = d.debug.total = total));
+
+      // const dispatch = Model.List.commands(State.list);
+      // dispatch.focus();
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -87,7 +103,7 @@ export default Dev.describe(name, (e) => {
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
     });
-    State.init.items(state.current.debug.total);
+    TestState.init.items(state, state.current.debug.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -96,36 +112,13 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { debug } = e.state;
-        const length = debug.total ?? 0;
-        const elements = Array.from({ length }).map((_, i) => {
-          const item = State.items[i];
-          const renderCount: t.RenderCountProps = { absolute: [0, -55, null, null], opacity: 0.2 };
-          return (
-            <LabelItem.Stateful
-              key={`item.${i}`}
-              index={i}
-              total={length}
-              list={debug.isList ? State.list : undefined}
-              item={item}
-              renderers={State.renderers}
-              useBehaviors={debug.useBehaviors}
-              renderCount={debug.renderCount ? renderCount : undefined}
-              debug={debug.debug}
-              onChange={(e) => {
-                // console.info(`⚡️ onChange[${i}]`, e);
-              }}
-            />
-          );
-        });
-
-        const renderCount: t.RenderCountProps = { absolute: [-18, 0, null, null], opacity: 0.2 };
+        const { isList, renderCount } = debug;
         return (
           <SampleList
-            items={State.items}
-            elements={elements}
+            list={TestState.list}
+            renderers={TestState.renderers}
             useBehaviors={debug.useBehaviors}
-            list={State.list}
-            renderCount={debug.renderCount ? renderCount : undefined}
+            debug={{ isList, renderCount }}
           />
         );
       });
@@ -157,7 +150,7 @@ export default Dev.describe(name, (e) => {
             .label(label)
             .right((e) => (e.state.debug.total === total ? '←' : ''))
             .onClick(async (e) => {
-              State.init.items(total);
+              TestState.init.items(state, total);
               await e.change((d) => (local.total = d.debug.total = total));
             }),
         );
@@ -168,17 +161,13 @@ export default Dev.describe(name, (e) => {
       total(3);
       total(10);
       dev.hr(-1, 5);
-      dev.button('add', async (e) => {
-        State.items.push(State.init.item());
-        const total = (e.state.current.debug.total ?? 0) + 1;
-        await e.change((d) => (local.total = d.debug.total = total));
-      });
+      dev.button('add', (e) => TestState.add(state));
     });
 
     dev.hr(5, 20);
 
     dev.section('Commands', (dev) => {
-      const dispatch = Model.List.commands(State.list);
+      const dispatch = Model.List.commands(TestState.list);
       dev.button('focus', (e) => Time.delay(0, dispatch.focus));
       dev.button('focus → blur', (e) =>
         Time.delay(0, () => {
@@ -193,15 +182,24 @@ export default Dev.describe(name, (e) => {
         Time.delay(0, () => dispatch.select(item, focus));
       };
       dev.button(['select: first', 'by index'], (e) => select(0));
-      dev.button(['select: first, focus', 'by index'], (e) => select(0, true));
-      dev.button(['select: first, focus', 'by id'], (e) => select(State.first.instance, true));
-      dev.button(['select: last, focus', 'by id'], (e) => select(State.last.instance, true));
+      dev.button(['select: first, focus', 'by id'], (e) =>
+        select(TestState.array.first.instance, true),
+      );
+      dev.hr(-1, 5);
+      dev.button(['select: last, focus', 'by index'], (e) =>
+        select(TestState.array.items.length - 1, true),
+      );
+      dev.button(['select: last, focus', 'by id'], (e) =>
+        select(TestState.array.last.instance, true),
+      );
 
       dev.hr(-1, 5);
 
-      dev.button('redraw: all', (e) => dispatch.redraw());
       dev.button(['redraw: first', 'by index'], (e) => dispatch.redraw(0));
-      dev.button(['redraw: first', 'by id'], (e) => dispatch.redraw(State.first.instance));
+      dev.button(['redraw: first', 'by id'], (e) =>
+        dispatch.redraw(TestState.array.first?.instance),
+      );
+      dev.button('redraw: all', (e) => dispatch.redraw());
     });
 
     dev.hr(5, 20);
@@ -235,7 +233,7 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('redraw (harness)', (e) => dev.redraw());
+      dev.button(['redraw', '(harness)'], (e) => dev.redraw());
     });
   });
 
@@ -244,14 +242,14 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const items = State.items.reduce((acc, next, i) => {
+      const items = TestState.array.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
         acc[key] = next.current;
         return acc;
       }, {} as Record<string, t.LabelItemState['current']>);
 
       const data = {
-        list: State.list.current,
+        list: TestState.list.current,
         items,
       };
 

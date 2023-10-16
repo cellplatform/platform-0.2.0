@@ -5,7 +5,7 @@ type O = Record<string, unknown>;
 type K = t.LabelItemActionKind;
 type FactoryOrInitial<A extends K = string, D extends O = O> =
   | t.LabelItem<A, D>
-  | (() => t.LabelItemState<A, D>);
+  | ((index: number) => t.LabelItemState<A, D>);
 
 /**
  * Helper for managing a set of items with a simple array.
@@ -18,7 +18,7 @@ export function array<A extends K = string, D extends O = O>(input?: FactoryOrIn
   const items: t.LabelItemState<A, D>[] = [];
   const getItem: t.GetLabelItem<A, D> = (target) => {
     if (typeof target === 'number') {
-      const item = items[target] ?? (items[target] = create(input));
+      const item = items[target] ?? (items[target] = create(target, input));
       return [item, target];
     } else {
       const index = items.findIndex((item) => item.instance === target);
@@ -47,6 +47,9 @@ export function array<A extends K = string, D extends O = O>(input?: FactoryOrIn
 /**
  * Helpers
  */
-function create<A extends K = string, D extends O = O>(input?: FactoryOrInitial<A, D>) {
-  return typeof input === 'function' ? input() : Item.state<A, D>(input);
+function create<A extends K = string, D extends O = O>(
+  index: number,
+  input?: FactoryOrInitial<A, D>,
+) {
+  return typeof input === 'function' ? input(index) : Item.state<A, D>(input);
 }

@@ -14,7 +14,7 @@ type O = Record<string, unknown>;
  */
 export type LabelList<D extends O = O> = {
   total: number;
-  getItem?: GetLabelItem;
+  getItem?: t.GetLabelItem;
   selected?: Id;
   focused?: boolean;
   cmd?: t.LabelListCmd; // Used to produce an event stream of commands.
