@@ -63,16 +63,6 @@ describe('LabelItem.Model', () => {
   });
 
   describe('Model.List.state', () => {
-    const { List } = Model;
-
-    function getItemsSample() {
-      const items: t.LabelItemState[] = [];
-      const getItem: t.GetLabelListItem = (index) => {
-        return items[index] ?? (items[index] = Model.Item.state());
-      };
-      return { items, getItem };
-    }
-
     describe('init', () => {
       it('defaults', () => {
         const state = Model.List.state();
@@ -80,39 +70,98 @@ describe('LabelItem.Model', () => {
       });
 
       it('{initial}', () => {
-        const getItem: t.GetLabelListItem = (index) => undefined;
+        const getItem: t.GetLabelItem = (index) => [undefined, -1];
         const state = Model.List.state({ total: 123, getItem });
         expect(state.current).to.eql({ total: 123, getItem });
       });
     });
 
+    describe('Model.List.array (helper)', () => {
+      it('init ← {initial}', () => {
+        const array1 = Model.List.array();
+        const array2 = Model.List.array({ label: 'foo' });
+        expect(array1.getItem(0)[0]?.current).to.eql({});
+        expect(array2.getItem(0)[0]?.current).to.eql({ label: 'foo' });
+      });
+
+      it('init ← factory function', () => {
+        const array = Model.List.array(() => Model.Item.state({ label: 'hello' }));
+        expect(array.getItem(0)[0]?.current).to.eql({ label: 'hello' });
+      });
+
+      it('getItem ← from index', () => {
+        const array = Model.List.array();
+        const [item, index] = array.getItem(0);
+        expect(item).to.equal(array.items[0]);
+        expect(index).to.equal(0);
+      });
+
+      it('getItem ← from id', () => {
+        const array = Model.List.array();
+        const [itemA, indexA] = array.getItem(0);
+        const [itemB, indexB] = array.getItem(itemA?.instance ?? '');
+        expect(itemA).to.equal(itemB);
+        expect(indexA).to.eql(indexB);
+      });
+
+      describe('helper props', () => {
+        it('first', () => {
+          const array = Model.List.array();
+          expect(array.first).to.eql(undefined);
+          const [item] = array.getItem(0);
+          expect(array.first).to.equal(item);
+        });
+
+        it('last', () => {
+          const array = Model.List.array();
+          expect(array.last).to.eql(undefined);
+          const [item] = array.getItem(9);
+          expect(array.last).to.equal(item);
+        });
+
+        it('length', () => {
+          const array = Model.List.array();
+          expect(array.length).to.eql(0);
+          array.getItem(9);
+          expect(array.length).to.eql(10);
+        });
+      });
+    });
+
     describe('items (fn)', () => {
-      it('returns nothing when no getter function', () => {
+      it('returns nothing: no getter function', () => {
         const state = Model.List.state();
         expect(state.current.getItem).to.eql(undefined);
-        expect(List.item(state, 0)).to.eql(undefined);
-        expect(List.item(state.current, 0)).to.eql(undefined);
+        expect(Model.List.getItem(state, 0)).to.eql([undefined, -1]);
+        expect(Model.List.getItem(state.current, 0)).to.eql([undefined, -1]);
+      });
+
+      it('returns nothing: no state param', () => {
+        expect(Model.List.getItem(undefined, 0)).to.eql([undefined, -1]);
       });
 
       it('returns item from getter function', () => {
-        const { items, getItem } = getItemsSample();
+        const { items, getItem } = Model.List.array();
         const state = Model.List.state({ total: 2, getItem });
 
-        const item1 = List.item(state, 0);
-        const item2 = List.item(state.current, 1);
+        const [itemA, indexA] = Model.List.getItem(state, 0);
+        const [itemB, indexB] = Model.List.getItem(state.current, 1);
 
-        expect(item1).to.eql(items[0]);
-        expect(item2).to.eql(items[1]);
+        expect(itemA).to.equal(items[0]);
+        expect(itemB).to.equal(items[1]);
+        expect([indexA, indexB]).to.eql([0, 1]);
 
-        expect(List.item(state.current, 0)).to.eql(item1);
-        expect(List.item(state, 1)).to.eql(item2);
+        // NB: same instance (repeat call).
+        expect(Model.List.getItem(state.current, 0)[0]).to.equal(itemA);
+        expect(Model.List.getItem(state, 1)[0]).to.equal(itemB);
       });
 
       it('out of bounds', () => {
-        const { items, getItem } = getItemsSample();
+        const { items, getItem } = Model.List.array();
         const state = Model.List.state({ total: 1, getItem });
-        expect(List.item(state, 2)).to.eql(undefined);
-        expect(items).to.eql([]);
+        expect(Model.List.getItem(state, -1)).to.eql([undefined, -1]);
+        expect(Model.List.getItem(state, 2)).to.eql([undefined, -1]);
+        expect(items).to.eql([]); // NB: no models instantiated.
       });
     });
 
