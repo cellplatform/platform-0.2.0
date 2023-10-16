@@ -12,6 +12,7 @@ export type * from './IFrame/types';
 export type * from './Icon/types';
 export type * from './LabelItem.Model/types';
 export type * from './LabelItem.Stateful/types';
+export type * from './LabelItem.VirtualList/types';
 export type * from './LabelItem/types';
 export type * from './Layout.Split/types';
 export type * from './Layout/types';

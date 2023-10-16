@@ -16,6 +16,7 @@ export const ModuleSpecs = {
   'sys.ui.common.IFrame': () => import('../ui/IFrame/-SPEC'),
   'sys.ui.common.LabelItem': () => import('../ui/LabelItem/-dev/-SPEC'),
   'sys.ui.common.LabelItem.Stateful': () => import('../ui/LabelItem.Stateful/-dev/-Spec'),
+  'sys.ui.common.LabelItem.VirtualList': () => import('../ui/LabelItem.VirtualList/-Spec'),
   'sys.ui.common.Layout.Split': () => import('../ui/Layout.Split/-SPEC'),
   'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/-SPEC'),
