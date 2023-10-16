@@ -1,7 +1,7 @@
-import { type t } from './common';
 import { Patch } from '../Json.Patch';
+import { type t } from './common';
 
-export const is = {
+export const Is = {
   state(input: any): input is t.PatchState<any> {
     if (input === null || typeof input !== 'object') return false;
     if (typeof input.instance !== 'string') return false;

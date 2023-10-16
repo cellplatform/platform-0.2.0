@@ -19,7 +19,7 @@ export const Model = {
     initial?: T,
   ): T {
     if (!Is.plainObject(input)) throw new Error('Not an object');
-    const item = PatchState.is.state(input) ? input.current : input;
+    const item = PatchState.Is.state(input) ? input.current : input;
     const res = (item.data ?? { ...initial } ?? {}) as T;
     if (Patch.isProxy(item) && !item.data) item.data = res;
     return res;

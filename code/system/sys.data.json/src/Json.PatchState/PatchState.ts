@@ -1,6 +1,6 @@
 import { Patch, rx, slug, type t } from './common';
 import { defaultEvents } from './PatchState.events';
-import { is } from './PathState.is';
+import { Is } from './PatchState.Is';
 
 type O = Record<string, unknown>;
 type Args<T extends O, E> = {
@@ -13,8 +13,11 @@ type Args<T extends O, E> = {
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
-  is,
+  Is,
 
+  /**
+   * Initialize a new <PathState> object.
+   */
   init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): t.PatchState<T, E> {
     const { onChange } = args;
     const $ = rx.subject<t.PatchChange<T>>();

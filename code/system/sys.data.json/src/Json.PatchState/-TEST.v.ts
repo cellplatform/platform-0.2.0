@@ -163,27 +163,27 @@ describe('PatchState', () => {
     });
   });
 
-  describe('is', () => {
-    it('is.proxy ← true', () => {
+  describe('PatchState.Is', () => {
+    it('Is.proxy ← true', () => {
       let proxy = false;
-      Patch.change({ foo: 123 }, (draft) => (proxy = PatchState.is.proxy(draft)));
+      Patch.change({ foo: 123 }, (draft) => (proxy = PatchState.Is.proxy(draft)));
       expect(proxy).to.eql(true);
     });
 
-    it('is.proxy ← false', () => {
+    it('Is.proxy ← false', () => {
       [undefined, null, {}, '', 123, true].forEach((value) => {
-        expect(PatchState.is.proxy(value)).to.eql(false);
+        expect(PatchState.Is.proxy(value)).to.eql(false);
       });
     });
 
-    it('is.state ← true', () => {
+    it('Is.state ← true', () => {
       const state = PatchState.init<T>({ initial });
-      expect(PatchState.is.state(state)).to.eql(true);
+      expect(PatchState.Is.state(state)).to.eql(true);
     });
 
-    it('is.state ← false', () => {
+    it('Is.state ← false', () => {
       [undefined, null, {}, '', 123, true].forEach((value) => {
-        expect(PatchState.is.state(value)).to.eql(false);
+        expect(PatchState.Is.state(value)).to.eql(false);
       });
     });
   });
