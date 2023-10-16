@@ -17,7 +17,6 @@ type T = {
   };
 };
 const initial: T = { debug: {} };
-
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
