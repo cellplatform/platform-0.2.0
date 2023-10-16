@@ -18,6 +18,7 @@
     "react-icons": "4.11.0",
     "react-spinners": "0.13.8",
     "react-inspector": "6.0.2",
+    "react-virtuoso": "4.6.1",
     "sys.text": "0.0.0",
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.util": "0.0.0",
