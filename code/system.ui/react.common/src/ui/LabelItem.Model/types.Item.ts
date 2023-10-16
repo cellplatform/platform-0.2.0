@@ -1,11 +1,14 @@
 import type { t } from './common';
 
+type Id = string;
+type Index = number;
 type O = Record<string, unknown>;
+type K = t.LabelItemActionKind;
 
 /**
  * Item (Data Model)
  */
-export type LabelItem<A extends t.LabelItemActionKind = string, D extends O = O> = {
+export type LabelItem<A extends K = string, D extends O = O> = {
   label?: string;
   placeholder?: string;
   enabled?: boolean;
@@ -20,18 +23,26 @@ export type LabelItem<A extends t.LabelItemActionKind = string, D extends O = O>
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState<
-  A extends t.LabelItemActionKind = string,
-  D extends O = O,
-> = t.ImmutableRef<t.LabelItem<A, D>, t.LabelItemEvents<A, D>>;
+export type LabelItemState<A extends K = string, D extends O = O> = t.ImmutableRef<
+  t.LabelItem<A, D>,
+  t.LabelItemEvents<A, D>
+>;
+
+/**
+ * Retrieve item.
+ */
+export type GetLabelItem<A extends K = string, D extends O = O> = (
+  target: Index | Id,
+) => LabelItemStateIndex<A, D>;
+export type LabelItemStateIndex<A extends K = string, D extends O = O> = [
+  t.LabelItemState<A, D> | undefined,
+  Index,
+];
 
 /**
  * Events API
  */
-export type LabelItemEvents<
-  A extends t.LabelItemActionKind = string,
-  D extends O = O,
-> = t.Lifecycle & {
+export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelItem<A, D>>>;
   readonly key: {
     readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
@@ -88,12 +99,12 @@ export type LabelItemClipboard = { action: 'Cut' | 'Copy' | 'Paste'; tx: string 
 export type LabelItemRedrawCmd = { type: 'Item:Redraw'; payload: LabelItemRedraw };
 export type LabelItemRedraw = { tx: string };
 
-export type LabelItemActionInvokedCmd<K extends t.LabelItemActionKind = string> = {
+export type LabelItemActionInvokedCmd<A extends K = string> = {
   type: 'Item:Action';
-  payload: LabelItemActionInvoked<K>;
+  payload: LabelItemActionInvoked<A>;
 };
-export type LabelItemActionInvoked<K extends t.LabelItemActionKind = string> = {
-  kind: K;
+export type LabelItemActionInvoked<A extends K = string> = {
+  kind: A;
   position: t.LabelItemPosition;
   focused: boolean;
   selected: boolean;

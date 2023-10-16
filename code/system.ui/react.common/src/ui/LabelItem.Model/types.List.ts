@@ -1,8 +1,8 @@
 import type { t } from './common';
 
-type O = Record<string, unknown>;
-type ItemId = string;
+type Id = string;
 type Index = number;
+type O = Record<string, unknown>;
 
 /**
  * List
@@ -14,14 +14,12 @@ type Index = number;
  */
 export type LabelList<D extends O = O> = {
   total: number;
-  selected?: ItemId;
+  getItem?: GetLabelItem;
+  selected?: Id;
   focused?: boolean;
   cmd?: t.LabelListCmd; // Used to produce an event stream of commands.
   data?: D;
-  getItem?: GetLabelListItem;
-};
 
-export type GetLabelListItem = (index: Index) => t.LabelItemState | undefined;
 
 export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.LabelListEvents<D>>;
 
@@ -44,8 +42,8 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  * (events as a property stream)
  */
 export type LabelListDispatch = {
-  select(item: Index | ItemId, focus?: boolean): void;
-  redraw(item?: Index | ItemId): void;
+  select(item: Index | Id, focus?: boolean): void;
+  redraw(item?: Index | Id): void;
   focus(focus?: boolean): void;
   blur(): void;
 };
@@ -56,7 +54,7 @@ export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocus };
 export type LabelListFocus = { focus: boolean; tx: string };
 
 export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelect };
-export type LabelListSelect = { item: Index | ItemId; focus: boolean; tx: string };
+export type LabelListSelect = { item: Index | Id; focus: boolean; tx: string };
 
 export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedraw };
-export type LabelListRedraw = { item?: Index | ItemId; tx: string };
+export type LabelListRedraw = { item?: Index | Id; tx: string };

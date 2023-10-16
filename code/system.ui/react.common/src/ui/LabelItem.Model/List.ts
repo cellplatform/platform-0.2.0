@@ -1,14 +1,18 @@
+import { array } from './List.array';
 import { commands } from './List.commands';
 import { events } from './List.events';
+import { getItem } from './List.getItem';
 import { DEFAULTS, PatchState, type t } from './common';
 
 type O = Record<string, unknown>;
 
 export const List = {
   commands,
+  getItem,
+  array,
 
   /**
-   * An observable list state.
+   * Create a new observable <List> state object.
    */
   state<D extends O = O>(initial?: t.LabelList<D>): t.LabelListState {
     type T = t.LabelList<D>;
@@ -17,28 +21,5 @@ export const List = {
       initial: initial ?? (DEFAULTS.data.list as t.LabelList<D>),
       events,
     });
-  },
-
-  /**
-   * Retrieve the item at the given index.
-   */
-  item<A extends t.LabelItemActionKind = string, D extends O = O>(
-    state: t.LabelList | t.LabelListState,
-    index: number,
-  ) {
-    const current = Wrangle.current(state);
-    if (!current?.getItem || index > current.total - 1) return undefined;
-    const res = current.getItem(index);
-    return res ? (res as t.LabelItemState<A, D>) : undefined;
-  },
-} as const;
-
-/**
- * Helpers
- */
-
-export const Wrangle = {
-  current<D extends O = O>(input: t.LabelList<D> | t.LabelListState<D>) {
-    return PatchState.is.state(input) ? input.current : input;
   },
 } as const;
