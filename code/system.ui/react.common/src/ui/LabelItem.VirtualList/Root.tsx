@@ -1,20 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
+import { Virtuoso } from 'react-virtuoso';
+
 const View: React.FC<t.RootProps> = (props) => {
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
+      position: 'relative',
+      display: 'grid',
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${Root.displayName}`}</div>
+      <Virtuoso
+        style={{}}
+        totalCount={200}
+        overscan={50}
+        itemContent={(index) => <div>Item {index}</div>}
+      />
     </div>
   );
 };
