@@ -150,7 +150,12 @@ export const Config = {
       const hasPlugin = (...items: t.VitePlugin[]) => items.some((name) => plugins.includes(name));
 
       if (hasPlugin('web:react')) {
-        const million = (await import('million/compiler')).default; // https://million.dev/docs (speed)
+        /**
+         * https://million.dev/docs
+         * Million.js → This is a provisional test, only keep if there are
+         *              no problems and there is an apparent speed advantage.
+         */
+        const million = (await import('million/compiler')).default;
         const react = (await import('@vitejs/plugin-react')).default;
         const hmr = e.mode === 'development';
         config.plugins?.push(million.vite({ mode: 'react', hmr }));
