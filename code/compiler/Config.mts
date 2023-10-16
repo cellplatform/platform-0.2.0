@@ -150,7 +150,10 @@ export const Config = {
       const hasPlugin = (...items: t.VitePlugin[]) => items.some((name) => plugins.includes(name));
 
       if (hasPlugin('web:react')) {
+        const million = (await import('million/compiler')).default; // https://million.dev/docs (speed)
         const react = (await import('@vitejs/plugin-react')).default;
+        const hmr = e.mode === 'development';
+        config.plugins?.push(million.vite({ mode: 'react', hmr }));
         config.plugins?.push(react());
       }
 
