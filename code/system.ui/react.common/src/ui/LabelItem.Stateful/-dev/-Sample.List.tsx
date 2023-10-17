@@ -12,25 +12,22 @@ export type SampleListProps = {
 
 export const SampleList: React.FC<SampleListProps> = (props) => {
   const { useBehaviors, list, renderers, debug = {} } = props;
-  const { ref, Provider } = LabelItem.Stateful.useListController({ useBehaviors, list });
+  const controller = LabelItem.Stateful.useListController({ useBehaviors, list });
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      outline: 'none',
-    }),
+    base: css({ position: 'relative', outline: 'none' }),
   };
 
   const length = list?.current.total ?? 0;
   const elements = Array.from({ length }).map((_, i) => {
     const [item] = LabelItem.Model.List.getItem(list, i);
     if (!item) return null;
-
     return (
       <LabelItem.Stateful
+        {...controller.handlers}
         key={item.instance}
         index={i}
         total={length}
@@ -39,20 +36,17 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
         renderers={renderers}
         useBehaviors={useBehaviors}
         renderCount={debug.renderCount ? itemRenderCount : undefined}
-        onChange={(e) => {
-          // console.info(`⚡️ onChange[${i}]`, e);
-        }}
       />
     );
   });
 
   return (
-    <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+    <controller.Provider>
+      <div ref={controller.ref} {...css(styles.base, props.style)}>
         {debug.renderCount && <RenderCount {...listRenderCount} />}
         <div>{elements}</div>
       </div>
-    </Provider>
+    </controller.Provider>
   );
 };
 

@@ -1,19 +1,14 @@
 import { LabelItem } from '../LabelItem/Root';
 import { DEFAULTS, type t } from './common';
 import { useItemController } from './use';
+import { Wrangle } from './Wrangle';
 
 /**
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const {
-    index,
-    total,
-    list,
-    item,
-    onChange,
-    useBehaviors = DEFAULTS.useBehaviors.defaults,
-  } = props;
+  const { index, total, list, item, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const handlers = Wrangle.pluckHandlers(props);
 
   const isSelected = item && list && list.current.selected === item.instance;
   const isEditing = item && list && list.current.editing === item.instance;
@@ -22,14 +17,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   /**
    * Roll-up controller.
    */
-  const controller = useItemController({
-    index,
-    total,
-    item,
-    list,
-    onChange,
-    useBehaviors,
-  });
+  const controller = useItemController({ index, total, list, item, useBehaviors, handlers });
 
   /**
    * Render

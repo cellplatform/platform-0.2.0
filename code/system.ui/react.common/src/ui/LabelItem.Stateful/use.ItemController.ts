@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { DEFAULTS, ListContext, Model, type t } from './common';
+import { useEffect, useState } from 'react';
+import { DEFAULTS, Model, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { useBubbleEvents } from './use.ItemController.bubble';
@@ -14,7 +14,6 @@ type Args = {
   item?: t.LabelItemState;
   list?: t.LabelListState;
   handlers?: t.LabelItemPropsHandlers;
-  onChange?: t.LabelItemStateChangeHandler;
 };
 
 /**
@@ -35,11 +34,7 @@ export function useItemController(args: Args) {
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
-
-  const onChange: t.LabelItemStateChangeHandler = (e) => {
-    dispatch.changed(e);
-    args.onChange?.(e);
-  };
+  const onChange: t.LabelItemStateChangedHandler = (e) => dispatch.changed(e);
 
   const selection = useItemSelectionController({
     enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
@@ -47,7 +42,7 @@ export function useItemController(args: Args) {
     item,
     list,
     onChange,
-    handlers: args.handlers ?? {}, // NB: passed in from prior controller (if there was one).
+    handlers: args.handlers,
   });
 
   const edit = useItemEditController({

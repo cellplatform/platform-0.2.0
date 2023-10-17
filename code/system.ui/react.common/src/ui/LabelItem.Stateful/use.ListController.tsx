@@ -1,66 +1,51 @@
-import { useEffect, useRef } from 'react';
-import { ActiveElement, DEFAULTS, Focus, ListContext, Model, type t } from './common';
-
+import { useRef, useState } from 'react';
 import { Wrangle } from './Wrangle';
+import { DEFAULTS, ListContext, Model, type t } from './common';
 import { useListNavigationController } from './use.ListNavigationController';
 
-type Args = {
+type Props = {
   enabled?: boolean;
   useBehaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
-  items?: t.LabelItemState[];
 };
 
 /**
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
-export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
-  const { items = [], useBehaviors = DEFAULTS.useBehaviors.defaults } = args;
-  const enabled =
-    (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation');
+export function useListController<H extends HTMLElement = HTMLDivElement>(props: Props) {
+  const enabled = Wrangle.enabled(props, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
-  const eventsRef = useRef<t.LabelListEvents>();
   const dispatchRef = useRef<t.LabelListDispatch>();
-  const listRef = useRef(args.list ?? Model.List.state());
+  const listRef = useRef(props.list ?? Model.List.state());
   const list = listRef.current;
 
   /**
-   * Monitor and sync the list's focus state.
+   * Hook into event handlers passed down to the <Item>.
    */
-  useEffect(() => {
-    const isFocused = () => Focus.containsFocus(ref);
-    const monitor = ActiveElement.listen(() => list?.change((d) => (d.focused = isFocused())));
-    return monitor.dispose;
-  }, [ref.current]);
+  const handlers: t.LabelItemPropsHandlers = {
+    onFocusChange(e) {
+      list?.change((d) => (d.focused = e.focused));
+    },
+  };
 
   /**
    * Sub-controllers.
    */
   useListNavigationController({
+    enabled: enabled && Wrangle.enabled(props, 'List', 'List.Navigation'),
     ref,
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'List', 'List.Navigation'),
-    items,
     list,
   });
 
   /**
-   * Initialize
-   */
-  useEffect(() => {
-    const events = (eventsRef.current = list.events());
-    const dispatch = (dispatchRef.current = Model.List.commands(list));
-    return events.dispose;
-  }, []);
-
-  /**
    * API
    */
-  const api = {
-    kind: 'controller:List',
+  return {
     ref,
     enabled,
-    items,
+    handlers,
+    list,
     get current() {
       return list?.current ?? DEFAULTS.data.list;
     },
@@ -76,5 +61,4 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
       return <Provider value={value}>{props.children}</Provider>;
     },
   } as const;
-  return api;
 }
