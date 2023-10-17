@@ -1,5 +1,8 @@
 import type { t } from './common';
 
+export type * from './types.props';
+export type * from './types.event';
+
 export type LabelItemPosition = { index: number; total: number };
 
 /**
@@ -47,46 +50,6 @@ export type LabelItemActionRenderHelpers = {
 };
 
 /**
- * Component (View)
- */
-export type LabelItemProps = {
-  total?: number;
-  index?: number;
-  id?: string;
-  item?: t.LabelItem;
-  renderers?: t.LabelItemRenderers;
-
-  focused?: boolean;
-  selected?: boolean;
-  editing?: boolean;
-
-  focusOnReady?: boolean;
-  focusOnEdit?: boolean;
-  tabIndex?: number;
-  maxLength?: number;
-  debug?: boolean;
-
-  style?: t.CssValue;
-  indent?: number;
-  padding?: t.CssEdgesInput;
-  borderRadius?: number;
-  renderCount?: t.RenderCountProps;
-} & LabelItemPropsHandlers;
-
-export type LabelItemPropsHandlers = {
-  onReady?: LabelItemReadyHandler;
-  onEditChange?: LabelItemChangeHandler;
-  onKeyDown?: LabelItemKeyHandler;
-  onKeyUp?: LabelItemKeyHandler;
-  onFocusChange?: LabelItemFocusHandler;
-  onClick?: LabelItemClickHandler;
-  onDoubleClick?: LabelItemClickHandler;
-  onLabelDoubleClick?: LabelItemClickHandler;
-  onEditClickAway?: LabelItemClickHandler;
-  onActionClick?: t.LabelItemActionHandler;
-};
-
-/**
  * ref={ ƒ }
  */
 export type LabelItemRef = {
@@ -96,55 +59,4 @@ export type LabelItemRef = {
   selectAll(): void;
   cursorToStart(): void;
   cursorToEnd(): void;
-};
-
-/**
- * Events
- */
-export type LabelItemReadyHandler = (e: LabelItemReadyHandlerArgs) => void;
-export type LabelItemReadyHandlerArgs = {
-  position: LabelItemPosition;
-  ref: LabelItemRef;
-};
-
-export type LabelItemChangeHandler = (e: LabelItemChangeHandlerArgs) => void;
-export type LabelItemChangeHandlerArgs = {
-  position: LabelItemPosition;
-  label: string;
-};
-
-export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
-export type LabelItemActionHandlerArgs = {
-  position: LabelItemPosition;
-  kind: LabelItemActionKind;
-  focused: boolean;
-  selected: boolean;
-  editing: boolean;
-};
-
-export type LabelItemKeyHandler = (e: LabelItemKeyHandlerArgs) => void;
-export type LabelItemKeyHandlerArgs = {
-  position: LabelItemPosition;
-  focused: boolean;
-  selected: boolean;
-  editing: boolean;
-  code: string;
-  is: t.KeyboardKeyFlags;
-  keypress: t.KeyboardKeypressProps;
-};
-
-export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;
-export type LabelItemFocusHandlerArgs = {
-  position: LabelItemPosition;
-  focused: boolean;
-};
-
-export type LabelItemClickHandler = (e: LabelItemClickHandlerArgs) => void;
-export type LabelItemClickHandlerArgs = {
-  position: LabelItemPosition;
-  focused: boolean;
-  selected: boolean;
-  editing: boolean;
-  target: 'Item' | 'Item:Label' | 'Item:Action' | 'Away';
-  kind: 'Single' | 'Double';
 };
