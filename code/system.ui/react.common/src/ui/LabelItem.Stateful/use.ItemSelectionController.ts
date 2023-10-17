@@ -57,8 +57,7 @@ export function useItemSelectionController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelItemController<'controller:Item.Selection'> = {
-    kind: 'controller:Item.Selection',
+  const api = {
     enabled,
     handlers,
     get current() {

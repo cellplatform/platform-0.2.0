@@ -157,13 +157,12 @@ export function useItemEditController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelItemController<'controller:Item.Edit'> = {
-    kind: 'controller:Item.Edit',
+  const api = {
     enabled,
     handlers,
     get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
-  };
+  } as const;
   return api;
 }

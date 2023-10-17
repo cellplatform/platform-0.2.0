@@ -73,13 +73,11 @@ export function useItemController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelItemController<'controller:Item'> = {
-    kind: 'controller:Item',
+  return {
     enabled,
     handlers,
     get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
   };
-  return api;
 }

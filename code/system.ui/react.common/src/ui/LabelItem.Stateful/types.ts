@@ -30,22 +30,6 @@ export type LabelListContext = {
 };
 
 /**
- * Controller API's
- */
-export type LabelItemController<Kind extends string> = {
-  readonly kind: Kind;
-  readonly enabled: boolean;
-  readonly current: t.LabelItem;
-  readonly handlers: t.LabelItemPropsHandlers;
-};
-
-export type LabelListController<Kind extends string, H extends HTMLElement> = {
-  readonly kind: Kind;
-  readonly ref: React.RefObject<H>;
-  readonly enabled: boolean;
-};
-
-/**
  * Events.
  */
 export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;

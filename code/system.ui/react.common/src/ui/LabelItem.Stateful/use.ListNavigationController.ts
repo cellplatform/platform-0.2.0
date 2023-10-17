@@ -58,10 +58,5 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
   /**
    * API
    */
-  const api: t.LabelListController<'controller:List.Navigation', H> = {
-    kind: 'controller:List.Navigation',
-    ref,
-    enabled,
-  } as const;
-  return api;
+  return { ref, enabled } as const;
 }
