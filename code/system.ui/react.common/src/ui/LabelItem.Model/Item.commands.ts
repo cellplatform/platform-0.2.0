@@ -10,7 +10,7 @@ export function commands(item?: t.LabelItemState) {
       dispatch({ type: 'Item:Redraw', payload: { tx: slug() } });
     },
 
-    changed(e: t.LabelItemStateChangeHandlerArgs) {
+    changed(e: t.LabelItemStateChangedHandlerArgs) {
       dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
     },
 

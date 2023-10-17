@@ -32,7 +32,7 @@ export type LabelItemProps = {
  */
 export type LabelItemPropsHandlers = {
   onReady?: t.LabelItemReadyHandler;
-  onEditChange?: t.LabelItemChangeHandler;
+  onEditChange?: t.LabelItemChangedHandler;
   onKeyDown?: t.LabelItemKeyHandler;
   onKeyUp?: t.LabelItemKeyHandler;
   onFocusChange?: t.LabelItemFocusHandler;

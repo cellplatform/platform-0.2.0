@@ -9,7 +9,7 @@ export type LabelItemReadyHandlerArgs = {
   ref: t.LabelItemRef;
 };
 
-export type LabelItemChangeHandler = (e: LabelItemChangeHandlerArgs) => void;
+export type LabelItemChangedHandler = (e: LabelItemChangeHandlerArgs) => void;
 export type LabelItemChangeHandlerArgs = {
   position: t.LabelItemPosition;
   label: string;

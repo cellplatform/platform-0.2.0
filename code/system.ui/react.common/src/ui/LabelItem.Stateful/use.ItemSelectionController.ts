@@ -7,7 +7,7 @@ type Args = {
   list?: t.LabelListState;
   item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
-  onChange?: t.LabelItemStateChangeHandler;
+  onChange?: t.LabelItemStateChangedHandler;
 };
 
 /**

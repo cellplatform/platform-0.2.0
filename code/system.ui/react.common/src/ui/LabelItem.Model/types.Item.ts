@@ -72,7 +72,7 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
  */
 export type LabelItemDispatch = {
   redraw(): void;
-  changed(e: t.LabelItemStateChangeHandlerArgs): void;
+  changed(e: t.LabelItemStateChangedHandlerArgs): void;
   action(e: t.LabelItemActionHandlerArgs): void;
   click(e: t.LabelItemClickHandlerArgs): void;
   clipboard(e: t.LabelItemClipboard['action']): void;
@@ -115,4 +115,4 @@ export type LabelItemClickCmd = { type: 'Item:Click'; payload: LabelItemClick };
 export type LabelItemClick = t.LabelItemClickHandlerArgs & { tx: string };
 
 export type LabelItemChangedCmd = { type: 'Item:Changed'; payload: LabelItemChanged };
-export type LabelItemChanged = t.LabelItemStateChangeHandlerArgs & { tx: string };
+export type LabelItemChanged = t.LabelItemStateChangedHandlerArgs & { tx: string };
