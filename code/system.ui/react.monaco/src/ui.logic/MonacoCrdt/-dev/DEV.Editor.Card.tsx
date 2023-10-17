@@ -9,7 +9,7 @@ export type DevEditorCardProps = {
 
 export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
   const { name, doc } = props;
-  const [_, setCount] = useState(0);
+  const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
   const codeString = doc.current.code.toString();

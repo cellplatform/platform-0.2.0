@@ -16,7 +16,7 @@ export const DevRow: React.FC<DevRowProps> = (props) => {
   const peer = remote.peer;
 
   const [isConnecting, setConnecting] = useState(false);
-  const [_, setCount] = useState(0);
+  const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
   const short = `peer:${Value.shortenHash(remote.peer.id, [5, 0])}`;
