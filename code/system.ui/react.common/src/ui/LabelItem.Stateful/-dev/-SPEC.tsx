@@ -65,27 +65,22 @@ export default Dev.describe(name, (e) => {
         events.cmd.action.on('left').subscribe((e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
-
-        events.cmd.action.on('foobar').subscribe((e) => {
+        events.cmd.action.on('right').subscribe((e) => {
           TestState.add(dev);
-          const dispatch = Model.List.commands(TestState.list);
-          // Time.delay(100, () => dispatch.focus);
         });
 
-        events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
+        // events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
         // events.cmd.click$.subscribe((e) => console.info(`⚡️ click$ [${e.position.index}]`, e));
 
         return state;
       },
     } as const,
 
-    async add(dev: t.DevCtxState<T>) {
-      TestState.list.change((d) => (d.total += 1));
-      const total = TestState.list.current.total;
+    async add(dev: t.DevCtxState<T>, focus?: boolean) {
+      const total = TestState.list.current.total + 1;
+      TestState.list.change((d) => (d.total = total));
       await dev.change((d) => (local.total = d.debug.total = total));
-
-      // const dispatch = Model.List.commands(State.list);
-      // dispatch.focus();
+      if (focus) Model.List.commands(TestState.list).focus();
     },
   };
 
@@ -159,12 +154,14 @@ export default Dev.describe(name, (e) => {
       total(10);
       dev.hr(-1, 5);
       dev.button('add', (e) => TestState.add(state));
+      dev.button('add → focus', (e) => TestState.add(state, true));
     });
 
     dev.hr(5, 20);
 
     dev.section('Commands', (dev) => {
       const dispatch = Model.List.commands(TestState.list);
+
       dev.button('focus', (e) => Time.delay(0, dispatch.focus));
       dev.button('focus → blur', (e) =>
         Time.delay(0, () => {
@@ -196,7 +193,9 @@ export default Dev.describe(name, (e) => {
       dev.button(['redraw: first', 'by id'], (e) =>
         dispatch.redraw(TestState.array.first?.instance),
       );
-      dev.button('redraw: all', (e) => dispatch.redraw());
+
+      dev.hr(-1, 5);
+      dev.button(['redraw: all', '(list)'], (e) => dispatch.redraw());
     });
 
     dev.hr(5, 20);

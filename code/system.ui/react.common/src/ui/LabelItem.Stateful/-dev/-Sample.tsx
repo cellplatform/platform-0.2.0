@@ -1,13 +1,13 @@
 import { DEFAULTS, Icons, type t } from '../common';
 
-export type SampleActionKind = 'left' | 'foobar';
+export type SampleActionKind = 'left' | 'right';
 
 export const Sample = {
   item() {
     const initial: t.LabelItem<SampleActionKind> = {
       label: 'hello 👋',
       left: { kind: 'left' },
-      right: { kind: 'foobar' },
+      right: { kind: 'right' },
     };
 
     return { initial } as const;
@@ -25,7 +25,7 @@ export const Sample = {
         switch (kind) {
           case 'left':
             return (e) => <Icons.Repo {...helpers.icon(e, 17, [0, 1])} />;
-          case 'foobar':
+          case 'right':
             return (e) => <Icons.ObjectTree {...helpers.icon(e, 17)} />;
         }
       },
