@@ -56,8 +56,9 @@ export type LabelItemProps = {
   item?: t.LabelItem;
   renderers?: t.LabelItemRenderers;
 
-  selected?: boolean;
   focused?: boolean;
+  selected?: boolean;
+  editing?: boolean;
 
   focusOnReady?: boolean;
   focusOnEdit?: boolean;

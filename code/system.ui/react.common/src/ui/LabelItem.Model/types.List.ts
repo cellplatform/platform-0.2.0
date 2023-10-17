@@ -5,21 +5,17 @@ type Index = number;
 type O = Record<string, unknown>;
 
 /**
- * List
- */
-
-/**
- * Context for when an item exists
- * within the context of a list.
+ * Model for a list of <Item>'s.
  */
 export type LabelList<D extends O = O> = {
   total: number;
   getItem?: t.GetLabelItem;
   selected?: Id;
+  editing?: Id;
   focused?: boolean;
   cmd?: t.LabelListCmd; // Used to produce an event stream of commands.
   data?: D;
-
+};
 
 export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.LabelListEvents<D>>;
 

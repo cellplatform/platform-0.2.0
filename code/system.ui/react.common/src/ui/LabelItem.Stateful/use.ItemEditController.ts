@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Wrangle } from './Wrangle';
 import { DEFAULTS, Keyboard, rx, type t } from './common';
 
-type Revertible = t.LabelItem & { _revert?: { label?: string } };
-type RevertibleNext = t.ImmutableNext<Revertible>;
+type RevertibleItem = t.LabelItem & { _revert?: { label?: string } };
+type ChangeItem = t.ImmutableNext<RevertibleItem>;
+type ChangeList = t.ImmutableNext<t.LabelList>;
 
 type Args = {
   position: t.LabelItemPosition;
@@ -29,9 +29,10 @@ export function useItemEditController(args: Args) {
    */
   type A = t.LabelItemChangeAction;
   const fire = (action: A) => args.onChange?.({ action, position, item: api.current });
-  const change = (action: A, fn: RevertibleNext) => {
-    if (!item || !enabled) return;
-    item.change(fn);
+  const change = (action: A, changeList: ChangeList, changeItem: ChangeItem) => {
+    if (!(enabled && list && item)) return;
+    list.change(changeList);
+    item.change(changeItem);
     fire(action);
     redraw();
   };
@@ -39,9 +40,8 @@ export function useItemEditController(args: Args) {
   const Edit = {
     is: {
       get editing() {
-        return Boolean(item?.current.editing);
+        return Boolean(item?.instance === list?.current.editing);
       },
-
       get editable() {
         return item?.current?.editable ?? DEFAULTS.editable;
       },
@@ -49,26 +49,33 @@ export function useItemEditController(args: Args) {
 
     start() {
       if (Edit.is.editing || !Edit.is.editable) return;
-      change('edit:start', (draft) => {
-        draft.editing = true;
-        (draft._revert || (draft._revert = {})).label = draft.label;
-      });
+      change(
+        'edit:start',
+        (list) => (list.editing = item?.instance),
+        (item) => ((item._revert || (item._revert = {})).label = item.label),
+      );
     },
 
     accept() {
       if (!Edit.is.editing) return;
-      change('edit:accept', (draft) => {
-        draft.editing = false;
-        delete draft._revert;
-      });
+      change(
+        'edit:accept',
+        (list) => (list.editing = undefined),
+        (item) => delete item._revert,
+      );
     },
 
     cancel() {
       if (!Edit.is.editing) return;
-      change('edit:cancel', (draft) => {
-        if (draft._revert) draft.label = draft._revert.label;
-        draft.editing = false;
-      });
+
+      change(
+        'edit:accept',
+        (list) => (list.editing = undefined),
+        (item) => {
+          if (item._revert) item.label = item._revert.label;
+          delete item._revert;
+        },
+      );
     },
 
     toggle() {
@@ -88,12 +95,21 @@ export function useItemEditController(args: Args) {
 
     onReady(e) {
       setRef(e.ref);
+      change(
+        'ready',
+        (list) => null,
+        (item) => null,
+      );
       args.handlers?.onReady?.(e);
-      change('ready', (d) => null);
     },
 
     onEditChange(e) {
-      change('label', (draft) => (draft.label = e.label));
+      change(
+        'label',
+        (list) => null,
+        (item) => (item.label = e.label),
+      );
+
       args.handlers?.onEditChange?.(e);
     },
 
@@ -127,12 +143,10 @@ export function useItemEditController(args: Args) {
 
     keyboard.on({
       Escape(e) {
-        if (!isSelected()) return;
-        Edit.cancel();
+        if (isSelected()) Edit.cancel();
       },
       Enter(e) {
-        if (!isSelected()) return;
-        Edit.toggle();
+        if (isSelected()) Edit.toggle();
       },
     });
 

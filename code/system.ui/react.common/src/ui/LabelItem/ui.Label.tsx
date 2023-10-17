@@ -13,19 +13,16 @@ export const Label: React.FC<Props> = (props) => {
     inputRef,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
-    selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
-    focused = DEFAULTS.focused,
     focusOnReady = DEFAULTS.focusOnReady,
+    focused = DEFAULTS.focused,
+    selected = DEFAULTS.selected,
+    editing = DEFAULTS.editing,
     renderers = DEFAULTS.renderers,
     item = {},
     debug,
   } = props;
-  const {
-    enabled = DEFAULTS.enabled,
-    editing = DEFAULTS.editing,
-    placeholder = DEFAULTS.placeholder,
-  } = item;
+  const { enabled = DEFAULTS.enabled, placeholder = DEFAULTS.placeholder } = item;
   const label = Wrangle.labelText(item);
 
   /**

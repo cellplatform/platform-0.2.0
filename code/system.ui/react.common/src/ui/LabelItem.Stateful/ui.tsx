@@ -14,7 +14,9 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
     onChange,
     useBehaviors = DEFAULTS.useBehaviors.defaults,
   } = props;
-  const isSelected = item && list && item.instance === list.current.selected;
+
+  const isSelected = item && list && list.current.selected === item.instance;
+  const isEditing = item && list && list.current.editing === item.instance;
   const isFocused = isSelected && list?.current.focused;
 
   /**
@@ -40,8 +42,9 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       total={props.total}
       renderers={props.renderers}
       item={controller.current}
-      selected={isSelected}
       focused={isFocused}
+      selected={isSelected}
+      editing={isEditing}
       focusOnEdit={true}
       renderCount={props.renderCount}
       debug={props.debug}

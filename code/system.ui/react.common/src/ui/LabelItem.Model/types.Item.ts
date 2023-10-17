@@ -12,7 +12,6 @@ export type LabelItem<A extends K = string, D extends O = O> = {
   label?: string;
   placeholder?: string;
   enabled?: boolean;
-  editing?: boolean;
   editable?: boolean;
   cmd?: t.LabelItemCmd; // Used to produce an event stream of commands.
   left?: t.LabelItemAction<A> | t.LabelItemAction<A>[] | null;

@@ -44,8 +44,6 @@ export default Dev.describe(name, (e) => {
         });
       },
       item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
-        console.log('init item', index);
-
         const Model = LabelItem.Stateful.Model;
 
         const { initial } = Sample.item();

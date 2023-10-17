@@ -20,11 +20,12 @@ export const View: React.FC<Props> = (props) => {
     tabIndex = DEFAULTS.tabIndex,
     focused = DEFAULTS.focused,
     selected = DEFAULTS.selected,
+    editing = DEFAULTS.editing,
     borderRadius = DEFAULTS.borderRadius,
     item = {},
     debug,
   } = props;
-  const { enabled = DEFAULTS.enabled, editing = DEFAULTS.editing } = item;
+  const { enabled = DEFAULTS.enabled } = item;
   const position = { index, total };
 
   const ref = useRef<HTMLDivElement>(null);

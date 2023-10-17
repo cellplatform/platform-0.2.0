@@ -15,7 +15,6 @@ type Args = {
  */
 export function useItemSelectionController(args: Args) {
   const { list, item, enabled = true, position } = args;
-
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 

@@ -15,11 +15,10 @@ const initial: T = {
 };
 
 const name = LabelItem.displayName ?? '';
-
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.LabelItemProps, 'selected' | 'indent' | 'padding' | 'focused' | 'debug'> &
-    Pick<t.LabelItem, 'label' | 'placeholder' | 'enabled' | 'editing'>;
+    Pick<t.LabelItemProps, 'focused' | 'editing' | 'selected' | 'indent' | 'padding' | 'debug'> &
+    Pick<t.LabelItem, 'label' | 'placeholder' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
     label: undefined,
@@ -82,8 +81,8 @@ export default Dev.describe(name, (e) => {
       d.item.placeholder = local.placeholder;
       d.item.right = Sample.actions().right;
       d.item.enabled = local.enabled;
-      d.item.editing = local.editing;
 
+      d.props.editing = local.editing;
       d.props.selected = local.selected;
       d.props.indent = local.indent;
       d.props.padding = local.padding;
@@ -160,12 +159,14 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.item, 'enabled'))));
       });
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.item.editing);
+        const value = (state: T) => Boolean(state.props.editing);
         btn
-          .label((e) => `item.editing`)
+          .label((e) => `editing`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.item, 'editing'))));
+          .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
       });
 
       dev.boolean((btn) => {
@@ -223,22 +224,24 @@ export default Dev.describe(name, (e) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.item.enabled;
+
         local.selected = data.props.selected;
-        local.editing = data.item.editing;
+        local.editing = data.props.editing;
         local.padding = data.props.padding;
         local.indent = data.props.indent;
         local.debug = data.props.debug;
+
         local.subjectBg = data.debug.subjectBg;
       };
 
       dev.button('default', async (e) => {
         await e.change((d) => {
           d.item.enabled = DEFAULTS.enabled;
-          d.item.editing = DEFAULTS.editing;
+          d.props.editing = DEFAULTS.editing;
           d.props.selected = DEFAULTS.selected;
+          d.props.focused = DEFAULTS.focused;
           d.props.padding = DEFAULTS.padding;
           d.props.indent = DEFAULTS.indent;
-          d.props.focused = DEFAULTS.focused;
         });
         updateLocalStorage();
       });
@@ -247,7 +250,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('selected', async (e) => {
         await e.change((d) => {
-          d.item.editing = false;
+          d.props.editing = false;
           d.props.selected = true;
         });
         updateLocalStorage();
@@ -255,7 +258,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('selected, focused', async (e) => {
         await e.change((d) => {
-          d.item.editing = false;
+          d.props.editing = false;
           d.props.selected = true;
           d.props.focused = true;
         });
@@ -266,7 +269,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('editing, focused', async (e) => {
         await e.change((d) => {
-          d.item.editing = true;
+          d.props.editing = true;
           d.props.selected = false;
           d.props.focused = true;
         });
@@ -276,7 +279,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('editing → selected', async (e) => {
         await e.change((d) => {
-          d.item.editing = true;
+          d.props.editing = true;
           d.props.selected = true;
           d.props.focused = false;
         });
@@ -286,7 +289,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('editing → selected, focused', async (e) => {
         await e.change((d) => {
-          d.item.editing = true;
+          d.props.editing = true;
           d.props.selected = true;
           d.props.focused = true;
         });
@@ -360,9 +363,9 @@ export default Dev.describe(name, (e) => {
           d.item.left = undefined;
           d.item.right = undefined;
           d.item.enabled = true;
-          d.item.editing = false;
           d.props.focused = false;
           d.props.selected = false;
+          d.props.editing = false;
         });
         updateLocalStorage();
         focus();
