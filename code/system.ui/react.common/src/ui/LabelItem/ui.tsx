@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, RenderCount, Style, css, rx, useClickOutside, type t } from './common';
 
 import { Wrangle } from './Wrangle';
@@ -12,6 +12,7 @@ type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 export const View: React.FC<Props> = (props) => {
   const {
     inputRef,
+    debug,
     id,
     index = DEFAULTS.index,
     total = DEFAULTS.total,
@@ -23,13 +24,11 @@ export const View: React.FC<Props> = (props) => {
     editing = DEFAULTS.editing,
     borderRadius = DEFAULTS.borderRadius,
     item = {},
-    debug,
   } = props;
   const { enabled = DEFAULTS.enabled } = item;
   const position = { index, total };
 
-  const ref = useRef<HTMLDivElement>(null);
-  const ctx = useListContext({ ref, id, position });
+  const { ref } = useListContext(position, { id });
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
@@ -64,15 +63,6 @@ export const View: React.FC<Props> = (props) => {
   ) => {
     return () => handler?.(clickArgs(kind, target));
   };
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    // HACK: When editing stopped, if the item was focused (within the textbox)
-    //       ensure that focus state is retained on the root DOM element.
-    if (!editing && focused) ref.current?.focus();
-  }, [editing]);
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
