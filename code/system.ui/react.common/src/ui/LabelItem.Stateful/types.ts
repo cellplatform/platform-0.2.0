@@ -20,9 +20,11 @@ export type LabelItemStatefulProps = {
   renderCount?: t.RenderCountProps;
   debug?: boolean;
   style?: t.CssValue;
-  onChange?: LabelItemStateChangeHandler;
-};
+} & t.LabelItemPropsHandlers;
 
+/**
+ * (Hook) List context.
+ */
 export type LabelListContext = {
   readonly list: t.LabelList;
   readonly dispatch: t.LabelListDispatch;
@@ -32,8 +34,8 @@ export type LabelListContext = {
 /**
  * Events.
  */
-export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;
-export type LabelItemStateChangeHandlerArgs = {
+export type LabelItemStateChangedHandler = (e: LabelItemStateChangedHandlerArgs) => void;
+export type LabelItemStateChangedHandlerArgs = {
   readonly action: LabelItemChangeAction;
   readonly position: t.LabelItemPosition;
   readonly item: t.LabelItem;
