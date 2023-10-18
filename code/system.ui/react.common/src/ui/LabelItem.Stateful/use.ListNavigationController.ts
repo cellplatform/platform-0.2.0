@@ -45,11 +45,15 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
 
     const { dispose } = Keyboard.onKeydown((e) => {
       if (List.is.editing) return;
+      const select = (index: number) => {
+        e.preventDefault(); // Prevent an overflowing DIV from scrolling on (↑↓) arrow keys.
+        List.select(index);
+      };
       const index = List.index;
-      if (e.key === 'ArrowUp') List.select(e.metaKey ? 0 : index.selected - 1);
-      if (e.key === 'ArrowDown') List.select(e.metaKey ? index.last : index.selected + 1);
-      if (e.key === 'Home') List.select(0);
-      if (e.key === 'End') List.select(index.last);
+      if (e.key === 'ArrowUp') select(e.metaKey ? 0 : index.selected - 1);
+      if (e.key === 'ArrowDown') select(e.metaKey ? index.last : index.selected + 1);
+      if (e.key === 'Home') select(0);
+      if (e.key === 'End') select(index.last);
     });
 
     if (!enabled) dispose();
