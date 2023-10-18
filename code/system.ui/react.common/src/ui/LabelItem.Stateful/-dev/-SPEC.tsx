@@ -53,9 +53,12 @@ export default Dev.describe(name, (e) => {
 
         events.key.enter$.subscribe((e) => console.info('Enter', e));
         events.key.escape$.subscribe((e) => console.info('Escape', e));
-        events.key.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe((e) => {
-          dispatch.redraw();
-        });
+        events.key.$.pipe(rx.filter((e) => e.code === 'KeyR')).subscribe(dispatch.redraw);
+
+        events.key.$.pipe(
+          rx.filter((e) => e.is.shift),
+          rx.filter((e) => e.code === 'KeyN'),
+        ).subscribe((e) => TestState.add(dev, true));
 
         events.cmd.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
         events.cmd.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));

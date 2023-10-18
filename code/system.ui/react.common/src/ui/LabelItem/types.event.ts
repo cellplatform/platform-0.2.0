@@ -32,7 +32,7 @@ export type LabelItemKeyHandlerArgs = {
   editing: boolean;
   code: string;
   is: t.KeyboardKeyFlags;
-  keypress: t.KeyboardKeypressProps;
+  handled(): void;
 };
 
 export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;

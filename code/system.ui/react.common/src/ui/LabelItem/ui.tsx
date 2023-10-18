@@ -1,5 +1,5 @@
-import { RefObject, useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, RenderCount, Style, css, rx, useClickOutside, type t } from './common';
+import { RefObject, useState, useEffect } from 'react';
+import { DEFAULTS, Keyboard, RenderCount, Style, css, useClickOutside, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { Label } from './ui.Label';
@@ -51,10 +51,7 @@ export const View: React.FC<Props> = (props) => {
    * Handlers
    */
   const onFocusHandler = (focused: boolean) => {
-    return () => {
-      console.log('item.onFocusHandler:', position.index, focused);
-      props.onFocusChange?.({ position, focused });
-    };
+    return () => props.onFocusChange?.({ position, focused });
   };
 
   const clickHandler = (
@@ -65,23 +62,30 @@ export const View: React.FC<Props> = (props) => {
     return () => handler?.(clickArgs(kind, target));
   };
 
+  /**
+   * Keyboard input
+   */
   useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-
-    const fire = (e: t.KeyboardState, handler?: t.LabelItemKeyHandler) => {
-      if (!e.last || !handler) return;
-      const { is, keypress } = e.last;
-      const code = keypress.code;
-      handler({ position, focused, selected, editing, code, is, keypress });
+    const isActive = selected && focused && !editing;
+    const fire = (e: KeyboardEvent, handler?: t.LabelItemKeyHandler) => {
+      const { is, handled, code } = Keyboard.toKeypress(e);
+      handler?.({ position, focused, selected, editing, is, code, handled });
     };
 
-    const $ = Keyboard.until(dispose$).$.pipe(rx.filter(() => focused));
-    const stage = (stage: t.KeyPressStage) => $.pipe(rx.filter((e) => e.last?.stage === stage));
-    stage('Down').subscribe((e) => fire(e, props.onKeyDown));
-    stage('Up').subscribe((e) => fire(e, props.onKeyUp));
+    const onKeydown = (e: KeyboardEvent) => fire(e, props.onKeyDown);
+    const onKeyup = (e: KeyboardEvent) => fire(e, props.onKeyUp);
+    if (isActive) {
+      document.addEventListener('keydown', onKeydown);
+      document.addEventListener('keyup', onKeyup);
+    }
 
-    return dispose;
-  }, [editing, focused]);
+    return () => {
+      if (isActive) {
+        document.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('keydown', onKeyup);
+      }
+    };
+  }, [selected, focused, editing]);
 
   /**
    * Render

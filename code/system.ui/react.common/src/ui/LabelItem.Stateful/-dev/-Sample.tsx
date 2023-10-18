@@ -9,7 +9,6 @@ export const Sample = {
       left: { kind: 'left' },
       right: { kind: 'right' },
     };
-
     return { initial } as const;
   },
 
