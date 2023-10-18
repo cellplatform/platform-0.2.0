@@ -44,7 +44,7 @@ export const Remote = {
       const isValid = PeerUri.Is.peerid(pasted) || PeerUri.Is.uri(pasted);
       const peerid = isValid ? PeerUri.id(pasted) : '';
 
-      const self = Data.self(ctx.list.current.items[0].state);
+      const self = Data.self(Model.List.getItem(ctx.list.current.state, 0)[0]!);
       const isSelf = self.peerid === peerid;
 
       state.change((d) => {

@@ -1,4 +1,4 @@
-import { Dev, type t, Webrtc } from '../../test.ui';
+import { Dev, Webrtc, type t } from '../../test.ui';
 
 import { Connector } from '.';
 import { Info } from '../ui.Info';
@@ -9,7 +9,7 @@ const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const model = Connector.Model.List.init();
+  const list = Connector.Model.List.init();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -18,8 +18,8 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    model.events().$.subscribe((e) => {
-      console.log('List.$:', e); // TEMP 🐷
+    list.events().$.subscribe((e) => {
+      console.log('(Model) List.$:', e); // TEMP 🐷
     });
 
     ctx.debug.width(330);
@@ -28,14 +28,12 @@ export default Dev.describe(name, (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        const current = model.current;
-        return (
-          <List
-            list={current.state}
-            items={current.items}
-            renderCount={{ absolute: [-20, 2, null, null], opacity: 0.2, prefix: 'list.render-' }}
-          />
-        );
+        const renderCount: t.RenderCountProps = {
+          absolute: [-20, 2, null, null],
+          opacity: 0.2,
+          prefix: 'list.render-',
+        };
+        return <List list={list.current.state} debug={{ renderCount }} />;
       });
   });
 
@@ -61,8 +59,7 @@ export default Dev.describe(name, (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        'model.state': model.current.state.current,
-        'model.items': model.current.items.map(({ state }) => state.current),
+        'model.list': list.current.state,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

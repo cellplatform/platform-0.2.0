@@ -9,7 +9,8 @@ export const Data = {
   list(input: t.ConnectorListState) {
     const list = {
       get items() {
-        return input.current.items.map(({ state }) => state.current);
+        const list = input.current.state;
+        return Model.List.map(list, (item) => item.current);
       },
       get data() {
         return list.items.map((item) => item.data!).filter(Boolean);

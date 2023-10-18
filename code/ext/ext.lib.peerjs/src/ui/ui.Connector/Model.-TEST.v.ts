@@ -25,9 +25,9 @@ describe('Connector.Model', () => {
   describe('List', () => {
     it('state', () => {
       const model = Model.List.init();
-      const current = model.current;
-      expect(current.items.length).to.eql(2);
-      expect(current.state.current).to.eql({});
+      const list = model.current;
+      expect(list.state.current.total).to.eql(2);
+      expect(list.state.current.getItem).to.be.a('function');
     });
   });
 });

@@ -6,6 +6,7 @@ export type {
   CssValue,
   DevCtxState,
   DevTools,
+  GetLabelItem,
   LabelItem,
   LabelItemRendererArgs,
   LabelItemRenderers,
