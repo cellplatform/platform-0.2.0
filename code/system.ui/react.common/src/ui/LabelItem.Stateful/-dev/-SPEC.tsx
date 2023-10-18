@@ -44,8 +44,6 @@ export default Dev.describe(name, (e) => {
         });
       },
       item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
-        const Model = LabelItem.Stateful.Model;
-
         const { initial } = Sample.item();
         const state = Model.Item.state<SampleActionKind>(initial);
         const dispatch = Model.Item.commands(state);
