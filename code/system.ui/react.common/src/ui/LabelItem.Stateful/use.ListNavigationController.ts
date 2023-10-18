@@ -32,12 +32,12 @@ export function useListNavigationController<H extends HTMLElement = HTMLDivEleme
           return selected ? list?.current.getItem?.(selected)[1] ?? -1 : -1;
         },
         get last() {
-          return (list?.current.total ?? 0) - 1;
+          return (list?.current.length ?? 0) - 1;
         },
       },
       select(index: number) {
         if (!list || !List.is.focused || List.is.editing) return;
-        index = Math.max(0, Math.min(index, list.current.total - 1));
+        index = Math.max(0, Math.min(index, list.current.length - 1));
         const item = list.current.getItem?.(index)[0];
         list.change((d) => (d.selected = item?.instance));
       },

@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
  * Model for a list of <Item>'s.
  */
 export type LabelList<D extends O = O> = {
-  total: number;
+  length: number;
   getItem?: t.GetLabelItem;
   selected?: Id;
   editing?: Id;

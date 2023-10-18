@@ -7,16 +7,16 @@ import { LabelItem } from './common';
 const Model = LabelItem.Model;
 
 type T = {
-  total?: number;
+  length?: number;
   props: t.VirtualListProps;
 };
 const initial: T = { props: {} };
 const name = VirtualList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T, 'total'>;
+  type LocalStore = Pick<T, 'length'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.VirtualList');
-  const local = localstore.object({ total: 999 });
+  const local = localstore.object({ length: 999 });
 
   let vlist: t.VirtualListHandle;
 
@@ -28,16 +28,13 @@ export default Dev.describe(name, (e) => {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
         TestState.array.getItem(length - 1);
         TestState.list.change((d) => {
-          d.total = length;
+          d.length = length;
           d.getItem = TestState.array.getItem;
         });
       },
       item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
         const { initial } = Sample.item();
         const state = Model.Item.state<SampleActionKind>(initial);
-        // const dispatch = Model.Item.commands(state);
-        // const events = state.events(dispose$);
-
         return state;
       },
     },
@@ -49,9 +46,9 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.total = local.total;
+      d.length = local.length;
     });
-    TestState.init.items(state, state.current.total);
+    TestState.init.items(state, state.current.length);
 
     ctx.debug.width(330);
     ctx.subject
@@ -74,11 +71,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Total', (dev) => {
-      const total = (total: number) => {
-        dev.button(`${total.toLocaleString()}`, (e) => {
-          e.change((d) => (local.total = d.total = total));
-          TestState.init.items(state, total);
+    dev.section('Length', (dev) => {
+      const total = (length: number) => {
+        dev.button(`${length.toLocaleString()}`, (e) => {
+          e.change((d) => (local.length = d.length = length));
+          TestState.init.items(state, length);
         });
       };
       total(0);

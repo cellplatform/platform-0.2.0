@@ -14,7 +14,7 @@ export function getItem<A extends t.LabelItemActionKind = string, D extends O = 
 
   const current = PatchState.Is.state(state) ? state.current : state;
   if (!current?.getItem) return notFound;
-  if (index < 0 || index > current.total - 1) return notFound;
+  if (index < 0 || index > current.length - 1) return notFound;
 
   const res = current.getItem(index);
   return res ? (res as t.LabelItemStateIndex<A, D>) : notFound;

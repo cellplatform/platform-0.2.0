@@ -71,7 +71,7 @@ describe('LabelItem.Model', () => {
 
       it('{initial}', () => {
         const getItem: t.GetLabelItem = (index) => [undefined, -1];
-        const state = Model.List.state({ total: 123, getItem });
+        const state = Model.List.state({ length: 123, getItem });
         expect(state.current).to.eql({ total: 123, getItem });
       });
     });
@@ -142,7 +142,7 @@ describe('LabelItem.Model', () => {
 
       it('returns item from getter function', () => {
         const { items, getItem } = Model.List.array();
-        const state = Model.List.state({ total: 2, getItem });
+        const state = Model.List.state({ length: 2, getItem });
 
         const [itemA, indexA] = Model.List.getItem(state, 0);
         const [itemB, indexB] = Model.List.getItem(state.current, 1);
@@ -158,7 +158,7 @@ describe('LabelItem.Model', () => {
 
       it('out of bounds', () => {
         const { items, getItem } = Model.List.array();
-        const state = Model.List.state({ total: 1, getItem });
+        const state = Model.List.state({ length: 1, getItem });
         expect(Model.List.getItem(state, -1)).to.eql([undefined, -1]);
         expect(Model.List.getItem(state, 2)).to.eql([undefined, -1]);
         expect(items).to.eql([]); // NB: no models instantiated.

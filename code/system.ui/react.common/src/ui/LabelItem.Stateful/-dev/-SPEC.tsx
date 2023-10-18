@@ -10,7 +10,7 @@ type T = {
   data?: t.LabelItem;
   debug: {
     debug?: boolean;
-    total?: number;
+    length?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
     isList?: boolean;
@@ -20,11 +20,14 @@ const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug' | 'isList'>;
+  type LocalStore = Pick<
+    T['debug'],
+    'length' | 'useBehaviors' | 'renderCount' | 'debug' | 'isList'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     useBehaviors: DEFAULTS.useBehaviors.defaults,
-    total: 1,
+    length: 1,
     debug: false,
     renderCount: true,
     isList: true,
@@ -39,7 +42,7 @@ export default Dev.describe(name, (e) => {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
         TestState.array.getItem(length - 1);
         TestState.list.change((d) => {
-          d.total = length;
+          d.length = length;
           d.getItem = TestState.array.getItem;
         });
       },
@@ -78,9 +81,9 @@ export default Dev.describe(name, (e) => {
     } as const,
 
     async add(dev: t.DevCtxState<T>, focus?: boolean) {
-      const total = TestState.list.current.total + 1;
-      TestState.list.change((d) => (d.total = total));
-      await dev.change((d) => (local.total = d.debug.total = total));
+      const length = TestState.list.current.length + 1;
+      TestState.list.change((d) => (d.length = length));
+      await dev.change((d) => (local.length = d.debug.length = length));
       if (focus) Model.List.commands(TestState.list).focus();
     },
   };
@@ -90,13 +93,13 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.total = local.total;
+      d.debug.length = local.length;
       d.debug.useBehaviors = local.useBehaviors;
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
     });
-    TestState.init.items(state, state.current.debug.total);
+    TestState.init.items(state, state.current.debug.length);
 
     ctx.debug.width(300);
     ctx.subject
@@ -135,16 +138,16 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section((dev) => {
-      const total = (total: number) => {
-        const label = `${total} ${Value.plural(total, 'item', 'items')}`;
+    dev.section('Length', (dev) => {
+      const total = (length: number) => {
+        const label = `${length} ${Value.plural(length, 'item', 'items')}`;
         dev.button((btn) =>
           btn
             .label(label)
-            .right((e) => (e.state.debug.total === total ? '←' : ''))
+            .right((e) => (e.state.debug.length === length ? '←' : ''))
             .onClick(async (e) => {
-              TestState.init.items(state, total);
-              await e.change((d) => (local.total = d.debug.total = total));
+              TestState.init.items(state, length);
+              await e.change((d) => (local.length = d.debug.length = length));
             }),
         );
       };
