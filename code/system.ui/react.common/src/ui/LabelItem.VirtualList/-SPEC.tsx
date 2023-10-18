@@ -28,7 +28,7 @@ export default Dev.describe(name, (e) => {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
         TestState.array.getItem(length - 1);
         TestState.list.change((d) => {
-          d.length = length;
+          d.total = length;
           d.getItem = TestState.array.getItem;
         });
       },

@@ -66,13 +66,13 @@ describe('LabelItem.Model', () => {
     describe('init', () => {
       it('defaults', () => {
         const state = Model.List.state();
-        expect(state.current.length).to.eql(0);
+        expect(state.current.total).to.eql(0);
       });
 
       it('{initial}', () => {
         const getItem: t.GetLabelItem = (index) => [undefined, -1];
-        const state = Model.List.state({ length: 123, getItem });
-        expect(state.current).to.eql({ length: 123, getItem });
+        const state = Model.List.state({ total: 123, getItem });
+        expect(state.current).to.eql({ total: 123, getItem });
       });
     });
 
@@ -142,7 +142,7 @@ describe('LabelItem.Model', () => {
 
       it('returns item from getter function', () => {
         const { items, getItem } = Model.List.array();
-        const state = Model.List.state({ length: 2, getItem });
+        const state = Model.List.state({ total: 2, getItem });
 
         const [itemA, indexA] = Model.List.getItem(state, 0);
         const [itemB, indexB] = Model.List.getItem(state.current, 1);
@@ -158,7 +158,7 @@ describe('LabelItem.Model', () => {
 
       it('out of bounds', () => {
         const { items, getItem } = Model.List.array();
-        const state = Model.List.state({ length: 1, getItem });
+        const state = Model.List.state({ total: 1, getItem });
         expect(Model.List.getItem(state, -1)).to.eql([undefined, -1]);
         expect(Model.List.getItem(state, 2)).to.eql([undefined, -1]);
         expect(items).to.eql([]); // NB: no models instantiated.
@@ -206,7 +206,7 @@ describe('LabelItem.Model', () => {
     describe('map items', () => {
       it('empty | nothing', () => {
         const { getItem } = Model.List.array();
-        const state = Model.List.state({ length: 0, getItem });
+        const state = Model.List.state({ total: 0, getItem });
         const res1 = Model.List.map(state, (item, index) => ({ item, index }));
         const res2 = Model.List.map(undefined, (item, index) => ({ item, index }));
         expect(res1.length).to.eql(0);
@@ -215,18 +215,19 @@ describe('LabelItem.Model', () => {
 
       it('maps items (from state)', () => {
         const { items, getItem } = Model.List.array();
-        const state = Model.List.state({ length: 2, getItem });
-        expect(state.current.length).to.eql(2);
+        const state = Model.List.state({ total: 2, getItem });
+        expect(state.current.total).to.eql(2);
 
-        const res = Model.List.map(state, (item, index) => ({ item, index }));
+        const res = Model.List.map(state, (item, index, total) => ({ item, index, total }));
         expect(res.map(({ index }) => index)).to.eql([0, 1]);
+        expect(res[0].total).to.equal(2);
         expect(res[0].item).to.equal(items[0]);
         expect(res[1].item).to.equal(items[1]);
       });
 
       it('maps items (from state.current)', () => {
         const { getItem } = Model.List.array();
-        const state = Model.List.state({ length: 2, getItem });
+        const state = Model.List.state({ total: 2, getItem });
         const res = Model.List.map(state.current, (item, index) => ({ item, index }));
         expect(res.map(({ index }) => index)).to.eql([0, 1]);
       });
@@ -234,15 +235,16 @@ describe('LabelItem.Model', () => {
       it('returns smaller result when [getItem] returns nothing', () => {
         const { items, getItem } = Model.List.array();
         const state = Model.List.state({
-          length: 3,
+          total: 3,
           getItem(target) {
             if (target === 1) return [undefined, -1];
             return getItem(target);
           },
         });
-        const res = Model.List.map(state, (item, index) => ({ item, index }));
-        expect(state.current.length).to.eql(3);
+        const res = Model.List.map(state, (item, index, total) => ({ item, index, total }));
+        expect(state.current.total).to.eql(3);
         expect(res.length).to.eql(2);
+        expect(res[0].total).to.equal(3); // NB: reports the total abstract list amount, not the lesser map size.
         expect(res[0].item).to.equal(items[0]);
         expect(res[1].item).to.equal(items[2]);
       });

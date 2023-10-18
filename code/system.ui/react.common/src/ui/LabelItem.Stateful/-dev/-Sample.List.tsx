@@ -21,15 +21,12 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
     base: css({ position: 'relative', outline: 'none' }),
   };
 
-  const length = list?.current.length ?? 0;
-
-  const elements = LabelItem.Model.List.map(list, (item, i) => {
+  const elements = LabelItem.Model.List.map(list, (item, index) => {
     return (
       <LabelItem.Stateful
         {...handlers}
         key={item.instance}
-        index={i}
-        total={length}
+        index={index}
         list={debug.isList ? list : undefined}
         item={item}
         renderers={renderers}

@@ -6,7 +6,7 @@ import { useHandle } from './use.HandleRef';
 
 export const View: React.FC<t.VirtualListProps> = (props) => {
   const { list, renderers } = props;
-  const length = list?.current.length ?? 0;
+  const total = list?.current.total ?? 0;
 
   const handle = useHandle();
   const listController = LabelItem.Stateful.useListController({ list });
@@ -33,7 +33,7 @@ export const View: React.FC<t.VirtualListProps> = (props) => {
       <div ref={listController.ref} {...css(styles.base, props.style)}>
         <Virtuoso
           ref={handle.ref}
-          totalCount={length}
+          totalCount={total}
           overscan={50}
           itemContent={(index) => {
             const [item] = LabelItem.Model.List.getItem(list, index);
@@ -43,7 +43,6 @@ export const View: React.FC<t.VirtualListProps> = (props) => {
                 {...listController.handlers}
                 key={item.instance}
                 index={index}
-                total={length}
                 list={list}
                 item={item}
                 renderers={renderers}

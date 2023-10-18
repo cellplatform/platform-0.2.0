@@ -7,7 +7,8 @@ import { Wrangle } from './Wrangle';
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const { index, total, list, item, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const { index, list, item, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
+  const total = list?.current.total ?? 0;
   const handlers = Wrangle.pluckHandlers(props);
 
   const isSelected = item && list && list.current.selected === item.instance;
@@ -27,7 +28,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       {...controller.handlers}
       id={item?.instance}
       index={props.index}
-      total={props.total}
+      total={total}
       renderers={props.renderers}
       item={controller.current}
       focused={isFocused}

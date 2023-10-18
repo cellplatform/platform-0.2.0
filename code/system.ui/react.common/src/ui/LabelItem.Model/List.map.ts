@@ -13,18 +13,18 @@ type K = t.LabelItemActionKind;
  */
 export function map<T, A extends K = string, D extends O = O>(
   input: t.LabelList | t.LabelListState | undefined,
-  fn: (item: t.LabelItemState<A, D>, index: number) => T,
+  fn: (item: t.LabelItemState<A, D>, index: number, total: number) => T,
 ): T[] {
   if (!input) return [];
 
   const list = PatchState.Is.state(input) ? input.current : input;
-  const length = Math.max(0, list.length ?? 0);
+  const length = Math.max(0, list.total ?? 0);
   if (length === 0 || typeof list.getItem !== 'function') return [];
 
   return Array.from({ length })
     .map((_, i) => {
       const [item] = getItem<A, D>(list, i);
-      return item ? fn(item, i) : undefined;
+      return item ? fn(item, i, length) : undefined;
     })
     .filter(Boolean) as T[];
 }

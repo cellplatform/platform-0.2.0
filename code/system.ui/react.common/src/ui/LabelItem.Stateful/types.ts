@@ -12,7 +12,6 @@ export type LabelItemBehaviorKind =
  */
 export type LabelItemStatefulProps = {
   index?: number;
-  total?: number;
   list?: t.LabelListState;
   item?: t.LabelItemState;
   renderers?: t.LabelItemRenderers;
