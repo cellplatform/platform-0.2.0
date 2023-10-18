@@ -1,8 +1,8 @@
-import { Dev, type t } from '../../test.ui';
-import { VirtualList } from '.';
-import { LabelItem } from './common';
-import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
 import type { VirtuosoHandle } from 'react-virtuoso';
+import { VirtualList } from '.';
+import { Dev, type t } from '../../test.ui';
+import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
+import { LabelItem } from './common';
 
 const Model = LabelItem.Model;
 
@@ -18,7 +18,7 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.VirtualList');
   const local = localstore.object({ total: 999 });
 
-  let handle: VirtuosoHandle;
+  let vlist: t.VirtualListHandle;
 
   const TestState = {
     array: Model.List.array(), // NB: simple container of Item models.
@@ -64,7 +64,7 @@ export default Dev.describe(name, (e) => {
             list={TestState.list}
             renderers={Sample.renderers}
             style={{ width: 330 }}
-            onReady={(e) => (handle = e.ref)}
+            onReady={(e) => (vlist = e.vlist)}
           />
         );
       });
@@ -89,15 +89,17 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Debug', (dev) => {
-      const scrollTo = (index: number) => {
-        dev.button(`scroll to: ${index}`, (e) => {
-          handle.scrollToIndex({ index, behavior: 'smooth', align: 'center' });
+    dev.section(['Handle', 'ƒ( vlist )'], (dev) => {
+      const scrollTo = (location: t.VirtialListScrollLocation) => {
+        dev.button(`scroll to: ${location}`, (e) => {
+          vlist.scrollTo(location);
         });
       };
       scrollTo(0);
       scrollTo(50);
       scrollTo(100);
+      dev.hr(-1, 5);
+      scrollTo('Last');
     });
   });
 
