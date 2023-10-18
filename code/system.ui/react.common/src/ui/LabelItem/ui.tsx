@@ -6,6 +6,7 @@ import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
 import { useListContext } from './use.ListContext';
+import { useKeyboard } from './use.Keyboard';
 
 type Props = t.LabelItemProps & { textboxRef: RefObject<t.TextInputRef> };
 
@@ -24,10 +25,13 @@ export const View: React.FC<Props> = (props) => {
     editing = DEFAULTS.editing,
     borderRadius = DEFAULTS.borderRadius,
     item = {},
+    onKeyDown,
+    onKeyUp,
   } = props;
   const { enabled = DEFAULTS.enabled } = item;
   const position = { index, total };
 
+  useKeyboard({ position, selected, focused, editing, onKeyDown, onKeyUp });
   const { ref } = useListContext(position, { id });
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
@@ -61,31 +65,6 @@ export const View: React.FC<Props> = (props) => {
   ) => {
     return () => handler?.(clickArgs(kind, target));
   };
-
-  /**
-   * Keyboard input
-   */
-  useEffect(() => {
-    const isActive = selected && focused && !editing;
-    const fire = (e: KeyboardEvent, handler?: t.LabelItemKeyHandler) => {
-      const { is, handled, code } = Keyboard.toKeypress(e);
-      handler?.({ position, focused, selected, editing, is, code, handled });
-    };
-
-    const onKeydown = (e: KeyboardEvent) => fire(e, props.onKeyDown);
-    const onKeyup = (e: KeyboardEvent) => fire(e, props.onKeyUp);
-    if (isActive) {
-      document.addEventListener('keydown', onKeydown);
-      document.addEventListener('keyup', onKeyup);
-    }
-
-    return () => {
-      if (isActive) {
-        document.removeEventListener('keydown', onKeydown);
-        document.removeEventListener('keydown', onKeyup);
-      }
-    };
-  }, [selected, focused, editing]);
 
   /**
    * Render
