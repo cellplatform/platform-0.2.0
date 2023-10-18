@@ -92,7 +92,7 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       const scrollTo = (index: number) => {
         dev.button(`scroll to: ${index}`, (e) => {
-          handle.scrollToIndex({ index, behavior: 'smooth' });
+          handle.scrollToIndex({ index, behavior: 'smooth', align: 'center' });
         });
       };
       scrollTo(0);
