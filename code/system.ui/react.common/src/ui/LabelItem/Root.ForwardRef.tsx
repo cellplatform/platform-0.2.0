@@ -8,15 +8,15 @@ import { View } from './ui';
 export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
   const { index, total, editing } = Wrangle.valuesOrDefault(props);
   const [itemRef, setItemRef] = useState<t.LabelItemRef>();
-  const inputRef = useRef<t.TextInputRef>(null);
+  const textboxRef = useRef<t.TextInputRef>(null);
   const focusTextbox = () => Time.delay(0, () => itemRef?.focus());
-  useImperativeHandle(ref, () => Ref(inputRef));
+  useImperativeHandle(ref, () => Ref(textboxRef));
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    const ref = Ref(inputRef);
+    const ref = Ref(textboxRef);
     setItemRef(ref);
     if (props.focusOnReady) focusTextbox();
     props.onReady?.({ ref, position: { index, total } });
@@ -29,5 +29,5 @@ export const ForwardRef = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, r
   /**
    * Render
    */
-  return <View {...props} inputRef={inputRef} />;
+  return <View {...props} textboxRef={textboxRef} />;
 });

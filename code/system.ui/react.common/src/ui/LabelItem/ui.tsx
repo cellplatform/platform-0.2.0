@@ -7,11 +7,11 @@ import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
 import { useListContext } from './use.ListContext';
 
-type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
+type Props = t.LabelItemProps & { textboxRef: RefObject<t.TextInputRef> };
 
 export const View: React.FC<Props> = (props) => {
   const {
-    inputRef,
+    textboxRef,
     debug,
     id,
     index = DEFAULTS.index,
@@ -42,7 +42,7 @@ export const View: React.FC<Props> = (props) => {
     ref,
     callback(e) {
       if (!editing) return;
-      inputRef.current?.blur();
+      textboxRef.current?.blur();
       props.onEditClickAway?.(clickArgs('Single', 'Away'));
     },
   });
@@ -52,6 +52,7 @@ export const View: React.FC<Props> = (props) => {
    */
   const onFocusHandler = (focused: boolean) => {
     return () => {
+      console.log('item.onFocusHandler:', position.index, focused);
       props.onFocusChange?.({ position, focused });
     };
   };
@@ -138,7 +139,7 @@ export const View: React.FC<Props> = (props) => {
         {item.left !== null && <Left {...props} />}
         <Label
           {...props}
-          inputRef={inputRef}
+          inputRef={textboxRef}
           onDoubleClick={clickHandler('Double', 'Item:Label', props.onLabelDoubleClick)}
           debug={debug}
         />
