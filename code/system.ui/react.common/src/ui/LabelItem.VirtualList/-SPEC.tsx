@@ -1,21 +1,24 @@
 import { Dev, type t } from '../../test.ui';
-import { Root } from '.';
+import { VirtualList } from '.';
 import { LabelItem } from './common';
 import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const Model = LabelItem.Model;
 
 type T = {
   total?: number;
-  props: t.RootProps;
+  props: t.VirtualListProps;
 };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
+const name = VirtualList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<T, 'total'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.VirtualList');
   const local = localstore.object({ total: 999 });
+
+  let handle: VirtuosoHandle;
 
   const TestState = {
     array: Model.List.array(), // NB: simple container of Item models.
@@ -57,11 +60,11 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         return (
-          <Root
-            //
+          <VirtualList
             list={TestState.list}
             renderers={Sample.renderers}
             style={{ width: 330 }}
+            onReady={(e) => (handle = e.ref)}
           />
         );
       });
@@ -78,7 +81,6 @@ export default Dev.describe(name, (e) => {
           TestState.init.items(state, total);
         });
       };
-
       total(0);
       total(10);
       total(100);
@@ -86,6 +88,17 @@ export default Dev.describe(name, (e) => {
     });
 
     dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      const scrollTo = (index: number) => {
+        dev.button(`scroll to: ${index}`, (e) => {
+          handle.scrollToIndex({ index, behavior: 'smooth' });
+        });
+      };
+      scrollTo(0);
+      scrollTo(50);
+      scrollTo(100);
+    });
   });
 
   e.it('ui:footer', async (e) => {

@@ -1,13 +1,25 @@
-import { Virtuoso } from 'react-virtuoso';
+import { useEffect, useState, useRef } from 'react';
+
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 import { DEFAULTS, FC, LabelItem, css, type t } from './common';
 
-const View: React.FC<t.RootProps> = (props) => {
+const View: React.FC<t.VirtualListProps> = (props) => {
   const { list, renderers } = props;
   const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list });
   const total = list?.current.total ?? 0;
 
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
+
   /**
-   * [Render]
+   * Lifecycle
+   */
+  useEffect(() => {
+    const ref = virtuosoRef.current;
+    if (ref) props.onReady?.({ ref });
+  }, [virtuosoRef.current]);
+
+  /**
+   * Render
    */
   const styles = {
     base: css({
@@ -20,16 +32,17 @@ const View: React.FC<t.RootProps> = (props) => {
     <Provider>
       <div ref={ref} {...css(styles.base, props.style)}>
         <Virtuoso
+          ref={virtuosoRef}
           totalCount={total}
           overscan={50}
-          itemContent={(i) => {
-            const [item] = LabelItem.Model.List.getItem(list, i);
+          itemContent={(index) => {
+            const [item] = LabelItem.Model.List.getItem(list, index);
             if (!item) return null;
             return (
               <LabelItem.Stateful
                 {...handlers}
                 key={item.instance}
-                index={i}
+                index={index}
                 total={length}
                 list={list}
                 item={item}
@@ -49,7 +62,7 @@ const View: React.FC<t.RootProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.RootProps, Fields>(
+export const VirtualList = FC.decorate<t.VirtualListProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'LabelItem.VirtualList' },
