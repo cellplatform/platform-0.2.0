@@ -18,7 +18,7 @@ type Args = {
  * HOOK: edit behavior controller for a single <Item>.
  */
 export function useItemEditController(args: Args) {
-  const { item, list, enabled = true, position } = args;
+  const { item, list, position, enabled = true } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -109,7 +109,6 @@ export function useItemEditController(args: Args) {
         (list) => null,
         (item) => (item.label = e.label),
       );
-
       args.handlers?.onEditChange?.(e);
     },
 
@@ -121,10 +120,6 @@ export function useItemEditController(args: Args) {
     onEditClickAway(e) {
       Edit.cancel();
       args.handlers?.onEditClickAway?.(e);
-    },
-
-    onFocusChange(e) {
-      args.handlers?.onFocusChange?.(e);
     },
   };
 
