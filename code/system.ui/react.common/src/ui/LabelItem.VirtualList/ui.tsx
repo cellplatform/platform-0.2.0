@@ -1,7 +1,5 @@
-import type { t } from './common';
-
 import { useEffect } from 'react';
-import { LabelItem, Virtuoso, css } from './common';
+import { LabelItem, Virtuoso, css, type t } from './common';
 import { useHandle } from './use.HandleRef';
 
 export const View: React.FC<t.VirtualListProps> = (props) => {
