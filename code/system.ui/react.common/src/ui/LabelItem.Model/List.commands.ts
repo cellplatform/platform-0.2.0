@@ -1,10 +1,12 @@
 import { slug, type t } from './common';
+import { Dispatcher } from './Dispatcher';
 
 /**
  * Dispatcher of "command" events for the given item.
  */
 export function commands(list?: t.LabelListState) {
-  const dispatch = (cmd: t.LabelListCmd) => list?.change((d) => (d.cmd = cmd));
+  const { dispatch } = Dispatcher(list);
+
   const api: t.LabelListDispatch = {
     focus(focus: boolean = true) {
       dispatch({ type: 'List:Focus', payload: { focus, tx: slug() } });
