@@ -18,7 +18,7 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', outline: 'none' }),
+    base: css({ position: 'relative' }),
   };
 
   const elements = LabelItem.Model.List.map(list, (item, index) => {
