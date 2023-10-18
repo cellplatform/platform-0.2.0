@@ -1,17 +1,54 @@
 import { Dev, type t } from '../../test.ui';
 import { Root } from '.';
+import { LabelItem } from './common';
+import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
 
-type T = { props: t.RootProps };
+const Model = LabelItem.Model;
+
+type T = {
+  total?: number;
+  props: t.RootProps;
+};
 const initial: T = { props: {} };
 const name = Root.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<T, 'total'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.VirtualList');
+  const local = localstore.object({ total: 999 });
+
+  const TestState = {
+    array: Model.List.array(), // NB: simple container of Item models.
+    list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
+    init: {
+      items(dev: t.DevCtxState<T>, length: number = 0) {
+        TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
+        TestState.array.getItem(length - 1);
+        TestState.list.change((d) => {
+          d.total = length;
+          d.getItem = TestState.array.getItem;
+        });
+      },
+      item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
+        const { initial } = Sample.item();
+        const state = Model.Item.state<SampleActionKind>(initial);
+        // const dispatch = Model.Item.commands(state);
+        // const events = state.events(dispose$);
+
+        return state;
+      },
+    },
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.total = local.total;
+    });
+    TestState.init.items(state, state.current.total);
 
     ctx.debug.width(330);
     ctx.subject
@@ -19,14 +56,36 @@ export default Dev.describe(name, (e) => {
       .size('fill-y')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} style={{ width: 330 }} />;
+        return (
+          <Root
+            //
+            list={TestState.list}
+            renderers={Sample.renderers}
+            style={{ width: 330 }}
+          />
+        );
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
+
+    dev.section('Total', (dev) => {
+      const total = (total: number) => {
+        dev.button(`${total.toLocaleString()}`, (e) => {
+          e.change((d) => (local.total = d.total = total));
+          TestState.init.items(state, total);
+        });
+      };
+
+      total(0);
+      total(10);
+      total(100);
+      total(1000);
+    });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {
