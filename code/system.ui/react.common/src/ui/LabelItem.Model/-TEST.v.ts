@@ -66,13 +66,13 @@ describe('LabelItem.Model', () => {
     describe('init', () => {
       it('defaults', () => {
         const state = Model.List.state();
-        expect(state.current).to.eql({ total: 0 });
+        expect(state.current.length).to.eql(0);
       });
 
       it('{initial}', () => {
         const getItem: t.GetLabelItem = (index) => [undefined, -1];
         const state = Model.List.state({ length: 123, getItem });
-        expect(state.current).to.eql({ total: 123, getItem });
+        expect(state.current).to.eql({ length: 123, getItem });
       });
     });
 
@@ -200,6 +200,51 @@ describe('LabelItem.Model', () => {
         expect(fired.length).to.eql(2);
 
         events.dispose();
+      });
+    });
+
+    describe('map items', () => {
+      it('empty | nothing', () => {
+        const { getItem } = Model.List.array();
+        const state = Model.List.state({ length: 0, getItem });
+        const res1 = Model.List.map(state, (item, index) => ({ item, index }));
+        const res2 = Model.List.map(undefined, (item, index) => ({ item, index }));
+        expect(res1.length).to.eql(0);
+        expect(res2.length).to.eql(0);
+      });
+
+      it('maps items (from state)', () => {
+        const { items, getItem } = Model.List.array();
+        const state = Model.List.state({ length: 2, getItem });
+        expect(state.current.length).to.eql(2);
+
+        const res = Model.List.map(state, (item, index) => ({ item, index }));
+        expect(res.map(({ index }) => index)).to.eql([0, 1]);
+        expect(res[0].item).to.equal(items[0]);
+        expect(res[1].item).to.equal(items[1]);
+      });
+
+      it('maps items (from state.current)', () => {
+        const { getItem } = Model.List.array();
+        const state = Model.List.state({ length: 2, getItem });
+        const res = Model.List.map(state.current, (item, index) => ({ item, index }));
+        expect(res.map(({ index }) => index)).to.eql([0, 1]);
+      });
+
+      it('returns smaller result when [getItem] returns nothing', () => {
+        const { items, getItem } = Model.List.array();
+        const state = Model.List.state({
+          length: 3,
+          getItem(target) {
+            if (target === 1) return [undefined, -1];
+            return getItem(target);
+          },
+        });
+        const res = Model.List.map(state, (item, index) => ({ item, index }));
+        expect(state.current.length).to.eql(3);
+        expect(res.length).to.eql(2);
+        expect(res[0].item).to.equal(items[0]);
+        expect(res[1].item).to.equal(items[2]);
       });
     });
   });

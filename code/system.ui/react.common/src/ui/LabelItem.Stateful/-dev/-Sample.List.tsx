@@ -22,9 +22,8 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
   };
 
   const length = list?.current.length ?? 0;
-  const elements = Array.from({ length }).map((_, i) => {
-    const [item] = LabelItem.Model.List.getItem(list, i);
-    if (!item) return null;
+
+  const elements = LabelItem.Model.List.map(list, (item, i) => {
     return (
       <LabelItem.Stateful
         {...handlers}
