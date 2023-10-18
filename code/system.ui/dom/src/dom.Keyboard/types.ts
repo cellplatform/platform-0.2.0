@@ -95,11 +95,12 @@ export type KeyboardKeypress = {
   handled(): void;
 };
 
-export type KeyboardKeypressProps = t.UIEventBase &
-  t.UIModifierKeys & {
-    readonly code: string;
-    readonly key: string;
-    readonly isComposing: boolean;
-    readonly location: number;
-    readonly repeat: boolean;
-  };
+export type KeyboardKeypressProps = {
+  readonly code: string;
+  readonly key: string;
+  readonly isComposing: boolean;
+  readonly location: number;
+  readonly repeat: boolean;
+  handled(): void;
+} & t.UIEventBase &
+  t.UIModifierKeys;

@@ -52,9 +52,7 @@ export const Util = {
         return Util.toFlags(e);
       },
       handled() {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+        Util.handled(e);
       },
     };
   },
@@ -78,6 +76,15 @@ export const Util = {
       isComposing,
       location,
       repeat,
+      handled() {
+        Util.handled(e);
+      },
     };
+  },
+
+  handled(e: KeyboardEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
   },
 };
