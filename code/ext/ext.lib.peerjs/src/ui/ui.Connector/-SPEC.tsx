@@ -3,7 +3,6 @@ import { Dev, Webrtc, type t } from '../../test.ui';
 import { Connector } from '.';
 import { Info } from '../ui.Info';
 import { List } from './ui.List';
-import { Renderers } from './Renderers';
 
 type T = { props: t.ConnectorProps };
 const initial: T = { props: {} };
@@ -11,7 +10,6 @@ const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const { list } = Connector.Model.List.init();
-  const renderers = Renderers.init(list);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -35,7 +33,7 @@ export default Dev.describe(name, (e) => {
           opacity: 0.2,
           prefix: 'list.render-',
         };
-        return <List list={list} renderers={renderers} debug={{ renderCount }} />;
+        return <List list={list} debug={{ renderCount }} />;
       });
   });
 

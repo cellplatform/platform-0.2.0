@@ -6,11 +6,12 @@ const selfActions: t.ConnectorAction[] = ['self:left', 'self:right'];
 const remoteActions: t.ConnectorAction[] = ['remote:left', 'remote:right'];
 
 export const Renderers = {
-  init(list: t.ConnectorListState): t.ConnectorItemRenderers {
-    const ctx: t.GetConnectorCtx = () => ({ list });
-
-    const self = Model.Self.renderers({ ctx });
-    const remote = Model.Remote.renderers({ ctx });
+  /**
+   * Initilise the router for item <Component> renderers.
+   */
+  init(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
+    const self = Model.Self.renderers(args);
+    const remote = Model.Remote.renderers(args);
 
     const getRenderer = (e: t.LabelItemRendererArgs) => {
       const kind = Data.kind(e.item);

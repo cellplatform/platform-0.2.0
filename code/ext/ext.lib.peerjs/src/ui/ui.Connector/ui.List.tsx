@@ -2,13 +2,12 @@ import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
   list: t.LabelListState;
-  renderers: t.LabelItemRenderers;
   debug?: { renderCount?: t.RenderCountProps };
   style?: t.CssValue;
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { list, debug = {}, renderers } = props;
+  const { list, debug = {} } = props;
   const { ref, Provider, handlers } = LabelItem.Stateful.useListController({ list });
 
   /**
@@ -21,12 +20,12 @@ export const List: React.FC<ListProps> = (props) => {
   const elements = LabelItem.Model.List.map(list, (item, i) => {
     return (
       <LabelItem.Stateful
+        //
         {...handlers}
         key={item.instance}
         index={i}
         list={list}
         item={item}
-        renderers={renderers}
       />
     );
   });
