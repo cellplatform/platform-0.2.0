@@ -2,10 +2,8 @@
  * @system → UI
  */
 export type {
-  LabelAction,
+  // LabelAction,
   LabelItemBehaviorKind,
-  LabelItemChangeHandler,
-  LabelItemController,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
