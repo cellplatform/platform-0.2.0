@@ -74,5 +74,8 @@ export function useItemController(args: Args) {
     get current() {
       return item?.current ?? DEFAULTS.data.item;
     },
+    get renderers() {
+      return item ? list?.current.getRenderers?.({ position, item }) : undefined;
+    },
   };
 }

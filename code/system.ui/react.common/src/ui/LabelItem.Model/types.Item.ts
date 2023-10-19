@@ -38,6 +38,14 @@ export type LabelItemStateIndex<A extends K = string, D extends O = O> = [
   Index,
 ];
 
+export type GetLabelItemRenderers<
+  A extends t.LabelItemActionKind = string,
+  D extends O = O,
+> = (args: {
+  position: t.LabelItemPosition;
+  item: t.LabelItemState<A, D>;
+}) => t.LabelItemRenderers<A>;
+
 /**
  * Events API
  */

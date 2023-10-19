@@ -33,7 +33,6 @@ export default Dev.describe(name, (e) => {
   const TestState = {
     array: Model.List.array(), // NB: simple container of Item models.
     list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
-    renderers: Sample.renderers,
     init: {
       items(dev: t.DevCtxState<T>, total: number = 0) {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
@@ -41,6 +40,7 @@ export default Dev.describe(name, (e) => {
         TestState.list.change((d) => {
           d.total = total;
           d.getItem = TestState.array.getItem;
+          d.getRenderers = () => Sample.renderers;
         });
       },
       item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
@@ -109,7 +109,7 @@ export default Dev.describe(name, (e) => {
         return (
           <SampleList
             list={TestState.list}
-            renderers={TestState.renderers}
+            // renderers={Sample.renderers}
             useBehaviors={debug.useBehaviors}
             debug={{ isList, renderCount }}
           />

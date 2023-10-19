@@ -10,6 +10,7 @@ type O = Record<string, unknown>;
 export type LabelList<D extends O = O> = {
   total: number;
   getItem?: t.GetLabelItem;
+  getRenderers?: t.GetLabelItemRenderers;
   selected?: Id;
   editing?: Id;
   focused?: boolean;
