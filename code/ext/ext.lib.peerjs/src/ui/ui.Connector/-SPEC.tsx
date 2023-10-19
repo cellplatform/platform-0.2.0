@@ -11,7 +11,7 @@ const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const { list } = Connector.Model.List.init();
-  const renderers = Renderers.fromList(list);
+  const renderers = Renderers.init(list);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

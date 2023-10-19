@@ -28,7 +28,7 @@ export type LabelItemState<A extends K = string, D extends O = O> = t.ImmutableR
 >;
 
 /**
- * Retrieve item.
+ * Retrieve item (factory functions)
  */
 export type GetLabelItem<A extends K = string, D extends O = O> = (
   target: Index | Id,
