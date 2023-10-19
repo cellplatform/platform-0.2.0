@@ -1,14 +1,14 @@
 import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
-  list?: t.LabelListState;
-  renderers?: t.LabelItemRenderers;
+  list: t.LabelListState;
+  renderers: t.LabelItemRenderers;
   debug?: { renderCount?: t.RenderCountProps };
   style?: t.CssValue;
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { list, renderers, debug = {} } = props;
+  const { list, debug = {}, renderers } = props;
   const { ref, Provider, handlers } = LabelItem.Stateful.useListController({ list });
 
   /**

@@ -3,6 +3,7 @@ import { Model, type t } from './common';
 type Input = t.LabelItem | t.LabelItemState;
 
 export const Data = {
+  kind: (item: Input) => Model.data<t.ConnectorData>(item).kind,
   self: (item: Input) => Model.data<t.ConnectorDataSelf>(item),
   remote: (item: Input) => Model.data<t.ConnectorDataRemote>(item),
 

@@ -52,6 +52,7 @@ export const Remote = {
         d.label = peerid;
         if (data.error) d.label = undefined;
       });
+
       redraw();
 
       Time.delay(3000, () => {
