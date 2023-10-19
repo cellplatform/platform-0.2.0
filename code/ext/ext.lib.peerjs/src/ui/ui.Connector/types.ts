@@ -36,9 +36,9 @@ export type ConnectorListState = t.LabelListState;
  * Model: Data
  */
 type D = ConnectorData;
-export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
-export type ConnectorDataSelf = {
-  kind: 'peer:self';
+export type ConnectorData = ConnectorDataLocal | ConnectorDataRemote;
+export type ConnectorDataLocal = {
+  kind: 'peer:local';
   copied?: string;
   peerid: string;
 };

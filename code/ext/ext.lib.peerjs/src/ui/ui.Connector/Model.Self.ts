@@ -4,7 +4,7 @@ import { Model, PeerUri, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
-type D = t.ConnectorDataSelf;
+type D = t.ConnectorDataLocal;
 
 export const Self = {
   init(args: SelfArgs) {
@@ -17,7 +17,7 @@ export const Self = {
 
   initial(args: SelfArgs): t.ConnectorItem<D> {
     const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
-    const data: D = { kind: 'peer:self', peerid };
+    const data: D = { kind: 'peer:local', peerid };
     return {
       editable: false,
       label: 'self', // NB: display value overridden in renderer.
