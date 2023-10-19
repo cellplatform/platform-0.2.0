@@ -28,12 +28,12 @@ export type ConnectorItemLocal = t.LabelItem<t.ConnectorActionLocal, t.Connector
 export type ConnectorItemRemote = t.LabelItem<t.ConnectorActionRemote, t.ConnectorDataRemote>;
 
 /**
- * Model: List
+ * Model: <List>
  */
 export type ConnectorListState = t.LabelListState;
 
 /**
- * Model: Data
+ * Model: <Data>
  */
 type D = ConnectorData;
 export type ConnectorData = ConnectorDataLocal | ConnectorDataRemote;
