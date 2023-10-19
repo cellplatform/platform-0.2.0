@@ -31,18 +31,23 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
       conn.on('data', (data) => {
         const message = data as RepoMessage;
         switch (message.type) {
-          case 'arrive':
-            conn.send({
-              type: 'welcome',
-              senderId: this.peerId,
-              targetId: message.senderId,
-            });
-            this.#announceConnection(message.senderId);
-            break;
+          /**
+           * TODO
+           * https://automerge.slack.com/archives/C61RJCM9S/p1697749052710309?thread_ts=1697568493.913469&cid=C61RJCM9S
+           */
 
-          case 'welcome':
-            this.#announceConnection(message.senderId);
-            break;
+          //           case 'arrive':
+          //             conn.send({
+          //               type: 'welcome',
+          //               senderId: this.peerId,
+          //               targetId: message.senderId,
+          //             });
+          //             this.#announceConnection(message.senderId);
+          //             break;
+          //
+          //           case 'welcome':
+          //             this.#announceConnection(message.senderId);
+          //             break;
 
           default:
             if ('data' in message) {
