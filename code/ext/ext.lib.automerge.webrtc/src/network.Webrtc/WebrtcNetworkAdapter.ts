@@ -1,9 +1,4 @@
-import {
-  Message,
-  NetworkAdapter,
-  type NetworkAdapterMessage,
-  type PeerId,
-} from '@automerge/automerge-repo';
+import { Message, NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
 import type { DataConnection, Peer } from 'peerjs';
 
 /**
@@ -34,7 +29,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
       conn.on('open', () => conn.send({ type: 'arrive', senderId: this.peerId }));
       conn.on('close', () => this.emit('close'));
       conn.on('data', (data) => {
-        const message = data as NetworkAdapterMessage;
+        const message = data as RepoMessage;
         switch (message.type) {
           case 'arrive':
             conn.send({
