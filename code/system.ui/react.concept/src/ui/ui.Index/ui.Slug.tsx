@@ -54,7 +54,7 @@ export const Slug: React.FC<SlugProps> = (props) => {
       <LabelItem
         style={styles.item}
         borderRadius={3}
-        item={{ label: text, editing: isEditing }}
+        item={{ label: text }}
         selected={isSelected}
         focused={isFocused}
         focusOnEdit={true}

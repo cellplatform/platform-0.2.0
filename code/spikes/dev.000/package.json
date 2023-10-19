@@ -17,11 +17,11 @@
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
-    "@automerge/automerge": "2.1.3",
-    "@automerge/automerge-repo": "1.0.6",
-    "@automerge/automerge-repo-network-messagechannel": "1.0.6",
-    "@automerge/automerge-repo-react-hooks": "1.0.6",
-    "@automerge/automerge-repo-storage-indexeddb": "1.0.6",
+    "@automerge/automerge": "2.1.5",
+    "@automerge/automerge-repo": "1.0.12",
+    "@automerge/automerge-repo-network-messagechannel": "1.0.12",
+    "@automerge/automerge-repo-react-hooks": "1.0.12",
+    "@automerge/automerge-repo-storage-indexeddb": "1.0.12",
     "ext.lib.auth.privy": "0.0.0",
     "ext.lib.automerge": "0.0.0",
     "ext.lib.automerge.webrtc": "0.0.0",

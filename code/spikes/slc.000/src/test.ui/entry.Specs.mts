@@ -5,7 +5,8 @@ const importCommon = async () => {
   const { Specs } = await dev();
   return {
     'sys.ui.common.Grid': Specs['sys.ui.common.Grid'],
-    'sys.ui.common.Item.LabelItem': Specs['sys.ui.common.Item.LabelItem'],
+    'sys.ui.common.Item.LabelItem': Specs['sys.ui.common.LabelItem'],
+    'sys.ui.common.Item.LabelItem.Stateful': Specs['sys.ui.common.LabelItem.Stateful'],
     'sys.ui.common.EdgePosition': Specs['sys.ui.common.EdgePosition'],
     'sys.ui.common.EdgePosition.Selector': Specs['sys.ui.common.EdgePosition.Selector'],
   };

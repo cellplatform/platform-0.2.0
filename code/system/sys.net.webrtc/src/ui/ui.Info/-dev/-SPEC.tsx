@@ -95,7 +95,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             console.info('⚡️ onPeerCtrlClick', e);
           },
         },
-        namespace: {},
       };
     },
   };

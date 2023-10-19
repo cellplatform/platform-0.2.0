@@ -26,10 +26,10 @@
     "sys.util": "0.0.0",
     "unified": "11.0.3",
     "unist-util-select": "5.0.0",
-    "yaml": "2.3.2"
+    "yaml": "2.3.3"
   },
   "devDependencies": {
-    "@types/sanitize-html": "2.9.1",
+    "@types/sanitize-html": "2.9.3",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0"
   },

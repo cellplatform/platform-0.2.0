@@ -116,7 +116,6 @@ export function useController(args: {
       onPeerSelect: (e) => setSelected(e.peerid),
       onPeerCtrlClick: (e) => console.info('⚡️ onPeerCtrlClick', e),
     },
-    namespace: {},
   };
 
   const onToggleInfo: t.ConnectToggleInfoHandler = (e) => {
