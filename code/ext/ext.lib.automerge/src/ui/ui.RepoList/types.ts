@@ -4,6 +4,9 @@ import { type t } from './common';
  * <Component>
  */
 export type RepoListProps = {
+  list?: t.RepoListState;
+  renderers?: t.RepoItemRenderers;
+  renderCount?: t.RenderCountProps;
   style?: t.CssValue;
 };
 
@@ -11,7 +14,7 @@ export type RepoListProps = {
  * Model: Context
  */
 export type GetRepoListCtx = () => RepoListCtx;
-export type RepoListCtx = { list: RepoListState };
+export type RepoListCtx = { list: RepoListState; dispatch: t.LabelListDispatch };
 
 /**
  * Model: Item
@@ -24,8 +27,7 @@ export type RepoItemRenderers = t.LabelItemRenderers<t.RepoListAction>;
 /**
  * Model: List
  */
-export type RepoListState = t.PatchState<t.RepoList>;
-export type RepoList = { state: t.LabelListState; items: t.RepoItemState[] };
+export type RepoListState = t.LabelListState;
 
 /**
  * Model: Data

@@ -24,13 +24,17 @@ export default Dev.describe(name, (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        const current = model.list.current;
+        const renderCount: t.RenderCountProps = {
+          absolute: [-20, 2, null, null],
+          opacity: 0.2,
+          prefix: 'list.render-',
+        };
         return (
-          <List
-            list={current.state}
-            items={current.items}
+          <RepoList
+            //
+            list={model.list}
             renderers={model.renderers}
-            renderCount={{ absolute: [-20, 2, null, null], opacity: 0.2, prefix: 'list.render-' }}
+            renderCount={renderCount}
           />
         );
       });

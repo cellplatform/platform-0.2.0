@@ -14,6 +14,9 @@ export const List = {
         if (index === 0) return [self, index];
         if (index === 1) return [first, index];
       } else {
+        /**
+         * TODO 🐷
+         */
       }
 
       return [undefined, -1];

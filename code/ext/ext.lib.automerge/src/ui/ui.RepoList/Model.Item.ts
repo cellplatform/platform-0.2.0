@@ -38,7 +38,7 @@ export const ItemModel = {
     /**
      * Behavior.
      */
-    const add = () => {
+    const add = async () => {
       const ctx = args.ctx();
       console.log('add', store);
       state.change((d) => {
@@ -49,9 +49,12 @@ export const ItemModel = {
       dispatch.redraw();
 
       ctx.list.change((d) => {
-        const next = ItemModel.state(args);
-        d.items.push(next);
+        // const items = d.items || (d.items = []);
+        // const next = ItemModel.state(args);
+        // items.push(next);
       });
+
+      ctx.dispatch.redraw();
     };
 
     const mode = () => Data.item(state).mode;

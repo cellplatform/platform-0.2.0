@@ -2,30 +2,28 @@ import { LabelItem, RenderCount, css, type t } from './common';
 
 export type ListProps = {
   list?: t.LabelListState;
-  items?: t.RepoItemState[];
   renderers?: t.RepoItemRenderers;
   style?: t.CssValue;
   renderCount?: t.RenderCountProps;
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { list, items = [] } = props;
-  const controller = LabelItem.Stateful.useListController({ list, items });
+  const { list } = props;
+  const { ref, Provider } = LabelItem.Stateful.useListController({ list });
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', outline: 'none' }),
+    base: css({ position: 'relative' }),
   };
 
-  const elements = items.map((item, i) => {
+  const elements = LabelItem.Model.List.map(list, (item, i) => {
     return (
       <LabelItem.Stateful
-        key={`item.${i}`}
+        key={item.instance}
         index={i}
-        total={length}
-        list={controller.list}
+        list={list}
         item={item}
         renderers={props.renderers}
       />
@@ -33,9 +31,11 @@ export const List: React.FC<ListProps> = (props) => {
   });
 
   return (
-    <div ref={controller.ref} {...css(styles.base, props.style)} tabIndex={0}>
-      {props.renderCount && <RenderCount {...props.renderCount} />}
-      <div>{elements}</div>
-    </div>
+    <Provider>
+      <div ref={ref} {...css(styles.base, props.style)}>
+        {props.renderCount && <RenderCount {...props.renderCount} />}
+        <div>{elements}</div>
+      </div>
+    </Provider>
   );
 };

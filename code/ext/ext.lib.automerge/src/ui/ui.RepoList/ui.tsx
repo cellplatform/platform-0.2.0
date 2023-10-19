@@ -1,19 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { css, type t } from './common';
+import { List } from './ui.List';
 
 export const View: React.FC<t.RepoListProps> = (props) => {
+  const { list, renderers } = props;
+
   /**
-   * [Render]
+   * Render
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    base: css({ position: 'relative' }),
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 Store List`}</div>
-    </div>
+    <List
+      //
+      list={list}
+      renderers={renderers}
+      renderCount={props.renderCount}
+    />
   );
 };
