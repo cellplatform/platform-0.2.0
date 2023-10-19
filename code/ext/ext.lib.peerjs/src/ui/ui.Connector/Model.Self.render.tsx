@@ -20,14 +20,14 @@ export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRend
     },
 
     action(kind, helpers) {
-      if (kind === 'local:left') {
+      if (kind === 'self:left') {
         return (e) => {
           const color = e.selected ? e.color : COLORS.BLUE;
           return <Icons.Person {...helpers.icon(e, 17)} color={color} />;
         };
       }
 
-      if (kind === 'local:right') {
+      if (kind === 'self:right') {
         return (e) => {
           const data = Data.self(e.item);
           if (!(e.selected && e.focused)) return null;

@@ -3,8 +3,7 @@ import { Data } from './Data';
 import { Model } from './Model';
 
 describe('Connector.Model', () => {
-  const list = Model.List.init();
-  const ctx: t.GetConnectorCtx = () => ({ list });
+  const { ctx } = Model.List.init();
 
   describe('Self', () => {
     it('state', () => {
@@ -24,7 +23,7 @@ describe('Connector.Model', () => {
 
   describe('List', () => {
     it('state', () => {
-      const list = Model.List.init();
+      const { list } = Model.List.init();
       expect(list.current.total).to.eql(2);
       expect(list.current.getItem).to.be.a('function');
     });

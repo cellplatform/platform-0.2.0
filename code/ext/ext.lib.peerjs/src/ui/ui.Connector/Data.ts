@@ -3,7 +3,7 @@ import { Model, type t } from './common';
 type Input = t.LabelItem | t.LabelItemState;
 
 export const Data = {
-  self: (item: Input) => Model.data<t.ConnectorDataLocal>(item),
+  self: (item: Input) => Model.data<t.ConnectorDataSelf>(item),
   remote: (item: Input) => Model.data<t.ConnectorDataRemote>(item),
 
   list(input: t.ConnectorListState) {

@@ -9,7 +9,8 @@ const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const list = Connector.Model.List.init();
+  const model = Connector.Model.List.init();
+  const { list } = model;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

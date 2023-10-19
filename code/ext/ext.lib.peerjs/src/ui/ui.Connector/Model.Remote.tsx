@@ -7,13 +7,7 @@ export type RemoteOptions = { dispose$?: t.UntilObservable };
 type D = t.ConnectorDataRemote;
 
 export const Remote = {
-  init(args: RemoteArgs) {
-    const { ctx } = args;
-    return {
-      state: Remote.state(args),
-      renderers: renderers({ ctx }),
-    };
-  },
+  renderers,
 
   initial(args: RemoteArgs): t.ConnectorItem<D> {
     const data: D = { kind: 'peer:remote' };
