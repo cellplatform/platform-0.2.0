@@ -3,13 +3,14 @@ import { DEFAULTS, PatchState, type t } from './common';
 import { array } from './List.array';
 import { commands } from './List.commands';
 import { events } from './List.events';
-import { getItem } from './List.getItem';
+import { get, getItem } from './List.get';
 import { map } from './List.map';
 
 type O = Record<string, unknown>;
 
 export const List = {
   commands,
+  get,
   getItem,
   array,
   map,

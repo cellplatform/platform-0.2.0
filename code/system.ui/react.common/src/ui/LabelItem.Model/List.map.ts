@@ -1,4 +1,4 @@
-import { getItem } from './List.getItem';
+import { getItem } from './List.get';
 import { PatchState, type t } from './common';
 
 type O = Record<string, unknown>;

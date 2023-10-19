@@ -128,7 +128,7 @@ describe('LabelItem.Model', () => {
       });
     });
 
-    describe('items (fn)', () => {
+    describe('Model.List.getItem', () => {
       it('returns nothing: no getter function', () => {
         const state = Model.List.state();
         expect(state.current.getItem).to.eql(undefined);
@@ -162,6 +162,37 @@ describe('LabelItem.Model', () => {
         expect(Model.List.getItem(state, -1)).to.eql([undefined, -1]);
         expect(Model.List.getItem(state, 2)).to.eql([undefined, -1]);
         expect(items).to.eql([]); // NB: no models instantiated.
+      });
+    });
+
+    describe('Model.List.get', () => {
+      const { items, getItem } = Model.List.array();
+      const list = Model.List.state({ total: 2, getItem });
+      const get = Model.List.get(list);
+      Model.List.map(list, () => null); // NB: Ensure the list is populated.
+
+      it('get.item ← from Index', () => {
+        const test = (index: number, expected?: t.LabelItemState) => {
+          expect(get.item(index)).to.equal(expected);
+        };
+        test(-1, undefined);
+        test(0, items[0]);
+        test(1, items[1]);
+        test(2, undefined);
+      });
+
+      it('get.index ← from [Item]', () => {
+        const test = (item: t.LabelItemState | undefined, expected: number) => {
+          expect(get.index(item)).to.equal(expected);
+        };
+        test(undefined, -1);
+        test(items[0], 0);
+        test(items[1], 1);
+      });
+
+      it('throw: not an interger', () => {
+        const fn = () => get.item(0.1);
+        expect(fn).to.throw(/Index is not an integer/);
       });
     });
 

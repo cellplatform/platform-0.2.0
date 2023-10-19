@@ -26,13 +26,12 @@ export type ConnectorItemState<T extends D = D> = t.LabelItemState<ConnectorActi
  */
 export type ConnectorListState = t.PatchState<t.ConnectorList>;
 export type ConnectorListItem = {
-  state: t.ConnectorItemState;
-  renderers: t.ConnectorItemRenderers;
-};
-export type ConnectorList = {
-  state: t.LabelListState;
-  items: t.ConnectorListItem[];
-};
+export type ConnectorListState = t.LabelListState;
+// export type ConnectorListItem = {
+//   state: t.ConnectorItemState;
+//   renderers: t.ConnectorItemRenderers;
+// };
+// export type ConnectorList = t.LabelListState;
 
 /**
  * Model: Data
