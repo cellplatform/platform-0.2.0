@@ -145,10 +145,7 @@
     "yaml": "2.3.3"
   },
   "resolutions": {
-    "@babel/traverse": ">=7.23.2",
-    "get-func-name": "^2.0.2",
-    "postcss": "8.4.31",
-    "zod": "3.22.4"
+    "@babel/traverse": ">=7.23.2"
   },
   "license": "MIT",
   "private": true
