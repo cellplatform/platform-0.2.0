@@ -28,7 +28,7 @@ export const Label: React.FC<Props> = (props) => {
   /**
    * Render
    */
-  const renderElement = (renderer?: t.LabelItemRenderer, text?: string) => {
+  const renderElement = (renderer?: t.LabelItemRender, text?: string) => {
     return typeof renderer === 'function'
       ? Wrangle.element(renderer, { index, total, enabled, selected, focused, editing, item })
       : text;

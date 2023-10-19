@@ -50,7 +50,7 @@ export const Wrangle = {
   },
 
   renderer(renderers: t.LabelItemRenderers, kind: t.LabelItemActionKind) {
-    const done = (res?: t.LabelItemRenderer | void) => res ?? undefined;
+    const done = (res?: t.LabelItemRender | void) => res ?? undefined;
 
     if (typeof renderers.action === 'function') {
       const res = renderers.action?.(kind, actionHelpers);
@@ -59,7 +59,7 @@ export const Wrangle = {
     return done(DEFAULTS.renderers.action?.(kind, actionHelpers));
   },
 
-  element(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
+  element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
     if (typeof renderer === 'string') return renderer;
     if (typeof renderer === 'function') {
       const { index, total } = args;
@@ -80,7 +80,7 @@ export const Wrangle = {
     return undefined;
   },
 
-  icon(renderer: t.LabelItemRenderer | undefined, args: RenderArgs) {
+  icon(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
     const el = Wrangle.element(renderer, args);
     if (el === null || el === false) return null;
     return el || Wrangle.defaultIcon(args);
@@ -97,11 +97,11 @@ export const Wrangle = {
  */
 
 const actionHelpers: t.LabelItemActionRenderHelpers = {
-  opacity(e: t.LabelItemRendererArgs) {
+  opacity(e: t.LabelItemRenderArgs) {
     if (e.enabled) return 0.9;
     return e.selected && e.focused ? 0.5 : 0.3;
   },
-  icon(e: t.LabelItemRendererArgs, size, offset): t.IconProps {
+  icon(e: t.LabelItemRenderArgs, size, offset): t.IconProps {
     return {
       color: e.color,
       opacity: actionHelpers.opacity(e),
