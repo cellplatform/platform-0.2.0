@@ -9,8 +9,7 @@ export const Data = {
   list(input: t.ConnectorListState) {
     const list = {
       get items() {
-        const list = input.current.state;
-        return Model.List.map(list, (item) => item.current);
+        return Model.List.map(input, (item) => item.current);
       },
       get data() {
         return list.items.map((item) => item.data!).filter(Boolean);
@@ -19,7 +18,7 @@ export const Data = {
         get items() {
           return list.items
             .filter((item) => item.data?.kind === 'peer:remote')
-            .map((item) => item as t.LabelItem<t.ConnectorAction, t.ConnectorDataRemote>);
+            .map((item) => item as t.ConnectorItemRemote);
         },
         get data() {
           return list.remotes.items.map((item) => item.data!);

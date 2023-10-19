@@ -1,13 +1,13 @@
 import { Data } from './Data';
 import { renderers } from './Model.Self.render';
-import { PeerUri, Model, Time, slug, type t } from './common';
+import { Model, PeerUri, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
 type D = t.ConnectorDataSelf;
 
 export const Self = {
-  init(args: SelfArgs): t.ConnectorListItem {
+  init(args: SelfArgs) {
     const { ctx } = args;
     return {
       state: Self.state(args),
@@ -30,7 +30,7 @@ export const Self = {
   /**
    * State wrapper.
    */
-  state(args: SelfArgs) {
+  state(args: SelfArgs): t.ConnectorItemState {
     const copyClipboard = async () => {
       const peerid = Data.self(state).peerid;
       await navigator.clipboard.writeText(PeerUri.uri(peerid));

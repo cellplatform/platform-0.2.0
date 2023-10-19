@@ -7,7 +7,7 @@ export type RemoteOptions = { dispose$?: t.UntilObservable };
 type D = t.ConnectorDataRemote;
 
 export const Remote = {
-  init(args: RemoteArgs): t.ConnectorListItem {
+  init(args: RemoteArgs) {
     const { ctx } = args;
     return {
       state: Remote.state(args),
@@ -26,7 +26,7 @@ export const Remote = {
     };
   },
 
-  state(args: RemoteArgs) {
+  state(args: RemoteArgs): t.ConnectorItemState {
     const initial = Remote.initial(args);
     const state = Model.Item.state<t.ConnectorAction, D>(initial);
     const dispatch = Model.Item.commands(state);
@@ -44,7 +44,7 @@ export const Remote = {
       const isValid = PeerUri.Is.peerid(pasted) || PeerUri.Is.uri(pasted);
       const peerid = isValid ? PeerUri.id(pasted) : '';
 
-      const self = Data.self(Model.List.getItem(ctx.list.current.state, 0)[0]!);
+      const self = Data.self(Model.List.get(ctx.list).item(0)!);
       const isSelf = self.peerid === peerid;
 
       state.change((d) => {
@@ -59,7 +59,6 @@ export const Remote = {
         if (data.error) d.label = undefined;
       });
       redraw();
-      // Time.delay(10, redraw);
 
       Time.delay(3000, () => {
         if (Data.remote(state).error?.tx !== tx) return;

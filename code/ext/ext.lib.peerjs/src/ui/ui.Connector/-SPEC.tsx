@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
           opacity: 0.2,
           prefix: 'list.render-',
         };
-        return <List list={list.current.state} debug={{ renderCount }} />;
+        return <List list={list} debug={{ renderCount }} />;
       });
   });
 
@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        'model.list': list.current.state,
+        'model.list': list.current,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
