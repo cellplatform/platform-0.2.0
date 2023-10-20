@@ -7,7 +7,7 @@ export type {
   DevCtxState,
   GetLabelItem,
   LabelItem,
-  LabelItemRendererArgs,
+  LabelItemRenderArgs,
   LabelItemRenderers,
   LabelItemState,
   LabelListDispatch,
