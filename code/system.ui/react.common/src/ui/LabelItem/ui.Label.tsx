@@ -29,8 +29,9 @@ export const Label: React.FC<Props> = (props) => {
    * Render
    */
   const renderElement = (renderer?: t.LabelItemRender, text?: string) => {
+    const render = Wrangle.render.element;
     return typeof renderer === 'function'
-      ? Wrangle.element(renderer, { index, total, enabled, selected, focused, editing, item })
+      ? render(renderer, { index, total, enabled, selected, focused, editing, item })
       : text;
   };
 
@@ -60,7 +61,9 @@ export const Label: React.FC<Props> = (props) => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     }),
-    labelEmpty: css({ opacity: placeholderStyle.opacity }),
+    labelEmpty: css({
+      opacity: placeholderStyle.opacity,
+    }),
   };
 
   const elTextbox = editing && (

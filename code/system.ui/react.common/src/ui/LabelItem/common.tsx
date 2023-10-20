@@ -1,4 +1,4 @@
-import { Icons, type t } from '../common';
+import { Icons, type t, COLORS } from '../common';
 
 export { Button } from '../Button';
 export { RenderCount } from '../RenderCount';
@@ -17,10 +17,10 @@ const leftAction: TLabelAction = { kind: 'left:default' };
 const rightAction: TLabelAction | undefined = undefined;
 
 const renderers: t.LabelItemRenderers = {
-  action(kind, helpers) {
-    return kind === leftAction.kind
-      ? (e) => <Icons.Repo {...helpers.icon(e, 18, [0, 1])} />
-      : (e) => <Icons.Face {...helpers.icon(e, 18)} />;
+  action(e, helpers) {
+    if (e.kind === leftAction.kind) return <Icons.Repo {...helpers.icon(e, 18, [0, 1])} />;
+    const opacity = e.selected && e.focused ? 0.3 : 0.2;
+    return <Icons.Face {...helpers.icon(e, 18)} color={COLORS.MAGENTA} opacity={opacity} />;
   },
 };
 

@@ -13,15 +13,8 @@ export { Keyboard } from '../Text.Keyboard';
  * Constants
  */
 type B = t.LabelItemBehaviorKind;
-const useBehaviorAll: B[] = [
-  //
-  'Item',
-  'Item.Selection',
-  'Item.Edit',
-  'List',
-  'List.Navigation',
-];
-const useBehaviorDefaults: B[] = ['Item', 'List'];
+const all: B[] = ['Item', 'Item.Selection', 'Item.Edit', 'List', 'List.Navigation'];
+const defaults: B[] = ['Item', 'List'];
 
 export const DEFAULTS = {
   index: -1,
@@ -29,9 +22,6 @@ export const DEFAULTS = {
   enabled: true,
   editing: false,
   editable: true,
-  useBehaviors: {
-    all: useBehaviorAll,
-    defaults: useBehaviorDefaults,
-  },
+  useBehaviors: { all, defaults },
   data: MODEL_DEFAULTS.data,
 } as const;

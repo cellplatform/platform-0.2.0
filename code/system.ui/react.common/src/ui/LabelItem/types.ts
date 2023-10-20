@@ -1,7 +1,6 @@
 import type { t } from './common';
-
-export type * from './types.props';
 export type * from './types.event';
+export type * from './types.props';
 
 export type LabelItemPosition = { index: number; total: number };
 
@@ -30,23 +29,24 @@ export type LabelItemValueArgs = {
 /**
  * JSX Renderer (data → visuals)
  */
+type K = t.LabelItemActionKind;
 export type LabelItemRendered = JSX.Element | undefined | false | null;
 export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRendered;
-export type LabelItemRenderArgs = LabelItemValueArgs & { color: string };
+export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
+export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & { kind: A };
 
-export type LabelItemRenderers<A extends LabelItemActionKind = string> = {
+type H = LabelItemActionRenderHelpers;
+export type LabelItemRenderers<A extends K = string> = {
   label?: t.LabelItemRender;
   placeholder?: t.LabelItemRender;
-  action?(kind: A, helpers: LabelItemActionRenderHelpers): t.LabelItemRender | void;
+  action?(e: LabelItemRenderActionArgs<A>, helpers: H): LabelItemRendered;
 };
 
+type S = t.IconProps['size'];
+type O = t.IconProps['offset'];
 export type LabelItemActionRenderHelpers = {
   opacity(e: t.LabelItemRenderArgs): number;
-  icon(
-    e: t.LabelItemRenderArgs,
-    size?: t.IconProps['size'],
-    offset?: t.IconProps['offset'],
-  ): t.IconProps;
+  icon(e: t.LabelItemRenderArgs, size?: S, offset?: O): t.IconProps;
 };
 
 /**

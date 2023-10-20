@@ -49,46 +49,23 @@ export const Wrangle = {
     return color;
   },
 
-  renderer(renderers: t.LabelItemRenderers, kind: t.LabelItemActionKind) {
-    const done = (res?: t.LabelItemRender | void) => res ?? undefined;
+  render: {
+    action(renderers: t.LabelItemRenderers, args: t.LabelItemRenderActionArgs) {
+      const { action } = renderers;
+      const fn = typeof action === 'function' ? action : DEFAULTS.renderers.action;
+      return fn?.(args, actionHelpers);
+    },
 
-    if (typeof renderers.action === 'function') {
-      const res = renderers.action?.(kind, actionHelpers);
-      if (res) return done(res);
-    }
-    return done(DEFAULTS.renderers.action?.(kind, actionHelpers));
-  },
-
-  element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
-    if (typeof renderer === 'string') return renderer;
-    if (typeof renderer === 'function') {
-      const { index, total } = args;
-      const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
-      const color = Wrangle.foreColor(args);
-      const el = renderer({
-        index,
-        total,
-        item,
-        enabled,
-        selected,
-        focused,
-        editing,
-        color,
-      });
-      return el;
-    }
-    return undefined;
-  },
-
-  icon(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
-    const el = Wrangle.element(renderer, args);
-    if (el === null || el === false) return null;
-    return el || Wrangle.defaultIcon(args);
-  },
-
-  defaultIcon(args: { selected?: boolean }) {
-    const color = Wrangle.foreColor(args);
-    return <Icons.Face size={18} color={color} offset={[0, 0]} />;
+    element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {
+      if (typeof renderer === 'string') return renderer;
+      if (typeof renderer === 'function') {
+        const { index, total } = args;
+        const { enabled, selected, focused, editing, item } = Wrangle.valuesOrDefault(args);
+        const color = Wrangle.foreColor(args);
+        return renderer({ index, total, item, enabled, selected, focused, editing, color });
+      }
+      return undefined;
+    },
   },
 } as const;
 

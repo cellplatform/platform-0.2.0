@@ -1,4 +1,4 @@
-import { DEFAULTS, Icons, type t } from '../common';
+import { Icons, type t } from '../common';
 
 export type SampleActionKind = 'left' | 'right';
 
@@ -20,13 +20,10 @@ export const Sample = {
       placeholder(e) {
         return <>{`placeholder:${e.item.placeholder || 'none'}`}</>;
       },
-      action(kind, helpers) {
-        switch (kind) {
-          case 'left':
-            return (e) => <Icons.Repo {...helpers.icon(e, 17, [0, 1])} />;
-          case 'right':
-            return (e) => <Icons.ObjectTree {...helpers.icon(e, 17)} />;
-        }
+      action(e, helpers) {
+        if (e.kind === 'left') return <Icons.Repo {...helpers.icon(e, 17, [0, 1])} />;
+        if (e.kind === 'right') return <Icons.ObjectTree {...helpers.icon(e, 17)} />;
+        return;
       },
     };
   },

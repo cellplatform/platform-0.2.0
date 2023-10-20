@@ -42,25 +42,25 @@ export const Sample = {
    */
   get renderers(): t.LabelItemRenderers<A> {
     return {
-      action(kind, helpers) {
-        if (kind === 'left:sample') {
-          return (e) => <Icons.Keyboard.outline {...helpers.icon(e, 17)} />;
+      action(e, helpers) {
+        if (e.kind === 'left:sample') {
+          return <Icons.Keyboard.outline {...helpers.icon(e, 17)} />;
         }
 
-        if (kind === 'right:1') {
-          return (e) => <Icons.ObjectTree {...helpers.icon(e, 17)} />;
+        if (e.kind === 'right:1') {
+          return <Icons.ObjectTree {...helpers.icon(e, 17)} />;
         }
 
-        if (kind === 'right:2') {
-          return (e) => <Icons.ObjectTree {...helpers.icon(e, 17)} />;
+        if (e.kind === 'right:2') {
+          return <Icons.ObjectTree {...helpers.icon(e, 17)} />;
         }
 
-        if (kind === 'right:3') {
-          return (e) => <Icons.Face {...helpers.icon(e, 18)} />;
+        if (e.kind === 'right:3') {
+          return <Icons.Face {...helpers.icon(e, 18)} />;
         }
 
-        if (kind === 'right:button') {
-          return (e) => (
+        if (e.kind === 'right:button') {
+          return (
             <LabelItem.Button
               selected={e.selected}
               focused={e.focused}

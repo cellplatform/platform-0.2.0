@@ -20,7 +20,8 @@ export type ActionProps = {
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, selected, focused, editing, debug, index, total, item, renderers } = props;
+  const { action, debug, renderers } = props;
+  const { index, total, selected, focused, editing, item } = Wrangle.valuesOrDefault(props);
   const { kind, width } = action;
   const enabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;
   const spinning = action.spinning ?? false;
@@ -54,6 +55,7 @@ export const Action: React.FC<ActionProps> = (props) => {
   /**
    * [Render]
    */
+  const color = Wrangle.foreColor({ selected, focused });
   const styles = {
     base: css({
       position: 'relative',
@@ -72,23 +74,26 @@ export const Action: React.FC<ActionProps> = (props) => {
     button: css({ display: 'grid' }),
   };
 
-  const renderer = Wrangle.renderer(renderers, kind);
-  const elBody = Wrangle.icon(renderer, {
+  const args: t.LabelItemRenderActionArgs = {
+    kind,
     index,
     total,
     selected,
     enabled,
     focused,
     editing,
+    color,
     item,
-  });
+  };
+
+  const elBody = Wrangle.render.action(renderers, args);
 
   const elButton = is.button && (
     <Button
-      onMouseDown={(e) => e.stopPropagation()}
-      onClick={handleClick}
       enabled={enabled}
       disabledOpacity={1}
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={handleClick}
     >
       <div {...styles.button}>{elBody}</div>
     </Button>

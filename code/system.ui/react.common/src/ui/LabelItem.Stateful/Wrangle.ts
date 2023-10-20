@@ -1,5 +1,4 @@
 import { DEFAULTS, type t } from './common';
-
 type B = t.LabelItemBehaviorKind;
 
 /**
