@@ -1,5 +1,4 @@
-import { DEFAULTS, FC, type t } from './common';
-import { Model } from './Model';
+import { DEFAULTS, FC, Model, type t } from './common';
 import { View } from './ui';
 
 /**

@@ -1,7 +1,7 @@
-import { Model, type t } from './common';
+import { Renderers } from '../ui.Connector/Renderers';
 import { Remote, type RemoteOptions } from './Model.Remote';
 import { Self, type SelfOptions } from './Model.Self';
-import { Renderers } from './Renderers';
+import { Model, type t } from './common';
 
 export const List = {
   /**

@@ -1,7 +1,6 @@
-import { Data } from './Data';
 import { renderRemote } from './Renderer.Remote';
 import { renderSelf } from './Renderer.Self';
-import { type t } from './common';
+import { Data, type t } from './common';
 
 const selfActions: t.ConnectorAction[] = ['self:left', 'self:right'];
 const remoteActions: t.ConnectorAction[] = ['remote:left', 'remote:right'];

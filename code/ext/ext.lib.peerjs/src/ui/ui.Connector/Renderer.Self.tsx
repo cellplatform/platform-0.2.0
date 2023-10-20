@@ -1,5 +1,4 @@
-import { COLORS, Icons, type t } from './common';
-import { Data } from './Data';
+import { COLORS, Data, Icons, type t } from './common';
 import { PeerLabel } from './ui.PeerLabel';
 
 export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
