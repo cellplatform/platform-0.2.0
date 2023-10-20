@@ -55,9 +55,11 @@ export async function build(
     const prefix = pc.bgCyan(pc.black(pc.bold(' DIST ')));
     const pkg = await Util.importPkgMeta(dir);
     const moduleName = pkg?.name || 'unknown';
+    const version = pkg?.version || 'unknown';
 
     const table = LogTable();
     const indent = ' '.repeat(6);
+    table.push([indent, 'version', `  ${version}`]);
     table.push([indent, 'bundle', `  ${bundle.length} files  `, bundleSize]);
     table.push([indent, 'types.d', `  ${types.length} files  `, typesSize]);
     table.push([indent, '', '', '-'.repeat(10)]);
