@@ -2,7 +2,7 @@ import { Icons, LabelItem, PeerUri, type t } from './common';
 import { Data } from './Data';
 import { PeerLabel } from './ui.PeerLabel';
 
-export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
+export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
   return {
     label(e) {
       const data = Data.remote(e.item);

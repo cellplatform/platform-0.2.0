@@ -1,6 +1,7 @@
-import { type t } from './common';
 import { Data } from './Data';
-import { Model } from './Model';
+import { renderRemote } from './Renderer.Remote';
+import { renderSelf } from './Renderer.Self';
+import { type t } from './common';
 
 const selfActions: t.ConnectorAction[] = ['self:left', 'self:right'];
 const remoteActions: t.ConnectorAction[] = ['remote:left', 'remote:right'];
@@ -10,22 +11,23 @@ export const Renderers = {
    * Initilise the router for item <Component> renderers.
    */
   init(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
-    const self = Model.Self.renderers(args);
-    const remote = Model.Remote.renderers(args);
+    const self = renderSelf(args);
+    const remote = renderRemote(args);
 
     const getRenderer = (e: t.LabelItemRenderArgs) => {
       const kind = Data.kind(e.item);
       if (kind === 'peer:self') return self;
       if (kind === 'peer:remote') return remote;
-      return;
+      throw new Error(`Renderer "${kind}" not found`);
     };
 
     return {
       label: (e) => getRenderer(e)?.label?.(e),
       placeholder: (e) => getRenderer(e)?.placeholder?.(e),
       action(e, helpers) {
-        if (selfActions.includes(e.kind)) return self.action?.(e, helpers);
-        if (remoteActions.includes(e.kind)) return remote.action?.(e, helpers);
+        const render = getRenderer(e).action;
+        if (selfActions.includes(e.kind)) return render?.(e, helpers);
+        if (remoteActions.includes(e.kind)) return render?.(e, helpers);
         return;
       },
     };

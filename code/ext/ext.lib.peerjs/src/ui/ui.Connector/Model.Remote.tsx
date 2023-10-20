@@ -1,5 +1,4 @@
 import { Data } from './Data';
-import { renderers } from './Render.Remote';
 import { PeerUri, Model, Time, slug, type t } from './common';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
@@ -7,8 +6,6 @@ export type RemoteOptions = { dispose$?: t.UntilObservable };
 type D = t.ConnectorDataRemote;
 
 export const Remote = {
-  renderers,
-
   initial(args: RemoteArgs): t.ConnectorItem<D> {
     const data: D = { kind: 'peer:remote' };
     return {

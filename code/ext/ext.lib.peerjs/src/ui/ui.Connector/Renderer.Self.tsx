@@ -2,7 +2,7 @@ import { COLORS, Icons, type t } from './common';
 import { Data } from './Data';
 import { PeerLabel } from './ui.PeerLabel';
 
-export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
+export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
   return {
     label(e) {
       const ctx = args.ctx();

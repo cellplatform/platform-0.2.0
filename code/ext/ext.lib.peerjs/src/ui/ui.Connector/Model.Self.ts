@@ -1,5 +1,4 @@
 import { Data } from './Data';
-import { renderers } from './Render.Self';
 import { Model, PeerUri, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
@@ -7,8 +6,6 @@ export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
 type D = t.ConnectorDataSelf;
 
 export const Self = {
-  renderers,
-
   initial(args: SelfArgs): t.ConnectorItem<D> {
     const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
     const data: D = { kind: 'peer:self', peerid };
