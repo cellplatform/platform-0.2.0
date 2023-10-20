@@ -24,8 +24,16 @@ export type ConnectorItem<T extends D = D> = t.LabelItem<t.ConnectorAction, T>;
 export type ConnectorItemRenderers = t.LabelItemRenderers<t.ConnectorAction>;
 export type ConnectorItemState<T extends D = D> = t.LabelItemState<ConnectorAction, T>;
 
-export type ConnectorItemSelf = t.LabelItem<t.ConnectorActionSelf, t.ConnectorDataRemote>;
-export type ConnectorItemRemote = t.LabelItem<t.ConnectorActionRemote, t.ConnectorDataRemote>;
+type TSelf = t.ConnectorActionSelf;
+type TRemote = t.ConnectorActionRemote;
+
+export type ConnectorItemSelf = t.LabelItem<TSelf, t.ConnectorDataRemote>;
+export type ConnectorItemRemote = t.LabelItem<TRemote, t.ConnectorDataRemote>;
+
+export type ConnectorItemStateSelf = t.LabelItemState<TSelf, t.ConnectorDataSelf>;
+export type ConnectorItemStateSelfEvents = t.LabelItemEvents<TSelf>;
+export type ConnectorItemStateRemote = t.LabelItemState<TRemote, t.ConnectorDataRemote>;
+export type ConnectorItemStateRemoteEvents = t.LabelItemEvents<TRemote>;
 
 /**
  * Model: <List>

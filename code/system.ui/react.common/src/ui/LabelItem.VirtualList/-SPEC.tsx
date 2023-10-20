@@ -82,6 +82,7 @@ export default Dev.describe(name, (e) => {
       total(10);
       total(100);
       total(1000);
+      total(10000);
     });
 
     dev.hr(5, 20);

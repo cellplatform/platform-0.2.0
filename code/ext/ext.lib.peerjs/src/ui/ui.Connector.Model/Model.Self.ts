@@ -1,5 +1,5 @@
-import { Data } from './Data';
-import { Model, PeerUri, Time, slug, type t } from './common';
+import { clipboardBehavior } from './Model.Self.b.clipboard';
+import { Model, PeerUri, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
 export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
@@ -18,32 +18,14 @@ export const Self = {
     };
   },
 
-  /**
-   * State wrapper.
-   */
   state(args: SelfArgs): t.ConnectorItemState {
-    const copyClipboard = async () => {
-      const peerid = Data.self(state).peerid;
-      await navigator.clipboard.writeText(PeerUri.uri(peerid));
-
-      const tx = slug();
-      state.change((d) => (Data.self(d).copied = tx));
-      dispatch.redraw();
-
-      Time.delay(1200, () => {
-        if (Data.self(state).copied !== tx) return;
-        state.change((d) => (Data.self(d).copied = undefined));
-        dispatch.redraw();
-      });
-    };
-
+    const { ctx } = args;
     const initial = Self.initial(args);
-    const state = Model.Item.state<t.ConnectorAction, D>(initial);
+    const state = Model.Item.state<t.ConnectorAction, D>(initial) as t.ConnectorItemStateSelf;
     const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
 
-    events.cmd.clipboard.copy$.subscribe(copyClipboard);
-    events.cmd.action.on('self:right').subscribe(copyClipboard);
+    clipboardBehavior({ ctx, state, events, dispatch });
 
     return state;
   },
