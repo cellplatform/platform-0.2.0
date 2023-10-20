@@ -13,7 +13,7 @@ export const Renderers = {
     const self = Model.Self.renderers(args);
     const remote = Model.Remote.renderers(args);
 
-    const getRenderer = (e: t.LabelItemRendererArgs) => {
+    const getRenderer = (e: t.LabelItemRenderArgs) => {
       const kind = Data.kind(e.item);
       if (kind === 'peer:self') return self;
       if (kind === 'peer:remote') return remote;
@@ -23,9 +23,9 @@ export const Renderers = {
     return {
       label: (e) => getRenderer(e)?.label?.(e),
       placeholder: (e) => getRenderer(e)?.placeholder?.(e),
-      action(kind, helpers) {
-        if (selfActions.includes(kind)) return self.action?.(kind, helpers);
-        if (remoteActions.includes(kind)) return remote.action?.(kind, helpers);
+      action(e, helpers) {
+        if (selfActions.includes(e.kind)) return self.action?.(e, helpers);
+        if (remoteActions.includes(e.kind)) return remote.action?.(e, helpers);
         return;
       },
     };

@@ -20,38 +20,33 @@ export function renderers(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRend
       return <>{text}</>;
     },
 
-    action(kind, helpers) {
-      if (kind === 'remote:left') {
-        return (e) => <Icons.Add {...helpers.icon(e, 17)} />;
+    action(e, helpers) {
+      if (e.kind === 'remote:left') {
+        return <Icons.Add {...helpers.icon(e, 17)} />;
       }
 
-      if (kind === 'remote:right') {
-        return (e) => {
-          const data = Data.remote(e.item);
+      if (e.kind === 'remote:right') {
+        const data = Data.remote(e.item);
+        if (data.error) {
+          return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />;
+        }
 
-          if (data.error) {
-            return (
-              <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />
-            );
-          }
+        /**
+         * TODO 🐷
+         */
+        if (e.selected && data.peerid) {
+          const spinning = false;
+          return (
+            <LabelItem.Button
+              selected={e.selected}
+              focused={e.focused}
+              spinning={spinning}
+              label={'Connect'}
+            />
+          );
+        }
 
-          /**
-           * TODO 🐷
-           */
-          if (e.selected && data.peerid) {
-            const spinning = false;
-            return (
-              <LabelItem.Button
-                selected={e.selected}
-                focused={e.focused}
-                spinning={spinning}
-                label={'Connect'}
-              />
-            );
-          }
-
-          return null;
-        };
+        return null;
       }
 
       return;
