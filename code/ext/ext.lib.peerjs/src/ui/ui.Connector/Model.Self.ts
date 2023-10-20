@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { renderers } from './Model.Self.render';
+import { renderers } from './Render.Self';
 import { Model, PeerUri, Time, slug, type t } from './common';
 
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };

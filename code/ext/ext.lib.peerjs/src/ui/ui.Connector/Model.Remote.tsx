@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { renderers } from './Model.Remote.render';
+import { renderers } from './Render.Remote';
 import { PeerUri, Model, Time, slug, type t } from './common';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
