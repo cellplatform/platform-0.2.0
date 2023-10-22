@@ -65,12 +65,12 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
   );
   const elBalance = !elClose && (
     <Button.Copy
+      style={styles.balance}
       minWidth={80}
       enabled={enabled}
       spinning={balance.is.fetching}
       spinner={{ color: { enabled: COLORS.DARK } }}
-      onCopy={(e) => e.copy(balance.eth)}
-      style={styles.balance}
+      onCopy={(e) => e.copy(`${balance.eth} ETH`)}
     >
       <div>{balance.toString('ETH', 5)}</div>
     </Button.Copy>
