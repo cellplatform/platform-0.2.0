@@ -7,7 +7,7 @@ export * from './ui.logic/MonacoCrdt/types.mjs';
 /**
  * Supported languages.
  */
-export type EditorLanguage = 'markdown' | 'typescript' | 'javascript' | 'json' | 'yaml';
+export type EditorLanguage = 'markdown' | 'typescript' | 'javascript' | 'json' | 'yaml' | 'go';
 export type EditorTheme = 'Light' | 'Dark';
 
 /**

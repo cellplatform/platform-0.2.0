@@ -1,5 +1,6 @@
 import { MonacoEditor, MonacoEditorProps } from '.';
 import { Dev, Wrangle, t, EditorCarets } from '../../test.ui';
+import { CODE_SAMPLES } from './-Sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -20,7 +21,7 @@ export default Dev.describe('MonacoEditor', (e) => {
     language: t.EditorLanguage;
     selection: t.EditorRange | null;
   };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.monoaco.MonacoEditor');
   const local = localstore.object({
     text: initial.props.text!,
     language: initial.props.language!,
@@ -82,20 +83,25 @@ export default Dev.describe('MonacoEditor', (e) => {
     dev.section('Language', (dev) => {
       const hr = () => dev.hr(-1, 5);
 
-      const language = (input: t.EditorLanguage) => {
+      const language = (input: t.EditorLanguage, codeSample?: string) => {
         const language = input as t.EditorLanguage;
         return dev.button((btn) =>
           btn
             .label(language)
             .right((e) => (e.state.props.language === language ? '← current' : ''))
             .onClick((e) => {
-              e.change((d) => (d.props.language = language));
-              local.language = language;
+              e.change((d) => {
+                local.language = d.props.language = language;
+                console.log('codeSample', codeSample);
+                if (codeSample) local.text = d.props.text = codeSample;
+              });
             }),
         );
       };
       language('typescript');
       language('javascript');
+      language('go', CODE_SAMPLES.go);
+
       hr();
       language('json');
       language('yaml');
