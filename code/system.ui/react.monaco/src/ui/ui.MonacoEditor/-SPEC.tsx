@@ -85,6 +85,10 @@ export default Dev.describe('MonacoEditor', (e) => {
 
       const language = (input: t.EditorLanguage, codeSample?: string) => {
         const language = input as t.EditorLanguage;
+        const format = (code: string) => {
+          code = code.replace(/^\s*\n|\n\s*$/g, '');
+          return `${code}\n`;
+        };
         return dev.button((btn) =>
           btn
             .label(language)
@@ -92,21 +96,21 @@ export default Dev.describe('MonacoEditor', (e) => {
             .onClick((e) => {
               e.change((d) => {
                 local.language = d.props.language = language;
-                console.log('codeSample', codeSample);
-                if (codeSample) local.text = d.props.text = codeSample;
+                if (codeSample) local.text = d.props.text = format(codeSample);
               });
             }),
         );
       };
-      language('typescript');
-      language('javascript');
+      language('typescript', CODE_SAMPLES.typescript);
+      language('javascript', CODE_SAMPLES.javascript);
       language('go', CODE_SAMPLES.go);
+      language('python', CODE_SAMPLES.python);
 
       hr();
-      language('json');
-      language('yaml');
+      language('json', CODE_SAMPLES.json);
+      language('yaml', CODE_SAMPLES.yaml);
       hr();
-      language('markdown');
+      language('markdown', CODE_SAMPLES.markdown);
     });
 
     dev.hr(5, 20);
