@@ -87,7 +87,7 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Handle', 'ƒ( vlist )'], (dev) => {
+    dev.section(['Handle', 'ƒ( v-list )'], (dev) => {
       const scrollTo = (location: t.VirtialListScrollLocation) => {
         dev.button(`scroll to: ${location}`, (e) => {
           vlist.scrollTo(location);
