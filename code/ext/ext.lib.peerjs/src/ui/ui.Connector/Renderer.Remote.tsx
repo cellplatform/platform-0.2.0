@@ -5,7 +5,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
   return {
     label(e) {
       const data = Data.remote(e.item);
-      const uri = PeerUri.uri(data.peerid);
+      const uri = PeerUri.uri(data.remoteid);
       return <PeerLabel uri={uri} selected={e.selected} focused={e.focused} />;
     },
 
@@ -33,7 +33,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         /**
          * TODO 🐷
          */
-        if (e.selected && data.peerid) {
+        if (e.selected && data.remoteid) {
           const spinning = false;
           return (
             <LabelItem.Button

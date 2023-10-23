@@ -6,13 +6,13 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
     label(e) {
       const ctx = args.ctx();
       const remotes = Data.list(ctx.list).remotes.data;
-      const totalRemotes = remotes.filter((d) => d.peerid).length;
+      const totalRemotes = remotes.filter((d) => d.remoteid).length;
       const peerWidth = totalRemotes === 0 ? undefined : 30;
 
       const data = Data.self(e.item);
       if (data.copied) return <>{'copied'}</>;
 
-      const uri = `me:${data.peerid}`;
+      const uri = `me:${data.localid}`;
       const { selected, focused } = e;
       return <PeerLabel uri={uri} prefixWidth={peerWidth} selected={selected} focused={focused} />;
     },

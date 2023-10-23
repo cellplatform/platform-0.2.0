@@ -22,11 +22,11 @@ export function clipboardBehavior(args: {
     const peerid = isValid ? PeerUri.id(pasted) : '';
 
     const self = Data.self(Model.List.get(ctx.list).item(0)!);
-    const isSelf = self.peerid === peerid;
+    const isSelf = self.localid === peerid;
 
     state.change((d) => {
       const data = Data.remote(d);
-      data.peerid = peerid;
+      data.remoteid = peerid;
 
       if (!isValid) data.error = { type: 'InvalidPeer', tx };
       else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
@@ -42,7 +42,7 @@ export function clipboardBehavior(args: {
       if (Data.remote(state).error?.tx !== tx) return;
       state.change((d) => {
         const data = Data.remote(d);
-        if (data.error) data.peerid = undefined;
+        if (data.error) data.remoteid = undefined;
         data.error = undefined;
       });
 

@@ -48,12 +48,12 @@ export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
 export type ConnectorDataSelf = {
   kind: 'peer:self';
   copied?: string;
-  peerid: string;
+  localid: string;
 };
 
 export type ConnectorDataRemote = {
   kind: 'peer:remote';
-  peerid?: string;
+  remoteid?: string;
   error?: { type: ConnectorDataRemoteError; tx: string };
 };
 

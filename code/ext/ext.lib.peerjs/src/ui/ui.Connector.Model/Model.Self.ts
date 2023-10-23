@@ -7,8 +7,8 @@ type D = t.ConnectorDataSelf;
 
 export const Self = {
   initial(args: SelfArgs): t.ConnectorItem<D> {
-    const peerid = PeerUri.id(args.peerid) || PeerUri.generate('');
-    const data: D = { kind: 'peer:self', peerid };
+    const localid = PeerUri.id(args.peerid) || PeerUri.generate('');
+    const data: D = { kind: 'peer:self', localid };
     return {
       editable: false,
       label: 'self', // NB: display value overridden in renderer.

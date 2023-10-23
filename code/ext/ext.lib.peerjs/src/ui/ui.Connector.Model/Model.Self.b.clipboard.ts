@@ -11,7 +11,7 @@ export function clipboardBehavior(args: {
   const redraw = () => dispatch.redraw();
 
   const copyClipboard = async () => {
-    const peerid = Data.self(state).peerid;
+    const peerid = Data.self(state).localid;
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
