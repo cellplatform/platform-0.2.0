@@ -15,9 +15,17 @@ export const Peer: React.FC<PeerProps> = (props) => {
   useEffect(() => {
     const model = PeerModel.wrap(props.peer.self);
     setModel(model);
-
     const events = model.events();
     events.$.subscribe(redraw);
+
+    events.cmd.data$.subscribe((e) => {
+      const peer = e.connection.peer;
+      console.log('data', e.data, `from "${peer.remote}" to "${peer.local}"`);
+    });
+
+    events.cmd.conn$.pipe(rx.filter((e) => Boolean(e.error))).subscribe((e) => {
+      console.log('error', e.error);
+    });
 
     return events.dispose;
   }, []);
@@ -33,8 +41,13 @@ export const Peer: React.FC<PeerProps> = (props) => {
     props.peer.self.destroy();
   };
 
-  const handleCloseConnection = (id: string) => {
-    model?.disconnect(id);
+  const handleCloseConnection = (connid: string) => {
+    model?.disconnect(connid);
+  };
+
+  const handleSendData = (connid: string) => {
+    const conn = model?.get.dataConnection(connid);
+    conn?.send('hello');
   };
 
   const handlePurge = () => {
@@ -81,7 +94,10 @@ export const Peer: React.FC<PeerProps> = (props) => {
             <li key={conn.id}>
               <div {...styles.connection}>
                 <div>{conn.id}</div>
-                <Button onClick={() => handleCloseConnection(conn.id)}>close</Button>
+                <div>
+                  <Button onClick={() => handleSendData(conn.id)}>send</Button>
+                  <Button onClick={() => handleCloseConnection(conn.id)}>close</Button>
+                </div>
               </div>
             </li>
           );
@@ -103,7 +119,7 @@ export const Peer: React.FC<PeerProps> = (props) => {
       </div>
       {elConnections}
       <div {...styles.section}>
-        <ObjectView data={model?.current} fontSize={11} expand={3} />
+        <ObjectView data={model?.current} fontSize={11} expand={1} />
       </div>
     </div>
   );
