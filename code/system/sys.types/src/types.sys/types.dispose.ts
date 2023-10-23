@@ -1,12 +1,17 @@
 import type { t } from '../common';
 
 export type Disposable = {
-  dispose(): void;
   readonly dispose$: t.Observable<void>;
+  dispose(): void;
 };
 
-export type Lifecycle = Disposable & {
-  readonly disposed: boolean;
-};
+export type Lifecycle = Disposable & { readonly disposed: boolean };
 
-export type UntilObservable = t.Observable<any> | (t.Observable<any> | undefined)[];
+/**
+ * TakeUntil:
+ *    Input of observable(s) that signal when
+ *    another observable should end.
+ */
+type O = t.Observable<any>;
+type OList = (O | OList | undefined)[];
+export type UntilObservable = O | OList;
