@@ -1,6 +1,6 @@
 import { PatchState } from '.';
 import { Patch } from '../Json.Patch';
-import { Time, Is, R, describe, expect, it, rx, slug, type t } from '../test';
+import { Is, Time, describe, expect, it, rx, slug, type t } from '../test';
 
 describe('PatchState', () => {
   type T = { label: string };
@@ -209,11 +209,7 @@ describe('PatchState', () => {
 
     type TFactory = t.PatchStateEventFactory<T, E>;
     const factory: TFactory = ($, dispose$) => {
-      const cmd$ = $.pipe(
-        rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-        rx.filter((e) => Boolean(e.to.cmd)),
-        rx.map((e) => e.to.cmd!),
-      );
+      const cmd$ = PatchState.Command.filter($, dispose$);
       return {
         $,
         cmd: {

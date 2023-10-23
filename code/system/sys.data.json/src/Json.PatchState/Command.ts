@@ -1,4 +1,4 @@
-import { rx, type t } from './common';
+import { R, rx, type t } from './common';
 
 type Cmd = { type: string; payload: { tx: string } };
 
@@ -39,5 +39,17 @@ export const Command = {
     }
 
     return dispatch;
+  },
+
+  /**
+   * Filter down on the "cmd" property observable.
+   */
+  filter<T extends Cmd>($: t.Observable<t.PatchChange<{ cmd?: T }>>, dispose$?: t.UntilObservable) {
+    const res$ = $.pipe(
+      rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
+      rx.filter((e) => Boolean(e.to.cmd)),
+      rx.map((e) => e.to.cmd!),
+    );
+    return dispose$ ? res$.pipe(rx.takeUntil(dispose$)) : res$;
   },
 } as const;
