@@ -1,5 +1,5 @@
 import { COLORS, Color, css, type t } from './common';
-import { PeerCard } from './ui.PeerCard';
+import { Peer } from './ui.Peer';
 
 export type RootProps = {
   peerA: t.PeerJs;
@@ -30,9 +30,9 @@ export const Root: React.FC<RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PeerCard peer={{ self: peerA, remote: peerB }} style={styles.peer} />
+      <Peer peer={{ self: peerA, remote: peerB }} style={styles.peer} />
       <div {...styles.divider} />
-      <PeerCard peer={{ self: peerB, remote: peerA }} style={styles.peer} />
+      <Peer peer={{ self: peerB, remote: peerA }} style={styles.peer} />
     </div>
   );
 };

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, ObjectView, PeerModel, css, type t } from './common';
+import { rx, COLORS, Color, ObjectView, PeerModel, css, type t } from './common';
 import { Button } from './ui.Button';
 
-export type PeerCardProps = {
+export type PeerProps = {
   peer: { self: t.PeerJs; remote: t.PeerJs };
   style?: t.CssValue;
 };
 
-export const PeerCard: React.FC<PeerCardProps> = (props) => {
+export const Peer: React.FC<PeerProps> = (props) => {
   const [model, setModel] = useState<t.PeerModel>();
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -41,6 +41,11 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     model?.purge();
   };
 
+  const handleTmp = () => {
+    //
+    if (!model) return;
+  };
+
   /**
    * Render
    */
@@ -57,10 +62,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
     ul: css({ margin: 0, lineHeight: 1.5 }),
-    connection: css({
-      display: 'grid',
-      gridTemplateColumns: '1fr auto',
-    }),
+    connection: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
   };
 
   const button = (label: string, handler?: () => void) => {
@@ -96,6 +98,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
           {button('peer.connect.data', handleConnectData)}
           {button('peer.destroy', handlePeerDestroy)}
           {button('purge', handlePurge)}
+          {button('tmp', handleTmp)}
         </ul>
       </div>
       {elConnections}
