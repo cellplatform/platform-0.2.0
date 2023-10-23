@@ -1,8 +1,9 @@
 /**
  * @external
  */
-import { equals, is, isEmpty, isNil, pipe, reject, startsWith, uniq, toString, clone } from 'ramda';
+import { clone, equals, is, isEmpty, isNil, pipe, reject, startsWith, toString, uniq } from 'ramda';
 export const R = {
+  clone,
   equals,
   is,
   isEmpty,
@@ -10,7 +11,6 @@ export const R = {
   pipe,
   reject,
   startsWith,
-  uniq,
   toString,
-  clone,
+  uniq,
 } as const;

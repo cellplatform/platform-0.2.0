@@ -1,6 +1,6 @@
 import { expect, describe, it } from '../test';
 import { Time } from '../Time';
-import { disposable } from './Rx.disposable.mjs';
+import { disposable } from './Rx.lifecycle.mjs';
 
 import { rx } from '.';
 

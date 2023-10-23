@@ -1,5 +1,5 @@
-import type { t } from '../common.t';
-import { disposable } from './Rx.disposable.mjs';
+import { type t } from '../common';
+import { disposable } from './Rx.lifecycle.mjs';
 import { Subject, take, takeUntil, filter } from './RxJs.lib.mjs';
 import { Time } from '../Time';
 
