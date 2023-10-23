@@ -5,9 +5,9 @@ export default Test.describe('Webrtc.Peer → connect', (e) => {
   e.timeout(9999);
 
   e.it('start data connection', async (e) => {
-    const peerA = Webrtc.Peer.create();
+    const peerA = Webrtc.PeerJs.create();
     await Time.wait(300);
-    const peerB = Webrtc.Peer.create();
+    const peerB = Webrtc.PeerJs.create();
     expect(peerA.id).to.not.eql(peerB.id);
 
     const modelA = PeerModel.wrap(peerA);

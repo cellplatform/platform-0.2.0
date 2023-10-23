@@ -25,7 +25,7 @@ export function openConnectionBehavior(args: {
     console.log('💥 connect', e);
 
     console.log('WebRtc', Webrtc);
-    const peer = Webrtc.Peer.create();
+    const peer = Webrtc.PeerJs.create();
 
     // peer.connect()
 

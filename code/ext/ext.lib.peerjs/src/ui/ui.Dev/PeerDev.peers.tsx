@@ -12,7 +12,7 @@ export function peersSection(args: {
     const placeholder = 'enter peer-id';
 
     const initPeer = (state: t.DevCtxState<t.PeerDevCtx>, peerid: string) => {
-      const peer = Webrtc.Peer.create(peerid);
+      const peer = Webrtc.PeerJs.create(peerid);
       state.change((d) => {
         local.localPeer = peerid;
         d.peerid.local = peerid;

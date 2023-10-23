@@ -5,7 +5,7 @@ import { PeerUri } from './Peer.Uri';
 describe('Is', () => {
   it('exports', () => {
     expect(Webrtc.Is).to.equal(Is);
-    expect(Webrtc.Peer.Is).to.equal(Is);
+    expect(Webrtc.PeerJs.Is).to.equal(Is);
     expect(PeerUri.Is).to.equal(Is);
   });
 

@@ -5,7 +5,7 @@ import type { t } from './common';
  */
 export type Webrtc = {
   readonly Is: WebrtcIs;
-  readonly Peer: WebrtcPeer;
+  readonly PeerJs: WebrtcPeerJs;
   readonly PeerUri: WebrtcPeerUri;
 };
 
@@ -13,7 +13,7 @@ export type Webrtc = {
  * Wrapper for working with peers
  */
 type OptionsArgs = { host: string; path: string; key: string };
-export type WebrtcPeer = {
+export type WebrtcPeerJs = {
   readonly Is: WebrtcIs;
   readonly Uri: WebrtcPeerUri;
   options(input?: OptionsArgs): t.PeerJsOptions;

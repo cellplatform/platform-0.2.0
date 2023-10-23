@@ -1,10 +1,11 @@
 import { type t } from './common';
-import { Peer } from './Peer';
-import { PeerUri } from './Peer.Uri';
+
 import { Is } from './Is';
+import { PeerUri } from './Peer.Uri';
+import { PeerJs } from './PeerJs';
 
 export const Webrtc: t.Webrtc = {
   Is,
-  Peer,
+  PeerJs,
   PeerUri,
 } as const;

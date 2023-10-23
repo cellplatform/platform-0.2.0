@@ -4,8 +4,6 @@
 import { equals } from 'ramda';
 export const R = { equals } as const;
 
-export { Peer } from 'peerjs';
-
 /**
  * @system
  */
