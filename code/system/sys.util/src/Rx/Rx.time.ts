@@ -1,6 +1,6 @@
 import { type t } from '../common';
-import { disposable } from './Rx.lifecycle.mjs';
-import { Subject, take, takeUntil, filter } from './RxJs.lib.mjs';
+import { disposable } from './Rx.lifecycle';
+import { Subject, take, takeUntil, filter } from './RxJs.lib';
 import { Time } from '../Time';
 
 type Milliseconds = number;

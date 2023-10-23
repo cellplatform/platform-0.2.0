@@ -1,11 +1,11 @@
-import { slug } from '../Id/Id.mjs';
-import { busAsType, instance, isBus } from './Rx.util.mjs';
-import { isEvent } from './Rx.event.mjs';
-import { filter, Subject } from './RxJs.lib.mjs';
-import { BusConnect } from './Rx.BusConnect.mjs';
-import { isObservable } from './Rx.util.mjs';
+import { slug } from '../Id/Id';
+import { busAsType, instance, isBus } from './Rx.util';
+import { isEvent } from './Rx.event';
+import { filter, Subject } from './RxJs.lib';
+import { BusConnect } from './Rx.BusConnect';
+import { isObservable } from './Rx.util';
 
-import type { t } from '../common.t';
+import type { t } from '../common';
 
 type E = t.Event;
 

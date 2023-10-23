@@ -1,6 +1,6 @@
 import { type t } from '../common';
-import { disposable } from './Rx.lifecycle.mjs';
-import { takeUntil, filter, delay } from './RxJs.lib.mjs';
+import { disposable } from './Rx.lifecycle';
+import { takeUntil, filter, delay } from './RxJs.lib';
 
 /**
  * Setup a two-way connection between two or more event-buses.

@@ -1,8 +1,7 @@
-import { expect, describe, it } from '../test';
-import { Time } from '../Time';
-import { disposable } from './Rx.lifecycle.mjs';
-
 import { rx } from '.';
+import { Time } from '../Time';
+import { describe, expect, it } from '../test';
+import { disposable } from './Rx.lifecycle';
 
 describe('rx', () => {
   describe('rx.subject (factory)', () => {

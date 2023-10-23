@@ -1,2 +1,2 @@
-import * as rx from './Rx.mjs';
+import * as rx from './Rx';
 export { rx };
