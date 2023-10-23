@@ -2,17 +2,26 @@ import type { t } from './common';
 
 type Id = string;
 
+/**
+ * Entry API
+ */
 export type WebrtcPeerModel = {
   init(options?: Partial<t.PeerJsCreateArgs> & { dispose$?: t.UntilObservable }): t.PeerModel;
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
 };
 
+/**
+ * Raw immutable model data.
+ */
 export type Peer = {
   open: boolean;
   connections: t.PeerConnection[];
   cmd?: t.PeerModelCmd; // Used to produce an event stream of commands.
 };
 
+/**
+ * A single peer-connection details
+ */
 export type PeerConnection = {
   kind: 'data' | 'media';
   id: string;
@@ -39,8 +48,11 @@ export type PeerModel = t.Lifecycle & {
   };
 };
 
-export type PeerModelConnection = { id: Id; peer: { local: Id; remote: Id } };
+/**
+ * Stateful immutable model (JSON patch).
+ */
 export type PeerModelState = t.PatchState<t.Peer, t.PeerModelEvents>;
+export type PeerModelConnection = { id: Id; peer: { local: Id; remote: Id } };
 
 /**
  * Events API
