@@ -1,11 +1,10 @@
-import { slug, type t } from './common';
-import { Dispatcher } from './Dispatcher';
+import { PatchState, slug, type t } from './common';
 
 /**
  * Dispatcher of "command" events for the given item.
  */
 export function commands(list?: t.LabelListState) {
-  const { dispatch } = Dispatcher(list);
+  const dispatch = PatchState.Command.dispatcher(list);
 
   const api: t.LabelListDispatch = {
     focus(focus: boolean = true) {

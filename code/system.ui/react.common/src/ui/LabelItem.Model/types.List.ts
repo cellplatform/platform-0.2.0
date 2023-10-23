@@ -35,7 +35,7 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
 };
 
 /**
- * Commands
+ * Event Commands
  * (events as a property stream)
  */
 export type LabelListDispatch = {

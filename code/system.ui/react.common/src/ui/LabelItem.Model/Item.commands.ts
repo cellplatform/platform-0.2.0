@@ -1,11 +1,10 @@
-import { slug, type t } from './common';
-import { Dispatcher } from './Dispatcher';
+import { PatchState, slug, type t } from './common';
 
 /**
  * Dispatcher of "command" events for the given item.
  */
 export function commands(item?: t.LabelItemState) {
-  const { dispatch } = Dispatcher(item);
+  const dispatch = PatchState.Command.dispatcher(item);
 
   const api: t.LabelItemDispatch = {
     redraw() {
