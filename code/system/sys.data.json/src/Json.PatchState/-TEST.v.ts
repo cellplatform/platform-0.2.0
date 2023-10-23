@@ -225,8 +225,8 @@ describe('PatchState', () => {
     };
 
     it('no params', () => {
-      const command = PatchState.Command.dispatcher<Cmd>();
-      expect(command.dispatch).to.be.a('function');
+      const dispatch = PatchState.Command.dispatcher<Cmd>();
+      expect(dispatch).to.be.a('function');
     });
 
     it('dispatches a command', async () => {
@@ -238,10 +238,10 @@ describe('PatchState', () => {
       events.cmd.one$.subscribe((e) => firedOne.push(e));
       events.cmd.two$.subscribe((e) => firedTwo.push(e));
 
-      const command = PatchState.Command.dispatcher<Cmd>(state);
-      command.dispatch({ type: 'foo.one', payload: { tx: slug(), msg: 'hello' } });
-      command.dispatch({ type: 'foo.two', payload: { tx: slug(), count: 123 } });
-      command.dispatch({ type: 'foo.two', payload: { tx: slug(), count: 456 } });
+      const dispatch = PatchState.Command.dispatcher<Cmd>(state);
+      dispatch({ type: 'foo.one', payload: { tx: slug(), msg: 'hello' } });
+      dispatch({ type: 'foo.two', payload: { tx: slug(), count: 123 } });
+      dispatch({ type: 'foo.two', payload: { tx: slug(), count: 456 } });
 
       expect(firedOne[0].msg).to.eql('hello');
       expect(firedTwo[0].count).to.eql(123);

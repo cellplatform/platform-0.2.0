@@ -32,12 +32,12 @@ export const Command = {
       )
       .subscribe(reset);
 
-    return {
-      dispatch(cmd: T) {
-        _tx = cmd.payload.tx;
-        state?.change((d) => (d.cmd = cmd));
-        dispatched$.next();
-      },
-    } as const;
+    function dispatch(cmd: T) {
+      _tx = cmd.payload.tx;
+      state?.change((d) => (d.cmd = cmd));
+      dispatched$.next();
+    }
+
+    return dispatch;
   },
 } as const;
