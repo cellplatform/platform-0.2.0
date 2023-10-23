@@ -9,7 +9,7 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
       /**
        * TODO 🐷
        */
-      const options = Webrtc.Peer.options();
+      const options = Webrtc.PeerJs.options();
       console.log('options', options);
     });
   });
