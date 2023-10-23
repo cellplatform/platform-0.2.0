@@ -7,11 +7,11 @@ import { PatchState, rx, type t } from './common';
 /**
  * Peer model.
  */
-export const PeerModel = {
+export const PeerModel: t.WebrtcPeerModel = {
   /**
    * Iniitalize a new PeerJS peer wrapped in an observable Model.
    */
-  init(options: Partial<t.PeerJsCreateArgs> & { dispose$?: t.UntilObservable } = {}) {
+  init(options = {}) {
     const { dispose$, host, path, key } = options;
     const peer = PeerJs.create({ host, path, key });
     return PeerModel.wrap(peer, dispose$);
@@ -20,7 +20,7 @@ export const PeerModel = {
   /**
    * Wrap a PeerJS object with a stateful management model.
    */
-  wrap(peer: t.PeerJs, dispose$?: t.UntilObservable) {
+  wrap(peer, dispose$) {
     const lifecycle = rx.lifecycle(dispose$);
     lifecycle.dispose$.subscribe(() => peer.destroy());
 
@@ -112,4 +112,4 @@ export const PeerModel = {
     const Data = manageDataConnection({ peer, model, state });
     return model;
   },
-} as const;
+};

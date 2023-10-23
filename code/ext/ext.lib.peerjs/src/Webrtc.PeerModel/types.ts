@@ -2,6 +2,11 @@ import type { t } from './common';
 
 type Id = string;
 
+export type WebrtcPeerModel = {
+  init(options?: Partial<t.PeerJsCreateArgs> & { dispose$?: t.UntilObservable }): t.PeerModel;
+  wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
+};
+
 export type Peer = {
   open: boolean;
   connections: t.PeerConnection[];

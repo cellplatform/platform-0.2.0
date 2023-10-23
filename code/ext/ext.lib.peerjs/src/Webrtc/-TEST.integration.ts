@@ -1,17 +1,17 @@
-import { Webrtc, PeerModel } from '.';
+import { Webrtc } from '.';
 import { Test, Time, expect, rx } from '../test.ui';
 
 export default Test.describe('Webrtc → peer connect', (e) => {
   e.timeout(9999);
 
   e.it('start data connection', async (e) => {
-    const modelA = PeerModel.init();
+    const peerA = Webrtc.peer();
     await Time.wait(300);
-    const modelB = PeerModel.init();
-    expect(modelA.id).to.not.eql(modelB.id);
+    const peerB = Webrtc.peer();
+    expect(peerA.id).to.not.eql(peerB.id);
 
-    const eventsA = modelA.events();
-    const eventsB = modelB.events();
+    const eventsA = peerA.events();
+    const eventsB = peerB.events();
 
     const result = {
       $: rx.subject<string>(),
@@ -25,8 +25,8 @@ export default Test.describe('Webrtc → peer connect', (e) => {
 
     await Time.wait(500);
 
-    const connid = await modelA.connect.data(modelB.id);
-    const conn = modelA.get.dataConnection(connid)!;
+    const connid = await peerA.connect.data(peerB.id);
+    const conn = peerA.get.dataConnection(connid)!;
     conn.send('👋 hello');
 
     await rx.asPromise.first(result.$);
@@ -36,10 +36,10 @@ export default Test.describe('Webrtc → peer connect', (e) => {
     /**
      * Test disposal.
      */
-    modelA.dispose();
-    modelB.dispose();
-    expect(modelA.disposed).to.eql(true);
-    expect(modelB.disposed).to.eql(true);
+    peerA.dispose();
+    peerB.dispose();
+    expect(peerA.disposed).to.eql(true);
+    expect(peerB.disposed).to.eql(true);
 
     expect(eventsA.disposed).to.eql(true);
     expect(eventsB.disposed).to.eql(true);
