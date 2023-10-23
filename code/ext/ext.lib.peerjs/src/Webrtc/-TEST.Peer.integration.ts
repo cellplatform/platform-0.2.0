@@ -1,15 +1,20 @@
-import { Webrtc } from '.';
+import { Webrtc, PeerModel } from '.';
 import { Test, Time, expect, rx } from '../test.ui';
 
 export default Test.describe('Webrtc.Peer → connect', (e) => {
   e.timeout(9999);
-  e.it('skipped', (e) => {});
 
   e.it('start data connection', async (e) => {
     const peerA = Webrtc.Peer.create();
     await Time.wait(300);
     const peerB = Webrtc.Peer.create();
     expect(peerA.id).to.not.eql(peerB.id);
+
+    const modelA = PeerModel.wrap(peerA);
+    const modelB = PeerModel.wrap(peerB);
+
+    const eventsA = modelA.events();
+    const eventsB = modelB.events();
 
     const result = {
       $: rx.subject<string>(),
@@ -33,9 +38,20 @@ export default Test.describe('Webrtc.Peer → connect', (e) => {
     });
 
     await rx.asPromise.first(result.$);
-
     expect(result.value).to.eql('👋 hello');
-    peerA.destroy();
-    peerB.destroy();
+
+    /**
+     * Test disposal.
+     */
+    modelA.dispose();
+    modelB.dispose();
+    expect(modelA.disposed).to.eql(true);
+    expect(modelB.disposed).to.eql(true);
+
+    expect(peerA.destroyed).to.eql(true); // NB: disposing the model wrapper destroys it's inner peer.
+    expect(peerB.destroyed).to.eql(true);
+
+    expect(eventsA.disposed).to.eql(true);
+    expect(eventsB.disposed).to.eql(true);
   });
 });

@@ -11,16 +11,16 @@ export const PeerModel = {
    */
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable) {
     const lifecycle = rx.lifecycle(dispose$);
+    lifecycle.dispose$.subscribe(() => peer.destroy());
+
     const local = peer.id;
     const initial: t.Peer = { open: false, connections: [] };
     const state = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
-      events($, dispose$) {
-        return events($, [rx.disposable(dispose$).dispose$, lifecycle.dispose$]);
-      },
+      events: ($, dispose$) => events($, [dispose$, lifecycle.dispose$]),
     });
     const dispatch = PatchState.Command.dispatcher<t.PeerModelCmd>(state);
-    const toConnection = (conn: t.DataConnection | t.MediaConnection) => {
+    const toDispatchConnection = (conn: t.DataConnection | t.MediaConnection) => {
       const id = conn.connectionId;
       const remote = conn.peer;
       return { id, peer: { local, remote } };
@@ -31,7 +31,7 @@ export const PeerModel = {
     const DataConnection = {
       monitor(conn: t.DataConnection) {
         const id = conn.connectionId;
-        const connection = toConnection(conn);
+        const connection = toDispatchConnection(conn);
         conn.on('data', (data) => {
           dispatch({ type: 'Peer:Data', payload: { tx: slug(), connection, data } });
         });
@@ -64,7 +64,7 @@ export const PeerModel = {
         DataConnection.monitor(conn);
         dispatch({
           type: 'Peer:Conn',
-          payload: { tx: slug(), connection: toConnection(conn), action: 'start:out' },
+          payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'start:out' },
         });
       },
 
@@ -79,7 +79,7 @@ export const PeerModel = {
         }
         dispatch({
           type: 'Peer:Conn',
-          payload: { tx: slug(), connection: toConnection(conn), action: 'start:in' },
+          payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'start:in' },
         });
       },
     } as const;
@@ -118,7 +118,7 @@ export const PeerModel = {
           conn.close();
           dispatch({
             type: 'Peer:Conn',
-            payload: { tx: slug(), connection: toConnection(conn), action: 'close' },
+            payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'close' },
           });
         }
         api.purge();
