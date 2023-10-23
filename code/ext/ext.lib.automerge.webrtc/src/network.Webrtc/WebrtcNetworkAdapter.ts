@@ -1,5 +1,6 @@
 import { Message, NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
 import type { DataConnection, Peer } from 'peerjs';
+import { type t } from '../common';
 
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
@@ -14,7 +15,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #remoteId: string | undefined;
   #isReady = false;
 
-  constructor(peer: Peer, remoteId?: string) {
+  constructor(peer: t.p.PeerJs, remoteId?: string) {
     super();
     this.#peer = peer;
     this.#remoteId = remoteId;

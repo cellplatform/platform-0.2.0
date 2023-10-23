@@ -2,13 +2,11 @@ import { Dev } from '../../test.ui';
 import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
 
-import type * as P from 'ext.lib.peerjs/src/types';
-
 type T = {
   user?: string;
   docUri?: string;
   peerid: { local: string; remote: string };
-  options?: P.PeerOptions;
+  options?: t.p.PeerOptions;
   debug: { connectingData?: boolean };
 };
 const initial: T = {
@@ -33,8 +31,8 @@ export default Dev.describe(name, (e) => {
   /**
    * WebRTC
    */
-  const connections: P.DataConnection[] = [];
-  let peer: P.Peer;
+  const connections: t.p.DataConnection[] = [];
+  let peer: t.p.PeerJs;
 
   /**
    * CRDT (Automerge)

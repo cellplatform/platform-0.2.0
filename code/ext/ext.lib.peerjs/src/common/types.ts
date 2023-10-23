@@ -1,7 +1,6 @@
 /**
  * @external
  */
-export type { DataConnection, MediaConnection, Peer as PeerJs, PeerOptions } from 'peerjs';
 export type { Observable } from 'rxjs';
 
 /**
