@@ -5,19 +5,20 @@ export default Test.describe('Webrtc.Peer → connect', (e) => {
   e.timeout(9999);
   e.it('skipped', (e) => {});
 
-  e.it.skip('start data connection', async (e) => {
-    const peer1 = Webrtc.Peer.create();
+  e.it('start data connection', async (e) => {
+    const peerA = Webrtc.Peer.create();
     await Time.wait(300);
-    const peer2 = Webrtc.Peer.create();
-    expect(peer1.id).to.not.eql(peer2.id);
+    const peerB = Webrtc.Peer.create();
+    expect(peerA.id).to.not.eql(peerB.id);
 
     const result = {
       $: rx.subject<string>(),
       value: '',
     };
 
-    peer2.on('connection', (conn) => {
+    peerB.on('connection', (conn) => {
       conn.on('data', (data) => {
+        console.log('data', data);
         result.value = data as string;
         result.$.next(result.value);
       });
@@ -25,10 +26,16 @@ export default Test.describe('Webrtc.Peer → connect', (e) => {
 
     await Time.wait(500);
 
-    const conn = peer1.connect(peer2.id);
-    conn.on('open', () => conn.send('👋 hello'));
+    const conn = peerA.connect(peerB.id);
+    conn.on('open', () => {
+      console.log('open');
+      conn.send('👋 hello');
+    });
 
     await rx.asPromise.first(result.$);
+
     expect(result.value).to.eql('👋 hello');
+    peerA.destroy();
+    peerB.destroy();
   });
 });

@@ -1,4 +1,5 @@
 import type { t } from './common';
+export type * from './types.model';
 
 /**
  * Wrapper for working with PeerJS
