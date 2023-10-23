@@ -31,7 +31,7 @@ export default Dev.describe(name, (e) => {
   /**
    * WebRTC
    */
-  const connections: t.p.DataConnection[] = [];
+  const connections: t.p.PeerJsConnData[] = [];
   let peer: t.p.PeerJs;
 
   /**
