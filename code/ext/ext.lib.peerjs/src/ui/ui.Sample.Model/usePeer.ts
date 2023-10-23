@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PeerModel, type t } from './common';
 
-export function usePeer(peer: t.Peer) {
+export function usePeer(peer: t.PeerJs) {
   const [model, setModel] = useState<t.PeerModel>();
 
   const [_, setCount] = useState(0);

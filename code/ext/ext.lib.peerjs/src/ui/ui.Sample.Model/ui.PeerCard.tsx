@@ -3,7 +3,7 @@ import { Button } from './ui.Button';
 import { usePeer } from './usePeer';
 
 export type PeerCardProps = {
-  peer: { self: t.Peer; remote: t.Peer };
+  peer: { self: t.PeerJs; remote: t.PeerJs };
   style?: t.CssValue;
 };
 

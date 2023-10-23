@@ -7,7 +7,7 @@ export const PeerModel = {
   /**
    * Wrap a PeerJS object with a stateful management model.
    */
-  wrap(peer: t.Peer) {
+  wrap(peer: t.PeerJs) {
     const local = peer.id;
     const initial: t.PeerState = { open: false, connections: [] };
     const state = PatchState.init<t.PeerState>({ initial });

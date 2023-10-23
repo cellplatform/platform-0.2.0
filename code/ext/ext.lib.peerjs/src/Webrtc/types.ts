@@ -17,9 +17,9 @@ export type WebrtcPeer = {
   readonly Is: WebrtcIs;
   readonly Uri: WebrtcPeerUri;
   options(input?: OptionsArgs): t.PeerOptions;
-  create(): t.Peer;
-  create(options?: OptionsArgs): t.Peer;
-  create(peerid: string, options?: OptionsArgs): t.Peer;
+  create(): t.PeerJs;
+  create(options?: OptionsArgs): t.PeerJs;
+  create(peerid: string, options?: OptionsArgs): t.PeerJs;
 };
 
 /**

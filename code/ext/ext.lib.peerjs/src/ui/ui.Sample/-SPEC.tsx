@@ -26,7 +26,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const connections: t.DataConnection[] = [];
-  let peer: t.Peer;
+  let peer: t.PeerJs;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

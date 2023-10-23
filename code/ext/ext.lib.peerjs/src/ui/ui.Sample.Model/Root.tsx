@@ -2,8 +2,8 @@ import { COLORS, Color, css, type t } from './common';
 import { PeerCard } from './ui.PeerCard';
 
 export type RootProps = {
-  peerA: t.Peer;
-  peerB: t.Peer;
+  peerA: t.PeerJs;
+  peerB: t.PeerJs;
   style?: t.CssValue;
 };
 

@@ -5,7 +5,7 @@ export function peersSection(args: {
   dev: t.DevTools;
   state: t.DevCtxState<t.PeerDevCtx>;
   local: t.PeerDevLocalStore;
-  onPeer?: (peer: t.Peer) => void;
+  onPeer?: (peer: t.PeerJs) => void;
 }) {
   const { dev, state, local } = args;
   dev.section('Peers', (dev) => {
