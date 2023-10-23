@@ -1,11 +1,12 @@
 import type { t } from './common';
 
-export type PeerState = {
+export type Peer = {
   open: boolean;
-  connections: t.PeerStateConnection[];
+  connections: t.PeerConnection[];
+  cmd?: t.PeerModelCmd; // Used to produce an event stream of commands.
 };
 
-export type PeerStateConnection = {
+export type PeerConnection = {
   kind: 'data' | 'media';
   id: string;
   peer: { local: string; remote: string };
@@ -17,9 +18,27 @@ export type PeerStateConnection = {
  */
 export type PeerModel = {
   id: string;
-  current: t.PeerState;
+  current: t.Peer;
   connect: { data(remotePeer: string): void };
   disconnect(id: string): void;
-  events(dispose$?: t.UntilObservable): t.PatchStateEvents<t.PeerState>;
+  events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): void;
 };
+
+/**
+ * Events API
+ */
+export type PeerModelEvents = t.Lifecycle & {
+  readonly $: t.Observable<t.PatchChange<t.Peer>>;
+  readonly cmd: {
+    readonly $: t.Observable<t.PeerModelCmd>;
+  };
+};
+
+/**
+ * Event Commands
+ */
+export type PeerModelCmd = PeerModelConnCmd;
+
+export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConn };
+export type PeerModelConn = { tx: string };

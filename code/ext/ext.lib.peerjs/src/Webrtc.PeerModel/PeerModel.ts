@@ -1,4 +1,5 @@
 import { PatchState, type t } from './common';
+import { events } from './PeerModel.events';
 
 /**
  * Peer model.
@@ -9,14 +10,14 @@ export const PeerModel = {
    */
   wrap(peer: t.PeerJs) {
     const local = peer.id;
-    const initial: t.PeerState = { open: false, connections: [] };
-    const state = PatchState.init<t.PeerState>({ initial });
+    const initial: t.Peer = { open: false, connections: [] };
+    const state = PatchState.init<t.Peer, t.PeerModelEvents>({ initial, events });
 
     const Get = {
       conn: {
-        exists: (s: t.PeerState, id: string) => Boolean(Get.conn.item(s, id)),
-        item: (s: t.PeerState, id: string) => s.connections.find((item) => item.id === id),
-        object(s: t.PeerState, id: string) {
+        exists: (s: t.Peer, id: string) => Boolean(Get.conn.item(s, id)),
+        item: (s: t.Peer, id: string) => s.connections.find((item) => item.id === id),
+        object(s: t.Peer, id: string) {
           const item = Get.conn.item(s, id);
           return item ? peer.getConnection(item.peer.remote, id) : undefined;
         },
