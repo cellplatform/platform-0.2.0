@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+type Id = string;
+
 export type Peer = {
   open: boolean;
   connections: t.PeerConnection[];
@@ -19,17 +21,20 @@ export type PeerConnection = {
 export type PeerModel = t.Lifecycle & {
   id: string;
   current: t.Peer;
-  connect: { data(remotePeer: string): void };
-  disconnect(id: string): void;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): void;
+  disconnect(id: Id): void;
+  connect: {
+    data(remotePeer: Id): Promise<Id>;
+  };
   get: {
-    connection(id: string): t.PeerJsConn | undefined;
-    dataConnection(id: string): t.PeerJsConnData | undefined;
-    mediaConnection(id: string): t.PeerJsConnMedia | undefined;
+    connection(id: Id): t.PeerJsConn | undefined;
+    dataConnection(id: Id): t.PeerJsConnData | undefined;
+    mediaConnection(id: Id): t.PeerJsConnMedia | undefined;
   };
 };
 
+export type PeerModelConnection = { id: Id; peer: { local: Id; remote: Id } };
 export type PeerModelState = t.PatchState<t.Peer, t.PeerModelEvents>;
 
 /**
@@ -39,8 +44,8 @@ export type PeerModelEvents = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.Peer>>;
   readonly cmd: {
     readonly $: t.Observable<t.PeerModelCmd>;
-    readonly conn$: t.Observable<t.PeerModelConn>;
     readonly data$: t.Observable<t.PeerModelData>;
+    readonly conn$: t.Observable<t.PeerModelConn>;
   };
 };
 
@@ -50,17 +55,20 @@ export type PeerModelEvents = t.Lifecycle & {
 export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd;
 
 export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConn };
-export type PeerModelConnAction = 'start:out' | 'start:in' | 'close' | 'error' | 'purge';
+export type PeerModelConnAction = 'start:out' | 'start:in' | 'ready' | 'close' | 'error' | 'purge';
 export type PeerModelConn = {
   tx: string;
   action: PeerModelConnAction;
-  connection?: { id: string; peer: { local: string; remote: string } };
+  connection?: PeerModelConnection;
   error?: Error;
 };
 
-export type PeerModelDataCmd = { type: 'Peer:Data'; payload: PeerModelData };
-export type PeerModelData = {
+export type PeerModelDataCmd<D extends unknown = unknown> = {
+  type: 'Peer:Data';
+  payload: PeerModelData<D>;
+};
+export type PeerModelData<D extends unknown = unknown> = {
   tx: string;
-  connection: { id: string; peer: { local: string; remote: string } };
-  data: unknown;
+  connection: PeerModelConnection;
+  data: D;
 };

@@ -59,7 +59,9 @@ export const PeerModel = {
       },
 
       connect: {
-        data: (remotePeer: string) => Data.start.outgoing(remotePeer),
+        data(remotePeer: string) {
+          return Data.start.outgoing(remotePeer);
+        },
       },
 
       disconnect(id) {

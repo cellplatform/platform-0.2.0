@@ -41,19 +41,25 @@ export function manageDataConnection(args: {
        * Start an outgoing data connection.
        */
       outgoing(remote: string) {
-        const conn = peer.connect(remote, { reliable: true });
-        const id = conn.connectionId;
-        state.change((d) => {
-          d.connections.push({ kind: 'data', id, open: false, peer: { remote, local } });
-        });
-        conn.on('open', () => {
+        return new Promise<string>((resolve, reject) => {
+          const conn = peer.connect(remote, { reliable: true });
+          const id = conn.connectionId;
           state.change((d) => {
-            const conn = Get.conn.item(d, id);
-            if (conn) conn.open = true;
+            d.connections.push({ kind: 'data', id, open: false, peer: { remote, local } });
           });
+          conn.on('open', () => {
+            state.change((d) => {
+              const item = Get.conn.item(d, id);
+              if (item) {
+                item.open = true;
+                api.dispatch.connection('ready', conn);
+                resolve(id);
+              }
+            });
+          });
+          api.monitor(conn);
+          api.dispatch.connection('start:out', conn);
         });
-        api.monitor(conn);
-        api.dispatch.connection('start:out', conn);
       },
 
       /**
@@ -69,6 +75,7 @@ export function manageDataConnection(args: {
           api.monitor(conn);
         }
         api.dispatch.connection('start:in', conn);
+        api.dispatch.connection('ready', conn);
       },
     },
   } as const;
