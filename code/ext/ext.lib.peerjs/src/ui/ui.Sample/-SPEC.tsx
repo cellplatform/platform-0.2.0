@@ -82,6 +82,9 @@ export default Dev.describe(name, (e) => {
             await e.change((d) => (d.debug.connectingData = true));
             const { local, remote } = e.state.current.peerid;
             const conn = peer.connect(remote);
+            console.log('remote', remote);
+            console.log('peer', peer);
+            console.log('conn', conn);
             conn.on('open', async () => {
               console.log('open', conn);
               conn.send(`hi from ${local}!`);
@@ -90,6 +93,16 @@ export default Dev.describe(name, (e) => {
               await e.change((d) => (d.debug.connectingData = false));
             });
           });
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+      dev.button('console.log( peer )', (e) => {
+        console.log('peer', peer);
       });
     });
   });
