@@ -3,10 +3,22 @@ import { DEFAULTS, Id, Test, Webrtc, expect, type t } from '../test.ui';
 export default Test.describe('Webrtc.PeerJs', (e) => {
   e.describe('options', (e) => {
     e.it('Peer.options (with args)', (e) => {
-      const res = Webrtc.PeerJs.options(DEFAULTS.signal);
+      const res1 = Webrtc.PeerJs.options(DEFAULTS.signal);
+      const res2 = Webrtc.PeerJs.options();
+      expect(res1.port).to.eql(443);
+      expect(res1.secure).to.eql(true);
+      expect(res1.host).to.eql(DEFAULTS.signal.host);
+      expect(res1.path).to.eql('/' + DEFAULTS.signal.path + '/');
+      expect(res1.key).to.eql(DEFAULTS.signal.key);
+      expect(res1).to.eql(res2);
+    });
+
+    e.it('Peer.options (partial args)', (e) => {
+      const res = Webrtc.PeerJs.options({ host: 'https://foo.com' });
+      expect(res.host).to.eql('foo.com');
+
       expect(res.port).to.eql(443);
       expect(res.secure).to.eql(true);
-      expect(res.host).to.eql(DEFAULTS.signal.host);
       expect(res.path).to.eql('/' + DEFAULTS.signal.path + '/');
       expect(res.key).to.eql(DEFAULTS.signal.key);
     });
@@ -38,12 +50,19 @@ export default Test.describe('Webrtc.PeerJs', (e) => {
     });
 
     e.it('Peer.create({ options }) ← explicit options', (e) => {
-      const options = DEFAULTS.signal as any;
-      delete options.host; // Test hack.
-      const peer = Webrtc.PeerJs.create(options);
+      const peer1 = Webrtc.PeerJs.create({});
+      const peer2 = Webrtc.PeerJs.create({ host: 'https://foo.com', path: '//bar', key: 'yo' });
 
-      expect(Id.is.cuid(peer.id)).to.eql(true);
-      expect(peer.options.host?.includes('peerjs.com')).to.be.true;
+      expect(Id.is.cuid(peer1.id)).to.eql(true);
+      expect(Id.is.cuid(peer2.id)).to.eql(true);
+
+      expect(peer1.options.host).to.eql('rtc.bus.events');
+      expect(peer1.options.path).to.eql('/signal/');
+      expect(peer1.options.key).to.eql('cell');
+
+      expect(peer2.options.host).to.eql('foo.com');
+      expect(peer2.options.path).to.eql('/bar/');
+      expect(peer2.options.key).to.eql('yo');
     });
 
     e.it('Peer.create(peerid, { options }) ← explicit id and options', (e) => {

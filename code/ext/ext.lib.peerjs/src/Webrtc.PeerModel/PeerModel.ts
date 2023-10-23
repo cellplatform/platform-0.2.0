@@ -1,3 +1,4 @@
+import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { manageDataConnection } from './PeerModel.DataConnection';
 import { events } from './PeerModel.events';
 import { getFactory } from './PeerModel.get';
@@ -7,6 +8,15 @@ import { PatchState, rx, type t } from './common';
  * Peer model.
  */
 export const PeerModel = {
+  /**
+   * Iniitalize a new PeerJS peer wrapped in an observable Model.
+   */
+  init(options: Partial<t.PeerJsCreateArgs> & { dispose$?: t.UntilObservable } = {}) {
+    const { dispose$, host, path, key } = options;
+    const peer = PeerJs.create({ host, path, key });
+    return PeerModel.wrap(peer, dispose$);
+  },
+
   /**
    * Wrap a PeerJS object with a stateful management model.
    */

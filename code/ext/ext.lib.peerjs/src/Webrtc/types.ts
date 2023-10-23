@@ -4,22 +4,9 @@ import type { t } from './common';
  * Wrapper for working with PeerJS
  */
 export type Webrtc = {
-  readonly Is: WebrtcIs;
-  readonly PeerJs: WebrtcPeerJs;
-  readonly PeerUri: WebrtcPeerUri;
-};
-
-/**
- * Wrapper for working with peers
- */
-type OptionsArgs = { host: string; path: string; key: string };
-export type WebrtcPeerJs = {
-  readonly Is: WebrtcIs;
-  readonly Uri: WebrtcPeerUri;
-  options(input?: OptionsArgs): t.PeerJsOptions;
-  create(): t.PeerJs;
-  create(options?: OptionsArgs): t.PeerJs;
-  create(peerid: string, options?: OptionsArgs): t.PeerJs;
+  readonly Is: t.WebrtcIs;
+  readonly PeerJs: t.WebrtcPeerJs;
+  readonly PeerUri: t.WebrtcPeerUri;
 };
 
 /**

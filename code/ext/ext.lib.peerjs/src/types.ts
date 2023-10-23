@@ -5,17 +5,18 @@ import type { DataConnection, MediaConnection } from 'peerjs';
  */
 export type PeerJsConn = DataConnection | MediaConnection;
 export type {
+  Peer as PeerJs,
   DataConnection as PeerJsConnData,
   MediaConnection as PeerJsConnMedia,
-  Peer as PeerJs,
   PeerOptions as PeerJsOptions,
 } from 'peerjs';
 
 /**
  * @system
  */
-export type * from './Webrtc/types';
+export type * from './Webrtc.PeerJs/types';
 export type * from './Webrtc.PeerModel/types';
+export type * from './Webrtc/types';
 
 export type * from './ui/ui.Connector/types';
 export type * from './ui/ui.Dev/types';

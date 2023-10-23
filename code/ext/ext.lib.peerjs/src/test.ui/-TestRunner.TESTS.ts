@@ -7,7 +7,7 @@ export const TESTS = {
 
       //
       'Integration Tests',
-      import('../Webrtc/-TEST.Peer.integration'),
+      import('../Webrtc/-TEST.integration'),
     ];
   },
 };

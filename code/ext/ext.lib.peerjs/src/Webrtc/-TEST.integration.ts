@@ -1,13 +1,14 @@
 import { Webrtc, PeerModel } from '.';
 import { Test, Time, expect, rx } from '../test.ui';
 
-export default Test.describe('Webrtc.Peer → connect', (e) => {
+export default Test.describe('Webrtc → peer connect', (e) => {
   e.timeout(9999);
 
   e.it('start data connection', async (e) => {
     const peerA = Webrtc.PeerJs.create();
     await Time.wait(300);
     const peerB = Webrtc.PeerJs.create();
+
     expect(peerA.id).to.not.eql(peerB.id);
 
     const modelA = PeerModel.wrap(peerA);
