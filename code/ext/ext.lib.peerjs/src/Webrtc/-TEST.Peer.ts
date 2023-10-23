@@ -20,7 +20,7 @@ export default Test.describe('Webrtc.Peer', (e) => {
   });
 
   e.describe('create', (e) => {
-    const assertOptions = (peer: t.PeerJs, expectOptions: t.PeerOptions) => {
+    const assertOptions = (peer: t.PeerJs, expectOptions: t.PeerJsOptions) => {
       Object.entries(expectOptions).forEach(([key, value]) => {
         expect((peer.options as any)[key]).to.eql(value, `${key}`);
       });

@@ -2,7 +2,7 @@ import { Dev, ObjectView, PeerDev, css, cuid, type t } from '../../test.ui';
 
 type T = {
   peerid: { local: string; remote: string };
-  options?: t.PeerOptions;
+  options?: t.PeerJsOptions;
   debug: { connectingData?: boolean };
 };
 const initial: T = {

@@ -6,7 +6,7 @@ type T = {
   user?: string;
   docUri?: string;
   peerid: { local: string; remote: string };
-  options?: t.p.PeerOptions;
+  options?: t.p.PeerJsOptions;
   debug: { connectingData?: boolean };
 };
 const initial: T = {

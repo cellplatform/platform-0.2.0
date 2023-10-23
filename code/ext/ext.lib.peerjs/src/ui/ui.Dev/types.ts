@@ -2,7 +2,7 @@ import { type t } from './common';
 
 export type PeerDevCtx = {
   peerid: { local: string; remote: string };
-  options?: t.PeerOptions;
+  options?: t.PeerJsOptions;
 };
 
 export type PeerDevLocalStore = {

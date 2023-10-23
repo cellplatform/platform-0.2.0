@@ -16,7 +16,7 @@ type OptionsArgs = { host: string; path: string; key: string };
 export type WebrtcPeer = {
   readonly Is: WebrtcIs;
   readonly Uri: WebrtcPeerUri;
-  options(input?: OptionsArgs): t.PeerOptions;
+  options(input?: OptionsArgs): t.PeerJsOptions;
   create(): t.PeerJs;
   create(options?: OptionsArgs): t.PeerJs;
   create(peerid: string, options?: OptionsArgs): t.PeerJs;

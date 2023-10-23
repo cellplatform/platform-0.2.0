@@ -1,4 +1,9 @@
-export type { DataConnection, MediaConnection, Peer as PeerJs, PeerOptions } from 'peerjs';
+export type {
+  DataConnection,
+  MediaConnection,
+  Peer as PeerJs,
+  PeerOptions as PeerJsOptions,
+} from 'peerjs';
 
 export type * from './Webrtc/types';
 export type * from './Webrtc.PeerModel/types';

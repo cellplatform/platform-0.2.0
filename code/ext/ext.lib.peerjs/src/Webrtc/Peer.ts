@@ -13,7 +13,7 @@ export const Peer: t.WebrtcPeer = {
   Is,
   Uri,
 
-  options(input?: OptionsArgs): t.PeerOptions {
+  options(input?: OptionsArgs): t.PeerJsOptions {
     const args = input ?? DEFAULTS.signal;
     const host = Path.trimHttpPrefix(args.host);
     const path = Path.ensureSlashes(args.path);
