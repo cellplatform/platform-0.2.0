@@ -1,6 +1,6 @@
-import { COLORS, Color, ObjectView, css, type t } from './common';
+import { useEffect, useState } from 'react';
+import { COLORS, Color, ObjectView, PeerModel, css, type t } from './common';
 import { Button } from './ui.Button';
-import { usePeer } from './usePeer';
 
 export type PeerCardProps = {
   peer: { self: t.PeerJs; remote: t.PeerJs };
@@ -8,8 +8,19 @@ export type PeerCardProps = {
 };
 
 export const PeerCard: React.FC<PeerCardProps> = (props) => {
-  const state = usePeer(props.peer.self);
-  const { model } = state;
+  const [model, setModel] = useState<t.PeerModel>();
+  const [_, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
+
+  useEffect(() => {
+    const model = PeerModel.wrap(props.peer.self);
+    setModel(model);
+
+    const events = model.events();
+    events.$.subscribe(redraw);
+
+    return events.dispose;
+  }, []);
 
   /**
    * Handlers
@@ -46,6 +57,10 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
     ul: css({ margin: 0, lineHeight: 1.5 }),
+    connection: css({
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
+    }),
   };
 
   const button = (label: string, handler?: () => void) => {
@@ -62,7 +77,10 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
         {(model?.current.connections ?? []).map((conn, i) => {
           return (
             <li key={conn.id}>
-              {conn.id} <Button onClick={() => handleCloseConnection(conn.id)}>close</Button>
+              <div {...styles.connection}>
+                <div>{conn.id}</div>
+                <Button onClick={() => handleCloseConnection(conn.id)}>close</Button>
+              </div>
             </li>
           );
         })}
@@ -82,7 +100,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       </div>
       {elConnections}
       <div {...styles.section}>
-        <ObjectView data={state.model?.current} fontSize={11} expand={3} />
+        <ObjectView data={model?.current} fontSize={11} expand={3} />
       </div>
     </div>
   );
