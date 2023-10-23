@@ -5,11 +5,7 @@ import { flatten } from 'ramda';
  * Listens to an observable and disposes of the object when fires.
  */
 export function until(disposable: t.Disposable, until$?: t.UntilObservable): t.Disposable {
-  if (until$) {
-    const list = Wrangle.flatArray(until$);
-    console.log('list', list);
-    list.forEach(($) => $.subscribe(disposable.dispose));
-  }
+  if (until$) Wrangle.flatArray(until$).forEach(($) => $.subscribe(disposable.dispose));
   return disposable;
 }
 
