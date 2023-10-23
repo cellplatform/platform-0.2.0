@@ -2,6 +2,7 @@
  * @system
  */
 export type {
+  ButtonProps,
   CssEdgesInput,
   CssValue,
   DevCtxState,
