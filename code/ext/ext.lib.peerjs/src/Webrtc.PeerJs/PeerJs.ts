@@ -14,7 +14,7 @@ export const PeerJs: t.WebrtcPeerJs = {
    * Format and flesh-out configuration options.
    */
   options(input?: Partial<t.PeerJsCreateArgs>): t.PeerJsOptions {
-    const host = Path.trimHttpPrefix(input?.host ?? DEFAULTS.signal.host);
+    const host = Path.trimSlashes(Path.trimHttpPrefix(input?.host ?? DEFAULTS.signal.host));
     const path = Path.ensureSlashes(input?.path ?? DEFAULTS.signal.path);
     const key = input?.key ?? DEFAULTS.signal.key;
     const port = 443;

@@ -14,7 +14,7 @@ export default Test.describe('Webrtc.PeerJs', (e) => {
     });
 
     e.it('Peer.options (partial args)', (e) => {
-      const res = Webrtc.PeerJs.options({ host: 'https://foo.com' });
+      const res = Webrtc.PeerJs.options({ host: 'https://foo.com/' });
       expect(res.host).to.eql('foo.com');
 
       expect(res.port).to.eql(443);
