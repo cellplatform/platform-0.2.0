@@ -1,6 +1,6 @@
 import { DEFAULTS, Path, Peer as PeerJs, cuid, type t } from '../common';
-import { PeerUri as Uri } from './Peer.Uri';
 import { Is } from './Is';
+import { PeerUri as Uri } from './Peer.Uri';
 
 export type OptionsArgs = { host: string; path: string; key: string };
 

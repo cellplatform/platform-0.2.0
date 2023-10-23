@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
     remotePeer: '',
   });
 
-  const connections: t.DataConnection[] = [];
+  const connections: t.PeerJsConnData[] = [];
   let peer: t.PeerJs;
 
   e.it('ui:init', async (e) => {

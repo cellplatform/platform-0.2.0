@@ -20,7 +20,7 @@ export const PeerModel = {
       events: ($, dispose$) => events($, [dispose$, lifecycle.dispose$]),
     });
     const dispatch = PatchState.Command.dispatcher<t.PeerModelCmd>(state);
-    const toDispatchConnection = (conn: t.DataConnection | t.MediaConnection) => {
+    const toDispatchConnection = (conn: t.PeerJsConn) => {
       const id = conn.connectionId;
       const remote = conn.peer;
       return { id, peer: { local, remote } };
@@ -28,8 +28,8 @@ export const PeerModel = {
 
     const Get = getFactory(peer);
 
-    const DataConnection = {
-      monitor(conn: t.DataConnection) {
+    const PeerJsDataConn = {
+      monitor(conn: t.PeerJsConnData) {
         const id = conn.connectionId;
         const connection = toDispatchConnection(conn);
         conn.on('data', (data) => {
@@ -61,21 +61,21 @@ export const PeerModel = {
             if (conn) conn.open = true;
           });
         });
-        DataConnection.monitor(conn);
+        PeerJsDataConn.monitor(conn);
         dispatch({
           type: 'Peer:Conn',
           payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'start:out' },
         });
       },
 
-      startIncoming(conn: t.DataConnection) {
+      startIncoming(conn: t.PeerJsConnData) {
         const exists = Boolean(Get.conn.item(state.current, conn.connectionId));
         if (!exists) {
           const id = conn.connectionId;
           const remote = conn.peer;
           const peer = { remote, local };
           state.change((d) => d.connections.push({ kind: 'data', id, open: true, peer }));
-          DataConnection.monitor(conn);
+          PeerJsDataConn.monitor(conn);
         }
         dispatch({
           type: 'Peer:Conn',
@@ -89,7 +89,7 @@ export const PeerModel = {
      */
     peer.on('open', () => state.change((d) => (d.open = true)));
     peer.on('close', () => state.change((d) => (d.open = false)));
-    peer.on('connection', (conn) => DataConnection.startIncoming(conn));
+    peer.on('connection', (conn) => PeerJsDataConn.startIncoming(conn));
 
     /**
      * Incoming media connection.
@@ -109,7 +109,7 @@ export const PeerModel = {
       },
 
       connect: {
-        data: (remotePeer: string) => DataConnection.startOutgoing(remotePeer),
+        data: (remotePeer: string) => PeerJsDataConn.startOutgoing(remotePeer),
       },
 
       disconnect(id) {
@@ -145,10 +145,10 @@ export const PeerModel = {
           return Get.conn.object(state.current, id);
         },
         dataConnection(id) {
-          return Get.conn.object(state.current, id, 'data') as t.DataConnection;
+          return Get.conn.object(state.current, id, 'data') as t.PeerJsConnData;
         },
         mediaConnection(id) {
-          return Get.conn.object(state.current, id, 'media') as t.MediaConnection;
+          return Get.conn.object(state.current, id, 'media') as t.PeerJsConnMedia;
         },
       },
 

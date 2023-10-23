@@ -24,9 +24,9 @@ export type PeerModel = t.Lifecycle & {
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): void;
   get: {
-    connection(id: string): t.DataConnection | t.MediaConnection | undefined;
-    dataConnection(id: string): t.DataConnection | undefined;
-    mediaConnection(id: string): t.MediaConnection | undefined;
+    connection(id: string): t.PeerJsConn | undefined;
+    dataConnection(id: string): t.PeerJsConnData | undefined;
+    mediaConnection(id: string): t.PeerJsConnMedia | undefined;
   };
 };
 
