@@ -1,6 +1,7 @@
-import { slug, PatchState, rx, type t } from './common';
+import { manageDataConnection } from './PeerModel.DataConnection';
 import { events } from './PeerModel.events';
 import { getFactory } from './PeerModel.get';
+import { PatchState, rx, type t } from './common';
 
 /**
  * Peer model.
@@ -13,95 +14,34 @@ export const PeerModel = {
     const lifecycle = rx.lifecycle(dispose$);
     lifecycle.dispose$.subscribe(() => peer.destroy());
 
-    const local = peer.id;
+    const Get = getFactory(peer);
     const initial: t.Peer = { open: false, connections: [] };
-    const state = PatchState.init<t.Peer, t.PeerModelEvents>({
+    const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
       events: ($, dispose$) => events($, [dispose$, lifecycle.dispose$]),
     });
-    const dispatch = PatchState.Command.dispatcher<t.PeerModelCmd>(state);
-    const toDispatchConnection = (conn: t.PeerJsConn) => {
-      const id = conn.connectionId;
-      const remote = conn.peer;
-      return { id, peer: { local, remote } };
-    };
-
-    const Get = getFactory(peer);
-
-    const PeerJsDataConn = {
-      monitor(conn: t.PeerJsConnData) {
-        const id = conn.connectionId;
-        const connection = toDispatchConnection(conn);
-        conn.on('data', (data) => {
-          dispatch({ type: 'Peer:Data', payload: { tx: slug(), connection, data } });
-        });
-        conn.on('close', () => {
-          state.change((d) => (d.connections = d.connections.filter((item) => item.id !== id)));
-          api.disconnect(id);
-        });
-        conn.on('error', (error) => {
-          // TODO 🐷
-          // console.log('error data', conn, error);
-          dispatch({
-            type: 'Peer:Conn',
-            payload: { tx: slug(), connection, action: 'error', error },
-          });
-        });
-      },
-
-      startOutgoing(remote: string) {
-        const conn = peer.connect(remote, { reliable: true });
-        const id = conn.connectionId;
-        state.change((d) => {
-          d.connections.push({ kind: 'data', id, open: false, peer: { remote, local } });
-        });
-        conn.on('open', () => {
-          state.change((d) => {
-            const conn = Get.conn.item(d, id);
-            if (conn) conn.open = true;
-          });
-        });
-        PeerJsDataConn.monitor(conn);
-        dispatch({
-          type: 'Peer:Conn',
-          payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'start:out' },
-        });
-      },
-
-      startIncoming(conn: t.PeerJsConnData) {
-        const exists = Boolean(Get.conn.item(state.current, conn.connectionId));
-        if (!exists) {
-          const id = conn.connectionId;
-          const remote = conn.peer;
-          const peer = { remote, local };
-          state.change((d) => d.connections.push({ kind: 'data', id, open: true, peer }));
-          PeerJsDataConn.monitor(conn);
-        }
-        dispatch({
-          type: 'Peer:Conn',
-          payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'start:in' },
-        });
-      },
-    } as const;
 
     /**
      * Peer events.
      */
     peer.on('open', () => state.change((d) => (d.open = true)));
     peer.on('close', () => state.change((d) => (d.open = false)));
-    peer.on('connection', (conn) => PeerJsDataConn.startIncoming(conn));
+    peer.on('connection', (conn) => Data.start.incoming(conn));
 
     /**
      * Incoming media connection.
      */
     peer.on('call', (e) => {
+      /**
+       * TODO 🐷 Media Connections
+       */
       console.log('call', e);
     });
 
     /**
      * API
      */
-    const api: t.PeerModel = {
+    const model: t.PeerModel = {
       id: peer.id,
       events: (dispose$?: t.UntilObservable) => state.events(dispose$),
       get current() {
@@ -109,19 +49,16 @@ export const PeerModel = {
       },
 
       connect: {
-        data: (remotePeer: string) => PeerJsDataConn.startOutgoing(remotePeer),
+        data: (remotePeer: string) => Data.start.outgoing(remotePeer),
       },
 
       disconnect(id) {
-        const conn = api.get.connection(id);
+        const conn = model.get.connection(id);
         if (conn) {
           conn.close();
-          dispatch({
-            type: 'Peer:Conn',
-            payload: { tx: slug(), connection: toDispatchConnection(conn), action: 'close' },
-          });
+          Data.dispatch.connection('close', conn);
         }
-        api.purge();
+        model.purge();
       },
 
       purge() {
@@ -135,9 +72,7 @@ export const PeerModel = {
           });
           if (total !== d.connections.length) changed = true;
         });
-        if (changed) {
-          dispatch({ type: 'Peer:Conn', payload: { tx: slug(), action: 'total' } });
-        }
+        if (changed) Data.dispatch.connection('purge');
       },
 
       get: {
@@ -161,6 +96,8 @@ export const PeerModel = {
         return lifecycle.disposed;
       },
     };
-    return api;
+
+    const Data = manageDataConnection({ peer, model, state });
+    return model;
   },
 } as const;

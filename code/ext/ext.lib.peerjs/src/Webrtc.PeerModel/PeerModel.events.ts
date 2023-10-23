@@ -15,7 +15,7 @@ export const events: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> = ($, d
     $,
     cmd: {
       $: cmd$,
-      conn$: rx.payload<t.PeerModelConnCmd>(cmd$, 'Peer:Conn'),
+      conn$: rx.payload<t.PeerModelConnCmd>(cmd$, 'Peer:Connection'),
       data$: rx.payload<t.PeerModelDataCmd>(cmd$, 'Peer:Data'),
     },
 

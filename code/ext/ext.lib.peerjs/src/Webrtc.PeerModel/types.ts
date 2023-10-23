@@ -30,6 +30,8 @@ export type PeerModel = t.Lifecycle & {
   };
 };
 
+export type PeerModelState = t.PatchState<t.Peer, t.PeerModelEvents>;
+
 /**
  * Events API
  */
@@ -47,10 +49,11 @@ export type PeerModelEvents = t.Lifecycle & {
  */
 export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd;
 
-export type PeerModelConnCmd = { type: 'Peer:Conn'; payload: PeerModelConn };
+export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConn };
+export type PeerModelConnAction = 'start:out' | 'start:in' | 'close' | 'error' | 'purge';
 export type PeerModelConn = {
   tx: string;
-  action: 'start:out' | 'start:in' | 'close' | 'error' | 'total';
+  action: PeerModelConnAction;
   connection?: { id: string; peer: { local: string; remote: string } };
   error?: Error;
 };
