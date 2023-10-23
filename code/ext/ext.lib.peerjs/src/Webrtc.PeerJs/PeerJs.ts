@@ -10,6 +10,9 @@ export const PeerJs: t.WebrtcPeerJs = {
   Is,
   Uri,
 
+  /**
+   * Format and flesh-out configuration options.
+   */
   options(input?: Partial<t.PeerJsCreateArgs>): t.PeerJsOptions {
     const host = Path.trimHttpPrefix(input?.host ?? DEFAULTS.signal.host);
     const path = Path.ensureSlashes(input?.path ?? DEFAULTS.signal.path);
