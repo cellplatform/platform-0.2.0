@@ -1,12 +1,16 @@
 import type { t } from './common';
 
 type Id = string;
+type InitOptions = Partial<t.PeerJsCreateArgs> & {
+  peerid?: Id;
+  dispose$?: t.UntilObservable;
+};
 
 /**
  * Entry API
  */
 export type WebrtcPeerModel = {
-  init(options?: Partial<t.PeerJsCreateArgs> & { dispose$?: t.UntilObservable }): t.PeerModel;
+  init(options?: InitOptions): t.PeerModel;
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
 };
 
@@ -26,7 +30,7 @@ export type PeerConnection = {
   kind: 'data' | 'media';
   id: string;
   peer: { local: string; remote: string };
-  open: boolean;
+  open: boolean | null; // NB: null while initializing.
 };
 
 /**
@@ -52,7 +56,7 @@ export type PeerModel = t.Lifecycle & {
  * Stateful immutable model (JSON patch).
  */
 export type PeerModelState = t.PatchState<t.Peer, t.PeerModelEvents>;
-export type PeerModelConnection = { id: Id; peer: { local: Id; remote: Id } };
+export type PeerConnectionId = { id: Id; peer: { local: Id; remote: Id } };
 
 /**
  * Events API
@@ -76,7 +80,7 @@ export type PeerModelConnAction = 'start:out' | 'start:in' | 'ready' | 'close' |
 export type PeerModelConn = {
   tx: string;
   action: PeerModelConnAction;
-  connection?: PeerModelConnection;
+  connection?: PeerConnectionId;
   error?: Error;
 };
 
@@ -86,6 +90,6 @@ export type PeerModelDataCmd<D extends unknown = unknown> = {
 };
 export type PeerModelData<D extends unknown = unknown> = {
   tx: string;
-  connection: PeerModelConnection;
+  connection: PeerConnectionId;
   data: D;
 };

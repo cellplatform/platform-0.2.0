@@ -72,9 +72,11 @@ export default Test.describe('Webrtc.PeerJs', (e) => {
 
       const peer1 = Webrtc.PeerJs.create(id1, DEFAULTS.signal);
       const peer2 = Webrtc.PeerJs.create(id2);
+      const peer3 = Webrtc.PeerJs.create(' ');
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2);
+      expect(Webrtc.Is.peerid(peer3.id)).to.eql(true);
 
       expect(peer1.options.host).to.eql(options.host);
       expect(peer2.options.host).to.eql(options.host);

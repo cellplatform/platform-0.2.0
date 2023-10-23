@@ -41,11 +41,12 @@ export function manageDataConnection(args: {
        * Start an outgoing data connection.
        */
       outgoing(remote: string) {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<string>((resolve) => {
           const conn = peer.connect(remote, { reliable: true });
           const id = conn.connectionId;
           state.change((d) => {
-            d.connections.push({ kind: 'data', id, open: false, peer: { remote, local } });
+            const peer = { local, remote };
+            d.connections.push({ kind: 'data', id, open: null, peer });
           });
           conn.on('open', () => {
             state.change((d) => {
@@ -53,8 +54,8 @@ export function manageDataConnection(args: {
               if (item) {
                 item.open = true;
                 api.dispatch.connection('ready', conn);
-                resolve(id);
               }
+              resolve(id);
             });
           });
           api.monitor(conn);

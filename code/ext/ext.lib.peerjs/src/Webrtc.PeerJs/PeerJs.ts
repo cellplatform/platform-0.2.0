@@ -26,8 +26,9 @@ export const PeerJs: t.WebrtcPeerJs = {
     if (args.length === 0) return new PeerJsLib(Uri.generate(false), PeerJs.options());
     if (isObject(args[0])) return new PeerJsLib(Uri.generate(false), PeerJs.options(args[0]));
     if (typeof args[0] === 'string') {
+      const id = args[0].trim() || Uri.generate(false);
       const options = isObject(args[1]) ? PeerJs.options(args[1]) : PeerJs.options();
-      return new PeerJsLib(args[0], options);
+      return new PeerJsLib(id, options);
     }
     throw new Error('Could not resolve Peer creation args');
   },
