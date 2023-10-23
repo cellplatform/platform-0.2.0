@@ -1,7 +1,6 @@
-import { Webrtc } from '.';
-import { DEFAULTS, Id, Test, expect, type t, Time } from '../test.ui';
+import { DEFAULTS, Id, Test, Webrtc, expect, type t } from '../test.ui';
 
-export default Test.describe('Webrtc.Peer', (e) => {
+export default Test.describe('Webrtc.PeerJs', (e) => {
   e.describe('options', (e) => {
     e.it('Peer.options (with args)', (e) => {
       const res = Webrtc.PeerJs.options(DEFAULTS.signal);

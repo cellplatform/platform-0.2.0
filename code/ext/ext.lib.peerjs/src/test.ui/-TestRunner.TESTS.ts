@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../Webrtc/-TEST.Peer'),
+      import('../Webrtc.PeerJs/-TEST'),
 
       //
       'Integration Tests',

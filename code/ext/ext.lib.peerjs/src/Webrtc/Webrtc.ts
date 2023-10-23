@@ -2,7 +2,7 @@ import { type t } from './common';
 
 import { Is } from './Is';
 import { PeerUri } from './Peer.Uri';
-import { PeerJs } from './PeerJs';
+import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 
 export const Webrtc: t.Webrtc = {
   Is,

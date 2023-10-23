@@ -1,9 +1,7 @@
 import { Peer as PeerJsLib } from 'peerjs';
-import { DEFAULTS, Path, cuid, type t } from '../common';
-import { Is } from './Is';
-import { PeerUri as Uri } from './Peer.Uri';
+import { DEFAULTS, Is, Path, PeerUri as Uri, cuid, type t } from './common';
 
-export type OptionsArgs = { host: string; path: string; key: string };
+type Options = { host: string; path: string; key: string };
 
 /**
  * Helpers for setting up and working with a WebRTC peer.
@@ -14,7 +12,7 @@ export const PeerJs: t.WebrtcPeerJs = {
   Is,
   Uri,
 
-  options(input?: OptionsArgs): t.PeerJsOptions {
+  options(input?: Options): t.PeerJsOptions {
     const args = input ?? DEFAULTS.signal;
     const host = Path.trimHttpPrefix(args.host);
     const path = Path.ensureSlashes(args.path);
