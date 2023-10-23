@@ -1,6 +1,6 @@
 import { PatchState } from '.';
 import { Patch } from '../Json.Patch';
-import { Is, describe, expect, it, rx, type t } from '../test';
+import { Time, Is, R, describe, expect, it, rx, slug, type t } from '../test';
 
 describe('PatchState', () => {
   type T = { label: string };
@@ -185,6 +185,71 @@ describe('PatchState', () => {
       [undefined, null, {}, '', 123, true].forEach((value) => {
         expect(PatchState.Is.state(value)).to.eql(false);
       });
+    });
+  });
+
+  describe('Command (Dispatcher)', () => {
+    type Cmd = OneCmd | TwoCmd;
+
+    type OneCmd = { type: 'foo.one'; payload: One };
+    type One = { tx: string; msg: string };
+
+    type TwoCmd = { type: 'foo.two'; payload: Two };
+    type Two = { tx: string; count: number };
+
+    type T = { cmd?: Cmd };
+    type E = {
+      $: rx.Observable<t.PatchChange<T>>;
+      cmd: {
+        $: t.Observable<Cmd>;
+        one$: t.Observable<One>;
+        two$: t.Observable<Two>;
+      };
+    };
+
+    type TFactory = t.PatchStateEventFactory<T, E>;
+    const factory: TFactory = ($, dispose$) => {
+      const cmd$ = $.pipe(
+        rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
+        rx.filter((e) => Boolean(e.to.cmd)),
+        rx.map((e) => e.to.cmd!),
+      );
+      return {
+        $,
+        cmd: {
+          $: cmd$,
+          one$: rx.payload<OneCmd>(cmd$, 'foo.one'),
+          two$: rx.payload<TwoCmd>(cmd$, 'foo.two'),
+        },
+      };
+    };
+
+    it('no params', () => {
+      const command = PatchState.Command.dispatcher<Cmd>();
+      expect(command.dispatch).to.be.a('function');
+    });
+
+    it('dispatches a command', async () => {
+      const state = PatchState.init<T, E>({ initial: {}, events: factory });
+      const events = state.events();
+
+      const firedOne: One[] = [];
+      const firedTwo: Two[] = [];
+      events.cmd.one$.subscribe((e) => firedOne.push(e));
+      events.cmd.two$.subscribe((e) => firedTwo.push(e));
+
+      const command = PatchState.Command.dispatcher<Cmd>(state);
+      command.dispatch({ type: 'foo.one', payload: { tx: slug(), msg: 'hello' } });
+      command.dispatch({ type: 'foo.two', payload: { tx: slug(), count: 123 } });
+      command.dispatch({ type: 'foo.two', payload: { tx: slug(), count: 456 } });
+
+      expect(firedOne[0].msg).to.eql('hello');
+      expect(firedTwo[0].count).to.eql(123);
+      expect(firedTwo[1].count).to.eql(456);
+
+      expect((state.current.cmd?.payload as Two).count).to.eql(456);
+      await Time.wait(0);
+      expect(state.current.cmd).to.eql(undefined); // NB: reset (no longer needed after event is published)
     });
   });
 });

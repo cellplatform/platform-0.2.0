@@ -14,6 +14,7 @@ export type {
   ImmutableNext,
   ImmutableRef,
   Lifecycle,
+  Milliseconds,
   NpmPackageJson,
   UntilObservable,
 } from 'sys.types/src/types';
