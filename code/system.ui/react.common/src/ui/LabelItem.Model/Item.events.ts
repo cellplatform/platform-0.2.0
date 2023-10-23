@@ -1,4 +1,4 @@
-import { R, mapVoid, rx, type t } from './common';
+import { PatchState, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -11,13 +11,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
 ): t.LabelItemEvents<A, D> {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
-
-  const cmd$ = $.pipe(
-    rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-    rx.filter((e) => Boolean(e.to.cmd)),
-    rx.map((e) => e.to.cmd!),
-  );
-
+  const cmd$ = PatchState.Command.filter($);
   const keydown$ = rx.payload<t.LabelItemKeydownCmd>(cmd$, 'Item:Keydown');
 
   type K = t.LabelItemKeyHandlerArgs;
