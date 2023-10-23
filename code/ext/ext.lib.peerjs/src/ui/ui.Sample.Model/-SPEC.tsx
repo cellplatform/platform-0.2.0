@@ -10,8 +10,8 @@ const initial: T = {};
 const name = 'SampleModel';
 
 export default Dev.describe(name, (e) => {
-  const peerA = Webrtc.PeerJs.create(`a-${Id.slug()}`);
-  const peerB = Webrtc.PeerJs.create(`b-${Id.slug()}`);
+  const peerA = Webrtc.peer({ peerid: `a-${Id.slug()}` });
+  const peerB = Webrtc.peer({ peerid: `b-${Id.slug()}` });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
-import { rx, COLORS, Color, ObjectView, PeerModel, css, type t } from './common';
+import { COLORS, Color, ObjectView, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
 export type PeerProps = {
-  peer: { self: t.PeerJs; remote: t.PeerJs };
+  peer: { local: t.PeerModel; remote: t.PeerModel };
   style?: t.CssValue;
 };
 
 export const Peer: React.FC<PeerProps> = (props) => {
-  const [model, setModel] = useState<t.PeerModel>();
+  const local = props.peer.local;
+
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
   useEffect(() => {
-    const model = PeerModel.wrap(props.peer.self);
-    setModel(model);
-    const events = model.events();
+    const events = local.events();
     events.$.subscribe(redraw);
 
     events.cmd.data$.subscribe((e) => {
@@ -34,29 +33,24 @@ export const Peer: React.FC<PeerProps> = (props) => {
    * Handlers
    */
   const handleConnectData = () => {
-    model?.connect.data(props.peer.remote.id);
+    local?.connect.data(props.peer.remote.id);
   };
 
-  const handlePeerDestroy = () => {
-    props.peer.self.destroy();
+  const handlePeerDispose = () => {
+    local.dispose();
   };
 
   const handleCloseConnection = (connid: string) => {
-    model?.disconnect(connid);
+    local?.disconnect(connid);
   };
 
   const handleSendData = (connid: string) => {
-    const conn = model?.get.dataConnection(connid);
+    const conn = local?.get.dataConnection(connid);
     conn?.send('hello');
   };
 
   const handlePurge = () => {
-    model?.purge();
-  };
-
-  const handleTmp = () => {
-    //
-    if (!model) return;
+    local?.purge();
   };
 
   /**
@@ -86,10 +80,10 @@ export const Peer: React.FC<PeerProps> = (props) => {
     );
   };
 
-  const elConnections = (model?.current.connections.length ?? 0) > 0 && (
+  const elConnections = (local?.current.connections.length ?? 0) > 0 && (
     <div {...styles.section}>
       <ul {...styles.ul}>
-        {(model?.current.connections ?? []).map((conn, i) => {
+        {(local?.current.connections ?? []).map((conn, i) => {
           return (
             <li key={conn.id}>
               <div {...styles.connection}>
@@ -108,18 +102,17 @@ export const Peer: React.FC<PeerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${props.peer.self.id}`}</div>
+      <div>{`🐷 ${props.peer.local.id}`}</div>
       <div {...styles.section}>
         <ul {...styles.ul}>
           {button('peer.connect.data', handleConnectData)}
-          {button('peer.destroy', handlePeerDestroy)}
+          {button('peer.dispose', handlePeerDispose)}
           {button('purge', handlePurge)}
-          {button('tmp', handleTmp)}
         </ul>
       </div>
       {elConnections}
       <div {...styles.section}>
-        <ObjectView data={model?.current} fontSize={11} expand={1} />
+        <ObjectView data={local?.current} fontSize={11} expand={1} />
       </div>
     </div>
   );
