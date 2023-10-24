@@ -1,5 +1,5 @@
-import { Id, Webrtc, cuid, describe, expect, it } from '../test';
-import { PeerUri } from './Peer.Uri';
+import { PeerId, PeerUri } from '.';
+import { Webrtc, cuid, describe, expect, it } from '../test';
 
 describe('PeerUri', () => {
   it('exports', () => {
@@ -12,19 +12,19 @@ describe('PeerUri', () => {
       const res1 = PeerUri.generate();
       const res2 = PeerUri.generate(false);
       expect(res1.startsWith('peer:')).to.eql(true);
-      expect(Id.Is.cuid(res1.split(':')[1])).to.eql(true);
-      expect(Id.Is.cuid(res2)).to.eql(true);
+      expect(PeerId.is(res1.split(':')[1])).to.eql(true);
+      expect(PeerId.is(res2)).to.eql(true);
     });
 
     it('prefix: true → "peer:"', () => {
       const res = PeerUri.generate(true);
       expect(res.startsWith('peer:')).to.eql(true);
-      expect(Id.Is.cuid(res.split(':')[1])).to.eql(true);
+      expect(PeerId.is(res.split(':')[1])).to.eql(true);
     });
 
     it('prefix: string → empty ("")', () => {
       const test = (uri: string) => {
-        expect(Id.Is.cuid(uri)).to.eql(true);
+        expect(PeerId.is(uri)).to.eql(true);
       };
       test(PeerUri.generate(''));
       test(PeerUri.generate('  '));
@@ -33,7 +33,7 @@ describe('PeerUri', () => {
     it('prefix: string → "foo:"', () => {
       const test = (uri: string, prefix: string) => {
         expect(uri.startsWith(`${prefix}:`)).to.eql(true);
-        expect(Id.Is.cuid(uri.split(':')[1])).to.eql(true);
+        expect(PeerId.is(uri.split(':')[1])).to.eql(true);
       };
       test(PeerUri.generate('  foo  '), 'foo');
       test(PeerUri.generate('foo'), 'foo');

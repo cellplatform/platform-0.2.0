@@ -1,9 +1,10 @@
-import { Id, type t } from './common';
+import { type t } from './common';
+import { PeerId } from './Peer.Id';
 
 export const Is: t.WebrtcIs = {
   peerid(input) {
     if (typeof input !== 'string') return false;
-    return Id.Is.cuid(input.trim());
+    return PeerId.is(input.trim());
   },
 
   uri(input) {

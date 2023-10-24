@@ -1,5 +1,6 @@
-import { Id, type t } from '../common';
+import { type t } from '../common';
 import { Is } from './Is';
+import { PeerId } from './Peer.Id';
 
 /**
  * Helper for formatting peer ids.
@@ -11,7 +12,8 @@ export const PeerUri: t.WebrtcPeerUri = {
    * Generate a new peer-id.
    */
   generate(prefix = true) {
-    return `${Wrangle.formatPrefix(prefix)}${Id.cuid()}`;
+    const id = PeerId.generate();
+    return `${Wrangle.formatPrefix(prefix)}${id}`;
   },
 
   /**
@@ -54,6 +56,7 @@ export const Wrangle = {
     if (typeof input === 'string') prefix = Wrangle.stripColons(input);
     return prefix ? `${prefix}:` : prefix;
   },
+
   stripColons(input: string) {
     return input.trim().replace(/^\:*/, '').replace(/\:*$/, '').trim();
   },

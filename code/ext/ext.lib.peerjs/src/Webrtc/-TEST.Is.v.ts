@@ -1,6 +1,6 @@
-import { Webrtc, cuid, describe, expect, it, slug } from '../test';
+import { PeerId, PeerUri } from '.';
+import { Webrtc, describe, expect, it, slug } from '../test';
 import { Is } from './Is';
-import { PeerUri } from './Peer.Uri';
 
 describe('Is', () => {
   it('exports', () => {
@@ -12,8 +12,8 @@ describe('Is', () => {
   describe('Is.peerid', () => {
     it('true', () => {
       const test = (input: any) => expect(Is.peerid(input)).to.eql(true);
-      test(cuid());
-      test(` ${cuid()}  `);
+      test(PeerId.generate());
+      test(` ${PeerId.generate()}  `);
       test(PeerUri.generate(false));
       test(PeerUri.generate('  '));
     });
