@@ -41,7 +41,8 @@ export function manageDataConnection(args: {
        * Start an outgoing data connection.
        */
       outgoing(remote: string) {
-        return new Promise<string>((resolve) => {
+        type R = { id: string; conn: t.PeerJsConnData };
+        return new Promise<R>((resolve) => {
           const conn = peer.connect(remote, { reliable: true });
           const id = conn.connectionId;
           state.change((d) => {
@@ -55,7 +56,7 @@ export function manageDataConnection(args: {
                 item.open = true;
                 api.dispatch.connection('ready', conn);
               }
-              resolve(id);
+              resolve({ id, conn });
             });
           });
           api.monitor(conn);

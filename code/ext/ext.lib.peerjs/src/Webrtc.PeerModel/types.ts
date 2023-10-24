@@ -43,7 +43,7 @@ export type PeerModel = t.Lifecycle & {
   purge(): void;
   disconnect(id: Id): void;
   connect: {
-    data(remotePeer: Id): Promise<Id>;
+    data(remotePeer: Id): Promise<{ id: Id; conn: t.PeerJsConnData }>;
   };
   get: {
     connection(id: Id): t.PeerJsConn | undefined;
