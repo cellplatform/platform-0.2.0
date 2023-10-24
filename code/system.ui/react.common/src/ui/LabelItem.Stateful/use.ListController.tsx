@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, ListContext, Model, type t } from './common';
+import { DEFAULTS, ListContext, Model, type t, rx } from './common';
 import { useListNavigationController } from './use.ListNavigationController';
 
 type Props = {
@@ -19,6 +19,19 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(props:
   const dispatchRef = useRef<t.LabelListDispatch>();
   const listRef = useRef(props.list ?? Model.List.state());
   const list = listRef.current;
+
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
+
+  /**
+   * Monitor redraws.
+   */
+  useEffect(() => {
+    const events = list.events();
+    events.cmd.redraw$.pipe(rx.filter((e) => !e.item)).subscribe(redraw);
+    events.total$.subscribe(redraw);
+    return events.dispose;
+  }, []);
 
   /**
    * Hook into event handlers passed down to the <Item>.

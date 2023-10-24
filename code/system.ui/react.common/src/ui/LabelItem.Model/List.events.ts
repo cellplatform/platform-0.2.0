@@ -22,6 +22,10 @@ export function events<D extends O = O>(
 
   const api: t.LabelListEvents<D> = {
     $,
+    total$: $.pipe(
+      rx.map((e) => e.to.total),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ),
     cmd: {
       $: cmd$,
       redraw$: rx.payload<t.LabelListRedrawCmd>(cmd$, 'List:Redraw'),
