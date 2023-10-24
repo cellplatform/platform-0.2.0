@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, ObjectView, css, rx, type t } from './common';
+import { COLORS, Color, ObjectView, css, rx, type t, Icons } from './common';
 import { Button } from './ui.Button';
 
 export type PeerProps = {
@@ -9,6 +9,7 @@ export type PeerProps = {
 
 export const Peer: React.FC<PeerProps> = (props) => {
   const local = props.peer.local;
+  const localid = local.id;
 
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -63,6 +64,7 @@ export const Peer: React.FC<PeerProps> = (props) => {
       boxSizing: 'border-box',
       fontSize: 14,
     }),
+    title: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
     section: css({
       marginTop: 8,
       paddingTop: 8,
@@ -102,7 +104,12 @@ export const Peer: React.FC<PeerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${props.peer.local.id}`}</div>
+      <div {...styles.title}>
+        <div>{`🐷 ${localid}`}</div>
+        <Button style={{ marginRight: 0 }} onClick={() => navigator.clipboard.writeText(localid)}>
+          <Icons.Copy size={16} />
+        </Button>
+      </div>
       <div {...styles.section}>
         <ul {...styles.ul}>
           {button('peer.connect.data', handleConnectData)}

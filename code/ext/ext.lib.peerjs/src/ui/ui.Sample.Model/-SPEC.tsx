@@ -1,4 +1,4 @@
-import { Dev, Id, Webrtc } from '../../test.ui';
+import { Dev, Webrtc } from '../../test.ui';
 import { Root } from './Root';
 
 type T = {};
@@ -8,10 +8,9 @@ const initial: T = {};
  * Spec
  */
 const name = 'SampleModel';
-
 export default Dev.describe(name, (e) => {
-  const peerA = Webrtc.peer({ peerid: `a-${Id.slug()}` });
-  const peerB = Webrtc.peer({ peerid: `b-${Id.slug()}` });
+  const peerA = Webrtc.peer();
+  const peerB = Webrtc.peer();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
