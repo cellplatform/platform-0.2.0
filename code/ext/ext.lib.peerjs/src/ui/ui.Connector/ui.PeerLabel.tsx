@@ -15,7 +15,7 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
   const [prefix, peerid = ''] = uri.split(':');
   if (!peerid) error = '(error: no peer)';
 
-  const length = 6;
+  const length = 5;
   const hashLeft = peerid.slice(0, length);
   const hashRight = peerid.slice(length);
 
