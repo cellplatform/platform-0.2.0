@@ -15,8 +15,7 @@ const initial: T = {
  * - https://peerjs.com
  * - https://github.com/peers/peerjs
  */
-const name = 'Sample';
-
+const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   type LocalStore = { localPeer: string; remotePeer: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');

@@ -7,7 +7,7 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'SampleModel';
+const name = 'Sample.02';
 export default Dev.describe(name, (e) => {
   const peerA = Webrtc.peer();
   const peerB = Webrtc.peer();
