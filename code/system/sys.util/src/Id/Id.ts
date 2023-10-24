@@ -25,7 +25,7 @@ const Is = {
  */
 export const Id = {
   Length,
-  is: Is,
+  Is,
 
   /**
    * Creates long collision-resistant long identifier.

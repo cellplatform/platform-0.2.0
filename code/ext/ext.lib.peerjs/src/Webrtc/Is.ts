@@ -3,7 +3,7 @@ import { Id, type t } from './common';
 export const Is: t.WebrtcIs = {
   peerid(input) {
     if (typeof input !== 'string') return false;
-    return Id.is.cuid(input.trim());
+    return Id.Is.cuid(input.trim());
   },
 
   uri(input) {

@@ -45,16 +45,16 @@ export default Test.describe('Webrtc.PeerJs', (e) => {
       assertOptions(peer1, Webrtc.PeerJs.options());
       assertOptions(peer2, Webrtc.PeerJs.options());
 
-      expect(Id.is.cuid(peer1.id)).to.eql(true);
-      expect(Id.is.cuid(peer2.id)).to.eql(true);
+      expect(Id.Is.cuid(peer1.id)).to.eql(true);
+      expect(Id.Is.cuid(peer2.id)).to.eql(true);
     });
 
     e.it('Peer.create({ options }) ← explicit options', (e) => {
       const peer1 = Webrtc.PeerJs.create({});
       const peer2 = Webrtc.PeerJs.create({ host: 'https://foo.com', path: '//bar', key: 'yo' });
 
-      expect(Id.is.cuid(peer1.id)).to.eql(true);
-      expect(Id.is.cuid(peer2.id)).to.eql(true);
+      expect(Id.Is.cuid(peer1.id)).to.eql(true);
+      expect(Id.Is.cuid(peer2.id)).to.eql(true);
 
       expect(peer1.options.host).to.eql('rtc.bus.events');
       expect(peer1.options.path).to.eql('/signal/');

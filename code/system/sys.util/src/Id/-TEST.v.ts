@@ -24,13 +24,13 @@ describe('Id', () => {
       expect(Id.cuid).to.equal(cuid);
     });
 
-    it('Id.is.cuid( )', () => {
-      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.is.cuid(v)).to.eql(false));
+    it('Id.Is.cuid( )', () => {
+      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.Is.cuid(v)).to.eql(false));
       Array.from({ length: 50 }).forEach(() => {
         const cuid = Id.cuid();
         const slug = Id.slug();
-        expect(Id.is.cuid(cuid)).to.eql(true);
-        expect(Id.is.cuid(slug)).to.eql(false);
+        expect(Id.Is.cuid(cuid)).to.eql(true);
+        expect(Id.Is.cuid(slug)).to.eql(false);
       });
     });
   });
@@ -61,13 +61,13 @@ describe('Id', () => {
       expect(Id.slug).to.equal(slug);
     });
 
-    it('Id.is.slug( )', () => {
-      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.is.cuid(v)).to.eql(false));
+    it('Id.Is.slug( )', () => {
+      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(Id.Is.cuid(v)).to.eql(false));
       Array.from({ length: 50 }).forEach(() => {
         const cuid = Id.cuid();
         const slug = Id.slug();
-        expect(Id.is.slug(cuid)).to.eql(false);
-        expect(Id.is.slug(slug)).to.eql(true);
+        expect(Id.Is.slug(cuid)).to.eql(false);
+        expect(Id.Is.slug(slug)).to.eql(true);
       });
     });
   });

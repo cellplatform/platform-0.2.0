@@ -28,7 +28,7 @@ describe('Store', async () => {
 
     it('doc', async () => {
       const doc = await generator();
-      expect(Id.is.slug(doc.instance)).to.eql(true);
+      expect(Id.Is.slug(doc.instance)).to.eql(true);
       expect(doc.uri).to.eql(doc.handle.url);
       expect(doc.toObject()).to.eql(doc.current);
     });
