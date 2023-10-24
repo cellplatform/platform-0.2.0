@@ -60,8 +60,6 @@ export const Button: React.FC<ButtonProps> = (props) => {
     </div>
   );
 
-  const elLabel = !spinning && <div {...styles.label}>{label}</div>;
-
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
       {elSpinner}
