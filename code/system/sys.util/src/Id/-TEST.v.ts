@@ -5,8 +5,8 @@ import { R } from '../common';
 
 describe('Id', () => {
   it('display', () => {
-    console.log(`slug: ${slug()}`);
-    console.log(`cuid: ${cuid()}`);
+    console.info(`slug: ${slug()}`);
+    console.info(`cuid: ${cuid()}`);
   });
 
   describe('cuid', () => {
@@ -69,6 +69,25 @@ describe('Id', () => {
         expect(Id.Is.slug(cuid)).to.eql(false);
         expect(Id.Is.slug(slug)).to.eql(true);
       });
+    });
+  });
+
+  describe('init (custom length)', () => {
+    const custom = Id.init(8);
+
+    it('generate', () => {
+      expect(custom.generate().length).to.eql(8);
+    });
+
+    it('length === 8', () => {
+      expect(custom.length).to.eql(8);
+    });
+
+    it('is (flag test)', () => {
+      const id = custom.generate();
+      expect(custom.is(id)).to.eql(true);
+      expect(custom.is('.2345678')).to.eql(false);
+      ['', true, 123, [], {}, null, undefined].forEach((v) => expect(custom.is(v)).to.eql(false));
     });
   });
 });
