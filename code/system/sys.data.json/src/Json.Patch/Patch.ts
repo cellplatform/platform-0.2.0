@@ -19,7 +19,7 @@ if (typeof enablePatches === 'function') enablePatches();
  *
  * See: https://immerjs.github.io/immer/docs/original
  */
-function toObject<T extends O>(input: any): T {
+export function toObject<T extends O>(input: any): T {
   return isDraft(input) ? (original<T>(input) as T) : input;
 }
 

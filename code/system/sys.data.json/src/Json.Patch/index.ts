@@ -1,1 +1,1 @@
-export * from './Patch';
+export { Patch, toObject } from './Patch';
