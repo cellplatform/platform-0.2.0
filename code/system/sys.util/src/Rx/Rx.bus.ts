@@ -1,4 +1,4 @@
-import { slug } from '../Id/Id';
+import { slug } from '../Id';
 import { busAsType, instance, isBus } from './Rx.util';
 import { isEvent } from './Rx.event';
 import { filter, Subject } from './RxJs.lib';

@@ -1,9 +1,4 @@
-import { init, isCuid } from '@paralleldrive/cuid2';
-import '../Value/Value.Random.mjs';
-
-const Length = { cuid: 25, slug: 6 } as const;
-const cuid = init({ length: Length.cuid });
-const slug = init({ length: Length.slug });
+import { init as config, isCuid } from '@paralleldrive/cuid2';
 
 function isFactory(length: number) {
   return (input: any) => {
@@ -11,6 +6,19 @@ function isFactory(length: number) {
     return input.length === length ? isCuid(input) : false;
   };
 }
+
+/**
+ * Initialize a new ID generator with the given length.
+ */
+function init(length: number) {
+  const generate = config({ length });
+  const is = isFactory(length);
+  return { generate, length, is } as const;
+}
+
+const Length = { cuid: 25, slug: 6 } as const;
+const cuid = init(Length.cuid);
+const slug = init(Length.slug);
 
 /**
  * Helpers to determine if a value is a cuid.
@@ -26,11 +34,12 @@ const Is = {
 export const Id = {
   Length,
   Is,
+  init,
 
   /**
    * Creates long collision-resistant long identifier.
    */
-  cuid,
+  cuid: cuid.generate,
 
   /**
    * Creates a non-sequental identifier.
@@ -38,16 +47,5 @@ export const Id = {
    *    [[DO NOT]] put "slugs" into databases as keys.
    *    Use the long "cuid" for that.
    */
-  slug,
-
-  /**
-   * Initialize a new ID generator with the given length.
-   */
-  init(length: number) {
-    const generate = init({ length });
-    const is = isFactory(length);
-    return { generate, length, is } as const;
-  },
+  slug: slug.generate,
 } as const;
-
-export { Is, cuid, slug };
