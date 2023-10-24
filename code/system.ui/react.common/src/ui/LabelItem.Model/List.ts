@@ -7,8 +7,10 @@ import { get, getItem } from './List.get';
 import { map } from './List.map';
 
 type O = Record<string, unknown>;
+const { toObject } = PatchState;
 
 export const List = {
+  toObject,
   commands,
   get,
   getItem,

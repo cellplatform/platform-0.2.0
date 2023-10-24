@@ -3,6 +3,8 @@ import { List } from './List';
 import { Is, Patch, PatchState, type t } from './common';
 
 type O = Record<string, unknown>;
+const { toObject } = PatchState;
+const { action } = Item;
 
 /**
  * Safe/immutable/observable in-memory state.
@@ -11,8 +13,15 @@ export const Model = {
   Item,
   List,
 
+  toObject,
+  action,
+
   /**
-   * Ensures the {data} object exists on the given draft/proxy object.
+   * Retrieves, or ensures the {data} object exists on the
+   * given draft/proxy object.
+   * Note:
+   *    When called within a proxy, the object is ensured to exist.
+   *    To simply read with no mutation, call outside of a [change] function.
    */
   data<T extends O>(
     input: t.LabelItem | t.LabelItemState | t.LabelList | t.LabelListState,

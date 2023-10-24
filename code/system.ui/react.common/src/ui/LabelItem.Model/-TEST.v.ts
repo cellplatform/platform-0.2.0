@@ -282,6 +282,60 @@ describe('LabelItem.Model', () => {
     });
   });
 
+  describe('Model.action', () => {
+    type A = 'foo' | 'bar' | 'baz';
+
+    it('exposed on Model and Model.Item', () => {
+      expect(Model.action).to.be.a('function');
+      expect(Model.action).to.equal(Model.Item.action);
+    });
+
+    it('no actions', () => {
+      const item = Model.Item.state<A>();
+      const res = Model.action(item, 'foo');
+      expect(res).to.eql([]);
+    });
+
+    it('gets action', () => {
+      const test = (input: t.LabelItem<A> | t.LabelItemState<A>) => {
+        const foo = Model.action(input, 'foo');
+        const bar = Model.action(input, 'bar');
+        const baz = Model.action(input, 'baz');
+        expect(foo).to.eql([{ kind: 'foo', enabled: false }, { kind: 'foo' }]);
+        expect(bar).to.eql([{ kind: 'bar' }]);
+        expect(baz).to.eql([]);
+      };
+
+      const item = Model.Item.state<A>({
+        left: { kind: 'foo', enabled: false },
+        right: [{ kind: 'foo' }, { kind: 'bar' }],
+      });
+
+      test(item);
+      test(item.current);
+    });
+
+    it('within [change] function', () => {
+      const item = Model.Item.state<A>({
+        left: { kind: 'foo', enabled: false },
+        right: [{ kind: 'foo' }, { kind: 'bar' }],
+      });
+
+      item.change((d) => {
+        const [fooLeft, fooRight] = Model.action(d, 'foo');
+        fooLeft.enabled = true;
+        fooRight.spinning = true;
+        Model.action(d, 'bar')[0].width = 350;
+      });
+
+      expect(item.current.left).to.eql({ kind: 'foo', enabled: true });
+      expect(item.current.right).to.eql([
+        { kind: 'foo', spinning: true },
+        { kind: 'bar', width: 350 },
+      ]);
+    });
+  });
+
   describe('Model.data', () => {
     type StateRef = t.ImmutableRef<any, any>;
 
