@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { Model, PeerUri, Time, slug, type t } from './common';
+import { DEFAULTS, Model, PeerUri, Time, slug, type t } from './common';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -14,6 +14,9 @@ export function clipboardBehavior(args: {
    * Behavior: Paste
    */
   events.cmd.clipboard.paste$.subscribe(async (e) => {
+    const stage = Data.remote(state).stage;
+    if (stage === 'Connected') return;
+
     const ctx = args.ctx();
     const tx = slug();
 
@@ -38,15 +41,14 @@ export function clipboardBehavior(args: {
 
     redraw();
 
-    Time.delay(3000, () => {
+    Time.delay(DEFAULTS.errorTimeout, () => {
       if (Data.remote(state).error?.tx !== tx) return;
       state.change((d) => {
         const data = Data.remote(d);
         if (data.error) data.remoteid = undefined;
         data.error = undefined;
+        redraw();
       });
-
-      redraw();
     });
   });
 }

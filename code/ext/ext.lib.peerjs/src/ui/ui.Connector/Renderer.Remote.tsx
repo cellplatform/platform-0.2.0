@@ -16,6 +16,8 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
 
       if (err === 'InvalidPeer') text = 'invalid peer ( please try again )';
       if (err === 'PeerIsSelf') text = 'cannot connect to yourself';
+      if (err === 'ConnectFail') text = data.error?.message || 'connection failed';
+
       return <>{text}</>;
     },
 
@@ -26,20 +28,26 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
 
       if (e.kind === 'remote:right') {
         const data = Data.remote(e.item);
+        const stage = data.stage;
+
         if (data.error) {
           return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />;
         }
 
-        /**
-         * TODO 🐷
-         */
-        if (data.connecting || (e.selected && data.remoteid)) {
-          const spinning = data.connecting;
+        if (stage === 'Connected') {
+          /**
+           * TODO 🐷
+           * Connected icons
+           */
+          return;
+        }
+
+        if (stage === 'Connecting' || (e.selected && data.remoteid)) {
           return (
             <LabelItem.Button
               selected={e.selected}
               focused={e.focused}
-              spinning={spinning}
+              spinning={stage === 'Connecting'}
               label={'Connect'}
             />
           );

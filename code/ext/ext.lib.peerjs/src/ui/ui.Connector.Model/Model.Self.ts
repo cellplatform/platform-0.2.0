@@ -1,4 +1,5 @@
 import { clipboardBehavior } from './Model.Self.b.clipboard';
+import { peerBehavior } from './Model.Self.b.peer';
 import { Model, type t } from './common';
 
 export type SelfOptions = { dispose$?: t.UntilObservable };
@@ -26,6 +27,7 @@ export const Self = {
     const events = state.events(args.dispose$);
 
     clipboardBehavior({ ctx, state, events, dispatch });
+    peerBehavior({ ctx, state, events, dispatch });
 
     return state;
   },

@@ -47,11 +47,10 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button(['copy', 'generate 🌳 → "peer:uri"'], (e) => {
-        const peeruri = Webrtc.PeerJs.Uri.generate();
-        navigator.clipboard.writeText(peeruri);
+      dev.button(['copy', 'bad peer-id'], (e) => {
+        navigator.clipboard.writeText(Webrtc.PeerJs.Uri.generate());
       });
-
+      dev.hr(-1, 5);
       dev.button('redraw', (e) => dev.redraw());
     });
 

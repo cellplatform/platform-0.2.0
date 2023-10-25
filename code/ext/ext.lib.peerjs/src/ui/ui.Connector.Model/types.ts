@@ -47,8 +47,8 @@ export type ConnectorDataSelf = {
 export type ConnectorDataRemote = {
   kind: 'peer:remote';
   remoteid?: string;
-  connecting?: boolean;
-  error?: { type: ConnectorDataRemoteError; tx: string };
+  stage?: 'Connecting' | 'Connected';
+  error?: { tx: string; type: ConnectorDataRemoteError; message?: string };
 };
 
-export type ConnectorDataRemoteError = 'InvalidPeer' | 'PeerIsSelf';
+export type ConnectorDataRemoteError = 'InvalidPeer' | 'PeerIsSelf' | 'ConnectFail';

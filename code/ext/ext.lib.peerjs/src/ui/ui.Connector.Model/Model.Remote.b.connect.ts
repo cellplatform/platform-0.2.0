@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { Model, type t } from './common';
+import { DEFAULTS, Model, type t, slug, Time } from './common';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -11,11 +11,8 @@ export function openConnectionBehavior(args: {
   const redraw = () => dispatch.redraw();
 
   const connect = async () => {
-    console.log('💥 connect');
     const data = Data.remote(state.current);
-    console.log('data', data);
-    console.log('state.current', state.current);
-    if (data.connecting) return;
+    if (data.stage === 'Connecting' || data.stage === 'Connected') return;
 
     const { peer, list } = args.ctx();
 
@@ -25,42 +22,53 @@ export function openConnectionBehavior(args: {
       return;
     }
 
-    const spin = (isConnecting: boolean) => {
+    const connecting = (value: boolean) => {
       state.change((d) => {
-        Data.remote(d).connecting = isConnecting;
-        Model.action(d, 'remote:right')[0].enabled = !isConnecting;
+        const data = Data.remote(d);
+        data.stage = value ? 'Connecting' : undefined;
+        Model.action(d, 'remote:right')[0].enabled = !value;
+        redraw();
       });
-      redraw();
     };
 
-    spin(true);
+    connecting(true);
+    const { error } = await peer.connect.data(remoteid);
+    connecting(false);
 
-    list.change((d) => {
-      d.total += 1;
-    });
+    if (error) {
+      const tx = slug();
+      state.change((d) => {
+        const data = Data.remote(d);
+        data.error = { tx, type: 'ConnectFail', message: error };
+        d.label = undefined;
+        redraw();
+      });
 
-    const { conn } = await peer.connect.data(remoteid);
-    console.log('conn', conn);
+      Time.delay(DEFAULTS.errorTimeout, () => {
+        if (Data.remote(state).error?.tx !== tx) return;
+        state.change((d) => {
+          Data.remote(d).error = undefined;
+          d.label = data.remoteid;
+          redraw();
+        });
+      });
+    } else {
+      state.change((d) => {
+        const data = Data.remote(d);
+        data.stage = 'Connected';
+      });
+    }
 
-    spin(false);
-
-    // state.change((d) => {
-    //   Data.remote(d).connecting = true;
-    //   Model.action(d, 'remote:right')[0].enabled = false;
-    // });
+    // Add
+    if (!error) {
+      list.change((d) => {
+        d.total += 1; // TEMP 🐷
+      });
+    }
   };
 
   /**
-   * TODO 🐷
-   * - listen for [ENTER] key (as ell as button click)
-   * - start spinning
-   * - connect to remote
-   * - stop spinning, update visual state with connection.
-   *
-   */
-
-  /**
-   * Behavior: Connect Button Click
+   * Listen: "Connect" button trigger.
    */
   events.key.enter$.subscribe(connect);
   events.cmd.action.on('remote:right').subscribe(connect);

@@ -43,7 +43,7 @@ export type PeerModel = t.Lifecycle & {
   purge(): void;
   disconnect(id: Id): void;
   connect: {
-    data(remotePeer: Id): Promise<{ id: Id; conn: t.PeerJsConnData }>;
+    data(remotePeer: Id): Promise<t.PeerConnectedData>;
   };
   get: {
     connection(id: Id): t.PeerJsConn | undefined;
@@ -51,6 +51,8 @@ export type PeerModel = t.Lifecycle & {
     mediaConnection(id: Id): t.PeerJsConnMedia | undefined;
   };
 };
+
+export type PeerConnectedData = { id: Id; conn: t.PeerJsConnData; error?: string };
 
 /**
  * Stateful immutable model (JSON patch).
@@ -65,31 +67,35 @@ export type PeerModelEvents = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.Peer>>;
   readonly cmd: {
     readonly $: t.Observable<t.PeerModelCmd>;
-    readonly data$: t.Observable<t.PeerModelData>;
-    readonly conn$: t.Observable<t.PeerModelConn>;
+    readonly data$: t.Observable<t.PeerModelDataCmdArgs>;
+    readonly conn$: t.Observable<t.PeerModelConnCmdArgs>;
+    readonly purge$: t.Observable<t.PeerModelPurgeCmdArgs>;
   };
 };
 
 /**
  * Event Commands
  */
-export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd;
+export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd | PeerModelPurgeCmd;
 
-export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConn };
-export type PeerModelConnAction = 'start:out' | 'start:in' | 'ready' | 'close' | 'error' | 'purge';
-export type PeerModelConn = {
+export type PeerModelConnAction = 'start:out' | 'start:in' | 'ready' | 'close' | 'error' | 'purged';
+export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConnCmdArgs };
+export type PeerModelConnCmdArgs = {
   tx: string;
   action: PeerModelConnAction;
   connection?: PeerConnectionId;
-  error?: Error;
+  error?: string;
 };
 
 export type PeerModelDataCmd<D extends unknown = unknown> = {
   type: 'Peer:Data';
-  payload: PeerModelData<D>;
+  payload: PeerModelDataCmdArgs<D>;
 };
-export type PeerModelData<D extends unknown = unknown> = {
+export type PeerModelDataCmdArgs<D extends unknown = unknown> = {
   tx: string;
   connection: PeerConnectionId;
   data: D;
 };
+
+export type PeerModelPurgeCmd = { type: 'Peer:Purge'; payload: PeerModelPurgeCmdArgs };
+export type PeerModelPurgeCmdArgs = { tx: string };

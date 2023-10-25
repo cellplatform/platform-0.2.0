@@ -18,9 +18,12 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
     },
 
     action(e, helpers) {
+      const ctx = args.ctx();
+
       if (e.kind === 'self:left') {
+        const opacity = ctx.peer.current.open ? 1 : 0.3;
         const color = e.selected ? e.color : COLORS.BLUE;
-        return <Icons.Person {...helpers.icon(e, 17)} color={color} />;
+        return <Icons.Person {...helpers.icon(e, 17)} color={color} opacity={opacity} />;
       }
 
       if (e.kind === 'self:right') {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, Icons, ObjectView, css, rx, type t } from './common';
+import { COLORS, Color, Icons, ObjectView, Time, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
 export type PeerCardProps = {
@@ -11,8 +11,13 @@ export type PeerCardProps = {
 export const PeerCard: React.FC<PeerCardProps> = (props) => {
   const self = props.peer.self;
   const selfid = self.id;
-  const copyPeerId = () => navigator.clipboard.writeText(selfid);
+  const copyPeerId = () => {
+    navigator.clipboard.writeText(selfid);
+    setCopied(true);
+    Time.delay(1500, () => setCopied(false));
+  };
 
+  const [copied, setCopied] = useState(false);
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
@@ -104,12 +109,14 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     </div>
   );
 
+  const prefix = props.prefix ?? '';
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title}>
         <div>
-          {`🐷 ${props.prefix ?? ''} `}
-          <Button onClick={copyPeerId}>{selfid}</Button>
+          {`🐷 ${prefix} `}
+          <Button onClick={copyPeerId}>{copied ? '(copied)' : selfid}</Button>
         </div>
         <Button style={{ marginRight: 0 }} onClick={copyPeerId}>
           <Icons.Copy size={16} />

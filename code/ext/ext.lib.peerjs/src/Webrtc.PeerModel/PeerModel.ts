@@ -1,6 +1,6 @@
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { manageDataConnection } from './PeerModel.DataConnection';
-import { events } from './PeerModel.events';
+import { eventFactory } from './PeerModel.events';
 import { getFactory } from './PeerModel.get';
 import { PatchState, rx, type t } from './common';
 
@@ -28,22 +28,25 @@ export const PeerModel: t.WebrtcPeerModel = {
     const initial: t.Peer = { open: false, connections: [] };
     const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
-      events: ($, dispose$) => events($, [dispose$, lifecycle.dispose$]),
+      events: ($, dispose$) => eventFactory($, [dispose$, lifecycle.dispose$]),
     });
 
     /**
-     * Peer events.
+     * Internal Model Events.
+     */
+    const events = state.events();
+    events.cmd.purge$.subscribe(() => model.purge());
+
+    /**
+     * PeerJS Events.
      */
     peer.on('open', () => state.change((d) => (d.open = true)));
     peer.on('close', () => state.change((d) => (d.open = false)));
     peer.on('connection', (conn) => Data.start.incoming(conn));
 
-    /**
-     * Incoming media connection.
-     */
     peer.on('call', (e) => {
       /**
-       * TODO 🐷 Media Connections
+       * TODO 🐷 Incoming Media Connections
        */
       console.log('call', e);
     });
@@ -84,7 +87,8 @@ export const PeerModel: t.WebrtcPeerModel = {
           });
           if (total !== d.connections.length) changed = true;
         });
-        if (changed) Data.dispatch.connection('purge');
+        console.log('purged', state.current);
+        if (changed) Data.dispatch.connection('purged');
       },
 
       get: {

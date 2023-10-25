@@ -3,7 +3,7 @@ import { PatchState, rx, type t } from './common';
 /**
  * Event factory.
  */
-export const events: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> = ($, dispose$) => {
+export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> = ($, dispose$) => {
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
@@ -12,6 +12,7 @@ export const events: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> = ($, d
     $: cmd$,
     data$: rx.payload<t.PeerModelDataCmd>(cmd$, 'Peer:Data'),
     conn$: rx.payload<t.PeerModelConnCmd>(cmd$, 'Peer:Connection'),
+    purge$: rx.payload<t.PeerModelPurgeCmd>(cmd$, 'Peer:Purge'),
   };
 
   /**
