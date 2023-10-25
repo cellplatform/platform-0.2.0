@@ -41,7 +41,7 @@ export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
 export type ConnectorDataSelf = {
   kind: 'peer:self';
   copied?: string;
-  localid: string;
+  peerid: string;
 };
 
 export type ConnectorDataRemote = {

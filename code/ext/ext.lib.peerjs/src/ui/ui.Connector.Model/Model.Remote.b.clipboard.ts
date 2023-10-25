@@ -22,7 +22,7 @@ export function clipboardBehavior(args: {
     const peerid = isValid ? PeerUri.id(pasted) : '';
 
     const self = Data.self(Model.List.get(ctx.list).item(0)!);
-    const isSelf = self.localid === peerid;
+    const isSelf = self.peerid === peerid;
 
     state.change((d) => {
       const data = Data.remote(d);

@@ -10,7 +10,7 @@ describe('Connector.Model', () => {
     it('state', () => {
       const model = Model.Self.state({ ctx });
       const data = Data.self(model);
-      expect(data.localid).to.eql(peer.id);
+      expect(data.peerid).to.eql(peer.id);
     });
   });
 
