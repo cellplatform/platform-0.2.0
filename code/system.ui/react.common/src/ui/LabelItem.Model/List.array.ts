@@ -25,13 +25,10 @@ export function array<A extends K = string, D extends O = O>(input?: FactoryOrIn
       return [items[index], index];
     }
   };
-  return {
+  const api: t.LabelListArray<A, D> = {
     items,
     getItem,
 
-    /**
-     * Helpers
-     */
     get length() {
       return items.length;
     },
@@ -41,7 +38,35 @@ export function array<A extends K = string, D extends O = O>(input?: FactoryOrIn
     get last() {
       return items[items.length - 1];
     },
-  } as const;
+
+    map<T>(fn: t.LabelItemTransform<T, A, D>) {
+      const result: T[] = [];
+      for (let i = 0; i < api.length; i++) {
+        result[i] = fn(getItem(i)[0]!, i, items);
+      }
+      return result;
+    },
+
+    fill(total) {
+      if (total >= 0) getItem(total - 1);
+      api.map(() => null);
+      return api;
+    },
+
+    /**
+     * NOTE: Can be inefficient if this is a large array.
+     *       But if it is a large array, consider using your own data
+     *       structure to manage the list (aka a "cursor").
+     */
+    remove(target) {
+      if (target !== undefined) {
+        const [, index] = getItem(target);
+        items.splice(index, 1);
+      }
+      return api;
+    },
+  };
+  return api;
 }
 
 /**

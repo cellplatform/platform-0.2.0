@@ -111,26 +111,84 @@ describe('LabelItem.Model', () => {
         expect(index).to.eql(-1);
       });
 
-      describe('helper props', () => {
-        it('first', () => {
-          const array = Model.List.array();
-          expect(array.first).to.eql(undefined);
-          const [item] = array.getItem(0);
-          expect(array.first).to.equal(item);
+      it('prop: first', () => {
+        const array = Model.List.array();
+        expect(array.first).to.eql(undefined);
+        const [item] = array.getItem(0);
+        expect(array.first).to.equal(item);
+      });
+
+      it('prop: last', () => {
+        const array = Model.List.array();
+        expect(array.last).to.eql(undefined);
+        const [item] = array.getItem(9);
+        expect(array.last).to.equal(item);
+      });
+
+      it('prop: length', () => {
+        const array = Model.List.array();
+        expect(array.length).to.eql(0);
+        array.getItem(9);
+        expect(array.length).to.eql(10);
+      });
+
+      it('map', () => {
+        const array = Model.List.array();
+        const res1 = array.map((item, index) => ({ item, index }));
+        expect(res1).to.eql([]);
+
+        array.getItem(2); // NB: expand the array to 3 items.
+        const res2 = array.map((item) => item.instance);
+        expect(res2.length).to.eql(3);
+        expect(res2).to.eql(array.items.map((item) => item.instance));
+      });
+
+      it('fill', () => {
+        const test = (total: number, expected = total) => {
+          const array = Model.List.array().fill(total);
+          const res = array.items.map((item) => item.instance).filter(Boolean);
+          expect(res.length).to.eql(expected);
+          expect(res).to.eql(array.items.map((item) => item.instance));
+        };
+        test(-1, 0);
+        test(0);
+        test(3);
+      });
+
+      describe('remove', () => {
+        it('remove( <undefined> )', () => {
+          const array = Model.List.array().fill(2);
+          expect(array.length).to.eql(2);
+          array.remove(undefined);
+          expect(array.length).to.eql(2); // NB: no change.
         });
 
-        it('last', () => {
-          const array = Model.List.array();
-          expect(array.last).to.eql(undefined);
-          const [item] = array.getItem(9);
-          expect(array.last).to.equal(item);
+        it('remove: by [index]', () => {
+          const array = Model.List.array().fill(5);
+          expect(array.length).to.eql(5);
+          const ids = array.map((item) => item.instance);
+
+          array.remove(0);
+          expect(array.length).to.eql(4);
+          expect(array.getItem(0)[0]?.instance).to.eql(ids[1]);
+
+          array.remove(2);
+          expect(array.length).to.eql(3);
+          expect(array.getItem(1)[0]?.instance).to.eql(ids[2]);
         });
 
-        it('length', () => {
-          const array = Model.List.array();
-          expect(array.length).to.eql(0);
-          array.getItem(9);
-          expect(array.length).to.eql(10);
+        it('remove: by "id"', () => {
+          const array = Model.List.array().fill(5);
+          expect(array.length).to.eql(5);
+          const ids = array.map((item) => item.instance);
+
+          array.remove(ids[0]);
+          expect(array.length).to.eql(4);
+          expect(array.getItem(0)[0]?.instance).to.eql(ids[1]);
+
+          array.remove(ids[2]);
+          expect(array.length).to.eql(3);
+          expect(array.getItem(0)[0]?.instance).to.eql(ids[1]);
         });
       });
     });
