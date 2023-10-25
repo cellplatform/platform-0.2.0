@@ -109,13 +109,13 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     </div>
   );
 
-  const prefix = props.prefix ?? '';
+  const prefix = props.prefix ?? 'peer:';
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title}>
         <div>
-          {`🐷 ${prefix} `}
+          {`🌳 ${prefix} `}
           <Button onClick={copyPeerId}>{copied ? '(copied)' : selfid}</Button>
         </div>
         <Button style={{ marginRight: 0 }} onClick={copyPeerId}>
