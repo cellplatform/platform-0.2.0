@@ -4,7 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-const allFields: t.InfoField[] = ['Module', 'Module.Verify', 'Component'];
+const allFields: t.InfoField[] = ['Module', 'Module.Verify', 'Component', 'Peer'];
 const defaultFields: t.InfoField[] = ['Module', 'Module.Verify'];
 
 export const DEFAULTS = {

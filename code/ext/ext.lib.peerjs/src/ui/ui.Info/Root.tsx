@@ -1,5 +1,7 @@
 import { DEFAULTS, FC, Pkg, PropList, t } from './common';
-import { FieldModuleVerify } from './field.Module.Verify';
+import { fieldModuleVerify } from './field.Module.Verify';
+import { fieldPeer } from './field.Peer';
+import { useRedraw } from './use.Redraw';
 
 export type InfoProps = {
   title?: t.PropListProps['title'];
@@ -18,10 +20,13 @@ export type InfoProps = {
 const View: React.FC<InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
 
+  useRedraw(data);
+
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Module.Verify', () => fieldModuleVerify(data))
     .field('Component', { label: 'Component', value: data.component?.name ?? 'Unnamed' })
+    .field('Peer', fieldPeer(data))
     .items(fields);
 
   return (
