@@ -19,6 +19,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
 
     action(e, helpers) {
       const ctx = args.ctx();
+      const data = Data.self(e.item);
 
       if (e.kind === 'self:left') {
         const opacity = ctx.peer.current.open ? 1 : 0.3;
@@ -27,7 +28,6 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       }
 
       if (e.kind === 'self:right') {
-        const data = Data.self(e.item);
         if (!(e.selected && e.focused)) return null;
         if (data.copied) {
           return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;

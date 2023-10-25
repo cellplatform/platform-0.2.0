@@ -6,6 +6,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
     label(e) {
       const data = Data.remote(e.item);
       const uri = PeerUri.uri(data.remoteid);
+      if (data.copied) return <>{'copied'}</>;
       return <PeerLabel uri={uri} selected={e.selected} focused={e.focused} />;
     },
 
@@ -27,11 +28,10 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
 
       if (e.kind === 'remote:left') {
         if (stage === 'Connected') {
-          const color = e.selected ? e.color : COLORS.BLUE;
           return (
             <Icons.Person
               {...helpers.icon(e, 17)}
-              color={color}
+              color={e.selected ? e.color : COLORS.BLUE}
               style={{ transform: 'scaleX(-1)' }}
             />
           );
@@ -43,6 +43,10 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
       if (e.kind === 'remote:right') {
         if (data.error) {
           return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />;
+        }
+
+        if (data.copied) {
+          return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
         }
 
         if (stage === 'Connected') {

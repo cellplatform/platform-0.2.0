@@ -8,20 +8,23 @@ export function clipboardBehavior(args: {
   dispatch: t.LabelItemDispatch;
 }) {
   const { events, state, dispatch } = args;
-  const redraw = () => dispatch.redraw();
+  const redraw = dispatch.redraw;
 
+  /**
+   * Behavior: Copy
+   */
   const copyClipboard = async () => {
     const peerid = Data.self(state).peerid;
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
     state.change((d) => (Data.self(d).copied = tx));
-    dispatch.redraw();
+    redraw();
 
     Time.delay(1200, () => {
       if (Data.self(state).copied !== tx) return;
       state.change((d) => (Data.self(d).copied = undefined));
-      dispatch.redraw();
+      redraw();
     });
   };
 

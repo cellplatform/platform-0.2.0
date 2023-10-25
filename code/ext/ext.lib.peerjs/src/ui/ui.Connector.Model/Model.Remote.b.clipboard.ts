@@ -13,7 +13,7 @@ export function clipboardBehavior(args: {
   /**
    * Behavior: Paste
    */
-  events.cmd.clipboard.paste$.subscribe(async (e) => {
+  const pasteClipboard = async () => {
     const stage = Data.remote(state).stage;
     if (stage === 'Connected') return;
 
@@ -50,5 +50,30 @@ export function clipboardBehavior(args: {
         redraw();
       });
     });
-  });
+  };
+
+  /**
+   * Behavior: Copy
+   */
+  const copyClipboard = async () => {
+    const peerid = Data.remote(state).remoteid;
+    if (!peerid) return;
+    await navigator.clipboard.writeText(PeerUri.uri(peerid));
+
+    const tx = slug();
+    state.change((d) => (Data.remote(d).copied = tx));
+    redraw();
+
+    Time.delay(1200, () => {
+      if (Data.remote(state).copied !== tx) return;
+      state.change((d) => (Data.remote(d).copied = undefined));
+      redraw();
+    });
+  };
+
+  /**
+   * UI Events (Incoming)
+   */
+  events.cmd.clipboard.paste$.subscribe(pasteClipboard);
+  events.cmd.clipboard.copy$.subscribe(copyClipboard);
 }
