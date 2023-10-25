@@ -1,4 +1,4 @@
-import { Data, Icons, LabelItem, PeerUri, type t } from './common';
+import { COLORS, Data, Icons, LabelItem, PeerUri, type t } from './common';
 import { PeerLabel } from './ui.PeerLabel';
 
 export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
@@ -22,14 +22,25 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
     },
 
     action(e, helpers) {
+      const data = Data.remote(e.item);
+      const stage = data.stage;
+
       if (e.kind === 'remote:left') {
+        if (stage === 'Connected') {
+          const color = e.selected ? e.color : COLORS.BLUE;
+          return (
+            <Icons.Person
+              {...helpers.icon(e, 17)}
+              color={color}
+              style={{ transform: 'scaleX(-1)' }}
+            />
+          );
+        }
+
         return <Icons.Add {...helpers.icon(e, 17)} />;
       }
 
       if (e.kind === 'remote:right') {
-        const data = Data.remote(e.item);
-        const stage = data.stage;
-
         if (data.error) {
           return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />;
         }
