@@ -26,6 +26,7 @@ export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.Lab
 export type LabelListEvents<D extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelList<D>>>;
   readonly total$: t.Observable<number>;
+  readonly selected$: t.Observable<Id>;
   readonly cmd: {
     readonly $: t.Observable<t.LabelListCmd>;
     readonly redraw$: t.Observable<t.LabelListRedraw>;
