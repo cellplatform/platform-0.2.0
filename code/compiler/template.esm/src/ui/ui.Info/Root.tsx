@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
-import { FieldModuleVerify } from './field.Module.Verify';
+import { fieldModuleVerify } from './field.Module.Verify';
 
 export type InfoProps = {
   title?: t.PropListProps['title'];
@@ -20,7 +20,7 @@ const View: React.FC<InfoProps> = (props) => {
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Module.Verify', () => fieldModuleVerify(data))
     .items(fields);
 
   return (
