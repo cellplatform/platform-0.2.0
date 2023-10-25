@@ -12,7 +12,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       const data = Data.self(e.item);
       if (data.copied) return <>{'copied'}</>;
 
-      const uri = `me:${data.peerid}`;
+      const uri = `self:${data.peerid}`;
       const { selected, focused } = e;
       return <PeerLabel uri={uri} prefixWidth={peerWidth} selected={selected} focused={focused} />;
     },
