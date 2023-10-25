@@ -22,9 +22,20 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       const data = Data.self(e.item);
 
       if (e.kind === 'self:left') {
-        const opacity = ctx.peer.current.open ? 1 : 0.3;
+        const isOpen = ctx.peer.current.open;
+        const opacity = isOpen ? 1 : 0.3;
         const color = e.selected ? e.color : COLORS.BLUE;
-        return <Icons.Person {...helpers.icon(e, 17)} color={color} opacity={opacity} />;
+        return (
+          <Icons.Person
+            {...helpers.icon(e, 17)}
+            color={color}
+            opacity={opacity}
+            style={{
+              transform: `scale(${isOpen ? 1 : 0.8})`,
+              transition: 'opacity 0.2s, transform 0.2s',
+            }}
+          />
+        );
       }
 
       if (e.kind === 'self:right') {
