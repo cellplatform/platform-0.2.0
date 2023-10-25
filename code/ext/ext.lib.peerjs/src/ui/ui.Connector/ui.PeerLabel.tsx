@@ -15,10 +15,6 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
   const [prefix, peerid = ''] = uri.split(':');
   if (!peerid) error = '(error: no peer)';
 
-  const length = 4;
-  const hashLeft = peerid.slice(0, length);
-  const hashRight = peerid.slice(length);
-
   /**
    * [Render]
    */
@@ -28,9 +24,12 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
     body: css({
       Flex: 'x-center-start',
     }),
-    prefix: css({ minWidth: props.prefixWidth, marginRight: 3 }),
-    hashLeft: css({}),
-    hashRight: css({ opacity: selected && focused ? 0.3 : 0.15 }),
+    prefix: css({
+      minWidth: props.prefixWidth,
+      marginRight: 3,
+      opacity: selected && focused ? 0.6 : 0.3,
+    }),
+    hash: css({}),
   };
 
   const elError = error && <div {...styles.error}>{error}</div>;
@@ -38,8 +37,7 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
   const elBody = !error && (
     <div {...styles.body}>
       <div {...styles.prefix}>{`${prefix}:`}</div>
-      <div {...styles.hashLeft}>{hashLeft}</div>
-      <div {...styles.hashRight}>{hashRight}</div>
+      <div {...styles.hash}>{peerid}</div>
     </div>
   );
 
