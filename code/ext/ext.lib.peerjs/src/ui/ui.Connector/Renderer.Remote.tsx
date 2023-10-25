@@ -28,7 +28,9 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
 
       if (e.kind === 'remote:left') {
         if (data.closePending) {
-          return <Icons.Close {...helpers.icon(e, 17)} />;
+          return (
+            <Icons.Add {...helpers.icon(e, 17)} style={{ transform: `rotate(45deg) scale(1.3)` }} />
+          );
         }
 
         if (stage === 'Connected') {
