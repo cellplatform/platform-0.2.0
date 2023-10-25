@@ -35,6 +35,14 @@ export default Dev.describe(name, (e) => {
     array: Model.List.array(), // NB: simple container of Item models.
     list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
     init: {
+      list(dev: t.DevCtxState<T>) {
+        const list = TestState.list;
+        list.events().cmd.remove$.subscribe((e) => {
+          TestState.array.remove(e.item);
+          list.change((d) => (d.total -= 1));
+          local.total = list.current.total;
+        });
+      },
       items(dev: t.DevCtxState<T>, total: number = 0) {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
         TestState.array.getItem(total - 1);
@@ -96,6 +104,7 @@ export default Dev.describe(name, (e) => {
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
     });
+    TestState.init.list(state);
     TestState.init.items(state, local.total);
 
     ctx.debug.width(300);
@@ -171,27 +180,34 @@ export default Dev.describe(name, (e) => {
       const select = (item: number | string, focus?: boolean) => {
         Time.delay(0, () => dispatch.select(item, focus));
       };
-      dev.button(['select: first', 'by index'], (e) => select(0));
-      dev.button(['select: first, focus', 'by id'], (e) =>
+      dev.button(['select: first', '[index]'], (e) => select(0));
+      dev.button(['select: first, focus', '"id"'], (e) =>
         select(TestState.array.first.instance, true),
       );
       dev.hr(-1, 5);
-      dev.button(['select: last, focus', 'by index'], (e) =>
+      dev.button(['select: last, focus', '[index]'], (e) =>
         select(TestState.array.items.length - 1, true),
       );
-      dev.button(['select: last, focus', 'by id'], (e) =>
+      dev.button(['select: last, focus', '"id"'], (e) =>
         select(TestState.array.last.instance, true),
       );
 
       dev.hr(-1, 5);
 
-      dev.button(['redraw: first', 'by index'], (e) => dispatch.redraw(0));
-      dev.button(['redraw: first', 'by id'], (e) =>
+      dev.button(['redraw: first', '[index]'], (e) => dispatch.redraw(0));
+      dev.button(['redraw: first', '"id"'], (e) =>
         dispatch.redraw(TestState.array.first?.instance),
       );
 
       dev.hr(-1, 5);
       dev.button(['redraw: all', '(list)'], (e) => dispatch.redraw());
+
+      dev.hr(-1, 5);
+
+      dev.button(['remove: first', '[index]'], (e) => dispatch.remove(0));
+      dev.button(['remove: first', '"id"'], (e) =>
+        dispatch.remove(TestState.array.first?.instance),
+      );
     });
 
     dev.hr(5, 20);

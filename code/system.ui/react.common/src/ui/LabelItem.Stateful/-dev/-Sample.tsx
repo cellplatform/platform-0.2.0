@@ -15,7 +15,7 @@ export const Sample = {
   get renderers(): t.LabelItemRenderers<SampleActionKind> {
     return {
       label(e) {
-        return <>{`(${e.index}) ${e.item.label || 'empty'}`}</>;
+        return <>{`(${e.index.toLocaleString()}) ${e.item.label || 'empty'}`}</>;
       },
       placeholder(e) {
         return <>{`placeholder:${e.item.placeholder || 'none'}`}</>;
