@@ -43,11 +43,16 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
+    dev.row((e) => (
+      <Info
+        fields={['Module', 'Component', 'Peer']}
+        data={{ component: { name }, peer: { self } }}
+      />
+    ));
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button(['copy', 'bad peer-id'], (e) => {
+      dev.button(['copy: bad peerid', '💥'], (e) => {
         navigator.clipboard.writeText(Webrtc.PeerJs.Uri.generate());
       });
       dev.hr(-1, 5);
@@ -57,7 +62,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
-      return <PeerCard prefix={'remote-peer:'} peer={{ self: remote, remote: self }} />;
+      return <PeerCard prefix={'remote.peer:'} peer={{ self: remote, remote: self }} />;
     });
   });
 
