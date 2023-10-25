@@ -13,8 +13,9 @@ export function commands(list?: t.LabelListState) {
     redraw(item) {
       dispatch({ type: 'List:Redraw', payload: { item, tx: slug() } });
     },
-    remove(item) {
-      dispatch({ type: 'List:Remove', payload: { item, tx: slug() } });
+    remove(index) {
+      dispatch({ type: 'List:Remove', payload: { index, tx: slug() } });
+      return api;
     },
     focus(focus: boolean = true) {
       dispatch({ type: 'List:Focus', payload: { focus, tx: slug() } });

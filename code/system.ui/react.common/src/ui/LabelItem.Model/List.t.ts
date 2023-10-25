@@ -65,4 +65,4 @@ export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedraw
 export type LabelListRedrawCmdArgs = { item?: Index | Id; tx: string };
 
 export type LabelListRemoveCmd = { type: 'List:Remove'; payload: LabelListRemoveCmdArgs };
-export type LabelListRemoveCmdArgs = { item?: Index | Id; tx: string };
+export type LabelListRemoveCmdArgs = { index: Index; tx: string };

@@ -38,9 +38,7 @@ export default Dev.describe(name, (e) => {
       list(dev: t.DevCtxState<T>) {
         const list = TestState.list;
         list.events().cmd.remove$.subscribe((e) => {
-          TestState.array.remove(e.item);
-          list.change((d) => (d.total -= 1));
-          local.total = list.current.total;
+          local.total = TestState.array.remove(e.index).length;
         });
       },
       items(dev: t.DevCtxState<T>, total: number = 0) {
@@ -204,10 +202,8 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button(['remove: first', '[index]'], (e) => dispatch.remove(0));
-      dev.button(['remove: first', '"id"'], (e) =>
-        dispatch.remove(TestState.array.first?.instance),
-      );
+      dev.button('remove: [0]', (e) => dispatch.remove(0));
+      dev.button('remove: [10]', (e) => dispatch.remove(10));
     });
 
     dev.hr(5, 20);

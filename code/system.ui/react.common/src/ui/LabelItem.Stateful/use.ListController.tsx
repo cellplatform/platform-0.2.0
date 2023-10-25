@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, ListContext, Model, type t, rx } from './common';
+import { DEFAULTS, ListContext, Model, rx, type t } from './common';
 import { useListNavigationController } from './use.ListNavigationController';
+import { useListRedraw } from './use.ListRedraw';
 
-type Props = {
+type Args = {
   enabled?: boolean;
   useBehaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
@@ -12,24 +13,26 @@ type Props = {
 /**
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
-export function useListController<H extends HTMLElement = HTMLDivElement>(props: Props) {
-  const enabled = Wrangle.enabled(props, 'List', 'List.Navigation');
+export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
+  const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
   const dispatchRef = useRef<t.LabelListDispatch>();
-  const listRef = useRef(props.list ?? Model.List.state());
+  const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
-  const [, setCount] = useState(0);
-  const redraw = () => setCount((prev) => prev + 1);
+  useListRedraw(list);
 
   /**
-   * Monitor redraws.
+   * Monitor item removal.
    */
   useEffect(() => {
     const events = list.events();
-    events.cmd.redraw$.pipe(rx.filter((e) => !e.item)).subscribe(redraw);
-    events.total$.subscribe(redraw);
+    const remove$ = events.cmd.remove$.pipe(
+      rx.filter((e) => e.index >= 0),
+      rx.filter((e) => e.index <= list.current.total - 1),
+    );
+    remove$.subscribe((e) => list.change((d) => (d.total -= 1)));
     return events.dispose;
   }, []);
 
@@ -46,7 +49,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(props:
    * Sub-controllers.
    */
   useListNavigationController({
-    enabled: enabled && Wrangle.enabled(props, 'List', 'List.Navigation'),
+    enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
     ref,
     list,
   });
