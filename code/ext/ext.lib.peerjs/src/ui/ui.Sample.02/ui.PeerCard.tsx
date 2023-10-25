@@ -4,19 +4,19 @@ import { Button } from './ui.Button';
 
 export type PeerCardProps = {
   prefix?: string;
-  peer: { local: t.PeerModel; remote: t.PeerModel };
+  peer: { self: t.PeerModel; remote: t.PeerModel };
   style?: t.CssValue;
 };
 
 export const PeerCard: React.FC<PeerCardProps> = (props) => {
-  const local = props.peer.local;
-  const localid = local.id;
+  const self = props.peer.self;
+  const selfid = self.id;
 
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
   useEffect(() => {
-    const events = local.events();
+    const events = self.events();
     events.$.subscribe(redraw);
 
     events.cmd.data$.subscribe((e) => {
@@ -35,24 +35,24 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
    * Handlers
    */
   const handleConnectData = () => {
-    local?.connect.data(props.peer.remote.id);
+    self?.connect.data(props.peer.remote.id);
   };
 
   const handlePeerDispose = () => {
-    local.dispose();
+    self.dispose();
   };
 
   const handleCloseConnection = (connid: string) => {
-    local?.disconnect(connid);
+    self?.disconnect(connid);
   };
 
   const handleSendData = (connid: string) => {
-    const conn = local?.get.dataConnection(connid);
+    const conn = self?.get.dataConnection(connid);
     conn?.send('hello');
   };
 
   const handlePurge = () => {
-    local?.purge();
+    self?.purge();
   };
 
   /**
@@ -83,10 +83,10 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     );
   };
 
-  const elConnections = (local?.current.connections.length ?? 0) > 0 && (
+  const elConnections = (self?.current.connections.length ?? 0) > 0 && (
     <div {...styles.section}>
       <ul {...styles.ul}>
-        {(local?.current.connections ?? []).map((conn, i) => {
+        {(self?.current.connections ?? []).map((conn, i) => {
           return (
             <li key={conn.id}>
               <div {...styles.connection}>
@@ -106,8 +106,8 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title}>
-        <div>{`🐷 ${props.prefix ?? ''} ${localid}`}</div>
-        <Button style={{ marginRight: 0 }} onClick={() => navigator.clipboard.writeText(localid)}>
+        <div>{`🐷 ${props.prefix ?? ''} ${selfid}`}</div>
+        <Button style={{ marginRight: 0 }} onClick={() => navigator.clipboard.writeText(selfid)}>
           <Icons.Copy size={16} />
         </Button>
       </div>
@@ -120,7 +120,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       </div>
       {elConnections}
       <div {...styles.section}>
-        <ObjectView data={local?.current} fontSize={11} expand={1} />
+        <ObjectView data={self?.current} fontSize={11} expand={1} />
       </div>
     </div>
   );

@@ -30,9 +30,9 @@ export const Root: React.FC<RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PeerCard peer={{ local: peerA, remote: peerB }} style={styles.peer} />
+      <PeerCard peer={{ self: peerA, remote: peerB }} style={styles.peer} />
       <div {...styles.divider} />
-      <PeerCard peer={{ local: peerB, remote: peerA }} style={styles.peer} />
+      <PeerCard peer={{ self: peerB, remote: peerA }} style={styles.peer} />
     </div>
   );
 };

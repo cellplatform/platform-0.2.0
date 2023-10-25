@@ -58,7 +58,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
-      return <PeerCard prefix={'remote:'} peer={{ local: self, remote }} />;
+      return <PeerCard prefix={'remote:'} peer={{ self: remote, remote: self }} />;
     });
   });
 
