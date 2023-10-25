@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { DEFAULTS, Model, type t, slug, Time } from './common';
+import { DEFAULTS, Model, Time, slug, type t } from './common';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -32,7 +32,7 @@ export function openConnectionBehavior(args: {
     };
 
     connecting(true);
-    const { error } = await peer.connect.data(remoteid);
+    const { conn, error } = await peer.connect.data(remoteid);
     connecting(false);
 
     if (error) {
@@ -58,6 +58,7 @@ export function openConnectionBehavior(args: {
       state.change((d) => {
         const data = Data.remote(d);
         data.stage = 'Connected';
+        data.connid = conn.connectionId;
       });
     }
 

@@ -48,6 +48,7 @@ export type ConnectorDataRemote = {
   kind: 'peer:remote';
   stage?: 'Connecting' | 'Connected';
   remoteid?: string;
+  connid?: string;
   copied?: string;
   closePending?: boolean;
   error?: { tx: string; type: ConnectorDataRemoteError; message?: string };
