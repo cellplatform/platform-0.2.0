@@ -21,6 +21,8 @@ export type {
   UntilObservable,
 } from 'sys.types/src/types';
 
+export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
+
 /**
  * @local
  */
