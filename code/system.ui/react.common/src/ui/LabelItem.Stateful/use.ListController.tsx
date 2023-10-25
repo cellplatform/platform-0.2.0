@@ -21,6 +21,9 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
+  /**
+   * Monitor redraw triggers.
+   */
   useListRedraw(list);
 
   /**
