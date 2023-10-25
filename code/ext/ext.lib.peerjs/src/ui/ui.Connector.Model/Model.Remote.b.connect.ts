@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { Webrtc, Model, PeerUri, Time, slug, type t, PatchState } from './common';
+import { Model, type t } from './common';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -38,7 +38,6 @@ export function openConnectionBehavior(args: {
     list.change((d) => {
       d.total += 1;
     });
-    // Model.List.commands(list).redraw();
 
     const { conn } = await peer.connect.data(remoteid);
     console.log('conn', conn);

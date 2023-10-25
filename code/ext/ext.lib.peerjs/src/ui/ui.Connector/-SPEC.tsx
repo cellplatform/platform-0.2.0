@@ -3,14 +3,16 @@ import { Dev, Webrtc, type t } from '../../test.ui';
 import { Connector } from '.';
 import { Info } from '../ui.Info';
 import { List } from './ui.List';
+import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 
 type T = { props: t.ConnectorProps };
 const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const peer = Webrtc.peer();
-  const { list } = Connector.Model.List.init({ peer });
+  const self = Webrtc.peer();
+  const remote = Webrtc.peer();
+  const { list } = Connector.Model.List.init({ peer: self });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -52,6 +54,12 @@ export default Dev.describe(name, (e) => {
 
       dev.button('redraw', (e) => dev.redraw());
     });
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return <PeerCard prefix={'remote:'} peer={{ local: self, remote }} />;
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -59,7 +67,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        peer: peer.id,
+        peer: self.id,
         props: e.state.props,
         'model.list': list.current,
       };

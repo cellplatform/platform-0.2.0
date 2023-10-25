@@ -8,7 +8,7 @@ export function clipboardBehavior(args: {
   dispatch: t.LabelItemDispatch;
 }) {
   const { events, state, dispatch } = args;
-  const redraw = () => dispatch.redraw();
+  const redraw = dispatch.redraw;
 
   /**
    * Behavior: Paste

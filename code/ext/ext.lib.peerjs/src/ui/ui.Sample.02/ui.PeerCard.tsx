@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { COLORS, Color, ObjectView, css, rx, type t, Icons } from './common';
 import { Button } from './ui.Button';
 
-export type PeerProps = {
+export type PeerCardProps = {
+  prefix?: string;
   peer: { local: t.PeerModel; remote: t.PeerModel };
   style?: t.CssValue;
 };
 
-export const Peer: React.FC<PeerProps> = (props) => {
+export const PeerCard: React.FC<PeerCardProps> = (props) => {
   const local = props.peer.local;
   const localid = local.id;
 
@@ -105,7 +106,7 @@ export const Peer: React.FC<PeerProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title}>
-        <div>{`🐷 ${localid}`}</div>
+        <div>{`🐷 ${props.prefix ?? ''} ${localid}`}</div>
         <Button style={{ marginRight: 0 }} onClick={() => navigator.clipboard.writeText(localid)}>
           <Icons.Copy size={16} />
         </Button>
