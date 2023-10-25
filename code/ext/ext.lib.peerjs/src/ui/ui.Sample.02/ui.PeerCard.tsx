@@ -40,25 +40,13 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
   /**
    * Handlers
    */
-  const handleConnectData = () => {
-    self?.connect.data(props.peer.remote.id);
-  };
-
-  const handlePeerDispose = () => {
-    self.dispose();
-  };
-
-  const handleCloseConnection = (connid: string) => {
-    self?.disconnect(connid);
-  };
-
+  const handlePurge = () => self?.purge();
+  const handleConnectData = () => self?.connect.data(props.peer.remote.id);
+  const handlePeerDispose = () => self.dispose();
+  const handleCloseConnection = (connid: string) => self?.disconnect(connid);
   const handleSendData = (connid: string) => {
     const conn = self?.get.dataConnection(connid);
     conn?.send('hello');
-  };
-
-  const handlePurge = () => {
-    self?.purge();
   };
 
   /**
@@ -71,12 +59,12 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       boxSizing: 'border-box',
       fontSize: 14,
     }),
-    title: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
     section: css({
       marginTop: 8,
       paddingTop: 8,
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
+    title: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
     ul: css({ margin: 0, lineHeight: 1.5 }),
     connection: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
   };
