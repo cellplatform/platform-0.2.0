@@ -1,5 +1,6 @@
 import {
   MdAdd,
+  MdClose,
   MdContentCopy,
   MdDone,
   MdEmojiPeople,
@@ -16,6 +17,7 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Close: icon(MdClose),
   Refresh: icon(MdRefresh),
   Copy: icon(MdContentCopy),
   Person: icon(MdEmojiPeople),

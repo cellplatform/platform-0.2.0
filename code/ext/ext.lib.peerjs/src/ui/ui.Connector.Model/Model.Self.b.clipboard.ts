@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { Model, PeerUri, Time, slug, type t } from './common';
+import { DEFAULTS, PeerUri, Time, slug, type t } from './common';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -21,7 +21,7 @@ export function clipboardBehavior(args: {
     state.change((d) => (Data.self(d).copied = tx));
     redraw();
 
-    Time.delay(1200, () => {
+    Time.delay(DEFAULTS.timeout.copiedPending, () => {
       if (Data.self(state).copied !== tx) return;
       state.change((d) => (Data.self(d).copied = undefined));
       redraw();

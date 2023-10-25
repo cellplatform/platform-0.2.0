@@ -27,6 +27,10 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
       const stage = data.stage;
 
       if (e.kind === 'remote:left') {
+        if (data.closePending) {
+          return <Icons.Close {...helpers.icon(e, 17)} />;
+        }
+
         if (stage === 'Connected') {
           return (
             <Icons.Person
@@ -49,10 +53,21 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
           return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
         }
 
+        if (data.closePending) {
+          return (
+            <LabelItem.Button
+              selected={e.selected}
+              focused={e.focused}
+              enabled={e.enabled}
+              label={'Close'}
+            />
+          );
+        }
+
         if (stage === 'Connected') {
           /**
            * TODO 🐷
-           * Connected icons
+           * Connected icons - Video | Screenshare
            */
           return;
         }

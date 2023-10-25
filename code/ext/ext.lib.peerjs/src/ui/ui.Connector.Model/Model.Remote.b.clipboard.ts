@@ -41,7 +41,7 @@ export function clipboardBehavior(args: {
 
     redraw();
 
-    Time.delay(DEFAULTS.errorTimeout, () => {
+    Time.delay(DEFAULTS.timeout.error, () => {
       if (Data.remote(state).error?.tx !== tx) return;
       state.change((d) => {
         const data = Data.remote(d);
@@ -56,15 +56,16 @@ export function clipboardBehavior(args: {
    * Behavior: Copy
    */
   const copyClipboard = async () => {
-    const peerid = Data.remote(state).remoteid;
-    if (!peerid) return;
+    const data = Data.remote(state);
+    const peerid = data.remoteid;
+    if (!peerid || data.closePending) return;
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
     state.change((d) => (Data.remote(d).copied = tx));
     redraw();
 
-    Time.delay(1200, () => {
+    Time.delay(DEFAULTS.timeout.copiedPending, () => {
       if (Data.remote(state).copied !== tx) return;
       state.change((d) => (Data.remote(d).copied = undefined));
       redraw();
@@ -72,7 +73,7 @@ export function clipboardBehavior(args: {
   };
 
   /**
-   * UI Events (Incoming)
+   * UI Events (triggers)
    */
   events.cmd.clipboard.paste$.subscribe(pasteClipboard);
   events.cmd.clipboard.copy$.subscribe(copyClipboard);

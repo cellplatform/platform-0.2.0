@@ -1,4 +1,5 @@
 import { clipboardBehavior } from './Model.Remote.b.clipboard';
+import { closeConnectionBehavior } from './Model.Remote.b.close';
 import { openConnectionBehavior } from './Model.Remote.b.connect';
 import { Model, type t } from './common';
 
@@ -26,6 +27,7 @@ export const Remote = {
     const events = state.events(args.dispose$);
 
     clipboardBehavior({ ctx, state, events, dispatch });
+    closeConnectionBehavior({ ctx, state, events, dispatch });
     openConnectionBehavior({ ctx, state, events, dispatch });
 
     return state;

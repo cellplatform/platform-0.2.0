@@ -14,6 +14,7 @@ export function openConnectionBehavior(args: {
     const { peer, list } = args.ctx();
     const data = Data.remote(state.current);
     if (data.stage === 'Connecting' || data.stage === 'Connected') return;
+    if (data.closePending) return;
 
     const remoteid = data.remoteid ?? '';
     if (!remoteid) {
@@ -44,7 +45,7 @@ export function openConnectionBehavior(args: {
         redraw();
       });
 
-      Time.delay(DEFAULTS.errorTimeout, () => {
+      Time.delay(DEFAULTS.timeout.error, () => {
         if (Data.remote(state).error?.tx !== tx) return;
         state.change((d) => {
           Data.remote(d).error = undefined;
@@ -60,16 +61,14 @@ export function openConnectionBehavior(args: {
       });
     }
 
-    // Add
     if (!error) {
-      list.change((d) => {
-        d.total += 1; // TEMP 🐷
-      });
+      // Add the next [+] item.
+      list.change((d) => (d.total += 1));
     }
   };
 
   /**
-   * Listen: "Connect" button trigger.
+   * Listen: "Connect" button (triggers).
    */
   events.key.enter$.subscribe(connect);
   events.cmd.action.on('remote:right').subscribe(connect);
