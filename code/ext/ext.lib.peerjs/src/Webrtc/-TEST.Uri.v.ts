@@ -61,8 +61,8 @@ describe('PeerUri', () => {
       expect(PeerUri.id('peer:foo')).to.eql('foo');
       expect(PeerUri.id(' peer:foo ')).to.eql('foo');
       expect(PeerUri.id('me:foo')).to.eql('foo');
-      expect(PeerUri.id('me:local:foo')).to.eql('foo');
-      expect(PeerUri.id('me:local: foo ')).to.eql('foo');
+      expect(PeerUri.id('me:self:foo')).to.eql('foo');
+      expect(PeerUri.id('me:self: foo ')).to.eql('foo');
     });
 
     it('non-string → empty ("")', () => {
