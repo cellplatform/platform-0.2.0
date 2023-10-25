@@ -29,8 +29,9 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
   readonly selected$: t.Observable<Id>;
   readonly cmd: {
     readonly $: t.Observable<t.LabelListCmd>;
-    readonly redraw$: t.Observable<t.LabelListRedraw>;
-    readonly select$: t.Observable<t.LabelListSelect>;
+    readonly redraw$: t.Observable<t.LabelListRedrawCmdArgs>;
+    readonly select$: t.Observable<t.LabelListSelectCmdArgs>;
+    readonly remove$: t.Observable<t.LabelListRemoveCmdArgs>;
     readonly focus$: t.Observable<void>;
     readonly blur$: t.Observable<void>;
   };
@@ -43,17 +44,25 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
 export type LabelListDispatch = {
   select(item: Index | Id, focus?: boolean): void;
   redraw(item?: Index | Id): void;
+  remove(item?: Index | Id): void;
   focus(focus?: boolean): void;
   blur(): void;
 };
 
-export type LabelListCmd = LabelListFocusCmd | LabelListSelectCmd | LabelListRedrawCmd;
+export type LabelListCmd =
+  | LabelListFocusCmd
+  | LabelListSelectCmd
+  | LabelListRedrawCmd
+  | LabelListRemoveCmd;
 
-export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocus };
-export type LabelListFocus = { focus: boolean; tx: string };
+export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocusCmdArgs };
+export type LabelListFocusCmdArgs = { focus: boolean; tx: string };
 
-export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelect };
-export type LabelListSelect = { item: Index | Id; focus: boolean; tx: string };
+export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelectCmdArgs };
+export type LabelListSelectCmdArgs = { item: Index | Id; focus: boolean; tx: string };
 
-export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedraw };
-export type LabelListRedraw = { item?: Index | Id; tx: string };
+export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedrawCmdArgs };
+export type LabelListRedrawCmdArgs = { item?: Index | Id; tx: string };
+
+export type LabelListRemoveCmd = { type: 'List:Remove'; payload: LabelListRemoveCmdArgs };
+export type LabelListRemoveCmdArgs = { item?: Index | Id; tx: string };

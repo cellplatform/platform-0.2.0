@@ -89,19 +89,26 @@ describe('LabelItem.Model', () => {
         expect(array.getItem(0)[0]?.current).to.eql({ label: 'hello' });
       });
 
-      it('getItem ← from index', () => {
+      it('getItem ← target: [index]', () => {
         const array = Model.List.array();
         const [item, index] = array.getItem(0);
         expect(item).to.equal(array.items[0]);
         expect(index).to.equal(0);
       });
 
-      it('getItem ← from id', () => {
+      it('getItem ← target: "id"', () => {
         const array = Model.List.array();
         const [itemA, indexA] = array.getItem(0);
         const [itemB, indexB] = array.getItem(itemA?.instance ?? '');
         expect(itemA).to.equal(itemB);
         expect(indexA).to.eql(indexB);
+      });
+
+      it('getItem ← target: <undefined>', () => {
+        const array = Model.List.array();
+        const [item, index] = array.getItem(undefined);
+        expect(item).to.eql(undefined);
+        expect(index).to.eql(-1);
       });
 
       describe('helper props', () => {

@@ -1,2 +1,2 @@
-export type * from './types.Item';
-export type * from './types.List';
+export type * from './Item.t';
+export type * from './List.t';

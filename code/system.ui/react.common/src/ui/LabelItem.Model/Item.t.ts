@@ -31,7 +31,7 @@ export type LabelItemState<A extends K = string, D extends O = O> = t.ImmutableR
  * Retrieve item (factory functions)
  */
 export type GetLabelItem<A extends K = string, D extends O = O> = (
-  target: Index | Id,
+  target?: Index | Id,
 ) => LabelItemStateIndex<A, D>;
 export type LabelItemStateIndex<A extends K = string, D extends O = O> = [
   t.LabelItemState<A, D> | undefined,
