@@ -47,6 +47,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
             <LabelItem.Button
               selected={e.selected}
               focused={e.focused}
+              enabled={e.enabled}
               spinning={stage === 'Connecting'}
               label={'Connect'}
             />

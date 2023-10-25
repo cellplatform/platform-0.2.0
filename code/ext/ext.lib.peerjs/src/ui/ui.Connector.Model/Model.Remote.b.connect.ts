@@ -11,10 +11,9 @@ export function openConnectionBehavior(args: {
   const redraw = () => dispatch.redraw();
 
   const connect = async () => {
+    const { peer, list } = args.ctx();
     const data = Data.remote(state.current);
     if (data.stage === 'Connecting' || data.stage === 'Connected') return;
-
-    const { peer, list } = args.ctx();
 
     const remoteid = data.remoteid ?? '';
     if (!remoteid) {
@@ -41,6 +40,7 @@ export function openConnectionBehavior(args: {
         const data = Data.remote(d);
         data.error = { tx, type: 'ConnectFail', message: error };
         d.label = undefined;
+        Model.action(d, 'remote:right')[0].button = false;
         redraw();
       });
 
@@ -49,6 +49,7 @@ export function openConnectionBehavior(args: {
         state.change((d) => {
           Data.remote(d).error = undefined;
           d.label = data.remoteid;
+          Model.action(d, 'remote:right')[0].button = true;
           redraw();
         });
       });
