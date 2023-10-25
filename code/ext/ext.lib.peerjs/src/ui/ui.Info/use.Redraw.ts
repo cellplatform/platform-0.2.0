@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { type t } from './common';
+import { type t, rx } from './common';
 
 export function useRedraw(data: t.InfoData = {}) {
   const peer = data.peer?.self;
@@ -9,7 +9,7 @@ export function useRedraw(data: t.InfoData = {}) {
 
   useEffect(() => {
     const events = peer?.events();
-    events?.cmd.conn$.subscribe(redraw);
+    events?.cmd.conn$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
     return events?.dispose;
   }, [peer?.id]);
 }
