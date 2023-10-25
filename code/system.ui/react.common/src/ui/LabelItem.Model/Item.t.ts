@@ -79,12 +79,15 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
  * (events as a property stream)
  */
 export type LabelItemDispatch = {
-  redraw(): void;
-  changed(e: t.LabelItemStateChangedHandlerArgs): void;
-  action(e: t.LabelItemActionHandlerArgs): void;
-  click(e: t.LabelItemClickHandlerArgs): void;
-  clipboard(e: t.LabelItemClipboard['action']): void;
-  key: { down(e: t.LabelItemKeyHandlerArgs): void; up(e: t.LabelItemKeyHandlerArgs): void };
+  redraw(): LabelItemDispatch;
+  changed(e: t.LabelItemStateChangedHandlerArgs): LabelItemDispatch;
+  action(e: t.LabelItemActionHandlerArgs): LabelItemDispatch;
+  click(e: t.LabelItemClickHandlerArgs): LabelItemDispatch;
+  clipboard(e: t.LabelItemClipboard['action']): LabelItemDispatch;
+  key: {
+    down(e: t.LabelItemKeyHandlerArgs): LabelItemDispatch;
+    up(e: t.LabelItemKeyHandlerArgs): LabelItemDispatch;
+  };
 };
 
 export type LabelItemCmd =
