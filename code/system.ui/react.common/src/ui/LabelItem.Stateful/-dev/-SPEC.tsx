@@ -10,7 +10,6 @@ type T = {
   data?: t.LabelItem;
   debug: {
     debug?: boolean;
-    total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
     isList?: boolean;
@@ -20,7 +19,9 @@ const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors' | 'renderCount' | 'debug' | 'isList'>;
+  type LocalStore = Pick<T['debug'], 'useBehaviors' | 'renderCount' | 'debug' | 'isList'> & {
+    total: number;
+  };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     useBehaviors: DEFAULTS.useBehaviors.defaults,
@@ -80,7 +81,7 @@ export default Dev.describe(name, (e) => {
     async add(dev: t.DevCtxState<T>, focus?: boolean) {
       const total = TestState.list.current.total + 1;
       TestState.list.change((d) => (d.total = total));
-      await dev.change((d) => (local.total = d.debug.total = total));
+      local.total = total;
       if (focus) Model.List.commands(TestState.list).focus();
     },
   };
@@ -90,13 +91,12 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.total = local.total;
       d.debug.useBehaviors = local.useBehaviors;
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
     });
-    TestState.init.items(state, state.current.debug.total);
+    TestState.init.items(state, local.total);
 
     ctx.debug.width(300);
     ctx.subject
@@ -138,15 +138,10 @@ export default Dev.describe(name, (e) => {
     dev.section('Total', (dev) => {
       const total = (length: number) => {
         const label = `${length} ${Value.plural(length, 'item', 'items')}`;
-        dev.button((btn) =>
-          btn
-            .label(label)
-            .right((e) => (e.state.debug.total === length ? '←' : ''))
-            .onClick(async (e) => {
-              TestState.init.items(state, length);
-              await e.change((d) => (local.total = d.debug.total = length));
-            }),
-        );
+        dev.button(label, (e) => {
+          TestState.init.items(state, length);
+          local.total = length;
+        });
       };
       total(0);
       dev.hr(-1, 5);
