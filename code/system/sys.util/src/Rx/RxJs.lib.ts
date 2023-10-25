@@ -30,6 +30,12 @@ export {
 } from 'rxjs/operators';
 
 /**
+ * Alias: shorter name.
+ */
+import { distinctUntilChanged } from 'rxjs/operators';
+export const distinctWhile = distinctUntilChanged;
+
+/**
  * 💦💦
  *
  *    NOTE: The take-until RXJS operator is exported here

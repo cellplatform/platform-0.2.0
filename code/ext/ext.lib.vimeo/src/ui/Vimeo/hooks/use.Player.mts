@@ -23,7 +23,7 @@ export function usePlayer(vimeo: t.VimeoInstance | undefined, options: Options =
 
       const status$ = events.status.$.pipe(rx.takeUntil(dispose$));
       const playing$ = events.status.playing$.pipe(rx.takeUntil(dispose$));
-      const startStop$ = playing$.pipe(rx.distinctUntilChanged((p, n) => p.playing === n.playing));
+      const startStop$ = playing$.pipe(rx.distinctWhile((p, n) => p.playing === n.playing));
 
       // Status (updates while playing).
       events.status.get().then((res) => setStatus(res.status));

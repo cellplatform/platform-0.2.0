@@ -100,7 +100,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         doc.$.pipe(
           rx.takeUntil(dispose$),
           rx.debounceTime(500),
-          rx.distinctUntilChanged(
+          rx.distinctWhile(
             (prev, next) => getText(prev.doc)?.toString() === getText(next.doc)?.toString(),
           ),
         ).subscribe((e) => firedChanged(getText(e.doc)?.toString()));

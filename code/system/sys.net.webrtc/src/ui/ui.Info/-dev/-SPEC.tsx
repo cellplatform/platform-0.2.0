@@ -112,7 +112,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     ) {
       props.$.pipe(
         rx.map((e) => e.lens[propField]),
-        rx.distinctUntilChanged((prev, next) => prev === next),
+        rx.distinctWhile((prev, next) => prev === next),
       ).subscribe((value) => ((local[localField] as any) = value));
     }
     persistToLocalOnChange('fields', 'fields');

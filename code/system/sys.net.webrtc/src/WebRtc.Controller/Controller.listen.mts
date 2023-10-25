@@ -244,7 +244,7 @@ export function listen(
   const remotePeerIds = (doc: t.NetworkDocShared) => peerIds(doc).filter((id) => id !== self.id);
   doc.$.pipe(
     rx.map((e) => e.doc),
-    rx.distinctUntilChanged((prev, next) => R.equals(peerIds(prev), peerIds(next))),
+    rx.distinctWhile((prev, next) => R.equals(peerIds(prev), peerIds(next))),
   ).subscribe(() => onDocPeersChanged(doc));
 
   /**
@@ -253,7 +253,7 @@ export function listen(
   doc.$.pipe(
     rx.map((e) => e.doc.network.peers),
     rx.map((e) => e[self.id].conns ?? {}),
-    rx.distinctUntilChanged((prev, next) => {
+    rx.distinctWhile((prev, next) => {
       if (prev.video !== next.video) return false;
       if (prev.screen !== next.screen) return false;
       return true;

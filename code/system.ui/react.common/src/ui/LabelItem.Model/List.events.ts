@@ -13,7 +13,7 @@ export function events<D extends O = O>(
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
   const cmd$ = $.pipe(
-    rx.distinctUntilChanged((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
+    rx.distinctWhile((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
     rx.filter((e) => Boolean(e.to.cmd)),
     rx.map((e) => e.to.cmd!),
   );
@@ -24,7 +24,7 @@ export function events<D extends O = O>(
     $,
     total$: $.pipe(
       rx.map((e) => e.to.total),
-      rx.distinctUntilChanged((prev, next) => prev === next),
+      rx.distinctWhile((prev, next) => prev === next),
     ),
     cmd: {
       $: cmd$,

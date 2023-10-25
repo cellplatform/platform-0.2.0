@@ -27,8 +27,8 @@ export function useItemSelectionController(args: Args) {
     const selectionChanged = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
     const isSelected = (list: t.LabelList) => list.selected === item?.instance;
     const events = list?.events();
-    events?.$.pipe(rx.distinctUntilChanged(focusChanged)).subscribe(redraw);
-    events?.$.pipe(rx.distinctUntilChanged(selectionChanged)).subscribe((e) => {
+    events?.$.pipe(rx.distinctWhile(focusChanged)).subscribe(redraw);
+    events?.$.pipe(rx.distinctWhile(selectionChanged)).subscribe((e) => {
       const isSelected = e.to.selected === item?.instance;
       fire(isSelected ? 'selected' : 'unselected');
       redraw();
