@@ -1,13 +1,14 @@
 import { clipboardBehavior } from './Model.Self.b.clipboard';
-import { Model, PeerUri, type t } from './common';
+import { Model, type t } from './common';
 
+export type SelfOptions = { dispose$?: t.UntilObservable };
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
-export type SelfOptions = { peerid?: string; dispose$?: t.UntilObservable };
 type D = t.ConnectorDataSelf;
 
 export const Self = {
   initial(args: SelfArgs): t.ConnectorItem<D> {
-    const localid = PeerUri.id(args.peerid) || PeerUri.generate('');
+    const peer = args.ctx().peer;
+    const localid = peer.id;
     const data: D = { kind: 'peer:self', localid };
     return {
       editable: false,

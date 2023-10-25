@@ -33,8 +33,8 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         /**
          * TODO 🐷
          */
-        if (e.selected && data.remoteid) {
-          const spinning = false;
+        if (data.connecting || (e.selected && data.remoteid)) {
+          const spinning = data.connecting;
           return (
             <LabelItem.Button
               selected={e.selected}

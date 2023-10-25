@@ -17,13 +17,13 @@ export const List: React.FC<ListProps> = (props) => {
     base: css({ position: 'relative' }),
   };
 
-  const elements = LabelItem.Model.List.map(list, (item, i) => {
+  const elements = LabelItem.Model.List.map(list, (item, index) => {
     return (
       <LabelItem.Stateful
         //
         {...handlers}
         key={item.instance}
-        index={i}
+        index={index}
         list={list}
         item={item}
       />

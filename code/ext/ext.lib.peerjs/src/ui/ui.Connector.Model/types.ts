@@ -4,7 +4,7 @@ import type { t } from './common';
  * Model: Context
  */
 export type GetConnectorCtx = () => ConnectorCtx;
-export type ConnectorCtx = { list: t.ConnectorListState };
+export type ConnectorCtx = { peer: t.PeerModel; list: t.ConnectorListState };
 
 /**
  * Model: Item
@@ -47,6 +47,7 @@ export type ConnectorDataSelf = {
 export type ConnectorDataRemote = {
   kind: 'peer:remote';
   remoteid?: string;
+  connecting?: boolean;
   error?: { type: ConnectorDataRemoteError; tx: string };
 };
 

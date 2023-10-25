@@ -9,7 +9,8 @@ const initial: T = { props: {} };
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  const { list } = Connector.Model.List.init();
+  const peer = Webrtc.peer();
+  const { list } = Connector.Model.List.init({ peer });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -58,6 +59,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
+        peer: peer.id,
         props: e.state.props,
         'model.list': list.current,
       };
