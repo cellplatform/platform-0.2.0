@@ -21,7 +21,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
 
     events.cmd.data$.subscribe((e) => {
       const peer = e.connection.peer;
-      console.log('data', e.data, `from "${peer.remote}" to "${peer.local}"`);
+      console.log('data', e.data, `from "${peer.remote}" to "${peer.self}"`);
     });
 
     events.cmd.conn$.pipe(rx.filter((e) => Boolean(e.error))).subscribe((e) => {

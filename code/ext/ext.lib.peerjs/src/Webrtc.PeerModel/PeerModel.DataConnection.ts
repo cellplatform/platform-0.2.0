@@ -8,14 +8,14 @@ export function manageDataConnection(args: {
   state: t.PeerModelState;
 }) {
   const { peer, state, model } = args;
-  const local = peer.id;
+  const self = peer.id;
   const dispatch = PatchState.Command.dispatcher<t.PeerModelCmd>(state);
   const Get = getFactory(peer);
 
   const api = {
     dispatch: {
       connection(action: t.PeerModelConnAction, conn?: t.PeerJsConn, error?: Error) {
-        const connection = conn ? Wrangle.dispatchConnection(local, conn) : undefined;
+        const connection = conn ? Wrangle.dispatchConnection(self, conn) : undefined;
         dispatch({
           type: 'Peer:Connection',
           payload: { tx: slug(), connection, action, error },
@@ -25,7 +25,7 @@ export function manageDataConnection(args: {
 
     monitor(conn: t.PeerJsConnData) {
       const id = conn.connectionId;
-      const connection = Wrangle.dispatchConnection(local, conn);
+      const connection = Wrangle.dispatchConnection(self, conn);
       conn.on('data', (data) => {
         dispatch({ type: 'Peer:Data', payload: { tx: slug(), connection, data } });
       });
@@ -46,7 +46,7 @@ export function manageDataConnection(args: {
           const conn = peer.connect(remote, { reliable: true });
           const id = conn.connectionId;
           state.change((d) => {
-            const peer = { local, remote };
+            const peer = { self, remote };
             d.connections.push({ kind: 'data', id, open: null, peer });
           });
           conn.on('open', () => {
@@ -72,7 +72,7 @@ export function manageDataConnection(args: {
         if (!exists) {
           const id = conn.connectionId;
           const remote = conn.peer;
-          const peer = { remote, local };
+          const peer = { self, remote };
           state.change((d) => d.connections.push({ kind: 'data', id, open: true, peer }));
           api.monitor(conn);
         }

@@ -29,7 +29,7 @@ export type Peer = {
 export type PeerConnection = {
   kind: 'data' | 'media';
   id: string;
-  peer: { local: string; remote: string };
+  peer: { self: Id; remote: Id };
   open: boolean | null; // NB: null while initializing.
 };
 
@@ -37,7 +37,7 @@ export type PeerConnection = {
  * Logical API over the peer state.
  */
 export type PeerModel = t.Lifecycle & {
-  id: string;
+  id: Id;
   current: t.Peer;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): void;
@@ -56,7 +56,7 @@ export type PeerModel = t.Lifecycle & {
  * Stateful immutable model (JSON patch).
  */
 export type PeerModelState = t.PatchState<t.Peer, t.PeerModelEvents>;
-export type PeerConnectionId = { id: Id; peer: { local: Id; remote: Id } };
+export type PeerConnectionId = { id: Id; peer: { self: Id; remote: Id } };
 
 /**
  * Events API

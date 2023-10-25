@@ -1,12 +1,14 @@
 import { type t } from './common';
 
+type Id = string;
+
 /**
  * Helpers
  */
 export const Wrangle = {
-  dispatchConnection(local: string, conn: t.PeerJsConn) {
+  dispatchConnection(self: Id, conn: t.PeerJsConn): t.PeerConnectionId {
     const id = conn.connectionId;
     const remote = conn.peer;
-    return { id, peer: { local, remote } };
+    return { id, peer: { self, remote } };
   },
 } as const;
