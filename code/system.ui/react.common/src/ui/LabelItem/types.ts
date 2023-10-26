@@ -30,21 +30,21 @@ export type LabelItemValueArgs = {
  * JSX Renderer (data → visuals)
  */
 type K = t.LabelItemActionKind;
-export type LabelItemRendered = JSX.Element | undefined | false | null;
-export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRendered;
+export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRenderResponse;
 export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
 export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & { kind: A };
+export type LabelItemRenderResponse = JSX.Element | undefined | false | null;
 
-type H = LabelItemActionRenderHelpers;
+type H = LabelItemActionHelpers;
 export type LabelItemRenderers<A extends K = string> = {
   label?: t.LabelItemRender;
   placeholder?: t.LabelItemRender;
-  action?(e: LabelItemRenderActionArgs<A>, helpers: H): LabelItemRendered;
+  action?(e: LabelItemRenderActionArgs<A>, helpers: H): LabelItemRenderResponse;
 };
 
 type S = t.IconProps['size'];
 type O = t.IconProps['offset'];
-export type LabelItemActionRenderHelpers = {
+export type LabelItemActionHelpers = {
   opacity(e: t.LabelItemRenderArgs): number;
   icon(e: t.LabelItemRenderArgs, size?: S, offset?: O): t.IconProps;
 };

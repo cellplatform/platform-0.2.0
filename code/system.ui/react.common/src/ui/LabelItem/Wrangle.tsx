@@ -73,7 +73,7 @@ export const Wrangle = {
  * Helpers
  */
 
-const actionHelpers: t.LabelItemActionRenderHelpers = {
+const actionHelpers: t.LabelItemActionHelpers = {
   opacity(e: t.LabelItemRenderArgs) {
     if (e.enabled) return 0.9;
     return e.selected && e.focused ? 0.5 : 0.3;
