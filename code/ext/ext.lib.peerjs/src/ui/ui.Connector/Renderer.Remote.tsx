@@ -8,7 +8,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
     label(e) {
       const data = Data.remote(e.item);
       const uri = PeerUri.uri(data.remoteid);
-      if (data.copied) return <>{'copied'}</>;
+      if (data.actionCompleted) return <>{data.actionCompleted.message}</>;
       return <PeerLabel uri={uri} selected={e.selected} focused={e.focused} />;
     },
 
@@ -54,8 +54,14 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
           return <Icons.Warning {...helpers.icon(e, 18)} tooltip={'Error'} margin={[0, 2, 0, 0]} />;
         }
 
-        if (data.copied) {
-          return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
+        if (data.actionCompleted) {
+          return (
+            <Icons.Done
+              {...helpers.icon(e, 18)}
+              tooltip={data.actionCompleted.tooltip}
+              offset={[0, -1]}
+            />
+          );
         }
 
         if (data.closePending) {

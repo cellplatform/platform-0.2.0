@@ -57,7 +57,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
             <Icons.Done
               {...helpers.icon(e, 18)}
               offset={[0, -1]}
-              tooltip={data.actionCompleted.message}
+              tooltip={data.actionCompleted.tooltip}
             />
           );
         }

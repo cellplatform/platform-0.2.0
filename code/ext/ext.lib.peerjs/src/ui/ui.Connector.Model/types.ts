@@ -47,7 +47,7 @@ export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
 export type ConnectorDataSelf = {
   kind: 'peer:self';
   peerid: string;
-  actionCompleted?: { tx: Tx; message: string };
+  actionCompleted?: { tx: Tx; message: string; tooltip?: string };
   purgePending?: boolean;
 };
 
@@ -56,8 +56,8 @@ export type ConnectorDataRemote = {
   stage?: 'Connecting' | 'Connected';
   remoteid?: string;
   connid?: string;
-  copied?: string;
   closePending?: boolean;
+  actionCompleted?: { tx: Tx; message: string; tooltip?: string };
   error?: { tx: Tx; type: ConnectorDataRemoteError; message?: string };
 };
 
