@@ -68,9 +68,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        peer: self.id,
         props: e.state.props,
+        peer: self.id,
         'model.list': list.current,
+        'peer.connections': self.current.connections,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
