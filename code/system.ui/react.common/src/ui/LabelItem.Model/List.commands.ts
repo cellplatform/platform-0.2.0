@@ -16,6 +16,7 @@ export function commands(list?: t.LabelListState) {
       return api;
     },
     remove(index) {
+      if (index === undefined || index < 0) return api;
       dispatch({ type: 'List:Remove', payload: { index, tx: slug() } });
       return api;
     },

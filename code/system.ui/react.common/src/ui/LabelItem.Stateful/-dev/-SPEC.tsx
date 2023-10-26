@@ -37,7 +37,8 @@ export default Dev.describe(name, (e) => {
     init: {
       list(dev: t.DevCtxState<T>) {
         const list = TestState.list;
-        list.events().cmd.remove$.subscribe((e) => {
+        const events = list.events();
+        events.cmd.remove$.subscribe((e) => {
           local.total = TestState.array.remove(e.index).length;
         });
       },
