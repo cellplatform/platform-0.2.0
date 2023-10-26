@@ -1,6 +1,6 @@
 import { DEFAULTS, Model, rx, type t } from './common';
 import { Data } from './u.Data';
-import { timer } from './u.ResetTimer';
+import { timer } from './u.Timer';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
