@@ -22,12 +22,15 @@ const View: React.FC<t.MediaToolbarProps> = (props) => {
       position: 'relative',
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
+    tmp: css({ fontSize: 11 }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={connectMedia}>{'🐷'}</Button>
-      <Button onClick={stopMedia}>{'🐷'}</Button>
+      <div {...styles.tmp}>
+        <Button onClick={connectMedia}>{'🐷'}</Button>
+        <Button onClick={stopMedia}>{'🐷'}</Button>
+      </div>
     </div>
   );
 };
