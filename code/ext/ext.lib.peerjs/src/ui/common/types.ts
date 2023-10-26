@@ -12,7 +12,6 @@ export type {
   LabelItem,
   LabelItemDispatch,
   LabelItemEvents,
-  LabelItemRenderAction,
   LabelItemRenderArgs,
   LabelItemRenderers,
   LabelItemState,

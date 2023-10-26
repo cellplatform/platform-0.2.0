@@ -21,7 +21,7 @@ export function closeConnectionBehavior(args: {
     clear: () => ResetTimer._?.cancel(),
     start() {
       ResetTimer.clear();
-      ResetTimer._ = Time.delay(DEFAULTS.timeout.closePending, Delete.reset);
+      ResetTimer._ = Time.delay(DEFAULTS.timeout.closePending, Close.reset);
     },
   };
 
@@ -33,7 +33,7 @@ export function closeConnectionBehavior(args: {
     }
   };
 
-  const Delete = {
+  const Close = {
     pending() {
       ResetTimer.clear();
       state.change((d) => (Data.remote(d).closePending = true));
@@ -53,7 +53,7 @@ export function closeConnectionBehavior(args: {
   };
 
   /**
-   * Keyboard Events (triggers)
+   * (Triggers): Keyboard Events
    */
   const on = (...code: string[]) => {
     return events.key.$.pipe(
@@ -62,21 +62,18 @@ export function closeConnectionBehavior(args: {
       rx.filter((data) => data.stage === 'Connected'),
     );
   };
-
   on('Delete', 'Backspace')
     .pipe(rx.filter((data) => !data.closePending))
-    .subscribe(Delete.pending);
-
+    .subscribe(Close.pending);
   on('Enter')
     .pipe(rx.filter((data) => data.closePending!))
-    .subscribe(Delete.complete);
-
+    .subscribe(Close.complete);
   on('Escape')
     .pipe(rx.filter((data) => data.closePending!))
-    .subscribe(Delete.reset);
+    .subscribe(Close.reset);
 
   /**
-   * Selection Events (triggers)
+   * (Triggers): Selection Events
    */
   const unselected$ = listEvents.selected$.pipe(
     rx.distinctWhile((prev, next) => prev === itemid && next == itemid),
@@ -84,10 +81,10 @@ export function closeConnectionBehavior(args: {
     rx.filter((e) => !e.isSelected),
     rx.filter((e) => e.data.closePending!),
   );
-  unselected$.subscribe(Delete.reset);
+  unselected$.subscribe(Close.reset);
 
   /**
-   * Connection Closed (trigger)
+   * (Triggers): Connection Closed
    */
   const connectionClosed$ = peerEvents.cmd.conn$.pipe(
     rx.filter((e) => e.action === 'closed'),
