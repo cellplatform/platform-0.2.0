@@ -52,7 +52,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button(['copy: bad peerid', '💥'], (e) => {
+      dev.button(['copy: bad "peer:<id>"', '("id" will fail) 💥'], (e) => {
         navigator.clipboard.writeText(Webrtc.PeerJs.Uri.generate());
       });
       dev.hr(-1, 5);
@@ -60,10 +60,7 @@ export default Dev.describe(name, (e) => {
     });
 
     dev.hr(5, 20);
-
-    dev.row((e) => {
-      return <PeerCard prefix={'peer.remote:'} peer={{ self: remote, remote: self }} />;
-    });
+    dev.row((e) => <PeerCard prefix={'peer.remote:'} peer={{ self: remote, remote: self }} />);
   });
 
   e.it('ui:footer', async (e) => {
