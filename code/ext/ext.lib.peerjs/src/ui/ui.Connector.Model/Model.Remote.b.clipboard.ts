@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { DEFAULTS, Model, PeerUri, Time, slug, type t } from './common';
+import { DEFAULTS, Model, PeerUri, Time, rx, slug, type t } from './common';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -9,6 +9,19 @@ export function clipboardBehavior(args: {
 }) {
   const { events, state, dispatch } = args;
   const redraw = dispatch.redraw;
+
+  /**
+   * Remove the written data.
+   */
+  const clearPasted = () => {
+    state.change((item) => {
+      const data = Data.remote(item);
+      data.remoteid = undefined;
+      data.stage = undefined;
+      item.label = undefined;
+    });
+    redraw();
+  };
 
   /**
    * Behavior: Paste
@@ -22,32 +35,32 @@ export function clipboardBehavior(args: {
 
     const pasted = (await navigator.clipboard.readText()).trim();
     const isValid = PeerUri.Is.peerid(pasted) || PeerUri.Is.uri(pasted);
-    const peerid = isValid ? PeerUri.id(pasted) : '';
+    const remoteid = isValid ? PeerUri.id(pasted) : '';
 
     const self = Data.self(Model.List.get(ctx.list).item(0)!);
-    const isSelf = self.peerid === peerid;
+    const isSelf = self.peerid === remoteid;
     const alreadyConnected =
-      !isSelf && ctx.peer.current.connections.some((c) => c.peer.remote === peerid);
+      !isSelf && ctx.peer.current.connections.some((c) => c.peer.remote === remoteid);
 
-    state.change((d) => {
-      const data = Data.remote(d);
-      data.remoteid = peerid;
+    state.change((item) => {
+      const data = Data.remote(item);
+      data.remoteid = remoteid;
 
       if (!isValid) data.error = { type: 'InvalidPeer', tx };
       else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
       else if (alreadyConnected) data.error = { type: 'PeerAlreadyConnected', tx };
       else data.error = undefined;
 
-      d.label = peerid;
-      if (data.error) d.label = undefined;
+      item.label = remoteid;
+      if (data.error) item.label = undefined;
     });
 
     redraw();
 
     Time.delay(DEFAULTS.timeout.error, () => {
       if (Data.remote(state).error?.tx !== tx) return;
-      state.change((d) => {
-        const data = Data.remote(d);
+      state.change((item) => {
+        const data = Data.remote(item);
         if (data.error) data.remoteid = undefined;
         data.error = undefined;
         redraw();
@@ -80,4 +93,11 @@ export function clipboardBehavior(args: {
    */
   events.cmd.clipboard.paste$.subscribe(pasteClipboard);
   events.cmd.clipboard.copy$.subscribe(copyClipboard);
+  events.key.escape$
+    .pipe(
+      rx.map((key) => ({ key, data: Data.remote(state) })),
+      rx.filter((e) => Boolean(Data.remote(state).remoteid)),
+      rx.filter((e) => e.data.stage === undefined),
+    )
+    .subscribe(clearPasted);
 }
