@@ -1,7 +1,7 @@
 import { Renderers } from '../ui.Connector/Renderers';
 import { Remote } from './Model.Remote';
 import { Self } from './Model.Self';
-import { Model, type t } from './common';
+import { Model, type t, rx } from './common';
 
 export const List = {
   /**
@@ -9,7 +9,8 @@ export const List = {
    */
   init(options: { peer: t.PeerModel }) {
     const { peer } = options;
-    const { dispose$ } = peer;
+    const lifecycle = rx.lifecycle(peer.dispose$);
+    const { dispose$, dispose } = lifecycle;
 
     const array = Model.List.array((index) => {
       return index === 0
@@ -18,7 +19,7 @@ export const List = {
         : Remote.state({ ctx, dispose$ });
     });
 
-    const ctx: t.GetConnectorCtx = () => ({ peer, list });
+    const ctx: t.GetConnectorCtx = () => ({ peer, list, dispose$ });
     const renderers = Renderers.init({ ctx });
     const list = Model.List.state({
       total: 2,
@@ -29,6 +30,11 @@ export const List = {
     const events = list.events(dispose$);
     events.cmd.remove$.subscribe((e) => array.remove(e.index));
 
-    return { list, ctx } as const;
+    return {
+      list,
+      ctx,
+      dispose,
+      dispose$,
+    } as const;
   },
 } as const;

@@ -1,4 +1,4 @@
-import { Data } from './Data';
+import { Data } from './u.Data';
 import { DEFAULTS, Model, Time, slug, type t } from './common';
 
 export function openConnectionBehavior(args: {

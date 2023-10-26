@@ -1,6 +1,6 @@
-import { describe, expect, it, type t, Webrtc } from '../../test';
-import { Data } from './Data';
+import { Webrtc, describe, expect, it } from '../../test';
 import { Model } from './Model';
+import { Data } from './u.Data';
 
 describe('Connector.Model', () => {
   const peer = Webrtc.peer();

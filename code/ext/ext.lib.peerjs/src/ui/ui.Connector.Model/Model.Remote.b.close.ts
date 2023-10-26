@@ -1,5 +1,6 @@
-import { Data } from './Data';
-import { DEFAULTS, Model, Time, rx, type t } from './common';
+import { DEFAULTS, Model, rx, type t } from './common';
+import { Data } from './u.Data';
+import { timer } from './u.ResetTimer';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -16,22 +17,7 @@ export function closeConnectionBehavior(args: {
   const listDispatch = Model.List.commands(list);
   const itemid = state.instance;
 
-  const ResetTimer = {
-    _: undefined as t.TimeDelayPromise | undefined,
-    clear: () => ResetTimer._?.cancel(),
-    start() {
-      ResetTimer.clear();
-      ResetTimer._ = Time.delay(DEFAULTS.timeout.closePending, Close.reset);
-    },
-  };
-
-  const removeFromList = () => {
-    const index = list.current.getItem?.(itemid)[1] ?? -1;
-    if (index > -1) {
-      listDispatch.remove(index);
-      listDispatch.select(index === 0 ? 0 : index - 1);
-    }
-  };
+  const ResetTimer = timer(DEFAULTS.timeout.closePending, () => Close.reset());
 
   const Close = {
     pending() {
@@ -48,8 +34,16 @@ export function closeConnectionBehavior(args: {
     complete() {
       const conn = Data.remote(state).connid ?? '';
       if (conn) peer.disconnect(conn);
-      removeFromList();
+      removeListItem();
     },
+  };
+
+  const removeListItem = () => {
+    const index = list.current.getItem?.(itemid)[1] ?? -1;
+    if (index > -1) {
+      listDispatch.remove(index);
+      listDispatch.select(index === 0 ? 0 : index - 1);
+    }
   };
 
   /**
@@ -90,5 +84,5 @@ export function closeConnectionBehavior(args: {
     rx.filter((e) => e.action === 'closed'),
     rx.filter((e) => e.connection?.id === Data.remote(state).connid),
   );
-  connectionClosed$.subscribe(removeFromList);
+  connectionClosed$.subscribe(removeListItem);
 }

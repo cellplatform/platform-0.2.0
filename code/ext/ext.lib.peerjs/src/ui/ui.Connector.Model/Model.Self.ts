@@ -1,6 +1,7 @@
 import { clipboardBehavior } from './Model.Self.b.clipboard';
 import { peerBehavior } from './Model.Self.b.peer';
 import { Model, type t } from './common';
+import { purgeBehavior } from './Model.Self.b.purge';
 
 export type SelfOptions = { dispose$?: t.UntilObservable };
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
@@ -28,6 +29,7 @@ export const Self = {
 
     clipboardBehavior({ ctx, state, events, dispatch });
     peerBehavior({ ctx, state, events, dispatch });
+    purgeBehavior({ ctx, state, events, dispatch });
 
     return state;
   },

@@ -4,7 +4,11 @@ import type { t } from './common';
  * Model: Context
  */
 export type GetConnectorCtx = () => ConnectorCtx;
-export type ConnectorCtx = { peer: t.PeerModel; list: t.ConnectorListState };
+export type ConnectorCtx = {
+  peer: t.PeerModel;
+  list: t.ConnectorListState;
+  dispose$: t.UntilObservable;
+};
 
 /**
  * Model: Item
