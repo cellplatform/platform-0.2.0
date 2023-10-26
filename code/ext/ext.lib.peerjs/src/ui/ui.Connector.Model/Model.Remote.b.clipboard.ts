@@ -78,25 +78,25 @@ export function clipboardBehavior(args: {
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
-    state.change((d) => (Data.remote(d).copied = tx));
+    state.change((item) => (Data.remote(item).copied = tx));
     redraw();
 
     Time.delay(DEFAULTS.timeout.copiedPending, () => {
       if (Data.remote(state).copied !== tx) return;
-      state.change((d) => (Data.remote(d).copied = undefined));
+      state.change((item) => (Data.remote(item).copied = undefined));
       redraw();
     });
   };
 
   /**
-   * UI Events (triggers)
+   * (Triggers)
    */
   events.cmd.clipboard.paste$.subscribe(pasteClipboard);
   events.cmd.clipboard.copy$.subscribe(copyClipboard);
   events.key.escape$
     .pipe(
       rx.map((key) => ({ key, data: Data.remote(state) })),
-      rx.filter((e) => Boolean(Data.remote(state).remoteid)),
+      rx.filter((e) => Boolean(e.data.remoteid)),
       rx.filter((e) => e.data.stage === undefined),
     )
     .subscribe(clearPasted);

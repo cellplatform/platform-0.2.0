@@ -23,10 +23,10 @@ export function openConnectionBehavior(args: {
     }
 
     const connecting = (value: boolean) => {
-      state.change((d) => {
-        const data = Data.remote(d);
+      state.change((item) => {
+        const data = Data.remote(item);
         data.stage = value ? 'Connecting' : undefined;
-        Model.action(d, 'remote:right')[0].enabled = !value;
+        Model.action(item, 'remote:right')[0].enabled = !value;
         redraw();
       });
     };
@@ -37,35 +37,35 @@ export function openConnectionBehavior(args: {
 
     if (error) {
       const tx = slug();
-      state.change((d) => {
-        const data = Data.remote(d);
+      state.change((item) => {
+        const data = Data.remote(item);
         data.error = { tx, type: 'ConnectFail', message: error };
-        d.label = undefined;
-        Model.action(d, 'remote:right')[0].button = false;
+        item.label = undefined;
+        Model.action(item, 'remote:right')[0].button = false;
         redraw();
       });
 
       Time.delay(DEFAULTS.timeout.error, () => {
         if (Data.remote(state).error?.tx !== tx) return;
-        state.change((d) => {
-          Data.remote(d).error = undefined;
-          d.label = data.remoteid;
-          Model.action(d, 'remote:right')[0].button = true;
+        state.change((item) => {
+          Data.remote(item).error = undefined;
+          item.label = data.remoteid;
+          Model.action(item, 'remote:right')[0].button = true;
           redraw();
         });
       });
     }
 
     if (!error) {
-      state.change((d) => {
-        const data = Data.remote(d);
+      state.change((item) => {
+        const data = Data.remote(item);
         data.stage = 'Connected';
         data.connid = conn.connectionId;
-        Model.action(d, 'remote:right')[0].button = false;
+        Model.action(item, 'remote:right')[0].button = false;
       });
 
       // Add the next [+] item.
-      list.change((d) => (d.total += 1));
+      list.change((item) => (item.total += 1));
     }
   };
 

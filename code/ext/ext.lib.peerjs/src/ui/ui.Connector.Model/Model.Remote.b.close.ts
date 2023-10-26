@@ -1,6 +1,6 @@
 import { DEFAULTS, Model, rx, type t } from './common';
 import { Data } from './u.Data';
-import { timer } from './u.Timer';
+import { ResetTimer } from './u.Timer';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -17,18 +17,17 @@ export function closeConnectionBehavior(args: {
   const listDispatch = Model.List.commands(list);
   const itemid = state.instance;
 
-  const ResetTimer = timer(DEFAULTS.timeout.closePending, () => Close.reset());
+  const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Close.reset());
 
   const Close = {
     pending() {
-      ResetTimer.clear();
-      state.change((d) => (Data.remote(d).closePending = true));
-      ResetTimer.start();
+      resetTimer.start();
+      state.change((item) => (Data.remote(item).closePending = true));
       redraw();
     },
     reset() {
-      ResetTimer.clear();
-      state.change((d) => (Data.remote(d).closePending = false));
+      resetTimer.clear();
+      state.change((item) => (Data.remote(item).closePending = false));
       redraw();
     },
     complete() {
@@ -49,40 +48,41 @@ export function closeConnectionBehavior(args: {
   /**
    * (Triggers): Keyboard Events
    */
-  const on = (...code: string[]) => {
-    return events.key.$.pipe(
+  const on = (...code: string[]) =>
+    events.key.$.pipe(
       rx.filter((e) => code.includes(e.code)),
-      rx.map(() => Data.remote(state)),
-      rx.filter((data) => data.stage === 'Connected'),
+      rx.map((key) => ({ key, data: Data.remote(state) })),
+      rx.filter((e) => e.data.stage === 'Connected'),
     );
-  };
   on('Delete', 'Backspace')
-    .pipe(rx.filter((data) => !data.closePending))
+    .pipe(rx.filter((e) => !e.data.closePending))
     .subscribe(Close.pending);
   on('Enter')
-    .pipe(rx.filter((data) => data.closePending!))
+    .pipe(rx.filter((e) => e.data.closePending!))
     .subscribe(Close.complete);
   on('Escape')
-    .pipe(rx.filter((data) => data.closePending!))
+    .pipe(rx.filter((e) => e.data.closePending!))
     .subscribe(Close.reset);
 
   /**
    * (Triggers): Selection Events
    */
-  const unselected$ = listEvents.selected$.pipe(
-    rx.distinctWhile((prev, next) => prev === itemid && next == itemid),
-    rx.map((id) => ({ isSelected: id === itemid, data: Data.remote(state) })),
-    rx.filter((e) => !e.isSelected),
-    rx.filter((e) => e.data.closePending!),
-  );
-  unselected$.subscribe(Close.reset);
+  listEvents
+    .item(itemid)
+    .selected$.pipe(
+      rx.map((isSelected) => ({ isSelected, data: Data.remote(state) })),
+      rx.filter((e) => !e.isSelected),
+      rx.filter((e) => e.data.closePending!),
+    )
+    .subscribe(Close.reset);
 
   /**
    * (Triggers): Connection Closed
    */
-  const connectionClosed$ = peerEvents.cmd.conn$.pipe(
-    rx.filter((e) => e.action === 'closed'),
-    rx.filter((e) => e.connection?.id === Data.remote(state).connid),
-  );
-  connectionClosed$.subscribe(removeListItem);
+  peerEvents.cmd.conn$
+    .pipe(
+      rx.filter((e) => e.action === 'closed'),
+      rx.filter((e) => e.connection?.id === Data.remote(state).connid),
+    )
+    .subscribe(removeListItem);
 }

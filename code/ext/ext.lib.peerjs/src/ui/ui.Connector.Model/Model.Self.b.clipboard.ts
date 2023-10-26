@@ -18,12 +18,12 @@ export function clipboardBehavior(args: {
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
-    state.change((d) => (Data.self(d).copied = tx));
+    state.change((item) => (Data.self(item).actionCompleted = { tx, message: 'copied' }));
     redraw();
 
     Time.delay(DEFAULTS.timeout.copiedPending, () => {
-      if (Data.self(state).copied !== tx) return;
-      state.change((d) => (Data.self(d).copied = undefined));
+      if (Data.self(state).actionCompleted?.tx !== tx) return;
+      state.change((item) => (Data.self(item).actionCompleted = undefined));
       redraw();
     });
   };

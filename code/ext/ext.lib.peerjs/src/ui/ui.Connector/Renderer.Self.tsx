@@ -1,4 +1,4 @@
-import { COLORS, Data, Icons, type t } from './common';
+import { COLORS, Data, Icons, type t, LabelItem } from './common';
 import { PeerLabel } from './ui.PeerLabel';
 
 export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
@@ -10,7 +10,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       const peerWidth = totalRemotes === 0 ? undefined : 30;
 
       const data = Data.self(e.item);
-      if (data.copied) return <>{'copied'}</>;
+      if (data.actionCompleted) return <>{data.actionCompleted.message}</>;
 
       const uri = `self:${data.peerid}`;
       const { selected, focused } = e;
@@ -40,11 +40,29 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
 
       if (e.kind === 'self:right') {
         if (!(e.selected && e.focused)) return null;
-        if (data.copied) {
-          return <Icons.Done {...helpers.icon(e, 18)} tooltip={'Copied'} offset={[0, -1]} />;
-        } else {
-          return <Icons.Copy {...helpers.icon(e, 16)} tooltip={'Copy to clipboard'} />;
+
+        if (data.purgePending) {
+          return (
+            <LabelItem.Button
+              selected={e.selected}
+              focused={e.focused}
+              enabled={e.enabled}
+              label={'Purge'}
+            />
+          );
         }
+
+        if (data.actionCompleted) {
+          return (
+            <Icons.Done
+              {...helpers.icon(e, 18)}
+              offset={[0, -1]}
+              tooltip={data.actionCompleted.message}
+            />
+          );
+        }
+
+        return <Icons.Copy {...helpers.icon(e, 16)} tooltip={'Copy to clipboard'} />;
       }
 
       return;

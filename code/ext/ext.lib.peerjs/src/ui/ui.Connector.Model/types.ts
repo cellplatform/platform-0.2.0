@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+type Tx = string;
+
 /**
  * Model: Context
  */
@@ -44,8 +46,9 @@ type D = ConnectorData;
 export type ConnectorData = ConnectorDataSelf | ConnectorDataRemote;
 export type ConnectorDataSelf = {
   kind: 'peer:self';
-  copied?: string;
   peerid: string;
+  actionCompleted?: { tx: Tx; message: string };
+  purgePending?: boolean;
 };
 
 export type ConnectorDataRemote = {
@@ -55,7 +58,7 @@ export type ConnectorDataRemote = {
   connid?: string;
   copied?: string;
   closePending?: boolean;
-  error?: { tx: string; type: ConnectorDataRemoteError; message?: string };
+  error?: { tx: Tx; type: ConnectorDataRemoteError; message?: string };
 };
 
 export type ConnectorDataRemoteError =
