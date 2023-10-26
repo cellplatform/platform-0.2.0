@@ -15,7 +15,7 @@ export type {
  * @system
  */
 export type * from './Webrtc.PeerJs/types';
-export type * from './Webrtc.PeerModel/types';
+export type * from './Webrtc.Peer/types';
 export type * from './Webrtc/types';
 
 export type * from './ui/ui.Connector.MediaToolbar/types';
