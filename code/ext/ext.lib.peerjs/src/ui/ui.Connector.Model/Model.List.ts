@@ -11,7 +11,7 @@ export const List = {
     const { peer } = options;
     const { dispose$ } = peer;
 
-    const { getItem } = Model.List.array((index) => {
+    const array = Model.List.array((index) => {
       return index === 0
         ? //
           Self.state({ ctx, dispose$ })
@@ -20,8 +20,14 @@ export const List = {
 
     const ctx: t.GetConnectorCtx = () => ({ peer, list });
     const renderers = Renderers.init({ ctx });
-    const getRenderers: t.GetLabelItemRenderers = () => renderers;
-    const list = Model.List.state({ total: 2, getItem, getRenderers });
+    const list = Model.List.state({
+      total: 2,
+      getItem: array.getItem,
+      getRenderers: () => renderers,
+    });
+
+    const events = list.events(dispose$);
+    events.cmd.remove$.subscribe((e) => array.remove(e.index));
 
     return { list, ctx } as const;
   },

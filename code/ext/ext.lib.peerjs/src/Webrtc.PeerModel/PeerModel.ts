@@ -87,7 +87,6 @@ export const PeerModel: t.WebrtcPeerModel = {
           });
           if (total !== d.connections.length) changed = true;
         });
-        console.log('purged', state.current);
         if (changed) Data.dispatch.connection('purged');
       },
 

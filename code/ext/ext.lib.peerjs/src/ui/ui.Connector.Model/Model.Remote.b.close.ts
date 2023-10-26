@@ -1,5 +1,5 @@
 import { Data } from './Data';
-import { DEFAULTS, Time, rx, type t } from './common';
+import { DEFAULTS, Model, Time, rx, type t } from './common';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -9,23 +9,42 @@ export function closeConnectionBehavior(args: {
 }) {
   const { events, state, dispatch } = args;
   const redraw = dispatch.redraw;
-  const listEvents = args.ctx().list.events();
+
+  const { list, peer } = args.ctx();
+  const listEvents = list.events();
+  const listDispatch = Model.List.commands(list);
   const itemid = state.instance;
 
-  const startDelete = () => {
-    state.change((d) => (Data.remote(d).closePending = true));
-    redraw();
-    Time.delay(DEFAULTS.timeout.closePending, reset);
+  const ResetTimer = {
+    _: undefined as t.TimeDelayPromise | undefined,
+    clear: () => ResetTimer._?.cancel(),
+    start() {
+      ResetTimer.clear();
+      ResetTimer._ = Time.delay(DEFAULTS.timeout.closePending, Delete.reset);
+    },
   };
 
-  const completeDelete = () => {
-    console.log('complete CLOSE');
-    reset();
-  };
+  const Delete = {
+    pending() {
+      ResetTimer.clear();
+      state.change((d) => (Data.remote(d).closePending = true));
+      ResetTimer.start();
+      redraw();
+    },
+    reset() {
+      ResetTimer.clear();
+      state.change((d) => (Data.remote(d).closePending = false));
+      redraw();
+    },
+    complete() {
+      // Close the network connection.
+      const connid = Data.remote(state).connid ?? '';
+      if (connid) peer.disconnect(connid);
 
-  const reset = () => {
-    state.change((d) => (Data.remote(d).closePending = false));
-    redraw();
+      // Remove from the UI list.
+      const index = list.current.getItem?.(itemid)[1] ?? -1;
+      listDispatch.remove(index).select(index - 1);
+    },
   };
 
   /**
@@ -41,28 +60,24 @@ export function closeConnectionBehavior(args: {
 
   on('Delete', 'Backspace')
     .pipe(rx.filter((data) => !data.closePending))
-    .subscribe(startDelete);
+    .subscribe(Delete.pending);
 
   on('Enter')
     .pipe(rx.filter((data) => data.closePending!))
-    .subscribe(completeDelete);
+    .subscribe(Delete.complete);
 
   on('Escape')
     .pipe(rx.filter((data) => data.closePending!))
-    .subscribe(reset);
-
-  const selected$ = listEvents.selected$.pipe(
-    rx.distinctWhile((prev, next) => prev === itemid && next == itemid),
-    rx.map((id) => ({ isSelected: id === itemid, data: Data.remote(state) })),
-  );
+    .subscribe(Delete.reset);
 
   /**
    * Selection Events (triggers).
    */
-  selected$
-    .pipe(
-      rx.filter((e) => !e.isSelected),
-      rx.filter((e) => e.data.closePending!),
-    )
-    .subscribe(reset);
+  const unselected$ = listEvents.selected$.pipe(
+    rx.distinctWhile((prev, next) => prev === itemid && next == itemid),
+    rx.map((id) => ({ isSelected: id === itemid, data: Data.remote(state) })),
+    rx.filter((e) => !e.isSelected),
+    rx.filter((e) => e.data.closePending!),
+  );
+  unselected$.subscribe(Delete.reset);
 }
