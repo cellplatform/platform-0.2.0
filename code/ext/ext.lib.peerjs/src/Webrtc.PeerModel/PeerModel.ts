@@ -74,7 +74,7 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
 
       purge() {
-        let changed = false;
+        const before = state.current.connections.length;
         state.change((d) => {
           const total = d.connections.length;
           d.connections = d.connections.filter((item) => {
@@ -82,9 +82,11 @@ export const PeerModel: t.WebrtcPeerModel = {
             if (Get.conn.object(d, item.id)?.open === false) return false;
             return true;
           });
-          if (total !== d.connections.length) changed = true;
         });
+        const after = state.current.connections.length;
+        const changed = before !== after;
         if (changed) Data.dispatch.connection('purged');
+        return { changed, total: { before, after } };
       },
 
       get: {
