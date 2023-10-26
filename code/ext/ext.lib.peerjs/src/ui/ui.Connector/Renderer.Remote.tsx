@@ -1,5 +1,6 @@
 import { COLORS, Data, Icons, LabelItem, PeerUri, type t } from './common';
 import { PeerLabel } from './ui.PeerLabel';
+import { Connected } from './ui.Connected';
 
 export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
   return {
@@ -38,7 +39,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
           return (
             <Icons.Person
               {...helpers.icon(e, 17)}
-              color={e.selected ? e.color : COLORS.BLUE}
+              color={e.selected && e.focused ? e.color : COLORS.BLUE}
               style={{ transform: 'scaleX(-1)' }}
             />
           );
@@ -68,6 +69,10 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         }
 
         if (stage === 'Connected') {
+          // return <Icons.Wifi {...helpers.icon(e, 17)} />;
+
+          return <Connected ctx={args.ctx} selected={e.selected} focused={e.focused} />;
+
           /**
            * TODO 🐷
            * Connected icons - Video | Screenshare

@@ -6,6 +6,7 @@ import {
   MdEmojiPeople,
   MdErrorOutline,
   MdRefresh,
+  MdSettingsInputAntenna,
   MdWarning,
 } from 'react-icons/md';
 import { VscSymbolClass } from 'react-icons/vsc';
@@ -26,4 +27,5 @@ export const Icons = {
   Done: icon(MdDone),
   Error: icon(MdErrorOutline),
   Warning: icon(MdWarning),
+  Antenna: icon(MdSettingsInputAntenna),
 } as const;

@@ -24,7 +24,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       if (e.kind === 'self:left') {
         const isOpen = ctx.peer.current.open;
         const opacity = isOpen ? 1 : 0.3;
-        const color = e.selected ? e.color : COLORS.BLUE;
+        const color = e.selected && e.focused ? e.color : COLORS.BLUE;
         return (
           <Icons.Person
             {...helpers.icon(e, 17)}

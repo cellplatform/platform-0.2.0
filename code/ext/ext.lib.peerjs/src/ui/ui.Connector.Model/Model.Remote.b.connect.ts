@@ -54,15 +54,16 @@ export function openConnectionBehavior(args: {
           redraw();
         });
       });
-    } else {
+    }
+
+    if (!error) {
       state.change((d) => {
         const data = Data.remote(d);
         data.stage = 'Connected';
         data.connid = conn.connectionId;
+        Model.action(d, 'remote:right')[0].button = false;
       });
-    }
 
-    if (!error) {
       // Add the next [+] item.
       list.change((d) => (d.total += 1));
     }
