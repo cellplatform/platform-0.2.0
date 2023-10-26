@@ -68,11 +68,8 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
 
       disconnect(id) {
-        const conn = model.get.connection(id);
-        if (conn) {
-          conn.close();
-          Data.dispatch.connection('close', conn);
-        }
+        if (!id) return;
+        model.get.connection(id)?.close();
         model.purge();
       },
 

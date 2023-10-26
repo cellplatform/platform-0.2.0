@@ -78,7 +78,13 @@ export type PeerModelEvents = t.Lifecycle & {
  */
 export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd | PeerModelPurgeCmd;
 
-export type PeerModelConnAction = 'start:out' | 'start:in' | 'ready' | 'close' | 'error' | 'purged';
+export type PeerModelConnAction =
+  | 'start:out'
+  | 'start:in'
+  | 'ready'
+  | 'closed'
+  | 'error'
+  | 'purged';
 export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConnCmdArgs };
 export type PeerModelConnCmdArgs = {
   tx: string;

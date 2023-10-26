@@ -11,7 +11,8 @@ export function closeConnectionBehavior(args: {
   const redraw = dispatch.redraw;
 
   const { list, peer } = args.ctx();
-  const listEvents = list.events();
+  const peerEvents = peer.events(events.dispose$);
+  const listEvents = list.events(events.dispose$);
   const listDispatch = Model.List.commands(list);
   const itemid = state.instance;
 
@@ -22,6 +23,14 @@ export function closeConnectionBehavior(args: {
       ResetTimer.clear();
       ResetTimer._ = Time.delay(DEFAULTS.timeout.closePending, Delete.reset);
     },
+  };
+
+  const removeFromList = () => {
+    const index = list.current.getItem?.(itemid)[1] ?? -1;
+    if (index > -1) {
+      listDispatch.remove(index);
+      listDispatch.select(index === 0 ? 0 : index - 1);
+    }
   };
 
   const Delete = {
@@ -37,18 +46,14 @@ export function closeConnectionBehavior(args: {
       redraw();
     },
     complete() {
-      // Close the network connection.
-      const connid = Data.remote(state).connid ?? '';
-      if (connid) peer.disconnect(connid);
-
-      // Remove from the UI list.
-      const index = list.current.getItem?.(itemid)[1] ?? -1;
-      listDispatch.remove(index).select(index - 1);
+      const conn = Data.remote(state).connid ?? '';
+      if (conn) peer.disconnect(conn);
+      removeFromList();
     },
   };
 
   /**
-   * Keyboard Events (triggers).
+   * Keyboard Events (triggers)
    */
   const on = (...code: string[]) => {
     return events.key.$.pipe(
@@ -71,7 +76,7 @@ export function closeConnectionBehavior(args: {
     .subscribe(Delete.reset);
 
   /**
-   * Selection Events (triggers).
+   * Selection Events (triggers)
    */
   const unselected$ = listEvents.selected$.pipe(
     rx.distinctWhile((prev, next) => prev === itemid && next == itemid),
@@ -80,4 +85,13 @@ export function closeConnectionBehavior(args: {
     rx.filter((e) => e.data.closePending!),
   );
   unselected$.subscribe(Delete.reset);
+
+  /**
+   * Connection Closed (trigger)
+   */
+  const connectionClosed$ = peerEvents.cmd.conn$.pipe(
+    rx.filter((e) => e.action === 'closed'),
+    rx.filter((e) => e.connection?.id === Data.remote(state).connid),
+  );
+  connectionClosed$.subscribe(removeFromList);
 }

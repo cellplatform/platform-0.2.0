@@ -30,14 +30,12 @@ export function manageDataConnection(args: {
       const id = conn.connectionId;
       const connection = Wrangle.dispatchConnection(self, conn);
       conn.on('data', (data) => {
-        dispatch({
-          type: 'Peer:Data',
-          payload: { tx: slug(), connection, data },
-        });
+        dispatch({ type: 'Peer:Data', payload: { tx: slug(), connection, data } });
       });
       conn.on('close', () => {
         state.change((d) => (d.connections = d.connections.filter((item) => item.id !== id)));
         model.disconnect(id);
+        api.dispatch.connection('closed', conn);
       });
       conn.on('error', (err) => api.dispatch.connection('error', conn, err.message));
     },
