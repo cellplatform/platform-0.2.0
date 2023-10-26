@@ -45,6 +45,15 @@ export function events<D extends O = O>(
       ),
     },
 
+    item(id) {
+      return {
+        selected$: api.selected$.pipe(
+          rx.distinctWhile((prev, next) => prev === id && next === id),
+          rx.map((next) => next === id),
+        ),
+      };
+    },
+
     /**
      * Lifecycle
      */
