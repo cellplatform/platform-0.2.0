@@ -1,6 +1,7 @@
 import { COLORS, Data, Icons, LabelItem, PeerUri, type t } from './common';
+
+import { MediaToolbar } from '../ui.Connector.MediaToolbar';
 import { PeerLabel } from './ui.PeerLabel';
-import { Connected } from './ui.Connected';
 
 export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
   return {
@@ -69,15 +70,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         }
 
         if (stage === 'Connected') {
-          // return <Icons.Wifi {...helpers.icon(e, 17)} />;
-
-          return <Connected ctx={args.ctx} selected={e.selected} focused={e.focused} />;
-
-          /**
-           * TODO 🐷
-           * Connected icons - Video | Screenshare
-           */
-          return;
+          return <MediaToolbar peer={args.ctx().peer} selected={e.selected} focused={e.focused} />;
         }
 
         if (stage === 'Connecting' || (e.selected && data.remoteid)) {
