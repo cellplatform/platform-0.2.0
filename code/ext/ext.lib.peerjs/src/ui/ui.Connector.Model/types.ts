@@ -54,4 +54,8 @@ export type ConnectorDataRemote = {
   error?: { tx: string; type: ConnectorDataRemoteError; message?: string };
 };
 
-export type ConnectorDataRemoteError = 'InvalidPeer' | 'PeerIsSelf' | 'ConnectFail';
+export type ConnectorDataRemoteError =
+  | 'InvalidPeer'
+  | 'PeerIsSelf'
+  | 'PeerAlreadyConnected'
+  | 'ConnectFail';

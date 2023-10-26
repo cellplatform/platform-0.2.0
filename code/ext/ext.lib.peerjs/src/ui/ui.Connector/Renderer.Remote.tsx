@@ -17,6 +17,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
 
       if (err === 'InvalidPeer') text = 'invalid peer ( please try again )';
       if (err === 'PeerIsSelf') text = 'cannot connect to yourself';
+      if (err === 'PeerAlreadyConnected') text = 'already connected to peer';
       if (err === 'ConnectFail') text = data.error?.message || 'connection failed';
 
       return <>{text}</>;

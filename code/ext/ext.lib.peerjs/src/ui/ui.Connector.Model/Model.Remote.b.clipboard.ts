@@ -26,6 +26,8 @@ export function clipboardBehavior(args: {
 
     const self = Data.self(Model.List.get(ctx.list).item(0)!);
     const isSelf = self.peerid === peerid;
+    const alreadyConnected =
+      !isSelf && ctx.peer.current.connections.some((c) => c.peer.remote === peerid);
 
     state.change((d) => {
       const data = Data.remote(d);
@@ -33,6 +35,7 @@ export function clipboardBehavior(args: {
 
       if (!isValid) data.error = { type: 'InvalidPeer', tx };
       else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
+      else if (alreadyConnected) data.error = { type: 'PeerAlreadyConnected', tx };
       else data.error = undefined;
 
       d.label = peerid;
