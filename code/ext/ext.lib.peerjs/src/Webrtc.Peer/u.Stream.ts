@@ -1,3 +1,6 @@
+import { type t } from './common';
+import { getFactory } from './u.getFactory';
+
 export const Stream = {
   /**
    * Stop all tracks within the stream.
@@ -66,5 +69,33 @@ export const Stream = {
         if (typeof fn === 'function') fn.call(track, ev);
       };
     });
+  },
+
+  /**
+   * Manages creating and releasing handles to streams.
+   */
+  memoryState(peerjs: t.PeerJs, state: t.PeerModelState) {
+    const Get = getFactory(peerjs);
+    let _video: MediaStream | undefined;
+    let _screen: MediaStream | undefined;
+
+    const releaseUnused = (kind: t.PeerConnectionKind, stream?: MediaStream) => {
+      if (Get.conn.itemsByKind(state.current, kind).length > 0) return stream;
+      Stream.stop(stream);
+      return undefined;
+    };
+
+    return {
+      async video() {
+        return _video || (_video = await Stream.getVideo());
+      },
+      async screen() {
+        return _screen || (_screen = await Stream.getScreen());
+      },
+      purge() {
+        _video = releaseUnused('media:video', _video);
+        _screen = releaseUnused('media:screen', _screen);
+      },
+    } as const;
   },
 } as const;

@@ -27,7 +27,7 @@ export const PeerModel: t.WebrtcPeerModel = {
     const lifecycle = rx.lifecycle(dispose$);
     lifecycle.dispose$.subscribe(() => peerjs.destroy());
 
-    const Get = getFactory(peerjs);
+    const get = getFactory(peerjs);
     const initial: t.Peer = { open: false, connections: [] };
     const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
@@ -41,23 +41,17 @@ export const PeerModel: t.WebrtcPeerModel = {
     events.cmd.purge$.subscribe(() => model.purge());
 
     /**
+     * Media Streams.
+     */
+    const streams = Stream.memoryState(peerjs, state);
+
+    /**
      * PeerJS Events.
      */
     peerjs.on('open', () => state.change((d) => (d.open = true)));
     peerjs.on('close', () => state.change((d) => (d.open = false)));
     peerjs.on('connection', (conn) => Data.start.incoming(conn));
     peerjs.on('call', (conn) => Media.start.incoming(conn));
-
-    /**
-     * Media streams.
-     */
-    let _videostream: MediaStream | undefined;
-    let _screenstream: MediaStream | undefined;
-    const releaseWhenLastStream = (kind: t.PeerConnectionKind, stream?: MediaStream) => {
-      if (Get.conn.itemsByKind(model.current, kind).length > 0) return stream;
-      Stream.stop(stream);
-      return undefined;
-    };
 
     /**
      * API
@@ -87,14 +81,13 @@ export const PeerModel: t.WebrtcPeerModel = {
         state.change((d) => {
           d.connections = d.connections.filter((item) => {
             if (item.open === false) return false;
-            if (Get.conn.peerjs(d, item.id)?.open === false) return false;
+            if (get.conn.peerjs(d, item.id)?.open === false) return false;
             return true;
           });
         });
 
         // Release media streams.
-        _videostream = releaseWhenLastStream('media:video', _videostream);
-        _screenstream = releaseWhenLastStream('media:screen', _screenstream);
+        streams.purge();
 
         // Finish up.
         const after = state.current.connections.length;
@@ -105,15 +98,11 @@ export const PeerModel: t.WebrtcPeerModel = {
 
       get: {
         conn: {
-          obj: Get.conn.obj(state),
+          obj: get.conn.obj(state),
         },
         stream: {
-          async video() {
-            return _videostream || (_videostream = await Stream.getVideo());
-          },
-          async screen() {
-            return _screenstream || (_screenstream = await Stream.getScreen());
-          },
+          video: streams.video,
+          screen: streams.screen,
         },
       },
 
