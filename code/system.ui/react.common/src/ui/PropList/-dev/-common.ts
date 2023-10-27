@@ -10,7 +10,8 @@ export type MyField =
   | 'Factory'
   | 'Factory.None'
   | 'Factory.Many'
-  | 'Factory.EmptyArray';
+  | 'Factory.EmptyArray'
+  | 'Factory.Mixed';
 
 export const SampleFields = {
   all: <MyField[]>[
@@ -21,6 +22,7 @@ export const SampleFields = {
     'Factory',
     'Factory.None',
     'Factory.Many',
+    'Factory.Mixed',
     'Factory.EmptyArray',
   ],
   defaults: <MyField[]>['Module.Name', 'Module.Version'],

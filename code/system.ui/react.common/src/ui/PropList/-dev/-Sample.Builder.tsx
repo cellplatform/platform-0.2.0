@@ -19,6 +19,7 @@ export const BuilderSample = {
         { label: 'Three', value: 789 },
       ])
       .field('Factory.EmptyArray', () => [])
+      .field('Factory.Mixed', () => [undefined, { label: 'Foo' }, undefined])
       .items(fields);
   },
 };

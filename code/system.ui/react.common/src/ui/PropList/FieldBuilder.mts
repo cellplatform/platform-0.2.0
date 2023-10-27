@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { R, type t } from './common';
 
 /**
  * Field builder.
@@ -28,15 +28,16 @@ export function FieldBuilder<F extends string>(): t.PropListFieldBuilder<F> {
      * Convert fields to <PropList> items.
      */
     items(fields: F[] = []) {
-      const list: t.PropListItem[] = [];
-
+      type P = t.PropListItem[];
+      const items: P = [];
       fields.filter(Boolean).forEach((name) => {
         const res = run(name);
         if (!res) return;
-        (Array.isArray(res) ? res : [res]).forEach((item) => list.push(item));
+        R.flatten(Array.isArray(res) ? res : [res]).forEach((item) => {
+          if (typeof item === 'object' && item !== null) items.push(item);
+        });
       });
-
-      return list;
+      return items;
     },
   };
 

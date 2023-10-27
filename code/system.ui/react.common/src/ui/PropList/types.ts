@@ -56,7 +56,7 @@ export type PropListFieldBuilder<F extends string> = {
   field(name: F, item: PropListItemFactory | PropListItem): PropListFieldBuilder<F>;
   items(fields?: F[]): PropListItem[];
 };
-export type PropListItemFactory = () => PropListItem | PropListItem[] | t.Falsy;
+export type PropListItemFactory = () => (PropListItem | t.Falsy) | (PropListItem | t.Falsy)[];
 
 /**
  * Default values used when optional properties are ommitted.
