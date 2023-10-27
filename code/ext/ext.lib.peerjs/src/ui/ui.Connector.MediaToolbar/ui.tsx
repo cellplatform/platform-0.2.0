@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { css, type t, rx } from './common';
+import { useEffect, useState } from 'react';
+import { Wrangle } from './Wrangle';
+import { Icons, css, type t } from './common';
 import { MediaButton } from './ui.MediaButton';
 
 export const View: React.FC<t.MediaToolbarProps> = (props) => {
@@ -17,11 +18,17 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
   /**
    * [Render]
    */
+  const iconColor = Wrangle.iconColor(props);
   const styles = {
-    base: css({ position: 'relative', Flex: 'x-center-center' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+      placeItems: 'center',
+      gridTemplateColumns: 'repeat(3, auto)',
+    }),
   };
 
-  const mediaButton = (kind: t.PeerConnectionMediaKind, style?: t.CssValue) => {
+  const mediaButton = (kind: t.PeerConnectionMediaKind, marginRight?: number) => {
     return (
       <MediaButton
         mediaKind={kind}
@@ -29,15 +36,16 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
         dataId={dataId}
         selected={selected}
         focused={focused}
-        style={style}
+        style={{ marginRight }}
       />
     );
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      {mediaButton('media:video', { marginRight: 5 })}
-      {mediaButton('media:screen')}
+      {mediaButton('media:video', 5)}
+      {mediaButton('media:screen', 6)}
+      <Icons.Antenna size={15} color={iconColor} />
     </div>
   );
 };

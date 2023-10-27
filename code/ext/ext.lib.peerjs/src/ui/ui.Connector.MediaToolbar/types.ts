@@ -10,3 +10,7 @@ export type MediaToolbarProps = {
   focused?: boolean;
   style?: t.CssValue;
 };
+
+export type MediaToolbarButtonProps = MediaToolbarProps & {
+  mediaKind: t.PeerConnectionMediaKind;
+};

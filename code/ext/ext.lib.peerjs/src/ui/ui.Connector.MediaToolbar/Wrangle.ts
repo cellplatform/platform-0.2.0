@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { COLORS, type t } from './common';
 
 /**
  * Helpers
@@ -29,5 +29,20 @@ export const Wrangle = {
     if (media === 'media:video') return 'media:video';
     if (media === 'media:screen') return 'media:screen';
     throw new Error(`Media kind '${media}' not supported.`);
+  },
+
+  iconColor(props: t.MediaToolbarProps) {
+    const { selected, focused } = props;
+    if (selected && focused) return COLORS.WHITE;
+    return COLORS.DARK;
+  },
+
+  iconOpacity(props: t.MediaToolbarButtonProps, state: { spinning?: boolean; over?: boolean }) {
+    const { selected, focused } = props;
+    const { spinning, over } = state;
+    if (spinning) return 0.1;
+    const hasConn = Wrangle.hasConnectionOfKind(props, props.mediaKind);
+    if (hasConn || over) return selected && focused ? 1 : 0.7;
+    return selected && focused ? 0.5 : 0.25;
   },
 } as const;

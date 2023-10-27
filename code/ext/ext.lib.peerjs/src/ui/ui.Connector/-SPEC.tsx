@@ -40,7 +40,7 @@ export default Dev.describe(name, (e) => {
     dev.row((e) => (
       <Info
         fields={['Module', 'Component', 'Peer', 'Peer.Remotes']}
-        data={{ component: { name }, peer: { self } }}
+        data={{ component: { name: `<${name}>` }, peer: { self } }}
       />
     ));
     dev.hr(5, 20);
