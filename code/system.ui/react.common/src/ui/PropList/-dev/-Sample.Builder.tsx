@@ -1,5 +1,5 @@
 import { PropList, MyField, SampleFields as Fields } from './-common';
-const pkg = { name: 'foobar', version: '1.2.3' };
+const pkg = { name: 'foobar', version: '1.2.3' } as const;
 
 export const BuilderSample = {
   Fields,
