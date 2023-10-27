@@ -100,6 +100,11 @@ export function manageDataConnection(args: {
       });
 
       conn.on('close', () => {
+        state.current.connections
+          .filter(({ kind }) => kind === 'media:video' || kind === 'media:screen')
+          .filter(({ peer }) => peer.remote === conn.peer)
+          .forEach(({ id }) => model.disconnect(id)); // Close child-media connections.
+
         state.change((d) => (d.connections = d.connections.filter((item) => item.id !== id)));
         model.disconnect(id);
         dispatch.connection('closed', conn);
