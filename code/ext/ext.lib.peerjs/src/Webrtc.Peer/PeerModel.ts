@@ -107,7 +107,7 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
 
       /**
-       * Lifecycle
+       * Lifecycle.
        */
       dispose: lifecycle.dispose,
       dispose$: lifecycle.dispose$,
