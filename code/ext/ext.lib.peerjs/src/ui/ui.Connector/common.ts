@@ -8,6 +8,7 @@ export { Data, Model } from '../ui.Connector.Model';
  */
 const behavior: t.ConnectorPropsBehavior = {
   grabFocusOnArrowKey: false,
+  focusOnLoad: false,
 };
 
 export const DEFAULTS = {

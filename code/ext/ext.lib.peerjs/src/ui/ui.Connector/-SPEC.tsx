@@ -18,6 +18,7 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
   const local = localstore.object({
     grabFocusOnArrowKey: true,
+    focusOnLoad: true,
   });
 
   const State = {
@@ -34,6 +35,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       const b = State.behavior(d.props);
       b.grabFocusOnArrowKey = local.grabFocusOnArrowKey;
+      b.focusOnLoad = local.focusOnLoad;
     });
 
     ctx.debug.width(330);
@@ -83,8 +85,21 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => {
-              const behavior = State.behavior(d.props);
-              local.grabFocusOnArrowKey = Dev.toggle(behavior, 'grabFocusOnArrowKey');
+              const b = State.behavior(d.props);
+              local.grabFocusOnArrowKey = Dev.toggle(b, 'grabFocusOnArrowKey');
+            }),
+          );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnLoad);
+        btn
+          .label((e) => `focusOnLoad`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const b = State.behavior(d.props);
+              local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
             }),
           );
       });

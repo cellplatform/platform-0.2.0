@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { DEFAULTS, Keyboard, LabelItem, type t } from './common';
 
+const b = DEFAULTS.behavior;
+
 /**
  * Keyboard controller.
  */
@@ -9,7 +11,7 @@ export function useKeyboard(args: {
   behavior?: t.ConnectorPropsBehavior;
 }) {
   const { list, behavior = {} } = args;
-  const { grabFocusOnArrowKey = DEFAULTS.behavior.grabFocusOnArrowKey } = behavior;
+  const { focusOnLoad = b.focusOnLoad, grabFocusOnArrowKey = b.grabFocusOnArrowKey } = behavior;
 
   useEffect(() => {
     const keyboard = Keyboard.until();
@@ -26,7 +28,11 @@ export function useKeyboard(args: {
       ArrowDown: (e) => focusAndSelect(),
     });
 
+    /**
+     * Initialize.
+     */
+    if (focusOnLoad) focusAndSelect();
     if (!grabFocusOnArrowKey) keyboard.dispose();
     return keyboard.dispose;
-  }, [grabFocusOnArrowKey, Boolean(list)]);
+  }, [grabFocusOnArrowKey, focusOnLoad, Boolean(list)]);
 }
