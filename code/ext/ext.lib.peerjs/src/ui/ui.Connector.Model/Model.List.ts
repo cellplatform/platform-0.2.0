@@ -7,8 +7,8 @@ export const List = {
   /**
    * Initialize a new [List] controller model.
    */
-  init(peer: t.PeerModel) {
-    const lifecycle = rx.lifecycle(peer.dispose$);
+  init(peer: t.PeerModel, options: { dispose$?: t.UntilObservable } = {}) {
+    const lifecycle = rx.lifecycle([peer.dispose$, options.dispose$]);
     const { dispose$, dispose } = lifecycle;
 
     const array = Model.List.array((index) => {

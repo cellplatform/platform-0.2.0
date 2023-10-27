@@ -1,18 +1,16 @@
 import { Dev, Webrtc, type t } from '../../test.ui';
+import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 
 import { Connector } from '.';
 import { Info } from '../ui.Info';
-import { List } from './ui.List';
-import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 
-type T = { props: t.ConnectorProps };
-const initial: T = { props: {} };
+type T = {};
+const initial: T = {};
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
-  const { list } = Connector.Model.List.init(self);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -20,10 +18,6 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
-
-    list.events().$.subscribe((e) => {
-      // console.log('(Model) List.$:', e); // TEMP 🐷
-    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -36,7 +30,7 @@ export default Dev.describe(name, (e) => {
           opacity: 0.2,
           prefix: 'list.render-',
         };
-        return <List list={list} debug={{ renderCount }} />;
+        return <Connector peer={self} debug={{ renderCount }} />;
       });
   });
 
@@ -68,9 +62,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        props: e.state.props,
         peer: self.id,
-        'model.list': list.current,
         'peer.connections': self.current.connections,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
