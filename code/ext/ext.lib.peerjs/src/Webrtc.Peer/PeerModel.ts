@@ -1,11 +1,11 @@
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
-import { Dispatch } from './Dispatch';
-import { StreamUtil } from './u.Stream';
 import { manageDataConnection } from './PeerModel.Conn.Data';
 import { manageMediaConnection } from './PeerModel.Conn.Media';
 import { eventFactory } from './PeerModel.events';
 import { getFactory } from './PeerModel.get';
 import { PatchState, rx, type t } from './common';
+import { Dispatch } from './u.Dispatch';
+import { Stream } from './u.Stream';
 
 /**
  * Peer model.
@@ -53,6 +53,11 @@ export const PeerModel: t.WebrtcPeerModel = {
      */
     let _videostream: MediaStream | undefined;
     let _screenstream: MediaStream | undefined;
+    const releaseWhenLastStream = (kind: t.PeerConnectionKind, stream?: MediaStream) => {
+      if (Get.conn.byKind(model.current, kind).length > 0) return stream;
+      Stream.stop(stream);
+      return undefined;
+    };
 
     /**
      * API
@@ -77,6 +82,7 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
 
       purge() {
+        // Walk connections.
         const before = state.current.connections.length;
         state.change((d) => {
           d.connections = d.connections.filter((item) => {
@@ -85,6 +91,12 @@ export const PeerModel: t.WebrtcPeerModel = {
             return true;
           });
         });
+
+        // Release media streams.
+        _videostream = releaseWhenLastStream('media:video', _videostream);
+        _screenstream = releaseWhenLastStream('media:screen', _screenstream);
+
+        // Finish up.
         const after = state.current.connections.length;
         const changed = before !== after;
         if (changed) dispatch.connection('purged');
@@ -113,10 +125,10 @@ export const PeerModel: t.WebrtcPeerModel = {
         },
         stream: {
           async video() {
-            return _videostream || (_videostream = await StreamUtil.getVideo());
+            return _videostream || (_videostream = await Stream.getVideo());
           },
           async screen() {
-            return _screenstream || (_screenstream = await StreamUtil.getScreen());
+            return _screenstream || (_screenstream = await Stream.getScreen());
           },
         },
       },

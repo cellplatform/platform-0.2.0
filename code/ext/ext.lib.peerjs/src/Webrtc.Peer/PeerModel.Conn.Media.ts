@@ -1,6 +1,7 @@
-import { Dispatch } from './Dispatch';
 import { getFactory } from './PeerModel.get';
 import { DEFAULTS, Time, type t } from './common';
+import { Dispatch } from './u.Dispatch';
+import { Stream } from './u.Stream';
 import { Wrangle } from './u.Wrangle';
 
 type Id = string;
@@ -54,7 +55,7 @@ export function manageMediaConnection(args: {
             });
           });
           dispatch.connection('start:out', conn);
-          api.monitor('outgoing', conn, localstream, resolve);
+          api.monitor(media, 'outgoing', conn, localstream, resolve);
         });
       },
 
@@ -90,30 +91,43 @@ export function manageMediaConnection(args: {
           );
         }
 
-        api.monitor('incoming', conn, localstream);
+        api.monitor(media, 'incoming', conn, localstream);
         conn.answer(localstream);
         dispatch.connection('start:in', conn);
       },
     },
 
     monitor(
+      media: t.PeerMediaKind,
       direction: t.PeerConnectDirection,
       conn: t.PeerJsConnMedia,
       localstream?: MediaStream,
       resolve?: (e: t.PeerConnectedMedia) => void,
     ) {
       const id = conn.connectionId;
+
+      /**
+       * The screen share may be closed externally within the host OS.
+       */
+      const monitorExternalScreenshareClose = (stream: MediaStream) => {
+        Stream.onEnded(stream, () => {
+          const item = model.current.connections.find((item) => item.id === id);
+          if (item) model.disconnect(item.id);
+        });
+      };
+
       const Handle = {
-        open(remote?: MediaStream) {
+        open(remotestream?: MediaStream) {
           timer?.cancel();
           state.change((d) => {
             const item = Get.conn.item(d, id);
             if (item) {
               const media = item.stream || (item.stream = { self: localstream });
-              media.remote = remote;
+              media.remote = remotestream;
               item.open = true;
             }
           });
+          if (media === 'screen' && localstream) monitorExternalScreenshareClose(localstream);
           dispatch.connection('ready', conn);
           resolve?.({ id });
         },
@@ -139,8 +153,13 @@ export function manageMediaConnection(args: {
         Handle.failure('timed out while connecting media');
       });
 
-      if (direction === 'incoming') conn.on('stream', (remote) => Handle.open(remote));
-      if (direction === 'outgoing') Handle.open();
+      if (media === 'video') {
+        conn.on('stream', (remote) => Handle.open(remote));
+      }
+      if (media === 'screen') {
+        if (direction === 'outgoing') Handle.open();
+        if (direction === 'incoming') conn.on('stream', (remote) => Handle.open(remote));
+      }
       conn.on('close', () => Handle.close());
       conn.on('error', (err) => dispatch.connection('error', conn, err.message));
     },
