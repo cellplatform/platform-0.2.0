@@ -35,6 +35,7 @@ export type PeerConnection = {
   metadata: PeerConnectMetadata;
   stream?: { self?: MediaStream; remote?: MediaStream };
 };
+export type PeerConnectionsByPeer = { [peer: string]: PeerConnection[] };
 
 export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKind;
 export type PeerConnectionDataKind = 'data';
@@ -66,6 +67,7 @@ export type PeerModel = t.Lifecycle & {
 export type PeerModelGet = {
   readonly conn: {
     readonly obj: PeerModelGetConnectionObject;
+    readonly remotes: PeerConnectionsByPeer;
   };
   readonly stream: {
     video(): Promise<MediaStream>;

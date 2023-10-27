@@ -19,6 +19,13 @@ export function getFactory(peerjs: t.PeerJs) {
       itemsByKind(peer: t.Peer, ...match: K[]) {
         return peer.connections.filter((item) => match.includes(item.kind));
       },
+      byRemote(peer: t.Peer): t.PeerConnectionsByPeer {
+        return peer.connections.reduce((acc, next) => {
+          const list = acc[next.peer.remote] ?? (acc[next.peer.remote] = []);
+          list.push(next);
+          return acc;
+        }, {} as t.PeerConnectionsByPeer);
+      },
       objFactory(state: t.PeerModelState) {
         type C = t.PeerJsConn;
         type D = t.PeerJsConnData;
