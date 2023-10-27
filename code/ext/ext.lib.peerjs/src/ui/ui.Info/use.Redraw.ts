@@ -9,7 +9,7 @@ export function useRedraw(data: t.InfoData = {}) {
 
   useEffect(() => {
     const events = peer?.events();
-    events?.cmd.conn$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
+    events?.$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
     return events?.dispose;
   }, [peer?.id]);
 }
