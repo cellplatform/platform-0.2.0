@@ -1,3 +1,21 @@
+import type { t } from './common';
+
+/**
+ * <Component>
+ */
+export type MonacoEditorProps = {
+  text?: string;
+  language?: t.EditorLanguage;
+  theme?: t.EditorTheme;
+  placeholder?: string;
+  focusOnLoad?: boolean;
+  tabSize?: number;
+  style?: t.CssValue;
+  onChange?: t.MonacoEditorChangeHandler;
+  onReady?: t.MonacoEditorReadyHandler;
+  onDispose?: t.MonacoEditorDisposedHandler;
+};
+
 /**
  * REF: https://github.com/suren-atoyan/monaco-react
  *      https://github.com/microsoft/monaco-editor

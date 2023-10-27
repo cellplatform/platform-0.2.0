@@ -1,24 +1,10 @@
-import EditorReact from '@monaco-editor/react';
-import { useEffect, useRef } from 'react';
-
-import { css, DEFAULTS, FC, LANGUAGES, t, Wrangle } from './common';
-
 import type { OnChange, OnMount } from '@monaco-editor/react';
 
-export type MonacoEditorProps = {
-  text?: string;
-  language?: t.EditorLanguage;
-  theme?: t.EditorTheme;
-  placeholder?: string;
-  focusOnLoad?: boolean;
-  tabSize?: number;
-  style?: t.CssValue;
-  onChange?: t.MonacoEditorChangeHandler;
-  onReady?: t.MonacoEditorReadyHandler;
-  onDispose?: t.MonacoEditorDisposedHandler;
-};
+import EditorReact from '@monaco-editor/react';
+import { useEffect, useRef } from 'react';
+import { DEFAULTS, FC, LANGUAGES, Wrangle, css, t } from './common';
 
-const View: React.FC<MonacoEditorProps> = (props) => {
+const View: React.FC<t.MonacoEditorProps> = (props) => {
   const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize, placeholder } = props;
   const theme = Wrangle.toMonacoTheme(props.theme);
 
@@ -98,7 +84,7 @@ type Fields = {
   languages: typeof LANGUAGES;
   className: typeof Wrangle.editorClassName;
 };
-export const MonacoEditor = FC.decorate<MonacoEditorProps, Fields>(
+export const MonacoEditor = FC.decorate<t.MonacoEditorProps, Fields>(
   View,
   {
     DEFAULTS,
