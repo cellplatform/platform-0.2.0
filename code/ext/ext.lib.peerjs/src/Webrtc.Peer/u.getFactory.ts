@@ -1,9 +1,11 @@
 import { type t } from './common';
 
+type K = t.PeerConnectionKind;
+
 export function getFactory(peerjs: t.PeerJs) {
   const api = {
     conn: {
-      peerjs(peer: t.Peer, id: string, ...match: t.PeerConnectionKind[]) {
+      peerjs(peer: t.Peer, id: string, ...match: K[]) {
         const item = api.conn.item(peer, id);
         if (item?.kind && match.length > 0 && !match.includes(item.kind)) return undefined;
         return item ? peerjs.getConnection(item.peer.remote, id) || undefined : undefined;
@@ -14,18 +16,20 @@ export function getFactory(peerjs: t.PeerJs) {
       item(peer: t.Peer, id: string) {
         return peer.connections.find((item) => item.id === id);
       },
-      itemsByKind(peer: t.Peer, ...match: t.PeerConnectionKind[]) {
+      itemsByKind(peer: t.Peer, ...match: K[]) {
         return peer.connections.filter((item) => match.includes(item.kind));
       },
-      obj(state: t.PeerModelState) {
+      objFactory(state: t.PeerModelState) {
+        type C = t.PeerJsConn;
         type D = t.PeerJsConnData;
         type M = t.PeerJsConnMedia;
-        const conn = api.conn;
-        const fn: t.PeerModelGetConnectionObject = (id) => conn.peerjs(state.current, id);
-        fn.data = (id) => conn.peerjs(state.current, id, 'data') as D;
-        fn.media = (id) => conn.peerjs(state.current, id, 'media:video', 'media:screen') as M;
-        fn.video = (id) => conn.peerjs(state.current, id, 'media:video') as M;
-        fn.screen = (id) => conn.peerjs(state.current, id, 'media:screen') as M;
+        const get = <T extends C>(id: string, ...match: K[]) =>
+          api.conn.peerjs(state.current, id, ...match) as T;
+        const fn: t.PeerModelGetConnectionObject = (id) => get(id);
+        fn.data = (id) => get<D>(id, 'data');
+        fn.media = (id) => get<M>(id, 'media:video', 'media:screen');
+        fn.video = (id) => get<M>(id, 'media:video');
+        fn.screen = (id) => get<M>(id, 'media:screen');
         return fn;
       },
     },
