@@ -111,8 +111,8 @@ export const PeerModel: t.WebrtcPeerModel = {
             return Get.conn.object(state.current, id, 'media:screen') as T;
           },
         },
-        media: {
-          async videostream() {
+        stream: {
+          async video() {
             return _videostream || (_videostream = await MediaUtil.getStream());
           },
         },

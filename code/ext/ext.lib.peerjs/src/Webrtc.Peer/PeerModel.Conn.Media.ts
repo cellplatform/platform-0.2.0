@@ -33,7 +33,7 @@ export function manageMediaConnection(args: {
 
           const kind: t.PeerConnectionKind = mediaKind === 'video' ? 'media:video' : 'media:screen';
           const metadata: t.PeerConnectMetadata = { kind, useragent: navigator.userAgent };
-          const localstream = await model.get.media.videostream();
+          const localstream = await model.get.stream.video();
           const conn = peerjs.call(remote, localstream, { metadata });
           const id = conn.connectionId;
           state.change((d) => {
@@ -66,7 +66,7 @@ export function manageMediaConnection(args: {
         const kind = metadata.kind as t.PeerConnectionKind;
         const id = conn.connectionId;
         const remote = conn.peer;
-        const localstream = await model.get.media.videostream();
+        const localstream = await model.get.stream.video();
 
         const exists = Get.conn.exists(state.current, conn.connectionId);
         if (!exists) {

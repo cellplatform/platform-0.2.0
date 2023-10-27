@@ -64,8 +64,8 @@ export type PeerModel = t.Lifecycle & {
       video(id: Id): t.PeerJsConnMedia | undefined;
       screen(id: Id): t.PeerJsConnMedia | undefined;
     };
-    media: {
-      videostream(): Promise<MediaStream>;
+    stream: {
+      video(): Promise<MediaStream>;
       // screen(): Promise<MediaStream>;
     };
   };
