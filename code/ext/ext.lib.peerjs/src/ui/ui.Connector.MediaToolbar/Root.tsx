@@ -1,18 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Button, Icons } from './common';
-import { Media } from './Media';
-import { useMediaStream } from './use.MediaStream';
 
 const View: React.FC<t.MediaToolbarProps> = (props) => {
-  const media = useMediaStream();
-
-  const connectMedia = async () => {
-    media.start();
-  };
-
-  const stopMedia = async () => {
-    media.stop();
-  };
+  const connectMedia = async () => {};
+  const stopMedia = async () => {};
 
   /**
    * [Render]

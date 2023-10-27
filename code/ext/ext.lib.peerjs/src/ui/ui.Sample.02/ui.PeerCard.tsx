@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MediaStream } from 'sys.ui.react.media';
 import { COLORS, Color, Icons, ObjectView, Time, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
@@ -31,7 +32,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     });
 
     events.cmd.conn$.pipe(rx.filter((e) => Boolean(e.error))).subscribe((e) => {
-      console.log('error', e.error);
+      console.info('conn$.error:', e.error);
     });
 
     return events.dispose;
@@ -42,10 +43,11 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
    */
   const handlePurge = () => self?.purge();
   const handleConnectData = () => self?.connect.data(props.peer.remote.id);
+  const handleConnectMeda = () => self?.connect.video(props.peer.remote.id);
   const handlePeerDispose = () => self.dispose();
   const handleCloseConnection = (connid: string) => self?.disconnect(connid);
   const handleSendData = (connid: string) => {
-    const conn = self?.get.dataConnection(connid);
+    const conn = self?.get.conn.data(connid);
     conn?.send('hello');
   };
 
@@ -67,6 +69,8 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     title: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
     ul: css({ margin: 0, lineHeight: 1.5 }),
     connection: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
+    connectionButtons: css({ Flex: 'x-center-center' }),
+    video: css({ Size: 21, marginLeft: 10 }),
   };
 
   const button = (label: string, handler?: () => void) => {
@@ -81,13 +85,30 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
     <div {...styles.section}>
       <ul {...styles.ul}>
         {(self?.current.connections ?? []).map((conn, i) => {
+          const button = (label: string, handler?: () => void) => {
+            return (
+              <Button onClick={handler} style={{ Margin: [0, 0, 0, 10] }}>
+                {label}
+              </Button>
+            );
+          };
+
+          const opacity = conn.open ? 1 : 0.3;
+          const elSend = conn.kind === 'data' && button('send', () => handleSendData(conn.id));
+
+          const stream = conn.stream?.remote;
+          const elStream = stream && (
+            <MediaStream.Video stream={stream} style={styles.video} borderRadius={4} muted={true} />
+          );
+
           return (
             <li key={conn.id}>
               <div {...styles.connection}>
-                <div>{conn.id}</div>
-                <div>
-                  <Button onClick={() => handleSendData(conn.id)}>send</Button>
-                  <Button onClick={() => handleCloseConnection(conn.id)}>close</Button>
+                <div style={{ opacity }}>{conn.id}</div>
+                <div {...styles.connectionButtons}>
+                  {elSend}
+                  {elStream}
+                  {button('close', () => handleCloseConnection(conn.id))}
                 </div>
               </div>
             </li>
@@ -113,6 +134,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       <div {...styles.section}>
         <ul {...styles.ul}>
           {button('peer.connect.data', handleConnectData)}
+          {button('peer.connect.media', handleConnectMeda)}
           {button('peer.dispose', handlePeerDispose)}
           {button('purge', handlePurge)}
         </ul>
