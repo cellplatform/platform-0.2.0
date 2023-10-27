@@ -4,20 +4,37 @@ import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 import { Connector } from '.';
 import { Info } from '../ui.Info';
 
-type T = {};
-const initial: T = {};
+type T = { props: t.ConnectorProps };
+const initial: T = {
+  props: {},
+};
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
+  type LocalStore = t.ConnectorPropsBehavior;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
+  const local = localstore.object({
+    grabFocusOnArrowKey: true,
+  });
+
+  const State = {
+    behavior(props: t.ConnectorProps): t.ConnectorPropsBehavior {
+      return props.behavior || (props.behavior = {});
+    },
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      const b = State.behavior(d.props);
+      b.grabFocusOnArrowKey = local.grabFocusOnArrowKey;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -30,7 +47,7 @@ export default Dev.describe(name, (e) => {
           opacity: 0.2,
           prefix: 'list.render-',
         };
-        return <Connector peer={self} debug={{ renderCount }} />;
+        return <Connector {...e.state.props} peer={self} debug={{ renderCount }} />;
       });
   });
 
@@ -55,6 +72,23 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
     dev.row((e) => <PeerCard prefix={'peer.remote:'} peer={{ self: remote, remote: self }} />);
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.grabFocusOnArrowKey);
+        btn
+          .label((e) => `grabFocusOnArrowKey`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const behavior = State.behavior(d.props);
+              local.grabFocusOnArrowKey = Dev.toggle(behavior, 'grabFocusOnArrowKey');
+            }),
+          );
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Model, rx, type t } from './common';
 import { List } from './ui.List';
+import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.ConnectorProps> = (props) => {
-  const { peer, debug } = props;
+  const { peer, debug, behavior = {} } = props;
   const [list, setList] = useState<t.LabelListState>();
 
+  useKeyboard({ list, behavior });
+
   /**
-   * Lifecycle
+   * (Lifecycle):
+   * Initialize the list model.
    */
   useEffect(() => {
     const { dispose$, dispose } = rx.disposable();

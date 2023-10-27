@@ -6,8 +6,13 @@ import type { t } from './common';
 export type ConnectorProps = {
   peer?: t.PeerModel;
   debug?: { renderCount?: t.RenderCountProps };
+  behavior?: t.ConnectorPropsBehavior;
   style?: t.CssValue;
-  onReady?: ConnectorReadyHandler;
+  onReady?: t.ConnectorReadyHandler;
+};
+
+export type ConnectorPropsBehavior = {
+  grabFocusOnArrowKey?: boolean;
 };
 
 /**
