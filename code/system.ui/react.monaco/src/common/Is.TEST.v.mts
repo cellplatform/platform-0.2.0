@@ -1,4 +1,4 @@
-import { DEFAULTS, describe, expect, it, t } from '../test';
+import { DEFAULTS, describe, expect, it, type t } from '../test';
 import { Is } from './Is.mjs';
 import { Wrangle } from './Wrangle.mjs';
 

@@ -1,10 +1,10 @@
-import { MonacoEditor, MonacoEditorProps } from '.';
-import { Dev, Wrangle, t, EditorCarets } from '../../test.ui';
+import { MonacoEditor } from '.';
+import { Dev, EditorCarets, Wrangle, type t } from '../../test.ui';
 import { CODE_SAMPLES } from './-Sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
-type T = { props: MonacoEditorProps };
+type T = { props: t.MonacoEditorProps };
 const initial: T = {
   props: {
     text: '',
