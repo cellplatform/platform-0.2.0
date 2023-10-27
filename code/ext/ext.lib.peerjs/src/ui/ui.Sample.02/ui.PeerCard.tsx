@@ -47,7 +47,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
   const handlePeerDispose = () => self.dispose();
   const handleCloseConnection = (connid: string) => self?.disconnect(connid);
   const handleSendData = (connid: string) => {
-    const conn = self?.get.conn.data(connid);
+    const conn = self?.get.conn.obj.data(connid);
     conn?.send('hello');
   };
 
