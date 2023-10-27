@@ -119,6 +119,15 @@ export function manageMediaConnection(args: {
         });
 
       conn.on('stream', (remote) => handleOpen(remote));
+
+      conn.on('close', () => {
+        state.change((d) => (d.connections = d.connections.filter((item) => item.id !== id)));
+        model.disconnect(id);
+        dispatch.connection('closed', conn);
+      });
+
+      conn.on('error', (err) => dispatch.connection('error', conn, err.message));
+
       const timeout = DEFAULTS.connectionTimeout;
       const timer = Time.delay(timeout, () => handleFailure('timed out while connecting media'));
     },
