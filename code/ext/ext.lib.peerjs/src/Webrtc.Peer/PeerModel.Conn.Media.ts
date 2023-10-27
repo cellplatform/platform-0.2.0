@@ -1,4 +1,4 @@
-import { DEFAULTS, Time, type t } from './common';
+import { DEFAULTS, Is, Time, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
 import { Wrangle } from './u.Wrangle';
@@ -65,7 +65,7 @@ export function manageMediaConnection(args: {
        */
       async incoming(conn: t.PeerJsConnMedia) {
         const metadata = Wrangle.metadata(conn);
-        if (!(metadata.kind === 'media:video' || metadata.kind === 'media:screen')) {
+        if (!Is.kindMedia(metadata.kind)) {
           const message = `Failed to establish incoming call. Incoming connnection not of type "media".`;
           dispatch.error(message);
           return;

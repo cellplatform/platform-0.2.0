@@ -1,7 +1,7 @@
-import { getFactory } from './u.getFactory';
-import { DEFAULTS, Time, slug, type t } from './common';
+import { DEFAULTS, Is, Time, slug, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Wrangle } from './u.Wrangle';
+import { getFactory } from './u.getFactory';
 
 type Id = string;
 
@@ -101,7 +101,7 @@ export function manageDataConnection(args: {
 
       conn.on('close', () => {
         state.current.connections
-          .filter(({ kind }) => kind === 'media:video' || kind === 'media:screen')
+          .filter(({ kind }) => Is.kindMedia(kind))
           .filter(({ peer }) => peer.remote === conn.peer)
           .forEach(({ id }) => model.disconnect(id)); // Close child-media connections.
 
