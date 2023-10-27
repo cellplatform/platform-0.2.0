@@ -41,4 +41,24 @@ describe('Is', () => {
       test(PeerUri.generate(false)); // NB: id only
     });
   });
+
+  describe('Is.<kind>', () => {
+    const NOT = [null, undefined, 123, {}, [], true, '', ' ', 'foo'];
+
+    it('Is.kindData', () => {
+      const test = (input: any, expected: boolean) => expect(Is.kindData(input)).to.eql(expected);
+      NOT.forEach((v) => test(v, false));
+      test(' data ', false);
+      test('data', true);
+    });
+
+    it('Is.kindMedia', () => {
+      const test = (input: any, expected: boolean) => expect(Is.kindMedia(input)).to.eql(expected);
+      NOT.forEach((v) => test(v, false));
+      test(' media:video ', false);
+      test(' media:screen ', false);
+      test('media:video', true);
+      test('media:screen', true);
+    });
+  });
 });
