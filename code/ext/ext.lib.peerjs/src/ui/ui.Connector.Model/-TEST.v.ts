@@ -4,7 +4,7 @@ import { Data } from './u.Data';
 
 describe('Connector.Model', () => {
   const peer = Webrtc.peer();
-  const { ctx } = Model.List.init({ peer });
+  const { ctx } = Model.List.init(peer);
 
   describe('Self', () => {
     it('state', () => {
@@ -23,7 +23,7 @@ describe('Connector.Model', () => {
 
   describe('List', () => {
     it('state', () => {
-      const { list } = Model.List.init({ peer });
+      const { list } = Model.List.init(peer);
       expect(list.current.total).to.eql(2);
       expect(list.current.getItem).to.be.a('function');
     });

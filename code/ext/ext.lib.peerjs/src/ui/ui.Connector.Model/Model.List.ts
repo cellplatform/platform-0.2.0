@@ -1,14 +1,13 @@
 import { Renderers } from '../ui.Connector/Renderers';
 import { Remote } from './Model.Remote';
 import { Self } from './Model.Self';
-import { Model, type t, rx } from './common';
+import { Model, rx, type t } from './common';
 
 export const List = {
   /**
    * Initialize a new [List] controller model.
    */
-  init(options: { peer: t.PeerModel }) {
-    const { peer } = options;
+  init(peer: t.PeerModel) {
     const lifecycle = rx.lifecycle(peer.dispose$);
     const { dispose$, dispose } = lifecycle;
 

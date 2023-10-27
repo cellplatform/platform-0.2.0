@@ -1,5 +1,5 @@
-import { Data } from './u.Data';
 import { DEFAULTS, Model, Time, slug, type t } from './common';
+import { Data } from './u.Data';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -16,11 +16,8 @@ export function openConnectionBehavior(args: {
     if (data.stage === 'Connecting' || data.stage === 'Connected') return;
     if (data.closePending) return;
 
-    const remoteid = data.remoteid ?? '';
-    if (!remoteid) {
-      // TODO: surface problem to UI
-      return;
-    }
+    const remoteid = (data.remoteid ?? '').trim();
+    if (!remoteid) return;
 
     const connecting = (value: boolean) => {
       state.change((item) => {

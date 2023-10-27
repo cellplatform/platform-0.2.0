@@ -44,7 +44,6 @@ export function clipboardBehavior(args: {
 
     state.change((item) => {
       const data = Data.remote(item);
-      data.remoteid = remoteid;
 
       if (!isValid) data.error = { type: 'InvalidPeer', tx };
       else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
@@ -53,6 +52,7 @@ export function clipboardBehavior(args: {
 
       item.label = remoteid;
       if (data.error) item.label = undefined;
+      data.remoteid = data.error ? undefined : remoteid;
     });
 
     redraw();

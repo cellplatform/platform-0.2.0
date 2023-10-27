@@ -12,7 +12,7 @@ const name = Connector.displayName ?? '';
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
-  const { list } = Connector.Model.List.init({ peer: self });
+  const { list } = Connector.Model.List.init(self);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
