@@ -66,13 +66,14 @@ export type PeerModel = t.Lifecycle & {
     };
     media: {
       videostream(): Promise<MediaStream>;
+      // screen(): Promise<MediaStream>;
     };
   };
 };
 
 export type PeerMediaKind = 'video' | 'screen';
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
-export type PeerConnectedData = { id: Id; error?: string };
+export type PeerConnectedData = { id: Id; conn: t.PeerJsConnData; error?: string };
 export type PeerConnectedMedia = { id: Id; error?: string };
 
 /**

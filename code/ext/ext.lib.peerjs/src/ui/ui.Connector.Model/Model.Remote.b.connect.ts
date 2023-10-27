@@ -32,7 +32,7 @@ export function openConnectionBehavior(args: {
     };
 
     connecting(true);
-    const { error } = await peer.connect.data(remoteid);
+    const { conn, error } = await peer.connect.data(remoteid);
     connecting(false);
 
     if (error) {

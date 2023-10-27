@@ -43,7 +43,7 @@ export function manageDataConnection(args: {
               if (!item) return handleFailure('failed to retrieve connection model');
               item.open = true;
               dispatch.connection('ready', conn);
-              resolve({ id });
+              resolve({ id, conn });
             });
 
           const handleFailure = (error: string) =>
@@ -51,7 +51,7 @@ export function manageDataConnection(args: {
               const item = Get.conn.item(d, id);
               if (item) item.open = false;
               dispatch.connection('error', conn, error);
-              resolve({ id, error });
+              resolve({ id, conn, error });
             });
 
           conn.on('open', handleOpen);
