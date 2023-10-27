@@ -1,6 +1,6 @@
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { Dispatch } from './Dispatch';
-import { MediaUtil } from './Media';
+import { StreamUtil } from './u.Stream';
 import { manageDataConnection } from './PeerModel.Conn.Data';
 import { manageMediaConnection } from './PeerModel.Conn.Media';
 import { eventFactory } from './PeerModel.events';
@@ -113,7 +113,10 @@ export const PeerModel: t.WebrtcPeerModel = {
         },
         stream: {
           async video() {
-            return _videostream || (_videostream = await MediaUtil.getStream());
+            return _videostream || (_videostream = await StreamUtil.getUserVideo());
+          },
+          async screen() {
+            return _screenstream || (_screenstream = await StreamUtil.getUserScreen());
           },
         },
       },

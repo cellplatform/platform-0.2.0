@@ -1,7 +1,7 @@
 import { Dispatch } from './Dispatch';
 import { getFactory } from './PeerModel.get';
-import { Wrangle } from './Wrangle';
 import { DEFAULTS, Time, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type Id = string;
 

@@ -1,5 +1,5 @@
 import { slug, type t } from './common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u.Wrangle';
 
 export const Dispatch = {
   common(peer: t.PeerModel) {
