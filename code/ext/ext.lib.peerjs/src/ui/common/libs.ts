@@ -19,4 +19,9 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
+export { MediaStream } from 'sys.ui.react.media';
+
+/**
+ * @local
+ */
 export { PeerUri, Webrtc } from '../../Webrtc';

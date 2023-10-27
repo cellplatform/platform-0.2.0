@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MediaStream } from 'sys.ui.react.media';
-import { COLORS, Color, Icons, ObjectView, Time, css, rx, type t } from './common';
+import { COLORS, Color, Icons, MediaStream, ObjectView, Time, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
 export type PeerCardProps = {

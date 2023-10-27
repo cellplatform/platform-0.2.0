@@ -8,6 +8,8 @@ import {
   MdRefresh,
   MdSettingsInputAntenna,
   MdWarning,
+  MdFace,
+  MdDvr,
 } from 'react-icons/md';
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -18,6 +20,8 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Face: icon(MdFace),
+  Screen: icon(MdDvr),
   Close: icon(MdClose),
   Refresh: icon(MdRefresh),
   Copy: icon(MdContentCopy),
