@@ -25,8 +25,8 @@ const View: React.FC<InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => fieldModuleVerify(data))
-    .field('Component', { label: 'Component', value: data.component?.name ?? 'Unnamed' })
-    .field('Peer', fieldPeer(data))
+    .field('Component', { label: 'Component', value: data.component?.name ?? '(Unnamed)' })
+    .field('Peer', () => fieldPeer(data, fields))
     .items(fields);
 
   return (
