@@ -5,7 +5,7 @@ export const StreamUtil = {
     stream?.getTracks().forEach((track) => track.stop());
   },
 
-  async getUserVideo() {
+  async getVideo() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -21,7 +21,7 @@ export const StreamUtil = {
     }
   },
 
-  async getUserScreen() {
+  async getScreen() {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: true,

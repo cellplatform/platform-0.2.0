@@ -67,7 +67,7 @@ export const PeerModel: t.WebrtcPeerModel = {
 
       connect: {
         data: (remoteid) => Data.start.outgoing(remoteid),
-        video: (remoteid) => Media.start.outgoing('video', remoteid),
+        media: (kind, remoteid) => Media.start.outgoing(kind, remoteid),
       },
 
       disconnect(id) {
@@ -113,10 +113,10 @@ export const PeerModel: t.WebrtcPeerModel = {
         },
         stream: {
           async video() {
-            return _videostream || (_videostream = await StreamUtil.getUserVideo());
+            return _videostream || (_videostream = await StreamUtil.getVideo());
           },
           async screen() {
-            return _screenstream || (_screenstream = await StreamUtil.getUserScreen());
+            return _screenstream || (_screenstream = await StreamUtil.getScreen());
           },
         },
       },

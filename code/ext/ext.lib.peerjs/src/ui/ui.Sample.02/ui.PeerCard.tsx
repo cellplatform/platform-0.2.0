@@ -43,7 +43,8 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
    */
   const handlePurge = () => self?.purge();
   const handleConnectData = () => self?.connect.data(props.peer.remote.id);
-  const handleConnectMedia = () => self?.connect.video(props.peer.remote.id);
+  const handleConnectVideo = () => self?.connect.media('video', props.peer.remote.id);
+  const handleConnectScreen = () => self?.connect.media('screen', props.peer.remote.id);
   const handlePeerDispose = () => self.dispose();
   const handleCloseConnection = (connid: string) => self?.disconnect(connid);
   const handleSendData = (connid: string) => {
@@ -134,7 +135,8 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
       <div {...styles.section}>
         <ul {...styles.ul}>
           {button('peer.connect.data', handleConnectData)}
-          {button('peer.connect.media', handleConnectMedia)}
+          {button('peer.connect.media.video', handleConnectVideo)}
+          {button('peer.connect.media.screen', handleConnectScreen)}
           {button('peer.dispose', handlePeerDispose)}
           {button('purge', handlePurge)}
         </ul>
