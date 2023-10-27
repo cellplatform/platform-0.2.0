@@ -17,7 +17,7 @@ export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
    * Root Peer (Self)
    */
   const root: P = {
-    label: peer ? `Peer (${peer.id})` : 'Peer',
+    label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
       data: Wrangle.rootLabel(current),
       opacity: current?.open ? 1 : 0.3,
@@ -33,8 +33,8 @@ export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
     const peers = peer.get.conn.remotes;
     Object.keys(peers).forEach((remoteid) => {
       remotes.push({
-        indent: 20,
-        label: PeerUri.prepend(remoteid, 'peer'),
+        indent: 15,
+        label: `remote: ${remoteid}`,
         value: (
           <div {...styles.conn}>
             <div>{Wrangle.remotesLabel(peers[remoteid])}</div>
