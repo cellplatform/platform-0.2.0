@@ -1,5 +1,8 @@
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
-import { manageDataConnection } from './PeerModel.DataConnection';
+import { Dispatch } from './Dispatch';
+import { MediaUtil } from './Media';
+import { manageDataConnection } from './PeerModel.Conn.Data';
+import { manageMediaConnection } from './PeerModel.Conn.Media';
 import { eventFactory } from './PeerModel.events';
 import { getFactory } from './PeerModel.get';
 import { PatchState, rx, type t } from './common';
@@ -20,11 +23,11 @@ export const PeerModel: t.WebrtcPeerModel = {
   /**
    * Wrap a PeerJS object with a stateful management model.
    */
-  wrap(peer, dispose$) {
+  wrap(peerjs, dispose$) {
     const lifecycle = rx.lifecycle(dispose$);
-    lifecycle.dispose$.subscribe(() => peer.destroy());
+    lifecycle.dispose$.subscribe(() => peerjs.destroy());
 
-    const Get = getFactory(peer);
+    const Get = getFactory(peerjs);
     const initial: t.Peer = { open: false, connections: [] };
     const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
@@ -40,43 +43,42 @@ export const PeerModel: t.WebrtcPeerModel = {
     /**
      * PeerJS Events.
      */
-    peer.on('open', () => state.change((d) => (d.open = true)));
-    peer.on('close', () => state.change((d) => (d.open = false)));
-    peer.on('connection', (conn) => Data.start.incoming(conn));
+    peerjs.on('open', () => state.change((d) => (d.open = true)));
+    peerjs.on('close', () => state.change((d) => (d.open = false)));
+    peerjs.on('connection', (conn) => Data.start.incoming(conn));
+    peerjs.on('call', (conn) => Media.start.incoming(conn));
 
-    peer.on('call', (e) => {
-      /**
-       * TODO 🐷 Incoming Media Connections
-       */
-      console.log('call', e);
-    });
+    /**
+     * Media streams.
+     */
+    let _videostream: MediaStream | undefined;
+    let _screenstream: MediaStream | undefined;
 
     /**
      * API
      */
     const model: t.PeerModel = {
-      id: peer.id,
+      id: peerjs.id,
+      dispatch: PatchState.Command.dispatcher<t.PeerModelCmd>(state),
       events: (dispose$?: t.UntilObservable) => state.events(dispose$),
       get current() {
         return state.current;
       },
 
       connect: {
-        data(remotePeer: string) {
-          return Data.start.outgoing(remotePeer);
-        },
+        data: (remoteid) => Data.start.outgoing(remoteid),
+        video: (remoteid) => Media.start.outgoing('video', remoteid),
       },
 
       disconnect(id) {
         if (!id) return;
-        model.get.connection(id)?.close();
+        model.get.conn.obj(id)?.close();
         model.purge();
       },
 
       purge() {
         const before = state.current.connections.length;
         state.change((d) => {
-          const total = d.connections.length;
           d.connections = d.connections.filter((item) => {
             if (item.open === false) return false;
             if (Get.conn.object(d, item.id)?.open === false) return false;
@@ -85,19 +87,34 @@ export const PeerModel: t.WebrtcPeerModel = {
         });
         const after = state.current.connections.length;
         const changed = before !== after;
-        if (changed) Data.dispatch.connection('purged');
+        if (changed) dispatch.connection('purged');
         return { changed, total: { before, after } };
       },
 
       get: {
-        connection(id) {
-          return Get.conn.object(state.current, id);
+        conn: {
+          obj: (id) => Get.conn.object(state.current, id),
+          data(id) {
+            type T = t.PeerJsConnData;
+            return Get.conn.object(state.current, id, 'data') as T;
+          },
+          media(id) {
+            type T = t.PeerJsConnMedia;
+            return Get.conn.object(state.current, id, 'media:video', 'media:screen') as T;
+          },
+          video(id) {
+            type T = t.PeerJsConnMedia;
+            return Get.conn.object(state.current, id, 'media:video') as T;
+          },
+          screen(id) {
+            type T = t.PeerJsConnMedia;
+            return Get.conn.object(state.current, id, 'media:screen') as T;
+          },
         },
-        dataConnection(id) {
-          return Get.conn.object(state.current, id, 'data') as t.PeerJsConnData;
-        },
-        mediaConnection(id) {
-          return Get.conn.object(state.current, id, 'media') as t.PeerJsConnMedia;
+        media: {
+          async videostream() {
+            return _videostream || (_videostream = await MediaUtil.getStream());
+          },
         },
       },
 
@@ -111,7 +128,9 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
     };
 
-    const Data = manageDataConnection({ peer, model, state });
+    const dispatch = Dispatch.common(model);
+    const Data = manageDataConnection({ peerjs, model, state });
+    const Media = manageMediaConnection({ peerjs, model, state });
     return model;
   },
 };

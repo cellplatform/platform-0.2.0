@@ -27,10 +27,19 @@ export type Peer = {
  * A single peer-connection details
  */
 export type PeerConnection = {
-  kind: 'data' | 'media';
+  kind: PeerConnectionKind;
   id: string;
   peer: { self: Id; remote: Id };
   open: boolean | null; // NB: null while initializing.
+  direction: 'incoming' | 'outgoing';
+  metadata: PeerConnectMetadata;
+  stream?: { self?: MediaStream; remote?: MediaStream };
+};
+
+export type PeerConnectionKind = 'data' | 'media:video' | 'media:screen';
+export type PeerConnectMetadata = {
+  kind: PeerConnectionKind | 'unknown';
+  useragent: string;
 };
 
 /**
@@ -39,20 +48,32 @@ export type PeerConnection = {
 export type PeerModel = t.Lifecycle & {
   id: Id;
   current: t.Peer;
+  dispatch: t.PeerModelDispatch;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): { changed: boolean; total: { before: number; after: number } };
   disconnect(id: Id): void;
   connect: {
-    data(remotePeer: Id): Promise<t.PeerConnectedData>;
+    data(remoteid: Id): Promise<t.PeerConnectedData>;
+    video(remoteid: Id): Promise<t.PeerConnectedMedia>;
   };
   get: {
-    connection(id: Id): t.PeerJsConn | undefined;
-    dataConnection(id: Id): t.PeerJsConnData | undefined;
-    mediaConnection(id: Id): t.PeerJsConnMedia | undefined;
+    conn: {
+      obj(id: Id): t.PeerJsConn | undefined;
+      data(id: Id): t.PeerJsConnData | undefined;
+      media(id: Id): t.PeerJsConnMedia | undefined;
+      video(id: Id): t.PeerJsConnMedia | undefined;
+      screen(id: Id): t.PeerJsConnMedia | undefined;
+    };
+    media: {
+      videostream(): Promise<MediaStream>;
+    };
   };
 };
 
-export type PeerConnectedData = { id: Id; conn: t.PeerJsConnData; error?: string };
+export type PeerMediaKind = 'video' | 'screen';
+export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
+export type PeerConnectedData = { id: Id; error?: string };
+export type PeerConnectedMedia = { id: Id; error?: string };
 
 /**
  * Stateful immutable model (JSON patch).
@@ -70,13 +91,20 @@ export type PeerModelEvents = t.Lifecycle & {
     readonly data$: t.Observable<t.PeerModelDataCmdArgs>;
     readonly conn$: t.Observable<t.PeerModelConnCmdArgs>;
     readonly purge$: t.Observable<t.PeerModelPurgeCmdArgs>;
+    readonly error$: t.Observable<t.PeerModelErrorCmdArgs>;
   };
 };
 
 /**
  * Event Commands
  */
-export type PeerModelCmd = PeerModelConnCmd | PeerModelDataCmd | PeerModelPurgeCmd;
+export type PeerModelDispatch = (cmd: PeerModelCmd) => void;
+
+export type PeerModelCmd =
+  | PeerModelConnCmd
+  | PeerModelDataCmd
+  | PeerModelPurgeCmd
+  | PeerModelErrorCmd;
 
 export type PeerModelConnAction =
   | 'start:out'
@@ -105,3 +133,6 @@ export type PeerModelDataCmdArgs<D extends unknown = unknown> = {
 
 export type PeerModelPurgeCmd = { type: 'Peer:Purge'; payload: PeerModelPurgeCmdArgs };
 export type PeerModelPurgeCmdArgs = { tx: string };
+
+export type PeerModelErrorCmd = { type: 'Peer:Error'; payload: PeerModelErrorCmdArgs };
+export type PeerModelErrorCmdArgs = { tx: string; message: string };

@@ -13,12 +13,13 @@ export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> =
     data$: rx.payload<t.PeerModelDataCmd>(cmd$, 'Peer:Data'),
     conn$: rx.payload<t.PeerModelConnCmd>(cmd$, 'Peer:Connection'),
     purge$: rx.payload<t.PeerModelPurgeCmd>(cmd$, 'Peer:Purge'),
+    error$: rx.payload<t.PeerModelErrorCmd>(cmd$, 'Peer:Error'),
   };
 
   /**
    * API
    */
-  return {
+  const api: t.PeerModelEvents = {
     $,
     cmd,
 
@@ -31,4 +32,5 @@ export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> =
       return lifecycle.disposed;
     },
   };
+  return api;
 };

@@ -11,4 +11,9 @@ export const Wrangle = {
     const remote = conn.peer;
     return { id, peer: { self, remote } };
   },
+
+  metadata(conn: t.PeerJsConn): t.PeerConnectMetadata {
+    if (!conn.metadata) return { kind: 'unknown', useragent: '' };
+    return conn.metadata as t.PeerConnectMetadata;
+  },
 } as const;

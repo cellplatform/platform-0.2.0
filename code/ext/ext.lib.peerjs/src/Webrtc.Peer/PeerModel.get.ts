@@ -5,9 +5,9 @@ export function getFactory(peer: t.PeerJs) {
     conn: {
       exists: (s: t.Peer, id: string) => Boolean(api.conn.item(s, id)),
       item: (s: t.Peer, id: string) => s.connections.find((item) => item.id === id),
-      object(s: t.Peer, id: string, kind?: t.PeerConnection['kind']) {
+      object(s: t.Peer, id: string, ...match: t.PeerConnection['kind'][]) {
         const item = api.conn.item(s, id);
-        if (kind && item?.kind !== kind) return undefined;
+        if (item?.kind && match.length > 0 && !match.includes(item.kind)) return undefined;
         return item ? peer.getConnection(item.peer.remote, id) || undefined : undefined;
       },
     },
