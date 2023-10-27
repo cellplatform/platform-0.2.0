@@ -77,7 +77,7 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Properties', (dev) => {
+    dev.section('Props: Behavior', (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.behavior?.grabFocusOnArrowKey);
         btn
