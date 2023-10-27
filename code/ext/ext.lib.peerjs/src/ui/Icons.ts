@@ -10,6 +10,7 @@ import {
   MdWarning,
   MdFace,
   MdDvr,
+  MdElectricalServices,
 } from 'react-icons/md';
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -32,4 +33,5 @@ export const Icons = {
   Error: icon(MdErrorOutline),
   Warning: icon(MdWarning),
   Antenna: icon(MdSettingsInputAntenna),
+  Plug: icon(MdElectricalServices),
 } as const;
