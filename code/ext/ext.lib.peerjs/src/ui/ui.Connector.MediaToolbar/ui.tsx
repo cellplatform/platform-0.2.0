@@ -10,9 +10,7 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
 
   useEffect(() => {
     const events = peer?.events();
-
     events?.cmd.conn$.subscribe(redraw);
-
     return events?.dispose;
   }, [peer?.id]);
 
