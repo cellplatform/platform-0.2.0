@@ -1,30 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Button, Icons } from './common';
-
-const View: React.FC<t.MediaToolbarProps> = (props) => {
-  const connectMedia = async () => {};
-  const stopMedia = async () => {};
-
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      position: 'relative',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-    tmp: css({ fontSize: 11 }),
-  };
-
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.tmp}>
-        <Button onClick={connectMedia}>{'🐷'}</Button>
-        <Button onClick={stopMedia}>{'🐷'}</Button>
-      </div>
-    </div>
-  );
-};
+import { DEFAULTS, FC, type t } from './common';
+import { View } from './ui';
 
 /**
  * Export

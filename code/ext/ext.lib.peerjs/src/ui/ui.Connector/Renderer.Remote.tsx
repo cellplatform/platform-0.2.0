@@ -76,7 +76,14 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         }
 
         if (stage === 'Connected') {
-          return <MediaToolbar peer={args.ctx().peer} selected={e.selected} focused={e.focused} />;
+          return (
+            <MediaToolbar
+              connid={data.connid}
+              peer={args.ctx().peer}
+              selected={e.selected}
+              focused={e.focused}
+            />
+          );
         }
 
         if (stage === 'Connecting' || (e.selected && data.remoteid)) {

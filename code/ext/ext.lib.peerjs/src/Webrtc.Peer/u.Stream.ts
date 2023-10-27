@@ -15,7 +15,6 @@ export const Stream = {
    * Retrieve a video camera stream.
    */
   async getVideo() {
-    console.log('get new video');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -35,7 +34,6 @@ export const Stream = {
    * Retrieve a screen share stream.
    */
   async getScreen() {
-    console.log('get new screenshare');
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: true,

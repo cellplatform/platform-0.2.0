@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type MediaToolbarProps = {
   peer?: t.PeerModel;
+  connid?: string;
   selected?: boolean;
   focused?: boolean;
   style?: t.CssValue;

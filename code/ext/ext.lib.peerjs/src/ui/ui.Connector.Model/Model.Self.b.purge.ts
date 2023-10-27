@@ -31,8 +31,8 @@ export function purgeBehavior(args: {
 
       const tx = slug();
       const message = res.changed
-        ? `${res.total.after} ${Value.plural(res.total.after, 'item', 'items')} purged`
-        : 'no change';
+        ? `(${res.total.after} ${Value.plural(res.total.after, 'item', 'items')} purged)`
+        : '(no change)';
       state.change((item) => (Data.self(item).actionCompleted = { tx, message }));
       redraw();
 
