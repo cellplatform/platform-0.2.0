@@ -45,7 +45,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.row((e) => (
       <Info
-        fields={['Module', 'Component', 'Peer']}
+        fields={['Module', 'Component', 'Peer', 'Peer.Remotes']}
         data={{ component: { name }, peer: { self } }}
       />
     ));
