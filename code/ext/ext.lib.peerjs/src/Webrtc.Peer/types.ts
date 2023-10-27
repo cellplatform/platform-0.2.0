@@ -36,8 +36,11 @@ export type PeerConnection = {
   stream?: { self?: MediaStream; remote?: MediaStream };
 };
 
+export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKind;
+export type PeerConnectionDataKind = 'data';
+export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
+
 export type PeerConnectDirection = 'incoming' | 'outgoing';
-export type PeerConnectionKind = 'data' | 'media:video' | 'media:screen';
 export type PeerConnectMetadata = {
   kind: PeerConnectionKind | 'unknown';
   useragent: string;
@@ -55,7 +58,7 @@ export type PeerModel = t.Lifecycle & {
   disconnect(id: Id): void;
   connect: {
     data(remoteid: Id): Promise<t.PeerConnectedData>;
-    media(kind: t.PeerMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
+    media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
   };
   get: {
     conn: {
@@ -72,7 +75,6 @@ export type PeerModel = t.Lifecycle & {
   };
 };
 
-export type PeerMediaKind = 'video' | 'screen';
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
 export type PeerConnectedData = { id: Id; conn: t.PeerJsConnData; error?: string };
 export type PeerConnectedMedia = { id: Id; error?: string };

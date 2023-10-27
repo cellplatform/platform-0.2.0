@@ -16,9 +16,9 @@ export function manageMediaConnection(args: {
   const Get = getFactory(peerjs);
   const dispatch = Dispatch.common(model);
 
-  const getStream = (kind: t.PeerMediaKind) => {
-    if (kind === 'video') return model.get.stream.video();
-    if (kind === 'screen') return model.get.stream.screen();
+  const getStream = (kind: t.PeerConnectionMediaKind) => {
+    if (kind === 'media:video') return model.get.stream.video();
+    if (kind === 'media:screen') return model.get.stream.screen();
     throw new Error(`media kind "${kind}" not supported`);
   };
 
@@ -27,7 +27,7 @@ export function manageMediaConnection(args: {
       /**
        * Start an outgoing data connection.
        */
-      async outgoing(media: t.PeerMediaKind, remote: Id) {
+      async outgoing(media: t.PeerConnectionMediaKind, remote: Id) {
         return new Promise<t.PeerConnectedMedia>(async (resolve) => {
           const existingDataConn = model.current.connections
             .filter((item) => item.kind === 'data')
@@ -38,7 +38,8 @@ export function manageMediaConnection(args: {
             return resolve({ id: '', error });
           }
 
-          const kind: t.PeerConnectionKind = media === 'video' ? 'media:video' : 'media:screen';
+          const kind: t.PeerConnectionKind =
+            media === 'media:video' ? 'media:video' : 'media:screen';
           const metadata: t.PeerConnectMetadata = { kind, useragent: navigator.userAgent };
           const localstream = await getStream(media);
           const conn = peerjs.call(remote, localstream, { metadata });
@@ -71,10 +72,11 @@ export function manageMediaConnection(args: {
         }
 
         const kind = metadata.kind as t.PeerConnectionKind;
-        const media: t.PeerMediaKind = kind === 'media:screen' ? 'screen' : 'video';
+        const media: t.PeerConnectionMediaKind =
+          kind === 'media:screen' ? 'media:screen' : 'media:video';
         const id = conn.connectionId;
         const remote = conn.peer;
-        const localstream = media === 'video' ? await model.get.stream.video() : undefined;
+        const localstream = media === 'media:video' ? await model.get.stream.video() : undefined;
 
         const exists = Get.conn.exists(state.current, conn.connectionId);
         if (!exists) {
@@ -98,7 +100,7 @@ export function manageMediaConnection(args: {
     },
 
     monitor(
-      media: t.PeerMediaKind,
+      media: t.PeerConnectionMediaKind,
       direction: t.PeerConnectDirection,
       conn: t.PeerJsConnMedia,
       localstream?: MediaStream,
@@ -127,7 +129,7 @@ export function manageMediaConnection(args: {
               item.open = true;
             }
           });
-          if (media === 'screen' && localstream) monitorExternalScreenshareClose(localstream);
+          if (media === 'media:screen' && localstream) monitorExternalScreenshareClose(localstream);
           dispatch.connection('ready', conn);
           resolve?.({ id });
         },
@@ -153,10 +155,10 @@ export function manageMediaConnection(args: {
         Handle.failure('timed out while connecting media');
       });
 
-      if (media === 'video') {
+      if (media === 'media:video') {
         conn.on('stream', (remote) => Handle.open(remote));
       }
-      if (media === 'screen') {
+      if (media === 'media:screen') {
         if (direction === 'outgoing') Handle.open();
         if (direction === 'incoming') conn.on('stream', (remote) => Handle.open(remote));
       }

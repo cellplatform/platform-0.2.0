@@ -7,7 +7,7 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
-  const startMedia = async (mediaKind: t.PeerMediaKind) => {
+  const startMedia = async (mediaKind: t.PeerConnectionMediaKind) => {
     const kind = Wrangle.toConnectionKind(mediaKind);
     const hasConn = Wrangle.hasConnectionOfKind(props, kind);
     const remoteid = Wrangle.remoteid(props);
@@ -15,11 +15,11 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
   };
 
   const startVideo = () => {
-    return startMedia('video');
+    return startMedia('media:video');
   };
 
   const startScreenshare = () => {
-    return startMedia('screen');
+    return startMedia('media:screen');
   };
 
   /**
@@ -68,9 +68,9 @@ export const Wrangle = {
       .some((item) => kinds.includes(item.kind));
   },
 
-  toConnectionKind(media: t.PeerMediaKind): t.PeerConnectionKind {
-    if (media === 'video') return 'media:video';
-    if (media === 'screen') return 'media:screen';
+  toConnectionKind(media: t.PeerConnectionMediaKind): t.PeerConnectionKind {
+    if (media === 'media:video') return 'media:video';
+    if (media === 'media:screen') return 'media:screen';
     throw new Error(`Media kind '${media}' not supported.`);
   },
 } as const;

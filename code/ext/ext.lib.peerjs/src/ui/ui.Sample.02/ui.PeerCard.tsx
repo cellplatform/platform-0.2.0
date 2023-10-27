@@ -43,8 +43,8 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
    */
   const handlePurge = () => self?.purge();
   const handleConnectData = () => self?.connect.data(props.peer.remote.id);
-  const handleConnectVideo = () => self?.connect.media('video', props.peer.remote.id);
-  const handleConnectScreen = () => self?.connect.media('screen', props.peer.remote.id);
+  const handleConnectVideo = () => self?.connect.media('media:video', props.peer.remote.id);
+  const handleConnectScreen = () => self?.connect.media('media:screen', props.peer.remote.id);
   const handlePeerDispose = () => self.dispose();
   const handleCloseConnection = (connid: string) => self?.disconnect(connid);
   const handleSendData = (connid: string) => {
