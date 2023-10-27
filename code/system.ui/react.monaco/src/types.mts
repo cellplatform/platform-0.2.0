@@ -1,8 +1,9 @@
 import type { t } from './common.t';
 
-export * from './ui/ui.MonacoEditor/types.mjs';
-export * from './ui.logic/EditorCarets/types.mjs';
-export * from './ui.logic/MonacoCrdt/types.mjs';
+export type * from './ui.logic/EditorCarets/types';
+export type * from './ui.logic/MonacoCrdt/types';
+export type * from './ui/ui.Bitext/types';
+export type * from './ui/ui.MonacoEditor/types';
 
 /**
  * Supported languages.
