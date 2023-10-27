@@ -1,8 +1,8 @@
-import { getFactory } from './PeerModel.get';
 import { DEFAULTS, Time, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
 import { Wrangle } from './u.Wrangle';
+import { getFactory } from './u.getFactory';
 
 type Id = string;
 

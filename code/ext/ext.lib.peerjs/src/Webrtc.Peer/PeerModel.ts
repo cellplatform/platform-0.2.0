@@ -2,10 +2,10 @@ import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { manageDataConnection } from './PeerModel.Conn.Data';
 import { manageMediaConnection } from './PeerModel.Conn.Media';
 import { eventFactory } from './PeerModel.events';
-import { getFactory } from './PeerModel.get';
 import { PatchState, rx, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
+import { getFactory } from './u.getFactory';
 
 /**
  * Peer model.
@@ -54,7 +54,7 @@ export const PeerModel: t.WebrtcPeerModel = {
     let _videostream: MediaStream | undefined;
     let _screenstream: MediaStream | undefined;
     const releaseWhenLastStream = (kind: t.PeerConnectionKind, stream?: MediaStream) => {
-      if (Get.conn.byKind(model.current, kind).length > 0) return stream;
+      if (Get.conn.itemsByKind(model.current, kind).length > 0) return stream;
       Stream.stop(stream);
       return undefined;
     };
@@ -87,7 +87,7 @@ export const PeerModel: t.WebrtcPeerModel = {
         state.change((d) => {
           d.connections = d.connections.filter((item) => {
             if (item.open === false) return false;
-            if (Get.conn.object(d, item.id)?.open === false) return false;
+            if (Get.conn.peerjs(d, item.id)?.open === false) return false;
             return true;
           });
         });
@@ -105,23 +105,7 @@ export const PeerModel: t.WebrtcPeerModel = {
 
       get: {
         conn: {
-          obj: (id) => Get.conn.object(state.current, id),
-          data(id) {
-            type T = t.PeerJsConnData;
-            return Get.conn.object(state.current, id, 'data') as T;
-          },
-          media(id) {
-            type T = t.PeerJsConnMedia;
-            return Get.conn.object(state.current, id, 'media:video', 'media:screen') as T;
-          },
-          video(id) {
-            type T = t.PeerJsConnMedia;
-            return Get.conn.object(state.current, id, 'media:video') as T;
-          },
-          screen(id) {
-            type T = t.PeerJsConnMedia;
-            return Get.conn.object(state.current, id, 'media:screen') as T;
-          },
+          obj: Get.conn.obj(state),
         },
         stream: {
           async video() {

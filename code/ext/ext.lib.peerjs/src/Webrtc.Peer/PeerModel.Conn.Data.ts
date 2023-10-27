@@ -1,4 +1,4 @@
-import { getFactory } from './PeerModel.get';
+import { getFactory } from './u.getFactory';
 import { DEFAULTS, Time, slug, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Wrangle } from './u.Wrangle';

@@ -26,8 +26,9 @@ export default Test.describe('Webrtc → peer connect', (e) => {
     await Time.wait(500);
 
     const res = await peerA.connect.data(peerB.id);
-    const conn = peerA.get.conn.data(res.id)!;
-    expect(conn).to.equal(res.conn);
+    const conn = res.conn;
+    expect(conn).to.equal(peerA.get.conn.obj(res.id)!);
+    expect(conn).to.equal(peerA.get.conn.obj.data(res.id)!);
 
     conn.send('👋 hello');
 

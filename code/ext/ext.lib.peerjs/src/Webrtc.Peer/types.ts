@@ -50,29 +50,35 @@ export type PeerConnectMetadata = {
  * Logical API over the peer state.
  */
 export type PeerModel = t.Lifecycle & {
-  id: Id;
-  current: t.Peer;
+  readonly id: Id;
+  readonly current: t.Peer;
+  readonly get: PeerModelGet;
+  readonly connect: {
+    data(remoteid: Id): Promise<t.PeerConnectedData>;
+    media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
+  };
   dispatch: t.PeerModelDispatch;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   purge(): { changed: boolean; total: { before: number; after: number } };
   disconnect(id: Id): void;
-  connect: {
-    data(remoteid: Id): Promise<t.PeerConnectedData>;
-    media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
+};
+
+export type PeerModelGet = {
+  readonly conn: {
+    readonly obj: PeerModelGetConnectionObject;
   };
-  get: {
-    conn: {
-      obj(id: Id): t.PeerJsConn | undefined;
-      data(id: Id): t.PeerJsConnData | undefined;
-      media(id: Id): t.PeerJsConnMedia | undefined;
-      video(id: Id): t.PeerJsConnMedia | undefined;
-      screen(id: Id): t.PeerJsConnMedia | undefined;
-    };
-    stream: {
-      video(): Promise<MediaStream>;
-      screen(): Promise<MediaStream>;
-    };
+  readonly stream: {
+    video(): Promise<MediaStream>;
+    screen(): Promise<MediaStream>;
   };
+};
+
+export type PeerModelGetConnectionObject = {
+  (id: Id): t.PeerJsConn | undefined;
+  data(id: Id): t.PeerJsConnData | undefined;
+  media(id: Id): t.PeerJsConnMedia | undefined;
+  video(id: Id): t.PeerJsConnMedia | undefined;
+  screen(id: Id): t.PeerJsConnMedia | undefined;
 };
 
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
