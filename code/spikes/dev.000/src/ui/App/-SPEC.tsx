@@ -1,4 +1,5 @@
-import { Dev, type t, Hash, Delete } from '../../test.ui';
+import { Color, COLORS, Dev, type t, Hash, Delete, css } from '../../test.ui';
+import { WebrtcUI, Webrtc } from 'ext.lib.peerjs';
 
 type T = {
   selected?: string;
@@ -14,6 +15,8 @@ const name = 'App';
 export default Dev.describe(name, (e) => {
   let network: t.NetworkDocSharedRef;
   let client: t.WebRtcEvents;
+
+  const self = Webrtc.peer();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -34,7 +37,7 @@ export default Dev.describe(name, (e) => {
       });
   });
 
-  e.it('ui:debug', async (e) => {
+  e.it('ui.header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
@@ -44,6 +47,7 @@ export default Dev.describe(name, (e) => {
       .render(async (e) => {
         const { ui } = await import('sys.net.webrtc');
         const WebRtc = await ui();
+
         return (
           <WebRtc.Connect.Stateful
             onReady={async (e) => {
@@ -62,6 +66,11 @@ export default Dev.describe(name, (e) => {
           />
         );
       });
+  });
+
+  e.it('ui:debug', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.row(async (e) => {
       const { Auth } = await import('ext.lib.auth.privy');
@@ -105,11 +114,15 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        'jwt:accessToken': Hash.shorten(e.state.accessToken ?? '', 7),
-      };
-      return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
-    });
+    dev.footer
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        const data = {
+          'jwt:accessToken': Hash.shorten(e.state.accessToken ?? '', 7),
+        };
+
+        return <WebrtcUI.Connector peer={self} behavior={{ focusOnLoad: true }} />;
+      });
   });
 });
