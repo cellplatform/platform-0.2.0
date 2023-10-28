@@ -29,11 +29,18 @@ export function manageMediaConnection(args: {
             return resolve(res);
           };
 
-          const existingDataConn = model.current.connections
+          const parentData = model.current.connections
             .filter((item) => item.kind === 'data')
             .find((item) => item.peer.remote === remote);
-          if (!existingDataConn) {
+          if (!parentData) {
             return resolveError('media connection requires data first');
+          }
+
+          const localstream = (await model.get.stream(kind)).stream;
+          if (!localstream) {
+            const error = 'Could not get outgoing media stream.';
+            return resolveError(error);
+
           }
 
           const metadata: t.PeerConnectMetadata = {
@@ -41,16 +48,11 @@ export function manageMediaConnection(args: {
             userAgent: navigator.userAgent,
           };
 
-          const localstream = (await model.get.stream(kind)).stream;
-          if (!localstream) {
-          }
-
           const conn = peerjs.call(remote, localstream, { metadata });
-          const id = conn.connectionId;
           state.change((d) => {
             d.connections.push({
               kind,
-              id,
+              id: conn.connectionId,
               peer: { self, remote },
               metadata,
               stream: { self: localstream },
@@ -58,9 +60,9 @@ export function manageMediaConnection(args: {
               open: null,
             });
           });
-          dispatch.connection('start:out', conn);
 
           api.monitor(kind, 'outgoing', conn, localstream, resolve);
+          dispatch.connection('start:out', conn);
         });
       },
 
