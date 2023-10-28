@@ -18,11 +18,15 @@ export const Wrangle = {
     return props.peer?.current.connections ?? [];
   },
 
-  hasConnectionOfKind(props: t.MediaToolbarProps, ...kinds: t.PeerConnectionKind[]) {
+  connectionOfKind(props: t.MediaToolbarProps, ...kinds: t.PeerConnectionKind[]) {
     const remoteid = Wrangle.remoteid(props);
     return Wrangle.connections(props)
       .filter((item) => item.peer.remote === remoteid)
-      .some((item) => kinds.includes(item.kind));
+      .filter((item) => kinds.includes(item.kind));
+  },
+
+  hasConnectionOfKind(props: t.MediaToolbarProps, ...kinds: t.PeerConnectionKind[]) {
+    return Wrangle.connectionOfKind(props, ...kinds).length > 0;
   },
 
   toConnectionKind(media: t.PeerConnectionMediaKind): t.PeerConnectionKind {
@@ -41,7 +45,7 @@ export const Wrangle = {
     const { selected, focused } = props;
     const { spinning, over } = state;
     if (spinning) return 0.1;
-    const hasConn = Wrangle.hasConnectionOfKind(props, props.mediaKind);
+    const hasConn = Wrangle.hasConnectionOfKind(props, props.kind);
     if (hasConn || over) return selected && focused ? 1 : 0.7;
     return selected && focused ? 0.5 : 0.25;
   },

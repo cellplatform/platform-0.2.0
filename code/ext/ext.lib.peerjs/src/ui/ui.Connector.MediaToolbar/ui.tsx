@@ -31,7 +31,7 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
   const mediaButton = (kind: t.PeerConnectionMediaKind, marginRight?: number) => {
     return (
       <MediaButton
-        mediaKind={kind}
+        kind={kind}
         peer={peer}
         dataId={dataId}
         selected={selected}

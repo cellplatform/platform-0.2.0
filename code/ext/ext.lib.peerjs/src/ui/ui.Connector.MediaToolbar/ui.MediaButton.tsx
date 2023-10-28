@@ -1,21 +1,33 @@
 import { useState } from 'react';
-import { Button, COLORS, Icons, Spinner, css, type t } from './common';
 import { Wrangle } from './Wrangle';
+import { Button, Icons, Spinner, css, type t } from './common';
 
 export const MediaButton: React.FC<t.MediaToolbarButtonProps> = (props) => {
-  const { mediaKind, peer } = props;
+  const { kind, peer } = props;
 
   const [over, setOver] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const enabled = !spinning;
 
-  const startMedia = async () => {
-    if (spinning) return;
-    setSpinning(true);
-    const hasConn = Wrangle.hasConnectionOfKind(props, mediaKind);
+  /**
+   * Event handler
+   */
+  const handleClick = async () => {
+    if (!peer || spinning) return;
+
+    const existing = Wrangle.connectionOfKind(props, kind);
+    const hasConn = existing.length > 0;
     const remoteid = Wrangle.remoteid(props);
-    if (!hasConn && remoteid) await peer?.connect.media(mediaKind, remoteid);
-    setSpinning(false);
+
+    if (hasConn) {
+      existing.forEach((conn) => peer?.disconnect(conn.id));
+    }
+
+    if (!hasConn && remoteid) {
+      setSpinning(true);
+      await peer?.connect.media(kind, remoteid);
+      setSpinning(false);
+    }
   };
 
   /**
@@ -45,7 +57,7 @@ export const MediaButton: React.FC<t.MediaToolbarButtonProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      onClick={startMedia}
+      onClick={handleClick}
       onMouse={(e) => setOver(e.isOver)}
     >
       <div {...styles.body}>
@@ -61,18 +73,18 @@ export const MediaButton: React.FC<t.MediaToolbarButtonProps> = (props) => {
  */
 const WrangleLocal = {
   icon(props: t.MediaToolbarButtonProps) {
-    const { mediaKind } = props;
-    if (mediaKind === 'media:video') return Icons.Face;
-    if (mediaKind === 'media:screen') return Icons.Screen;
+    const { kind } = props;
+    if (kind === 'media:video') return Icons.Face;
+    if (kind === 'media:screen') return Icons.Screen;
     return Icons.Error;
   },
 
   tooltip(props: t.MediaToolbarButtonProps) {
-    const { mediaKind } = props;
-    const hasConn = Wrangle.hasConnectionOfKind(props, props.mediaKind);
+    const { kind } = props;
+    const hasConn = Wrangle.hasConnectionOfKind(props, kind);
     const prefix = hasConn ? 'Start' : 'Stop';
-    if (mediaKind === 'media:video') return `${prefix} video`;
-    if (mediaKind === 'media:screen') return `${prefix} screenshare`;
+    if (kind === 'media:video') return `${prefix} video`;
+    if (kind === 'media:screen') return `${prefix} screenshare`;
     return undefined;
   },
 } as const;
