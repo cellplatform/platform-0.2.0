@@ -13,7 +13,7 @@ export const Wrangle = {
   },
 
   metadata(conn: t.PeerJsConn): t.PeerConnectMetadata {
-    if (!conn.metadata) return { kind: 'unknown', useragent: '' };
+    if (!conn.metadata) return { kind: 'unknown', userAgent: '' };
     return conn.metadata as t.PeerConnectMetadata;
   },
 } as const;

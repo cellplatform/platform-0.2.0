@@ -44,7 +44,7 @@ export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
 export type PeerConnectDirection = 'incoming' | 'outgoing';
 export type PeerConnectMetadata = {
   kind: PeerConnectionKind | 'unknown';
-  useragent: string;
+  userAgent: string;
 };
 
 /**
