@@ -45,28 +45,31 @@ export const Stream = {
    */
   memoryState(peerjs: t.PeerJs, state: t.PeerModelState) {
     const get = getterFactory(peerjs);
-    let _video: t.GetMediaResponse | undefined;
-    let _screen: t.GetMediaResponse | undefined;
+    let _video: MediaStream | undefined;
+    let _screen: MediaStream | undefined;
 
-    const releaseUnused = (kind: t.PeerConnectionMediaKind, media?: t.GetMediaResponse) => {
-      if (get.conn.itemsByKind(state.current, kind).length > 0) return media;
-      const stream = media?.stream;
+    const releaseIfUnused = (kind: t.PeerConnectionMediaKind, stream?: MediaStream) => {
+      if (get.conn.itemsByKind(state.current, kind).length > 0) return stream;
       if (stream) Stream.stop(stream);
       return undefined;
     };
 
     return {
-      async video() {
-        if (!_video) _video = await Stream.getVideo();
-        return _video;
+      async video(): Promise<t.GetMediaResponse> {
+        if (_video) return { stream: _video };
+        const res = await getVideo();
+        _video = res.stream;
+        return res;
       },
-      async screen() {
-        if (!_screen) _screen = await Stream.getScreen();
-        return _screen;
+      async screen(): Promise<t.GetMediaResponse> {
+        if (_screen) return { stream: _screen };
+        const res = await getScreen();
+        _screen = res.stream;
+        return res;
       },
       purge() {
-        _video = releaseUnused('media:video', _video);
-        _screen = releaseUnused('media:screen', _screen);
+        _video = releaseIfUnused('media:video', _video);
+        _screen = releaseIfUnused('media:screen', _screen);
       },
     } as const;
   },

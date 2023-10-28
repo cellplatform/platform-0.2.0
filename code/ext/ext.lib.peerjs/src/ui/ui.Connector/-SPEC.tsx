@@ -104,6 +104,15 @@ export default Dev.describe(name, (e) => {
           );
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('getDisplayMedia', async (e) => {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+        console.info('stream', stream);
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

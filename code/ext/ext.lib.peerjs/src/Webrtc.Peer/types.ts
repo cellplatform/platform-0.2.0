@@ -63,8 +63,8 @@ export type PeerModel = t.Lifecycle & {
   };
   dispatch: t.PeerModelDispatch;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
-  purge(): { changed: boolean; total: { before: number; after: number } };
   disconnect(id: Id): void;
+  purge(): { changed: boolean; total: { before: number; after: number } };
 };
 
 export type PeerModelGet = {
@@ -72,7 +72,7 @@ export type PeerModelGet = {
     readonly obj: PeerModelGetConnectionObject;
     readonly remotes: PeerConnectionsByPeer;
   };
-  stream(kind: t.PeerConnectionMediaKind): Promise<t.GetMediaResponse>;
+  media(kind: t.PeerConnectionMediaKind): Promise<t.GetMediaResponse>;
 };
 
 export type PeerModelGetConnectionObject = {

@@ -36,11 +36,11 @@ export function manageMediaConnection(args: {
             return resolveError('media connection requires data first');
           }
 
-          const localstream = (await model.get.stream(kind)).stream;
-          if (!localstream) {
-            const error = 'Could not get outgoing media stream.';
+          const media = await model.get.media(kind);
+          const stream = media.stream;
+          if (!stream) {
+            const error = 'Could not get outgoing media stream';
             return resolveError(error);
-
           }
 
           const metadata: t.PeerConnectMetadata = {
@@ -48,20 +48,20 @@ export function manageMediaConnection(args: {
             userAgent: navigator.userAgent,
           };
 
-          const conn = peerjs.call(remote, localstream, { metadata });
+          const conn = peerjs.call(remote, stream, { metadata });
           state.change((d) => {
             d.connections.push({
               kind,
               id: conn.connectionId,
               peer: { self, remote },
               metadata,
-              stream: { self: localstream },
+              stream: { self: stream },
               direction: 'outgoing',
               open: null,
             });
           });
 
-          api.monitor(kind, 'outgoing', conn, localstream, resolve);
+          api.monitor(kind, 'outgoing', conn, stream, resolve);
           dispatch.connection('start:out', conn);
         });
       },
@@ -82,8 +82,9 @@ export function manageMediaConnection(args: {
         const id = conn.connectionId;
         const remote = conn.peer;
 
-        let stream: MediaStream | undefined;
-        if (kind === 'media:video') stream = (await model.get.stream('media:video')).stream;
+        let media: t.GetMediaResponse | undefined;
+        if (kind === 'media:video') media = await model.get.media('media:video'); // NB: starting a response screen-share not required!
+        const stream = media?.stream;
 
         const exists = get.conn.exists(state.current, conn.connectionId);
         if (!exists) {

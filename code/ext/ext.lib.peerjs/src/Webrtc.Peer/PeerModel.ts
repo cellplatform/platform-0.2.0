@@ -104,10 +104,10 @@ export const PeerModel: t.WebrtcPeerModel = {
             return get.conn.byRemote(model.current);
           },
         },
-        stream(kind) {
+        media(kind) {
           if (kind === 'media:video') return streams.video();
           if (kind === 'media:screen') return streams.screen();
-          throw new Error(`Media kind "${kind}" not supported`);
+          throw new Error(`Kind "${kind}" not supported`);
         },
       },
 
