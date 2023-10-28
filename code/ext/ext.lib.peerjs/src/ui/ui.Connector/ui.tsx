@@ -17,7 +17,9 @@ export const View: React.FC<t.ConnectorProps> = (props) => {
     const { dispose$, dispose } = rx.disposable();
     if (peer) {
       const model = Model.List.init(peer, { dispose$ });
-      setList(model.list);
+      const list = model.list;
+      setList(list);
+      props.onReady?.({ peer, list });
     }
     return dispose;
   }, [peer?.id]);
