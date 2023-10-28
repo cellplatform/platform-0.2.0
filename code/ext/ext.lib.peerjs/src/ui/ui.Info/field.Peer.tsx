@@ -62,8 +62,8 @@ const Wrangle = {
 
   remotesLabel(input: t.PeerConnection[]) {
     const conns = {
-      data: input.filter((m) => Webrtc.Is.kindData(m.kind)),
-      media: input.filter((m) => Webrtc.Is.kindMedia(m.kind)),
+      data: input.filter((m) => Webrtc.Is.kind.data(m.kind)),
+      media: input.filter((m) => Webrtc.Is.kind.media(m.kind)),
     };
     const data = `${conns.data.length} data`;
     const media = conns.media.length > 0 ? `${conns.media.length} media` : '';

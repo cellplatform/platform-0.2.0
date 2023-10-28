@@ -45,15 +45,15 @@ describe('Is', () => {
   describe('Is.<kind>', () => {
     const NOT = [null, undefined, 123, {}, [], true, '', ' ', 'foo'];
 
-    it('Is.kindData', () => {
-      const test = (input: any, expected: boolean) => expect(Is.kindData(input)).to.eql(expected);
+    it('Is.kind.data', () => {
+      const test = (input: any, expected: boolean) => expect(Is.kind.data(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test(' data ', false);
       test('data', true);
     });
 
-    it('Is.kindMedia', () => {
-      const test = (input: any, expected: boolean) => expect(Is.kindMedia(input)).to.eql(expected);
+    it('Is.kind.media', () => {
+      const test = (input: any, expected: boolean) => expect(Is.kind.media(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test(' media:video ', false);
       test(' media:screen ', false);

@@ -13,11 +13,13 @@ export const Is: t.WebrtcIs = {
     return parts[0] === 'peer' && Is.peerid(parts[1]);
   },
 
-  kindData(input: any): input is t.PeerConnectionDataKind {
-    return input === 'data';
-  },
+  kind: {
+    data(input: any): input is t.PeerConnectionDataKind {
+      return input === 'data';
+    },
 
-  kindMedia(input: any): input is t.PeerConnectionMediaKind {
-    return input === 'media:video' || input === 'media:screen';
+    media(input: any): input is t.PeerConnectionMediaKind {
+      return input === 'media:video' || input === 'media:screen';
+    },
   },
 } as const;

@@ -1,7 +1,7 @@
 import { DEFAULTS, Is, Time, slug, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Wrangle } from './u.Wrangle';
-import { getFactory } from './u.getFactory';
+import { getFactory } from './u.get';
 
 type Id = string;
 
@@ -22,7 +22,7 @@ export function manageDataConnection(args: {
        */
       outgoing(remote: Id) {
         return new Promise<t.PeerConnectedData>((resolve) => {
-          const metadata: t.PeerConnectMetadata = { kind: 'data', useragent: navigator.userAgent };
+          const metadata: t.PeerConnectMetadata = { kind: 'data', userAgent: navigator.userAgent };
           const conn = peerjs.connect(remote, { reliable: true, metadata });
           const id = conn.connectionId;
           state.change((d) => {
@@ -101,7 +101,7 @@ export function manageDataConnection(args: {
 
       conn.on('close', () => {
         state.current.connections
-          .filter(({ kind }) => Is.kindMedia(kind))
+          .filter(({ kind }) => Is.kind.media(kind))
           .filter(({ peer }) => peer.remote === conn.peer)
           .forEach(({ id }) => model.disconnect(id)); // Close child-media connections.
 
