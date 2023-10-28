@@ -14,10 +14,11 @@ export type {
 /**
  * @system
  */
-export type * from './Webrtc.PeerJs/types';
 export type * from './Webrtc.Peer/types';
+export type * from './Webrtc.PeerJs/types';
 export type * from './Webrtc/types';
 
+export type * from './ui/ui.AvatarTray/types';
 export type * from './ui/ui.Connector.MediaToolbar/types';
 export type * from './ui/ui.Connector.Model/types';
 export type * from './ui/ui.Connector/types';
