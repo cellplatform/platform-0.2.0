@@ -6,6 +6,9 @@ type InitOptions = Partial<t.PeerJsCreateArgs> & {
   dispose$?: t.UntilObservable;
 };
 
+export type GetMedia = () => Promise<GetMediaResponse>;
+export type GetMediaResponse = { stream?: MediaStream; error?: Error };
+
 /**
  * Entry API
  */
@@ -69,10 +72,7 @@ export type PeerModelGet = {
     readonly obj: PeerModelGetConnectionObject;
     readonly remotes: PeerConnectionsByPeer;
   };
-  readonly stream: {
-    video(): Promise<MediaStream>;
-    screen(): Promise<MediaStream>;
-  };
+  stream(kind: t.PeerConnectionMediaKind): Promise<t.GetMediaResponse>;
 };
 
 export type PeerModelGetConnectionObject = {

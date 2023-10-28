@@ -12,7 +12,7 @@ export function manageDataConnection(args: {
 }) {
   const { peerjs, model, state } = args;
   const self = peerjs.id;
-  const Get = getFactory(peerjs);
+  const get = getFactory(peerjs);
   const dispatch = Dispatch.common(model);
 
   const api = {
@@ -39,7 +39,7 @@ export function manageDataConnection(args: {
           const handleOpen = () =>
             state.change((d) => {
               timer.cancel();
-              const item = Get.conn.item(d, id);
+              const item = get.conn.item(d, id);
               if (!item) return handleFailure('failed to retrieve connection model');
               item.open = true;
               dispatch.connection('ready', conn);
@@ -48,7 +48,7 @@ export function manageDataConnection(args: {
 
           const handleFailure = (error: string) =>
             state.change((d) => {
-              const item = Get.conn.item(d, id);
+              const item = get.conn.item(d, id);
               if (item) item.open = false;
               dispatch.connection('error', conn, error);
               resolve({ id, conn, error });
@@ -66,7 +66,7 @@ export function manageDataConnection(args: {
        * Start an incoming data connection.
        */
       incoming(conn: t.PeerJsConnData) {
-        const exists = Get.conn.exists(state.current, conn.connectionId);
+        const exists = get.conn.exists(state.current, conn.connectionId);
         if (!exists) {
           const id = conn.connectionId;
           const remote = conn.peer;

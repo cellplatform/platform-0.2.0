@@ -2,7 +2,7 @@ import { DEFAULTS, Is, Time, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
 import { Wrangle } from './u.Wrangle';
-import { getFactory } from './u.getFactory';
+import { getFactory } from './u.get';
 
 type Id = string;
 
@@ -13,35 +13,38 @@ export function manageMediaConnection(args: {
 }) {
   const { peerjs, state, model } = args;
   const self = peerjs.id;
-  const Get = getFactory(peerjs);
+  const get = getFactory(peerjs);
   const dispatch = Dispatch.common(model);
-
-  const getStream = (kind: t.PeerConnectionMediaKind) => {
-    if (kind === 'media:video') return model.get.stream.video();
-    if (kind === 'media:screen') return model.get.stream.screen();
-    throw new Error(`media kind "${kind}" not supported`);
-  };
 
   const api = {
     start: {
       /**
        * Start an outgoing data connection.
        */
-      async outgoing(media: t.PeerConnectionMediaKind, remote: Id) {
+      async outgoing(kind: t.PeerConnectionMediaKind, remote: Id) {
         return new Promise<t.PeerConnectedMedia>(async (resolve) => {
+          const resolveError = (error: string) => {
+            dispatch.connection('error', undefined, error);
+            const res = { id: '', error };
+            return resolve(res);
+          };
+
           const existingDataConn = model.current.connections
             .filter((item) => item.kind === 'data')
             .find((item) => item.peer.remote === remote);
           if (!existingDataConn) {
-            const error = 'media connection requires data first';
-            dispatch.connection('error', undefined, error);
-            return resolve({ id: '', error });
+            return resolveError('media connection requires data first');
           }
 
-          const kind: t.PeerConnectionKind =
-            media === 'media:video' ? 'media:video' : 'media:screen';
-          const metadata: t.PeerConnectMetadata = { kind, useragent: navigator.userAgent };
-          const localstream = await getStream(media);
+          const metadata: t.PeerConnectMetadata = {
+            kind,
+            userAgent: navigator.userAgent,
+          };
+
+          const localstream = (await model.get.stream(kind)).stream;
+          if (!localstream) {
+          }
+
           const conn = peerjs.call(remote, localstream, { metadata });
           const id = conn.connectionId;
           state.change((d) => {
@@ -49,14 +52,15 @@ export function manageMediaConnection(args: {
               kind,
               id,
               peer: { self, remote },
-              open: null,
               metadata,
               stream: { self: localstream },
               direction: 'outgoing',
+              open: null,
             });
           });
           dispatch.connection('start:out', conn);
-          api.monitor(media, 'outgoing', conn, localstream, resolve);
+
+          api.monitor(kind, 'outgoing', conn, localstream, resolve);
         });
       },
 
@@ -65,36 +69,37 @@ export function manageMediaConnection(args: {
        */
       async incoming(conn: t.PeerJsConnMedia) {
         const metadata = Wrangle.metadata(conn);
-        if (!Is.kindMedia(metadata.kind)) {
-          const message = `Failed to establish incoming call. Incoming connnection not of type "media".`;
+
+        if (!Is.kind.media(metadata.kind)) {
+          const message = `Failed to establish incoming call. Connnection not of type "media".`;
           dispatch.error(message);
           return;
         }
 
-        const kind = metadata.kind as t.PeerConnectionKind;
-        const media: t.PeerConnectionMediaKind =
-          kind === 'media:screen' ? 'media:screen' : 'media:video';
+        const kind = metadata.kind as t.PeerConnectionMediaKind;
         const id = conn.connectionId;
         const remote = conn.peer;
-        const localstream = media === 'media:video' ? await model.get.stream.video() : undefined;
 
-        const exists = Get.conn.exists(state.current, conn.connectionId);
+        let stream: MediaStream | undefined;
+        if (kind === 'media:video') stream = (await model.get.stream('media:video')).stream;
+
+        const exists = get.conn.exists(state.current, conn.connectionId);
         if (!exists) {
           state.change((d) =>
             d.connections.push({
               kind,
               id,
               peer: { self, remote },
-              open: null,
               metadata,
-              stream: { self: localstream },
+              stream: { self: stream },
               direction: 'incoming',
+              open: null,
             }),
           );
         }
 
-        api.monitor(media, 'incoming', conn, localstream);
-        conn.answer(localstream);
+        api.monitor(kind, 'incoming', conn, stream);
+        conn.answer(stream);
         dispatch.connection('start:in', conn);
       },
     },
@@ -122,7 +127,7 @@ export function manageMediaConnection(args: {
         open(remotestream?: MediaStream) {
           timer?.cancel();
           state.change((d) => {
-            const item = Get.conn.item(d, id);
+            const item = get.conn.item(d, id);
             if (item) {
               const media = item.stream || (item.stream = { self: localstream });
               media.remote = remotestream;
@@ -142,7 +147,7 @@ export function manageMediaConnection(args: {
 
         failure(error: string) {
           state.change((d) => {
-            const item = Get.conn.item(d, id);
+            const item = get.conn.item(d, id);
             if (item) item.open = false;
             dispatch.connection('error', conn, error);
             resolve?.({ id, error });

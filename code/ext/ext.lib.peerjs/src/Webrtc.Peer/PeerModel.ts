@@ -1,11 +1,12 @@
+import { PatchState, rx, type t, Is } from './common';
+
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { manageDataConnection } from './PeerModel.Conn.Data';
 import { manageMediaConnection } from './PeerModel.Conn.Media';
 import { eventFactory } from './PeerModel.events';
-import { PatchState, rx, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
-import { getFactory } from './u.getFactory';
+import { getFactory } from './u.get';
 
 /**
  * Peer model.
@@ -103,9 +104,10 @@ export const PeerModel: t.WebrtcPeerModel = {
             return get.conn.byRemote(model.current);
           },
         },
-        stream: {
-          video: streams.video,
-          screen: streams.screen,
+        stream(kind) {
+          if (kind === 'media:video') return streams.video();
+          if (kind === 'media:screen') return streams.screen();
+          throw new Error(`Media kind "${kind}" not supported`);
         },
       },
 
