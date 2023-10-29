@@ -4,4 +4,6 @@ export * from '../common';
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+export const DEFAULTS = {
+  size: 36,
+} as const;

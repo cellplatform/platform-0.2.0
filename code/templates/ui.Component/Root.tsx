@@ -3,7 +3,7 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 const View: React.FC<t.RootProps> = (props) => {
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({

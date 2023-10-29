@@ -74,7 +74,6 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
     dev.row((e) => <PeerCard prefix={'peer.remote:'} peer={{ self: remote, remote: self }} />);
-
     dev.hr(5, 20);
 
     dev.section('Props: Behavior', (dev) => {

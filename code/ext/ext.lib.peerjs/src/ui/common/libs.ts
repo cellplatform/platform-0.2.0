@@ -11,6 +11,7 @@ export {
   ObjectView,
   PropList,
   RenderCount,
+  Slider,
   Spinner,
   TestRunner,
   css,
@@ -24,4 +25,4 @@ export { MediaStream } from 'sys.ui.react.media';
 /**
  * @local
  */
-export { PeerUri, Webrtc } from '../../Webrtc';
+export { Is, PeerUri, Webrtc } from '../../Webrtc';

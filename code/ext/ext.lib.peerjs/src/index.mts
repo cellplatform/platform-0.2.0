@@ -10,6 +10,11 @@ export { Pkg };
 export { Webrtc, PeerModel } from './Webrtc';
 export { PeerDev } from './ui/ui.Dev';
 
+import { Connector } from './ui/ui.Connector';
+export const WebrtcUI = {
+  Connector,
+} as const;
+
 /**
  * Dev
  */

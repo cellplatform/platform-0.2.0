@@ -11,5 +11,5 @@ type Fields = {
 export const Connector = FC.decorate<t.ConnectorProps, Fields>(
   View,
   { DEFAULTS, Model },
-  { displayName: 'Connector' },
+  { displayName: 'Webrtc.Connector' },
 );
