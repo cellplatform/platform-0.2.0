@@ -6,6 +6,8 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
   const { peer, size = DEFAULTS.size } = props;
   const { streams } = useMediaStreams(peer);
 
+  if (streams.length === 0) return null;
+
   /**
    * Render
    */
