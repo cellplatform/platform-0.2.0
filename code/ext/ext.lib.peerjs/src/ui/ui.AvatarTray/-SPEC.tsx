@@ -1,11 +1,11 @@
-import { Root } from '.';
+import { AvatarTray } from '.';
 import { Slider, Dev, Webrtc, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 
 type T = { props: t.AvatarTrayProps };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
+const name = AvatarTray.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
@@ -24,8 +24,9 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         return (
-          <Root
+          <AvatarTray
             {...e.state.props}
+            style={{ margin: 10 }}
             peer={self}
             onClick={(e) => {
               console.log('⚡️ onClick:', e);
@@ -38,7 +39,6 @@ export default Dev.describe(name, (e) => {
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
     dev.header
       .padding(0)
       .border(-0.1)
@@ -76,7 +76,6 @@ export default Dev.describe(name, (e) => {
         props: e.state.props,
         peer: self.current,
       };
-
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

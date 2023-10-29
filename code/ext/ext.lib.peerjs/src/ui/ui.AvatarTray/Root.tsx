@@ -7,7 +7,7 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.AvatarTrayProps, Fields>(
+export const AvatarTray = FC.decorate<t.AvatarTrayProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'AvatarTray' },
