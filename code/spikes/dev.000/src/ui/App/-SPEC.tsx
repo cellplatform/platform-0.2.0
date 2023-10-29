@@ -1,5 +1,5 @@
-import { Webrtc, WebrtcUI } from 'ext.lib.peerjs';
-import { Dev, Hash, type t } from '../../test.ui';
+import { Webrtc, UI } from 'ext.lib.peerjs';
+import { Color, COLORS, Dev, Hash, type t, css } from '../../test.ui';
 
 type T = {
   selected?: string;
@@ -122,7 +122,23 @@ export default Dev.describe(name, (e) => {
           'jwt:accessToken': Hash.shorten(e.state.accessToken ?? '', 7),
         };
 
-        return <WebrtcUI.Connector peer={self} behavior={{ focusOnLoad: true }} />;
+        const styles = {
+          base: css({}),
+        };
+
+        return (
+          <div {...styles.base}>
+            <UI.AvatarTray
+              peer={self}
+              size={48}
+              style={{ padding: 8, borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }}
+              onClick={(e) => {
+                console.info('⚡️ avatar click', e);
+              }}
+            />
+            <UI.Connector peer={self} behavior={{ focusOnLoad: true }} />
+          </div>
+        );
       });
   });
 });
