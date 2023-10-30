@@ -26,6 +26,14 @@ describe('PatchState', () => {
       const state2 = PatchState.init({ initial });
       expect(state1.instance).to.not.eql(state2.instance);
     });
+
+    it('init: <type>', () => {
+      const type = 'foo.bar';
+      const state1 = PatchState.init({ initial });
+      const state2 = PatchState.init({ initial, type });
+      expect(state1.type).to.eql(undefined);
+      expect(state2.type).to.eql(type);
+    });
   });
 
   describe('change', () => {
@@ -171,7 +179,7 @@ describe('PatchState', () => {
     });
 
     it('Is.proxy ← false', () => {
-      [undefined, null, {}, '', 123, true].forEach((value) => {
+      [undefined, null, {}, [], '', 123, true].forEach((value) => {
         expect(PatchState.Is.proxy(value)).to.eql(false);
       });
     });
@@ -182,8 +190,23 @@ describe('PatchState', () => {
     });
 
     it('Is.state ← false', () => {
-      [undefined, null, {}, '', 123, true].forEach((value) => {
+      [undefined, null, {}, [], '', 123, true].forEach((value) => {
         expect(PatchState.Is.state(value)).to.eql(false);
+      });
+    });
+
+    it('Is.type ← true', () => {
+      const type = 'foo.bar';
+      const state = PatchState.init<T>({ initial, type });
+      expect(PatchState.Is.type(state, type)).to.eql(true);
+    });
+
+    it('Is.type ← false', () => {
+      const type = 'foo.bar';
+      const state = PatchState.init<T>({ initial });
+      expect(PatchState.Is.type(state, type)).to.eql(false); // NB: no "type" field.
+      [undefined, null, {}, [], '', 123, true].forEach((value) => {
+        expect(PatchState.Is.type(value, type)).to.eql(false);
       });
     });
   });

@@ -15,6 +15,14 @@ export const Is = {
   },
 
   /**
+   * Determine if the given object is a [PatchState] of the specified type.
+   */
+  type(input: any, type: string): input is t.PatchState<any> {
+    if (!Is.state(input)) return false;
+    return input.type === type;
+  },
+
+  /**
    * Determine if the given object is a "proxy/draft" that is
    * currently being edited within a change function.
    */

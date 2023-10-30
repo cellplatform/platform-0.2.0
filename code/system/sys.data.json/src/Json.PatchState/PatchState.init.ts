@@ -4,6 +4,7 @@ import { defaultEvents } from './PatchState.events';
 type O = Record<string, unknown>;
 type Args<T extends O, E> = {
   initial: T;
+  type?: string;
   events?: t.PatchStateEventFactory<T, E>;
   onChange?: t.PatchChangeHandler<T>;
 };
@@ -14,7 +15,7 @@ type Args<T extends O, E> = {
 export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): t.PatchState<T, E> {
   const $ = rx.subject<t.PatchChange<T>>();
   let _current = { ...args.initial };
-  return {
+  const state: t.PatchState<T, E> = {
     /**
      * Unique instance identifier.
      * NB: This does not pertain to the data itself, rather
@@ -22,6 +23,7 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
      *     cheap object instance comparison (eg. in hooks).
      */
     instance: slug(),
+    // type: args.type,
 
     /**
      * Current state.
@@ -47,5 +49,8 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
       const factory = args.events ?? defaultEvents;
       return factory($, dispose$) as E;
     },
-  } as const;
+  };
+
+  if (args.type) state.type = args.type;
+  return state;
 }
