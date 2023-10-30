@@ -87,6 +87,7 @@ export const Action: React.FC<ActionProps> = (props) => {
   };
 
   const elBody = Wrangle.render.action(renderers, args);
+  if (!elBody) return null;
 
   const elButton = is.button && (
     <Button

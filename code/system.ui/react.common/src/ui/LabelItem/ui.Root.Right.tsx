@@ -5,7 +5,7 @@ import { Actions } from './ui.Actions';
 
 export const Right: React.FC<t.LabelItemProps> = (props) => {
   const args = Wrangle.valuesOrDefault(props);
-  const action = args.item.right ?? DEFAULTS.rightAction;
+  const action = args.item.right === null ? undefined : args.item.right || DEFAULTS.rightAction;
   return (
     <Actions
       {...args}

@@ -52,8 +52,10 @@ export const Wrangle = {
   render: {
     action(renderers: t.LabelItemRenderers, args: t.LabelItemRenderActionArgs) {
       const { action } = renderers;
-      const fn = typeof action === 'function' ? action : DEFAULTS.renderers.action;
-      return fn?.(args, actionHelpers);
+      const defaultAction = DEFAULTS.renderers.action;
+      const fn = typeof action === 'function' ? action : defaultAction;
+      const res = fn?.(args, actionHelpers);
+      return res === undefined ? defaultAction?.(args, actionHelpers) : res;
     },
 
     element(renderer: t.LabelItemRender | undefined, args: RenderArgs) {

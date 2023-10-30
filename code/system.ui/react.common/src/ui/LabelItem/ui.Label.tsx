@@ -83,11 +83,12 @@ export const Label: React.FC<Props> = (props) => {
     />
   );
 
+  const elLabelBody = renderElement(renderers.label, label.text);
   const elLabel = !editing && (
     <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
-      {label.isEmpty
+      {elLabelBody === false || elLabelBody === null || label.isEmpty
         ? renderElement(renderers.placeholder, placeholder)
-        : renderElement(renderers.label, label.text)}
+        : elLabelBody}
     </div>
   );
 
