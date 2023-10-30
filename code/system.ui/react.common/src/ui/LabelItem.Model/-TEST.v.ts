@@ -4,7 +4,7 @@ import { describe, expect, it, slug, type t } from '../../test';
 describe('LabelItem.Model', () => {
   describe('Model.Item.state', () => {
     describe('init', () => {
-      it('defaults', () => {
+      it('init: defaults', () => {
         const state = Model.Item.state();
         expect(state.current).to.eql({});
 
@@ -12,9 +12,17 @@ describe('LabelItem.Model', () => {
         expect(state.current.label).to.eql('hello'); // NB: initial value.
       });
 
-      it('{initial}', () => {
+      it('init: {initial}', () => {
         const state = Model.Item.state({ label: 'foo' });
         expect(state.current.label).to.eql('foo'); // NB: initial value.
+      });
+
+      it('init: <type>', () => {
+        const type = 'foo.bar';
+        const state1 = Model.Item.state({});
+        const state2 = Model.Item.state({}, { type });
+        expect(state1.type).to.eql(undefined);
+        expect(state2.type).to.eql(type);
       });
     });
 
@@ -64,15 +72,24 @@ describe('LabelItem.Model', () => {
 
   describe('Model.List.state', () => {
     describe('init', () => {
-      it('defaults', () => {
+      it('init: defaults', () => {
         const state = Model.List.state();
         expect(state.current.total).to.eql(0);
       });
 
-      it('{initial}', () => {
+      it('init: {initial}', () => {
         const getItem: t.GetLabelItem = (index) => [undefined, -1];
         const state = Model.List.state({ total: 123, getItem });
         expect(state.current).to.eql({ total: 123, getItem });
+      });
+
+      it('init: <type>', () => {
+        const initial = { total: 0 };
+        const type = 'foo.bar';
+        const state1 = Model.List.state(initial);
+        const state2 = Model.List.state(initial, { type });
+        expect(state1.type).to.eql(undefined);
+        expect(state2.type).to.eql(type);
       });
     });
 

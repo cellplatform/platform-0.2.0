@@ -15,12 +15,12 @@ export const Item = {
    */
   state<A extends t.LabelItemActionKind = string, D extends O = O>(
     initial: t.LabelItem<A, D> = DEFAULTS.data.item as t.LabelItem<A, D>,
-    options: { onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
+    options: { type?: string; onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
   ): t.LabelItemState<A, D> {
     type T = t.LabelItem<A, D>;
     type E = t.LabelItemEvents<A, D>;
-    const { onChange } = options;
-    return PatchState.init<T, E>({ initial, events, onChange });
+    const { type, onChange } = options;
+    return PatchState.init<T, E>({ initial, type, events, onChange });
   },
 
   /**
