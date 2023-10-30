@@ -1,4 +1,3 @@
-import type { VirtuosoHandle } from 'react-virtuoso';
 import { VirtualList } from '.';
 import { Dev, type t } from '../../test.ui';
 import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
@@ -59,7 +58,7 @@ export default Dev.describe(name, (e) => {
         return (
           <VirtualList
             list={TestState.list}
-            renderers={Sample.renderers}
+            renderers={Sample.renderers({})}
             style={{ width: 330 }}
             onReady={(e) => (vlist = e.vlist)}
           />
