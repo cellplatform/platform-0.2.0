@@ -15,5 +15,6 @@ export type Immutable<T> = {
  */
 export type ImmutableRef<T, E> = Immutable<T> & {
   instance: string;
+  type?: string; // Optional typename.
   events(dispose$?: t.UntilObservable): E;
 };

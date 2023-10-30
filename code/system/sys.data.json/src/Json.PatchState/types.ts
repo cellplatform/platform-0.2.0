@@ -5,9 +5,7 @@ type O = Record<string, unknown>;
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T, E> & {
-  type?: string;
-};
+export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T, E>;
 
 /**
  * Event API
