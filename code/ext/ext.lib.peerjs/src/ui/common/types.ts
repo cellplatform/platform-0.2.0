@@ -15,6 +15,7 @@ export type {
   LabelItemRenderArgs,
   LabelItemRenderers,
   LabelItemState,
+  LabelListEvents,
   LabelListState,
   PropListItem,
   PropListProps,

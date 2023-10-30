@@ -1,7 +1,7 @@
 import { clipboardBehavior } from './Model.Self.b.clipboard';
 import { peerBehavior } from './Model.Self.b.peer';
-import { Model, type t } from './common';
 import { purgeBehavior } from './Model.Self.b.purge';
+import { DEFAULTS, Model, type t } from './common';
 
 export type SelfOptions = { dispose$?: t.UntilObservable };
 export type SelfArgs = SelfOptions & { ctx: t.GetConnectorCtx };
@@ -21,9 +21,11 @@ export const Self = {
   },
 
   state(args: SelfArgs): t.ConnectorItemState {
+    type T = t.ConnectorItemStateSelf;
     const { ctx } = args;
+    const type = DEFAULTS.type.self;
     const initial = Self.initial(args);
-    const state = Model.Item.state<t.ConnectorAction, D>(initial) as t.ConnectorItemStateSelf;
+    const state = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
     const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
 

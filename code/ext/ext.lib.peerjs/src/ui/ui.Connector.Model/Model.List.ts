@@ -1,7 +1,7 @@
 import { Renderers } from '../ui.Connector/Renderers';
 import { Remote } from './Model.Remote';
 import { Self } from './Model.Self';
-import { Model, rx, type t } from './common';
+import { Model, rx, type t, DEFAULTS } from './common';
 
 export const List = {
   /**
@@ -20,11 +20,14 @@ export const List = {
 
     const ctx: t.GetConnectorCtx = () => ({ peer, list, dispose$ });
     const renderers = Renderers.init({ ctx });
-    const list = Model.List.state({
-      total: 2,
-      getItem: array.getItem,
-      getRenderers: () => renderers,
-    });
+    const list = Model.List.state(
+      {
+        total: 2,
+        getItem: array.getItem,
+        getRenderers: () => renderers,
+      },
+      { type: DEFAULTS.type.list },
+    );
 
     const events = list.events(dispose$);
     events.cmd.remove$.subscribe((e) => array.remove(e.index));

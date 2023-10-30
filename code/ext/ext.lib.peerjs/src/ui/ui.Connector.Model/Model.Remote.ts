@@ -1,7 +1,8 @@
 import { clipboardBehavior } from './Model.Remote.b.clipboard';
 import { closeConnectionBehavior } from './Model.Remote.b.close';
 import { openConnectionBehavior } from './Model.Remote.b.connect';
-import { Model, type t } from './common';
+import { selectionBehavior } from './Model.Remote.b.selection';
+import { DEFAULTS, Model, type t } from './common';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = { dispose$?: t.UntilObservable };
@@ -20,12 +21,15 @@ export const Remote = {
   },
 
   state(args: RemoteArgs): t.ConnectorItemState {
+    type T = t.ConnectorItemStateRemote;
     const { ctx } = args;
+    const type = DEFAULTS.type.remote;
     const initial = Remote.initial(args);
-    const state = Model.Item.state<t.ConnectorAction, D>(initial) as t.ConnectorItemStateRemote;
+    const state = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
     const dispatch = Model.Item.commands(state);
     const events = state.events(args.dispose$);
 
+    selectionBehavior({ ctx, state, events, dispatch });
     clipboardBehavior({ ctx, state, events, dispatch });
     closeConnectionBehavior({ ctx, state, events, dispatch });
     openConnectionBehavior({ ctx, state, events, dispatch });
