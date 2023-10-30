@@ -2,6 +2,8 @@ import { R, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
+const noop$ = rx.subject();
+
 /**
  * Event wrapper factory.
  */
@@ -45,13 +47,13 @@ export function events<D extends O = O>(
       ),
     },
 
-    item(id) {
-      return {
-        selected$: api.selected$.pipe(
-          rx.distinctWhile((prev, next) => prev === id && next === id),
-          rx.map((next) => next === id),
-        ),
-      };
+    item(id, dispose$?: t.UntilObservable) {
+      let selected$ = api.selected$.pipe(
+        rx.takeUntil(dispose$ || noop$),
+        rx.distinctWhile((prev, next) => prev === id && next === id),
+        rx.map((next) => next === id),
+      );
+      return { selected$ } as const;
     },
 
     /**

@@ -35,7 +35,10 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
     readonly focus$: t.Observable<void>;
     readonly blur$: t.Observable<void>;
   };
-  item(id: Id): {
+  item(
+    id: Id,
+    dispose$?: t.UntilObservable,
+  ): {
     selected$: t.Observable<boolean>;
   };
 };
