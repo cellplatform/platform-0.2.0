@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
 
   const TestState = {
     array: Model.List.array(), // NB: simple container of Item models.
-    list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
+    list: Model.List.state(), //  NB: the actual [List] state object (points into the ↑ array-list).
     init: {
       items(dev: t.DevCtxState<T>, length: number = 0) {
         TestState.array = Model.List.array((i) => TestState.init.item(dev, i));
