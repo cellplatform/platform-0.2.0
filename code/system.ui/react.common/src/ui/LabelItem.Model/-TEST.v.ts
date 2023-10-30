@@ -494,4 +494,33 @@ describe('LabelItem.Model', () => {
       });
     });
   });
+
+  describe('Model.Is', () => {
+    it('Is.state', () => {
+      const state = Model.Item.state();
+      expect(Model.Is.state(state)).to.eql(true);
+      expect(Model.Is.state(state.current)).to.eql(false);
+      [null, undefined, '', 123, false, [], {}].forEach((value) => {
+        expect(Model.Is.state(value)).to.eql(false);
+      });
+    });
+
+    it('Is.type', () => {
+      const type = 'foo.bar';
+
+      const item1 = Model.Item.state();
+      const item2 = Model.Item.state({}, { type });
+      const list1 = Model.List.state({ total: 0 });
+      const list2 = Model.List.state({ total: 0 }, { type });
+
+      expect(Model.Is.type(item1, type)).to.eql(false);
+      expect(Model.Is.type(item2, type)).to.eql(true);
+      expect(Model.Is.type(list1, type)).to.eql(false);
+      expect(Model.Is.type(list2, type)).to.eql(true);
+
+      [null, undefined, '', 123, false, [], {}].forEach((value) => {
+        expect(Model.Is.type(value, type)).to.eql(false);
+      });
+    });
+  });
 });
