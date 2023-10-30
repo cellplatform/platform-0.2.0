@@ -32,8 +32,8 @@ export default Dev.describe(name, (e) => {
   });
 
   const TestState = {
-    array: Model.List.array(), // NB: simple container of Item models.
-    list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list)
+    array: Model.List.array(), // NB: simple container of <Item> models.
+    list: Model.List.state(), //  NB: the actual List state object (points into the ↑ array-list).
     init: {
       list(dev: t.DevCtxState<T>) {
         const list = TestState.list;
@@ -48,7 +48,12 @@ export default Dev.describe(name, (e) => {
         TestState.list.change((d) => {
           d.total = total;
           d.getItem = TestState.array.getItem;
-          d.getRenderers = () => Sample.renderers;
+          d.getRenderers = () =>
+            Sample.renderers({
+              // label: { return: null },
+              // placeholder: { return: null },
+              // action: { return: null },
+            });
         });
       },
       item(dev: t.DevCtxState<T>, index: number, dispose$?: t.Observable<any>) {
@@ -119,7 +124,7 @@ export default Dev.describe(name, (e) => {
             list={TestState.list}
             // renderers={Sample.renderers}
             useBehaviors={debug.useBehaviors}
-            debug={{ isList, renderCount }}
+            debug={{ isList, renderCount, ruby: debug.debug }}
           />
         );
       });

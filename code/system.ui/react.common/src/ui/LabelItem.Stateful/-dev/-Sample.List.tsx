@@ -6,7 +6,7 @@ export type SampleListProps = {
   useBehaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
   renderers?: t.LabelItemRenderers;
-  debug?: { isList?: boolean; renderCount?: boolean };
+  debug?: { isList?: boolean; renderCount?: boolean; ruby?: boolean };
   style?: t.CssValue;
 };
 
@@ -31,6 +31,7 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
         item={item}
         renderers={renderers}
         useBehaviors={useBehaviors}
+        debug={debug.ruby}
         renderCount={debug.renderCount ? itemRenderCount : undefined}
       />
     );
