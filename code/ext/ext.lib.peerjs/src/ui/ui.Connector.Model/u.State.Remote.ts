@@ -59,7 +59,7 @@ export const Remote = {
 
   setAsConnected(item: t.ConnectorItemStateRemote, list: t.ConnectorListState, conn: t.PeerJsConn) {
     item.change((d) => {
-      Model.action<t.ConnectorAction>(d, 'remote:right')[0].button = false;
+      Model.action<t.ConnectorAction>(d, 'remote:right')[0].button = true;
       const data = Data.remote(d);
       data.stage = 'Connected';
       data.connid = conn.connectionId;

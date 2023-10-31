@@ -13,7 +13,7 @@ export function openConnectionBehavior(args: {
 
   const connect = async () => {
     const { peer, list } = args.ctx();
-    const data = Data.remote(state.current);
+    const data = Data.remote(state);
     if (data.stage === 'Connecting' || data.stage === 'Connected') return;
     if (data.closePending) return;
 

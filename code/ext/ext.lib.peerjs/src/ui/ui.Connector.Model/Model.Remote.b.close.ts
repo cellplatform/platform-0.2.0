@@ -16,7 +16,6 @@ export function closeConnectionBehavior(args: {
   const peerEvents = peer.events(events.dispose$);
   const listEvents = list.events(events.dispose$);
   const listItemEvents = listEvents.item(state.instance);
-
   const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Close.reset());
 
   const Close = {
@@ -59,17 +58,25 @@ export function closeConnectionBehavior(args: {
     .subscribe(Close.reset);
 
   /**
-   * (Triggers): Selection Events
+   * (Trigger): Click close
+   */
+  events.cmd.action
+    .on('remote:right')
+    .pipe(rx.filter((e) => Data.remote(state).closePending!))
+    .subscribe(Close.complete);
+
+  /**
+   * (Trigger): Selection Changed Event
    */
   listItemEvents.selected$
     .pipe(
-      rx.filter((isSelected) => !isSelected),
+      rx.filter((selected) => !selected),
       rx.filter((e) => Data.remote(state).closePending!),
     )
     .subscribe(Close.reset);
 
   /**
-   * (Triggers): Connection Closed
+   * (Trigger): Connection Closed
    */
   peerEvents.cmd.conn$
     .pipe(
