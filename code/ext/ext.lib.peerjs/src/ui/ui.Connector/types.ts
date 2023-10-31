@@ -5,8 +5,8 @@ import type { t } from './common';
  */
 export type ConnectorProps = {
   peer?: t.PeerModel;
-  debug?: { renderCount?: t.RenderCountProps };
   behavior?: t.ConnectorPropsBehavior;
+  debug?: { renderCount?: t.RenderCountProps; name?: string };
   style?: t.CssValue;
   onReady?: t.ConnectorReadyHandler;
 };
