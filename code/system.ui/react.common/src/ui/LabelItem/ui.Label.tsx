@@ -81,8 +81,8 @@ export const Label: React.FC<Props> = (props) => {
       focusAction={'Select'}
       onChanged={(e) => props.onEditChange?.({ label: e.to, position: { index, total } })}
       onKeyDown={(e) => {
-        // Cancel [↑↓] arrow keys.
         if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+          // Cancel [↑↓] arrow keys.
           e.preventDefault();
           e.stopPropagation();
         }
