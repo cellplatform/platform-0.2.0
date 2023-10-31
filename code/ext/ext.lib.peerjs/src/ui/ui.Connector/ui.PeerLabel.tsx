@@ -3,6 +3,7 @@ import { css, type t } from './common';
 export type PeerLabelProps = {
   uri?: string;
   prefixWidth?: number;
+  prefixColor?: string;
   selected?: boolean;
   focused?: boolean;
   style?: t.CssValue;
@@ -25,9 +26,10 @@ export const PeerLabel: React.FC<PeerLabelProps> = (props) => {
       Flex: 'x-center-start',
     }),
     prefix: css({
-      minWidth: props.prefixWidth,
       marginRight: 3,
-      opacity: selected && focused ? 0.6 : 0.3,
+      minWidth: props.prefixWidth,
+      color: props.prefixColor,
+      opacity: props.prefixColor ? 1 : selected && focused ? 0.6 : 0.3,
     }),
     hash: css({}),
   };

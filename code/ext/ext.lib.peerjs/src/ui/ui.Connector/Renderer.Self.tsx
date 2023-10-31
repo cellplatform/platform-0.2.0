@@ -14,7 +14,15 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
 
       const uri = `self:${data.peerid}`;
       const { selected, focused } = e;
-      return <PeerLabel uri={uri} prefixWidth={peerWidth} selected={selected} focused={focused} />;
+      return (
+        <PeerLabel
+          uri={uri}
+          prefixColor={!(selected && focused) ? COLORS.BLUE : undefined}
+          prefixWidth={peerWidth}
+          selected={selected}
+          focused={focused}
+        />
+      );
     },
 
     action(e, helpers) {
