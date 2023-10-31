@@ -1,5 +1,6 @@
-import { DEFAULTS, Model, rx, type t } from './common';
+import { DEFAULTS, rx, type t } from './common';
 import { Data } from './u.Data';
+import { State } from './u.State';
 import { ResetTimer } from './u.Timer';
 
 export function closeConnectionBehavior(args: {
@@ -14,8 +15,7 @@ export function closeConnectionBehavior(args: {
   const { list, peer } = args.ctx();
   const peerEvents = peer.events(events.dispose$);
   const listEvents = list.events(events.dispose$);
-  const listDispatch = Model.List.commands(list);
-  const itemid = state.instance;
+  const listItemEvents = listEvents.item(state.instance);
 
   const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Close.reset());
 
@@ -33,17 +33,11 @@ export function closeConnectionBehavior(args: {
     complete() {
       const conn = Data.remote(state).connid ?? '';
       if (conn) peer.disconnect(conn);
-      removeListItem();
+      removeFromList();
     },
   };
 
-  const removeListItem = () => {
-    const index = list.current.getItem?.(itemid)[1] ?? -1;
-    if (index > -1) {
-      listDispatch.remove(index);
-      listDispatch.select(index === 0 ? 0 : index - 1);
-    }
-  };
+  const removeFromList = () => State.Remote.removeFromList(state, list);
 
   /**
    * (Triggers): Keyboard Events
@@ -67,12 +61,10 @@ export function closeConnectionBehavior(args: {
   /**
    * (Triggers): Selection Events
    */
-  listEvents
-    .item(itemid)
-    .selected$.pipe(
-      rx.map((isSelected) => ({ isSelected, data: Data.remote(state) })),
-      rx.filter((e) => !e.isSelected),
-      rx.filter((e) => e.data.closePending!),
+  listItemEvents.selected$
+    .pipe(
+      rx.filter((isSelected) => !isSelected),
+      rx.filter((e) => Data.remote(state).closePending!),
     )
     .subscribe(Close.reset);
 
@@ -84,5 +76,5 @@ export function closeConnectionBehavior(args: {
       rx.filter((e) => e.action === 'closed'),
       rx.filter((e) => e.connection?.id === Data.remote(state).connid),
     )
-    .subscribe(removeListItem);
+    .subscribe(removeFromList);
 }

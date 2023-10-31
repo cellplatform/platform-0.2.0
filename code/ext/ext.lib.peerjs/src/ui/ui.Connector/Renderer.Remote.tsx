@@ -87,15 +87,17 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
         }
 
         if (stage === 'Connecting' || (e.selected && data.remoteid)) {
-          return (
-            <LabelItem.Button
-              selected={e.selected}
-              focused={e.focused}
-              enabled={e.enabled}
-              spinning={stage === 'Connecting'}
-              label={'Connect'}
-            />
-          );
+          if (!args.ctx().list.current.editing) {
+            return (
+              <LabelItem.Button
+                selected={e.selected}
+                focused={e.focused}
+                enabled={e.enabled}
+                spinning={stage === 'Connecting'}
+                label={'Connect'}
+              />
+            );
+          }
         }
 
         return null;

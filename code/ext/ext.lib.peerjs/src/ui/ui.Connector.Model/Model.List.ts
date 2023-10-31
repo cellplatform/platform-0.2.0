@@ -1,7 +1,8 @@
 import { Renderers } from '../ui.Connector/Renderers';
 import { Remote } from './Model.Remote';
 import { Self } from './Model.Self';
-import { Model, rx, type t, DEFAULTS } from './common';
+import { DEFAULTS, Model, rx, type t } from './common';
+import { peerMonitor } from './Model.List.b.peerMonitor';
 
 export const List = {
   /**
@@ -31,6 +32,8 @@ export const List = {
 
     const events = list.events(dispose$);
     events.cmd.remove$.subscribe((e) => array.remove(e.index));
+
+    peerMonitor({ peer, list, array, dispose$ });
 
     return {
       list,

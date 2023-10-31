@@ -1,4 +1,5 @@
-import { Dev, Webrtc, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
+import { AvatarTray } from '../ui.AvatarTray';
 import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
 
 import { Connector } from '.';
@@ -49,7 +50,14 @@ export default Dev.describe(name, (e) => {
           opacity: 0.2,
           prefix: 'list.render-',
         };
-        return <Connector {...e.state.props} peer={self} debug={{ renderCount }} />;
+        return (
+          <Connector
+            //
+            {...e.state.props}
+            peer={self}
+            debug={{ renderCount, name: 'Main' }}
+          />
+        );
       });
   });
 
@@ -108,21 +116,45 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('getDisplayMedia', async (e) => {
-        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: false,
+        });
         console.info('stream', stream);
       });
+
+      dev.button(['redraw', '(harness)'], (e) => dev.redraw());
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        peer: self.id,
-        'peer.connections': self.current.connections,
-      };
-      return <Dev.Object name={name} data={data} expand={1} />;
-    });
+
+    dev.footer
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        const data = {
+          peer: self.id,
+          'peer.connections': self.current.connections,
+        };
+
+        const borderBottom = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+        const styles = {
+          obj: css({ padding: 8, borderBottom }),
+          avatars: css({ padding: 8 }),
+        };
+        return (
+          <div>
+            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
+            <AvatarTray
+              peer={self}
+              style={styles.avatars}
+              onClick={(e) => console.info(`⚡️ onClick`, e)}
+            />
+          </div>
+        );
+      });
   });
 });

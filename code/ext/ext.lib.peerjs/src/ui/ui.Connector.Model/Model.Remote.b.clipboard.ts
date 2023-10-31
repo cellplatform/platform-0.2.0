@@ -1,5 +1,6 @@
+import { DEFAULTS, PeerUri, Time, rx, slug, type t } from './common';
 import { Data } from './u.Data';
-import { DEFAULTS, Model, PeerUri, Time, rx, slug, type t } from './common';
+import { State } from './u.State';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -9,62 +10,22 @@ export function clipboardBehavior(args: {
 }) {
   const { events, state, dispatch } = args;
   const redraw = dispatch.redraw;
-
-  /**
-   * Remove the written data.
-   */
-  const clearPasted = () => {
-    state.change((item) => {
-      const data = Data.remote(item);
-      data.remoteid = undefined;
-      data.stage = undefined;
-      item.label = undefined;
-    });
-    redraw();
-  };
+  const canPaste = () => Data.remote(state).stage !== 'Connected';
 
   /**
    * Behavior: Paste
    */
-  const pasteClipboard = async () => {
-    const stage = Data.remote(state).stage;
-    if (stage === 'Connected') return;
+  const pasteClipboard = async (text: string) => {
+    if (!canPaste()) return;
 
-    const ctx = args.ctx();
-    const tx = slug();
-
-    const pasted = (await navigator.clipboard.readText()).trim();
-    const isValid = PeerUri.Is.peerid(pasted) || PeerUri.Is.uri(pasted);
-    const remoteid = isValid ? PeerUri.id(pasted) : '';
-
-    const self = Data.self(Model.List.get(ctx.list).item(0)!);
-    const isSelf = self.peerid === remoteid;
-    const alreadyConnected =
-      !isSelf && ctx.peer.current.connections.some((c) => c.peer.remote === remoteid);
-
-    state.change((item) => {
-      const data = Data.remote(item);
-
-      if (!isValid) data.error = { type: 'InvalidPeer', tx };
-      else if (isSelf) data.error = { type: 'PeerIsSelf', tx };
-      else if (alreadyConnected) data.error = { type: 'PeerAlreadyConnected', tx };
-      else data.error = undefined;
-
-      item.label = remoteid;
-      if (data.error) item.label = undefined;
-      data.remoteid = data.error ? undefined : remoteid;
-    });
-
-    redraw();
+    const { peer, list } = args.ctx();
+    const { tx } = State.Remote.setPeerText(state, list, peer, text);
 
     Time.delay(DEFAULTS.timeout.error, () => {
-      if (Data.remote(state).error?.tx !== tx) return;
-      state.change((item) => {
-        const data = Data.remote(item);
-        if (data.error) data.remoteid = undefined;
-        data.error = undefined;
+      if (State.Remote.resetError(state, tx)) {
+        peer.purge();
         redraw();
-      });
+      }
     });
   };
 
@@ -91,13 +52,17 @@ export function clipboardBehavior(args: {
   /**
    * (Triggers)
    */
-  events.cmd.clipboard.paste$.subscribe(pasteClipboard);
   events.cmd.clipboard.copy$.subscribe(copyClipboard);
-  events.key.escape$
+
+  events.key.$.pipe(
+    rx.filter((e) => e.is.meta),
+    rx.filter(() => canPaste()),
+  ).subscribe(() => dispatch.edit('start'));
+
+  events.cmd.edited$
     .pipe(
-      rx.map((key) => ({ key, data: Data.remote(state) })),
-      rx.filter((e) => Boolean(e.data.remoteid)),
-      rx.filter((e) => e.data.stage === undefined),
+      rx.filter(() => canPaste()),
+      rx.filter((e) => e.action === 'accepted'),
     )
-    .subscribe(clearPasted);
+    .subscribe((e) => pasteClipboard(e.label));
 }

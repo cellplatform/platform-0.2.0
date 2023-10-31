@@ -12,7 +12,7 @@ export const Remote = {
   initial(args: RemoteArgs): t.ConnectorItem<D> {
     const data: D = { kind: 'peer:remote' };
     return {
-      editable: false,
+      editable: true,
       placeholder: 'paste remote peer',
       left: { kind: 'remote:left', button: false },
       right: { kind: 'remote:right' },

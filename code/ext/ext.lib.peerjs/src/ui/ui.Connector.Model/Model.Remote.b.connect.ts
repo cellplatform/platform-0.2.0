@@ -1,5 +1,6 @@
-import { DEFAULTS, Model, Time, slug, type t } from './common';
+import { DEFAULTS, Time, type t } from './common';
 import { Data } from './u.Data';
+import { State } from './u.State';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -20,12 +21,8 @@ export function openConnectionBehavior(args: {
     if (!remoteid) return;
 
     const connecting = (value: boolean) => {
-      state.change((item) => {
-        const data = Data.remote(item);
-        data.stage = value ? 'Connecting' : undefined;
-        Model.action(item, 'remote:right')[0].enabled = !value;
-        redraw();
-      });
+      State.Remote.setAsConnecting(state, value);
+      redraw();
     };
 
     connecting(true);
@@ -33,36 +30,17 @@ export function openConnectionBehavior(args: {
     connecting(false);
 
     if (error) {
-      const tx = slug();
-      state.change((item) => {
-        const data = Data.remote(item);
-        data.error = { tx, type: 'ConnectFail', message: error };
-        item.label = undefined;
-        Model.action(item, 'remote:right')[0].button = false;
-        redraw();
-      });
+      console.log('error:', error, 'remote:', remoteid);
+      const { tx } = State.Remote.setConnectError(state, error);
+      redraw();
 
       Time.delay(DEFAULTS.timeout.error, () => {
-        if (Data.remote(state).error?.tx !== tx) return;
-        state.change((item) => {
-          Data.remote(item).error = undefined;
-          item.label = data.remoteid;
-          Model.action(item, 'remote:right')[0].button = true;
-          redraw();
-        });
+        if (State.Remote.resetError(state, tx, remoteid)) redraw();
       });
     }
 
     if (!error) {
-      state.change((item) => {
-        const data = Data.remote(item);
-        data.stage = 'Connected';
-        data.connid = conn.connectionId;
-        Model.action(item, 'remote:right')[0].button = false;
-      });
-
-      // Add the next [+] item.
-      list.change((item) => (item.total += 1));
+      State.Remote.setAsConnected(state, list, conn);
     }
   };
 

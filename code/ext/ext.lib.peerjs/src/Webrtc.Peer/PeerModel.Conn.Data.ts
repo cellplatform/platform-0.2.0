@@ -21,10 +21,11 @@ export function manageDataConnection(args: {
        * Start an outgoing data connection.
        */
       outgoing(remote: Id) {
-        return new Promise<t.PeerConnectedData>((resolve) => {
+        return new Promise<t.PeerConnectedData>(async (resolve) => {
           const metadata: t.PeerConnectMetadata = { kind: 'data', userAgent: navigator.userAgent };
           const conn = peerjs.connect(remote, { reliable: true, metadata });
           const id = conn.connectionId;
+
           state.change((d) => {
             d.connections.push({
               kind: 'data',
@@ -36,7 +37,7 @@ export function manageDataConnection(args: {
             });
           });
 
-          const handleOpen = () =>
+          const handleOpen = () => {
             state.change((d) => {
               timer.cancel();
               const item = get.conn.item(d, id);
@@ -45,6 +46,7 @@ export function manageDataConnection(args: {
               dispatch.connection('ready', conn);
               resolve({ id, conn });
             });
+          };
 
           const handleFailure = (error: string) =>
             state.change((d) => {
