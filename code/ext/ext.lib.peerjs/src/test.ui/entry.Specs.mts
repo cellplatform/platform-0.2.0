@@ -8,6 +8,7 @@ export const Specs = {
   'ext.lib.peerjs.ui.Connector.MediaToolbar': () => import('../ui/ui.Connector.MediaToolbar/-SPEC'),
   'ext.lib.peerjs.ui.Sample.01': () => import('../ui/ui.Sample.01/-SPEC'),
   'ext.lib.peerjs.ui.Sample.02': () => import('../ui/ui.Sample.02/-SPEC'),
+  'ext.lib.peerjs.ui.Sample.03': () => import('../ui/ui.Sample.03/-SPEC'),
 };
 
 export default Specs;
