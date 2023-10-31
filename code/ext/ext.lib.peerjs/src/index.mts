@@ -15,9 +15,11 @@ export { PeerDev } from './ui/ui.Dev';
  */
 import { Connector } from './ui/ui.Connector';
 import { AvatarTray } from './ui/ui.AvatarTray';
+import { Video } from './ui/common';
 export const UI = {
   Connector,
   AvatarTray,
+  Video,
 } as const;
 
 /**

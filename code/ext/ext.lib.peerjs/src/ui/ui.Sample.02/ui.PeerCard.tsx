@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, Icons, MediaStream, ObjectView, Time, css, rx, type t } from './common';
+import { COLORS, Color, Icons, ObjectView, Time, Video, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
 export type PeerCardProps = {
@@ -98,7 +98,7 @@ export const PeerCard: React.FC<PeerCardProps> = (props) => {
 
           const stream = conn.stream?.remote;
           const elStream = stream && (
-            <MediaStream.Video stream={stream} style={styles.video} borderRadius={4} muted={true} />
+            <Video stream={stream} style={styles.video} borderRadius={4} muted={true} />
           );
 
           return (

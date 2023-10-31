@@ -6,6 +6,7 @@ import type { t } from './common';
 export type AvatarTrayProps = {
   size?: number;
   peer?: t.PeerModel;
+  muted?: boolean;
   style?: t.CssValue;
   onClick?: t.PeerStreamClickHandler;
 };

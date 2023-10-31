@@ -4,3 +4,4 @@ export { Dev } from 'sys.ui.react.common';
 
 export * from '../ui/common';
 export * from '../ui/ui.Dev';
+export { UI } from '../index.mjs';

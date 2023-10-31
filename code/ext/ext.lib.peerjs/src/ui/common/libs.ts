@@ -20,7 +20,7 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
-export { MediaStream } from 'sys.ui.react.media';
+export { Video } from 'sys.ui.react.media';
 
 /**
  * @local

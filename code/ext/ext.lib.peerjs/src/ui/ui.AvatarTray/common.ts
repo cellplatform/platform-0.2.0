@@ -6,4 +6,5 @@ export * from '../common';
  */
 export const DEFAULTS = {
   size: 48,
+  muted: true,
 } as const;
