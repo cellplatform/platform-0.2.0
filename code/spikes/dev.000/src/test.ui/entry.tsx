@@ -29,7 +29,7 @@ const render = async (content: Subject) => {
   if (content === 'Dev:Localhost') {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('../entry.Specs.Localhost.mjs');
-    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
+    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 2 });
     root.render(el);
     return;
   }

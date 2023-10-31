@@ -10,7 +10,7 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'App';
+const name = 'App.00';
 
 export default Dev.describe(name, (e) => {
   let network: t.NetworkDocSharedRef;
