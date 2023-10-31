@@ -64,11 +64,11 @@ export function useItemEditController(args: Args) {
         (list) => (list.editing = undefined),
         (item) => delete item._revert,
       );
+      dispatch.edited('accepted');
     },
 
     cancel() {
       if (!Edit.is.editing) return;
-
       change(
         'edit:accept',
         (list) => (list.editing = undefined),
@@ -77,6 +77,7 @@ export function useItemEditController(args: Args) {
           delete item._revert;
         },
       );
+      dispatch.edited('cancelled');
     },
   };
 

@@ -12,7 +12,6 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
   const lifecycle = rx.lifecycle(dispose$);
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
   const cmd$ = PatchState.Command.filter($);
-  const keydown$ = rx.payload<t.LabelItemKeydownCmd>(cmd$, 'Item:Keydown');
 
   type K = t.LabelItemKeyHandlerArgs;
   type E = t.LabelItemEvents<A, D>;
@@ -24,9 +23,10 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
     $,
     get key() {
       if (!cache.key) {
-        const filterOn = (code: string) => keydown$.pipe(rx.filter<K>((e) => e.code === code));
+        const $ = rx.payload<t.LabelItemKeydownCmd>(cmd$, 'Item:Keydown');
+        const filterOn = (code: string) => $.pipe(rx.filter<K>((e) => e.code === code));
         cache.key = {
-          $: keydown$,
+          $,
           enter$: filterOn('Enter'),
           escape$: filterOn('Escape'),
         };
@@ -47,6 +47,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
           changed$: rx.payload<t.LabelItemChangedCmd>(cmd$, 'Item:Changed'),
           click$: rx.payload<t.LabelItemClickCmd>(cmd$, 'Item:Click'),
           edit$: rx.payload<t.LabelItemEditCmd>(cmd$, 'Item:Edit'),
+          edited$: rx.payload<t.LabelItemEditedCmd>(cmd$, 'Item:Edited'),
           clipboard: {
             $: clipboard$,
             cut$: clipboard('Cut'),

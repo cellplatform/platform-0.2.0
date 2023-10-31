@@ -32,6 +32,12 @@ export function commands(item?: t.LabelItemState) {
       return api;
     },
 
+    edited(action) {
+      const label = item?.current.label ?? '';
+      dispatch({ type: 'Item:Edited', payload: { action, label, tx: slug() } });
+      return api;
+    },
+
     /**
      * Clipboard related actions.
      */
