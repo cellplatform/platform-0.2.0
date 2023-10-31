@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Model, rx, type t } from './common';
-import { List } from './ui.List';
 
 export function useListState(peer?: t.PeerModel, onReady?: t.ConnectorReadyHandler) {
   const [list, setList] = useState<t.LabelListState>();
