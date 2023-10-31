@@ -1,6 +1,7 @@
-import { Icons, type t, COLORS } from '../common';
+import { COLORS, Icons, type t } from '../common';
 
 export { Button } from '../Button';
+export { Focus } from '../Focus';
 export { RenderCount } from '../RenderCount';
 export { Spinner } from '../Spinner';
 export { TextInput } from '../Text.Input';

@@ -1,12 +1,12 @@
-import { RefObject, useState, useEffect } from 'react';
-import { DEFAULTS, Keyboard, RenderCount, Style, css, useClickOutside, type t } from './common';
+import { RefObject, useState } from 'react';
+import { DEFAULTS, Focus, RenderCount, Style, css, useClickOutside, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
-import { useListContext } from './use.ListContext';
 import { useKeyboard } from './use.Keyboard';
+import { useListContext } from './use.ListContext';
 
 type Props = t.LabelItemProps & { textboxRef: RefObject<t.TextInputRef> };
 
@@ -63,7 +63,12 @@ export const View: React.FC<Props> = (props) => {
     target: ClickTarget,
     handler?: t.LabelItemClickHandler,
   ) => {
-    return () => handler?.(clickArgs(kind, target));
+    return () => {
+      if (kind === 'Single' && target === 'Item') {
+        if (!Focus.containsFocus(ref)) ref.current?.focus(); // NB: Ensure focused.
+      }
+      handler?.(clickArgs(kind, target));
+    };
   };
 
   /**
