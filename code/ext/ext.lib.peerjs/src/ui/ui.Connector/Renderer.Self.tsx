@@ -7,7 +7,7 @@ export function renderSelf(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRen
       const ctx = args.ctx();
       const remotes = Data.list(ctx.list).remotes.data;
       const totalRemotes = remotes.filter((d) => d.remoteid).length;
-      const peerWidth = totalRemotes === 0 ? undefined : 30;
+      const peerWidth = totalRemotes === 0 ? undefined : 28;
 
       const data = Data.self(e.item);
       if (data.actionCompleted) return <>{data.actionCompleted.message}</>;
