@@ -31,6 +31,7 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
     readonly $: t.Observable<t.LabelListCmd>;
     readonly redraw$: t.Observable<t.LabelListRedrawCmdArgs>;
     readonly select$: t.Observable<t.LabelListSelectCmdArgs>;
+    readonly edit$: t.Observable<t.LabelListEditCmdArgs>;
     readonly remove$: t.Observable<t.LabelListRemoveCmdArgs>;
     readonly focus$: t.Observable<void>;
     readonly blur$: t.Observable<void>;
@@ -49,6 +50,7 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  */
 export type LabelListDispatch = {
   select(item: Index | Id, focus?: boolean): LabelListDispatch;
+  edit(item: Index | Id, action?: t.LabelListEditCmdArgs['action']): LabelListDispatch;
   redraw(item?: Index | Id): LabelListDispatch;
   remove(index?: Index): LabelListDispatch;
   focus(focus?: boolean): LabelListDispatch;
@@ -59,16 +61,24 @@ export type LabelListCmd =
   | LabelListFocusCmd
   | LabelListSelectCmd
   | LabelListRedrawCmd
-  | LabelListRemoveCmd;
+  | LabelListRemoveCmd
+  | LabelListEditCmd;
 
 export type LabelListFocusCmd = { type: 'List:Focus'; payload: LabelListFocusCmdArgs };
-export type LabelListFocusCmdArgs = { focus: boolean; tx: string };
+export type LabelListFocusCmdArgs = { tx: string; focus: boolean };
 
 export type LabelListSelectCmd = { type: 'List:Select'; payload: LabelListSelectCmdArgs };
-export type LabelListSelectCmdArgs = { item: Index | Id; focus: boolean; tx: string };
+export type LabelListSelectCmdArgs = { tx: string; item: Index | Id; focus: boolean };
 
 export type LabelListRedrawCmd = { type: 'List:Redraw'; payload: LabelListRedrawCmdArgs };
-export type LabelListRedrawCmdArgs = { item?: Index | Id; tx: string };
+export type LabelListRedrawCmdArgs = { tx: string; item?: Index | Id };
 
 export type LabelListRemoveCmd = { type: 'List:Remove'; payload: LabelListRemoveCmdArgs };
-export type LabelListRemoveCmdArgs = { index: Index; tx: string };
+export type LabelListRemoveCmdArgs = { tx: string; index: Index };
+
+export type LabelListEditCmd = { type: 'List:Edit'; payload: LabelListEditCmdArgs };
+export type LabelListEditCmdArgs = {
+  tx: string;
+  item: Id;
+  action: t.LabelItemEditCmdArgs['action'];
+};

@@ -189,6 +189,9 @@ export default Dev.describe(name, (e) => {
         select(TestState.array.first.instance, true),
       );
       dev.hr(-1, 5);
+      dev.button('edit: first', (e) => dispatch.edit(0));
+      dev.button('edit: last', (e) => dispatch.edit(TestState.array.last.instance));
+      dev.hr(-1, 5);
       dev.button(['select: last, focus', '[index]'], (e) =>
         select(TestState.array.items.length - 1, true),
       );

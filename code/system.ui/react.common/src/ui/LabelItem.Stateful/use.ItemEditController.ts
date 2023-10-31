@@ -143,7 +143,7 @@ export function useItemEditController(args: Args) {
   }, [enabled, ref, item?.instance]);
 
   /**
-   * Command listener.
+   * Command listener (Item).
    */
   useEffect(() => {
     const events = item?.events();
@@ -161,6 +161,20 @@ export function useItemEditController(args: Args) {
     });
     return events?.dispose;
   }, [enabled, item?.instance]);
+
+  /**
+   * Command listener (List).
+   */
+  useEffect(() => {
+    const events = list?.events();
+    events?.cmd.edit$
+      .pipe(
+        rx.filter((e) => enabled),
+        rx.filter((e) => e.item === item?.instance),
+      )
+      .subscribe((e) => dispatch.edit(e.action));
+    return events?.dispose;
+  }, [enabled, list?.instance]);
 
   /**
    * API

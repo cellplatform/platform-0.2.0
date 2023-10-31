@@ -11,6 +11,14 @@ export function commands(list?: t.LabelListState) {
       dispatch({ type: 'List:Select', payload: { item, focus, tx: slug() } });
       return api;
     },
+    edit(target, action = 'start') {
+      const item = Wrangle.itemId(list, target);
+      if (item) {
+        api.select(item, true);
+        dispatch({ type: 'List:Edit', payload: { item, action, tx: slug() } });
+      }
+      return api;
+    },
     redraw(item) {
       dispatch({ type: 'List:Redraw', payload: { item, tx: slug() } });
       return api;
@@ -28,6 +36,18 @@ export function commands(list?: t.LabelListState) {
       api.focus(false);
       return api;
     },
-  } as const;
+  };
   return api;
 }
+
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  itemId(list?: t.LabelListState, target?: string | number) {
+    const getItem = list?.current.getItem;
+    if (!getItem || target === undefined) return '';
+    const [item, index] = getItem(target);
+    return item?.instance ?? '';
+  },
+} as const;

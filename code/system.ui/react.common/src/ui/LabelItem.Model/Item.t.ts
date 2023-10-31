@@ -59,9 +59,9 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
   readonly cmd: {
     readonly $: t.Observable<t.LabelItemCmd>;
     readonly redraw$: t.Observable<void>;
-    readonly changed$: t.Observable<t.LabelItemChanged>;
-    readonly click$: t.Observable<t.LabelItemClick>;
-    readonly edit$: t.Observable<t.LabelItemEdit>;
+    readonly changed$: t.Observable<t.LabelItemChangedCmdArgs>;
+    readonly click$: t.Observable<t.LabelItemClickCmdArgs>;
+    readonly edit$: t.Observable<t.LabelItemEditCmdArgs>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
       on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
@@ -84,7 +84,7 @@ export type LabelItemDispatch = {
   changed(e: t.LabelItemStateChangedHandlerArgs): LabelItemDispatch;
   action(e: t.LabelItemActionHandlerArgs): LabelItemDispatch;
   click(e: t.LabelItemClickHandlerArgs): LabelItemDispatch;
-  edit(action: LabelItemEdit['action']): LabelItemDispatch;
+  edit(action: LabelItemEditCmdArgs['action']): LabelItemDispatch;
   clipboard(e: t.LabelItemClipboard['action']): LabelItemDispatch;
   key: {
     down(e: t.LabelItemKeyHandlerArgs): LabelItemDispatch;
@@ -125,11 +125,11 @@ export type LabelItemActionInvoked<A extends K = string> = {
   tx: string;
 };
 
-export type LabelItemClickCmd = { type: 'Item:Click'; payload: LabelItemClick };
-export type LabelItemClick = t.LabelItemClickHandlerArgs & { tx: string };
+export type LabelItemClickCmd = { type: 'Item:Click'; payload: LabelItemClickCmdArgs };
+export type LabelItemClickCmdArgs = t.LabelItemClickHandlerArgs & { tx: string };
 
-export type LabelItemChangedCmd = { type: 'Item:Changed'; payload: LabelItemChanged };
-export type LabelItemChanged = t.LabelItemStateChangedHandlerArgs & { tx: string };
+export type LabelItemChangedCmd = { type: 'Item:Changed'; payload: LabelItemChangedCmdArgs };
+export type LabelItemChangedCmdArgs = t.LabelItemStateChangedHandlerArgs & { tx: string };
 
-export type LabelItemEditCmd = { type: 'Item:Edit'; payload: LabelItemEdit };
-export type LabelItemEdit = { tx: string; action: 'start' | 'accept' | 'cancel' | 'toggle' };
+export type LabelItemEditCmd = { type: 'Item:Edit'; payload: LabelItemEditCmdArgs };
+export type LabelItemEditCmdArgs = { tx: string; action: 'start' | 'accept' | 'cancel' | 'toggle' };
