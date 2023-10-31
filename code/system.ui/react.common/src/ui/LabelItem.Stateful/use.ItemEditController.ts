@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, rx, type t } from './common';
+import { DEFAULTS, Keyboard, rx, type t, Model } from './common';
 
 type RevertibleItem = t.LabelItem & { _revert?: { label?: string } };
 type ChangeItem = t.ImmutableNext<RevertibleItem>;
@@ -19,6 +19,7 @@ type Args = {
  */
 export function useItemEditController(args: Args) {
   const { item, list, position, enabled = true } = args;
+  const dispatch = Model.Item.commands(item);
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -77,14 +78,6 @@ export function useItemEditController(args: Args) {
         },
       );
     },
-
-    toggle() {
-      if (Edit.is.editing) {
-        Edit.accept();
-      } else {
-        Edit.start();
-      }
-    },
   };
 
   /**
@@ -113,12 +106,12 @@ export function useItemEditController(args: Args) {
     },
 
     onLabelDoubleClick(e) {
-      Edit.start();
+      dispatch.edit('start');
       args.handlers?.onLabelDoubleClick?.(e);
     },
 
     onEditClickAway(e) {
-      Edit.cancel();
+      dispatch.edit('cancel');
       args.handlers?.onEditClickAway?.(e);
     },
   };
@@ -138,16 +131,36 @@ export function useItemEditController(args: Args) {
 
     keyboard.on({
       Escape(e) {
-        if (isSelected()) Edit.cancel();
+        if (isSelected()) dispatch.edit('cancel');
       },
       Enter(e) {
-        if (isSelected()) Edit.toggle();
+        if (isSelected()) dispatch.edit('toggle');
       },
     });
 
     if (!enabled) dispose();
     return dispose;
-  }, [enabled, ref]);
+  }, [enabled, ref, item?.instance]);
+
+  /**
+   * Command listener.
+   */
+  useEffect(() => {
+    const events = item?.events();
+    events?.cmd.edit$.pipe(rx.filter((e) => enabled)).subscribe((e) => {
+      if (e.action === 'start') Edit.start();
+      if (e.action === 'accept') Edit.accept();
+      if (e.action === 'cancel') Edit.cancel();
+      if (e.action === 'toggle') {
+        if (Edit.is.editing) {
+          Edit.accept();
+        } else {
+          Edit.start();
+        }
+      }
+    });
+    return events?.dispose;
+  }, [enabled, item?.instance]);
 
   /**
    * API

@@ -61,6 +61,7 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
     readonly redraw$: t.Observable<void>;
     readonly changed$: t.Observable<t.LabelItemChanged>;
     readonly click$: t.Observable<t.LabelItemClick>;
+    readonly edit$: t.Observable<t.LabelItemEdit>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
       on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
@@ -83,6 +84,7 @@ export type LabelItemDispatch = {
   changed(e: t.LabelItemStateChangedHandlerArgs): LabelItemDispatch;
   action(e: t.LabelItemActionHandlerArgs): LabelItemDispatch;
   click(e: t.LabelItemClickHandlerArgs): LabelItemDispatch;
+  edit(action: LabelItemEdit['action']): LabelItemDispatch;
   clipboard(e: t.LabelItemClipboard['action']): LabelItemDispatch;
   key: {
     down(e: t.LabelItemKeyHandlerArgs): LabelItemDispatch;
@@ -97,7 +99,8 @@ export type LabelItemCmd =
   | LabelItemRedrawCmd
   | LabelItemActionInvokedCmd
   | LabelItemClickCmd
-  | LabelItemChangedCmd;
+  | LabelItemChangedCmd
+  | LabelItemEditCmd;
 
 export type LabelItemKeydownCmd = { type: 'Item:Keydown'; payload: LabelItemKeypress };
 export type LabelItemKeyupCmd = { type: 'Item:Keyup'; payload: LabelItemKeypress };
@@ -127,3 +130,6 @@ export type LabelItemClick = t.LabelItemClickHandlerArgs & { tx: string };
 
 export type LabelItemChangedCmd = { type: 'Item:Changed'; payload: LabelItemChanged };
 export type LabelItemChanged = t.LabelItemStateChangedHandlerArgs & { tx: string };
+
+export type LabelItemEditCmd = { type: 'Item:Edit'; payload: LabelItemEdit };
+export type LabelItemEdit = { tx: string; action: 'start' | 'accept' | 'cancel' | 'toggle' };

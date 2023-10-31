@@ -12,25 +12,30 @@ export function commands(item?: t.LabelItemState) {
       return api;
     },
 
-    changed(e: t.LabelItemStateChangedHandlerArgs) {
+    changed(e) {
       dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
       return api;
     },
 
-    action(e: t.LabelItemActionHandlerArgs) {
+    action(e) {
       dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
       return api;
     },
 
-    click(e: t.LabelItemClickHandlerArgs) {
+    click(e) {
       dispatch({ type: 'Item:Click', payload: { ...e, tx: slug() } });
+      return api;
+    },
+
+    edit(action) {
+      dispatch({ type: 'Item:Edit', payload: { action, tx: slug() } });
       return api;
     },
 
     /**
      * Clipboard related actions.
      */
-    clipboard(action: t.LabelItemClipboard['action']) {
+    clipboard(action) {
       dispatch({ type: 'Item:Clipboard', payload: { action, tx: slug() } });
       return api;
     },
