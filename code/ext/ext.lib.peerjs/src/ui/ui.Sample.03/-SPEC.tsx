@@ -1,4 +1,4 @@
-import { css, Dev, Color, COLORS, type t, UI, Webrtc, Video } from '../../test.ui';
+import { COLORS, Color, Dev, UI, Webrtc, css } from '../../test.ui';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -24,7 +24,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Video stream={e.state.stream} muted={true} />;
+        return <UI.Video stream={e.state.stream} muted={true} />;
       });
   });
 
