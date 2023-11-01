@@ -132,7 +132,7 @@ export default Dev.describe(name, (e) => {
               peer={self}
               size={48}
               style={{ padding: 8, borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }}
-              onClick={(e) => {
+              onChange={(e) => {
                 console.info('⚡️ avatar click', e);
               }}
             />

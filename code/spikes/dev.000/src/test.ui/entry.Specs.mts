@@ -5,6 +5,8 @@
 import '@vime/core/themes/default.css';
 import '@vime/core/themes/light.css';
 
+const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
+
 const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 const { Specs: WebRtc } = await import('sys.net.webrtc/specs');
@@ -28,8 +30,7 @@ const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
 const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
 
 export const Specs = {
-  'App.00': () => import('../ui/App/-SPEC.00'),
-  'App.01': () => import('../ui/App/-SPEC.01'),
+  ...App,
 
   ...WebRtc,
   ...Crdt,
