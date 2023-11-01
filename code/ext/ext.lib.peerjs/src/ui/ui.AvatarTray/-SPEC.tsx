@@ -28,8 +28,8 @@ export default Dev.describe(name, (e) => {
             {...e.state.props}
             style={{ margin: 10 }}
             peer={self}
-            onClick={(e) => {
-              console.log('⚡️ onClick:', e);
+            onChange={(e) => {
+              console.log('⚡️ onChange:', e);
             }}
           />
         );

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Is, type t } from './common';
 
 export function useMediaStreams(peer?: t.PeerModel) {
-  const [streams, setStreams] = useState<{ conn: t.PeerConnection; stream: MediaStream }[]>([]);
+  const [streams, setStreams] = useState<t.AvatarTrayStream[]>([]);
 
   useEffect(() => {
     const update = () => {

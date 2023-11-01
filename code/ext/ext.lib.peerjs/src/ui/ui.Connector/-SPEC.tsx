@@ -151,7 +151,7 @@ export default Dev.describe(name, (e) => {
             <AvatarTray
               peer={self}
               style={styles.avatars}
-              onClick={(e) => console.info(`⚡️ onClick`, e)}
+              onChange={(e) => console.info(`⚡️ onClick`, e)}
             />
           </div>
         );

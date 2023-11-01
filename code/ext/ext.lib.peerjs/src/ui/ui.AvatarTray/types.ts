@@ -8,14 +8,18 @@ export type AvatarTrayProps = {
   peer?: t.PeerModel;
   muted?: boolean;
   style?: t.CssValue;
-  onClick?: t.PeerStreamClickHandler;
+  onChange?: t.PeerStreamChangeHandler;
+};
+
+export type AvatarTrayStream = {
+  conn: t.PeerConnection;
+  stream: MediaStream;
 };
 
 /**
  * Events
  */
-export type PeerStreamClickHandler = (e: PeerStreamClickHandlerArgs) => void;
-export type PeerStreamClickHandlerArgs = {
-  conn: t.PeerConnection;
-  stream: MediaStream;
+export type PeerStreamChangeHandler = (e: PeerStreamChangeHandlerArgs) => void;
+export type PeerStreamChangeHandlerArgs = {
+  selected?: AvatarTrayStream;
 };
