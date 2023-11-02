@@ -7,15 +7,17 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
   return {
     label(e) {
       const data = Data.remote(e.item);
-      const uri = PeerUri.uri(data.remoteid);
       if (data.actionCompleted) return <>{data.actionCompleted.message}</>;
+      if (!data.remoteid) return;
+
+      const uri = PeerUri.uri(data.remoteid);
       return <PeerLabel uri={uri} selected={e.selected} focused={e.focused} />;
     },
 
     placeholder(e) {
       const data = Data.remote(e.item);
       const err = data.error?.type;
-      let text = e.item.placeholder;
+      let text = 'paste remote peer';
 
       if (err === 'InvalidPeer') text = 'invalid peer ( please try again )';
       if (err === 'PeerIsSelf') text = 'cannot connect to yourself';

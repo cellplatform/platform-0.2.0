@@ -12,7 +12,6 @@ export const Remote = {
     const data: D = { kind: 'peer:remote' };
     return {
       editable: true,
-      placeholder: 'paste remote peer',
       left: { kind: 'remote:left', button: false },
       right: { kind: 'remote:right' },
       data,
