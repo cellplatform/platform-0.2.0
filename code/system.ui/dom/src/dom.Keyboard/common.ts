@@ -2,6 +2,7 @@ import { type t } from '../common';
 import { R } from '../common';
 
 export * from '../common';
+export { UserAgent } from '../dom.UserAgent';
 
 /**
  * Defaults

@@ -21,6 +21,9 @@ export type KeyboardKeyFlags = {
   readonly ctrl: boolean;
   readonly meta: boolean;
   readonly shift: boolean;
+  readonly cut: boolean;
+  readonly copy: boolean;
+  readonly paste: boolean;
 };
 
 /**

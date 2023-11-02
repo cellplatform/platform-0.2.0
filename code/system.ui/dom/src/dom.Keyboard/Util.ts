@@ -1,4 +1,4 @@
-import { t } from './common';
+import { t, UserAgent } from './common';
 
 export const Util = {
   isModifier(value: string) {
@@ -17,6 +17,9 @@ export const Util = {
   },
 
   toFlags(e: KeyboardEvent): t.KeyboardKeyFlags {
+    const os = UserAgent.current.os;
+    const clipboardModifier = os.name === 'Mac OS' ? e.metaKey : e.ctrlKey;
+
     return {
       down: e.type === 'keydown',
       up: e.type === 'keyup',
@@ -31,6 +34,9 @@ export const Util = {
       ctrl: e.ctrlKey,
       meta: e.metaKey,
       shift: e.shiftKey,
+      cut: e.code === 'KeyX' && clipboardModifier,
+      copy: e.code === 'KeyC' && clipboardModifier,
+      paste: e.code === 'KeyV' && clipboardModifier,
     };
   },
 
