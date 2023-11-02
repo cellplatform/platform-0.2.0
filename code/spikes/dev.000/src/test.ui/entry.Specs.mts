@@ -11,7 +11,11 @@ const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 const { Specs: WebRtc } = await import('sys.net.webrtc/specs');
 
-const { ModuleSpecs: Common, DevSpecs: ComonDev } = await import('sys.ui.react.common/specs');
+const {
+  ModuleSpecs: Common,
+  DevSpecs: ComonDev,
+  SampleSpecs: CommonSample,
+} = await import('sys.ui.react.common/specs');
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
@@ -37,6 +41,7 @@ export const Specs = {
   ...Monaco,
   ...Common,
   ...ComonDev,
+  ...CommonSample,
   ...Dev,
   ...Media,
   ...MediaImage,
