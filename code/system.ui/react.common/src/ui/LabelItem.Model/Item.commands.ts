@@ -52,10 +52,9 @@ export function commands(item?: t.LabelItemState) {
     key: {
       down(e: t.LabelItemKeyHandlerArgs) {
         dispatch({ type: 'Item:Keydown', payload: { ...e, tx: slug() } });
-        const meta = (code: string) => e.is.meta && e.code === code;
-        if (meta('KeyX')) api.clipboard('Cut');
-        if (meta('KeyC')) api.clipboard('Copy');
-        if (meta('KeyV')) api.clipboard('Paste');
+        if (e.is.cut) api.clipboard('Cut');
+        if (e.is.copy) api.clipboard('Copy');
+        if (e.is.paste) api.clipboard('Paste');
         return api;
       },
       up(e: t.LabelItemKeyHandlerArgs) {

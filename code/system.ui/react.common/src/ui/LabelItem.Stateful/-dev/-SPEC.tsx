@@ -71,7 +71,7 @@ export default Dev.describe(name, (e) => {
           rx.filter((e) => e.code === 'KeyN'),
         ).subscribe((e) => TestState.add(dev, true));
 
-        events.cmd.clipboard.cut$.subscribe((e) => console.info('🌳 cut', state.current));
+        events.cmd.clipboard.cut$.subscribe((e) => console.info('🎬 cut', state.current));
         events.cmd.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
         events.cmd.clipboard.paste$.subscribe((e) => console.info('💥 paste', state.current));
 
