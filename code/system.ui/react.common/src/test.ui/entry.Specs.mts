@@ -60,10 +60,15 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 
+export const SampleSpecs = {
+  'sys.ui.sample.Hash': () => import('../ui.sample/Hash/-SPEC'),
+};
+
 export const Specs = {
   ...ModuleSpecs,
   ...HookSpecs,
   ...DevSpecs,
+  ...SampleSpecs,
 };
 
 export default Specs;
