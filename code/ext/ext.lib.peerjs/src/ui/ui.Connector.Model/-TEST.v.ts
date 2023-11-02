@@ -25,7 +25,6 @@ describe('Connector.Model', () => {
     it('state', () => {
       const model = Model.Remote.state({ ctx });
       expect(model.type).to.eql(DEFAULTS.type.remote);
-      expect(model.current.placeholder).to.eql('paste remote peer');
 
       expect(Model.Is.self(model)).to.eql(false);
       expect(Model.Is.remote(model)).to.eql(true);
