@@ -1,6 +1,8 @@
 import UAParser from 'ua-parser-js';
 import { type t } from '../common';
 
+let _current: t.UserAgent | undefined;
+
 /**
  * Ref:
  *    https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
@@ -15,8 +17,10 @@ export const UserAgent = {
    * Parse the browser user-agent string.
    */
   get current() {
+    if (_current) return _current;
     const text = typeof navigator === 'object' ? navigator.userAgent : '';
-    return UserAgent.parse(text);
+    _current = UserAgent.parse(text);
+    return _current;
   },
 
   /**
@@ -24,7 +28,7 @@ export const UserAgent = {
    * Example:
    *
    *    const ua = UserAgent.parse(navigator.userAgent);
-   * '
+   *
    */
   parse(input: t.UserAgentString): t.UserAgent {
     const parser = UAParser((input || '').trim());

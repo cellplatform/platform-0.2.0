@@ -16,5 +16,14 @@ describe('UserAgent', () => {
     const res = UserAgent.current;
     expect(res.browser.name).to.eql('WebKit');
     expect(res.engine.name).to.eql('WebKit');
+
+    expect(res).to.equal(UserAgent.current); // NB: same instance, lazily parsed.
+    expect(res).to.not.equal(UserAgent.parse(navigator.userAgent)); // sanity check on instance
+  });
+
+  it('UserAgent.current (lazily evaluation → cached)', () => {
+    const res = UserAgent.current;
+    expect(res).to.not.equal(UserAgent.parse(navigator.userAgent));
+    expect(res).to.equal(UserAgent.current); // NB: same instance, lazily parsed.
   });
 });
