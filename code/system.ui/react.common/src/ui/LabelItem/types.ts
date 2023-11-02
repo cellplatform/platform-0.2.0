@@ -33,7 +33,7 @@ type K = t.LabelItemActionKind;
 export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRenderResponse;
 export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
 export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & { kind: A };
-export type LabelItemRenderResponse = JSX.Element | undefined | false | null;
+export type LabelItemRenderResponse = JSX.Element | string | undefined | false | null;
 
 type H = LabelItemActionHelpers;
 export type LabelItemRenderers<A extends K = string> = {

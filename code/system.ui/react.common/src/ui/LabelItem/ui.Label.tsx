@@ -23,18 +23,11 @@ export const Label: React.FC<Props> = (props) => {
     debug,
   } = props;
   const { enabled = DEFAULTS.enabled, placeholder = DEFAULTS.placeholder } = item;
-  const label = Wrangle.labelText(item);
+  const label = item.label || '';
 
   /**
    * Render
    */
-  const renderElement = (renderer?: t.LabelItemRender, text?: string) => {
-    const render = Wrangle.render.element;
-    return typeof renderer === 'function'
-      ? render(renderer, { index, total, enabled, selected, focused, editing, item })
-      : text;
-  };
-
   const color = Wrangle.foreColor(props);
   const fontSize = 13;
   const valueStyle = { fontSize, color, disabledColor: color };
@@ -66,10 +59,19 @@ export const Label: React.FC<Props> = (props) => {
     }),
   };
 
+  const renderElement = (renderer?: t.LabelItemRender, text?: string) => {
+    if (typeof renderer === 'function') {
+      const fn = Wrangle.render.element;
+      const res = fn(renderer, { index, total, enabled, selected, focused, editing, item });
+      if (res !== undefined) return res;
+    }
+    return text;
+  };
+
   const elTextbox = editing && (
     <TextInput
       ref={inputRef}
-      value={label.text}
+      value={label}
       placeholder={renderElement(renderers.placeholder, placeholder)}
       valueStyle={valueStyle}
       placeholderStyle={placeholderStyle}
@@ -90,12 +92,11 @@ export const Label: React.FC<Props> = (props) => {
     />
   );
 
-  const elLabelBody = renderElement(renderers.label, label.text);
+  const elLabelBody = !editing && renderElement(renderers.label, label);
+
   const elLabel = !editing && (
-    <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>
-      {elLabelBody === false || elLabelBody === null || label.isEmpty
-        ? renderElement(renderers.placeholder, placeholder)
-        : elLabelBody}
+    <div {...css(styles.label, !elLabelBody && styles.labelEmpty)}>
+      {elLabelBody || renderElement(renderers.placeholder, placeholder)}
     </div>
   );
 

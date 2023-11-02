@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
+import { COLORS, Color, DEFAULTS, type t } from './common';
 
 type RenderArgs = {
   index: number;
@@ -22,13 +22,6 @@ export const Wrangle = {
     } = props;
     const enabled = props.enabled ?? item.enabled ?? DEFAULTS.enabled;
     return { index, total, enabled, selected, focused, editing, item } as const;
-  },
-
-  labelText(args: { label?: string }) {
-    const text = args.label || '';
-    const hasValue = Boolean(text.trim());
-    const isEmpty = !hasValue;
-    return { text, hasValue, isEmpty } as const;
   },
 
   backgroundColor(args: { selected?: boolean; focused?: boolean }) {

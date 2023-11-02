@@ -6,7 +6,7 @@ type T = {
   ref?: t.LabelItemRef;
   item: t.LabelItem<A>;
   props: t.LabelItemProps;
-  debug: { subjectBg?: boolean };
+  debug: { subjectBg?: boolean; useRenderers?: boolean };
 };
 const initial: T = {
   item: {},
@@ -31,6 +31,7 @@ export default Dev.describe(name, (e) => {
     focused: DEFAULTS.focused,
     debug: DEFAULTS.debug,
     subjectBg: true,
+    useRenderers: true,
   });
 
   const State = {
@@ -40,7 +41,7 @@ export default Dev.describe(name, (e) => {
       return {
         ...state.current.props,
         item: state.current.item,
-        renderers: Sample.renderers,
+        renderers: debug.useRenderers ? Sample.renderers : undefined,
 
         onReady(e) {
           console.info('⚡️ onReady', e);
@@ -90,6 +91,7 @@ export default Dev.describe(name, (e) => {
       d.props.debug = local.debug;
 
       d.debug.subjectBg = local.subjectBg;
+      d.debug.useRenderers = local.useRenderers;
     });
 
     ctx.debug.width(300);
@@ -383,12 +385,24 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => e.change((d) => (local.subjectBg = Dev.toggle(d.debug, 'subjectBg'))));
       });
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.debug);
         btn
           .label((e) => `debug`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.useRenderers);
+        btn
+          .label((e) => `use renderers`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useRenderers = Dev.toggle(d.debug, 'useRenderers')));
+          });
       });
     });
 

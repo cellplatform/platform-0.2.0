@@ -42,6 +42,20 @@ export const Sample = {
    */
   get renderers(): t.LabelItemRenderers<A> {
     return {
+      label(e) {
+        // return 'overridden label';
+        // return null; //   NB: (suppress)
+        // return false; //  NB: (supress)
+        return undefined; // NB: Default.
+      },
+
+      placeholder(e) {
+        // return 'overridden placeholder';
+        // return null; //   NB: (suppress)
+        // return false; //  NB: (supress)
+        return undefined; // NB: Default.
+      },
+
       action(e, helpers) {
         if (e.kind === 'left:sample') {
           return <Icons.Keyboard.outline {...helpers.icon(e, 17)} />;
