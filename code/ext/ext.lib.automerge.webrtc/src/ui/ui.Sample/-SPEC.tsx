@@ -22,20 +22,15 @@ const name = 'Sample.WebRtc';
 
 export default Dev.describe(name, (e) => {
   const self = Network.peer();
+  const remote = Network.peer();
 
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Sample');
   const local = localstore.object({
     localPeer: cuid(),
     remotePeer: '',
     docUri: undefined,
   });
-
-  /**
-   * WebRTC
-   */
-  const connections: t.p.PeerJsConnData[] = [];
-  let peer: t.p.PeerJs;
 
   /**
    * CRDT (Automerge)
@@ -92,15 +87,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const { PeerDev } = await import('ext.lib.peerjs');
-    PeerDev.peersSection({
-      dev,
-      state,
-      local,
-      onPeer: (p) => (peer = p),
+    dev.row((e) => {
+      return <Network.Dev.PeerCard peer={{ self: remote, remote: self }} />;
     });
 
-    dev.hr(0, 20);
+    dev.hr(5, 20);
 
     const addNetworkAdapter = (adapter: t.NetworkAdapter) => {
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
@@ -108,15 +99,15 @@ export default Dev.describe(name, (e) => {
     };
 
     dev.button(['addNetworkAdapter', '<undefined>'], (e) => {
-      if (!peer) return;
-      const webrtc = new WebrtcNetworkAdapter(peer);
-      addNetworkAdapter(webrtc);
+      // if (!peer) return;
+      // const webrtc = new WebrtcNetworkAdapter(peer);
+      // addNetworkAdapter(webrtc);
     });
 
     dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
-      if (!(peer && local.remotePeer)) return;
-      const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
-      addNetworkAdapter(webrtc);
+      // if (!(peer && local.remotePeer)) return;
+      // const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
+      // addNetworkAdapter(webrtc);
     });
 
     dev.hr(5, 20);
@@ -148,8 +139,7 @@ export default Dev.describe(name, (e) => {
       const data = {
         user: e.state.user,
         docUri: e.state.docUri,
-        peer,
-        connections,
+        // peer,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
