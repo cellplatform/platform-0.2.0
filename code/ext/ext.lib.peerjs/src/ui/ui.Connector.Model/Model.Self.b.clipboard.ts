@@ -32,5 +32,5 @@ export function clipboardBehavior(args: {
    * UI Events (Incoming)
    */
   events.cmd.clipboard.copy$.subscribe(copyClipboard);
-  events.cmd.action.on('self:right').subscribe(copyClipboard);
+  events.cmd.action.kind('self:right').subscribe(copyClipboard);
 }

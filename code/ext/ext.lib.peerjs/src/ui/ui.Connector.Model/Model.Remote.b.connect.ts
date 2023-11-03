@@ -48,5 +48,5 @@ export function openConnectionBehavior(args: {
    * Listen: "Connect" button (triggers).
    */
   events.key.enter$.subscribe(connect);
-  events.cmd.action.on('remote:right').subscribe(connect);
+  events.cmd.action.kind('remote:right').subscribe(connect);
 }

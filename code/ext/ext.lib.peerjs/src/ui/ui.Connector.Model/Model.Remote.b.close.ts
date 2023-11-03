@@ -61,7 +61,7 @@ export function closeConnectionBehavior(args: {
    * (Trigger): Click close
    */
   events.cmd.action
-    .on('remote:right')
+    .kind('remote:right')
     .pipe(rx.filter((e) => Data.remote(state).closePending!))
     .subscribe(Close.complete);
 
