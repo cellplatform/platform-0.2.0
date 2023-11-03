@@ -76,7 +76,13 @@ export default Dev.describe(name, (e) => {
                 state.change((d) => (d.stream = e.selected?.stream));
               }}
             />
-            <UI.Connector peer={self} behavior={{ focusOnLoad: true }} />
+            <UI.Connector
+              peer={self}
+              behavior={{
+                focusOnLoad: true,
+                grabFocusOnArrowKey: true,
+              }}
+            />
           </div>
         );
       });

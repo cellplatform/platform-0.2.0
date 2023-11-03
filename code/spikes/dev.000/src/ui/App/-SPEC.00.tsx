@@ -114,31 +114,9 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.footer
-      .padding(0)
-      .border(-0.1)
-      .render<T>((e) => {
-        const data = {
-          'jwt:accessToken': Hash.shorten(e.state.accessToken ?? '', 7),
-        };
-
-        const styles = {
-          base: css({}),
-        };
-
-        return (
-          <div {...styles.base}>
-            <UI.AvatarTray
-              peer={self}
-              size={48}
-              style={{ padding: 8, borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }}
-              onChange={(e) => {
-                console.info('⚡️ avatar click', e);
-              }}
-            />
-            <UI.Connector peer={self} behavior={{ focusOnLoad: true }} />
-          </div>
-        );
-      });
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={name} data={data} expand={1} />;
+    });
   });
 });
