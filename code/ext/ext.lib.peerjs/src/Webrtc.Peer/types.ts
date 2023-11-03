@@ -66,18 +66,19 @@ export type PeerModel = t.Lifecycle & {
 
 export type PeerModelGet = {
   readonly conn: {
-    readonly obj: PeerModelGetConnectionObject;
     readonly remotes: PeerConnectionsByPeer;
+    readonly obj: PeerModelGetConnectionObject;
+    item(id?: Id): t.PeerConnection | undefined;
   };
   media(kind: t.PeerConnectionMediaKind): Promise<t.GetMediaResponse>;
 };
 
 export type PeerModelGetConnectionObject = {
-  (id: Id): t.PeerJsConn | undefined;
-  data(id: Id): t.PeerJsConnData | undefined;
-  media(id: Id): t.PeerJsConnMedia | undefined;
-  video(id: Id): t.PeerJsConnMedia | undefined;
-  screen(id: Id): t.PeerJsConnMedia | undefined;
+  (id?: Id): t.PeerJsConn | undefined;
+  data(id?: Id): t.PeerJsConnData | undefined;
+  media(id?: Id): t.PeerJsConnMedia | undefined;
+  video(id?: Id): t.PeerJsConnMedia | undefined;
+  screen(id?: Id): t.PeerJsConnMedia | undefined;
 };
 
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;

@@ -99,10 +99,11 @@ export const PeerModel: t.WebrtcPeerModel = {
 
       get: {
         conn: {
-          obj: get.conn.objFactory(state),
           get remotes() {
             return get.conn.byRemote(model.current);
           },
+          obj: get.conn.objFactory(state),
+          item: (id = '') => state.current.connections.find((item) => item.id === id),
         },
         media(kind) {
           if (kind === 'media:video') return streams.video();

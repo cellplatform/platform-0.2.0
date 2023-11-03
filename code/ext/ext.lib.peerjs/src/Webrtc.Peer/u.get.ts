@@ -30,7 +30,7 @@ export function getFactory(peerjs: t.PeerJs) {
         type C = t.PeerJsConn;
         type D = t.PeerJsConnData;
         type M = t.PeerJsConnMedia;
-        const get = <T extends C>(id: string, ...match: K[]) =>
+        const get = <T extends C>(id: string = '', ...match: K[]) =>
           api.conn.peerjs(state.current, id, ...match) as T;
         const fn: t.PeerModelGetConnectionObject = (id) => get(id);
         fn.data = (id) => get<D>(id, 'data');
