@@ -65,7 +65,7 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
     readonly edited$: t.Observable<t.LabelItemEditedCmdArgs>;
     readonly action: {
       readonly $: t.Observable<t.LabelItemActionInvoked>;
-      on(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
+      kind(...kind: A[]): t.Observable<t.LabelItemActionInvoked<A>>;
     };
     readonly clipboard: {
       readonly $: t.Observable<t.LabelItemClipboard>;
