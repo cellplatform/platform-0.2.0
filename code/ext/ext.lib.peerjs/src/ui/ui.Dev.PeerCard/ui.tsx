@@ -45,6 +45,9 @@ export const View: React.FC<t.DevPeerCardProps> = (props) => {
       paddingTop: 8,
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
+    obj: css({
+      paddingLeft: 15,
+    }),
   };
 
   return (
@@ -55,8 +58,8 @@ export const View: React.FC<t.DevPeerCardProps> = (props) => {
 
       {total > 0 && <Connections peer={props.peer} style={styles.section} />}
 
-      <div {...styles.section}>
-        <ObjectView data={self?.current} fontSize={10} expand={1} />
+      <div {...css(styles.section, styles.obj)}>
+        <ObjectView data={self?.current} fontSize={11} expand={1} />
       </div>
     </div>
   );
