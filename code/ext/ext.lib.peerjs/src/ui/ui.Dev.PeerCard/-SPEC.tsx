@@ -39,7 +39,6 @@ export default Dev.describe(name, (e) => {
     });
 
     dev.hr(5, 20);
-
     dev.row((e) => <PeerCard peer={{ self: peerC, remote: peerA }} />);
   });
 

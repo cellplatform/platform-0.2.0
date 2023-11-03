@@ -1,5 +1,5 @@
 import { COLORS, Color, Dev, UI, Webrtc, css, type t } from '../../test.ui';
-import { PeerCard } from '../ui.dev.PeerCard';
+import { PeerCard } from '../ui.Dev.PeerCard';
 
 type T = {
   muted?: boolean;

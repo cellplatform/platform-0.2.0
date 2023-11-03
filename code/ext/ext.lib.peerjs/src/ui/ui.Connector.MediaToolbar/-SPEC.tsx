@@ -1,6 +1,6 @@
 import { MediaToolbar } from '.';
 import { Dev, Webrtc, type t } from '../../test.ui';
-import { PeerCard } from '../ui.dev.PeerCard';
+import { PeerCard } from '../ui.Dev.PeerCard';
 
 const DEFAULTS = MediaToolbar.DEFAULTS;
 
