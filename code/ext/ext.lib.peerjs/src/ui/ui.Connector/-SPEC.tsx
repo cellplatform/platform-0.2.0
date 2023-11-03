@@ -1,6 +1,6 @@
 import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
 import { AvatarTray } from '../ui.AvatarTray';
-import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
+import { PeerCard } from '../ui.dev.PeerCard';
 
 import { Connector } from '.';
 import { Info } from '../ui.Info';

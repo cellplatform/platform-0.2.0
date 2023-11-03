@@ -1,3 +1,4 @@
+import { UI as Network } from 'ext.lib.peerjs';
 import { Dev } from '../../test.ui';
 import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
@@ -20,6 +21,8 @@ const initial: T = {
 const name = 'Sample.WebRtc';
 
 export default Dev.describe(name, (e) => {
+  const self = Network.peer();
+
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
   const local = localstore.object({
@@ -70,6 +73,18 @@ export default Dev.describe(name, (e) => {
             <Sample user={e.state.user} docUri={doc?.uri} />
           </store.Provider>
         );
+      });
+  });
+
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.header
+      .padding(0)
+      .border(-0.1)
+      .render((e) => {
+        return <Network.Connector peer={self} />;
       });
   });
 

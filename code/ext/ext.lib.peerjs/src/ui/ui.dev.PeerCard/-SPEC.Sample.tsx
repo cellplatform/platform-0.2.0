@@ -1,13 +1,13 @@
 import { COLORS, Color, css, type t } from './common';
-import { PeerCard } from './ui.PeerCard';
+import { PeerCard } from '.';
 
-export type RootProps = {
+export type SampleProps = {
   peerA: t.PeerModel;
   peerB: t.PeerModel;
   style?: t.CssValue;
 };
 
-export const Root: React.FC<RootProps> = (props) => {
+export const Sample: React.FC<SampleProps> = (props) => {
   const { peerA, peerB } = props;
 
   /**

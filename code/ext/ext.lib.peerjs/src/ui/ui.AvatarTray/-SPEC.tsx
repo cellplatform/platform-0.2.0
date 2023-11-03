@@ -1,7 +1,7 @@
 import { AvatarTray } from '.';
-import { Slider, Dev, Webrtc, type t } from '../../test.ui';
+import { Dev, Slider, Webrtc, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
-import { PeerCard } from '../ui.Sample.02/ui.PeerCard';
+import { PeerCard } from '../ui.dev.PeerCard';
 
 type T = { props: t.AvatarTrayProps };
 const initial: T = { props: {} };

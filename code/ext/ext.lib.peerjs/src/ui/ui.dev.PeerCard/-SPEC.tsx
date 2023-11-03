@@ -1,5 +1,6 @@
+import { PeerCard } from '.';
 import { Dev, Webrtc } from '../../test.ui';
-import { Root } from './Root';
+import { Sample } from './-SPEC.Sample';
 
 type T = {};
 const initial: T = {};
@@ -7,10 +8,11 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'Sample.02';
+const name = 'dev.PeerCard';
 export default Dev.describe(name, (e) => {
   const peerA = Webrtc.peer();
   const peerB = Webrtc.peer();
+  const peerC = Webrtc.peer();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -24,7 +26,7 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
-        return <Root peerA={peerA} peerB={peerB} />;
+        return <Sample peerA={peerA} peerB={peerB} />;
       });
   });
 
@@ -35,6 +37,10 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
     });
+
+    dev.hr(5, 20);
+
+    dev.row((e) => <PeerCard peer={{ self: peerC, remote: peerA }} />);
   });
 
   e.it('ui:footer', async (e) => {

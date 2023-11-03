@@ -25,3 +25,4 @@ export type * from './ui/ui.Connector/types';
 export type * from './ui/ui.Dev/types';
 export type * from './ui/ui.Info/types';
 export type * from './ui/ui.Video/types';
+export type * from './ui/ui.dev.PeerCard/types';

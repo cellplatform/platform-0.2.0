@@ -2,13 +2,7 @@ import { useEffect, useState } from 'react';
 import { COLORS, Color, Icons, ObjectView, Time, Video, css, rx, type t } from './common';
 import { Button } from './ui.Button';
 
-export type PeerCardProps = {
-  prefix?: string;
-  peer: { self: t.PeerModel; remote: t.PeerModel };
-  style?: t.CssValue;
-};
-
-export const PeerCard: React.FC<PeerCardProps> = (props) => {
+export const View: React.FC<t.DevPeerCardProps> = (props) => {
   const self = props.peer.self;
   const selfid = self.id;
   const copyPeerId = () => {
