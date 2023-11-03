@@ -13,10 +13,10 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.wallet.rainbow',
   version: '0.0.0',
   dependencies: {
-    '@rainbow-me/rainbowkit': '1.1.3',
+    '@rainbow-me/rainbowkit': '1.2.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'viem': '1.17.2',
+    'viem': '1.18.4',
     'wagmi': '1.4.5',
   },
   toString() {
