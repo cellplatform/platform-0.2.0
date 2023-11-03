@@ -29,6 +29,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
           $,
           enter$: filterOn('Enter'),
           escape$: filterOn('Escape'),
+          on: (fn, handler) => $.pipe(rx.filter((e) => fn(e))).subscribe(handler),
         };
       }
       return cache.key;

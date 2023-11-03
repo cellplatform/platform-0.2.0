@@ -55,6 +55,10 @@ export type LabelItemEvents<A extends K = string, D extends O = O> = t.Lifecycle
     readonly $: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly enter$: t.Observable<t.LabelItemKeyHandlerArgs>;
     readonly escape$: t.Observable<t.LabelItemKeyHandlerArgs>;
+    on(
+      filter: (e: t.LabelItemKeyHandlerArgs) => boolean,
+      handler?: (e: t.LabelItemKeyHandlerArgs) => void,
+    ): void;
   };
   readonly cmd: {
     readonly $: t.Observable<t.LabelItemCmd>;
