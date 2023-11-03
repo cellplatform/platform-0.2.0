@@ -27,7 +27,6 @@ const { Specs: ExtProtocolHats } = await import('ext.lib.protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.lib.auth.privy/specs');
-const { Specs: ExtIpfsW3s } = await import('ext.lib.ipfs.w3s/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
@@ -54,7 +53,6 @@ export const Specs = {
   ...ExtVimeo,
 
   ...ExtAuthPrivy,
-  ...ExtIpfsW3s,
   ...ExtPeerJs,
   ...ExtAutomerge,
   ...ExtCodeMirror,

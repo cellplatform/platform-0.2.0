@@ -41,7 +41,6 @@
     "@vime/core": "5.4.1",
     "@vime/react": "5.4.1",
     "@vimeo/player": "2.20.1",
-    "@web3-storage/w3up-client": "9.2.1",
     "approx-string-match": "2.0.0",
     "akahu": "1.15.1",
     "cli-table3": "0.6.3",
@@ -100,7 +99,6 @@
     "unist-util-select": "5.0.0",
     "viem": "1.18.4",
     "wagmi": "1.4.5",
-    "web3.storage": "4.5.5",
     "yaml": "2.3.3",
     "zod": "3.22.4"
   },
