@@ -2,6 +2,7 @@ import { clipboardBehavior } from './Model.Remote.b.clipboard';
 import { closeConnectionBehavior } from './Model.Remote.b.close';
 import { openConnectionBehavior } from './Model.Remote.b.connect';
 import { DEFAULTS, Model, type t } from './common';
+import { Log } from './u.Log';
 
 export type RemoteArgs = RemoteOptions & { ctx: t.GetConnectorCtx };
 export type RemoteOptions = { dispose$?: t.UntilObservable };
@@ -30,6 +31,11 @@ export const Remote = {
     clipboardBehavior({ ctx, state, events, dispatch });
     closeConnectionBehavior({ ctx, state, events, dispatch });
     openConnectionBehavior({ ctx, state, events, dispatch });
+
+    events.key.on(
+      (e) => e.code === 'KeyP',
+      (e) => Log.item('🙊 Remote', ctx().peer, state),
+    );
 
     return state;
   },
