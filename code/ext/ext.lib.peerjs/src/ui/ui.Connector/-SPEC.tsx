@@ -56,6 +56,7 @@ export default Dev.describe(name, (e) => {
             {...e.state.props}
             peer={self}
             debug={{ renderCount, name: 'Main' }}
+            onReady={(e) => console.info('⚡️ onReady', e)}
           />
         );
       });

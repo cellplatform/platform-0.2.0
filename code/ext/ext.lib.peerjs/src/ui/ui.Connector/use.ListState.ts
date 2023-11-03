@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Model, rx, type t } from './common';
 
 export function useListState(peer?: t.PeerModel, onReady?: t.ConnectorReadyHandler) {
   const [list, setList] = useState<t.LabelListState>();
+  const readyRef = useRef(false);
 
   useEffect(() => {
     const { dispose$, dispose } = rx.disposable();
@@ -10,7 +11,8 @@ export function useListState(peer?: t.PeerModel, onReady?: t.ConnectorReadyHandl
       const model = Model.List.init(peer, { dispose$ });
       const list = model.list;
       setList(list);
-      onReady?.({ peer, list });
+      if (!readyRef.current) onReady?.({ peer, list });
+      readyRef.current = true;
     }
     return dispose;
   }, [peer?.id]);

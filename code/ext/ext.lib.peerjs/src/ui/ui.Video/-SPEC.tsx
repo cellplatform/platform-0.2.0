@@ -55,7 +55,11 @@ export default Dev.describe(name, (e) => {
 
         return (
           <div>
-            <UI.Connector peer={self} behavior={{ focusOnLoad: true }} />
+            <UI.Connector
+              peer={self}
+              behavior={{ focusOnLoad: true }}
+              onReady={(e) => console.info('⚡️ UI.Connector.onReady', e)}
+            />
             <UI.AvatarTray
               peer={self}
               style={styles.avatars}
