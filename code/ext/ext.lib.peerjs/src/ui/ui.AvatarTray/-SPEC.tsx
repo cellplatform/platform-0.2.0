@@ -3,20 +3,29 @@ import { Dev, Slider, Webrtc, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
-type T = { props: t.AvatarTrayProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.AvatarTrayProps;
+  debug: { sizePercent?: number };
+};
+const initial: T = { props: {}, debug: {} };
 const name = AvatarTray.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
+  type LocalStore = Pick<T['debug'], 'sizePercent'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.AvatarTray');
+  const local = localstore.object({ sizePercent: 0.5 });
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.debug.sizePercent = local.sizePercent;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -28,6 +37,7 @@ export default Dev.describe(name, (e) => {
             {...e.state.props}
             style={{ margin: 10 }}
             peer={self}
+            size={Number(e.state.debug.sizePercent) * (AvatarTray.DEFAULTS.size * 2)}
             onChange={(e) => {
               console.log('⚡️ onChange:', e);
             }}
@@ -53,7 +63,17 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       dev.row((e) => {
-        return <Slider />;
+        return (
+          <Slider
+            style={{ MarginX: 15 }}
+            percent={e.state.debug.sizePercent}
+            track={{ height: 5 }}
+            thumb={{ size: 12 }}
+            onChange={(e) => {
+              state.change((d) => (local.sizePercent = d.debug.sizePercent = e.percent));
+            }}
+          />
+        );
       });
     });
 
