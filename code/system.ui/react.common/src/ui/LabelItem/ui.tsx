@@ -113,6 +113,7 @@ export const View: React.FC<Props> = (props) => {
   return (
     <div
       ref={ref}
+      data-id={`ListItem:${props.id || 'unknown'}`}
       {...css(styles.base, props.style)}
       tabIndex={tabIndex}
       onFocus={onFocusHandler(true)}
