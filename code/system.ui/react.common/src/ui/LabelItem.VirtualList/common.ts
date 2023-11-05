@@ -7,4 +7,6 @@ export { LabelItem } from '../LabelItem';
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+export const DEFAULTS = {
+  overscan: 50,
+} as const;

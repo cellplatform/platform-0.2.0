@@ -1,6 +1,8 @@
-import { VirtualList } from '.';
 import { Dev, type t } from '../../test.ui';
 import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
+
+import { VirtualList } from '.';
+import { SampleView } from './-SPEC.Sample';
 import { LabelItem } from './common';
 
 const Model = LabelItem.Model;
@@ -17,7 +19,7 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.VirtualList');
   const local = localstore.object({ length: 999 });
 
-  let vlist: t.VirtualListHandle;
+  let vlist: t.VirtualListRef;
 
   const TestState = {
     array: Model.List.array(), // NB: simple container of Item models.
@@ -56,11 +58,14 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         return (
-          <VirtualList
+          <SampleView
             list={TestState.list}
             renderers={Sample.renderers({})}
             style={{ width: 330 }}
-            onReady={(e) => (vlist = e.vlist)}
+            onReady={(e) => {
+              console.info(`⚡️ onReady:`, e);
+              vlist = e;
+            }}
           />
         );
       });
@@ -78,6 +83,8 @@ export default Dev.describe(name, (e) => {
         });
       };
       total(0);
+      dev.hr(-1, 5);
+      total(1);
       total(10);
       total(100);
       total(1000);
@@ -94,10 +101,16 @@ export default Dev.describe(name, (e) => {
         });
       };
       scrollTo(0);
+      dev.hr(-1, 5);
+      scrollTo(1);
       scrollTo(50);
       scrollTo(100);
       dev.hr(-1, 5);
       scrollTo('Last');
+
+      dev.hr(-1, 5);
+
+      dev.button('select: first', (e) => vlist.select(0, true));
     });
   });
 

@@ -1,20 +1,23 @@
-import { DEFAULTS, FC, type t } from './common';
-import { View } from './ui';
-import { useHandle } from './use.HandleRef';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
-/**
- * Export
- */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-  useHandle: typeof useHandle;
-};
+import { type t, type VirtuosoHandle } from './common';
+import { VirtualListRef } from './Ref';
+import { View } from './ui';
 
 /**
  * A "virtual" (infinite) scrolling list
  */
-export const VirtualList = FC.decorate<t.VirtualListProps, Fields>(
-  View,
-  { DEFAULTS, useHandle },
-  { displayName: 'LabelItem.VirtualList' },
-);
+export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((props, ref) => {
+  const { list } = props;
+
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
+  const handleRef = useRef<t.VirtualListRef>();
+  const getOrCreateHandle = () => {
+    return handleRef.current || (handleRef.current = VirtualListRef({ list, virtuosoRef }));
+  };
+
+  useImperativeHandle(ref, getOrCreateHandle);
+  useEffect(() => props.onReady?.(getOrCreateHandle()), []);
+
+  return <View {...props} virtuosoRef={virtuosoRef} />;
+});

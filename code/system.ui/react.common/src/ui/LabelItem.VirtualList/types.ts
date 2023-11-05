@@ -1,5 +1,6 @@
 import type { t } from './common';
 
+type Id = string;
 type Index = number;
 type LocationOptions = {
   align?: 'start' | 'center' | 'end';
@@ -10,9 +11,12 @@ type LocationOptions = {
 export type VirtialListScrollLocation = Index | 'Last';
 
 /**
- * Programmatic API for controlling a list.
+ * Programmatic API for controlling a list imperatively.
+ * Usage (either):
+ *    1. onReady(e)
+ *    2. ref={useRef<VirtualListRef>()}
  */
-export type VirtualListHandle = {
+export type VirtualListRef = t.LabelListDispatch & {
   scrollTo(location: VirtialListScrollLocation, options?: LocationOptions): void;
 };
 
@@ -22,6 +26,7 @@ export type VirtualListHandle = {
 export type VirtualListProps = {
   list?: t.LabelListState;
   renderers?: t.LabelItemRenderers;
+  overscan?: number;
   style?: t.CssValue;
   onReady?: VirtualListReadyHandler;
 };
@@ -29,7 +34,4 @@ export type VirtualListProps = {
 /**
  * Events
  */
-export type VirtualListReadyHandler = (e: VirtualListReadyHandlerArgs) => void;
-export type VirtualListReadyHandlerArgs = {
-  vlist: VirtualListHandle;
-};
+export type VirtualListReadyHandler = (e: VirtualListRef) => void;

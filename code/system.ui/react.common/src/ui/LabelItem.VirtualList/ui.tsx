@@ -1,41 +1,33 @@
-import { useEffect } from 'react';
-import { LabelItem, Virtuoso, css, type t } from './common';
-import { useHandle } from './use.HandleRef';
+import { RefObject } from 'react';
+import { DEFAULTS, LabelItem, Virtuoso, css, type VirtuosoHandle, type t } from './common';
 
-export const View: React.FC<t.VirtualListProps> = (props) => {
-  const { list, renderers } = props;
+type Props = t.VirtualListProps & {
+  virtuosoRef: RefObject<VirtuosoHandle>;
+};
+
+export const View: React.FC<Props> = (props) => {
+  const { list, renderers, overscan = DEFAULTS.overscan } = props;
   const total = list?.current.total ?? 0;
-
-  const handle = useHandle();
   const listController = LabelItem.Stateful.useListController({ list });
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    if (handle.ready) props.onReady?.({ vlist: handle.list });
-  }, [handle.ref.current]);
 
   /**
    * Render
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-    }),
+    base: css({ position: 'relative', display: 'grid' }),
   };
 
   return (
     <listController.Provider>
       <div ref={listController.ref} {...css(styles.base, props.style)}>
         <Virtuoso
-          ref={handle.ref}
+          ref={props.virtuosoRef}
           totalCount={total}
-          overscan={50}
+          overscan={overscan}
           itemContent={(index) => {
             const [item] = LabelItem.Model.List.getItem(list, index);
             if (!item) return null;
+
             return (
               <LabelItem.Stateful
                 {...listController.handlers}
