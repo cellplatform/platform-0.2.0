@@ -7,6 +7,7 @@ export type AvatarTrayProps = {
   size?: number;
   peer?: t.PeerModel;
   muted?: boolean;
+  emptyMessage?: string | JSX.Element;
   style?: t.CssValue;
   onChange?: t.PeerStreamChangeHandler;
 };

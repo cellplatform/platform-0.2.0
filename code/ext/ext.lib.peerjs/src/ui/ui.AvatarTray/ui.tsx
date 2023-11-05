@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-
-import { DEFAULTS, Is, css, type t, rx } from './common';
+import { useEffect, useState } from 'react';
+import { Color, COLORS, DEFAULTS, Is, css, rx, type t } from './common';
 import { Avatar } from './ui.Avatar';
 import { useMediaStreams } from './use.MediaStreams';
 
@@ -35,18 +34,14 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     const action = (action: A) => events?.cmd.conn$.pipe(rx.filter((e) => e.action === action));
     action('closed')?.subscribe((e) => handleClosed(e.connection?.id));
 
-    // events?.cmd.conn$?.pipe().subscribe((e) => {
-    //   if (!selected) handleChange(streams[0]);
-    //   console.log('ready', e, streams);
-    // });
-
     return events?.dispose;
   }, [streamids, selected?.stream.id, peer?.id]);
 
   /**
    * Render
    */
-  if (streams.length === 0) return null;
+  if (streams.length === 0 && !props.emptyMessage) return null;
+
   const styles = {
     base: css({
       minHeight: size,
@@ -54,6 +49,10 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
       placeItems: 'center',
       gridTemplateColumns: `repeat(${streams.length}, auto)`,
       columnGap: '5px',
+    }),
+    emptyMessage: css({
+      fontSize: 14,
+      color: Color.alpha(COLORS.DARK, 0.2),
     }),
   };
 
@@ -69,7 +68,16 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     );
   });
 
-  return <div {...css(styles.base, props.style)}>{elVideos}</div>;
+  const elEmpty = props.emptyMessage && streams.length === 0 && (
+    <div {...styles.emptyMessage}>{props.emptyMessage}</div>
+  );
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      {elVideos}
+      {elEmpty}
+    </div>
+  );
 };
 
 /**
@@ -77,7 +85,6 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
  */
 export const Wrangle = {
   stream(peer: t.PeerModel, selected?: string) {
-    // const { peer, selected } = props;
     const connections = peer?.current.connections ?? [];
 
     if (selected) {
@@ -85,10 +92,7 @@ export const Wrangle = {
       if (conn?.stream) return conn.stream.remote ?? conn.stream.self;
     }
 
-    // connections
-    // Is.kind.media()
     const first = connections.find((conn) => Is.kind.media(conn));
     return first?.stream?.remote ?? first?.stream?.self;
-    //
   },
 } as const;
