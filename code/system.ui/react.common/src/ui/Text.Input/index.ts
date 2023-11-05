@@ -1,5 +1,5 @@
 export { TextInput } from './Root';
-export { TextInputRef } from './Root.Ref.mjs';
+export { TextInputRef } from './Ref';
 
 /**
  * TODO 🐷

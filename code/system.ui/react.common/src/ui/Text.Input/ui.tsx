@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useState } from 'react';
 
-import { css, DEFAULTS, t, Time } from './common';
+import { DEFAULTS, Time, css, type t } from './common';
 import { TextInputHint } from './ui.TextInput.Hint';
 import { HtmlInput } from './ui.TextInput.Html';
 import { Util } from './util.mjs';
@@ -10,7 +10,7 @@ type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
 /**
  * Component
  */
-export const TextInputBase: React.FC<Props> = (props) => {
+export const View: React.FC<Props> = (props) => {
   const {
     inputRef,
     placeholder,

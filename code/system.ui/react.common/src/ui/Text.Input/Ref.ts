@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 import { type t } from './common';
 
 /**
- * The "ref={...}" API for manipulating the component
+ * The "ref={ ƒ }" API for manipulating the component
  * for things like focus/blur/select.
  */
 export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {

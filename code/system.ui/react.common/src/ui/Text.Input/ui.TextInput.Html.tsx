@@ -1,8 +1,7 @@
 import { RefObject, useEffect } from 'react';
-
 import { useFocus } from '../useFocus';
-import { Color, css, DEFAULTS, KeyboardMonitor, R, t, Diff } from './common';
-import { TextInputRef } from './Root.Ref.mjs';
+import { TextInputRef } from './Ref';
+import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
 import { Util } from './util.mjs';
 
 /**
