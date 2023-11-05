@@ -49,12 +49,12 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  * (events as a property stream)
  */
 export type LabelListDispatch = {
-  select(item: Index | Id, focus?: boolean): LabelListDispatch;
-  edit(item: Index | Id, action?: t.LabelListEditCmdArgs['action']): LabelListDispatch;
-  redraw(item?: Index | Id): LabelListDispatch;
-  remove(index?: Index): LabelListDispatch;
-  focus(focus?: boolean): LabelListDispatch;
-  blur(): LabelListDispatch;
+  select(item: Index | Id, focus?: boolean): void;
+  edit(item: Index | Id, action?: t.LabelListEditCmdArgs['action']): void;
+  redraw(item?: Index | Id): void;
+  remove(index?: Index): void;
+  focus(focus?: boolean): void;
+  blur(): void;
 };
 
 export type LabelListCmd =
