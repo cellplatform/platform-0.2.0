@@ -55,4 +55,8 @@ const Wrangle = {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Info = FC.decorate<InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<InfoProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);
