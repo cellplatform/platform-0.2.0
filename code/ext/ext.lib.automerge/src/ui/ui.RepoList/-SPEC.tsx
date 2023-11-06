@@ -50,14 +50,9 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Ref ( ƒ )', (dev) => {
       dev.button((btn) => {
+        const onClick = (target: t.LabelListItemTarget) => Time.delay(0, () => ref.select(target));
         const select = (label: string, target: t.LabelListItemTarget) => {
-          return (
-            <Button
-              label={label}
-              style={{ marginLeft: 8 }}
-              onClick={() => Time.delay(0, () => ref.select(target))}
-            />
-          );
+          return <Button label={label} style={{ marginLeft: 8 }} onClick={() => onClick(target)} />;
         };
 
         btn
@@ -71,7 +66,7 @@ export default Dev.describe(name, (e) => {
             );
           })
           .enabled((e) => true)
-          .onClick((e) => {});
+          .onClick((e) => onClick('First'));
       });
     });
 
