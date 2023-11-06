@@ -1,3 +1,3 @@
-export type * from './Item.t';
-export type * from './List.array.t';
-export type * from './List.t';
+export type * from './t.Item';
+export type * from './t.List';
+export type * from './t.List.array';
