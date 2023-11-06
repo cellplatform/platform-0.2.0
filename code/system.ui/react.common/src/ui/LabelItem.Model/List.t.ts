@@ -4,6 +4,8 @@ type Id = string;
 type Index = number;
 type O = Record<string, unknown>;
 
+export type LabelListEdge = 'First' | 'Last';
+
 /**
  * Model for a list of <Item>'s.
  */

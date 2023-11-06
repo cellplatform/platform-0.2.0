@@ -275,7 +275,7 @@ describe('LabelItem.Model', () => {
 
       describe('Model.List.get', () => {
         const { items, getItem } = Model.List.array();
-        const list = Model.List.state({ total: 2, getItem });
+        const list = Model.List.state({ total: 3, getItem });
         const get = Model.List.get(list);
         Model.List.map(list, () => null); // NB: Ensure the list is populated.
 
@@ -286,7 +286,8 @@ describe('LabelItem.Model', () => {
           test(-1, undefined);
           test(0, items[0]);
           test(1, items[1]);
-          test(2, undefined);
+          test(2, items[2]);
+          test(3, undefined);
         });
 
         it('get.index ← from [Item]', () => {
@@ -296,6 +297,30 @@ describe('LabelItem.Model', () => {
           test(undefined, -1);
           test(items[0], 0);
           test(items[1], 1);
+        });
+
+        it('get.index ← from item "ID"', () => {
+          const test = (item: string | undefined, expected: number) => {
+            expect(get.index(item)).to.equal(expected);
+          };
+          test(undefined, -1);
+          test(items[0].instance, 0);
+          test(items[1].instance, 1);
+        });
+
+        it('get.index ← from "First" | "Last" (edge)', () => {
+          const test = (item: t.LabelListEdge | undefined, expected: number) => {
+            expect(get.index(item)).to.equal(expected);
+          };
+          test(undefined, -1);
+          test('First', 0);
+          test('Last', 2);
+        });
+
+        it('get.index ← from index (NB: completness)', () => {
+          expect(get.index(-1)).to.eql(-1);
+          expect(get.index(0)).to.eql(0);
+          expect(get.index(1)).to.eql(1);
         });
 
         it('throw: not an interger', () => {
