@@ -27,7 +27,7 @@
     "@automerge/automerge-repo-network-messagechannel": "1.0.13",
     "@automerge/automerge-repo-react-hooks": "1.0.13",
     "@automerge/automerge-repo-storage-indexeddb": "1.0.13",
-    "@hatsprotocol/sdk-v1-core": "0.6.0",
+    "@hatsprotocol/sdk-v1-core": "0.7.0",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
     "@monaco-editor/react": "4.6.0",
@@ -59,7 +59,7 @@
     "minimist": "1.2.8",
     "monaco-editor": "0.44.0",
     "nostr-tools": "1.17.0",
-    "openai": "4.15.4",
+    "openai": "4.16.1",
     "ora": "7.0.1",
     "peerjs": "1.5.1",
     "picocolors": "1.0.0",
@@ -96,10 +96,10 @@
     "tinycolor2": "1.6.0",
     "ua-parser-js": "1.0.37",
     "unified": "11.0.4",
-    "unist-util-select": "5.0.0",
-    "viem": "1.18.6",
+    "unist-util-select": "5.1.0",
+    "viem": "1.18.7",
     "wagmi": "1.4.5",
-    "yaml": "2.3.3",
+    "yaml": "2.3.4",
     "zod": "3.22.4"
   },
   "devDependencies": {
@@ -112,15 +112,15 @@
     "@types/node": "20.8.10",
     "@types/qrcode": "1.5.4",
     "@types/ramda": "0.29.7",
-    "@types/react": "18.2.35",
+    "@types/react": "18.2.36",
     "@types/react-dom": "18.2.14",
     "@types/sanitize-html": "2.9.3",
     "@types/semver": "7.5.4",
     "@types/tinycolor2": "1.4.5",
     "@types/ua-parser-js": "0.7.38",
     "@types/vimeo__player": "2.18.2",
-    "@typescript-eslint/eslint-plugin": "6.9.1",
-    "@typescript-eslint/parser": "6.9.1",
+    "@typescript-eslint/eslint-plugin": "6.10.0",
+    "@typescript-eslint/parser": "6.10.0",
     "@vitejs/plugin-react": "4.1.1",
     "chai": "4.3.10",
     "dotenv": "16.3.1",
@@ -142,9 +142,7 @@
     "vitest": "0.34.6",
     "yaml": "2.3.4"
   },
-  "resolutions": {
-    "browserify-sign": ">=4.2.2"
-  },
+  "resolutions": {},
   "license": "MIT",
   "private": true
 }

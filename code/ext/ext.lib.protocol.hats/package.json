@@ -12,7 +12,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@hatsprotocol/sdk-v1-core": "0.6.0",
+    "@hatsprotocol/sdk-v1-core": "0.7.0",
     "sys.fs.indexeddb": "0.0.0",
     "sys.util": "0.0.0",
     "sys.ui.react.common": "0.0.0"
