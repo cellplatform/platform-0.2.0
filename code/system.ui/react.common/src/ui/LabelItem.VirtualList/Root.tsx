@@ -12,9 +12,8 @@ export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((pro
 
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const handleRef = useRef<t.VirtualListRef>();
-  const getOrCreateHandle = () => {
-    return handleRef.current || (handleRef.current = VirtualListRef({ list, virtuosoRef }));
-  };
+  const createHandle = () => (handleRef.current = VirtualListRef({ list, virtuosoRef }));
+  const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
   useEffect(() => props.onReady?.(getOrCreateHandle()), []);

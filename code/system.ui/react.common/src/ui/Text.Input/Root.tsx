@@ -10,9 +10,8 @@ import { View } from './ui';
 export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleRef = useRef<t.TextInputRef>();
-  const getOrCreateHandle = () => {
-    return handleRef.current || (handleRef.current = TextInputRef(inputRef));
-  };
+  const createHandle = () => (handleRef.current = TextInputRef(inputRef));
+  const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
 
