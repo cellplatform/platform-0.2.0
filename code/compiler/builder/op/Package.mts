@@ -145,12 +145,13 @@ export const Package = {
     if (defaultBuild) await processBuild(defaultBuild, [defaultTarget]);
 
     // Finish up.
-    return {
+    const api: PkgMeta = {
       sideEffects: false,
       types: _types,
       exports: Exports.sorted,
       typesVersions: Types.versions,
     };
+    return api;
   },
 
   /**

@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
+export type { EventBus, Disposable } from 'sys.types/src/types';
 
 /**
  * @local

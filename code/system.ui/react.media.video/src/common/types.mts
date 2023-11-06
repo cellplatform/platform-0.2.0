@@ -14,7 +14,7 @@ export type {
   Seconds,
   Percent,
   Pixels,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 
 export type {
   CssEdgesInput,

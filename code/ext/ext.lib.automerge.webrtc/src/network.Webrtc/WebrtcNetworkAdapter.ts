@@ -1,10 +1,6 @@
-import {
-  Message,
-  NetworkAdapter,
-  type NetworkAdapterMessage,
-  type PeerId,
-} from '@automerge/automerge-repo';
+import { Message, NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
 import type { DataConnection, Peer } from 'peerjs';
+import { type t } from '../common';
 
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
@@ -19,7 +15,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #remoteId: string | undefined;
   #isReady = false;
 
-  constructor(peer: Peer, remoteId?: string) {
+  constructor(peer: t.p.PeerJs, remoteId?: string) {
     super();
     this.#peer = peer;
     this.#remoteId = remoteId;
@@ -34,20 +30,25 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
       conn.on('open', () => conn.send({ type: 'arrive', senderId: this.peerId }));
       conn.on('close', () => this.emit('close'));
       conn.on('data', (data) => {
-        const message = data as NetworkAdapterMessage;
+        const message = data as RepoMessage;
         switch (message.type) {
-          case 'arrive':
-            conn.send({
-              type: 'welcome',
-              senderId: this.peerId,
-              targetId: message.senderId,
-            });
-            this.#announceConnection(message.senderId);
-            break;
+          /**
+           * TODO
+           * https://automerge.slack.com/archives/C61RJCM9S/p1697749052710309?thread_ts=1697568493.913469&cid=C61RJCM9S
+           */
 
-          case 'welcome':
-            this.#announceConnection(message.senderId);
-            break;
+          //           case 'arrive':
+          //             conn.send({
+          //               type: 'welcome',
+          //               senderId: this.peerId,
+          //               targetId: message.senderId,
+          //             });
+          //             this.#announceConnection(message.senderId);
+          //             break;
+          //
+          //           case 'welcome':
+          //             this.#announceConnection(message.senderId);
+          //             break;
 
           default:
             if ('data' in message) {

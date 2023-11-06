@@ -6,7 +6,7 @@ export type { VercelConfigFile, VercelHttpDeployResponse } from 'ext.vercel/src/
 /**
  * @system
  */
-export type { EventBus, DirManifest } from 'sys.types/src/types.mjs';
+export type { EventBus, DirManifest } from 'sys.types/src/types';
 export type { Fs } from 'sys.fs/src/types.mjs';
 export type { Text } from 'sys.text/src/types.mjs';
 

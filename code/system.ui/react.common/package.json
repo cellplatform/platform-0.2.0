@@ -18,6 +18,7 @@
     "react-icons": "4.11.0",
     "react-spinners": "0.13.8",
     "react-inspector": "6.0.2",
+    "react-virtuoso": "4.6.2",
     "sys.text": "0.0.0",
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.util": "0.0.0",
@@ -25,7 +26,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
-    "@types/qrcode": "1.5.2",
+    "@types/qrcode": "1.5.4",
     "sys.fs": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",

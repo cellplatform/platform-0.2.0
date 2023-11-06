@@ -1,1 +1,1 @@
-export * from './WrangleUrl.mjs';
+export * from './WrangleUrl';

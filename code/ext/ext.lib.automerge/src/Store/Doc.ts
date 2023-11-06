@@ -1,5 +1,5 @@
 import { DocEvents } from './Doc.Events';
-import { Is, R, type t } from './common';
+import { Is, R, slug, type t } from './common';
 
 export type DocRefArgs<T> = { initial: t.ImmutableNext<T>; uri?: t.DocUri | string };
 
@@ -24,8 +24,10 @@ export const Doc = {
 
     const handle = Is.automergeUrl(args.uri) ? repo.find<T>(args.uri) : create();
     const uri = handle.url;
+    const instance = slug();
 
     const api: t.DocRefHandle<T> = {
+      instance,
       uri,
       handle,
       get current() {

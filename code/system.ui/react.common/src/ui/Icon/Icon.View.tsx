@@ -1,4 +1,4 @@
-import { t, css, Color } from '../../common';
+import { Style, t, css, Color } from '../../common';
 
 export type IconProps = { size: number; color?: string };
 export type IconComponent = React.FC<IconProps>;
@@ -16,9 +16,10 @@ export const IconView: React.FC<IconViewProps> = (props) => {
     base: css({
       display: 'inline-block',
       overflow: 'hidden',
-      opacity: opacity === undefined ? 1 : opacity,
       Size: size,
       transform: offset ? `translate(${offset[0]}px, ${offset[1]}px)` : undefined,
+      opacity: opacity === undefined ? 1 : opacity,
+      ...Style.toMargins(props.margin),
     }),
   };
 

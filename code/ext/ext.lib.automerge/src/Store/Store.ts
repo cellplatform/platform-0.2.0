@@ -10,8 +10,7 @@ export const Store = {
    * Initialize a new instance of a CRDT repo.
    */
   init(repo?: t.Repo) {
-    const api = {
-      kind: 'crdt:store',
+    const api: t.Store = {
       repo: repo ?? new Repo({ network: [] }),
       doc: {
         /**

@@ -8,4 +8,5 @@ export { next as A } from '@automerge/automerge';
 /**
  * @system
  */
-export { Time, cuid, rx } from 'sys.util';
+export { PatchState } from 'sys.data.json';
+export { Id, Time, cuid, rx, slug } from 'sys.util';

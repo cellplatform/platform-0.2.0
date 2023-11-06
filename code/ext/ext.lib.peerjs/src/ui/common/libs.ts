@@ -7,12 +7,22 @@ export {
   Color,
   FC,
   Keyboard,
-  LabelItemStateful,
+  LabelItem,
   ObjectView,
   PropList,
+  RenderCount,
+  Slider,
+  Spinner,
   TestRunner,
   css,
   useDragTarget,
   useFocus,
   useMouse,
 } from 'sys.ui.react.common';
+
+export { Video } from 'sys.ui.react.media';
+
+/**
+ * @local
+ */
+export { Is, PeerUri, Webrtc } from '../../Webrtc';

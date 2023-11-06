@@ -1,5 +1,5 @@
 import { PropList, MyField, SampleFields as Fields } from './-common';
-const pkg = { name: 'foobar', version: '1.2.3' };
+const pkg = { name: 'foobar', version: '1.2.3' } as const;
 
 export const BuilderSample = {
   Fields,
@@ -19,6 +19,7 @@ export const BuilderSample = {
         { label: 'Three', value: 789 },
       ])
       .field('Factory.EmptyArray', () => [])
+      .field('Factory.Mixed', () => [undefined, { label: 'Foo' }, undefined])
       .items(fields);
   },
 };

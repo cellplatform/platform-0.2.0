@@ -21,27 +21,29 @@ export async function build(
   dir = fs.resolve(dir);
   const relativeDir = dir.substring(Paths.rootDir.length);
 
-  // Pre-build.
-  await Template.ensureBaseline(dir);
-  if (syncDeps) {
-    await Dependencies.syncVersions({ filter: (dir) => dir === relativeDir });
+  if (true) {
+    // Pre-build.
+    await Template.ensureBaseline(dir);
+    if (syncDeps) {
+      await Dependencies.syncVersions({ filter: (dir) => dir === relativeDir });
+    }
+
+    // - Typescript (lint).
+    const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
+    if (!tsBuildOutput.ok) return tsBuildOutput;
+
+    // - ESM bundling.
+    const viteBuildOutput = await Vite.build(dir, { silent });
+    if (!viteBuildOutput.ok) return viteBuildOutput;
+
+    // Post build.
+    await fs.remove(fs.join(dir, Paths.types.dist));
+    await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
+    await Package.generate(dir);
+    await Vite.deleteBuildManifests(dir);
   }
 
-  // - Typescript (lint).
-  const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
-  if (!tsBuildOutput.ok) return tsBuildOutput;
-
-  // - ESM bundling.
-  const viteBuildOutput = await Vite.build(dir, { silent });
-  if (!viteBuildOutput.ok) return viteBuildOutput;
-
-  // Post build.
-  await fs.remove(fs.join(dir, Paths.types.dist));
-  await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
-  await Package.generate(dir);
-  await Vite.deleteBuildManifests(dir);
-
-  // Finish up.
+  // Write output.
   if (!silent) {
     const typedir = `/${Paths.types.dirname}/`;
     const size = await Util.folderSize(fs.join(dir, 'dist'));
@@ -56,8 +58,16 @@ export async function build(
     const pkg = await Util.importPkgMeta(dir);
     const moduleName = pkg?.name || 'unknown';
 
+    const version = pkg?.version ?? '';
+    const major = version?.split('.')[0];
+    const minor = version?.split('.')[1];
+    const patch = version?.split('.')[2];
+    const versionDisplay =
+      patch && version !== '0.0.0' ? pc.green(`${major}.${minor}.${patch}`) : version;
+
     const table = LogTable();
     const indent = ' '.repeat(6);
+    table.push([indent, 'version', `  ${versionDisplay}`, '']);
     table.push([indent, 'bundle', `  ${bundle.length} files  `, bundleSize]);
     table.push([indent, 'types.d', `  ${types.length} files  `, typesSize]);
     table.push([indent, '', '', '-'.repeat(10)]);
@@ -69,5 +79,6 @@ export async function build(
     console.info('');
   }
 
-  return { ok: true, errorCode: 0 };
+  // Finish up.
+  return { ok: true, errorCode: 0 } as const;
 }

@@ -21,8 +21,10 @@ export type {
   IgnoredResponse,
   Immutable,
   ImmutableNext,
+  ImmutableRef,
   JsonMapU,
   JsonU,
+  Lifecycle,
   Milliseconds,
   ModuleDef,
   PartialDeep,
@@ -31,7 +33,8 @@ export type {
   Point,
   Seconds,
   Size,
-} from 'sys.types/src/types.mjs';
+  UntilObservable,
+} from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
 export type {
@@ -53,6 +56,8 @@ export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types.mjs';
 export type {
   KeyMatchSubscriberHandler,
   KeyMatchSubscriberHandlerArgs,
+  KeyPressStage,
+  KeyboardKeyFlags,
   KeyboardKeypress,
   KeyboardKeypressProps,
   KeyboardModifierEdges,
@@ -61,7 +66,7 @@ export type {
   LocalStorage,
   UIEventBase,
   UIModifierKeys,
-} from 'sys.ui.dom/src/types.mjs';
+} from 'sys.ui.dom/src/types';
 export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/types.mjs';
 export type {
   DevCtx,

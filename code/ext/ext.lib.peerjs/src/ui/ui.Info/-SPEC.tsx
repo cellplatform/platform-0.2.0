@@ -1,5 +1,6 @@
 import { Info, type InfoProps } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, Webrtc, type t } from '../../test.ui';
+import { Connector } from '../ui.Connector';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
@@ -10,6 +11,8 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
+  const self = Webrtc.peer();
+
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.Info');
   const local = localstore.object({
@@ -31,13 +34,23 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        return <Info {...e.state.props} data={{ peer: { self } }} />;
+      });
+  });
+
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    dev.header
+      .padding(0)
+      .border(-0.1)
+      .render((e) => {
+        return <Connector peer={self} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.TODO();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {

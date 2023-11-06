@@ -12,14 +12,11 @@ export type CrdtInfoField =
   | 'History.Item'
   | 'History.Item.Message'
   | 'Url'
-  | 'Url.QRCode'
-  | 'Namespace'
-  | 'Namespace.Title';
+  | 'Url.QRCode';
 
 export type CrdtInfoData = {
   file?: { doc?: t.CrdtDocFile<any>; title?: string; path?: string };
   network?: { doc?: t.CrdtDocSync<any> };
   url?: { href: string; title?: string };
-  namespace?: t.CrdtNsInfoData;
   history?: t.CrdtHistoryInfoData;
 };

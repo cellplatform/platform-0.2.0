@@ -14,8 +14,9 @@ export const ModuleSpecs = {
   'sys.ui.common.Grid': () => import('../ui/Grid/-dev/-SPEC'),
   'sys.ui.common.Icon': () => import('../ui/Icon/-SPEC'),
   'sys.ui.common.IFrame': () => import('../ui/IFrame/-SPEC'),
-  'sys.ui.common.Item.LabelItem': () => import('../ui/Item.LabelItem/-dev/-SPEC'),
-  'sys.ui.common.Item.LabelItem.Stateful': () => import('../ui/Item.LabelItem.Stateful/-dev/-Spec'),
+  'sys.ui.common.LabelItem': () => import('../ui/LabelItem/-dev/-SPEC'),
+  'sys.ui.common.LabelItem.Stateful': () => import('../ui/LabelItem.Stateful/-dev/-SPEC'),
+  'sys.ui.common.LabelItem.VirtualList': () => import('../ui/LabelItem.VirtualList/-SPEC'),
   'sys.ui.common.Layout.Split': () => import('../ui/Layout.Split/-SPEC'),
   'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/-SPEC'),
@@ -59,10 +60,15 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 
+export const SampleSpecs = {
+  'sys.ui.sample.Hash': () => import('../ui.sample/Hash/-SPEC'),
+};
+
 export const Specs = {
   ...ModuleSpecs,
   ...HookSpecs,
   ...DevSpecs,
+  ...SampleSpecs,
 };
 
 export default Specs;

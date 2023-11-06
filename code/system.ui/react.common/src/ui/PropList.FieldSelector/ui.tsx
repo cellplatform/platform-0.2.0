@@ -16,7 +16,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const isSelected = (field: string) => selected.includes(field);
 
   const mouse = useMouse();
-  const [_, setCount] = useState(0);
+  const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
   /**

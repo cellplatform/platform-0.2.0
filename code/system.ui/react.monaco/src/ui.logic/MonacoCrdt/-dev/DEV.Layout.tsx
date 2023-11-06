@@ -1,6 +1,5 @@
 import { useRef } from 'react';
-
-import { Color, css, Dev, t } from './-common';
+import { Color, css, Dev, type t } from './-common';
 import { DevEditor } from './DEV.Editor';
 
 export type DevLayoutReadyHandler = (e: DevLayoutReadyHandlerArgs) => void;

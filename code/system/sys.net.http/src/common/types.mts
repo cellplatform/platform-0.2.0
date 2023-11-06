@@ -3,7 +3,7 @@ import type { HttpEvent } from '../types.mjs';
 /**
  * @system
  */
-export type { Json } from 'sys.types/src/types.mjs';
+export type { Json } from 'sys.types/src/types';
 
 /**
  * @local

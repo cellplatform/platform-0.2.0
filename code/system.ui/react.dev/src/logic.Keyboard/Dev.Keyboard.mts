@@ -37,7 +37,7 @@ export const DevKeyboard = {
     const openUrlTab = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
 
     const keyboard = Keyboard.on({
-      Escape(e) {
+      'CMD + Escape'(e) {
         escape$.next();
       },
 

@@ -81,7 +81,6 @@ export default Dev.describe('CrdtInfo', async (e) => {
             data: docA.history[docA.history.length - 1],
           },
         },
-        namespace: {},
       };
 
       return {

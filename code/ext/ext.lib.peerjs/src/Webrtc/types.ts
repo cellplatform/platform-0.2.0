@@ -3,18 +3,30 @@ import type { t } from './common';
 /**
  * Wrapper for working with PeerJS
  */
-export type WebRtc = {
-  readonly Peer: WebRtcPeer;
+export type Webrtc = {
+  readonly Is: t.WebrtcIs;
+  readonly PeerJs: t.WebrtcPeerJs;
+  readonly PeerUri: t.WebrtcPeerUri;
+  readonly PeerModel: t.WebrtcPeerModel;
+  readonly peer: t.WebrtcPeerModel['init'];
 };
 
 /**
- * Wrapper for working with peers
+ * Helpers for working with Peer ids.
  */
-type OptionsArgs = { host: string; path: string; key: string };
+export type WebrtcPeerUri = {
+  readonly Is: WebrtcIs;
+  generate(prefix?: boolean | string): string;
+  prepend(uri: string, ...prefix: string[]): string;
+  id(input?: string): string;
+  uri(input?: string): string;
+};
 
-export type WebRtcPeer = {
-  options(input?: OptionsArgs): t.PeerOptions;
-  create(): t.Peer;
-  create(options?: OptionsArgs): t.Peer;
-  create(peerid: string, options?: OptionsArgs): t.Peer;
+export type WebrtcIs = {
+  peerid(input?: any): boolean;
+  uri(input?: any): boolean;
+  kind: {
+    data(input: any): input is t.PeerConnectionDataKind;
+    media(input: any): input is t.PeerConnectionMediaKind;
+  };
 };

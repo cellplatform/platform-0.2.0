@@ -1,2 +1,2 @@
 export * from '../common';
-export { Patch } from '../Json.Patch';
+export { Patch, toObject } from '../Json.Patch';

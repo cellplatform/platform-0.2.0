@@ -1,9 +1,10 @@
-import { MonacoEditor, MonacoEditorProps } from '.';
-import { Dev, Wrangle, t, EditorCarets } from '../../test.ui';
+import { MonacoEditor } from '.';
+import { Dev, EditorCarets, Wrangle, type t } from '../../test.ui';
+import { CODE_SAMPLES } from './-Sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
-type T = { props: MonacoEditorProps };
+type T = { props: t.MonacoEditorProps };
 const initial: T = {
   props: {
     text: '',
@@ -20,7 +21,7 @@ export default Dev.describe('MonacoEditor', (e) => {
     language: t.EditorLanguage;
     selection: t.EditorRange | null;
   };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.monoaco.MonacoEditor');
   const local = localstore.object({
     text: initial.props.text!,
     language: initial.props.language!,
@@ -82,25 +83,34 @@ export default Dev.describe('MonacoEditor', (e) => {
     dev.section('Language', (dev) => {
       const hr = () => dev.hr(-1, 5);
 
-      const language = (input: t.EditorLanguage) => {
+      const language = (input: t.EditorLanguage, codeSample?: string) => {
         const language = input as t.EditorLanguage;
+        const format = (code: string) => {
+          code = code.replace(/^\s*\n|\n\s*$/g, '');
+          return `${code}\n`;
+        };
         return dev.button((btn) =>
           btn
             .label(language)
             .right((e) => (e.state.props.language === language ? '← current' : ''))
             .onClick((e) => {
-              e.change((d) => (d.props.language = language));
-              local.language = language;
+              e.change((d) => {
+                local.language = d.props.language = language;
+                if (codeSample) local.text = d.props.text = format(codeSample);
+              });
             }),
         );
       };
-      language('typescript');
-      language('javascript');
+      language('typescript', CODE_SAMPLES.typescript);
+      language('javascript', CODE_SAMPLES.javascript);
+      language('go', CODE_SAMPLES.go);
+      language('python', CODE_SAMPLES.python);
+
       hr();
-      language('json');
-      language('yaml');
+      language('json', CODE_SAMPLES.json);
+      language('yaml', CODE_SAMPLES.yaml);
       hr();
-      language('markdown');
+      language('markdown', CODE_SAMPLES.markdown);
     });
 
     dev.hr(5, 20);

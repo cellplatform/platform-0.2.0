@@ -6,4 +6,4 @@ export const Dispose = {
   create,
   until,
   done,
-};
+} as const;

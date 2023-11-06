@@ -1,14 +1,13 @@
+import { UI as Network } from 'ext.lib.peerjs';
 import { Dev } from '../../test.ui';
 import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
-
-import type * as P from 'ext.lib.peerjs/src/types';
 
 type T = {
   user?: string;
   docUri?: string;
   peerid: { local: string; remote: string };
-  options?: P.PeerOptions;
+  options?: t.p.PeerJsOptions;
   debug: { connectingData?: boolean };
 };
 const initial: T = {
@@ -22,19 +21,16 @@ const initial: T = {
 const name = 'Sample.WebRtc';
 
 export default Dev.describe(name, (e) => {
+  const self = Network.peer();
+  const remote = Network.peer();
+
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Sample');
   const local = localstore.object({
     localPeer: cuid(),
     remotePeer: '',
     docUri: undefined,
   });
-
-  /**
-   * WebRTC
-   */
-  const connections: P.DataConnection[] = [];
-  let peer: P.Peer;
 
   /**
    * CRDT (Automerge)
@@ -75,19 +71,27 @@ export default Dev.describe(name, (e) => {
       });
   });
 
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.header
+      .padding(0)
+      .border(-0.1)
+      .render((e) => {
+        return <Network.Connector peer={self} />;
+      });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const { PeerDev } = await import('ext.lib.peerjs');
-    PeerDev.peersSection({
-      dev,
-      state,
-      local,
-      onPeer: (p) => (peer = p),
+    dev.row((e) => {
+      return <Network.Dev.PeerCard peer={{ self: remote, remote: self }} />;
     });
 
-    dev.hr(0, 20);
+    dev.hr(5, 20);
 
     const addNetworkAdapter = (adapter: t.NetworkAdapter) => {
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
@@ -95,15 +99,15 @@ export default Dev.describe(name, (e) => {
     };
 
     dev.button(['addNetworkAdapter', '<undefined>'], (e) => {
-      if (!peer) return;
-      const webrtc = new WebrtcNetworkAdapter(peer);
-      addNetworkAdapter(webrtc);
+      // if (!peer) return;
+      // const webrtc = new WebrtcNetworkAdapter(peer);
+      // addNetworkAdapter(webrtc);
     });
 
     dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
-      if (!(peer && local.remotePeer)) return;
-      const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
-      addNetworkAdapter(webrtc);
+      // if (!(peer && local.remotePeer)) return;
+      // const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
+      // addNetworkAdapter(webrtc);
     });
 
     dev.hr(5, 20);
@@ -135,8 +139,7 @@ export default Dev.describe(name, (e) => {
       const data = {
         user: e.state.user,
         docUri: e.state.docUri,
-        peer,
-        connections,
+        // peer,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

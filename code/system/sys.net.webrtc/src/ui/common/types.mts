@@ -8,7 +8,7 @@ export type {
   TestSuiteModel,
 } from 'sys.test.spec/src/types.mjs';
 
-export type { CrdtInfoData, CrdtFuncData, CrdtNsInfoData } from 'sys.data.crdt/src/types.mjs';
+export type { CrdtInfoData, CrdtFuncData } from 'sys.data.crdt/src/types.mjs';
 
 /**
  * @system → UI

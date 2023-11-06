@@ -1,7 +1,16 @@
 import { type t } from './common';
+
 export * from '../common';
+export { Data, Model } from '../ui.Connector.Model';
 
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+const behavior: t.ConnectorPropsBehavior = {
+  grabFocusOnArrowKey: false,
+  focusOnLoad: false,
+};
+
+export const DEFAULTS = {
+  behavior,
+} as const;

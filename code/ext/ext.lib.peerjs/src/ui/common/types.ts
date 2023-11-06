@@ -2,14 +2,26 @@
  * @system
  */
 export type {
+  ButtonProps,
   CssEdgesInput,
   CssValue,
   DevCtxState,
   DevTools,
+  GetLabelItem,
+  GetLabelItemRenderers,
   LabelItem,
-  LabelItemListState,
+  LabelItemDispatch,
+  LabelItemEvents,
+  LabelItemRenderArgs,
+  LabelItemRenderers,
   LabelItemState,
+  LabelListArray,
+  LabelListEdge,
+  LabelListEvents,
+  LabelListState,
+  PropListItem,
   PropListProps,
+  RenderCountProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**

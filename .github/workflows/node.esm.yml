@@ -17,7 +17,8 @@ jobs:
         node-version: [18.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -25,15 +26,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
 
-      # Caching dependencies
-      - uses: actions/cache@v3
-        with:
-          path: ~/.yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - run: yarn install
       - run: yarn audit
       - run: yarn build
       - run: yarn test
+      - run: yarn count

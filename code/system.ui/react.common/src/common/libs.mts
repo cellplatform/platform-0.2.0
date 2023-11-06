@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { clamp, clone, equals, mergeDeepRight, prop, sortBy, uniq } from 'ramda';
-export const R = { clone, equals, mergeDeepRight, uniq, clamp, prop, sortBy } as const;
+import { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } from 'ramda';
+export const R = { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } as const;
 export { Observable, Subject } from 'rxjs';
 
 /**

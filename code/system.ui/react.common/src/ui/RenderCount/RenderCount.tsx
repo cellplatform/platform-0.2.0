@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { COLORS, css, type t } from '../common';
 
 export const RenderCount: React.FC<t.RenderCountProps> = (props) => {
-  const { prefix = 'render-', theme = 'Light' } = props;
+  const { prefix = 'render-', theme = 'Light', opacity = 0.6 } = props;
   const countRef = useRef(0);
   countRef.current++;
 
@@ -15,7 +15,7 @@ export const RenderCount: React.FC<t.RenderCountProps> = (props) => {
       pointerEvents: 'none',
       fontSize: 11,
       color: theme === 'Dark' ? COLORS.WHITE : COLORS.DARK,
-      opacity: 0.6,
+      opacity,
     }),
   };
 

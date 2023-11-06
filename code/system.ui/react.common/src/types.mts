@@ -13,7 +13,7 @@ export type {
   EdgePositionInput,
   EdgePositionX,
   EdgePositionY,
-} from 'sys.types/src/types.mjs';
+} from 'sys.types/src/types';
 export type {
   KeyboardKeypress,
   KeyboardModifierFlags,
@@ -21,7 +21,7 @@ export type {
   KeyboardState,
   KeyboardStateCurrent,
   LocalStorage,
-} from 'sys.ui.dom/src/types.mjs';
+} from 'sys.ui.dom/src/types';
 export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types.mjs';
 
 /**

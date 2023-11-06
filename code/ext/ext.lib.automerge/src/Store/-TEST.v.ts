@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { A, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Id, Is, describe, expect, it, rx, type t } from '../test';
 
 export type D = { count?: t.A.Counter };
 
@@ -8,8 +8,11 @@ describe('Store', async () => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const generator = store.doc.factory<D>(initial);
 
-  it('kind: "crdt:store"', () => {
-    expect(store.kind).to.eql('crdt:store');
+  it('Is.store', () => {
+    expect(Is.store(store)).to.eql(true);
+    [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      expect(Is.store(value)).to.eql(false);
+    });
   });
 
   describe('store.doc', () => {
@@ -18,8 +21,16 @@ describe('Store', async () => {
       const doc2 = await generator();
       doc2.change((d) => d.count?.increment(5));
 
+      expect(doc1.instance).to.not.eql(doc2.instance);
       expect(doc1.current.count?.value).to.eql(0);
       expect(doc2.current.count?.value).to.eql(5);
+    });
+
+    it('doc', async () => {
+      const doc = await generator();
+      expect(Id.Is.slug(doc.instance)).to.eql(true);
+      expect(doc.uri).to.eql(doc.handle.url);
+      expect(doc.toObject()).to.eql(doc.current);
     });
 
     it('toObject (POJO)', async () => {

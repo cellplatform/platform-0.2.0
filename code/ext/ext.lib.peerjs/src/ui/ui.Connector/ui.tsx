@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { type t } from './common';
+import { List } from './ui.List';
+import { useKeyboard } from './use.Keyboard';
+import { useSelection } from './use.Selection';
 
-export const View: React.FC<t.RootProps> = (props) => {
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      position: 'relative',
-    }),
-  };
+type Props = t.ConnectorProps & { list: t.LabelListState };
 
-  return <div {...css(styles.base, props.style)}>{'🐷 Peer Connector'}</div>;
+export const View: React.FC<Props> = (props) => {
+  const { list, peer, debug = {}, behavior = {}, onSelectionChange } = props;
+
+  useSelection({ peer, list, onSelectionChange });
+  useKeyboard({ list, behavior });
+
+  if (!peer || !list) return null;
+  return <List list={list} debug={debug} style={props.style} />;
 };

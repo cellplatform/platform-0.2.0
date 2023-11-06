@@ -13,12 +13,12 @@
   },
   "dependencies": {
     "sys.util": "0.0.0",
-    "ua-parser-js": "1.0.36"
+    "ua-parser-js": "1.0.37"
   },
   "devDependencies": {
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
-    "@types/ua-parser-js": "0.7.37"
+    "@types/ua-parser-js": "0.7.38"
   },
   "license": "MIT",
   "private": true,

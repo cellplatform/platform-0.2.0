@@ -10,7 +10,6 @@ export {
   FC,
   Grid,
   LabelItem,
-  LabelItemStateful,
   Keyboard,
   ProgressBar,
   PropList,

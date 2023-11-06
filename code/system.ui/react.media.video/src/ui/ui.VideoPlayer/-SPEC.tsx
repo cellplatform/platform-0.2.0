@@ -53,7 +53,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.debug.textboxUrl = local.textboxUrl;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(360);
     ctx.subject.display('grid').render<T>((e) => {
       const { props } = e.state;
       return (
@@ -171,6 +171,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       dev.hr(-1, 5);
       def(SAMPLE.VIDEO.GmFarcaster, 'IPFS: GM Farcaster');
       def(SAMPLE.VIDEO.GroupScale, 'IPFS: Group Scale');
+      def(SAMPLE.VIDEO.GroupScaleFrench, 'IPFS: Group Scale (French)');
       dev.hr(-1, 5);
       def(DEFAULTS.unknown);
 

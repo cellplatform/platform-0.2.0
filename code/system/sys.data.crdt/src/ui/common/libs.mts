@@ -9,7 +9,6 @@ export {
   FC,
   Focus,
   LabelItem,
-  LabelItemStateful,
   Keyboard,
   PropList,
   QRCode,
