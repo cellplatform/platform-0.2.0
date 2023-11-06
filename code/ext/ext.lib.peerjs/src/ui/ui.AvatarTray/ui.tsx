@@ -12,7 +12,8 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
    * Handlers
    */
   const handleClick = (selected?: MediaStream) => {
-    props.onSelection?.({ selected });
+    if (!peer) return;
+    props.onSelection?.({ peer, selected });
   };
 
   const handleClosed = (connid?: string) => {

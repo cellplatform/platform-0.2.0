@@ -68,7 +68,7 @@ export default Dev.describe(name, (e) => {
               muted={e.state.muted}
               onSelection={(e) => {
                 console.info(`⚡️ onClick`, e);
-                state.change((d) => (d.props.stream = e.selected?.stream));
+                state.change((d) => (d.props.stream = e.selected));
               }}
             />
           </div>

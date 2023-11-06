@@ -17,5 +17,6 @@ export type AvatarTrayProps = {
  */
 export type PeerStreamSelectionHandler = (e: PeerStreamSelectionHandlerArgs) => void;
 export type PeerStreamSelectionHandlerArgs = {
+  peer: t.PeerModel;
   selected?: MediaStream;
 };
