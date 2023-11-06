@@ -15,8 +15,11 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Sample');
   const local = localstore.object({ docUri: undefined });
 
+  console.log('-------------------------------------------');
   const store = WebStore.init();
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
+
+  console.log('store', store);
 
   let doc: t.DocRefHandle<t.SampleDoc>;
   const initDoc = async (state: t.DevCtxState<T>) => {
