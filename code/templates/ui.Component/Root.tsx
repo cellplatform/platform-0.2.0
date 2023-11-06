@@ -25,4 +25,8 @@ const View: React.FC<t.RootProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.RootProps, Fields>(View, { DEFAULTS }, { displayName: 'Root' });
+export const Root = FC.decorate<t.RootProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);
