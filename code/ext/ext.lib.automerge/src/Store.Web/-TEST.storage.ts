@@ -1,5 +1,5 @@
 import { WebStore } from '.';
-import { A, Test, expect, type t } from '../test.ui';
+import { A, Test, Time, expect, type t } from '../test.ui';
 
 export type D = { count?: t.A.Counter };
 
@@ -17,8 +17,9 @@ export default Test.describe('WebStore: IndexedDBStorageAdapter', (e) => {
     doc1.change((d) => d.count?.increment(5));
     assertCount(doc1, 5);
 
+    await Time.wait(250);
     const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
-    assertCount(doc2, 5); // NB: different store - from IndexedDB.
+    assertCount(doc2, 5); // NB: different store - from [IndexedDB].
 
     expect(store1.doc.exists(doc1.uri)).to.eql(true);
     expect(store2.doc.exists(doc2.uri)).to.eql(true);
