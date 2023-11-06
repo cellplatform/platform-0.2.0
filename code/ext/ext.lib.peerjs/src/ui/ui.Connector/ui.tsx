@@ -1,11 +1,14 @@
 import { type t } from './common';
 import { List } from './ui.List';
 import { useKeyboard } from './use.Keyboard';
-import { useListState } from './use.ListState';
+import { useSelection } from './use.Selection';
 
-export const View: React.FC<t.ConnectorProps> = (props) => {
-  const { peer, debug = {}, behavior = {} } = props;
-  const { list } = useListState(peer, props.onReady);
+type Props = t.ConnectorProps & { list: t.LabelListState };
+
+export const View: React.FC<Props> = (props) => {
+  const { list, peer, debug = {}, behavior = {}, onSelectionChange } = props;
+
+  useSelection({ peer, list, onSelectionChange });
   useKeyboard({ list, behavior });
 
   if (!peer || !list) return null;

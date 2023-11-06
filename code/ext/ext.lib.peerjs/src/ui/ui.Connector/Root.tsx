@@ -1,15 +1,24 @@
-import { DEFAULTS, FC, Model, type t } from './common';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+
+import { ConnectorRef } from './Ref';
+import { Model, type t } from './common';
 import { View } from './ui';
 
 /**
  * Export
  */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-  Model: typeof Model;
-};
-export const Connector = FC.decorate<t.ConnectorProps, Fields>(
-  View,
-  { DEFAULTS, Model },
-  { displayName: 'Webrtc.Connector' },
-);
+export const Connector = forwardRef<t.ConnectorRef, t.ConnectorProps>((props, ref) => {
+  const { peer } = props;
+
+  const handleRef = useRef<t.ConnectorRef>();
+  const modelRef = useRef(Model.List.init(peer));
+  const list = modelRef.current.list;
+
+  const createHandle = () => (handleRef.current = ConnectorRef({ peer, list }));
+  const getOrCreateHandle = () => handleRef.current || createHandle();
+
+  useImperativeHandle(ref, getOrCreateHandle);
+  useEffect(() => props.onReady?.(getOrCreateHandle()), []);
+
+  return <View {...props} list={list} />;
+});

@@ -1,4 +1,4 @@
-import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
+import { Button, COLORS, Color, Dev, Time, UI, Webrtc, css, type t } from '../../test.ui';
 import { AvatarTray } from '../ui.AvatarTray';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
@@ -6,14 +6,16 @@ import { Connector } from '.';
 import { Info } from '../ui.Info';
 
 type T = { props: t.ConnectorProps };
-const initial: T = {
-  props: {},
-};
 const name = Connector.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
+  let ref: t.ConnectorRef;
+
+  const initial: T = {
+    props: { peer: self },
+  };
 
   type LocalStore = t.ConnectorPropsBehavior;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
@@ -51,12 +53,17 @@ export default Dev.describe(name, (e) => {
           prefix: 'list.render-',
         };
         return (
-          <Connector
-            //
+          <UI.Connector
             {...e.state.props}
             peer={self}
             debug={{ renderCount, name: 'Main' }}
-            onReady={(e) => console.info('⚡️ onReady', e)}
+            onReady={(e) => {
+              console.info('⚡️ onReady', e);
+              ref = e;
+            }}
+            onSelectionChange={(e) => {
+              console.info('⚡️ onSelectionChange', e);
+            }}
           />
         );
       });
@@ -75,7 +82,8 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button(['copy: bad "peer:<id>"', '(will fail) 💥'], (e) => {
-        navigator.clipboard.writeText(Webrtc.PeerJs.Uri.generate());
+        const id = Webrtc.PeerJs.Uri.generate();
+        navigator.clipboard.writeText(id);
       });
       dev.hr(-1, 5);
       dev.button('redraw', (e) => dev.redraw());
@@ -84,8 +92,16 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
     dev.row((e) => <PeerCard prefix={'peer.remote:'} peer={{ self: remote, remote: self }} />);
     dev.hr(5, 20);
+    dev.row((e) => (
+      <AvatarTray
+        peer={self}
+        onChange={(e) => console.info(`⚡️ onChange`, e)}
+        emptyMessage={'No media connetions to display.'}
+      />
+    ));
+    dev.hr(5, 20);
 
-    dev.section('Props: Behavior', (dev) => {
+    dev.section('Props: Load Behavior', (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.behavior?.grabFocusOnArrowKey);
         btn
@@ -110,6 +126,35 @@ export default Dev.describe(name, (e) => {
               local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
             }),
           );
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Ref', (dev) => {
+      dev.button((btn) => {
+        const select = (label: string, target: t.ConnectorRefSelectTarget) => {
+          return (
+            <Button
+              style={{ marginLeft: 8 }}
+              label={label}
+              onClick={() => Time.delay(0, () => ref.select(target))}
+            />
+          );
+        };
+
+        btn
+          .label(`select`)
+          .right((e) => {
+            return (
+              <div>
+                {select('first', 'First')}
+                {select('last', 'Last')}
+              </div>
+            );
+          })
+          .enabled((e) => true)
+          .onClick((e) => {});
       });
     });
 
@@ -143,17 +188,18 @@ export default Dev.describe(name, (e) => {
 
         const borderBottom = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
         const styles = {
-          obj: css({ padding: 8, borderBottom }),
-          avatars: css({ padding: 8 }),
+          avatars: css({ padding: 8, borderBottom }),
+          obj: css({ padding: 8 }),
         };
+
         return (
           <div>
-            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
             <AvatarTray
               peer={self}
               style={styles.avatars}
-              onChange={(e) => console.info(`⚡️ onClick`, e)}
+              onChange={(e) => console.info(`⚡️ onChange`, e)}
             />
+            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
           </div>
         );
       });

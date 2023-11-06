@@ -30,9 +30,10 @@ export const List: React.FC<ListProps> = (props) => {
     );
   });
 
+  const dataid = `Connector:List:${list.instance}`;
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+      <div ref={ref} data-id={dataid} {...css(styles.base, props.style)}>
         {debug.renderCount && <RenderCount {...debug.renderCount} />}
         <div>{elements}</div>
       </div>

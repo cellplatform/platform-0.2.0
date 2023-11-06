@@ -1,6 +1,6 @@
 import { Model, type t } from './common';
 
-type Input = t.LabelItem | t.LabelItemState;
+type ItemInput = t.LabelItem | t.LabelItemState;
 
 /**
  * Helpers for retreiving the typed {data} on the list/item models.
@@ -9,9 +9,17 @@ export const Data = {
   /**
    * Item
    */
-  kind: (item: Input) => Model.data<t.ConnectorData>(item).kind,
-  self: (item: Input) => Model.data<t.ConnectorDataSelf>(item),
-  remote: (item: Input) => Model.data<t.ConnectorDataRemote>(item),
+  kind: (input: ItemInput) => Model.data<t.ConnectorData>(input).kind,
+  self: (input: ItemInput) => Model.data<t.ConnectorDataSelf>(input),
+  remote: (input: ItemInput) => Model.data<t.ConnectorDataRemote>(input),
+
+  peerid(input?: ItemInput) {
+    if (!input) return;
+    const kind = Data.kind(input);
+    if (kind === 'peer:self') return Data.self(input).peerid;
+    if (kind === 'peer:remote') return Data.remote(input).remoteid;
+    return;
+  },
 
   /**
    * List
