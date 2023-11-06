@@ -1,5 +1,7 @@
+import type { VirtuosoHandle, t } from './common';
+
 import { RefObject } from 'react';
-import { DEFAULTS, LabelItem, Virtuoso, css, type VirtuosoHandle, type t } from './common';
+import { DEFAULTS, LabelItem, Virtuoso, css } from './common';
 
 type ListProps = t.VirtualListProps & { virtuosoRef: RefObject<VirtuosoHandle> };
 
@@ -7,7 +9,7 @@ export const List: React.FC<ListProps> = (props) => {
   const { list, renderers, overscan = DEFAULTS.overscan } = props;
   const total = list?.current.total ?? 0;
 
-  const { ref, Provider, handlers } = LabelItem.Stateful.useListController({ list });
+  const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list });
 
   /**
    * Render
