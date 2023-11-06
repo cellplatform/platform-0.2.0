@@ -1,13 +1,20 @@
 import { type t } from './common';
 
 /**
+ * API: Imperative handle reference.
+ */
+export type RepoListRef = t.LabelListDispatch & {
+  store: t.WebStore;
+};
+
+/**
  * <Component>
  */
 export type RepoListProps = {
-  list?: t.RepoListState;
-  renderers?: t.RepoItemRenderers;
+  store: t.WebStore;
   renderCount?: t.RenderCountProps;
   style?: t.CssValue;
+  onReady?: t.RepoListReadyHandler;
 };
 
 /**
@@ -35,3 +42,8 @@ export type RepoListState = t.LabelListState;
 export type RepoItemData = {
   mode: 'Add' | 'Doc';
 };
+
+/**
+ * Events
+ */
+export type RepoListReadyHandler = (e: t.RepoListRef) => void;

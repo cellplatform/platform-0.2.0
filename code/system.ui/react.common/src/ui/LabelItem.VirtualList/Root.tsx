@@ -23,6 +23,6 @@ export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((pro
 });
 
 /**
- * Meta.
+ * Meta
  */
 VirtualList.displayName = DEFAULTS.displayName;

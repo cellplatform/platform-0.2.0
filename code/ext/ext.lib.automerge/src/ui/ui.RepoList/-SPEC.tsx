@@ -1,15 +1,15 @@
-import { Dev, type t, WebStore } from '../../test.ui';
 import { RepoList } from '.';
-import { List } from './ui.List';
+import { Dev, WebStore, type t, Time, Button } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type T = { props: t.RepoListProps };
-const initial: T = { props: {} };
 const name = RepoList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const store = WebStore.init();
-  const model = RepoList.Model.init(store);
+
+  let ref: t.RepoListRef;
+  const initial: T = { props: { store } };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -31,10 +31,12 @@ export default Dev.describe(name, (e) => {
         };
         return (
           <RepoList
-            //
-            list={model.list}
-            renderers={model.renderers}
+            {...e.state.props}
             renderCount={renderCount}
+            onReady={(e) => {
+              console.info(`⚡️ RepoList.onReady`, e);
+              ref = e;
+            }}
           />
         );
       });
@@ -44,6 +46,35 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
+    dev.hr(5, 20);
+
+    dev.section('Ref ( ƒ )', (dev) => {
+      dev.button((btn) => {
+        const select = (label: string, target: t.LabelListItemTarget) => {
+          return (
+            <Button
+              label={label}
+              style={{ marginLeft: 8 }}
+              onClick={() => Time.delay(0, () => ref.select(target))}
+            />
+          );
+        };
+
+        btn
+          .label(`select`)
+          .right((e) => {
+            return (
+              <div>
+                {select('first', 'First')}
+                {select('last', 'Last')}
+              </div>
+            );
+          })
+          .enabled((e) => true)
+          .onClick((e) => {});
+      });
+    });
+
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {

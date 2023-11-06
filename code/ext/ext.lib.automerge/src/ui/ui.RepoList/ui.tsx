@@ -1,7 +1,12 @@
 import { css, type t } from './common';
 import { List } from './ui.List';
 
-export const View: React.FC<t.RepoListProps> = (props) => {
+type Props = t.RepoListProps & {
+  list: t.RepoListState;
+  renderers: t.RepoItemRenderers;
+};
+
+export const View: React.FC<Props> = (props) => {
   const { list, renderers } = props;
 
   /**
