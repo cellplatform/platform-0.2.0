@@ -38,7 +38,7 @@ export default Dev.describe(name, (e) => {
             style={{ margin: 10 }}
             peer={self}
             size={Number(e.state.debug.sizePercent) * (AvatarTray.DEFAULTS.size * 2)}
-            onChange={(e) => {
+            onSelection={(e) => {
               console.log('⚡️ onChange:', e);
             }}
           />

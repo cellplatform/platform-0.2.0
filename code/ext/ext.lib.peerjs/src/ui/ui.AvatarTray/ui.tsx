@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
-import { Color, COLORS, DEFAULTS, Is, css, rx, type t } from './common';
+import { useEffect } from 'react';
+import { COLORS, Color, DEFAULTS, css, rx, type t } from './common';
 import { Avatar } from './ui.Avatar';
 import { useMediaStreams } from './use.MediaStreams';
 
 export const View: React.FC<t.AvatarTrayProps> = (props) => {
   const { peer, size = DEFAULTS.size } = props;
-  const { streams } = useMediaStreams(peer);
-  const streamids = streams.map((s) => s.stream.id);
-  const [selected, setSelected] = useState<t.AvatarTrayStream | undefined>();
+  const { self, streams, streamids } = useMediaStreams(peer);
+  const total = streams.length + (self ? 1 : 0);
 
   /**
    * Handlers
    */
-  const handleChange = (selected?: t.AvatarTrayStream) => {
-    setSelected(selected);
-    props.onChange?.({ selected });
+  const handleClick = (selected?: MediaStream) => {
+    props.onSelection?.({ selected });
   };
 
   const handleClosed = (connid?: string) => {
-    if (selected?.conn?.id === connid) {
-      const first = streams[0];
-      handleChange(first);
-    }
+    /**
+     * TODO 🐷
+     */
+    console.log('handle Connection Closed', connid);
+    // if (selected?.conn?.id === connid) {
+    //   const first = streams[0];
+    //   handleChange(first);
+    // }
   };
 
   /**
@@ -35,19 +37,19 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     action('closed')?.subscribe((e) => handleClosed(e.connection?.id));
 
     return events?.dispose;
-  }, [streamids, selected?.stream.id, peer?.id]);
+  }, [streamids, peer?.id]);
 
   /**
    * Render
    */
-  if (streams.length === 0 && !props.emptyMessage) return null;
+  if (total === 0 && !props.emptyMessage) return null;
 
   const styles = {
     base: css({
       minHeight: size,
       display: 'grid',
       placeItems: 'center',
-      gridTemplateColumns: `repeat(${streams.length}, auto)`,
+      gridTemplateColumns: `repeat(${total}, auto)`,
       columnGap: '5px',
     }),
     emptyMessage: css({
@@ -56,43 +58,30 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     }),
   };
 
-  const elVideos = streams.map(({ conn, stream }) => {
+  const avatar = (stream: MediaStream) => {
     return (
       <Avatar
         key={stream.id}
         size={props.size}
         muted={props.muted}
         stream={stream}
-        onClick={() => handleChange({ conn, stream })}
+        onClick={() => handleClick(stream)}
       />
     );
-  });
+  };
 
-  const elEmpty = props.emptyMessage && streams.length === 0 && (
+  const elSelf = self && avatar(self);
+  const elOthers = streams.map((stream) => avatar(stream));
+
+  const elEmpty = props.emptyMessage && total === 0 && (
     <div {...styles.emptyMessage}>{props.emptyMessage}</div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elVideos}
+      {elSelf}
+      {elOthers}
       {elEmpty}
     </div>
   );
 };
-
-/**
- * Helpers
- */
-export const Wrangle = {
-  stream(peer: t.PeerModel, selected?: string) {
-    const connections = peer?.current.connections ?? [];
-
-    if (selected) {
-      const conn = connections.find((conn) => conn.id === selected);
-      if (conn?.stream) return conn.stream.remote ?? conn.stream.self;
-    }
-
-    const first = connections.find((conn) => Is.kind.media(conn));
-    return first?.stream?.remote ?? first?.stream?.self;
-  },
-} as const;

@@ -58,13 +58,15 @@ export default Dev.describe(name, (e) => {
             <UI.Connector
               peer={self}
               behavior={{ focusOnLoad: true }}
-              onReady={(e) => console.info('⚡️ UI.Connector.onReady', e)}
+              onReady={(e) => {
+                console.info('⚡️ Connector.onReady:', e);
+              }}
             />
             <UI.AvatarTray
               peer={self}
               style={styles.avatars}
               muted={e.state.muted}
-              onChange={(e) => {
+              onSelection={(e) => {
                 console.info(`⚡️ onClick`, e);
                 state.change((d) => (d.props.stream = e.selected?.stream));
               }}

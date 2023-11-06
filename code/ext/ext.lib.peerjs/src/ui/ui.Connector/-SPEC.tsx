@@ -95,7 +95,7 @@ export default Dev.describe(name, (e) => {
     dev.row((e) => (
       <AvatarTray
         peer={self}
-        onChange={(e) => console.info(`⚡️ onChange`, e)}
+        onSelection={(e) => console.info(`⚡️ onChange`, e)}
         emptyMessage={'No media connetions to display.'}
       />
     ));
@@ -197,7 +197,7 @@ export default Dev.describe(name, (e) => {
             <AvatarTray
               peer={self}
               style={styles.avatars}
-              onChange={(e) => console.info(`⚡️ onChange`, e)}
+              onSelection={(e) => console.info(`⚡️ onChange`, e)}
             />
             <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
           </div>
