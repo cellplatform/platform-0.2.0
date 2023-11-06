@@ -54,7 +54,7 @@ export const Paths = {
 
       'src/common/index.ts',
       'src/common/libs.ts',
-      'src/common/types.ts',
+      'src/common/t.ts',
 
       'src/test/-TEST.v.ts',
       'src/test/index.ts',
@@ -69,14 +69,14 @@ export const Paths = {
 
       'src/ui/common/index.ts',
       'src/ui/common/libs.ts',
-      'src/ui/common/types.ts',
+      'src/ui/common/t.ts',
 
       'src/ui/ui.Info/-SPEC.tsx',
       'src/ui/ui.Info/field.Module.Verify.tsx',
       'src/ui/ui.Info/common.ts',
       'src/ui/ui.Info/index.ts',
       'src/ui/ui.Info/Root.tsx',
-      'src/ui/ui.Info/types.ts',
+      'src/ui/ui.Info/t.ts',
       'src/ui/ui.Sample.01/-SPEC.tsx',
       'src/ui/Icons.ts',
     ],
