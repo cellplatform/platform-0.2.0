@@ -71,9 +71,9 @@ export default Dev.describe(name, (e) => {
               peer={self}
               style={styles.avatars}
               muted={false}
-              onChange={(e) => {
+              onSelection={(e) => {
                 console.info(`⚡️ onClick`, e);
-                state.change((d) => (d.stream = e.selected?.stream));
+                state.change((d) => (d.stream = e.selected));
               }}
             />
             <UI.Connector

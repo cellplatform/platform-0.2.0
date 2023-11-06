@@ -47,12 +47,12 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
 
   const styles = {
     base: css({
+      position: 'relative',
       minHeight: size,
       display: 'grid',
       placeItems: 'center',
-      gridTemplateColumns: `repeat(${total}, auto)`,
-      columnGap: '5px',
     }),
+    body: css({ display: 'flex', flexWrap: 'wrap', gap: '10px' }),
     emptyMessage: css({
       fontSize: 14,
       color: Color.alpha(COLORS.DARK, 0.2),
@@ -78,10 +78,16 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     <div {...styles.emptyMessage}>{props.emptyMessage}</div>
   );
 
-  return (
-    <div {...css(styles.base, props.style)}>
+  const elBody = !elEmpty && (
+    <div {...styles.body}>
       {elSelf}
       {elOthers}
+    </div>
+  );
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      {elBody}
       {elEmpty}
     </div>
   );
