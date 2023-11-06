@@ -1,14 +1,13 @@
 import { RefObject } from 'react';
 import { DEFAULTS, LabelItem, Virtuoso, css, type VirtuosoHandle, type t } from './common';
 
-type Props = t.VirtualListProps & {
-  virtuosoRef: RefObject<VirtuosoHandle>;
-};
+type ListProps = t.VirtualListProps & { virtuosoRef: RefObject<VirtuosoHandle> };
 
-export const View: React.FC<Props> = (props) => {
+export const List: React.FC<ListProps> = (props) => {
   const { list, renderers, overscan = DEFAULTS.overscan } = props;
   const total = list?.current.total ?? 0;
-  const listController = LabelItem.Stateful.useListController({ list });
+
+  const { ref, Provider, handlers } = LabelItem.Stateful.useListController({ list });
 
   /**
    * Render
@@ -18,8 +17,8 @@ export const View: React.FC<Props> = (props) => {
   };
 
   return (
-    <listController.Provider>
-      <div ref={listController.ref} {...css(styles.base, props.style)}>
+    <Provider>
+      <div ref={ref} {...css(styles.base, props.style)}>
         <Virtuoso
           ref={props.virtuosoRef}
           totalCount={total}
@@ -30,7 +29,7 @@ export const View: React.FC<Props> = (props) => {
 
             return (
               <LabelItem.Stateful
-                {...listController.handlers}
+                {...handlers}
                 key={item.instance}
                 index={index}
                 list={list}
@@ -41,6 +40,6 @@ export const View: React.FC<Props> = (props) => {
           }}
         />
       </div>
-    </listController.Provider>
+    </Provider>
   );
 };
