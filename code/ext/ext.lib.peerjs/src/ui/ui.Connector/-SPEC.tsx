@@ -11,8 +11,8 @@ const name = Connector.displayName ?? '';
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
-  let ref: t.ConnectorRef;
 
+  let ref: t.ConnectorRef;
   const initial: T = {
     props: { peer: self },
   };
@@ -131,9 +131,9 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Ref', (dev) => {
+    dev.section('Ref ( ƒ )', (dev) => {
       dev.button((btn) => {
-        const select = (label: string, target: t.ConnectorRefSelectTarget) => {
+        const select = (label: string, target: t.LabelListItemTarget) => {
           return (
             <Button
               style={{ marginLeft: 8 }}
