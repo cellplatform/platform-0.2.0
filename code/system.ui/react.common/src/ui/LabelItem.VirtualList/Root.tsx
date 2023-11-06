@@ -1,7 +1,8 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import type { VirtuosoHandle, t } from './common';
 
-import { type t, type VirtuosoHandle } from './common';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { VirtualListRef } from './Ref';
+import { DEFAULTS } from './common';
 import { List } from './ui.List';
 
 /**
@@ -20,3 +21,8 @@ export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((pro
 
   return <List {...props} virtuosoRef={virtuosoRef} />;
 });
+
+/**
+ * Meta.
+ */
+VirtualList.displayName = DEFAULTS.displayName;
