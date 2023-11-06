@@ -59,20 +59,20 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     }),
   };
 
-  const avatar = (stream: MediaStream) => {
+  const avatar = (stream: MediaStream, muted?: boolean) => {
     return (
       <Avatar
         key={stream.id}
         size={props.size}
-        muted={props.muted}
+        muted={muted}
         stream={stream}
         onClick={() => handleClick(stream)}
       />
     );
   };
 
-  const elSelf = self && avatar(self);
-  const elOthers = streams.map((stream) => avatar(stream));
+  const elSelf = self && avatar(self, true);
+  const elOthers = streams.map((stream) => avatar(stream, props.muted));
 
   const elEmpty = props.emptyMessage && total === 0 && (
     <div {...styles.emptyMessage}>{props.emptyMessage}</div>
