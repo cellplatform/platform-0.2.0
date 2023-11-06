@@ -3,11 +3,11 @@ import type { t } from './common';
 /**
  * Ref: API handle.
  */
-export type ConnectorRef = {
+export type ConnectorRef = t.LabelListDispatch & {
   readonly peer: t.PeerModel;
-  select(target: ConnectorRefSelectTarget, focus?: boolean): void;
+  // select(target: ConnectorRefSelectTarget, focus?: boolean): void;
 };
-export type ConnectorRefSelectTarget = number | t.LabelListEdge;
+// export type ConnectorRefSelectTarget = number | t.LabelListEdge;
 
 /**
  * <Component>

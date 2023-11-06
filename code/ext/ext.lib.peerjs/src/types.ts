@@ -14,14 +14,14 @@ export type {
 /**
  * @system
  */
-export type * from './Webrtc.Peer/types';
-export type * from './Webrtc.PeerJs/types';
-export type * from './Webrtc/types';
+export type * from './Webrtc.Peer/t';
+export type * from './Webrtc.PeerJs/t';
+export type * from './Webrtc/t';
 
-export type * from './ui/ui.AvatarTray/types';
-export type * from './ui/ui.Connector.MediaToolbar/types';
-export type * from './ui/ui.Connector.Model/types';
-export type * from './ui/ui.Connector/types';
-export type * from './ui/ui.Dev.PeerCard/types';
-export type * from './ui/ui.Info/types';
-export type * from './ui/ui.Video/types';
+export type * from './ui/ui.AvatarTray/t';
+export type * from './ui/ui.Connector.MediaToolbar/t';
+export type * from './ui/ui.Connector.Model/t';
+export type * from './ui/ui.Connector/t';
+export type * from './ui/ui.Dev.PeerCard/t';
+export type * from './ui/ui.Info/t';
+export type * from './ui/ui.Video/t';

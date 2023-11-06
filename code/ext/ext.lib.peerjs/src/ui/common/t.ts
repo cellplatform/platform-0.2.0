@@ -16,8 +16,10 @@ export type {
   LabelItemRenderers,
   LabelItemState,
   LabelListArray,
+  LabelListDispatch,
   LabelListEdge,
   LabelListEvents,
+  LabelListItemTarget,
   LabelListState,
   PropListItem,
   PropListProps,
@@ -27,4 +29,4 @@ export type {
 /**
  * @local
  */
-export type * from '../../common/types';
+export type * from '../../common/t';
