@@ -6,4 +6,6 @@ export const Model = LabelItem.Stateful.Model;
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+export const DEFAULTS = {
+  displayName: 'RepoList',
+} as const;

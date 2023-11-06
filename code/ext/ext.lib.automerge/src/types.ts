@@ -1,5 +1,5 @@
-export type * from './Store.Web/types';
-export type * from './Store/types';
+export type * from './Store.Web/t';
+export type * from './Store/t';
 
-export type * from './ui/ui.Info/types';
-export type * from './ui/ui.RepoList/types';
+export type * from './ui/ui.Info/t';
+export type * from './ui/ui.RepoList/t';

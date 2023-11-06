@@ -12,5 +12,5 @@ type Fields = {
 export const RepoList = FC.decorate<t.RepoListProps, Fields>(
   View,
   { DEFAULTS, Model },
-  { displayName: 'RepoList' },
+  { displayName: DEFAULTS.displayName },
 );
