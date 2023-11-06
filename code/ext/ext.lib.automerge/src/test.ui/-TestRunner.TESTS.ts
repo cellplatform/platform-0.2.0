@@ -4,7 +4,7 @@ export const TESTS = {
       //
       import('./-TEST'),
       import('../common/Is.TEST'),
-      import('../Store.Web/WebStore.TEST'),
+      import('../Store.Web/-TEST'),
     ];
   },
 };
