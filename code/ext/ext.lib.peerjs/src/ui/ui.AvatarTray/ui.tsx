@@ -20,7 +20,8 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
     /**
      * TODO 🐷
      */
-    console.log('handle Connection Closed', connid);
+    console.log(`${DEFAULTS.displayName} handle Connection Closed`, connid);
+
     // if (selected?.conn?.id === connid) {
     //   const first = streams[0];
     //   handleChange(first);
