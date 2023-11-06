@@ -60,7 +60,7 @@ export const ItemModel = {
     const mode = () => Data.item(state).mode;
     const addModeFilter = rx.filter(() => mode() === 'Add');
     events.key.enter$.pipe(addModeFilter).subscribe(add);
-    events.cmd.action.on('Store:Left').pipe(addModeFilter).subscribe(add);
+    events.cmd.action.kind('Store:Left').pipe(addModeFilter).subscribe(add);
     events.cmd.click$
       .pipe(rx.filter((e) => e.kind === 'Double'))
       .pipe(rx.filter((e) => e.target === 'Item'))
