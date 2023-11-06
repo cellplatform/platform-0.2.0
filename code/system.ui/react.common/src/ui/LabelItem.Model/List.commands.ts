@@ -1,27 +1,33 @@
 import { PatchState, slug, type t } from './common';
+import { get as createGetter } from './List.get';
 
 /**
  * Dispatcher of "command" events for the given item.
  */
 export function commands(list?: t.LabelListState) {
   const dispatch = PatchState.Command.dispatcher(list);
+  const get = createGetter(list);
 
   const api: t.LabelListDispatch = {
-    select(item, focus = false) {
+    select(target, focus = false) {
+      const item = get.index(target);
       dispatch({ type: 'List:Select', payload: { item, focus, tx: slug() } });
     },
     edit(target, action = 'start') {
-      const item = Wrangle.itemId(list, target);
+      const item = get.item(target)?.instance;
       if (item) {
-        api.select(item, true);
-        dispatch({ type: 'List:Edit', payload: { item, action, tx: slug() } });
+        const tx = slug();
+        dispatch({ type: 'List:Select', payload: { item, focus: true, tx } });
+        dispatch({ type: 'List:Edit', payload: { item, action, tx } });
       }
     },
-    redraw(item) {
+    redraw(target) {
+      const item = get.index(target);
       dispatch({ type: 'List:Redraw', payload: { item, tx: slug() } });
     },
-    remove(index) {
-      if (index === undefined || index < 0) return;
+    remove(target) {
+      const index = get.index(target);
+      if (index < 0) return;
       dispatch({ type: 'List:Remove', payload: { index, tx: slug() } });
     },
     focus(focus: boolean = true) {
@@ -38,7 +44,7 @@ export function commands(list?: t.LabelListState) {
  * Helpers
  */
 export const Wrangle = {
-  itemId(list?: t.LabelListState, target?: string | number) {
+  itemId(list?: t.LabelListState, target?: t.LabelListItemTarget) {
     const getItem = list?.current.getItem;
     if (!getItem || target === undefined) return '';
     const [item, index] = getItem(target);

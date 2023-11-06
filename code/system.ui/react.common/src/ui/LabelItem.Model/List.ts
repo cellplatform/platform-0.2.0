@@ -3,7 +3,8 @@ import { DEFAULTS, PatchState, type t } from './common';
 import { array } from './List.array';
 import { commands } from './List.commands';
 import { events } from './List.events';
-import { get, getItem } from './List.get';
+import { get } from './List.get';
+import { getItem } from './List.getItem';
 import { map } from './List.map';
 
 type O = Record<string, unknown>;

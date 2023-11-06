@@ -5,6 +5,7 @@ type Index = number;
 type O = Record<string, unknown>;
 
 export type LabelListEdge = 'First' | 'Last';
+export type LabelListItemTarget = Index | Id | LabelListEdge;
 
 /**
  * Model for a list of <Item>'s.
@@ -51,10 +52,10 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
  * (events as a property stream)
  */
 export type LabelListDispatch = {
-  select(item: Index | Id, focus?: boolean): void;
-  edit(item: Index | Id, action?: t.LabelListEditCmdArgs['action']): void;
-  redraw(item?: Index | Id): void;
-  remove(index?: Index): void;
+  select(item: t.LabelListItemTarget, focus?: boolean): void;
+  edit(item: t.LabelListItemTarget, action?: t.LabelListEditCmdArgs['action']): void;
+  redraw(item?: t.LabelListItemTarget): void;
+  remove(index?: t.LabelListItemTarget): void;
   focus(focus?: boolean): void;
   blur(): void;
 };

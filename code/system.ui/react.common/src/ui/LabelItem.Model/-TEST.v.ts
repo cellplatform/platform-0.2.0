@@ -279,53 +279,94 @@ describe('LabelItem.Model', () => {
         const get = Model.List.get(list);
         Model.List.map(list, () => null); // NB: Ensure the list is populated.
 
-        it('get.item ← from Index', () => {
-          const test = (index: number, expected?: t.LabelItemState) => {
-            expect(get.item(index)).to.equal(expected);
-          };
-          test(-1, undefined);
-          test(0, items[0]);
-          test(1, items[1]);
-          test(2, items[2]);
-          test(3, undefined);
+        describe('get.item', () => {
+          it('get.item ← from Index', () => {
+            const test = (index: number, expected?: t.LabelItemState) => {
+              expect(get.item(index)).to.equal(expected);
+            };
+            test(-1, undefined);
+            test(0, items[0]);
+            test(1, items[1]);
+            test(2, items[2]);
+            test(99, undefined);
+          });
+
+          it('get.item ← from "First" | "Last" (edge)', () => {
+            const test = (input: t.LabelListEdge | undefined, expected?: t.LabelItemState) => {
+              expect(get.item(input)).to.equal(expected);
+            };
+            test(undefined, undefined);
+            test('First', items[0]);
+            test('Last', items[2]);
+          });
+
+          it('get.item ← from "id" string', () => {
+            const test = (input: string | undefined, expected?: t.LabelItemState) => {
+              expect(get.item(input)).to.equal(expected);
+            };
+            test(undefined, undefined);
+            test(items[0].instance, items[0]);
+            test(items[1].instance, items[1]);
+          });
+
+          it('get.item ← from state (NB: completeness)', () => {
+            expect(get.item(items[0])).to.eql(items[0]);
+            expect(get.item(items[99])).to.eql(undefined);
+          });
+
+          it('get.item ← <nothing>', () => {
+            expect(get.item(undefined)).to.eql(undefined);
+            expect(get.item(null as any)).to.eql(undefined);
+            expect(get.item('foobar')).to.eql(undefined);
+            expect(get.item(999)).to.eql(undefined);
+          });
         });
 
-        it('get.index ← from [Item]', () => {
-          const test = (item: t.LabelItemState | undefined, expected: number) => {
-            expect(get.index(item)).to.equal(expected);
-          };
-          test(undefined, -1);
-          test(items[0], 0);
-          test(items[1], 1);
-        });
+        describe('get.index', () => {
+          it('get.index ← from [Item]', () => {
+            const test = (input: t.LabelItemState | undefined, expected: number) => {
+              expect(get.index(input)).to.equal(expected);
+            };
+            test(undefined, -1);
+            test(items[0], 0);
+            test(items[1], 1);
+          });
 
-        it('get.index ← from item "ID"', () => {
-          const test = (item: string | undefined, expected: number) => {
-            expect(get.index(item)).to.equal(expected);
-          };
-          test(undefined, -1);
-          test(items[0].instance, 0);
-          test(items[1].instance, 1);
-        });
+          it('get.index ← from item "id" string', () => {
+            const test = (input: string | undefined, expected: number) => {
+              expect(get.index(input)).to.equal(expected);
+            };
+            test(undefined, -1);
+            test(items[0].instance, 0);
+            test(items[1].instance, 1);
+          });
 
-        it('get.index ← from "First" | "Last" (edge)', () => {
-          const test = (item: t.LabelListEdge | undefined, expected: number) => {
-            expect(get.index(item)).to.equal(expected);
-          };
-          test(undefined, -1);
-          test('First', 0);
-          test('Last', 2);
-        });
+          it('get.index ← from "First" | "Last" (edge)', () => {
+            const test = (input: t.LabelListEdge | undefined, expected: number) => {
+              expect(get.index(input)).to.equal(expected);
+            };
+            test(undefined, -1);
+            test('First', 0);
+            test('Last', 2);
+          });
 
-        it('get.index ← from index (NB: completness)', () => {
-          expect(get.index(-1)).to.eql(-1);
-          expect(get.index(0)).to.eql(0);
-          expect(get.index(1)).to.eql(1);
+          it('get.index ← from index (NB: completeness)', () => {
+            expect(get.index(-1)).to.eql(-1);
+            expect(get.index(0)).to.eql(0);
+            expect(get.index(1)).to.eql(1);
+          });
+
+          it('get.index ← <nothing>', () => {
+            expect(get.index(undefined)).to.eql(-1);
+            expect(get.index(null as any)).to.eql(-1);
+            expect(get.index('foobar')).to.eql(-1);
+          });
         });
 
         it('throw: not an interger', () => {
-          const fn = () => get.item(0.1);
-          expect(fn).to.throw(/Index is not an integer/);
+          const err = /Index is not an integer/;
+          expect(() => get.item(0.1)).to.throw(err);
+          expect(() => get.index(0.1)).to.throw(err);
         });
       });
 

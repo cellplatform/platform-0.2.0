@@ -1,41 +1,52 @@
 import { PatchState, type t } from './common';
+import { getItem } from './List.getItem';
 
-type ItemId = string;
 type O = Record<string, unknown>;
 type ListInput = t.LabelList | t.LabelListState;
 
 /**
- * Retrieve an item from a list via [index] or [Item] reference.
- */
-export function getItem<A extends t.LabelItemActionKind = string, D extends O = O>(
-  list: ListInput | undefined,
-  index: number,
-): t.LabelItemStateIndex<A, D> {
-  const notFound: t.LabelItemStateIndex<A, D> = [undefined, -1];
-  if (!list) return notFound;
-
-  const current = PatchState.Is.state(list) ? list.current : list;
-  if (!current?.getItem) return notFound;
-  if (index < 0 || index > current.total - 1) return notFound;
-  if (!Number.isInteger(index)) throw new Error('Index is not an integer');
-
-  const res = current.getItem(index);
-  return res ? (res as t.LabelItemStateIndex<A, D>) : notFound;
-}
-
-/**
  * Convenience API for working with [getItem]
  */
-export function get<A extends t.LabelItemActionKind = string, D extends O = O>(list: ListInput) {
+export function get<A extends t.LabelItemActionKind = string, D extends O = O>(list?: ListInput) {
   return {
-    item(index: number) {
+    /**
+     * Find the ListItem object.
+     */
+    item(input?: t.LabelItemState | t.LabelListItemTarget) {
+      if (!list || input === undefined || input === null) return undefined;
+      if (typeof input === 'object') return input;
+
+      if (typeof input === 'string' && !(input === 'First' || input === 'Last')) {
+        const current = PatchState.Is.state(list) ? list.current : list;
+        const res = current.getItem?.(input);
+        return res ? res[0] : undefined;
+      }
+
+      let index = -1;
+      if (typeof input === 'number') {
+        index = input;
+      } else if (typeof input === 'string') {
+        if (input === 'First') index = 0;
+        else if (input === 'Last') {
+          const current = PatchState.Is.state(list) ? list.current : list;
+          index = current.total - 1;
+        }
+      }
+
       const [item] = getItem<A, D>(list, index);
       return item;
     },
-    index(input?: t.LabelItemState | ItemId | t.LabelListEdge | number) {
-      if (input === undefined) return -1;
-      if (typeof input === 'number') return input;
+
+    /**
+     * Find the ListItem index.
+     */
+    index(input?: t.LabelItemState | t.LabelListItemTarget) {
+      if (!list || input === undefined || input === null) return -1;
       if (input === 'First') return 0;
+      if (typeof input === 'number') {
+        if (!Number.isInteger(input)) throw new Error('Index is not an integer');
+        return input;
+      }
 
       const id = typeof input === 'object' ? input.instance : input;
       if (typeof id !== 'string') return -1;

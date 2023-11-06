@@ -181,38 +181,44 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      const select = (item: number | string, focus?: boolean) => {
+      const select = (item: t.LabelListItemTarget, focus?: boolean) => {
         Time.delay(0, () => dispatch.select(item, focus));
       };
       dev.button(['select: first', '[index]'], (e) => select(0));
-      dev.button(['select: first, focus', '"id"'], (e) =>
-        select(TestState.array.first.instance, true),
-      );
+      dev.button(['select: first, focus', '"id"'], (e) => {
+        select(TestState.array.first.instance, true);
+      });
+      dev.button('select: "First"', (e) => select('First'));
       dev.hr(-1, 5);
-      dev.button('edit: first', (e) => dispatch.edit(0));
-      dev.button('edit: last', (e) => dispatch.edit(TestState.array.last.instance));
-      dev.hr(-1, 5);
-      dev.button(['select: last, focus', '[index]'], (e) =>
-        select(TestState.array.items.length - 1, true),
-      );
-      dev.button(['select: last, focus', '"id"'], (e) =>
-        select(TestState.array.last.instance, true),
-      );
 
+      dev.button(['select: last', '[index]'], (e) => {
+        select(TestState.array.items.length - 1, false);
+      });
+      dev.button(['select: last, focus', '"id"'], (e) => {
+        select(TestState.array.last.instance, true);
+      });
+      dev.button('select: "Last"', (e) => select('Last'));
+      dev.hr(-1, 5);
+
+      dev.button('edit: 0', (e) => dispatch.edit(0));
+      dev.button('edit: last (id)', (e) => {
+        console.log('TestState.array.last.instance', TestState.array.last.instance);
+        dispatch.edit(TestState.array.last.instance);
+      });
+      dev.button('edit: "Last"', (e) => dispatch.edit('Last'));
       dev.hr(-1, 5);
 
       dev.button(['redraw: first', '[index]'], (e) => dispatch.redraw(0));
-      dev.button(['redraw: first', '"id"'], (e) =>
-        dispatch.redraw(TestState.array.first?.instance),
-      );
-
+      dev.button(['redraw: first', '"id"'], (e) => {
+        dispatch.redraw(TestState.array.first?.instance);
+      });
       dev.hr(-1, 5);
-      dev.button(['redraw: all', '(list)'], (e) => dispatch.redraw());
 
+      dev.button(['redraw: all', '(list)'], (e) => dispatch.redraw());
       dev.hr(-1, 5);
 
       dev.button('remove: [0]', (e) => dispatch.remove(0));
-      dev.button('remove: [10]', (e) => dispatch.remove(10));
+      dev.button('remove: "Last"', (e) => dispatch.remove('Last'));
     });
 
     dev.hr(5, 20);
