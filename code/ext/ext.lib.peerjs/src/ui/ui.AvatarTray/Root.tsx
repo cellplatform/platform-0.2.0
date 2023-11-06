@@ -10,5 +10,5 @@ type Fields = {
 export const AvatarTray = FC.decorate<t.AvatarTrayProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'AvatarTray' },
+  { displayName: DEFAULTS.displayName },
 );

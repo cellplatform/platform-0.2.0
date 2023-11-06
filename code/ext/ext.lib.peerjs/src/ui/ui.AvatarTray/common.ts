@@ -5,6 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
+  displayName: 'AvatarTray',
   size: 48,
   muted: true,
 } as const;
