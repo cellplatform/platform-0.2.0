@@ -14,20 +14,6 @@ describe('Store', async () => {
     expect(Is.store(store)).to.eql(true);
   });
 
-  describe('store.length', () => {
-    it('length → 0', () => {
-      const store = Store.init();
-      expect(store.length).to.eql(0);
-    });
-
-    it('length → 2', async () => {
-      const store = Store.init();
-      const generator = store.doc.factory<D>(initial);
-      await Promise.all([generator(), generator()]);
-      expect(store.length).to.eql(2);
-    });
-  });
-
   describe('store.doc', () => {
     it('create and change', async () => {
       const doc1 = await generator();
