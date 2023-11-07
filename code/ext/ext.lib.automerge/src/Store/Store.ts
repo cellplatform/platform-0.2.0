@@ -1,11 +1,13 @@
 import { Repo } from '@automerge/automerge-repo';
 import { Doc } from './Doc';
-import { type t } from './common';
+import { DocUri as Uri, type t } from './common';
 
 /**
  * Manage an Automerge repo.
  */
 export const Store = {
+  Uri,
+
   /**
    * Initialize a new instance of a CRDT repo.
    */
@@ -37,6 +39,7 @@ export const Store = {
         },
       },
     } as const;
+
     return api;
   },
 } as const;
