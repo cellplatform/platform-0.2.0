@@ -1,4 +1,9 @@
 /**
+ * @ext
+ */
+export type { WebStore } from 'ext.lib.automerge/src/types';
+
+/**
  * @system
  */
 export type { Fs } from 'sys.fs/src/types.mjs';
@@ -10,4 +15,4 @@ export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';
