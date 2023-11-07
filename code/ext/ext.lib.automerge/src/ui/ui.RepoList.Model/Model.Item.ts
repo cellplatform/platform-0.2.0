@@ -1,5 +1,5 @@
 import { createDocumentBehavior } from './Model.Item.b.create';
-import { Model, type t } from './common';
+import { DEFAULTS, Model, type t } from './common';
 
 type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
 type D = t.RepoItemData;
@@ -21,7 +21,7 @@ export const ItemModel = {
   state(args: Args) {
     const { ctx } = args;
     const initial = ItemModel.initial(args);
-    const item = Model.Item.state<t.RepoListAction, D>(initial);
+    const item = Model.Item.state<t.RepoListAction, D>(initial, { type: DEFAULTS.typename.item });
     const events = item.events(args.dispose$);
 
     /**

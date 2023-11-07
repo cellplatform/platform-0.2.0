@@ -1,5 +1,5 @@
 import { ItemModel } from './Model.Item';
-import { Model, rx, type t } from './common';
+import { Model, rx, type t, DEFAULTS } from './common';
 
 export const List = {
   /**
@@ -15,12 +15,16 @@ export const List = {
       return ItemModel.state({ ctx });
     });
 
-    const list = Model.List.state({ total: 1, getItem: array.getItem });
+    const list: t.RepoListState = Model.List.state(
+      { total: 1, getItem: array.getItem },
+      { type: DEFAULTS.typename.list },
+    );
     const dispatch = Model.List.commands(list);
 
     return {
       ctx,
       list,
+      dispatch,
       dispose,
       dispose$,
     } as const;
