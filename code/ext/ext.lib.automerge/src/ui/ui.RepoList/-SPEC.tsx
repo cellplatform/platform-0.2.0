@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
             renderCount={renderCount}
             onReady={(e) => {
               console.info(`⚡️ RepoList.onReady`, e);
-              ref = e;
+              ref = e.ref;
             }}
           />
         );

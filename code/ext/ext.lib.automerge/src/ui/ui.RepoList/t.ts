@@ -36,4 +36,5 @@ export type RepoListCtx = {
 /**
  * Events
  */
-export type RepoListReadyHandler = (e: t.RepoListRef) => void;
+export type RepoListReadyHandler = (e: t.RepoListReadyHandlerArgs) => void;
+export type RepoListReadyHandlerArgs = { ref: t.RepoListRef };

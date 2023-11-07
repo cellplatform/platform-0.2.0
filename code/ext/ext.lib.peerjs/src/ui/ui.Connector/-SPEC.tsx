@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
             debug={{ renderCount, name: 'Main' }}
             onReady={(e) => {
               console.info('⚡️ onReady', e);
-              ref = e;
+              ref = e.ref;
             }}
             onSelectionChange={(e) => {
               console.info('⚡️ onSelectionChange', e);

@@ -18,7 +18,7 @@ export const Connector = forwardRef<t.ConnectorRef, t.ConnectorProps>((props, re
   const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
-  useEffect(() => props.onReady?.(getOrCreateHandle()), []);
+  useEffect(() => props.onReady?.({ ref: getOrCreateHandle() }), []);
 
   return <View {...props} list={list} />;
 });

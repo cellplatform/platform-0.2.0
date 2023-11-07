@@ -22,7 +22,7 @@ export const RepoList = forwardRef<t.RepoListRef, t.RepoListProps>((props, ref) 
   const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
-  useEffect(() => props.onReady?.(getOrCreateHandle()), []);
+  useEffect(() => props.onReady?.({ ref: getOrCreateHandle() }), []);
 
   return <View {...props} list={list} renderers={renderers} />;
 });

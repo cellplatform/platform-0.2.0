@@ -26,7 +26,8 @@ export type ConnectorBehavior = {
 /**
  * Events
  */
-export type ConnectorReadyHandler = (e: t.ConnectorRef) => void;
+export type ConnectorReadyHandler = (e: ConnectorReadyHandlerArgs) => void;
+export type ConnectorReadyHandlerArgs = { ref: t.ConnectorRef };
 
 export type ConnectorSelectionHandler = (e: ConnectorSelectionHandlerArgs) => void;
 export type ConnectorSelectionHandlerArgs = {
