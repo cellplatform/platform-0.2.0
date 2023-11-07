@@ -30,7 +30,7 @@ export const View: React.FC<Props> = (props) => {
 
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+      <div ref={ref} {...css(styles.base, props.style)} tabIndex={0}>
         {props.renderCount && <RenderCount {...props.renderCount} />}
         <div>{elements}</div>
       </div>

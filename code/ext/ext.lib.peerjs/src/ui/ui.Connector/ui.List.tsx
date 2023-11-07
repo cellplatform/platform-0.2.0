@@ -32,7 +32,7 @@ export const List: React.FC<Props> = (props) => {
 
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+      <div ref={ref} {...css(styles.base, props.style)} tabIndex={0}>
         {debug.renderCount && <RenderCount {...debug.renderCount} />}
         <div>{elements}</div>
       </div>

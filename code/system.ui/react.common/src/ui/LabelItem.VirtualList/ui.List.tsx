@@ -20,7 +20,7 @@ export const List: React.FC<ListProps> = (props) => {
 
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+      <div ref={ref} {...css(styles.base, props.style)} tabIndex={0}>
         <Virtuoso
           ref={props.virtuosoRef}
           totalCount={total}
