@@ -20,10 +20,10 @@ export const WebStore = {
    * Initialize a new instance of a CRDT repo.
    */
   init(options: InitArgs = {}) {
-    const repo = new Repo({
-      network: Wrangle.network(options),
-      storage: Wrangle.storage(options),
-    });
+    const network = Wrangle.network(options);
+    const storage = Wrangle.storage(options);
+    const repo = new Repo({ network, storage });
+
     const store: t.WebStore = {
       ...Store.init(repo),
       Provider(props: { children?: React.ReactNode }) {
