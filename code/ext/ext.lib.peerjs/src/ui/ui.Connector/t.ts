@@ -10,14 +10,14 @@ export type ConnectorRef = t.LabelListDispatch & { readonly peer: t.PeerModel };
  */
 export type ConnectorProps = {
   peer: t.PeerModel;
-  behavior?: t.ConnectorPropsBehavior;
+  behavior?: t.ConnectorBehavior;
   debug?: { renderCount?: t.RenderCountProps; name?: string };
   style?: t.CssValue;
   onReady?: t.ConnectorReadyHandler;
   onSelectionChange?: t.ConnectorSelectionHandler;
 };
 
-export type ConnectorPropsBehavior = {
+export type ConnectorBehavior = {
   focusOnLoad?: boolean;
   focusOnArrowKey?: boolean;
 };

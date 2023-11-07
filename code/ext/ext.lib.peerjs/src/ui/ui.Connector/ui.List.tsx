@@ -20,7 +20,6 @@ export const List: React.FC<Props> = (props) => {
   const elements = LabelItem.Model.List.map(list, (item, index) => {
     return (
       <LabelItem.Stateful
-        //
         {...handlers}
         key={item.instance}
         index={index}

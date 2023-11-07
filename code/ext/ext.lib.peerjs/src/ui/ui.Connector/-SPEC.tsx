@@ -17,7 +17,7 @@ export default Dev.describe(name, (e) => {
     props: { peer: self },
   };
 
-  type LocalStore = t.ConnectorPropsBehavior;
+  type LocalStore = t.ConnectorBehavior;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
   const local = localstore.object({
     focusOnArrowKey: true,
@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const State = {
-    behavior(props: t.ConnectorProps): t.ConnectorPropsBehavior {
+    behavior(props: t.ConnectorProps): t.ConnectorBehavior {
       return props.behavior || (props.behavior = {});
     },
   };
