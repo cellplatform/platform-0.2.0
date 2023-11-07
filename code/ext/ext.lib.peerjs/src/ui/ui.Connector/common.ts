@@ -7,7 +7,7 @@ export { Data, Model } from '../ui.Connector.Model';
  * Constants
  */
 const behavior: t.ConnectorPropsBehavior = {
-  grabFocusOnArrowKey: false,
+  focusOnArrowKey: false,
   focusOnLoad: false,
 };
 

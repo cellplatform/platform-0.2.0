@@ -51,7 +51,7 @@ export const Wrangle = {
 
     const d = DEFAULTS.behavior;
     if (b.focusOnLoad ?? d.focusOnLoad) res.push('Focus.OnLoad');
-    if (b.grabFocusOnArrowKey ?? d.grabFocusOnArrowKey) res.push('Focus.OnArrowKey');
+    if (b.focusOnArrowKey ?? d.focusOnArrowKey) res.push('Focus.OnArrowKey');
 
     return res;
   },

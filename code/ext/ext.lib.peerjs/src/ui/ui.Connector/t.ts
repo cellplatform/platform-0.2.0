@@ -19,7 +19,7 @@ export type ConnectorProps = {
 
 export type ConnectorPropsBehavior = {
   focusOnLoad?: boolean;
-  grabFocusOnArrowKey?: boolean;
+  focusOnArrowKey?: boolean;
 };
 
 /**
