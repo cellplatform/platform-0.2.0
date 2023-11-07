@@ -80,13 +80,7 @@ export default Dev.describe(name, (e) => {
                 state.change((d) => (d.stream = e.selected));
               }}
             />
-            <Webrtc.Connector
-              peer={self}
-              behavior={{
-                focusOnLoad: true,
-                grabFocusOnArrowKey: true,
-              }}
-            />
+            <Webrtc.Connector peer={self} behavior={{ focusOnLoad: true }} />
           </div>
         );
       });
