@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Dev, WebStore, type t, Time, Button } from '../../test.ui';
+import { Button, Dev, Time, WebStore, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type T = { props: t.RepoListProps };
@@ -7,16 +7,32 @@ const name = RepoList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const store = WebStore.init();
-
   let ref: t.RepoListRef;
   const initial: T = { props: { store } };
+
+  type LocalStore = t.RepoListBehavior;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
+  const local = localstore.object({
+    focusOnArrowKey: true,
+    focusOnLoad: true,
+  });
+
+  const State = {
+    behavior(props: t.RepoListProps): t.RepoListBehavior {
+      return props.behavior || (props.behavior = {});
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      const b = State.behavior(d.props);
+      b.focusOnArrowKey = local.focusOnArrowKey;
+      b.focusOnLoad = local.focusOnLoad;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -67,6 +83,36 @@ export default Dev.describe(name, (e) => {
           })
           .enabled((e) => true)
           .onClick((e) => onClick('First'));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Props: Load Behavior', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnArrowKey);
+        btn
+          .label((e) => `focusOnArrowKey`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const b = State.behavior(d.props);
+              local.focusOnArrowKey = Dev.toggle(b, 'focusOnArrowKey');
+            }),
+          );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnLoad);
+        btn
+          .label((e) => `focusOnLoad`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const b = State.behavior(d.props);
+              local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
+            }),
+          );
       });
     });
 

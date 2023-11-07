@@ -3,7 +3,7 @@ import { type t } from './common';
 /**
  * Behavior for adding a new document to the repo.
  */
-export function addBehavior(args: {
+export function createDocumentBehavior(args: {
   list: t.LabelListState;
   array: t.LabelListArray;
   dispose$?: t.UntilObservable;
@@ -12,5 +12,5 @@ export function addBehavior(args: {
   /**
    * TODO 🐷
    */
-  console.log('add behavior');
+  console.log('behavior: add ');
 }

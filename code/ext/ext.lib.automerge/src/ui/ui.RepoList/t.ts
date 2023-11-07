@@ -12,9 +12,15 @@ export type RepoListRef = t.LabelListDispatch & {
  */
 export type RepoListProps = {
   store: t.WebStore;
+  behavior?: t.RepoListBehavior;
   renderCount?: t.RenderCountProps;
   style?: t.CssValue;
   onReady?: t.RepoListReadyHandler;
+};
+
+export type RepoListBehavior = {
+  focusOnLoad?: boolean;
+  focusOnArrowKey?: boolean;
 };
 
 /**

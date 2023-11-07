@@ -1,5 +1,5 @@
 import { ItemModel } from './Model.Item';
-import { addBehavior } from './Model.Item.b.add';
+import { createDocumentBehavior } from './Model.Item.b.create';
 import { Model, rx, type t } from './common';
 
 export const List = {
@@ -19,7 +19,7 @@ export const List = {
     const list = Model.List.state({ total: 1, getItem: array.getItem });
     const dispatch = Model.List.commands(list);
 
-    addBehavior({ list, array, dispose$ });
+    createDocumentBehavior({ list, array, dispose$ });
 
     return {
       ctx,
