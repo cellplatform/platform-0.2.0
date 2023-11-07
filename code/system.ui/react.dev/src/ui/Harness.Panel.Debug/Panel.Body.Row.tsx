@@ -13,7 +13,10 @@ export const DebugPanelBodyRow: React.FC<DebugPanelBodyRow> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', display: 'grid' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
   return <div {...styles.base}>{element}</div>;

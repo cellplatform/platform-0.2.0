@@ -15,7 +15,10 @@ export const List: React.FC<ListProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({ position: 'relative', display: 'grid' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
   return (

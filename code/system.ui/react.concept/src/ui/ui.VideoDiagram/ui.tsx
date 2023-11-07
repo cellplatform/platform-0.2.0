@@ -12,7 +12,10 @@ export const View: React.FC<t.VideoDiagramProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', display: 'grid' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
   return (
