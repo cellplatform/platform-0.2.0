@@ -1,4 +1,5 @@
-import { LabelItem, RenderCount, css, type t, DEFAULTS } from './common';
+import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type Props = t.RepoListProps & { list: t.RepoListState; renderers: t.RepoItemRenderers };
 
@@ -37,19 +38,3 @@ export const View: React.FC<Props> = (props) => {
     </Provider>
   );
 };
-
-/**
- * Helpers
- */
-export const Wrangle = {
-  useBehaviors(props: Props) {
-    const { behavior: b = {} } = props;
-    const res: t.LabelItemBehaviorKind[] = ['Item', 'List'];
-
-    const d = DEFAULTS.behavior;
-    if (b.focusOnLoad ?? d.focusOnLoad) res.push('Focus.OnLoad');
-    if (b.focusOnArrowKey ?? d.focusOnArrowKey) res.push('Focus.OnArrowKey');
-
-    return res;
-  },
-} as const;
