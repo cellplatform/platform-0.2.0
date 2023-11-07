@@ -9,14 +9,16 @@ export const Renderers = {
       label(e) {
         const data = Data.item(e.item);
         if (data.mode === 'Add') return;
-        return <>{e.item.label ?? 'Unnamed'}</>;
+        if (!e.item.label) return;
+        return <>{e.item.label}</>;
       },
 
       placeholder(e) {
         const data = Data.item(e.item);
-        let label = '';
-        if (data.mode === 'Add') label = 'new document';
-        return <>{label}</>;
+        let text = '';
+        if (data.mode === 'Add') text = 'new document';
+        if (data.mode === 'Doc') text = Wrangle.placeholderUri(data.uri);
+        return <>{text}</>;
       },
 
       action(e, helpers) {
@@ -37,3 +39,13 @@ export const Renderers = {
     };
   },
 };
+
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  placeholderUri(text?: string) {
+    if (!text) return 'doc:uri';
+    return `doc:${text.split(':')[1]}`;
+  },
+} as const;

@@ -19,4 +19,5 @@ export type RepoListState = t.LabelListState;
  */
 export type RepoItemData = {
   mode: 'Add' | 'Doc';
+  uri?: string;
 };
