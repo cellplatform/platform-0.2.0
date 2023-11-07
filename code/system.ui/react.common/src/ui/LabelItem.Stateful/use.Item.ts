@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, Model, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { useBubbleEvents } from './use.ItemController.bubble';
-import { useItemEditController } from './use.ItemEditController';
-import { useItemSelectionController } from './use.ItemSelectionController';
+import { useBubbleEvents } from './use.Item.bubble';
+import { useItemEditController } from './use.Item.Edit';
+import { useItemSelectionController } from './use.Item.Selection';
 
 type Args = {
   index?: number;

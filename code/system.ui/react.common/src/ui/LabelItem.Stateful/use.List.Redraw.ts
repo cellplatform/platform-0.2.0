@@ -4,7 +4,7 @@ import { rx, type t, Model } from './common';
 /**
  * HOOK: trigger redraws on specific list-model state changes.
  */
-export function useListRedraw(list: t.LabelListState) {
+export function useListRedrawController(list: t.LabelListState) {
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 

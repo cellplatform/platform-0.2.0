@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, ListContext, Model, rx, type t } from './common';
-import { useListNavigationController } from './use.ListNavigationController';
-import { useListRedraw } from './use.ListRedraw';
+import { useListKeyboardController } from './use.List.Keyboard';
+import { useListNavigationController } from './use.List.Navigation';
+import { useListRedrawController } from './use.List.Redraw';
 
 type Args = {
   enabled?: boolean;
@@ -14,6 +15,7 @@ type Args = {
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
 export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
+  const { useBehaviors } = args;
   const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
@@ -24,7 +26,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   /**
    * Monitor redraw triggers.
    */
-  useListRedraw(list);
+  useListRedrawController(list);
 
   /**
    * Monitor item removal.
@@ -51,6 +53,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   /**
    * Sub-controllers.
    */
+  useListKeyboardController({ list, useBehaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
     ref,

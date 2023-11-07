@@ -5,7 +5,9 @@ export type LabelItemBehaviorKind =
   | 'Item.Selection'
   | 'Item.Edit'
   | 'List'
-  | 'List.Navigation';
+  | 'List.Navigation'
+  | 'Focus.OnLoad'
+  | 'Focus.OnArrowKey';
 
 /**
  * Component (View).
