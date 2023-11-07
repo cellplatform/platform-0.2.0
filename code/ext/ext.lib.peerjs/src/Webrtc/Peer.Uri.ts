@@ -25,6 +25,9 @@ export const PeerUri: t.WebrtcPeerUri = {
     return parts[parts.length - 1].trim();
   },
 
+  /**
+   * Concert input to a standard "peer:<abc>" URI.
+   */
   uri(input) {
     if (typeof input !== 'string') return '';
     input = input.trim();
