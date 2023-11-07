@@ -9,9 +9,22 @@ describe('Store', async () => {
   const generator = store.doc.factory<D>(initial);
 
   it('Is.store', () => {
+    const non = [true, 123, '', [], {}, null, undefined];
+    non.forEach((value) => expect(Is.store(value)).to.eql(false));
     expect(Is.store(store)).to.eql(true);
-    [true, 123, '', [], {}, null, undefined].forEach((value) => {
-      expect(Is.store(value)).to.eql(false);
+  });
+
+  describe('store.length', () => {
+    it('length → 0', () => {
+      const store = Store.init();
+      expect(store.length).to.eql(0);
+    });
+
+    it('length → 2', async () => {
+      const store = Store.init();
+      const generator = store.doc.factory<D>(initial);
+      await Promise.all([generator(), generator()]);
+      expect(store.length).to.eql(2);
     });
   });
 

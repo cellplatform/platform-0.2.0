@@ -13,7 +13,12 @@ export const Store = {
    */
   init(repo?: t.Repo) {
     const api: t.Store = {
+      get length() {
+        return Object.keys(api.repo.handles).length;
+      },
+
       repo: repo ?? new Repo({ network: [] }),
+
       doc: {
         /**
          * Find or create a new CRDT document from the repo.

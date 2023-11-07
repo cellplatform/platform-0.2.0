@@ -33,6 +33,7 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
  * Store (a repository of documents).
  */
 export type Store = {
+  readonly length: number;
   repo: t.Repo;
   doc: {
     findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
