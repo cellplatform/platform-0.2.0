@@ -7,8 +7,20 @@ export { Pkg };
 /**
  * Library
  */
+import { WebStore } from './Store.Web';
+export { WebStore };
 export { Store } from './Store';
-export { WebStore } from './Store.Web';
+
+/**
+ * Library: UI
+ */
+import { Info } from './ui/ui.Info';
+import { RepoList } from './ui/ui.RepoList';
+export const UI = {
+  WebStore,
+  Info,
+  RepoList,
+};
 
 /**
  * Dev

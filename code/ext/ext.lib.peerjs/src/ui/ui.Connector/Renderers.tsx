@@ -7,7 +7,7 @@ const remoteActions: t.ConnectorAction[] = ['remote:left', 'remote:right'];
 
 export const Renderers = {
   /**
-   * Initilise the router for item <Component> renderers.
+   * Initilise the router for the <Component>'s that render within an item
    */
   init(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemRenderers {
     const self = renderSelf(args);

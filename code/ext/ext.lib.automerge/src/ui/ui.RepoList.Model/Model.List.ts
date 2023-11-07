@@ -1,6 +1,5 @@
-import { PatchState, Model, type t } from './common';
 import { ItemModel } from './Model.Item';
-import { renderers } from './Model.Item.render';
+import { Model, type t } from './common';
 
 export const List = {
   /**
@@ -8,12 +7,12 @@ export const List = {
    */
   init(store: t.Store) {
     const ctx: t.GetRepoListCtx = () => ({ list, dispatch });
-    const first = ItemModel.init({ store, ctx });
+    const first = ItemModel.state({ store, ctx });
 
     const getItem: t.GetLabelItem = (target) => {
       if (typeof target === 'number') {
         const index = target;
-        if (index === 0) return [first.state, index];
+        if (index === 0) return [first, index];
       } else {
         /**
          * TODO 🐷
@@ -26,10 +25,6 @@ export const List = {
     const list = Model.List.state({ total: 1, getItem });
     const dispatch = Model.List.commands(list);
 
-    return {
-      ctx,
-      list,
-      renderers: renderers({ ctx }),
-    } as const;
+    return { ctx, list } as const;
   },
 } as const;

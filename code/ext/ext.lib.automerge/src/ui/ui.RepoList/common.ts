@@ -1,7 +1,5 @@
-import { LabelItem } from './common';
-
 export * from '../common';
-export const Model = LabelItem.Stateful.Model;
+export { Data, Model } from '../ui.RepoList.Model';
 
 /**
  * Constants

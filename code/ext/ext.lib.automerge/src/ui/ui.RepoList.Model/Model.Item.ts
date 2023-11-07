@@ -1,21 +1,11 @@
 import { Data } from './Data';
-import { renderers } from './Model.Item.render';
 import { Model, rx, type t } from './common';
 
-export type ItemModelArgs = { store: t.Store; ctx: t.GetRepoListCtx; dispose$?: t.UntilObservable };
-
+type Args = { store: t.Store; ctx: t.GetRepoListCtx; dispose$?: t.UntilObservable };
 type D = t.RepoItemData;
 
 export const ItemModel = {
-  init(args: ItemModelArgs) {
-    const { ctx } = args;
-    return {
-      state: ItemModel.state(args),
-      renderers: renderers({ ctx }),
-    };
-  },
-
-  initial(args: ItemModelArgs): t.RepoItem {
+  initial(args: Args): t.RepoItem {
     const data: D = { mode: 'Add' };
     return {
       editable: false,
@@ -28,7 +18,7 @@ export const ItemModel = {
   /**
    * State wrapper.
    */
-  state(args: ItemModelArgs) {
+  state(args: Args) {
     const { store } = args;
     const initial = ItemModel.initial(args);
     const state = Model.Item.state<t.RepoListAction, D>(initial);

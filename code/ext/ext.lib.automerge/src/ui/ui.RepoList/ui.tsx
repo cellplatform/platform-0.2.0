@@ -16,12 +16,5 @@ export const View: React.FC<Props> = (props) => {
     base: css({ position: 'relative' }),
   };
 
-  return (
-    <List
-      //
-      list={list}
-      renderers={renderers}
-      renderCount={props.renderCount}
-    />
-  );
+  return <List list={list} renderers={renderers} renderCount={props.renderCount} />;
 };
