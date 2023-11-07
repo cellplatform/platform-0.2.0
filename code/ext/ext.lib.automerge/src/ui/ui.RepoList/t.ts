@@ -21,7 +21,11 @@ export type RepoListProps = {
  * Model: Context
  */
 export type GetRepoListCtx = () => RepoListCtx;
-export type RepoListCtx = { list: RepoListState; dispatch: t.LabelListDispatch };
+export type RepoListCtx = {
+  list: RepoListState;
+  dispatch: t.LabelListDispatch;
+  dispose$?: t.UntilObservable;
+};
 
 /**
  * Model: Item

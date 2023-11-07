@@ -1,30 +1,31 @@
 import { ItemModel } from './Model.Item';
-import { Model, type t } from './common';
+import { addBehavior } from './Model.Item.b.add';
+import { Model, rx, type t } from './common';
 
 export const List = {
   /**
    * Initialise a new state model for a Repo.
    */
-  init(store: t.Store) {
-    const ctx: t.GetRepoListCtx = () => ({ list, dispatch });
-    const first = ItemModel.state({ store, ctx });
+  init(store: t.Store, options: { dispose$?: t.UntilObservable } = {}) {
+    const lifecycle = rx.lifecycle(options.dispose$);
+    const { dispose$, dispose } = lifecycle;
 
-    const getItem: t.GetLabelItem = (target) => {
-      if (typeof target === 'number') {
-        const index = target;
-        if (index === 0) return [first, index];
-      } else {
-        /**
-         * TODO 🐷
-         */
-      }
+    const ctx: t.GetRepoListCtx = () => ({ list, dispatch, dispose$ });
 
-      return [undefined, -1];
-    };
+    const array = Model.List.array((index) => {
+      return ItemModel.state({ store, ctx });
+    });
 
-    const list = Model.List.state({ total: 1, getItem });
+    const list = Model.List.state({ total: 1, getItem: array.getItem });
     const dispatch = Model.List.commands(list);
 
-    return { ctx, list } as const;
+    addBehavior({ list, array, dispose$ });
+
+    return {
+      ctx,
+      list,
+      dispose,
+      dispose$,
+    } as const;
   },
 } as const;
