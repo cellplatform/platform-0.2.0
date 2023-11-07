@@ -14,7 +14,7 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
   const local = localstore.object({
     focusOnArrowKey: true,
-    focusOnLoad: true,
+    focusOnLoad: false,
   });
 
   const State = {
