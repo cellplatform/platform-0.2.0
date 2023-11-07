@@ -3,15 +3,13 @@ import { type t } from './common';
 /**
  * API: Imperative handle reference.
  */
-export type RepoListRef = t.LabelListDispatch & {
-  store: t.WebStore;
-};
+export type RepoListRef = t.LabelListDispatch & { store: t.Store };
 
 /**
  * <Component>
  */
 export type RepoListProps = {
-  store: t.WebStore;
+  store: t.Store;
   behavior?: t.RepoListBehavior;
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
@@ -27,31 +25,12 @@ export type RepoListBehavior = {
 /**
  * Model: Context
  */
-export type GetRepoListCtx = () => RepoListCtx;
+export type RepoListCtxGet = () => RepoListCtx;
 export type RepoListCtx = {
-  list: RepoListState;
+  list: t.RepoListState;
+  store: t.Store;
   dispatch: t.LabelListDispatch;
   dispose$?: t.UntilObservable;
-};
-
-/**
- * Model: Item
- */
-export type RepoListAction = 'Store:Left';
-export type RepoItem = t.LabelItem<t.RepoListAction, RepoItemData>;
-export type RepoItemState = t.LabelItemState<RepoListAction, RepoItemData>;
-export type RepoItemRenderers = t.LabelItemRenderers<t.RepoListAction>;
-
-/**
- * Model: List
- */
-export type RepoListState = t.LabelListState;
-
-/**
- * Model: Data
- */
-export type RepoItemData = {
-  mode: 'Add' | 'Doc';
 };
 
 /**

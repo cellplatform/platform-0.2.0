@@ -8,6 +8,7 @@ export type {
   GetLabelItem,
   LabelItem,
   LabelItemBehaviorKind,
+  LabelItemEvents,
   LabelItemRenderArgs,
   LabelItemRenderers,
   LabelItemState,

@@ -4,7 +4,7 @@ export const Renderers = {
   /**
    * Initilise the router for the <Component>'s that render within an item.
    */
-  init(args: { ctx: t.GetRepoListCtx }): t.RepoItemRenderers {
+  init(args: { ctx: t.RepoListCtxGet }): t.RepoItemRenderers {
     return {
       label(e) {
         const data = Data.item(e.item);

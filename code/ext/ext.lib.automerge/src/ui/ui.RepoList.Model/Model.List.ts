@@ -1,5 +1,4 @@
 import { ItemModel } from './Model.Item';
-import { createDocumentBehavior } from './Model.Item.b.create';
 import { Model, rx, type t } from './common';
 
 export const List = {
@@ -10,16 +9,14 @@ export const List = {
     const lifecycle = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = lifecycle;
 
-    const ctx: t.GetRepoListCtx = () => ({ list, dispatch, dispose$ });
+    const ctx: t.RepoListCtxGet = () => ({ list, store, dispatch, dispose$ });
 
     const array = Model.List.array((index) => {
-      return ItemModel.state({ store, ctx });
+      return ItemModel.state({ ctx });
     });
 
     const list = Model.List.state({ total: 1, getItem: array.getItem });
     const dispatch = Model.List.commands(list);
-
-    createDocumentBehavior({ list, array, dispose$ });
 
     return {
       ctx,

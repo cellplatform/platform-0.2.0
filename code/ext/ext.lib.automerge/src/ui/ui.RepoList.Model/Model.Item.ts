@@ -1,7 +1,7 @@
-import { Data } from './Data';
-import { Model, rx, type t } from './common';
+import { createDocumentBehavior } from './Model.Item.b.create';
+import { Model, type t } from './common';
 
-type Args = { store: t.Store; ctx: t.GetRepoListCtx; dispose$?: t.UntilObservable };
+type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
 type D = t.RepoItemData;
 
 export const ItemModel = {
@@ -19,43 +19,19 @@ export const ItemModel = {
    * State wrapper.
    */
   state(args: Args) {
-    const { store } = args;
+    const { ctx } = args;
     const initial = ItemModel.initial(args);
-    const state = Model.Item.state<t.RepoListAction, D>(initial);
-    const dispatch = Model.Item.commands(state);
-    const events = state.events(args.dispose$);
+    const item = Model.Item.state<t.RepoListAction, D>(initial);
+    const events = item.events(args.dispose$);
 
     /**
-     * Behavior.
+     * Behavior controllers.
      */
-    const add = async () => {
-      const ctx = args.ctx();
-      console.log('add', store);
-      state.change((d) => {
-        const data = Data.item(d);
-        data.mode = 'Doc';
-      });
+    createDocumentBehavior({ ctx, item, events });
 
-      dispatch.redraw();
-
-      ctx.list.change((d) => {
-        // const items = d.items || (d.items = []);
-        // const next = ItemModel.state(args);
-        // items.push(next);
-      });
-
-      ctx.dispatch.redraw();
-    };
-
-    const mode = () => Data.item(state).mode;
-    const addModeFilter = rx.filter(() => mode() === 'Add');
-    events.key.enter$.pipe(addModeFilter).subscribe(add);
-    events.cmd.action.kind('Store:Left').pipe(addModeFilter).subscribe(add);
-    events.cmd.click$
-      .pipe(rx.filter((e) => e.kind === 'Double'))
-      .pipe(rx.filter((e) => e.target === 'Item'))
-      .subscribe(add);
-
-    return state;
+    /**
+     * Finish up.
+     */
+    return item;
   },
 } as const;
