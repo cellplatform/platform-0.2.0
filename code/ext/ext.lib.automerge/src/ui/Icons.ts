@@ -10,5 +10,5 @@ const icon = Icon.renderer;
 export const Icons = {
   Refresh: icon(MdRefresh),
   Add: icon(MdAdd),
-  Databse: icon(TbDatabase),
+  Database: icon(TbDatabase),
 } as const;

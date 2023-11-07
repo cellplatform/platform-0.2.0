@@ -2,7 +2,7 @@ import { COLORS, Data, Icons, type t } from './common';
 
 export const Renderers = {
   /**
-   * Initilise the router for the <Component>'s that render within an item
+   * Initilise the router for the <Component>'s that render within an item.
    */
   init(args: { ctx: t.GetRepoListCtx }): t.RepoItemRenderers {
     return {
@@ -22,12 +22,14 @@ export const Renderers = {
       action(e, helpers) {
         if (e.kind === 'Store:Left') {
           const data = Data.item(e.item);
+
           if (data.mode === 'Add') {
             const color = e.focused ? e.color : COLORS.BLUE;
             return <Icons.Add {...helpers.icon(e, 17)} color={color} />;
           }
+
           if (data.mode === 'Doc') {
-            return <Icons.Databse {...helpers.icon(e, 18)} />;
+            return <Icons.Database {...helpers.icon(e, 18)} />;
           }
         }
         return;
