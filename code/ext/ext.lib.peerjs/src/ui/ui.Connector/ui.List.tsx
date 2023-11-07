@@ -4,7 +4,7 @@ import { useSelection } from './use.Selection';
 type Props = t.ConnectorProps & { list: t.LabelListState };
 
 export const List: React.FC<Props> = (props) => {
-  const { list, peer, onSelectionChange, debug = {} } = props;
+  const { list, peer, onSelectionChange, debug = {}, tabIndex = DEFAULTS.tabIndex } = props;
   const useBehaviors = Wrangle.useBehaviors(props);
 
   useSelection({ peer, list, onSelectionChange });
@@ -32,7 +32,7 @@ export const List: React.FC<Props> = (props) => {
 
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)} tabIndex={0}>
+      <div ref={ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
         {debug.renderCount && <RenderCount {...debug.renderCount} />}
         <div>{elements}</div>
       </div>

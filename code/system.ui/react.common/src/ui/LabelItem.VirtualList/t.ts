@@ -1,6 +1,5 @@
 import type { t } from './common';
 
-type Id = string;
 type Index = number;
 type LocationOptions = {
   align?: 'start' | 'center' | 'end';
@@ -27,6 +26,7 @@ export type VirtualListProps = {
   list?: t.LabelListState;
   renderers?: t.LabelItemRenderers;
   overscan?: number;
+  tabIndex?: number;
   style?: t.CssValue;
   onReady?: VirtualListReadyHandler;
 };

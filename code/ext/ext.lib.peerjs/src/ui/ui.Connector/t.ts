@@ -12,6 +12,7 @@ export type ConnectorProps = {
   peer: t.PeerModel;
   behavior?: t.ConnectorBehavior;
   debug?: { renderCount?: t.RenderCountProps; name?: string };
+  tabIndex?: number;
   style?: t.CssValue;
   onReady?: t.ConnectorReadyHandler;
   onSelectionChange?: t.ConnectorSelectionHandler;

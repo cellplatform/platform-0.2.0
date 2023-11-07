@@ -3,7 +3,7 @@ import type { VirtuosoHandle, t } from './common';
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { VirtualListRef } from './Ref';
 import { DEFAULTS } from './common';
-import { List } from './ui.List';
+import { List } from './ui';
 
 /**
  * A "virtual" (infinite) scrolling list.

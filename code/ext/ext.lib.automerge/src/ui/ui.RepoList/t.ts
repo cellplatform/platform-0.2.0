@@ -14,6 +14,7 @@ export type RepoListProps = {
   store: t.WebStore;
   behavior?: t.RepoListBehavior;
   renderCount?: t.RenderCountProps;
+  tabIndex?: number;
   style?: t.CssValue;
   onReady?: t.RepoListReadyHandler;
 };

@@ -3,7 +3,7 @@ import { LabelItem, RenderCount, css, type t, DEFAULTS } from './common';
 type Props = t.RepoListProps & { list: t.RepoListState; renderers: t.RepoItemRenderers };
 
 export const View: React.FC<Props> = (props) => {
-  const { list } = props;
+  const { list, tabIndex = DEFAULTS.tabIndex } = props;
   const useBehaviors = Wrangle.useBehaviors(props);
   const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list, useBehaviors });
 
@@ -30,7 +30,7 @@ export const View: React.FC<Props> = (props) => {
 
   return (
     <Provider>
-      <div ref={ref} {...css(styles.base, props.style)} tabIndex={0}>
+      <div ref={ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
         {props.renderCount && <RenderCount {...props.renderCount} />}
         <div>{elements}</div>
       </div>

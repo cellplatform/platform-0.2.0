@@ -14,4 +14,5 @@ const behavior: t.ConnectorBehavior = {
 export const DEFAULTS = {
   displayName: 'Webrtc.Connector',
   behavior,
+  tabIndex: 0,
 } as const;

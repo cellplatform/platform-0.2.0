@@ -14,4 +14,5 @@ const behavior: t.RepoListBehavior = {
 export const DEFAULTS = {
   displayName: 'RepoList',
   behavior,
+  tabIndex: 0,
 } as const;
