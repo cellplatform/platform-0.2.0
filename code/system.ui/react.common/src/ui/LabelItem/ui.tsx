@@ -1,4 +1,4 @@
-import { RefObject, useState } from 'react';
+import React, { RefObject, useState, useRef } from 'react';
 import { DEFAULTS, Focus, RenderCount, Style, css, useClickOutside, type t } from './common';
 
 import { Wrangle } from './Wrangle';
@@ -31,8 +31,9 @@ export const View: React.FC<Props> = (props) => {
   const { enabled = DEFAULTS.enabled } = item;
   const position = { index, total };
 
+  const ref = useRef<HTMLDivElement>(null);
+  useListContext(ref, position, { id });
   useKeyboard({ position, selected, focused, editing, onKeyDown, onKeyUp });
-  const { ref } = useListContext(position, { id });
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
@@ -63,9 +64,15 @@ export const View: React.FC<Props> = (props) => {
     target: ClickTarget,
     handler?: t.LabelItemClickHandler,
   ) => {
-    return () => {
+    return (ev: any) => {
+      const e = ev as React.MouseEvent;
       if (kind === 'Single' && target === 'Item') {
-        if (!Focus.containsFocus(ref)) ref.current?.focus(); // NB: Ensure focused.
+        // Ensure focused if this was not a "programmatically" enduced selection.
+        // NOTE:
+        //    Programmatic selection via command uses
+        //    dispatches a synthetic mousedown event.
+        const isProgrammaticSelect = e.detail === DEFAULTS.syntheticMousedownDetail;
+        if (!isProgrammaticSelect && !Focus.containsFocus(ref)) ref.current?.focus();
       }
       handler?.(clickArgs(kind, target));
     };

@@ -44,6 +44,7 @@ export const DEFAULTS = {
   borderRadius: 0,
   placeholder: 'placeholder',
   spinner: { width: 15 },
+  syntheticMousedownDetail: -1, // NB: used to signal to the consumer of a synthetically dispatched "mousedown" event.
 
   leftAction,
   rightAction,
