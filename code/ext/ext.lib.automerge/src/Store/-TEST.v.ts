@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { A, Id, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Id, Is, describe, expect, it, rx, type t, expectError } from '../test';
 
 export type D = { count?: t.A.Counter };
 
@@ -12,6 +12,43 @@ describe('Store', async () => {
     const non = [true, 123, '', [], {}, null, undefined];
     non.forEach((value) => expect(Is.store(value)).to.eql(false));
     expect(Is.store(store)).to.eql(true);
+  });
+
+  describe('lifecycle', () => {
+    it('dispose', () => {
+      const store = Store.init();
+      expect(store.disposed).to.eql(false);
+
+      let count = 0;
+      store.dispose$.subscribe(() => count++);
+      store.dispose();
+      store.dispose();
+      expect(store.disposed).to.eql(true);
+      expect(count).to.eql(1);
+    });
+
+    it('dispose$', () => {
+      const { dispose, dispose$ } = rx.disposable();
+      const store = Store.init({ dispose$ });
+      expect(store.disposed).to.eql(false);
+
+      let count = 0;
+      store.dispose$.subscribe(() => count++);
+      dispose();
+      expect(store.disposed).to.eql(true);
+      expect(count).to.eql(1);
+    });
+
+    it('throw if disposed', async () => {
+      const store = Store.init();
+      store.dispose();
+
+      const err = 'Store is disposed';
+      expectError(async () => store.repo, err);
+      expectError(async () => store.doc.findOrCreate<D>(initial), err);
+      expectError(async () => store.doc.factory<D>(initial), err);
+      expectError(async () => store.doc.exists(), err);
+    });
   });
 
   describe('store.doc', () => {

@@ -1,8 +1,8 @@
 import type { t } from './common';
 export type * from './t.events';
 
-type Initial<T> = t.ImmutableNext<T>;
 type Uri = DocUri | string;
+type Initial<T> = t.ImmutableNext<T>;
 
 /**
  * The address of a document within the repo/store.
@@ -32,7 +32,7 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
 /**
  * Store (a repository of documents).
  */
-export type Store = {
+export type Store = t.Lifecycle & {
   readonly repo: t.Repo;
   readonly doc: {
     findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
@@ -40,3 +40,9 @@ export type Store = {
     exists(uri?: Uri): boolean;
   };
 };
+
+/**
+ * Index of documents within a repository store.
+ */
+export type StoreIndex = { docs: StoreIndexItem[] };
+export type StoreIndexItem = { uri: Uri; name?: string };
