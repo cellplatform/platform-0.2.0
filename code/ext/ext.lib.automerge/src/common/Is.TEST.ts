@@ -24,7 +24,7 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.webStore', (e) => {
-    expect(Is.webStore(WebStore.init())).to.eql(true);
+    expect(Is.webStore(WebStore.init({ storage: false }))).to.eql(true);
     expect(Is.webStore(Store.init())).to.eql(false);
     NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
   });
