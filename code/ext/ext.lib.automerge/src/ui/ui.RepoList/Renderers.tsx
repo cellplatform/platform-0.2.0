@@ -46,6 +46,6 @@ export const Renderers = {
 export const Wrangle = {
   placeholderUri(text?: string) {
     if (!text) return 'doc:uri';
-    return `doc:${text.split(':')[1]}`;
+    return `db:${text.split(':')[1]}`;
   },
 } as const;
