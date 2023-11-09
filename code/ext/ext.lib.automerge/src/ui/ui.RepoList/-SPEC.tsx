@@ -7,6 +7,7 @@ const name = RepoList.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   const store = WebStore.init();
+  const store = WebStore.init({ storage: 'dev.test' });
   let ref: t.RepoListRef;
   const initial: T = { props: { store } };
 

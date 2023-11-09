@@ -10,8 +10,8 @@ export default Test.describe('WebStore: IndexedDBStorageAdapter', (e) => {
   };
 
   e.it('is persistent', async (e) => {
-    const store1 = WebStore.init({ network: false });
-    const store2 = WebStore.init({ network: false });
+    const store1 = WebStore.init({ network: false, storage: 'dev.test' });
+    const store2 = WebStore.init({ network: false, storage: 'dev.test' });
 
     const doc1 = await store1.doc.findOrCreate(initial);
     doc1.change((d) => d.count?.increment(5));

@@ -10,8 +10,8 @@ export default Test.describe('WebStore: BroadcastChannelNetworkAdapter', (e) => 
   };
 
   e.it('sync between two documents', async (e) => {
-    const store1 = WebStore.init();
-    const store2 = WebStore.init();
+    const store1 = WebStore.init({ storage: false });
+    const store2 = WebStore.init({ storage: false });
 
     const doc1 = await store1.doc.findOrCreate(initial);
     await Time.wait(250);
