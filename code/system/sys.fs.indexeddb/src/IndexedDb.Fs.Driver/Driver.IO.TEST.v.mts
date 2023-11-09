@@ -273,7 +273,7 @@ describe('FsIO (IndexedDB)', () => {
 
     it('write (replace)', async () => {
       const { fs } = await testCreate();
-      const test = await TestIndexedDb.create(fs.id);
+      const test = await TestIndexedDb.init(fs.id);
 
       const encode = (text: string) => new TextEncoder().encode(text);
       const uri = 'path:file.txt';

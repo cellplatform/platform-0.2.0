@@ -21,8 +21,8 @@ export const TestIndexedDb = {
   INDEX,
   record,
 
-  create(name: string) {
-    return IndexedDb.create<T>({
+  init(name: string) {
+    return IndexedDb.init<T>({
       name,
       store(db) {
         const api: T = {

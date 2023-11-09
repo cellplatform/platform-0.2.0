@@ -16,7 +16,7 @@ export const IndexedDbDriver = (options: { id?: FilesystemId; dir?: DirPath } = 
   const dir = options.dir ?? ROOT_DIR;
   const id = (options.id ?? 'fs').trim();
 
-  const db = IndexedDb.create<t.FsIndexedDb>({
+  const db = IndexedDb.init<t.FsIndexedDb>({
     name: id,
     version: 1,
 
