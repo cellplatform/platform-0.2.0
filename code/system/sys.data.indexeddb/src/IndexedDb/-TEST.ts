@@ -22,7 +22,7 @@ export default Test.describe('IndexedDb', (e) => {
 
   e.it('create', async (e) => {
     await Time.wait(100);
-    const res = await IndexedDb.create<T>({ name, store: (db) => ({ name, db }) });
+    const res = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
     expect(res.name).to.eql(name);
     expect(res.db instanceof IDBDatabase).to.eql(true);
     await assertDbExists(name, true);
@@ -30,8 +30,8 @@ export default Test.describe('IndexedDb', (e) => {
 
   e.it('create (already exists)', async (e) => {
     await Time.wait(100);
-    const res1 = await IndexedDb.create<T>({ name, store: (db) => ({ name, db }) });
-    const res2 = await IndexedDb.create<T>({ name, store: (db) => ({ name, db }) });
+    const res1 = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
+    const res2 = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
     expect(res1.db.name).to.eql(res2.name);
   });
 

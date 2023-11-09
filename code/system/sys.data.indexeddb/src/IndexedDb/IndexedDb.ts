@@ -12,7 +12,7 @@ export const IndexedDb = {
   /**
    * Create a promised base interface into an IndexedDb
    */
-  create<T>(args: {
+  init<T>(args: {
     name: string;
     version?: number;
     schema?: (req: IDBOpenDBRequest, e: IDBVersionChangeEvent) => void;
