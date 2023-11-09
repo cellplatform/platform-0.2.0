@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+export { IndexedDb } from './IndexedDb';
+
+/**
  * Dev
  */
 export const dev = async () => {

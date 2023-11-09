@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
       d.props.margin = 10;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
       .size([320, null])
@@ -37,14 +37,12 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.TODO();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            style={{ Margin: [10, 40, 10, 30] }}
             all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(ev) => {
