@@ -1,4 +1,4 @@
-import { css, effect, type Signal, type t, RenderCount } from './common';
+import { RenderCount, css, type Signal, type t } from './common';
 
 export type SampleProps = {
   counter: Signal<number>;
