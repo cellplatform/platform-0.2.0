@@ -22,7 +22,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <RenderCount absolute={[-20, 0, null, null]} opacity={0.2} />
+      <RenderCount absolute={[-19, 4, null, null]} opacity={0.2} />
       <div {...styles.label}>{`🐷 count: ${counter.value}`}</div>
     </div>
   );
