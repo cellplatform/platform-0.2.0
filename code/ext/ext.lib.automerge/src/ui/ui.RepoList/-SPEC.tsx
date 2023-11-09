@@ -64,7 +64,7 @@ export default Dev.describe(name, (e) => {
     dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
     dev.hr(5, 20);
 
-    dev.section('Ref ( ƒ )', (dev) => {
+    dev.section('ref( ƒ )', (dev) => {
       dev.button((btn) => {
         const onClick = (target: t.LabelListItemTarget) => Time.delay(0, () => ref.select(target));
         const select = (label: string, target: t.LabelListItemTarget) => {
