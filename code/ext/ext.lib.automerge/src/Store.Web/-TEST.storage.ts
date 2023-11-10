@@ -13,12 +13,12 @@ export default Test.describe('Store.Web: IndexedDBStorageAdapter', (e) => {
     const store1 = WebStore.init({ network: false, storage: 'dev.test' });
     const store2 = WebStore.init({ network: false, storage: 'dev.test' });
 
-    const doc1 = await store1.doc.findOrCreate(initial);
+    const doc1 = await store1.doc.getOrCreate(initial);
     doc1.change((d) => d.count?.increment(5));
     assertCount(doc1, 5);
 
     await Time.wait(250);
-    const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
+    const doc2 = await store2.doc.getOrCreate(initial, doc1.uri);
     assertCount(doc2, 5); // NB: different store - from [IndexedDB].
 
     expect(await store1.doc.exists(doc1.uri)).to.eql(true);
@@ -29,7 +29,7 @@ export default Test.describe('Store.Web: IndexedDBStorageAdapter', (e) => {
     const store1 = WebStore.init({ network: false, storage: false });
     const store2 = WebStore.init({ network: false, storage: false });
 
-    const doc = await store1.doc.findOrCreate(initial);
+    const doc = await store1.doc.getOrCreate(initial);
     doc.change((d) => d.count?.increment(5));
     assertCount(doc, 5);
 

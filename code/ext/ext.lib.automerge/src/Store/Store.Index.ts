@@ -9,7 +9,7 @@ export const StoreIndex = {
    * Create a new Index handle.
    */
   async init(store: t.Store, uri?: string) {
-    const doc = await store.doc.findOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
+    const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
 
     /**
      * Store the URI to new documents in the index.

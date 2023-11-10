@@ -41,6 +41,7 @@ describe('Store', async () => {
 
       let count = 0;
       store.dispose$.subscribe(() => count++);
+
       dispose();
       expect(store.disposed).to.eql(true);
       expect(count).to.eql(1);
@@ -65,7 +66,7 @@ describe('Store', async () => {
       expect(doc.toObject()).to.eql(doc.current);
     });
 
-    it('toObject (POJO)', async () => {
+    it('toObject ← POJO', async () => {
       const doc = await generator();
       expect(A.isAutomerge(doc.current)).to.eql(true);
       expect(A.isAutomerge(doc.toObject())).to.eql(false);
@@ -86,19 +87,22 @@ describe('Store', async () => {
 
       expect(Is.automergeUrl(DUMMY_URI)).to.eql(true);
       await test(DUMMY_URI, false);
+
+      store.dispose();
     });
 
     it('exists:true', async () => {
       const store = Store.init();
-      const doc = await store.doc.findOrCreate<D>(initial);
+      const doc = await store.doc.getOrCreate<D>(initial);
       const exists = await store.doc.exists(doc.uri);
       expect(exists).to.eql(true);
+      store.dispose();
     });
 
     it('get', async () => {
       const store = Store.init();
 
-      const doc1 = await store.doc.findOrCreate<D>(initial);
+      const doc1 = await store.doc.getOrCreate<D>(initial);
       const doc2 = await store.doc.get<D>(doc1.uri);
       const doc3 = await store.doc.get<D>(undefined);
       const doc4 = await store.doc.get<D>(DUMMY_URI, { timeout: 30 });
@@ -107,6 +111,14 @@ describe('Store', async () => {
       expect(doc2?.current).to.eql(doc1.current);
       expect(doc3).to.eql(undefined);
       expect(doc4).to.eql(undefined);
+
+      store.dispose();
+    });
+
+    it('getOrCreate: "ready" by default', async () => {
+      const doc = await store.doc.getOrCreate(initial);
+      expect(doc.handle.state).to.eql('ready');
+      store.dispose();
     });
 
     describe('factory (generator)', () => {
@@ -137,11 +149,6 @@ describe('Store', async () => {
         const events1 = doc.events();
         const events2 = doc.events();
         expect(events1).to.not.equal(events2);
-      });
-
-      it('findOrCreate: "ready" (default)', async () => {
-        const doc = await store.doc.findOrCreate(initial);
-        expect(doc.handle.state).to.eql('ready');
       });
 
       describe('dispose', () => {

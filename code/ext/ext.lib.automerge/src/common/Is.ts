@@ -6,9 +6,10 @@ export const Is = {
     if (!isObject(input) || !isObject(input.doc)) return false;
     if (!Is.repo(input.repo)) return false;
     return (
-      typeof input.doc.findOrCreate === 'function' &&
       typeof input.doc.factory === 'function' &&
-      typeof input.doc.exists === 'function'
+      typeof input.doc.exists === 'function' &&
+      typeof input.doc.get === 'function' &&
+      typeof input.doc.getOrCreate === 'function'
     );
   },
 

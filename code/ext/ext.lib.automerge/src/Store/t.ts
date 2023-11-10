@@ -40,7 +40,7 @@ export type StoreDoc = {
   factory<T>(initial: Initial<T>): DocFactory<T>;
   exists(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<boolean>;
   get<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
-  findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
+  getOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
 };
 
 /**

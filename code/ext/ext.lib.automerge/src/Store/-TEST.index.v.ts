@@ -34,7 +34,7 @@ describe('StoreIndex', async () => {
 
     expect(index.doc.current.docs).to.eql([]);
 
-    const doc = await store.doc.findOrCreate(initial);
+    const doc = await store.doc.getOrCreate(initial);
     const exists = index.doc.current.docs.some((d) => d.uri === doc.uri);
     expect(exists).to.eql(true);
 

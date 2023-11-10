@@ -31,14 +31,14 @@ export const Store = {
          * Create an "initial constructor" factory for typed docs.
          */
         factory<T>(initial: t.ImmutableNext<T>) {
-          return (uri?: Uri) => api.doc.findOrCreate<T>(initial, uri);
+          return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
         },
 
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async findOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri) {
-          const res = Doc.findOrCreate<T>(api.repo, { initial, uri, dispose$ });
+        async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri) {
+          const res = Doc.getOrCreate<T>(api.repo, { initial, uri, dispose$ });
           await res.handle.whenReady();
           return res;
         },
@@ -52,7 +52,7 @@ export const Store = {
           type R = t.DocRefHandle<T> | undefined;
           return new Promise<R>((resolve) => {
             const { timeout = DEFAULTS.timeout.find } = options;
-            const ref = Doc.find<T>(api.repo, uri, dispose$);
+            const ref = Doc.get<T>(api.repo, uri, dispose$);
             if (!ref) return resolve(undefined);
 
             const done$ = rx.subject();

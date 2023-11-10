@@ -63,10 +63,10 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
   });
 
-  e.describe('store.doc.findOrCreate', (e) => {
+  e.describe('store.doc.getOrCreate', (e) => {
     e.it('initial creation', async (e) => {
-      const doc1 = await store.doc.findOrCreate<D>(initial);
-      const doc2 = await store.doc.findOrCreate<D>(initial);
+      const doc1 = await store.doc.getOrCreate<D>(initial);
+      const doc2 = await store.doc.getOrCreate<D>(initial);
 
       expect(doc1.handle.state).to.eql('ready');
       expect(doc1.uri).to.eql(doc1.handle.url);
@@ -79,8 +79,8 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
 
     e.it('retrieve existing (from URI)', async (e) => {
-      const doc1 = await store.doc.findOrCreate<D>(initial);
-      const doc2 = await store.doc.findOrCreate<D>(initial, doc1.uri);
+      const doc1 = await store.doc.getOrCreate<D>(initial);
+      const doc2 = await store.doc.getOrCreate<D>(initial, doc1.uri);
       expect(doc1.uri).to.eql(doc2.uri);
       expect(doc1.current).to.equal(doc2.current);
     });

@@ -13,7 +13,7 @@ export const Doc = {
   /**
    * Find the document document from the repo.
    */
-  find<T>(repo: t.Repo, uri: Uri, dispose$?: t.UntilObservable) {
+  get<T>(repo: t.Repo, uri: Uri, dispose$?: t.UntilObservable) {
     const handle = Is.automergeUrl(uri) ? repo.find<T>(uri) : undefined;
     return handle ? wrapHandle<T>({ handle, dispose$ }) : undefined;
   },
@@ -21,7 +21,7 @@ export const Doc = {
   /**
    * Find or initialize a new document from the repo.
    */
-  findOrCreate<T>(repo: t.Repo, args: DocRefArgs<T>) {
+  getOrCreate<T>(repo: t.Repo, args: DocRefArgs<T>) {
     const create = () => {
       const doc = repo.create<T>();
       doc.change((d: any) => args.initial(d));

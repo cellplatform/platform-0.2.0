@@ -59,7 +59,7 @@ export const StoreIndexDb = {
               throw new Error(err);
             }
 
-            const doc = await store.doc.findOrCreate<t.RepoIndex>((d) => (d.docs = []));
+            const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []));
             const uri = doc.uri;
 
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');

@@ -13,9 +13,9 @@ export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) =>
     const store1 = WebStore.init({ storage: false });
     const store2 = WebStore.init({ storage: false });
 
-    const doc1 = await store1.doc.findOrCreate(initial);
+    const doc1 = await store1.doc.getOrCreate(initial);
     await Time.wait(250);
-    const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
+    const doc2 = await store2.doc.getOrCreate(initial, doc1.uri);
     assertCount(doc1, 0);
     assertCount(doc2, 0);
 
@@ -30,9 +30,9 @@ export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) =>
     const store1 = WebStore.init({ network: false });
     const store2 = WebStore.init({ network: false });
 
-    const doc1 = await store1.doc.findOrCreate(initial);
+    const doc1 = await store1.doc.getOrCreate(initial);
     await Time.wait(250);
-    const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
+    const doc2 = await store2.doc.getOrCreate(initial, doc1.uri);
     assertCount(doc1, 0);
     assertCount(doc2, 0);
 

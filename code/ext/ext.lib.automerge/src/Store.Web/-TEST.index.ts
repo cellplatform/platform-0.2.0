@@ -10,7 +10,7 @@ export default Test.describe('Store.Web: Index', (e) => {
   e.it('event: on new document → stores in index', async (e) => {
     const store = WebStore.init({ network: false, storage: { name } });
     const index = await WebStore.index(store);
-    const doc = await store.doc.findOrCreate(initial);
+    const doc = await store.doc.getOrCreate(initial);
     const exists = index.doc.current.docs.some((d) => d.uri === doc.uri);
     expect(exists).to.eql(true);
     store.dispose();
