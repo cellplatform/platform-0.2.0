@@ -9,7 +9,7 @@ export const TESTS = {
       import('../Store.Web/-TEST.storage'),
       import('../Store.Web/-TEST.sync'),
       import('../Store.Web/-TEST.index'),
-      import('../Store.IndexDb/-TEST'),
+      import('../Store.Meta.Db/-TEST'),
       'UI.Repo',
       import('../ui/ui.RepoList.Model/-TEST'),
     ];
