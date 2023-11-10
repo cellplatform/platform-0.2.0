@@ -35,14 +35,15 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
 export type Store = t.Lifecycle & {
   readonly repo: t.Repo;
   readonly doc: {
-    findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
+    exists(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<boolean>;
     factory<T>(initial: Initial<T>): DocFactory<T>;
-    exists(uri?: Uri): boolean;
+    findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
+    find<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
   };
 };
 
 /**
  * Index of documents within a repository store.
  */
-export type StoreIndex = { docs: StoreIndexItem[] };
-export type StoreIndexItem = { uri: Uri; name?: string };
+export type RepoIndex = { docs: RepoIndexDoc[] };
+export type RepoIndexDoc = { uri: Uri; name?: string };

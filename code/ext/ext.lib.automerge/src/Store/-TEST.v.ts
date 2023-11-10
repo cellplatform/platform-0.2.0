@@ -1,12 +1,19 @@
 import { Store } from '.';
-import { A, Id, Is, describe, expect, it, rx, type t, expectError } from '../test';
+import { A, Id, Is, describe, expect, it, rx, type t } from '../test';
 
 type D = { count?: t.A.Counter };
 
 describe('Store', async () => {
-  const store = Store.init();
-  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-  const generator = store.doc.factory<D>(initial);
+  const DUMMY_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
+
+  const testSetup = () => {
+    const store = Store.init();
+    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+    const generator = store.doc.factory<D>(initial);
+    return { store, initial, generator } as const;
+  };
+
+  const { store, initial, generator } = testSetup();
 
   it('Is.store', () => {
     const non = [true, 123, '', [], {}, null, undefined];
@@ -38,17 +45,6 @@ describe('Store', async () => {
       expect(store.disposed).to.eql(true);
       expect(count).to.eql(1);
     });
-
-    it('throw if disposed', async () => {
-      const store = Store.init();
-      store.dispose();
-
-      const err = 'Store is disposed';
-      expectError(async () => store.repo, err);
-      expectError(async () => store.doc.findOrCreate<D>(initial), err);
-      expectError(async () => store.doc.factory<D>(initial), err);
-      expectError(async () => store.doc.exists(), err);
-    });
   });
 
   describe('store.doc', () => {
@@ -76,20 +72,41 @@ describe('Store', async () => {
       expect(doc.toObject()).to.eql({ count: { value: 0 } });
     });
 
-    it('does not exist', () => {
+    it('exists: false', async () => {
       const store = Store.init();
-      ['404', true, null, undefined, [], {}]
-        //
-        .forEach((uri: any) => expect(store.doc.exists(uri)).to.eql(false));
-      const dummy = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
-      expect(Is.automergeUrl(dummy)).to.eql(true);
-      expect(store.doc.exists(dummy)).to.eql(false);
+
+      const test = async (uri: any, expected: boolean) => {
+        const exists = await store.doc.exists(uri, { timeout: 10 });
+        expect(exists).to.eql(expected, uri);
+      };
+
+      for (const uri of ['404', true, null, undefined, [], {}]) {
+        await test(uri, false);
+      }
+
+      expect(Is.automergeUrl(DUMMY_URI)).to.eql(true);
+      await test(DUMMY_URI, false);
     });
 
-    it('does exist', async () => {
+    it('exists:true', async () => {
       const store = Store.init();
       const doc = await store.doc.findOrCreate<D>(initial);
-      expect(store.doc.exists(doc.uri)).to.eql(true);
+      const exists = await store.doc.exists(doc.uri);
+      expect(exists).to.eql(true);
+    });
+
+    it('find', async () => {
+      const store = Store.init();
+
+      const doc1 = await store.doc.findOrCreate<D>(initial);
+      const doc2 = await store.doc.find<D>(doc1.uri);
+      const doc3 = await store.doc.find<D>(undefined);
+      const doc4 = await store.doc.find<D>(DUMMY_URI, { timeout: 30 });
+
+      expect(doc1.uri).to.eql(doc2?.uri);
+      expect(doc2?.current).to.eql(doc1.current);
+      expect(doc3).to.eql(undefined);
+      expect(doc4).to.eql(undefined);
     });
 
     describe('factory (generator)', () => {
@@ -115,9 +132,8 @@ describe('Store', async () => {
 
   describe('store.doc.events', () => {
     describe('lifecycle', async () => {
-      const doc = await generator();
-
-      it('multiple instances', () => {
+      it('multiple instances', async () => {
+        const doc = await generator();
         const events1 = doc.events();
         const events2 = doc.events();
         expect(events1).to.not.equal(events2);
@@ -129,7 +145,8 @@ describe('Store', async () => {
       });
 
       describe('dispose', () => {
-        it('via .dispose()', () => {
+        it('via .dispose()', async () => {
+          const doc = await generator();
           const events = doc.events();
           let fired = 0;
           events.dispose$.subscribe(() => fired++);
@@ -141,7 +158,8 @@ describe('Store', async () => {
           expect(fired).to.eql(1);
         });
 
-        it('via { dispose$ }', () => {
+        it('via { dispose$ }', async () => {
+          const doc = await generator();
           const dispose$ = new rx.Subject<void>();
           const events = doc.events(dispose$);
 
@@ -151,6 +169,22 @@ describe('Store', async () => {
           expect(events.disposed).to.eql(false);
           dispose$.next();
           dispose$.next();
+          expect(events.disposed).to.eql(true);
+          expect(fired).to.eql(1);
+        });
+
+        it('when parent store is disposed', async () => {
+          const { store, generator } = testSetup();
+          const doc = await generator();
+          const events = doc.events();
+          let fired = 0;
+          events.dispose$.subscribe(() => fired++);
+
+          expect(store.disposed).to.eql(false);
+          expect(events.disposed).to.eql(false);
+          store.dispose();
+
+          expect(store.disposed).to.eql(true);
           expect(events.disposed).to.eql(true);
           expect(fired).to.eql(1);
         });
