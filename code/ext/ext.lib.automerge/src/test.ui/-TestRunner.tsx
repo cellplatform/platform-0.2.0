@@ -1,4 +1,4 @@
-import { Dev, type t } from '.';
+import { Dev, IndexedDb, type t, TestIndexedDb } from '.';
 
 type T = {
   spinning?: boolean;
@@ -40,6 +40,18 @@ export default Dev.describe('TestRunner', (e) => {
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
+
+    dev.hr(5, 20);
+
+    dev.section('Maintenance', (dev) => {
+      dev.button('delete test databases', async (e) => {
+        await TestIndexedDb.delete();
+      });
+
+      dev.button('delete .index database', async (e) => {
+        await IndexedDb.delete('.index');
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

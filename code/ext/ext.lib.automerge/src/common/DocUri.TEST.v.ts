@@ -1,7 +1,7 @@
 import { describe, expect, it, type t } from '../test';
 import { DocUri } from '.';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
 describe('Store.DocUri', () => {
   describe('DocUri.id', () => {

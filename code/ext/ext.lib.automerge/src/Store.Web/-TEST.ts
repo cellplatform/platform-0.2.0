@@ -1,7 +1,7 @@
 import { WebStore } from '.';
 import { A, Is, Test, expect, type t } from '../test.ui';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
 export default Test.describe('WebStore', (e) => {
   const store = WebStore.init();

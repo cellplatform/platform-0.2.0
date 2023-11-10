@@ -1,7 +1,7 @@
 import { Store } from '.';
 import { A, Id, Is, describe, expect, it, rx, type t, expectError } from '../test';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
 describe('Store', async () => {
   const store = Store.init();

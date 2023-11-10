@@ -1,7 +1,7 @@
 import { WebStore } from '.';
 import { A, Test, Time, expect, type t } from '../test.ui';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
 export default Test.describe('WebStore: BroadcastChannelNetworkAdapter', (e) => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));

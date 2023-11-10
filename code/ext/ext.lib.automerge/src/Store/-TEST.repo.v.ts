@@ -1,7 +1,7 @@
 import { Store } from '.';
 import { A, describe, expect, it, type t } from '../test';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
 describe('Store.repo', () => {
   const store = Store.init();
