@@ -2,10 +2,7 @@ import { DEFAULTS, IndexedDb, NAME, rx, type t } from './common';
 
 const { Record } = IndexedDb;
 
-/**
- * An IndexedDB for storing meta-data about [Store/Repo]'s.
- */
-export const StoreMetaDb = {
+export const StoreIndexDb = {
   /**
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */
@@ -21,7 +18,7 @@ export const StoreMetaDb = {
        */
       schema(req, e) {
         const db = req.result;
-        const keyPath: keyof t.StoreMetaRecord = 'dbname';
+        const keyPath: keyof t.RepoDbRecord = 'dbname';
         const stores = db.createObjectStore(NAME.STORE.repos, { keyPath });
         stores.createIndex(NAME.INDEX.repos, [keyPath]);
       },
@@ -49,7 +46,7 @@ export const StoreMetaDb = {
             const dbname = Wrangle.dbname(store);
             const tx = db.transaction([NAME.STORE.repos], 'readonly');
             const table = tx.objectStore(NAME.STORE.repos);
-            return Record.get<t.StoreMetaRecord>(table, dbname);
+            return Record.get<t.RepoDbRecord>(table, dbname);
           },
 
           /**
@@ -67,7 +64,7 @@ export const StoreMetaDb = {
 
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
-            return Record.put<t.StoreMetaRecord>(table, { dbname, indexUri: uri });
+            return Record.put<t.RepoDbRecord>(table, { dbname, indexUri: uri });
           },
 
           async delete(store: t.WebStore) {
@@ -75,7 +72,7 @@ export const StoreMetaDb = {
             const existed = await api.exists(store);
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
-            await Record.delete<t.StoreMetaRecord>(table, dbname);
+            await Record.delete<t.RepoDbRecord>(table, dbname);
             return { existed };
           },
 

@@ -4,7 +4,7 @@ import type { t } from './common';
  * IndexedDB
  * NOTE: Extends the automerge-repo database.
  */
-export type StoreMetaDb = t.Lifecycle & {
+export type StoreIndexDb = t.Lifecycle & {
   name: string;
   database: IDBDatabase;
   exists(store: t.WebStore): Promise<boolean>;
@@ -16,7 +16,7 @@ export type StoreMetaDb = t.Lifecycle & {
 /**
  * DB Record: maps to where an index
  */
-export type StoreMetaRecord = {
+export type RepoDbRecord = {
   dbname: string; //   Name of the IndexedDB used by the repos [StorageAdapter].
   indexUri: string; // Document URI of the <RepoIndex>.
 };
