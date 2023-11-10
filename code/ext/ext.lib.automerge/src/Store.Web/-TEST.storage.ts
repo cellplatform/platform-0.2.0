@@ -3,7 +3,7 @@ import { A, Test, Time, expect, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
-export default Test.describe('WebStore: IndexedDBStorageAdapter', (e) => {
+export default Test.describe('Store.Web: IndexedDBStorageAdapter', (e) => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
@@ -21,8 +21,8 @@ export default Test.describe('WebStore: IndexedDBStorageAdapter', (e) => {
     const doc2 = await store2.doc.findOrCreate(initial, doc1.uri);
     assertCount(doc2, 5); // NB: different store - from [IndexedDB].
 
-    expect(store1.doc.exists(doc1.uri)).to.eql(true);
-    expect(store2.doc.exists(doc2.uri)).to.eql(true);
+    expect(await store1.doc.exists(doc1.uri)).to.eql(true);
+    expect(await store2.doc.exists(doc2.uri)).to.eql(true);
   });
 
   e.it('not persistent', async (e) => {
@@ -33,7 +33,7 @@ export default Test.describe('WebStore: IndexedDBStorageAdapter', (e) => {
     doc.change((d) => d.count?.increment(5));
     assertCount(doc, 5);
 
-    expect(store1.doc.exists(doc.uri)).to.eql(true);
-    expect(store2.doc.exists(doc.uri)).to.eql(false);
+    expect(await store1.doc.exists(doc.uri)).to.eql(true);
+    expect(await store2.doc.exists(doc.uri)).to.eql(false);
   });
 });

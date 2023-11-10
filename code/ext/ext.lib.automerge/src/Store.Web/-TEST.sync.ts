@@ -3,7 +3,7 @@ import { A, Test, Time, expect, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
-export default Test.describe('WebStore: BroadcastChannelNetworkAdapter', (e) => {
+export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);

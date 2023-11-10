@@ -1,10 +1,11 @@
 import { WebStore } from '.';
-import { A, Is, Test, expect, type t } from '../test.ui';
+import { Time, A, Is, Test, expect, type t, rx, IndexedDb, slug } from '../test.ui';
+import { DEFAULTS } from './common';
 
 type D = { count?: t.A.Counter };
 
-export default Test.describe('WebStore', (e) => {
-  const store = WebStore.init();
+export default Test.describe('Store.Web (Repo)', (e) => {
+  const store = WebStore.init({ storage: false });
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
@@ -24,12 +25,41 @@ export default Test.describe('WebStore', (e) => {
       const { networkSubsystem, storageSubsystem } = store.repo;
       expect(Is.networkSubsystem(networkSubsystem)).to.eql(true, 'network');
       expect(Is.storageSubsystem(storageSubsystem)).to.eql(true, 'storage');
+      expect(store.info.storage?.name).to.eql(DEFAULTS.storage.name);
     });
 
     e.it('no storage', (e) => {
       const store = WebStore.init({ storage: false });
       expect(Is.storageSubsystem(store.repo.storageSubsystem)).to.eql(false);
       expect(store.repo.storageSubsystem).to.eql(undefined);
+      expect(store.info.storage).to.eql(undefined);
+    });
+
+    e.it('storage with custom name', async (e) => {
+      const name = `dev.test`;
+      const store1 = WebStore.init({ storage: name });
+      const store2 = WebStore.init({ storage: { name } });
+      expect(store1.info.storage?.name).to.eql(name);
+      expect(store2.info.storage?.name).to.eql(name);
+      const databases = await IndexedDb.list();
+      expect(databases.map(({ name }) => name)).to.include(name);
+    });
+  });
+
+  e.describe('lifecycle', (e) => {
+    e.it('dispose', async (e) => {
+      const store = WebStore.init({ storage: 'dev.test' });
+      expect(store.disposed).to.eql(false);
+      store.dispose();
+      expect(store.disposed).to.eql(true);
+    });
+
+    e.it('dispose$', (e) => {
+      const { dispose, dispose$ } = rx.disposable();
+      const store = WebStore.init({ dispose$, storage: 'dev.test' });
+      expect(store.disposed).to.eql(false);
+      dispose();
+      expect(store.disposed).to.eql(true);
     });
   });
 
