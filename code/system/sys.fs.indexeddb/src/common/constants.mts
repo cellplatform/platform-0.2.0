@@ -8,4 +8,4 @@ export const NAME = {
     DIRS: 'DirIndex',
     HASH: 'HashIndex',
   },
-};
+} as const;
