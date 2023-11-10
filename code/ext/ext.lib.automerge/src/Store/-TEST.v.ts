@@ -95,13 +95,13 @@ describe('Store', async () => {
       expect(exists).to.eql(true);
     });
 
-    it('find', async () => {
+    it('get', async () => {
       const store = Store.init();
 
       const doc1 = await store.doc.findOrCreate<D>(initial);
-      const doc2 = await store.doc.find<D>(doc1.uri);
-      const doc3 = await store.doc.find<D>(undefined);
-      const doc4 = await store.doc.find<D>(DUMMY_URI, { timeout: 30 });
+      const doc2 = await store.doc.get<D>(doc1.uri);
+      const doc3 = await store.doc.get<D>(undefined);
+      const doc4 = await store.doc.get<D>(DUMMY_URI, { timeout: 30 });
 
       expect(doc1.uri).to.eql(doc2?.uri);
       expect(doc2?.current).to.eql(doc1.current);

@@ -46,7 +46,7 @@ export const Store = {
         /**
          * Find the existing CRDT document in the repo (or return nothing).
          */
-        async find<T>(uri?: Uri, options: Options = {}) {
+        async get<T>(uri?: Uri, options: Options = {}) {
           if (!Is.automergeUrl(uri)) return undefined;
 
           type R = t.DocRefHandle<T> | undefined;
@@ -70,7 +70,7 @@ export const Store = {
          * Determine if the given document exists within the repo.
          */
         async exists(uri?: Uri, options: Options = {}) {
-          const res = await api.doc.find(uri, options);
+          const res = await api.doc.get(uri, options);
           return Boolean(res);
         },
       },

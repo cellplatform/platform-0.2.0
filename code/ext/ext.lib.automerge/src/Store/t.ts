@@ -34,12 +34,13 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
  */
 export type Store = t.Lifecycle & {
   readonly repo: t.Repo;
-  readonly doc: {
-    exists(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<boolean>;
-    factory<T>(initial: Initial<T>): DocFactory<T>;
-    findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
-    find<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
-  };
+  readonly doc: StoreDoc;
+};
+export type StoreDoc = {
+  factory<T>(initial: Initial<T>): DocFactory<T>;
+  exists(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<boolean>;
+  get<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
+  findOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
 };
 
 /**
