@@ -101,7 +101,7 @@ export const IndexedDb = {
   /**
    * Operations on DB record objects.
    */
-  record: {
+  Record: {
     /**
      * Retrieves the value of the first record matching the
      * given key or key range in query.
@@ -117,7 +117,8 @@ export const IndexedDb = {
      * Add or update an object in the given store.
      */
     async put<T>(store: IDBObjectStore, value: T, key?: IDBValidKey) {
-      return IndexedDb.asPromise<T>(store.put(value, key));
+      await IndexedDb.asPromise<T>(store.put(value, key));
+      return value;
     },
 
     /**
@@ -142,4 +143,4 @@ export const IndexedDb = {
       return res;
     },
   },
-};
+} as const;

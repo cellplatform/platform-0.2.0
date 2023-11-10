@@ -58,7 +58,7 @@ export function FsIO(args: { dir: DirPath; db: IDBDatabase }): t.FsIO {
         files: tx.objectStore(NAME.STORE.FILES),
       };
 
-      const get = IndexedDb.record.get;
+      const get = IndexedDb.Record.get;
       const hash = (await get<t.PathRecord>(store.paths, path))?.hash || '';
       const data = hash ? (await get<t.BinaryRecord>(store.files, hash))?.data : undefined;
       const bytes = data ? data.byteLength : -1;
@@ -91,7 +91,7 @@ export function FsIO(args: { dir: DirPath; db: IDBDatabase }): t.FsIO {
           files: tx.objectStore(NAME.STORE.FILES),
         };
 
-        const put = IndexedDb.record.put;
+        const put = IndexedDb.Record.put;
         await Promise.all([
           put<t.PathRecord>(store.paths, Delete.undefined({ path, dir, hash, bytes })),
           put<t.BinaryRecord>(store.files, { hash, data }),
@@ -123,19 +123,19 @@ export function FsIO(args: { dir: DirPath; db: IDBDatabase }): t.FsIO {
 
       const remove = async (path: string) => {
         // Lookup the [Path] meta-data record.
-        const pathRecord = await IndexedDb.record.get<t.PathRecord>(store.paths, path);
+        const pathRecord = await IndexedDb.Record.get<t.PathRecord>(store.paths, path);
         if (!pathRecord) return false;
 
         // Determine if the file (hash) is referenced by any other paths.
         const hash = pathRecord.hash;
-        const hashRefs = await IndexedDb.record.getAll<t.PathRecord>(index.hash, [hash]);
+        const hashRefs = await IndexedDb.Record.getAll<t.PathRecord>(index.hash, [hash]);
         const isLastRef = hashRefs.filter((item) => item.path !== path).length === 0;
 
         // Delete the [Path] meta-data record.
-        await IndexedDb.record.delete<t.PathRecord>(store.paths, path);
+        await IndexedDb.Record.delete<t.PathRecord>(store.paths, path);
 
         // Delete the file-data if there are no other path's referencing the file.
-        if (isLastRef) await IndexedDb.record.delete<t.BinaryRecord>(store.files, hash);
+        if (isLastRef) await IndexedDb.Record.delete<t.BinaryRecord>(store.files, hash);
 
         return true;
       };
@@ -167,7 +167,7 @@ export function FsIO(args: { dir: DirPath; db: IDBDatabase }): t.FsIO {
         const store = tx.objectStore(NAME.STORE.PATHS);
         const { dir } = Path.parts(targetPath);
         const { hash, bytes } = sourceInfo;
-        await IndexedDb.record.put<t.PathRecord>(store, { path: targetPath, dir, hash, bytes });
+        await IndexedDb.Record.put<t.PathRecord>(store, { path: targetPath, dir, hash, bytes });
       };
 
       try {

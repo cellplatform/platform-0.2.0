@@ -10,7 +10,7 @@ export function DbLookup(db: IDBDatabase) {
       path = formatPath(path);
       const tx = db.transaction([NAME.STORE.PATHS], 'readonly');
       const store = tx.objectStore(NAME.STORE.PATHS);
-      return IndexedDb.record.get<t.PathRecord>(store, path);
+      return IndexedDb.Record.get<t.PathRecord>(store, path);
     },
 
     async paths() {
@@ -20,7 +20,7 @@ export function DbLookup(db: IDBDatabase) {
       /**
        * TODO 🐷
        */
-      return IndexedDb.record.getAll<t.PathRecord>(store);
+      return IndexedDb.Record.getAll<t.PathRecord>(store);
     },
 
     dir(path: string) {
@@ -29,7 +29,7 @@ export function DbLookup(db: IDBDatabase) {
       const store = tx.objectStore(NAME.STORE.PATHS);
       const index = store.index(NAME.INDEX.DIRS);
       const { dir } = Path.parts(`${Path.trimSlashesEnd(path)}/`);
-      return IndexedDb.record.get<t.PathRecord>(index, [dir]);
+      return IndexedDb.Record.get<t.PathRecord>(index, [dir]);
     },
   };
 }

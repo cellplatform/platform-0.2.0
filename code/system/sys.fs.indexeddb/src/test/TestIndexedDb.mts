@@ -11,7 +11,7 @@ type T = {
 };
 
 const { STORE, INDEX } = NAME;
-const record = IndexedDb.record;
+const Record = IndexedDb.Record;
 
 /**
  * Helpers for evaluating the underlying [IndexedDB] directly.
@@ -19,7 +19,7 @@ const record = IndexedDb.record;
 export const TestIndexedDb = {
   STORE,
   INDEX,
-  record,
+  record: Record,
 
   init(name: string) {
     return IndexedDb.init<T>({
@@ -38,13 +38,13 @@ export const TestIndexedDb = {
           async getAllPaths() {
             const tx = db.transaction(NAME.STORE.PATHS, 'readonly');
             const store = tx.objectStore(NAME.STORE.PATHS);
-            return record.getAll<t.PathRecord>(store);
+            return Record.getAll<t.PathRecord>(store);
           },
 
           async getAllFiles() {
             const tx = db.transaction(NAME.STORE.FILES, 'readonly');
             const store = tx.objectStore(NAME.STORE.FILES);
-            return record.getAll<t.BinaryRecord>(store);
+            return Record.getAll<t.BinaryRecord>(store);
           },
 
           async deleteAll() {
@@ -56,8 +56,8 @@ export const TestIndexedDb = {
               files: tx.objectStore(NAME.STORE.FILES),
             };
 
-            await Promise.all(paths.map(({ path }) => record.delete(store.paths, path)));
-            await Promise.all(files.map(({ hash }) => record.delete(store.files, hash)));
+            await Promise.all(paths.map(({ path }) => Record.delete(store.paths, path)));
+            await Promise.all(files.map(({ hash }) => Record.delete(store.files, hash)));
           },
         };
 
