@@ -33,12 +33,6 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
       const db = await StoreIndexDb.init();
       const res = await db.getOrCreate(store);
 
-      /**
-       * TODO 🐷
-       */
-      console.log('-------------------------------------------');
-      console.log('res //', res);
-
       expect(res?.dbname).to.eql(name);
       expect(res?.dbname).to.eql(store.info.storage?.name);
       expect(Is.automergeUrl(res?.indexUri)).to.eql(true);
