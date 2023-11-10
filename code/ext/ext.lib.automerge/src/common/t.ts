@@ -23,6 +23,7 @@ export type {
   ImmutableNext,
   ImmutableRef,
   Lifecycle,
+  Msecs,
   UntilObservable,
 } from 'sys.types/src/types';
 

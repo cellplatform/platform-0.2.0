@@ -1,5 +1,5 @@
 import { isValidAutomergeUrl } from '@automerge/automerge-repo';
-import type * as t from './types';
+import type * as t from './t';
 
 export const Is = {
   store(input: any): input is t.Store {
