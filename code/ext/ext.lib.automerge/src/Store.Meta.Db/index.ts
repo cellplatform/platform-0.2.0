@@ -1,1 +1,1 @@
-export * from './StoreIndexDb';
+export * from './MetaDb';
