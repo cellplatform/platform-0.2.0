@@ -26,6 +26,7 @@ export default Test.describe('IndexedDb', (e) => {
     expect(res.name).to.eql(name);
     expect(res.db instanceof IDBDatabase).to.eql(true);
     await assertDbExists(name, true);
+    res.db.close();
   });
 
   e.it('create (already exists)', async (e) => {
@@ -33,6 +34,9 @@ export default Test.describe('IndexedDb', (e) => {
     const res1 = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
     const res2 = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
     expect(res1.db.name).to.eql(res2.name);
+
+    res1.db.close();
+    res2.db.close();
   });
 
   e.it('exists', async (e) => {
@@ -45,6 +49,14 @@ export default Test.describe('IndexedDb', (e) => {
     expect(names).to.includes(name);
   });
 
+  e.it('db.isClosed', async (e) => {
+    const res = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
+    expect(IndexedDb.db.isClosed(res.db)).to.eql(false);
+
+    res.db.close();
+    expect(IndexedDb.db.isClosed(res.db)).to.eql(true);
+  });
+
   e.it('delete non-existant database (no error)', async (e) => {
     const res = await IndexedDb.delete('404-no-exist');
     expect(res.error).to.include(`Failed while opening database '404-no-exist'`);
@@ -53,8 +65,10 @@ export default Test.describe('IndexedDb', (e) => {
   e.it('delete', async (e) => {
     await assertDbExists(name, true);
     const res = await IndexedDb.delete(name);
+    expect(res.name).to.eql('dev.test');
+    expect(res.error).to.eql(undefined);
 
-    await Time.wait(100);
+    await Time.wait(500);
     await assertDbExists(name, false);
     expect(res.error).to.eql(undefined);
     expect(res.name).to.eql(name);

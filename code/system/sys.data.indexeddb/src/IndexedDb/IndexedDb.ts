@@ -59,9 +59,11 @@ export const IndexedDb = {
       const db = list.find((item) => item.name === name);
 
       const done = (error?: string) => {
-        const name = db?.name ?? '';
-        const version = db?.version ?? -1;
-        resolve({ name, version, error });
+        resolve({
+          name: db?.name ?? name,
+          version: db?.version ?? -1,
+          error,
+        });
       };
 
       const fail = (detail = '') => {
@@ -75,6 +77,11 @@ export const IndexedDb = {
         const req = indexedDB.deleteDatabase(name);
         req.onerror = () => fail();
         req.onsuccess = (e) => done();
+        req.onblocked = (e) => {
+          const error =
+            `Failed while deleting database '${name}' because it is blocked (open elsewhere)`.trim();
+          return done(error);
+        };
       } catch (error: any) {
         done(`Failed while deleting database '${name}'. ${error.message}`.trim());
       }
@@ -118,6 +125,21 @@ export const IndexedDb = {
      */
     async delete<T>(store: IDBObjectStore, key: IDBValidKey | IDBKeyRange) {
       return IndexedDb.asPromise<T>(store.delete(key));
+    },
+  },
+
+  /**
+   * Determine if an IDBDatabase is closed.
+   */
+  db: {
+    isClosed(db: IDBDatabase) {
+      let res = false;
+      try {
+        db.transaction([db.objectStoreNames[0]], 'readonly');
+      } catch (error: any) {
+        if (error.name === 'InvalidStateError') res = true;
+      }
+      return res;
     },
   },
 };
