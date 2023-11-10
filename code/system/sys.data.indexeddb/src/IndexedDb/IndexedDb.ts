@@ -132,7 +132,7 @@ export const IndexedDb = {
   /**
    * Determine if an IDBDatabase is closed.
    */
-  db: {
+  Database: {
     isClosed(db: IDBDatabase) {
       let res = false;
       try {
