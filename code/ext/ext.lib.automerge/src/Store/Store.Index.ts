@@ -12,7 +12,7 @@ export const StoreIndex = {
    */
   async init(store: t.Store, uri?: string) {
     const repo = store.repo;
-    const ref = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
+    const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
 
     /**
      * Store the URI to new documents in the index.
@@ -21,7 +21,7 @@ export const StoreIndex = {
       if (!payload.isNew) return;
       const uri = payload.handle.url;
       const exists = api.exists(uri);
-      if (!exists) ref.change((d) => d.docs.push({ uri }));
+      if (!exists) doc.change((d) => d.docs.push({ uri }));
     };
 
     const onDeleteDocument = async (payload: DeleteDocumentPayload) => {
@@ -29,7 +29,7 @@ export const StoreIndex = {
       const uri = DocUri.automerge(id);
       const index = api.current.docs.findIndex((item) => item.uri === uri);
       if (index > -1) {
-        ref.change((d) => Data.array(d.docs).deleteAt(index));
+        doc.change((d) => Data.array(d.docs).deleteAt(index));
       }
     };
 
@@ -47,12 +47,12 @@ export const StoreIndex = {
     const api: t.StoreIndex = {
       kind: 'store:index',
       store,
-      ref,
+      doc,
       get current() {
-        return ref.current;
+        return doc.current;
       },
       exists(uri: Uri) {
-        return ref.current.docs.some((doc) => doc.uri === uri);
+        return doc.current.docs.some((doc) => doc.uri === uri);
       },
     };
 

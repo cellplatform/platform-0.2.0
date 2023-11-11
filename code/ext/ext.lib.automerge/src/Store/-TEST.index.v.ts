@@ -17,7 +17,7 @@ describe('StoreIndex', async () => {
 
     expect(res.kind === 'store:index').to.eql(true);
     expect(res.store).to.equal(store);
-    expect(res.ref.current.docs).to.eql([]);
+    expect(res.doc.current.docs).to.eql([]);
 
     store.dispose();
   });
@@ -25,12 +25,12 @@ describe('StoreIndex', async () => {
   it('lifecycle: init → dispose', async () => {
     const { store } = testSetup();
     const indexA = await Store.Index.init(store);
-    const indexB = await Store.Index.init(store, indexA.ref.uri);
+    const indexB = await Store.Index.init(store, indexA.doc.uri);
 
-    expect(indexA.ref.uri).to.eql(indexB.ref.uri);
-    expect(indexA.ref.current.docs).to.eql([]);
+    expect(indexA.doc.uri).to.eql(indexB.doc.uri);
+    expect(indexA.doc.current.docs).to.eql([]);
 
-    const events = indexB.ref.events();
+    const events = indexB.doc.events();
     expect(store.disposed).to.eql(false);
     expect(events.disposed).to.eql(false);
 
@@ -42,10 +42,10 @@ describe('StoreIndex', async () => {
   it('new documents automatically added to index', async () => {
     const { store, initial } = testSetup();
     const meta = await Store.Index.init(store);
-    expect(meta.ref.current.docs.length).to.eql(0);
+    expect(meta.doc.current.docs.length).to.eql(0);
 
     const sample = await store.doc.getOrCreate(initial);
-    expect(meta.ref.current.docs[0].uri).to.eql(sample.uri);
+    expect(meta.doc.current.docs[0].uri).to.eql(sample.uri);
     expect(meta.exists(sample.uri)).to.eql(true);
 
     store.dispose();
@@ -56,11 +56,11 @@ describe('StoreIndex', async () => {
     const meta = await Store.Index.init(store);
 
     const sample = await store.doc.getOrCreate(initial);
-    expect(meta.ref.current.docs[0].uri).to.eql(sample.uri);
+    expect(meta.doc.current.docs[0].uri).to.eql(sample.uri);
     expect(meta.exists(sample.uri)).to.eql(true);
 
     store.repo.delete(sample.uri);
-    expect(meta.ref.current.docs).to.eql([]);
+    expect(meta.doc.current.docs).to.eql([]);
     expect(meta.exists(sample.uri)).to.eql(false);
 
     store.dispose();

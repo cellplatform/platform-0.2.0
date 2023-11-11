@@ -57,10 +57,9 @@ export const WebStore = {
     const record = await db.getOrCreate(store);
     const uri = record.indexUri;
 
-    console.log('uri', uri);
+    console.log('record.uri', uri);
 
-    const doc = await Store.Index.init(store, uri);
-    return doc;
+    return Store.Index.init(store, uri);
   },
 } as const;
 
