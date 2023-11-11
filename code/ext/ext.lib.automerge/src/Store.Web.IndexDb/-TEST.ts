@@ -27,7 +27,7 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
     expect(IndexedDb.Database.isClosed(db.database)).to.eql(true);
   });
 
-  e.describe('getOrCreate', (e) => {
+  e.describe('retrieve', (e) => {
     e.it('getOrCreate', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const db = await StoreIndexDb.init();
