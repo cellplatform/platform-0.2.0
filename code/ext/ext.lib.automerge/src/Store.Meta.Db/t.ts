@@ -18,5 +18,5 @@ export type StoreMetaDb = t.Lifecycle & {
  */
 export type StoreMetaRecord = {
   dbname: string; //   Name of the IndexedDB used by the repos [StorageAdapter].
-  indexUri: string; // Document URI of the <RepoIndex>.
+  indexUri: string; // URI of index-document for the store/repo.
 };
