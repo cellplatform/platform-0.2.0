@@ -1,5 +1,6 @@
 import type { t } from './common';
 export type * from './t.events';
+export type * from './t.index';
 
 type Uri = DocUri | string;
 type Initial<T> = t.ImmutableNext<T>;
@@ -42,9 +43,3 @@ export type StoreDoc = {
   get<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
   getOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
 };
-
-/**
- * Index of documents within a repository store.
- */
-export type RepoIndex = { docs: RepoIndexDoc[] };
-export type RepoIndexDoc = { uri: Uri; name?: string };
