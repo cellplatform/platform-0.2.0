@@ -6,5 +6,5 @@ export const DEFAULTS = {
 
 export const NAME = {
   STORE: { repos: 'repos' },
-  INDEX: { repos: 'repos' },
+  INDEX: { repos: { dbname_index: 'dbname_index' } },
 } as const;

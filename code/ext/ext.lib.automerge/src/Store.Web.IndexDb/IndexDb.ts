@@ -8,8 +8,8 @@ export const StoreIndexDb = {
   /**
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */
-  init() {
-    const name = DEFAULTS.sys.dbname;
+  init(options: { name?: string } = {}) {
+    const name = options.name ?? DEFAULTS.sys.dbname;
 
     return IndexedDb.init<t.StoreIndexDb>({
       name,
@@ -19,10 +19,12 @@ export const StoreIndexDb = {
        * Database schema declaration.
        */
       schema(req, e) {
+        type R = t.StoreMetaRecord;
         const db = req.result;
-        const keyPath: keyof t.StoreMetaRecord = 'dbname';
-        const stores = db.createObjectStore(NAME.STORE.repos, { keyPath });
-        stores.createIndex(NAME.INDEX.repos, [keyPath]);
+        const dbname: keyof R = 'dbname';
+        const index: keyof R = 'index';
+        const store = db.createObjectStore(NAME.STORE.repos, { keyPath: dbname });
+        store.createIndex(NAME.INDEX.repos.dbname_index, [dbname, index], { unique: true });
       },
 
       /**
@@ -61,12 +63,13 @@ export const StoreIndexDb = {
               throw new Error(err);
             }
 
-            const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []));
-            const uri = doc.uri;
+            const existing = await api.get(store);
+            if (existing) return existing;
 
+            const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []));
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
-            return Record.put<t.StoreMetaRecord>(table, { dbname, indexUri: uri });
+            return Record.put<t.StoreMetaRecord>(table, { dbname, index: doc.uri });
           },
 
           async delete(store: t.WebStore) {
