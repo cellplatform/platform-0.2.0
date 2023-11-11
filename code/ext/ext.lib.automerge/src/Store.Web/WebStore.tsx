@@ -53,7 +53,8 @@ export const WebStore = {
    * Create instance of the store/repo's document Index.
    */
   async index(store: t.WebStore) {
-    const db = await StoreIndexDb.init();
+    const dbname = StoreIndexDb.name(store);
+    const db = await StoreIndexDb.init(dbname);
     const record = await db.getOrCreate(store);
     return Store.Index.init(store, record.index);
   },

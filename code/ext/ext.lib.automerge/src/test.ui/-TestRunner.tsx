@@ -45,12 +45,9 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.section('Maintenance', (dev) => {
       dev.button('delete test databases', async (e) => {
-        await IndexedDb.delete('dev.test');
         await IndexedDb.delete('automerge');
-      });
-
-      dev.button('delete ".index.test" database', async (e) => {
-        await IndexedDb.delete('.index.test');
+        await IndexedDb.delete('dev.test');
+        await IndexedDb.delete('dev.test:index');
       });
     });
   });

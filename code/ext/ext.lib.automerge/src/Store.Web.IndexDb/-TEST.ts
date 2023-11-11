@@ -5,21 +5,22 @@ import { DEFAULTS, Is } from './common';
 
 export default Test.describe('Store.Web: IndexDb', (e) => {
   const name = 'dev.test';
+  const indexName = StoreIndexDb.name(name);
 
   const init = () => {
-    return StoreIndexDb.init({ name: '.index.test' });
+    return StoreIndexDb.init(indexName);
   };
 
   e.it('init (defaults)', async (e) => {
-    const db = await StoreIndexDb.init();
+    const db = await StoreIndexDb.init(indexName);
 
     await Time.wait(100);
     const databases = (await IndexedDb.list()).map((e) => e.name);
 
-    const dbname = DEFAULTS.sys.dbname;
-    expect(databases).to.include(dbname);
-    expect(db.database.name).to.eql(dbname);
-    expect(db.name).to.eql(dbname);
+    expect(databases).to.include(name);
+    expect(databases).to.include(indexName);
+    expect(db.database.name).to.eql(indexName);
+    expect(db.name).to.eql(indexName);
     db.dispose();
   });
 
@@ -52,11 +53,8 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
         const db = await init();
         const res1 = await db.getOrCreate(store);
         const res2 = await db.getOrCreate(store);
-
         expect(res1.dbname).to.eql(res2.dbname);
         expect(res1.index).to.eql(res2.index);
-        console.log('res1', res1);
-        console.log('res2', res2);
       });
     });
 
@@ -96,6 +94,24 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
       expectError(() => db.getOrCreate(store), err);
       store.dispose();
       db.dispose();
+    });
+  });
+
+  e.describe('name (formatting)', (e) => {
+    e.it('from string', (e) => {
+      expect(StoreIndexDb.name('foo')).to.eql('foo:index');
+      expect(StoreIndexDb.name('  foo  ')).to.eql('foo:index');
+      expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:index');
+    });
+
+    e.it('from store', async (e) => {
+      const store = WebStore.init({ network: false, storage: { name } });
+      expect(StoreIndexDb.name(store)).to.eql('dev.test:index');
+    });
+
+    e.it('throw: no name', (e) => {
+      const fn = () => StoreIndexDb.name('  ');
+      expect(fn).to.throw(/A root store name is required/);
     });
   });
 });

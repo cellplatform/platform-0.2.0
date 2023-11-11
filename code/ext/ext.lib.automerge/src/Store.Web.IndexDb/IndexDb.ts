@@ -1,4 +1,4 @@
-import { DEFAULTS, IndexedDb, NAME, rx, type t } from './common';
+import { IndexedDb, NAME, rx, type t } from './common';
 const { Record } = IndexedDb;
 
 /**
@@ -6,11 +6,19 @@ const { Record } = IndexedDb;
  */
 export const StoreIndexDb = {
   /**
+   * Format the index DB name.
+   */
+  name(store: string | t.WebStore) {
+    let root = (typeof store === 'string' ? store : store.info.storage?.name || '').trim();
+    if (!root) throw new Error(`A root store name is required`);
+    root = root.replace(/\:*$/, '');
+    return `${root}:index`;
+  },
+
+  /**
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */
-  init(options: { name?: string } = {}) {
-    const name = options.name ?? DEFAULTS.sys.dbname;
-
+  init(name: string) {
     return IndexedDb.init<t.StoreIndexDb>({
       name,
       version: 1,
