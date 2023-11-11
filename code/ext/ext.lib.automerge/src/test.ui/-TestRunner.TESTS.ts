@@ -8,7 +8,7 @@ export const TESTS = {
       import('../Store.Web/-TEST'),
       import('../Store.Web/-TEST.storage'),
       import('../Store.Web/-TEST.sync'),
-      import('../Store.Web/-TEST.index'),
+      import('../Store.Web/-TEST.meta'),
       import('../Store.Meta.Db/-TEST'),
       'UI.Repo',
       import('../ui/ui.RepoList.Model/-TEST'),

@@ -3,7 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { WebStoreIndex as Index } from './WebStore.Index';
+import { WebStoreMeta as Meta } from './WebStore.Meta';
 import { DEFAULTS, type t } from './common';
 
 export type Init = {
@@ -17,8 +17,8 @@ export type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
-  Index,
-  index: Index.init,
+  Meta,
+  meta: Meta.init,
 
   /**
    * Initialize a new instance of a CRDT repo.
