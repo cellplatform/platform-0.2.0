@@ -1,7 +1,7 @@
 import { Repo } from '@automerge/automerge-repo';
-import { Doc } from './Doc';
+import { Doc } from './Store.Doc';
 import { StoreIndex as Index } from './Store.Index';
-import { DocUri as Uri, rx, type t, Time, DEFAULTS, Is } from './common';
+import { DEFAULTS, Is, Time, DocUri as Uri, rx, type t } from './common';
 
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
