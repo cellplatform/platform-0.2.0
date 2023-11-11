@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { Time, A, describe, expect, it, type t, Is } from '../test';
+import { A, describe, expect, it, type t } from '../test';
 
 type D = { count?: t.A.Counter };
 
@@ -17,7 +17,7 @@ describe('StoreIndex', async () => {
 
     expect(res.kind === 'store:index').to.eql(true);
     expect(res.store).to.equal(store);
-    expect(res.index.current.docs).to.eql([]);
+    expect(res.ref.current.docs).to.eql([]);
 
     store.dispose();
   });
@@ -25,12 +25,12 @@ describe('StoreIndex', async () => {
   it('lifecycle: init → dispose', async () => {
     const { store } = testSetup();
     const indexA = await Store.Index.init(store);
-    const indexB = await Store.Index.init(store, indexA.index.uri);
+    const indexB = await Store.Index.init(store, indexA.ref.uri);
 
-    expect(indexA.index.uri).to.eql(indexB.index.uri);
-    expect(indexA.index.current.docs).to.eql([]);
+    expect(indexA.ref.uri).to.eql(indexB.ref.uri);
+    expect(indexA.ref.current.docs).to.eql([]);
 
-    const events = indexB.index.events();
+    const events = indexB.ref.events();
     expect(store.disposed).to.eql(false);
     expect(events.disposed).to.eql(false);
 
@@ -41,13 +41,27 @@ describe('StoreIndex', async () => {
 
   it('new documents automatically added to index', async () => {
     const { store, initial } = testSetup();
-    const { index } = await Store.Index.init(store);
-    expect(index.current.docs.length).to.eql(0);
+    const meta = await Store.Index.init(store);
+    expect(meta.ref.current.docs.length).to.eql(0);
 
-    const sampleDoc = await store.doc.getOrCreate(initial);
-    const exists = index.current.docs.some((d) => d.uri === sampleDoc.uri);
-    expect(exists).to.eql(true);
-    expect(index.current.docs.length).to.eql(1);
+    const sample = await store.doc.getOrCreate(initial);
+    expect(meta.ref.current.docs[0].uri).to.eql(sample.uri);
+    expect(meta.exists(sample.uri)).to.eql(true);
+
+    store.dispose();
+  });
+
+  it('deleted documents automatically removed from index', async () => {
+    const { store, initial } = testSetup();
+    const meta = await Store.Index.init(store);
+
+    const sample = await store.doc.getOrCreate(initial);
+    expect(meta.ref.current.docs[0].uri).to.eql(sample.uri);
+    expect(meta.exists(sample.uri)).to.eql(true);
+
+    store.repo.delete(sample.uri);
+    expect(meta.ref.current.docs).to.eql([]);
+    expect(meta.exists(sample.uri)).to.eql(false);
 
     store.dispose();
   });

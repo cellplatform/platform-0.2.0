@@ -12,4 +12,9 @@ export const DocUri = {
     if (!text.includes(':')) return text;
     return text.split(':')[1] ?? '';
   },
+
+  automerge(input: any): string {
+    const id = DocUri.id(input);
+    return id ? `automerge:${id}` : '';
+  },
 } as const;

@@ -3,9 +3,11 @@ import type { t } from './common';
 type Uri = t.DocUri | string;
 
 export type StoreIndex = {
-  kind: 'store:index';
-  store: t.Store;
-  index: t.DocRefHandle<t.RepoIndex>;
+  readonly kind: 'store:index';
+  readonly store: t.Store;
+  readonly ref: t.DocRefHandle<t.RepoIndex>;
+  readonly current: t.RepoIndex;
+  exists(uri: Uri): boolean;
 };
 
 /**

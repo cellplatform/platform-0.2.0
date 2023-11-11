@@ -1,5 +1,5 @@
-import { describe, it, expect, type t } from '../test';
-import { toObject } from './util';
+import { describe, expect, it } from '../test';
+import { toObject } from './u';
 
 describe('Util', () => {
   it('toObject', () => {

@@ -27,4 +27,24 @@ describe('Store.DocUri', () => {
       expect(DocUri.id('  automerge:abc:foo  ')).to.eql('abc');
     });
   });
+
+  describe('DocUri.automerge', () => {
+    it('nothing', () => {
+      [true, 123, '', [], {}, null, undefined].forEach((value) => {
+        expect(DocUri.automerge(value)).to.eql('');
+      });
+    });
+
+    it('ensure "automerge:" prfix', () => {
+      const test = (input: any, expected: string) => {
+        const res = DocUri.automerge(input);
+        expect(res).to.eql(expected, input);
+      };
+      test('foo', 'automerge:foo');
+      test(' foo ', 'automerge:foo');
+      test(' db:foo ', 'automerge:foo');
+      test(' automerge:foo ', 'automerge:foo');
+      test(' automerge ', 'automerge:automerge');
+    });
+  });
 });
