@@ -73,7 +73,7 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
     e.it('throw: storage not enabled on repo', async (e) => {
       const store = WebStore.init({ network: false, storage: false });
       const db = await StoreIndexDb.init();
-      const err = 'Cannot add repo index as it does storage is not enabled';
+      const err = 'does not have storage enabled';
       expectError(() => db.getOrCreate(store), err);
       store.dispose();
       db.dispose();
