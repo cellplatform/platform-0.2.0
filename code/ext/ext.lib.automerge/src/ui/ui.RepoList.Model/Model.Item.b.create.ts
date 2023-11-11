@@ -28,7 +28,7 @@ export function createDocumentBehavior(args: {
     });
     dispatch.redraw();
 
-    list.change((d) => (d.total += 1));
+    list.state.change((d) => (d.total += 1));
     dispatch.redraw();
   };
 

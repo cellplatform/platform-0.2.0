@@ -26,8 +26,7 @@ export type RepoListBehavior = {
  */
 export type RepoListCtxGet = () => RepoListCtx;
 export type RepoListCtx = {
-  list: t.RepoListState;
+  list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
   store: t.Store;
-  dispatch: t.LabelListDispatch;
   dispose$?: t.UntilObservable;
 };

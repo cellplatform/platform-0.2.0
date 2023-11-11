@@ -6,10 +6,10 @@ type T = { props: t.RepoListProps };
 const name = RepoList.displayName ?? '';
 const initial: T = { props: {} };
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ storage: 'dev.test' });
-  const model = RepoList.Model.init(store);
-  const ref = RepoList.Ref(store, model.list);
+  const model = await RepoList.Model.init(store);
+  const ref = RepoList.Ref(store, model.list.state);
 
   type LocalStore = t.RepoListBehavior;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
@@ -46,7 +46,7 @@ export default Dev.describe(name, (e) => {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
-        return <RepoList {...e.state.props} list={model.list} renderCount={renderCount} />;
+        return <RepoList {...e.state.props} list={model.list.state} renderCount={renderCount} />;
       });
   });
 

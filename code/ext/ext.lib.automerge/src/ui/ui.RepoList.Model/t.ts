@@ -16,8 +16,8 @@ export type RepoListState = t.LabelListState;
 
 export type RepoListModel = t.Lifecycle & {
   ctx: t.RepoListCtxGet;
-  list: t.RepoListState;
-  dispatch: t.LabelListDispatch;
+  index: t.StoreIndex;
+  list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
 };
 
 /**
