@@ -11,7 +11,7 @@ export const StoreIndexDb = {
   init() {
     const name = DEFAULTS.sys.dbname;
 
-    return IndexedDb.init<t.StoreMetaDb>({
+    return IndexedDb.init<t.StoreIndexDb>({
       name,
       version: 1,
 
@@ -33,7 +33,7 @@ export const StoreIndexDb = {
         const { dispose, dispose$ } = life;
         dispose$.subscribe(() => db.close());
 
-        const api: t.StoreMetaDb = {
+        const api: t.StoreIndexDb = {
           name,
           database: db,
 

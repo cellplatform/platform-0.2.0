@@ -4,7 +4,7 @@ import type { t } from './common';
  * IndexedDB
  * NOTE: Extends the automerge-repo database.
  */
-export type StoreMetaDb = t.Lifecycle & {
+export type StoreIndexDb = t.Lifecycle & {
   name: string;
   database: IDBDatabase;
   exists(store: t.WebStore): Promise<boolean>;
