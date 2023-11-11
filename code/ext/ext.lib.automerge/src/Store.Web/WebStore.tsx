@@ -17,8 +17,7 @@ export type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
-  Meta,
-  meta: Meta.init,
+  index: Meta.index,
 
   /**
    * Initialize a new instance of a CRDT repo.
