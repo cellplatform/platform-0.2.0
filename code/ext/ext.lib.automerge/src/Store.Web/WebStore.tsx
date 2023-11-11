@@ -3,7 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { WebStoreMeta as Meta } from './WebStore.Meta';
+import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, type t } from './common';
 
 export type Init = {
@@ -17,7 +17,6 @@ export type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
-  index: Meta.index,
 
   /**
    * Initialize a new instance of a CRDT repo.
@@ -48,6 +47,20 @@ export const WebStore = {
     };
 
     return store;
+  },
+
+  /**
+   * Initialize an index for the store.
+   */
+  async index(store: t.WebStore) {
+    const db = await StoreIndexDb.init();
+    const record = await db.getOrCreate(store);
+    const uri = record.indexUri;
+
+    console.log('uri', uri);
+
+    const doc = await Store.Index.init(store, uri);
+    return doc;
   },
 } as const;
 

@@ -3,21 +3,22 @@ import { A, Test, expect, toObject, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
-export default Test.describe('Store.Web: Meta', (e) => {
+export default Test.describe('Store.Web: Index', (e) => {
   const name = 'dev.test';
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
 
-  e.describe('Index', (e) => {
-    e.it('disposes of Index events when root Store is disposed', async (e) => {
-      const store = WebStore.init({ network: false, storage: { name } });
-      const index = await WebStore.index(store);
-      const events = index.ref.events();
+  e.it('disposes of Index events when store/repo is disposed', async (e) => {
+    const store = WebStore.init({ network: false, storage: { name } });
+    const index = await WebStore.index(store);
+    const events = index.ref.events();
 
-      store.dispose();
-      expect(events.disposed).to.eql(true); // NB: because parent store disposed.
-    });
+    store.dispose();
+    expect(events.disposed).to.eql(true); // NB: because parent store disposed.
+  });
 
-    e.it('on ⚡️ new document event → adds to index', async (e) => {
+
+  e.describe('auto sync with repo', (e) => {
+    e.it('repo: on ⚡️ new document event → adds to index', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const index = await WebStore.index(store);
       const events = index.ref.events();
@@ -35,7 +36,7 @@ export default Test.describe('Store.Web: Meta', (e) => {
       store.dispose();
     });
 
-    e.it('on ⚡️ delete document event → removes from index', async (e) => {
+    e.it('repo: on ⚡️ delete document event → removes from index', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const index = await WebStore.index(store);
       const events = index.ref.events();
