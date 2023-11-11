@@ -13,11 +13,11 @@ describe('StoreIndex', async () => {
 
   it('init', async () => {
     const { store } = testSetup();
-    const res = await Store.Index.init(store);
+    const index = await Store.Index.init(store);
 
-    expect(res.kind === 'store:index').to.eql(true);
-    expect(res.store).to.equal(store);
-    expect(res.doc.current.docs).to.eql([]);
+    expect(index.kind === 'store:index').to.eql(true);
+    expect(index.store).to.equal(store);
+    expect(index.doc.current.docs).to.eql([]);
 
     store.dispose();
   });
