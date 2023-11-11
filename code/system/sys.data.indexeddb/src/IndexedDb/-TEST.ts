@@ -5,10 +5,7 @@ export default Test.describe('IndexedDb', (e) => {
   e.timeout(9999);
 
   const name = 'dev.test';
-  type T = {
-    name: string;
-    db: IDBDatabase;
-  };
+  type T = { name: string; db: IDBDatabase };
 
   const assertDbExists = async (name: string, exists = true) => {
     const databases = await indexedDB.databases();
@@ -49,12 +46,14 @@ export default Test.describe('IndexedDb', (e) => {
     expect(names).to.includes(name);
   });
 
-  e.it('db.isClosed', async (e) => {
-    const res = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
-    expect(IndexedDb.db.isClosed(res.db)).to.eql(false);
+  e.describe('IndexedDb.Database', (e) => {
+    e.it('isClosed', async (e) => {
+      const res = await IndexedDb.init<T>({ name, store: (db) => ({ name, db }) });
+      expect(IndexedDb.Database.isClosed(res.db)).to.eql(false);
 
-    res.db.close();
-    expect(IndexedDb.db.isClosed(res.db)).to.eql(true);
+      res.db.close();
+      expect(IndexedDb.Database.isClosed(res.db)).to.eql(true);
+    });
   });
 
   e.it('delete non-existant database (no error)', async (e) => {
