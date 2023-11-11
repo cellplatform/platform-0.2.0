@@ -10,5 +10,5 @@ export type * from './ui/ui.RepoList/t';
  * Automerge JS object extensions
  */
 export interface AutomergeArray<T> extends Array<T> {
-  deleteAt(index: number): void;
+  deleteAt(index: number, total?: number): void;
 }
