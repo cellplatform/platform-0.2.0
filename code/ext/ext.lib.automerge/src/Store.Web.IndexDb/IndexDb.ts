@@ -1,11 +1,10 @@
 import { DEFAULTS, IndexedDb, NAME, rx, type t } from './common';
-
 const { Record } = IndexedDb;
 
 /**
  * An IndexedDB for storing meta-data about [Store/Repo]'s.
  */
-export const StoreMetaDb = {
+export const StoreIndexDb = {
   /**
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */

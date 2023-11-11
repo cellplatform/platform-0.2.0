@@ -1,13 +1,13 @@
-import { StoreMetaDb } from '.';
+import { StoreIndexDb } from '.';
 import { WebStore } from '../Store.Web';
-import { IndexedDb, Test, Time, expect, expectError, type t } from '../test.ui';
+import { IndexedDb, Test, Time, expect, expectError } from '../test.ui';
 import { DEFAULTS, Is } from './common';
 
-export default Test.describe('Store.Web: MetaDb', (e) => {
+export default Test.describe('Store.Web: IndexDb', (e) => {
   const name = 'dev.test';
 
   e.it('init', async (e) => {
-    const db = await StoreMetaDb.init();
+    const db = await StoreIndexDb.init();
 
     await Time.wait(300);
     const databases = (await IndexedDb.list()).map((e) => e.name);
@@ -19,7 +19,7 @@ export default Test.describe('Store.Web: MetaDb', (e) => {
   });
 
   e.it('dispose', async (e) => {
-    const db = await StoreMetaDb.init();
+    const db = await StoreIndexDb.init();
     expect(db.disposed).to.eql(false);
 
     db.dispose();
@@ -30,7 +30,7 @@ export default Test.describe('Store.Web: MetaDb', (e) => {
   e.describe('getOrCreate', (e) => {
     e.it('getOrCreate', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      const db = await StoreMetaDb.init();
+      const db = await StoreIndexDb.init();
       const res = await db.getOrCreate(store);
 
       expect(res?.dbname).to.eql(name);
@@ -43,7 +43,7 @@ export default Test.describe('Store.Web: MetaDb', (e) => {
 
     e.it('get', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      const db = await StoreMetaDb.init();
+      const db = await StoreIndexDb.init();
       const res = await db.get(store);
 
       expect(res?.dbname).to.eql(name);
@@ -56,7 +56,7 @@ export default Test.describe('Store.Web: MetaDb', (e) => {
 
     e.it('exists', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      const db = await StoreMetaDb.init();
+      const db = await StoreIndexDb.init();
 
       expect(await db.exists(store)).to.eql(true);
 
@@ -72,7 +72,7 @@ export default Test.describe('Store.Web: MetaDb', (e) => {
 
     e.it('throw: storage not enabled on repo', async (e) => {
       const store = WebStore.init({ network: false, storage: false });
-      const db = await StoreMetaDb.init();
+      const db = await StoreIndexDb.init();
       const err = 'Cannot add repo index as it does storage is not enabled';
       expectError(() => db.getOrCreate(store), err);
       store.dispose();
