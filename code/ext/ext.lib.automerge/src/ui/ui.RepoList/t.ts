@@ -9,12 +9,11 @@ export type RepoListRef = t.LabelListDispatch & { store: t.Store };
  * <Component>
  */
 export type RepoListProps = {
-  store: t.Store;
+  list?: t.RepoListState;
   behavior?: t.RepoListBehavior;
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
   style?: t.CssValue;
-  onReady?: t.RepoListReadyHandler;
 };
 
 export type RepoListBehavior = {
@@ -32,9 +31,3 @@ export type RepoListCtx = {
   dispatch: t.LabelListDispatch;
   dispose$?: t.UntilObservable;
 };
-
-/**
- * Events
- */
-export type RepoListReadyHandler = (e: t.RepoListReadyHandlerArgs) => void;
-export type RepoListReadyHandlerArgs = { ref: t.RepoListRef };

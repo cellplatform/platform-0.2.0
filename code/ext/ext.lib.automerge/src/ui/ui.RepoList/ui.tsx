@@ -1,11 +1,13 @@
+import { useRef } from 'react';
+import { Renderers } from './Renderers';
 import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
-type Props = t.RepoListProps & { list: t.RepoListState; renderers: t.RepoItemRenderers };
-
-export const View: React.FC<Props> = (props) => {
+export const View: React.FC<t.RepoListProps> = (props) => {
   const { list, tabIndex = DEFAULTS.tabIndex } = props;
-  const useBehaviors = Wrangle.useBehaviors(props);
+
+  const renderers = useRef(Renderers.init()).current;
+  const useBehaviors = Wrangle.behaviors(props);
   const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list, useBehaviors });
 
   /**
@@ -23,7 +25,7 @@ export const View: React.FC<Props> = (props) => {
         index={i}
         list={list}
         item={item}
-        renderers={props.renderers}
+        renderers={renderers}
         useBehaviors={useBehaviors}
       />
     );

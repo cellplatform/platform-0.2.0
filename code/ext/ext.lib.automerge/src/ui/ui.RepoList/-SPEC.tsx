@@ -4,12 +4,12 @@ import { Info } from '../ui.Info';
 
 type T = { props: t.RepoListProps };
 const name = RepoList.displayName ?? '';
+const initial: T = { props: {} };
 
 export default Dev.describe(name, (e) => {
-  const store = WebStore.init();
   const store = WebStore.init({ storage: 'dev.test' });
-  let ref: t.RepoListRef;
-  const initial: T = { props: { store } };
+  const model = RepoList.Model.init(store);
+  const ref = RepoList.Ref(store, model.list);
 
   type LocalStore = t.RepoListBehavior;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
@@ -42,20 +42,11 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const renderCount: t.RenderCountProps = {
+          prefix: 'list.render-',
           absolute: [-20, 2, null, null],
           opacity: 0.2,
-          prefix: 'list.render-',
         };
-        return (
-          <RepoList
-            {...e.state.props}
-            renderCount={renderCount}
-            onReady={(e) => {
-              console.info(`⚡️ RepoList.onReady`, e);
-              ref = e.ref;
-            }}
-          />
-        );
+        return <RepoList {...e.state.props} list={model.list} renderCount={renderCount} />;
       });
   });
 
@@ -121,6 +112,8 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
     });
   });
 
@@ -128,7 +121,9 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        props: e.state.props,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

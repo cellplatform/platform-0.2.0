@@ -14,6 +14,12 @@ export type RepoItemEvents = t.LabelItemEvents<RepoListAction, RepoItemData>;
  */
 export type RepoListState = t.LabelListState;
 
+export type RepoListModel = t.Lifecycle & {
+  ctx: t.RepoListCtxGet;
+  list: t.RepoListState;
+  dispatch: t.LabelListDispatch;
+};
+
 /**
  * Model: Data
  */
