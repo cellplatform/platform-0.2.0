@@ -13,13 +13,13 @@ export type Init = {
 };
 
 /**
- * Manage an Automerge repo on the browser.
+ * Manage an Automerge "repo" on the browser.
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
 
   /**
-   * Initialize a new instance of a CRDT repo.
+   * Initialize a new instance of a CRDT store/repo.
    */
   init(options: Init = {}) {
     const network = Wrangle.network(options);
@@ -50,16 +50,12 @@ export const WebStore = {
   },
 
   /**
-   * Initialize an index for the store.
+   * Create instance of the store/repo's document Index.
    */
   async index(store: t.WebStore) {
     const db = await StoreIndexDb.init();
     const record = await db.getOrCreate(store);
-    const uri = record.indexUri;
-
-    console.log('record.uri', uri);
-
-    return Store.Index.init(store, uri);
+    return Store.Index.init(store, record.index);
   },
 } as const;
 
