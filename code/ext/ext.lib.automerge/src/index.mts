@@ -9,7 +9,9 @@ export { Pkg };
  */
 import { WebStore } from './Store.Web';
 export { WebStore };
+
 export { Store } from './Store';
+export { toObject } from './common';
 
 /**
  * Library: UI

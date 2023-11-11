@@ -1,5 +1,5 @@
 import { DocEvents } from './Doc.Events';
-import { Is, R, slug, type t } from './common';
+import { Is, slug, toObject, type t } from './common';
 
 type Uri = t.DocUri | string;
 
@@ -53,7 +53,7 @@ function wrapHandle<T>(args: { handle: t.DocHandle<T>; dispose$?: t.UntilObserva
       return DocEvents.init<T>(handle, { dispose$: [args.dispose$, dispose$] });
     },
     toObject() {
-      return R.clone(api.current);
+      return toObject<T>(api.current);
     },
   };
   return api;
