@@ -1,4 +1,4 @@
-import { COLORS, Data, Icons, type t } from './common';
+import { COLORS, Data, DocUri, Hash, Icons, css, type t } from './common';
 
 export const Renderers = {
   /**
@@ -15,10 +15,18 @@ export const Renderers = {
 
       placeholder(e) {
         const data = Data.item(e.item);
-        let text = '';
-        if (data.mode === 'Add') text = 'new document';
-        if (data.mode === 'Doc') text = Wrangle.placeholderUri(data.uri);
-        return <>{text}</>;
+        if (data.mode === 'Add') {
+          return <>{'new document'}</>;
+        }
+        if (data.mode === 'Doc') {
+          const style = css({
+            fontFamily: 'monospace',
+            fontSize: 11,
+          });
+          const uri = Wrangle.placeholderUri(data.uri);
+          return <div {...style}>{uri}</div>;
+        }
+        return <>{'placeholder'}</>;
       },
 
       action(e, helpers) {
@@ -45,7 +53,9 @@ export const Renderers = {
  */
 export const Wrangle = {
   placeholderUri(text?: string) {
-    if (!text) return 'doc:uri';
-    return `db:${text.split(':')[1]}`;
+    if (!text) return 'doc: uri';
+    const id = DocUri.id(text);
+    const hash = Hash.shorten(id, [2, 4]);
+    return `crdt:${hash}`;
   },
 } as const;
