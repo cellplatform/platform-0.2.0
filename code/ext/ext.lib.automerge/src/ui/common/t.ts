@@ -12,6 +12,7 @@ export type {
   LabelItemRenderArgs,
   LabelItemRenderers,
   LabelItemState,
+  LabelItemStateIndex,
   LabelListArray,
   LabelListDispatch,
   LabelListItemTarget,
