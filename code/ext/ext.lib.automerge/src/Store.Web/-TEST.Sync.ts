@@ -1,18 +1,18 @@
 import { WebStore } from '.';
-import { A, Test, Time, expect, type t } from '../test.ui';
+import { A, Test, Time, expect, type t, TestDb } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) => {
+  const name = TestDb.name;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };
 
   e.it('sync between two documents', async (e) => {
-    const store1 = WebStore.init({ storage: false });
-    const store2 = WebStore.init({ storage: false });
+    const store1 = WebStore.init({ storage: false }); // NB: default "network" true
+    const store2 = WebStore.init({ storage: false, network: true });
 
     const doc1 = await store1.doc.getOrCreate(initial);
     await Time.wait(250);
@@ -28,12 +28,12 @@ export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) =>
   });
 
   e.it('not synced: no network adapter', async (e) => {
-    const store1 = WebStore.init({ network: false, storage: false });
-    const store2 = WebStore.init({ network: false, storage: false });
+    const store1 = WebStore.init({ network: false, storage: { name } });
+    const store2 = WebStore.init({ network: false, storage: { name } });
 
     const doc1 = await store1.doc.getOrCreate(initial);
     await Time.wait(250);
-    const doc2 = await store2.doc.getOrCreate(initial, doc1.uri);
+    const doc2 = await store2.doc.getOrCreate(initial, doc1.uri); // NB: knows about this from storage, but will not network sync.
     assertCount(doc1, 0);
     assertCount(doc2, 0);
 
