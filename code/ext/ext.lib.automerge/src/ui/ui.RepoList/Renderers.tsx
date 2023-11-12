@@ -55,7 +55,7 @@ export const Wrangle = {
   placeholderUri(text?: string) {
     if (!text) return 'doc: uri';
     const id = DocUri.id(text);
-    const hash = Hash.shorten(id, [2, 4]);
+    const hash = Hash.shorten(id, [4, 4]);
     return `crdt:${hash}`;
   },
 } as const;
