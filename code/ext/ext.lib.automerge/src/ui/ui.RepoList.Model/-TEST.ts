@@ -8,8 +8,9 @@ export default Test.describe('RepoList.Model', (e) => {
   e.describe('Model.List', (e) => {
     e.it('init', async (e) => {
       const model = await Model.init(store);
-      expect(model.index.kind === 'store:index').to.eql('store:index');
+      expect(model.index.kind === 'store:index').to.eql(true);
       expect(model.list.state.type).to.eql(DEFAULTS.typename.list);
+      expect(model.ctx().store).to.equal(store);
     });
 
     e.it('dispose', async (e) => {
