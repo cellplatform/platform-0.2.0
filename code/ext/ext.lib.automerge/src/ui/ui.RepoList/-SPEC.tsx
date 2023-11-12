@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Button, Dev, Time, WebStore, type t } from '../../test.ui';
+import { Button, Dev, Time, WebStore, type t, TestDb } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type T = { props: t.RepoListProps };
@@ -7,7 +7,8 @@ const name = RepoList.displayName ?? '';
 const initial: T = { props: {} };
 
 export default Dev.describe(name, async (e) => {
-  const store = WebStore.init({ storage: 'dev.test' });
+  const name = TestDb.Spec.name;
+  const store = WebStore.init({ storage: { name } });
   const model = await RepoList.Model.init(store);
   const ref = RepoList.Ref(store, model.list.state);
 

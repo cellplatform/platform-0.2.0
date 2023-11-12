@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { TestDb, Dev } from '../../test.ui';
 import { A, WebStore, type t } from './common';
 import { Sample } from './ui.Sample';
 
@@ -15,7 +15,7 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Sample');
   const local = localstore.object({ docUri: undefined });
 
-  const store = WebStore.init({ storage: 'dev.test' });
+  const store = WebStore.init({ storage: TestDb.Spec.name });
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
   let doc: t.DocRefHandle<t.SampleDoc>;

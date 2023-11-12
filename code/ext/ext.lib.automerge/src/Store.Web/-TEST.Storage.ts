@@ -1,5 +1,5 @@
 import { WebStore } from '.';
-import { A, Test, Time, expect, type t } from '../test.ui';
+import { A, Test, TestDb, Time, expect, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
@@ -10,8 +10,9 @@ export default Test.describe('Store.Web: IndexedDBStorageAdapter', (e) => {
   };
 
   e.it('is persistent', async (e) => {
-    const store1 = WebStore.init({ network: false, storage: 'dev.test' });
-    const store2 = WebStore.init({ network: false, storage: 'dev.test' });
+    const name = TestDb.name;
+    const store1 = WebStore.init({ network: false, storage: { name } });
+    const store2 = WebStore.init({ network: false, storage: { name } });
 
     const doc1 = await store1.doc.getOrCreate(initial);
     doc1.change((d) => d.count?.increment(5));

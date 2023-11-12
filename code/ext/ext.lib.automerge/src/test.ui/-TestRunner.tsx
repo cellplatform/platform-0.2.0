@@ -1,4 +1,4 @@
-import { Dev, IndexedDb, type t, TestIndexedDb } from '.';
+import { Dev, IndexedDb, type t, TestDb } from '.';
 
 type T = {
   spinning?: boolean;
@@ -44,10 +44,15 @@ export default Dev.describe('TestRunner', (e) => {
     dev.hr(5, 20);
 
     dev.section('Maintenance', (dev) => {
-      dev.button('delete test databases', async (e) => {
-        await IndexedDb.delete('automerge');
-        await IndexedDb.delete('dev.test');
-        await IndexedDb.delete('dev.test:index');
+      dev.button('delete "test" databases', async (e) => {
+        await TestDb.deleteDatabases();
+      });
+      dev.button('delete "spec" databases', async (e) => {
+        await TestDb.Spec.deleteDatabases();
+      });
+      dev.hr(-1, 5);
+      dev.button('delete: "localfirst" database', async (e) => {
+        await IndexedDb.delete('localfirst');
       });
     });
   });

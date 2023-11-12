@@ -1,7 +1,12 @@
 import { isValidAutomergeUrl } from '@automerge/automerge-repo';
+import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import type * as t from './t';
 
 export const Is = {
+  automergeUrl(input: any): input is t.AutomergeUrl {
+    return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
+  },
+
   store(input: any): input is t.Store {
     if (!isObject(input) || !isObject(input.doc)) return false;
     if (!Is.repo(input.repo)) return false;
@@ -44,8 +49,8 @@ export const Is = {
     );
   },
 
-  automergeUrl(input: any): input is t.AutomergeUrl {
-    return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
+  broadcastChannel(input: any): input is BroadcastChannelNetworkAdapter {
+    return input instanceof BroadcastChannelNetworkAdapter;
   },
 } as const;
 

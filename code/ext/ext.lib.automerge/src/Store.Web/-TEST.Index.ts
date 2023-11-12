@@ -1,10 +1,10 @@
 import { WebStore } from '.';
-import { A, Test, expect, toObject, type t } from '../test.ui';
+import { A, Test, TestDb, expect, toObject, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: Index', (e) => {
-  const name = 'dev.test';
+  const name = TestDb.name;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
 
   e.it('disposes of Index events when store/repo is disposed', async (e) => {

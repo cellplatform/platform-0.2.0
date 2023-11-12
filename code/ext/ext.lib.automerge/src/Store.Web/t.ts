@@ -5,7 +5,10 @@ import type { t } from './common';
  */
 export type WebStore = t.Store & {
   Provider(props: { children?: React.ReactNode }): JSX.Element;
-  readonly info: {
-    readonly storage?: { readonly name: string };
-  };
+  readonly info: WebStoreInfo;
+};
+
+export type WebStoreInfo = {
+  readonly storage?: { readonly kind: 'IndexedDb'; readonly name: string };
+  readonly network?: { readonly kinds: t.StoreNetworkKind[] };
 };

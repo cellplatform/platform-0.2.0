@@ -5,6 +5,7 @@ type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };
@@ -27,8 +28,8 @@ export default Test.describe('Store.Web: BroadcastChannelNetworkAdapter', (e) =>
   });
 
   e.it('not synced: no network adapter', async (e) => {
-    const store1 = WebStore.init({ network: false });
-    const store2 = WebStore.init({ network: false });
+    const store1 = WebStore.init({ network: false, storage: false });
+    const store2 = WebStore.init({ network: false, storage: false });
 
     const doc1 = await store1.doc.getOrCreate(initial);
     await Time.wait(250);

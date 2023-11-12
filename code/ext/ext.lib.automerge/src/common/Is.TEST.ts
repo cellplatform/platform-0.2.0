@@ -2,7 +2,7 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
-import { Test, expect } from '../test.ui';
+import { Test, expect, TestDb } from '../test.ui';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
 import { Is } from '.';
@@ -14,7 +14,7 @@ export default Test.describe('Is', (e) => {
   const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
   const repo3 = new Repo({
     network: [new BroadcastChannelNetworkAdapter()],
-    storage: new IndexedDBStorageAdapter(),
+    storage: new IndexedDBStorageAdapter(TestDb.name),
   });
 
   e.it('Is.store', (e) => {
@@ -56,5 +56,11 @@ export default Test.describe('Is', (e) => {
     const doc = store.repo.create();
     expect(Is.automergeUrl(doc.url)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
+  });
+
+  e.it('Is.broadcastChannel', (e) => {
+    const adapter = new BroadcastChannelNetworkAdapter();
+    expect(Is.broadcastChannel(adapter)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.broadcastChannel(v)).to.eql(false));
   });
 });

@@ -43,3 +43,5 @@ export type StoreDoc = {
   get<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
   getOrCreate<T>(initial: Initial<T>, uri?: Uri): Promise<t.DocRefHandle<T>>;
 };
+
+export type StoreNetworkKind = 'BroadcastChannel' | 'Unknown';

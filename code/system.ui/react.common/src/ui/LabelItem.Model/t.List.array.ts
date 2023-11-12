@@ -15,7 +15,6 @@ type K = t.LabelItemActionKind;
 export type LabelListArray<A extends K = string, D extends O = O> = {
   readonly items: t.LabelItemState<A, D>[];
   readonly getItem: t.GetLabelItem<A, D>;
-
   readonly length: number;
   readonly first: t.LabelItemState<A, D>;
   readonly last: t.LabelItemState<A, D>;
