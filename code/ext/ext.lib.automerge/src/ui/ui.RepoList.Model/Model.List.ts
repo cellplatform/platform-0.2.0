@@ -1,6 +1,7 @@
 import { ItemModel } from './Model.Item';
+import { GetItem } from './Model.List.GetItem';
 import { repoListenerBehavior } from './Model.List.b.repo';
-import { DEFAULTS, Model, rx, type t, WebStore } from './common';
+import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 
 export const List = {
   /**
@@ -10,25 +11,30 @@ export const List = {
     const life = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = life;
     const index = await WebStore.index(store);
+
     /**
      * Model.
      */
-    const ctx: t.RepoListCtxGet = () => ({ list, store, dispose$ });
+    const ctx: t.RepoListCtxGet = () => ({ list, store, index, dispose$ });
     const array = Model.List.array((i) => ItemModel.state({ ctx }));
+    const getItem = GetItem(index, array);
     const state: t.RepoListState = Model.List.state(
-      { total: 1, getItem: array.getItem },
+      {
+        total: index.doc.current.docs.length + 1,
+        getItem,
+      },
       { type: DEFAULTS.typename.list, dispose$ },
     );
-    const dispatch = Model.List.commands(state);
 
     /**
      * Behaviors.
      */
-    repoListenerBehavior({ store, ctx });
+    repoListenerBehavior({ store, index, dispose$ });
 
     /**
      * API.
      */
+    const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
     const api: t.RepoListModel = {
       ctx,

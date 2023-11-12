@@ -4,10 +4,11 @@ import type { t } from './common';
  * Model: Item
  */
 export type RepoListAction = 'Store:Left';
-export type RepoItem = t.LabelItem<t.RepoListAction, RepoItemData>;
-export type RepoItemState = t.LabelItemState<RepoListAction, RepoItemData>;
+export type RepoItem = t.LabelItem<t.RepoListAction, t.RepoItemData>;
+export type RepoItemState = t.LabelItemState<t.RepoListAction, t.RepoItemData>;
 export type RepoItemRenderers = t.LabelItemRenderers<t.RepoListAction>;
 export type RepoItemEvents = t.LabelItemEvents<RepoListAction, RepoItemData>;
+export type RepoArray = t.LabelListArray<t.RepoListAction, t.RepoItemData>;
 
 /**
  * Model: List
