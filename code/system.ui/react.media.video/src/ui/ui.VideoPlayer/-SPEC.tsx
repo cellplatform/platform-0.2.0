@@ -169,7 +169,6 @@ export default Dev.describe('Player (Vime)', (e) => {
       def(SAMPLE.YOUTUBE.AlanKay, 'Alan Kay');
       def(SAMPLE.YOUTUBE.LocalFirst, 'Local First @pvh');
       dev.hr(-1, 5);
-      def(SAMPLE.VIDEO.GmFarcaster, 'IPFS: GM Farcaster');
       def(SAMPLE.VIDEO.GroupScale, 'IPFS: Group Scale');
       def(SAMPLE.VIDEO.GroupScaleFrench, 'IPFS: Group Scale (French)');
       dev.hr(-1, 5);
