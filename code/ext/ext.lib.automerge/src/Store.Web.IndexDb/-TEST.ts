@@ -1,36 +1,32 @@
 import { StoreIndexDb } from '.';
 import { WebStore } from '../Store.Web';
-import { IndexedDb, Test, Time, expect, expectError, TestDb } from '../test.ui';
-import { DEFAULTS, Is } from './common';
+import { IndexedDb, Test, expect, expectError } from '../test.ui';
+import { Is } from './common';
 
 export default Test.describe('Store.Web: IndexDb', (e) => {
-  const name = TestDb.name;
+  const name = 'dev.test.IndexDb'; // NB: different name from other tests, to avoid errors when this DB is deleted.
   const indexName = StoreIndexDb.name(name);
+  const init = () => StoreIndexDb.init(indexName);
 
-  const init = () => {
-    return StoreIndexDb.init(indexName);
-  };
+  e.describe('initialize', (e) => {
+    e.it('initialize (defaults)', async (e) => {
+      const db = await StoreIndexDb.init(indexName);
+      const databases = (await IndexedDb.list()).map((e) => e.name);
 
-  e.it('init (defaults)', async (e) => {
-    const db = await StoreIndexDb.init(indexName);
+      expect(databases).to.include(indexName);
+      expect(db.database.name).to.eql(indexName);
+      expect(db.name).to.eql(indexName);
+      db.dispose();
+    });
 
-    await Time.wait(100);
-    const databases = (await IndexedDb.list()).map((e) => e.name);
+    e.it('dispose', async (e) => {
+      const db = await init();
+      expect(db.disposed).to.eql(false);
 
-    expect(databases).to.include(name);
-    expect(databases).to.include(indexName);
-    expect(db.database.name).to.eql(indexName);
-    expect(db.name).to.eql(indexName);
-    db.dispose();
-  });
-
-  e.it('dispose', async (e) => {
-    const db = await init();
-    expect(db.disposed).to.eql(false);
-
-    db.dispose();
-    expect(db.disposed).to.eql(true);
-    expect(IndexedDb.Database.isClosed(db.database)).to.eql(true);
+      db.dispose();
+      expect(db.disposed).to.eql(true);
+      expect(IndexedDb.Database.isClosed(db.database)).to.eql(true);
+    });
   });
 
   e.describe('retrieve', (e) => {
@@ -104,9 +100,9 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
       expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:index');
     });
 
-    e.it('from store', async (e) => {
+    e.it('from store', (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      expect(StoreIndexDb.name(store)).to.eql('dev.test:index');
+      expect(StoreIndexDb.name(store)).to.eql(`${name}:index`);
     });
 
     e.it('throw: no name', (e) => {

@@ -1,5 +1,5 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
-import { Data, DocUri, type t } from './common';
+import { Data, DocUri, type t, R, Is } from './common';
 
 type Uri = t.DocUri | string;
 
@@ -13,6 +13,12 @@ export const StoreIndex = {
   async init(store: t.Store, uri?: string) {
     const repo = store.repo;
     const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
+
+    if (!Is.repoIndex(doc.current)) {
+      const name = Wrangle.storeName(store);
+      const err = `Failed while retrieveing Index document on store/repo "${name}". Document with URI "${uri}" was malformed.`;
+      throw new Error(err);
+    }
 
     /**
      * Store the URI to new documents in the index.
@@ -57,5 +63,15 @@ export const StoreIndex = {
     };
 
     return api;
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  storeName(store: t.Store) {
+    const name = Is.webStore(store) ? store.info.storage?.name : '';
+    return name || 'Unknown';
   },
 } as const;

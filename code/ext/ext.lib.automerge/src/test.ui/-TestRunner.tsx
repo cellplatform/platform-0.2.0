@@ -44,10 +44,11 @@ export default Dev.describe('TestRunner', (e) => {
     dev.hr(5, 20);
 
     dev.section('Maintenance', (dev) => {
-      dev.button('delete "test" databases', async (e) => {
+      dev.button('delete "unit test" databases', async (e) => {
         await TestDb.deleteDatabases();
       });
-      dev.button('delete "spec" databases', async (e) => {
+      dev.hr(-1, 5);
+      dev.button('delete "spec / harness" databases', async (e) => {
         await TestDb.Spec.deleteDatabases();
       });
     });

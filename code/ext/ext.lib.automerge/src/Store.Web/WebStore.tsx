@@ -56,7 +56,8 @@ export const WebStore = {
     const dbname = StoreIndexDb.name(store);
     const db = await StoreIndexDb.init(dbname);
     const record = await db.getOrCreate(store);
-    return Store.Index.init(store, record.index);
+    const uri = record.index;
+    return Store.Index.init(store, uri);
   },
 } as const;
 
