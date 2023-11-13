@@ -6,7 +6,7 @@ export default Test.describe('RepoList.Model', (e) => {
   const store = WebStore.init({ network: false, storage: 'dev.test' });
 
   e.describe('Model.List', (e) => {
-    e.it('init', async (e) => {
+    e.it('initialize', async (e) => {
       const model = await Model.init(store);
       expect(model.index.kind === 'store:index').to.eql(true);
       expect(model.list.state.type).to.eql(DEFAULTS.typename.list);
@@ -27,7 +27,7 @@ export default Test.describe('RepoList.Model', (e) => {
   });
 
   e.describe('Model.Item', (e) => {
-    e.it('init', async (e) => {
+    e.it('initialize', async (e) => {
       const model = await Model.init(store);
       const item = Model.Item.state({ ctx: model.ctx });
       expect(item.type).to.eql(DEFAULTS.typename.item);

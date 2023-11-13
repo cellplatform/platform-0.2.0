@@ -11,7 +11,7 @@ describe('StoreIndex', async () => {
     return { store, initial, generator } as const;
   };
 
-  it('init', async () => {
+  it('initialize', async () => {
     const { store } = testSetup();
     const index = await Store.Index.init(store);
 

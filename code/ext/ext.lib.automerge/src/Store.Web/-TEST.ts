@@ -13,7 +13,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     expect(doc.current.count?.value).to.eql(expected);
   };
 
-  e.describe('init', (e) => {
+  e.describe('initialize', (e) => {
     e.it('Is.webStore', (e) => {
       expect(Is.webStore(store)).to.eql(true);
     });
