@@ -2,7 +2,7 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
-import { Test, expect, TestDb } from '../test.ui';
+import { type t, Test, expect, TestDb } from '../test.ui';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
 import { Is } from '.';
@@ -34,6 +34,12 @@ export default Test.describe('Is', (e) => {
     expect(Is.repo(repo1)).to.eql(true);
     expect(Is.repo(repo2)).to.eql(true);
     expect(Is.repo(repo3)).to.eql(true);
+  });
+
+  e.it('Is.repoIndex', (e) => {
+    NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
+    const index: t.RepoIndex = { docs: [] };
+    expect(Is.repoIndex(index)).to.eql(true);
   });
 
   e.it('Is.networkSubsystem', (e) => {

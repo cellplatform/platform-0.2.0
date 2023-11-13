@@ -30,6 +30,12 @@ export const Is = {
     return true;
   },
 
+  repoIndex(input: any): input is t.RepoIndex {
+    if (!isObject(input)) return false;
+    const subject = input as t.RepoIndex;
+    return Array.isArray(subject.docs);
+  },
+
   networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {
     if (!isObject(input)) return false;
     return (
