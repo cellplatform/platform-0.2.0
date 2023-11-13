@@ -2,7 +2,7 @@ import { UI as Crdt } from 'ext.lib.automerge';
 import { UI as Webrtc } from 'ext.lib.peerjs';
 
 import { COLORS, Color, Dev, css } from '../../test.ui';
-import { Main } from './-SPEC.01.Main';
+import { View } from './-SPEC.01.View';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -12,9 +12,10 @@ const initial: T = {};
  */
 const name = 'App.01';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   const self = Webrtc.peer();
   const store = Crdt.WebStore.init();
+  const repo = await Crdt.RepoList.model(store);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -29,7 +30,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Main stream={e.state.stream} store={store} />;
+        return <View stream={e.state.stream} repo={repo} />;
       });
   });
 

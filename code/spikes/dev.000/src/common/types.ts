@@ -1,7 +1,7 @@
 /**
  * @ext
  */
-export type { WebStore } from 'ext.lib.automerge/src/types';
+export type { RepoListModel, WebStore } from 'ext.lib.automerge/src/types';
 
 /**
  * @system

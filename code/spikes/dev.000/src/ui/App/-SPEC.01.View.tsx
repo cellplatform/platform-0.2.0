@@ -2,13 +2,13 @@ import { UI as Crdt } from 'ext.lib.automerge';
 import { UI as Webrtc } from 'ext.lib.peerjs';
 import { COLORS, Color, css, type t } from '../common';
 
-export type MainProps = {
+export type ViewProps = {
   stream?: MediaStream;
-  store: t.WebStore;
+  repo: t.RepoListModel;
   style?: t.CssValue;
 };
 
-export const Main: React.FC<MainProps> = (props) => {
+export const View: React.FC<ViewProps> = (props) => {
   /**
    * Render
    */
@@ -26,7 +26,7 @@ export const Main: React.FC<MainProps> = (props) => {
 
   const elLeft = (
     <div {...styles.left}>
-      <Crdt.RepoList store={props.store} />
+      <Crdt.RepoList list={props.repo.list.state} />
     </div>
   );
 
