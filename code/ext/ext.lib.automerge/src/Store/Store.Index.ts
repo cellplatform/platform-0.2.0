@@ -48,6 +48,9 @@ export const StoreIndex = {
       kind: 'store:index',
       store,
       doc,
+      get total() {
+        return doc.current.docs.length;
+      },
       exists(uri: Uri) {
         return doc.current.docs.some((doc) => doc.uri === uri);
       },

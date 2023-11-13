@@ -6,6 +6,7 @@ export type StoreIndex = {
   readonly kind: 'store:index';
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
+  readonly total: number;
   exists(documentUri: Uri): boolean;
 };
 

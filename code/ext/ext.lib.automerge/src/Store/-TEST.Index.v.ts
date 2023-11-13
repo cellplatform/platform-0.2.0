@@ -18,6 +18,7 @@ describe('StoreIndex', async () => {
     expect(index.kind === 'store:index').to.eql(true);
     expect(index.store).to.equal(store);
     expect(index.doc.current.docs).to.eql([]);
+    expect(index.total).to.eql(0);
 
     store.dispose();
   });
@@ -41,27 +42,31 @@ describe('StoreIndex', async () => {
 
   it('new documents automatically added to index', async () => {
     const { store, initial } = testSetup();
-    const meta = await Store.Index.init(store);
-    expect(meta.doc.current.docs.length).to.eql(0);
+    const index = await Store.Index.init(store);
+    expect(index.doc.current.docs.length).to.eql(0);
+    expect(index.total).to.eql(0);
 
     const sample = await store.doc.getOrCreate(initial);
-    expect(meta.doc.current.docs[0].uri).to.eql(sample.uri);
-    expect(meta.exists(sample.uri)).to.eql(true);
+    expect(index.doc.current.docs[0].uri).to.eql(sample.uri);
+    expect(index.exists(sample.uri)).to.eql(true);
+    expect(index.total).to.eql(1);
 
     store.dispose();
   });
 
   it('deleted documents automatically removed from index', async () => {
     const { store, initial } = testSetup();
-    const meta = await Store.Index.init(store);
+    const index = await Store.Index.init(store);
 
     const sample = await store.doc.getOrCreate(initial);
-    expect(meta.doc.current.docs[0].uri).to.eql(sample.uri);
-    expect(meta.exists(sample.uri)).to.eql(true);
+    expect(index.doc.current.docs[0].uri).to.eql(sample.uri);
+    expect(index.exists(sample.uri)).to.eql(true);
+    expect(index.total).to.eql(1);
 
     store.repo.delete(sample.uri);
-    expect(meta.doc.current.docs).to.eql([]);
-    expect(meta.exists(sample.uri)).to.eql(false);
+    expect(index.doc.current.docs).to.eql([]);
+    expect(index.total).to.eql(0);
+    expect(index.exists(sample.uri)).to.eql(false);
 
     store.dispose();
   });
