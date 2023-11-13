@@ -1,11 +1,12 @@
 import { WebStore } from '.';
-import { A, Test, TestDb, expect, toObject, type t } from '../test.ui';
+import { Time, A, Test, TestDb, expect, toObject, type t, Value } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: Index', (e) => {
   const name = TestDb.name;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+  const contains = (docs: t.RepoIndexItem[], uri: string) => docs.some((e) => e.uri === uri);
 
   e.it('disposes of Index events when store/repo is disposed', async (e) => {
     const store = WebStore.init({ network: false, storage: { name } });
@@ -16,11 +17,20 @@ export default Test.describe('Store.Web: Index', (e) => {
     expect(events.disposed).to.eql(true); // NB: because parent store disposed.
   });
 
-  e.it('multiple instances from store yeild same index URI', async (e) => {
+  e.it('multiple instances from store yield same index URI', async (e) => {
     const store = WebStore.init({ network: false, storage: { name } });
-    const index1 = await WebStore.index(store);
-    const index2 = await WebStore.index(store);
-    expect(index1.doc.uri).to.eql(index2.doc.uri);
+
+    const indexes: t.StoreIndex[] = [];
+    await Promise.all(
+      Array.from({ length: 10 }).map(async (item) => {
+        await Time.wait(Value.random(0, 250));
+        indexes.push(await WebStore.index(store));
+      }),
+    );
+
+    const uri = indexes[0].doc.uri;
+    const every = indexes.every((store) => store.doc.uri === uri);
+    expect(every).to.eql(true);
   });
 
   e.describe('auto sync with repo', (e) => {
@@ -34,8 +44,11 @@ export default Test.describe('Store.Web: Index', (e) => {
 
       const sample = await store.doc.getOrCreate(initial);
       expect(index.exists(sample.uri)).to.eql(true);
+
+      const docs = fired[0].docs;
       expect(fired.length).to.eql(1);
-      expect(fired[0].docs[0].uri).to.eql(sample.uri);
+      expect(docs[docs.length - 1].uri).to.eql(sample.uri); // NB: added to end.
+      expect(contains(fired[0].docs, sample.uri)).to.eql(true);
 
       store.dispose();
     });
@@ -50,11 +63,15 @@ export default Test.describe('Store.Web: Index', (e) => {
 
       const sample = await store.doc.getOrCreate(initial);
       expect(index.exists(sample.uri)).to.eql(true);
-      expect(index.doc.current.docs[0].uri).to.eql(sample.uri);
+
+      const docs = fired[0].docs;
+      expect(docs[docs.length - 1].uri).to.eql(sample.uri); // NB: added to end.
 
       store.repo.delete(sample.uri);
-      expect(index.doc.current.docs).to.eql([]);
-      expect(fired[1].docs).to.eql([]);
+      expect(contains(index.doc.current.docs, sample.uri)).to.eql(false);
+
+      expect(fired.length).to.eql(2);
+      expect(contains(fired[1].docs, sample.uri)).to.eql(false);
       expect(index.exists(sample.uri)).to.eql(false);
 
       store.dispose();

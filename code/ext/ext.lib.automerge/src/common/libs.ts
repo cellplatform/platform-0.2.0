@@ -10,4 +10,4 @@ export const R = { clone, equals } as const;
  */
 export { IndexedDb } from 'sys.data.indexeddb';
 export { PatchState } from 'sys.data.json';
-export { Delete, Hash, Id, Time, cuid, rx, slug } from 'sys.util';
+export { Delete, Hash, Id, Time, Value, cuid, rx, slug } from 'sys.util';
