@@ -27,7 +27,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
-    "@types/qrcode": "1.5.4",
+    "@types/qrcode": "1.5.5",
     "sys.fs": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
