@@ -7,9 +7,9 @@ const name = RepoList.displayName ?? '';
 const initial: T = { props: {} };
 
 export default Dev.describe(name, async (e) => {
-  const name = TestDb.Spec.name;
-  const store = WebStore.init({ storage: { name } });
-  const model = await RepoList.Model.init(store);
+  const storage = TestDb.Spec.name;
+  const store = WebStore.init({ storage });
+  const model = await RepoList.model(store);
   const ref = RepoList.Ref(store, model.list.state);
 
   type LocalStore = t.RepoListBehavior;
@@ -54,14 +54,24 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
+    dev.row((e) => (
+      <Info fields={['Module', 'Component']} data={{ component: { name: storage } }} />
+    ));
     dev.hr(5, 20);
 
     dev.section('ref( ƒ )', (dev) => {
       dev.button((btn) => {
-        const onClick = (target: t.LabelListItemTarget) => Time.delay(0, () => ref.select(target));
+        const onClick = (target: t.LabelListItemTarget) =>
+          Time.delay(100, () => ref.select(target));
         const select = (label: string, target: t.LabelListItemTarget) => {
-          return <Button label={label} style={{ marginLeft: 8 }} onClick={() => onClick(target)} />;
+          return (
+            <Button
+              //
+              label={label}
+              style={{ marginLeft: 8 }}
+              onClick={() => onClick(target)}
+            />
+          );
         };
 
         btn
@@ -124,6 +134,7 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
+        index: `${model.index.kind}[${model.index.total}]`,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

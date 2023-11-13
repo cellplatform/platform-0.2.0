@@ -1,18 +1,19 @@
 import { Model } from '../ui.RepoList.Model';
+import { RepoListRef as Ref } from './Ref';
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { RepoListRef as Ref } from './Ref';
 
 /**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  Model: typeof Model;
   Ref: typeof Ref;
+  Model: typeof Model;
+  model: typeof Model.init;
 };
 export const RepoList = FC.decorate<t.RepoListProps, Fields>(
   View,
-  { DEFAULTS, Model, Ref },
-  { displayName: 'RepoList' },
+  { DEFAULTS, Ref, Model, model: Model.init },
+  { displayName: 'Crdt.RepoList' },
 );

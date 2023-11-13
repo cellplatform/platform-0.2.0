@@ -1,4 +1,5 @@
 import { createDocumentBehavior } from './Model.Item.b.create';
+import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
 type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
@@ -29,6 +30,7 @@ export const ItemModel = {
      * Behavior controllers.
      */
     createDocumentBehavior({ ctx, item, events });
+    renameBehavior({ ctx, item, events });
 
     /**
      * Finish up.

@@ -1,4 +1,4 @@
-import { Model, rx, type t } from './common';
+import { Model, rx, Time, type t } from './common';
 import { Data } from './Data';
 
 /**
@@ -17,19 +17,14 @@ export function createDocumentBehavior(args: {
    * Add a new document to the repo.
    */
   const add = async () => {
-    const doc = await store.doc.findOrCreate<T>((d) => ({ tmp: 0 }));
+    // Generate a new document.
+    await store.doc.getOrCreate((d) => ({}));
 
-    item.change((d) => {
-      const data = Data.item(d);
-      data.mode = 'Doc';
-      data.uri = doc.uri;
-      d.label = '';
-      d.editable = true;
-    });
-    dispatch.redraw();
-
+    // NB: After creating the new document, simply append 1 to the length of the list.
+    //     The [getItem] data generator takes care of the rest.
     list.state.change((d) => (d.total += 1));
     dispatch.redraw();
+    Time.delay(100, () => dispatch.edit('start')); // NB: ensure editing mode.
   };
 
   /**

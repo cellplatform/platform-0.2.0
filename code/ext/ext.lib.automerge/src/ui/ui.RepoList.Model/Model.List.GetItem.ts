@@ -12,6 +12,7 @@ export function GetItem(index: t.StoreIndex, array: t.RepoArray): t.RepoArray['g
         data.mode = 'Doc';
         data.uri = doc.uri;
         d.editable = true;
+        if (doc.name) d.label = doc.name;
       });
     }
     return [item, i];
