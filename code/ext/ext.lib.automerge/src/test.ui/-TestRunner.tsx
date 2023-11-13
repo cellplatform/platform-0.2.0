@@ -50,10 +50,6 @@ export default Dev.describe('TestRunner', (e) => {
       dev.button('delete "spec" databases', async (e) => {
         await TestDb.Spec.deleteDatabases();
       });
-      dev.hr(-1, 5);
-      dev.button('delete: "localfirst" database', async (e) => {
-        await IndexedDb.delete('localfirst');
-      });
     });
   });
 
