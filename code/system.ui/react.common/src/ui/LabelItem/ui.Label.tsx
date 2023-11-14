@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, TextInput, css, type t } from './common';
+import { COLORS, DEFAULTS, TextInput, css, type t } from './common';
 
 type Props = t.LabelItemProps & {
   inputRef: RefObject<t.TextInputRef>;
@@ -41,6 +41,7 @@ export const Label: React.FC<Props> = (props) => {
       boxSizing: 'border-box',
       display: 'grid',
       backgroundColor: debug ? DEFAULTS.RUBY : undefined,
+      caretColor: editing && focused ? COLORS.WHITE : COLORS.BLUE,
     }),
     label: css({
       color,
