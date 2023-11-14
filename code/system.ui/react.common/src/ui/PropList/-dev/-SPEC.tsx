@@ -271,7 +271,7 @@ const Util = {
     const { source, fields } = state.debug;
     if (source === 'Empty') return [];
     if (source === 'Samples') return sampleItems;
-    if (source === 'One Item') return [{ label: 'hello', value: '123' }];
+    if (source === 'One Item') return [{ label: 'hello', value: 'py.123' }];
     if (source === 'Two Items')
       return [
         { label: 'one', value: '123' },
