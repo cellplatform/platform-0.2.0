@@ -1,5 +1,5 @@
 import { Info, type InfoProps } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, TestDb, WebStore, type t } from '../../test.ui';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
@@ -9,7 +9,11 @@ const DEFAULTS = Info.DEFAULTS;
  * Spec
  */
 const name = Info.displayName ?? '⚠️';
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
+  const storage = TestDb.Spec.name;
+  const store = WebStore.init({ storage });
+  const index = await WebStore.index(store);
+
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Info');
   const local = localstore.object({
@@ -31,7 +35,7 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        return <Info {...e.state.props} data={{ repo: { store, index } }} />;
       });
   });
 

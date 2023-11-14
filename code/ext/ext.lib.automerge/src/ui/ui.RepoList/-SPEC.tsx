@@ -1,6 +1,6 @@
 import { RepoList } from '.';
-import { Button, Dev, Time, WebStore, type t, TestDb } from '../../test.ui';
-import { Info } from '../ui.Info';
+import { Button, Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
+import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
 const name = RepoList.displayName ?? '';
@@ -54,9 +54,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => (
-      <Info fields={['Module', 'Component']} data={{ component: { name: storage } }} />
-    ));
+    dev.row((e) => <SpecInfo model={model} />);
     dev.hr(5, 20);
 
     dev.section('ref( ƒ )', (dev) => {

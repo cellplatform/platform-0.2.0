@@ -17,6 +17,7 @@ export type {
   LabelListDispatch,
   LabelListItemTarget,
   LabelListState,
+  PropListItem,
   PropListProps,
   RenderCountProps,
 } from 'sys.ui.react.common/src/types.mjs';

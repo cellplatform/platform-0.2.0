@@ -30,6 +30,7 @@ export const List = {
     const list = { state, dispatch };
     const api: t.RepoListModel = {
       ctx,
+      store,
       index,
       list,
 
