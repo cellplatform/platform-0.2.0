@@ -15,13 +15,6 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@automerge/automerge-repo-network-broadcastchannel@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-broadcastchannel/-/automerge-repo-network-broadcastchannel-1.0.17.tgz#015dce541823b755f389f1147c9e70347559bed2"
-  integrity sha512-JU04lr5lZbbvY8tn+6W8F2Bl0vSSWCCtzQOiyil06O1+5sz/wPfPLGyM3JGxazEEqeXxRfWrFf5jBpKQ820CIA==
-  dependencies:
-    "@automerge/automerge-repo" "^1.0.17"
-
 "@automerge/automerge-repo-network-broadcastchannel@1.0.18":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-broadcastchannel/-/automerge-repo-network-broadcastchannel-1.0.18.tgz#9fae44afe1cce0430cb97a52bc48928cb6f26e54"
@@ -29,30 +22,12 @@
   dependencies:
     "@automerge/automerge-repo" "^1.0.18"
 
-"@automerge/automerge-repo-network-messagechannel@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.0.17.tgz#5cba542a557c8fd7d0438658305f3bfad8c274d3"
-  integrity sha512-sInPvVRaLGy3u0zakWvTz2G5S3Ym2RDkwMC1SDiOTyT6+fXguIuGkgMRTWVBLhUc7eplJK+0vZwvkkk3RyccYQ==
-  dependencies:
-    "@automerge/automerge-repo" "^1.0.17"
-
 "@automerge/automerge-repo-network-messagechannel@1.0.18":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.0.18.tgz#785178045fb920e3d857affe5f3b2cf12a70b641"
   integrity sha512-pz+ejRi2nlFTpl5T1lDHvR7Grbm58G2dgGIjVC+NS+FAliPhiV1b6XV1qUMF0C2bBW+zXaicSlKF3zzoFm7jMA==
   dependencies:
     "@automerge/automerge-repo" "^1.0.18"
-
-"@automerge/automerge-repo-react-hooks@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-react-hooks/-/automerge-repo-react-hooks-1.0.17.tgz#e3d4cbae8d522a8619a38f07fa1ce9c6784bff1e"
-  integrity sha512-liaNoYsslHM33LxouQ9kCZQqaxfhLtZRgeTs9oHeVKspEsJJpP+keKbPTlSYPRFoQue7uWme3AOgzLLVGb8UUw==
-  dependencies:
-    "@automerge/automerge-repo" "^1.0.17"
-    eventemitter3 "^5.0.1"
-    react "^18.2.0"
-    react-dom "^18.2.0"
-    react-usestateref "^1.0.8"
 
 "@automerge/automerge-repo-react-hooks@1.0.18":
   version "1.0.18"
@@ -66,34 +41,12 @@
     react-dom "^18.2.0"
     react-usestateref "^1.0.8"
 
-"@automerge/automerge-repo-storage-indexeddb@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.0.17.tgz#2864bbff23ec28f1c275e2059450b57ee4fdedb4"
-  integrity sha512-RqeB65G6X5DA39GqbEv/nGWRwlAJCdvP4XK+QsdxVLqvD8JUvF/p46yTNf9Rh9O0dVTTgvgRxGQpOCgjEqQxUw==
-  dependencies:
-    "@automerge/automerge-repo" "^1.0.17"
-
 "@automerge/automerge-repo-storage-indexeddb@1.0.18":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.0.18.tgz#63753cb79db710e3832bb35ab1d12217ef215f34"
   integrity sha512-v48sM5kp4lydHsL8wpySzCVjSvapbPw/AFXV34MZKLSHUEFWdh8TaM1J1yDt/YjdN1CIfIkr7r+F0hhbkC3gQg==
   dependencies:
     "@automerge/automerge-repo" "^1.0.18"
-
-"@automerge/automerge-repo@1.0.17", "@automerge/automerge-repo@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.0.17.tgz#2faae6df1986052e9d87b6de8742da03ca23e14d"
-  integrity sha512-FOs5jLHe+lh44Enq7FiKfOD2itLm0zQRIe01mcCiFAZS7w4X2KJ/l6JdkaN814wgBnUGAslkB2Vr6BKMXR/6tQ==
-  dependencies:
-    bs58check "^3.0.1"
-    cbor-x "^1.3.0"
-    debug "^4.3.4"
-    eventemitter3 "^5.0.1"
-    fast-sha256 "^1.3.0"
-    tiny-typed-emitter "^2.1.0"
-    ts-node "^10.9.1"
-    uuid "^9.0.0"
-    xstate "^4.37.0"
 
 "@automerge/automerge-repo@1.0.18", "@automerge/automerge-repo@^1.0.18":
   version "1.0.18"
@@ -1283,50 +1236,6 @@
   dependencies:
     "@preact/signals-core" "^1.4.0"
     use-sync-external-store "^1.2.0"
-
-"@privy-io/react-auth@1.47.1":
-  version "1.47.1"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.47.1.tgz#0a734158d82dc9ad86492644f04cbb47c0c5993e"
-  integrity sha512-yt56C2CCyi1vfj26wxtkTH9eWNhxOVsCzLJRwW5xdLd1jTQG4iQx0ze+mPlj/hW0ZrsrFRhIwOGa64gsmFolRQ==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.8.0-beta.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.3.2"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.10.1"
-    "@walletconnect/modal" "^2.5.9"
-    "@walletconnect/qrcode-modal" "^1.8.0"
-    base64-js "^1.5.1"
-    body-scroll-lock "^4.0.0-beta.0"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-    wicg-inert "^3.1.2"
 
 "@privy-io/react-auth@1.47.2":
   version "1.47.2"
@@ -4679,6 +4588,15 @@ framer-motion@10.16.4:
   optionalDependencies:
     "@emotion/is-prop-valid" "^0.8.2"
 
+framer-motion@10.16.5:
+  version "10.16.5"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.16.5.tgz#f1ad625adf213a8906f1ea52a31a4ef222f056d5"
+  integrity sha512-GEzVjOYP2MIpV9bT/GbhcsBNoImG3/2X3O/xVNWmktkv9MdJ7P/44zELm/7Fjb+O3v39SmKFnoDQB32giThzpg==
+  dependencies:
+    tslib "^2.4.0"
+  optionalDependencies:
+    "@emotion/is-prop-valid" "^0.8.2"
+
 fs-extra@11.1.1:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.1.tgz#da69f7c39f3b002378b0954bb6ae7efdc0876e2d"
@@ -6758,10 +6676,10 @@ open@^9.1.0:
     is-inside-container "^1.0.0"
     is-wsl "^2.2.0"
 
-openai@4.17.4:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.17.4.tgz#984cf61fb2d4c3dae168d7295259cda7e677ad4d"
-  integrity sha512-ThRFkl6snLbcAKS58St7N3CaKuI5WdYUvIjPvf4s+8SdymgNtOfzmZcZXVcCefx04oKFnvZJvIcTh3eAFUUhAQ==
+openai@4.17.5:
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.17.5.tgz#096655741965656ec969731e97d4bce880112d66"
+  integrity sha512-SDgA933/QOjISCgWRc/JQhY1HweYZ6FOie3bWrCpj09FA5xIlaomldbyzICHNjtkh7SWEmGYFjRHIDtuwr+eTw==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -6773,10 +6691,10 @@ openai@4.17.4:
     node-fetch "^2.6.7"
     web-streams-polyfill "^3.2.1"
 
-openai@4.17.5:
-  version "4.17.5"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.17.5.tgz#096655741965656ec969731e97d4bce880112d66"
-  integrity sha512-SDgA933/QOjISCgWRc/JQhY1HweYZ6FOie3bWrCpj09FA5xIlaomldbyzICHNjtkh7SWEmGYFjRHIDtuwr+eTw==
+openai@4.18.0:
+  version "4.18.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.18.0.tgz#445f2001c2261ca3b4372039103fa5fc072d70bb"
+  integrity sha512-0C+waXoU7mvp/1QZzwnmPCkq4t02VJkjL1EXn0Pd7pFuTA0Y4y1LwzSZSiF/tpxw+Pr7diHVJjbfJ8QbdZnEcA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -7485,6 +7403,11 @@ react-icons@4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.11.0.tgz#4b0e31c9bfc919608095cc429c4f1846f4d66c65"
   integrity sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==
+
+react-icons@4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.12.0.tgz#54806159a966961bfd5cdb26e492f4dafd6a8d78"
+  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
 
 react-inspector@6.0.2:
   version "6.0.2"
@@ -8754,20 +8677,6 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
-
-viem@1.19.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-1.19.0.tgz#e9f2b5084795d217c4adeb4b1c46d2afa949967c"
-  integrity sha512-Q4gU7D5KMZDK2rarQqjeqW7KmZRdfbDyP+bDlsu0Ia+IWR4Aali+dMbis1s3rC12OWdNfSR5MNmPCHoqoQa5ew==
-  dependencies:
-    "@adraffy/ens-normalize" "1.9.4"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    abitype "0.9.8"
-    isows "1.0.3"
-    ws "8.13.0"
 
 viem@1.19.1:
   version "1.19.1"
