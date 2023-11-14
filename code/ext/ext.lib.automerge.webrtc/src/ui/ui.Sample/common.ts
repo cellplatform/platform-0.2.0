@@ -1,4 +1,2 @@
 export * from '../common';
-
-import * as t from './types';
-export type { t };
+export type * as t from './t';

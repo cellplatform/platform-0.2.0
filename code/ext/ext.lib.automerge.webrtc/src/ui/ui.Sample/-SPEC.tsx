@@ -2,6 +2,7 @@ import { UI as Network } from 'ext.lib.peerjs';
 import { Dev } from '../../test.ui';
 import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
+import { Info } from '../ui.Info';
 
 type T = {
   user?: string;
@@ -73,8 +74,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-
     dev.header
       .padding(0)
       .border(-0.1)
@@ -86,6 +85,12 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.row((e) => {
+      return <Info />;
+    });
+
+    dev.hr(5, 20);
 
     dev.row((e) => {
       return <Network.Dev.PeerCard peer={{ self: remote, remote: self }} />;

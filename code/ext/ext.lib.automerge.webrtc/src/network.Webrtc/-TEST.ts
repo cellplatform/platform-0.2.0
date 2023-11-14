@@ -4,8 +4,10 @@ import { WebrtcNetworkAdapter } from '.';
 import { Webrtc } from 'ext.lib.peerjs';
 
 export default Test.describe('WebrtcNetworkAdapter', (e) => {
-  e.describe.skip('intergration tests', (e) => {
-    e.it('connects and syncs over WebRTC', async (e) => {
+  e.describe('intergration tests', (e) => {
+    e.it('TODO', async (e) => {});
+
+    e.it.skip('connects and syncs over WebRTC', async (e) => {
       /**
        * TODO 🐷
        */

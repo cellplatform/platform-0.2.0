@@ -1,3 +1,4 @@
+import { UI as Network } from 'ext.lib.peerjs';
 import { Info, type InfoProps } from '.';
 import { Dev, type t } from '../../test.ui';
 
@@ -10,6 +11,8 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
+  const self = Network.peer();
+
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
   const local = localstore.object({
@@ -35,9 +38,18 @@ export default Dev.describe(name, (e) => {
       });
   });
 
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.header
+      .padding(0)
+      .border(-0.1)
+      .render((e) => {
+        return <Network.Connector peer={self} />;
+      });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.TODO();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {

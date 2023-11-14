@@ -1,6 +1,6 @@
 import { DEFAULTS, TestRunner, type t } from './common';
 
-export function FieldModuleVerify(data: t.InfoData, info?: {}) {
+export function fieldModuleVerify(data: t.InfoData) {
   const ctx = {};
   return TestRunner.PropList.runner({
     ctx,

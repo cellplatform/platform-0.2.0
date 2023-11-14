@@ -11,4 +11,4 @@ export type {
 /**
  * @local
  */
-export type * from '../../common/types';
+export type * from '../../common/t';
