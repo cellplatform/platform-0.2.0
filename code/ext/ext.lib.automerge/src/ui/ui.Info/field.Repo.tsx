@@ -1,6 +1,6 @@
 import { Icons, Value, css, type t } from './common';
 
-export function FieldRepo(data: t.InfoData) {
+export function fieldRepo(data: t.InfoData) {
   if (!data.repo) return;
 
   const store = data.repo;
