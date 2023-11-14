@@ -87,7 +87,12 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.row((e) => {
-      return <Info />;
+      return (
+        <Info
+          fields={['Module', 'Repo', 'Peer', 'Peer.Remotes']}
+          data={{ peer: { self }, repo: { store } }}
+        />
+      );
     });
 
     dev.hr(5, 20);
