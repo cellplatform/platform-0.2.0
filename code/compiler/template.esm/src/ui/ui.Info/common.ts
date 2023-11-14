@@ -8,7 +8,7 @@ export const DEFAULTS = {
   displayName: 'Info',
   fields: {
     get all(): t.InfoField[] {
-      return ['Module', 'Module.Verify'];
+      return ['Module', 'Module.Verify', 'Component'];
     },
     get default(): t.InfoField[] {
       return ['Module', 'Module.Verify'];
