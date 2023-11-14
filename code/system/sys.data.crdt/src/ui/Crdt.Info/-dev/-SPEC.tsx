@@ -223,7 +223,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
         const props = Util.props(e.state);
         return (
           <Dev.FieldSelector
-            style={{ Margin: [10, 10, 10, 20] }}
+            style={{ Margin: [10, 10, 10, 15] }}
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}
             onClick={(ev) => {

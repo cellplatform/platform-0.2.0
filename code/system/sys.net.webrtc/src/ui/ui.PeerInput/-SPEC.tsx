@@ -84,7 +84,7 @@ export default Dev.describe('PeerInput', async (e) => {
         const props = Util.props(e.state);
         return (
           <Dev.FieldSelector
-            style={{ Margin: [10, 10, 10, 20] }}
+            style={{ Margin: [10, 10, 10, 15] }}
             all={PeerInput.FIELDS}
             selected={props.fields ?? DEFAULTS.fields}
             onClick={(ev) => {

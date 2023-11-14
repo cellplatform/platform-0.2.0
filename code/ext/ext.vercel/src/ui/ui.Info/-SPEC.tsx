@@ -42,7 +42,7 @@ export default Dev.describe(name, (e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            style={{ Margin: [10, 10, 10, 20] }}
+            style={{ Margin: [10, 10, 10, 15] }}
             all={Info.FIELDS}
             selected={props.fields}
             onClick={(ev) => {
