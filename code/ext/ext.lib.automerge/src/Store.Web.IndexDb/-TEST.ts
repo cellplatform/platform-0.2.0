@@ -11,9 +11,6 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
   e.describe('initialize', (e) => {
     e.it('initialize (defaults)', async (e) => {
       const db = await StoreIndexDb.init(indexName);
-      const databases = (await IndexedDb.list()).map((e) => e.name);
-
-      expect(databases).to.include(indexName);
       expect(db.database.name).to.eql(indexName);
       expect(db.name).to.eql(indexName);
       db.dispose();

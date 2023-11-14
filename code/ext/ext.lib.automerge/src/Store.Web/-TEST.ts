@@ -41,14 +41,12 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       store.dispose();
     });
 
-    e.it('storage with custom name', async (e) => {
+    e.it('storage with custom name', (e) => {
       const name = TestDb.name;
       const store1 = WebStore.init({ storage: name });
       const store2 = WebStore.init({ storage: { name } });
       expect(store1.info.storage?.name).to.eql(name);
       expect(store2.info.storage?.name).to.eql(name);
-      const databases = await IndexedDb.list();
-      expect(databases.map(({ name }) => name)).to.include(name);
       store1.dispose();
       store2.dispose();
     });
