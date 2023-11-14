@@ -1,4 +1,4 @@
-type DeleteResponse = { name: string; version: number; error?: string };
+type DeleteResponse = { name: string; error?: string };
 
 /**
  * A promise based wrapper into the IndexedDB API.
@@ -36,42 +36,15 @@ export const IndexedDb = {
   },
 
   /**
-   * List databases.
-   */
-  list(): Promise<IDBDatabaseInfo[]> {
-    return indexedDB.databases();
-  },
-
-  /**
-   * Determine if the database exists.
-   */
-  async exists(name: string) {
-    const list = await IndexedDb.list();
-    return list.some((db) => db.name === name);
-  },
-
-  /**
    * Delete the named database.
    */
   async delete(name: string) {
-    return new Promise<DeleteResponse>(async (resolve, reject) => {
-      const list = await IndexedDb.list();
-      const db = list.find((item) => item.name === name);
-
-      const done = (error?: string) => {
-        resolve({
-          name: db?.name ?? name,
-          version: db?.version ?? -1,
-          error,
-        });
-      };
-
+    return new Promise<DeleteResponse>(async (resolve) => {
+      const done = (error?: string) => resolve({ name, error });
       const fail = (detail = '') => {
-        const error = `Failed while opening database '${name}'. ${detail}`.trim();
+        const error = `Failed while deleting database '${name}'. ${detail}`.trim();
         return done(error);
       };
-
-      if (!db) return fail('Database does not exist');
 
       try {
         const req = indexedDB.deleteDatabase(name);

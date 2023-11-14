@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.fs.indexeddb',
   version: '0.0.0',
   dependencies: {
+    'sys.data.indexeddb': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.util': '0.0.0',
   },
