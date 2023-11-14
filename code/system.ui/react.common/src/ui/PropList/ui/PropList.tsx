@@ -51,8 +51,17 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     });
 
   const elTitle = props.title && (
-    <PropListTitle style={styles.title} theme={theme} defaults={defaults} data={props.title} />
+    <PropListTitle
+      style={styles.title}
+      total={items.length}
+      theme={theme}
+      defaults={defaults}
+      data={props.title}
+    />
   );
+
+  // Exit if empty.
+  if (items.length === 0 && !Wrangle.hasTitle(props.title)) return null;
 
   return (
     <Card
@@ -72,7 +81,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
         {elTitle}
-        <div {...styles.items}>{elItems}</div>
+        {items.length > 0 && <div {...styles.items}>{elItems}</div>}
       </div>
     </Card>
   );
