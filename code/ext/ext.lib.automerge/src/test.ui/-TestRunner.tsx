@@ -1,4 +1,4 @@
-import { Dev, type t } from '.';
+import { Dev, IndexedDb, type t, TestDb } from '.';
 
 type T = {
   spinning?: boolean;
@@ -11,7 +11,7 @@ export default Dev.describe('TestRunner', (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
 
-    ctx.debug.width(300);
+    ctx.debug.width(350);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
@@ -40,6 +40,18 @@ export default Dev.describe('TestRunner', (e) => {
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
+
+    dev.hr(5, 20);
+
+    dev.section('Maintenance', (dev) => {
+      dev.button('delete "unit test" databases', async (e) => {
+        await TestDb.deleteDatabases();
+      });
+      dev.hr(-1, 5);
+      dev.button('delete "spec / harness" databases', async (e) => {
+        await TestDb.Spec.deleteDatabases();
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

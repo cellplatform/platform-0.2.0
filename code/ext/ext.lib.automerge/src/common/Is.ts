@@ -1,14 +1,20 @@
 import { isValidAutomergeUrl } from '@automerge/automerge-repo';
-import type * as t from './types';
+import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
+import type * as t from './t';
 
 export const Is = {
+  automergeUrl(input: any): input is t.AutomergeUrl {
+    return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
+  },
+
   store(input: any): input is t.Store {
     if (!isObject(input) || !isObject(input.doc)) return false;
     if (!Is.repo(input.repo)) return false;
     return (
-      typeof input.doc.findOrCreate === 'function' &&
       typeof input.doc.factory === 'function' &&
-      typeof input.doc.exists === 'function'
+      typeof input.doc.exists === 'function' &&
+      typeof input.doc.get === 'function' &&
+      typeof input.doc.getOrCreate === 'function'
     );
   },
 
@@ -22,6 +28,12 @@ export const Is = {
     if (!Is.networkSubsystem(networkSubsystem)) return false;
     if (storageSubsystem && !Is.storageSubsystem(storageSubsystem)) return false;
     return true;
+  },
+
+  repoIndex(input: any): input is t.RepoIndex {
+    if (!isObject(input)) return false;
+    const subject = input as t.RepoIndex;
+    return Array.isArray(subject.docs);
   },
 
   networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {
@@ -43,8 +55,8 @@ export const Is = {
     );
   },
 
-  automergeUrl(input: any): input is t.AutomergeUrl {
-    return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
+  broadcastChannel(input: any): input is BroadcastChannelNetworkAdapter {
+    return input instanceof BroadcastChannelNetworkAdapter;
   },
 } as const;
 

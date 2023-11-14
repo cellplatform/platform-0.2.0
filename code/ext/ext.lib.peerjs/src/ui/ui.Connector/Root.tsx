@@ -1,11 +1,11 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { ConnectorRef } from './Ref';
-import { Model, type t } from './common';
+import { Model, type t, DEFAULTS } from './common';
 import { View } from './ui';
 
 /**
- * Export
+ * A UI for configuring Peer connections.
  */
 export const Connector = forwardRef<t.ConnectorRef, t.ConnectorProps>((props, ref) => {
   const { peer } = props;
@@ -18,7 +18,12 @@ export const Connector = forwardRef<t.ConnectorRef, t.ConnectorProps>((props, re
   const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
-  useEffect(() => props.onReady?.(getOrCreateHandle()), []);
+  useEffect(() => props.onReady?.({ ref: getOrCreateHandle() }), []);
 
   return <View {...props} list={list} />;
 });
+
+/**
+ * Meta
+ */
+Connector.displayName = DEFAULTS.displayName;

@@ -3,7 +3,8 @@ import { DEFAULTS, PatchState, type t } from './common';
 import { array } from './List.array';
 import { commands } from './List.commands';
 import { events } from './List.events';
-import { get, getItem } from './List.get';
+import { get } from './List.get';
+import { getItem } from './List.getItem';
 import { map } from './List.map';
 
 type O = Record<string, unknown>;
@@ -22,7 +23,7 @@ export const List = {
    */
   state<D extends O = O>(
     initial?: t.LabelList<D>,
-    options: { type?: string } = {},
+    options: { type?: string; dispose$?: t.UntilObservable } = {},
   ): t.LabelListState {
     type T = t.LabelList<D>;
     type E = t.LabelListEvents<D>;
@@ -30,7 +31,9 @@ export const List = {
     return PatchState.init<T, E>({
       initial: initial ?? (DEFAULTS.data.list as t.LabelList<D>),
       type,
-      events,
+      events($, dispose$) {
+        return events<D>($, [dispose$, options.dispose$]);
+      },
     });
   },
 } as const;

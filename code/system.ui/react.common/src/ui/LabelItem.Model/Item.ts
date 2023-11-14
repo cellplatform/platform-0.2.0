@@ -1,9 +1,7 @@
 import { commands } from './Item.commands';
 import { events } from './Item.events';
-import { Is } from './Model.Is';
-import { DEFAULTS, PatchState, rx, type t } from './common';
+import { DEFAULTS, PatchState, type t } from './common';
 
-type Id = string;
 type O = Record<string, unknown>;
 type K = t.LabelItemActionKind;
 const { toObject } = PatchState;
@@ -17,12 +15,23 @@ export const Item = {
    */
   state<A extends t.LabelItemActionKind = string, D extends O = O>(
     initial: t.LabelItem<A, D> = DEFAULTS.data.item as t.LabelItem<A, D>,
-    options: { type?: string; onChange?: t.PatchChangeHandler<t.LabelItem<A, D>> } = {},
+    options: {
+      type?: string;
+      onChange?: t.PatchChangeHandler<t.LabelItem<A, D>>;
+      dispose$?: t.UntilObservable;
+    } = {},
   ): t.LabelItemState<A, D> {
     type T = t.LabelItem<A, D>;
     type E = t.LabelItemEvents<A, D>;
     const { type, onChange } = options;
-    return PatchState.init<T, E>({ initial, type, events, onChange });
+    return PatchState.init<T, E>({
+      initial,
+      type,
+      onChange,
+      events($, dispose$) {
+        return events<A, D>($, [dispose$, options.dispose$]);
+      },
+    });
   },
 
   /**
@@ -38,19 +47,6 @@ export const Item = {
     const right = Wrangle.actionArray(current.right).filter(onKind);
     return [...left, ...right].filter(Boolean);
   },
-
-  /**
-   * Configured a "selected" state Observable for the item.
-   */
-  // selected$(
-  //   list: t.LabelListState | t.LabelListEvents,
-  //   item?: t.LabelItemState | Id,
-  //   dispose$?: t.UntilObservable,
-  // ) {
-  //   const listEvents = Is.state(list) ? list.events(dispose$) : list;
-  //   const selected$ = listEvents.selected$.pipe();
-  //   return dispose$ ? selected$.pipe(rx.takeUntil(dispose$)) : selected$;
-  // },
 } as const;
 
 /**

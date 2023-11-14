@@ -1,6 +1,6 @@
-export { useItemController } from './use.ItemController';
-export { useItemEditController } from './use.ItemEditController';
-export { useItemSelectionController } from './use.ItemSelectionController';
+export { useItemController } from './use.Item';
+export { useItemEditController } from './use.Item.Edit';
+export { useItemSelectionController } from './use.Item.Selection';
 
-export { useListController } from './use.ListController';
-export { useListNavigationController } from './use.ListNavigationController';
+export { useListController } from './use.List';
+export { useListNavigationController } from './use.List.Navigation';

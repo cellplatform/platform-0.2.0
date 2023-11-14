@@ -1,22 +1,40 @@
-import { Dev, type t, WebStore } from '../../test.ui';
 import { RepoList } from '.';
-import { List } from './ui.List';
-import { Info } from '../ui.Info';
+import { Button, Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
+import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
-const initial: T = { props: {} };
 const name = RepoList.displayName ?? '';
+const initial: T = { props: {} };
 
-export default Dev.describe(name, (e) => {
-  const store = WebStore.init();
-  const model = RepoList.Model.init(store);
+export default Dev.describe(name, async (e) => {
+  const storage = TestDb.Spec.name;
+  const store = WebStore.init({ storage });
+  const model = await RepoList.model(store);
+  const ref = RepoList.Ref(store, model.list.state);
+
+  type LocalStore = t.RepoListBehavior;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
+  const local = localstore.object({
+    focusOnArrowKey: true,
+    focusOnLoad: false,
+  });
+
+  const State = {
+    behavior(props: t.RepoListProps): t.RepoListBehavior {
+      return props.behavior || (props.behavior = {});
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      const b = State.behavior(d.props);
+      b.focusOnArrowKey = local.focusOnArrowKey;
+      b.focusOnLoad = local.focusOnLoad;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -25,29 +43,86 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const renderCount: t.RenderCountProps = {
+          prefix: 'list.render-',
           absolute: [-20, 2, null, null],
           opacity: 0.2,
-          prefix: 'list.render-',
         };
-        return (
-          <RepoList
-            //
-            list={model.list}
-            renderers={model.renderers}
-            renderCount={renderCount}
-          />
-        );
+        return <RepoList {...e.state.props} list={model.list.state} renderCount={renderCount} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <Info fields={['Module', 'Component']} data={{ component: { name } }} />);
+    dev.row((e) => <SpecInfo model={model} />);
+    dev.hr(5, 20);
+
+    dev.section('ref( ƒ )', (dev) => {
+      dev.button((btn) => {
+        const onClick = (target: t.LabelListItemTarget) =>
+          Time.delay(100, () => ref.select(target));
+        const select = (label: string, target: t.LabelListItemTarget) => {
+          return (
+            <Button
+              //
+              label={label}
+              style={{ marginLeft: 8 }}
+              onClick={() => onClick(target)}
+            />
+          );
+        };
+
+        btn
+          .label(`select`)
+          .right((e) => {
+            return (
+              <div>
+                {select('first', 'First')}
+                {select('last', 'Last')}
+              </div>
+            );
+          })
+          .enabled((e) => true)
+          .onClick((e) => onClick('First'));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Props: Load Behavior', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnArrowKey);
+        btn
+          .label((e) => `focusOnArrowKey`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const b = State.behavior(d.props);
+              local.focusOnArrowKey = Dev.toggle(b, 'focusOnArrowKey');
+            }),
+          );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnLoad);
+        btn
+          .label((e) => `focusOnLoad`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              const b = State.behavior(d.props);
+              local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
+            }),
+          );
+      });
+    });
+
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
     });
   });
 
@@ -55,7 +130,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        props: e.state.props,
+        index: `${model.index.kind}[${model.index.total}]`,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

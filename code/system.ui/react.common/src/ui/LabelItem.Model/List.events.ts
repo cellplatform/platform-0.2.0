@@ -1,7 +1,6 @@
 import { R, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
-
 const noop$ = rx.subject();
 
 /**

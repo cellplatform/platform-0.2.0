@@ -11,21 +11,21 @@ const name = Connector.displayName ?? '';
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
-  let ref: t.ConnectorRef;
 
+  let ref: t.ConnectorRef;
   const initial: T = {
     props: { peer: self },
   };
 
-  type LocalStore = t.ConnectorPropsBehavior;
+  type LocalStore = t.ConnectorBehavior;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
   const local = localstore.object({
-    grabFocusOnArrowKey: true,
+    focusOnArrowKey: true,
     focusOnLoad: true,
   });
 
   const State = {
-    behavior(props: t.ConnectorProps): t.ConnectorPropsBehavior {
+    behavior(props: t.ConnectorProps): t.ConnectorBehavior {
       return props.behavior || (props.behavior = {});
     },
   };
@@ -37,7 +37,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       const b = State.behavior(d.props);
-      b.grabFocusOnArrowKey = local.grabFocusOnArrowKey;
+      b.focusOnArrowKey = local.focusOnArrowKey;
       b.focusOnLoad = local.focusOnLoad;
     });
 
@@ -59,7 +59,7 @@ export default Dev.describe(name, (e) => {
             debug={{ renderCount, name: 'Main' }}
             onReady={(e) => {
               console.info('⚡️ onReady', e);
-              ref = e;
+              ref = e.ref;
             }}
             onSelectionChange={(e) => {
               console.info('⚡️ onSelectionChange', e);
@@ -103,14 +103,14 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Props: Load Behavior', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.behavior?.grabFocusOnArrowKey);
+        const value = (state: T) => Boolean(state.props.behavior?.focusOnArrowKey);
         btn
-          .label((e) => `grabFocusOnArrowKey`)
+          .label((e) => `focusOnArrowKey`)
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => {
               const b = State.behavior(d.props);
-              local.grabFocusOnArrowKey = Dev.toggle(b, 'grabFocusOnArrowKey');
+              local.focusOnArrowKey = Dev.toggle(b, 'focusOnArrowKey');
             }),
           );
       });
@@ -131,16 +131,11 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Ref', (dev) => {
+    dev.section('ref( ƒ )', (dev) => {
       dev.button((btn) => {
-        const select = (label: string, target: t.ConnectorRefSelectTarget) => {
-          return (
-            <Button
-              style={{ marginLeft: 8 }}
-              label={label}
-              onClick={() => Time.delay(0, () => ref.select(target))}
-            />
-          );
+        const onClick = (target: t.LabelListItemTarget) => Time.delay(0, () => ref.select(target));
+        const select = (label: string, target: t.LabelListItemTarget) => {
+          return <Button style={{ marginLeft: 8 }} label={label} onClick={() => onClick(target)} />;
         };
 
         btn
@@ -154,7 +149,7 @@ export default Dev.describe(name, (e) => {
             );
           })
           .enabled((e) => true)
-          .onClick((e) => {});
+          .onClick((e) => onClick('First'));
       });
     });
 

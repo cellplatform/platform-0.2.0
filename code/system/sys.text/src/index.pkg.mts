@@ -27,8 +27,8 @@ export const Pkg: ModuleDef = {
     'retext-stringify': '4.0.0',
     'sys.util': '0.0.0',
     'unified': '11.0.4',
-    'unist-util-select': '5.0.0',
-    'yaml': '2.3.3',
+    'unist-util-select': '5.1.0',
+    'yaml': '2.3.4',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

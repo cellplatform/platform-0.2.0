@@ -1,2 +1,2 @@
-export * from './IndexedDb.mjs';
-export * from './DbLookup.mjs';
+export * from './DbLookup';
+export * from './IndexedDb';

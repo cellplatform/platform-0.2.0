@@ -1,5 +1,8 @@
-import { UI, Webrtc } from 'ext.lib.peerjs';
+import { UI as Crdt } from 'ext.lib.automerge';
+import { UI as Webrtc } from 'ext.lib.peerjs';
+
 import { COLORS, Color, Dev, css } from '../../test.ui';
+import { View } from './-SPEC.01.View';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -9,8 +12,10 @@ const initial: T = {};
  */
 const name = 'App.01';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   const self = Webrtc.peer();
+  const store = Crdt.WebStore.init();
+  const repo = await Crdt.RepoList.model(store);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -25,7 +30,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <UI.Video stream={e.state.stream} muted={true} />;
+        return <View stream={e.state.stream} repo={repo} />;
       });
   });
 
@@ -67,7 +72,7 @@ export default Dev.describe(name, (e) => {
 
         return (
           <div>
-            <UI.AvatarTray
+            <Webrtc.AvatarTray
               peer={self}
               style={styles.avatars}
               muted={false}
@@ -76,13 +81,7 @@ export default Dev.describe(name, (e) => {
                 state.change((d) => (d.stream = e.selected));
               }}
             />
-            <UI.Connector
-              peer={self}
-              behavior={{
-                focusOnLoad: true,
-                grabFocusOnArrowKey: true,
-              }}
-            />
+            <Webrtc.Connector peer={self} behavior={{ focusOnLoad: true }} />
           </div>
         );
       });

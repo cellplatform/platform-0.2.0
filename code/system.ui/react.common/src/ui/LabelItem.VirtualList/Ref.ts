@@ -2,7 +2,7 @@ import { type RefObject } from 'react';
 import { LabelItem, type VirtuosoHandle, type t } from './common';
 
 /**
- * API: Imperitive ref.
+ * API: Imperative handle reference.
  */
 export function VirtualListRef(args: {
   virtuosoRef: RefObject<VirtuosoHandle>;

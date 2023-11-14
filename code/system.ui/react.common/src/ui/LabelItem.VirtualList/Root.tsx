@@ -1,11 +1,12 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import type { VirtuosoHandle, t } from './common';
 
-import { type t, type VirtuosoHandle } from './common';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { VirtualListRef } from './Ref';
-import { View } from './ui';
+import { DEFAULTS } from './common';
+import { List } from './ui';
 
 /**
- * A "virtual" (infinite) scrolling list
+ * A "virtual" (infinite) scrolling list.
  */
 export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((props, ref) => {
   const { list } = props;
@@ -18,5 +19,10 @@ export const VirtualList = forwardRef<t.VirtualListRef, t.VirtualListProps>((pro
   useImperativeHandle(ref, getOrCreateHandle);
   useEffect(() => props.onReady?.(getOrCreateHandle()), []);
 
-  return <View {...props} virtuosoRef={virtuosoRef} />;
+  return <List {...props} virtuosoRef={virtuosoRef} />;
 });
+
+/**
+ * Meta
+ */
+VirtualList.displayName = DEFAULTS.displayName;

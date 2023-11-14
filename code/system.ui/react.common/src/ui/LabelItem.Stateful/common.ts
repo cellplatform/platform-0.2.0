@@ -13,7 +13,15 @@ export { Keyboard } from '../Text.Keyboard';
  * Constants
  */
 type B = t.LabelItemBehaviorKind;
-const all: B[] = ['Item', 'Item.Selection', 'Item.Edit', 'List', 'List.Navigation'];
+const all: B[] = [
+  'Item',
+  'Item.Selection',
+  'Item.Edit',
+  'List',
+  'List.Navigation',
+  'Focus.OnLoad',
+  'Focus.OnArrowKey',
+];
 const defaults: B[] = ['Item', 'List'];
 
 export const DEFAULTS = {

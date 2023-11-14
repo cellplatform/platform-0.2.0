@@ -8,5 +8,7 @@ export { LabelItem } from '../LabelItem';
  * Constants
  */
 export const DEFAULTS = {
+  displayName: 'LabelItem.VirtualList',
   overscan: 50,
+  tabIndex: 0,
 } as const;

@@ -11,13 +11,13 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.532',
+  version: '0.0.541',
   dependencies: {
-    '@automerge/automerge': '2.1.6',
-    '@automerge/automerge-repo': '1.0.13',
-    '@automerge/automerge-repo-network-messagechannel': '1.0.13',
-    '@automerge/automerge-repo-react-hooks': '1.0.13',
-    '@automerge/automerge-repo-storage-indexeddb': '1.0.13',
+    '@automerge/automerge': '2.1.7',
+    '@automerge/automerge-repo': '1.0.18',
+    '@automerge/automerge-repo-network-messagechannel': '1.0.18',
+    '@automerge/automerge-repo-react-hooks': '1.0.18',
+    '@automerge/automerge-repo-storage-indexeddb': '1.0.18',
     'ext.lib.auth.privy': '0.0.0',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',

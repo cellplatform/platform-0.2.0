@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.common',
   version: '0.0.0',
   dependencies: {
+    '@preact/signals-react': '1.3.6',
     'qrcode': '1.5.3',
     'react': '18.2.0',
     'react-dom': '18.2.0',

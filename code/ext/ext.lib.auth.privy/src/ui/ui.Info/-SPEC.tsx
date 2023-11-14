@@ -87,7 +87,7 @@ export default Dev.describe(name, (e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            style={{ Margin: [10, 40, 10, 30] }}
+            style={{ Margin: [10, 10, 10, 15] }}
             all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(ev) => {

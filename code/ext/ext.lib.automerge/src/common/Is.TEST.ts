@@ -2,10 +2,10 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
-import { Test, expect } from '../test.ui';
+import { Is } from '.';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
-import { Is } from '.';
+import { Test, TestDb, expect, type t } from '../test.ui';
 
 export default Test.describe('Is', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
@@ -14,7 +14,7 @@ export default Test.describe('Is', (e) => {
   const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
   const repo3 = new Repo({
     network: [new BroadcastChannelNetworkAdapter()],
-    storage: new IndexedDBStorageAdapter(),
+    storage: new IndexedDBStorageAdapter(TestDb.name),
   });
 
   e.it('Is.store', (e) => {
@@ -24,7 +24,7 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.webStore', (e) => {
-    expect(Is.webStore(WebStore.init())).to.eql(true);
+    expect(Is.webStore(WebStore.init({ storage: false }))).to.eql(true);
     expect(Is.webStore(Store.init())).to.eql(false);
     NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
   });
@@ -34,6 +34,12 @@ export default Test.describe('Is', (e) => {
     expect(Is.repo(repo1)).to.eql(true);
     expect(Is.repo(repo2)).to.eql(true);
     expect(Is.repo(repo3)).to.eql(true);
+  });
+
+  e.it('Is.repoIndex', (e) => {
+    NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
+    const index: t.RepoIndex = { docs: [] };
+    expect(Is.repoIndex(index)).to.eql(true);
   });
 
   e.it('Is.networkSubsystem', (e) => {
@@ -56,5 +62,11 @@ export default Test.describe('Is', (e) => {
     const doc = store.repo.create();
     expect(Is.automergeUrl(doc.url)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
+  });
+
+  e.it('Is.broadcastChannel', (e) => {
+    const adapter = new BroadcastChannelNetworkAdapter();
+    expect(Is.broadcastChannel(adapter)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.broadcastChannel(v)).to.eql(false));
   });
 });

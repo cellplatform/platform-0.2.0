@@ -1,17 +1,50 @@
 import { Store } from '.';
-import { A, Id, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Id, Is, describe, expect, expectError, it, rx, type t } from '../test';
 
-export type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter };
 
-describe('Store', async () => {
-  const store = Store.init();
-  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-  const generator = store.doc.factory<D>(initial);
+describe('Store (base)', async () => {
+  const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
+
+  const testSetup = () => {
+    const store = Store.init();
+    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+    const generator = store.doc.factory<D>(initial);
+    return { store, initial, generator } as const;
+  };
+
+  const { store, initial, generator } = testSetup();
 
   it('Is.store', () => {
+    const non = [true, 123, '', [], {}, null, undefined];
+    non.forEach((value) => expect(Is.store(value)).to.eql(false));
     expect(Is.store(store)).to.eql(true);
-    [true, 123, '', [], {}, null, undefined].forEach((value) => {
-      expect(Is.store(value)).to.eql(false);
+  });
+
+  describe('lifecycle', () => {
+    it('dispose', () => {
+      const store = Store.init();
+      expect(store.disposed).to.eql(false);
+
+      let count = 0;
+      store.dispose$.subscribe(() => count++);
+      store.dispose();
+      store.dispose();
+      expect(store.disposed).to.eql(true);
+      expect(count).to.eql(1);
+    });
+
+    it('dispose$', () => {
+      const { dispose, dispose$ } = rx.disposable();
+      const store = Store.init({ dispose$ });
+      expect(store.disposed).to.eql(false);
+
+      let count = 0;
+      store.dispose$.subscribe(() => count++);
+
+      dispose();
+      expect(store.disposed).to.eql(true);
+      expect(count).to.eql(1);
     });
   });
 
@@ -33,27 +66,80 @@ describe('Store', async () => {
       expect(doc.toObject()).to.eql(doc.current);
     });
 
-    it('toObject (POJO)', async () => {
+    it('toObject ← POJO', async () => {
       const doc = await generator();
       expect(A.isAutomerge(doc.current)).to.eql(true);
       expect(A.isAutomerge(doc.toObject())).to.eql(false);
       expect(doc.toObject()).to.eql({ count: { value: 0 } });
     });
 
-    it('does not exist', () => {
-      const store = Store.init();
-      ['404', true, null, undefined, [], {}]
-        //
-        .forEach((uri: any) => expect(store.doc.exists(uri)).to.eql(false));
-      const dummy = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
-      expect(Is.automergeUrl(dummy)).to.eql(true);
-      expect(store.doc.exists(dummy)).to.eql(false);
+    describe('existence', () => {
+      it('exists: false', async () => {
+        const store = Store.init();
+        const test = async (uri: any, expected: boolean) => {
+          const exists = await store.doc.exists(uri, { timeout: 10 });
+          expect(exists).to.eql(expected, uri);
+        };
+
+        for (const uri of ['404', true, null, undefined, [], {}]) {
+          await test(uri, false);
+        }
+
+        expect(Is.automergeUrl(FAIL_URI)).to.eql(true); // NB: ensure we test for a non-existent document, not a malformed URI.
+        await test(FAIL_URI, false);
+
+        store.dispose();
+      });
+
+      it('exists:true', async () => {
+        const store = Store.init();
+        const doc = await store.doc.getOrCreate<D>(initial);
+        const exists = await store.doc.exists(doc.uri);
+        expect(exists).to.eql(true);
+        store.dispose();
+      });
     });
 
-    it('does exist', async () => {
-      const store = Store.init();
-      const doc = await store.doc.findOrCreate<D>(initial);
-      expect(store.doc.exists(doc.uri)).to.eql(true);
+    describe('get', () => {
+      it('get: success (document)', async () => {
+        const store = Store.init();
+
+        const doc1 = await store.doc.getOrCreate<D>(initial);
+        const doc2 = await store.doc.get<D>(doc1.uri);
+        const doc3 = await store.doc.get<D>(undefined);
+
+        expect(doc1.uri).to.eql(doc2?.uri);
+        expect(doc2?.current).to.eql(doc1.current);
+        expect(doc3).to.eql(undefined);
+
+        store.dispose();
+      });
+
+      it('get: undefined (not found)', async () => {
+        const store = Store.init();
+        const doc = await store.doc.get<D>(FAIL_URI, { timeout: 30 });
+        expect(doc).to.eql(undefined);
+        store.dispose();
+      });
+    });
+
+    describe('getOrCreate', () => {
+      it('"ready" by default', async () => {
+        const doc = await store.doc.getOrCreate(initial);
+        expect(doc.handle.state).to.eql('ready');
+        store.dispose();
+      });
+
+      it('throw: bad URI times out', async () => {
+        expect(Is.automergeUrl(FAIL_URI)).to.eql(true); // NB: make sure we are testing a valid, but non-existent URI.
+
+        const timeout = 30;
+        const err = 'Failed to retrieve document for the given URI';
+        const fn = () => store.doc.getOrCreate(initial, FAIL_URI, { timeout });
+        await expectError(fn, err);
+
+        store.dispose();
+      });
     });
 
     describe('factory (generator)', () => {
@@ -79,21 +165,16 @@ describe('Store', async () => {
 
   describe('store.doc.events', () => {
     describe('lifecycle', async () => {
-      const doc = await generator();
-
-      it('multiple instances', () => {
+      it('multiple instances', async () => {
+        const doc = await generator();
         const events1 = doc.events();
         const events2 = doc.events();
         expect(events1).to.not.equal(events2);
       });
 
-      it('findOrCreate: "ready" (default)', async () => {
-        const doc = await store.doc.findOrCreate(initial);
-        expect(doc.handle.state).to.eql('ready');
-      });
-
       describe('dispose', () => {
-        it('via .dispose()', () => {
+        it('via .dispose()', async () => {
+          const doc = await generator();
           const events = doc.events();
           let fired = 0;
           events.dispose$.subscribe(() => fired++);
@@ -105,7 +186,8 @@ describe('Store', async () => {
           expect(fired).to.eql(1);
         });
 
-        it('via { dispose$ }', () => {
+        it('via { dispose$ }', async () => {
+          const doc = await generator();
           const dispose$ = new rx.Subject<void>();
           const events = doc.events(dispose$);
 
@@ -115,6 +197,22 @@ describe('Store', async () => {
           expect(events.disposed).to.eql(false);
           dispose$.next();
           dispose$.next();
+          expect(events.disposed).to.eql(true);
+          expect(fired).to.eql(1);
+        });
+
+        it('when parent store is disposed', async () => {
+          const { store, generator } = testSetup();
+          const doc = await generator();
+          const events = doc.events();
+          let fired = 0;
+          events.dispose$.subscribe(() => fired++);
+
+          expect(store.disposed).to.eql(false);
+          expect(events.disposed).to.eql(false);
+          store.dispose();
+
+          expect(store.disposed).to.eql(true);
           expect(events.disposed).to.eql(true);
           expect(fired).to.eql(1);
         });

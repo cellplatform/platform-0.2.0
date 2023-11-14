@@ -1,4 +1,4 @@
-import type * as t from './types';
+import type * as t from './t';
 
 export * from '../index.pkg.mjs';
 export * from './DEFAULTS';

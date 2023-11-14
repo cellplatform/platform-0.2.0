@@ -1,21 +1,19 @@
-import { RefObject, useContext, useEffect, useRef, useState } from 'react';
+import { RefObject, useContext, useEffect, useState } from 'react';
 import { ListContext } from './Context.List';
-import { rx, type t } from './common';
+import { DEFAULTS, rx, type t } from './common';
 
 /**
  * Manages state monitoring when running within the
  * context of a containing list.
  */
 export function useListContext(
+  ref: RefObject<HTMLDivElement>,
   position: t.LabelItemPosition,
-  options: { ref?: RefObject<HTMLDivElement>; id?: string } = {},
+  options: { id?: string } = {},
 ) {
   const { id } = options;
   const { index } = position;
   const ctx = useContext(ListContext);
-
-  const _ref = useRef<HTMLDivElement>(null);
-  const ref = options.ref || _ref;
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -42,7 +40,9 @@ export function useListContext(
      * Selection
      */
     list.cmd.select$.pipe(rx.filter((e) => is.item(e.item))).subscribe((e) => {
-      ref.current?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      const detail = DEFAULTS.syntheticMousedownDetail; // NB: hint to any consumers of the event that it is synthetic.
+      const event = new MouseEvent('mousedown', { bubbles: true, detail });
+      ref.current?.dispatchEvent(event);
       if (e.focus) focus();
     });
 

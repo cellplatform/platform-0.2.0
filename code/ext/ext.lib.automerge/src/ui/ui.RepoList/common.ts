@@ -1,9 +1,18 @@
-import { LabelItem } from './common';
+import { type t } from './common';
 
 export * from '../common';
-export const Model = LabelItem.Stateful.Model;
+export { Data, Model } from '../ui.RepoList.Model';
 
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+const behavior: t.RepoListBehavior = {
+  focusOnArrowKey: false,
+  focusOnLoad: false,
+};
+
+export const DEFAULTS = {
+  displayName: 'RepoList',
+  behavior,
+  tabIndex: 0,
+} as const;
