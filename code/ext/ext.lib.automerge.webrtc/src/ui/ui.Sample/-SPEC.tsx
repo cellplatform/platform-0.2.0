@@ -1,8 +1,8 @@
 import { UI as Network } from 'ext.lib.peerjs';
 import { Dev } from '../../test.ui';
-import { A, WebStore, WebrtcNetworkAdapter, cuid, type t } from './common';
-import { Sample } from './ui.Sample';
 import { Info } from '../ui.Info';
+import { A, WebStore, cuid, type t } from './common';
+import { Sample } from './ui.Sample';
 
 type T = {
   user?: string;

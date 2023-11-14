@@ -1,6 +1,6 @@
 import { UI as Network } from 'ext.lib.peerjs';
 import { Info, type InfoProps } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, WebStore, type t } from '../../test.ui';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
@@ -12,6 +12,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   const self = Network.peer();
+  const store = WebStore.init({ network: [] });
 
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
@@ -34,7 +35,7 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} data={{ peer: { self } }} />;
+        return <Info {...e.state.props} data={{ peer: { self }, repo: { store } }} />;
       });
   });
 

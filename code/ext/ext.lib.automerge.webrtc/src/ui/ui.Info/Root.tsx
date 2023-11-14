@@ -1,6 +1,7 @@
-import { DEFAULTS, FC, Pkg, PropList, t } from './common';
+import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
 import { fieldModuleVerify } from './field.Module.Verify';
 import { fieldPeer } from './field.Peer';
+import { fieldRepo } from './field.Repo';
 
 export type InfoProps = {
   title?: t.PropListProps['title'];
@@ -24,6 +25,7 @@ const View: React.FC<InfoProps> = (props) => {
     .field('Module.Verify', () => fieldModuleVerify(data))
     .field('Component', { label: 'Component', value: data.component?.name ?? '(Unnamed)' })
     .field('Peer', () => fieldPeer(data, fields))
+    .field('Repo', () => fieldRepo(data))
     .items(fields);
 
   return (
