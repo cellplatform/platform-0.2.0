@@ -71,9 +71,9 @@ export default Dev.describe('PropList', (e) => {
         return (
           <PropList
             {...props}
-            backside={backside}
             header={elHeader}
             footer={elFooter}
+            backside={backside}
             backsideHeader={elHeader}
             backsideFooter={elFooter}
           />
