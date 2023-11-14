@@ -15,12 +15,15 @@ export const SpecDb = {
  * Unit-test databases.
  */
 export const TestDb = {
-  name: 'dev.test',
+  name: {
+    test: 'dev.test',
+    dbtest: 'dev.test.IndexDb',
+  },
   IndexedDb,
   Spec: SpecDb,
   async deleteDatabases() {
-    await deleteDatabase(TestDb.name);
-    await deleteDatabase('dev.test.IndexDb');
+    await deleteDatabase(TestDb.name.test);
+    await deleteDatabase(TestDb.name.dbtest);
   },
 } as const;
 

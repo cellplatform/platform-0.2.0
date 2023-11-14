@@ -5,7 +5,7 @@ import { DEFAULTS } from './common';
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web (Repo)', (e) => {
-  const name = TestDb.name;
+  const name = TestDb.name.test;
   const store = WebStore.init({ storage: false });
 
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
@@ -42,7 +42,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
 
     e.it('storage with custom name', (e) => {
-      const name = TestDb.name;
+      const name = TestDb.name.test;
       const store1 = WebStore.init({ storage: name });
       const store2 = WebStore.init({ storage: { name } });
       expect(store1.info.storage?.name).to.eql(name);

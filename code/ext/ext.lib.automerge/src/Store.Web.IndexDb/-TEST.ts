@@ -1,10 +1,10 @@
 import { StoreIndexDb } from '.';
 import { WebStore } from '../Store.Web';
-import { IndexedDb, Test, expect, expectError } from '../test.ui';
+import { IndexedDb, Test, expect, expectError, TestDb } from '../test.ui';
 import { Is } from './common';
 
 export default Test.describe('Store.Web: IndexDb', (e) => {
-  const name = 'dev.test.IndexDb'; // NB: different name from other tests, to avoid errors when this DB is deleted.
+  const name = TestDb.name.dbtest; // NB: different name from other tests, to avoid errors when this DB is deleted.
   const indexName = StoreIndexDb.name(name);
   const init = () => StoreIndexDb.init(indexName);
 

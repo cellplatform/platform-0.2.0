@@ -14,7 +14,7 @@ export default Test.describe('Is', (e) => {
   const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
   const repo3 = new Repo({
     network: [new BroadcastChannelNetworkAdapter()],
-    storage: new IndexedDBStorageAdapter(TestDb.name),
+    storage: new IndexedDBStorageAdapter(TestDb.name.test),
   });
 
   e.it('Is.store', (e) => {

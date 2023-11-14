@@ -10,7 +10,7 @@ export default Test.describe('Store.Web: IndexedDBStorageAdapter', (e) => {
   };
 
   e.it('is persistent', async (e) => {
-    const name = TestDb.name;
+    const name = TestDb.name.test;
     const store1 = WebStore.init({ network: false, storage: { name } });
     const store2 = WebStore.init({ network: false, storage: { name } });
 
