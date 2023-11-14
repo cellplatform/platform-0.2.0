@@ -1,5 +1,5 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
-import { Data, DocUri, type t, R, Is } from './common';
+import { Data, DocUri, Is, type t } from './common';
 
 type Uri = t.DocUri | string;
 

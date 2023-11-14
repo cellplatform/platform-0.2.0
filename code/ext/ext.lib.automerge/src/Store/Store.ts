@@ -1,7 +1,7 @@
 import { Repo } from '@automerge/automerge-repo';
 import { Doc } from './Store.Doc';
 import { StoreIndex as Index } from './Store.Index';
-import { DEFAULTS, Is, Time, DocUri as Uri, rx, type t } from './common';
+import { Is, DocUri as Uri, rx, type t } from './common';
 
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
@@ -37,33 +37,19 @@ export const Store = {
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri) {
-          const res = Doc.getOrCreate<T>(api.repo, { initial, uri, dispose$ });
-          await res.handle.whenReady();
-          return res;
+        async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri, options: Options = {}) {
+          const { timeout } = options;
+          return Doc.getOrCreate<T>(api.repo, { initial, uri, timeout, dispose$ });
         },
 
         /**
          * Find the existing CRDT document in the repo (or return nothing).
          */
         async get<T>(uri?: Uri, options: Options = {}) {
-          if (!Is.automergeUrl(uri)) return undefined;
-
-          type R = t.DocRefHandle<T> | undefined;
-          return new Promise<R>((resolve) => {
-            const { timeout = DEFAULTS.timeout.find } = options;
-            const ref = Doc.get<T>(api.repo, uri, dispose$);
-            if (!ref) return resolve(undefined);
-
-            const done$ = rx.subject();
-            const done = (res: R) => {
-              rx.done(done$);
-              resolve(res);
-            };
-
-            Time.until(done$).delay(timeout, () => done(undefined));
-            ref.handle.whenReady().then(() => done(ref));
-          });
+          const { timeout } = options;
+          return Is.automergeUrl(uri)
+            ? Doc.get<T>(api.repo, uri, { timeout, dispose$ })
+            : undefined;
         },
 
         /**

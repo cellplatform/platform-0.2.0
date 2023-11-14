@@ -2,10 +2,10 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
-import { type t, Test, expect, TestDb } from '../test.ui';
+import { Is } from '.';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
-import { Is } from '.';
+import { Test, TestDb, expect, type t } from '../test.ui';
 
 export default Test.describe('Is', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];

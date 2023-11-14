@@ -1,10 +1,10 @@
 import { Store } from '.';
-import { A, Id, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Id, Is, describe, expect, expectError, it, rx, type t } from '../test';
 
 type D = { count?: t.A.Counter };
 
-describe('Store', async () => {
-  const DUMMY_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
+describe('Store (base)', async () => {
+  const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
 
   const testSetup = () => {
     const store = Store.init();
@@ -73,52 +73,73 @@ describe('Store', async () => {
       expect(doc.toObject()).to.eql({ count: { value: 0 } });
     });
 
-    it('exists: false', async () => {
-      const store = Store.init();
+    describe('existence', () => {
+      it('exists: false', async () => {
+        const store = Store.init();
+        const test = async (uri: any, expected: boolean) => {
+          const exists = await store.doc.exists(uri, { timeout: 10 });
+          expect(exists).to.eql(expected, uri);
+        };
 
-      const test = async (uri: any, expected: boolean) => {
-        const exists = await store.doc.exists(uri, { timeout: 10 });
-        expect(exists).to.eql(expected, uri);
-      };
+        for (const uri of ['404', true, null, undefined, [], {}]) {
+          await test(uri, false);
+        }
 
-      for (const uri of ['404', true, null, undefined, [], {}]) {
-        await test(uri, false);
-      }
+        expect(Is.automergeUrl(FAIL_URI)).to.eql(true); // NB: ensure we test for a non-existent document, not a malformed URI.
+        await test(FAIL_URI, false);
 
-      expect(Is.automergeUrl(DUMMY_URI)).to.eql(true);
-      await test(DUMMY_URI, false);
+        store.dispose();
+      });
 
-      store.dispose();
+      it('exists:true', async () => {
+        const store = Store.init();
+        const doc = await store.doc.getOrCreate<D>(initial);
+        const exists = await store.doc.exists(doc.uri);
+        expect(exists).to.eql(true);
+        store.dispose();
+      });
     });
 
-    it('exists:true', async () => {
-      const store = Store.init();
-      const doc = await store.doc.getOrCreate<D>(initial);
-      const exists = await store.doc.exists(doc.uri);
-      expect(exists).to.eql(true);
-      store.dispose();
+    describe('get', () => {
+      it('get: success (document)', async () => {
+        const store = Store.init();
+
+        const doc1 = await store.doc.getOrCreate<D>(initial);
+        const doc2 = await store.doc.get<D>(doc1.uri);
+        const doc3 = await store.doc.get<D>(undefined);
+
+        expect(doc1.uri).to.eql(doc2?.uri);
+        expect(doc2?.current).to.eql(doc1.current);
+        expect(doc3).to.eql(undefined);
+
+        store.dispose();
+      });
+
+      it('get: undefined (not found)', async () => {
+        const store = Store.init();
+        const doc = await store.doc.get<D>(FAIL_URI, { timeout: 30 });
+        expect(doc).to.eql(undefined);
+        store.dispose();
+      });
     });
 
-    it('get', async () => {
-      const store = Store.init();
+    describe('getOrCreate', () => {
+      it('"ready" by default', async () => {
+        const doc = await store.doc.getOrCreate(initial);
+        expect(doc.handle.state).to.eql('ready');
+        store.dispose();
+      });
 
-      const doc1 = await store.doc.getOrCreate<D>(initial);
-      const doc2 = await store.doc.get<D>(doc1.uri);
-      const doc3 = await store.doc.get<D>(undefined);
-      const doc4 = await store.doc.get<D>(DUMMY_URI, { timeout: 30 });
+      it('throw: bad URI times out', async () => {
+        expect(Is.automergeUrl(FAIL_URI)).to.eql(true); // NB: make sure we are testing a valid, but non-existent URI.
 
-      expect(doc1.uri).to.eql(doc2?.uri);
-      expect(doc2?.current).to.eql(doc1.current);
-      expect(doc3).to.eql(undefined);
-      expect(doc4).to.eql(undefined);
+        const timeout = 30;
+        const err = 'Failed to retrieve document for the given URI';
+        const fn = () => store.doc.getOrCreate(initial, FAIL_URI, { timeout });
+        await expectError(fn, err);
 
-      store.dispose();
-    });
-
-    it('getOrCreate: "ready" by default', async () => {
-      const doc = await store.doc.getOrCreate(initial);
-      expect(doc.handle.state).to.eql('ready');
-      store.dispose();
+        store.dispose();
+      });
     });
 
     describe('factory (generator)', () => {
