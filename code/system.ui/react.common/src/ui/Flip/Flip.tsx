@@ -20,7 +20,11 @@ const View: React.FC<FlipProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', perspective: 1000, display: 'grid' }),
+    base: css({
+      position: 'relative',
+      perspective: 1000,
+      display: 'grid',
+    }),
     body: css({
       gridRow: 1,
       gridColumn: 1,
@@ -29,10 +33,13 @@ const View: React.FC<FlipProps> = (props) => {
       transition: `transform ${speed}ms ease-out`,
       display: 'grid',
     }),
-    front: css({ transform: `rotateY(${flipped ? -180 : 0}deg)` }),
-    back: css({ transform: `rotateY(${flipped ? 0 : 180}deg)` }),
+    front: css({
+      transform: `rotateY(${flipped ? -180 : 0}deg)`,
+    }),
+    back: css({
+      transform: `rotateY(${flipped ? 0 : 180}deg)`,
+    }),
     empty: css({
-      padding: 10,
       boxSizing: 'border-box',
       fontStyle: 'italic',
       fontSize: 14,
