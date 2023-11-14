@@ -34,7 +34,7 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        return <Info {...e.state.props} data={{ peer: { self } }} />;
       });
   });
 
@@ -43,9 +43,7 @@ export default Dev.describe(name, (e) => {
     dev.header
       .padding(0)
       .border(-0.1)
-      .render((e) => {
-        return <Network.Connector peer={self} />;
-      });
+      .render((e) => <Network.Connector peer={self} />);
   });
 
   e.it('ui:debug', async (e) => {
