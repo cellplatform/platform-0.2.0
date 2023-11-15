@@ -1,7 +1,7 @@
 import type { DataConnection } from 'peerjs';
 
 import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
-import { Time, type t } from '../common';
+import { Time, rx, type t } from '../common';
 
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
@@ -13,7 +13,7 @@ import { Time, type t } from '../common';
 export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: DataConnection;
   #isReady = false;
-  #isDisconnected = false;
+  #disconnected = rx.subject<void>();
 
   constructor(conn: DataConnection) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
@@ -26,16 +26,15 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     const conn = this.#conn;
     const send = (message: t.WebrtcMessage) => conn.send(message);
 
-    conn.on('open', () => send({ type: 'arrive', senderId }));
-    conn.on('close', () => this.emit('close'));
-    conn.on('data', (data) => {
-      if (this.#isDisconnected) return;
-
-      const message = data as t.WebrtcMessage;
+    const handleOpen = () => send({ type: 'arrive', senderId });
+    const handleClose = () => this.emit('close');
+    const handleData = (e: any) => {
+      const message = e as t.WebrtcMessage;
       switch (message.type) {
         case 'arrive':
-          send({ type: 'welcome', senderId, targetId: message.senderId });
-          this.#announceConnection(message.senderId);
+          const targetId = message.senderId;
+          send({ type: 'welcome', senderId, targetId });
+          this.#announceConnection(targetId);
           break;
 
         case 'welcome':
@@ -50,6 +49,15 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
           }
           break;
       }
+    };
+
+    conn.on('open', handleOpen);
+    conn.on('close', handleClose);
+    conn.on('data', handleData);
+    this.#disconnected.subscribe(() => {
+      conn.off('open', handleOpen);
+      conn.off('close', handleClose);
+      conn.off('data', handleData);
     });
 
     /**
@@ -61,11 +69,10 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   }
 
   disconnect() {
-    this.#isDisconnected = true;
+    this.#disconnected.next();
   }
 
   send(message: RepoMessage) {
-    if (this.#isDisconnected) return;
     if (!this.#conn) throw new Error('Connection not ready');
     const send = (message: t.WebrtcMessage) => this.#conn.send(message);
     if ('data' in message) {
