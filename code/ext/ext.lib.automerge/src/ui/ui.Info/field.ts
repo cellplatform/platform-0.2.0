@@ -1,7 +1,9 @@
-import { fieldModuleVerify as moduleVerify } from './field.Module.Verify';
-import { fieldRepo as repo } from './field.Repo';
+import { component, module, moduleVerify } from './field.Module';
+import { repo } from './field.Repo';
 
 export const Field = {
+  module,
   moduleVerify,
+  component,
   repo,
 } as const;

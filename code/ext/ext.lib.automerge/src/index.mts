@@ -18,6 +18,7 @@ export { toObject } from './common';
  */
 import { Info } from './ui/ui.Info';
 import { RepoList } from './ui/ui.RepoList';
+export { Info };
 export const UI = {
   WebStore,
   Info,

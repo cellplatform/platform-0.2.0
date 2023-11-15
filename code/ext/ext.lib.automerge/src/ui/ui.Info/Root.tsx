@@ -19,10 +19,10 @@ const View: React.FC<InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
+    .field('Module', () => Field.module())
     .field('Module.Verify', () => Field.moduleVerify())
     .field('Repo', () => Field.repo(data.repo))
-    .field('Component', { label: 'Component', value: data.component?.name ?? 'Unnamed' })
+    .field('Component', () => Field.component(data.component))
     .items(fields);
 
   return (
