@@ -1,6 +1,7 @@
-import { Message, NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
-import type { DataConnection, Peer } from 'peerjs';
-import { type t } from '../common';
+import type { DataConnection } from 'peerjs';
+
+import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
+import { Time, type t } from '../common';
 
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
@@ -10,74 +11,55 @@ import { type t } from '../common';
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
  */
 export class WebrtcNetworkAdapter extends NetworkAdapter {
-  #peer: Peer;
-  #conn: DataConnection | undefined;
-  #remoteId: string | undefined;
+  #conn: DataConnection;
   #isReady = false;
 
-  constructor(peer: t.p.PeerJs, remoteId?: string) {
+  constructor(conn: DataConnection) {
+    if (!conn) throw new Error(`A peerjs data-connection is required`);
     super();
-    this.#peer = peer;
-    this.#remoteId = remoteId;
+    this.#conn = conn;
   }
 
   connect(peerId: PeerId) {
-    this.peerId = peerId;
+    const senderId = (this.peerId = peerId);
+    const conn = this.#conn;
+    const send = (message: t.WebrtcMessage) => conn.send(message);
 
-    const setupConnection = (conn: DataConnection) => {
-      this.#conn = conn;
+    conn.on('open', () => send({ type: 'arrive', senderId }));
+    conn.on('close', () => this.emit('close'));
+    conn.on('data', (data) => {
+      const message = data as t.WebrtcMessage;
+      switch (message.type) {
+        case 'arrive':
+          send({ type: 'welcome', senderId, targetId: message.senderId });
+          this.#announceConnection(message.senderId);
+          break;
 
-      conn.on('open', () => conn.send({ type: 'arrive', senderId: this.peerId }));
-      conn.on('close', () => this.emit('close'));
-      conn.on('data', (data) => {
-        const message = data as RepoMessage;
-        switch (message.type) {
-          /**
-           * TODO
-           * https://automerge.slack.com/archives/C61RJCM9S/p1697749052710309?thread_ts=1697568493.913469&cid=C61RJCM9S
-           */
+        case 'welcome':
+          this.#announceConnection(message.senderId);
+          break;
 
-          //           case 'arrive':
-          //             conn.send({
-          //               type: 'welcome',
-          //               senderId: this.peerId,
-          //               targetId: message.senderId,
-          //             });
-          //             this.#announceConnection(message.senderId);
-          //             break;
-          //
-          //           case 'welcome':
-          //             this.#announceConnection(message.senderId);
-          //             break;
+        default:
+          if ('data' in message) {
+            this.emit('message', { ...message, data: toUint8Array(message.data) });
+          } else {
+            this.emit('message', message);
+          }
+          break;
+      }
+    });
 
-          default:
-            if ('data' in message) {
-              this.emit('message', { ...message, data: toUint8Array(message.data) });
-            } else {
-              this.emit('message', message);
-            }
-            break;
-        }
-      });
-
-      /**
-       * Mark this channel as ready after 100ms, at this point there
-       * must be something weird going on at the other end to cause us
-       * to receive no response.
-       */
-      setTimeout(() => this.#setAsReady(), 100);
-    };
-
-    this.#peer.on('connection', (conn) => setupConnection(conn));
-
-    // If the remote-id is known start the connection now.
-    if (this.#remoteId) setupConnection(this.#peer.connect(this.#remoteId));
+    /**
+     * Mark this channel as ready after 100ms, at this point there
+     * must be something weird going on at the other end to cause us
+     * to receive no response.
+     */
+    Time.delay(100, () => this.#setAsReady());
   }
 
-  send(message: Message) {
+  send(message: RepoMessage) {
     const conn = this.#conn;
     if (!conn) throw new Error('Connection not ready');
-
     if ('data' in message) {
       conn.send({ ...message, data: toUint8Array(message.data) });
     } else {

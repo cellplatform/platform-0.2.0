@@ -1,4 +1,4 @@
-import { PatchState, rx, type t, Is } from './common';
+import { PatchState, rx, type t } from './common';
 
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { manageDataConnection } from './PeerModel.Conn.Data';

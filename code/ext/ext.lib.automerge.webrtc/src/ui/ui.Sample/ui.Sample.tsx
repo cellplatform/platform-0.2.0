@@ -21,7 +21,6 @@ export const Sample: React.FC<SampleProps> = (props) => {
     }),
     body: css({
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
     }),
     title: css({ fontWeight: 'bold' }),
     icon: css({ opacity: props.user ? 1 : 0.3, marginRight: 5 }),
@@ -40,11 +39,8 @@ export const Sample: React.FC<SampleProps> = (props) => {
         <span>{props.user && `network ${props.user}`}</span>
       </div>
       <div {...styles.body}>
-        <div>
-          <div>count: {count}</div>
-          <Button.Blue label={'increment'} onClick={increment} />
-        </div>
-        <div {...styles.right}>{count ? count : ''}</div>
+        <div>count: {count}</div>
+        <Button.Blue label={'increment'} onClick={increment} />
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 import { UI as Network } from 'ext.lib.peerjs';
+import { WebrtcNetworkAdapter } from '../../network.Webrtc';
 import { Dev } from '../../test.ui';
 import { Info } from '../ui.Info';
-import { A, WebStore, cuid, type t } from './common';
+import { rx, Time, A, WebStore, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
 
 type T = {
   user?: string;
   docUri?: string;
   peerid: { local: string; remote: string };
-  options?: t.p.PeerJsOptions;
   debug: { connectingData?: boolean };
 };
 const initial: T = {
@@ -22,9 +22,6 @@ const initial: T = {
 const name = 'Sample.WebRtc';
 
 export default Dev.describe(name, (e) => {
-  const self = Network.peer();
-  const remote = Network.peer();
-
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Sample');
   const local = localstore.object({
@@ -32,6 +29,13 @@ export default Dev.describe(name, (e) => {
     remotePeer: '',
     docUri: undefined,
   });
+
+  /**
+   * Network Peers
+   */
+  const remote = Network.peer();
+  const self = Network.peer();
+  const selfEvents = self.events();
 
   /**
    * CRDT (Automerge)
@@ -57,6 +61,18 @@ export default Dev.describe(name, (e) => {
       d.peerid.remote = local.remotePeer;
     });
     await initDoc(state);
+
+    selfEvents.cmd.conn$
+      .pipe(
+        rx.filter((e) => e.kind === 'data'),
+        rx.filter((e) => e.action === 'ready'),
+      )
+      .subscribe((e) => {
+        const conn = self.get.conn.obj.data(e.connection?.id);
+        const adapter = new WebrtcNetworkAdapter(conn!);
+        store.repo.networkSubsystem.addNetworkAdapter(adapter);
+        state.change((d) => (d.user = adapter.peerId));
+      });
 
     ctx.debug.width(330);
     ctx.subject
@@ -99,25 +115,6 @@ export default Dev.describe(name, (e) => {
 
     dev.row((e) => {
       return <Network.Dev.PeerCard peer={{ self: remote, remote: self }} />;
-    });
-
-    dev.hr(5, 20);
-
-    const addNetworkAdapter = (adapter: t.NetworkAdapter) => {
-      store.repo.networkSubsystem.addNetworkAdapter(adapter);
-      state.change((d) => (d.user = adapter.peerId));
-    };
-
-    dev.button(['addNetworkAdapter', '<undefined>'], (e) => {
-      // if (!peer) return;
-      // const webrtc = new WebrtcNetworkAdapter(peer);
-      // addNetworkAdapter(webrtc);
-    });
-
-    dev.button(['addNetworkAdapter', 'remote-peer'], (e) => {
-      // if (!(peer && local.remotePeer)) return;
-      // const webrtc = new WebrtcNetworkAdapter(peer, local.remotePeer);
-      // addNetworkAdapter(webrtc);
     });
 
     dev.hr(5, 20);
