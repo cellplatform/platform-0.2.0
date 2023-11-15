@@ -6,6 +6,7 @@ export { next as A } from '@automerge/automerge';
  * @ext
  */
 export { WebStore } from 'ext.lib.automerge';
+export { Webrtc } from 'ext.lib.peerjs';
 
 /**
  * @system

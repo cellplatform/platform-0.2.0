@@ -1,5 +1,6 @@
+import type { DataConnection } from 'peerjs';
+
 import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
-import { type DataConnection } from 'peerjs';
 import { Time, rx, type t } from '../common';
 
 /**
