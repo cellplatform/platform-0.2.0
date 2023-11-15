@@ -65,6 +65,7 @@ export type PeerModel = t.Lifecycle & {
 };
 
 export type PeerModelGet = {
+  readonly peerjs: t.PeerJs;
   readonly conn: {
     readonly remotes: PeerConnectionsByPeer;
     readonly obj: PeerModelGetConnectionObject;
