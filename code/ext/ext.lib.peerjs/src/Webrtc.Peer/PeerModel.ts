@@ -98,7 +98,6 @@ export const PeerModel: t.WebrtcPeerModel = {
       },
 
       get: {
-        peerjs,
         conn: {
           get remotes() {
             return get.conn.byRemote(model.current);
