@@ -1,11 +1,10 @@
 import { Icons, Value, css, type t } from './common';
 
-export function fieldRepo(data: t.InfoData) {
-  if (!data.repo) return;
+export function fieldRepo(repo: t.InfoData['repo']) {
+  if (!repo) return;
 
-  const store = data.repo;
-  const index = store.index;
-  const name = store.name || store.store?.info.storage?.name || 'Unnamed';
+  const index = repo.index;
+  const name = repo.name || repo.store?.info.storage?.name || 'Unnamed';
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total, 'document', 'documents');
@@ -24,7 +23,7 @@ export function fieldRepo(data: t.InfoData) {
   );
 
   const res: t.PropListItem = {
-    label: store.label || 'Store',
+    label: repo.label || 'Repo',
     value,
   };
 

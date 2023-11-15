@@ -1,6 +1,5 @@
 import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
-import { fieldModuleVerify } from './field.Module.Verify';
-import { fieldRepo } from './field.Repo';
+import { Field } from './field';
 
 export type InfoProps = {
   title?: t.PropListProps['title'];
@@ -21,9 +20,9 @@ const View: React.FC<InfoProps> = (props) => {
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => fieldModuleVerify(data))
+    .field('Module.Verify', () => Field.moduleVerify())
+    .field('Repo', () => Field.repo(data.repo))
     .field('Component', { label: 'Component', value: data.component?.name ?? 'Unnamed' })
-    .field('Repo', () => fieldRepo(data))
     .items(fields);
 
   return (
@@ -57,5 +56,10 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Field: typeof Field;
 };
-export const Info = FC.decorate<InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<InfoProps, Fields>(
+  View,
+  { DEFAULTS, Field },
+  { displayName: 'Info' },
+);
