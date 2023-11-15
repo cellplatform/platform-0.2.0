@@ -13,6 +13,7 @@ import { Time, type t } from '../common';
 export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: DataConnection;
   #isReady = false;
+  #isDisconnected = false;
 
   constructor(conn: DataConnection) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
@@ -28,6 +29,8 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     conn.on('open', () => send({ type: 'arrive', senderId }));
     conn.on('close', () => this.emit('close'));
     conn.on('data', (data) => {
+      if (this.#isDisconnected) return;
+
       const message = data as t.WebrtcMessage;
       switch (message.type) {
         case 'arrive':
@@ -57,13 +60,18 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     Time.delay(100, () => this.#setAsReady());
   }
 
+  disconnect() {
+    this.#isDisconnected = true;
+  }
+
   send(message: RepoMessage) {
-    const conn = this.#conn;
-    if (!conn) throw new Error('Connection not ready');
+    if (this.#isDisconnected) return;
+    if (!this.#conn) throw new Error('Connection not ready');
+    const send = (message: t.WebrtcMessage) => this.#conn.send(message);
     if ('data' in message) {
-      conn.send({ ...message, data: toUint8Array(message.data) });
+      send({ ...message, data: toUint8Array(message.data) });
     } else {
-      conn.send(message);
+      send(message);
     }
   }
 
@@ -76,10 +84,6 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #announceConnection(peerId: PeerId) {
     this.#setAsReady();
     this.emit('peer-candidate', { peerId });
-  }
-
-  disconnect() {
-    this.#peer.disconnect();
   }
 }
 
