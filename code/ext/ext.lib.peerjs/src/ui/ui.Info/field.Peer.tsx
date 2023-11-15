@@ -1,4 +1,4 @@
-import { Icons, PeerUri, Value, Webrtc, css, type t } from './common';
+import { Icons, Value, Webrtc, css, type t } from './common';
 
 type P = t.PropListItem;
 
@@ -7,8 +7,9 @@ const styles = {
   icon: css({ marginLeft: 5 }),
 };
 
-export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
-  const self = data.peer?.self;
+export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
+  if (!data) return;
+  const self = data?.self;
   const peer = self;
   const current = peer?.current;
   const showRemotes = fields.includes('Peer.Remotes');

@@ -19,6 +19,7 @@ import { PeerCard } from './ui/ui.Dev.PeerCard';
 import { Info } from './ui/ui.Info';
 import { Video } from './ui/ui.Video';
 
+export { Info };
 export const UI = {
   peer: Webrtc.peer,
   Info,
