@@ -1,5 +1,6 @@
 import { type t } from '../common';
 export * from '../common';
+export { Info as PeerInfo } from 'ext.lib.peerjs';
 
 /**
  * Constants

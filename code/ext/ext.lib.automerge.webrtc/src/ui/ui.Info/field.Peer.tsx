@@ -1,17 +1,13 @@
 import type { InfoField as PeerField } from 'ext.lib.peerjs/src/types';
+import { PeerInfo, type t } from './common';
 
-import { UI } from 'ext.lib.peerjs';
-import { type t } from './common';
-
-export function fieldPeer(data: t.InfoData, parentFields: t.InfoField[]) {
-  const peer = data.peer;
-  if (!peer) return undefined;
+export function peer(data: t.InfoData['peer'], parentFields: t.InfoField[]) {
+  if (!data) return undefined;
 
   const fields: PeerField[] = [];
   if (parentFields.includes('Peer')) fields.push('Peer');
   if (parentFields.includes('Peer.Remotes')) fields.push('Peer.Remotes');
   if (fields.length === 0) return;
 
-  const value = <UI.Info style={{ flex: 1 }} fields={fields} data={{ peer }} />;
-  return { value };
+  return PeerInfo.Field.peer(data, fields);
 }

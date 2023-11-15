@@ -60,9 +60,10 @@ const Wrangle = {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Field: typeof Field;
+  useRedraw: typeof useRedraw;
 };
 export const Info = FC.decorate<InfoProps, Fields>(
   View,
-  { DEFAULTS, Field },
+  { DEFAULTS, Field, useRedraw },
   { displayName: 'Info' },
 );

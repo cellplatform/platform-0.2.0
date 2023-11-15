@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { type t, rx } from './common';
+import { rx, type t } from './common';
 
 export function useRedraw(data: t.InfoData = {}) {
   const peer = data.peer?.self;
