@@ -4,5 +4,5 @@ export type InfoField = 'Module' | 'Module.Verify' | 'Component';
 
 export type InfoData = {
   url?: { href: string; title?: string };
-  component?: { name?: string };
+  component?: { label?: string; name?: string };
 };

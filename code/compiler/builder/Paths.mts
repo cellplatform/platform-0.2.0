@@ -72,7 +72,8 @@ export const Paths = {
       'src/ui/common/t.ts',
 
       'src/ui/ui.Info/-SPEC.tsx',
-      'src/ui/ui.Info/field.Module.Verify.tsx',
+      'src/ui/ui.Info/field.Module.tsx',
+      'src/ui/ui.Info/field.ts',
       'src/ui/ui.Info/common.ts',
       'src/ui/ui.Info/index.ts',
       'src/ui/ui.Info/Root.tsx',
