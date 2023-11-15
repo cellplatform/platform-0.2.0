@@ -22,11 +22,11 @@
   },
   "dependencies": {
     "@automerge/automerge": "2.1.7",
-    "@automerge/automerge-repo": "1.0.18",
-    "@automerge/automerge-repo-network-broadcastchannel": "1.0.18",
-    "@automerge/automerge-repo-network-messagechannel": "1.0.18",
-    "@automerge/automerge-repo-react-hooks": "1.0.18",
-    "@automerge/automerge-repo-storage-indexeddb": "1.0.18",
+    "@automerge/automerge-repo": "1.0.19",
+    "@automerge/automerge-repo-network-broadcastchannel": "1.0.19",
+    "@automerge/automerge-repo-network-messagechannel": "1.0.19",
+    "@automerge/automerge-repo-react-hooks": "1.0.19",
+    "@automerge/automerge-repo-storage-indexeddb": "1.0.19",
     "@hatsprotocol/sdk-v1-core": "0.7.0",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
@@ -60,7 +60,7 @@
     "minimist": "1.2.8",
     "monaco-editor": "0.44.0",
     "nostr-tools": "1.17.0",
-    "openai": "4.18.0",
+    "openai": "4.19.0",
     "ora": "7.0.1",
     "peerjs": "1.5.1",
     "picocolors": "1.0.0",
@@ -98,8 +98,8 @@
     "ua-parser-js": "1.0.37",
     "unified": "11.0.4",
     "unist-util-select": "5.1.0",
-    "viem": "1.19.1",
-    "wagmi": "1.4.6",
+    "viem": "1.19.3",
+    "wagmi": "1.4.7",
     "yaml": "2.3.4",
     "zod": "3.22.4"
   },
@@ -112,7 +112,7 @@
     "@types/minimist": "1.2.5",
     "@types/node": "20.9.0",
     "@types/qrcode": "1.5.5",
-    "@types/ramda": "0.29.8",
+    "@types/ramda": "0.29.9",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
     "@types/sanitize-html": "2.9.4",
@@ -143,9 +143,7 @@
     "vitest": "0.34.6",
     "yaml": "2.3.4"
   },
-  "resolutions": {
-    "axios": ">=1.6.0"
-  },
+  "resolutions": {},
   "license": "MIT",
   "private": true
 }
