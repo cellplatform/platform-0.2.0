@@ -143,7 +143,9 @@
     "vitest": "0.34.6",
     "yaml": "2.3.4"
   },
-  "resolutions": {},
+  "resolutions": {
+    "axios": ">=1.6.2"
+  },
   "license": "MIT",
   "private": true
 }
