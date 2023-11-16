@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+export { WebrtcNetworkAdapter, WebrtcStoreManager } from './network.Webrtc';
+
+/**
  * Dev
  */
 export const dev = async () => {

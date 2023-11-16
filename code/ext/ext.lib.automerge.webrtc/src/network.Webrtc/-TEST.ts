@@ -1,5 +1,5 @@
 import { WebrtcStoreManager } from '.';
-import { Test, Time, WebStore, Webrtc, expect } from '../test.ui';
+import { type t, Test, Time, WebStore, Webrtc, expect } from '../test.ui';
 
 type D = { count: number };
 
@@ -12,34 +12,39 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
     const store = WebStore.init({ network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
     const manager = WebrtcStoreManager.init(store, peer);
+
+    const added: t.WebrtcStoreManagerAdded[] = [];
+    manager.added$.subscribe((e) => added.push(e));
+
     const dispose = () => {
       peer.dispose();
       store.dispose();
       manager.dispose();
     };
-    return { peer, events, store, generator, manager, dispose } as const;
+    return { peer, events, store, added, generator, manager, dispose } as const;
   };
 
   e.describe('Integration (Live)', (e) => {
     e.it('connects and sync docs over WebRTC', async (e) => {
       const wait = (msecs = 400) => Time.wait(msecs);
-
       const self = testSetup();
       await wait();
       const remote = testSetup();
       await wait();
 
-      const firedAdd = { self: 0, remote: 0 };
-      self.manager.added$.subscribe(() => firedAdd.self++);
-      remote.manager.added$.subscribe(() => firedAdd.remote++);
-
       const res = await self.peer.connect.data(remote.peer.id);
       expect(res.error).to.eql(undefined);
       expect(self.manager.total.added).to.eql(1);
       expect(remote.manager.total.added).to.eql(1);
-      expect(firedAdd.self).to.eql(1);
-      expect(firedAdd.remote).to.eql(1);
 
+      expect(self.added.length).to.eql(1);
+      expect(remote.added.length).to.eql(1);
+      expect(self.added[0].conn.id).to.eql(res.id);
+      expect(remote.added[0].conn.id).to.eql(res.id);
+
+      /**
+       * Create a new document.
+       */
       const docSelf = await self.generator();
       await wait();
       const docRemote = await remote.generator(docSelf.uri);
@@ -47,6 +52,9 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
       expect(docSelf.current).to.eql({ count: 0 });
       expect(docRemote.current).to.eql({ count: 0 });
 
+      /**
+       * Change the document, and ensure it syncs over the network connection.
+       */
       docRemote.change((d) => (d.count = 123));
       await wait(500);
       expect(docSelf.current).to.eql({ count: 123 });

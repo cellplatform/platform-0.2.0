@@ -8,7 +8,8 @@ export const WebrtcStoreManager = {
   init(store: t.Store, peer: t.PeerModel) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
-    const added$ = rx.subject<string>();
+
+    const added$ = rx.subject<t.WebrtcStoreManagerAdded>();
     let _totalAdded = 0;
 
     const events = peer.events();
@@ -20,11 +21,14 @@ export const WebrtcStoreManager = {
     );
 
     dataReady$.subscribe((id) => {
-      const conn = peer.get.conn.obj.data(id);
-      const adapter = new WebrtcNetworkAdapter(conn!);
+      const obj = peer.get.conn.obj.data(id);
+      if (!obj) throw new Error(`Failed to retrieve data connection with id "${id}".`);
+
+      const adapter = new WebrtcNetworkAdapter(obj!);
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
+
       _totalAdded += 1;
-      added$.next(id);
+      added$.next({ conn: { id, obj }, adapter });
     });
 
     const api: t.WebrtcStoreManager = {
