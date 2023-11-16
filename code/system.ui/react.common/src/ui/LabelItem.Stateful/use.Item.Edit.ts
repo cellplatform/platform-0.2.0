@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, rx, type t, Model } from './common';
+import { DEFAULTS, Keyboard, Model, rx, type t } from './common';
 
 type RevertibleItem = t.LabelItem & { _revert?: { label?: string } };
 type ChangeItem = t.ImmutableNext<RevertibleItem>;
