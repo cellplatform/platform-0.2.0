@@ -131,26 +131,13 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('ref( ƒ )', (dev) => {
-      dev.button((btn) => {
-        const onClick = (target: t.LabelListItemTarget) => Time.delay(0, () => ref.select(target));
-        const select = (label: string, target: t.LabelListItemTarget) => {
-          return <Button style={{ marginLeft: 8 }} label={label} onClick={() => onClick(target)} />;
-        };
-
-        btn
-          .label(`select`)
-          .right((e) => {
-            return (
-              <div>
-                {select('first', 'First')}
-                {select('last', 'Last')}
-              </div>
-            );
-          })
-          .enabled((e) => true)
-          .onClick((e) => onClick('First'));
-      });
+    dev.section('ref ( ƒ )', (dev) => {
+      const select = (target: t.LabelListItemTarget) => {
+        const focus = true;
+        Time.delay(0, () => ref.select(target, focus));
+      };
+      dev.button('select: first', (e) => select('First'));
+      dev.button('select: last', (e) => select('Last'));
     });
 
     dev.hr(5, 20);
