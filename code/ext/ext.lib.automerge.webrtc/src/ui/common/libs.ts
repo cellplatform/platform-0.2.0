@@ -1,11 +1,12 @@
 /**
  * @external
  */
-export { useDocument } from '@automerge/automerge-repo-react-hooks';
+export { useDocument } from 'ext.lib.automerge';
 
 /**
  * @system
  */
+export { IndexedDb } from 'sys.data.indexeddb';
 export {
   Button,
   COLORS,

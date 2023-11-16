@@ -1,3 +1,7 @@
+import { WebStore } from './Store.Web';
+import { Info } from './ui/ui.Info';
+import { RepoList } from './ui/ui.RepoList';
+
 /**
  * Module (Meta)
  */
@@ -7,17 +11,14 @@ export { Pkg };
 /**
  * Library
  */
-import { WebStore } from './Store.Web';
-export { WebStore };
-
 export { Store } from './Store';
-export { toObject } from './common';
+export { Is, toObject } from './common';
+export { WebStore };
 
 /**
  * Library: UI
  */
-import { Info } from './ui/ui.Info';
-import { RepoList } from './ui/ui.RepoList';
+export { useDocument } from './ui/common';
 export { Info };
 export const UI = {
   WebStore,

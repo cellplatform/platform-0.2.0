@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export type { RepoListModel } from 'ext.lib.automerge/src/types';
+
+/**
  * @system
  */
 export type {

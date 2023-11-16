@@ -25,7 +25,7 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   };
 
   e.describe('Integration (Live)', (e) => {
-    e.it('connects and sync docs over WebRTC', async (e) => {
+    e.it('connects and sync douments over WebRTC', async (e) => {
       const wait = (msecs = 400) => Time.wait(msecs);
       const self = testSetup();
       await wait();
