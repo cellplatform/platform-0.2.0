@@ -6,7 +6,7 @@ import { Store } from '../Store';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
-export type Init = {
+type Init = {
   dispose$?: t.UntilObservable;
   network?: boolean | t.NetworkAdapter[];
   storage?: boolean | string | { name?: string };
@@ -17,7 +17,10 @@ export type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
-  IndexDb: StoreIndexDb,
+
+  get IndexDb() {
+    return StoreIndexDb;
+  },
 
   /**
    * Initialize a new instance of a CRDT store/repo.
