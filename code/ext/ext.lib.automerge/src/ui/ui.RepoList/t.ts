@@ -9,7 +9,7 @@ export type RepoListRef = t.LabelListDispatch & { store: t.Store };
  * <Component>
  */
 export type RepoListProps = {
-  list?: t.RepoListState;
+  list?: t.RepoListState | t.RepoListModel;
   behavior?: t.RepoListBehavior;
   renderCount?: t.RenderCountProps;
   tabIndex?: number;

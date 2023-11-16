@@ -47,7 +47,7 @@ export default Dev.describe(name, async (e) => {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
-        return <RepoList {...e.state.props} list={model.list.state} renderCount={renderCount} />;
+        return <RepoList {...e.state.props} list={model} renderCount={renderCount} />;
       });
   });
 
