@@ -70,7 +70,7 @@ export function useItemEditController(args: Args) {
     cancel() {
       if (!Edit.is.editing) return;
       change(
-        'edit:accept',
+        'edit:cancel',
         (list) => (list.editing = undefined),
         (item) => {
           if (item._revert) item.label = item._revert.label;
