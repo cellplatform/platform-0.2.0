@@ -4,12 +4,12 @@ import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
 /**
  * Manages the relationship between a [Repo/Store] and a network peer.
  */
-export const WebrtcStoreManager = {
+export const WebrtcStore = {
   init(store: t.Store, peer: t.PeerModel) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
 
-    const added$ = rx.subject<t.WebrtcStoreManagerAdded>();
+    const added$ = rx.subject<t.WebrtcStoreNetworkAdapterAdded>();
     let _totalAdded = 0;
 
     const events = peer.events();
@@ -31,7 +31,7 @@ export const WebrtcStoreManager = {
       added$.next({ conn: { id, obj }, adapter });
     });
 
-    const api: t.WebrtcStoreManager = {
+    const api: t.WebrtcStore = {
       store,
       peer,
       added$: added$.pipe(rx.takeUntil(dispose$)),

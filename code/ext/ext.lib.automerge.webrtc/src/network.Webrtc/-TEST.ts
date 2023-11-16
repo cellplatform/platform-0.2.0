@@ -1,9 +1,9 @@
-import { WebrtcStoreManager } from '.';
+import { WebrtcStore } from '.';
 import { Test, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
 
 type D = { count: number };
 
-export default Test.describe('WebrtcNetworkAdapter', (e) => {
+export default Test.describe('WebrtcNetworkAdapter | WebrtcStore', (e) => {
   e.timeout(9999);
 
   const testSetup = () => {
@@ -11,9 +11,9 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
     const events = peer.events();
     const store = WebStore.init({ network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
-    const manager = WebrtcStoreManager.init(store, peer);
+    const manager = WebrtcStore.init(store, peer);
 
-    const added: t.WebrtcStoreManagerAdded[] = [];
+    const added: t.WebrtcStoreNetworkAdapterAdded[] = [];
     manager.added$.subscribe((e) => added.push(e));
 
     const dispose = () => {
@@ -62,7 +62,7 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
     });
   });
 
-  e.describe('WebrtcStoreManager', (e) => {
+  e.describe('WebrtcStore (Manager)', (e) => {
     e.it('initialize', async (e) => {
       const { dispose, manager, store, peer } = testSetup();
       expect(manager.total.added).to.eql(0);

@@ -1,2 +1,2 @@
 export * from './Webrtc.NetworkAdapter';
-export * from './Webrtc.StoreManager';
+export * from './Webrtc.Store';

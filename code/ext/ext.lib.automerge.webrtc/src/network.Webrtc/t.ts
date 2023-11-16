@@ -3,14 +3,14 @@ export type { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
 
 export type * from './t.Message';
 
-export type WebrtcStoreManager = t.Lifecycle & {
+export type WebrtcStore = t.Lifecycle & {
   readonly store: t.Store;
   readonly peer: t.PeerModel;
   readonly total: { readonly added: number };
-  readonly added$: t.Observable<WebrtcStoreManagerAdded>;
+  readonly added$: t.Observable<WebrtcStoreNetworkAdapterAdded>;
 };
 
-export type WebrtcStoreManagerAdded = {
+export type WebrtcStoreNetworkAdapterAdded = {
   conn: { id: string; obj: t.DataConnection };
   adapter: t.WebrtcNetworkAdapter;
 };

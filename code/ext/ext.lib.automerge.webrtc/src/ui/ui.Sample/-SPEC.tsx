@@ -1,5 +1,5 @@
 import { UI as Network } from 'ext.lib.peerjs';
-import { WebrtcStoreManager } from '../../network.Webrtc';
+import { WebrtcStore } from '../../network.Webrtc';
 import { Dev } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { A, WebStore, cuid, type t } from './common';
@@ -61,7 +61,7 @@ export default Dev.describe(name, (e) => {
     });
     await initDoc(state);
 
-    const manager = WebrtcStoreManager.init(store, self);
+    const manager = WebrtcStore.init(store, self);
     manager.added$.subscribe((e) => {
       state.change((d) => (d.user = e.adapter.peerId));
     });
