@@ -112,7 +112,7 @@ export function useItemEditController(args: Args) {
     },
 
     onEditClickAway(e) {
-      dispatch.edit('cancel');
+      dispatch.edit('accept');
       args.handlers?.onEditClickAway?.(e);
     },
   };
