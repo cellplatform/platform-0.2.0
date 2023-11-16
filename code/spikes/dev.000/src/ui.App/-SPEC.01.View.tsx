@@ -1,6 +1,6 @@
 import { UI as Crdt } from 'ext.lib.automerge';
 import { UI as Webrtc } from 'ext.lib.peerjs';
-import { COLORS, Color, css, type t } from '../common';
+import { COLORS, Color, css, type t } from './common';
 
 export type ViewProps = {
   stream?: MediaStream;

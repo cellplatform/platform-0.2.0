@@ -1,7 +1,7 @@
 import { UI as Crdt } from 'ext.lib.automerge';
 import { UI as Webrtc } from 'ext.lib.peerjs';
 
-import { COLORS, Color, Dev, css } from '../../test.ui';
+import { COLORS, Color, Dev, css } from '../test.ui';
 import { View } from './-SPEC.01.View';
 
 type T = { stream?: MediaStream };

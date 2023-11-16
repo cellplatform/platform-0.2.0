@@ -1,5 +1,5 @@
 import { Webrtc, UI } from 'ext.lib.peerjs';
-import { Color, COLORS, Dev, Hash, type t, css } from '../../test.ui';
+import { Color, COLORS, Dev, Hash, type t, css } from '../test.ui';
 
 type T = {
   selected?: string;
