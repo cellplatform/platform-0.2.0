@@ -33,7 +33,6 @@ export default Dev.describe(name, (e) => {
   /**
    * Network Peers
    */
-  const remote = Network.peer();
   const self = Network.peer();
 
   /**
@@ -101,12 +100,6 @@ export default Dev.describe(name, (e) => {
           data={{ peer: { self }, repo: { store } }}
         />
       );
-    });
-
-    dev.hr(5, 20);
-
-    dev.row((e) => {
-      return <Network.Dev.PeerCard peer={{ self: remote, remote: self }} />;
     });
 
     dev.hr(5, 20);
