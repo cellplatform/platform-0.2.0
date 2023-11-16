@@ -1,4 +1,4 @@
-import { LabelItem } from './common';
+import { LabelItem, Typenames } from './common';
 
 export * from '../common';
 export const Model = LabelItem.Stateful.Model;
@@ -7,8 +7,5 @@ export const Model = LabelItem.Stateful.Model;
  * Constants
  */
 export const DEFAULTS = {
-  typename: {
-    list: 'RepoList.List1',
-    item: 'RepoList.Item',
-  },
+  typename: Typenames.RepoList,
 } as const;

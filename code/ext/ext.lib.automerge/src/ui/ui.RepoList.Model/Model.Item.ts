@@ -22,7 +22,7 @@ export const ItemModel = {
   state(args: Args) {
     const { ctx } = args;
     const initial = ItemModel.initial(args);
-    const type = DEFAULTS.typename.item;
+    const type = DEFAULTS.typename.Item;
     const item = Model.Item.state<t.RepoListAction, D>(initial, { type });
     const events = item.events(args.dispose$);
 
