@@ -1,4 +1,4 @@
-import { type t, rx } from './common';
+import { rx, type t } from './common';
 import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
 
 /**
@@ -32,6 +32,8 @@ export const WebrtcStoreManager = {
     });
 
     const api: t.WebrtcStoreManager = {
+      store,
+      peer,
       added$: added$.pipe(rx.takeUntil(dispose$)),
       total: {
         get added() {

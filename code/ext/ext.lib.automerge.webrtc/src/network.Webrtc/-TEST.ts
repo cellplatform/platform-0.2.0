@@ -1,5 +1,5 @@
 import { WebrtcStoreManager } from '.';
-import { type t, Test, Time, WebStore, Webrtc, expect } from '../test.ui';
+import { Test, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
 
 type D = { count: number };
 
@@ -64,8 +64,10 @@ export default Test.describe('WebrtcNetworkAdapter', (e) => {
 
   e.describe('WebrtcStoreManager', (e) => {
     e.it('initialize', async (e) => {
-      const { dispose, manager } = testSetup();
+      const { dispose, manager, store, peer } = testSetup();
       expect(manager.total.added).to.eql(0);
+      expect(manager.store).to.equal(store);
+      expect(manager.peer).to.equal(peer);
       dispose();
     });
 

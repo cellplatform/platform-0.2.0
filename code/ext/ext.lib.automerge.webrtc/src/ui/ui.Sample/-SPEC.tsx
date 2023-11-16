@@ -1,8 +1,8 @@
 import { UI as Network } from 'ext.lib.peerjs';
-import { WebrtcNetworkAdapter } from '../../network.Webrtc';
+import { WebrtcStoreManager } from '../../network.Webrtc';
 import { Dev } from '../../test.ui';
 import { Info } from '../ui.Info';
-import { A, WebStore, cuid, rx, type t } from './common';
+import { A, WebStore, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
 
 type T = {
@@ -35,7 +35,6 @@ export default Dev.describe(name, (e) => {
    */
   const remote = Network.peer();
   const self = Network.peer();
-  const selfEvents = self.events();
 
   /**
    * CRDT (Automerge)
@@ -62,17 +61,10 @@ export default Dev.describe(name, (e) => {
     });
     await initDoc(state);
 
-    selfEvents.cmd.conn$
-      .pipe(
-        rx.filter((e) => e.kind === 'data'),
-        rx.filter((e) => e.action === 'ready'),
-      )
-      .subscribe((e) => {
-        const conn = self.get.conn.obj.data(e.connection?.id);
-        const adapter = new WebrtcNetworkAdapter(conn!);
-        store.repo.networkSubsystem.addNetworkAdapter(adapter);
-        state.change((d) => (d.user = adapter.peerId));
-      });
+    const manager = WebrtcStoreManager.init(store, self);
+    manager.added$.subscribe((e) => {
+      state.change((d) => (d.user = e.adapter.peerId));
+    });
 
     ctx.debug.width(330);
     ctx.subject
