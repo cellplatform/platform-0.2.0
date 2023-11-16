@@ -6,9 +6,13 @@ import { Is } from '.';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
 import { Test, TestDb, expect, type t } from '../test.ui';
+import { RepoList } from '../ui/ui.RepoList';
 
 export default Test.describe('Is', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
+
+  const storage = TestDb.name.test;
+  const store = WebStore.init({ network: false, storage });
 
   const repo1 = new Repo({ network: [] });
   const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
@@ -21,6 +25,15 @@ export default Test.describe('Is', (e) => {
     const store = Store.init();
     expect(Is.store(store)).to.eql(true);
     NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
+    store.dispose();
+  });
+
+  e.it('Is.storeIndex', async (e) => {
+    const store = Store.init();
+    const index = await Store.Index.init(store);
+    NON_OBJECTS.forEach((value) => expect(Is.storeIndex(value)).to.eql(false));
+    expect(Is.storeIndex(index)).to.eql(true);
+    store.dispose();
   });
 
   e.it('Is.webStore', (e) => {
@@ -37,9 +50,25 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.repoIndex', (e) => {
-    NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
     const index: t.RepoIndex = { docs: [] };
     expect(Is.repoIndex(index)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
+  });
+
+  e.it('Is.repoListState', async (e) => {
+    const model = await RepoList.model(store);
+    NON_OBJECTS.forEach((v) => expect(Is.repoListState(v)).to.eql(false));
+    expect(Is.repoListState(model.list.state)).to.eql(true);
+    model.dispose();
+  });
+
+  e.it('Is.repoListModel', async (e) => {
+    const model = await RepoList.model(store);
+    NON_OBJECTS.forEach((v) => expect(Is.repoListState(v)).to.eql(false));
+    expect(Is.repoListModel(model.list.state)).to.eql(false);
+    expect(Is.repoListModel(model.list)).to.eql(false);
+    expect(Is.repoListModel(model)).to.eql(true);
+    model.dispose();
   });
 
   e.it('Is.networkSubsystem', (e) => {
