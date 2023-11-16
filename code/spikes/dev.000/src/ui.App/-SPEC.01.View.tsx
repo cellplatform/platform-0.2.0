@@ -18,15 +18,13 @@ export const View: React.FC<ViewProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '250px 1fr',
     }),
-    left: css({
-      borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-    }),
+    left: css({ borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
     right: css({}),
   };
 
   const elLeft = (
     <div {...styles.left}>
-      <Crdt.RepoList list={props.repo.list.state} />
+      <Crdt.RepoList list={props.repo} />
     </div>
   );
 
