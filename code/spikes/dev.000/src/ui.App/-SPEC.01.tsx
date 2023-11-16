@@ -69,7 +69,7 @@ export default Dev.describe(name, async (e) => {
               style={styles.avatars}
               muted={false}
               onSelection={(e) => {
-                console.info(`⚡️ onClick`, e);
+                console.info(`⚡️ AvatarTray.onSelection`, e);
                 state.change((d) => (d.stream = e.selected));
               }}
             />
