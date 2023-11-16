@@ -12,7 +12,7 @@ export type SampleListProps = {
 
 export const SampleList: React.FC<SampleListProps> = (props) => {
   const { useBehaviors, list, renderers, debug = {} } = props;
-  const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list, useBehaviors });
+  const List = LabelItem.Stateful.useListController({ list, useBehaviors });
 
   /**
    * [Render]
@@ -24,13 +24,13 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
   const elements = LabelItem.Model.List.map(list, (item, index) => {
     return (
       <LabelItem.Stateful
-        {...handlers}
+        {...List.item.handlers}
         key={item.instance}
         index={index}
         list={debug.isList ? list : undefined}
         item={item}
+        useBehaviors={List.item.useBehaviors}
         renderers={renderers}
-        useBehaviors={useBehaviors}
         debug={debug.ruby}
         renderCount={debug.renderCount ? itemRenderCount : undefined}
       />
@@ -38,12 +38,12 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
   });
 
   return (
-    <Provider>
-      <div ref={ref} {...css(styles.base, props.style)}>
+    <List.Provider>
+      <div ref={List.ref} {...css(styles.base, props.style)} tabIndex={0}>
         {debug.renderCount && <RenderCount {...listRenderCount} />}
         <div>{elements}</div>
       </div>
-    </Provider>
+    </List.Provider>
   );
 };
 

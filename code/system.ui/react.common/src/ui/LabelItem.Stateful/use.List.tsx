@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, ListContext, Model, rx, type t } from './common';
+import { useListFocusController } from './use.List.Focus';
 import { useListKeyboardController } from './use.List.Keyboard';
 import { useListNavigationController } from './use.List.Navigation';
 import { useListRedrawController } from './use.List.Redraw';
@@ -19,7 +20,6 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
-  const dispatchRef = useRef<t.LabelListDispatch>();
   const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
@@ -44,15 +44,12 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   /**
    * Hook into event handlers passed down to the <Item>.
    */
-  const handlers: t.LabelItemPropsHandlers = {
-    onFocusChange(e) {
-      list?.change((d) => (d.focused = e.focused));
-    },
-  };
+  let handlers: t.LabelItemPropsHandlers = {};
 
   /**
    * Sub-controllers.
    */
+  useListFocusController({ ref, list });
   useListKeyboardController({ list, useBehaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
@@ -66,7 +63,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   return {
     ref,
     enabled,
-    handlers,
+    item: { handlers, useBehaviors },
     list,
     get current() {
       return list?.current ?? DEFAULTS.data.list;
@@ -74,7 +71,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     Provider(props: { children?: React.ReactNode }) {
       const Provider = ListContext.Provider;
       const value: t.LabelListContext = {
-        dispatch: dispatchRef.current!,
+        dispatch: Model.List.commands(list),
         events: list.events,
         get list() {
           return list.current;

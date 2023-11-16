@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, type t, Model } from './common';
+import { rx, type t } from './common';
 
 /**
  * HOOK: trigger redraws on specific list-model state changes.
