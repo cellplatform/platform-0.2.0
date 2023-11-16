@@ -5,7 +5,7 @@ import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
  * Manages the relationship between a [Repo/Store] and a network peer.
  */
 export const WebrtcStore = {
-  init(store: t.Store, peer: t.PeerModel) {
+  monitor(peer: t.PeerModel, store: t.Store) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
 

@@ -3,7 +3,7 @@ import { Test, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
 
 type D = { count: number };
 
-export default Test.describe('WebrtcNetworkAdapter | WebrtcStore', (e) => {
+export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   e.timeout(9999);
 
   const testSetup = () => {
@@ -11,7 +11,7 @@ export default Test.describe('WebrtcNetworkAdapter | WebrtcStore', (e) => {
     const events = peer.events();
     const store = WebStore.init({ network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
-    const manager = WebrtcStore.init(store, peer);
+    const manager = WebrtcStore.monitor(peer, store);
 
     const added: t.WebrtcStoreNetworkAdapterAdded[] = [];
     manager.added$.subscribe((e) => added.push(e));
