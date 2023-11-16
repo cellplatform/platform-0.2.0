@@ -8,8 +8,10 @@ export const View: React.FC<t.RepoListProps> = (props) => {
   const list = Wrangle.listState(props.list);
 
   const renderers = useRef(Renderers.init()).current;
-  const useBehaviors = Wrangle.behaviors(props);
-  const { Provider, ref, handlers } = LabelItem.Stateful.useListController({ list, useBehaviors });
+  const List = LabelItem.Stateful.useListController({
+    list,
+    useBehaviors: Wrangle.behaviors(props),
+  });
 
   /**
    * [Render]
@@ -21,23 +23,23 @@ export const View: React.FC<t.RepoListProps> = (props) => {
   const elements = LabelItem.Model.List.map(list, (item, i) => {
     return (
       <LabelItem.Stateful
-        {...handlers}
+        {...List.item.handlers}
         key={item.instance}
         index={i}
         list={list}
         item={item}
         renderers={renderers}
-        useBehaviors={useBehaviors}
+        useBehaviors={List.item.useBehaviors}
       />
     );
   });
 
   return (
-    <Provider>
-      <div ref={ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
+    <List.Provider>
+      <div ref={List.ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
         {props.renderCount && <RenderCount {...props.renderCount} />}
         <div>{elements}</div>
       </div>
-    </Provider>
+    </List.Provider>
   );
 };
