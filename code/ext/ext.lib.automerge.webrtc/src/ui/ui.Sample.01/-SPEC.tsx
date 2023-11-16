@@ -19,7 +19,7 @@ const initial: T = {
 /**
  * Spec
  */
-const name = 'Sample.WebRtc';
+const name = 'Sample.01';
 
 export default Dev.describe(name, (e) => {
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
@@ -60,7 +60,7 @@ export default Dev.describe(name, (e) => {
     });
     await initDoc(state);
 
-    const manager = WebrtcStore.init(store, self);
+    const manager = WebrtcStore.monitor(self, store);
     manager.added$.subscribe((e) => {
       state.change((d) => (d.user = e.adapter.peerId));
     });
