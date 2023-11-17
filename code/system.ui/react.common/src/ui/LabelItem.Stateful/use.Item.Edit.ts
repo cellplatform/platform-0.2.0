@@ -19,7 +19,10 @@ type Args = {
  */
 export function useItemEditController(args: Args) {
   const { item, list, position, enabled = true } = args;
-  const dispatch = Model.Item.commands(item);
+  const dispatch = {
+    item: Model.Item.commands(item),
+    list: Model.List.commands(list),
+  } as const;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [, setCount] = useState(0);
@@ -40,10 +43,14 @@ export function useItemEditController(args: Args) {
 
   const Edit = {
     is: {
+      get focused() {
+        return Boolean(list?.current.focused);
+      },
       get editing() {
         return Boolean(item?.instance === list?.current.editing);
       },
       get editable() {
+        if (!Edit.is.focused) return false;
         return item?.current?.editable ?? DEFAULTS.editable;
       },
     },
@@ -59,16 +66,19 @@ export function useItemEditController(args: Args) {
 
     accept() {
       if (!Edit.is.editing) return;
+      const focused = Edit.is.focused;
       change(
         'edit:accept',
         (list) => (list.editing = undefined),
         (item) => delete item._revert,
       );
-      dispatch.edited('accepted');
+      dispatch.item.edited('accepted');
+      if (focused) dispatch.list.focus();
     },
 
     cancel() {
       if (!Edit.is.editing) return;
+      const focused = Edit.is.focused;
       change(
         'edit:cancel',
         (list) => (list.editing = undefined),
@@ -77,7 +87,8 @@ export function useItemEditController(args: Args) {
           delete item._revert;
         },
       );
-      dispatch.edited('cancelled');
+      dispatch.item.edited('cancelled');
+      if (focused) dispatch.list.focus();
     },
   };
 
@@ -107,12 +118,12 @@ export function useItemEditController(args: Args) {
     },
 
     onLabelDoubleClick(e) {
-      dispatch.edit('start');
+      dispatch.item.edit('start');
       args.handlers?.onLabelDoubleClick?.(e);
     },
 
     onEditClickAway(e) {
-      dispatch.edit('accept');
+      dispatch.item.edit('accept');
       args.handlers?.onEditClickAway?.(e);
     },
   };
@@ -132,10 +143,10 @@ export function useItemEditController(args: Args) {
 
     keyboard.on({
       Escape(e) {
-        if (isSelected()) dispatch.edit('cancel');
+        if (isSelected()) dispatch.item.edit('cancel');
       },
       Enter(e) {
-        if (isSelected()) dispatch.edit('toggle');
+        if (isSelected()) dispatch.item.edit('toggle');
       },
     });
 
@@ -173,7 +184,7 @@ export function useItemEditController(args: Args) {
         rx.filter((e) => enabled),
         rx.filter((e) => e.item === item?.instance),
       )
-      .subscribe((e) => dispatch.edit(e.action));
+      .subscribe((e) => dispatch.item.edit(e.action));
     return events?.dispose;
   }, [enabled, list?.instance]);
 
