@@ -1,6 +1,7 @@
 import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
 
 export type SampleEdgeProps = {
+  name: t.Edge;
   edge: t.SampleEdge;
   style?: t.CssValue;
 };
