@@ -25,4 +25,12 @@ export function useListFocusController<H extends HTMLElement = HTMLDivElement>(a
       ref.current?.removeEventListener('focusout', handleBlur);
     };
   }, [ref.current, list.instance]);
+
+  /**
+   * Ensure the "focus border" does not show for the container element.
+   */
+  useEffect(() => {
+    const el = ref.current;
+    if (el) el.style.outline = 'none';
+  }, [ref.current, list.instance]);
 }
