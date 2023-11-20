@@ -49,7 +49,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   /**
    * Sub-controllers.
    */
-  useListFocusController({ ref, list });
+  useListFocusController({ ref, list, behaviors });
   useListKeyboardController({ list, behaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),

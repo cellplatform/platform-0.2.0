@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Wrangle } from './Wrangle';
-import { Keyboard, Model, type t, Time } from './common';
+import { Keyboard, Model, type t } from './common';
 
 /**
  * HOOK: Keyboard listener for various common behaviors of the list.
@@ -9,8 +9,8 @@ export function useListKeyboardController(args: {
   list: t.LabelListState;
   behaviors?: t.LabelItemBehaviorKind[];
 }) {
-  const { list, behaviors = [] } = args;
-  const behaviorsKinds = behaviors.join();
+  const { list, behaviors } = args;
+  const behaviorsKinds = (behaviors || []).join();
 
   /**
    * Command: "redraw" (entire list).

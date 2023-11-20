@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Wrangle } from './Wrangle';
 import { type t } from './common';
 
 /**
@@ -7,24 +8,30 @@ import { type t } from './common';
 export function useListFocusController<H extends HTMLElement = HTMLDivElement>(args: {
   ref: React.RefObject<H>;
   list: t.LabelListState;
+  behaviors?: t.LabelItemBehaviorKind[];
 }) {
-  const { ref, list } = args;
+  const { ref, list, behaviors } = args;
+  const behaviorsKinds = (behaviors || []).join();
 
   /**
    * Command: "redraw" (entire list).
    */
   useEffect(() => {
     const changer = (focused: boolean) => () => list.change((d) => (d.focused = focused));
-    const handleFocus = changer(true);
-    const handleBlur = changer(false);
+    const focus = changer(true);
+    const blur = changer(false);
 
-    ref.current?.addEventListener('focusin', handleFocus);
-    ref.current?.addEventListener('focusout', handleBlur);
+    // Focus on load.
+    if (Wrangle.enabled({ behaviors }, 'Focus.OnLoad')) focus();
+
+    // Wire/un-sire events.
+    ref.current?.addEventListener('focusin', focus);
+    ref.current?.addEventListener('focusout', blur);
     return () => {
-      ref.current?.removeEventListener('focusin', handleFocus);
-      ref.current?.removeEventListener('focusout', handleBlur);
+      ref.current?.removeEventListener('focusin', focus);
+      ref.current?.removeEventListener('focusout', blur);
     };
-  }, [ref.current, list.instance]);
+  }, [ref.current, list.instance, behaviorsKinds]);
 
   /**
    * Ensure the "focus border" does not show for the container element.
