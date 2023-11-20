@@ -2,6 +2,7 @@ import type { UserConfig as ViteUserConfig } from 'vite';
 
 export { ViteUserConfig };
 
+export type SortModulesBy = 'Topological' | 'Alpha' | 'None';
 export type PathString = string;
 export type DirString = PathString;
 export type ImportMetaUrl = PathString; // eg: the ESM [import.meta.url] value.
