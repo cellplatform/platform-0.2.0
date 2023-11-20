@@ -6,12 +6,10 @@ type Props = t.ConnectorProps & { list: t.LabelListState };
 
 export const List: React.FC<Props> = (props) => {
   const { list, peer, onSelectionChange, debug = {}, tabIndex = DEFAULTS.tabIndex } = props;
+  const behaviors = Wrangle.behaviors(props);
 
   useSelection({ peer, list, onSelectionChange });
-  const List = LabelItem.Stateful.useListController({
-    list,
-    useBehaviors: Wrangle.behaviors(props),
-  });
+  const List = LabelItem.Stateful.useListController({ list, behaviors });
 
   /**
    * [Render]
@@ -28,7 +26,7 @@ export const List: React.FC<Props> = (props) => {
         index={index}
         list={list}
         item={item}
-        useBehaviors={List.item.useBehaviors}
+        behaviors={List.item.behaviors}
       />
     );
   });

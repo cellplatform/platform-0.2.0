@@ -6,12 +6,10 @@ import { Wrangle } from './u.Wrangle';
 export const View: React.FC<t.RepoListProps> = (props) => {
   const { tabIndex = DEFAULTS.tabIndex } = props;
   const list = Wrangle.listState(props.list);
+  const behaviors = Wrangle.behaviors(props);
 
   const renderers = useRef(Renderers.init()).current;
-  const List = LabelItem.Stateful.useListController({
-    list,
-    useBehaviors: Wrangle.behaviors(props),
-  });
+  const List = LabelItem.Stateful.useListController({ list, behaviors });
 
   /**
    * [Render]
@@ -29,7 +27,7 @@ export const View: React.FC<t.RepoListProps> = (props) => {
         list={list}
         item={item}
         renderers={renderers}
-        useBehaviors={List.item.useBehaviors}
+        behaviors={List.item.behaviors}
       />
     );
   });
