@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { Wrangle } from './Wrangle';
-import { Keyboard, Model, type t } from './common';
+import { Keyboard, Model, type t, Time } from './common';
 
 /**
  * HOOK: Keyboard listener for various common behaviors of the list.
  */
 export function useListKeyboardController(args: {
   list: t.LabelListState;
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
 }) {
-  const { list, useBehaviors = [] } = args;
-  const useBehaviorsKinds = useBehaviors.join();
+  const { list, behaviors = [] } = args;
+  const behaviorsKinds = behaviors.join();
 
   /**
    * Command: "redraw" (entire list).
@@ -20,8 +20,8 @@ export function useListKeyboardController(args: {
     const commands = Model.List.commands(list);
 
     const is = {
-      focusOnLoad: Wrangle.enabled({ useBehaviors }, 'Focus.OnLoad'),
-      focusOnArrowKey: Wrangle.enabled({ useBehaviors }, 'Focus.OnArrowKey'),
+      focusOnLoad: Wrangle.enabled({ behaviors }, 'Focus.OnLoad'),
+      focusOnArrowKey: Wrangle.enabled({ behaviors }, 'Focus.OnArrowKey'),
     };
 
     const focusAndSelect = () => {
@@ -38,5 +38,5 @@ export function useListKeyboardController(args: {
     if (!is.focusOnArrowKey) keyboard.dispose(); // NB: release keyboard events if beheavior not enabled.
 
     return keyboard.dispose;
-  }, [list?.instance, useBehaviorsKinds]);
+  }, [list?.instance, behaviorsKinds]);
 }

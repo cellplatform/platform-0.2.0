@@ -3,7 +3,7 @@ import { RenderCount } from '../../RenderCount';
 import { css, type t } from '../common';
 
 export type SampleListProps = {
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
   renderers?: t.LabelItemRenderers;
   debug?: { isList?: boolean; renderCount?: boolean; ruby?: boolean };
@@ -11,8 +11,8 @@ export type SampleListProps = {
 };
 
 export const SampleList: React.FC<SampleListProps> = (props) => {
-  const { useBehaviors, list, renderers, debug = {} } = props;
-  const List = LabelItem.Stateful.useListController({ list, useBehaviors });
+  const { behaviors, list, renderers, debug = {} } = props;
+  const List = LabelItem.Stateful.useListController({ list, behaviors });
 
   /**
    * [Render]
@@ -29,7 +29,7 @@ export const SampleList: React.FC<SampleListProps> = (props) => {
         index={index}
         list={debug.isList ? list : undefined}
         item={item}
-        useBehaviors={List.item.useBehaviors}
+        behaviors={List.item.behaviors}
         renderers={renderers}
         debug={debug.ruby}
         renderCount={debug.renderCount ? itemRenderCount : undefined}

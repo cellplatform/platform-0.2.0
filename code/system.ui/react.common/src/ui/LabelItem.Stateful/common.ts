@@ -30,6 +30,6 @@ export const DEFAULTS = {
   enabled: true,
   editing: false,
   editable: true,
-  useBehaviors: { all, defaults },
+  behaviors: { all, defaults },
   data: MODEL_DEFAULTS.data,
 } as const;

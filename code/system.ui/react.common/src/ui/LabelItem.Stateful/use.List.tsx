@@ -8,7 +8,7 @@ import { useListRedrawController } from './use.List.Redraw';
 
 type Args = {
   enabled?: boolean;
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
 };
 
@@ -16,7 +16,7 @@ type Args = {
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
 export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
-  const { useBehaviors } = args;
+  const { behaviors } = args;
   const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
@@ -50,7 +50,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
    * Sub-controllers.
    */
   useListFocusController({ ref, list });
-  useListKeyboardController({ list, useBehaviors });
+  useListKeyboardController({ list, behaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
     ref,
@@ -63,7 +63,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   return {
     ref,
     enabled,
-    item: { handlers, useBehaviors },
+    item: { handlers, behaviors },
     list,
     get current() {
       return list?.current ?? DEFAULTS.data.list;

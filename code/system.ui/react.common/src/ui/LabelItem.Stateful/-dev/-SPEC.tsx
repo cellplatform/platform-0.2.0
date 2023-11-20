@@ -10,7 +10,7 @@ type T = {
   data?: t.LabelItem;
   debug: {
     debug?: boolean;
-    useBehaviors?: t.LabelItemBehaviorKind[];
+    behaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
     isList?: boolean;
   };
@@ -19,12 +19,12 @@ const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'useBehaviors' | 'renderCount' | 'debug' | 'isList'> & {
+  type LocalStore = Pick<T['debug'], 'behaviors' | 'renderCount' | 'debug' | 'isList'> & {
     total: number;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    useBehaviors: DEFAULTS.useBehaviors.defaults,
+    behaviors: DEFAULTS.behaviors.defaults,
     total: 1,
     debug: false,
     renderCount: true,
@@ -103,7 +103,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.useBehaviors = local.useBehaviors;
+      d.debug.behaviors = local.behaviors;
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
@@ -123,7 +123,7 @@ export default Dev.describe(name, (e) => {
           <SampleList
             list={TestState.list}
             // renderers={Sample.renderers}
-            useBehaviors={debug.useBehaviors}
+            behaviors={debug.behaviors}
             debug={{ isList, renderCount, ruby: debug.debug }}
           />
         );
@@ -137,10 +137,10 @@ export default Dev.describe(name, (e) => {
     dev.row((e) => {
       return (
         <LabelItem.BehaviorSelector
-          selected={e.state.debug.useBehaviors}
+          selected={e.state.debug.behaviors}
           onChange={(e) => {
-            state.change((d) => (d.debug.useBehaviors = e.next));
-            local.useBehaviors = e.next;
+            state.change((d) => (d.debug.behaviors = e.next));
+            local.behaviors = e.next;
           }}
         />
       );
@@ -202,7 +202,6 @@ export default Dev.describe(name, (e) => {
 
       dev.button('edit: 0', (e) => dispatch.edit(0));
       dev.button('edit: last (id)', (e) => {
-        console.log('TestState.array.last.instance', TestState.array.last.instance);
         dispatch.edit(TestState.array.last.instance);
       });
       dev.button('edit: "Last"', (e) => dispatch.edit('Last'));

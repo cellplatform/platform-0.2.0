@@ -5,9 +5,9 @@ type B = t.LabelItemBehaviorKind;
  * Helpers
  */
 export const Wrangle = {
-  enabled(props: { enabled?: boolean; useBehaviors?: B[] }, ...match: B[]) {
-    const { useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
-    return (props.enabled ?? true) && Wrangle.isUsing(useBehaviors, ...match);
+  enabled(props: { enabled?: boolean; behaviors?: B[] }, ...match: B[]) {
+    const { behaviors = DEFAULTS.behaviors.defaults } = props;
+    return (props.enabled ?? true) && Wrangle.isUsing(behaviors, ...match);
   },
 
   isUsing(kinds: B[], ...match: B[]) {

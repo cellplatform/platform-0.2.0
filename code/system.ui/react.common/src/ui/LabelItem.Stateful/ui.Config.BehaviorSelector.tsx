@@ -20,8 +20,8 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
     <FieldSelector
       style={props.style}
       title={title}
-      all={DEFAULTS.useBehaviors.all}
-      defaults={DEFAULTS.useBehaviors.defaults}
+      all={DEFAULTS.behaviors.all}
+      defaults={DEFAULTS.behaviors.defaults}
       selected={props.selected}
       indent={20}
       indexes={false}
