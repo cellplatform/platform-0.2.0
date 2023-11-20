@@ -10,7 +10,7 @@ export const List: React.FC<Props> = (props) => {
   useSelection({ peer, list, onSelectionChange });
   const List = LabelItem.Stateful.useListController({
     list,
-    useBehaviors: Wrangle.useBehaviors(props),
+    useBehaviors: Wrangle.behaviors(props),
   });
 
   /**

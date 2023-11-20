@@ -1,7 +1,7 @@
 import { DEFAULTS, type t } from './common';
 
 export const Wrangle = {
-  useBehaviors(props: t.ConnectorProps) {
+  behaviors(props: t.ConnectorProps) {
     const { behavior: b = {} } = props;
     const res: t.LabelItemBehaviorKind[] = ['Item', 'List'];
 
