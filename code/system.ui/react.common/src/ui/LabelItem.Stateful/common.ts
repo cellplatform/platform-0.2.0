@@ -12,24 +12,27 @@ export { Keyboard } from '../Text.Keyboard';
 /**
  * Constants
  */
-type B = t.LabelItemBehaviorKind;
-const all: B[] = [
-  'Item',
-  'Item.Selection',
-  'Item.Edit',
-  'List',
-  'List.Navigation',
-  'Focus.OnLoad',
-  'Focus.OnArrowKey',
-];
-const defaults: B[] = ['Item', 'List'];
-
 export const DEFAULTS = {
   index: -1,
   total: -1,
   enabled: true,
   editing: false,
   editable: true,
-  behaviors: { all, defaults },
   data: MODEL_DEFAULTS.data,
+  behaviors: {
+    get all(): t.LabelItemBehaviorKind[] {
+      return [
+        'Item',
+        'Item.Selection',
+        'Item.Edit',
+        'List',
+        'List.Navigation',
+        'Focus.OnLoad',
+        'Focus.OnArrowKey',
+      ];
+    },
+    get defaults(): t.LabelItemBehaviorKind[] {
+      return ['Item', 'List'];
+    },
+  },
 } as const;
