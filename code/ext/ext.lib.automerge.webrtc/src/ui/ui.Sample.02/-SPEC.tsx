@@ -1,6 +1,7 @@
 import { Dev, IndexedDb } from '../../test.ui';
-import { Crdt, Webrtc } from './common';
+import { Crdt, Webrtc, DocUri } from './common';
 import { Sample } from './ui.Sample';
+import { WebrtcStore } from '../../network.Webrtc';
 
 type T = {};
 const initial: T = {};
@@ -15,6 +16,12 @@ export default Dev.describe(name, async (e) => {
     const peer = Webrtc.peer();
     const store = Crdt.WebStore.init({ storage });
     const repo = await Crdt.RepoList.model(store);
+
+    const monitor = WebrtcStore.monitor(peer, store);
+    monitor.added$.subscribe((e) => {
+      console.info('🌳 network adapter added:', peer.id, e);
+    });
+
     return { peer, repo } as const;
   };
 
@@ -60,13 +67,26 @@ export default Dev.describe(name, async (e) => {
     });
 
     dev.hr(5, 20);
+
+    dev.button('tmp', async (e) => {
+      const uri = self.repo.index.doc.uri;
+      const doc = await remote.repo.store.doc.get(uri);
+      console.log('doc', doc);
+      doc?.events().changed$.subscribe((e) => {
+        console.log('changed', e);
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const format = (uri: string) => DocUri.id(uri, { shorten: 4 });
+      const data = {
+        self: { index: format(self.repo.index.doc.uri) },
+        remote: { index: format(remote.repo.index.doc.uri) },
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
