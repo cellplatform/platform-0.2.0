@@ -36,6 +36,8 @@ export default Dev.describe(name, async (e) => {
       b.focusOnLoad = local.focusOnLoad;
     });
 
+    model.index.doc.events().changed$.subscribe(() => dev.redraw());
+
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
@@ -109,14 +111,12 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      console.log('model', model);
-
       const data = {
         props: e.state.props,
         db: storage,
-        'db.index': `${model.index.kind}[${model.index.total}]`,
+        'db.index': `${model.index.db.name}[${model.index.total}]`,
+        index: model.index.doc.toObject(),
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
