@@ -28,7 +28,7 @@ export const WebrtcStore = {
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
 
       _totalAdded += 1;
-      added$.next({ conn: { id, obj }, adapter });
+      added$.next({ peer: peer.id, conn: { id, obj }, adapter });
     });
 
     const api: t.WebrtcStore = {

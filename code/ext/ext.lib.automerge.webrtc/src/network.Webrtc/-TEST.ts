@@ -40,14 +40,17 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       expect(self.added.length).to.eql(1);
       expect(remote.added.length).to.eql(1);
       expect(self.added[0].conn.id).to.eql(res.id);
+      expect(self.added[0].peer).to.eql(self.peer.id);
+
       expect(remote.added[0].conn.id).to.eql(res.id);
+      expect(remote.added[0].peer).to.eql(remote.peer.id);
 
       /**
        * Create a new document.
        */
       const docSelf = await self.generator();
       await wait();
-      const docRemote = await remote.generator(docSelf.uri);
+      const docRemote = await remote.generator(docSelf.uri); // NB: knowledge of remote document URI.
       await wait();
       expect(docSelf.current).to.eql({ count: 0 });
       expect(docRemote.current).to.eql({ count: 0 });
