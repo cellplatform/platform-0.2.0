@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Button, Dev, TestDb, Time, WebStore, type t, IndexedDb } from '../../test.ui';
+import { Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
@@ -111,10 +111,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
+      console.log('model', model);
+
       const data = {
         props: e.state.props,
-        storage,
-        index: `${model.index.kind}[${model.index.total}]`,
+        db: storage,
+        'db.index': `${model.index.kind}[${model.index.total}]`,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
