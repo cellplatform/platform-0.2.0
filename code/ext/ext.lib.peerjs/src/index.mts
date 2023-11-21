@@ -14,7 +14,7 @@ export { PeerModel, Webrtc } from './Webrtc';
  * Library: UI
  */
 import { AvatarTray } from './ui/ui.AvatarTray';
-import { Connector } from './ui/ui.Connector';
+import { Connector, ConnectorConfig } from './ui/ui.Connector';
 import { PeerCard } from './ui/ui.Dev.PeerCard';
 import { Info } from './ui/ui.Info';
 import { Video } from './ui/ui.Video';
@@ -24,6 +24,7 @@ export const UI = {
   peer: Webrtc.peer,
   Info,
   Connector,
+  ConnectorConfig,
   AvatarTray,
   Video,
   Dev: { PeerCard },

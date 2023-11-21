@@ -1,8 +1,8 @@
-import { Button, COLORS, Color, Dev, Time, UI, Webrtc, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Time, UI, Webrtc, css, type t } from '../../test.ui';
 import { AvatarTray } from '../ui.AvatarTray';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
-import { Connector } from '.';
+import { Connector, ConnectorConfig, DEFAULTS } from '.';
 import { Info } from '../ui.Info';
 
 type T = { props: t.ConnectorProps };
@@ -13,22 +13,13 @@ export default Dev.describe(name, (e) => {
   const remote = Webrtc.peer();
 
   let ref: t.ConnectorRef;
-  const initial: T = {
-    props: { peer: self },
-  };
+  const initial: T = { props: { peer: self } };
 
-  type LocalStore = t.ConnectorBehavior;
+  type LocalStore = Pick<t.ConnectorProps, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
   const local = localstore.object({
-    focusOnArrowKey: true,
-    focusOnLoad: true,
+    behaviors: DEFAULTS.behaviors.default,
   });
-
-  const State = {
-    behavior(props: t.ConnectorProps): t.ConnectorBehavior {
-      return props.behavior || (props.behavior = {});
-    },
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -36,9 +27,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const b = State.behavior(d.props);
-      b.focusOnArrowKey = local.focusOnArrowKey;
-      b.focusOnLoad = local.focusOnLoad;
+      d.props.behaviors = local.behaviors;
     });
 
     ctx.debug.width(330);
@@ -78,6 +67,21 @@ export default Dev.describe(name, (e) => {
         data={{ component: { name: `<${name}>` }, peer: { self } }}
       />
     ));
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return (
+        <ConnectorConfig
+          selected={e.state.props.behaviors}
+          onChange={(e) => {
+            state.change((d) => (d.props.behaviors = e.next));
+            local.behaviors = e.next;
+          }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
@@ -99,36 +103,6 @@ export default Dev.describe(name, (e) => {
         emptyMessage={'No media connetions to display.'}
       />
     ));
-    dev.hr(5, 20);
-
-    dev.section('Props: Load Behavior', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.behavior?.focusOnArrowKey);
-        btn
-          .label((e) => `focusOnArrowKey`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              const b = State.behavior(d.props);
-              local.focusOnArrowKey = Dev.toggle(b, 'focusOnArrowKey');
-            }),
-          );
-      });
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.behavior?.focusOnLoad);
-        btn
-          .label((e) => `focusOnLoad`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              const b = State.behavior(d.props);
-              local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
-            }),
-          );
-      });
-    });
-
     dev.hr(5, 20);
 
     dev.section('ref ( ƒ )', (dev) => {

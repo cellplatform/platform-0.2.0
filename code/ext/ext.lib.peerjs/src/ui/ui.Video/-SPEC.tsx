@@ -57,7 +57,7 @@ export default Dev.describe(name, (e) => {
           <div>
             <UI.Connector
               peer={self}
-              behavior={{ focusOnLoad: true }}
+              behaviors={['Focus.OnLoad']}
               onReady={(e) => {
                 console.info('⚡️ Connector.onReady:', e);
               }}
