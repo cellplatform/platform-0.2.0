@@ -25,12 +25,12 @@ export const Api: React.FC<ApiProps> = (props) => {
     bar: css({
       width: 20,
       height: 6,
-      backgroundColor: Color.alpha(COLORS.DARK, 0.1),
+      backgroundColor: Color.alpha(COLORS.DARK, 0.2),
       alignSelf: 'center',
     }),
     head: css({
       position: 'relative',
-      border: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      border: `solid 5px ${Color.alpha(COLORS.DARK, 0.2)}`,
       Size: 10,
       borderRadius: '100%',
     }),
