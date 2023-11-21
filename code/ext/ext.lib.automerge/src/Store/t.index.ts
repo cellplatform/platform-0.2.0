@@ -2,6 +2,9 @@ import type { t } from './common';
 
 type Uri = t.DocUri | string;
 
+/**
+ * A CRDT document that represents an index of a store/repo.
+ */
 export type StoreIndex = {
   readonly kind: 'store:index';
   readonly store: t.Store;

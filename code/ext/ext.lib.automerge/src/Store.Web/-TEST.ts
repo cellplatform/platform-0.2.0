@@ -119,7 +119,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
   });
 
-  e.describe('doc: change', (e) => {
+  e.describe('store.doc (change)', (e) => {
     const generator = store.doc.factory<D>(initial);
 
     e.it('change', async (e) => {

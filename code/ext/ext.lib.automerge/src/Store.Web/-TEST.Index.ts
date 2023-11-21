@@ -1,5 +1,5 @@
 import { WebStore } from '.';
-import { Time, A, Test, TestDb, expect, toObject, type t, Value } from '../test.ui';
+import { A, Test, TestDb, Time, Value, expect, toObject, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
@@ -8,32 +8,41 @@ export default Test.describe('Store.Web: Index', (e) => {
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const contains = (docs: t.RepoIndexItem[], uri: string) => docs.some((e) => e.uri === uri);
 
-  e.it('disposes of Index events when store/repo is disposed', async (e) => {
-    const store = WebStore.init({ network: false, storage: { name } });
-    const index = await WebStore.index(store);
-    const events = index.doc.events();
+  e.describe('lifecycle', (e) => {
+    e.it('initialize', async (e) => {
+      const store = WebStore.init({ network: false, storage: { name } });
+      const index = await WebStore.index(store);
+      expect(index.kind === 'store:index').to.eql(true);
+      expect(index.db.name).to.eql(WebStore.IndexDb.name(name));
+    });
 
-    store.dispose();
-    expect(events.disposed).to.eql(true); // NB: because parent store disposed.
+    e.it('disposes of Index events when store/repo is disposed', async (e) => {
+      const store = WebStore.init({ network: false, storage: { name } });
+      const index = await WebStore.index(store);
+      const events = index.doc.events();
+
+      store.dispose();
+      expect(events.disposed).to.eql(true); // NB: because parent store disposed.
+    });
+
+    e.it('multiple instances from store yield same index URI', async (e) => {
+      const store = WebStore.init({ network: false, storage: { name } });
+
+      const indexes: t.StoreIndex[] = [];
+      await Promise.all(
+        Array.from({ length: 10 }).map(async (item) => {
+          await Time.wait(Value.random(0, 250));
+          indexes.push(await WebStore.index(store));
+        }),
+      );
+
+      const uri = indexes[0].doc.uri;
+      const every = indexes.every((store) => store.doc.uri === uri);
+      expect(every).to.eql(true);
+    });
   });
 
-  e.it('multiple instances from store yield same index URI', async (e) => {
-    const store = WebStore.init({ network: false, storage: { name } });
-
-    const indexes: t.StoreIndex[] = [];
-    await Promise.all(
-      Array.from({ length: 10 }).map(async (item) => {
-        await Time.wait(Value.random(0, 250));
-        indexes.push(await WebStore.index(store));
-      }),
-    );
-
-    const uri = indexes[0].doc.uri;
-    const every = indexes.every((store) => store.doc.uri === uri);
-    expect(every).to.eql(true);
-  });
-
-  e.describe('auto sync with repo', (e) => {
+  e.describe('sync with repo (automatic)', (e) => {
     e.it('repo: on ⚡️ new document event → adds to index', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const index = await WebStore.index(store);
@@ -42,8 +51,10 @@ export default Test.describe('Store.Web: Index', (e) => {
       const fired: t.RepoIndex[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
 
+      const totalBefore = index.total;
       const sample = await store.doc.getOrCreate(initial);
       expect(index.exists(sample.uri)).to.eql(true);
+      expect(index.total).to.eql(totalBefore + 1);
 
       const docs = fired[0].docs;
       expect(fired.length).to.eql(1);

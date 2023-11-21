@@ -20,3 +20,10 @@ export type StoreMetaRecord = {
   dbname: string; // Name of the IndexedDB used by the repos [StorageAdapter].
   index: string; //  URI of index-document for the store/repo.
 };
+
+/**
+ * A CRDT document that represents an index of a store/repo.
+ */
+export type WebStoreIndex = t.StoreIndex & {
+  readonly db: t.StoreIndexDb;
+};
