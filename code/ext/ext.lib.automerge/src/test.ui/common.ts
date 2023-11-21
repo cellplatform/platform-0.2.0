@@ -5,4 +5,4 @@ export { Dev } from 'sys.ui.react.common';
 
 export * from '../Store.Web.IndexDb';
 export * from '../ui/common';
-export * from './TestIndexedDb';
+export * from './TestDb';
