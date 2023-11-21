@@ -4,21 +4,17 @@ import { type t } from './common';
  * API: Imperative handle reference.
  */
 export type RepoListRef = t.LabelListDispatch & { store: t.Store };
+export type RepoListBehaviorKind = 'Focus.OnLoad' | 'Focus.OnArrowKey';
 
 /**
  * <Component>
  */
 export type RepoListProps = {
   list?: t.RepoListState | t.RepoListModel;
-  behavior?: t.RepoListBehavior;
+  behaviors?: t.RepoListBehaviorKind[];
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
   style?: t.CssValue;
-};
-
-export type RepoListBehavior = {
-  focusOnLoad?: boolean;
-  focusOnArrowKey?: boolean;
 };
 
 /**

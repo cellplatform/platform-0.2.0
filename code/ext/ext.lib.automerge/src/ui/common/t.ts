@@ -17,6 +17,7 @@ export type {
   LabelListDispatch,
   LabelListItemTarget,
   LabelListState,
+  PropListFieldSelectorClickHandler,
   PropListItem,
   PropListProps,
   RenderCountProps,

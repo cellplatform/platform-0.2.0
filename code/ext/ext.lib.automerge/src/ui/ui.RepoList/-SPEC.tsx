@@ -12,18 +12,11 @@ export default Dev.describe(name, async (e) => {
   const model = await RepoList.model(store);
   const ref = RepoList.Ref(model);
 
-  type LocalStore = t.RepoListBehavior;
+  type LocalStore = Pick<t.RepoListProps, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
   const local = localstore.object({
-    focusOnArrowKey: true,
-    focusOnLoad: false,
+    behaviors: RepoList.DEFAULTS.behaviors.defaults,
   });
-
-  const State = {
-    behavior(props: t.RepoListProps): t.RepoListBehavior {
-      return props.behavior || (props.behavior = {});
-    },
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -31,9 +24,7 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const b = State.behavior(d.props);
-      b.focusOnArrowKey = local.focusOnArrowKey;
-      b.focusOnLoad = local.focusOnLoad;
+      d.props.behaviors = local.behaviors;
     });
 
     model.index.doc.events().changed$.subscribe(() => dev.redraw());
@@ -57,6 +48,21 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.row((e) => <SpecInfo model={model} />);
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return (
+        <RepoList.Config
+          selected={e.state.props.behaviors}
+          onChange={(e) => {
+            state.change((d) => (d.props.behaviors = e.next));
+            local.behaviors = e.next;
+          }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
 
     dev.section('ref ( ƒ )', (dev) => {
@@ -66,36 +72,6 @@ export default Dev.describe(name, async (e) => {
       };
       dev.button('select: first', (e) => select('First'));
       dev.button('select: last', (e) => select('Last'));
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('Props: Load Behavior', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.behavior?.focusOnArrowKey);
-        btn
-          .label((e) => `focusOnArrowKey`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              const b = State.behavior(d.props);
-              local.focusOnArrowKey = Dev.toggle(b, 'focusOnArrowKey');
-            }),
-          );
-      });
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.behavior?.focusOnLoad);
-        btn
-          .label((e) => `focusOnLoad`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              const b = State.behavior(d.props);
-              local.focusOnLoad = Dev.toggle(b, 'focusOnLoad');
-            }),
-          );
-      });
     });
 
     dev.hr(5, 20);
