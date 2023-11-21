@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Keyboard, Model, rx, type t } from './common';
+import { DEFAULTS, Keyboard, Model, Time, rx, type t } from './common';
 
 type RevertibleItem = t.LabelItem & { _revert?: { label?: string } };
 type ChangeItem = t.ImmutableNext<RevertibleItem>;
@@ -160,7 +160,10 @@ export function useItemEditController(args: Args) {
   useEffect(() => {
     const events = item?.events();
     events?.cmd.edit$.pipe(rx.filter((e) => enabled)).subscribe((e) => {
-      if (e.action === 'start') Edit.start();
+      if (e.action === 'start') {
+        dispatch.list.focus();
+        Time.delay(0, Edit.start);
+      }
       if (e.action === 'accept') Edit.accept();
       if (e.action === 'cancel') Edit.cancel();
       if (e.action === 'toggle') {

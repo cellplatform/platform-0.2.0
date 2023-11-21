@@ -11,7 +11,10 @@ export function createDocumentBehavior(args: {
 }) {
   const { ctx, events, item } = args;
   const { list, store } = ctx();
-  const dispatch = Model.Item.commands(item);
+  const dispatch = {
+    item: Model.Item.commands(item),
+    list: list.dispatch,
+  } as const;
 
   /**
    * Add a new document to the repo.
@@ -23,8 +26,10 @@ export function createDocumentBehavior(args: {
     // NB: After creating the new document, simply append 1 to the length of the list.
     //     The [getItem] data generator takes care of the rest.
     list.state.change((d) => (d.total += 1));
-    dispatch.redraw();
-    Time.delay(100, () => dispatch.edit('start')); // NB: ensure editing mode.
+    dispatch.item.redraw();
+    Time.delay(0, () => {
+      dispatch.item.edit('start'); // NB: ensure editing mode.
+    });
   };
 
   /**
