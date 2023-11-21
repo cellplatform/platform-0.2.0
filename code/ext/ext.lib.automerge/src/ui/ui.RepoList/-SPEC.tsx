@@ -15,7 +15,7 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<t.RepoListProps, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
   const local = localstore.object({
-    behaviors: RepoList.DEFAULTS.behaviors.defaults,
+    behaviors: RepoList.DEFAULTS.behaviors.default,
   });
 
   e.it('ui:init', async (e) => {

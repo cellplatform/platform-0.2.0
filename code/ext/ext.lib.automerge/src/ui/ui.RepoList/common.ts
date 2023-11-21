@@ -1,4 +1,5 @@
 import { type t } from '../common';
+
 export * from '../common';
 export { Data, Model } from '../ui.RepoList.Model';
 
@@ -10,10 +11,10 @@ export const DEFAULTS = {
   displayName: 'RepoList',
   tabIndex: 0,
   behaviors: {
-    get all(): t.RepoListBehaviorKind[] {
+    get all(): t.RepoListBehavior[] {
       return ['Focus.OnLoad', 'Focus.OnArrowKey'];
     },
-    get defaults(): t.RepoListBehaviorKind[] {
+    get default(): t.RepoListBehavior[] {
       return [];
     },
   },

@@ -1,10 +1,9 @@
 import { DEFAULTS, Is, type t } from './common';
 
 export const Wrangle = {
-  behaviors(props: t.RepoListProps) {
-    const { behaviors = DEFAULTS.behaviors.defaults } = props;
-    const res: t.LabelItemBehaviorKind[] = ['Item', 'List', ...behaviors];
-    return res;
+  behaviors(props: t.RepoListProps): t.LabelItemBehaviorKind[] {
+    const { behaviors = DEFAULTS.behaviors.default } = props;
+    return ['Item', 'List', ...behaviors];
   },
 
   listState(input?: t.RepoListState | t.RepoListModel): t.RepoListState | undefined {
