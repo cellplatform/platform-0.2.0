@@ -12,7 +12,7 @@ export { Pkg };
  * Library
  */
 export { Store } from './Store';
-export { Is, toObject } from './common';
+export { DocUri, Is, toObject } from './common';
 export { WebStore };
 
 /**
