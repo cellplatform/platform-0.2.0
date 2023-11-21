@@ -3,6 +3,7 @@ import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
 export type SampleEdgeProps = {
   name: t.Edge;
   edge: t.SampleEdge;
+  focusOnLoad?: boolean;
   style?: t.CssValue;
 };
 
@@ -35,7 +36,7 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
             console.info(`⚡️ AvatarTray.onSelection`, e);
           }}
         />
-        <Webrtc.Connector peer={edge.peer} behavior={{}} />
+        <Webrtc.Connector peer={edge.peer} behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []} />
       </div>
     </div>
   );

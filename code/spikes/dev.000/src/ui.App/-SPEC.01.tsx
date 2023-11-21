@@ -73,7 +73,7 @@ export default Dev.describe(name, async (e) => {
                 state.change((d) => (d.stream = e.selected));
               }}
             />
-            <Webrtc.Connector peer={self} behavior={{ focusOnLoad: true }} />
+            <Webrtc.Connector peer={self} behaviors={['Focus.OnLoad']} />
           </div>
         );
       });
