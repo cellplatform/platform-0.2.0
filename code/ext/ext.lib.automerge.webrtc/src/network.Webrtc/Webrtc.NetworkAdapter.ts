@@ -14,26 +14,28 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: DataConnection;
   #isReady = false;
   #disconnected = rx.subject<void>();
+  #$ = rx.subject<t.WebrtcMessage>();
+  readonly $: t.Observable<t.WebrtcMessage>;
 
   constructor(conn: DataConnection) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
     super();
     this.#conn = conn;
+    this.$ = this.#$.pipe(rx.takeUntil(this.#disconnected));
   }
 
   connect(peerId: PeerId) {
     const senderId = (this.peerId = peerId);
     const conn = this.#conn;
-    const send = (message: t.WebrtcMessage) => conn.send(message);
 
-    const handleOpen = () => send({ type: 'arrive', senderId });
+    const handleOpen = () => this.#transmit({ type: 'arrive', senderId });
     const handleClose = () => this.emit('close');
     const handleData = (e: any) => {
       const message = e as t.WebrtcMessage;
       switch (message.type) {
         case 'arrive':
           const targetId = message.senderId;
-          send({ type: 'welcome', senderId, targetId });
+          this.#transmit({ type: 'welcome', senderId, targetId });
           this.#announceConnection(targetId);
           break;
 
@@ -74,12 +76,17 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
 
   send(message: RepoMessage) {
     if (!this.#conn) throw new Error('Connection not ready');
-    const send = (message: t.WebrtcMessage) => this.#conn.send(message);
     if ('data' in message) {
-      send({ ...message, data: toUint8Array(message.data) });
+      this.#transmit({ ...message, data: toUint8Array(message.data) });
     } else {
-      send(message);
+      this.#transmit(message);
     }
+  }
+
+  #transmit(message: t.WebrtcMessage) {
+    if (!this.#conn) throw new Error('Connection not ready');
+    this.#conn.send(message);
+    this.#$.next(message);
   }
 
   #setAsReady() {

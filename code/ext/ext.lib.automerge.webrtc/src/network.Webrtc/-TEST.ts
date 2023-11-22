@@ -11,9 +11,9 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
     const events = peer.events();
     const store = WebStore.init({ network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
-    const manager = WebrtcStore.monitor(peer, store);
+    const manager = WebrtcStore.init(peer, store);
 
-    const added: t.WebrtcStoreNetworkAdapterAdded[] = [];
+    const added: t.WebrtcStoreAdapterAdded[] = [];
     manager.added$.subscribe((e) => added.push(e));
 
     const dispose = () => {
@@ -45,6 +45,11 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       expect(remote.added[0].conn.id).to.eql(res.id);
       expect(remote.added[0].peer).to.eql(remote.peer.id);
 
+      const bytesBefore = {
+        self: self.manager.total.bytes,
+        remote: remote.manager.total.bytes,
+      } as const;
+
       /**
        * Create a new document.
        */
@@ -62,6 +67,9 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       await wait(500);
       expect(docSelf.current).to.eql({ count: 123 });
       expect(docRemote.current).to.eql({ count: 123 });
+
+      expect(self.manager.total.bytes).to.greaterThan(bytesBefore.self);
+      expect(remote.manager.total.bytes).to.greaterThan(bytesBefore.remote);
     });
   });
 
