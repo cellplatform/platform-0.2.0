@@ -19,15 +19,8 @@ export const Api: React.FC<ApiProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({
-      display: 'grid',
-      alignContent: 'center',
-    }),
-    body: css({
-      display: 'grid',
-      alignContent: 'center',
-      gridTemplateColumns: '1fr auto',
-    }),
+    base: css({ display: 'grid', alignContent: 'center' }),
+    body: css({ display: 'grid', alignContent: 'center', gridTemplateColumns: 'auto auto' }),
     bar: css({
       width: 20,
       height: 6,

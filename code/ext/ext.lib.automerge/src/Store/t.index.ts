@@ -11,6 +11,8 @@ export type StoreIndex = {
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   readonly total: number;
   exists(documentUri: Uri): boolean;
+  add(documentUri: Uri): boolean;
+  remove(documentUri: Uri): boolean;
 };
 
 /**

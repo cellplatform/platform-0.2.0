@@ -25,18 +25,12 @@ export const StoreIndex = {
      */
     const onDocument = async (payload: DocumentPayload) => {
       if (!payload.isNew) return;
-      const uri = payload.handle.url;
-      const exists = api.exists(uri);
-      if (!exists) doc.change((d) => d.docs.push({ uri }));
+      api.add(payload.handle.url);
     };
 
     const onDeleteDocument = async (payload: DeleteDocumentPayload) => {
-      const id = payload.documentId;
-      const uri = DocUri.automerge(id);
-      const index = api.doc.current.docs.findIndex((item) => item.uri === uri);
-      if (index > -1) {
-        doc.change((d) => Data.array(d.docs).deleteAt(index));
-      }
+      const uri = DocUri.automerge(payload.documentId);
+      api.remove(uri);
     };
 
     /**
@@ -59,6 +53,17 @@ export const StoreIndex = {
       },
       exists(uri: Uri) {
         return doc.current.docs.some((doc) => doc.uri === uri);
+      },
+      add(uri: Uri) {
+        const exists = api.exists(uri);
+        if (!exists) doc.change((d) => d.docs.push({ uri }));
+        return !exists;
+      },
+      remove(uri: Uri) {
+        const index = api.doc.current.docs.findIndex((item) => item.uri === uri);
+        const exists = index > -1;
+        if (exists) doc.change((d) => Data.array(d.docs).deleteAt(index));
+        return exists;
       },
     };
 
