@@ -14,7 +14,6 @@ export function eventBubbleBehavior(args: {
 
   const edge$ = (action: t.RepoListAction, kind?: t.RepoListActionCtx['kind']) => {
     return events.cmd.action.kind(action).pipe(
-      rx.filter((e) => e.focused && e.selected),
       rx.filter((e) => mode() === 'Doc'), // NB: defensive guard.
       rx.map((e) => e.ctx as t.RepoListActionCtx),
       rx.filter((e) => (kind ? e.kind === kind : true)),
