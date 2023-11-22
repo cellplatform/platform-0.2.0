@@ -38,5 +38,19 @@ export type RepoListCtx = {
   list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
   store: t.Store;
   index: t.StoreIndex;
+  handlers: t.RepoListHandlers;
   dispose$?: t.UntilObservable;
+};
+
+/**
+ * Events
+ */
+export type RepoListHandlers = {
+  onShare?: t.RepoListShareHandler;
+};
+export type RepoListShareHandler = (e: RepoListShareHandlerArgs) => void;
+export type RepoListShareHandlerArgs = {
+  store: t.Store;
+  index: t.StoreIndex;
+  item: t.RepoIndexItem;
 };

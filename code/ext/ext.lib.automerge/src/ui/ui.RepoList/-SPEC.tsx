@@ -9,7 +9,11 @@ const initial: T = { props: {} };
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
-  const model = await RepoList.model(store);
+  const model = await RepoList.model(store, {
+    onShare(e) {
+      console.info(`⚡️ onShare`, e);
+    },
+  });
   const ref = RepoList.Ref(model);
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors'>;

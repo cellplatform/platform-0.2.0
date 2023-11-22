@@ -7,6 +7,11 @@ export type RepoListRef = t.LabelListDispatch & { store: t.Store };
 export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Share';
 
 /**
+ * Action
+ */
+export type RepoListActionCtx = { kind: 'Share' };
+
+/**
  * <Component>
  */
 export type RepoListProps = {
@@ -15,11 +20,4 @@ export type RepoListProps = {
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
   style?: t.CssValue;
-};
-
-/**
- * Action
- */
-export type RepoListActionCtx = {
-  kind: 'Share';
 };
