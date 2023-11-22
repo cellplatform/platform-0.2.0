@@ -29,12 +29,6 @@ export const Actions: React.FC<ActionsProps> = (props) => {
     total = DEFAULTS.total,
     enabled = DEFAULTS.enabled,
     renderers = DEFAULTS.renderers,
-    item,
-    selected,
-    focused,
-    editing,
-    label,
-    debug,
   } = props;
   const actions = Wrangle.actions(props);
 
@@ -52,16 +46,16 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         key={`${i}:${action.kind}`}
         index={index}
         total={total}
-        item={item}
+        item={props.item}
         renderers={renderers}
         style={margins}
         action={action}
-        label={label}
         enabled={enabled}
-        selected={selected}
-        focused={focused}
-        editing={editing}
-        debug={debug}
+        label={props.label}
+        selected={props.selected}
+        focused={props.focused}
+        editing={props.editing}
+        debug={props.debug}
         onItemClick={props.onItemClick}
         onActionClick={props.onActionClick}
       />
