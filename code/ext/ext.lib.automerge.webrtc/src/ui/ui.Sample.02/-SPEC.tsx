@@ -1,7 +1,7 @@
-import { Dev, IndexedDb } from '../../test.ui';
-import { Crdt, Webrtc, DocUri } from './common';
-import { Sample } from './ui.Sample';
 import { WebrtcStore } from '../../network.Webrtc';
+import { Dev, IndexedDb } from '../../test.ui';
+import { Crdt, DocUri, Webrtc } from './common';
+import { Sample } from './ui.Sample';
 
 type T = {};
 const initial: T = {};
@@ -15,12 +15,17 @@ export default Dev.describe(name, async (e) => {
   const create = async (storage: string) => {
     const peer = Webrtc.peer();
     const store = Crdt.WebStore.init({ storage });
-    const repo = await Crdt.RepoList.model(store);
+    const repo = await Crdt.RepoList.model(store, {
+      onShareClick(e) {
+        console.info(`⚡️ onShareClick`, e);
+      },
+      onDatabaseClick(e) {
+        console.info(`⚡️ onDatabaseClick`, e);
+      },
+    });
 
     const monitor = WebrtcStore.monitor(peer, store);
-    monitor.added$.subscribe((e) => {
-      console.info('🌳 network adapter added:', peer.id, e);
-    });
+    monitor.added$.subscribe((e) => console.info('🌳 network adapter added:', peer.id, e));
 
     return { peer, repo } as const;
   };

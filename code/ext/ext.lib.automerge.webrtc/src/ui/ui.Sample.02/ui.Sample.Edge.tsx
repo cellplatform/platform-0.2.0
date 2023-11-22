@@ -26,7 +26,7 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Crdt.RepoList list={edge.repo} />
+      <Crdt.RepoList list={edge.repo} behaviors={['Share']} />
       <div {...styles.footer}>
         <Webrtc.AvatarTray
           peer={edge.peer}
