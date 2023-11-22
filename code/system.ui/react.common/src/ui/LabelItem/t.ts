@@ -36,7 +36,7 @@ export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
 export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & {
   readonly kind: A;
   readonly set: {
-    ctx(value: t.LabelItemActionCtx): void;
+    ctx<T extends t.LabelItemActionCtx>(value: T): void;
   };
 };
 
