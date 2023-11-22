@@ -10,8 +10,12 @@ export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
   const model = await RepoList.model(store, {
-    onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
-    onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
+    onDatabaseClick(e) {
+      console.info(`⚡️ onDatabaseClick`, e);
+    },
+    onShareClick(e) {
+      console.info(`⚡️ onShareClick`, e);
+    },
   });
   const ref = RepoList.Ref(model);
 

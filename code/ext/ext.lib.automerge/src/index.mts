@@ -11,9 +11,9 @@ export { Pkg };
 /**
  * Library
  */
+import { DocUri, Is, toObject } from './common';
 export { Store } from './Store';
-export { DocUri, Is, toObject } from './common';
-export { WebStore };
+export { DocUri, Is, WebStore, toObject };
 
 /**
  * Library: UI
@@ -21,6 +21,8 @@ export { WebStore };
 export { useDocument } from './ui/common';
 export { Info };
 export const UI = {
+  DocUri,
+  Is,
   WebStore,
   Info,
   RepoList,
