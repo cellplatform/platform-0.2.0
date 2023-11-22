@@ -11,4 +11,4 @@ export { Webrtc } from 'ext.lib.peerjs';
 /**
  * @system
  */
-export { Time, cuid, rx } from 'sys.util';
+export { Filesize, Time, cuid, rx } from 'sys.util';
