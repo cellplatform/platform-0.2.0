@@ -38,7 +38,7 @@ export function createDocumentBehavior(args: {
   const mode = () => Data.item(item).mode;
   const addModeFilter = rx.filter(() => mode() === 'Add');
   events.key.enter$.pipe(addModeFilter).subscribe(add);
-  events.cmd.action.kind('Store:Left').pipe(addModeFilter).subscribe(add);
+  events.cmd.action.kind('Item:Left').pipe(addModeFilter).subscribe(add);
   events.cmd.click$
     .pipe(rx.filter((e) => mode() === 'Add'))
     .pipe(rx.filter((e) => e.kind === 'Double'))

@@ -1,8 +1,11 @@
 import { DEFAULTS, Is, type t } from './common';
 
+type B = t.LabelItemBehaviorKind;
+
 export const Wrangle = {
-  behaviors(props: t.RepoListProps): t.LabelItemBehaviorKind[] {
-    const { behaviors = DEFAULTS.behaviors.default } = props;
+  listBehaviors(props: t.RepoListProps): B[] {
+    const prop = props.behaviors ?? DEFAULTS.behaviors.default;
+    const behaviors = prop.filter((m) => m === 'Focus.OnArrowKey' || m === 'Focus.OnLoad') as B[];
     return ['Item', 'List', ...behaviors];
   },
 

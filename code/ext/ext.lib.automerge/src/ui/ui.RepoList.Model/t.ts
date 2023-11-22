@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * Model: Item
  */
-export type RepoListAction = 'Store:Left';
+export type RepoListAction = 'Item:Left' | 'Item:Right';
 export type RepoItem = t.LabelItem<t.RepoListAction, t.RepoItemData>;
 export type RepoItemState = t.LabelItemState<t.RepoListAction, t.RepoItemData>;
 export type RepoItemRenderers = t.LabelItemRenderers<t.RepoListAction>;

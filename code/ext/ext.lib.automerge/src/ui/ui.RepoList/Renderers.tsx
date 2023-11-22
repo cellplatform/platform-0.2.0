@@ -1,10 +1,12 @@
-import { COLORS, Data, DocUri, Hash, Icons, css, type t } from './common';
+import { COLORS, DEFAULTS, Data, DocUri, Hash, Icons, css, type t } from './common';
 
 export const Renderers = {
   /**
    * Initilise the router for the <Component>'s that render within an item.
    */
-  init(): t.RepoItemRenderers {
+  init(props: t.RepoListProps): t.RepoItemRenderers {
+    const { behaviors = DEFAULTS.behaviors.default } = props;
+
     return {
       label(e) {
         const data = Data.item(e.item);
@@ -30,7 +32,9 @@ export const Renderers = {
       },
 
       action(e, helpers) {
-        if (e.kind === 'Store:Left') {
+        const data = Data.item(e.item);
+
+        if (e.kind === 'Item:Left') {
           const data = Data.item(e.item);
 
           if (data.mode === 'Add') {
@@ -42,11 +46,20 @@ export const Renderers = {
             return <Icons.Database {...helpers.icon(e, 18)} />;
           }
         }
-        return;
+
+        if (e.kind === 'Item:Right') {
+          if (data.mode === 'Doc') {
+            if (e.selected && behaviors.includes('Share')) {
+              return <Icons.Share {...helpers.icon(e, 18)} />;
+            }
+          }
+        }
+
+        return null; // Default no icon.
       },
     };
   },
-};
+} as const;
 
 /**
  * Helpers

@@ -6,9 +6,9 @@ import { Wrangle } from './u.Wrangle';
 export const View: React.FC<t.RepoListProps> = (props) => {
   const { tabIndex = DEFAULTS.tabIndex } = props;
   const list = Wrangle.listState(props.list);
-  const behaviors = Wrangle.behaviors(props);
+  const behaviors = Wrangle.listBehaviors(props);
 
-  const renderers = useRef(Renderers.init()).current;
+  const renderers = Renderers.init(props);
   const List = LabelItem.Stateful.useListController({ list, behaviors });
 
   /**

@@ -4,7 +4,7 @@ import { type t } from './common';
  * API: Imperative handle reference.
  */
 export type RepoListRef = t.LabelListDispatch & { store: t.Store };
-export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey';
+export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Share';
 
 /**
  * <Component>

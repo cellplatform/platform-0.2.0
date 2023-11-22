@@ -11,7 +11,8 @@ export const ItemModel = {
     return {
       editable: false,
       label: '',
-      left: { kind: 'Store:Left' },
+      left: { kind: 'Item:Left' },
+      right: { kind: 'Item:Right' },
       data,
     };
   },

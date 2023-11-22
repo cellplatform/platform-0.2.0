@@ -1,3 +1,4 @@
+import { LuShare } from 'react-icons/lu';
 import { MdAdd, MdRefresh } from 'react-icons/md';
 import { TbDatabase } from 'react-icons/tb';
 import { VscRepo } from 'react-icons/vsc';
@@ -13,4 +14,5 @@ export const Icons = {
   Add: icon(MdAdd),
   Database: icon(TbDatabase),
   Repo: icon(VscRepo),
+  Share: icon(LuShare),
 } as const;

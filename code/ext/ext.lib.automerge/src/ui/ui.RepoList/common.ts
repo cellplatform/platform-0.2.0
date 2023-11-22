@@ -12,7 +12,7 @@ export const DEFAULTS = {
   tabIndex: 0,
   behaviors: {
     get all(): t.RepoListBehavior[] {
-      return ['Focus.OnLoad', 'Focus.OnArrowKey'];
+      return ['Focus.OnLoad', 'Focus.OnArrowKey', 'Share'];
     },
     get default(): t.RepoListBehavior[] {
       return [];
