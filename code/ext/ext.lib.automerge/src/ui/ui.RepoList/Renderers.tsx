@@ -47,11 +47,10 @@ export const Renderers = {
           }
         }
 
-        if (e.kind === 'Item:Right') {
-          if (data.mode === 'Doc') {
-            if (e.selected && behaviors.includes('Share')) {
-              return <Icons.Share {...helpers.icon(e, 18)} />;
-            }
+        if (e.kind === 'Item:Right' && data.mode === 'Doc') {
+          if (e.selected && behaviors.includes('Share')) {
+            e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
+            return <Icons.Share {...helpers.icon(e, 18)} />;
           }
         }
 

@@ -18,12 +18,8 @@ export type RepoListProps = {
 };
 
 /**
- * Model: Context
+ * Action
  */
-export type RepoListCtxGet = () => RepoListCtx;
-export type RepoListCtx = {
-  list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
-  store: t.Store;
-  index: t.StoreIndex;
-  dispose$?: t.UntilObservable;
+export type RepoListActionCtx = {
+  kind: 'Share';
 };

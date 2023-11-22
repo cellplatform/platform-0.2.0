@@ -29,3 +29,14 @@ export type RepoItemData = {
   mode: 'Add' | 'Doc';
   uri?: string;
 };
+
+/**
+ * Model: Context
+ */
+export type RepoListCtxGet = () => RepoListCtx;
+export type RepoListCtx = {
+  list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
+  store: t.Store;
+  index: t.StoreIndex;
+  dispose$?: t.UntilObservable;
+};

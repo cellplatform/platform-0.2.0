@@ -1,5 +1,6 @@
 import { createDocumentBehavior } from './Model.Item.b.create';
 import { renameBehavior } from './Model.Item.b.rename';
+import { shareBehavior } from './Model.Item.b.share';
 import { DEFAULTS, Model, type t } from './common';
 
 type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
@@ -32,6 +33,7 @@ export const ItemModel = {
      */
     createDocumentBehavior({ ctx, item, events });
     renameBehavior({ ctx, item, events });
+    shareBehavior({ ctx, item, events });
 
     /**
      * Finish up.

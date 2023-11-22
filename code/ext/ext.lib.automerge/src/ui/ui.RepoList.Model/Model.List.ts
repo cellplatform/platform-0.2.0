@@ -15,7 +15,12 @@ export const List = {
     /**
      * Model.
      */
-    const ctx: t.RepoListCtxGet = () => ({ list, store, index, dispose$ });
+    const ctx: t.RepoListCtxGet = () => ({
+      list,
+      store,
+      index,
+      dispose$,
+    });
     const array = Model.List.array((i) => ItemModel.state({ ctx }));
     const getItem = GetItem(index, array);
     const state: t.RepoListState = Model.List.state(
