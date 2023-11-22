@@ -4,8 +4,8 @@ import { PatchState, rx, type t } from './common';
  * Event factory.
  */
 export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> = ($, dispose$) => {
-  const lifecycle = rx.lifecycle(dispose$);
-  $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
+  const life = rx.lifecycle(dispose$);
+  $ = $.pipe(rx.takeUntil(life.dispose$));
 
   const cmd$ = PatchState.Command.filter($);
   const cmd: t.PeerModelEvents['cmd'] = {
@@ -26,10 +26,10 @@ export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> =
     /**
      * Lifecycle
      */
-    dispose: lifecycle.dispose,
-    dispose$: lifecycle.dispose$,
+    dispose: life.dispose,
+    dispose$: life.dispose$,
     get disposed() {
-      return lifecycle.disposed;
+      return life.disposed;
     },
   };
   return api;
