@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Button, css, DEFAULTS, type t } from './common';
 import { ActionSpinner } from './ui.Action.Spinner';
 import { Wrangle } from './Wrangle';
@@ -26,6 +27,8 @@ export const Action: React.FC<ActionProps> = (props) => {
   const enabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;
   const spinning = action.spinning ?? false;
 
+  const ctxRef = useRef<t.LabelItemActionCtx>({});
+
   const is = {
     button: Boolean(enabled && (action.button ?? true)),
   } as const;
@@ -41,6 +44,7 @@ export const Action: React.FC<ActionProps> = (props) => {
       focused: Boolean(focused),
       selected: Boolean(selected),
       editing: Boolean(editing),
+      ctx: ctxRef.current,
     });
     props.onItemClick?.({
       position,
@@ -84,6 +88,7 @@ export const Action: React.FC<ActionProps> = (props) => {
     editing,
     color,
     item,
+    set: { ctx: (value) => (ctxRef.current = value) },
   };
 
   const elBody = Wrangle.render.action(renderers, args);

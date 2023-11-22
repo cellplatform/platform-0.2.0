@@ -129,6 +129,7 @@ export type LabelItemActionInvoked<A extends K = string> = {
   focused: boolean;
   selected: boolean;
   editing: boolean;
+  ctx: t.LabelItemActionCtx;
   tx: string;
 };
 

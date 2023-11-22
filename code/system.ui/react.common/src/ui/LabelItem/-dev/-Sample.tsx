@@ -66,6 +66,7 @@ export const Sample = {
         }
 
         if (e.kind === 'right:2') {
+          e.set.ctx({ foo: 123 }); // NB: ability for renderer to leave hints to the model about what it has rendered (catch this on the click CMD event).
           return <Icons.ObjectTree {...helpers.icon(e, 17)} />;
         }
 

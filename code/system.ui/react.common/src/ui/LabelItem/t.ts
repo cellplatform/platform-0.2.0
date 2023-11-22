@@ -34,8 +34,10 @@ export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRenderRespons
 export type LabelItemRenderResponse = JSX.Element | string | undefined | false | null;
 export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
 export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & {
-  kind: A;
-  ctx(value: t.LabelItemActionCtx): void;
+  readonly kind: A;
+  readonly set: {
+    ctx(value: t.LabelItemActionCtx): void;
+  };
 };
 
 type H = LabelItemActionHelpers;
