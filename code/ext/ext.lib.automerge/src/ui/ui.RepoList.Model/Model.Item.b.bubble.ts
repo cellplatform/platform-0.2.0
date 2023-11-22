@@ -20,7 +20,7 @@ export function eventBubbleBehavior(args: {
     );
   };
 
-  const clickArgs = () => {
+  const getArgs = () => {
     const { store, index, handlers } = args.ctx();
     const data = Data.item(args.item);
     const item = index.doc.current.docs.find((item) => item.uri === data.uri);
@@ -32,12 +32,12 @@ export function eventBubbleBehavior(args: {
    * (Trigger) Listeners.
    */
   edge$('Item:Left').subscribe((e) => {
-    const { handlers, payload } = clickArgs();
+    const { handlers, payload } = getArgs();
     if (payload) handlers?.onDatabaseClick?.(payload);
   });
 
   edge$('Item:Right', 'Share').subscribe((e) => {
-    const { handlers, payload } = clickArgs();
+    const { handlers, payload } = getArgs();
     if (payload) handlers?.onShareClick?.(payload);
   });
 }
