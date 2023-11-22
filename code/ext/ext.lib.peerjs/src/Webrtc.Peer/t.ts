@@ -75,10 +75,10 @@ export type PeerModelGet = {
 
 export type PeerModelGetConnectionObject = {
   (id?: Id): t.PeerJsConn | undefined;
-  data(id?: Id): t.PeerJsConnData | undefined;
-  media(id?: Id): t.PeerJsConnMedia | undefined;
-  video(id?: Id): t.PeerJsConnMedia | undefined;
-  screen(id?: Id): t.PeerJsConnMedia | undefined;
+  data(connId?: Id): t.PeerJsConnData | undefined;
+  media(connId?: Id): t.PeerJsConnMedia | undefined;
+  video(connId?: Id): t.PeerJsConnMedia | undefined;
+  screen(connId?: Id): t.PeerJsConnMedia | undefined;
 };
 
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
