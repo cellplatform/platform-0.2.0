@@ -23,7 +23,7 @@ export const StoreIndex = {
     /**
      * Store the URI to new documents in the index.
      */
-    const onNewDocument = async (payload: DocumentPayload) => {
+    const onDocument = async (payload: DocumentPayload) => {
       if (!payload.isNew) return;
       const uri = payload.handle.url;
       const exists = api.exists(uri);
@@ -42,10 +42,10 @@ export const StoreIndex = {
     /**
      * Repo event listeners.
      */
-    repo.on('document', onNewDocument);
+    repo.on('document', onDocument);
     repo.on('delete-document', onDeleteDocument);
     store.dispose$.subscribe(() => {
-      repo.off('document', onNewDocument);
+      repo.off('document', onDocument);
       repo.off('delete-document', onDeleteDocument);
     });
 
