@@ -1,12 +1,19 @@
-import { COLORS, Color, css, type t } from './common';
+import { COLORS, Color, css, type t, Filesize } from './common';
 
 export type ApiProps = {
-  edge: t.Edge;
+  edge: t.SampleEdge['kind'];
+  bytes?: number;
   style?: t.CssValue;
 };
 
 export const Api: React.FC<ApiProps> = (props) => {
-  const { edge } = props;
+  const { edge, bytes = 0 } = props;
+  const is = {
+    left: edge === 'Left',
+    right: edge === 'Right',
+  } as const;
+
+  const label = bytes > 0 ? Filesize(bytes) : undefined;
 
   /**
    * Render
@@ -15,7 +22,6 @@ export const Api: React.FC<ApiProps> = (props) => {
     base: css({
       display: 'grid',
       alignContent: 'center',
-      transform: edge === 'Right' ? 'scaleX(-1)' : undefined,
     }),
     body: css({
       display: 'grid',
@@ -33,14 +39,28 @@ export const Api: React.FC<ApiProps> = (props) => {
       border: `solid 5px ${Color.alpha(COLORS.DARK, 0.2)}`,
       Size: 10,
       borderRadius: '100%',
+      display: 'grid',
+      justifyContent: 'center',
+    }),
+    headLabel: css({
+      position: 'relative',
+      fontSize: 10,
+      top: -20,
+      opacity: 0.4,
+      width: 60,
+      textAlign: 'center',
+      overflow: 'hidden',
     }),
   };
+
+  const elBar = <div {...styles.bar}></div>;
+  const elHead = <div {...styles.head}>{label && <div {...styles.headLabel}>{label}</div>}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <div {...styles.bar}></div>
-        <div {...styles.head}></div>
+        {is.left ? elBar : elHead}
+        {is.left ? elHead : elBar}
       </div>
     </div>
   );

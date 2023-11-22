@@ -1,7 +1,6 @@
 import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
 
 export type SampleEdgeProps = {
-  name: t.Edge;
   edge: t.SampleEdge;
   focusOnLoad?: boolean;
   style?: t.CssValue;
@@ -29,14 +28,17 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
       <Crdt.RepoList list={edge.repo} behaviors={['Share']} />
       <div {...styles.footer}>
         <Webrtc.AvatarTray
-          peer={edge.peer}
+          peer={edge.network.peer}
           style={styles.avatars}
           muted={true}
           onSelection={(e) => {
             console.info(`⚡️ AvatarTray.onSelection`, e);
           }}
         />
-        <Webrtc.Connector peer={edge.peer} behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []} />
+        <Webrtc.Connector
+          peer={edge.network.peer}
+          behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []}
+        />
       </div>
     </div>
   );
