@@ -26,8 +26,18 @@ export type RepoIndexItem = { uri: Uri; name?: string };
  * Events
  */
 export type StoreIndexEvents = t.Lifecycle & {
-  $: t.Observable<t.StoreIndexEvent>;
-  changed$: t.Observable<t.DocChanged<t.RepoIndex>>;
+  readonly $: t.Observable<t.StoreIndexEvent>;
+  readonly changed$: t.Observable<t.DocChanged<t.RepoIndex>>;
+  readonly added$: t.Observable<StoreIndexAdded>;
 };
 
-export type StoreIndexEvent = t.DocEvent<t.RepoIndex>;
+export type StoreIndexEvent = t.DocEvent<t.RepoIndex> | StoreIndexAddedEvent;
+
+export type StoreIndexAddedEvent = {
+  type: 'crdt:store:index/Added';
+  payload: StoreIndexAdded;
+};
+export type StoreIndexAdded = {
+  index: number;
+  item: t.RepoIndexItem;
+};

@@ -149,19 +149,29 @@ describe('StoreIndex', async () => {
 
       it('changed$', async () => {
         const { store, events, index } = await eventsSetup();
+        const fired: t.DocChanged<t.RepoIndex>[] = [];
+        events.changed$.subscribe((e) => fired.push(e));
 
-        const fired: t.StoreIndexEvent[] = [];
-        const firedChanged: t.DocChanged<t.RepoIndex>[] = [];
-        events.$.subscribe((e) => fired.push(e));
-        events.changed$.subscribe((e) => firedChanged.push(e));
-
-        const uri = 'automerge:foobar';
-        index.add(uri);
-
+        index.add('automerge:foobar');
         expect(fired.length).to.eql(1);
-        expect(firedChanged.length).to.eql(1);
-        expect(firedChanged[0]).to.eql(fired[0].payload);
-        expect(firedChanged[0].doc.docs[0].uri).to.eql(uri);
+        expect(fired[0].doc.docs[0].uri).to.eql('automerge:foobar');
+
+        store.dispose();
+      });
+
+      it('added$', async () => {
+        const { store, events, index } = await eventsSetup();
+        const fired: t.StoreIndexAdded[] = [];
+        events.added$.subscribe((e) => fired.push(e));
+
+        index.add('automerge:foo');
+        index.add('automerge:bar');
+
+        expect(fired.length).to.eql(2);
+        expect(fired[0].index).to.eql(0);
+        expect(fired[1].index).to.eql(1);
+        expect(fired[0].item.uri).to.eql('automerge:foo');
+        expect(fired[1].item.uri).to.eql('automerge:bar');
 
         store.dispose();
       });
