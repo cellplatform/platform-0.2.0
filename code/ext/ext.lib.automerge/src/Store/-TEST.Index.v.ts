@@ -138,5 +138,33 @@ describe('StoreIndex', async () => {
         expect(fired).to.eql(1);
       });
     });
+
+    describe('fire', () => {
+      const eventsSetup = async () => {
+        const base = testSetup();
+        const index = await Store.Index.init(base.store);
+        const events = index.events();
+        return { ...base, index, events } as const;
+      };
+
+      it('changed$', async () => {
+        const { store, events, index } = await eventsSetup();
+
+        const fired: t.StoreIndexEvent[] = [];
+        const firedChanged: t.DocChanged<t.RepoIndex>[] = [];
+        events.$.subscribe((e) => fired.push(e));
+        events.changed$.subscribe((e) => firedChanged.push(e));
+
+        const uri = 'automerge:foobar';
+        index.add(uri);
+
+        expect(fired.length).to.eql(1);
+        expect(firedChanged.length).to.eql(1);
+        expect(firedChanged[0]).to.eql(fired[0].payload);
+        expect(firedChanged[0].doc.docs[0].uri).to.eql(uri);
+
+        store.dispose();
+      });
+    });
   });
 });

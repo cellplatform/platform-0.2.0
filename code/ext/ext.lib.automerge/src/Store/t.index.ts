@@ -25,4 +25,9 @@ export type RepoIndexItem = { uri: Uri; name?: string };
 /**
  * Events
  */
-export type StoreIndexEvents = t.Lifecycle & {};
+export type StoreIndexEvents = t.Lifecycle & {
+  $: t.Observable<t.StoreIndexEvent>;
+  changed$: t.Observable<t.DocChanged<t.RepoIndex>>;
+};
+
+export type StoreIndexEvent = t.DocEvent<t.RepoIndex>;
