@@ -1,4 +1,6 @@
-import { type t } from './common';
+import type { t } from './common';
+
+export type LabelItemActionCtx = Record<string, unknown>;
 
 /**
  * Events
@@ -22,6 +24,7 @@ export type LabelItemActionHandlerArgs = {
   focused: boolean;
   selected: boolean;
   editing: boolean;
+  ctx: t.LabelItemActionCtx;
 };
 
 export type LabelItemKeyHandler = (e: LabelItemKeyHandlerArgs) => void;
