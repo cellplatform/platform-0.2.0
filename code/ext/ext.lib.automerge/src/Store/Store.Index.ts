@@ -1,5 +1,6 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Data, DocUri, Is, type t } from './common';
+import { events } from './Store.Index.Events';
 
 type Uri = t.DocUri | string;
 
@@ -7,6 +8,8 @@ type Uri = t.DocUri | string;
  * Manages an index of documents within a repository.
  */
 export const StoreIndex = {
+  events,
+
   /**
    * Create a new Index handle.
    */
@@ -64,6 +67,9 @@ export const StoreIndex = {
         const exists = index > -1;
         if (exists) doc.change((d) => Data.array(d.docs).deleteAt(index));
         return exists;
+      },
+      events(dispose$) {
+        return events(api, { dispose$: [dispose$, store.dispose$] });
       },
     };
 

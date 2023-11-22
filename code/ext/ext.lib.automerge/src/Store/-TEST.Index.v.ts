@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { A, describe, expect, expectError, it, type t } from '../test';
+import { rx, A, describe, expect, expectError, it, type t } from '../test';
 
 type D = { count?: t.A.Counter };
 
@@ -91,6 +91,52 @@ describe('StoreIndex', async () => {
       expect(index.exists(sample.uri)).to.eql(false);
 
       store.dispose();
+    });
+  });
+
+  describe('events', () => {
+    describe('lifecycle', () => {
+      it('dispose (method)', async () => {
+        const { store } = testSetup();
+        const index = await Store.Index.init(store);
+        const events = index.events();
+        let fired = 0;
+        events.dispose$.subscribe(() => fired++);
+        expect(events.disposed).to.eql(false);
+        events.dispose();
+        events.dispose();
+        expect(events.disposed).to.eql(true);
+        expect(fired).to.eql(1);
+        store.dispose();
+      });
+
+      it('dispose (method)', async () => {
+        const life = rx.lifecycle();
+        const { store } = testSetup();
+        const index = await Store.Index.init(store);
+        const events = index.events(life.dispose$);
+        let fired = 0;
+        events.dispose$.subscribe(() => fired++);
+        expect(events.disposed).to.eql(false);
+
+        life.dispose();
+        expect(events.disposed).to.eql(true);
+        expect(fired).to.eql(1);
+
+        store.dispose();
+      });
+
+      it('disposed when store is disposed', async () => {
+        const { store } = testSetup();
+        const index = await Store.Index.init(store);
+        const events = index.events();
+        let fired = 0;
+        events.dispose$.subscribe(() => fired++);
+        expect(events.disposed).to.eql(false);
+        store.dispose();
+        expect(events.disposed).to.eql(true);
+        expect(fired).to.eql(1);
+      });
     });
   });
 });

@@ -13,6 +13,7 @@ export type StoreIndex = {
   exists(documentUri: Uri): boolean;
   add(documentUri: Uri): boolean;
   remove(documentUri: Uri): boolean;
+  events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };
 
 /**
@@ -20,3 +21,8 @@ export type StoreIndex = {
  */
 export type RepoIndex = { docs: RepoIndexItem[] };
 export type RepoIndexItem = { uri: Uri; name?: string };
+
+/**
+ * Events
+ */
+export type StoreIndexEvents = t.Lifecycle & {};
