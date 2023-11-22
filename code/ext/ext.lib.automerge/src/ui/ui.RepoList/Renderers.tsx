@@ -35,8 +35,6 @@ export const Renderers = {
         const data = Data.item(e.item);
 
         if (e.kind === 'Item:Left') {
-          const data = Data.item(e.item);
-
           if (data.mode === 'Add') {
             const color = e.focused ? e.color : COLORS.BLUE;
             return <Icons.Add {...helpers.icon(e, 17)} color={color} />;
@@ -50,7 +48,7 @@ export const Renderers = {
         if (e.kind === 'Item:Right' && data.mode === 'Doc') {
           if (e.selected && behaviors.includes('Share')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
-            return <Icons.Share {...helpers.icon(e, 18)} />;
+            return <Icons.Share {...helpers.icon(e, 16)} />;
           }
         }
 

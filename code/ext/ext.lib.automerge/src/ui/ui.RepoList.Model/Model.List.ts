@@ -18,13 +18,7 @@ export const List = {
     /**
      * Model.
      */
-    const ctx: t.RepoListCtxGet = () => ({
-      list,
-      store,
-      index,
-      handlers,
-      dispose$,
-    });
+    const ctx: t.RepoListCtxGet = () => ({ list, store, index, handlers, dispose$ });
     const array = Model.List.array((i) => ItemModel.state({ ctx }));
     const getItem = GetItem(index, array);
     const state: t.RepoListState = Model.List.state(
@@ -61,7 +55,7 @@ export const List = {
  */
 const Wrangle = {
   handlers(options: Options = {}): t.RepoListHandlers {
-    const { onShare } = options;
-    return { onShare };
+    const { onShareClick, onDatabaseClick } = options;
+    return { onShareClick, onDatabaseClick };
   },
 } as const;

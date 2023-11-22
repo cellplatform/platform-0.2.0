@@ -46,10 +46,12 @@ export type RepoListCtx = {
  * Events
  */
 export type RepoListHandlers = {
-  onShare?: t.RepoListShareHandler;
+  onShareClick?: t.RepoListClickHandler;
+  onDatabaseClick?: t.RepoListClickHandler;
 };
-export type RepoListShareHandler = (e: RepoListShareHandlerArgs) => void;
-export type RepoListShareHandlerArgs = {
+
+export type RepoListClickHandler = (e: RepoListClickHandlerArgs) => void;
+export type RepoListClickHandlerArgs = {
   store: t.Store;
   index: t.StoreIndex;
   item: t.RepoIndexItem;

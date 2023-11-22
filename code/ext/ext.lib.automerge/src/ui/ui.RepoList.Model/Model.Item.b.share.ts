@@ -27,6 +27,6 @@ export function shareBehavior(args: {
       const data = Data.item(args.item);
       const { store, index, handlers } = args.ctx();
       const item = index.doc.current.docs.find((item) => item.uri === data.uri);
-      if (item) handlers.onShare?.({ store, index, item: toObject(item) });
+      if (item) handlers.onShareClick?.({ store, index, item: toObject(item) });
     });
 }

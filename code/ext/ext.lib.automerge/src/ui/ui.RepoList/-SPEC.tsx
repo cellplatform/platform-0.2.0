@@ -10,9 +10,8 @@ export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
   const model = await RepoList.model(store, {
-    onShare(e) {
-      console.info(`⚡️ onShare`, e);
-    },
+    onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
+    onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
   });
   const ref = RepoList.Ref(model);
 
@@ -25,7 +24,6 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.behaviors = local.behaviors;
