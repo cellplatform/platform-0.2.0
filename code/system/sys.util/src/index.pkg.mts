@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     '@noble/hashes': '1.3.2',
     '@paralleldrive/cuid2': '2.2.2',
+    'pretty-bytes': '6.1.1',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

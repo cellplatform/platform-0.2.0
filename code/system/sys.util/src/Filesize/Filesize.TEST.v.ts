@@ -1,6 +1,5 @@
-import { describe, expect, it } from '../test';
-import { Filesystem } from '../index.mjs';
 import { Filesize } from '.';
+import { describe, expect, it } from '../test';
 
 describe('Filesize', () => {
   it('default', () => {
@@ -16,10 +15,5 @@ describe('Filesize', () => {
   it('spacer', () => {
     expect(Filesize(1234, { locale: undefined })).to.eql('1.23 kB');
     expect(Filesize(1234, { locale: 'de' })).to.eql('1,23 kB');
-  });
-
-  it('Filesystem.Filesize(...)', () => {
-    expect(Filesystem.Filesize).to.equal(Filesize);
-    expect(Filesystem.Filesize(1234)).to.eql('1.23 kB');
   });
 });

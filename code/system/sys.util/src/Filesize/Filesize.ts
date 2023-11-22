@@ -1,5 +1,5 @@
 import prettybytes from 'pretty-bytes';
-import { FilesizeOptions } from './types.mjs';
+import { type FilesizeOptions } from './types';
 
 /**
  * Convert a number of bytes into a human-readable string.
