@@ -6,6 +6,10 @@ import type { Message, PeerId } from '@automerge/automerge-repo';
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
  */
 export type WebrtcMessage = ArriveMessage | WelcomeMessage | Message;
+export type WebrtcMessageAlert = {
+  direction: 'Incoming' | 'Outgoing';
+  message: WebrtcMessage;
+};
 
 /**
  * Notify the network that we have arrived so everyone knows our peer ID

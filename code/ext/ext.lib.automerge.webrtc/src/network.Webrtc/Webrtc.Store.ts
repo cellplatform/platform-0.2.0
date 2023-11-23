@@ -29,8 +29,8 @@ export const WebrtcStore = {
       const adapter = new WebrtcNetworkAdapter(obj);
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
 
-      adapter.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-        if (e.type === 'sync') total.bytes += e.data.byteLength;
+      adapter.message$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+        if (e.message.type === 'sync') total.bytes += e.message.data.byteLength;
         fire({ type: 'crdt:webrtc/Message', payload: e });
       });
 

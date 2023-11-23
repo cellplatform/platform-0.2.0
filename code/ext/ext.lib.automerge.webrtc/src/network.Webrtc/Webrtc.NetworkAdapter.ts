@@ -14,14 +14,14 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: DataConnection;
   #isReady = false;
   #disconnected = rx.subject<void>();
-  #$ = rx.subject<t.WebrtcMessage>();
-  readonly $: t.Observable<t.WebrtcMessage>;
+  #message$ = rx.subject<t.WebrtcMessageAlert>();
+  readonly message$: t.Observable<t.WebrtcMessageAlert>;
 
   constructor(conn: DataConnection) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
     super();
     this.#conn = conn;
-    this.$ = this.#$.pipe(rx.takeUntil(this.#disconnected));
+    this.message$ = this.#message$.pipe(rx.takeUntil(this.#disconnected));
   }
 
   connect(peerId: PeerId) {
@@ -44,11 +44,21 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
           break;
 
         default:
-          if ('data' in message) {
-            this.emit('message', { ...message, data: toUint8Array(message.data) });
-          } else {
-            this.emit('message', message);
-          }
+          let payload = message;
+          if ('data' in message) payload = { ...message, data: toUint8Array(message.data) };
+
+          this.emit('message', payload);
+          // this.#message$.next({ direction: 'Incoming', message });
+          this.#alert('Incoming', message);
+
+          //           const payload1 =
+          //             'data' in message ? { ...message, data: toUint8Array(message.data) } : message;
+          //
+          //           if ('data' in message) {
+          //             this.emit('message', { ...message, data: toUint8Array(message.data) });
+          //           } else {
+          //             this.emit('message', message);
+          //           }
           break;
       }
     };
@@ -86,7 +96,11 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #transmit(message: t.WebrtcMessage) {
     if (!this.#conn) throw new Error('Connection not ready');
     this.#conn.send(message);
-    this.#$.next(message);
+    this.#alert('Outgoing', message);
+  }
+
+  #alert(direction: t.WebrtcMessageAlert['direction'], message: t.WebrtcMessage) {
+    this.#message$.next({ direction, message });
   }
 
   #setAsReady() {

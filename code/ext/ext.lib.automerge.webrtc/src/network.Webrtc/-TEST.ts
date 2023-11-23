@@ -11,23 +11,25 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
     const events = peer.events();
     const store = WebStore.init({ network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
-    const manager = WebrtcStore.init(peer, store);
+    const network = WebrtcStore.init(peer, store);
 
-    const add: t.WebrtcStoreAdapterAdded[] = [];
-    manager.add$.subscribe((e) => add.push(e));
+    const added: t.WebrtcStoreAdapterAdded[] = [];
+    const messages: t.WebrtcMessageAlert[] = [];
+    network.added$.subscribe((e) => added.push(e));
+    network.message$.subscribe((e) => messages.push(e));
 
     const dispose = () => {
       peer.dispose();
       store.dispose();
-      manager.dispose();
+      network.dispose();
     };
     return {
       peer,
       events,
       store,
-      fired: { add },
       generator,
-      manager,
+      network,
+      fired: { added, messages },
       dispose,
     } as const;
   };
@@ -42,20 +44,20 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
 
       const res = await self.peer.connect.data(remote.peer.id);
       expect(res.error).to.eql(undefined);
-      expect(self.manager.total.added).to.eql(1);
-      expect(remote.manager.total.added).to.eql(1);
+      expect(self.network.total.added).to.eql(1);
+      expect(remote.network.total.added).to.eql(1);
 
-      expect(self.fired.add.length).to.eql(1);
-      expect(remote.fired.add.length).to.eql(1);
-      expect(self.fired.add[0].conn.id).to.eql(res.id);
-      expect(self.fired.add[0].peer).to.eql(self.peer.id);
+      expect(self.fired.added.length).to.eql(1);
+      expect(remote.fired.added.length).to.eql(1);
+      expect(self.fired.added[0].conn.id).to.eql(res.id);
+      expect(self.fired.added[0].peer).to.eql(self.peer.id);
 
-      expect(remote.fired.add[0].conn.id).to.eql(res.id);
-      expect(remote.fired.add[0].peer).to.eql(remote.peer.id);
+      expect(remote.fired.added[0].conn.id).to.eql(res.id);
+      expect(remote.fired.added[0].peer).to.eql(remote.peer.id);
 
       const bytesBefore = {
-        self: self.manager.total.bytes,
-        remote: remote.manager.total.bytes,
+        self: self.network.total.bytes,
+        remote: remote.network.total.bytes,
       } as const;
 
       /**
@@ -72,38 +74,74 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
        * Change the document and ensure it syncs over the network connection.
        */
       docRemote.change((d) => (d.count = 123));
-      await wait(500);
+      await wait(800);
       expect(docSelf.current).to.eql({ count: 123 });
       expect(docRemote.current).to.eql({ count: 123 });
 
-      expect(self.manager.total.bytes).to.greaterThan(bytesBefore.self);
-      expect(remote.manager.total.bytes).to.greaterThan(bytesBefore.remote);
+      /**
+       * Byte count (data transmitted).
+       */
+      const bytesAfter = {
+        self: self.network.total.bytes,
+        remote: remote.network.total.bytes,
+      } as const;
+
+      expect(bytesAfter.self).to.greaterThan(bytesBefore.self);
+      expect(bytesAfter.remote).to.greaterThan(bytesBefore.remote);
+      expect(areRoughlyTheSame(bytesAfter.self, bytesAfter.remote, 0.2)).to.eql(true);
+
+      /**
+       * Message events ⚡️
+       */
+      const direction = (
+        events: t.WebrtcMessageAlert[],
+        direction: t.WebrtcMessageAlert['direction'],
+      ) => events.filter((e) => e.direction === direction);
+
+      expect(direction(self.fired.messages, 'Outgoing').length).to.eql(3);
+      expect(direction(remote.fired.messages, 'Outgoing').length).to.eql(3);
+
+      expect(direction(self.fired.messages, 'Incoming').length).to.eql(2);
+      expect(direction(remote.fired.messages, 'Incoming').length).to.eql(2);
+
+      expect(self.fired.messages[0].message.type === 'welcome').to.eql(true);
+      expect(remote.fired.messages[0].message.type === 'arrive').to.eql(true);
     });
   });
 
-  e.describe('WebrtcStore (Manager)', (e) => {
+  e.describe('WebrtcStore (Network Manager)', (e) => {
     e.it('initialize', async (e) => {
-      const { dispose, manager, store, peer } = testSetup();
-      expect(manager.total.added).to.eql(0);
-      expect(manager.store).to.equal(store);
-      expect(manager.peer).to.equal(peer);
+      const { dispose, network, store, peer } = testSetup();
+      expect(network.total.added).to.eql(0);
+      expect(network.store).to.equal(store);
+      expect(network.peer).to.equal(peer);
       dispose();
     });
 
     e.it('dispose: when Peer disposes', async (e) => {
-      const { peer, dispose, manager } = testSetup();
-      expect(manager.disposed).to.eql(false);
+      const { peer, dispose, network } = testSetup();
+      expect(network.disposed).to.eql(false);
       peer.dispose();
-      expect(manager.disposed).to.eql(true);
+      expect(network.disposed).to.eql(true);
       dispose();
     });
 
     e.it('dispose: when Store disposes', async (e) => {
-      const { store, dispose, manager } = testSetup();
-      expect(manager.disposed).to.eql(false);
+      const { store, dispose, network } = testSetup();
+      expect(network.disposed).to.eql(false);
       store.dispose();
-      expect(manager.disposed).to.eql(true);
+      expect(network.disposed).to.eql(true);
       dispose();
     });
   });
 });
+
+/**
+ * Helpers
+ */
+function areRoughlyTheSame(left: number, right: number, tolerance: t.Percent): boolean {
+  const average = (left + right) / 2;
+  const difference = Math.abs(left - right);
+  const allowedDifference = average * tolerance;
+  return difference <= allowedDifference;
+}

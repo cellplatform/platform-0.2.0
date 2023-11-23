@@ -10,7 +10,7 @@ export type WebrtcStore = t.Lifecycle & {
   readonly total: { readonly added: number; readonly bytes: number };
   readonly $: t.Observable<t.WebrtcStoreEvent>;
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;
-  readonly message$: t.Observable<t.WebrtcMessage>;
+  readonly message$: t.Observable<t.WebrtcMessageAlert>;
 };
 
 /**
@@ -30,5 +30,5 @@ export type WebrtcStoreAdapterAdded = {
 
 export type WebrtcStoreMessageEvent = {
   type: 'crdt:webrtc/Message';
-  payload: t.WebrtcMessage;
+  payload: t.WebrtcMessageAlert;
 };
