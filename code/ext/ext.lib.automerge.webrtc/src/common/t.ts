@@ -9,7 +9,14 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { Disposable, EventBus, Lifecycle, Msecs, UntilObservable } from 'sys.types/src/types';
+export type {
+  Disposable,
+  EventBus,
+  Lifecycle,
+  Msecs,
+  Percent,
+  UntilObservable,
+} from 'sys.types/src/types';
 
 export type { DocRefHandle, DocUri, Store, WebStore } from 'ext.lib.automerge/src/types';
 export type { PeerModel } from 'ext.lib.peerjs/src/types';
