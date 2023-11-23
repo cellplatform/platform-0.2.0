@@ -1,4 +1,4 @@
-import { WebStore } from '.';
+import { WebStore } from '../Store.Web';
 import { A, Test, TestDb, Time, Value, expect, toObject, type t } from '../test.ui';
 
 type D = { count?: t.A.Counter };
