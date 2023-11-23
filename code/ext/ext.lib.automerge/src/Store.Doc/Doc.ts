@@ -1,4 +1,4 @@
-import { DocEvents } from './Store.Doc.Events';
+import { DocEvents } from './Doc.Events';
 import { DEFAULTS, Is, Time, rx, slug, toObject, type t } from './common';
 
 type Uri = t.DocUri | string;

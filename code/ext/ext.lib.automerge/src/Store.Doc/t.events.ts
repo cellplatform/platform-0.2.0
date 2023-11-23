@@ -1,6 +1,6 @@
-import { type t } from './common';
+import type { t } from './common';
 
-export type O = Record<string, unknown>;
+type O = Record<string, unknown>;
 
 /**
  * Event API
@@ -11,7 +11,7 @@ export type DocEvents<T> = t.Lifecycle & {
 };
 
 /**
- * EVENTS
+ * Events
  */
 export type DocEvent<T = O> = DocChangedEvent<T>;
 export type DocChangedEvent<T> = {

@@ -81,8 +81,17 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-      dev.button(`delete database: "${storage}"`, async (e) => {
-        await TestDb.Spec.deleteDatabases();
+      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabases());
+
+      dev.hr(5, 20);
+
+      dev.button('tmp', async (e) => {
+        type D = { '.meta': Meta };
+        type Meta = {
+          ephemeral?: boolean;
+        };
+        const doc = await model.store.doc.getOrCreate<D>((d) => (d['.meta'] = {}));
+        console.log('doc.toObject()', doc.toObject());
       });
     });
   });

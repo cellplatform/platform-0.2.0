@@ -1,5 +1,5 @@
 import { Repo } from '@automerge/automerge-repo';
-import { Doc } from './Store.Doc';
+import { Doc } from '../Store.Doc';
 import { StoreIndex as Index } from '../Store.Index';
 import { Is, DocUri as Uri, rx, type t } from './common';
 

@@ -3,14 +3,14 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { WebStoreIndex } from '../Store.Web.Index';
+import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
 type Init = {
-  dispose$?: t.UntilObservable;
   network?: boolean | t.NetworkAdapter[];
   storage?: boolean | string | { name?: string };
+  dispose$?: t.UntilObservable;
 };
 
 /**
