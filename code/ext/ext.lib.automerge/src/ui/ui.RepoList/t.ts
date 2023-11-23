@@ -15,7 +15,7 @@ export type RepoListActionCtx = { kind: 'Share' };
  * <Component>
  */
 export type RepoListProps = {
-  list?: t.RepoListState | t.RepoListModel;
+  list?: t.RepoListModel;
   behaviors?: t.RepoListBehavior[];
   renderCount?: t.RenderCountProps;
   tabIndex?: number;

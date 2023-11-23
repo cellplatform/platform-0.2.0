@@ -20,7 +20,11 @@ export type StoreIndex = {
  * Index of documents within a store/repository.
  */
 export type RepoIndex = { docs: RepoIndexItem[] };
-export type RepoIndexItem = { uri: Uri; name?: string };
+export type RepoIndexItem = {
+  uri: Uri;
+  name?: string;
+  shared?: boolean; // Flag indicating if the document is to be published when connected to the network.
+};
 
 /**
  * Events

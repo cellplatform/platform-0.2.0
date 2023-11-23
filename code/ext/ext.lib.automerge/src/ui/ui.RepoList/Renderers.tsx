@@ -5,7 +5,7 @@ export const Renderers = {
    * Initilise the router for the <Component>'s that render within an item.
    */
   init(props: t.RepoListProps): t.RepoItemRenderers {
-    const { behaviors = DEFAULTS.behaviors.default } = props;
+    const { list, behaviors = DEFAULTS.behaviors.default } = props;
 
     return {
       label(e) {
@@ -46,9 +46,14 @@ export const Renderers = {
         }
 
         if (e.kind === 'Item:Right' && data.mode === 'Doc') {
-          if (e.selected && behaviors.includes('Share')) {
+          if (behaviors.includes('Share')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
-            return <Icons.Share {...helpers.icon(e, 16)} />;
+            const item = Wrangle.indexItem(list, data.uri);
+            if (item?.shared) {
+              return <Icons.Antenna {...helpers.icon(e, 16)} />;
+            } else {
+              if (e.selected) return <Icons.Share {...helpers.icon(e, 16)} />;
+            }
           }
         }
 
@@ -67,5 +72,10 @@ export const Wrangle = {
     const id = DocUri.id(text);
     const hash = Hash.shorten(id, [4, 4]);
     return `crdt:${hash}`;
+  },
+
+  indexItem(list?: t.RepoListModel, uri?: string) {
+    if (!list || !uri) return;
+    return list.index.doc.current.docs.find((item) => item.uri === uri);
   },
 } as const;

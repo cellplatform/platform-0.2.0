@@ -1,5 +1,5 @@
 import { LuShare } from 'react-icons/lu';
-import { MdAdd, MdRefresh } from 'react-icons/md';
+import { MdAdd, MdRefresh, MdSettingsInputAntenna } from 'react-icons/md';
 import { TbDatabase } from 'react-icons/tb';
 import { VscRepo } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -15,4 +15,5 @@ export const Icons = {
   Database: icon(TbDatabase),
   Repo: icon(VscRepo),
   Share: icon(LuShare),
+  Antenna: icon(MdSettingsInputAntenna),
 } as const;

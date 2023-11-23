@@ -55,4 +55,5 @@ export type RepoListClickHandlerArgs = {
   store: t.Store;
   index: t.StoreIndex;
   item: t.RepoIndexItem;
+  position: { index: number; total: number };
 };
