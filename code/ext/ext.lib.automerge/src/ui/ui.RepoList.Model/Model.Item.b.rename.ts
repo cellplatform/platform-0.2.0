@@ -4,19 +4,15 @@ import { Data } from './Data';
 /**
  * Behavior for handling name edits.
  */
-export function renameBehavior(args: {
-  ctx: t.RepoListCtxGet;
-  item: t.RepoItemState;
-  events: t.RepoItemEvents;
-}) {
-  const { ctx, events, item } = args;
+export function renameBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
+  const { ctx, item } = args;
   const { index } = ctx();
 
   /**
    * Update the name in the index.
    */
   const rename = async (name: string) => {
-    const uri = Data.item(item).uri;
+    const uri = Data.item(item.state).uri;
     index.doc.change((d) => {
       const item = d.docs.find((doc) => doc.uri === uri);
       if (item) item.name = name;
@@ -26,8 +22,8 @@ export function renameBehavior(args: {
   /**
    * (Trigger) Listener
    */
-  const mode = () => Data.item(item).mode;
-  events.cmd.edited$
+  const mode = () => Data.item(item.state).mode;
+  item.events.cmd.edited$
     .pipe(
       rx.filter((e) => e.action === 'accepted'),
       rx.filter((e) => mode() === 'Doc'), // NB: defensive guard.

@@ -1,4 +1,4 @@
-import { createDocumentBehavior } from './Model.Item.b.create';
+import { createBehavior } from './Model.Item.b.create';
 import { renameBehavior } from './Model.Item.b.rename';
 import { eventsBehavior } from './Model.Item.b.events';
 import { DEFAULTS, Model, type t } from './common';
@@ -25,19 +25,21 @@ export const ItemModel = {
     const { ctx } = args;
     const initial = ItemModel.initial(args);
     const type = DEFAULTS.typename.Item;
-    const item = Model.Item.state<t.RepoListAction, D>(initial, { type });
-    const events = item.events(args.dispose$);
+    const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
+    const events = state.events(args.dispose$);
+    const dispatch = Model.Item.commands(state);
+    const item: t.RepoItemCtx = { state, events, dispatch };
 
     /**
      * Behavior controllers.
      */
-    createDocumentBehavior({ ctx, item, events });
-    renameBehavior({ ctx, item, events });
-    eventsBehavior({ ctx, item, events });
+    createBehavior({ ctx, item });
+    renameBehavior({ ctx, item });
+    eventsBehavior({ ctx, item });
 
     /**
      * Finish up.
      */
-    return item;
+    return state;
   },
 } as const;

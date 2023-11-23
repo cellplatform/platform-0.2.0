@@ -42,6 +42,12 @@ export type RepoListCtx = {
   dispose$?: t.UntilObservable;
 };
 
+export type RepoItemCtx = {
+  state: t.RepoItemState;
+  events: t.RepoItemEvents;
+  dispatch: t.LabelItemDispatch;
+};
+
 /**
  * Events
  */

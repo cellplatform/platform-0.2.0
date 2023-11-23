@@ -21,10 +21,7 @@ export const Renderers = {
           return <>{'new document'}</>;
         }
         if (data.mode === 'Doc') {
-          const style = css({
-            fontFamily: 'monospace',
-            fontSize: 11,
-          });
+          const style = css({ fontFamily: 'monospace', fontSize: 11 });
           const uri = Wrangle.placeholderUri(data.uri);
           return <div {...style}>{uri}</div>;
         }
