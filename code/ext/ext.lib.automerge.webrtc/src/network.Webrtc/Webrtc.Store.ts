@@ -15,7 +15,7 @@ export const WebrtcStore = {
 
     const total = { added: 0, bytes: 0 };
 
-    const peerEvents = peer.events();
+    const peerEvents = peer.events(dispose$);
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
       rx.filter((e) => e.action === 'ready'),

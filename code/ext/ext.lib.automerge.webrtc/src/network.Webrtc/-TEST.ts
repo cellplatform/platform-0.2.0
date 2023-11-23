@@ -61,7 +61,7 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       expect(docRemote.current).to.eql({ count: 0 });
 
       /**
-       * Change the document, and ensure it syncs over the network connection.
+       * Change the document and ensure it syncs over the network connection.
        */
       docRemote.change((d) => (d.count = 123));
       await wait(500);
