@@ -1,4 +1,4 @@
-import { Store } from '.';
+import { Store } from '../Store';
 import { rx, A, describe, expect, expectError, it, type t } from '../test';
 
 type D = { count?: t.A.Counter };
