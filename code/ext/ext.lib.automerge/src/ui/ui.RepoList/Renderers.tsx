@@ -47,7 +47,8 @@ export const Renderers = {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
             const item = Wrangle.indexItem(list, data.uri);
             if (item?.shared) {
-              return <Icons.Antenna {...helpers.icon(e, 16)} />;
+              const opacity = item.shared.current ? 1 : e.focused ? 0.4 : 0.2;
+              return <Icons.Antenna {...helpers.icon(e, 16)} opacity={opacity} />;
             } else {
               if (e.selected) return <Icons.Share {...helpers.icon(e, 16)} />;
             }

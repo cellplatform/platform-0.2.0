@@ -1,10 +1,21 @@
-import { rx, type t } from './common';
+import { A, type t } from './common';
 import { Data } from './Data';
 import { Wrangle } from './Wrangle';
 
 export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
   const action$ = Wrangle.item$(args.item).action$;
 
+  const toggleShared = (item: t.RepoIndexItem) => {
+    if (typeof item.shared !== 'object') {
+      item.shared = { current: false, count: new A.Counter(0) };
+    }
+    item.shared.current = !item.shared.current;
+    item.shared.count.increment(1);
+  };
+
+  /**
+   * Listener.
+   */
   action$('Item:Right', 'Share').subscribe((e) => {
     const ctx = args.ctx();
 
@@ -13,7 +24,7 @@ export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoI
     if (exists) {
       ctx.index.doc.change((d) => {
         const item = d.docs[position.index];
-        if (item) item.shared = !item.shared;
+        if (item) toggleShared(item);
       });
     }
 

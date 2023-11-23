@@ -1,4 +1,5 @@
-import type { t } from './common';
+import type { t, A } from './common';
+export type * from './t.Events';
 
 type Uri = t.DocUri | string;
 
@@ -23,32 +24,13 @@ export type RepoIndex = { docs: RepoIndexItem[] };
 export type RepoIndexItem = {
   uri: Uri;
   name?: string;
-  shared?: boolean; // Flag indicating if the document is to be published when connected to the network.
+  shared?: RepoIndexItemShared;
 };
 
 /**
- * Events
+ * Record of the share/publish status of the document.
  */
-export type StoreIndexEvents = t.Lifecycle & {
-  readonly $: t.Observable<t.StoreIndexEvent>;
-  readonly changed$: t.Observable<t.DocChanged<t.RepoIndex>>;
-  readonly added$: t.Observable<StoreIndexAdded>;
-  readonly removed$: t.Observable<StoreIndexRemoved>;
+export type RepoIndexItemShared = {
+  count: A.Counter;
+  current: boolean;
 };
-
-export type StoreIndexEvent =
-  | t.DocEvent<t.RepoIndex>
-  | StoreIndexAddedEvent
-  | StoreIndexRemovedEvent;
-
-export type StoreIndexAddedEvent = {
-  type: 'crdt:store:index/Added';
-  payload: StoreIndexAdded;
-};
-export type StoreIndexAdded = { index: number; total: number; item: t.RepoIndexItem };
-
-export type StoreIndexRemovedEvent = {
-  type: 'crdt:store:index/Removed';
-  payload: StoreIndexRemoved;
-};
-export type StoreIndexRemoved = { index: number; total: number; item: t.RepoIndexItem };

@@ -14,7 +14,6 @@ export type RepoArray = t.LabelListArray<t.RepoListAction, t.RepoItemData>;
  * Model: List
  */
 export type RepoListState = t.LabelListState;
-
 export type RepoListModel = t.Lifecycle & {
   ctx: t.RepoListCtxGet;
   store: t.WebStore;
