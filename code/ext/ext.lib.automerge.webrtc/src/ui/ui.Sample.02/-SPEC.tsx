@@ -133,7 +133,7 @@ export default Dev.describe(name, async (e) => {
     };
 
     const increment = async (edge: t.SampleEdge) => {
-      const doc = await getDoc(self);
+      const doc = await getDoc(edge);
       doc?.change((d) => {
         if (typeof d.count !== 'number') d.count = 0;
         d.count++;
@@ -149,7 +149,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(-1, 5);
     dev.button('left: increment', (e) => increment(self));
-    dev.button('right: increment', (e) => increment(self));
+    dev.button('right: increment', (e) => increment(remote));
     dev.hr(-1, 5);
     dev.button('monitor: left', (e) => monitor(self));
     dev.button('monitor: right', (e) => monitor(remote));
