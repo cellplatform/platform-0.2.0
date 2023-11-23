@@ -47,7 +47,7 @@ export const WebrtcStore = {
       peer,
 
       $,
-      added$: rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded'),
+      add$: rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded'),
       message$: rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message'),
 
       get total() {

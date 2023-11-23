@@ -61,7 +61,7 @@ export default Dev.describe(name, (e) => {
     await initDoc(state);
 
     const manager = WebrtcStore.init(self, store);
-    manager.added$.subscribe((e) => {
+    manager.add$.subscribe((e) => {
       state.change((d) => (d.user = e.adapter.peerId));
     });
 

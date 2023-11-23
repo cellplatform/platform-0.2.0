@@ -13,8 +13,8 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
     const generator = store.doc.factory<D>((d) => (d.count = 0));
     const manager = WebrtcStore.init(peer, store);
 
-    const added: t.WebrtcStoreAdapterAdded[] = [];
-    manager.added$.subscribe((e) => added.push(e));
+    const add: t.WebrtcStoreAdapterAdded[] = [];
+    manager.add$.subscribe((e) => add.push(e));
 
     const dispose = () => {
       peer.dispose();
@@ -25,7 +25,7 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       peer,
       events,
       store,
-      fired: { added },
+      fired: { add },
       generator,
       manager,
       dispose,
@@ -45,13 +45,13 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       expect(self.manager.total.added).to.eql(1);
       expect(remote.manager.total.added).to.eql(1);
 
-      expect(self.fired.added.length).to.eql(1);
-      expect(remote.fired.added.length).to.eql(1);
-      expect(self.fired.added[0].conn.id).to.eql(res.id);
-      expect(self.fired.added[0].peer).to.eql(self.peer.id);
+      expect(self.fired.add.length).to.eql(1);
+      expect(remote.fired.add.length).to.eql(1);
+      expect(self.fired.add[0].conn.id).to.eql(res.id);
+      expect(self.fired.add[0].peer).to.eql(self.peer.id);
 
-      expect(remote.fired.added[0].conn.id).to.eql(res.id);
-      expect(remote.fired.added[0].peer).to.eql(remote.peer.id);
+      expect(remote.fired.add[0].conn.id).to.eql(res.id);
+      expect(remote.fired.add[0].peer).to.eql(remote.peer.id);
 
       const bytesBefore = {
         self: self.manager.total.bytes,
