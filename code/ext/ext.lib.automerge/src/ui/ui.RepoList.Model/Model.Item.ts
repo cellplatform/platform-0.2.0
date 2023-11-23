@@ -1,6 +1,6 @@
 import { createBehavior } from './Model.Item.b.create';
 import { renameBehavior } from './Model.Item.b.rename';
-import { eventsBehavior } from './Model.Item.b.events';
+import { eventMonitorBehavior } from './Model.Item.b.monitor';
 import { DEFAULTS, Model, type t } from './common';
 
 type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
@@ -35,7 +35,7 @@ export const ItemModel = {
      */
     createBehavior({ ctx, item });
     renameBehavior({ ctx, item });
-    eventsBehavior({ ctx, item });
+    eventMonitorBehavior({ ctx, item });
 
     /**
      * Finish up.
