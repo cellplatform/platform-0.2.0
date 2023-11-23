@@ -23,7 +23,8 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
       const index = e.patches[0].path[1] as number;
       const item = e.patchInfo.after.docs[index];
       if (item) {
-        $$.next({ type: 'crdt:store:index/Added', payload: { index, item } });
+        const total = e.patchInfo.after.docs.length;
+        $$.next({ type: 'crdt:store:index/Added', payload: { index, total, item } });
       }
     });
 
@@ -37,7 +38,8 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
       const index = e.patches[0].path[1] as number;
       const item = e.patchInfo.before.docs[index];
       if (item) {
-        $$.next({ type: 'crdt:store:index/Removed', payload: { index, item } });
+        const total = e.patchInfo.after.docs.length;
+        $$.next({ type: 'crdt:store:index/Removed', payload: { index, total, item } });
       }
     });
 

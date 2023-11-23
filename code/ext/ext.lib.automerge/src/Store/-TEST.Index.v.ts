@@ -169,8 +169,10 @@ describe('StoreIndex', async () => {
 
         expect(fired.length).to.eql(2);
         expect(fired[0].index).to.eql(0);
-        expect(fired[1].index).to.eql(1);
+        expect(fired[0].total).to.eql(1);
         expect(fired[0].item.uri).to.eql('automerge:foo');
+        expect(fired[1].index).to.eql(1);
+        expect(fired[1].total).to.eql(2);
         expect(fired[1].item.uri).to.eql('automerge:bar');
 
         store.dispose();
@@ -187,6 +189,7 @@ describe('StoreIndex', async () => {
 
         expect(fired.length).to.eql(1);
         expect(fired[0].index).to.eql(1);
+        expect(fired[0].total).to.eql(1);
         expect(fired[0].item.uri).to.eql('automerge:bar');
 
         store.dispose();

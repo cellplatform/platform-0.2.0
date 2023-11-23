@@ -41,10 +41,10 @@ export type StoreIndexAddedEvent = {
   type: 'crdt:store:index/Added';
   payload: StoreIndexAdded;
 };
-export type StoreIndexAdded = { index: number; item: t.RepoIndexItem };
+export type StoreIndexAdded = { index: number; total: number; item: t.RepoIndexItem };
 
 export type StoreIndexRemovedEvent = {
   type: 'crdt:store:index/Removed';
   payload: StoreIndexRemoved;
 };
-export type StoreIndexRemoved = { index: number; item: t.RepoIndexItem };
+export type StoreIndexRemoved = { index: number; total: number; item: t.RepoIndexItem };
