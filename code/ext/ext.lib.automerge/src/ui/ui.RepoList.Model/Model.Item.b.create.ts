@@ -1,4 +1,4 @@
-import { Model, rx, Time, type t } from './common';
+import { Model, rx, type t } from './common';
 import { Data } from './Data';
 
 /**
@@ -10,7 +10,8 @@ export function createDocumentBehavior(args: {
   events: t.RepoItemEvents;
 }) {
   const { ctx, events, item } = args;
-  const { list, store } = ctx();
+  const { list, store, index } = ctx();
+  const indexEvents = index.events(events.dispose$);
   const dispatch = {
     item: Model.Item.commands(item),
     list: list.dispatch,
@@ -21,19 +22,13 @@ export function createDocumentBehavior(args: {
    */
   const add = async () => {
     // Generate a new document.
+    // NB: the addition of a new item to the list is handed in the [listBehavior].
     await store.doc.getOrCreate((d) => ({}));
-
-    // NB: After creating the new document, simply append 1 to the length of the list.
-    //     The [getItem] data generator takes care of the rest.
-    list.state.change((d) => (d.total += 1));
-    dispatch.item.redraw();
-    Time.delay(0, () => {
-      dispatch.item.edit('start'); // NB: ensure editing mode.
-    });
+    dispatch.item.edit('start'); // NB: ensure editing mode.
   };
 
   /**
-   * (Trigger) Listener
+   * (Trigger) Listener.
    */
   const mode = () => Data.item(item).mode;
   const addModeFilter = rx.filter(() => mode() === 'Add');

@@ -1,6 +1,7 @@
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
+import { listBehavior } from './Model.List.b';
 
 type Options = { dispose$?: t.UntilObservable } & t.RepoListHandlers;
 
@@ -27,10 +28,15 @@ export const List = {
     );
 
     /**
-     * API.
+     * Behaviors.
      */
     const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
+    listBehavior({ ctx });
+
+    /**
+     * API.
+     */
     const api: t.RepoListModel = {
       ctx,
       store,
