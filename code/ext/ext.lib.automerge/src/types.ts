@@ -1,3 +1,4 @@
+export type * from './Store.Web.Index/t';
 export type * from './Store.Web.IndexDb/t';
 export type * from './Store.Web/t';
 export type * from './Store/t';

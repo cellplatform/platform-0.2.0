@@ -4,7 +4,7 @@ import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
-import { index } from './WebStore.index';
+import { WebStoreIndex } from '../Store.Web.Index';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
 type Init = {
@@ -26,7 +26,7 @@ export const WebStore = {
   /**
    * Create instance of the store/repo's document Index.
    */
-  index,
+  index: WebStoreIndex.init,
 
   /**
    * Initialize a new instance of a CRDT store/repo.
