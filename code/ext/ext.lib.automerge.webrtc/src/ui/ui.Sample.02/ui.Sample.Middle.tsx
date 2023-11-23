@@ -1,5 +1,6 @@
 import { css, type t } from './common';
 import { Footer } from './ui.Sample.Middle.Footer';
+import { usePeerMonitor } from './use.Peer.Monitor';
 
 export type SampleMiddleProps = {
   left: t.SampleEdge;
