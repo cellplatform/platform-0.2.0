@@ -35,10 +35,12 @@ export const Api: React.FC<ApiProps> = (props) => {
       display: 'grid',
       justifyContent: 'center',
     }),
-    headLabel: css({
+    label: css({
       position: 'relative',
       fontSize: 10,
-      top: -20,
+      fontFamily: 'monospace',
+      letterSpacing: -0.1,
+      top: -22,
       opacity: 0.4,
       width: 60,
       textAlign: 'center',
@@ -47,7 +49,7 @@ export const Api: React.FC<ApiProps> = (props) => {
   };
 
   const elBar = <div {...styles.bar}></div>;
-  const elHead = <div {...styles.head}>{label && <div {...styles.headLabel}>{label}</div>}</div>;
+  const elHead = <div {...styles.head}>{label && <div {...styles.label}>{label}</div>}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
