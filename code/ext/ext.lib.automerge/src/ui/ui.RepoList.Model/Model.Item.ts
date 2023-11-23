@@ -1,6 +1,7 @@
+import { actionLeftBehavior } from './Model.Item.b.action.left';
+import { actionShareBehavior } from './Model.Item.b.action.share';
 import { createBehavior } from './Model.Item.b.create';
 import { renameBehavior } from './Model.Item.b.rename';
-import { eventMonitorBehavior } from './Model.Item.b.monitor';
 import { DEFAULTS, Model, type t } from './common';
 
 type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
@@ -35,7 +36,8 @@ export const ItemModel = {
      */
     createBehavior({ ctx, item });
     renameBehavior({ ctx, item });
-    eventMonitorBehavior({ ctx, item });
+    actionLeftBehavior({ ctx, item });
+    actionShareBehavior({ ctx, item });
 
     /**
      * Finish up.
