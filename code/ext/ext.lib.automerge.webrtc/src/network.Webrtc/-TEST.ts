@@ -21,7 +21,15 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       store.dispose();
       manager.dispose();
     };
-    return { peer, events, store, added, generator, manager, dispose } as const;
+    return {
+      peer,
+      events,
+      store,
+      fired: { added },
+      generator,
+      manager,
+      dispose,
+    } as const;
   };
 
   e.describe('Integration (Live)', (e) => {
@@ -37,13 +45,13 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
       expect(self.manager.total.added).to.eql(1);
       expect(remote.manager.total.added).to.eql(1);
 
-      expect(self.added.length).to.eql(1);
-      expect(remote.added.length).to.eql(1);
-      expect(self.added[0].conn.id).to.eql(res.id);
-      expect(self.added[0].peer).to.eql(self.peer.id);
+      expect(self.fired.added.length).to.eql(1);
+      expect(remote.fired.added.length).to.eql(1);
+      expect(self.fired.added[0].conn.id).to.eql(res.id);
+      expect(self.fired.added[0].peer).to.eql(self.peer.id);
 
-      expect(remote.added[0].conn.id).to.eql(res.id);
-      expect(remote.added[0].peer).to.eql(remote.peer.id);
+      expect(remote.fired.added[0].conn.id).to.eql(res.id);
+      expect(remote.fired.added[0].peer).to.eql(remote.peer.id);
 
       const bytesBefore = {
         self: self.manager.total.bytes,
