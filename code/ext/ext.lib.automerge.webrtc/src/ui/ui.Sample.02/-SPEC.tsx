@@ -64,7 +64,6 @@ export default Dev.describe(name, async (e) => {
     });
 
     const network = WebrtcStore.init(peer, store);
-
     const edge: t.SampleEdge = { kind, repo, network };
     return edge;
   };
@@ -101,7 +100,48 @@ export default Dev.describe(name, async (e) => {
         self.network.peer.connect.data(remote.network.peer.id);
       });
 
+      dev.hr(5, 20);
+
+      dev.button('tmp: conn.send', async (e) => {
+        const peer = self.network.peer;
+        const conn = peer.current.connections.find((m) => m.kind === 'data');
+        const data = peer.get.conn.obj.data(conn?.id);
+        if (data) {
+          data.send({ msg: 'hello' });
+        }
+      });
+
+      const getDoc = async (edge: t.SampleEdge) => {
+        type D = { count: number };
+        const repo = edge.repo;
+        const uri = repo.index.doc.current.docs[0]?.uri;
+        const doc = await repo.store.doc.get<D>(uri);
+        return doc;
+      };
+
+      const increment = async (edge: t.SampleEdge) => {
+        const doc = await getDoc(edge);
+        doc?.change((d) => {
+          if (typeof d.count !== 'number') d.count = 0;
+          d.count++;
+        });
+      };
+
+      const monitor = async (edge: t.SampleEdge) => {
+        const doc = await getDoc(edge);
+        doc?.events().changed$.subscribe((e) => {
+          console.log('⚡️', edge.kind, doc.toObject());
+        });
+      };
+
       dev.hr(-1, 5);
+      dev.button('left: increment', (e) => increment(self));
+      dev.button('right: increment', (e) => increment(remote));
+      dev.hr(-1, 5);
+      dev.button('monitor: left', (e) => monitor(self));
+      dev.button('monitor: right', (e) => monitor(remote));
+
+      dev.hr(5, 20);
 
       dev.button('delete sample databases', async (e) => {
         const del = async (name: string) => {
@@ -112,47 +152,6 @@ export default Dev.describe(name, async (e) => {
         await del(dbname.right);
       });
     });
-
-    dev.hr(5, 20);
-
-    dev.button('tmp: conn.send', async (e) => {
-      const peer = self.network.peer;
-      const conn = peer.current.connections.find((m) => m.kind === 'data');
-      const data = peer.get.conn.obj.data(conn?.id);
-      if (data) {
-        data.send({ msg: 'hello' });
-      }
-    });
-
-    const getDoc = async (edge: t.SampleEdge) => {
-      type D = { count: number };
-      const repo = edge.repo;
-      const uri = repo.index.doc.current.docs[0]?.uri;
-      const doc = await repo.store.doc.get<D>(uri);
-      return doc;
-    };
-
-    const increment = async (edge: t.SampleEdge) => {
-      const doc = await getDoc(edge);
-      doc?.change((d) => {
-        if (typeof d.count !== 'number') d.count = 0;
-        d.count++;
-      });
-    };
-
-    const monitor = async (edge: t.SampleEdge) => {
-      const doc = await getDoc(edge);
-      doc?.events().changed$.subscribe((e) => {
-        console.log('⚡️', edge.kind, doc.toObject());
-      });
-    };
-
-    dev.hr(-1, 5);
-    dev.button('left: increment', (e) => increment(self));
-    dev.button('right: increment', (e) => increment(remote));
-    dev.hr(-1, 5);
-    dev.button('monitor: left', (e) => monitor(self));
-    dev.button('monitor: right', (e) => monitor(remote));
   });
 
   e.it('ui:footer', async (e) => {
