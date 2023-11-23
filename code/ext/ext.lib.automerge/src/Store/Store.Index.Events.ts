@@ -1,7 +1,7 @@
 import { rx, type t } from './common';
 
 /**
- * Factory for the Index events objectl
+ * Factory for the Index events object.
  */
 export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObservable } = {}) {
   const life = rx.lifecycle(options.dispose$);
@@ -15,16 +15,29 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
 
   changed$
     .pipe(
-      rx.map((e) => e.patches[0]),
-      rx.filter((e) => e.action === 'insert'),
-      rx.filter((e) => e.path[0] === 'docs'),
-      rx.filter((e) => typeof e.path[1] === 'number'),
+      rx.filter((e) => e.patches[0].action === 'insert'),
+      rx.filter((e) => e.patches[0].path[0] === 'docs'),
+      rx.filter((e) => typeof e.patches[0].path[1] === 'number'),
     )
     .subscribe((e) => {
-      const i = e.path[1] as number;
-      const item = index.doc.current.docs[i];
+      const index = e.patches[0].path[1] as number;
+      const item = e.patchInfo.after.docs[index];
       if (item) {
-        $$.next({ type: 'crdt:store:index/Added', payload: { index: i, item } });
+        $$.next({ type: 'crdt:store:index/Added', payload: { index, item } });
+      }
+    });
+
+  changed$
+    .pipe(
+      rx.filter((e) => e.patches[0].action === 'del'),
+      rx.filter((e) => e.patches[0].path[0] === 'docs'),
+      rx.filter((e) => typeof e.patches[0].path[1] === 'number'),
+    )
+    .subscribe((e) => {
+      const index = e.patches[0].path[1] as number;
+      const item = e.patchInfo.before.docs[index];
+      if (item) {
+        $$.next({ type: 'crdt:store:index/Removed', payload: { index, item } });
       }
     });
 
@@ -35,6 +48,7 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     $,
     changed$,
     added$: rx.payload<t.StoreIndexAddedEvent>($, 'crdt:store:index/Added'),
+    removed$: rx.payload<t.StoreIndexRemovedEvent>($, 'crdt:store:index/Removed'),
 
     /**
      * Lifecycle

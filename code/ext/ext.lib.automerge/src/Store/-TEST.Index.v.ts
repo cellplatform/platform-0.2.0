@@ -175,6 +175,22 @@ describe('StoreIndex', async () => {
 
         store.dispose();
       });
+
+      it('removed$', async () => {
+        const { store, events, index } = await eventsSetup();
+        const fired: t.StoreIndexRemoved[] = [];
+        events.removed$.subscribe((e) => fired.push(e));
+
+        index.add('automerge:foo');
+        index.add('automerge:bar');
+        index.remove('automerge:bar');
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0].index).to.eql(1);
+        expect(fired[0].item.uri).to.eql('automerge:bar');
+
+        store.dispose();
+      });
     });
   });
 });
