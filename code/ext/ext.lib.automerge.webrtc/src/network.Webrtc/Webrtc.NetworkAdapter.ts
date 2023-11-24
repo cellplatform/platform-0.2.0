@@ -3,6 +3,8 @@ import type { DataConnection } from 'peerjs';
 import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
 import { Time, rx, type t } from '../common';
 
+const kind: t.StoreNetworkKind = 'WebRTC';
+
 /**
  * An Automerge repo network-adapter for WebRTC (P2P)
  *
@@ -15,7 +17,9 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #isReady = false;
   #disconnected = rx.subject<void>();
   #message$ = rx.subject<t.WebrtcMessageAlert>();
+
   readonly message$: t.Observable<t.WebrtcMessageAlert>;
+  readonly kind = kind;
 
   constructor(conn: DataConnection) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);

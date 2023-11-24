@@ -93,7 +93,7 @@ export default Test.describe('Is', (e) => {
     NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
   });
 
-  e.it('Is.broadcastChannel', (e) => {
+  e.it('Is.broadcastChannel (network adapter)', (e) => {
     const adapter = new BroadcastChannelNetworkAdapter();
     expect(Is.broadcastChannel(adapter)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.broadcastChannel(v)).to.eql(false));

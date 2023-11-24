@@ -3,7 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 import { Store } from '../Store';
-import { WebStoreIndex } from '../Store.Web.Index';
+import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
@@ -26,7 +26,8 @@ export const WebStore = {
   /**
    * Create instance of the store/repo's document Index.
    */
-  index: WebStoreIndex.init,
+  Index,
+  index: Index.init,
 
   /**
    * Initialize a new instance of a CRDT store/repo.
@@ -46,7 +47,9 @@ export const WebStore = {
       /**
        * Metadata about the store.
        */
-      info: Wrangle.info(options),
+      get info() {
+        return Wrangle.info(options);
+      },
 
       /**
        * The react <Provider> context.

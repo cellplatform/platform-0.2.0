@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-export type StoreNetworkKind = 'BroadcastChannel' | 'Unknown';
+export type StoreNetworkKind = 'BroadcastChannel' | 'WebRTC' | 'Unknown';
 
 /**
  * Store (a repository of documents).
