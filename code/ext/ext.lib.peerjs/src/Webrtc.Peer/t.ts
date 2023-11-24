@@ -123,6 +123,7 @@ export type PeerModelConnAction =
   | 'closed'
   | 'error'
   | 'purged';
+
 export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConnCmdArgs };
 export type PeerModelConnCmdArgs = {
   tx: string;
