@@ -14,8 +14,8 @@ export const WebStoreIndex = {
     const base = await Store.Index.init(store, { uri });
     return {
       ...base,
-      get total() {
-        return base.total;
+      total() {
+        return base.total();
       },
       db,
     };

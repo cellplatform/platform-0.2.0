@@ -10,22 +10,27 @@ export type StoreIndex = {
   readonly kind: 'store:index';
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
-  readonly total: number;
+  total(filter?: t.RepoIndexFilter): number;
   exists(documentUri: Uri): boolean;
-  add(documentUri: Uri): boolean;
-  remove(documentUri: Uri): boolean;
+  add(documentUri: Uri): Promise<boolean>;
+  remove(documentUri: Uri): Promise<boolean>;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };
+
+export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;
+export type RepoIndexFilterArgs = { doc: t.RepoIndexDoc; index: number };
 
 /**
  * Index of documents within a store/repository.
  */
-export type RepoIndex = { docs: RepoIndexItem[] };
-export type RepoIndexItem = {
+export type RepoIndex = { docs: RepoIndexDoc[] };
+export type RepoIndexDoc = {
   uri: Uri;
   name?: string;
   shared?: RepoIndexItemShared;
+  meta?: RepoIndexDocMeta;
 };
+export type RepoIndexDocMeta = Pick<t.DocMeta, 'ephemeral'>;
 
 /**
  * Record of the share/publish status of the document.

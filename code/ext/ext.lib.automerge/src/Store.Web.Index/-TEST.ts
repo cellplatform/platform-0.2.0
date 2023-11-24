@@ -6,7 +6,7 @@ type D = { count?: t.A.Counter };
 export default Test.describe('Store.Web: Index', (e) => {
   const name = TestDb.name.test;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-  const contains = (docs: t.RepoIndexItem[], uri: string) => docs.some((e) => e.uri === uri);
+  const contains = (docs: t.RepoIndexDoc[], uri: string) => docs.some((e) => e.uri === uri);
 
   e.describe('lifecycle', (e) => {
     e.it('initialize', async (e) => {
@@ -51,10 +51,10 @@ export default Test.describe('Store.Web: Index', (e) => {
       const fired: t.RepoIndex[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
 
-      const totalBefore = index.total;
+      const totalBefore = index.total();
       const sample = await store.doc.getOrCreate(initial);
       expect(index.exists(sample.uri)).to.eql(true);
-      expect(index.total).to.eql(totalBefore + 1);
+      expect(index.total()).to.eql(totalBefore + 1);
 
       const docs = fired[0].docs;
       expect(fired.length).to.eql(1);

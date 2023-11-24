@@ -104,7 +104,7 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
 
     e.it('throw: no name', (e) => {
       const fn = () => StoreIndexDb.name('  ');
-      expect(fn).to.throw(/A root store name is required/);
+      expect(fn).to.throw(/A store name is required/);
     });
   });
 });

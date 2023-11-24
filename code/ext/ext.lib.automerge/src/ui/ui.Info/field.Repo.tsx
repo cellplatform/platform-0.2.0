@@ -7,8 +7,8 @@ export function repo(repo: t.InfoData['repo']) {
   const name = repo.name || repo.store?.info.storage?.name || 'Unnamed';
   let text = `${name}`;
   if (index) {
-    const documents = Value.plural(index.total, 'document', 'documents');
-    text = `${text} → ${index.total} ${documents}`;
+    const documents = Value.plural(index.total(), 'document', 'documents');
+    text = `${text} → ${index.total()} ${documents}`;
   }
 
   const styles = {
