@@ -9,10 +9,13 @@ export const WebrtcStore = {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const peerEvents = peer.events(dispose$);
-    const total = { added: 0, bytes: 0 };
+    const total = { added: 0, bytes: { in: 0, out: 0 } };
 
     const subject$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = subject$.pipe(rx.takeUntil(dispose$));
+    const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded');
+    const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
+
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
 
     const ready$ = peerEvents.cmd.conn$.pipe(
@@ -22,9 +25,13 @@ export const WebrtcStore = {
       rx.filter(Boolean),
     );
 
-    const initializeNetworkAdapter = (connid: string) => {
-      const obj = peer.get.conn.obj.data(connid);
-      if (!obj) throw new Error(`Failed to retrieve data connection with id "${connid}".`);
+    message$.subscribe((e) => {
+      if (e.message.type === 'sync') {
+        const bytes = e.message.data.byteLength;
+        if (e.direction === 'Incoming') total.bytes.in += bytes;
+        if (e.direction === 'Outgoing') total.bytes.out += bytes;
+      }
+    });
 
       const adapter = new WebrtcNetworkAdapter(obj);
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
@@ -49,8 +56,8 @@ export const WebrtcStore = {
       peer,
 
       $,
-      added$: rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded'),
-      message$: rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message'),
+      added$,
+      message$,
 
       get total() {
         return total;

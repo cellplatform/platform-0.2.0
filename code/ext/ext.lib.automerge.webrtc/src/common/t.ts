@@ -7,8 +7,10 @@ export type { DataConnection } from 'peerjs';
 export type { Observable } from 'rxjs';
 
 export type {
+  DocMeta,
   DocRefHandle,
   DocUri,
+  DocWithMeta,
   Store,
   StoreIndex,
   StoreNetworkKind,
