@@ -42,3 +42,12 @@ export type DocStore = {
     options?: { timeout?: t.Msecs },
   ): Promise<t.DocRefHandle<T>>;
 };
+
+/**
+ * Common meta-data object that can decorate CRDT documents
+ * on a hidden key, eg { .meta: {} }
+ */
+export type DocMetaKey = '.meta';
+export type DocMeta = {
+  ephemeral?: boolean;
+};

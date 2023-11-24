@@ -1,5 +1,6 @@
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, rx, type t } from '../test';
+import { Doc, DEFAULTS } from '.';
 
 type D = { count?: t.A.Counter };
 
@@ -211,6 +212,29 @@ describe('Store (base)', async () => {
       increment();
       increment();
       expect(fired.length).to.eql(1); // NB: no change after dispose.
+    });
+  });
+
+  describe('Doc.meta', () => {
+    it('does not have .meta → undefined', () => {
+      [null, undefined, '', 123, true, [], {}].forEach((value: any) => {
+        expect(Doc.meta(value)).to.eql(undefined);
+      });
+    });
+
+    it('does NOT adjust the input document', () => {
+      const doc = { count: 123 } as any;
+      const res = Doc.meta(doc);
+      expect(res).to.eql(undefined);
+      expect(doc).to.eql(doc);
+      expect(doc[Doc.metaKey]).to.eql(undefined);
+    });
+
+    it('does adjust the input document ← { force: true }', () => {
+      const doc = { count: 123 } as any;
+      const res = Doc.meta(doc, { mutate: true });
+      expect(res).to.eql(DEFAULTS.initial.meta);
+      expect(doc[Doc.metaKey]).to.eql({});
     });
   });
 });
