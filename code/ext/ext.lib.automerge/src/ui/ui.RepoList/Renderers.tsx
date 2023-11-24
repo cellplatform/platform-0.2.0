@@ -43,7 +43,7 @@ export const Renderers = {
         }
 
         if (e.kind === 'Item:Right' && data.mode === 'Doc') {
-          if (behaviors.includes('Share')) {
+          if (behaviors.includes('Shareable')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
             const item = Wrangle.indexItem(list, data.uri);
             if (item?.shared) {
