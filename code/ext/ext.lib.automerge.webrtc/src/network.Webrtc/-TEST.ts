@@ -6,12 +6,13 @@ type D = { count: number };
 export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   e.timeout(9999);
 
-  const testSetup = () => {
+  const testSetup = async () => {
     const peer = Webrtc.peer();
     const events = peer.events();
     const store = WebStore.init({ storage: false, network: [] });
+    const index = await WebStore.index(store);
     const generator = store.doc.factory<D>((d) => (d.count = 0));
-    const network = WebrtcStore.init(peer, store);
+    const network = WebrtcStore.init(peer, store, index);
 
     const added: t.WebrtcStoreAdapterAdded[] = [];
     const messages: t.WebrtcMessageAlert[] = [];
@@ -37,9 +38,9 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   e.describe('Integration (Live)', (e) => {
     e.it('connects and sync douments over WebRTC', async (e) => {
       const wait = (msecs = 400) => Time.wait(msecs);
-      const self = testSetup();
+      const self = await testSetup();
       await wait();
-      const remote = testSetup();
+      const remote = await testSetup();
       await wait();
 
       const res = await self.peer.connect.data(remote.peer.id);
@@ -99,24 +100,24 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   });
 
   e.describe('WebrtcStore (Network Manager)', (e) => {
-    e.it('initialize', (e) => {
-      const { dispose, network, store, peer } = testSetup();
+    e.it('initialize', async (e) => {
+      const { dispose, network, store, peer } = await testSetup();
       expect(network.total.added).to.eql(0);
       expect(network.store).to.equal(store);
       expect(network.peer).to.equal(peer);
       dispose();
     });
 
-    e.it('dispose: when Peer disposes', (e) => {
-      const { peer, dispose, network } = testSetup();
+    e.it('dispose: when Peer disposes', async (e) => {
+      const { peer, dispose, network } = await testSetup();
       expect(network.disposed).to.eql(false);
       peer.dispose();
       expect(network.disposed).to.eql(true);
       dispose();
     });
 
-    e.it('dispose: when Store disposes', (e) => {
-      const { store, dispose, network } = testSetup();
+    e.it('dispose: when Store disposes', async (e) => {
+      const { store, dispose, network } = await testSetup();
       expect(network.disposed).to.eql(false);
       store.dispose();
       expect(network.disposed).to.eql(true);
