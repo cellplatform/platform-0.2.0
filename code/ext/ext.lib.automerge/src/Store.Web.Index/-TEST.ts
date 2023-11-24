@@ -53,6 +53,7 @@ export default Test.describe('Store.Web: Index', (e) => {
 
       const totalBefore = index.total();
       const sample = await store.doc.getOrCreate(initial);
+      await Time.wait(0);
       expect(index.exists(sample.uri)).to.eql(true);
       expect(index.total()).to.eql(totalBefore + 1);
 
@@ -73,6 +74,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
 
       const sample = await store.doc.getOrCreate(initial);
+      await Time.wait(0);
       expect(index.exists(sample.uri)).to.eql(true);
 
       const docs = fired[0].docs;
