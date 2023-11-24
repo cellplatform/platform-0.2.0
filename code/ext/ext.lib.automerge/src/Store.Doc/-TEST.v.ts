@@ -228,18 +228,18 @@ describe('Store (base)', async () => {
     it('ensure: mutates input document', () => {
       const doc = { count: 123 } as any;
       const initial: t.DocMeta = { ephemeral: true };
-      expect(Doc.Meta.has(doc)).to.eql(false);
+      expect(Doc.Meta.exists(doc)).to.eql(false);
 
       const res = Doc.Meta.ensure(doc, initial);
       expect(res).to.eql(true);
       expect(doc[Doc.Meta.key]).to.eql(initial);
-      expect(Doc.Meta.has(doc)).to.eql(true);
+      expect(Doc.Meta.exists(doc)).to.eql(true);
     });
 
     it('get: does not have .meta → undefined (invalid input)', () => {
       [null, undefined, '', 123, true, [], {}].forEach((doc: any) => {
         expect(Doc.Meta.get(doc)).to.eql(undefined);
-        expect(Doc.Meta.has(doc)).to.eql(false);
+        expect(Doc.Meta.exists(doc)).to.eql(false);
       });
     });
 
@@ -249,7 +249,7 @@ describe('Store (base)', async () => {
       expect(res).to.eql(undefined);
       expect(doc).to.eql(doc);
       expect((doc as any)[Doc.Meta.key]).to.eql(undefined);
-      expect(Doc.Meta.has(doc)).to.eql(false);
+      expect(Doc.Meta.exists(doc)).to.eql(false);
     });
 
     it('get: does mutate the input document ← { mutate: true }', () => {
@@ -257,7 +257,7 @@ describe('Store (base)', async () => {
       const res = Doc.Meta.get(doc, { mutate: true });
       expect(res).to.eql(DEFAULTS.initial.meta);
       expect((doc as any)[Doc.Meta.key]).to.eql({});
-      expect(Doc.Meta.has(doc)).to.eql(true);
+      expect(Doc.Meta.exists(doc)).to.eql(true);
     });
 
     it('get: metadata <Type> extension', () => {

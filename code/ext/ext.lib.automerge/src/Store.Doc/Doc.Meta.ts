@@ -35,7 +35,7 @@ export const DocMeta = {
    * Ensures the {.meta} data object is on the document.
    */
   ensure<T extends t.DocMeta>(doc: O, initial?: T) {
-    if (DocMeta.has(doc)) return false;
+    if (DocMeta.exists(doc)) return false;
     DocMeta.get(doc, { mutate: true, initial });
     return true;
   },
@@ -43,7 +43,7 @@ export const DocMeta = {
   /**
    * Determine if the given document has {.meta} data.
    */
-  has(input: O | t.DocRefHandle<O>) {
+  exists(input: O | t.DocRefHandle<O>) {
     if (typeof input !== 'object' || input === null) return false;
     const doc = PatchState.Is.state(input) ? input.current : input;
     return Boolean(doc[DocMeta.key]);
