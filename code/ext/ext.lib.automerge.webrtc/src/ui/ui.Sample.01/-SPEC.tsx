@@ -21,7 +21,7 @@ const initial: T = {
  */
 const name = 'Sample.01';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Sample');
   const local = localstore.object({
@@ -39,6 +39,7 @@ export default Dev.describe(name, (e) => {
    * CRDT (Automerge)
    */
   const store = WebStore.init({ network: [] });
+  const index = await WebStore.index(store);
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
   let doc: t.DocRefHandle<t.SampleDoc>;
@@ -60,8 +61,8 @@ export default Dev.describe(name, (e) => {
     });
     await initDoc(state);
 
-    const manager = WebrtcStore.init(self, store);
-    manager.added$.subscribe((e) => {
+    const network = WebrtcStore.init(self, store, index);
+    network.added$.subscribe((e) => {
       state.change((d) => (d.user = e.adapter.peerId));
     });
 

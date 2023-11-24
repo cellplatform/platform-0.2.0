@@ -1,5 +1,5 @@
 import { WebrtcStore } from '../../network.Webrtc';
-import { Dev, IndexedDb } from '../../test.ui';
+import { Dev, IndexedDb, TestDb } from '../../test.ui';
 import { Crdt, DocUri, Webrtc, type t } from './common';
 import { Sample } from './ui.Sample';
 
@@ -57,13 +57,10 @@ export default Dev.describe(name, async (e) => {
             repo.index.doc.change((d) => d.docs.push({ uri }));
           }
         }
-        // if (DocUri.)
-        // Webrtc.is
       }
-      // store.doc.get()
     });
 
-    const network = WebrtcStore.init(peer, store);
+    const network = WebrtcStore.init(peer, store, repo.index);
     const edge: t.SampleEdge = { kind, repo, network };
     return edge;
   };
@@ -86,9 +83,7 @@ export default Dev.describe(name, async (e) => {
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        return <Sample left={self} right={remote} />;
-      });
+      .render<T>((e) => <Sample left={self} right={remote} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -150,6 +145,8 @@ export default Dev.describe(name, async (e) => {
         };
         await del(dbname.left);
         await del(dbname.right);
+        await TestDb.deleteDatabases();
+        await TestDb.Spec.deleteDatabases();
       });
     });
   });
