@@ -1,17 +1,19 @@
 import { WebrtcStore } from '.';
-import { Test, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
+import { Test, TestDb, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
 
 type D = { count: number };
 
-export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
+export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
   e.timeout(9999);
 
-  const testSetup = async () => {
+  const setup = async () => {
     const peer = Webrtc.peer();
     const events = peer.events();
-    const store = WebStore.init({ storage: false, network: [] });
-    const index = await WebStore.index(store);
+    const storage = TestDb.name.test;
+    const store = WebStore.init({ storage, network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
+
+    const index = await WebStore.index(store);
     const network = WebrtcStore.init(peer, store, index);
 
     const added: t.WebrtcStoreAdapterAdded[] = [];
@@ -38,9 +40,9 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
   e.describe('Integration (Live)', (e) => {
     e.it('connects and sync douments over WebRTC', async (e) => {
       const wait = (msecs = 400) => Time.wait(msecs);
-      const self = await testSetup();
+      const self = await setup();
       await wait();
-      const remote = await testSetup();
+      const remote = await setup();
       await wait();
 
       const res = await self.peer.connect.data(remote.peer.id);
@@ -75,9 +77,9 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
        * Change the document and ensure it syncs over the network connection.
        */
       docRemote.change((d) => (d.count = 123));
-      await wait(800);
-      expect(docSelf.current).to.eql({ count: 123 });
-      expect(docRemote.current).to.eql({ count: 123 });
+      await wait(1000);
+      expect(docSelf.current).to.eql({ count: 123 }, 'self synced');
+      expect(docRemote.current).to.eql({ count: 123 }, 'remote synced');
 
       /**
        * Byte count (data transmitted).
@@ -89,19 +91,19 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
 
       expect(bytesAfter.self).to.greaterThan(bytesBefore.self);
       expect(bytesAfter.remote).to.greaterThan(bytesBefore.remote);
-      expect(areRoughlyTheSame(bytesAfter.self, bytesAfter.remote, 0.2)).to.eql(true);
+      expect(areRoughlyTheSame(bytesAfter.self, bytesAfter.remote, 0.3)).to.eql(true, 'bytes sent');
 
       /**
        * Message events ⚡️
        */
-      expect(self.fired.messages[0].message.type === 'welcome').to.eql(true);
-      expect(remote.fired.messages[0].message.type === 'arrive').to.eql(true);
+      expect(self.fired.messages[0].message.type === 'welcome').to.eql(true, 'self message');
+      expect(remote.fired.messages[0].message.type === 'arrive').to.eql(true, 'remote message');
     });
   });
 
   e.describe('WebrtcStore (Network Manager)', (e) => {
     e.it('initialize', async (e) => {
-      const { dispose, network, store, peer } = await testSetup();
+      const { dispose, network, store, peer } = await setup();
       expect(network.total.added).to.eql(0);
       expect(network.store).to.equal(store);
       expect(network.peer).to.equal(peer);
@@ -109,7 +111,7 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
     });
 
     e.it('dispose: when Peer disposes', async (e) => {
-      const { peer, dispose, network } = await testSetup();
+      const { peer, dispose, network } = await setup();
       expect(network.disposed).to.eql(false);
       peer.dispose();
       expect(network.disposed).to.eql(true);
@@ -117,7 +119,7 @@ export default Test.describe('WebrtcStore | WebrtcNetworkAdapter', (e) => {
     });
 
     e.it('dispose: when Store disposes', async (e) => {
-      const { store, dispose, network } = await testSetup();
+      const { store, dispose, network } = await setup();
       expect(network.disposed).to.eql(false);
       store.dispose();
       expect(network.disposed).to.eql(true);

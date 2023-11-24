@@ -10,7 +10,7 @@ export const StoreIndexDb = {
    */
   name(store: string | t.WebStore) {
     let root = (typeof store === 'string' ? store : store.info.storage?.name || '').trim();
-    if (!root) throw new Error(`A root store name is required`);
+    if (!root) throw new Error(`A store name is required for the Index`);
     root = root.replace(/\:*$/, '');
     return `${root}:index`;
   },
