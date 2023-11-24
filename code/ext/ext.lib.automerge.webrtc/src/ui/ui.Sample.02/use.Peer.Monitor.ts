@@ -7,7 +7,8 @@ import { rx, type t } from './common';
 export function usePeerMonitor(network: t.WebrtcStore) {
   const peer = network.peer;
   const [isConnected, setConnected] = useState(false);
-  const [bytes, setBytes] = useState(0);
+  const [bytesIn, setBytesIn] = useState(0);
+  const [bytesOut, setBytesOut] = useState(0);
 
   /**
    * Monitor peer total.
@@ -26,14 +27,15 @@ export function usePeerMonitor(network: t.WebrtcStore) {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-
     network.message$
       .pipe(
         rx.takeUntil(dispose$),
         rx.map(() => network.total.bytes),
-        rx.distinctWhile((prev, next) => prev === next),
       )
-      .subscribe((e) => setBytes(network.total.bytes));
+      .subscribe((bytes) => {
+        setBytesIn(bytes.in);
+        setBytesOut(bytes.out);
+      });
 
     return dispose;
   }, [peer.id]);
@@ -43,6 +45,10 @@ export function usePeerMonitor(network: t.WebrtcStore) {
    */
   return {
     isConnected,
-    bytes,
+    bytes: {
+      in: bytesIn,
+      out: bytesOut,
+      total: bytesIn + bytesOut,
+    },
   } as const;
 }

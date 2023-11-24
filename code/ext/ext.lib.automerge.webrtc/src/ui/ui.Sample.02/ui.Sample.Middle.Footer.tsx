@@ -13,7 +13,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
   const left = usePeerMonitor(props.left.network);
   const right = usePeerMonitor(props.right.network);
   const isConnected = left.isConnected && right.isConnected;
-  const { isTransmitting } = useTransmitMonitor(left.bytes + right.bytes);
+  const { isTransmitting } = useTransmitMonitor(left.bytes.total + right.bytes.total);
 
   /**
    * Render
@@ -75,9 +75,9 @@ export const Footer: React.FC<FooterProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ApiHandle edge={props.left} bytes={left.bytes} />
+      <ApiHandle edge={props.left} bytes={left.bytes.total} />
       {elMiddle}
-      <ApiHandle edge={props.right} bytes={right.bytes} />
+      <ApiHandle edge={props.right} bytes={right.bytes.total} />
     </div>
   );
 };
