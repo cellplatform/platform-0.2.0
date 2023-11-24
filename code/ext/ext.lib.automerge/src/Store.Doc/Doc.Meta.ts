@@ -15,10 +15,10 @@ export const DocMeta = {
   /**
    * Retrieves, and optionally force inserts, the {.meta} data object.
    */
-  get<F extends boolean = false>(
+  get<T extends t.DocMeta, F extends boolean = false>(
     doc: O,
-    options: { mutate?: F; initial?: t.DocMeta } = {},
-  ): F extends true ? t.DocMeta : t.DocMeta | undefined {
+    options: { mutate?: F; initial?: T } = {},
+  ): F extends true ? T : T | undefined {
     if (typeof doc !== 'object' || doc === null) return undefined as any;
     if (!(DocMeta.key in doc) && !options.mutate) return undefined as any;
 
@@ -27,14 +27,14 @@ export const DocMeta = {
       doc[DocMeta.key] = initial;
     }
 
-    type TReturn = F extends true ? t.DocMeta : t.DocMeta | undefined;
+    type TReturn = F extends true ? T : T | undefined;
     return doc[DocMeta.key] as TReturn;
   },
 
   /**
    * Ensures the {.meta} data object is on the document.
    */
-  ensure(doc: O, initial?: t.DocMeta) {
+  ensure<T extends t.DocMeta>(doc: O, initial?: T) {
     if (DocMeta.has(doc)) return false;
     DocMeta.get(doc, { mutate: true, initial });
     return true;

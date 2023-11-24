@@ -244,20 +244,29 @@ describe('Store (base)', async () => {
     });
 
     it('get: does NOT mutate the input document (default)', () => {
-      const doc = { count: 123 } as any;
+      const doc = { count: 123 };
       const res = Doc.Meta.get(doc);
       expect(res).to.eql(undefined);
       expect(doc).to.eql(doc);
-      expect(doc[Doc.Meta.key]).to.eql(undefined);
+      expect((doc as any)[Doc.Meta.key]).to.eql(undefined);
       expect(Doc.Meta.has(doc)).to.eql(false);
     });
 
     it('get: does mutate the input document ← { mutate: true }', () => {
-      const doc = { count: 123 } as any;
+      const doc = { count: 123 };
       const res = Doc.Meta.get(doc, { mutate: true });
       expect(res).to.eql(DEFAULTS.initial.meta);
-      expect(doc[Doc.Meta.key]).to.eql({});
+      expect((doc as any)[Doc.Meta.key]).to.eql({});
       expect(Doc.Meta.has(doc)).to.eql(true);
+    });
+
+    it('get: metadata <Type> extension', () => {
+      type T = t.DocMeta & { foo: number };
+      const initial: T = { foo: 123, ephemeral: true };
+      const doc = { message: 'hello' };
+      const res = Doc.Meta.get(doc, { mutate: true, initial });
+      expect(res).to.eql(initial);
+      expect((doc as any)[Doc.Meta.key]).to.eql(initial);
     });
   });
 });
