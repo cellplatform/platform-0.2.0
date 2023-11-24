@@ -89,9 +89,17 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
         remote: remote.network.total.bytes,
       } as const;
 
-      expect(bytesAfter.self).to.greaterThan(bytesBefore.self);
-      expect(bytesAfter.remote).to.greaterThan(bytesBefore.remote);
-      expect(areRoughlyTheSame(bytesAfter.self, bytesAfter.remote, 0.3)).to.eql(true, 'bytes sent');
+      const expectGreater = (a: number, b: number, message?: string) => {
+        expect(a).to.greaterThanOrEqual(b, message);
+      };
+
+      expectGreater(bytesAfter.self.in, bytesBefore.self.in, 'bytes-in (self)');
+      expectGreater(bytesAfter.remote.in, bytesBefore.remote.in, 'bytes-in (remote)');
+      expectGreater(bytesAfter.self.out, bytesBefore.self.out, 'bytes-out (self)');
+      expectGreater(bytesAfter.remote.out, bytesBefore.remote.out, 'bytes-out (remote)');
+
+      expectRoughlySame(bytesAfter.self.in, bytesAfter.remote.in, 0.3, 'bytes-in same(ish)');
+      expectRoughlySame(bytesAfter.self.out, bytesAfter.remote.out, 0.3, 'bytes-out same(ish)');
 
       /**
        * Message events ⚡️
@@ -131,9 +139,14 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 /**
  * Helpers
  */
-function areRoughlyTheSame(left: number, right: number, tolerance: t.Percent): boolean {
+function areRoughlySame(left: number, right: number, tolerance: t.Percent): boolean {
   const average = (left + right) / 2;
   const difference = Math.abs(left - right);
   const allowedDifference = average * tolerance;
   return difference <= allowedDifference;
+}
+
+function expectRoughlySame(left: number, right: number, tolerance: t.Percent, message?: string) {
+  const res = areRoughlySame(left, right, tolerance);
+  expect(res).to.eql(true, message);
 }

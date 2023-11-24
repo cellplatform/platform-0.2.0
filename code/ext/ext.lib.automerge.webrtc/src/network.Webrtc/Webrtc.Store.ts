@@ -1,11 +1,19 @@
 import { rx, type t } from './common';
+
+import { Ephemeral } from './Webrtc.Ephemeral';
 import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
+import { monitorAdapter } from './u.adapter';
 
 /**
  * Manages the relationship between a [Repo/Store] and a network peer.
  */
 export const WebrtcStore = {
-  init(peer: t.PeerModel, store: t.Store) {
+  Ephemeral,
+
+  /**
+   * Initialize a new network manager.
+   */
+  init(peer: t.PeerModel, store: t.Store, index: t.StoreIndex) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const peerEvents = peer.events(dispose$);
@@ -17,6 +25,7 @@ export const WebrtcStore = {
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
+    const ephemeral = Ephemeral.init(peer, store, index, fire);
 
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
@@ -33,18 +42,19 @@ export const WebrtcStore = {
       }
     });
 
-      const adapter = new WebrtcNetworkAdapter(obj);
-      store.repo.networkSubsystem.addNetworkAdapter(adapter);
+    const initAdapter = async (connid: string) => {
+      const conn = peer.get.conn.obj.data(connid);
+      if (!conn) throw new Error(`Failed to retrieve WebRTC data-connection with id "${connid}".`);
 
-      adapter.message$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-        if (e.message.type === 'sync') total.bytes += e.message.data.byteLength;
-        fire({ type: 'crdt:webrtc/Message', payload: e });
-      });
+      const adapter = new WebrtcNetworkAdapter(conn);
+      store.repo.networkSubsystem.addNetworkAdapter(adapter);
+      monitorAdapter({ adapter, fire, dispose$ });
+      await ephemeral.connect(conn);
 
       total.added += 1;
       fire({
         type: 'crdt:webrtc/AdapterAdded',
-        payload: { peer: peer.id, conn: { id: connid, obj }, adapter },
+        payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
       });
     };
 
@@ -76,7 +86,7 @@ export const WebrtcStore = {
     /**
      * Finish up.
      */
-    ready$.subscribe(initializeNetworkAdapter);
+    ready$.subscribe((e) => initAdapter(e));
     return api;
   },
 } as const;
