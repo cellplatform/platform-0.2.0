@@ -11,7 +11,7 @@ export const WebStoreIndex = {
     const db = await StoreIndexDb.init(dbname);
     const record = await db.getOrCreate(store);
     const uri = record.index;
-    const base = await Store.Index.init(store, uri);
+    const base = await Store.Index.init(store, { uri });
     return {
       ...base,
       get total() {

@@ -1,6 +1,6 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
-import { Data, DocUri, Is, type t } from './common';
 import { events } from './Store.Index.Events';
+import { Data, DocUri, Is, type t } from './common';
 
 type Uri = t.DocUri | string;
 
@@ -13,7 +13,8 @@ export const StoreIndex = {
   /**
    * Create a new Index handle.
    */
-  async init(store: t.Store, uri?: string) {
+  async init(store: t.Store, options: { uri?: string } = {}) {
+    const { uri } = options;
     const repo = store.repo;
     const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
 

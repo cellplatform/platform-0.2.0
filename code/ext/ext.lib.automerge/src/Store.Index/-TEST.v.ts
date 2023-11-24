@@ -27,7 +27,7 @@ describe('StoreIndex', async () => {
     it('lifecycle: init → dispose', async () => {
       const { store } = testSetup();
       const indexA = await Store.Index.init(store);
-      const indexB = await Store.Index.init(store, indexA.doc.uri);
+      const indexB = await Store.Index.init(store, { uri: indexA.doc.uri });
 
       expect(indexA.doc.uri).to.eql(indexB.doc.uri);
       expect(indexA.doc.current.docs).to.eql([]);
@@ -44,7 +44,7 @@ describe('StoreIndex', async () => {
     it('multiple instances', async () => {
       const { store } = testSetup();
       const index1 = await Store.Index.init(store);
-      const index2 = await Store.Index.init(store, index1.doc.uri);
+      const index2 = await Store.Index.init(store, { uri: index1.doc.uri });
       const index3 = await Store.Index.init(store);
       expect(index1.doc.uri).to.eql(index2.doc.uri);
       expect(index1.doc.uri).to.not.eql(index3.doc.uri);
@@ -54,7 +54,7 @@ describe('StoreIndex', async () => {
     it('throw: retrieve non-existent URI', async () => {
       const { store } = testSetup();
       await expectError(
-        () => Store.Index.init(store, 'automerge:404'),
+        () => Store.Index.init(store, { uri: 'automerge:404' }),
         'Failed to retrieve document for the given URI',
       );
       store.dispose();
