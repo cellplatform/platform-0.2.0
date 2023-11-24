@@ -10,6 +10,7 @@ export type {
   DocRefHandle,
   DocUri,
   Store,
+  StoreIndex,
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
