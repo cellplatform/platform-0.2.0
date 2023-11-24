@@ -14,6 +14,7 @@ export { Pkg };
 import { DocUri, Is, toObject } from './common';
 export { Store } from './Store';
 export { DocUri, Is, WebStore, toObject };
+export { TestDb } from './test.ui/TestDb';
 
 /**
  * Library: UI
