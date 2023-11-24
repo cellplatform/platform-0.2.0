@@ -1,29 +1,12 @@
 import { DocEvents } from './Doc.Events';
+import { DocMeta as Meta } from './Doc.Meta';
 import { DEFAULTS, Is, Time, rx, slug, toObject, type t } from './common';
 
-type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
 
 export const Doc = {
-  /**
-   * Standard location for meta.
-   */
-  metaKey: '.meta',
-  meta<F extends boolean = false>(
-    doc: O,
-    options: { mutate?: F; initial?: t.DocMeta } = {},
-  ): F extends true ? t.DocMeta : t.DocMeta | undefined {
-    if (typeof doc !== 'object' || doc === null) return undefined as any;
-    if (!(Doc.metaKey in doc) && !options.mutate) return undefined as any;
-
-    if (options.mutate) {
-      const { initial = DEFAULTS.initial.meta } = options;
-      doc[Doc.metaKey] = initial;
-    }
-
-    type TReturn = F extends true ? t.DocMeta : t.DocMeta | undefined;
-    return doc[Doc.metaKey] as TReturn;
-  },
+  toObject,
+  Meta,
 
   /**
    * Find the document document from the repo.

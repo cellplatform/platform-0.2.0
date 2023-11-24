@@ -1,6 +1,6 @@
+import { DEFAULTS, Doc } from '.';
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, rx, type t } from '../test';
-import { Doc, DEFAULTS } from '.';
 
 type D = { count?: t.A.Counter };
 
@@ -215,26 +215,49 @@ describe('Store (base)', async () => {
     });
   });
 
-  describe('Doc.meta', () => {
-    it('does not have .meta → undefined', () => {
-      [null, undefined, '', 123, true, [], {}].forEach((value: any) => {
-        expect(Doc.meta(value)).to.eql(undefined);
+  describe('Doc.Meta', () => {
+    it('standard key', () => {
+      expect(Doc.Meta.key).to.eql('.meta');
+    });
+
+    it('standard defaults', () => {
+      expect(Doc.Meta.default).to.eql(DEFAULTS.initial.meta);
+      expect(Doc.Meta.default).to.not.equal(Doc.Meta.default); // NB: cloned instance.
+    });
+
+    it('ensure: mutates input document', () => {
+      const doc = { count: 123 } as any;
+      const initial: t.DocMeta = { ephemeral: true };
+      expect(Doc.Meta.has(doc)).to.eql(false);
+
+      const res = Doc.Meta.ensure(doc, initial);
+      expect(res).to.eql(true);
+      expect(doc[Doc.Meta.key]).to.eql(initial);
+      expect(Doc.Meta.has(doc)).to.eql(true);
+    });
+
+    it('get: does not have .meta → undefined (invalid input)', () => {
+      [null, undefined, '', 123, true, [], {}].forEach((doc: any) => {
+        expect(Doc.Meta.get(doc)).to.eql(undefined);
+        expect(Doc.Meta.has(doc)).to.eql(false);
       });
     });
 
-    it('does NOT adjust the input document', () => {
+    it('get: does NOT mutate the input document (default)', () => {
       const doc = { count: 123 } as any;
-      const res = Doc.meta(doc);
+      const res = Doc.Meta.get(doc);
       expect(res).to.eql(undefined);
       expect(doc).to.eql(doc);
-      expect(doc[Doc.metaKey]).to.eql(undefined);
+      expect(doc[Doc.Meta.key]).to.eql(undefined);
+      expect(Doc.Meta.has(doc)).to.eql(false);
     });
 
-    it('does adjust the input document ← { force: true }', () => {
+    it('get: does mutate the input document ← { mutate: true }', () => {
       const doc = { count: 123 } as any;
-      const res = Doc.meta(doc, { mutate: true });
+      const res = Doc.Meta.get(doc, { mutate: true });
       expect(res).to.eql(DEFAULTS.initial.meta);
-      expect(doc[Doc.metaKey]).to.eql({});
+      expect(doc[Doc.Meta.key]).to.eql({});
+      expect(Doc.Meta.has(doc)).to.eql(true);
     });
   });
 });

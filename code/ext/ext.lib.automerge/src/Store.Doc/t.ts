@@ -47,7 +47,7 @@ export type DocStore = {
  * Common meta-data object that can decorate CRDT documents
  * on a hidden key, eg { .meta: {} }
  */
-export type DocMetaKey = '.meta';
+export type DocWithMeta = { '.meta': DocMeta };
 export type DocMeta = {
   ephemeral?: boolean;
 };
