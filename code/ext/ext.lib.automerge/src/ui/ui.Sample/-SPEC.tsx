@@ -1,8 +1,10 @@
+import { Repo } from '@automerge/automerge-repo';
+
 import { TestDb, Dev } from '../../test.ui';
 import { A, WebStore, type t } from './common';
 import { Sample } from './ui.Sample';
 
-type T = { docUri?: t.DocUri };
+type T = {};
 const initial: T = {};
 
 /**
@@ -11,28 +13,16 @@ const initial: T = {};
 const name = 'Sample';
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { docUri?: t.DocUri };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Sample');
-  const local = localstore.object({ docUri: undefined });
-
-  const store = WebStore.init({ storage: TestDb.Spec.name });
-  const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
-
-  let doc: t.DocRefHandle<t.SampleDoc>;
-  const initDoc = async (state: t.DevCtxState<T>) => {
-    doc = await generator(local.docUri);
-    state.change((d) => (local.docUri = d.docUri = doc.uri));
-  };
+  const storage = TestDb.Spec.name;
+  const store = WebStore.init({ storage });
+  const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = 0));
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.docUri = local.docUri;
-    });
-    await initDoc(state);
+    await state.change((d) => {});
 
     ctx.debug.width(330);
     ctx.subject
@@ -40,11 +30,7 @@ export default Dev.describe(name, async (e) => {
       .size([350, 150])
       .display('grid')
       .render<T>((e) => {
-        return (
-          <store.Provider>
-            <Sample docUri={doc?.uri} />
-          </store.Provider>
-        );
+        return <store.Provider>{/* <Sample docUri={doc?.uri} /> */}</store.Provider>;
       });
   });
 
@@ -53,9 +39,18 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
     dev.TODO();
 
-    dev.button('new doc', async (e) => {
-      local.docUri = undefined;
-      await initDoc(state);
+    dev.button('tmp', async (e) => {
+      // const doc = await generator();
+      // console.log('doc.toObject()', doc.toObject());
+      // Repo.
+      // const doc = store.repo.find('automerge:123456');
+    });
+
+    dev.hr(5, 20);
+
+    dev.button('delete test/spec databases', async (e) => {
+      await TestDb.deleteDatabases();
+      await TestDb.Spec.deleteDatabases();
     });
   });
 
@@ -63,7 +58,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = { storage };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
