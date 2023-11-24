@@ -1,5 +1,5 @@
-import { rx, type t } from './common';
 import { Data } from './Data';
+import { StoreIndex, rx, type t } from './common';
 
 /**
  * Helpers
@@ -16,5 +16,9 @@ export const Wrangle = {
         );
       },
     } as const;
+  },
+
+  filterDocs(index: t.RepoIndex, filter?: t.RepoIndexFilter): t.RepoIndexDoc[] {
+    return StoreIndex.filter(index.docs, filter);
   },
 } as const;

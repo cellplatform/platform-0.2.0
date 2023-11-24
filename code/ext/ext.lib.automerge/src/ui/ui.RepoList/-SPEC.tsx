@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
+import { Doc, Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
@@ -80,19 +80,16 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabases());
+      dev.button(['create: "ephemeral" doc', '(filtered out)'], async (e) => {
+        type D = t.DocWithMeta;
 
-      dev.hr(5, 20);
-
-      dev.button('tmp', async (e) => {
-        type D = { '.meta': Meta };
-        type Meta = {
-          ephemeral?: boolean;
-        };
-        const doc = await model.store.doc.getOrCreate<D>((d) => (d['.meta'] = {}));
+        const doc = await model.store.doc.getOrCreate<D>((d) => {
+          Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
+        });
         console.log('doc.toObject()', doc.toObject());
       });
+      dev.hr(-1, 5);
+      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabases());
     });
   });
 
@@ -102,7 +99,7 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props: e.state.props,
         db: storage,
-        'db.index': `${model.index.db.name}[${model.index.total}]`,
+        'db.index': `${model.index.db.name}[${model.index.total()}]`,
         index: model.index.doc.toObject(),
       };
       return <Dev.Object name={name} data={data} expand={1} />;

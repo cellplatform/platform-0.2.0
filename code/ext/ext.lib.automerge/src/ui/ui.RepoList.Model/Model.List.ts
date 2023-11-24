@@ -1,9 +1,10 @@
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
-import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 import { listBehavior } from './Model.List.b';
+import { Wrangle } from './u.Wrangle';
+import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 
-type Options = { dispose$?: t.UntilObservable } & t.RepoListHandlers;
+type Options = { dispose$?: t.UntilObservable; filter?: t.RepoIndexFilter } & t.RepoListHandlers;
 
 export const List = {
   /**
@@ -12,16 +13,24 @@ export const List = {
   async init(store: t.WebStore, options: Options = {}) {
     const life = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = life;
+    const { filter = DEFAULTS.filter } = options;
     const index = await WebStore.index(store);
-    const total = index.doc.current.docs.length + 1;
-    const handlers = Wrangle.handlers(options);
+    const total = Wrangle.filterDocs(index.doc.current, filter).length + 1;
+    const handlers = wrangle.handlers(options);
 
     /**
      * Model.
      */
-    const ctx: t.RepoListCtxGet = () => ({ list, store, index, handlers, dispose$ });
+    const ctx: t.RepoListCtxGet = () => ({
+      list,
+      store,
+      index,
+      handlers,
+      filter,
+      dispose$,
+    });
     const array = Model.List.array((i) => ItemModel.state({ ctx }));
-    const getItem = GetItem(index, array);
+    const getItem = GetItem(index, array, filter);
     const state: t.RepoListState = Model.List.state(
       { total, getItem },
       { type: DEFAULTS.typename.List, dispose$ },
@@ -59,7 +68,7 @@ export const List = {
 /**
  * Helpers
  */
-const Wrangle = {
+const wrangle = {
   handlers(options: Options = {}): t.RepoListHandlers {
     const { onShareClick, onDatabaseClick } = options;
     return { onShareClick, onDatabaseClick };

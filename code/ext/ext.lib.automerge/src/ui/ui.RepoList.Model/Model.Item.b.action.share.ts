@@ -1,11 +1,11 @@
 import { A, type t } from './common';
 import { Data } from './Data';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u.Wrangle';
 
 export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
   const action$ = Wrangle.item$(args.item).action$;
 
-  const toggleShared = (item: t.RepoIndexItem) => {
+  const toggleShared = (item: t.RepoIndexDoc) => {
     if (typeof item.shared !== 'object') {
       item.shared = { current: false, count: new A.Counter(0) };
     }

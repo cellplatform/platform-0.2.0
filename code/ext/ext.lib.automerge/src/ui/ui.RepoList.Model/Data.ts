@@ -1,4 +1,5 @@
 import { Model, toObject, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type ItemInput = t.LabelItem | t.LabelItemState | t.RepoItemCtx;
 
@@ -7,9 +8,10 @@ export const Data = {
     return Model.data<t.RepoItemData>(asItem(input));
   },
 
-  findIndexOf(ctx: t.RepoListCtxGet, input: ItemInput) {
+  findIndexOf(getCtx: t.RepoListCtxGet, input: ItemInput) {
+    const ctx = getCtx();
     const data = Data.item(input);
-    const docs = ctx().index.doc.current.docs;
+    const docs = Wrangle.filterDocs(ctx.index.doc.current, ctx.filter);
     const index = docs.findIndex((item) => item.uri === data.uri);
     const item = docs[index];
     const exists = index > -1;
@@ -17,9 +19,9 @@ export const Data = {
     return { exists, item, position } as const;
   },
 
-  clickArgs(ctx: t.RepoListCtxGet, input: ItemInput): t.RepoListClickHandlerArgs {
-    const { store, index } = ctx();
-    const { item, position } = Data.findIndexOf(ctx, input);
+  clickArgs(getCtx: t.RepoListCtxGet, input: ItemInput): t.RepoListClickHandlerArgs {
+    const { store, index } = getCtx();
+    const { item, position } = Data.findIndexOf(getCtx, input);
     return { store, index, position, item: toObject(item) };
   },
 } as const;
