@@ -37,8 +37,8 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
     } as const;
   };
 
-  e.describe('Integration (Live)', (e) => {
-    e.it('connects and sync douments over WebRTC', async (e) => {
+  e.describe('Integration Test (Live Network Sequence)', (e) => {
+    e.it('connect → sync document (webrtc) → count bytes', async (e) => {
       const wait = (msecs = 400) => Time.wait(msecs);
       const self = await setup();
       await wait();
