@@ -24,10 +24,12 @@ export function useListFocusController<H extends HTMLElement = HTMLDivElement>(a
     // Focus on load.
     if (Wrangle.enabled({ behaviors }, 'Focus.OnLoad')) focus();
 
-    // Wire/un-sire events.
+    // Wire up events.
     ref.current?.addEventListener('focusin', focus);
     ref.current?.addEventListener('focusout', blur);
+
     return () => {
+      // Un-wire events.
       ref.current?.removeEventListener('focusin', focus);
       ref.current?.removeEventListener('focusout', blur);
     };

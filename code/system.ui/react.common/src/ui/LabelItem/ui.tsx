@@ -1,4 +1,4 @@
-import React, { RefObject, useState, useRef } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import { DEFAULTS, Focus, RenderCount, Style, css, useClickOutside, type t } from './common';
 
 import { Wrangle } from './Wrangle';
