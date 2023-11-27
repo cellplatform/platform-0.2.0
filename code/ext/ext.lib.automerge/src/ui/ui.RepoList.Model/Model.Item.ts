@@ -1,6 +1,6 @@
 import { actionLeftBehavior } from './Model.Item.b.action.left';
 import { actionShareBehavior } from './Model.Item.b.action.share';
-import { createBehavior } from './Model.Item.b.create';
+import { addBehavior } from './Model.Item.b.add';
 import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
@@ -34,7 +34,7 @@ export const ItemModel = {
     /**
      * Behavior controllers.
      */
-    createBehavior({ ctx, item });
+    addBehavior({ ctx, item });
     renameBehavior({ ctx, item });
     actionLeftBehavior({ ctx, item });
     actionShareBehavior({ ctx, item });

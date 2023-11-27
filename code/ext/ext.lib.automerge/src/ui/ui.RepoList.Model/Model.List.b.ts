@@ -1,4 +1,4 @@
-import { rx, type t } from './common';
+import { Time, rx, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 /**
@@ -15,6 +15,8 @@ export function listBehavior(args: { ctx: t.RepoListCtxGet }) {
   // NB: After a new document is added, simply append 1 to the length of the list.
   //     The [getItem] data generator takes care of the rest.
   indexEvents.added$.pipe(rx.filter((e) => e.total !== currentTotal() + 1)).subscribe((e) => {
-    list.state.change((d) => (d.total = currentTotal() + 1));
+    const total = currentTotal();
+    list.state.change((d) => (d.total = total + 1)); //    (1) Append new item to list.
+    Time.delay(0, () => list.dispatch.edit(total - 1)); // (2) Start edit.
   });
 }

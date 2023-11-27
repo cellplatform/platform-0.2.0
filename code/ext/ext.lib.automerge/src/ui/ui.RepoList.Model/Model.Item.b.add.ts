@@ -4,18 +4,18 @@ import { Data } from './Data';
 /**
  * Behavior for adding a new document to the repo.
  */
-export function createBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
+export function addBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
   const { item } = args;
 
   /**
    * Add a new document to the repo.
    */
   const add = async () => {
-    // Generate a new document.
-    // NB: the addition of a new item to the list is handed in the [listBehavior].
+    // Generate a new empty document.
+    // NB: The addition of a new item to the list-total and setting
+    //     to "edit mode" is handed in the [list-behavior] controller.
     const { store } = args.ctx();
-    await store.doc.getOrCreate((d) => ({}));
-    item.dispatch.edit('start'); // NB: ensure editing mode.
+    await store.doc.getOrCreate<unknown>((d) => ({}));
   };
 
   /**
@@ -26,8 +26,9 @@ export function createBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCt
   item.events.key.enter$.pipe(addModeFilter).subscribe(add);
   item.events.cmd.action.kind('Item:Left').pipe(addModeFilter).subscribe(add);
   item.events.cmd.click$
-    .pipe(rx.filter((e) => mode() === 'Add'))
-    .pipe(rx.filter((e) => e.kind === 'Double'))
-    .pipe(rx.filter((e) => e.target === 'Item'))
+    .pipe(
+      rx.filter((e) => mode() === 'Add'),
+      rx.filter((e) => e.kind === 'Double' && e.target === 'Item'),
+    )
     .subscribe(add);
 }
