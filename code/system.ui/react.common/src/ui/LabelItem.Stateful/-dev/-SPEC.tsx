@@ -13,13 +13,17 @@ type T = {
     behaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
     isList?: boolean;
+    editOnActionAdd?: boolean;
   };
 };
 const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T['debug'], 'behaviors' | 'renderCount' | 'debug' | 'isList'> & {
+  type LocalStore = Pick<
+    T['debug'],
+    'behaviors' | 'renderCount' | 'debug' | 'isList' | 'editOnActionAdd'
+  > & {
     total: number;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
@@ -29,6 +33,7 @@ export default Dev.describe(name, (e) => {
     debug: false,
     renderCount: true,
     isList: true,
+    editOnActionAdd: true,
   });
 
   const TestState = {
@@ -69,7 +74,7 @@ export default Dev.describe(name, (e) => {
         events.key.$.pipe(
           rx.filter((e) => e.is.shift),
           rx.filter((e) => e.code === 'KeyN'),
-        ).subscribe((e) => TestState.add(dev, true));
+        ).subscribe((e) => TestState.add(dev, 'focus'));
 
         events.cmd.clipboard.cut$.subscribe((e) => console.info('🎬 cut', state.current));
         events.cmd.clipboard.copy$.subscribe((e) => console.info('🌳 copy', state.current));
@@ -80,7 +85,8 @@ export default Dev.describe(name, (e) => {
           console.info('🔥🔎 command/action filtered:', e);
         });
         events.cmd.action.kind('right').subscribe((e) => {
-          TestState.add(dev);
+          const edit = dev.current.debug.editOnActionAdd;
+          TestState.add(dev, edit ? 'edit' : undefined);
         });
 
         // events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
@@ -90,11 +96,13 @@ export default Dev.describe(name, (e) => {
       },
     } as const,
 
-    async add(dev: t.DevCtxState<T>, focus?: boolean) {
+    async add(dev: t.DevCtxState<T>, action?: 'focus' | 'edit') {
       const total = TestState.list.current.total + 1;
       TestState.list.change((d) => (d.total = total));
       local.total = total;
-      if (focus) Model.List.commands(TestState.list).focus();
+      const dispatch = Model.List.commands(TestState.list);
+      if (action === 'focus') Time.delay(0, () => dispatch.focus());
+      if (action === 'edit') Time.delay(0, () => dispatch.edit(total - 1));
     },
   };
 
@@ -107,6 +115,7 @@ export default Dev.describe(name, (e) => {
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
+      d.debug.editOnActionAdd = local.editOnActionAdd;
     });
     TestState.init.list(state);
     TestState.init.items(state, local.total);
@@ -163,10 +172,23 @@ export default Dev.describe(name, (e) => {
       total(10);
       dev.hr(-1, 5);
       dev.button('add', (e) => TestState.add(state));
-      dev.button('add → focus', (e) => TestState.add(state, true));
+      dev.button('add → focus', (e) => TestState.add(state, 'focus'));
+      dev.button('add → edit', (e) => TestState.add(state, 'edit'));
     });
 
     dev.hr(5, 20);
+
+    dev.boolean((btn) => {
+      const value = (state: T) => Boolean(state.debug.editOnActionAdd);
+      btn
+        .label((e) => `edit on add (action button)`)
+        .value((e) => value(e.state))
+        .onClick((e) =>
+          e.change((d) => (local.editOnActionAdd = Dev.toggle(d.debug, 'editOnActionAdd'))),
+        );
+    });
+
+    dev.hr(0, 10);
 
     dev.section('Commands', (dev) => {
       const dispatch = Model.List.commands(TestState.list);
@@ -271,7 +293,7 @@ export default Dev.describe(name, (e) => {
         items,
       };
 
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.items'] }} />;
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$'] }} />;
     });
   });
 });
