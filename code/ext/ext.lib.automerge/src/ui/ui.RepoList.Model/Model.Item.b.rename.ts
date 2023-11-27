@@ -27,6 +27,8 @@ export function renameBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCt
     .pipe(
       rx.filter((e) => e.action === 'accepted'),
       rx.filter((e) => mode() === 'Doc'), // NB: defensive guard.
+      rx.distinctWhile((prev, next) => prev.label === next.label),
+      rx.delay(100), // NB: ensure the rewrite does not cause a redraw wich effects the "de-editing" phase change.
     )
     .subscribe((e) => rename(e.label));
 }
