@@ -56,7 +56,7 @@ export type LabelListDispatch = {
   edit(item: t.LabelListItemTarget, action?: t.LabelListEditCmdArgs['action']): void;
   redraw(item?: t.LabelListItemTarget): void;
   remove(index?: t.LabelListItemTarget): void;
-  focus(focus?: boolean): void;
+  focus(): void;
   blur(): void;
 };
 

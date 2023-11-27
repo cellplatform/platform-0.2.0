@@ -1,4 +1,4 @@
-import { PatchState, slug, type t } from './common';
+import { PatchState, slug, Time, type t } from './common';
 import { get as createGetter } from './List.get';
 
 /**
@@ -30,11 +30,11 @@ export function commands(list?: t.LabelListState) {
       if (index < 0) return;
       dispatch({ type: 'List:Remove', payload: { index, tx: slug() } });
     },
-    focus(focus: boolean = true) {
-      dispatch({ type: 'List:Focus', payload: { focus, tx: slug() } });
+    focus() {
+      dispatch({ type: 'List:Focus', payload: { focus: true, tx: slug() } });
     },
     blur() {
-      api.focus(false);
+      dispatch({ type: 'List:Focus', payload: { focus: false, tx: slug() } });
     },
   };
   return api;

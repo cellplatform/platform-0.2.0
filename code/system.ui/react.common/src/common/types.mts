@@ -27,6 +27,7 @@ export type {
   Lifecycle,
   Milliseconds,
   ModuleDef,
+  Msecs,
   PartialDeep,
   Percent,
   Pixels,
