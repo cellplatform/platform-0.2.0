@@ -15,18 +15,15 @@ export const View: React.FC<ViewProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      display: 'grid',
+      gridTemplateColumns: '230px 1fr',
     }),
     left: css({
       backgroundColor: Color.alpha(COLORS.WHITE, 0.8),
       backdropFilter: 'blur(20px)',
       borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      Absolute: [0, null, 0, 0],
-      width: 230,
-      // display: 'none',
     }),
-    main: css({
-      Absolute: 0,
-    }),
+    main: css({}),
   };
 
   const elLeft = (
@@ -39,8 +36,8 @@ export const View: React.FC<ViewProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elMain}
       {elLeft}
+      {elMain}
     </div>
   );
 };
