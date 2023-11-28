@@ -10,15 +10,14 @@ import { RepoList } from '../ui/ui.RepoList';
 
 export default Test.describe('Is', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
-
-  const storage = TestDb.name.test;
+  const storage = TestDb.Unit.name;
   const store = WebStore.init({ network: false, storage });
 
   const repo1 = new Repo({ network: [] });
   const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
   const repo3 = new Repo({
     network: [new BroadcastChannelNetworkAdapter()],
-    storage: new IndexedDBStorageAdapter(TestDb.name.test),
+    storage: new IndexedDBStorageAdapter(TestDb.Unit.name),
   });
 
   e.it('Is.store', (e) => {

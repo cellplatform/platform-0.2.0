@@ -3,7 +3,7 @@ import { Test, TestDb, WebStore, expect } from '../../test.ui';
 import { DEFAULTS, Is } from './common';
 
 export default Test.describe('RepoList.Model', (e) => {
-  const storage = TestDb.name.test;
+  const storage = TestDb.Unit.name;
   const store = WebStore.init({ network: false, storage });
 
   e.describe('Model.List', (e) => {

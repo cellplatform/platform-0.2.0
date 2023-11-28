@@ -4,7 +4,7 @@ import { A, Test, TestDb, Time, Value, expect, toObject, type t } from '../test.
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: Index', (e) => {
-  const name = TestDb.name.test;
+  const name = TestDb.Unit.name;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
   const contains = (docs: t.RepoIndexDoc[], uri: string) => docs.some((e) => e.uri === uri);
 

@@ -50,7 +50,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.button('delete test/spec databases', async (e) => {
       await TestDb.deleteDatabases();
-      await TestDb.Spec.deleteDatabases();
+      await TestDb.Spec.deleteDatabase();
     });
   });
 

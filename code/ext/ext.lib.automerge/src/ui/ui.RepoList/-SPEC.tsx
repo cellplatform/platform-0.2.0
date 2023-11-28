@@ -89,7 +89,7 @@ export default Dev.describe(name, async (e) => {
         console.log('doc.toObject()', doc.toObject());
       });
       dev.hr(-1, 5);
-      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabases());
+      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabase());
     });
   });
 

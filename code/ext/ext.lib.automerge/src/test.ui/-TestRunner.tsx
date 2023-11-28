@@ -49,7 +49,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
       dev.hr(-1, 5);
       dev.button('delete "spec / harness" databases', async (e) => {
-        await TestDb.Spec.deleteDatabases();
+        await TestDb.Spec.deleteDatabase();
       });
     });
   });
