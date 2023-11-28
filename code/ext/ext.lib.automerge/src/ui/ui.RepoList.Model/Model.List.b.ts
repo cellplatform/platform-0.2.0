@@ -17,6 +17,7 @@ export function listBehavior(args: { ctx: t.RepoListCtxGet }) {
   indexEvents.added$.pipe(rx.filter((e) => e.total !== currentTotal() + 1)).subscribe((e) => {
     const total = currentTotal();
     list.state.change((d) => (d.total = total + 1)); //    (1) Append new item to list.
+    list.dispatch.redraw();
     Time.delay(0, () => list.dispatch.edit(total - 1)); // (2) Start edit.
   });
 }
