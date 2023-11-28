@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Time, Tree, css, type t } from './common';
-import { Description } from './ui.Description';
+import { Description } from './ui.Test.Description';
 import { TestResult } from './ui.Test';
 
 export type SuiteResultsProps = {

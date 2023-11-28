@@ -1,4 +1,4 @@
-import { Color, COLORS, css, type t } from './common';
+import { COLORS, Color, css, type t } from './common';
 
 export type DescriptionProps = {
   text: string;
@@ -29,10 +29,8 @@ export const Description: React.FC<DescriptionProps> = (props) => {
       fontWeight: 600,
       borderRadius: 3,
     }),
-    text: css({
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    text: css({ Flex: 'x-center-start' }),
+    copy: css({ marginLeft: 5, filter: 'scale(0.3)' }),
   };
 
   const elTodo = desc.isTodo && <div {...styles.todo}>TODO</div>;
