@@ -1,5 +1,5 @@
 import { Model } from '.';
-import { rx, describe, expect, it, slug, type t } from '../../test';
+import { describe, expect, it, rx, slug, type t } from '../../test';
 
 describe('LabelItem.Model', () => {
   describe('Model.Item.state', () => {

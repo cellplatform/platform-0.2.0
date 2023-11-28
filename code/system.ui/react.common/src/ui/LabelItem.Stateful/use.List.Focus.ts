@@ -29,7 +29,7 @@ export function useListFocusController<H extends HTMLElement = HTMLDivElement>(a
     ref.current?.addEventListener('focusout', blur);
 
     return () => {
-      // Un-wire events.
+      // Unwire events.
       ref.current?.removeEventListener('focusin', focus);
       ref.current?.removeEventListener('focusout', blur);
     };

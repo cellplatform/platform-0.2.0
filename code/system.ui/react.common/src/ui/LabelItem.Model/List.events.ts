@@ -31,6 +31,10 @@ export function events<D extends O = O>(
       rx.map((e) => e.to.selected || ''),
       rx.distinctWhile((prev, next) => prev === next),
     ),
+    editing$: $.pipe(
+      rx.map((e) => e.to.editing || ''),
+      rx.distinctWhile((prev, next) => prev === next),
+    ),
     cmd: {
       $: cmd$,
       redraw$: rx.payload<t.LabelListRedrawCmd>(cmd$, 'List:Redraw'),
