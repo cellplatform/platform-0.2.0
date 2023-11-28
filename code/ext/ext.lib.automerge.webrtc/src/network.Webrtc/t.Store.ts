@@ -6,6 +6,7 @@ type Id = string;
 export type WebrtcStore = t.Lifecycle & {
   readonly store: t.Store;
   readonly peer: t.PeerModel;
+  readonly ephemeral: t.DocRefHandle<t.WebrtcEphemeral>;
   readonly total: t.WebrtcStoreTotals;
   readonly $: t.Observable<t.WebrtcStoreEvent>;
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;

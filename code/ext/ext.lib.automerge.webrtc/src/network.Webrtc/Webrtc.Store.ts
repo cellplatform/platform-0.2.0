@@ -1,6 +1,6 @@
 import { rx, type t } from './common';
 
-import { Ephemeral } from './Webrtc.Ephemeral';
+import { Ephemeral } from './Webrtc.Store.Ephemeral';
 import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
 import { monitorAdapter } from './u.adapter';
 
@@ -13,7 +13,7 @@ export const WebrtcStore = {
   /**
    * Initialize a new network manager.
    */
-  init(peer: t.PeerModel, store: t.Store, index: t.StoreIndex) {
+  async init(peer: t.PeerModel, store: t.Store, index: t.StoreIndex) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const peerEvents = peer.events(dispose$);
@@ -25,7 +25,7 @@ export const WebrtcStore = {
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
-    const ephemeral = Ephemeral.init(peer, store, index, fire);
+    const ephemeral = await Ephemeral.init(peer, store, index, fire);
 
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
@@ -54,7 +54,11 @@ export const WebrtcStore = {
       total.added += 1;
       fire({
         type: 'crdt:webrtc/AdapterAdded',
-        payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
+        payload: {
+          peer: peer.id,
+          conn: { id: connid, obj: conn },
+          adapter,
+        },
       });
     };
 
@@ -64,6 +68,7 @@ export const WebrtcStore = {
     const api: t.WebrtcStore = {
       store,
       peer,
+      ephemeral: ephemeral.doc,
 
       $,
       added$,
