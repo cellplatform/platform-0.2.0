@@ -65,12 +65,8 @@ export default Dev.describe(name, async (e) => {
     return edge;
   };
 
-  const dbname = {
-    left: 'dev.sample.left',
-    right: 'dev.sample.right',
-  } as const;
-  const self = await create('Left', dbname.left);
-  const remote = await create('Right', dbname.right);
+  const self = await create('Left', TestDb.EdgeSample.left.name);
+  const remote = await create('Right', TestDb.EdgeSample.right.name);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -105,7 +101,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(5, 20);
 
       const edgeDebug = (edge: t.SampleEdge) => {
-        dev.title([edge.kind, 'Repo']);
+        dev.title([`${edge.kind}`, `peer: ${edge.network.peer.id}`]);
         dev.button('ephemeral: count++', (e) => {
           edge.network.ephemeral.change((d) => (d.count = (d.count || 0) + 1));
         });
