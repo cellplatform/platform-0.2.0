@@ -26,8 +26,8 @@ export default Dev.describe(name, (e) => {
 
     dev.button('delete all', () => TestDb.deleteDatabases());
     dev.hr(-1, 5);
-    dev.button('delete: unit test', () => TestDb.Unit.deleteDatabases);
-    dev.button('delete: spec sample', () => TestDb.Spec.deleteDatabases);
-    dev.button('delete: edges sample', () => TestDb.EdgeSample.deleteDatabases);
+    dev.button('delete: unit test', () => TestDb.Unit.deleteDatabase());
+    dev.button('delete: spec sample', () => TestDb.Spec.deleteDatabase());
+    dev.button('delete: edges sample', () => TestDb.EdgeSample.deleteDatabases());
   });
 });
