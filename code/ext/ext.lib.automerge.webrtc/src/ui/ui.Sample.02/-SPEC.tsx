@@ -12,6 +12,17 @@ const initial: T = {};
 const name = 'Sample.02';
 
 export default Dev.describe(name, async (e) => {
+  const deleteDatabases = async () => {
+    const del = async (name: string) => {
+      await IndexedDb.delete(name);
+      await IndexedDb.delete(Crdt.WebStore.IndexDb.name(name));
+    };
+    await del(dbname.left);
+    await del(dbname.right);
+    await TestDb.deleteDatabases();
+    await TestDb.Spec.deleteDatabases();
+  };
+
   const create = async (kind: t.SampleEdge['kind'], storage: string) => {
     const peer = Webrtc.peer();
     const store = Crdt.WebStore.init({
@@ -138,16 +149,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(5, 20);
 
-      dev.button('delete sample databases', async (e) => {
-        const del = async (name: string) => {
-          await IndexedDb.delete(name);
-          await IndexedDb.delete(Crdt.WebStore.IndexDb.name(name));
-        };
-        await del(dbname.left);
-        await del(dbname.right);
-        await TestDb.deleteDatabases();
-        await TestDb.Spec.deleteDatabases();
-      });
+      dev.button('delete sample databases', deleteDatabases);
     });
   });
 
