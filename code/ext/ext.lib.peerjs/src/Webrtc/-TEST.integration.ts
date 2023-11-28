@@ -5,6 +5,8 @@ export default Test.describe('Webrtc → peer connect', (e) => {
   e.timeout(9999);
 
   e.it('start data connection', async (e) => {
+    console.info('🌳 Starting');
+
     const peerA = Webrtc.peer();
     await Time.wait(300);
     const peerB = Webrtc.peer();
@@ -22,6 +24,8 @@ export default Test.describe('Webrtc → peer connect', (e) => {
       result.value = e.data as string;
       result.$.next(result.value);
     });
+
+    console.info('🌳 Peers Created');
 
     await Time.wait(500);
 
@@ -46,5 +50,7 @@ export default Test.describe('Webrtc → peer connect', (e) => {
 
     expect(eventsA.disposed).to.eql(true);
     expect(eventsB.disposed).to.eql(true);
+
+    console.info('🌳 Done');
   });
 });
