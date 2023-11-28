@@ -105,9 +105,14 @@ export default Dev.describe(name, async (e) => {
       dev.hr(5, 20);
 
       const edgeDebug = (edge: t.SampleEdge) => {
-        dev.title(edge.kind);
+        dev.title([edge.kind, 'Repo']);
         dev.button('ephemeral: count++', (e) => {
           edge.network.ephemeral.change((d) => (d.count = (d.count || 0) + 1));
+        });
+
+        dev.row((e) => {
+          const data = edge.network.ephemeral.current;
+          return <Dev.Object data={data} style={{ marginTop: 8, marginLeft: 8 }} fontSize={11} />;
         });
       };
 
@@ -168,8 +173,8 @@ export default Dev.describe(name, async (e) => {
       const format = (edge: t.SampleEdge) => {
         const uri = edge.repo.index.doc.uri;
         const index = DocUri.id(uri, { shorten: 4 });
-        const ephemeral = edge.network.ephemeral.current;
-        return { index, ephemeral } as const;
+        const total = edge.repo.index.doc.current.docs.length;
+        return `index:${index} [${total}]`;
       };
       const data = {
         self: format(self),

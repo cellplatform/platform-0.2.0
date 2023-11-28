@@ -1,7 +1,7 @@
 import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
-import { rx, Doc, type t } from './common';
-import { monitorAdapter } from './u.adapter';
 import { handshake } from './Webrtc.Store.Ephemeral.handshake';
+import { Doc, rx, type t } from './common';
+import { monitorAdapter } from './u.adapter';
 
 /**
  * A non-persistent store manager for sharing ephemeral
@@ -17,8 +17,6 @@ export const Ephemeral = {
   ) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
-    const peerEvents = peer.events(dispose$);
-    const data$ = peerEvents.cmd.data$.pipe(rx.map((e) => e.data));
 
     const doc = await store.doc.getOrCreate<t.WebrtcEphemeral>((d) => {
       const defaults = Doc.Meta.default;

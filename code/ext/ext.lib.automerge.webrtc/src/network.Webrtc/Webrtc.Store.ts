@@ -42,7 +42,7 @@ export const WebrtcStore = {
       }
     });
 
-    const initAdapter = async (connid: string) => {
+    const initializeAdapter = async (connid: string) => {
       const conn = peer.get.conn.obj.data(connid);
       if (!conn) throw new Error(`Failed to retrieve WebRTC data-connection with id "${connid}".`);
 
@@ -54,11 +54,7 @@ export const WebrtcStore = {
       total.added += 1;
       fire({
         type: 'crdt:webrtc/AdapterAdded',
-        payload: {
-          peer: peer.id,
-          conn: { id: connid, obj: conn },
-          adapter,
-        },
+        payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
       });
     };
 
@@ -91,7 +87,7 @@ export const WebrtcStore = {
     /**
      * Finish up.
      */
-    ready$.subscribe((e) => initAdapter(e));
+    ready$.subscribe((connid) => initializeAdapter(connid));
     return api;
   },
 } as const;
