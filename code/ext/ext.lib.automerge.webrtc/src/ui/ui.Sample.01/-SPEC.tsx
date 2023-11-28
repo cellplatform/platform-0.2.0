@@ -61,7 +61,7 @@ export default Dev.describe(name, async (e) => {
     });
     await initDoc(state);
 
-    const network = WebrtcStore.init(self, store, index);
+    const network = await WebrtcStore.init(self, store, index);
     network.added$.subscribe((e) => {
       state.change((d) => (d.user = e.adapter.peerId));
     });
