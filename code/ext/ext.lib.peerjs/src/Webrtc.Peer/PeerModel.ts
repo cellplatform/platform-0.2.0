@@ -25,14 +25,14 @@ export const PeerModel: t.WebrtcPeerModel = {
    * Wrap a PeerJS object with a stateful management model.
    */
   wrap(peerjs, dispose$) {
-    const lifecycle = rx.lifecycle(dispose$);
-    lifecycle.dispose$.subscribe(() => peerjs.destroy());
+    const life = rx.lifecycle(dispose$);
+    life.dispose$.subscribe(() => peerjs.destroy());
 
     const get = getFactory(peerjs);
     const initial: t.Peer = { open: false, connections: [] };
     const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
       initial,
-      events: ($, dispose$) => eventFactory($, [dispose$, lifecycle.dispose$]),
+      events: ($, dispose$) => eventFactory($, [dispose$, life.dispose$]),
     });
 
     /**
@@ -115,10 +115,10 @@ export const PeerModel: t.WebrtcPeerModel = {
       /**
        * Lifecycle.
        */
-      dispose: lifecycle.dispose,
-      dispose$: lifecycle.dispose$,
+      dispose: life.dispose,
+      dispose$: life.dispose$,
       get disposed() {
-        return lifecycle.disposed;
+        return life.disposed;
       },
     };
 

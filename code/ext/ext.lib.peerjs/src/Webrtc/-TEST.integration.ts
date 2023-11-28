@@ -1,5 +1,5 @@
 import { Webrtc } from '.';
-import { Test, Time, expect, rx } from '../test.ui';
+import { Test, Time, expect, rx, type t } from '../test.ui';
 
 export default Test.describe('Webrtc → peer connect', (e) => {
   e.timeout(9999);
@@ -15,6 +15,13 @@ export default Test.describe('Webrtc → peer connect', (e) => {
     const eventsA = peerA.events();
     const eventsB = peerB.events();
 
+    type M = t.PeerConnectMetadata & { foo: number };
+    const firedBeforeA: t.PeerModelBeforeOutgoingCmdArgs[] = [];
+    eventsA.cmd.beforeOutgoing$.subscribe((e) => {
+      e.metadata<M>((data) => (data.foo = 1234)); // Example usage: adding a shared ephemeral Doc URI.
+      firedBeforeA.push(e);
+    });
+
     const result = {
       $: rx.subject<string>(),
       value: '',
@@ -25,7 +32,7 @@ export default Test.describe('Webrtc → peer connect', (e) => {
       result.$.next(result.value);
     });
 
-    console.info('🌳 Peers Created');
+    console.info('🌳 Peers Setup');
 
     await Time.wait(500);
 
@@ -34,11 +41,15 @@ export default Test.describe('Webrtc → peer connect', (e) => {
     expect(conn).to.equal(peerA.get.conn.obj(res.id)!);
     expect(conn).to.equal(peerA.get.conn.obj.data(res.id)!);
 
-    conn.send('👋 hello');
+    expect(firedBeforeA.length).to.eql(1);
+    expect(firedBeforeA[0].kind === 'data').to.be.true;
+    expect((conn.metadata as M).foo).to.eql(1234);
+    console.info('conn.metadata', conn.metadata);
 
+    conn.send('👋 hello');
     await rx.asPromise.first(result.$);
     expect(result.value).to.eql('👋 hello');
-    console.log('sent data:', result.value);
+    console.info('sent data:', result.value);
 
     /**
      * Test disposal.

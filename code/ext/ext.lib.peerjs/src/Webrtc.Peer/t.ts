@@ -58,9 +58,9 @@ export type PeerModel = t.Lifecycle & {
     data(remoteid: Id): Promise<t.PeerConnectedData>;
     media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
   };
-  dispatch: t.PeerModelDispatch;
-  events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   disconnect(id: Id): void;
+  events(dispose$?: t.UntilObservable): t.PeerModelEvents;
+  dispatch: t.PeerModelDispatch;
   purge(): { changed: boolean; total: { before: number; after: number } };
 };
 
@@ -99,7 +99,8 @@ export type PeerModelEvents = t.Lifecycle & {
   readonly cmd: {
     readonly $: t.Observable<t.PeerModelCmd>;
     readonly data$: t.Observable<t.PeerModelDataCmdArgs>;
-    readonly conn$: t.Observable<t.PeerModelConnCmdArgs>;
+    readonly conn$: t.Observable<t.PeerModelConnectionCmdArgs>;
+    readonly beforeOutgoing$: t.Observable<t.PeerModelBeforeOutgoingCmdArgs>;
     readonly purge$: t.Observable<t.PeerModelPurgeCmdArgs>;
     readonly error$: t.Observable<t.PeerModelErrorCmdArgs>;
   };
@@ -111,7 +112,8 @@ export type PeerModelEvents = t.Lifecycle & {
 export type PeerModelDispatch = (cmd: PeerModelCmd) => void;
 
 export type PeerModelCmd =
-  | PeerModelConnCmd
+  | PeerModelBeforeOutgoingCmd
+  | PeerModelConnectionCmd
   | PeerModelDataCmd
   | PeerModelPurgeCmd
   | PeerModelErrorCmd;
@@ -124,8 +126,22 @@ export type PeerModelConnAction =
   | 'error'
   | 'purged';
 
-export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConnCmdArgs };
-export type PeerModelConnCmdArgs = {
+export type PeerModelBeforeOutgoingCmd = {
+  type: 'Peer:Conn/BeforeOutgoing';
+  payload: PeerModelBeforeOutgoingCmdArgs;
+};
+export type PeerModelBeforeOutgoingCmdArgs = {
+  tx: string;
+  kind: PeerConnectionKind;
+  peer: { self: Id; remote: Id };
+  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => void): void;
+};
+
+export type PeerModelConnectionCmd = {
+  type: 'Peer:Conn';
+  payload: PeerModelConnectionCmdArgs;
+};
+export type PeerModelConnectionCmdArgs = {
   tx: string;
   action: PeerModelConnAction;
   connection?: PeerConnectionId;

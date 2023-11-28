@@ -43,11 +43,7 @@ export function manageMediaConnection(args: {
             return resolveError(error);
           }
 
-          const metadata: t.PeerConnectMetadata = {
-            kind,
-            userAgent: navigator.userAgent,
-          };
-
+          const metadata = dispatch.beforeOutgoing(kind, self, remote);
           const conn = peerjs.call(remote, stream, { metadata });
           state.change((d) => {
             d.connections.push({

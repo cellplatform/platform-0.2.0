@@ -10,8 +10,9 @@ export const eventFactory: t.PatchStateEventFactory<t.Peer, t.PeerModelEvents> =
   const cmd$ = PatchState.Command.filter($);
   const cmd: t.PeerModelEvents['cmd'] = {
     $: cmd$,
+    beforeOutgoing$: rx.payload<t.PeerModelBeforeOutgoingCmd>(cmd$, 'Peer:Conn/BeforeOutgoing'),
+    conn$: rx.payload<t.PeerModelConnectionCmd>(cmd$, 'Peer:Conn'),
     data$: rx.payload<t.PeerModelDataCmd>(cmd$, 'Peer:Data'),
-    conn$: rx.payload<t.PeerModelConnCmd>(cmd$, 'Peer:Connection'),
     purge$: rx.payload<t.PeerModelPurgeCmd>(cmd$, 'Peer:Purge'),
     error$: rx.payload<t.PeerModelErrorCmd>(cmd$, 'Peer:Error'),
   };
