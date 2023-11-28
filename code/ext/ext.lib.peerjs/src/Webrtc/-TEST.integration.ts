@@ -38,7 +38,7 @@ export default Test.describe('Webrtc → peer connect', (e) => {
 
     await rx.asPromise.first(result.$);
     expect(result.value).to.eql('👋 hello');
-    console.log('result.value', result.value);
+    console.log('sent data:', result.value);
 
     /**
      * Test disposal.
