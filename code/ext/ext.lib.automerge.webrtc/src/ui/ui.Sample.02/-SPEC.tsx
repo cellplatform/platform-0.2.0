@@ -12,17 +12,6 @@ const initial: T = {};
 const name = 'Sample.02';
 
 export default Dev.describe(name, async (e) => {
-  const deleteDatabases = async () => {
-    const del = async (name: string) => {
-      await IndexedDb.delete(name);
-      await IndexedDb.delete(Crdt.WebStore.IndexDb.name(name));
-    };
-    await del(dbname.left);
-    await del(dbname.right);
-    await TestDb.deleteDatabases();
-    await TestDb.Spec.deleteDatabases();
-  };
-
   const create = async (kind: t.SampleEdge['kind'], storage: string) => {
     const peer = Webrtc.peer();
     const store = Crdt.WebStore.init({
@@ -39,39 +28,39 @@ export default Dev.describe(name, async (e) => {
         const name = e.item.name;
 
         // peer.connect.data(e.item.id);
-        peer.current.connections.forEach((e) => {
-          console.log('peer.get.conn.remotes', peer.get.conn.remotes);
-
-          const conn = peer.get.conn.obj.data(e.id);
-          console.log('conn', e, conn);
-          if (conn) {
-            // conn.
-            conn.send({ kind: 'share:doc', uri, name });
-          }
-        });
+        //         peer.current.connections.forEach((e) => {
+        //           console.log('peer.get.conn.remotes', peer.get.conn.remotes);
+        //
+        //           const conn = peer.get.conn.obj.data(e.id);
+        //           console.log('conn', e, conn);
+        //           if (conn) {
+        //             // conn.
+        //             // conn.send({ kind: 'share:doc', uri, name });
+        //           }
+        //         });
         // peer.get.conn.
       },
     });
 
-    peer.events().cmd.data$.subscribe(async (e) => {
-      const payload = e.data as any;
-      if (payload.kind === 'share:doc') {
-        const uri = payload.uri;
-        if (Crdt.Is.automergeUrl(uri)) {
-          console.log('-------------------------------------------');
-          // const m = await store.doc.get(uri);
-          // console.log('m', m);
-          const exists = await store.doc.exists(uri);
-          // console.log('uri', uri);/
-          console.log('exists', peer.id, exists, uri);
-          if (!repo.index.exists(uri)) {
-            repo.index.doc.change((d) => d.docs.push({ uri }));
-          }
-        }
-      }
-    });
+    // peer.events().cmd.data$.subscribe(async (e) => {
+    //   const payload = e.data as any;
+    //   if (payload.kind === 'share:doc') {
+    //     const uri = payload.uri;
+    //     if (Crdt.Is.automergeUrl(uri)) {
+    //       console.log('-------------------------------------------');
+    //       // const m = await store.doc.get(uri);
+    //       // console.log('m', m);
+    //       const exists = await store.doc.exists(uri);
+    //       // console.log('uri', uri);/
+    //       console.log('exists', peer.id, exists, uri);
+    //       if (!repo.index.exists(uri)) {
+    //         repo.index.doc.change((d) => d.docs.push({ uri }));
+    //       }
+    //     }
+    //   }
+    // });
 
-    const network = WebrtcStore.init(peer, store, repo.index);
+    const network = await WebrtcStore.init(peer, store, repo.index);
     const edge: t.SampleEdge = { kind, repo, network };
     return edge;
   };
@@ -90,6 +79,13 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
+    const monitor = (edge: t.SampleEdge) => {
+      const ephemeral = edge.network.ephemeral.events();
+      ephemeral.changed$.subscribe(() => dev.redraw());
+    };
+    monitor(self);
+    monitor(remote);
+
     ctx.debug.width(300);
     ctx.subject
       .size('fill')
@@ -105,6 +101,19 @@ export default Dev.describe(name, async (e) => {
       dev.button('connect (peers)', async (e) => {
         self.network.peer.connect.data(remote.network.peer.id);
       });
+
+      dev.hr(5, 20);
+
+      const edgeDebug = (edge: t.SampleEdge) => {
+        dev.title(edge.kind);
+        dev.button('ephemeral: count++', (e) => {
+          edge.network.ephemeral.change((d) => (d.count = (d.count || 0) + 1));
+        });
+      };
+
+      edgeDebug(self);
+      dev.hr(5, 20);
+      edgeDebug(remote);
 
       dev.hr(5, 20);
 
@@ -149,19 +158,24 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(5, 20);
 
-      dev.button('delete sample databases', deleteDatabases);
+      dev.button('delete sample databases', () => TestDb.EdgeSample.deleteDatabases());
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const format = (uri: string) => DocUri.id(uri, { shorten: 4 });
-      const data = {
-        self: { index: format(self.repo.index.doc.uri) },
-        remote: { index: format(remote.repo.index.doc.uri) },
+      const format = (edge: t.SampleEdge) => {
+        const uri = edge.repo.index.doc.uri;
+        const index = DocUri.id(uri, { shorten: 4 });
+        const ephemeral = edge.network.ephemeral.current;
+        return { index, ephemeral } as const;
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      const data = {
+        self: format(self),
+        remote: format(remote),
+      };
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.self'] }} />;
     });
   });
 });
