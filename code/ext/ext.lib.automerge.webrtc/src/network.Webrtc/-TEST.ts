@@ -9,12 +9,12 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
   const setup = async () => {
     const peer = Webrtc.peer();
     const events = peer.events();
-    const storage = TestDb.name.test;
+    const storage = TestDb.Unit.name;
     const store = WebStore.init({ storage, network: [] });
     const generator = store.doc.factory<D>((d) => (d.count = 0));
 
     const index = await WebStore.index(store);
-    const network = WebrtcStore.init(peer, store, index);
+    const network = await WebrtcStore.init(peer, store, index);
 
     const added: t.WebrtcStoreAdapterAdded[] = [];
     const messages: t.WebrtcMessageAlert[] = [];
