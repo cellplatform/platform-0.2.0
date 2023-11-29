@@ -26,6 +26,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
       store.dispose();
       network.dispose();
     };
+
     return {
       peer,
       events,

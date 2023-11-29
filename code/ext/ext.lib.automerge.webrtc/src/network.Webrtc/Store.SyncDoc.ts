@@ -81,14 +81,17 @@ export const SyncDoc = {
    * Remove all ephemeral documents from the given repo index.
    */
   purge(index: t.StoreIndex) {
+    const purged: string[] = [];
     index.doc.change((d) => {
       const docs = Crdt.Data.array(d.docs);
-      let index = -1;
+      let i = -1;
       while (true) {
-        index = d.docs.findIndex((item) => item.meta?.ephemeral);
-        if (index < 0) break;
-        docs.deleteAt(index);
+        i = d.docs.findIndex((item) => item.meta?.ephemeral);
+        if (i < 0) break;
+        purged.push(docs[i].uri);
+        docs.deleteAt(i);
       }
     });
+    return purged;
   },
 } as const;
