@@ -206,7 +206,7 @@ describe('StoreIndex', async () => {
 
       it('added$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexAdded[] = [];
+        const fired: t.StoreIndexItem[] = [];
         events.added$.subscribe((e) => fired.push(e));
 
         await index.add('automerge:foo');
@@ -225,7 +225,7 @@ describe('StoreIndex', async () => {
 
       it('removed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexRemoved[] = [];
+        const fired: t.StoreIndexItem[] = [];
         events.removed$.subscribe((e) => fired.push(e));
 
         await index.add('automerge:foo');

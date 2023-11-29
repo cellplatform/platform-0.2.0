@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Doc, Dev, TestDb, Time, WebStore, type t } from '../../test.ui';
+import { Dev, Doc, TestDb, Time, WebStore, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
@@ -29,7 +29,9 @@ export default Dev.describe(name, async (e) => {
       d.props.behaviors = local.behaviors;
     });
 
-    model.index.doc.events().changed$.subscribe(() => dev.redraw());
+    const events = { index: model.index.events() };
+    events.index.changed$.subscribe(() => dev.redraw());
+    events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
 
     ctx.debug.width(330);
     ctx.subject
