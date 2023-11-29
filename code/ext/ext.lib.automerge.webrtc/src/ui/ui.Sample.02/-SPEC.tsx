@@ -93,7 +93,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(5, 20);
 
       dev.button('purge ephemeral', (e) => {
-        const purge = (edge: t.SampleEdge) => WebrtcStore.Ephemeral.purge(edge.repo.index);
+        const purge = (edge: t.SampleEdge) => WebrtcStore.SyncDoc.purge(edge.repo.index);
         purge(self);
         purge(remote);
         dev.redraw();

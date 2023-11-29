@@ -1,14 +1,14 @@
 import { rx, type t } from './common';
 
 import { WebrtcNetworkAdapter } from './NetworkAdapter';
-import { Ephemeral } from './Store.SyncDoc';
+import { SyncDoc } from './Store.SyncDoc';
 import { monitorAdapter } from './u.adapter';
 
 /**
  * Manages the relationship between a [Repo/Store] and a network peer.
  */
 export const WebrtcStore = {
-  Ephemeral,
+  SyncDoc,
 
   /**
    * Initialize a new network manager.
@@ -25,7 +25,7 @@ export const WebrtcStore = {
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
-    const ephemeral = await Ephemeral.init(peer, store, index, fire);
+    const ephemeral = await SyncDoc.init(peer, store, index, fire);
 
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),

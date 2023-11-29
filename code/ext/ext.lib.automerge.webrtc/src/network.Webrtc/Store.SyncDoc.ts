@@ -7,10 +7,10 @@ import { Patches } from './Store.SyncDoc.patches';
 import { monitorAdapter } from './u.adapter';
 
 /**
- * A non-persistent store manager for sharing ephemeral
- * data over the network connection.
+ * An ephemeral (non-visual) document used to sync
+ * index and other shared state over network connections.
  */
-export const Ephemeral = {
+export const SyncDoc = {
   Patches,
 
   /**
