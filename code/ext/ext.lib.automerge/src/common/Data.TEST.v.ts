@@ -28,5 +28,17 @@ describe('Data', () => {
       doc.change((d) => Data.array(d.items).deleteAt(0, 99));
       assertItems([]);
     });
+
+    it('throw: not an array', () => {
+      [true, 123, '', {}, null, undefined].forEach((value: any) => {
+        const fn = () => Data.array(value);
+        expect(fn).to.throw(/Not an array/);
+      });
+    });
+
+    it('throw: not an automerge array', () => {
+      const fn = () => Data.array([1, 2, 3]);
+      expect(fn).to.throw(/Not an automerge array/);
+    });
   });
 });
