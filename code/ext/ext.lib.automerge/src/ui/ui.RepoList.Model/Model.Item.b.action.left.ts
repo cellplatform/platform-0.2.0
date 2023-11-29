@@ -1,13 +1,12 @@
 import { type t } from './common';
-import { Data } from './Data';
 import { Wrangle } from './u.Wrangle';
 
 export function actionLeftBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
-  const action$ = Wrangle.item$(args.item).action$;
+  const action$ = Wrangle.Item.$(args.item).action$;
 
   action$('Item:Left').subscribe((e) => {
     const ctx = args.ctx();
-    const payload = Data.clickArgs(args.ctx, args.item);
+    const payload = Wrangle.Item.click(args.ctx, args.item);
     ctx.handlers.onDatabaseClick?.(payload);
   });
 }

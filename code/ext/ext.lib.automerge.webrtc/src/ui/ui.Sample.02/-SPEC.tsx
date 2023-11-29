@@ -14,8 +14,8 @@ const createEdge = async (kind: t.ConnectionEdgeKind) => {
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
   const repo = await Crdt.RepoList.model(store, {
-    onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
-    onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
+    // onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
+    // onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
   });
 
   const network = await WebrtcStore.init(peer, store, repo.index);
