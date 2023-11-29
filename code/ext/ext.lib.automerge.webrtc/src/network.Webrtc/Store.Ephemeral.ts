@@ -1,13 +1,18 @@
-import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
-import { handshake } from './Webrtc.Store.Ephemeral.handshake';
 import { Crdt, Doc, rx, type t } from './common';
+
+import { WebrtcNetworkAdapter } from './NetworkAdapter';
+import { handshake } from './Store.Ephemeral.handshake';
+import { IndexSync } from './Store.IndexSync';
 import { monitorAdapter } from './u.adapter';
+import { Patches } from './Store.Ephemeral.patches';
 
 /**
  * A non-persistent store manager for sharing ephemeral
  * data over the network connection.
  */
 export const Ephemeral = {
+  Patches,
+
   /**
    * Setup a new ephemeral document manager for a store/peer.
    */
@@ -19,11 +24,13 @@ export const Ephemeral = {
   ) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
+    const self = peer.id;
 
     const doc = await store.doc.getOrCreate<t.WebrtcEphemeral>((d) => {
-      const defaults = Doc.Meta.default;
-      Doc.Meta.ensure(d, { ...defaults, ephemeral: true });
+      Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
+      d.shared = {};
     });
+    IndexSync.local(index, doc, dispose$);
 
     /**
      * API
@@ -45,14 +52,8 @@ export const Ephemeral = {
 
         // Perform ephemeral document URI handshake.
         const res = await handshake({ conn, peer, doc, dispose$ });
-        const rdoc = await store.doc.get(res.doc.uri);
-
-        /**
-         * TODO 🐷
-         */
-        rdoc?.events().changed$.subscribe((e) => {
-          console.log(' >> ', res.peer.local, rdoc.current);
-        });
+        const remote = await store.doc.get<t.WebrtcEphemeral>(res.doc.uri);
+        if (remote) IndexSync.remote(index, remote, dispose$);
       },
 
       /**

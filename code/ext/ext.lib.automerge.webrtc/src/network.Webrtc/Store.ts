@@ -1,7 +1,7 @@
 import { rx, type t } from './common';
 
-import { Ephemeral } from './Webrtc.Store.Ephemeral';
-import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
+import { WebrtcNetworkAdapter } from './NetworkAdapter';
+import { Ephemeral } from './Store.Ephemeral';
 import { monitorAdapter } from './u.adapter';
 
 /**
