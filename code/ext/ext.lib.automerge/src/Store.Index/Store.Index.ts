@@ -1,6 +1,7 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
+import { Patches } from './Store.Index.Patches';
 import { Data, Delete, DocUri, Is, type t } from './common';
 
 type O = Record<string, unknown>;
@@ -10,6 +11,7 @@ type Uri = t.DocUri | string;
  * Manages an index of documents within a repository.
  */
 export const StoreIndex = {
+  Patches,
   events,
 
   /**
