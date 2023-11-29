@@ -3,6 +3,9 @@
  */
 export { useDocument } from 'ext.lib.automerge';
 
+export { UI as Crdt, DocUri } from 'ext.lib.automerge';
+export { UI as Webrtc } from 'ext.lib.peerjs';
+
 /**
  * @system
  */

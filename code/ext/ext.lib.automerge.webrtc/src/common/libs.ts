@@ -1,3 +1,6 @@
+/**
+ * @external
+ */
 import { equals } from 'ramda';
 export const R = { equals } as const;
 export { next as A } from '@automerge/automerge';
@@ -6,8 +9,6 @@ export { next as A } from '@automerge/automerge';
  * @ext
  */
 export { Store, WebStore, Doc } from 'ext.lib.automerge';
-export { UI as Crdt, DocUri } from 'ext.lib.automerge';
-export { UI as Webrtc } from 'ext.lib.peerjs';
 
 /**
  * @system
