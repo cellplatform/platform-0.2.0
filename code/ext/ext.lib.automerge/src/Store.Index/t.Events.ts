@@ -21,4 +21,8 @@ export type StoreIndexAddedEvent = { type: 'crdt:store:index/Added'; payload: St
 export type StoreIndexRemovedEvent = { type: 'crdt:store:index/Removed'; payload: StoreIndexItem };
 export type StoreIndexSharedEvent = { type: 'crdt:store:index/Shared'; payload: StoreIndexItem };
 
-export type StoreIndexItem = { index: number; total: number; item: t.RepoIndexDoc };
+export type StoreIndexItem = {
+  index: number;
+  total: number;
+  item: t.RepoIndexDoc;
+};

@@ -2,7 +2,6 @@ import { rx, type t } from './common';
 
 type TResponse = {
   doc: { uri: string };
-  peer: { local: string; remote: string };
   error?: string;
 };
 
@@ -18,7 +17,7 @@ export async function handshake(args: {
     const data$ = events.cmd.data$.pipe(rx.map((e) => e.data));
 
     const done = (uri: string, error?: string) => {
-      resolve({ doc: { uri }, peer: { local, remote }, error });
+      resolve({ doc: { uri }, error });
     };
 
     const uri = doc.uri;
