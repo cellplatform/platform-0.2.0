@@ -1,10 +1,10 @@
 import { Crdt, Doc, rx, type t } from './common';
 
 import { WebrtcNetworkAdapter } from './NetworkAdapter';
-import { handshake } from './Store.Ephemeral.handshake';
 import { IndexSync } from './Store.IndexSync';
+import { handshake } from './Store.SyncDoc.handshake';
+import { Patches } from './Store.SyncDoc.patches';
 import { monitorAdapter } from './u.adapter';
-import { Patches } from './Store.Ephemeral.patches';
 
 /**
  * A non-persistent store manager for sharing ephemeral
