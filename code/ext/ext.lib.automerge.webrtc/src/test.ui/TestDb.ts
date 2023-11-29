@@ -1,6 +1,7 @@
 import { TestDb as Base } from 'ext.lib.automerge';
+import { type t } from './common';
 
-const edge = (kind: 'Left' | 'Right', name: string) => {
+const edge = (kind: t.ConnectionEdgeKind, name: string) => {
   return {
     kind,
     name,
@@ -13,6 +14,11 @@ const edge = (kind: 'Left' | 'Right', name: string) => {
 export const EdgeSampleDb = {
   left: edge('Left', 'dev.sample.left'),
   right: edge('Right', 'dev.sample.right'),
+  edge(kind: t.ConnectionEdgeKind) {
+    if (kind === 'Left') return EdgeSampleDb.left;
+    if (kind === 'Right') return EdgeSampleDb.right;
+    throw new Error(`Edge "${kind}" not supported`);
+  },
   async deleteDatabases() {
     await EdgeSampleDb.left.deleteDatabase();
     await EdgeSampleDb.right.deleteDatabase();

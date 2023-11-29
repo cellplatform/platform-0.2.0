@@ -62,8 +62,9 @@ export const WebrtcStore = {
      * API
      */
     const api: t.WebrtcStore = {
-      store,
       peer,
+      store,
+      index,
       ephemeral: ephemeral.doc,
 
       $,
