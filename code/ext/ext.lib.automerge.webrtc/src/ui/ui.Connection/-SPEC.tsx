@@ -1,10 +1,10 @@
-import { Root } from '.';
+import { Connection } from '.';
 import { Crdt, Dev, TestDb, Webrtc, WebrtcStore, type t } from '../../test.ui';
 
 type T = { props: t.ConnectionProps };
 const initial: T = { props: {} };
 
-const create = async (kind: t.ConnectionEdgeKind) => {
+const createEdge = async (kind: t.ConnectionEdgeKind) => {
   const peer = Webrtc.peer();
   const db = TestDb.EdgeSample.edge(kind);
   const store = Crdt.WebStore.init({
@@ -17,10 +17,10 @@ const create = async (kind: t.ConnectionEdgeKind) => {
   return edge;
 };
 
-const name = Root.displayName ?? '';
+const name = Connection.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const left = await create('Left');
-  const right = await create('Right');
+  const left = await createEdge('Left');
+  const right = await createEdge('Right');
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -35,7 +35,7 @@ export default Dev.describe(name, async (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} left={left} right={right} />;
+        return <Connection {...e.state.props} left={left} right={right} />;
       });
   });
 

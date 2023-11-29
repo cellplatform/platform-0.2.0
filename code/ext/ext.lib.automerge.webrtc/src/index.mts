@@ -10,6 +10,17 @@ export { Pkg };
 export { WebrtcNetworkAdapter, WebrtcStore } from './network.Webrtc';
 
 /**
+ * Library: UI
+ */
+import { Info } from './ui/ui.Info';
+import { Connection } from './ui/ui.Connection';
+export { Info };
+export const UI = {
+  Info,
+  Connection,
+} as const;
+
+/**
  * Dev
  */
 export const dev = async () => {

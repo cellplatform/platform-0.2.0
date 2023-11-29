@@ -7,7 +7,7 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.ConnectionProps, Fields>(
+export const Connection = FC.decorate<t.ConnectionProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

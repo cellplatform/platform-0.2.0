@@ -1,6 +1,4 @@
 import { WebStore } from './Store.Web';
-import { Info } from './ui/ui.Info';
-import { RepoList } from './ui/ui.RepoList';
 
 /**
  * Module (Meta)
@@ -27,6 +25,9 @@ export const Crdt = {
 /**
  * Library: UI
  */
+import { Info } from './ui/ui.Info';
+import { RepoList } from './ui/ui.RepoList';
+
 export { useDocument } from './ui/common';
 export { Info };
 export const UI = {
