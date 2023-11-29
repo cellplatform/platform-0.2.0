@@ -1,5 +1,4 @@
 import { A, type t } from './common';
-import { Data } from './Data';
 import { Wrangle } from './u.Wrangle';
 
 export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
@@ -20,11 +19,11 @@ export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoI
     const ctx = args.ctx();
 
     // Update the model state.
-    const { position, exists } = Wrangle.Item.indexOf(args.ctx, args.item);
-
+    const { index, exists } = Wrangle.Item.indexOf(args.ctx, args.item);
     if (exists) {
       ctx.index.doc.change((d) => {
-        const item = d.docs[position.index];
+        const docs = Wrangle.filterDocs(d, ctx.filter);
+        const item = docs[index];
         if (item) toggleShared(item);
       });
     }

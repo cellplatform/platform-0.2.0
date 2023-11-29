@@ -22,8 +22,9 @@ export const WrangleItem = {
     const index = docs.findIndex((item) => item.uri === data.uri);
     const item = docs[index];
     const exists = index > -1;
-    const position = { index, total: docs.length };
-    return { exists, item, position } as const;
+    const total = docs.length;
+    const position = { index, total };
+    return { exists, index, position, item } as const;
   },
 
   click(getCtx: t.RepoListCtxGet, input: ItemInput): t.RepoListClickHandlerArgs {
