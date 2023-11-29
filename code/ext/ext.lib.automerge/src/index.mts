@@ -24,7 +24,7 @@ export { TestDb } from './test.ui/TestDb';
 export { useDocument } from './ui/common';
 export { Info };
 export const UI = {
-  DocUri,
+  Uri: DocUri,
   Is,
   WebStore,
   Info,
