@@ -70,10 +70,13 @@ export const PeerModel: t.WebrtcPeerModel = {
         media: (kind, remoteid) => Media.start.outgoing(kind, remoteid),
       },
 
-      disconnect(id) {
-        if (!id) return;
-        model.get.conn.obj(id)?.close();
-        model.purge();
+      disconnect(connid) {
+        if (connid) {
+          model.get.conn.obj(connid)?.close();
+          model.purge();
+        } else {
+          model.current.connections.forEach((conn) => model.disconnect(conn.id));
+        }
       },
 
       purge() {

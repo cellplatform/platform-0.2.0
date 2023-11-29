@@ -58,7 +58,7 @@ export type PeerModel = t.Lifecycle & {
     data(remoteid: Id): Promise<t.PeerConnectedData>;
     media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
   };
-  disconnect(id: Id): void;
+  disconnect(connid?: Id): void;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   dispatch: t.PeerModelDispatch;
   purge(): { changed: boolean; total: { before: number; after: number } };
