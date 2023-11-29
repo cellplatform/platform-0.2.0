@@ -26,11 +26,11 @@ export function useRedrawEvent(
     const hasRenderer = (renderers: Id[]) => ids.some((id) => renderers.includes(id));
     const match$ = events.redraw.$.pipe(filter((e) => e.all || hasRenderer(e.renderers)));
     match$.subscribe(redraw);
-    return () => events.dispose();
+    return events.dispose;
   }, [ids.join(',')]);
 
   /**
    * API
    */
-  return { count, ids };
+  return { count, ids } as const;
 }
