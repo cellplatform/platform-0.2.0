@@ -1,14 +1,16 @@
 import { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
 import { handshake } from './Webrtc.Store.Ephemeral.handshake';
-import { Doc, rx, type t } from './common';
+import { Crdt, Doc, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
  * A non-persistent store manager for sharing ephemeral
  * data over the network connection.
  */
-
 export const Ephemeral = {
+  /**
+   * Setup a new ephemeral document manager for a store/peer.
+   */
   async init(
     peer: t.PeerModel,
     store: t.Store,
@@ -44,6 +46,10 @@ export const Ephemeral = {
         // Perform ephemeral document URI handshake.
         const res = await handshake({ conn, peer, doc, dispose$ });
         const rdoc = await store.doc.get(res.doc.uri);
+
+        /**
+         * TODO 🐷
+         */
         rdoc?.events().changed$.subscribe((e) => {
           console.log(' >> ', res.peer.local, rdoc.current);
         });
@@ -57,5 +63,20 @@ export const Ephemeral = {
         return life.disposed;
       },
     } as const;
+  },
+
+  /**
+   * Remove all ephemeral documents from the given repo index.
+   */
+  purge(index: t.StoreIndex) {
+    index.doc.change((d) => {
+      const docs = Crdt.Data.array(d.docs);
+      let index = -1;
+      while (true) {
+        index = d.docs.findIndex((item) => item.meta?.ephemeral);
+        if (index < 0) break;
+        docs.deleteAt(index);
+      }
+    });
   },
 } as const;
