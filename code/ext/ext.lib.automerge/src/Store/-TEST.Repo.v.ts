@@ -14,6 +14,6 @@ describe('Store.repo', () => {
 
     const doc = await generator();
     const keys = Object.keys(repo.handles);
-    expect(keys).to.eql([Store.Uri.id(doc.uri)]);
+    expect(keys).to.eql([Store.Doc.Uri.id(doc.uri)]);
   });
 });

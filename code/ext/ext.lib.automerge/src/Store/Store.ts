@@ -1,7 +1,7 @@
 import { Repo } from '@automerge/automerge-repo';
 import { Doc } from '../Store.Doc';
 import { StoreIndex as Index } from '../Store.Index';
-import { Is, DocUri as Uri, rx, type t } from './common';
+import { Is, rx, type t } from './common';
 
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
@@ -10,8 +10,9 @@ type Options = { timeout?: t.Msecs };
  * Manage an Automerge repo.
  */
 export const Store = {
-  Uri,
+  Doc,
   Index,
+  index: Index.init,
 
   /**
    * Initialize a new instance of a CRDT repo.
