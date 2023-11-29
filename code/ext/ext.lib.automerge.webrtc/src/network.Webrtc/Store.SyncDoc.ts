@@ -14,6 +14,16 @@ export const SyncDoc = {
   Patches,
 
   /**
+   * Get or create a SyncDoc from the given store.
+   */
+  async getOrCreate(store: t.Store, uri?: string) {
+    return store.doc.getOrCreate<t.WebrtcEphemeral>((d) => {
+      Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
+      d.shared = {};
+    }, uri);
+  },
+
+  /**
    * Setup a new ephemeral document manager for a store/peer.
    */
   async init(
@@ -24,12 +34,13 @@ export const SyncDoc = {
   ) {
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
-    const self = peer.id;
 
-    const doc = await store.doc.getOrCreate<t.WebrtcEphemeral>((d) => {
-      Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
-      d.shared = {};
-    });
+    /**
+     * TODO 🐷
+     * - persist / re-use the doc (??)
+     */
+
+    const doc = await SyncDoc.getOrCreate(store);
     IndexSync.local(index, doc, dispose$);
 
     /**

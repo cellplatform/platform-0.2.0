@@ -1,2 +1,2 @@
-export * from './NetworkAdapter';
-export * from './Store';
+export { WebrtcNetworkAdapter } from './NetworkAdapter';
+export { WebrtcStore } from './Store';
