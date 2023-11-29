@@ -3,7 +3,8 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../common/Is.TEST'),
+      import('../common/u.Is.TEST'),
+      import('../common/u.As.TEST'),
       'Store',
       import('../Store.Web/-TEST'),
       import('../Store.Web/-TEST.Storage'),

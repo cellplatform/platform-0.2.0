@@ -4,7 +4,8 @@ export * from '../index.pkg.mjs';
 
 export * from './Data';
 export * from './DocUri';
-export * from './Is';
+export * from './u.As';
+export * from './u.Is';
 
 export * from './constants';
 export * from './libs';
