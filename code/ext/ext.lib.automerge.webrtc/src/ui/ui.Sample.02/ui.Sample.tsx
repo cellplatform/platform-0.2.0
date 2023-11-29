@@ -9,9 +9,6 @@ export type SampleProps = {
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  /**
-   * Render
-   */
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({

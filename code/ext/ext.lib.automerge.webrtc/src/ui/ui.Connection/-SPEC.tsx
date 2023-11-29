@@ -5,8 +5,8 @@ type T = { props: t.ConnectionProps };
 const initial: T = { props: {} };
 
 const createEdge = async (kind: t.ConnectionEdgeKind) => {
-  const peer = Webrtc.peer();
   const db = TestDb.EdgeSample.edge(kind);
+  const peer = Webrtc.peer();
   const store = Crdt.WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.

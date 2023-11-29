@@ -48,8 +48,6 @@ export const View: React.FC<t.ConnectionProps> = (props) => {
       overflow: 'hidden',
       color: Color.alpha(COLOR, isTransmitting ? 0.65 : 0.3),
       transition: `border-color ${SECS}s, color ${SECS}s`,
-      textDecoration: 'none',
-      ':hover': { color: COLORS.BLUE },
     }),
   };
 
