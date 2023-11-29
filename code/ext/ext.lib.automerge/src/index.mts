@@ -11,12 +11,18 @@ export { Pkg };
 /**
  * Library
  */
-import { As, DocUri, Is, toObject } from './common';
-export { As, DocUri, Is, WebStore, toObject };
+import { Data, DocUri, Is, toObject } from './common';
+import { Store } from './Store';
+import { Doc } from './Store.Doc';
+export { Data, Doc, DocUri, Is, Store, toObject, WebStore };
 
-export { Store } from './Store';
-export { Doc } from './Store.Doc';
-export { TestDb } from './test.ui/TestDb';
+export const Crdt = {
+  Uri: DocUri,
+  Is,
+  Data,
+  Store,
+  WebStore,
+} as const;
 
 /**
  * Library: UI
@@ -25,16 +31,17 @@ export { useDocument } from './ui/common';
 export { Info };
 export const UI = {
   Uri: DocUri,
-  As,
   Is,
+  Data,
   WebStore,
   Info,
   RepoList,
-};
+} as const;
 
 /**
  * Dev
  */
+export { TestDb } from './test.ui/TestDb';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };
