@@ -1,5 +1,5 @@
 import type { t } from './common';
-export type { WebrtcNetworkAdapter } from './Webrtc.NetworkAdapter';
+export type { WebrtcNetworkAdapter } from './NetworkAdapter';
 
 type Id = string;
 
