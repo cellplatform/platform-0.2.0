@@ -4,7 +4,11 @@ import type { t } from './common';
  * An ephemeral
  */
 export type WebrtcEphemeral = t.DocWithMeta & {
-  count: number; // TEMP 🐷
+  shared: WebrtcEphemeralShared;
+};
+export type WebrtcEphemeralShared = { [docuri: string]: WebrtcEphemeralSharedRef };
+export type WebrtcEphemeralSharedRef = {
+  name?: string;
 };
 
 /**
@@ -26,6 +30,7 @@ export type WebrtcEphemeralConfirmedEvent = {
   type: 'webrtc:ephemeral/confirmed';
   payload: t.WebrtcEphemeralConfirmed;
 };
+
 export type WebrtcEphemeralConfirmed = {
   conn: { id: string };
   peer: { from: string; to: string };
