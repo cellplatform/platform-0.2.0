@@ -1,5 +1,5 @@
 import { WebrtcStore } from '../../network.Webrtc';
-import { Crdt, Dev, Hash, PropList, TestDb, Webrtc } from '../../test.ui';
+import { Crdt, Dev, Doc, Hash, PropList, TestDb, Webrtc } from '../../test.ui';
 import { type t } from './common';
 import { Sample } from './ui.Sample';
 
@@ -79,8 +79,20 @@ export default Dev.describe(name, async (e) => {
       });
 
       dev.row((e) => {
-        const data = edge.network.ephemeral.current;
-        return <Dev.Object data={data} style={{ marginTop: 8, marginLeft: 8 }} fontSize={11} />;
+        const data = edge.network.ephemeral.toObject();
+        const shared = Object.keys(data.shared).reduce((acc, next) => {
+          const key = `automerge:${Hash.shorten(Doc.Uri.id(next), 6)}`;
+          (acc as any)[key] = data.shared[next];
+          return acc;
+        }, {});
+        return (
+          <Dev.Object
+            data={{ ...data, shared }}
+            style={{ marginTop: 8, marginLeft: 8 }}
+            fontSize={11}
+            expand={1}
+          />
+        );
       });
     };
     edgeDebug(left);
