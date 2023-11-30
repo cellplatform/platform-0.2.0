@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Dev, Doc, TestDb, Time, WebStore, type t } from '../../test.ui';
+import { Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
@@ -30,7 +30,7 @@ export default Dev.describe(name, async (e) => {
     });
 
     const events = { index: model.index.events() };
-    events.index.changed$.subscribe(() => dev.redraw());
+    events.index.changed$.subscribe(() => dev.redraw('debug'));
     events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
 
     ctx.debug.width(330);
@@ -84,13 +84,22 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.button(['create: "ephemeral" doc', '(filtered out)'], async (e) => {
         type D = t.DocWithMeta;
-
         const doc = await model.store.doc.getOrCreate<D>((d) => {
           Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
         });
         console.log('doc.toObject()', doc.toObject());
       });
+
       dev.hr(-1, 5);
+      dev.button('mutate: rename first', (e) => {
+        model.index.doc.change((d) => {
+          const first = d.docs.find((m) => !m.meta?.ephemeral);
+          if (first) first.name = `renamed: ${slug()}`;
+        });
+      });
+
+      dev.hr(-1, 5);
+
       dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabase());
     });
   });
