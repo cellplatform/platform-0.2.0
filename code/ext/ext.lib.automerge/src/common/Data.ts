@@ -16,7 +16,7 @@ export const Data = {
   },
 
   /**
-   * Assign a value to the given object, or [delete] if value is <undefined>.
+   * Safely assigns a value to the given object, or [delete] if value is <undefined>.
    * NOTE: Automerge does not allow <undefined>.
    */
   assign<T extends O, K extends keyof T>(obj: T, key: keyof T, value: T[K] | undefined) {
@@ -31,8 +31,8 @@ export const Data = {
   },
 
   /**
-   * Ensure the given value exists on the object, not replacing
-   * the value if it already exists.
+   * Safely ensures the given value exists on the object,
+   * not replacing the value if it already exists.
    */
   ensure<T extends O, K extends keyof T>(obj: T, key: keyof T, initial: T[K]) {
     if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
