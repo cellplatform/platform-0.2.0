@@ -239,6 +239,35 @@ describe('StoreIndex', async () => {
 
         store.dispose();
       });
+
+      it('shared$', async () => {
+        const { store, events, index } = await eventsSetup();
+        const fired: t.StoreIndexItem[] = [];
+        events.shared$.subscribe((e) => fired.push(e));
+        const item = () => index.doc.current.docs[0];
+
+        await index.add('automerge:foo');
+        expect(item().uri).to.eql('automerge:foo');
+        expect(item().shared).to.eql(undefined);
+
+        Store.Index.Mutate.shared(index.doc).toggle(0);
+        expect(item().shared?.current).to.eql(true);
+        expect(item().shared?.count.value).to.eql(1);
+
+        Store.Index.Mutate.shared(index.doc).toggle(0, true); // NB: no change.
+        expect(item().shared?.current).to.eql(true);
+        expect(item().shared?.count.value).to.eql(1);
+
+        Store.Index.Mutate.shared(index.doc).toggle(0, false); // NB: explicit value.
+        expect(item().shared?.current).to.eql(false);
+        expect(item().shared?.count.value).to.eql(2);
+
+        expect(fired.length).to.eql(2);
+        expect(fired[0].item.shared?.current).to.eql(true);
+        expect(fired[1].item.shared?.current).to.eql(false);
+
+        store.dispose();
+      });
     });
   });
 });

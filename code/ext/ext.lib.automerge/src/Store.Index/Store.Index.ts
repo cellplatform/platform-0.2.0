@@ -1,7 +1,7 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
-import { Data, Delete, DocUri, Is, type t } from './common';
+import { A, Data, Delete, DocUri, Is, type t } from './common';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
@@ -28,7 +28,7 @@ export const StoreIndex = {
     const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
 
     if (!Is.repoIndex(doc.current)) {
-      const name = Wrangle.storeName(store);
+      const name = wrangle.storeName(store);
       const err = `Failed while retrieving Index document on store/repo "${name}". Document with URI "${uri}" was malformed.`;
       throw new Error(err);
     }
@@ -89,7 +89,7 @@ export const StoreIndex = {
       async add(uri: Uri) {
         const exists = api.exists(uri);
         if (exists) return false;
-        const meta = await Wrangle.meta(store, uri);
+        const meta = await wrangle.meta(store, uri);
         api.doc.change((d) => d.docs.push(Delete.undefined({ uri, meta })));
         return true;
       },
@@ -107,12 +107,31 @@ export const StoreIndex = {
 
     return api;
   },
+
+  Mutate: {
+    shared(doc: t.DocRefHandle<t.RepoIndex>, filter?: t.RepoIndexFilter) {
+      return {
+        toggle(index: number, value?: boolean) {
+          doc.change((d) => {
+            const docs = StoreIndex.filter(d.docs, filter);
+            const item = docs[index];
+            if (item) {
+              const shared = wrangle.shared(item);
+              const next = typeof value === 'boolean' ? value : !shared.current;
+              if (shared.current !== next) shared.count.increment(1);
+              shared.current = next;
+            }
+          });
+        },
+      } as const;
+    },
+  },
 } as const;
 
 /**
  * Helpers
  */
-export const Wrangle = {
+const wrangle = {
   storeName(store: t.Store) {
     const name = Is.webStore(store) ? store.info.storage?.name : '';
     return name || 'Unknown';
@@ -137,5 +156,10 @@ export const Wrangle = {
     const res: t.RepoIndexDocMeta = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
+  },
+
+  shared(item: t.RepoIndexDoc) {
+    if (typeof item.shared !== 'object') item.shared = { current: false, count: new A.Counter(0) };
+    return item.shared!;
   },
 } as const;
