@@ -9,10 +9,13 @@ export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoI
    */
   action$('Item:Right', 'Share').subscribe((e) => {
     const ctx = args.ctx();
+    const { filter } = ctx;
 
     // Update the model state.
     const { index, exists } = Wrangle.Item.indexOf(args.ctx, args.item);
-    if (exists) StoreIndex.Mutate.shared(ctx.index.doc, ctx.filter).toggle(index);
+    if (exists) {
+      ctx.index.doc.change((d) => StoreIndex.Mutate.toggleShared(d, index, { filter }));
+    }
 
     // Alert listeners.
     ctx.handlers.onShareClick?.(Wrangle.Item.click(args.ctx, args.item));

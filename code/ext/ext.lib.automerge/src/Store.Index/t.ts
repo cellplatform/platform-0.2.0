@@ -1,4 +1,4 @@
-import type { t, A } from './common';
+import type { t } from './common';
 export type * from './t.Events';
 
 type Uri = t.DocUri | string;
@@ -36,6 +36,5 @@ export type RepoIndexDocMeta = Pick<t.DocMeta, 'ephemeral'>;
  * Record of the share/publish status of the document.
  */
 export type RepoIndexItemShared = {
-  count: A.Counter;
   current: boolean;
 };

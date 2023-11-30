@@ -1,7 +1,9 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
-import { A, Data, Delete, DocUri, Is, type t } from './common';
+import { Data, Delete, DocUri, Is, type t } from './common';
+import { Wrangle } from './u.Wrangle';
+import { Mutate } from './Store.Index.Mutate';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
@@ -10,14 +12,9 @@ type Uri = t.DocUri | string;
  * Manages an index of documents within a repository.
  */
 export const StoreIndex = {
+  Mutate,
   events,
-
-  /**
-   * Filter a set of docs within the index.
-   */
-  filter(docs: t.RepoIndexDoc[], filter?: t.RepoIndexFilter) {
-    return !filter ? docs : docs.filter((doc, index) => filter({ doc, index }, index));
-  },
+  filter: Wrangle.filter,
 
   /**
    * Create a new Index handle.
@@ -106,25 +103,6 @@ export const StoreIndex = {
 
     return api;
   },
-
-  Mutate: {
-    shared(doc: t.DocRefHandle<t.RepoIndex>, filter?: t.RepoIndexFilter) {
-      return {
-        toggle(index: number, value?: boolean) {
-          doc.change((d) => {
-            const docs = StoreIndex.filter(d.docs, filter);
-            const item = docs[index];
-            if (item) {
-              const shared = wrangle.shared(item);
-              const next = typeof value === 'boolean' ? value : !shared.current;
-              if (shared.current !== next) shared.count.increment(1);
-              shared.current = next;
-            }
-          });
-        },
-      } as const;
-    },
-  },
 } as const;
 
 /**
@@ -158,7 +136,7 @@ const wrangle = {
   },
 
   shared(item: t.RepoIndexDoc) {
-    if (typeof item.shared !== 'object') item.shared = { current: false, count: new A.Counter(0) };
+    if (typeof item.shared !== 'object') item.shared = { current: false };
     return item.shared!;
   },
 } as const;

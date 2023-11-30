@@ -2,14 +2,14 @@ import { Store } from '../Store';
 import { Doc } from '../Store.Doc';
 import { A, Time, describe, expect, expectError, it, rx, type t } from '../test';
 
-type D = { count?: t.A.Counter };
+type D = { count: number };
 
 describe('StoreIndex', async () => {
   const setup = () => {
     const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-    const generator = store.doc.factory<D>(initial);
-    return { store, initial, generator } as const;
+    const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
+    const generateSample = store.doc.factory<D>(initial);
+    return { store, initial, generateSample } as const;
   };
 
   describe('initialize', () => {
@@ -53,7 +53,7 @@ describe('StoreIndex', async () => {
     });
 
     it('total (filter)', async () => {
-      const { store, generator } = setup();
+      const { store, generateSample: generator } = setup();
       const index = await Store.Index.init(store);
 
       await generator();
@@ -140,7 +140,7 @@ describe('StoreIndex', async () => {
       type T = t.DocMeta & { foo: string };
       const meta: T = { ephemeral: true, foo: 'hello' };
       const sample = await store.doc.getOrCreate<D>((d) => {
-        d.count = new A.Counter(0);
+        d.count = 0;
         Doc.Meta.ensure(d, meta);
       });
 
@@ -284,17 +284,14 @@ describe('StoreIndex', async () => {
         expect(item().uri).to.eql('automerge:foo');
         expect(item().shared).to.eql(undefined);
 
-        Store.Index.Mutate.shared(index.doc).toggle(0);
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0));
         expect(item().shared?.current).to.eql(true);
-        expect(item().shared?.count.value).to.eql(1);
 
-        Store.Index.Mutate.shared(index.doc).toggle(0, true); // NB: no change.
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0, { value: true })); // NB: no change.
         expect(item().shared?.current).to.eql(true);
-        expect(item().shared?.count.value).to.eql(1);
 
-        Store.Index.Mutate.shared(index.doc).toggle(0, false); // NB: explicit value.
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0)); // NB: explicit value.
         expect(item().shared?.current).to.eql(false);
-        expect(item().shared?.count.value).to.eql(2);
 
         expect(fired.length).to.eql(2);
         expect(fired[0].item.shared?.current).to.eql(true);
