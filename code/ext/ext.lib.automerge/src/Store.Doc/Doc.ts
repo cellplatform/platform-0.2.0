@@ -1,12 +1,13 @@
 import { DocEvents } from './Doc.Events';
 import { DocMeta as Meta } from './Doc.Meta';
-import { DEFAULTS, Is, Time, rx, slug, toObject, type t, DocUri as Uri } from './common';
+import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, slug, toObject, type t } from './common';
 
 type Uri = t.DocUri | string;
 
 export const Doc = {
   Uri,
   Meta,
+  Data,
   toObject,
 
   /**
