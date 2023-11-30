@@ -110,19 +110,21 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
+      const total = (edge: t.SampleEdge) => {
+        return edge.repo.index.doc.current.docs.length;
+      };
+
       const format = (edge: t.SampleEdge) => {
         const uri = edge.repo.index.doc.uri;
-        const index = Crdt.Uri.id(uri, { shorten: 4 });
-        const total = edge.repo.index.doc.current.docs.length;
         return {
-          total,
+          total: total(edge),
           'index:uri': Crdt.Uri.id(uri, { shorten: 6 }),
           index: edge.repo.index.doc.current,
         };
       };
       const data = {
-        self: format(left),
-        remote: format(right),
+        [`left[${total(left)}]`]: format(left),
+        [`right[${total(right)}]`]: format(right),
       };
       return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.self'] }} />;
     });
