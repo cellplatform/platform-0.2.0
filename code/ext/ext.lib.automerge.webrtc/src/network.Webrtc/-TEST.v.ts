@@ -1,4 +1,4 @@
-import { WebrtcStore } from '.';
+import { IndexSync, WebrtcStore } from '.';
 import { Store, describe, expect, it, type t } from '../test';
 
 describe('network.Webrtc', () => {
@@ -49,11 +49,67 @@ describe('network.Webrtc', () => {
       const res1 = SyncDoc.Patches.shared(fired.changes[0]);
       const res2 = SyncDoc.Patches.shared(fired.changes[1]);
 
-      expect(res1.put).to.eql(uri);
+      expect(res1.put?.uri).to.eql(uri);
       expect(res1.del).to.eql(undefined);
 
       expect(res2.put).to.eql(undefined);
-      expect(res2.del).to.eql(uri);
+      expect(res2.del?.uri).to.eql(uri);
+
+      store.dispose();
+    });
+  });
+
+  describe('IndexSync.local', () => {
+    it('add → rename → remove', async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      const doc = await SyncDoc.getOrCreate(store);
+
+      IndexSync.local(index, doc);
+      expect(doc.current.shared).to.eql({});
+
+      const uri = 'automerge:foo';
+      await index.add(uri);
+      expect(doc.current.shared).to.eql({}); // NB: not yet shared.
+
+      // Share.
+      Store.Index.Mutate.shared(index.doc).toggle(1, true);
+      expect(doc.current.shared[uri]).to.eql({}); // NB: entry now on the sync-doc.
+
+      // Rename.
+      index.doc.change((d) => (d.docs[1].name = 'foo'));
+      expect(doc.current.shared[uri]).to.eql({ name: 'foo' });
+      index.doc.change((d) => delete d.docs[1].name);
+      expect(doc.current.shared[uri]).to.eql({}); // NB: name removed
+
+      // Remove.
+      await index.remove(uri);
+      expect(doc.current.shared).to.eql({});
+
+      store.dispose();
+    });
+
+    it('pre-existing index', async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      const doc = await SyncDoc.getOrCreate(store);
+
+      await index.add('automerge:a'); // Not shared.
+      await index.add('automerge:b');
+      await index.add('automerge:c');
+
+      index.doc.change((d) => (d.docs[2].name = 'hello'));
+      Store.Index.Mutate.shared(index.doc).toggle(2, true);
+      Store.Index.Mutate.shared(index.doc).toggle(3, true);
+
+      // Start the sync.
+      IndexSync.local(index, doc);
+
+      // Ensure the syncer updated the doc.
+      const shared = doc.current.shared;
+      expect(shared['automerge:a']).to.eql(undefined);
+      expect(shared['automerge:b']).to.eql({ name: 'hello' });
+      expect(shared['automerge:c']).to.eql({});
 
       store.dispose();
     });
