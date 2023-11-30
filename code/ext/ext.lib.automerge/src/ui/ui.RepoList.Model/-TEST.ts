@@ -34,10 +34,18 @@ export default Test.describe('RepoList.Model', (e) => {
   });
 
   e.describe('Model.Item', (e) => {
-    e.it('initialize', async (e) => {
+    e.it('init: Doc', async (e) => {
       const model = await Model.init(store);
-      const item = Model.Item.state({ ctx: model.ctx });
+      const item = Model.Item.state(model.ctx, 'Doc');
       expect(item.type).to.eql(DEFAULTS.typename.Item);
+      expect(item.current.editable).to.eql(true);
+    });
+
+    e.it('init: Add', async (e) => {
+      const model = await Model.init(store);
+      const item = Model.Item.state(model.ctx, 'Add');
+      expect(item.type).to.eql(DEFAULTS.typename.Item);
+      expect(item.current.editable).to.eql(false);
     });
   });
 });
