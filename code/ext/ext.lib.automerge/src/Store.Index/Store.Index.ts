@@ -86,11 +86,10 @@ export const StoreIndex = {
       /**
        * Add a new entry to the index.
        */
-      async add(uri: Uri) {
-        const exists = api.exists(uri);
-        if (exists) return false;
+      async add(uri: Uri, name) {
+        if (api.exists(uri)) return false;
         const meta = await wrangle.meta(store, uri);
-        api.doc.change((d) => d.docs.push(Delete.undefined({ uri, meta })));
+        api.doc.change((d) => d.docs.push(Delete.undefined({ uri, name, meta })));
         return true;
       },
 

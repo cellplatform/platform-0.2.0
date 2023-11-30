@@ -12,7 +12,7 @@ export type StoreIndex = {
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   total(filter?: t.RepoIndexFilter): number;
   exists(documentUri: Uri): boolean;
-  add(documentUri: Uri): Promise<boolean>;
+  add(documentUri: Uri, name?: string): Promise<boolean>;
   remove(documentUri: Uri): Promise<boolean>;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };

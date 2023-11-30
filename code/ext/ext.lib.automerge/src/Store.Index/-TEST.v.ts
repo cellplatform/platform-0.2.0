@@ -79,6 +79,40 @@ describe('StoreIndex', async () => {
     });
   });
 
+  describe('add / remove', () => {
+    it('add', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      expect(index.doc.current.docs).to.eql([]);
+
+      const uri = 'automerge:foo';
+      const res1 = await index.add(uri);
+      const res2 = await index.add(uri);
+      expect(res1).to.eql(true);
+      expect(res2).to.eql(false); // Already added.
+
+      store.dispose();
+    });
+
+    it('adds with name', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      expect(index.doc.current.docs).to.eql([]);
+
+      const uri = 'automerge:foo';
+      const res1 = await index.add(uri, 'foo');
+      expect(index.doc.current.docs[0].name).to.eql('foo');
+      const res2 = await index.add(uri, 'foo');
+      const res3 = await index.add(uri, 'bar'); // NB: no change, already exists.
+
+      expect(res1).to.eql(true);
+      expect(res2).to.eql(false); // Already added.
+      expect(res3).to.eql(false);
+
+      store.dispose();
+    });
+  });
+
   describe('method: "add" (auto syncs with repo)', () => {
     it('new documents automatically added to index', async () => {
       const { store, initial } = setup();
