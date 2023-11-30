@@ -6,6 +6,7 @@ export type StoreIndexEvents = t.Lifecycle & {
   readonly added$: t.Observable<t.StoreIndexItem>;
   readonly removed$: t.Observable<t.StoreIndexItem>;
   readonly shared$: t.Observable<t.StoreIndexItem>;
+  readonly renamed$: t.Observable<t.StoreIndexItem>;
 };
 
 /**
@@ -15,11 +16,13 @@ export type StoreIndexEvent =
   | t.DocEvent<t.RepoIndex>
   | StoreIndexAddedEvent
   | StoreIndexRemovedEvent
-  | StoreIndexSharedEvent;
+  | StoreIndexSharedEvent
+  | StoreIndexRenamedEvent;
 
 export type StoreIndexAddedEvent = { type: 'crdt:store:index/Added'; payload: StoreIndexItem };
 export type StoreIndexRemovedEvent = { type: 'crdt:store:index/Removed'; payload: StoreIndexItem };
 export type StoreIndexSharedEvent = { type: 'crdt:store:index/Shared'; payload: StoreIndexItem };
+export type StoreIndexRenamedEvent = { type: 'crdt:store:index/Renamed'; payload: StoreIndexItem };
 
 export type StoreIndexItem = {
   index: number;

@@ -40,7 +40,6 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
 
   docs$
     .pipe(
-      rx.filter((e) => e.patches[0].path[0] === 'docs'),
       rx.filter((e) => typeof e.patches[0].path[1] === 'number'),
       rx.filter((e) => e.patches[0].path[2] === 'shared'),
     )
@@ -49,6 +48,18 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
       const total = e.patchInfo.after.docs.length;
       const item = e.patchInfo.after.docs[index];
       if (item) $$.next({ type: 'crdt:store:index/Shared', payload: { index, total, item } });
+    });
+
+  docs$
+    .pipe(
+      rx.filter((e) => typeof e.patches[0].path[1] === 'number'),
+      rx.filter((e) => e.patches[0].path[2] === 'name'),
+    )
+    .subscribe((e) => {
+      const index = e.patches[0].path[1] as number;
+      const total = e.patchInfo.after.docs.length;
+      const item = e.patchInfo.after.docs[index];
+      if (item) $$.next({ type: 'crdt:store:index/Renamed', payload: { index, total, item } });
     });
 
   /**
@@ -60,6 +71,7 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     added$: rx.payload<t.StoreIndexAddedEvent>($, 'crdt:store:index/Added'),
     removed$: rx.payload<t.StoreIndexRemovedEvent>($, 'crdt:store:index/Removed'),
     shared$: rx.payload<t.StoreIndexSharedEvent>($, 'crdt:store:index/Shared'),
+    renamed$: rx.payload<t.StoreIndexRenamedEvent>($, 'crdt:store:index/Renamed'),
 
     /**
      * Lifecycle

@@ -244,9 +244,9 @@ describe('StoreIndex', async () => {
         const { store, events, index } = await eventsSetup();
         const fired: t.StoreIndexItem[] = [];
         events.shared$.subscribe((e) => fired.push(e));
-        const item = () => index.doc.current.docs[0];
 
         await index.add('automerge:foo');
+        const item = () => index.doc.current.docs[0];
         expect(item().uri).to.eql('automerge:foo');
         expect(item().shared).to.eql(undefined);
 
@@ -265,6 +265,25 @@ describe('StoreIndex', async () => {
         expect(fired.length).to.eql(2);
         expect(fired[0].item.shared?.current).to.eql(true);
         expect(fired[1].item.shared?.current).to.eql(false);
+
+        store.dispose();
+      });
+
+      it('renamed$', async () => {
+        const { store, events, index } = await eventsSetup();
+        const fired: t.StoreIndexItem[] = [];
+        events.renamed$.subscribe((e) => fired.push(e));
+
+        await index.add('automerge:foo');
+        const item = () => index.doc.current.docs[0];
+        expect(item().uri).to.eql('automerge:foo');
+        expect(item().name).to.eql(undefined);
+
+        index.doc.change((d) => (d.docs[0].name = 'foo'));
+        expect(item().name).to.eql('foo');
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0].item.name).to.eql('foo');
 
         store.dispose();
       });
