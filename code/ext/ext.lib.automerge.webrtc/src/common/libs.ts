@@ -8,7 +8,7 @@ export { next as A } from '@automerge/automerge';
 /**
  * @ext
  */
-export { Doc, Store, WebStore } from 'ext.lib.automerge';
+export { Doc, Store, WebStore, toObject } from 'ext.lib.automerge';
 
 /**
  * @system
