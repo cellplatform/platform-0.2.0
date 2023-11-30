@@ -17,7 +17,10 @@ export function useListFocusController<H extends HTMLElement = HTMLDivElement>(a
    * Command: "redraw" (entire list).
    */
   useEffect(() => {
-    const changer = (focused: boolean) => () => list.change((d) => (d.focused = focused));
+    const changer = (focused: boolean) => () => {
+      list.change((d) => (d.focused = focused));
+      if (focused) ref.current?.focus(); // NB: ensure the DOM element actually has focus.
+    };
     const focus = changer(true);
     const blur = changer(false);
 
