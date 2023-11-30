@@ -40,7 +40,7 @@ export default Dev.describe(name, async (e) => {
 
     const monitor = (edge: t.SampleEdge) => {
       const ephemeral = edge.network.ephemeral.events();
-      ephemeral.changed$.subscribe(() => dev.redraw());
+      ephemeral.changed$.subscribe(() => dev.redraw('debug'));
     };
     monitor(left);
     monitor(right);
