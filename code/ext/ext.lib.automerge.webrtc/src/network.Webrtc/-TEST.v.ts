@@ -35,7 +35,7 @@ describe('network.Webrtc', () => {
       const index = await Store.index(store);
       const doc = await SyncDoc.getOrCreate(store);
       const events = doc.events();
-      const changes: t.DocChanged<t.WebrtcEphemeral>[] = [];
+      const changes: t.DocChanged<t.WebrtcSyncDoc>[] = [];
       events.changed$.subscribe((e) => changes.push(e));
       return { store, index, doc, events, fired: { changes } } as const;
     };

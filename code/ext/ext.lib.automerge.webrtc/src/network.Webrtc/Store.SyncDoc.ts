@@ -17,7 +17,7 @@ export const SyncDoc = {
    * Get or create a SyncDoc from the given store.
    */
   async getOrCreate(store: t.Store, uri?: string) {
-    return store.doc.getOrCreate<t.WebrtcEphemeral>((d) => {
+    return store.doc.getOrCreate<t.WebrtcSyncDoc>((d) => {
       Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
       d.shared = {};
     }, uri);
@@ -63,7 +63,7 @@ export const SyncDoc = {
 
         // Perform ephemeral document URI handshake.
         const res = await handshake({ conn, peer, doc, dispose$ });
-        const remote = await store.doc.get<t.WebrtcEphemeral>(res.doc.uri);
+        const remote = await store.doc.get<t.WebrtcSyncDoc>(res.doc.uri);
         if (remote) IndexSync.remote(index, remote, dispose$);
       },
 

@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 export const Patches = {
-  shared(e: t.DocChanged<t.WebrtcEphemeral>) {
+  shared(e: t.DocChanged<t.WebrtcSyncDoc>) {
     const read = (action: 'put' | 'del') => {
       const first = e.patches[0];
       const path = first.path;

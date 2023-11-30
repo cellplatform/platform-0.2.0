@@ -7,7 +7,7 @@ type TResponse = {
 
 export async function handshake(args: {
   conn: t.DataConnection;
-  doc: t.DocRefHandle<t.WebrtcEphemeral>;
+  doc: t.DocRefHandle<t.WebrtcSyncDoc>;
   peer: t.PeerModel;
   dispose$?: t.UntilObservable;
 }) {
@@ -25,16 +25,16 @@ export async function handshake(args: {
     const remote = conn.peer;
     const id = conn.connectionId;
     const stop = { in$: rx.subject(), out$: rx.subject() } as const;
-    const send = (event: t.WebrtcEphemeralEvent) => conn.send(event);
+    const send = (event: t.WebrtcSyncDocEvent) => conn.send(event);
 
-    const setup$ = rx.payload<t.WebrtcEphemeralSetupEvent>(data$, 'webrtc:ephemeral/setup').pipe(
+    const setup$ = rx.payload<t.WebrtcSyncDocSetupEvent>(data$, 'webrtc:ephemeral/setup').pipe(
       rx.takeUntil(stop.in$),
       rx.filter((e) => e.conn.id == id),
       rx.filter((e) => e.peer.to === local),
     );
 
     const confirmed$ = rx
-      .payload<t.WebrtcEphemeralConfirmedEvent>(data$, 'webrtc:ephemeral/confirmed')
+      .payload<t.WebrtcSyncDocConfirmedEvent>(data$, 'webrtc:ephemeral/confirmed')
       .pipe(
         rx.filter((e) => e.conn.id == id),
         rx.filter((e) => e.peer.to === local),
