@@ -1,5 +1,5 @@
 import { RepoList } from '.';
-import { Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
+import { rx, Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
 
 type T = { props: t.RepoListProps };
@@ -29,7 +29,11 @@ export default Dev.describe(name, async (e) => {
       d.props.behaviors = local.behaviors;
     });
 
-    const events = { index: model.index.events() };
+    const events = {
+      list: model.list.state.events(),
+      index: model.index.events(),
+    };
+    events.list.$.pipe(rx.debounceTime(100)).subscribe(() => dev.redraw('debug'));
     events.index.changed$.subscribe(() => dev.redraw('debug'));
     events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
 
@@ -95,6 +99,14 @@ export default Dev.describe(name, async (e) => {
           Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
         });
       });
+      dev.button('delete: doc (last)', async (e) => {
+        const index = model.index;
+        const docs = index.doc.current.docs.filter((m) => !m.meta?.ephemeral);
+        const last = docs[docs.length - 1];
+        const uri = last?.uri;
+        const removed = await index.remove(uri);
+        console.info('💥 removed:', removed, '←', uri);
+      });
 
       dev.hr(-1, 5);
 
@@ -116,6 +128,7 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
+        list: model.list.state.current,
         db: storage,
         'db:index': `${model.index.db.name}[${model.index.total()}]`,
         'db:index.doc': model.index.doc.toObject(),

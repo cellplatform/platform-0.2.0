@@ -37,6 +37,11 @@ export const WrangleItem = {
 export const Wrangle = {
   Item: WrangleItem,
 
+  total(getCtx: t.RepoListCtxGet) {
+    const { index, filter } = getCtx();
+    return Wrangle.filterDocs(index.doc.current, filter).length;
+  },
+
   filterDocs(index: t.RepoIndex, filter?: t.RepoIndexFilter): t.RepoIndexDoc[] {
     return StoreIndex.filter(index.docs, filter);
   },

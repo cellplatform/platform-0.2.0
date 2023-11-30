@@ -4,30 +4,29 @@ import { addBehavior } from './Model.Item.b.add';
 import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
-type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
 type D = t.RepoItemData;
+type M = D['mode'];
 
 export const ItemModel = {
-  initial(args: Args): t.RepoItem {
-    const data: D = { mode: 'Add' };
+  initial(mode: M): t.RepoItem {
+    const data: D = { mode };
     return {
-      editable: false,
       label: '',
       left: { kind: 'Item:Left' },
       right: { kind: 'Item:Right' },
       data,
+      editable: mode === 'Doc',
     };
   },
 
   /**
    * State wrapper.
    */
-  state(args: Args) {
-    const { ctx } = args;
-    const initial = ItemModel.initial(args);
+  state(ctx: t.RepoListCtxGet, mode: M, options: { dispose$?: t.UntilObservable } = {}) {
+    const initial = ItemModel.initial(mode);
     const type = DEFAULTS.typename.Item;
     const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
-    const events = state.events(args.dispose$);
+    const events = state.events(options.dispose$);
     const dispatch = Model.Item.commands(state);
     const item: t.RepoItemCtx = { state, events, dispatch };
 

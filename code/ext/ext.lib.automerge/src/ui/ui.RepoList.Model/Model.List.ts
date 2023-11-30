@@ -2,8 +2,8 @@ import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
-import { Wrangle } from './u.Wrangle';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type Options = { dispose$?: t.UntilObservable; filter?: t.RepoIndexFilter } & t.RepoListHandlers;
 
@@ -30,8 +30,8 @@ export const List = {
       filter,
       dispose$,
     });
-    const array = Model.List.array((i) => ItemModel.state({ ctx }));
-    const getItem = GetItem(index, array, filter);
+    const array = Model.List.array((i) => ItemModel.state(ctx, 'Doc', { dispose$ }));
+    const getItem = GetItem(ctx, array);
     const state: t.RepoListState = Model.List.state(
       { total, getItem },
       { type: DEFAULTS.typename.List, dispose$ },
@@ -43,7 +43,7 @@ export const List = {
     const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
     listBehavior({ ctx });
-    listRedrawBehavior({ ctx });
+    listRedrawBehavior({ ctx, array });
 
     /**
      * API.
