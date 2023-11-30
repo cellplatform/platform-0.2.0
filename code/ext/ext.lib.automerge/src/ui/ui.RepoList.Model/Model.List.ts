@@ -1,6 +1,7 @@
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
+import { listRedrawBehavior } from './Model.List.b.redraw';
 import { Wrangle } from './u.Wrangle';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 
@@ -42,6 +43,7 @@ export const List = {
     const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
     listBehavior({ ctx });
+    listRedrawBehavior({ ctx });
 
     /**
      * API.
