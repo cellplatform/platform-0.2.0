@@ -82,15 +82,22 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.button(['create: "ephemeral" doc', '(filtered out)'], async (e) => {
+
+      dev.hr(-1, 5);
+
+      dev.button('create: doc', async (e) => {
+        type T = { msg?: string };
+        await model.store.doc.getOrCreate<T>((d) => null);
+      });
+      dev.button(['create: doc ("ephemeral")', 'filtered out'], async (e) => {
         type D = t.DocWithMeta;
-        const doc = await model.store.doc.getOrCreate<D>((d) => {
+        await model.store.doc.getOrCreate<D>((d) => {
           Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
         });
-        console.log('doc.toObject()', doc.toObject());
       });
 
       dev.hr(-1, 5);
+
       dev.button('mutate: rename first', (e) => {
         model.index.doc.change((d) => {
           const first = d.docs.find((m) => !m.meta?.ephemeral);
@@ -100,7 +107,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button(`delete database: "${storage}"`, (e) => TestDb.Spec.deleteDatabase());
+      dev.button([`delete database: "${storage}"`, '💥'], (e) => TestDb.Spec.deleteDatabase());
     });
   });
 
