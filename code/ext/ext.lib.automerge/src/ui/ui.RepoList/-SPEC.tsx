@@ -117,8 +117,8 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props: e.state.props,
         db: storage,
-        'db.index': `${model.index.db.name}[${model.index.total()}]`,
-        index: model.index.doc.toObject(),
+        'db:index': `${model.index.db.name}[${model.index.total()}]`,
+        'db:index.doc': model.index.doc.toObject(),
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
