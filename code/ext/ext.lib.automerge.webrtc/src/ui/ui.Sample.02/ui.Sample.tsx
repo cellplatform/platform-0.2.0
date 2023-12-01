@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { COLORS, Color, css, type t } from './common';
 import { SampleEdge } from './ui.Sample.Edge';
 import { SampleMiddle } from './ui.Sample.Middle';
@@ -10,6 +12,16 @@ export type SampleProps = {
 
 export const Sample: React.FC<SampleProps> = (props) => {
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  const [stream, setStream] = useState<MediaStream>();
+
+  /**
+   * Handlers
+   */
+  const onStreamSelection: t.PeerStreamSelectionHandler = (e) => setStream(e.selected);
+
+  /**
+   * Render
+   */
   const styles = {
     base: css({
       position: 'relative',
@@ -22,9 +34,9 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <SampleEdge edge={props.left} style={styles.left} />
-      <SampleMiddle left={props.left} right={props.right} />
-      <SampleEdge edge={props.right} style={styles.right} />
+      <SampleEdge edge={props.left} style={styles.left} onStreamSelection={onStreamSelection} />
+      <SampleMiddle left={props.left} right={props.right} stream={stream} />
+      <SampleEdge edge={props.right} style={styles.right} onStreamSelection={onStreamSelection} />
     </div>
   );
 };

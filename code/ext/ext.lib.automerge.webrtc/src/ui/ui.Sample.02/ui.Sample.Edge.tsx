@@ -4,6 +4,7 @@ export type SampleEdgeProps = {
   edge: t.SampleEdge;
   focusOnLoad?: boolean;
   style?: t.CssValue;
+  onStreamSelection?: t.PeerStreamSelectionHandler;
 };
 
 export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
@@ -30,9 +31,10 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
         <Webrtc.AvatarTray
           peer={edge.network.peer}
           style={styles.avatars}
-          muted={true}
+          muted={false}
           onSelection={(e) => {
             console.info(`⚡️ AvatarTray.onSelection`, e);
+            props.onStreamSelection?.(e);
           }}
         />
         <Webrtc.Connector

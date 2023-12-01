@@ -1,9 +1,10 @@
-import { css, type t } from './common';
 import { Connection } from '../ui.Connection';
+import { COLORS, Color, Webrtc, css, type t } from './common';
 
 export type SampleMiddleProps = {
   left: t.SampleEdge;
   right: t.SampleEdge;
+  stream?: MediaStream;
   style?: t.CssValue;
 };
 
@@ -15,13 +16,37 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({ display: 'grid', gridTemplateRows: '1fr auto' }),
+    base: css({ position: 'relative', display: 'grid', overflow: 'hidden' }),
+    connection: css({ Absolute: [null, 0, 0, 0] }),
+    stream: css({ Absolute: 0 }),
+    mask: css({
+      Absolute: [null, 0, 0, 0],
+      backgroundColor: Color.alpha(COLORS.WHITE, 0.8),
+      height: 76,
+    }),
+    maskDivider: css({
+      Absolute: [-10, 0, null, 0],
+      height: 10,
+      backdropFilter: 'blur(15px)',
+      backgroundColor: Color.alpha(COLORS.WHITE, 0.2),
+    }),
   };
+
+  const elStream = props.stream && (
+    <Webrtc.Video stream={props.stream} muted={true} style={styles.stream} empty={''} />
+  );
+
+  const elMask = elStream && (
+    <div {...styles.mask}>
+      <div {...styles.maskDivider} />
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div></div>
-      <Connection left={left} right={right} />
+      {elStream}
+      {elMask}
+      <Connection left={left} right={right} style={styles.connection} />
     </div>
   );
 };
