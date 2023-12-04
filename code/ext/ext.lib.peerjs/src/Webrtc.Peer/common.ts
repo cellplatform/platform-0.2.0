@@ -2,5 +2,5 @@ export * from '../common';
 export { Is } from '../Webrtc/Is';
 
 export const DEFAULTS = {
-  connectionTimeout: 5000,
+  connectionTimeout: 10000,
 } as const;
