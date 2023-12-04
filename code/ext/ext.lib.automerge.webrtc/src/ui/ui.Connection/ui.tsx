@@ -1,5 +1,5 @@
 import { COLORS, Color, css, type t } from './common';
-import { ApiHandle } from './ui.ApiHandle';
+import { Handle } from './ui.Handle';
 import { usePeerMonitor } from './use.Peer.Monitor';
 import { useTransmitMonitor } from './use.Transmit.Monitor';
 
@@ -62,9 +62,9 @@ export const View: React.FC<t.ConnectionProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ApiHandle edge={'Left'} bytes={left.bytes.total} />
+      <Handle edge={'Left'} bytes={left.bytes.total} />
       {elMiddle}
-      <ApiHandle edge={'Right'} bytes={right.bytes.total} />
+      <Handle edge={'Right'} bytes={right.bytes.total} />
     </div>
   );
 };

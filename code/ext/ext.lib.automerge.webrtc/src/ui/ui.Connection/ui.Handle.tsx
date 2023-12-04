@@ -1,13 +1,13 @@
 import { COLORS, Color, Filesize, Spinner, css, type t } from './common';
 import { useTransmitMonitor } from './use.Transmit.Monitor';
 
-export type ApiHandleProps = {
+export type HandleProps = {
   edge: t.ConnectionEdgeKind;
   bytes?: number;
   style?: t.CssValue;
 };
 
-export const ApiHandle: React.FC<ApiHandleProps> = (props) => {
+export const Handle: React.FC<HandleProps> = (props) => {
   const { edge, bytes = 0 } = props;
   const is = { left: edge === 'Left', right: edge === 'Right' } as const;
   const label = bytes > 0 ? Filesize(bytes) : undefined;
