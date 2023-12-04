@@ -15,10 +15,11 @@ export default Dev.describe(name, async (e) => {
   });
   const ref = RepoList.Ref(model);
 
-  type LocalStore = Pick<t.RepoListProps, 'behaviors'>;
+  type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
   const local = localstore.object({
     behaviors: RepoList.DEFAULTS.behaviors.default,
+    newlabel: RepoList.DEFAULTS.newlabel,
   });
 
   e.it('ui:init', async (e) => {
@@ -27,6 +28,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.behaviors = local.behaviors;
+      d.props.newlabel = local.newlabel;
     });
 
     const events = {
@@ -69,6 +71,13 @@ export default Dev.describe(name, async (e) => {
           }}
         />
       );
+    });
+
+    dev.textbox((txt) => {
+      txt
+        .label((e) => 'insert label ( + )')
+        .value((e) => e.state.props.newlabel)
+        .onChange((e) => e.change((d) => (local.newlabel = d.props.newlabel = e.to.value)));
     });
 
     dev.hr(5, 20);

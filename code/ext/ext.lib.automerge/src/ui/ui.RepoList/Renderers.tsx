@@ -18,7 +18,7 @@ export const Renderers = {
       placeholder(e) {
         const data = Data.item(e.item);
         if (data.mode === 'Add') {
-          return <>{'new document'}</>;
+          return <>{props.newlabel ?? DEFAULTS.newlabel}</>;
         }
         if (data.mode === 'Doc') {
           const style = css({ fontFamily: 'monospace', fontSize: 11 });

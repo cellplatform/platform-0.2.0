@@ -17,6 +17,7 @@ export type RepoListActionCtx = { kind: 'Share' };
 export type RepoListProps = {
   list?: t.RepoListModel;
   behaviors?: t.RepoListBehavior[];
+  newlabel?: string;
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
   style?: t.CssValue;

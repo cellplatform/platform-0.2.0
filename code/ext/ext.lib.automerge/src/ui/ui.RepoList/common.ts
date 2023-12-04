@@ -9,6 +9,7 @@ export { Data, Model } from '../ui.RepoList.Model';
 
 export const DEFAULTS = {
   displayName: 'RepoList',
+  newlabel: 'new database',
   tabIndex: 0,
   behaviors: {
     get all(): t.RepoListBehavior[] {
