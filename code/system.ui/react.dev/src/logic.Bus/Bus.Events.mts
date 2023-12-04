@@ -285,8 +285,8 @@ export function BusEvents(args: {
       const host = await Renderers.host();
       return [...debug, ...host];
     },
-    fire(renderers: string[]) {
-      redraw.fire({ renderers });
+    fire(target: t.DevRedrawTarget, renderers: string[]) {
+      redraw.fire({ renderers, target });
       return renderers;
     },
   } as const;
@@ -299,17 +299,17 @@ export function BusEvents(args: {
       .payload<t.DevRedrawEvent>($, 'sys.dev/redraw')
       .pipe(rx.observeOn(rx.animationFrameScheduler)),
     fire(args) {
-      const { renderers = [], all } = args;
-      if (all || renderers.length > 0) {
+      const { renderers = [], target } = args;
+      if (target || renderers.length > 0) {
         bus.fire({
           type: 'sys.dev/redraw',
-          payload: { instance, renderers, all },
+          payload: { instance, renderers, target },
         });
       }
     },
-    subject: async () => Renderers.fire(await Renderers.subject()),
-    debug: async () => Renderers.fire(await Renderers.debug()),
-    harness: async () => Renderers.fire(await Renderers.harness()),
+    subject: async () => Renderers.fire('subject', await Renderers.subject()),
+    debug: async () => Renderers.fire('debug', await Renderers.debug()),
+    harness: async () => Renderers.fire('harness', await Renderers.harness()),
   };
 
   /**
