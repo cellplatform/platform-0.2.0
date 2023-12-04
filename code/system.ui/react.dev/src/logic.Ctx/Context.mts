@@ -53,7 +53,6 @@ export const Context = {
         if (target === 'subject') await events.redraw.subject();
         if (target === 'harness') await events.redraw.harness();
         if (target === 'debug') await events.redraw.debug();
-        throw new Error(`Redraw target "${target}" not supported`);
       },
 
       async state<T extends O>(initial: T) {
