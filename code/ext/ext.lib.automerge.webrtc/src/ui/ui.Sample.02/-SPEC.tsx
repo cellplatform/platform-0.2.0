@@ -39,8 +39,10 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {});
 
     const monitor = (edge: t.SampleEdge) => {
-      const ephemeral = edge.network.ephemeral.events();
-      ephemeral.changed$.subscribe(() => dev.redraw('debug'));
+      const peer = edge.network.peer.events();
+      const ephemeralDoc = edge.network.ephemeral.events();
+      ephemeralDoc.changed$.subscribe(() => dev.redraw('debug'));
+      peer.cmd.conn$.subscribe((e) => dev.redraw('debug'));
     };
     monitor(left);
     monitor(right);
@@ -57,8 +59,24 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.section('Peers', (dev) => {
-      dev.button('connect', (e) => left.network.peer.connect.data(right.network.peer.id));
-      dev.button('disconnect', (e) => left.network.peer.disconnect());
+      const connect = () => left.network.peer.connect.data(right.network.peer.id);
+      const disconnect = () => left.network.peer.disconnect();
+      const isConnected = () => left.network.peer.current.connections.length > 0;
+
+      dev.button((btn) => {
+        btn
+          .label(() => (isConnected() ? 'connected' : 'connect'))
+          .right((e) => (!isConnected() ? '🌳' : ''))
+          .enabled((e) => !isConnected())
+          .onClick((e) => connect());
+      });
+      dev.button((btn) => {
+        btn
+          .label(() => (isConnected() ? 'disconnect' : 'not connected'))
+          .right((e) => (isConnected() ? '💥' : ''))
+          .enabled((e) => isConnected())
+          .onClick((e) => disconnect());
+      });
     });
 
     dev.hr(5, 20);
