@@ -45,7 +45,7 @@ export default Dev.describe(name, async (e) => {
 
     const monitorPeer = (edge: t.ConnectionEdge) => {
       const peer = edge.network.peer.events();
-      peer.cmd.conn$.subscribe((e) => dev.redraw());
+      peer.cmd.conn$.subscribe((e) => dev.redraw('debug'));
     };
     monitorPeer(left);
     monitorPeer(right);
