@@ -16,6 +16,10 @@ const initial: T = {
 };
 
 export default Dev.describe('Button', (e) => {
+  const tmp = {
+    count: 0,
+  };
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -27,10 +31,6 @@ export default Dev.describe('Button', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'Dev.Button'} data={e.state.props} expand={1} />);
 
     dev.section((dev) => {
       dev
@@ -85,7 +85,7 @@ export default Dev.describe('Button', (e) => {
     dev.section((dev) => {
       dev.button((btn) =>
         btn
-          .label((e) => `"string left"`)
+          .label((e) => `ƒ → "string left" (${tmp.count})`)
           .right((e) => {
             const style = css({
               PaddingX: 10,
@@ -97,6 +97,7 @@ export default Dev.describe('Button', (e) => {
           })
           .onClick((e) => {
             console.log('click');
+            e.redraw();
           }),
       );
 
@@ -139,6 +140,29 @@ export default Dev.describe('Button', (e) => {
           .right('right value')
           .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'spinning'))),
       );
+    });
+
+    dev.hr(5, 15);
+
+    dev.section('Redraw', (dev) => {
+      dev.button('tmp.count ++', (e) => tmp.count++);
+      dev.hr(-1, 5);
+      dev.button('dev.redraw', (e) => dev.redraw());
+      dev.button('dev.redraw( "debug" )', (e) => dev.redraw('debug'));
+      dev.button('dev.redraw( "harness" )', (e) => dev.redraw('harness'));
+      dev.button('dev.redraw( "subject" )', (e) => dev.redraw('subject'));
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = {
+        tmp,
+        props: e.state.props,
+      };
+      return <Dev.Object name={'Dev.Button'} data={data} expand={1} />;
     });
   });
 });
