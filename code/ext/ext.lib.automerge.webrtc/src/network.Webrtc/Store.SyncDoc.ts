@@ -39,7 +39,6 @@ export const SyncDoc = {
      * TODO 🐷
      * - persist / re-use the doc (??)
      */
-
     const doc = await SyncDoc.getOrCreate(store);
     IndexSync.local(index, doc, dispose$);
 
