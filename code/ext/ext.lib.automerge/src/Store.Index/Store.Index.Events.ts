@@ -1,5 +1,7 @@
 import { rx, type t } from './common';
 
+type ChangeType = t.StoreIndexChangeEvent['type'];
+
 /**
  * Factory for the Index events object.
  */
@@ -13,6 +15,13 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
   const doc = index.doc.events(dispose$);
   doc.$.subscribe((e) => $$.next(e));
 
+  const notEphemeral = (doc: t.RepoIndexDoc) => !doc.meta?.ephemeral;
+  const getTotal = (index: t.RepoIndex) => index.docs.filter(notEphemeral).length;
+  const fire = (type: ChangeType, index: number, total: number, item: t.RepoIndexDoc) => {
+    if (!item) return;
+    $$.next({ type, payload: { index, total, item } });
+  };
+
   const docs$ = changed$.pipe(rx.filter((e) => e.patches[0].path[0] === 'docs'));
   docs$
     .pipe(
@@ -21,9 +30,9 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const total = e.patchInfo.after.docs.length;
       const item = e.patchInfo.after.docs[index];
-      if (item) $$.next({ type: 'crdt:store:index/Added', payload: { index, total, item } });
+      const total = getTotal(e.patchInfo.after);
+      fire('crdt:store:index/Added', index, total, item);
     });
 
   docs$
@@ -33,9 +42,9 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const total = e.patchInfo.after.docs.length;
       const item = e.patchInfo.before.docs[index];
-      if (item) $$.next({ type: 'crdt:store:index/Removed', payload: { index, total, item } });
+      const total = getTotal(e.patchInfo.after);
+      fire('crdt:store:index/Removed', index, total, item);
     });
 
   docs$
@@ -45,9 +54,9 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const total = e.patchInfo.after.docs.length;
       const item = e.patchInfo.after.docs[index];
-      if (item) $$.next({ type: 'crdt:store:index/Shared', payload: { index, total, item } });
+      const total = getTotal(e.patchInfo.after);
+      fire('crdt:store:index/Shared', index, total, item);
     });
 
   docs$
@@ -57,9 +66,9 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const total = e.patchInfo.after.docs.length;
       const item = e.patchInfo.after.docs[index];
-      if (item) $$.next({ type: 'crdt:store:index/Renamed', payload: { index, total, item } });
+      const total = getTotal(e.patchInfo.after);
+      fire('crdt:store:index/Renamed', index, total, item);
     });
 
   /**
