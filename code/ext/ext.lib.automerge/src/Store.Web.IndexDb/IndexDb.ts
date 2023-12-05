@@ -77,7 +77,9 @@ export const StoreIndexDb = {
             const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []));
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
-            return Record.put<t.StoreMetaRecord>(table, { dbname, index: doc.uri });
+            const record: t.StoreMetaRecord = { dbname, index: doc.uri };
+            await Record.put(table, record);
+            return record;
           },
 
           async delete(store: t.WebStore) {

@@ -12,8 +12,8 @@ export type StoreIndexEvents = t.Lifecycle & {
 /**
  * Events
  */
-export type StoreIndexEvent =
-  | t.DocEvent<t.RepoIndex>
+export type StoreIndexEvent = t.DocEvent<t.RepoIndex> | StoreIndexChangeEvent;
+export type StoreIndexChangeEvent =
   | StoreIndexAddedEvent
   | StoreIndexRemovedEvent
   | StoreIndexSharedEvent
