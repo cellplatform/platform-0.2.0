@@ -2,9 +2,14 @@ import { IndexedDb, StoreIndexDb } from './common';
 
 export async function deleteDatabase(name: string) {
   const index = StoreIndexDb.name(name);
+  console.info(`💥 DELETING: ${name}...`);
+  console.info(`💥 DELETING: ${index}...`);
+
   await IndexedDb.delete(name);
   await IndexedDb.delete(index);
-  console.info(`🐷 DELETED: ${name} | ${index}`);
+
+  console.info(`🐷 DELETED: ${name}`);
+  console.info(`🐷 DELETED: ${index}`);
 }
 
 /**
