@@ -57,6 +57,13 @@ export default Test.describe('IndexedDb', (e) => {
       expect(res.error).to.eql(undefined);
       expect(res.name).to.eql(name);
     });
+
+    e.it('delete (already deleted)', async (e) => {
+      const res = await IndexedDb.delete(name);
+      expect(res.name).to.eql('dev.test');
+      expect(res.error).to.eql(undefined);
+      await assertDbExists(name, false);
+    });
   });
 
   e.describe('IndexedDb.Database', (e) => {

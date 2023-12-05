@@ -38,26 +38,25 @@ export const IndexedDb = {
   /**
    * Delete the named database.
    */
-  async delete(name: string) {
-    return new Promise<DeleteResponse>(async (resolve) => {
+  async delete(name: string): Promise<DeleteResponse> {
+    return new Promise<DeleteResponse>((resolve) => {
       const done = (error?: string) => resolve({ name, error });
-      const fail = (detail = '') => {
-        const error = `Failed while deleting database '${name}'. ${detail}`.trim();
-        return done(error);
+
+      // Open the database to check if it exists
+      const openReq = indexedDB.open(name);
+      openReq.onsuccess = (e: Event) => {
+        // Close the database before deleting.
+        const db = (e.target as IDBOpenDBRequest).result;
+        db.close();
+
+        // Proceed to delete the database.
+        const deleteReq = indexedDB.deleteDatabase(name);
+        deleteReq.onerror = () => done(`Failed to delete database '${name}'.`);
+        deleteReq.onblocked = () => done(`Deletion of database '${name}' is blocked.`);
+        deleteReq.onsuccess = () => done();
       };
 
-      try {
-        const req = indexedDB.deleteDatabase(name);
-        req.onerror = () => fail();
-        req.onsuccess = (e) => done();
-        req.onblocked = (e) => {
-          const error =
-            `Failed while deleting database '${name}' because it is blocked (open elsewhere)`.trim();
-          return done(error);
-        };
-      } catch (error: any) {
-        done(`Failed while deleting database '${name}'. ${error.message}`.trim());
-      }
+      openReq.onerror = () => done(`Failed to open database '${name}' for deletion.`);
     });
   },
 
