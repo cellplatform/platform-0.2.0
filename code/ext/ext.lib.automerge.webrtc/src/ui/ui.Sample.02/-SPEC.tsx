@@ -1,10 +1,10 @@
 import { WebrtcStore } from '../../network.Webrtc';
 import { Crdt, Dev, Doc, Hash, PropList, TestDb, Webrtc } from '../../test.ui';
 import { type t } from './common';
-import { Restart } from './ui.Restart';
+import { Reload } from './ui.Reload';
 import { Sample } from './ui.Sample';
 
-type T = { debug: { restart?: boolean } };
+type T = { debug: { reload?: boolean } };
 const initial: T = { debug: {} };
 
 const createEdge = async (kind: t.ConnectionEdgeKind) => {
@@ -53,7 +53,7 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.restart) return <Restart />;
+        if (e.state.debug.reload) return <Reload />;
         return <Sample left={left} right={right} />;
       });
   });
@@ -132,13 +132,13 @@ export default Dev.describe(name, async (e) => {
         const purge = (edge: t.SampleEdge) => WebrtcStore.SyncDoc.purge(edge.repo.index);
         purge(left);
         purge(right);
-        e.change((d) => (d.debug.restart = true));
+        e.change((d) => (d.debug.reload = true));
       });
 
       dev.hr(-1, 5);
       dev.button('delete sample databases', async (e) => {
         await TestDb.EdgeSample.deleteDatabases();
-        e.change((d) => (d.debug.restart = true));
+        e.change((d) => (d.debug.reload = true));
       });
     });
   });

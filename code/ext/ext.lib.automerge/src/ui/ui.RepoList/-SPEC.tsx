@@ -1,9 +1,9 @@
 import { RepoList } from '.';
 import { rx, Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.Info';
-import { Restart } from './-SPEC.Restart';
+import { Reload } from './-SPEC.Reload';
 
-type T = { props: t.RepoListProps; debug: { restart?: boolean } };
+type T = { props: t.RepoListProps; debug: { reload?: boolean } };
 const name = RepoList.displayName ?? '';
 const initial: T = { props: {}, debug: {} };
 
@@ -46,7 +46,7 @@ export default Dev.describe(name, async (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.restart) return <Restart />;
+        if (e.state.debug.reload) return <Reload />;
 
         const renderCount: t.RenderCountProps = {
           prefix: 'list.render-',
@@ -132,7 +132,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.restart = true));
+        e.state.change((d) => (d.debug.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
     });
