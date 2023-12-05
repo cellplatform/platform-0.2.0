@@ -1,11 +1,21 @@
 import { WebrtcStore } from '.';
-import { Test, TestDb, Time, WebStore, Webrtc, expect, type t } from '../test.ui';
+import {
+  Test,
+  TestDb,
+  Time,
+  WebStore,
+  Webrtc,
+  expect,
+  expectRoughlySame,
+  type t,
+} from '../test.ui';
 
 type D = { count: number };
 
 export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
-  e.timeout(9999);
+  e.timeout(5000);
 
+  type TParts = Awaited<ReturnType<typeof setup>>;
   const setup = async () => {
     const peer = Webrtc.peer();
     const events = peer.events();
@@ -38,16 +48,23 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
     } as const;
   };
 
-  e.describe('Integration Test (Live Network Sequence)', (e) => {
-    e.it('connect → sync document (webrtc) → count bytes', async (e) => {
-      const wait = (msecs = 400) => Time.wait(msecs);
-      const self = await setup();
+  e.describe('Integration Test (Network Sequence)', (e) => {
+    let self: TParts;
+    let remote: TParts;
+    const wait = (msecs = 500) => Time.wait(msecs);
+
+    e.it('connect peer to network', async (e) => {
+      self = await setup();
       await wait();
-      const remote = await setup();
+      remote = await setup();
       await wait();
+
+      expect(self.network.total.added).to.eql(0);
+      expect(remote.network.total.added).to.eql(0);
 
       const res = await self.peer.connect.data(remote.peer.id);
       expect(res.error).to.eql(undefined);
+
       expect(self.network.total.added).to.eql(1);
       expect(remote.network.total.added).to.eql(1);
 
@@ -58,7 +75,9 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
       expect(remote.fired.added[0].conn.id).to.eql(res.id);
       expect(remote.fired.added[0].peer).to.eql(remote.peer.id);
+    });
 
+    e.it('sync document (webrtc / data)', async (e) => {
       const bytesBefore = {
         self: self.network.total.bytes,
         remote: remote.network.total.bytes,
@@ -108,6 +127,11 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
       expect(self.fired.messages[0].message.type === 'welcome').to.eql(true, 'self message');
       expect(remote.fired.messages[0].message.type === 'arrive').to.eql(true, 'remote message');
     });
+
+    e.it('dispose', (e) => {
+      self.dispose();
+      remote.dispose();
+    });
   });
 
   e.describe('WebrtcStore (Network Manager)', (e) => {
@@ -136,18 +160,3 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
     });
   });
 });
-
-/**
- * Helpers
- */
-function areRoughlySame(left: number, right: number, tolerance: t.Percent): boolean {
-  const average = (left + right) / 2;
-  const difference = Math.abs(left - right);
-  const allowedDifference = average * tolerance;
-  return difference <= allowedDifference;
-}
-
-function expectRoughlySame(left: number, right: number, tolerance: t.Percent, message?: string) {
-  const res = areRoughlySame(left, right, tolerance);
-  expect(res).to.eql(true, message);
-}

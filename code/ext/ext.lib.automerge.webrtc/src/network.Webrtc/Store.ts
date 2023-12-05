@@ -48,14 +48,15 @@ export const WebrtcStore = {
 
       const adapter = new WebrtcNetworkAdapter(conn);
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
-      monitorAdapter({ adapter, fire, dispose$ });
-      await ephemeral.connect(conn);
-
       total.added += 1;
+      monitorAdapter({ adapter, fire, dispose$ });
+
       fire({
         type: 'crdt:webrtc/AdapterAdded',
         payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
       });
+
+      await ephemeral.connect(conn);
     };
 
     /**
