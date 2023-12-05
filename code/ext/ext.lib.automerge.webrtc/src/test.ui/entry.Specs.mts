@@ -7,6 +7,7 @@ export const Specs = {
   'ext.lib.automerge.webrtc.ui.Connection': () => import('../ui/ui.Connection/-SPEC'),
   'ext.lib.automerge.webrtc.ui.Sample.01': () => import('../ui/ui.Sample.01/-SPEC'),
   'ext.lib.automerge.webrtc.ui.Sample.02': () => import('../ui/ui.Sample.02/-SPEC'),
+  'ext.lib.automerge.webrtc.ui.Sample.02.edge': () => import('../ui/ui.Sample.02/-SPEC.edge'),
 };
 
 export default Specs;

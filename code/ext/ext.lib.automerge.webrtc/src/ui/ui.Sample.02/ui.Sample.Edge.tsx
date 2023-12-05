@@ -15,11 +15,7 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
    */
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
-    base: css({
-      backgroundColor: COLORS.WHITE,
-      display: 'grid',
-      gridTemplateRows: '1fr auto',
-    }),
+    base: css({ backgroundColor: COLORS.WHITE, display: 'grid', gridTemplateRows: '1fr auto' }),
     footer: css({ borderTop: border }),
     avatars: css({ padding: 8, borderBottom: border }),
   };

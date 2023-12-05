@@ -4,10 +4,10 @@ import { type t } from './common';
 import { Reload } from './ui.Reload';
 import { Sample } from './ui.Sample';
 
-type T = { debug: { reload?: boolean } };
-const initial: T = { debug: {} };
+type T = { reload?: boolean };
+const initial: T = {};
 
-const createEdge = async (kind: t.ConnectionEdgeKind) => {
+export const createEdge = async (kind: t.ConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Webrtc.peer();
   const store = Crdt.WebStore.init({
@@ -29,12 +29,14 @@ const createEdge = async (kind: t.ConnectionEdgeKind) => {
  */
 const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
-  const left = await createEdge('Left');
-  const right = await createEdge('Right');
+  let left: t.SampleEdge;
+  let right: t.SampleEdge;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    left = await createEdge('Left');
+    right = await createEdge('Right');
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -53,7 +55,7 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <Reload />;
+        if (e.state.reload) return <Reload />;
         return <Sample left={left} right={right} />;
       });
   });
@@ -132,13 +134,13 @@ export default Dev.describe(name, async (e) => {
         const purge = (edge: t.SampleEdge) => WebrtcStore.SyncDoc.purge(edge.repo.index);
         purge(left);
         purge(right);
-        e.change((d) => (d.debug.reload = true));
+        e.change((d) => (d.reload = true));
       });
 
       dev.hr(-1, 5);
-      dev.button('delete sample databases', async (e) => {
+      dev.button(['delete sample databases', '💥'], async (e) => {
         await TestDb.EdgeSample.deleteDatabases();
-        e.change((d) => (d.debug.reload = true));
+        e.change((d) => (d.reload = true));
       });
     });
   });
