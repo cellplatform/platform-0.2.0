@@ -1,7 +1,7 @@
 import { RepoList } from '.';
 import { rx, Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
-import { SpecInfo } from './-SPEC.Info';
-import { Reload } from './-SPEC.Reload';
+import { SpecInfo } from './-SPEC.ui.Info';
+import { Reload } from './-SPEC.ui.Reload';
 
 type T = { props: t.RepoListProps; debug: { reload?: boolean } };
 const name = RepoList.displayName ?? '';
@@ -10,11 +10,9 @@ const initial: T = { props: {}, debug: {} };
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
-  const model = await RepoList.model(store, {
-    onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
-    onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
-  });
-  const ref = RepoList.Ref(model);
+
+  let model: t.RepoListModel;
+  let ref: t.RepoListRef;
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
@@ -26,6 +24,13 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
+    model = await RepoList.model(store, {
+      onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
+      onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
+    });
+    ref = RepoList.Ref(model);
+
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.behaviors = local.behaviors;
