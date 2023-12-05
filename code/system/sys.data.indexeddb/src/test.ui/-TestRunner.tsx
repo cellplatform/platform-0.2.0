@@ -1,9 +1,7 @@
 import { Dev, type t } from '.';
+import { IndexedDb } from '../index.mjs';
 
-type T = {
-  spinning?: boolean;
-  results?: t.TestSuiteRunResponse[];
-};
+type T = { spinning?: boolean; results?: t.TestSuiteRunResponse[] };
 const initial: T = {};
 
 export default Dev.describe('TestRunner', (e) => {
@@ -40,6 +38,12 @@ export default Dev.describe('TestRunner', (e) => {
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
+
+    dev.hr(5, 20);
+
+    dev.button('delete: "dev.test"', async (e) => {
+      await IndexedDb.delete('dev.test');
+    });
   });
 
   e.it('ui:footer', async (e) => {
