@@ -1,4 +1,4 @@
-import { expectError } from './index';
+import { expect, expectError, expectRoughlySame } from '.';
 import { describe, it } from '../test';
 
 describe('expectError', () => {
@@ -18,5 +18,16 @@ describe('expectError', () => {
     await expectError(async () => {
       await expectError(async () => null);
     });
+  });
+});
+
+describe('expectRoughlySame', () => {
+  it('is within tolerance', () => {
+    expectRoughlySame(1, 1.25, 0.3);
+  });
+
+  it('is outside tolerance', () => {
+    const fn = () => expectRoughlySame(1, 1.25, 0.2, 'my error');
+    expect(fn).to.throw(/my error/);
   });
 });
