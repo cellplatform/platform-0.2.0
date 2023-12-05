@@ -1,6 +1,7 @@
-import { Dev, TestDb, Crdt } from '../../test.ui';
-import { createEdge } from './-SPEC';
 import { type t } from './common';
+
+import { Crdt, Dev, TestDb } from '../../test.ui';
+import { createEdge } from './-SPEC';
 import { Reload } from './ui.Reload';
 import { SampleEdge } from './ui.Sample.Edge';
 
