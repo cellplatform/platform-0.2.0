@@ -1,4 +1,4 @@
-import { expect } from './expect.mjs';
+import { expect } from './expect';
 
 /**
  * Checks for an error within an async function.

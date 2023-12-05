@@ -1,1 +1,1 @@
-export * from './expect/index.mjs';
+export * from './expect';

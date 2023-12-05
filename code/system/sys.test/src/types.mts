@@ -1,1 +1,1 @@
-export type { expect, expectError } from './index.mjs';
+export type { expect, expectError } from './expect';
