@@ -10,8 +10,9 @@ export function displayStartupText(text: string): PluginOption {
     config(config, env) {
       console.info(text);
     },
-    handleHotUpdate({ server }) {
+    handleHotUpdate(e) {
       hmrCount++;
+      console.info(text);
     },
   };
 }
