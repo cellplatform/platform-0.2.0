@@ -1,17 +1,17 @@
 /// <reference types="vitest" />
 
+import { type ManualChunksOption } from 'rollup';
 import { fileURLToPath } from 'url';
-import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
-
-import { asArray, fs, pc, R, Util, type t } from './builder/common/index.mjs';
-import { Paths } from './builder/index.mjs';
+import { BuildOptions, LibraryOptions, UserConfig, UserConfigExport, defineConfig } from 'vite';
+import { type InlineConfig as TestConfig } from 'vitest';
 
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
-import type { ManualChunksOption } from 'rollup';
-import type { InlineConfig as TestConfig } from 'vitest';
+import { displayStartupText } from './Config.plugin.displayStartupText.mjs';
+import { R, Util, asArray, fs, pc, type t } from './builder/common/index.mjs';
+import { Paths } from './builder/index.mjs';
 
 /**
  * Common configuration setup.
@@ -54,15 +54,26 @@ export const Config = {
       const external: string[] = [];
       const manualChunks: ManualChunksOption = {};
       const build: BuildOptions = {
-        rollupOptions: { external, output: { manualChunks } },
         manifest: Paths.viteBuildManifest,
         assetsDir: 'lib',
         target: 'esnext',
+        rollupOptions: {
+          external,
+          output: { manualChunks },
+          onwarn(warning, warn) {
+            // Use a string match to suppress specific warnings
+            // Simply return to ignore the warning
+            warn(warning); // ← default warning handler
+          },
+        },
       };
+
+      const title = pc.gray(`module:${pc.white(pc.bold(pkg.name))}:${pkg.version}`);
+      const titlePlugin = e.command === 'serve' ? displayStartupText(title) : undefined;
 
       let config: UserConfig = {
         build,
-        plugins: [topLevelAwait(), wasm()],
+        plugins: [topLevelAwait(), wasm(), titlePlugin],
         worker: {
           format: 'es',
           plugins: () => [topLevelAwait(), wasm()],
