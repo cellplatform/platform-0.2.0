@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.555',
+  version: '0.0.558',
   dependencies: {
     '@automerge/automerge': '2.1.7',
     '@automerge/automerge-repo': '1.0.19',
