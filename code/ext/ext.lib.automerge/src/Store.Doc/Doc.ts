@@ -1,6 +1,7 @@
 import { DocEvents } from './Doc.Events';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, slug, toObject, type t } from './common';
+import { DocPatch as Patch } from './Doc.Patch';
 
 type Uri = t.DocUri | string;
 
@@ -8,6 +9,7 @@ export const Doc = {
   Uri,
   Meta,
   Data,
+  Patch,
   toObject,
 
   /**
