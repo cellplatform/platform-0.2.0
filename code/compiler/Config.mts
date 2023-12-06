@@ -10,7 +10,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
-import type { ManualChunksOption, RollupOptions } from 'rollup';
+import type { ManualChunksOption } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -53,12 +53,8 @@ export const Config = {
        */
       const external: string[] = [];
       const manualChunks: ManualChunksOption = {};
-      const rollupOptions: RollupOptions = {
-        external,
-        output: { manualChunks },
-      };
       const build: BuildOptions = {
-        rollupOptions,
+        rollupOptions: { external, output: { manualChunks } },
         manifest: Paths.viteBuildManifest,
         assetsDir: 'lib',
         target: 'esnext',
