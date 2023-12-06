@@ -13,7 +13,13 @@ export const WebrtcStore = {
   /**
    * Initialize a new network manager.
    */
-  async init(peer: t.PeerModel, store: t.Store, index: t.StoreIndex) {
+  async init(
+    peer: t.PeerModel,
+    store: t.Store,
+    index: t.StoreIndex,
+    options: { label?: string } = {},
+  ) {
+    const { label } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const peerEvents = peer.events(dispose$);
@@ -25,7 +31,7 @@ export const WebrtcStore = {
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
-    const ephemeral = await SyncDoc.init(peer, store, index, fire);
+    const ephemeral = await SyncDoc.init(peer, store, index, { fire, label });
 
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
@@ -66,7 +72,7 @@ export const WebrtcStore = {
       peer,
       store,
       index,
-      ephemeral: ephemeral.doc,
+      ephemeral: ephemeral.doc.local,
 
       $,
       added$,

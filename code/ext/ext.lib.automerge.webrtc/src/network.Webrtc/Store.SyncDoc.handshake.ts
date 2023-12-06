@@ -7,12 +7,12 @@ type TResponse = {
 
 export async function handshake(args: {
   conn: t.DataConnection;
-  doc: t.DocRefHandle<t.WebrtcSyncDoc>;
+  local: t.DocRefHandle<t.WebrtcSyncDoc>;
   peer: t.PeerModel;
   dispose$?: t.UntilObservable;
 }) {
   return new Promise<TResponse>((resolve, reject) => {
-    const { peer, conn, doc } = args;
+    const { peer, conn, local } = args;
     const events = peer.events(args.dispose$);
     const data$ = events.cmd.data$.pipe(rx.map((e) => e.data));
 
@@ -20,8 +20,7 @@ export async function handshake(args: {
       resolve({ doc: { uri }, error });
     };
 
-    const uri = doc.uri;
-    const local = peer.id;
+    const uri = local.uri;
     const remote = conn.peer;
     const id = conn.connectionId;
     const stop = { in$: rx.subject(), out$: rx.subject() } as const;
@@ -30,15 +29,15 @@ export async function handshake(args: {
     const setup$ = rx.payload<t.WebrtcSyncDocSetupEvent>(data$, 'webrtc:ephemeral/setup').pipe(
       rx.takeUntil(stop.in$),
       rx.filter((e) => e.conn.id == id),
-      rx.filter((e) => e.peer.to === local),
+      rx.filter((e) => e.peer.to === peer.id),
     );
 
     const confirmed$ = rx
       .payload<t.WebrtcSyncDocConfirmedEvent>(data$, 'webrtc:ephemeral/confirmed')
       .pipe(
         rx.filter((e) => e.conn.id == id),
-        rx.filter((e) => e.peer.to === local),
-        rx.filter((e) => e.doc.uri === doc.uri),
+        rx.filter((e) => e.peer.to === peer.id),
+        rx.filter((e) => e.doc.uri === local.uri),
       );
 
     confirmed$.subscribe(() => stop.out$.next());
@@ -48,7 +47,7 @@ export async function handshake(args: {
       const id = e.conn.id;
       send({
         type: 'webrtc:ephemeral/confirmed',
-        payload: { doc: { uri }, conn: { id }, peer: { from: local, to: remote } },
+        payload: { doc: { uri }, conn: { id }, peer: { from: peer.id, to: remote } },
       });
       done(uri);
     });
@@ -58,7 +57,7 @@ export async function handshake(args: {
       .subscribe(() => {
         send({
           type: 'webrtc:ephemeral/setup',
-          payload: { conn: { id }, doc: { uri }, peer: { from: local, to: remote } },
+          payload: { conn: { id }, doc: { uri }, peer: { from: peer.id, to: remote } },
         });
       });
   });

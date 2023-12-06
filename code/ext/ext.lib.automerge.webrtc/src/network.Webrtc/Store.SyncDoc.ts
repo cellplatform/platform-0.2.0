@@ -30,8 +30,12 @@ export const SyncDoc = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndex,
-    fire?: (e: t.WebrtcStoreMessageEvent) => void,
+    options: {
+      fire?: (e: t.WebrtcStoreMessageEvent) => void;
+      label?: string;
+    } = {},
   ) {
+    const { fire, label } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
 
@@ -39,8 +43,8 @@ export const SyncDoc = {
      * TODO 🐷
      * - persist / re-use the doc (??)
      */
-    const doc = await SyncDoc.getOrCreate(store);
-    IndexSync.local(index, doc, dispose$);
+    const local = await SyncDoc.getOrCreate(store);
+    IndexSync.local(index, { local }, { label, dispose$ });
 
     /**
      * API
@@ -48,7 +52,7 @@ export const SyncDoc = {
     return {
       store,
       index,
-      doc,
+      doc: { local },
 
       /**
        * Connection handshake that setups up the link to the remote ephemeral doc.
@@ -61,9 +65,9 @@ export const SyncDoc = {
         monitorAdapter({ adapter, fire, dispose$ });
 
         // Perform ephemeral document URI handshake.
-        const res = await handshake({ conn, peer, doc, dispose$ });
+        const res = await handshake({ conn, peer, local, dispose$ });
         const remote = await store.doc.get<t.WebrtcSyncDoc>(res.doc.uri);
-        if (remote) IndexSync.remote(index, remote, dispose$);
+        if (remote) IndexSync.remote(index, { local, remote }, { label, dispose$ });
       },
 
       /**
