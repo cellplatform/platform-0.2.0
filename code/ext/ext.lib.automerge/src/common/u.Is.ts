@@ -1,4 +1,4 @@
-import { isValidAutomergeUrl } from '@automerge/automerge-repo';
+import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Typenames } from './constants';
 import { PatchState } from './libs';
@@ -7,6 +7,18 @@ import type * as t from './t';
 export const Is = {
   automergeUrl(input: any): input is t.AutomergeUrl {
     return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
+  },
+
+  docRef<T>(input: any): input is t.DocRef<T> {
+    if (!isObject(input)) return false;
+    return (
+      Is.automergeUrl(input.uri) &&
+      input.handle instanceof DocHandle &&
+      typeof input.instance === 'string' &&
+      typeof input.change === 'function' &&
+      typeof input.events === 'function' &&
+      typeof input.toObject === 'function'
+    );
   },
 
   store(input: any): input is t.Store {

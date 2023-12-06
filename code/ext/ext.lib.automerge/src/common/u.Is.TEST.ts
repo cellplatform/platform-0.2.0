@@ -20,6 +20,22 @@ export default Test.describe('Is', (e) => {
     storage: new IndexedDBStorageAdapter(TestDb.Unit.name),
   });
 
+  e.it('Is.automergeUrl', (e) => {
+    const store = Store.init();
+    const doc = store.repo.create();
+    expect(Is.automergeUrl(doc.url)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
+  });
+
+  e.it('Is.docRef', async (e) => {
+    type T = { count: number };
+    NON_OBJECTS.forEach((v) => expect(Is.docRef(v)).to.eql(false));
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<T>((d) => (d.count = 0));
+    expect(Is.docRef(doc)).to.eql(true);
+    store.dispose();
+  });
+
   e.it('Is.store', (e) => {
     const store = Store.init();
     expect(Is.store(store)).to.eql(true);
@@ -83,13 +99,6 @@ export default Test.describe('Is', (e) => {
     expect(Is.storageSubsystem(repo1.storageSubsystem)).to.eql(false);
     expect(Is.storageSubsystem(repo2.storageSubsystem)).to.eql(false);
     expect(Is.storageSubsystem(repo3.storageSubsystem)).to.eql(true);
-  });
-
-  e.it('Is.automergeUrl', (e) => {
-    const store = Store.init();
-    const doc = store.repo.create();
-    expect(Is.automergeUrl(doc.url)).to.eql(true);
-    NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
   });
 
   e.it('Is.broadcastChannel (network adapter)', (e) => {
