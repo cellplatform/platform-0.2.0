@@ -10,12 +10,14 @@ export const DocPatch = {
   /**
    * Apply one or more patches to a document.
    */
-  apply<T>(doc: T | t.DocRef<T>, changeset: t.Patch | t.Patch[]): void {
+  apply<T>(doc: T | t.DocRef<T>, changeset: t.Patch | t.Patch[]): T {
     if (Is.docRef(doc)) {
       doc.change((d) => DocPatch.apply(d, changeset));
+      return doc.current;
     } else {
       const items = Array.isArray(changeset) ? changeset : [changeset];
       items.forEach((change) => patch<T>(doc, change));
+      return doc;
     }
   },
 } as const;

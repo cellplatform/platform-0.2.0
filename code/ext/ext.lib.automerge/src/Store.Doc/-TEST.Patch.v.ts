@@ -49,14 +49,16 @@ describe('Doc.Patch', async () => {
       expect(doc1.current).to.eql({ count: 1, msg: 'hello' });
       expect(doc2.current).to.eql({ count: 0 });
 
-      doc2.change((d) => Doc.Patch.apply(d, patches));
+      let res: D | undefined;
+      doc2.change((d) => (res = Doc.Patch.apply(d, patches)));
       expect(doc1.current).to.eql({ count: 1, msg: 'hello' });
       expect(doc2.current).to.eql({ count: 1, msg: 'hello' });
+      expect(res).to.eql({ count: 1, msg: 'hello' });
 
       events.dispose();
     });
 
-    it('pass docRef', async () => {
+    it('pass: docRef<T>', async () => {
       const doc1 = await generator();
       const doc2 = await generator();
       const events = doc1.events();
@@ -71,9 +73,10 @@ describe('Doc.Patch', async () => {
       expect(doc1.current).to.eql({ count: 1, msg: 'hello' });
       expect(doc2.current).to.eql({ count: 0 });
 
-      Doc.Patch.apply(doc2, patches);
+      const res = Doc.Patch.apply(doc2, patches);
       expect(doc1.current).to.eql({ count: 1, msg: 'hello' });
       expect(doc2.current).to.eql({ count: 1, msg: 'hello' });
+      expect(res).to.eql({ count: 1, msg: 'hello' });
 
       events.dispose();
     });
