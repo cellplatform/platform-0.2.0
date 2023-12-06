@@ -75,7 +75,7 @@ export default Dev.describe('Button', (e) => {
       dev.button((btn) => {
         btn
           .label(`right: false`)
-          .right((e) => false && `←`)
+          .right((e) => `←`)
           .onClick((e) => {});
       });
     });

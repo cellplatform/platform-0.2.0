@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 
-import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
@@ -70,7 +69,7 @@ export const Config = {
         plugins: [topLevelAwait(), wasm()],
         worker: {
           format: 'es',
-          plugins: [topLevelAwait(), wasm()],
+          plugins: () => [topLevelAwait(), wasm()],
         },
         optimizeDeps: {
           /**
@@ -165,11 +164,6 @@ export const Config = {
       if (hasPlugin('web:svelte')) {
         const svelte = (await import('@sveltejs/vite-plugin-svelte')).svelte;
         config.plugins?.push(svelte());
-      }
-
-      if (hasPlugin('bundle:visualize')) {
-        const filename = fs.join(Paths.outDir.root, 'bundle.stats.html');
-        config.plugins?.push(visualizer({ filename }));
       }
 
       /**
