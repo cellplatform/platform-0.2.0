@@ -77,7 +77,7 @@ export const SyncDoc = {
   },
 
   /**
-   * Remove all ephemeral documents from the given repo index.
+   * Remove all ephemeral documents from the given repo-index.
    */
   purge(index: t.StoreIndex) {
     const purged: string[] = [];
