@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.peerjs',
   version: '0.0.0',
   dependencies: {
-    'peerjs': '1.5.1',
+    'peerjs': '1.5.2',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',

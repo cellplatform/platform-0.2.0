@@ -6,7 +6,7 @@ type TResponse = {
 };
 
 export async function handshake(args: {
-  conn: t.DataConnection;
+  conn: t.PeerJsConnData;
   local: t.DocRefHandle<t.WebrtcSyncDoc>;
   peer: t.PeerModel;
   dispose$?: t.UntilObservable;

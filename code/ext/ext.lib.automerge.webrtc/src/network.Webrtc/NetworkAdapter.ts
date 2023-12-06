@@ -1,5 +1,3 @@
-import type { DataConnection } from 'peerjs';
-
 import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
 import { Time, rx, type t } from '../common';
 
@@ -13,7 +11,7 @@ const kind: t.StoreNetworkKind = 'WebRTC';
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
  */
 export class WebrtcNetworkAdapter extends NetworkAdapter {
-  #conn: DataConnection;
+  #conn: t.PeerJsConnData;
   #isReady = false;
   #disconnected = rx.subject<void>();
   #message$ = rx.subject<t.WebrtcMessageAlert>();
@@ -21,7 +19,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   readonly message$: t.Observable<t.WebrtcMessageAlert>;
   readonly kind = kind;
 
-  constructor(conn: DataConnection) {
+  constructor(conn: t.PeerJsConnData) {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
     super();
     this.#conn = conn;
@@ -50,19 +48,8 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
         default:
           let payload = message;
           if ('data' in message) payload = { ...message, data: toUint8Array(message.data) };
-
           this.emit('message', payload);
-          // this.#message$.next({ direction: 'Incoming', message });
           this.#alert('Incoming', message);
-
-          //           const payload1 =
-          //             'data' in message ? { ...message, data: toUint8Array(message.data) } : message;
-          //
-          //           if ('data' in message) {
-          //             this.emit('message', { ...message, data: toUint8Array(message.data) });
-          //           } else {
-          //             this.emit('message', message);
-          //           }
           break;
       }
     };

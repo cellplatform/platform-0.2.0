@@ -30,7 +30,7 @@ export type WebrtcStoreAdapterAddedEvent = {
 };
 export type WebrtcStoreAdapterAdded = {
   peer: Id;
-  conn: { id: Id; obj: t.DataConnection };
+  conn: { id: Id; obj: t.PeerJsConnData };
   adapter: t.WebrtcNetworkAdapter;
 };
 

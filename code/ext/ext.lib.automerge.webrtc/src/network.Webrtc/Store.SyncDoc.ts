@@ -57,7 +57,7 @@ export const SyncDoc = {
       /**
        * Connection handshake that setups up the link to the remote ephemeral doc.
        */
-      async connect(conn: t.DataConnection) {
+      async connect(conn: t.PeerJsConnData) {
         const dispose$ = [peer.dispose$, store.dispose$];
 
         // Setup the network adapter.

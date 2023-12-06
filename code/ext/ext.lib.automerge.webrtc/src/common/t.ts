@@ -3,7 +3,6 @@
  */
 export type { next as A } from '@automerge/automerge';
 export type { NetworkAdapter } from '@automerge/automerge-repo';
-export type { DataConnection } from 'peerjs';
 export type { Observable } from 'rxjs';
 
 export type {
@@ -18,7 +17,7 @@ export type {
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
-export type { PeerModel } from 'ext.lib.peerjs/src/types';
+export type { PeerModel, PeerJsConnData } from 'ext.lib.peerjs/src/types';
 
 /**
  * @system
