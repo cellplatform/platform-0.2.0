@@ -98,7 +98,7 @@ export default Dev.describe(name, async (e) => {
           <PropList
             items={[
               { label: 'peer', value: edge.network.peer.id },
-              { label: 'doc/ephemeral', value: Hash.shorten(docid, 6) },
+              { label: 'syncdoc / ephemeral', value: Hash.shorten(docid, 6) },
             ]}
           />
         );
@@ -106,9 +106,9 @@ export default Dev.describe(name, async (e) => {
 
       dev.row((e) => {
         const data = edge.network.ephemeral.toObject();
-        const shared = Object.keys(data.shared).reduce((acc, next) => {
+        const shared = Object.keys(data['index.shared']).reduce((acc, next) => {
           const key = `automerge:${Hash.shorten(Doc.Uri.id(next), 6)}`;
-          (acc as any)[key] = data.shared[next];
+          (acc as any)[key] = data['index.shared'][next];
           return acc;
         }, {});
         return (
@@ -119,16 +119,6 @@ export default Dev.describe(name, async (e) => {
             expand={1}
           />
         );
-      });
-
-      dev.hr(-1, [8, 5]);
-
-      dev.button('tmp: increment', async (e) => {
-        const doc = edge.network.ephemeral;
-        doc.change((d) => {
-          if (typeof d.tmp !== 'number') d.tmp = 0;
-          d.tmp += 1;
-        });
       });
     };
     edgeDebug(left);

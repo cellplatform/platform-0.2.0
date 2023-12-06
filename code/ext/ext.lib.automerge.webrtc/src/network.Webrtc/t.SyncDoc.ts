@@ -4,8 +4,7 @@ import type { t } from './common';
  * An ephemeral
  */
 export type WebrtcSyncDoc = t.DocWithMeta & {
-  shared: WebrtcSyncDocShared;
-  tmp?: number;
+  'index.shared': WebrtcSyncDocShared;
 };
 export type WebrtcSyncDocShared = { [docuri: string]: WebrtcSyncDocSharedRef };
 export type WebrtcSyncDocSharedRef = {

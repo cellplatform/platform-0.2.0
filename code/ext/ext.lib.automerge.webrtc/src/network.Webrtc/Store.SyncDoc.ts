@@ -19,7 +19,7 @@ export const SyncDoc = {
   async getOrCreate(store: t.Store, uri?: string) {
     return store.doc.getOrCreate<t.WebrtcSyncDoc>((d) => {
       Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
-      d.shared = {};
+      d['index.shared'] = {};
     }, uri);
   },
 
