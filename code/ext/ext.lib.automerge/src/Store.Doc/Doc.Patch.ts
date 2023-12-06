@@ -9,7 +9,6 @@ import { type t, Is } from './common';
 export const DocPatch = {
   /**
    * Apply one or more patches to a document.
-   * NOTE: Do this within a [change] mutator function.
    */
   apply<T>(doc: T | t.DocRef<T>, changeset: t.Patch | t.Patch[]): void {
     if (Is.docRef(doc)) {
