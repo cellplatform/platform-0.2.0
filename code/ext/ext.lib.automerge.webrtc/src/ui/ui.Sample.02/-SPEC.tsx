@@ -20,7 +20,8 @@ export const createEdge = async (kind: t.ConnectionEdgeKind) => {
     // onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
   });
 
-  const network = await WebrtcStore.init(peer, store, repo.index);
+  const label = kind;
+  const network = await WebrtcStore.init(peer, store, repo.index, { label });
   const edge: t.SampleEdge = { kind, repo, network };
   return edge;
 };
@@ -118,6 +119,16 @@ export default Dev.describe(name, async (e) => {
             expand={1}
           />
         );
+      });
+
+      dev.hr(-1, [8, 5]);
+
+      dev.button('tmp: increment', async (e) => {
+        const doc = edge.network.ephemeral;
+        doc.change((d) => {
+          if (typeof d.tmp !== 'number') d.tmp = 0;
+          d.tmp += 1;
+        });
       });
     };
     edgeDebug(left);

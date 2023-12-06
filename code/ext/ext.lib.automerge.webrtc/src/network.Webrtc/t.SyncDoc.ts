@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type WebrtcSyncDoc = t.DocWithMeta & {
   shared: WebrtcSyncDocShared;
+  tmp?: number;
 };
 export type WebrtcSyncDocShared = { [docuri: string]: WebrtcSyncDocSharedRef };
 export type WebrtcSyncDocSharedRef = {
