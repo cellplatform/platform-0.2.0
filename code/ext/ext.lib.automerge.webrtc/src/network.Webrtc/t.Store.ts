@@ -7,7 +7,7 @@ export type WebrtcStore = t.Lifecycle & {
   readonly peer: t.PeerModel;
   readonly store: t.Store;
   readonly index: t.StoreIndex;
-  readonly ephemeral: t.DocRefHandle<t.WebrtcSyncDoc>;
+  readonly syncdoc: t.DocRefHandle<t.WebrtcSyncDoc>;
   readonly total: t.WebrtcStoreTotals;
   readonly $: t.Observable<t.WebrtcStoreEvent>;
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;

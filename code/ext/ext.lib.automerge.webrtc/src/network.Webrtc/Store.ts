@@ -72,7 +72,7 @@ export const WebrtcStore = {
       peer,
       store,
       index,
-      ephemeral: syncdoc.doc.local,
+      syncdoc: syncdoc.doc.local,
 
       $,
       added$,

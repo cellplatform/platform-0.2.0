@@ -45,7 +45,7 @@ export default Dev.describe(name, async (e) => {
 
     const monitor = (edge: t.SampleEdge) => {
       const peer = edge.network.peer.events();
-      const ephemeralDoc = edge.network.ephemeral.events();
+      const ephemeralDoc = edge.network.syncdoc.events();
       ephemeralDoc.changed$.subscribe(() => dev.redraw('debug'));
       peer.cmd.conn$.subscribe((e) => dev.redraw('debug'));
     };
@@ -93,7 +93,7 @@ export default Dev.describe(name, async (e) => {
       dev.title(edge.kind);
 
       dev.row((e) => {
-        const docid = Crdt.Uri.id(edge.network.ephemeral.uri);
+        const docid = Crdt.Uri.id(edge.network.syncdoc.uri);
         return (
           <PropList
             items={[
@@ -106,7 +106,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.row((e) => {
         const formatUri = (uri: string) => `automerge:${Hash.shorten(Doc.Uri.id(uri), 4)}`;
-        const data = edge.network.ephemeral.toObject();
+        const data = edge.network.syncdoc.toObject();
         const docs = data.shared.map((uri) => formatUri(uri));
         return (
           <Dev.Object
