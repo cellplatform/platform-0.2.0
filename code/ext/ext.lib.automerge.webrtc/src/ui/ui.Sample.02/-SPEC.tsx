@@ -99,7 +99,7 @@ export default Dev.describe(name, async (e) => {
           <PropList
             items={[
               { label: 'peer', value: edge.network.peer.id },
-              { label: 'syncdoc / ephemeral', value: doc || '-' },
+              { label: 'syncdoc (ephemeral)', value: doc || '(not connected)' },
             ]}
           />
         );
