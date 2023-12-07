@@ -1,7 +1,7 @@
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, rx, type t } from '../test';
 
-type D = { count?: t.A.Counter };
+type D = { count?: t.A.Counter; msg?: string };
 
 describe('Store (base)', async () => {
   const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
@@ -185,11 +185,11 @@ describe('Store (base)', async () => {
       });
     });
 
-    it('changed', async () => {
+    it('changed$', async () => {
       const doc = await generator();
       const events = doc.events();
 
-      let fired: t.DocChanged<D>[] = [];
+      const fired: t.DocChanged<D>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       const increment = () => doc.change((d) => d.count?.increment(1));
@@ -210,6 +210,22 @@ describe('Store (base)', async () => {
       increment();
       increment();
       expect(fired.length).to.eql(1); // NB: no change after dispose.
+    });
+
+    it('changed$: does not fire when value not updated', async () => {
+      const doc = await generator();
+      const events = doc.events();
+
+      const fired: t.DocChanged<D>[] = [];
+      events.changed$.subscribe((e) => fired.push(e));
+
+      doc.change((d) => {}); // NB: no adjustments made
+      expect(fired.length).to.eql(0);
+
+      doc.change((d) => (d.msg = 'foo'));
+      expect(fired.length).to.eql(1);
+
+      events.dispose();
     });
   });
 
