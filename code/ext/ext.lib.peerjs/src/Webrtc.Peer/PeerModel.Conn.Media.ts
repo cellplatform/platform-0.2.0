@@ -1,4 +1,4 @@
-import { DEFAULTS, Is, Time, type t } from './common';
+import { DEFAULTS, WebrtcIs, Time, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
 import { Wrangle } from './u.Wrangle';
@@ -43,7 +43,7 @@ export function manageMediaConnection(args: {
             return resolveError(error);
           }
 
-          const metadata = dispatch.beforeOutgoing(kind, self, remote);
+          const metadata = await dispatch.beforeOutgoing(kind, self, remote);
           const conn = peerjs.call(remote, stream, { metadata });
           state.change((d) => {
             d.connections.push({
@@ -68,7 +68,7 @@ export function manageMediaConnection(args: {
       async incoming(conn: t.PeerJsConnMedia) {
         const metadata = Wrangle.metadata(conn);
 
-        if (!Is.kind.media(metadata.kind)) {
+        if (!WebrtcIs.kind.media(metadata.kind)) {
           const message = `Failed to establish incoming call. Connnection not of type "media".`;
           dispatch.error(message);
           return;
