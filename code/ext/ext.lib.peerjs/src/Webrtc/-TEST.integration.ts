@@ -18,7 +18,7 @@ export default Test.describe('Webrtc → peer connect', (e) => {
     type M = t.PeerConnectMetadata & { foo: number };
     const firedBeforeA: t.PeerModelBeforeOutgoingCmdArgs[] = [];
     eventsA.cmd.beforeOutgoing$.subscribe((e) => {
-      e.metadata<M>((data) => (data.foo = 1234)); // Example usage: adding a shared ephemeral Doc URI.
+      e.metadata<M>(async (data) => (data.foo = 1234)); // Example usage: adding a shared ephemeral Doc URI.
       firedBeforeA.push(e);
     });
 

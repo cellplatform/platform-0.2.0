@@ -137,7 +137,7 @@ export type PeerModelBeforeOutgoingCmdArgs = {
   tx: string;
   kind: PeerConnectionKind;
   peer: { self: Id; remote: Id };
-  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => void | Promise<void>): void;
+  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => any | Promise<any>): void;
 };
 
 export type PeerModelConnectionCmd = {
