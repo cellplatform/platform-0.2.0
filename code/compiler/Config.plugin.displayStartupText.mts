@@ -12,7 +12,6 @@ export function displayStartupText(text: string): PluginOption {
     },
     handleHotUpdate(e) {
       hmrCount++;
-      console.info(text);
     },
   };
 }
