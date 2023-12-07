@@ -49,5 +49,6 @@ export type DocStore = {
  */
 export type DocWithMeta = { '.meta': DocMeta };
 export type DocMeta = {
+  type?: { name: string };
   ephemeral?: boolean;
 };

@@ -48,10 +48,13 @@ describe('Doc.Meta', async () => {
 
   it('get: metadata <Type> extension', () => {
     type T = t.DocMeta & { foo: number };
-    const initial: T = { foo: 123, ephemeral: true };
+    const initial: T = { foo: 123, ephemeral: true, type: { name: 'foo.bar' } };
     const doc = { message: 'hello' };
     const res = Doc.Meta.get(doc, { mutate: true, initial });
     expect(res).to.eql(initial);
     expect((doc as any)[Doc.Meta.key]).to.eql(initial);
+    expect(res.type?.name).to.eql('foo.bar');
+    expect(res.ephemeral).to.eql(true);
+    expect(res.foo).to.eql(123);
   });
 });
