@@ -31,7 +31,7 @@ export const WebrtcStore = {
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
     const fire = (e: t.WebrtcStoreEvent) => subject$.next(e);
-    const ephemeral = await SyncDoc.init(peer, store, index, { fire, label });
+    const syncdoc = await SyncDoc.init(peer, store, index, { fire, label });
 
     const ready$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
@@ -62,7 +62,7 @@ export const WebrtcStore = {
         payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
       });
 
-      await ephemeral.connect(conn);
+      await syncdoc.connect(conn);
     };
 
     /**
@@ -72,7 +72,7 @@ export const WebrtcStore = {
       peer,
       store,
       index,
-      ephemeral: ephemeral.doc.local,
+      ephemeral: syncdoc.doc.local,
 
       $,
       added$,

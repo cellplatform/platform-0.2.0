@@ -29,8 +29,18 @@ export const Remote = {
        */
       if (action.del) {
         //
+      // async ensureItem(uri: string, item: t.WebrtcSyncDocSharedRef) {
+      //   const { shared, name } = item;
+      //   const exists = index.exists(uri);
+      //   if (!exists && shared) {
+      //     await index.add(uri, name);
+      //     Index.updateItem(uri, { shared, name });
+      //   }
+      // },
       }
     });
+      console.log('e.patches', e.patches);
+      console.log(label, 'ACTION/local', action);
   },
 
   /**

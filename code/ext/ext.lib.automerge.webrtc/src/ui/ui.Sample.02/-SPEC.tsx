@@ -98,25 +98,22 @@ export default Dev.describe(name, async (e) => {
           <PropList
             items={[
               { label: 'peer', value: edge.network.peer.id },
-              { label: 'syncdoc / ephemeral', value: Hash.shorten(docid, 6) },
+              { label: 'syncdoc / ephemeral', value: Hash.shorten(docid, [3, 5]) },
             ]}
           />
         );
       });
 
       dev.row((e) => {
+        const formatUri = (uri: string) => `automerge:${Hash.shorten(Doc.Uri.id(uri), 4)}`;
         const data = edge.network.ephemeral.toObject();
-        const shared = Object.keys(data['index.shared']).reduce((acc, next) => {
-          const key = `automerge:${Hash.shorten(Doc.Uri.id(next), 6)}`;
-          (acc as any)[key] = data['index.shared'][next];
-          return acc;
-        }, {});
+        const docs = data.shared.map((uri) => formatUri(uri));
         return (
           <Dev.Object
-            data={{ ...data, shared }}
+            data={{ ...data, docs }}
             style={{ marginTop: 8, marginLeft: 8 }}
             fontSize={11}
-            expand={1}
+            expand={{ level: 1, paths: ['$', '$.docs'] }}
           />
         );
       });

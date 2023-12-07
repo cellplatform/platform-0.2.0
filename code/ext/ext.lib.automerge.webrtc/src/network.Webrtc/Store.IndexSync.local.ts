@@ -1,59 +1,55 @@
 import { Doc, type t } from './common';
 
-export function local(
-  index: t.StoreIndex,
-  doc: t.DocRefHandle<t.WebrtcSyncDoc>,
-  dispose$?: t.UntilObservable,
-) {
-  const events = index.events(dispose$);
-  events.added$.subscribe((e) => Local.item(doc, e.item));
-  events.shared$.subscribe((e) => Local.item(doc, e.item));
-  events.renamed$.subscribe((e) => Local.item(doc, e.item));
-  events.removed$.subscribe((e) => Local.item(doc, e.item, { action: 'remove' }));
-  Local.all(index, doc); // Initial sync.
-}
+type D = t.DocRefHandle<t.WebrtcSyncDoc>;
+type Action = 'remove';
 
 export const Local = {
   /**
    * Manage keeping a local ephemeral network-doc in sync with an repo/index.
    */
-  init(index: t.StoreIndex, doc: t.DocRefHandle<t.WebrtcSyncDoc>, dispose$?: t.UntilObservable) {
-    const events = index.events(dispose$);
-    events.added$.subscribe((e) => Local.item(doc, e.item));
-    events.shared$.subscribe((e) => Local.item(doc, e.item));
-    events.renamed$.subscribe((e) => Local.item(doc, e.item));
-    events.removed$.subscribe((e) => Local.item(doc, e.item, { action: 'remove' }));
-    Local.all(index, doc); // Initial sync.
+  init(
+    index: t.StoreIndex,
+    doc: { local: D },
+    options: { dispose$?: t.UntilObservable; label?: string } = {},
+  ) {
+    const { label, dispose$ } = options;
+    const events = {
+      index: index.events(dispose$),
+      doc: doc.local.events(dispose$),
+    } as const;
+
+    const change = (doc: D, source: t.RepoIndexDoc, action?: Action) => {
+      doc.change((d) => Local.sync(source, d, action));
+    };
+
+    events.index.added$.subscribe((e) => change(doc.local, e.item));
+    events.index.shared$.subscribe((e) => change(doc.local, e.item));
+    events.index.renamed$.subscribe((e) => change(doc.local, e.item));
+    events.index.removed$.subscribe((e) => change(doc.local, e.item, 'remove'));
+    Local.all(index, doc.local); // Initial sync.
   },
 
   /**
    * Sync the entire set of docs within an index.
    */
-  all(index: t.StoreIndex, doc: t.DocRefHandle<t.WebrtcSyncDoc>) {
+  all(index: t.StoreIndex, doc: D) {
     index.doc.current.docs
       .filter((item) => item.shared?.current)
       .filter((item) => !item.meta?.ephemeral)
-      .forEach((item) => Local.item(doc, item));
+      .forEach((item) => doc.change((d) => Local.sync(item, d)));
   },
 
   /**
-   * Update an item from the local [Index] into the shared [SyncDoc] clone.
+   * Update an item from the local [Index] into the ephemeral [SyncDoc] clone.
    */
-  item(
-    doc: t.DocRefHandle<t.WebrtcSyncDoc>,
-    item: t.RepoIndexDoc,
-    options: { action?: 'remove' } = {},
-  ) {
-    const { uri, name } = item;
-    const isShared = !!item.shared?.current;
-    const remove = !isShared || options.action === 'remove';
-    doc.change((d) => {
-      if (remove) {
-        delete d.shared[uri];
-      } else {
-        const item = Doc.Data.ensure(d.shared, uri, {});
-        Doc.Data.assign(item, 'name', name);
-      }
-    });
+  sync(source: t.RepoIndexDoc, target: t.WebrtcSyncDoc, action?: Action) {
+    const shared = !!source.shared?.current;
+    const findIndex = () => target.shared.findIndex((uri) => uri === source.uri);
+    if (!shared || action === 'remove') {
+      const index = findIndex();
+      if (index > -1) Doc.Data.array(target.shared).deleteAt(index);
+    } else if (shared && findIndex() < 0) {
+      target.shared.push(source.uri);
+    }
   },
 } as const;
