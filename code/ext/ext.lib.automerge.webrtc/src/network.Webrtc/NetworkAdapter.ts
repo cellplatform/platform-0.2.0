@@ -13,7 +13,7 @@ const kind: t.StoreNetworkKind = 'WebRTC';
 export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: t.PeerJsConnData;
   #isReady = false;
-  #disconnected = rx.subject<void>();
+  #disconnected$ = rx.subject<void>();
   #message$ = rx.subject<t.WebrtcMessageAlert>();
 
   readonly message$: t.Observable<t.WebrtcMessageAlert>;
@@ -23,7 +23,10 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     if (!conn) throw new Error(`A peerjs data-connection is required`);
     super();
     this.#conn = conn;
-    this.message$ = this.#message$.pipe(rx.takeUntil(this.#disconnected));
+    this.message$ = this.#message$.pipe(
+      rx.takeUntil(this.#disconnected$),
+      rx.filter(() => this.#isReady),
+    );
   }
 
   connect(peerId: PeerId) {
@@ -57,7 +60,9 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     conn.on('open', handleOpen);
     conn.on('close', handleClose);
     conn.on('data', handleData);
-    this.#disconnected.subscribe(() => {
+    this.#disconnected$.subscribe(() => {
+      this.#isReady = false;
+      console.log('DISCONNECTED', this.#isReady);
       conn.off('open', handleOpen);
       conn.off('close', handleClose);
       conn.off('data', handleData);
@@ -72,7 +77,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   }
 
   disconnect() {
-    this.#disconnected.next();
+    this.#disconnected$.next();
   }
 
   send(message: RepoMessage) {
