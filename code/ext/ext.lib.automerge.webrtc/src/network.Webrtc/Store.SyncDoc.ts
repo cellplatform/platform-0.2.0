@@ -1,17 +1,12 @@
 import { Crdt, Doc, rx, type t } from './common';
-
-import { WebrtcNetworkAdapter } from './NetworkAdapter';
-import { IndexSync } from './Store.IndexSync';
-import { handshake } from './Store.SyncDoc.handshake';
-import { Patches } from './Store.SyncDoc.patches';
-import { monitorAdapter } from './u.adapter';
+import { Sync, type Action } from './Store.SyncDoc.Sync';
 
 /**
  * An ephemeral (non-visual) document used to sync
  * index and other shared state over network connections.
  */
 export const SyncDoc = {
-  Patches,
+  Sync,
 
   /**
    * Get or create a SyncDoc from the given store.
@@ -19,7 +14,7 @@ export const SyncDoc = {
   async getOrCreate(store: t.Store, uri?: string) {
     return store.doc.getOrCreate<t.WebrtcSyncDoc>((d) => {
       Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
-      d.shared = [];
+      d.shared = {};
     }, uri);
   },
 
@@ -30,12 +25,9 @@ export const SyncDoc = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndex,
-    options: {
-      fire?: (e: t.WebrtcStoreMessageEvent) => void;
-      label?: string;
-    } = {},
+    options: { label?: string; uri?: string; fire?: (e: t.WebrtcStoreEvent) => void } = {},
   ) {
-    const { fire, label } = options;
+    const { label } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
 
@@ -43,32 +35,31 @@ export const SyncDoc = {
      * TODO 🐷
      * - persist / re-use the doc (??)
      */
-    const local = await SyncDoc.getOrCreate(store);
-    IndexSync.local(index, { local }, { label, dispose$ });
+
+    /**
+     * Setup the CRDT document.
+     */
+    const doc = await SyncDoc.getOrCreate(store, options.uri);
+    const events = doc.events(dispose$);
+    const fireChange = (change: t.DocChanged<t.WebrtcSyncDoc>) => {
+      options.fire?.({ type: 'crdt:webrtc/SyncDoc', payload: { change } });
+    };
+
+    /**
+     * Event Listeners.
+     */
+    events.changed$.subscribe((change) => fireChange(change));
+    SyncDoc.listenToIndex({ index, doc, dispose$, label });
+    Sync.all(index, doc);
 
     /**
      * API
      */
     return {
+      kind: 'SyncDoc',
       store,
       index,
-      doc: { local },
-
-      /**
-       * Connection handshake that setups up the link to the remote ephemeral doc.
-       */
-      async connect(conn: t.PeerJsConnData) {
-        const dispose$ = [peer.dispose$, store.dispose$];
-
-        // Setup the network adapter.
-        const adapter = new WebrtcNetworkAdapter(conn);
-        monitorAdapter({ adapter, fire, dispose$ });
-
-        // Perform ephemeral document URI handshake.
-        const res = await handshake({ conn, peer, local, dispose$ });
-        const remote = await store.doc.get<t.WebrtcSyncDoc>(res.doc.uri);
-        if (remote) IndexSync.remote(index, { local, remote }, { label, dispose$ });
-      },
+      doc,
 
       /**
        * Lifecycle
@@ -96,5 +87,25 @@ export const SyncDoc = {
       }
     });
     return purged;
+  },
+
+  /**
+   * Setup event listener for an [Index] and keep the [SyncDoc] in sync.
+   */
+  listenToIndex(args: {
+    index: t.StoreIndex;
+    doc: t.DocRefHandle<t.WebrtcSyncDoc>;
+    dispose$?: t.UntilObservable;
+    label?: string;
+  }) {
+    const { index, doc, dispose$ } = args;
+    const events = index.events(dispose$);
+    const change = (source: t.RepoIndexDoc, action?: Action) => {
+      doc.change((d) => Sync.doc(source, d, action));
+    };
+    events.added$.subscribe((e) => change(e.item));
+    events.shared$.subscribe((e) => change(e.item));
+    events.renamed$.subscribe((e) => change(e.item));
+    events.removed$.subscribe((e) => change(e.item, 'remove'));
   },
 } as const;

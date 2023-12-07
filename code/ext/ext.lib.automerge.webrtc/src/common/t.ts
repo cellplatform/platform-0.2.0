@@ -17,7 +17,12 @@ export type {
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
-export type { PeerModel, PeerJsConnData } from 'ext.lib.peerjs/src/types';
+export type {
+  PeerConnectDirection,
+  PeerConnectMetadata,
+  PeerJsConnData,
+  PeerModel,
+} from 'ext.lib.peerjs/src/types';
 
 /**
  * @system

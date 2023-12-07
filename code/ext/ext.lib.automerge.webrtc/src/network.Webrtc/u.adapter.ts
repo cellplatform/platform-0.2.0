@@ -5,12 +5,12 @@ export function monitorAdapter(args: {
   dispose$?: t.UntilObservable;
   fire?: (e: t.WebrtcStoreMessageEvent) => void;
 }) {
-  const { fire, dispose$ = rx.subject() } = args;
-  const message$ = args.adapter.message$.pipe(rx.takeUntil(dispose$));
-  message$.subscribe((payload) =>
+  const { adapter, fire } = args;
+  const { dispose$ } = rx.disposable(args.dispose$);
+  adapter.message$.pipe(rx.takeUntil(dispose$)).subscribe((payload) => {
     fire?.({
       type: 'crdt:webrtc/Message',
       payload,
-    }),
-  );
+    });
+  });
 }
