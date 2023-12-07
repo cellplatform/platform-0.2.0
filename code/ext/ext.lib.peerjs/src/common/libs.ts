@@ -8,4 +8,4 @@ export const R = { equals } as const;
  * @system
  */
 export { PatchState } from 'sys.data.json';
-export { Hash, Id, Path, Time, Value, cuid, rx, slug } from 'sys.util';
+export { Hash, Id, Is, Path, Time, Value, cuid, rx, slug } from 'sys.util';

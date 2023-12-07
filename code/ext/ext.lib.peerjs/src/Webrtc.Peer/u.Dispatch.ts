@@ -1,4 +1,4 @@
-import { slug, type t } from './common';
+import { slug, type t, Is } from './common';
 import { Wrangle } from './u.Wrangle';
 
 type Id = string;
@@ -12,9 +12,10 @@ export const Dispatch = {
         const metadata = conn ? (conn?.metadata as t.PeerConnectMetadata) : undefined;
         const kind = metadata?.kind !== 'unknown' ? metadata?.kind : undefined;
         const connection = conn ? Wrangle.dispatchConnection(self, conn) : undefined;
+        const direction = peer.current.connections.find((c) => c.id === connection?.id)?.direction;
         dispatch({
           type: 'Peer:Conn',
-          payload: { tx: slug(), connection, action, kind, error },
+          payload: { tx: slug(), action, direction, connection, kind, error },
         });
       },
 
@@ -32,20 +33,19 @@ export const Dispatch = {
         });
       },
 
-      beforeOutgoing(kind: t.PeerConnectionKind, self: Id, remote: Id) {
-        const metadata: t.PeerConnectMetadata = {
-          kind,
-          userAgent: navigator.userAgent,
-        };
+      async beforeOutgoing(kind: t.PeerConnectionKind, self: Id, remote: Id) {
+        let _res: any;
+        const metadata: t.PeerConnectMetadata = { kind, userAgent: navigator.userAgent };
         dispatch({
           type: 'Peer:Conn/BeforeOutgoing',
           payload: {
             tx: slug(),
             kind,
             peer: { self, remote },
-            metadata: (fn) => fn(metadata as any),
+            metadata: (fn) => (_res = fn(metadata as any)),
           },
         });
+        if (Is.promise(_res)) await _res;
         metadata.kind = kind; // NB: ensure the kind was not manipulated.
         return metadata;
       },

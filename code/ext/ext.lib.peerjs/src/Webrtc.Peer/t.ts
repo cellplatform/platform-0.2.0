@@ -45,7 +45,10 @@ export type PeerConnectionDataKind = 'data';
 export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
 
 export type PeerConnectDirection = 'incoming' | 'outgoing';
-export type PeerConnectMetadata = { kind: PeerConnectionKind | 'unknown'; userAgent: string };
+export type PeerConnectMetadata = {
+  kind: PeerConnectionKind | 'unknown';
+  userAgent: string;
+};
 
 /**
  * Logical API over the peer state.
@@ -134,7 +137,7 @@ export type PeerModelBeforeOutgoingCmdArgs = {
   tx: string;
   kind: PeerConnectionKind;
   peer: { self: Id; remote: Id };
-  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => void): void;
+  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => void | Promise<void>): void;
 };
 
 export type PeerModelConnectionCmd = {
@@ -144,6 +147,7 @@ export type PeerModelConnectionCmd = {
 export type PeerModelConnectionCmdArgs = {
   tx: string;
   action: PeerModelConnAction;
+  direction?: t.PeerConnectDirection;
   connection?: PeerConnectionId;
   kind?: PeerConnectionKind;
   error?: string;
