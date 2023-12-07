@@ -1,5 +1,5 @@
 import { Crdt, Doc, rx, type t } from './common';
-import { Sync, type Action } from './Store.SyncDoc.Sync';
+import { Sync, type Action } from './SyncDoc.Sync';
 
 /**
  * An ephemeral (non-visual) document used to sync
@@ -49,7 +49,7 @@ export const SyncDoc = {
      * Event Listeners.
      */
     events.changed$.subscribe((change) => fireChange(change));
-    SyncDoc.listenToIndex({ index, doc, dispose$, label });
+    SyncDoc.listenToIndex({ index, doc, label, dispose$ });
     Sync.all(index, doc);
 
     /**

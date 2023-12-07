@@ -1,7 +1,7 @@
 import { rx, type t } from './common';
 
 import { WebrtcNetworkAdapter } from './NetworkAdapter';
-import { SyncDoc } from './Store.SyncDoc';
+import { SyncDoc } from './SyncDoc';
 import { monitorAdapter } from './u.adapter';
 
 /**
