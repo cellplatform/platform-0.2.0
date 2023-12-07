@@ -15,4 +15,5 @@ export type * from './ui/ui.RepoList/t';
  */
 export interface AutomergeArray<T> extends Array<T> {
   deleteAt(index: number, total?: number): void;
+  insertAt(index: number, ...items: T[]): void;
 }

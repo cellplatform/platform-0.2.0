@@ -29,6 +29,22 @@ describe('Data', () => {
       assertItems([]);
     });
 
+    it.only('insertAt', async () => {
+      const doc = await generator();
+      doc.change((d) => (d.items = []));
+
+      const assertItems = (value: number[]) => {
+        expect(doc.current.items).to.eql(value);
+      };
+
+      doc.change((d) => Data.array(d.items).insertAt(0, 1));
+      assertItems([1]);
+      doc.change((d) => Data.array(d.items).insertAt(1, 2, 3));
+      assertItems([1, 2, 3]);
+      doc.change((d) => Data.array(d.items).insertAt(1, 99));
+      assertItems([1, 99, 2, 3]);
+    });
+
     it('throw: not an array', () => {
       [true, 123, '', {}, null, undefined].forEach((value: any) => {
         const fn = () => Data.array(value);
