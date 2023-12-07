@@ -17,7 +17,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'viem': '1.19.11',
-    'wagmi': '1.4.8',
+    'wagmi': '1.4.10',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
