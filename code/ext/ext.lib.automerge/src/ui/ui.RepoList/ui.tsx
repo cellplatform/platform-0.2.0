@@ -3,6 +3,7 @@ import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.RepoListProps> = (props) => {
+  const { tabIndex = DEFAULTS.tabIndex } = props;
   const list = Wrangle.listState(props.list);
   const behaviors = Wrangle.listBehaviors(props);
 
@@ -32,7 +33,7 @@ export const View: React.FC<t.RepoListProps> = (props) => {
 
   return (
     <List.Provider>
-      <div ref={List.ref} {...css(styles.base, props.style)}>
+      <div ref={List.ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
         {props.renderCount && <RenderCount {...props.renderCount} />}
         <div>{elements}</div>
       </div>

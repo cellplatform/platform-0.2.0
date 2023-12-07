@@ -19,5 +19,6 @@ export type RepoListProps = {
   behaviors?: t.RepoListBehavior[];
   newlabel?: string;
   renderCount?: t.RenderCountProps;
+  tabIndex?: number;
   style?: t.CssValue;
 };
