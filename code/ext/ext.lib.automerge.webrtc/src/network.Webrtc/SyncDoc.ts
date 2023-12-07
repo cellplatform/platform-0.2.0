@@ -13,7 +13,12 @@ export const SyncDoc = {
    */
   async getOrCreate(store: t.Store, uri?: string) {
     return store.doc.getOrCreate<t.WebrtcSyncDoc>((d) => {
-      Doc.Meta.ensure(d, { ...Doc.Meta.default, ephemeral: true });
+      const initial: t.DocMeta = {
+        ...Doc.Meta.default,
+        type: { name: 'crdt.webrtc.SyncDoc' },
+        ephemeral: true,
+      };
+      Doc.Meta.ensure(d, initial);
       d.shared = {};
     }, uri);
   },

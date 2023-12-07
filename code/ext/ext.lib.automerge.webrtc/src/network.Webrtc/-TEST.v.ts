@@ -1,13 +1,18 @@
 import { SyncDoc } from '.';
-import { Store, describe, expect, it } from '../test';
+import { Doc, Store, describe, expect, it } from '../test';
 
 describe('network.Webrtc', () => {
   describe('SyncDoc', () => {
     it('getOrCreate', async () => {
       const store = Store.init();
       const doc = await SyncDoc.getOrCreate(store);
-      expect(doc.current['.meta'].ephemeral).to.eql(true);
       expect(doc.current.shared).to.eql({});
+      expect(doc.current['.meta'].ephemeral).to.eql(true);
+
+      const meta = Doc.Meta.get(doc.current);
+      expect(meta?.ephemeral).to.eql(true);
+      expect(meta?.type?.name).to.eql('crdt.webrtc.SyncDoc');
+
       store.dispose();
     });
 
