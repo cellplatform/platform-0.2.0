@@ -89,14 +89,14 @@ describe('StoreIndex', async () => {
       const res1 = await index.add({ uri });
       const res2 = await index.add({ uri });
       const res3 = await index.add([{ uri }, { uri }, { uri }]);
-      expect(res1).to.eql(true);
-      expect(res2).to.eql(false); // Already added.
-      expect(res3).to.eql(false); // Already added.
+      expect(res1).to.eql(1);
+      expect(res2).to.eql(0); // Already added.
+      expect(res3).to.eql(0); // Already added.
 
       store.dispose();
     });
 
-    it('adds with name', async () => {
+    it('add (with name)', async () => {
       const { store } = setup();
       const index = await Store.index(store);
       expect(index.doc.current.docs).to.eql([]);
@@ -107,14 +107,14 @@ describe('StoreIndex', async () => {
       const res2 = await index.add({ uri, name: 'foo' });
       const res3 = await index.add({ uri, name: 'bar' }); // NB: no change, already exists.
 
-      expect(res1).to.eql(true);
-      expect(res2).to.eql(false); // Already added.
-      expect(res3).to.eql(false);
+      expect(res1).to.eql(1);
+      expect(res2).to.eql(0); // Already added.
+      expect(res3).to.eql(0);
 
       store.dispose();
     });
 
-    it('add multiple items', async () => {
+    it('add (many)', async () => {
       const { store } = setup();
       const index = await Store.index(store);
       expect(index.doc.current.docs).to.eql([]);
@@ -128,9 +128,9 @@ describe('StoreIndex', async () => {
       const res2 = await index.add([{ uri: A }, { uri: C }]);
       const res3 = await index.add([{ uri: A }, { uri: D }]);
 
-      expect(res1).to.eql(true);
-      expect(res2).to.eql(false); // NB: all specified items already exist.
-      expect(res3).to.eql(true);
+      expect(res1).to.eql(3);
+      expect(res2).to.eql(0); // NB: all specified items already exist.
+      expect(res3).to.eql(1);
 
       const docs = index.doc.current.docs;
       expect(docs[0].uri).to.eql(A);
@@ -138,6 +138,25 @@ describe('StoreIndex', async () => {
       expect(docs[2].uri).to.eql(C);
       expect(docs[2].name).to.eql('foobar');
       expect(docs[3].uri).to.eql(D);
+
+      store.dispose();
+    });
+
+    it('add (does not allow duplicates)', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      expect(index.total()).to.eql(0);
+
+      const A = 'automerge:a';
+      const B = 'automerge:b';
+      const C = 'automerge:c';
+
+      await index.add({ uri: A });
+      await index.add({ uri: A });
+      expect(index.total()).to.eql(1);
+
+      await index.add([{ uri: A }, { uri: B }, { uri: B }, { uri: B }]);
+      expect(index.total()).to.eql(2);
 
       store.dispose();
     });
@@ -162,6 +181,21 @@ describe('StoreIndex', async () => {
       expect(index.exists([A, B, C])).to.eql(false);
       expect(index.exists([C])).to.eql(false);
       expect(index.exists([])).to.eql(false);
+
+      store.dispose();
+    });
+
+    it.skip('remove', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      const A = 'automerge:a';
+      const B = 'automerge:b';
+      const C = 'automerge:c';
+      await index.add([{ uri: A }, { uri: B }, { uri: B }]);
+      expect(index.total()).to.eql(3);
+
+      console.log('index.current', index.doc.current);
 
       store.dispose();
     });

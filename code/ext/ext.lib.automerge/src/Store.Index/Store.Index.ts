@@ -1,9 +1,9 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
-import { Data, Delete, DocUri, Is, type t } from './common';
-import { Wrangle } from './u.Wrangle';
 import { Mutate } from './Store.Index.Mutate';
+import { Data, Delete, DocUri, Is, R, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
@@ -90,16 +90,20 @@ export const StoreIndex = {
         const inputs = (Array.isArray(input) ? input : [input]).filter(Boolean);
         const wait = inputs.map(async (e) => ({ ...e, meta: await wrangle.meta(store, e.uri) }));
         const items = await Promise.all(wait);
-        if (api.exists(inputs.map((e) => e.uri))) return false;
+        if (api.exists(inputs.map((e) => e.uri))) return 0;
 
+        let added = 0;
         api.doc.change((d) => {
-          items
+          const inserts = items
             .filter((e) => !d.docs.some(({ uri }) => e.uri === uri))
-            .map(({ uri, name, meta }) => Delete.undefined({ uri, name, meta }))
-            .forEach((e) => d.docs.push(e));
+            .map(({ uri, name, meta }) => Delete.undefined({ uri, name, meta }));
+
+          const unique = R.uniqBy((e) => e.uri, inserts);
+          unique.forEach((e) => d.docs.push(e));
+          added = unique.length;
         });
 
-        return true;
+        return added;
       },
 
       /**
