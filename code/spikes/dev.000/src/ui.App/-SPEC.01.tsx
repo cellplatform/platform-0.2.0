@@ -43,7 +43,14 @@ export default Dev.describe(name, async (e) => {
       return (
         <Auth.Info
           data={{ provider: Auth.Env.provider }}
-          fields={['Auth.Login', 'Id.User', 'Id.User.Phone', 'Auth.Link.Wallet', 'Wallet.List']}
+          fields={[
+            'Auth.Login',
+            'Id.User',
+            'Id.User.Phone',
+            'Auth.Link.Wallet',
+            'Wallet.List',
+            'Refresh',
+          ]}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
         />
       );
