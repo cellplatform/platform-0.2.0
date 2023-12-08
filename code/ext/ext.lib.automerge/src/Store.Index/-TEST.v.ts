@@ -185,17 +185,37 @@ describe('StoreIndex', async () => {
       store.dispose();
     });
 
-    it.skip('remove', async () => {
+    it('remove', async () => {
       const { store } = setup();
       const index = await Store.index(store);
 
       const A = 'automerge:a';
       const B = 'automerge:b';
       const C = 'automerge:c';
-      await index.add([{ uri: A }, { uri: B }, { uri: B }]);
-      expect(index.total()).to.eql(3);
+      const D = 'automerge:d';
+      await index.add([{ uri: A }, { uri: B }, { uri: C }, { uri: D }]);
+      expect(index.total()).to.eql(4);
 
-      console.log('index.current', index.doc.current);
+      const res1 = await index.remove(A);
+      expect(res1).to.eql(1);
+      expect(index.exists(A)).to.eql(false);
+      expect(index.exists([B, D, C])).to.eql(true);
+
+      const res2 = await index.remove(A); // NB: no longer within index.
+      const res3 = await index.remove([A]);
+      const res4 = await index.remove([]);
+      expect(res2).to.eql(0);
+      expect(res3).to.eql(0);
+      expect(res4).to.eql(0);
+
+      const res5 = await index.remove([D, B]);
+      expect(res5).to.eql(2);
+      expect(index.exists([A, B, D])).to.eql(false);
+      expect(index.exists(C)).to.eql(true);
+
+      const res6 = await index.remove([C, C, C]);
+      expect(res6).to.eql(1);
+      expect(index.total()).to.eql(0);
 
       store.dispose();
     });

@@ -76,6 +76,7 @@ export const StoreIndex = {
 
       /**
        * Determine if a document with the given URI exists in the index.
+       * If an array of URIs is passed, exists means "all URIs exist".
        */
       exists(input) {
         const uris = (Array.isArray(input) ? input : [input]).filter(Boolean);
@@ -109,11 +110,21 @@ export const StoreIndex = {
       /**
        * Remove the given document from the index.
        */
-      async remove(uri) {
-        const index = api.doc.current.docs.findIndex((item) => item.uri === uri);
-        const exists = index > -1;
-        if (exists) doc.change((d) => Data.array(d.docs).deleteAt(index));
-        return exists;
+      async remove(input) {
+        const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
+        let uris = (Array.isArray(input) ? input : [input]).filter(Boolean);
+        uris = uris.filter((uri) => findIndex(uri) > -1);
+        uris = R.uniq(uris);
+
+        const total = uris.length;
+        if (total > 0) {
+          doc.change((d) => {
+            const docs = Data.array(d.docs);
+            uris.forEach((uri) => docs.deleteAt(findIndex(uri)));
+          });
+        }
+
+        return total;
       },
     };
 

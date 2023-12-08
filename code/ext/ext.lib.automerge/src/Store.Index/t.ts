@@ -12,9 +12,9 @@ export type StoreIndex = {
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   total(filter?: t.RepoIndexFilter): number;
-  exists(documentUri: Uri | Uri[]): boolean;
   add(doc: AddSubject | AddSubject[]): Promise<number>;
-  remove(documentUri: Uri): Promise<boolean>;
+  remove(uri: Uri | Uri[]): Promise<number>;
+  exists(uri: Uri | Uri[]): boolean;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };
 
