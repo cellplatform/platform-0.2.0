@@ -2,6 +2,7 @@ import type { t } from './common';
 export type * from './t.Events';
 
 type Uri = t.DocUri | string;
+type AddSubject = { uri: Uri; name?: string };
 
 /**
  * A CRDT that represents an index of a store/repo.
@@ -11,13 +12,11 @@ export type StoreIndex = {
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   total(filter?: t.RepoIndexFilter): number;
-  exists(documentUri: Uri): boolean;
-  add(doc: AddItem): Promise<boolean>;
+  exists(documentUri: Uri | Uri[]): boolean;
+  add(doc: AddSubject | AddSubject[]): Promise<boolean>;
   remove(documentUri: Uri): Promise<boolean>;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };
-
-type AddItem = { uri: Uri; name?: string };
 
 export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;
 export type RepoIndexFilterArgs = { doc: t.RepoIndexDoc; index: number };

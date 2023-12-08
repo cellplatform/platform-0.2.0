@@ -79,7 +79,7 @@ describe('StoreIndex', async () => {
     });
   });
 
-  describe('add / remove', () => {
+  describe('add / remove / exists', () => {
     it('add', async () => {
       const { store } = setup();
       const index = await Store.index(store);
@@ -88,8 +88,10 @@ describe('StoreIndex', async () => {
       const uri = 'automerge:foo';
       const res1 = await index.add({ uri });
       const res2 = await index.add({ uri });
+      const res3 = await index.add([{ uri }, { uri }, { uri }]);
       expect(res1).to.eql(true);
       expect(res2).to.eql(false); // Already added.
+      expect(res3).to.eql(false); // Already added.
 
       store.dispose();
     });
@@ -108,6 +110,58 @@ describe('StoreIndex', async () => {
       expect(res1).to.eql(true);
       expect(res2).to.eql(false); // Already added.
       expect(res3).to.eql(false);
+
+      store.dispose();
+    });
+
+    it('add multiple items', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      expect(index.doc.current.docs).to.eql([]);
+
+      const A = 'automerge:a';
+      const B = 'automerge:b';
+      const C = 'automerge:c';
+      const D = 'automerge:d';
+
+      const res1 = await index.add([{ uri: A }, { uri: B }, { uri: C, name: 'foobar' }]);
+      const res2 = await index.add([{ uri: A }, { uri: C }]);
+      const res3 = await index.add([{ uri: A }, { uri: D }]);
+
+      expect(res1).to.eql(true);
+      expect(res2).to.eql(false); // NB: all specified items already exist.
+      expect(res3).to.eql(true);
+
+      const docs = index.doc.current.docs;
+      expect(docs[0].uri).to.eql(A);
+      expect(docs[1].uri).to.eql(B);
+      expect(docs[2].uri).to.eql(C);
+      expect(docs[2].name).to.eql('foobar');
+      expect(docs[3].uri).to.eql(D);
+
+      store.dispose();
+    });
+
+    it('exists', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      const A = 'automerge:a';
+      const B = 'automerge:b';
+      const C = 'automerge:c';
+
+      expect(index.exists(A)).to.eql(false);
+      expect(index.exists([A, B, C])).to.eql(false);
+
+      await index.add({ uri: A });
+      await index.add({ uri: B });
+
+      expect(index.exists(A)).to.eql(true);
+      expect(index.exists([A, B])).to.eql(true);
+
+      expect(index.exists([A, B, C])).to.eql(false);
+      expect(index.exists([C])).to.eql(false);
+      expect(index.exists([])).to.eql(false);
 
       store.dispose();
     });

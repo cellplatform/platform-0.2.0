@@ -77,18 +77,28 @@ export const StoreIndex = {
       /**
        * Determine if a document with the given URI exists in the index.
        */
-      exists(uri) {
-        return doc.current.docs.some((doc) => doc.uri === uri);
+      exists(input) {
+        const uris = (Array.isArray(input) ? input : [input]).filter(Boolean);
+        if (uris.length === 0) return false;
+        return uris.every((uri) => doc.current.docs.some((doc) => doc.uri === uri));
       },
 
       /**
        * Add a new entry to the index.
        */
-      async add(item) {
-        const { uri, name } = item;
-        const meta = await wrangle.meta(store, uri);
-        if (api.exists(uri)) return false;
-        api.doc.change((d) => d.docs.push(Delete.undefined({ uri, name, meta })));
+      async add(input) {
+        const inputs = (Array.isArray(input) ? input : [input]).filter(Boolean);
+        const wait = inputs.map(async (e) => ({ ...e, meta: await wrangle.meta(store, e.uri) }));
+        const items = await Promise.all(wait);
+        if (api.exists(inputs.map((e) => e.uri))) return false;
+
+        api.doc.change((d) => {
+          items
+            .filter((e) => !d.docs.some(({ uri }) => e.uri === uri))
+            .map(({ uri, name, meta }) => Delete.undefined({ uri, name, meta }))
+            .forEach((e) => d.docs.push(e));
+        });
+
         return true;
       },
 
