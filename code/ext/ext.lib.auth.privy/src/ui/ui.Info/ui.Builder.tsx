@@ -1,8 +1,8 @@
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, Keyboard, Pkg, PropList, useMouse, type t } from './common';
+import { DEFAULTS, rx, Keyboard, Pkg, PropList, useMouse, type t } from './common';
 import { Field } from './field';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
@@ -13,6 +13,9 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     data = DEFAULTS.data,
   } = props;
 
+  const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
+  const refresh$ = refreshRef$.current;
+
   const keyboard = Keyboard.useKeyboardState();
   const mouse = useMouse();
   const privy = usePrivy();
@@ -20,7 +23,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const [ready, setReady] = useState(false);
 
   const [, setRedraw] = useState(0);
-  const redraw = () => setRedraw((prev) => prev + 1);
+  const refresh = () => {
+    setRedraw((prev) => prev + 1);
+    refreshRef$.current.next();
+  };
 
   const modifiers = {
     is: { over: mouse.is.over },
@@ -54,10 +60,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       () => user && Field.linkWallet(privy, data, wallets, fields, enabled),
     )
     .field('Wallet.List', () =>
-      Field.walletsList({ privy, data, wallets, enabled, modifiers, fields }),
+      Field.walletsList({ privy, data, wallets, enabled, modifiers, fields, refresh$ }),
     )
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields }))
-    .field('Refresh', () => Field.refresh({ privy, data, wallets, fields, enabled, redraw }))
+    .field('Refresh', () => Field.refresh({ privy, data, wallets, fields, enabled, refresh }))
     .items(fields);
 
   useEffect(() => {

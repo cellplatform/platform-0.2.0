@@ -9,8 +9,9 @@ export function walletsList(args: {
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
   fields: t.InfoField[];
+  refresh$?: t.Observable<void>;
 }): t.PropListItem[] {
-  const { privy, wallets, modifiers, fields, data } = args;
+  const { privy, wallets, modifiers, fields, data, refresh$ } = args;
   const enabled = privy.ready ? args.enabled : false;
   const showClose = modifiers.is.over && modifiers.keys.alt;
   const chain = Wrangle.chain(data);
@@ -32,6 +33,7 @@ export function walletsList(args: {
           chain={chain}
           enabled={enabled}
           showClose={showClose}
+          refresh$={refresh$}
         />
       );
       return { value };
