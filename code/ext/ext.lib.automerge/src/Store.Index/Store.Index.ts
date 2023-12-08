@@ -116,7 +116,6 @@ export const StoreIndex = {
         });
 
         toggleShared.forEach(({ uri, value }) => api.toggleShared(uri, { value }));
-
         return added;
       },
 
@@ -155,7 +154,6 @@ export const StoreIndex = {
               const item = docs[i];
               const shared = wrangle.shared(item);
               shared.current = typeof options.value === 'boolean' ? options.value : !shared.current;
-              //
               res.push({ uri, shared: shared.current });
             });
           });
