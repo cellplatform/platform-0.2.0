@@ -10,7 +10,7 @@ export const Patches = {
       const uri = first.path[0] === key ? first.path[1] : undefined;
       const value = first.action === 'put' ? first.value : undefined;
 
-      return uri ? { uri, value } : undefined;
+      return uri ? { uri: String(uri), value } : undefined;
     };
     const put = read('put');
     const del = read('del');

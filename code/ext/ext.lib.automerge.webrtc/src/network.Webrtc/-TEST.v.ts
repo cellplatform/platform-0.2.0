@@ -1,5 +1,6 @@
 import { SyncDoc } from '.';
 import { Doc, Store, describe, expect, it, type t } from '../test';
+import { listenToIndex } from './SyncDoc.b.listenToIndex';
 
 describe('network.Webrtc', () => {
   describe('SyncDoc', () => {
@@ -83,7 +84,7 @@ describe('network.Webrtc', () => {
       const index = await Store.index(store);
       const doc = await SyncDoc.getOrCreate(store);
 
-      SyncDoc.listenToIndex({ index, doc });
+      listenToIndex({ index, doc });
       expect(doc.current.shared).to.eql({});
 
       const uri = 'automerge:foo';

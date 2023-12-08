@@ -1,5 +1,8 @@
+import { Patches } from './SyncDoc.Patches';
+import { Sync } from './SyncDoc.Sync';
+import { listenToDoc } from './SyncDoc.b.listenToDoc';
+import { listenToIndex } from './SyncDoc.b.listenToIndex';
 import { Crdt, Doc, rx, type t } from './common';
-import { Sync, type Action } from './SyncDoc.Sync';
 
 /**
  * An ephemeral (non-visual) document used to sync
@@ -7,6 +10,7 @@ import { Sync, type Action } from './SyncDoc.Sync';
  */
 export const SyncDoc = {
   Sync,
+  Patches,
 
   /**
    * Get or create a SyncDoc from the given store.
@@ -30,9 +34,9 @@ export const SyncDoc = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndex,
-    options: { label?: string; uri?: string; fire?: (e: t.WebrtcStoreEvent) => void } = {},
+    options: { debugLabel?: string; uri?: string; fire?: (e: t.WebrtcStoreEvent) => void } = {},
   ) {
-    const { label } = options;
+    const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose$ } = life;
 
@@ -54,7 +58,12 @@ export const SyncDoc = {
      * Event Listeners.
      */
     events.changed$.subscribe((change) => fireChange(change));
-    SyncDoc.listenToIndex({ index, doc, label, dispose$ });
+    listenToIndex({ index, doc, debugLabel, dispose$ });
+    listenToDoc({ index, doc, debugLabel, dispose$ });
+
+    /**
+     * Initialize.
+     */
     Sync.all(index, doc);
 
     /**
@@ -92,25 +101,5 @@ export const SyncDoc = {
       }
     });
     return purged;
-  },
-
-  /**
-   * Setup event listener for an [Index] and keep the [SyncDoc] in sync.
-   */
-  listenToIndex(args: {
-    index: t.StoreIndex;
-    doc: t.DocRefHandle<t.WebrtcSyncDoc>;
-    dispose$?: t.UntilObservable;
-    label?: string;
-  }) {
-    const { index, doc, dispose$ } = args;
-    const events = index.events(dispose$);
-    const change = (source: t.RepoIndexDoc, action?: Action) => {
-      doc.change((d) => Sync.doc(source, d, action));
-    };
-    events.added$.subscribe((e) => change(e.item));
-    events.shared$.subscribe((e) => change(e.item));
-    events.renamed$.subscribe((e) => change(e.item));
-    events.removed$.subscribe((e) => change(e.item, 'remove'));
   },
 } as const;
