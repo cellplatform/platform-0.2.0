@@ -38,7 +38,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Reference', (dev) => {
       const link = (title: string, href: string) => {
-        dev.row((e) => <Link href={href} title={title} />);
+        dev.row((e) => <Link href={href} title={title} style={{ paddingLeft: 8 }} />);
       };
       link('(docs):', URLS.docs);
       link('(repo):', URLS.repo);
