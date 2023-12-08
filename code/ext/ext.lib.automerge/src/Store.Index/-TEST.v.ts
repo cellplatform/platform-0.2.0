@@ -158,8 +158,6 @@ describe('StoreIndex', async () => {
       expect(docs[1].shared?.current).to.eql(false);
       expect(docs[2].shared?.current).to.eql(undefined);
 
-      console.log('docs', docs);
-
       store.dispose();
     });
 
