@@ -1,5 +1,5 @@
 import { SyncDoc } from '.';
-import { Doc, Store, describe, expect, it } from '../test';
+import { Doc, Store, describe, expect, it, type t } from '../test';
 
 describe('network.Webrtc', () => {
   describe('SyncDoc', () => {
@@ -27,6 +27,51 @@ describe('network.Webrtc', () => {
       const res = SyncDoc.purge(index);
       expect(index.total()).to.eql(0);
       expect(res).to.eql([doc.uri]);
+
+      store.dispose();
+    });
+  });
+
+  describe('SyncDoc.Patches', () => {
+    const setup = async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      const doc = await SyncDoc.getOrCreate(store);
+
+      const events = {
+        doc: doc.events(),
+        index: index.events(),
+      } as const;
+
+      const fired: t.DocChanged<t.WebrtcSyncDoc>[] = [];
+      events.doc.changed$.subscribe((e) => fired.push(e));
+
+      return { store, index, doc, events, fired };
+    };
+
+    it('Patches.shared', async () => {
+      const { store, doc, fired } = await setup();
+
+      const uri = 'automerge:foo';
+      doc.change((d) => (d.shared[uri] = true));
+      doc.change((d) => (d.shared[uri] = false));
+      doc.change((d) => delete d.shared[uri]);
+
+      const res1 = SyncDoc.Patches.shared(fired[0]);
+      const res2 = SyncDoc.Patches.shared(fired[1]);
+      const res3 = SyncDoc.Patches.shared(fired[2]);
+
+      expect(res1.put?.uri).to.eql(uri);
+      expect(res1.put?.value).to.eql(true);
+      expect(res1.del).to.eql(undefined);
+
+      expect(res2.put?.uri).to.eql(uri);
+      expect(res2.put?.value).to.eql(false);
+      expect(res2.del).to.eql(undefined);
+
+      expect(res3.put).to.eql(undefined);
+      expect(res3.del?.uri).to.eql(uri);
+      expect(res3.del?.value).to.eql(undefined);
 
       store.dispose();
     });
@@ -69,9 +114,8 @@ describe('network.Webrtc', () => {
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 2, { value: true }));
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 3, { value: true }));
 
-      SyncDoc.Sync.all(index, doc);
-
       // Ensure the syncer updated the doc.
+      SyncDoc.Sync.all(index, doc);
       const shared = doc.current.shared;
       expect(shared['automerge:a']).to.eql(undefined);
       expect(shared['automerge:b']).to.eql(true);
