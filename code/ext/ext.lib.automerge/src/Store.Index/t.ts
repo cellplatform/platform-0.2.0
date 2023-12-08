@@ -12,10 +12,12 @@ export type StoreIndex = {
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   total(filter?: t.RepoIndexFilter): number;
   exists(documentUri: Uri): boolean;
-  add(documentUri: Uri, name?: string): Promise<boolean>;
+  add(doc: AddItem): Promise<boolean>;
   remove(documentUri: Uri): Promise<boolean>;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
 };
+
+type AddItem = { uri: Uri; name?: string };
 
 export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;
 export type RepoIndexFilterArgs = { doc: t.RepoIndexDoc; index: number };

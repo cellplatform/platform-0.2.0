@@ -86,8 +86,8 @@ describe('StoreIndex', async () => {
       expect(index.doc.current.docs).to.eql([]);
 
       const uri = 'automerge:foo';
-      const res1 = await index.add(uri);
-      const res2 = await index.add(uri);
+      const res1 = await index.add({ uri });
+      const res2 = await index.add({ uri });
       expect(res1).to.eql(true);
       expect(res2).to.eql(false); // Already added.
 
@@ -100,10 +100,10 @@ describe('StoreIndex', async () => {
       expect(index.doc.current.docs).to.eql([]);
 
       const uri = 'automerge:foo';
-      const res1 = await index.add(uri, 'foo');
+      const res1 = await index.add({ uri, name: 'foo' });
       expect(index.doc.current.docs[0].name).to.eql('foo');
-      const res2 = await index.add(uri, 'foo');
-      const res3 = await index.add(uri, 'bar'); // NB: no change, already exists.
+      const res2 = await index.add({ uri, name: 'foo' });
+      const res3 = await index.add({ uri, name: 'bar' }); // NB: no change, already exists.
 
       expect(res1).to.eql(true);
       expect(res2).to.eql(false); // Already added.
@@ -231,7 +231,7 @@ describe('StoreIndex', async () => {
         const fired: t.DocChanged<t.RepoIndex>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
 
-        await index.add('automerge:foobar');
+        await index.add({ uri: 'automerge:foobar' });
         expect(fired.length).to.eql(1);
         expect(fired[0].doc.docs[0].uri).to.eql('automerge:foobar');
 
@@ -243,8 +243,8 @@ describe('StoreIndex', async () => {
         const fired: t.StoreIndexItem[] = [];
         events.added$.subscribe((e) => fired.push(e));
 
-        await index.add('automerge:foo');
-        await index.add('automerge:bar');
+        await index.add({ uri: 'automerge:foo' });
+        await index.add({ uri: 'automerge:bar' });
 
         expect(fired.length).to.eql(2);
         expect(fired[0].index).to.eql(0);
@@ -262,8 +262,8 @@ describe('StoreIndex', async () => {
         const fired: t.StoreIndexItem[] = [];
         events.removed$.subscribe((e) => fired.push(e));
 
-        await index.add('automerge:foo');
-        await index.add('automerge:bar');
+        await index.add({ uri: 'automerge:foo' });
+        await index.add({ uri: 'automerge:bar' });
         await index.remove('automerge:bar');
 
         expect(fired.length).to.eql(1);
@@ -279,7 +279,7 @@ describe('StoreIndex', async () => {
         const fired: t.StoreIndexItem[] = [];
         events.shared$.subscribe((e) => fired.push(e));
 
-        await index.add('automerge:foo');
+        await index.add({ uri: 'automerge:foo' });
         const item = () => index.doc.current.docs[0];
         expect(item().uri).to.eql('automerge:foo');
         expect(item().shared).to.eql(undefined);
@@ -305,7 +305,7 @@ describe('StoreIndex', async () => {
         const fired: t.StoreIndexItem[] = [];
         events.renamed$.subscribe((e) => fired.push(e));
 
-        await index.add('automerge:foo');
+        await index.add({ uri: 'automerge:foo' });
         const item = () => index.doc.current.docs[0];
         expect(item().uri).to.eql('automerge:foo');
         expect(item().name).to.eql(undefined);

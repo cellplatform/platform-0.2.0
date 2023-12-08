@@ -35,7 +35,8 @@ export const StoreIndex = {
      */
     const onDocument = async (payload: DocumentPayload) => {
       if (!payload.isNew) return;
-      await api.add(payload.handle.url);
+      const uri = payload.handle.url;
+      await api.add({ uri });
     };
 
     const onDeleteDocument = async (payload: DeleteDocumentPayload) => {
@@ -76,14 +77,15 @@ export const StoreIndex = {
       /**
        * Determine if a document with the given URI exists in the index.
        */
-      exists(uri: Uri) {
+      exists(uri) {
         return doc.current.docs.some((doc) => doc.uri === uri);
       },
 
       /**
        * Add a new entry to the index.
        */
-      async add(uri: Uri, name) {
+      async add(item) {
+        const { uri, name } = item;
         const meta = await wrangle.meta(store, uri);
         if (api.exists(uri)) return false;
         api.doc.change((d) => d.docs.push(Delete.undefined({ uri, name, meta })));
@@ -93,7 +95,7 @@ export const StoreIndex = {
       /**
        * Remove the given document from the index.
        */
-      async remove(uri: Uri) {
+      async remove(uri) {
         const index = api.doc.current.docs.findIndex((item) => item.uri === uri);
         const exists = index > -1;
         if (exists) doc.change((d) => Data.array(d.docs).deleteAt(index));
