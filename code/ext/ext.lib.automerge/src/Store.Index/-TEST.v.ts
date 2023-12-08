@@ -79,7 +79,7 @@ describe('StoreIndex', async () => {
     });
   });
 
-  describe('add / remove / exists', () => {
+  describe('methods: add / remove / exists', () => {
     it('add', async () => {
       const { store } = setup();
       const index = await Store.index(store);
@@ -276,6 +276,84 @@ describe('StoreIndex', async () => {
       expect(index.doc.current.docs).to.eql([]);
       expect(index.total()).to.eql(0);
       expect(index.exists(sample.uri)).to.eql(false);
+
+      store.dispose();
+    });
+  });
+
+  describe('method: toggleShared', () => {
+    const A = 'automerge:a';
+    const B = 'automerge:b';
+    const C = 'automerge:c';
+
+    it('single', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      const getDoc = (i: number) => index.doc.current.docs[i];
+      const getCurrent = (i: number) => getDoc(i).shared?.current;
+
+      await index.add([{ uri: A }, { uri: B }]);
+
+      let docs = index.doc.current.docs;
+      expect(docs[0].shared).to.eql(undefined);
+      expect(docs[1].shared).to.eql(undefined);
+
+      const res1 = index.toggleShared(A);
+      expect(getCurrent(0)).to.eql(true);
+      expect(res1).to.eql([{ uri: A, shared: true }]);
+
+      const res2 = index.toggleShared(A);
+      expect(getCurrent(0)).to.eql(false);
+      expect(res2).to.eql([{ uri: A, shared: false }]);
+
+      index.toggleShared(A, { value: true });
+      expect(getCurrent(0)).to.eql(true);
+      index.toggleShared(A, { value: true });
+      expect(getCurrent(0)).to.eql(true);
+
+      store.dispose();
+    });
+
+    it('multiple', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      const getDoc = (i: number) => index.doc.current.docs[i];
+      const getCurrent = (i: number) => getDoc(i).shared?.current;
+
+      await index.add([{ uri: A }, { uri: B }]);
+
+      const res1 = index.toggleShared([A]);
+      expect(getCurrent(0)).to.eql(true);
+      expect(getCurrent(1)).to.eql(undefined);
+
+      const res2 = index.toggleShared([B, A]);
+      expect(getCurrent(0)).to.eql(false);
+      expect(getCurrent(1)).to.eql(true);
+
+      const res3 = index.toggleShared([C, A]); // NB: "C" not within index.
+      expect(getCurrent(0)).to.eql(true);
+      expect(getCurrent(1)).to.eql(true); // NB: no change
+
+      expect(res1).to.eql([{ uri: A, shared: true }]);
+      expect(res2).to.eql([
+        { uri: B, shared: true },
+        { uri: A, shared: false },
+      ]);
+      expect(res3).to.eql([{ uri: A, shared: true }]);
+
+      store.dispose();
+    });
+
+    it('does nothing when document does not exist', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      const res1 = index.toggleShared(A);
+      const res2 = index.toggleShared([A, B, C]);
+      const res3 = index.toggleShared([]);
+      expect(res1).to.eql([]);
+      expect(res2).to.eql([]);
+      expect(res3).to.eql([]);
 
       store.dispose();
     });

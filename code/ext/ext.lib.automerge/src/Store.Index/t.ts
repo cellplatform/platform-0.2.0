@@ -1,7 +1,8 @@
 import type { t } from './common';
 export type * from './t.Events';
 
-type Uri = t.DocUri | string;
+type Uri = string;
+type UriInput = Uri | Uri[];
 type AddSubject = { uri: Uri; name?: string };
 
 /**
@@ -12,10 +13,11 @@ export type StoreIndex = {
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
-  exists(uri: Uri | Uri[]): boolean;
+  exists(uri: UriInput): boolean;
   total(filter?: t.RepoIndexFilter): number;
   add(doc: AddSubject | AddSubject[]): Promise<number>;
-  remove(uri: Uri | Uri[]): number;
+  remove(uri: UriInput): number;
+  toggleShared(uri: UriInput, options?: { value?: boolean }): { uri: Uri; shared: boolean }[];
 };
 
 export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;

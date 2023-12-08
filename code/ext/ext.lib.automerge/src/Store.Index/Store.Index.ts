@@ -6,7 +6,8 @@ import { Data, Delete, DocUri, Is, R, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | string;
+type Uri = string;
+type UriInput = Uri | Uri[];
 
 /**
  * Manages an index of documents within a repository.
@@ -23,6 +24,7 @@ export const StoreIndex = {
     const { uri } = options;
     const repo = store.repo;
     const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
+    const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
 
     if (!Is.repoIndex(doc.current)) {
       const name = wrangle.storeName(store);
@@ -111,20 +113,44 @@ export const StoreIndex = {
        * Remove the given document from the index.
        */
       remove(input) {
-        const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
-        let uris = (Array.isArray(input) ? input : [input]).filter(Boolean);
-        uris = uris.filter((uri) => findIndex(uri) > -1);
+        let uris = wrangle.uris(input);
         uris = R.uniq(uris);
-
-        const total = uris.length;
-        if (total > 0) {
+        uris = uris.filter((uri) => findIndex(uri) > -1);
+        if (uris.length > 0) {
           doc.change((d) => {
             const docs = Data.array(d.docs);
             uris.forEach((uri) => docs.deleteAt(findIndex(uri)));
           });
         }
+        return uris.length;
+      },
 
-        return total;
+      /**
+       * Toggles the shared state of the given URI(s).
+       */
+      toggleShared(input, options = {}) {
+        type T = ReturnType<t.StoreIndex['toggleShared']>[number];
+        const res: T[] = [];
+
+        let uris = wrangle.uris(input);
+        uris = R.uniq(uris);
+        uris = uris.filter((uri) => findIndex(uri) > -1);
+
+        if (uris.length > 0) {
+          doc.change((d) => {
+            const docs = Data.array(d.docs);
+            uris.forEach((uri) => {
+              const i = findIndex(uri);
+              const item = docs[i];
+              const shared = wrangle.shared(item);
+              shared.current = typeof options.value === 'boolean' ? options.value : !shared.current;
+              //
+              res.push({ uri, shared: shared.current });
+            });
+          });
+        }
+
+        return res;
       },
     };
 
@@ -136,6 +162,11 @@ export const StoreIndex = {
  * Helpers
  */
 const wrangle = {
+  uris(input: UriInput) {
+    input = !input ? [] : input;
+    return (Array.isArray(input) ? input : [input]).filter(Boolean);
+  },
+
   storeName(store: t.Store) {
     const name = Is.webStore(store) ? store.info.storage?.name : '';
     return name || 'Unknown';
