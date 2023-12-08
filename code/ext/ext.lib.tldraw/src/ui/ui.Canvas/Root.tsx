@@ -2,17 +2,17 @@ import '@tldraw/tldraw/tldraw.css';
 
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { CanvasConfig } from './ui.Canvas.Config';
+import { Config } from './ui.Config';
 
 /**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  Config: typeof CanvasConfig;
+  Config: typeof Config;
 };
 export const Canvas = FC.decorate<t.CanvasProps, Fields>(
   View,
-  { DEFAULTS, Config: CanvasConfig },
+  { DEFAULTS, Config: Config },
   { displayName: 'Canvas' },
 );

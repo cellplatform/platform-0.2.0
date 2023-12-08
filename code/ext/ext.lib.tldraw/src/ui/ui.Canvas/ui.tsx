@@ -17,7 +17,11 @@ export const View: React.FC<t.CanvasProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Tldraw />
+      <Tldraw
+        onMount={(e) => {
+          console.log('onMount', e);
+        }}
+      />
     </div>
   );
 };

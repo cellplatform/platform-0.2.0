@@ -1,6 +1,6 @@
 import { DEFAULTS, PropList, type t } from './common';
 
-export const CanvasConfig: React.FC<t.CanvasConfigProps> = (props) => {
+export const Config: React.FC<t.CanvasConfigProps> = (props) => {
   const { title = 'Configuration' } = props;
   return (
     <PropList.FieldSelector

@@ -13,7 +13,7 @@ const URLS = {
 /**
  * Spec
  */
-const name = 'Sample.01';
+const name = 'Canvas';
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<t.CanvasProps, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
