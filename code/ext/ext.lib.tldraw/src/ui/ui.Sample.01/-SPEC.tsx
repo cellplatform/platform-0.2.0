@@ -6,6 +6,8 @@ const initial: T = { props: {} };
 
 /**
  * Spec
+ * https://tldraw.dev
+ * https://github.com/tldraw/tldraw?tab=readme-ov-file
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {

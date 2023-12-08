@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { Tldraw } from '@tldraw/tldraw';
+import '@tldraw/tldraw/tldraw.css';
+
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 export type SampleProps = {
@@ -11,13 +14,15 @@ export const Sample: React.FC<SampleProps> = (props) => {
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      position: 'relative',
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 Sample`}</div>
+      <Tldraw />
     </div>
   );
 };

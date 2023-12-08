@@ -25,6 +25,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.peerjs': '0.0.0',
     'ext.lib.protocol.hats': '0.0.0',
     'ext.lib.stripe': '0.0.0',
+    'ext.lib.tldraw': '0.0.0',
     'ext.lib.vimeo': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
