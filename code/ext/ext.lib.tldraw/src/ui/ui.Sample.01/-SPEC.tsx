@@ -1,13 +1,17 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev } from '../../test.ui';
+import { Link } from './-SPEC.ui.Link';
 import { Sample, type SampleProps } from './-SPEC.ui.Sample';
 
 type T = { props: SampleProps };
 const initial: T = { props: {} };
 
+const URLS = {
+  docs: 'https://tldraw.dev',
+  repo: 'https://github.com/tldraw/tldraw?tab=readme-ov-file',
+} as const;
+
 /**
  * Spec
- * https://tldraw.dev
- * https://github.com/tldraw/tldraw?tab=readme-ov-file
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
@@ -31,7 +35,14 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
+
+    dev.section('Reference', (dev) => {
+      const link = (title: string, href: string) => {
+        dev.row((e) => <Link href={href} title={title} />);
+      };
+      link('(docs):', URLS.docs);
+      link('(repo):', URLS.repo);
+    });
   });
 
   e.it('ui:footer', async (e) => {
