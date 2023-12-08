@@ -6,8 +6,7 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'Sample';
-
+const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

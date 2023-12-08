@@ -1,13 +1,13 @@
 import { Dev, type t } from '../../test.ui';
+import { Sample, type SampleProps } from './-SPEC.ui.Sample';
 
-type T = {};
-const initial: T = {};
+type T = { props: SampleProps };
+const initial: T = { props: {} };
 
 /**
  * Spec
  */
-const name = 'Sample';
-
+const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -19,10 +19,10 @@ export default Dev.describe(name, (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        return <Sample {...e.state.props} />;
       });
   });
 
