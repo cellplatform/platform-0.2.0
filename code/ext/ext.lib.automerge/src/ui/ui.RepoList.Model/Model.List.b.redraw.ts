@@ -1,6 +1,5 @@
-import { Time, type t } from './common';
+import { type t } from './common';
 import { Wrangle } from './u.Wrangle';
-import { Data } from './Data';
 
 /**
  * Behavior that monitors the index looking for redraw ques.
@@ -10,9 +9,9 @@ export function listRedrawBehavior(args: { ctx: t.RepoListCtxGet; array: t.RepoA
   const events = index.events(dispose$);
 
   /**
-   * REDRAW: on renames within the underlying [Index] model.
+   * Redraw on renames within the underlying [Index] model.
    */
-  events.renamed$.pipe().subscribe((e) => {
+  events.renamed$.subscribe((e) => {
     const { name, uri } = e.item;
     const { item, index } = wrangle.itemFromUri(args.ctx, uri);
     if (item && item.current.label !== name) {
@@ -21,6 +20,18 @@ export function listRedrawBehavior(args: { ctx: t.RepoListCtxGet; array: t.RepoA
     }
   });
 
+  /**
+   * Redraw on share change.
+   */
+  events.shared$.subscribe((e) => {
+    const { uri } = e.item;
+    const { item, index } = wrangle.itemFromUri(args.ctx, uri);
+    if (item) list.dispatch.redraw(index);
+  });
+
+  /**
+   * Adjust list length on removal.
+   */
   events.removed$.subscribe((e) => {
     const { uri } = e.item;
     const arrayIndex = wrangle.arrayIndex(args.array, uri);
