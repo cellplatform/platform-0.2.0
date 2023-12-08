@@ -20,8 +20,7 @@ export const createEdge = async (kind: t.ConnectionEdgeKind) => {
     // onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
   });
 
-  const label = kind;
-  const network = await WebrtcStore.init(peer, store, repo.index, { label });
+  const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
   const edge: t.SampleEdge = { kind, repo, network };
   return edge;
 };

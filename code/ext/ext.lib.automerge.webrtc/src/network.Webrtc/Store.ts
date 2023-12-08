@@ -17,9 +17,9 @@ export const WebrtcStore = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndex,
-    options: { label?: string } = {},
+    options: { debugLabel?: string } = {},
   ) {
-    const { label } = options;
+    const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const peerEvents = peer.events(dispose$);
@@ -39,7 +39,8 @@ export const WebrtcStore = {
     let syncdoc: TSyncDoc | undefined;
     peerEvents.cmd.beforeOutgoing$.subscribe((e) => {
       e.metadata<t.WebrtcStoreConnectMetadata>(async (data) => {
-        if (!syncdoc) syncdoc = await SyncDoc.init(peer, store, index, { label, fire });
+        console.log('BEFORE CONNECT (OUT)', debugLabel);
+        if (!syncdoc) syncdoc = await SyncDoc.init(peer, store, index, { debugLabel, fire });
         data.syncdoc = syncdoc.doc.uri;
       });
     });
@@ -94,11 +95,11 @@ export const WebrtcStore = {
       /**
        * Setup sync-doc.
        */
-      if ((direction = 'incoming')) {
+      if (direction === 'incoming') {
         const metadata = conn.metadata as t.WebrtcStoreConnectMetadata;
         if (metadata.syncdoc) {
           const uri = metadata.syncdoc;
-          syncdoc = await SyncDoc.init(peer, store, index, { uri, label, fire });
+          syncdoc = await SyncDoc.init(peer, store, index, { uri, debugLabel, fire });
         }
       }
     };

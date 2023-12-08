@@ -16,7 +16,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
   e.timeout(5000);
 
   type TParts = Awaited<ReturnType<typeof setup>>;
-  const setup = async (label?: string) => {
+  const setup = async (debugLabel?: string) => {
     const peer = Webrtc.peer();
     const events = peer.events();
     const storage = TestDb.Unit.name;
@@ -24,7 +24,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
     const generator = store.doc.factory<D>((d) => (d.count = 0));
 
     const index = await WebStore.index(store);
-    const network = await WebrtcStore.init(peer, store, index, { label });
+    const network = await WebrtcStore.init(peer, store, index, { debugLabel });
 
     const added: t.WebrtcStoreAdapterAdded[] = [];
     const messages: t.WebrtcMessageAlert[] = [];
