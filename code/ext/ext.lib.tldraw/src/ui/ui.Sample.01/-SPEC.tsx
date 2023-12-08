@@ -1,8 +1,8 @@
-import { Dev } from '../../test.ui';
+import { Canvas } from '.';
+import { Dev, Pkg, type t } from '../../test.ui';
 import { Link } from './-SPEC.ui.Link';
-import { Sample, type SampleProps } from './-SPEC.ui.Sample';
 
-type T = { props: SampleProps };
+type T = { props: t.CanvasProps };
 const initial: T = { props: {} };
 
 const URLS = {
@@ -15,12 +15,20 @@ const URLS = {
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<t.CanvasProps, 'behaviors'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    behaviors: Canvas.DEFAULTS.behaviors.default,
+  });
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.props.behaviors = local.behaviors;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -28,7 +36,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Sample {...e.state.props} />;
+        return <Canvas {...e.state.props} />;
       });
   });
 
@@ -42,6 +50,20 @@ export default Dev.describe(name, (e) => {
       };
       link('(docs):', URLS.docs);
       link('(repo):', URLS.repo);
+    });
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return (
+        <Canvas.Config
+          selected={e.state.props.behaviors}
+          onChange={(e) => {
+            state.change((d) => (d.props.behaviors = e.next));
+            local.behaviors = e.next;
+          }}
+        />
+      );
     });
   });
 

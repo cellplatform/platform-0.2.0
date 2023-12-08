@@ -1,14 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
 import { Tldraw } from '@tldraw/tldraw';
 import '@tldraw/tldraw/tldraw.css';
 
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { css, type t } from './common';
 
-export type SampleProps = {
-  style?: t.CssValue;
-};
-
-export const Sample: React.FC<SampleProps> = (props) => {
+export const View: React.FC<t.CanvasProps> = (props) => {
   /**
    * Render
    */

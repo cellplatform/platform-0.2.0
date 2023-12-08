@@ -8,6 +8,7 @@ export type {
   PropListItem,
   PropListProps,
   RenderCountProps,
+  PropListFieldSelectorClickHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
