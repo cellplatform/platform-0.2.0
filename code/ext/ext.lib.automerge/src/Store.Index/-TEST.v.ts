@@ -5,6 +5,11 @@ import { A, Time, describe, expect, expectError, it, rx, type t } from '../test'
 type D = { count: number };
 
 describe('StoreIndex', async () => {
+  const A = 'automerge:a';
+  const B = 'automerge:b';
+  const C = 'automerge:c';
+  const D = 'automerge:d';
+
   const setup = () => {
     const store = Store.init();
     const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
@@ -119,11 +124,6 @@ describe('StoreIndex', async () => {
       const index = await Store.index(store);
       expect(index.doc.current.docs).to.eql([]);
 
-      const A = 'automerge:a';
-      const B = 'automerge:b';
-      const C = 'automerge:c';
-      const D = 'automerge:d';
-
       const res1 = await index.add([{ uri: A }, { uri: B }, { uri: C, name: 'foobar' }]);
       const res2 = await index.add([{ uri: A }, { uri: C }]);
       const res3 = await index.add([{ uri: A }, { uri: D }]);
@@ -142,21 +142,38 @@ describe('StoreIndex', async () => {
       store.dispose();
     });
 
+    it('add (as shared)', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      const res = await index.add([
+        { uri: A, shared: true },
+        { uri: B, shared: false },
+        { uri: C },
+      ]);
+      expect(res).to.eql(3);
+
+      const docs = index.doc.current.docs;
+      expect(docs[0].shared?.current).to.eql(true);
+      expect(docs[1].shared?.current).to.eql(false);
+      expect(docs[2].shared?.current).to.eql(undefined);
+
+      console.log('docs', docs);
+
+      store.dispose();
+    });
+
     it('add (does not allow duplicates)', async () => {
       const { store } = setup();
       const index = await Store.index(store);
       expect(index.total()).to.eql(0);
 
-      const A = 'automerge:a';
-      const B = 'automerge:b';
-      const C = 'automerge:c';
-
       await index.add({ uri: A });
       await index.add({ uri: A });
-      expect(index.total()).to.eql(1);
+      expect(index.doc.current.docs.map((m) => m.uri)).to.eql([A]);
 
       await index.add([{ uri: A }, { uri: B }, { uri: B }, { uri: B }]);
-      expect(index.total()).to.eql(2);
+      expect(index.doc.current.docs.map((m) => m.uri)).to.eql([A, B]);
 
       store.dispose();
     });
@@ -164,10 +181,6 @@ describe('StoreIndex', async () => {
     it('exists', async () => {
       const { store } = setup();
       const index = await Store.index(store);
-
-      const A = 'automerge:a';
-      const B = 'automerge:b';
-      const C = 'automerge:c';
 
       expect(index.exists(A)).to.eql(false);
       expect(index.exists([A, B, C])).to.eql(false);
@@ -189,10 +202,6 @@ describe('StoreIndex', async () => {
       const { store } = setup();
       const index = await Store.index(store);
 
-      const A = 'automerge:a';
-      const B = 'automerge:b';
-      const C = 'automerge:c';
-      const D = 'automerge:d';
       await index.add([{ uri: A }, { uri: B }, { uri: C }, { uri: D }]);
       expect(index.total()).to.eql(4);
 
@@ -282,10 +291,6 @@ describe('StoreIndex', async () => {
   });
 
   describe('method: toggleShared', () => {
-    const A = 'automerge:a';
-    const B = 'automerge:b';
-    const C = 'automerge:c';
-
     it('single', async () => {
       const { store } = setup();
       const index = await Store.index(store);

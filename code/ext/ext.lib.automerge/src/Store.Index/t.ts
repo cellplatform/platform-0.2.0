@@ -3,7 +3,7 @@ export type * from './t.Events';
 
 type Uri = string;
 type UriInput = Uri | Uri[];
-type AddSubject = { uri: Uri; name?: string };
+type AddSubject = { uri: Uri; name?: string; shared?: boolean };
 
 /**
  * A CRDT that represents an index of a store/repo.

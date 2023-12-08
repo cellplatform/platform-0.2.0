@@ -95,16 +95,27 @@ export const StoreIndex = {
         const items = await Promise.all(wait);
         if (api.exists(inputs.map((e) => e.uri))) return 0;
 
+        const toggleShared: { uri: string; value: boolean }[] = [];
         let added = 0;
+
         api.doc.change((d) => {
           const inserts = items
             .filter((e) => !d.docs.some(({ uri }) => e.uri === uri))
-            .map(({ uri, name, meta }) => Delete.undefined({ uri, name, meta }));
+            .map(({ shared, uri, name, meta }) => ({
+              uri,
+              shared,
+              doc: Delete.undefined<t.RepoIndexDoc>({ uri, name, meta }),
+            }));
 
           const unique = R.uniqBy((e) => e.uri, inserts);
-          unique.forEach((e) => d.docs.push(e));
+          unique.forEach((e) => {
+            d.docs.push(e.doc);
+            if (typeof e.shared === 'boolean') toggleShared.push({ uri: e.uri, value: e.shared });
+          });
           added = unique.length;
         });
+
+        toggleShared.forEach(({ uri, value }) => api.toggleShared(uri, { value }));
 
         return added;
       },
