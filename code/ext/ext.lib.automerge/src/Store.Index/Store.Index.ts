@@ -41,7 +41,7 @@ export const StoreIndex = {
 
     const onDeleteDocument = async (payload: DeleteDocumentPayload) => {
       const uri = DocUri.automerge(payload.documentId);
-      await api.remove(uri);
+      api.remove(uri);
     };
 
     /**
@@ -110,7 +110,7 @@ export const StoreIndex = {
       /**
        * Remove the given document from the index.
        */
-      async remove(input) {
+      remove(input) {
         const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
         let uris = (Array.isArray(input) ? input : [input]).filter(Boolean);
         uris = uris.filter((uri) => findIndex(uri) > -1);

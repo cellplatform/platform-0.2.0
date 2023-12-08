@@ -11,11 +11,11 @@ export type StoreIndex = {
   readonly kind: 'store:index';
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.RepoIndex>;
+  events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
+  exists(uri: Uri | Uri[]): boolean;
   total(filter?: t.RepoIndexFilter): number;
   add(doc: AddSubject | AddSubject[]): Promise<number>;
-  remove(uri: Uri | Uri[]): Promise<number>;
-  exists(uri: Uri | Uri[]): boolean;
-  events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
+  remove(uri: Uri | Uri[]): number;
 };
 
 export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;

@@ -196,24 +196,24 @@ describe('StoreIndex', async () => {
       await index.add([{ uri: A }, { uri: B }, { uri: C }, { uri: D }]);
       expect(index.total()).to.eql(4);
 
-      const res1 = await index.remove(A);
+      const res1 = index.remove(A);
       expect(res1).to.eql(1);
       expect(index.exists(A)).to.eql(false);
       expect(index.exists([B, D, C])).to.eql(true);
 
-      const res2 = await index.remove(A); // NB: no longer within index.
-      const res3 = await index.remove([A]);
-      const res4 = await index.remove([]);
+      const res2 = index.remove(A); // NB: no longer within index.
+      const res3 = index.remove([A]);
+      const res4 = index.remove([]);
       expect(res2).to.eql(0);
       expect(res3).to.eql(0);
       expect(res4).to.eql(0);
 
-      const res5 = await index.remove([D, B]);
+      const res5 = index.remove([D, B]);
       expect(res5).to.eql(2);
       expect(index.exists([A, B, D])).to.eql(false);
       expect(index.exists(C)).to.eql(true);
 
-      const res6 = await index.remove([C, C, C]);
+      const res6 = index.remove([C, C, C]);
       expect(res6).to.eql(1);
       expect(index.total()).to.eql(0);
 
@@ -372,7 +372,7 @@ describe('StoreIndex', async () => {
 
         await index.add({ uri: 'automerge:foo' });
         await index.add({ uri: 'automerge:bar' });
-        await index.remove('automerge:bar');
+        index.remove('automerge:bar');
 
         expect(fired.length).to.eql(1);
         expect(fired[0].index).to.eql(1);
