@@ -3,6 +3,7 @@ import type { t } from './common';
 export type InfoField =
   | 'Module'
   | 'Module.Verify'
+  | 'Refresh'
   | 'Id.User'
   | 'Id.User.Phone'
   | 'Id.App.Privy'

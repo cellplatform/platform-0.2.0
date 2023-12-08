@@ -1,6 +1,6 @@
-import { Button, COLORS, type t, Spinner } from './common';
+import { Button, COLORS, Spinner, type t } from './common';
 
-export function FieldLogin(privy: t.PrivyInterface, enabled: boolean): t.PropListItem | undefined {
+export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem | undefined {
   if (!privy.ready) enabled = false;
 
   /**

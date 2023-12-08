@@ -2,7 +2,7 @@ import { Value, type t } from './common';
 import { WalletRow } from './ui.Row.Wallet';
 import { Wrangle } from './Wrangle';
 
-export function FieldWalletsList(args: {
+export function walletsList(args: {
   privy: t.PrivyInterface;
   wallets: t.ConnectedWallet[];
   data: t.InfoData;

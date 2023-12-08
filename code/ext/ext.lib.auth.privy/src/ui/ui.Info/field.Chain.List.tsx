@@ -1,7 +1,7 @@
 import { Chain, DEFAULTS, Value, type t } from './common';
 import { ChainRow } from './ui.Row.Chain';
 
-export function FieldChainList(args: {
+export function chainList(args: {
   privy: t.PrivyInterface;
   data: t.InfoData;
   enabled: boolean;

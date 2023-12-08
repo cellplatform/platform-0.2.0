@@ -1,7 +1,7 @@
 import { Button, Chain, COLORS, Value, type t } from './common';
 import { Wrangle } from './Wrangle';
 
-export function FieldLinkWallet(
+export function linkWallet(
   privy: t.PrivyInterface,
   data: t.InfoData,
   wallets: t.ConnectedWallet[],

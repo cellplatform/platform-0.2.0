@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Keyboard, Pkg, PropList, useMouse, type t } from './common';
-import { FieldLogin } from './field.Auth.Login';
-import { FieldChainList } from './field.Chain.List';
-import { FieldModuleVerify } from './field.Module.Verify';
-import { FieldLinkWallet } from './field.Wallets.Link';
-import { FieldWalletsList } from './field.Wallets.List';
+import { Field } from './field';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
@@ -22,6 +18,9 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const privy = usePrivy();
   const { wallets } = useWallets();
   const [ready, setReady] = useState(false);
+
+  const [, setRedraw] = useState(0);
+  const redraw = () => setRedraw((prev) => prev + 1);
 
   const modifiers = {
     is: { over: mouse.is.over },
@@ -44,17 +43,21 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Module.Verify', () => Field.moduleVerify(data))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
-    .field('Auth.Login', () => FieldLogin(privy, enabled))
-    .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, data, wallets, fields, enabled))
-    .field('Wallet.List', () =>
-      FieldWalletsList({ privy, data, wallets, enabled, modifiers, fields }),
+    .field('Auth.Login', () => Field.login(privy, enabled))
+    .field(
+      'Auth.Link.Wallet',
+      () => user && Field.linkWallet(privy, data, wallets, fields, enabled),
     )
-    .field('Chain.List', () => FieldChainList({ privy, data, enabled, modifiers, fields }))
+    .field('Wallet.List', () =>
+      Field.walletsList({ privy, data, wallets, enabled, modifiers, fields }),
+    )
+    .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields }))
+    .field('Refresh', () => Field.refresh({ privy, data, wallets, fields, enabled, redraw }))
     .items(fields);
 
   useEffect(() => {

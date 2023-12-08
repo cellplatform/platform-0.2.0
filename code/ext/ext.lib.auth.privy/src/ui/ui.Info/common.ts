@@ -7,6 +7,7 @@ export * from '../common';
 const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
+  'Refresh',
   'Id.User',
   'Id.User.Phone',
   'Id.App.Privy',
