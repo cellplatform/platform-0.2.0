@@ -88,7 +88,7 @@ describe('network.Webrtc', () => {
       expect(doc.current.shared).to.eql({});
 
       const uri = 'automerge:foo';
-      await index.add(uri);
+      await index.add({ uri });
       expect(doc.current.shared).to.eql({}); // NB: not yet shared.
 
       // Share.
@@ -107,16 +107,16 @@ describe('network.Webrtc', () => {
       const index = await Store.index(store);
       const doc = await SyncDoc.getOrCreate(store);
 
-      await index.add('automerge:a'); // Not shared.
-      await index.add('automerge:b');
-      await index.add('automerge:c');
+      await index.add({ uri: 'automerge:a' }); // Not shared.
+      await index.add({ uri: 'automerge:b' });
+      await index.add({ uri: 'automerge:c' });
 
       index.doc.change((d) => (d.docs[2].name = 'hello'));
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 2, { value: true }));
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 3, { value: true }));
 
       // Ensure the syncer updated the doc.
-      SyncDoc.Sync.all(index, doc);
+      SyncDoc.Sync.indexToDoc(index, doc);
       const shared = doc.current.shared;
       expect(shared['automerge:a']).to.eql(undefined);
       expect(shared['automerge:b']).to.eql(true);
