@@ -2,7 +2,7 @@ import { Patches } from './SyncDoc.Patches';
 import { Sync } from './SyncDoc.Sync';
 import { listenToDoc } from './SyncDoc.b.listenToDoc';
 import { listenToIndex } from './SyncDoc.b.listenToIndex';
-import { Crdt, Doc, rx, type t } from './common';
+import { UserAgent, Crdt, Doc, rx, type t } from './common';
 
 /**
  * An ephemeral (non-visual) document used to sync
@@ -23,6 +23,7 @@ export const SyncDoc = {
         ephemeral: true,
       };
       Doc.Meta.ensure(d, initial);
+      d.peers = {};
       d.shared = {};
     }, uri);
   },
@@ -64,7 +65,13 @@ export const SyncDoc = {
     /**
      * Initialize.
      */
-    Sync.all(index, doc);
+    Sync.docToIndex(doc, index, { debugLabel });
+    Sync.indexToDoc(index, doc, { debugLabel });
+    doc.change((d) => {
+      const ua = UserAgent.current;
+      const data: t.WebrtcSyncDocPeer = { ua };
+      d.peers[peer.id] = data;
+    });
 
     /**
      * API
