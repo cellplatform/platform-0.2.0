@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg } from '../../test.ui';
 
 type T = {};
 const initial: T = {};
@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        return <div>{`🐷 ${Pkg.name}: ${name}`}</div>;
       });
   });
 
@@ -29,6 +29,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.TODO();
+
+    dev.button('sample', async (e) => {
+      const { startLibp2p } = await import('./-SPEC.runSample');
+      startLibp2p();
+    });
   });
 
   e.it('ui:footer', async (e) => {
