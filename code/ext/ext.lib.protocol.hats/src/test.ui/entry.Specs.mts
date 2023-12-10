@@ -1,8 +1,10 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ext.lib.protocol.hats.tests': () => import('./-TestRunner'),
-  'ext.lib.protocol.hats.ui.Info': () => import('../ui/Info/-dev/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/Info/-dev/-SPEC'),
 };
 
 export default Specs;

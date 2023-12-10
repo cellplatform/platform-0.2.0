@@ -1,8 +1,10 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'sys.ui.media.image.tests': () => import('./-TestRunner'),
-  'sys.ui.media.image.Image': () => import('../ui/Image/-dev/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Image`]: () => import('../ui/Image/-dev/-SPEC'),
 };
 
 export default Specs;

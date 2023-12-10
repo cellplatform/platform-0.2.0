@@ -1,9 +1,11 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ext.lib.prosemirror.tests': () => import('./-TestRunner'),
-  'ext.lib.prosemirror.ui.Info': () => import('../ui/ui.Info/-SPEC'),
-  'ext.lib.prosemirror.ui.Example': () => import('../ui/ui.Example/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.Example`]: () => import('../ui/ui.Example/-SPEC'),
 };
 
 export default Specs;

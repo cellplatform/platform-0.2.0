@@ -1,8 +1,10 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ext.lib.auth.privy.tests': () => import('./-TestRunner'),
-  'ext.lib.auth.privy.ui.Info': () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
 };
 
 export default Specs;

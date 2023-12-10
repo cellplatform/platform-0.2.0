@@ -1,10 +1,12 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'vendor.wallet.rainbow.tests': () => import('./-TestRunner'),
-  'vendor.wallet.rainbow.ui.Info': () => import('../ui/Info/-dev/-SPEC'),
-  'vendor.wallet.rainbow.ui.Connect': () => import('../ui/Connect/-SPEC'),
-  'vendor.wallet.rainbow.ui.ChainSelector': () => import('../ui/ChainSelector/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/Info/-dev/-SPEC'),
+  [`${ns}.ui.Connect`]: () => import('../ui/Connect/-SPEC'),
+  [`${ns}.ui.ChainSelector`]: () => import('../ui/ChainSelector/-SPEC'),
 };
 
 export default Specs;

@@ -1,9 +1,11 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'sys.net.nostr.tests': () => import('./-TestRunner'),
-  'sys.net.nostr.ui.Info': () => import('../ui/Info/-dev/-SPEC'),
-  'sys.net.nostr.ui.Sample': () => import('./-SPEC.Sample'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/Info/-dev/-SPEC'),
+  [`${ns}.ui.Sample`]: () => import('./-SPEC.Sample'),
 };
 
 export default Specs;

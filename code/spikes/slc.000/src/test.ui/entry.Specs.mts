@@ -1,4 +1,6 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 const importCommon = async () => {
   const { dev } = await import('sys.ui.react.common');
@@ -20,15 +22,15 @@ const importConcept = async () => {
 
 export const Specs = {
   // SLC ("Social Lean Canvas")
-  'slc.tests': () => import('./-TestRunner'),
-  'slc.ui.Info': () => import('../ui/slc.Info/-dev/-SPEC'),
-  'slc.ui.IFrameRef': () => import('../ui/slc.IFrameRef/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/slc.Info/-dev/-SPEC'),
+  [`${ns}.ui.IFrameRef`]: () => import('../ui/slc.IFrameRef/-SPEC'),
 
   // System
-  'ext.ui.Payment.Stripe': () => import('../ui/ext.ui.Payment.Stripe/-SPEC'),
+  [`${ns}.ui.Payment.Stripe`]: () => import('../ui/ext.ui.Payment.Stripe/-SPEC'),
 
   // External (Partitions).
-  'ext.slc.Ember': () => import('../ui/ext.slc.Ember/-SPEC'),
+  [`${ns}.ext.Ember`]: () => import('../ui/ext.slc.Ember/-SPEC'),
 
   // system
   ...(await importCommon()),
