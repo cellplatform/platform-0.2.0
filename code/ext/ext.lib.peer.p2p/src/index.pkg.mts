@@ -13,6 +13,11 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.peer.p2p',
   version: '0.0.0',
   dependencies: {
+    '@libp2p/webrtc-star': '7.0.0',
+    '@libp2p/mplex': '10.0.6',
+    '@chainsafe/libp2p-noise': '14.0.0',
+    'libp2p': '1.0.9',
+    'libp2p-gossipsub': '0.13.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
