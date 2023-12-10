@@ -28,7 +28,25 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
+
+    async function loadMyModule() {
+      try {
+        // Assuming the module is located in 'myModuleDirectory/index.ts'
+        // Replace './myModuleDirectory' with the actual path relative to this file
+        const myModule = await import('../../ext.Foo');
+
+        console.log('myModule', myModule);
+        myModule.Foo.run();
+
+        // Use the imported module
+        // For example, if 'myModule' exports a function named 'myFunction', you can call it as:
+        // myModule.myFunction();
+      } catch (error) {
+        console.error('Failed to load the module:', error);
+      }
+    }
+
+    dev.button('load', (e) => loadMyModule());
   });
 
   e.it('ui:footer', async (e) => {
