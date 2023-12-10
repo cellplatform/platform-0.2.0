@@ -11,7 +11,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@automerge/automerge": "2.1.7",
+    "@automerge/automerge": "2.1.8",
     "@automerge/automerge-repo": "1.0.19",
     "@automerge/automerge-repo-network-broadcastchannel": "1.0.19",
     "@automerge/automerge-repo-react-hooks": "1.0.19",
