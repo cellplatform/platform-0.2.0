@@ -29,7 +29,7 @@ describe('Data', () => {
       assertItems([]);
     });
 
-    it.only('insertAt', async () => {
+    it('insertAt', async () => {
       const doc = await generator();
       doc.change((d) => (d.items = []));
 
