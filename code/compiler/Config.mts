@@ -13,10 +13,14 @@ import { displayStartupText } from './Config.plugin.displayStartupText.mjs';
 import { R, Util, asArray, fs, pc, type t } from './builder/common/index.mjs';
 import { Paths } from './builder/index.mjs';
 
+export { fs };
+
 /**
  * Common configuration setup.
  */
 export const Config = {
+  fs,
+
   defaults: {
     /**
      * Test runner.
@@ -275,7 +279,7 @@ export const Config = {
       return _current;
     };
   },
-};
+} as const;
 
 /**
  * Helpers
