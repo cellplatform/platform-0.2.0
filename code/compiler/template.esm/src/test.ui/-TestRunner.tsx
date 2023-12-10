@@ -1,4 +1,4 @@
-import { Dev, type t } from '.';
+import { Dev, Pkg, type t } from '.';
 
 type T = {
   spinning?: boolean;
@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
-        .localstore('dev:NAMESPACE')
+        .localstore(`dev:${Pkg.name}`)
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );

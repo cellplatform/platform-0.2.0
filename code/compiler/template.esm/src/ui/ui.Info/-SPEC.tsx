@@ -1,5 +1,5 @@
 import { Info, type InfoProps } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
@@ -11,7 +11,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE.Info');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.Info`);
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
   });
