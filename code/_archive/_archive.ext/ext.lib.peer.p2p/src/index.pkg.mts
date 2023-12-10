@@ -17,6 +17,7 @@ export const Pkg: ModuleDef = {
     '@libp2p/webrtc-star': '7.0.0',
     '@libp2p/websockets': '8.0.6',
     '@libp2p/mplex': '10.0.6',
+    '@libp2p/webrtc': '4.0.9',
     '@chainsafe/libp2p-noise': '14.0.0',
     '@chainsafe/libp2p-yamux': '6.0.1',
     'libp2p': '1.0.9',
@@ -24,7 +25,6 @@ export const Pkg: ModuleDef = {
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'ws': '8.15.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
