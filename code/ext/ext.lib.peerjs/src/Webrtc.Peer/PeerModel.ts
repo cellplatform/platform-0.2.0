@@ -61,8 +61,14 @@ export const PeerModel: t.WebrtcPeerModel = {
       id: peerjs.id,
       dispatch: PatchState.Command.dispatcher<t.PeerModelCmd>(state),
       events: (dispose$?: t.UntilObservable) => state.events(dispose$),
+
       get current() {
         return state.current;
+      },
+
+      get iceServers() {
+        // ICE: Interactive Connectivity Establishment
+        return peerjs.options.config.iceServers;
       },
 
       connect: {

@@ -57,14 +57,17 @@ export type PeerModel = t.Lifecycle & {
   readonly id: Id;
   readonly current: t.Peer;
   readonly get: PeerModelGet;
-  readonly connect: {
-    data(remoteid: Id): Promise<t.PeerConnectedData>;
-    media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
-  };
+  readonly connect: PeerModelConnect;
+  readonly iceServers: PeerModelIceServer[];
   disconnect(connid?: Id): void;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
   dispatch: t.PeerModelDispatch;
   purge(): { changed: boolean; total: { before: number; after: number } };
+};
+
+export type PeerModelConnect = {
+  data(remoteid: Id): Promise<t.PeerConnectedData>;
+  media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
 };
 
 export type PeerModelGet = {
@@ -82,6 +85,15 @@ export type PeerModelGetConnectionObject = {
   media(connId?: Id): t.PeerJsConnMedia | undefined;
   video(connId?: Id): t.PeerJsConnMedia | undefined;
   screen(connId?: Id): t.PeerJsConnMedia | undefined;
+};
+
+/**
+ * ICE: Interactive Connectivity Establishment
+ */
+export type PeerModelIceServer = {
+  urls: string | string[];
+  credential?: string;
+  username?: string;
 };
 
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
