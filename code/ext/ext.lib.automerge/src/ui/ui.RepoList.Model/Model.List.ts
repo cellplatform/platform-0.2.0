@@ -4,6 +4,7 @@ import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 import { Wrangle } from './u.Wrangle';
+import { listSelectedBehavior } from './Model.List.b.selected';
 
 type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
 
@@ -43,6 +44,7 @@ export const List = {
     const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
     listBehavior({ ctx });
+    listSelectedBehavior({ ctx });
     listRedrawBehavior({ ctx, array });
 
     /**
