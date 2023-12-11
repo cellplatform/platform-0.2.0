@@ -68,8 +68,8 @@ describe('network.Webrtc', () => {
       const { store, doc, fired } = await setup();
 
       const uri = 'automerge:foo';
-      doc.change((d) => (d.shared[uri] = true));
-      doc.change((d) => (d.shared[uri] = false));
+      doc.change((d) => (d.shared[uri] = { current: true, version: 1 }));
+      doc.change((d) => (d.shared[uri] = { current: false, version: 2 }));
       doc.change((d) => delete d.shared[uri]);
 
       const res1 = SyncDoc.Patches.shared(fired[0]);
@@ -77,16 +77,18 @@ describe('network.Webrtc', () => {
       const res3 = SyncDoc.Patches.shared(fired[2]);
 
       expect(res1.put?.uri).to.eql(uri);
-      expect(res1.put?.value).to.eql(true);
+      expect(res1.put?.shared).to.eql(true);
+      expect(res1.put?.version).to.eql(1);
       expect(res1.del).to.eql(undefined);
 
       expect(res2.put?.uri).to.eql(uri);
-      expect(res2.put?.value).to.eql(false);
+      expect(res2.put?.shared).to.eql(false);
+      expect(res2.put?.version).to.eql(2);
       expect(res2.del).to.eql(undefined);
 
       expect(res3.put).to.eql(undefined);
       expect(res3.del?.uri).to.eql(uri);
-      expect(res3.del?.value).to.eql(undefined);
+      expect(res3.del?.shared).to.eql(undefined);
 
       store.dispose();
     });
@@ -107,10 +109,10 @@ describe('network.Webrtc', () => {
 
       // Share.
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { value: true }));
-      expect(doc.current.shared[uri]).to.eql(true); // NB: entry now exists on the sync-doc.
+      expect(doc.current.shared[uri]).to.eql({ current: true, version: 1 }); // NB: entry now exists on the sync-doc.
 
       // Remove.
-      await index.remove(uri);
+      index.remove(uri);
       expect(doc.current.shared).to.eql({});
 
       store.dispose();
@@ -133,8 +135,8 @@ describe('network.Webrtc', () => {
       SyncDoc.Sync.indexToDoc(index, doc);
       const shared = doc.current.shared;
       expect(shared['automerge:a']).to.eql(undefined);
-      expect(shared['automerge:b']).to.eql(true);
-      expect(shared['automerge:c']).to.eql(true);
+      expect(shared['automerge:b']).to.eql({ current: true, version: 1 });
+      expect(shared['automerge:c']).to.eql({ current: true, version: 1 });
 
       store.dispose();
     });

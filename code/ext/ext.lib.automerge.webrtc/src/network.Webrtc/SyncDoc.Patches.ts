@@ -8,10 +8,16 @@ export const Patches = {
       if (first.action !== action) return;
 
       const uri = first.path[0] === key ? first.path[1] : undefined;
-      const value = first.action === 'put' ? first.value : undefined;
+      if (!uri) return undefined;
 
-      return uri ? { uri: String(uri), value } : undefined;
+      const item = e.patchInfo.after.shared[uri];
+      return {
+        uri: String(uri),
+        shared: item?.current,
+        version: item?.version,
+      };
     };
+
     const put = read('put');
     const del = read('del');
     return { put, del } as const;

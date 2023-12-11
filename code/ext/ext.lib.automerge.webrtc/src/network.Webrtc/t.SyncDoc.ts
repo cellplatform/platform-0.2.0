@@ -18,4 +18,5 @@ export type WebrtcSyncDocPeer = { ua: t.UserAgent };
 /**
  * Map of shared documents.
  */
-export type WebrtcSyncDocShared = { [uri: string]: boolean };
+export type WebrtcSyncDocShared = { [uri: string]: WebrtcSyncDocSharedItem };
+export type WebrtcSyncDocSharedItem = { current: boolean; version: number };

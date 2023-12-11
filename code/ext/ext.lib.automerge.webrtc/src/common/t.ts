@@ -11,9 +11,9 @@ export type {
   DocRefHandle,
   DocUri,
   DocWithMeta,
-  RepoIndexDoc,
   Store,
   StoreIndex,
+  StoreIndexDocItem,
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
