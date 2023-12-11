@@ -341,7 +341,6 @@ describe('StoreIndex', async () => {
       expect(getCurrent(1)).to.eql(true); // NB: no change
 
       expect(res1).to.eql([{ uri: A, shared: true, version: 1 }]);
-      console.log('res2', res2);
       expect(res2).to.eql([
         { uri: B, shared: true, version: 1 },
         { uri: A, shared: false, version: 2 },
