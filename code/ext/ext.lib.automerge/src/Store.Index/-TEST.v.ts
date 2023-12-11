@@ -1,6 +1,6 @@
 import { Store } from '../Store';
 import { Doc } from '../Store.Doc';
-import { A, Time, describe, expect, expectError, it, rx, type t } from '../test';
+import { Time, describe, expect, expectError, it, rx, type t } from '../test';
 
 type D = { count: number };
 

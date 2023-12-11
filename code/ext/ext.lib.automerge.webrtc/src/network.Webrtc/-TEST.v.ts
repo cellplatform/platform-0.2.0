@@ -92,7 +92,7 @@ describe('network.Webrtc', () => {
       expect(doc.current.shared).to.eql({}); // NB: not yet shared.
 
       // Share.
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 1, { value: true }));
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { value: true }));
       expect(doc.current.shared[uri]).to.eql(true); // NB: entry now exists on the sync-doc.
 
       // Remove.
@@ -112,8 +112,8 @@ describe('network.Webrtc', () => {
       await index.add({ uri: 'automerge:c' });
 
       index.doc.change((d) => (d.docs[2].name = 'hello'));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 2, { value: true }));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 3, { value: true }));
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[2], { value: true }));
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[3], { value: true }));
 
       // Ensure the syncer updated the doc.
       SyncDoc.Sync.indexToDoc(index, doc);
