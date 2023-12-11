@@ -1,5 +1,7 @@
 import { Hash } from './libs';
 
+type ShortenInput = number | [number, number];
+
 /**
  * Helpers for working with document URIs.
  */
@@ -8,7 +10,7 @@ export const DocUri = {
    * Extract the ID component of a document URI.
    * eg: "automerge:<abc>" → "<abc>"
    */
-  id(input: any, options: { shorten?: number | [number, number] } = {}): string {
+  id(input: any, options: { shorten?: ShortenInput } = {}): string {
     if (typeof input !== 'string') return '';
 
     const done = (id: string) => {
@@ -24,8 +26,8 @@ export const DocUri = {
   /**
    * Ensure the value is prefixed with "automerge:"
    */
-  automerge(input: any): string {
-    const id = DocUri.id(input);
+  automerge(input: any, options: { shorten?: ShortenInput } = {}): string {
+    const id = DocUri.id(input, options);
     return id ? `automerge:${id}` : '';
   },
 } as const;

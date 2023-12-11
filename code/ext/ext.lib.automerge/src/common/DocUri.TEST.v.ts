@@ -41,7 +41,7 @@ describe('Store.DocUri', () => {
       });
     });
 
-    it('ensure "automerge:" prfix', () => {
+    it('ensure "automerge:" prefix', () => {
       const test = (input: any, expected: string) => {
         const res = DocUri.automerge(input);
         expect(res).to.eql(expected, input);
@@ -51,6 +51,14 @@ describe('Store.DocUri', () => {
       test(' db:foo ', 'automerge:foo');
       test(' automerge:foo ', 'automerge:foo');
       test(' automerge ', 'automerge:automerge');
+    });
+
+    it('shorten', () => {
+      const uri = 'automerge:3xFTnhG6Z3fzdxqiEoLMRrWHFdfe';
+      const res1 = DocUri.automerge(uri, { shorten: 4 });
+      const res2 = DocUri.automerge(uri, { shorten: [2, 3] });
+      expect(res1).to.eql('automerge:3xFT..Fdfe');
+      expect(res2).to.eql('automerge:3x..dfe');
     });
   });
 });
