@@ -23,13 +23,13 @@ export type StoreIndex = {
 };
 
 export type StoreIndexFilter = (e: StoreIndexFilterArgs, index: number) => boolean;
-export type StoreIndexFilterArgs = { doc: t.StoreIndexItem; index: number };
+export type StoreIndexFilterArgs = { doc: t.StoreIndexDocItem; index: number };
 
 /**
  * Index of documents within a store/repository.
  */
-export type StoreIndexDoc = { docs: StoreIndexItem[] };
-export type StoreIndexItem = {
+export type StoreIndexDoc = { docs: StoreIndexDocItem[] };
+export type StoreIndexDocItem = {
   uri: Uri;
   name?: string;
   meta?: RepoIndexDocMeta;
