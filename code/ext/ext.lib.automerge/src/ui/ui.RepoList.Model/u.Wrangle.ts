@@ -24,10 +24,11 @@ export const WrangleItem = {
     const docs = Wrangle.filterDocs(ctx.index.doc.current, ctx.filter);
     const index = docs.findIndex((item) => item.uri === data.uri);
     const item = docs[index];
+    const uri = item?.uri || '';
     const exists = index > -1;
     const total = docs.length;
     const position = { index, total };
-    return { exists, index, position, item, data } as const;
+    return { exists, uri, index, position, item, data } as const;
   },
 
   click(getCtx: t.RepoListCtxGet, input: ItemInput): t.RepoListClickHandlerArgs {

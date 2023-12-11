@@ -1,4 +1,4 @@
-import { StoreIndex, type t } from './common';
+import { type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
@@ -11,10 +11,8 @@ export function actionShareBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoI
     const ctx = args.ctx();
 
     // Update the model state.
-    const { index, exists } = Wrangle.Item.get(args.ctx, args.item);
-    if (exists) {
-      ctx.index.doc.change((d) => StoreIndex.Mutate.toggleShared(d.docs[index]));
-    }
+    const { exists, uri } = Wrangle.Item.get(args.ctx, args.item);
+    if (exists) ctx.index.toggleShared(uri);
 
     // Alert listeners.
     ctx.handlers.onShareClick?.(Wrangle.Item.click(args.ctx, args.item));

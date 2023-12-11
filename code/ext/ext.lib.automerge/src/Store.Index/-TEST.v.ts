@@ -356,9 +356,11 @@ describe('StoreIndex', async () => {
       const res1 = index.toggleShared(A);
       const res2 = index.toggleShared([A, B, C]);
       const res3 = index.toggleShared([]);
+      const res4 = index.toggleShared('');
       expect(res1).to.eql([]);
       expect(res2).to.eql([]);
       expect(res3).to.eql([]);
+      expect(res4).to.eql([]);
 
       store.dispose();
     });
