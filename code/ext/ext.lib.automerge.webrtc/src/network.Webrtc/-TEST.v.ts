@@ -1,5 +1,5 @@
 import { SyncDoc } from '.';
-import { Doc, Store, describe, expect, it, type t } from '../test';
+import { Doc, Store, Time, describe, expect, it, type t } from '../test';
 import { listenToIndex } from './SyncDoc.b.listenToIndex';
 
 describe('network.Webrtc', () => {
@@ -17,12 +17,26 @@ describe('network.Webrtc', () => {
       store.dispose();
     });
 
+    it('new docs auto-added to index', async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      expect(index.total()).to.eql(0);
+
+      const doc = await SyncDoc.getOrCreate(store);
+
+      await Time.wait(0);
+      expect(index.total()).to.eql(1);
+      expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
+    });
+
     it('purge', async () => {
       const store = Store.init();
       const index = await Store.index(store);
 
       expect(index.total()).to.eql(0);
       const doc = await SyncDoc.getOrCreate(store);
+
+      await Time.wait(0);
       expect(index.total()).to.eql(1);
 
       const res = SyncDoc.purge(index);

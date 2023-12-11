@@ -231,19 +231,18 @@ describe('StoreIndex', async () => {
   describe('method: "add" (auto syncs with repo)', () => {
     it('new documents automatically added to index', async () => {
       const { store, initial } = setup();
-      const index = await Store.Index.init(store);
-      expect(index.doc.current.docs.length).to.eql(0);
+      const index = await Store.index(store);
       expect(index.total()).to.eql(0);
 
       const sample = await store.doc.getOrCreate(initial);
       await Time.wait(0);
       expect(Doc.Meta.exists(sample)).to.eql(false);
+      expect(index.exists(sample.uri)).to.eql(true);
+      expect(index.total()).to.eql(1);
 
       const entry = index.doc.current.docs[0];
       expect(entry.uri).to.eql(sample.uri);
       expect(entry.meta).to.eql(undefined);
-      expect(index.exists(sample.uri)).to.eql(true);
-      expect(index.total()).to.eql(1);
 
       store.dispose();
     });

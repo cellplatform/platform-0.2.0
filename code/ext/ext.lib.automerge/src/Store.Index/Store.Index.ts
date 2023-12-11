@@ -35,14 +35,14 @@ export const StoreIndex = {
     /**
      * Store the URI to new documents in the index.
      */
-    const onDocument = async (payload: DocumentPayload) => {
-      if (!payload.isNew) return;
-      const uri = payload.handle.url;
+    const onDocument = async (e: DocumentPayload) => {
+      if (!e.isNew) return;
+      const uri = e.handle.url;
       await api.add({ uri });
     };
 
-    const onDeleteDocument = async (payload: DeleteDocumentPayload) => {
-      const uri = DocUri.automerge(payload.documentId);
+    const onDeleteDocument = async (e: DeleteDocumentPayload) => {
+      const uri = DocUri.automerge(e.documentId);
       api.remove(uri);
     };
 
