@@ -293,7 +293,7 @@ describe('StoreIndex', async () => {
       const { store } = setup();
       const index = await Store.index(store);
       const getDoc = (i: number) => index.doc.current.docs[i];
-      const getCurrent = (i: number) => getDoc(i).shared?.current;
+      const getSharedAt = (i: number) => getDoc(i).shared;
 
       await index.add([{ uri: A }, { uri: B }]);
 
@@ -302,17 +302,20 @@ describe('StoreIndex', async () => {
       expect(docs[1].shared).to.eql(undefined);
 
       const res1 = index.toggleShared(A);
-      expect(getCurrent(0)).to.eql(true);
-      expect(res1).to.eql([{ uri: A, shared: true }]);
+      expect(getSharedAt(0)?.current).to.eql(true);
+      expect(getSharedAt(0)?.version.value).to.eql(1);
+      expect(res1).to.eql([{ uri: A, shared: true, version: 1 }]);
 
       const res2 = index.toggleShared(A);
-      expect(getCurrent(0)).to.eql(false);
-      expect(res2).to.eql([{ uri: A, shared: false }]);
+      expect(getSharedAt(0)?.current).to.eql(false);
+      expect(res2).to.eql([{ uri: A, shared: false, version: 2 }]);
 
       index.toggleShared(A, { value: true });
-      expect(getCurrent(0)).to.eql(true);
+      expect(getSharedAt(0)?.current).to.eql(true);
+      expect(getSharedAt(0)?.version.value).to.eql(3);
+
       index.toggleShared(A, { value: true });
-      expect(getCurrent(0)).to.eql(true);
+      expect(getSharedAt(0)?.version.value).to.eql(3); // NB: no change.
 
       store.dispose();
     });
@@ -337,12 +340,13 @@ describe('StoreIndex', async () => {
       expect(getCurrent(0)).to.eql(true);
       expect(getCurrent(1)).to.eql(true); // NB: no change
 
-      expect(res1).to.eql([{ uri: A, shared: true }]);
+      expect(res1).to.eql([{ uri: A, shared: true, version: 1 }]);
+      console.log('res2', res2);
       expect(res2).to.eql([
-        { uri: B, shared: true },
-        { uri: A, shared: false },
+        { uri: B, shared: true, version: 1 },
+        { uri: A, shared: false, version: 2 },
       ]);
-      expect(res3).to.eql([{ uri: A, shared: true }]);
+      expect(res3).to.eql([{ uri: A, shared: true, version: 3 }]);
 
       store.dispose();
     });
@@ -417,7 +421,7 @@ describe('StoreIndex', async () => {
 
       it('changed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.DocChanged<t.RepoIndex>[] = [];
+        const fired: t.DocChanged<t.StoreIndexDoc>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foobar' });
@@ -429,7 +433,7 @@ describe('StoreIndex', async () => {
 
       it('added$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexItem[] = [];
+        const fired: t.StoreIndexEventItem[] = [];
         events.added$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foo' });
@@ -448,7 +452,7 @@ describe('StoreIndex', async () => {
 
       it('removed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexItem[] = [];
+        const fired: t.StoreIndexEventItem[] = [];
         events.removed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foo' });
@@ -465,7 +469,7 @@ describe('StoreIndex', async () => {
 
       it('shared$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexItem[] = [];
+        const fired: t.StoreIndexEventItem[] = [];
         events.shared$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foo' });
@@ -473,13 +477,13 @@ describe('StoreIndex', async () => {
         expect(item().uri).to.eql('automerge:foo');
         expect(item().shared).to.eql(undefined);
 
-        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0));
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0]));
         expect(item().shared?.current).to.eql(true);
 
-        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0, { value: true })); // NB: no change.
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0], { value: true })); // NB: no change.
         expect(item().shared?.current).to.eql(true);
 
-        index.doc.change((d) => Store.Index.Mutate.toggleShared(d, 0)); // NB: explicit value.
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0])); // NB: explicit value.
         expect(item().shared?.current).to.eql(false);
 
         expect(fired.length).to.eql(2);
@@ -491,7 +495,7 @@ describe('StoreIndex', async () => {
 
       it('renamed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.StoreIndexItem[] = [];
+        const fired: t.StoreIndexEventItem[] = [];
         events.renamed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foo' });

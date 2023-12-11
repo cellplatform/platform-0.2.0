@@ -2,30 +2,42 @@ import type { t } from './common';
 
 export type StoreIndexEvents = t.Lifecycle & {
   readonly $: t.Observable<t.StoreIndexEvent>;
-  readonly changed$: t.Observable<t.DocChanged<t.RepoIndex>>;
-  readonly added$: t.Observable<t.StoreIndexItem>;
-  readonly removed$: t.Observable<t.StoreIndexItem>;
-  readonly shared$: t.Observable<t.StoreIndexItem>;
-  readonly renamed$: t.Observable<t.StoreIndexItem>;
+  readonly changed$: t.Observable<t.DocChanged<t.StoreIndexDoc>>;
+  readonly added$: t.Observable<t.StoreIndexEventItem>;
+  readonly removed$: t.Observable<t.StoreIndexEventItem>;
+  readonly shared$: t.Observable<t.StoreIndexEventItem>;
+  readonly renamed$: t.Observable<t.StoreIndexEventItem>;
 };
 
 /**
  * Events
  */
-export type StoreIndexEvent = t.DocEvent<t.RepoIndex> | StoreIndexChangeEvent;
+export type StoreIndexEvent = t.DocEvent<t.StoreIndexDoc> | StoreIndexChangeEvent;
 export type StoreIndexChangeEvent =
   | StoreIndexAddedEvent
   | StoreIndexRemovedEvent
   | StoreIndexSharedEvent
   | StoreIndexRenamedEvent;
 
-export type StoreIndexAddedEvent = { type: 'crdt:store:index/Added'; payload: StoreIndexItem };
-export type StoreIndexRemovedEvent = { type: 'crdt:store:index/Removed'; payload: StoreIndexItem };
-export type StoreIndexSharedEvent = { type: 'crdt:store:index/Shared'; payload: StoreIndexItem };
-export type StoreIndexRenamedEvent = { type: 'crdt:store:index/Renamed'; payload: StoreIndexItem };
+export type StoreIndexAddedEvent = {
+  type: 'crdt:store:index/Added';
+  payload: StoreIndexEventItem;
+};
+export type StoreIndexRemovedEvent = {
+  type: 'crdt:store:index/Removed';
+  payload: StoreIndexEventItem;
+};
+export type StoreIndexSharedEvent = {
+  type: 'crdt:store:index/Shared';
+  payload: StoreIndexEventItem;
+};
+export type StoreIndexRenamedEvent = {
+  type: 'crdt:store:index/Renamed';
+  payload: StoreIndexEventItem;
+};
 
-export type StoreIndexItem = {
+export type StoreIndexEventItem = {
   index: number;
   total: number;
-  item: t.RepoIndexDoc;
+  item: t.StoreIndexItem;
 };
