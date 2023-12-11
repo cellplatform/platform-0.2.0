@@ -267,7 +267,7 @@ describe('LabelItem.Model', () => {
         expect(Model.List.getItem(undefined, 0)).to.eql([undefined, -1]);
       });
 
-      it('returns item from getter function', () => {
+      it('returns item from getter function: index', () => {
         const { items, getItem } = Model.List.array();
         const state = Model.List.state({ total: 2, getItem });
 
@@ -281,6 +281,17 @@ describe('LabelItem.Model', () => {
         // NB: same instance (repeat call).
         expect(Model.List.getItem(state.current, 0)[0]).to.equal(itemA);
         expect(Model.List.getItem(state, 1)[0]).to.equal(itemB);
+      });
+
+      it('returns item from getter function: ID (string)', () => {
+        const { getItem } = Model.List.array();
+        const state = Model.List.state({ total: 2, getItem });
+
+        const [itemA, indexA] = Model.List.getItem(state, 0);
+        const [itemB, indexB] = Model.List.getItem(state, itemA?.instance ?? '');
+
+        expect(itemA).to.equal(itemB);
+        expect(indexA).to.eql(indexB);
       });
 
       it('out of bounds', () => {
