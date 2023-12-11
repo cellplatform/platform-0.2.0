@@ -3,7 +3,7 @@ import { StoreIndex, rx, toObject, type t } from './common';
 
 export const WrangleItem = {
   $(item: t.RepoItemCtx) {
-    const mode = () => Data.item(item).mode;
+    const mode = () => Data.item(item).kind;
     return {
       action$(action: t.RepoListAction, kind?: t.RepoListActionCtx['kind']) {
         return item.events.cmd.action.kind(action).pipe(

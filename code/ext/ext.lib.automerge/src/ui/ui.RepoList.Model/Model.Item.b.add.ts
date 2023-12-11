@@ -21,7 +21,7 @@ export function addBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }
   /**
    * (Trigger) Listener.
    */
-  const mode = () => Data.item(item.state).mode;
+  const mode = () => Data.item(item.state).kind;
   const addModeFilter = rx.filter(() => mode() === 'Add');
   item.events.key.enter$.pipe(addModeFilter).subscribe(add);
   item.events.cmd.action.kind('Item:Left').pipe(addModeFilter).subscribe(add);

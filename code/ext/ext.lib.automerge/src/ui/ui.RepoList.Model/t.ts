@@ -26,7 +26,7 @@ export type RepoListModel = t.Lifecycle & {
  */
 export type GetRepoLabelItem = t.GetLabelItem<t.RepoListAction, t.RepoItemData>;
 export type RepoItemData = {
-  mode: 'Add' | 'Doc';
+  kind: 'Add' | 'Doc';
   uri?: string;
 };
 

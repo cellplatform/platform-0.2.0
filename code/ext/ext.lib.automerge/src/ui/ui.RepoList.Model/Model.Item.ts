@@ -5,25 +5,25 @@ import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
 type D = t.RepoItemData;
-type M = D['mode'];
+type K = D['kind'];
 
 export const ItemModel = {
-  initial(mode: M): t.RepoItem {
-    const data: D = { mode };
+  initial(kind: K): t.RepoItem {
+    const data: D = { kind };
     return {
       label: '',
       left: { kind: 'Item:Left' },
       right: { kind: 'Item:Right' },
       data,
-      editable: mode === 'Doc',
+      editable: kind === 'Doc',
     };
   },
 
   /**
    * State wrapper.
    */
-  state(ctx: t.RepoListCtxGet, mode: M, options: { dispose$?: t.UntilObservable } = {}) {
-    const initial = ItemModel.initial(mode);
+  state(ctx: t.RepoListCtxGet, kind: K, options: { dispose$?: t.UntilObservable } = {}) {
+    const initial = ItemModel.initial(kind);
     const type = DEFAULTS.typename.Item;
     const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
     const events = state.events(options.dispose$);

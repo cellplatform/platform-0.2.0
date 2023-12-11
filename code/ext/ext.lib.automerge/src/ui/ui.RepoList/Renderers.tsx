@@ -10,17 +10,17 @@ export const Renderers = {
     return {
       label(e) {
         const data = Data.item(e.item);
-        if (data.mode === 'Add') return;
+        if (data.kind === 'Add') return;
         if (!e.item.label) return;
         return <>{e.item.label}</>;
       },
 
       placeholder(e) {
         const data = Data.item(e.item);
-        if (data.mode === 'Add') {
+        if (data.kind === 'Add') {
           return <>{props.newlabel ?? DEFAULTS.newlabel}</>;
         }
-        if (data.mode === 'Doc') {
+        if (data.kind === 'Doc') {
           const style = css({ fontFamily: 'monospace', fontSize: 11 });
           const uri = Wrangle.placeholderUri(data.uri);
           return <div {...style}>{uri}</div>;
@@ -32,17 +32,17 @@ export const Renderers = {
         const data = Data.item(e.item);
 
         if (e.kind === 'Item:Left') {
-          if (data.mode === 'Add') {
+          if (data.kind === 'Add') {
             const color = e.focused ? e.color : COLORS.BLUE;
             return <Icons.Add {...helpers.icon(e, 17)} color={color} />;
           }
 
-          if (data.mode === 'Doc') {
+          if (data.kind === 'Doc') {
             return <Icons.Database {...helpers.icon(e, 18)} />;
           }
         }
 
-        if (e.kind === 'Item:Right' && data.mode === 'Doc') {
+        if (e.kind === 'Item:Right' && data.kind === 'Doc') {
           if (behaviors.includes('Shareable')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
             const item = Wrangle.indexItem(list, data.uri);

@@ -22,7 +22,7 @@ export function renameBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCt
   /**
    * (Trigger) Listener
    */
-  const mode = () => Data.item(item.state).mode;
+  const mode = () => Data.item(item.state).kind;
   item.events.cmd.edited$
     .pipe(
       rx.filter((e) => e.action === 'accepted'),
