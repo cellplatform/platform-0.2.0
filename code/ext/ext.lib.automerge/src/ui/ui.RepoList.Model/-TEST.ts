@@ -1,5 +1,5 @@
 import { Model } from '.';
-import { rx, Test, TestDb, WebStore, expect } from '../../test.ui';
+import { Test, TestDb, WebStore, expect, rx } from '../../test.ui';
 import { DEFAULTS, Is } from './common';
 
 export default Test.describe('RepoList.Model', (e) => {
@@ -27,7 +27,6 @@ export default Test.describe('RepoList.Model', (e) => {
       expect(events.disposed).to.eql(false, 'events');
 
       model.dispose();
-
       expect(model.disposed).to.eql(true, 'model');
       expect(events.disposed).to.eql(true, 'events');
     });

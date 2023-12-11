@@ -23,6 +23,7 @@ export type RepoListCtx = {
   handlers: t.RepoListHandlers;
   dispose$?: t.UntilObservable;
   filter: t.StoreIndexFilter;
+  events: (dispose$?: t.UntilObservable) => t.RepoListEvents;
 };
 
 export type RepoItemCtx = {
@@ -48,12 +49,4 @@ export type RepoListClickHandlerArgs = {
   item: t.StoreIndexDocItem;
 };
 
-export type RepoListActiveHandler = (e: RepoListActiveHandlerArgs) => void;
-export type RepoListActiveHandlerArgs = {
-  store: t.Store;
-  index: t.StoreIndex;
-  position: { index: number; total: number };
-  kind: t.RepoItemData['kind'];
-  item: t.StoreIndexDocItem;
-  focused: boolean;
-};
+export type RepoListActiveHandler = (e: t.RepoListActiveEventArgs) => void;

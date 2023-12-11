@@ -16,7 +16,7 @@ export default Dev.describe(name, async (e) => {
 
   let model: t.RepoListModel;
   let ref: t.RepoListRef;
-  let active: t.RepoListActiveHandlerArgs | undefined;
+  let active: t.RepoListActiveEventArgs | undefined;
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');

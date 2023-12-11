@@ -3,9 +3,9 @@ import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
+import { listSelectionBehavior } from './Model.List.b.selection';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 import { Wrangle } from './u.Wrangle';
-import { listSelectionBehavior } from './Model.List.b.selection';
 
 type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
 
@@ -24,6 +24,7 @@ export const List = {
     /**
      * Model.
      */
+    const events = (dispose$?: t.UntilObservable) => eventsFactory({ ctx, dispose$ });
     const ctx: t.RepoListCtxGet = () => ({
       list,
       store,
@@ -31,6 +32,7 @@ export const List = {
       handlers,
       filter,
       dispose$,
+      events,
     });
     const array = Model.List.array((i) => ItemModel.state(ctx, 'Doc', { dispose$ }));
     const getItem = GetItem(ctx, array);
@@ -56,9 +58,7 @@ export const List = {
       store,
       index,
       list,
-      events(dispose$) {
-        return eventsFactory(api, { dispose$ });
-      },
+      events,
 
       /**
        * Lifecycle.
