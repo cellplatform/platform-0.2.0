@@ -115,7 +115,7 @@ export const StoreIndex = {
           added = unique.length;
         });
 
-        toggleShared.forEach(({ uri, value }) => api.toggleShared(uri, { value }));
+        toggleShared.forEach(({ uri, value }) => api.toggleShared(uri, { shared: value }));
         return added;
       },
 

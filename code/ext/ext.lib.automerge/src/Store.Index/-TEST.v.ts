@@ -309,11 +309,11 @@ describe('StoreIndex', async () => {
       expect(getSharedAt(0)?.current).to.eql(false);
       expect(res2).to.eql([{ uri: A, shared: false, version: 2 }]);
 
-      index.toggleShared(A, { value: true });
+      index.toggleShared(A, { shared: true });
       expect(getSharedAt(0)?.current).to.eql(true);
       expect(getSharedAt(0)?.version.value).to.eql(3);
 
-      index.toggleShared(A, { value: true });
+      index.toggleShared(A, { shared: true });
       expect(getSharedAt(0)?.version.value).to.eql(3); // NB: no change.
 
       store.dispose();
@@ -478,7 +478,7 @@ describe('StoreIndex', async () => {
         index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0]));
         expect(item().shared?.current).to.eql(true);
 
-        index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0], { value: true })); // NB: no change.
+        index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0], { shared: true })); // NB: no change.
         expect(item().shared?.current).to.eql(true);
 
         index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[0])); // NB: explicit value.
