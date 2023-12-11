@@ -29,8 +29,12 @@ export type LabelListState<D extends O = O> = t.PatchState<t.LabelList<D>, t.Lab
 export type LabelListEvents<D extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.PatchChange<t.LabelList<D>>>;
   readonly total$: t.Observable<number>;
-  readonly selected$: t.Observable<Id>; // NB: empty string when nothing selected.
-  readonly editing$: t.Observable<Id>; //  NB: empty string when not editing.
+  readonly editing$: t.Observable<Id>; // NB: empty string when not editing.
+  readonly active: {
+    readonly $: t.Observable<t.LabelListEventsActiveChange>;
+    readonly selected$: t.Observable<t.LabelListEventsActiveChange>;
+    readonly focused$: t.Observable<t.LabelListEventsActiveChange>;
+  };
   readonly cmd: {
     readonly $: t.Observable<t.LabelListCmd>;
     readonly redraw$: t.Observable<t.LabelListRedrawCmdArgs>;
@@ -45,8 +49,11 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
     dispose$?: t.UntilObservable,
   ): {
     selected$: t.Observable<boolean>;
+    focused$: t.Observable<boolean>;
   };
 };
+
+export type LabelListEventsActiveChange = { focused: boolean; selected?: Id };
 
 /**
  * Event Commands

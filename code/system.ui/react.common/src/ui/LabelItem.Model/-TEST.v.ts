@@ -91,26 +91,56 @@ describe('LabelItem.Model', () => {
         const array = Model.List.array({});
         const list = Model.List.state({ total: 3, getItem: array.getItem });
         const events = list.events();
-        const $ = events.item('foo', dispose$).selected$;
+        const foo = events.item('foo', dispose$);
 
-        const firedBool: boolean[] = [];
-        const firedId: string[] = [];
-        $.subscribe((e) => firedBool.push(e));
-        events.selected$.subscribe((e) => firedId.push(e));
+        const fired: boolean[] = [];
+        const firedDetail: t.LabelListEventsActiveChange[] = [];
+        foo.selected$.subscribe((e) => fired.push(e));
+        events.active.selected$.subscribe((e) => firedDetail.push(e));
 
         list.change((d) => (d.selected = 'foo'));
         list.change((d) => (d.selected = 'foo'));
 
-        expect(firedBool[0]).to.eql(true);
-        expect(firedId[0]).to.eql('foo');
+        expect(fired[0]).to.eql(true);
+        expect(firedDetail[0].selected).to.eql('foo');
 
         list.change((d) => (d.selected = 'bar'));
-        expect(firedBool[1]).to.eql(false);
-        expect(firedId[1]).to.eql('bar');
+        expect(fired[1]).to.eql(false);
+        expect(firedDetail[1].selected).to.eql('bar');
 
         dispose();
         list.change((d) => (d.selected = 'foo'));
-        expect(firedBool.length).to.eql(2); // NB: no change
+        expect(fired.length).to.eql(2); // NB: no change
+      });
+
+      it.only('events.item( id ).focused$', () => {
+        const { dispose$, dispose } = rx.disposable();
+        const array = Model.List.array({});
+        const list = Model.List.state({ total: 3, getItem: array.getItem });
+        const events = list.events();
+        const foo = events.item('foo', dispose$);
+
+        const fired: boolean[] = [];
+        const firedDetail: t.LabelListEventsActiveChange[] = [];
+        foo.focused$.subscribe((e) => fired.push(e));
+        events.active.focused$.subscribe((e) => firedDetail.push(e));
+
+        list.change((d) => (d.selected = 'foo'));
+        list.change((d) => (d.selected = 'foo'));
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0]).to.eql(false);
+        expect(firedDetail[0].focused).to.eql(false);
+
+        list.change((d) => (d.focused = true));
+        expect(fired[1]).to.eql(true);
+        expect(firedDetail[1].focused).to.eql(true);
+
+        list.change((d) => (d.selected = 'bar'));
+        expect(fired[2]).to.eql(false);
+        expect(firedDetail[2]).to.eql(undefined); // NB: global list focus state NOT changed.
+
+        dispose();
       });
     });
   });
