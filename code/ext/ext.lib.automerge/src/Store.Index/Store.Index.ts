@@ -23,7 +23,7 @@ export const StoreIndex = {
   async init(store: t.Store, options: { uri?: string } = {}) {
     const { uri } = options;
     const repo = store.repo;
-    const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []), uri);
+    const doc = await store.doc.getOrCreate<t.StoreIndexDoc>((d) => (d.docs = []), uri);
     const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
 
     if (!Is.repoIndex(doc.current)) {
@@ -104,7 +104,7 @@ export const StoreIndex = {
             .map(({ shared, uri, name, meta }) => ({
               uri,
               shared,
-              doc: Delete.undefined<t.RepoIndexDoc>({ uri, name, meta }),
+              doc: Delete.undefined<t.StoreIndexItem>({ uri, name, meta }),
             }));
 
           const unique = R.uniqBy((e) => e.uri, inserts);
@@ -151,10 +151,9 @@ export const StoreIndex = {
             const docs = Data.array(d.docs);
             uris.forEach((uri) => {
               const i = findIndex(uri);
-              const item = docs[i];
-              const shared = wrangle.shared(item);
-              shared.current = typeof options.value === 'boolean' ? options.value : !shared.current;
-              res.push({ uri, shared: shared.current });
+              const doc = docs[i];
+              const shared = Mutate.toggleShared(doc, options);
+              res.push({ uri, shared: shared.current, version: shared.version.value });
             });
           });
         }
@@ -200,10 +199,5 @@ const wrangle = {
     const res: t.RepoIndexDocMeta = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
-  },
-
-  shared(item: t.RepoIndexDoc) {
-    if (typeof item.shared !== 'object') item.shared = { current: false };
-    return item.shared!;
   },
 } as const;

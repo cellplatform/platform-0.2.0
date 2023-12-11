@@ -65,7 +65,7 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.repoIndex', (e) => {
-    const index: t.RepoIndex = { docs: [] };
+    const index: t.StoreIndexDoc = { docs: [] };
     expect(Is.repoIndex(index)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
   });

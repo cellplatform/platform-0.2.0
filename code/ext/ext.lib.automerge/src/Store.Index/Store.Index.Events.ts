@@ -11,13 +11,13 @@ export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObserva
 
   const $$ = rx.subject<t.StoreIndexEvent>();
   const $ = $$.pipe(rx.takeUntil(dispose$));
-  const changed$ = rx.payload<t.DocChangedEvent<t.RepoIndex>>($, 'crdt:DocChanged');
+  const changed$ = rx.payload<t.DocChangedEvent<t.StoreIndexDoc>>($, 'crdt:DocChanged');
   const doc = index.doc.events(dispose$);
   doc.$.subscribe((e) => $$.next(e));
 
-  const notEphemeral = (doc: t.RepoIndexDoc) => !doc.meta?.ephemeral;
-  const getTotal = (index: t.RepoIndex) => index.docs.filter(notEphemeral).length;
-  const fire = (type: ChangeType, index: number, total: number, item: t.RepoIndexDoc) => {
+  const notEphemeral = (doc: t.StoreIndexItem) => !doc.meta?.ephemeral;
+  const getTotal = (index: t.StoreIndexDoc) => index.docs.filter(notEphemeral).length;
+  const fire = (type: ChangeType, index: number, total: number, item: t.StoreIndexItem) => {
     if (!item) return;
     $$.next({ type, payload: { index, total, item } });
   };

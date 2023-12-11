@@ -6,7 +6,7 @@ type D = { count?: t.A.Counter };
 export default Test.describe('Store.Web: Index', (e) => {
   const name = TestDb.Unit.name;
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-  const contains = (docs: t.RepoIndexDoc[], uri: string) => docs.some((e) => e.uri === uri);
+  const contains = (docs: t.StoreIndexItem[], uri: string) => docs.some((e) => e.uri === uri);
 
   e.describe('lifecycle', (e) => {
     e.it('initialize', async (e) => {
@@ -48,7 +48,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const index = await WebStore.index(store);
       const events = index.doc.events();
 
-      const fired: t.RepoIndex[] = [];
+      const fired: t.StoreIndexDoc[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
 
       const totalBefore = index.total();
@@ -70,7 +70,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const index = await WebStore.index(store);
       const events = index.doc.events();
 
-      const fired: t.RepoIndex[] = [];
+      const fired: t.StoreIndexDoc[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
 
       const sample = await store.doc.getOrCreate(initial);

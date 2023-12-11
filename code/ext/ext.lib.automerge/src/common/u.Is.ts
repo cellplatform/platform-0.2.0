@@ -50,9 +50,9 @@ export const Is = {
     return true;
   },
 
-  repoIndex(input: any): input is t.RepoIndex {
+  repoIndex(input: any): input is t.StoreIndexDoc {
     if (!isObject(input)) return false;
-    const subject = input as t.RepoIndex;
+    const subject = input as t.StoreIndexDoc;
     return Array.isArray(subject.docs);
   },
 

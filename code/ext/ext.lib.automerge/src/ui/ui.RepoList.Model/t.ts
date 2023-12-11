@@ -61,6 +61,6 @@ export type RepoListClickHandler = (e: RepoListClickHandlerArgs) => void;
 export type RepoListClickHandlerArgs = {
   store: t.Store;
   index: t.StoreIndex;
-  item: t.RepoIndexDoc;
+  item: t.StoreIndexItem;
   position: { index: number; total: number };
 };
