@@ -1,9 +1,12 @@
 import { RepoList } from '.';
-import { rx, Dev, Doc, TestDb, Time, WebStore, slug, type t } from '../../test.ui';
+import { Dev, Doc, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.ui.Info';
 import { Reload } from './-SPEC.ui.Reload';
 
-type T = { props: t.RepoListProps; debug: { reload?: boolean } };
+type T = {
+  props: t.RepoListProps;
+  debug: { reload?: boolean };
+};
 const name = RepoList.displayName ?? '';
 const initial: T = { props: {}, debug: {} };
 
@@ -13,6 +16,7 @@ export default Dev.describe(name, async (e) => {
 
   let model: t.RepoListModel;
   let ref: t.RepoListRef;
+  let selected: t.RepoListSelectionHandlerArgs | undefined;
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
@@ -28,6 +32,10 @@ export default Dev.describe(name, async (e) => {
     model = await RepoList.model(store, {
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
+      onSelection: (e) => {
+        console.info(`⚡️ onSelection`, e);
+        selected = e;
+      },
     });
     ref = RepoList.Ref(model);
 
@@ -41,7 +49,9 @@ export default Dev.describe(name, async (e) => {
       list: model.list.state.events(),
       index: model.index.events(),
     };
-    events.list.$.pipe(rx.debounceTime(100)).subscribe(() => dev.redraw('debug'));
+
+    const redraw$ = rx.merge(events.list.$, events.list.selected$);
+    redraw$.pipe(rx.debounceTime(100)).subscribe(() => dev.redraw('debug'));
     events.index.changed$.subscribe(() => dev.redraw('debug'));
     events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
 
@@ -148,10 +158,11 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        list: model.list.state.current,
+        'model:list': model.list.state.current,
         db: storage,
         'db:index': `${model.index.db.name}[${model.index.total()}]`,
         'db:index.doc': model.index.doc.toObject(),
+        selected,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

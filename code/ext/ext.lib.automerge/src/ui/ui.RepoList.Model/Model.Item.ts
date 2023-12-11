@@ -11,10 +11,10 @@ export const ItemModel = {
   initial(kind: K): t.RepoItem {
     const data: D = { kind };
     return {
+      data,
       label: '',
       left: { kind: 'Item:Left' },
       right: { kind: 'Item:Right' },
-      data,
       editable: kind === 'Doc',
     };
   },

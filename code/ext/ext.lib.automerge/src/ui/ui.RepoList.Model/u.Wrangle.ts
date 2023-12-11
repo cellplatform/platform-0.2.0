@@ -1,5 +1,8 @@
 import { Data, type ItemInput } from './Data';
-import { StoreIndex, rx, toObject, type t } from './common';
+import { Model, StoreIndex, rx, toObject, type t } from './common';
+
+type Index = number;
+type Id = string;
 
 export const WrangleItem = {
   $(item: t.RepoItemCtx) {
@@ -15,7 +18,7 @@ export const WrangleItem = {
     } as const;
   },
 
-  indexOf(getCtx: t.RepoListCtxGet, input: ItemInput) {
+  get(getCtx: t.RepoListCtxGet, input: ItemInput) {
     const ctx = getCtx();
     const data = Data.item(input);
     const docs = Wrangle.filterDocs(ctx.index.doc.current, ctx.filter);
@@ -24,18 +27,24 @@ export const WrangleItem = {
     const exists = index > -1;
     const total = docs.length;
     const position = { index, total };
-    return { exists, index, position, item } as const;
+    return { exists, index, position, item, data } as const;
   },
 
   click(getCtx: t.RepoListCtxGet, input: ItemInput): t.RepoListClickHandlerArgs {
     const { store, index } = getCtx();
-    const { item, position } = WrangleItem.indexOf(getCtx, input);
+    const { item, position } = WrangleItem.get(getCtx, input);
     return { store, index, position, item: toObject(item) };
   },
 } as const;
 
 export const Wrangle = {
   Item: WrangleItem,
+
+  getItem(getCtx: t.RepoListCtxGet, target: Index | Id) {
+    const ctx = getCtx();
+    const [item] = Model.List.getItem(ctx.list.state, target);
+    return item ? WrangleItem.get(getCtx, item) : undefined;
+  },
 
   total(getCtx: t.RepoListCtxGet) {
     const { index, filter } = getCtx();

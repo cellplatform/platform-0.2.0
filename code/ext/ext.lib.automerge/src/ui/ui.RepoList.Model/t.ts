@@ -50,17 +50,27 @@ export type RepoItemCtx = {
 };
 
 /**
- * Events
+ * Event Handlers
  */
 export type RepoListHandlers = {
   onShareClick?: t.RepoListClickHandler;
   onDatabaseClick?: t.RepoListClickHandler;
+  onSelection?: t.RepoListSelectionHandler;
 };
 
 export type RepoListClickHandler = (e: RepoListClickHandlerArgs) => void;
 export type RepoListClickHandlerArgs = {
   store: t.Store;
   index: t.StoreIndex;
-  item: t.StoreIndexDocItem;
   position: { index: number; total: number };
+  item: t.StoreIndexDocItem;
+};
+
+export type RepoListSelectionHandler = (e: RepoListSelectionHandlerArgs) => void;
+export type RepoListSelectionHandlerArgs = {
+  store: t.Store;
+  index: t.StoreIndex;
+  position: { index: number; total: number };
+  kind: t.RepoItemData['kind'];
+  item: t.StoreIndexDocItem;
 };

@@ -72,7 +72,7 @@ export const List = {
  */
 const wrangle = {
   handlers(options: Options = {}): t.RepoListHandlers {
-    const { onShareClick, onDatabaseClick } = options;
-    return { onShareClick, onDatabaseClick };
+    const { onShareClick, onDatabaseClick, onSelection } = options;
+    return { onShareClick, onDatabaseClick, onSelection } as const;
   },
 } as const;
