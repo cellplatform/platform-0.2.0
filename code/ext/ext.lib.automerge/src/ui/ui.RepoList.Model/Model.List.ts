@@ -1,3 +1,4 @@
+import { eventsFactory } from './Model.Events';
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
@@ -55,6 +56,9 @@ export const List = {
       store,
       index,
       list,
+      events(dispose$) {
+        return eventsFactory(api, { dispose$ });
+      },
 
       /**
        * Lifecycle.

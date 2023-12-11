@@ -1,5 +1,5 @@
 import { Model } from '.';
-import { Test, TestDb, WebStore, expect } from '../../test.ui';
+import { rx, Test, TestDb, WebStore, expect } from '../../test.ui';
 import { DEFAULTS, Is } from './common';
 
 export default Test.describe('RepoList.Model', (e) => {
@@ -30,6 +30,27 @@ export default Test.describe('RepoList.Model', (e) => {
 
       expect(model.disposed).to.eql(true, 'model');
       expect(events.disposed).to.eql(true, 'events');
+    });
+  });
+
+  e.describe('Model.List.Events', (e) => {
+    e.it('init → dispose', async (e) => {
+      const model = await Model.init(store);
+      const life = rx.disposable();
+
+      const events1 = model.events();
+      const events2 = model.events(life.dispose$);
+
+      expect(events1.disposed).to.eql(false);
+      expect(events2.disposed).to.eql(false);
+
+      life.dispose();
+      expect(events1.disposed).to.eql(false);
+      expect(events2.disposed).to.eql(true);
+
+      model.dispose();
+      expect(events1.disposed).to.eql(true);
+      expect(events2.disposed).to.eql(true);
     });
   });
 
