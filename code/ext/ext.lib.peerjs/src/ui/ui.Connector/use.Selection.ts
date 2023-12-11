@@ -18,7 +18,7 @@ export function useSelection(args: {
      * Listen.
      */
     const events = list.events(dispose$);
-    rx.merge(events.selected$, events.total$)
+    rx.merge(events.active.selected$, events.total$)
       .pipe(
         rx.map(() => Wrangle.selectionEvent(peer, list)),
         rx.filter(Boolean),
