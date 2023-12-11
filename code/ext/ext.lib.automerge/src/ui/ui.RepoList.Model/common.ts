@@ -7,7 +7,7 @@ export const Model = LabelItem.Stateful.Model;
 /**
  * Constants
  */
-const filter: t.RepoIndexFilter = (e) => {
+const filter: t.StoreIndexFilter = (e) => {
   // NB: ephemeral docs are excluded from the visual document list.
   if (e.doc.meta?.ephemeral) return false;
   return true;

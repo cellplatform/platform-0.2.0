@@ -40,7 +40,7 @@ export type RepoListCtx = {
   index: t.StoreIndex;
   handlers: t.RepoListHandlers;
   dispose$?: t.UntilObservable;
-  filter: t.RepoIndexFilter;
+  filter: t.StoreIndexFilter;
 };
 
 export type RepoItemCtx = {

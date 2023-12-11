@@ -17,13 +17,13 @@ export type StoreIndex = {
   readonly toggleShared: t.StoreIndexToggleShared;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
   exists(uri: UriInput): boolean;
-  total(filter?: t.RepoIndexFilter): number;
+  total(filter?: t.StoreIndexFilter): number;
   add(doc: AddSubject | AddSubject[]): Promise<number>;
   remove(uri: UriInput): number;
 };
 
-export type RepoIndexFilter = (e: RepoIndexFilterArgs, index: number) => boolean;
-export type RepoIndexFilterArgs = { doc: t.StoreIndexItem; index: number };
+export type StoreIndexFilter = (e: StoreIndexFilterArgs, index: number) => boolean;
+export type StoreIndexFilterArgs = { doc: t.StoreIndexItem; index: number };
 
 /**
  * Index of documents within a store/repository.

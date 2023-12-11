@@ -5,7 +5,7 @@ import { listRedrawBehavior } from './Model.List.b.redraw';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
-type Options = { dispose$?: t.UntilObservable; filter?: t.RepoIndexFilter } & t.RepoListHandlers;
+type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
 
 export const List = {
   /**

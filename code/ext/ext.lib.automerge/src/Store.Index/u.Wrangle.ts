@@ -4,7 +4,7 @@ export const Wrangle = {
   /**
    * Filter a set of docs within the index.
    */
-  filter(docs: t.StoreIndexItem[], filter?: t.RepoIndexFilter) {
+  filter(docs: t.StoreIndexItem[], filter?: t.StoreIndexFilter) {
     return !filter ? docs : docs.filter((doc, index) => filter({ doc, index }, index));
   },
 
