@@ -16,7 +16,7 @@ export default Dev.describe(name, async (e) => {
 
   let model: t.RepoListModel;
   let ref: t.RepoListRef;
-  let selected: t.RepoListSelectionHandlerArgs | undefined;
+  let active: t.RepoListActiveHandlerArgs | undefined;
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
@@ -32,9 +32,9 @@ export default Dev.describe(name, async (e) => {
     model = await RepoList.model(store, {
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
-      onSelection: (e) => {
-        console.info(`⚡️ onSelection`, e);
-        selected = e;
+      onActiveChanged: (e) => {
+        console.info(`⚡️ onActiveChanged`, e);
+        active = e;
       },
     });
     ref = RepoList.Ref(model);
@@ -50,7 +50,7 @@ export default Dev.describe(name, async (e) => {
       index: model.index.events(),
     };
 
-    const redraw$ = rx.merge(events.list.$, events.list.selected$);
+    const redraw$ = rx.merge(events.list.$, events.list.active.$);
     redraw$.pipe(rx.debounceTime(100)).subscribe(() => dev.redraw('debug'));
     events.index.changed$.subscribe(() => dev.redraw('debug'));
     events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
@@ -162,7 +162,7 @@ export default Dev.describe(name, async (e) => {
         db: storage,
         'db:index': `${model.index.db.name}[${model.index.total()}]`,
         'db:index.doc': model.index.doc.toObject(),
-        selected,
+        active: active?.item || undefined,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

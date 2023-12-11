@@ -36,7 +36,7 @@ export type RepoItemCtx = {
 export type RepoListHandlers = {
   onShareClick?: t.RepoListClickHandler;
   onDatabaseClick?: t.RepoListClickHandler;
-  onSelection?: t.RepoListSelectionHandler;
+  onActiveChanged?: t.RepoListActiveHandler;
 };
 
 export type RepoListClickHandler = (e: RepoListClickHandlerArgs) => void;
@@ -47,11 +47,12 @@ export type RepoListClickHandlerArgs = {
   item: t.StoreIndexDocItem;
 };
 
-export type RepoListSelectionHandler = (e: RepoListSelectionHandlerArgs) => void;
-export type RepoListSelectionHandlerArgs = {
+export type RepoListActiveHandler = (e: RepoListActiveHandlerArgs) => void;
+export type RepoListActiveHandlerArgs = {
   store: t.Store;
   index: t.StoreIndex;
   position: { index: number; total: number };
   kind: t.RepoItemData['kind'];
   item: t.StoreIndexDocItem;
+  focused: boolean;
 };

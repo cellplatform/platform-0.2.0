@@ -41,9 +41,9 @@ export const WrangleItem = {
 export const Wrangle = {
   Item: WrangleItem,
 
-  getItem(getCtx: t.RepoListCtxGet, target: Index | Id) {
+  getItem(getCtx: t.RepoListCtxGet, target?: Index | Id) {
     const ctx = getCtx();
-    const [item] = Model.List.getItem(ctx.list.state, target);
+    const [item] = Model.List.getItem(ctx.list.state, target || '');
     return item ? WrangleItem.get(getCtx, item) : undefined;
   },
 

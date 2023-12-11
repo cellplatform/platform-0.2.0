@@ -4,7 +4,7 @@ import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
 import { Wrangle } from './u.Wrangle';
-import { listSelectedBehavior } from './Model.List.b.selected';
+import { listSelectionBehavior } from './Model.List.b.selection';
 
 type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
 
@@ -44,7 +44,7 @@ export const List = {
     const dispatch = Model.List.commands(state);
     const list = { state, dispatch };
     listBehavior({ ctx });
-    listSelectedBehavior({ ctx });
+    listSelectionBehavior({ ctx });
     listRedrawBehavior({ ctx, array });
 
     /**
@@ -74,7 +74,7 @@ export const List = {
  */
 const wrangle = {
   handlers(options: Options = {}): t.RepoListHandlers {
-    const { onShareClick, onDatabaseClick, onSelection } = options;
-    return { onShareClick, onDatabaseClick, onSelection } as const;
+    const { onShareClick, onDatabaseClick, onActiveChanged } = options;
+    return { onShareClick, onDatabaseClick, onActiveChanged } as const;
   },
 } as const;
