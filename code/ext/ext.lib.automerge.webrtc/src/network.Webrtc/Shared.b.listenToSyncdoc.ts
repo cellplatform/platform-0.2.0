@@ -1,4 +1,4 @@
-import { Sync } from './SyncDoc.Sync';
+import { Sync } from './Shared.Sync';
 import { R, rx, type t } from './common';
 
 /**

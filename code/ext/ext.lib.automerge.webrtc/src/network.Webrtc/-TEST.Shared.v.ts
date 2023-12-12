@@ -1,10 +1,10 @@
-import { SyncDoc } from '.';
+import { SyncDoc } from './Shared';
 import { Doc, Store, Time, describe, expect, it, type t } from '../test';
-import { listenToIndex } from './SyncDoc.b.listenToIndex';
-import { listenToSyncdoc } from './SyncDoc.b.listenToSyncdoc';
+import { listenToIndex } from './Shared.b.listenToIndex';
+import { listenToSyncdoc } from './Shared.b.listenToSyncdoc';
 
-describe('network.Webrtc', () => {
-  describe('SyncDoc', () => {
+describe('network.Webrtc: Shared', () => {
+  describe('Shared', () => {
     it('getOrCreate', async () => {
       const store = Store.init();
       const doc = await SyncDoc.getOrCreate(store);
@@ -48,7 +48,7 @@ describe('network.Webrtc', () => {
     });
   });
 
-  describe('SyncDoc.Patches', () => {
+  describe('Shared.Patches', () => {
     const setup = async () => {
       const store = Store.init();
       const index = await Store.index(store);
@@ -90,7 +90,7 @@ describe('network.Webrtc', () => {
     });
   });
 
-  describe('SyncDoc.Sync', () => {
+  describe('Shared.Sync', () => {
     it('Sync.listenToIndex: add → rename → remove', async () => {
       const store = Store.init();
       const index = await Store.index(store);

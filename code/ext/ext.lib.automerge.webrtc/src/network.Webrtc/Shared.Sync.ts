@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { Mutate } from './SyncDoc.Mutate';
+import { Mutate } from './Shared.Mutate';
 
 export const Sync = {
   Mutate,

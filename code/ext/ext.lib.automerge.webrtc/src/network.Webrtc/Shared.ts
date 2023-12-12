@@ -1,8 +1,8 @@
-import { Mutate } from './SyncDoc.Mutate';
-import { Patches } from './SyncDoc.Patches';
-import { Sync } from './SyncDoc.Sync';
-import { listenToIndex } from './SyncDoc.b.listenToIndex';
-import { listenToSyncdoc } from './SyncDoc.b.listenToSyncdoc';
+import { Mutate } from './Shared.Mutate';
+import { Patches } from './Shared.Patches';
+import { Sync } from './Shared.Sync';
+import { listenToIndex } from './Shared.b.listenToIndex';
+import { listenToSyncdoc } from './Shared.b.listenToSyncdoc';
 import { Crdt, Doc, UserAgent, rx, type t } from './common';
 
 /**
