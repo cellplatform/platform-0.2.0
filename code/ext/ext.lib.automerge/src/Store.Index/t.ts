@@ -11,7 +11,7 @@ type AddDoc = { uri: Uri; name?: string; shared?: boolean };
  * A CRDT that represents an index of a store/repo.
  */
 export type StoreIndexState = {
-  readonly kind: 'store.index.state';
+  readonly kind: 'crdt.store.index';
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.StoreIndex>;
   readonly toggleShared: t.StoreIndexToggleShared;
@@ -28,11 +28,10 @@ export type StoreIndexFilterArgs = { doc: t.StoreIndexDoc; index: number };
 /**
  * Index of documents within a store/repository.
  */
-export type StoreIndex = { docs: t.StoreIndexDoc[] };
+export type StoreIndex = t.DocWithMeta & { docs: t.StoreIndexDoc[] };
 export type StoreIndexDoc = {
   uri: Uri;
   name?: string;
-  meta?: StoreIndexDocMeta;
+  meta?: Pick<t.DocMeta, 'ephemeral'>;
   shared?: t.StoreIndexItemShared;
 };
-export type StoreIndexDocMeta = Pick<t.DocMeta, 'ephemeral'>;

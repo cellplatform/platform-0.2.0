@@ -15,7 +15,13 @@ export const Shared = {
   Mutate,
 
   get type(): t.DocMetaType {
-    return { name: 'crdt.network.shared' };
+    const name: t.CrdtSharedState['kind'] = 'crdt.network.shared';
+    return { name };
+  },
+
+  get meta(): t.DocMeta {
+    const type = Shared.type;
+    return { ...Doc.Meta.default, type, ephemeral: true };
   },
 
   /**
@@ -23,12 +29,7 @@ export const Shared = {
    */
   async getOrCreate(store: t.Store, uri?: string) {
     return store.doc.getOrCreate<t.CrdtShared>((d) => {
-      const initial: t.DocMeta = {
-        ...Doc.Meta.default,
-        type: Shared.type,
-        ephemeral: true,
-      };
-      Doc.Meta.ensure(d, initial);
+      Doc.Meta.ensure(d, Shared.meta);
       d.peers = {};
       d.docs = {};
     }, uri);
@@ -85,6 +86,7 @@ export const Shared = {
      * API
      */
     return {
+      kind: 'crdt.network.shared',
       store,
       index,
       doc: shared,

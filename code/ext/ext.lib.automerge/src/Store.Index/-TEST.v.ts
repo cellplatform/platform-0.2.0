@@ -21,11 +21,14 @@ describe('StoreIndex', async () => {
     it('defaults', async () => {
       const { store } = setup();
       const index = await Store.Index.init(store);
+      const doc = index.doc.current;
 
-      expect(index.kind === 'store.index.state').to.eql(true);
-      expect(index.store).to.equal(store);
-      expect(index.doc.current.docs).to.eql([]);
       expect(index.total()).to.eql(0);
+      expect(index.kind === 'crdt.store.index').to.eql(true);
+      expect(index.store).to.equal(store);
+      expect(doc.docs).to.eql([]);
+      expect(doc['.meta'].type?.name).to.eql(index.kind);
+      expect(doc['.meta'].ephemeral).to.not.exist;
 
       store.dispose();
     });

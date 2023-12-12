@@ -1,8 +1,9 @@
 import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
+import { Data, Delete, DocUri, Is, R, type t } from './common';
+
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
 import { Mutate } from './Store.Index.Mutate';
-import { Data, Delete, DocUri, Is, R, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
@@ -17,13 +18,27 @@ export const StoreIndex = {
   events,
   filter: Wrangle.filter,
 
+  get type(): t.DocMetaType {
+    const name: t.StoreIndexState['kind'] = 'crdt.store.index';
+    return { name };
+  },
+
+  get meta(): t.DocMeta {
+    const type = StoreIndex.type;
+    return { ...Doc.Meta.default, type };
+  },
+
   /**
    * Create a new Index handle.
    */
   async init(store: t.Store, options: { uri?: string } = {}) {
     const { uri } = options;
     const repo = store.repo;
-    const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => (d.docs = []), uri);
+    const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => {
+      Doc.Meta.ensure(d, StoreIndex.meta);
+      d.docs = [];
+    }, uri);
+
     const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
 
     if (!Is.repoIndex(doc.current)) {
@@ -58,7 +73,7 @@ export const StoreIndex = {
 
     // Finish up.
     const api: t.StoreIndexState = {
-      kind: 'store.index.state',
+      kind: 'crdt.store.index',
       store,
       doc,
 
@@ -196,7 +211,7 @@ const wrangle = {
     const meta = Doc.Meta.get(ref.current);
     if (!meta) return undefined;
 
-    const res: t.StoreIndexDocMeta = {};
+    const res: t.StoreIndexDoc['meta'] = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
   },

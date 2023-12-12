@@ -35,7 +35,7 @@ export const Is = {
   storeIndex(input: any): input is t.StoreIndexState {
     if (!isObject(input)) return false;
     const index = input as t.StoreIndexState;
-    return index.kind === 'store.index.state' && Is.store(index.store);
+    return index.kind === 'crdt.store.index' && Is.store(index.store);
   },
 
   webStore(input: any): input is t.WebStore {

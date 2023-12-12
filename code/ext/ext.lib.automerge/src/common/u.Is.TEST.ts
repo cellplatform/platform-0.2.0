@@ -65,7 +65,7 @@ export default Test.describe('Is', (e) => {
   });
 
   e.it('Is.repoIndex', (e) => {
-    const index: t.StoreIndex = { docs: [] };
+    const index: t.StoreIndex = { ['.meta']: Store.Index.meta, docs: [] };
     expect(Is.repoIndex(index)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
   });
