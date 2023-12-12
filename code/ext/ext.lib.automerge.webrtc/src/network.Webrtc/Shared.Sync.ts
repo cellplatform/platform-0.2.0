@@ -45,7 +45,7 @@ export const Sync = {
         index: indexItem?.version.value ?? -1,
         shared: sharedItem.version ?? -1,
       };
-      const shared = {
+      const current = {
         index: indexItem?.current,
         shared: sharedItem.current,
       };
@@ -53,7 +53,7 @@ export const Sync = {
         index: !!indexItem,
         shared: !!sharedItem.current,
       };
-      return { uri, exists, version, shared } as const;
+      return { uri, exists, version, current } as const;
     };
 
     const updates = Object.entries(shared.current.docs)
@@ -62,13 +62,11 @@ export const Sync = {
 
     const wait = updates.map(async (e) => {
       const { uri } = e;
-      const shared = e.shared.shared;
+      const exists = e.exists.index;
       const version = e.version.shared;
-      if (!e.exists.index) {
-        await index.add({ uri, shared });
-      } else {
-        index.toggleShared(uri, { shared, version });
-      }
+      const shared = e.current.shared;
+      if (!exists && shared) await index.add({ uri, shared });
+      if (exists) index.toggleShared(uri, { shared, version });
     });
 
     await Promise.all(wait);
