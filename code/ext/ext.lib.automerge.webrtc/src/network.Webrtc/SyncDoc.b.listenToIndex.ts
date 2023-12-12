@@ -1,4 +1,4 @@
-import { Sync, type Action } from './SyncDoc.Sync';
+import { Sync } from './SyncDoc.Sync';
 import { type t } from './common';
 
 /**
@@ -11,7 +11,7 @@ export function listenToIndex(
 ) {
   const { debugLabel, dispose$ } = options;
   const events = index.events(dispose$);
-  const change = (indexItem: t.StoreIndexDocItem, action?: Action) => {
+  const change = (indexItem: t.StoreIndexDocItem, action?: t.WebrtcSyncDocMutateAction) => {
     syncdoc.change((d) => Sync.Mutate.syncdoc(d, indexItem, { action, debugLabel }));
   };
   events.added$.subscribe((e) => change(e.item));

@@ -1,12 +1,13 @@
 import { type t } from './common';
-
-export type Action = 'unshare';
+import { Mutate } from './SyncDoc.Mutate';
 
 export const Sync = {
+  Mutate,
+
   /**
-   * Sync the entire set of docs within an [Index].
+   * Sync outdated changes from the entire [Index] to the shared [SyncDoc].
    */
-  indexIntoDoc(
+  indexToSyncdoc(
     index: t.StoreIndex,
     syncdoc: t.DocRefHandle<t.WebrtcSyncDoc>,
     options: { debugLabel?: string } = {},
@@ -29,47 +30,48 @@ export const Sync = {
   },
 
   /**
-   * Update an item from the local [Index] into the ephemeral [SyncDoc] clone.
+   * Sync outdated changes from the [SyncDoc] to the [Index]
    */
-  Mutate: {
-    syncdoc(
-      draft: t.WebrtcSyncDoc,
-      indexItem: t.StoreIndexDocItem,
-      options: { debugLabel?: string; action?: Action } = {},
-    ) {
-      const { debugLabel, action } = options;
-      const uri = indexItem.uri;
+  async syncdocToIndex(
+    syncdoc: t.DocRefHandle<t.WebrtcSyncDoc>,
+    index: t.StoreIndex,
+    options: { debugLabel?: string } = {},
+  ) {
+    const { debugLabel } = options;
 
-      const getVersions = () => {
-        const index = indexItem.shared?.version.value ?? -1;
-        const syncdoc = draft.shared[uri]?.version ?? -1;
-        return { index, syncdoc } as const;
+    const meta = (uri: string, syncdocItem: t.WebrtcSyncDocSharedItem) => {
+      const indexItem = index.doc.current.docs.find((item) => item.uri === uri)?.shared;
+      const version = {
+        index: indexItem?.version.value ?? -1,
+        syndoc: syncdocItem.version ?? -1,
       };
-
-      const done = (error?: string) => {
-        const shared = draft.shared[uri]?.current ?? false;
-        const versions = getVersions();
-        const version = Math.max(versions.index, versions.syncdoc);
-        return { uri, shared, version, error } as const;
+      const shared = {
+        index: indexItem?.current,
+        syncdoc: syncdocItem.current,
       };
+      const exists = {
+        index: !!indexItem,
+        syncdoc: !!syncdocItem.current,
+      };
+      return { uri, exists, version, shared } as const;
+    };
 
-      if (indexItem.meta?.ephemeral) return done('Invalid index item (ephemeral)');
+    const updates = Object.entries(syncdoc.current.shared)
+      .map(([key, value]) => meta(key, value))
+      .filter((e) => e.version.syndoc > e.version.index);
 
-      const version = getVersions();
-      if (version.index < 0 && version.syncdoc < 0) return done('Not ready to sync');
-
-      if (version.index >= version.syncdoc) {
-        const shared = draft.shared[uri] ?? { current: false, version: 0 };
-        shared.version = indexItem.shared?.version.value ?? 0;
-        shared.current = indexItem.shared?.current ?? false;
-        if (action === 'unshare') {
-          shared.current = false;
-          shared.version += 1;
-        }
-        if (!draft.shared[uri]) draft.shared[uri] = shared; // NB: ensure the shared object is attached to the CRDT.
+    const wait = updates.map(async (e) => {
+      const { uri } = e;
+      const shared = e.shared.syncdoc;
+      const version = e.version.syndoc;
+      if (!e.exists.index) {
+        await index.add({ uri, shared });
+      } else {
+        index.toggleShared(uri, { shared, version });
       }
+    });
 
-      return done();
-    },
+    await Promise.all(wait);
+    return updates;
   },
 } as const;

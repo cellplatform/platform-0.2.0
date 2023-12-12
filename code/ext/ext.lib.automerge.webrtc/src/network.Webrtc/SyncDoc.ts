@@ -1,3 +1,4 @@
+import { Mutate } from './SyncDoc.Mutate';
 import { Patches } from './SyncDoc.Patches';
 import { Sync } from './SyncDoc.Sync';
 import { listenToIndex } from './SyncDoc.b.listenToIndex';
@@ -11,6 +12,7 @@ import { Crdt, Doc, UserAgent, rx, type t } from './common';
 export const SyncDoc = {
   Sync,
   Patches,
+  Mutate,
 
   /**
    * Get or create a SyncDoc from the given store.
@@ -68,7 +70,7 @@ export const SyncDoc = {
     /**
      * Initialize.
      */
-    Sync.indexIntoDoc(index, syncdoc, { debugLabel });
+    Sync.indexToSyncdoc(index, syncdoc, { debugLabel });
     syncdoc.change((d) => {
       const ua = UserAgent.current;
       const data: t.WebrtcSyncDocPeer = { ua };

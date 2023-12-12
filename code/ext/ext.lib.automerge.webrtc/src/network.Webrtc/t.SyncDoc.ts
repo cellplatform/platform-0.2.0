@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+export type WebrtcSyncDocMutateAction = 'unshare';
+
 /**
  * An ephemeral document for the purposes of synchonizing
  * state and configuration between connected peers.

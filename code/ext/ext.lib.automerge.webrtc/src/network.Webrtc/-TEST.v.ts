@@ -148,7 +148,7 @@ describe('network.Webrtc', () => {
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[3], { shared: true }));
 
       // Ensure the syncer updated the doc.
-      SyncDoc.Sync.indexIntoDoc(index, doc);
+      SyncDoc.Sync.indexToSyncdoc(index, doc);
       const shared = doc.current.shared;
       expect(shared['automerge:a']).to.eql(undefined);
       expect(shared['automerge:b']).to.eql({ current: true, version: 1 });
