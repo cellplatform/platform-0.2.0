@@ -72,8 +72,11 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.section('Peers', (dev) => {
-      const disconnect = () => left.network.peer.disconnect();
       const isConnected = () => left.network.peer.current.connections.length > 0;
+      const disconnect = () => {
+        left.network.peer.disconnect();
+        state.change((d) => (d.reload = true));
+      };
 
       const connectButton = (label: string, fn: () => void) => {
         dev.button((btn) => {
