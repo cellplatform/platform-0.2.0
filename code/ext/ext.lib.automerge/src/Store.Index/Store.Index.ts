@@ -58,7 +58,7 @@ export const StoreIndex = {
 
     // Finish up.
     const api: t.StoreIndexState = {
-      kind: 'store.index:state',
+      kind: 'store.index.state',
       store,
       doc,
 

@@ -12,7 +12,7 @@ export default Test.describe('Store.Web: Index', (e) => {
     e.it('initialize', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const index = await WebStore.index(store);
-      expect(index.kind === 'store.index:state').to.eql(true);
+      expect(index.kind === 'store.index.state').to.eql(true);
       expect(index.db.name).to.eql(WebStore.IndexDb.name(name));
     });
 

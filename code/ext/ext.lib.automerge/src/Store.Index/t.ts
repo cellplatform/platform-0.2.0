@@ -11,7 +11,7 @@ type AddDoc = { uri: Uri; name?: string; shared?: boolean };
  * A CRDT that represents an index of a store/repo.
  */
 export type StoreIndexState = {
-  readonly kind: 'store.index:state';
+  readonly kind: 'store.index.state';
   readonly store: t.Store;
   readonly doc: t.DocRefHandle<t.StoreIndex>;
   readonly toggleShared: t.StoreIndexToggleShared;

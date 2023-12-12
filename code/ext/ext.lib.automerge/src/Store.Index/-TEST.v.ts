@@ -22,7 +22,7 @@ describe('StoreIndex', async () => {
       const { store } = setup();
       const index = await Store.Index.init(store);
 
-      expect(index.kind === 'store.index:state').to.eql(true);
+      expect(index.kind === 'store.index.state').to.eql(true);
       expect(index.store).to.equal(store);
       expect(index.doc.current.docs).to.eql([]);
       expect(index.total()).to.eql(0);
