@@ -39,7 +39,6 @@ export const WebrtcStore = {
     let syncdoc: TSyncDoc | undefined;
     peerEvents.cmd.beforeOutgoing$.subscribe((e) => {
       e.metadata<t.WebrtcStoreConnectMetadata>(async (data) => {
-        console.log('BEFORE CONNECT (OUT)', debugLabel);
         if (!syncdoc) syncdoc = await SyncDoc.init(peer, store, index, { debugLabel, fire });
         data.syncdoc = syncdoc.doc.uri;
       });

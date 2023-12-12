@@ -76,49 +76,46 @@ describe('network.Webrtc', () => {
       const res2 = SyncDoc.Patches.shared(fired[1]);
       const res3 = SyncDoc.Patches.shared(fired[2]);
 
-      expect(res1.put?.uri).to.eql(uri);
-      expect(res1.put?.shared).to.eql(true);
-      expect(res1.put?.version).to.eql(1);
-      expect(res1.del).to.eql(undefined);
+      expect(res1?.uri).to.eql(uri);
+      expect(res1?.shared).to.eql(true);
+      expect(res1?.version).to.eql(1);
 
-      expect(res2.put?.uri).to.eql(uri);
-      expect(res2.put?.shared).to.eql(false);
-      expect(res2.put?.version).to.eql(2);
-      expect(res2.del).to.eql(undefined);
+      expect(res2?.uri).to.eql(uri);
+      expect(res2?.shared).to.eql(false);
+      expect(res2?.version).to.eql(2);
 
-      expect(res3.put).to.eql(undefined);
-      expect(res3.del?.uri).to.eql(uri);
-      expect(res3.del?.shared).to.eql(undefined);
-
+      expect(res3).to.eql(undefined);
       store.dispose();
     });
   });
 
   describe('SyncDoc.Sync', () => {
-    it('listenToIndex: add → rename → remove', async () => {
+    it('Sync.listenToIndex: add → rename → remove', async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const doc = await SyncDoc.getOrCreate(store);
+      const syncdoc = await SyncDoc.getOrCreate(store);
 
-      listenToIndex({ index, doc });
-      expect(doc.current.shared).to.eql({});
+      listenToIndex(index, syncdoc);
+      expect(syncdoc.current.shared).to.eql({});
 
       const uri = 'automerge:foo';
       await index.add({ uri });
-      expect(doc.current.shared).to.eql({}); // NB: not yet shared.
+      expect(syncdoc.current.shared).to.eql({}); // NB: not yet shared.
 
       // Share.
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { value: true }));
-      expect(doc.current.shared[uri]).to.eql({ current: true, version: 1 }); // NB: entry now exists on the sync-doc.
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { shared: true }));
+      expect(syncdoc.current.shared[uri]).to.eql({ current: true, version: 1 }); // NB: entry now exists on the sync-doc.
 
       // Remove.
       index.remove(uri);
-      expect(doc.current.shared).to.eql({});
-
+      expect(syncdoc.current.shared[uri].current).to.eql(false);
+      expect(syncdoc.current.shared[uri].version).to.eql(2);
       store.dispose();
     });
 
     it('Sync.all (pre-existing index)', async () => {
+
+    it('Sync.indexIntoDoc (all items from pre-existing [Index])', async () => {
       const store = Store.init();
       const index = await Store.index(store);
       const doc = await SyncDoc.getOrCreate(store);
@@ -128,11 +125,11 @@ describe('network.Webrtc', () => {
       await index.add({ uri: 'automerge:c' });
 
       index.doc.change((d) => (d.docs[2].name = 'hello'));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[2], { value: true }));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[3], { value: true }));
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[2], { shared: true }));
+      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[3], { shared: true }));
 
       // Ensure the syncer updated the doc.
-      SyncDoc.Sync.indexToDoc(index, doc);
+      SyncDoc.Sync.indexIntoDoc(index, doc);
       const shared = doc.current.shared;
       expect(shared['automerge:a']).to.eql(undefined);
       expect(shared['automerge:b']).to.eql({ current: true, version: 1 });

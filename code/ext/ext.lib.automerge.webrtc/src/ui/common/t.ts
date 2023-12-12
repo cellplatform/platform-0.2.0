@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export type { RepoListModel } from 'ext.lib.automerge/src/types';
+export type { RepoListHandlers, RepoListModel } from 'ext.lib.automerge/src/types';
 export type { PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 
 /**

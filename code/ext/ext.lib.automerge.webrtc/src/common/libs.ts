@@ -14,4 +14,4 @@ export { Doc, Store, WebStore, toObject } from 'ext.lib.automerge';
  * @system
  */
 export { UserAgent } from 'sys.ui.dom';
-export { Filesize, Hash, Time, cuid, rx } from 'sys.util';
+export { Delete, Filesize, Hash, Time, cuid, rx } from 'sys.util';

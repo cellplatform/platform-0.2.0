@@ -49,25 +49,27 @@ export const SyncDoc = {
     /**
      * Setup the CRDT document.
      */
-    const doc = await SyncDoc.getOrCreate(store, options.uri);
-    const events = doc.events(dispose$);
+    const syncdoc = await SyncDoc.getOrCreate(store, options.uri);
+    const events = syncdoc.events(dispose$);
     const fireChange = (change: t.DocChanged<t.WebrtcSyncDoc>) => {
-      options.fire?.({ type: 'crdt:webrtc/SyncDoc', payload: { change } });
+      options.fire?.({
+        type: 'crdt:webrtc/SyncDoc',
+        payload: { change },
+      });
     };
 
     /**
      * Event Listeners.
      */
     events.changed$.subscribe((change) => fireChange(change));
-    listenToIndex({ index, doc, debugLabel, dispose$ });
-    listenToDoc({ index, doc, debugLabel, dispose$ });
+    listenToIndex(index, syncdoc, { debugLabel, dispose$ });
+    listenToDoc(index, syncdoc, { debugLabel, dispose$ });
 
     /**
      * Initialize.
      */
-    Sync.docToIndex(doc, index, { debugLabel });
-    Sync.indexToDoc(index, doc, { debugLabel });
-    doc.change((d) => {
+    Sync.indexIntoDoc(index, syncdoc, { debugLabel });
+    syncdoc.change((d) => {
       const ua = UserAgent.current;
       const data: t.WebrtcSyncDocPeer = { ua };
       d.peers[peer.id] = data;
@@ -80,7 +82,7 @@ export const SyncDoc = {
       kind: 'SyncDoc',
       store,
       index,
-      doc,
+      doc: syncdoc,
 
       /**
        * Lifecycle
