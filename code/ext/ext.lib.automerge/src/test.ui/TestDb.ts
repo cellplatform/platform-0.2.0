@@ -42,5 +42,7 @@ export const TestDb = {
     await SpecDb.deleteDatabase();
     await UnitDb.deleteDatabase();
     await IndexDb.deleteDatabase();
+
+    await this.deleteDatabase('localfirst'); // TEMP 🐷
   },
 } as const;

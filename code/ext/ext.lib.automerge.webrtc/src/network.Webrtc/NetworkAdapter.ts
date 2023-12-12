@@ -9,6 +9,7 @@ const kind: t.StoreNetworkKind = 'WebRTC';
  * Based on:
  *    MessageChannelNetworkAdapter (point-to-point)
  *    https://github.com/automerge/automerge-repo/blob/main/packages/automerge-repo-network-messagechannel/src/index.ts
+ *
  */
 export class WebrtcNetworkAdapter extends NetworkAdapter {
   #conn: t.PeerJsConnData;
