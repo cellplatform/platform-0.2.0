@@ -65,10 +65,7 @@ export default Dev.describe(name, async (e) => {
       .border(-0.1)
       .render<T>((e) => {
         const borderBottom = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
-        const styles = {
-          avatars: css({ padding: 8, borderBottom }),
-        };
-
+        const styles = { avatars: css({ padding: 8, borderBottom }) };
         return (
           <div>
             <Webrtc.AvatarTray
