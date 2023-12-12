@@ -30,8 +30,12 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>(async (e) => {
         const width = 250;
-        if (e.state.reload) return <Reload style={{ width }} />;
-        return <SampleEdge edge={left} style={{ width }} />;
+        if (e.state.reload) {
+          const resetClose = () => state.change((d) => (d.reload = false));
+          return <Reload style={{ width }} onClose={resetClose} />;
+        } else {
+          return <SampleEdge edge={left} style={{ width }} />;
+        }
       });
   });
 
@@ -40,10 +44,13 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Debug', (dev) => {
-      dev.button([`delete database: "${TestDb.EdgeSample.left.name}"`, '💥'], async (e) => {
-        await TestDb.EdgeSample.left.deleteDatabase();
-        e.change((d) => (d.reload = true));
-      });
+      const deleteButton = (label: string, fn: () => Promise<any>) => {
+        dev.button([`delete db: ${label}`, '💥'], async (e) => {
+          await e.change((d) => (d.reload = true));
+          await fn();
+        });
+      };
+      deleteButton(TestDb.EdgeSample.left.name, TestDb.EdgeSample.left.deleteDatabase);
     });
   });
 

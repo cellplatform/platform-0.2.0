@@ -58,8 +58,12 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.reload) return <Reload />;
-        return <Sample left={left} right={right} />;
+        if (e.state.reload) {
+          const resetClose = () => state.change((d) => (d.reload = false));
+          return <Reload onClose={resetClose} />;
+        } else {
+          return <Sample left={left} right={right} />;
+        }
       });
   });
 
@@ -154,10 +158,16 @@ export default Dev.describe(name, async (e) => {
       });
 
       dev.hr(-1, 5);
-      dev.button(['delete sample databases', '💥'], async (e) => {
-        await TestDb.EdgeSample.deleteDatabases();
-        e.change((d) => (d.reload = true));
-      });
+
+      const deleteButton = (label: string, fn: () => Promise<any>) => {
+        dev.button([`delete db: ${label}`, '💥'], async (e) => {
+          await e.change((d) => (d.reload = true));
+          await fn();
+        });
+      };
+      deleteButton('all', TestDb.EdgeSample.deleteDatabases);
+      deleteButton(TestDb.EdgeSample.left.name, TestDb.EdgeSample.left.deleteDatabase);
+      deleteButton(TestDb.EdgeSample.right.name, TestDb.EdgeSample.right.deleteDatabase);
     });
   });
 
