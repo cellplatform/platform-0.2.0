@@ -4,9 +4,9 @@ import { rx, type t } from './common';
 /**
  * Setup an event listener for a [SyncDoc] and keep the [Index] in sync with it.
  */
-export function listenToDoc(
-  index: t.StoreIndex,
+export function listenToSyncdoc(
   syncdoc: t.DocRefHandle<t.WebrtcSyncDoc>,
+  index: t.StoreIndex,
   options: { debugLabel?: string; dispose$?: t.UntilObservable } = {},
 ) {
   const { dispose$, debugLabel } = options;

@@ -1,8 +1,8 @@
 import { Patches } from './SyncDoc.Patches';
 import { Sync } from './SyncDoc.Sync';
-import { listenToDoc } from './SyncDoc.b.listenToDoc';
 import { listenToIndex } from './SyncDoc.b.listenToIndex';
-import { UserAgent, Crdt, Doc, rx, type t } from './common';
+import { listenToSyncdoc } from './SyncDoc.b.listenToSyncdoc';
+import { Crdt, Doc, UserAgent, rx, type t } from './common';
 
 /**
  * An ephemeral (non-visual) document used to sync
@@ -63,7 +63,7 @@ export const SyncDoc = {
      */
     events.changed$.subscribe((change) => fireChange(change));
     listenToIndex(index, syncdoc, { debugLabel, dispose$ });
-    listenToDoc(index, syncdoc, { debugLabel, dispose$ });
+    listenToSyncdoc(syncdoc, index, { debugLabel, dispose$ });
 
     /**
      * Initialize.

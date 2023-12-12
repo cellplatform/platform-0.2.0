@@ -1,6 +1,7 @@
 import { SyncDoc } from '.';
 import { Doc, Store, Time, describe, expect, it, type t } from '../test';
 import { listenToIndex } from './SyncDoc.b.listenToIndex';
+import { listenToSyncdoc } from './SyncDoc.b.listenToSyncdoc';
 
 describe('network.Webrtc', () => {
   describe('SyncDoc', () => {
@@ -113,7 +114,25 @@ describe('network.Webrtc', () => {
       store.dispose();
     });
 
-    it('Sync.all (pre-existing index)', async () => {
+    it('Sync.listenToSyncdoc', async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      const syncdoc = await SyncDoc.getOrCreate(store);
+      const shared = (uri: string) => syncdoc.current.shared[uri];
+
+      await Time.wait(0);
+      listenToSyncdoc(syncdoc, index);
+      expect(syncdoc.current.shared).to.eql({});
+
+      const uri = 'automerge:foo';
+      syncdoc.change((d) => (d.shared[uri] = { current: false, version: 0 }));
+
+      expect(shared(uri)).to.eql({ current: false, version: 0 });
+      syncdoc.change((d) => (d.shared[uri] = { current: true, version: 1 }));
+      expect(shared(uri)).to.eql({ current: true, version: 1 });
+
+      store.dispose();
+    });
 
     it('Sync.indexIntoDoc (all items from pre-existing [Index])', async () => {
       const store = Store.init();
