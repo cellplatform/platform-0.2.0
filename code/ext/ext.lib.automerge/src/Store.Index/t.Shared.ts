@@ -16,6 +16,6 @@ export type StoreIndexItemShared = {
  */
 export type StoreIndexToggleShared = (
   uri: UriInput,
-  options?: { shared?: boolean },
+  options?: { shared?: boolean; version?: number },
 ) => StoreIndexToggleSharedResponse[];
 export type StoreIndexToggleSharedResponse = { uri: Uri; shared: boolean; version: number };

@@ -349,6 +349,54 @@ describe('StoreIndex', async () => {
       store.dispose();
     });
 
+    it('{ version } parameter', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      await index.add([{ uri: A }, { uri: B }]);
+
+      const getDoc = (i: number) => index.doc.current.docs[i];
+      const getCurrent = (i: number) => getDoc(i).shared?.current;
+
+      index.toggleShared(A);
+      index.toggleShared(A);
+      index.toggleShared(A);
+
+      const doc0 = getDoc(0);
+      expect(doc0.shared?.current).to.eql(true);
+      expect(doc0.shared?.version.value).to.eql(3);
+
+      const res1 = index.toggleShared(A, { version: 2 });
+      const doc1 = getDoc(0);
+      expect(doc1.shared?.current).to.eql(true); // NB: no change.
+      expect(doc1.shared?.version.value).to.eql(3);
+      expect(res1).to.eql([{ uri: A, shared: true, version: 3 }]);
+
+      expect(getCurrent(1)).to.eql(undefined);
+      const res2 = index.toggleShared([A, B], { version: 2 });
+      const doc2a = getDoc(0);
+      const doc2b = getDoc(1);
+      expect(doc2a.shared?.current).to.eql(true); // NB: no change.
+      expect(doc2a.shared?.version.value).to.eql(3);
+      expect(doc2b.shared?.current).to.eql(true); // NB: changed.
+      expect(doc2b.shared?.version.value).to.eql(2);
+      expect(res2).to.eql([
+        { uri: A, shared: true, version: 3 },
+        { uri: B, shared: true, version: 2 },
+      ]);
+
+      const res3 = index.toggleShared(A, { version: 3 }); // NB: version same as index (allow increment)
+      const doc3 = getDoc(0);
+      expect(doc3.shared?.current).to.eql(false);
+      expect(doc3.shared?.version.value).to.eql(4);
+      expect(res3).to.eql([{ uri: A, shared: false, version: 4 }]);
+
+      const res4 = index.toggleShared(A, { version: 10 });
+      const doc4 = getDoc(0);
+      expect(doc4.shared?.current).to.eql(true);
+      expect(doc4.shared?.version.value).to.eql(10);
+      expect(res4).to.eql([{ uri: A, shared: true, version: 10 }]);
+    });
+
     it('does nothing when document does not exist', async () => {
       const { store } = setup();
       const index = await Store.index(store);
