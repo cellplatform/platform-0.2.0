@@ -8,12 +8,12 @@ export type WebrtcStore = t.Lifecycle & {
   readonly peer: t.PeerModel;
   readonly store: t.Store;
   readonly index: t.StoreIndex;
-  readonly syncdoc?: t.DocRefHandle<t.WebrtcSyncDoc>;
+  readonly shared?: t.DocRefHandle<t.CrdtShared>;
   readonly total: t.WebrtcStoreTotals;
   readonly $: t.Observable<t.WebrtcStoreEvent>;
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;
   readonly message$: t.Observable<t.WebrtcMessageAlert>;
-  readonly syncdoc$: t.Observable<t.WebrtcStoreSyncdocChanged>;
+  readonly shared$: t.Observable<t.CrdtSharedChanged>;
 };
 
 export type WebrtcStoreTotals = {
@@ -21,7 +21,7 @@ export type WebrtcStoreTotals = {
   readonly bytes: { in: number; out: number };
 };
 
-export type WebrtcStoreConnectMetadata = t.PeerConnectMetadata & { syncdoc: Uri };
+export type WebrtcStoreConnectMetadata = t.PeerConnectMetadata & { shared: Uri };
 
 /**
  * Events
@@ -29,7 +29,7 @@ export type WebrtcStoreConnectMetadata = t.PeerConnectMetadata & { syncdoc: Uri 
 export type WebrtcStoreEvent =
   | WebrtcStoreAdapterAddedEvent
   | WebrtcStoreMessageEvent
-  | WebrtcStoreSyncdocChangedEvent;
+  | t.CrdtSharedChangedEvent;
 
 export type WebrtcStoreAdapterAddedEvent = {
   type: 'crdt:webrtc/AdapterAdded';
@@ -44,12 +44,4 @@ export type WebrtcStoreAdapterAdded = {
 export type WebrtcStoreMessageEvent = {
   type: 'crdt:webrtc/Message';
   payload: t.WebrtcMessageAlert;
-};
-
-export type WebrtcStoreSyncdocChangedEvent = {
-  type: 'crdt:webrtc/SyncDoc';
-  payload: WebrtcStoreSyncdocChanged;
-};
-export type WebrtcStoreSyncdocChanged = {
-  change: t.DocChanged<t.WebrtcSyncDoc>;
 };

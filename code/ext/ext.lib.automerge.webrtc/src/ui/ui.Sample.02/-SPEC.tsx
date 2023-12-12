@@ -28,7 +28,7 @@ const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
-  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexDocItem } | undefined;
+  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexItem } | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -99,38 +99,37 @@ export default Dev.describe(name, async (e) => {
       dev.title(edge.kind);
 
       dev.row((e) => {
-        const docid = Crdt.Uri.id(edge.network.syncdoc?.uri);
+        const docid = Crdt.Uri.id(edge.network.shared?.uri);
         const doc = Hash.shorten(docid, [3, 5]);
         return (
           <PropList
             items={[
               { label: 'peer', value: edge.network.peer.id },
-              { label: 'syncdoc (ephemeral)', value: doc || '(not connected)' },
+              { label: 'shared (sync document)', value: doc || '(not connected)' },
             ]}
           />
         );
       });
 
       dev.row((e) => {
-        const formatUri = (uri: string) => `automerge:${Hash.shorten(Doc.Uri.id(uri), 4)}`;
-        const data = edge.network.syncdoc?.toObject();
+        const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
+        const data = edge.network.shared?.toObject();
+        if (!data?.docs) return null;
 
-        if (!data?.shared) return null;
-
-        const shared = { ...data?.shared };
-        Object.keys(shared).forEach((key) => {
-          const value = shared[key];
-          shared[formatUri(key)] = value;
-          delete shared[key];
+        const docs = { ...data?.docs };
+        Object.keys(docs).forEach((uri) => {
+          const value = docs[uri];
+          docs[formatUri(uri)] = value;
+          delete docs[uri];
         });
 
         return (
           <Dev.Object
-            name={'SyncDoc'}
-            data={{ ...data, shared }}
+            name={'Shared'}
+            data={{ ...data, docs }}
             fontSize={11}
             style={{ marginTop: 8, marginLeft: 8 }}
-            expand={{ level: 1, paths: ['$', '$.shared'] }}
+            expand={{ level: 1, paths: ['$', '$.docs'] }}
           />
         );
       });
@@ -148,7 +147,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(5, 20);
 
       dev.button('purge ephemeral', (e) => {
-        const purge = (edge: t.SampleEdge) => WebrtcStore.SyncDoc.purge(edge.repo.index);
+        const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.repo.index);
         purge(left);
         purge(right);
         e.change((d) => (d.reload = true));
@@ -176,7 +175,7 @@ export default Dev.describe(name, async (e) => {
         };
       };
 
-      const formatSelected = (item?: t.StoreIndexDocItem) => {
+      const formatSelected = (item?: t.StoreIndexItem) => {
         if (!item) return;
 
         const shared = item.shared
@@ -194,13 +193,24 @@ export default Dev.describe(name, async (e) => {
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
+        [`selected:uri`]: selected
+          ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
+          : undefined,
         [`selected`]: formatSelected(selected?.item),
       };
       return (
         <Dev.Object
           name={name}
-          data={Delete.undefined(data)}
-          expand={{ level: 1, paths: ['$', '$.selected', '$.selected.shared'] }}
+          data={Delete.empty(data)}
+          fontSize={11}
+          expand={{
+            level: 1,
+            paths: [
+              '$',
+              // '$.selected',
+              // '$.selected.shared',
+            ],
+          }}
         />
       );
     });

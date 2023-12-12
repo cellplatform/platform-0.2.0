@@ -8,12 +8,13 @@ export type { Observable } from 'rxjs';
 export type {
   DocChanged,
   DocMeta,
+  DocMetaType,
   DocRefHandle,
   DocUri,
   DocWithMeta,
   Store,
   StoreIndex,
-  StoreIndexDocItem,
+  StoreIndexItem,
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';

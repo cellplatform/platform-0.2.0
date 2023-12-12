@@ -39,5 +39,5 @@ export type StoreIndexRenamedEvent = {
 export type StoreIndexEventItem = {
   index: number;
   total: number;
-  item: t.StoreIndexDocItem;
+  item: t.StoreIndexItem;
 };

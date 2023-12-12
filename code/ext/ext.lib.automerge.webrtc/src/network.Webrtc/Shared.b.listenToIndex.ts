@@ -2,17 +2,17 @@ import { Sync } from './Shared.Sync';
 import { type t } from './common';
 
 /**
- * Setup event listener for an [Index] and keep the [SyncDoc] in sync.
+ * Setup event listener for an [Index] to keep it synced into the [Shared] document.
  */
 export function listenToIndex(
   index: t.StoreIndex,
-  syncdoc: t.DocRefHandle<t.WebrtcSyncDoc>,
+  shared: t.DocRefHandle<t.CrdtShared>,
   options: { debugLabel?: string; dispose$?: t.UntilObservable } = {},
 ) {
   const { debugLabel, dispose$ } = options;
   const events = index.events(dispose$);
-  const change = (indexItem: t.StoreIndexDocItem, action?: t.WebrtcSyncDocMutateAction) => {
-    syncdoc.change((d) => Sync.Mutate.syncdoc(d, indexItem, { action, debugLabel }));
+  const change = (indexItem: t.StoreIndexItem, action?: t.CrdtSharedMutateAction) => {
+    shared.change((d) => Sync.Mutate.shared(d, indexItem, { action, debugLabel }));
   };
   events.added$.subscribe((e) => change(e.item));
   events.shared$.subscribe((e) => change(e.item));

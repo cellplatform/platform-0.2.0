@@ -48,7 +48,8 @@ export type DocStore = {
  * on a hidden key, eg { .meta: {} }
  */
 export type DocWithMeta = { '.meta': DocMeta };
+export type DocMetaType = { name: string };
 export type DocMeta = {
-  type?: { name: string };
+  type?: t.DocMetaType;
   ephemeral?: boolean;
 };

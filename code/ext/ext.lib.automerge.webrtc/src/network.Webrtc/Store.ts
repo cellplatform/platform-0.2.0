@@ -1,14 +1,14 @@
 import { rx, type t } from './common';
 
 import { WebrtcNetworkAdapter } from './NetworkAdapter';
-import { SyncDoc } from './Shared';
+import { Shared } from './Shared';
 import { monitorAdapter } from './u.adapter';
 
 /**
  * Manages the relationship between a [Repo/Store] and a network peer.
  */
 export const WebrtcStore = {
-  SyncDoc,
+  Shared,
 
   /**
    * Initialize a new network manager.
@@ -30,17 +30,17 @@ export const WebrtcStore = {
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded');
     const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
-    const syncdoc$ = rx.payload<t.WebrtcStoreSyncdocChangedEvent>($, 'crdt:webrtc/SyncDoc');
+    const shared$ = rx.payload<t.CrdtSharedChangedEvent>($, 'crdt:shared/Changed');
 
     /**
-     * SyncDoc setup.
+     * [Shared] network document setup.
+     * Catch before an outbound connection starts and publish the store URI to the document.
      */
-    type TSyncDoc = Awaited<ReturnType<typeof SyncDoc.init>>;
-    let syncdoc: TSyncDoc | undefined;
+    let shared: t.CrdtSharedState | undefined;
     peerEvents.cmd.beforeOutgoing$.subscribe((e) => {
       e.metadata<t.WebrtcStoreConnectMetadata>(async (data) => {
-        if (!syncdoc) syncdoc = await SyncDoc.init(peer, store, index, { debugLabel, fire });
-        data.syncdoc = syncdoc.doc.uri;
+        if (!shared) shared = await Shared.init(peer, store, index, { debugLabel, fire });
+        data.shared = shared.doc.uri;
       });
     });
 
@@ -92,13 +92,13 @@ export const WebrtcStore = {
       });
 
       /**
-       * Setup sync-doc.
+       * Setup shared-doc.
        */
       if (direction === 'incoming') {
         const metadata = conn.metadata as t.WebrtcStoreConnectMetadata;
-        if (metadata.syncdoc) {
-          const uri = metadata.syncdoc;
-          syncdoc = await SyncDoc.init(peer, store, index, { uri, debugLabel, fire });
+        if (metadata.shared) {
+          const uri = metadata.shared;
+          shared = await Shared.init(peer, store, index, { uri, debugLabel, fire });
         }
       }
     };
@@ -114,14 +114,14 @@ export const WebrtcStore = {
       $,
       added$,
       message$,
-      syncdoc$,
+      shared$,
 
       get total() {
         return total;
       },
 
-      get syncdoc() {
-        return syncdoc?.doc;
+      get shared() {
+        return shared?.doc;
       },
 
       /**

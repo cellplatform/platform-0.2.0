@@ -18,6 +18,6 @@ export type RepoListActiveEventArgs = {
   index: t.StoreIndex;
   position: { index: number; total: number };
   kind: t.RepoItemData['kind'];
-  item: t.StoreIndexDocItem;
+  item: t.StoreIndexItem;
   focused: boolean;
 };

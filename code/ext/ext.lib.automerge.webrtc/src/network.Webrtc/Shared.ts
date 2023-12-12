@@ -2,31 +2,35 @@ import { Mutate } from './Shared.Mutate';
 import { Patches } from './Shared.Patches';
 import { Sync } from './Shared.Sync';
 import { listenToIndex } from './Shared.b.listenToIndex';
-import { listenToSyncdoc } from './Shared.b.listenToSyncdoc';
+import { listenToShared } from './Shared.b.listenToShared';
 import { Crdt, Doc, UserAgent, rx, type t } from './common';
 
 /**
  * An ephemeral (non-visual) document used to sync
  * index and other shared state over network connections.
  */
-export const SyncDoc = {
+export const Shared = {
   Sync,
   Patches,
   Mutate,
 
+  get type(): t.DocMetaType {
+    return { name: 'crdt.network.shared' };
+  },
+
   /**
-   * Get or create a SyncDoc from the given store.
+   * Get or create a [Shared] document type from the given store.
    */
   async getOrCreate(store: t.Store, uri?: string) {
-    return store.doc.getOrCreate<t.WebrtcSyncDoc>((d) => {
+    return store.doc.getOrCreate<t.CrdtShared>((d) => {
       const initial: t.DocMeta = {
         ...Doc.Meta.default,
-        type: { name: 'crdt.webrtc.SyncDoc' },
+        type: Shared.type,
         ephemeral: true,
       };
       Doc.Meta.ensure(d, initial);
       d.peers = {};
-      d.shared = {};
+      d.docs = {};
     }, uri);
   },
 
@@ -51,11 +55,11 @@ export const SyncDoc = {
     /**
      * Setup the CRDT document.
      */
-    const syncdoc = await SyncDoc.getOrCreate(store, options.uri);
-    const events = syncdoc.events(dispose$);
-    const fireChange = (change: t.DocChanged<t.WebrtcSyncDoc>) => {
+    const shared = await Shared.getOrCreate(store, options.uri);
+    const events = shared.events(dispose$);
+    const fireChange = (change: t.DocChanged<t.CrdtShared>) => {
       options.fire?.({
-        type: 'crdt:webrtc/SyncDoc',
+        type: 'crdt:shared/Changed',
         payload: { change },
       });
     };
@@ -64,16 +68,16 @@ export const SyncDoc = {
      * Event Listeners.
      */
     events.changed$.subscribe((change) => fireChange(change));
-    listenToIndex(index, syncdoc, { debugLabel, dispose$ });
-    listenToSyncdoc(syncdoc, index, { debugLabel, dispose$ });
+    listenToIndex(index, shared, { debugLabel, dispose$ });
+    listenToShared(shared, index, { debugLabel, dispose$ });
 
     /**
      * Initialize.
      */
-    Sync.indexToSyncdoc(index, syncdoc, { debugLabel });
-    syncdoc.change((d) => {
+    Sync.indexToShared(index, shared, { debugLabel });
+    shared.change((d) => {
       const ua = UserAgent.current;
-      const data: t.WebrtcSyncDocPeer = { ua };
+      const data: t.CrdtSharedPeer = { ua };
       d.peers[peer.id] = data;
     });
 
@@ -81,10 +85,9 @@ export const SyncDoc = {
      * API
      */
     return {
-      kind: 'SyncDoc',
       store,
       index,
-      doc: syncdoc,
+      doc: shared,
 
       /**
        * Lifecycle
