@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 import { WebrtcStore } from '../../network.Webrtc';
-import { Crdt, Dev, Doc, Hash, PropList, TestDb, Webrtc, rx } from '../../test.ui';
+import { Delete, Crdt, Dev, Doc, Hash, PropList, TestDb, Webrtc, rx } from '../../test.ui';
 import { Reload } from './ui.Reload';
 import { Sample } from './ui.Sample';
 
@@ -15,11 +15,7 @@ export const createEdge = async (kind: t.ConnectionEdgeKind) => {
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
-  const repo = await Crdt.RepoList.model(store, {
-    // onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
-    // onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
-  });
-
+  const repo = await Crdt.RepoList.model(store);
   const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
   const edge: t.SampleEdge = { kind, repo, network };
   return edge;
@@ -32,10 +28,12 @@ const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
+  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexDocItem } | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
     left = await createEdge('Left');
     right = await createEdge('Right');
 
@@ -44,9 +42,13 @@ export default Dev.describe(name, async (e) => {
 
     const monitor = (edge: t.SampleEdge) => {
       const redraw = () => dev.redraw('debug');
+      const debounce = rx.debounceTime(50);
       const peer = edge.network.peer.events();
-      peer.cmd.conn$.subscribe(redraw);
-      edge.network.$.pipe(rx.debounceTime(50)).subscribe(redraw);
+      const repo$ = edge.repo.events();
+      peer.cmd.conn$.pipe(debounce).subscribe(redraw);
+      edge.network.$.pipe(debounce).subscribe(redraw);
+      repo$.active$.pipe(debounce).subscribe(redraw);
+      repo$.active$.subscribe((e) => (selected = { edge, item: e.item }));
     };
     monitor(left);
     monitor(right);
@@ -66,17 +68,22 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.section('Peers', (dev) => {
-      const connect = () => left.network.peer.connect.data(right.network.peer.id);
       const disconnect = () => left.network.peer.disconnect();
       const isConnected = () => left.network.peer.current.connections.length > 0;
 
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'connected' : 'connect'))
-          .right((e) => (!isConnected() ? '🌳' : ''))
-          .enabled((e) => !isConnected())
-          .onClick((e) => connect());
-      });
+      const connectButton = (label: string, fn: () => void) => {
+        dev.button((btn) => {
+          btn
+            .label(() => `connect: ${label}`)
+            .right((e) => (!isConnected() ? '🌳' : ''))
+            .enabled((e) => !isConnected())
+            .onClick((e) => fn());
+        });
+      };
+
+      connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
+      connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
+      dev.hr(-1, 5);
       dev.button((btn) => {
         btn
           .label(() => (isConnected() ? 'disconnect' : 'not connected'))
@@ -159,23 +166,43 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const total = (edge: t.SampleEdge) => {
-        return edge.repo.index.doc.current.docs.length;
-      };
-
-      const format = (edge: t.SampleEdge) => {
-        const uri = edge.repo.index.doc.uri;
+      const total = (edge: t.SampleEdge) => edge.repo.index.doc.current.docs.length;
+      const shorten = (uri: string) => Crdt.Uri.id(uri, { shorten: 6 });
+      const formatEdge = (edge: t.SampleEdge) => {
         return {
           total: total(edge),
-          'index:uri': Crdt.Uri.id(uri, { shorten: 6 }),
           index: edge.repo.index.doc.current,
+          'index:uri': shorten(edge.repo.index.doc.uri),
         };
       };
-      const data = {
-        [`left[${total(left)}]`]: format(left),
-        [`right[${total(right)}]`]: format(right),
+
+      const formatSelected = (item?: t.StoreIndexDocItem) => {
+        if (!item) return;
+
+        const shared = item.shared
+          ? { ...item.shared, version: item.shared.version.value }
+          : undefined;
+
+        return {
+          ...item,
+          uri: Crdt.Uri.automerge(item.uri, { shorten: 6 }),
+          shared,
+        };
       };
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.self'] }} />;
+
+      const data = {
+        [`left[${total(left)}]`]: formatEdge(left),
+        [`right[${total(right)}]`]: formatEdge(right),
+        [`selected:edge`]: selected ? selected.edge.kind : undefined,
+        [`selected`]: formatSelected(selected?.item),
+      };
+      return (
+        <Dev.Object
+          name={name}
+          data={Delete.undefined(data)}
+          expand={{ level: 1, paths: ['$', '$.selected', '$.selected.shared'] }}
+        />
+      );
     });
   });
 });
