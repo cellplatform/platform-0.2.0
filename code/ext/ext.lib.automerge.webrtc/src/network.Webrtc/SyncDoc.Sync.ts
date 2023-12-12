@@ -16,7 +16,7 @@ export const Sync = {
 
     syncdoc.change((d) => {
       items.forEach((item) => {
-        const res = Sync.Mutate.syncdocItem(d, item, { debugLabel });
+        const res = Sync.Mutate.syncdoc(d, item, { debugLabel });
         if (!res.error) {
           const indexVersion = item.shared?.version.value ?? 0;
           if (res.version > indexVersion) {
@@ -32,7 +32,7 @@ export const Sync = {
    * Update an item from the local [Index] into the ephemeral [SyncDoc] clone.
    */
   Mutate: {
-    syncdocItem(
+    syncdoc(
       draft: t.WebrtcSyncDoc,
       indexItem: t.StoreIndexDocItem,
       options: { debugLabel?: string; action?: Action } = {},

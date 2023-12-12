@@ -12,7 +12,7 @@ export function listenToIndex(
   const { debugLabel, dispose$ } = options;
   const events = index.events(dispose$);
   const change = (indexItem: t.StoreIndexDocItem, action?: Action) => {
-    syncdoc.change((d) => Sync.Mutate.syncdocItem(d, indexItem, { action, debugLabel }));
+    syncdoc.change((d) => Sync.Mutate.syncdoc(d, indexItem, { action, debugLabel }));
   };
   events.added$.subscribe((e) => change(e.item));
   events.shared$.subscribe((e) => change(e.item));
