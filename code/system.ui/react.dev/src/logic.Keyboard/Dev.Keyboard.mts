@@ -8,6 +8,7 @@ export const DevKeyboard = {
     cancelSave: true,
     cancelPrint: true,
     newTab: true,
+    copyAddress: true,
     doubleEscapeDelay: 300,
   },
 
@@ -20,6 +21,7 @@ export const DevKeyboard = {
       cancelSave?: boolean;
       cancelPrint?: boolean;
       newTab?: boolean;
+      copyAddress?: boolean;
       doubleEscapeDelay?: Milliseconds;
       onDoubleEscape?: (e: { delay: number }) => void;
     } = {},
@@ -31,16 +33,23 @@ export const DevKeyboard = {
       cancelSave = DEFAULT.cancelSave,
       cancelPrint = DEFAULT.cancelPrint,
       newTab = DEFAULT.newTab,
+      copyAddress = DEFAULT.copyAddress,
       doubleEscapeDelay = DEFAULT.doubleEscapeDelay,
     } = options;
 
     const openUrlTab = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
 
     const keyboard = Keyboard.on({
+      /**
+       * Return to root.
+       */
       'CMD + Escape'(e) {
         escape$.next();
       },
 
+      /**
+       * Clear debug console.
+       */
       'CMD + KeyK'(e) {
         if (clearConsole) {
           e.handled();
@@ -70,7 +79,6 @@ export const DevKeyboard = {
         e.handled();
         openUrlTab(location.href);
       },
-
       'CTRL + ALT + KeyT'(e) {
         if (!newTab) return;
         e.handled();
@@ -80,6 +88,22 @@ export const DevKeyboard = {
         params.set(qs.dev, 'true');
         params.set(qs.selected, namespace);
         openUrlTab(url.href);
+      },
+
+      /**
+       * Copy current harness address
+       */
+      'CTRL + ALT + KeyC'(e) {
+        if (!copyAddress) return;
+        e.handled();
+        const url = new URL(location.href);
+        const params = url.searchParams;
+        if (params.get(qs.dev) !== 'true') {
+          params.delete(qs.selected);
+          params.delete(qs.filter);
+        }
+        navigator.clipboard.writeText(url.href);
+        console.info(`copied: ${url.href}`);
       },
     });
 
