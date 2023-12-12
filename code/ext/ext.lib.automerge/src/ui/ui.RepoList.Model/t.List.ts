@@ -19,7 +19,7 @@ export type RepoListCtxGet = () => RepoListCtx;
 export type RepoListCtx = {
   list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
   store: t.Store;
-  index: t.StoreIndex;
+  index: t.StoreIndexState;
   handlers: t.RepoListHandlers;
   dispose$?: t.UntilObservable;
   filter: t.StoreIndexFilter;
@@ -44,9 +44,9 @@ export type RepoListHandlers = {
 export type RepoListClickHandler = (e: RepoListClickHandlerArgs) => void;
 export type RepoListClickHandlerArgs = {
   store: t.Store;
-  index: t.StoreIndex;
+  index: t.StoreIndexState;
   position: { index: number; total: number };
-  item: t.StoreIndexItem;
+  item: t.StoreIndexDoc;
 };
 
 export type RepoListActiveHandler = (e: t.RepoListActiveEventArgs) => void;

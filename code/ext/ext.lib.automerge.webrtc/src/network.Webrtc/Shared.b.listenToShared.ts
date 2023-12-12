@@ -6,7 +6,7 @@ import { R, rx, type t } from './common';
  */
 export function listenToShared(
   shared: t.DocRefHandle<t.CrdtShared>,
-  index: t.StoreIndex,
+  index: t.StoreIndexState,
   options: { debugLabel?: string; dispose$?: t.UntilObservable } = {},
 ) {
   const { dispose$, debugLabel } = options;

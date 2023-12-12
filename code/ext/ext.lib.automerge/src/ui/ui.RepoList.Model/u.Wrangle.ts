@@ -52,7 +52,7 @@ export const Wrangle = {
     return Wrangle.filterDocs(index.doc.current, filter).length;
   },
 
-  filterDocs(index: t.StoreIndexDoc, filter?: t.StoreIndexFilter): t.StoreIndexItem[] {
+  filterDocs(index: t.StoreIndex, filter?: t.StoreIndexFilter): t.StoreIndexDoc[] {
     return StoreIndex.filter(index.docs, filter);
   },
 } as const;

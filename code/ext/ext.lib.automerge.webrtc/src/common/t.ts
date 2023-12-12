@@ -13,8 +13,8 @@ export type {
   DocUri,
   DocWithMeta,
   Store,
-  StoreIndex,
-  StoreIndexItem,
+  StoreIndexState,
+  StoreIndexDoc,
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';

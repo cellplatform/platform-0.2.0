@@ -7,7 +7,7 @@ type Uri = string;
 export type WebrtcStore = t.Lifecycle & {
   readonly peer: t.PeerModel;
   readonly store: t.Store;
-  readonly index: t.StoreIndex;
+  readonly index: t.StoreIndexState;
   readonly shared?: t.DocRefHandle<t.CrdtShared>;
   readonly total: t.WebrtcStoreTotals;
   readonly $: t.Observable<t.WebrtcStoreEvent>;

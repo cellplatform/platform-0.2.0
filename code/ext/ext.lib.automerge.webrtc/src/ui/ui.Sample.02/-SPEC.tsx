@@ -28,7 +28,7 @@ const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
-  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexItem } | undefined;
+  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -175,7 +175,7 @@ export default Dev.describe(name, async (e) => {
         };
       };
 
-      const formatSelected = (item?: t.StoreIndexItem) => {
+      const formatSelected = (item?: t.StoreIndexDoc) => {
         if (!item) return;
 
         const shared = item.shared

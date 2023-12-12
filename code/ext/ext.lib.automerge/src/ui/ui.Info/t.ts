@@ -9,6 +9,6 @@ export type InfoData = {
     label?: string;
     name?: string;
     store?: t.WebStore;
-    index?: t.StoreIndex;
+    index?: t.StoreIndexState;
   };
 };

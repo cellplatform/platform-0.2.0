@@ -9,7 +9,7 @@ export const Mutate = {
    */
   shared(
     draft: t.CrdtShared,
-    index: t.StoreIndexItem,
+    index: t.StoreIndexDoc,
     options: { debugLabel?: string; action?: t.CrdtSharedMutateAction } = {},
   ) {
     const { debugLabel, action } = options;

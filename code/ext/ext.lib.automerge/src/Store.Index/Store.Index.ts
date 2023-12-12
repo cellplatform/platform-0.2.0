@@ -23,7 +23,7 @@ export const StoreIndex = {
   async init(store: t.Store, options: { uri?: string } = {}) {
     const { uri } = options;
     const repo = store.repo;
-    const doc = await store.doc.getOrCreate<t.StoreIndexDoc>((d) => (d.docs = []), uri);
+    const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => (d.docs = []), uri);
     const findIndex = (uri: string) => api.doc.current.docs.findIndex((e) => e.uri === uri);
 
     if (!Is.repoIndex(doc.current)) {
@@ -57,8 +57,8 @@ export const StoreIndex = {
     });
 
     // Finish up.
-    const api: t.StoreIndex = {
-      kind: 'store:index',
+    const api: t.StoreIndexState = {
+      kind: 'store.index:state',
       store,
       doc,
 
@@ -104,7 +104,7 @@ export const StoreIndex = {
             .map(({ shared, uri, name, meta }) => ({
               uri,
               shared,
-              doc: Delete.undefined<t.StoreIndexItem>({ uri, name, meta }),
+              doc: Delete.undefined<t.StoreIndexDoc>({ uri, name, meta }),
             }));
 
           const unique = R.uniqBy((e) => e.uri, inserts);
@@ -139,7 +139,7 @@ export const StoreIndex = {
        * Toggles the shared state of the given URI(s).
        */
       toggleShared(input, options = {}) {
-        type T = ReturnType<t.StoreIndex['toggleShared']>[number];
+        type T = ReturnType<t.StoreIndexState['toggleShared']>[number];
         const res: T[] = [];
 
         let uris = wrangle.uris(input);
@@ -196,7 +196,7 @@ const wrangle = {
     const meta = Doc.Meta.get(ref.current);
     if (!meta) return undefined;
 
-    const res: t.RepoIndexDocMeta = {};
+    const res: t.StoreIndexDocMeta = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
   },

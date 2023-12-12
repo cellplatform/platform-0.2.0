@@ -22,7 +22,7 @@ describe('StoreIndex', async () => {
       const { store } = setup();
       const index = await Store.Index.init(store);
 
-      expect(index.kind === 'store:index').to.eql(true);
+      expect(index.kind === 'store.index:state').to.eql(true);
       expect(index.store).to.equal(store);
       expect(index.doc.current.docs).to.eql([]);
       expect(index.total()).to.eql(0);
@@ -469,7 +469,7 @@ describe('StoreIndex', async () => {
 
       it('changed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.DocChanged<t.StoreIndexDoc>[] = [];
+        const fired: t.DocChanged<t.StoreIndex>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foobar' });

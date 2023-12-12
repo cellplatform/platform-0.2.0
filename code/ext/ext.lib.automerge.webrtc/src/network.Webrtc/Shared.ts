@@ -40,7 +40,7 @@ export const Shared = {
   async init(
     peer: t.PeerModel,
     store: t.Store,
-    index: t.StoreIndex,
+    index: t.StoreIndexState,
     options: { debugLabel?: string; uri?: string; fire?: (e: t.WebrtcStoreEvent) => void } = {},
   ) {
     const { debugLabel } = options;
@@ -102,7 +102,7 @@ export const Shared = {
   /**
    * Remove all ephemeral documents from the given repo-index.
    */
-  purge(index: t.StoreIndex) {
+  purge(index: t.StoreIndexState) {
     const purged: string[] = [];
     index.doc.change((d) => {
       const docs = Crdt.Data.array(d.docs);

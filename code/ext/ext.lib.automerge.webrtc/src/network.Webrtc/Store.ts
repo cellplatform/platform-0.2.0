@@ -16,7 +16,7 @@ export const WebrtcStore = {
   async init(
     peer: t.PeerModel,
     store: t.Store,
-    index: t.StoreIndex,
+    index: t.StoreIndexState,
     options: { debugLabel?: string } = {},
   ) {
     const { debugLabel } = options;

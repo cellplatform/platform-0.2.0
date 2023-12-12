@@ -32,10 +32,10 @@ export const Is = {
     );
   },
 
-  storeIndex(input: any): input is t.StoreIndex {
+  storeIndex(input: any): input is t.StoreIndexState {
     if (!isObject(input)) return false;
-    const index = input as t.StoreIndex;
-    return index.kind === 'store:index' && Is.store(index.store);
+    const index = input as t.StoreIndexState;
+    return index.kind === 'store.index:state' && Is.store(index.store);
   },
 
   webStore(input: any): input is t.WebStore {
@@ -50,9 +50,9 @@ export const Is = {
     return true;
   },
 
-  repoIndex(input: any): input is t.StoreIndexDoc {
+  repoIndex(input: any): input is t.StoreIndex {
     if (!isObject(input)) return false;
-    const subject = input as t.StoreIndexDoc;
+    const subject = input as t.StoreIndex;
     return Array.isArray(subject.docs);
   },
 
