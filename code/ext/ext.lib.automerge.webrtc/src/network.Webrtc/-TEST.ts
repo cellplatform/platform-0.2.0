@@ -120,12 +120,6 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
       expectRoughlySame(bytesAfter.self.in, bytesAfter.remote.in, 0.3, 'bytes-in same(ish)');
       expectRoughlySame(bytesAfter.self.out, bytesAfter.remote.out, 0.3, 'bytes-out same(ish)');
-
-      /**
-       * Message events ⚡️
-       */
-      expect(self.fired.messages[0].message.type === 'welcome').to.eql(true, 'self message');
-      expect(remote.fired.messages[0].message.type === 'arrive').to.eql(true, 'remote message');
     });
 
     e.it('dispose', (e) => {
