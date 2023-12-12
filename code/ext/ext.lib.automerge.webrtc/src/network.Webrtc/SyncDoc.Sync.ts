@@ -65,11 +65,6 @@ export const Sync = {
         if (action === 'unshare') {
           shared.current = false;
           shared.version += 1;
-
-          /**
-           * TODO 🐷
-           * - change {shared.version} → Counter
-           */
         }
         if (!draft.shared[uri]) draft.shared[uri] = shared; // NB: ensure the shared object is attached to the CRDT.
       }
