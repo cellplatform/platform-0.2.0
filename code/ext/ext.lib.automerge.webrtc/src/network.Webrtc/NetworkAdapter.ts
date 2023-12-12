@@ -62,7 +62,6 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     conn.on('data', handleData);
     this.#disconnected$.subscribe(() => {
       this.#isReady = false;
-      console.log('DISCONNECTED', this.#isReady);
       conn.off('open', handleOpen);
       conn.off('close', handleClose);
       conn.off('data', handleData);
