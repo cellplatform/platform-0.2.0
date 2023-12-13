@@ -7,6 +7,5 @@ export function ResetTimer(delay: t.Milliseconds, action: () => void) {
     clear();
     _timer = Time.delay(delay, action);
   };
-  const api = { start, clear } as const;
-  return api;
+  return { start, clear } as const;
 }

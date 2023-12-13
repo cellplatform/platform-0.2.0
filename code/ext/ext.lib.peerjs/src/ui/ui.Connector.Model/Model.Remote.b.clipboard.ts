@@ -32,13 +32,10 @@ export function clipboardBehavior(args: {
     if (!canPaste()) return;
 
     const { peer, list } = args.ctx();
-    const { tx } = State.Remote.setPeerText(state, list, peer, text);
-
-    Time.delay(DEFAULTS.timeout.error, () => {
-      if (State.Remote.resetError(state, tx)) {
-        peer.purge();
-        redraw();
-      }
+    State.Remote.setPeerText(state, list, peer, text, {
+      events,
+      errorTimeout: true,
+      errorCleared: (e) => peer.purge(),
     });
   };
 

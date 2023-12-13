@@ -1,4 +1,4 @@
-import { rx, DEFAULTS, Time, type t, slug } from './common';
+import { rx, type t } from './common';
 import { Data } from './u.Data';
 import { State } from './u.State';
 
@@ -34,13 +34,7 @@ export function openConnectionBehavior(args: {
     connecting(false);
 
     if (error) {
-      console.error('connect error:', error, 'remote:', remoteid);
-      const { tx } = State.Remote.setConnectError(state, error);
-      redraw();
-
-      Time.delay(DEFAULTS.timeout.error, () => {
-        if (State.Remote.resetError(state, tx, remoteid)) redraw();
-      });
+      State.Remote.setError(state, 'ConnectFail', { message: error, timeout: true });
     }
 
     if (!error) {
