@@ -234,7 +234,7 @@ export default Dev.describe(name, (e) => {
         dispatch.redraw(TestState.array.first?.instance);
       });
       dev.button(['redraw: first', 'count++'], (e) => {
-        TestState.array.first.change((d) => (d.redraw = (d.redraw || (d.redraw = 0)) + 1));
+        Model.Item.incrementRedraw(TestState.array.first);
       });
 
       dev.hr(-1, 5);
