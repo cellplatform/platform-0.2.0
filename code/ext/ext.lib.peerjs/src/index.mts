@@ -18,6 +18,7 @@ import { Connector, ConnectorConfig } from './ui/ui.Connector';
 import { PeerCard } from './ui/ui.Dev.PeerCard';
 import { Info } from './ui/ui.Info';
 import { Video } from './ui/ui.Video';
+import { Icons } from './ui/Icons';
 
 export { Info };
 export const UI = {
@@ -27,6 +28,7 @@ export const UI = {
   ConnectorConfig,
   AvatarTray,
   Video,
+  Icons,
   Dev: { PeerCard },
 } as const;
 
