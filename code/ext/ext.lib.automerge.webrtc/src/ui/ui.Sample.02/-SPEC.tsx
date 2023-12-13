@@ -38,6 +38,7 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+    const resetReloadClose = () => state.change((d) => (d.reload = false));
 
     const monitor = (edge: t.SampleEdge) => {
       const redraw = () => dev.redraw('debug');
@@ -58,8 +59,7 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
-          const resetClose = () => state.change((d) => (d.reload = false));
-          return <TestDb.UI.Reload onClose={resetClose} />;
+          return <TestDb.UI.Reload onClose={resetReloadClose} />;
         } else {
           return <Sample left={left} right={right} />;
         }

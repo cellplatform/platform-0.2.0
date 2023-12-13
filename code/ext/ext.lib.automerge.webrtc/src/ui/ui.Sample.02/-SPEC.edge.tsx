@@ -21,6 +21,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+    const resetReloadClose = () => state.change((d) => (d.reload = false));
 
     ctx.debug.width(330);
     ctx.subject
@@ -30,8 +31,7 @@ export default Dev.describe(name, (e) => {
       .render<T>(async (e) => {
         const width = 250;
         if (e.state.reload) {
-          const resetClose = () => state.change((d) => (d.reload = false));
-          return <TestDb.UI.Reload style={{ width }} onClose={resetClose} />;
+          return <TestDb.UI.Reload style={{ width }} onClose={resetReloadClose} />;
         } else {
           return <SampleEdge edge={left} style={{ width }} />;
         }

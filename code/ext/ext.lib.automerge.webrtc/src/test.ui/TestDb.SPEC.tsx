@@ -7,13 +7,12 @@ const initial: T = {};
  * Spec
  */
 const name = 'TestDb';
-
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+    const resetReloadClose = () => state.change((d) => (d.reload = false));
 
     ctx.debug.width(330);
     ctx.subject
@@ -22,8 +21,7 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
-          const resetClose = () => state.change((d) => (d.reload = false));
-          return <TestDb.UI.Reload onClose={resetClose} />;
+          return <TestDb.UI.Reload onClose={resetReloadClose} />;
         } else {
           return <Icons.Database size={80} style={{ placeSelf: 'center' }} />;
         }
