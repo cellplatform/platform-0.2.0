@@ -104,33 +104,34 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
       const summary = pc.yellow(`${pc.yellow(totalFailed)} of ${total} tests failed`);
       console.info(pc.yellow(`${pc.bold('Failed:')} ${Util.formatPath(item.path)} (${summary})`));
 
-      obj.testResults
-        .filter((item) => item.status === 'failed')
-        .forEach((item) => {
-          const { assertionResults } = item;
-          const filename = item.name.substring(base.length + 1);
-          assertionResults
-            .filter((item) => item.status === 'failed')
-            .forEach((item, i) => {
-              const { location } = item;
-              const line = location?.line ?? 'line-<unknown>';
-              const column = location?.column ?? 'column-<unknown>';
+      obj.testResults.forEach((item) => {
+        const { assertionResults } = item;
+        const filename = item.name.substring(base.length + 1);
 
-              const testAncestors = `${item.ancestorTitles.filter(Boolean).join(' → ').trim()}`;
-              const testTitle = `${testAncestors} → ${pc.red(item.title.trim())}`;
-              const address = `${filename}:${line}:${column}`;
-              const detail = `|→ ${pc.red(`failure in:`)} ${testTitle}`;
+        if (item.message) console.info(pc.magenta(item.message), '\n');
 
-              console.info(pc.yellow(pc.dim(`    (${i + 1}) ${address}`)));
-              console.info(pc.yellow(pc.dim(`        ${detail}`)));
-              item.failureMessages.forEach((item) => {
-                const failure = `|→ ${pc.red('message:')}    ${item}`;
-                console.info(pc.yellow(pc.dim(`        ${failure}`)));
-              });
+        assertionResults
+          .filter((item) => item.status === 'failed')
+          .forEach((item, i) => {
+            const { location } = item;
+            const line = location?.line ?? 'line-<unknown>';
+            const column = location?.column ?? 'column-<unknown>';
 
-              console.info(' ');
+            const testAncestors = `${item.ancestorTitles.filter(Boolean).join(' → ').trim()}`;
+            const testTitle = `${testAncestors} → ${pc.red(item.title.trim())}`;
+            const address = `${filename}:${line}:${column}`;
+            const detail = `|→ ${pc.red(`failure in:`)} ${testTitle}`;
+
+            console.info(pc.yellow(pc.dim(`    (${i + 1}) ${address}`)));
+            console.info(pc.yellow(pc.dim(`        ${detail}`)));
+            item.failureMessages.forEach((item) => {
+              const failure = `|→ ${pc.red('message:')}    ${item}`;
+              console.info(pc.yellow(pc.dim(`        ${failure}`)));
             });
-        });
+
+            console.info(' ');
+          });
+      });
     }
   });
 };
