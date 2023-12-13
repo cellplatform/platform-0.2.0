@@ -13,7 +13,9 @@ export function useListRedrawController(list: t.LabelListState) {
    */
   useEffect(() => {
     const events = list.events();
-    const redrawCommand$ = events.cmd.redraw$.pipe(rx.filter((e) => !e.item));
+    const redrawCommand$ = events.cmd.redraw$.pipe(
+      rx.filter((e) => e.item === undefined || e.item === -1),
+    );
     const redraw$ = rx.merge(events.total$, redrawCommand$);
     redraw$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
     return events.dispose;
