@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
-import { describe, expect, it } from '../test';
-import { delay, wait } from './Delay.mjs';
+import { describe, expect, it, type t } from '../test';
+import { delay, wait, action } from './Delay.mjs';
 
 const now = () => new Date().getTime();
 
@@ -73,5 +73,41 @@ describe('wait', () => {
 
     await wait(ob$);
     expect(now() - startedAt).to.be.greaterThan(10);
+  });
+});
+
+describe('action', () => {
+  it('start → complete', async () => {
+    let fired: t.TimeDelayActionReason[] = [];
+    const timer = action(5, (e) => fired.push(e.action));
+    expect(timer.running).to.eql(false);
+
+    await wait(10);
+    expect(fired).to.eql([]);
+    expect(timer.running).to.eql(false);
+
+    timer.start();
+    expect(timer.running).to.eql(true);
+    await wait(10);
+    expect(fired.length).to.eql(1);
+    expect(fired[0]).to.eql('complete');
+    expect(timer.running).to.eql(false);
+  });
+
+  it('start → clear', async () => {
+    let fired: t.TimeDelayActionReason[] = [];
+    const timer = action(10, (e) => fired.push(e.action));
+    expect(timer.running).to.eql(false);
+
+    timer.start();
+    expect(timer.running).to.eql(true);
+
+    await wait(3);
+    timer.reset();
+    expect(timer.running).to.eql(false);
+
+    await wait(20);
+    expect(fired.length).to.eql(1);
+    expect(fired[0]).to.eql('reset');
   });
 });

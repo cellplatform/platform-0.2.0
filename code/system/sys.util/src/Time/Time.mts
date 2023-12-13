@@ -1,4 +1,4 @@
-import { delay, wait } from './Delay.mjs';
+import { delay, wait, action } from './Delay.mjs';
 import { Duration } from './Duration.mjs';
 import { elapsed, timer } from './Timer.mjs';
 import { until } from './Until.mjs';
@@ -9,6 +9,7 @@ const Time: t.Time = {
   day,
   delay,
   wait,
+  action,
   timer,
   elapsed,
   utc,

@@ -4,7 +4,7 @@ import { type t } from './common.mjs';
 /**
  * A more useful (promise based) timeout function.
  */
-export function delay<T = any>(msecs: number, callback?: () => T): t.TimeDelayPromise<T> {
+export function delay<T = any>(msecs: t.Msecs, callback?: () => T): t.TimeDelayPromise<T> {
   let timeout: NodeJS.Timeout | undefined;
 
   let resolver: any;
@@ -58,4 +58,35 @@ export const wait: t.TimeWait = (msecs) => {
   } else {
     return delay(msecs, () => false);
   }
+};
+
+/**
+ * A start/stop action timer.
+ */
+export const action: t.TimeDelayActionFactory = (msecs, fn) => {
+  let timer: t.TimeDelayPromise | undefined;
+  let running = false;
+
+  const stop = () => {
+    running = false;
+    timer?.cancel();
+  };
+
+  return {
+    start() {
+      stop();
+      running = true;
+      timer = delay(msecs, () => {
+        running = false;
+        fn({ action: 'complete' });
+      });
+    },
+    reset() {
+      stop();
+      fn({ action: 'reset' });
+    },
+    get running() {
+      return running;
+    },
+  } as const;
 };

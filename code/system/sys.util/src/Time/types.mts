@@ -14,15 +14,23 @@ export type TimeDuration = {
 
 export type TimeUnit = 'msec' | 'ms' | 'sec' | 's' | 'min' | 'm' | 'hour' | 'h' | 'day' | 'd';
 
-export type TimeDelay<T = any> = (msecs: number, callback?: () => T) => TimeDelayPromise<T>;
+export type TimeDelay<T = any> = (msecs: t.Msecs, callback?: () => T) => TimeDelayPromise<T>;
 export type TimeDelayPromise<T = any> = Promise<T> & {
   readonly id: NodeJS.Timeout;
   readonly result: T | undefined;
   readonly isCancelled: boolean;
   cancel(): void;
 };
+export type TimeDelayActionFactory = (msecs: t.Msecs, fn: TimeDelayActionFn) => TimeDelayAction;
+export type TimeDelayActionReason = 'complete' | 'reset';
+export type TimeDelayActionFn = (e: { action: TimeDelayActionReason }) => any;
+export type TimeDelayAction = {
+  readonly running: boolean;
+  start(): void;
+  reset(): void;
+};
 
-export type TimeWait = (msecs: number | Observable<any>) => Promise<unknown>;
+export type TimeWait = (msecs: t.Msecs | Observable<any>) => Promise<unknown>;
 export type TimeElapsed = (
   from: DateInput,
   options?: { to?: DateInput; round?: number },
@@ -34,6 +42,7 @@ export type DateInput = number | string | Date | Dayjs;
 export type Time = {
   readonly delay: TimeDelay;
   readonly wait: TimeWait;
+  readonly action: TimeDelayActionFactory;
   readonly elapsed: TimeElapsed;
   readonly day: DayFactory;
   readonly now: DateTime;
