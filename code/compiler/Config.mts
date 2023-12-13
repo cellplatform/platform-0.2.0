@@ -73,7 +73,8 @@ export const Config = {
       };
 
       const title = pc.gray(`module: ${pc.white(pc.bold(pkg.name))}`);
-      const titlePlugin = e.command === 'serve' ? displayStartupText(title) : undefined;
+      const titlePlugin =
+        e.command === 'serve' && e.mode !== 'test' ? displayStartupText(title) : undefined;
 
       let config: UserConfig = {
         build,

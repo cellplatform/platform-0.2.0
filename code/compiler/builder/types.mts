@@ -129,6 +129,7 @@ export type TestStats = {
   success: boolean;
   suites: { total: number; passed: number; failed: number; pending: number };
   tests: { total: number; passed: number; failed: number; pending: number; todo: number };
+  error?: string;
 };
 
 export type VitestResultsData = {
