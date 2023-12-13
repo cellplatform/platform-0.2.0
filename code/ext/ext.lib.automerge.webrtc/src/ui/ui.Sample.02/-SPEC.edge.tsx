@@ -2,7 +2,6 @@ import { type t } from './common';
 
 import { Crdt, Dev, TestDb } from '../../test.ui';
 import { createEdge } from './-SPEC';
-import { Reload } from './ui.Reload';
 import { SampleEdge } from './ui.Sample.Edge';
 
 type T = { reload?: boolean };
@@ -32,7 +31,7 @@ export default Dev.describe(name, (e) => {
         const width = 250;
         if (e.state.reload) {
           const resetClose = () => state.change((d) => (d.reload = false));
-          return <Reload style={{ width }} onClose={resetClose} />;
+          return <TestDb.UI.Reload style={{ width }} onClose={resetClose} />;
         } else {
           return <SampleEdge edge={left} style={{ width }} />;
         }
@@ -71,9 +70,7 @@ export default Dev.describe(name, (e) => {
         };
       };
 
-      const data = {
-        [`index[${total(left)}]`]: format(left),
-      };
+      const data = { [`index[${total(left)}]`]: format(left) };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

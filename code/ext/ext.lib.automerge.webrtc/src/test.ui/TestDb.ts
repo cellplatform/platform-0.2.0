@@ -12,6 +12,7 @@ const edge = (kind: t.ConnectionEdgeKind, name: string) => {
 };
 
 export const EdgeSampleDb = {
+  name: 'dev.sample',
   left: edge('Left', 'dev.sample.left'),
   right: edge('Right', 'dev.sample.right'),
   edge(kind: t.ConnectionEdgeKind) {

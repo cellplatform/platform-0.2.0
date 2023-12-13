@@ -1,8 +1,7 @@
 import { type t } from './common';
 
 import { WebrtcStore } from '../../network.Webrtc';
-import { Delete, Crdt, Dev, Doc, Hash, PropList, TestDb, Webrtc, rx } from '../../test.ui';
-import { Reload } from './ui.Reload';
+import { Crdt, Delete, Dev, Doc, Hash, PropList, TestDb, Webrtc, rx } from '../../test.ui';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean };
@@ -60,7 +59,7 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         if (e.state.reload) {
           const resetClose = () => state.change((d) => (d.reload = false));
-          return <Reload onClose={resetClose} />;
+          return <TestDb.UI.Reload onClose={resetClose} />;
         } else {
           return <Sample left={left} right={right} />;
         }

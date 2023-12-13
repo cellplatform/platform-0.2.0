@@ -1,4 +1,5 @@
 import { IndexedDb, StoreIndexDb } from './common';
+import { Reload } from './Reload';
 
 export async function deleteDatabase(name: string) {
   const index = StoreIndexDb.name(name);
@@ -45,4 +46,5 @@ export const TestDb = {
 
     await this.deleteDatabase('localfirst'); // TEMP 🐷
   },
+  UI: { Reload },
 } as const;
