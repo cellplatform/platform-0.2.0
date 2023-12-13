@@ -28,6 +28,7 @@ export type TimeDelayAction = {
   readonly running: boolean;
   start(): void;
   reset(): void;
+  complete(): void; // Force complete.
 };
 
 export type TimeWait = (msecs: t.Msecs | Observable<any>) => Promise<unknown>;

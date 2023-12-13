@@ -101,7 +101,6 @@ describe('action', () => {
 
     timer.start();
     expect(timer.running).to.eql(true);
-
     await wait(3);
     timer.reset();
     expect(timer.running).to.eql(false);
@@ -109,5 +108,24 @@ describe('action', () => {
     await wait(20);
     expect(fired.length).to.eql(1);
     expect(fired[0]).to.eql('reset');
+  });
+
+  it('start → complete (forced early)', async () => {
+    let fired: t.TimeDelayActionReason[] = [];
+    const timer = action(10, (e) => fired.push(e.action));
+    expect(timer.running).to.eql(false);
+
+    timer.start();
+    expect(timer.running).to.eql(true);
+    await wait(3);
+    timer.complete();
+    timer.complete();
+    timer.complete(); // NB: does not fire multiple times.
+    expect(fired.length).to.eql(1);
+    expect(fired[0]).to.eql('complete');
+    expect(timer.running).to.eql(false);
+
+    await wait(20);
+    expect(fired.length).to.eql(1); // NB: does not fire after timeout (cancelled).
   });
 });

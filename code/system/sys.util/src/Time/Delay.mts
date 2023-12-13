@@ -71,22 +71,27 @@ export const action: t.TimeDelayActionFactory = (msecs, fn) => {
     running = false;
     timer?.cancel();
   };
+  const complete = () => {
+    if (!running) return;
+    running = false;
+    fn({ action: 'complete' });
+  };
+  const start = () => {
+    stop();
+    running = true;
+    timer = delay(msecs, complete);
+  };
+  const reset = () => {
+    stop();
+    fn({ action: 'reset' });
+  };
 
   return {
-    start() {
-      stop();
-      running = true;
-      timer = delay(msecs, () => {
-        running = false;
-        fn({ action: 'complete' });
-      });
-    },
-    reset() {
-      stop();
-      fn({ action: 'reset' });
-    },
+    start,
+    reset,
+    complete,
     get running() {
       return running;
     },
-  } as const;
+  };
 };
