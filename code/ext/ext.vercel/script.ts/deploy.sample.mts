@@ -27,7 +27,6 @@ const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
 
 await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
 // await copy('../../compiler.samples/web.react/dist');
-// await copy('../../compiler.samples/web.svelte/dist');
 // await copy('../../tmp/phil.cockfield.net/dist');
 
 /**
