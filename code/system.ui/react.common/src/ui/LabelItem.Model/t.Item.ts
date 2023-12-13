@@ -141,11 +141,16 @@ export type LabelItemChangedCmd = { type: 'Item:Changed'; payload: LabelItemChan
 export type LabelItemChangedCmdArgs = t.LabelItemStateChangedHandlerArgs & { tx: string };
 
 export type LabelItemEditCmd = { type: 'Item:Edit'; payload: LabelItemEditCmdArgs };
-export type LabelItemEditCmdArgs = { tx: string; action: 'start' | 'accept' | 'cancel' | 'toggle' };
+export type LabelItemEditCmdArgs = {
+  readonly tx: string;
+  readonly action: 'start' | 'accept' | 'cancel' | 'toggle';
+  readonly cancelled: boolean;
+  cancel(): void;
+};
 
 export type LabelItemEditedCmd = { type: 'Item:Edited'; payload: LabelItemEditedCmdArgs };
 export type LabelItemEditedCmdArgs = {
-  tx: string;
-  action: 'accepted' | 'cancelled';
-  label: string;
+  readonly tx: string;
+  readonly action: 'accepted' | 'cancelled';
+  readonly label: string;
 };

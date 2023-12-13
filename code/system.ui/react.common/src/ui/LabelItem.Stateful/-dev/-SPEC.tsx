@@ -14,6 +14,7 @@ type T = {
     renderCount?: boolean;
     isList?: boolean;
     editOnActionAdd?: boolean;
+    cancelOnEditCmd?: boolean;
   };
 };
 const initial: T = { debug: {} };
@@ -22,7 +23,7 @@ const name = LabelItem.Stateful.displayName ?? '';
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<
     T['debug'],
-    'behaviors' | 'renderCount' | 'debug' | 'isList' | 'editOnActionAdd'
+    'behaviors' | 'renderCount' | 'debug' | 'isList' | 'editOnActionAdd' | 'cancelOnEditCmd'
   > & {
     total: number;
   };
@@ -34,6 +35,7 @@ export default Dev.describe(name, (e) => {
     renderCount: true,
     isList: true,
     editOnActionAdd: true,
+    cancelOnEditCmd: false,
   });
 
   const TestState = {
@@ -89,6 +91,14 @@ export default Dev.describe(name, (e) => {
           TestState.add(dev, edit ? 'edit' : undefined);
         });
 
+        events.cmd.edit$.subscribe((e) => {
+          e.cancel();
+          if (dev.current.debug.cancelOnEditCmd) {
+            e.cancel();
+            console.info('⚡️ cancelled edit command:', e.cancelled, e);
+          }
+        });
+
         // events.cmd.changed$.subscribe((e) => console.info(`⚡️ changed$ [${e.position.index}]`, e));
         // events.cmd.click$.subscribe((e) => console.info(`⚡️ click$ [${e.position.index}]`, e));
 
@@ -116,6 +126,7 @@ export default Dev.describe(name, (e) => {
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
       d.debug.editOnActionAdd = local.editOnActionAdd;
+      d.debug.cancelOnEditCmd = local.cancelOnEditCmd;
     });
     TestState.init.list(state);
     TestState.init.items(state, local.total);
@@ -186,6 +197,16 @@ export default Dev.describe(name, (e) => {
         .onClick((e) =>
           e.change((d) => (local.editOnActionAdd = Dev.toggle(d.debug, 'editOnActionAdd'))),
         );
+    });
+
+    dev.boolean((btn) => {
+      const value = (state: T) => Boolean(state.debug.cancelOnEditCmd);
+      btn
+        .label((e) => `cancel on edit ⚡️`)
+        .value((e) => value(e.state))
+        .onClick((e) => {
+          e.change((d) => (local.cancelOnEditCmd = Dev.toggle(d.debug, 'cancelOnEditCmd')));
+        });
     });
 
     dev.hr(0, 10);

@@ -159,21 +159,26 @@ export function useItemEditController(args: Args) {
    */
   useEffect(() => {
     const events = item?.events();
-    events?.cmd.edit$.pipe(rx.filter((e) => enabled)).subscribe((e) => {
-      if (e.action === 'start') {
-        dispatch.list.focus();
-        Time.delay(0, Edit.start);
-      }
-      if (e.action === 'accept') Edit.accept();
-      if (e.action === 'cancel') Edit.cancel();
-      if (e.action === 'toggle') {
-        if (Edit.is.editing) {
-          Edit.accept();
-        } else {
-          Edit.start();
+    events?.cmd.edit$
+      .pipe(
+        rx.filter((e) => enabled),
+        rx.filter((e) => !e.cancelled),
+      )
+      .subscribe((e) => {
+        if (e.action === 'start') {
+          dispatch.list.focus();
+          Time.delay(0, Edit.start);
         }
-      }
-    });
+        if (e.action === 'accept') Edit.accept();
+        if (e.action === 'cancel') Edit.cancel();
+        if (e.action === 'toggle') {
+          if (Edit.is.editing) {
+            Edit.accept();
+          } else {
+            Edit.start();
+          }
+        }
+      });
     return events?.dispose;
   }, [enabled, item?.instance]);
 
