@@ -6,3 +6,16 @@ export type SampleEdge = {
   repo: t.RepoListModel;
   network: t.WebrtcStore;
 };
+
+/**
+ * <Component>
+ */
+export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
+
+export type SampleEdgeProps = {
+  edge: t.SampleEdge;
+  offsetLabel?: t.SampleEdgeLabel;
+  focusOnLoad?: boolean;
+  style?: t.CssValue;
+  onStreamSelection?: t.PeerStreamSelectionHandler;
+};

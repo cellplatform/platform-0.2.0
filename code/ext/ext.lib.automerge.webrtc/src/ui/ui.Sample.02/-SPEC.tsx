@@ -1,7 +1,19 @@
 import { type t } from './common';
 
 import { WebrtcStore } from '../../network.Webrtc';
-import { Crdt, Delete, Dev, Doc, Hash, PropList, TestDb, Webrtc, rx } from '../../test.ui';
+import {
+  COLORS,
+  Crdt,
+  Delete,
+  Dev,
+  Doc,
+  Hash,
+  PropList,
+  TestDb,
+  Webrtc,
+  css,
+  rx,
+} from '../../test.ui';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean };
@@ -14,6 +26,7 @@ export const createEdge = async (kind: t.ConnectionEdgeKind) => {
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
+
   const repo = await Crdt.RepoList.model(store);
   const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
   const edge: t.SampleEdge = { kind, repo, network };
@@ -82,7 +95,7 @@ export default Dev.describe(name, async (e) => {
           btn
             .label(() => `connect: ${label}`)
             .right((e) => (!isConnected() ? '🌳' : ''))
-            .enabled((e) => !isConnected())
+            // .enabled((e) => !isConnected())
             .onClick((e) => fn());
         });
       };
@@ -107,11 +120,35 @@ export default Dev.describe(name, async (e) => {
       dev.row((e) => {
         const docid = Crdt.Uri.id(edge.network.shared?.uri);
         const doc = Hash.shorten(docid, [3, 5]);
+
+        const styles = {
+          peer: css({
+            display: 'grid',
+            placeItems: 'center',
+            gridTemplateColumns: 'auto auto',
+            columnGap: '5px',
+          }),
+        };
+
         return (
           <PropList
             items={[
-              { label: 'peer', value: edge.network.peer.id },
-              { label: 'shared (sync document)', value: doc || '(not connected)' },
+              {
+                label: 'peer',
+                value: (
+                  <div {...styles.peer}>
+                    <span>{`peer:${edge.network.peer.id}`}</span>
+                    <Webrtc.Icons.Person size={15} color={COLORS.BLUE} />
+                  </div>
+                ),
+              },
+              {
+                label: 'shared (transient doc)',
+                value: {
+                  data: doc || '(not connected)',
+                  opacity: doc ? 1 : 0.3,
+                },
+              },
             ]}
           />
         );
@@ -167,9 +204,10 @@ export default Dev.describe(name, async (e) => {
           await fn();
         });
       };
-      deleteButton('all', TestDb.EdgeSample.deleteDatabases);
       deleteButton(TestDb.EdgeSample.left.name, TestDb.EdgeSample.left.deleteDatabase);
       deleteButton(TestDb.EdgeSample.right.name, TestDb.EdgeSample.right.deleteDatabase);
+      dev.hr(-1, 5);
+      deleteButton('(both)', TestDb.EdgeSample.deleteDatabases);
     });
   });
 
