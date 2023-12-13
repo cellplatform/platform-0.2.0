@@ -12,7 +12,7 @@
     "ls": "ts-node-esm      -T script.ts/cmd.all.list.mts",
     "count": "ts-node-esm   -T script.ts/cmd.count.mts",
     "nuke": "ts-node-esm    -T script.ts/cmd.nuke.mts",
-    "tmp": "ts-node-esm     -T script.ts/cmd.tmp.mts",
+    "tmp": "ts-node-esm     -T script.ts/cmd.tmp.ts",
     "mit": "fossa analyze --debug"
   },
   "workspaces": {
