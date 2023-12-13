@@ -1,6 +1,5 @@
 import { DEFAULTS, Time, Value, rx, slug, type t } from './common';
 import { Data } from './u.Data';
-import { ResetTimer } from './u.Timer';
 
 export function purgeBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -12,16 +11,18 @@ export function purgeBehavior(args: {
   const { peer } = args.ctx();
   const redraw = dispatch.redraw;
 
-  const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Purge.reset());
+  const timer = Time.action(DEFAULTS.timeout.closePending, (e) => {
+    if (e.action === 'complete') Purge.reset();
+  });
 
   const Purge = {
     pending() {
-      resetTimer.start();
+      timer.start();
       state.change((item) => (Data.self(item).purgePending = true));
       redraw();
     },
     reset() {
-      resetTimer.clear();
+      timer.reset();
       state.change((item) => (Data.self(item).purgePending = false));
       redraw();
     },

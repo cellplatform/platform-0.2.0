@@ -1,7 +1,6 @@
-import { DEFAULTS, rx, type t } from './common';
+import { DEFAULTS, Time, rx, type t } from './common';
 import { Data } from './u.Data';
 import { State } from './u.State';
-import { ResetTimer } from './u.Timer';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
@@ -16,16 +15,19 @@ export function closeConnectionBehavior(args: {
   const peerEvents = peer.events(events.dispose$);
   const listEvents = list.events(events.dispose$);
   const listItemEvents = listEvents.item(state.instance);
-  const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Close.reset());
+
+  const timer = Time.action(DEFAULTS.timeout.closePending, (e) => {
+    if (e.action === 'complete') Close.reset();
+  });
 
   const Close = {
     pending() {
-      resetTimer.start();
+      timer.start();
       state.change((item) => (Data.remote(item).closePending = true));
       redraw();
     },
     reset() {
-      resetTimer.clear();
+      timer.reset();
       state.change((item) => (Data.remote(item).closePending = false));
       redraw();
     },
