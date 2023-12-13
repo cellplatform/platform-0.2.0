@@ -1,4 +1,4 @@
-import { DEFAULTS, Time, type t } from './common';
+import { rx, DEFAULTS, Time, type t, slug } from './common';
 import { Data } from './u.Data';
 import { State } from './u.State';
 
@@ -9,11 +9,15 @@ export function openConnectionBehavior(args: {
   dispatch: t.LabelItemDispatch;
 }) {
   const { events, state, dispatch } = args;
-  const redraw = () => dispatch.redraw();
+  const redraw = dispatch.redraw;
+  const getData = () => Data.remote(state);
 
+  /**
+   * Connect to the remote peer.
+   */
   const connect = async () => {
     const { peer, list } = args.ctx();
-    const data = Data.remote(state);
+    const data = getData();
     if (data.stage === 'Connecting' || data.stage === 'Connected') return;
     if (data.closePending) return;
 
@@ -30,7 +34,7 @@ export function openConnectionBehavior(args: {
     connecting(false);
 
     if (error) {
-      console.log('error:', error, 'remote:', remoteid);
+      console.error('connect error:', error, 'remote:', remoteid);
       const { tx } = State.Remote.setConnectError(state, error);
       redraw();
 
@@ -45,8 +49,22 @@ export function openConnectionBehavior(args: {
   };
 
   /**
+   * Clear the remote-peer data.
+   */
+  const clear = () => {
+    State.Remote.clearPeerText(state);
+    redraw();
+  };
+
+  /**
    * Listen: "Connect" button (triggers).
    */
-  events.key.enter$.subscribe(connect);
   events.cmd.action.kind('remote:right').subscribe(connect);
+  events.key.enter$.subscribe(connect);
+  events.key.escape$
+    .pipe(
+      rx.map((e) => getData()),
+      rx.filter((data) => !data.stage && !!data.remoteid),
+    )
+    .subscribe(clear);
 }

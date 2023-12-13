@@ -5,8 +5,8 @@ import { Data } from './u.Data';
  * Shared location for common state-transformations.
  */
 export const Remote = {
-  resetError(item: t.ConnectorItemStateRemote, tx: string, remoteid?: string) {
-    if (Data.remote(item).error?.tx !== tx) return false;
+  resetError(item: t.ConnectorItemStateRemote, tx?: string, remoteid?: string) {
+    if (tx && Data.remote(item).error?.tx !== tx) return false;
     item.change((d) => {
       const data = Data.remote(d);
       data.error = undefined;
@@ -47,6 +47,17 @@ export const Remote = {
     });
 
     return { tx } as const;
+  },
+
+  clearPeerText(item: t.ConnectorItemStateRemote) {
+    item.change((d) => {
+      const data = Data.remote(d);
+      data.error = undefined;
+      data.remoteid = undefined;
+      data.stage = undefined;
+      d.label = undefined;
+      d.editable = true;
+    });
   },
 
   setAsConnecting(item: t.ConnectorItemStateRemote, isConnecting: boolean) {

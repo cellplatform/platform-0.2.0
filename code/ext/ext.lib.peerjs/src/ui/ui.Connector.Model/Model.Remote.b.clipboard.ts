@@ -13,6 +13,19 @@ export function clipboardBehavior(args: {
   const canPaste = () => Data.remote(state).stage !== 'Connected';
 
   /**
+   * Behavior: Start editing.
+   * NOTE: This puts a <input> in place to recieve the pasted data.
+   *       This is a hack to avoid the security checks in some browsers
+   *       on the JS [clipboard.readText] method.
+   *       This does not open a security hole, but rather is just UX
+   *       because the user is using the keyboard anyhow.
+   */
+  const startEditing = () => {
+    State.Remote.resetError(state);
+    dispatch.edit('start');
+  };
+
+  /**
    * Behavior: Paste
    */
   const pasteClipboard = async (text: string) => {
@@ -57,7 +70,7 @@ export function clipboardBehavior(args: {
   events.key.$.pipe(
     rx.filter((e) => e.is.meta),
     rx.filter(() => canPaste()),
-  ).subscribe(() => dispatch.edit('start'));
+  ).subscribe(() => startEditing()); // NB: prepare <input> to catch paste operation.
 
   events.cmd.edited$
     .pipe(
