@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.util',
   version: '0.0.0',
   dependencies: {
-    '@noble/hashes': '1.3.2',
+    '@noble/hashes': '1.3.3',
     '@paralleldrive/cuid2': '2.2.2',
     'pretty-bytes': '6.1.1',
   },

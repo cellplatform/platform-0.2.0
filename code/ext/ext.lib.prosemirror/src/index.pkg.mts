@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'prosemirror-state': '1.4.3',
     'prosemirror-view': '1.32.6',
-    'prosemirror-model': '1.19.3',
+    'prosemirror-model': '1.19.4',
     'prosemirror-schema-basic': '1.2.2',
     'prosemirror-schema-list': '1.3.0',
     'prosemirror-example-setup': '1.2.2',

@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.automerge.webrtc',
   version: '0.0.0',
   dependencies: {
-    '@automerge/automerge': '2.1.8',
+    '@automerge/automerge': '2.1.9',
     '@automerge/automerge-repo': '1.0.19',
     '@automerge/automerge-repo-network-broadcastchannel': '1.0.19',
     '@automerge/automerge-repo-react-hooks': '1.0.19',
