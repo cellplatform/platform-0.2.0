@@ -233,6 +233,10 @@ export default Dev.describe(name, (e) => {
       dev.button(['redraw: first', '"id"'], (e) => {
         dispatch.redraw(TestState.array.first?.instance);
       });
+      dev.button(['redraw: first', 'count++'], (e) => {
+        TestState.array.first.change((d) => (d.redraw = (d.redraw || (d.redraw = 0)) + 1));
+      });
+
       dev.hr(-1, 5);
 
       dev.button(['redraw: all', '(list)'], (e) => dispatch.redraw());

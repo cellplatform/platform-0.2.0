@@ -19,6 +19,7 @@ export function events<A extends t.LabelItemActionKind = string, D extends O = O
     key: undefined as E['key'] | undefined,
     cmd: undefined as E['cmd'] | undefined,
   };
+
   const api: E = {
     $,
     get key() {

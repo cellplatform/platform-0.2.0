@@ -17,6 +17,7 @@ export type LabelItem<A extends K = string, D extends O = O> = {
   left?: t.LabelItemAction<A> | t.LabelItemAction<A>[] | null;
   right?: t.LabelItemAction<A> | t.LabelItemAction<A>[] | null;
   data?: D;
+  redraw?: number;
 };
 
 /**

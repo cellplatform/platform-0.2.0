@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Model, type t } from './common';
+import { DEFAULTS, Model, rx, type t } from './common';
 
 import { Wrangle } from './Wrangle';
 import { useItemEditController } from './use.Item.Edit';
@@ -61,7 +61,14 @@ export function useItemController(args: Args) {
    */
   useEffect(() => {
     const events = item?.events();
-    if (events) events.cmd.redraw$.subscribe(redraw);
+    if (events) {
+      // Handle redraws.
+      const redrawCount$ = events.$.pipe(rx.distinctWhile((p, n) => p.to.redraw === n.to.redraw));
+      const redrawCmd$ = events.cmd.redraw$;
+      const redraw$ = rx.merge(redrawCount$, redrawCmd$);
+      redraw$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
+    }
+
     return events?.dispose;
   }, [item?.instance]);
 
