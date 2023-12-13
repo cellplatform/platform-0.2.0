@@ -24,19 +24,19 @@ export const Remote = {
     const { ctx } = args;
     const type = DEFAULTS.type.remote;
     const initial = Remote.initial(args);
-    const state = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
-    const dispatch = Model.Item.commands(state);
-    const events = state.events(args.dispose$);
+    const item = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
+    const dispatch = Model.Item.commands(item);
+    const events = item.events(args.dispose$);
 
-    clipboardBehavior({ ctx, state, events, dispatch });
-    closeConnectionBehavior({ ctx, state, events, dispatch });
-    openConnectionBehavior({ ctx, state, events, dispatch });
+    clipboardBehavior({ ctx, item, events, dispatch });
+    closeConnectionBehavior({ ctx, item, events, dispatch });
+    openConnectionBehavior({ ctx, item, events, dispatch });
 
     events.key.on(
       (e) => e.code === 'KeyP',
-      (e) => Log.item('🙊 Remote', ctx().peer, state),
+      (e) => Log.item('🙊 Remote', ctx().peer, item),
     );
 
-    return state;
+    return item;
   },
 } as const;

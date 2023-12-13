@@ -4,13 +4,13 @@ import { State } from './u.State';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateRemote;
+  item: t.ConnectorItemStateRemote;
   events: t.ConnectorItemStateRemoteEvents;
   dispatch: t.LabelItemDispatch;
 }) {
-  const { events, state, dispatch } = args;
+  const { events, item, dispatch } = args;
   const redraw = dispatch.redraw;
-  const canPaste = () => Data.remote(state).stage !== 'Connected';
+  const canPaste = () => Data.remote(item).stage !== 'Connected';
 
   /**
    * Behavior: Start editing.
@@ -21,7 +21,7 @@ export function clipboardBehavior(args: {
    *       because the user is using the keyboard anyhow.
    */
   const startEditing = () => {
-    State.Remote.resetError(state);
+    State.Remote.resetError(item);
     dispatch.edit('start');
   };
 
@@ -32,7 +32,7 @@ export function clipboardBehavior(args: {
     if (!canPaste()) return;
 
     const { peer, list } = args.ctx();
-    State.Remote.setPeerText(state, list, peer, text, {
+    State.Remote.setPeerText(item, list, peer, text, {
       events,
       errorTimeout: true,
       errorCleared: (e) => peer.purge(),
@@ -43,18 +43,18 @@ export function clipboardBehavior(args: {
    * Behavior: Copy
    */
   const copyClipboard = async () => {
-    const data = Data.remote(state);
+    const data = Data.remote(item);
     const peerid = data.remoteid;
     if (!peerid || data.closePending) return;
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
-    state.change((item) => (Data.remote(item).actionCompleted = { tx, message: 'copied' }));
+    item.change((item) => (Data.remote(item).actionCompleted = { tx, message: 'copied' }));
     redraw();
 
     Time.delay(DEFAULTS.timeout.copiedPending, () => {
-      if (Data.remote(state).actionCompleted?.tx !== tx) return;
-      state.change((item) => (Data.remote(item).actionCompleted = undefined));
+      if (Data.remote(item).actionCompleted?.tx !== tx) return;
+      item.change((item) => (Data.remote(item).actionCompleted = undefined));
       redraw();
     });
   };

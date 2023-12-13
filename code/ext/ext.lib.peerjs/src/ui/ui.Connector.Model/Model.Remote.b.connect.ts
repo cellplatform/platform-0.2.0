@@ -4,13 +4,13 @@ import { State } from './u.State';
 
 export function openConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateRemote;
+  item: t.ConnectorItemStateRemote;
   events: t.ConnectorItemStateRemoteEvents;
   dispatch: t.LabelItemDispatch;
 }) {
-  const { events, state, dispatch } = args;
+  const { events, item, dispatch } = args;
   const redraw = dispatch.redraw;
-  const getData = () => Data.remote(state);
+  const getData = () => Data.remote(item);
 
   /**
    * Connect to the remote peer.
@@ -25,7 +25,7 @@ export function openConnectionBehavior(args: {
     if (!remoteid) return;
 
     const connecting = (value: boolean) => {
-      State.Remote.setAsConnecting(state, value);
+      State.Remote.setAsConnecting(item, value);
       redraw();
     };
 
@@ -34,11 +34,11 @@ export function openConnectionBehavior(args: {
     connecting(false);
 
     if (error) {
-      State.Remote.setError(state, 'ConnectFail', { message: error, timeout: true });
+      State.Remote.setError(item, 'ConnectFail', { message: error, timeout: true });
     }
 
     if (!error) {
-      State.Remote.setAsConnected(state, list, conn);
+      State.Remote.setAsConnected(item, list, conn);
     }
   };
 
@@ -46,7 +46,7 @@ export function openConnectionBehavior(args: {
    * Clear the remote-peer data.
    */
   const clear = () => {
-    State.Remote.clearPeerText(state);
+    State.Remote.clearPeerText(item);
     redraw();
   };
 

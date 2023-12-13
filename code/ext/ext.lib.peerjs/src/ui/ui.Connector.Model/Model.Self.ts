@@ -26,19 +26,19 @@ export const Self = {
     const { ctx } = args;
     const type = DEFAULTS.type.self;
     const initial = Self.initial(args);
-    const state = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
-    const dispatch = Model.Item.commands(state);
-    const events = state.events(args.dispose$);
+    const item = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
+    const dispatch = Model.Item.commands(item);
+    const events = item.events(args.dispose$);
 
-    clipboardBehavior({ ctx, state, events, dispatch });
-    peerBehavior({ ctx, state, events, dispatch });
-    purgeBehavior({ ctx, state, events, dispatch });
+    clipboardBehavior({ ctx, item, events, dispatch });
+    peerBehavior({ ctx, item, events, dispatch });
+    purgeBehavior({ ctx, item, events, dispatch });
 
     events.key.on(
       (e) => e.code === 'KeyP',
-      (e) => Log.item('🫠 Self', ctx().peer, state),
+      (e) => Log.item('🫠 Self', ctx().peer, item),
     );
 
-    return state;
+    return item;
   },
 } as const;
