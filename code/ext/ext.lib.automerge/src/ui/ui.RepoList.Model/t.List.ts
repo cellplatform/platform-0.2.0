@@ -9,7 +9,7 @@ export type GetRepoListModel = () => RepoListModel;
 export type RepoListModel = t.Lifecycle & {
   store: t.WebStore;
   index: t.WebStoreIndex;
-  list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
+  list: { state: t.RepoListState; dispatch: t.LabelListDispatch; events: t.RepoListEvents };
   filter: t.StoreIndexFilter;
   handlers: t.RepoListHandlers;
   events(dispose$?: t.UntilObservable): t.RepoListEvents;

@@ -9,9 +9,12 @@ export default Test.describe('RepoList.Model', (e) => {
   e.describe('Model.List', (e) => {
     e.it('initialize', async (e) => {
       const model = await Model.init(store);
+      expect(model.store).to.equal(store);
       expect(model.index.kind === 'crdt.store.index').to.eql(true);
       expect(model.list.state.type).to.eql(DEFAULTS.typename.List);
-      expect(model.store).to.equal(store);
+
+      expect(model.list.events).to.equal(model.list.events); // NB: lazy-loaded singleton instance.
+      expect(model.events()).to.not.equal(model.list.events);
     });
 
     e.it('is', async (e) => {
