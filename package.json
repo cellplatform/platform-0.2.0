@@ -100,7 +100,7 @@
     "ua-parser-js": "1.0.37",
     "unified": "11.0.4",
     "unist-util-select": "5.1.0",
-    "viem": "1.19.13",
+    "viem": "1.19.15",
     "wagmi": "1.4.11",
     "yaml": "2.3.4",
     "zod": "3.22.4"
