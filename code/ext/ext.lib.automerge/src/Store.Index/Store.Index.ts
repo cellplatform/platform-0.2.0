@@ -168,7 +168,7 @@ export const StoreIndex = {
               const i = findIndex(uri);
               const doc = docs[i];
               const shared = Mutate.toggleShared(doc, options);
-              res.push({ uri, shared: shared.current, version: shared.version.value });
+              res.push({ uri, shared: shared.current, version: shared.version?.value ?? -1 });
             });
           });
         }

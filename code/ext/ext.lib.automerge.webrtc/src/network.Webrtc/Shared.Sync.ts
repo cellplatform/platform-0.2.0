@@ -19,7 +19,7 @@ export const Sync = {
       items.forEach((item) => {
         const res = Sync.Mutate.shared(d, item, { debugLabel });
         if (!res.error) {
-          const indexVersion = item.shared?.version.value ?? 0;
+          const indexVersion = item.shared?.version?.value ?? 0;
           if (res.version > indexVersion) {
             const { uri, shared, version } = res;
             index.toggleShared(uri, { shared, version });

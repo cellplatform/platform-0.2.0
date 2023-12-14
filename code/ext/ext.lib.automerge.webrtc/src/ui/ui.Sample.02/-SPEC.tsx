@@ -229,7 +229,7 @@ export default Dev.describe(name, async (e) => {
         if (!item) return;
 
         const shared = item.shared
-          ? { ...item.shared, version: item.shared.version.value }
+          ? { ...item.shared, version: item.shared.version?.value ?? -1 }
           : undefined;
 
         return {

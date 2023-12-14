@@ -17,7 +17,7 @@ export const Mutate = {
 
     const getVersions = () => {
       return {
-        index: index.shared?.version.value ?? -1,
+        index: index.shared?.version?.value ?? -1,
         shared: draft.docs[uri]?.version ?? -1,
       } as const;
     };
@@ -36,7 +36,7 @@ export const Mutate = {
 
     if (version.index >= version.shared) {
       const shared = draft.docs[uri] ?? { current: false, version: 0 };
-      shared.version = index.shared?.version.value ?? 0;
+      shared.version = index.shared?.version?.value ?? 0;
       shared.current = index.shared?.current ?? false;
       if (action === 'unshare') {
         shared.current = false;
