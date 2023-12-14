@@ -1,5 +1,5 @@
 import type { t } from './common';
-export type * from './t.events';
+export type * from './t.Events';
 
 type Uri = t.DocUri | string;
 type Initial<T> = t.ImmutableNext<T>;
