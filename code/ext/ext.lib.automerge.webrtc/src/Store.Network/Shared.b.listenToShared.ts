@@ -12,9 +12,11 @@ export function listenToShared(
   const { dispose$, debugLabel } = options;
   const events = shared.events(dispose$);
 
-  events.$.pipe(
-    rx.map((e) => e.payload.doc.docs),
-    rx.distinctWhile((prev, next) => R.equals(prev, next)),
-    rx.debounceTime(100),
-  ).subscribe((e) => Sync.sharedToIndex(shared, index, { debugLabel }));
+  events.changed$
+    .pipe(
+      rx.map((e) => e.doc.docs),
+      rx.distinctWhile((prev, next) => R.equals(prev, next)),
+      rx.debounceTime(100),
+    )
+    .subscribe((e) => Sync.sharedToIndex(shared, index, { debugLabel }));
 }
