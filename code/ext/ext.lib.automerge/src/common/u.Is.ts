@@ -63,13 +63,8 @@ export const Is = {
 
   repoListModel(input: any): input is t.RepoListModel {
     if (!isObject(input)) return false;
-    const model = input as t.RepoListModel;
-    return (
-      typeof model.ctx === 'function' &&
-      Is.repoListState(model.list?.state) &&
-      Is.webStore(model.store) &&
-      Is.storeIndex(model.index)
-    );
+    const { list, store, index } = input as t.RepoListModel;
+    return Is.repoListState(list?.state) && Is.webStore(store) && Is.storeIndex(index);
   },
 
   networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {

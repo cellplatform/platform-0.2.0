@@ -1,7 +1,7 @@
 import { type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
-export function actionShareBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCtx }) {
+export function actionShareBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemCtx }) {
   const action$ = Wrangle.Item.$(args.item).action$;
 
   /**

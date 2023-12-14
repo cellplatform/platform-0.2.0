@@ -2,7 +2,7 @@ import { rx, toObject, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export function eventsFactory(args: {
-  ctx: t.GetRepoListCtx;
+  ctx: t.GetRepoListModel;
   dispose$?: t.UntilObservable;
 }): t.RepoListEvents {
   const ctx = args.ctx();

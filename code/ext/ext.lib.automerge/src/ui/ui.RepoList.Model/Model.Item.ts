@@ -23,7 +23,7 @@ export const ItemModel = {
   /**
    * State wrapper.
    */
-  state(ctx: t.GetRepoListCtx, kind: K, options: { dispose$?: t.UntilObservable } = {}) {
+  state(ctx: t.GetRepoListModel, kind: K, options: { dispose$?: t.UntilObservable } = {}) {
     const initial = ItemModel.initial(kind);
     const type = DEFAULTS.typename.Item;
     const state = Model.Item.state<t.RepoListAction, D>(initial, { type });

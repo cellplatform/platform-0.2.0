@@ -4,7 +4,7 @@ import { Data } from './Data';
 /**
  * Behavior for adding a new document to the repo.
  */
-export function addBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCtx }) {
+export function addBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemCtx }) {
   const { item } = args;
 
   /**

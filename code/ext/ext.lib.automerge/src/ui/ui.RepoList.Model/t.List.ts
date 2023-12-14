@@ -5,12 +5,16 @@ import type { t } from './common';
  */
 export type RepoListState = t.LabelListState;
 export type RepoListModel = t.Lifecycle & {
-  ctx: t.GetRepoListCtx;
+  // ctx: t.GetRepoListCtx;
   store: t.WebStore;
   index: t.WebStoreIndex;
   list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
+  filter: t.StoreIndexFilter;
+  handlers: t.RepoListHandlers;
   events(dispose$?: t.UntilObservable): t.RepoListEvents;
 };
+
+export type GetRepoListModel = () => RepoListModel;
 
 /**
  * Model: List Context

@@ -18,7 +18,7 @@ export const WrangleItem = {
     } as const;
   },
 
-  get(getCtx: t.GetRepoListCtx, input: ItemInput) {
+  get(getCtx: t.GetRepoListModel, input: ItemInput) {
     const ctx = getCtx();
     const data = Data.item(input);
     const docs = Wrangle.filterDocs(ctx.index.doc.current, ctx.filter);
@@ -31,7 +31,7 @@ export const WrangleItem = {
     return { exists, uri, index, position, item, data } as const;
   },
 
-  click(getCtx: t.GetRepoListCtx, input: ItemInput): t.RepoListClickHandlerArgs {
+  click(getCtx: t.GetRepoListModel, input: ItemInput): t.RepoListClickHandlerArgs {
     const { store, index } = getCtx();
     const { item, position } = WrangleItem.get(getCtx, input);
     return { store, index, position, item: toObject(item) };
@@ -41,7 +41,7 @@ export const WrangleItem = {
 export const Wrangle = {
   Item: WrangleItem,
 
-  getItem(getCtx: t.GetRepoListCtx, target?: Index | Id) {
+  getItem(getCtx: t.GetRepoListModel, target?: Index | Id) {
     const ctx = getCtx();
     const [item] = Model.List.getItem(ctx.list.state, target || '');
     return item ? WrangleItem.get(getCtx, item) : undefined;
