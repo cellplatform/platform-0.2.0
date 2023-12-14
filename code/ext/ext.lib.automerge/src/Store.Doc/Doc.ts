@@ -1,7 +1,7 @@
-import { eventsFactory } from './Doc.Events';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
-import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, slug, toObject, type t } from './common';
+import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, toObject, type t } from './common';
+import { Handle } from './u.Handle';
 
 type Uri = t.DocUri | string;
 
@@ -38,7 +38,7 @@ export const Doc = {
 
       const handle = repo.find<T>(uri);
       Time.until(done$).delay(timeout, () => done(undefined));
-      handle.whenReady().then(() => done(wrapHandle<T>({ handle, dispose$ })));
+      handle.whenReady().then(() => done(Handle.wrap<T>(handle, { dispose$ })));
     });
   },
 
@@ -70,33 +70,8 @@ export const Doc = {
     const handle = repo.create<T>();
     handle.change((d: any) => args.initial(d));
 
-    const ref = wrapHandle<T>({ handle, dispose$ });
+    const ref = Handle.wrap<T>(handle, { dispose$ });
     await ref.handle.whenReady();
     return ref;
   },
 } as const;
-
-/**
- * Helpers
- */
-function wrapHandle<T>(args: { handle: t.DocHandle<T>; dispose$?: t.UntilObservable }) {
-  const { handle } = args;
-  const api: t.DocRefHandle<T> = {
-    instance: slug(),
-    uri: handle.url,
-    handle,
-    get current() {
-      return handle.docSync();
-    },
-    change(fn) {
-      handle.change((d: any) => fn(d));
-    },
-    events(dispose$) {
-      return eventsFactory<T>(handle, { dispose$: [args.dispose$, dispose$] });
-    },
-    toObject() {
-      return toObject<T>(api.current);
-    },
-  };
-  return api;
-}

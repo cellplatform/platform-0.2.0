@@ -29,4 +29,6 @@ export type DocChanged<T = O> = {
 export type DocEphemeralEvent = {
   readonly type: 'crdt:doc/Ephemeral';
 };
-export type DocEphemeral = {};
+export type DocEphemeral = {
+  direction: t.IODirection;
+};

@@ -4,9 +4,10 @@ import { rx, type t } from './common';
  * Generate a new events wrapper for the given handle.
  */
 export function eventsFactory<T>(
-  handle: t.DocHandle<T>,
+  ref: t.DocRefHandle<T>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {
+  const handle = ref.handle;
   const uri = handle.url;
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
