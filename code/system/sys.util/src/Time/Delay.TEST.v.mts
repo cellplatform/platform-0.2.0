@@ -78,8 +78,8 @@ describe('wait', () => {
 
 describe('action', () => {
   it('start → complete', async () => {
-    let fired: t.TimeDelayActionFnArgs[] = [];
-    const timer = action(5, (e) => fired.push(e));
+    let fired: t.TimeDelayActionHandlerArgs[] = [];
+    const timer = action(5).on((e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     await wait(10);
@@ -99,8 +99,8 @@ describe('action', () => {
   });
 
   it('start → (restart) → complete', async () => {
-    let fired: t.TimeDelayActionFnArgs[] = [];
-    const timer = action(10, (e) => fired.push(e));
+    let fired: t.TimeDelayActionHandlerArgs[] = [];
+    const timer = action(10).on((e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     timer.start();
@@ -138,8 +138,8 @@ describe('action', () => {
   });
 
   it('start → clear', async () => {
-    let fired: t.TimeDelayActionFnArgs[] = [];
-    const timer = action(10, (e) => fired.push(e));
+    let fired: t.TimeDelayActionHandlerArgs[] = [];
+    const timer = action(10).on((e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     timer.start();
@@ -156,8 +156,8 @@ describe('action', () => {
   });
 
   it('start → complete (forced early)', async () => {
-    let fired: t.TimeDelayActionFnArgs[] = [];
-    const timer = action(10, (e) => fired.push(e));
+    let fired: t.TimeDelayActionHandlerArgs[] = [];
+    const timer = action(10).on((e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     timer.start();
@@ -174,5 +174,17 @@ describe('action', () => {
 
     await wait(20);
     expect(fired.length).to.eql(2); // NB: does not fire after timeout (cancelled).
+  });
+
+  it('specific handlers', async () => {
+    let fired: t.TimeDelayActionHandlerArgs[] = [];
+    const timer = action(5).on('complete', (e) => fired.push(e));
+    expect(timer.running).to.eql(false);
+
+    timer.start();
+    await wait(10);
+
+    expect(fired.length).to.eql(1);
+    expect(fired[0].action).to.eql('complete');
   });
 });

@@ -63,7 +63,7 @@ export const wait: t.TimeWait = (msecs) => {
 /**
  * A start/stop action timer.
  */
-export const action: t.TimeDelayActionFactory = (msecs, fn) => {
+export const action: t.TimeDelayActionFactory = (msecs) => {
   let timer: t.TimeDelayPromise | undefined;
   let startedAt = -1;
   let running = false;
@@ -72,9 +72,12 @@ export const action: t.TimeDelayActionFactory = (msecs, fn) => {
     return startedAt < 0 ? -1 : new Date().getTime() - startedAt;
   };
 
-  const fire = (action: t.TimeDelayActionReason) => {
+  const handlers = new Set<{ action: t.TimeDelayActionAction; fn: t.TimeDelayActionHandler }>();
+  const fire = (action: t.TimeDelayActionAction) => {
     const elapsed = getElapsed();
-    fn({ action, elapsed });
+    handlers.forEach((e) => {
+      if (e.action === action) e.fn({ action, elapsed });
+    });
   };
 
   const complete = () => {
@@ -101,15 +104,29 @@ export const action: t.TimeDelayActionFactory = (msecs, fn) => {
     startedAt = -1;
   };
 
-  return {
-    start,
-    reset,
-    complete,
+  const api = {
     get running() {
       return running;
     },
     get elapsed() {
       return getElapsed();
     },
+    start,
+    reset,
+    complete,
+
+    on(...input: any[]) {
+      if (typeof input[0] === 'function') {
+        const fn = input[0] as t.TimeDelayActionHandler;
+        api.on('start', fn).on('restart', fn).on('reset', fn).on('complete', fn);
+      } else {
+        const action = input[0] as t.TimeDelayActionAction;
+        const fn = input[1] as t.TimeDelayActionHandler;
+        handlers.add({ action, fn });
+      }
+
+      return api;
+    },
   };
+  return api;
 };

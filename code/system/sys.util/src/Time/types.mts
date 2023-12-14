@@ -21,16 +21,18 @@ export type TimeDelayPromise<T = any> = Promise<T> & {
   readonly isCancelled: boolean;
   cancel(): void;
 };
-export type TimeDelayActionFactory = (msecs: t.Msecs, fn: TimeDelayActionFn) => TimeDelayAction;
-export type TimeDelayActionReason = 'start' | 'reset' | 'restart' | 'complete';
-export type TimeDelayActionFn = (e: TimeDelayActionFnArgs) => any;
-export type TimeDelayActionFnArgs = { action: TimeDelayActionReason; elapsed: t.Msecs };
+export type TimeDelayActionFactory = (msecs: t.Msecs) => TimeDelayAction;
+export type TimeDelayActionAction = 'start' | 'restart' | 'reset' | 'complete';
+export type TimeDelayActionHandler = (e: TimeDelayActionHandlerArgs) => any;
+export type TimeDelayActionHandlerArgs = { action: TimeDelayActionAction; elapsed: t.Msecs };
 export type TimeDelayAction = {
   readonly running: boolean;
   readonly elapsed: t.Msecs;
   start(): void;
   reset(): void;
   complete(): void; // Force complete.
+  on(fn: TimeDelayActionHandler): TimeDelayAction;
+  on(action: t.TimeDelayActionAction, fn: TimeDelayActionHandler): TimeDelayAction;
 };
 
 export type TimeWait = (msecs: t.Msecs | Observable<any>) => Promise<unknown>;
