@@ -14,8 +14,9 @@ export type DocEvents<T> = t.Lifecycle & {
  * Events
  */
 export type DocEvent<T = O> = DocChangedEvent<T>;
+
 export type DocChangedEvent<T> = {
-  readonly type: 'crdt:DocChanged';
+  readonly type: 'crdt:doc/Changed';
   readonly payload: DocChanged<T>;
 };
 export type DocChanged<T = O> = {
@@ -24,3 +25,8 @@ export type DocChanged<T = O> = {
   readonly patches: t.Patch[];
   readonly patchInfo: t.PatchInfo<T>;
 };
+
+export type DocEphemeralEvent = {
+  readonly type: 'crdt:doc/Ephemeral';
+};
+export type DocEphemeral = {};

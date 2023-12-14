@@ -1,7 +1,7 @@
-import { DocEvents } from './Doc.Events';
+import { eventsFactory } from './Doc.Events';
 import { DocMeta as Meta } from './Doc.Meta';
-import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, slug, toObject, type t } from './common';
 import { DocPatch as Patch } from './Doc.Patch';
+import { DEFAULTS, Data, Is, Time, DocUri as Uri, rx, slug, toObject, type t } from './common';
 
 type Uri = t.DocUri | string;
 
@@ -92,7 +92,7 @@ function wrapHandle<T>(args: { handle: t.DocHandle<T>; dispose$?: t.UntilObserva
       handle.change((d: any) => fn(d));
     },
     events(dispose$) {
-      return DocEvents.init<T>(handle, { dispose$: [args.dispose$, dispose$] });
+      return eventsFactory<T>(handle, { dispose$: [args.dispose$, dispose$] });
     },
     toObject() {
       return toObject<T>(api.current);

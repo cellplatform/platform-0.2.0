@@ -11,7 +11,7 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
 
   const $$ = rx.subject<t.StoreIndexEvent>();
   const $ = $$.pipe(rx.takeUntil(dispose$));
-  const changed$ = rx.payload<t.DocChangedEvent<t.StoreIndex>>($, 'crdt:DocChanged');
+  const changed$ = rx.payload<t.DocChangedEvent<t.StoreIndex>>($, 'crdt:doc/Changed');
   const doc = index.doc.events(dispose$);
   doc.$.subscribe((e) => $$.next(e));
 
