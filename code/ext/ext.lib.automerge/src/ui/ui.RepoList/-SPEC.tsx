@@ -33,7 +33,7 @@ export default Dev.describe(name, async (e) => {
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
       onActiveChanged: (e) => {
-        console.info(`⚡️ onActiveChanged`, e);
+        // console.info(`⚡️ onActiveChanged`, e);
         active = e;
       },
     });
