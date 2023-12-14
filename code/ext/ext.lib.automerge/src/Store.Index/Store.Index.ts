@@ -9,6 +9,7 @@ import { Mutate } from './Store.Index.Mutate';
 type O = Record<string, unknown>;
 type Uri = string;
 type UriInput = Uri | Uri[];
+type AddInput = t.StoreIndexAddParam | Uri;
 
 /**
  * Manages an index of documents within a repository.
@@ -105,7 +106,7 @@ export const StoreIndex = {
        * Add a new entry to the index.
        */
       async add(input) {
-        const inputs = (Array.isArray(input) ? input : [input]).filter(Boolean);
+        const inputs = wrangle.addParams(input);
         const wait = inputs.map(async (e) => ({ ...e, meta: await wrangle.meta(store, e.uri) }));
         const items = await Promise.all(wait);
         if (api.exists(inputs.map((e) => e.uri))) return 0;
@@ -188,6 +189,13 @@ const wrangle = {
   uris(input: UriInput) {
     input = !input ? [] : input;
     return (Array.isArray(input) ? input : [input]).filter(Boolean);
+  },
+
+  addParams(input: AddInput | AddInput[]): t.StoreIndexAddParam[] {
+    if (!input) return [];
+    const list = Array.isArray(input) ? input : [input];
+    const objects = list.map((v) => (typeof v === 'string' ? { uri: v } : v));
+    return objects.filter(Boolean);
   },
 
   storeName(store: t.Store) {

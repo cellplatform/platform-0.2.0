@@ -5,7 +5,7 @@ export type * from './t.Shared';
 
 type Uri = string;
 type UriInput = Uri | Uri[];
-type AddDoc = { uri: Uri; name?: string; shared?: boolean };
+type AddInput = t.StoreIndexAddParam | Uri;
 
 /**
  * A CRDT that represents an index of a store/repo.
@@ -18,9 +18,10 @@ export type StoreIndexState = {
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
   exists(uri: UriInput): boolean;
   total(filter?: t.StoreIndexFilter): number;
-  add(doc: AddDoc | AddDoc[]): Promise<number>;
+  add(doc: AddInput | AddInput[]): Promise<number>;
   remove(uri: UriInput): number;
 };
+export type StoreIndexAddParam = { uri: Uri; name?: string; shared?: boolean };
 
 export type StoreIndexFilter = (e: StoreIndexFilterArgs, index: number) => boolean;
 export type StoreIndexFilterArgs = { doc: t.StoreIndexDoc; index: number };

@@ -3,20 +3,19 @@ import { Doc } from '../Store.Doc';
 import { Time, describe, expect, expectError, it, rx, type t } from '../test';
 
 type D = { count: number };
+const A = 'automerge:a';
+const B = 'automerge:b';
+const C = 'automerge:c';
+const D = 'automerge:d';
 
-describe('StoreIndex', async () => {
-  const A = 'automerge:a';
-  const B = 'automerge:b';
-  const C = 'automerge:c';
-  const D = 'automerge:d';
+const setup = () => {
+  const store = Store.init();
+  const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
+  const generator = store.doc.factory<D>(initial);
+  return { store, initial, generator } as const;
+};
 
-  const setup = () => {
-    const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
-    const generateSample = store.doc.factory<D>(initial);
-    return { store, initial, generateSample } as const;
-  };
-
+describe('StoreIndex', () => {
   describe('initialize', () => {
     it('defaults', async () => {
       const { store } = setup();
@@ -61,7 +60,7 @@ describe('StoreIndex', async () => {
     });
 
     it('total (filter)', async () => {
-      const { store, generateSample: generator } = setup();
+      const { store, generator } = setup();
       const index = await Store.Index.init(store);
 
       await generator();
@@ -94,9 +93,9 @@ describe('StoreIndex', async () => {
       expect(index.doc.current.docs).to.eql([]);
 
       const uri = 'automerge:foo';
-      const res1 = await index.add({ uri });
+      const res1 = await index.add(uri);
       const res2 = await index.add({ uri });
-      const res3 = await index.add([{ uri }, { uri }, { uri }]);
+      const res3 = await index.add([{ uri }, uri, { uri }]);
       expect(res1).to.eql(1);
       expect(res2).to.eql(0); // Already added.
       expect(res3).to.eql(0); // Already added.
@@ -127,9 +126,9 @@ describe('StoreIndex', async () => {
       const index = await Store.index(store);
       expect(index.doc.current.docs).to.eql([]);
 
-      const res1 = await index.add([{ uri: A }, { uri: B }, { uri: C, name: 'foobar' }]);
-      const res2 = await index.add([{ uri: A }, { uri: C }]);
-      const res3 = await index.add([{ uri: A }, { uri: D }]);
+      const res1 = await index.add([A, B, { uri: C, name: 'foobar' }]);
+      const res2 = await index.add([A, C]);
+      const res3 = await index.add([A, D]);
 
       expect(res1).to.eql(3);
       expect(res2).to.eql(0); // NB: all specified items already exist.
@@ -169,8 +168,8 @@ describe('StoreIndex', async () => {
       const index = await Store.index(store);
       expect(index.total()).to.eql(0);
 
-      await index.add({ uri: A });
-      await index.add({ uri: A });
+      await index.add(A);
+      await index.add(A);
       expect(index.doc.current.docs.map((m) => m.uri)).to.eql([A]);
 
       await index.add([{ uri: A }, { uri: B }, { uri: B }, { uri: B }]);
@@ -186,8 +185,8 @@ describe('StoreIndex', async () => {
       expect(index.exists(A)).to.eql(false);
       expect(index.exists([A, B, C])).to.eql(false);
 
-      await index.add({ uri: A });
-      await index.add({ uri: B });
+      await index.add(A);
+      await index.add(B);
 
       expect(index.exists(A)).to.eql(true);
       expect(index.exists([A, B])).to.eql(true);
@@ -203,7 +202,7 @@ describe('StoreIndex', async () => {
       const { store } = setup();
       const index = await Store.index(store);
 
-      await index.add([{ uri: A }, { uri: B }, { uri: C }, { uri: D }]);
+      await index.add([A, B, C, D]);
       expect(index.total()).to.eql(4);
 
       const res1 = index.remove(A);
@@ -297,7 +296,7 @@ describe('StoreIndex', async () => {
       const getDoc = (i: number) => index.doc.current.docs[i];
       const getSharedAt = (i: number) => getDoc(i).shared;
 
-      await index.add([{ uri: A }, { uri: B }]);
+      await index.add([A, B]);
 
       let docs = index.doc.current.docs;
       expect(docs[0].shared).to.eql(undefined);
@@ -328,7 +327,7 @@ describe('StoreIndex', async () => {
       const getDoc = (i: number) => index.doc.current.docs[i];
       const getCurrent = (i: number) => getDoc(i).shared?.current;
 
-      await index.add([{ uri: A }, { uri: B }]);
+      await index.add([A, B]);
 
       const res1 = index.toggleShared([A]);
       expect(getCurrent(0)).to.eql(true);
@@ -355,7 +354,7 @@ describe('StoreIndex', async () => {
     it('{ version } parameter', async () => {
       const { store } = setup();
       const index = await Store.index(store);
-      await index.add([{ uri: A }, { uri: B }]);
+      await index.add([A, B]);
 
       const getDoc = (i: number) => index.doc.current.docs[i];
       const getCurrent = (i: number) => getDoc(i).shared?.current;
