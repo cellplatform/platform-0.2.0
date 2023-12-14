@@ -52,16 +52,18 @@ export function deleteBehavior(args: Args) {
       redraw();
     },
 
-    /**
-     * TODO 🐷
-     * - archive concept (rather than had delete)
-     */
     invoke() {
       const uri = getData().uri;
       if (!Delete.is.pending || !uri) return;
 
       const { position } = Wrangle.Item.get(ctx, item);
       const { focused } = list.state.current;
+
+      /**
+       * TODO 🐷
+       * - archive concept (rather than had delete)
+       */
+      console.warn('TODO 🐷: archive concept (rather than had hard delete)');
 
       // Delete the item from the [Index].
       index.remove(uri);
