@@ -11,8 +11,8 @@ export function listenToIndex(
 ) {
   const { debugLabel, dispose$ } = options;
   const events = index.events(dispose$);
-  const change = (indexItem: t.StoreIndexDoc, action?: t.CrdtSharedMutateAction) => {
-    shared.change((d) => Sync.Mutate.shared(d, indexItem, { action, debugLabel }));
+  const change = (item: t.StoreIndexDoc, action?: t.CrdtSharedMutateAction) => {
+    shared.change((d) => Sync.Mutate.shared(d, item, { action, debugLabel }));
   };
   events.added$.subscribe((e) => change(e.item));
   events.shared$.subscribe((e) => change(e.item));

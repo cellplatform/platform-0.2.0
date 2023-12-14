@@ -54,7 +54,7 @@ export const Shared = {
      */
 
     /**
-     * Setup the CRDT document.
+     * Setup the "shared" CRDT syncing document.
      */
     const shared = await Shared.getOrCreate(store, options.uri);
     const events = shared.events(dispose$);
