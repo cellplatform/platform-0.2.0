@@ -64,29 +64,29 @@ export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItem
   /**
    * Listen.
    */
-  const on = (...codes: string[]) => {
-    return events.item.key.$.pipe(
+  const on = (codes: string[], options: { handled?: boolean } = {}) => {
+    const $ = events.item.key.$.pipe(
       rx.filter((e) => codes.includes(e.code)),
       rx.map((e) => ({ data: getData(), key: e })),
       rx.filter((e) => e.data.kind === 'Doc'),
     );
+    if (options.handled) $.subscribe((e) => e.key.handled());
+    return $;
   };
 
-  const filter = {
-    pending: rx.filter((e) => Delete.is.pending),
-    notPending: rx.filter((e) => !Delete.is.pending),
-  } as const;
-  const supressEdit$ = item.events.cmd.edit$.pipe(rx.filter((e) => Delete.is.pending));
+  const is = Delete.is;
+  const supressEdit$ = item.events.cmd.edit$.pipe(rx.filter((e) => is.pending));
   const selected$ = events.list.item(item.state.instance).selected$;
-  const deselected$ = selected$.pipe(rx.filter((e) => !e)).pipe(filter.pending);
-  const initiate$ = on('Delete', 'Backspace');
-  const enterKey$ = on('Enter').pipe(filter.pending);
-  const escapeKey$ = on('Escape').pipe(filter.pending);
+  const deselected$ = selected$.pipe(rx.filter((e) => !e)).pipe(rx.filter((e) => is.pending));
+  const initiate$ = on(['Delete', 'Backspace']);
+  const enterKey$ = on(['Enter'], { handled: true }).pipe(rx.filter((e) => is.pending));
+  const escapeKey$ = on(['Escape']).pipe(rx.filter((e) => is.pending));
   const buttonClick$ = action$('Item:Right', 'Delete');
-  const execute$ = rx.merge(enterKey$, buttonClick$).pipe(filter.pending);
+  const execute$ = rx.merge(enterKey$, buttonClick$).pipe(rx.filter((e) => is.pending));
 
   supressEdit$.subscribe((e) => e.cancel()); // NB: Supress the start edit operation (from ENTER key) while pending.
-  rx.merge(escapeKey$, deselected$).subscribe(Delete.reset);
+  escapeKey$.subscribe(Delete.reset);
+  deselected$.subscribe(Delete.reset);
   initiate$.subscribe(Delete.pending);
   execute$.subscribe(Delete.invoke);
 }
