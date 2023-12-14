@@ -18,22 +18,22 @@ export const WrangleItem = {
     } as const;
   },
 
-  get(getCtx: t.GetRepoListModel, input: ItemInput) {
-    const ctx = getCtx();
+  get(ctx: t.GetRepoListModel, input: ItemInput) {
+    const { index, filter } = ctx();
     const data = Data.item(input);
-    const docs = Wrangle.filterDocs(ctx.index.doc.current, ctx.filter);
-    const index = docs.findIndex((item) => item.uri === data.uri);
-    const item = docs[index];
+    const docs = Wrangle.filterDocs(index.doc.current, filter);
+    const i = docs.findIndex((item) => item.uri === data.uri);
+    const item = docs[i];
     const uri = item?.uri || '';
-    const exists = index > -1;
+    const exists = i > -1;
     const total = docs.length;
-    const position = { index, total };
-    return { exists, uri, index, position, item, data } as const;
+    const position = { index: i, total };
+    return { exists, uri, position, item, data } as const;
   },
 
-  click(getCtx: t.GetRepoListModel, input: ItemInput): t.RepoListClickHandlerArgs {
-    const { store, index } = getCtx();
-    const { item, position } = WrangleItem.get(getCtx, input);
+  click(ctx: t.GetRepoListModel, input: ItemInput): t.RepoListClickHandlerArgs {
+    const { store, index } = ctx();
+    const { item, position } = WrangleItem.get(ctx, input);
     return { store, index, position, item: toObject(item) };
   },
 } as const;
@@ -41,14 +41,14 @@ export const WrangleItem = {
 export const Wrangle = {
   Item: WrangleItem,
 
-  getItem(getCtx: t.GetRepoListModel, target?: Index | Id) {
-    const ctx = getCtx();
-    const [item] = Model.List.getItem(ctx.list.state, target || '');
-    return item ? WrangleItem.get(getCtx, item) : undefined;
+  getItem(ctx: t.GetRepoListModel, target?: Index | Id) {
+    const { list } = ctx();
+    const [item] = Model.List.getItem(list.state, target || '');
+    return item ? WrangleItem.get(ctx, item) : undefined;
   },
 
-  total(getCtx: t.GetRepoListModel) {
-    const { index, filter } = getCtx();
+  total(ctx: t.GetRepoListModel) {
+    const { index, filter } = ctx();
     return Wrangle.filterDocs(index.doc.current, filter).length;
   },
 
