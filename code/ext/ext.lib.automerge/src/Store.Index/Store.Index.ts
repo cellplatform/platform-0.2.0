@@ -3,8 +3,8 @@ import { Data, Delete, DocUri, Is, R, type t } from './common';
 
 import { Doc } from '../Store.Doc';
 import { events } from './Store.Index.Events';
+import { Filter } from './Store.Index.Filter';
 import { Mutate } from './Store.Index.Mutate';
-import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
 type Uri = string;
@@ -15,8 +15,8 @@ type UriInput = Uri | Uri[];
  */
 export const StoreIndex = {
   Mutate,
+  Filter,
   events,
-  filter: Wrangle.filter,
 
   get type(): t.DocMetaType {
     const name: t.StoreIndexState['kind'] = 'crdt.store.index';
@@ -88,7 +88,7 @@ export const StoreIndex = {
        * Count the total number of items within the index.
        */
       total(filter) {
-        return StoreIndex.filter(doc.current.docs, filter).length;
+        return StoreIndex.Filter.docs(doc.current.docs, filter).length;
       },
 
       /**
