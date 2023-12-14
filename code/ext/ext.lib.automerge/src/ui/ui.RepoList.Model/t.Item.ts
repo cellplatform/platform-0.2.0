@@ -17,4 +17,7 @@ export type GetRepoLabelItem = t.GetLabelItem<t.RepoListAction, t.RepoItemData>;
 export type RepoItemData = {
   kind: 'Add' | 'Doc';
   uri?: string;
+  pending?: RepoItemDataPending;
 };
+
+export type RepoItemDataPending = { tx: string; action: 'Delete' };

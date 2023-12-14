@@ -9,7 +9,7 @@ export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Shareable'
 /**
  * Action
  */
-export type RepoListActionCtx = { kind: 'Share' };
+export type RepoListActionCtx = { kind: 'Share' | 'Delete' };
 
 /**
  * <Component>

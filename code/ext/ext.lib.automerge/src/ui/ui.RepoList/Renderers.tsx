@@ -1,4 +1,4 @@
-import { COLORS, DEFAULTS, Data, DocUri, Hash, Icons, css, type t } from './common';
+import { COLORS, DEFAULTS, Data, DocUri, Hash, Icons, LabelItem, css, type t } from './common';
 
 export const Renderers = {
   /**
@@ -43,6 +43,18 @@ export const Renderers = {
         }
 
         if (e.kind === 'Item:Right' && data.kind === 'Doc') {
+          if (data.pending?.action === 'Delete') {
+            e.set.ctx<t.RepoListActionCtx>({ kind: 'Delete' });
+            return (
+              <LabelItem.Button
+                selected={e.selected}
+                focused={e.focused}
+                enabled={e.enabled}
+                label={'Delete'}
+              />
+            );
+          }
+
           if (behaviors.includes('Shareable')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
             const item = Wrangle.indexItem(list, data.uri);

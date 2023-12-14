@@ -1,6 +1,7 @@
 import { actionLeftBehavior } from './Model.Item.b.action.left';
 import { actionShareBehavior } from './Model.Item.b.action.share';
 import { addBehavior } from './Model.Item.b.add';
+import { deleteBehavior } from './Model.Item.b.delete';
 import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
@@ -37,6 +38,7 @@ export const ItemModel = {
     renameBehavior({ ctx, item });
     actionLeftBehavior({ ctx, item });
     actionShareBehavior({ ctx, item });
+    deleteBehavior({ ctx, item });
 
     /**
      * Finish up.

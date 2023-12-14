@@ -16,4 +16,5 @@ const filter: t.StoreIndexFilter = (e) => {
 export const DEFAULTS = {
   typename: Typenames.RepoList,
   filter,
+  timeout: { delete: 5000 },
 } as const;
