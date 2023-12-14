@@ -126,7 +126,7 @@ export default Dev.describe(name, async (e) => {
             display: 'grid',
             placeItems: 'center',
             gridTemplateColumns: 'auto auto',
-            columnGap: '5px',
+            columnGap: '3px',
           }),
         };
 
@@ -186,6 +186,46 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+
+      const getShared = () => {
+        return { left: left.network.shared, right: right.network.shared } as const;
+      };
+
+      type TFoo = { type: 'foo'; payload: { foo: number } };
+
+      dev.button('tmp-1: listen', (e) => {
+        const shared = getShared();
+        if (!shared.left || !shared.right) return;
+
+        const events = {
+          left: shared.left.events(),
+          right: shared.right.events(),
+        };
+
+        events.left.ephemeral.in$.subscribe((e) => console.log('left|in$', e));
+        events.right.ephemeral.in$.subscribe((e) => console.log('right|in$', e));
+
+        const foo$ = events.right.ephemeral.type$<TFoo>(
+          (e) => typeof e.message === 'object' && e.message?.type === 'foo',
+        );
+        foo$.subscribe((e) => console.log('foo$', e));
+      });
+
+      dev.button('tmp-2: broadcast', (e) => {
+        const shared = getShared();
+        if (!shared.left || !shared.right) return;
+
+        const send = (data: any) => {
+          shared.left?.handle.broadcast(data);
+        };
+
+        console.log('------------------- send ---------------------');
+        send({ type: 'foo', payload: { foo: 123 } });
+        send('hello');
+        send(['foo']);
+        send(123);
+      });
 
       dev.hr(5, 20);
 
