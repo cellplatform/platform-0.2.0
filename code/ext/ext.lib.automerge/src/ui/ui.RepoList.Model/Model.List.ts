@@ -25,8 +25,8 @@ export const List = {
      * Model.
      */
     const ctx: t.GetRepoListModel = () => model;
-    const array = Model.List.array((i) => ItemModel.state(() => model, 'Doc', { dispose$ }));
-    const getItem = GetItem(() => model, array);
+    const array = Model.List.array(() => ItemModel.state(ctx, 'Doc', { dispose$ }));
+    const getItem = GetItem(ctx, array);
     const state: t.RepoListState = Model.List.state(
       { total, getItem },
       { type: DEFAULTS.typename.List, dispose$ },
