@@ -3,7 +3,7 @@ import { rx, type t } from './common';
 /**
  * Behaviors for the list.
  */
-export function listSelectionBehavior(args: { ctx: t.RepoListCtxGet }) {
+export function listSelectionBehavior(args: { ctx: t.GetRepoListCtx }) {
   const ctx = args.ctx();
   const events = { repo: ctx.events() } as const;
 

@@ -4,7 +4,7 @@ import { Wrangle } from './u.Wrangle';
 /**
  * Behaviors for the list.
  */
-export function listBehavior(args: { ctx: t.RepoListCtxGet }) {
+export function listBehavior(args: { ctx: t.GetRepoListCtx }) {
   const { list, index, dispose$ } = args.ctx();
   const currentTotal = () => Wrangle.total(args.ctx);
   const events = index.events(dispose$);

@@ -25,7 +25,7 @@ export const List = {
      * Model.
      */
     const events = (dispose$?: t.UntilObservable) => eventsFactory({ ctx, dispose$ });
-    const ctx: t.RepoListCtxGet = () => ({
+    const ctx: t.GetRepoListCtx = () => ({
       list,
       store,
       index,

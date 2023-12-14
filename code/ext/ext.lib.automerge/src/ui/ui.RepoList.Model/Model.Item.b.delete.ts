@@ -5,7 +5,7 @@ import { Wrangle } from './u.Wrangle';
 /**
  * Behavior for deleting a document.
  */
-export function deleteBehavior(args: { ctx: t.RepoListCtxGet; item: t.RepoItemCtx }) {
+export function deleteBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCtx }) {
   const { ctx, item } = args;
   const { index, list } = ctx();
   const action$ = Wrangle.Item.$(args.item).action$;

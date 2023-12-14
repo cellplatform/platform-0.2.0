@@ -4,7 +4,7 @@ import { Data } from './Data';
 import { ItemModel } from './Model.Item';
 import { Wrangle } from './u.Wrangle';
 
-export function GetItem(getCtx: t.RepoListCtxGet, array: t.RepoArray): t.GetRepoLabelItem {
+export function GetItem(getCtx: t.GetRepoListCtx, array: t.RepoArray): t.GetRepoLabelItem {
   const indexTotal = () => Wrangle.total(getCtx);
   let _addItem: t.RepoItemState | undefined;
 

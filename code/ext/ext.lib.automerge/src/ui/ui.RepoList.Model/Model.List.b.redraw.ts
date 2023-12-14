@@ -4,7 +4,7 @@ import { Wrangle } from './u.Wrangle';
 /**
  * Behavior that monitors the index looking for redraw ques.
  */
-export function listRedrawBehavior(args: { ctx: t.RepoListCtxGet; array: t.RepoArray }) {
+export function listRedrawBehavior(args: { ctx: t.GetRepoListCtx; array: t.RepoArray }) {
   const { list, index, dispose$ } = args.ctx();
   const events = index.events(dispose$);
 
@@ -44,13 +44,13 @@ export function listRedrawBehavior(args: { ctx: t.RepoListCtxGet; array: t.RepoA
  * Helpers
  */
 export const wrangle = {
-  indexFromUri(ctx: t.RepoListCtxGet, uri: string) {
+  indexFromUri(ctx: t.GetRepoListCtx, uri: string) {
     const { index, filter } = ctx();
     const docs = Wrangle.filterDocs(index.doc.current, filter);
     return docs.findIndex((d) => d.uri === uri);
   },
 
-  itemFromUri(ctx: t.RepoListCtxGet, uri: string) {
+  itemFromUri(ctx: t.GetRepoListCtx, uri: string) {
     const list = ctx().list;
     const index = wrangle.indexFromUri(ctx, uri);
     const item = list.state.current.getItem?.(index)[0];
