@@ -14,14 +14,14 @@ export function events<D extends O = O>(
 
   const cmd$ = $.pipe(
     rx.distinctWhile((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-    rx.filter((e) => Boolean(e.to.cmd)),
+    rx.filter((e) => !!e.to.cmd),
     rx.map((e) => e.to.cmd!),
   );
 
   const focus$ = rx.payload<t.LabelListFocusCmd>(cmd$, 'List:Focus');
   const active$ = $.pipe(
     rx.map((e) => e.to),
-    rx.map(({ focused, selected }) => ({ focused: Boolean(focused), selected })),
+    rx.map(({ focused, selected }) => ({ focused: !!focused, selected })),
     rx.distinctUntilChanged((prev, next) => R.equals(prev, next)),
   );
 
@@ -54,6 +54,12 @@ export function events<D extends O = O>(
         rx.filter((e) => !e.focus),
         mapVoid,
       ),
+      type$<T>(filter?: (e: T) => boolean) {
+        return cmd$.pipe(
+          rx.map((e) => e as T),
+          rx.filter((e) => (filter ? filter(e) : true)),
+        );
+      },
     },
 
     item(id, dispose$?: t.UntilObservable) {

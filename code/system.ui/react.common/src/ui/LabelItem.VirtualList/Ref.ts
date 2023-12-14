@@ -36,6 +36,7 @@ export function VirtualListRef(args: {
     remove: dispatch.remove,
     focus: dispatch.focus,
     blur: dispatch.blur,
+    cmd: dispatch.cmd,
   };
 
   return api;

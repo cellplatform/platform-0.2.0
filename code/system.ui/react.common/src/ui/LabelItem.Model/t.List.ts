@@ -43,6 +43,7 @@ export type LabelListEvents<D extends O = O> = t.Lifecycle & {
     readonly remove$: t.Observable<t.LabelListRemoveCmdArgs>;
     readonly focus$: t.Observable<void>;
     readonly blur$: t.Observable<void>;
+    type$<E extends t.Event>(filter?: (event: E) => boolean): t.Observable<E>;
   };
   item(
     id: Id,
@@ -66,6 +67,7 @@ export type LabelListDispatch = {
   remove(index?: t.LabelListItemTarget): void;
   focus(): void;
   blur(): void;
+  cmd<T extends t.Event>(event: T): void;
 };
 
 export type LabelListCmd =

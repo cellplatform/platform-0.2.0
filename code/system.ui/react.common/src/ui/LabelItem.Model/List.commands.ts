@@ -1,4 +1,4 @@
-import { PatchState, slug, Time, type t } from './common';
+import { PatchState, slug, type t } from './common';
 import { get as createGetter } from './List.get';
 
 /**
@@ -35,6 +35,9 @@ export function commands(list?: t.LabelListState) {
     },
     blur() {
       dispatch({ type: 'List:Focus', payload: { focus: false, tx: slug() } });
+    },
+    cmd<E>(event: E) {
+      dispatch(event as any);
     },
   };
   return api;

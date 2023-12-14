@@ -1,5 +1,5 @@
 import { Model } from '.';
-import { describe, expect, it, rx, slug, type t } from '../../test';
+import { Time, describe, expect, it, rx, slug, type t } from '../../test';
 
 describe('LabelItem.Model', () => {
   describe('Model.Item.state', () => {
@@ -113,7 +113,7 @@ describe('LabelItem.Model', () => {
         expect(fired.length).to.eql(2); // NB: no change
       });
 
-      it.only('events.item( id ).focused$', () => {
+      it('events.item( id ).focused$', () => {
         const { dispose$, dispose } = rx.disposable();
         const array = Model.List.array({});
         const list = Model.List.state({ total: 3, getItem: array.getItem });
@@ -481,6 +481,45 @@ describe('LabelItem.Model', () => {
 
         dispatch.focus();
         expect(fired.length).to.eql(2);
+
+        events.dispose();
+      });
+
+      it('events.cmd.$ (custom commands)', async () => {
+        const state = Model.List.state();
+        const dispatch = Model.List.commands(state);
+        const events = state.events();
+
+        type Event = FooEvent | BarEvent;
+        type FooEvent = { type: 'foo'; payload: { count: number } };
+        type BarEvent = { type: 'bar'; payload: { msg?: string } };
+
+        const fired1: t.LabelListCmd[] = [];
+        const fired2: t.Event[] = [];
+        const fired3: t.Event[] = [];
+        events.cmd.$.subscribe((e) => fired1.push(e));
+        events.cmd.type$<Event>((e) => e.type === 'bar').subscribe((e) => fired2.push(e));
+        events.cmd.type$<Event>().subscribe((e) => fired3.push(e));
+
+        const foo: FooEvent = { type: 'foo', payload: { count: 123 } };
+        const bar: BarEvent = { type: 'bar', payload: { msg: 'hello' } };
+
+        dispatch.cmd<Event>(foo);
+        expect(state.current.cmd).to.eql(foo);
+        await Time.wait(0);
+        expect(state.current.cmd).to.eql(undefined);
+
+        expect(fired1.length).to.eql(1);
+        expect(fired2.length).to.eql(0); // NB: filtered.
+        expect(fired3.length).to.eql(1);
+        expect(fired1[0]).to.eql(foo);
+
+        dispatch.cmd<Event>(bar);
+        expect(fired2.length).to.eql(1); // NB: filtered.
+        expect(fired3.length).to.eql(2);
+        expect(fired2[0]).to.eql(bar);
+        expect(fired3[0]).to.eql(foo);
+        expect(fired3[1]).to.eql(bar);
 
         events.dispose();
       });
