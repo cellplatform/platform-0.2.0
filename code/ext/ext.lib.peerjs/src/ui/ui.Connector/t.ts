@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * Ref: API handle.
  */
-export type ConnectorRef = t.LabelListDispatch & { readonly peer: t.PeerModel };
+export type ConnectorRef = Omit<t.LabelListDispatch, 'cmd'> & { readonly peer: t.PeerModel };
 export type ConnectorBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey';
 
 /**
