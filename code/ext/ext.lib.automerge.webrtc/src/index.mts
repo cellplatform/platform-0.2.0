@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-export { WebrtcNetworkAdapter, WebrtcStore } from './Webrtc';
+export { WebrtcNetworkAdapter, WebrtcStore } from './Store.Network';
 
 /**
  * Library: UI
