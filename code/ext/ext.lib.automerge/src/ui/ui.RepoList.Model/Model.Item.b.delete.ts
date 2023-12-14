@@ -5,16 +5,18 @@ import { Wrangle } from './u.Wrangle';
 /**
  * Behavior for deleting a document.
  */
-export function deleteBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCtx }) {
+export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemModel }) {
   const { ctx, item } = args;
-  const { index, list } = ctx();
+  const { index, list, dispose$ } = ctx();
   const action$ = Wrangle.Item.$(args.item).action$;
   const redraw = item.dispatch.redraw;
   const getData = () => Data.item(item.state);
+  const timer = Time.action(DEFAULTS.timeout.delete).on('complete', () => Delete.reset());
 
-  const timer = Time.action(DEFAULTS.timeout.delete, (e) => {
-    if (e.action === 'complete') Delete.reset();
-  });
+  const events = {
+    list: list.state.events(dispose$),
+    item: item.events,
+  } as const;
 
   let tx = '';
   const Delete = {
@@ -40,7 +42,7 @@ export function deleteBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCt
       redraw();
     },
 
-    execute() {
+    invoke() {
       /**
        * TODO 🐷
        */
@@ -52,9 +54,8 @@ export function deleteBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCt
   /**
    * Listen.
    */
-
   const on = (...codes: string[]) => {
-    return item.events.key.$.pipe(
+    return events.item.key.$.pipe(
       rx.filter((e) => codes.includes(e.code)),
       rx.map((e) => ({ data: getData(), key: e })),
       rx.filter((e) => e.data.kind === 'Doc'),
@@ -66,16 +67,16 @@ export function deleteBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCt
     notPending: rx.filter((e) => !Delete.is.pending),
   } as const;
   const supressEdit$ = item.events.cmd.edit$.pipe(rx.filter((e) => Delete.is.pending));
+  const selected$ = events.list.item(item.state.instance).selected$;
+  const deselected$ = selected$.pipe(rx.filter((e) => !e)).pipe(filter.pending);
   const initiate$ = on('Delete', 'Backspace');
   const enterKey$ = on('Enter').pipe(filter.pending);
   const escapeKey$ = on('Escape').pipe(filter.pending);
   const buttonClick$ = action$('Item:Right', 'Delete');
-  const execute$ = rx.merge(enterKey$, buttonClick$).pipe(rx.filter((e) => Delete.is.pending));
+  const execute$ = rx.merge(enterKey$, buttonClick$).pipe(filter.pending);
 
-  initiate$.subscribe(Delete.pending);
-  escapeKey$.subscribe(Delete.reset);
-  execute$.subscribe(Delete.execute);
   supressEdit$.subscribe((e) => e.cancel()); // NB: Supress the start edit operation (from ENTER key) while pending.
-
-   */
+  rx.merge(escapeKey$, deselected$).subscribe(Delete.reset);
+  initiate$.subscribe(Delete.pending);
+  execute$.subscribe(Delete.invoke);
 }
