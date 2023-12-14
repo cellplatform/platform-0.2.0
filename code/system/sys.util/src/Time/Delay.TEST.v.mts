@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
-import { describe, expect, it, type t } from '../test';
-import { delay, wait, action } from './Delay.mjs';
+import { describe, expect, expectRoughlySame, it, type t } from '../test';
+import { action, delay, wait } from './Delay.mjs';
 
 const now = () => new Date().getTime();
 
@@ -78,8 +78,8 @@ describe('wait', () => {
 
 describe('action', () => {
   it('start → complete', async () => {
-    let fired: t.TimeDelayActionReason[] = [];
-    const timer = action(5, (e) => fired.push(e.action));
+    let fired: t.TimeDelayActionFnArgs[] = [];
+    const timer = action(5, (e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     await wait(10);
@@ -88,15 +88,58 @@ describe('action', () => {
 
     timer.start();
     expect(timer.running).to.eql(true);
+    expect(fired[0].action).to.eql('start');
+
     await wait(10);
-    expect(fired.length).to.eql(1);
-    expect(fired[0]).to.eql('complete');
+    expect(fired.length).to.eql(2);
+    expect(fired[1].action).to.eql('complete');
+    expectRoughlySame(fired[1].elapsed, 5, 1.1, `elapsed: ${timer.elapsed}`);
     expect(timer.running).to.eql(false);
+    expect(timer.elapsed).to.eql(-1);
+  });
+
+  it('start → (restart) → complete', async () => {
+    let fired: t.TimeDelayActionFnArgs[] = [];
+    const timer = action(10, (e) => fired.push(e));
+    expect(timer.running).to.eql(false);
+
+    timer.start();
+    expect(timer.running).to.eql(true);
+    expect(fired[0].action).to.eql('start');
+
+    const restart = async () => {
+      expect(timer.running).to.eql(true);
+      await wait(5);
+      timer.start();
+    };
+
+    await restart();
+    await restart();
+    await restart();
+    await restart();
+    await restart();
+
+    expect(timer.elapsed).to.greaterThan(20); // NB: well over the absolute delay of the timer.
+    expect(timer.running).to.eql(true);
+
+    // Wait for timeout.
+    await wait(15);
+    expect(timer.running).to.eql(false);
+    expect(timer.elapsed).to.eql(-1);
+
+    expect(fired.length).to.eql(7);
+    expect(fired[0].action).to.eql('start');
+    expect(fired[1].action).to.eql('restart');
+    expect(fired[2].action).to.eql('restart');
+    expect(fired[3].action).to.eql('restart');
+    expect(fired[4].action).to.eql('restart');
+    expect(fired[5].action).to.eql('restart');
+    expect(fired[6].action).to.eql('complete');
   });
 
   it('start → clear', async () => {
-    let fired: t.TimeDelayActionReason[] = [];
-    const timer = action(10, (e) => fired.push(e.action));
+    let fired: t.TimeDelayActionFnArgs[] = [];
+    const timer = action(10, (e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     timer.start();
@@ -104,15 +147,17 @@ describe('action', () => {
     await wait(3);
     timer.reset();
     expect(timer.running).to.eql(false);
+    expect(timer.elapsed).to.eql(-1);
 
     await wait(20);
-    expect(fired.length).to.eql(1);
-    expect(fired[0]).to.eql('reset');
+    expect(fired.length).to.eql(2);
+    expect(fired[1].action).to.eql('reset');
+    expectRoughlySame(fired[1].elapsed, 3, 1.1, `elapsed: ${timer.elapsed}`);
   });
 
   it('start → complete (forced early)', async () => {
-    let fired: t.TimeDelayActionReason[] = [];
-    const timer = action(10, (e) => fired.push(e.action));
+    let fired: t.TimeDelayActionFnArgs[] = [];
+    const timer = action(10, (e) => fired.push(e));
     expect(timer.running).to.eql(false);
 
     timer.start();
@@ -121,11 +166,13 @@ describe('action', () => {
     timer.complete();
     timer.complete();
     timer.complete(); // NB: does not fire multiple times.
-    expect(fired.length).to.eql(1);
-    expect(fired[0]).to.eql('complete');
+    expect(fired.length).to.eql(2);
+    expect(fired[1].action).to.eql('complete');
+    expectRoughlySame(fired[1].elapsed, 3, 1.1, `elapsed: ${timer.elapsed}`);
     expect(timer.running).to.eql(false);
+    expect(timer.elapsed).to.eql(-1);
 
     await wait(20);
-    expect(fired.length).to.eql(1); // NB: does not fire after timeout (cancelled).
+    expect(fired.length).to.eql(2); // NB: does not fire after timeout (cancelled).
   });
 });

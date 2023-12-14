@@ -65,25 +65,40 @@ export const wait: t.TimeWait = (msecs) => {
  */
 export const action: t.TimeDelayActionFactory = (msecs, fn) => {
   let timer: t.TimeDelayPromise | undefined;
+  let startedAt = -1;
   let running = false;
 
-  const stop = () => {
-    running = false;
-    timer?.cancel();
+  const getElapsed = () => {
+    return startedAt < 0 ? -1 : new Date().getTime() - startedAt;
   };
+
+  const fire = (action: t.TimeDelayActionReason) => {
+    const elapsed = getElapsed();
+    fn({ action, elapsed });
+  };
+
   const complete = () => {
     if (!running) return;
     running = false;
-    fn({ action: 'complete' });
+    fire('complete');
+    startedAt = -1;
   };
   const start = () => {
-    stop();
+    if (!running) {
+      fire('start');
+      startedAt = new Date().getTime();
+    } else {
+      fire('restart');
+    }
     running = true;
+    timer?.cancel();
     timer = delay(msecs, complete);
   };
   const reset = () => {
-    stop();
-    fn({ action: 'reset' });
+    running = false;
+    timer?.cancel();
+    fire('reset');
+    startedAt = -1;
   };
 
   return {
@@ -92,6 +107,9 @@ export const action: t.TimeDelayActionFactory = (msecs, fn) => {
     complete,
     get running() {
       return running;
+    },
+    get elapsed() {
+      return getElapsed();
     },
   };
 };

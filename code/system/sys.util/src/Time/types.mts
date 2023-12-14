@@ -22,10 +22,12 @@ export type TimeDelayPromise<T = any> = Promise<T> & {
   cancel(): void;
 };
 export type TimeDelayActionFactory = (msecs: t.Msecs, fn: TimeDelayActionFn) => TimeDelayAction;
-export type TimeDelayActionReason = 'complete' | 'reset';
-export type TimeDelayActionFn = (e: { action: TimeDelayActionReason }) => any;
+export type TimeDelayActionReason = 'start' | 'reset' | 'restart' | 'complete';
+export type TimeDelayActionFn = (e: TimeDelayActionFnArgs) => any;
+export type TimeDelayActionFnArgs = { action: TimeDelayActionReason; elapsed: t.Msecs };
 export type TimeDelayAction = {
   readonly running: boolean;
+  readonly elapsed: t.Msecs;
   start(): void;
   reset(): void;
   complete(): void; // Force complete.
