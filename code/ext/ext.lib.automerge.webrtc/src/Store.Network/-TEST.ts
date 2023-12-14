@@ -48,7 +48,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
     } as const;
   };
 
-  e.describe('Integration Test (Network Sequence)', (e) => {
+  e.describe('🍌 Integration Test (Network Sequence)', (e) => {
     let self: TParts;
     let remote: TParts;
     const wait = (msecs = 500) => Time.wait(msecs);
@@ -120,6 +120,51 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
       expectRoughlySame(bytesAfter.self.in, bytesAfter.remote.in, 0.3, 'bytes-in same(ish)');
       expectRoughlySame(bytesAfter.self.out, bytesAfter.remote.out, 0.3, 'bytes-out same(ish)');
+    });
+
+    e.it('ephemeral events', async (e) => {
+      const selfDoc = await self.generator();
+      await wait();
+      const remoteDoc = await remote.generator(selfDoc.uri);
+      await wait();
+
+      type TData = { count: number; msg?: string };
+      const listenToEphemeral = (doc: t.DocRefHandle<D>) => {
+        const events = doc.events();
+        const fired = {
+          out$: [] as t.DocEphemeralOut<D>[],
+          in$: [] as t.DocEphemeralIn<D>[],
+          inTyped$: [] as t.DocEphemeralIn<D, TData>[],
+        };
+        events.ephemeral.in$.subscribe((e) => fired.in$.push(e));
+        events.ephemeral.out$.subscribe((e) => fired.out$.push(e));
+        events.ephemeral
+          .type$<TData>((e) => e.message.count <= 10)
+          .subscribe((e) => fired.inTyped$.push(e));
+        return fired;
+      };
+
+      const fired = {
+        self: listenToEphemeral(selfDoc),
+        remote: listenToEphemeral(remoteDoc),
+      } as const;
+
+      // Broadcast (self → remote).
+      selfDoc.handle.broadcast({ count: 0 });
+      selfDoc.handle.broadcast({ count: 10 });
+      selfDoc.handle.broadcast({ count: 999 });
+      await wait(500);
+
+      expect(fired.self.in$.length).to.eql(0);
+      expect(fired.self.inTyped$.length).to.eql(0);
+      expect(fired.self.out$.length).to.eql(3);
+
+      expect(fired.remote.in$.length).to.eql(3);
+      expect(fired.remote.inTyped$.length).to.eql(2);
+      expect(fired.remote.out$.length).to.eql(0);
+
+      expect(fired.remote.inTyped$[0].message.count).to.eql(0);
+      expect(fired.remote.inTyped$[1].message.count).to.eql(10);
     });
 
     e.it('dispose', (e) => {

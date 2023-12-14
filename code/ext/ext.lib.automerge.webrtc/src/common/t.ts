@@ -7,6 +7,8 @@ export type { Observable } from 'rxjs';
 
 export type {
   DocChanged,
+  DocEphemeralIn,
+  DocEphemeralOut,
   DocMeta,
   DocMetaType,
   DocRefHandle,
