@@ -162,9 +162,10 @@ export default Dev.describe(name, async (e) => {
         db: storage,
         'db:index': `${model.index.db.name}[${model.index.total()}]`,
         'db:index.doc': model.index.doc.toObject(),
-        active: active?.item || undefined,
+        'active:focus': !!active?.focused,
+        'active:item': active?.item || undefined,
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

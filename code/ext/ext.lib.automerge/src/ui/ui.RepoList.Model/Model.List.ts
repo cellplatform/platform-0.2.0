@@ -25,15 +25,7 @@ export const List = {
      * Model.
      */
     const events = (dispose$?: t.UntilObservable) => eventsFactory({ ctx: () => model, dispose$ });
-    const ctx: t.GetRepoListCtx = () => ({
-      list,
-      store,
-      index,
-      handlers,
-      filter,
-      dispose$,
-      events,
-    });
+
     const array = Model.List.array((i) => ItemModel.state(() => model, 'Doc', { dispose$ }));
     const getItem = GetItem(() => model, array);
     const state: t.RepoListState = Model.List.state(
@@ -67,9 +59,9 @@ export const List = {
     /**
      * Behaviors.
      */
-    listBehavior({ ctx });
-    listSelectionBehavior({ ctx });
-    listRedrawBehavior({ ctx, array });
+    listBehavior({ ctx: () => model });
+    listSelectionBehavior({ ctx: () => model });
+    listRedrawBehavior({ ctx: () => model, array });
 
     // Finish up.
     return model;

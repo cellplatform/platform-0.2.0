@@ -10,6 +10,12 @@ export type RepoItemRenderers = t.LabelItemRenderers<t.RepoListAction>;
 export type RepoItemEvents = t.LabelItemEvents<RepoListAction, RepoItemData>;
 export type RepoArray = t.LabelListArray<t.RepoListAction, t.RepoItemData>;
 
+export type RepoItemModel = {
+  state: t.RepoItemState;
+  events: t.RepoItemEvents;
+  dispatch: t.LabelItemDispatch;
+};
+
 /**
  * Model: Item Data
  */

@@ -1,5 +1,5 @@
 import { Model, type t } from './common';
-export type ItemInput = t.LabelItem | t.LabelItemState | t.RepoItemCtx;
+export type ItemInput = t.LabelItem | t.LabelItemState | t.RepoItemModel;
 
 export const Data = {
   item: (input: ItemInput) => Model.data<t.RepoItemData>(asItem(input)),

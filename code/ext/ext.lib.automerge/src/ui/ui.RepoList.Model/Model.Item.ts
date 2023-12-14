@@ -29,7 +29,7 @@ export const ItemModel = {
     const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
     const events = state.events(options.dispose$);
     const dispatch = Model.Item.commands(state);
-    const item: t.RepoItemCtx = { state, events, dispatch };
+    const item: t.RepoItemModel = { state, events, dispatch };
 
     /**
      * Behavior controllers.

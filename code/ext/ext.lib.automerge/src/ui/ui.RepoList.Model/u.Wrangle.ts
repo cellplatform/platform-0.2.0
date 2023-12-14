@@ -5,7 +5,7 @@ type Index = number;
 type Id = string;
 
 export const WrangleItem = {
-  $(item: t.RepoItemCtx) {
+  $(item: t.RepoItemModel) {
     const mode = () => Data.item(item).kind;
     return {
       action$(action: t.RepoListAction, kind?: t.RepoListActionCtx['kind']) {
@@ -47,7 +47,7 @@ export const Wrangle = {
     return item ? WrangleItem.get(getCtx, item) : undefined;
   },
 
-  total(getCtx: t.GetRepoListCtx) {
+  total(getCtx: t.GetRepoListModel) {
     const { index, filter } = getCtx();
     return Wrangle.filterDocs(index.doc.current, filter).length;
   },

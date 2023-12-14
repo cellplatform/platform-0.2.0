@@ -4,7 +4,7 @@ import { Data } from './Data';
 /**
  * Behavior for handling name edits.
  */
-export function renameBehavior(args: { ctx: t.GetRepoListCtx; item: t.RepoItemCtx }) {
+export function renameBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemModel }) {
   const { ctx, item } = args;
   const { index } = ctx();
 
