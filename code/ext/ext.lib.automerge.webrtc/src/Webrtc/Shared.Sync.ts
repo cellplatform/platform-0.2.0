@@ -39,37 +39,37 @@ export const Sync = {
   ) {
     const { debugLabel } = options;
 
-    const meta = (uri: string, sharedItem: t.CrdtSharedDoc) => {
-      const indexItem = index.doc.current.docs.find((item) => item.uri === uri)?.shared;
-      const version = {
-        index: indexItem?.version.value ?? -1,
-        shared: sharedItem.version ?? -1,
-      };
-      const current = {
-        index: indexItem?.current,
-        shared: sharedItem.current,
-      };
+    const getMeta = (uri: string, sharedItem: t.CrdtSharedDoc) => {
+      const indexItem = index.doc.current.docs.find((item) => item.uri === uri);
       const exists = {
         index: !!indexItem,
         shared: !!sharedItem.current,
       };
+      const version = {
+        index: indexItem?.shared?.version.value ?? -1,
+        shared: sharedItem.version ?? -1,
+      };
+      const current = {
+        index: indexItem?.shared?.current,
+        shared: sharedItem.current,
+      };
       return { uri, exists, version, current } as const;
     };
 
-    const updates = Object.entries(shared.current.docs)
-      .map(([key, value]) => meta(key, value))
-      .filter((e) => e.version.shared > e.version.index);
+    const meta = Object.entries(shared.current.docs).map(([key, value]) => getMeta(key, value));
+    const versionUpdates = meta.filter((e) => e.version.shared > e.version.index);
 
-    const wait = updates.map(async (e) => {
-      const { uri } = e;
-      const exists = e.exists.index;
-      const version = e.version.shared;
-      const shared = e.current.shared;
-      if (!exists && shared) await index.add({ uri, shared });
-      if (exists) index.toggleShared(uri, { shared, version });
-    });
+    await Promise.all(
+      versionUpdates.map(async (e) => {
+        const { uri } = e;
+        const exists = e.exists.index;
+        const version = e.version.shared;
+        const shared = e.current.shared;
+        if (!exists && shared) await index.add({ uri, shared });
+        if (exists) index.toggleShared(uri, { shared, version });
+      }),
+    );
 
-    await Promise.all(wait);
-    return updates;
+    return versionUpdates;
   },
 } as const;
