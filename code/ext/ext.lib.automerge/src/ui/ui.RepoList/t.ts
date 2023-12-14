@@ -3,7 +3,7 @@ import { type t } from './common';
 /**
  * API: Imperative handle reference.
  */
-export type RepoListRef = t.LabelListDispatch & { store: t.Store };
+export type RepoListRef = Omit<t.LabelListDispatch, 'cmd'> & { store: t.Store };
 export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Shareable';
 
 /**

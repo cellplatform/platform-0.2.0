@@ -16,6 +16,7 @@ export type {
   EdgePositionInput,
   EdgePositionX,
   EdgePositionY,
+  Event,
   EventBus,
   Falsy,
   IgnoredResponse,

@@ -32,4 +32,4 @@ export type RepoListClickHandlerArgs = {
   item: t.StoreIndexDoc;
 };
 
-export type RepoListActiveHandler = (e: t.RepoListActiveEventArgs) => void;
+export type RepoListActiveHandler = (e: t.RepoListActiveChangedEventArgs) => void;

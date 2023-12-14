@@ -13,10 +13,13 @@ export function eventsFactory(args: {
     list: ctx.list.state.events(dispose$),
   } as const;
 
+  const cmdFilter = (e: t.RepoListCmdEvent) => e.type.startsWith('crdt:RepoList:active');
+  const cmd$ = events.list.cmd.type$<t.RepoListCmdEvent>(cmdFilter);
+
   const active$ = events.list.active.$.pipe(
     rx.map((e) => Wrangle.getItem(args.ctx, e.selected)!),
     rx.filter((e) => !!e),
-    rx.map((e): t.RepoListActiveEventArgs => {
+    rx.map((e): t.RepoListActiveChangedEventArgs => {
       const { store, list, index } = args.ctx();
       const { position } = e;
       const kind = e.data.kind;
@@ -31,6 +34,8 @@ export function eventsFactory(args: {
    */
   const api: t.RepoListEvents = {
     active$,
+    deleting$: rx.payload<t.RepoListDeletingEvent>(cmd$, 'crdt:RepoList:active/deleting'),
+    deleted$: rx.payload<t.RepoListDeletedEvent>(cmd$, 'crdt:RepoList:active/deleted'),
 
     /**
      * Lifecycle

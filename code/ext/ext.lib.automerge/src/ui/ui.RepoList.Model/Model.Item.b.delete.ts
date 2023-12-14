@@ -2,12 +2,14 @@ import { DEFAULTS, rx, slug, Time, type t } from './common';
 import { Data } from './Data';
 import { Wrangle } from './u.Wrangle';
 
+type Args = { ctx: t.GetRepoListModel; item: t.RepoItemModel };
+
 /**
  * Behavior for deleting a document.
  */
-export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemModel }) {
+export function deleteBehavior(args: Args) {
   const { ctx, item } = args;
-  const { index, list, dispose$ } = ctx();
+  const { store, index, list, dispose$ } = ctx();
   const action$ = Wrangle.Item.$(args.item).action$;
   const redraw = item.dispatch.redraw;
   const getData = () => Data.item(item.state);
@@ -28,7 +30,15 @@ export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItem
     },
 
     pending() {
+      const uri = getData().uri;
+      if (!uri) return;
       if (Delete.is.pending) return timer.start(); // NB: already running...restart timer.
+
+      // Fire before-event.
+      const cancelled = Fire.beforeEvent(args);
+      if (cancelled) return;
+
+      // Put into pending delete mode.
       timer.start();
       tx = slug();
       item.state.change((d) => (Data.item(d).pending = { tx, action: 'Delete' }));
@@ -50,14 +60,15 @@ export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItem
       const uri = getData().uri;
       if (!Delete.is.pending || !uri) return;
 
-      // Delete the item from the [Index].
       const { position } = Wrangle.Item.get(ctx, item);
       const { focused } = list.state.current;
-      index.remove(uri);
 
-      // Reset state of list.
-      list.dispatch.select(position.index);
-      if (focused) Time.delay(0, list.dispatch.focus);
+      // Delete the item from the [Index].
+      index.remove(uri);
+      Time.delay(0, () => list.dispatch.select(position.index, focused));
+
+      // Fire after-event.
+      Fire.afterEvent(args);
     },
   } as const;
 
@@ -90,3 +101,40 @@ export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItem
   initiate$.subscribe(Delete.pending);
   execute$.subscribe(Delete.invoke);
 }
+
+/**
+ * Helpers
+ */
+type E = t.RepoListCmdEvent;
+const Fire = {
+  base(args: Args): t.RepoListDeletedEventArgs {
+    const { store, index } = args.ctx();
+    const { position } = Wrangle.Item.get(args.ctx, args.item);
+    const uri = Data.item(args.item.state).uri ?? '';
+    return { uri, store, index, position };
+  },
+
+  beforeEvent(args: Args) {
+    const { list } = args.ctx();
+    let cancelled = false;
+    list.dispatch.cmd<E>({
+      type: 'crdt:RepoList:active/deleting',
+      payload: {
+        ...Fire.base(args),
+        get cancelled() {
+          return cancelled;
+        },
+        cancel: () => (cancelled = true),
+      },
+    });
+    return cancelled;
+  },
+
+  afterEvent(args: Args) {
+    const { list } = args.ctx();
+    list.dispatch.cmd<E>({
+      type: 'crdt:RepoList:active/deleted',
+      payload: Fire.base(args),
+    });
+  },
+} as const;

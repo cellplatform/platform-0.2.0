@@ -5,7 +5,7 @@ import { Reload } from './-SPEC.ui.Reload';
 
 type T = {
   props: t.RepoListProps;
-  debug: { reload?: boolean };
+  debug: { reload?: boolean; cancelDelete?: boolean };
 };
 const name = RepoList.displayName ?? '';
 const initial: T = { props: {}, debug: {} };
@@ -16,13 +16,15 @@ export default Dev.describe(name, async (e) => {
 
   let model: t.RepoListModel;
   let ref: t.RepoListRef;
-  let active: t.RepoListActiveEventArgs | undefined;
+  let active: t.RepoListActiveChangedEventArgs | undefined;
 
-  type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'>;
+  type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'> &
+    Pick<T['debug'], 'cancelDelete'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
   const local = localstore.object({
     behaviors: RepoList.DEFAULTS.behaviors.default,
     newlabel: RepoList.DEFAULTS.newlabel,
+    cancelDelete: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -43,17 +45,25 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.props.behaviors = local.behaviors;
       d.props.newlabel = local.newlabel;
+      d.debug.cancelDelete = local.cancelDelete;
     });
 
     const events = {
       list: model.list.state.events(),
       index: model.index.events(),
+      repo: model.events(),
     };
 
     const redraw$ = rx.merge(events.list.$, events.list.active.$);
     redraw$.pipe(rx.debounceTime(100)).subscribe(() => dev.redraw('debug'));
     events.index.changed$.subscribe(() => dev.redraw('debug'));
-    events.index.shared$.subscribe((e) => console.log('⚡️ shared$', e));
+
+    events.index.shared$.subscribe((e) => console.info('⚡️ shared', e));
+    events.repo.deleted$.subscribe((e) => console.info('⚡️ deleted', e));
+    events.repo.deleting$.subscribe((e) => {
+      if (state.current.debug.cancelDelete) e.cancel();
+      console.info('⚡️ deleting', e);
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -113,6 +123,18 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.cancelDelete;
+        btn
+          .label((e) => `cancel delete (via ⚡️)`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.cancelDelete = Dev.toggle(d.debug, 'cancelDelete')));
+          });
+      });
 
       dev.hr(-1, 5);
 
