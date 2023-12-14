@@ -7,7 +7,7 @@ import type { Message, PeerId } from '@automerge/automerge-repo';
  */
 export type WebrtcMessage = ArriveMessage | WelcomeMessage | Message;
 export type WebrtcMessageAlert = {
-  direction: 'Incoming' | 'Outgoing';
+  direction: 'incoming' | 'outgoing';
   message: WebrtcMessage;
 };
 

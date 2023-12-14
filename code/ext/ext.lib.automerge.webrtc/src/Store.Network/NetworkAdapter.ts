@@ -53,7 +53,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
           let payload = message;
           if ('data' in message) payload = { ...message, data: toUint8Array(message.data) };
           this.emit('message', payload);
-          this.#alert('Incoming', message);
+          this.#alert('incoming', message);
           break;
       }
     };
@@ -92,10 +92,10 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
   #transmit(message: t.WebrtcMessage) {
     if (!this.#conn) throw new Error('Connection not ready');
     this.#conn.send(message);
-    this.#alert('Outgoing', message);
+    this.#alert('outgoing', message);
   }
 
-  #alert(direction: t.WebrtcMessageAlert['direction'], message: t.WebrtcMessage) {
+  #alert(direction: t.PeerConnectDirection, message: t.WebrtcMessage) {
     this.#message$.next({ direction, message });
   }
 

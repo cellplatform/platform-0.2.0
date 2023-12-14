@@ -60,8 +60,8 @@ export const WebrtcStore = {
     message$.subscribe((e) => {
       if (e.message.type === 'sync') {
         const bytes = e.message.data.byteLength;
-        if (e.direction === 'Incoming') total.bytes.in += bytes;
-        if (e.direction === 'Outgoing') total.bytes.out += bytes;
+        if (e.direction === 'incoming') total.bytes.in += bytes;
+        if (e.direction === 'outgoing') total.bytes.out += bytes;
       }
     });
 
