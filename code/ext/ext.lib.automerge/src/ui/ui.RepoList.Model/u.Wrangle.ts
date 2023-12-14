@@ -21,7 +21,7 @@ export const WrangleItem = {
   get(ctx: t.GetRepoListModel, input: ItemInput) {
     const { index, filter } = ctx();
     const data = Data.item(input);
-    const docs = Wrangle.filterDocs(index.doc.current, filter);
+    const docs = StoreIndex.Filter.docs(index.doc.current, filter);
     const i = docs.findIndex((item) => item.uri === data.uri);
     const item = docs[i];
     const uri = item?.uri || '';
@@ -49,10 +49,6 @@ export const Wrangle = {
 
   total(ctx: t.GetRepoListModel) {
     const { index, filter } = ctx();
-    return Wrangle.filterDocs(index.doc.current, filter).length;
-  },
-
-  filterDocs(index: t.StoreIndex, filter?: t.StoreIndexFilter): t.StoreIndexDoc[] {
-    return StoreIndex.Filter.docs(index.docs, filter);
+    return StoreIndex.Filter.docs(index.doc.current, filter).length;
   },
 } as const;

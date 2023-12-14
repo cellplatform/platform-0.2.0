@@ -5,7 +5,6 @@ import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
 import { listSelectionBehavior } from './Model.List.b.selection';
 import { DEFAULTS, Model, WebStore, rx, type t } from './common';
-import { Wrangle } from './u.Wrangle';
 
 type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
 
@@ -18,7 +17,7 @@ export const List = {
     const { dispose$, dispose } = life;
     const { filter = DEFAULTS.filter } = options;
     const index = await WebStore.index(store);
-    const total = Wrangle.filterDocs(index.doc.current, filter).length + 1;
+    const total = WebStore.Index.Filter.docs(index.doc.current, filter).length + 1;
     const handlers = wrangle.handlers(options);
 
     /**

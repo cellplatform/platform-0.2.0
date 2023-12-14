@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { StoreIndex, type t } from './common';
 
 import { Data } from './Data';
 import { ItemModel } from './Model.Item';
@@ -20,7 +20,7 @@ export function GetItem(getCtx: t.GetRepoListModel, array: t.RepoArray): t.GetRe
       } else {
         const { index, filter } = getCtx();
         const [item, i] = array.getItem(target);
-        const docs = Wrangle.filterDocs(index.doc.current, filter);
+        const docs = StoreIndex.Filter.docs(index.doc.current, filter);
         const doc = docs[i];
         updateItemFromDoc(item, doc);
         return [item, i];

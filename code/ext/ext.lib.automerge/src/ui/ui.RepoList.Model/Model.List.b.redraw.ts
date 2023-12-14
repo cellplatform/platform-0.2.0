@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t, StoreIndex } from './common';
 import { Wrangle } from './u.Wrangle';
 
 /**
@@ -46,7 +46,7 @@ export function listRedrawBehavior(args: { ctx: t.GetRepoListModel; array: t.Rep
 export const wrangle = {
   indexFromUri(ctx: t.GetRepoListModel, uri: string) {
     const { index, filter } = ctx();
-    const docs = Wrangle.filterDocs(index.doc.current, filter);
+    const docs = StoreIndex.Filter.docs(index.doc.current, filter);
     return docs.findIndex((d) => d.uri === uri);
   },
 

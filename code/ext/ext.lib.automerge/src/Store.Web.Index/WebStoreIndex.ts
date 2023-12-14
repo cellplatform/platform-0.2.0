@@ -3,6 +3,9 @@ import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { type t } from './common';
 
 export const WebStoreIndex = {
+  Doc: Store.Doc,
+  Filter: Store.Index.Filter,
+
   /**
    * Create instance of the store/repo's document Index.
    */
