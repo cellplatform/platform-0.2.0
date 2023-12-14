@@ -564,3 +564,39 @@ describe('StoreIndex', () => {
     });
   });
 });
+
+describe('StoreIndex.Filter', () => {
+  const Filter = Store.Index.Filter;
+
+  const generateDocs = async (store: t.Store, options: { index?: t.StoreIndexState } = {}) => {
+    const doc1 = await store.doc.getOrCreate<D>((d) => (d.count = 0));
+    const doc2 = await store.doc.getOrCreate<D>((d) => (d.count = 0));
+    const doc3 = await store.doc.getOrCreate<D>((d) => (d.count = 0));
+    const uris = [doc1.uri, doc2.uri, doc3.uri];
+
+    if (options.index) {
+      await options.index.add(uris);
+      expect(options.index.total()).to.eql(3);
+    }
+
+    return { doc1, doc2, doc3, uris } as const;
+  };
+
+  it('filter.docs (inputs)', async () => {
+    const { store } = setup();
+    const index = await Store.Index.init(store);
+    const { doc2 } = await generateDocs(store, { index });
+
+    const filter: t.StoreIndexFilter = (e) => e.index === 1;
+    const res1 = Filter.docs(index, filter);
+    const res2 = Filter.docs(index.doc.current, filter);
+    const res3 = Filter.docs(index.doc.current.docs, filter);
+
+    expect(res1.length).to.eql(1);
+    expect(res1[0].uri).to.eql(doc2.uri);
+    expect(res2).to.eql(res1);
+    expect(res3).to.eql(res1);
+
+    store.dispose();
+  });
+});
