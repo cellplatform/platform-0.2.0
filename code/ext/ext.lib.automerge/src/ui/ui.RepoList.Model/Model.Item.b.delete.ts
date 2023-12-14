@@ -42,12 +42,22 @@ export function deleteBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItem
       redraw();
     },
 
+    /**
+     * TODO 🐷
+     * - archive concept (rather than had delete)
+     */
     invoke() {
-      /**
-       * TODO 🐷
-       */
+      const uri = getData().uri;
+      if (!Delete.is.pending || !uri) return;
 
-      console.log('execute', '⚡️💦🐷🌳 🧨🌼✨🧫 👋🧠⚠️💥👁️ ↑↓←→');
+      // Delete the item from the [Index].
+      const { position } = Wrangle.Item.get(ctx, item);
+      const { focused } = list.state.current;
+      index.remove(uri);
+
+      // Reset state of list.
+      list.dispatch.select(position.index);
+      if (focused) Time.delay(0, list.dispatch.focus);
     },
   } as const;
 
