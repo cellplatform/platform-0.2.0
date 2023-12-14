@@ -32,15 +32,8 @@ export const List = {
       { type: DEFAULTS.typename.List, dispose$ },
     );
 
-    let _events: t.RepoListEvents;
     const dispatch = Model.List.commands(state);
-    const list = {
-      state,
-      dispatch,
-      get events() {
-        return _events || (_events = model.events());
-      },
-    };
+    const list = { state, dispatch };
 
     /**
      * API.
