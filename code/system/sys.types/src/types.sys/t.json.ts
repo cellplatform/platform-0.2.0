@@ -11,3 +11,10 @@ export type JsonMap = { [property: string]: Json };
  */
 export type JsonU = string | number | boolean | null | JsonMapU | JsonU[] | undefined;
 export type JsonMapU = { [property: string]: JsonU };
+
+/**
+ * CBOR (Concise Binary Object Representation)
+ * RFC 8949
+ * https://cbor.io
+ */
+export type CBOR = string | number | boolean | CBOR[] | { [key: string]: CBOR } | null;

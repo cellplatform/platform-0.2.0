@@ -17,6 +17,7 @@ export type { Observable } from 'rxjs';
 export type { PatchState } from 'sys.data.json/src/types';
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
 export type {
+  CBOR,
   Disposable,
   EventBus,
   IODirection,
