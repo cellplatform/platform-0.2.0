@@ -32,23 +32,19 @@ export const List = {
       { type: DEFAULTS.typename.List, dispose$ },
     );
 
-    const dispatch = Model.List.commands(state);
-    const list = { state, dispatch };
-
     /**
      * API.
      */
+    const dispatch = Model.List.commands(state);
     const model: t.RepoListModel = {
       store,
       index,
       filter,
       handlers,
-      list,
+      list: { state, dispatch },
       events: (dispose$?: t.UntilObservable) => eventsFactory({ ctx, dispose$ }),
 
-      /**
-       * Lifecycle.
-       */
+      // Lifecycle.
       dispose,
       dispose$,
       get disposed() {

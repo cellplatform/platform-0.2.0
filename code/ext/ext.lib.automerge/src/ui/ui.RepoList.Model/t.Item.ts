@@ -12,8 +12,8 @@ export type RepoArray = t.LabelListArray<t.RepoListAction, t.RepoItemData>;
 
 export type RepoItemModel = {
   state: t.RepoItemState;
-  events: t.RepoItemEvents;
   dispatch: t.LabelItemDispatch;
+  events: t.RepoItemEvents;
 };
 
 /**
