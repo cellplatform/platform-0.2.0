@@ -68,7 +68,7 @@ export const WebrtcStore = {
     /**
      * Initialize a network adapter for the given connection ID.
      */
-    const initAdapter = async (connid: string, direction: t.PeerConnectDirection) => {
+    const initAdapter = async (connid: string, direction: t.IODirection) => {
       const conn = peer.get.conn.obj.data(connid);
       if (!conn) throw new Error(`Failed to retrieve WebRTC data-connection with id "${connid}".`);
 

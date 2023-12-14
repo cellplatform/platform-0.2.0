@@ -13,17 +13,12 @@ export type {
   DocUri,
   DocWithMeta,
   Store,
-  StoreIndexState,
   StoreIndexDoc,
+  StoreIndexState,
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
-export type {
-  PeerConnectDirection,
-  PeerConnectMetadata,
-  PeerJsConnData,
-  PeerModel,
-} from 'ext.lib.peerjs/src/types';
+export type { PeerConnectMetadata, PeerJsConnData, PeerModel } from 'ext.lib.peerjs/src/types';
 
 /**
  * @system
@@ -31,6 +26,7 @@ export type {
 export type {
   Disposable,
   EventBus,
+  IODirection,
   Lifecycle,
   Msecs,
   Percent,

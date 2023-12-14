@@ -95,7 +95,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     this.#alert('outgoing', message);
   }
 
-  #alert(direction: t.PeerConnectDirection, message: t.WebrtcMessage) {
+  #alert(direction: t.IODirection, message: t.WebrtcMessage) {
     this.#message$.next({ direction, message });
   }
 

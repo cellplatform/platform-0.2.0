@@ -105,7 +105,7 @@ export function manageMediaConnection(args: {
 
     monitor(
       media: t.PeerConnectionMediaKind,
-      direction: t.PeerConnectDirection,
+      direction: t.IODirection,
       conn: t.PeerJsConnMedia,
       localstream?: MediaStream,
       resolve?: (e: t.PeerConnectedMedia) => void,

@@ -19,6 +19,7 @@ export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.m
 export type {
   Disposable,
   EventBus,
+  IODirection,
   Immutable,
   ImmutableNext,
   ImmutableRef,

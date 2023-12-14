@@ -1,4 +1,5 @@
 import type { Message, PeerId } from '@automerge/automerge-repo';
+import { type t } from './common';
 
 /**
  * Based on:
@@ -7,7 +8,7 @@ import type { Message, PeerId } from '@automerge/automerge-repo';
  */
 export type WebrtcMessage = ArriveMessage | WelcomeMessage | Message;
 export type WebrtcMessageAlert = {
-  direction: 'incoming' | 'outgoing';
+  direction: t.IODirection;
   message: WebrtcMessage;
 };
 

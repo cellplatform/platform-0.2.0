@@ -34,7 +34,7 @@ export type PeerConnection = {
   id: string;
   peer: { self: Id; remote: Id };
   open: boolean | null; // NB: null while initializing.
-  direction: PeerConnectDirection;
+  direction: t.IODirection;
   metadata: PeerConnectMetadata;
   stream?: { self?: MediaStream; remote?: MediaStream };
 };
@@ -44,7 +44,6 @@ export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKin
 export type PeerConnectionDataKind = 'data';
 export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
 
-export type PeerConnectDirection = 'incoming' | 'outgoing';
 export type PeerConnectMetadata = {
   kind: PeerConnectionKind | 'unknown';
   userAgent: string;
@@ -159,7 +158,7 @@ export type PeerModelConnectionCmd = {
 export type PeerModelConnectionCmdArgs = {
   tx: string;
   action: PeerModelConnAction;
-  direction?: t.PeerConnectDirection;
+  direction?: t.IODirection;
   connection?: PeerConnectionId;
   kind?: PeerConnectionKind;
   error?: string;

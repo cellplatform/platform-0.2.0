@@ -1,3 +1,4 @@
+export type * from './types';
 export type * from './types.coord';
 export type * from './types.deep';
 export type * from './types.dispose';
@@ -5,8 +6,8 @@ export type * from './types.dom';
 export type * from './types.event';
 export type * from './types.event.pump';
 export type * from './types.immutable';
+export type * from './types.io';
 export type * from './types.json';
-export type * from './types';
 export type * from './types.module';
 export type * from './types.number';
 export type * from './types.number.time';
