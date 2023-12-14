@@ -3,7 +3,7 @@ import { Shared } from './Shared';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';
 
-describe('network.Webrtc: Shared', () => {
+describe('Webrtc: Shared', () => {
   describe('Shared', () => {
     it('getOrCreate', async () => {
       const store = Store.init();

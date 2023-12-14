@@ -1,6 +1,5 @@
 import { type t } from './common';
 
-import { WebrtcStore } from '../../network.Webrtc';
 import {
   COLORS,
   Crdt,
@@ -11,6 +10,7 @@ import {
   PropList,
   TestDb,
   Webrtc,
+  WebrtcStore,
   css,
   rx,
 } from '../../test.ui';
