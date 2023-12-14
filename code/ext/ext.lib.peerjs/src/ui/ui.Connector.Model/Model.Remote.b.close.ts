@@ -15,10 +15,7 @@ export function closeConnectionBehavior(args: {
   const peerEvents = peer.events(events.dispose$);
   const listEvents = list.events(events.dispose$);
   const listItemEvents = listEvents.item(item.instance);
-
-  const timer = Time.action(DEFAULTS.timeout.closePending, (e) => {
-    if (e.action === 'complete') Close.reset();
-  });
+  const timer = Time.action(DEFAULTS.timeout.closePending).on('complete', () => Close.reset());
 
   const Close = {
     pending() {

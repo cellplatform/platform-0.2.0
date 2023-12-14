@@ -10,10 +10,7 @@ export function purgeBehavior(args: {
   const { dispatch, events, item } = args;
   const { peer } = args.ctx();
   const redraw = dispatch.redraw;
-
-  const timer = Time.action(DEFAULTS.timeout.closePending, (e) => {
-    if (e.action === 'complete') Purge.reset();
-  });
+  const timer = Time.action(DEFAULTS.timeout.closePending).on('complete', () => Purge.reset());
 
   const Purge = {
     pending() {
