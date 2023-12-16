@@ -12,7 +12,7 @@ export const Patches = {
     const item = e.patchInfo.after.docs[uri];
     return {
       uri: String(uri),
-      shared: item?.current,
+      shared: item?.shared,
       version: item?.version,
     };
   },

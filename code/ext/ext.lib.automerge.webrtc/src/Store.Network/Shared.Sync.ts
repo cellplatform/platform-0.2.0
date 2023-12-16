@@ -43,7 +43,7 @@ export const Sync = {
       const indexItem = index.doc.current.docs.find((item) => item.uri === uri);
       const exists = {
         index: !!indexItem,
-        shared: !!sharedItem.current,
+        shared: !!sharedItem.shared,
       };
       const version = {
         index: indexItem?.shared?.version.value ?? -1,
@@ -51,7 +51,7 @@ export const Sync = {
       };
       const current = {
         index: indexItem?.shared?.current,
-        shared: sharedItem.current,
+        shared: sharedItem.shared,
       };
       return { uri, exists, version, current } as const;
     };

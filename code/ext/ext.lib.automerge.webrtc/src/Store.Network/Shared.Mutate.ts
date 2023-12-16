@@ -23,7 +23,7 @@ export const Mutate = {
     };
 
     const done = (error?: string) => {
-      const shared = draft.docs[uri]?.current ?? false;
+      const shared = draft.docs[uri]?.shared ?? false;
       const versions = getVersions();
       const version = Math.max(versions.index, versions.shared);
       return { uri, shared, version, error } as const;
@@ -35,7 +35,7 @@ export const Mutate = {
     if (version.index < 0 && version.shared < 0) return done('Not ready to sync');
 
     const changeShared = (fn: (shared: t.CrdtSharedDoc) => void) => {
-      const shared = draft.docs[uri] ?? { current: false, version: 0 };
+      const shared = draft.docs[uri] ?? { shared: false, version: 0 };
       fn(shared);
       if (!draft.docs[uri]) draft.docs[uri] = shared; // NB: ensure the shared object is attached to the CRDT.
     };
@@ -43,9 +43,9 @@ export const Mutate = {
     if (version.index >= version.shared) {
       changeShared((shared) => {
         shared.version = index.shared?.version?.value ?? 0;
-        shared.current = index.shared?.current ?? false;
+        shared.shared = index.shared?.current ?? false;
         if (action === 'unshare') {
-          shared.current = false;
+          shared.shared = false;
           shared.version += 1;
         }
       });

@@ -69,8 +69,8 @@ describe('Webrtc: Shared', () => {
       const { store, doc, fired } = await setup();
 
       const uri = 'automerge:foo';
-      doc.change((d) => (d.docs[uri] = { current: true, version: 1 }));
-      doc.change((d) => (d.docs[uri] = { current: false, version: 2 }));
+      doc.change((d) => (d.docs[uri] = { shared: true, version: 1 }));
+      doc.change((d) => (d.docs[uri] = { shared: false, version: 2 }));
       doc.change((d) => delete d.docs[uri]);
 
       const res1 = Shared.Patches.shared(fired[0]);
@@ -109,7 +109,7 @@ describe('Webrtc: Shared', () => {
 
       // Remove.
       index.remove(uri);
-      expect(shared.current.docs[uri].current).to.eql(false);
+      expect(shared.current.docs[uri].shared).to.eql(false);
       expect(shared.current.docs[uri].version).to.eql(2);
       store.dispose();
     });
@@ -125,10 +125,10 @@ describe('Webrtc: Shared', () => {
       expect(shared.current.docs).to.eql({});
 
       const uri = 'automerge:foo';
-      shared.change((d) => (d.docs[uri] = { current: false, version: 0 }));
+      shared.change((d) => (d.docs[uri] = { shared: false, version: 0 }));
 
       expect(get(uri)).to.eql({ current: false, version: 0 });
-      shared.change((d) => (d.docs[uri] = { current: true, version: 1 }));
+      shared.change((d) => (d.docs[uri] = { shared: true, version: 1 }));
       expect(get(uri)).to.eql({ current: true, version: 1 });
 
       store.dispose();
