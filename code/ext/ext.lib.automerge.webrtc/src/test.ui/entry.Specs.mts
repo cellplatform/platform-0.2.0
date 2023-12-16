@@ -7,6 +7,7 @@ export const Specs = {
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
   [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
   [`${ns}.ui.Connection`]: () => import('../ui/ui.Connection/-SPEC'),
+  [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
   [`${ns}.ui.Sample.02.edge`]: () => import('../ui/ui.Sample.02/-SPEC.edge'),
