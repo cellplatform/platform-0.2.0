@@ -1,13 +1,13 @@
 import { COLORS, Color, css, useMouse, type t } from './common';
 
 export type EdgeLabelProps = {
-  edge: t.SampleEdge;
+  edge: t.PeerRepoList;
   offsetLabel?: t.SampleEdgeLabel;
   style?: t.CssValue;
 };
 
 export const EdgeLabel: React.FC<EdgeLabelProps> = (props) => {
-  const { edge, offsetLabel = { text: wrangle.defaultLabelText(props) } } = props;
+  const { edge, offsetLabel = { text: wrangle.defaultLabelText(props.edge) } } = props;
   const mouse = useMouse();
 
   if (!offsetLabel.text) return null;
@@ -17,7 +17,7 @@ export const EdgeLabel: React.FC<EdgeLabelProps> = (props) => {
    */
   const styles = {
     base: css({
-      Absolute: offsetLabel.absolute ?? [-20, 0, null, 0],
+      Absolute: offsetLabel.absolute ?? [-18, 0, null, 0],
       userSelect: 'none',
       fontFamily: 'monospace',
       fontSize: 9,
@@ -25,7 +25,7 @@ export const EdgeLabel: React.FC<EdgeLabelProps> = (props) => {
       transition: `color 0.2s`,
       display: 'grid',
       justifyContent: edge.kind === 'Left' ? 'start' : 'end',
-      PaddingX: 8,
+      PaddingX: 7,
     }),
   };
 
@@ -40,8 +40,7 @@ export const EdgeLabel: React.FC<EdgeLabelProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  defaultLabelText(props: t.SampleEdgeProps) {
-    const { edge } = props;
+  defaultLabelText(edge: t.PeerRepoList) {
     const dbname = edge.repo.store.info.storage?.name;
     return `repo:db:${dbname}` ?? '';
   },

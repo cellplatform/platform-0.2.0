@@ -1,5 +1,3 @@
-import type { SampleEdge } from '../ui.Sample.02/t';
-
 import { PeerRepoList } from '.';
 import { Crdt, Dev, TestDb, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
@@ -12,7 +10,7 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  let left: SampleEdge;
+  let left: t.PeerRepoList;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -33,7 +31,7 @@ export default Dev.describe(name, (e) => {
         if (e.state.debug.reload) {
           return <TestDb.UI.Reload style={{ width }} onClose={resetReloadClose} />;
         } else {
-          return <PeerRepoList {...e.state.props} style={{ width }} />;
+          return <PeerRepoList {...e.state.props} edge={left} style={{ width }} />;
         }
       });
   });
@@ -57,11 +55,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const total = (edge: SampleEdge) => {
+      const total = (edge: t.PeerRepoList) => {
         return edge.repo.index.doc.current.docs.length;
       };
 
-      const format = (edge: SampleEdge) => {
+      const format = (edge: t.PeerRepoList) => {
         const uri = edge.repo.index.doc.uri;
         return {
           total: total(edge),

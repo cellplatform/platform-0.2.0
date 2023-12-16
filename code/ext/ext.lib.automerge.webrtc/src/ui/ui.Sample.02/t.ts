@@ -10,8 +10,6 @@ export type SampleEdge = {
 /**
  * <Component>
  */
-export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
-
 export type SampleEdgeProps = {
   edge: t.SampleEdge;
   offsetLabel?: t.SampleEdgeLabel;
@@ -19,3 +17,5 @@ export type SampleEdgeProps = {
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
 };
+
+export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };

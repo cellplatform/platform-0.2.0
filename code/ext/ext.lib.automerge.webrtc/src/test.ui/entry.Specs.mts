@@ -10,7 +10,6 @@ export const Specs = {
   [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
-  [`${ns}.ui.Sample.02.edge`]: () => import('../ui/ui.Sample.02/-SPEC.edge'),
 };
 
 export default Specs;

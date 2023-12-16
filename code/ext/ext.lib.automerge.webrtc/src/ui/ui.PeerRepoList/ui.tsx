@@ -1,19 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { COLORS, Color, Crdt, DEFAULTS, FC, Webrtc, css, type t } from './common';
+import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
+  const { edge } = props;
+
+  if (!edge) return null;
+
   /**
    * Render
    */
+  const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
-      padding: 5,
+      position: 'relative',
+      backgroundColor: COLORS.WHITE,
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
     }),
+    footer: css({ borderTop: border }),
+    avatars: css({ padding: 8, borderBottom: border }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${PeerRepoList.displayName}`}</div>
+      <EdgeLabel edge={edge} offsetLabel={props.offsetLabel} />
+      <Crdt.RepoList list={edge.repo} behaviors={['Shareable']} />
+      <div {...styles.footer}>
+        <Webrtc.AvatarTray
+          peer={edge.network.peer}
+          style={styles.avatars}
+          muted={false}
+          onSelection={(e) => {
+            console.info(`⚡️ AvatarTray.onSelection`, e);
+            props.onStreamSelection?.(e);
+          }}
+        />
+        <Webrtc.Connector
+          peer={edge.network.peer}
+          behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []}
+        />
+      </div>
     </div>
   );
 };
