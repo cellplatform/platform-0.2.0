@@ -1,0 +1,1 @@
+export { createEdge } from './-SPEC';

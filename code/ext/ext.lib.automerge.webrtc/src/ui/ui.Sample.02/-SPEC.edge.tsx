@@ -66,7 +66,7 @@ export default Dev.describe(name, (e) => {
         return {
           total: total(edge),
           'index:uri': Crdt.Uri.id(uri, { shorten: 6 }),
-          index: edge.repo.index.doc.current,
+          'index:doc': edge.repo.index.doc.current,
         };
       };
 
