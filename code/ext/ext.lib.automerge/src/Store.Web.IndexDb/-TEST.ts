@@ -95,14 +95,15 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
 
   e.describe('name (formatting)', (e) => {
     e.it('from string', (e) => {
-      expect(StoreIndexDb.name('foo')).to.eql('foo:index');
-      expect(StoreIndexDb.name('  foo  ')).to.eql('foo:index');
-      expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:index');
+      expect(StoreIndexDb.name('foo')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('  foo  ')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('fs')).to.eql('fs:sys');
     });
 
     e.it('from store', (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      expect(StoreIndexDb.name(store)).to.eql(`${name}:index`);
+      expect(StoreIndexDb.name(store)).to.eql(`${name}:sys`);
     });
 
     e.it('throw: no name', (e) => {
