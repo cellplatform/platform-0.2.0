@@ -63,7 +63,7 @@ export function deleteBehavior(args: Args) {
        * TODO 🐷
        * - archive concept (rather than had delete)
        */
-      console.warn('TODO 🐷: archive concept (rather than had hard delete)');
+      console.warn('TODO 🐷: archive concept (rather than hard delete)');
 
       // Delete the item from the [Index].
       index.remove(uri);
