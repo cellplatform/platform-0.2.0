@@ -3,8 +3,11 @@ import { Root } from '.';
 
 type T = { props: t.RootProps };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
 
+/**
+ * Spec
+ */
+const name = Root.displayName ?? '';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
