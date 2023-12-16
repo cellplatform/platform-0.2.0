@@ -17,17 +17,17 @@ export async function deleteDatabase(name: string) {
  * DevHarness "Spec" databases.
  */
 export const SpecDb = {
-  name: 'dev.spec',
+  name: 'tmp.spec',
   deleteDatabase: () => deleteDatabase(SpecDb.name),
 } as const;
 
 export const UnitDb = {
-  name: 'dev.test',
+  name: 'tmp.test',
   deleteDatabase: () => deleteDatabase(UnitDb.name),
 } as const;
 
 export const IndexDb = {
-  name: 'dev.test.IndexDb',
+  name: 'tmp.test.IndexDb',
   deleteDatabase: () => deleteDatabase(IndexDb.name),
 } as const;
 
