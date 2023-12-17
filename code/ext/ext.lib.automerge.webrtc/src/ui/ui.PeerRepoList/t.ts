@@ -1,16 +1,11 @@
 import type { t } from './common';
 
-export type PeerRepoList = {
-  kind: t.ConnectionEdgeKind; // TEMP 🐷
-  repo: t.RepoListModel;
-  network: t.WebrtcStore;
-};
-
 /**
  * <Component>
  */
 export type PeerRepoListProps = {
-  edge?: t.PeerRepoList;
+  repo?: t.RepoListModel;
+  network?: t.WebrtcStore;
   focusOnLoad?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;

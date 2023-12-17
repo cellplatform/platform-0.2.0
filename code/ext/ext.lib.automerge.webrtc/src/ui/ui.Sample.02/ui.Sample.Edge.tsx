@@ -23,7 +23,8 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
 
   return (
     <PeerRepoList
-      edge={edge}
+      repo={edge.repo}
+      network={edge.network}
       style={styles.base}
       debug={{
         label: {

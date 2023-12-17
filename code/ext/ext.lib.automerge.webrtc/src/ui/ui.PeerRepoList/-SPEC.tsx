@@ -10,12 +10,16 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  let left: t.PeerRepoList;
+  let repo: t.RepoListModel;
+  let network: t.WebrtcStore;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
-    left = await createEdge('Left');
+
+    const model = await createEdge('Left');
+    repo = model.repo;
+    network = model.network;
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -31,7 +35,9 @@ export default Dev.describe(name, (e) => {
         if (e.state.debug.reload) {
           return <TestDb.UI.Reload style={{ width }} onClose={resetReloadClose} />;
         } else {
-          return <PeerRepoList {...e.state.props} edge={left} style={{ width }} />;
+          return (
+            <PeerRepoList {...e.state.props} repo={repo} network={network} style={{ width }} />
+          );
         }
       });
   });
@@ -54,22 +60,27 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.footer.border(-0.1).render<T>((e) => {
-      const total = (edge: t.PeerRepoList) => {
-        return edge.repo.index.doc.current.docs.length;
-      };
 
-      const format = (edge: t.PeerRepoList) => {
-        const uri = edge.repo.index.doc.uri;
-        return {
-          total: total(edge),
-          'index:uri': Crdt.Uri.id(uri, { shorten: 6 }),
-          'index:doc': edge.repo.index.doc.current,
-        };
-      };
+    /**
+     * TODO 🐷
+     */
 
-      const data = { [`index[${total(left)}]`]: format(left) };
-      return <Dev.Object name={name} data={data} expand={1} />;
-    });
+    //     dev.footer.border(-0.1).render<T>((e) => {
+    //       const total = (edge: t.PeerRepoList) => {
+    //         return edge.repo.index.doc.current.docs.length;
+    //       };
+    //
+    //       const format = (edge: t.PeerRepoList) => {
+    //         const uri = edge.repo.index.doc.uri;
+    //         return {
+    //           total: total(edge),
+    //           'index:uri': Crdt.Uri.id(uri, { shorten: 6 }),
+    //           'index:doc': edge.repo.index.doc.current,
+    //         };
+    //       };
+    //
+    //       const data = { [`index[${total(left)}]`]: format(left) };
+    //       return <Dev.Object name={name} data={data} expand={1} />;
+    // });
   });
 });

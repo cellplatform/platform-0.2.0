@@ -2,9 +2,9 @@ import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
-  const { edge, debug = {} } = props;
+  const { repo, network, debug = {} } = props;
 
-  if (!edge) return null;
+  if (!(repo && network)) return null;
 
   /**
    * Render
@@ -26,10 +26,10 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elDebugLabel}
-      <Crdt.RepoList list={edge.repo} behaviors={['Shareable']} />
+      <Crdt.RepoList list={repo} behaviors={['Shareable']} />
       <div {...styles.footer}>
         <Webrtc.AvatarTray
-          peer={edge.network.peer}
+          peer={network.peer}
           style={styles.avatars}
           muted={false}
           onSelection={(e) => {
@@ -38,7 +38,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
           }}
         />
         <Webrtc.Connector
-          peer={edge.network.peer}
+          peer={network.peer}
           behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []}
         />
       </div>
