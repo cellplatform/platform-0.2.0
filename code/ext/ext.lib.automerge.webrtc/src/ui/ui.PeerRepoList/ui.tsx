@@ -1,8 +1,8 @@
-import { COLORS, Color, Crdt, DEFAULTS, FC, Webrtc, css, type t } from './common';
+import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
-  const { edge } = props;
+  const { edge, debug = {} } = props;
 
   if (!edge) return null;
 
@@ -21,9 +21,11 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
     avatars: css({ padding: 8, borderBottom: border }),
   };
 
+  const elDebugLabel = debug.label && <EdgeLabel {...debug.label} />;
+
   return (
     <div {...css(styles.base, props.style)}>
-      <EdgeLabel edge={edge} offsetLabel={props.offsetLabel} />
+      {elDebugLabel}
       <Crdt.RepoList list={edge.repo} behaviors={['Shareable']} />
       <div {...styles.footer}>
         <Webrtc.AvatarTray
@@ -43,15 +45,3 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
     </div>
   );
 };
-
-/**
- * Export
- */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
-export const PeerRepoList = FC.decorate<t.PeerRepoListProps, Fields>(
-  View,
-  { DEFAULTS },
-  { displayName: DEFAULTS.displayName },
-);

@@ -9,6 +9,7 @@ export type SampleEdgeProps = {
 
 export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const { edge } = props;
+
   /**
    * Render
    */
@@ -21,6 +22,30 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   };
 
   return (
-    <PeerRepoList edge={edge} style={styles.base} onStreamSelection={props.onStreamSelection} />
+    <PeerRepoList
+      edge={edge}
+      style={styles.base}
+      debug={{
+        label: {
+          text: wrangle.debugLabelText(edge),
+          align: wrangle.debugAlign(edge),
+        },
+      }}
+      onStreamSelection={props.onStreamSelection}
+    />
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  debugLabelText(edge: t.SampleEdge) {
+    const dbname = edge.repo.store.info.storage?.name ?? '';
+    return dbname ? `repo:db:${dbname}` : '';
+  },
+
+  debugAlign(edge: t.SampleEdge): t.PeerRepoListPropsDebugLabel['align'] {
+    return edge.kind;
+  },
+} as const;
