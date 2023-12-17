@@ -105,7 +105,7 @@ describe('Webrtc: Shared', () => {
 
       // Share.
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { shared: true }));
-      expect(shared.current.docs[uri]).to.eql({ current: true, version: 1 }); // NB: entry now exists on the shared-doc.
+      expect(shared.current.docs[uri]).to.eql({ shared: true, version: 1 }); // NB: entry now exists on the shared-doc.
 
       // Remove.
       index.remove(uri);
@@ -127,9 +127,9 @@ describe('Webrtc: Shared', () => {
       const uri = 'automerge:foo';
       shared.change((d) => (d.docs[uri] = { shared: false, version: 0 }));
 
-      expect(get(uri)).to.eql({ current: false, version: 0 });
+      expect(get(uri)).to.eql({ shared: false, version: 0 });
       shared.change((d) => (d.docs[uri] = { shared: true, version: 1 }));
-      expect(get(uri)).to.eql({ current: true, version: 1 });
+      expect(get(uri)).to.eql({ shared: true, version: 1 });
 
       store.dispose();
     });
@@ -151,8 +151,8 @@ describe('Webrtc: Shared', () => {
       Shared.Sync.indexToShared(index, doc);
       const shared = doc.current.docs;
       expect(shared['automerge:a']).to.eql(undefined);
-      expect(shared['automerge:b']).to.eql({ current: true, version: 1 });
-      expect(shared['automerge:c']).to.eql({ current: true, version: 1 });
+      expect(shared['automerge:b']).to.eql({ shared: true, version: 1 });
+      expect(shared['automerge:c']).to.eql({ shared: true, version: 1 });
 
       store.dispose();
     });
