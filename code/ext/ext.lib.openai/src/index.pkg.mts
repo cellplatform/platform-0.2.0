@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.openai',
   version: '0.0.0',
   dependencies: {
-    'openai': '4.21.0',
+    'openai': '4.23.0',
     'sys.util': '0.0.0',
   },
   toString() {
