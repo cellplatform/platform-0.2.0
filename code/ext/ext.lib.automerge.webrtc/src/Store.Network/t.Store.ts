@@ -36,9 +36,8 @@ export type WebrtcStoreAdapterAddedEvent = {
   payload: WebrtcStoreAdapterAdded;
 };
 export type WebrtcStoreAdapterAdded = {
-  peer: Id;
-  conn: { id: Id; obj: t.PeerJsConnData };
-  adapter: t.WebrtcNetworkAdapter;
+  peer: { local: Id; remote: Id };
+  conn: { id: Id };
 };
 
 export type WebrtcStoreMessageEvent = {

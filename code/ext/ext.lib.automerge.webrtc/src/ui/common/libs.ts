@@ -1,9 +1,8 @@
 /**
  * @external
  */
-export { useDocument } from 'ext.lib.automerge';
 
-export { UI as Crdt, DocUri } from 'ext.lib.automerge';
+export { RepoList } from 'ext.lib.automerge';
 export { UI as Webrtc } from 'ext.lib.peerjs';
 
 /**

@@ -1,1 +1,1 @@
-export * from './Root';
+export { Info } from './Root';

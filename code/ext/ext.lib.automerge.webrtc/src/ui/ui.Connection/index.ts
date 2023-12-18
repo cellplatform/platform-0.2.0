@@ -1,2 +1,2 @@
-export * from './Root';
+export { Connection } from './Root';
 export { DEFAULTS } from './common';

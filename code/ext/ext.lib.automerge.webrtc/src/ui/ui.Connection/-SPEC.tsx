@@ -1,5 +1,5 @@
 import { Connection } from '.';
-import { Crdt, Dev, TestDb, Webrtc, WebrtcStore, type t } from '../../test.ui';
+import { WebStore, Dev, TestDb, Webrtc, WebrtcStore, type t } from '../../test.ui';
 
 type T = {
   props: t.ConnectionProps;
@@ -13,11 +13,11 @@ const initial: T = {
 const createEdge = async (kind: t.ConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Webrtc.peer();
-  const store = Crdt.WebStore.init({
+  const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
-  const index = await Crdt.WebStore.index(store);
+  const index = await WebStore.index(store);
   const network = await WebrtcStore.init(peer, store, index);
   const edge: t.ConnectionEdge = { kind, network };
   return edge;

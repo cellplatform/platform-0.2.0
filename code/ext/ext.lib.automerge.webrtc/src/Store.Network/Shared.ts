@@ -3,7 +3,7 @@ import { Patches } from './Shared.Patches';
 import { Sync } from './Shared.Sync';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';
-import { Crdt, Doc, UserAgent, rx, type t } from './common';
+import { Doc, UserAgent, rx, type t } from './common';
 
 /**
  * An ephemeral (non-visual) document used to sync
@@ -107,7 +107,7 @@ export const Shared = {
   purge(index: t.StoreIndexState) {
     const purged: string[] = [];
     index.doc.change((d) => {
-      const docs = Crdt.Data.array(d.docs);
+      const docs = Doc.Data.array(d.docs);
       let i = -1;
       while (true) {
         i = d.docs.findIndex((item) => item.meta?.ephemeral);

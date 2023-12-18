@@ -18,7 +18,7 @@ export const WebrtcStore = {
     store: t.Store,
     index: t.StoreIndexState,
     options: { debugLabel?: string } = {},
-  ) {
+  ): Promise<t.WebrtcStore> {
     const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
@@ -88,7 +88,10 @@ export const WebrtcStore = {
       total.added += 1;
       fire({
         type: 'crdt:webrtc/AdapterAdded',
-        payload: { peer: peer.id, conn: { id: connid, obj: conn }, adapter },
+        payload: {
+          peer: { local: peer.id, remote: conn.peer },
+          conn: { id: connid },
+        },
       });
 
       /**

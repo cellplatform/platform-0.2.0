@@ -1,4 +1,4 @@
-import { COLORS, Color, Crdt, Webrtc, css, type t } from './common';
+import { COLORS, Color, RepoList, Webrtc, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
@@ -26,7 +26,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elDebugLabel}
-      <Crdt.RepoList list={repo} behaviors={['Shareable']} />
+      <RepoList list={repo} behaviors={['Shareable']} />
       <div {...styles.footer}>
         <Webrtc.AvatarTray
           peer={network.peer}

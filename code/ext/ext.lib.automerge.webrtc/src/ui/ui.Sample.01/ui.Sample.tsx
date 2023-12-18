@@ -1,4 +1,5 @@
-import { Button, css, useDocument, type t } from './common';
+import { useDocument } from '@automerge/automerge-repo-react-hooks';
+import { Button, css, type t } from './common';
 
 export type SampleProps = {
   user?: string;

@@ -1,6 +1,6 @@
 import { UI as Network } from 'ext.lib.peerjs';
 
-import { Dev } from '../../test.ui';
+import { Dev, Pkg } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { A, WebStore, WebrtcStore, cuid, type t } from './common';
 import { Sample } from './ui.Sample';
@@ -20,10 +20,9 @@ const initial: T = {
  * Spec
  */
 const name = 'Sample.01';
-
 export default Dev.describe(name, async (e) => {
   type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Sample');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     localPeer: cuid(),
     remotePeer: '',
@@ -62,9 +61,7 @@ export default Dev.describe(name, async (e) => {
     await initDoc(state);
 
     const network = await WebrtcStore.init(self, store, index);
-    network.added$.subscribe((e) => {
-      state.change((d) => (d.user = e.adapter.peerId));
-    });
+    network.added$.subscribe((e) => state.change((d) => (d.user = e.peer.remote)));
 
     ctx.debug.width(330);
     ctx.subject
@@ -98,7 +95,10 @@ export default Dev.describe(name, async (e) => {
       return (
         <Info
           fields={['Module', 'Repo', 'Peer', 'Peer.Remotes']}
-          data={{ peer: { self }, repo: { store } }}
+          data={{
+            peer: { self },
+            repo: { store },
+          }}
         />
       );
     });
@@ -132,7 +132,6 @@ export default Dev.describe(name, async (e) => {
       const data = {
         user: e.state.user,
         docUri: e.state.docUri,
-        // peer,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

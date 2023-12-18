@@ -12,13 +12,9 @@ export { WebrtcNetworkAdapter, WebrtcStore } from './Store.Network';
 /**
  * Library: UI
  */
-import { Info } from './ui/ui.Info';
-import { Connection } from './ui/ui.Connection';
-export { Info };
-export const UI = {
-  Info,
-  Connection,
-} as const;
+export { Info } from './ui/ui.Info';
+export { Connection } from './ui/ui.Connection';
+export { PeerRepoList } from './ui/ui.PeerRepoList';
 
 /**
  * Dev

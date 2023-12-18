@@ -2,13 +2,14 @@ import { type t } from './common';
 
 import {
   COLORS,
-  Crdt,
   Delete,
   Dev,
   Doc,
   Hash,
   PropList,
+  RepoList,
   TestDb,
+  WebStore,
   Webrtc,
   WebrtcStore,
   css,
@@ -22,12 +23,12 @@ const initial: T = {};
 export const createEdge = async (kind: t.ConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Webrtc.peer();
-  const store = Crdt.WebStore.init({
+  const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
 
-  const repo = await Crdt.RepoList.model(store);
+  const repo = await RepoList.model(store);
   const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
   const edge: t.SampleEdge = { kind, repo, network };
   return edge;
@@ -118,7 +119,7 @@ export default Dev.describe(name, async (e) => {
       dev.title(edge.kind);
 
       dev.row((e) => {
-        const docid = Crdt.Uri.id(edge.network.shared?.uri);
+        const docid = Doc.Uri.id(edge.network.shared?.uri);
         const doc = Hash.shorten(docid, [3, 5]);
 
         const styles = {
@@ -256,7 +257,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.footer.border(-0.1).render<T>((e) => {
       const total = (edge: t.SampleEdge) => edge.repo.index.doc.current.docs.length;
-      const shorten = (uri: string) => Crdt.Uri.id(uri, { shorten: 6 });
+      const shorten = (uri: string) => Doc.Uri.id(uri, { shorten: 6 });
       const formatEdge = (edge: t.SampleEdge) => {
         return {
           total: total(edge),
@@ -274,7 +275,7 @@ export default Dev.describe(name, async (e) => {
 
         return {
           ...item,
-          uri: Crdt.Uri.automerge(item.uri, { shorten: 6 }),
+          uri: Doc.Uri.automerge(item.uri, { shorten: 6 }),
           shared,
         };
       };

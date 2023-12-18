@@ -1,5 +1,5 @@
 import { PeerRepoList } from '.';
-import { Crdt, Dev, TestDb, type t } from '../../test.ui';
+import { Dev, TestDb, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
 type T = { props: t.PeerRepoListProps; debug: { reload?: boolean } };
