@@ -2,7 +2,7 @@ import { COLORS, Color, Filesize, Spinner, css, type t } from './common';
 import { useTransmitMonitor } from './use.Transmit.Monitor';
 
 export type HandleProps = {
-  edge: t.ConnectionEdgeKind;
+  edge: t.NetworkConnectionEdgeKind;
   bytes?: number;
   style?: t.CssValue;
 };

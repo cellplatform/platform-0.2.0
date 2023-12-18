@@ -20,7 +20,7 @@ import { Sample } from './ui.Sample';
 type T = { reload?: boolean };
 const initial: T = {};
 
-export const createEdge = async (kind: t.ConnectionEdgeKind) => {
+export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Webrtc.peer();
   const store = WebStore.init({
@@ -41,7 +41,7 @@ const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
-  let selected: { edge: t.ConnectionEdge; item: t.StoreIndexDoc } | undefined;
+  let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

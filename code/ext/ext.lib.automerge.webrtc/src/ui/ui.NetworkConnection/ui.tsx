@@ -4,7 +4,7 @@ import { Middle } from './ui.Middle';
 import { usePeerMonitor } from './use.Peer.Monitor';
 import { useTransmitMonitor } from './use.Transmit.Monitor';
 
-export const View: React.FC<t.ConnectionProps> = (props) => {
+export const View: React.FC<t.NetworkConnectionProps> = (props) => {
   const left = usePeerMonitor(props.left?.network);
   const right = usePeerMonitor(props.right?.network);
   const { isTransmitting } = useTransmitMonitor(left.bytes.total + right.bytes.total);

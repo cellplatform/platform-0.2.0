@@ -13,7 +13,7 @@ export { WebrtcNetworkAdapter, WebrtcStore } from './Store.Network';
  * Library: UI
  */
 export { Info } from './ui/ui.Info';
-export { Connection } from './ui/ui.Connection';
+export { NetworkConnection } from './ui/ui.NetworkConnection';
 export { PeerRepoList } from './ui/ui.PeerRepoList';
 
 /**

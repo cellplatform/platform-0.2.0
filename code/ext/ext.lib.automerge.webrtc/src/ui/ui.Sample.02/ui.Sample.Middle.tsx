@@ -1,4 +1,4 @@
-import { Connection } from '../ui.Connection';
+import { NetworkConnection } from '../ui.NetworkConnection';
 import { COLORS, Color, Webrtc, css, type t } from './common';
 
 export type SampleMiddleProps = {
@@ -46,7 +46,7 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {elStream}
       {elMask}
-      <Connection left={left} right={right} style={styles.connection} />
+      <NetworkConnection left={left} right={right} style={styles.connection} />
     </div>
   );
 };
@@ -55,7 +55,7 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  connectionEdge(edge: t.SampleEdge): t.ConnectionEdge {
+  connectionEdge(edge: t.SampleEdge): t.NetworkConnectionEdge {
     const { kind, network } = edge;
     return { kind, network };
   },

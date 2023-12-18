@@ -1,8 +1,8 @@
-import { Connection } from '.';
+import { NetworkConnection } from '.';
 import { WebStore, Dev, TestDb, Webrtc, WebrtcStore, type t } from '../../test.ui';
 
 type T = {
-  props: t.ConnectionProps;
+  props: t.NetworkConnectionProps;
   debug: { count: number; debugBg?: boolean };
 };
 const initial: T = {
@@ -10,7 +10,7 @@ const initial: T = {
   debug: { count: 0 },
 };
 
-const createEdge = async (kind: t.ConnectionEdgeKind) => {
+const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Webrtc.peer();
   const store = WebStore.init({
@@ -19,11 +19,11 @@ const createEdge = async (kind: t.ConnectionEdgeKind) => {
   });
   const index = await WebStore.index(store);
   const network = await WebrtcStore.init(peer, store, index);
-  const edge: t.ConnectionEdge = { kind, network };
+  const edge: t.NetworkConnectionEdge = { kind, network };
   return edge;
 };
 
-const name = Connection.displayName ?? '';
+const name = NetworkConnection.displayName ?? '';
 export default Dev.describe(name, async (e) => {
   const left = await createEdge('Left');
   const right = await createEdge('Right');
@@ -43,7 +43,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.debugBg = local.debugBg;
     });
 
-    const monitorPeer = (edge: t.ConnectionEdge) => {
+    const monitorPeer = (edge: t.NetworkConnectionEdge) => {
       const peer = edge.network.peer.events();
       peer.cmd.conn$.subscribe((e) => dev.redraw('debug'));
     };
@@ -60,7 +60,7 @@ export default Dev.describe(name, async (e) => {
         ctx.subject.backgroundColor(!!debugBg ? 1 : 0);
 
         return (
-          <Connection
+          <NetworkConnection
             {...e.state.props}
             left={left}
             right={right}
@@ -119,7 +119,7 @@ export default Dev.describe(name, async (e) => {
       });
       dev.hr(-1, 5);
 
-      const sendButton = (edge: t.ConnectionEdge) => {
+      const sendButton = (edge: t.NetworkConnectionEdge) => {
         dev.button(`send data from "${edge.kind}"`, (e) => {
           type T = { count?: number };
           edge.network.shared?.change((d) => {

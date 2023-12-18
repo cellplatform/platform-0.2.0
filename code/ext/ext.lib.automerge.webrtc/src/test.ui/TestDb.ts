@@ -1,7 +1,7 @@
 import { TestDb as Base } from 'ext.lib.automerge';
 import { type t } from './common';
 
-const edge = (kind: t.ConnectionEdgeKind, name: string) => {
+const edge = (kind: t.NetworkConnectionEdgeKind, name: string) => {
   return {
     kind,
     name,
@@ -15,7 +15,7 @@ export const EdgeSampleDb = {
   name: 'tmp.sample',
   left: edge('Left', 'tmp.sample.left'),
   right: edge('Right', 'tmp.sample.right'),
-  edge(kind: t.ConnectionEdgeKind) {
+  edge(kind: t.NetworkConnectionEdgeKind) {
     if (kind === 'Left') return EdgeSampleDb.left;
     if (kind === 'Right') return EdgeSampleDb.right;
     throw new Error(`Edge "${kind}" not supported`);

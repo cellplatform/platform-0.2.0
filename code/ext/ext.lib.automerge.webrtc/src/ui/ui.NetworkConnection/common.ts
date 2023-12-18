@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'Unnamed',
+  displayName: 'NetworkConnection',
 } as const;
