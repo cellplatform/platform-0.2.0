@@ -1,1 +1,1 @@
-export * from './IndexDb';
+export { StoreIndexDb } from './IndexDb';

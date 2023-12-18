@@ -1,2 +1,2 @@
-export * from './Model';
-export * from './Data';
+export { Model } from './Model';
+export { Data } from './Data';

@@ -1,5 +1,3 @@
-import { WebStore } from './Store.Web';
-
 /**
  * Module (Meta)
  */
@@ -9,35 +7,18 @@ export { Pkg };
 /**
  * Library
  */
-import { Data, DocUri, Is, toObject } from './common';
-import { Store } from './Store';
-import { Doc } from './Store.Doc';
-export { Data, Doc, DocUri, Is, Store, toObject, WebStore };
-
-export const Crdt = {
-  Uri: DocUri,
-  Is,
-  Data,
-  Store,
-  WebStore,
-} as const;
+export { Doc } from './Store.Doc';
+export { Store } from './Store';
+export { WebStore } from './Store.Web';
+export { Data, Is, toObject } from './common';
+export { StoreIndexDb } from './Store.Web.IndexDb';
+export { WebStoreIndex } from './Store.Web.Index';
 
 /**
  * Library: UI
  */
-import { Info } from './ui/ui.Info';
-import { RepoList } from './ui/ui.RepoList';
-
-export { useDocument } from './ui/common';
-export { Info };
-export const UI = {
-  Uri: DocUri,
-  Is,
-  Data,
-  WebStore,
-  Info,
-  RepoList,
-} as const;
+export { Info } from './ui/ui.Info';
+export { RepoList } from './ui/ui.RepoList';
 
 /**
  * Dev

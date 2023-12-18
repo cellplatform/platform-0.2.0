@@ -1,2 +1,2 @@
-export * from './Doc';
+export { Doc } from './Doc';
 export { DEFAULTS } from './common';

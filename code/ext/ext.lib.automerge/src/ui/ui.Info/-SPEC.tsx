@@ -1,7 +1,7 @@
-import { Info, type InfoProps } from '.';
-import { Dev, TestDb, WebStore, type t } from '../../test.ui';
+import { Info } from '.';
+import { Dev, Pkg, TestDb, WebStore, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -15,7 +15,7 @@ export default Dev.describe(name, async (e) => {
   const index = await WebStore.index(store);
 
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.Info');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
   });
@@ -54,7 +54,7 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as InfoProps['fields']);
+                  : (ev.next as t.InfoProps['fields']);
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}

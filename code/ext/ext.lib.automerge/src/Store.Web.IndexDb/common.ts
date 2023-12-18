@@ -1,4 +1,4 @@
-export * from '../ui/common';
+export * from '../common';
 
 export const DEFAULTS = {} as const;
 

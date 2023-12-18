@@ -1,1 +1,1 @@
-export * from './WebStoreIndex';
+export { WebStoreIndex } from './WebStoreIndex';

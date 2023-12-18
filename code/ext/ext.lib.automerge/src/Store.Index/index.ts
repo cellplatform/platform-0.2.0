@@ -1,1 +1,1 @@
-export * from './Store.Index';
+export { StoreIndex } from './Store.Index';
