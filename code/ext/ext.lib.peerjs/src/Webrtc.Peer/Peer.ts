@@ -1,9 +1,9 @@
 import { PatchState, rx, type t } from './common';
 
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
-import { manageDataConnection } from './PeerModel.Conn.Data';
-import { manageMediaConnection } from './PeerModel.Conn.Media';
-import { eventFactory } from './PeerModel.events';
+import { manageDataConnection } from './Peer.Conn.Data';
+import { manageMediaConnection } from './Peer.Conn.Media';
+import { eventFactory } from './Peer.events';
 import { Dispatch } from './u.Dispatch';
 import { Stream } from './u.Stream';
 import { getFactory } from './u.get';
