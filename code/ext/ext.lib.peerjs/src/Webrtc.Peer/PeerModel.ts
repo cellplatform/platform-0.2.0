@@ -11,7 +11,7 @@ import { getFactory } from './u.get';
 /**
  * Peer model.
  */
-export const PeerModel: t.WebrtcPeerModel = {
+export const PeerModel: t.WebrtcPeer = {
   /**
    * Iniitalize a new PeerJS peer wrapped in an observable Model.
    */

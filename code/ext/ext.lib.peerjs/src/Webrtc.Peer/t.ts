@@ -12,7 +12,7 @@ export type GetMediaResponse = { stream?: MediaStream; error?: Error };
 /**
  * Entry API
  */
-export type WebrtcPeerModel = {
+export type WebrtcPeer = {
   init(options?: InitOptions): t.PeerModel;
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
 };
