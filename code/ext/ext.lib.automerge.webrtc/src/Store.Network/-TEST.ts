@@ -1,10 +1,10 @@
 import { WebrtcStore } from '.';
 import {
+  PeerModel,
   Test,
   TestDb,
   Time,
   WebStore,
-  Webrtc,
   expect,
   expectRoughlySame,
   type t,
@@ -17,7 +17,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
   type TParts = Awaited<ReturnType<typeof setup>>;
   const setup = async (debugLabel?: string) => {
-    const peer = Webrtc.peer();
+    const peer = PeerModel.init();
     const events = peer.events();
     const storage = TestDb.Unit.name;
     const store = WebStore.init({ storage, network: [] });

@@ -1,5 +1,5 @@
 import { NetworkConnection } from '.';
-import { WebStore, Dev, TestDb, Webrtc, WebrtcStore, type t } from '../../test.ui';
+import { WebStore, Dev, TestDb, PeerUI, PeerModel, WebrtcStore, type t } from '../../test.ui';
 
 type T = {
   props: t.NetworkConnectionProps;
@@ -12,7 +12,7 @@ const initial: T = {
 
 const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
-  const peer = Webrtc.peer();
+  const peer = PeerModel.init();
   const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
@@ -75,7 +75,7 @@ export default Dev.describe(name, async (e) => {
     dev.header
       .padding(0)
       .border(-0.1)
-      .render((e) => <Webrtc.Connector peer={left.network.peer} />);
+      .render((e) => <PeerUI.Connector peer={left.network.peer} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -138,6 +138,6 @@ export default Dev.describe(name, async (e) => {
     dev.footer
       .padding(0)
       .border(-0.1)
-      .render((e) => <Webrtc.Connector peer={right.network.peer} />);
+      .render((e) => <PeerUI.Connector peer={right.network.peer} />);
   });
 });

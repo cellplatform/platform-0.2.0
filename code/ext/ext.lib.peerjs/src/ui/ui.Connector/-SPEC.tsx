@@ -1,4 +1,4 @@
-import { COLORS, Color, Dev, Time, UI, Webrtc, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Time, PeerUI, Webrtc, css, type t } from '../../test.ui';
 import { AvatarTray } from '../ui.AvatarTray';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
@@ -42,7 +42,7 @@ export default Dev.describe(name, (e) => {
           prefix: 'list.render-',
         };
         return (
-          <UI.Connector
+          <PeerUI.Connector
             {...e.state.props}
             peer={self}
             debug={{ renderCount, name: 'Main' }}

@@ -6,11 +6,12 @@ import {
   Dev,
   Doc,
   Hash,
+  PeerModel,
+  PeerUI,
   PropList,
   RepoList,
   TestDb,
   WebStore,
-  Webrtc,
   WebrtcStore,
   css,
   rx,
@@ -22,7 +23,7 @@ const initial: T = {};
 
 export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
-  const peer = Webrtc.peer();
+  const peer = PeerModel.init();
   const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
@@ -139,7 +140,7 @@ export default Dev.describe(name, async (e) => {
                 value: (
                   <div {...styles.peer}>
                     <span>{`peer:${edge.network.peer.id}`}</span>
-                    <Webrtc.Icons.Person size={15} color={COLORS.BLUE} />
+                    <PeerUI.Icons.Person size={15} color={COLORS.BLUE} />
                   </div>
                 ),
               },

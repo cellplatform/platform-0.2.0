@@ -1,6 +1,5 @@
-import { UI as Network } from 'ext.lib.peerjs';
 import { Info } from '.';
-import { Dev, WebStore, type t } from '../../test.ui';
+import { PeerUI, Dev, PeerModel, WebStore, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps };
 const initial: T = { props: {} };
@@ -11,7 +10,7 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  const self = Network.peer();
+  const self = PeerModel.init();
   const store = WebStore.init({ network: [] });
 
   type LocalStore = { selectedFields?: t.InfoField[] };
@@ -44,7 +43,7 @@ export default Dev.describe(name, (e) => {
     dev.header
       .padding(0)
       .border(-0.1)
-      .render((e) => <Network.Connector peer={self} />);
+      .render((e) => <PeerUI.Connector peer={self} />);
   });
 
   e.it('ui:debug', async (e) => {

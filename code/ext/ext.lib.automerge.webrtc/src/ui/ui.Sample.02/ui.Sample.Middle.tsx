@@ -1,5 +1,5 @@
 import { NetworkConnection } from '../ui.NetworkConnection';
-import { COLORS, Color, Webrtc, css, type t } from './common';
+import { COLORS, Color, PeerUI, css, type t } from './common';
 
 export type SampleMiddleProps = {
   left: t.SampleEdge;
@@ -33,7 +33,7 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
   };
 
   const elStream = props.stream && (
-    <Webrtc.Video stream={props.stream} muted={true} style={styles.stream} empty={''} />
+    <PeerUI.Video stream={props.stream} muted={true} style={styles.stream} empty={''} />
   );
 
   const elMask = elStream && (

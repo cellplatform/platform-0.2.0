@@ -21,7 +21,7 @@ import { Video } from './ui/ui.Video';
 import { Icons } from './ui/Icons';
 
 export { Info };
-export const UI = {
+export const PeerUI = {
   peer: Webrtc.peer,
   Info,
   Connector,

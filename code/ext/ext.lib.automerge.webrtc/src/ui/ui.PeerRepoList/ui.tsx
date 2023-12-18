@@ -1,4 +1,4 @@
-import { COLORS, Color, RepoList, Webrtc, css, type t } from './common';
+import { COLORS, Color, RepoList, PeerUI, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
@@ -28,7 +28,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
       {elDebugLabel}
       <RepoList list={repo} behaviors={['Shareable']} />
       <div {...styles.footer}>
-        <Webrtc.AvatarTray
+        <PeerUI.AvatarTray
           peer={network.peer}
           style={styles.avatars}
           muted={false}
@@ -37,7 +37,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
             props.onStreamSelection?.(e);
           }}
         />
-        <Webrtc.Connector
+        <PeerUI.Connector
           peer={network.peer}
           behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []}
         />

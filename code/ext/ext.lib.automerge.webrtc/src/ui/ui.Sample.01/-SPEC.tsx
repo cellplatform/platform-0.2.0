@@ -1,4 +1,4 @@
-import { UI as Network } from 'ext.lib.peerjs';
+import { PeerUI, PeerModel } from 'ext.lib.peerjs';
 
 import { Dev, Pkg } from '../../test.ui';
 import { Info } from '../ui.Info';
@@ -32,7 +32,7 @@ export default Dev.describe(name, async (e) => {
   /**
    * Network Peers
    */
-  const self = Network.peer();
+  const self = PeerModel.init();
 
   /**
    * CRDT (Automerge)
@@ -83,7 +83,7 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.1)
       .render((e) => {
-        return <Network.Connector peer={self} />;
+        return <PeerUI.Connector peer={self} />;
       });
   });
 
