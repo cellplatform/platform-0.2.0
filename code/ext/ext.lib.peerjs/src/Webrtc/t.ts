@@ -7,7 +7,7 @@ export type Webrtc = {
   readonly Is: t.WebrtcIs;
   readonly PeerJs: t.WebrtcPeerJs;
   readonly PeerUri: t.WebrtcPeerUri;
-  readonly PeerModel: t.WebrtcPeer;
+  readonly Peer: t.WebrtcPeer;
   readonly peer: t.WebrtcPeer['init'];
 };
 

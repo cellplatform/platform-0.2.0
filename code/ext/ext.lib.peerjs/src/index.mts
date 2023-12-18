@@ -7,8 +7,8 @@ export { Pkg };
 /**
  * Library
  */
-import { Webrtc } from './Webrtc';
-export { PeerModel, Webrtc } from './Webrtc';
+import { Peer } from './Webrtc';
+export { Peer, Webrtc } from './Webrtc';
 
 /**
  * Library: UI
@@ -22,7 +22,7 @@ import { Icons } from './ui/Icons';
 
 export { Info };
 export const PeerUI = {
-  peer: Webrtc.peer,
+  peer: Peer.init,
   Info,
   Connector,
   ConnectorConfig,

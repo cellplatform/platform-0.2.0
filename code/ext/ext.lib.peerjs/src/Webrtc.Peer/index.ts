@@ -1,1 +1,1 @@
-export { PeerModel } from './Peer';
+export { Peer } from './Peer';
