@@ -1,10 +1,10 @@
-import { Icons, Value, css, type t } from './common';
+import { Icons, Is, Value, css, type t } from './common';
 
 export function repo(repo: t.InfoData['repo']) {
   if (!repo) return;
 
   const index = repo.index;
-  const name = repo.name || repo.store?.info.storage?.name || 'Unnamed';
+  const name = wrangle.name(repo);
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total(), 'document', 'documents');
@@ -30,3 +30,19 @@ export function repo(repo: t.InfoData['repo']) {
 
   return res;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  name(repo: t.InfoData['repo']) {
+    const UNKNOWN = 'Unknown';
+    if (!repo) return UNKNOWN;
+    if (repo.name) return repo.name;
+    if (Is.webStore(repo.store)) {
+      const name = repo.store?.info.storage?.name;
+      if (name) return name;
+    }
+    return UNKNOWN;
+  },
+} as const;

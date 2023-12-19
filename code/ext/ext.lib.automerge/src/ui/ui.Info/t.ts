@@ -8,7 +8,7 @@ export type InfoData = {
   repo?: {
     label?: string;
     name?: string;
-    store?: t.WebStore;
+    store?: t.Store;
     index?: t.StoreIndexState;
   };
 };
