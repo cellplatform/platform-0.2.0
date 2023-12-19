@@ -71,7 +71,7 @@ export default Dev.describe(name, async (e) => {
         <PeerRepoList.Info
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']}
-          data={{ network }}
+          data={{ network, repo }}
         />
       );
     });
