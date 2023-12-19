@@ -12,7 +12,7 @@ const name = 'App.01';
 export default Dev.describe(name, async (e) => {
   const self = Peer.init();
   const store = WebStore.init({
-    storage: 'tmp',
+    storage: 'fs',
     network: [],
   });
   const model = await RepoList.model(store);

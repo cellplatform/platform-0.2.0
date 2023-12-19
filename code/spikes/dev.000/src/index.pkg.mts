@@ -30,6 +30,7 @@ export const Pkg: ModuleDef = {
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.crdt': '0.0.0',
+    'sys.data.indexeddb': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.fs.indexeddb': '0.0.0',
     'sys.text': '0.0.0',
