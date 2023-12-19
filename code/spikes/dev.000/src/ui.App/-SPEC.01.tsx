@@ -1,6 +1,6 @@
 import { RepoList, WebStore } from 'ext.lib.automerge';
 import { WebrtcStore } from 'ext.lib.automerge.webrtc';
-import { PeerModel } from 'ext.lib.peerjs';
+import { Peer } from 'ext.lib.peerjs';
 
 import { Dev, type t } from '../test.ui';
 import { View } from './-SPEC.01.View';
@@ -13,7 +13,7 @@ const initial: T = {};
  */
 const name = 'App.01';
 export default Dev.describe(name, async (e) => {
-  const self = PeerModel.init();
+  const self = Peer.init();
   const store = WebStore.init({
     storage: 'tmp',
     network: [],

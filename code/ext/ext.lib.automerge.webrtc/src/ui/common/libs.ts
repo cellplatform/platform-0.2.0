@@ -3,7 +3,7 @@
  */
 
 export { RepoList } from 'ext.lib.automerge';
-export { PeerUI, PeerModel } from 'ext.lib.peerjs';
+export { Peer, PeerUI } from 'ext.lib.peerjs';
 
 /**
  * @system

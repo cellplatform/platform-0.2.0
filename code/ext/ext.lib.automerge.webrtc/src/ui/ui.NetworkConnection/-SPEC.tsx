@@ -1,5 +1,5 @@
 import { NetworkConnection } from '.';
-import { WebStore, Dev, TestDb, PeerUI, PeerModel, WebrtcStore, type t } from '../../test.ui';
+import { Dev, Peer, PeerUI, TestDb, WebStore, WebrtcStore, type t } from '../../test.ui';
 
 type T = {
   props: t.NetworkConnectionProps;
@@ -12,7 +12,7 @@ const initial: T = {
 
 const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
-  const peer = PeerModel.init();
+  const peer = Peer.init();
   const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.

@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { PeerUI, Dev, PeerModel, WebStore, type t } from '../../test.ui';
+import { Dev, Peer, PeerUI, WebStore, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps };
 const initial: T = { props: {} };
@@ -10,7 +10,7 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  const self = PeerModel.init();
+  const self = Peer.init();
   const store = WebStore.init({ network: [] });
 
   type LocalStore = { selectedFields?: t.InfoField[] };

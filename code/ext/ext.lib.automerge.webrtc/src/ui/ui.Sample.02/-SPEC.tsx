@@ -6,7 +6,7 @@ import {
   Dev,
   Doc,
   Hash,
-  PeerModel,
+  Peer,
   PeerUI,
   PropList,
   RepoList,
@@ -23,7 +23,7 @@ const initial: T = {};
 
 export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
-  const peer = PeerModel.init();
+  const peer = Peer.init();
   const store = WebStore.init({
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.

@@ -1,4 +1,4 @@
-import { PeerUI, PeerModel } from 'ext.lib.peerjs';
+import { Peer, PeerUI } from 'ext.lib.peerjs';
 
 import { Dev, Pkg } from '../../test.ui';
 import { Info } from '../ui.Info';
@@ -32,7 +32,7 @@ export default Dev.describe(name, async (e) => {
   /**
    * Network Peers
    */
-  const self = PeerModel.init();
+  const self = Peer.init();
 
   /**
    * CRDT (Automerge)
