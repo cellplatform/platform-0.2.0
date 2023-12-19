@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, PropList, type t } from './common';
+import { DEFAULTS, FC, PropList, usePeerMonitor, useTransmitMonitor, type t } from './common';
 import { Field } from './field';
 import { useRedraw } from './use.Redraw';
 
@@ -7,7 +7,10 @@ import { useRedraw } from './use.Redraw';
  */
 const View: React.FC<t.InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
+
   useRedraw(data);
+  const { bytes } = usePeerMonitor(data.network);
+  const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())
@@ -16,6 +19,7 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Peer', () => Field.peer(data, fields))
     .field('Repo', () => Field.repo(data, fields))
     .field('Network.Shared', () => Field.network.shared(data, fields))
+    .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting))
     .items(fields);
 
   return (

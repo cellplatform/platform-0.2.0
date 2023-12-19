@@ -11,7 +11,8 @@ export type InfoField =
   | 'Peer.Remotes'
   | 'Repo'
   | 'Network.Shared'
-  | 'Network.Shared.Json';
+  | 'Network.Shared.Json'
+  | 'Network.Transfer';
 
 export type InfoData = {
   url?: { href: string; title?: string };

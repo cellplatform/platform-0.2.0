@@ -95,7 +95,13 @@ export default Dev.describe(name, async (e) => {
       };
 
       config('Default', DEFAULTS.fields.default);
-      config('Info → PeerRepoList', ['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']);
+      config('Info → PeerRepoList', [
+        'Repo',
+        'Peer',
+        'Network.Transfer',
+        'Network.Shared',
+        'Network.Shared.Json',
+      ]);
     });
 
     dev.hr(5, 20);

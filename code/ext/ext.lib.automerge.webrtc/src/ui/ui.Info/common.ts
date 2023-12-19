@@ -1,6 +1,9 @@
 import { type t } from '../common';
-export * from '../common';
+
 export { Info as PeerInfo } from 'ext.lib.peerjs';
+
+export * from '../common';
+export { usePeerMonitor, useTransmitMonitor } from '../use';
 
 /**
  * Constants
@@ -17,6 +20,7 @@ export const DEFAULTS = {
         'Repo',
         'Network.Shared',
         'Network.Shared.Json',
+        'Network.Transfer',
       ];
     },
     get default(): t.InfoField[] {
