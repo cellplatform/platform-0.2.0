@@ -1,6 +1,5 @@
 import { DEFAULTS, FC, PeerInfo, PropList, type t } from './common';
 import { Field } from './field';
-import { peer } from './field.Peer';
 
 /**
  * Component
@@ -14,8 +13,9 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Module', () => Field.module())
     .field('Module.Verify', () => Field.moduleVerify())
     .field('Component', () => Field.component(data.component))
-    .field('Peer', () => peer(data.peer, fields))
+    .field('Peer', () => Field.peer(data, fields))
     .field('Repo', () => Field.repo(data.repo))
+    .field('Network.Shared', () => Field.network.shared(data, fields))
     .items(fields);
 
   return (

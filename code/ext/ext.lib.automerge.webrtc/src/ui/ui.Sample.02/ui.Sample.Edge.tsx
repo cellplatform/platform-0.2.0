@@ -1,5 +1,4 @@
-import { COLORS, Color, css, type t } from './common';
-import { PeerRepoList } from '../ui.PeerRepoList';
+import { COLORS, Color, PeerRepoList, css, type t } from './common';
 
 export type SampleEdgeProps = {
   edge: t.SampleEdge;

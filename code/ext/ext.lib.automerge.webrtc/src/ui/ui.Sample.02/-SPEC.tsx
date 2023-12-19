@@ -1,39 +1,12 @@
 import { type t } from './common';
 
-import {
-  COLORS,
-  Delete,
-  Dev,
-  Doc,
-  Hash,
-  Peer,
-  PeerUI,
-  PropList,
-  RepoList,
-  TestDb,
-  WebStore,
-  WebrtcStore,
-  css,
-  rx,
-} from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { createEdge } from './-SPEC.createEdge';
+import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean };
 const initial: T = {};
-
-export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
-  const db = TestDb.EdgeSample.edge(kind);
-  const peer = Peer.init();
-  const store = WebStore.init({
-    storage: db.name,
-    network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
-  });
-
-  const repo = await RepoList.model(store);
-  const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
-  const edge: t.SampleEdge = { kind, repo, network };
-  return edge;
-};
 
 /**
  * Spec
@@ -117,64 +90,13 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     const edgeDebug = (edge: t.SampleEdge) => {
-      dev.title(edge.kind);
-
+      const network = edge.network;
       dev.row((e) => {
-        const docid = Doc.Uri.id(edge.network.shared?.uri);
-        const doc = Hash.shorten(docid, [3, 5]);
-
-        const styles = {
-          peer: css({
-            display: 'grid',
-            placeItems: 'center',
-            gridTemplateColumns: 'auto auto',
-            columnGap: '3px',
-          }),
-        };
-
         return (
-          <PropList
-            items={[
-              {
-                label: 'peer',
-                value: (
-                  <div {...styles.peer}>
-                    <span>{`peer:${edge.network.peer.id}`}</span>
-                    <PeerUI.Icons.Person size={15} color={COLORS.BLUE} />
-                  </div>
-                ),
-              },
-              {
-                label: 'shared (transient doc)',
-                value: {
-                  data: doc || '(not connected)',
-                  opacity: doc ? 1 : 0.3,
-                },
-              },
-            ]}
-          />
-        );
-      });
-
-      dev.row((e) => {
-        const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
-        const data = edge.network.shared?.toObject();
-        if (!data?.docs) return null;
-
-        const docs = { ...data?.docs };
-        Object.keys(docs).forEach((uri) => {
-          const value = docs[uri];
-          docs[formatUri(uri)] = value;
-          delete docs[uri];
-        });
-
-        return (
-          <Dev.Object
-            name={'Shared'}
-            data={{ ...data, docs }}
-            fontSize={11}
-            style={{ marginTop: 8, marginLeft: 8 }}
-            expand={{ level: 1, paths: ['$', '$.docs'] }}
+          <PeerRepoList.Info
+            title={edge.kind}
+            fields={['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']}
+            data={{ network }}
           />
         );
       });

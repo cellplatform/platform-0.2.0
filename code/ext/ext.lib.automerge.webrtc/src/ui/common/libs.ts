@@ -15,6 +15,7 @@ export {
   Color,
   FC,
   Keyboard,
+  ObjectView,
   PropList,
   Spinner,
   TestRunner,
