@@ -1,4 +1,4 @@
-import { DevReload } from '.';
+import { DEFAULTS, DevReload } from '.';
 import { COLORS, Dev, Pkg, type t } from '../../test.ui';
 
 type T = {
@@ -12,10 +12,11 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DevReload.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.DevReloadProps, 'isCloseable'>;
+  type LocalStore = Pick<t.DevReloadProps, 'isCloseable' | 'isReloadRequired'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    isCloseable: true,
+    isCloseable: DEFAULTS.isCloseable,
+    isReloadRequired: DEFAULTS.isReloadRequired,
   });
 
   e.it('ui:init', async (e) => {
@@ -25,6 +26,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.isCloseable = local.isCloseable;
+      d.props.isReloadRequired = local.isReloadRequired;
     });
 
     ctx.debug.width(330);
@@ -58,12 +60,22 @@ export default Dev.describe(name, (e) => {
             e.change((d) => (local.isCloseable = Dev.toggle(d.props, 'isCloseable'))),
           );
       });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.isReloadRequired);
+        btn
+          .label((e) => `isReloadRequired`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.isReloadRequired = Dev.toggle(d.props, 'isReloadRequired'))),
+          );
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('reset', (e) => {
+      dev.button('reset (hidden)', (e) => {
         state.change((d) => (d.debug.hidden = false));
       });
     });

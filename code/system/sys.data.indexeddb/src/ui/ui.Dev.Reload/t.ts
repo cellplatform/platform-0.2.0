@@ -5,6 +5,8 @@ import type { t } from './common';
  */
 export type DevReloadProps = {
   isCloseable?: boolean;
+  isReloadRequired?: boolean;
   style?: t.CssValue;
-  onClose?: () => void;
+  onCloseClick?: () => void;
+  onReloadClick?: () => void;
 };

@@ -4,4 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+export const DEFAULTS = {
+  isCloseable: true,
+  isReloadRequired: true,
+} as const;
