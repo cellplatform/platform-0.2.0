@@ -38,7 +38,8 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      minHeight: 260,
+      minHeight: 200,
+      minWidth: 500,
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),

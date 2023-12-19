@@ -21,5 +21,3 @@ export {
   useFocus,
   useMouse,
 } from 'sys.ui.react.common';
-
-export { DevReload } from 'sys.data.indexeddb';
