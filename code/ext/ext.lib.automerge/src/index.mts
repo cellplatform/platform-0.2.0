@@ -17,7 +17,7 @@ export { WebStoreIndex } from './Store.Web.Index';
 /**
  * Library: UI
  */
-export { Info } from './ui/ui.Info';
+export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
 
 /**
