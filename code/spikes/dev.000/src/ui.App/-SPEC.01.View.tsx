@@ -1,6 +1,4 @@
-import { PeerRepoList } from 'ext.lib.automerge.webrtc';
-import { PeerUI } from 'ext.lib.peerjs';
-import { COLORS, Color, css, type t } from './common';
+import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
 
 export type ViewProps = {
   stream?: MediaStream;

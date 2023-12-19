@@ -1,9 +1,6 @@
-import { RepoList, WebStore } from 'ext.lib.automerge';
-import { WebrtcStore } from 'ext.lib.automerge.webrtc';
-import { Peer } from 'ext.lib.peerjs';
-
 import { Dev, type t } from '../test.ui';
 import { View } from './-SPEC.01.View';
+import { Peer, RepoList, WebStore, WebrtcStore, PeerRepoList } from './common';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -63,6 +60,18 @@ export default Dev.describe(name, async (e) => {
             'Refresh',
           ]}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return (
+        <PeerRepoList.Info
+          title={'Network'}
+          fields={['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']}
+          data={{ network }}
         />
       );
     });
