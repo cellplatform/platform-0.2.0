@@ -35,17 +35,23 @@ export default Dev.describe('Icon', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
-    dev.section('Debug', (dev) => {
-      dev.boolean((btn) =>
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.flipX);
         btn
-          .label((e) => `inherit color: ${e.state.debug.inheritColor ? 'magenta' : '(none)'}`)
-          .value((e) => e.state.debug.inheritColor)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'inheritColor'))),
-      );
+          .label((e) => `flipX`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipX')));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.flipY);
+        btn
+          .label((e) => `flipY`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipY')));
+      });
 
       dev.boolean((btn) =>
         btn
@@ -65,7 +71,18 @@ export default Dev.describe('Icon', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Color', (dev) => {
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `inherit color: ${e.state.debug.inheritColor ? 'magenta' : '(none)'}`)
+          .value((e) => e.state.debug.inheritColor)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'inheritColor'))),
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
       const color = (name: string, value?: string) => {
         dev.button(name, (e) => e.change((d) => (d.props.color = value)));
       };
@@ -79,9 +96,16 @@ export default Dev.describe('Icon', (e) => {
 
     dev.hr();
 
-    dev.section('tooltip', (dev) => {
+    dev.section('Tooltip', (dev) => {
       dev.button('"Hello"', (e) => e.change((d) => (d.props.tooltip = 'Hello')));
       dev.button('none', (e) => e.change((d) => (d.props.tooltip = undefined)));
     });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
   });
 });

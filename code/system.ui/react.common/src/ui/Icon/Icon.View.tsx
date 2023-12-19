@@ -9,7 +9,7 @@ export type IconViewProps = t.IconProps & {
 };
 
 export const IconView: React.FC<IconViewProps> = (props) => {
-  const { size = 24, opacity, offset } = props;
+  const { size = 24, opacity } = props;
   const Component = props.type;
 
   const styles = {
@@ -17,7 +17,7 @@ export const IconView: React.FC<IconViewProps> = (props) => {
       display: 'inline-block',
       overflow: 'hidden',
       Size: size,
-      transform: offset ? `translate(${offset[0]}px, ${offset[1]}px)` : undefined,
+      transform: wrangle.transform(props),
       opacity: opacity === undefined ? 1 : opacity,
       ...Style.toMargins(props.margin),
     }),
@@ -35,7 +35,7 @@ export const IconView: React.FC<IconViewProps> = (props) => {
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
-      <Component size={size} color={formatColor(props)} />
+      <Component size={size} color={wrangle.color(props)} />
     </div>
   );
 };
@@ -43,6 +43,21 @@ export const IconView: React.FC<IconViewProps> = (props) => {
 /**
  * Helpers
  */
-function formatColor(props: IconViewProps) {
-  return props.color ? Color.format(props.color) : undefined;
-}
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  color(props: IconViewProps) {
+    return props.color ? Color.format(props.color) : undefined;
+  },
+
+  transform(props: IconViewProps) {
+    const { offset, flipX, flipY } = props;
+    let res = '';
+    if (offset) res += ` translate(${offset[0]}px, ${offset[1]}px)`;
+    if (flipX) res += ` scaleX(-1)`;
+    if (flipY) res += ` scaleY(-1)`;
+    return res.trim() || undefined;
+  },
+} as const;
