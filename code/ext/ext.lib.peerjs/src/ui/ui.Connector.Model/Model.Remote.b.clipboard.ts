@@ -65,7 +65,7 @@ export function clipboardBehavior(args: {
   events.cmd.clipboard.copy$.subscribe(copyClipboard);
 
   events.key.$.pipe(
-    rx.filter((e) => e.is.meta),
+    rx.filter((e) => (e.is.os.mac ? e.is.meta : e.is.ctrl)),
     rx.filter(() => canPaste()),
   ).subscribe(() => startEditing()); // NB: prepare <input> to catch paste operation.
 
