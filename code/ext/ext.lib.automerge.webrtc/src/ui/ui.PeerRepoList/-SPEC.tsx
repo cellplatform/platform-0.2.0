@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const width = 250;
         if (e.state.debug.reload) {
-          return <TestDb.UI.Reload style={{ width }} onCloseClick={resetReloadClose} />;
+          return <TestDb.DevReload style={{ width }} onCloseClick={resetReloadClose} />;
         } else {
           return (
             <PeerRepoList {...e.state.props} repo={repo} network={network} style={{ width }} />

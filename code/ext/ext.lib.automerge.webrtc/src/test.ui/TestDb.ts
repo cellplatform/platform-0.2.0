@@ -1,5 +1,5 @@
 import { TestDb as Base } from 'ext.lib.automerge';
-import { type t } from './common';
+import { type t, DevReload } from './common';
 
 const edge = (kind: t.NetworkConnectionEdgeKind, name: string) => {
   return {
@@ -33,4 +33,5 @@ export const TestDb = {
     await Base.deleteDatabases();
     await EdgeSampleDb.deleteDatabases();
   },
+  DevReload,
 } as const;

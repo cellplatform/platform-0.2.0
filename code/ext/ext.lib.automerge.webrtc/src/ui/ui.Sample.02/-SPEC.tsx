@@ -74,7 +74,7 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
-          return <TestDb.UI.Reload onCloseClick={resetReloadClose} />;
+          return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
           return <Sample left={left} right={right} />;
         }

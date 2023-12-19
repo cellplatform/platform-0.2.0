@@ -13,4 +13,5 @@ export default Config.vite(import.meta.url, (e) => {
   });
   e.target('web');
   e.externalDependency(e.ctx.deps.map((d) => d.name));
+  e.chunk('Info', 'src/ui/ui.Info/index.ts');
 });
