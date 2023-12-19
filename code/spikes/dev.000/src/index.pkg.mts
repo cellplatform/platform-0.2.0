@@ -32,7 +32,6 @@ export const Pkg: ModuleDef = {
     'sys.data.crdt': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.fs.indexeddb': '0.0.0',
-    'sys.net.webrtc': '0.0.0',
     'sys.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.concept': '0.0.0',
