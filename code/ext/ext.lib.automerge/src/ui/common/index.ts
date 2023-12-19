@@ -1,7 +1,5 @@
 import type * as t from './t';
 
-export { Doc } from '../../Store.Doc';
-export * from '../../Store.Web';
 export * from '../../common';
 export * from '../Icons';
 export * from './libs';
