@@ -111,12 +111,11 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('ref ( ƒ )', (dev) => {
-      const select = (target: t.LabelListItemTarget) => {
-        const focus = true;
+      const select = (target: t.LabelListItemTarget, focus = true) => {
         Time.delay(0, () => ref.select(target, focus));
       };
-      dev.button('select: first', (e) => select('First'));
-      dev.button('select: last', (e) => select('Last'));
+      dev.button('select: first', (e) => select('First', false));
+      dev.button(['select: last', 'focus'], (e) => select('Last', true));
     });
 
     dev.hr(5, 20);
