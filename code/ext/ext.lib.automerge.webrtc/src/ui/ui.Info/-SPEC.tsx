@@ -9,9 +9,10 @@ const DEFAULTS = Info.DEFAULTS;
  * Spec
  */
 const name = Info.displayName ?? '⚠️';
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   const self = Peer.init();
   const store = WebStore.init({ network: [] });
+  const index = await WebStore.index(store);
 
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
@@ -34,7 +35,7 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} data={{ peer: { self }, repo: { store } }} />;
+        return <Info {...e.state.props} data={{ peer: { self }, repo: { store, index } }} />;
       });
   });
 

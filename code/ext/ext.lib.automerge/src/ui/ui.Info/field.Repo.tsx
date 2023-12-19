@@ -8,7 +8,7 @@ export function repo(repo: t.InfoData['repo']) {
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total(), 'document', 'documents');
-    text = `${text} → ${index.total()} ${documents}`;
+    text = `${text} ← ${index.total()} ${documents}`;
   }
 
   const styles = {
@@ -17,8 +17,9 @@ export function repo(repo: t.InfoData['repo']) {
 
   const value = (
     <div {...styles.base}>
+      <Icons.Database size={14} offset={[0, 1]} style={{ marginRight: 2 }} />
       <div>{text}</div>
-      <Icons.Repo size={14} style={{ marginLeft: 4 }} offset={[0, 1]} />
+      <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />
     </div>
   );
 
