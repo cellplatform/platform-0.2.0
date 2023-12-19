@@ -14,6 +14,7 @@ import '@tldraw/tldraw/tldraw.css';
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
 
 const { Specs: Crdt } = await import('sys.data.crdt/specs');
+const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 
 const {
@@ -42,6 +43,7 @@ export const Specs = {
   ...App,
 
   ...Crdt,
+  ...IndexedDb,
   ...Monaco,
   ...Common,
   ...ComonDev,

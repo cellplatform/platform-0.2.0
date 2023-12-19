@@ -15,8 +15,8 @@ export default Dev.describe(name, async (e) => {
     storage: 'tmp',
     network: [],
   });
-  const repo = await RepoList.model(store);
-  const network: t.WebrtcStore = await WebrtcStore.init(self, store, repo.index, {});
+  const model = await RepoList.model(store);
+  const network: t.WebrtcStore = await WebrtcStore.init(self, store, model.index, {});
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -34,7 +34,7 @@ export default Dev.describe(name, async (e) => {
         return (
           <View
             stream={e.state.stream}
-            repo={repo}
+            model={model}
             network={network}
             onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
           />
@@ -71,7 +71,7 @@ export default Dev.describe(name, async (e) => {
         <PeerRepoList.Info
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']}
-          data={{ network, repo }}
+          data={{ network, repo: model }}
         />
       );
     });

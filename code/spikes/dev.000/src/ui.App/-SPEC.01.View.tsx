@@ -2,7 +2,7 @@ import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
 
 export type ViewProps = {
   stream?: MediaStream;
-  repo: t.RepoListModel;
+  model: t.RepoListModel;
   network: t.WebrtcStore;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
@@ -30,7 +30,7 @@ export const View: React.FC<ViewProps> = (props) => {
   const elLeft = (
     <div {...styles.left}>
       <PeerRepoList
-        repo={props.repo}
+        model={props.model}
         network={props.network}
         onStreamSelection={props.onStreamSelection}
       />
