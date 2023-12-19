@@ -1,7 +1,6 @@
 import { RepoList } from '.';
-import { Dev, Doc, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
+import { DevReload, Dev, Doc, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.ui.Info';
-import { Reload } from './-SPEC.ui.Reload';
 
 type T = {
   props: t.RepoListProps;
@@ -71,7 +70,7 @@ export default Dev.describe(name, async (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <Reload />;
+        if (e.state.debug.reload) return <DevReload />;
 
         const renderCount: t.RenderCountProps = {
           prefix: 'list.render-',
