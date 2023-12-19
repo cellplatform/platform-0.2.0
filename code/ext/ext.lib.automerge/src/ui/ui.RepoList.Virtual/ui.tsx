@@ -14,7 +14,7 @@ export const View: React.FC<t.RepoListVirtualProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${'foobar'}`}</div>
+      <div>{`🐷 ${DEFAULTS.displayName}`}</div>
     </div>
   );
 };

@@ -10,10 +10,11 @@ export type SpecInfoProps = {
 
 export const SpecInfo: React.FC<SpecInfoProps> = (props) => {
   const { model, name } = props;
-  const { store, index } = model;
-
   const [, setRedraw] = useState(0);
   const redraw = () => setRedraw((prev) => prev + 1);
+
+  if (!model) return null;
+  const { store, index } = model;
 
   useEffect(() => {
     const events = index.doc.events();
@@ -25,10 +26,7 @@ export const SpecInfo: React.FC<SpecInfoProps> = (props) => {
     <Info
       style={props.style}
       fields={['Module', 'Repo', 'Component']}
-      data={{
-        repo: { store, index },
-        component: { name },
-      }}
+      data={{ repo: { store, index }, component: { name } }}
     />
   );
 };

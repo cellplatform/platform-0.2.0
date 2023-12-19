@@ -11,9 +11,8 @@ const initial: T = { props: {}, debug: {} };
 
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
-  const store = WebStore.init({ storage });
 
-  let repo: t.RepoListModel;
+  let model: t.RepoListModel;
   let ref: t.RepoListRef;
   let active: t.RepoListActiveChangedEventArgs | undefined;
 
@@ -30,15 +29,16 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    repo = await RepoList.model(store, {
+    const store = WebStore.init({ storage });
+    model = await RepoList.model(store, {
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
       onActiveChanged: (e) => {
-        // console.info(`⚡️ onActiveChanged`, e);
+        console.info(`⚡️ onActiveChanged`, e);
         active = e;
       },
     });
-    ref = RepoList.Ref(repo);
+    ref = RepoList.Ref(model);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
@@ -48,9 +48,9 @@ export default Dev.describe(name, async (e) => {
     });
 
     const events = {
-      list: repo.list.state.events(),
-      index: repo.index.events(),
-      repo: repo.events(),
+      list: model.list.state.events(),
+      index: model.index.events(),
+      repo: model.events(),
     };
 
     const redraw$ = rx.merge(events.list.$, events.list.active.$);
@@ -77,14 +77,14 @@ export default Dev.describe(name, async (e) => {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
-        return <RepoList {...e.state.props} model={repo} renderCount={renderCount} />;
+        return <RepoList {...e.state.props} model={model} renderCount={renderCount} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <SpecInfo model={repo} name={'<RepoList>'} />);
+    dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
 
     dev.hr(5, 20);
 
@@ -138,27 +138,27 @@ export default Dev.describe(name, async (e) => {
 
       dev.button('create: doc', async (e) => {
         type T = { msg?: string };
-        await repo.store.doc.getOrCreate<T>((d) => null);
+        await model.store.doc.getOrCreate<T>((d) => null);
       });
       dev.button(['create: doc ("ephemeral")', 'filtered out'], async (e) => {
         type D = t.DocWithMeta;
-        await repo.store.doc.getOrCreate<D>((d) => {
+        await model.store.doc.getOrCreate<D>((d) => {
           Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
         });
       });
       dev.button('delete: doc (last)', async (e) => {
-        const index = repo.index;
+        const index = model.index;
         const docs = index.doc.current.docs.filter((m) => !m.meta?.ephemeral);
         const last = docs[docs.length - 1];
         const uri = last?.uri;
-        const removed = await index.remove(uri);
+        const removed = index.remove(uri);
         console.info('💥 removed:', removed, '←', uri);
       });
 
       dev.hr(-1, 5);
 
       dev.button('mutate: rename first', (e) => {
-        repo.index.doc.change((d) => {
+        model.index.doc.change((d) => {
           const first = d.docs.find((m) => !m.meta?.ephemeral);
           if (first) first.name = `renamed: ${slug()}`;
         });
@@ -176,12 +176,13 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
+      if (!model) return;
       const data = {
         props: e.state.props,
-        'model:list': repo.list.state.current,
+        'model:list': model.list.state.current,
         db: storage,
-        'db:index': `${repo.index.db.name}[${repo.index.total()}]`,
-        'db:index.doc': repo.index.doc.toObject(),
+        'db:index': `${model.index.db.name}[${model.index.total()}]`,
+        'db:index.doc': model.index.doc.toObject(),
         'active:focus': !!active?.focused,
         'active:item': active?.item || undefined,
       };
