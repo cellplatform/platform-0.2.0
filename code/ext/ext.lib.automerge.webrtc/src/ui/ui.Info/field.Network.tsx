@@ -56,8 +56,6 @@ const wrangle = {
         />
       </div>
     );
-
-    //
   },
 } as const;
 
