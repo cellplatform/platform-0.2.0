@@ -3,7 +3,7 @@ import { COLORS, Dev, Pkg, type t } from '../../test.ui';
 
 type T = {
   props: t.DevReloadProps;
-  debug: { hidden?: boolean };
+  debug: { hidden?: boolean; onCloseClick?: boolean; onReloadClick?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -12,11 +12,14 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DevReload.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.DevReloadProps, 'isCloseable' | 'isReloadRequired'>;
+  type LocalStore = Pick<t.DevReloadProps, 'isCloseable' | 'isReloadRequired'> &
+    Pick<T['debug'], 'onCloseClick' | 'onReloadClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     isCloseable: DEFAULTS.isCloseable,
     isReloadRequired: DEFAULTS.isReloadRequired,
+    onCloseClick: true,
+    onReloadClick: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -27,19 +30,26 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.isCloseable = local.isCloseable;
       d.props.isReloadRequired = local.isReloadRequired;
+      d.debug.onCloseClick = local.onCloseClick;
+      d.debug.onReloadClick = local.onReloadClick;
     });
+
+    const onCloseClick = () => state.change((d) => (d.debug.hidden = true));
+    const onReloadClick = () => console.info(`⚡️ onReloadClick`);
 
     ctx.debug.width(330);
     ctx.subject
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.hidden) return <div />;
+        const debug = e.state.debug;
+        if (debug.hidden) return <div />;
 
         return (
           <DevReload
             {...e.state.props}
-            onCloseClick={() => state.change((d) => (d.debug.hidden = true))}
+            onCloseClick={debug.onCloseClick ? onCloseClick : undefined}
+            onReloadClick={debug.onReloadClick ? onReloadClick : undefined}
             style={{ backgroundColor: COLORS.WHITE }}
           />
         );
@@ -77,6 +87,28 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       dev.button('reset (hidden)', (e) => {
         state.change((d) => (d.debug.hidden = false));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.onCloseClick);
+        btn
+          .label((e) => `onCloseClick`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.onCloseClick = Dev.toggle(d.debug, 'onCloseClick')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.onReloadClick);
+        btn
+          .label((e) => `onReloadClick`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.onReloadClick = Dev.toggle(d.debug, 'onReloadClick')));
+          });
       });
     });
   });
