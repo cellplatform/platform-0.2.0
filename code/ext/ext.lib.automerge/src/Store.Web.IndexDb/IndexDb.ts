@@ -1,5 +1,4 @@
 import { IndexedDb, NAME, rx, type t } from './common';
-const { Record } = IndexedDb;
 
 /**
  * An IndexedDB for storing meta-data about [Store/Repo]'s.
@@ -19,6 +18,7 @@ export const StoreIndexDb = {
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */
   init(name: string) {
+    const { Record } = IndexedDb;
     return IndexedDb.init<t.StoreIndexDb>({
       name,
       version: 1,
