@@ -29,7 +29,6 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {

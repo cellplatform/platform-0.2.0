@@ -30,7 +30,7 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
       if (!life.disposed) setItems(wrangle.items(dbs, filter));
     });
     return life.dispose;
-  }, [reloadRequired]);
+  }, [reloadRequired, items.length, deleted.length]);
 
   /**
    * Render
