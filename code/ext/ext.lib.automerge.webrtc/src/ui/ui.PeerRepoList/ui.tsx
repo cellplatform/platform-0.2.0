@@ -3,7 +3,6 @@ import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
   const { model, network, debug = {} } = props;
-
   if (!(model && network)) return null;
 
   /**

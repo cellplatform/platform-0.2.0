@@ -1,6 +1,6 @@
+import { Info } from '../ui.Info';
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { Info } from '../ui.Info';
 
 /**
  * Export

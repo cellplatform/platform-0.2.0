@@ -85,9 +85,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
-
     dev.hr(5, 20);
-
     dev.row((e) => {
       return (
         <RepoList.Config
