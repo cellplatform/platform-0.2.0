@@ -19,6 +19,7 @@ export type InfoData = {
   peer?: PeerInfoData['peer'];
   repo?: AutomergeInfoData['repo'];
   network?: t.WebrtcStore;
+  shared?: { json?: { expand?: { level?: number; paths?: string[] } } };
 };
 
 /**

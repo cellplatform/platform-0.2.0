@@ -49,6 +49,7 @@ export default Dev.describe(name, async (e) => {
             data={{
               network: self.network,
               repo: { store, index },
+              // shared: { json: { expand: { paths: [], level: 1 } } },
             }}
           />
         );
