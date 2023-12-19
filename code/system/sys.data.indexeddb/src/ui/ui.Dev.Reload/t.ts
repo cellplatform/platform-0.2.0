@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type ReloadProps = {
+export type DevReloadProps = {
   isCloseable?: boolean;
   style?: t.CssValue;
   onClose?: () => void;

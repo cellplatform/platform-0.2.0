@@ -22,4 +22,4 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
-export { Reload } from 'sys.data.indexeddb';
+export { DevReload } from 'sys.data.indexeddb';

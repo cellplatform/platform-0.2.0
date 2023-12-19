@@ -13,7 +13,7 @@ export { IndexedDb } from './IndexedDb';
  * Library.UI
  */
 export { Info } from './ui/ui.Info';
-export { Reload } from './ui/ui.Reload';
+export { DevReload } from './ui/ui.Dev.Reload';
 
 /**
  * Dev

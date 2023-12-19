@@ -1,8 +1,8 @@
-import { Reload } from '.';
+import { DevReload } from '.';
 import { COLORS, Dev, Pkg, type t } from '../../test.ui';
 
 type T = {
-  props: t.ReloadProps;
+  props: t.DevReloadProps;
   debug: { hidden?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
@@ -10,9 +10,9 @@ const initial: T = { props: {}, debug: {} };
 /**
  * Spec
  */
-const name = Reload.displayName ?? '';
+const name = DevReload.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.ReloadProps, 'isCloseable'>;
+  type LocalStore = Pick<t.DevReloadProps, 'isCloseable'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     isCloseable: true,
@@ -35,7 +35,7 @@ export default Dev.describe(name, (e) => {
         if (e.state.debug.hidden) return <div />;
 
         return (
-          <Reload
+          <DevReload
             {...e.state.props}
             onCloseClick={() => state.change((d) => (d.debug.hidden = true))}
             style={{ backgroundColor: COLORS.WHITE }}

@@ -1,13 +1,13 @@
 import { Button, Icons, css, type t } from './common';
 
-export type ReloadProps = {
+export type DevReloadProps = {
   isCloseable?: boolean;
   style?: t.CssValue;
   onCloseClick?: () => void;
   onReloadClick?: () => void;
 };
 
-export const Reload: React.FC<ReloadProps> = (props) => {
+export const DevReload: React.FC<DevReloadProps> = (props) => {
   const { isCloseable = true } = props;
   const reload = () => {
     if (props.onReloadClick) {
