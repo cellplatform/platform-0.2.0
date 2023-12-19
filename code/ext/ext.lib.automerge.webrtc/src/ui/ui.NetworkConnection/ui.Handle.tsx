@@ -1,5 +1,4 @@
-import { COLORS, Color, Filesize, Spinner, css, type t } from './common';
-import { useTransmitMonitor } from './use.Transmit.Monitor';
+import { COLORS, Color, Filesize, Spinner, css, useTransmitMonitor, type t } from './common';
 
 export type HandleProps = {
   edge: t.NetworkConnectionEdgeKind;

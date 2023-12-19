@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Time, type t } from './common';
 
+/**
+ * Delayed display to show when data is being transmitted.
+ */
 export function useTransmitMonitor(bytes: number = 0, options: { msecs?: t.Msecs } = {}) {
   const { msecs = 1500 } = options;
   const [isTransmitting, setTransmitting] = useState(false);

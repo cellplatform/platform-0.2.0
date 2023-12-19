@@ -1,8 +1,6 @@
-import { css, type t } from './common';
+import { css, usePeerMonitor, useTransmitMonitor, type t } from './common';
 import { Handle } from './ui.Handle';
 import { Middle } from './ui.Middle';
-import { usePeerMonitor } from './use.Peer.Monitor';
-import { useTransmitMonitor } from './use.Transmit.Monitor';
 
 export const View: React.FC<t.NetworkConnectionProps> = (props) => {
   const left = usePeerMonitor(props.left?.network);

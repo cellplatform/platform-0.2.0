@@ -1,5 +1,5 @@
-import { type t } from './common';
 export * from '../common';
+export { usePeerMonitor, useTransmitMonitor } from '../use';
 
 /**
  * Constants

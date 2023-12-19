@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { rx, type t } from './common';
 
 /**
- * A counter for data passing through a peer.
+ * Monitor how much data is being transmitted through the network.
  */
 export function usePeerMonitor(network?: t.WebrtcStore) {
   const peer = network?.peer;
