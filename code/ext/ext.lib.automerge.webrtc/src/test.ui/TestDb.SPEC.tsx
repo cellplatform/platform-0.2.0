@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
-          return <TestDb.UI.Reload onClose={resetReloadClose} />;
+          return <TestDb.UI.Reload onCloseClick={resetReloadClose} />;
         } else {
           return <Icons.Database size={80} style={{ placeSelf: 'center' }} />;
         }
