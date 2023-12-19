@@ -43,7 +43,7 @@ export function renderRemote(args: { ctx: t.GetConnectorCtx }): t.ConnectorItemR
             <Icons.Person
               {...helpers.icon(e, 17)}
               color={e.selected && e.focused ? e.color : COLORS.BLUE}
-              style={{ transform: 'scaleX(-1)' }}
+              flipX={true}
             />
           );
         }
