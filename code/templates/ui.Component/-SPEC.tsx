@@ -7,7 +7,7 @@ const initial: T = { props: {} };
 /**
  * Spec
  */
-const name = Root.displayName ?? '';
+const name = Root.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
