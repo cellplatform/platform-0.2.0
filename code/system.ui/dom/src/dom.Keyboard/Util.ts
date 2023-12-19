@@ -18,9 +18,11 @@ export const Util = {
 
   toFlags(e: KeyboardEvent): t.KeyboardKeyFlags {
     const os = UserAgent.current.os;
-    const clipboardModifier = os.name === 'Mac OS' ? e.metaKey : e.ctrlKey;
-
+    const mac = os.name === 'Mac OS';
+    const windows = os.name === 'Windows';
+    const clipboardModifier = mac ? e.metaKey : e.ctrlKey;
     return {
+      os: { mac, windows },
       down: e.type === 'keydown',
       up: e.type === 'keyup',
       modifier: ['Shift', 'Alt', 'Control', 'Meta'].includes(e.key),

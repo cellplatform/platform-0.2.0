@@ -8,6 +8,7 @@ export type KeyboardModifierEdges = [] | ['Left'] | ['Right'] | ['Left' | 'Right
 export type KeyboardModifierKey = 'SHIFT' | 'CTRL' | 'ALT' | 'META';
 
 export type KeyboardKeyFlags = {
+  readonly os: { mac: boolean; windows: boolean };
   readonly down: boolean;
   readonly up: boolean;
   readonly modifier: boolean;
