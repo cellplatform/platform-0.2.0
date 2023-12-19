@@ -22,7 +22,7 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
 
   return (
     <PeerRepoList
-      repo={edge.repo}
+      model={edge.model}
       network={edge.network}
       style={styles.base}
       debug={{
@@ -41,7 +41,7 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
  */
 const wrangle = {
   debugLabelText(edge: t.SampleEdge) {
-    const dbname = edge.repo.store.info.storage?.name ?? '';
+    const dbname = edge.model.store.info.storage?.name ?? '';
     return dbname ? `repo:db:${dbname}` : '';
   },
 

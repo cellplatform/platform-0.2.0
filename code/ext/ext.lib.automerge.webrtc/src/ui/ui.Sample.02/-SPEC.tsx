@@ -32,7 +32,7 @@ export default Dev.describe(name, async (e) => {
       const redraw = () => dev.redraw('debug');
       const debounce = rx.debounceTime(50);
       const peer = edge.network.peer.events();
-      const repo$ = edge.repo.events();
+      const repo$ = edge.model.events();
       peer.cmd.conn$.pipe(debounce).subscribe(redraw);
       edge.network.$.pipe(debounce).subscribe(redraw);
       repo$.active$.pipe(debounce).subscribe(redraw);
@@ -154,7 +154,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(5, 20);
 
       dev.button('purge ephemeral', (e) => {
-        const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.repo.index);
+        const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.model.index);
         purge(left);
         purge(right);
         e.change((d) => (d.reload = true));
@@ -179,13 +179,13 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const total = (edge: t.SampleEdge) => edge.repo.index.doc.current.docs.length;
+      const total = (edge: t.SampleEdge) => edge.model.index.doc.current.docs.length;
       const shorten = (uri: string) => Doc.Uri.id(uri, { shorten: 6 });
       const formatEdge = (edge: t.SampleEdge) => {
         return {
           total: total(edge),
-          index: edge.repo.index.doc.current,
-          'index:uri': shorten(edge.repo.index.doc.uri),
+          index: edge.model.index.doc.current,
+          'index:uri': shorten(edge.model.index.doc.uri),
         };
       };
 

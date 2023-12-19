@@ -3,7 +3,7 @@ import { type t } from './common';
 
 export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
-  repo: t.RepoListModel;
+  model: t.RepoListModel;
   network: t.WebrtcStore;
 };
 

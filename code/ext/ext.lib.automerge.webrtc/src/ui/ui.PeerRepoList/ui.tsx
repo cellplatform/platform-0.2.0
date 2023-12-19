@@ -2,9 +2,9 @@ import { COLORS, Color, RepoList, PeerUI, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
-  const { repo, network, debug = {} } = props;
+  const { model, network, debug = {} } = props;
 
-  if (!(repo && network)) return null;
+  if (!(model && network)) return null;
 
   /**
    * Render
@@ -26,7 +26,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elDebugLabel}
-      <RepoList list={repo} behaviors={['Shareable']} />
+      <RepoList model={model} behaviors={['Shareable']} />
       <div {...styles.footer}>
         <PeerUI.AvatarTray
           peer={network.peer}

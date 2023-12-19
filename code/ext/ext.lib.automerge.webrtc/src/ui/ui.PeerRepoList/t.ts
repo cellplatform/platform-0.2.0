@@ -4,7 +4,7 @@ import type { t } from './common';
  * <Component>
  */
 export type PeerRepoListProps = {
-  repo?: t.RepoListModel;
+  model?: t.RepoListModel;
   network?: t.WebrtcStore;
   focusOnLoad?: boolean;
   debug?: PeerRepoListPropsDebug;

@@ -17,14 +17,14 @@ export default Dev.describe(name, async (e) => {
     remote: remote.network.peer,
   } as const;
 
-  let repo: t.RepoListModel;
+  let model: t.RepoListModel;
   let network: t.WebrtcStore;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    repo = self.repo;
+    model = self.model;
     network = self.network;
 
     const state = await ctx.state<T>(initial);
@@ -42,7 +42,7 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload style={{ width }} onCloseClick={resetReloadClose} />;
         } else {
           return (
-            <PeerRepoList {...e.state.props} repo={repo} network={network} style={{ width }} />
+            <PeerRepoList {...e.state.props} model={model} network={network} style={{ width }} />
           );
         }
       });

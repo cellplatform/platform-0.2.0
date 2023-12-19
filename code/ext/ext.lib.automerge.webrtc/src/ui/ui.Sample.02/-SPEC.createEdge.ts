@@ -8,8 +8,8 @@ export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
-  const repo = await RepoList.model(store);
-  const network = await WebrtcStore.init(peer, store, repo.index, { debugLabel: kind });
-  const edge: t.SampleEdge = { kind, repo, network };
+  const model = await RepoList.model(store);
+  const network = await WebrtcStore.init(peer, store, model.index, { debugLabel: kind });
+  const edge: t.SampleEdge = { kind, model, network };
   return edge;
 };
