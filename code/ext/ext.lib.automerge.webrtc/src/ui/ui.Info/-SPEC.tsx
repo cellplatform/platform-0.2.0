@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, Peer, PeerUI, WebStore, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
 type T = { props: t.InfoProps };
@@ -49,7 +49,6 @@ export default Dev.describe(name, async (e) => {
             data={{
               network: self.network,
               repo: { store, index },
-              // shared: { json: { expand: { paths: [], level: 1 } } },
             }}
           />
         );
