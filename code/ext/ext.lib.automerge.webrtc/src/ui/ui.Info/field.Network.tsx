@@ -51,7 +51,7 @@ const wrangle = {
           name={'Shared'}
           data={{ ...data, docs }}
           fontSize={11}
-          style={{ marginLeft: 12, marginTop: 2 }}
+          style={{ marginLeft: 10, marginTop: 3 }}
           expand={{ level: 1, paths: ['$', '$.docs'] }}
         />
       </div>

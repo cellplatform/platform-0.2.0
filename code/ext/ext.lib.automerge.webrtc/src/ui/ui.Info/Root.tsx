@@ -1,13 +1,13 @@
 import { DEFAULTS, FC, PeerInfo, PropList, type t } from './common';
 import { Field } from './field';
+import { useRedraw } from './use.Redraw';
 
 /**
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
-
-  PeerInfo.useRedraw(data);
+  useRedraw(data);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())
@@ -49,5 +49,10 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  useRedraw: typeof useRedraw;
 };
-export const Info = FC.decorate<t.InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<t.InfoProps, Fields>(
+  View,
+  { DEFAULTS, useRedraw },
+  { displayName: 'Info' },
+);

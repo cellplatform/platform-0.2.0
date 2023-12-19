@@ -37,20 +37,21 @@ export default Dev.describe(name, async (e) => {
       d.props.margin = 10;
     });
 
-    const monitor = (network: t.WebrtcStore) => {
-      network.peer.events().$.subscribe(() => ctx.redraw());
-      network.$.subscribe(() => ctx.redraw());
-    };
-    monitor(self.network);
-    monitor(remote.network);
-
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} data={{ network: self.network, repo: { store, index } }} />;
+        return (
+          <Info
+            {...e.state.props}
+            data={{
+              network: self.network,
+              repo: { store, index },
+            }}
+          />
+        );
       });
   });
 

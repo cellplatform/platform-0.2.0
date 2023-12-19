@@ -27,7 +27,7 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
           <Icons.Person size={14} style={styles.iconRight} color={COLORS.BLUE} />
         </div>
       ),
-      opacity: current?.open ? 1 : 0.3,
+      opacity: current?.open || peer.current.connections.length > 0 ? 1 : 0.3,
     },
   };
   if (!peer) return root;
