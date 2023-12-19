@@ -3,12 +3,19 @@ import { Button, Icons, css, type t } from './common';
 export type ReloadProps = {
   isCloseable?: boolean;
   style?: t.CssValue;
-  onClose?: () => void;
+  onCloseClick?: () => void;
+  onReloadClick?: () => void;
 };
 
 export const Reload: React.FC<ReloadProps> = (props) => {
   const { isCloseable = true } = props;
-  const reload = () => location.reload();
+  const reload = () => {
+    if (props.onReloadClick) {
+      props.onReloadClick();
+    } else {
+      location.reload();
+    }
+  };
 
   /**
    * Render
@@ -32,7 +39,7 @@ export const Reload: React.FC<ReloadProps> = (props) => {
   );
 
   const elClose = isCloseable && (
-    <Button style={styles.close} onClick={() => props.onClose?.()}>
+    <Button style={styles.close} onClick={() => props.onCloseClick?.()}>
       <Icons.Close />
     </Button>
   );

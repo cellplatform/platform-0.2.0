@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
 import { Root } from '.';
 
 type T = { props: t.RootProps };

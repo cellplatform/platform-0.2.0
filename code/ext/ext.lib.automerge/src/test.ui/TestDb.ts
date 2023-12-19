@@ -1,5 +1,4 @@
-import { IndexedDb, StoreIndexDb } from './common';
-import { Reload } from './Reload';
+import { IndexedDb, Reload, StoreIndexDb } from './common';
 
 export async function deleteDatabase(name: string) {
   const index = StoreIndexDb.name(name);
