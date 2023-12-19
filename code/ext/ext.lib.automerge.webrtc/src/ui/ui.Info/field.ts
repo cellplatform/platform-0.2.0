@@ -1,7 +1,7 @@
-import { InfoField } from 'ext.lib.automerge';
 import { component, module, moduleVerify } from './field.Module';
-import { peer } from './field.Peer';
 import { network } from './field.Network';
+import { peer } from './field.Peer';
+import { repo } from './field.Repo';
 
 export const Field = {
   module,
@@ -9,7 +9,5 @@ export const Field = {
   component,
   peer,
   network,
-  get repo() {
-    return InfoField.repo;
-  },
+  repo,
 } as const;
