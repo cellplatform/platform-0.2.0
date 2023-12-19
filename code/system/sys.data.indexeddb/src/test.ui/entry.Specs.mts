@@ -6,7 +6,7 @@ export const Specs = {
   [`${ns}.tests`]: () => import('./-TestRunner'),
   [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
   [`${ns}.ui.Dev.Reload`]: () => import('../ui/ui.Dev.Reload/-SPEC'),
-  [`${ns}.ui.Dev.DbList`]: () => import('../ui/ui.Dev.DbList/-SPEC'),
+  [`${ns}.ui.Dev.Delete`]: () => import('../ui/ui.Dev.Delete/-SPEC'),
 };
 
 export default Specs;

@@ -14,6 +14,7 @@ export { IndexedDb } from './IndexedDb';
  */
 export { Info } from './ui/ui.Info';
 export { DevReload } from './ui/ui.Dev.Reload';
+export { DevDelete } from './ui/ui.Dev.Delete';
 
 /**
  * Dev
