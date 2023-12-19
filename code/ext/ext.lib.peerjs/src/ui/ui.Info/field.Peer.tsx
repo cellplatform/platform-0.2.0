@@ -40,7 +40,6 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
     const peers = peer.get.conn.remotes;
     Object.keys(peers).forEach((remoteid) => {
       remotes.push({
-        // indent: 5,
         label: (
           <div {...styles.center}>
             <Icons.Person size={14} style={styles.iconLeft} flipX={true} />

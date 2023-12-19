@@ -91,12 +91,12 @@ export default Dev.describe(name, (e) => {
         const styles = {
           base: css({}),
           obj: css({ margin: 8 }),
-          connector: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
+          conn: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
         };
         return (
           <div {...styles.base}>
             <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
-            <Connector peer={remote} style={styles.connector} />
+            <Connector peer={remote} style={styles.conn} />
           </div>
         );
       });
