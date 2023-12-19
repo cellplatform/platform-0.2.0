@@ -1,25 +1,25 @@
 import { RepoList } from '.';
-import { DevReload, Dev, Doc, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
+import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.ui.Info';
 
 type T = {
   props: t.RepoListProps;
   debug: { reload?: boolean; cancelDelete?: boolean };
 };
-const name = RepoList.displayName ?? '';
+const name = RepoList.displayName ?? 'Unknown';
 const initial: T = { props: {}, debug: {} };
 
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
 
-  let model: t.RepoListModel;
+  let repo: t.RepoListModel;
   let ref: t.RepoListRef;
   let active: t.RepoListActiveChangedEventArgs | undefined;
 
   type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'> &
     Pick<T['debug'], 'cancelDelete'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.ui.RepoList');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     behaviors: RepoList.DEFAULTS.behaviors.default,
     newlabel: RepoList.DEFAULTS.newlabel,
@@ -30,7 +30,7 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    model = await RepoList.model(store, {
+    repo = await RepoList.model(store, {
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
       onActiveChanged: (e) => {
@@ -38,7 +38,7 @@ export default Dev.describe(name, async (e) => {
         active = e;
       },
     });
-    ref = RepoList.Ref(model);
+    ref = RepoList.Ref(repo);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
@@ -48,9 +48,9 @@ export default Dev.describe(name, async (e) => {
     });
 
     const events = {
-      list: model.list.state.events(),
-      index: model.index.events(),
-      repo: model.events(),
+      list: repo.list.state.events(),
+      index: repo.index.events(),
+      repo: repo.events(),
     };
 
     const redraw$ = rx.merge(events.list.$, events.list.active.$);
@@ -77,14 +77,14 @@ export default Dev.describe(name, async (e) => {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
-        return <RepoList {...e.state.props} list={model} renderCount={renderCount} />;
+        return <RepoList {...e.state.props} model={repo} renderCount={renderCount} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <SpecInfo model={model} />);
+    dev.row((e) => <SpecInfo model={repo} name={'<RepoList>'} />);
 
     dev.hr(5, 20);
 
@@ -138,16 +138,16 @@ export default Dev.describe(name, async (e) => {
 
       dev.button('create: doc', async (e) => {
         type T = { msg?: string };
-        await model.store.doc.getOrCreate<T>((d) => null);
+        await repo.store.doc.getOrCreate<T>((d) => null);
       });
       dev.button(['create: doc ("ephemeral")', 'filtered out'], async (e) => {
         type D = t.DocWithMeta;
-        await model.store.doc.getOrCreate<D>((d) => {
+        await repo.store.doc.getOrCreate<D>((d) => {
           Doc.Meta.get(d, { mutate: true, initial: { ephemeral: true } });
         });
       });
       dev.button('delete: doc (last)', async (e) => {
-        const index = model.index;
+        const index = repo.index;
         const docs = index.doc.current.docs.filter((m) => !m.meta?.ephemeral);
         const last = docs[docs.length - 1];
         const uri = last?.uri;
@@ -158,7 +158,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button('mutate: rename first', (e) => {
-        model.index.doc.change((d) => {
+        repo.index.doc.change((d) => {
           const first = d.docs.find((m) => !m.meta?.ephemeral);
           if (first) first.name = `renamed: ${slug()}`;
         });
@@ -178,10 +178,10 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        'model:list': model.list.state.current,
+        'model:list': repo.list.state.current,
         db: storage,
-        'db:index': `${model.index.db.name}[${model.index.total()}]`,
-        'db:index.doc': model.index.doc.toObject(),
+        'db:index': `${repo.index.db.name}[${repo.index.total()}]`,
+        'db:index.doc': repo.index.doc.toObject(),
         'active:focus': !!active?.focused,
         'active:item': active?.item || undefined,
       };

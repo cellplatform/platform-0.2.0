@@ -4,7 +4,7 @@ import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.RepoListProps> = (props) => {
   const { tabIndex = DEFAULTS.tabIndex } = props;
-  const list = Wrangle.listState(props.list);
+  const list = Wrangle.listState(props.model);
   const behaviors = Wrangle.listBehaviors(props);
 
   const renderers = Renderers.init(props);

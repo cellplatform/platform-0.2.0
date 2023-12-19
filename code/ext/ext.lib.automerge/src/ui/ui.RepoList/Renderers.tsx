@@ -5,7 +5,7 @@ export const Renderers = {
    * Initilise the router for the <Component>'s that render within an item.
    */
   init(props: t.RepoListProps): t.RepoItemRenderers {
-    const { list, behaviors = DEFAULTS.behaviors.default } = props;
+    const { model, behaviors = DEFAULTS.behaviors.default } = props;
 
     return {
       label(e) {
@@ -57,7 +57,7 @@ export const Renderers = {
 
           if (behaviors.includes('Shareable')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
-            const item = Wrangle.indexItem(list, data.uri);
+            const item = Wrangle.indexItem(model, data.uri);
             if (item?.shared) {
               const opacity = item.shared.current ? 1 : e.focused ? 0.4 : 0.2;
               return <Icons.Antenna {...helpers.icon(e, 16)} opacity={opacity} />;

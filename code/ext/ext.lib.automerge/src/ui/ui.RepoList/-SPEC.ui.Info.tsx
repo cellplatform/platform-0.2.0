@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-
 import { Info } from '../ui.Info';
 import { type t } from './common';
 
 export type SpecInfoProps = {
   model: t.RepoListModel;
+  name: string;
   style?: t.CssValue;
 };
 
 export const SpecInfo: React.FC<SpecInfoProps> = (props) => {
-  const { model } = props;
+  const { model, name } = props;
   const { store, index } = model;
 
   const [, setRedraw] = useState(0);
@@ -27,7 +27,7 @@ export const SpecInfo: React.FC<SpecInfoProps> = (props) => {
       fields={['Module', 'Repo', 'Component']}
       data={{
         repo: { store, index },
-        component: { name: '<RepoList>' },
+        component: { name },
       }}
     />
   );

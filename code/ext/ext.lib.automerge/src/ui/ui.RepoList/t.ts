@@ -15,7 +15,7 @@ export type RepoListActionCtx = { kind: 'Share' | 'Delete' };
  * <Component>
  */
 export type RepoListProps = {
-  list?: t.RepoListModel;
+  model?: t.RepoListModel;
   behaviors?: t.RepoListBehavior[];
   newlabel?: string;
   renderCount?: t.RenderCountProps;
