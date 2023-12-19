@@ -1,7 +1,7 @@
 import type { t } from './common';
 
-import type { InfoData as AutomergeData } from 'ext.lib.automerge/src/types';
-import type { InfoData as PeerData } from 'ext.lib.peerjs/src/types';
+import type { InfoData as AutomergeInfoData } from 'ext.lib.automerge/src/types';
+import type { InfoData as PeerInfoData } from 'ext.lib.peerjs/src/types';
 
 export type InfoField =
   | 'Module'
@@ -16,8 +16,8 @@ export type InfoField =
 export type InfoData = {
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
-  peer?: PeerData['peer'];
-  repo?: AutomergeData['repo'];
+  peer?: PeerInfoData['peer'];
+  repo?: AutomergeInfoData['repo'];
   network?: t.WebrtcStore;
 };
 

@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, PeerInfo, PropList, type t } from './common';
+import { DEFAULTS, FC, PropList, type t } from './common';
 import { Field } from './field';
 import { useRedraw } from './use.Redraw';
 
@@ -14,7 +14,7 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Module.Verify', () => Field.moduleVerify())
     .field('Component', () => Field.component(data.component))
     .field('Peer', () => Field.peer(data, fields))
-    .field('Repo', () => Field.repo(data.repo))
+    .field('Repo', () => Field.repo(data, fields))
     .field('Network.Shared', () => Field.network.shared(data, fields))
     .items(fields);
 
