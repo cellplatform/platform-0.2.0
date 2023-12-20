@@ -8,7 +8,7 @@ const DEFAULTS = Info.DEFAULTS;
 /**
  * Spec
  */
-const name = Info.displayName ?? '⚠️';
+const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });

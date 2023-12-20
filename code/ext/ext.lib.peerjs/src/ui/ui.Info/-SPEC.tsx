@@ -9,7 +9,7 @@ const DEFAULTS = Info.DEFAULTS;
 /**
  * Spec
  */
-const name = Info.displayName ?? '⚠️';
+const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();

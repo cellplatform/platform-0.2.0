@@ -15,7 +15,7 @@ const DEFAULTS = Info.DEFAULTS;
  * Spec
  * https://docs.privy.io/
  */
-const name = Info.displayName ?? '⚠️';
+const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[]; selectedChain?: t.EvmChainName } & Pick<
     t.InfoProps,

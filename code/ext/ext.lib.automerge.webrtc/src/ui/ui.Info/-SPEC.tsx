@@ -9,7 +9,7 @@ const DEFAULTS = Info.DEFAULTS;
 /**
  * Spec
  */
-const name = Info.displayName ?? '⚠️';
+const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
   const self = await createEdge('Left');
   const remote = await createEdge('Right');

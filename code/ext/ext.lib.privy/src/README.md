@@ -1,4 +1,4 @@
-# ext.lib.auth.privy
+# ext.lib.privy
 
 Add a `.env.local` file with the following keys:
 
