@@ -1,12 +1,15 @@
 import type { t } from './common';
 
+export type PeerRepoListTarget = 'Peer' | 'RepoList';
+
 /**
  * <Component>
  */
 export type PeerRepoListProps = {
   model?: t.RepoListModel;
   network?: t.WebrtcStore;
-  focusOnLoad?: boolean;
+  focusOnLoad?: PeerRepoListTarget;
+  shareable?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;

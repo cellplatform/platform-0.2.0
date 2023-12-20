@@ -1,5 +1,5 @@
-import { PeerRepoList } from '.';
-import { COLORS, Color, Dev, Doc, PeerUI, TestDb, css, type t } from '../../test.ui';
+import { DEFAULTS, PeerRepoList } from '.';
+import { COLORS, Color, Dev, Doc, PeerUI, Pkg, TestDb, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
 type T = { props: t.PeerRepoListProps; debug: { reload?: boolean } };
@@ -20,6 +20,12 @@ export default Dev.describe(name, async (e) => {
   let model: t.RepoListModel;
   let network: t.WebrtcStore;
 
+  type LocalStore = Pick<t.PeerRepoListProps, 'shareable'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    shareable: DEFAULTS.shareable,
+  });
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -28,7 +34,10 @@ export default Dev.describe(name, async (e) => {
     network = self.network;
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.props.shareable = local.shareable;
+      d.props.focusOnLoad = 'Peer';
+    });
     const resetReloadClose = () => state.change((d) => (d.debug.reload = false));
 
     ctx.debug.width(330);
@@ -60,6 +69,18 @@ export default Dev.describe(name, async (e) => {
           data={{ network }}
         />
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.shareable);
+        btn
+          .label((e) => `shareable`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.shareable = Dev.toggle(d.props, 'shareable'))));
+      });
     });
 
     dev.hr(5, 20);

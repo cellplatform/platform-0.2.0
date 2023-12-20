@@ -1,4 +1,4 @@
-import { COLORS, Color, RepoList, PeerUI, css, type t } from './common';
+import { COLORS, Color, RepoList, PeerUI, DEFAULTS, css, type t } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
@@ -25,7 +25,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elDebugLabel}
-      <RepoList model={model} behaviors={['Shareable']} />
+      <RepoList model={model} behaviors={wrangle.repolistBehaviors(props)} />
       <div {...styles.footer}>
         <PeerUI.AvatarTray
           peer={network.peer}
@@ -36,11 +36,27 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
             props.onStreamSelection?.(e);
           }}
         />
-        <PeerUI.Connector
-          peer={network.peer}
-          behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : []}
-        />
+        <PeerUI.Connector peer={network.peer} behaviors={wrangle.peerBehaviors(props)} />
       </div>
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  repolistBehaviors(props: t.PeerRepoListProps): t.RepoListBehavior[] {
+    const { shareable = DEFAULTS.shareable } = props;
+    const res: t.RepoListBehavior[] = [];
+    if (shareable) res.push('Shareable');
+    if (props.focusOnLoad === 'RepoList') res.push('Focus.OnLoad');
+    return res;
+  },
+
+  peerBehaviors(props: t.PeerRepoListProps) {
+    const res: t.ConnectorBehavior[] = [];
+    if (props.focusOnLoad === 'Peer') res.push('Focus.OnLoad');
+    return res;
+  },
+} as const;

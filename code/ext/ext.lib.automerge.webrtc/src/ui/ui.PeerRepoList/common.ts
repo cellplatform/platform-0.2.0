@@ -6,4 +6,5 @@ export * from '../common';
  */
 export const DEFAULTS = {
   displayName: 'PeerRepoList',
+  shareable: true,
 } as const;
