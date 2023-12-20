@@ -40,7 +40,15 @@ describe('Store (base)', async () => {
     });
 
     describe('existence', () => {
-      it('exists: false', async () => {
+      it('exists: true', async () => {
+        const store = Store.init();
+        const doc = await store.doc.getOrCreate<D>(initial);
+        const exists = await store.doc.exists(doc.uri);
+        expect(exists).to.eql(true);
+        store.dispose();
+      });
+
+      it('exists: false (404)', async () => {
         const store = Store.init();
         const test = async (uri: any, expected: boolean) => {
           const exists = await store.doc.exists(uri, { timeout: 10 });
@@ -57,11 +65,18 @@ describe('Store (base)', async () => {
         store.dispose();
       });
 
-      it('exists:true', async () => {
+      it('exists: false (deleted)', async () => {
         const store = Store.init();
         const doc = await store.doc.getOrCreate<D>(initial);
-        const exists = await store.doc.exists(doc.uri);
-        expect(exists).to.eql(true);
+        const test = async (expected: boolean) => {
+          const exists = await store.doc.exists(doc.uri);
+          expect(exists).to.eql(expected, doc.uri);
+        };
+
+        await test(true);
+        doc.handle.delete();
+        await test(false);
+
         store.dispose();
       });
     });
@@ -125,6 +140,18 @@ describe('Store (base)', async () => {
         const doc1 = await generator();
         const doc2 = await generator(`${doc1.uri}`);
         expect(doc1.uri).to.eql(doc2.uri);
+      });
+    });
+
+    describe('delete', () => {
+      it('delete: doc.handle.state | ready → deleted', async () => {
+        const doc = await generator();
+        expect(doc.handle.state).to.eql('ready');
+        expect(await store.doc.exists(doc.uri)).to.eql(true);
+
+        doc.handle.delete();
+        expect(doc.handle.state).to.eql('deleted');
+        expect(await store.doc.exists(doc.uri)).to.eql(false);
       });
     });
   });

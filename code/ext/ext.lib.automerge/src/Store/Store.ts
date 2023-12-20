@@ -58,7 +58,7 @@ export const Store = {
          */
         async exists(uri?: Uri, options: Options = {}) {
           const res = await api.doc.get(uri, options);
-          return Boolean(res);
+          return !!res;
         },
       },
 
