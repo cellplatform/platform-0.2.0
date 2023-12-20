@@ -1,3 +1,5 @@
+export type * from './t.Automerge';
+
 /**
  * @external
  */

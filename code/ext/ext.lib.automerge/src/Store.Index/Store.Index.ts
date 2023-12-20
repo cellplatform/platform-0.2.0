@@ -1,4 +1,3 @@
-import type { DeleteDocumentPayload, DocumentPayload } from '@automerge/automerge-repo';
 import { Data, Delete, DocUri, Is, R, type t } from './common';
 
 import { Doc } from '../Store.Doc';
@@ -51,13 +50,13 @@ export const StoreIndex = {
     /**
      * Store the URI to new documents in the index.
      */
-    const onDocument = async (e: DocumentPayload) => {
+    const onDocument = async (e: t.DocumentPayload) => {
       if (!e.isNew) return;
       const uri = e.handle.url;
       await api.add({ uri });
     };
 
-    const onDeleteDocument = async (e: DeleteDocumentPayload) => {
+    const onDeleteDocument = async (e: t.DeleteDocumentPayload) => {
       const uri = DocUri.automerge(e.documentId);
       api.remove(uri);
     };
