@@ -79,7 +79,7 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Icons.Wallet size={16} opacity={0.8} offset={[0, 0]} style={styles.wallet} />
+      <Icons.Wallet size={16} opacity={enabled ? 0.8 : 0.2} offset={[0, 0]} style={styles.wallet} />
       {elAddress}
       <div {...styles.kind}>{Wrangle.walletClientType(wallet)}</div>
       {elClose || elBalance}
