@@ -33,6 +33,7 @@ export const View: React.FC<ViewProps> = (props) => {
         model={props.model}
         network={props.network}
         onStreamSelection={props.onStreamSelection}
+        focusOnLoad={true}
       />
     </div>
   );
