@@ -47,7 +47,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row(async (e) => {
-      const { Auth } = await import('ext.lib.auth.privy');
+      const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
           data={{ provider: Auth.Env.provider }}

@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { AuthEnv, Delete, Dev, Hash, Time, type t } from '../../test.ui';
+import { AuthEnv, Delete, Dev, Hash, Pkg, Time, type t } from '../../test.ui';
 
 type T = {
   props: t.InfoProps;
@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
     t.InfoProps,
     'enabled' | 'useAuthProvider' | 'clipboard'
   >;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.auth.privy.Info');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,

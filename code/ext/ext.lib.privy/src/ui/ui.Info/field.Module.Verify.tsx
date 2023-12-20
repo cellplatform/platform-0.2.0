@@ -7,7 +7,7 @@ export function moduleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.auth.privy.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.lib.privy.tests');
       return url.href;
     },
 

@@ -1,5 +1,5 @@
 {
-  "name": "ext.lib.auth.privy",
+  "name": "ext.lib.privy",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,

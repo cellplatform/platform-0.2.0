@@ -60,7 +60,7 @@ export default Dev.describe('TestRunner', (e) => {
         .run({ ctx })
         .enabled(() => Boolean(privy?.authenticated))
         .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
-        .localstore('dev:ext.lib.auth.privy')
+        .localstore('dev:ext.lib.privy')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
