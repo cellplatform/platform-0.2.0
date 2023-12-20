@@ -1,4 +1,4 @@
-import { Button, type t } from './common';
+import { Icons, css, Button, type t } from './common';
 
 export function refresh(args: {
   privy: t.PrivyInterface;
@@ -11,11 +11,23 @@ export function refresh(args: {
   const { privy, data, fields } = args;
   let enabled = args.enabled;
   if (!privy.ready) enabled = false;
+  if (!privy.authenticated) return undefined;
 
   const onClick = () => args.refresh?.();
 
+  const styles = {
+    center: css({ Flex: 'x-center-center' }),
+  };
+
   return {
     label: '',
-    value: <Button onClick={onClick}>Refresh</Button>,
+    value: (
+      <Button onClick={onClick} enabled={enabled}>
+        <div {...styles.center}>
+          <Icons.Refresh size={16} offset={[-1, -1]} />
+          <div>{'refresh'}</div>
+        </div>
+      </Button>
+    ),
   };
 }

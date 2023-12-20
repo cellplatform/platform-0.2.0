@@ -1,4 +1,4 @@
-import { MdClose, MdWallet } from 'react-icons/md';
+import { MdClose, MdRefresh, MdWallet } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -9,4 +9,5 @@ const icon = Icon.renderer;
 export const Icons = {
   Wallet: icon(MdWallet),
   Close: icon(MdClose),
+  Refresh: icon(MdRefresh),
 } as const;
