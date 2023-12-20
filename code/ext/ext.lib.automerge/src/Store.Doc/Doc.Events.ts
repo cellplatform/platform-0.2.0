@@ -10,10 +10,14 @@ export function eventsFactory<T>(
   type E = t.DocEvents<T>;
   const handle = doc.handle;
   const uri = handle.url;
+
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
+  dispose$.subscribe(() => {
+    unlisten();
+    fire$?.complete();
+  });
 
-  dispose$.subscribe(() => fire$?.complete());
   const fire$ = rx.subject<t.DocEvent<T>>();
   const $ = fire$.pipe(rx.takeUntil(dispose$));
   const fire = (e: t.DocEvent<T>) => fire$.next(e);
@@ -29,14 +33,14 @@ export function eventsFactory<T>(
   };
 
   /**
-   * Listen
+   * Handlers.
    */
-  handle.on('change', (e) => {
+  const onChange = (e: t.DocHandleChangePayload<T>) => {
     const { doc, patches, patchInfo } = e;
     fire({ type: 'crdt:doc/Changed', payload: { uri, doc, patches, patchInfo } });
-  });
+  };
 
-  handle.on('ephemeral-message', (e) => {
+  const onEphemeralInbound = (e: t.DocHandleEphemeralMessagePayload<T>) => {
     const payload: t.DocEphemeralIn<T> = {
       direction: 'incoming',
       doc,
@@ -44,12 +48,25 @@ export function eventsFactory<T>(
       message: e.message as t.CBOR,
     };
     fire({ type: 'crdt:doc/Ephemeral:in', payload });
-  });
-  handle.on('ephemeral-message-outbound', (e) => {
+  };
+
+  const onEphemeralOutbound = (e: t.DocHandleOutboundEphemeralMessagePayload<T>) => {
     const data = e.data;
     const payload: t.DocEphemeralOut<T> = { direction: 'outgoing', doc, data };
     fire({ type: 'crdt:doc/Ephemeral:out', payload });
-  });
+  };
+
+  /**
+   * Listen.
+   */
+  handle.on('change', onChange);
+  handle.on('ephemeral-message', onEphemeralInbound);
+  handle.on('ephemeral-message-outbound', onEphemeralOutbound);
+  const unlisten = () => {
+    handle.off('change', onChange);
+    handle.off('ephemeral-message', onEphemeralInbound);
+    handle.off('ephemeral-message-outbound', onEphemeralOutbound);
+  };
 
   /**
    * API
