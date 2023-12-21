@@ -1,10 +1,13 @@
 import { DEFAULTS, type t } from './common';
+import { dataid } from './Wrangle.dataid';
 type B = t.LabelItemBehaviorKind;
 
 /**
  * Helpers
  */
 export const Wrangle = {
+  dataid,
+
   enabled(props: { enabled?: boolean; behaviors?: B[] }, ...match: B[]) {
     const { behaviors = DEFAULTS.behaviors.defaults } = props;
     return (props.enabled ?? true) && Wrangle.isUsing(behaviors, ...match);

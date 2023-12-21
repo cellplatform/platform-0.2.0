@@ -120,7 +120,7 @@ export const View: React.FC<Props> = (props) => {
   return (
     <div
       ref={ref}
-      data-id={`ListItem:${props.id || 'unknown'}`}
+      data-id={Wrangle.dataid.item(props.id)}
       {...css(styles.base, props.style)}
       tabIndex={tabIndex}
       onFocus={onFocusHandler(true)}
