@@ -11,6 +11,7 @@ export type {
   DocEphemeralOut,
   DocMeta,
   DocMetaType,
+  DocRef,
   DocRefHandle,
   DocUri,
   DocWithMeta,

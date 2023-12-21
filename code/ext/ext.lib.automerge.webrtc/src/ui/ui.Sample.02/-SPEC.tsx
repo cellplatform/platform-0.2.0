@@ -141,7 +141,7 @@ export default Dev.describe(name, async (e) => {
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
-          shared.left?.handle.broadcast(data);
+          (shared.left as t.DocRefHandle<t.CrdtShared>)?.handle.broadcast(data);
         };
 
         console.log('------------------- send ---------------------');

@@ -9,7 +9,7 @@ export const Sync = {
    */
   indexToShared(
     index: t.StoreIndexState,
-    shared: t.DocRefHandle<t.CrdtShared>,
+    shared: t.DocRef<t.CrdtShared>,
     options: { debugLabel?: string } = {},
   ) {
     const { debugLabel } = options;
@@ -33,7 +33,7 @@ export const Sync = {
    * Sync outdated changes from the [Shared] document to the [Index].
    */
   async sharedToIndex(
-    shared: t.DocRefHandle<t.CrdtShared>,
+    shared: t.DocRef<t.CrdtShared>,
     index: t.StoreIndexState,
     options: { debugLabel?: string } = {},
   ) {
