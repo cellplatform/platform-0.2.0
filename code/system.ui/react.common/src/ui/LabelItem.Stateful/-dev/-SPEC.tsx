@@ -270,6 +270,13 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.textbox((txt) => {
+        txt
+          .placeholder('sample focus textbox')
+          .onChange((e) => {})
+          .onEnter((e) => {});
+      });
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debug);
         btn
