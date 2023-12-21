@@ -34,14 +34,11 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
  */
 export type DocStore = {
   factory<T>(initial: Initial<T>): t.DocFactory<T>;
-  exists(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<boolean>;
-  get<T>(uri?: Uri, options?: { timeout?: t.Msecs }): Promise<t.DocRefHandle<T> | undefined>;
-  getOrCreate<T>(
-    initial: Initial<T>,
-    uri?: Uri,
-    options?: { timeout?: t.Msecs },
-  ): Promise<t.DocRefHandle<T>>;
+  exists(uri?: Uri, options?: TOptions): Promise<boolean>;
+  get<T>(uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T> | undefined>;
+  getOrCreate<T>(initial: Initial<T>, uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T>>;
 };
+type TOptions = { timeout?: t.Msecs };
 
 /**
  * Common meta-data object that can decorate CRDT documents
@@ -49,7 +46,4 @@ export type DocStore = {
  */
 export type DocWithMeta = { '.meta': DocMeta };
 export type DocMetaType = { name: string };
-export type DocMeta = {
-  type?: t.DocMetaType;
-  ephemeral?: boolean;
-};
+export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
