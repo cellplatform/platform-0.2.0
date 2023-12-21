@@ -43,11 +43,14 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   }, []);
 
   /**
-   * Assign identifier.
+   * Initialize the list's root DOM element.
    */
   useEffect(() => {
     const el = ref.current;
-    if (el) el.setAttribute('data-id', Wrangle.dataid.list(idRef.current));
+    if (el) {
+      el.setAttribute('data-id', Wrangle.dataid.list(idRef.current));
+      el.style.outline = 'none';
+    }
   }, [!!ref.current]);
 
   /**
