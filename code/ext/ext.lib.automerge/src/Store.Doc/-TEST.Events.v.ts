@@ -114,7 +114,7 @@ describe('Store (base)', async () => {
   });
 
   describe('deleted$', () => {
-    it('deleted$ ← via [doc.handle.delete]', async () => {
+    it('deleted$ ← via [store.doc.delete]', async () => {
       const doc = await generator();
       const events = doc.events();
 
@@ -125,7 +125,7 @@ describe('Store (base)', async () => {
       events.deleted$.subscribe((e) => fired.push(e));
 
       expect(await store.doc.exists(doc.uri)).to.eql(true);
-      doc.handle.delete();
+      await store.doc.delete(doc.uri);
       expect(await store.doc.exists(doc.uri, { timeout: 10 })).to.eql(false);
 
       expect(fired.length).to.eql(1);

@@ -16,6 +16,14 @@ export const Handle = {
       get current() {
         return handle.docSync();
       },
+      is: {
+        get ready() {
+          return handle.isReady();
+        },
+        get deleted() {
+          return handle.isDeleted();
+        },
+      },
       change(fn) {
         handle.change((d: any) => fn(d));
       },

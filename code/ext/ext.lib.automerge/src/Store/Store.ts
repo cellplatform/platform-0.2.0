@@ -40,7 +40,7 @@ export const Store = {
          */
         async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri, options: Options = {}) {
           const { timeout } = options;
-          return Doc.getOrCreate<T>(api.repo, { initial, uri, timeout, dispose$ });
+          return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
         },
 
         /**
@@ -48,9 +48,7 @@ export const Store = {
          */
         async get<T>(uri?: Uri, options: Options = {}) {
           const { timeout } = options;
-          return Is.automergeUrl(uri)
-            ? Doc.get<T>(api.repo, uri, { timeout, dispose$ })
-            : undefined;
+          return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
         },
 
         /**
@@ -59,6 +57,14 @@ export const Store = {
         async exists(uri?: Uri, options: Options = {}) {
           const res = await api.doc.get(uri, options);
           return !!res;
+        },
+
+        /**
+         * Delete the specified document.
+         */
+        async delete(uri?: Uri, options = {}) {
+          const { timeout } = options;
+          return Doc.delete({ repo, uri, timeout });
         },
       },
 

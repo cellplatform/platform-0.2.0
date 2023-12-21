@@ -15,18 +15,21 @@ export const Doc = {
   /**
    * Find the document document from the repo.
    */
-  get<T>(
-    repo: t.Repo,
-    uri: Uri,
-    options: { timeout?: t.Msecs; dispose$?: t.UntilObservable; throw?: boolean } = {},
-  ) {
+  get<T>(args: {
+    repo: t.Repo;
+    uri: Uri;
+    timeout?: t.Msecs;
+    dispose$?: t.UntilObservable;
+    throw?: boolean;
+  }) {
     type R = t.DocRefHandle<T> | undefined;
     return new Promise<R>((resolve, reject) => {
-      const { dispose$, timeout = DEFAULTS.timeout.get } = options;
+      const { repo, uri, dispose$, timeout = DEFAULTS.timeout.get } = args;
+
       const done$ = rx.subject();
       const done = (res: R) => {
         rx.done(done$);
-        if (!res && options.throw) {
+        if (!res && args.throw) {
           const err = `Failed to retrieve document for the given URI "${uri}".`;
           return reject(new Error(err));
         } else {
@@ -47,22 +50,20 @@ export const Doc = {
   /**
    * Find or initialize a new document from the repo.
    */
-  async getOrCreate<T>(
-    repo: t.Repo,
-    args: {
-      initial: t.ImmutableNext<T>;
-      uri?: Uri;
-      dispose$?: t.UntilObservable;
-      timeout?: t.Msecs;
-    },
-  ): Promise<t.DocRefHandle<T>> {
-    const { timeout, dispose$ } = args;
+  async getOrCreate<T>(args: {
+    repo: t.Repo;
+    initial: t.ImmutableNext<T>;
+    uri?: Uri;
+    dispose$?: t.UntilObservable;
+    timeout?: t.Msecs;
+  }): Promise<t.DocRefHandle<T>> {
+    const { repo, uri, timeout, dispose$ } = args;
 
     /**
      * Lookup existing URI requested.
      */
-    if (args.uri) {
-      const res = await Doc.get(repo, args.uri, { timeout, dispose$, throw: true });
+    if (uri) {
+      const res = await Doc.get({ repo, uri, timeout, dispose$, throw: true });
       return res as t.DocRefHandle<T>;
     }
 
@@ -75,5 +76,19 @@ export const Doc = {
     const ref = Handle.wrap<T>(handle, { dispose$ });
     await ref.handle.whenReady();
     return ref;
+  },
+
+  /**
+   * Delete the specified document.
+   */
+  async delete(args: { repo: t.Repo; uri?: Uri; timeout?: t.Msecs }) {
+    const { repo, uri, timeout } = args;
+    if (!uri) return false;
+
+    const exists = !!(await Doc.get({ repo, uri, timeout }));
+    if (!exists) return false;
+
+    repo.delete(uri as t.DocUri);
+    return true;
   },
 } as const;

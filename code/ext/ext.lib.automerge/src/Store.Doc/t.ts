@@ -12,7 +12,10 @@ export type DocUri = t.AutomergeUrl;
 /**
  * An immutable/observable CRDT document reference.
  */
-export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & { toObject(): T };
+export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
+  readonly is: { ready: boolean; deleted: boolean };
+  toObject(): T;
+};
 
 /**
  * A complete reference-handle to a CRDT document
@@ -37,6 +40,7 @@ export type DocStore = {
   exists(uri?: Uri, options?: TOptions): Promise<boolean>;
   get<T>(uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T> | undefined>;
   getOrCreate<T>(initial: Initial<T>, uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T>>;
+  delete(uri?: Uri, options?: TOptions): Promise<boolean>;
 };
 type TOptions = { timeout?: t.Msecs };
 

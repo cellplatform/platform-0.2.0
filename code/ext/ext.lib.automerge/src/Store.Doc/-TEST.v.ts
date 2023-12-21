@@ -30,6 +30,8 @@ describe('Store (base)', async () => {
       expect(Id.Is.slug(doc.instance)).to.eql(true);
       expect(doc.uri).to.eql(doc.handle.url);
       expect(doc.toObject()).to.eql(doc.current);
+      expect(doc.is.ready).to.eql(true);
+      expect(doc.is.deleted).to.eql(false);
     });
 
     it('toObject ← POJO', async () => {
@@ -39,7 +41,7 @@ describe('Store (base)', async () => {
       expect(doc.toObject()).to.eql({ count: { value: 0 } });
     });
 
-    describe('existence', () => {
+    describe('store.doc.exists', () => {
       it('exists: true', async () => {
         const store = Store.init();
         const doc = await store.doc.getOrCreate<D>(initial);
@@ -68,6 +70,8 @@ describe('Store (base)', async () => {
       it('exists: false (deleted)', async () => {
         const store = Store.init();
         const doc = await store.doc.getOrCreate<D>(initial);
+        expect(doc.is.deleted).to.eql(false);
+
         const test = async (expected: boolean) => {
           const exists = await store.doc.exists(doc.uri);
           expect(exists).to.eql(expected, doc.uri);
@@ -75,13 +79,14 @@ describe('Store (base)', async () => {
 
         await test(true);
         doc.handle.delete();
+        expect(doc.is.deleted).to.eql(true);
         await test(false);
 
         store.dispose();
       });
     });
 
-    describe('get', () => {
+    describe('store.doc.get', () => {
       it('get: success (document)', async () => {
         const store = Store.init();
 
@@ -89,6 +94,7 @@ describe('Store (base)', async () => {
         const doc2 = await store.doc.get<D>(doc1.uri);
         const doc3 = await store.doc.get<D>(undefined);
 
+        expect(doc1.is.ready).to.eql(true);
         expect(doc1.uri).to.eql(doc2?.uri);
         expect(doc2?.current).to.eql(doc1.current);
         expect(doc3).to.eql(undefined);
@@ -104,10 +110,12 @@ describe('Store (base)', async () => {
       });
     });
 
-    describe('getOrCreate', () => {
+    describe('store.doc.getOrCreate', () => {
       it('"ready" by default', async () => {
         const doc = await store.doc.getOrCreate(initial);
         expect(doc.handle.state).to.eql('ready');
+        expect(doc.is.ready).to.eql(true);
+        expect(doc.is.deleted).to.eql(false);
         store.dispose();
       });
 
@@ -123,7 +131,7 @@ describe('Store (base)', async () => {
       });
     });
 
-    describe('factory (generator)', () => {
+    describe('store.doc.factory (generator)', () => {
       it('different documents (generate)', async () => {
         const doc1 = await generator();
         const doc2 = await generator();
@@ -143,17 +151,31 @@ describe('Store (base)', async () => {
       });
     });
 
-    describe('delete', () => {
-      it('delete: doc.handle.state | ready → deleted', async () => {
-        const doc = await generator();
-        expect(doc.handle.state).to.eql('ready');
-        expect(doc.handle.isDeleted()).to.eql(false);
-        expect(await store.doc.exists(doc.uri)).to.eql(true);
+    describe('store.doc.delete', () => {
+      it('no URI ← false', async () => {
+        const res = await store.doc.delete(undefined, { timeout: 10 });
+        expect(res).to.eql(false);
+      });
 
-        doc.handle.delete();
-        expect(doc.handle.state).to.eql('deleted');
-        expect(doc.handle.isDeleted()).to.eql(true);
-        expect(await store.doc.exists(doc.uri)).to.eql(false);
+      it('delete ← true (success)', async () => {
+        const doc = await generator();
+        expect(doc.is.deleted).to.eql(false);
+        expect(doc.is.ready).to.eql(true);
+
+        const res = await store.doc.delete(doc.uri);
+        expect(res).to.eql(true);
+        expect(doc.is.deleted).to.eql(true);
+        expect(doc.is.ready).to.eql(false);
+      });
+
+      it('delete ← false (404, does not exist)', async () => {
+        const doc = await generator();
+        expect(doc.is.deleted).to.eql(false);
+
+        const uri = 'automerge:3Y6RQm4fUWc6Pt6SS3iShhbGcZBJ'; // NB: does not exist.
+        const res = await store.doc.delete(uri, { timeout: 10 });
+        expect(res).to.eql(false);
+        expect(doc.is.deleted).to.eql(false); // Still not deleted (ie. the URI above had nothing to do with the document).
       });
     });
   });
