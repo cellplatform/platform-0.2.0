@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.akahu',
   version: '0.0.0',
   dependencies: {
-    'akahu': '1.15.1',
+    'akahu': '1.15.2',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },

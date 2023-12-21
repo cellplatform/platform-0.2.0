@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.protocol.hats',
   version: '0.0.0',
   dependencies: {
-    '@hatsprotocol/sdk-v1-core': '0.8.0',
+    '@hatsprotocol/sdk-v1-core': '0.8.1',
     'sys.fs.indexeddb': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
