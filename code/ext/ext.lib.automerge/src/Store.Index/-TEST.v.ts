@@ -294,45 +294,34 @@ describe('StoreIndex', () => {
       store.dispose();
     });
 
-    it('[repo.delete] document automatically removed from index', async () => {
+    describe('document automatically removed from index upon delete', async () => {
       const { store, initial } = setup();
-      const index = await Store.Index.init(store);
 
-      const doc = await store.doc.getOrCreate(initial);
-      await Time.wait(0);
-      expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
-      expect(index.exists(doc.uri)).to.eql(true);
-      expect(index.total()).to.eql(1);
+      const test = async (invokeDelete: (doc: t.DocRefHandle<D>) => any) => {
+        const index = await Store.Index.init(store);
 
-      store.repo.delete(doc.uri);
-      expect(index.doc.current.docs).to.eql([]);
-      expect(index.total()).to.eql(0);
-      expect(index.exists(doc.uri)).to.eql(false);
+        const doc = await store.doc.getOrCreate(initial);
+        await Time.wait(0);
+        expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
+        expect(index.exists(doc.uri)).to.eql(true);
+        expect(index.total()).to.eql(1);
 
-      store.dispose();
-    });
+        await invokeDelete(doc);
 
-    it.skip('[handle.delete] document automatically removed from index', async () => {
-      const { store, initial } = setup();
-      const index = await Store.Index.init(store);
+        expect(index.doc.current.docs).to.eql([]);
+        expect(index.total()).to.eql(0);
+        expect(index.exists(doc.uri)).to.eql(false);
 
-      const doc = await store.doc.getOrCreate(initial);
-      await Time.wait(0);
-      expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
-      expect(index.exists(doc.uri)).to.eql(true);
-      expect(index.total()).to.eql(1);
+        store.dispose();
+      };
 
-      doc.handle.delete();
+      it('via [repo.delete]', async () => {
+        await test((doc) => store.repo.delete(doc.uri));
+      });
 
-      /**
-       * TODO 🐷
-       */
-
-      expect(index.doc.current.docs).to.eql([]);
-      expect(index.total()).to.eql(0);
-      expect(index.exists(doc.uri)).to.eql(false);
-
-      store.dispose();
+      it('via [store.doc.delete]', async () => {
+        await test((doc) => store.doc.delete(doc.uri));
+      });
     });
   });
 
