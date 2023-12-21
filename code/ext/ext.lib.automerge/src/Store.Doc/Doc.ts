@@ -37,7 +37,7 @@ export const Doc = {
       if (!Is.automergeUrl(uri)) return done(undefined);
 
       const handle = repo.find<T>(uri);
-      if (handle.state === 'deleted') return done(undefined);
+      if (handle.isDeleted()) return done(undefined);
 
       Time.until(done$).delay(timeout, () => done(undefined));
       handle.whenReady().then(() => done(Handle.wrap<T>(handle, { dispose$ })));

@@ -40,6 +40,13 @@ export function eventsFactory<T>(
     fire({ type: 'crdt:doc/Changed', payload: { uri, doc, patches, patchInfo } });
   };
 
+  const onDelete = (e: t.DocHandleDeletePayload<T>) => {
+    fire({
+      type: 'crdt:doc/Deleted',
+      payload: { uri, doc: doc.current },
+    });
+  };
+
   const onEphemeralInbound = (e: t.DocHandleEphemeralMessagePayload<T>) => {
     const payload: t.DocEphemeralIn<T> = {
       direction: 'incoming',
@@ -60,10 +67,12 @@ export function eventsFactory<T>(
    * Listen.
    */
   handle.on('change', onChange);
+  handle.on('delete', onDelete);
   handle.on('ephemeral-message', onEphemeralInbound);
   handle.on('ephemeral-message-outbound', onEphemeralOutbound);
   const unlisten = () => {
     handle.off('change', onChange);
+    handle.off('delete', onDelete);
     handle.off('ephemeral-message', onEphemeralInbound);
     handle.off('ephemeral-message-outbound', onEphemeralOutbound);
   };
@@ -74,6 +83,7 @@ export function eventsFactory<T>(
   const api: E = {
     $,
     changed$: rx.payload<t.DocChangedEvent<T>>($, 'crdt:doc/Changed'),
+    deleted$: rx.payload<t.DocDeletedEvent<T>>($, 'crdt:doc/Deleted'),
     ephemeral,
 
     /**

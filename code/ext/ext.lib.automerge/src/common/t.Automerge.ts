@@ -1,6 +1,7 @@
 export type {
   DeleteDocumentPayload,
   DocHandleChangePayload,
+  DocHandleDeletePayload,
   DocHandleEphemeralMessagePayload,
   DocHandleOutboundEphemeralMessagePayload,
   DocumentPayload,

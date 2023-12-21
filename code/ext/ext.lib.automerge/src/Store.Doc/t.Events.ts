@@ -8,6 +8,7 @@ type O = Record<string, unknown>;
 export type DocEvents<T> = t.Lifecycle & {
   readonly $: t.Observable<t.DocEvent<T>>;
   readonly changed$: t.Observable<t.DocChanged<T>>;
+  readonly deleted$: t.Observable<t.DocDeleted<T>>;
   readonly ephemeral: {
     readonly in$: t.Observable<t.DocEphemeralIn<T>>;
     readonly out$: t.Observable<t.DocEphemeralOut<T>>;
@@ -22,10 +23,10 @@ export type DocEphemeralFilter<T, M extends t.CBOR> = (e: t.DocEphemeralIn<T, M>
 /**
  * Events
  */
-export type DocEvent<T = O> = DocChangedEvent<T> | DocEphemeralEvent<T>;
+export type DocEvent<T = O> = DocChangedEvent<T> | DocDeletedEvent<T> | DocEphemeralEvent<T>;
 
 /**
- * Event: Document change
+ * Event: Document change.
  */
 export type DocChangedEvent<T> = {
   type: 'crdt:doc/Changed';
@@ -36,6 +37,18 @@ export type DocChanged<T = O> = {
   doc: T;
   patches: t.Patch[];
   patchInfo: t.PatchInfo<T>;
+};
+
+/**
+ * Event: Document deleted.
+ */
+export type DocDeletedEvent<T> = {
+  type: 'crdt:doc/Deleted';
+  payload: DocDeleted<T>;
+};
+export type DocDeleted<T = O> = {
+  uri: t.DocUri;
+  doc: T;
 };
 
 /**
