@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, ListContext, Model, rx, type t } from './common';
+import { DEFAULTS, ListContext, Model, rx, slug, type t } from './common';
 import { useListFocusController } from './use.List.Focus';
 import { useListKeyboardController } from './use.List.Keyboard';
 import { useListNavigationController } from './use.List.Navigation';
@@ -20,6 +20,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
+  const idRef = useRef(slug());
   const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
@@ -42,6 +43,14 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   }, []);
 
   /**
+   * Assign identifier.
+   */
+  useEffect(() => {
+    const el = ref.current;
+    if (el) el.setAttribute('data-id', Wrangle.dataid.list(idRef.current));
+  }, [!!ref.current]);
+
+  /**
    * Hook into event handlers passed down to the <Item>.
    */
   let handlers: t.LabelItemPropsHandlers = {};
@@ -50,7 +59,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
    * Sub-controllers.
    */
   useListFocusController({ ref, list, behaviors });
-  useListKeyboardController({ list, behaviors });
+  useListKeyboardController({ ref, list, behaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
     ref,

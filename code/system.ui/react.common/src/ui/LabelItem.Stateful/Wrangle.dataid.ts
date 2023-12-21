@@ -1,10 +1,10 @@
-import { type t } from './common';
-
 /**
- * Helpers
+ * Helpers for formatting data-id attributes.
  */
 export const dataid = {
-  item(instanceid?: string) {
-    return `ListItem:${instanceid || 'unknown'}`;
+  list: (id?: string) => dataid.format('List', id),
+  item: (id?: string) => dataid.format('ListItem', id),
+  format(ns: 'ListItem' | 'List', id?: string) {
+    return `${ns}:${id || 'unknown'}`;
   },
-};
+} as const;
