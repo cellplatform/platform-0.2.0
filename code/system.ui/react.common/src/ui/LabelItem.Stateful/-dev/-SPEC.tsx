@@ -1,6 +1,6 @@
 import { Dev, Time, Value, rx, type t } from '../../../test.ui';
 import { LabelItem } from '../../LabelItem';
-import { Sample, type SampleActionKind } from './-Sample';
+import { Sample, type SampleActionKind } from './-Sample.renderers';
 import { SampleList } from './-Sample.List';
 
 const Model = LabelItem.Model;
