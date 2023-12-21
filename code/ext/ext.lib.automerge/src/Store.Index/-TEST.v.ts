@@ -297,7 +297,7 @@ describe('StoreIndex', () => {
     describe('document automatically removed from index upon delete', async () => {
       const { store, initial } = setup();
 
-      const test = async (invokeDelete: (doc: t.DocRefHandle<D>) => any) => {
+      const test = async (invokeDelete: (doc: t.DocRef<D>) => any) => {
         const index = await Store.Index.init(store);
 
         const doc = await store.doc.getOrCreate(initial);

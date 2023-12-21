@@ -13,6 +13,7 @@ export type DocUri = t.AutomergeUrl;
  * An immutable/observable CRDT document reference.
  */
 export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
+  readonly uri: t.DocUri;
   readonly is: { ready: boolean; deleted: boolean };
   toObject(): T;
 };
@@ -21,10 +22,7 @@ export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
  * A complete reference-handle to a CRDT document
  * including the underlying automerge-repo handle.
  */
-export type DocRefHandle<T> = DocRef<T> & {
-  readonly uri: t.DocUri;
-  readonly handle: t.DocHandle<T>;
-};
+export type DocRefHandle<T> = DocRef<T> & { readonly handle: t.DocHandle<T> };
 
 /**
  * Generator function that produces a stongly-typed document
