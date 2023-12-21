@@ -13,7 +13,7 @@ type AddInput = t.StoreIndexAddParam | Uri;
 export type StoreIndexState = {
   readonly kind: 'crdt.store.index';
   readonly store: t.Store;
-  readonly doc: t.DocRefHandle<t.StoreIndex>;
+  readonly doc: t.DocRef<t.StoreIndex>;
   readonly toggleShared: t.StoreIndexToggleShared;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
   exists(uri: UriInput): boolean;

@@ -28,7 +28,7 @@ describe('Store (base)', async () => {
     it('doc', async () => {
       const doc = await generator();
       expect(Id.Is.slug(doc.instance)).to.eql(true);
-      expect(doc.uri).to.eql(doc.handle.url);
+      expect(doc.uri).to.eql((doc as t.DocRefHandle<D>).handle.url);
       expect(doc.toObject()).to.eql(doc.current);
       expect(doc.is.ready).to.eql(true);
       expect(doc.is.deleted).to.eql(false);
@@ -78,7 +78,7 @@ describe('Store (base)', async () => {
         };
 
         await test(true);
-        doc.handle.delete();
+        await store.doc.delete(doc.uri);
         expect(doc.is.deleted).to.eql(true);
         await test(false);
 
@@ -113,7 +113,7 @@ describe('Store (base)', async () => {
     describe('store.doc.getOrCreate', () => {
       it('"ready" by default', async () => {
         const doc = await store.doc.getOrCreate(initial);
-        expect(doc.handle.state).to.eql('ready');
+        expect((doc as t.DocRefHandle<D>).handle.state).to.eql('ready');
         expect(doc.is.ready).to.eql(true);
         expect(doc.is.deleted).to.eql(false);
         store.dispose();

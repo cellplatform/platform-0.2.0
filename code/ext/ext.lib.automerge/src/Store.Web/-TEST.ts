@@ -81,8 +81,11 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       const doc1 = await store.doc.getOrCreate<D>(initial);
       const doc2 = await store.doc.getOrCreate<D>(initial);
 
-      expect(doc1.handle.state).to.eql('ready');
-      expect(doc1.uri).to.eql(doc1.handle.url);
+      type H = t.DocRefHandle<D>;
+      expect((doc1 as H).handle.state).to.eql('ready');
+      expect(doc1.uri).to.eql((doc1 as H).handle.url);
+      expect(doc1.is.ready).to.eql(true);
+      expect(doc1.is.deleted).to.eql(false);
       assertCount(doc1, 0);
       assertCount(doc2, 0);
 

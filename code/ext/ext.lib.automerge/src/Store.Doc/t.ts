@@ -21,6 +21,12 @@ export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
 /**
  * A complete reference-handle to a CRDT document
  * including the underlying automerge-repo handle.
+ *
+ * NOTE:
+ *    This is not returned directly by the getter functions
+ *    so as to provide a consistent API without inconsistencies
+ *    being exposed. A DocRefHandle<T> can be cast from a DocRef<T>
+ *    when and IF you know what you're doing.
  */
 export type DocRefHandle<T> = DocRef<T> & { readonly handle: t.DocHandle<T> };
 
@@ -28,7 +34,7 @@ export type DocRefHandle<T> = DocRef<T> & { readonly handle: t.DocHandle<T> };
  * Generator function that produces a stongly-typed document
  * with a curried initial state.
  */
-export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
+export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRef<T>>;
 
 /**
  * Document access exposed from a store/repo.
@@ -36,8 +42,8 @@ export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRefHandle<T>>;
 export type DocStore = {
   factory<T>(initial: Initial<T>): t.DocFactory<T>;
   exists(uri?: Uri, options?: TOptions): Promise<boolean>;
-  get<T>(uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T> | undefined>;
-  getOrCreate<T>(initial: Initial<T>, uri?: Uri, options?: TOptions): Promise<t.DocRefHandle<T>>;
+  get<T>(uri?: Uri, options?: TOptions): Promise<t.DocRef<T> | undefined>;
+  getOrCreate<T>(initial: Initial<T>, uri?: Uri, options?: TOptions): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: TOptions): Promise<boolean>;
 };
 type TOptions = { timeout?: t.Msecs };
