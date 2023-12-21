@@ -86,7 +86,7 @@ describe('StoreIndex', () => {
     });
   });
 
-  describe('methods: add / remove / exists', () => {
+  describe('method: add', () => {
     it('add', async () => {
       const { store } = setup();
       const index = await Store.index(store);
@@ -177,28 +177,10 @@ describe('StoreIndex', () => {
 
       store.dispose();
     });
+  });
 
-    it('exists', async () => {
-      const { store } = setup();
-      const index = await Store.index(store);
-
-      expect(index.exists(A)).to.eql(false);
-      expect(index.exists([A, B, C])).to.eql(false);
-
-      await index.add(A);
-      await index.add(B);
-
-      expect(index.exists(A)).to.eql(true);
-      expect(index.exists([A, B])).to.eql(true);
-
-      expect(index.exists([A, B, C])).to.eql(false);
-      expect(index.exists([C])).to.eql(false);
-      expect(index.exists([])).to.eql(false);
-
-      store.dispose();
-    });
-
-    it('remove', async () => {
+  describe('method: remove', () => {
+    it('sequence', async () => {
       const { store } = setup();
       const index = await Store.index(store);
 
@@ -230,20 +212,62 @@ describe('StoreIndex', () => {
     });
   });
 
-  describe('method: "add" (auto syncs with repo)', () => {
+  describe('method: exists', () => {
+    it('single URI', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      expect(index.exists(A)).to.eql(false);
+      expect(index.exists(B)).to.eql(false);
+
+      await index.add(A);
+
+      expect(index.exists(A)).to.eql(true);
+      expect(index.exists(B)).to.eql(false);
+
+      await index.add(B);
+
+      expect(index.exists(A)).to.eql(true);
+      expect(index.exists(B)).to.eql(true);
+
+      store.dispose();
+    });
+
+    it('multiple URIs', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+
+      expect(index.exists([A])).to.eql(false);
+      expect(index.exists([A, B, C])).to.eql(false);
+
+      await index.add(A);
+      await index.add(B);
+
+      expect(index.exists([A])).to.eql(true);
+      expect(index.exists([A, B])).to.eql(true);
+
+      expect(index.exists([A, B, C])).to.eql(false);
+      expect(index.exists([C])).to.eql(false);
+      expect(index.exists([])).to.eql(false);
+
+      store.dispose();
+    });
+  });
+
+  describe('auto syncing index with repo (via events)', () => {
     it('new documents automatically added to index', async () => {
       const { store, initial } = setup();
       const index = await Store.index(store);
       expect(index.total()).to.eql(0);
 
-      const sample = await store.doc.getOrCreate(initial);
+      const doc = await store.doc.getOrCreate(initial);
       await Time.wait(0);
-      expect(Doc.Meta.exists(sample)).to.eql(false);
-      expect(index.exists(sample.uri)).to.eql(true);
+      expect(Doc.Meta.exists(doc)).to.eql(false);
+      expect(index.exists(doc.uri)).to.eql(true);
       expect(index.total()).to.eql(1);
 
       const entry = index.doc.current.docs[0];
-      expect(entry.uri).to.eql(sample.uri);
+      expect(entry.uri).to.eql(doc.uri);
       expect(entry.meta).to.eql(undefined);
 
       store.dispose();
@@ -270,20 +294,43 @@ describe('StoreIndex', () => {
       store.dispose();
     });
 
-    it('deleted documents automatically removed from index', async () => {
+    it('[repo.delete] document automatically removed from index', async () => {
       const { store, initial } = setup();
       const index = await Store.Index.init(store);
 
-      const sample = await store.doc.getOrCreate(initial);
+      const doc = await store.doc.getOrCreate(initial);
       await Time.wait(0);
-      expect(index.doc.current.docs[0].uri).to.eql(sample.uri);
-      expect(index.exists(sample.uri)).to.eql(true);
+      expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
+      expect(index.exists(doc.uri)).to.eql(true);
       expect(index.total()).to.eql(1);
 
-      store.repo.delete(sample.uri);
+      store.repo.delete(doc.uri);
       expect(index.doc.current.docs).to.eql([]);
       expect(index.total()).to.eql(0);
-      expect(index.exists(sample.uri)).to.eql(false);
+      expect(index.exists(doc.uri)).to.eql(false);
+
+      store.dispose();
+    });
+
+    it.skip('[handle.delete] document automatically removed from index', async () => {
+      const { store, initial } = setup();
+      const index = await Store.Index.init(store);
+
+      const doc = await store.doc.getOrCreate(initial);
+      await Time.wait(0);
+      expect(index.doc.current.docs[0].uri).to.eql(doc.uri);
+      expect(index.exists(doc.uri)).to.eql(true);
+      expect(index.total()).to.eql(1);
+
+      doc.handle.delete();
+
+      /**
+       * TODO 🐷
+       */
+
+      expect(index.doc.current.docs).to.eql([]);
+      expect(index.total()).to.eql(0);
+      expect(index.exists(doc.uri)).to.eql(false);
 
       store.dispose();
     });
