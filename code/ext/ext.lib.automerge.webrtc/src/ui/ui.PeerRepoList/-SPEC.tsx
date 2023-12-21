@@ -36,7 +36,10 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.shareable = local.shareable;
+
+      // Focus behavior (sample).
       d.props.focusOnLoad = 'Peer';
+      d.props.focusOnArrowKey = 'RepoList';
     });
     const resetReloadClose = () => state.change((d) => (d.debug.reload = false));
 
@@ -47,12 +50,11 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const width = 250;
-        if (e.state.debug.reload) {
+        const { props, debug } = e.state;
+        if (debug.reload) {
           return <TestDb.DevReload style={{ width }} onCloseClick={resetReloadClose} />;
         } else {
-          return (
-            <PeerRepoList {...e.state.props} model={model} network={network} style={{ width }} />
-          );
+          return <PeerRepoList {...props} model={model} network={network} style={{ width }} />;
         }
       });
   });

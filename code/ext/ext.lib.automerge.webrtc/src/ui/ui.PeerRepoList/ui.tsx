@@ -51,12 +51,14 @@ const wrangle = {
     const res: t.RepoListBehavior[] = [];
     if (shareable) res.push('Shareable');
     if (props.focusOnLoad === 'RepoList') res.push('Focus.OnLoad');
+    if (props.focusOnArrowKey === 'RepoList') res.push('Focus.OnArrowKey');
     return res;
   },
 
   peerBehaviors(props: t.PeerRepoListProps) {
     const res: t.ConnectorBehavior[] = [];
     if (props.focusOnLoad === 'Peer') res.push('Focus.OnLoad');
+    if (props.focusOnArrowKey === 'Peer') res.push('Focus.OnArrowKey');
     return res;
   },
 } as const;

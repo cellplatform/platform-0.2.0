@@ -9,6 +9,7 @@ export type PeerRepoListProps = {
   model?: t.RepoListModel;
   network?: t.WebrtcStore;
   focusOnLoad?: PeerRepoListTarget;
+  focusOnArrowKey?: PeerRepoListTarget;
   shareable?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;
