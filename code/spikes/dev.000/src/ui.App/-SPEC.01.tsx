@@ -52,7 +52,6 @@ export default Dev.describe(name, async (e) => {
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
-          data={{ provider: Auth.Env.provider }}
           fields={[
             'Auth.Login',
             'Id.User',
@@ -61,6 +60,7 @@ export default Dev.describe(name, async (e) => {
             'Wallet.List',
             'Refresh',
           ]}
+          data={{ provider: Auth.Env.provider }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
         />
       );
@@ -73,7 +73,11 @@ export default Dev.describe(name, async (e) => {
         <PeerRepoList.Info
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-          data={{ network, repo: model }}
+          data={{
+            network,
+            repo: model,
+            shared: { json: { expand: { level: 1 } } },
+          }}
         />
       );
     });
