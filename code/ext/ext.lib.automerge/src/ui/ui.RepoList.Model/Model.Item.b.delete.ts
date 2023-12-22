@@ -52,21 +52,15 @@ export function deleteBehavior(args: Args) {
       redraw();
     },
 
-    invoke() {
+    async invoke() {
       const uri = getData().uri;
       if (!Delete.is.pending || !uri) return;
 
       const { position } = Wrangle.Item.get(ctx, item);
       const { focused } = list.state.current;
 
-      /**
-       * TODO 🐷
-       * - archive concept (rather than had delete)
-       */
-      console.warn('TODO 🐷: archive concept (rather than hard delete)');
-
       // Delete the item from the [Index].
-      index.remove(uri);
+      await store.doc.delete(uri);
       Time.delay(0, () => list.dispatch.select(position.index, focused));
 
       // Fire after-event.
