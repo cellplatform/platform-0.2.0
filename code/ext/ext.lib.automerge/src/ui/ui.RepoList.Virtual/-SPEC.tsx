@@ -16,7 +16,7 @@ export default Dev.describe(name, (e) => {
   const storage = TestDb.Spec.name;
   let model: t.RepoListModel;
 
-  type LocalStore = Pick<t.RepoListProps, 'behaviors'>;
+  type LocalStore = Pick<t.RepoListModel, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     behaviors: RepoListVirtual.DEFAULTS.behaviors.default,
@@ -30,9 +30,7 @@ export default Dev.describe(name, (e) => {
     model = await RepoListVirtual.model(store, {});
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.props.behaviors = local.behaviors;
-    });
+    await state.change((d) => {});
 
     ctx.debug.width(330);
     ctx.subject
@@ -57,10 +55,10 @@ export default Dev.describe(name, (e) => {
     dev.row((e) => {
       return (
         <RepoListVirtual.Config
-          selected={e.state.props.behaviors}
+          selected={local.behaviors}
           onChange={(e) => {
-            state.change((d) => (d.props.behaviors = e.next));
-            local.behaviors = e.next;
+            local.behaviors = e.next || [];
+            dev.redraw();
           }}
         />
       );
