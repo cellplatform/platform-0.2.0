@@ -10,7 +10,7 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const self = await createEdge('Left');
+  const self = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable']);
   const remote = await createEdge('Right');
   const peer = {
     self: self.network.peer,
@@ -20,10 +20,10 @@ export default Dev.describe(name, async (e) => {
   let model: t.RepoListModel;
   let network: t.WebrtcStore;
 
-  type LocalStore = Pick<t.PeerRepoListProps, 'shareable'>;
+  type LocalStore = Pick<t.PeerRepoListProps, 'focusOnLoad'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    shareable: DEFAULTS.shareable,
+    focusOnLoad: DEFAULTS.focusPeerOnLoad,
   });
 
   e.it('ui:init', async (e) => {
@@ -35,11 +35,7 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.shareable = local.shareable;
-
-      // Focus behavior (sample).
-      d.props.focusOnLoad = 'Peer';
-      d.props.focusOnArrowKey = 'RepoList';
+      d.props.focusOnLoad = local.focusOnLoad;
     });
     const resetReloadClose = () => state.change((d) => (d.debug.reload = false));
 
@@ -77,11 +73,13 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.shareable);
+        const value = (state: T) => Boolean(state.props.focusOnLoad);
         btn
-          .label((e) => `shareable`)
+          .label((e) => `focusOnLoad`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.shareable = Dev.toggle(d.props, 'shareable'))));
+          .onClick((e) => {
+            e.change((d) => (local.focusOnLoad = Dev.toggle(d.props, 'focusOnLoad')));
+          });
       });
     });
 
