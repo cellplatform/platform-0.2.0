@@ -2,10 +2,12 @@ import { COLORS, DEFAULTS, Data, DocUri, Hash, Icons, LabelItem, css, type t } f
 
 export const Renderers = {
   /**
-   * Initilise the router for the <Component>'s that render within an item.
+   * Initilise the router for the <Component>'s
+   * that render together to compse a single list-item.
    */
   init(props: t.RepoListProps): t.RepoItemRenderers {
-    const { model, behaviors = DEFAULTS.behaviors.default } = props;
+    const { model } = props;
+    const behaviors = model?.behaviors ?? DEFAULTS.behaviors.default;
 
     return {
       label(e) {
@@ -43,7 +45,7 @@ export const Renderers = {
         }
 
         if (e.kind === 'Item:Right' && data.kind === 'Doc') {
-          if (data.pending?.action === 'Delete') {
+          if (data.pending?.action === 'Delete' && behaviors.includes('Deletable')) {
             e.set.ctx<t.RepoListActionCtx>({ kind: 'Delete' });
             return (
               <LabelItem.Button

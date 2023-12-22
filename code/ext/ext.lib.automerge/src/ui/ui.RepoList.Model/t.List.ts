@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Shareable' | 'Deletable';
+
 /**
  * Model: List
  */
@@ -12,6 +14,7 @@ export type RepoListModel = t.Lifecycle & {
   list: { state: t.RepoListState; dispatch: t.LabelListDispatch };
   filter: t.StoreIndexFilter;
   handlers: t.RepoListHandlers;
+  behaviors: t.RepoListBehavior[];
   events(dispose$?: t.UntilObservable): t.RepoListEvents;
 };
 

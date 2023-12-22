@@ -6,7 +6,11 @@ import { listRedrawBehavior } from './Model.List.b.redraw';
 import { listSelectionBehavior } from './Model.List.b.selection';
 import { DEFAULTS, Model, WebStore, StoreIndex, rx, type t } from './common';
 
-type Options = { dispose$?: t.UntilObservable; filter?: t.StoreIndexFilter } & t.RepoListHandlers;
+type Options = {
+  dispose$?: t.UntilObservable;
+  filter?: t.StoreIndexFilter;
+  behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
+} & t.RepoListHandlers;
 
 export const List = {
   /**
@@ -41,6 +45,9 @@ export const List = {
       filter,
       handlers,
       list: { state, dispatch },
+      get behaviors() {
+        return wrangle.behaviors(options);
+      },
       events: (dispose$?: t.UntilObservable) => eventsFactory({ ctx, dispose$ }),
 
       // Lifecycle.
@@ -70,5 +77,10 @@ const wrangle = {
   handlers(options: Options = {}): t.RepoListHandlers {
     const { onShareClick, onDatabaseClick, onActiveChanged } = options;
     return { onShareClick, onDatabaseClick, onActiveChanged } as const;
+  },
+
+  behaviors(options: Options = {}) {
+    const { behaviors = DEFAULTS.behaviors.default } = options;
+    return typeof behaviors === 'function' ? behaviors() : behaviors;
   },
 } as const;

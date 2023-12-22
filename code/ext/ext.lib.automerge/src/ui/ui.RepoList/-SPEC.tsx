@@ -8,6 +8,7 @@ type T = {
 };
 const name = RepoList.displayName ?? 'Unknown';
 const initial: T = { props: {}, debug: {} };
+const DEFAULTS = RepoList.DEFAULTS;
 
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
@@ -16,12 +17,14 @@ export default Dev.describe(name, async (e) => {
   let ref: t.RepoListRef;
   let active: t.RepoListActiveChangedEventArgs | undefined;
 
-  type LocalStore = Pick<t.RepoListProps, 'behaviors' | 'newlabel'> &
-    Pick<T['debug'], 'cancelDelete'>;
+  type LocalStore = Pick<t.RepoListProps, 'newlabel'> &
+    Pick<T['debug'], 'cancelDelete'> &
+    Pick<t.RepoListModel, 'behaviors'>;
+
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
-    behaviors: RepoList.DEFAULTS.behaviors.default,
-    newlabel: RepoList.DEFAULTS.newlabel,
+    behaviors: DEFAULTS.behaviors.default,
+    newlabel: DEFAULTS.newlabel,
     cancelDelete: false,
   });
 
@@ -31,6 +34,7 @@ export default Dev.describe(name, async (e) => {
 
     const store = WebStore.init({ storage });
     model = await RepoList.model(store, {
+      behaviors: () => local.behaviors || [],
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
       onActiveChanged: (e) => {
@@ -42,7 +46,6 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.behaviors = local.behaviors;
       d.props.newlabel = local.newlabel;
       d.debug.cancelDelete = local.cancelDelete;
     });
@@ -77,6 +80,7 @@ export default Dev.describe(name, async (e) => {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
+
         return <RepoList {...e.state.props} model={model} renderCount={renderCount} />;
       });
   });
@@ -86,17 +90,25 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
     dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
     dev.hr(5, 20);
-    dev.row((e) => {
-      return (
-        <RepoList.Config
-          selected={e.state.props.behaviors}
-          onChange={(e) => {
-            state.change((d) => (d.props.behaviors = e.next));
-            local.behaviors = e.next;
-          }}
-        />
-      );
+
+    dev.section((dev) => {
+      dev.row((e) => {
+        return (
+          <RepoList.Config selected={local.behaviors} onChange={(e) => setBehaviors(e.next)} />
+        );
+      });
+
+      const setBehaviors = (next?: t.RepoListBehavior[]) => {
+        local.behaviors = next || [];
+        dev.redraw();
+      };
+
+      dev.button('set: common configuration', (e) => {
+        setBehaviors(['Focus.OnArrowKey', 'Shareable', 'Deletable']);
+      });
     });
+
+    dev.hr(-1, [5, 15]);
 
     dev.textbox((txt) => {
       txt

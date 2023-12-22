@@ -18,4 +18,12 @@ export const DEFAULTS = {
   typename: Typenames.RepoList,
   filter,
   timeout: { delete: 5000 },
+  behaviors: {
+    get all(): t.RepoListBehavior[] {
+      return ['Focus.OnLoad', 'Focus.OnArrowKey', 'Shareable', 'Deletable'];
+    },
+    get default(): t.RepoListBehavior[] {
+      return [];
+    },
+  },
 } as const;

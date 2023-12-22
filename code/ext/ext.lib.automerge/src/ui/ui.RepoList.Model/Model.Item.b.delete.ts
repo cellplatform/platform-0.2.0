@@ -80,6 +80,7 @@ export function deleteBehavior(args: Args) {
   const on = (codes: string[], options: { handled?: boolean } = {}) => {
     const $ = events.item.key.$.pipe(
       rx.filter((e) => codes.includes(e.code)),
+      rx.filter(() => ctx().behaviors.includes('Deletable')),
       rx.map((e) => ({ data: getData(), key: e })),
       rx.filter((e) => e.data.kind === 'Doc'),
     );
