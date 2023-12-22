@@ -15,7 +15,9 @@ export default Dev.describe(name, async (e) => {
     storage: 'fs',
     network: [],
   });
-  const model = await RepoList.model(store);
+  const model = await RepoList.model(store, {
+    behaviors: ['Shareable', 'Deletable', 'Focus.OnArrowKey'],
+  });
   const network: t.WebrtcStore = await WebrtcStore.init(self, store, model.index, {});
 
   e.it('ui:init', async (e) => {
