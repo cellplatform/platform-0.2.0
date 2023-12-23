@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.585",
+  "version": "0.6.0",
   "type": "module",
   "sideEffects": false,
   "cell": {
