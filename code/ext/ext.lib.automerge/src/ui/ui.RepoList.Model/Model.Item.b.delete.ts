@@ -59,11 +59,14 @@ export function deleteBehavior(args: Args) {
       const { position } = Wrangle.Item.get(ctx, item);
       const { focused } = list.state.current;
 
-      // Delete the item from the [Index].
-      await store.doc.delete(uri);
-      Time.delay(0, () => list.dispatch.select(position.index, focused));
+      /**
+       * Delete the item from the [Store] and the [Index].
+       */
+      await store.doc.delete(uri); // NB: ← This should auto-delete from the Index too.
+      index.remove(uri); // NB: ← This just ensures it's removed from the index.
 
       // Fire after-event.
+      Time.delay(0, () => list.dispatch.select(position.index, focused));
       Fire.afterEvent(args);
     },
   } as const;
