@@ -1,3 +1,3 @@
 export const Specs = {
-  'main.entry.App': () => import('../ui.App/-SPEC.01'),
+  'main.000': () => import('../ui.App/-SPEC.000'),
 };
