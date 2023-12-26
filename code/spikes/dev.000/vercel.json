@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "routes": [
     {
-      "src": "/([^/]*)/?",
+      "src": "/(.*)",
       "dest": "/$1"
     }
   ]
