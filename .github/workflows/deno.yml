@@ -18,8 +18,8 @@ jobs:
           deno --version
           deno run script.deno/info.ts
 
-      - name: build modules (🐷 todo)
+      - name: build modules (🐷)
         run: deno run script.deno/build.ts
 
-      - name: run tests (🐷 todo)
+      - name: run tests (🐷)
         run: echo no-op
