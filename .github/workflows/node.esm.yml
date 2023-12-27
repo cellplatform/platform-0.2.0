@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    name: build.node
     runs-on: ubuntu-latest
     strategy:
       matrix:
