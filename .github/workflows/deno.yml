@@ -13,7 +13,10 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: deno info
+      - name: deno info 👋
         run: |
           deno --version
           deno run script.deno/hello.ts
+
+      - name: build modules
+        run: deno run script.deno/build.ts
