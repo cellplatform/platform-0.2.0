@@ -8,11 +8,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - uses: denolib/setup-deno@v2
         with:
           deno-version: v1.x
 
-      - run: |
+      - name: deno info
+        run: |
           deno --version
           deno run script.deno/hello.ts
