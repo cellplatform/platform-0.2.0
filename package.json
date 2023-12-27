@@ -62,7 +62,7 @@
     "minimist": "1.2.8",
     "monaco-editor": "0.45.0",
     "openai": "4.24.1",
-    "ora": "7.0.1",
+    "ora": "8.0.1",
     "peerjs": "1.5.2",
     "picocolors": "1.0.0",
     "pretty-bytes": "6.1.1",
