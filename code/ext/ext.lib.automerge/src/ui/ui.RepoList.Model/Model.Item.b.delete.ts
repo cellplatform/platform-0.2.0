@@ -62,8 +62,8 @@ export function deleteBehavior(args: Args) {
       /**
        * Delete the item from the [Store] and the [Index].
        */
-      await store.doc.delete(uri); // NB: ← This should auto-delete from the Index too.
       index.remove(uri); // NB: ← This just ensures it's removed from the index.
+      await store.doc.delete(uri); // NB: ← Deleting from the store should also auto-delete from the [Index] too ↑.
 
       // Fire after-event.
       Time.delay(0, () => list.dispatch.select(position.index, focused));
