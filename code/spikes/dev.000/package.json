@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.6.1",
+  "version": "0.6.9",
   "type": "module",
   "sideEffects": false,
   "cell": {
@@ -15,9 +15,9 @@
     "bundle": "ts-node-esm -T ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
-    "deploy__": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
-    "deploy": "yarn audit && yarn patch && yarn build && vc --prod",
-    "tmp": "ts-node-esm -T ./script/tmp.mts"
+    "prepare-vercel": "sh script.sh/vercel-file.sh",
+    "deploy": "yarn audit && yarn patch && yarn build && yarn prepare-vercel && vc --prod",
+    "tmp": "yarn prepare-vercel"
   },
   "dependencies": {
     "@automerge/automerge": "2.1.10",
