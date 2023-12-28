@@ -10,9 +10,9 @@
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
 (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
-- [compilation](/code/compiler/) toolchain
-- [system](/code/system/) modules
-- [system.ui](/code/system.ui/) modules
+- [compilation](/code/compiler/) toolchain (W3C standards)
+- modules: [system](/code/system/) 
+- modules: [system.ui](/code/system.ui/) 
 
 ---
 
@@ -20,8 +20,9 @@
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
 Sustained long range R&D.  
-Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.
+Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.  
 
+Whilst the author(s) have been in diverse dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, the system constains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or related so called "AI" technology). Informed, augmented, yes...but no advocation of direct human discipline and creativity.
 
 
 |     | repo                   | status
