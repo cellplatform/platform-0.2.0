@@ -102,7 +102,8 @@
     "viem": "1.21.1",
     "wagmi": "1.4.12",
     "yaml": "2.3.4",
-    "zod": "3.22.4"
+    "zod": "3.22.4",
+    "chai": "5.0.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "3.0.1",
@@ -114,7 +115,7 @@
     "@types/node": "20.10.5",
     "@types/qrcode": "1.5.5",
     "@types/ramda": "0.29.9",
-    "@types/react": "18.2.45",
+    "@types/react": "18.2.46",
     "@types/react-dom": "18.2.18",
     "@types/sanitize-html": "2.9.5",
     "@types/semver": "7.5.6",
@@ -125,7 +126,7 @@
     "@typescript-eslint/eslint-plugin": "6.16.0",
     "@typescript-eslint/parser": "6.16.0",
     "@vitejs/plugin-react": "4.2.1",
-    "chai": "4.3.10",
+    "chai": "5.0.0",
     "dotenv": "16.3.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.2",
