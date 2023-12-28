@@ -22,7 +22,7 @@
 Sustained long range R&D.  
 Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.  
 
-Whilst the author(s) have been in diverse dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, the system constains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or related so called "AI" technology). Informed, augmented, yes...but no advocation of direct human discipline and creativity.
+Whilst the author(s) have been in diverse, exploratory dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, the system contains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or related so called "AI" technology). Informed, augmented, yes...but no advocation of direct human discipline, creativity, coherence.
 
 
 |     | repo                   | status
