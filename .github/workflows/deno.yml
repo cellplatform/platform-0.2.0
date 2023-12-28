@@ -18,8 +18,14 @@ jobs:
           deno --version
           deno run script.deno/info.ts
 
+      - name: security audit (🐷)
+        run: echo TODO
+
       - name: build modules (🐷)
-        run: deno run script.deno/build.ts
+        run: deno run script.deno/build-all.ts
 
       - name: run tests (🐷)
-        run: echo no-op
+        run: echo TODO
+
+      - name: count (project stats)
+        run: echo TODO
