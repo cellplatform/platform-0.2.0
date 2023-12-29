@@ -1,7 +1,8 @@
 import { actionLeftBehavior } from './Model.Item.b.action.left';
 import { actionShareBehavior } from './Model.Item.b.action.share';
-import { newBehavior } from './Model.Item.b.new';
+import { clipboardBehavior } from './Model.Item.b.clipboard';
 import { deleteBehavior } from './Model.Item.b.delete';
+import { newBehavior } from './Model.Item.b.new';
 import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
@@ -39,6 +40,7 @@ export const ItemModel = {
     actionLeftBehavior({ ctx, item });
     actionShareBehavior({ ctx, item });
     deleteBehavior({ ctx, item });
+    clipboardBehavior({ ctx, item });
 
     /**
      * Finish up.

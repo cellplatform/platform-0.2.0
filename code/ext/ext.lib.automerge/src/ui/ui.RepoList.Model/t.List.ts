@@ -1,6 +1,11 @@
 import type { t } from './common';
 
-export type RepoListBehavior = 'Focus.OnLoad' | 'Focus.OnArrowKey' | 'Shareable' | 'Deletable';
+export type RepoListBehavior =
+  | 'Focus.OnLoad'
+  | 'Focus.OnArrowKey'
+  | 'Shareable'
+  | 'Deletable'
+  | 'Copyable';
 
 /**
  * Model: List

@@ -20,10 +20,10 @@ export const DEFAULTS = {
   timeout: { delete: 5000 },
   behaviors: {
     get all(): t.RepoListBehavior[] {
-      return ['Focus.OnLoad', 'Focus.OnArrowKey', 'Shareable', 'Deletable'];
+      return ['Focus.OnLoad', 'Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'];
     },
     get default(): t.RepoListBehavior[] {
-      return [];
+      return ['Copyable'];
     },
   },
 } as const;
