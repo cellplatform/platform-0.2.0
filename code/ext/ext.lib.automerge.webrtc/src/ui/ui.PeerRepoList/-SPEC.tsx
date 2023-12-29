@@ -10,7 +10,7 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const self = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable']);
+  const self = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
   const remote = await createEdge('Right');
   const peer = {
     self: self.network.peer,
