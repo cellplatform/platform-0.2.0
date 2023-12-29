@@ -42,7 +42,7 @@ export function clipboardBehavior(args: {
   /**
    * Behavior: Copy
    */
-  const copyClipboard = async () => {
+  const copyToClipboard = async () => {
     const data = Data.remote(item);
     const peerid = data.remoteid;
     if (!peerid || data.closePending) return;
@@ -60,9 +60,9 @@ export function clipboardBehavior(args: {
   };
 
   /**
-   * (Triggers)
+   * (Listen)
    */
-  events.cmd.clipboard.copy$.subscribe(copyClipboard);
+  events.cmd.clipboard.copy$.subscribe(copyToClipboard);
 
   events.key.$.pipe(
     rx.filter((e) => (e.is.os.mac ? e.is.meta : e.is.ctrl)),
