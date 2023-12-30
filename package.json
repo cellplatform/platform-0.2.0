@@ -112,7 +112,7 @@
     "@types/diff": "5.0.9",
     "@types/fs-extra": "11.0.4",
     "@types/minimist": "1.2.5",
-    "@types/node": "20.10.5",
+    "@types/node": "20.10.6",
     "@types/qrcode": "1.5.5",
     "@types/ramda": "0.29.9",
     "@types/react": "18.2.46",
