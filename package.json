@@ -52,7 +52,7 @@
     "dayjs": "1.11.10",
     "diff": "5.1.0",
     "execa": "8.0.1",
-    "fake-indexeddb": "5.0.1",
+    "fake-indexeddb": "5.0.2",
     "framer-motion": "10.16.16",
     "fs-extra": "11.2.0",
     "glamor-jss": "1.4.1",
