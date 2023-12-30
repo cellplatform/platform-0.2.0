@@ -13,19 +13,19 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: system info
+      - name: sys.info
         run: |
           deno --version
           deno run script.deno/info.ts
 
-      - name: security audit (🐷)
+      - name: ci.audit ← Software Supply Chain Security (🐷)
         run: echo TODO
 
-      - name: build modules (🐷)
+      - name: ci.build ← bundle modules (🐷)
         run: deno run script.deno/build-all.ts
 
-      - name: run tests (🐷)
+      - name: ci.test ← unit tests (🐷)
         run: echo TODO
 
-      - name: count (project stats)
+      - name: ci.info ← count (stats)
         run: echo TODO
