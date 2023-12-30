@@ -27,5 +27,5 @@ jobs:
       - name: ci.test ← unit tests (🐷)
         run: echo TODO
 
-      - name: ci.info ← count (stats)
+      - name: ci.info ← count (stats) 🐷
         run: echo TODO
