@@ -24,8 +24,7 @@
     "sys.fs.indexeddb": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
-    "sys.ui.react.common": "0.0.0",
-    "sys.ui.react.monaco": "0.0.0"
+    "sys.ui.react.common": "0.0.0"
   },
   "license": "MIT",
   "private": true,
