@@ -130,7 +130,8 @@ Informed, augmented, yes...but no abdication of direct human ƒ(discipline, crea
 
 <p>&nbsp;</p>
 
-![group-scape](https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png)
+<img alt="smor-model-group-scale-n-dimension-cell" src="https://github.com/cellplatform/platform-0.2.0/assets/185555/a9b360a4-14f1-470c-af07-321257c37433">
+
 
 <p>&nbsp;</p>
 
@@ -150,8 +151,10 @@ The inverse proposition also appears to be true:
 
 <p>&nbsp;</p>
 
+![smor-sys crdt-cell](https://github.com/cellplatform/platform-0.2.0/assets/185555/338a4013-2480-4167-b5fe-e3738d478285)
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/233560802-f4b2e339-bb90-40cf-b3fc-78387c1f853a.png)
+
+
 
 
 <p>&nbsp;</p>
