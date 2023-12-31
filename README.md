@@ -40,7 +40,7 @@ Informed, augmented, yes...but no abdication of direct human ƒ(discipline, crea
 
 # Philosophy: Dev
 
->> Open Systems.  
+>> Open System.  
    Open Commons.  
 
 ---
