@@ -29,7 +29,7 @@
     "yaml": "2.3.4"
   },
   "devDependencies": {
-    "@types/sanitize-html": "2.9.4",
+    "@types/sanitize-html": "2.9.5",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0"
   },

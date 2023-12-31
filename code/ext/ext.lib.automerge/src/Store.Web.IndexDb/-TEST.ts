@@ -1,10 +1,11 @@
 import { StoreIndexDb } from '.';
 import { WebStore } from '../Store.Web';
-import { IndexedDb, Test, expect, expectError } from '../test.ui';
+import { IndexedDb, Test, TestDb, expect, expectError } from '../test.ui';
 import { Is } from './common';
 
 export default Test.describe('Store.Web: IndexDb', (e) => {
-  const name = 'dev.test.IndexDb'; // NB: different name from other tests, to avoid errors when this DB is deleted.
+  e.timeout(5000);
+  const name = TestDb.Index.name; // NB: different name from other tests, to avoid errors when this DB is deleted.
   const indexName = StoreIndexDb.name(name);
   const init = () => StoreIndexDb.init(indexName);
 
@@ -51,33 +52,35 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
       });
     });
 
-    e.it('get', async (e) => {
-      const store = WebStore.init({ network: false, storage: { name } });
-      const db = await init();
-      const res = await db.get(store);
+    e.describe('get', (e) => {
+      e.it('get', async (e) => {
+        const db = await init();
+        const store = WebStore.init({ network: false, storage: { name } });
+        const res = await db.get(store);
 
-      expect(res?.dbname).to.eql(name);
-      expect(res?.dbname).to.eql(store.info.storage?.name);
-      expect(Is.automergeUrl(res?.index)).to.eql(true);
+        expect(res?.dbname).to.eql(name);
+        expect(res?.dbname).to.eql(store.info.storage?.name);
+        expect(Is.automergeUrl(res?.index)).to.eql(true);
 
-      db.dispose();
-      store.dispose();
-    });
+        db.dispose();
+        store.dispose();
+      });
 
-    e.it('exists', async (e) => {
-      const store = WebStore.init({ network: false, storage: { name } });
-      const db = await init();
+      e.it('exists', async (e) => {
+        const store = WebStore.init({ network: false, storage: { name } });
+        const db = await init();
 
-      expect(await db.exists(store)).to.eql(true);
+        expect(await db.exists(store)).to.eql(true);
 
-      const res = await db.delete(store);
-      expect(res.existed).to.eql(true);
+        const res = await db.delete(store);
+        expect(res.existed).to.eql(true);
 
-      expect(await db.exists(store)).to.eql(false);
-      expect(await db.get(store)).to.eql(undefined);
+        expect(await db.exists(store)).to.eql(false);
+        expect(await db.get(store)).to.eql(undefined);
 
-      db.dispose();
-      store.dispose();
+        db.dispose();
+        store.dispose();
+      });
     });
 
     e.it('throw: storage not enabled on repo', async (e) => {
@@ -92,19 +95,20 @@ export default Test.describe('Store.Web: IndexDb', (e) => {
 
   e.describe('name (formatting)', (e) => {
     e.it('from string', (e) => {
-      expect(StoreIndexDb.name('foo')).to.eql('foo:index');
-      expect(StoreIndexDb.name('  foo  ')).to.eql('foo:index');
-      expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:index');
+      expect(StoreIndexDb.name('foo')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('  foo  ')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('  foo:::  ')).to.eql('foo:sys');
+      expect(StoreIndexDb.name('fs')).to.eql('fs:sys');
     });
 
     e.it('from store', (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
-      expect(StoreIndexDb.name(store)).to.eql(`${name}:index`);
+      expect(StoreIndexDb.name(store)).to.eql(`${name}:sys`);
     });
 
     e.it('throw: no name', (e) => {
       const fn = () => StoreIndexDb.name('  ');
-      expect(fn).to.throw(/A root store name is required/);
+      expect(fn).to.throw(/A store name is required/);
     });
   });
 });

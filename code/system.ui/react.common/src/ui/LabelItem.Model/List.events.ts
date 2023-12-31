@@ -1,7 +1,6 @@
 import { R, mapVoid, rx, type t } from './common';
 
 type O = Record<string, unknown>;
-const noop$ = rx.subject();
 
 /**
  * Event wrapper factory.
@@ -15,11 +14,16 @@ export function events<D extends O = O>(
 
   const cmd$ = $.pipe(
     rx.distinctWhile((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-    rx.filter((e) => Boolean(e.to.cmd)),
+    rx.filter((e) => !!e.to.cmd),
     rx.map((e) => e.to.cmd!),
   );
 
   const focus$ = rx.payload<t.LabelListFocusCmd>(cmd$, 'List:Focus');
+  const active$ = $.pipe(
+    rx.map((e) => e.to),
+    rx.map(({ focused, selected }) => ({ focused: !!focused, selected })),
+    rx.distinctUntilChanged((prev, next) => R.equals(prev, next)),
+  );
 
   const api: t.LabelListEvents<D> = {
     $,
@@ -27,10 +31,15 @@ export function events<D extends O = O>(
       rx.map((e) => e.to.total),
       rx.distinctWhile((prev, next) => prev === next),
     ),
-    selected$: $.pipe(
-      rx.map((e) => e.to.selected || ''),
+    editing$: $.pipe(
+      rx.map((e) => e.to.editing || ''),
       rx.distinctWhile((prev, next) => prev === next),
     ),
+    active: {
+      $: active$,
+      selected$: active$.pipe(rx.distinctWhile((p, n) => p.selected == n.selected)),
+      focused$: active$.pipe(rx.distinctWhile((p, n) => p.focused == n.focused)),
+    },
     cmd: {
       $: cmd$,
       redraw$: rx.payload<t.LabelListRedrawCmd>(cmd$, 'List:Redraw'),
@@ -45,15 +54,25 @@ export function events<D extends O = O>(
         rx.filter((e) => !e.focus),
         mapVoid,
       ),
+      type$<T>(filter?: (e: T) => boolean) {
+        return cmd$.pipe(
+          rx.map((e) => e as T),
+          rx.filter((e) => (filter ? filter(e) : true)),
+        );
+      },
     },
 
     item(id, dispose$?: t.UntilObservable) {
-      let selected$ = api.selected$.pipe(
-        rx.takeUntil(dispose$ || noop$),
-        rx.distinctWhile((prev, next) => prev === id && next === id),
-        rx.map((next) => next === id),
+      const $ = api.active.$.pipe(rx.takeUntil(dispose$ || rx.noop$));
+      const selected$ = $.pipe(
+        rx.map((next) => next.selected === id),
+        rx.distinctWhile((prev, next) => prev === next),
       );
-      return { selected$ } as const;
+      const focused$ = $.pipe(
+        rx.map((next) => next.selected === id && next.focused),
+        rx.distinctWhile((prev, next) => prev === next),
+      );
+      return { selected$, focused$ } as const;
     },
 
     /**

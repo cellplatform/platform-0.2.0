@@ -5,12 +5,13 @@ import { Keyboard, Model, type t } from './common';
 /**
  * HOOK: Keyboard listener for various common behaviors of the list.
  */
-export function useListKeyboardController(args: {
+export function useListKeyboardController<H extends HTMLElement = HTMLDivElement>(args: {
+  ref: React.RefObject<H>;
   list: t.LabelListState;
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
 }) {
-  const { list, useBehaviors = [] } = args;
-  const useBehaviorsKinds = useBehaviors.join();
+  const { ref, list, behaviors } = args;
+  const behaviorsKinds = (behaviors || []).join();
 
   /**
    * Command: "redraw" (entire list).
@@ -20,11 +21,12 @@ export function useListKeyboardController(args: {
     const commands = Model.List.commands(list);
 
     const is = {
-      focusOnLoad: Wrangle.enabled({ useBehaviors }, 'Focus.OnLoad'),
-      focusOnArrowKey: Wrangle.enabled({ useBehaviors }, 'Focus.OnArrowKey'),
+      focusOnLoad: Wrangle.enabled({ behaviors }, 'Focus.OnLoad'),
+      focusOnArrowKey: Wrangle.enabled({ behaviors }, 'Focus.OnArrowKey'),
     };
 
-    const focusAndSelect = () => {
+    const focusAndSelect = (force = false) => {
+      if (!force && focusedElsewhere(ref)) return;
       if (!list.current.selected) commands.select(0);
       commands.focus();
     };
@@ -38,5 +40,19 @@ export function useListKeyboardController(args: {
     if (!is.focusOnArrowKey) keyboard.dispose(); // NB: release keyboard events if beheavior not enabled.
 
     return keyboard.dispose;
-  }, [list?.instance, useBehaviorsKinds]);
+  }, [list?.instance, behaviorsKinds, !!ref.current]);
+}
+
+/**
+ * Helpers
+ */
+function focusedElsewhere(ref: React.RefObject<HTMLElement>) {
+  const activeEl = document.activeElement;
+  if (activeEl === null || activeEl === document.body) return false;
+  if (activeEl) {
+    if (ref.current && ref.current === activeEl) return false;
+    if (ref.current?.contains(activeEl)) return false;
+    return true;
+  }
+  return false;
 }

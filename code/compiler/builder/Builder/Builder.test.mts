@@ -1,4 +1,4 @@
-import { JsonUtil, execa, type t } from '../common/index.mjs';
+import { JsonUtil, execa, pc, type t } from '../common/index.mjs';
 
 /**
  * Execute unit-tests within the target module directory.
@@ -54,8 +54,9 @@ export async function test(
     stdout = res.stdout;
   }
 
-  const ok = exitCode === 0;
+  let ok = exitCode === 0;
   const stats = reporter === 'json' ? parseStats(stdout) : undefined;
+  if (stats?.success === false || stats?.error) ok = false;
   return {
     ok,
     exitCode,
@@ -69,23 +70,41 @@ export async function test(
 /**
  * Helpers
  */
-function parseStats(json: string): t.TestStats {
-  const data = JSON.parse(json);
+function parseStats(json: string): t.TestStats | undefined {
+  let lines = json.split('\n');
+  const index = lines.findIndex((line) => line === '{');
+  if (index < 0) return;
 
-  return {
-    success: data.success,
-    suites: {
-      total: data.numTotalTestSuites,
-      passed: data.numPassedTestSuites,
-      failed: data.numFailedTestSuites,
-      pending: data.numPendingTestSuites,
-    },
-    tests: {
-      total: data.numTotalTests,
-      passed: data.numPassedTests,
-      failed: data.numFailedTests,
-      pending: data.numPendingTests,
-      todo: data.numTodoTests,
-    },
-  };
+  try {
+    const data = JSON.parse(lines.slice(index).join('\n'));
+    return {
+      success: data.success,
+      suites: {
+        total: data.numTotalTestSuites,
+        passed: data.numPassedTestSuites,
+        failed: data.numFailedTestSuites,
+        pending: data.numPendingTestSuites,
+      },
+      tests: {
+        total: data.numTotalTests,
+        passed: data.numPassedTests,
+        failed: data.numFailedTests,
+        pending: data.numPendingTests,
+        todo: data.numTodoTests,
+      },
+    };
+  } catch (error: any) {
+    const CHARS = 500;
+    console.info(pc.red('Failed while parsing JSON returned from vitest.'), error.message);
+    console.info(pc.gray(`First ${pc.white(CHARS)} characters of failed json input:`));
+    console.info(pc.gray('-'.repeat(80)));
+    console.info(pc.yellow(json.substring(0, 500)));
+    console.info(pc.gray('-'.repeat(80)));
+    return {
+      success: false,
+      suites: { total: -1, passed: -1, failed: -1, pending: -1 },
+      tests: { total: -1, passed: -1, failed: -1, pending: -1, todo: -1 },
+      error: error.message,
+    };
+  }
 }

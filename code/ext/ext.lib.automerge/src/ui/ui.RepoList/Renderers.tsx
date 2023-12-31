@@ -1,28 +1,29 @@
-import { COLORS, Data, DocUri, Hash, Icons, css, type t } from './common';
+import { COLORS, DEFAULTS, Data, DocUri, Hash, Icons, LabelItem, css, type t } from './common';
 
 export const Renderers = {
   /**
-   * Initilise the router for the <Component>'s that render within an item.
+   * Initilise the router for the <Component>'s
+   * that render together to compse a single list-item.
    */
-  init(): t.RepoItemRenderers {
+  init(props: t.RepoListProps): t.RepoItemRenderers {
+    const { model } = props;
+    const behaviors = model?.behaviors ?? DEFAULTS.behaviors.default;
+
     return {
       label(e) {
         const data = Data.item(e.item);
-        if (data.mode === 'Add') return;
+        if (data.kind === 'Add') return;
         if (!e.item.label) return;
         return <>{e.item.label}</>;
       },
 
       placeholder(e) {
         const data = Data.item(e.item);
-        if (data.mode === 'Add') {
-          return <>{'new document'}</>;
+        if (data.kind === 'Add') {
+          return <>{props.newlabel || DEFAULTS.newlabel}</>;
         }
-        if (data.mode === 'Doc') {
-          const style = css({
-            fontFamily: 'monospace',
-            fontSize: 11,
-          });
+        if (data.kind === 'Doc') {
+          const style = css({ fontFamily: 'monospace', fontSize: 11 });
           const uri = Wrangle.placeholderUri(data.uri);
           return <div {...style}>{uri}</div>;
         }
@@ -30,23 +31,49 @@ export const Renderers = {
       },
 
       action(e, helpers) {
-        if (e.kind === 'Store:Left') {
-          const data = Data.item(e.item);
+        const data = Data.item(e.item);
 
-          if (data.mode === 'Add') {
+        if (e.kind === 'Item:Left') {
+          if (data.kind === 'Add') {
             const color = e.focused ? e.color : COLORS.BLUE;
             return <Icons.Add {...helpers.icon(e, 17)} color={color} />;
           }
 
-          if (data.mode === 'Doc') {
+          if (data.kind === 'Doc') {
             return <Icons.Database {...helpers.icon(e, 18)} />;
           }
         }
-        return;
+
+        if (e.kind === 'Item:Right' && data.kind === 'Doc') {
+          if (data.pending?.action === 'Delete' && behaviors.includes('Deletable')) {
+            e.set.ctx<t.RepoListActionCtx>({ kind: 'Delete' });
+            return (
+              <LabelItem.Button
+                selected={e.selected}
+                focused={e.focused}
+                enabled={e.enabled}
+                label={'Delete'}
+              />
+            );
+          }
+
+          if (behaviors.includes('Shareable')) {
+            e.set.ctx<t.RepoListActionCtx>({ kind: 'Share' });
+            const item = Wrangle.indexItem(model, data.uri);
+            if (item?.shared) {
+              const opacity = item.shared.current ? 1 : e.focused ? 0.4 : 0.2;
+              return <Icons.Antenna {...helpers.icon(e, 16)} opacity={opacity} />;
+            } else {
+              if (e.selected) return <Icons.Share {...helpers.icon(e, 16)} />;
+            }
+          }
+        }
+
+        return null; // Default no icon.
       },
     };
   },
-};
+} as const;
 
 /**
  * Helpers
@@ -57,5 +84,10 @@ export const Wrangle = {
     const id = DocUri.id(text);
     const hash = Hash.shorten(id, [4, 4]);
     return `crdt:${hash}`;
+  },
+
+  indexItem(list?: t.RepoListModel, uri?: string) {
+    if (!list || !uri) return;
+    return list.index.doc.current.docs.find((item) => item.uri === uri);
   },
 } as const;

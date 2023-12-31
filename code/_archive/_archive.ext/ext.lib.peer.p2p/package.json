@@ -1,0 +1,48 @@
+{
+  "name": "ext.lib.peer.p2p",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist && serve",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "ws": "deno run --allow-net src.deno/server.ts",
+    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "@libp2p/bootstrap": "10.0.6",
+    "@libp2p/webrtc-star": "7.0.0",
+    "@libp2p/websockets": "8.0.6",
+    "@libp2p/mplex": "10.0.6",
+    "@libp2p/webrtc": "4.0.9",
+    "@chainsafe/libp2p-noise": "14.0.0",
+    "@chainsafe/libp2p-yamux": "6.0.1",
+    "libp2p": "1.0.9",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sys.util": "0.0.0",
+    "sys.ui.react.common": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0",
+    "sys.test.spec": "0.0.0",
+    "sys.types": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "sideEffects": false,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Bus } from './BusController';
-import { Filesize } from './Filesize';
+import { Filesize } from './common';
 import { Path } from './Path';
 
 export const Filesystem = {

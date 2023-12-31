@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, type t, Model } from './common';
+import { rx, type t } from './common';
 
 /**
  * HOOK: trigger redraws on specific list-model state changes.
@@ -13,7 +13,8 @@ export function useListRedrawController(list: t.LabelListState) {
    */
   useEffect(() => {
     const events = list.events();
-    const redrawCommand$ = events.cmd.redraw$.pipe(rx.filter((e) => !e.item));
+    const isNil = (value?: string | number) => value === undefined || value === -1;
+    const redrawCommand$ = events.cmd.redraw$.pipe(rx.filter((e) => isNil(e.item)));
     const redraw$ = rx.merge(events.total$, redrawCommand$);
     redraw$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
     return events.dispose;

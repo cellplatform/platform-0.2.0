@@ -1,4 +1,4 @@
-name: ci
+name: ci.node
 
 env:
   VERCEL_TEST_TOKEN: ${{ secrets.VERCEL_TEST_TOKEN }}
@@ -11,10 +11,11 @@ on:
 
 jobs:
   build:
+    name: build.node
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [19.x]
 
     steps:
       - name: Checkout repository

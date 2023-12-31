@@ -20,7 +20,7 @@ export type DevContext = t.Disposable & {
   toObject(): t.DevCtxObject;
 };
 
-export type DevRedrawTarget = 'all' | 'subject';
+export type DevRedrawTarget = 'all' | 'subject' | 'harness' | 'debug';
 export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type DevPropDisplay = 'flex' | 'grid' | undefined;
 export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;

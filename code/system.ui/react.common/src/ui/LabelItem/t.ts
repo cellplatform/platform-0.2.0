@@ -1,6 +1,6 @@
 import type { t } from './common';
-export type * from './types.event';
-export type * from './types.props';
+export type * from './t.event';
+export type * from './t.props';
 
 export type LabelItemPosition = { index: number; total: number };
 
@@ -31,9 +31,14 @@ export type LabelItemValueArgs = {
  */
 type K = t.LabelItemActionKind;
 export type LabelItemRender = (e: LabelItemRenderArgs) => LabelItemRenderResponse;
-export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
-export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & { kind: A };
 export type LabelItemRenderResponse = JSX.Element | string | undefined | false | null;
+export type LabelItemRenderArgs = t.LabelItemValueArgs & { color: string };
+export type LabelItemRenderActionArgs<A extends K = string> = t.LabelItemRenderArgs & {
+  readonly kind: A;
+  readonly set: {
+    ctx<T extends t.LabelItemActionCtx>(value: T): void;
+  };
+};
 
 type H = LabelItemActionHelpers;
 export type LabelItemRenderers<A extends K = string> = {

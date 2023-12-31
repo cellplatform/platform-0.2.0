@@ -30,11 +30,14 @@ export function commands(list?: t.LabelListState) {
       if (index < 0) return;
       dispatch({ type: 'List:Remove', payload: { index, tx: slug() } });
     },
-    focus(focus: boolean = true) {
-      dispatch({ type: 'List:Focus', payload: { focus, tx: slug() } });
+    focus() {
+      dispatch({ type: 'List:Focus', payload: { focus: true, tx: slug() } });
     },
     blur() {
-      api.focus(false);
+      dispatch({ type: 'List:Focus', payload: { focus: false, tx: slug() } });
+    },
+    cmd<E>(event: E) {
+      dispatch(event as any);
     },
   };
   return api;

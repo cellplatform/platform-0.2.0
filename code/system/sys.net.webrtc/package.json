@@ -12,7 +12,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "peerjs": "1.5.1",
+    "peerjs": "1.5.2",
     "sys.data.crdt": "0.0.0",
     "sys.fs": "0.0.0",
     "sys.text": "0.0.0",

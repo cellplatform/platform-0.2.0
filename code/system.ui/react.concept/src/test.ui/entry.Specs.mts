@@ -1,12 +1,14 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'sys.ui.concept.tests': () => import('./-TestRunner'),
-  'sys.ui.concept.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
-  'sys.ui.concept.Index': () => import('../ui/ui.Index/-SPEC'),
-  'sys.ui.concept.VideoDiagram': () => import('../ui/ui.VideoDiagram/-SPEC'),
-  'sys.ui.concept.VideoDiagram.Edit': () => import('../ui/ui.VideoDiagram/-SPEC.Edit'),
-  'sys.ui.concept.Empty': () => import('../ui/ui.Empty/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-dev/-SPEC'),
+  [`${ns}.ui.Index`]: () => import('../ui/ui.Index/-SPEC'),
+  [`${ns}.ui.VideoDiagram`]: () => import('../ui/ui.VideoDiagram/-SPEC'),
+  [`${ns}.ui.VideoDiagram.Edit`]: () => import('../ui/ui.VideoDiagram/-SPEC.Edit'),
+  [`${ns}.ui.Empty`]: () => import('../ui/ui.Empty/-SPEC'),
 };
 
 export default Specs;

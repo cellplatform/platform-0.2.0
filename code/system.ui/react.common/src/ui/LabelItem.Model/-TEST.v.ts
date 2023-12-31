@@ -1,5 +1,5 @@
 import { Model } from '.';
-import { rx, describe, expect, it, slug, type t } from '../../test';
+import { Time, describe, expect, it, rx, slug, type t } from '../../test';
 
 describe('LabelItem.Model', () => {
   describe('Model.Item.state', () => {
@@ -91,26 +91,56 @@ describe('LabelItem.Model', () => {
         const array = Model.List.array({});
         const list = Model.List.state({ total: 3, getItem: array.getItem });
         const events = list.events();
-        const $ = events.item('foo', dispose$).selected$;
+        const foo = events.item('foo', dispose$);
 
-        const firedBool: boolean[] = [];
-        const firedId: string[] = [];
-        $.subscribe((e) => firedBool.push(e));
-        events.selected$.subscribe((e) => firedId.push(e));
+        const fired: boolean[] = [];
+        const firedDetail: t.LabelListEventsActiveChange[] = [];
+        foo.selected$.subscribe((e) => fired.push(e));
+        events.active.selected$.subscribe((e) => firedDetail.push(e));
 
         list.change((d) => (d.selected = 'foo'));
         list.change((d) => (d.selected = 'foo'));
 
-        expect(firedBool[0]).to.eql(true);
-        expect(firedId[0]).to.eql('foo');
+        expect(fired[0]).to.eql(true);
+        expect(firedDetail[0].selected).to.eql('foo');
 
         list.change((d) => (d.selected = 'bar'));
-        expect(firedBool[1]).to.eql(false);
-        expect(firedId[1]).to.eql('bar');
+        expect(fired[1]).to.eql(false);
+        expect(firedDetail[1].selected).to.eql('bar');
 
         dispose();
         list.change((d) => (d.selected = 'foo'));
-        expect(firedBool.length).to.eql(2); // NB: no change
+        expect(fired.length).to.eql(2); // NB: no change
+      });
+
+      it('events.item( id ).focused$', () => {
+        const { dispose$, dispose } = rx.disposable();
+        const array = Model.List.array({});
+        const list = Model.List.state({ total: 3, getItem: array.getItem });
+        const events = list.events();
+        const foo = events.item('foo', dispose$);
+
+        const fired: boolean[] = [];
+        const firedDetail: t.LabelListEventsActiveChange[] = [];
+        foo.focused$.subscribe((e) => fired.push(e));
+        events.active.focused$.subscribe((e) => firedDetail.push(e));
+
+        list.change((d) => (d.selected = 'foo'));
+        list.change((d) => (d.selected = 'foo'));
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0]).to.eql(false);
+        expect(firedDetail[0].focused).to.eql(false);
+
+        list.change((d) => (d.focused = true));
+        expect(fired[1]).to.eql(true);
+        expect(firedDetail[1].focused).to.eql(true);
+
+        list.change((d) => (d.selected = 'bar'));
+        expect(fired[2]).to.eql(false);
+        expect(firedDetail[2]).to.eql(undefined); // NB: global list focus state NOT changed.
+
+        dispose();
       });
     });
   });
@@ -267,7 +297,7 @@ describe('LabelItem.Model', () => {
         expect(Model.List.getItem(undefined, 0)).to.eql([undefined, -1]);
       });
 
-      it('returns item from getter function', () => {
+      it('returns item from getter function: index', () => {
         const { items, getItem } = Model.List.array();
         const state = Model.List.state({ total: 2, getItem });
 
@@ -281,6 +311,17 @@ describe('LabelItem.Model', () => {
         // NB: same instance (repeat call).
         expect(Model.List.getItem(state.current, 0)[0]).to.equal(itemA);
         expect(Model.List.getItem(state, 1)[0]).to.equal(itemB);
+      });
+
+      it('returns item from getter function: ID (string)', () => {
+        const { getItem } = Model.List.array();
+        const state = Model.List.state({ total: 2, getItem });
+
+        const [itemA, indexA] = Model.List.getItem(state, 0);
+        const [itemB, indexB] = Model.List.getItem(state, itemA?.instance ?? '');
+
+        expect(itemA).to.equal(itemB);
+        expect(indexA).to.eql(indexB);
       });
 
       it('out of bounds', () => {
@@ -440,6 +481,45 @@ describe('LabelItem.Model', () => {
 
         dispatch.focus();
         expect(fired.length).to.eql(2);
+
+        events.dispose();
+      });
+
+      it('events.cmd.$ (custom commands)', async () => {
+        const state = Model.List.state();
+        const dispatch = Model.List.commands(state);
+        const events = state.events();
+
+        type Event = FooEvent | BarEvent;
+        type FooEvent = { type: 'foo'; payload: { count: number } };
+        type BarEvent = { type: 'bar'; payload: { msg?: string } };
+
+        const fired1: t.LabelListCmd[] = [];
+        const fired2: t.Event[] = [];
+        const fired3: t.Event[] = [];
+        events.cmd.$.subscribe((e) => fired1.push(e));
+        events.cmd.type$<Event>((e) => e.type === 'bar').subscribe((e) => fired2.push(e));
+        events.cmd.type$<Event>().subscribe((e) => fired3.push(e));
+
+        const foo: FooEvent = { type: 'foo', payload: { count: 123 } };
+        const bar: BarEvent = { type: 'bar', payload: { msg: 'hello' } };
+
+        dispatch.cmd<Event>(foo);
+        expect(state.current.cmd).to.eql(foo);
+        await Time.wait(0);
+        expect(state.current.cmd).to.eql(undefined);
+
+        expect(fired1.length).to.eql(1);
+        expect(fired2.length).to.eql(0); // NB: filtered.
+        expect(fired3.length).to.eql(1);
+        expect(fired1[0]).to.eql(foo);
+
+        dispatch.cmd<Event>(bar);
+        expect(fired2.length).to.eql(1); // NB: filtered.
+        expect(fired3.length).to.eql(2);
+        expect(fired2[0]).to.eql(bar);
+        expect(fired3[0]).to.eql(foo);
+        expect(fired3[1]).to.eql(bar);
 
         events.dispose();
       });

@@ -16,7 +16,7 @@ export const FindUtil = {
   async projectDirs(
     options: {
       filter?: t.PathFilter;
-      sortBy?: 'Topological' | 'Alpha' | 'None';
+      sortBy?: t.SortModulesBy;
       hasViteConfig?: boolean;
     } = {},
   ) {
@@ -34,9 +34,9 @@ export const FindUtil = {
       return options.filter ? options.filter(path.substring(Paths.rootDir.length)) : true;
     });
 
-    const { sortBy: sort = 'Alpha' } = options;
-    if (sort === 'Alpha') dirs = await FindUtil.sortAlpha(dirs);
-    if (sort === 'Topological') dirs = await FindUtil.sortTopological(dirs);
+    const { sortBy = 'Alpha' } = options;
+    if (sortBy === 'Alpha') dirs = await FindUtil.sortAlpha(dirs);
+    if (sortBy === 'Topological') dirs = await FindUtil.sortTopological(dirs);
 
     return dirs;
   },

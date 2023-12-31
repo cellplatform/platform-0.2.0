@@ -51,6 +51,10 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
     },
   };
 
-  if (args.type) state.type = args.type;
+  if (args.type) {
+    // @ts-ignore
+    state.type = args.type;
+  }
+
   return state;
 }

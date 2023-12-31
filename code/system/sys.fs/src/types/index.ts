@@ -1,4 +1,3 @@
-export type * from '../Filesize/types.mjs';
 export type * from '../Manifest/types.mjs';
 export type * from '../BusEvents/types.mjs';
 export type * from '../BusController/types.mjs';

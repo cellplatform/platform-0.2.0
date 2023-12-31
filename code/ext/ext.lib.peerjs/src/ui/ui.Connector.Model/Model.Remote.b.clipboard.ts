@@ -4,13 +4,26 @@ import { State } from './u.State';
 
 export function clipboardBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateRemote;
+  item: t.ConnectorItemStateRemote;
   events: t.ConnectorItemStateRemoteEvents;
   dispatch: t.LabelItemDispatch;
 }) {
-  const { events, state, dispatch } = args;
+  const { events, item, dispatch } = args;
   const redraw = dispatch.redraw;
-  const canPaste = () => Data.remote(state).stage !== 'Connected';
+  const canPaste = () => Data.remote(item).stage !== 'Connected';
+
+  /**
+   * Behavior: Start editing.
+   * NOTE: This puts a <input> in place to recieve the pasted data.
+   *       This is a hack to avoid the security checks in some browsers
+   *       on the JS [clipboard.readText] method.
+   *       This does not open a security hole, but rather is just UX
+   *       because the user is using the keyboard anyhow.
+   */
+  const startEditing = () => {
+    State.Remote.resetError(item);
+    dispatch.edit('start');
+  };
 
   /**
    * Behavior: Paste
@@ -19,45 +32,42 @@ export function clipboardBehavior(args: {
     if (!canPaste()) return;
 
     const { peer, list } = args.ctx();
-    const { tx } = State.Remote.setPeerText(state, list, peer, text);
-
-    Time.delay(DEFAULTS.timeout.error, () => {
-      if (State.Remote.resetError(state, tx)) {
-        peer.purge();
-        redraw();
-      }
+    State.Remote.setPeerText(item, list, peer, text, {
+      events,
+      errorTimeout: true,
+      errorCleared: (e) => peer.purge(),
     });
   };
 
   /**
    * Behavior: Copy
    */
-  const copyClipboard = async () => {
-    const data = Data.remote(state);
+  const copyToClipboard = async () => {
+    const data = Data.remote(item);
     const peerid = data.remoteid;
     if (!peerid || data.closePending) return;
     await navigator.clipboard.writeText(PeerUri.uri(peerid));
 
     const tx = slug();
-    state.change((item) => (Data.remote(item).actionCompleted = { tx, message: 'copied' }));
+    item.change((item) => (Data.remote(item).actionCompleted = { tx, message: 'copied' }));
     redraw();
 
     Time.delay(DEFAULTS.timeout.copiedPending, () => {
-      if (Data.remote(state).actionCompleted?.tx !== tx) return;
-      state.change((item) => (Data.remote(item).actionCompleted = undefined));
+      if (Data.remote(item).actionCompleted?.tx !== tx) return;
+      item.change((item) => (Data.remote(item).actionCompleted = undefined));
       redraw();
     });
   };
 
   /**
-   * (Triggers)
+   * (Listen)
    */
-  events.cmd.clipboard.copy$.subscribe(copyClipboard);
+  events.cmd.clipboard.copy$.subscribe(copyToClipboard);
 
   events.key.$.pipe(
-    rx.filter((e) => e.is.meta),
+    rx.filter((e) => (e.is.os.mac ? e.is.meta : e.is.ctrl)),
     rx.filter(() => canPaste()),
-  ).subscribe(() => dispatch.edit('start'));
+  ).subscribe(() => startEditing()); // NB: prepare <input> to catch paste operation.
 
   events.cmd.edited$
     .pipe(

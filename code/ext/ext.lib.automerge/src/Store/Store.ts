@@ -1,7 +1,7 @@
 import { Repo } from '@automerge/automerge-repo';
-import { Doc } from './Store.Doc';
-import { StoreIndex as Index } from './Store.Index';
-import { Is, DocUri as Uri, rx, type t } from './common';
+import { Doc } from '../Store.Doc';
+import { StoreIndex as Index } from '../Store.Index';
+import { Is, rx, type t } from './common';
 
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
@@ -10,8 +10,9 @@ type Options = { timeout?: t.Msecs };
  * Manage an Automerge repo.
  */
 export const Store = {
-  Uri,
+  Doc,
   Index,
+  index: Index.init,
 
   /**
    * Initialize a new instance of a CRDT repo.
@@ -39,7 +40,7 @@ export const Store = {
          */
         async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri, options: Options = {}) {
           const { timeout } = options;
-          return Doc.getOrCreate<T>(api.repo, { initial, uri, timeout, dispose$ });
+          return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
         },
 
         /**
@@ -47,9 +48,7 @@ export const Store = {
          */
         async get<T>(uri?: Uri, options: Options = {}) {
           const { timeout } = options;
-          return Is.automergeUrl(uri)
-            ? Doc.get<T>(api.repo, uri, { timeout, dispose$ })
-            : undefined;
+          return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
         },
 
         /**
@@ -57,7 +56,15 @@ export const Store = {
          */
         async exists(uri?: Uri, options: Options = {}) {
           const res = await api.doc.get(uri, options);
-          return Boolean(res);
+          return !!res;
+        },
+
+        /**
+         * Delete the specified document.
+         */
+        async delete(uri?: Uri, options = {}) {
+          const { timeout } = options;
+          return Doc.delete({ repo, uri, timeout });
         },
       },
 

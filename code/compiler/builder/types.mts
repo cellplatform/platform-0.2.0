@@ -2,6 +2,7 @@ import type { UserConfig as ViteUserConfig } from 'vite';
 
 export { ViteUserConfig };
 
+export type SortModulesBy = 'Topological' | 'Alpha' | 'None';
 export type PathString = string;
 export type DirString = PathString;
 export type ImportMetaUrl = PathString; // eg: the ESM [import.meta.url] value.
@@ -12,7 +13,7 @@ export type PathFilter = (path: PathString) => boolean;
 export type TsEnv = 'web' | 'web:react' | 'web:svelte';
 
 export type ViteTarget = 'web' | 'node';
-export type VitePlugin = 'web:react' | 'web:svelte' | 'bundle:visualize';
+export type VitePlugin = 'web:react' | 'web:svelte';
 
 /**
  * [tsconfig.json] file.
@@ -128,6 +129,7 @@ export type TestStats = {
   success: boolean;
   suites: { total: number; passed: number; failed: number; pending: number };
   tests: { total: number; passed: number; failed: number; pending: number; todo: number };
+  error?: string;
 };
 
 export type VitestResultsData = {

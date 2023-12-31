@@ -1,18 +1,18 @@
 ![banner](https://user-images.githubusercontent.com/185555/208599983-cfb3aba5-b8c2-44bd-b0b0-4115bfc0bd0f.png)
 
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
+[![ci.deno](https://github.com/cellplatform/platform-0.2.0/actions/workflows/deno.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/deno.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
 
 
 
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
 (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
-- [compilation](/code/compiler/) toolchain
-- [system](/code/system/) modules
-- [system.ui](/code/system.ui/) modules
+- [compilation](/code/compiler/) toolchain (W3C standards)
+- modules: [system](/code/system/) 
+- modules: [system.ui](/code/system.ui/) 
 
 ---
 
@@ -20,7 +20,11 @@
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
 Sustained long range R&D.  
-Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.
+Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.  
+
+Whilst the author(s) have been in diverse, exploratory dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, this repo contains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or any related so called "AI" technology).  
+Informed, augmented, yes...but no abdication of direct human ƒ(discipline, creativity, coherence).
+
 
 
 
@@ -126,7 +130,8 @@ Architecture, API's, and other conceptual primmitives will change (almost certai
 
 <p>&nbsp;</p>
 
-![group-scape](https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png)
+<img alt="smor-model-group-scale-n-dimension-cell" src="https://github.com/cellplatform/platform-0.2.0/assets/185555/a9b360a4-14f1-470c-af07-321257c37433">
+
 
 <p>&nbsp;</p>
 
@@ -146,8 +151,10 @@ The inverse proposition also appears to be true:
 
 <p>&nbsp;</p>
 
+![smor-sys crdt-cell](https://github.com/cellplatform/platform-0.2.0/assets/185555/338a4013-2480-4167-b5fe-e3738d478285)
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/233560802-f4b2e339-bb90-40cf-b3fc-78387c1f853a.png)
+
+
 
 
 <p>&nbsp;</p>

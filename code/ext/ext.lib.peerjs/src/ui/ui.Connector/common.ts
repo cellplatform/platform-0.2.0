@@ -6,13 +6,16 @@ export { Data, Model } from '../ui.Connector.Model';
 /**
  * Constants
  */
-const behavior: t.ConnectorBehavior = {
-  focusOnArrowKey: false,
-  focusOnLoad: false,
-};
 
 export const DEFAULTS = {
   displayName: 'Webrtc.Connector',
-  behavior,
   tabIndex: 0,
+  behaviors: {
+    get all(): t.ConnectorBehavior[] {
+      return ['Focus.OnLoad', 'Focus.OnArrowKey'];
+    },
+    get default(): t.ConnectorBehavior[] {
+      return [];
+    },
+  },
 } as const;

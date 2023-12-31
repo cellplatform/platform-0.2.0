@@ -1,40 +1,50 @@
-import { createDocumentBehavior } from './Model.Item.b.create';
+import { actionLeftBehavior } from './Model.Item.b.action.left';
+import { actionShareBehavior } from './Model.Item.b.action.share';
+import { clipboardBehavior } from './Model.Item.b.clipboard';
+import { deleteBehavior } from './Model.Item.b.delete';
+import { newBehavior } from './Model.Item.b.new';
 import { renameBehavior } from './Model.Item.b.rename';
 import { DEFAULTS, Model, type t } from './common';
 
-type Args = { ctx: t.RepoListCtxGet; dispose$?: t.UntilObservable };
 type D = t.RepoItemData;
+type K = D['kind'];
 
 export const ItemModel = {
-  initial(args: Args): t.RepoItem {
-    const data: D = { mode: 'Add' };
+  initial(kind: K): t.RepoItem {
+    const data: D = { kind };
     return {
-      editable: false,
-      label: '',
-      left: { kind: 'Store:Left' },
       data,
+      label: '',
+      left: { kind: 'Item:Left' },
+      right: { kind: 'Item:Right' },
+      editable: kind === 'Doc',
     };
   },
 
   /**
    * State wrapper.
    */
-  state(args: Args) {
-    const { ctx } = args;
-    const initial = ItemModel.initial(args);
-    const type = DEFAULTS.typename.item;
-    const item = Model.Item.state<t.RepoListAction, D>(initial, { type });
-    const events = item.events(args.dispose$);
+  state(ctx: t.GetRepoListModel, kind: K, options: { dispose$?: t.UntilObservable } = {}) {
+    const initial = ItemModel.initial(kind);
+    const type = DEFAULTS.typename.Item;
+    const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
+    const events = state.events(options.dispose$);
+    const dispatch = Model.Item.commands(state);
+    const item: t.RepoItemModel = { state, events, dispatch };
 
     /**
      * Behavior controllers.
      */
-    createDocumentBehavior({ ctx, item, events });
-    renameBehavior({ ctx, item, events });
+    newBehavior({ ctx, item });
+    renameBehavior({ ctx, item });
+    actionLeftBehavior({ ctx, item });
+    actionShareBehavior({ ctx, item });
+    deleteBehavior({ ctx, item });
+    clipboardBehavior({ ctx, item });
 
     /**
      * Finish up.
      */
-    return item;
+    return state;
   },
 } as const;

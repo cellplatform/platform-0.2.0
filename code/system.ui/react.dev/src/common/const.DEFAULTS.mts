@@ -53,5 +53,6 @@ export const DEFAULTS = {
     d: 'd', // NB: alias for "?dev"
     dev: 'dev',
     selected: 'selected',
+    filter: 'filter',
   },
 } as const;

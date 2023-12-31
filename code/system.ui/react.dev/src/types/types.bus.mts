@@ -73,8 +73,10 @@ export type DevEvents = t.Disposable & {
   };
   redraw: {
     $: t.Observable<t.DevRedraw>;
-    fire(args: { all?: boolean; renderers?: Id[] }): void;
-    subject(): Promise<Id | undefined>;
+    fire(args: { target?: t.DevRedrawTarget; renderers?: Id[] }): void;
+    subject(): Promise<Id[]>;
+    harness(): Promise<Id[]>;
+    debug(): Promise<Id[]>;
   };
 };
 
@@ -245,5 +247,5 @@ export type DevRedrawEvent = {
 export type DevRedraw = {
   instance: Id;
   renderers: Id[];
-  all?: boolean;
+  target?: t.DevRedrawTarget;
 };

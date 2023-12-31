@@ -1,42 +1,41 @@
-import { DEFAULTS, rx, type t } from './common';
+import { DEFAULTS, Time, rx, type t } from './common';
 import { Data } from './u.Data';
 import { State } from './u.State';
-import { ResetTimer } from './u.Timer';
 
 export function closeConnectionBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateRemote;
+  item: t.ConnectorItemStateRemote;
   events: t.ConnectorItemStateRemoteEvents;
   dispatch: t.LabelItemDispatch;
 }) {
-  const { events, state, dispatch } = args;
+  const { events, item, dispatch } = args;
   const redraw = dispatch.redraw;
 
   const { list, peer } = args.ctx();
   const peerEvents = peer.events(events.dispose$);
   const listEvents = list.events(events.dispose$);
-  const listItemEvents = listEvents.item(state.instance);
-  const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Close.reset());
+  const listItemEvents = listEvents.item(item.instance);
+  const timer = Time.action(DEFAULTS.timeout.closePending).on('complete', () => Close.reset());
 
   const Close = {
     pending() {
-      resetTimer.start();
-      state.change((item) => (Data.remote(item).closePending = true));
+      timer.start();
+      item.change((item) => (Data.remote(item).closePending = true));
       redraw();
     },
     reset() {
-      resetTimer.clear();
-      state.change((item) => (Data.remote(item).closePending = false));
+      timer.reset();
+      item.change((item) => (Data.remote(item).closePending = false));
       redraw();
     },
     complete() {
-      const conn = Data.remote(state).connid ?? '';
+      const conn = Data.remote(item).connid ?? '';
       if (conn) peer.disconnect(conn);
       removeFromList();
     },
   };
 
-  const removeFromList = () => State.Remote.removeFromList(state, list);
+  const removeFromList = () => State.Remote.removeFromList(item, list);
 
   /**
    * (Triggers): Keyboard Events
@@ -44,7 +43,7 @@ export function closeConnectionBehavior(args: {
   const on = (...code: string[]) =>
     events.key.$.pipe(
       rx.filter((e) => code.includes(e.code)),
-      rx.map((key) => ({ key, data: Data.remote(state) })),
+      rx.map((key) => ({ key, data: Data.remote(item) })),
       rx.filter((e) => e.data.stage === 'Connected'),
     );
   on('Delete', 'Backspace')
@@ -62,7 +61,7 @@ export function closeConnectionBehavior(args: {
    */
   events.cmd.action
     .kind('remote:right')
-    .pipe(rx.filter((e) => Data.remote(state).closePending!))
+    .pipe(rx.filter((e) => Data.remote(item).closePending!))
     .subscribe(Close.complete);
 
   /**
@@ -71,7 +70,7 @@ export function closeConnectionBehavior(args: {
   listItemEvents.selected$
     .pipe(
       rx.filter((selected) => !selected),
-      rx.filter((e) => Data.remote(state).closePending!),
+      rx.filter((e) => Data.remote(item).closePending!),
     )
     .subscribe(Close.reset);
 
@@ -81,7 +80,7 @@ export function closeConnectionBehavior(args: {
   peerEvents.cmd.conn$
     .pipe(
       rx.filter((e) => e.action === 'closed'),
-      rx.filter((e) => e.connection?.id === Data.remote(state).connid),
+      rx.filter((e) => e.connection?.id === Data.remote(item).connid),
     )
     .subscribe(removeFromList);
 }

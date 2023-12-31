@@ -1,5 +1,6 @@
-import { Color, COLORS, css, DevIcons, t, Time } from './common';
-import { Description } from './ui.Description';
+import { useState } from 'react';
+import { Button, COLORS, Color, DevIcons, Time, css, t } from './common';
+import { Description } from './ui.Test.Description';
 import { TestError } from './ui.Test.Error';
 
 export type TestResultProps = {
@@ -14,12 +15,25 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   const isExcludedViaOnly = excluded.includes('only');
   const isNoop = data.noop;
 
+  const [copied, setCopied] = useState(false);
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
   // NB: still show if "skipped" to the test retains visibility
   //     until either implemented or deleted.
   if (isExcludedViaOnly && !isSkipped) return null;
 
   /**
-   * [Render]
+   * Handlers
+   */
+  const handleCopy = () => {
+    navigator.clipboard.writeText(data.description);
+    setCopied(true);
+    Time.delay(1200, () => setCopied(false));
+  };
+
+  /**
+   * Render
    */
   const styles = {
     _base: css({
@@ -50,7 +64,13 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <DevIcons.Skip size={16} color={Color.alpha(COLORS.DARK, 0.3)} offset={[0, 2]} />
   );
 
-  const elIcons = (
+  const elCopy = isOver && (
+    <Button onClick={handleCopy}>
+      <DevIcons.Copy size={16} />
+    </Button>
+  );
+
+  const elIcons = elCopy || (
     <>
       {elSuccessIcon}
       {elFailIcon}
@@ -68,9 +88,9 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.line.base}>
+      <div {...styles.line.base} onMouseEnter={over(true)} onMouseLeave={over(false)}>
         <div {...styles.line.icon}>{elNoopIcon || elIcons}</div>
-        <Description text={data.description} isSkipped={isSkipped} />
+        <Description text={copied ? '(copied)' : data.description} isSkipped={isSkipped} />
         <div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>
       </div>
       {elError}

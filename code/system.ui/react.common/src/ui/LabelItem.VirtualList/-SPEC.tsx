@@ -1,5 +1,5 @@
 import { Dev, type t } from '../../test.ui';
-import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample';
+import { Sample, type SampleActionKind } from '../LabelItem.Stateful/-dev/-Sample.renderers';
 
 import { VirtualList } from '.';
 import { SampleView } from './-SPEC.Sample';

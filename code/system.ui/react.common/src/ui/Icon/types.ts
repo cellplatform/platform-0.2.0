@@ -14,6 +14,8 @@ export type IconProps = {
   opacity?: number;
   tooltip?: string;
   offset?: [number, number]; // x,y  |  +/- pixels
+  flipX?: boolean;
+  flipY?: boolean;
   margin?: t.MarginInput;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;

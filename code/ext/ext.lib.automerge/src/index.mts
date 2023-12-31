@@ -7,26 +7,23 @@ export { Pkg };
 /**
  * Library
  */
-import { WebStore } from './Store.Web';
-export { WebStore };
-
+export { Doc } from './Store.Doc';
 export { Store } from './Store';
-export { toObject } from './common';
+export { WebStore } from './Store.Web';
+export { Data, Is, toObject } from './common';
+export { StoreIndexDb } from './Store.Web.IndexDb';
+export { WebStoreIndex } from './Store.Web.Index';
 
 /**
  * Library: UI
  */
-import { Info } from './ui/ui.Info';
-import { RepoList } from './ui/ui.RepoList';
-export const UI = {
-  WebStore,
-  Info,
-  RepoList,
-};
+export { Info, InfoField } from './ui/ui.Info';
+export { RepoList } from './ui/ui.RepoList';
 
 /**
  * Dev
  */
+export { TestDb } from './test.ui/TestDb';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };

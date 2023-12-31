@@ -1,26 +1,25 @@
-import { DEFAULTS, FC, Pkg, PropList, t } from './common';
-import { FieldModuleVerify } from './field.Module.Verify';
-
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
-  data?: t.InfoData;
-  margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
-  style?: t.CssValue;
-};
+import { DEFAULTS, FC, PropList, usePeerMonitor, useTransmitMonitor, type t } from './common';
+import { Field } from './field';
+import { useRedraw } from './use.Redraw';
 
 /**
  * Component
  */
-const View: React.FC<InfoProps> = (props) => {
+const View: React.FC<t.InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
 
+  useRedraw(data);
+  const { bytes } = usePeerMonitor(data.network);
+  const { isTransmitting } = useTransmitMonitor(bytes.total);
+
   const items = PropList.builder<t.InfoField>()
-    .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Module', () => Field.module())
+    .field('Module.Verify', () => Field.moduleVerify())
+    .field('Component', () => Field.component(data.component))
+    .field('Peer', () => Field.peer(data, fields))
+    .field('Repo', () => Field.repo(data, fields))
+    .field('Network.Shared', () => Field.network.shared(data, fields))
+    .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting))
     .items(fields);
 
   return (
@@ -42,7 +41,7 @@ const View: React.FC<InfoProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  title(props: InfoProps) {
+  title(props: t.InfoProps) {
     const title = PropList.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
@@ -54,5 +53,10 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  useRedraw: typeof useRedraw;
 };
-export const Info = FC.decorate<InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<t.InfoProps, Fields>(
+  View,
+  { DEFAULTS, useRedraw },
+  { displayName: 'Info' },
+);

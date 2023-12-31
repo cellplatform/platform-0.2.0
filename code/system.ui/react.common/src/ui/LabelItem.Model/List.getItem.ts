@@ -1,5 +1,7 @@
 import { PatchState, type t } from './common';
 
+type Index = number;
+type Id = string;
 type O = Record<string, unknown>;
 type ListInput = t.LabelList | t.LabelListState;
 
@@ -8,16 +10,20 @@ type ListInput = t.LabelList | t.LabelListState;
  */
 export function getItem<A extends t.LabelItemActionKind = string, D extends O = O>(
   list: ListInput | undefined,
-  index: number,
+  target: Index | Id,
 ): t.LabelItemStateIndex<A, D> {
   const notFound: t.LabelItemStateIndex<A, D> = [undefined, -1];
   if (!list) return notFound;
 
   const current = PatchState.Is.state(list) ? list.current : list;
   if (!current?.getItem) return notFound;
-  if (index < 0 || index > current.total - 1) return notFound;
-  if (!Number.isInteger(index)) throw new Error('Index is not an integer');
 
-  const res = current.getItem(index);
+  if (typeof target === 'number') {
+    //
+    if (target < 0 || target > current.total - 1) return notFound;
+    if (!Number.isInteger(target)) throw new Error('Index is not an integer');
+  }
+
+  const res = current.getItem(target);
   return res ? (res as t.LabelItemStateIndex<A, D>) : notFound;
 }

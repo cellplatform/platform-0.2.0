@@ -10,7 +10,7 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "chai": "4.3.10"
+    "chai": "5.0.0"
   },
   "devDependencies": {
     "sys.types": "0.0.0"

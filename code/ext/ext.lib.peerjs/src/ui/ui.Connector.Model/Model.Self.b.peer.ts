@@ -2,7 +2,7 @@ import { rx, type t } from './common';
 
 export function peerBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateSelf;
+  item: t.ConnectorItemStateSelf;
   events: t.ConnectorItemStateSelfEvents;
   dispatch: t.LabelItemDispatch;
 }) {

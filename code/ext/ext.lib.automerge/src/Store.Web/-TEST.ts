@@ -1,11 +1,11 @@
 import { WebStore } from '.';
-import { A, IndexedDb, Is, Test, TestDb, expect, rx, type t } from '../test.ui';
+import { A, Is, Test, TestDb, expect, rx, type t } from '../test.ui';
 import { DEFAULTS } from './common';
 
 type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web (Repo)', (e) => {
-  const name = TestDb.name;
+  const name = TestDb.Unit.name;
   const store = WebStore.init({ storage: false });
 
   const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
@@ -42,7 +42,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
 
     e.it('storage with custom name', (e) => {
-      const name = TestDb.name;
+      const name = TestDb.Unit.name;
       const store1 = WebStore.init({ storage: name });
       const store2 = WebStore.init({ storage: { name } });
       expect(store1.info.storage?.name).to.eql(name);
@@ -81,8 +81,11 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       const doc1 = await store.doc.getOrCreate<D>(initial);
       const doc2 = await store.doc.getOrCreate<D>(initial);
 
-      expect(doc1.handle.state).to.eql('ready');
-      expect(doc1.uri).to.eql(doc1.handle.url);
+      type H = t.DocRefHandle<D>;
+      expect((doc1 as H).handle.state).to.eql('ready');
+      expect(doc1.uri).to.eql((doc1 as H).handle.url);
+      expect(doc1.is.ready).to.eql(true);
+      expect(doc1.is.deleted).to.eql(false);
       assertCount(doc1, 0);
       assertCount(doc2, 0);
 
@@ -119,7 +122,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
     });
   });
 
-  e.describe('doc: change', (e) => {
+  e.describe('store.doc (change)', (e) => {
     const generator = store.doc.factory<D>(initial);
 
     e.it('change', async (e) => {

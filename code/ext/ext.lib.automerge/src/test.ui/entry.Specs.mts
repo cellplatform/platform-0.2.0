@@ -1,10 +1,13 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ext.lib.automerge.tests': () => import('./-TestRunner'),
-  'ext.lib.automerge.ui.Info': () => import('../ui/ui.Info/-SPEC'),
-  'ext.lib.automerge.ui.Sample': () => import('../ui/ui.Sample/-SPEC'),
-  'ext.lib.automerge.ui.RepoList': () => import('../ui/ui.RepoList/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.RepoList`]: () => import('../ui/ui.RepoList/-SPEC'),
+  [`${ns}.ui.RepoList.Virtual`]: () => import('../ui/ui.RepoList.Virtual/-SPEC'),
 };
 
 export default Specs;

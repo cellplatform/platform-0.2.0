@@ -1,5 +1,5 @@
 import { Info, type InfoProps } from '.';
-import { Dev, Webrtc, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 
 type T = { props: InfoProps };
@@ -9,9 +9,10 @@ const DEFAULTS = Info.DEFAULTS;
 /**
  * Spec
  */
-const name = Info.displayName ?? '⚠️';
+const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
+  const remote = Webrtc.peer();
 
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.Info');
@@ -72,13 +73,32 @@ export default Dev.describe(name, (e) => {
         );
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('connect', (e) => self.connect.data(remote.id));
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
-      return <Dev.Object name={name} data={data} expand={1} />;
-    });
+    dev.footer
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        const data = e.state;
+        const styles = {
+          base: css({}),
+          obj: css({ margin: 8 }),
+          conn: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
+        };
+        return (
+          <div {...styles.base}>
+            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
+            <Connector peer={remote} style={styles.conn} />
+          </div>
+        );
+      });
   });
 });

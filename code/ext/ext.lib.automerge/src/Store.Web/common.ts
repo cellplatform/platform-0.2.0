@@ -1,5 +1,5 @@
 export * from '../ui/common';
 
 export const DEFAULTS = {
-  storage: { name: 'localfirst' },
+  storage: { name: 'fs' },
 } as const;

@@ -7,24 +7,28 @@ export { Pkg };
 /**
  * Library
  */
-import { Webrtc } from './Webrtc';
-export { PeerModel, Webrtc } from './Webrtc';
+import { Peer } from './Webrtc';
+export { Peer, Webrtc } from './Webrtc';
 
 /**
  * Library: UI
  */
+import { Icons } from './ui/Icons';
 import { AvatarTray } from './ui/ui.AvatarTray';
-import { Connector } from './ui/ui.Connector';
+import { Connector, ConnectorConfig } from './ui/ui.Connector';
 import { PeerCard } from './ui/ui.Dev.PeerCard';
 import { Info } from './ui/ui.Info';
 import { Video } from './ui/ui.Video';
 
-export const UI = {
-  peer: Webrtc.peer,
+export { Info };
+export const PeerUI = {
+  peer: Peer.init,
   Info,
   Connector,
+  ConnectorConfig,
   AvatarTray,
   Video,
+  Icons,
   Dev: { PeerCard },
 } as const;
 

@@ -1,5 +1,5 @@
-import { R, Util, type t } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
+import { R, Util, type t } from '../common/index.mjs';
 
 const PackageJson = Util.PackageJson;
 
@@ -116,8 +116,9 @@ export const Dependencies = {
   /**
    * Builds a topologically sorted list of dependencies within the system.
    */
-  async buildGraph(options: { filter?: t.PathFilter } = {}) {
-    const allPaths = await Util.Find.projectDirs({ sortBy: 'Topological' });
+  async buildGraph(options: { filter?: t.PathFilter; sortBy?: t.SortModulesBy } = {}) {
+    const { sortBy = 'Topological' } = options;
+    const allPaths = await Util.Find.projectDirs({ sortBy });
 
     const pkgCache: { [dir: string]: t.PkgJson } = {};
     const getPkg = async (dir: string): Promise<t.PkgJson> => {

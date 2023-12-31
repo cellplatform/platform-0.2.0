@@ -24,13 +24,15 @@ export function useRedrawEvent(
   useEffect(() => {
     const events = DevBus.Events({ instance });
     const hasRenderer = (renderers: Id[]) => ids.some((id) => renderers.includes(id));
-    const match$ = events.redraw.$.pipe(filter((e) => e.all || hasRenderer(e.renderers)));
+    const matchTarget = (value?: t.DevRedrawTarget) => value === 'all';
+    const match = (e: t.DevRedraw) => matchTarget(e.target) || hasRenderer(e.renderers);
+    const match$ = events.redraw.$.pipe(filter(match));
     match$.subscribe(redraw);
-    return () => events.dispose();
+    return events.dispose;
   }, [ids.join(',')]);
 
   /**
    * API
    */
-  return { count, ids };
+  return { count, ids } as const;
 }

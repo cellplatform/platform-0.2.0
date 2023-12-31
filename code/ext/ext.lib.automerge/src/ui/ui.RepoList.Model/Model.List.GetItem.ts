@@ -1,20 +1,47 @@
-import { type t } from './common';
+import { StoreIndex, type t } from './common';
+
 import { Data } from './Data';
+import { ItemModel } from './Model.Item';
+import { Wrangle } from './u.Wrangle';
 
-export function GetItem(index: t.StoreIndex, array: t.RepoArray): t.RepoArray['getItem'] {
+export function GetItem(getCtx: t.GetRepoListModel, array: t.RepoArray): t.GetRepoLabelItem {
+  const indexTotal = () => Wrangle.total(getCtx);
+  let _addItem: t.RepoItemState | undefined;
+
   return (target) => {
-    const [item, i] = array.getItem(target);
-    const doc = index.doc.current.docs[i];
-
-    if (doc && item && item?.current.data?.mode !== 'Doc') {
-      item.change((d) => {
-        const data = Data.item(d);
-        data.mode = 'Doc';
-        data.uri = doc.uri;
-        d.editable = true;
-        if (doc.name) d.label = doc.name;
-      });
+    if (!_addItem) {
+      const { dispose$ } = getCtx();
+      _addItem = ItemModel.state(getCtx, 'Add', { dispose$ });
     }
-    return [item, i];
+
+    if (typeof target === 'number') {
+      if (target === indexTotal()) {
+        return [_addItem, target];
+      } else {
+        const { index, filter } = getCtx();
+        const [item, i] = array.getItem(target);
+        const docs = StoreIndex.Filter.docs(index.doc.current, filter);
+        const doc = docs[i];
+        updateItemFromDoc(item, doc);
+        return [item, i];
+      }
+    }
+
+    if (typeof target === 'string') {
+      if (target === _addItem.instance) return [_addItem, indexTotal()];
+      return array.getItem(target);
+    }
+
+    // Not found.
+    return [undefined, -1];
   };
+}
+
+/**
+ * Helpers
+ */
+function updateItemFromDoc(item?: t.RepoItemState, doc?: t.StoreIndexDoc) {
+  if (!doc || item?.current.data?.kind !== 'Doc') return;
+  if (!item.current.data?.uri) item.change((d) => (Data.item(d).uri = doc.uri));
+  if (item.current.label !== doc.name) item.change((d) => (d.label = doc.name));
 }

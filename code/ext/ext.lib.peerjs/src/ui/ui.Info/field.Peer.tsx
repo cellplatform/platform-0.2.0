@@ -1,14 +1,16 @@
-import { Icons, PeerUri, Value, Webrtc, css, type t } from './common';
+import { COLORS, Icons, Value, Webrtc, css, type t } from './common';
 
 type P = t.PropListItem;
 
 const styles = {
-  conn: css({ Flex: 'x-center-center' }),
-  icon: css({ marginLeft: 5 }),
+  center: css({ Flex: 'x-center-center' }),
+  iconRight: css({ marginLeft: 5 }),
+  iconLeft: css({ marginRight: 5 }),
 };
 
-export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
-  const self = data.peer?.self;
+export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
+  if (!data) return;
+  const self = data?.self;
   const peer = self;
   const current = peer?.current;
   const showRemotes = fields.includes('Peer.Remotes');
@@ -19,8 +21,13 @@ export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
   const root: P = {
     label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
-      data: Wrangle.rootLabel(current),
-      opacity: current?.open ? 1 : 0.3,
+      data: (
+        <div {...styles.center}>
+          <div>{Wrangle.rootLabel(current)}</div>
+          <Icons.Person size={14} style={styles.iconRight} color={COLORS.BLUE} />
+        </div>
+      ),
+      opacity: current?.open || peer.current.connections.length > 0 ? 1 : 0.3,
     },
   };
   if (!peer) return root;
@@ -33,12 +40,16 @@ export function fieldPeer(data: t.InfoData, fields: t.InfoField[]) {
     const peers = peer.get.conn.remotes;
     Object.keys(peers).forEach((remoteid) => {
       remotes.push({
-        indent: 15,
-        label: `remote: ${remoteid}`,
+        label: (
+          <div {...styles.center}>
+            <Icons.Person size={14} style={styles.iconLeft} flipX={true} />
+            <div>{`remote: ${remoteid}`}</div>
+          </div>
+        ),
         value: (
-          <div {...styles.conn}>
+          <div {...styles.center}>
             <div>{Wrangle.remotesLabel(peers[remoteid])}</div>
-            <Icons.Plug size={14} style={styles.icon} />
+            <Icons.Plug size={14} style={styles.iconRight} />
           </div>
         ),
       });

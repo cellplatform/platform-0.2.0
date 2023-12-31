@@ -1,11 +1,24 @@
 /**
  * @external
  */
-import { clone, uniq, flatten } from 'ramda';
+import { clone, flatten, uniq } from 'ramda';
 export const R = { clone, uniq, flatten } as const;
 
 /**
  * @system
  */
-export { Mime, Delete, Hash, Is, Stream, Json, Sort, Time } from 'sys.util';
-export { asArray, cuid, slug, rx } from 'sys.util';
+export {
+  Delete,
+  Filesize,
+  Hash,
+  Is,
+  Json,
+  Mime,
+  Sort,
+  Stream,
+  Time,
+  asArray,
+  cuid,
+  rx,
+  slug,
+} from 'sys.util';

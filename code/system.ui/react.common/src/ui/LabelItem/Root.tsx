@@ -6,6 +6,7 @@ import { BehaviorSelector } from '../LabelItem.Stateful/ui.Config.BehaviorSelect
 import { ListContext } from './Context.List';
 import { ForwardRef } from './Root.ForwardRef';
 import { Button } from './ui.Button';
+import { Wrangle } from './Wrangle';
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
@@ -14,6 +15,7 @@ type Fields = {
   Button: typeof Button;
   BehaviorSelector: typeof BehaviorSelector;
   ListContext: typeof ListContext;
+  dataid: typeof Wrangle.dataid;
 };
 export const LabelItem = FC.decorate<t.LabelItemProps, Fields>(
   ForwardRef,
@@ -24,6 +26,7 @@ export const LabelItem = FC.decorate<t.LabelItemProps, Fields>(
     Button,
     BehaviorSelector,
     ListContext,
+    dataid: Wrangle.dataid,
   },
   { displayName: 'LabelItem' },
 );

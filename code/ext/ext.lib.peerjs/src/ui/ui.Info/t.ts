@@ -4,6 +4,6 @@ export type InfoField = 'Module' | 'Module.Verify' | 'Component' | 'Peer' | 'Pee
 
 export type InfoData = {
   url?: { href: string; title?: string };
-  component?: { name?: string };
+  component?: { label?: string; name?: string };
   peer?: { self: t.PeerModel };
 };

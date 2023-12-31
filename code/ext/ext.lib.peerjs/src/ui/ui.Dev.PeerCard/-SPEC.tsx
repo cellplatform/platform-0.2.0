@@ -1,7 +1,8 @@
 import { PeerCard } from '.';
-import { Dev, Webrtc } from '../../test.ui';
+import { type t, Dev, Webrtc, Time } from '../../test.ui';
 import { Sample } from './-SPEC.Sample';
 
+type TMeta = t.PeerConnectMetadata & { msg: string };
 type T = {};
 const initial: T = {};
 
@@ -20,6 +21,19 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+
+    const events = {
+      peerA: peerA.events(),
+      peerB: peerB.events(),
+      peerC: peerC.events(),
+    } as const;
+
+    events.peerA.cmd.beforeOutgoing$.subscribe(async (e) => {
+      e.metadata<TMeta>(async (data) => {
+        await Time.wait(50); // NB: Test ensures async lookups can be done to decorate the meta-data.
+        data.msg = 'foobar 👋';
+      });
+    });
 
     ctx.debug.width(330);
     ctx.subject

@@ -1,5 +1,5 @@
 import { Peer as PeerJsLib } from 'peerjs';
-import { DEFAULTS, Is, Path, PeerUri as Uri, type t } from './common';
+import { DEFAULTS, WebrtcIs, Path, PeerUri as Uri, type t } from './common';
 
 /**
  * Helpers for setting up and working with a WebRTC peer.
@@ -7,7 +7,7 @@ import { DEFAULTS, Is, Path, PeerUri as Uri, type t } from './common';
  *    https://github.com/peers/peerjs
  */
 export const PeerJs: t.WebrtcPeerJs = {
-  Is,
+  Is: WebrtcIs,
   Uri,
 
   /**

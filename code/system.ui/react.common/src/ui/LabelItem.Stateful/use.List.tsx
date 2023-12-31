@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, ListContext, Model, rx, type t } from './common';
+import { DEFAULTS, ListContext, Model, rx, slug, type t } from './common';
+import { useListFocusController } from './use.List.Focus';
 import { useListKeyboardController } from './use.List.Keyboard';
 import { useListNavigationController } from './use.List.Navigation';
 import { useListRedrawController } from './use.List.Redraw';
 
 type Args = {
   enabled?: boolean;
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
   list?: t.LabelListState;
 };
 
@@ -15,11 +16,11 @@ type Args = {
  * HOOK: roll-up of all controllers related to a list of <Item>'s.
  */
 export function useListController<H extends HTMLElement = HTMLDivElement>(args: Args) {
-  const { useBehaviors } = args;
+  const { behaviors } = args;
   const enabled = Wrangle.enabled(args, 'List', 'List.Navigation');
 
   const ref = useRef<H>(null);
-  const dispatchRef = useRef<t.LabelListDispatch>();
+  const idRef = useRef(slug());
   const listRef = useRef(args.list ?? Model.List.state());
   const list = listRef.current;
 
@@ -42,18 +43,26 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   }, []);
 
   /**
+   * Initialize the list's root DOM element.
+   */
+  useEffect(() => {
+    const el = ref.current;
+    if (el) {
+      el.setAttribute('data-id', Wrangle.dataid.list(idRef.current));
+      el.style.outline = 'none';
+    }
+  }, [!!ref.current]);
+
+  /**
    * Hook into event handlers passed down to the <Item>.
    */
-  const handlers: t.LabelItemPropsHandlers = {
-    onFocusChange(e) {
-      list?.change((d) => (d.focused = e.focused));
-    },
-  };
+  let handlers: t.LabelItemPropsHandlers = {};
 
   /**
    * Sub-controllers.
    */
-  useListKeyboardController({ list, useBehaviors });
+  useListFocusController({ ref, list, behaviors });
+  useListKeyboardController({ ref, list, behaviors });
   useListNavigationController({
     enabled: enabled && Wrangle.enabled(args, 'List', 'List.Navigation'),
     ref,
@@ -66,7 +75,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
   return {
     ref,
     enabled,
-    handlers,
+    item: { handlers, behaviors },
     list,
     get current() {
       return list?.current ?? DEFAULTS.data.list;
@@ -74,7 +83,7 @@ export function useListController<H extends HTMLElement = HTMLDivElement>(args: 
     Provider(props: { children?: React.ReactNode }) {
       const Provider = ListContext.Provider;
       const value: t.LabelListContext = {
-        dispatch: dispatchRef.current!,
+        dispatch: Model.List.commands(list),
         events: list.events,
         get list() {
           return list.current;

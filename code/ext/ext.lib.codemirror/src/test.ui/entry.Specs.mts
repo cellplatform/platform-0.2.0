@@ -1,9 +1,11 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ext.lib.codemirror.tests': () => import('./-TestRunner'),
-  'ext.lib.codemirror.ui.Info': () => import('../ui/ui.Info/-SPEC'),
-  'ext.lib.codemirror.ui.Editor': () => import('../ui/ui.Editor/-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.Editor`]: () => import('../ui/ui.Editor/-SPEC'),
 };
 
 export default Specs;

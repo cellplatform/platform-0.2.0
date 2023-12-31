@@ -1,10 +1,13 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
 import { Root } from '.';
 
 type T = { props: t.RootProps };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
 
+/**
+ * Spec
+ */
+const name = Root.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

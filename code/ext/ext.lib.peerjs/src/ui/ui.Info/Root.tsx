@@ -1,6 +1,5 @@
-import { DEFAULTS, FC, Pkg, PropList, t } from './common';
-import { fieldModuleVerify } from './field.Module.Verify';
-import { fieldPeer } from './field.Peer';
+import { DEFAULTS, FC, PropList, type t } from './common';
+import { Field } from './field';
 import { useRedraw } from './use.Redraw';
 
 export type InfoProps = {
@@ -23,10 +22,10 @@ const View: React.FC<InfoProps> = (props) => {
   useRedraw(data);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => fieldModuleVerify(data))
-    .field('Component', { label: 'Component', value: data.component?.name ?? '(Unnamed)' })
-    .field('Peer', () => fieldPeer(data, fields))
+    .field('Module', () => Field.module())
+    .field('Module.Verify', () => Field.moduleVerify())
+    .field('Component', () => Field.component(data.component))
+    .field('Peer', () => Field.peer(data.peer, fields))
     .items(fields);
 
   return (
@@ -60,5 +59,11 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Field: typeof Field;
+  useRedraw: typeof useRedraw;
 };
-export const Info = FC.decorate<InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<InfoProps, Fields>(
+  View,
+  { DEFAULTS, Field, useRedraw },
+  { displayName: 'Info' },
+);

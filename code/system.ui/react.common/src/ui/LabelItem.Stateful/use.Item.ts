@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Model, type t } from './common';
+import { DEFAULTS, Model, rx, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { useBubbleEvents } from './use.Item.bubble';
 import { useItemEditController } from './use.Item.Edit';
 import { useItemSelectionController } from './use.Item.Selection';
+import { useBubbleEvents } from './use.Item.bubble';
 
 type Args = {
   index?: number;
   total?: number;
-  useBehaviors?: t.LabelItemBehaviorKind[];
+  behaviors?: t.LabelItemBehaviorKind[];
   enabled?: boolean;
   item?: t.LabelItemState;
   list?: t.LabelListState;
@@ -23,21 +23,21 @@ export function useItemController(args: Args) {
   const {
     index = DEFAULTS.index,
     total = DEFAULTS.total,
-    useBehaviors = DEFAULTS.useBehaviors.defaults,
+    behaviors = DEFAULTS.behaviors.defaults,
     item,
     list,
   } = args;
   const position = { index, total };
   const dispatch = Model.Item.commands(item);
   const enabled =
-    (args.enabled ?? true) && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection', 'Item.Edit');
+    (args.enabled ?? true) && Wrangle.isUsing(behaviors, 'Item', 'Item.Selection', 'Item.Edit');
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
   const onChange: t.LabelItemStateChangedHandler = (e) => dispatch.changed(e);
 
   const selection = useItemSelectionController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Selection'),
+    enabled: enabled && Wrangle.isUsing(behaviors, 'Item', 'Item.Selection'),
     position,
     item,
     list,
@@ -46,7 +46,7 @@ export function useItemController(args: Args) {
   });
 
   const edit = useItemEditController({
-    enabled: enabled && Wrangle.isUsing(useBehaviors, 'Item', 'Item.Edit'),
+    enabled: enabled && Wrangle.isUsing(behaviors, 'Item', 'Item.Edit'),
     position,
     item,
     list,
@@ -61,7 +61,14 @@ export function useItemController(args: Args) {
    */
   useEffect(() => {
     const events = item?.events();
-    if (events) events.cmd.redraw$.subscribe(redraw);
+    if (events) {
+      // Handle redraws.
+      const redrawCount$ = events.$.pipe(rx.distinctWhile((p, n) => p.to.redraw === n.to.redraw));
+      const redrawCmd$ = events.cmd.redraw$;
+      const redraw$ = rx.merge(redrawCount$, redrawCmd$);
+      redraw$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);
+    }
+
     return events?.dispose;
   }, [item?.instance]);
 

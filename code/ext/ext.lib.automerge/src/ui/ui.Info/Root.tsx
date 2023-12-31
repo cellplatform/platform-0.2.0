@@ -1,29 +1,17 @@
-import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
-import { FieldModuleVerify } from './field.Module.Verify';
-import { FieldRepo } from './field.Repo';
-
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
-  data?: t.InfoData;
-  margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
-  style?: t.CssValue;
-};
+import { DEFAULTS, FC, PropList, type t } from './common';
+import { InfoField } from './field';
 
 /**
  * Component
  */
-const View: React.FC<InfoProps> = (props) => {
+const View: React.FC<t.InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
-    .field('Component', { label: 'Component', value: data.component?.name ?? 'Unnamed' })
-    .field('Repo', () => FieldRepo(data))
+    .field('Module', () => InfoField.module())
+    .field('Module.Verify', () => InfoField.moduleVerify())
+    .field('Repo', () => InfoField.repo(data.repo))
+    .field('Component', () => InfoField.component(data.component))
     .items(fields);
 
   return (
@@ -45,7 +33,7 @@ const View: React.FC<InfoProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  title(props: InfoProps) {
+  title(props: t.InfoProps) {
     const title = PropList.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
@@ -57,5 +45,10 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Field: typeof InfoField;
 };
-export const Info = FC.decorate<InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });
+export const Info = FC.decorate<t.InfoProps, Fields>(
+  View,
+  { DEFAULTS, Field: InfoField },
+  { displayName: 'Info' },
+);

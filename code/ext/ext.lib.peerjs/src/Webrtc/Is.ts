@@ -1,7 +1,7 @@
 import { type t } from './common';
 import { PeerId } from './Peer.Id';
 
-export const Is: t.WebrtcIs = {
+export const WebrtcIs: t.WebrtcIs = {
   peerid(input) {
     if (typeof input !== 'string') return false;
     return PeerId.is(input.trim());
@@ -10,7 +10,7 @@ export const Is: t.WebrtcIs = {
   uri(input) {
     if (typeof input !== 'string') return false;
     const parts = input.trim().split(':');
-    return parts[0] === 'peer' && Is.peerid(parts[1]);
+    return parts[0] === 'peer' && WebrtcIs.peerid(parts[1]);
   },
 
   kind: {

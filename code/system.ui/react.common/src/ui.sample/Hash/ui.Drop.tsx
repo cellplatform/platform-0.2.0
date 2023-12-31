@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDragTarget } from '../../ui/useDragTarget';
-import { Hash, css, type t } from '../common';
+import { Color, COLORS, Hash, css, type t } from '../common';
 import { Filesize } from 'sys.fs';
 
 export type DropProps = {
@@ -27,14 +27,20 @@ export const Drop: React.FC<DropProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       display: 'grid',
       placeItems: 'center',
-      userSelect: 'none',
+      boxSizing: 'border-box',
+      fontSize: 60,
+      padding: '1em',
     }),
     message: css({
       Padding: [20, 50],
-      pointerEvents: 'none',
-      lineHeight: 1.5,
+      letterSpacing: -0.6,
+      wordBreak: 'break-all',
+      marginBottom: '0.25em',
+      backgroundColor: Color.alpha(COLORS.DARK, 0.03),
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
     }),
   };
 
@@ -42,9 +48,9 @@ export const Drop: React.FC<DropProps> = (props) => {
 
   return (
     <div ref={drag.ref} {...css(styles.base, props.style)}>
-      <div {...styles.message}>
-        <div>{message}</div>
-        {data && <div>{Filesize(data.byteLength)}</div>}
+      <div>
+        <div {...styles.message}>{message}</div>
+        {data && <div {...styles.message}>{Filesize(data.byteLength)}</div>}
       </div>
     </div>
   );

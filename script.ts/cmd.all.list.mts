@@ -8,7 +8,8 @@ const filter = (path: string) => {
   return true;
 };
 const sortBy = argv.topo ? 'Topological' : 'Alpha';
-let paths = await Builder.Find.projectDirs({ filter, sortBy });
+const graph = await Builder.Dependencies.buildGraph({ filter, sortBy });
+const paths = graph.map(({ path }) => path);
 
 if (paths.length === 0) {
   console.warn(pc.gray('no paths'));
@@ -19,7 +20,6 @@ const table = LogTable();
 
 for (const path of paths) {
   const size = await Util.folderSize(fs.join(path, 'dist'));
-
   const column = {
     path: pc.gray(` • ${Util.formatPath(path)}`),
     size: pc.gray(`  /dist: ${size.toString()}`),

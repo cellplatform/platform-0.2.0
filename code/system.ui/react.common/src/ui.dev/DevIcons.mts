@@ -3,6 +3,7 @@ import { HiCommandLine } from 'react-icons/hi2';
 import {
   MdCheck,
   MdClose,
+  MdContentCopy,
   MdDoneAll,
   MdInfoOutline,
   MdKeyboard,
@@ -32,6 +33,7 @@ export const DevIcons = {
   Info: icon(MdInfoOutline),
   Method: icon(VscSymbolVariable),
   Close: icon(MdClose),
+  Copy: icon(MdContentCopy),
   Tick: icon(MdCheck),
   Skip: icon(MdToggleOff),
   Play: icon(MdPlayArrow),

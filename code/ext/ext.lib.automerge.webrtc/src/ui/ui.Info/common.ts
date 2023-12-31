@@ -1,13 +1,31 @@
 import { type t } from '../common';
+
+export { Info as PeerInfo } from 'ext.lib.peerjs';
+
 export * from '../common';
+export { usePeerMonitor, useTransmitMonitor } from '../use';
 
 /**
  * Constants
  */
-const allFields: t.InfoField[] = ['Module', 'Module.Verify'];
-const defaultFields: t.InfoField[] = ['Module', 'Module.Verify'];
-
 export const DEFAULTS = {
-  fields: { all: allFields, default: defaultFields },
+  fields: {
+    get all(): t.InfoField[] {
+      return [
+        'Module',
+        'Module.Verify',
+        'Component',
+        'Peer',
+        'Peer.Remotes',
+        'Repo',
+        'Network.Shared',
+        'Network.Shared.Json',
+        'Network.Transfer',
+      ];
+    },
+    get default(): t.InfoField[] {
+      return ['Module', 'Module.Verify'];
+    },
+  },
   query: { dev: 'dev' },
 } as const;

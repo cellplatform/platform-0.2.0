@@ -64,8 +64,6 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
   const elBack = backside && (
     <div {...sideStyle}>
       <CardBody padding={props.padding}>{backside}</CardBody>
-
-      {/* <div {...styles.body}>{backside}</div> */}
     </div>
   );
 

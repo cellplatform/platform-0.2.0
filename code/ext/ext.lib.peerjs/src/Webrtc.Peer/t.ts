@@ -12,7 +12,7 @@ export type GetMediaResponse = { stream?: MediaStream; error?: Error };
 /**
  * Entry API
  */
-export type WebrtcPeerModel = {
+export type WebrtcPeer = {
   init(options?: InitOptions): t.PeerModel;
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
 };
@@ -34,7 +34,7 @@ export type PeerConnection = {
   id: string;
   peer: { self: Id; remote: Id };
   open: boolean | null; // NB: null while initializing.
-  direction: PeerConnectDirection;
+  direction: t.IODirection;
   metadata: PeerConnectMetadata;
   stream?: { self?: MediaStream; remote?: MediaStream };
 };
@@ -44,8 +44,10 @@ export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKin
 export type PeerConnectionDataKind = 'data';
 export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
 
-export type PeerConnectDirection = 'incoming' | 'outgoing';
-export type PeerConnectMetadata = { kind: PeerConnectionKind | 'unknown'; userAgent: string };
+export type PeerConnectMetadata = {
+  kind: PeerConnectionKind | 'unknown';
+  userAgent: string;
+};
 
 /**
  * Logical API over the peer state.
@@ -54,14 +56,17 @@ export type PeerModel = t.Lifecycle & {
   readonly id: Id;
   readonly current: t.Peer;
   readonly get: PeerModelGet;
-  readonly connect: {
-    data(remoteid: Id): Promise<t.PeerConnectedData>;
-    media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
-  };
-  dispatch: t.PeerModelDispatch;
+  readonly connect: PeerModelConnect;
+  readonly iceServers: PeerModelIceServer[];
+  disconnect(connid?: Id): void;
   events(dispose$?: t.UntilObservable): t.PeerModelEvents;
-  disconnect(id: Id): void;
+  dispatch: t.PeerModelDispatch;
   purge(): { changed: boolean; total: { before: number; after: number } };
+};
+
+export type PeerModelConnect = {
+  data(remoteid: Id): Promise<t.PeerConnectedData>;
+  media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
 };
 
 export type PeerModelGet = {
@@ -75,10 +80,19 @@ export type PeerModelGet = {
 
 export type PeerModelGetConnectionObject = {
   (id?: Id): t.PeerJsConn | undefined;
-  data(id?: Id): t.PeerJsConnData | undefined;
-  media(id?: Id): t.PeerJsConnMedia | undefined;
-  video(id?: Id): t.PeerJsConnMedia | undefined;
-  screen(id?: Id): t.PeerJsConnMedia | undefined;
+  data(connId?: Id): t.PeerJsConnData | undefined;
+  media(connId?: Id): t.PeerJsConnMedia | undefined;
+  video(connId?: Id): t.PeerJsConnMedia | undefined;
+  screen(connId?: Id): t.PeerJsConnMedia | undefined;
+};
+
+/**
+ * ICE: Interactive Connectivity Establishment
+ */
+export type PeerModelIceServer = {
+  urls: string | string[];
+  credential?: string;
+  username?: string;
 };
 
 export type PeerConnected = PeerConnectedData | PeerConnectedMedia;
@@ -99,7 +113,8 @@ export type PeerModelEvents = t.Lifecycle & {
   readonly cmd: {
     readonly $: t.Observable<t.PeerModelCmd>;
     readonly data$: t.Observable<t.PeerModelDataCmdArgs>;
-    readonly conn$: t.Observable<t.PeerModelConnCmdArgs>;
+    readonly conn$: t.Observable<t.PeerModelConnectionCmdArgs>;
+    readonly beforeOutgoing$: t.Observable<t.PeerModelBeforeOutgoingCmdArgs>;
     readonly purge$: t.Observable<t.PeerModelPurgeCmdArgs>;
     readonly error$: t.Observable<t.PeerModelErrorCmdArgs>;
   };
@@ -111,7 +126,8 @@ export type PeerModelEvents = t.Lifecycle & {
 export type PeerModelDispatch = (cmd: PeerModelCmd) => void;
 
 export type PeerModelCmd =
-  | PeerModelConnCmd
+  | PeerModelBeforeOutgoingCmd
+  | PeerModelConnectionCmd
   | PeerModelDataCmd
   | PeerModelPurgeCmd
   | PeerModelErrorCmd;
@@ -123,10 +139,26 @@ export type PeerModelConnAction =
   | 'closed'
   | 'error'
   | 'purged';
-export type PeerModelConnCmd = { type: 'Peer:Connection'; payload: PeerModelConnCmdArgs };
-export type PeerModelConnCmdArgs = {
+
+export type PeerModelBeforeOutgoingCmd = {
+  type: 'Peer:Conn/BeforeOutgoing';
+  payload: PeerModelBeforeOutgoingCmdArgs;
+};
+export type PeerModelBeforeOutgoingCmdArgs = {
+  tx: string;
+  kind: PeerConnectionKind;
+  peer: { self: Id; remote: Id };
+  metadata<T extends t.PeerConnectMetadata>(fn: (data: T) => any | Promise<any>): void;
+};
+
+export type PeerModelConnectionCmd = {
+  type: 'Peer:Conn';
+  payload: PeerModelConnectionCmdArgs;
+};
+export type PeerModelConnectionCmdArgs = {
   tx: string;
   action: PeerModelConnAction;
+  direction?: t.IODirection;
   connection?: PeerConnectionId;
   kind?: PeerConnectionKind;
   error?: string;

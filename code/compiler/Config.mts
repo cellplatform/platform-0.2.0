@@ -1,23 +1,26 @@
 /// <reference types="vitest" />
 
-import { visualizer } from 'rollup-plugin-visualizer';
+import { type ManualChunksOption } from 'rollup';
 import { fileURLToPath } from 'url';
-import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
-
-import { asArray, fs, pc, R, Util, type t } from './builder/common/index.mjs';
-import { Paths } from './builder/index.mjs';
+import { BuildOptions, LibraryOptions, UserConfig, UserConfigExport, defineConfig } from 'vite';
+import { type InlineConfig as TestConfig } from 'vitest';
 
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
-import type { ManualChunksOption, RollupOptions } from 'rollup';
-import type { InlineConfig as TestConfig } from 'vitest';
+import { displayStartupText } from './plugins/displayStartupText.mjs';
+import { R, Util, asArray, fs, pc, type t } from './builder/common/index.mjs';
+import { Paths } from './builder/index.mjs';
+
+export { fs };
 
 /**
  * Common configuration setup.
  */
 export const Config = {
+  fs,
+
   defaults: {
     /**
      * Test runner.
@@ -54,23 +57,31 @@ export const Config = {
        */
       const external: string[] = [];
       const manualChunks: ManualChunksOption = {};
-      const rollupOptions: RollupOptions = {
-        external,
-        output: { manualChunks },
-      };
       const build: BuildOptions = {
-        rollupOptions,
         manifest: Paths.viteBuildManifest,
         assetsDir: 'lib',
         target: 'esnext',
+        rollupOptions: {
+          external,
+          output: { manualChunks },
+          onwarn(warning, warn) {
+            // Use a string match to suppress specific warnings
+            // Simply return to ignore the warning
+            warn(warning); // ← default warning handler
+          },
+        },
       };
+
+      const title = pc.gray(`module: ${pc.green(pc.bold(pkg.name))}`);
+      const titlePlugin =
+        e.command === 'serve' && e.mode !== 'test' ? displayStartupText(title) : undefined;
 
       let config: UserConfig = {
         build,
-        plugins: [topLevelAwait(), wasm()],
+        plugins: [topLevelAwait(), wasm(), titlePlugin],
         worker: {
           format: 'es',
-          plugins: [topLevelAwait(), wasm()],
+          plugins: () => [topLevelAwait(), wasm()],
         },
         optimizeDeps: {
           /**
@@ -93,12 +104,12 @@ export const Config = {
 
       /**
        * TODO 🐷 - Temporary ←[DELETE]
-       * Temporary requirement of module: ext.lib.auth.privy
+       * Temporary requirement of module: ext.lib.privy
        * https://privy-developers.slack.com/archives/C059ABLSB47/p1692753366943129?thread_ts=1692753043.728049&cid=C059ABLSB47
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        const modules = ['ext.lib.auth.privy', 'dev.000'];
+        const modules = ['ext.lib.privy', 'dev.000'];
         return modules.some((item) => modulePath.includes(item));
       };
 
@@ -165,11 +176,6 @@ export const Config = {
       if (hasPlugin('web:svelte')) {
         const svelte = (await import('@sveltejs/vite-plugin-svelte')).svelte;
         config.plugins?.push(svelte());
-      }
-
-      if (hasPlugin('bundle:visualize')) {
-        const filename = fs.join(Paths.outDir.root, 'bundle.stats.html');
-        config.plugins?.push(visualizer({ filename }));
       }
 
       /**
@@ -274,7 +280,7 @@ export const Config = {
       return _current;
     };
   },
-};
+} as const;
 
 /**
  * Helpers

@@ -12,7 +12,7 @@ const View: React.FC<t.ChainSelectorProps> = (props) => {
   const handleChange = (next: t.ChainName[]) => {
     if (props.onChange && next?.join() !== selected?.join()) {
       props.onChange({
-        empty: next?.length === 0 ?? true,
+        empty: next?.length === 0,
         prev: selected,
         next,
       });

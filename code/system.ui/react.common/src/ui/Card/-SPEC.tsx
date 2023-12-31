@@ -7,6 +7,7 @@ type T = {
     flipFast: boolean;
     focusable: boolean;
     header: boolean;
+    body: boolean;
     footer: boolean;
   };
 };
@@ -22,6 +23,7 @@ const initial: T = {
     flipFast: true,
     focusable: true,
     header: false,
+    body: true,
     footer: true,
   },
 };
@@ -52,7 +54,7 @@ export default Dev.describe('Card', (e) => {
           }),
         };
 
-        const elBody = <div {...styles.body}>{Dev.Lorem.toString()}</div>;
+        const elBody = debug.body && <div {...styles.body}>{Dev.Lorem.toString()}</div>;
         const elBackside = <div {...styles.body}>{`🐷 Backside`}</div>;
 
         const elHeader = debug.header && <div {...styles.header}>Header</div>;
@@ -212,6 +214,13 @@ export default Dev.describe('Card', (e) => {
           .label((e) => `header`)
           .value((e) => Boolean(e.state.debug.header))
           .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'header'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `body`)
+          .value((e) => Boolean(e.state.debug.body))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'body'))),
       );
 
       dev.boolean((btn) =>

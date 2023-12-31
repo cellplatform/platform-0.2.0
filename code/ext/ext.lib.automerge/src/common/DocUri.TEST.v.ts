@@ -1,7 +1,5 @@
-import { describe, expect, it, type t } from '../test';
 import { DocUri } from '.';
-
-type D = { count?: t.A.Counter };
+import { describe, expect, it, type t } from '../test';
 
 describe('Store.DocUri', () => {
   describe('DocUri.id', () => {
@@ -26,6 +24,14 @@ describe('Store.DocUri', () => {
       expect(DocUri.id('automerge:abc:foo')).to.eql('abc');
       expect(DocUri.id('  automerge:abc:foo  ')).to.eql('abc');
     });
+
+    it('shorten', () => {
+      const uri = 'automerge:3xFTnhG6Z3fzdxqiEoLMRrWHFdfe';
+      const res1 = DocUri.id(uri, { shorten: 4 });
+      const res2 = DocUri.id(uri, { shorten: [2, 3] });
+      expect(res1).to.eql('3xFT..Fdfe');
+      expect(res2).to.eql('3x..dfe');
+    });
   });
 
   describe('DocUri.automerge', () => {
@@ -35,7 +41,7 @@ describe('Store.DocUri', () => {
       });
     });
 
-    it('ensure "automerge:" prfix', () => {
+    it('ensure "automerge:" prefix', () => {
       const test = (input: any, expected: string) => {
         const res = DocUri.automerge(input);
         expect(res).to.eql(expected, input);
@@ -45,6 +51,14 @@ describe('Store.DocUri', () => {
       test(' db:foo ', 'automerge:foo');
       test(' automerge:foo ', 'automerge:foo');
       test(' automerge ', 'automerge:automerge');
+    });
+
+    it('shorten', () => {
+      const uri = 'automerge:3xFTnhG6Z3fzdxqiEoLMRrWHFdfe';
+      const res1 = DocUri.automerge(uri, { shorten: 4 });
+      const res2 = DocUri.automerge(uri, { shorten: [2, 3] });
+      expect(res1).to.eql('automerge:3xFT..Fdfe');
+      expect(res2).to.eql('automerge:3x..dfe');
     });
   });
 });

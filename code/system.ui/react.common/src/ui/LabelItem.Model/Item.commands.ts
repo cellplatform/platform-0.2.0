@@ -8,35 +8,64 @@ export function commands(item?: t.LabelItemState) {
 
   const api: t.LabelItemDispatch = {
     redraw() {
-      dispatch({ type: 'Item:Redraw', payload: { tx: slug() } });
+      dispatch({
+        type: 'Item:Redraw',
+        payload: { tx: slug() },
+      });
     },
 
     changed(e) {
-      dispatch({ type: 'Item:Changed', payload: { ...e, tx: slug() } });
+      dispatch({
+        type: 'Item:Changed',
+        payload: { ...e, tx: slug() },
+      });
     },
 
     action(e) {
-      dispatch({ type: 'Item:Action', payload: { ...e, tx: slug() } });
+      dispatch({
+        type: 'Item:Action',
+        payload: { ...e, tx: slug() },
+      });
     },
 
     click(e) {
-      dispatch({ type: 'Item:Click', payload: { ...e, tx: slug() } });
+      dispatch({
+        type: 'Item:Click',
+        payload: { ...e, tx: slug() },
+      });
     },
 
     edit(action) {
-      dispatch({ type: 'Item:Edit', payload: { action, tx: slug() } });
+      let cancelled = false;
+      const payload: t.LabelItemEditCmdArgs = {
+        action,
+        tx: slug(),
+        get cancelled() {
+          return cancelled;
+        },
+        cancel() {
+          cancelled = true;
+        },
+      };
+      dispatch({ type: 'Item:Edit', payload });
     },
 
     edited(action) {
       const label = item?.current.label ?? '';
-      dispatch({ type: 'Item:Edited', payload: { action, label, tx: slug() } });
+      dispatch({
+        type: 'Item:Edited',
+        payload: { action, label, tx: slug() },
+      });
     },
 
     /**
      * Clipboard related actions.
      */
     clipboard(action) {
-      dispatch({ type: 'Item:Clipboard', payload: { action, tx: slug() } });
+      dispatch({
+        type: 'Item:Clipboard',
+        payload: { action, tx: slug() },
+      });
     },
 
     /**

@@ -2,7 +2,6 @@ import { Card, COLORS, css, DEFAULTS, type t } from '../common';
 import { PropListItem } from '../ui.Item/Item';
 import { PropListTitle } from '../ui.Item/Title';
 import { Wrangle } from '../util.mjs';
-import { EmptyBackside } from './EmptyBackside';
 
 /**
  * Component
@@ -51,15 +50,24 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     });
 
   const elTitle = props.title && (
-    <PropListTitle style={styles.title} theme={theme} defaults={defaults} data={props.title} />
+    <PropListTitle
+      style={styles.title}
+      total={items.length}
+      theme={theme}
+      defaults={defaults}
+      data={props.title}
+    />
   );
+
+  // Exit if empty.
+  if (items.length === 0 && !Wrangle.hasTitle(props.title)) return null;
 
   return (
     <Card
       style={css(styles.base, props.style)}
       showAsCard={Boolean(card)}
       showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
-      backside={props.backside ?? <EmptyBackside />}
+      backside={props.backside}
       backsideHeader={props.backsideHeader}
       backsideFooter={props.backsideFooter}
       header={props.header}
@@ -72,7 +80,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
         {elTitle}
-        <div {...styles.items}>{elItems}</div>
+        {items.length > 0 && <div {...styles.items}>{elItems}</div>}
       </div>
     </Card>
   );

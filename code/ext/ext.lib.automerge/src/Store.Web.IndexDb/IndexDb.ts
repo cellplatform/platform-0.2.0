@@ -1,5 +1,4 @@
 import { IndexedDb, NAME, rx, type t } from './common';
-const { Record } = IndexedDb;
 
 /**
  * An IndexedDB for storing meta-data about [Store/Repo]'s.
@@ -10,15 +9,16 @@ export const StoreIndexDb = {
    */
   name(store: string | t.WebStore) {
     let root = (typeof store === 'string' ? store : store.info.storage?.name || '').trim();
-    if (!root) throw new Error(`A root store name is required`);
+    if (!root) throw new Error(`A store name is required for the Index`);
     root = root.replace(/\:*$/, '');
-    return `${root}:index`;
+    return `${root}:sys`;
   },
 
   /**
    * Initialie a new entry-point to the DB containing references to Store/Repo indexes.
    */
   init(name: string) {
+    const { Record } = IndexedDb;
     return IndexedDb.init<t.StoreIndexDb>({
       name,
       version: 1,
@@ -74,10 +74,12 @@ export const StoreIndexDb = {
             const existing = await api.get(store);
             if (existing) return existing;
 
-            const doc = await store.doc.getOrCreate<t.RepoIndex>((d) => (d.docs = []));
+            const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => (d.docs = []));
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
-            return Record.put<t.StoreMetaRecord>(table, { dbname, index: doc.uri });
+            const record: t.StoreMetaRecord = { dbname, index: doc.uri };
+            await Record.put(table, record);
+            return record;
           },
 
           async delete(store: t.WebStore) {

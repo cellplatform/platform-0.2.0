@@ -1,18 +1,23 @@
 /**
  * @external
  */
-export { useDocument } from '@automerge/automerge-repo-react-hooks';
+
+export { RepoList } from 'ext.lib.automerge';
+export { Peer, PeerUI } from 'ext.lib.peerjs';
 
 /**
  * @system
  */
+export { IndexedDb } from 'sys.data.indexeddb';
 export {
   Button,
   COLORS,
   Color,
   FC,
   Keyboard,
+  ObjectView,
   PropList,
+  Spinner,
   TestRunner,
   css,
   useDragTarget,

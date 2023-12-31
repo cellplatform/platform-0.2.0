@@ -1,4 +1,5 @@
 import { COLORS, Color, DEFAULTS, type t } from './common';
+import { dataid } from '../LabelItem.Stateful/Wrangle.dataid';
 
 type RenderArgs = {
   index: number;
@@ -11,6 +12,8 @@ type RenderArgs = {
 };
 
 export const Wrangle = {
+  dataid,
+
   valuesOrDefault(props: Partial<t.LabelItemValueArgs>): t.LabelItemValueArgs {
     const {
       index = DEFAULTS.index,
@@ -67,7 +70,6 @@ export const Wrangle = {
 /**
  * Helpers
  */
-
 const actionHelpers: t.LabelItemActionHelpers = {
   opacity(e: t.LabelItemRenderArgs) {
     if (e.enabled) return 0.9;

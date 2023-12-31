@@ -2,8 +2,8 @@
  * @external
  */
 export { next as A } from '@automerge/automerge';
-import { clone, equals } from 'ramda';
-export const R = { clone, equals } as const;
+import { clone, equals, uniq, uniqBy } from 'ramda';
+export const R = { clone, equals, uniq, uniqBy } as const;
 
 /**
  * @system

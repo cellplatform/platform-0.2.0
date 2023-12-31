@@ -254,6 +254,43 @@ export function BusEvents(args: {
     },
   };
 
+  const Renderers = {
+    async get(fn: (e: { props: t.DevRenderProps; push(id?: string): void }) => void) {
+      const props = (await info.fire()).info?.render.props;
+      const res: string[] = [];
+      if (props) fn({ props, push: (id) => (id ? res.push(id) : null) });
+      return res.filter(Boolean);
+    },
+    subject() {
+      return Renderers.get((e) => e.push(e.props.subject.renderer?.id));
+    },
+    debug() {
+      return Renderers.get((e) => {
+        e.props.debug.body.renderers.forEach(({ id }) => e.push(id));
+        e.push(e.props.debug.header.renderer?.id);
+        e.push(e.props.debug.footer.renderer?.id);
+      });
+    },
+    host() {
+      return Renderers.get((e) => {
+        e.push(e.props.host.header.renderer?.id);
+        e.push(e.props.host.footer.renderer?.id);
+        Object.values(e.props.host.layers)
+          .filter((value) => typeof value.renderer === 'object')
+          .forEach((value) => e.push(value.renderer?.id));
+      });
+    },
+    async harness() {
+      const debug = await Renderers.debug();
+      const host = await Renderers.host();
+      return [...debug, ...host];
+    },
+    fire(target: t.DevRedrawTarget, renderers: string[]) {
+      redraw.fire({ renderers, target });
+      return renderers;
+    },
+  } as const;
+
   /**
    * Redraw (re-render component).
    */
@@ -262,19 +299,17 @@ export function BusEvents(args: {
       .payload<t.DevRedrawEvent>($, 'sys.dev/redraw')
       .pipe(rx.observeOn(rx.animationFrameScheduler)),
     fire(args) {
-      const { renderers = [], all } = args;
-      bus.fire({
-        type: 'sys.dev/redraw',
-        payload: { instance, renderers, all },
-      });
+      const { renderers = [], target } = args;
+      if (target || renderers.length > 0) {
+        bus.fire({
+          type: 'sys.dev/redraw',
+          payload: { instance, renderers, target },
+        });
+      }
     },
-    async subject() {
-      const res = await info.fire();
-      if (!res.info) return; // NB: Ignore if not ready.
-      const id = res.info?.render.props?.subject.renderer?.id;
-      if (id) redraw.fire({ renderers: [id] });
-      return id;
-    },
+    subject: async () => Renderers.fire('subject', await Renderers.subject()),
+    debug: async () => Renderers.fire('debug', await Renderers.debug()),
+    harness: async () => Renderers.fire('harness', await Renderers.harness()),
   };
 
   /**

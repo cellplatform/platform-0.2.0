@@ -1,4 +1,4 @@
-export { PeerModel, Webrtc } from '../../Webrtc';
+export { Peer, Webrtc } from '../../Webrtc';
 export * from '../common';
 
 /**

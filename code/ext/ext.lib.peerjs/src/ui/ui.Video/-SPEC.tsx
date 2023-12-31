@@ -1,4 +1,4 @@
-import { COLORS, Color, Dev, UI, Webrtc, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, PeerUI, Webrtc, css, type t } from '../../test.ui';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
 type T = {
@@ -35,7 +35,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <UI.Video {...e.state.props} peer={self} />;
+        return <PeerUI.Video {...e.state.props} peer={self} />;
       });
   });
 
@@ -55,14 +55,12 @@ export default Dev.describe(name, (e) => {
 
         return (
           <div>
-            <UI.Connector
+            <PeerUI.Connector
               peer={self}
-              behavior={{ focusOnLoad: true }}
-              onReady={(e) => {
-                console.info('⚡️ Connector.onReady:', e);
-              }}
+              behaviors={['Focus.OnLoad']}
+              onReady={(e) => console.info('⚡️ Connector.onReady:', e)}
             />
-            <UI.AvatarTray
+            <PeerUI.AvatarTray
               peer={self}
               style={styles.avatars}
               muted={e.state.muted}

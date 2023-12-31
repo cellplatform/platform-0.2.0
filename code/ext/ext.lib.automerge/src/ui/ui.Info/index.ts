@@ -1,1 +1,2 @@
-export * from './Root';
+export { Info } from './Root';
+export { InfoField } from './field';

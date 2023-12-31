@@ -47,6 +47,13 @@ export const Item = {
     const right = Wrangle.actionArray(current.right).filter(onKind);
     return [...left, ...right].filter(Boolean);
   },
+
+  /**
+   * Increment the redraw count on the given item.
+   */
+  incrementRedraw(item: t.LabelItemState) {
+    item.change((d) => (d.redraw = (d.redraw || (d.redraw = 0)) + 1));
+  },
 } as const;
 
 /**

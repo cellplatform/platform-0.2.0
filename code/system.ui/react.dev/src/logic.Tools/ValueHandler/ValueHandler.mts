@@ -37,7 +37,8 @@ export function ValueHandler<V, State extends O>(events: t.DevEvents) {
   events.state.changed$.subscribe((e) => onChanged(e.info));
   events.props.changed$.subscribe((e) => onChanged(e.info));
   events.redraw.$.subscribe((e) => {
-    if (e.all) onChanged(undefined, true);
+    const match: t.DevRedrawTarget[] = ['all', 'debug', 'harness'];
+    if (e.target && match.includes(e.target)) onChanged(undefined, true);
   });
 
   const api = {

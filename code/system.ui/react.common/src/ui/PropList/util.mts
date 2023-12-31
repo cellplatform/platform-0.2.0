@@ -72,6 +72,13 @@ export const Wrangle = {
     return input.toString();
   },
 
+  hasTitle(input?: t.PropListTitleInput) {
+    const title = Wrangle.title(input);
+    if (!title.value) return false;
+    if (Array.isArray(title.value) && title.value.filter(Boolean).length === 0) return false;
+    return true;
+  },
+
   title(input?: t.PropListTitleInput): t.PropListTitle {
     if (!input) return { value: [null, null] };
 

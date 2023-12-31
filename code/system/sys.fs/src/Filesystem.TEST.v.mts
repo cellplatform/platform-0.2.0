@@ -1,6 +1,6 @@
-import { expect, describe, it } from './test';
+import { describe, expect, it } from './test';
 
-import { Filesize } from './Filesize';
+import { Filesize } from './common';
 import { Filesystem } from './Filesystem.mjs';
 import { Path } from './Path';
 

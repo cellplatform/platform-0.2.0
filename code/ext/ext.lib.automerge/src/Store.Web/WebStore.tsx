@@ -2,14 +2,16 @@ import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
+
 import { Store } from '../Store';
+import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
-export type Init = {
-  dispose$?: t.UntilObservable;
+type Init = {
   network?: boolean | t.NetworkAdapter[];
   storage?: boolean | string | { name?: string };
+  dispose$?: t.UntilObservable;
 };
 
 /**
@@ -17,6 +19,16 @@ export type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
+
+  get IndexDb() {
+    return StoreIndexDb;
+  },
+
+  /**
+   * Create instance of the store/repo's document Index.
+   */
+  Index,
+  index: Index.init,
 
   /**
    * Initialize a new instance of a CRDT store/repo.
@@ -36,7 +48,9 @@ export const WebStore = {
       /**
        * Metadata about the store.
        */
-      info: Wrangle.info(options),
+      get info() {
+        return Wrangle.info(options);
+      },
 
       /**
        * The react <Provider> context.
@@ -47,17 +61,6 @@ export const WebStore = {
     };
 
     return store;
-  },
-
-  /**
-   * Create instance of the store/repo's document Index.
-   */
-  async index(store: t.WebStore) {
-    const dbname = StoreIndexDb.name(store);
-    const db = await StoreIndexDb.init(dbname);
-    const record = await db.getOrCreate(store);
-    const uri = record.index;
-    return Store.Index.init(store, uri);
   },
 } as const;
 

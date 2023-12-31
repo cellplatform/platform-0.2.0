@@ -1,28 +1,26 @@
 import { DEFAULTS, Time, Value, rx, slug, type t } from './common';
 import { Data } from './u.Data';
-import { ResetTimer } from './u.Timer';
 
 export function purgeBehavior(args: {
   ctx: t.GetConnectorCtx;
-  state: t.ConnectorItemStateSelf;
+  item: t.ConnectorItemStateSelf;
   events: t.ConnectorItemStateSelfEvents;
   dispatch: t.LabelItemDispatch;
 }) {
-  const { dispatch, events, state } = args;
+  const { dispatch, events, item } = args;
   const { peer } = args.ctx();
   const redraw = dispatch.redraw;
-
-  const resetTimer = ResetTimer(DEFAULTS.timeout.closePending, () => Purge.reset());
+  const timer = Time.action(DEFAULTS.timeout.closePending).on('complete', () => Purge.reset());
 
   const Purge = {
     pending() {
-      resetTimer.start();
-      state.change((item) => (Data.self(item).purgePending = true));
+      timer.start();
+      item.change((item) => (Data.self(item).purgePending = true));
       redraw();
     },
     reset() {
-      resetTimer.clear();
-      state.change((item) => (Data.self(item).purgePending = false));
+      timer.reset();
+      item.change((item) => (Data.self(item).purgePending = false));
       redraw();
     },
     run() {
@@ -33,12 +31,12 @@ export function purgeBehavior(args: {
       const message = res.changed
         ? `(${res.total.after} ${Value.plural(res.total.after, 'item', 'items')} purged)`
         : '(no change)';
-      state.change((item) => (Data.self(item).actionCompleted = { tx, message }));
+      item.change((item) => (Data.self(item).actionCompleted = { tx, message }));
       redraw();
 
       Time.delay(DEFAULTS.timeout.copiedPending, () => {
-        if (Data.self(state).actionCompleted?.tx !== tx) return;
-        state.change((item) => (Data.self(item).actionCompleted = undefined));
+        if (Data.self(item).actionCompleted?.tx !== tx) return;
+        item.change((item) => (Data.self(item).actionCompleted = undefined));
         redraw();
       });
     },
@@ -50,7 +48,7 @@ export function purgeBehavior(args: {
   const on = (...code: string[]) =>
     events.key.$.pipe(
       rx.filter((e) => code.includes(e.code)),
-      rx.map((key) => ({ key, data: Data.self(state) })),
+      rx.map((key) => ({ key, data: Data.self(item) })),
     );
   on('Delete', 'Backspace')
     .pipe(rx.filter((e) => !e.data.purgePending))
