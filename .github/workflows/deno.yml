@@ -29,3 +29,6 @@ jobs:
 
       - name: ci.info ← count (stats) 🐷
         run: echo TODO
+
+      - name: sample.deno (🐷)
+        run: deno run script.deno/sample.ts

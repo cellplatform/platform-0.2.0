@@ -13,7 +13,8 @@
     "count": "ts-node-esm   -T script.ts/cmd.count.mts",
     "nuke": "ts-node-esm    -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm     -T script.ts/cmd.tmp.ts",
-    "mit": "fossa analyze --debug"
+    "mit": "fossa analyze --debug",
+    "deno.sample": "deno run script.deno/sample.ts"
   },
   "workspaces": {
     "packages": [
