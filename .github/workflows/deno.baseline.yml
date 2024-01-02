@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set start time
+      - name: Record start time
         run: echo "START_TIME=$(date +%s%N)" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
