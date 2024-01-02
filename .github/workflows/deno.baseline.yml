@@ -21,11 +21,9 @@ jobs:
           deno --version
           deno run --allow-env script.deno/info.ts
 
-      - name: Set end time
-        run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
-
       - name: Calculate elapsed time
         run: |
+          echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
           ELAPSED_MSECS=$((($END_TIME - $START_TIME)/1000000))
           ELAPSED_SECS=$(($ELAPSED_MSECS / 1000))
           echo "Elapsed time: $ELAPSED_MSECS msecs"
