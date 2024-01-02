@@ -18,12 +18,16 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Set start time
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Show info
-        run: |
-          deno run --allow-env script.deno/info.ts
+        run: deno run --allow-env script.deno/info.ts
+
+      - name: Set end time
+        run: echo "END_TIME=$(date +%s)" >> $GITHUB_ENV
 
       - name: Calculate elapsed time
         run: |
-          echo "END_TIME=$(date +%s)" >> $GITHUB_ENV
           ELAPSED_TIME=$(($END_TIME - $START_TIME))
           echo "Elapsed time: $ELAPSED_TIME seconds"
