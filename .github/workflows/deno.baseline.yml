@@ -7,6 +7,9 @@ jobs:
     name: build.deno
     runs-on: ubuntu-latest
     steps:
+      - name: Set start time
+        run: echo "START_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -15,5 +18,5 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: elapsed time
+      - name: Show elapsed time
         run: deno run --allow-env script.deno/ci.print.elapsed.ts
