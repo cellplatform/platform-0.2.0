@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: build and test
+    name: build and test (🐷 TODO)
     runs-on: ubuntu-latest
 
     steps:
