@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: audit, build, and test
+    name: node - audit, build and test
     runs-on: ubuntu-latest
     strategy:
       matrix:
