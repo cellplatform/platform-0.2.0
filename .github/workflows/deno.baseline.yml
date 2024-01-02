@@ -10,7 +10,10 @@ jobs:
       - name: Set start time
         run: echo "START_TIME=$(date +%s%N)" >> $GITHUB_ENV
 
-      # Add your steps here
+      - uses: actions/checkout@v2
+      - uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.x
 
       - name: Set end time
         run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
