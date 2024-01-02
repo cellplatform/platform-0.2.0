@@ -19,4 +19,6 @@ jobs:
           deno-version: v1.x
 
       - name: Show elapsed time
-        run: deno run --allow-env script.deno/ci.print.elapsed.ts
+        run: |
+          deno run --allow-env script.deno/info.ts
+          deno run --allow-env script.deno/ci.print.elapsed.ts
