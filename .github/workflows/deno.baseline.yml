@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   run-deno:
-    name: build.deno
+    name: deno.baseline (runtime setup speed)
     runs-on: ubuntu-latest
     steps:
       - name: Set start time

@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: build.deno
+    name: deno.build and test
     runs-on: ubuntu-latest
 
     steps:
