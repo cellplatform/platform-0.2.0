@@ -16,7 +16,7 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: System Info
+      - name: Info
         run: |
           deno --version
           deno run --allow-env script.deno/info.ts
