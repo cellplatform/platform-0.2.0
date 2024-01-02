@@ -26,5 +26,6 @@ jobs:
       - name: Calculate elapsed time
         run: |
           ELAPSED_MSECS=$((($END_TIME - $START_TIME)/1000000))
+          ELAPSED_SECS=$(($ELAPSED_MSECS / 1000))
           echo "Elapsed time: $ELAPSED_MSECS milliseconds"
-          echo "Elapsed time: $($ELAPSED_MSECS/1000) seconds"
+          echo "Elapsed time: $ELAPSED_SECS seconds"
