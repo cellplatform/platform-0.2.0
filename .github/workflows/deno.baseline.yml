@@ -8,17 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set start time
-        run: echo "START_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
 
-      - name: Checkout repository
+      - name: Checkout eepository
         uses: actions/checkout@v2
 
-      - name: Setup Deno
+      - name: Setup deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
 
-      - name: Show elapsed time
+      - name: Show info
         run: |
           deno run --allow-env script.deno/info.ts
-          deno run --allow-env script.deno/ci.print.elapsed.ts
+
+      - name: Calculate elapsed time
+        run: |
+          echo "END_TIME=$(date +%s)" >> $GITHUB_ENV
+          ELAPSED_TIME=$(($END_TIME - $START_TIME))
+          echo "Elapsed time: $ELAPSED_TIME seconds"
