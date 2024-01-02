@@ -18,7 +18,7 @@ jobs:
           deno --version
           deno run script.deno/info.ts
 
-      - name: (🐷) ci.audit ← Software Supply Chain (Security)
+      - name: (🐷) ci.audit ← Software Supply Chain (Secure)
         run: echo TODO
 
       - name: (🐷) ci.build ← bundle modules
