@@ -27,4 +27,4 @@ jobs:
         run: |
           ELAPSED_MSECS=$((($END_TIME - $START_TIME)/1000000))
           echo "Elapsed time: $ELAPSED_MSECS milliseconds"
-          echo "Elapsed time: $ELAPSED_MSECS/1000 seconds"
+          echo "Elapsed time: $($ELAPSED_MSECS/1000) seconds"
