@@ -16,7 +16,7 @@ jobs:
       - name: sys.info
         run: |
           deno --version
-          deno run script.deno/info.ts
+          deno run --allow-env script.deno/info.ts
 
       - name: (🐷) ci.audit ← Software Supply Chain (Secure)
         run: echo TODO
