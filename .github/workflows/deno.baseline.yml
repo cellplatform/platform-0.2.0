@@ -1,33 +1,21 @@
-name: ci.deno.baseline
+name: deno.ci.baseline
 
 on: [push]
 
 jobs:
-  run-deno:
-    name: baseline (runtime setup speed)
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Set start time
-        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+        run: echo "START_TIME=$(date +%s%N)" >> $GITHUB_ENV
 
-      - name: Checkout eepository
-        uses: actions/checkout@v2
-
-      - name: Setup deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-
-      - name: Set start time
-        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
-
-      - name: Show info
-        run: deno run --allow-env script.deno/info.ts
+      # Add your steps here
 
       - name: Set end time
-        run: echo "END_TIME=$(date +%s)" >> $GITHUB_ENV
+        run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
 
       - name: Calculate elapsed time
         run: |
-          ELAPSED_TIME=$(($END_TIME - $START_TIME))
-          echo "Elapsed time: $ELAPSED_TIME seconds"
+          ELAPSED_TIME=$((($END_TIME - $START_TIME)/1000000))
+          echo "Elapsed time: $ELAPSED_TIME milliseconds"
