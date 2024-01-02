@@ -52,6 +52,12 @@ foo:
 
 export const json = JSON.stringify({ name: 'foo', version: '0.1.2' }, null, '  ');
 
+export const rust = `
+fn main() {
+  println!("Hello, World!");
+}
+`;
+
 /**
  * Index
  */
@@ -64,4 +70,5 @@ export const CODE_SAMPLES: Partial<T> = {
   markdown,
   yaml,
   json,
+  rust,
 };

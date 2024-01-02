@@ -14,6 +14,7 @@ export type EditorLanguage =
   | 'javascript'
   | 'json'
   | 'yaml'
+  | 'rust'
   | 'go'
   | 'python';
 export type EditorTheme = 'Light' | 'Dark';
