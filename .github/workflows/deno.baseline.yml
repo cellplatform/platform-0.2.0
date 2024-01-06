@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: deno.baseline
+    name: stats
     runs-on: ubuntu-latest
 
     steps:
