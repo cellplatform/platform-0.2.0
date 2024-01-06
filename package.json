@@ -14,7 +14,8 @@
     "nuke": "ts-node-esm    -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm     -T script.ts/cmd.tmp.ts",
     "mit": "fossa analyze --debug",
-    "deno.sample": "deno run script.deno/sample.ts"
+    "deno.sample": "deno run script.deno/sample.ts",
+    "deno.count": "deno run --allow-read script.deno/info.count.ts"
   },
   "workspaces": {
     "packages": [
