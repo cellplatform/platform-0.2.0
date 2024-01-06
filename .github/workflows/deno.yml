@@ -22,7 +22,7 @@ jobs:
         run: echo TODO
 
       - name: (🐷) ci.build ← bundle modules
-        run: deno run script.deno/build-all.ts
+        run: deno run script.deno/build.all.ts
 
       - name: (🐷) ci.test ← unit tests
         run: echo TODO
