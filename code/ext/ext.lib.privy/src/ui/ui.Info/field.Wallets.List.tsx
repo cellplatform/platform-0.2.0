@@ -19,7 +19,7 @@ export function walletsList(args: {
   const res: t.PropListItem[] = [];
 
   if (fields.includes('Wallet.List.Title')) {
-    const label = Value.plural(wallets.length, 'Wallet', 'Wallets');
+    const label = data.wallet?.list?.title ?? Value.plural(wallets.length, 'Wallet', 'Wallets');
     res.push({ label, divider: false });
   }
 

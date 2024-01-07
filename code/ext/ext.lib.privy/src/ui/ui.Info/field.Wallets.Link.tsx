@@ -28,7 +28,7 @@ export function linkWallet(
 
   let label = Value.plural(wallets.length, 'Wallet', 'Wallets');
   if (!fields.includes('Wallet.List') && wallets.length > 1) label = `${label} (${wallets.length})`;
-  if (!fields.includes('Chain.List')) label = `${label} - ${Chain.displayName(chain)}`;
+  if (!fields.includes('Chain.List')) label = `${label} - Chain: ${Chain.displayName(chain)}`;
 
   return {
     label,
