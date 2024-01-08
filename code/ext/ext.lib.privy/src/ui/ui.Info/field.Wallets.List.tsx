@@ -17,6 +17,7 @@ export function walletsList(args: {
   const chain = Wrangle.chain(data);
 
   const res: t.PropListItem[] = [];
+  if (!privy.authenticated) return res;
 
   if (fields.includes('Wallet.List.Title')) {
     const label = data.wallet?.list?.title ?? Value.plural(wallets.length, 'Wallet', 'Wallets');
