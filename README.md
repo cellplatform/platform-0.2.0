@@ -126,11 +126,12 @@ Informed, augmented, yes...but no abdication of direct human ƒ(discipline, crea
 <p>&nbsp;</p>
 
 ## Human Systems 
-(aka. the "all of us"). Diverse social/relational networks of people, across scales. "People" not "users." 
+(aka. the "all of us"). Diverse social/relational networks of people, across scales. "People" not "users."  
+Initial high fidelity design emphasis on the `1:1` (dyad) and `1:3` (tradic tendencies) as graph/network primitives.
 
 <p>&nbsp;</p>
 
-<img alt="smor-model-group-scale-n-dimension-cell" src="https://github.com/cellplatform/platform-0.2.0/assets/185555/a9b360a4-14f1-470c-af07-321257c37433">
+<img width="1999" alt="smor-model-group-scale-n-dimension-cell" src="https://github.com/cellplatform/platform-0.2.0/assets/185555/58aa1409-d745-4b6c-a20b-828d6858437a">
 
 
 <p>&nbsp;</p>
