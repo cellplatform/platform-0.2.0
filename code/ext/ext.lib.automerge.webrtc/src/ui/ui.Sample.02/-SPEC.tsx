@@ -5,7 +5,10 @@ import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
-type T = { reload?: boolean };
+type T = {
+  reload?: boolean;
+  modalElement?: JSX.Element;
+};
 const initial: T = {};
 
 /**
@@ -49,7 +52,7 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
-          return <Sample left={left} right={right} />;
+          return <Sample left={left} right={right} modalElement={e.state.modalElement} />;
         }
       });
   });
@@ -152,6 +155,18 @@ export default Dev.describe(name, async (e) => {
       });
 
       dev.hr(5, 20);
+      dev.section('Spike: loader', (dev) => {
+        const loadComponent = async () => {
+          const { MonacoEditor } = await import('sys.ui.react.monaco');
+          dev.change((d) => {
+            d.modalElement = <MonacoEditor />;
+          });
+        };
+
+        dev.button('load <component>', loadComponent);
+      });
+
+      dev.hr(5, 20);
 
       dev.button('purge ephemeral', (e) => {
         const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.model.index);
@@ -204,6 +219,7 @@ export default Dev.describe(name, async (e) => {
       };
 
       const data = {
+        state: e.state,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
@@ -212,6 +228,7 @@ export default Dev.describe(name, async (e) => {
           : undefined,
         [`selected`]: formatSelected(selected?.item),
       };
+
       return (
         <Dev.Object
           name={name}
