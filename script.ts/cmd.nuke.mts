@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Builder, fs, pc, rimraf, Util } from './common/index.mjs';
 
 async function remove(path: string) {

@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';

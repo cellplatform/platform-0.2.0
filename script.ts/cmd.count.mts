@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Count, fs } from './common/index.mjs';
 
 const base = fs.resolve('.');

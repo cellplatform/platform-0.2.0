@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 import dotenv from 'dotenv';
 import { Configuration, OpenAIApi } from 'openai';
 import { R } from './common.mjs';

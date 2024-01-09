@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Crdt } from 'sys.data.crdt';
 import { Filesystem } from 'sys.fs.node';
 import { rx } from 'sys.util';
