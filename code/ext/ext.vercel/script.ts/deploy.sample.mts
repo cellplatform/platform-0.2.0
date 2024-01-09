@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Vercel } from 'ext.vercel';
 import { Filesystem } from 'sys.fs.node';
 import { Time, rx } from 'sys.util';

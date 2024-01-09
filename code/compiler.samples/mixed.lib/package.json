@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "test": "tsx ../../../script.ts/cmd.test.mts",
+    "build": "tsx ../../../script.ts/cmd.build.mts",
+    "clean": "tsx ../../../script.ts/cmd.clean.mts",
     "sample.node": "node dist/index.js",
-    "tmp": "ts-node-esm -T ./script.ts/tmp.mts"
+    "tmp": "tsx ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.util": "0.0.0"

@@ -23,6 +23,9 @@ export type InfoData = {
     selected?: t.EvmChainName;
     onSelected?: InfoChainSelectedHandler;
   };
+  wallet?: {
+    list?: { title?: string };
+  };
 };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };

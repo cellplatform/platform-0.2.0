@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Builder, LogTable, Util, fs, minimist, pc } from './common/index.mjs';
 
 const argv = minimist(process.argv.slice(2));

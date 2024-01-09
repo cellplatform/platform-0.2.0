@@ -59,9 +59,13 @@ export default Dev.describe(name, async (e) => {
             'Id.User.Phone',
             'Auth.Link.Wallet',
             'Wallet.List',
+            'Wallet.List.Title',
             'Refresh',
           ]}
-          data={{ provider: Auth.Env.provider }}
+          data={{
+            provider: Auth.Env.provider,
+            wallet: { list: { title: 'Public Key' } },
+          }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
         />
       );

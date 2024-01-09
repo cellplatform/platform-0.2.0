@@ -5,9 +5,9 @@
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "test": "tsx ../../../script.ts/cmd.test.mts",
+    "build": "tsx ../../../script.ts/cmd.build.mts",
+    "clean": "tsx ../../../script.ts/cmd.clean.mts",
     "spec": "yarn test --run --reporter verbose"
   },
   "dependencies": {

@@ -103,6 +103,7 @@ export default Dev.describe('MonacoEditor', (e) => {
       };
       language('typescript', CODE_SAMPLES.typescript);
       language('javascript', CODE_SAMPLES.javascript);
+      language('rust', CODE_SAMPLES.rust);
       language('go', CODE_SAMPLES.go);
       language('python', CODE_SAMPLES.python);
 

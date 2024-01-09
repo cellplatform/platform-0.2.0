@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { Builder, LogTable, R, Time, Util, fs, ora, pc, type t } from './common/index.mjs';
 
 type Milliseconds = number;

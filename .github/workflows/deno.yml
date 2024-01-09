@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: build.deno
+    name: deno.ci (🐷 TODO)
     runs-on: ubuntu-latest
 
     steps:
@@ -13,19 +13,22 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: sys.info
+      - name: Info
         run: |
           deno --version
-          deno run script.deno/info.ts
+          deno run --allow-env script.deno/info.ts
 
-      - name: ci.audit ← Software Supply Chain Security (🐷)
+      - name: (🐷) ci.audit ← Software Supply Chain (Secure)
         run: echo TODO
 
-      - name: ci.build ← bundle modules (🐷)
-        run: deno run script.deno/build-all.ts
+      - name: (🐷) ci.build ← bundle modules
+        run: deno run script.deno/build.all.ts
 
-      - name: ci.test ← unit tests (🐷)
+      - name: (🐷) ci.test ← unit tests
         run: echo TODO
 
       - name: ci.info ← count (stats) 🐷
         run: echo TODO
+
+      - name: (🐙) sample.deno
+        run: deno run script.deno/sample.ts
