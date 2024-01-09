@@ -18,6 +18,7 @@ export const Pkg: ModuleDef = {
     'monaco-editor': '0.45.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'ext.lib.automerge': '0.0.0',
     'sys.data.crdt': '0.0.0',
     'sys.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
