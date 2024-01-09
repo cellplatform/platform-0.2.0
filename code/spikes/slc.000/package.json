@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "bundle": "ts-node-esm -T ./script/bundle.mts",
+    "test": "tsx ../../../script.ts/cmd.test.mts",
+    "build": "tsx ../../../script.ts/cmd.build.mts",
+    "clean": "tsx ../../../script.ts/cmd.clean.mts",
+    "bundle": "tsx ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
-    "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
-    "tmp": "ts-node-esm -T ./script/tmp.mts"
+    "deploy": "yarn audit && yarn patch && yarn prepare && tsx ./script/deploy.mts",
+    "tmp": "tsx ./script/tmp.mts"
   },
   "dependencies": {
     "ext.lib.vimeo": "0.0.0",
