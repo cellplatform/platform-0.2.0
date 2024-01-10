@@ -1864,51 +1864,6 @@
     "@preact/signals-core" "^1.5.1"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.52.4":
-  version "1.52.4"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.52.4.tgz#756735a889120267bcad21069a487407f255defd"
-  integrity sha512-vW8YgQwKJ8NMjHXIpGMYMcUCn2nL3kH1MhJs58MHfgZKT/2WIqlrfvtRH/ATXsTgOxF0YpA+qEMRGyKvh6ZOTg==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.9.0"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.3.2"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.10.5"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.5"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    react-use "^17.4.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-    wicg-inert "^3.1.2"
-
 "@privy-io/react-auth@1.52.5":
   version "1.52.5"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.52.5.tgz#a92e7f259524439d84d19beb051305152fb3c817"
@@ -5761,15 +5716,6 @@ framer-motion@10.17.12:
   version "10.17.12"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.17.12.tgz#efae01c1a4d8f325a11e64d0c0fc837ec1482dba"
   integrity sha512-6aaBLN2EgH/GilXwOzEalTfw5Rx9DTQJJjTrxq5bfDbGtPCzXz2GCN6ePGRpTi1ZGugLHxdU273h38ENbcdFKQ==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
-
-framer-motion@10.17.9:
-  version "10.17.9"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.17.9.tgz#d3bb15039e8bd6ba5d044a3fa181332a09cd2692"
-  integrity sha512-z2NpP8r+XuALoPA7ZVZHm/OoTnwkQNJFBu91sC86o/FYvJ4x7ar3eQnixgwYWFK7kEqOtQ6whtNM37tn1KrOOA==
   dependencies:
     tslib "^2.4.0"
   optionalDependencies:
