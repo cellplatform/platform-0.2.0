@@ -11,6 +11,7 @@ export type CrdtSharedMutateAction = 'unshare';
 export type CrdtShared = t.DocWithMeta & {
   peers: CrdtSharedPeers;
   docs: CrdtSharedDocs;
+  tmp: Record<string, unknown>;
 };
 
 /**
