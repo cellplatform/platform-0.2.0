@@ -1,6 +1,6 @@
 import { Data, Delete, DocUri, Is, R, type t } from './common';
 
-import { Doc } from '../Store.Doc';
+import { Doc } from '../Doc';
 import { events } from './Store.Index.Events';
 import { Filter } from './Store.Index.Filter';
 import { Mutate } from './Store.Index.Mutate';

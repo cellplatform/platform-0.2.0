@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-export { Doc } from './Store.Doc';
+export { Doc } from './Doc';
 export { Store } from './Store';
 export { WebStore } from './Store.Web';
 export { Data, Is, toObject } from './common';

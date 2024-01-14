@@ -5,7 +5,10 @@ import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
-type T = { reload?: boolean };
+type T = {
+  reload?: boolean;
+  modalElement?: JSX.Element;
+};
 const initial: T = {};
 
 /**
@@ -16,6 +19,20 @@ export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
+
+  const loadCodeEditor = async (state: t.DevCtxState<T>) => {
+    console.log('💦 load module: sys.ui.react.monaco');
+    const { MonacoEditor } = await import('sys.ui.react.monaco');
+    await state.change((d) => (d.modalElement = <MonacoEditor style={{ opacity: 0.9 }} />));
+  };
+
+  const loadDiagramEditor = async (state: t.DevCtxState<T>) => {
+    console.log('💦 load module: ext.lib.tldraw');
+    const { Canvas } = await import('ext.lib.tldraw');
+    // @ts-ignore
+    await import('@tldraw/tldraw/tldraw.css');
+    await state.change((d) => (d.modalElement = <Canvas style={{ opacity: 0.9 }} />));
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -35,6 +52,28 @@ export default Dev.describe(name, async (e) => {
       const repo$ = edge.model.events();
       peer.cmd.conn$.pipe(debounce).subscribe(redraw);
       edge.network.$.pipe(debounce).subscribe(redraw);
+
+      edge.network.$.pipe(debounce).subscribe((e) => {
+        console.log('network', e);
+      });
+
+      edge.network.added$.pipe().subscribe((e) => {
+        console.log('network.added$', e);
+      });
+
+      edge.network.shared$.pipe().subscribe(async (e) => {
+        const tmp = e.change.doc.tmp;
+        console.log('shared$', edge.kind, tmp);
+
+        if (tmp.foo === 'CodeEditor') {
+          loadCodeEditor(state);
+        } else if (tmp.foo === 'DiagramEditor') {
+          loadDiagramEditor(state);
+        } else {
+          await state.change((d) => (d.modalElement = undefined));
+        }
+      });
+
       repo$.active$.pipe(debounce).subscribe(redraw);
       repo$.active$.subscribe((e) => (selected = { edge, item: e.item }));
     };
@@ -49,7 +88,7 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
-          return <Sample left={left} right={right} />;
+          return <Sample left={left} right={right} modalElement={e.state.modalElement} />;
         }
       });
   });
@@ -113,12 +152,15 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const getShared = () => {
-        return { left: left.network.shared, right: right.network.shared } as const;
+        return {
+          left: left.network.shared,
+          right: right.network.shared,
+        } as const;
       };
 
       type TFoo = { type: 'foo'; payload: { foo: number } };
 
-      dev.button('tmp-1: listen', (e) => {
+      const listenToEphemeral = async () => {
         const shared = getShared();
         if (!shared.left || !shared.right) return;
 
@@ -127,14 +169,22 @@ export default Dev.describe(name, async (e) => {
           right: shared.right.events(),
         };
 
-        events.left.ephemeral.in$.subscribe((e) => console.log('left|in$', e));
-        events.right.ephemeral.in$.subscribe((e) => console.log('right|in$', e));
+        events.left.ephemeral.in$.subscribe((e) => {
+          console.log('left|in$', e);
+          // loadCodeEditor();
+        });
+        events.right.ephemeral.in$.subscribe((e) => {
+          console.log('right|in$', e);
+          loadCodeEditor(state);
+        });
 
         const foo$ = events.right.ephemeral.type$<TFoo>(
           (e) => typeof e.message === 'object' && e.message?.type === 'foo',
         );
         foo$.subscribe((e) => console.log('foo$', e));
-      });
+      };
+
+      dev.button('tmp-1: listen', (e) => listenToEphemeral());
 
       dev.button('tmp-2: broadcast', (e) => {
         const shared = getShared();
@@ -149,6 +199,25 @@ export default Dev.describe(name, async (e) => {
         send('hello');
         send(['foo']);
         send(123);
+      });
+
+      dev.hr(-1, 5);
+
+      const addTmpButton = (title: string, fn: (doc: t.DocRef<t.CrdtShared>) => any) => {
+        dev.button(title, (e) => {
+          const left = getShared().left;
+          if (left) fn(left);
+        });
+      };
+
+      addTmpButton('tmp-3: loader → <CodeEditor>', (doc) => {
+        doc.change((d) => (d.tmp.foo = 'CodeEditor'));
+      });
+      addTmpButton('tmp-4: loader → <DiagramEditor>', (doc) => {
+        doc.change((d) => (d.tmp.foo = 'DiagramEditor'));
+      });
+      addTmpButton('tmp-5: loader → remove', (doc) => {
+        doc.change((d) => delete d.tmp.foo);
       });
 
       dev.hr(5, 20);
@@ -204,6 +273,7 @@ export default Dev.describe(name, async (e) => {
       };
 
       const data = {
+        state: e.state,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
@@ -212,6 +282,7 @@ export default Dev.describe(name, async (e) => {
           : undefined,
         [`selected`]: formatSelected(selected?.item),
       };
+
       return (
         <Dev.Object
           name={name}

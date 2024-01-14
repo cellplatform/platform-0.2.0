@@ -7,12 +7,14 @@
 
 
 
-[Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
+Monorepo comprising the core set of shared `/sys` system modules that flexibly compose into varying arrangements of   
 (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
 - [compilation](/code/compiler/) toolchain (W3C standards)
 - modules: [system](/code/system/) 
 - modules: [system.ui](/code/system.ui/) 
+
+(built on [Web Standards](https://wintercg.org/))
 
 ---
 

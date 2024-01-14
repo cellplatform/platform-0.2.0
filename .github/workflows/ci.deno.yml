@@ -1,4 +1,4 @@
-name: ci.deno.baseline
+name: ci.deno
 
 on: [push]
 

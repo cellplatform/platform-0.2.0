@@ -1,5 +1,5 @@
+import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { Doc } from '../Store.Doc';
 import { Time, describe, expect, expectError, it, rx, type t } from '../test';
 
 type D = { count: number };

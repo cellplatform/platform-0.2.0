@@ -20,7 +20,7 @@ export const Pkg: ModuleDef = {
     'rehype-format': '5.0.0',
     'remark-frontmatter': '5.0.0',
     'remark-gfm': '4.0.0',
-    'remark-rehype': '11.0.0',
+    'remark-rehype': '11.1.0',
     'remark-parse': '11.0.0',
     'remark-stringify': '11.0.0',
     'retext-english': '5.0.0',

@@ -14,8 +14,7 @@ const store = new Map<Id, RegistryEntry>();
  *    within the lens so that when changing, the lens
  *    knows how many times it needs to run it's initial
  *    "get" function to ensure that within the entire
- *    sub-tree that all lens's may construct accurately
- *    complete.
+ *    sub-tree all lens's may construct accurately.
  */
 export const Registry = {
   total(root: Doc) {
