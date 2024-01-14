@@ -12,7 +12,7 @@
     "tmp": "tsx   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "openai": "4.24.2",
+    "openai": "4.24.7",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
