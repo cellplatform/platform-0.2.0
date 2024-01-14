@@ -12,6 +12,7 @@ export const Doc = {
   Meta,
   Data,
   Patch,
+  Lens,
 
   toObject,
   get,
