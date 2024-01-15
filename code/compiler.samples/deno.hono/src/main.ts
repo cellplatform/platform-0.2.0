@@ -1,6 +1,7 @@
-import { dotenv, Hono, type t } from './deps.ts';
-const _env = await dotenv.load();
+import { Hono, type t } from './deps.ts';
 const app = new Hono();
+
+console.log(`.env: FOO=${Deno.env.get('FOO')}`);
 
 app.get('/', (c: t.Context) => {
   return c.text('Hello Deno/Hono 👋!!');
