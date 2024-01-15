@@ -6,7 +6,7 @@ import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
 import { describe, expect, it, type t } from '../test';
 
-describe('Is', (e) => {
+describe('Is (flags)', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
 
   it('Is.automergeUrl', () => {

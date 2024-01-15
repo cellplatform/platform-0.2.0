@@ -7,7 +7,7 @@ import { WebStore } from '../Store.Web';
 import { Test, TestDb, expect } from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
 
-export default Test.describe('Is', (e) => {
+export default Test.describe('Is (flags)', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
   const storage = TestDb.Unit.name;
   const store = WebStore.init({ network: false, storage });
