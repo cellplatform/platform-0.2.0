@@ -9,7 +9,6 @@ export type LensGetDescendent<R extends {}, L extends {}> = (doc: R) => L;
  * Lens for operating on a sub-tree within a CRDT.
  */
 export type Lens<R extends {}, L extends {}> = t.Lifecycle & {
-  readonly kind: 'crdt:doc:lens';
   readonly root: t.DocRef<R>;
   readonly $: t.Observable<LensChange<R, L>>;
   readonly current: L;

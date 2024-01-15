@@ -34,7 +34,6 @@ describe('Doc.Lens', () => {
       expect(root.current).to.eql({});
 
       const lens = Doc.Lens.init<TRoot, TChild>(root, getDesendent);
-      expect(lens.kind).to.eql('crdt:doc:lens');
       expect(lens.root).to.equal(root);
       expect(lens.current).to.eql({ count: 0 });
 

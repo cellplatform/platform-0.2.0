@@ -47,7 +47,6 @@ export function init<R extends {}, L extends {}>(
    * API
    */
   const api: t.Lens<R, L> = {
-    kind: 'crdt:doc:lens',
     root,
     $,
 
