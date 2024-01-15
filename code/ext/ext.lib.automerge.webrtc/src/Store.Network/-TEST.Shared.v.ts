@@ -9,7 +9,9 @@ describe('Webrtc: Shared', () => {
       const store = Store.init();
       const doc = await Shared.getOrCreate(store);
       expect(doc.current.docs).to.eql({});
-      expect(doc.current.tmp).to.eql(undefined);
+      expect(doc.current.peers).to.eql({});
+      expect(doc.current.ns).to.eql({});
+      expect(doc.current.tmp).to.eql(undefined); // Only defined when needed.
       expect(doc.current['.meta'].ephemeral).to.eql(true);
 
       const meta = Doc.Meta.get(doc.current);

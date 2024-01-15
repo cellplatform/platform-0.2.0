@@ -32,6 +32,7 @@ export const Shared = {
       Doc.Meta.ensure(d, Shared.meta);
       d.peers = {};
       d.docs = {};
+      d.ns = {};
     }, uri);
   },
 
