@@ -2,7 +2,7 @@ import { Lens, rx, toObject, type t } from './common';
 
 export const Namespace = {
   /**
-   * Create a lens namespace manager within the given document.
+   * Create a [Lens] namespace manager for (or within) the a root document.
    *
    * [Context]:
    *      This allows multiple lens to be created on a {map}
@@ -20,7 +20,7 @@ export const Namespace = {
     dispose$.subscribe(() => cache.clear());
 
     /**
-     * API.
+     * API
      */
     const api: t.NamespaceManager<R, N> = {
       kind: 'crdt:namespace',
