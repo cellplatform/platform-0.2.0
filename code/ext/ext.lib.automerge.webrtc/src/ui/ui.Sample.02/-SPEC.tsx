@@ -62,7 +62,8 @@ export default Dev.describe(name, async (e) => {
       });
 
       edge.network.shared$.pipe().subscribe(async (e) => {
-        const tmp = e.change.doc.tmp;
+        const tmp = e.change.doc.tmp ?? {};
+
         console.log('shared$', edge.kind, tmp);
 
         if (tmp.foo === 'CodeEditor') {
@@ -210,14 +211,15 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
+      const tmp = (doc: t.CrdtShared) => doc.tmp ?? (doc.tmp = {});
       addTmpButton('tmp-3: loader → <CodeEditor>', (doc) => {
-        doc.change((d) => (d.tmp.foo = 'CodeEditor'));
+        doc.change((d) => (tmp(d).foo = 'CodeEditor'));
       });
       addTmpButton('tmp-4: loader → <DiagramEditor>', (doc) => {
-        doc.change((d) => (d.tmp.foo = 'DiagramEditor'));
+        doc.change((d) => (tmp(d).foo = 'DiagramEditor'));
       });
       addTmpButton('tmp-5: loader → remove', (doc) => {
-        doc.change((d) => delete d.tmp.foo);
+        doc.change((d) => delete tmp(d).foo);
       });
 
       dev.hr(5, 20);

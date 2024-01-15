@@ -62,10 +62,8 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
       expect(self.fired.added.length).to.eql(1);
       expect(remote.fired.added.length).to.eql(1);
       expect(self.fired.added[0].conn.id).to.eql(res.id);
-      expect(self.fired.added[0].peer).to.eql(self.peer.id);
-
-      expect(remote.fired.added[0].conn.id).to.eql(res.id);
-      expect(remote.fired.added[0].peer).to.eql(remote.peer.id);
+      expect(self.fired.added[0].peer.local).to.eql(self.peer.id);
+      expect(self.fired.added[0].peer.remote).to.eql(remote.peer.id);
     });
 
     e.it('sync document (webrtc / data)', async (e) => {
