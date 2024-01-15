@@ -21,7 +21,7 @@ export type DocEvents<T> = t.Lifecycle & {
 export type DocEphemeralFilter<T, M extends t.CBOR> = (e: t.DocEphemeralIn<T, M>) => boolean;
 
 /**
- * Events
+ * EVENTS
  */
 export type DocEvent<T = O> = DocChangedEvent<T> | DocDeletedEvent<T> | DocEphemeralEvent<T>;
 
