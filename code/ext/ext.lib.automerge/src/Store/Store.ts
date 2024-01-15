@@ -76,7 +76,7 @@ export const Store = {
       get disposed() {
         return life.disposed;
       },
-    } as const;
+    };
 
     return api;
   },

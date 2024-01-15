@@ -1864,51 +1864,6 @@
     "@preact/signals-core" "^1.5.1"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.52.5":
-  version "1.52.5"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.52.5.tgz#a92e7f259524439d84d19beb051305152fb3c817"
-  integrity sha512-ONfGMHnZBU76gCV8BmG/TevP2aIeWvbreypM8lQ3xOTRXoYx+AB/5nG7Waqt7Ms5X8EFbVyMvCDQX2RUKHfZ0g==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.9.0"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.3.2"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.10.5"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.5"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    react-use "^17.4.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-    wicg-inert "^3.1.2"
-
 "@privy-io/react-auth@1.52.6":
   version "1.52.6"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.52.6.tgz#2ece8f38247846986ca2574da47fcfe14c2e7022"
@@ -3473,10 +3428,10 @@
     loupe "^2.3.7"
     pretty-format "^29.7.0"
 
-"@wagmi/connectors@4.1.3":
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.3.tgz#938076f071917c58c500b7d72cc81f4780d93097"
-  integrity sha512-/Ddu92Fwe8BwyUyyOOkDwkg+7R+D0so1kaJ0BU36y+ufiRwhy47OG9Nmibh2tqYRUIGychw2hdsCeCqgIm7ToQ==
+"@wagmi/connectors@4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.4.tgz#bf2d7e14478a915752afe05b9c9912a400c749fe"
+  integrity sha512-Mk/JnVs9pPd9cN/b5F+kHZMRU13yVf1zJwXNzSKpt7BOJQBqiFxJtmuZdRsNboEGEiPDFoEnzOzeAFi2xk3UGw==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.1"
     "@metamask/sdk" "0.14.1"
@@ -3485,10 +3440,10 @@
     "@walletconnect/ethereum-provider" "2.11.0"
     "@walletconnect/modal" "2.6.2"
 
-"@wagmi/core@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.2.0.tgz#df13903c40bdbc174b34354d2ba44338b3c3cdb6"
-  integrity sha512-K3nAX9BR73l6sTGlv0grZd8VinOu5/nMA7j0zsTz6hq04glitN4aWiLMw1S8OuxwAVSZIGnpLv6uXjjKgP1low==
+"@wagmi/core@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.2.1.tgz#e18d1ecaea5d5d4e78c3e0ef336f71506f4f5e8d"
+  integrity sha512-eoTHG600lFpQyeofuo1nlAuTlI7rjduJK/yU4F8sLwjucROSE5RmD2OpQOkeEC3JGoXjrYxVPbY77PUD6ajzqw==
   dependencies:
     eventemitter3 "5.0.1"
     mipd "0.0.5"
@@ -5757,15 +5712,6 @@ formdata-node@^4.3.2:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
 
-framer-motion@10.17.12:
-  version "10.17.12"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.17.12.tgz#efae01c1a4d8f325a11e64d0c0fc837ec1482dba"
-  integrity sha512-6aaBLN2EgH/GilXwOzEalTfw5Rx9DTQJJjTrxq5bfDbGtPCzXz2GCN6ePGRpTi1ZGugLHxdU273h38ENbcdFKQ==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
-
 framer-motion@10.18.0:
   version "10.18.0"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.18.0.tgz#1f4fc51403996ea7170af885bd44a7079d255950"
@@ -5984,10 +5930,10 @@ h3@^1.8.1, h3@^1.8.2:
     uncrypto "^0.1.3"
     unenv "^1.7.4"
 
-happy-dom@13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-13.1.0.tgz#31a858f661c99ede360ff2f00b948a7937894354"
-  integrity sha512-jJnCMLB0J5eMq9Q1h2zWm86iVf7tPGXjNxA4wwhSf5Tx5Us4VwiPyj2ln95IOcyPNNOg8vfCzygwtBiAs2460A==
+happy-dom@13.1.4:
+  version "13.1.4"
+  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-13.1.4.tgz#26592cb6c764526088473ac0030bd1959375c90d"
+  integrity sha512-f8STa4iuJcpXn7YjgqBEemzinyPAdjlHMxlCNbIERdRIjJO9Z9Cj3XW5LuiEhsURFfl0AOWqj0hQitme4gq+Gg==
   dependencies:
     css.escape "^1.5.1"
     entities "^4.5.0"
@@ -8071,21 +8017,6 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai@4.24.2:
-  version "4.24.2"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.24.2.tgz#7b58236e28e8b94277c12c4fb6ead8351af9c7c1"
-  integrity sha512-Np5zFPAYsBRmsfgPS8cMM25r1wVO5NCTdmeoYDNEUhJn/rw6jNXU0CFSFwhbWsjIkYhdv31pPIzQ0xChHCvltQ==
-  dependencies:
-    "@types/node" "^18.11.18"
-    "@types/node-fetch" "^2.6.4"
-    abort-controller "^3.0.0"
-    agentkeepalive "^4.2.1"
-    digest-fetch "^1.3.0"
-    form-data-encoder "1.7.2"
-    formdata-node "^4.3.2"
-    node-fetch "^2.6.7"
-    web-streams-polyfill "^3.2.1"
-
 openai@4.24.7:
   version "4.24.7"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.24.7.tgz#65b206bcf15c11202f758b5e1e945ffa13fd6b7f"
@@ -8798,11 +8729,6 @@ react-i18next@^13.2.2:
     "@babel/runtime" "^7.22.5"
     html-parse-stringify "^3.0.1"
 
-react-icons@4.12.0:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.12.0.tgz#54806159a966961bfd5cdb26e492f4dafd6a8d78"
-  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
-
 react-icons@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.0.1.tgz#1694e11bfa2a2888cab47dcc30154ce90485feee"
@@ -9084,17 +9010,6 @@ remark-parse@11.0.0, remark-parse@^11.0.0:
     mdast-util-from-markdown "^2.0.0"
     micromark-util-types "^2.0.0"
     unified "^11.0.0"
-
-remark-rehype@11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/remark-rehype/-/remark-rehype-11.0.0.tgz#7f21c08738bde024be5f16e4a8b13e5d7a04cf6b"
-  integrity sha512-vx8x2MDMcxuE4lBmQ46zYUDfcFMmvg80WYX+UNLeG6ixjdCCLcw1lrgAukwBTuOFsS78eoAedHGn9sNM0w7TPw==
-  dependencies:
-    "@types/hast" "^3.0.0"
-    "@types/mdast" "^4.0.0"
-    mdast-util-to-hast "^13.0.0"
-    unified "^11.0.0"
-    vfile "^6.0.0"
 
 remark-rehype@11.1.0:
   version "11.1.0"
@@ -10327,20 +10242,6 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.0.3.tgz#c913048b95fb392d596e187bc3dfb2edd4446c77"
-  integrity sha512-9r+CMEA0zf8QCvCobTUX4vhP9x0t7wRjHbadfHDHw8ULjnzwoQc1Yc1pK99GtqK4hv5hKacDe78dibg80p/a+A==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    abitype "0.10.0"
-    isows "1.0.3"
-    ws "8.13.0"
-
 viem@2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.0.6.tgz#1472054eb767c8e74db2e6fab11a8ad8db7387d0"
@@ -10485,13 +10386,13 @@ w3c-keyname@^2.2.0, w3c-keyname@^2.2.4:
   resolved "https://registry.yarnpkg.com/w3c-keyname/-/w3c-keyname-2.2.8.tgz#7b17c8c6883d4e8b86ac8aba79d39e880f8869c5"
   integrity sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==
 
-wagmi@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.2.0.tgz#177bb497493392b62332f2fff3cae7944e731c74"
-  integrity sha512-WX5A7t9ZaCK3Ino0n8MzCmE7+ZWFOjejm3b21K0SiPEGt7v4dbOC0pC0nFUJTz3s1bqkOcWOqzEJiEVNLjgK8w==
+wagmi@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.2.1.tgz#5651c90484b311a21438a26ab16c8c2db486e19c"
+  integrity sha512-lOro0KprkzANip4eV5WoeYenXo3VOWiBcri/l+yqPPpUR/CSQhBR5i04yK9JRS11CQaJp15jZRD3Amwg4Ch1ww==
   dependencies:
-    "@wagmi/connectors" "4.1.3"
-    "@wagmi/core" "2.2.0"
+    "@wagmi/connectors" "4.1.4"
+    "@wagmi/core" "2.2.1"
     use-sync-external-store "1.2.0"
 
 warning@^3.0.0:
