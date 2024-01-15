@@ -144,9 +144,10 @@ describe('Webrtc: Shared', () => {
       await index.add({ uri: 'automerge:b' });
       await index.add({ uri: 'automerge:c' });
 
+      const Mutate = Store.Index.Mutate;
       index.doc.change((d) => (d.docs[2].name = 'hello'));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[2], { shared: true }));
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[3], { shared: true }));
+      index.doc.change((d) => Mutate.toggleShared(d.docs[2], { shared: true }));
+      index.doc.change((d) => Mutate.toggleShared(d.docs[3], { shared: true }));
 
       // Ensure the syncer updated the doc.
       Shared.Sync.indexToShared(index, doc);
@@ -158,8 +159,32 @@ describe('Webrtc: Shared', () => {
       store.dispose();
     });
 
-    it.skip('Sync.sharedToIndex', async () => {
-      // Shared.Sync.sharedToIndex;
+    it('Sync.sharedToIndex', async () => {
+      const store = Store.init();
+      const index = await Store.index(store);
+      const doc = await Shared.getOrCreate(store);
+
+      const Mutate = Store.Index.Mutate;
+      await index.add({ uri: 'automerge:a' }); // Not shared.
+      await index.add({ uri: 'automerge:b' });
+      index.doc.change((d) => Mutate.toggleShared(d.docs[2], { shared: true }));
+      Shared.Sync.indexToShared(index, doc);
+
+      // Make change → unshare a document.
+      doc.change((d) => {
+        d.docs['automerge:b'].shared = false;
+        d.docs['automerge:b'].version++;
+      });
+
+      // NB: not changed yet.
+      expect(index.doc.current.docs[2].shared?.current).to.eql(true);
+      expect(index.doc.current.docs[2].shared?.version.value).to.eql(1);
+
+      Shared.Sync.sharedToIndex(doc, index); // ← ✨ function under test.
+      expect(index.doc.current.docs[2].shared?.current).to.eql(false);
+      expect(index.doc.current.docs[2].shared?.version.value).to.eql(2);
+
+      store.dispose();
     });
   });
 });
