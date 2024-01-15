@@ -1,1 +1,1 @@
-export * from './ns';
+export * from './Namespace';
