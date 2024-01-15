@@ -1,0 +1,70 @@
+import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
+
+import { Is } from '.';
+import { Doc } from '../Doc';
+import { Store } from '../Store';
+import { WebStore } from '../Store.Web';
+import { describe, expect, it, type t } from '../test';
+
+describe('Is', (e) => {
+  const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
+
+  it('Is.automergeUrl', () => {
+    const store = Store.init();
+    const doc = store.repo.create();
+    expect(Is.automergeUrl(doc.url)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.automergeUrl(v)).to.eql(false));
+  });
+
+  it('Is.docRef', async () => {
+    type T = { count: number };
+    NON_OBJECTS.forEach((v) => expect(Is.docRef(v)).to.eql(false));
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<T>((d) => (d.count = 0));
+    expect(Is.docRef(doc)).to.eql(true);
+    store.dispose();
+  });
+
+  it('Is.store', () => {
+    const store = Store.init();
+    expect(Is.store(store)).to.eql(true);
+    NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
+    store.dispose();
+  });
+
+  it('Is.storeIndex', async () => {
+    const store = Store.init();
+    const index = await Store.Index.init(store);
+    NON_OBJECTS.forEach((value) => expect(Is.storeIndex(value)).to.eql(false));
+    expect(Is.storeIndex(index)).to.eql(true);
+    store.dispose();
+  });
+
+  it('Is.webStore', () => {
+    expect(Is.webStore(WebStore.init({ storage: false }))).to.eql(true);
+    expect(Is.webStore(Store.init())).to.eql(false);
+    NON_OBJECTS.forEach((value) => expect(Is.store(value)).to.eql(false));
+  });
+
+  it('Is.repoIndex', () => {
+    const index: t.StoreIndex = { ['.meta']: Store.Index.meta, docs: [] };
+    expect(Is.repoIndex(index)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
+  });
+
+  it('Is.broadcastChannel (network adapter)', () => {
+    const adapter = new BroadcastChannelNetworkAdapter();
+    expect(Is.broadcastChannel(adapter)).to.eql(true);
+    NON_OBJECTS.forEach((v) => expect(Is.broadcastChannel(v)).to.eql(false));
+  });
+
+  it('Is.namespace', async () => {
+    type TRoot = { count: number };
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
+    const ns = Doc.namespace(doc);
+    expect(Is.namespace(ns)).to.eql(true);
+    NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
+    store.dispose();
+  });
+});
