@@ -9,7 +9,7 @@ describe('Doc.Lens', () => {
   type TChild = { count: number; child?: TChild };
 
   const store = Store.init();
-  const getOrCreate = () => store.doc.getOrCreate<TRoot>((d) => null);
+  const setup = () => store.doc.getOrCreate<TRoot>((d) => null);
 
   const getDesendent: t.CrdtLensGetDescendent<TRoot, TChild> = (doc) => {
     // NB: If the child does not exist, it is written onto the object.
@@ -24,13 +24,13 @@ describe('Doc.Lens', () => {
   });
 
   it('does not exist (get, total)', async () => {
-    const root = await getOrCreate();
+    const root = await setup();
     expect(Registry.get(root)).to.eql(undefined);
     expect(Registry.total(root)).to.eql(0);
   });
 
   it('add', async () => {
-    const root = await getOrCreate();
+    const root = await setup();
     const res1 = Registry.add(root);
     const res2 = Registry.add(root);
     expect(res1.total).to.eql(1);
@@ -40,8 +40,8 @@ describe('Doc.Lens', () => {
   });
 
   it('remove', async () => {
-    const root1 = await getOrCreate();
-    const root2 = await getOrCreate();
+    const root1 = await setup();
+    const root2 = await setup();
 
     Registry.add(root1);
     Registry.add(root1);
@@ -61,8 +61,8 @@ describe('Doc.Lens', () => {
   });
 
   it('lens → add → dispose → remove', async () => {
-    const root1 = await getOrCreate();
-    const root2 = await getOrCreate();
+    const root1 = await setup();
+    const root2 = await setup();
 
     expect(Registry.total(root1)).to.eql(0);
 

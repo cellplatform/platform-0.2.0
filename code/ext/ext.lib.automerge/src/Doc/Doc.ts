@@ -15,6 +15,7 @@ export const Doc = {
 
   Lens,
   lens: Lens.init,
+  namespace: Lens.namespace,
 
   toObject,
   get,
