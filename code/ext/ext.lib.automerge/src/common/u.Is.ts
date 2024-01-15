@@ -1,7 +1,7 @@
 import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Typenames } from './constants';
-import { PatchState } from './libs';
+import { PatchState, Value } from './libs';
 import type * as t from './t';
 
 export const Is = {
@@ -88,6 +88,19 @@ export const Is = {
 
   broadcastChannel(input: any): input is BroadcastChannelNetworkAdapter {
     return input instanceof BroadcastChannelNetworkAdapter;
+  },
+
+  namespace<R extends {}, N extends string = string>(
+    input: any,
+  ): input is t.NamespaceManager<R, N> {
+    if (!isObject(input)) return false;
+    const obj = input as t.NamespaceManager<any>;
+    return (
+      obj.kind === 'crdt:namespace' &&
+      typeof obj.lens === 'function' &&
+      typeof obj.list === 'function' &&
+      Value.is.observable(obj.$)
+    );
   },
 } as const;
 

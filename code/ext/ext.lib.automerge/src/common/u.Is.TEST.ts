@@ -5,7 +5,7 @@ import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-index
 import { Is } from '.';
 import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
-import { Test, TestDb, expect, type t } from '../test.ui';
+import { Doc, Test, TestDb, expect, type t } from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
 
 export default Test.describe('Is', (e) => {
@@ -105,5 +105,15 @@ export default Test.describe('Is', (e) => {
     const adapter = new BroadcastChannelNetworkAdapter();
     expect(Is.broadcastChannel(adapter)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.broadcastChannel(v)).to.eql(false));
+  });
+
+  e.it('Is.namespace', async (e) => {
+    type TRoot = { count: number };
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
+    const ns = Doc.namespace(doc);
+    expect(Is.namespace(ns)).to.eql(true);
+    NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
+    store.dispose();
   });
 });
