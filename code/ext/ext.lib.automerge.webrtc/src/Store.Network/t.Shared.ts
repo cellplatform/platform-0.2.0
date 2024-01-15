@@ -13,7 +13,7 @@ export type CrdtSharedMutateAction = 'unshare';
 export type CrdtShared = t.DocWithMeta & {
   peers: CrdtSharedPeers;
   docs: CrdtSharedDocs;
-  ns: O;
+  ns: t.NamespaceMap;
   tmp?: O; // TEMP 🐷 ??
 };
 

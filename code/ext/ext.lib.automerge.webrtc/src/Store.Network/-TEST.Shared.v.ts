@@ -1,4 +1,4 @@
-import { Doc, Store, Time, describe, expect, it, type t } from '../test';
+import { Doc, Store, Time, describe, expect, it, type t, Is } from '../test';
 import { Shared } from './Shared';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';
@@ -46,6 +46,29 @@ describe('Webrtc: Shared', () => {
       const res = Shared.purge(index);
       expect(index.total()).to.eql(0);
       expect(res).to.eql([doc.uri]);
+
+      store.dispose();
+    });
+  });
+
+  describe('Shared.namespace', () => {
+    type N = 'foo' | 'bar';
+
+    it('retrieves {ns} with loosley and strongly typed key', async () => {
+      const store = Store.init();
+      const doc = await Shared.getOrCreate(store);
+      const ns1 = Shared.namespace(doc);
+      const ns2 = Shared.namespace<N>(doc);
+
+      expect(Is.namespace(ns1)).to.eql(true);
+      expect(Is.namespace(ns2)).to.eql(true);
+      expect(ns1).to.not.equal(ns2); // NB: different instance writing the same underlying document.
+
+      const foo = ns1.lens('foo', { count: 123 });
+      const bar = ns2.lens('bar', { msg: 'hello' });
+      expect(foo.current.count).to.eql(123);
+      expect(bar.current.msg).to.eql('hello');
+      expect(doc.current.ns).to.eql({ foo: { count: 123 }, bar: { msg: 'hello' } });
 
       store.dispose();
     });

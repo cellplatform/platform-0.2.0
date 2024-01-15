@@ -51,7 +51,7 @@ export const Shared = {
 
     /**
      * TODO 🐷
-     * - persist / re-use the doc (??)
+     * - persist / re-use the doc (??), or delete on network disconnect.
      */
 
     /**
@@ -118,5 +118,13 @@ export const Shared = {
       }
     });
     return purged;
+  },
+
+  /**
+   * Construct a namespace-manager to operate on the {ns} field
+   * of the shared doc.
+   */
+  namespace<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
+    return Doc.namespace<t.CrdtShared, N>(shared, (d) => d.ns);
   },
 } as const;

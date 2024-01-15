@@ -18,4 +18,7 @@ export type Lens<R extends {}, L extends {}> = t.Lifecycle & {
   toObject(): L;
 };
 
+/**
+ * Events
+ */
 export type LensChange<R extends {}, L extends {}> = t.DocChanged<R> & { lens: L };
