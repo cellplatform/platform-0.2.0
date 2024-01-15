@@ -248,31 +248,39 @@ describe('rx', () => {
   describe('rx.withinTimeThreshold (eg. "double-click")', () => {
     const $ = new rx.Subject<void>();
 
-    it('fires within time-threshold', async (e) => {
-      const threshold = rx.withinTimeThreshold($, 30);
-      let fired = 0;
-      threshold.$.subscribe(() => fired++);
+    it(
+      'fires within time-threshold',
+      async (e) => {
+        const threshold = rx.withinTimeThreshold($, 30);
+        let fired = 0;
+        threshold.$.subscribe(() => fired++);
 
-      $.next();
-      await Time.wait(5);
-      $.next();
-      expect(fired).to.eql(1);
+        $.next();
+        await Time.wait(5);
+        $.next();
+        expect(fired).to.eql(1);
 
-      threshold.dispose();
-    });
+        threshold.dispose();
+      },
+      { repeats: 3 },
+    );
 
-    it('does not fire (outside time-threshold)', async (e) => {
-      const threshold = rx.withinTimeThreshold($, 5);
-      let fired = 0;
-      threshold.$.subscribe(() => fired++);
+    it(
+      'does not fire (outside time-threshold)',
+      async (e) => {
+        const threshold = rx.withinTimeThreshold($, 5);
+        let fired = 0;
+        threshold.$.subscribe(() => fired++);
 
-      $.next();
-      await Time.wait(10);
-      $.next();
-      expect(fired).to.eql(0);
+        $.next();
+        await Time.wait(10);
+        $.next();
+        expect(fired).to.eql(0);
 
-      threshold.dispose();
-    });
+        threshold.dispose();
+      },
+      { repeats: 3 },
+    );
 
     it('dispose', async (e) => {
       const threshold = rx.withinTimeThreshold($, 10);
