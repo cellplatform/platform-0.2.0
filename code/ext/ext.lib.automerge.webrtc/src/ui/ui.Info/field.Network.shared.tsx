@@ -66,7 +66,7 @@ const wrangle = {
 
   expandPaths(data: t.InfoData) {
     const res = data.shared?.json?.expand?.paths;
-    return Array.isArray(res) ? res : ['$', '$.docs'];
+    return Array.isArray(res) ? res : ['$'];
   },
 
   expandLevel(data: t.InfoData) {
