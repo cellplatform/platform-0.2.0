@@ -21,9 +21,7 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
 
   if (fields.includes('Network.Shared.Json')) {
     const obj = wrangle.jsonObject(data);
-    if (obj) {
-      res.push({ value: obj });
-    }
+    if (obj) res.push({ value: obj });
   }
 
   return res;
