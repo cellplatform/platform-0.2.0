@@ -1,4 +1,4 @@
-import { DocLens } from '.';
+import { Lens } from '.';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
 import { describe, expect, it, type t } from '../test';
@@ -11,7 +11,7 @@ describe('Doc.Lens', () => {
   const store = Store.init();
   const setup = () => store.doc.getOrCreate<TRoot>((d) => null);
 
-  const getDesendent: t.CrdtLensGetDescendent<TRoot, TChild> = (doc) => {
+  const getDesendent: t.LensGetDescendent<TRoot, TChild> = (doc) => {
     // NB: If the child does not exist, it is written onto the object.
     //     Required for the CRDT to register the {root} subject
     //     prior to be handed to the lens mutator function
@@ -19,7 +19,7 @@ describe('Doc.Lens', () => {
   };
 
   it('API references', () => {
-    expect(DocLens.Registry).to.equal(Registry);
+    expect(Lens.Registry).to.equal(Registry);
     expect(Doc.Lens.Registry).to.equal(Registry);
   });
 

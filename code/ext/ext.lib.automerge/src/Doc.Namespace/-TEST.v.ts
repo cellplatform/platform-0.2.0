@@ -1,12 +1,11 @@
-import { namespace } from '.';
+import { Namespace } from '.';
 import { Doc } from '../Doc';
-import { DocLens } from '../Doc.Lens';
 import { Store } from '../Store';
 import { A, Value, describe, expect, it, rx, type t } from '../test';
 
-describe('Lens Namespace', () => {
-  type TFoo = { ns?: t.CrdtNsMap };
-  type TRoot = { ns?: t.CrdtNsMap; foo?: TFoo };
+describe('Namespace (Lens)', () => {
+  type TFoo = { ns?: t.NamespaceMap };
+  type TRoot = { ns?: t.NamespaceMap; foo?: TFoo };
   type TDoc = { count: number };
   type TError = { message?: string };
 
@@ -17,14 +16,10 @@ describe('Lens Namespace', () => {
 
   it('init', async () => {
     const doc = await setup();
-    const ns1 = namespace<TRoot>(doc);
-    const ns2 = DocLens.namespace<TRoot>(doc);
-    const ns3 = Doc.Lens.namespace<TRoot>(doc);
-    const ns4 = Doc.namespace<TRoot>(doc);
+    const ns1 = Namespace.init<TRoot>(doc);
+    const ns2 = Doc.namespace<TRoot>(doc);
     expect(ns1.kind).to.eql('crdt:namespace');
     expect(ns2.kind).to.eql('crdt:namespace');
-    expect(ns3.kind).to.eql('crdt:namespace');
-    expect(ns4.kind).to.eql('crdt:namespace');
   });
 
   describe('container', () => {
@@ -85,7 +80,7 @@ describe('Lens Namespace', () => {
       const doc = await setup();
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
 
-      const events: t.CrdtNsChange<TRoot, N>[] = [];
+      const events: t.NamespaceChange<TRoot, N>[] = [];
       ns.$.subscribe((e) => events.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
@@ -108,7 +103,7 @@ describe('Lens Namespace', () => {
       const doc = await setup();
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
 
-      const events: t.CrdtNsChange<TRoot, N>[] = [];
+      const events: t.NamespaceChange<TRoot, N>[] = [];
       ns.$.subscribe((e) => events.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
@@ -152,7 +147,7 @@ describe('Lens Namespace', () => {
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
       const ns2 = namespace.lens<TError>('bar', {});
 
-      type NS = t.CrdtNsMap; // NB: generic string as namespace key.
+      type NS = t.NamespaceMap; // NB: generic string as namespace key.
       expect((doc.current.ns as NS).foo).to.eql({ count: 0 });
       expect((doc.current.ns as NS).bar).to.eql({});
 
@@ -168,7 +163,7 @@ describe('Lens Namespace', () => {
 
     it('strongly typed namespace "names" (string union)', async () => {
       type N = 'foo.bar' | 'foo.baz';
-      type NS = t.CrdtNsMap<N>;
+      type NS = t.NamespaceMap<N>;
       const doc = await setup();
       const namespace = Doc.namespace<TRoot, N>(doc, (d) => d.ns || (d.ns = {}));
 
@@ -227,7 +222,7 @@ describe('Lens Namespace', () => {
   });
 
   describe('dispose', () => {
-    const getMap: t.CrdtNsMapGetLens<TRoot> = (d) => d.ns || (d.ns = {});
+    const getMap: t.NamespaceMapGetLens<TRoot> = (d) => d.ns || (d.ns = {});
 
     it('{ dispose$ } ← as param', async () => {
       const doc = await setup();

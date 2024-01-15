@@ -1,4 +1,5 @@
-import { DocLens as Lens } from '../Doc.Lens';
+import { Lens } from '../Doc.Lens';
+import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
 import { del } from './Doc.u.delete';
@@ -12,10 +13,11 @@ export const Doc = {
   Meta,
   Data,
   Patch,
-
   Lens,
+  Namespace,
+
   lens: Lens.init,
-  namespace: Lens.namespace,
+  namespace: Namespace.init,
 
   toObject,
   get,

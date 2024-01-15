@@ -6,7 +6,7 @@ import { rx, toObject, type t } from './common';
  */
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
-  get: t.CrdtLensGetDescendent<R, L>,
+  get: t.LensGetDescendent<R, L>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {
   Registry.add(root);
@@ -22,7 +22,7 @@ export function init<R extends {}, L extends {}>(
     Registry.remove(root);
   });
 
-  const subject$ = new rx.Subject<t.CrdtLensChange<R, L>>();
+  const subject$ = new rx.Subject<t.LensChange<R, L>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
 
   const fire = {
@@ -46,7 +46,7 @@ export function init<R extends {}, L extends {}>(
   /**
    * API
    */
-  const api: t.CrdtLens<R, L> = {
+  const api: t.Lens<R, L> = {
     kind: 'crdt:doc:lens',
     root,
     $,
@@ -97,7 +97,7 @@ export function init<R extends {}, L extends {}>(
     /**
      * Create a new sub-lens from the current lens.
      */
-    lens<T extends {}>(fn: t.CrdtLensGetDescendent<L, T>) {
+    lens<T extends {}>(fn: t.LensGetDescendent<L, T>) {
       return init(root, (doc) => fn(get(doc)), { dispose$ });
     },
 

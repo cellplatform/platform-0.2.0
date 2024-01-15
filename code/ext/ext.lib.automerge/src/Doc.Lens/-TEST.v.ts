@@ -1,4 +1,4 @@
-import { DocLens } from '.';
+import { Lens } from '.';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
 import { describe, expect, it, type t } from '../test';
@@ -15,7 +15,7 @@ describe('Doc.Lens', () => {
     return { root, dispose } as const;
   };
 
-  const getDesendent: t.CrdtLensGetDescendent<TRoot, TChild> = (doc) => {
+  const getDesendent: t.LensGetDescendent<TRoot, TChild> = (doc) => {
     // NB: If the child does not exist, it is written onto the object.
     //     Required for the CRDT to register the {root} subject
     //     prior to be handed to the lens mutator function
@@ -23,8 +23,8 @@ describe('Doc.Lens', () => {
   };
 
   it('API references', () => {
-    expect(Doc.Lens).to.equal(DocLens);
-    expect(Doc.lens).to.eql(DocLens.init);
+    expect(Doc.Lens).to.equal(Lens);
+    expect(Doc.lens).to.eql(Lens.init);
     expect(Doc.Lens.Registry).to.equal(Registry);
   });
 
@@ -150,7 +150,7 @@ describe('Doc.Lens', () => {
       const { root, dispose } = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
-      const fired: t.CrdtLensChange<TRoot, TChild>[] = [];
+      const fired: t.LensChange<TRoot, TChild>[] = [];
       lens.$.subscribe((e) => fired.push(e));
 
       lens.change((d) => (d.count = 123));
@@ -165,7 +165,7 @@ describe('Doc.Lens', () => {
       const { root, dispose } = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
-      const fired: t.CrdtLensChange<TRoot, TChild>[] = [];
+      const fired: t.LensChange<TRoot, TChild>[] = [];
       lens.$.subscribe((e) => fired.push(e));
 
       root.change((d) => (d.msg = 'hello root'));
@@ -192,8 +192,8 @@ describe('Doc.Lens', () => {
       const lens1 = Doc.lens<TRoot, TChild>(root, getDesendent);
       const lens2 = Doc.lens<TRoot, TChild>(root, getDesendent);
 
-      const fired1: t.CrdtLensChange<TRoot, TChild>[] = [];
-      const fired2: t.CrdtLensChange<TRoot, TChild>[] = [];
+      const fired1: t.LensChange<TRoot, TChild>[] = [];
+      const fired2: t.LensChange<TRoot, TChild>[] = [];
       lens1.$.subscribe((e) => fired1.push(e));
       lens2.$.subscribe((e) => fired2.push(e));
 
@@ -226,8 +226,8 @@ describe('Doc.Lens', () => {
       const lens1 = Doc.lens<T, T['A']>(root, (doc) => doc.A);
       const lens2 = Doc.lens<T, T['B']>(root, (doc) => doc.B);
 
-      const fired1: t.CrdtLensChange<T, T['A']>[] = [];
-      const fired2: t.CrdtLensChange<T, T['B']>[] = [];
+      const fired1: t.LensChange<T, T['A']>[] = [];
+      const fired2: t.LensChange<T, T['B']>[] = [];
       lens1.$.subscribe((e) => fired1.push(e));
       lens2.$.subscribe((e) => fired2.push(e));
 
@@ -256,7 +256,7 @@ describe('Doc.Lens', () => {
         return d2;
       });
 
-      type C = t.CrdtLensChange<TRoot, TChild>;
+      type C = t.LensChange<TRoot, TChild>;
       const fired1: C[] = [];
       const fired2: C[] = [];
       lens1.$.subscribe((e) => fired1.push(e));
