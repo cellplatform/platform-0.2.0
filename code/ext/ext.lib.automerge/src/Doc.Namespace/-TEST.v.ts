@@ -85,18 +85,18 @@ describe('Namespace (Lens)', () => {
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
       expect(events.length).to.eql(1);
-      expect(events[0].lens.foo).to.eql({ count: 0 });
-      expect(events[0].lens.bar).to.eql(undefined);
+      expect(events[0].payload.lens.foo).to.eql({ count: 0 });
+      expect(events[0].payload.lens.bar).to.eql(undefined);
 
       const bar = ns.lens<TDoc>('bar', { count: 123 });
       expect(events.length).to.eql(2);
-      expect(events[1].lens.foo).to.eql({ count: 0 });
-      expect(events[1].lens.bar).to.eql({ count: 123 });
+      expect(events[1].payload.lens.foo).to.eql({ count: 0 });
+      expect(events[1].payload.lens.bar).to.eql({ count: 123 });
 
       foo.change((d) => d.count++);
       expect(events.length).to.eql(3);
-      expect(events[2].lens.foo).to.eql({ count: 1 });
-      expect(events[2].lens.bar).to.eql({ count: 123 });
+      expect(events[2].payload.lens.foo).to.eql({ count: 1 });
+      expect(events[2].payload.lens.bar).to.eql({ count: 123 });
     });
 
     it('no longer fires after dispose', async () => {

@@ -15,9 +15,12 @@ export const Namespace = {
     getMap?: t.NamespaceMapGetLens<R>,
     options?: { dispose$: t.UntilObservable },
   ): t.NamespaceManager<R, N> {
-    const events = root.events(options?.dispose$);
-    const { dispose, dispose$ } = events;
+    const rootEvents = root.events(options?.dispose$);
+    const { dispose, dispose$ } = rootEvents;
+
     const container = wrangle.containerLens<R, N>(root, getMap, dispose$);
+    const containerEvents = container.events();
+
     const cache = new Map<N, t.Lens<R, {}>>();
     dispose$.subscribe(() => cache.clear());
 
@@ -28,7 +31,7 @@ export const Namespace = {
       kind: 'crdt:namespace',
 
       get $() {
-        return container.$;
+        return containerEvents.$;
       },
 
       get container() {
@@ -72,7 +75,7 @@ export const Namespace = {
       dispose$,
       dispose,
       get disposed() {
-        return events.disposed;
+        return rootEvents.disposed;
       },
     };
 

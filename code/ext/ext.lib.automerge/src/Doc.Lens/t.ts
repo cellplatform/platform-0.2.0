@@ -10,14 +10,28 @@ export type LensGetDescendent<R extends {}, L extends {}> = (doc: R) => L;
  */
 export type Lens<R extends {}, L extends {}> = t.Lifecycle & {
   readonly root: t.DocRef<R>;
-  readonly $: t.Observable<LensChange<R, L>>;
   readonly current: L;
   change(fn: t.ImmutableNext<L>): t.Lens<R, L>;
+  events(dispose$?: t.UntilObservable): LensEvents<R, L>;
   lens<T extends {}>(get: LensGetDescendent<L, T>): Lens<R, T>;
   toObject(): L;
 };
 
 /**
+ * Events API
+ */
+export type LensEvents<R extends {}, L extends {}> = t.Lifecycle & {
+  readonly $: t.Observable<LensEvent<R, L>>;
+  readonly changed$: t.Observable<LensChanged<R, L>>;
+};
+
+/**
  * Events
  */
-export type LensChange<R extends {}, L extends {}> = t.DocChanged<R> & { lens: L };
+export type LensEvent<R extends {}, L extends {}> = LensChangedEvent<R, L>;
+
+export type LensChangedEvent<R extends {}, L extends {}> = {
+  type: 'crdt:lens:changed';
+  payload: LensChanged<R, L>;
+};
+export type LensChanged<R extends {}, L extends {}> = t.DocChanged<R> & { lens: L };

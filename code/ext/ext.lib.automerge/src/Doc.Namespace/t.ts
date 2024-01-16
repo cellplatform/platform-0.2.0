@@ -2,7 +2,7 @@ import type { t } from '../common';
 
 export type NamespaceMap<N extends string = string> = Record<N, {}>;
 export type NamespaceMapGetLens<R extends {}> = t.LensGetDescendent<R, NamespaceMap>;
-export type NamespaceChange<R extends {}, N extends string = string> = t.LensChange<
+export type NamespaceChange<R extends {}, N extends string = string> = t.LensEvent<
   R,
   NamespaceMap<N>
 >;
