@@ -8,10 +8,9 @@ describe('Webrtc: Shared', () => {
     it('getOrCreate', async () => {
       const store = Store.init();
       const doc = await Shared.getOrCreate(store);
-      expect(doc.current.docs).to.eql({});
-      expect(doc.current.peers).to.eql({});
+      expect(doc.current.sys.docs).to.eql({});
+      expect(doc.current.sys.peers).to.eql({});
       expect(doc.current.ns).to.eql({});
-      expect(doc.current.tmp).to.eql(undefined); // Only defined when needed.
       expect(doc.current['.meta'].ephemeral).to.eql(true);
 
       const meta = Doc.Meta.get(doc.current);
@@ -95,9 +94,9 @@ describe('Webrtc: Shared', () => {
       const { store, doc, fired } = await setup();
 
       const uri = 'automerge:foo';
-      doc.change((d) => (d.docs[uri] = { shared: true, version: 1 }));
-      doc.change((d) => (d.docs[uri] = { shared: false, version: 2 }));
-      doc.change((d) => delete d.docs[uri]);
+      doc.change((d) => (d.sys.docs[uri] = { shared: true, version: 1 }));
+      doc.change((d) => (d.sys.docs[uri] = { shared: false, version: 2 }));
+      doc.change((d) => delete d.sys.docs[uri]);
 
       const res1 = Shared.Patches.shared(fired[0]);
       const res2 = Shared.Patches.shared(fired[1]);
@@ -123,20 +122,20 @@ describe('Webrtc: Shared', () => {
       const shared = await Shared.getOrCreate(store);
 
       listenToIndex(index, shared);
-      expect(shared.current.docs).to.eql({});
+      expect(shared.current.sys.docs).to.eql({});
 
       const uri = 'automerge:foo';
       await index.add({ uri });
-      expect(shared.current.docs).to.eql({}); // NB: not yet shared.
+      expect(shared.current.sys.docs).to.eql({}); // NB: not yet shared.
 
       // Share.
       index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { shared: true }));
-      expect(shared.current.docs[uri]).to.eql({ shared: true, version: 1 }); // NB: entry now exists on the shared-doc.
+      expect(shared.current.sys.docs[uri]).to.eql({ shared: true, version: 1 }); // NB: entry now exists on the shared-doc.
 
       // Remove.
       index.remove(uri);
-      expect(shared.current.docs[uri].shared).to.eql(false);
-      expect(shared.current.docs[uri].version).to.eql(2);
+      expect(shared.current.sys.docs[uri].shared).to.eql(false);
+      expect(shared.current.sys.docs[uri].version).to.eql(2);
       store.dispose();
     });
 
@@ -144,17 +143,17 @@ describe('Webrtc: Shared', () => {
       const store = Store.init();
       const index = await Store.index(store);
       const shared = await Shared.getOrCreate(store);
-      const get = (uri: string) => shared.current.docs[uri];
+      const get = (uri: string) => shared.current.sys.docs[uri];
 
       await Time.wait(0);
       listenToShared(shared, index);
-      expect(shared.current.docs).to.eql({});
+      expect(shared.current.sys.docs).to.eql({});
 
       const uri = 'automerge:foo';
-      shared.change((d) => (d.docs[uri] = { shared: false, version: 0 }));
+      shared.change((d) => (d.sys.docs[uri] = { shared: false, version: 0 }));
 
       expect(get(uri)).to.eql({ shared: false, version: 0 });
-      shared.change((d) => (d.docs[uri] = { shared: true, version: 1 }));
+      shared.change((d) => (d.sys.docs[uri] = { shared: true, version: 1 }));
       expect(get(uri)).to.eql({ shared: true, version: 1 });
 
       store.dispose();
@@ -176,7 +175,7 @@ describe('Webrtc: Shared', () => {
 
       // Ensure the syncer updated the doc.
       Shared.Sync.indexToShared(index, doc);
-      const shared = doc.current.docs;
+      const shared = doc.current.sys.docs;
       expect(shared['automerge:a']).to.eql(undefined);
       expect(shared['automerge:b']).to.eql({ shared: true, version: 1 });
       expect(shared['automerge:c']).to.eql({ shared: true, version: 1 });
@@ -197,8 +196,8 @@ describe('Webrtc: Shared', () => {
 
       // Make change → unshare a document.
       doc.change((d) => {
-        d.docs['automerge:b'].shared = false;
-        d.docs['automerge:b'].version++;
+        d.sys.docs['automerge:b'].shared = false;
+        d.sys.docs['automerge:b'].version++;
       });
 
       // NB: not changed yet.

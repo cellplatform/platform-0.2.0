@@ -56,7 +56,7 @@ export const Sync = {
       return { uri, exists, version, current } as const;
     };
 
-    const meta = Object.entries(shared.current.docs).map(([key, value]) => getMeta(key, value));
+    const meta = Object.entries(shared.current.sys.docs).map(([key, value]) => getMeta(key, value));
     const versionUpdates = meta.filter((e) => e.version.shared > e.version.index);
 
     await Promise.all(

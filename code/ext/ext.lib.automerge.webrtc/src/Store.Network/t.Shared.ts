@@ -11,8 +11,7 @@ export type CrdtSharedMutateAction = 'unshare';
  * state and configuration between connected peers.
  */
 export type CrdtShared = t.DocWithMeta & {
-  peers: CrdtSharedPeers;
-  docs: CrdtSharedDocs;
+  sys: { peers: CrdtSharedPeers; docs: CrdtSharedDocs };
   ns: t.NamespaceMap;
   tmp?: O; // TEMP 🐷 ??
 };

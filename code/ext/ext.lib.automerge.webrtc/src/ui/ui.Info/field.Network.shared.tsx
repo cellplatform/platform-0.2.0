@@ -37,9 +37,9 @@ const wrangle = {
 
     const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
     const obj = network.shared.doc?.toObject();
-    if (!obj?.docs) return undefined;
+    if (!obj?.sys.docs) return undefined;
 
-    const docs = { ...obj?.docs };
+    const docs = { ...obj?.sys.docs };
     Object.keys(docs).forEach((uri) => {
       const value = docs[uri];
       docs[formatUri(uri)] = value;
@@ -50,7 +50,7 @@ const wrangle = {
       <div {...css({ flex: 1 })}>
         <ObjectView
           name={'Shared'}
-          data={{ ...obj, docs }}
+          data={{ ...obj, sys: { ...obj.sys, docs } }}
           fontSize={11}
           style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
           expand={{

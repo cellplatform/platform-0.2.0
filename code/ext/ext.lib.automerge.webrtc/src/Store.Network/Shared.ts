@@ -30,8 +30,7 @@ export const Shared = {
   async getOrCreate(store: t.Store, uri?: string) {
     return store.doc.getOrCreate<t.CrdtShared>((d) => {
       Doc.Meta.ensure(d, Shared.meta);
-      d.peers = {};
-      d.docs = {};
+      d.sys = { peers: {}, docs: {} };
       d.ns = {};
     }, uri);
   },
@@ -80,7 +79,7 @@ export const Shared = {
     shared.change((d) => {
       const ua = UserAgent.current;
       const data: t.CrdtSharedPeer = { ua };
-      d.peers[peer.id] = data;
+      d.sys.peers[peer.id] = data;
     });
 
     /**

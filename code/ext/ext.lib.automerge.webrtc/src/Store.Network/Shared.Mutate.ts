@@ -1,4 +1,4 @@
-import { type t, Doc } from './common';
+import { type t } from './common';
 
 /**
  * Common mutatation functions for data objects.
@@ -18,12 +18,12 @@ export const Mutate = {
     const getVersions = () => {
       return {
         index: index.shared?.version?.value ?? -1,
-        shared: draft.docs[uri]?.version ?? -1,
+        shared: draft.sys.docs[uri]?.version ?? -1,
       } as const;
     };
 
     const done = (error?: string) => {
-      const shared = draft.docs[uri]?.shared ?? false;
+      const shared = draft.sys.docs[uri]?.shared ?? false;
       const versions = getVersions();
       const version = Math.max(versions.index, versions.shared);
       return { uri, shared, version, error } as const;
@@ -35,9 +35,9 @@ export const Mutate = {
     if (version.index < 0 && version.shared < 0) return done('Not ready to sync');
 
     const changeShared = (fn: (shared: t.CrdtSharedDoc) => void) => {
-      const shared = draft.docs[uri] ?? { shared: false, version: 0 };
+      const shared = draft.sys.docs[uri] ?? { shared: false, version: 0 };
       fn(shared);
-      if (!draft.docs[uri]) draft.docs[uri] = shared; // NB: ensure the shared object is attached to the CRDT.
+      if (!draft.sys.docs[uri]) draft.sys.docs[uri] = shared; // NB: ensure the shared object is attached to the CRDT.
     };
 
     if (version.index >= version.shared) {
