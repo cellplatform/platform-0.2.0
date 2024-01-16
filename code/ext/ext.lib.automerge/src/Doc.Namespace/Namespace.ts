@@ -45,9 +45,10 @@ export const Namespace = {
         });
       },
 
-      lens<L extends {}>(namespace: N, initial: L) {
+      lens<L extends {}>(namespace: N, initial: L, options: { type?: string } = {}) {
         if (cache.has(namespace)) return cache.get(namespace) as t.Lens<R, L>;
 
+        const { type } = options;
         const lens = Lens<R, L>(
           root,
           (draft) => {
@@ -55,7 +56,7 @@ export const Namespace = {
             const subject = container[namespace] || (container[namespace] = initial ?? {});
             return subject as L;
           },
-          { dispose$ },
+          { dispose$, type },
         );
 
         cache.set(namespace, lens);
