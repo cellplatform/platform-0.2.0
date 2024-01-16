@@ -61,7 +61,7 @@ export default Dev.describe(name, async (e) => {
         console.log('network.added$', e);
       });
 
-      edge.network.shared$.pipe().subscribe(async (e) => {
+      edge.network.shared.$.pipe().subscribe(async (e) => {
         const tmp = e.change.doc.tmp ?? {};
 
         console.log('shared$', edge.kind, tmp);
@@ -154,8 +154,8 @@ export default Dev.describe(name, async (e) => {
 
       const getShared = () => {
         return {
-          left: left.network.shared,
-          right: right.network.shared,
+          left: left.network.shared.doc,
+          right: right.network.shared.doc,
         } as const;
       };
 

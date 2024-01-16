@@ -8,7 +8,7 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
   if (!network) return [];
 
   const res: t.PropListItem[] = [];
-  const docid = Doc.Uri.id(network.shared?.uri);
+  const docid = Doc.Uri.id(network.shared.doc?.uri);
   const doc = Hash.shorten(docid, [4, 4]);
 
   res.push({
@@ -36,7 +36,7 @@ const wrangle = {
     if (!network) return;
 
     const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
-    const obj = network.shared?.toObject();
+    const obj = network.shared.doc?.toObject();
     if (!obj?.docs) return undefined;
 
     const docs = { ...obj?.docs };
