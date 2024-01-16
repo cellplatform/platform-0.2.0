@@ -127,6 +127,9 @@ export const WebrtcStore = {
         get doc() {
           return shared?.doc;
         },
+        namespace<N extends string = string>() {
+          return shared ? Shared.namespace<N>(shared.doc) : undefined;
+        },
       },
 
       /**

@@ -15,6 +15,7 @@ export type WebrtcStore = t.Lifecycle & {
   readonly shared: {
     readonly $: t.Observable<t.CrdtSharedChanged>;
     readonly doc?: t.DocRef<t.CrdtShared>;
+    namespace<N extends string = string>(): t.NamespaceManager<t.CrdtShared['ns'], N> | undefined;
   };
 };
 

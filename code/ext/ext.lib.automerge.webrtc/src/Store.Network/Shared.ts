@@ -125,6 +125,6 @@ export const Shared = {
    * of the shared doc.
    */
   namespace<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
-    return Doc.namespace<t.CrdtShared, N>(shared, (d) => d.ns);
+    return Doc.namespace<t.CrdtShared['ns'], N>(shared, (d) => d.ns);
   },
 } as const;

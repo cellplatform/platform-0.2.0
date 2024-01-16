@@ -15,6 +15,7 @@ export type {
   DocRefHandle,
   DocUri,
   DocWithMeta,
+  NamespaceManager,
   NamespaceMap,
   Store,
   StoreIndexDoc,

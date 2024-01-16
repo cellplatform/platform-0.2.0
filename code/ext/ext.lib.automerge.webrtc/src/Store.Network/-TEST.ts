@@ -53,6 +53,9 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
       expect(self.network.total.added).to.eql(0);
       expect(remote.network.total.added).to.eql(0);
 
+      expect(self.network.shared.doc).to.eql(undefined);
+      expect(self.network.shared.namespace()).to.eql(undefined);
+
       const res = await self.peer.connect.data(remote.peer.id);
       expect(res.error).to.eql(undefined);
 
@@ -109,6 +112,31 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
       expectRoughlySame(bytesAfter.self.in, bytesAfter.remote.in, 0.3, 'bytes-in same(ish)');
       expectRoughlySame(bytesAfter.self.out, bytesAfter.remote.out, 0.3, 'bytes-out same(ish)');
+    });
+
+    e.it('shared (doc / state / namespace)', async (e) => {
+      const shared = {
+        self: self.network.shared,
+        remote: remote.network.shared,
+      } as const;
+
+      expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);
+
+      type N = 'tmp' | 'foo';
+      type T = { count: number };
+      const ns = {
+        self: shared.self.namespace<N>(),
+        remote: shared.self.namespace<N>(),
+      } as const;
+
+      const tmp = {
+        self: ns.self?.lens<T>('tmp', { count: 0 }),
+        remote: ns.remote?.lens<T>('tmp', { count: 0 }),
+      } as const;
+
+      tmp.self?.change((d) => (d.count = 1234));
+      await wait();
+      expect(tmp.remote?.current.count).to.eql(1234);
     });
 
     e.it('ephemeral events', async (e) => {
