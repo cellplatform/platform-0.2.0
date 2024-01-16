@@ -14,6 +14,7 @@ export function eventsFactory<R extends {}, L extends {}>(
   const api: t.LensEvents<R, L> = {
     $,
     changed$: rx.payload<t.LensChangedEvent<R, L>>($, 'crdt:lens:changed'),
+    deleted$: rx.payload<t.LensDeletedEvent<R, L>>($, 'crdt:lens:deleted'),
 
     /**
      * Lifecycle

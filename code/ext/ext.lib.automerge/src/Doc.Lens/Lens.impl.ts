@@ -14,37 +14,47 @@ export function init<R extends {}, L extends {}>(
   let _count = 0;
   let _changing = false;
   let _lastValue: L | undefined;
-  const rootEvents = root.events(options.dispose$);
+  const events = root.events(options.dispose$);
 
-  const { dispose, dispose$ } = rootEvents;
-  rootEvents.deleted$.subscribe(dispose);
-  rootEvents.dispose$.subscribe(() => {
+  const { dispose, dispose$ } = events;
+  events.dispose$.subscribe(() => {
     subject$.complete();
     Registry.remove(root);
   });
 
   const subject$ = rx.subject<t.LensEvent<R, L>>();
 
-  const fire = {
-    fromChange(e: t.DocChanged<R>) {
+  const Fire = {
+    changed(e: t.DocChanged<R>) {
       subject$.next({
         type: 'crdt:lens:changed',
+        payload: { ...e, lens: api.current },
+      });
+    },
+    deleted(e: t.DocDeleted<R>) {
+      subject$.next({
+        type: 'crdt:lens:deleted',
         payload: { ...e, lens: api.current },
       });
     },
   } as const;
 
   // Monitor for changes made to the lens scope independently of this instance.
-  rootEvents.changed$
+  events.changed$
     .pipe(
       rx.takeUntil(dispose$),
       rx.filter(() => !_changing),
       rx.filter(() => _lastValue !== api.current),
     )
     .subscribe((e) => {
-      fire.fromChange(e);
+      Fire.changed(e);
       _lastValue = api.current;
     });
+
+  events.deleted$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+    Fire.deleted(e);
+    dispose();
+  });
 
   /**
    * API
@@ -80,13 +90,13 @@ export function init<R extends {}, L extends {}>(
       }
 
       let _fired: t.DocChanged<R> | undefined;
-      rootEvents.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
+      events.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
 
       // Perform change.
       root.change((d) => fn(get(d)));
 
       // Alert listeners.
-      if (_fired) fire.fromChange(_fired);
+      if (_fired) Fire.changed(_fired);
 
       // Finish up.
       _lastValue = api.current;
@@ -99,7 +109,7 @@ export function init<R extends {}, L extends {}>(
      * Create new events observer.
      */
     events(dispose$?: t.UntilObservable) {
-      return eventsFactory(subject$, { dispose$: [dispose$, rootEvents.dispose$] });
+      return eventsFactory(subject$, { dispose$: [dispose$, events.dispose$] });
     },
 
     /**
@@ -122,7 +132,7 @@ export function init<R extends {}, L extends {}>(
     dispose,
     dispose$,
     get disposed() {
-      return rootEvents.disposed;
+      return events.disposed;
     },
   };
 

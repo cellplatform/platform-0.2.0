@@ -10,8 +10,7 @@ describe('Doc.Lens', () => {
 
   const store = Store.init();
   const setup = async (options: { store?: t.Store } = {}) => {
-    const root = await (options.store ?? store).doc.getOrCreate<TRoot>((d) => null);
-    return { root } as const;
+    return (options.store ?? store).doc.getOrCreate<TRoot>((d) => null);
   };
 
   const getDesendent: t.LensGetDescendent<TRoot, TChild> = (doc) => {
@@ -29,7 +28,7 @@ describe('Doc.Lens', () => {
 
   describe('create', () => {
     it('Doc.Lens.init', async () => {
-      const { root } = await setup();
+      const root = await setup();
       expect(root.current).to.eql({});
 
       const lens = Doc.Lens.init<TRoot, TChild>(root, getDesendent);
@@ -38,13 +37,13 @@ describe('Doc.Lens', () => {
     });
 
     it('Doc.lens (← exposed as library entry)', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       expect(lens.root).to.equal(root);
     });
 
     it('toObject', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
       expect(lens.toObject()).to.eql(lens.current);
@@ -55,7 +54,7 @@ describe('Doc.Lens', () => {
   describe('dispose', () => {
     it('disposes when store disposes', async () => {
       const store = Store.init();
-      const { root } = await setup({ store });
+      const root = await setup({ store });
 
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       expect(Registry.exists(root)).to.eql(true);
@@ -71,7 +70,7 @@ describe('Doc.Lens', () => {
     });
 
     it('disposes when deleted from store', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const timeout = 10;
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
@@ -84,7 +83,7 @@ describe('Doc.Lens', () => {
     });
 
     it('disposes lens without effecting root', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const timeout = 10;
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
@@ -101,7 +100,7 @@ describe('Doc.Lens', () => {
 
   describe('change', () => {
     it('lens descendent object does initially exist', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
       const res = lens.change((child) => (child.count = 123));
@@ -116,7 +115,7 @@ describe('Doc.Lens', () => {
     });
 
     it('lens descendent object does not initially exist (factory generated)', async (e) => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
       const res = lens.change((child) => (child.count = 123));
@@ -129,7 +128,7 @@ describe('Doc.Lens', () => {
 
   describe('events ($)', () => {
     it('change events → descendent', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       const events = lens.events();
 
@@ -145,7 +144,7 @@ describe('Doc.Lens', () => {
     });
 
     it('change on root', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       const events = lens.events();
 
@@ -172,7 +171,7 @@ describe('Doc.Lens', () => {
     });
 
     it('change on same descendent → different lens', async () => {
-      const { root } = await setup();
+      const root = await setup();
       const lens1 = Doc.lens<TRoot, TChild>(root, getDesendent);
       const lens2 = Doc.lens<TRoot, TChild>(root, getDesendent);
       const events1 = lens1.events();
@@ -235,7 +234,7 @@ describe('Doc.Lens', () => {
     });
 
     it('lens nested within lens (same root) ← events', async () => {
-      const { root } = await setup();
+      const root = await setup();
 
       const lens1 = Doc.lens<TRoot, TChild>(root, (doc) => {
         const d1 = doc.child || (doc.child = { count: 0 });
@@ -269,9 +268,37 @@ describe('Doc.Lens', () => {
       events2.dispose();
     });
 
+    it('deleted', async () => {
+      const store = Store.init();
+      const root1 = await setup({ store });
+      const root2 = await setup({ store });
+      const lens = Doc.lens<TRoot, TChild>(root1, getDesendent);
+      const events = lens.events();
+
+      expect(lens.disposed).to.eql(false);
+      expect(events.disposed).to.eql(false);
+
+      const fired: t.LensDeleted<TRoot, TChild>[] = [];
+      events.deleted$.subscribe((e) => fired.push(e));
+
+      await store.doc.delete(root2.uri);
+      expect(fired.length).to.eql(0); // NB: "root2" not implicated in the lens under test.
+
+      await store.doc.delete(root1.uri);
+      expect(fired.length).to.eql(1);
+      expect(fired[0].lens.count).to.eql(0);
+      expect(fired[0].uri).to.eql(root1.uri);
+
+      // NB: deletion of the document auto-disposes of the lens and the events.
+      expect(lens.disposed).to.eql(true);
+      expect(events.disposed).to.eql(true);
+
+      store.dispose();
+    });
+
     describe('dispose', () => {
       it('on events.dispose() method', async () => {
-        const { root } = await setup();
+        const root = await setup();
         const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
         const events = lens.events();
 
@@ -281,7 +308,7 @@ describe('Doc.Lens', () => {
       });
 
       it('on events({ dispose$ }) param', async () => {
-        const { root } = await setup();
+        const root = await setup();
         const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
         const life = rx.lifecycle();
@@ -294,7 +321,7 @@ describe('Doc.Lens', () => {
       });
 
       it('on parent lens dispose', async () => {
-        const { root } = await setup();
+        const root = await setup();
         const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
         const events = lens.events();
 
@@ -305,7 +332,7 @@ describe('Doc.Lens', () => {
 
       it('on root store dispose', async () => {
         const store = Store.init();
-        const { root } = await setup({ store });
+        const root = await setup({ store });
         const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
         const events = lens.events();
 
@@ -318,7 +345,7 @@ describe('Doc.Lens', () => {
 
   describe('sub-lens ← lens.lens(...)', () => {
     it('init', async (e) => {
-      const { root } = await setup();
+      const root = await setup();
       expect(root.current).to.eql({});
 
       const lens1 = Doc.lens<TRoot, TChild>(root, getDesendent);
@@ -331,7 +358,7 @@ describe('Doc.Lens', () => {
     });
 
     it('change', async () => {
-      const { root } = await setup();
+      const root = await setup();
 
       const lens1 = Doc.lens<TRoot, TChild>(root, getDesendent);
       const lens2 = lens1.lens(getDesendent);
@@ -355,7 +382,7 @@ describe('Doc.Lens', () => {
 
     it('dispose', async () => {
       const store = Store.init();
-      const { root } = await setup({ store });
+      const root = await setup({ store });
       const events = root.events();
 
       const lens1 = Doc.lens<TRoot, TChild>(root, getDesendent);
