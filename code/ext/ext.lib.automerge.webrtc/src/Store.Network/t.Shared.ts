@@ -1,6 +1,8 @@
 import type { t } from './common';
 import type { Shared } from './Shared';
 
+type O = Record<string, unknown>;
+
 export type CrdtSharedState = Awaited<ReturnType<typeof Shared.init>>;
 export type CrdtSharedMutateAction = 'unshare';
 
@@ -9,9 +11,9 @@ export type CrdtSharedMutateAction = 'unshare';
  * state and configuration between connected peers.
  */
 export type CrdtShared = t.DocWithMeta & {
-  peers: CrdtSharedPeers;
-  docs: CrdtSharedDocs;
-  tmp: Record<string, unknown>;
+  sys: { peers: CrdtSharedPeers; docs: CrdtSharedDocs };
+  ns: t.NamespaceMap;
+  tmp?: O; // TEMP 🐷 ??
 };
 
 /**

@@ -1,33 +1,32 @@
 import { Lens, rx, toObject, type t } from './common';
 
+type O = Record<string, unknown>;
+
 export const Namespace = {
   /**
-   * Create a lens namespace manager within the given document.
+   * Create a [Lens] namespace manager for (or within) the a root document.
    *
    * [Context]:
    *      This allows multiple lens to be created on a {map}
    *      object within the single document.
    */
-  init<R extends {}, N extends string = string>(
+  init<R extends O, N extends string = string>(
     root: t.DocRef<R>,
     getMap?: t.NamespaceMapGetLens<R>,
     options?: { dispose$: t.UntilObservable },
   ): t.NamespaceManager<R, N> {
-    const events = root.events(options?.dispose$);
-    const { dispose, dispose$ } = events;
+    const rootEvents = root.events(options?.dispose$);
+    const { dispose, dispose$ } = rootEvents;
     const container = wrangle.containerLens<R, N>(root, getMap, dispose$);
+
     const cache = new Map<N, t.Lens<R, {}>>();
     dispose$.subscribe(() => cache.clear());
 
     /**
-     * API.
+     * API
      */
     const api: t.NamespaceManager<R, N> = {
       kind: 'crdt:namespace',
-
-      get $() {
-        return container.$;
-      },
 
       get container() {
         type T = t.NamespaceMap<N>;
@@ -46,9 +45,10 @@ export const Namespace = {
         });
       },
 
-      lens<L extends {}>(namespace: N, initial: L) {
+      lens<L extends {}>(namespace: N, initial: L, options: { type?: string } = {}) {
         if (cache.has(namespace)) return cache.get(namespace) as t.Lens<R, L>;
 
+        const { type } = options;
         const lens = Lens<R, L>(
           root,
           (draft) => {
@@ -56,12 +56,16 @@ export const Namespace = {
             const subject = container[namespace] || (container[namespace] = initial ?? {});
             return subject as L;
           },
-          { dispose$ },
+          { dispose$, type },
         );
 
         cache.set(namespace, lens);
         lens.dispose$.pipe(rx.take(1)).subscribe(() => cache.delete(namespace));
         return lens;
+      },
+
+      events(dispose$?: t.UntilObservable) {
+        return container.events(dispose$);
       },
 
       /**
@@ -70,7 +74,7 @@ export const Namespace = {
       dispose$,
       dispose,
       get disposed() {
-        return events.disposed;
+        return rootEvents.disposed;
       },
     };
 

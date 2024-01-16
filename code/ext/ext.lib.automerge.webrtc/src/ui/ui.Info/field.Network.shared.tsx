@@ -8,7 +8,7 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
   if (!network) return [];
 
   const res: t.PropListItem[] = [];
-  const docid = Doc.Uri.id(network.shared?.uri);
+  const docid = Doc.Uri.id(network.shared.doc?.uri);
   const doc = Hash.shorten(docid, [4, 4]);
 
   res.push({
@@ -21,9 +21,7 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
 
   if (fields.includes('Network.Shared.Json')) {
     const obj = wrangle.jsonObject(data);
-    if (obj) {
-      res.push({ value: obj });
-    }
+    if (obj) res.push({ value: obj });
   }
 
   return res;
@@ -38,10 +36,10 @@ const wrangle = {
     if (!network) return;
 
     const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
-    const obj = network.shared?.toObject();
-    if (!obj?.docs) return undefined;
+    const obj = network.shared.doc?.toObject();
+    if (!obj?.sys.docs) return undefined;
 
-    const docs = { ...obj?.docs };
+    const docs = { ...obj?.sys.docs };
     Object.keys(docs).forEach((uri) => {
       const value = docs[uri];
       docs[formatUri(uri)] = value;
@@ -52,7 +50,7 @@ const wrangle = {
       <div {...css({ flex: 1 })}>
         <ObjectView
           name={'Shared'}
-          data={{ ...obj, docs }}
+          data={{ ...obj, sys: { ...obj.sys, docs } }}
           fontSize={11}
           style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
           expand={{
@@ -66,7 +64,7 @@ const wrangle = {
 
   expandPaths(data: t.InfoData) {
     const res = data.shared?.json?.expand?.paths;
-    return Array.isArray(res) ? res : ['$', '$.docs'];
+    return Array.isArray(res) ? res : ['$'];
   },
 
   expandLevel(data: t.InfoData) {

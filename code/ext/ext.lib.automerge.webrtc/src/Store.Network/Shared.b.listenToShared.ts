@@ -14,7 +14,7 @@ export function listenToShared(
 
   events.changed$
     .pipe(
-      rx.map((e) => e.doc.docs),
+      rx.map((e) => e.doc.sys.docs),
       rx.distinctWhile((prev, next) => R.equals(prev, next)),
       rx.debounceTime(100),
     )

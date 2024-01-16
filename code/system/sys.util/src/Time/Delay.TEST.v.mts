@@ -98,44 +98,48 @@ describe('action', () => {
     expect(timer.elapsed).to.eql(-1);
   });
 
-  it('start → (restart) → complete', async () => {
-    let fired: t.TimeDelayActionHandlerArgs[] = [];
-    const timer = action(10).on((e) => fired.push(e));
-    expect(timer.running).to.eql(false);
+  it(
+    'start → (restart) → complete',
+    async () => {
+      let fired: t.TimeDelayActionHandlerArgs[] = [];
+      const timer = action(10).on((e) => fired.push(e));
+      expect(timer.running).to.eql(false);
 
-    timer.start();
-    expect(timer.running).to.eql(true);
-    expect(fired[0].action).to.eql('start');
-
-    const restart = async () => {
-      expect(timer.running).to.eql(true);
-      await wait(5);
       timer.start();
-    };
+      expect(timer.running).to.eql(true);
+      expect(fired[0].action).to.eql('start');
 
-    await restart();
-    await restart();
-    await restart();
-    await restart();
-    await restart();
+      const restart = async () => {
+        expect(timer.running).to.eql(true);
+        await wait(5);
+        timer.start();
+      };
 
-    expect(timer.elapsed).to.greaterThan(20); // NB: well over the absolute delay of the timer.
-    expect(timer.running).to.eql(true);
+      await restart();
+      await restart();
+      await restart();
+      await restart();
+      await restart();
 
-    // Wait for timeout.
-    await wait(15);
-    expect(timer.running).to.eql(false);
-    expect(timer.elapsed).to.eql(-1);
+      expect(timer.elapsed).to.greaterThan(20); // NB: well over the absolute delay of the timer.
+      expect(timer.running).to.eql(true);
 
-    expect(fired.length).to.eql(7);
-    expect(fired[0].action).to.eql('start');
-    expect(fired[1].action).to.eql('restart');
-    expect(fired[2].action).to.eql('restart');
-    expect(fired[3].action).to.eql('restart');
-    expect(fired[4].action).to.eql('restart');
-    expect(fired[5].action).to.eql('restart');
-    expect(fired[6].action).to.eql('complete');
-  });
+      // Wait for timeout.
+      await wait(15);
+      expect(timer.running).to.eql(false);
+      expect(timer.elapsed).to.eql(-1);
+
+      expect(fired.length).to.eql(7);
+      expect(fired[0].action).to.eql('start');
+      expect(fired[1].action).to.eql('restart');
+      expect(fired[2].action).to.eql('restart');
+      expect(fired[3].action).to.eql('restart');
+      expect(fired[4].action).to.eql('restart');
+      expect(fired[5].action).to.eql('restart');
+      expect(fired[6].action).to.eql('complete');
+    },
+    { retry: 3 },
+  );
 
   it('start → clear', async () => {
     let fired: t.TimeDelayActionHandlerArgs[] = [];

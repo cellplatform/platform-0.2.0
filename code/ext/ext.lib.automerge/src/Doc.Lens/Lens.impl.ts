@@ -1,5 +1,6 @@
+import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { rx, toObject, type t } from './common';
+import { rx, slug, toObject, type t } from './common';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
@@ -7,7 +8,7 @@ import { rx, toObject, type t } from './common';
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
   get: t.LensGetDescendent<R, L>,
-  options: { dispose$?: t.UntilObservable } = {},
+  options: { dispose$?: t.UntilObservable; type?: string } = {},
 ) {
   Registry.add(root);
   let _count = 0;
@@ -16,18 +17,25 @@ export function init<R extends {}, L extends {}>(
   const events = root.events(options.dispose$);
 
   const { dispose, dispose$ } = events;
-  events.deleted$.subscribe(dispose);
   events.dispose$.subscribe(() => {
     subject$.complete();
     Registry.remove(root);
   });
 
-  const subject$ = new rx.Subject<t.LensChange<R, L>>();
-  const $ = subject$.pipe(rx.takeUntil(dispose$));
+  const subject$ = rx.subject<t.LensEvent<R, L>>();
 
-  const fire = {
-    fromChange(e: t.DocChanged<R>) {
-      subject$.next({ ...e, lens: api.current });
+  const Fire = {
+    changed(e: t.DocChanged<R>) {
+      subject$.next({
+        type: 'crdt:lens:changed',
+        payload: { ...e, lens: api.current },
+      });
+    },
+    deleted(e: t.DocDeleted<R>) {
+      subject$.next({
+        type: 'crdt:lens:deleted',
+        payload: { ...e, lens: api.current },
+      });
     },
   } as const;
 
@@ -39,17 +47,22 @@ export function init<R extends {}, L extends {}>(
       rx.filter(() => _lastValue !== api.current),
     )
     .subscribe((e) => {
-      fire.fromChange(e);
+      Fire.changed(e);
       _lastValue = api.current;
     });
+
+  events.deleted$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+    Fire.deleted(e);
+    dispose();
+  });
 
   /**
    * API
    */
   const api: t.Lens<R, L> = {
-    kind: 'crdt:doc:lens',
+    instance: `${root.uri}:lens.${slug()}`,
+    type: options.type,
     root,
-    $,
 
     /**
      * Current value of the descendent.
@@ -62,7 +75,7 @@ export function init<R extends {}, L extends {}>(
      * Immutable change mutation on the descendent.
      */
     change(fn) {
-      if (api.disposed) return api;
+      if (api.disposed) return;
       _changing = true;
 
       // NB: forces the [get] factory to initialize the descendent if necessary.
@@ -85,13 +98,19 @@ export function init<R extends {}, L extends {}>(
       root.change((d) => fn(get(d)));
 
       // Alert listeners.
-      if (_fired) fire.fromChange(_fired);
+      if (_fired) Fire.changed(_fired);
 
       // Finish up.
       _lastValue = api.current;
       _changing = false;
       _count++;
-      return api;
+    },
+
+    /**
+     * Create new events observer.
+     */
+    events(dispose$?: t.UntilObservable) {
+      return eventsFactory(subject$, { dispose$: [dispose$, events.dispose$] });
     },
 
     /**

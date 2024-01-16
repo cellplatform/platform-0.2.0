@@ -66,54 +66,76 @@ describe('Namespace (Lens)', () => {
     });
   });
 
-  describe('$ ← (container.$ observable)', () => {
+  describe('events ← (container observable)', () => {
     type N = 'foo' | 'bar';
-
-    it('same observable instance', async () => {
-      const doc = await setup();
-      const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
-      expect(Value.is.observable(ns.$)).to.eql(true);
-      expect(ns.$).to.equal(ns.$);
-    });
 
     it('change events', async () => {
       const doc = await setup();
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+      const events = ns.events();
 
-      const events: t.NamespaceChange<TRoot, N>[] = [];
-      ns.$.subscribe((e) => events.push(e));
+      const fired: t.LensChanged<TRoot, t.NamespaceMap<N>>[] = [];
+      events.changed$.subscribe((e) => fired.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
-      expect(events.length).to.eql(1);
-      expect(events[0].lens.foo).to.eql({ count: 0 });
-      expect(events[0].lens.bar).to.eql(undefined);
+      expect(fired.length).to.eql(1);
+      expect(fired[0].lens.foo).to.eql({ count: 0 });
+      expect(fired[0].lens.bar).to.eql(undefined);
 
       const bar = ns.lens<TDoc>('bar', { count: 123 });
-      expect(events.length).to.eql(2);
-      expect(events[1].lens.foo).to.eql({ count: 0 });
-      expect(events[1].lens.bar).to.eql({ count: 123 });
+      expect(fired.length).to.eql(2);
+      expect(fired[1].lens.foo).to.eql({ count: 0 });
+      expect(fired[1].lens.bar).to.eql({ count: 123 });
 
       foo.change((d) => d.count++);
-      expect(events.length).to.eql(3);
-      expect(events[2].lens.foo).to.eql({ count: 1 });
-      expect(events[2].lens.bar).to.eql({ count: 123 });
+      expect(fired.length).to.eql(3);
+      expect(fired[2].lens.foo).to.eql({ count: 1 });
+      expect(fired[2].lens.bar).to.eql({ count: 123 });
+
+      events.dispose();
     });
 
     it('no longer fires after dispose', async () => {
       const doc = await setup();
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+      const events = ns.events();
 
-      const events: t.NamespaceChange<TRoot, N>[] = [];
-      ns.$.subscribe((e) => events.push(e));
+      const fired: t.LensChanged<TRoot, t.NamespaceMap<N>>[] = [];
+      events.changed$.subscribe((e) => fired.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
       foo.change((d) => d.count++);
-      expect(events.length).to.eql(2);
+      expect(fired.length).to.eql(2);
 
       ns.dispose();
       foo.change((d) => d.count++);
       foo.change((d) => d.count++);
-      expect(events.length).to.eql(2);
+      expect(fired.length).to.eql(2);
+
+      events.dispose();
+    });
+
+    describe('dispose', () => {
+      it('disposed on events({ dispose$ }) param', async () => {
+        const life = rx.lifecycle();
+        const doc = await setup();
+        const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+        const events = ns.events(life.dispose$);
+
+        expect(events.disposed).to.eql(false);
+        life.dispose();
+        expect(events.disposed).to.eql(true);
+      });
+
+      it('auto disposed after [namespace] is disposed', async () => {
+        const doc = await setup();
+        const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+        const events = ns.events();
+
+        expect(events.disposed).to.eql(false);
+        ns.dispose();
+        expect(events.disposed).to.eql(true);
+      });
     });
   });
 
@@ -137,6 +159,18 @@ describe('Namespace (Lens)', () => {
       expect(namespace.lens('foo', { count: 0 }).current).to.eql({ count: 888 });
       expect((doc.current as any).foo).to.eql({ count: 888 });
       expect((doc.current as any).bar).to.eql({ count: 999 });
+    });
+
+    it('namespace.lens: type (display typename)', async () => {
+      const doc = await setup();
+      const namespace = Doc.namespace<TRoot>(doc);
+
+      const type = 'foo.bar';
+      const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
+      const ns2 = namespace.lens<TDoc>('bar', { count: 456 }, { type });
+
+      expect(ns1.type).to.eql(undefined);
+      expect(ns2.type).to.eql(type);
     });
 
     it('namespace.lens: from sub-tree (get container → ƒ)', async () => {

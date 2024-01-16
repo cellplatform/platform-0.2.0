@@ -117,14 +117,19 @@ export const WebrtcStore = {
       $,
       added$,
       message$,
-      shared$,
 
       get total() {
         return total;
       },
 
-      get shared() {
-        return shared?.doc;
+      shared: {
+        $: shared$,
+        get doc() {
+          return shared?.doc;
+        },
+        namespace<N extends string = string>() {
+          return shared ? Shared.namespace<N>(shared.doc) : undefined;
+        },
       },
 
       /**

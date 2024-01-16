@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: stats
+    name: deno.stats
     runs-on: ubuntu-latest
 
     steps:
