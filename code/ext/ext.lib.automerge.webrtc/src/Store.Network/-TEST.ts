@@ -124,6 +124,10 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
 
       type N = 'tmp' | 'foo';
       type T = { count: number };
+
+      const namespace = shared.self.namespace<N>();
+      const foo = namespace?.lens<T>('foo', { count: 0 });
+
       const ns = {
         self: shared.self.namespace<N>(),
         remote: shared.self.namespace<N>(),
