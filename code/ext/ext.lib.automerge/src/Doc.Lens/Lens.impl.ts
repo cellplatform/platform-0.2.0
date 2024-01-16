@@ -1,6 +1,6 @@
-import { Registry } from './Lens.Registry';
-import { rx, toObject, type t } from './common';
 import { eventsFactory } from './Lens.Events';
+import { Registry } from './Lens.Registry';
+import { rx, slug, toObject, type t } from './common';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
@@ -8,7 +8,7 @@ import { eventsFactory } from './Lens.Events';
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
   get: t.LensGetDescendent<R, L>,
-  options: { dispose$?: t.UntilObservable } = {},
+  options: { dispose$?: t.UntilObservable; type?: string } = {},
 ) {
   Registry.add(root);
   let _count = 0;
@@ -60,6 +60,8 @@ export function init<R extends {}, L extends {}>(
    * API
    */
   const api: t.Lens<R, L> = {
+    instance: `${root.uri}:lens.${slug()}`,
+    type: options.type,
     root,
 
     /**
@@ -73,7 +75,7 @@ export function init<R extends {}, L extends {}>(
      * Immutable change mutation on the descendent.
      */
     change(fn) {
-      if (api.disposed) return api;
+      if (api.disposed) return;
       _changing = true;
 
       // NB: forces the [get] factory to initialize the descendent if necessary.
@@ -102,7 +104,6 @@ export function init<R extends {}, L extends {}>(
       _lastValue = api.current;
       _changing = false;
       _count++;
-      return api;
     },
 
     /**

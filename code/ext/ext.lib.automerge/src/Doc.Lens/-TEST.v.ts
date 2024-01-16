@@ -34,12 +34,24 @@ describe('Doc.Lens', () => {
       const lens = Doc.Lens.init<TRoot, TChild>(root, getDesendent);
       expect(lens.root).to.equal(root);
       expect(lens.current).to.eql({ count: 0 });
+      expect(lens.type).to.eql(undefined);
+
+      const id = lens.instance;
+      expect(id.startsWith(root.uri)).to.eql(true);
+      expect(id.substring(0, id.lastIndexOf('.')).endsWith(':lens')).to.eql(true);
     });
 
     it('Doc.lens (← exposed as library entry)', async () => {
       const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       expect(lens.root).to.equal(root);
+    });
+
+    it('{ type } option ← optional typename', async () => {
+      const root = await setup();
+      const type = 'foo.bar';
+      const lens = Doc.lens<TRoot, TChild>(root, getDesendent, { type });
+      expect(lens.type).to.eql(type);
     });
 
     it('toObject', async () => {
@@ -103,9 +115,7 @@ describe('Doc.Lens', () => {
       const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
-      const res = lens.change((child) => (child.count = 123));
-      expect(res).to.equal(lens);
-
+      lens.change((child) => (child.count = 123));
       expect(lens.current.count).to.eql(123);
       expect(root.current.child?.count).to.eql(123);
 
@@ -118,8 +128,7 @@ describe('Doc.Lens', () => {
       const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
 
-      const res = lens.change((child) => (child.count = 123));
-      expect(res).to.equal(lens);
+      lens.change((child) => (child.count = 123));
 
       expect(lens.current.count).to.eql(123);
       expect(root.current.child?.count).to.eql(123);

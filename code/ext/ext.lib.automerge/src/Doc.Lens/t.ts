@@ -8,14 +8,11 @@ export type LensGetDescendent<R extends {}, L extends {}> = (doc: R) => L;
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export type Lens<R extends {}, L extends {}> = t.Lifecycle & {
+export type Lens<R extends {}, L extends {}> = t.ImmutableRef<L, LensEvents<R, L>> & {
   readonly root: t.DocRef<R>;
-  readonly current: L;
-  change(fn: t.ImmutableNext<L>): t.Lens<R, L>;
-  events(dispose$?: t.UntilObservable): LensEvents<R, L>;
   lens<T extends {}>(get: LensGetDescendent<L, T>): Lens<R, T>;
   toObject(): L;
-};
+} & t.Lifecycle;
 
 /**
  * Events API

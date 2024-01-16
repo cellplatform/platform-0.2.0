@@ -98,8 +98,7 @@ export const Is = {
     return (
       obj.kind === 'crdt:namespace' &&
       typeof obj.lens === 'function' &&
-      typeof obj.list === 'function' &&
-      Value.is.observable(obj.$)
+      typeof obj.list === 'function'
     );
   },
 } as const;
