@@ -114,7 +114,7 @@ export default Test.describe('WebrtcStore (NetworkAdapter)', (e) => {
       expectRoughlySame(bytesAfter.self.out, bytesAfter.remote.out, 0.3, 'bytes-out same(ish)');
     });
 
-    e.it('shared (doc / state / namespace)', async (e) => {
+    e.it('shared (doc / state → namespace)', async (e) => {
       const shared = {
         self: self.network.shared,
         remote: remote.network.shared,
