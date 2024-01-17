@@ -31,8 +31,5 @@ export type CrdtSharedDoc = { shared: boolean; version: number };
 /**
  * Events.
  */
-export type CrdtSharedChangedEvent = {
-  type: 'crdt:shared/Changed';
-  payload: CrdtSharedChanged;
-};
-export type CrdtSharedChanged = { change: t.DocChanged<t.CrdtShared> };
+export type CrdtSharedChangedEvent = { type: 'crdt:shared/Changed'; payload: CrdtSharedChanged };
+export type CrdtSharedChanged = t.DocChanged<t.CrdtShared>;

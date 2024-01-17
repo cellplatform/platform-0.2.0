@@ -59,7 +59,7 @@ export default Dev.describe(name, async (e) => {
       });
 
       edge.network.shared.$.pipe().subscribe(async (e) => {
-        const tmp = e.change.doc.tmp ?? {};
+        const tmp = e.doc.tmp ?? {};
 
         console.log('shared$', edge.kind, tmp);
 

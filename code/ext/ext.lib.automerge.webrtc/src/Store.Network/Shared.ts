@@ -58,10 +58,10 @@ export const Shared = {
      */
     const shared = await Shared.getOrCreate(store, options.uri);
     const events = shared.events(dispose$);
-    const fireChange = (change: t.DocChanged<t.CrdtShared>) => {
+    const fireChange = (payload: t.DocChanged<t.CrdtShared>) => {
       options.fire?.({
         type: 'crdt:shared/Changed',
-        payload: { change },
+        payload,
       });
     };
 
