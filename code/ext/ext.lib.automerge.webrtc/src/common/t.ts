@@ -39,6 +39,7 @@ export type {
   IODirection,
   Lifecycle,
   Msecs,
+  OmitLifecycle,
   Percent,
   UntilObservable,
 } from 'sys.types/src/types';

@@ -46,7 +46,7 @@ export const Shared = {
   ) {
     const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
-    const { dispose$ } = life;
+    const { dispose, dispose$ } = life;
 
     /**
      * TODO 🐷
@@ -58,9 +58,9 @@ export const Shared = {
      */
     const shared = await Shared.getOrCreate(store, options.uri);
     const events = shared.events(dispose$);
-    const fireChange = (payload: t.DocChanged<t.CrdtShared>) => {
+    const fireChanged = (payload: t.DocChanged<t.CrdtShared>) => {
       options.fire?.({
-        type: 'crdt:shared/Changed',
+        type: 'crdt:webrtc:shared/Changed',
         payload,
       });
     };
@@ -68,7 +68,7 @@ export const Shared = {
     /**
      * Event Listeners.
      */
-    events.changed$.subscribe((change) => fireChange(change));
+    events.changed$.subscribe((change) => fireChanged(change));
     listenToIndex(index, shared, { debugLabel, dispose$ });
     listenToShared(shared, index, { debugLabel, dispose$ });
 
@@ -85,7 +85,7 @@ export const Shared = {
     /**
      * API
      */
-    return {
+    const api: t.CrdtSharedState = {
       kind: 'crdt.network.shared',
       store,
       index,
@@ -94,11 +94,13 @@ export const Shared = {
       /**
        * Lifecycle
        */
+      dispose,
       dispose$,
       get disposed() {
         return life.disposed;
       },
-    } as const;
+    };
+    return api;
   },
 
   /**
