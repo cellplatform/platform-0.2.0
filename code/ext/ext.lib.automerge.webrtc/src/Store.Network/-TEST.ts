@@ -1,5 +1,5 @@
 import { WebrtcStore } from '.';
-import { Peer, Test, TestDb, WebStore, expect, type t } from '../test.ui';
+import { Peer, Test, TestDb, WebStore, expect, rx, type t } from '../test.ui';
 
 type D = { count: number };
 export type TParts = Awaited<ReturnType<typeof setup>>;
@@ -38,7 +38,7 @@ export const setup = async (debugLabel?: string) => {
 export default Test.describe('WebrtcStore', (e) => {
   e.timeout(5000);
 
-  e.it('initialize', async (e) => {
+  e.it('init', async (e) => {
     const { dispose, network, store, peer } = await setup();
     expect(network.total.added).to.eql(0);
     expect(network.store).to.equal(store);
@@ -61,6 +61,44 @@ export default Test.describe('WebrtcStore', (e) => {
       store.dispose();
       expect(network.disposed).to.eql(true);
       dispose();
+    });
+  });
+
+  e.describe('events ($)', (e) => {
+    e.it('init', async (e) => {
+      const { dispose, network } = await setup();
+      const events = network.events();
+      expect(rx.isObservable(events.$)).to.eql(true);
+      dispose();
+    });
+
+    e.describe('dispose', (e) => {
+      e.it('events().dispose() ← method', async (e) => {
+        const { dispose, network } = await setup();
+        const events = network.events();
+        expect(events.disposed).to.eql(false);
+        events.dispose();
+        expect(events.disposed).to.eql(true);
+        dispose();
+      });
+
+      e.it('events({ dispose$ }) ← param', async (e) => {
+        const { dispose, network } = await setup();
+        const life = rx.lifecycle();
+        const events = network.events(life.dispose$);
+        expect(events.disposed).to.eql(false);
+        life.dispose();
+        expect(events.disposed).to.eql(true);
+        dispose();
+      });
+
+      e.it('on parent store disposal', async (e) => {
+        const { dispose, network } = await setup();
+        const events = network.events();
+        expect(events.disposed).to.eql(false);
+        dispose();
+        expect(events.disposed).to.eql(true);
+      });
     });
   });
 });

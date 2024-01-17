@@ -3,6 +3,7 @@ import { rx, type t } from './common';
 import { WebrtcNetworkAdapter } from './NetworkAdapter';
 import { Shared } from './Shared';
 import { monitorAdapter } from './u.adapter';
+import { eventsFactory } from './Store.Events';
 
 /**
  * Manages the relationship between a [Repo/Store] and a network peer.
@@ -130,6 +131,10 @@ export const WebrtcStore = {
         namespace<N extends string = string>() {
           return shared ? Shared.namespace<N>(shared.doc) : undefined;
         },
+      },
+
+      events(dispose$) {
+        return eventsFactory($, { dispose$: [dispose$, api.dispose$] });
       },
 
       /**

@@ -1,7 +1,6 @@
 import type { t } from './common';
 export type { WebrtcNetworkAdapter } from './NetworkAdapter';
 
-type Id = string;
 type Uri = string;
 
 export type WebrtcStore = t.Lifecycle & {
@@ -17,6 +16,7 @@ export type WebrtcStore = t.Lifecycle & {
     readonly doc?: t.DocRef<t.CrdtShared>;
     namespace<N extends string = string>(): t.NamespaceManager<t.CrdtShared['ns'], N> | undefined;
   };
+  events(dispose$?: t.UntilObservable): t.WebrtcStoreEvents;
 };
 
 export type WebrtcStoreTotals = {
@@ -25,25 +25,3 @@ export type WebrtcStoreTotals = {
 };
 
 export type WebrtcStoreConnectMetadata = t.PeerConnectMetadata & { shared: Uri };
-
-/**
- * Events
- */
-export type WebrtcStoreEvent =
-  | WebrtcStoreAdapterAddedEvent
-  | WebrtcStoreMessageEvent
-  | t.CrdtSharedChangedEvent;
-
-export type WebrtcStoreAdapterAddedEvent = {
-  type: 'crdt:webrtc/AdapterAdded';
-  payload: WebrtcStoreAdapterAdded;
-};
-export type WebrtcStoreAdapterAdded = {
-  peer: { local: Id; remote: Id };
-  conn: { id: Id };
-};
-
-export type WebrtcStoreMessageEvent = {
-  type: 'crdt:webrtc/Message';
-  payload: t.WebrtcMessageAlert;
-};
