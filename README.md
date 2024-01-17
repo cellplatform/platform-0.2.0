@@ -156,8 +156,7 @@ The inverse proposition also appears to be true:
 
 <p>&nbsp;</p>
 
-![smor-sys crdt-cell](https://github.com/cellplatform/platform-0.2.0/assets/185555/338a4013-2480-4167-b5fe-e3738d478285)
-
+![smor-sys crdt-cell-timeline](https://github.com/cellplatform/platform-0.2.0/assets/185555/588f6c58-3e94-4818-8ada-cb333822025d)
 
 
 
