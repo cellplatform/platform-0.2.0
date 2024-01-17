@@ -3,6 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
+      import('../Store.Network/-TEST.integration'),
       import('../Store.Network/-TEST'),
     ];
   },
