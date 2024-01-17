@@ -12,15 +12,11 @@ export const setup = async (debugLabel?: string) => {
   const index = await WebStore.index(store);
   const network = await WebrtcStore.init(peer, store, index, { debugLabel });
 
-  const events = {
-    peer: peer.events(),
-    network: network.events(),
-  } as const;
-
   const added: t.WebrtcStoreAdapterAdded[] = [];
   const messages: t.WebrtcMessageAlert[] = [];
-  events.network.added$.subscribe((e) => added.push(e));
-  events.network.message$.subscribe((e) => messages.push(e));
+  const events = network.events();
+  events.added$.subscribe((e) => added.push(e));
+  events.message$.subscribe((e) => messages.push(e));
 
   const dispose = () => {
     peer.dispose();

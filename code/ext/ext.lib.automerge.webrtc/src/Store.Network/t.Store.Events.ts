@@ -10,6 +10,7 @@ export type WebrtcStoreEvents = t.Lifecycle & {
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;
   readonly message$: t.Observable<t.WebrtcMessageAlert>;
   readonly peer: t.OmitLifecycle<t.PeerModelEvents>;
+  readonly shared: t.OmitLifecycle<t.CrdtSharedEvents>;
 };
 
 /**

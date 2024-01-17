@@ -1,3 +1,4 @@
+import { eventsFactory } from './Shared.Events';
 import { Mutate } from './Shared.Mutate';
 import { Patches } from './Shared.Patches';
 import { Sync } from './Shared.Sync';
@@ -38,13 +39,16 @@ export const Shared = {
   /**
    * Setup a new ephemeral document manager for a store/peer.
    */
-  async init(
-    peer: t.PeerModel,
-    store: t.Store,
-    index: t.StoreIndexState,
-    options: { debugLabel?: string; uri?: string; fire?: (e: t.WebrtcStoreEvent) => void } = {},
-  ) {
-    const { debugLabel } = options;
+  async init(args: {
+    $: t.Observable<t.WebrtcStoreEvent>;
+    peer: t.PeerModel;
+    store: t.Store;
+    index: t.StoreIndexState;
+    debugLabel?: string;
+    uri?: string;
+    fire?: (e: t.WebrtcStoreEvent) => void;
+  }) {
+    const { index, peer, store, debugLabel } = args;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
 
@@ -56,10 +60,9 @@ export const Shared = {
     /**
      * Setup the "shared" CRDT syncing document.
      */
-    const shared = await Shared.getOrCreate(store, options.uri);
-    const events = shared.events(dispose$);
+    const doc = await Shared.getOrCreate(store, args.uri);
     const fireChanged = (payload: t.DocChanged<t.CrdtShared>) => {
-      options.fire?.({
+      args.fire?.({
         type: 'crdt:webrtc:shared/Changed',
         payload,
       });
@@ -68,15 +71,15 @@ export const Shared = {
     /**
      * Event Listeners.
      */
-    events.changed$.subscribe((change) => fireChanged(change));
-    listenToIndex(index, shared, { debugLabel, dispose$ });
-    listenToShared(shared, index, { debugLabel, dispose$ });
+    doc.events(dispose$).changed$.subscribe((change) => fireChanged(change));
+    listenToIndex(index, doc, { debugLabel, dispose$ });
+    listenToShared(doc, index, { debugLabel, dispose$ });
 
     /**
      * Initialize.
      */
-    Sync.indexToShared(index, shared, { debugLabel });
-    shared.change((d) => {
+    Sync.indexToShared(index, doc, { debugLabel });
+    doc.change((d) => {
       const ua = UserAgent.current;
       const data: t.CrdtSharedPeer = { ua };
       d.sys.peers[peer.id] = data;
@@ -89,7 +92,11 @@ export const Shared = {
       kind: 'crdt.network.shared',
       store,
       index,
-      doc: shared,
+      doc,
+
+      events(dispose$) {
+        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
+      },
 
       /**
        * Lifecycle

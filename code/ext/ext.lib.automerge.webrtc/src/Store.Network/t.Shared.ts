@@ -9,6 +9,7 @@ export type CrdtSharedState = t.Lifecycle & {
   readonly store: t.Store;
   readonly index: t.StoreIndexState;
   readonly doc: t.DocRef<t.CrdtShared>;
+  events(dispose$?: t.UntilObservable): t.CrdtSharedEvents;
 
 };
 
@@ -33,19 +34,3 @@ export type CrdtSharedPeer = { ua: t.UserAgent };
  */
 export type CrdtSharedDocs = { [uri: string]: CrdtSharedDoc };
 export type CrdtSharedDoc = { shared: boolean; version: number };
-
-/**
- * Events
- */
-export type CrdtSharedEvent = CrdtSharedReadyEvent | CrdtSharedChangedEvent;
-
-export type CrdtSharedReadyEvent = {
-  type: 'crdt:webrtc:shared/Ready';
-  payload: CrdtSharedState;
-};
-
-export type CrdtSharedChangedEvent = {
-  type: 'crdt:webrtc:shared/Changed';
-  payload: CrdtSharedChanged;
-};
-export type CrdtSharedChanged = t.DocChanged<t.CrdtShared>;

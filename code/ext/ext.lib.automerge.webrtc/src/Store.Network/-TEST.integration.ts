@@ -22,11 +22,16 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
     expect(self.network.shared.doc).to.eql(undefined);
     expect(self.network.shared.namespace()).to.eql(undefined);
 
+    let sharedReadyCount = 0;
+    self.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
+    remote.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
+
     const res = await self.peer.connect.data(remote.peer.id);
     expect(res.error).to.eql(undefined);
 
     expect(self.network.total.added).to.eql(1);
     expect(remote.network.total.added).to.eql(1);
+    expect(sharedReadyCount).to.eql(2); // NB: both self AND remote fired [shared.ready$]
 
     expect(self.fired.added.length).to.eql(1);
     expect(remote.fired.added.length).to.eql(1);

@@ -1,21 +1,24 @@
 import { rx, type t } from './common';
+import { eventsFactory as sharedEventsFactory } from './Shared.Events';
 
 /**
  * Generate a new events wrapper for the (WebRTC) network Store.
  */
-export function eventsFactory(
-  store: t.WebrtcStore,
-  source$: t.Observable<t.WebrtcStoreEvent>,
-  options: { dispose$?: t.UntilObservable } = {},
-) {
-  const life = rx.lifecycle(options.dispose$);
+export function eventsFactory(args: {
+  $: t.Observable<t.WebrtcStoreEvent>;
+  store: t.Store;
+  peer: t.PeerModel;
+  dispose$?: t.UntilObservable;
+}) {
+  const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
 
-  const $ = source$.pipe(rx.takeUntil(dispose$));
+  const $ = args.$.pipe(rx.takeUntil(dispose$));
   const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded');
   const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
 
   let _peer: t.PeerModelEvents;
+  let _shared: t.CrdtSharedEvents;
 
   const api: t.WebrtcStoreEvents = {
     $,
@@ -23,7 +26,11 @@ export function eventsFactory(
     message$,
 
     get peer() {
-      return _peer || (_peer = store.peer.events(dispose$));
+      return _peer || (_peer = args.peer.events(dispose$));
+    },
+
+    get shared() {
+      return _shared || (_shared = sharedEventsFactory({ $, dispose$ }));
     },
 
     /**

@@ -36,7 +36,7 @@ export const WebrtcStore = {
     let _shared: t.CrdtSharedState | undefined;
     const initShared = async (uri?: string) => {
       if (_shared) return;
-      _shared = await Shared.init(peer, store, index, { uri, debugLabel, fire });
+      _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
       fire({
         type: 'crdt:webrtc:shared/Ready',
         payload: _shared,
@@ -107,7 +107,7 @@ export const WebrtcStore = {
       },
 
       events(dispose$) {
-        return eventsFactory(api, $, { dispose$: [dispose$, api.dispose$] });
+        return eventsFactory({ $, store, peer, dispose$: [dispose$, api.dispose$] });
       },
 
       /**
