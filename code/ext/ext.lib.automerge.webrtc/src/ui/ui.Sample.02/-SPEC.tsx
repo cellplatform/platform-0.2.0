@@ -48,13 +48,15 @@ export default Dev.describe(name, async (e) => {
       const peer = edge.network.peer.events();
       const repo$ = edge.model.events();
       peer.cmd.conn$.pipe(debounce).subscribe(redraw);
-      edge.network.$.pipe(debounce).subscribe(redraw);
 
-      edge.network.$.pipe(debounce).subscribe((e) => {
+      const events = { network: edge.network.events() } as const;
+      events.network.$.pipe(debounce).subscribe(redraw);
+
+      events.network.$.pipe(debounce).subscribe((e) => {
         console.log('network', e);
       });
 
-      edge.network.added$.pipe().subscribe((e) => {
+      events.network.added$.pipe().subscribe((e) => {
         console.log('network.added$', e);
       });
 

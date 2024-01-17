@@ -12,12 +12,14 @@ export function useRedraw(data: t.InfoData) {
   const redraw = () => setCount((prev) => prev + 1);
 
   useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-    const redraw$ = rx.subject();
-    redraw$.pipe(rx.debounceTime(30)).subscribe(redraw);
-    network?.peer.events(dispose$).$.subscribe(() => redraw$.next());
-    network?.$.pipe(rx.takeUntil(dispose$)).subscribe(() => redraw$.next());
-    return dispose;
+    const events = network?.events();
+    if (network && events) {
+      const redraw$ = rx.subject();
+      redraw$.pipe(rx.debounceTime(30)).subscribe(redraw);
+      events.peer.$.subscribe(() => redraw$.next());
+      events.$.subscribe(() => redraw$.next());
+    }
+    return events?.dispose;
   }, [!!network]);
 
   return {} as const;

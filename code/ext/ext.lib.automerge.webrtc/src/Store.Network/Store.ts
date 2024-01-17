@@ -27,10 +27,12 @@ export const WebrtcStore = {
     const total = { added: 0, bytes: { in: 0, out: 0 } };
 
     const fire = (e: t.WebrtcStoreEvent) => $$.next(e);
+
+    /**
+     * TODO 🐷 shared events sub-sumed witin the Store events (??)
+     */
     const $$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
-    const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded');
-    const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
     const shared$ = rx.payload<t.CrdtSharedChangedEvent>($, 'crdt:shared/Changed');
 
     /**
@@ -48,23 +50,12 @@ export const WebrtcStore = {
     /**
      * Network peer setup.
      */
-    const ready$ = peerEvents.cmd.conn$.pipe(
+    const peerReady$ = peerEvents.cmd.conn$.pipe(
       rx.filter((e) => e.kind === 'data'),
       rx.filter((e) => e.action === 'ready'),
       rx.filter((e) => Boolean(e.connection?.id && e.direction)),
       rx.map((e) => ({ connid: e.connection?.id!, direction: e.direction! })),
     );
-
-    /**
-     * Monitor sync messages.
-     */
-    message$.subscribe((e) => {
-      if (e.message.type === 'sync') {
-        const bytes = e.message.data.byteLength;
-        if (e.direction === 'incoming') total.bytes.in += bytes;
-        if (e.direction === 'outgoing') total.bytes.out += bytes;
-      }
-    });
 
     /**
      * Initialize a network adapter for the given connection ID.
@@ -115,10 +106,6 @@ export const WebrtcStore = {
       store,
       index,
 
-      $,
-      added$,
-      message$,
-
       get total() {
         return total;
       },
@@ -134,7 +121,7 @@ export const WebrtcStore = {
       },
 
       events(dispose$) {
-        return eventsFactory($, { dispose$: [dispose$, api.dispose$] });
+        return eventsFactory(api, $, { dispose$: [dispose$, api.dispose$] });
       },
 
       /**
@@ -148,9 +135,25 @@ export const WebrtcStore = {
     } as const;
 
     /**
+     * Listen
+     */
+    const events = api.events();
+    peerReady$.subscribe((e) => initAdapter(e.connid, e.direction));
+
+    /**
+     * - Monitor sync messages.
+     */
+    events.message$.subscribe((e) => {
+      if (e.message.type === 'sync') {
+        const bytes = e.message.data.byteLength;
+        if (e.direction === 'incoming') total.bytes.in += bytes;
+        if (e.direction === 'outgoing') total.bytes.out += bytes;
+      }
+    });
+
+    /**
      * Finish up.
      */
-    ready$.subscribe((e) => initAdapter(e.connid, e.direction));
     return api;
   },
 } as const;

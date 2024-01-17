@@ -7,6 +7,9 @@ type Id = string;
  */
 export type WebrtcStoreEvents = t.Lifecycle & {
   readonly $: t.Observable<t.WebrtcStoreEvent>;
+  readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;
+  readonly message$: t.Observable<t.WebrtcMessageAlert>;
+  readonly peer: Omit<t.PeerModelEvents, 'dispose' | 'dispose$' | 'disposed'>;
 };
 
 /**
