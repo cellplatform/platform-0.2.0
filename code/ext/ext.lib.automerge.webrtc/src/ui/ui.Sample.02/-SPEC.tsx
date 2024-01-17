@@ -5,10 +5,7 @@ import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
-type T = {
-  reload?: boolean;
-  modalElement?: JSX.Element;
-};
+type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
 
 /**
@@ -76,7 +73,7 @@ export default Dev.describe(name, async (e) => {
       });
 
       repo$.active$.pipe(debounce).subscribe(redraw);
-      repo$.active$.subscribe((e) => (selected = { edge, item: e.item }));
+      repo$.active$.subscribe(({ item }) => (selected = { edge, item }));
     };
     monitor(left);
     monitor(right);
@@ -192,7 +189,8 @@ export default Dev.describe(name, async (e) => {
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
-          (shared.left as t.DocRefHandle<t.CrdtShared>)?.handle.broadcast(data);
+          type T = t.DocRefHandle<t.CrdtShared>;
+          (shared.left as T)?.handle.broadcast(data);
         };
 
         console.log('------------------- send ---------------------');
