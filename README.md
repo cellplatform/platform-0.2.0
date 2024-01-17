@@ -167,7 +167,9 @@ The inverse proposition also appears to be true:
 
 # Development
 
-[![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
+[![ci.node](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml)
+[![ci.deno](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.deno.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.deno.yml)
+
 
 ### Primary Global Commands (All Modules)
 
