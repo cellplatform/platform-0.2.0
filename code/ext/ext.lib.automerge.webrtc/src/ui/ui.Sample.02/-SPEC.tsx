@@ -38,8 +38,8 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable']);
-    right = await createEdge('Right', ['Shareable', 'Deletable']);
+    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
+    right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});

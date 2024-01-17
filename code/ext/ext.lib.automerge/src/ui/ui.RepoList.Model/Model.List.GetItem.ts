@@ -1,8 +1,8 @@
 import { StoreIndex, type t } from './common';
 
-import { Data } from './Data';
+import { Data } from './u.Data';
 import { ItemModel } from './Model.Item';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 export function GetItem(getCtx: t.GetRepoListModel, array: t.RepoArray): t.GetRepoLabelItem {
   const indexTotal = () => Wrangle.total(getCtx);

@@ -13,6 +13,7 @@ export const Renderers = {
       label(e) {
         const data = Data.item(e.item);
         if (data.kind === 'Add') return;
+        if (data.message) return <>{data.message.text}</>;
         if (!e.item.label) return;
         return <>{e.item.label}</>;
       },
@@ -34,6 +35,11 @@ export const Renderers = {
         const data = Data.item(e.item);
 
         if (e.kind === 'Item:Left') {
+          const messageIcon = data.message?.icon;
+          if (messageIcon === 'Tick') {
+            return <Icons.Done {...helpers.icon(e, 18)} />;
+          }
+
           if (data.kind === 'Add') {
             const color = e.focused ? e.color : COLORS.BLUE;
             return <Icons.Add {...helpers.icon(e, 17)} color={color} />;
