@@ -18,7 +18,7 @@ export default Dev.describe(name, async (e) => {
   } as const;
 
   let model: t.RepoListModel;
-  let network: t.WebrtcStore;
+  let network: t.NetworkStore;
 
   type LocalStore = Pick<t.PeerRepoListProps, 'focusOnLoad'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);

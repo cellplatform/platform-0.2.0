@@ -19,7 +19,7 @@ export type InfoData = {
   component?: { label?: string; name?: string };
   peer?: PeerInfoData['peer'];
   repo?: AutomergeInfoData['repo'];
-  network?: t.WebrtcStore;
+  network?: t.NetworkStore;
   shared?: { json?: { expand?: { level?: number; paths?: string[] } } };
 };
 

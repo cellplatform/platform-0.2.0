@@ -15,5 +15,5 @@ export type NetworkConnectionProps = {
 export type NetworkConnectionEdgeKind = 'Left' | 'Right';
 export type NetworkConnectionEdge = {
   kind: t.NetworkConnectionEdgeKind;
-  network: t.WebrtcStore;
+  network: t.NetworkStore;
 };

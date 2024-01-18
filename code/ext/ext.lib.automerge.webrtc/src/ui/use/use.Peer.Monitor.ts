@@ -4,7 +4,7 @@ import { rx, type t } from './common';
 /**
  * Monitor how much data is being transmitted through the network.
  */
-export function usePeerMonitor(network?: t.WebrtcStore) {
+export function usePeerMonitor(network?: t.NetworkStore) {
   const peer = network?.peer;
   const [isConnected, setConnected] = useState(false);
   const [bytesIn, setBytesIn] = useState(0);

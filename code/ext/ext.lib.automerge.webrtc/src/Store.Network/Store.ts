@@ -19,7 +19,7 @@ export const WebrtcStore = {
     store: t.Store,
     index: t.StoreIndexState,
     options: { debugLabel?: string } = {},
-  ): Promise<t.WebrtcStore> {
+  ): Promise<t.NetworkStore> {
     const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
@@ -72,7 +72,7 @@ export const WebrtcStore = {
        * Setup shared-doc.
        */
       if (direction === 'incoming') {
-        const metadata = conn.metadata as t.WebrtcStoreConnectMetadata;
+        const metadata = conn.metadata as t.NetworkStoreConnectMetadata;
         if (metadata.shared) {
           const uri = metadata.shared;
           await initShared(uri);
@@ -83,7 +83,7 @@ export const WebrtcStore = {
     /**
      * API
      */
-    const api: t.WebrtcStore = {
+    const api: t.NetworkStore = {
       peer,
       store,
       index,
@@ -145,7 +145,7 @@ export const WebrtcStore = {
      *    the store's URI to it's [Shared] state document.
      */
     events.peer.cmd.beforeOutgoing$.subscribe((e) => {
-      e.metadata<t.WebrtcStoreConnectMetadata>(async (metadata) => {
+      e.metadata<t.NetworkStoreConnectMetadata>(async (metadata) => {
         if (!_shared) await initShared();
         metadata.shared = _shared!.doc.uri;
       });
