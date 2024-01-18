@@ -20,7 +20,6 @@ export type CrdtSharedState = t.Lifecycle & {
 export type CrdtShared = t.DocWithMeta & {
   sys: { peers: CrdtSharedPeers; docs: CrdtSharedDocs };
   ns: t.NamespaceMap;
-  tmp?: O; // TEMP 🐷 ??
 };
 
 /**
