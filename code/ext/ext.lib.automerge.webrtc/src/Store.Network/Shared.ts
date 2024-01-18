@@ -53,8 +53,7 @@ export const Shared = {
     const { dispose, dispose$ } = life;
 
     /**
-     * TODO 🐷
-     * - persist / re-use the doc (??), or delete on network disconnect.
+     * TODO 🐷 persist / re-use the doc (??), or delete on network disconnect.
      */
 
     /**
