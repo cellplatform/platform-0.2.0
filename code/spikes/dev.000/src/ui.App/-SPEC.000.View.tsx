@@ -3,7 +3,7 @@ import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
 export type ViewProps = {
   stream?: MediaStream;
   model: t.RepoListModel;
-  network: t.WebrtcStore;
+  network: t.NetworkStore;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
 };
