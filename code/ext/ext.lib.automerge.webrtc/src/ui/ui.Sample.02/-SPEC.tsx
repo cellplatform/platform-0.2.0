@@ -1,12 +1,16 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx, toObject } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
+
+type SampleNamespace = 'tmp';
+type SampleNamespaceTmp = 'CodeEditor' | 'DiagramEditor';
+type SampleTmp = { foo?: SampleNamespaceTmp };
 
 /**
  * Spec
@@ -53,7 +57,7 @@ export default Dev.describe(name, async (e) => {
       events.network.$.pipe(debounce).subscribe(redraw);
 
       events.network.$.pipe(debounce).subscribe((e) => {
-        console.log('network', e);
+        // console.log('network', e);
       });
 
       events.network.added$.pipe().subscribe((e) => {
@@ -62,11 +66,10 @@ export default Dev.describe(name, async (e) => {
 
       edge.network.shared().then((shared) => {
         shared.events().changed$.subscribe(async (e) => {
-          const tmp = e.doc.tmp ?? {};
-          console.log('shared', edge.kind, tmp);
-
-          if (tmp.foo === 'CodeEditor') return loadCodeEditor(state);
-          if (tmp.foo === 'DiagramEditor') return loadDiagramEditor(state);
+          const ns = shared.namespace<SampleNamespace>();
+          const tmp = ns.lens<SampleTmp>('tmp', {});
+          if (tmp.current.foo === 'CodeEditor') return loadCodeEditor(state);
+          if (tmp.current.foo === 'DiagramEditor') return loadDiagramEditor(state);
           await state.change((d) => (d.modalElement = undefined));
         });
       });
@@ -150,8 +153,8 @@ export default Dev.describe(name, async (e) => {
 
       const getShared = async () => {
         return {
-          left: (await left.network.shared()).doc,
-          right: (await right.network.shared()).doc,
+          left: await left.network.shared(),
+          right: await right.network.shared(),
         } as const;
       };
 
@@ -162,8 +165,8 @@ export default Dev.describe(name, async (e) => {
         if (!shared.left || !shared.right) return;
 
         const events = {
-          left: shared.left.events(),
-          right: shared.right.events(),
+          left: shared.left.doc.events(),
+          right: shared.right.doc.events(),
         };
 
         events.left.ephemeral.in$.subscribe((e) => {
@@ -189,7 +192,7 @@ export default Dev.describe(name, async (e) => {
 
         const send = (data: any) => {
           type T = t.DocRefHandle<t.CrdtShared>;
-          (shared.left as T)?.handle.broadcast(data);
+          (shared.left.doc as T)?.handle.broadcast(data);
         };
 
         console.log('------------------- send ---------------------');
@@ -201,22 +204,24 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
 
-      const addTmpButton = (title: string, fn: (doc: t.DocRef<t.CrdtShared>) => any) => {
+      const addTmpButton = (title: string, fn: (doc: t.Lens<t.NamespaceMap, SampleTmp>) => any) => {
         dev.button(title, async (e) => {
           const left = (await getShared()).left;
-          if (left) fn(left);
+          if (left) {
+            const tmp = left.namespace<SampleNamespace>().lens<SampleTmp>('tmp', {});
+            fn(tmp);
+          }
         });
       };
 
-      const tmp = (doc: t.CrdtShared) => doc.tmp ?? (doc.tmp = {});
       addTmpButton('tmp-3: loader → <CodeEditor>', (doc) => {
-        doc.change((d) => (tmp(d).foo = 'CodeEditor'));
+        doc.change((d) => (d.foo = 'CodeEditor'));
       });
       addTmpButton('tmp-4: loader → <DiagramEditor>', (doc) => {
-        doc.change((d) => (tmp(d).foo = 'DiagramEditor'));
+        doc.change((d) => (d.foo = 'DiagramEditor'));
       });
       addTmpButton('tmp-5: loader → remove', (doc) => {
-        doc.change((d) => delete tmp(d).foo);
+        doc.change((d) => delete d.foo);
       });
 
       dev.hr(5, 20);
