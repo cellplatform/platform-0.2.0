@@ -9,12 +9,7 @@ export type WebrtcStore = t.Lifecycle & {
   readonly index: t.StoreIndexState;
   readonly total: t.WebrtcStoreTotals;
   events(dispose$?: t.UntilObservable): t.WebrtcStoreEvents;
-
-  readonly shared: {
-    readonly $: t.Observable<t.CrdtSharedChanged>; // TEMP 🐷
-    readonly doc?: t.DocRef<t.CrdtShared>;
-    namespace<N extends string = string>(): t.NamespaceManager<t.CrdtShared['ns'], N> | undefined;
-  };
+  shared(): Promise<t.OmitLifecycle<t.CrdtSharedState>>;
 };
 
 export type WebrtcStoreTotals = {

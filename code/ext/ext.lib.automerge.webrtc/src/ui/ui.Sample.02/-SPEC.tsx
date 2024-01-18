@@ -60,18 +60,15 @@ export default Dev.describe(name, async (e) => {
         console.log('network.added$', e);
       });
 
-      edge.network.shared.$.pipe().subscribe(async (e) => {
-        const tmp = e.doc.tmp ?? {};
+      edge.network.shared().then((shared) => {
+        shared.events().changed$.subscribe(async (e) => {
+          const tmp = e.doc.tmp ?? {};
+          console.log('shared', edge.kind, tmp);
 
-        console.log('shared$', edge.kind, tmp);
-
-        if (tmp.foo === 'CodeEditor') {
-          loadCodeEditor(state);
-        } else if (tmp.foo === 'DiagramEditor') {
-          loadDiagramEditor(state);
-        } else {
+          if (tmp.foo === 'CodeEditor') return loadCodeEditor(state);
+          if (tmp.foo === 'DiagramEditor') return loadDiagramEditor(state);
           await state.change((d) => (d.modalElement = undefined));
-        }
+        });
       });
 
       repo$.active$.pipe(debounce).subscribe(redraw);
@@ -151,17 +148,17 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
 
-      const getShared = () => {
+      const getShared = async () => {
         return {
-          left: left.network.shared.doc,
-          right: right.network.shared.doc,
+          left: (await left.network.shared()).doc,
+          right: (await right.network.shared()).doc,
         } as const;
       };
 
       type TFoo = { type: 'foo'; payload: { foo: number } };
 
       const listenToEphemeral = async () => {
-        const shared = getShared();
+        const shared = await getShared();
         if (!shared.left || !shared.right) return;
 
         const events = {
@@ -186,8 +183,8 @@ export default Dev.describe(name, async (e) => {
 
       dev.button('tmp-1: listen', (e) => listenToEphemeral());
 
-      dev.button('tmp-2: broadcast', (e) => {
-        const shared = getShared();
+      dev.button('tmp-2: broadcast', async (e) => {
+        const shared = await getShared();
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
@@ -205,8 +202,8 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const addTmpButton = (title: string, fn: (doc: t.DocRef<t.CrdtShared>) => any) => {
-        dev.button(title, (e) => {
-          const left = getShared().left;
+        dev.button(title, async (e) => {
+          const left = (await getShared()).left;
           if (left) fn(left);
         });
       };

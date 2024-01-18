@@ -98,6 +98,10 @@ export const Shared = {
         return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
       },
 
+      namespace<N extends string = string>() {
+        return Shared.namespace<N>(doc);
+      },
+
       /**
        * Lifecycle
        */
@@ -129,8 +133,8 @@ export const Shared = {
   },
 
   /**
-   * Construct a namespace-manager to operate on the {ns} field
-   * of the shared doc.
+   * Construct a namespace-manager to operate on the {ns}
+   * field of the [Shared] state document.
    */
   namespace<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
     return Doc.namespace<t.CrdtShared['ns'], N>(shared, (d) => d.ns);

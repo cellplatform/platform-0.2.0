@@ -25,13 +25,9 @@ export const WebrtcStore = {
     const { dispose, dispose$ } = life;
     const total = { added: 0, bytes: { in: 0, out: 0 } };
 
-    /**
-     * TODO 🐷 shared events sub-sumed witin the Store events (??)
-     */
-    const fire = (e: t.WebrtcStoreEvent) => $$.next(e);
     const $$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
-    const shared$ = rx.payload<t.CrdtSharedChangedEvent>($, 'crdt:webrtc:shared/Changed');
+    const fire = (e: t.WebrtcStoreEvent) => $$.next(e);
 
     let _shared: t.CrdtSharedState | undefined;
     const initShared = async (uri?: string) => {
@@ -96,18 +92,13 @@ export const WebrtcStore = {
         return total;
       },
 
-      shared: {
-        $: shared$,
-        get doc() {
-          return _shared?.doc;
-        },
-        namespace<N extends string = string>() {
-          return _shared ? Shared.namespace<N>(_shared.doc) : undefined;
-        },
-      },
-
       events(dispose$) {
         return eventsFactory({ $, store, peer, dispose$: [dispose$, api.dispose$] });
+      },
+
+      async shared() {
+        if (_shared) return _shared;
+        return rx.firstValueFrom(events.shared.ready$.pipe(rx.take(1)));
       },
 
       /**

@@ -21,6 +21,7 @@ export function eventsFactory(args: {
   const api: t.CrdtSharedEvents = {
     $,
     ready$: rx.payload<t.CrdtSharedReadyEvent>($, 'crdt:webrtc:shared/Ready'),
+    changed$: rx.payload<t.CrdtSharedChangedEvent>($, 'crdt:webrtc:shared/Changed'),
 
     /**
      * Lifecycle

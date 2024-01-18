@@ -19,9 +19,6 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
     expect(self.network.total.added).to.eql(0);
     expect(remote.network.total.added).to.eql(0);
 
-    expect(self.network.shared.doc).to.eql(undefined);
-    expect(self.network.shared.namespace()).to.eql(undefined);
-
     let sharedReadyCount = 0;
     self.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
     remote.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
@@ -87,15 +84,14 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
 
   e.it('shared (doc / state → namespace)', async (e) => {
     const shared = {
-      self: self.network.shared,
-      remote: remote.network.shared,
+      self: await self.network.shared(),
+      remote: await remote.network.shared(),
     } as const;
 
     expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);
 
     type N = 'tmp' | 'foo';
     type T = { count: number };
-
     const namespace = shared.self.namespace<N>();
     const foo = namespace?.lens<T>('foo', { count: 0 });
 

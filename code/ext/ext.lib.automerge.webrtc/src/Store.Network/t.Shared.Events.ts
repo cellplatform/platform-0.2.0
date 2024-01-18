@@ -6,6 +6,7 @@ import type { t } from './common';
 export type CrdtSharedEvents = t.Lifecycle & {
   readonly $: t.Observable<t.CrdtSharedEvent>;
   readonly ready$: t.Observable<t.CrdtSharedState>;
+  readonly changed$: t.Observable<t.CrdtSharedChanged>;
 };
 
 /**
