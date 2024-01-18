@@ -5,7 +5,15 @@ export type Disposable = {
   dispose(): void;
 };
 
-export type Lifecycle = Disposable & { readonly disposed: boolean };
+export type Lifecycle = Disposable & {
+  readonly disposed: boolean;
+};
+
+/**
+ * Utility Type: remove fields from composite object.
+ */
+export type OmitDisposable<T extends Disposable> = Omit<T, 'dispose' | 'dispose$'>;
+export type OmitLifecycle<T extends Lifecycle> = Omit<T, 'dispose' | 'dispose$' | 'disposed'>;
 
 /**
  * TakeUntil:

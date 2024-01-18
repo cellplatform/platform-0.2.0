@@ -120,9 +120,10 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const sendButton = (edge: t.NetworkConnectionEdge) => {
-        dev.button(`send data from "${edge.kind}"`, (e) => {
+        dev.button(`send data from "${edge.kind}"`, async (e) => {
           type T = { count?: number };
-          edge.network.shared.doc?.change((d) => {
+          const shared = await edge.network.shared();
+          shared.doc?.change((d) => {
             const data = d as T;
             data.count = data.count ? data.count + 1 : 1;
           });

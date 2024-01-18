@@ -15,6 +15,7 @@ export type {
   DocRefHandle,
   DocUri,
   DocWithMeta,
+  Lens,
   NamespaceManager,
   NamespaceMap,
   Store,
@@ -23,7 +24,12 @@ export type {
   StoreNetworkKind,
   WebStore,
 } from 'ext.lib.automerge/src/types';
-export type { PeerConnectMetadata, PeerJsConnData, PeerModel } from 'ext.lib.peerjs/src/types';
+export type {
+  PeerConnectMetadata,
+  PeerJsConnData,
+  PeerModel,
+  PeerModelEvents,
+} from 'ext.lib.peerjs/src/types';
 
 /**
  * @system
@@ -34,6 +40,7 @@ export type {
   IODirection,
   Lifecycle,
   Msecs,
+  OmitLifecycle,
   Percent,
   UntilObservable,
 } from 'sys.types/src/types';

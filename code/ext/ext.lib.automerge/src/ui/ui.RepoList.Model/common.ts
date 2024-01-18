@@ -17,7 +17,10 @@ const filter: t.StoreIndexFilter = (e) => {
 export const DEFAULTS = {
   typename: Typenames.RepoList,
   filter,
-  timeout: { delete: 5000 },
+  timeout: {
+    delete: 5000,
+    message: 2000,
+  },
   behaviors: {
     get all(): t.RepoListBehavior[] {
       return ['Focus.OnLoad', 'Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'];

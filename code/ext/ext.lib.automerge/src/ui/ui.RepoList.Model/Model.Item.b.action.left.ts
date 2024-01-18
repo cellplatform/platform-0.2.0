@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 export function actionLeftBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemModel }) {
   const action$ = Wrangle.Item.$(args.item).action$;

@@ -2,7 +2,7 @@
  * @ext
  */
 export type { RepoListModel, WebStore } from 'ext.lib.automerge/src/types';
-export type { WebrtcStore } from 'ext.lib.automerge.webrtc/src/types';
+export type { NetworkStore } from 'ext.lib.automerge.webrtc/src/types';
 export type { PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 
 /**

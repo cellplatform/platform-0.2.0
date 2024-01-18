@@ -1,5 +1,5 @@
 import { Time, rx, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 /**
  * Behaviors for the list.

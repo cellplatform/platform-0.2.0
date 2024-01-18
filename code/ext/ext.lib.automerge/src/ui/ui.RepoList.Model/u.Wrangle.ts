@@ -1,4 +1,4 @@
-import { Data, type ItemInput } from './Data';
+import { Data, type ItemInput } from './u.Data';
 import { Model, StoreIndex, rx, toObject, type t } from './common';
 
 type Index = number;

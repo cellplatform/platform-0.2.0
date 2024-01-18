@@ -3,7 +3,7 @@ import { type t } from '../common';
 export { Info as PeerInfo } from 'ext.lib.peerjs';
 
 export * from '../common';
-export { usePeerMonitor, useTransmitMonitor } from '../use';
+export { usePeerMonitor, useShared, useTransmitMonitor } from '../use';
 
 /**
  * Constants

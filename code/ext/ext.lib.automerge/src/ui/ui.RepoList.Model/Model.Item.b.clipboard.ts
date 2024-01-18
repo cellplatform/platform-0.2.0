@@ -1,12 +1,18 @@
 import { rx, type t } from './common';
-import { Data } from './Data';
+import { Data, State } from './u';
 
 /**
  * Behavior for handling "copy" operations on a repo item.
  */
 export function clipboardBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemModel }) {
   const { item } = args;
-  const events = { item: item.events } as const;
+  const { list, dispose$ } = args.ctx();
+
+  const events = {
+    list: list.state.events(dispose$),
+    item: item.events,
+  } as const;
+
   const is = {
     get doc() {
       return Data.item(item).kind === 'Doc';
@@ -19,23 +25,24 @@ export function clipboardBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoI
   /**
    * (Handlers)
    */
+
   const copyToClipboard = async () => {
     if (!is.copyable) return;
 
     const uri = Data.item(item).uri;
     const id = Data.Uri.id(uri);
-    const text = id || 'ERROR: URI of CRDT document not found';
+    const text = id ? `crdt:automerge:${id}` : 'ERROR: URI of CRDT document not found';
     await navigator.clipboard.writeText(text);
 
-    /**
-     * TODO 🐷 show "(copied)" message on time delay.
-     */
-    console.log('copied to clipboard:', text);
+    const message = State.message.set(item, 'copied uri', { icon: 'Tick' });
+    clearMessage$.pipe(rx.take(1)).subscribe(() => message.clear());
   };
 
   /**
    * (Listen)
    */
+  const deselected$ = events.list.item(item.state.instance).selected$.pipe(rx.filter((e) => !e));
+  const clearMessage$ = rx.merge(deselected$, events.item.key.escape$);
   events.item.cmd.clipboard.copy$.pipe(rx.filter(() => is.copyable)).subscribe(copyToClipboard);
   events.item.cmd.action
     .kind('Item:Left')

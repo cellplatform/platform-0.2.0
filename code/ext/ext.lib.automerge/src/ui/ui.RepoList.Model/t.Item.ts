@@ -24,6 +24,8 @@ export type RepoItemData = {
   kind: 'Add' | 'Doc';
   uri?: string;
   pending?: RepoItemDataPending;
+  message?: RepoItemDataMessage;
 };
 
 export type RepoItemDataPending = { tx: string; action: 'Delete' };
+export type RepoItemDataMessage = { tx: string; text: string; icon?: 'Tick' };

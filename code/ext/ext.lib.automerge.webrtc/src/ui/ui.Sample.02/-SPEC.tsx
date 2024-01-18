@@ -1,15 +1,16 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx, toObject } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
 
-type T = {
-  reload?: boolean;
-  modalElement?: JSX.Element;
-};
+type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
+
+type SampleNamespace = 'tmp';
+type SampleNamespaceTmp = 'CodeEditor' | 'DiagramEditor';
+type SampleTmp = { foo?: SampleNamespaceTmp };
 
 /**
  * Spec
@@ -38,8 +39,8 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable']);
-    right = await createEdge('Right', ['Shareable', 'Deletable']);
+    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
+    right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -51,32 +52,30 @@ export default Dev.describe(name, async (e) => {
       const peer = edge.network.peer.events();
       const repo$ = edge.model.events();
       peer.cmd.conn$.pipe(debounce).subscribe(redraw);
-      edge.network.$.pipe(debounce).subscribe(redraw);
 
-      edge.network.$.pipe(debounce).subscribe((e) => {
-        console.log('network', e);
+      const events = { network: edge.network.events() } as const;
+      events.network.$.pipe(debounce).subscribe(redraw);
+
+      events.network.$.pipe(debounce).subscribe((e) => {
+        // console.log('network', e);
       });
 
-      edge.network.added$.pipe().subscribe((e) => {
+      events.network.added$.pipe().subscribe((e) => {
         console.log('network.added$', e);
       });
 
-      edge.network.shared.$.pipe().subscribe(async (e) => {
-        const tmp = e.change.doc.tmp ?? {};
-
-        console.log('shared$', edge.kind, tmp);
-
-        if (tmp.foo === 'CodeEditor') {
-          loadCodeEditor(state);
-        } else if (tmp.foo === 'DiagramEditor') {
-          loadDiagramEditor(state);
-        } else {
+      edge.network.shared().then((shared) => {
+        shared.events().changed$.subscribe(async (e) => {
+          const ns = shared.namespace<SampleNamespace>();
+          const tmp = ns.lens<SampleTmp>('tmp', {});
+          if (tmp.current.foo === 'CodeEditor') return loadCodeEditor(state);
+          if (tmp.current.foo === 'DiagramEditor') return loadDiagramEditor(state);
           await state.change((d) => (d.modalElement = undefined));
-        }
+        });
       });
 
       repo$.active$.pipe(debounce).subscribe(redraw);
-      repo$.active$.subscribe((e) => (selected = { edge, item: e.item }));
+      repo$.active$.subscribe(({ item }) => (selected = { edge, item }));
     };
     monitor(left);
     monitor(right);
@@ -135,7 +134,7 @@ export default Dev.describe(name, async (e) => {
         return (
           <PeerRepoList.Info
             title={edge.kind}
-            fields={['Repo', 'Peer', 'Network.Shared', 'Network.Shared.Json']}
+            fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
             data={{ network }}
           />
         );
@@ -152,22 +151,22 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
 
-      const getShared = () => {
+      const getShared = async () => {
         return {
-          left: left.network.shared.doc,
-          right: right.network.shared.doc,
+          left: await left.network.shared(),
+          right: await right.network.shared(),
         } as const;
       };
 
       type TFoo = { type: 'foo'; payload: { foo: number } };
 
       const listenToEphemeral = async () => {
-        const shared = getShared();
+        const shared = await getShared();
         if (!shared.left || !shared.right) return;
 
         const events = {
-          left: shared.left.events(),
-          right: shared.right.events(),
+          left: shared.left.doc.events(),
+          right: shared.right.doc.events(),
         };
 
         events.left.ephemeral.in$.subscribe((e) => {
@@ -187,12 +186,13 @@ export default Dev.describe(name, async (e) => {
 
       dev.button('tmp-1: listen', (e) => listenToEphemeral());
 
-      dev.button('tmp-2: broadcast', (e) => {
-        const shared = getShared();
+      dev.button('tmp-2: broadcast', async (e) => {
+        const shared = await getShared();
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
-          (shared.left as t.DocRefHandle<t.CrdtShared>)?.handle.broadcast(data);
+          type T = t.DocRefHandle<t.CrdtShared>;
+          (shared.left.doc as T)?.handle.broadcast(data);
         };
 
         console.log('------------------- send ---------------------');
@@ -204,22 +204,24 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
 
-      const addTmpButton = (title: string, fn: (doc: t.DocRef<t.CrdtShared>) => any) => {
-        dev.button(title, (e) => {
-          const left = getShared().left;
-          if (left) fn(left);
+      const addTmpButton = (title: string, fn: (doc: t.Lens<t.NamespaceMap, SampleTmp>) => any) => {
+        dev.button(title, async (e) => {
+          const left = (await getShared()).left;
+          if (left) {
+            const tmp = left.namespace<SampleNamespace>().lens<SampleTmp>('tmp', {});
+            fn(tmp);
+          }
         });
       };
 
-      const tmp = (doc: t.CrdtShared) => doc.tmp ?? (doc.tmp = {});
       addTmpButton('tmp-3: loader → <CodeEditor>', (doc) => {
-        doc.change((d) => (tmp(d).foo = 'CodeEditor'));
+        doc.change((d) => (d.foo = 'CodeEditor'));
       });
       addTmpButton('tmp-4: loader → <DiagramEditor>', (doc) => {
-        doc.change((d) => (tmp(d).foo = 'DiagramEditor'));
+        doc.change((d) => (d.foo = 'DiagramEditor'));
       });
       addTmpButton('tmp-5: loader → remove', (doc) => {
-        doc.change((d) => delete tmp(d).foo);
+        doc.change((d) => delete d.foo);
       });
 
       dev.hr(5, 20);

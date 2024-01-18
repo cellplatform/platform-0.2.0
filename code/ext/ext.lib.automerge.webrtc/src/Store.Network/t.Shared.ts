@@ -1,10 +1,17 @@
 import type { t } from './common';
-import type { Shared } from './Shared';
 
 type O = Record<string, unknown>;
 
-export type CrdtSharedState = Awaited<ReturnType<typeof Shared.init>>;
 export type CrdtSharedMutateAction = 'unshare';
+
+export type CrdtSharedState = t.Lifecycle & {
+  readonly kind: 'crdt.network.shared';
+  readonly store: t.Store;
+  readonly index: t.StoreIndexState;
+  readonly doc: t.DocRef<t.CrdtShared>;
+  events(dispose$?: t.UntilObservable): t.CrdtSharedEvents;
+  namespace<N extends string = string>(): t.NamespaceManager<t.CrdtShared['ns'], N>;
+};
 
 /**
  * An ephemeral document for the purposes of synchonizing
@@ -13,7 +20,6 @@ export type CrdtSharedMutateAction = 'unshare';
 export type CrdtShared = t.DocWithMeta & {
   sys: { peers: CrdtSharedPeers; docs: CrdtSharedDocs };
   ns: t.NamespaceMap;
-  tmp?: O; // TEMP 🐷 ??
 };
 
 /**
@@ -27,12 +33,3 @@ export type CrdtSharedPeer = { ua: t.UserAgent };
  */
 export type CrdtSharedDocs = { [uri: string]: CrdtSharedDoc };
 export type CrdtSharedDoc = { shared: boolean; version: number };
-
-/**
- * Events.
- */
-export type CrdtSharedChangedEvent = {
-  type: 'crdt:shared/Changed';
-  payload: CrdtSharedChanged;
-};
-export type CrdtSharedChanged = { change: t.DocChanged<t.CrdtShared> };

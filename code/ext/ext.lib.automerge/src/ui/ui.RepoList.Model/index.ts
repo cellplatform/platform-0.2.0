@@ -1,2 +1,2 @@
 export { Model } from './Model';
-export { Data } from './Data';
+export { Data } from './u.Data';

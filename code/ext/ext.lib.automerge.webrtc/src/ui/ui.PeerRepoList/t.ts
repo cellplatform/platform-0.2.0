@@ -5,7 +5,7 @@ import type { t } from './common';
  */
 export type PeerRepoListProps = {
   model?: t.RepoListModel;
-  network?: t.WebrtcStore;
+  network?: t.NetworkStore;
   focusOnLoad?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;

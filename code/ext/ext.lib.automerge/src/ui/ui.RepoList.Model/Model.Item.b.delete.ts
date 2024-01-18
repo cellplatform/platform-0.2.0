@@ -1,6 +1,5 @@
 import { DEFAULTS, rx, slug, Time, type t } from './common';
-import { Data } from './Data';
-import { Wrangle } from './u.Wrangle';
+import { Data, Wrangle } from './u';
 
 type Args = { ctx: t.GetRepoListModel; item: t.RepoItemModel };
 

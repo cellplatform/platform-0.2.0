@@ -1,5 +1,5 @@
 import { type t, StoreIndex } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 /**
  * Behavior that monitors the index looking for redraw ques.

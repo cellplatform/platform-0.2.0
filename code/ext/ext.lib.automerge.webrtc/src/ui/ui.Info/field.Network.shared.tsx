@@ -3,12 +3,16 @@ import { Doc, Hash, ObjectView, css, type t } from './common';
 /**
  * Shared network state (transient document).
  */
-export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[] {
+export function shared(
+  data: t.InfoData,
+  fields: t.InfoField[],
+  shared?: t.DocRef<t.CrdtShared>,
+): t.PropListItem[] {
   const network = data.network;
   if (!network) return [];
 
   const res: t.PropListItem[] = [];
-  const docid = Doc.Uri.id(network.shared.doc?.uri);
+  const docid = Doc.Uri.id(shared?.uri);
   const doc = Hash.shorten(docid, [4, 4]);
 
   res.push({
@@ -20,7 +24,7 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
   });
 
   if (fields.includes('Network.Shared.Json')) {
-    const obj = wrangle.jsonObject(data);
+    const obj = wrangle.jsonObject(data, shared);
     if (obj) res.push({ value: obj });
   }
 
@@ -31,12 +35,12 @@ export function shared(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[
  * Helpers
  */
 const wrangle = {
-  jsonObject(data: t.InfoData) {
+  jsonObject(data: t.InfoData, shared?: t.DocRef<t.CrdtShared>) {
     const network = data.network;
     if (!network) return;
 
     const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
-    const obj = network.shared.doc?.toObject();
+    const obj = shared?.toObject();
     if (!obj?.sys.docs) return undefined;
 
     const docs = { ...obj?.sys.docs };

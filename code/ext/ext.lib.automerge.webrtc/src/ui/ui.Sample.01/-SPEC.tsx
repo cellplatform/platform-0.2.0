@@ -61,7 +61,8 @@ export default Dev.describe(name, async (e) => {
     await initDoc(state);
 
     const network = await WebrtcStore.init(self, store, index);
-    network.added$.subscribe((e) => state.change((d) => (d.user = e.peer.remote)));
+    const events = network.events();
+    events.added$.subscribe((e) => state.change((d) => (d.user = e.peer.remote)));
 
     ctx.debug.width(330);
     ctx.subject

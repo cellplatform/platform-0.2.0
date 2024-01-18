@@ -1,5 +1,5 @@
 import { rx, type t } from './common';
-import { Data } from './Data';
+import { Data } from './u';
 
 /**
  * Behavior for adding a new document to the repo.

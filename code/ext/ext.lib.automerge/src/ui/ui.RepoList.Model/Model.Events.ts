@@ -1,5 +1,5 @@
 import { rx, toObject, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 export function eventsFactory(args: {
   ctx: t.GetRepoListModel;

@@ -14,7 +14,7 @@ export function repo(data: t.InfoData, fields: t.InfoField[]) {
  * Helpers
  */
 const wrangle = {
-  fromNetwork(network: t.WebrtcStore) {
+  fromNetwork(network: t.NetworkStore) {
     const { store, index } = network;
     return InfoField.repo({ store, index });
   },
