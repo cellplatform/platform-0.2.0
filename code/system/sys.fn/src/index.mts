@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+export { Func } from './Func';
+
+/**
  * Dev
  */
 export const dev = async () => {
