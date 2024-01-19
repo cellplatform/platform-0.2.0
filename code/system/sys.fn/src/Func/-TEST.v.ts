@@ -21,8 +21,7 @@ describe('Func', () => {
 
     const fn = Func.import<R, P>(async (e) => {
       const m = await import('../test/sample/ModuleA');
-      const numbers = e.sum ?? [];
-      return async () => m.ModuleA.sum(...numbers);
+      return async () => m.ModuleA.sum(...(e.sum ?? []));
     });
 
     const res = await fn({ sum: [1, 2, 3] });

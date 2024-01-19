@@ -1,5 +1,14 @@
 import { type t } from './common';
 
+/**
+ * TODO 🐷
+ * - pass (e) to loader.
+ * - take in:
+ *    - metadata: name
+ *    - beforeRun, afterRun handlers
+ * - function props:
+ *    - stats: { run: { total:number }, log: [] }
+ * - function methods:
  *    - load() ← pre-load the module, but don't run it.
  */
 
