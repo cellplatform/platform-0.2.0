@@ -6,11 +6,12 @@ export type {
   RepoListHandlers,
   RepoListModel,
 } from 'ext.lib.automerge/src/types';
-export type { PeerStreamSelectionHandler, ConnectorBehavior } from 'ext.lib.peerjs/src/types';
+export type { ConnectorBehavior, PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 
 /**
  * @system
  */
+export type { ImmutableRef } from 'sys.types/src/types';
 export type {
   CssEdgesInput,
   CssValue,
