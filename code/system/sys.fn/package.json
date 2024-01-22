@@ -8,7 +8,7 @@
     "test": "tsx  ../../../script.ts/cmd.test.mts",
     "build": "tsx ../../../script.ts/cmd.build.mts",
     "clean": "tsx ../../../script.ts/cmd.clean.mts",
-    "tmp": "tsx   ./script.ts/tmp.mts"
+    "tmp": "tsx   ./script.ts/tmp.ts"
   },
   "dependencies": {
     "react": "18.2.0",
