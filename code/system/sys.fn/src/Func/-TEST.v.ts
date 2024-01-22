@@ -5,7 +5,7 @@ describe('Func', () => {
   it('no params: fn()', async () => {
     type R = { msg: string };
 
-    const fn = Func.import<R>(async (e) => {
+    const fn = Func.import<R>(async () => {
       const m = (await import('../test/sample/ModuleA')).default;
       const msg = `foo:${m.name}`;
       return async () => ({ msg });
@@ -19,9 +19,9 @@ describe('Func', () => {
     type R = number;
     type P = { sum?: number[] };
 
-    const fn = Func.import<R, P>(async (e) => {
+    const fn = Func.import<R, P>(async (args) => {
       const m = await import('../test/sample/ModuleA');
-      return async () => m.ModuleA.sum(...(e.sum ?? []));
+      return async (e) => m.ModuleA.sum(...(e.sum ?? []));
     });
 
     const res = await fn({ sum: [1, 2, 3] });
