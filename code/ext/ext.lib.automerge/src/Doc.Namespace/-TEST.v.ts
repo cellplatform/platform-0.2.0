@@ -1,7 +1,7 @@
 import { Namespace } from '.';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { A, Value, describe, expect, it, rx, type t } from '../test';
+import { A, describe, expect, it, rx, type t } from '../test';
 
 describe('Namespace (Lens)', () => {
   type TFoo = { ns?: t.NamespaceMap };
@@ -10,14 +10,15 @@ describe('Namespace (Lens)', () => {
   type TError = { message?: string };
 
   const store = Store.init();
-  const setup = async (options: { store?: t.Store } = {}) => {
-    return await (options.store ?? store).doc.getOrCreate<TRoot>((d) => null);
+  const setup = (options: { store?: t.Store } = {}) => {
+    return (options.store ?? store).doc.getOrCreate<TRoot>((d) => null);
   };
 
   it('init', async () => {
     const doc = await setup();
     const ns1 = Namespace.init<TRoot>(doc);
     const ns2 = Doc.namespace<TRoot>(doc);
+    expect(Namespace.init).to.equal(Doc.namespace); // NB: surfaced in API on Doc.
     expect(ns1.kind).to.eql('crdt:namespace');
     expect(ns2.kind).to.eql('crdt:namespace');
   });
@@ -246,6 +247,8 @@ describe('Namespace (Lens)', () => {
       expect(list[1].namespace).to.eql('bar');
       expect(list[0].lens).to.eql(foo);
       expect(list[1].lens).to.eql(bar);
+
+      console.log('list', list);
     });
 
     it('new list every call', async () => {
