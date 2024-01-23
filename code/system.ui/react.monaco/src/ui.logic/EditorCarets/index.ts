@@ -1,1 +1,1 @@
-export * from './EditorCarets.mjs';
+export * from './EditorCarets';

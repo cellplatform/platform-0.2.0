@@ -1,7 +1,7 @@
 import { EditorCarets } from '../EditorCarets';
 import { rx, t, Wrangle } from './common';
-import { DocPeers } from './doc.Peers.mjs';
-import { DocText } from './doc.Text.mjs';
+import { DocPeers } from './doc.Peers';
+import { DocText } from './doc.Text';
 
 type Milliseconds = number;
 

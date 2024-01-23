@@ -1,7 +1,7 @@
-import { DEFAULTS } from './const.mjs';
-import { Is } from './Is.mjs';
-import { monaco } from './Wrangle.monaco.mjs';
-import { asRange } from './Wrangle.asRange.mjs';
+import { DEFAULTS } from './const';
+import { Is } from './Is';
+import { monaco } from './Wrangle.monaco';
+import { asRange } from './Wrangle.asRange';
 
 import type { t } from '../common.t';
 

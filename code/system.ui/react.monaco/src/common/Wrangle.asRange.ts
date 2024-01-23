@@ -1,4 +1,4 @@
-import { DEFAULTS } from './const.mjs';
+import { DEFAULTS } from './const';
 import type { t } from '../common.t';
 
 /**

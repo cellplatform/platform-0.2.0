@@ -1,4 +1,4 @@
-export * from './types.monaco.mjs';
+export * from './types.monaco';
 
 /**
  * @external
@@ -21,4 +21,4 @@ export type { AutomergeText, CrdtDocRef, CrdtDocFile } from 'sys.data.crdt/src/t
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';

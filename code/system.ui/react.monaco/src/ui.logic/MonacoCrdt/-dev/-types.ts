@@ -1,5 +1,5 @@
 import type { t } from '../../../common.t';
-export * from '../../../common/types.mjs';
+export type * from '../../../common/t';
 
 /**
  * Sample code document.

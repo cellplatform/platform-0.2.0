@@ -1,1 +1,1 @@
-export * from './MonacoCrdt.mjs';
+export * from './MonacoCrdt';

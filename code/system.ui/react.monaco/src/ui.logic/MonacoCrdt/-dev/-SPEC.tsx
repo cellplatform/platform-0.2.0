@@ -192,7 +192,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
       dev.button('run tests', async (e) => {
         await e.change((d) => (d.debug.showTests = true));
-        await run(import('./-TEST.mjs'));
+        await run(import('./-TEST'));
       });
       dev.button('clear', (e) => e.change((d) => (d.tests = { ...initial.tests })));
     });

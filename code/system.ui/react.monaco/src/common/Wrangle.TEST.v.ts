@@ -1,5 +1,5 @@
 import { describe, it, expect, t, DEFAULTS } from '../test';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 const { NULL_RANGE } = DEFAULTS;
 

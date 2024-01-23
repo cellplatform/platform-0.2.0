@@ -1,5 +1,5 @@
 import { Is, R, rx, t, Wrangle } from '../common';
-import { DecorationStyle } from './Decoration.style.mjs';
+import { DecorationStyle } from './Decoration.style';
 
 /**
  * Manages caret/selection(s) decoration within an editor.

@@ -1,5 +1,5 @@
 import { t, rx } from '../common';
-import { CaretDecoration } from './Decoration.mjs';
+import { CaretDecoration } from './Decoration';
 
 /**
  * Manages a set of carets for an editor.

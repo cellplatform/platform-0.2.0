@@ -1,7 +1,7 @@
 import type { t } from '../common.t';
-import { R } from './libs.mjs';
-import { asRange } from './Wrangle.asRange.mjs';
-import { DEFAULTS } from './const.mjs';
+import { R } from './libs';
+import { asRange } from './Wrangle.asRange';
+import { DEFAULTS } from './const';
 
 export const Is = {
   number(value: any) {
