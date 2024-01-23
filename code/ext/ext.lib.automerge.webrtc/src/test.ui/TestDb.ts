@@ -28,10 +28,10 @@ export const EdgeSampleDb = {
 
 export const TestDb = {
   ...Base,
+  DevReload,
   EdgeSample: EdgeSampleDb,
   async deleteDatabases() {
     await Base.deleteDatabases();
     await EdgeSampleDb.deleteDatabases();
   },
-  DevReload,
 } as const;

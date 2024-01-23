@@ -52,8 +52,8 @@ export default Dev.describe(name, async (e) => {
     right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
     const resetReloadClose = () => state.change((d) => (d.reload = false));
+    await state.change((d) => {});
 
     const monitor = (edge: t.SampleEdge) => {
       const redraw = () => dev.redraw('debug');
