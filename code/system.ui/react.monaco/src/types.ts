@@ -1,8 +1,9 @@
 import type { t } from './common.t';
 
-export type * from './ui.logic/Editor.Carets/t';
 export type * from './ui/ui.MonacoEditor/t';
 
+export type * from './ui.logic/Editor.Carets/t';
+export type * from './ui.logic/Editor.Crdt.Lens/t';
 export type * from './ui.logic/MonacoCrdt__OLD/t';
 
 /**
