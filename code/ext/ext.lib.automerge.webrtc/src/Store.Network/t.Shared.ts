@@ -10,7 +10,7 @@ export type CrdtSharedState = t.Lifecycle & {
   readonly index: t.StoreIndexState;
   readonly doc: t.DocRef<t.CrdtShared>;
   events(dispose$?: t.UntilObservable): t.CrdtSharedEvents;
-  namespace<N extends string = string>(): t.NamespaceManager<t.CrdtShared['ns'], N>;
+  namespace<N extends string = string>(): t.NamespaceManager<N>;
 };
 
 /**

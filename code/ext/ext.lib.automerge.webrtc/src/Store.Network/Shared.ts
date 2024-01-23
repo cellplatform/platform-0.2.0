@@ -136,6 +136,7 @@ export const Shared = {
    * field of the [Shared] state document.
    */
   namespace<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
-    return Doc.namespace<t.CrdtShared['ns'], N>(shared, (d) => d.ns);
+    const ns = Doc.namespace<t.CrdtShared['ns'], N>(shared, (d) => d.ns);
+    return ns as t.NamespaceManager<N>; // NB: type hack.
   },
 } as const;
