@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { Loader, type LoaderDef } from './-SPEC.Loader';
+import { Loader } from './-SPEC.Loader';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
@@ -21,15 +21,28 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let lens: t.Lens<LoaderDef> | undefined;
+  let lens: t.Lens<t.SampleSharedOverlay> | undefined;
 
-  //   const loadDiagramEditor = async (state: t.DevCtxState<T>) => {
-  //     console.log('💦 load module: ext.lib.tldraw');
-  //     const { Canvas } = await import('ext.lib.tldraw');
-  //     // @ts-ignore
-  //     await import('@tldraw/tldraw/tldraw.css');
-  //     await state.change((d) => (d.modalElement = <Canvas style={{ opacity: 0.9 }} />));
-  //   };
+  /**
+   * A factory function
+   */
+  const factory: t.LoadFactory = async (e) => {
+    const { typename, docuri, store } = e;
+
+    if (typename === 'CodeEditor') {
+      const { CodeEditorLoader } = await import('./Module.CodeEditor'); // NB: dynamic code-splitting here.
+      return <CodeEditorLoader store={store} docuri={docuri} />;
+    }
+
+    if (typename === 'DiagramEditor') {
+      // @ts-ignore
+      await import('@tldraw/tldraw/tldraw.css');
+      const { Canvas } = await import('ext.lib.tldraw');
+      return <Canvas style={{ opacity: 0.9 }} />;
+    }
+
+    return;
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -61,9 +74,13 @@ export default Dev.describe(name, async (e) => {
     monitor(left);
     monitor(right);
 
+    /**
+     * When the shared namespace is ready (i.e. the network is connected)
+     * the initialize the sample namespace.
+     */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      lens = ns.lens<LoaderDef>('foo.sample', {});
+      lens = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
       dev.redraw();
     });
 
@@ -75,8 +92,9 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
-          const elLoader = lens && <Loader store={left.network.store} lens={lens} />;
-          return <Sample left={left} right={right} overlay={elLoader} />;
+          const store = left.network.store;
+          const elOverlay = lens && <Loader store={store} lens={lens} factory={factory} />;
+          return <Sample left={left} right={right} overlay={elOverlay} />;
         }
       });
   });
@@ -172,18 +190,21 @@ export default Dev.describe(name, async (e) => {
         foo$.subscribe((e) => console.log('foo$', e));
       };
 
-      dev.button((btn) => {
-        btn
-          .label(`tmp: ƒ → load → CodeEditor`)
-          .enabled((e) => !!lens && !!selected?.item.uri)
-          .onClick((e) => {
-            const docuri = selected?.item.uri;
-            if (lens && docuri) {
-              lens.change((d) => (d.module = { name: 'CodeEditor', docuri }));
-            }
-          });
-      });
+      const loaderButton = (label: string, typename: string) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .enabled((e) => !!lens && !!selected?.item.uri)
+            .onClick((e) => {
+              const docuri = selected?.item.uri;
+              if (!(lens && docuri)) return;
+              lens.change((d) => (d.module = { typename, docuri }));
+            });
+        });
+      };
 
+      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor');
+      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor');
       dev.button('unload', (e) => lens?.change((d) => delete d.module));
 
       dev.hr(-1, 5);

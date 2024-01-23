@@ -1,49 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useLoader } from './-SPEC.Loader.useLoader';
 import { COLORS, Color, Spinner, css, type t } from './common';
-
-export type LoaderDef = {
-  module?: { name: string; docuri: string };
-};
 
 export type LoaderProps = {
   store: t.Store;
-  lens: t.Lens<LoaderDef>;
+  lens: t.Lens<t.SampleSharedOverlay>;
+  factory: t.LoadFactory;
   style?: t.CssValue;
 };
 
 export const Loader: React.FC<LoaderProps> = (props) => {
-  const { lens, store } = props;
-
-  const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [body, setBody] = useState<JSX.Element>();
-
-  useEffect(() => {
-    const events = lens.events();
-
-    events.changed$.subscribe(async (e) => {
-      const m = e.after.module;
-      const name = m?.name;
-      const docuri = m?.docuri;
-
-      setVisible(name !== undefined);
-      if (!name || !docuri) return;
-
-      setLoading(true);
-      setBody(undefined);
-
-      if (name === 'CodeEditor') {
-        const { CodeEditorLoader } = await import('./-SPEC.Loader.Code');
-        setBody(<CodeEditorLoader store={store} docuri={docuri} />);
-      }
-
-      setLoading(false);
-    });
-
-    return events.dispose;
-  }, []);
-
-  if (!visible) return null;
+  const { lens, store, factory } = props;
+  const { loading, body } = useLoader({ lens, store, factory });
+  if (!(loading || body)) return null;
 
   /**
    * Render

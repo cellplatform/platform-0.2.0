@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { MonacoEditor } from 'sys.ui.react.monaco';
-import { Statusbar } from './-SPEC.Loader.Statusbar';
+import { Statusbar } from './ui.Statusbar';
 import { Color, css, type t } from './common';
 
 import { Text } from '@automerge/automerge';
@@ -18,7 +18,7 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
 
   useEffect(() => {
     props.store.doc.get<TDoc>(docuri).then((doc) => {
-      console.log('doc', doc?.toObject());
+      console.log('doc', doc);
     });
   }, [docuri]);
 

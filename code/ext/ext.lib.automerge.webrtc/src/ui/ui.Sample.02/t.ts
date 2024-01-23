@@ -19,3 +19,11 @@ export type SampleEdgeProps = {
 };
 
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
+export type SampleSharedOverlay = { module?: LoaderDef };
+
+/**
+ * Dynamic Loading
+ */
+export type LoaderDef = { typename: string; docuri: string };
+export type LoadFactory = (args: LoadFactoryArgs) => Promise<JSX.Element | void>;
+export type LoadFactoryArgs = LoaderDef & { store: t.Store };
