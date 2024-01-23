@@ -27,12 +27,12 @@ describe('PatchState', () => {
       expect(state1.instance).to.not.eql(state2.instance);
     });
 
-    it('init: <type>', () => {
-      const type = 'foo.bar';
+    it('init: <typename>', () => {
+      const typename = 'foo.bar';
       const state1 = PatchState.init({ initial });
-      const state2 = PatchState.init({ initial, type });
-      expect(state1.type).to.eql(undefined);
-      expect(state2.type).to.eql(type);
+      const state2 = PatchState.init({ initial, typename });
+      expect(state1.typename).to.eql(undefined);
+      expect(state2.typename).to.eql(typename);
     });
   });
 
@@ -196,9 +196,9 @@ describe('PatchState', () => {
     });
 
     it('Is.type ← true', () => {
-      const type = 'foo.bar';
-      const state = PatchState.init<T>({ initial, type });
-      expect(PatchState.Is.type(state, type)).to.eql(true);
+      const typename = 'foo.bar';
+      const state = PatchState.init<T>({ initial, typename });
+      expect(PatchState.Is.type(state, typename)).to.eql(true);
     });
 
     it('Is.type ← false', () => {

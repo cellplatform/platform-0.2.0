@@ -22,9 +22,9 @@ export const Remote = {
   state(args: RemoteArgs): t.ConnectorItemState {
     type T = t.ConnectorItemStateRemote;
     const { ctx } = args;
-    const type = DEFAULTS.type.remote;
+    const typename = DEFAULTS.typename.remote;
     const initial = Remote.initial(args);
-    const item = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
+    const item = Model.Item.state<t.ConnectorAction, D>(initial, { typename }) as T;
     const dispatch = Model.Item.commands(item);
     const events = item.events(args.dispose$);
 

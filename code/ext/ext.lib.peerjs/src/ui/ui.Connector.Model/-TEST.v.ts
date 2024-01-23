@@ -10,7 +10,7 @@ describe('Connector.Model', () => {
   describe('Self', () => {
     it('state', () => {
       const model = Model.Self.state({ ctx });
-      expect(model.type).to.eql(DEFAULTS.type.self);
+      expect(model.typename).to.eql(DEFAULTS.typename.self);
 
       const data = Data.self(model);
       expect(data.peerid).to.eql(peer.id);
@@ -24,7 +24,7 @@ describe('Connector.Model', () => {
   describe('Remote', () => {
     it('state', () => {
       const model = Model.Remote.state({ ctx });
-      expect(model.type).to.eql(DEFAULTS.type.remote);
+      expect(model.typename).to.eql(DEFAULTS.typename.remote);
 
       expect(Model.Is.self(model)).to.eql(false);
       expect(Model.Is.remote(model)).to.eql(true);
@@ -35,7 +35,7 @@ describe('Connector.Model', () => {
   describe('List', () => {
     it('state', () => {
       const { list } = Model.List.init(peer);
-      expect(list.type).to.eql(DEFAULTS.type.list);
+      expect(list.typename).to.eql(DEFAULTS.typename.list);
       expect(list.current.total).to.eql(2);
       expect(list.current.getItem).to.be.a('function');
 

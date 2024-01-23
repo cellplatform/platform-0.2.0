@@ -32,7 +32,7 @@ export const List = {
     const getItem = GetItem(ctx, array);
     const state: t.RepoListState = Model.List.state(
       { total, getItem },
-      { type: DEFAULTS.typename.List, dispose$ },
+      { typename: DEFAULTS.typename.List, dispose$ },
     );
 
     /**

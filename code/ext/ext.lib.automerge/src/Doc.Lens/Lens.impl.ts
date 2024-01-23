@@ -8,7 +8,7 @@ import { rx, slug, toObject, type t } from './common';
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
   get: t.LensGetDescendent<R, L>,
-  options: { dispose$?: t.UntilObservable; type?: string } = {},
+  options: { dispose$?: t.UntilObservable; typename?: string } = {},
 ) {
   Registry.add(root);
   let _count = 0;
@@ -65,7 +65,7 @@ export function init<R extends {}, L extends {}>(
    */
   const api: t.Lens<L> = {
     instance: `${root.uri}:lens.${slug()}`,
-    type: options.type,
+    typename: options.typename,
 
     /**
      * Current value of the descendent.

@@ -166,12 +166,12 @@ describe('Namespace (Lens)', () => {
       const doc = await setup();
       const namespace = Doc.namespace<TRoot>(doc);
 
-      const type = 'foo.bar';
+      const typename = 'foo.bar';
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
-      const ns2 = namespace.lens<TDoc>('bar', { count: 456 }, { type });
+      const ns2 = namespace.lens<TDoc>('bar', { count: 456 }, { typename });
 
-      expect(ns1.type).to.eql(undefined);
-      expect(ns2.type).to.eql(type);
+      expect(ns1.typename).to.eql(undefined);
+      expect(ns2.typename).to.eql(typename);
     });
 
     it('namespace.lens: from sub-tree (get container → ƒ)', async () => {

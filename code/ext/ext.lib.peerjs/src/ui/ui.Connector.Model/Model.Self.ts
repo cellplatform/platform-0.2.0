@@ -24,9 +24,9 @@ export const Self = {
   state(args: SelfArgs): t.ConnectorItemState {
     type T = t.ConnectorItemStateSelf;
     const { ctx } = args;
-    const type = DEFAULTS.type.self;
+    const typename = DEFAULTS.typename.self;
     const initial = Self.initial(args);
-    const item = Model.Item.state<t.ConnectorAction, D>(initial, { type }) as T;
+    const item = Model.Item.state<t.ConnectorAction, D>(initial, { typename }) as T;
     const dispatch = Model.Item.commands(item);
     const events = item.events(args.dispose$);
 

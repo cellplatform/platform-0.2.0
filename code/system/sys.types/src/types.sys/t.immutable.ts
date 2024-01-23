@@ -15,6 +15,6 @@ export type Immutable<T> = {
  */
 export type ImmutableRef<T, E> = Immutable<T> & {
   readonly instance: string;
-  readonly type?: string; // Optional typename (reflection).
+  readonly typename?: string; // Optional typename (for reflection).
   events(dispose$?: t.UntilObservable): E;
 };
