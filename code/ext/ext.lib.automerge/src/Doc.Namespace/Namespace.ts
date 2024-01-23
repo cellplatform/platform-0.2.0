@@ -68,6 +68,10 @@ export const Namespace = {
         return container.events(dispose$);
       },
 
+      toType<T extends string>() {
+        return api as unknown as t.NamespaceManager<T>;
+      },
+
       /**
        * Lifecycle
        */

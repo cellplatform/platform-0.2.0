@@ -23,6 +23,17 @@ describe('Namespace (Lens)', () => {
     expect(ns2.kind).to.eql('crdt:namespace');
   });
 
+  it('toType<T>() conversion', async () => {
+    const doc = await setup();
+    type N = 'foo' | 'bar';
+    const ns1 = Namespace.init<TRoot>(doc);
+    const ns2 = ns1.toType<N>();
+    ns1.lens('baz', {});
+    ns2.lens('foo', {});
+    expect(ns1).to.equal(ns2);
+    expect(doc.current).to.eql({ baz: {}, foo: {} });
+  });
+
   describe('container', () => {
     it('namespace.container: { document } root', async () => {
       const doc = await setup();
@@ -379,7 +390,5 @@ describe('Namespace (Lens)', () => {
     });
   });
 
-  it('done (clean up)', () => {
-    store.dispose();
-  });
+  it('done (clean up)', () => store.dispose());
 });
