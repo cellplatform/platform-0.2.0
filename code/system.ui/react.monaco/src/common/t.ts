@@ -6,6 +6,11 @@ export * from './types.monaco';
 export type { Observable } from 'rxjs';
 
 /**
+ * @ext
+ */
+export type { DocChanged, DocRef, Lens, Store, WebStore } from 'ext.lib.automerge/src/types';
+
+/**
  * @system
  */
 export type { EventBus, Disposable } from 'sys.types/src/types';

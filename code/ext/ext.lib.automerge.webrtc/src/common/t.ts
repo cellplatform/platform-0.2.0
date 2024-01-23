@@ -5,6 +5,9 @@ export type { next as A } from '@automerge/automerge';
 export type { NetworkAdapter } from '@automerge/automerge-repo';
 export type { Observable } from 'rxjs';
 
+/**
+ * @ext
+ */
 export type {
   DocChanged,
   DocEphemeralIn,
