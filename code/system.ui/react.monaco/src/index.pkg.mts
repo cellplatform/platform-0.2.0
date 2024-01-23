@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     '@monaco-editor/react': '4.6.0',
     'diff': '5.1.0',
+    'ext.lib.automerge': '0.0.0',
     'monaco-editor': '0.45.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
