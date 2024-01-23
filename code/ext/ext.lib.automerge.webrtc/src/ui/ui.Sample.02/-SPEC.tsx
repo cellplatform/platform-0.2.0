@@ -1,16 +1,19 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx, toObject } from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
+import { loader } from './-SPEC.Loader';
 
 type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
 
 type SampleNamespace = 'tmp';
 type SampleNamespaceTmp = 'CodeEditor' | 'DiagramEditor';
-type SampleTmp = { foo?: SampleNamespaceTmp };
+type SampleTmp = {
+  foo?: SampleNamespaceTmp;
+};
 
 /**
  * Spec
@@ -175,7 +178,7 @@ export default Dev.describe(name, async (e) => {
         });
         events.right.ephemeral.in$.subscribe((e) => {
           console.log('right|in$', e);
-          loadCodeEditor(state);
+          // loadCodeEditor(state);
         });
 
         const foo$ = events.right.ephemeral.type$<TFoo>(
@@ -183,6 +186,23 @@ export default Dev.describe(name, async (e) => {
         );
         foo$.subscribe((e) => console.log('foo$', e));
       };
+
+      dev.button('tmp', async (e) => {
+        const left = (await getShared()).left;
+        //
+        const ns = left.namespace<SampleNamespace>();
+        const lens = ns.lens<{ foo?: number }>('tmp', {});
+        // lens.events().
+        const ev = lens.events();
+        ev.changed$.subscribe((e) => {
+          //
+          console.log('e>>', e);
+        });
+        const el = await loader(lens);
+        state.change((d) => (d.modalElement = el));
+
+        lens.change((d) => (d.foo = 123));
+      });
 
       dev.button('tmp-1: listen', (e) => listenToEphemeral());
 
