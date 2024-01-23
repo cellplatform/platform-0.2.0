@@ -55,7 +55,7 @@
     "diff": "5.1.0",
     "execa": "8.0.1",
     "fake-indexeddb": "5.0.2",
-    "framer-motion": "10.18.0",
+    "framer-motion": "11.0.2",
     "fs-extra": "11.2.0",
     "glamor-jss": "1.4.1",
     "glob": "10.3.10",
