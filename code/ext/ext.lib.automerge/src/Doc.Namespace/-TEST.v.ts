@@ -27,7 +27,7 @@ describe('Namespace (Lens)', () => {
     const doc = await setup();
     type N = 'foo' | 'bar';
     const ns1 = Namespace.init<TRoot>(doc);
-    const ns2 = ns1.toType<N>();
+    const ns2 = ns1.typed<N>();
     ns1.lens('baz', {});
     ns2.lens('foo', {});
     expect(ns1).to.equal(ns2);
