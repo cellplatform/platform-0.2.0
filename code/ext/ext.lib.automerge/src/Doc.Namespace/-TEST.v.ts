@@ -74,23 +74,23 @@ describe('Namespace (Lens)', () => {
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
       const events = ns.events();
 
-      const fired: t.LensChanged<TRoot, t.NamespaceMap<N>>[] = [];
+      const fired: t.LensChanged<t.NamespaceMap<N>>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
       expect(fired.length).to.eql(1);
-      expect(fired[0].lens.foo).to.eql({ count: 0 });
-      expect(fired[0].lens.bar).to.eql(undefined);
+      expect(fired[0].after.foo).to.eql({ count: 0 });
+      expect(fired[0].after.bar).to.eql(undefined);
 
       const bar = ns.lens<TDoc>('bar', { count: 123 });
       expect(fired.length).to.eql(2);
-      expect(fired[1].lens.foo).to.eql({ count: 0 });
-      expect(fired[1].lens.bar).to.eql({ count: 123 });
+      expect(fired[1].after.foo).to.eql({ count: 0 });
+      expect(fired[1].after.bar).to.eql({ count: 123 });
 
       foo.change((d) => d.count++);
       expect(fired.length).to.eql(3);
-      expect(fired[2].lens.foo).to.eql({ count: 1 });
-      expect(fired[2].lens.bar).to.eql({ count: 123 });
+      expect(fired[2].after.foo).to.eql({ count: 1 });
+      expect(fired[2].after.bar).to.eql({ count: 123 });
 
       events.dispose();
     });
@@ -100,7 +100,7 @@ describe('Namespace (Lens)', () => {
       const ns = Doc.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
       const events = ns.events();
 
-      const fired: t.LensChanged<TRoot, t.NamespaceMap<N>>[] = [];
+      const fired: t.LensChanged<t.NamespaceMap<N>>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       const foo = ns.lens<TDoc>('foo', { count: 0 });
