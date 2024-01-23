@@ -90,14 +90,18 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
 
     expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);
 
+    // NB: property returns same instance.
     type N = 'tmp' | 'foo';
     type T = { count: number };
-    const namespace = shared.self.namespace<N>();
+    expect(shared.self.namespace).to.equal(shared.self.namespace);
+    expect(shared.self.namespace.typed<N>()).to.equal(shared.self.namespace);
+
+    const namespace = shared.self.namespace.typed<N>();
     const foo = namespace?.lens<T>('foo', { count: 0 });
 
     const ns = {
-      self: shared.self.namespace<N>(),
-      remote: shared.self.namespace<N>(),
+      self: shared.self.namespace.typed<N>(),
+      remote: shared.self.namespace.typed<N>(),
     } as const;
 
     const tmp = {
