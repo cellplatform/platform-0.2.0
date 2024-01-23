@@ -1,6 +1,6 @@
 import type { t } from './common.t';
 
-export type * from './ui.logic/EditorCarets/t';
+export type * from './ui.logic/Editor.Carets/t';
 export type * from './ui.logic/MonacoCrdt/t';
 export type * from './ui/ui.MonacoEditor/t';
 

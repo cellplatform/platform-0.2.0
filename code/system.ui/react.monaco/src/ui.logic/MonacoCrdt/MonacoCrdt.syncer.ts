@@ -1,4 +1,4 @@
-import { EditorCarets } from '../EditorCarets';
+import { EditorCarets } from '../Editor.Carets';
 import { rx, t, Wrangle } from './common';
 import { DocPeers } from './doc.Peers';
 import { DocText } from './doc.Text';
