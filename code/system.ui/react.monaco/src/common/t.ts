@@ -1,21 +1,10 @@
 export type * from './t.monaco';
+export type * from './t.Automerge';
 
 /**
  * @external
  */
 export type { Observable } from 'rxjs';
-
-/**
- * @ext
- */
-export type {
-  DocChanged,
-  DocRef,
-  Lens,
-  Store,
-  WebStore,
-  WebStoreIndex,
-} from 'ext.lib.automerge/src/types';
 
 /**
  * @system
