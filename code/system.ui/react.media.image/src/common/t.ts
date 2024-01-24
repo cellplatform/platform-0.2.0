@@ -16,4 +16,4 @@ export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/ty
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';

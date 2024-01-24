@@ -23,7 +23,7 @@ export type {
   PropListProps,
 } from 'sys.ui.react.common/src/types';
 
-export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
+export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types';
 
 /**
  * @local
