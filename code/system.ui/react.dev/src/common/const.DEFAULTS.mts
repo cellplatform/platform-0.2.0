@@ -1,7 +1,7 @@
+import type * as t from './t';
+
 import { COLORS } from './const.COLORS.mjs';
 import { Color } from './libs.mjs';
-
-import type { t } from '../common.t';
 
 export const DEFAULTS = {
   get size(): t.DevRenderedSize {
