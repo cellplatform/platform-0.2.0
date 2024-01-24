@@ -47,7 +47,7 @@ export type {
   UntilObservable,
 } from 'sys.types/src/types';
 
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
+export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { UserAgent } from 'sys.ui.dom/src/types';
 
 /**

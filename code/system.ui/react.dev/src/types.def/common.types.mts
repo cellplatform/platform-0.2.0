@@ -22,7 +22,7 @@ export type {
   TestSuiteRunResponse,
   TestHandlerArgs,
   SpecImports,
-} from 'sys.test.spec/src/types.mjs';
+} from 'sys.test.spec/src/types';
 
 export type { CssValue } from 'sys.ui.react.css/src/types';
 

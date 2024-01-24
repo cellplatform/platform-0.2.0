@@ -26,7 +26,7 @@ export type {
   TestSuiteRunResponse,
   SpecImport,
   SpecImports,
-} from 'sys.test.spec/src/types.mjs';
+} from 'sys.test.spec/src/types';
 
 /**
  * @local

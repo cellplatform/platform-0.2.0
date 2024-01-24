@@ -2,7 +2,7 @@ import type { Loader, Tree } from './TestSuite.helpers';
 import type { Stats } from './TestSuite.helpers/Stats.mjs';
 import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
-import type { t } from './common.t';
+import type { t } from './common';
 
 export type * from './TestSuite.helpers/types.mjs';
 

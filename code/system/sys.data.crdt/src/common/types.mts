@@ -21,7 +21,7 @@ export type {
   SpecImports,
   TestSuiteModel,
   TestSuiteRunResponse,
-} from 'sys.test.spec/src/types.mjs';
+} from 'sys.test.spec/src/types';
 export type { TextCharDiff } from 'sys.text/src/types';
 export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types';
 

@@ -48,7 +48,7 @@ export type {
   TestSuiteModel,
   TestSuiteRunResponse,
   TestSuiteRunStats,
-} from 'sys.test.spec/src/types.mjs';
+} from 'sys.test.spec/src/types';
 export type { TextCharDiff } from 'sys.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 

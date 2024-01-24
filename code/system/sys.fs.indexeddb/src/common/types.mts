@@ -22,7 +22,7 @@ export type {
   DirManifestInfo,
 } from 'sys.fs/src/types';
 
-export type { TestSuiteRunResponse, SpecImport } from 'sys.test.spec/src/types.mjs';
+export type { TestSuiteRunResponse, SpecImport } from 'sys.test.spec/src/types';
 
 /**
  * @local
