@@ -50,4 +50,4 @@ export type {
 /**
  * @local
  */
-export type * from '../types.mjs';
+export type * from '../types';

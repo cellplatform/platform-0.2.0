@@ -1,4 +1,4 @@
-import type * as t from './types.mjs';
+import type * as t from './t';
 
 /**
  * Flags
