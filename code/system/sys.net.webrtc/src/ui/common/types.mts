@@ -13,7 +13,7 @@ export type { CrdtInfoData, CrdtFuncData } from 'sys.data.crdt/src/types.mjs';
 /**
  * @system → UI
  */
-export type { MonacoCodeEditor, EditorPeersState, Monaco } from 'sys.ui.react.monaco/src/types.mjs';
+export type { MonacoCodeEditor, EditorPeersState, Monaco } from 'sys.ui.react.monaco/src/types';
 export type { RecordButtonState } from 'sys.ui.react.media/src/types.mjs';
 export type {
   CardProps,
