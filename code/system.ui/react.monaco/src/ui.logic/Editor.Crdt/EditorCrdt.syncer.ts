@@ -1,5 +1,7 @@
 import { DEFAULTS, rx, type t } from './common';
 
+import { Text } from '@automerge/automerge';
+
 /**
  * An adapter for managing 2-way binding between a code-editor UI
  * component and a CRDT (Automerge.Text) data-structure.
@@ -58,14 +60,12 @@ export function syncer(args: {
     e.changes.forEach((change) => {
       console.log('state.toObject()', state.toObject());
       state.change((d) => {
-        //
-        // const text = d.code || (d.code = new A.Text(''));
-
-        const index = change.rangeOffset;
+        const text = d.code || (d.code = new Text());
+        const i = change.rangeOffset;
         if (change.text === '') {
-          // text.deleteAt(index, change.rangeLength);
+          text.deleteAt(i, change.rangeLength);
         } else {
-          // text.insertAt(index, ...change.text.split(''));
+          text.insertAt(i, ...change.text.split(''));
         }
       });
     });
