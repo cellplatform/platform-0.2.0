@@ -1,1 +1,1 @@
-export * from './NetworkAdapter';
+export * from './WebrtcNetworkAdapter';
