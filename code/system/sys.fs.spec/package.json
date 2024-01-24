@@ -5,8 +5,8 @@
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "test": "tsx ../../../script.ts/cmd.test.mts",
-    "build": "tsx ../../../script.ts/cmd.build.mts",
+    "test": "tsx ../../../script.ts/cmd.test.ts",
+    "build": "tsx ../../../script.ts/cmd.build.ts",
     "clean": "tsx ../../../script.ts/cmd.clean.mts",
     "spec": "yarn test --run --reporter verbose"
   },
