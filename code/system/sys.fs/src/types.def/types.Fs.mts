@@ -1,4 +1,4 @@
-import type { t } from '../common.t';
+import type { t } from '../common';
 
 type DirPath = string; //  Path to a directory, eg: "foo/"
 type FilePath = string; // Path to a file, eg: "foo/bar.txt"

@@ -15,7 +15,7 @@ export type {
 } from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types';
-export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types.mjs';
+export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types';
 export type {
   SpecImport,
   SpecImports,

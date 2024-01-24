@@ -10,7 +10,7 @@ export type Yaml = {
 /**
  * @system
  */
-export type { Fs } from 'sys.fs/src/types.mjs';
+export type { Fs } from 'sys.fs/src/types';
 
 /**
  * @local

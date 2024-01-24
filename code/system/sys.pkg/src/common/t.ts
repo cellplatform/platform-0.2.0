@@ -9,7 +9,7 @@ export type * from './t.Vercel';
  * @system
  */
 export type { EventBus, DirManifest, Msecs } from 'sys.types/src/types';
-export type { Fs } from 'sys.fs/src/types.mjs';
+export type { Fs } from 'sys.fs/src/types';
 export type { Text } from 'sys.text/src/types';
 
 /**

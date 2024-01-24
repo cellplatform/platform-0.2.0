@@ -9,7 +9,7 @@ export type {
 /**
  * @system
  */
-export type { FsDriverFactory } from 'sys.fs/src/types.mjs';
+export type { FsDriverFactory } from 'sys.fs/src/types';
 
 /**
  * @local

@@ -20,7 +20,7 @@ export type {
   ManifestFile,
   DirManifest,
   DirManifestInfo,
-} from 'sys.fs/src/types.mjs';
+} from 'sys.fs/src/types';
 
 export type { TestSuiteRunResponse, SpecImport } from 'sys.test.spec/src/types.mjs';
 
