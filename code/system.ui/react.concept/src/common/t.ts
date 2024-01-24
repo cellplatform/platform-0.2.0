@@ -45,7 +45,7 @@ export type {
   VideoSrc,
   VideoSrcInput,
   VideoStatus,
-} from 'sys.ui.react.media.video/src/types.mjs';
+} from 'sys.ui.react.media.video/src/types';
 
 /**
  * @local
