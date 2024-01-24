@@ -22,7 +22,7 @@ export type {
   TestSuiteModel,
   TestSuiteRunResponse,
 } from 'sys.test.spec/src/types.mjs';
-export type { TextCharDiff } from 'sys.text/src/types.mjs';
+export type { TextCharDiff } from 'sys.text/src/types';
 export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
 
 /**

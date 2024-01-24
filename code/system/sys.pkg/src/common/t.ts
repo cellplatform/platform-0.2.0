@@ -10,7 +10,7 @@ export type * from './t.Vercel';
  */
 export type { EventBus, DirManifest, Msecs } from 'sys.types/src/types';
 export type { Fs } from 'sys.fs/src/types.mjs';
-export type { Text } from 'sys.text/src/types.mjs';
+export type { Text } from 'sys.text/src/types';
 
 /**
  * @local
