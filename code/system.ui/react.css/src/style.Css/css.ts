@@ -1,7 +1,7 @@
 import { glamor, t, Is } from '../common';
-import * as Util from './util.mjs';
+import * as Util from './util';
 
-export * from './util.mjs';
+export * from './util';
 export const MEDIA_QUERY_RETINA = `@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)`;
 
 /**

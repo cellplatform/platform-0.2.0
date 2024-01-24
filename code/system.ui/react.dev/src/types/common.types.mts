@@ -24,7 +24,7 @@ export type {
   SpecImports,
 } from 'sys.test.spec/src/types.mjs';
 
-export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
+export type { CssValue } from 'sys.ui.react.css/src/types';
 
 /**
  * @local

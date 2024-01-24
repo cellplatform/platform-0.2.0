@@ -17,7 +17,7 @@ export type {
   DomRect,
 } from 'sys.types/src/types';
 
-export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
+export type { CssValue } from 'sys.ui.react.css/src/types';
 
 export type {
   TestModel,

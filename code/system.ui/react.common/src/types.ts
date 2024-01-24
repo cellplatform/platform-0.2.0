@@ -22,7 +22,7 @@ export type {
   KeyboardStateCurrent,
   LocalStorage,
 } from 'sys.ui.dom/src/types';
-export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types.mjs';
+export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types';
 
 /**
  * @local
