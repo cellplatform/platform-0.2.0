@@ -15,4 +15,4 @@ export type { Text } from 'sys.text/src/types';
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';
