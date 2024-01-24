@@ -1,6 +1,6 @@
 import type * as t from './t';
 
-import { DEFAULTS } from './const.mjs';
+import { DEFAULTS } from './const';
 
 const QS = DEFAULTS.qs;
 

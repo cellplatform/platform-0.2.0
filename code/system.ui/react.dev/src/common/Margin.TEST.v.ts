@@ -1,5 +1,5 @@
 import { describe, expect, it, t } from '../test';
-import { Margin } from './Margin.mjs';
+import { Margin } from './Margin';
 
 describe('Margin', () => {
   it('toArray', () => {

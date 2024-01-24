@@ -1,5 +1,5 @@
 import { describe, expect, it } from '../test';
-import { WrangleUrl, WrangleUrlParams } from './Wrangle.mjs';
+import { WrangleUrl, WrangleUrlParams } from './Wrangle';
 
 describe('Entry', () => {
   it('isDev', () => {

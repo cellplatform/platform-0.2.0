@@ -2,7 +2,7 @@ import { DevBus } from '../logic.Bus';
 import { Context } from '../logic.Ctx';
 import { Spec } from '../logic.Spec';
 import { describe, expect, it, rx, t } from '../test';
-import { Is } from './Is.mjs';
+import { Is } from './Is';
 
 describe('Is (flags)', () => {
   const bus = rx.bus();

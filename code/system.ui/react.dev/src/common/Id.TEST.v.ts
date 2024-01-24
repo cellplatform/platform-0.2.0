@@ -1,5 +1,5 @@
 import { describe, expect, it } from '../test';
-import { Id } from './Id.mjs';
+import { Id } from './Id';
 
 describe('Id', () => {
   describe('ctx (session)', () => {

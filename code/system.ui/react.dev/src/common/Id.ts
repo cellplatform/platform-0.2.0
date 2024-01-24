@@ -1,4 +1,4 @@
-import { slug } from './libs.mjs';
+import { slug } from './libs';
 
 /**
  * Unique identifier generators.
