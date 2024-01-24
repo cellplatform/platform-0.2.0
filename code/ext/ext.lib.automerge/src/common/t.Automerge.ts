@@ -1,3 +1,4 @@
+export type { Text } from '@automerge/automerge';
 export type {
   DeleteDocumentPayload,
   DocHandleChangePayload,
