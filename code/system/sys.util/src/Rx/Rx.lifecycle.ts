@@ -1,6 +1,6 @@
 import { take } from 'rxjs';
 import { Dispose } from '../Dispose';
-import { type t } from '../common.t';
+import { type t } from '../common';
 
 /**
  * Generates the base mechanism of an disposable observable.

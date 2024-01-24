@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { type t } from '../common.t';
+import { type t } from '../common';
 import { done } from './Dispose.done.mjs';
 import { until } from './Dispose.until.mjs';
 

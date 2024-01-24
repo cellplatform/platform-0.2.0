@@ -1,6 +1,5 @@
 import type { ConfigType, Dayjs } from 'dayjs';
-import type { Observable } from 'rxjs';
-import type { t } from '../common.t';
+import type { t } from '../common';
 
 export type TimeDuration = {
   readonly ok: boolean;
@@ -35,7 +34,7 @@ export type TimeDelayAction = {
   on(action: t.TimeDelayActionAction, fn: TimeDelayActionHandler): TimeDelayAction;
 };
 
-export type TimeWait = (msecs: t.Msecs | Observable<any>) => Promise<unknown>;
+export type TimeWait = (msecs: t.Msecs | t.Observable<any>) => Promise<unknown>;
 export type TimeElapsed = (
   from: DateInput,
   options?: { to?: DateInput; round?: number },
