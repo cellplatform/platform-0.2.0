@@ -1,5 +1,5 @@
-import { fs } from './fs.mjs';
-import { prettybytes } from './libs.mjs';
+import { fs } from './fs';
+import { prettybytes } from './libs';
 
 /**
  * Calculate the size of a folder

@@ -1,4 +1,4 @@
-import { LogTable, fs, pc, prettybytes, type t } from './common/index.mjs';
+import { LogTable, fs, pc, prettybytes, type t } from './common';
 
 const Pkg = (await fs.readJson(fs.resolve('./package.json'))) as t.PkgJson;
 

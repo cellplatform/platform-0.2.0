@@ -1,4 +1,4 @@
-import { JsonUtil, execa, pc, type t } from '../common/index.mjs';
+import { JsonUtil, execa, pc, type t } from '../common';
 
 /**
  * Execute unit-tests within the target module directory.

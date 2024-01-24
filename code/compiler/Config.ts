@@ -9,9 +9,9 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 
-import { displayStartupText } from './plugins/displayStartupText.mjs';
-import { R, Util, asArray, fs, pc, type t } from './builder/common/index.mjs';
-import { Paths } from './builder/index.mjs';
+import { displayStartupText } from './plugins/displayStartupText';
+import { R, Util, asArray, fs, pc, type t } from './builder/common';
+import { Paths } from './builder';
 
 export { fs };
 

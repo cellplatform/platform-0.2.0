@@ -1,8 +1,8 @@
-import { fs } from './fs.mjs';
-import { R } from './libs.mjs';
-import { VersionUtil } from './util.Version.mjs';
+import type * as t from '../t';
 
-import type * as t from '../types.mjs';
+import { fs } from './fs';
+import { R } from './libs';
+import { VersionUtil } from './util.Version';
 
 /**
  * [package.json] file specific operations.

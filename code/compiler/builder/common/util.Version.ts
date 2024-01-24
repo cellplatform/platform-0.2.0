@@ -1,4 +1,4 @@
-import { semver } from './libs.mjs';
+import { semver } from './libs';
 
 /**
  * Helpers for working with "semantic-version" values.

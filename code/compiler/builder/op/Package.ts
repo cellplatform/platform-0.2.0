@@ -1,6 +1,6 @@
-import { fs, R, Util, type t } from '../common/index.mjs';
-import { Paths } from '../Paths.mjs';
-import { Vite } from './Vite.mjs';
+import { fs, R, Util, type t } from '../common';
+import { Paths } from '../Paths';
+import { Vite } from './Vite';
 
 type StringMap = { [key: string]: string };
 type PkgMeta = {

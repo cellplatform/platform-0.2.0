@@ -1,5 +1,5 @@
-import { fs, type t } from '../common/index.mjs';
-import { Paths } from '../Paths.mjs';
+import { fs, type t } from '../common';
+import { Paths } from '../Paths';
 
 /**
  * Clean a module of transient build artifacts and temporary data.

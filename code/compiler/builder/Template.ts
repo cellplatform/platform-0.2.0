@@ -1,5 +1,5 @@
-import { fs, t } from './common/index.mjs';
-import { Paths } from './Paths.mjs';
+import { fs, t } from './common';
+import { Paths } from './Paths';
 
 type TemplateKind = 'config' | 'esm.json' | 'entry:src' | 'entry:html';
 

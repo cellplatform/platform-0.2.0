@@ -1,5 +1,5 @@
-import { execa, fs, pc, R, Util, type t } from '../common/index.mjs';
-import { Paths } from '../Paths.mjs';
+import { execa, fs, pc, R, Util, type t } from '../common';
+import { Paths } from '../Paths';
 
 /**
  * Helpers for preparing and transpiling typescript modules (build).

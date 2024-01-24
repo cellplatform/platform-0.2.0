@@ -1,10 +1,10 @@
-import { fs, LogTable, pc, Util, type t } from '../common/index.mjs';
-import { Dependencies } from '../op/Dependencies.mjs';
-import { Package } from '../op/Package.mjs';
-import { Typescript } from '../op/Typescript.mjs';
-import { Vite } from '../op/Vite.mjs';
-import { Paths } from '../Paths.mjs';
-import { Template } from '../Template.mjs';
+import { fs, LogTable, pc, Util, type t } from '../common';
+import { Dependencies } from '../op/Dependencies';
+import { Package } from '../op/Package';
+import { Typescript } from '../op/Typescript';
+import { Vite } from '../op/Vite';
+import { Paths } from '../Paths';
+import { Template } from '../Template';
 
 /**
  * Run a build that:

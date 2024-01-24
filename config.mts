@@ -1,1 +1,1 @@
-export { Config } from './code/compiler/Config.mjs';
+export { Config } from './code/compiler/Config';

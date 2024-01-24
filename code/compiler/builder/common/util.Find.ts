@@ -1,9 +1,9 @@
-import { Paths } from '../Paths.mjs';
-import { fs } from './fs.mjs';
-import { PackageJsonUtil } from './util.Json.mjs';
-import { TopologicalSort } from './util.TopologicalSort.mjs';
+import { Paths } from '../Paths';
+import { fs } from './fs';
+import { PackageJsonUtil } from './util.Json';
+import { TopologicalSort } from './util.TopologicalSort';
 
-import type * as t from '../types.mjs';
+import type * as t from '../t';
 
 /**
  * Find helpers for looking up directory paths and other

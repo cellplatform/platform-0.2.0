@@ -1,10 +1,10 @@
-import { fs } from './fs.mjs';
-import { FindUtil } from './util.Find.mjs';
-import { folderSize } from './util.FolderSize.mjs';
-import { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
-import { VersionUtil } from './util.Version.mjs';
+import type * as t from '../t';
 
-import type * as t from '../types.mjs';
+import { fs } from './fs';
+import { FindUtil } from './util.Find';
+import { folderSize } from './util.FolderSize';
+import { JsonUtil, PackageJsonUtil } from './util.Json';
+import { VersionUtil } from './util.Version';
 
 /**
  * Common helpers.
