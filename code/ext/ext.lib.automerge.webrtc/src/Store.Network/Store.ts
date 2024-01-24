@@ -1,8 +1,6 @@
-import { rx, type t } from './common';
-
-import { WebrtcNetworkAdapter } from './NetworkAdapter';
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
+import { WebrtcNetworkAdapter, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
