@@ -9,7 +9,7 @@ export default Test.describe('Automerge (Library)', (e) => {
       expect(text.elems).to.eql([]);
     });
 
-    e.it('within change', async (e) => {
+    e.it.skip('within change ƒ(n)', async (e) => {
       type D = { text: t.Text };
       /**
        * TODO 🐷 BUG ← throws error

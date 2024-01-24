@@ -12,7 +12,7 @@ export { Store } from './Store';
 export { WebStore } from './Store.Web';
 export { WebStoreIndex } from './Store.Web.Index';
 export { StoreIndexDb } from './Store.Web.IndexDb';
-export { Data, Is, toObject } from './common';
+export { Data, Is, Text, toObject } from './common';
 
 /**
  * Library: UI

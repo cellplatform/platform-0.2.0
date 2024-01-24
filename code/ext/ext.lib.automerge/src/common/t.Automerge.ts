@@ -1,4 +1,5 @@
-export type { Text } from '@automerge/automerge';
+export type { Counter, Text } from '@automerge/automerge';
+
 export type {
   DeleteDocumentPayload,
   DocHandleChangePayload,
