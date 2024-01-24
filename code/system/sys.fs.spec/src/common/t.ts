@@ -14,4 +14,4 @@ export type { FsDriverFactory } from 'sys.fs/src/types';
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';
