@@ -1,9 +1,8 @@
 /**
  * @external
  */
-export type { next as A } from '@automerge/automerge';
-export type { NetworkAdapter } from '@automerge/automerge-repo';
 export type { Observable } from 'rxjs';
+export type * from './t.Automerge';
 
 /**
  * @ext

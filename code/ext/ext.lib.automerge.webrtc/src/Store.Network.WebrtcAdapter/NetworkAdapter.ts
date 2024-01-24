@@ -1,4 +1,4 @@
-import { NetworkAdapter, type PeerId, type RepoMessage } from '@automerge/automerge-repo';
+import { NetworkAdapter } from '@automerge/automerge-repo';
 import { Time, rx, type t } from '../common';
 
 const kind: t.StoreNetworkKind = 'WebRTC';
@@ -30,35 +30,42 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     );
   }
 
-  connect(peerId: PeerId) {
+  connect(peerId: t.AutomergePeerId) {
     const senderId = (this.peerId = peerId);
     const conn = this.#conn;
 
-    const handleOpen = () => this.#transmit({ type: 'arrive', senderId });
+    const handleOpen = () => this.#transmit({ type: 'arrive', senderId, peerMetadata: {} });
     const handleClose = () => this.emit('close');
     const handleData = (e: any) => {
-      const message = e as t.WebrtcMessage;
-      switch (message.type) {
-        case 'arrive':
-          const targetId = message.senderId;
-          this.#transmit({ type: 'welcome', senderId, targetId });
-          this.#announceConnection(targetId);
-          break;
+      const msg = e as t.WebrtcMessage;
 
-        case 'welcome':
-          this.#announceConnection(message.senderId);
-          break;
-
-        default:
-          let payload = message;
-          if ('data' in message) {
-            const data = toUint8Array(message.data);
-            payload = { ...message, data };
-          }
-          this.emit('message', payload);
-          this.#alert('incoming', message);
-          break;
+      /**
+       * Arrive.
+       */
+      if (msg.type === 'arrive') {
+        const { peerMetadata } = msg as t.ArriveMessage;
+        const targetId = msg.senderId;
+        this.#transmit({ type: 'welcome', senderId, targetId, peerMetadata });
+        this.#announceConnection(targetId, peerMetadata);
+        return;
       }
+
+      /**
+       * Welcome.
+       */
+      if (msg.type === 'welcome') {
+        const { peerMetadata } = msg as t.WelcomeMessage;
+        this.#announceConnection(msg.senderId, peerMetadata);
+        return;
+      }
+
+      /**
+       * Default (data payload).
+       */
+      let payload = msg as t.AutomergeMessage;
+      if ('data' in msg) payload = { ...payload, data: toUint8Array(msg.data!) };
+      this.emit('message', payload);
+      this.#alert('incoming', msg);
     };
 
     conn.on('open', handleOpen);
@@ -83,7 +90,7 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     this.#disconnected$.next();
   }
 
-  send(message: RepoMessage) {
+  send(message: t.AutomergeRepoMessage) {
     if (!this.#conn) throw new Error('Connection not ready');
     if ('data' in message) {
       this.#transmit({ ...message, data: toUint8Array(message.data) });
@@ -108,9 +115,9 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
     this.emit('ready', { network: this });
   }
 
-  #announceConnection(peerId: PeerId) {
+  #announceConnection(peerId: t.AutomergePeerId, peerMetadata: t.PeerMetadata) {
     this.#setAsReady();
-    this.emit('peer-candidate', { peerId });
+    this.emit('peer-candidate', { peerId, peerMetadata });
   }
 }
 
