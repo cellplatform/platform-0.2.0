@@ -1,4 +1,4 @@
-import type { t } from '../../common.t';
+import type { t } from '../common';
 
 const isLocal = location.hostname === 'localhost';
 // const root = isLocal ? 'http://localhost:5052' : 'https://doc.db.team';

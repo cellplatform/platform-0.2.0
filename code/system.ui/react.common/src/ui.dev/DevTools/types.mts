@@ -1,4 +1,4 @@
-import type { t } from '../../common.t';
+import type { t } from '../../common';
 
 type O = Record<string, unknown>;
 type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
