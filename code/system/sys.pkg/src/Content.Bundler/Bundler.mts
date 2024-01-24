@@ -1,4 +1,4 @@
-import { Filesize, Path, t, TestFilesystem } from '../common';
+import { Filesize, Path, TestFilesystem, type t } from '../common';
 import { ContentLogger } from '../Content.Logger';
 import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';

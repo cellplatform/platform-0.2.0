@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type { t } from '../common';
 
 type UnixEpoch = number;
 
@@ -19,7 +19,7 @@ export type LogDeploymentEntry = LogDeploymentEntryVercel;
 export type LogDeploymentEntryVercel = {
   kind: 'vercel:deployment';
   status: number;
-  success?: t.VercelHttpDeployResponse['deployment'];
+  success?: t.VercelHttpDeployResponse;
   error?: string;
 };
 

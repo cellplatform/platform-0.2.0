@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type { t } from '../common';
 
 export type MarkdownPropsBase = { version: string };
 type B = MarkdownPropsBase;
