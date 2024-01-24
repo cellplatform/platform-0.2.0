@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type { t } from '../common';
 
 /**
  * Root index for text processing tools.

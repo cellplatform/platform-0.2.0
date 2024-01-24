@@ -1,6 +1,5 @@
-import { type t } from '../common.t';
-
 import type { is } from 'unist-util-is';
+import type { t } from '../common';
 
 export type Markdown = {
   processor: t.MarkdownProcessorFactory;

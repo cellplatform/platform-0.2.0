@@ -1,5 +1,5 @@
-import { t } from '../common.t';
 import search from 'approx-string-match';
+import { type t } from '../common';
 
 /**
  * Approximate string matching.

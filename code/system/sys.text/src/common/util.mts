@@ -1,4 +1,4 @@
-import type * as t from './types.mjs';
+import type * as t from './t';
 
 /**
  * Substring into portion of a string based on the given Unified.js AST postiion.

@@ -1,5 +1,5 @@
 import { diffChars } from 'diff';
-import type { t } from '../common.t';
+import { type t } from '../common';
 
 /**
  * Helpers for determining differences between text strings.
