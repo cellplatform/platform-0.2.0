@@ -13,4 +13,4 @@ export type { CssValue } from 'sys.ui.react.css/src/types';
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';

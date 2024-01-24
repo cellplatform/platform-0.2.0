@@ -93,7 +93,7 @@ export type {
   UseMouseDragHandler,
   UseMouseMovement,
   UseMouseProps,
-} from 'sys.ui.react.util/src/types.mjs';
+} from 'sys.ui.react.util/src/types';
 
 /**
  * @local
