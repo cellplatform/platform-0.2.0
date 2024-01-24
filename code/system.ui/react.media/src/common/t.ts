@@ -14,4 +14,4 @@ export type { DevCtxState, CssValue, CssRadiusInput } from 'sys.ui.react.common/
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';

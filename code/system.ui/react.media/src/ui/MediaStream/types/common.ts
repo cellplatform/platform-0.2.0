@@ -1,1 +1,1 @@
-export type { t } from '../../common.t';
+export type { t } from '../../common';
