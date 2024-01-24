@@ -7,7 +7,7 @@
     "dev": "vite",
     "test": "tsx ../../../script.ts/cmd.test.ts",
     "build": "tsx ../../../script.ts/cmd.build.ts",
-    "clean": "tsx ../../../script.ts/cmd.clean.mts",
+    "clean": "tsx ../../../script.ts/cmd.clean.ts",
     "tmp": "vitest"
   },
   "license": "MIT",
