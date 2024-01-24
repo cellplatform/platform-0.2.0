@@ -9,6 +9,7 @@ export { Pkg };
  */
 export { MonacoEditor } from './ui/ui.MonacoEditor';
 export { MonacoCrdt } from './ui.logic/MonacoCrdt__OLD';
+export { EditorCrdt } from './ui.logic/Editor.Crdt';
 
 /**
  * Dev

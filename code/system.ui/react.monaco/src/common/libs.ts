@@ -1,7 +1,7 @@
 /**
  * @external
  */
-import { uniq, equals, clamp } from 'ramda';
+import { clamp, equals, uniq } from 'ramda';
 export const R = { uniq, equals, clamp } as const;
 
 /**
@@ -12,5 +12,5 @@ export { Doc, Store, WebStore, toObject } from 'ext.lib.automerge';
 /**
  * @system
  */
-export { rx, Value } from 'sys.util';
-export { FC, Color, css, Card, Style } from 'sys.ui.react.common';
+export { Card, Color, FC, Style, css } from 'sys.ui.react.common';
+export { Time, Value, rx } from 'sys.util';
