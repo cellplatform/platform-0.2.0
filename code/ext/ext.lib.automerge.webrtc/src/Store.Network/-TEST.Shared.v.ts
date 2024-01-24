@@ -1,4 +1,4 @@
-import { Doc, Store, Time, describe, expect, it, type t, Is } from '../test';
+import { Doc, Is, Store, Time, describe, expect, it, type t } from '../test';
 import { Shared } from './Shared';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';
@@ -70,6 +70,18 @@ describe('Webrtc: Shared', () => {
       expect(doc.current.ns).to.eql({ foo: { count: 123 }, bar: { msg: 'hello' } });
 
       store.dispose();
+    });
+
+    it('retrieves shared instances of namespace lens', async () => {
+      const store = Store.init();
+      const doc = await Shared.getOrCreate(store);
+      const ns = Shared.namespace<N>(doc);
+
+      const lens1 = ns.lens('foo', {});
+      const lens2 = ns.lens('foo', {});
+      const lens3 = ns.lens('bar', {});
+      expect(lens1).to.equal(lens2); // NB: same instance retrieved.
+      expect(lens1).to.not.equal(lens3);
     });
   });
 

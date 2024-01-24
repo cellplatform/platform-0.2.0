@@ -32,9 +32,8 @@ describe('Doc.Lens', () => {
       expect(root.current).to.eql({});
 
       const lens = Doc.Lens.init<TRoot, TChild>(root, getDesendent);
-      expect(lens.root).to.equal(root);
       expect(lens.current).to.eql({ count: 0 });
-      expect(lens.type).to.eql(undefined);
+      expect(lens.typename).to.eql(undefined);
 
       const id = lens.instance;
       expect(id.startsWith(root.uri)).to.eql(true);
@@ -44,14 +43,14 @@ describe('Doc.Lens', () => {
     it('Doc.lens (← exposed as library entry)', async () => {
       const root = await setup();
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
-      expect(lens.root).to.equal(root);
+      expect(lens.current).to.eql({ count: 0 });
     });
 
-    it('{ type } option ← optional typename', async () => {
+    it('{ typename } option ← optional typename', async () => {
       const root = await setup();
-      const type = 'foo.bar';
-      const lens = Doc.lens<TRoot, TChild>(root, getDesendent, { type });
-      expect(lens.type).to.eql(type);
+      const typename = 'foo.bar';
+      const lens = Doc.lens<TRoot, TChild>(root, getDesendent, { typename });
+      expect(lens.typename).to.eql(typename);
     });
 
     it('toObject', async () => {
@@ -141,13 +140,12 @@ describe('Doc.Lens', () => {
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       const events = lens.events();
 
-      const fired: t.LensChanged<TRoot, TChild>[] = [];
+      const fired: t.LensChanged<TChild>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       lens.change((d) => (d.count = 123));
       expect(fired.length).to.eql(1);
-      expect(fired[0].doc.child?.count).to.eql(123);
-      expect(fired[0].lens.count).to.eql(123);
+      expect(fired[0].after.count).to.eql(123);
 
       events.dispose();
     });
@@ -157,7 +155,7 @@ describe('Doc.Lens', () => {
       const lens = Doc.lens<TRoot, TChild>(root, getDesendent);
       const events = lens.events();
 
-      const fired: t.LensChanged<TRoot, TChild>[] = [];
+      const fired: t.LensChanged<TChild>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       root.change((d) => (d.msg = 'hello root'));
@@ -169,8 +167,9 @@ describe('Doc.Lens', () => {
       });
 
       expect(fired.length).to.eql(1);
-      expect(fired[0].doc.child?.count).to.eql(1234);
-      expect(fired[0].lens.count).to.eql(1234);
+      // expect(fired[0].doc.child?.count).to.eql(1234);
+      expect(fired[0].before.count).to.eql(0);
+      expect(fired[0].after.count).to.eql(1234);
       expect(root.current.child?.count).to.eql(1234);
 
       lens.change((d) => (d.count = 888));
@@ -186,8 +185,8 @@ describe('Doc.Lens', () => {
       const events1 = lens1.events();
       const events2 = lens2.events();
 
-      const fired1: t.LensChanged<TRoot, TChild>[] = [];
-      const fired2: t.LensChanged<TRoot, TChild>[] = [];
+      const fired1: t.LensChanged<TChild>[] = [];
+      const fired2: t.LensChanged<TChild>[] = [];
       events1.changed$.subscribe((e) => fired1.push(e));
       events2.changed$.subscribe((e) => fired2.push(e));
 
@@ -223,8 +222,8 @@ describe('Doc.Lens', () => {
       const events1 = lens1.events();
       const events2 = lens2.events();
 
-      const fired1: t.LensChanged<T, T['A']>[] = [];
-      const fired2: t.LensChanged<T, T['B']>[] = [];
+      const fired1: t.LensChanged<T['A']>[] = [];
+      const fired2: t.LensChanged<T['B']>[] = [];
       events1.changed$.subscribe((e) => fired1.push(e));
       events2.changed$.subscribe((e) => fired2.push(e));
 
@@ -259,7 +258,7 @@ describe('Doc.Lens', () => {
       const events1 = lens1.events();
       const events2 = lens2.events();
 
-      type C = t.LensChanged<TRoot, TChild>;
+      type C = t.LensChanged<TChild>;
       const fired1: C[] = [];
       const fired2: C[] = [];
       events1.changed$.subscribe((e) => fired1.push(e));
@@ -287,7 +286,7 @@ describe('Doc.Lens', () => {
       expect(lens.disposed).to.eql(false);
       expect(events.disposed).to.eql(false);
 
-      const fired: t.LensDeleted<TRoot, TChild>[] = [];
+      const fired: t.LensDeleted<TChild>[] = [];
       events.deleted$.subscribe((e) => fired.push(e));
 
       await store.doc.delete(root2.uri);
@@ -295,8 +294,8 @@ describe('Doc.Lens', () => {
 
       await store.doc.delete(root1.uri);
       expect(fired.length).to.eql(1);
-      expect(fired[0].lens.count).to.eql(0);
-      expect(fired[0].uri).to.eql(root1.uri);
+      expect(fired[0].before.count).to.eql(0);
+      expect(fired[0].after).to.eql(undefined);
 
       // NB: deletion of the document auto-disposes of the lens and the events.
       expect(lens.disposed).to.eql(true);

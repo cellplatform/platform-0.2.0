@@ -14,18 +14,18 @@ export const Namespace = {
     root: t.DocRef<R>,
     getMap?: t.NamespaceMapGetLens<R>,
     options?: { dispose$: t.UntilObservable },
-  ): t.NamespaceManager<R, N> {
+  ): t.NamespaceManager<N> {
     const rootEvents = root.events(options?.dispose$);
     const { dispose, dispose$ } = rootEvents;
     const container = wrangle.containerLens<R, N>(root, getMap, dispose$);
 
-    const cache = new Map<N, t.Lens<R, {}>>();
+    const cache = new Map<N, t.Lens<{}>>();
     dispose$.subscribe(() => cache.clear());
 
     /**
      * API
      */
-    const api: t.NamespaceManager<R, N> = {
+    const api: t.NamespaceManager<N> = {
       kind: 'crdt:namespace',
 
       get container() {
@@ -40,15 +40,15 @@ export const Namespace = {
       list<L extends {}>() {
         return Array.from(cache).map((item) => {
           const namespace = item[0] as N;
-          const lens = item[1] as t.Lens<R, L>;
+          const lens = item[1] as t.Lens<L>;
           return { namespace, lens };
         });
       },
 
-      lens<L extends {}>(namespace: N, initial: L, options: { type?: string } = {}) {
-        if (cache.has(namespace)) return cache.get(namespace) as t.Lens<R, L>;
+      lens<L extends {}>(namespace: N, initial: L, options: { typename?: string } = {}) {
+        if (cache.has(namespace)) return cache.get(namespace) as t.Lens<L>;
 
-        const { type } = options;
+        const { typename } = options;
         const lens = Lens<R, L>(
           root,
           (draft) => {
@@ -56,7 +56,7 @@ export const Namespace = {
             const subject = container[namespace] || (container[namespace] = initial ?? {});
             return subject as L;
           },
-          { dispose$, type },
+          { dispose$, typename },
         );
 
         cache.set(namespace, lens);
@@ -66,6 +66,10 @@ export const Namespace = {
 
       events(dispose$?: t.UntilObservable) {
         return container.events(dispose$);
+      },
+
+      typed<T extends string>() {
+        return api as unknown as t.NamespaceManager<T>;
       },
 
       /**

@@ -8,7 +8,7 @@ import { rx, slug, toObject, type t } from './common';
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
   get: t.LensGetDescendent<R, L>,
-  options: { dispose$?: t.UntilObservable; type?: string } = {},
+  options: { dispose$?: t.UntilObservable; typename?: string } = {},
 ) {
   Registry.add(root);
   let _count = 0;
@@ -22,19 +22,23 @@ export function init<R extends {}, L extends {}>(
     Registry.remove(root);
   });
 
-  const subject$ = rx.subject<t.LensEvent<R, L>>();
+  const subject$ = rx.subject<t.LensEvent<L>>();
 
   const Fire = {
     changed(e: t.DocChanged<R>) {
+      const before = get(e.patchInfo.before);
+      const after = get(e.patchInfo.after);
       subject$.next({
         type: 'crdt:lens:changed',
-        payload: { ...e, lens: api.current },
+        payload: { before, after },
       });
     },
     deleted(e: t.DocDeleted<R>) {
+      const before = get(e.doc);
+      const after = undefined;
       subject$.next({
         type: 'crdt:lens:deleted',
-        payload: { ...e, lens: api.current },
+        payload: { before, after },
       });
     },
   } as const;
@@ -59,10 +63,9 @@ export function init<R extends {}, L extends {}>(
   /**
    * API
    */
-  const api: t.Lens<R, L> = {
+  const api: t.Lens<L> = {
     instance: `${root.uri}:lens.${slug()}`,
-    type: options.type,
-    root,
+    typename: options.typename,
 
     /**
      * Current value of the descendent.

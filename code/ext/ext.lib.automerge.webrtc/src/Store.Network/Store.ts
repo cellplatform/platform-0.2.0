@@ -1,8 +1,6 @@
-import { rx, type t } from './common';
-
-import { WebrtcNetworkAdapter } from './NetworkAdapter';
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
+import { WebrtcNetworkAdapter, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
@@ -121,7 +119,7 @@ export const WebrtcStore = {
      */
     events.message$.subscribe((e) => {
       if (e.message.type === 'sync') {
-        const bytes = e.message.data.byteLength;
+        const bytes = e.message.data?.byteLength ?? 0;
         if (e.direction === 'incoming') total.bytes.in += bytes;
         if (e.direction === 'outgoing') total.bytes.out += bytes;
       }

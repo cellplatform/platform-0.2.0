@@ -50,18 +50,25 @@ const wrangle = {
       delete docs[uri];
     });
 
+    const styles = {
+      base: css({ flex: 1, display: 'grid' }),
+      inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
+    };
+
     return (
-      <div {...css({ flex: 1 })}>
-        <ObjectView
-          name={'Shared'}
-          data={{ ...obj, sys: { ...obj.sys, docs } }}
-          fontSize={11}
-          style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
-          expand={{
-            level: wrangle.expandLevel(data),
-            paths: wrangle.expandPaths(data),
-          }}
-        />
+      <div {...styles.base}>
+        <div {...styles.inner}>
+          <ObjectView
+            name={'Shared'}
+            data={{ ...obj, sys: { ...obj.sys, docs } }}
+            fontSize={11}
+            style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
+            expand={{
+              level: wrangle.expandLevel(data),
+              paths: wrangle.expandPaths(data),
+            }}
+          />
+        </div>
       </div>
     );
   },

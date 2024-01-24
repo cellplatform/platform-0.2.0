@@ -27,7 +27,7 @@ export const List = {
         getItem: array.getItem,
         getRenderers: () => renderers,
       },
-      { type: DEFAULTS.type.list },
+      { typename: DEFAULTS.typename.list },
     );
 
     const events = list.events(dispose$);

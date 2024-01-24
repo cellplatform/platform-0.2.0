@@ -15,6 +15,11 @@ export type * from './ui/ui.RepoList.Virtual/t';
 export type * from './ui/ui.RepoList/t';
 
 /**
+ * Automerge.
+ */
+export type { Text as AutomergeText } from './common/t.Automerge';
+
+/**
  * Automerge JS object extensions.
  */
 export interface AutomergeArray<T> extends Array<T> {

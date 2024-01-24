@@ -7,7 +7,7 @@ export const Model = LabelItem.Stateful.Model;
  * Constants
  */
 export const DEFAULTS = {
-  type: {
+  typename: {
     list: `${Pkg.name}.Connector.List`,
     self: `${Pkg.name}.Connector.Self`,
     remote: `${Pkg.name}.Connector.Remote`,

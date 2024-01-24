@@ -18,11 +18,11 @@ describe('LabelItem.Model', () => {
       });
 
       it('init: <type>', () => {
-        const type = 'foo.bar';
+        const typename = 'foo.bar';
         const state1 = Model.Item.state({});
-        const state2 = Model.Item.state({}, { type });
-        expect(state1.type).to.eql(undefined);
-        expect(state2.type).to.eql(type);
+        const state2 = Model.Item.state({}, { typename });
+        expect(state1.typename).to.eql(undefined);
+        expect(state2.typename).to.eql(typename);
       });
     });
 
@@ -160,11 +160,11 @@ describe('LabelItem.Model', () => {
 
       it('init: <type>', () => {
         const initial = { total: 0 };
-        const type = 'foo.bar';
+        const typename = 'foo.bar';
         const state1 = Model.List.state(initial);
-        const state2 = Model.List.state(initial, { type });
-        expect(state1.type).to.eql(undefined);
-        expect(state2.type).to.eql(type);
+        const state2 = Model.List.state(initial, { typename });
+        expect(state1.typename).to.eql(undefined);
+        expect(state2.typename).to.eql(typename);
       });
     });
 
@@ -715,20 +715,20 @@ describe('LabelItem.Model', () => {
     });
 
     it('Is.type', () => {
-      const type = 'foo.bar';
+      const typename = 'foo.bar';
 
       const item1 = Model.Item.state();
-      const item2 = Model.Item.state({}, { type });
+      const item2 = Model.Item.state({}, { typename });
       const list1 = Model.List.state({ total: 0 });
-      const list2 = Model.List.state({ total: 0 }, { type });
+      const list2 = Model.List.state({ total: 0 }, { typename });
 
-      expect(Model.Is.type(item1, type)).to.eql(false);
-      expect(Model.Is.type(item2, type)).to.eql(true);
-      expect(Model.Is.type(list1, type)).to.eql(false);
-      expect(Model.Is.type(list2, type)).to.eql(true);
+      expect(Model.Is.type(item1, typename)).to.eql(false);
+      expect(Model.Is.type(item2, typename)).to.eql(true);
+      expect(Model.Is.type(list1, typename)).to.eql(false);
+      expect(Model.Is.type(list2, typename)).to.eql(true);
 
       [null, undefined, '', 123, false, [], {}].forEach((value) => {
-        expect(Model.Is.type(value, type)).to.eql(false);
+        expect(Model.Is.type(value, typename)).to.eql(false);
       });
     });
   });

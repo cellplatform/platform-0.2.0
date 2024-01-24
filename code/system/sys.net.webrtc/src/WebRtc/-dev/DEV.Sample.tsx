@@ -7,7 +7,7 @@ import { DevCrdtSync } from './DEV.CrdtSync';
 
 import type { Doc } from './DEV.CrdtSync';
 
-import type { MonacoCodeEditor } from 'sys.ui.react.monaco/src/types.mjs';
+import type { MonacoCodeEditor } from 'sys.ui.react.monaco/src/types';
 
 export type DevSampleProps = {
   self: t.Peer;

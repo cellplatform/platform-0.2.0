@@ -10,9 +10,9 @@ export { Pkg };
 export { Doc } from './Doc';
 export { Store } from './Store';
 export { WebStore } from './Store.Web';
-export { Data, Is, toObject } from './common';
-export { StoreIndexDb } from './Store.Web.IndexDb';
 export { WebStoreIndex } from './Store.Web.Index';
+export { StoreIndexDb } from './Store.Web.IndexDb';
+export { Data, Is, Text, toObject } from './common';
 
 /**
  * Library: UI

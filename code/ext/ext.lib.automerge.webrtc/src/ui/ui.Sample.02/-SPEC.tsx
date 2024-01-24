@@ -1,6 +1,7 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx, toObject } from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { Loader } from './-SPEC.Loader';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
@@ -8,9 +9,7 @@ import { Sample } from './ui.Sample';
 type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
 
-type SampleNamespace = 'tmp';
-type SampleNamespaceTmp = 'CodeEditor' | 'DiagramEditor';
-type SampleTmp = { foo?: SampleNamespaceTmp };
+type SampleNamespace = 'foo.sample';
 
 /**
  * Spec
@@ -21,18 +20,28 @@ export default Dev.describe(name, async (e) => {
   let right: t.SampleEdge;
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
-  const loadCodeEditor = async (state: t.DevCtxState<T>) => {
-    console.log('💦 load module: sys.ui.react.monaco');
-    const { MonacoEditor } = await import('sys.ui.react.monaco');
-    await state.change((d) => (d.modalElement = <MonacoEditor style={{ opacity: 0.9 }} />));
-  };
+  let ns: t.NamespaceManager<SampleNamespace> | undefined;
+  let lens: t.Lens<t.SampleSharedOverlay> | undefined;
 
-  const loadDiagramEditor = async (state: t.DevCtxState<T>) => {
-    console.log('💦 load module: ext.lib.tldraw');
-    const { Canvas } = await import('ext.lib.tldraw');
-    // @ts-ignore
-    await import('@tldraw/tldraw/tldraw.css');
-    await state.change((d) => (d.modalElement = <Canvas style={{ opacity: 0.9 }} />));
+  /**
+   * A factory function
+   */
+  const factory: t.LoadFactory = async (e) => {
+    const { typename, docuri, store } = e;
+
+    if (typename === 'CodeEditor') {
+      const { CodeEditorLoader } = await import('./Module.CodeEditor'); // NB: dynamic code-splitting here.
+      return <CodeEditorLoader store={store} docuri={docuri} />;
+    }
+
+    if (typename === 'DiagramEditor') {
+      // @ts-ignore
+      await import('@tldraw/tldraw/tldraw.css');
+      const { Canvas } = await import('ext.lib.tldraw');
+      return <Canvas style={{ opacity: 0.9 }} />;
+    }
+
+    return;
   };
 
   e.it('ui:init', async (e) => {
@@ -43,8 +52,8 @@ export default Dev.describe(name, async (e) => {
     right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
     const resetReloadClose = () => state.change((d) => (d.reload = false));
+    await state.change((d) => {});
 
     const monitor = (edge: t.SampleEdge) => {
       const redraw = () => dev.redraw('debug');
@@ -56,29 +65,24 @@ export default Dev.describe(name, async (e) => {
       const events = { network: edge.network.events() } as const;
       events.network.$.pipe(debounce).subscribe(redraw);
 
-      events.network.$.pipe(debounce).subscribe((e) => {
-        // console.log('network', e);
-      });
-
-      events.network.added$.pipe().subscribe((e) => {
-        console.log('network.added$', e);
-      });
-
-      edge.network.shared().then((shared) => {
-        shared.events().changed$.subscribe(async (e) => {
-          const ns = shared.namespace<SampleNamespace>();
-          const tmp = ns.lens<SampleTmp>('tmp', {});
-          if (tmp.current.foo === 'CodeEditor') return loadCodeEditor(state);
-          if (tmp.current.foo === 'DiagramEditor') return loadDiagramEditor(state);
-          await state.change((d) => (d.modalElement = undefined));
-        });
-      });
+      events.network.$.pipe(debounce).subscribe((e) => {});
+      events.network.added$.pipe().subscribe((e) => console.log('network.added$', e));
 
       repo$.active$.pipe(debounce).subscribe(redraw);
       repo$.active$.subscribe(({ item }) => (selected = { edge, item }));
     };
     monitor(left);
     monitor(right);
+
+    /**
+     * When the shared namespace is ready (i.e. the network is connected)
+     * the initialize the sample namespace.
+     */
+    left.network.shared().then((shared) => {
+      ns = shared.namespace.typed<SampleNamespace>();
+      lens = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
+      dev.redraw();
+    });
 
     ctx.debug.width(300);
     ctx.subject
@@ -88,7 +92,9 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
-          return <Sample left={left} right={right} modalElement={e.state.modalElement} />;
+          const store = left.network.store;
+          const elOverlay = lens && <Loader store={store} lens={lens} factory={factory} />;
+          return <Sample left={left} right={right} overlay={elOverlay} />;
         }
       });
   });
@@ -175,7 +181,7 @@ export default Dev.describe(name, async (e) => {
         });
         events.right.ephemeral.in$.subscribe((e) => {
           console.log('right|in$', e);
-          loadCodeEditor(state);
+          // loadCodeEditor(state);
         });
 
         const foo$ = events.right.ephemeral.type$<TFoo>(
@@ -184,9 +190,27 @@ export default Dev.describe(name, async (e) => {
         foo$.subscribe((e) => console.log('foo$', e));
       };
 
-      dev.button('tmp-1: listen', (e) => listenToEphemeral());
+      const loaderButton = (label: string, typename: string) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .enabled((e) => !!lens && !!selected?.item.uri)
+            .onClick((e) => {
+              const docuri = selected?.item.uri;
+              if (!(lens && docuri)) return;
+              lens.change((d) => (d.module = { typename, docuri }));
+            });
+        });
+      };
 
-      dev.button('tmp-2: broadcast', async (e) => {
+      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor');
+      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor');
+      dev.button('unload', (e) => lens?.change((d) => delete d.module));
+
+      dev.hr(-1, 5);
+
+      dev.button('console: tmp-1: listen', (e) => listenToEphemeral());
+      dev.button('console: tmp-2: broadcast', async (e) => {
         const shared = await getShared();
         if (!shared.left || !shared.right) return;
 
@@ -200,28 +224,6 @@ export default Dev.describe(name, async (e) => {
         send('hello');
         send(['foo']);
         send(123);
-      });
-
-      dev.hr(-1, 5);
-
-      const addTmpButton = (title: string, fn: (doc: t.Lens<t.NamespaceMap, SampleTmp>) => any) => {
-        dev.button(title, async (e) => {
-          const left = (await getShared()).left;
-          if (left) {
-            const tmp = left.namespace<SampleNamespace>().lens<SampleTmp>('tmp', {});
-            fn(tmp);
-          }
-        });
-      };
-
-      addTmpButton('tmp-3: loader → <CodeEditor>', (doc) => {
-        doc.change((d) => (d.foo = 'CodeEditor'));
-      });
-      addTmpButton('tmp-4: loader → <DiagramEditor>', (doc) => {
-        doc.change((d) => (d.foo = 'DiagramEditor'));
-      });
-      addTmpButton('tmp-5: loader → remove', (doc) => {
-        doc.change((d) => delete d.foo);
       });
 
       dev.hr(5, 20);

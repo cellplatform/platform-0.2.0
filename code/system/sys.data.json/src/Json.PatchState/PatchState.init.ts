@@ -4,7 +4,7 @@ import { defaultEvents } from './PatchState.events';
 type O = Record<string, unknown>;
 type Args<T extends O, E> = {
   initial: T;
-  type?: string;
+  typename?: string;
   events?: t.PatchStateEventFactory<T, E>;
   onChange?: t.PatchChangeHandler<T>;
 };
@@ -51,9 +51,9 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
     },
   };
 
-  if (args.type) {
+  if (args.typename) {
     // @ts-ignore
-    state.type = args.type;
+    state.typename = args.typename;
   }
 
   return state;

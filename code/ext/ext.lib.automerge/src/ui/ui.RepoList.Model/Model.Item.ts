@@ -26,8 +26,8 @@ export const ItemModel = {
    */
   state(ctx: t.GetRepoListModel, kind: K, options: { dispose$?: t.UntilObservable } = {}) {
     const initial = ItemModel.initial(kind);
-    const type = DEFAULTS.typename.Item;
-    const state = Model.Item.state<t.RepoListAction, D>(initial, { type });
+    const typename = DEFAULTS.typename.Item;
+    const state = Model.Item.state<t.RepoListAction, D>(initial, { typename });
     const events = state.events(options.dispose$);
     const dispatch = Model.Item.commands(state);
     const item: t.RepoItemModel = { state, events, dispatch };

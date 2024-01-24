@@ -17,9 +17,9 @@ export const Is = {
   /**
    * Determine if the given object is a [PatchState] of the specified type.
    */
-  type(input: any, type: string): input is t.PatchState<any> {
+  type(input: any, typename: string): input is t.PatchState<any> {
     if (!Is.state(input)) return false;
-    return input.type === type;
+    return input.typename === typename;
   },
 
   /**

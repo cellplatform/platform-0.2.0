@@ -11,7 +11,7 @@ export default Test.describe('RepoList.Model', (e) => {
       const model = await Model.init(store);
       expect(model.store).to.equal(store);
       expect(model.index.kind === 'crdt.store.index').to.eql(true);
-      expect(model.list.state.type).to.eql(DEFAULTS.typename.List);
+      expect(model.list.state.typename).to.eql(DEFAULTS.typename.List);
     });
 
     e.it('is', async (e) => {
@@ -57,14 +57,14 @@ export default Test.describe('RepoList.Model', (e) => {
     e.it('init: Doc', async (e) => {
       const model = await Model.init(store);
       const item = Model.Item.state(() => model, 'Doc');
-      expect(item.type).to.eql(DEFAULTS.typename.Item);
+      expect(item.typename).to.eql(DEFAULTS.typename.Item);
       expect(item.current.editable).to.eql(true);
     });
 
     e.it('init: Add', async (e) => {
       const model = await Model.init(store);
       const item = Model.Item.state(() => model, 'Add');
-      expect(item.type).to.eql(DEFAULTS.typename.Item);
+      expect(item.typename).to.eql(DEFAULTS.typename.Item);
       expect(item.current.editable).to.eql(false);
     });
   });

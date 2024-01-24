@@ -23,14 +23,14 @@ export const List = {
    */
   state<D extends O = O>(
     initial?: t.LabelList<D>,
-    options: { type?: string; dispose$?: t.UntilObservable } = {},
+    options: { typename?: string; dispose$?: t.UntilObservable } = {},
   ): t.LabelListState {
     type T = t.LabelList<D>;
     type E = t.LabelListEvents<D>;
-    const { type } = options;
+    const { typename } = options;
     return PatchState.init<T, E>({
       initial: initial ?? (DEFAULTS.data.list as t.LabelList<D>),
-      type,
+      typename,
       events($, dispose$) {
         return events<D>($, [dispose$, options.dispose$]);
       },

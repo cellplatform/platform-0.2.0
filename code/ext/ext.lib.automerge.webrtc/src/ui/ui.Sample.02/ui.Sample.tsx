@@ -7,7 +7,7 @@ import { SampleMiddle } from './ui.Sample.Middle';
 export type SampleProps = {
   left: t.SampleEdge;
   right: t.SampleEdge;
-  modalElement?: JSX.Element;
+  overlay?: JSX.Element;
   style?: t.CssValue;
 };
 
@@ -25,7 +25,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
   const styles = {
     base: css({ position: 'relative' }),
     body: css({ Absolute: 0, display: 'grid', gridTemplateColumns: '250px 1fr 250px' }),
-    modal: css({ Absolute: 0, display: 'grid' }),
+    overlay: css({ Absolute: 0, display: 'grid', pointerEvents: 'none' }),
   };
 
   const elBody = (
@@ -36,12 +36,12 @@ export const Sample: React.FC<SampleProps> = (props) => {
     </div>
   );
 
-  const elModal = props.modalElement && <div {...styles.modal}>{props.modalElement}</div>;
+  const elOverlay = props.overlay && <div {...styles.overlay}>{props.overlay}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
       {elBody}
-      {elModal}
+      {elOverlay}
     </div>
   );
 };

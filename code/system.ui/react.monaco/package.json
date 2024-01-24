@@ -12,8 +12,11 @@
     "tmp": "tsx   ./script.ts/tmp.mts"
   },
   "dependencies": {
+    "@automerge/automerge": "2.1.10",
+    "@automerge/automerge-repo": "1.1.0",
     "@monaco-editor/react": "4.6.0",
     "diff": "5.1.0",
+    "ext.lib.automerge": "0.0.0",
     "monaco-editor": "0.45.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -26,6 +29,7 @@
   "devDependencies": {
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
+    "sys.data.indexeddb": "0.0.0",
     "sys.ui.react.dev": "0.0.0"
   },
   "license": "MIT",

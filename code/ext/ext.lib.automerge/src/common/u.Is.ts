@@ -90,9 +90,7 @@ export const Is = {
     return input instanceof BroadcastChannelNetworkAdapter;
   },
 
-  namespace<R extends {}, N extends string = string>(
-    input: any,
-  ): input is t.NamespaceManager<R, N> {
+  namespace<N extends string = string>(input: any): input is t.NamespaceManager<N> {
     if (!isObject(input)) return false;
     const obj = input as t.NamespaceManager<any>;
     return (

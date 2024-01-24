@@ -1,2 +1,2 @@
-export * from './EditorCarets';
-export * from './MonacoCrdt';
+export * from './Editor.Carets';
+export * from './MonacoCrdt__OLD';
