@@ -1,6 +1,8 @@
 /**
  * @external
  */
+
+// @ts-ignore
 import * as glamor from 'glamor-jss';
 export { glamor };
 
