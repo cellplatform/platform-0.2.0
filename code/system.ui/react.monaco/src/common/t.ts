@@ -15,9 +15,9 @@ export type {
   TestHandlerArgs,
   TestSuiteModel,
   TestSuiteRunResponse,
-} from 'sys.test.spec/src/types.mjs';
+} from 'sys.test.spec/src/types';
 export type { Disposable, EventBus, Msecs, UntilObservable } from 'sys.types/src/types';
-export type { CssValue, DevCtx } from 'sys.ui.react.common/src/types.mjs';
+export type { CssValue, DevCtx } from 'sys.ui.react.common/src/types';
 
 /**
  * @local

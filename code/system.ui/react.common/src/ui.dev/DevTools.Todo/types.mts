@@ -1,4 +1,4 @@
-import type { t } from '../../common.t';
+import type { t } from '../../common';
 
 type O = Record<string, unknown>;
 type StyleArg<S extends O> = t.DevTodoStyle | t.DevValueHandler<t.DevTodoStyle, S> | null;

@@ -1,6 +1,6 @@
-import { Global } from '../style.Css/global.mjs';
-import { GlobalStyles } from './css.global.mjs';
-import { NormalizeStyles } from './css.normalize.mjs';
+import { Global } from '../style.Css/global';
+import { GlobalStyles } from './css.global';
+import { NormalizeStyles } from './css.normalize';
 
 let isReset = false;
 

@@ -19,7 +19,7 @@ export type {
   ManifestFile,
   DirManifest,
   DirManifestInfo,
-} from 'sys.fs/src/types.mjs';
+} from 'sys.fs/src/types';
 
 /**
  * @local

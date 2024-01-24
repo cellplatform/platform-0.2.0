@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "tsx ../../../script.ts/cmd.test.mts",
-    "build": "tsx ../../../script.ts/cmd.build.mts",
-    "clean": "tsx ../../../script.ts/cmd.clean.mts",
+    "test": "tsx ../../../script.ts/cmd.test.ts",
+    "build": "tsx ../../../script.ts/cmd.build.ts",
+    "clean": "tsx ../../../script.ts/cmd.clean.ts",
     "tmp": "tsx   ./script.ts/tmp.mts"
   },
   "dependencies": {

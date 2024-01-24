@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { CssValue } from 'sys.ui.react.common/src/types.mjs';
+export type { CssValue } from 'sys.ui.react.common/src/types';
 
 /**
  * @local

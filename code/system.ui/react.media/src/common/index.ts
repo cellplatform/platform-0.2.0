@@ -1,8 +1,7 @@
-import type * as t from './types.mjs';
+export type * as t from './t';
 
-export type { t };
 export * from '../index.pkg.mjs';
-export * from './libs.mjs';
+export * from './libs';
 
 export const COLORS = {
   WHITE: '#fff',

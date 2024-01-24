@@ -1,2 +1,1 @@
-import * as Color from './Color.mjs';
-export { Color };
+export * as Color from './Color';

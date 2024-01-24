@@ -8,7 +8,7 @@ export type {
   PropListItem,
   PropListProps,
   DevCtxState,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

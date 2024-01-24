@@ -21,8 +21,8 @@ export type {
   PatchStateEventFactory,
   PatchStateEvents,
 } from 'sys.data.json/src/types';
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
-export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
+export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { TimeDelayPromise } from 'sys.util/src/types';
 
 /**
  * @local

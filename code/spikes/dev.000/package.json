@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.6.26",
+  "version": "0.6.27",
   "type": "module",
   "sideEffects": false,
   "cell": {
@@ -9,9 +9,9 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",
-    "test": "tsx ../../../script.ts/cmd.test.mts",
-    "build": "tsx ../../../script.ts/cmd.build.mts",
-    "clean": "tsx ../../../script.ts/cmd.clean.mts",
+    "test": "tsx ../../../script.ts/cmd.test.ts",
+    "build": "tsx ../../../script.ts/cmd.build.ts",
+    "clean": "tsx ../../../script.ts/cmd.clean.ts",
     "bundle": "tsx ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",

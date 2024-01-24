@@ -15,15 +15,15 @@ export type {
 } from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types';
-export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types.mjs';
+export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types';
 export type {
   SpecImport,
   SpecImports,
   TestSuiteModel,
   TestSuiteRunResponse,
-} from 'sys.test.spec/src/types.mjs';
-export type { TextCharDiff } from 'sys.text/src/types.mjs';
-export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.test.spec/src/types';
+export type { TextCharDiff } from 'sys.text/src/types';
+export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types';
 
 /**
  * @system → ui
@@ -35,7 +35,7 @@ export type {
   PropListProps,
   TextInputRef,
   PropListFieldSelectorClickHandler,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

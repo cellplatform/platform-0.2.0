@@ -1,4 +1,4 @@
-import { ToMimetype } from './types.mjs';
+import { type t } from '../common';
 
 export const TYPES = {
   BINARY: 'application/octet-stream',
@@ -11,7 +11,7 @@ export const TYPES = {
  *    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
  *
  */
-export const toMimetype: ToMimetype = (input, defaultType = '') => {
+export const toMimetype: t.ToMimetype = (input, defaultType = '') => {
   input = (input || '').trim();
 
   if (input.endsWith('.js')) return 'application/javascript';

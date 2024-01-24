@@ -1,9 +1,10 @@
-export type { t } from '../common.t';
 export * from '../index.pkg.mjs';
 
-export * from './const.mjs';
-export * from './libs.mjs';
-export * from './Margin.mjs';
-export * from './Is.mjs';
-export * from './Id.mjs';
-export * from './Wrangle.mjs';
+export * from './Id';
+export * from './Is';
+export * from './Margin';
+export * from './Wrangle';
+export * from './const';
+export * from './libs';
+
+export type * as t from './t';

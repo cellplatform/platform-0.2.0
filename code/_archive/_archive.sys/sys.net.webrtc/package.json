@@ -1,0 +1,46 @@
+{
+  "name": "sys.net.webrtc",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist/web && serve",
+    "test": "tsx ../../../script.ts/cmd.test.ts",
+    "build": "tsx ../../../script.ts/cmd.build.ts",
+    "clean": "tsx ../../../script.ts/cmd.clean.ts",
+    "tmp": "tsx   ./script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "peerjs": "1.5.2",
+    "sys.data.crdt": "0.0.0",
+    "sys.fs": "0.0.0",
+    "sys.text": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "yaml": "2.3.4",
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0",
+    "sys.ui.dom": "0.0.0",
+    "sys.ui.react.common": "0.0.0",
+    "sys.ui.react.monaco": "0.0.0",
+    "sys.ui.react.media.image": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Config } from '../../../config.mjs';
+import { Config } from '../../../Config';
 
 export const tsconfig = Config.ts((e) => {
   e.env('web:react');
