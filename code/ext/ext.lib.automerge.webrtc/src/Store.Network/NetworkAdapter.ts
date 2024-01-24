@@ -51,7 +51,10 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
 
         default:
           let payload = message;
-          if ('data' in message) payload = { ...message, data: toUint8Array(message.data) };
+          if ('data' in message) {
+            const data = toUint8Array(message.data);
+            payload = { ...message, data };
+          }
           this.emit('message', payload);
           this.#alert('incoming', message);
           break;
@@ -114,6 +117,6 @@ export class WebrtcNetworkAdapter extends NetworkAdapter {
 /**
  * Helpers
  */
-function toUint8Array(input: ArrayBufferLike): Uint8Array {
+function toUint8Array(input: Uint8Array): Uint8Array {
   return input instanceof Uint8Array ? input : new Uint8Array(input);
 }
