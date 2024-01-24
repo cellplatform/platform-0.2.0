@@ -258,8 +258,6 @@ describe('Namespace (Lens)', () => {
       expect(list[1].namespace).to.eql('bar');
       expect(list[0].lens).to.eql(foo);
       expect(list[1].lens).to.eql(bar);
-
-      console.log('list', list);
     });
 
     it('new list every call', async () => {
