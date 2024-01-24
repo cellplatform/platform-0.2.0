@@ -15,7 +15,6 @@ export type {
   Store,
   WebStore,
   WebStoreIndex,
-  Text,
 } from 'ext.lib.automerge/src/types';
 
 /**

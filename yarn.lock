@@ -27,12 +27,28 @@
   dependencies:
     "@automerge/automerge-repo" "^1.0.19"
 
+"@automerge/automerge-repo-network-broadcastchannel@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-broadcastchannel/-/automerge-repo-network-broadcastchannel-1.1.0.tgz#1330e593b7f5281ab8e7e79de5d38ca82e33ee3d"
+  integrity sha512-eYd8DnJI8UIcc8lXlRkKueSQ7njeHVzE/lviu5vno+oVIR920K4KZ3QHroO4W1X1UrDxxlc7oSXNEndLJT8w9g==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.0"
+
 "@automerge/automerge-repo-network-messagechannel@1.0.19":
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.0.19.tgz#7431e32625b446cd08f55ffb0b03d3a7e0cc4f41"
   integrity sha512-QyCF3oydmTC6fNH0PyaqWQR5r1YKGlswT0r9/TvxHhvDhmPutxtEe3gNeGlr3Qtfe/24q6NOs6JlZ37/D6QjXQ==
   dependencies:
     "@automerge/automerge-repo" "^1.0.19"
+
+"@automerge/automerge-repo-network-messagechannel@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.1.0.tgz#b6e5a7421eccca358b02c0f8ed30c0ab81988c1c"
+  integrity sha512-/zftnka7+zlRwZF45FXlBToGV380pYwHCSt+glxL6UKvpJQW+2fMC/+gqWHARbU3vh04pWhSZFOU1ASdCKYC8Q==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.0"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
 
 "@automerge/automerge-repo-react-hooks@1.0.19":
   version "1.0.19"
@@ -46,6 +62,18 @@
     react-dom "^18.2.0"
     react-usestateref "^1.0.8"
 
+"@automerge/automerge-repo-react-hooks@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-react-hooks/-/automerge-repo-react-hooks-1.1.0.tgz#ad145d99250d849fcaf8d15e9d1bf65f1f9ebd49"
+  integrity sha512-cNvu6I9TnTjT8/DdKehFvRu0/aoDeTbxSJGQKnuwk5jsvUF8qBA3g3WU4Scc5ceaXYYz+nLpu7t8I6dZSsLOdw==
+  dependencies:
+    "@automerge/automerge" "^2.1.9"
+    "@automerge/automerge-repo" "1.1.0"
+    eventemitter3 "^5.0.1"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    react-usestateref "^1.0.8"
+
 "@automerge/automerge-repo-storage-indexeddb@1.0.19":
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.0.19.tgz#2ab5fa9700b9efb29f688697a8c0df6f8cfd27dc"
@@ -53,12 +81,35 @@
   dependencies:
     "@automerge/automerge-repo" "^1.0.19"
 
+"@automerge/automerge-repo-storage-indexeddb@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.1.0.tgz#e37c1e820c56cc40f4ef4a306a96827074015484"
+  integrity sha512-WbPTljuqCGGlgpKm6MWyLsl9P8wpBfaoxg29+E5NEIue/O5H2xTNvRASsUdv0V3tkp7cZB6DiDrD+q4BVonn5A==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.0"
+
 "@automerge/automerge-repo@1.0.19", "@automerge/automerge-repo@^1.0.19":
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.0.19.tgz#cb90845a87a116c65cf9ba5d0d75d2e24169455d"
   integrity sha512-IcfX9xkbk+YY7IhG+ZCoUVccou2MmHGXvu/XGOICFmUIaG1mkQAPzZU2u5r2JUX0cpr/2PcIPOeCletJMssnWw==
   dependencies:
     "@automerge/automerge" "^2.1.7"
+    bs58check "^3.0.1"
+    cbor-x "^1.3.0"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
+    fast-sha256 "^1.3.0"
+    tiny-typed-emitter "^2.1.0"
+    ts-node "^10.9.1"
+    uuid "^9.0.0"
+    xstate "^4.37.0"
+
+"@automerge/automerge-repo@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.0.tgz#adb24708e949b72a73d9349ab2ad4e7eb4487b76"
+  integrity sha512-QRSt2s89Uhrlofbkipsb/9Alyp65/e1PocNzY+L4J7yDDXD7fbEW5uThXey2lSb1m98Fe0+NtzyKD1we6lvAkA==
+  dependencies:
+    "@automerge/automerge" "^2.1.9"
     bs58check "^3.0.1"
     cbor-x "^1.3.0"
     debug "^4.3.4"
@@ -79,7 +130,7 @@
   resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.9.0.tgz#1b0e1ea595feeb47ea0f4b685bf2ffb7fa61f97c"
   integrity sha512-wTPcW3wVk20D1x0DOko/RsfZV1mlc8HJynqgTRhVocOxFIU/RCilnYRfJmSb8LwCG2uZzfqg0DLsEBqQZ53KBQ==
 
-"@automerge/automerge@2.1.10":
+"@automerge/automerge@2.1.10", "@automerge/automerge@^2.1.9":
   version "2.1.10"
   resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.1.10.tgz#257f9f94c37db088008548cca7e57e853d1ed354"
   integrity sha512-xj8R3fQHZmDYnrYW5WrBqWm/r5sLV9Z7mu89pJ10wGLVS2V+iAB2os85DoOGI2etzjmQsoHyrd97GBmszjH4zQ==
@@ -1919,6 +1970,51 @@
     web3-core "^1.8.0"
     web3-core-helpers "^1.8.0"
 
+"@privy-io/react-auth@1.54.2":
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.54.2.tgz#8d5e12a54a452cb31df1504dc45d77106e8476a1"
+  integrity sha512-1PC0PVC4KtYUXJ1FFmzqYvUZOVcUdYoG2dARzFdvVlGwtuB6cf2o5aD6C+55tNPovBRyKcflNSWKt+jiE+Iulg==
+  dependencies:
+    "@coinbase/wallet-sdk" "^3.9.0"
+    "@ethersproject/abstract-signer" "^5.7.0"
+    "@ethersproject/address" "^5.7.0"
+    "@ethersproject/bignumber" "^5.7.0"
+    "@ethersproject/bytes" "^5.7.0"
+    "@ethersproject/contracts" "^5.7.0"
+    "@ethersproject/logger" "^5.7.0"
+    "@ethersproject/providers" "^5.7.1"
+    "@ethersproject/strings" "^5.7.0"
+    "@ethersproject/transactions" "^5.7.0"
+    "@ethersproject/units" "^5.7.0"
+    "@headlessui/react" "^1.7.18"
+    "@heroicons/react" "^2.0.18"
+    "@marsidev/react-turnstile" "^0.3.2"
+    "@metamask/eth-sig-util" "^6.0.0"
+    "@walletconnect/ethereum-provider" "^2.10.5"
+    "@walletconnect/modal" "^2.6.2"
+    base64-js "^1.5.1"
+    dotenv "^16.0.3"
+    encoding "^0.1.13"
+    eventemitter3 "^5.0.1"
+    fast-password-entropy "^1.1.1"
+    jose "^4.11.2"
+    js-cookie "^3.0.5"
+    libphonenumber-js "^1.10.14"
+    lokijs "^1.5.12"
+    md5 "^2.3.0"
+    mipd "^0.0.5"
+    ofetch "^1.2.0"
+    pino-pretty "^10.0.0"
+    qrcode "^1.5.1"
+    react-device-detect "^2.2.2"
+    react-use "^17.4.2"
+    secure-password-utilities "^0.2.1"
+    styled-components "^5.3.6"
+    tinycolor2 "^1.6.0"
+    uuid ">=8 <10"
+    web3-core "^1.8.0"
+    web3-core-helpers "^1.8.0"
+
 "@radix-ui/number@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/number/-/number-1.0.1.tgz#644161a3557f46ed38a042acf4a770e826021674"
@@ -3450,10 +3546,10 @@
     loupe "^2.3.7"
     pretty-format "^29.7.0"
 
-"@wagmi/connectors@4.1.8":
-  version "4.1.8"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.8.tgz#8d2b7d93218ca3211a68c14862c1c9f1c08286f9"
-  integrity sha512-ODQUB1YGn0rofOcg7T5UCzHZNKSgai4Nri7harI4wao13J2gPcjIsPewiGwKWhCd8nePICUvZ2IL0b6gWq3cqA==
+"@wagmi/connectors@4.1.9":
+  version "4.1.9"
+  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.9.tgz#b7c82e59cd38ba8de1b9cf5f6d0da34947751cf0"
+  integrity sha512-4pz+oZemPW9JOmBmR0oq7pNJlR0oyLfaZMH4IfgATApumZ0uDlMLe6KY1JEbW202rHk0g+NNYYlJsSHYwhCCUg==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.1"
     "@metamask/sdk" "0.14.1"
@@ -3462,10 +3558,10 @@
     "@walletconnect/ethereum-provider" "2.11.0"
     "@walletconnect/modal" "2.6.2"
 
-"@wagmi/core@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.5.0.tgz#dcd12550a76824fe6697de113c907afbf2081fa0"
-  integrity sha512-aWWxIctf76NXBDzbX+FPsBLB3lkGwf1wqbQZJqb+pyuzwwN2dR1NDwsYlPVMeP6SKliKsfxlYWFcKCkPqGuJqg==
+"@wagmi/core@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.6.0.tgz#400780e933104c02aa10b21590d4610a6edc14dd"
+  integrity sha512-z/9lVFG+mCQnATtdS/rFsOLp/Kf3DlpBM5aiDAahwXG405BgXl5SdFt7HkLefFmEnVon7ZN8a1eExSPJGlaRlA==
   dependencies:
     eventemitter3 "5.0.1"
     mipd "0.0.5"
@@ -5112,10 +5208,10 @@ dot-path-value@^0.0.10:
   resolved "https://registry.yarnpkg.com/dot-path-value/-/dot-path-value-0.0.10.tgz#538239fe60597f0fd753b0a8e31e6e3459baddf2"
   integrity sha512-MrVpDoFwk1xjeM0sGRuei7N3LQOylJ9iamgfxAQwPY0hPnDHL981hM/KpoQwFHMckgjZvJA0MyH7VN//ernFFA==
 
-dotenv@16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.2.tgz#3cb611ce5a63002dbabf7c281bc331f69d28f03f"
-  integrity sha512-HTlk5nmhkm8F6JcdXvHIzaorzCoziNQT9mGxLPVXW8wJF1TiGSL60ZGB4gHWabHOaMmWmhvk2/lPHfnBiT78AQ==
+dotenv@16.4.0:
+  version "16.4.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.0.tgz#ac21c3fcaad2e7832a1cd0c0e4e8e52225ecda0e"
+  integrity sha512-WvImr5kpN5NGNn7KaDjJnLTh5rDVLZiDf/YLA8T1ZEZEBZNEDOE+mnkS0PVjPax8ZxBP5zC5SLMB3/9VV5de9g==
 
 dotenv@^16.0.3:
   version "16.3.1"
@@ -5738,15 +5834,6 @@ formdata-node@^4.3.2:
   dependencies:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
-
-framer-motion@10.18.0:
-  version "10.18.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.18.0.tgz#1f4fc51403996ea7170af885bd44a7079d255950"
-  integrity sha512-oGlDh1Q1XqYPksuTD/usb0I70hq95OUzmL9+6Zd+Hs4XV0oaISBa/UUMSjYiq6m8EUF32132mOJ8xVZS+I0S6w==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
 
 framer-motion@11.0.2:
   version "11.0.2"
@@ -10409,13 +10496,13 @@ w3c-keyname@^2.2.0, w3c-keyname@^2.2.4:
   resolved "https://registry.yarnpkg.com/w3c-keyname/-/w3c-keyname-2.2.8.tgz#7b17c8c6883d4e8b86ac8aba79d39e880f8869c5"
   integrity sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==
 
-wagmi@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.0.tgz#2b697ac4a7fc7bf5c5d98e04353f43340b8bf1be"
-  integrity sha512-rP6u49LPQXv+46EzokL7dTlLGduenMqt4ZQ76M4jCR6lTDs7/PaJGevrIGKZiCUYSm1nvvtdDlR1GlJ9u+Q8RA==
+wagmi@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.1.tgz#51736d94dfcc2990e88d06e28ca7302a35479436"
+  integrity sha512-ZDKz9B1hGH0R6GeRlBd6YAF9em5mK2D+A2LgKSMnlI3wDVlr+9hA4ej/rboCtmNMMnZ81/0xr77NG9H8sc1wyg==
   dependencies:
-    "@wagmi/connectors" "4.1.8"
-    "@wagmi/core" "2.5.0"
+    "@wagmi/connectors" "4.1.9"
+    "@wagmi/core" "2.6.0"
     use-sync-external-store "1.2.0"
 
 warning@^3.0.0:
