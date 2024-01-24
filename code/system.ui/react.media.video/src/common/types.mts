@@ -22,7 +22,7 @@ export type {
   PropListProps,
   SliderTrackProps,
   SliderTickProps,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

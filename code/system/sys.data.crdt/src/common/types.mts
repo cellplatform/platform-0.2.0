@@ -23,7 +23,7 @@ export type {
   TestSuiteRunResponse,
 } from 'sys.test.spec/src/types.mjs';
 export type { TextCharDiff } from 'sys.text/src/types';
-export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
+export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types';
 
 /**
  * @system → ui
@@ -35,7 +35,7 @@ export type {
   PropListProps,
   TextInputRef,
   PropListFieldSelectorClickHandler,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

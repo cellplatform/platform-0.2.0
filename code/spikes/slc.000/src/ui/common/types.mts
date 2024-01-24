@@ -21,7 +21,7 @@ export type {
   EdgePositionInput,
   ProgressBarClickHandler,
   PropListProps,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 

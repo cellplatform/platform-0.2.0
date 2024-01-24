@@ -4,7 +4,7 @@
 export type {
   // LabelAction,
   LabelItemBehaviorKind,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

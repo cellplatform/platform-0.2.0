@@ -98,7 +98,7 @@ export type {
 /**
  * @local
  */
-export type * from '../types.mjs';
+export type * from '../types';
 export type UrlInput = string | URL | Location;
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];

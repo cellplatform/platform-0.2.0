@@ -17,7 +17,7 @@ export type {
   TestSuiteRunResponse,
 } from 'sys.test.spec/src/types.mjs';
 export type { Disposable, EventBus, Msecs, UntilObservable } from 'sys.types/src/types';
-export type { CssValue, DevCtx } from 'sys.ui.react.common/src/types.mjs';
+export type { CssValue, DevCtx } from 'sys.ui.react.common/src/types';
 
 /**
  * @local

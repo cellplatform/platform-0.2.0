@@ -38,7 +38,7 @@ export type {
   SliderTick,
   SliderTickProps,
   SplitLayoutEditorChangeHandler,
-} from 'sys.ui.react.common/src/types.mjs';
+} from 'sys.ui.react.common/src/types';
 export type { ImageSizeStrategy, ImageSrc } from 'sys.ui.react.media.image/src/types.mjs';
 export type {
   VideoPlayerStatusHandler,
