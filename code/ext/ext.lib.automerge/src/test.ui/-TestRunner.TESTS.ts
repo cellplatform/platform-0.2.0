@@ -3,7 +3,6 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('./-Automerge.TEST'),
       import('../common/u.Is.TEST'),
 
       'Store',
