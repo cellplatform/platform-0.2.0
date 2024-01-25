@@ -1,5 +1,5 @@
 import { describe, it, expect, type t } from '../test';
-import { JsonPath } from '.';
+import { Path } from '.';
 
 describe('Json.Path', () => {
   describe('resolve', () => {
@@ -10,17 +10,17 @@ describe('Json.Path', () => {
       list: [1, { msg: 'two' }, ['a', 'b', null]],
     };
 
-    it('returns root ← param []', () => {
-      const res = JsonPath.resolve<R>(root, []);
+    it('returns {root} ← param []', () => {
+      const res = Path.resolve<R>(root, []);
       expect(res).to.eql(root);
     });
 
     it('returns match', () => {
-      const res1 = JsonPath.resolve<R>(root, ['msg']);
-      const res2 = JsonPath.resolve<R>(root, ['child']);
-      const res3 = JsonPath.resolve<R>(root, ['child', 'foo']);
-      const res4 = JsonPath.resolve<R>(root, ['child', 'foo', 'count']);
-      const res5 = JsonPath.resolve<R>(root, ['child', 'bar']);
+      const res1 = Path.resolve<R>(root, ['msg']);
+      const res2 = Path.resolve<R>(root, ['child']);
+      const res3 = Path.resolve<R>(root, ['child', 'foo']);
+      const res4 = Path.resolve<R>(root, ['child', 'foo', 'count']);
+      const res5 = Path.resolve<R>(root, ['child', 'bar']);
 
       expect(res1).to.eql('hello');
       expect(res2).to.equal(root.child);
@@ -30,18 +30,18 @@ describe('Json.Path', () => {
     });
 
     it('interprets numbers as indexes', () => {
-      expect(JsonPath.resolve<R>(root, ['list', 0])).to.eql(1);
-      expect(JsonPath.resolve<R>(root, ['list', '0'])).to.eql(1);
-      expect(JsonPath.resolve<R>(root, ['list', '0 '])).to.eql(undefined); // NB: space in path
-      expect(JsonPath.resolve<R>(root, ['list', 1])).to.equal(root.list[1]);
-      expect(JsonPath.resolve<R>(root, ['list', 2, 1])).to.eql('b');
-      expect(JsonPath.resolve<R>(root, ['list', 2, 999])).to.eql(undefined);
-      expect(JsonPath.resolve<R>(root, ['list', 2, 2])).to.eql(null);
+      expect(Path.resolve<R>(root, ['list', 0])).to.eql(1);
+      expect(Path.resolve<R>(root, ['list', '0'])).to.eql(1);
+      expect(Path.resolve<R>(root, ['list', '0 '])).to.eql(undefined); // NB: space in path
+      expect(Path.resolve<R>(root, ['list', 1])).to.equal(root.list[1]);
+      expect(Path.resolve<R>(root, ['list', 2, 1])).to.eql('b');
+      expect(Path.resolve<R>(root, ['list', 2, 999])).to.eql(undefined);
+      expect(Path.resolve<R>(root, ['list', 2, 2])).to.eql(null);
     });
 
     it('throws if root not an object', () => {
       [null, undefined, 123, true, ''].forEach((value) => {
-        const fn = () => JsonPath.resolve(value as any, []);
+        const fn = () => Path.resolve(value as any, []);
         expect(fn).to.throw(/root is not an object/);
       });
     });

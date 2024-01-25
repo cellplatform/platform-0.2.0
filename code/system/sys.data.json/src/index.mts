@@ -10,4 +10,4 @@ export { Pkg };
 export { Json } from './Json';
 export { Patch } from './Json.Patch';
 export { PatchState } from './Json.PatchState';
-export { JsonPath as Path } from './Json.Path';
+export { Path } from './Json.Path';

@@ -1,1 +1,1 @@
-export * from './JsonPath';
+export * from './Path';
