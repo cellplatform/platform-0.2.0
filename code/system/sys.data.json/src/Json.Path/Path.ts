@@ -9,7 +9,7 @@ export const Path = {
   /**
    * Read into an object and return the resulting value at the given path.
    */
-  resolve<T>(root: O, path: t.JsonPath): T | undefined {
+  resolve<T>(root: O | any[], path: t.JsonPath): T | undefined {
     if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
     if (!path || path.length === 0) return root as T;
 

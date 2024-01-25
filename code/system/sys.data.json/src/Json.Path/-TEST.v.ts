@@ -29,6 +29,12 @@ describe('Json.Path', () => {
       expect(res5).to.eql(null);
     });
 
+    it('matches when root is an [array]', () => {
+      expect(Path.resolve<R>([], [0])).to.equal(undefined);
+      expect(Path.resolve<R>([root], [0, 'msg'])).to.equal('hello');
+      expect(Path.resolve<R>([root, root], [1, 'list', 2, '0'])).to.equal('a');
+    });
+
     it('interprets numbers as indexes', () => {
       expect(Path.resolve<R>(root, ['list', 0])).to.eql(1);
       expect(Path.resolve<R>(root, ['list', '0'])).to.eql(1);
