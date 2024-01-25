@@ -22,6 +22,7 @@ export const Pkg: ModuleDef = {
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.indexeddb': '0.0.0',
+    'sys.data.json': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },
