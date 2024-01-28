@@ -13,7 +13,7 @@ type Options<R extends {}> = {
  */
 export function init<R extends {}, L extends {}>(
   root: t.DocRef<R>,
-  path: t.JsonPath | (() => t.JsonPath),
+  path?: t.JsonPath | (() => t.JsonPath),
   options?: Options<R> | t.LensInitial2<R>,
 ) {
   const args = wrangle.options<R>(options);
@@ -178,7 +178,7 @@ const wrangle = {
     return input ?? {};
   },
 
-  path(path: t.JsonPath | (() => t.JsonPath)) {
-    return typeof path === 'function' ? path() : path;
+  path(path?: t.JsonPath | (() => t.JsonPath)) {
+    return typeof path === 'function' ? path() : path ?? [];
   },
 } as const;

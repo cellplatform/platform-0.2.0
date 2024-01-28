@@ -34,7 +34,7 @@ describe('Doc.Lens', () => {
       expect(id.substring(0, id.lastIndexOf('.')).endsWith(':lens')).to.eql(true);
     });
 
-    it('Doc.lens (← exposed as library entry)', async () => {
+    it('Doc.lens ← exposed as library entry', async () => {
       const root = await setup();
       const lens = Doc.lens2<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
@@ -47,13 +47,13 @@ describe('Doc.Lens', () => {
       expect(lens.typename).to.eql(typename);
     });
 
-    it('{init} param', async () => {
+    it('options: {init} param', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
       const lens = Lens.init<TRoot, TChild>(root, path, { init: (d) => (d.child = { count: 1 }) });
       expect(lens.current).to.eql({ count: 1 });
     });
 
-    it('init function() param', async () => {
+    it('options: as init function()', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
       const lens = Lens.init<TRoot, TChild>(root, path, (d) => (d.child = { count: 123 }));
       expect(lens.current).to.eql({ count: 123 });
@@ -131,6 +131,12 @@ describe('Doc.Lens', () => {
   });
 
   describe('path', () => {
+    it('path undefined', async () => {
+      const root = await setup();
+      const lens = Lens.init<TRoot, TChild>(root);
+      expect(lens.current).to.eql(root.current);
+    });
+
     it('path as array', async () => {
       const root = await setup();
       const lens = Lens.init<TRoot, TChild>(root, path);
