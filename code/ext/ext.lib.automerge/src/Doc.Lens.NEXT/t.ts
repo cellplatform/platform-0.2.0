@@ -1,43 +1,43 @@
 import type { t } from '../common';
 
-export type LensInitial2<R extends {}> = (doc: R) => void;
+export type LensInitial<R extends {}> = (doc: R) => void;
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export type Lens2<L extends {}> = t.ImmutableRef<L, LensEvents2<L>> & {
-  lens<T extends {}>(path: t.JsonPath, init?: LensInitial2<L>): Lens2<T>;
+export type Lens<L extends {}> = t.ImmutableRef<L, LensEvents<L>> & {
+  lens<T extends {}>(path: t.JsonPath, init?: LensInitial<L>): Lens<T>;
   toObject(): L;
 } & t.Lifecycle;
 
 /**
  * Events API
  */
-export type LensEvents2<L extends {}> = t.Lifecycle & {
-  readonly $: t.Observable<LensEvent2<L>>;
-  readonly changed$: t.Observable<LensChanged2<L>>;
-  readonly deleted$: t.Observable<LensDeleted2<L>>;
+export type LensEvents<L extends {}> = t.Lifecycle & {
+  readonly $: t.Observable<LensEvent<L>>;
+  readonly changed$: t.Observable<LensChanged<L>>;
+  readonly deleted$: t.Observable<LensDeleted<L>>;
 };
 
 /**
  * Events
  */
-export type LensEvent2<L extends {}> = LensChangedEvent2<L> | LensDeletedEvent2<L>;
+export type LensEvent<L extends {}> = LensChangedEvent<L> | LensDeletedEvent<L>;
 
 /**
  * - Changed
  */
-export type LensChangedEvent2<L extends {}> = {
+export type LensChangedEvent<L extends {}> = {
   type: 'crdt:lens:changed';
-  payload: LensChanged2<L>;
+  payload: LensChanged<L>;
 };
-export type LensChanged2<L extends {}> = { before: L; after: L };
+export type LensChanged<L extends {}> = { before: L; after: L };
 
 /**
  * - Deleted
  */
-export type LensDeletedEvent2<L extends {}> = {
+export type LensDeletedEvent<L extends {}> = {
   type: 'crdt:lens:deleted';
-  payload: LensDeleted2<L>;
+  payload: LensDeleted<L>;
 };
-export type LensDeleted2<L extends {}> = { before: L; after: undefined };
+export type LensDeleted<L extends {}> = { before: L; after: undefined };

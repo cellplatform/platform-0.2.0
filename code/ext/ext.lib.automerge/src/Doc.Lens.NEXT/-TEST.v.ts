@@ -15,9 +15,9 @@ describe('Doc.Lens', () => {
   };
 
   it('API references', () => {
-    expect(Doc.Lens2).to.equal(Lens);
-    expect(Doc.lens2).to.eql(Lens.init);
-    expect(Doc.Lens2.Registry).to.equal(Registry);
+    expect(Doc.Lens).to.equal(Lens);
+    expect(Doc.lens).to.eql(Lens.init);
+    expect(Doc.Lens.Registry).to.equal(Registry);
   });
 
   describe('create', () => {
@@ -25,7 +25,7 @@ describe('Doc.Lens', () => {
       const root = await setup();
       expect(root.current).to.eql({ child: { count: 0 } });
 
-      const lens = Doc.Lens2.init<TRoot, TChild>(root, path);
+      const lens = Doc.Lens.init<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
       expect(lens.typename).to.eql(undefined);
 
@@ -36,7 +36,7 @@ describe('Doc.Lens', () => {
 
     it('Doc.lens ← exposed as library entry', async () => {
       const root = await setup();
-      const lens = Doc.lens2<TRoot, TChild>(root, path);
+      const lens = Doc.lens<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
     });
 

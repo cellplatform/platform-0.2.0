@@ -15,14 +15,14 @@ describe('Namespace (Lens)', () => {
   };
 
   it('exposed from Doc API', () => {
-    expect(Namespace).to.equal(Doc.Namespace2);
-    expect(Namespace.init).to.equal(Doc.namespace2);
+    expect(Namespace).to.equal(Doc.Namespace);
+    expect(Namespace.init).to.equal(Doc.namespace);
   });
 
   it('init', async () => {
     const doc = await setup();
     const ns1 = Namespace.init<TRoot>(doc);
-    const ns2 = Doc.namespace2<TRoot>(doc);
+    const ns2 = Doc.namespace<TRoot>(doc);
     expect(ns1.kind).to.eql('crdt:namespace');
     expect(ns2.kind).to.eql('crdt:namespace');
   });
@@ -133,7 +133,7 @@ describe('Namespace (Lens)', () => {
 
     it('no longer fires after dispose', async () => {
       const doc = await setup();
-      const ns = Doc.namespace2<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+      const ns = Doc.namespace<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
       const events = ns.events();
 
       const fired: t.LensChanged<t.NamespaceMap<N>>[] = [];
@@ -155,7 +155,7 @@ describe('Namespace (Lens)', () => {
       it('disposed on events({ dispose$ }) param', async () => {
         const life = rx.lifecycle();
         const doc = await setup();
-        const ns = Doc.namespace2<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+        const ns = Doc.namespace<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
         const events = ns.events(life.dispose$);
 
         expect(events.disposed).to.eql(false);
@@ -165,7 +165,7 @@ describe('Namespace (Lens)', () => {
 
       it('auto disposed after [namespace] is disposed', async () => {
         const doc = await setup();
-        const ns = Doc.namespace2<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+        const ns = Doc.namespace<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
         const events = ns.events();
 
         expect(events.disposed).to.eql(false);
@@ -178,7 +178,7 @@ describe('Namespace (Lens)', () => {
   describe('lens', () => {
     it('namespace.lens: from { document } root', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc);
+      const namespace = Doc.namespace<TRoot>(doc);
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
       const ns2 = namespace.lens('foo', { count: 0 });
@@ -199,7 +199,7 @@ describe('Namespace (Lens)', () => {
 
     it('namespace.lens: type (display typename)', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
 
       const typename = 'foo.bar';
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
@@ -211,7 +211,7 @@ describe('Namespace (Lens)', () => {
 
     it('namespace.lens: from sub-tree (get container → ƒ)', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
       expect(doc.current.ns).to.eql({});
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
@@ -235,7 +235,7 @@ describe('Namespace (Lens)', () => {
       type N = 'foo.bar' | 'foo.baz';
       type NS = t.NamespaceMap<N>;
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
 
       const ns1 = namespace.lens<TDoc>('foo.bar', { count: 0 });
       const ns2 = namespace.lens<TError>('foo.baz', {});
@@ -249,7 +249,7 @@ describe('Namespace (Lens)', () => {
 
     it('same namespace → single instance of lens', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc);
+      const namespace = Doc.namespace<TRoot>(doc);
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
       const ns2 = namespace.lens<TDoc>('foo', { count: 456 });
@@ -263,14 +263,14 @@ describe('Namespace (Lens)', () => {
   describe('list', () => {
     it('empty', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc);
+      const namespace = Doc.namespace<TRoot>(doc);
       expect(namespace.list()).to.eql([]);
     });
 
     it('items', async () => {
       type K = 'foo' | 'bar';
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot, K>(doc);
+      const namespace = Doc.namespace<TRoot, K>(doc);
 
       const initial: TDoc = { count: 0 };
       const foo = namespace.lens('foo', initial);
@@ -286,7 +286,7 @@ describe('Namespace (Lens)', () => {
 
     it('new list every call', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc);
+      const namespace = Doc.namespace<TRoot>(doc);
       expect(namespace.list()).to.not.equal(namespace.list()); // NB: new instance each time.
     });
   });
@@ -295,7 +295,7 @@ describe('Namespace (Lens)', () => {
     it('{ dispose$ } ← as param', async () => {
       const doc = await setup();
       const { dispose, dispose$ } = rx.disposable();
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], {
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], {
         dispose$,
         init: (d) => (d.ns = {}),
       });
@@ -316,7 +316,7 @@ describe('Namespace (Lens)', () => {
     it('namespace.dispose ← ( method ) ', async () => {
       const doc = await setup();
 
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
       const ns2 = namespace.lens<TError>('bar', {});
 
@@ -333,7 +333,7 @@ describe('Namespace (Lens)', () => {
 
     it('lens.dispose', async () => {
       const doc = await setup();
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
 
       const initial: TDoc = { count: 0 };
       const lens1 = namespace.lens('foo', initial);
@@ -359,7 +359,7 @@ describe('Namespace (Lens)', () => {
       const store = Store.init();
       const doc = await setup({ store });
 
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
       const ns2 = namespace.lens<TError>('bar', {});
 
@@ -380,7 +380,7 @@ describe('Namespace (Lens)', () => {
       const store = Store.init();
       const doc = await setup({ store });
 
-      const namespace = Doc.namespace2<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
+      const namespace = Doc.namespace<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
       namespace.lens<TDoc>('foo', { count: 0 });
       namespace.lens<TError>('bar', {});
 
@@ -397,7 +397,7 @@ describe('Namespace (Lens)', () => {
       const store2 = Store.init();
 
       const doc1 = await setup({ store: store1 });
-      const ns1 = Doc.namespace2<TRoot>(doc1, ['ns'], (d) => (d.ns = {}));
+      const ns1 = Doc.namespace<TRoot>(doc1, ['ns'], (d) => (d.ns = {}));
 
       ns1.lens<TDoc>('foo', { count: 0 });
       ns1.lens<TError>('bar', {});
@@ -408,7 +408,7 @@ describe('Namespace (Lens)', () => {
       expect(Object.keys(doc1.current.ns ?? {}).length).to.eql(2); // NB: underlying document not changed on disposal.
 
       const doc2 = await setup({ store: store2 });
-      const ns2 = Doc.namespace2<TRoot>(doc2, ['ns'], (d) => (d.ns = {}));
+      const ns2 = Doc.namespace<TRoot>(doc2, ['ns'], (d) => (d.ns = {}));
       expect(Object.keys(ns2.container).length).to.eql(0);
     });
   });

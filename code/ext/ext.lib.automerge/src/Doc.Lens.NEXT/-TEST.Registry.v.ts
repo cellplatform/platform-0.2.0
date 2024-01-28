@@ -14,7 +14,7 @@ describe('Doc.Lens', () => {
 
   it('API references', () => {
     expect(Lens.Registry).to.equal(Registry);
-    expect(Doc.Lens2.Registry).to.equal(Registry);
+    expect(Doc.Lens.Registry).to.equal(Registry);
   });
 
   it('does not exist (get, total)', async () => {

@@ -1,7 +1,7 @@
 import { Lens, rx, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
-type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.LensInitial2<R> };
+type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.LensInitial<R> };
 
 export const Namespace = {
   /**
@@ -14,24 +14,24 @@ export const Namespace = {
   init<R extends O, N extends string = string>(
     root: t.DocRef<R>,
     path?: t.JsonPath | (() => t.JsonPath),
-    options?: Options<R> | t.LensInitial2<R>,
-  ): t.NamespaceManager2<N> {
+    options?: Options<R> | t.LensInitial<R>,
+  ): t.NamespaceManager<N> {
     const args = wrangle.options(options);
     const events = root.events(args.dispose$);
     const { dispose, dispose$ } = events;
 
     const container = Lens<R, t.NamespaceMap<N>>(root, path, { init: args.init, dispose$ });
-    const cache = new Map<N, t.Lens2<{}>>();
+    const cache = new Map<N, t.Lens<{}>>();
     dispose$.subscribe(() => cache.clear());
 
     /**
      * API
      */
-    const api: t.NamespaceManager2<N> = {
+    const api: t.NamespaceManager<N> = {
       kind: 'crdt:namespace',
 
       get container() {
-        type T = t.NamespaceMap2<N>;
+        type T = t.NamespaceMap<N>;
         if (api.disposed) return {} as T;
         const res = {} as T;
         Array.from(cache).forEach(([key, value]) => (res[key] = toObject(value.current)));
@@ -41,13 +41,13 @@ export const Namespace = {
       list<L extends {}>() {
         return Array.from(cache).map((item) => {
           const namespace = item[0] as N;
-          const lens = item[1] as t.Lens2<L>;
+          const lens = item[1] as t.Lens<L>;
           return { namespace, lens };
         });
       },
 
       lens<L extends {}>(namespace: N, initial: L, options: { typename?: string } = {}) {
-        if (cache.has(namespace)) return cache.get(namespace) as t.Lens2<L>;
+        if (cache.has(namespace)) return cache.get(namespace) as t.Lens<L>;
 
         // Ensure the namespace {object} exists.
         if (container.current[namespace] === undefined) {
@@ -70,7 +70,7 @@ export const Namespace = {
       },
 
       typed<T extends string>() {
-        return api as unknown as t.NamespaceManager2<T>;
+        return api as unknown as t.NamespaceManager<T>;
       },
 
       /**
@@ -91,7 +91,7 @@ export const Namespace = {
  * Helpers
  */
 const wrangle = {
-  options<R extends {}>(input?: Options<R> | t.LensInitial2<R>): Options<R> {
+  options<R extends {}>(input?: Options<R> | t.LensInitial<R>): Options<R> {
     if (typeof input === 'function') return { init: input };
     return input ?? {};
   },
