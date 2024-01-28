@@ -1,7 +1,5 @@
 import { type t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Helpers for working with arrays that represent object paths.
  */
