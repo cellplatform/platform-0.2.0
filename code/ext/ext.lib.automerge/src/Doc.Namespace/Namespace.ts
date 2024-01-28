@@ -1,7 +1,6 @@
 import { Lens, rx, toObject, type t } from './common';
 
-type O = Record<string, unknown>;
-type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.LensInitial<R> };
+type Options<R extends object> = { dispose$?: t.UntilObservable; init?: t.LensInitial<R> };
 
 export const Namespace = {
   /**
@@ -11,7 +10,7 @@ export const Namespace = {
    *      This allows multiple lens to be created on a {map}
    *      object within the single document.
    */
-  init<R extends O, N extends string = string>(
+  init<R extends object, N extends string = string>(
     root: t.DocRef<R>,
     path?: t.JsonPath | (() => t.JsonPath),
     options?: Options<R> | t.LensInitial<R>,
@@ -38,7 +37,7 @@ export const Namespace = {
         return res;
       },
 
-      list<L extends {}>() {
+      list<L extends object>() {
         return Array.from(cache).map((item) => {
           const namespace = item[0] as N;
           const lens = item[1] as t.Lens<L>;
@@ -46,7 +45,7 @@ export const Namespace = {
         });
       },
 
-      lens<L extends {}>(namespace: N, initial: L, options: { typename?: string } = {}) {
+      lens<L extends object>(namespace: N, initial: L, options: { typename?: string } = {}) {
         if (cache.has(namespace)) return cache.get(namespace) as t.Lens<L>;
 
         // Ensure the namespace {object} exists.
@@ -91,7 +90,7 @@ export const Namespace = {
  * Helpers
  */
 const wrangle = {
-  options<R extends {}>(input?: Options<R> | t.LensInitial<R>): Options<R> {
+  options<R extends object>(input?: Options<R> | t.LensInitial<R>): Options<R> {
     if (typeof input === 'function') return { init: input };
     return input ?? {};
   },

@@ -3,7 +3,7 @@ import { rx, type t } from './common';
 /**
  * Generate a new events wrapper for the given handle.
  */
-export function eventsFactory<L extends {}>(
+export function eventsFactory<L extends object>(
   source$: t.Observable<t.LensEvent<L>>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {

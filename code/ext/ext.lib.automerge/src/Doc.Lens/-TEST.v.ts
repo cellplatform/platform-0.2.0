@@ -483,7 +483,5 @@ describe('Doc.Lens', () => {
     });
   });
 
-  it('done (clean up)', () => {
-    store.dispose();
-  });
+  it('done (clean up)', () => store.dispose());
 });
