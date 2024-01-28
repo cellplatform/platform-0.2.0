@@ -1,6 +1,6 @@
 export type * from './Doc/t';
-export type * from './Doc.Lens.NEXT/t';
-export type * from './Doc.Namespace.NEXT/t';
+export type * from './Doc.Lens/t';
+export type * from './Doc.Namespace/t';
 
 export type * from './Store.Index/t';
 export type * from './Store/t';

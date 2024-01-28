@@ -1,5 +1,5 @@
-import { Lens } from '../Doc.Lens.NEXT';
-import { Namespace } from '../Doc.Namespace.NEXT';
+import { Lens } from '../Doc.Lens';
+import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
 import { del } from './Doc.u.delete';

@@ -23,7 +23,6 @@ export function init<R extends {}, L extends {}>(
   let _changing = false;
   let _lastValue: L | undefined;
 
-  const get = (root: R) => Path.resolve<L>(root, wrangle.path(path))!;
   const events = root.events(args.dispose$);
 
   events.dispose$.subscribe(() => {
@@ -33,17 +32,21 @@ export function init<R extends {}, L extends {}>(
   const subject$ = rx.subject<t.LensEvent<L>>();
   const { dispose, dispose$ } = events;
 
+  const Get = {
+    path: (root: R) => Path.resolve<L>(root, wrangle.path(path))!,
+  } as const;
+
   const Fire = {
     changed(e: t.DocChanged<R>) {
-      const before = get(e.patchInfo.before);
-      const after = get(e.patchInfo.after);
+      const before = Get.path(e.patchInfo.before);
+      const after = Get.path(e.patchInfo.after);
       subject$.next({
         type: 'crdt:lens:changed',
         payload: { before, after },
       });
     },
     deleted(e: t.DocDeleted<R>) {
-      const before = get(e.doc);
+      const before = Get.path(e.doc);
       const after = undefined;
       subject$.next({
         type: 'crdt:lens:deleted',
@@ -80,7 +83,7 @@ export function init<R extends {}, L extends {}>(
      * Current value of the descendent.
      */
     get current() {
-      return get(root.current);
+      return Get.path(root.current);
     },
 
     /**
@@ -99,7 +102,7 @@ export function init<R extends {}, L extends {}>(
            *       all sub-trees lens getters are correctly initialized.
            */
           const length = Registry.total(root) + 1;
-          Array.from({ length }).forEach(() => get(draft));
+          Array.from({ length }).forEach(() => Get.path(draft));
         });
       }
 
@@ -107,7 +110,7 @@ export function init<R extends {}, L extends {}>(
       events.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
 
       // Perform change.
-      root.change((d) => fn(get(d)));
+      root.change((d) => fn(Get.path(d)));
 
       // Alert listeners.
       if (_fired) Fire.changed(_fired);
@@ -154,10 +157,10 @@ export function init<R extends {}, L extends {}>(
   /**
    * Initialize.
    */
-  if (typeof get(root.current) !== 'object') {
+  if (typeof Get.path(root.current) !== 'object') {
     const fn = args.init;
     if (typeof fn === 'function') root.change((d) => fn(d));
-    if (typeof get(root.current) !== 'object') {
+    if (typeof Get.path(root.current) !== 'object') {
       const pathstring = wrangle.path(path).join('/');
       throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
     }
