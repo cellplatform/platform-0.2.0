@@ -1,7 +1,7 @@
 import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Typenames } from './constants';
-import { PatchState, Value } from './libs';
+import { PatchState } from './libs';
 import type * as t from './t';
 
 export const Is = {
