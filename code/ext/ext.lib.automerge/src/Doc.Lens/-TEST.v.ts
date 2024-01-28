@@ -14,12 +14,6 @@ describe('Doc.Lens', () => {
     return (options.store ?? store).doc.getOrCreate<TRoot>((d) => (d.child = { count: 0 }));
   };
 
-  it('API references', () => {
-    expect(Doc.Lens).to.equal(Lens);
-    expect(Doc.lens).to.eql(Lens.init);
-    expect(Doc.Lens.Registry).to.equal(Registry);
-  });
-
   describe('create', () => {
     it('Doc.Lens.init', async () => {
       const root = await setup();

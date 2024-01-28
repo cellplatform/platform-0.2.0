@@ -1,3 +1,6 @@
+import { Doc } from '.';
+import { Lens, Registry } from '../Doc.Lens';
+import { Namespace } from '../Doc.Namespace';
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, type t } from '../test';
 
@@ -13,6 +16,23 @@ describe('Store (base)', async () => {
   };
 
   const { store, initial, generator } = testSetup();
+
+  describe('API', () => {
+    it('splice', () => {
+      expect(Doc.splice).to.equal(A.splice);
+    });
+
+    it('lens', () => {
+      expect(Doc.Lens).to.equal(Lens);
+      expect(Doc.lens).to.eql(Lens.init);
+      expect(Doc.Lens.Registry).to.equal(Registry);
+    });
+
+    it('namespace', () => {
+      expect(Doc.Namespace).to.equal(Namespace);
+      expect(Doc.namespace).to.equal(Namespace.init);
+    });
+  });
 
   describe('store.doc', () => {
     it('create and change', async () => {

@@ -14,11 +14,6 @@ describe('Namespace (Lens)', () => {
     return (options.store ?? store).doc.getOrCreate<TRoot>((d) => null);
   };
 
-  it('exposed from Doc API', () => {
-    expect(Namespace).to.equal(Doc.Namespace);
-    expect(Namespace.init).to.equal(Doc.namespace);
-  });
-
   it('init', async () => {
     const doc = await setup();
     const ns1 = Namespace.init<TRoot>(doc);
