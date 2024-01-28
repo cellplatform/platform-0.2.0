@@ -137,13 +137,13 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 0 });
     });
 
-    it('path param as function → {object}', async () => {
+    it('path as function → {object}', async () => {
       const root = await setup();
       const lens = Lens.init<TRoot, TChild>(root, () => path);
       expect(lens.current).to.eql({ count: 0 });
     });
 
-    it('path param as function → [index] → {object}', async () => {
+    it('path as function → [index] → {object}', async () => {
       const root = await setup();
       let index = 0;
       const lens = Lens.init<TRoot, TChild>(
@@ -154,6 +154,14 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 0 });
       index = 1;
       expect(lens.current).to.eql({ count: 1 });
+    });
+
+    it('path → root', async () => {
+      const root = await setup();
+      const lens1 = Lens.init<TRoot, TChild>(root, []);
+      const lens2 = Lens.init<TRoot, TChild>(root, () => []);
+      expect(lens1.current).to.eql(root.current);
+      expect(lens2.current).to.eql(root.current);
     });
   });
 
