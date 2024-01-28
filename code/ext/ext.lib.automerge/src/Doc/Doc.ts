@@ -1,6 +1,7 @@
 import { Lens } from '../Doc.Lens';
 import { Lens as Lens2 } from '../Doc.Lens.NEXT';
 import { Namespace } from '../Doc.Namespace';
+import { Namespace as Namespace2 } from '../Doc.Namespace.NEXT';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
 import { del } from './Doc.u.delete';
@@ -15,12 +16,16 @@ export const Doc = {
   Data,
   Patch,
   Lens,
-  Lens2, // TEMP 🐷
   Namespace,
 
+  Lens2, // TEMP 🐷
+  Namespace2, // TEMP 🐷
+
   lens: Lens.init,
-  lens2: Lens2.init, // TEMP 🐷
   namespace: Namespace.init,
+
+  lens2: Lens2.init, // TEMP 🐷
+  namespace2: Namespace2.init, // TEMP 🐷
 
   toObject,
   get,

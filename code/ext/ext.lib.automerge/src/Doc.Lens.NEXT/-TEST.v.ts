@@ -76,7 +76,7 @@ describe('Doc.Lens', () => {
       expect(lens.toObject()).to.not.equal(lens.current);
     });
 
-    it('throw: path does not yeild an {object}', async () => {
+    it('throw: path does not yield an {object}', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
       const fn = () => Lens.init<TRoot, TChild>(root, path);
       expect(fn).to.throw(/Target path of \[Lens\] is not an object/);
@@ -160,6 +160,18 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 0 });
       index = 1;
       expect(lens.current).to.eql({ count: 1 });
+    });
+
+    it('throw: path index does not yield {object}', async () => {
+      const root = await setup();
+
+      const fn = () =>
+        Lens.init<TRoot, TChild>(
+          root,
+          () => ['child', 'list', 2],
+          (d) => (d.child!.list = []),
+        );
+      expect(fn).to.throw(/Target path of \[Lens\] is not an object/);
     });
 
     it('path → root', async () => {
