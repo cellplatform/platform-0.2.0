@@ -31,7 +31,7 @@ export type LensChangedEvent<L extends {}> = {
   type: 'crdt:lens:changed';
   payload: LensChanged<L>;
 };
-export type LensChanged<L extends {}> = { before: L; after: L };
+export type LensChanged<L extends {}> = { before: L; after: L; patches: t.Patch[] };
 
 /**
  * - Deleted

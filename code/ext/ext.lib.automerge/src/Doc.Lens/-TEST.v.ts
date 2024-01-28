@@ -220,11 +220,13 @@ describe('Doc.Lens', () => {
       lens.change((d) => (d.count = 123));
       expect(fired.length).to.eql(1);
       expect(fired[0].after.count).to.eql(123);
+      expect(fired[0].patches[0].action).to.eql('put');
+      expect(fired[0].patches[0].path).to.eql(['count']);
 
       events.dispose();
     });
 
-    it('change on root', async () => {
+    it('change on root ← fires through lens', async () => {
       const root = await setup();
       const lens = Lens.init<TRoot, TChild>(root, path);
       const events = lens.events();
@@ -243,10 +245,13 @@ describe('Doc.Lens', () => {
       expect(fired.length).to.eql(1);
       expect(fired[0].before.count).to.eql(0);
       expect(fired[0].after.count).to.eql(1234);
+      expect(fired[0].patches[0].path).to.eql(['count']);
+
       expect(root.current.child?.count).to.eql(1234);
 
       lens.change((d) => (d.count = 888));
       expect(fired.length).to.eql(2);
+      expect(fired[1].patches[0].path).to.eql(['count']);
 
       events.dispose();
     });

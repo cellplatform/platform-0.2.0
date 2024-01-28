@@ -23,6 +23,7 @@ export function init<R extends {}, L extends {}>(
   let _changing = false;
   let _lastValue: L | undefined;
 
+  const resolve = (root: R) => Path.resolve<L>(root, wrangle.path(path))!;
   const events = root.events(args.dispose$);
 
   events.dispose$.subscribe(() => {
@@ -32,21 +33,18 @@ export function init<R extends {}, L extends {}>(
   const subject$ = rx.subject<t.LensEvent<L>>();
   const { dispose, dispose$ } = events;
 
-  const Get = {
-    path: (root: R) => Path.resolve<L>(root, wrangle.path(path))!,
-  } as const;
-
-  const Fire = {
+  const fire = {
     changed(e: t.DocChanged<R>) {
-      const before = Get.path(e.patchInfo.before);
-      const after = Get.path(e.patchInfo.after);
+      const before = resolve(e.patchInfo.before);
+      const after = resolve(e.patchInfo.after);
+      const patches = wrangle.patches(e.patches, path);
       subject$.next({
         type: 'crdt:lens:changed',
-        payload: { before, after },
+        payload: { before, after, patches },
       });
     },
     deleted(e: t.DocDeleted<R>) {
-      const before = Get.path(e.doc);
+      const before = resolve(e.doc);
       const after = undefined;
       subject$.next({
         type: 'crdt:lens:deleted',
@@ -63,12 +61,12 @@ export function init<R extends {}, L extends {}>(
       rx.filter(() => _lastValue !== api.current),
     )
     .subscribe((e) => {
-      Fire.changed(e);
+      fire.changed(e);
       _lastValue = api.current;
     });
 
   events.deleted$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-    Fire.deleted(e);
+    fire.deleted(e);
     dispose();
   });
 
@@ -83,7 +81,7 @@ export function init<R extends {}, L extends {}>(
      * Current value of the descendent.
      */
     get current() {
-      return Get.path(root.current);
+      return resolve(root.current);
     },
 
     /**
@@ -102,7 +100,7 @@ export function init<R extends {}, L extends {}>(
            *       all sub-trees lens getters are correctly initialized.
            */
           const length = Registry.total(root) + 1;
-          Array.from({ length }).forEach(() => Get.path(draft));
+          Array.from({ length }).forEach(() => resolve(draft));
         });
       }
 
@@ -110,10 +108,10 @@ export function init<R extends {}, L extends {}>(
       events.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
 
       // Perform change.
-      root.change((d) => fn(Get.path(d)));
+      root.change((d) => fn(resolve(d)));
 
       // Alert listeners.
-      if (_fired) Fire.changed(_fired);
+      if (_fired) fire.changed(_fired);
 
       // Finish up.
       _lastValue = api.current;
@@ -157,10 +155,10 @@ export function init<R extends {}, L extends {}>(
   /**
    * Initialize.
    */
-  if (typeof Get.path(root.current) !== 'object') {
+  if (typeof resolve(root.current) !== 'object') {
     const fn = args.init;
     if (typeof fn === 'function') root.change((d) => fn(d));
-    if (typeof Get.path(root.current) !== 'object') {
+    if (typeof resolve(root.current) !== 'object') {
       const pathstring = wrangle.path(path).join('/');
       throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
     }
@@ -183,5 +181,10 @@ const wrangle = {
 
   path(path?: t.JsonPath | (() => t.JsonPath)) {
     return typeof path === 'function' ? path() : path ?? [];
+  },
+
+  patches(patches: t.Patch[], path?: t.JsonPath | (() => t.JsonPath)) {
+    const length = wrangle.path(path).length;
+    return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
   },
 } as const;
