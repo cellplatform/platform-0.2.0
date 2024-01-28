@@ -30,8 +30,8 @@ export const Statusbar: React.FC<StatusbarProps> = (props) => {
       <div {...styles.span}>{props.left}</div>
       <div {...styles.label}>
         <span {...styles.mono}>{props.right}</span>
-        <Icons.Database size={15} margin={[0, 0, 0, 8]} />
-        <Icons.Antenna size={15} margin={[0, 0, 0, 5]} />
+        <Icons.Database size={15} margin={[0, 0, 0, 4]} />
+        <Icons.Antenna size={15} margin={[0, 0, 0, 10]} />
       </div>
     </div>
   );

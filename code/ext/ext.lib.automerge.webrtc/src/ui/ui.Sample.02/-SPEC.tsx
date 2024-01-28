@@ -191,10 +191,11 @@ export default Dev.describe(name, async (e) => {
       };
 
       const loaderButton = (label: string, typename: string) => {
+        const isEnabled = () => !!lens && !!selected?.item.uri;
         dev.button((btn) => {
           btn
             .label(label)
-            .enabled((e) => !!lens && !!selected?.item.uri)
+            .enabled(isEnabled)
             .onClick((e) => {
               const docuri = selected?.item.uri;
               if (!(lens && docuri)) return;
@@ -203,9 +204,17 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
-      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor');
-      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor');
-      dev.button('unload', (e) => lens?.change((d) => delete d.module));
+      loaderButton(`ƒ ( load → CodeEditor )`, 'CodeEditor');
+      loaderButton(`ƒ ( load → DiagramEditor )`, 'DiagramEditor');
+
+      dev.button((btn) => {
+        const isEnabled = () => !!lens && !!selected?.item.uri;
+        btn
+          .label('ƒ ( 💥 )')
+          .right((e) => 'unload')
+          .enabled((e) => isEnabled())
+          .onClick((e) => lens?.change((d) => delete d.module));
+      });
 
       dev.hr(-1, 5);
 
@@ -228,7 +237,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(5, 20);
 
-      dev.button('purge ephemeral', (e) => {
+      dev.button(['purge ephemeral', '💦'], (e) => {
         const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.model.index);
         purge(left);
         purge(right);
@@ -238,7 +247,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const deleteButton = (label: string, fn: () => Promise<any>) => {
-        dev.button([`delete db: ${label}`, '💥'], async (e) => {
+        dev.button([`delete fs/db: ${label}`, '💥'], async (e) => {
           await e.change((d) => (d.reload = true));
           await fn();
         });
