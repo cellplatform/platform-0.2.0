@@ -13,6 +13,7 @@ export {
   FC,
   Keyboard,
   LabelItem,
+  ObjectView,
   PropList,
   RenderCount,
   TestRunner,

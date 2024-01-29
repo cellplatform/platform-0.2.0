@@ -1,15 +1,15 @@
 import type { t } from './common';
 
-export type InfoField = 'Module' | 'Module.Verify' | 'Component' | 'Repo';
+export type InfoField = 'Module' | 'Module.Verify' | 'Component' | 'Repo' | 'Document';
 
 export type InfoData = {
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
-  repo?: {
+  repo?: { label?: string; name?: string; store?: t.Store; index?: t.StoreIndexState };
+  document?: {
     label?: string;
-    name?: string;
-    store?: t.Store;
-    index?: t.StoreIndexState;
+    doc?: t.DocRef<unknown>;
+    object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   };
 };
 

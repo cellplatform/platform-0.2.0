@@ -9,10 +9,16 @@ const DEFAULTS = Info.DEFAULTS;
  * Spec
  */
 const name = Info.displayName ?? 'Unknown';
+
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
   const store = WebStore.init({ storage });
   const index = await WebStore.index(store);
+
+  const docAtIndex = async (i: number) => {
+    const doc = index.doc.current.docs[i];
+    return doc ? index.store.doc.get(doc.uri) : undefined;
+  };
 
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -34,8 +40,23 @@ export default Dev.describe(name, async (e) => {
       .backgroundColor(1)
       .size([320, null])
       .display('grid')
-      .render<T>((e) => {
-        return <Info {...e.state.props} data={{ repo: { store, index } }} />;
+      .render<T>(async (e) => {
+        const fields = e.state.props.fields ?? [];
+        const doc = fields.includes('Document') ? await docAtIndex(0) : undefined;
+
+        return (
+          <Info
+            {...e.state.props}
+            data={{
+              repo: { store, index },
+              document: {
+                // label: '',
+                doc,
+                object: { name: 'foobar', expand: { level: 2 } },
+              },
+            }}
+          />
+        );
       });
   });
 

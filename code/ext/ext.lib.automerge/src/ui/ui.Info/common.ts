@@ -8,7 +8,7 @@ export * from '../common';
 export const DEFAULTS = {
   fields: {
     get all(): t.InfoField[] {
-      return ['Module', 'Module.Verify', 'Component', 'Repo'];
+      return ['Module', 'Module.Verify', 'Component', 'Repo', 'Document'];
     },
     get default(): t.InfoField[] {
       return ['Module', 'Module.Verify'];
