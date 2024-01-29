@@ -1,6 +1,6 @@
-import type * as t from './-SPEC.t';
-import { CrdtInfo, Dev, Store, WebStore, MonacoEditor, TestDb, Doc } from '../../test.ui';
+import { CrdtInfo, Dev, Doc, MonacoEditor, TestDb } from '../../test.ui';
 import { setupStore, type D } from './-SPEC.store';
+import type * as t from './-SPEC.t';
 
 type T = { reload?: boolean };
 
@@ -67,10 +67,11 @@ export default Dev.describe(name, async (e) => {
     dev.row((e) => {
       return (
         <CrdtInfo
-          fields={['Module', 'Component', 'Repo']}
+          fields={['Module', 'Component', 'Repo', 'Document']}
           data={{
-            component: { name, label: 'Syncer: UI ↔︎ Data' },
+            component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
+            document: { doc },
           }}
         />
       );
