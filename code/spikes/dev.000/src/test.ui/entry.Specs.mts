@@ -28,15 +28,16 @@ const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 const { Specs: MediaVideo } = await import('sys.ui.react.media.video/specs');
 const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 
-const { Specs: Monaco } = await import('ext.lib.monaco/specs');
+const { Specs: ExtMonaco } = await import('ext.lib.monaco/specs');
+const { Specs: ExtMonacoCrdt } = await import('ext.lib.monaco.crdt/specs');
+const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
+const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
 const { Specs: ExtProtocolHats } = await import('ext.lib.protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
-const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
-const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
 const { Specs: ExtTldraw } = await import('ext.lib.tldraw/specs');
 
 export const Specs = {
@@ -44,7 +45,6 @@ export const Specs = {
 
   ...Crdt,
   ...IndexedDb,
-  ...Monaco,
   ...Common,
   ...ComonDev,
   ...CommonSample,
@@ -54,6 +54,9 @@ export const Specs = {
   ...MediaVideo,
   ...Fs,
   ...Concept,
+
+  ...ExtMonaco,
+  ...ExtMonacoCrdt,
 
   ...ExtStripe,
   ...ExtProtocolHats,
