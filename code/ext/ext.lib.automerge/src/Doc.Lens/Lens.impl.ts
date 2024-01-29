@@ -4,7 +4,7 @@ import { Path, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = {
-  init?: t.LensInitial<R>;
+  init?: t.InitializeLens<R>;
   typename?: string;
   dispose$?: t.UntilObservable;
 };
@@ -15,7 +15,7 @@ type Options<R extends O> = {
 export function init<R extends O, L extends O>(
   root: t.DocRef<R>,
   path?: t.JsonPath | (() => t.JsonPath),
-  options?: Options<R> | t.LensInitial<R>,
+  options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {
   const args = wrangle.options<R>(options);
 
@@ -130,7 +130,7 @@ export function init<R extends O, L extends O>(
     /**
      * Create a new sub-lens from the current lens.
      */
-    lens<T extends O>(subpath: t.JsonPath, fn?: t.LensInitial<L>) {
+    lens<T extends O>(subpath: t.JsonPath, fn?: t.InitializeLens<L>) {
       const composite = [...wrangle.path(path), ...subpath];
       if (fn && typeof Path.resolve(root, composite) !== 'object') api.change((d) => fn(d));
       return init<R, T>(root, composite, { dispose$ });
@@ -175,7 +175,7 @@ export function init<R extends O, L extends O>(
  * Helpers
  */
 const wrangle = {
-  options<R extends O>(input?: Options<R> | t.LensInitial<R>): Options<R> {
+  options<R extends O>(input?: Options<R> | t.InitializeLens<R>): Options<R> {
     if (typeof input === 'function') return { init: input };
     return input ?? {};
   },
