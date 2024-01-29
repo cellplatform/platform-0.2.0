@@ -15,6 +15,8 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'ext.lib.automerge': '0.0.0',
+    'ext.lib.monaco': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },

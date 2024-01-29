@@ -2,6 +2,8 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { Monaco, MonacoCodeEditor } from 'ext.lib.monaco/src/types';
+export type { StoreIndexDb, WebStoreIndex, Store } from 'ext.lib.automerge/src/types';
 
 /**
  * @system

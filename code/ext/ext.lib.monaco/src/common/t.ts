@@ -1,6 +1,3 @@
-export type * from './t.monaco';
-export type * from './t.Automerge';
-
 /**
  * @external
  */
