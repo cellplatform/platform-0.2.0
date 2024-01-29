@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-import { EditorCarets } from './ui.logic';
+import { EditorCarets } from './ui/logic.Editor.Carets';
 import { MonacoEditor } from './ui/ui.MonacoEditor';
 
 export { EditorCarets, MonacoEditor };
