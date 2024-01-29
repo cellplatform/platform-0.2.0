@@ -52,10 +52,10 @@ export default Dev.describe(name, async (e) => {
                 console.groupEnd();
 
                 // TEMP 🐷 - casting error
-                const lens = sample as t.Lens<any>;
+                const lens = sample;
                 // const lens = sample;
 
-                Monaco.Crdt.Syncer.listen({ monaco, editor, lens });
+                Monaco.Crdt.Syncer.listen({ lens });
               }}
             />
           );
