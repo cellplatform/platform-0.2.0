@@ -1,9 +1,9 @@
-import { Icons, Is, Value, css, type t, ObjectView } from './common';
+import { ObjectView, css, type t } from './common';
 
 type D = t.InfoData['document'];
 
 export function document(data: D) {
-  if (!data || !data.doc) return;
+  if (!data) return;
   const res: t.PropListItem[] = [];
 
   const label = data.label ?? 'Document';
