@@ -7,8 +7,14 @@ export { Pkg };
 /**
  * Library
  */
-export { MonacoEditor } from './ui/ui.MonacoEditor';
-export { EditorCarets } from './ui.logic';
+import { EditorCarets } from './ui.logic';
+import { MonacoEditor } from './ui/ui.MonacoEditor';
+
+export { EditorCarets, MonacoEditor };
+export const Monaco = {
+  Editor: MonacoEditor,
+  Carets: EditorCarets,
+} as const;
 
 /**
  * Dev
