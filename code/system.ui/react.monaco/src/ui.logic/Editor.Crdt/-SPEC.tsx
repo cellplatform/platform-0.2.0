@@ -21,7 +21,6 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    const resetReloadClose = () => state.change((d) => (d.reload = false));
     await state.change((d) => {});
 
     const events = { doc: doc.events() } as const;
@@ -29,9 +28,7 @@ export default Dev.describe(name, async (e) => {
       dev.redraw('debug');
 
       console.group('🌳 ');
-      e.patches.forEach((patch) => {
-        console.log('patch', patch, patch.path);
-      });
+      e.patches.forEach((patch) => console.log('patch', patch, patch.path));
       console.groupEnd();
     });
 
@@ -41,7 +38,7 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
-          return <TestDb.DevReload onCloseClick={resetReloadClose} />;
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
         } else {
           return (
             <MonacoEditor
