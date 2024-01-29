@@ -75,7 +75,7 @@ export function init<R extends O, L extends O>(
    * API
    */
   const api: t.Lens<L> = {
-    instance: `${root.uri}:lens.${slug()}`,
+    instance: `crdt:${root.uri}:lens.${slug()}`,
     typename: args.typename,
 
     /**

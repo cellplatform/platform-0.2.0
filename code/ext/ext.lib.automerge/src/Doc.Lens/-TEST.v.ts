@@ -23,9 +23,9 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 0 });
       expect(lens.typename).to.eql(undefined);
 
-      const id = lens.instance;
-      expect(id.startsWith(root.uri)).to.eql(true);
-      expect(id.substring(0, id.lastIndexOf('.')).endsWith(':lens')).to.eql(true);
+      const instance = lens.instance;
+      expect(instance.startsWith(`crdt:${root.uri}`)).to.eql(true);
+      expect(instance.substring(0, instance.lastIndexOf('.')).endsWith(':lens')).to.eql(true);
     });
 
     it('Doc.lens ← exposed as library entry', async () => {
