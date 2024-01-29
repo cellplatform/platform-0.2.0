@@ -1,15 +1,14 @@
-import { CrdtInfo, Dev, Doc, MonacoEditor, TestDb } from '../../test.ui';
+import { CrdtInfo, Dev, MonacoEditor, Pkg, TestDb } from '../../test.ui';
 import { setupStore, type D } from './-SPEC.store';
-import type * as t from './-SPEC.t';
+import { Doc, type t } from './common';
 
 type T = { reload?: boolean };
-
 const initial: T = {};
 
 /**
  * Spec
  */
-const name = 'Sample.01';
+const name = `${Pkg.name}.syncer`;
 export default Dev.describe(name, async (e) => {
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
   let monaco: t.Monaco;
@@ -53,6 +52,8 @@ export default Dev.describe(name, async (e) => {
                 console.log('event', e);
                 console.log('lens', lens);
                 console.groupEnd();
+
+                // Monaco.Crdt.Syncer.listen({ lens });
               }}
             />
           );
