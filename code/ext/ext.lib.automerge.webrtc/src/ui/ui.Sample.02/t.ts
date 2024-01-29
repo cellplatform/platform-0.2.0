@@ -20,6 +20,7 @@ export type SampleEdgeProps = {
 
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleSharedOverlay = { module?: LoaderDef };
+export type DevHarnessShared = { debugPanel: boolean };
 
 /**
  * Dynamic Loading

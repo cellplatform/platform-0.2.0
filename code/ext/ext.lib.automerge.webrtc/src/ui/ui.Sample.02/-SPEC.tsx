@@ -5,11 +5,12 @@ import { Loader } from './-SPEC.Loader';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
+import { monitorKeyboard } from './-SPEC.keyboard';
 
 type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
 
-type SampleNamespace = 'foo.sample';
+type SampleNamespace = 'foo.sample' | 'dev.harness';
 
 /**
  * Spec
@@ -21,7 +22,8 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let lens: t.Lens<t.SampleSharedOverlay> | undefined;
+  let sharedOverlay: t.Lens<t.SampleSharedOverlay> | undefined;
+  let sharedDevHarness: t.Lens<t.DevHarnessShared> | undefined;
 
   /**
    * A factory function
@@ -75,12 +77,20 @@ export default Dev.describe(name, async (e) => {
     monitor(right);
 
     /**
-     * When the shared namespace is ready (i.e. the network is connected)
+     * When the shared namespace becomes ready (i.e. the network is now connected)
      * the initialize the sample namespace.
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      lens = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
+      sharedOverlay = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
+      sharedDevHarness = ns.lens<t.DevHarnessShared>('dev.harness', { debugPanel: true });
+
+      sharedDevHarness.events().changed$.subscribe((e) => {
+        ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
+        dev.redraw('debug');
+      });
+
+      monitorKeyboard(sharedDevHarness);
       dev.redraw();
     });
 
@@ -93,7 +103,9 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
           const store = left.network.store;
-          const elOverlay = lens && <Loader store={store} lens={lens} factory={factory} />;
+          const elOverlay = sharedOverlay && (
+            <Loader store={store} lens={sharedOverlay} factory={factory} />
+          );
           return <Sample left={left} right={right} overlay={elOverlay} />;
         }
       });
@@ -191,15 +203,15 @@ export default Dev.describe(name, async (e) => {
       };
 
       const loaderButton = (label: string, typename: string) => {
-        const isEnabled = () => !!lens && !!selected?.item.uri;
+        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         dev.button((btn) => {
           btn
             .label(label)
             .enabled(isEnabled)
             .onClick((e) => {
               const docuri = selected?.item.uri;
-              if (!(lens && docuri)) return;
-              lens.change((d) => (d.module = { typename, docuri }));
+              if (!(sharedOverlay && docuri)) return;
+              sharedOverlay.change((d) => (d.module = { typename, docuri }));
             });
         });
       };
@@ -208,12 +220,12 @@ export default Dev.describe(name, async (e) => {
       loaderButton(`ƒ ( load → DiagramEditor )`, 'DiagramEditor');
 
       dev.button((btn) => {
-        const isEnabled = () => !!lens && !!selected?.item.uri;
+        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         btn
           .label('ƒ ( 💥 )')
           .right((e) => 'unload')
           .enabled((e) => isEnabled())
-          .onClick((e) => lens?.change((d) => delete d.module));
+          .onClick((e) => sharedOverlay?.change((d) => delete d.module));
       });
 
       dev.hr(-1, 5);
