@@ -54,7 +54,7 @@ export const json = JSON.stringify({ name: 'foo', version: '0.1.2' }, null, '  '
 
 export const rust = `
 fn main() {
-  println!("Hello, World!");
+  println!("Hello, Rust!");
 }
 `;
 

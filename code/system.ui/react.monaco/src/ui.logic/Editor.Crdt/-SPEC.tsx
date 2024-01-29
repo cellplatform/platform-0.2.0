@@ -1,7 +1,7 @@
-import { css, Dev, type t, TestDb, MonacoEditor, Doc } from '../../test.ui';
-import { setupStore } from './-SPEC.store';
 import { Info as CrdtInfo } from 'ext.lib.automerge';
 import { EditorCrdt } from '.';
+import { Dev, Doc, MonacoEditor, TestDb, type t } from '../../test.ui';
+import { setupStore, type D } from './-SPEC.store';
 
 type T = { reload?: boolean };
 const initial: T = {};
@@ -23,7 +23,17 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     const resetReloadClose = () => state.change((d) => (d.reload = false));
     await state.change((d) => {});
-    doc.events().changed$.subscribe((e) => dev.redraw('debug'));
+
+    const events = { doc: doc.events() } as const;
+    events.doc.changed$.subscribe((e) => {
+      dev.redraw('debug');
+
+      console.group('🌳 ');
+      e.patches.forEach((patch) => {
+        console.log('patch', patch, patch.path);
+      });
+      console.groupEnd();
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -40,8 +50,10 @@ export default Dev.describe(name, async (e) => {
                 console.log('⚡️ MonacoEditor.onReady', e);
                 monaco = e.monaco;
                 editor = e.editor;
-                const state = Doc.lens(doc, (d) => d.sample || (d.sample = {}));
-                EditorCrdt.syncer({ monaco, editor, state });
+                const lens = Doc.lens<D, t.CodeDoc>(doc, ['sample'], (d) => (d.sample = {}));
+                // EditorCrdt.syncer({ monaco, editor, lens });
+
+                // const m: t.Lens<t.CodeDoc> = lens;
               }}
             />
           );
@@ -68,13 +80,20 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button('tmp', (e) => {
+        doc.change((d) => {
+          d.count++;
+          const sample = d.sample || (d.sample = { code: '' });
+
+          sample.code = 'hello world 👋\n';
+        });
+      });
+
+      dev.hr(-1, 5);
+
       dev.button([`delete db: "${db.name}"`, '💥'], async (e) => {
         await e.change((d) => (d.reload = true));
         await TestDb.Spec.deleteDatabase();
-      });
-
-      dev.button('tmp', (e) => {
-        doc.change((d) => d.count++);
       });
     });
   });

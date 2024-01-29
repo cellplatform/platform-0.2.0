@@ -1,6 +1,6 @@
 import { TestDb, Time, WebStore, type t } from '../../test.ui';
 
-type D = { count: number; sample?: t.CodeDoc };
+export type D = { count: number; sample?: t.CodeDoc };
 
 export async function setupStore(docname: string) {
   const db = TestDb.Spec;
