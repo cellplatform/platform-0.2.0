@@ -24,6 +24,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
       enabled={isEnabled}
       track={Wrangle.track(item)}
       style={styles.base}
+      theme={Switch.Theme.light.blue}
       onMouseDown={props.onClick}
     />
   );
