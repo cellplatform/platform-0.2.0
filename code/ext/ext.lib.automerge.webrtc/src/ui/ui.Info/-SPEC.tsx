@@ -2,8 +2,11 @@ import { Info } from '.';
 import { COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
-type T = { props: t.InfoProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.InfoProps;
+  debug: { visible?: boolean };
+};
+const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
@@ -49,6 +52,10 @@ export default Dev.describe(name, async (e) => {
             data={{
               network: self.network,
               repo: { store, index },
+              visible: {
+                value: e.state.debug.visible,
+                onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
+              },
             }}
           />
         );
