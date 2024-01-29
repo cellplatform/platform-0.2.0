@@ -67,6 +67,7 @@ export const Paths = {
       'src/test.ui/entry.tsx',
       'src/test.ui/index.ts',
 
+      'src/ui/common/Icons.ts',
       'src/ui/common/index.ts',
       'src/ui/common/libs.ts',
       'src/ui/common/t.ts',
@@ -79,7 +80,6 @@ export const Paths = {
       'src/ui/ui.Info/Root.tsx',
       'src/ui/ui.Info/t.ts',
       'src/ui/ui.Sample.01/-SPEC.tsx',
-      'src/ui/Icons.ts',
     ],
   },
 };
