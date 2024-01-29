@@ -6,8 +6,4 @@ export default Test.describe(`Module: ${Pkg.toString()}`, (e) => {
     expect(typeof Pkg.name).to.eql('string');
     expect(typeof Pkg.version).to.eql('string');
   });
-
-  e.it.skip('TODO:', async (e) => {
-    //
-  });
 });
