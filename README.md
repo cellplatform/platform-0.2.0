@@ -12,8 +12,9 @@ Monorepo comprising the core set of shared `/sys` system modules that flexibly c
 - [compilation](/code/compiler/) toolchain (W3C standards)
 - modules: [system](/code/system/) 
 - modules: [system.ui](/code/system.ui/) 
+- modules: [ext.lib](/code/ext/) 
 
-(built on [Web Standards](https://wintercg.org/))
+(built on, and commited to, [Web Standards](https://wintercg.org/))
 
 ---
 
