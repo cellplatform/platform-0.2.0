@@ -23,12 +23,12 @@ const {
   SampleSpecs: CommonSample,
 } = await import('sys.ui.react.common/specs');
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
-const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 const { Specs: MediaVideo } = await import('sys.ui.react.media.video/specs');
 const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 
+const { Specs: Monaco } = await import('ext.lib.monaco/specs');
 const { Specs: ExtProtocolHats } = await import('ext.lib.protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');

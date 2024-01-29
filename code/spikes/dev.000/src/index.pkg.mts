@@ -21,6 +21,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',
     'ext.lib.codemirror': '0.0.0',
+    'ext.lib.monaco': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
     'ext.lib.privy': '0.0.0',
     'ext.lib.protocol.hats': '0.0.0',

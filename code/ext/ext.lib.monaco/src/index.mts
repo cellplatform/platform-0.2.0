@@ -8,6 +8,7 @@ export { Pkg };
  * Library
  */
 export { MonacoEditor } from './ui/ui.MonacoEditor';
+export { EditorCarets } from './ui.logic';
 
 /**
  * Dev
