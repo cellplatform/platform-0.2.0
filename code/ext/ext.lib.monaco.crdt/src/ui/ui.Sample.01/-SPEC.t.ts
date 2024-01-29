@@ -1,5 +1,5 @@
 export * from '../common/t';
 
-export type CodeDoc = {
+export type SampleCodeDoc = {
   code?: string;
 };

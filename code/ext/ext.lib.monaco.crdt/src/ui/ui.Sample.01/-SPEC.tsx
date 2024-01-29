@@ -28,6 +28,8 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
+    doc.events().changed$.subscribe(() => dev.redraw('debug'));
+
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
@@ -43,7 +45,7 @@ export default Dev.describe(name, async (e) => {
               onReady={(e) => {
                 monaco = e.monaco;
                 editor = e.editor;
-                const lens = Doc.lens<D, t.CodeDoc>(doc, ['sample'], (d) => (d.sample = {}));
+                const lens = Doc.lens<D, t.SampleCodeDoc>(doc, ['sample'], (d) => (d.sample = {}));
                 // EditorCrdt.syncer({ monaco, editor, lens });
 
                 // const m: t.Lens<t.CodeDoc> = lens;
@@ -77,13 +79,22 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('tmp', (e) => {
-        doc.change((d) => {
-          d.count++;
-          const sample = d.sample || (d.sample = { code: '' });
+      dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
 
-          sample.code = 'hello world 👋\n';
+      dev.button('doc.change: (code sample)', (e) => {
+        doc.change((d) => {
+          // d.count++;
+          const sample = d.sample || (d.sample = { code: '' });
+          sample.code = `hello world 👋\ncount: ${doc.current.count}`;
         });
+      });
+
+      dev.button((btn) => {
+        btn
+          .label(`doc.change: (increment count)`)
+          .right((e) => `${doc.current.count} + 1`)
+          .onClick((e) => doc.change((d) => d.count++));
       });
 
       dev.hr(-1, 5);
@@ -99,7 +110,9 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        ['crdt.doc']: doc.toObject(),
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
