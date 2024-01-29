@@ -8,6 +8,7 @@ export type SampleEdgeProps = {
 
 export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const { edge } = props;
+  const visible = edge.visible ?? true;
 
   /**
    * Render
@@ -15,10 +16,13 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
+      width: 250,
       borderLeft: edge.kind === 'Right' ? border : undefined,
       borderRight: edge.kind === 'Left' ? border : undefined,
     }),
   };
+
+  if (!visible) return <div />;
 
   return (
     <PeerRepoList

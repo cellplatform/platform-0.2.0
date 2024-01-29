@@ -1,3 +1,4 @@
+import { A } from './common';
 import { init } from './Lens.impl';
 import { Registry } from './Lens.Registry';
 
@@ -6,5 +7,6 @@ import { Registry } from './Lens.Registry';
  */
 export const Lens = {
   init,
+  splice: A.splice,
   Registry,
 } as const;

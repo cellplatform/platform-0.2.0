@@ -21,6 +21,7 @@ export const DEFAULTS = {
         'Network.Shared',
         'Network.Shared.Json',
         'Network.Transfer',
+        'Visible',
       ];
     },
     get default(): t.InfoField[] {

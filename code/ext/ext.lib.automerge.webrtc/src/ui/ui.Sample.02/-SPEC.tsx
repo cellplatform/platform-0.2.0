@@ -5,11 +5,12 @@ import { Loader } from './-SPEC.Loader';
 import { createEdge } from './-SPEC.createEdge';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
+import { monitorKeyboard } from './-SPEC.keyboard';
 
 type T = { reload?: boolean; modalElement?: JSX.Element };
 const initial: T = {};
 
-type SampleNamespace = 'foo.sample';
+type SampleNamespace = 'foo.sample' | 'dev.harness';
 
 /**
  * Spec
@@ -21,7 +22,8 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let lens: t.Lens<t.SampleSharedOverlay> | undefined;
+  let sharedOverlay: t.Lens<t.SampleSharedOverlay> | undefined;
+  let sharedDevHarness: t.Lens<t.DevHarnessShared> | undefined;
 
   /**
    * A factory function
@@ -75,12 +77,26 @@ export default Dev.describe(name, async (e) => {
     monitor(right);
 
     /**
-     * When the shared namespace is ready (i.e. the network is connected)
+     * When the shared namespace becomes ready (i.e. the network is now connected)
      * the initialize the sample namespace.
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      lens = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
+      sharedOverlay = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
+      sharedDevHarness = ns.lens<t.DevHarnessShared>('dev.harness', {
+        debugPanel: true,
+        edge: { Left: { visible: true }, Right: { visible: true } },
+      });
+
+      sharedDevHarness
+        .events()
+        .changed$.pipe(rx.debounceTime(100))
+        .subscribe((e) => {
+          ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
+          dev.redraw();
+        });
+
+      monitorKeyboard(sharedDevHarness);
       dev.redraw();
     });
 
@@ -93,8 +109,16 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
           const store = left.network.store;
-          const elOverlay = lens && <Loader store={store} lens={lens} factory={factory} />;
-          return <Sample left={left} right={right} overlay={elOverlay} />;
+          const lens = sharedOverlay;
+          const edge = sharedDevHarness?.current.edge;
+          const elLoader = lens && <Loader store={store} lens={lens} factory={factory} />;
+          return (
+            <Sample
+              left={{ ...left, visible: edge?.Left.visible }}
+              right={{ ...right, visible: edge?.Right.visible }}
+              overlay={elLoader}
+            />
+          );
         }
       });
   });
@@ -136,12 +160,31 @@ export default Dev.describe(name, async (e) => {
 
     const edgeDebug = (edge: t.SampleEdge) => {
       const network = edge.network;
+
       dev.row((e) => {
+        const shared = sharedDevHarness;
+        const edgeLayout = shared?.current.edge[edge.kind];
         return (
           <PeerRepoList.Info
             title={edge.kind}
-            fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-            data={{ network }}
+            fields={[
+              'Visible',
+              'Repo',
+              'Peer',
+              'Network.Transfer',
+              'Network.Shared',
+              'Network.Shared.Json',
+            ]}
+            data={{
+              network,
+              visible: {
+                value: edgeLayout?.visible ?? true,
+                enabled: !!edgeLayout,
+                onToggle(visible) {
+                  shared?.change((d) => (d.edge[edge.kind].visible = !visible));
+                },
+              },
+            }}
           />
         );
       });
@@ -191,21 +234,30 @@ export default Dev.describe(name, async (e) => {
       };
 
       const loaderButton = (label: string, typename: string) => {
+        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         dev.button((btn) => {
           btn
             .label(label)
-            .enabled((e) => !!lens && !!selected?.item.uri)
+            .enabled(isEnabled)
             .onClick((e) => {
               const docuri = selected?.item.uri;
-              if (!(lens && docuri)) return;
-              lens.change((d) => (d.module = { typename, docuri }));
+              if (!(sharedOverlay && docuri)) return;
+              sharedOverlay.change((d) => (d.module = { typename, docuri }));
             });
         });
       };
 
-      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor');
-      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor');
-      dev.button('unload', (e) => lens?.change((d) => delete d.module));
+      loaderButton(`ƒ ( load → CodeEditor )`, 'CodeEditor');
+      loaderButton(`ƒ ( load → DiagramEditor )`, 'DiagramEditor');
+
+      dev.button((btn) => {
+        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
+        btn
+          .label('ƒ ( 💥 )')
+          .right((e) => 'unload')
+          .enabled((e) => isEnabled())
+          .onClick((e) => sharedOverlay?.change((d) => delete d.module));
+      });
 
       dev.hr(-1, 5);
 
@@ -228,7 +280,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(5, 20);
 
-      dev.button('purge ephemeral', (e) => {
+      dev.button(['purge ephemeral', '💦'], (e) => {
         const purge = (edge: t.SampleEdge) => WebrtcStore.Shared.purge(edge.model.index);
         purge(left);
         purge(right);
@@ -238,7 +290,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const deleteButton = (label: string, fn: () => Promise<any>) => {
-        dev.button([`delete db: ${label}`, '💥'], async (e) => {
+        dev.button([`delete fs/db: ${label}`, '💥'], async (e) => {
           await e.change((d) => (d.reload = true));
           await fn();
         });

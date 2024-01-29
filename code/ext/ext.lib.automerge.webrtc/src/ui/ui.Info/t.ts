@@ -12,7 +12,8 @@ export type InfoField =
   | 'Repo'
   | 'Network.Shared'
   | 'Network.Shared.Json'
-  | 'Network.Transfer';
+  | 'Network.Transfer'
+  | 'Visible';
 
 export type InfoData = {
   url?: { href: string; title?: string };
@@ -21,6 +22,12 @@ export type InfoData = {
   repo?: AutomergeInfoData['repo'];
   network?: t.NetworkStore;
   shared?: { json?: { expand?: { level?: number; paths?: string[] } } };
+  visible?: {
+    value?: boolean;
+    enabled?: boolean;
+    label?: string;
+    onToggle?: (current: boolean) => void;
+  };
 };
 
 /**

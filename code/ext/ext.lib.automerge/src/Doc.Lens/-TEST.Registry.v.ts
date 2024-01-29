@@ -1,22 +1,16 @@
 import { Lens } from '.';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it } from '../test';
 import { Registry } from './Lens.Registry';
 
 describe('Doc.Lens', () => {
   type TRoot = { msg?: string; child?: TChild };
   type TChild = { count: number; child?: TChild };
 
+  const path = ['child'];
   const store = Store.init();
-  const setup = () => store.doc.getOrCreate<TRoot>((d) => null);
-
-  const getDesendent: t.LensGetDescendent<TRoot, TChild> = (doc) => {
-    // NB: If the child does not exist, it is written onto the object.
-    //     Required for the CRDT to register the {root} subject
-    //     prior to be handed to the lens mutator function
-    return doc.child || (doc.child = { count: 0 });
-  };
+  const setup = () => store.doc.getOrCreate<TRoot>((d) => (d.child = { count: 0 }));
 
   it('API references', () => {
     expect(Lens.Registry).to.equal(Registry);
@@ -66,10 +60,10 @@ describe('Doc.Lens', () => {
 
     expect(Registry.total(root1)).to.eql(0);
 
-    const lens1 = Doc.lens<TRoot, TChild>(root1, getDesendent);
-    const lens2 = Doc.lens<TRoot, TChild>(root1, getDesendent);
-    const lens3 = lens2.lens(getDesendent);
-    const lens4 = Doc.lens<TRoot, TChild>(root2, getDesendent); // NB: not the same root doc.
+    const lens1 = Lens.init<TRoot, TChild>(root1, path);
+    const lens2 = Lens.init<TRoot, TChild>(root1, path);
+    const lens3 = lens2.lens(path, (d) => (d.child = { count: 0 }));
+    const lens4 = Lens.init<TRoot, TChild>(root2, path); // NB: not the same root doc.
 
     expect(Registry.total(root1)).to.eql(3);
 

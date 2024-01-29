@@ -5,6 +5,7 @@ export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
   model: t.RepoListModel;
   network: t.NetworkStore;
+  visible?: boolean;
 };
 
 /**
@@ -19,7 +20,13 @@ export type SampleEdgeProps = {
 };
 
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
+export type SampleEdgeLayout = { visible: boolean };
 export type SampleSharedOverlay = { module?: LoaderDef };
+
+export type DevHarnessShared = {
+  debugPanel: boolean;
+  edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
+};
 
 /**
  * Dynamic Loading

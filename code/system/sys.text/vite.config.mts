@@ -1,4 +1,4 @@
-import { Config } from '../../../Config';
+import { Config } from '../../../config';
 
 export default Config.vite(import.meta.url, (e) => {
   e.lib();

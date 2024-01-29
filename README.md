@@ -12,8 +12,9 @@ Monorepo comprising the core set of shared `/sys` system modules that flexibly c
 - [compilation](/code/compiler/) toolchain (W3C standards)
 - modules: [system](/code/system/) 
 - modules: [system.ui](/code/system.ui/) 
+- modules: [ext.lib](/code/ext/) 
 
-(built on [Web Standards](https://wintercg.org/))
+(built on, and commited to, [Web Standards](https://wintercg.org/))
 
 ---
 
@@ -26,7 +27,7 @@ Sustained long range R&D.
 Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.  
 
 Whilst the author(s) have been in diverse, exploratory dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, this repo contains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or any related so called "AI" technology).  
-Informed, augmented, yes...but no abdication of direct human ƒ(discipline, creativity, coherence).
+Informed, augmented, yes...but no abdication of direct human: discipline, creativity, coherence.
 
 
 

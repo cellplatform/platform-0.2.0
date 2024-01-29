@@ -18,6 +18,7 @@ export type EditorLanguage =
   | 'rust'
   | 'go'
   | 'python';
+
 export type EditorTheme = 'Light' | 'Dark';
 
 /**

@@ -1,40 +1,51 @@
 import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { rx, slug, toObject, type t } from './common';
+import { Path, rx, slug, toObject, type t } from './common';
+
+type O = Record<string, unknown>;
+type Options<R extends O> = {
+  init?: t.LensInitial<R>;
+  typename?: string;
+  dispose$?: t.UntilObservable;
+};
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export function init<R extends {}, L extends {}>(
+export function init<R extends O, L extends O>(
   root: t.DocRef<R>,
-  get: t.LensGetDescendent<R, L>,
-  options: { dispose$?: t.UntilObservable; typename?: string } = {},
-) {
+  path?: t.JsonPath | (() => t.JsonPath),
+  options?: Options<R> | t.LensInitial<R>,
+): t.Lens<L> {
+  const args = wrangle.options<R>(options);
+
   Registry.add(root);
   let _count = 0;
   let _changing = false;
   let _lastValue: L | undefined;
-  const events = root.events(options.dispose$);
 
-  const { dispose, dispose$ } = events;
+  const resolve = (root: R) => Path.resolve<L>(root, wrangle.path(path))!;
+  const events = root.events(args.dispose$);
+
   events.dispose$.subscribe(() => {
     subject$.complete();
     Registry.remove(root);
   });
-
   const subject$ = rx.subject<t.LensEvent<L>>();
+  const { dispose, dispose$ } = events;
 
-  const Fire = {
+  const fire = {
     changed(e: t.DocChanged<R>) {
-      const before = get(e.patchInfo.before);
-      const after = get(e.patchInfo.after);
+      const before = resolve(e.patchInfo.before);
+      const after = resolve(e.patchInfo.after);
+      const patches = wrangle.patches(e.patches, path);
       subject$.next({
         type: 'crdt:lens:changed',
-        payload: { before, after },
+        payload: { before, after, patches },
       });
     },
     deleted(e: t.DocDeleted<R>) {
-      const before = get(e.doc);
+      const before = resolve(e.doc);
       const after = undefined;
       subject$.next({
         type: 'crdt:lens:deleted',
@@ -51,12 +62,12 @@ export function init<R extends {}, L extends {}>(
       rx.filter(() => _lastValue !== api.current),
     )
     .subscribe((e) => {
-      Fire.changed(e);
+      fire.changed(e);
       _lastValue = api.current;
     });
 
   events.deleted$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-    Fire.deleted(e);
+    fire.deleted(e);
     dispose();
   });
 
@@ -64,14 +75,14 @@ export function init<R extends {}, L extends {}>(
    * API
    */
   const api: t.Lens<L> = {
-    instance: `${root.uri}:lens.${slug()}`,
-    typename: options.typename,
+    instance: `crdt:${root.uri}:lens.${slug()}`,
+    typename: args.typename,
 
     /**
      * Current value of the descendent.
      */
     get current() {
-      return get(root.current);
+      return resolve(root.current);
     },
 
     /**
@@ -90,7 +101,7 @@ export function init<R extends {}, L extends {}>(
            *       all sub-trees lens getters are correctly initialized.
            */
           const length = Registry.total(root) + 1;
-          Array.from({ length }).forEach(() => get(draft));
+          Array.from({ length }).forEach(() => resolve(draft));
         });
       }
 
@@ -98,10 +109,10 @@ export function init<R extends {}, L extends {}>(
       events.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
 
       // Perform change.
-      root.change((d) => fn(get(d)));
+      root.change((d) => fn(resolve(d)));
 
       // Alert listeners.
-      if (_fired) Fire.changed(_fired);
+      if (_fired) fire.changed(_fired);
 
       // Finish up.
       _lastValue = api.current;
@@ -119,8 +130,10 @@ export function init<R extends {}, L extends {}>(
     /**
      * Create a new sub-lens from the current lens.
      */
-    lens<T extends {}>(fn: t.LensGetDescendent<L, T>) {
-      return init(root, (doc) => fn(get(doc)), { dispose$ });
+    lens<T extends O>(subpath: t.JsonPath, fn?: t.LensInitial<L>) {
+      const composite = [...wrangle.path(path), ...subpath];
+      if (fn && typeof Path.resolve(root, composite) !== 'object') api.change((d) => fn(d));
+      return init<R, T>(root, composite, { dispose$ });
     },
 
     /**
@@ -140,7 +153,39 @@ export function init<R extends {}, L extends {}>(
     },
   };
 
+  /**
+   * Initialize.
+   */
+  if (typeof resolve(root.current) !== 'object') {
+    const fn = args.init;
+    if (typeof fn === 'function') root.change((d) => fn(d));
+    if (typeof resolve(root.current) !== 'object') {
+      const pathstring = wrangle.path(path).join('/');
+      throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
+    }
+  }
+
   api.change(() => null); // NB: Ensure the lens is initialized.
   _lastValue = api.current;
+
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  options<R extends O>(input?: Options<R> | t.LensInitial<R>): Options<R> {
+    if (typeof input === 'function') return { init: input };
+    return input ?? {};
+  },
+
+  path(path?: t.JsonPath | (() => t.JsonPath)) {
+    return typeof path === 'function' ? path() : path ?? [];
+  },
+
+  patches(patches: t.Patch[], path?: t.JsonPath | (() => t.JsonPath)) {
+    const length = wrangle.path(path).length;
+    return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
+  },
+} as const;

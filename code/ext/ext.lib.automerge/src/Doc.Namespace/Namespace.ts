@@ -1,6 +1,7 @@
 import { Lens, rx, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
+type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.LensInitial<R> };
 
 export const Namespace = {
   /**
@@ -12,13 +13,14 @@ export const Namespace = {
    */
   init<R extends O, N extends string = string>(
     root: t.DocRef<R>,
-    getMap?: t.NamespaceMapGetLens<R>,
-    options?: { dispose$: t.UntilObservable },
+    path?: t.JsonPath | (() => t.JsonPath),
+    options?: Options<R> | t.LensInitial<R>,
   ): t.NamespaceManager<N> {
-    const rootEvents = root.events(options?.dispose$);
-    const { dispose, dispose$ } = rootEvents;
-    const container = wrangle.containerLens<R, N>(root, getMap, dispose$);
+    const args = wrangle.options(options);
+    const events = root.events(args.dispose$);
+    const { dispose, dispose$ } = events;
 
+    const container = Lens<R, t.NamespaceMap<N>>(root, path, { init: args.init, dispose$ });
     const cache = new Map<N, t.Lens<{}>>();
     dispose$.subscribe(() => cache.clear());
 
@@ -31,13 +33,12 @@ export const Namespace = {
       get container() {
         type T = t.NamespaceMap<N>;
         if (api.disposed) return {} as T;
-
         const res = {} as T;
         Array.from(cache).forEach(([key, value]) => (res[key] = toObject(value.current)));
         return res;
       },
 
-      list<L extends {}>() {
+      list<L extends O>() {
         return Array.from(cache).map((item) => {
           const namespace = item[0] as N;
           const lens = item[1] as t.Lens<L>;
@@ -45,22 +46,22 @@ export const Namespace = {
         });
       },
 
-      lens<L extends {}>(namespace: N, initial: L, options: { typename?: string } = {}) {
+      lens<L extends O>(namespace: N, initial: L, options: { typename?: string } = {}) {
         if (cache.has(namespace)) return cache.get(namespace) as t.Lens<L>;
 
-        const { typename } = options;
-        const lens = Lens<R, L>(
-          root,
-          (draft) => {
-            const container = wrangle.container<R, N>(draft, getMap);
-            const subject = container[namespace] || (container[namespace] = initial ?? {});
-            return subject as L;
-          },
-          { dispose$, typename },
-        );
+        // Ensure the namespace {object} exists.
+        if (container.current[namespace] === undefined) {
+          container.change((d) => (d[namespace] = initial));
+        }
 
-        cache.set(namespace, lens);
+        // Construct the lens.
+        const { typename } = options;
+        const subpath = () => [...wrangle.path(path), namespace];
+        const lens = Lens<R, L>(root, subpath, { dispose$, typename });
         lens.dispose$.pipe(rx.take(1)).subscribe(() => cache.delete(namespace));
+
+        // Finish up.
+        cache.set(namespace, lens);
         return lens;
       },
 
@@ -78,7 +79,7 @@ export const Namespace = {
       dispose$,
       dispose,
       get disposed() {
-        return rootEvents.disposed;
+        return events.disposed;
       },
     };
 
@@ -90,20 +91,12 @@ export const Namespace = {
  * Helpers
  */
 const wrangle = {
-  container<R extends {}, N extends string = string>(root: R, getMap?: t.NamespaceMapGetLens<R>) {
-    return (getMap ? getMap(root) : root) as t.NamespaceMap<N>;
+  options<R extends O>(input?: Options<R> | t.LensInitial<R>): Options<R> {
+    if (typeof input === 'function') return { init: input };
+    return input ?? {};
   },
 
-  containerLens<R extends {}, N extends string = string>(
-    root: t.DocRef<R>,
-    getMap?: t.NamespaceMapGetLens<R>,
-    dispose$?: t.Observable<any>,
-  ) {
-    return Lens<R, t.NamespaceMap<N>>(
-      root,
-      (draft) => wrangle.container<R, N>(draft, getMap),
-      { dispose$ },
-      //
-    );
+  path(path?: t.JsonPath | (() => t.JsonPath)) {
+    return typeof path === 'function' ? path() : path ?? [];
   },
-};
+} as const;

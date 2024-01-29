@@ -29,6 +29,7 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Repo', () => Field.repo(data, fields))
     .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc))
     .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting))
+    .field('Visible', () => Field.visible(data))
     .items(fields);
 
   return (

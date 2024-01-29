@@ -7,12 +7,19 @@ export { Pkg };
 /**
  * Library
  */
-export { Doc } from './Doc';
-export { Store } from './Store';
-export { WebStore } from './Store.Web';
+import { Doc } from './Doc';
+import { Store } from './Store';
+import { WebStore } from './Store.Web';
 export { WebStoreIndex } from './Store.Web.Index';
 export { StoreIndexDb } from './Store.Web.IndexDb';
-export { Data, Is, Text, toObject } from './common';
+export { Data, Is, toObject } from './common';
+
+export { Doc, Store, WebStore };
+export const Crdt = {
+  Doc,
+  Store,
+  WebStore,
+} as const;
 
 /**
  * Library: UI

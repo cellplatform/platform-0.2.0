@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.test',
   version: '0.0.0',
   dependencies: {
-    'chai': '5.0.0',
+    'chai': '5.0.3',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

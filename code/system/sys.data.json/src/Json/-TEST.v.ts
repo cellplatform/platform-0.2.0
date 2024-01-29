@@ -3,6 +3,7 @@ import { Json } from '.';
 
 import { JsonBus } from '../Json.Bus';
 import { Patch } from '../Json.Patch';
+import { Path } from '../Json.Path';
 
 describe('Json', () => {
   it('exposes [JsonBus]', () => {
@@ -11,6 +12,10 @@ describe('Json', () => {
 
   it('exposes [Patch]', () => {
     expect(Json.Patch).to.equal(Patch);
+  });
+
+  it('exposes [Path]', () => {
+    expect(Json.Path).to.eql(Path);
   });
 
   it('isJson', () => {
