@@ -11,14 +11,17 @@ export type SampleMiddleProps = {
 export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
   const left = Wrangle.connectionEdge(props.left);
   const right = Wrangle.connectionEdge(props.right);
-
-  if (props.left.visible === false && props.right.visible === false) return <div />;
+  const isHidden = props.left.visible === false && props.right.visible === false;
 
   /**
    * Render
    */
   const styles = {
-    base: css({ position: 'relative', display: 'grid', overflow: 'hidden' }),
+    base: css({
+      position: 'relative',
+      display: isHidden ? 'none' : 'grid',
+      overflow: 'hidden',
+    }),
     connection: css({ Absolute: [null, 0, 0, 0] }),
     stream: css({ Absolute: 0 }),
     mask: css({
