@@ -83,7 +83,10 @@ export default Dev.describe(name, async (e) => {
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
       sharedOverlay = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
-      sharedDevHarness = ns.lens<t.DevHarnessShared>('dev.harness', { debugPanel: true });
+      sharedDevHarness = ns.lens<t.DevHarnessShared>('dev.harness', {
+        debugPanel: true,
+        edge: { Left: { visible: true }, Right: { visible: true } },
+      });
 
       sharedDevHarness.events().changed$.subscribe((e) => {
         ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
@@ -148,7 +151,9 @@ export default Dev.describe(name, async (e) => {
 
     const edgeDebug = (edge: t.SampleEdge) => {
       const network = edge.network;
+
       dev.row((e) => {
+        const edgeLayout = sharedDevHarness?.current.edge[edge.kind];
         return (
           <PeerRepoList.Info
             title={edge.kind}
@@ -160,7 +165,16 @@ export default Dev.describe(name, async (e) => {
               'Network.Shared',
               'Network.Shared.Json',
             ]}
-            data={{ network, visible: { value: true, enabled: false } }}
+            data={{
+              network,
+              visible: {
+                value: edgeLayout?.visible ?? true,
+                enabled: !!edgeLayout,
+                onToggle(visible) {
+                  sharedDevHarness?.change((d) => (d.edge[edge.kind].visible = !visible));
+                },
+              },
+            }}
           />
         );
       });
