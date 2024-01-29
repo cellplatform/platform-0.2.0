@@ -1,4 +1,4 @@
-import { CrdtInfo, Dev, MonacoEditor, Pkg, TestDb } from '../../test.ui';
+import { CrdtInfo, Dev, Monaco, Pkg, TestDb } from '../../test.ui';
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
 
@@ -39,21 +39,23 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
         } else {
           return (
-            <MonacoEditor
+            <Monaco.Editor
               focusOnLoad={true}
               onReady={(e) => {
                 monaco = e.monaco;
                 editor = e.editor;
-                const lens = Doc.lens<D, t.SampleCodeDoc>(doc, ['sample'], (d) => (d.sample = {}));
-                // EditorCrdt.syncer({ monaco, editor, lens });
+                const sample = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
 
-                // const m: t.Lens<t.CodeDoc> = lens;
                 console.group('⚡️ MonacoEditor.onReady');
                 console.log('event', e);
-                console.log('lens', lens);
+                console.log('lens', sample);
                 console.groupEnd();
 
-                // Monaco.Crdt.Syncer.listen({ lens });
+                // TEMP 🐷 - casting error
+                const lens = sample as t.Lens<any>;
+                // const lens = sample;
+
+                Monaco.Crdt.Syncer.listen({ monaco, editor, lens });
               }}
             />
           );
