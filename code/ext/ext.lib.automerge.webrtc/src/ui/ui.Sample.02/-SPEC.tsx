@@ -152,8 +152,15 @@ export default Dev.describe(name, async (e) => {
         return (
           <PeerRepoList.Info
             title={edge.kind}
-            fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-            data={{ network }}
+            fields={[
+              'Visible',
+              'Repo',
+              'Peer',
+              'Network.Transfer',
+              'Network.Shared',
+              'Network.Shared.Json',
+            ]}
+            data={{ network, visible: { value: true, enabled: false } }}
           />
         );
       });
