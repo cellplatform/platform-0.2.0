@@ -5,6 +5,7 @@ export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
   model: t.RepoListModel;
   network: t.NetworkStore;
+  visible?: boolean;
 };
 
 /**

@@ -88,10 +88,13 @@ export default Dev.describe(name, async (e) => {
         edge: { Left: { visible: true }, Right: { visible: true } },
       });
 
-      sharedDevHarness.events().changed$.subscribe((e) => {
-        ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
-        dev.redraw('debug');
-      });
+      sharedDevHarness
+        .events()
+        .changed$.pipe(rx.debounceTime(100))
+        .subscribe((e) => {
+          ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
+          dev.redraw();
+        });
 
       monitorKeyboard(sharedDevHarness);
       dev.redraw();
@@ -106,10 +109,16 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
           const store = left.network.store;
-          const elOverlay = sharedOverlay && (
-            <Loader store={store} lens={sharedOverlay} factory={factory} />
+          const lens = sharedOverlay;
+          const edge = sharedDevHarness?.current.edge;
+          const elLoader = lens && <Loader store={store} lens={lens} factory={factory} />;
+          return (
+            <Sample
+              left={{ ...left, visible: edge?.Left.visible }}
+              right={{ ...right, visible: edge?.Right.visible }}
+              overlay={elLoader}
+            />
           );
-          return <Sample left={left} right={right} overlay={elOverlay} />;
         }
       });
   });
@@ -153,7 +162,8 @@ export default Dev.describe(name, async (e) => {
       const network = edge.network;
 
       dev.row((e) => {
-        const edgeLayout = sharedDevHarness?.current.edge[edge.kind];
+        const shared = sharedDevHarness;
+        const edgeLayout = shared?.current.edge[edge.kind];
         return (
           <PeerRepoList.Info
             title={edge.kind}
@@ -171,7 +181,7 @@ export default Dev.describe(name, async (e) => {
                 value: edgeLayout?.visible ?? true,
                 enabled: !!edgeLayout,
                 onToggle(visible) {
-                  sharedDevHarness?.change((d) => (d.edge[edge.kind].visible = !visible));
+                  shared?.change((d) => (d.edge[edge.kind].visible = !visible));
                 },
               },
             }}

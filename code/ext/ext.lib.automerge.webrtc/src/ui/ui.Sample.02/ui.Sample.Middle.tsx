@@ -12,6 +12,8 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
   const left = Wrangle.connectionEdge(props.left);
   const right = Wrangle.connectionEdge(props.right);
 
+  if (props.left.visible === false && props.right.visible === false) return <div />;
+
   /**
    * Render
    */
