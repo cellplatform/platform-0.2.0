@@ -52,4 +52,19 @@ describe('Json.Path', () => {
       });
     });
   });
+
+  describe('TypedJsonPath', () => {
+    type MyObject = { root: { foo: { count: number } } };
+
+    it('deep type, partial and full', () => {
+      type P = t.TypedJsonPath<MyObject>;
+      const path1: P = ['root'];
+      const path2: P = ['root', 'foo'];
+      const path3: P = ['root', 'foo', 'count'];
+    });
+  });
 });
+
+export type TypedJsonPath<T> = T extends object
+  ? { [K in keyof T]: [K, ...TypedJsonPath<T[K]>] | [K] }[keyof T]
+  : [];
