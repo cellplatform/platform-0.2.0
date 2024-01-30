@@ -252,16 +252,16 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
-      loaderButton(`ƒ ( load → CodeEditor )`, 'CodeEditor', 'Main:Overlay');
-      loaderButton(`ƒ ( load → DiagramEditor )`, 'DiagramEditor', 'Main:Overlay');
-      loaderButton(`ƒ ( load → Auth )`, 'Auth', 'Dev:Header');
+      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main:Overlay');
+      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main:Overlay');
+      loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
 
       dev.hr(-1, 5);
 
       dev.button((btn) => {
         const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         btn
-          .label('ƒ ( 💥 )')
+          .label('ƒ → 💥')
           .right((e) => 'unload')
           .enabled((e) => isEnabled())
           .onClick((e) => sharedOverlay?.change((d) => delete d.module));
