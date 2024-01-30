@@ -1,9 +1,13 @@
 /**
  * @external
  */
-export type { Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
-export type { Monaco, MonacoCodeEditor } from 'ext.lib.monaco/src/types';
 export type { Observable } from 'rxjs';
+
+/**
+ * @ext.lib
+ */
+export type { Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
+export type { Monaco, MonacoCodeEditor, SelectionOffset } from 'ext.lib.monaco/src/types';
 
 /**
  * @system
