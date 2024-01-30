@@ -1,4 +1,4 @@
-import type * as t from '../common/types';
+import type * as t from '../common/t';
 
 type O = Record<string, unknown>;
 type Id = string;
