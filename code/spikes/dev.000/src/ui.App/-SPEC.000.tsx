@@ -81,7 +81,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             network,
             repo: model,
-            shared: { json: { expand: { level: 1 } } },
+            shared: { object: { expand: { level: 1 } } },
           }}
         />
       );
