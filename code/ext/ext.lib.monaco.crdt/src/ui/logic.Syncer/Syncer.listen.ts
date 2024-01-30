@@ -1,4 +1,5 @@
-import { DEFAULTS, Doc, Monaco, Path, rx, type t } from './common';
+import { Doc, Path, rx, type t } from './common';
+import { MonacoPatcher } from './u.MonacoPatch';
 
 type O = Record<string, unknown>;
 
@@ -11,27 +12,23 @@ export function listen<T extends O>(
   editor: t.MonacoCodeEditor,
   lens: t.Lens<T>,
   target: t.TypedJsonPath<T>,
-  options: {
-    debounce?: t.Msecs;
-    dispose$?: t.UntilObservable;
-  } = {},
+  options: { dispose$?: t.UntilObservable; debugLabel?: string } = {},
 ) {
-  const { debounce = DEFAULTS.debounce } = options;
+  const { debugLabel } = options;
   const life = rx.lifecycle(options.dispose$);
-  const { dispose, dispose$ } = life;
+  life.dispose$.subscribe(() => handlerDidChangeModelContent.dispose());
 
-  dispose$.subscribe(() => {
-    handlerDidChangeModelContent.dispose();
-    handlerDidChangeCursorSelection.dispose();
-  });
-
-  const Events = {
-    lens: lens.events(dispose$),
-  } as const;
-
-  const Code = {
-    get current() {
-      return Path.resolve(lens.current, target);
+  /**
+   * Helpers.
+   */
+  const monacoPatch = MonacoPatcher.init(monaco, editor);
+  const Events = { lens: lens.events(life.dispose$) } as const;
+  const Lens = {
+    get code() {
+      return Lens.resolve(lens.current);
+    },
+    resolve(doc: T) {
+      return Path.resolve<string>(doc, target) ?? '';
     },
     splice(doc: T, index: number, del: number, text?: string) {
       Doc.splice(doc, [...target], index, del, text);
@@ -44,43 +41,28 @@ export function listen<T extends O>(
   let _ignoreChange = false;
   const changeEditorText = (text: string) => {
     _ignoreChange = true;
-
     const before = editor.getSelections()!;
     editor.setValue(text);
     editor.setSelections(before);
-
     _ignoreChange = false;
   };
 
   /**
-   * Keep track of current/previous selection offsets.
-   */
-  let _lastSelection: t.SelectionOffset[] = [];
-  const handlerDidChangeCursorSelection = editor.onDidChangeCursorSelection((e) => {
-    if (life.disposed) return;
-
-    const next = editor.getSelections() || [];
-    _lastSelection = next.map((range) => Monaco.Wrangle.monaco(monaco).offsets(editor, range));
-
-    // console.log('_lastSelection', _lastSelection);
-    // if (args.peers) {
-    //   const selections = next.map((next) => Wrangle.asRange(next));
-    //   docPeers.changeLocal((local) => (local.selections = selections));
-    // }
-
-    // fireChange('local', 'selection');
-  });
-
-  /**
    * CRDT changed.
    */
-  Events.lens.changed$.pipe().subscribe((e) => {
+  Events.lens.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
     const prev = editor.getValue();
-    const next = Code.current;
+    const next = Lens.resolve(e.after);
+    if (next === prev) return;
 
-    console.log('next', next, e);
-    // const next = (e.after[codeKey] ?? '') as string;
-    // if (prev !== next) changeEditorText(next);
+    const source = 'crdt-sync';
+    const patches = e.patches.filter((patch) => startsWith(patch.path, target));
+    patches.forEach((patch) => {
+      _ignoreChange = true;
+      if (patch.action === 'del') monacoPatch.delete(patch, `${source}:delete`);
+      if (patch.action === 'splice') monacoPatch.splice(patch, `${source}:update`);
+      _ignoreChange = false;
+    });
   });
 
   /**
@@ -91,55 +73,29 @@ export function listen<T extends O>(
     if (_ignoreChange) return;
 
     /**
-     * Check if the user has deleted text by replacing
-     * a complete selection with a single typed character.
-     *
-     * Ensure the CRDT selected text is deleted before adding the
-     * changed character data.
-     */
-    const oldLength = e.changes.reduce((acc, change) => acc + change.rangeLength, 0);
-    const newLength = e.changes.reduce((acc, change) => acc + change.text.length, 0);
-    if (oldLength > 0 && newLength > 0) {
-      lens.change((d) => {
-        _lastSelection.forEach(({ start, end }) => Code.splice(d, start, end - start));
-      });
-    }
-
-    /**
      * Apply each change to the CRDT text field.
      * https://automerge.org/automerge/api-docs/js/functions/next.splice.html
      */
     e.changes.forEach((change) => {
-      lens.change((d) => {
-        const i = change.rangeOffset;
-        if (change.text === '') {
-          Code.splice(d, i, change.rangeLength); // Delete.
-        } else {
-          Code.splice(d, i, 0, change.text); // Update.
-        }
-      });
+      const { startLineNumber, endLineNumber, startColumn, endColumn } = change.range;
+      const isReplace = startLineNumber !== endLineNumber || startColumn !== endColumn;
+      const index = change.rangeOffset;
+      const deleteCount = isReplace ? change.rangeLength : 0;
+      lens.change((d) => Lens.splice(d, index, deleteCount, change.text));
     });
   });
 
   /**
-   * API
+   * Initialize.
    */
-  const api = {
-    /**
-     * Lifecycle
-     */
-    dispose,
-    dispose$,
-    get disposed() {
-      return life.disposed;
-    },
-  } as const;
-
-  /**
-   * Initialize
-   */
-  const initial = Code.current;
+  const initial = Lens.code;
   if (typeof initial === 'string') changeEditorText(initial);
+  return life;
+}
 
-  return api;
+/**
+ * Helpers
+ */
+function startsWith(list: any[], m: any[]): boolean {
+  return list.length >= m.length && m.every((value, index) => value === list[index]);
 }

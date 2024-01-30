@@ -1,4 +1,4 @@
-import { CrdtInfo, Dev, Monaco, Pkg, TestDb } from '../../test.ui';
+import { COLORS, Color, CrdtInfo, Dev, Monaco, Pkg, TestDb, css } from '../../test.ui';
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
 
@@ -11,13 +11,12 @@ const initial: T = {};
 const name = `${Pkg.name}.syncer`;
 export default Dev.describe(name, async (e) => {
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
-  let monaco: t.Monaco;
-  let editor: t.MonacoCodeEditor;
+  const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = { code: '' }));
 
-  console.group('🌳 state');
-  console.log(`db: "${db.name}"`);
-  console.log('store', store);
-  console.log('index', index);
+  console.group('🌳 state (syncer sample)');
+  console.info(`db: "${db.name}"`);
+  console.info('store', store);
+  console.info('index', index);
   console.groupEnd();
 
   e.it('ui:init', async (e) => {
@@ -29,33 +28,37 @@ export default Dev.describe(name, async (e) => {
 
     doc.events().changed$.subscribe(() => dev.redraw('debug'));
 
+    const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
+      console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
+      Monaco.Crdt.Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], { debugLabel });
+    };
+
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size('fill')
       .display('grid')
       .render<T>((e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
         } else {
+          const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+          const styles = {
+            base: css({ display: 'grid', gridTemplateRows: '1fr 1fr', rowGap: '30px' }),
+            top: css({ borderBottom: border }),
+            bottom: css({ borderTop: border }),
+          };
           return (
-            <Monaco.Editor
-              focusOnLoad={true}
-              onReady={(e) => {
-                monaco = e.monaco;
-                editor = e.editor;
-
-                const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
-                lens.change((d) => (d.code = d.code || ''));
-
-                console.info('⚡️ MonacoEditor.onReady');
-                console.info('|- event', e);
-                console.info('|- lens', lens);
-                // console.groupEnd();
-
-                Monaco.Crdt.Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code']);
-              }}
-            />
+            <div {...styles.base}>
+              <Monaco.Editor
+                focusOnLoad={true}
+                style={styles.top}
+                onReady={(e) => handleReady('top', e.monaco, e.editor)}
+              />
+              <Monaco.Editor
+                style={styles.bottom}
+                onReady={(e) => handleReady('bottom', e.monaco, e.editor)}
+              />
+            </div>
           );
         }
       });
@@ -82,19 +85,26 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.button('reload', (e) => location.reload());
       dev.hr(-1, 5);
 
-      dev.button('doc.change: (code sample)', (e) => {
-        doc.change((d) => {
-          const sample = d.sample || (d.sample = { code: '' });
-          const count = doc.current.count;
-          sample.code = `const msg = "hello world 👋";\nconst count = ${count};\n`;
-        });
+      dev.button('change: sample.code', (e) => {
+        const count = doc.current.count;
+        const text = `const msg = "hello world 👋";\nconst count = ${count};\n`;
+        lens.change((d) => (d.code = text));
       });
+
+      dev.button('change: sample.name', (e) => {
+        doc.change((d) => d.count++);
+        const count = doc.current.count;
+        lens.change((d) => (d.name = `name.${count}`));
+      });
+
+      dev.hr(-1, 5);
 
       dev.button((btn) => {
         btn
-          .label(`doc.change: (increment count)`)
+          .label(`change: increment count`)
           .right((e) => `${doc.current.count} + 1`)
           .onClick((e) => doc.change((d) => d.count++));
       });

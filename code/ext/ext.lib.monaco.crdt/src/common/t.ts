@@ -1,13 +1,19 @@
 /**
  * @external
  */
+export type { DelPatch, SpliceTextPatch } from '@automerge/automerge';
 export type { Observable } from 'rxjs';
 
 /**
  * @ext.lib
  */
 export type { Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
-export type { Monaco, MonacoCodeEditor, SelectionOffset } from 'ext.lib.monaco/src/types';
+export type {
+  EditorRange,
+  Monaco,
+  MonacoCodeEditor,
+  SelectionOffset,
+} from 'ext.lib.monaco/src/types';
 
 /**
  * @system
