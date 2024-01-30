@@ -44,18 +44,16 @@ export default Dev.describe(name, async (e) => {
               onReady={(e) => {
                 monaco = e.monaco;
                 editor = e.editor;
-                const sample = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
+
+                const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
+                lens.change((d) => (d.code = d.code || ''));
 
                 console.group('⚡️ MonacoEditor.onReady');
                 console.log('event', e);
-                console.log('lens', sample);
+                console.log('lens', lens);
                 console.groupEnd();
 
-                // TEMP 🐷 - casting error
-                const lens = sample;
-                // const lens = sample;
-
-                Monaco.Crdt.Syncer.listen({ lens });
+                Monaco.Crdt.Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code']);
               }}
             />
           );
@@ -74,7 +72,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
-            document: { doc },
+            document: { doc, object: { expand: { level: 3 } } },
           }}
         />
       );
