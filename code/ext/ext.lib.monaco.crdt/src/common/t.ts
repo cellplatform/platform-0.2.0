@@ -12,6 +12,7 @@ export type { Monaco, MonacoCodeEditor, SelectionOffset } from 'ext.lib.monaco/s
 /**
  * @system
  */
+export type { TypedJsonPath } from 'sys.data.json/src/types';
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { Disposable, EventBus, Lifecycle, Msecs, UntilObservable } from 'sys.types/src/types';
 
