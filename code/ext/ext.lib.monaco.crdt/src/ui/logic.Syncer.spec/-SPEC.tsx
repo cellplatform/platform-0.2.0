@@ -48,10 +48,10 @@ export default Dev.describe(name, async (e) => {
                 const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
                 lens.change((d) => (d.code = d.code || ''));
 
-                console.group('⚡️ MonacoEditor.onReady');
-                console.log('event', e);
-                console.log('lens', lens);
-                console.groupEnd();
+                console.info('⚡️ MonacoEditor.onReady');
+                console.info('|- event', e);
+                console.info('|- lens', lens);
+                // console.groupEnd();
 
                 Monaco.Crdt.Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code']);
               }}
