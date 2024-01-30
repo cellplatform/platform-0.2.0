@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Video, css, type t } from './common';
+import { DEFAULTS, Video, css, rx, type t } from './common';
 import { Empty } from './ui.Empty';
 
 export const View: React.FC<t.VideoProps> = (props) => {
@@ -14,7 +14,7 @@ export const View: React.FC<t.VideoProps> = (props) => {
 
   useEffect(() => {
     const events = peer?.events();
-    events?.cmd.conn$.subscribe(redraw);
+    events?.cmd.conn$.pipe(rx.debounceTime(10)).subscribe(redraw);
     return events?.dispose;
   }, [peer?.id]);
 

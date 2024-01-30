@@ -152,12 +152,10 @@ export function manageMediaConnection(args: {
             resolve?.({ id, error });
           });
         },
-      };
+      } as const;
 
       const msecs = DEFAULTS.connectionTimeout;
-      const timer = Time.delay(msecs, () => {
-        Handle.failure('timed out while connecting media');
-      });
+      const timer = Time.delay(msecs, () => Handle.failure('timed out while connecting media'));
 
       if (media === 'media:video') {
         conn.on('stream', (remote) => Handle.open(remote));
