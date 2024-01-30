@@ -2,8 +2,7 @@ import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
 import { Path, rx, slug, toObject, type t } from './common';
 
-type O = Record<string, unknown>;
-type Options<R extends O> = {
+type Options<R> = {
   init?: t.InitializeLens<R>;
   typename?: string;
   dispose$?: t.UntilObservable;
@@ -12,7 +11,7 @@ type Options<R extends O> = {
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export function init<R extends O, L extends O>(
+export function init<R, L>(
   root: t.DocRef<R>,
   path?: t.JsonPath | (() => t.JsonPath),
   options?: Options<R> | t.InitializeLens<R>,
@@ -130,7 +129,7 @@ export function init<R extends O, L extends O>(
     /**
      * Create a new sub-lens from the current lens.
      */
-    lens<T extends O>(subpath: t.JsonPath, fn?: t.InitializeLens<L>) {
+    lens<T>(subpath: t.JsonPath, fn?: t.InitializeLens<L>) {
       const composite = [...wrangle.path(path), ...subpath];
       if (fn && typeof Path.resolve(root, composite) !== 'object') api.change((d) => fn(d));
       return init<R, T>(root, composite, { dispose$ });
@@ -175,7 +174,7 @@ export function init<R extends O, L extends O>(
  * Helpers
  */
 const wrangle = {
-  options<R extends O>(input?: Options<R> | t.InitializeLens<R>): Options<R> {
+  options<R>(input?: Options<R> | t.InitializeLens<R>): Options<R> {
     if (typeof input === 'function') return { init: input };
     return input ?? {};
   },

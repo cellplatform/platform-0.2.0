@@ -1,11 +1,9 @@
 import { rx, type t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Generate a new events wrapper for the given handle.
  */
-export function eventsFactory<L extends O>(
+export function eventsFactory<L>(
   source$: t.Observable<t.LensEvent<L>>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {
