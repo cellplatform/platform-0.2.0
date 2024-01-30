@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { COLORS, Color, PeerRepoList, css, type t } from './common';
 
 export type SampleEdgeProps = {
@@ -9,6 +11,13 @@ export type SampleEdgeProps = {
 export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const { edge } = props;
   const visible = edge.visible ?? true;
+
+  useEffect(() => {
+    console.log('init', edge.kind);
+    return () => {
+      console.log('disposed', edge.kind);
+    };
+  }, []);
 
   /**
    * Render
@@ -29,13 +38,13 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
       <PeerRepoList
         model={edge.model}
         network={edge.network}
+        onStreamSelection={props.onStreamSelection}
         debug={{
           label: {
             text: wrangle.debugLabelText(edge),
             align: wrangle.debugAlign(edge),
           },
         }}
-        onStreamSelection={props.onStreamSelection}
       />
     </div>
   );
