@@ -7,6 +7,6 @@ export type VideoProps = {
   peer?: t.PeerModel;
   stream?: MediaStream;
   muted?: boolean;
-  empty?: string | JSX.Element;
+  empty?: string | JSX.Element | null;
   style?: t.CssValue;
 };

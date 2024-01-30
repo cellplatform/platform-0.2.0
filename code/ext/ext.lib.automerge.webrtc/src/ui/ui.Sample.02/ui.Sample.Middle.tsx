@@ -40,7 +40,7 @@ export const SampleMiddle: React.FC<SampleMiddleProps> = (props) => {
   };
 
   const elStream = props.stream && (
-    <PeerUI.Video stream={props.stream} muted={true} style={styles.stream} empty={''} />
+    <PeerUI.Video stream={props.stream} muted={true} style={styles.stream} empty={null} />
   );
 
   const elMask = elStream && (

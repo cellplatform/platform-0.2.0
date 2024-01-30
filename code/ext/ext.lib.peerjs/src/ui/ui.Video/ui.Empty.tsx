@@ -18,9 +18,11 @@ export const Empty: React.FC<EmptyProps> = (props) => {
       placeItems: 'center',
       pointerEvents: 'none',
       userSelect: 'none',
-      color: Color.alpha(COLORS.DARK, 0.3),
     }),
+    text: css({ color: Color.alpha(COLORS.DARK, 0.3) }),
   };
 
-  return <div {...css(styles.base, props.style)}>{value}</div>;
+  const elText = typeof value === 'string' && <div {...styles.text}>{value}</div>;
+
+  return <div {...css(styles.base, props.style)}>{elText || value}</div>;
 };
