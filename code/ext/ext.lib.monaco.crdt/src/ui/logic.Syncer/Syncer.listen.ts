@@ -30,11 +30,11 @@ export function listen<T extends O>(
   } as const;
 
   const Code = {
-    splice(doc: T, index: number, del: number, text?: string) {
-      Doc.splice(doc, [...target], index, del, text);
-    },
     get current() {
       return Path.resolve(lens.current, target);
+    },
+    splice(doc: T, index: number, del: number, text?: string) {
+      Doc.splice(doc, [...target], index, del, text);
     },
   } as const;
 

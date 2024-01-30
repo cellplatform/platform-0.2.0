@@ -88,7 +88,7 @@ export default Dev.describe(name, async (e) => {
         doc.change((d) => {
           const sample = d.sample || (d.sample = { code: '' });
           const count = doc.current.count;
-          sample.code = `const msg = "hello world 👋";\nconst count = ${count};`;
+          sample.code = `const msg = "hello world 👋";\nconst count = ${count};\n`;
         });
       });
 
