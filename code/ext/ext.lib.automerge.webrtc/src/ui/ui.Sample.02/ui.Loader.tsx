@@ -1,4 +1,4 @@
-import { useLoader } from './-SPEC.Loader.useLoader';
+import { useLoader } from './Load.useLoader';
 import { COLORS, Color, Spinner, css, type t } from './common';
 
 export type LoaderProps = {

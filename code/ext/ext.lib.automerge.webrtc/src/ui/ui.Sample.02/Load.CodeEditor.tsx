@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
-import { MonacoEditor } from 'sys.ui.react.monaco';
+import { Monaco } from 'ext.lib.monaco.crdt';
+import { Color, Doc, css, type t } from './common';
 import { Statusbar } from './ui.Statusbar';
-import { Color, css, type t } from './common';
 
-import { Text } from '@automerge/automerge';
-
-export type TDoc = { text: Text };
+export type TDoc = { text: string };
 
 export type CodeEditorLoaderProps = {
   store: t.Store;
@@ -15,12 +12,6 @@ export type CodeEditorLoaderProps = {
 
 export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
   const { store, docuri } = props;
-
-  useEffect(() => {
-    props.store.doc.get<TDoc>(docuri).then((doc) => {
-      console.log('doc', doc);
-    });
-  }, [docuri]);
 
   /**
    * Render
@@ -34,11 +25,17 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
   };
 
   const elEditor = (
-    <MonacoEditor
+    <Monaco.Editor
       style={css(styles.base, props.style)}
       focusOnLoad={true}
-      onReady={(e) => {
-        e.editor.setValue('👋\nHello World\n');
+      onReady={async (e) => {
+        const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
+        const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
+        Monaco.Crdt.Syncer.listen<TDoc>(e.monaco, e.editor, lens, ['text']);
+
+        lens.events().changed$.subscribe((e) => {
+          console.log('lens changed:', e);
+        });
       }}
     />
   );
