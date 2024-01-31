@@ -11,7 +11,7 @@ const initial: T = {};
 const name = `${Pkg.name}.syncer`;
 export default Dev.describe(name, async (e) => {
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
-  const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = { code: '' }));
+  const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
 
   console.group('🌳 state (syncer sample)');
   console.info(`db: "${db.name}"`);

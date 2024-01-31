@@ -21,14 +21,14 @@ export function listen<T extends O>(
   /**
    * Helpers.
    */
-  const monacoPatch = MonacoPatcher.init(monaco, editor);
+  const patchMonaco = MonacoPatcher.init(monaco, editor);
   const Events = { lens: lens.events(life.dispose$) } as const;
   const Lens = {
     get code() {
-      return Lens.resolve(lens.current);
+      return Lens.resolve(lens.current) ?? '';
     },
     resolve(doc: T) {
-      return Path.resolve<string>(doc, target) ?? '';
+      return Path.resolve<string>(doc, target);
     },
     splice(doc: T, index: number, del: number, text?: string) {
       Doc.splice(doc, [...target], index, del, text);
@@ -59,8 +59,8 @@ export function listen<T extends O>(
     const patches = e.patches.filter((patch) => startsWith(patch.path, target));
     patches.forEach((patch) => {
       _ignoreChange = true;
-      if (patch.action === 'del') monacoPatch.delete(patch, `${source}:delete`);
-      if (patch.action === 'splice') monacoPatch.splice(patch, `${source}:update`);
+      if (patch.action === 'del') patchMonaco.delete(patch, `${source}:delete`);
+      if (patch.action === 'splice') patchMonaco.splice(patch, `${source}:update`);
       _ignoreChange = false;
     });
   });
@@ -88,8 +88,10 @@ export function listen<T extends O>(
   /**
    * Initialize.
    */
-  const initial = Lens.code;
+  const initial = Lens.resolve(lens.current);
   if (typeof initial === 'string') changeEditorText(initial);
+  if (initial === undefined) lens.change((d) => Path.mutate(d, target, ''));
+
   return life;
 }
 
