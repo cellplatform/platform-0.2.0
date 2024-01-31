@@ -89,8 +89,8 @@ export function listen<T extends O>(
    * Initialize.
    */
   const initial = Lens.resolve(lens.current);
-  if (typeof initial === 'string') changeEditorText(initial);
   if (initial === undefined) lens.change((d) => Path.mutate(d, target, ''));
+  if (typeof initial === 'string') changeEditorText(initial);
 
   return life;
 }
