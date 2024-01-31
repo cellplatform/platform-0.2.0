@@ -2,6 +2,16 @@ import { describe, it, expect, type t } from '../test';
 import { Path } from '.';
 
 describe('Json.Path', () => {
+  describe('TypedJsonPath', () => {
+    type MyObject = { root: { foo: { count: number } } };
+    it('deep type, partial and full', () => {
+      type P = t.TypedJsonPath<MyObject>;
+      const path1: P = ['root'];
+      const path2: P = ['root', 'foo'];
+      const path3: P = ['root', 'foo', 'count'];
+    });
+  });
+
   describe('resolve', () => {
     type R = typeof root;
     const root = {
@@ -53,18 +63,45 @@ describe('Json.Path', () => {
     });
   });
 
-  describe('TypedJsonPath', () => {
-    type MyObject = { root: { foo: { count: number } } };
+  describe('mutate', () => {
+    type R = { msg?: string; child?: { foo?: { count: number } } };
 
-    it('deep type, partial and full', () => {
-      type P = t.TypedJsonPath<MyObject>;
-      const path1: P = ['root'];
-      const path2: P = ['root', 'foo'];
-      const path3: P = ['root', 'foo', 'count'];
+    it('set value shaoow', () => {
+      const root: R = {};
+      Path.mutate(root, ['msg'], 'hello');
+      expect(root.msg).to.eql('hello');
+    });
+
+    it('set value deep', () => {
+      const root: R = {};
+      Path.mutate(root, ['child', 'foo', 'count'], 123);
+      expect(root.child?.foo?.count).to.eql(123);
+    });
+
+    it('does not replace existing objects', () => {
+      const root: R = { child: { foo: { count: 0 } } };
+      const refChild = root.child;
+      const refFoo = root.child?.foo;
+
+      Path.mutate(root, ['child', 'foo', 'count'], 123);
+      expect(root.child?.foo?.count).to.eql(123);
+      expect(root.child).to.equal(refChild); // NB: same instance.
+      expect(root.child?.foo).to.eql(refFoo);
+    });
+
+    it('throws if path is empty', () => {
+      [[], undefined, null].forEach((path: any) => {
+        const root: R = {};
+        const fn = () => Path.mutate(root, path, 'foo');
+        expect(fn).to.throw(/path cannot be empty/);
+      });
+    });
+
+    it('throws if root not an object', () => {
+      [null, undefined, 123, true, ''].forEach((root) => {
+        const fn = () => Path.mutate(root, ['msg'], 'foo');
+        expect(fn).to.throw(/root is not an object/);
+      });
     });
   });
 });
-
-export type TypedJsonPath<T> = T extends object
-  ? { [K in keyof T]: [K, ...TypedJsonPath<T[K]>] | [K] }[keyof T]
-  : [];
