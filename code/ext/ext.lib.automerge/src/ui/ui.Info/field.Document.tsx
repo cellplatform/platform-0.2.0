@@ -1,16 +1,41 @@
-import { ObjectView, css, type t } from './common';
+import { Doc, Hash, ObjectView, css, type t } from './common';
 
 type D = t.InfoData['document'];
 
-export function document(data: D) {
+export function doc(data: D, fields: t.InfoField[]) {
   if (!data) return;
   const res: t.PropListItem[] = [];
-
   const label = data.label ?? 'Document';
   const hasLabel = !!label.trim();
-  if (hasLabel) res.push({ label, divider: false });
 
-  res.push({ value: wrangle.objectElement(data, hasLabel) });
+  /**
+   * Title
+   */
+  if (hasLabel) {
+    const doc = data.doc;
+    const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
+
+    let value: string | undefined;
+    if (uri) {
+      const id = Doc.Uri.id(uri);
+      value = uri ? `crdt:automerge:${Hash.shorten(id, [4, 4])}` : undefined;
+    }
+
+    res.push({
+      label,
+      value,
+      divider: false,
+    });
+  }
+
+  /**
+   * The <Object? view component.
+   */
+  res.push({
+    value: wrangle.objectElement(data, hasLabel),
+  });
+
+  // Finish up.
   return res;
 }
 

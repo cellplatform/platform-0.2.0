@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export type { DelPatch, SpliceTextPatch } from '@automerge/automerge';
+export type { DelPatch, Patch, SpliceTextPatch } from '@automerge/automerge';
 export type { Observable } from 'rxjs';
 
 /**

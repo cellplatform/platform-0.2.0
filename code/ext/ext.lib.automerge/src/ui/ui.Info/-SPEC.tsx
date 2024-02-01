@@ -42,7 +42,7 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>(async (e) => {
         const fields = e.state.props.fields ?? [];
-        const doc = fields.includes('Document') ? await docAtIndex(0) : undefined;
+        const doc = fields.includes('Doc') ? await docAtIndex(0) : undefined;
 
         return (
           <Info
