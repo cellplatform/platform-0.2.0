@@ -7,7 +7,7 @@ export const R = { equals } as const;
 /**
  * @ext.lib
  */
-export { Doc, Store, WebStore } from 'ext.lib.automerge';
+export { A, Doc, Store, WebStore } from 'ext.lib.automerge';
 export { Monaco } from 'ext.lib.monaco';
 
 /**
