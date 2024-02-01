@@ -1602,10 +1602,10 @@
     "@preact/signals-core" "^1.5.1"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.54.3":
-  version "1.54.3"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.54.3.tgz#c46ff4a3b08d3dea4bf19f98d4e003c6689404ff"
-  integrity sha512-Wxp+RRvGaG6U2FSPTyxji95l8DU+7FY38JCLGC6BSzmnD0xwDR2QFxpQdt9pftYyhd/UcCY89MU9DiGWPc+mUQ==
+"@privy-io/react-auth@1.55.0":
+  version "1.55.0"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.55.0.tgz#e55af9eedc0c36d5d17e6954a403f43f615a8f61"
+  integrity sha512-8T+wl/YiaOvZG7xyd699pu7M1W6smIjqpLOJVREVK/4kB4MhibhL2TWVjxNeZWukxtPS5sokDVIZexern2K4rA==
   dependencies:
     "@coinbase/wallet-sdk" "^3.9.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -1647,10 +1647,10 @@
     web3-core "^1.8.0"
     web3-core-helpers "^1.8.0"
 
-"@privy-io/react-auth@1.55.0":
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.55.0.tgz#e55af9eedc0c36d5d17e6954a403f43f615a8f61"
-  integrity sha512-8T+wl/YiaOvZG7xyd699pu7M1W6smIjqpLOJVREVK/4kB4MhibhL2TWVjxNeZWukxtPS5sokDVIZexern2K4rA==
+"@privy-io/react-auth@1.55.1":
+  version "1.55.1"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.55.1.tgz#3774664cee12269c2e79b78438eebd7e42f38939"
+  integrity sha512-uIUS0d6K61N3OtsT4MSqRJ6bZ+M4j27zc74ftkv3X8XLMkq90YypDuzj44dMBzoDX0Z96DGTQEE6Yh/Hmw5HOQ==
   dependencies:
     "@coinbase/wallet-sdk" "^3.9.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -2875,10 +2875,10 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@20.11.13":
-  version "20.11.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.13.tgz#188263ee2c8d590e181d3f5bfa7e485a932957cb"
-  integrity sha512-5G4zQwdiQBSWYTDAH1ctw2eidqdhMJaNsiIDKHFr55ihz5Trl2qqR8fdrT732yPBho5gkNxXm67OxWFBqX9aPg==
+"@types/node@20.11.14":
+  version "20.11.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.14.tgz#9fdc9c2550c2f6693508ca4530f821474c4ee3bb"
+  integrity sha512-w3yWCcwULefjP9DmDDsgUskrMoOy5Z8MiwKHr1FvqGPtx7CvJzQvxD7eKpxNtklQxLruxSXWddyeRtyud0RcXQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -9822,10 +9822,10 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.6.0.tgz#b42fc27fd1500510320aa91da2846fb09457e808"
-  integrity sha512-6uVtT78SUFBFteBewXNel0AkTa/MP5wTqbWyg8ay4IyMXpSxuZl0QEN5H+/MBbEjILpRnJKD7E5klBLdWXNqXQ==
+viem@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.6.1.tgz#aaab145746e019fdb0a838e32c19bad69d6b2a15"
+  integrity sha512-565cKS2fQ8XU9sfQo5NGAZXdKwPFjof4nO3NUyElVHKqKw9l5/y2iDDMEubvxm09rBlzibJ+Sw/mI4jnnkQE4g==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
@@ -9836,10 +9836,10 @@ viem@2.6.0:
     isows "1.0.3"
     ws "8.13.0"
 
-viem@2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.6.1.tgz#aaab145746e019fdb0a838e32c19bad69d6b2a15"
-  integrity sha512-565cKS2fQ8XU9sfQo5NGAZXdKwPFjof4nO3NUyElVHKqKw9l5/y2iDDMEubvxm09rBlzibJ+Sw/mI4jnnkQE4g==
+viem@2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.1.tgz#b46e2d012b4b543e4377da8584cd12f79c6161b1"
+  integrity sha512-izAX2KedTFnI2l0ZshtnlK2ZuDvSlKeuaanWyNwC4ffDgrCGtwX1bvVXO3Krh53lZgqvjd8UGpjGaBl3WqJ4yQ==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
