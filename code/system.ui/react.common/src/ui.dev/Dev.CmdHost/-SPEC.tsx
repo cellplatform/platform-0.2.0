@@ -22,8 +22,8 @@ add('zoo');
 type T = { props: CmdHostProps };
 
 const badge = {
-  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
-  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml/badge.svg',
+  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml',
 };
 const initial: T = {
   props: { pkg: Pkg, specs, hrDepth: 2, badge },
@@ -33,6 +33,7 @@ export default Dev.describe('CmdHost', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+    ctx.debug.width(330);
     ctx.subject
       .size('fill')
       .display('grid')
