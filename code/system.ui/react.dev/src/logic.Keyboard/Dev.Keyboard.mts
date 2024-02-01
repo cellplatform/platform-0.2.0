@@ -52,7 +52,7 @@ export const DevKeyboard = {
        */
       'CMD + KeyK'(e) {
         if (clearConsole) {
-          e.handled();
+          // NB: not handled so other ['CMD+K' → clear] handlers will run.
           console.clear();
         }
       },

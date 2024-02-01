@@ -31,6 +31,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
 
   useKeyboard(textboxRef, {
     onArrowKey: () => textboxRef?.focus(),
+    onClear: () => filterChanged(''),
   });
 
   /**

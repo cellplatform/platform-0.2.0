@@ -10,7 +10,10 @@ export type ArrowKeyHandlerArgs = { key: ArrowKey; meta: boolean };
  */
 export function useKeyboard(
   textboxRef?: t.TextInputRef,
-  options: { onArrowKey?: ArrowKeyHandler } = {},
+  options: {
+    onArrowKey?: ArrowKeyHandler;
+    onClear?: () => void;
+  } = {},
 ) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -29,6 +32,7 @@ export function useKeyboard(
       },
 
       ['Escape']: (e) => textboxRef?.blur(),
+      ['CMD + KeyK']: (e) => options.onClear?.(),
 
       ['ArrowUp']: (e) => arrowKey(e, 'Up'),
       ['ArrowDown']: (e) => arrowKey(e, 'Down'),
