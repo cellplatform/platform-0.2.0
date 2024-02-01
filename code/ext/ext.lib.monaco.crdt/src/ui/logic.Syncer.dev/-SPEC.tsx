@@ -71,7 +71,7 @@ export default Dev.describe(name, async (e) => {
     dev.row((e) => {
       return (
         <CrdtInfo
-          fields={['Module', 'Component', 'Repo', 'Document']}
+          fields={['Module', 'Component', 'Repo', 'Doc', 'Doc.URI']}
           data={{
             component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
