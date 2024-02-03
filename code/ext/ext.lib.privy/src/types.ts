@@ -1,13 +1,13 @@
 import type { User as AuthUser } from '@privy-io/react-auth';
 
-export type * from './evm/Balance/types';
-export type * from './evm/Chain/types';
-export type * from './evm/Wallet/types';
+export type * from './evm/Balance/t';
+export type * from './evm/Chain/t';
+export type * from './evm/Wallet/t';
 
-export type * from './http/Exchange/types';
+export type * from './http/Exchange/t';
 
-export type * from './ui/ui.Auth/types';
-export type * from './ui/ui.Info/types';
+export type * from './ui/ui.Auth/t';
+export type * from './ui/ui.Info/t';
 
 /**
  * Authentication

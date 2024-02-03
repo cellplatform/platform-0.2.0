@@ -1,4 +1,4 @@
-import type * as t from './types';
+import type * as t from './t';
 
 const env = (key: t.AuthEnvKey): string => {
   const obj = (import.meta as any).env;

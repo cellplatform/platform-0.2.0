@@ -1,4 +1,4 @@
-import type * as t from './types';
+import type * as t from './t';
 
 export { TestFilesystem } from 'sys.fs.indexeddb';
 export { expect, expectError } from 'sys.test';
