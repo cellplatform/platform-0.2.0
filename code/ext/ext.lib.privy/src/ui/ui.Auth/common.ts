@@ -8,6 +8,7 @@ const loginMethods: t.AuthProviderLoginMethods = ['sms'];
 
 export const DEFAULTS = {
   loginMethods,
+  defaultCountry: 'NZ',
 
   /**
    * Source:

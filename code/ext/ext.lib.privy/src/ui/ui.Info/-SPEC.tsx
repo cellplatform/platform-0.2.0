@@ -40,6 +40,7 @@ export default Dev.describe(name, (e) => {
 
       d.props.data = {
         provider: AuthEnv.provider,
+        wallet: { list: { title: 'Public Key' } },
         chain: {
           selected: local.selectedChain,
           onSelected(e) {
@@ -48,7 +49,6 @@ export default Dev.describe(name, (e) => {
             local.selectedChain = e.chain;
           },
         },
-        wallet: { list: { title: 'Public Key' } },
       };
     });
 

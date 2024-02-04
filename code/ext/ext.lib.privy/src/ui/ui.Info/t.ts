@@ -12,6 +12,7 @@ export type InfoField =
   | 'Login.SMS'
   | 'Login.Farcaster'
   | 'Link.Wallet'
+  | 'Link.Farcaster'
   | 'Wallet.List'
   | 'Wallet.List.Title'
   | 'Chain.List'
