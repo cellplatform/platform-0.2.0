@@ -19,13 +19,12 @@ const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[]; selectedChain?: t.EvmChainName } & Pick<
     t.InfoProps,
-    'enabled' | 'useAuthProvider' | 'clipboard'
+    'enabled' | 'clipboard'
   >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,
-    useAuthProvider: DEFAULTS.useAuthProvider,
     selectedChain: DEFAULTS.data.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
@@ -38,7 +37,6 @@ export default Dev.describe(name, (e) => {
       d.props.enabled = local.enabled;
       d.props.fields = local.selectedFields;
       d.props.clipboard = local.clipboard;
-      d.props.useAuthProvider = local.useAuthProvider;
 
       d.props.data = {
         provider: AuthEnv.provider,
@@ -146,16 +144,6 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.hr(-1, 5);
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.useAuthProvider);
-        btn
-          .label((e) => `useAuthProvider`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.useAuthProvider = Dev.toggle(d.props, 'useAuthProvider'))),
-          );
-      });
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.clipboard);

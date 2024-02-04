@@ -39,7 +39,6 @@ export const DEFAULTS = {
   query: { dev: 'dev' },
   fields: { all: allFields, default: defaultFields },
   enabled: true,
-  useAuthProvider: true,
   clipboard: true,
   data,
 } as const;

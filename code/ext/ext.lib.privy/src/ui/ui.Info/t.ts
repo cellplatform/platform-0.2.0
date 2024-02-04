@@ -38,7 +38,6 @@ export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.InfoField[];
-  useAuthProvider?: boolean;
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
