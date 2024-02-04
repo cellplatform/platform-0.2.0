@@ -43,12 +43,12 @@ export const Wrangle = {
 
   loginMethods(fields: t.InfoField[] = []): t.AuthProviderLoginMethods {
     const DEFAULT = DEFAULTS.loginMethods;
-    const LOGIN_METHODS: t.InfoField[] = ['Auth.Login', 'Auth.Login.SMS', 'Auth.Login.SMS'];
+    const LOGIN_METHODS: t.InfoField[] = ['Login', 'Login.SMS', 'Login.SMS'];
     if (!fields.some((field) => LOGIN_METHODS.includes(field))) return [];
 
     const res: t.AuthProviderLoginMethods = [];
-    if (fields.includes('Auth.Login.SMS')) res.push('sms');
-    if (fields.includes('Auth.Login.Farcaster')) res.push('farcaster');
+    if (fields.includes('Login.SMS')) res.push('sms');
+    if (fields.includes('Login.Farcaster')) res.push('farcaster');
 
     return res.length === 0 ? DEFAULT : res;
   },

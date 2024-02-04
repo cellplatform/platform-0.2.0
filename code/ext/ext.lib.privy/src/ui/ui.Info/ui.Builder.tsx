@@ -54,11 +54,8 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
-    .field('Auth.Login', () => Field.login(privy, enabled))
-    .field(
-      'Auth.Link.Wallet',
-      () => user && Field.linkWallet(privy, data, wallets, fields, enabled),
-    )
+    .field('Login', () => Field.login(privy, enabled))
+    .field('Link.Wallet', () => user && Field.linkWallet(privy, data, wallets, fields, enabled))
     .field('Wallet.List', () =>
       Field.walletsList({ privy, data, wallets, enabled, modifiers, fields, refresh$ }),
     )

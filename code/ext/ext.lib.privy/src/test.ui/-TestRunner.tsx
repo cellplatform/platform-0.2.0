@@ -42,7 +42,7 @@ export default Dev.describe('TestRunner', (e) => {
       return (
         <Info
           data={{ provider: AuthEnv.provider }}
-          fields={['Module', 'Id.User', 'Auth.Login']}
+          fields={['Module', 'Id.User', 'Login']}
           clipboard={false}
           onChange={(e) => {
             privy = e.privy;

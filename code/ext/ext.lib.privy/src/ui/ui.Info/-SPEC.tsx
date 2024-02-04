@@ -117,15 +117,10 @@ export default Dev.describe(name, (e) => {
         });
       };
 
-      button('wallet view', () => [
-        'Auth.Login',
-        'Auth.Link.Wallet',
-        'Wallet.List',
-        'Wallet.List.Title',
-      ]);
+      button('wallet view', () => ['Login', 'Link.Wallet', 'Wallet.List', 'Wallet.List.Title']);
       button('wallet view (chain selector)', () => [
-        'Auth.Login',
-        'Auth.Link.Wallet',
+        'Login',
+        'Link.Wallet',
         'Wallet.List',
         'Chain.List',
         'Chain.List.Title',

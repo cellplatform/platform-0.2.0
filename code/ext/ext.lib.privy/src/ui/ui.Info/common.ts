@@ -14,23 +14,17 @@ const allFields: t.InfoField[] = [
   'Id.User.Phone',
   'Id.App.Privy',
   'Id.App.WalletConnect',
-  'Auth.Login',
-  'Auth.Login.SMS',
-  'Auth.Login.Farcaster',
-  'Auth.Link.Wallet',
+  'Login',
+  'Login.SMS',
+  'Login.Farcaster',
+  'Link.Wallet',
   'Wallet.List',
   'Wallet.List.Title',
   'Chain.List',
   'Chain.List.Title',
   'Chain.List.Testnets',
 ];
-const defaultFields: t.InfoField[] = [
-  'Module',
-  'Id.User',
-  'Id.User.Phone',
-  'Auth.Login',
-  'Auth.Link.Wallet',
-];
+const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Id.User.Phone', 'Login', 'Link.Wallet'];
 
 const data: t.InfoData = {
   chain: {
