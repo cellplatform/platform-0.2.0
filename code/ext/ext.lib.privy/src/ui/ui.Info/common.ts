@@ -1,4 +1,6 @@
 import { Chain, type t } from '../common';
+import { DEFAULTS as PROVIDER_DEFAULTS } from '../ui.Auth/common';
+
 export * from '../common';
 
 /**
@@ -13,6 +15,8 @@ const allFields: t.InfoField[] = [
   'Id.App.Privy',
   'Id.App.WalletConnect',
   'Auth.Login',
+  'Auth.Login.SMS',
+  'Auth.Login.Farcaster',
   'Auth.Link.Wallet',
   'Wallet.List',
   'Wallet.List.Title',
@@ -41,4 +45,5 @@ export const DEFAULTS = {
   enabled: true,
   clipboard: true,
   data,
+  loginMethods: PROVIDER_DEFAULTS.loginMethods,
 } as const;

@@ -9,6 +9,8 @@ export type InfoField =
   | 'Id.App.Privy'
   | 'Id.App.WalletConnect'
   | 'Auth.Login'
+  | 'Auth.Login.SMS'
+  | 'Auth.Login.Farcaster'
   | 'Auth.Link.Wallet'
   | 'Wallet.List'
   | 'Wallet.List.Title'

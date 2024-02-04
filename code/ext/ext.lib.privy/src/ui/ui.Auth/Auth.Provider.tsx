@@ -3,7 +3,7 @@ import { COLORS, DEFAULTS, FC, type t } from './common';
 import { useStyleOverrides } from './use.StyleOverrides';
 
 const View: React.FC<t.AuthProviderProps> = (props) => {
-  const { appId, logoUrl: logo = DEFAULTS.logoUrl } = props;
+  const { appId, logoUrl = DEFAULTS.logoUrl, loginMethods = DEFAULTS.loginMethods } = props;
   useStyleOverrides();
 
   if (!appId) return '⚠️ AuthProvider missing "appId"';
@@ -16,10 +16,10 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
       appId={appId}
       onSuccess={(user, isNewUser) => props.onSuccess?.({ user, isNewUser })}
       config={{
-        loginMethods: ['sms'], // NB: Start with phone (embedded wallet), then progressively add other wallets later.
+        loginMethods,
         walletConnectCloudProjectId: props.walletConnectId,
         appearance: {
-          logo,
+          logo: logoUrl,
           theme: 'light',
           accentColor: COLORS.BLUE,
           showWalletLoginFirst: false,
