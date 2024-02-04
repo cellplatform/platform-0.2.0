@@ -12,9 +12,9 @@ export function linkFarcaster(
   if (!privy.ready || !privy.authenticated) enabled = false;
 
   /**
-   * TODO 🐷 not working
-   * Service error: "there was a problem" after login from Warpcast.
-   * See conversation at: https://privy-developers.slack.com/archives/C059ABLSB47/p1707088424465269
+   * TODO 🐷 BUG: not working
+   *    Service error: "there was a problem" after login from Warpcast.
+   *    See conversation at: https://privy-developers.slack.com/archives/C059ABLSB47/p1707088424465269
    */
 
   /**
