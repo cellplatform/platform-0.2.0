@@ -3,8 +3,8 @@ import { type t } from './common';
 import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { monitorKeyboard } from './-SPEC.keyboard';
-import { loadFactory } from './Load.factory';
 import { PeerRepoList } from './common';
+import { loadFactory } from './loader.factory';
 import { Loader } from './ui.Loader';
 import { Sample } from './ui.Sample';
 

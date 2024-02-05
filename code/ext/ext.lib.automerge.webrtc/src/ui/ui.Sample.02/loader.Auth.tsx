@@ -13,10 +13,13 @@ export const AuthLoader: React.FC<AuthLoaderProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Auth.Info
         fields={[
-          'Auth.Login',
+          'Login',
+          'Login.SMS',
+          'Login.Farcaster',
           'Id.User',
           'Id.User.Phone',
-          'Auth.Link.Wallet',
+          'Link.Wallet',
+          'Link.Farcaster',
           'Wallet.List',
           'Wallet.List.Title',
           'Refresh',

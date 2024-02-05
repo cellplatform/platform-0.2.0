@@ -1,4 +1,4 @@
-import { useLoader } from './Load.useLoader';
+import { useLoader } from './ui.useLoader';
 import { COLORS, Color, Spinner, css, type t } from './common';
 
 export type LoaderProps = {
