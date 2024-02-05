@@ -1,4 +1,5 @@
 import { Button, COLORS, type t } from './common';
+import { FCUsername } from './ui.FC.Username';
 
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
@@ -10,12 +11,8 @@ export function linkFarcaster(
   enabled: boolean,
 ): t.PropListItem | undefined {
   if (!privy.ready || !privy.authenticated) enabled = false;
-
-  /**
-   * TODO 🐷 BUG: not working
-   *    Service error: "there was a problem" after login from Warpcast.
-   *    See conversation at: https://privy-developers.slack.com/archives/C059ABLSB47/p1707088424465269
-   */
+  const fc = privy.user?.farcaster;
+  const isAuthenticated = !!fc;
 
   /**
    * Handlers
@@ -29,12 +26,20 @@ export function linkFarcaster(
    * Render
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
-  const elButton = (
-    <Button style={{ color }} label={'Link'} enabled={enabled} onClick={linkFarcaster} />
+  const elLogin = !isAuthenticated && (
+    <Button style={{ color }} label={'Connect'} enabled={enabled} onClick={linkFarcaster} />
   );
+
+  const elUsername = isAuthenticated && <FCUsername data={fc} />;
 
   return {
     label: 'Farcaster',
-    value: elButton,
+    value: {
+      data: elLogin || elUsername,
+      clipboard() {
+        if (!fc) return;
+        return `https://warpcast.com/${fc.username}`;
+      },
+    },
   };
 }

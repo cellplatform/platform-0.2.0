@@ -37,12 +37,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
       fontWeight: is.monospace ? 'bolder' : undefined,
       fontSize: wrangle.fontSize(props),
     }),
-    text: css({
-      // Absolute: 0,
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    }),
+    text: css({ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
     component: css({ Flex: 'center-end' }),
   };
 

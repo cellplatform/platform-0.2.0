@@ -25,7 +25,7 @@ const allFields: t.InfoField[] = [
   'Chain.List.Title',
   'Chain.List.Testnets',
 ];
-const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Id.User.Phone', 'Login', 'Link.Wallet'];
+const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Login', 'Link.Wallet'];
 
 const data: t.InfoData = {
   chain: {
