@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t } from '../common';
 
 /**
  * A factory for code-split (dynamicly loaded) ESM module.
@@ -7,7 +7,7 @@ export const loadFactory: t.LoadFactory = async (e) => {
   const { typename, docuri, store } = e;
 
   if (typename === 'CodeEditor') {
-    const { CodeEditorLoader } = await import('./loader.CodeEditor'); // NB: dynamic code-splitting here.
+    const { CodeEditorLoader } = await import('./CodeEditor'); // NB: dynamic code-splitting here.
     return <CodeEditorLoader store={store} docuri={docuri} />;
   }
 
@@ -19,7 +19,7 @@ export const loadFactory: t.LoadFactory = async (e) => {
   }
 
   if (typename === 'Auth') {
-    const { AuthLoader } = await import('./loader.Auth');
+    const { AuthLoader } = await import('./Auth');
     return <AuthLoader store={store} docuri={docuri} />;
   }
 

@@ -1,5 +1,5 @@
 import { Auth } from 'ext.lib.privy';
-import { css, type t } from './common';
+import { css, type t } from '../common';
 
 export type AuthLoaderProps = {
   store: t.Store;
