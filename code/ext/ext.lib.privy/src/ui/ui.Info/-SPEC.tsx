@@ -117,6 +117,8 @@ export default Dev.describe(name, (e) => {
         });
       };
 
+      button('all', () => DEFAULTS.fields.all);
+      dev.hr(-1, 5);
       button('wallet view', () => ['Login', 'Link.Wallet', 'Wallet.List', 'Wallet.List.Title']);
       button('wallet view (chain selector)', () => [
         'Login',
@@ -125,6 +127,8 @@ export default Dev.describe(name, (e) => {
         'Chain.List',
         'Chain.List.Title',
       ]);
+      dev.hr(-1, 5);
+      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Link.Farcaster']);
     });
 
     dev.hr(5, 20);

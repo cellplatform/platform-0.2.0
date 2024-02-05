@@ -1,8 +1,8 @@
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, rx, Keyboard, Pkg, PropList, useMouse, type t } from './common';
+import { DEFAULTS, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
 import { Field } from './field';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
@@ -56,7 +56,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Login', () => Field.login(privy, enabled))
     .field('Link.Wallet', () => user && Field.linkWallet(privy, data, wallets, fields, enabled))
-    .field('Link.Farcaster', () => user && Field.linkFarcaster(privy, data, fields, enabled))
+    .field('Link.Farcaster', () => user && Field.linkFarcaster({ privy, enabled, modifiers }))
     .field('Wallet.List', () =>
       Field.walletsList({ privy, data, wallets, enabled, modifiers, fields, refresh$ }),
     )

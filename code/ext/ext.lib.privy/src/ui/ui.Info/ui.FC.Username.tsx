@@ -18,6 +18,7 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
       placeItems: 'center',
       gridTemplateColumns: 'auto auto',
       columnGap: '5px',
+      height: 19,
     }),
     pfp: css({ Size: 16, borderRadius: 16 }),
   };

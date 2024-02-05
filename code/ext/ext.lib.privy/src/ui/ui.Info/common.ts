@@ -9,7 +9,6 @@ export * from '../common';
 const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
-  'Refresh',
   'Id.User',
   'Id.User.Phone',
   'Id.App.Privy',
@@ -24,6 +23,7 @@ const allFields: t.InfoField[] = [
   'Chain.List',
   'Chain.List.Title',
   'Chain.List.Testnets',
+  'Refresh',
 ];
 const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Login', 'Link.Wallet'];
 
