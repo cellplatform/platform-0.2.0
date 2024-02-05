@@ -51,7 +51,11 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const styles = {
-    base: css({}),
+    base: css({
+      height: 19,
+      display: 'grid',
+      alignContent: 'center',
+    }),
     close: css({}),
   };
 
