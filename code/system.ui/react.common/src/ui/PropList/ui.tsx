@@ -1,12 +1,12 @@
-import { Card, COLORS, css, DEFAULTS, type t } from '../common';
-import { PropListItem } from '../ui.Item/Item';
-import { PropListTitle } from '../ui.Item/Title';
-import { Wrangle } from '../util.mjs';
+import { Card, COLORS, css, DEFAULTS, type t } from './common';
+import { PropListItem } from './ui.Item/Item';
+import { PropListTitle } from './ui.Item/Title';
+import { Wrangle } from './util';
 
 /**
  * Component
  */
-export const PropList: React.FC<t.PropListProps> = (props) => {
+export const View: React.FC<t.PropListProps> = (props) => {
   const { theme = DEFAULTS.theme } = props;
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);

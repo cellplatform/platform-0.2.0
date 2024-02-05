@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button, DEFAULTS, KeyboardMonitor, css, rx, useMouse, type t } from './common';
+import { Button, css, DEFAULTS, KeyboardMonitor, rx, useMouse, type t } from './common';
 
-import { PropList } from '../PropList/ui/PropList';
+import { View as PropList } from '../PropList/ui';
 import { Label } from './ui.Label';
 import { Wrangle } from './Wrangle.mjs';
 

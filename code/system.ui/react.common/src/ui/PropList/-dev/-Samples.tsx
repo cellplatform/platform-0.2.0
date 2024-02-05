@@ -53,14 +53,8 @@ export const sampleItems: t.PropListItem[] = [
   { label: 'one', value: '🙈', indent: 15 },
   { label: 'two', value: '🙊', indent: 15 },
   { label: 'three', value: '🙉', indent: 15 },
-  {
-    label: 'label',
-    value: <div {...styles.value}>value</div>,
-  },
-  {
-    label: <div {...styles.label}>label</div>,
-    value: 'value',
-  },
+  { label: 'label', value: <div {...styles.value}>value</div> },
+  { label: <div {...styles.label}>label</div>, value: 'value' },
   {
     label: 'component (clipboard)',
     value: {
@@ -82,7 +76,7 @@ export const sampleItems: t.PropListItem[] = [
   },
   {
     label: 'token',
-    value: <TextSecret text={'abcdefg123456'} fontSize={DEFAULTS.fontSize} />,
+    value: <TextSecret text={'abcdefg123456'} fontSize={DEFAULTS.fontSize.sans} />,
   },
   { label: 'indent foo', value: 1234, indent: 15 },
   { label: 'indent bar', value: 5678, indent: 15 },

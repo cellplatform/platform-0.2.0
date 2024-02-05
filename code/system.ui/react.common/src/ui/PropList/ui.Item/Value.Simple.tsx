@@ -1,7 +1,7 @@
 import { isValidElement } from 'react';
-import { Color, COLORS, css, type t } from './common';
+import { Color, COLORS, css, type t, DEFAULTS } from './common';
 
-import { Wrangle } from '../util.mjs';
+import { Wrangle } from '../util';
 import { CopyIcon } from './CopyIcon';
 
 export type SimpleValueProps = {
@@ -17,10 +17,10 @@ export type SimpleValueProps = {
 
 export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
   const { message } = props;
-  const value = toValueObject(props);
+  const value = wrangle.valueObject(props);
 
-  const is = toFlags(props);
-  const textColor = toTextColor(props);
+  const is = wrangle.flags(props);
+  const textColor = wrangle.textColor(props);
   const cursor = props.cursor ?? is.copyActive ? 'pointer' : 'default';
 
   const styles = {
@@ -28,26 +28,25 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
       position: 'relative',
       opacity: value.opacity ?? 1,
       transition: 'opacty 100ms ease-out',
-      flex: 1,
+      display: 'grid',
     }),
     content: css({
       cursor,
       color: textColor,
       fontFamily: is.monospace ? 'monospace' : undefined,
       fontWeight: is.monospace ? 'bolder' : undefined,
-      fontSize: value.fontSize !== undefined ? value.fontSize : undefined,
+      fontSize: wrangle.fontSize(props),
     }),
     text: css({
-      Absolute: 0,
+      // Absolute: 0,
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      textAlign: 'right',
     }),
     component: css({ Flex: 'center-end' }),
   };
 
-  const content = message ? message : toRenderValue(props);
+  const content = message ? message : wrangle.renderValue(props);
 
   return (
     <div {...css(styles.base)}>
@@ -66,38 +65,48 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
  * [Helpers]
  */
 
-function toValueObject(props: SimpleValueProps) {
-  if (isValidElement(props.value)) return { data: props.value };
-  return props.value as t.PropListValue;
-}
+const wrangle = {
+  flags(props: SimpleValueProps) {
+    const value = wrangle.valueObject(props);
+    const { isOver, isCopyable, defaults } = props;
+    let monospace = value.monospace ?? defaults.monospace;
+    if (typeof value.data === 'boolean') monospace = true;
+    return {
+      boolean: typeof value.data === 'boolean',
+      copyActive: isOver && isCopyable,
+      monospace,
+    };
+  },
 
-function toRenderValue(props: SimpleValueProps) {
-  const value = toValueObject(props);
-  return isValidElement(value.data) ? value.data : value.data?.toString();
-}
+  textColor(props: SimpleValueProps) {
+    const value = wrangle.valueObject(props);
+    if (value.color !== undefined) return Color.format(value.color);
 
-function toTextColor(props: SimpleValueProps) {
-  const value = toValueObject(props);
-  if (value.color !== undefined) return Color.format(value.color);
+    const theme = Wrangle.theme(props.theme);
+    if (props.message) return theme.color.alpha(0.3);
 
-  const theme = Wrangle.theme(props.theme);
-  if (props.message) return theme.color.alpha(0.3);
+    const is = wrangle.flags(props);
+    if (is.copyActive) return COLORS.BLUE;
+    if (is.boolean) return COLORS.PURPLE;
 
-  const is = toFlags(props);
-  if (is.copyActive) return COLORS.BLUE;
-  if (is.boolean) return COLORS.PURPLE;
+    return theme.color.base;
+  },
 
-  return theme.color.base;
-}
+  renderValue(props: SimpleValueProps) {
+    const value = wrangle.valueObject(props);
+    return isValidElement(value.data) ? value.data : value.data?.toString();
+  },
 
-function toFlags(props: SimpleValueProps) {
-  const value = toValueObject(props);
-  const { isOver, isCopyable, defaults } = props;
-  let monospace = value.monospace ?? defaults.monospace;
-  if (typeof value.data === 'boolean') monospace = true;
-  return {
-    boolean: typeof value.data === 'boolean',
-    copyActive: isOver && isCopyable,
-    monospace,
-  };
-}
+  valueObject(props: SimpleValueProps) {
+    if (isValidElement(props.value)) return { data: props.value };
+    return props.value as t.PropListValue;
+  },
+
+  fontSize(props: SimpleValueProps) {
+    const value = wrangle.valueObject(props);
+    if (value.fontSize !== undefined) return value.fontSize;
+
+    const is = wrangle.flags(props);
+    return is.monospace ? DEFAULTS.fontSize.mono : DEFAULTS.fontSize.sans;
+  },
+} as const;
