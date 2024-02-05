@@ -112,7 +112,14 @@ export default Dev.describe(name, (e) => {
             .enabled((e) => true)
             .onClick((e) => {
               if (!fn) return;
-              e.change((d) => (local.selectedFields = d.props.fields = fn()));
+
+              const fields = {
+                prev: state.current.props.fields ?? [],
+                next: fn(),
+              } as const;
+
+              const value = e.is.meta ? [...fields.prev, ...fields.next] : fields.next;
+              e.change((d) => (local.selectedFields = d.props.fields = value));
             });
         });
       };
