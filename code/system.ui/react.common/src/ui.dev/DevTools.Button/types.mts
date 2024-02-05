@@ -26,4 +26,5 @@ export type DevButtonClickHandlerArgs<S extends O = O> = DevButtonHandlerArgs<S>
   dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
+  is: { meta: boolean; ctrl: boolean; shift: boolean; alt: boolean };
 };
