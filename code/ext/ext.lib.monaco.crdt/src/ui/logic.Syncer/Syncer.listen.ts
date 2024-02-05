@@ -1,3 +1,4 @@
+import { calculateDiff } from './-tmp.diff';
 import { Doc, Path, rx, type t } from './common';
 import { MonacoPatcher } from './u.MonacoPatch';
 
@@ -54,6 +55,12 @@ export function listen<T extends O>(
     const prev = editor.getValue();
     const next = Lens.resolve(e.after);
     if (next === prev) return;
+
+    /**
+     * TODO 🐷
+     */
+    const diff = calculateDiff(Lens.resolve(e.before) ?? '', Lens.resolve(e.after) ?? '');
+    console.log('TODO 🐷 diff:', diff);
 
     const source = 'crdt-sync';
     const patches = e.patches.filter((patch) => startsWith(patch.path, target));
