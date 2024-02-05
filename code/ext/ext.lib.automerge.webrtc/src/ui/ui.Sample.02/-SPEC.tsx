@@ -236,7 +236,7 @@ export default Dev.describe(name, async (e) => {
         dev.button((btn) => {
           btn
             .label(label)
-            .enabled(isEnabled)
+            .enabled(() => isEnabled())
             .onClick((e) => {
               const docuri = selected?.item.uri;
               if (!(sharedOverlay && sharedDevHarness)) return;
@@ -252,9 +252,9 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
+      loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
       loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main:Overlay');
       loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main:Overlay');
-      loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
 
       dev.hr(-1, 5);
 
