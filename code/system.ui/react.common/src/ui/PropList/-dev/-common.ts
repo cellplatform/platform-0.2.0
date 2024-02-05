@@ -14,16 +14,21 @@ export type MyField =
   | 'Factory.Mixed';
 
 export const SampleFields = {
-  all: <MyField[]>[
-    'Module',
-    'Module.Name',
-    'Module.Version',
-    'Module.Version.Diff',
-    'Factory',
-    'Factory.None',
-    'Factory.Many',
-    'Factory.Mixed',
-    'Factory.EmptyArray',
-  ],
-  defaults: <MyField[]>['Module.Name', 'Module.Version'],
+  get all(): MyField[] {
+    return [
+      'Module',
+      'Module.Name',
+      'Module.Version',
+      'Module.Version.Diff',
+      'Factory',
+      'Factory.None',
+      'Factory.Many',
+      'Factory.Mixed',
+      'Factory.EmptyArray',
+    ];
+  },
+
+  get defaults(): MyField[] {
+    return ['Module.Name', 'Module.Version'];
+  },
 };
