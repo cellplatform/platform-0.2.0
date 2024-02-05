@@ -1,8 +1,9 @@
 import { login } from './field.Auth.Login';
 import { chainList } from './field.Chain.List';
+import { linkFarcaster } from './field.Link.Farcaster';
+import { linkWallet } from './field.Link.Wallet';
 import { moduleVerify } from './field.Module.Verify';
 import { refresh } from './field.Refresh';
-import { linkWallet } from './field.Wallets.Link';
 import { walletsList } from './field.Wallets.List';
 
 export const Field = {
@@ -10,6 +11,7 @@ export const Field = {
   chainList,
   moduleVerify,
   refresh,
-  linkWallet,
   walletsList,
+  linkWallet,
+  linkFarcaster,
 } as const;

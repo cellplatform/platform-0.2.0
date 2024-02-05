@@ -40,4 +40,16 @@ export const Wrangle = {
   chain(data: t.InfoData) {
     return (data.chain?.selected ?? DEFAULTS.data.chain!.selected!) as t.EvmChainName;
   },
+
+  loginMethods(fields: t.InfoField[] = []): t.AuthProviderLoginMethods {
+    const DEFAULT = DEFAULTS.loginMethods;
+    const LOGIN_METHODS: t.InfoField[] = ['Login', 'Login.SMS', 'Login.SMS'];
+    if (!fields.some((field) => LOGIN_METHODS.includes(field))) return DEFAULT;
+
+    const res: t.AuthProviderLoginMethods = [];
+    if (fields.includes('Login.SMS')) res.push('sms');
+    if (fields.includes('Login.Farcaster')) res.push('farcaster');
+
+    return res.length === 0 ? DEFAULT : res;
+  },
 } as const;

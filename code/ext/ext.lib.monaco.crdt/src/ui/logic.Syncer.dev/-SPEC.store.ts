@@ -1,7 +1,7 @@
-import type * as t from './-SPEC.t';
-import { TestDb, Time, WebStore } from '../../test.ui';
+import { TestDb } from '../../test.ui';
+import { Time, WebStore, type t } from './common';
 
-export type D = { count: number; sample?: t.SampleCodeDoc };
+export type D = { count: number; sample?: t.SampleDoc };
 
 export async function setupStore(docname: string) {
   const db = TestDb.Spec;

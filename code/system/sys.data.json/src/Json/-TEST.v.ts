@@ -1,15 +1,10 @@
-import { describe, it, expect, t } from '../test';
 import { Json } from '.';
+import { describe, expect, it, type t } from '../test';
 
-import { JsonBus } from '../Json.Bus';
 import { Patch } from '../Json.Patch';
 import { Path } from '../Json.Path';
 
 describe('Json', () => {
-  it('exposes [JsonBus]', () => {
-    expect(Json.Bus).to.equal(JsonBus);
-  });
-
   it('exposes [Patch]', () => {
     expect(Json.Patch).to.equal(Patch);
   });

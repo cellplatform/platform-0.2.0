@@ -28,7 +28,9 @@
     "sys.test": "0.0.0",
     "sys.test.spec": "0.0.0",
     "sys.types": "0.0.0",
-    "sys.ui.react.monaco": "0.0.0",
+    "ext.lib.monaco": "0.0.0",
+    "ext.lib.monaco.crdt": "0.0.0",
+    "ext.lib.privy": "0.0.0",
     "ext.lib.tldraw": "0.0.0"
   },
   "license": "MIT",

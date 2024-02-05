@@ -1,4 +1,4 @@
-import { FieldBuilder } from '../PropList/FieldBuilder.mjs';
+import { FieldBuilder } from '../PropList/FieldBuilder';
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 

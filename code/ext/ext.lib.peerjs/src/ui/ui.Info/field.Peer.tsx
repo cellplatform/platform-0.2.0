@@ -1,4 +1,4 @@
-import { COLORS, Icons, Value, Webrtc, css, type t } from './common';
+import { COLORS, Color, Icons, Value, Webrtc, css, type t } from './common';
 
 type P = t.PropListItem;
 
@@ -14,6 +14,7 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
   const peer = self;
   const current = peer?.current;
   const showRemotes = fields.includes('Peer.Remotes');
+  const totalConnections = peer.current.connections.length ?? 0;
 
   /**
    * Root Peer (Self)
@@ -24,10 +25,14 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
       data: (
         <div {...styles.center}>
           <div>{Wrangle.rootLabel(current)}</div>
-          <Icons.Person size={14} style={styles.iconRight} color={COLORS.BLUE} />
+          <Icons.Person
+            size={14}
+            style={styles.iconRight}
+            color={totalConnections > 0 ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.35)}
+          />
         </div>
       ),
-      opacity: current?.open || peer.current.connections.length > 0 ? 1 : 0.3,
+      opacity: current?.open || totalConnections > 0 ? 1 : 0.3,
     },
   };
   if (!peer) return root;

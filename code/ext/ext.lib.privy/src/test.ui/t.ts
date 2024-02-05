@@ -1,5 +1,5 @@
-import type * as t from './types';
-export * from '../ui/common/types';
+import type * as t from './t';
+export * from '../ui/common/t';
 
 export type TestCtx = {
   privy: t.PrivyInterface;

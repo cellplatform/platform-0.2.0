@@ -67,7 +67,10 @@ export function button<S extends O = O>(
     const dev = ctx.toObject().props;
     const hasHandlers = clickHandlers.size > 0;
     const isEnabled = hasHandlers && values.enabled.current !== false;
-    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
+    const onClick = (e: React.MouseEvent) => {
+      const is = { meta: e.metaKey, ctrl: e.ctrlKey, shift: e.shiftKey, alt: e.altKey };
+      clickHandlers.forEach((fn) => fn({ ...args, dev, state, change, is }));
+    };
 
     return (
       <Button

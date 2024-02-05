@@ -16,27 +16,28 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
-      width: 250,
-      borderLeft: edge.kind === 'Right' ? border : undefined,
-      borderRight: edge.kind === 'Left' ? border : undefined,
+      width: visible ? 250 : 0,
+      overflow: 'hidden',
+      borderLeft: visible && edge.kind === 'Right' ? border : undefined,
+      borderRight: visible && edge.kind === 'Left' ? border : undefined,
+      display: 'grid',
     }),
   };
 
-  if (!visible) return <div />;
-
   return (
-    <PeerRepoList
-      model={edge.model}
-      network={edge.network}
-      style={styles.base}
-      debug={{
-        label: {
-          text: wrangle.debugLabelText(edge),
-          align: wrangle.debugAlign(edge),
-        },
-      }}
-      onStreamSelection={props.onStreamSelection}
-    />
+    <div {...css(styles.base, props.style)}>
+      <PeerRepoList
+        model={edge.model}
+        network={edge.network}
+        onStreamSelection={props.onStreamSelection}
+        debug={{
+          label: {
+            text: wrangle.debugLabelText(edge),
+            align: wrangle.debugAlign(edge),
+          },
+        }}
+      />
+    </div>
   );
 };
 

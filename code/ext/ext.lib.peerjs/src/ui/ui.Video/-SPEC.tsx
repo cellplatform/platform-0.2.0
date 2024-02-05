@@ -88,6 +88,19 @@ export default Dev.describe(name, (e) => {
       });
     });
 
+    dev.hr(-1, 5);
+
+    const empty = (label: string, fn: (d: T) => void) => {
+      dev.button(`empty: ${label}`, (e) => e.state.change((d) => fn(d)));
+    };
+    empty('undefined (default)', (d) => (d.props.empty = undefined));
+    empty('null (nothing)', (d) => (d.props.empty = null));
+    empty('text', (d) => (d.props.empty = '👋 Hello, World!'));
+    empty('<Element>', (d) => {
+      const style = css({ backgroundColor: 'rgba(255, 0, 0, 0.1)', padding: 10 });
+      d.props.empty = <div {...style}>My Element</div>;
+    });
+
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {

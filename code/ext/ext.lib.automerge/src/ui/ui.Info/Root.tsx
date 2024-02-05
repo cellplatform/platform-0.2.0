@@ -12,6 +12,7 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Module.Verify', () => InfoField.moduleVerify())
     .field('Repo', () => InfoField.repo(data.repo))
     .field('Component', () => InfoField.component(data.component))
+    .field('Doc', () => InfoField.doc(data.document, fields))
     .items(fields);
 
   return (

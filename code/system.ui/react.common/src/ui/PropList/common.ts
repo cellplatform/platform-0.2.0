@@ -13,6 +13,6 @@ export * from '../common';
 export const THEMES: t.PropListTheme[] = ['Light', 'Dark'];
 export const DEFAULTS = {
   theme: THEMES[0],
-  fontSize: 12,
+  fontSize: { sans: 12, mono: 11 },
   messageDelay: 1500,
 } as const;

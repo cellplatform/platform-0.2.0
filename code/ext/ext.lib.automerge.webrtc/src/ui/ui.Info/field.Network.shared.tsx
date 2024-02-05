@@ -74,12 +74,12 @@ const wrangle = {
   },
 
   expandPaths(data: t.InfoData) {
-    const res = data.shared?.json?.expand?.paths;
+    const res = data.shared?.object?.expand?.paths;
     return Array.isArray(res) ? res : ['$'];
   },
 
   expandLevel(data: t.InfoData) {
-    const res = data.shared?.json?.expand?.level;
+    const res = data.shared?.object?.expand?.level;
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 } as const;

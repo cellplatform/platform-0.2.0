@@ -24,6 +24,7 @@ export type SampleEdgeLayout = { visible: boolean };
 export type SampleSharedOverlay = { module?: LoaderDef };
 
 export type DevHarnessShared = {
+  module?: LoaderDef;
   debugPanel: boolean;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
@@ -31,6 +32,6 @@ export type DevHarnessShared = {
 /**
  * Dynamic Loading
  */
-export type LoaderDef = { typename: string; docuri: string };
+export type LoaderDef = { typename: string; docuri: string; target?: string };
 export type LoadFactory = (args: LoadFactoryArgs) => Promise<JSX.Element | void>;
 export type LoadFactoryArgs = LoaderDef & { store: t.Store };

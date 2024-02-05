@@ -1,13 +1,15 @@
 import type { t } from '../common';
 
 type O = Record<string, unknown>;
-export type LensInitial<T extends O> = (doc: T) => void;
+type NonUndefined<T> = T extends undefined ? never : T;
+
+export type InitializeLens<T> = (doc: T) => void;
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
 export type Lens<L extends O> = t.ImmutableRef<L, LensEvents<L>> & {
-  lens<T extends O>(path: t.JsonPath, init?: LensInitial<L>): Lens<T>;
+  lens<T extends O>(path: t.JsonPath, init?: InitializeLens<L>): Lens<NonUndefined<T>>; // NB: type hack to ensure T is not undefined.
   toObject(): L;
 } & t.Lifecycle;
 

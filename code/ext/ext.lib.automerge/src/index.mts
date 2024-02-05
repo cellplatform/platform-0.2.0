@@ -12,7 +12,7 @@ import { Store } from './Store';
 import { WebStore } from './Store.Web';
 export { WebStoreIndex } from './Store.Web.Index';
 export { StoreIndexDb } from './Store.Web.IndexDb';
-export { Data, Is, toObject } from './common';
+export { A, Data, Is, toObject } from './common';
 
 export { Doc, Store, WebStore };
 export const Crdt = {

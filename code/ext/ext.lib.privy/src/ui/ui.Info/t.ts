@@ -8,8 +8,11 @@ export type InfoField =
   | 'Id.User.Phone'
   | 'Id.App.Privy'
   | 'Id.App.WalletConnect'
-  | 'Auth.Login'
-  | 'Auth.Link.Wallet'
+  | 'Login'
+  | 'Login.SMS'
+  | 'Login.Farcaster'
+  | 'Link.Wallet'
+  | 'Link.Farcaster'
   | 'Wallet.List'
   | 'Wallet.List.Title'
   | 'Chain.List'
@@ -38,7 +41,6 @@ export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.InfoField[];
-  useAuthProvider?: boolean;
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;

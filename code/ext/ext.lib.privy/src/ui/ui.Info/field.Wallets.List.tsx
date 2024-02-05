@@ -1,6 +1,6 @@
+import { Wrangle } from './Wrangle';
 import { Value, type t } from './common';
 import { WalletRow } from './ui.Row.Wallet';
-import { Wrangle } from './Wrangle';
 
 export function walletsList(args: {
   privy: t.PrivyInterface;

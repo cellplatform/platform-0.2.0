@@ -54,10 +54,10 @@ export default Dev.describe(name, async (e) => {
       return (
         <Auth.Info
           fields={[
-            'Auth.Login',
+            'Login',
             'Id.User',
             'Id.User.Phone',
-            'Auth.Link.Wallet',
+            'Link.Wallet',
             'Wallet.List',
             'Wallet.List.Title',
             'Refresh',
@@ -81,7 +81,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             network,
             repo: model,
-            shared: { json: { expand: { level: 1 } } },
+            shared: { object: { expand: { level: 1 } } },
           }}
         />
       );

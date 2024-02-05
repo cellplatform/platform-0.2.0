@@ -1,12 +1,24 @@
-import { PrivyProvider } from '@privy-io/react-auth';
+import { PrivyProvider, type PrivyClientConfig } from '@privy-io/react-auth';
 import { COLORS, DEFAULTS, FC, type t } from './common';
 import { useStyleOverrides } from './use.StyleOverrides';
 
 const View: React.FC<t.AuthProviderProps> = (props) => {
-  const { appId, logoUrl: logo = DEFAULTS.logoUrl } = props;
+  const { appId } = props;
   useStyleOverrides();
 
   if (!appId) return '⚠️ AuthProvider missing "appId"';
+
+  const config: PrivyClientConfig = {
+    loginMethods: props.loginMethods ?? DEFAULTS.loginMethods,
+    walletConnectCloudProjectId: props.walletConnectId,
+    intl: { defaultCountry: DEFAULTS.defaultCountry },
+    appearance: {
+      theme: 'light',
+      logo: props.logoUrl ?? DEFAULTS.logoUrl,
+      accentColor: COLORS.BLUE,
+      showWalletLoginFirst: false,
+    },
+  };
 
   /**
    * [Render]
@@ -14,17 +26,8 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
   return (
     <PrivyProvider
       appId={appId}
+      config={config}
       onSuccess={(user, isNewUser) => props.onSuccess?.({ user, isNewUser })}
-      config={{
-        loginMethods: ['sms'], // NB: Start with phone (embedded wallet), then progressively add other wallets later.
-        walletConnectCloudProjectId: props.walletConnectId,
-        appearance: {
-          logo,
-          theme: 'light',
-          accentColor: COLORS.BLUE,
-          showWalletLoginFirst: false,
-        },
-      }}
     >
       {props.children}
     </PrivyProvider>
@@ -34,9 +37,7 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
 /**
  * Export
  */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
+type Fields = { DEFAULTS: typeof DEFAULTS };
 export const AuthProvider = FC.decorate<t.AuthProviderProps, Fields>(
   View,
   { DEFAULTS },

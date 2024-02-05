@@ -24,11 +24,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
-    body: css({
-      Absolute: 0,
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
-    }),
+    body: css({ Absolute: 0, display: 'grid', gridTemplateColumns: 'auto 1fr auto' }),
     overlay: css({ Absolute: 0, display: 'grid', pointerEvents: 'none' }),
   };
 

@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
-import { format } from '../util.format.mjs';
+import { format } from '../util.format';
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
 import { DEFAULTS, Time, css, useMouse, type t } from './common';
 
 export type PropListValueProps = {
   item: t.PropListItem;
+  hasLabel?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
   defaults: t.PropListDefaults;
@@ -14,6 +15,7 @@ export type PropListValueProps = {
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
+  const { hasLabel = true } = props;
   const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
@@ -62,11 +64,12 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
    */
   const styles = {
     base: css({
-      flex: 1,
       position: 'relative',
-      Flex: 'center-end',
       userSelect: 'none',
       fontWeight: item.value.bold ? 'bold' : undefined,
+      display: 'grid',
+      alignContent: 'center',
+      justifyContent: hasLabel ? 'end' : undefined,
     }),
   };
 

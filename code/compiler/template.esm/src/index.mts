@@ -5,6 +5,10 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+
+/**
  * Dev
  */
 export const dev = async () => {

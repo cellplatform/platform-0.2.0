@@ -1,13 +1,14 @@
 import { type t } from './common';
 
 import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { Loader } from './-SPEC.Loader';
 import { createEdge } from './-SPEC.createEdge';
-import { PeerRepoList } from './common';
-import { Sample } from './ui.Sample';
 import { monitorKeyboard } from './-SPEC.keyboard';
+import { PeerRepoList } from './common';
+import { loadFactory } from './loader.factory';
+import { Loader } from './ui.Loader';
+import { Sample } from './ui.Sample';
 
-type T = { reload?: boolean; modalElement?: JSX.Element };
+type T = { reload?: boolean };
 const initial: T = {};
 
 type SampleNamespace = 'foo.sample' | 'dev.harness';
@@ -24,27 +25,6 @@ export default Dev.describe(name, async (e) => {
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
   let sharedOverlay: t.Lens<t.SampleSharedOverlay> | undefined;
   let sharedDevHarness: t.Lens<t.DevHarnessShared> | undefined;
-
-  /**
-   * A factory function
-   */
-  const factory: t.LoadFactory = async (e) => {
-    const { typename, docuri, store } = e;
-
-    if (typename === 'CodeEditor') {
-      const { CodeEditorLoader } = await import('./Module.CodeEditor'); // NB: dynamic code-splitting here.
-      return <CodeEditorLoader store={store} docuri={docuri} />;
-    }
-
-    if (typename === 'DiagramEditor') {
-      // @ts-ignore
-      await import('@tldraw/tldraw/tldraw.css');
-      const { Canvas } = await import('ext.lib.tldraw');
-      return <Canvas style={{ opacity: 0.9 }} />;
-    }
-
-    return;
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -91,8 +71,22 @@ export default Dev.describe(name, async (e) => {
       sharedDevHarness
         .events()
         .changed$.pipe(rx.debounceTime(100))
-        .subscribe((e) => {
-          ctx.debug.width(e.after.debugPanel ?? true ? 300 : 0);
+        .subscribe(async (e) => {
+          const m = e.after;
+          ctx.debug.width(m.debugPanel ?? true ? 300 : 0);
+
+          /**
+           * Header component.
+           */
+          if (m.module) {
+            const store = left.network.store;
+            const { typename, docuri } = m.module;
+            const el = await loadFactory({ store, typename, docuri });
+            if (el && m.module.target === 'header') {
+              dev.header.border(-0.1).render(el);
+            }
+          }
+
           dev.redraw();
         });
 
@@ -111,12 +105,12 @@ export default Dev.describe(name, async (e) => {
           const store = left.network.store;
           const lens = sharedOverlay;
           const edge = sharedDevHarness?.current.edge;
-          const elLoader = lens && <Loader store={store} lens={lens} factory={factory} />;
+          const elOverlay = lens && <Loader store={store} lens={lens} factory={loadFactory} />;
           return (
             <Sample
               left={{ ...left, visible: edge?.Left.visible }}
               right={{ ...right, visible: edge?.Right.visible }}
-              overlay={elLoader}
+              overlay={elOverlay}
             />
           );
         }
@@ -233,27 +227,41 @@ export default Dev.describe(name, async (e) => {
         foo$.subscribe((e) => console.log('foo$', e));
       };
 
-      const loaderButton = (label: string, typename: string) => {
+      const loaderButton = (
+        label: string,
+        typename: string,
+        target: 'Main:Overlay' | 'Dev:Header',
+      ) => {
         const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         dev.button((btn) => {
           btn
             .label(label)
-            .enabled(isEnabled)
+            .enabled(() => isEnabled())
             .onClick((e) => {
               const docuri = selected?.item.uri;
-              if (!(sharedOverlay && docuri)) return;
-              sharedOverlay.change((d) => (d.module = { typename, docuri }));
+              if (!(sharedOverlay && sharedDevHarness)) return;
+              if (!docuri) return;
+
+              if (target === 'Main:Overlay') {
+                sharedOverlay.change((d) => (d.module = { typename, docuri }));
+              }
+              if (target === 'Dev:Header') {
+                sharedDevHarness.change((d) => (d.module = { typename, docuri, target: 'header' }));
+              }
             });
         });
       };
 
-      loaderButton(`ƒ ( load → CodeEditor )`, 'CodeEditor');
-      loaderButton(`ƒ ( load → DiagramEditor )`, 'DiagramEditor');
+      loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
+      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main:Overlay');
+      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main:Overlay');
+
+      dev.hr(-1, 5);
 
       dev.button((btn) => {
         const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
         btn
-          .label('ƒ ( 💥 )')
+          .label('ƒ → 💥')
           .right((e) => 'unload')
           .enabled((e) => isEnabled())
           .onClick((e) => sharedOverlay?.change((d) => delete d.module));

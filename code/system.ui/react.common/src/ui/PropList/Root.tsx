@@ -1,10 +1,10 @@
-import { Wrangle } from './util.mjs';
+import { Wrangle } from './util';
 import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 
 import { FieldSelector } from '../PropList.FieldSelector';
-import { FieldBuilder } from './FieldBuilder.mjs';
+import { FieldBuilder } from './FieldBuilder';
 import { Hash } from './ui.Item/Value.Hash';
-import { PropList as View } from './ui/PropList';
+import { View } from './ui';
 
 type Fields = {
   THEMES: typeof THEMES;

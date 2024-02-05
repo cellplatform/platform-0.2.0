@@ -1,7 +1,7 @@
 import { Lens, rx, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
-type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.LensInitial<R> };
+type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.InitializeLens<R> };
 
 export const Namespace = {
   /**
@@ -14,7 +14,7 @@ export const Namespace = {
   init<R extends O, N extends string = string>(
     root: t.DocRef<R>,
     path?: t.JsonPath | (() => t.JsonPath),
-    options?: Options<R> | t.LensInitial<R>,
+    options?: Options<R> | t.InitializeLens<R>,
   ): t.NamespaceManager<N> {
     const args = wrangle.options(options);
     const events = root.events(args.dispose$);
@@ -91,7 +91,7 @@ export const Namespace = {
  * Helpers
  */
 const wrangle = {
-  options<R extends O>(input?: Options<R> | t.LensInitial<R>): Options<R> {
+  options<R extends O>(input?: Options<R> | t.InitializeLens<R>): Options<R> {
     if (typeof input === 'function') return { init: input };
     return input ?? {};
   },
