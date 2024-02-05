@@ -16,8 +16,6 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
   const showRemotes = fields.includes('Peer.Remotes');
   const totalConnections = peer.current.connections.length ?? 0;
 
-  console.log('totalConnections', totalConnections);
-
   /**
    * Root Peer (Self)
    */
