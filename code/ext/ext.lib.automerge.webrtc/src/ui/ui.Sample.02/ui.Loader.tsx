@@ -1,16 +1,16 @@
-import { useLoader } from './ui.useLoader';
 import { COLORS, Color, Spinner, css, type t } from './common';
+import { useLoader } from './ui.useLoader';
 
 export type LoaderProps = {
   store: t.Store;
-  lens: t.Lens<t.SampleSharedOverlay>;
-  factory: t.LoadFactory;
+  shared: t.Lens<t.SampleSharedMain>;
+  factory: t.LoadFactory<any>;
   style?: t.CssValue;
 };
 
 export const Loader: React.FC<LoaderProps> = (props) => {
-  const { lens, store, factory } = props;
-  const { loading, body } = useLoader({ lens, store, factory });
+  const { shared, store, factory } = props;
+  const { loading, body } = useLoader({ shared, store, factory });
   if (!(loading || body)) return null;
 
   /**

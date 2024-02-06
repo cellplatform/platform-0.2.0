@@ -8,8 +8,10 @@ export type NetworkStore = t.Lifecycle & {
   readonly index: t.StoreIndexState;
   readonly total: t.NetworkStoreTotals;
   events(dispose$?: t.UntilObservable): t.WebrtcStoreEvents;
-  shared(): Promise<t.OmitLifecycle<t.CrdtSharedState>>;
+  shared(): Promise<NetworkStoreShared>;
 };
+
+export type NetworkStoreShared = t.OmitLifecycle<t.CrdtSharedState>;
 
 export type NetworkStoreTotals = {
   readonly added: number;

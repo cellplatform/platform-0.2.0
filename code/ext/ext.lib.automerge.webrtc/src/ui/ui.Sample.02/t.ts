@@ -1,5 +1,7 @@
-export * from '../common/t';
-import { type t } from './common';
+export type * from '../common/t';
+import type { t } from './common';
+
+type S = string;
 
 export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
@@ -9,7 +11,7 @@ export type SampleEdge = {
 };
 
 /**
- * <Component>
+ * Sample: <Component>
  */
 export type SampleEdgeProps = {
   edge: t.SampleEdge;
@@ -21,17 +23,24 @@ export type SampleEdgeProps = {
 
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleEdgeLayout = { visible: boolean };
-export type SampleSharedOverlay = { module?: LoaderDef };
+export type SampleSharedMain = { module?: LoaderDef };
+export type SampleFactoryTypename = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'CmdHost';
 
-export type DevHarnessShared = {
-  module?: LoaderDef;
+/**
+ * Sample: DevHarness
+ */
+export type HarnessShared = {
   debugPanel: boolean;
+  module?: LoaderDef<SampleFactoryTypename>;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
 /**
  * Dynamic Loading
  */
-export type LoaderDef = { typename: string; docuri: string; target?: string };
-export type LoadFactory = (args: LoadFactoryArgs) => Promise<JSX.Element | void>;
-export type LoadFactoryArgs = LoaderDef & { store: t.Store };
+export type LoaderDef<T extends S = S> = { typename: T; docuri: string; target?: string };
+export type LoadFactory<T extends S = S> = (e: LoadFactoryArgs<T>) => Promise<JSX.Element | void>;
+export type LoadFactoryArgs<T extends S = S> = LoaderDef<T> & {
+  store: t.Store;
+  shared: t.Lens<{ module?: LoaderDef<T> }>;
+};

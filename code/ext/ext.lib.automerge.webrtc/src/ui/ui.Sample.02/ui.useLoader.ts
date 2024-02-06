@@ -3,17 +3,17 @@ import { type t } from './common';
 
 export function useLoader(props: {
   store: t.Store;
-  lens: t.Lens<t.SampleSharedOverlay>;
+  shared: t.Lens<t.SampleSharedMain>;
   factory: t.LoadFactory;
 }) {
-  const { lens, store, factory } = props;
+  const { shared, store, factory } = props;
   const [loading, setLoading] = useState(false);
   const [body, setBody] = useState<JSX.Element>();
 
   useEffect(() => {
     setBody(undefined);
     setLoading(false);
-    const events = lens.events();
+    const events = shared.events();
 
     events.changed$.subscribe(async (e) => {
       const m = e.after.module;
@@ -24,13 +24,13 @@ export function useLoader(props: {
       if (!typename || !docuri) return;
 
       setLoading(true);
-      const el = await factory({ typename, docuri, store });
+      const el = await factory({ typename, docuri, store, shared });
       setBody(el || undefined);
       setLoading(false);
     });
 
     return events.dispose;
-  }, [lens.instance]);
+  }, [shared.instance]);
 
   return { loading, body } as const;
 }

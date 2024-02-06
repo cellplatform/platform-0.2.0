@@ -23,8 +23,8 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let sharedOverlay: t.Lens<t.SampleSharedOverlay> | undefined;
-  let sharedDevHarness: t.Lens<t.DevHarnessShared> | undefined;
+  let sharedMain: t.Lens<t.SampleSharedMain> | undefined;
+  let sharedHarness: t.Lens<t.HarnessShared> | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -62,13 +62,13 @@ export default Dev.describe(name, async (e) => {
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      sharedOverlay = ns.lens<t.SampleSharedOverlay>('foo.sample', {});
-      sharedDevHarness = ns.lens<t.DevHarnessShared>('dev.harness', {
+      sharedMain = ns.lens<t.SampleSharedMain>('foo.sample', {});
+      sharedHarness = ns.lens<t.HarnessShared>('dev.harness', {
         debugPanel: true,
         edge: { Left: { visible: true }, Right: { visible: true } },
       });
 
-      sharedDevHarness
+      sharedHarness
         .events()
         .changed$.pipe(rx.debounceTime(100))
         .subscribe(async (e) => {
@@ -81,7 +81,8 @@ export default Dev.describe(name, async (e) => {
           if (m.module) {
             const store = left.network.store;
             const { typename, docuri } = m.module;
-            const el = await loadFactory({ store, typename, docuri });
+            const shared = sharedHarness!;
+            const el = await loadFactory({ store, typename, docuri, shared });
             if (el && m.module.target === 'header') {
               dev.header.border(-0.1).render(el);
             }
@@ -90,7 +91,7 @@ export default Dev.describe(name, async (e) => {
           dev.redraw();
         });
 
-      monitorKeyboard(sharedDevHarness);
+      monitorKeyboard(sharedHarness);
       dev.redraw();
     });
 
@@ -103,9 +104,9 @@ export default Dev.describe(name, async (e) => {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
           const store = left.network.store;
-          const lens = sharedOverlay;
-          const edge = sharedDevHarness?.current.edge;
-          const elOverlay = lens && <Loader store={store} lens={lens} factory={loadFactory} />;
+          const edge = sharedHarness?.current.edge;
+          const lens = sharedMain;
+          const elOverlay = lens && <Loader store={store} shared={lens} factory={loadFactory} />;
           return (
             <Sample
               left={{ ...left, visible: edge?.Left.visible }}
@@ -156,7 +157,7 @@ export default Dev.describe(name, async (e) => {
       const network = edge.network;
 
       dev.row((e) => {
-        const shared = sharedDevHarness;
+        const shared = sharedHarness;
         const edgeLayout = shared?.current.edge[edge.kind];
         return (
           <PeerRepoList.Info
@@ -229,42 +230,44 @@ export default Dev.describe(name, async (e) => {
 
       const loaderButton = (
         label: string,
-        typename: string,
-        target: 'Main:Overlay' | 'Dev:Header',
+        typename: t.SampleFactoryTypename,
+        target: 'Main' | 'Dev:Header',
       ) => {
-        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
+        const isEnabled = () => !!sharedMain && !!selected?.item.uri;
         dev.button((btn) => {
           btn
             .label(label)
             .enabled(() => isEnabled())
             .onClick((e) => {
               const docuri = selected?.item.uri;
-              if (!(sharedOverlay && sharedDevHarness)) return;
+              if (!(sharedMain && sharedHarness)) return;
               if (!docuri) return;
 
-              if (target === 'Main:Overlay') {
-                sharedOverlay.change((d) => (d.module = { typename, docuri }));
+              if (target === 'Main') {
+                sharedMain.change((d) => (d.module = { typename, docuri }));
               }
               if (target === 'Dev:Header') {
-                sharedDevHarness.change((d) => (d.module = { typename, docuri, target: 'header' }));
+                sharedHarness.change((d) => (d.module = { typename, docuri, target: 'header' }));
               }
             });
         });
       };
 
       loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
-      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main:Overlay');
-      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main:Overlay');
+      dev.hr(-1, 5);
+      loaderButton(`ƒ → load → CmdHost`, 'CmdHost', 'Main');
+      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main');
+      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main');
 
       dev.hr(-1, 5);
 
       dev.button((btn) => {
-        const isEnabled = () => !!sharedOverlay && !!selected?.item.uri;
+        const isEnabled = () => !!sharedMain && !!selected?.item.uri;
         btn
           .label('ƒ → 💥')
           .right((e) => 'unload')
           .enabled((e) => isEnabled())
-          .onClick((e) => sharedOverlay?.change((d) => delete d.module));
+          .onClick((e) => sharedMain?.change((d) => delete d.module));
       });
 
       dev.hr(-1, 5);
