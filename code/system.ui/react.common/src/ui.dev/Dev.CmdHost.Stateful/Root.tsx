@@ -12,7 +12,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const { mutateUrl = true } = props;
 
   const readyRef = useRef(false);
-  const [command, setCommand] = useState(Wrangle.url().filter);
+  const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
