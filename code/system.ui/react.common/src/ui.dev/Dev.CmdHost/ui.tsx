@@ -45,6 +45,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
       </div>
       <CmdBar
         text={props.command}
+        placeholder={props.commandPlaceholder}
         hintKey={props.hintKey}
         focusOnReady={props.focusOnReady ?? true}
         onReady={(ref) => setTextboxRef(ref)}

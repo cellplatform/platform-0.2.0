@@ -3,6 +3,7 @@ import { HintKey } from './ui.HintKey';
 
 export type CmdBarProps = {
   text?: string;
+  placeholder?: string;
   style?: t.CssValue;
   hintKey?: string | string[];
   focusOnReady?: boolean;
@@ -14,7 +15,7 @@ export type CmdBarProps = {
 };
 
 export const CmdBar: React.FC<CmdBarProps> = (props) => {
-  const { focusOnReady = DEFAULTS.focusOnReady } = props;
+  const { focusOnReady = DEFAULTS.focusOnReady, placeholder = DEFAULTS.commandPlaceholder } = props;
 
   const hintKeys = Wrangle.hintKeys(props);
   const hasHintKeys = hintKeys.length > 0;
@@ -44,7 +45,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
   const elTextbox = (
     <TextInput
       value={props.text}
-      placeholder={'command'}
+      placeholder={placeholder}
       placeholderStyle={{
         opacity: 0.3,
         color: COLORS.WHITE,

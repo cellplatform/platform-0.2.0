@@ -10,6 +10,7 @@ export type CmdHostProps = {
   pkg: { name: string; version: string };
   specs?: t.SpecImports;
   command?: string;
+  commandPlaceholder?: string;
   applyFilter?: boolean;
   selectedIndex?: number;
   hintKey?: string | string[];

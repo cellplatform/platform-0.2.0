@@ -9,6 +9,7 @@ export const SpecList = DevBase.SpecList;
  */
 export const DEFAULTS = {
   badge: SpecList.DEFAULTS.badge,
+  commandPlaceholder: 'command',
   focusOnReady: true,
   qs: BASE.qs,
 } as const;

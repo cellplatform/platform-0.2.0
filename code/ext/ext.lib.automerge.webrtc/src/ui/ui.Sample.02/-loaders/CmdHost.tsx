@@ -25,10 +25,11 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <CmdHost.Stateful
         pkg={Pkg}
+        specs={specs}
         badge={badge}
         mutateUrl={false}
-        specs={specs}
         showDevParam={false}
+        commandPlaceholder={'namespace'}
       />
     </div>
   );
