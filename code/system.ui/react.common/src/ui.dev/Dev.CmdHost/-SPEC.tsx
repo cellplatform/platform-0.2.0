@@ -16,17 +16,22 @@ addSamples('foo.baz');
 addSamples('boo.cat');
 add('zoo');
 
-type T = { props: t.CmdHostStatefulProps };
+type T = {
+  props: t.CmdHostStatefulProps;
+  debug: { stateful?: boolean };
+};
 
 const badge = CmdHost.DEFAULTS.badge;
-const initial: T = { props: { pkg: Pkg } };
+const initial: T = { props: { pkg: Pkg }, debug: {} };
 
 export default Dev.describe('CmdHost', (e) => {
-  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl'>;
+  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl'> &
+    Pick<T['debug'], 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     hrDepth: 2,
     mutateUrl: true,
+    stateful: true,
   });
 
   e.it('init', async (e) => {
@@ -34,10 +39,12 @@ export default Dev.describe('CmdHost', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.hrDepth = local.hrDepth;
-      d.props.mutateUrl = local.mutateUrl;
       d.props.badge = badge;
       d.props.specs = specs;
+
+      d.props.hrDepth = local.hrDepth;
+      d.props.mutateUrl = local.mutateUrl;
+      d.debug.stateful = local.stateful;
     });
 
     ctx.debug.width(330);
@@ -46,8 +53,11 @@ export default Dev.describe('CmdHost', (e) => {
       .display('grid')
       .backgroundColor(1)
       .render<T>((e) => {
+        const isStateful = e.state.debug.stateful;
+        const Component = isStateful ? CmdHost.Stateful : CmdHost;
+
         return (
-          <CmdHost.Stateful
+          <Component
             {...e.state.props}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
           />
@@ -86,6 +96,15 @@ export default Dev.describe('CmdHost', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.stateful);
+        btn
+          .label((e) => `${value(e.state) ? 'stateful' : 'stateless'} (component)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.debug, 'stateful'))));
+      });
+
+      dev.hr(-1, 5);
       dev.button('tmp', (e) => {
         e.change((d) => (d.props.command = 'foobar'));
       });
