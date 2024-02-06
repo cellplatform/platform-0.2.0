@@ -10,6 +10,10 @@ export type CmdHostProps = {
 };
 
 export const CmdHost: React.FC<CmdHostProps> = (props) => {
+  const { store, shared } = props;
+
+  console.log('CmdHost (loader)', shared);
+
   /**
    * Render
    */
@@ -19,7 +23,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Base.Stateful pkg={Pkg} badge={badge} />
+      <Base.Stateful pkg={Pkg} badge={badge} mutateUrl={false} />
     </div>
   );
 };
