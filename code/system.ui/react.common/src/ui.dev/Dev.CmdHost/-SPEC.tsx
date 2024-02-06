@@ -1,8 +1,5 @@
-import { t, Dev } from '../../test.ui';
-import { CmdHostStateful } from '.';
-import { Pkg } from '../../index.pkg.mjs';
-
-import type { CmdHostProps } from '.';
+import { CmdHost } from '.';
+import { Dev, Pkg, type t } from '../../test.ui';
 
 const fn = () => import('../DevTools/-SPEC');
 
@@ -19,7 +16,7 @@ addSamples('foo.baz');
 addSamples('boo.cat');
 add('zoo');
 
-type T = { props: CmdHostProps };
+type T = { props: t.CmdHostProps };
 
 const badge = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml/badge.svg',
@@ -40,7 +37,7 @@ export default Dev.describe('CmdHost', (e) => {
       .backgroundColor(1)
       .render<T>((e) => {
         return (
-          <CmdHostStateful
+          <CmdHost.Stateful
             {...e.state.props}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
           />

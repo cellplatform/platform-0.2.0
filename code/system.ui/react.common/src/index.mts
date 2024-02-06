@@ -50,7 +50,7 @@ export { COLORS, Color, FC, Style, UserAgent, css, rx, useRubberband } from './c
 /**
  * Dev
  */
-export { Dev, DevTools, Spec, TestRunner } from './ui.dev';
+export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };
