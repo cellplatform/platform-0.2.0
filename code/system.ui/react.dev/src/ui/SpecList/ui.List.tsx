@@ -8,13 +8,14 @@ export type ListProps = {
   url: URL;
   scroll?: boolean;
   selectedIndex?: number;
+  showDevParam?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
   onItemReadyChange?: t.SpecListItemReadyHandler;
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url } = props;
+  const { imports, url, showDevParam = true } = props;
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
@@ -79,10 +80,9 @@ export const List: React.FC<ListProps> = (props) => {
       {elEmpty}
       {elList}
 
-      <hr {...styles.hrDashed} />
-
-      {hasDevParam && item(-1, undefined, { title: '?dev - remove param' })}
-      {!hasDevParam && item(-1, 'true', { title: '?dev - add param' })}
+      {showDevParam && <hr {...styles.hrDashed} />}
+      {showDevParam && hasDevParam && item(-1, undefined, { title: '?dev - remove param' })}
+      {showDevParam && !hasDevParam && item(-1, 'true', { title: '?dev - add param' })}
     </ul>
   );
 };

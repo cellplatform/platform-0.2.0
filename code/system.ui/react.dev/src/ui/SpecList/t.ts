@@ -1,9 +1,30 @@
+import type { t } from './common';
+
 type Url = string;
 type Percent = number; // 0..1
 
 export type SpecListBadge = {
   image: Url;
   href: Url;
+};
+
+/**
+ * <Component>
+ */
+export type SpecListProps = {
+  title?: string;
+  version?: string;
+  specs?: t.SpecImports;
+  selectedIndex?: number;
+  href?: string;
+  hrDepth?: number;
+  badge?: t.SpecListBadge;
+  allowRubberband?: boolean;
+  showDevParam?: boolean;
+  style?: t.CssValue;
+  scroll?: boolean;
+  scrollTo$?: t.Observable<t.SpecListScrollTarget>;
+  onChildVisibility?: t.SpecListChildVisibilityHandler;
 };
 
 /**
