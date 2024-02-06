@@ -1,2 +1,2 @@
-export * from './u.URL';
+export * from './u.Url';
 export * from './u.Wrangle';
