@@ -16,20 +16,30 @@ addSamples('foo.baz');
 addSamples('boo.cat');
 add('zoo');
 
-type T = { props: t.CmdHostProps };
+type T = { props: t.CmdHostStatefulProps };
 
-const badge = {
-  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml/badge.svg',
-  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml',
-};
-const initial: T = {
-  props: { pkg: Pkg, specs, hrDepth: 2, badge },
-};
+const badge = CmdHost.DEFAULTS.badge;
+const initial: T = { props: { pkg: Pkg } };
 
 export default Dev.describe('CmdHost', (e) => {
+  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    hrDepth: 2,
+    mutateUrl: true,
+  });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    state.change((d) => {
+      d.props.hrDepth = local.hrDepth;
+      d.props.mutateUrl = local.mutateUrl;
+      d.props.badge = badge;
+      d.props.specs = specs;
+    });
+
     ctx.debug.width(330);
     ctx.subject
       .size('fill')
@@ -51,18 +61,34 @@ export default Dev.describe('CmdHost', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'Dev.CmdHost'} data={e.state} expand={1} />);
 
-    dev.section('hrDepth', (dev) => {
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.mutateUrl);
+        btn
+          .label((e) => `mutateUrl`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.mutateUrl = Dev.toggle(d.props, 'mutateUrl'))));
+      });
+
+      dev.hr(-1, 5);
+
       const depth = (value?: number) => {
         dev.button((btn) =>
           btn
-            .label(`${value ?? '(undefined)'}`)
+            .label(`hrDepth: ${value ?? '(undefined)'}`)
             .right((e) => (e.state.props.hrDepth === value ? '←' : ''))
-            .onClick((e) => e.change((d) => (d.props.hrDepth = value))),
+            .onClick((e) => e.change((d) => (local.hrDepth = d.props.hrDepth = value))),
         );
       };
       [undefined, 2, 3].forEach((value) => depth(value));
     });
 
-    dev.hr(-1, 5);
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('tmp', (e) => {
+        e.change((d) => (d.props.command = 'foobar'));
+      });
+    });
   });
 });
