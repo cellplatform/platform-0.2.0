@@ -15,6 +15,7 @@ export type ListItemProps = {
   hrDepth?: number;
   style?: t.CssValue;
   onReadyChange?: t.SpecListItemReadyHandler;
+  onClick?: t.SpecListItemClickHandler;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -34,7 +35,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const baseRef = useRef<HTMLLIElement>(null);
 
   /**
-   * [Lifecycle]
+   * Lifecycle
    */
   useEffect(() => {
     const el = baseRef.current ?? undefined;
@@ -45,7 +46,18 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   }, []);
 
   /**
-   * [Render]
+   * Handlers
+   */
+  const handleClick = (e: React.MouseEvent) => {
+    if (props.onClick) {
+      e.preventDefault(); // NB: suppress default <a> click when handler provided.
+      const importer = address ? imports[address] : undefined;
+      props.onClick?.({ index, address, imports, importer });
+    }
+  };
+
+  /**
+   * Render
    */
   const styles = {
     base: css({
@@ -85,7 +97,11 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         <div {...styles.row.icon}>
           {Icon && <VscSymbolClass color={isSelected ? COLORS.WHITE : COLORS.BLUE} />}
         </div>
-        <a href={url.href} {...css(styles.link, !ns ? styles.linkDimmed : undefined)}>
+        <a
+          href={url.href}
+          onClick={handleClick}
+          {...css(styles.link, !ns ? styles.linkDimmed : undefined)}
+        >
           <div {...styles.row.label}>{title ?? address}</div>
         </a>
         <div />

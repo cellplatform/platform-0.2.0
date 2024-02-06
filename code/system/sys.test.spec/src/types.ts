@@ -19,7 +19,8 @@ export type TestModifier = 'skip' | 'only';
 
 export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
 export type SpecImport = Promise<{ default: TestSuiteModel }>;
-export type SpecImports = { [namespace: string]: () => SpecImport };
+export type SpecImporter = () => SpecImport;
+export type SpecImports = { [namespace: string]: SpecImporter };
 
 /**
  * BDD ("behavior driven develoment") style test configuration API.

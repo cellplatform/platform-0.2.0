@@ -1,31 +1,32 @@
 /**
  * @external
  */
-export type { Observable } from 'rxjs';
 export type { IconType } from 'react-icons';
+export type { Observable } from 'rxjs';
 
 /**
  * @system
  */
 export type {
-  EventBus,
-  Event,
   Disposable,
+  DomRect,
+  Event,
+  EventBus,
+  IgnoredResponse,
   Json,
   JsonMap,
-  IgnoredResponse,
-  DomRect,
 } from 'sys.types/src/types';
 
 export type { CssValue } from 'sys.ui.react.css/src/types';
 
 export type {
-  TestModel,
+  SpecImport,
+  SpecImporter,
+  SpecImports,
   TestHandlerArgs,
+  TestModel,
   TestSuiteModel,
   TestSuiteRunResponse,
-  SpecImport,
-  SpecImports,
 } from 'sys.test.spec/src/types';
 
 /**

@@ -11,7 +11,7 @@ export const Title: React.FC<TitleProps> = (props) => {
   if (!props.title?.trim()) return null;
 
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({ display: 'grid', gridTemplateColumns: `1fr auto` }),

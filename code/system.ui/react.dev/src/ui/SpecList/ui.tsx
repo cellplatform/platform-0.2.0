@@ -31,7 +31,7 @@ export const View: React.FC<t.SpecListProps> = (props) => {
   };
 
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({
@@ -66,6 +66,7 @@ export const View: React.FC<t.SpecListProps> = (props) => {
           hrDepth={props.hrDepth}
           showDevParam={props.showDevParam}
           onItemReadyChange={handleItemReadyChange}
+          onItemClick={props.onItemClick}
         />
       </div>
     </div>

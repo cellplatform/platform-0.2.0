@@ -25,6 +25,7 @@ export type SpecListProps = {
   scroll?: boolean;
   scrollTo$?: t.Observable<t.SpecListScrollTarget>;
   onItemVisibility?: t.SpecListItemVisibilityHandler;
+  onItemClick?: t.SpecListItemClickHandler;
 };
 
 /**
@@ -35,9 +36,9 @@ export type SpecListScrollTarget = { index: number };
 /**
  * Fired when a list-item is scrolled into or out-of view.
  */
-export type SpecListChildVisibilityHandler = (e: SpecListChildVisibilityHandlerArgs) => void;
-export type SpecListChildVisibilityHandlerArgs = { children: SpecListChildVisibility[] };
-export type SpecListChildVisibility = {
+export type SpecListItemVisibilityHandler = (e: SpecListItemVisibilityHandlerArgs) => void;
+export type SpecListItemVisibilityHandlerArgs = { children: SpecItemChildVisibility[] };
+export type SpecItemChildVisibility = {
   index: number;
   isVisible: boolean;
   threshold: Percent | [Percent, Percent, Percent, Percent];
@@ -60,4 +61,7 @@ export type SpecListItemReadyHandlerArgs = {
 export type SpecListItemClickHandler = (e: SpecListItemClickHandlerArgs) => void;
 export type SpecListItemClickHandlerArgs = {
   index: number;
+  address?: string;
+  imports: t.SpecImports;
+  importer?: t.SpecImporter;
 };

@@ -12,6 +12,7 @@ export type ListProps = {
   hrDepth?: number;
   style?: t.CssValue;
   onItemReadyChange?: t.SpecListItemReadyHandler;
+  onItemClick?: t.SpecListItemClickHandler;
 };
 
 export const List: React.FC<ListProps> = (props) => {
@@ -20,7 +21,7 @@ export const List: React.FC<ListProps> = (props) => {
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({
@@ -68,6 +69,7 @@ export const List: React.FC<ListProps> = (props) => {
         Icon={options.Icon}
         hrDepth={props.hrDepth}
         onReadyChange={props.onItemReadyChange}
+        onClick={props.onItemClick}
       />
     );
   };
