@@ -119,7 +119,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       onChanged={handleCommandChanged}
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
       onKeyDown={handleKeyboard}
-      onChildVisibility={(e) => setChildItems(e.children)}
+      onItemVisibility={(e) => setChildItems(e.children)}
     />
   );
 };

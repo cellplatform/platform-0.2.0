@@ -8,7 +8,6 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
 
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
-
   useKeyboard(textboxRef, {
     onArrowKey: () => textboxRef?.focus(),
     onClear: () => filterChanged(''),
@@ -40,7 +39,8 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           scroll={true}
           scrollTo$={props.scrollTo$}
           selectedIndex={props.selectedIndex}
-          onChildVisibility={props.onChildVisibility}
+          onItemVisibility={props.onItemVisibility}
+          onItemClick={props.onItemClick}
         />
       </div>
       <CmdBar

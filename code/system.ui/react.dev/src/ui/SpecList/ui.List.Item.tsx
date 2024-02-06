@@ -51,7 +51,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const handleClick = (e: React.MouseEvent) => {
     if (props.onClick) {
       e.preventDefault(); // NB: suppress default <a> click when handler provided.
-      const importer = address ? imports[address] : undefined;
+      const match = address ? imports[address] : undefined;
+      const importer = typeof match === 'function' ? match : undefined;
       props.onClick?.({ index, address, imports, importer });
     }
   };

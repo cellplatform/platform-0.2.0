@@ -18,7 +18,7 @@ add('zoo');
 
 type T = {
   props: t.CmdHostStatefulProps;
-  debug: { stateful?: boolean };
+  debug: { stateful?: boolean; useOnItemClick?: boolean };
 };
 
 const badge = CmdHost.DEFAULTS.badge;
@@ -26,13 +26,14 @@ const initial: T = { props: { pkg: Pkg }, debug: {} };
 
 export default Dev.describe('CmdHost', (e) => {
   type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl' | 'showDevParam'> &
-    Pick<T['debug'], 'stateful'>;
+    Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     hrDepth: 2,
     mutateUrl: true,
-    stateful: true,
     showDevParam: true,
+    stateful: true,
+    useOnItemClick: true,
   });
 
   e.it('init', async (e) => {
@@ -47,6 +48,7 @@ export default Dev.describe('CmdHost', (e) => {
       d.props.mutateUrl = local.mutateUrl;
       d.props.showDevParam = local.showDevParam;
       d.debug.stateful = local.stateful;
+      d.debug.useOnItemClick = local.useOnItemClick;
     });
 
     ctx.debug.width(330);
@@ -55,13 +57,20 @@ export default Dev.describe('CmdHost', (e) => {
       .display('grid')
       .backgroundColor(1)
       .render<T>((e) => {
-        const isStateful = e.state.debug.stateful;
-        const Component = isStateful ? CmdHost.Stateful : CmdHost;
+        const debug = e.state.debug;
+        const Component = debug.stateful ? CmdHost.Stateful : CmdHost;
 
         return (
           <Component
             {...e.state.props}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
+            onItemClick={
+              !debug.useOnItemClick
+                ? undefined
+                : (e) => {
+                    console.info('⚡️ onItemClick', e);
+                  }
+            }
           />
         );
       });
@@ -116,9 +125,19 @@ export default Dev.describe('CmdHost', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.stateful);
         btn
-          .label((e) => `${value(e.state) ? 'stateful' : 'stateless'} (component)`)
+          .label((e) => `${value(e.state) ? 'stateful' : 'stateless'} component`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.debug, 'stateful'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.useOnItemClick);
+        btn
+          .label((e) => `onItemClick: ${value(e.state) ? 'ƒ' : '(undefined)'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useOnItemClick = Dev.toggle(d.debug, 'useOnItemClick')));
+          });
       });
     });
   });

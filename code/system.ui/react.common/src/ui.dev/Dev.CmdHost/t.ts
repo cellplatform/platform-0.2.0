@@ -24,7 +24,8 @@ export type CmdHostProps = {
   onCmdFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
   onKeyUp?: t.TextInputKeyEventHandler;
-  onChildVisibility?: t.SpecListItemVisibilityHandler;
+  onItemVisibility?: t.SpecListItemVisibilityHandler;
+  onItemClick?: t.SpecListItemClickHandler;
 };
 
 export type CmdHostStatefulProps = Omit<CmdHostProps, 'filter'> & {

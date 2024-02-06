@@ -84,9 +84,10 @@ export type {
   DevRenderer,
   DevTheme,
   DevValueHandler,
+  SpecItemChildVisibility,
   SpecListBadge,
-  SpecItemChildVisibility as SpecListChildVisibility,
-  SpecListItemVisibilityHandler as SpecListChildVisibilityHandler,
+  SpecListItemClickHandler,
+  SpecListItemVisibilityHandler,
   SpecListScrollTarget,
 } from 'sys.ui.react.dev/src/types';
 export type {
