@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { t } from './common';
 
-type T = Map<number, t.SpecListChildVisibility>;
+type T = Map<number, t.SpecItemChildVisibility>;
 type Percent = number; // 0..1
 type LiMap = Map<number, HTMLLIElement>;
 
@@ -11,10 +11,10 @@ type LiMap = Map<number, HTMLLIElement>;
 export function useScrollObserver(
   baseRef: React.RefObject<HTMLDivElement>,
   itemRefs: LiMap,
-  callback: t.SpecListChildVisibilityHandler | undefined,
+  callback: t.SpecListItemVisibilityHandler | undefined,
   options: { threshold?: Percent | [Percent, Percent, Percent, Percent] } = {},
 ) {
-  const mapRef = useRef<T>(new Map<number, t.SpecListChildVisibility>());
+  const mapRef = useRef<T>(new Map<number, t.SpecItemChildVisibility>());
 
   useEffect(() => {
     let observer: IntersectionObserver;

@@ -24,7 +24,7 @@ export type SpecListProps = {
   style?: t.CssValue;
   scroll?: boolean;
   scrollTo$?: t.Observable<t.SpecListScrollTarget>;
-  onChildVisibility?: t.SpecListChildVisibilityHandler;
+  onItemVisibility?: t.SpecListItemVisibilityHandler;
 };
 
 /**
@@ -51,4 +51,13 @@ export type SpecListItemReadyHandlerArgs = {
   index: number;
   lifecycle: 'ready' | 'disposed';
   el?: HTMLLIElement;
+};
+
+/**
+ * Fired when a list-item is clicked.
+ * NB: existence of this event-handler prop supresses the default <a> link click behavior.
+ */
+export type SpecListItemClickHandler = (e: SpecListItemClickHandlerArgs) => void;
+export type SpecListItemClickHandlerArgs = {
+  index: number;
 };

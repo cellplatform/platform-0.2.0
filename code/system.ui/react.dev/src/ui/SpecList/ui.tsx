@@ -18,7 +18,7 @@ export const View: React.FC<t.SpecListProps> = (props) => {
   const itemRefs = useRef<LiMap>(new Map<number, HTMLLIElement>());
 
   useRubberband(props.allowRubberband ?? false);
-  useScrollObserver(baseRef, itemRefs.current, props.onChildVisibility);
+  useScrollObserver(baseRef, itemRefs.current, props.onItemVisibility);
   useScrollController(baseRef, itemRefs.current, props.scrollTo$);
 
   /**

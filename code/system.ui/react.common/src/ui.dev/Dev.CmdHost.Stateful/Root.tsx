@@ -20,7 +20,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const total = Object.keys(specs).length;
   const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
 
-  const [childItems, setChildItems] = useState<t.SpecListChildVisibility[]>([]);
+  const [childItems, setChildItems] = useState<t.SpecItemChildVisibility[]>([]);
   const selectionChangeTrigger = childItems.map((item) => item.isVisible).join(',');
   const scrollToRef$ = useRef<T>(new rx.Subject<t.SpecListScrollTarget>());
 
