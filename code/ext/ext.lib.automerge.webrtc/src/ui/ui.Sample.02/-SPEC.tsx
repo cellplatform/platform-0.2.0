@@ -4,7 +4,7 @@ import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { loadFactory } from './-loader/factory';
+import { loadFactory } from './-loaders/factory';
 import { Loader } from './ui.Loader';
 import { Sample } from './ui.Sample';
 
@@ -255,7 +255,7 @@ export default Dev.describe(name, async (e) => {
 
       loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
       dev.hr(-1, 5);
-      loaderButton(`ƒ → load → CmdHost`, 'CmdHost', 'Main');
+      loaderButton(`ƒ → load → Namspace (Loader)`, 'CmdHost', 'Main');
       loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main');
       loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main');
 
@@ -264,8 +264,8 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         const isEnabled = () => !!sharedMain && !!selected?.item.uri;
         btn
-          .label('ƒ → 💥')
-          .right((e) => 'unload')
+          .label('ƒ → (unload)')
+          .right((e) => '💥')
           .enabled((e) => isEnabled())
           .onClick((e) => sharedMain?.change((d) => delete d.module));
       });

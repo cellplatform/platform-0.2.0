@@ -23,7 +23,13 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <CmdHost.Stateful pkg={Pkg} badge={badge} mutateUrl={false} specs={specs} />
+      <CmdHost.Stateful
+        pkg={Pkg}
+        badge={badge}
+        mutateUrl={false}
+        specs={specs}
+        showDevParam={false}
+      />
     </div>
   );
 };
