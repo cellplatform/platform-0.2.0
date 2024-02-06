@@ -141,23 +141,27 @@ describe('action', () => {
     { retry: 3 },
   );
 
-  it('start → clear', async () => {
-    let fired: t.TimeDelayActionHandlerArgs[] = [];
-    const timer = action(10).on((e) => fired.push(e));
-    expect(timer.running).to.eql(false);
+  it(
+    'start → clear',
+    async () => {
+      let fired: t.TimeDelayActionHandlerArgs[] = [];
+      const timer = action(10).on((e) => fired.push(e));
+      expect(timer.running).to.eql(false);
 
-    timer.start();
-    expect(timer.running).to.eql(true);
-    await wait(3);
-    timer.reset();
-    expect(timer.running).to.eql(false);
-    expect(timer.elapsed).to.eql(-1);
+      timer.start();
+      expect(timer.running).to.eql(true);
+      await wait(3);
+      timer.reset();
+      expect(timer.running).to.eql(false);
+      expect(timer.elapsed).to.eql(-1);
 
-    await wait(20);
-    expect(fired.length).to.eql(2);
-    expect(fired[1].action).to.eql('reset');
-    expectRoughlySame(fired[1].elapsed, 3, 1.1, `elapsed: ${timer.elapsed}`);
-  });
+      await wait(20);
+      expect(fired.length).to.eql(2);
+      expect(fired[1].action).to.eql('reset');
+      expectRoughlySame(fired[1].elapsed, 3, 1.1, `elapsed: ${timer.elapsed}`);
+    },
+    { repeats: 3 },
+  );
 
   it('start → complete (forced early)', async () => {
     let fired: t.TimeDelayActionHandlerArgs[] = [];
