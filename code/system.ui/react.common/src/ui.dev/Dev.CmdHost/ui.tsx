@@ -36,6 +36,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           specs={filteredSpecs}
           badge={props.badge}
           hrDepth={props.hrDepth}
+          showDevParam={props.showDevParam}
           scroll={true}
           scrollTo$={props.scrollTo$}
           selectedIndex={props.selectedIndex}

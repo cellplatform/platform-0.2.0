@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { View as CmdHost } from '../Dev.CmdHost/ui';
-import { Filter, rx, type t } from './common';
+import { Filter, Time, rx, type t } from './common';
 import { Url, Wrangle } from './u';
 
 type T = t.Subject<t.SpecListScrollTarget>;
@@ -11,6 +11,7 @@ type T = t.Subject<t.SpecListScrollTarget>;
 export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const { mutateUrl = true } = props;
 
+  const readyRef = useRef(false);
   const [command, setCommand] = useState(Wrangle.url().filter);
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -24,22 +25,19 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const scrollToRef$ = useRef<T>(new rx.Subject<t.SpecListScrollTarget>());
 
   /**
-   * [Effects]
+   * Handle scroll behavior when the selection changes.
    */
   useEffect(() => {
-    /**
-     * Handle scroll behavior when the selection changes.
-     */
     const child = childItems[selectedIndex];
     const scrollTo$ = scrollToRef$.current;
     const index = child ? child.index : -1;
     if (child && !child.isVisible) scrollTo$.next({ index });
   }, [selectedIndex, selectionChangeTrigger]);
 
+  /**
+   * Reset the selection when the command/filter changes or on initial load.
+   */
   useEffect(() => {
-    /**
-     * Reset the selection when the command/filter changes or on initial load.
-     */
     const { selected } = Wrangle.url();
     let index = 0;
     if (selected && specs[selected]) index = Wrangle.selectedIndexFromNamespace(specs, selected);
@@ -47,7 +45,23 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   }, [total, command]);
 
   /**
-   * [Handlers]
+   * Keep command state in sync with passed-in property if it changes.
+   */
+  useEffect(() => {
+    const ready = readyRef.current;
+    const prop = props.command ?? '';
+    if (ready && prop !== command) handleCommandChanged({ command: prop });
+  }, [props.command]);
+
+  /**
+   * Set ready flag after initial render.
+   */
+  useEffect(() => {
+    Time.delay(0, () => (readyRef.current = true));
+  }, []);
+
+  /**
+   * Handlers
    */
   const handleCommandChanged: t.CmdHostChangedHandler = (e) => {
     if (mutateUrl) Url.mutateFilter(e.command);

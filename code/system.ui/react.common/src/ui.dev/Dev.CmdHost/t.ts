@@ -15,6 +15,7 @@ export type CmdHostProps = {
   hintKey?: string | string[];
   hrDepth?: number;
   badge?: t.SpecListBadge;
+  showDevParam?: boolean;
   style?: t.CssValue;
   focusOnReady?: boolean;
   scrollTo$?: t.Observable<t.SpecListScrollTarget>;

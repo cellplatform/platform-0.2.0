@@ -25,13 +25,14 @@ const badge = CmdHost.DEFAULTS.badge;
 const initial: T = { props: { pkg: Pkg }, debug: {} };
 
 export default Dev.describe('CmdHost', (e) => {
-  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl'> &
+  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl' | 'showDevParam'> &
     Pick<T['debug'], 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     hrDepth: 2,
     mutateUrl: true,
     stateful: true,
+    showDevParam: true,
   });
 
   e.it('init', async (e) => {
@@ -44,6 +45,7 @@ export default Dev.describe('CmdHost', (e) => {
 
       d.props.hrDepth = local.hrDepth;
       d.props.mutateUrl = local.mutateUrl;
+      d.props.showDevParam = local.showDevParam;
       d.debug.stateful = local.stateful;
     });
 
@@ -80,6 +82,16 @@ export default Dev.describe('CmdHost', (e) => {
           .onClick((e) => e.change((d) => (local.mutateUrl = Dev.toggle(d.props, 'mutateUrl'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.showDevParam);
+        btn
+          .label((e) => `showDevParam`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.showDevParam = Dev.toggle(d.props, 'showDevParam'))),
+          );
+      });
+
       dev.hr(-1, 5);
 
       const depth = (value?: number) => {
@@ -91,6 +103,11 @@ export default Dev.describe('CmdHost', (e) => {
         );
       };
       [undefined, 2, 3].forEach((value) => depth(value));
+
+      dev.hr(-1, 5);
+      dev.button('command → "foobar"', (e) => {
+        e.change((d) => (d.props.command = 'foobar'));
+      });
     });
 
     dev.hr(5, 20);
@@ -102,11 +119,6 @@ export default Dev.describe('CmdHost', (e) => {
           .label((e) => `${value(e.state) ? 'stateful' : 'stateless'} (component)`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.debug, 'stateful'))));
-      });
-
-      dev.hr(-1, 5);
-      dev.button('tmp', (e) => {
-        e.change((d) => (d.props.command = 'foobar'));
       });
     });
   });
