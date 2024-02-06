@@ -1,9 +1,9 @@
+import type { Farcaster } from '@privy-io/react-auth';
 import type { t } from './common';
 
 export type InfoField =
   | 'Module'
   | 'Module.Verify'
-  | 'Refresh'
   | 'Id.User'
   | 'Id.User.Phone'
   | 'Id.App.Privy'
@@ -17,7 +17,9 @@ export type InfoField =
   | 'Wallet.List.Title'
   | 'Chain.List'
   | 'Chain.List.Title'
-  | 'Chain.List.Testnets';
+  | 'Chain.List.Testnets'
+  | 'Refresh'
+  | 'Refresh.Label';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
@@ -29,6 +31,7 @@ export type InfoData = {
   wallet?: {
     list?: { title?: string };
   };
+  farcaster?: { onClick?: InfoFarcasterClickHandler };
 };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
@@ -66,3 +69,6 @@ export type InfoChainSelectedHandler = (e: InfoChainSelectedHandlerArgs) => void
 export type InfoChainSelectedHandlerArgs = {
   readonly chain: t.EvmChainName;
 };
+
+export type InfoFarcasterClickHandler = (e: InfoFarcasterClickHandlerArgs) => void;
+export type InfoFarcasterClickHandlerArgs = { user: Farcaster };

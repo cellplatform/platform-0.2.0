@@ -24,6 +24,7 @@ const allFields: t.InfoField[] = [
   'Chain.List.Title',
   'Chain.List.Testnets',
   'Refresh',
+  'Refresh.Label',
 ];
 const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Login', 'Link.Wallet'];
 

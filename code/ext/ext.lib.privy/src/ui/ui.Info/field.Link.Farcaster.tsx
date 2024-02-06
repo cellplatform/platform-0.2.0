@@ -6,10 +6,12 @@ import { FCLink } from './ui.FC.Link';
  */
 export function linkFarcaster(args: {
   privy: t.PrivyInterface;
+  data: t.InfoData;
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
 }): t.PropListItem | undefined {
   const { privy, modifiers } = args;
+  const data = args.data.farcaster;
   const showClose = modifiers.is.over && modifiers.keys.alt;
 
   let enabled = args.enabled;
@@ -17,6 +19,6 @@ export function linkFarcaster(args: {
 
   return {
     label: 'Farcaster',
-    value: <FCLink privy={privy} enabled={enabled} showClose={showClose} />,
+    value: <FCLink privy={privy} enabled={enabled} showClose={showClose} onClick={data?.onClick} />,
   };
 }
