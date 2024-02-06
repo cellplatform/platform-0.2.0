@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@automerge/automerge': '2.1.10',
-    '@automerge/automerge-repo': '1.1.0',
+    '@automerge/automerge-repo': '1.1.1',
     '@monaco-editor/react': '4.6.0',
     'diff': '5.1.0',
     'ext.lib.automerge': '0.0.0',
