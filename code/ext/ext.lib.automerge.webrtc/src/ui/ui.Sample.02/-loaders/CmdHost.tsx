@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { CmdHost } from 'sys.ui.react.common';
 import { COLORS, Pkg, R, css, rx, type t } from '../common';
 import { specs } from './CmdHost.imports';
@@ -15,7 +14,7 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
   const { store, shared } = props;
   const badge = CmdHost.DEFAULTS.badge;
 
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState(shared.current.filter ?? '');
 
   /**
    * Lifecycle
@@ -26,7 +25,7 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
       rx.map((e) => e.after.filter),
       rx.distinctWhile((prev, next) => R.equals(prev, next)),
     );
-    filter$.subscribe((filter) => setCommand(filter ?? ''));
+    filter$.subscribe((value) => setCommand(value ?? ''));
     return events.dispose;
   }, [shared.instance]);
 
@@ -49,9 +48,7 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
         showDevParam={false}
         command={command}
         commandPlaceholder={'namespace'}
-        onChanged={(e) => {
-          shared.change((d) => (d.filter = e.command));
-        }}
+        onChanged={(e) => shared.change((d) => (d.filter = e.command))}
         onItemClick={(e) => {
           console.log('onItemClick', e);
         }}
