@@ -41,6 +41,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           selectedIndex={props.selectedIndex}
           onItemVisibility={props.onItemVisibility}
           onItemClick={props.onItemClick}
+          onItemSelect={props.onItemSelect}
         />
       </div>
       <CmdBar

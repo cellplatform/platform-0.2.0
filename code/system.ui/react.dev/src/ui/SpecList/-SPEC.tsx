@@ -39,6 +39,7 @@ export default Spec.describe('SpecList', (e) => {
             badge={DEFAULTS.badge}
             onItemVisibility={(e) => console.info('⚡️ onItemVisibility', e)}
             onItemClick={(e) => console.info('⚡️ onItemClick', e)}
+            onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
           />
         );
       });

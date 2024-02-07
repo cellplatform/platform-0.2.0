@@ -1,5 +1,4 @@
 import { VscSymbolClass } from 'react-icons/vsc';
-
 import { Color, COLORS, css, DEFAULTS, t } from './common';
 import { ListItem } from './ui.List.Item';
 
@@ -12,7 +11,8 @@ export type ListProps = {
   hrDepth?: number;
   style?: t.CssValue;
   onItemReadyChange?: t.SpecListItemReadyHandler;
-  onItemClick?: t.SpecListItemClickHandler;
+  onItemClick?: t.SpecListItemHandler;
+  onItemSelect?: t.SpecListItemHandler;
 };
 
 export const List: React.FC<ListProps> = (props) => {
@@ -70,6 +70,7 @@ export const List: React.FC<ListProps> = (props) => {
         hrDepth={props.hrDepth}
         onReadyChange={props.onItemReadyChange}
         onClick={props.onItemClick}
+        onSelect={props.onItemSelect}
       />
     );
   };

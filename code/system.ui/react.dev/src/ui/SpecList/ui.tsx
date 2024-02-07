@@ -67,6 +67,7 @@ export const View: React.FC<t.SpecListProps> = (props) => {
           showDevParam={props.showDevParam}
           onItemReadyChange={handleItemReadyChange}
           onItemClick={props.onItemClick}
+          onItemSelect={props.onItemSelect}
         />
       </div>
     </div>

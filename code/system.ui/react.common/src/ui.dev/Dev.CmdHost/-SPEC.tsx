@@ -64,6 +64,7 @@ export default Dev.describe('CmdHost', (e) => {
           <Component
             {...e.state.props}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
+            onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
             onItemClick={
               !debug.useOnItemClick
                 ? undefined
@@ -116,6 +117,10 @@ export default Dev.describe('CmdHost', (e) => {
       dev.hr(-1, 5);
       dev.button('command → "foobar"', (e) => {
         e.change((d) => (d.props.command = 'foobar'));
+      });
+
+      dev.button('selectedIndex → 0', (e) => {
+        e.change((d) => (d.props.selectedIndex = 0));
       });
     });
 

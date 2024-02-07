@@ -14,7 +14,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const readyRef = useRef(false);
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
   const [isFocused, setFocused] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
 
   const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
@@ -43,6 +43,12 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     if (selected && specs[selected]) index = Wrangle.selectedIndexFromNamespace(specs, selected);
     setSelectedIndex(index);
   }, [total, command]);
+
+  useEffect(() => {
+    const ready = readyRef.current;
+    const prop = props.selectedIndex ?? 0;
+    if (ready && prop !== selectedIndex) setSelectedIndex(prop);
+  }, [props.selectedIndex]);
 
   /**
    * Keep command state in sync with passed-in property if it changes.

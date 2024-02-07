@@ -15,7 +15,8 @@ export type ListItemProps = {
   hrDepth?: number;
   style?: t.CssValue;
   onReadyChange?: t.SpecListItemReadyHandler;
-  onClick?: t.SpecListItemClickHandler;
+  onClick?: t.SpecListItemHandler;
+  onSelect?: t.SpecListItemHandler;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -45,15 +46,23 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isSelected) props.onSelect?.(getArgs());
+  }, [isSelected]);
+
   /**
    * Handlers
    */
+  const getArgs = (): t.SpecListItemHandlerArgs => {
+    const match = address ? imports[address] : undefined;
+    const importer = typeof match === 'function' ? match : undefined;
+    return { index, address, imports, importer };
+  };
+
   const handleClick = (e: React.MouseEvent) => {
     if (props.onClick) {
       e.preventDefault(); // NB: suppress default <a> click when handler provided.
-      const match = address ? imports[address] : undefined;
-      const importer = typeof match === 'function' ? match : undefined;
-      props.onClick?.({ index, address, imports, importer });
+      props.onClick?.(getArgs());
     }
   };
 
