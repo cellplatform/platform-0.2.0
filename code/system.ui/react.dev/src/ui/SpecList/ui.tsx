@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import { COLORS, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
@@ -22,7 +22,16 @@ export const View: React.FC<t.SpecListProps> = (props) => {
   useScrollController(baseRef, itemRefs.current, props.scrollTo$);
 
   /**
-   * [Handlers]
+   * Lifecycle
+   */
+  useEffect(() => {
+    const i = props.selectedIndex;
+    const isUnselected = i === undefined || (typeof i === 'number' && i < 0);
+    if (isUnselected) props.onItemSelect?.({ index: -1 });
+  }, [props.selectedIndex]);
+
+  /**
+   * Handlers
    */
   const handleItemReadyChange: t.SpecListItemReadyHandler = (e) => {
     const map = itemRefs.current;

@@ -56,7 +56,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const getArgs = (): t.SpecListItemHandlerArgs => {
     const match = address ? imports[address] : undefined;
     const importer = typeof match === 'function' ? match : undefined;
-    return { index, address, imports, importer };
+    return { index, address, importer };
   };
 
   const handleClick = (e: React.MouseEvent) => {

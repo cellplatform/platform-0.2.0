@@ -63,6 +63,5 @@ export type SpecListItemHandler = (e: SpecListItemHandlerArgs) => void;
 export type SpecListItemHandlerArgs = {
   index: number;
   address?: string;
-  imports: t.SpecImports;
   importer?: t.SpecImporter;
 };

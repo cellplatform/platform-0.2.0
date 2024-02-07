@@ -15,6 +15,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
+  const [selectedItem, setSelectedItem] = useState<t.SpecListItemHandlerArgs>();
 
   const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
@@ -75,6 +76,11 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     props.onChanged?.(e);
   };
 
+  const handleItemSelected: t.SpecListItemHandler = (e) => {
+    setSelectedItem(e.index > -1 ? e : undefined);
+    props.onItemSelect?.(e);
+  };
+
   const handleKeyboard = (e: t.TextInputKeyEvent) => {
     const done = () => e.preventDefault();
 
@@ -97,16 +103,16 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       setSelectedIndex(Wrangle.selected(specs, next));
       return done();
     }
-    if (e.key === 'Enter' && mutateUrl) {
-      Url.mutateLoadedNamespace(selectedIndex, specs, { reload: true });
+    if (e.key === 'Enter') {
+      if (mutateUrl) {
+        Url.mutateLoadedNamespace(selectedIndex, specs, { reload: true });
+        done();
+      }
 
-      /**
-       * NB: forced page reload here
-       * 🐷 Integration Extension (HERE)
-       *    - load inline as child <Component>.
-       *    - load transitions (spinner, fade-in, etc).
-       */
-      return done();
+      if (props.onItemClick && selectedItem) {
+        props.onItemClick(selectedItem);
+        done();
+      }
     }
   };
 
@@ -126,6 +132,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
       onKeyDown={handleKeyboard}
       onItemVisibility={(e) => setChildItems(e.children)}
+      onItemSelect={handleItemSelected}
     />
   );
 };
