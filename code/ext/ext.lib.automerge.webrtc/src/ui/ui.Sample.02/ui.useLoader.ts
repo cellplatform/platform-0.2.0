@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { type t } from './common';
+import { R, rx, type t } from './common';
 
 export function useLoader(props: {
   store: t.Store;
@@ -14,9 +14,13 @@ export function useLoader(props: {
     setBody(undefined);
     setLoading(false);
     const events = shared.events();
+    const module$ = events.changed$.pipe(
+      rx.map((e) => e.after),
+      rx.distinctWhile((prev, next) => !!R.equals(prev.module, next.module)),
+    );
 
-    events.changed$.subscribe(async (e) => {
-      const m = e.after.module;
+    module$.subscribe(async (e) => {
+      const m = e.module;
       const typename = m?.typename;
       const docuri = m?.docuri;
 

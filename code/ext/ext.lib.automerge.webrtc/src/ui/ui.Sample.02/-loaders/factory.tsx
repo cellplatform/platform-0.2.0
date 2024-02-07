@@ -25,7 +25,7 @@ export const loadFactory: t.LoadFactory<t.SampleFactoryTypename> = async (e) => 
 
   if (typename === 'CmdHost') {
     const { CmdHostLoader } = await import('./CmdHost');
-    return <CmdHostLoader store={store} shared={shared} />;
+    return <CmdHostLoader store={store} shared={shared} factory={loadFactory} />;
   }
 
   return;
