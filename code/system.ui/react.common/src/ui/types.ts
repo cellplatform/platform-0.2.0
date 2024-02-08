@@ -16,6 +16,8 @@ export type * from './LabelItem.VirtualList/t';
 export type * from './LabelItem/t';
 export type * from './Layout.Split/types';
 export type * from './Layout/types';
+export type * from './ModuleHost.Stateful/t';
+export type * from './ModuleHost/t';
 export type * from './ObjectView/types';
 export type * from './ProgressBar/types';
 export type * from './PropList.FieldSelector/types';

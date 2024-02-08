@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Filter, SpecList, css, type t } from './common';
+import { Filter, ModuleList, css, type t } from './common';
 import { CmdBar } from './ui.CmdBar';
 import { useKeyboard } from './useKeyboard.mjs';
 
-export const View: React.FC<t.CmdHostProps> = (props) => {
+export const View: React.FC<t.ModuleHostProps> = (props) => {
   const { pkg, applyFilter = true } = props;
   const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
 
@@ -29,7 +29,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <SpecList
+        <ModuleList
           title={pkg.name}
           version={pkg.version}
           imports={filteredSpecs}
