@@ -48,6 +48,7 @@ export const DevSpecs = {
   'sys.ui.dev.TestRunner.PropList.runner': () =>
     import('../ui.dev/TestRunner/-dev/-SPEC.PropList.runner'),
   'sys.ui.dev.CmdHost': () => import('../ui.dev/Dev.CmdHost/-SPEC'),
+  'sys.ui.dev.ModuleList': () => import('../ui.dev/-SPEC/-SPEC.ModuleList'),
   'sys.ui.dev.DevSplash': () => import('../ui.dev/Dev.Splash/-SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/-SPEC'),
   'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/-SPEC'),
