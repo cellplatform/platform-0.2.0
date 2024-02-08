@@ -5,7 +5,7 @@ import { useKeyboard } from './useKeyboard.mjs';
 
 export const View: React.FC<t.ModuleHostProps> = (props) => {
   const { pkg, applyFilter = true } = props;
-  const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
+  const filteredSpecs = applyFilter ? Filter.specs(props.imports, props.command) : props.imports;
 
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
   useKeyboard(textboxRef, {

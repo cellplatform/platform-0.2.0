@@ -1,15 +1,15 @@
 import { ModuleHost } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
+import { Specs } from '../../test.ui/entry.Specs.mjs';
 
 const fn = () => import('./-SPEC');
-
-const specs: t.ModuleImports<unknown> = {
+const imports: t.ModuleImports<unknown> = {
   foo: fn,
   foobar: fn,
 };
 
 const NUMBERS = ['one', 'two', 'three', 'four'];
-const add = (key: string) => ((specs as t.SpecImports)[key] = fn);
+const add = (key: string) => ((imports as t.SpecImports)[key] = fn);
 const addSamples = (prefix: string) => NUMBERS.forEach((num) => add(`${prefix}.${num}`));
 addSamples('foo.bar');
 addSamples('foo.baz');
@@ -43,14 +43,14 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.badge = badge;
-      d.props.specs = specs;
+      d.debug.stateful = local.stateful;
+      d.debug.useOnItemClick = local.useOnItemClick;
 
+      d.props.badge = badge;
+      d.props.imports = d.debug.stateful ? Specs : imports;
       d.props.hrDepth = local.hrDepth;
       d.props.mutateUrl = local.mutateUrl;
       d.props.showParamDev = local.showParamDev;
-      d.debug.stateful = local.stateful;
-      d.debug.useOnItemClick = local.useOnItemClick;
     });
 
     ctx.debug.width(330);
@@ -60,7 +60,6 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .render<T>((e) => {
         const debug = e.state.debug;
-
         const Component = debug.stateful ? ModuleHost.Stateful : ModuleHost;
         const props = debug.stateful
           ? (e.state.props as t.ModuleHostStatefulProps)
@@ -137,7 +136,12 @@ export default Dev.describe(name, (e) => {
         btn
           .label((e) => `${value(e.state) ? 'stateful' : 'stateless'} component`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.debug, 'stateful'))));
+          .onClick((e) => {
+            e.change((d) => {
+              local.stateful = Dev.toggle(d.debug, 'stateful');
+              d.props.imports = local.stateful ? Specs : imports;
+            });
+          });
       });
 
       dev.boolean((btn) => {

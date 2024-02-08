@@ -8,7 +8,7 @@ export type ModuleHostChangedHandlerArgs = { command: string };
  */
 export type ModuleHostProps<T = t.SpecModule> = {
   pkg: { name: string; version: string };
-  specs?: t.ModuleImports<T>;
+  imports?: t.ModuleImports<T>;
   command?: string;
   commandPlaceholder?: string;
   applyFilter?: boolean;

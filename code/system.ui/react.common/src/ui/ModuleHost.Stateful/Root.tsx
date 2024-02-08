@@ -8,7 +8,7 @@ type T = t.Subject<t.ModuleListScrollTarget>;
 /**
  * A version of <ModuleHost> that manages a bunch of state interanally.
  */
-export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
+export const ModuleHostStateful: React.FC<t.ModuleHostStatefulProps> = (props) => {
   const { mutateUrl = true } = props;
 
   const readyRef = useRef(false);
@@ -17,9 +17,9 @@ export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
   const [selectedItem, setSelectedItem] = useState<t.ModuleListItemHandlerArgs>();
 
-  const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
-  const total = Object.keys(specs).length;
-  const hintKeys = Wrangle.hintKey({ focused, selectedIndex, specs, command });
+  const imports = Filter.specs(props.imports, command, { maxErrors: 1 });
+  const total = Object.keys(imports).length;
+  const hintKeys = Wrangle.hintKey({ focused, selectedIndex, imports, command });
 
   const [items, setItems] = useState<t.ModuleListItemVisibility[]>([]);
   const selectionChangeTrigger = items.map((item) => item.isVisible).join(',');
@@ -41,7 +41,8 @@ export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   useEffect(() => {
     const { selected } = Wrangle.url();
     let index = 0;
-    if (selected && specs[selected]) index = Wrangle.selectedIndexFromNamespace(specs, selected);
+    if (selected && imports[selected])
+      index = Wrangle.selectedIndexFromNamespace(imports, selected);
     setSelectedIndex(index);
   }, [total, command]);
 
@@ -70,7 +71,7 @@ export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   /**
    * Handlers
    */
-  const handleCommandChanged: t.CmdHostChangedHandler = (e) => {
+  const handleCommandChanged: t.ModuleHostChangedHandler = (e) => {
     if (mutateUrl) Url.mutateFilter(e.command);
     setCommand(e.command);
     props.onChanged?.(e);
@@ -85,27 +86,27 @@ export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     const done = () => e.preventDefault();
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
-      setSelectedIndex(Wrangle.selected(specs, 0));
+      setSelectedIndex(Wrangle.selected(imports, 0));
       return done();
     }
     if (e.key === 'End' || (e.key === 'ArrowDown' && e.metaKey)) {
-      setSelectedIndex(Wrangle.selected(specs, total - 1));
+      setSelectedIndex(Wrangle.selected(imports, total - 1));
       return done();
     }
 
     if (e.key === 'ArrowUp') {
       const next = selectedIndex - (e.altKey ? 5 : 1);
-      setSelectedIndex(Wrangle.selected(specs, next));
+      setSelectedIndex(Wrangle.selected(imports, next));
       return done();
     }
     if (e.key === 'ArrowDown') {
       const next = selectedIndex + (e.altKey ? 5 : 1);
-      setSelectedIndex(Wrangle.selected(specs, next));
+      setSelectedIndex(Wrangle.selected(imports, next));
       return done();
     }
     if (e.key === 'Enter') {
       if (mutateUrl) {
-        Url.mutateLoadedNamespace(selectedIndex, specs, { reload: true });
+        Url.mutateLoadedNamespace(selectedIndex, imports, { reload: true });
         done();
       }
 
@@ -122,7 +123,7 @@ export const ModuleHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   return (
     <ModuleHost
       {...props}
-      specs={specs}
+      imports={imports}
       command={command}
       applyFilter={false} // NB: Filter already applied above.
       selectedIndex={selectedIndex}
