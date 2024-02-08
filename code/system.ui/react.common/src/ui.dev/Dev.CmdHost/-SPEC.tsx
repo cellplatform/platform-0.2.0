@@ -115,10 +115,13 @@ export default Dev.describe('CmdHost', (e) => {
       [undefined, 2, 3].forEach((value) => depth(value));
 
       dev.hr(-1, 5);
+      dev.button('command → (empty)', (e) => {
+        e.change((d) => (d.props.command = ''));
+      });
       dev.button('command → "foobar"', (e) => {
         e.change((d) => (d.props.command = 'foobar'));
       });
-
+      dev.hr(-1, 5);
       dev.button('selectedIndex → 0', (e) => {
         e.change((d) => (d.props.selectedIndex = 0));
       });

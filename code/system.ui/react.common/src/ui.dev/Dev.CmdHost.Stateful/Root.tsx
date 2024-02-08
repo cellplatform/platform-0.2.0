@@ -3,7 +3,7 @@ import { View as CmdHost } from '../Dev.CmdHost/ui';
 import { Filter, Time, rx, type t } from './common';
 import { Url, Wrangle } from './u';
 
-type T = t.Subject<t.SpecListScrollTarget>;
+type T = t.Subject<t.ModuleListScrollTarget>;
 
 /**
  * A version of <CmdHost> that manages state interanally.
@@ -15,15 +15,15 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
-  const [selectedItem, setSelectedItem] = useState<t.SpecListItemHandlerArgs>();
+  const [selectedItem, setSelectedItem] = useState<t.ModuleListItemHandlerArgs>();
 
   const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
   const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
 
-  const [childItems, setChildItems] = useState<t.SpecItemChildVisibility[]>([]);
+  const [childItems, setChildItems] = useState<t.ModuleListItemVisibility[]>([]);
   const selectionChangeTrigger = childItems.map((item) => item.isVisible).join(',');
-  const scrollToRef$ = useRef<T>(new rx.Subject<t.SpecListScrollTarget>());
+  const scrollToRef$ = useRef<T>(new rx.Subject<t.ModuleListScrollTarget>());
 
   /**
    * Handle scroll behavior when the selection changes.
@@ -76,7 +76,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     props.onChanged?.(e);
   };
 
-  const handleItemSelected: t.SpecListItemHandler = (e) => {
+  const handleItemSelected: t.ModuleListItemHandler = (e) => {
     setSelectedItem(e.index > -1 ? e : undefined);
     props.onItemSelect?.(e);
   };

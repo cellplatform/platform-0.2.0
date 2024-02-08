@@ -32,7 +32,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
         <SpecList
           title={pkg.name}
           version={pkg.version}
-          specs={filteredSpecs}
+          imports={filteredSpecs}
           badge={props.badge}
           hrDepth={props.hrDepth}
           showDevParam={props.showDevParam}

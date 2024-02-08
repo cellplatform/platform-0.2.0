@@ -6,25 +6,25 @@ export type CmdHostChangedHandlerArgs = { command: string };
 /**
  * <Component>
  */
-export type CmdHostProps = {
+export type CmdHostProps<T = t.SpecModule> = {
   pkg: { name: string; version: string };
-  specs?: t.SpecImports;
+  specs?: t.ModuleImports<T>;
   command?: string;
   commandPlaceholder?: string;
   applyFilter?: boolean;
   selectedIndex?: number;
   hintKey?: string | string[];
   hrDepth?: number;
-  badge?: t.SpecListBadge;
+  badge?: t.ModuleListBadge;
   showDevParam?: boolean;
   style?: t.CssValue;
   focusOnReady?: boolean;
-  scrollTo$?: t.Observable<t.SpecListScrollTarget>;
+  scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
   onChanged?: t.CmdHostChangedHandler;
   onCmdFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
   onKeyUp?: t.TextInputKeyEventHandler;
-  onItemVisibility?: t.SpecListItemVisibilityHandler;
-  onItemClick?: t.SpecListItemHandler;
-  onItemSelect?: t.SpecListItemHandler;
+  onItemVisibility?: t.ModuleListItemVisibilityHandler;
+  onItemClick?: t.ModuleListItemHandler;
+  onItemSelect?: t.ModuleListItemHandler;
 };
