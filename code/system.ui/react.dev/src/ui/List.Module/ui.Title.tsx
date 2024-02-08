@@ -8,7 +8,10 @@ export type TitleProps = {
 };
 
 export const Title: React.FC<TitleProps> = (props) => {
-  if (!props.title?.trim()) return null;
+  const title = props.title?.trim();
+  const badge = props.badge;
+
+  if (!(title || badge)) return null;
 
   /**
    * Render
@@ -18,21 +21,18 @@ export const Title: React.FC<TitleProps> = (props) => {
     left: css({ fontWeight: 'bold' }),
     right: css({ display: 'grid', alignContent: 'center' }),
     block: css({ display: 'block' }),
-    version: css({
-      color: Color.alpha(COLORS.DARK, 0.3),
-      marginLeft: 3,
-    }),
+    version: css({ color: Color.alpha(COLORS.DARK, 0.3), marginLeft: 3 }),
   };
 
-  const elBadge = props.badge && (
-    <a href={props.badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
-      <img {...styles.block} src={props.badge?.image} />
+  const elBadge = badge && (
+    <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
+      <img {...styles.block} src={badge?.image} />
     </a>
   );
 
-  const elTitle = (
+  const elTitle = title && (
     <>
-      <span>{props.title}</span>
+      <span>{title}</span>
       {props.version && <span {...styles.version}>{`@${props.version}`}</span>}
     </>
   );

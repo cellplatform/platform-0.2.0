@@ -31,12 +31,12 @@ export default Spec.describe('ModuleList', (e) => {
           <ModuleList
             title={Pkg.name}
             version={Pkg.version}
+            badge={DEFAULTS.badge}
             imports={specs}
             hrDepth={2}
             scroll={true}
             // filter={'foo'}
             selectedIndex={0}
-            badge={DEFAULTS.badge}
             onItemVisibility={(e) => console.info('⚡️ onItemVisibility', e)}
             onItemClick={(e) => console.info('⚡️ onItemClick', e)}
             onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
