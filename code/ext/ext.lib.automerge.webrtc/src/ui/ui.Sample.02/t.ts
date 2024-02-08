@@ -21,7 +21,12 @@ export type SampleEdgeProps = {
   onStreamSelection?: t.PeerStreamSelectionHandler;
 };
 
-export type SampleFactoryTypename = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'CmdHost';
+export type SampleFactoryTypename =
+  | 'CodeEditor'
+  | 'DiagramEditor'
+  | 'Auth'
+  | 'CmdHost'
+  | 'ModuleLoader';
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleEdgeLayout = { visible: boolean };
 export type SampleSharedMain = { module?: LoaderDef };
