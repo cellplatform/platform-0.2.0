@@ -76,7 +76,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
           selectedIndex={props.selectedIndex}
           focused={focused}
           hrDepth={props.hrDepth}
-          showDevParam={props.showDevParam}
+          showParamDev={props.showParamDev}
           onItemReadyChange={handleItemReadyChange}
           onItemClick={props.onItemClick}
           onItemSelect={props.onItemSelect}

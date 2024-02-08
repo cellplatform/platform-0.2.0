@@ -1,5 +1,5 @@
 import { VscSymbolClass } from 'react-icons/vsc';
-import { Color, COLORS, css, DEFAULTS, t } from './common';
+import { Color, COLORS, css, DEFAULTS, type t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
@@ -8,7 +8,7 @@ export type ListProps = {
   focused: boolean;
   scroll?: boolean;
   selectedIndex?: number;
-  showDevParam?: boolean;
+  showParamDev?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
   onItemReadyChange?: t.ModuleListItemReadyHandler;
@@ -17,7 +17,7 @@ export type ListProps = {
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url, showDevParam = true, focused } = props;
+  const { imports, url, showParamDev = true, focused } = props;
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
@@ -85,9 +85,9 @@ export const List: React.FC<ListProps> = (props) => {
       {elEmpty}
       {elList}
 
-      {showDevParam && <hr {...styles.hrDashed} />}
-      {showDevParam && hasDevParam && item(-1, undefined, { title: '?dev - remove param' })}
-      {showDevParam && !hasDevParam && item(-1, 'true', { title: '?dev - add param' })}
+      {showParamDev && <hr {...styles.hrDashed} />}
+      {showParamDev && hasDevParam && item(-1, undefined, { title: '?dev - remove param' })}
+      {showParamDev && !hasDevParam && item(-1, 'true', { title: '?dev - add param' })}
     </ul>
   );
 };

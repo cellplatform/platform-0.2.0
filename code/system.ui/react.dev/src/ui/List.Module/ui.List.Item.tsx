@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-
 import { VscSymbolClass } from 'react-icons/vsc';
-import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
+import { COLORS, Calc, Color, DEFAULTS, css, type t } from './common';
 
 export type ListItemProps = {
   index: number;

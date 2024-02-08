@@ -18,7 +18,7 @@ export type ModuleListProps<T = unknown> = {
   badge?: t.ModuleListBadge;
   allowRubberband?: boolean;
   focused?: boolean;
-  showDevParam?: boolean;
+  showParamDev?: boolean;
   style?: t.CssValue;
   scroll?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
