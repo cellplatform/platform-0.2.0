@@ -14,13 +14,15 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
   const { store, shared } = props;
   const badge = CmdHost.DEFAULTS.badge;
 
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const [command, setCommand] = useState(shared.current.filter ?? '');
   const [elOverlay, setOverlay] = useState<JSX.Element>();
 
   /**
    * Handlers
    */
-  const load = async (address: string) => {
+  const load = async (address?: string) => {
+    if (!address) return unload();
     const importer = Specs[address];
     const res = await importer?.();
     console.log('load', res);
@@ -51,11 +53,14 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
       rx.distinctWhile((prev, next) => R.equals(prev, next)),
     );
 
+    const index$ = events.changed$.pipe(
+      rx.map((e) => e.after.selectedIndex),
+      rx.distinctWhile((prev, next) => R.equals(prev, next)),
+    );
+
     filter$.subscribe((value) => setCommand(value ?? ''));
-    address$.subscribe((address) => {
-      if (address) load(address);
-      else unload();
-    });
+    address$.subscribe((value) => load(value));
+    index$.subscribe((value) => setSelectedIndex(value));
     return events.dispose;
   }, [shared.instance]);
 
@@ -80,8 +85,10 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
       showDevParam={false}
       command={command}
       commandPlaceholder={'namespace'}
+      selectedIndex={selectedIndex}
       onChanged={(e) => shared.change((d) => (d.filter = e.command))}
       onItemClick={(e) => shared.change((d) => (d.address = e.address))}
+      onItemSelect={(e) => shared.change((d) => (d.selectedIndex = e.index))}
     />
   );
 

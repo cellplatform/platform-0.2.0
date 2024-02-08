@@ -25,7 +25,11 @@ export type SampleFactoryTypename = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'C
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleEdgeLayout = { visible: boolean };
 export type SampleSharedMain = { module?: LoaderDef };
-export type SampleSharedCmdHost = SampleSharedMain & { filter?: string; address?: string };
+export type SampleSharedCmdHost = SampleSharedMain & {
+  filter?: string;
+  address?: string;
+  selectedIndex?: number;
+};
 
 /**
  * Sample: DevHarness
