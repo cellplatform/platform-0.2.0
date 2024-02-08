@@ -1,4 +1,4 @@
-import { type t } from './common';
+export { TextInput } from '../Text.Input';
 export * from '../common';
 
 /**
@@ -6,4 +6,7 @@ export * from '../common';
  */
 export const DEFAULTS = {
   displayName: 'CommandBar',
+  enabled: true,
+  focusOnReady: true,
+  commandPlaceholder: 'command',
 } as const;

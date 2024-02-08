@@ -1,5 +1,6 @@
 import { DEFAULTS as BASE, DevBase } from '../common';
 
+export { CommandBar } from '../../ui/Command.Bar';
 export * from '../common';
 export * from './common.Filter';
 export const SpecList = DevBase.SpecList;
