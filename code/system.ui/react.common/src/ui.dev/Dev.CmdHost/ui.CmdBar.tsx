@@ -16,7 +16,6 @@ export type CmdBarProps = {
 
 export const CmdBar: React.FC<CmdBarProps> = (props) => {
   const { focusOnReady = DEFAULTS.focusOnReady, placeholder = DEFAULTS.commandPlaceholder } = props;
-
   const hintKeys = Wrangle.hintKeys(props);
   const hasHintKeys = hintKeys.length > 0;
 
@@ -32,10 +31,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
-    textbox: css({
-      boxSizing: 'border-box',
-      Padding: [7, 7],
-    }),
+    textbox: css({ boxSizing: 'border-box', Padding: [7, 7] }),
     hintKeys: {
       base: css({ paddingLeft: 6, paddingRight: 6, display: 'grid', placeItems: 'center' }),
       inner: css({ Flex: 'horizontal-center-center' }),
@@ -46,11 +42,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
     <TextInput
       value={props.text}
       placeholder={placeholder}
-      placeholderStyle={{
-        opacity: 0.3,
-        color: COLORS.WHITE,
-        fontFamily: 'sans-serif',
-      }}
+      placeholderStyle={{ opacity: 0.3, color: COLORS.WHITE, fontFamily: 'sans-serif' }}
       valueStyle={{
         color: COLORS.WHITE,
         fontFamily: 'monospace',
@@ -62,7 +54,6 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       autoCapitalize={false}
       focusOnReady={focusOnReady}
       selectOnReady={focusOnReady}
-      //
       onFocusChange={props.onFocusChange}
       onReady={props.onReady}
       onChanged={props.onChanged}
