@@ -21,6 +21,7 @@ export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { LabelItem } from './ui/LabelItem';
 export { Layout } from './ui/Layout';
+export { ModuleLoader } from './ui/ModuleLoader';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
