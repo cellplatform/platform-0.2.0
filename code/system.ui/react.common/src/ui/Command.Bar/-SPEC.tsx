@@ -1,7 +1,7 @@
-import { Dev, Pkg, type t } from '../../test.ui';
-import { DEFAULTS, Root } from '.';
+import { CommandBar, DEFAULTS } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: t.RootProps };
+type T = { props: t.CommandBarProps };
 const initial: T = { props: {} };
 
 /**
@@ -22,7 +22,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} />;
+        return <CommandBar {...e.state.props} />;
       });
   });
 

@@ -7,6 +7,7 @@ export const ModuleSpecs = {
   'sys.ui.common.Card': () => import('../ui/Card/-SPEC'),
   'sys.ui.common.Center': () => import('../ui/Center/-SPEC'),
   'sys.ui.common.Chip': () => import('../ui/Chip/-SPEC'),
+  'sys.ui.common.Command.Bar': () => import('../ui/Command.Bar/-SPEC'),
   'sys.ui.common.ContainerQuery': () => import('../ui/ContainerQuery/-SPEC'),
   'sys.ui.common.EdgePosition': () => import('../ui/EdgePosition/-SPEC'),
   'sys.ui.common.EdgePosition.Selector': () => import('../ui/EdgePosition.Selector/-SPEC'),
