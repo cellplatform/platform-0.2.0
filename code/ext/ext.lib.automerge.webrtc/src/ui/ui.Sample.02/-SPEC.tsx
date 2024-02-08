@@ -1,12 +1,13 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { Color, css, COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.createEdge';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { loadFactory } from './-loaders/factory';
 import { Loader } from './ui.Loader';
 import { Sample } from './ui.Sample';
+import { ShellDivider } from './-SPEC.ShellDivider';
 
 type T = { reload?: boolean };
 const initial: T = {};
@@ -186,7 +187,7 @@ export default Dev.describe(name, async (e) => {
     };
 
     edgeDebug(left);
-    dev.hr(-1, 20);
+    dev.row((e) => <ShellDivider />);
     edgeDebug(right);
 
     dev.hr(5, 20);
