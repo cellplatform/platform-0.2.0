@@ -3,7 +3,7 @@ import { Color, COLORS, css, DEFAULTS, type t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
-  imports: t.SpecImports;
+  imports: t.ModuleImports;
   url: URL;
   focused: boolean;
   scroll?: boolean;

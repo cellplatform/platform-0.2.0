@@ -16,9 +16,9 @@ export type ModuleListProps<T = unknown> = {
   href?: string;
   hrDepth?: number;
   badge?: t.ModuleListBadge;
+  showParamDev?: boolean;
   allowRubberband?: boolean;
   focused?: boolean;
-  showParamDev?: boolean;
   style?: t.CssValue;
   scroll?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
@@ -61,5 +61,5 @@ export type ModuleListItemHandler = (e: ModuleListItemHandlerArgs) => void;
 export type ModuleListItemHandlerArgs = {
   index: number;
   address?: string;
-  importer?: t.SpecImporter;
+  importer?: t.ModuleImporter;
 };

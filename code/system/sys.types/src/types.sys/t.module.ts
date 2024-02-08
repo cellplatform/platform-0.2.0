@@ -5,6 +5,6 @@ export type ModuleDef = {
   toString(): string;
 };
 
-export type ModuleImport<T> = Promise<T>;
-export type ModuleImporter<T> = () => ModuleImport<T>;
-export type ModuleImports<T> = { [namespace: string]: ModuleImporter<T> };
+export type ModuleImport<T = unknown> = Promise<T>;
+export type ModuleImporter<T = unknown> = () => ModuleImport<T>;
+export type ModuleImports<T = unknown> = { [namespace: string]: ModuleImporter<T> };

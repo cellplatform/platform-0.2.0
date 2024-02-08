@@ -1,5 +1,4 @@
-import { useRef, useEffect } from 'react';
-
+import { useEffect, useRef } from 'react';
 import { COLORS, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
@@ -12,9 +11,7 @@ type LiMap = Map<number, HTMLLIElement>;
 export const View: React.FC<t.ModuleListProps> = (props) => {
   const { scroll = false, focused = true } = props;
   const url = new URL(props.href ?? window.location.href);
-
-  type M = t.SpecModule;
-  const imports = (props.imports ?? {}) as t.ModuleImports<M>;
+  const imports = (props.imports ?? {}) as t.ModuleImports;
 
   const baseRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<LiMap>(new Map<number, HTMLLIElement>());

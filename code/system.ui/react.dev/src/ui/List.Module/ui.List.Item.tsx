@@ -5,7 +5,7 @@ import { COLORS, Calc, Color, DEFAULTS, css, type t } from './common';
 export type ListItemProps = {
   index: number;
   url: URL;
-  imports: t.SpecImports;
+  imports: t.ModuleImports;
   address?: string;
   title?: string;
   selected?: boolean;
