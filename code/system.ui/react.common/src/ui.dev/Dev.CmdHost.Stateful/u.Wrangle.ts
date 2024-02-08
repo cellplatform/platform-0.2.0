@@ -31,7 +31,7 @@ export const Wrangle = {
     selectedIndex: number;
     command: string;
   }) {
-    if (!args.focused) return ['↑', '↓', '⎇K'];
+    if (!args.focused) return ['↑', '↓', '⌘K'];
     return ['↑', '↓', 'enter'];
   },
 } as const;
