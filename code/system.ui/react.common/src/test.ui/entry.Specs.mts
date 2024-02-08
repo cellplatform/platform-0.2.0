@@ -18,7 +18,6 @@ export const ModuleSpecs = {
   'sys.ui.common.LabelItem.Stateful': () => import('../ui/LabelItem.Stateful/-dev/-SPEC'),
   'sys.ui.common.LabelItem.VirtualList': () => import('../ui/LabelItem.VirtualList/-SPEC'),
   'sys.ui.common.Layout.Split': () => import('../ui/Layout.Split/-SPEC'),
-  'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),
   'sys.ui.common.ModuleHost': () => import('../ui/ModuleHost/-SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/-SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/-SPEC'),
