@@ -5,6 +5,7 @@ import { ListItem } from './ui.List.Item';
 export type ListProps = {
   imports: t.SpecImports;
   url: URL;
+  focused: boolean;
   scroll?: boolean;
   selectedIndex?: number;
   showDevParam?: boolean;
@@ -16,7 +17,7 @@ export type ListProps = {
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url, showDevParam = true } = props;
+  const { imports, url, showDevParam = true, focused } = props;
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
@@ -55,12 +56,13 @@ export const List: React.FC<ListProps> = (props) => {
       Icon?: t.IconType;
     } = {},
   ) => {
-    const isSelected = !options.ns ? false : index === props.selectedIndex;
+    const selected = !options.ns ? false : index === props.selectedIndex;
     return (
       <ListItem
         key={index}
         index={index}
-        isSelected={isSelected}
+        selected={selected}
+        focused={focused}
         url={url}
         imports={imports}
         address={address}

@@ -10,7 +10,7 @@ import { useScrollObserver } from './useScrollObserver.mjs';
 type LiMap = Map<number, HTMLLIElement>;
 
 export const View: React.FC<t.ModuleListProps> = (props) => {
-  const { scroll = false } = props;
+  const { scroll = false, focused = true } = props;
   const url = new URL(props.href ?? window.location.href);
 
   type M = t.SpecModule;
@@ -74,6 +74,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
           url={url}
           imports={imports}
           selectedIndex={props.selectedIndex}
+          focused={focused}
           hrDepth={props.hrDepth}
           showDevParam={props.showDevParam}
           onItemReadyChange={handleItemReadyChange}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
@@ -9,7 +9,8 @@ export type ListItemProps = {
   imports: t.SpecImports;
   address?: string;
   title?: string;
-  isSelected?: boolean;
+  selected?: boolean;
+  focused: boolean;
   Icon?: t.IconType;
   ns?: boolean;
   hrDepth?: number;
@@ -20,7 +21,7 @@ export type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { index, Icon, hrDepth = -1, ns, title, imports, address, url, isSelected } = props;
+  const { index, Icon, hrDepth = -1, ns, title, imports, address, url, selected, focused } = props;
   const importsKeys = Object.keys(imports);
 
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
@@ -47,8 +48,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isSelected) props.onSelect?.(getArgs());
-  }, [isSelected]);
+    if (selected) props.onSelect?.(getArgs());
+  }, [selected]);
 
   /**
    * Handlers
@@ -79,7 +80,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
     }),
     link: css({
-      color: isSelected ? COLORS.WHITE : COLORS.BLUE,
+      color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
       textDecoration: 'none',
     }),
     linkDimmed: css({
@@ -89,13 +90,23 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     }),
     row: {
       base: css({
-        backgroundColor: isSelected ? Color.alpha(COLORS.BLUE, 1) : undefined,
+        backgroundColor: selected
+          ? focused
+            ? COLORS.BLUE
+            : Color.alpha(COLORS.DARK, 0.08)
+          : undefined,
         borderRadius: 3,
         position: 'relative',
         display: 'grid',
         gridTemplateColumns: 'auto auto 1fr',
       }),
-      icon: css({ marginLeft: 10, marginRight: 10, display: 'grid', placeItems: 'center' }),
+      icon: css({
+        color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
+        marginLeft: 10,
+        marginRight: 10,
+        display: 'grid',
+        placeItems: 'center',
+      }),
       label: css({ ':hover': { textDecoration: 'underline' } }),
     },
   };
@@ -104,9 +115,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     <li ref={baseRef} {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
       <div {...styles.row.base}>
-        <div {...styles.row.icon}>
-          {Icon && <VscSymbolClass color={isSelected ? COLORS.WHITE : COLORS.BLUE} />}
-        </div>
+        <div {...styles.row.icon}>{Icon && <VscSymbolClass />}</div>
         <a
           href={url.href}
           onClick={handleClick}
