@@ -12,6 +12,7 @@ export const AuthLoader: React.FC<AuthLoaderProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <Auth.Info
+        title={'Identity'}
         fields={[
           'Login',
           'Login.SMS',
