@@ -1,7 +1,6 @@
 import type { t } from './common';
 
 type ElementInput = JSX.Element | null | false;
-type Milliseconds = number;
 
 /**
  * Component: <PropList>
@@ -43,7 +42,7 @@ export type PropListProps = {
 
 export type PropListSize = { fixed?: number; min?: number; max?: number };
 export type PropListCard = {
-  flipSpeed?: Milliseconds;
+  flipSpeed?: t.Milliseconds;
   shadow?: boolean | t.CssShadow;
   background?: t.CardBackground;
   border?: t.CardBorder;

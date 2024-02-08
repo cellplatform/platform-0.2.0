@@ -1,7 +1,6 @@
 import type { t } from './common';
 
 type ElementInput = JSX.Element | null | false;
-type Milliseconds = number;
 type Color = string | number;
 
 export type CardBorder = {
@@ -16,7 +15,7 @@ export type CardBackground = {
 
 export type CardBackside = {
   flipped?: boolean;
-  speed?: Milliseconds;
+  speed?: t.Milliseconds;
 };
 
 export type CardSizeDimension = number | { fixed?: number; min?: number; max?: number };

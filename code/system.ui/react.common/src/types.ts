@@ -28,9 +28,9 @@ export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/s
  * @local
  */
 export type { DevCtx, DevCtxState } from './common/t';
-export type * from './ui.dev/types.mjs';
-export type * from './ui.tools/types.mjs';
-export type * from './ui/types';
+export type * from './ui.dev/t';
+export type * from './ui.tools/t';
+export type * from './ui/t';
 
 /**
  * Common Types

@@ -1,11 +1,6 @@
 import { Color, COLORS, css, type t } from '../common';
 
-export type ChipProps = {
-  text?: string;
-  style?: t.CssValue;
-};
-
-export const Chip: React.FC<ChipProps> = (props) => {
+export const Chip: React.FC<t.ChipProps> = (props) => {
   const { text = '' } = props;
   const isEmpty = !Boolean(text);
 

@@ -2,7 +2,6 @@ import type { MouseEventHandler } from 'react';
 import type { t } from './common';
 
 type Id = string;
-type Milliseconds = number;
 type Pixels = number;
 
 export type TextInputRef = {
@@ -107,7 +106,7 @@ export type TextInputEvents = {
   status: {
     req$: t.Observable<t.TextInputStatusReq>;
     res$: t.Observable<t.TextInputStatusRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<TextInputStatusRes>;
+    get(options?: { timeout?: t.Milliseconds }): Promise<TextInputStatusRes>;
   };
 
   text: {

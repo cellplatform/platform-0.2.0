@@ -1,7 +1,6 @@
-import { type t } from '../../common';
+import type { t } from '../../common';
 export type * from './Test.PropList/types.mjs';
 
-type Milliseconds = number;
 type Ctx = Record<string, unknown>;
 
 /**
@@ -11,5 +10,5 @@ export type GetTestBundle = () => Promise<GetTestBundleResponse>;
 export type GetTestBundleResponse = {
   specs: t.TestSuiteModel[];
   ctx?: Ctx;
-  timeout?: Milliseconds;
+  timeout?: t.Milliseconds;
 };
