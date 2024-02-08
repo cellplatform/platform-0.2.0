@@ -9,10 +9,12 @@ import { useScrollObserver } from './useScrollObserver.mjs';
 
 type LiMap = Map<number, HTMLLIElement>;
 
-export const View: React.FC<t.SpecListProps> = (props) => {
+export const View: React.FC<t.ModuleListProps> = (props) => {
   const { scroll = false } = props;
   const url = new URL(props.href ?? window.location.href);
-  const imports = props.specs ?? {};
+
+  type M = t.SpecModule;
+  const imports = (props.imports ?? {}) as t.ModuleImports<M>;
 
   const baseRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<LiMap>(new Map<number, HTMLLIElement>());
@@ -33,7 +35,7 @@ export const View: React.FC<t.SpecListProps> = (props) => {
   /**
    * Handlers
    */
-  const handleItemReadyChange: t.SpecListItemReadyHandler = (e) => {
+  const handleItemReadyChange: t.ModuleListItemReadyHandler = (e) => {
     const map = itemRefs.current;
     if (e.lifecycle === 'ready') map.set(e.index, e.el!);
     if (e.lifecycle === 'disposed') map.delete(e.index);
@@ -58,11 +60,11 @@ export const View: React.FC<t.SpecListProps> = (props) => {
       padding: 30,
       paddingTop: 20,
     }),
+    title: css({ marginBottom: 20 }),
     list: {
       outer: css({ marginTop: 30, display: 'grid' }),
       inner: css({ minWidth: 550, MarginX: 50 }),
     },
-    title: css({ marginBottom: 20 }),
   };
 
   const elList = (

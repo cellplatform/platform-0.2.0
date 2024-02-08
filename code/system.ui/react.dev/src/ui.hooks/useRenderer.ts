@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { DevBus } from '../logic.Bus';
 import { DEFAULTS, Is, t } from './common';
-import { useCurrentState } from './useCurrentState.mjs';
-import { useRedrawEvent } from './useRedrawEvent.mjs';
+import { useCurrentState } from './useCurrentState';
+import { useRedrawEvent } from './useRedrawEvent';
 
 export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef) {
   const id = renderer?.id ?? '';

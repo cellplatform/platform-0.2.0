@@ -12,7 +12,7 @@ type LiMap = Map<number, HTMLLIElement>;
 export function useScrollController(
   baseRef: React.RefObject<HTMLDivElement>,
   itemRefs: LiMap,
-  scrollToProp$?: t.Observable<t.SpecListScrollTarget>,
+  scrollToProp$?: t.Observable<t.ModuleListScrollTarget>,
 ) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -30,7 +30,7 @@ export function useScrollController(
     /**
      * Bubble incoming property events into the local observable.
      */
-    const scrollTo$ = new rx.Subject<t.SpecListScrollTarget>();
+    const scrollTo$ = new rx.Subject<t.ModuleListScrollTarget>();
     scrollToProp$?.pipe(rx.takeUntil(dispose$)).subscribe((e) => scrollTo$.next(e));
 
     /**

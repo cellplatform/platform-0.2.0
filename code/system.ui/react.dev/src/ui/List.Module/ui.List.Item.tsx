@@ -14,9 +14,9 @@ export type ListItemProps = {
   ns?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
-  onReadyChange?: t.SpecListItemReadyHandler;
-  onClick?: t.SpecListItemHandler;
-  onSelect?: t.SpecListItemHandler;
+  onReadyChange?: t.ModuleListItemReadyHandler;
+  onClick?: t.ModuleListItemHandler;
+  onSelect?: t.ModuleListItemHandler;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -53,7 +53,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Handlers
    */
-  const getArgs = (): t.SpecListItemHandlerArgs => {
+  const getArgs = (): t.ModuleListItemHandlerArgs => {
     const match = address ? imports[address] : undefined;
     const importer = typeof match === 'function' ? match : undefined;
     return { index, address, importer };

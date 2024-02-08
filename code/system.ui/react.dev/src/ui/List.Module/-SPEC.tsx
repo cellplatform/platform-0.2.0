@@ -1,7 +1,7 @@
-import { DEFAULTS, SpecList } from '.';
+import { DEFAULTS, ModuleList } from '.';
 import { Pkg, Spec, type t } from '../../test.ui';
 
-export default Spec.describe('SpecList', (e) => {
+export default Spec.describe('ModuleList', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
 
@@ -28,10 +28,10 @@ export default Spec.describe('SpecList', (e) => {
         add('zoo');
 
         return (
-          <SpecList
+          <ModuleList
             title={Pkg.name}
             version={Pkg.version}
-            specs={specs}
+            imports={specs}
             hrDepth={2}
             scroll={true}
             // filter={'foo'}

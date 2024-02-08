@@ -3,7 +3,7 @@ import { Color, COLORS, css, t } from '../common';
 export type TitleProps = {
   title?: string;
   version?: string;
-  badge?: t.SpecListBadge;
+  badge?: t.ModuleListBadge;
   style?: t.CssValue;
 };
 

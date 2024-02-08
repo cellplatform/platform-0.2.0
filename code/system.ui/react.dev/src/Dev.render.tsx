@@ -1,11 +1,11 @@
-import { COLORS, DevWrangle, t } from './common';
+import { COLORS, DevWrangle, type t } from './common';
 import { DevKeyboard } from './logic.Keyboard';
 import { Harness } from './ui/Harness';
-import { SpecList } from './ui/SpecList';
+import { SpecList } from './ui/List.Spec';
 
 type Options = {
   location?: t.UrlInput;
-  badge?: t.SpecListBadge;
+  badge?: t.ModuleListBadge;
   hrDepth?: number;
   keyboard?: boolean;
   style?: t.CssValue;
@@ -38,7 +38,7 @@ export async function render(
     <SpecList
       title={pkg.name}
       version={pkg.version}
-      specs={specs}
+      imports={specs}
       badge={options.badge}
       hrDepth={options.hrDepth}
       style={style}

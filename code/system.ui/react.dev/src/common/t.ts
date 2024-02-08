@@ -15,6 +15,9 @@ export type {
   IgnoredResponse,
   Json,
   JsonMap,
+  ModuleImport,
+  ModuleImporter,
+  ModuleImports,
 } from 'sys.types/src/types';
 
 export type { CssValue } from 'sys.ui.react.css/src/types';
@@ -23,6 +26,7 @@ export type {
   SpecImport,
   SpecImporter,
   SpecImports,
+  SpecModule,
   TestHandlerArgs,
   TestModel,
   TestSuiteModel,

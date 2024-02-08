@@ -7,8 +7,8 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const SpecList = FC.decorate<t.SpecListProps, Fields>(
+export const ModuleList = FC.decorate<t.ModuleListProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'SpecList' },
+  { displayName: 'ModuleList' },
 );

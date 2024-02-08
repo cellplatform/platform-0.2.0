@@ -10,9 +10,9 @@ export type ListProps = {
   showDevParam?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
-  onItemReadyChange?: t.SpecListItemReadyHandler;
-  onItemClick?: t.SpecListItemHandler;
-  onItemSelect?: t.SpecListItemHandler;
+  onItemReadyChange?: t.ModuleListItemReadyHandler;
+  onItemClick?: t.ModuleListItemHandler;
+  onItemSelect?: t.ModuleListItemHandler;
 };
 
 export const List: React.FC<ListProps> = (props) => {
