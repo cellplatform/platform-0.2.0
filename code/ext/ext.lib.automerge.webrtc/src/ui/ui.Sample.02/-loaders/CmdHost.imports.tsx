@@ -3,6 +3,7 @@ import { type t } from '../common';
 const fn = () => import('../-SPEC');
 
 export const specs: t.SpecImports = {
-  foo: fn,
-  foobar: fn,
+  'foo.sample.01': fn,
+  'foo.sample.02': fn,
+  'foo.bar': fn,
 };
