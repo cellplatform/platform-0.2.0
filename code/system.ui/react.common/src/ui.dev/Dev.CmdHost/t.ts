@@ -16,7 +16,8 @@ export type CmdHostProps<T = t.SpecModule> = {
   hintKey?: string | string[];
   hrDepth?: number;
   badge?: t.ModuleListBadge;
-  showDevParam?: boolean;
+  focused?: boolean;
+  showParamDev?: boolean;
   style?: t.CssValue;
   focusOnReady?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;

@@ -21,15 +21,15 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   const total = Object.keys(specs).length;
   const hintKeys = Wrangle.hintKey({ focused, selectedIndex, specs, command });
 
-  const [childItems, setChildItems] = useState<t.ModuleListItemVisibility[]>([]);
-  const selectionChangeTrigger = childItems.map((item) => item.isVisible).join(',');
+  const [items, setItems] = useState<t.ModuleListItemVisibility[]>([]);
+  const selectionChangeTrigger = items.map((item) => item.isVisible).join(',');
   const scrollToRef$ = useRef<T>(new rx.Subject<t.ModuleListScrollTarget>());
 
   /**
    * Handle scroll behavior when the selection changes.
    */
   useEffect(() => {
-    const child = childItems[selectedIndex];
+    const child = items[selectedIndex];
     const scrollTo$ = scrollToRef$.current;
     const index = child ? child.index : -1;
     if (child && !child.isVisible) scrollTo$.next({ index });
@@ -45,15 +45,15 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     setSelectedIndex(index);
   }, [total, command]);
 
+  /**
+   * Keep state in sync with passed-in properties when they change.
+   */
   useEffect(() => {
     const ready = readyRef.current;
     const prop = props.selectedIndex ?? 0;
     if (ready && prop !== selectedIndex) setSelectedIndex(prop);
   }, [props.selectedIndex]);
 
-  /**
-   * Keep command state in sync with passed-in property if it changes.
-   */
   useEffect(() => {
     const ready = readyRef.current;
     const prop = props.command ?? '';
@@ -125,13 +125,14 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       specs={specs}
       command={command}
       applyFilter={false} // NB: Filter already applied above.
-      selectedIndex={focused ? selectedIndex : undefined}
+      selectedIndex={selectedIndex}
+      focused={focused}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}
       onChanged={handleCommandChanged}
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
       onKeyDown={handleKeyboard}
-      onItemVisibility={(e) => setChildItems(e.children)}
+      onItemVisibility={(e) => setItems(e.children)}
       onItemSelect={handleItemSelected}
     />
   );

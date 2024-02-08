@@ -25,13 +25,13 @@ const badge = CmdHost.DEFAULTS.badge;
 const initial: T = { props: { pkg: Pkg }, debug: {} };
 
 export default Dev.describe('CmdHost', (e) => {
-  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl' | 'showDevParam'> &
+  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl' | 'showParamDev'> &
     Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     hrDepth: 2,
     mutateUrl: true,
-    showDevParam: true,
+    showParamDev: true,
     stateful: true,
     useOnItemClick: true,
   });
@@ -46,7 +46,7 @@ export default Dev.describe('CmdHost', (e) => {
 
       d.props.hrDepth = local.hrDepth;
       d.props.mutateUrl = local.mutateUrl;
-      d.props.showDevParam = local.showDevParam;
+      d.props.showParamDev = local.showParamDev;
       d.debug.stateful = local.stateful;
       d.debug.useOnItemClick = local.useOnItemClick;
     });
@@ -93,12 +93,12 @@ export default Dev.describe('CmdHost', (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.showDevParam);
+        const value = (state: T) => Boolean(state.props.showParamDev);
         btn
-          .label((e) => `showDevParam`)
+          .label((e) => `showParamDev`)
           .value((e) => value(e.state))
           .onClick((e) =>
-            e.change((d) => (local.showDevParam = Dev.toggle(d.props, 'showDevParam'))),
+            e.change((d) => (local.showParamDev = Dev.toggle(d.props, 'showParamDev'))),
           );
       });
 
