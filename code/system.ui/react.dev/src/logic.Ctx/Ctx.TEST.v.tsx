@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { DEFAULTS, describe, expect, Id, it, t, TestSample } from '../test';
+import { DEFAULTS, Id, TestSample, describe, expect, it, type t } from '../test';
 
 export function expectRendererId(value?: string) {
   expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);

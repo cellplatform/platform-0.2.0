@@ -1,7 +1,7 @@
 import 'symbol-observable';
 
-import { t, slug, rx, Time } from '../common';
 import { DevBus } from '../../logic.Bus';
+import { Time, rx, slug, type t } from '../common';
 
 type Milliseconds = number;
 type Results = { ok: boolean; elapsed: Milliseconds; total: number; specs: ModuleResults[] };

@@ -1,4 +1,4 @@
-import { t, Margin } from '../common';
+import { Margin, type t } from '../common';
 
 export const Wrangle = {
   componentSize(value?: t.DevRenderSize) {

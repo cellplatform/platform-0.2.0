@@ -1,6 +1,6 @@
-import { BusEvents as Events } from './Bus.Events.mjs';
 import { BusController as Controller } from './Bus.Controller.mjs';
-import { t, Is, Spec } from './common';
+import { BusEvents as Events } from './Bus.Events.mjs';
+import { Is, Spec, type t } from './common';
 
 export * from './Bus.Events.mjs';
 

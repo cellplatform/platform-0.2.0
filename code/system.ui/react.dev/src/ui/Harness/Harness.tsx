@@ -3,13 +3,13 @@ import { HarnessHost } from '../Harness.Host';
 import { DebugPanel } from '../Harness.Panel.Debug';
 import {
   COLORS,
+  Color,
   ErrorBoundary,
   css,
-  Color,
-  type t,
   useBusController,
   useRubberband,
   useSizeObserver,
+  type t,
 } from '../common';
 import { ErrorFallback } from './ErrorFallback';
 

@@ -1,4 +1,4 @@
-import { DEFAULTS, t, Margin, Id } from './common';
+import { DEFAULTS, Id, Margin, type t } from './common';
 import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
 
 import type { PropArgs } from './common.types';

@@ -1,5 +1,5 @@
-import { css, t, useRenderer } from '../common';
-import { Wrangle } from './Wrangle.mjs';
+import { css, useRenderer, type t } from '../common';
+import { Wrangle } from './Wrangle';
 
 export type PanelBarProps = {
   instance: t.DevInstance;

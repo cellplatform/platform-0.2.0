@@ -1,4 +1,4 @@
-import { t, Test, maybeWait } from '../common';
+import { Test, maybeWait, type t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 /**

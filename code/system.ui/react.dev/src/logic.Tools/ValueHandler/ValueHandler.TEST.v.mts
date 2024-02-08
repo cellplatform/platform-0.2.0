@@ -1,4 +1,4 @@
-import { describe, expect, it, t, TestSample, Time } from '../../test';
+import { TestSample, Time, describe, expect, it, type t } from '../../test';
 import { ValueHandler } from './ValueHandler.mjs';
 
 describe('ValueHandler', () => {

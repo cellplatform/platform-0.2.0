@@ -1,4 +1,4 @@
-import { t, Color } from '../common';
+import { Color, type t } from '../common';
 
 export const Wrangle = {
   borderStyle(props?: t.DevRenderPropsEdge) {

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { defaultIfEmpty } from 'rxjs';
 
-import { rx, t, Time } from './common';
+import { Time, rx, type t } from './common';
 
 type LiMap = Map<number, HTMLLIElement>;
 
