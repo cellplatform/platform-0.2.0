@@ -26,12 +26,12 @@ export const Wrangle = {
   },
 
   hintKey(args: {
-    isFocused: boolean;
+    focused: boolean;
     specs?: t.SpecImports;
     selectedIndex: number;
     command: string;
   }) {
-    if (!args.isFocused) return ['↑', '↓', '⎇K'];
+    if (!args.focused) return ['↑', '↓', '⎇K'];
     return ['↑', '↓', 'enter'];
   },
-};
+} as const;

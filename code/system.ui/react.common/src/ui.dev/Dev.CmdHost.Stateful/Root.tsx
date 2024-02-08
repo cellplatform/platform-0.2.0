@@ -13,13 +13,13 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
 
   const readyRef = useRef(false);
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
-  const [isFocused, setFocused] = useState(false);
+  const [focused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
   const [selectedItem, setSelectedItem] = useState<t.ModuleListItemHandlerArgs>();
 
   const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
-  const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
+  const hintKeys = Wrangle.hintKey({ focused, selectedIndex, specs, command });
 
   const [childItems, setChildItems] = useState<t.ModuleListItemVisibility[]>([]);
   const selectionChangeTrigger = childItems.map((item) => item.isVisible).join(',');
@@ -125,7 +125,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       specs={specs}
       command={command}
       applyFilter={false} // NB: Filter already applied above.
-      selectedIndex={isFocused ? selectedIndex : undefined}
+      selectedIndex={focused ? selectedIndex : undefined}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}
       onChanged={handleCommandChanged}
