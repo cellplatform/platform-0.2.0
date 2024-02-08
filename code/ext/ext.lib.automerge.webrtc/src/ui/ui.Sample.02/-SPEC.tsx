@@ -267,7 +267,10 @@ export default Dev.describe(name, async (e) => {
           .label('ƒ → (unload)')
           .right((e) => '💥')
           .enabled((e) => isEnabled())
-          .onClick((e) => sharedMain?.change((d) => delete d.module));
+          .onClick((e) => {
+            sharedMain?.change((d) => delete d.module);
+            dev.redraw();
+          });
       });
 
       dev.hr(-1, 5);
