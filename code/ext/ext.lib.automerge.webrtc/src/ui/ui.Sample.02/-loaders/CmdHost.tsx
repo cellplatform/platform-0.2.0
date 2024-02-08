@@ -82,7 +82,7 @@ export const CmdHostLoader: React.FC<CmdHostLoaderProps> = (props) => {
       badge={badge}
       hrDepth={2}
       mutateUrl={false}
-      showDevParam={false}
+      showParamDev={false}
       command={command}
       commandPlaceholder={'namespace'}
       selectedIndex={selectedIndex}
