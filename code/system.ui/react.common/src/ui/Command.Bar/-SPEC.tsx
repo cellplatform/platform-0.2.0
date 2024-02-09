@@ -45,7 +45,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CommandBar
             {...e.state.props}
-            onChanged={(e) => state.change((d) => (local.text = d.props.text = e.to))}
+            onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
           />
         );
       });

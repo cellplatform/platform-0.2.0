@@ -11,7 +11,7 @@ export type CommandBarProps = {
   focusOnReady?: boolean;
   style?: t.CssValue;
   onReady?: t.TextInputReadyHandler;
-  onChanged?: t.TextInputChangeEventHandler;
+  onChange?: t.TextInputChangeEventHandler;
   onFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
   onKeyUp?: t.TextInputKeyEventHandler;
