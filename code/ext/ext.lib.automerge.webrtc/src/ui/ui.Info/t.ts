@@ -21,7 +21,10 @@ export type InfoData = {
   peer?: PeerInfoData['peer'];
   repo?: AutomergeInfoData['repo'];
   network?: t.NetworkStore;
-  shared?: { object?: { expand?: { level?: number; paths?: string[] } } };
+  shared?: {
+    object?: { expand?: { level?: number; paths?: string[] } };
+    onIconClick: (e: {}) => void;
+  };
   visible?: {
     value?: boolean;
     enabled?: boolean;

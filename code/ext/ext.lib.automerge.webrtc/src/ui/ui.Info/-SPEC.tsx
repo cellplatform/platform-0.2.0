@@ -56,6 +56,18 @@ export default Dev.describe(name, async (e) => {
                 value: e.state.debug.visible,
                 onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
               },
+              shared: {
+                onIconClick(e) {
+                  console.info('⚡️ shared.onIconClick', e);
+                  state.change((d) => {
+                    const fields = d.props.fields ?? [];
+                    d.props.fields = fields.includes('Network.Shared.Json')
+                      ? fields.filter((f) => f !== 'Network.Shared.Json')
+                      : [...fields, 'Network.Shared.Json'];
+                    local.selectedFields = d.props.fields;
+                  });
+                },
+              },
             }}
           />
         );
@@ -106,7 +118,7 @@ export default Dev.describe(name, async (e) => {
         'Peer',
         'Network.Transfer',
         'Network.Shared',
-        'Network.Shared.Json',
+        // 'Network.Shared.Json',
       ]);
     });
 

@@ -1,4 +1,4 @@
-import { Doc, Hash, ObjectView, css, type t } from './common';
+import { Doc, Hash, ObjectView, css, type t, Icons, Button } from './common';
 
 /**
  * Shared network state (transient document).
@@ -18,7 +18,7 @@ export function shared(
   res.push({
     label: 'Shared State',
     value: {
-      data: doc ? `crdt:${doc}` : '(not connected)',
+      data: wrangle.displayValue(data, shared?.uri),
       opacity: doc ? 1 : 0.3,
     },
   });
@@ -35,6 +35,39 @@ export function shared(
  * Helpers
  */
 const wrangle = {
+  displayValue(data: t.InfoData, uri?: string) {
+    if (!uri) return '(not connected)';
+    const docid = Doc.Uri.id(uri);
+    const doc = Hash.shorten(docid, [4, 4]);
+
+    const parts: JSX.Element[] = [];
+
+    const text = `crdt:${doc}`;
+    parts.push(<>{text}</>);
+
+    const elIcon = <Icons.Object size={14} />;
+    const onIconClick = data.shared?.onIconClick;
+    if (!onIconClick) parts.push(elIcon);
+    else parts.push(<Button onClick={(e) => onIconClick({})}>{elIcon}</Button>);
+
+    const styles = {
+      base: css({
+        display: 'grid',
+        alignContent: 'center',
+        gridTemplateColumns: `repeat(2, auto)`,
+        columnGap: '5px',
+      }),
+    };
+
+    return (
+      <div {...styles.base}>
+        {parts.map((el, i) => {
+          return <div key={i}>{el}</div>;
+        })}
+      </div>
+    );
+  },
+
   jsonObject(data: t.InfoData, shared?: t.DocRef<t.CrdtShared>) {
     const network = data.network;
     if (!network) return;

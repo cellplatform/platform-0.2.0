@@ -54,7 +54,7 @@ export default Dev.describe(name, async (e) => {
                 doc,
                 object: { name: 'foobar', expand: { level: 2 } },
                 onIconClick(e) {
-                  console.info('⚡️ onIconClick', e);
+                  console.info('⚡️ document.onIconClick', e);
                   state.change((d) => {
                     const fields = d.props.fields ?? [];
                     d.props.fields = fields.includes('Doc.Object')
