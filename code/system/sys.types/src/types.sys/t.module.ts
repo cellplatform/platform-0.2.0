@@ -7,4 +7,4 @@ export type ModuleDef = {
 
 export type ModuleImport<T = unknown> = Promise<T>;
 export type ModuleImporter<T = unknown> = () => ModuleImport<T>;
-export type ModuleImports<T = unknown> = { [namespace: string]: ModuleImporter<T> };
+export type ModuleImports<T = unknown> = { [name: string]: ModuleImporter<T> };
