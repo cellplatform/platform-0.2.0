@@ -1,4 +1,4 @@
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Color, COLORS, Dev, Pkg, type t } from '../../test.ui';
 import { DEFAULTS, ModuleLoader } from '.';
 
 type T = {
@@ -12,11 +12,13 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<t.ModuleNamespaceProps, 'flipped' | 'commandbar'>;
+  type LocalStore = T['debug'] & Pick<t.ModuleLoaderProps, 'flipped' | 'spinning' | 'theme'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    flipped: false,
+    flipped: DEFAULTS.flipped,
+    spinning: DEFAULTS.spinning,
+    theme: DEFAULTS.theme,
     debugBg: true,
     debugFill: true,
   });
@@ -28,19 +30,25 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.flipped = local.flipped;
+      d.props.theme = local.theme;
+      d.props.spinning = local.spinning;
       d.props.back = { element: <div>{'Back 👋'}</div> };
+
       d.debug.debugBg = local.debugBg;
     });
 
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      // .size('fill', 80)
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-
+        const isDark = props.theme === 'Dark';
         ctx.subject.backgroundColor(debug.debugBg ? 1 : 0);
+        ctx.host
+          .backgroundColor(isDark ? COLORS.DARK : null)
+          .tracelineColor(isDark ? Color.alpha(COLORS.WHITE, 0.1) : null);
+
         if (debug.debugFill) ctx.subject.size('fill', 80);
         if (!debug.debugFill) ctx.subject.size([350, 120]);
 
@@ -60,6 +68,34 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
       });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.spinning);
+        btn
+          .label((e) => `spinning`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning'))));
+      });
+
+      dev.hr(-1, 5);
+
+      const buttonTheme = (theme: t.ModuleLoaderTheme) => {
+        dev.button((btn) => {
+          const value = (state: T) => state.props.theme;
+          const isCurrent = (state: T) => value(state) === theme;
+          btn
+            .label(`theme: "${theme}"`)
+            .right((e) => (isCurrent(e.state) ? `←` : ''))
+            // .enabled((e) => true)
+            .onClick((e) => e.change((d) => (local.theme = d.props.theme = theme)));
+        });
+
+        // dev.button(`theme: "${theme}"`, (e) => {
+        //   e.change((d) => (d.props.theme = theme));
+        // });
+      };
+      buttonTheme('Light');
+      buttonTheme('Dark');
     });
 
     dev.hr(5, 20);
