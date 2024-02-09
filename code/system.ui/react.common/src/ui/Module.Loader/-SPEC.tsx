@@ -86,13 +86,8 @@ export default Dev.describe(name, (e) => {
           btn
             .label(`theme: "${theme}"`)
             .right((e) => (isCurrent(e.state) ? `←` : ''))
-            // .enabled((e) => true)
             .onClick((e) => e.change((d) => (local.theme = d.props.theme = theme)));
         });
-
-        // dev.button(`theme: "${theme}"`, (e) => {
-        //   e.change((d) => (d.props.theme = theme));
-        // });
       };
       buttonTheme('Light');
       buttonTheme('Dark');
