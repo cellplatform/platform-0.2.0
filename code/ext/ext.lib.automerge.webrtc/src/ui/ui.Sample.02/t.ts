@@ -28,7 +28,11 @@ export type SampleFactoryTypename =
   | 'CmdHost'
   | 'ModuleNamespace';
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
-export type SampleEdgeLayout = { visible: boolean };
+export type SampleEdgeLayout = {
+  visible: boolean;
+  showJson: boolean;
+  fields?: t.InfoField[];
+};
 export type SampleSharedMain = { module?: LoaderDef };
 export type SampleSharedCmdHost = SampleSharedMain & {
   filter?: string;

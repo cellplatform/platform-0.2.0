@@ -23,7 +23,7 @@ export type InfoData = {
   network?: t.NetworkStore;
   shared?: {
     object?: { expand?: { level?: number; paths?: string[] } };
-    onIconClick: (e: {}) => void;
+    onIconClick?: (e: {}) => void;
   };
   visible?: {
     value?: boolean;

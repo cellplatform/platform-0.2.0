@@ -1,13 +1,13 @@
 import { type t } from './common';
 
-import { Color, css, COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { ShellDivider } from './-SPEC.ShellDivider';
 import { createEdge } from './-SPEC.createEdge';
 import { monitorKeyboard } from './-SPEC.keyboard';
-import { PeerRepoList } from './common';
 import { loadFactory } from './-loaders/factory';
+import { PeerRepoList } from './common';
 import { Loader } from './ui.Loader';
 import { Sample } from './ui.Sample';
-import { ShellDivider } from './-SPEC.ShellDivider';
 
 type T = { reload?: boolean };
 const initial: T = {};
@@ -66,7 +66,10 @@ export default Dev.describe(name, async (e) => {
       sharedMain = ns.lens<t.SampleSharedMain>('foo.sample', {});
       sharedHarness = ns.lens<t.HarnessShared>('dev.harness', {
         debugPanel: true,
-        edge: { Left: { visible: true }, Right: { visible: true } },
+        edge: {
+          Left: { visible: true, showJson: true },
+          Right: { visible: true, showJson: true },
+        },
       });
 
       sharedHarness
@@ -159,25 +162,43 @@ export default Dev.describe(name, async (e) => {
 
       dev.row((e) => {
         const shared = sharedHarness;
-        const edgeLayout = shared?.current.edge[edge.kind];
+        const getLayout = (d?: t.HarnessShared) => d?.edge[edge.kind];
+        const layout = getLayout(shared?.current);
+        const defaultFields: t.InfoField[] = [
+          'Visible',
+          'Repo',
+          'Peer',
+          'Network.Transfer',
+          'Network.Shared',
+        ];
+
+        if (!layout?.fields) {
+          shared?.change((d) => (d.edge[edge.kind].fields = defaultFields));
+        }
+
         return (
           <PeerRepoList.Info
             title={edge.kind}
-            fields={[
-              'Visible',
-              'Repo',
-              'Peer',
-              'Network.Transfer',
-              'Network.Shared',
-              'Network.Shared.Json',
-            ]}
+            fields={layout?.fields ?? defaultFields}
             data={{
               network,
               visible: {
-                value: edgeLayout?.visible ?? true,
-                enabled: !!edgeLayout,
+                value: layout?.visible ?? true,
+                enabled: !!layout,
                 onToggle(visible) {
                   shared?.change((d) => (d.edge[edge.kind].visible = !visible));
+                },
+              },
+              shared: {
+                onIconClick(e) {
+                  shared?.change((d) => {
+                    const edge = getLayout(d)!;
+                    const fields = edge.fields ?? [];
+                    edge.fields = fields.includes('Network.Shared.Json')
+                      ? fields.filter((f) => f !== 'Network.Shared.Json')
+                      : [...fields, 'Network.Shared.Json'];
+                  });
+                  dev.redraw('debug');
                 },
               },
             }}
