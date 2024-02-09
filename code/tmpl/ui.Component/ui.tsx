@@ -8,7 +8,8 @@ export const View: React.FC<t.RootProps> = (props) => {
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
