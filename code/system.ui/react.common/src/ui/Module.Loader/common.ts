@@ -8,8 +8,12 @@ export { Spinner } from '../Spinner';
  * Constants
  */
 
-const spinning: t.ModuleLoaderSpinning = { width: 50 };
 const theme: t.ModuleLoaderTheme = 'Light';
+const spinning: t.ModuleLoaderSpinning = {
+  width: 50,
+  bodyOpacity: 0.2,
+  transition: 150,
+};
 
 export const DEFAULTS = {
   displayName: 'ModuleLoader',

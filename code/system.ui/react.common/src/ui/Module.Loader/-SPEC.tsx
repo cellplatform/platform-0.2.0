@@ -33,7 +33,6 @@ export default Dev.describe(name, (e) => {
       d.props.theme = local.theme;
       d.props.spinning = local.spinning;
       d.props.back = { element: <div>{'Back 👋'}</div> };
-
       d.debug.debugBg = local.debugBg;
     });
 
@@ -66,7 +65,11 @@ export default Dev.describe(name, (e) => {
         btn
           .label((e) => `flipped`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
+          .onClick((e) =>
+            e.change((d) => {
+              local.flipped = Dev.toggle(d.props, 'flipped');
+            }),
+          );
       });
 
       dev.boolean((btn) => {
@@ -74,7 +77,13 @@ export default Dev.describe(name, (e) => {
         btn
           .label((e) => `spinning`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning'))));
+          .onClick((e) =>
+            e.change((d) => {
+              const current = d.props.spinning;
+              d.props.spinning = typeof current === 'boolean' ? !current : false;
+              local.spinning = d.props.spinning;
+            }),
+          );
       });
 
       dev.hr(-1, 5);
@@ -91,6 +100,29 @@ export default Dev.describe(name, (e) => {
       };
       buttonTheme('Light');
       buttonTheme('Dark');
+
+      dev.hr(-1, 5);
+      dev.button('reset', async (e) => {
+        e.change((d) => {
+          local.flipped = d.props.flipped = DEFAULTS.flipped;
+          local.spinning = d.props.spinning = undefined;
+        });
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Common State', (dev) => {
+      dev.button('spinner → body blur', (e) => {
+        e.change((d) => {
+          const spinning =
+            typeof d.props.spinning === 'object' ? d.props.spinning : (d.props.spinning = {});
+
+          spinning.bodyBlur = 3;
+          spinning.bodyOpacity = 0.5;
+          local.spinning = spinning;
+        });
+      });
     });
 
     dev.hr(5, 20);

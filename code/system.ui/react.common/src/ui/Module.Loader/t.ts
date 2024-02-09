@@ -19,6 +19,9 @@ export type ModuleLoaderProps = {
 export type ModuleLoaderSpinning = {
   width?: number;
   color?: string;
+  bodyOpacity?: t.Percent;
+  bodyBlur?: t.Pixels;
+  transition?: t.Msecs;
 };
 
 /**
