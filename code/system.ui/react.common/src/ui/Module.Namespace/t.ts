@@ -1,7 +1,5 @@
 import type { t } from './common';
 
-type R = JSX.Element | null | false;
-
 /**
  * <Component>
  */
@@ -16,16 +14,4 @@ export type ModuleNamespaceProps<N extends string = string> = {
 
 export type ModuleNamespaceCommandbarProps = {
   visible?: boolean;
-};
-
-/**
- * Render factory
- */
-export type ModuleRenderer<N extends string, T = unknown> = (
-  e: ModuleRendererArgs<N, T>,
-) => R | Promise<R>;
-
-export type ModuleRendererArgs<N extends string, T = unknown> = {
-  name: N;
-  importer: t.ModuleImporter<T>;
 };

@@ -7,18 +7,18 @@ type T = {
 };
 const initial: T = { props: {}, debug: {} };
 
-const imports = {
+const sampleImports = {
   foo: async () => null,
   bar: async () => null,
 };
 
-type K = keyof typeof imports;
+type K = keyof typeof sampleImports;
 const renderer: t.ModuleRenderer<K> = async (e) => {
   return null;
 };
 
 /**
- * Spec
+ * Spec: ModuleNamespace
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
@@ -38,10 +38,9 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const p = d.props;
-      p.flipped = local.flipped;
-      p.commandbar = local.commandbar;
-      p.imports = imports;
+      d.props.flipped = local.flipped;
+      d.props.commandbar = local.commandbar;
+      d.props.imports = sampleImports;
       d.debug.debugBg = local.debugBg;
     });
 
@@ -92,7 +91,7 @@ export default Dev.describe(name, (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debugBg);
         btn
-          .label((e) => `background`)
+          .label((e) => `background: ${value(e.state) ? 'white' : '(none)'}`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugBg = Dev.toggle(d.debug, 'debugBg'))));
       });
