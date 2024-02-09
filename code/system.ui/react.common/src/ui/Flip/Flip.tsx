@@ -18,8 +18,8 @@ const View: React.FC<t.FlipProps> = (props) => {
       transition: `transform ${speed}ms ease-out`,
       display: 'grid',
     }),
-    front: css({ transform: `rotateY(${flipped ? -180 : 0}deg)` }),
-    back: css({ transform: `rotateY(${flipped ? 0 : 180}deg)` }),
+    front: css({ display: 'grid', transform: `rotateY(${flipped ? -180 : 0}deg)` }),
+    back: css({ display: 'grid', transform: `rotateY(${flipped ? 0 : 180}deg)` }),
   };
 
   const elFront = props.front && <div {...css(styles.body, styles.front)}>{props.front}</div>;
