@@ -92,7 +92,6 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       setSelectedIndex(Wrangle.selected(specs, total - 1));
       return done();
     }
-
     if (e.key === 'ArrowUp') {
       const next = selectedIndex - (e.altKey ? 5 : 1);
       setSelectedIndex(Wrangle.selected(specs, next));
@@ -108,7 +107,6 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
         Url.mutateLoadedNamespace(selectedIndex, specs, { reload: true });
         done();
       }
-
       if (props.onItemClick && selectedItem) {
         props.onItemClick(selectedItem);
         done();
