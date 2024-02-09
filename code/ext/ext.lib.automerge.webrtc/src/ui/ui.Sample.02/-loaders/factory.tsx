@@ -28,9 +28,9 @@ export const loadFactory: t.LoadFactory<t.SampleFactoryTypename> = async (e) => 
     return <CmdHostLoader store={store} shared={shared} factory={loadFactory} />;
   }
 
-  if (typename === 'ModuleLoader') {
-    const { ModuleLoader } = await import('sys.ui.react.common');
-    return <ModuleLoader />;
+  if (typename === 'ModuleNamespace') {
+    const { ModuleNamespace } = await import('sys.ui.react.common');
+    return <ModuleNamespace />;
   }
 
   return;

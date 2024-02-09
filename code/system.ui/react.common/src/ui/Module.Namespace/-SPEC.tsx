@@ -1,23 +1,34 @@
+import { DEFAULTS, ModuleNamespace } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
-import { DEFAULTS, ModuleLoader } from '.';
 
 type T = {
-  props: t.ModuleLoaderProps;
+  props: t.ModuleNamespaceProps;
   debug: { debugBg?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
+
+const imports = {
+  foo: async () => null,
+  bar: async () => null,
+};
+
+type K = keyof typeof imports;
+const renderer: t.ModuleRenderer<K> = async (e) => {
+  return null;
+};
 
 /**
  * Spec
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.ModuleLoaderProps, 'flipped' | 'command'> & Pick<T['debug'], 'debugBg'>;
+  type LocalStore = Pick<t.ModuleNamespaceProps, 'flipped' | 'commandbar'> &
+    Pick<T['debug'], 'debugBg'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     flipped: false,
-    command: DEFAULTS.command,
+    commandbar: DEFAULTS.command,
     debugBg: true,
   });
 
@@ -29,7 +40,8 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       const p = d.props;
       p.flipped = local.flipped;
-      p.command = local.command;
+      p.commandbar = local.commandbar;
+      p.imports = imports;
       d.debug.debugBg = local.debugBg;
     });
 
@@ -40,7 +52,7 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { props, debug } = e.state;
         ctx.subject.backgroundColor(debug.debugBg ? 1 : 0);
-        return <ModuleLoader {...props} />;
+        return <ModuleNamespace {...props} render={renderer} />;
       });
   });
 
@@ -61,15 +73,15 @@ export default Dev.describe(name, (e) => {
     dev.hr(-1, 5);
 
     dev.boolean((btn) => {
-      const value = (state: T) => Boolean(state.props.command?.visible);
+      const value = (state: T) => Boolean(state.props.commandbar?.visible);
       btn
         .label((e) => `command.visible`)
         .value((e) => value(e.state))
         .onClick((e) =>
           e.change((d) => {
-            const command = d.props.command || (d.props.command = DEFAULTS.command);
+            const command = d.props.commandbar || (d.props.commandbar = DEFAULTS.command);
             Dev.toggle(command, 'visible');
-            local.command = command;
+            local.commandbar = command;
           }),
         );
     });

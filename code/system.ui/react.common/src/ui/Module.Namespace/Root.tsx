@@ -7,7 +7,7 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const ModuleLoader = FC.decorate<t.ModuleLoaderProps, Fields>(
+export const ModuleNamespace = FC.decorate<t.ModuleNamespaceProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

@@ -256,7 +256,7 @@ export default Dev.describe(name, async (e) => {
 
       loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
       dev.hr(-1, 5);
-      loaderButton(`ƒ → load → <ModuleLoader>`, 'ModuleLoader', 'Main');
+      loaderButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'Main');
       loaderButton(`ƒ → load → Namespace (Loader)`, 'CmdHost', 'Main');
       dev.hr(-1, 5);
       loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main');

@@ -26,7 +26,7 @@ export type SampleFactoryTypename =
   | 'DiagramEditor'
   | 'Auth'
   | 'CmdHost'
-  | 'ModuleLoader';
+  | 'ModuleNamespace';
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleEdgeLayout = { visible: boolean };
 export type SampleSharedMain = { module?: LoaderDef };

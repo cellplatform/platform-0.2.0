@@ -8,11 +8,11 @@ export { CommandBar } from '../Command.Bar';
  * Constants
  */
 
-const command: t.ModuleLoaderCommandProps = {
+const command: t.ModuleNamespaceCommandbarProps = {
   visible: true,
 };
 
 export const DEFAULTS = {
-  displayName: 'ModuleLoader',
+  displayName: 'ModuleNamespace',
   command,
 } as const;
