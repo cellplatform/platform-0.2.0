@@ -19,6 +19,7 @@ export type * from './LabelItem.VirtualList/t';
 export type * from './LabelItem/t';
 export type * from './Layout.Split/t';
 export type * from './Layout/t';
+export type * from './Module.Loader/t';
 export type * from './Module.Namespace/t';
 export type * from './ObjectView/t';
 export type * from './ProgressBar/t';
