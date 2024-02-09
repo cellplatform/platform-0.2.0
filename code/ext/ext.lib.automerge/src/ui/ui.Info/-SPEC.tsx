@@ -53,6 +53,16 @@ export default Dev.describe(name, async (e) => {
                 // label: '',
                 doc,
                 object: { name: 'foobar', expand: { level: 2 } },
+                onIconClick(e) {
+                  console.info('⚡️ onIconClick', e);
+                  state.change((d) => {
+                    const fields = d.props.fields ?? [];
+                    d.props.fields = fields.includes('Doc.Object')
+                      ? fields.filter((f) => f !== 'Doc.Object')
+                      : [...fields, 'Doc.Object'];
+                    local.selectedFields = d.props.fields;
+                  });
+                },
               },
             }}
           />

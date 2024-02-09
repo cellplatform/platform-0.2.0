@@ -1,6 +1,13 @@
 import type { t } from './common';
 
-export type InfoField = 'Module' | 'Module.Verify' | 'Component' | 'Repo' | 'Doc' | 'Doc.URI';
+export type InfoField =
+  | 'Module'
+  | 'Module.Verify'
+  | 'Component'
+  | 'Repo'
+  | 'Doc'
+  | 'Doc.URI'
+  | 'Doc.Object';
 
 export type InfoData = {
   url?: { href: string; title?: string };
@@ -10,6 +17,7 @@ export type InfoData = {
     label?: string;
     doc?: t.DocRef<unknown>;
     object?: { name?: string; expand?: { level?: number; paths?: string[] } };
+    onIconClick?: (e: {}) => void;
   };
 };
 

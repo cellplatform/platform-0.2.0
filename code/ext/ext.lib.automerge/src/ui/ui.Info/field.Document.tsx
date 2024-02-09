@@ -1,4 +1,4 @@
-import { Doc, Hash, ObjectView, css, type t } from './common';
+import { Doc, Hash, ObjectView, css, type t, Icons, Button } from './common';
 
 type D = t.InfoData['document'];
 
@@ -15,11 +15,34 @@ export function doc(data: D, fields: t.InfoField[]) {
     const doc = data.doc;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
 
-    let value: string | undefined;
+    const parts: JSX.Element[] = [];
+
     if (uri) {
       const id = Doc.Uri.id(uri);
-      value = uri ? `crdt:automerge:${Hash.shorten(id, [4, 4])}` : undefined;
+      const text = uri ? `crdt:automerge:${Hash.shorten(id, [4, 4])}` : undefined;
+      parts.push(<>{text}</>);
     }
+
+    const elIcon = <Icons.Object size={14} />;
+    if (!data.onIconClick) parts.push(elIcon);
+    else parts.push(<Button onClick={(e) => data.onIconClick?.({})}>{elIcon}</Button>);
+
+    const styles = {
+      base: css({
+        display: 'grid',
+        alignContent: 'center',
+        gridTemplateColumns: `repeat(${parts.length}, auto)`,
+        columnGap: '5px',
+      }),
+    };
+
+    const value = (
+      <div {...styles.base}>
+        {parts.map((el, i) => {
+          return <div key={i}>{el}</div>;
+        })}
+      </div>
+    );
 
     res.push({
       label,
@@ -29,11 +52,11 @@ export function doc(data: D, fields: t.InfoField[]) {
   }
 
   /**
-   * The <Object? view component.
+   * The <Object> component.
    */
-  res.push({
-    value: wrangle.objectElement(data, hasLabel),
-  });
+  if (fields.includes('Doc.Object')) {
+    res.push({ value: wrangle.objectElement(data, hasLabel) });
+  }
 
   // Finish up.
   return res;
