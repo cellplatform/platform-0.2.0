@@ -22,6 +22,7 @@ export type ModuleLoaderSpinning = {
   bodyOpacity?: t.Percent;
   bodyBlur?: t.Pixels;
   transition?: t.Msecs;
+  element?: RenderOutput;
 };
 
 /**

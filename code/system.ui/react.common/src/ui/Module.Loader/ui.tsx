@@ -7,10 +7,6 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
   const is = Wrangle.is(props);
 
   /**
-   * TODO 🐷
-   */
-
-  /**
    * Render
    */
   const speed = spinning?.transition ?? DEFAULTS.spinning.transition;
@@ -34,7 +30,7 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner.Bar width={spinning.width} color={spinning.color} />
+      {spinning.element || <Spinner.Bar width={spinning.width} color={spinning.color} />}
     </div>
   );
 

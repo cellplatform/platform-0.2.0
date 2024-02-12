@@ -1,5 +1,6 @@
 import { Color, COLORS, Dev, Pkg, type t } from '../../test.ui';
 import { DEFAULTS, ModuleLoader } from '.';
+import { SampleSpinner } from './-SPEC.Components';
 
 type T = {
   props: t.ModuleLoaderProps;
@@ -52,7 +53,7 @@ export default Dev.describe(name, (e) => {
           .tracelineColor(isDark ? Color.alpha(COLORS.WHITE, 0.1) : null);
 
         if (debug.debugFill) ctx.subject.size('fill', 80);
-        else ctx.subject.size([350, 120]);
+        else ctx.subject.size([400, 200]);
 
         return <ModuleLoader {...props} />;
       });
@@ -120,10 +121,17 @@ export default Dev.describe(name, (e) => {
         e.change((d) => {
           const spinning =
             typeof d.props.spinning === 'object' ? d.props.spinning : (d.props.spinning = {});
-
           spinning.bodyBlur = 3;
           spinning.bodyOpacity = 0.5;
           local.spinning = spinning;
+        });
+      });
+
+      dev.button('spinner → <element>', (e) => {
+        e.change((d) => {
+          const spinning =
+            typeof d.props.spinning === 'object' ? d.props.spinning : (d.props.spinning = {});
+          spinning.element = <SampleSpinner theme={d.props.theme} />;
         });
       });
     });
