@@ -15,4 +15,4 @@ export const Spinner = {
    * Helpers
    */
   Center,
-};
+} as const;

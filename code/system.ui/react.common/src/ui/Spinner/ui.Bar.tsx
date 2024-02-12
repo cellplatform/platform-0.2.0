@@ -1,5 +1,5 @@
 import { Color, COLORS, css, type t } from '../common';
-import { useImporter } from './useImporter.mjs';
+import { useImporter } from './useImporter';
 
 export type SpinnerBarProps = {
   width?: number;
