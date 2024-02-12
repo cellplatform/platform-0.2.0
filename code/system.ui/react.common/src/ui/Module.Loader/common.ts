@@ -7,7 +7,6 @@ export { Spinner } from '../Spinner';
 /**
  * Constants
  */
-
 const theme: t.ModuleLoaderTheme = 'Light';
 const spinning: t.ModuleLoaderSpinning = {
   width: 50,

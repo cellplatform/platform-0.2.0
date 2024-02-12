@@ -34,6 +34,7 @@ export default Dev.describe(name, (e) => {
       d.props.spinning = local.spinning;
       d.props.back = { element: <div>{'Back 👋'}</div> };
       d.debug.debugBg = local.debugBg;
+      d.debug.debugFill = local.debugFill;
     });
 
     ctx.debug.width(330);
@@ -42,14 +43,16 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
+
         const isDark = props.theme === 'Dark';
-        ctx.subject.backgroundColor(debug.debugBg ? 1 : 0);
+        const bgThemeColor = isDark ? Color.alpha(COLORS.WHITE, 0.02) : COLORS.WHITE;
+        ctx.subject.backgroundColor(debug.debugBg ? bgThemeColor : 0);
         ctx.host
           .backgroundColor(isDark ? COLORS.DARK : null)
           .tracelineColor(isDark ? Color.alpha(COLORS.WHITE, 0.1) : null);
 
         if (debug.debugFill) ctx.subject.size('fill', 80);
-        if (!debug.debugFill) ctx.subject.size([350, 120]);
+        else ctx.subject.size([350, 120]);
 
         return <ModuleLoader {...props} />;
       });

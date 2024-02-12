@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+export type ModuleNamespaceTheme = t.ModuleLoaderTheme;
+
 /**
  * <Component>
  */
@@ -9,6 +11,7 @@ export type ModuleNamespaceProps<N extends string = string> = {
   render?: t.ModuleRenderer<any>;
   commandbar?: t.ModuleNamespaceCommandbarProps;
   flipped?: boolean;
+  theme?: t.ModuleNamespaceTheme;
   style?: t.CssValue;
 };
 

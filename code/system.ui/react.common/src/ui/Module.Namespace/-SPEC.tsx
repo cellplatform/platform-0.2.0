@@ -1,9 +1,9 @@
 import { DEFAULTS, ModuleNamespace } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Pkg, type t } from '../../test.ui';
 
 type T = {
   props: t.ModuleNamespaceProps;
-  debug: { debugBg?: boolean };
+  debug: { debugBg?: boolean; debugFill?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -22,14 +22,16 @@ const renderer: t.ModuleRenderer<K> = async (e) => {
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.ModuleNamespaceProps, 'flipped' | 'commandbar'> &
-    Pick<T['debug'], 'debugBg'>;
+  type LocalStore = Pick<t.ModuleNamespaceProps, 'flipped' | 'commandbar' | 'theme'> &
+    Pick<T['debug'], 'debugBg' | 'debugFill'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     flipped: false,
     commandbar: DEFAULTS.command,
+    theme: DEFAULTS.theme,
     debugBg: true,
+    debugFill: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,8 +42,10 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.flipped = local.flipped;
       d.props.commandbar = local.commandbar;
+      d.props.theme = local.theme;
       d.props.imports = sampleImports;
       d.debug.debugBg = local.debugBg;
+      d.debug.debugFill = local.debugFill;
     });
 
     ctx.debug.width(330);
@@ -50,7 +54,17 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-        ctx.subject.backgroundColor(debug.debugBg ? 1 : 0);
+
+        const isDark = props.theme === 'Dark';
+        const bgThemeColor = isDark ? Color.alpha(COLORS.WHITE, 0.02) : COLORS.WHITE;
+        ctx.subject.backgroundColor(debug.debugBg ? bgThemeColor : 0);
+        ctx.host
+          .backgroundColor(isDark ? COLORS.DARK : null)
+          .tracelineColor(isDark ? Color.alpha(COLORS.WHITE, 0.1) : null);
+
+        if (debug.debugFill) ctx.subject.size('fill', 80);
+        else ctx.subject.size([350, 220]);
+
         return <ModuleNamespace {...props} render={renderer} />;
       });
   });
@@ -58,6 +72,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    dev.TODO().hr(0, 20);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -85,6 +100,21 @@ export default Dev.describe(name, (e) => {
         );
     });
 
+    dev.hr(-1, 5);
+
+    const buttonTheme = (theme: t.ModuleLoaderTheme) => {
+      dev.button((btn) => {
+        const value = (state: T) => state.props.theme;
+        const isCurrent = (state: T) => value(state) === theme;
+        btn
+          .label(`theme: "${theme}"`)
+          .right((e) => (isCurrent(e.state) ? `←` : ''))
+          .onClick((e) => e.change((d) => (local.theme = d.props.theme = theme)));
+      });
+    };
+    buttonTheme('Light');
+    buttonTheme('Dark');
+
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
@@ -94,6 +124,14 @@ export default Dev.describe(name, (e) => {
           .label((e) => `background: ${value(e.state) ? 'white' : '(none)'}`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugBg = Dev.toggle(d.debug, 'debugBg'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.debugFill);
+        btn
+          .label((e) => `size: ${value(e.state) ? 'fill screen' : 'specific contraint'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debugFill = Dev.toggle(d.debug, 'debugFill'))));
       });
     });
   });

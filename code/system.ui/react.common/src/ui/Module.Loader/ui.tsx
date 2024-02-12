@@ -4,7 +4,6 @@ import { Wrangle } from './u.Wrangle';
 export const View: React.FC<t.ModuleLoaderProps> = (props) => {
   const { flipped = DEFAULTS.flipped } = props;
   const spinning = Wrangle.spinning(props);
-  const theme = Wrangle.theme(props);
   const is = Wrangle.is(props);
 
   /**
@@ -20,7 +19,7 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
     base: css({
       position: 'relative',
       display: 'grid',
-      color: theme === 'Dark' ? COLORS.WHITE : COLORS.BLACK,
+      color: is.dark ? COLORS.WHITE : COLORS.BLACK,
     }),
     front: {
       base: css({ position: 'relative', display: 'grid' }),

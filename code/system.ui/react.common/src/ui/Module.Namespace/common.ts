@@ -7,7 +7,7 @@ export { CommandBar } from '../Command.Bar';
 /**
  * Constants
  */
-
+const theme: t.ModuleNamespaceTheme = 'Light';
 const command: t.ModuleNamespaceCommandbarProps = {
   visible: true,
 };
@@ -15,4 +15,5 @@ const command: t.ModuleNamespaceCommandbarProps = {
 export const DEFAULTS = {
   displayName: 'ModuleNamespace',
   command,
+  theme,
 } as const;
