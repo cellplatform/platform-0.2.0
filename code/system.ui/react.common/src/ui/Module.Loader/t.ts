@@ -11,6 +11,7 @@ export type ModuleLoaderTheme = 'Light' | 'Dark';
 export type ModuleLoaderProps = {
   flipped?: boolean;
   spinning?: boolean | t.ModuleLoaderSpinning;
+  spinner?: RenderOutput | (() => RenderOutput); // Custom spinning renderer.
   theme?: ModuleLoaderTheme;
   back?: { element: RenderInput };
   style?: t.CssValue;
@@ -22,7 +23,6 @@ export type ModuleLoaderSpinning = {
   bodyOpacity?: t.Percent;
   bodyBlur?: t.Pixels;
   transition?: t.Msecs;
-  element?: RenderOutput;
 };
 
 /**

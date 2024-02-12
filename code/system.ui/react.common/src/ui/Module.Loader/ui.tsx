@@ -1,4 +1,4 @@
-import { COLORS, DEFAULTS, Flip, Spinner, css, type t } from './common';
+import { COLORS, DEFAULTS, Flip, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.ModuleLoaderProps> = (props) => {
@@ -28,11 +28,7 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
     spinner: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
   };
 
-  const elSpinner = spinning && (
-    <div {...styles.spinner}>
-      {spinning.element || <Spinner.Bar width={spinning.width} color={spinning.color} />}
-    </div>
-  );
+  const elSpinner = spinning && <div {...styles.spinner}>{Wrangle.spinner(props, spinning)}</div>;
 
   const elFront = (
     <div {...styles.front.base}>

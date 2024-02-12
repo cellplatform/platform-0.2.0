@@ -129,9 +129,7 @@ export default Dev.describe(name, (e) => {
 
       dev.button('spinner → <element>', (e) => {
         e.change((d) => {
-          const spinning =
-            typeof d.props.spinning === 'object' ? d.props.spinning : (d.props.spinning = {});
-          spinning.element = <SampleSpinner theme={d.props.theme} />;
+          d.props.spinner = <SampleSpinner theme={d.props.theme} />;
         });
       });
     });

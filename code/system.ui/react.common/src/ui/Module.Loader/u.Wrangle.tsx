@@ -1,4 +1,5 @@
-import { COLORS, DEFAULTS, type t } from './common';
+import { isValidElement } from 'react';
+import { COLORS, DEFAULTS, Spinner, type t } from './common';
 
 /**
  * Helpers
@@ -31,5 +32,16 @@ export const Wrangle = {
       return format({ ...DEFAULTS.spinning, ...props.spinning });
     }
     return ensure ? format(DEFAULTS.spinning) : undefined;
+  },
+
+  spinner(props: t.ModuleLoaderProps, spinning?: t.ModuleLoaderSpinning) {
+    const def = spinning ?? Wrangle.spinning(props);
+    if (!def) return null;
+    if (isValidElement(props.spinner)) return props.spinner;
+    if (typeof props.spinner === 'function') {
+      const el = props.spinner();
+      if (el) return el;
+    }
+    return <Spinner.Bar width={def.width} color={def.color} />;
   },
 } as const;
