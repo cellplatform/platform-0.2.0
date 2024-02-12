@@ -129,7 +129,7 @@ export default Dev.describe(name, (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debugFill);
         btn
-          .label((e) => `size: ${value(e.state) ? 'fill screen' : 'specific contraint'}`)
+          .label((e) => `size: ${value(e.state) ? 'filling screen' : 'specific contraint'}`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugFill = Dev.toggle(d.debug, 'debugFill'))));
       });
