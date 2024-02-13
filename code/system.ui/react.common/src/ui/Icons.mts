@@ -3,16 +3,15 @@ import { Icon } from './Icon';
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 import {
   MdFace,
-  MdOpenInNew,
   MdOutlineVerticalAlignCenter,
   MdPortableWifiOff,
   MdVisibility,
   MdVisibilityOff,
   MdWifi,
 } from 'react-icons/md';
+import { RxOpenInNewWindow } from 'react-icons/rx';
 import { TbCopy } from 'react-icons/tb';
 import { VscRepo, VscSymbolClass } from 'react-icons/vsc';
-import { RxOpenInNewWindow } from 'react-icons/rx';
 
 const icon = Icon.renderer;
 
