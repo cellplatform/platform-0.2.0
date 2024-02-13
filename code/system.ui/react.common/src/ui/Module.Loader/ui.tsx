@@ -5,7 +5,7 @@ import { Body } from './ui.Body';
 type RenderOutput = JSX.Element | null | false;
 
 export const View: React.FC<t.ModuleLoaderProps> = (props) => {
-  const { flipped = DEFAULTS.flipped } = props;
+  const { front, back, flipped = DEFAULTS.flipped } = props;
   const is = Wrangle.is(props);
 
   /**
@@ -20,7 +20,15 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
   };
 
   const face = (el?: RenderOutput) => {
-    return <Body spinning={is.spinning} spinner={props.spinner} theme={props.theme} element={el} />;
+    return (
+      <Body
+        spinning={is.spinning}
+        spinner={props.spinner}
+        theme={props.theme}
+        element={el}
+        onError={props.onError}
+      />
+    );
   };
 
   return (
@@ -28,8 +36,8 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
       <Flip
         //
         flipped={flipped}
-        front={face(props.front?.element)}
-        back={face(props.back?.element)}
+        front={face(front?.element)}
+        back={face(back?.element)}
       />
     </div>
   );

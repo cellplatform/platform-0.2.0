@@ -1,11 +1,11 @@
 import { DEFAULTS, ModuleLoader } from '.';
-import { Dev, Pkg, css, type t } from '../../test.ui';
-import { SampleSpinner, Sample } from './-SPEC.Components';
+import { Dev, Pkg, Time, type t } from '../../test.ui';
+import { Sample, SampleSpinner } from './-SPEC.Components';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
   props: t.ModuleLoaderProps;
-  debug: { debugBg?: boolean; debugFill?: boolean };
+  debug: { debugBg?: boolean; debugFill?: boolean; debugErrorCloseable?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -22,6 +22,7 @@ export default Dev.describe(name, (e) => {
     spinning: DEFAULTS.spinning,
     debugBg: true,
     debugFill: true,
+    debugErrorCloseable: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -36,6 +37,7 @@ export default Dev.describe(name, (e) => {
 
       d.debug.debugBg = local.debugBg;
       d.debug.debugFill = local.debugFill;
+      d.debug.debugErrorCloseable = local.debugErrorCloseable;
     });
 
     await state.change((d) => {
@@ -50,7 +52,17 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         WrangleSpec.mutateSubject(dev, e.state);
-        return <ModuleLoader {...e.state.props} />;
+        return (
+          <ModuleLoader
+            {...e.state.props}
+            onError={(e) => {
+              console.info('⚡️ onError', e);
+              const closeable = state.current.debug.debugErrorCloseable;
+              if (closeable) e.closeable();
+              else Time.delay(2500, () => e.clear());
+            }}
+          />
+        );
       });
   });
 
@@ -160,6 +172,18 @@ export default Dev.describe(name, (e) => {
           .label((e) => `size: ${value(e.state) ? 'filling screen' : 'specific contraint'}`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugFill = Dev.toggle(d.debug, 'debugFill'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.debugErrorCloseable);
+        btn
+          .label((e) => (value(e.state) ? `error: closeable` : `error: not closeable (times out)`))
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change(
+              (d) => (local.debugErrorCloseable = Dev.toggle(d.debug, 'debugErrorCloseable')),
+            );
+          });
       });
     });
   });

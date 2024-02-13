@@ -15,6 +15,7 @@ export type ModuleLoaderProps = {
   front?: { element: RenderOutput };
   back?: { element: RenderOutput };
   style?: t.CssValue;
+  onError?: ModuleLoaderErrorHandler;
 };
 
 /**
@@ -36,4 +37,14 @@ export type ModuleLoaderSpinner = {
   bodyOpacity?: t.Percent;
   bodyBlur?: t.Pixels;
   element?: RenderOutput | ((e: ModuleLoaderRenderArgs) => RenderOutput); // Custom spinning renderer.
+};
+
+/**
+ * Events
+ */
+export type ModuleLoaderErrorHandler = (e: ModuleLoaderErrorHandlerArgs) => void;
+export type ModuleLoaderErrorHandlerArgs = {
+  error: any;
+  clear(): void;
+  closeable(): void;
 };

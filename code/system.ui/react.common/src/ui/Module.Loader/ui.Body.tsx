@@ -1,6 +1,7 @@
-import { css, type t } from './common';
+import { ErrorBoundary, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
-import { LoaderSpinner } from './ui.Spinner';
+import { ErrorFallback, type ErrorFallbackProps } from './ui.ErrorFallback';
+import { LoadSpinner } from './ui.Spinner';
 
 export type BodyProps = {
   theme?: t.ModuleLoaderTheme;
@@ -8,11 +9,19 @@ export type BodyProps = {
   spinning?: boolean;
   spinner?: t.ModuleLoaderSpinner;
   style?: t.CssValue;
+  onError?: t.ModuleLoaderErrorHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
   const { spinning, element } = props;
   if (!(spinning || element)) return null;
+
+  /**
+   * Handers
+   */
+  const renderFallback = (args: ErrorFallbackProps) => {
+    return <ErrorFallback {...args} onError={props.onError} />;
+  };
 
   /**
    * Render
@@ -29,15 +38,26 @@ export const Body: React.FC<BodyProps> = (props) => {
     }),
   };
 
+  const elContent = (
+    <div {...styles.content}>
+      {/* <ErrorBoundary FallbackComponent={ErrorFallback}>{element}</ErrorBoundary> */}
+      <ErrorBoundary fallbackRender={renderFallback}>{element}</ErrorBoundary>
+    </div>
+  );
+
+  const elSpinner = (
+    <LoadSpinner
+      spinning={spinning}
+      spinner={props.spinner}
+      theme={props.theme}
+      style={styles.spinner}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.content}>{element}</div>
-      <LoaderSpinner
-        spinning={spinning}
-        spinner={props.spinner}
-        theme={props.theme}
-        style={styles.spinner}
-      />
+      {elContent}
+      {elSpinner}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { Icon } from './Icon';
 
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 import {
+  MdClose,
   MdFace,
   MdOutlineVerticalAlignCenter,
   MdPortableWifiOff,
@@ -19,6 +20,7 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Close: icon(MdClose),
   Wifi: { On: icon(MdWifi), Off: icon(MdPortableWifiOff) },
   Face: icon(MdFace),
   Copy: icon(TbCopy),

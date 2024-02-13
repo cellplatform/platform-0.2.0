@@ -4,23 +4,23 @@ import { Wrangle } from './u.Wrangle';
 
 type RenderOutput = JSX.Element | null | false;
 
-export type LoaderSpinnerProps = {
+export type LoadSpinnerProps = {
   theme?: t.ModuleLoaderTheme;
   spinning?: boolean;
   spinner?: t.ModuleLoaderSpinner;
   style?: t.CssValue;
 };
 
-export const LoaderSpinner: React.FC<LoaderSpinnerProps> = (props) => {
+export const LoadSpinner: React.FC<LoadSpinnerProps> = (props) => {
   const { spinning = DEFAULTS.spinning, theme = DEFAULTS.theme } = props;
-  const spinner = Wrangle.spinner(props);
-  const isDark = theme === 'Dark';
-
   if (!spinning) return null;
+
+  const spinner = Wrangle.spinner(props);
 
   /**
    * Render
    */
+  const isDark = theme === 'Dark';
   const color = isDark ? COLORS.WHITE : COLORS.DARK;
   const styles = {
     base: css({
