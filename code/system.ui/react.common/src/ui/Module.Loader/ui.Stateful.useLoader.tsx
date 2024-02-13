@@ -18,24 +18,22 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
 
   useEffect(() => {
     const life = rx.lifecycle();
-    const factory = Wrangle.factoryProps(factoryRef.current);
+    const factory = factoryRef.current;
 
-    const load = async (
-      factory: t.ModuleLoaderFactory | undefined,
-      done: (el: t.RenderOutput) => void,
-    ) => {
+    const load = async (face: t.ModuleLoaderFace, done: (el: t.RenderOutput) => void) => {
       if (!factory) return done(null);
 
       setSpinning(true);
-      const res = await factory({ theme, name });
+      const is = { front: face === 'Front', back: face === 'Back' };
+      const res = await factory({ theme, name, face, is });
       if (life.disposed) return;
       setSpinning(false);
 
       done(res);
     };
 
-    load(factory?.front, setFront);
-    load(factory?.back, setBack);
+    load('Front', setFront);
+    load('Back', setBack);
     return life.dispose;
   }, [name, theme]);
 

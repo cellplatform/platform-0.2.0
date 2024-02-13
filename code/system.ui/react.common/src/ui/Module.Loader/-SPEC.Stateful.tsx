@@ -1,5 +1,6 @@
 import { DEFAULTS, ModuleLoader } from '.';
-import { Dev, Pkg, Time, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
+import { factory, type N } from './-SPEC.factory';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
@@ -32,6 +33,7 @@ export default Dev.describe(name, (e) => {
       d.props.flipped = local.flipped;
       d.props.theme = local.theme;
       d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 6 };
+      d.props.factory = factory;
 
       d.debug.debugBg = local.debugBg;
       d.debug.debugFill = local.debugFill;
@@ -88,26 +90,9 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Factory', (dev) => {
-      type N = 'foo.instant' | 'foo.delayed';
-      const factory: t.ModuleLoaderFactory<N> = async (e) => {
-        if (e.name === 'foo.instant') {
-          const { Sample } = await import('./-SPEC.Components');
-          return <Sample {...e} text={'Sample'} />;
-        }
-        if (e.name === 'foo.delayed') {
-          const { Sample } = await import('./-SPEC.Components');
-          await Time.wait(1000);
-          return <Sample {...e} text={'Sample (Loaded Async)'} />;
-        }
-        return null;
-      };
-
       const btn = (name: N) => {
         dev.button(`factory: ${name}`, (e) => {
-          e.change((d) => {
-            d.props.factory = factory;
-            d.props.name = name;
-          });
+          e.change((d) => (d.props.name = name));
         });
       };
 

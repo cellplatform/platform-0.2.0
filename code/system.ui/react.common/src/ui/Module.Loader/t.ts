@@ -1,6 +1,7 @@
 import type { t } from './common';
 
 export type ModuleLoaderTheme = 'Light' | 'Dark';
+export type ModuleLoaderFace = 'Front' | 'Back';
 
 /**
  * <Component>
@@ -21,11 +22,7 @@ export type ModuleLoaderProps = {
  */
 export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'back' | 'spinning'> & {
   name?: string;
-  factory?: ModuleLoaderStatefulFactoryProp<any> | ModuleLoaderFactory<any> | null;
-};
-export type ModuleLoaderStatefulFactoryProp<N extends string = string> = {
-  front?: ModuleLoaderFactory<N>;
-  back?: ModuleLoaderFactory<N>;
+  factory?: ModuleLoaderFactory<any> | null;
 };
 
 /**
@@ -37,11 +34,8 @@ export type ModuleLoaderFactory<N extends string = string> = (
 export type ModuleLoaderFactoryArgs<N extends string = string> = {
   name: N;
   theme: ModuleLoaderTheme;
-
-  /**
-   * TODO 🐷
-   */
-  // face: 'Front' | 'Back';
+  face: ModuleLoaderFace;
+  is: { front: boolean; back: boolean };
 };
 export type ModuleLoaderFactoryRes = Promise<t.RenderOutput>;
 

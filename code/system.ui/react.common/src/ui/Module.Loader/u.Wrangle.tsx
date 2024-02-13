@@ -22,13 +22,4 @@ export const Wrangle = {
   spinner(props: { spinner?: t.ModuleLoaderSpinner }) {
     return { ...DEFAULTS.spinner, ...props.spinner };
   },
-
-  factoryProps(
-    factory: t.ModuleLoaderStatefulProps['factory'],
-  ): t.ModuleLoaderStatefulFactoryProp | undefined {
-    if (!factory || factory === null) return undefined;
-    if (typeof factory === 'function') return { front: factory };
-    if (typeof factory === 'object') return factory;
-    return undefined;
-  },
 } as const;
