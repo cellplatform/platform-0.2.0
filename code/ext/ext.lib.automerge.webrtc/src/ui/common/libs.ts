@@ -15,6 +15,8 @@ export {
   Color,
   FC,
   Keyboard,
+  ModuleLoader,
+  ModuleNamespace,
   ObjectView,
   PropList,
   Spinner,
