@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, PropList } from './common';
+import { COLORS, PropList, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const List: React.FC<t.ModuleNamespaceListProps> = (props) => {
