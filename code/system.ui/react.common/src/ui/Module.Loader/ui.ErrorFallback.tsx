@@ -37,13 +37,15 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
     }),
     body: css({ position: 'relative', minWidth: 400, MarginX: 50 }),
     pre: css({ fontSize: 10, userSelect: 'text' }),
+    message: css({}),
+    stack: css({ opacity: 0.6 }),
     close: css({ Absolute: [5, 5, null, null] }),
   };
 
   const elError = (
     <pre {...styles.pre}>
-      <div>{error?.message ?? 'No Message'}</div>
-      <div>{error?.stack ?? 'No Stack'}</div>
+      <div {...styles.message}>{error?.message ?? 'No Message'}</div>
+      <div {...styles.stack}>{error?.stack ?? 'No Stack'}</div>
     </pre>
   );
 

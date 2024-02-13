@@ -43,7 +43,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    if (error) throw new Error(`Holy Syntax Error, Batman! "${text}"`);
+    if (error) throw new Error(`Holy Syntax Error, Batman! → "${text}"`);
   }, [error]);
 
   /**
