@@ -1,26 +1,25 @@
 import { DEFAULTS, ModuleLoader } from '.';
-import { Dev, Pkg, css, type t } from '../../test.ui';
-import { SampleSpinner } from './-SPEC.Components';
+import { Dev, Pkg, Time, type t } from '../../test.ui';
+import { Sample } from './-SPEC.Components';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
-  props: t.ModuleLoaderProps;
+  props: t.ModuleLoaderStatefulProps;
   debug: { debugBg?: boolean; debugFill?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
 
 /**
- * Spec: ModuleLoader
+ * Spec: ModuleLoader.Stateful
  */
-const name = DEFAULTS.displayName;
+const name = `${DEFAULTS.displayName}.Stateful`;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<t.ModuleLoaderProps, 'flipped' | 'spinning' | 'theme'>;
+  type LocalStore = T['debug'] & Pick<t.ModuleLoaderStatefulProps, 'flipped' | 'theme'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: DEFAULTS.theme,
     flipped: DEFAULTS.flipped,
-    spinning: DEFAULTS.spinning,
     debugBg: true,
     debugFill: true,
   });
@@ -33,28 +32,20 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.flipped = local.flipped;
       d.props.theme = local.theme;
-      d.props.spinning = local.spinning;
+      d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 6 };
 
       d.debug.debugBg = local.debugBg;
       d.debug.debugFill = local.debugFill;
     });
 
-    await state.change((d) => {
-      const render = (text: string) => {
-        const style = css({ Padding: [5, 7], backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ });
-        return <div {...style}>{text}</div>;
-      };
-      d.props.front = { element: render('Front 👋') };
-      d.props.back = { element: render('Back 👋') };
-    });
-
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
+      .size([250, null])
       .display('grid')
       .render<T>((e) => {
         WrangleSpec.mutateSubject(dev, e.state);
-        return <ModuleLoader {...e.state.props} />;
+        return <ModuleLoader.Stateful {...e.state.props} />;
       });
   });
 
@@ -64,20 +55,8 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = WrangleSpec.link;
-      link(dev, 'see: ModuleLoader.Stateful', 'sys.ui.common.Module.Loader.Stateful');
+      link(dev, ['see: ModuleLoader', '(stateless)'], 'sys.ui.common.Module.Loader');
       link(dev, 'see: ModuleLoader.Namespace', 'sys.ui.common.Module.Namespace');
-
-      dev.hr(-1, 5);
-      dev.button('reset', (e) => {
-        e.change((d) => {
-          const p = d.props;
-          local.flipped = p.flipped = DEFAULTS.flipped;
-          local.theme = p.theme = DEFAULTS.theme;
-          local.spinning = p.spinning = false;
-          p.spinner = undefined;
-          // p.factory = undefined;
-        });
-      });
     });
 
     dev.hr(5, 20);
@@ -89,20 +68,6 @@ export default Dev.describe(name, (e) => {
           .label((e) => `flipped`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
-      });
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.spinning);
-        btn
-          .label((e) => `spinning`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              const current = d.props.spinning;
-              d.props.spinning = typeof current === 'boolean' ? !current : false;
-              local.spinning = d.props.spinning;
-            }),
-          );
       });
 
       dev.hr(-1, 5);
@@ -123,22 +88,27 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Common State', (dev) => {
-      dev.button('spinner → body blur', (e) => {
-        e.change((d) => {
-          const spinner = d.props.spinner || (d.props.spinner = {});
-          spinner.bodyBlur = 3;
-          spinner.bodyOpacity = 0.5;
-        });
+    dev.section('Factory', (dev) => {
+      type A = t.ModuleLoaderRenderArgs;
+      const sampleSyncFactory = (e: A) => {
+        return <Sample {...e} text={'Sample'} />;
+      };
+      const sampleAsyncFactory = async (e: A) => {
+        await Time.wait(1000);
+        const { Sample } = await import('./-SPEC.Components');
+        return <Sample {...e} text={'Sample (Loaded Async)'} />;
+      };
+
+      dev.button(['factory: sample', '(sync)'], (e) => {
+        e.change((d) => (d.props.factory = sampleSyncFactory));
       });
 
-      dev.button('spinner → <element>', (e) => {
-        e.change((d) => {
-          const spinner = d.props.spinner || (d.props.spinner = {});
-          // spinner.element = <SampleSpinner theme={d.props.theme} />;
-          spinner.element = (e) => <SampleSpinner theme={e.theme} />;
-        });
+      dev.button(['factory: sample', '(async)'], (e) => {
+        e.change((d) => (d.props.factory = sampleAsyncFactory));
       });
+
+      dev.hr(-1, 5);
+      dev.button('unload', (e) => e.change((d) => (d.props.factory = undefined)));
     });
 
     dev.hr(5, 20);

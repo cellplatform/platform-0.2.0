@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Flip, Color, COLORS, css, DEFAULTS, FC, rx, type t, CommandBar } from './common';
+import { COLORS, Color, CommandBar, DEFAULTS, Flip, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
@@ -16,18 +15,20 @@ export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
       display: 'grid',
       color: is.dark ? COLORS.WHITE : COLORS.BLACK,
     }),
-    body: css({
-      display: 'grid',
-      gridTemplateRows: '1fr auto',
-    }),
+    body: css({ display: 'grid', gridTemplateRows: '1fr auto' }),
     main: css({ display: 'grid', placeItems: 'center' }),
-    bar: css({ display: command.visible ? 'block' : 'none' }),
+    commandbar: css({
+      display: command.visible ? 'block' : 'none',
+      borderTop: `solid 1px ${Color.alpha(COLORS.WHITE, is.dark ? 0.1 : 0)}`,
+    }),
   };
 
   const elBody = (
     <div {...styles.body}>
       <div {...styles.main}>{`🐷 ${DEFAULTS.displayName}`}</div>
-      <CommandBar style={styles.bar} />
+      <div {...styles.commandbar}>
+        <CommandBar />
+      </div>
     </div>
   );
 

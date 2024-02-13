@@ -1,14 +1,17 @@
-import { isValidElement } from 'react';
-import { COLORS, DEFAULTS, Spinner, type t } from './common';
+import { DEFAULTS, type t } from './common';
 
 /**
  * Helpers
  */
 export const Wrangle = {
   is(props: t.ModuleLoaderProps) {
+    const { spinning = DEFAULTS.spinning } = props;
     const theme = Wrangle.theme(props);
-    const is = { dark: theme === 'Dark', light: theme === 'Light' } as const;
-    return is;
+    return {
+      dark: theme === 'Dark',
+      light: theme === 'Light',
+      spinning,
+    } as const;
   },
 
   theme(props: t.ModuleLoaderProps) {
@@ -16,32 +19,15 @@ export const Wrangle = {
     return theme;
   },
 
-  spinning(
-    props: t.ModuleLoaderProps,
-    ensure: boolean = false,
-  ): t.ModuleLoaderSpinning | undefined {
-    const format = (res: t.ModuleLoaderSpinning) => {
-      const theme = Wrangle.theme(props);
-      const color = res.color ? res.color : theme === 'Dark' ? COLORS.WHITE : COLORS.BLACK;
-      return { ...res, color };
-    };
-    if (props.spinning === true) {
-      return format(DEFAULTS.spinning);
-    }
-    if (typeof props.spinning === 'object') {
-      return format({ ...DEFAULTS.spinning, ...props.spinning });
-    }
-    return ensure ? format(DEFAULTS.spinning) : undefined;
+  spinner(props: { spinner?: t.ModuleLoaderSpinner }) {
+    return { ...DEFAULTS.spinner, ...props.spinner };
   },
 
-  spinner(props: t.ModuleLoaderProps, spinning?: t.ModuleLoaderSpinning) {
-    const def = spinning ?? Wrangle.spinning(props);
-    if (!def) return null;
-    if (isValidElement(props.spinner)) return props.spinner;
-    if (typeof props.spinner === 'function') {
-      const el = props.spinner();
-      if (el) return el;
-    }
-    return <Spinner.Bar width={def.width} color={def.color} />;
+  factoryProps(props: t.ModuleLoaderStatefulProps): t.ModuleLoaderFactoryProps | undefined {
+    const factory = props.factory;
+    if (!factory || factory === null) return undefined;
+    if (typeof factory === 'function') return { front: factory };
+    if (typeof factory === 'object') return factory;
+    return undefined;
   },
 } as const;

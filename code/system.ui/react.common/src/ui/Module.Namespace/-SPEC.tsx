@@ -1,5 +1,6 @@
 import { DEFAULTS, ModuleNamespace } from '.';
 import { COLORS, Color, Dev, Pkg, type t } from '../../test.ui';
+import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
   props: t.ModuleNamespaceProps;
@@ -13,7 +14,7 @@ const sampleImports = {
 };
 
 type K = keyof typeof sampleImports;
-const renderer: t.ModuleRenderer<K> = async (e) => {
+const renderer: t.ModuleNamespaceRenderer<K> = async (e) => {
   return null;
 };
 
@@ -53,25 +54,22 @@ export default Dev.describe(name, (e) => {
       .size('fill', 80)
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-
-        const isDark = props.theme === 'Dark';
-        const bgThemeColor = isDark ? Color.alpha(COLORS.WHITE, 0.02) : COLORS.WHITE;
-        ctx.subject.backgroundColor(debug.debugBg ? bgThemeColor : 0);
-        ctx.host
-          .backgroundColor(isDark ? COLORS.DARK : null)
-          .tracelineColor(isDark ? Color.alpha(COLORS.WHITE, 0.1) : null);
-
-        if (debug.debugFill) ctx.subject.size('fill', 80);
-        else ctx.subject.size([350, 220]);
-
-        return <ModuleNamespace {...props} render={renderer} />;
+        WrangleSpec.mutateSubject(dev, e.state);
+        return <ModuleNamespace {...e.state.props} render={renderer} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.section('', (dev) => {
+      const link = WrangleSpec.link;
+      link(dev, 'see: ModuleLoader', 'sys.ui.common.Module.Loader');
+      link(dev, 'see: ModuleLoader.Stateful', 'sys.ui.common.Module.Loader.Stateful');
+    });
+    dev.hr(5, 20);
+
     dev.TODO().hr(0, 20);
 
     dev.section('Properties', (dev) => {

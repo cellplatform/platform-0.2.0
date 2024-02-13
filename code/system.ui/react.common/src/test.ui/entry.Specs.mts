@@ -21,6 +21,7 @@ export const ModuleSpecs = {
   'sys.ui.common.Layout.Split': () => import('../ui/Layout.Split/-SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/-SPEC'),
   'sys.ui.common.Module.Loader': () => import('../ui/Module.Loader/-SPEC'),
+  'sys.ui.common.Module.Loader.Stateful': () => import('../ui/Module.Loader/-SPEC.Stateful'),
   'sys.ui.common.Module.Namespace': () => import('../ui/Module.Namespace/-SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/-SPEC'),
   'sys.ui.common.ProgressBar': () => import('../ui/ProgressBar/-SPEC'),
