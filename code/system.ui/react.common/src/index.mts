@@ -22,6 +22,7 @@ export { Icon } from './ui/Icon';
 export { LabelItem } from './ui/LabelItem';
 export { Layout } from './ui/Layout';
 export { ModuleNamespace } from './ui/Module.Namespace';
+export { ModuleLoader } from './ui/Module.Loader';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
