@@ -29,8 +29,8 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: COLORS.MAGENTA,
       color,
+      backgroundColor: COLORS.MAGENTA,
       overflow: 'hidden',
       display: 'grid',
       placeItems: 'center',
