@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { ModuleLoader, type t } from '../common';
 
 /**
  * A factory for code-split (dynamicly loaded) ESM module.
@@ -19,8 +19,19 @@ export const loadFactory: t.LoadFactory<t.SampleFactoryTypename> = async (e) => 
   }
 
   if (typename === 'Auth') {
-    const { AuthLoader } = await import('./Auth');
-    return <AuthLoader store={store} docuri={docuri} />;
+    return (
+      <ModuleLoader.Stateful
+        factory={async (e) => {
+          /**
+           * TODO 🐷
+           * e.onError
+           */
+
+          const { AuthLoader } = await import('./Auth');
+          return <AuthLoader store={store} docuri={docuri} />;
+        }}
+      />
+    );
   }
 
   if (typename === 'CmdHost') {
