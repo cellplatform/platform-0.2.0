@@ -55,7 +55,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = WrangleSpec.link;
-      link(dev, ['see: ModuleLoader', '(stateless)'], 'Module.Loader');
+      link(dev, 'see: ModuleLoader (stateless)', 'Module.Loader');
       link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
     });
 

@@ -1,6 +1,6 @@
 import { DEFAULTS, ModuleLoader } from '.';
 import { Dev, Pkg, css, type t } from '../../test.ui';
-import { SampleSpinner } from './-SPEC.Components';
+import { SampleSpinner, Sample } from './-SPEC.Components';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
@@ -40,12 +40,9 @@ export default Dev.describe(name, (e) => {
     });
 
     await state.change((d) => {
-      const render = (text: string) => {
-        const style = css({ Padding: [5, 7], backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ });
-        return <div {...style}>{text}</div>;
-      };
-      d.props.front = { element: render('Front 👋') };
-      d.props.back = { element: render('Back 👋') };
+      const sample = (text: string) => <Sample text={text} theme={d.props.theme!} />;
+      d.props.front = { element: sample('Front 👋') };
+      d.props.back = { element: sample('Back 👋') };
     });
 
     ctx.debug.width(330);
@@ -62,22 +59,23 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    const reset = () => {
+      dev.change((d) => {
+        const p = d.props;
+        local.flipped = p.flipped = DEFAULTS.flipped;
+        local.theme = p.theme = DEFAULTS.theme;
+        local.spinning = p.spinning = false;
+        p.spinner = undefined;
+      });
+    };
+
     dev.section('', (dev) => {
       const link = WrangleSpec.link;
       link(dev, 'see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
       link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
 
       dev.hr(-1, 5);
-      dev.button('reset', (e) => {
-        e.change((d) => {
-          const p = d.props;
-          local.flipped = p.flipped = DEFAULTS.flipped;
-          local.theme = p.theme = DEFAULTS.theme;
-          local.spinning = p.spinning = false;
-          p.spinner = undefined;
-          // p.factory = undefined;
-        });
-      });
+      dev.button('reset', reset);
     });
 
     dev.hr(5, 20);
@@ -139,6 +137,9 @@ export default Dev.describe(name, (e) => {
           spinner.element = (e) => <SampleSpinner theme={e.theme} />;
         });
       });
+
+      dev.hr(-1, 5);
+      dev.button('reset', reset);
     });
 
     dev.hr(5, 20);

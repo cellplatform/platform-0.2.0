@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, Spinner, css, type t } from './common';
+import { COLORS, Color, DEFAULTS, Spinner, css, type t, Button } from './common';
 
 /**
  * Sample-Spinner
@@ -48,7 +48,15 @@ export const Sample: React.FC<SampleProps> = (props) => {
   };
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{props.text ?? 'Sample'}</div>
+      <div>
+        <div>{props.text ?? 'Sample'}</div>
+        <Button.Blue
+          label={'(throw error)'}
+          onClick={() => {
+            throw new Error('Foo');
+          }}
+        />
+      </div>
       <div {...styles.border} />
     </div>
   );

@@ -25,7 +25,8 @@ export type ModuleNamespaceCommandbarProps = {
  * <Component>.List
  */
 export type ModuleNamespaceListProps = {
-  //
+  theme?: t.ModuleNamespaceTheme;
+  style?: t.CssValue;
 };
 
 /**

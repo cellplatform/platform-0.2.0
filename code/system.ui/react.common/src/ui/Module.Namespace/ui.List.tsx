@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t, PropList } from './common';
 
-export const List: React.FC<Y.ModuleNamespaceListProps> = (props) => {
+export const List: React.FC<t.ModuleNamespaceListProps> = (props) => {
   /**
    * Render
    */
