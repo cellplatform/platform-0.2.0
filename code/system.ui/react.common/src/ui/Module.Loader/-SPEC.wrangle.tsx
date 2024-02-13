@@ -1,4 +1,4 @@
-import { COLORS, Color, type t } from './common';
+import { COLORS, Color, type t, Pkg, Icons } from './common';
 
 type T = {
   props: { theme?: t.ModuleLoaderTheme };
@@ -30,11 +30,19 @@ export const WrangleSpec = {
     else ctx.subject.size([400, 200]);
   },
 
-  link(dev: t.DevTools<T>, label: string | [string, string], namespace: string) {
-    dev.button(label, (e) => {
-      const url = new URL(location.href);
-      url.searchParams.set('dev', namespace);
-      window.location.href = url.href;
+  link(dev: t.DevTools<T>, label: string, namespace: string) {
+    const elRight = <Icons.NewTab size={16} />;
+
+    dev.button((btn) => {
+      btn
+        .label(label)
+        .right((e) => elRight)
+        .onClick((e) => {
+          const url = new URL(location.href);
+          namespace = `${Pkg.name}.${namespace}`;
+          url.searchParams.set('dev', namespace);
+          window.open(url.href, '_blank', 'noopener,noreferrer');
+        });
     });
   },
 } as const;

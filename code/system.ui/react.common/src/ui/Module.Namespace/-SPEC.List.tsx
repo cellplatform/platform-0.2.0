@@ -1,15 +1,17 @@
 import { css, Dev, type t } from '../../test.ui';
 import { DEFAULTS, ModuleNamespace } from '.';
+import { WrangleSpec } from './-SPEC.wrangle';
 
-type T = { props: t.ModuleNamespaceListProps };
-const initial: T = {
-  props: {},
+type T = {
+  props: t.ModuleNamespaceListProps;
+  debug: { debugBg?: boolean; debugFill?: boolean };
 };
+const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec: ModuleNamespace.List
  */
-const name = `${DEFAULTS.displayName}.Stateful`;
+const name = `${DEFAULTS.displayName}.List`;
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -31,7 +33,12 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
+
+    dev.section('', (dev) => {
+      const link = WrangleSpec.link;
+      link(dev, 'see: ModuleNamespace', 'Module.Namespace');
+    });
+    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {

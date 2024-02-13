@@ -64,8 +64,8 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = WrangleSpec.link;
-      link(dev, 'see: ModuleLoader.Stateful', 'sys.ui.common.Module.Loader.Stateful');
-      link(dev, 'see: ModuleLoader.Namespace', 'sys.ui.common.Module.Namespace');
+      link(dev, 'see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
 
       dev.hr(-1, 5);
       dev.button('reset', (e) => {

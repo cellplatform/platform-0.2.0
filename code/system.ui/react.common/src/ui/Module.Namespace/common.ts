@@ -1,8 +1,10 @@
 import { type t } from './common';
 
-export * from '../common';
-export { Flip } from '../Flip';
 export { CommandBar } from '../Command.Bar';
+export { Flip } from '../Flip';
+export { PropList } from '../PropList';
+
+export * from '../common';
 
 /**
  * Constants
