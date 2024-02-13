@@ -19,7 +19,7 @@ export const Body: React.FC<BodyProps> = (props) => {
   /**
    * Handers
    */
-  const renderFallback = (args: ErrorFallbackProps) => {
+  const errorFallback = (args: ErrorFallbackProps) => {
     return <ErrorFallback {...args} onError={props.onError} />;
   };
 
@@ -28,10 +28,9 @@ export const Body: React.FC<BodyProps> = (props) => {
    */
   const spinner = Wrangle.spinner(props);
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({ position: 'relative', display: 'grid' }),
     spinner: css({ Absolute: 0 }),
     content: css({
-      Absolute: 0,
       opacity: spinning ? spinner.bodyOpacity ?? 0 : 1,
       filter: `blur(${spinning ? spinner?.bodyBlur ?? 0 : 0}px)`,
       display: 'grid',
@@ -40,8 +39,7 @@ export const Body: React.FC<BodyProps> = (props) => {
 
   const elContent = (
     <div {...styles.content}>
-      {/* <ErrorBoundary FallbackComponent={ErrorFallback}>{element}</ErrorBoundary> */}
-      <ErrorBoundary fallbackRender={renderFallback}>{element}</ErrorBoundary>
+      <ErrorBoundary fallbackRender={errorFallback}>{element}</ErrorBoundary>
     </div>
   );
 

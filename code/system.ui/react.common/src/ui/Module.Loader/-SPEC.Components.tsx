@@ -56,6 +56,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
       position: 'relative',
       display: 'grid',
       placeItems: 'center',
+      minHeight: 180,
     }),
     border: css({
       Absolute: 5,
@@ -63,14 +64,19 @@ export const Sample: React.FC<SampleProps> = (props) => {
       borderRadius: 6,
       pointerEvents: 'none',
     }),
+    throwError: css({
+      Absolute: [null, 12, 12, null],
+      fontSize: 12,
+    }),
   };
+
   return (
     <div {...css(styles.base, props.style)}>
       <div>
         <div>{text}</div>
-        <Button.Blue label={'(throw error)'} onClick={() => setError(true)} />
       </div>
       <div {...styles.border} />
+      <Button.Blue label={'throw error'} onClick={() => setError(true)} style={styles.throwError} />
     </div>
   );
 };

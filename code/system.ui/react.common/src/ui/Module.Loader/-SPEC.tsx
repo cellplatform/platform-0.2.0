@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
-        WrangleSpec.mutateSubject(dev, e.state);
+        WrangleSpec.mutateSubject(dev, e.state, { height: null });
         return (
           <ModuleLoader
             {...e.state.props}
