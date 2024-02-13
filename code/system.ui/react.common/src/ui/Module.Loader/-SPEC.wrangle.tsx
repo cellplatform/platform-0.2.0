@@ -1,4 +1,4 @@
-import { COLORS, Color, type t, Pkg, Icons } from './common';
+import { COLORS, Color, Icons, Pkg, type t } from './common';
 
 type T = {
   props: { theme?: t.ModuleLoaderTheme };
@@ -9,7 +9,11 @@ type T = {
  * Helpers
  */
 export const WrangleSpec = {
-  mutateSubject(dev: t.DevTools<T>, current: T) {
+  mutateSubject(
+    dev: t.DevTools<T>,
+    current: T,
+    options: { width?: number | null; height?: number | null } = {},
+  ) {
     const ctx = dev.ctx;
     const { props, debug } = current;
     const isDark = props.theme === 'Dark';
@@ -26,8 +30,10 @@ export const WrangleSpec = {
     /**
      * Size
      */
+    const width = options.width === null ? null : options.width ?? 400;
+    const height = options.height === null ? null : options.height ?? 200;
     if (debug.debugFill) ctx.subject.size('fill', 80);
-    else ctx.subject.size([400, 200]);
+    else ctx.subject.size([width, height]);
   },
 
   link(dev: t.DevTools<T>, label: string, namespace: string) {

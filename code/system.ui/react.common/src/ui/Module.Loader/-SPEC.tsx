@@ -15,7 +15,6 @@ const initial: T = { props: {}, debug: {} };
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<t.ModuleLoaderProps, 'flipped' | 'spinning' | 'theme'>;
-
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: DEFAULTS.theme,
