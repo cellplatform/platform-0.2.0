@@ -12,4 +12,5 @@ export type * from './t.module';
 export type * from './t.number';
 export type * from './t.number.time';
 export type * from './t.pkg';
+export type * from './t.react';
 export type * from './t.readonly';

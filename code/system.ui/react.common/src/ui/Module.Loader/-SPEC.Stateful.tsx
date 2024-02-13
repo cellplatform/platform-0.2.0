@@ -1,6 +1,5 @@
 import { DEFAULTS, ModuleLoader } from '.';
 import { Dev, Pkg, Time, type t } from '../../test.ui';
-import { Sample } from './-SPEC.Components';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
@@ -89,26 +88,33 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Factory', (dev) => {
-      type A = t.ModuleLoaderRenderArgs;
-      const sampleSyncFactory = (e: A) => {
-        return <Sample {...e} text={'Sample'} />;
+      type N = 'foo.instant' | 'foo.delayed';
+      const factory: t.ModuleLoaderFactory<N> = async (e) => {
+        if (e.name === 'foo.instant') {
+          const { Sample } = await import('./-SPEC.Components');
+          return <Sample {...e} text={'Sample'} />;
+        }
+        if (e.name === 'foo.delayed') {
+          const { Sample } = await import('./-SPEC.Components');
+          await Time.wait(1000);
+          return <Sample {...e} text={'Sample (Loaded Async)'} />;
+        }
+        return null;
       };
-      const sampleAsyncFactory = async (e: A) => {
-        await Time.wait(1000);
-        const { Sample } = await import('./-SPEC.Components');
-        return <Sample {...e} text={'Sample (Loaded Async)'} />;
+
+      const btn = (name: N) => {
+        dev.button(`factory: ${name}`, (e) => {
+          e.change((d) => {
+            d.props.factory = factory;
+            d.props.name = name;
+          });
+        });
       };
 
-      dev.button(['factory: sample', '(sync)'], (e) => {
-        e.change((d) => (d.props.factory = sampleSyncFactory));
-      });
-
-      dev.button(['factory: sample', '(async)'], (e) => {
-        e.change((d) => (d.props.factory = sampleAsyncFactory));
-      });
-
+      btn('foo.instant');
+      btn('foo.delayed');
       dev.hr(-1, 5);
-      dev.button('unload', (e) => e.change((d) => (d.props.factory = undefined)));
+      dev.button('unload', (e) => e.change((d) => (d.props.name = undefined)));
     });
 
     dev.hr(5, 20);
@@ -136,7 +142,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
       return <Dev.Object name={name} data={data} expand={1} />;

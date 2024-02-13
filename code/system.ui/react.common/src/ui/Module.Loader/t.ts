@@ -1,7 +1,5 @@
 import type { t } from './common';
 
-type RenderOutput = JSX.Element | null | false;
-
 export type ModuleLoaderTheme = 'Light' | 'Dark';
 
 /**
@@ -12,8 +10,8 @@ export type ModuleLoaderProps = {
   spinning?: boolean;
   spinner?: ModuleLoaderSpinner;
   theme?: ModuleLoaderTheme;
-  front?: { element: RenderOutput };
-  back?: { element: RenderOutput };
+  front?: { element: t.RenderOutput };
+  back?: { element: t.RenderOutput };
   style?: t.CssValue;
   onError?: ModuleLoaderErrorHandler;
 };
@@ -22,13 +20,30 @@ export type ModuleLoaderProps = {
  * <Component> ← Stateful
  */
 export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'back' | 'spinning'> & {
-  factory?: ModuleLoaderFactory | ModuleLoaderFactoryProps | null;
+  name?: string;
+  factory?: ModuleLoaderStatefulFactoryProp<any> | ModuleLoaderFactory<any> | null;
+};
+export type ModuleLoaderStatefulFactoryProp<N extends string = string> = {
+  front?: ModuleLoaderFactory<N>;
+  back?: ModuleLoaderFactory<N>;
 };
 
-export type ModuleLoaderFactory = (e: ModuleLoaderRenderArgs) => ModuleLoaderFactoryRes;
-export type ModuleLoaderFactoryRes = RenderOutput | Promise<RenderOutput>;
-export type ModuleLoaderFactoryProps = { front?: ModuleLoaderFactory; back?: ModuleLoaderFactory };
-export type ModuleLoaderRenderArgs = { theme: ModuleLoaderTheme };
+/**
+ * Factory
+ */
+export type ModuleLoaderFactory<N extends string = string> = (
+  e: ModuleLoaderFactoryArgs<N>,
+) => ModuleLoaderFactoryRes;
+export type ModuleLoaderFactoryArgs<N extends string = string> = {
+  name: N;
+  theme: ModuleLoaderTheme;
+
+  /**
+   * TODO 🐷
+   */
+  // face: 'Front' | 'Back';
+};
+export type ModuleLoaderFactoryRes = Promise<t.RenderOutput>;
 
 /**
  * Spinner configuation
@@ -36,7 +51,7 @@ export type ModuleLoaderRenderArgs = { theme: ModuleLoaderTheme };
 export type ModuleLoaderSpinner = {
   bodyOpacity?: t.Percent;
   bodyBlur?: t.Pixels;
-  element?: RenderOutput | ((e: ModuleLoaderRenderArgs) => RenderOutput); // Custom spinning renderer.
+  element?: t.RenderOutput | ((e: { theme: ModuleLoaderTheme }) => t.RenderOutput); // Custom spinning renderer.
 };
 
 /**

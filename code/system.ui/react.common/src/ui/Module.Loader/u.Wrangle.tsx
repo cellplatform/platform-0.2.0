@@ -23,8 +23,9 @@ export const Wrangle = {
     return { ...DEFAULTS.spinner, ...props.spinner };
   },
 
-  factoryProps(props: t.ModuleLoaderStatefulProps): t.ModuleLoaderFactoryProps | undefined {
-    const factory = props.factory;
+  factoryProps(
+    factory: t.ModuleLoaderStatefulProps['factory'],
+  ): t.ModuleLoaderStatefulFactoryProp | undefined {
     if (!factory || factory === null) return undefined;
     if (typeof factory === 'function') return { front: factory };
     if (typeof factory === 'object') return factory;

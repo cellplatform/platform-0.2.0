@@ -1,6 +1,6 @@
 import { type t } from './common';
 import { View } from './ui';
-import { useLoader } from './use.Loader';
+import { useLoader } from './ui.Stateful.useLoader';
 
 export const Stateful: React.FC<t.ModuleLoaderStatefulProps> = (props) => {
   const loader = useLoader(props);

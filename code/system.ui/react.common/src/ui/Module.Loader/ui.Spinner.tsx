@@ -2,8 +2,6 @@ import { isValidElement } from 'react';
 import { COLORS, DEFAULTS, Spinner, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
-type RenderOutput = JSX.Element | null | false;
-
 export type LoadSpinnerProps = {
   theme?: t.ModuleLoaderTheme;
   spinning?: boolean;
@@ -30,7 +28,7 @@ export const LoadSpinner: React.FC<LoadSpinnerProps> = (props) => {
     }),
   };
 
-  let el: RenderOutput;
+  let el: t.RenderOutput;
   if (typeof spinner.element === 'function') el = spinner.element({ theme });
   else if (isValidElement(spinner.element)) el = spinner.element;
   else el = <Spinner.Bar width={50} color={color} />;

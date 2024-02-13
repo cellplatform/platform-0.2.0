@@ -2,8 +2,6 @@ import { COLORS, DEFAULTS, Flip, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 import { Body } from './ui.Body';
 
-type RenderOutput = JSX.Element | null | false;
-
 export const View: React.FC<t.ModuleLoaderProps> = (props) => {
   const { front, back, flipped = DEFAULTS.flipped } = props;
   const is = Wrangle.is(props);
@@ -19,7 +17,7 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
     }),
   };
 
-  const face = (el?: RenderOutput) => {
+  const face = (el?: t.RenderOutput) => {
     return (
       <Body
         spinning={is.spinning}
