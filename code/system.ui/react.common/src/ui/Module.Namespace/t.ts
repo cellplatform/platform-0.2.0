@@ -22,6 +22,13 @@ export type ModuleNamespaceCommandbarProps = {
 };
 
 /**
+ * <Component>.List
+ */
+export type ModuleNamespaceListProps = {
+  //
+};
+
+/**
  * Render factory
  */
 export type ModuleNamespaceRenderer<N extends string, T = unknown> = (
