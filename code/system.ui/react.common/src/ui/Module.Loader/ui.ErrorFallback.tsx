@@ -6,11 +6,20 @@ import { Button, COLORS, Color, Icons, css, type t } from './common';
 export type ErrorFallbackProps = FallbackProps & {
   style?: t.CssValue;
   onError?: t.ModuleLoaderErrorHandler;
+  onErrorCleared?: t.ModuleLoaderErrorClearedHandler;
 };
 
 export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
-  const { error, resetErrorBoundary } = props;
+  const { error } = props;
   const [closeable, setCloseable] = useState(!props.onError);
+
+  /**
+   * Handlers
+   */
+  const clear = () => {
+    props.resetErrorBoundary();
+    props.onErrorCleared?.({ error });
+  };
 
   /**
    * Lifecycle
@@ -18,7 +27,6 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
   useEffect(() => {
     if (props.onError) {
       const closeable = () => setCloseable(true);
-      const clear = resetErrorBoundary;
       props.onError({ error, clear, closeable });
     }
   }, []);
@@ -62,7 +70,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
   );
 
   const elClose = closeable && (
-    <Button style={styles.close} onClick={resetErrorBoundary}>
+    <Button style={styles.close} onClick={clear}>
       <Icons.Close color={color} />
     </Button>
   );

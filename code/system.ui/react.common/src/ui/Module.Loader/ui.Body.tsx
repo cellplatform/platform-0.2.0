@@ -10,6 +10,7 @@ export type BodyProps = {
   spinner?: t.ModuleLoaderSpinner;
   style?: t.CssValue;
   onError?: t.ModuleLoaderErrorHandler;
+  onErrorCleared?: t.ModuleLoaderErrorClearedHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
@@ -20,7 +21,8 @@ export const Body: React.FC<BodyProps> = (props) => {
    * Handers
    */
   const errorFallback = (args: ErrorFallbackProps) => {
-    return <ErrorFallback {...args} onError={props.onError} />;
+    const { onError, onErrorCleared } = props;
+    return <ErrorFallback {...args} onError={onError} onErrorCleared={onErrorCleared} />;
   };
 
   /**

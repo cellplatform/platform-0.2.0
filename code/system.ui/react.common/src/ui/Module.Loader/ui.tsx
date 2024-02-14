@@ -25,6 +25,7 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
         theme={props.theme}
         element={el}
         onError={props.onError}
+        onErrorCleared={props.onErrorCleared}
       />
     );
   };

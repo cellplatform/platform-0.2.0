@@ -16,6 +16,7 @@ export type ModuleLoaderProps = {
   back?: { element: t.RenderOutput };
   style?: t.CssValue;
   onError?: ModuleLoaderErrorHandler;
+  onErrorCleared?: ModuleLoaderErrorClearedHandler;
 };
 
 /**
@@ -71,3 +72,6 @@ export type ModuleLoaderErrorHandlerArgs = {
   clear(): void;
   closeable(): void;
 };
+
+export type ModuleLoaderErrorClearedHandler = (e: ModuleLoaderErrorClearedHandlerArgs) => void;
+export type ModuleLoaderErrorClearedHandlerArgs = { readonly error: any };
