@@ -10,8 +10,8 @@ export function factory<TName extends string = string>(factory: t.ModuleLoaderFa
   const api: t.ModuleLoaderFactoryBuilder<TName> = {
     factory,
 
-    render(name: TName) {
-      return <Stateful factory={factory} name={name} />;
+    render(name: TName, props = {}) {
+      return <Stateful {...props} factory={factory} name={name} />;
     },
   };
 

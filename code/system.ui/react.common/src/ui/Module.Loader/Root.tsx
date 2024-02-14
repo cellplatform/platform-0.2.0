@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
-import { factory } from './Root.factory';
+import { factory } from './factory';
 import { View } from './ui';
 import { Stateful } from './ui.Stateful';
 

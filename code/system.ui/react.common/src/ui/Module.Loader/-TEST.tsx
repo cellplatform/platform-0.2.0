@@ -64,5 +64,13 @@ export default Test.describe('Module.Loader', (e) => {
       assertModuleLoader(res2, 'bar');
       assertModuleLoader(res3, '404');
     });
+
+    e.it('factory.render( "typename", {props} ) ← optional display properties', (e) => {
+      const { fn, assertModuleLoader } = testFactory();
+      const loader = ModuleLoader.factory(fn);
+      const res = loader.render('foo', { flipped: true });
+      assertModuleLoader(res, 'foo');
+      expect(res.props.flipped).to.eql(true);
+    });
   });
 });

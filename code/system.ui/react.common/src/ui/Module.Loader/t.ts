@@ -1,4 +1,5 @@
 import type { t } from './common';
+export type * from './t.factory';
 
 type B = boolean;
 export type ModuleLoaderTheme = 'Light' | 'Dark';
@@ -41,18 +42,6 @@ export type ModuleLoaderFactoryArgs<N extends string = string> = {
 };
 export type ModuleLoaderFactoryFlags = { front: B; back: B; light: B; dark: B };
 export type ModuleLoaderFactoryResponse = Promise<t.RenderOutput>;
-
-/**
- * Factory function builder.
- */
-export type ModuleLoaderFactoryFunc<TName extends string = string> = (
-  factory: t.ModuleLoaderFactory<TName>,
-) => ModuleLoaderFactoryBuilder<TName>;
-
-export type ModuleLoaderFactoryBuilder<TName extends string> = {
-  readonly factory: t.ModuleLoaderFactory<TName>;
-  render(name: TName): JSX.Element;
-};
 
 /**
  * Spinner configuation
