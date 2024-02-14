@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { factory } from './Root.factory';
 import { View } from './ui';
 import { Stateful } from './ui.Stateful';
 
@@ -9,10 +9,10 @@ import { Stateful } from './ui.Stateful';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Stateful: typeof Stateful;
-  Wrangle: typeof Wrangle;
+  factory: typeof factory;
 };
 export const ModuleLoader = FC.decorate<t.ModuleLoaderProps, Fields>(
   View,
-  { DEFAULTS, Stateful, Wrangle },
+  { DEFAULTS, Stateful, factory },
   { displayName: DEFAULTS.displayName },
 );

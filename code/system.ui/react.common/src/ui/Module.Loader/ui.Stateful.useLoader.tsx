@@ -24,7 +24,12 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
       if (!factory) return done(null);
 
       setSpinning(true);
-      const is = { front: face === 'Front', back: face === 'Back' };
+      const is: t.ModuleLoaderFactoryFlags = {
+        front: face === 'Front',
+        back: face === 'Back',
+        dark: theme === 'Dark',
+        light: theme === 'Light',
+      };
       const res = await factory({ theme, name, face, is });
       if (life.disposed) return;
       setSpinning(false);

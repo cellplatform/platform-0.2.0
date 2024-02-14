@@ -1,5 +1,6 @@
 import type { t } from './common';
 
+type B = boolean;
 export type ModuleLoaderTheme = 'Light' | 'Dark';
 export type ModuleLoaderFace = 'Front' | 'Back';
 
@@ -21,7 +22,7 @@ export type ModuleLoaderProps = {
  * <Component> ← Stateful
  */
 export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'back' | 'spinning'> & {
-  name?: string;
+  name?: string; // NB: passed to the factory.
   factory?: ModuleLoaderFactory<any> | null;
 };
 
@@ -30,14 +31,27 @@ export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'bac
  */
 export type ModuleLoaderFactory<N extends string = string> = (
   e: ModuleLoaderFactoryArgs<N>,
-) => ModuleLoaderFactoryRes;
+) => ModuleLoaderFactoryResponse;
 export type ModuleLoaderFactoryArgs<N extends string = string> = {
-  name: N;
-  theme: ModuleLoaderTheme;
-  face: ModuleLoaderFace;
-  is: { front: boolean; back: boolean };
+  readonly name: N;
+  readonly theme: ModuleLoaderTheme;
+  readonly face: ModuleLoaderFace;
+  readonly is: ModuleLoaderFactoryFlags;
 };
-export type ModuleLoaderFactoryRes = Promise<t.RenderOutput>;
+export type ModuleLoaderFactoryFlags = { front: B; back: B; light: B; dark: B };
+export type ModuleLoaderFactoryResponse = Promise<t.RenderOutput>;
+
+/**
+ * Factory function builder.
+ */
+export type ModuleLoaderFactoryFunc<TName extends string = string> = (
+  factory: t.ModuleLoaderFactory<TName>,
+) => ModuleLoaderFactoryBuilder<TName>;
+export type ModuleLoaderFactoryBuilder<TName extends string> = {
+  readonly factory: t.ModuleLoaderFactory<TName>;
+  render(name: TName): JSX.Element;
+  type(name: TName): { render(): JSX.Element };
+};
 
 /**
  * Spinner configuation
@@ -53,7 +67,7 @@ export type ModuleLoaderSpinner = {
  */
 export type ModuleLoaderErrorHandler = (e: ModuleLoaderErrorHandlerArgs) => void;
 export type ModuleLoaderErrorHandlerArgs = {
-  error: any;
+  readonly error: any;
   clear(): void;
   closeable(): void;
 };
