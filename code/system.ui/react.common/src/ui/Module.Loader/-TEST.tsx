@@ -64,13 +64,5 @@ export default Test.describe('Module.Loader', (e) => {
       assertModuleLoader(res2, 'bar');
       assertModuleLoader(res3, '404');
     });
-
-    e.it('factory.type( "typename" ).render( )', (e) => {
-      const { fn, invoked, assertModuleLoader } = testFactory();
-      const type = ModuleLoader.factory(fn).type('foo');
-      const res = type.render();
-      assertModuleLoader(res, 'foo');
-      expect(invoked).to.eql([]);
-    });
   });
 });

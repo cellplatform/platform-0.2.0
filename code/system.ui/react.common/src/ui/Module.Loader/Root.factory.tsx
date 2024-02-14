@@ -13,11 +13,6 @@ export function factory<TName extends string = string>(factory: t.ModuleLoaderFa
     render(name: TName) {
       return <Stateful factory={factory} name={name} />;
     },
-
-    type(name: TName) {
-      const render = () => api.render(name);
-      return { render };
-    },
   };
 
   return api;

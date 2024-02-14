@@ -48,10 +48,10 @@ export type ModuleLoaderFactoryResponse = Promise<t.RenderOutput>;
 export type ModuleLoaderFactoryFunc<TName extends string = string> = (
   factory: t.ModuleLoaderFactory<TName>,
 ) => ModuleLoaderFactoryBuilder<TName>;
+
 export type ModuleLoaderFactoryBuilder<TName extends string> = {
   readonly factory: t.ModuleLoaderFactory<TName>;
   render(name: TName): JSX.Element;
-  type(name: TName): { render(): JSX.Element };
 };
 
 /**
