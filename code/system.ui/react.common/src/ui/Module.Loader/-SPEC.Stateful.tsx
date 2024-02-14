@@ -5,7 +5,7 @@ import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
   props: t.ModuleLoaderStatefulProps;
-  debug: { debugBg?: boolean; debugFill?: boolean; debugErrorClearable?: boolean };
+  debug: { debugBg?: boolean; debugFill?: boolean; debugClearErrorButton?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -22,7 +22,7 @@ export default Dev.describe(name, (e) => {
     flipped: DEFAULTS.flipped,
     debugBg: true,
     debugFill: true,
-    debugErrorClearable: true,
+    debugClearErrorButton: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -38,7 +38,7 @@ export default Dev.describe(name, (e) => {
 
       d.debug.debugBg = local.debugBg;
       d.debug.debugFill = local.debugFill;
-      d.debug.debugErrorClearable = local.debugErrorClearable;
+      d.debug.debugClearErrorButton = local.debugClearErrorButton;
     });
 
     ctx.debug.width(330);
@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         WrangleSpec.mutateSubject(dev, e.state);
 
         type E = t.ModuleLoaderErrorHandler;
-        const handleErrorDelayedClear: E = async (e) => {
+        const handleErrorThenClear: E = async (e) => {
           console.info('⚡️ onError', e);
           await Time.wait(2500);
           e.clear();
@@ -60,7 +60,7 @@ export default Dev.describe(name, (e) => {
         return (
           <ModuleLoader.Stateful
             {...props}
-            onError={debug.debugErrorClearable ? undefined : handleErrorDelayedClear}
+            onError={debug.debugClearErrorButton ? undefined : handleErrorThenClear}
             onErrorCleared={(e) => console.info('⚡️ onErrorCleared', e)}
           />
         );
@@ -75,6 +75,8 @@ export default Dev.describe(name, (e) => {
       const link = WrangleSpec.link;
       link(dev, 'see: ModuleLoader (stateless)', 'Module.Loader');
       link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
+      dev.hr(-1, 5);
+      link(dev, 'see: unit tests', 'tests');
     });
 
     dev.hr(5, 20);
@@ -141,13 +143,13 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.debugErrorClearable);
+        const value = (state: T) => Boolean(state.debug.debugClearErrorButton);
         btn
           .label((e) => `error clearable`)
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => {
-              local.debugErrorClearable = Dev.toggle(d.debug, 'debugErrorClearable');
+              local.debugClearErrorButton = Dev.toggle(d.debug, 'debugClearErrorButton');
             });
           });
       });
