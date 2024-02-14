@@ -1,6 +1,7 @@
+import type { FallbackProps } from 'react-error-boundary';
+
 import { useEffect, useState } from 'react';
-import { type FallbackProps } from 'react-error-boundary';
-import { Button, COLORS, Icons, css, type t } from './common';
+import { Button, COLORS, Color, Icons, css, type t } from './common';
 
 export type ErrorFallbackProps = FallbackProps & {
   style?: t.CssValue;
@@ -36,7 +37,17 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
       placeItems: 'center',
     }),
     body: css({ position: 'relative', minWidth: 400, MarginX: 50 }),
-    pre: css({ fontSize: 10, userSelect: 'text' }),
+    pre: css({
+      position: 'relative',
+      fontSize: 10,
+      userSelect: 'text',
+    }),
+    traceline: css({
+      Absolute: [-20, null, null, 0],
+      width: 0.5,
+      height: 100,
+      backgroundColor: Color.alpha(COLORS.WHITE, 0.2),
+    }),
     message: css({ marginBottom: 5 }),
     stack: css({ opacity: 0.6 }),
     close: css({ Absolute: [5, 5, null, null] }),
@@ -44,6 +55,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
 
   const elError = (
     <pre {...styles.pre}>
+      <div {...styles.traceline} />
       <div {...styles.message}>{error?.message ?? 'No Message'}</div>
       <div {...styles.stack}>{error?.stack ?? 'No Stack'}</div>
     </pre>
