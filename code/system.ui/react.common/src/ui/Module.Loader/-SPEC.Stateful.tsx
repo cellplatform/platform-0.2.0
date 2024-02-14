@@ -1,6 +1,6 @@
 import { DEFAULTS, ModuleLoader } from '.';
 import { Dev, Pkg, Time, type t } from '../../test.ui';
-import { factory, type TCtx, type TName } from './-SPEC.factory';
+import { factory, type TContext, type TName } from './-SPEC.factory';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
@@ -71,7 +71,7 @@ export default Dev.describe(name, (e) => {
         };
 
         if (debug.debugUseLoader && name) {
-          const loader = ModuleLoader.factory<TName, TCtx>(factory).ctx({ count: 123 });
+          const loader = ModuleLoader.factory<TName, TContext>(factory).ctx({ count: 123 });
           return loader.render(name, props);
         } else {
           return <ModuleLoader.Stateful {...props} />;

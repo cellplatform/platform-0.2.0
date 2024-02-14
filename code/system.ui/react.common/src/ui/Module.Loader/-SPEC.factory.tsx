@@ -1,12 +1,12 @@
 import { Time, type t } from './common';
 
 export type TName = 'foo.instant' | 'foo.delayed';
-export type TCtx = { count?: number };
+export type TContext = { count?: number };
 
 /**
  * Sample renderer factory.
  */
-export const factory: t.ModuleFactory<TName, TCtx> = async (e) => {
+export const factory: t.ModuleFactory<TName, TContext> = async (e) => {
   if (e.name === 'foo.instant') {
     const { Sample } = await import('./-SPEC.Components');
     const text = `Sample - ${e.face}`;
