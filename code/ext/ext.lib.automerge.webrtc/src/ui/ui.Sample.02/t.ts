@@ -21,12 +21,6 @@ export type SampleEdgeProps = {
   onStreamSelection?: t.PeerStreamSelectionHandler;
 };
 
-export type SampleFactoryTypename =
-  | 'CodeEditor'
-  | 'DiagramEditor'
-  | 'Auth'
-  | 'CmdHost'
-  | 'ModuleNamespace';
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
 export type SampleEdgeLayout = {
   visible: boolean;
@@ -45,18 +39,18 @@ export type SampleSharedCmdHost = SampleSharedMain & {
  */
 export type HarnessShared = {
   debugPanel: boolean;
-  module?: SampleLoaderDef<SampleFactoryTypename>;
+  module?: SampleLoaderDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
 /**
- * Dynamic Loading
+ * Dynamic Loader (factory)
  */
-export type SampleLoaderDef<T extends S = S> = { typename: T; docuri: string; target?: string };
-export type SampleLoadFactory<T extends S = S> = (
-  e: SampleLoadFactoryArgs<T>,
-) => Promise<JSX.Element | void>;
-export type SampleLoadFactoryArgs<T extends S = S> = SampleLoaderDef<T> & {
+export type SampleTypename = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'ModuleNamespace';
+export type SampleFactoryCtx = {
+  docuri: string;
   store: t.Store;
-  shared: t.Lens<{ module?: SampleLoaderDef<T> }>;
 };
+
+// TEMP 🐷
+export type SampleLoaderDef = { typename: SampleTypename; docuri: string; target?: string };

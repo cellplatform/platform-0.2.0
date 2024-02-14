@@ -1,12 +1,11 @@
 import { type t } from './common';
 
-import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { ShellDivider } from './-SPEC.ShellDivider';
 import { createEdge } from './-SPEC.edge';
-import { loadFactory } from './-SPEC.factory';
+import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { Loader } from './ui.Loader';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean };
@@ -82,14 +81,12 @@ export default Dev.describe(name, async (e) => {
           /**
            * Header component.
            */
-          if (m.module) {
-            const store = left.network.store;
+          if (m.module && m.module.target === 'header') {
             const { typename, docuri } = m.module;
+            const store = left.network.store;
             const shared = sharedHarness!;
-            const el = await loadFactory({ store, typename, docuri, shared });
-            if (el && m.module.target === 'header') {
-              dev.header.border(-0.1).render(el);
-            }
+            const el = loader.ctx({ store, docuri }).render(typename);
+            if (el) dev.header.border(-0.1).render(el);
           }
 
           dev.redraw();
@@ -107,10 +104,18 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={resetReloadClose} />;
         } else {
+          const shared = sharedHarness!;
+          const edge = shared?.current.edge;
           const store = left.network.store;
-          const edge = sharedHarness?.current.edge;
-          const lens = sharedMain;
-          const elOverlay = lens && <Loader store={store} shared={lens} factory={loadFactory} />;
+
+          let elOverlay: JSX.Element | undefined;
+          const m = sharedMain?.current.module;
+          if (m && m.target !== 'header') {
+            const { docuri, typename } = m;
+            const style = { backgroundColor: COLORS.WHITE };
+            elOverlay = loader.ctx({ store, docuri }).render(typename, { style });
+          }
+
           return (
             <Sample
               left={{ ...left, visible: edge?.Left.visible }}
@@ -252,7 +257,7 @@ export default Dev.describe(name, async (e) => {
 
       const loaderButton = (
         label: string,
-        typename: t.SampleFactoryTypename,
+        typename: t.SampleTypename,
         target: 'Main' | 'Dev:Header',
       ) => {
         const isEnabled = () => !!sharedMain && !!selected?.item.uri;
@@ -271,6 +276,8 @@ export default Dev.describe(name, async (e) => {
               if (target === 'Dev:Header') {
                 sharedHarness.change((d) => (d.module = { typename, docuri, target: 'header' }));
               }
+
+              dev.redraw();
             });
         });
       };
@@ -278,7 +285,6 @@ export default Dev.describe(name, async (e) => {
       loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
       dev.hr(-1, 5);
       loaderButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'Main');
-      loaderButton(`ƒ → load → Namespace (Loader)`, 'CmdHost', 'Main');
       dev.hr(-1, 5);
       loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main');
       loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main');
