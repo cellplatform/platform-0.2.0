@@ -2,7 +2,7 @@ import { type t } from './common';
 
 import { Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { ShellDivider } from './-SPEC.ShellDivider';
-import { createEdge } from './-SPEC.createEdge';
+import { createEdge } from './-SPEC.edge';
 import { loadFactory } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
