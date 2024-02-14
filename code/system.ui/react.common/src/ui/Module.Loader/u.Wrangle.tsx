@@ -19,7 +19,7 @@ export const Wrangle = {
     return theme;
   },
 
-  spinner(props: { spinner?: t.ModuleLoaderSpinner }) {
-    return { ...DEFAULTS.spinner, ...props.spinner };
+  spinner(props: { spinner?: t.ModuleLoaderProps['spinner'] }) {
+    return props.spinner === null ? undefined : { ...DEFAULTS.spinner, ...props.spinner };
   },
 } as const;

@@ -11,7 +11,7 @@ export type ModuleLoaderFace = 'Front' | 'Back';
 export type ModuleLoaderProps = {
   flipped?: boolean;
   spinning?: boolean;
-  spinner?: ModuleLoaderSpinner;
+  spinner?: ModuleLoaderSpinner | null;
   theme?: ModuleLoaderTheme;
   front?: { element: t.RenderOutput };
   back?: { element: t.RenderOutput };

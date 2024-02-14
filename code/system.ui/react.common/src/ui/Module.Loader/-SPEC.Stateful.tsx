@@ -39,7 +39,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.flipped = local.flipped;
       d.props.theme = local.theme;
-      d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 6 };
+      d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 5 };
       d.props.factory = factory;
 
       d.debug.debugBg = local.debugBg;
@@ -121,11 +121,18 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Factory', (dev) => {
-      const btn = (name: TName) => {
-        dev.button(`factory: "${name}"`, (e) => e.change((d) => (d.props.name = name)));
+      const btn = (name: TName, right?: string, mutate?: (d: T) => void) => {
+        dev.button([`factory: "${name}"`, right ?? ''], (e) => {
+          e.change((d) => {
+            d.props.name = name;
+            d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 5 }; // NB: sample default.
+            mutate?.(d);
+          });
+        });
       };
       btn('foo.instant');
       btn('foo.delayed');
+      btn('foo.delayed', '(no spinner)', (d) => (d.props.spinner = null));
       dev.hr(-1, 5);
       dev.button('unload', (e) => e.change((d) => (d.props.name = undefined)));
     });

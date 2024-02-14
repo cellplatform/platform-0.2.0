@@ -1,19 +1,16 @@
 import { isValidElement } from 'react';
 import { COLORS, DEFAULTS, Spinner, css, type t } from './common';
-import { Wrangle } from './u.Wrangle';
 
 export type LoadSpinnerProps = {
+  spinner: t.ModuleLoaderSpinner;
   theme?: t.ModuleLoaderTheme;
-  spinning?: boolean;
-  spinner?: t.ModuleLoaderSpinner;
+  spinning: boolean;
   style?: t.CssValue;
 };
 
 export const LoadSpinner: React.FC<LoadSpinnerProps> = (props) => {
-  const { spinning = DEFAULTS.spinning, theme = DEFAULTS.theme } = props;
+  const { spinning, spinner, theme = DEFAULTS.theme } = props;
   if (!spinning) return null;
-
-  const spinner = Wrangle.spinner(props);
 
   /**
    * Render
