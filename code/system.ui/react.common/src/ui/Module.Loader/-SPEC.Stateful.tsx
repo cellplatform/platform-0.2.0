@@ -131,6 +131,7 @@ export default Dev.describe(name, (e) => {
         });
       };
       btn('foo.instant');
+      dev.hr(-1, 5);
       btn('foo.delayed');
       btn('foo.delayed', '(no spinner)', (d) => (d.props.spinner = null));
       dev.hr(-1, 5);
