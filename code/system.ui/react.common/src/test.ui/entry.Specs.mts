@@ -3,6 +3,7 @@ export { Pkg };
 const ns = Pkg.name;
 
 export const ModuleSpecs = {
+  [`${ns}.tests`]: () => import('./-TestRunner'),
   [`${ns}.Button`]: () => import('../ui/Button/-SPEC'),
   [`${ns}.Button.Copy`]: () => import('../ui/Button/-SPEC.CopyButton'),
   [`${ns}.Button.Switch`]: () => import('../ui/Button.Switch/-SPEC'),
