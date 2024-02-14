@@ -6,6 +6,15 @@ import { ModuleLoader, type t } from '../common';
 export const loadFactory: t.LoadFactory<t.SampleFactoryTypename> = async (e) => {
   const { typename, store, docuri, shared } = e;
 
+  type TName = t.SampleFactoryTypename;
+  const factory = ModuleLoader.factory<TName>(async (e) => {
+    if (e.name === 'Auth') {
+      const { AuthLoader } = await import('./Auth');
+      return <AuthLoader store={store} docuri={docuri} />;
+    }
+    return null;
+  });
+
   if (typename === 'CodeEditor') {
     const { CodeEditorLoader } = await import('./CodeEditor'); // NB: dynamic code-splitting here.
     return <CodeEditorLoader store={store} docuri={docuri} />;
@@ -19,19 +28,8 @@ export const loadFactory: t.LoadFactory<t.SampleFactoryTypename> = async (e) => 
   }
 
   if (typename === 'Auth') {
-    return (
-      <ModuleLoader.Stateful
-        factory={async (e) => {
-          /**
-           * TODO 🐷
-           * e.onError
-           */
-
-          const { AuthLoader } = await import('./Auth');
-          return <AuthLoader store={store} docuri={docuri} />;
-        }}
-      />
-    );
+    // return factory.render(typename);
+    return factory.type('Auth').render();
   }
 
   if (typename === 'CmdHost') {
