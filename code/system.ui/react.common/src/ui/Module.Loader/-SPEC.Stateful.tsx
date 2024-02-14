@@ -91,7 +91,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Factory', (dev) => {
       const btn = (name: N) => {
-        dev.button(`factory: ${name}`, (e) => {
+        dev.button(`factory: "${name}"`, (e) => {
           e.change((d) => (d.props.name = name));
         });
       };
