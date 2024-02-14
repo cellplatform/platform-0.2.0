@@ -27,7 +27,7 @@ export type SampleEdgeLayout = {
   showJson: boolean;
   fields?: t.InfoField[];
 };
-export type SampleSharedMain = { module?: SampleLoaderDef };
+export type SampleSharedMain = { module?: SampleModuleDef };
 export type SampleSharedCmdHost = SampleSharedMain & {
   filter?: string;
   address?: string;
@@ -39,18 +39,15 @@ export type SampleSharedCmdHost = SampleSharedMain & {
  */
 export type HarnessShared = {
   debugPanel: boolean;
-  module?: SampleLoaderDef;
+  module?: SampleModuleDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
 /**
  * Dynamic Loader (factory)
  */
-export type SampleTypename = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'ModuleNamespace';
-export type SampleFactoryCtx = {
-  docuri: string;
-  store: t.Store;
-};
+export type SampleName = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'ModuleNamespace';
+export type SampleFactoryCtx = { docuri: string; store: t.Store };
 
-// TEMP 🐷
-export type SampleLoaderDef = { typename: SampleTypename; docuri: string; target?: string };
+export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };
+export type SampleModuleDefTarget = 'dev:header' | 'main';

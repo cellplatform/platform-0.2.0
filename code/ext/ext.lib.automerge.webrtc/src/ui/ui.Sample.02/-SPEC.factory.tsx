@@ -3,7 +3,7 @@ import { ModuleLoader, type t } from './common';
 /**
  * A factory for code-split (dynamicly loaded) ESM module.
  */
-export const loader = ModuleLoader.factory<t.SampleTypename, t.SampleFactoryCtx>(async (e) => {
+export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(async (e) => {
   const { store, docuri } = e.ctx;
 
   if (e.name === 'Auth') {

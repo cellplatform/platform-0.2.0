@@ -7,6 +7,7 @@ import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { Sample } from './ui.Sample';
+import { Unloaded } from './ui.Unloaded';
 
 type T = { reload?: boolean };
 const initial: T = {};
@@ -81,10 +82,9 @@ export default Dev.describe(name, async (e) => {
           /**
            * Header component.
            */
-          if (m.module && m.module.target === 'header') {
-            const { typename, docuri } = m.module;
+          if (m.module && m.module.target === 'dev:header') {
+            const { name: typename, docuri } = m.module;
             const store = left.network.store;
-            const shared = sharedHarness!;
             const el = loader.ctx({ store, docuri }).render(typename);
             if (el) dev.header.border(-0.1).render(el);
           }
@@ -110,8 +110,8 @@ export default Dev.describe(name, async (e) => {
 
           let elOverlay: JSX.Element | undefined;
           const m = sharedMain?.current.module;
-          if (m && m.target !== 'header') {
-            const { docuri, typename } = m;
+          if (m && m.target === 'main') {
+            const { docuri, name: typename } = m;
             const style = { backgroundColor: COLORS.WHITE };
             elOverlay = loader.ctx({ store, docuri }).render(typename, { style });
           }
@@ -255,11 +255,7 @@ export default Dev.describe(name, async (e) => {
         foo$.subscribe((e) => console.log('foo$', e));
       };
 
-      const loaderButton = (
-        label: string,
-        typename: t.SampleTypename,
-        target: 'Main' | 'Dev:Header',
-      ) => {
+      const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
         const isEnabled = () => !!sharedMain && !!selected?.item.uri;
         dev.button((btn) => {
           btn
@@ -270,38 +266,43 @@ export default Dev.describe(name, async (e) => {
               if (!(sharedMain && sharedHarness)) return;
               if (!docuri) return;
 
-              if (target === 'Main') {
-                sharedMain.change((d) => (d.module = { typename, docuri }));
-              }
-              if (target === 'Dev:Header') {
-                sharedHarness.change((d) => (d.module = { typename, docuri, target: 'header' }));
-              }
-
+              const module: t.SampleModuleDef = { name, docuri, target };
+              if (target === 'main') sharedMain.change((d) => (d.module = module));
+              if (target === 'dev:header') sharedHarness.change((d) => (d.module = module));
               dev.redraw();
             });
         });
       };
-
-      loaderButton(`ƒ → load → Auth`, 'Auth', 'Dev:Header');
+      loadButton(`ƒ → load → Auth`, 'Auth', 'dev:header');
       dev.hr(-1, 5);
-      loaderButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'Main');
+      loadButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'main');
       dev.hr(-1, 5);
-      loaderButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'Main');
-      loaderButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'Main');
+      loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
+      loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
 
       dev.hr(-1, 5);
 
-      dev.button((btn) => {
-        const isEnabled = () => !!sharedMain && !!selected?.item.uri;
-        btn
-          .label('ƒ → (unload)')
-          .right((e) => '💥')
-          .enabled((e) => isEnabled())
-          .onClick((e) => {
-            sharedMain?.change((d) => delete d.module);
-            dev.redraw();
-          });
-      });
+      const unloadButton = (target: t.SampleModuleDefTarget) => {
+        dev.button((btn) => {
+          const isEnabled = () => !!sharedMain && !!selected?.item.uri;
+          btn
+            .label(`ƒ → (unload ${target})`)
+            .right((e) => '💥')
+            .enabled((e) => isEnabled())
+            .onClick((e) => {
+              if (target === 'main') sharedMain?.change((d) => delete d.module);
+              if (target === 'dev:header') {
+                sharedHarness?.change((d) => {
+                  delete d.module;
+                  dev.header.render(<Unloaded />);
+                });
+              }
+              dev.redraw();
+            });
+        });
+      };
+      unloadButton('main');
+      unloadButton('dev:header');
 
       dev.hr(-1, 5);
 
