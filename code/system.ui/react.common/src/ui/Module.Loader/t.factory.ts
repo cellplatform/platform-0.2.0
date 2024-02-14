@@ -30,13 +30,13 @@ export type ModuleFactoryResponse = Promise<t.RenderOutput>;
 /**
  * Factory function builder.
  */
-export type ModuleFactoryFunc<TName extends string = string, Ctx extends O = O> = (
-  factory: t.ModuleFactory<TName, Ctx>,
-) => ModuleFactoryBuilder<TName, Ctx>;
+export type ModuleFactoryRendererInit<TName extends string = string, Ctx extends O = O> = (
+  load: t.ModuleFactory<TName, Ctx>,
+) => ModuleFactoryRenderer<TName, Ctx>;
 
 export type ModuleFactoryRenderProps = RenderProps;
-export type ModuleFactoryBuilder<TName extends string, Ctx extends O = O> = {
-  readonly factory: t.ModuleFactory<TName, Ctx>;
+export type ModuleFactoryRenderer<TName extends string, Ctx extends O = O> = {
+  readonly load: t.ModuleFactory<TName, Ctx>;
   render(name: TName, ctx: Ctx, props?: RenderProps): JSX.Element;
   ctx(ctx: Ctx): {
     readonly ctx: Ctx;

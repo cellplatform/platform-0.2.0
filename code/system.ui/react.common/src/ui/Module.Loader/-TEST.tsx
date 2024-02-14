@@ -27,8 +27,8 @@ export default Test.describe('Module.Loader', (e) => {
 
     e.it('factory', async (e) => {
       const { fn, invoked } = testFactory();
-      const loader = ModuleLoader.factory(fn);
-      expect(loader.factory).to.equal(fn);
+      const factory = ModuleLoader.factory(fn);
+      expect(factory.load).to.equal(fn);
       expect(invoked.length).to.eql(0);
 
       const args1: t.ModuleFactoryArgs<TName> = {
@@ -46,8 +46,8 @@ export default Test.describe('Module.Loader', (e) => {
         is: { front: false, back: true, light: true, dark: false },
       };
 
-      const res1 = await loader.factory(args1);
-      const res2 = await loader.factory(args2);
+      const res1 = await factory.load(args1);
+      const res2 = await factory.load(args2);
       expect(isValidElement(res1)).to.eql(true);
       expect(res2).to.eql(null);
 
@@ -58,10 +58,10 @@ export default Test.describe('Module.Loader', (e) => {
 
     e.it('factory.render( "typename" )', (e) => {
       const { fn, assertModuleLoader } = testFactory();
-      const loader = ModuleLoader.factory(fn);
-      const res1 = loader.render('foo', { count: 123 });
-      const res2 = loader.render('bar', { count: 456 });
-      const res3 = loader.render('404', {});
+      const factory = ModuleLoader.factory(fn);
+      const res1 = factory.render('foo', { count: 123 });
+      const res2 = factory.render('bar', { count: 456 });
+      const res3 = factory.render('404', {});
 
       assertModuleLoader(res1, 'foo', { count: 123 });
       assertModuleLoader(res2, 'bar', { count: 456 });
@@ -70,9 +70,9 @@ export default Test.describe('Module.Loader', (e) => {
 
     e.it('factory.render( "typename", {props} ) ← optional display properties', (e) => {
       const { fn, assertModuleLoader } = testFactory();
-      const loader = ModuleLoader.factory(fn);
+      const factory = ModuleLoader.factory(fn);
       const ctx = { count: 123 };
-      const res = loader.render('foo', ctx, { flipped: true });
+      const res = factory.render('foo', ctx, { flipped: true });
       assertModuleLoader(res, 'foo', ctx);
       expect(res.props.flipped).to.eql(true);
     });
@@ -80,10 +80,10 @@ export default Test.describe('Module.Loader', (e) => {
     e.it('factory.ctx( ) ← curry the context', (e) => {
       const { fn, assertModuleLoader } = testFactory();
       const ctx = { count: 123 };
-      const loader = ModuleLoader.factory(fn).ctx(ctx);
-      expect(loader.ctx).to.equal(ctx);
+      const factory = ModuleLoader.factory(fn).ctx(ctx);
+      expect(factory.ctx).to.equal(ctx);
 
-      const res = loader.render('foo', { flipped: true });
+      const res = factory.render('foo', { flipped: true });
       assertModuleLoader(res, 'foo', ctx);
       expect(res.props.flipped).to.eql(true);
     });
