@@ -37,7 +37,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = (props) => {
     }),
     body: css({ position: 'relative', minWidth: 400, MarginX: 50 }),
     pre: css({ fontSize: 10, userSelect: 'text' }),
-    message: css({}),
+    message: css({ marginBottom: 5 }),
     stack: css({ opacity: 0.6 }),
     close: css({ Absolute: [5, 5, null, null] }),
   };
