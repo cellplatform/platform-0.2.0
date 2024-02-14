@@ -8,8 +8,8 @@ export default Test.describe('Module.Loader', (e) => {
     type TCtx = { count?: number };
 
     const testFactory = () => {
-      const invoked: t.ModuleLoaderFactoryArgs<TName, TCtx>[] = [];
-      const fn: t.ModuleLoaderFactory<TName, TCtx> = async (e) => {
+      const invoked: t.ModuleFactoryArgs<TName, TCtx>[] = [];
+      const fn: t.ModuleFactory<TName, TCtx> = async (e) => {
         invoked.push(e);
         if (e.name === 'foo') return <div />;
         if (e.name === 'bar') return null;
@@ -31,14 +31,14 @@ export default Test.describe('Module.Loader', (e) => {
       expect(loader.factory).to.equal(fn);
       expect(invoked.length).to.eql(0);
 
-      const args1: t.ModuleLoaderFactoryArgs<TName> = {
+      const args1: t.ModuleFactoryArgs<TName> = {
         name: 'foo',
         ctx: {},
         theme: 'Light',
         face: 'Front',
         is: { front: false, back: true, light: true, dark: false },
       };
-      const args2: t.ModuleLoaderFactoryArgs<TName, TCtx> = {
+      const args2: t.ModuleFactoryArgs<TName, TCtx> = {
         name: 'bar',
         ctx: { count: 123 },
         theme: 'Dark',

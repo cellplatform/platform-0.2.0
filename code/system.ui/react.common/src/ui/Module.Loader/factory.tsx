@@ -9,18 +9,18 @@ type O = Record<string, unknown>;
  *    pre-built element renderers.
  */
 export function factory<TName extends string = string, Ctx extends O = O>(
-  factory: t.ModuleLoaderFactory<TName, Ctx>,
+  factory: t.ModuleFactory<TName, Ctx>,
 ) {
-  const api: t.ModuleLoaderFactoryBuilder<TName, Ctx> = {
+  const api: t.ModuleFactoryBuilder<TName, Ctx> = {
     factory,
 
     render(name: TName, ctx: Ctx, props = {}) {
-      type T = t.ModuleLoaderFactory<TName, any>;
+      type T = t.ModuleFactory<TName, any>;
       return <Stateful {...props} name={name} ctx={ctx} factory={factory as T} />;
     },
 
     ctx(ctx) {
-      type T = t.ModuleLoaderFactoryRenderProps;
+      type T = t.ModuleFactoryRenderProps;
       const render = (name: TName, props: T = {}) => api.render(name, ctx, props);
       return { ctx, render };
     },

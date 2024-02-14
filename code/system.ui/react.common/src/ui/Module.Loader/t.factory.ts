@@ -6,37 +6,37 @@ type RenderProps = Omit<t.ModuleLoaderStatefulProps, 'name' | 'factory' | 'ctx'>
 /**
  * Factory
  */
-export type ModuleLoaderFactory<TName extends string = string, Ctx extends O = O> = (
-  e: ModuleLoaderFactoryArgs<TName, Ctx>,
-) => ModuleLoaderFactoryResponse;
+export type ModuleFactory<TName extends string = string, Ctx extends O = O> = (
+  e: ModuleFactoryArgs<TName, Ctx>,
+) => ModuleFactoryResponse;
 
-export type ModuleLoaderFactoryArgs<TName extends string = string, Ctx extends O = O> = {
+export type ModuleFactoryArgs<TName extends string = string, Ctx extends O = O> = {
   readonly name: TName;
   readonly ctx: Ctx;
   readonly theme: t.ModuleLoaderTheme;
   readonly face: t.ModuleLoaderFace;
-  readonly is: ModuleLoaderFactoryFlags;
+  readonly is: ModuleFactoryFlags;
 };
 
-export type ModuleLoaderFactoryFlags = {
+export type ModuleFactoryFlags = {
   readonly front: boolean;
   readonly back: boolean;
   readonly light: boolean;
   readonly dark: boolean;
 };
 
-export type ModuleLoaderFactoryResponse = Promise<t.RenderOutput>;
+export type ModuleFactoryResponse = Promise<t.RenderOutput>;
 
 /**
  * Factory function builder.
  */
-export type ModuleLoaderFactoryFunc<TName extends string = string, Ctx extends O = O> = (
-  factory: t.ModuleLoaderFactory<TName, Ctx>,
-) => ModuleLoaderFactoryBuilder<TName, Ctx>;
+export type ModuleFactoryFunc<TName extends string = string, Ctx extends O = O> = (
+  factory: t.ModuleFactory<TName, Ctx>,
+) => ModuleFactoryBuilder<TName, Ctx>;
 
-export type ModuleLoaderFactoryRenderProps = RenderProps;
-export type ModuleLoaderFactoryBuilder<TName extends string, Ctx extends O = O> = {
-  readonly factory: t.ModuleLoaderFactory<TName, Ctx>;
+export type ModuleFactoryRenderProps = RenderProps;
+export type ModuleFactoryBuilder<TName extends string, Ctx extends O = O> = {
+  readonly factory: t.ModuleFactory<TName, Ctx>;
   render(name: TName, ctx: Ctx, props?: RenderProps): JSX.Element;
   ctx(ctx: Ctx): {
     readonly ctx: Ctx;

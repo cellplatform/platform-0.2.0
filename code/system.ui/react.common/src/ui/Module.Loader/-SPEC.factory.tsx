@@ -6,7 +6,7 @@ export type TCtx = { count?: number };
 /**
  * Sample renderer factory.
  */
-export const factory: t.ModuleLoaderFactory<TName, TCtx> = async (e) => {
+export const factory: t.ModuleFactory<TName, TCtx> = async (e) => {
   if (e.name === 'foo.instant') {
     const { Sample } = await import('./-SPEC.Components');
     const text = `Sample - ${e.face}`;

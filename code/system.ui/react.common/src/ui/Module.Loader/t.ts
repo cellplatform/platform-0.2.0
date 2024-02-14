@@ -26,7 +26,7 @@ export type ModuleLoaderProps = {
 export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'back' | 'spinning'> & {
   name?: string; // NB: passed to the factory.
   ctx?: O;
-  factory?: t.ModuleLoaderFactory<any> | null;
+  factory?: t.ModuleFactory<any> | null;
 };
 
 /**

@@ -27,7 +27,7 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
       if (!factory) return done(null);
 
       setSpinning(true);
-      const is: t.ModuleLoaderFactoryFlags = {
+      const is: t.ModuleFactoryFlags = {
         front: face === 'Front',
         back: face === 'Back',
         dark: theme === 'Dark',
