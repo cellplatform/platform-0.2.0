@@ -6,7 +6,7 @@ import { Button, COLORS, Icons, Pkg, R, css, rx, type t } from '../common';
 export type CmdHostLoaderProps = {
   store: t.Store;
   shared: t.Lens<t.SampleSharedCmdHost>;
-  factory: t.LoadFactory<any>;
+  factory: t.SampleLoadFactory<any>;
   style?: t.CssValue;
 };
 

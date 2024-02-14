@@ -4,7 +4,7 @@ import { useLoader } from './ui.useLoader';
 export type LoaderProps = {
   store: t.Store;
   shared: t.Lens<t.SampleSharedMain>;
-  factory: t.LoadFactory<any>;
+  factory: t.SampleLoadFactory<any>;
   style?: t.CssValue;
 };
 

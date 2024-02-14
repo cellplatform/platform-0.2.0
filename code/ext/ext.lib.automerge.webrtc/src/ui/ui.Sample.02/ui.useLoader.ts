@@ -4,7 +4,7 @@ import { R, rx, type t } from './common';
 export function useLoader(props: {
   store: t.Store;
   shared: t.Lens<t.SampleSharedMain>;
-  factory: t.LoadFactory;
+  factory: t.SampleLoadFactory;
 }) {
   const { shared, store, factory } = props;
   const [loading, setLoading] = useState(false);

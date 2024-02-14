@@ -33,7 +33,7 @@ export type SampleEdgeLayout = {
   showJson: boolean;
   fields?: t.InfoField[];
 };
-export type SampleSharedMain = { module?: LoaderDef };
+export type SampleSharedMain = { module?: SampleLoaderDef };
 export type SampleSharedCmdHost = SampleSharedMain & {
   filter?: string;
   address?: string;
@@ -45,16 +45,18 @@ export type SampleSharedCmdHost = SampleSharedMain & {
  */
 export type HarnessShared = {
   debugPanel: boolean;
-  module?: LoaderDef<SampleFactoryTypename>;
+  module?: SampleLoaderDef<SampleFactoryTypename>;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
 /**
  * Dynamic Loading
  */
-export type LoaderDef<T extends S = S> = { typename: T; docuri: string; target?: string };
-export type LoadFactory<T extends S = S> = (e: LoadFactoryArgs<T>) => Promise<JSX.Element | void>;
-export type LoadFactoryArgs<T extends S = S> = LoaderDef<T> & {
+export type SampleLoaderDef<T extends S = S> = { typename: T; docuri: string; target?: string };
+export type SampleLoadFactory<T extends S = S> = (
+  e: SampleLoadFactoryArgs<T>,
+) => Promise<JSX.Element | void>;
+export type SampleLoadFactoryArgs<T extends S = S> = SampleLoaderDef<T> & {
   store: t.Store;
-  shared: t.Lens<{ module?: LoaderDef<T> }>;
+  shared: t.Lens<{ module?: SampleLoaderDef<T> }>;
 };

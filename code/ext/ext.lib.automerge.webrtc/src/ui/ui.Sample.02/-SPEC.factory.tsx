@@ -5,7 +5,7 @@ type TName = t.SampleFactoryTypename;
 /**
  * A factory for code-split (dynamicly loaded) ESM module.
  */
-export const loadFactory: t.LoadFactory<TName> = async (e) => {
+export const loadFactory: t.SampleLoadFactory<TName> = async (e) => {
   const { typename, store, docuri, shared } = e;
 
   /**
