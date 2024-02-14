@@ -1,11 +1,16 @@
 import { DEFAULTS, ModuleLoader } from '.';
 import { Dev, Pkg, Time, type t } from '../../test.ui';
-import { factory, type N } from './-SPEC.factory';
+import { factory, type TCtx, type TName } from './-SPEC.factory';
 import { WrangleSpec } from './-SPEC.wrangle';
 
 type T = {
   props: t.ModuleLoaderStatefulProps;
-  debug: { debugBg?: boolean; debugFill?: boolean; debugClearErrorButton?: boolean };
+  debug: {
+    debugBg?: boolean;
+    debugFill?: boolean;
+    debugClearErrorButton?: boolean;
+    debugUseLoader?: boolean;
+  };
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -23,6 +28,7 @@ export default Dev.describe(name, (e) => {
     debugBg: true,
     debugFill: true,
     debugClearErrorButton: true,
+    debugUseLoader: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -39,6 +45,7 @@ export default Dev.describe(name, (e) => {
       d.debug.debugBg = local.debugBg;
       d.debug.debugFill = local.debugFill;
       d.debug.debugClearErrorButton = local.debugClearErrorButton;
+      d.debug.debugUseLoader = local.debugUseLoader;
     });
 
     ctx.debug.width(330);
@@ -47,7 +54,8 @@ export default Dev.describe(name, (e) => {
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { debug } = e.state;
+        const name = e.state.props.name as TName;
         WrangleSpec.mutateSubject(dev, e.state);
 
         type E = t.ModuleLoaderErrorHandler;
@@ -56,14 +64,18 @@ export default Dev.describe(name, (e) => {
           await Time.wait(2500);
           e.clear();
         };
+        const props: t.ModuleLoaderStatefulProps = {
+          ...e.state.props,
+          onError: debug.debugClearErrorButton ? handleErrorThenClear : undefined,
+          onErrorCleared: (e) => console.info('⚡️ onErrorCleared', e),
+        };
 
-        return (
-          <ModuleLoader.Stateful
-            {...props}
-            onError={debug.debugClearErrorButton ? undefined : handleErrorThenClear}
-            onErrorCleared={(e) => console.info('⚡️ onErrorCleared', e)}
-          />
-        );
+        if (debug.debugUseLoader && name) {
+          const loader = ModuleLoader.factory<TName, TCtx>(factory).ctx({ count: 123 });
+          return loader.render(name, props);
+        } else {
+          return <ModuleLoader.Stateful {...props} />;
+        }
       });
   });
 
@@ -109,12 +121,9 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Factory', (dev) => {
-      const btn = (name: N) => {
-        dev.button(`factory: "${name}"`, (e) => {
-          e.change((d) => (d.props.name = name));
-        });
+      const btn = (name: TName) => {
+        dev.button(`factory: "${name}"`, (e) => e.change((d) => (d.props.name = name)));
       };
-
       btn('foo.instant');
       btn('foo.delayed');
       dev.hr(-1, 5);
@@ -142,10 +151,25 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => e.change((d) => (local.debugFill = Dev.toggle(d.debug, 'debugFill'))));
       });
 
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.debugUseLoader);
+        btn
+          .label((e) => `factory loader: ${value(e.state) ? 'using' : 'not used'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => {
+              local.debugUseLoader = Dev.toggle(d.debug, 'debugUseLoader');
+              dev.redraw();
+            });
+          });
+      });
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debugClearErrorButton);
         btn
-          .label((e) => `error clearable`)
+          .label((e) => (value(e.state) ? `error: show close button` : `error: no close button`))
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => {

@@ -32,11 +32,14 @@ export const SampleSpinner: React.FC<SampleSpinnerProps> = (props) => {
 export type SampleProps = {
   text: string;
   theme: t.ModuleLoaderTheme;
+  count?: number;
   style?: t.CssValue;
 };
 export const Sample: React.FC<SampleProps> = (props) => {
   console.info(`💦 render: <Sample>`);
-  const text = props.text ?? 'Sample';
+  let text = props.text ?? 'Sample';
+  if (typeof props.count === 'number') text = `${text} ← (ctx: ${props.count})`;
+
   const [error, setError] = useState(false);
 
   /**
@@ -72,9 +75,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>
-        <div>{text}</div>
-      </div>
+      <div>{text}</div>
       <div {...styles.border} />
       <Button.Blue label={'throw error'} onClick={() => setError(true)} style={styles.throwError} />
     </div>

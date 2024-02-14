@@ -5,7 +5,9 @@ import { Wrangle } from './u.Wrangle';
 export function useLoader(props: t.ModuleLoaderStatefulProps) {
   const theme = Wrangle.theme(props);
   const name = props.name ?? '';
+
   const factoryRef = useRef(props.factory);
+  const ctxRef = useRef(props.ctx);
 
   const [front, setFront] = useState<t.RenderOutput>(null);
   const [back, setBack] = useState<t.RenderOutput>(null);
@@ -14,7 +16,8 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
   useEffect(() => {
     // NB: this is done so we don't need to use the `props.factory` in the loader effect deps.
     factoryRef.current = props.factory;
-  }, [props.factory]);
+    ctxRef.current = props.ctx;
+  }, [props.factory, props.ctx]);
 
   useEffect(() => {
     const life = rx.lifecycle();
@@ -30,7 +33,8 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
         dark: theme === 'Dark',
         light: theme === 'Light',
       };
-      const res = await factory({ theme, name, face, is });
+      const ctx = ctxRef.current ?? {};
+      const res = await factory({ name, ctx, theme, face, is });
       if (life.disposed) return;
       setSpinning(false);
 

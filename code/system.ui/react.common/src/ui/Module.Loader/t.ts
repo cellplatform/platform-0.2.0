@@ -1,7 +1,7 @@
 import type { t } from './common';
 export type * from './t.factory';
 
-type B = boolean;
+type O = Record<string, unknown>;
 export type ModuleLoaderTheme = 'Light' | 'Dark';
 export type ModuleLoaderFace = 'Front' | 'Back';
 
@@ -25,23 +25,9 @@ export type ModuleLoaderProps = {
  */
 export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'back' | 'spinning'> & {
   name?: string; // NB: passed to the factory.
-  factory?: ModuleLoaderFactory<any> | null;
+  ctx?: O;
+  factory?: t.ModuleLoaderFactory<any> | null;
 };
-
-/**
- * Factory
- */
-export type ModuleLoaderFactory<N extends string = string> = (
-  e: ModuleLoaderFactoryArgs<N>,
-) => ModuleLoaderFactoryResponse;
-export type ModuleLoaderFactoryArgs<N extends string = string> = {
-  readonly name: N;
-  readonly theme: ModuleLoaderTheme;
-  readonly face: ModuleLoaderFace;
-  readonly is: ModuleLoaderFactoryFlags;
-};
-export type ModuleLoaderFactoryFlags = { front: B; back: B; light: B; dark: B };
-export type ModuleLoaderFactoryResponse = Promise<t.RenderOutput>;
 
 /**
  * Spinner configuation

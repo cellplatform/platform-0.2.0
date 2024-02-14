@@ -1,20 +1,23 @@
 import { Time, type t } from './common';
 
-export type N = 'foo.instant' | 'foo.delayed';
+export type TName = 'foo.instant' | 'foo.delayed';
+export type TCtx = { count?: number };
 
 /**
  * Sample renderer factory.
  */
-export const factory: t.ModuleLoaderFactory<N> = async (e) => {
+export const factory: t.ModuleLoaderFactory<TName, TCtx> = async (e) => {
   if (e.name === 'foo.instant') {
     const { Sample } = await import('./-SPEC.Components');
-    return <Sample {...e} text={`Sample - ${e.face}`} />;
+    const text = `Sample - ${e.face}`;
+    return <Sample {...e} count={e.ctx.count} text={text} />;
   }
 
   if (e.name === 'foo.delayed') {
-    const { Sample } = await import('./-SPEC.Components');
     await Time.wait(1000);
-    return <Sample {...e} text={`Sample (Loaded Async) - ${e.face}`} />;
+    const { Sample } = await import('./-SPEC.Components');
+    const text = `Sample (Loaded Async) - ${e.face}`;
+    return <Sample {...e} count={e.ctx.count} text={text} />;
   }
 
   return null;
