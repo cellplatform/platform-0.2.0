@@ -46,7 +46,12 @@ export type HarnessShared = {
 /**
  * Dynamic Loader (factory)
  */
-export type SampleName = 'CodeEditor' | 'DiagramEditor' | 'Auth' | 'ModuleNamespace';
+export type SampleName =
+  | 'Auth'
+  | 'CodeEditor'
+  | 'CodeEditor.AI'
+  | 'DiagramEditor'
+  | 'ModuleNamespace';
 export type SampleFactoryCtx = { docuri: string; store: t.Store };
 
 export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };

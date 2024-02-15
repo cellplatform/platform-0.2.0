@@ -278,6 +278,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'main');
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
+      loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
       loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
 
       dev.hr(-1, 5);

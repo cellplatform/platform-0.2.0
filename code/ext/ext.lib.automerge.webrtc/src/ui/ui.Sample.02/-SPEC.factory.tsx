@@ -16,6 +16,11 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
     return <CodeEditorLoader store={store} docuri={docuri} />;
   }
 
+  if (e.name === 'CodeEditor.AI') {
+    const { CodeEditorAI } = await import('./-loaders/CodeEditor.AI');
+    return <CodeEditorAI store={store} docuri={docuri} />;
+  }
+
   if (e.name === 'DiagramEditor') {
     // @ts-ignore
     await import('@tldraw/tldraw/tldraw.css');
