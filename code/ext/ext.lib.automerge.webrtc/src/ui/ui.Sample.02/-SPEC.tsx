@@ -86,14 +86,18 @@ export default Dev.describe(name, async (e) => {
             const { name: typename, docuri } = m.module;
             const store = left.network.store;
             const el = loader.ctx({ store, docuri }).render(typename);
-            if (el) dev.header.border(-0.1).render(el);
+            dev.header.border(-0.1).render(el);
           }
 
           dev.redraw();
         });
 
+      sharedMain
+        .events()
+        .changed$.pipe(rx.debounceTime(100))
+        .subscribe((e) => dev.redraw('subject'));
+
       monitorKeyboard(sharedHarness);
-      dev.redraw();
     });
 
     ctx.debug.width(300);
@@ -109,9 +113,9 @@ export default Dev.describe(name, async (e) => {
           const store = left.network.store;
 
           let elOverlay: JSX.Element | undefined;
-          const m = sharedMain?.current.module;
-          if (m && m.target === 'main') {
-            const { docuri, name: typename } = m;
+          const mod = sharedMain?.current.module;
+          if (mod && mod.target === 'main') {
+            const { docuri, name: typename } = mod;
             const style = { backgroundColor: COLORS.WHITE };
             elOverlay = loader.ctx({ store, docuri }).render(typename, { style });
           }
@@ -143,7 +147,6 @@ export default Dev.describe(name, async (e) => {
           btn
             .label(() => `connect: ${label}`)
             .right((e) => (!isConnected() ? '🌳' : ''))
-            // .enabled((e) => !isConnected())
             .onClick((e) => fn());
         });
       };
@@ -203,7 +206,6 @@ export default Dev.describe(name, async (e) => {
                       ? fields.filter((f) => f !== 'Network.Shared.Json')
                       : [...fields, 'Network.Shared.Json'];
                   });
-                  dev.redraw('debug');
                 },
               },
             }}
@@ -219,7 +221,7 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
+      dev.button('redraw', () => dev.redraw());
       dev.hr(-1, 5);
 
       const getShared = async () => {
