@@ -53,6 +53,7 @@ export const Handle: React.FC<HandleProps> = (props) => {
       opacity: isTransmitting ? 0.65 : 0.3,
       color: COLOR,
       transition: `border-color ${SECS}s, opacity ${SECS}s`,
+      cursor: 'default',
     }),
     spinner: css({
       Absolute: 0 - CIRCLE_BORDER * 3,
