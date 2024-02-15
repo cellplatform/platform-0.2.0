@@ -22,9 +22,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
       text={props.text}
       language={'markdown'}
       onReady={(e) => {}}
-      onChange={(e) => {
-        props.onChange?.({ text: e.text });
-      }}
+      onChange={(e) => props.onChange?.({ text: e.text })}
     />
   );
 
