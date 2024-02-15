@@ -28,7 +28,10 @@ export const Message: React.FC<MessageProps> = (props) => {
       marginBottom: 10,
       fontSize: 14,
     }),
-    content: css({ fontSize: 14, lineHeight: 1.3 }),
+    content: css({
+      fontSize: 14,
+      lineHeight: 1.3,
+    }),
   };
 
   return (
