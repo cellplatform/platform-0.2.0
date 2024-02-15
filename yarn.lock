@@ -2882,10 +2882,10 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@20.11.17":
-  version "20.11.17"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.17.tgz#cdd642d0e62ef3a861f88ddbc2b61e32578a9292"
-  integrity sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==
+"@types/node@20.11.19":
+  version "20.11.19"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.19.tgz#b466de054e9cb5b3831bee38938de64ac7f81195"
+  integrity sha512-7xMnVEcZFu0DikYjWOlRq7NTPETrm7teqUT2WkQjrTIkEgUyyGdWsj/Zg8bEJt5TNklzbPD1X3fqfsHw3SpapQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -8222,6 +8222,15 @@ prosemirror-view@1.32.7, prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prose
     prosemirror-state "^1.0.0"
     prosemirror-transform "^1.1.0"
 
+prosemirror-view@1.33.0:
+  version "1.33.0"
+  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.33.0.tgz#c0989fadfa3f3e69093a1a54f579f773aa41b884"
+  integrity sha512-Ax0Mx3p5EcWYoCzCB+ZdvYenrm5aTzVgkebQr09Kn5ZO5wmugcZNZx3sCmMK1aHS+h8oS1IlTxIXCGF53JSBRw==
+  dependencies:
+    prosemirror-model "^1.16.0"
+    prosemirror-state "^1.0.0"
+    prosemirror-transform "^1.1.0"
+
 proxy-compare@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.5.1.tgz#17818e33d1653fbac8c2ec31406bce8a2966f600"
@@ -9350,10 +9359,10 @@ svelte-preprocess@5.1.3, svelte-preprocess@^5.1.0:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-svelte@4.2.10:
-  version "4.2.10"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.10.tgz#3bef8d79ca75eb53cc4d03f9fac1546e60393f77"
-  integrity sha512-Ep06yCaCdgG1Mafb/Rx8sJ1QS3RW2I2BxGp2Ui9LBHSZ2/tO/aGLc5WqPjgiAP6KAnLJGaIr/zzwQlOo1b8MxA==
+svelte@4.2.11:
+  version "4.2.11"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.11.tgz#b1a57a41d01686b4f7230611f89a5c25b23a1745"
+  integrity sha512-YIQk3J4X89wOLhjsqIW8tqY3JHPuBdtdOIkASP2PZeAMcSW9RsIjQzMesCrxOF3gdWYC0mKknlKF7OqmLM+Zqg==
   dependencies:
     "@ampproject/remapping" "^2.2.1"
     "@jridgewell/sourcemap-codec" "^1.4.15"
@@ -9930,10 +9939,10 @@ vite-plugin-wasm@3.3.0:
   resolved "https://registry.yarnpkg.com/vite-plugin-wasm/-/vite-plugin-wasm-3.3.0.tgz#2908ef2529bf8f33f4e549c8c6fda26ad273ca15"
   integrity sha512-tVhz6w+W9MVsOCHzxo6SSMSswCeIw4HTrXEi6qL3IRzATl83jl09JVO1djBqPSwfjgnpVHNLYcaMbaDX5WB/pg==
 
-vite@5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-5.1.2.tgz#34e04d38db27ceebe6f0c9d053ea14d6496753d1"
-  integrity sha512-uwiFebQbTWRIGbCaTEBVAfKqgqKNKMJ2uPXsXeLIZxM8MVMjoS3j0cG8NrPxdDIadaWnPSjrkLWffLSC+uiP3Q==
+vite@5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-5.1.3.tgz#dd072653a80225702265550a4700561740dfde55"
+  integrity sha512-UfmUD36DKkqhi/F75RrxvPpry+9+tTkrXfMNZD+SboZqBCMsxKtO52XeGzzuh7ioz+Eo/SYDBbdb0Z7vgcDJew==
   dependencies:
     esbuild "^0.19.3"
     postcss "^8.4.35"
