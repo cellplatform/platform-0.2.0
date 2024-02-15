@@ -1,10 +1,14 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
 import { css, type t } from './common';
 
+export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
+export type EditorEventHandlerArgs = { text: string };
+
 export type SampleProps = {
   text?: string;
   style?: t.CssValue;
-  onChange?: (e: { text: string }) => void;
+  onChange?: EditorEventHandler;
+  onCmdEnterKey?: EditorEventHandler;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
@@ -21,7 +25,11 @@ export const Sample: React.FC<SampleProps> = (props) => {
       focusOnLoad={true}
       text={props.text}
       language={'markdown'}
-      onReady={(e) => {}}
+      onReady={(e) => {
+        const { editor, monaco } = e;
+        const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
+        editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
+      }}
       onChange={(e) => props.onChange?.({ text: e.text })}
     />
   );

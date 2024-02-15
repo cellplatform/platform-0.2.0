@@ -1,7 +1,7 @@
 import { Dev, Pkg } from '../../test.ui';
-import { Sample, type SampleProps } from './ui';
-import { type t } from './common';
+import { Icons, type t } from './common';
 import { Http } from './http';
+import { Sample, type SampleProps } from './ui';
 import { Message } from './ui.Message';
 
 type T = {
@@ -14,7 +14,7 @@ const initial: T = { props: {} };
 /**
  * Spec
  */
-const name = 'Sample.AI';
+const name = 'sample.api.openai';
 
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<SampleProps, 'text'> & Pick<T, 'completion'>;
@@ -23,6 +23,22 @@ export default Dev.describe(name, (e) => {
     text: 'say hello',
     completion: undefined,
   });
+
+  const sendPrompt = async (state: t.DevCtxState<T>) => {
+    const current = state.current;
+    const text = (current.props.text ?? '').trim();
+    const isRunning = !!current.running;
+    if (isRunning || !text) return;
+    await state.change((d) => (d.running = true));
+
+    // API call.
+    const res = await Http.getCompletion(text);
+
+    await state.change((d) => {
+      d.completion = local.completion = res;
+      d.running = false;
+    });
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -43,9 +59,14 @@ export default Dev.describe(name, (e) => {
         return (
           <Sample
             {...e.state.props}
-            onChange={(e) => {
-              state.change((d) => (d.props.text = e.text));
+            onChange={async (e) => {
               local.text = e.text;
+              await state.change((d) => (d.props.text = e.text));
+              dev.redraw('debug');
+            }}
+            onCmdEnterKey={(e) => {
+              console.info('⚡️ onCmdEnterKey', e);
+              sendPrompt(state);
             }}
           />
         );
@@ -59,25 +80,21 @@ export default Dev.describe(name, (e) => {
     dev.section('', (dev) => {
       dev.button((btn) => {
         const isRunning = () => !!state.current.running;
-        const isEnabled = () => !isRunning();
+        const isEnabled = () => {
+          const current = state.current;
+          const text = current.props.text ?? '';
+          return !isRunning() && text.length > 0;
+        };
         btn
-          .label(`chat completion`)
+          .label(() => (isRunning() ? `sending` : `send prompt`))
+          .right(() => <Icons.Send size={16} />)
           .spinner(() => isRunning())
           .enabled(isEnabled)
-          .onClick(async (e) => {
-            if (isRunning()) return;
-            await e.state.change((d) => (d.running = true));
-            const text = e.state.current.props.text ?? '';
-            const res = await Http.getCompletion(text);
-            await e.change((d) => {
-              d.completion = local.completion = res;
-              d.running = false;
-            });
-          });
+          .onClick((e) => sendPrompt(e.state));
       });
 
       dev.hr(-1, 5);
-      dev.button('clear', (e) => e.change((d) => (d.completion = undefined)));
+      dev.button('(reset)', (e) => e.change((d) => (d.completion = undefined)));
     });
 
     dev.hr(5, 20);
@@ -99,7 +116,8 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { props, completion } = e.state;
+      const data = { props, completion };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
