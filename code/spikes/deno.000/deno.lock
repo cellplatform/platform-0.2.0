@@ -3,7 +3,8 @@
   "packages": {
     "specifiers": {
       "npm:hono": "npm:hono@4.0.2",
-      "npm:openai": "npm:openai@4.24.7"
+      "npm:openai": "npm:openai@4.24.7",
+      "npm:ramda": "npm:ramda@0.29.1"
     },
     "npm": {
       "@types/node-fetch@2.6.11": {
@@ -150,6 +151,10 @@
           "node-fetch": "node-fetch@2.7.0",
           "web-streams-polyfill": "web-streams-polyfill@3.3.2"
         }
+      },
+      "ramda@0.29.1": {
+        "integrity": "sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==",
+        "dependencies": {}
       },
       "tr46@0.0.3": {
         "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
