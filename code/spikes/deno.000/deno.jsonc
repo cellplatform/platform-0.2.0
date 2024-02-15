@@ -1,2 +1,14 @@
-// https://docs.deno.com/runtime/manual/getting_started/configuration_file
-{}
+{
+  "tasks": {
+    "start": "deno --watch --allow-net --allow-env src/main.ts",
+    "dev": "deno run --watch --allow-net --allow-env src/main.ts"
+  },
+  "deploy": {
+    "project": "8bb6c1a5-f085-4d05-b1b8-0b148395e1de",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "src/main.ts"
+  }
+}
