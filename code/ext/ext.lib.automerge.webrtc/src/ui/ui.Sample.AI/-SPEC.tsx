@@ -1,5 +1,5 @@
 import { Dev, Pkg } from '../../test.ui';
-import { Icons, type t } from './common';
+import { DEFAULTS, Icons, type t } from './common';
 import { Http } from './http';
 import { Sample, type SampleProps } from './ui';
 import { Message } from './ui.Message';
@@ -7,6 +7,7 @@ import { Message } from './ui.Message';
 type T = {
   props: SampleProps;
   completion?: t.Completion;
+  model?: t.ModelName;
   running?: boolean;
 };
 const initial: T = { props: {} };
@@ -17,14 +18,16 @@ const initial: T = { props: {} };
 const name = 'sample.api.openai';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<SampleProps, 'text'> & Pick<T, 'completion'>;
+  type LocalStore = Pick<SampleProps, 'text'> & Pick<T, 'completion' | 'model'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     text: 'say hello',
     completion: undefined,
+    model: DEFAULTS.model.default,
   });
 
   const sendPrompt = async (state: t.DevCtxState<T>) => {
+    // BEFORE send.
     const current = state.current;
     const text = (current.props.text ?? '').trim();
     const isRunning = !!current.running;
@@ -34,6 +37,7 @@ export default Dev.describe(name, (e) => {
     // API call.
     const res = await Http.getCompletion(text);
 
+    // AFTER send.
     await state.change((d) => {
       d.completion = local.completion = res;
       d.running = false;
@@ -48,6 +52,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.text = local.text;
       d.completion = local.completion;
+      d.model = local.model;
     });
 
     ctx.debug.width(330);
@@ -92,6 +97,17 @@ export default Dev.describe(name, (e) => {
           .enabled(isEnabled)
           .onClick((e) => sendPrompt(e.state));
       });
+      dev.hr(-1, 5);
+
+      const modelButton = (model: t.ModelName) => {
+        dev.button((btn) => {
+          btn
+            .label(`model: ${model}`)
+            .right((e) => (e.state.model === model ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.model = d.model = model)));
+        });
+      };
+      DEFAULTS.model.all.forEach(modelButton);
 
       dev.hr(-1, 5);
       dev.button('(reset)', (e) => e.change((d) => (d.completion = undefined)));
