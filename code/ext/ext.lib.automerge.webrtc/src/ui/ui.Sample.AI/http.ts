@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t, DEFAULTS } from './common';
 
 const urls = {
   local: `http://localhost:8000/ai`,
@@ -14,9 +14,12 @@ export const Http = {
     return url;
   },
 
-  async getCompletion(text: string) {
+  async fetchCompletion(text: string, model?: t.ModelName) {
     const url = location.hostname === 'localhost' ? urls.local : urls.prod;
-    const body: t.MessagePayload = { messages: [{ role: 'user', content: text }] };
+    const body: t.MessagePayload = {
+      model: model ?? DEFAULTS.model.default,
+      messages: [{ role: 'user', content: text }],
+    };
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

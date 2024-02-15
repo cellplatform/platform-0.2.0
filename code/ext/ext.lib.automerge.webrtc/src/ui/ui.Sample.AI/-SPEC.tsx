@@ -35,7 +35,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => (d.running = true));
 
     // API call.
-    const res = await Http.getCompletion(text);
+    const res = await Http.fetchCompletion(text);
 
     // AFTER send.
     await state.change((d) => {
