@@ -38,11 +38,8 @@ app.post('/ai', async (c) => {
   }
 
   const messages = body.messages as any;
-  const completion = await openai.chat.completions.create({
-    messages,
-    model: 'gpt-3.5-turbo',
-  });
-
+  const model = 'gpt-3.5-turbo';
+  const completion = await openai.chat.completions.create({ model, messages });
   return c.json({ completion });
 });
 
