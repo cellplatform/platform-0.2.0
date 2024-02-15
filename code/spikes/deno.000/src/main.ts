@@ -1,10 +1,10 @@
 // deno-lint-ignore-file no-explicit-any
-import { Hono, Is, OpenAI, cors } from './common.ts';
+import { DEFAULTS, Hono, Is, OpenAI, cors, type t } from './u.ts';
 
-const app = new Hono();
 const apiKey = Deno.env.get('OPENAI_API_KEY');
 const openai = new OpenAI({ apiKey });
 
+const app = new Hono();
 app.use(
   '*',
   cors({
@@ -15,21 +15,25 @@ app.use(
   }),
 );
 
+/**
+ * Home
+ */
 app.get('/', (c) => {
-  const tmp = '';
-  const text = `Hello 🤖:AI relay! ← (🦄 teamdb) ${tmp}`.trim();
-  return c.text(text);
+  const about = `openai relay ← (🦄 teamdb)`;
+  return c.text(about);
 });
 
+/**
+ * AI
+ */
 app.get('/ai', async (c) => {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: 'Say this is a test' }],
-    model: 'gpt-3.5-turbo',
+  const res = await openai.models.list();
+  const models = res.data.map((m) => {
+    const { id, created, owned_by: ownedBy } = m;
+    return { id, created, ownedBy } as t.ModelListItem;
   });
-
-  return c.json(chatCompletion);
+  return c.json({ models });
 });
-
 app.post('/ai', async (c) => {
   const body = await c.req.json();
 
@@ -38,7 +42,7 @@ app.post('/ai', async (c) => {
   }
 
   const messages = body.messages as any;
-  const model = 'gpt-3.5-turbo';
+  const model = body.model ?? DEFAULTS.model;
   const completion = await openai.chat.completions.create({ model, messages });
   return c.json({ completion });
 });

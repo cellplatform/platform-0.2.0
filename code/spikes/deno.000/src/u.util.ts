@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import type * as t from './types.ts';
+import type * as t from './t.ts';
 
 export const Is = {
   messagePayload(input: any): input is t.MessagePayload {
