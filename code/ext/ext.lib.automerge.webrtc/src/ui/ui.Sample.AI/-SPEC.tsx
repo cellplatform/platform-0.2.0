@@ -133,7 +133,8 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { props, completion } = e.state;
-      const data = { props, completion };
+      const endpoint = Http.url();
+      const data = { endpoint, props, completion };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
