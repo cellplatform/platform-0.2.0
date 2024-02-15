@@ -4,13 +4,5 @@ import { useLoader } from './ui.Stateful.useLoader';
 
 export const Stateful: React.FC<t.ModuleLoaderStatefulProps> = (props) => {
   const loader = useLoader(props);
-  return (
-    <View
-      //
-      {...props}
-      front={loader.front}
-      back={loader.back}
-      spinning={loader.spinning}
-    />
-  );
+  return <View {...props} element={loader.element} spinning={loader.spinning} />;
 };

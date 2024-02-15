@@ -19,12 +19,11 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = `${DEFAULTS.displayName}.Stateful`;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<t.ModuleLoaderStatefulProps, 'flipped' | 'theme'>;
+  type LocalStore = T['debug'] & Pick<t.ModuleLoaderStatefulProps, 'theme'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: DEFAULTS.theme,
-    flipped: DEFAULTS.flipped,
     debugBg: true,
     debugFill: true,
     debugClearErrorButton: true,
@@ -37,7 +36,6 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.flipped = local.flipped;
       d.props.theme = local.theme;
       d.props.spinner = { bodyOpacity: 0.3, bodyBlur: 5 };
       d.props.factory = factory;
@@ -94,16 +92,6 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.flipped);
-        btn
-          .label((e) => `flipped`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
-      });
-
-      dev.hr(-1, 5);
-
       const buttonTheme = (theme: t.ModuleLoaderTheme) => {
         dev.button((btn) => {
           const value = (state: T) => state.props.theme;

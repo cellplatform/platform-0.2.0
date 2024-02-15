@@ -35,15 +35,13 @@ export default Test.describe('Module.Loader', (e) => {
         name: 'foo',
         ctx: {},
         theme: 'Light',
-        face: 'Front',
-        is: { front: false, back: true, light: true, dark: false },
+        is: { light: true, dark: false },
       };
       const args2: t.ModuleFactoryArgs<TName, TCtx> = {
         name: 'bar',
         ctx: { count: 123 },
         theme: 'Dark',
-        face: 'Back',
-        is: { front: false, back: true, light: true, dark: false },
+        is: { light: true, dark: false },
       };
 
       const res1 = await factory.load(args1);
@@ -72,9 +70,9 @@ export default Test.describe('Module.Loader', (e) => {
       const { fn, assertModuleLoader } = testFactory();
       const factory = ModuleLoader.factory(fn);
       const ctx = { count: 123 };
-      const res = factory.render('foo', ctx, { flipped: true });
+      const res = factory.render('foo', ctx, { theme: 'Dark' });
       assertModuleLoader(res, 'foo', ctx);
-      expect(res.props.flipped).to.eql(true);
+      expect(res.props.theme).to.eql('Dark');
     });
 
     e.it('factory.ctx( ) ← curry the context', (e) => {
@@ -83,9 +81,9 @@ export default Test.describe('Module.Loader', (e) => {
       const factory = ModuleLoader.factory(fn).ctx(ctx);
       expect(factory.ctx).to.equal(ctx);
 
-      const res = factory.render('foo', { flipped: true });
+      const res = factory.render('foo', { theme: 'Dark' });
       assertModuleLoader(res, 'foo', ctx);
-      expect(res.props.flipped).to.eql(true);
+      expect(res.props.theme).to.eql('Dark');
     });
   });
 });

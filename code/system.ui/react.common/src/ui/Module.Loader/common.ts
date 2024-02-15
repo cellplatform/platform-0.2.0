@@ -2,7 +2,6 @@ import { type t } from './common';
 export * from '../common';
 
 export { Button } from '../Button';
-export { Flip } from '../Flip';
 export { Spinner } from '../Spinner';
 
 /**
@@ -16,5 +15,4 @@ export const DEFAULTS = {
   theme,
   spinner,
   spinning: false,
-  flipped: false,
 } as const;

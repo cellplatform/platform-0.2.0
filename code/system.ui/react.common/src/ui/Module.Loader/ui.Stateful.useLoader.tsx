@@ -9,8 +9,7 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
   const factoryRef = useRef(props.factory);
   const ctxRef = useRef(props.ctx);
 
-  const [front, setFront] = useState<t.RenderOutput>(null);
-  const [back, setBack] = useState<t.RenderOutput>(null);
+  const [element, setElement] = useState<t.RenderOutput>(null);
   const [spinning, setSpinning] = useState(false);
 
   useEffect(() => {
@@ -23,26 +22,23 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
     const life = rx.lifecycle();
     const factory = factoryRef.current;
 
-    const load = async (face: t.ModuleLoaderFace, done: (el: t.RenderOutput) => void) => {
-      if (!factory) return done(null);
+    const load = async () => {
+      if (!factory) return setElement(null);
 
       setSpinning(true);
       const is: t.ModuleFactoryFlags = {
-        front: face === 'Front',
-        back: face === 'Back',
         dark: theme === 'Dark',
         light: theme === 'Light',
       };
       const ctx = ctxRef.current ?? {};
-      const res = await factory({ name, ctx, theme, face, is });
+      const res = await factory({ name, ctx, theme, is });
       if (life.disposed) return;
       setSpinning(false);
 
-      done(res);
+      setElement(res);
     };
 
-    load('Front', setFront);
-    load('Back', setBack);
+    load();
     return life.dispose;
   }, [name, theme]);
 
@@ -50,8 +46,8 @@ export function useLoader(props: t.ModuleLoaderStatefulProps) {
    * API
    */
   return {
-    front: front ? { element: front } : undefined,
-    back: back ? { element: back } : undefined,
+    // front: element ? { element: element } : undefined,
+    element,
     spinning,
   } as const;
 }

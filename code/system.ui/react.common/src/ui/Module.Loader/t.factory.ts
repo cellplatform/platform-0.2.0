@@ -14,13 +14,10 @@ export type ModuleFactoryArgs<TName extends string = string, Ctx extends O = O> 
   readonly name: TName;
   readonly ctx: Ctx;
   readonly theme: t.ModuleLoaderTheme;
-  readonly face: t.ModuleLoaderFace;
   readonly is: ModuleFactoryFlags;
 };
 
 export type ModuleFactoryFlags = {
-  readonly front: boolean;
-  readonly back: boolean;
   readonly light: boolean;
   readonly dark: boolean;
 };

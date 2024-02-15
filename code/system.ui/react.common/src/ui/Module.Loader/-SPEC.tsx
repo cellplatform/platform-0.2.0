@@ -14,11 +14,10 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<t.ModuleLoaderProps, 'flipped' | 'spinning' | 'theme'>;
+  type LocalStore = T['debug'] & Pick<t.ModuleLoaderProps, 'spinning' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: DEFAULTS.theme,
-    flipped: DEFAULTS.flipped,
     spinning: DEFAULTS.spinning,
     debugBg: true,
     debugFill: true,
@@ -31,7 +30,6 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.flipped = local.flipped;
       d.props.theme = local.theme;
       d.props.spinning = local.spinning;
 
@@ -41,9 +39,7 @@ export default Dev.describe(name, (e) => {
     });
 
     await state.change((d) => {
-      const sample = (text: string) => <Sample text={text} theme={d.props.theme!} />;
-      d.props.front = { element: sample('Front 👋') };
-      d.props.back = { element: sample('Back 👋') };
+      d.props.element = <Sample text={'Element 👋'} theme={d.props.theme!} />;
     });
 
     ctx.debug.width(330);
@@ -73,7 +69,6 @@ export default Dev.describe(name, (e) => {
     const reset = () => {
       dev.change((d) => {
         const p = d.props;
-        local.flipped = p.flipped = DEFAULTS.flipped;
         local.theme = p.theme = DEFAULTS.theme;
         local.spinning = p.spinning = false;
         p.spinner = undefined;
@@ -92,14 +87,6 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.flipped);
-        btn
-          .label((e) => `flipped`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
-      });
-
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.spinning);
         btn

@@ -1,9 +1,8 @@
-import { COLORS, DEFAULTS, Flip, css, type t } from './common';
+import { COLORS, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 import { Body } from './ui.Body';
 
 export const View: React.FC<t.ModuleLoaderProps> = (props) => {
-  const { front, back, flipped = DEFAULTS.flipped } = props;
   const is = Wrangle.is(props);
 
   /**
@@ -17,26 +16,15 @@ export const View: React.FC<t.ModuleLoaderProps> = (props) => {
     }),
   };
 
-  const face = (el?: t.RenderOutput) => {
-    return (
+  return (
+    <div {...css(styles.base, props.style)}>
       <Body
         spinning={is.spinning}
         spinner={props.spinner}
         theme={props.theme}
-        element={el}
+        element={props.element}
         onError={props.onError}
         onErrorCleared={props.onErrorCleared}
-      />
-    );
-  };
-
-  return (
-    <div {...css(styles.base, props.style)}>
-      <Flip
-        //
-        flipped={flipped}
-        front={face(front?.element)}
-        back={face(back?.element)}
       />
     </div>
   );

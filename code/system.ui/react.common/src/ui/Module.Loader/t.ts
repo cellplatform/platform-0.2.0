@@ -3,18 +3,15 @@ export type * from './t.factory';
 
 type O = Record<string, unknown>;
 export type ModuleLoaderTheme = 'Light' | 'Dark';
-export type ModuleLoaderFace = 'Front' | 'Back';
 
 /**
  * <Component>
  */
 export type ModuleLoaderProps = {
-  flipped?: boolean;
   spinning?: boolean;
   spinner?: ModuleLoaderSpinner | null;
   theme?: ModuleLoaderTheme;
-  front?: { element: t.RenderOutput };
-  back?: { element: t.RenderOutput };
+  element?: t.RenderOutput;
   style?: t.CssValue;
   onError?: ModuleLoaderErrorHandler;
   onErrorCleared?: ModuleLoaderErrorClearedHandler;
