@@ -1,5 +1,3 @@
-export type DevTheme = 'Light' | 'Dark';
-
 export type DevMarginInput =
   | number
   | [number]

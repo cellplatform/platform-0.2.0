@@ -87,7 +87,6 @@ export type {
   DevRenderProps,
   DevRenderRef,
   DevRenderer,
-  DevTheme,
   DevValueHandler,
   ModuleListBadge,
   ModuleListItemHandler,
