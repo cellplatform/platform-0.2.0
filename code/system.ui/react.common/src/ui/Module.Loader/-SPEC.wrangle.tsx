@@ -1,3 +1,4 @@
+import { Dev } from '../../test.ui';
 import { COLORS, Color, Icons, Pkg, type t } from './common';
 
 type T = {
@@ -34,21 +35,5 @@ export const WrangleSpec = {
     const height = options.height === null ? null : options.height ?? 200;
     if (debug.debugFill) ctx.subject.size('fill', 80);
     else ctx.subject.size([width, height]);
-  },
-
-  link(dev: t.DevTools<T>, label: string, namespace: string) {
-    const elRight = <Icons.NewTab size={16} />;
-
-    dev.button((btn) => {
-      btn
-        .label(label)
-        .right((e) => elRight)
-        .onClick((e) => {
-          const url = new URL(location.href);
-          namespace = `${Pkg.name}.${namespace}`;
-          url.searchParams.set('dev', namespace);
-          window.open(url.href, '_blank', 'noopener,noreferrer');
-        });
-    });
   },
 } as const;

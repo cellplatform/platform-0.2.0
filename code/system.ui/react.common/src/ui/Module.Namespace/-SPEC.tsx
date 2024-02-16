@@ -61,14 +61,14 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const link = Dev.link.pkg(Pkg, dev);
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      const link = WrangleSpec.link;
-      link(dev, 'see: ModuleLoader', 'Module.Loader');
-      link(dev, 'see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link.ns('see: ModuleLoader', 'Module.Loader');
+      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
       dev.hr(-1, 5);
-      link(dev, 'see: ModuleNamespace.List', 'Module.Namespace.List');
+      link.ns('see: ModuleNamespace.List', 'Module.Namespace.List');
     });
     dev.hr(5, 20);
 

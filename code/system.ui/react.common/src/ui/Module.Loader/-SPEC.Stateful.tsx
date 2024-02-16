@@ -82,11 +82,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      const link = WrangleSpec.link;
-      link(dev, 'see: ModuleLoader (stateless)', 'Module.Loader');
-      link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
+      const link = Dev.link.pkg(Pkg, dev);
+      link.ns('see: ModuleLoader (stateless)', 'Module.Loader');
+      link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
       dev.hr(-1, 5);
-      link(dev, 'see: unit tests', 'tests');
+      link.ns('see: unit tests', 'tests');
     });
 
     dev.hr(5, 20);
@@ -120,7 +120,7 @@ export default Dev.describe(name, (e) => {
       };
       btn('foo.instant');
       dev.hr(-1, 5);
-      btn('foo.delayed');
+      btn('foo.delayed', '(1.5s wait)');
       btn('foo.delayed', '(no spinner)', (d) => (d.props.spinner = null));
       dev.hr(-1, 5);
       dev.button('unload', (e) => e.change((d) => (d.props.name = undefined)));
@@ -163,10 +163,10 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.debugClearErrorButton);
+        const show = (state: T) => !state.debug.debugClearErrorButton;
         btn
-          .label((e) => (value(e.state) ? `error: show close button` : `error: no close button`))
-          .value((e) => value(e.state))
+          .label((e) => (show(e.state) ? `error: show close button` : `error: no close button`))
+          .value((e) => show(e.state))
           .onClick((e) => {
             e.change((d) => {
               local.debugClearErrorButton = Dev.toggle(d.debug, 'debugClearErrorButton');

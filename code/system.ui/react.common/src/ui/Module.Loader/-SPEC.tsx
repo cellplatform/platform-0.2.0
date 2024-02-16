@@ -76,9 +76,9 @@ export default Dev.describe(name, (e) => {
     };
 
     dev.section('', (dev) => {
-      const link = WrangleSpec.link;
-      link(dev, 'see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
-      link(dev, 'see: ModuleLoader.Namespace', 'Module.Namespace');
+      const link = Dev.link.pkg(Pkg, dev);
+      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
 
       dev.hr(-1, 5);
       dev.button('reset', reset);

@@ -43,11 +43,11 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const link = Dev.link.pkg(Pkg, dev);
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      const link = WrangleSpec.link;
-      link(dev, 'see: ModuleNamespace', 'Module.Namespace');
+      link.ns('see: ModuleNamespace', 'Module.Namespace');
     });
     dev.hr(5, 20);
 

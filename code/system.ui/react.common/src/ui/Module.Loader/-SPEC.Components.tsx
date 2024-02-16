@@ -39,6 +39,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
   console.info(`💦 render: <Sample>`);
   let text = props.text ?? 'Sample';
   if (typeof props.count === 'number') text = `${text} ← (ctx: ${props.count})`;
+  text = `${text} 👋`;
 
   const [error, setError] = useState(false);
 
