@@ -6,11 +6,11 @@ import { Message } from './ui.Message';
 
 type T = {
   props: SampleProps;
-  completion?: t.Completion;
   model?: t.ModelName;
-  running?: boolean;
+  completion?: t.Completion;
+  debug: { running?: boolean; forcePublicUrl?: boolean };
 };
-const initial: T = { props: {} };
+const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec
@@ -18,29 +18,31 @@ const initial: T = { props: {} };
 const name = 'sample.api.openai';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<SampleProps, 'text'> & Pick<T, 'completion' | 'model'>;
+  type LocalStore = Pick<SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     text: 'say hello',
     completion: undefined,
     model: DEFAULTS.model.default,
+    forcePublicUrl: false,
   });
 
   const sendPrompt = async (state: t.DevCtxState<T>) => {
     // BEFORE send.
     const current = state.current;
+    const forcePublicUrl = current.debug.forcePublicUrl ?? false;
     const text = (current.props.text ?? '').trim();
-    const isRunning = !!current.running;
+    const isRunning = !!current.debug.running;
     if (isRunning || !text) return;
-    await state.change((d) => (d.running = true));
+    await state.change((d) => (d.debug.running = true));
 
     // API call.
-    const res = await Http.fetchCompletion(text);
+    const res = await Http.fetchCompletion(text, { forcePublicUrl });
 
     // AFTER send.
     await state.change((d) => {
       d.completion = local.completion = res;
-      d.running = false;
+      d.debug.running = false;
     });
   };
 
@@ -53,6 +55,7 @@ export default Dev.describe(name, (e) => {
       d.props.text = local.text;
       d.completion = local.completion;
       d.model = local.model;
+      d.debug.forcePublicUrl = local.forcePublicUrl;
     });
 
     ctx.debug.width(330);
@@ -81,10 +84,13 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const link = Dev.link.pkg(Pkg, dev);
+
+    link.ns('see: docs (openai api)', 'https://platform.openai.com/docs').hr(5, 20);
 
     dev.section('', (dev) => {
       dev.button((btn) => {
-        const isRunning = () => !!state.current.running;
+        const isRunning = () => !!state.current.debug.running;
         const isEnabled = () => {
           const current = state.current;
           const text = current.props.text ?? '';
@@ -103,7 +109,7 @@ export default Dev.describe(name, (e) => {
         dev.button((btn) => {
           btn
             .label(`model: ${model}`)
-            .right((e) => (e.state.model === model ? '←' : ''))
+            .right((e) => (e.state.model === model ? <Icons.Check size={16} /> : ''))
             .onClick((e) => e.change((d) => (local.model = d.model = model)));
         });
       };
@@ -126,14 +132,26 @@ export default Dev.describe(name, (e) => {
         </div>
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.forcePublicUrl);
+        btn
+          .label((e) => `force public url`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'forcePublicUrl')));
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props, completion } = e.state;
-      const endpoint = Http.url();
+      const { debug, props, completion } = e.state;
+      const endpoint = Http.url(debug.forcePublicUrl);
       const data = { endpoint, props, completion };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

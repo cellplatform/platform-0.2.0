@@ -1,4 +1,11 @@
-import { MdArrowUpward, MdClose, MdRefresh, MdSend, MdSettingsInputAntenna } from 'react-icons/md';
+import {
+  MdArrowUpward,
+  MdCheck,
+  MdClose,
+  MdRefresh,
+  MdSend,
+  MdSettingsInputAntenna,
+} from 'react-icons/md';
 import { TbDatabase } from 'react-icons/tb';
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -16,4 +23,5 @@ export const Icons = {
   Antenna: icon(MdSettingsInputAntenna),
   Object: icon(VscSymbolClass),
   Send: icon(MdSend),
+  Check: icon(MdCheck),
 } as const;
