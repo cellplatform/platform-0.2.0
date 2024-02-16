@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { DEFAULTS, Hono, Is, OpenAI, cors, type t } from './u.ts';
+import { serveStatic } from 'https://deno.land/x/hono/middleware.ts';
 
 const apiKey = Deno.env.get('OPENAI_API_KEY');
 const openai = new OpenAI({ apiKey });
@@ -16,10 +17,11 @@ app.use(
 );
 
 /**
- * Home
+ * Site
  */
+app.use('/static/*', serveStatic({ root: './' }));
 app.get('/', (c) => {
-  const about = `openai relay ← (🦄 teamdb)`;
+  const about = `tdb ← (🦄 team:db)`;
   return c.text(about);
 });
 
