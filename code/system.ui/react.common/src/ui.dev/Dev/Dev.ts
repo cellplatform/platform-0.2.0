@@ -4,7 +4,7 @@ import { PropList } from '../../ui/PropList';
 import { Lorem } from '../../ui.tools';
 import { ObjectView } from '../../ui/ObjectView';
 import { DevSplash as Splash } from '../Dev.Splash';
-import { DevIcons as Icons } from '../DevIcons.mjs';
+import { DevIcons as Icons } from '../Dev.Icons';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
 

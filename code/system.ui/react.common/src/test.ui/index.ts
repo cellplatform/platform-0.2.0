@@ -10,6 +10,7 @@ export { Test } from 'sys.test.spec';
  */
 export * from '../common';
 export { Dev } from '../ui.dev';
+export { DevIcons } from '../ui.dev/common';
 export { Lorem } from '../ui.tools';
 export { Icons } from '../ui/Icons.mjs';
 export { ObjectView } from '../ui/ObjectView';

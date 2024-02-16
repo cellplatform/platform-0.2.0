@@ -1,18 +1,17 @@
 /**
  * @system
  */
-export { Tree } from 'sys.test.spec';
-export { Dev as DevBase, Spec, ValueHandler, DevWrangle, DevKeyboard } from 'sys.ui.react.dev';
-export { Test } from 'sys.test.spec';
+export { Test, Tree } from 'sys.test.spec';
+export { Dev as DevBase, DevKeyboard, DevWrangle, Spec, ValueHandler } from 'sys.ui.react.dev';
 
 /**
  * @local
  */
-export { DevIcons, Icon } from '../DevIcons.mjs';
-export { ObjectView } from '../../ui/ObjectView';
 export { Button } from '../../ui/Button';
 export { Switch } from '../../ui/Button.Switch';
+export { ObjectView } from '../../ui/ObjectView';
 export { RenderCount } from '../../ui/RenderCount';
-export { TextInput } from '../../ui/Text.Input';
 export { Spinner } from '../../ui/Spinner';
+export { TextInput } from '../../ui/Text.Input';
 export { Keyboard } from '../../ui/Text.Keyboard';
+export { DevIcons, Icon } from '../Dev.Icons';

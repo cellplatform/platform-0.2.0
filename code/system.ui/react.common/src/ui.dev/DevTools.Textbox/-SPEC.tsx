@@ -1,6 +1,5 @@
 import { Textbox, TextboxProps } from '.';
-import { t, Dev } from '../../test.ui';
-import { DevIcons } from '../DevIcons.mjs';
+import { Dev, DevIcons, type t } from '../../test.ui';
 
 type StringOrNil = string | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;

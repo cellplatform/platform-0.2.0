@@ -7,6 +7,7 @@ import {
   MdDoneAll,
   MdInfoOutline,
   MdKeyboard,
+  MdLink,
   MdNotStarted,
   MdPlayArrow,
   MdPlayCircle,
@@ -17,7 +18,9 @@ import {
   MdToggleOff,
   MdToggleOn,
   MdWarning,
+  MdKeyboardTab,
 } from 'react-icons/md';
+import { RxOpenInNewWindow } from 'react-icons/rx';
 import { TbPrompt } from 'react-icons/tb';
 import { VscSymbolVariable } from 'react-icons/vsc';
 import { Icon } from '../ui/Icon';
@@ -30,6 +33,8 @@ const icon = Icon.renderer;
  * DevTools icons.
  */
 export const DevIcons = {
+  NewTab: icon(MdKeyboardTab),
+  Link: icon(MdLink),
   Info: icon(MdInfoOutline),
   Method: icon(VscSymbolVariable),
   Close: icon(MdClose),
