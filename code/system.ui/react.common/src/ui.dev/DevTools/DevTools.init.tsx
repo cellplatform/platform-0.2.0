@@ -7,7 +7,7 @@ import { textbox } from '../DevTools.Textbox';
 import { title } from '../DevTools.Title';
 import { todo } from '../DevTools.Todo';
 import { DevBase, Spec, type t } from '../common';
-import { Helpers } from './Helpers.mjs';
+import { Helpers } from './Helpers';
 
 type O = Record<string, unknown>;
 

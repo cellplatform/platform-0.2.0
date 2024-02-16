@@ -1,4 +1,5 @@
 import { t, COLORS } from '../common';
+import { link } from './Helpers.link';
 
 type O = Record<string, unknown>;
 
@@ -6,6 +7,8 @@ type O = Record<string, unknown>;
  * Simple helpers useful when workling with the [DevTools].
  */
 export const Helpers = {
+  link,
+
   /**
    * Toggle the value of a boolean {object} key.
    * WARNING:
@@ -34,4 +37,4 @@ export const Helpers = {
       ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
     }
   },
-};
+} as const;
