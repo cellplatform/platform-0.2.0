@@ -41,7 +41,7 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
   );
 
   const statusText = `Lens<TCodeEditor> → sys.crdt:${props.docuri}`;
-  const elStatusbar = <Statusbar left={'Cell'} right={statusText} />;
+  const elStatusbar = <Statusbar left={'A1: Cell'} right={statusText} />;
 
   return (
     <div {...css(styles.base, props.style)}>

@@ -112,8 +112,8 @@ export default Dev.describe(name, async (e) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      config('Default', DEFAULTS.fields.default);
-      config('Info → PeerRepoList', [
+      config('default', DEFAULTS.fields.default);
+      config('info → PeerRepoList', [
         'Repo',
         'Peer',
         'Network.Transfer',
