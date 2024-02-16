@@ -1,3 +1,6 @@
+/**
+ * NOTE: Generated for each module on build.
+ */
 export type ModuleDef = {
   name: string;
   version: string;
