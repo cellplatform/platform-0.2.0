@@ -5,6 +5,6 @@ export type * as t from './t';
 
 export * from '../../common';
 export * from './const';
-export * from './libs.mjs';
+export * from './libs';
 
 export { DevIcons } from '../Dev.Icons';
