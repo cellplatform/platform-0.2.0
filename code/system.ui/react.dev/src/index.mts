@@ -1,6 +1,6 @@
 export { Pkg } from './index.pkg.mjs';
 
-export { DevWrangle } from './common';
+export { DevWrangle, Is } from './common';
 export { DevKeyboard } from './logic.Keyboard';
 export { Spec } from './logic.Spec';
 export { ValueHandler } from './logic.Tools';

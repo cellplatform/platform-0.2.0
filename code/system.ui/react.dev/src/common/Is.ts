@@ -8,7 +8,7 @@ export const Is = {
     return input === undefined || input === null;
   },
 
-  ctx(input: any) {
+  ctx(input: any): input is t.DevCtx {
     if (input === null || typeof input !== 'object') return false;
     const obj = input as t.DevCtx;
     return (
@@ -20,4 +20,4 @@ export const Is = {
       typeof obj['debug'] === 'object'
     );
   },
-};
+} as const;
