@@ -2,7 +2,7 @@ import { Dev } from '../../test.ui';
 import { COLORS, Color, Icons, Pkg, type t } from './common';
 
 type T = {
-  props: { theme?: t.ModuleLoaderTheme };
+  props: { theme?: t.CommonTheme };
   debug: { debugBg?: boolean; debugFill?: boolean };
 };
 

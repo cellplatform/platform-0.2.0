@@ -2,7 +2,6 @@ import type { t } from './common';
 export type * from './t.factory';
 
 type O = Record<string, unknown>;
-export type ModuleLoaderTheme = 'Light' | 'Dark';
 
 /**
  * <Component>
@@ -10,7 +9,7 @@ export type ModuleLoaderTheme = 'Light' | 'Dark';
 export type ModuleLoaderProps = {
   spinning?: boolean;
   spinner?: ModuleLoaderSpinner | null;
-  theme?: ModuleLoaderTheme;
+  theme?: t.CommonTheme;
   element?: t.RenderOutput;
   style?: t.CssValue;
   onError?: ModuleLoaderErrorHandler;
@@ -32,7 +31,7 @@ export type ModuleLoaderStatefulProps = Omit<t.ModuleLoaderProps, 'front' | 'bac
 export type ModuleLoaderSpinner = {
   bodyOpacity?: t.Percent;
   bodyBlur?: t.Pixels;
-  element?: t.RenderOutput | ((e: { theme: ModuleLoaderTheme }) => t.RenderOutput); // Custom spinning renderer.
+  element?: t.RenderOutput | ((e: { theme: t.CommonTheme }) => t.RenderOutput); // Custom spinning renderer.
 };
 
 /**

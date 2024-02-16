@@ -2,7 +2,7 @@ import type { t } from './common';
 
 type RenderOutput = JSX.Element | null | false;
 
-export type ModuleNamespaceTheme = t.ModuleLoaderTheme;
+export type ModuleNamespaceTheme = t.CommonTheme;
 
 /**
  * <Component>

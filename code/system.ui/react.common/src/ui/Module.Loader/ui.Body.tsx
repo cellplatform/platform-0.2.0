@@ -4,7 +4,7 @@ import { ErrorFallback, type ErrorFallbackProps } from './ui.ErrorFallback';
 import { LoadSpinner } from './ui.Spinner';
 
 export type BodyProps = {
-  theme?: t.ModuleLoaderTheme;
+  theme?: t.CommonTheme;
   element?: JSX.Element | null | false;
   spinning?: boolean;
   spinner?: t.ModuleLoaderSpinner | null;

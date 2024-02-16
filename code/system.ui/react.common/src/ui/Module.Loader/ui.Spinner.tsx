@@ -3,7 +3,7 @@ import { COLORS, DEFAULTS, Spinner, css, type t } from './common';
 
 export type LoadSpinnerProps = {
   spinner: t.ModuleLoaderSpinner;
-  theme?: t.ModuleLoaderTheme;
+  theme?: t.CommonTheme;
   spinning: boolean;
   style?: t.CssValue;
 };

@@ -92,7 +92,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      const buttonTheme = (theme: t.ModuleLoaderTheme) => {
+      const buttonTheme = (theme: t.CommonTheme) => {
         dev.button((btn) => {
           const value = (state: T) => state.props.theme;
           const isCurrent = (state: T) => value(state) === theme;

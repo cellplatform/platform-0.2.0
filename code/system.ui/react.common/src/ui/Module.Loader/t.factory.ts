@@ -13,7 +13,7 @@ export type ModuleFactory<TName extends string = string, Ctx extends O = O> = (
 export type ModuleFactoryArgs<TName extends string = string, Ctx extends O = O> = {
   readonly name: TName;
   readonly ctx: Ctx;
-  readonly theme: t.ModuleLoaderTheme;
+  readonly theme: t.CommonTheme;
   readonly is: ModuleFactoryFlags;
 };
 

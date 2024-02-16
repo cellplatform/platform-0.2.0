@@ -4,7 +4,7 @@ import { Button, COLORS, Color, DEFAULTS, Spinner, css, type t } from './common'
 /**
  * Sample-Spinner
  */
-export type SampleSpinnerProps = { theme?: t.ModuleLoaderTheme; style?: t.CssValue };
+export type SampleSpinnerProps = { theme?: t.CommonTheme; style?: t.CssValue };
 export const SampleSpinner: React.FC<SampleSpinnerProps> = (props) => {
   const { theme = DEFAULTS.theme } = props;
   const isDark = theme === 'Dark';
@@ -31,7 +31,7 @@ export const SampleSpinner: React.FC<SampleSpinnerProps> = (props) => {
  */
 export type SampleProps = {
   text: string;
-  theme: t.ModuleLoaderTheme;
+  theme: t.CommonTheme;
   count?: number;
   style?: t.CssValue;
 };
