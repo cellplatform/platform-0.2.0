@@ -5,7 +5,7 @@ type O = Record<string, unknown>;
 /**
  * Link dev-harness helpers.
  */
-export const link = {
+export const Link = {
   ns<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
     const elRight = <DevIcons.NewTab size={16} />;
     dev.button((btn) => {
@@ -32,7 +32,7 @@ export const link = {
   pkg<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>) {
     const api = {
       ns(label: string, target: string) {
-        link.ns(pkg, dev, label, target);
+        Link.ns(pkg, dev, label, target);
         return api;
       },
       hr(line: number | [number, number] = -1, margin?: t.DevHrMargin) {

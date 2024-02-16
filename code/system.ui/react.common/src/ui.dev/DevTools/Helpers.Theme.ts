@@ -13,10 +13,10 @@ export const Theme = {
    */
   background(ctx: t.DevCtx, value: t.CommonTheme = 'Light') {
     const is = Theme.is(value);
-    if (value === 'Light') {
+    if (is.light) {
       ctx.host.backgroundColor(null).tracelineColor(null);
     }
-    if (value === 'Dark') {
+    if (is.dark) {
       ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
     }
   },
