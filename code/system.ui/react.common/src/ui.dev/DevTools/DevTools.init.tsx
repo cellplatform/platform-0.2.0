@@ -68,11 +68,6 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return Lorem.words(words, endWith);
     },
 
-    theme(value) {
-      Helpers.theme(ctx, value);
-      return api;
-    },
-
     /**
      * 🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳
      *

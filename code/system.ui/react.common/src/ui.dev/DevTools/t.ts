@@ -20,7 +20,6 @@ export type DevTools<S extends O = O> = {
    * Helpers.
    */
   lorem(words?: number, endWith?: string): string;
-  theme(value: t.DevTheme): DevTools<S>;
 
   // NB: Useful for logically grouping blocks.
   section(title: string | [string, string], fn?: SectionHandler<S>): DevTools<S>;

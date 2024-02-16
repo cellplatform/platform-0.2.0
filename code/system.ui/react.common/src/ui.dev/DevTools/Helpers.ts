@@ -1,5 +1,6 @@
-import { t, COLORS } from '../common';
+import { COLORS, type t } from '../common';
 import { link } from './Helpers.link';
+import { theme } from './Helpers.theme';
 
 type O = Record<string, unknown>;
 
@@ -8,6 +9,7 @@ type O = Record<string, unknown>;
  */
 export const Helpers = {
   link,
+  theme,
 
   /**
    * Toggle the value of a boolean {object} key.
@@ -24,17 +26,5 @@ export const Helpers = {
     const next = current === undefined ? true : !current;
     object[key] = next as T[keyof T];
     return next;
-  },
-
-  /**
-   * Adjust the theme of the DevHarness.
-   */
-  theme(ctx: t.DevCtx, theme?: t.DevTheme) {
-    if (theme === 'Light') {
-      ctx.host.backgroundColor(null).tracelineColor(null);
-    }
-    if (theme === 'Dark') {
-      ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
-    }
   },
 } as const;

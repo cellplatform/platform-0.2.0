@@ -106,7 +106,7 @@ export default Dev.describe('PropList', (e) => {
           .onClick((e) =>
             e.change((d) => {
               d.props.theme = e.current ? 'Dark' : 'Light';
-              dev.theme(d.props.theme);
+              Dev.theme.background(dev.ctx, d.props.theme);
             }),
           ),
       );

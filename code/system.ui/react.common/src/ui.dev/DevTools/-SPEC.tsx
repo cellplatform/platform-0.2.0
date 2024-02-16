@@ -80,7 +80,7 @@ export default Dev.describe('DevTools', (e) => {
             .onClick((e) =>
               e.change((d) => {
                 d.theme = e.current ? 'Dark' : 'Light';
-                dev.theme(d.theme);
+                Dev.theme.background(dev.ctx, d.theme);
                 e.ctx.subject.backgroundColor(d.theme === 'Dark' ? 0 : 1);
               }),
             ),
