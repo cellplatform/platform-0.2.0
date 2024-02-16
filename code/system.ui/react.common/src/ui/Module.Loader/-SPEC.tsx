@@ -76,7 +76,7 @@ export default Dev.describe(name, (e) => {
     };
 
     dev.section('', (dev) => {
-      const link = Dev.link.pkg(Pkg, dev);
+      const link = Dev.Link.pkg(Pkg, dev);
       link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
       link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
 

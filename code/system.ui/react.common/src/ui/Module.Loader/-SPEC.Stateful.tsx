@@ -82,7 +82,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      const link = Dev.link.pkg(Pkg, dev);
+      const link = Dev.Link.pkg(Pkg, dev);
       link.ns('see: ModuleLoader (stateless)', 'Module.Loader');
       link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
       dev.hr(-1, 5);

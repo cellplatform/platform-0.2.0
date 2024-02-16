@@ -1,6 +1,5 @@
-import { COLORS, type t } from '../common';
-import { link } from './Helpers.link';
-import { theme } from './Helpers.theme';
+import { Link } from './Helpers.Link';
+import { Theme } from './Helpers.Theme';
 
 type O = Record<string, unknown>;
 
@@ -8,8 +7,8 @@ type O = Record<string, unknown>;
  * Simple helpers useful when workling with the [DevTools].
  */
 export const Helpers = {
-  link,
-  theme,
+  Link,
+  Theme,
 
   /**
    * Toggle the value of a boolean {object} key.

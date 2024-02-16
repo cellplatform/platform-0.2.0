@@ -4,9 +4,12 @@ import {
   MdCheck,
   MdClose,
   MdContentCopy,
+  MdDarkMode,
   MdDoneAll,
   MdInfoOutline,
   MdKeyboard,
+  MdKeyboardTab,
+  MdLightMode,
   MdLink,
   MdNotStarted,
   MdPlayArrow,
@@ -18,9 +21,7 @@ import {
   MdToggleOff,
   MdToggleOn,
   MdWarning,
-  MdKeyboardTab,
 } from 'react-icons/md';
-import { RxOpenInNewWindow } from 'react-icons/rx';
 import { TbPrompt } from 'react-icons/tb';
 import { VscSymbolVariable } from 'react-icons/vsc';
 import { Icon } from '../ui/Icon';
@@ -59,4 +60,5 @@ export const DevIcons = {
     Failed: icon(MdWarning),
     Skipped: icon(MdToggleOn),
   },
+  Theme: { Light: icon(MdLightMode), Dark: icon(MdDarkMode) },
 };

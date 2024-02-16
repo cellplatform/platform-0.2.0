@@ -34,7 +34,7 @@ export default Dev.describe('Test.syntax', (e) => {
     await ctx.state<T>(initial);
     ctx.subject.display('grid').render<T>((e) => {
       const { props, debug } = e.state;
-      Dev.theme.background(ctx, props.theme);
+      Dev.Theme.background(ctx, props.theme);
 
       const styles = {
         base: css({ width: debug.fixedWidth ? 300 : undefined }),

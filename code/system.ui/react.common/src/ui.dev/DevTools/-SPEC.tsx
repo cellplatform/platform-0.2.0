@@ -15,7 +15,6 @@ export default Dev.describe('DevTools', (e) => {
     ctx.subject
       .display('grid')
       .size([400, null])
-      .backgroundColor(1)
       .render<T>((e) => <Sample state={e.state} />);
   });
 
@@ -80,11 +79,18 @@ export default Dev.describe('DevTools', (e) => {
             .onClick((e) =>
               e.change((d) => {
                 d.theme = e.current ? 'Dark' : 'Light';
-                Dev.theme.background(dev.ctx, d.theme);
-                e.ctx.subject.backgroundColor(d.theme === 'Dark' ? 0 : 1);
+                Dev.Theme.background(dev.ctx, d.theme);
               }),
             ),
         );
+
+      dev.hr(5, 20);
+
+      Dev.Theme.switch(
+        dev,
+        (d) => d.theme,
+        (d, value) => (d.theme = value),
+      );
 
       dev.hr(5, 20);
 
@@ -95,9 +101,8 @@ export default Dev.describe('DevTools', (e) => {
     dev.hr(-1, 5);
 
     const target = 'Module.Loader.Stateful';
-    Dev.link.ns(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
-    Dev.link
-      .pkg(Pkg, dev)
+    Dev.Link.ns(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
+    Dev.Link.pkg(Pkg, dev)
       .ns(`pkg.dev (1): "Foo"`, target)
       .ns(`pkg.dev (2): "Foo.Bar"`, target)
       .hr()

@@ -61,7 +61,7 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const link = Dev.link.pkg(Pkg, dev);
+    const link = Dev.Link.pkg(Pkg, dev);
     const state = await dev.state();
 
     dev.section('', (dev) => {

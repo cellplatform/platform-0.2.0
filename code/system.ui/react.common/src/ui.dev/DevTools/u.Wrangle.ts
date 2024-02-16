@@ -6,8 +6,8 @@ import { Is } from './Is';
  */
 export const Wrangle = {
   ctx(input: t.DevTools | t.DevCtx) {
-    if (Is.dev(input)) return input.ctx;
     if (Is.ctx(input)) return input;
+    if (Is.dev(input)) return input.ctx;
     return;
   },
 } as const;
