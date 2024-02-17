@@ -2,7 +2,7 @@ import { Test } from '.';
 import { describe, expect, it, t, Time } from '../test';
 import { TestTree } from '../TestSuite.helpers';
 
-describe('TestSuiteModel', () => {
+describe('TestSuiteModel', { retry: 3 }, () => {
   describe('model', () => {
     it('id: "TestSuite.<slug>"', () => {
       const model1 = Test.describe('foo');

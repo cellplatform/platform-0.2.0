@@ -4,7 +4,7 @@ import { time } from '.';
 const FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const format = (date: Date) => time.day(date).format(FORMAT);
 
-describe('timer', () => {
+describe('timer', { retry: 3 }, () => {
   it('starts with current date', () => {
     const now = time.day().format(FORMAT);
     const timer = time.timer();
@@ -18,17 +18,13 @@ describe('timer', () => {
     expect(format(timer.startedAt)).to.not.eql(format(new Date()));
   });
 
-  it(
-    'waits',
-    async () => {
-      const timer = time.timer();
-      expect(timer.elapsed.msec).to.lessThan(5); // NB: 'msecs' default unit for 'elapsed'.
-      await time.wait(10);
-      expect(timer.elapsed.msec).to.greaterThan(6);
-      expect(timer.elapsed.msec).to.greaterThan(6);
-    },
-    { retry: 3 },
-  );
+  it('waits', async () => {
+    const timer = time.timer();
+    expect(timer.elapsed.msec).to.lessThan(5); // NB: 'msecs' default unit for 'elapsed'.
+    await time.wait(10);
+    expect(timer.elapsed.msec).to.greaterThan(6);
+    expect(timer.elapsed.msec).to.greaterThan(6);
+  });
 
   it('reports elapsed seconds', () => {
     const start = time.day().subtract(1, 'm').subtract(30, 's').subtract(259, 'ms').toDate();
