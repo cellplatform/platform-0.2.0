@@ -1,14 +1,16 @@
 // deno-lint-ignore-file no-explicit-any
-import { DEFAULTS, Is, OpenAI, type t } from './u.ts';
-import { Env } from './env.ts';
+import { DEFAULTS, Env, Is, OpenAI, type t } from './u.common.ts';
 
 /**
  * OpenAI route setup.
  */
-export function init(path: string, app: t.HonoApp) {
+export default function init(path: string, app: t.HonoApp) {
   const apiKey = Env.Vars.openai.apiKey;
   const openai = new OpenAI({ apiKey });
 
+  /**
+   * GET
+   */
   app.get(path, async (c) => {
     const res = await openai.models.list();
     const models = res.data.map((m) => {
@@ -18,6 +20,9 @@ export function init(path: string, app: t.HonoApp) {
     return c.json({ models });
   });
 
+  /**
+   * POST: chat completion
+   */
   app.post(path, async (c) => {
     const body = await c.req.json();
 

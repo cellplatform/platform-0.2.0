@@ -1,7 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
-import type * as t from './t.ts';
+import { Http, type t } from '../common/mod.ts';
 
 export const Is = {
+  statusOK: Http.statusOK,
+
   messagePayload(input: any): input is t.MessagePayload {
     if (input === null || typeof input !== 'object') return false;
     if (!Array.isArray(input.messages)) return false;
@@ -13,4 +15,4 @@ export const Is = {
     if (input === null || typeof input !== 'object') return false;
     return typeof input.role === 'string' && input.content === 'string';
   },
-};
+} as const;

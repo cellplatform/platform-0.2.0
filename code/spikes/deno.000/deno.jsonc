@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --watch --allow-net --allow-read src/main.ts",
+    "start": "deno run --allow-net --allow-read src/main.ts",
     "dev": "deno run --watch --allow-net --allow-read src/main.ts",
     "tmp": "deno run -A src/-tmp.ts"
   },
