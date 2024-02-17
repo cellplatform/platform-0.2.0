@@ -28,7 +28,8 @@ export function init(path: string, app: t.HonoApp) {
    * GET list projects.
    */
   app.get(`${path}/projects`, async (c) => {
-    const url = `${baseurl}/organizations/${orgId}/projects`;
+    const qs = new URL(c.req.url).search;
+    const url = `${baseurl}/organizations/${orgId}/projects${qs}`;
     const res = await fetch(url, { method: 'GET', headers });
     if (!Is.statusOK(res)) return c.text(failedUpstream(res), 500);
 
@@ -59,5 +60,8 @@ export function init(path: string, app: t.HonoApp) {
    */
   app.delete(`${path}/projects`, async (c) => {
     //
+    /**
+     * TODO 🐷
+     */
   });
 }
