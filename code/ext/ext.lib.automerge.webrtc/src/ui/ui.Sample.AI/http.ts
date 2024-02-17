@@ -1,13 +1,8 @@
-import { type t, DEFAULTS } from './common';
+import { DEFAULTS, type t } from './common';
 
-const urls = {
-  local: `http://localhost:8000/ai`,
-  prod: `https://tdb.deno.dev/ai`,
-} as const;
+const urls = DEFAULTS.urls;
 
 export const Http = {
-  urls,
-
   url(forcePublic = false) {
     const isLocalhost = location.hostname === 'localhost';
     const url = isLocalhost && !forcePublic ? urls.local : urls.prod;
