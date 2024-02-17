@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { COLORS, Color, css, type t } from './common';
 
 export type MessageProps = {
   message: t.Message;
@@ -8,6 +7,7 @@ export type MessageProps = {
 
 export const Message: React.FC<MessageProps> = (props) => {
   const { message } = props;
+
   /**
    * Render
    */
