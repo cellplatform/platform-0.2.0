@@ -1,14 +1,14 @@
-import { Dev, Pkg } from '../../test.ui';
+import { Delete, Dev, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 
-import { Http } from '.';
 import { SAMPLE } from './-SPEC.sample';
-import { type t } from './common';
+import { Http, type t } from './common';
 import { Sample } from './ui';
 
 type T = {
   props: t.SampleProps;
   debug: { forcePublicUrl?: boolean };
+  tmp?: any;
 };
 const initial: T = { props: {}, debug: {} };
 
@@ -90,12 +90,34 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('ƒ: fetch( 💦 )', async (e) => {
-        console.log('Http.Api', Http.Api);
-        const forcePublic = e.state.current.debug.forcePublicUrl;
-        const http = Http.Api.http({ forcePublic });
-        const res = await http.get('deno/subhosting');
-        console.log('res', res);
+      const getHttp = () => {
+        const forcePublic = state.current.debug.forcePublicUrl;
+        const fetch = Http.fetcher({ forcePublic });
+        // return Http.Api.http({ forcePublic });
+        return Http.methods(fetch);
+      };
+
+      dev.button('💦 GET projects', async (e) => {
+        // https://docs.deno.com/subhosting/manual
+        const http = getHttp();
+        const res1 = await http.get('deno/hosting');
+        const res2 = await http.get('deno/hosting/projects');
+        console.log('res1', res1.json);
+        console.log('res2', res2.json);
+
+        e.change((d) => (d.tmp = { info: res1.json, projects: res2.json }));
+      });
+
+      dev.button('💦 POST create project', async (e) => {
+        // https://docs.deno.com/subhosting/manual
+        const http = getHttp();
+        const body = {
+          name: `foo-${slug()}`,
+          description: 'Sample project',
+        };
+        const res = await http.post('deno/hosting/projects', body);
+
+        e.change((d) => (d.tmp = res.json));
       });
     });
 
@@ -118,12 +140,20 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { debug, props } = e.state;
+      const { debug, props, tmp } = e.state;
+      const forcePublic = debug.forcePublicUrl;
       const data = {
-        origin: Http.Api.origin(debug.forcePublicUrl),
+        origin: Http.origin({ forcePublic }),
         props,
+        tmp,
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return (
+        <Dev.Object
+          name={name}
+          data={Delete.undefined(data)}
+          expand={{ level: 1, paths: ['$', '$.tmp'] }}
+        />
+      );
     });
   });
 });
