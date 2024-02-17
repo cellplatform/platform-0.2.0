@@ -1,20 +1,8 @@
-import { type t } from './u.ts';
-import { routes as ai } from './app.routes.openai.ts';
-
-/**
- * Home
- */
-export function root(app: t.HonoApp) {
-  app.get('/', (c) => {
-    const about = `tdb ← (🦄 team:db)`;
-    return c.text(about);
-  });
-}
+import { init as ai } from './app.route.openai.ts';
+import { init as root } from './app.route.root.ts';
+import { deno } from './app.route.deno.ts';
 
 /**
  * Route index.
  */
-export const Routes = {
-  root,
-  ai,
-} as const;
+export const Routes = { root, ai, deno } as const;
