@@ -1,12 +1,12 @@
 import { COLORS, t, DevBase, DevWrangle, DevKeyboard } from '../common';
-import { CmdHostStateful } from '../Dev.CmdHost';
-import { KeyboardActions } from './Keyboard.mjs';
+import { CmdHostStateful } from '../Dev.CmdHost.Stateful';
+import { KeyboardActions } from './Keyboard';
 
 type EscapeAction = 'ReloadRootUrl';
 
 type Options = {
   location?: t.UrlInput;
-  badge?: t.SpecListBadge;
+  badge?: t.ModuleListBadge;
   hrDepth?: number;
   keyboard?: boolean;
   doubleEscapeKeyAction?: null | EscapeAction;
@@ -27,11 +27,7 @@ export async function render(
   const { keyboard = true, doubleEscapeKeyAction = 'ReloadRootUrl' } = options;
   const url = DevWrangle.Url.navigate.formatDevFlag(options);
   const spec = await DevWrangle.Url.module(url, specs);
-
-  const style = options.style ?? {
-    Absolute: 0,
-    backgroundColor: COLORS.WHITE,
-  };
+  const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
   if (keyboard) {
     DevKeyboard.listen({

@@ -3,7 +3,8 @@ export { Dev } from '../Dev.mjs';
 
 export const ModuleSpecs = {
   'sys.ui.dev.Harness': () => import('../ui/Harness/-SPEC'),
-  'sys.ui.dev.SpecList': () => import('../ui/SpecList/-SPEC'),
+  'sys.ui.dev.ModuleList': () => import('../ui/List.Module/-SPEC'),
+  // 'sys.ui.dev.list.SpecList': () => import('../ui/List.Spec/-SPEC'),
 };
 
 export const SampleSpecs = {

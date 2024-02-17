@@ -1,4 +1,4 @@
-import { Is, Margin, t, Id } from './common';
+import { Id, Is, Margin, type t } from './common';
 
 import type { PropArgs } from './common.types';
 

@@ -17,7 +17,7 @@ export function repo(repo: t.InfoData['repo']) {
 
   const value = (
     <div {...styles.base}>
-      <Icons.Database size={14} offset={[0, 1]} style={{ marginRight: 2 }} />
+      <Icons.Database size={14} offset={[0, 1]} style={{ marginRight: 3 }} />
       <div>{text}</div>
       <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />
     </div>

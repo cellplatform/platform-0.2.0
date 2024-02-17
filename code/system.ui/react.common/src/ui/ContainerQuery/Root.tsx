@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, slug, Style } from './common';
+import { useEffect, useRef } from 'react';
+import { css, slug, type t } from './common';
 
 /**
  * Responsive UI container using the

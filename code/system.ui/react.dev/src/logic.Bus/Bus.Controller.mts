@@ -1,7 +1,7 @@
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { R, DEFAULTS, Id, Is, rx, t, Test } from './common';
+import { DEFAULTS, Id, Is, R, Test, rx, type t } from './common';
 
 /**
  * Event controller.

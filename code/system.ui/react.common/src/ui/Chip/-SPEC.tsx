@@ -1,7 +1,7 @@
-import { Dev } from '../../test.ui';
-import { Chip, ChipProps } from '.';
+import { Dev, type t } from '../../test.ui';
+import { Chip } from '.';
 
-type T = { props: ChipProps };
+type T = { props: t.ChipProps };
 const initial: T = { props: { text: 'hello:world' } };
 
 export default Dev.describe('Chip', (e) => {

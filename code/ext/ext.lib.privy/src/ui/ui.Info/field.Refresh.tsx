@@ -25,7 +25,7 @@ export function refresh(args: {
       <Button onClick={onClick} enabled={enabled}>
         <div {...styles.center}>
           <Icons.Refresh size={16} offset={[-1, -1]} margin={[0, 2, 0, 0]} />
-          <div>{'Refresh'}</div>
+          {fields.includes('Refresh.Label') && <div>{'Refresh'}</div>}
         </div>
       </Button>
     ),

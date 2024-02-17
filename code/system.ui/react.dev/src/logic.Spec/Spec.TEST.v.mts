@@ -1,6 +1,5 @@
-import { isExternal } from 'util/types';
 import { Spec } from '.';
-import { describe, expect, it, t, TestSample, Time, Is } from '../test';
+import { Is, TestSample, Time, describe, expect, it, type t } from '../test';
 
 describe('Spec', () => {
   describe('Spec.ctx(e)', () => {

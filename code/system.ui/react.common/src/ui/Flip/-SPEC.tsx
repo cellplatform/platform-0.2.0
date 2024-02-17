@@ -1,8 +1,8 @@
-import { Flip, FlipProps } from '.';
-import { COLORS, css, Dev, Keyboard } from '../../test.ui';
+import { Flip } from '.';
+import { COLORS, css, Dev, Keyboard, Pkg, type t } from '../../test.ui';
 
 type T = {
-  props: FlipProps;
+  props: t.FlipProps;
   debug: { content?: boolean };
 };
 const initial: T = {
@@ -10,9 +10,11 @@ const initial: T = {
   debug: { content: true },
 };
 
-export default Dev.describe('Flip', (e) => {
+const name = 'Flip';
+export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'];
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Flip');
+
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     content: initial.debug.content,
   });
@@ -105,7 +107,7 @@ export default Dev.describe('Flip', (e) => {
       const data = {
         props: e.state.props,
       };
-      return <Dev.Object name={'Flip'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

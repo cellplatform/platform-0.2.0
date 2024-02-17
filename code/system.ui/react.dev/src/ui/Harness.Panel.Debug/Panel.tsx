@@ -1,4 +1,4 @@
-import { Color, css, R, t, useCurrentState } from '../common';
+import { Color, css, R, useCurrentState, type t } from '../common';
 import { PanelFooter, PanelHeader } from '../Harness.Panel.Edge';
 import { DebugPanelBody as Body } from './Panel.Body';
 

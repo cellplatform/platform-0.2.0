@@ -111,4 +111,4 @@ export const Context = {
     await api.refresh();
     return api;
   },
-};
+} as const;

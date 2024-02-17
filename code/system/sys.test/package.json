@@ -10,7 +10,7 @@
     "clean": "tsx ../../../script.ts/cmd.clean.ts"
   },
   "dependencies": {
-    "chai": "5.0.3"
+    "chai": "5.1.0"
   },
   "devDependencies": {
     "sys.types": "0.0.0"

@@ -21,6 +21,8 @@ export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { LabelItem } from './ui/LabelItem';
 export { Layout } from './ui/Layout';
+export { ModuleNamespace } from './ui/Module.Namespace';
+export { ModuleLoader } from './ui/Module.Loader';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
@@ -50,7 +52,7 @@ export { COLORS, Color, FC, Style, UserAgent, css, rx, useRubberband } from './c
 /**
  * Dev
  */
-export { Dev, DevTools, Spec, TestRunner } from './ui.dev';
+export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };

@@ -81,7 +81,8 @@ export const Shared = {
     doc.change((d) => {
       const ua = UserAgent.current;
       const data: t.CrdtSharedPeer = { ua };
-      d.sys.peers[peer.id] = data;
+      const peers = d.sys?.peers;
+      if (peers) peers[peer.id] = data;
     });
 
     /**

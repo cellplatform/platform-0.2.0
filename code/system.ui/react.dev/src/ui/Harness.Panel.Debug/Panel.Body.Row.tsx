@@ -1,4 +1,4 @@
-import { css, t, useRenderer } from '../common';
+import { css, useRenderer, type t } from '../common';
 
 export type DebugPanelBodyRow = {
   instance: t.DevInstance;

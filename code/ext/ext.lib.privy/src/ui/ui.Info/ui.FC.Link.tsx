@@ -7,6 +7,7 @@ export type FCLinkProps = {
   enabled?: boolean;
   showClose?: boolean;
   style?: t.CssValue;
+  onClick?: t.InfoFarcasterClickHandler;
 };
 
 export const FCLink: React.FC<FCLinkProps> = (props) => {
@@ -74,7 +75,9 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
   const elSpinner = spinning && <Spinner.Bar width={35} />;
   const elLink = !isAuthenticated && button('Connect', linkFarcaster);
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
-  const elUsername = isAuthenticated && !elUnlink && <FCUsername data={fc} />;
+  const elUsername = isAuthenticated && !elUnlink && (
+    <FCUsername user={fc} onClick={props.onClick} />
+  );
 
   return (
     <div {...css(styles.base, props.style)}>{elSpinner || elUnlink || elLink || elUsername}</div>

@@ -1,6 +1,6 @@
 {
-  "name": "sys.dev",
-  "version": "0.6.37",
+  "name": "dev.000",
+  "version": "0.6.57",
   "type": "module",
   "sideEffects": false,
   "cell": {
@@ -21,10 +21,10 @@
   },
   "dependencies": {
     "@automerge/automerge": "2.1.10",
-    "@automerge/automerge-repo": "1.1.0",
-    "@automerge/automerge-repo-network-messagechannel": "1.1.0",
-    "@automerge/automerge-repo-react-hooks": "1.1.0",
-    "@automerge/automerge-repo-storage-indexeddb": "1.1.0",
+    "@automerge/automerge-repo": "1.1.1",
+    "@automerge/automerge-repo-network-messagechannel": "1.1.1",
+    "@automerge/automerge-repo-react-hooks": "1.1.1",
+    "@automerge/automerge-repo-storage-indexeddb": "1.1.1",
     "ext.lib.automerge": "0.0.0",
     "ext.lib.automerge.webrtc": "0.0.0",
     "ext.lib.codemirror": "0.0.0",

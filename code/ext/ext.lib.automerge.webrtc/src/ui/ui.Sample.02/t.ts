@@ -1,5 +1,7 @@
-export * from '../common/t';
-import { type t } from './common';
+export type * from '../common/t';
+import type { t } from './common';
+
+type S = string;
 
 export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
@@ -9,7 +11,7 @@ export type SampleEdge = {
 };
 
 /**
- * <Component>
+ * Sample: <Component>
  */
 export type SampleEdgeProps = {
   edge: t.SampleEdge;
@@ -20,18 +22,37 @@ export type SampleEdgeProps = {
 };
 
 export type SampleEdgeLabel = { text: string; absolute?: t.CssEdgesInput };
-export type SampleEdgeLayout = { visible: boolean };
-export type SampleSharedOverlay = { module?: LoaderDef };
+export type SampleEdgeLayout = {
+  visible: boolean;
+  showJson: boolean;
+  fields?: t.InfoField[];
+};
+export type SampleSharedMain = { module?: SampleModuleDef };
+export type SampleSharedCmdHost = SampleSharedMain & {
+  filter?: string;
+  address?: string;
+  selectedIndex?: number;
+};
 
-export type DevHarnessShared = {
-  module?: LoaderDef;
+/**
+ * Sample: DevHarness
+ */
+export type HarnessShared = {
   debugPanel: boolean;
+  module?: SampleModuleDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
 /**
- * Dynamic Loading
+ * Dynamic Loader (factory)
  */
-export type LoaderDef = { typename: string; docuri: string; target?: string };
-export type LoadFactory = (args: LoadFactoryArgs) => Promise<JSX.Element | void>;
-export type LoadFactoryArgs = LoaderDef & { store: t.Store };
+export type SampleName =
+  | 'Auth'
+  | 'CodeEditor'
+  | 'CodeEditor.AI'
+  | 'DiagramEditor'
+  | 'ModuleNamespace';
+export type SampleFactoryCtx = { docuri: string; store: t.Store };
+
+export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };
+export type SampleModuleDefTarget = 'dev:header' | 'main';

@@ -46,7 +46,7 @@ export default Dev.describe('ObjectView', (e) => {
             const current = e.state.current.theme ?? ObjectView.DEFAULTS.theme;
             const next = current === 'Dark' ? 'Light' : 'Dark';
             e.change((draft) => (draft.theme = next));
-            dev.theme(next);
+            Dev.Theme.background(dev.ctx, next);
           }),
       );
 

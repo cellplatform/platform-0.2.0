@@ -1,4 +1,4 @@
-import { t, Is } from '../common';
+import { Is, type t } from '../common';
 
 export const Wrangle = {
   ctx(

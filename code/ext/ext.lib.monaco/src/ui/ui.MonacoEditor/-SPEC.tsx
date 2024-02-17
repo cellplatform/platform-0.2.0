@@ -1,6 +1,6 @@
 import { MonacoEditor } from '.';
 import { Dev, Wrangle, type t, Pkg, EditorCarets } from '../../test.ui';
-import { CODE_SAMPLES } from './-Sample.code';
+import { CODE_SAMPLES } from './-SPEC.Sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -54,6 +54,11 @@ export default Dev.describe(name, (e) => {
               editor.onDidChangeCursorSelection((e) => (local.selection = asRange(e.selection)));
 
               ctx.redraw();
+
+              // Sample: catch [CMD + Enter] key.
+              editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, (e) => {
+                console.log('CMD + Enter', e);
+              });
             }}
             onChange={(e) => {
               local.text = e.text;

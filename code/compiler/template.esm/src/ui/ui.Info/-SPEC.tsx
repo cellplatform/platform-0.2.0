@@ -18,6 +18,7 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const link = Dev.link.pkg(Pkg, dev);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
@@ -37,6 +38,8 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    const link = Dev.link.pkg(Pkg, dev);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {

@@ -1,8 +1,9 @@
+import type { t } from './common';
+
 import type { Loader, Tree } from './TestSuite.helpers';
 import type { Stats } from './TestSuite.helpers/Stats.mjs';
 import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
-import type { t } from './common';
 
 export type * from './TestSuite.helpers/types.mjs';
 
@@ -18,8 +19,11 @@ type IgnoredResponse = any | Promise<any>;
 export type TestModifier = 'skip' | 'only';
 
 export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
-export type SpecImport = Promise<{ default: TestSuiteModel }>;
-export type SpecImports = { [namespace: string]: () => SpecImport };
+
+export type SpecModule = { default: TestSuiteModel };
+export type SpecImport = t.ModuleImport<SpecModule>;
+export type SpecImporter = t.ModuleImporter<SpecModule>;
+export type SpecImports = t.ModuleImports<SpecModule>;
 
 /**
  * BDD ("behavior driven develoment") style test configuration API.

@@ -1,4 +1,4 @@
-import { t, Is } from '../common';
+import { Is, type t } from '../common';
 
 type T = { args: t.TestHandlerArgs; ctx: t.DevCtxObject };
 

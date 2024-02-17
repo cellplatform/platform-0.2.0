@@ -1,1 +1,1 @@
-export * from './Spinner.mjs';
+export * from './Spinner';

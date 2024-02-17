@@ -49,6 +49,11 @@ export default Dev.describe(name, (e) => {
             local.selectedChain = e.chain;
           },
         },
+        farcaster: {
+          onClick(e) {
+            console.info(`⚡️ farcaster.onClick`, e);
+          },
+        },
       };
     });
 
@@ -124,14 +129,33 @@ export default Dev.describe(name, (e) => {
       };
 
       button('all', () => DEFAULTS.fields.all);
+      button('common', () => [
+        'Login',
+        'Login.SMS',
+        'Login.Farcaster',
+        'Id.User',
+        'Id.User.Phone',
+        'Link.Farcaster',
+        'Link.Wallet',
+        'Wallet.List',
+        'Wallet.List.Title',
+        'Refresh',
+      ]);
       dev.hr(-1, 5);
-      button('wallet view', () => ['Login', 'Link.Wallet', 'Wallet.List', 'Wallet.List.Title']);
+      button('wallet view', () => [
+        'Login',
+        'Link.Wallet',
+        'Wallet.List',
+        'Wallet.List.Title',
+        'Refresh',
+      ]);
       button('wallet view (chain selector)', () => [
         'Login',
         'Link.Wallet',
         'Wallet.List',
         'Chain.List',
         'Chain.List.Title',
+        'Refresh',
       ]);
       dev.hr(-1, 5);
       button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Link.Farcaster']);

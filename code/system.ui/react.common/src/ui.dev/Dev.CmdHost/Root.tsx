@@ -1,83 +1,16 @@
-import { useState } from 'react';
+import { CmdHostStateful as Stateful } from '../Dev.CmdHost.Stateful';
+import { DEFAULTS, FC, type t } from './common';
+import { View } from './ui';
 
-import { css, SpecList, type t, Filter } from './common';
-import { CmdBar } from './ui.CmdBar';
-import { useKeyboard } from './useKeyboard.mjs';
-
-export type CmdHostProps = {
-  pkg: { name: string; version: string };
-  specs?: t.SpecImports;
-  command?: string;
-  applyFilter?: boolean;
-  selectedIndex?: number;
-  hintKey?: string | string[];
-  hrDepth?: number;
-  badge?: t.SpecListBadge;
-  style?: t.CssValue;
-  focusOnReady?: boolean;
-  scrollTo$?: t.Observable<t.SpecListScrollTarget>;
-  onChanged?: t.CmdHostChangedHandler;
-  onCmdFocusChange?: t.TextInputFocusChangeHandler;
-  onKeyDown?: t.TextInputKeyEventHandler;
-  onKeyUp?: t.TextInputKeyEventHandler;
-  onChildVisibility?: t.SpecListChildVisibilityHandler;
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  Stateful: typeof Stateful;
 };
-
-export const CmdHost: React.FC<CmdHostProps> = (props) => {
-  const { pkg, applyFilter = true } = props;
-  const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
-
-  const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
-
-  useKeyboard(textboxRef, {
-    onArrowKey: () => textboxRef?.focus(),
-    onClear: () => filterChanged(''),
-  });
-
-  /**
-   * Handlers
-   */
-  const filterChanged = (command: string) => {
-    props.onChanged?.({ command });
-  };
-
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto' }),
-    body: css({
-      userSelect: 'none',
-      position: 'relative',
-      display: 'grid',
-    }),
-  };
-
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.body}>
-        <SpecList
-          title={pkg.name}
-          version={pkg.version}
-          specs={filteredSpecs}
-          badge={props.badge}
-          hrDepth={props.hrDepth}
-          scroll={true}
-          scrollTo$={props.scrollTo$}
-          selectedIndex={props.selectedIndex}
-          onChildVisibility={props.onChildVisibility}
-        />
-      </div>
-      <CmdBar
-        text={props.command}
-        hintKey={props.hintKey}
-        focusOnReady={props.focusOnReady ?? true}
-        onReady={(ref) => setTextboxRef(ref)}
-        onChanged={(e) => filterChanged(e.to)}
-        onFocusChange={props.onCmdFocusChange}
-        onKeyDown={props.onKeyDown}
-        onKeyUp={props.onKeyUp}
-      />
-    </div>
-  );
-};
+export const CmdHost = FC.decorate<t.CmdHostProps, Fields>(
+  View,
+  { DEFAULTS, Stateful },
+  { displayName: 'CmdHost' },
+);
