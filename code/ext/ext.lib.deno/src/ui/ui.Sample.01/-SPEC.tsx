@@ -76,7 +76,7 @@ export default Dev.describe(name, (e) => {
 
     link
       .title('References')
-      .ns('docs: deno → subhosting', 'https://github.com/denoland/subhosting_ide_starter')
+      .ns('docs: deno → subhosting', 'https://docs.deno.com/subhosting/manual')
       .hr()
       .ns('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
       .ns('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter');
@@ -115,8 +115,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug, props } = e.state;
-      const endpoint = Http.Api.url(debug.forcePublicUrl);
-      const data = { endpoint, props };
+      const data = {
+        'url.origin': Http.Api.origin(debug.forcePublicUrl),
+        props,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
