@@ -1,5 +1,5 @@
-import { fetcher, origin } from './Http.fetcher';
-import { methods } from './Http.methods';
+import { client } from './Http.client';
+import { fetcher, methods, origin } from './Http.fetch';
 import { statusOK } from './common';
 
 export const Http = {
@@ -7,4 +7,5 @@ export const Http = {
   origin,
   fetcher,
   methods,
+  client,
 } as const;

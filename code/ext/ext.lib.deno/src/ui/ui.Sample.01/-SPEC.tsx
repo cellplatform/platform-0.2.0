@@ -9,8 +9,13 @@ type T = {
   props: t.SampleProps;
   debug: { forcePublicUrl?: boolean };
   tmp?: any;
+  deno: { projects: t.DenoProject[] };
 };
-const initial: T = { props: {}, debug: {} };
+const initial: T = {
+  props: {},
+  debug: {},
+  deno: { projects: [] },
+};
 
 /**
  * Spec
@@ -66,8 +71,11 @@ export default Dev.describe(name, (e) => {
       return (
         <Info
           //
-          fields={['Component']}
-          data={{ component: { label: 'Management Interface', name: 'Deno Subhosting' } }}
+          fields={['Component', 'Projects.List']}
+          data={{
+            component: { label: 'Management Interface', name: 'Deno Subhosting' },
+            projects: { list: e.state.deno.projects },
+          }}
         />
       );
     });
@@ -76,7 +84,7 @@ export default Dev.describe(name, (e) => {
 
     link
       .title('References')
-      .ns('docs: deno → subhosting', 'https://docs.deno.com/subhosting/manual')
+      .ns('docs: deno → subhosting', 'https://docs.deno.com/subhosting')
       .hr()
       .ns('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
       .ns('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter');
@@ -93,27 +101,28 @@ export default Dev.describe(name, (e) => {
       const getHttp = () => {
         const forcePublic = state.current.debug.forcePublicUrl;
         const fetch = Http.fetcher({ forcePublic });
-        // return Http.Api.http({ forcePublic });
-        return Http.methods(fetch);
+        const http = Http.methods(fetch);
+        const client = Http.client(fetch);
+        return { http, client } as const;
       };
 
-      dev.button('💦 GET projects', async (e) => {
-        // https://docs.deno.com/subhosting/manual
-        const http = getHttp();
-        const res1 = await http.get('deno/hosting');
-        const res2 = await http.get('deno/hosting/projects');
-        console.log('res1', res1.json);
-        console.log('res2', res2.json);
+      dev.button('💦 GET projects (client)', async (e) => {
+        const client = getHttp().client;
 
-        e.change((d) => (d.tmp = { info: res1.json, projects: res2.json }));
+        console.log('client', client);
+        const res = await client.projects.list({ sort: 'name' });
+        console.log('res', res);
+
+        e.change((d) => (d.deno.projects = res.projects));
       });
 
+      dev.hr(-1, 5);
+
       dev.button('💦 POST create project', async (e) => {
-        // https://docs.deno.com/subhosting/manual
-        const http = getHttp();
+        const http = getHttp().http;
         const body = {
-          name: `foo-${slug()}`,
-          description: 'Sample project',
+          // name: `foo-${slug()}`,
+          description: `Sample project ${slug()}`,
         };
         const res = await http.post('deno/hosting/projects', body);
 
@@ -144,7 +153,7 @@ export default Dev.describe(name, (e) => {
       const forcePublic = debug.forcePublicUrl;
       const data = {
         origin: Http.origin({ forcePublic }),
-        props,
+        props: { ...props, code: props.code?.slice(0, 30) },
         tmp,
       };
       return (

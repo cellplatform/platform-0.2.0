@@ -14,9 +14,13 @@ export type HttpResponse = {
   json: t.Json;
 };
 
-export type HttpFetcher = (method: t.HttpMethod, path: string, body?: O) => Promise<HttpResponse>;
+export type HttpFetcher = (
+  method: t.HttpMethod,
+  path: string,
+  options?: { body?: O; params?: O },
+) => Promise<HttpResponse>;
 export type HttpFetchMethods = {
-  get(path: string): Promise<HttpResponse>;
-  post(path: string, body: O): Promise<HttpResponse>;
-  delete(path: string): Promise<HttpResponse>;
+  get(path: string, params?: O): Promise<HttpResponse>;
+  post(path: string, body: O, params?: O): Promise<HttpResponse>;
+  delete(path: string, params?: O): Promise<HttpResponse>;
 };
