@@ -3,6 +3,7 @@ import { DEFAULTS, Icons, type t } from './common';
 import { Http } from './http';
 import { Sample, type SampleProps } from './ui';
 import { Message } from './ui.Message';
+import { EmptyMessage } from './ui.Message.Empty';
 
 type T = {
   props: SampleProps;
@@ -21,7 +22,7 @@ export default Dev.describe(name, (e) => {
   type LocalStore = Pick<SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    text: 'say hello',
+    text: 'say hello world properly',
     completion: undefined,
     model: DEFAULTS.model.default,
     forcePublicUrl: false,
@@ -122,15 +123,12 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
-      const list = e.state.completion;
-      if (!list) return null;
-      return (
-        <div>
-          {list.choices.map((e, i) => (
-            <Message key={i} message={e.message} />
-          ))}
-        </div>
-      );
+      const completion = e.state.completion;
+      const list = completion?.choices ?? [];
+      if (list.length === 0) return <EmptyMessage />;
+
+      const elMessages = list.map((e, i) => <Message key={i} message={e.message} />);
+      return <div>{elMessages}</div>;
     });
 
     dev.hr(5, 20);
@@ -141,7 +139,9 @@ export default Dev.describe(name, (e) => {
         btn
           .label((e) => `force public url`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'forcePublicUrl')));
+          .onClick((e) => {
+            e.change((d) => (local.forcePublicUrl = Dev.toggle(d.debug, 'forcePublicUrl')));
+          });
       });
     });
   });

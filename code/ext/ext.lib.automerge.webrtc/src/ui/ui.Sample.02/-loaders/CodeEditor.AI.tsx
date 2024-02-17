@@ -1,5 +1,5 @@
 import { Dev, type t } from '../../../test.ui';
-import spec from '../../ui.Sample.AI/-SPEC';
+import { Sample } from 'ext.lib.openai';
 
 export type CodeEditorAIProps = {
   store: t.Store;
@@ -8,5 +8,5 @@ export type CodeEditorAIProps = {
 };
 
 export const CodeEditorAI: React.FC<CodeEditorAIProps> = (props) => {
-  return <Dev.Harness spec={spec} />;
+  return <Dev.Harness spec={Sample.spec} />;
 };

@@ -1,7 +1,11 @@
-export { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg.mjs';
+export { Pkg };
+const ns = Pkg.name;
 
 export const Specs = {
-  'ns.root.SAMPLE': () => import('./-SPEC'),
+  [`${ns}.tests`]: () => import('./-TestRunner'),
+  [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
 };
 
 export default Specs;
