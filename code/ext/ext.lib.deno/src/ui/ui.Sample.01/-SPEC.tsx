@@ -1,4 +1,6 @@
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Dev, Pkg } from '../../test.ui';
+import { Sample } from './ui';
+import { type t } from './common';
 
 type T = {};
 const initial: T = {};
@@ -18,10 +20,10 @@ export default Dev.describe(name, (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        return <Sample />;
       });
   });
 
