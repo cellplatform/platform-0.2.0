@@ -93,7 +93,7 @@ type ValueBase = {
   bold?: boolean;
   opacity?: number;
   indent?: number;
-  onClick?: (e: PropListValueEventArgs) => void;
+  onClick?: t.PropListItemHandler;
 };
 
 export type PropListValueGeneric = ValueBase & {
@@ -110,8 +110,9 @@ export type PropListValueSwitch = ValueBase & {
 /**
  * CLICK event arguments.
  */
-export type PropListValueEventArgs = {
-  item: PropListItem;
-  value: PropListValue;
-  message: (value: JSX.Element | string, delay?: number) => void;
+export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
+export type PropListItemHandlerArgs = {
+  readonly item: PropListItem;
+  readonly value: PropListValue;
+  readonly message: (value: JSX.Element | string, delay?: number) => void;
 };
