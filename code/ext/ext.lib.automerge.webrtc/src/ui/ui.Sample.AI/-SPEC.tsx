@@ -84,7 +84,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.link.pkg(Pkg, dev);
+    const link = Dev.Link.pkg(Pkg, dev);
 
     link.ns('see: docs (openai api)', 'https://platform.openai.com/docs').hr(5, 20);
 
