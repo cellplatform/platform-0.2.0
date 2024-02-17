@@ -1,15 +1,12 @@
 import type * as t from './t.ts';
-
-export { type t };
 export * from '../common';
-
-const urls = {
-  local: `http://localhost:8000/ai`,
-  prod: `https://api.db.team/ai`,
-} as const;
+export { type t };
 
 export const DEFAULTS = {
-  urls,
+  urls: {
+    local: `http://localhost:8080/ai`,
+    prod: `https://api.db.team/ai`,
+  },
   model: {
     get default(): t.ModelName {
       return 'gpt-3.5-turbo';

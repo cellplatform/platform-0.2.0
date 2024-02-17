@@ -32,3 +32,9 @@ export type Completion = {
   choices: CompletionChoice[];
   usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
 };
+
+/**
+ * UI Components
+ */
+export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
+export type EditorEventHandlerArgs = { text: string };

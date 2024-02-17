@@ -1,22 +1,16 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
 import { css, type t } from './common';
 
-export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
-export type EditorEventHandlerArgs = { text: string };
-
 export type SampleProps = {
   text?: string;
   style?: t.CssValue;
-  onChange?: EditorEventHandler;
-  onCmdEnterKey?: EditorEventHandler;
+  onChange?: t.EditorEventHandler;
+  onCmdEnterKey?: t.EditorEventHandler;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-    }),
+    base: css({ position: 'relative', display: 'grid' }),
   };
 
   const elEditor = (
