@@ -1,10 +1,15 @@
 import { Dev, Pkg } from '../../test.ui';
-import { Sample } from './ui';
-import { type t } from './common';
 import { Info } from '../ui.Info';
-import { SAMPLE } from './-SPEC.sample';
 
-type T = { props: t.SampleProps; debug: {} };
+import { Http } from '.';
+import { SAMPLE } from './-SPEC.sample';
+import { type t } from './common';
+import { Sample } from './ui';
+
+type T = {
+  props: t.SampleProps;
+  debug: { forcePublicUrl?: boolean };
+};
 const initial: T = { props: {}, debug: {} };
 
 /**
@@ -17,6 +22,7 @@ export default Dev.describe(name, (e) => {
   ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({
     code: SAMPLE.code,
+    forcePublicUrl: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -26,6 +32,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.code = local.code;
+      d.debug.forcePublicUrl = local.forcePublicUrl;
     });
 
     ctx.debug.width(330);
@@ -76,9 +83,29 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Common States', (dev) => {
+    dev.section('Actions', (dev) => {
       dev.button('set sample: "code"', (e) => {
         e.change((d) => (local.code = d.props.code = SAMPLE.code));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('ƒ: fetch( 💦 )', (e) => {
+        console.log('Http.Api', Http.Api);
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.forcePublicUrl);
+        btn
+          .label((e) => `force public url`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.forcePublicUrl = Dev.toggle(d.debug, 'forcePublicUrl')));
+          });
       });
     });
   });
@@ -87,7 +114,9 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { debug, props } = e.state;
+      const endpoint = Http.Api.url(debug.forcePublicUrl);
+      const data = { endpoint, props };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
