@@ -9,7 +9,10 @@ type T = {
   props: t.SampleProps;
   debug: { forcePublicUrl?: boolean };
   tmp?: any;
-  deno: { projects: t.DenoProject[] };
+  deno: {
+    projects: t.DenoProject[];
+    selectedProject?: string;
+  };
 };
 const initial: T = {
   props: {},
@@ -74,7 +77,11 @@ export default Dev.describe(name, (e) => {
           fields={['Component', 'Projects.List']}
           data={{
             component: { label: 'Management Interface', name: 'Deno Subhosting' },
-            projects: { list: e.state.deno.projects },
+            projects: {
+              list: e.state.deno.projects,
+              selected: e.state.deno.selectedProject,
+              onSelect: (e) => state.change((d) => (d.deno.selectedProject = e.id)),
+            },
           }}
         />
       );

@@ -34,7 +34,9 @@ export default Dev.describe(name, (e) => {
       d.props.margin = 10;
       d.props.data = {
         projects: {
-          onSelect: (e) => state.change((d) => (d.props.data!.projects!.selected = e.id)),
+          onSelect(e) {
+            state.change((d) => (d.props.data!.projects!.selected = e.id));
+          },
         },
       };
     });

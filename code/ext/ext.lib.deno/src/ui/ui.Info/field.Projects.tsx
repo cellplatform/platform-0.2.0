@@ -48,12 +48,15 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
       </div>
     );
 
-    return { label, value };
+    return { label, value, selected: isSelected };
   });
 
   // Title
   const total = projects.list.length;
-  res.push({ label: 'Projects', value: total === 0 ? '-' : total });
+  res.push({
+    label: 'Projects',
+    value: <div {...css({ paddingRight: 4 })}>{total === 0 ? '-' : total}</div>,
+  });
 
   // Finish up.
   res.push(...items);
