@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
 
 type T = {};
 const initial: T = {};
@@ -28,7 +28,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.link.pkg(Pkg, dev);
+    const link = Dev.Link.pkg(Pkg, dev);
     dev.TODO();
   });
 
