@@ -1,3 +1,4 @@
+import type { t } from './common';
 export type * from '../common/t';
 
 /**
@@ -36,5 +37,12 @@ export type Completion = {
 /**
  * UI Components
  */
+export type SampleProps = {
+  text?: string;
+  style?: t.CssValue;
+  onChange?: t.EditorEventHandler;
+  onCmdEnterKey?: t.EditorEventHandler;
+};
+
 export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
 export type EditorEventHandlerArgs = { text: string };

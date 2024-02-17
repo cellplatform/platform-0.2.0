@@ -1,12 +1,12 @@
 import { Dev, Pkg } from '../../test.ui';
 import { DEFAULTS, Icons, type t } from './common';
 import { Http } from './http';
-import { Sample, type SampleProps } from './ui';
+import { Sample } from './ui';
 import { Message } from './ui.Message';
 import { EmptyMessage } from './ui.Message.Empty';
 
 type T = {
-  props: SampleProps;
+  props: t.SampleProps;
   model?: t.ModelName;
   completion?: t.Completion;
   debug: { running?: boolean; forcePublicUrl?: boolean };
@@ -19,7 +19,7 @@ const initial: T = { props: {}, debug: {} };
 const name = 'sample.api.openai';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
+  type LocalStore = Pick<t.SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     text: 'say hello world properly',

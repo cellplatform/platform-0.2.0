@@ -1,14 +1,7 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
 import { css, type t } from './common';
 
-export type SampleProps = {
-  text?: string;
-  style?: t.CssValue;
-  onChange?: t.EditorEventHandler;
-  onCmdEnterKey?: t.EditorEventHandler;
-};
-
-export const Sample: React.FC<SampleProps> = (props) => {
+export const Sample: React.FC<t.SampleProps> = (props) => {
   const styles = {
     base: css({ position: 'relative', display: 'grid' }),
   };
