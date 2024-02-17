@@ -101,20 +101,11 @@ export default Dev.describe(name, (e) => {
           );
       });
 
-      dev.hr(-1, 5);
-
-      const buttonTheme = (theme: t.CommonTheme) => {
-        dev.button((btn) => {
-          const value = (state: T) => state.props.theme;
-          const isCurrent = (state: T) => value(state) === theme;
-          btn
-            .label(`theme: "${theme}"`)
-            .right((e) => (isCurrent(e.state) ? `←` : ''))
-            .onClick((e) => e.change((d) => (local.theme = d.props.theme = theme)));
-        });
-      };
-      buttonTheme('Light');
-      buttonTheme('Dark');
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);

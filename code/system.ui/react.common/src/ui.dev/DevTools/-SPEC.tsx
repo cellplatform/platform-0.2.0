@@ -4,7 +4,7 @@ import { DevTools } from '.';
 import { Dev, Pkg, RenderCount, type t } from '../../test.ui';
 import { css } from '../common';
 
-type T = { count: number; on: boolean; theme: t.CommonTheme };
+type T = { count: number; on: boolean; theme?: t.CommonTheme };
 const initial: T = { count: 0, on: true, theme: 'Light' };
 
 export default Dev.describe('DevTools', (e) => {

@@ -7,7 +7,7 @@ type O = Record<string, unknown>;
  * Helpers for working with common themes within the harness.
  */
 export const Theme = {
-  is(theme: t.CommonTheme) {
+  is(theme: t.CommonTheme = 'Light') {
     return { dark: theme === 'Dark', light: theme === 'Light' } as const;
   },
 
@@ -29,7 +29,7 @@ export const Theme = {
    */
   switch<T extends O>(
     dev: t.DevTools<T>,
-    current: (d: T) => t.CommonTheme,
+    current: (d: T) => t.CommonTheme | undefined,
     update: (d: T, value: t.CommonTheme) => void,
   ) {
     dev.button((btn) => {
