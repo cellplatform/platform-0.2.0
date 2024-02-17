@@ -23,5 +23,18 @@
     "sys.types": "0.0.0"
   },
   "license": "MIT",
-  "private": true
+  "private": true,
+  "sideEffects": false,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
+  }
 }
