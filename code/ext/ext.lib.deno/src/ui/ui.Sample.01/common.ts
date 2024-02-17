@@ -3,8 +3,8 @@ export { type t };
 export * from '../common';
 
 export const DEFAULTS = {
-  urls: {
-    local: `http://localhost:8000/`,
-    prod: `https://api.db.team/`,
+  origins: {
+    local: `http://localhost:8080`,
+    prod: `https://api.db.team`,
   },
 } as const;

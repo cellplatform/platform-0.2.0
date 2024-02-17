@@ -90,8 +90,12 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('ƒ: fetch( 💦 )', (e) => {
+      dev.button('ƒ: fetch( 💦 )', async (e) => {
         console.log('Http.Api', Http.Api);
+        const forcePublic = e.state.current.debug.forcePublicUrl;
+        const http = Http.Api.http({ forcePublic });
+        const res = await http.get('deno/subhosting');
+        console.log('res', res);
       });
     });
 
@@ -116,7 +120,7 @@ export default Dev.describe(name, (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug, props } = e.state;
       const data = {
-        'url.origin': Http.Api.origin(debug.forcePublicUrl),
+        origin: Http.Api.origin(debug.forcePublicUrl),
         props,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
