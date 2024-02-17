@@ -3,7 +3,7 @@ export * from '../common';
 export { type t };
 
 export const DEFAULTS = {
-  urls: {
+  origins: {
     local: `http://localhost:8080/ai`,
     prod: `https://api.db.team/ai`,
   },
