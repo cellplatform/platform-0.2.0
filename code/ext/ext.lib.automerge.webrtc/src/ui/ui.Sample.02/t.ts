@@ -51,6 +51,7 @@ export type SampleName =
   | 'CodeEditor'
   | 'CodeEditor.AI'
   | 'DiagramEditor'
+  | 'Deno.Deploy'
   | 'ModuleNamespace';
 export type SampleFactoryCtx = { docuri: string; store: t.Store };
 
