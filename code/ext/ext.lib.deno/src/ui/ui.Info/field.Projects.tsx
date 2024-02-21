@@ -7,9 +7,8 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
 
   const items = projects.list.map((project, index): t.PropListItem => {
     const id = project.id;
-    const isSelected = id === projects.selected;
+    const selected = id === projects.selected;
     const hasClickHandler = !!projects.onSelect;
-    const handleClick = () => projects.onSelect?.({ id, index, project });
 
     const styles = {
       label: css({
@@ -29,26 +28,31 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
         borderRadius: '100%',
         marginLeft: 5,
         marginRight: 6,
-        visibility: isSelected ? 'visible' : 'hidden',
+        visibility: selected ? 'visible' : 'hidden',
       }),
     };
 
     const name = project.name || 'Unnamed';
     const label = (
-      <div {...styles.label} onMouseDown={handleClick}>
+      <div {...styles.label}>
         <div {...styles.selected}></div>
         <div>{name}</div>
       </div>
     );
 
     const value = (
-      <div {...styles.value} onMouseDown={handleClick}>
+      <div {...styles.value}>
         <div>{}</div>
         <Icons.Server size={14} />
       </div>
     );
 
-    return { label, value, selected: isSelected };
+    return {
+      label,
+      value,
+      selected,
+      onClick: () => projects.onSelect?.({ id, index, project }),
+    };
   });
 
   // Title
