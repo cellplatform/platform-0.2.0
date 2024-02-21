@@ -1,6 +1,6 @@
 import { Color, css, DEFAULTS, Wrangle, type t } from './common';
-import { PropListLabel } from './Label';
-import { PropListValue } from './Value';
+import { PropListLabel } from './ui.Label';
+import { PropListValue } from './ui.Value';
 
 export type PropListItemProps = {
   data: t.PropListItem;
@@ -16,6 +16,11 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const hasLabel = !!data.label;
   const selected = Wrangle.selected(data, theme.is.dark);
   const divider = data.divider ?? true;
+
+  /**
+   * TODO 🐷
+   */
+  // const m = useClickHandler();
 
   /**
    * Render

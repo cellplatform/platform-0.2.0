@@ -1,7 +1,6 @@
 import { Card, COLORS, css, DEFAULTS, type t } from './common';
-import { PropListItem } from './ui.Item/Item';
-import { PropListTitle } from './ui.Item/Title';
 import { Wrangle } from './u';
+import { PropListItem, PropListTitle } from './ui.Item';
 
 /**
  * Component

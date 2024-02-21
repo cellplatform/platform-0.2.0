@@ -4,7 +4,7 @@ import { Wrangle } from './u';
 import { FieldSelector } from '../PropList.FieldSelector';
 import { FieldBuilder } from './FieldBuilder';
 import { View } from './ui';
-import { Hash } from './ui.Item/Value.Hash';
+import { Hash } from './ui.Item';
 
 type Fields = {
   THEMES: typeof THEMES;

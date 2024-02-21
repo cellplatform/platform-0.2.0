@@ -5,11 +5,7 @@ import { COLORS, css, Icons } from './common';
  */
 export const CopyIcon: React.FC = () => {
   const styles = {
-    base: css({
-      Absolute: [0, -16, 0, null],
-      display: 'grid',
-      placeItems: 'center',
-    }),
+    base: css({ Absolute: [0, -16, 0, null], display: 'grid', placeItems: 'center' }),
     icon: css({ opacity: 0.8 }),
   };
   return (

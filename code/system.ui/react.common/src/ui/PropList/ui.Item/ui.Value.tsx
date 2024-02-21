@@ -1,7 +1,6 @@
-import { format } from '../u.format';
-import { SimpleValue } from './Value.Simple';
-import { SwitchValue } from './Value.Switch';
-import { css, useMouse, type t } from './common';
+import { css, format, useMouse, type t } from './common';
+import { SimpleValue } from './ui.Value.Simple';
+import { SwitchValue } from './ui.Value.Switch';
 import { useHandler } from './use.Handler';
 
 export type PropListValueProps = {

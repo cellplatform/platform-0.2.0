@@ -1,8 +1,7 @@
 import { isValidElement } from 'react';
-import { Color, COLORS, css, type t, DEFAULTS } from './common';
-
 import { Wrangle } from '../u';
-import { CopyIcon } from './CopyIcon';
+import { COLORS, Color, DEFAULTS, css, type t } from './common';
+import { CopyIcon } from './ui.CopyIcon';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
