@@ -1,12 +1,13 @@
 import { format } from '../u.format';
-import { useClickHandler as useHandlers } from './Item.useHandlers';
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
 import { css, useMouse, type t } from './common';
+import { useHandler } from './use.Handler';
 
 export type PropListValueProps = {
   item: t.PropListItem;
   hasLabel?: boolean;
+  message?: string | JSX.Element;
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
   style?: t.CssValue;
@@ -20,7 +21,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
   const cursor = item.value.onClick ? 'pointer' : undefined;
 
   const mouse = useMouse();
-  const handlers = useHandlers(props);
+  const handler = useHandler(props, item.value.onClick);
 
   /**
    * [Render]
@@ -38,22 +39,23 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
 
   const renderKind = () => {
     const kind = (value as t.PropListValueKinds).kind;
+    const message = props.message ?? handler.message;
 
     if (kind === 'Switch') {
-      return <SwitchValue value={value} onClick={handlers.onClick} />;
+      return <SwitchValue value={value} onClick={handler.onClick} />;
     }
 
-    if (handlers.message || item.isSimple || item.isComponent) {
+    if (message || item.isSimple || item.isComponent) {
       return (
         <SimpleValue
           value={value}
-          message={handlers.message}
+          message={message}
           isOver={mouse.is.over}
           isCopyable={isCopyable}
           cursor={cursor}
           defaults={props.defaults}
           theme={props.theme}
-          onClick={handlers.onClick}
+          onClick={handler.onClick}
         />
       );
     }

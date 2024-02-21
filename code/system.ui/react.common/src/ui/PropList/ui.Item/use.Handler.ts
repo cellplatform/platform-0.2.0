@@ -2,7 +2,10 @@ import { useRef, useState } from 'react';
 import { format } from '../u.format';
 import { DEFAULTS, Time, type t } from './common';
 
-export function useClickHandler(props: { item: t.PropListItem; defaults: t.PropListDefaults }) {
+export function useHandler(
+  props: { item: t.PropListItem; defaults: t.PropListDefaults },
+  handler?: t.PropListItemHandler | undefined,
+) {
   const item = format(props.item);
   const isCopyable = item.isCopyable(props.defaults);
 
@@ -12,38 +15,38 @@ export function useClickHandler(props: { item: t.PropListItem; defaults: t.PropL
   /**
    * Handlers
    */
-  const showMessage = (message: JSX.Element | string, delay?: number) => {
+  const showMessage = (message: JSX.Element | string, hideAfter?: t.Msecs) => {
     messageDelay.current?.cancel();
     setMessage(message);
-    const msecs = delay ?? DEFAULTS.messageDelay;
-    messageDelay.current = Time.delay(msecs, () => setMessage(undefined));
+    const delay = hideAfter ?? DEFAULTS.messageDelay;
+    messageDelay.current = Time.delay(delay, () => setMessage(undefined));
   };
 
   const onClick = async () => {
     const { clipboard, value } = item;
-    let message: JSX.Element | string | undefined;
-    let delay: number | undefined;
+    let _message: JSX.Element | string | undefined;
+    let _delay: number | undefined;
 
-    value.onClick?.({
+    handler?.({
       item,
       value,
       message(text, msecs) {
-        message = text;
-        delay = msecs;
+        _message = text;
+        _delay = msecs;
       },
     });
 
     if (clipboard && isCopyable) {
       const value = typeof clipboard === 'function' ? clipboard() : clipboard;
       await navigator.clipboard.writeText(value ?? '');
-      if (!message) {
-        const text = (value || '').toString().trim();
+      if (!_message) {
+        const text = String(value || '').trim();
         const isHttp = text.startsWith('http://') || text.startsWith('https://');
-        message = isHttp ? 'copied url' : 'copied';
+        _message = isHttp ? 'copied url' : 'copied';
       }
     }
 
-    if (message) showMessage(message, delay);
+    if (_message) showMessage(_message, _delay);
   };
 
   /**
