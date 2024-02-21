@@ -50,9 +50,25 @@ export function init(path: string, app: t.HonoApp) {
     });
 
     if (!Is.statusOK(res)) return c.text(failedUpstream(res), 500);
+    return c.json({ created: true, data: await res.json() });
+  });
 
-    const data = await res.json();
-    return c.json({ created: true, data });
+  /**
+   * POST: Deploy.
+   */
+  app.post(`${path}/projects/:projectId/deployments`, async (c) => {
+    const projectId = c.req.param('projectId');
+    const url = `${baseurl}/projects/${projectId}/deployments`;
+    const body = (await c.req.json()) as t.DenoDeployArgs;
+
+    const res = await fetch(url, {
+      headers,
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+
+    if (!Is.statusOK(res)) return c.text(failedUpstream(res), 500);
+    return c.json({ created: true, data: await res.json() });
   });
 
   /**
