@@ -4,24 +4,23 @@ import { PropListValue } from './Value';
 
 export type PropListItemProps = {
   data: t.PropListItem;
-  isFirst?: boolean;
-  isLast?: boolean;
+  is: { first: boolean; last: boolean };
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
-  const { data, isFirst, isLast, defaults } = props;
+  const { data, is, defaults } = props;
   const theme = Wrangle.theme(props.theme);
-  const hasLabel = Boolean(data.label);
+  const hasLabel = !!data.label;
   const selected = Wrangle.selected(data, theme.is.dark);
   const divider = data.divider ?? true;
 
   /**
    * Render
    */
-  const noBorder = isLast || !divider;
+  const noBorder = is.last || !divider;
   const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
@@ -47,9 +46,8 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       {hasLabel && <PropListLabel data={data} defaults={defaults} theme={props.theme} />}
       <PropListValue
         item={data}
+        is={is}
         hasLabel={hasLabel}
-        isFirst={isFirst}
-        isLast={isLast}
         defaults={defaults}
         theme={props.theme}
       />

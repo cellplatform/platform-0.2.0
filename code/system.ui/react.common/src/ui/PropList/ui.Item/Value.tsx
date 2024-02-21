@@ -6,16 +6,15 @@ import { DEFAULTS, Time, css, useMouse, type t } from './common';
 
 export type PropListValueProps = {
   item: t.PropListItem;
+  is: { first: boolean; last: boolean };
   hasLabel?: boolean;
-  isFirst?: boolean;
-  isLast?: boolean;
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const { hasLabel = true } = props;
+  const { is, hasLabel = true } = props;
   const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
