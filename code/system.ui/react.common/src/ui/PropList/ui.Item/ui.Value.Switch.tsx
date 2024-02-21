@@ -3,7 +3,7 @@ import { Color, css, type t } from './common';
 
 export type SwitchValueProps = {
   value: t.PropListValue;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const SwitchValue: React.FC<SwitchValueProps> = (props) => {

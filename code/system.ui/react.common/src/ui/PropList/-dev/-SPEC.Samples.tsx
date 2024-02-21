@@ -46,6 +46,7 @@ export const sampleItems: t.PropListItem[] = [
     value: {
       data: 'click value',
       onClick(e) {
+        console.info('⚡️ item.value.onClick', e);
         const el = <div style={{ color: COLORS.MAGENTA }}>{'clicked element!'}</div>;
         e.message(el, 1200);
       },
@@ -53,11 +54,13 @@ export const sampleItems: t.PropListItem[] = [
   },
   {
     label: 'click handler',
-    value: 'click item',
+    value: {
+      data: 'click whole item',
+      onClick: (e) => console.info('⚡️ item.value.onClick', e),
+    },
     onClick(e) {
-      const backgroundColor = 'rgba(255, 0, 0, 0.1)';
-      const el = <div style={{ backgroundColor }}>{'clicked element!'}</div>;
-      e.message(el, 1200);
+      console.info('⚡️ item.onClick', e);
+      e.message('My Clicked Text', 1200);
     },
   },
   { label: 'descender gyp', value: 'descender gyp' },

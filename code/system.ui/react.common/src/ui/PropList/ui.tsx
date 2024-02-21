@@ -28,7 +28,6 @@ export const View: React.FC<t.PropListProps> = (props) => {
       maxWidth: width?.max,
       maxHeight: height?.max,
     }),
-    items: css({}),
   };
 
   const elItems = items
@@ -38,7 +37,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
       return (
         <PropListItem
           key={i}
-          data={item!}
+          item={item!}
           is={{ first: i === 0, last: i === items.length - 1 }}
           defaults={defaults}
           theme={theme}
@@ -72,7 +71,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
         {elTitle}
-        {items.length > 0 && <div {...styles.items}>{elItems}</div>}
+        {items.length > 0 && <div>{elItems}</div>}
       </div>
     </Card>
   );

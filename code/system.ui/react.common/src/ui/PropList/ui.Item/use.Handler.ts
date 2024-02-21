@@ -3,32 +3,36 @@ import { format } from '../u.format';
 import { DEFAULTS, Time, type t } from './common';
 
 export function useHandler(
-  props: { item: t.PropListItem; defaults: t.PropListDefaults },
+  input: t.PropListItem,
+  defaults: t.PropListDefaults,
   handler?: t.PropListItemHandler | undefined,
 ) {
-  const item = format(props.item);
-  const isCopyable = item.isCopyable(props.defaults);
+  const item = format(input);
+  const isCopyable = item.isCopyable(defaults);
+  const cursor = handler ? 'pointer' : undefined;
 
   const [message, setMessage] = useState<JSX.Element | string>();
-  const messageDelay = useRef<t.TimeDelayPromise>();
+  const timer = useRef<t.TimeDelayPromise>();
 
   /**
    * Handlers
    */
   const showMessage = (message: JSX.Element | string, hideAfter?: t.Msecs) => {
-    messageDelay.current?.cancel();
+    timer.current?.cancel();
     setMessage(message);
-    const delay = hideAfter ?? DEFAULTS.messageDelay;
-    messageDelay.current = Time.delay(delay, () => setMessage(undefined));
+    const msecs = hideAfter ?? DEFAULTS.messageDelay;
+    timer.current = Time.delay(msecs, () => setMessage(undefined));
   };
 
   const onClick = async () => {
+    if (!handler) return;
+
     const { clipboard, value } = item;
     let _message: JSX.Element | string | undefined;
     let _delay: number | undefined;
 
-    handler?.({
-      item,
+    handler({
+      item: input,
       value,
       message(text, msecs) {
         _message = text;
@@ -52,5 +56,9 @@ export function useHandler(
   /**
    * API
    */
-  return { message, onClick } as const;
+  return {
+    message,
+    cursor,
+    onClick: handler ? onClick : undefined,
+  } as const;
 }

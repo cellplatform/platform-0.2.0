@@ -1,9 +1,10 @@
-import { Color, css, DEFAULTS, Wrangle, type t } from './common';
+import { Color, DEFAULTS, Wrangle, css, type t } from './common';
 import { PropListLabel } from './ui.Label';
 import { PropListValue } from './ui.Value';
+import { useHandler } from './use.Handler';
 
 export type PropListItemProps = {
-  data: t.PropListItem;
+  item: t.PropListItem;
   is: { first: boolean; last: boolean };
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
@@ -11,16 +12,13 @@ export type PropListItemProps = {
 };
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
-  const { data, is, defaults } = props;
+  const { item, is, defaults } = props;
   const theme = Wrangle.theme(props.theme);
-  const hasLabel = !!data.label;
-  const selected = Wrangle.selected(data, theme.is.dark);
-  const divider = data.divider ?? true;
+  const hasLabel = !!item.label;
+  const selected = Wrangle.selected(item, theme.is.dark);
+  const divider = item.divider ?? true;
 
-  /**
-   * TODO 🐷
-   */
-  // const m = useClickHandler();
+  const handler = useHandler(props.item, props.defaults, item.onClick);
 
   /**
    * Render
@@ -34,6 +32,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       paddingTop: 4,
       paddingBottom: noBorder ? 0 : 4,
       minHeight: 16,
+      cursor: handler.cursor,
       fontSize: DEFAULTS.fontSize.sans,
       borderBottom: `solid ${noBorder ? 0 : 1}px ${borderColor}`,
       ':first-child': { paddingTop: 2 },
@@ -47,9 +46,16 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   };
 
   return (
-    <div {...styles.base} title={data.tooltip}>
-      {hasLabel && <PropListLabel data={data} defaults={defaults} theme={props.theme} />}
-      <PropListValue item={data} hasLabel={hasLabel} defaults={defaults} theme={props.theme} />
+    <div {...styles.base} title={item.tooltip} onClick={handler.onClick}>
+      {hasLabel && <PropListLabel data={item} defaults={defaults} theme={props.theme} />}
+      <PropListValue
+        item={item}
+        hasLabel={hasLabel}
+        defaults={defaults}
+        theme={props.theme}
+        cursor={handler.cursor}
+        message={handler.message}
+      />
     </div>
   );
 };

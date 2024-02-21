@@ -7,6 +7,7 @@ export type PropListValueProps = {
   item: t.PropListItem;
   hasLabel?: boolean;
   message?: string | JSX.Element;
+  cursor?: string;
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
   style?: t.CssValue;
@@ -17,10 +18,10 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
   const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
-  const cursor = item.value.onClick ? 'pointer' : undefined;
 
   const mouse = useMouse();
-  const handler = useHandler(props, item.value.onClick);
+  const handler = useHandler(props.item, props.defaults, item.value.onClick);
+  const cursor = props.cursor ?? handler.cursor;
 
   /**
    * [Render]
