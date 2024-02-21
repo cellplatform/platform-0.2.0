@@ -1,8 +1,9 @@
-import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
-
-import { BuilderSample, SampleFields, sampleItems, type MyField } from '.';
 import { PropList } from '..';
+import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
+import { BuilderSample } from './-SPEC.Sample.Builder';
+import { sampleItems } from './-SPEC.Samples';
+import { SampleFields, type MyField } from './-common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type T = {
@@ -219,14 +220,12 @@ export default Dev.describe('PropList', (e) => {
       };
       button('Empty');
       dev.hr(-1, 5);
+      button('Samples');
       button('One Item');
       button('Two Items');
-      button('Samples');
       dev.hr(-1, 5);
       button('Builder');
     });
-
-    dev.hr(-1, 10);
 
     dev.section((dev) => {
       dev.row((e) => {
@@ -241,7 +240,7 @@ export default Dev.describe('PropList', (e) => {
           },
         };
 
-        return <PropList.FieldSelector {...props} style={{ Margin: [20, 25, 20, 38] }} />;
+        return <PropList.FieldSelector {...props} style={{ Margin: [20, 0, 20, 30] }} />;
       });
     });
   });
