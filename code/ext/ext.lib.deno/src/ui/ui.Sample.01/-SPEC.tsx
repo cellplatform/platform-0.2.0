@@ -125,7 +125,7 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('💦 POST create project', async (e) => {
+      dev.button('💦 create project', async (e) => {
         const http = getHttp().http;
         const body = {
           // name: `foo-${slug()}`,
@@ -134,6 +134,32 @@ export default Dev.describe(name, (e) => {
         const res = await http.post('deno/hosting/projects', body);
 
         e.change((d) => (d.tmp = res.json));
+      });
+
+      dev.button((btn) => {
+        const isEnabled = () => !!state.current.deno.selectedProject;
+        btn
+          .label(`💦 deploy`)
+          .enabled((e) => isEnabled())
+          .onClick(async (e) => {
+            const projectId = state.current.deno.selectedProject;
+            console.log('deploy', projectId);
+
+            const http = getHttp().http;
+
+            const content = state.current.props.code ?? '';
+            const body: t.DenoDeployArgs = {
+              entryPointUrl: 'main.ts',
+              assets: { 'main.ts': { kind: 'file', content, encoding: 'utf-8' } },
+              envVars: {},
+            };
+
+            const path = `deno/hosting/projects/${projectId}/deployments`;
+            const res = await http.post(path, body);
+
+            console.log('-------------------------------------------');
+            console.log('res', res);
+          });
       });
     });
 
