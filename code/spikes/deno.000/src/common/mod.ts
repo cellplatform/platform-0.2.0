@@ -1,4 +1,4 @@
-export type * as t from '../t.ts';
+export type * as t from '../types.ts';
 export * from './libs.ts';
 
 export { Env } from '../env.ts';

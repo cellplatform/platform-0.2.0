@@ -1,11 +1,3 @@
-export type * from './route.deno/t.ts';
-
-import type { Hono } from 'npm:hono';
-import type { Env, BlankSchema } from 'npm:hono/types';
-
-export type { BlankSchema } from 'npm:hono/types';
-export type HonoApp = Hono<Env, BlankSchema, '/'>;
-
 /**
  * https://platform.openai.com/docs
  */

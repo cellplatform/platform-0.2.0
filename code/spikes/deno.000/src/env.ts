@@ -17,7 +17,7 @@ export const Env = {
      */
     deno: {
       /**
-       * Organization: Sys (Subhosting)
+       * Organization: "sys" (Subhosting)
        * https://docs.deno.com/subhosting/manual
        */
       subhosting: {

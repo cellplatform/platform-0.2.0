@@ -9,10 +9,10 @@ import deno from './route.deno/mod.ts';
 const app = new Server.Hono();
 
 const cors = Server.cors({
-  origin: '*', // Specify allowed origin or use '*' to allow all origins
+  origin: '*', // Allowed origin or use '*' to allow all origins.
   allowMethods: ['GET', 'POST'],
-  allowHeaders: ['Content-Type'], // Specify allowed headers
-  maxAge: 86400, // Specify preflight cache age in seconds
+  allowHeaders: ['Content-Type'],
+  maxAge: 86400, // Preflight cache age in seconds.
 });
 
 app.use('*', cors);

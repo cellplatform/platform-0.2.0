@@ -1,3 +1,6 @@
+import OpenAI from 'npm:openai';
+export { OpenAI };
+
 export * from '../common/mod.ts';
 export * from './u.is.ts';
 

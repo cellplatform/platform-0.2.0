@@ -1,6 +1,3 @@
-import OpenAI from 'npm:openai';
-export { OpenAI };
-
 // Hono
 import { Hono } from 'npm:hono';
 import { cors } from 'npm:hono/cors';
