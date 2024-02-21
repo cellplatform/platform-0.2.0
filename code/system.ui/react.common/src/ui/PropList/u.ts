@@ -1,6 +1,6 @@
 import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
-import { format } from './util.format';
-import { theme } from './util.theme';
+import { format } from './u.format';
+import { theme } from './u.theme';
 
 export const Wrangle = {
   format,

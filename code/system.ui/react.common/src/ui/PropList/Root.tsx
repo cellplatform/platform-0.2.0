@@ -1,4 +1,4 @@
-import { Wrangle } from './util';
+import { Wrangle } from './u';
 import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 
 import { FieldSelector } from '../PropList.FieldSelector';

@@ -2,7 +2,7 @@ import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
 
 import { BuilderSample, SampleFields, sampleItems, type MyField } from '.';
 import { PropList } from '..';
-import { Wrangle } from '../util';
+import { Wrangle } from '../u';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type T = {
