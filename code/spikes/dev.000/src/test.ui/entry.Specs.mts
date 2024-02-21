@@ -39,6 +39,7 @@ const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 const { Specs: ExtTldraw } = await import('ext.lib.tldraw/specs');
+const { Specs: ExtDeno } = await import('ext.lib.deno/specs');
 
 export const Specs = {
   ...App,
@@ -68,4 +69,5 @@ export const Specs = {
   ...ExtCodeMirror,
   ...ExtAutomergeWebrtc,
   ...ExtTldraw,
+  ...ExtDeno,
 };
