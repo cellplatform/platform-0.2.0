@@ -6,7 +6,7 @@ import { SAMPLE } from './-SPEC.sample';
 import { Http, type t } from './common';
 import { Sample } from './ui';
 
-type T = TState & { props: t.SampleProps };
+type T = TState & { props: t.SampleProps; accessToken?: string };
 const initial: T = {
   props: {},
   deno: { projects: [], deployments: [] },
@@ -70,7 +70,10 @@ export default Dev.describe(name, (e) => {
           title={'Identity'}
           fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
           data={{ provider: Auth.Env.provider }}
-          onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+          onChange={(e) => {
+            console.info('⚡️ Auth.onChange:', e);
+            state.change((d) => (d.accessToken = e.accessToken));
+          }}
         />
       );
     });
@@ -194,10 +197,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props, deno } = e.state;
+      const { props, deno, accessToken } = e.state;
       const forcePublic = e.state.forcePublicUrl;
       const data = {
         origin: Http.origin({ forcePublic }),
+        jwt: accessToken ? `${accessToken.slice(0, 10)}...` : undefined,
         props: { ...props, code: props.code?.slice(0, 30) },
         deno,
       };
