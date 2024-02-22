@@ -11,6 +11,14 @@ export type InfoData = {
   projects?: {
     list?: t.DenoProject[];
     selected?: Id;
-    onSelect?(e: { index: Index; id: Id; project: t.DenoProject }): void;
+    onSelect?(e: { index: Index; project: t.DenoProject }): void;
+    onDeploymentClick?(e: {
+      index: Index;
+      project: t.DenoProject;
+      deployment: t.DenoDeployment;
+    }): void;
+  };
+  deployments?: {
+    list?: t.DenoDeployment[];
   };
 };

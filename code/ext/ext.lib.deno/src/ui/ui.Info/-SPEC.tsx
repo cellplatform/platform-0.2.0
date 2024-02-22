@@ -35,7 +35,8 @@ export default Dev.describe(name, (e) => {
       d.props.data = {
         projects: {
           onSelect(e) {
-            state.change((d) => (d.props.data!.projects!.selected = e.id));
+            const projectId = e.project.id;
+            state.change((d) => (d.props.data!.projects!.selected = projectId));
           },
         },
       };

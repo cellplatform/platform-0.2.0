@@ -10,10 +10,12 @@ export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   Disposable,
   EventBus,
-  Lifecycle,
-  UntilObservable,
+  Immutable,
+  ImmutableRef,
   Json,
   JsonMap,
+  Lifecycle,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 /**

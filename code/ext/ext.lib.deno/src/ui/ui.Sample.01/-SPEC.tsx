@@ -1,23 +1,15 @@
 import { Delete, Dev, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 
+import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
 import { Http, type t } from './common';
 import { Sample } from './ui';
 
-type T = {
-  props: t.SampleProps;
-  debug: { forcePublicUrl?: boolean };
-  tmp?: any;
-  deno: {
-    projects: t.DenoProject[];
-    selectedProject?: string;
-  };
-};
+type T = TState & { props: t.SampleProps };
 const initial: T = {
   props: {},
-  debug: {},
-  deno: { projects: [] },
+  deno: { projects: [], deployments: [] },
 };
 
 /**
@@ -25,7 +17,7 @@ const initial: T = {
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SampleProps, 'code'> & T['debug'];
+  type LocalStore = Pick<t.SampleProps, 'code'> & Pick<T, 'forcePublicUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({
@@ -40,8 +32,10 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.code = local.code;
-      d.debug.forcePublicUrl = local.forcePublicUrl;
+      d.forcePublicUrl = local.forcePublicUrl;
     });
+
+    HttpState.updateProjects(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -65,23 +59,49 @@ export default Dev.describe(name, (e) => {
       });
   });
 
+  e.it('ui:debug:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.header
+      .border(-0.1)
+      .padding([10, 15, 10, 15])
+      .render<T>(async (e) => {
+        const { Auth } = await import('ext.lib.privy');
+        return (
+          <Auth.Info
+            title={'Identity'}
+            fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
+            data={{ provider: Auth.Env.provider }}
+            onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+          />
+        );
+      });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
     dev.row((e) => {
+      const deno = e.state.deno;
+
       return (
         <Info
-          //
           fields={['Component', 'Projects.List']}
           data={{
             component: { label: 'Management Interface', name: 'Deno Subhosting' },
             projects: {
-              list: e.state.deno.projects,
-              selected: e.state.deno.selectedProject,
-              onSelect: (e) => state.change((d) => (d.deno.selectedProject = e.id)),
+              list: deno.projects,
+              selected: deno.selectedProject,
+              onSelect: (e) => state.change((d) => (d.deno.selectedProject = e.project.id)),
+              onDeploymentClick(e) {
+                console.log('onDeploymentClick', e);
+                const domain = e.deployment.domains[0];
+                const href = `https://${domain}`;
+                window.open(href, '_blank', 'noopener,noreferrer');
+              },
             },
+            deployments: { list: deno.deployments },
           }}
         />
       );
@@ -106,24 +126,13 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
 
       const getHttp = () => {
-        const forcePublic = state.current.debug.forcePublicUrl;
+        const forcePublic = state.current.forcePublicUrl;
         const fetch = Http.fetcher({ forcePublic });
         const http = Http.methods(fetch);
         const client = Http.client(fetch);
         return { http, client } as const;
       };
-
-      dev.button('💦 GET projects (client)', async (e) => {
-        const client = getHttp().client;
-
-        console.log('client', client);
-        const res = await client.projects.list({ sort: 'name' });
-        console.log('res', res);
-
-        e.change((d) => (d.deno.projects = res.projects));
-      });
-
-      dev.hr(-1, 5);
+      const getSelectedProject = () => state.current.deno.selectedProject;
 
       dev.button('💦 create project', async (e) => {
         const http = getHttp().http;
@@ -131,20 +140,28 @@ export default Dev.describe(name, (e) => {
           // name: `foo-${slug()}`,
           description: `Sample project ${slug()}`,
         };
-        const res = await http.post('deno/hosting/projects', body);
-
-        e.change((d) => (d.tmp = res.json));
+        const res = await http.post('deno/projects', body);
+        // e.change((d) => (d.tmp = res.json));
       });
+      dev.hr(-1, 5);
+
+      dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
 
       dev.button((btn) => {
-        const isEnabled = () => !!state.current.deno.selectedProject;
         btn
-          .label(`💦 deploy`)
-          .enabled((e) => isEnabled())
-          .onClick(async (e) => {
-            const projectId = state.current.deno.selectedProject;
-            console.log('deploy', projectId);
+          .label(`💦 get deployments`)
+          .enabled((e) => !!getSelectedProject())
+          .onClick((e) => HttpState.updateDeployments(state));
+      });
 
+      dev.hr(-1, 5);
+
+      dev.button((btn) => {
+        btn
+          .label(`deploy`)
+          .enabled((e) => !!getSelectedProject())
+          .onClick(async (e) => {
+            const projectId = getSelectedProject();
             const http = getHttp().http;
 
             const content = state.current.props.code ?? '';
@@ -154,11 +171,12 @@ export default Dev.describe(name, (e) => {
               envVars: {},
             };
 
-            const path = `deno/hosting/projects/${projectId}/deployments`;
+            const path = `deno/projects/${projectId}/deployments`;
             const res = await http.post(path, body);
 
             console.log('-------------------------------------------');
             console.log('res', res);
+            await HttpState.updateDeployments(state);
           });
       });
     });
@@ -167,12 +185,12 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.forcePublicUrl);
+        const value = (state: T) => !!state.forcePublicUrl;
         btn
           .label((e) => `force public url`)
           .value((e) => value(e.state))
           .onClick((e) => {
-            e.change((d) => (local.forcePublicUrl = Dev.toggle(d.debug, 'forcePublicUrl')));
+            e.change((d) => (local.forcePublicUrl = Dev.toggle(d, 'forcePublicUrl')));
           });
       });
     });
@@ -182,18 +200,19 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { debug, props, tmp } = e.state;
-      const forcePublic = debug.forcePublicUrl;
+      const { props, deno } = e.state;
+      const forcePublic = e.state.forcePublicUrl;
       const data = {
         origin: Http.origin({ forcePublic }),
         props: { ...props, code: props.code?.slice(0, 30) },
-        tmp,
+        deno,
       };
       return (
         <Dev.Object
           name={name}
           data={Delete.undefined(data)}
           expand={{ level: 1, paths: ['$', '$.tmp'] }}
+          fontSize={11}
         />
       );
     });

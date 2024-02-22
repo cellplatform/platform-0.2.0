@@ -1,5 +1,20 @@
 type O = Record<string, unknown>;
+type DateTimeString = string;
 
+export type DenoListParams<TSort extends string> = {
+  page?: number;
+  limit?: number;
+  q?: string;
+  sort?: TSort;
+  order?: 'asc' | 'desc';
+};
+
+export type DenoListProjectsParams = DenoListParams<'name' | 'updated_at'>;
+export type DenoListDeploymentsParams = DenoListParams<'id' | 'created_at'>;
+
+/**
+ * Project
+ */
 export type DenoProjectCreateArgs = {
   name?: string;
   description?: string;
@@ -9,16 +24,22 @@ export type DenoProject = {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: DateTimeString;
+  updatedAt: DateTimeString;
 };
 
-export type DenoProjectListParams = {
-  page?: number;
-  limit?: number;
-  q?: string;
-  sort?: 'update_at' | 'name';
-  order?: 'asc' | 'desc';
+/**
+ * Deployment
+ */
+export type DenoDeployment = {
+  id: string;
+  projectId: string;
+  description: string;
+  status: 'failed' | 'pending' | 'success';
+  domains: string[];
+  databases: { [key: string]: string };
+  createdAt: DateTimeString;
+  updatedAt: DateTimeString;
 };
 
 export type DenoDeployArgs = {

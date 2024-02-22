@@ -1,14 +1,24 @@
-import { COLORS, Icons, css, type t } from './common';
+import { Button, COLORS, Icons, R, css, type t } from './common';
 
 export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const projects = data.projects;
   if (!projects?.list) return res;
 
+  const sort = R.sortBy(R.prop('createdAt'));
+  const deployments = sort(data.deployments?.list ?? []);
+  deployments.reverse();
+
   const items = projects.list.map((project, index): t.PropListItem => {
     const id = project.id;
     const selected = id === projects.selected;
     const hasClickHandler = !!projects.onSelect;
+    const deployment = deployments.find((d) => d.projectId === id);
+
+    const handleDeploymentClick = () => {
+      if (!deployment) return;
+      projects.onDeploymentClick?.({ index, project, deployment });
+    };
 
     const styles = {
       label: css({
@@ -43,7 +53,9 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
     const value = (
       <div {...styles.value}>
         <div>{}</div>
-        <Icons.Server size={14} />
+        <Button enabled={!!deployment} onClick={handleDeploymentClick}>
+          <Icons.Server size={14} />
+        </Button>
       </div>
     );
 
@@ -51,7 +63,7 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
       label,
       value,
       selected,
-      onClick: () => projects.onSelect?.({ id, index, project }),
+      onClick: () => projects.onSelect?.({ index, project }),
     };
   });
 

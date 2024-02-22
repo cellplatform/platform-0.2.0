@@ -14,12 +14,28 @@ export function client(input: t.HttpFetcher | t.HttpOptions) {
      * Projects
      */
     projects: {
-      async list(params?: t.DenoProjectListParams) {
-        const res = await http.get('deno/hosting/projects', params);
+      async list(params?: t.DenoListProjectsParams) {
+        const url = 'deno/projects';
+        const res = await http.get(url, params);
         const { ok, status, json } = res;
         const projects = ok ? (json as t.DenoProject[]) : [];
         return { ok, status, projects };
       },
+    },
+
+    /**
+     * Deployments
+     */
+    deployments(projectId: string) {
+      return {
+        async list(params?: t.DenoListDeploymentsParams) {
+          const url = `deno/projects/${projectId}/deployments`;
+          const res = await http.get(url, params);
+          const { ok, status, json } = res;
+          const deployments = ok ? (json as t.DenoDeployment[]) : [];
+          return { ok, status, deployments };
+        },
+      } as const;
     },
   } as const;
 
