@@ -12,10 +12,22 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       focusOnLoad={true}
       text={props.code}
       language={'typescript'}
-      onReady={(e) => {
+      onReady={async (e) => {
         const { editor, monaco } = e;
         const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
+
+        /**
+         * TODO 🐷
+         */
+
+        //         const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
+        //         const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
+        //         Monaco.Crdt.Syncer.listen<TDoc>(e.monaco, e.editor, lens, ['text']);
+        //
+        //         lens.events().changed$.subscribe((e) => {
+        //           console.log('lens changed:', e);
+        //         });
       }}
       onChange={(e) => props.onChange?.({ text: e.text })}
     />
