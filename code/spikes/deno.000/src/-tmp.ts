@@ -1,10 +1,15 @@
+// import type * as t from '../../../ext/ext.lib.deno/src/t.deno.ts';
+
+const m: t.DenoDeployment[] = [];
+console.log('m', m);
+
 /**
  * REF
  * https://docs.deno.com/runtime/tutorials/http_server
  */
 const port = 8080;
 
-const handler = (request: Request): Response => {
+const handler = (_req: Request): Response => {
   const body = 'hello world 👋';
   return new Response(body, { status: 200 });
 };
