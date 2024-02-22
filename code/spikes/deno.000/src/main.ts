@@ -23,7 +23,7 @@ app.use('/static/*', Server.serveStatic({ root: './' }) as any); // Hack (any).
  */
 app.get('/', (c) => c.text(`tdb ← (🦄 team:db)`));
 openai('/ai', app);
-deno.hosting('deno/hosting', app);
+deno('/deno', app);
 
 /**
  * Start

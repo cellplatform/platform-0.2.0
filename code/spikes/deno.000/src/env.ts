@@ -20,10 +20,8 @@ export const Env = {
        * Organization: "sys" (Subhosting)
        * https://docs.deno.com/subhosting/manual
        */
-      subhosting: {
-        accessToken: env['SYS_DEPLOY_ACCESS_TOKEN'],
-        orgId: env['SYS_DEPLOY_ORG_ID'],
-      },
+      accessToken: env['SYS_DEPLOY_ACCESS_TOKEN'],
+      orgId: env['SYS_DEPLOY_ORG_ID'],
     },
   },
 } as const;

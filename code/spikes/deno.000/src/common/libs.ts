@@ -1,3 +1,9 @@
+/**
+ * Standard Lib.
+ */
+import { join } from 'https://deno.land/std@0.142.0/path/mod.ts';
+export const Path = { join } as const;
+
 // Hono
 import { Hono } from 'npm:hono';
 import { cors } from 'npm:hono/cors';

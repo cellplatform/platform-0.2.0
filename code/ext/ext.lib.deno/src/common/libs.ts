@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { equals } from 'ramda';
-export const R = { equals } as const;
+import { descend, equals, prop, sortBy, sortWith } from 'ramda';
+export const R = { descend, equals, prop, sortBy, sortWith } as const;
 
 /**
  * @system
