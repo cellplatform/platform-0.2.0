@@ -49,29 +49,10 @@ export default Dev.describe(name, (e) => {
             onChange={async (e) => {
               local.code = e.text;
               await state.change((d) => (d.props.code = e.text));
-              // dev.redraw('debug');
             }}
             onCmdEnterKey={(e) => {
               console.info('⚡️ onCmdEnterKey', e);
             }}
-          />
-        );
-      });
-  });
-
-  e.it('ui:debug:header', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.header
-      .border(-0.1)
-      .padding([10, 15, 10, 15])
-      .render<T>(async (e) => {
-        const { Auth } = await import('ext.lib.privy');
-        return (
-          <Auth.Info
-            title={'Identity'}
-            fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
-            data={{ provider: Auth.Env.provider }}
-            onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
           />
         );
       });
@@ -82,14 +63,27 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
+    dev.row(async (e) => {
+      const { Auth } = await import('ext.lib.privy');
+      return (
+        <Auth.Info
+          title={'Identity'}
+          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
+          data={{ provider: Auth.Env.provider }}
+          onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
+
     dev.row((e) => {
       const deno = e.state.deno;
-
       return (
         <Info
-          fields={['Component', 'Projects.List']}
+          title={'Deno Subhosting'}
+          fields={['Projects.List']}
           data={{
-            component: { label: 'Management Interface', name: 'Deno Subhosting' },
             projects: {
               list: deno.projects,
               selected: deno.selectedProject,
@@ -128,7 +122,7 @@ export default Dev.describe(name, (e) => {
       const getHttp = () => {
         const forcePublic = state.current.forcePublicUrl;
         const fetch = Http.fetcher({ forcePublic });
-        const http = Http.methods(fetch);
+        const http = Http.toMethods(fetch);
         const client = Http.client(fetch);
         return { http, client } as const;
       };

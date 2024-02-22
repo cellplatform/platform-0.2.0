@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { fetcher, methods } from './Http.fetch';
+import { fetcher, toMethods } from './Http.fetch';
 
 /**
  * Client wrapping for the Deno sub-hosting API.
@@ -7,7 +7,7 @@ import { fetcher, methods } from './Http.fetch';
  */
 export function client(input: t.HttpFetcher | t.HttpOptions) {
   const fetch = typeof input === 'function' ? input : fetcher(input);
-  const http = methods(fetch);
+  const http = toMethods(fetch);
 
   const api = {
     /**

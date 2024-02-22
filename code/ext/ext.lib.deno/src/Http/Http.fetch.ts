@@ -47,7 +47,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
 /**
  * HTTP helper methods.
  */
-export function methods(fetcher: t.HttpFetcher): t.HttpFetchMethods {
+export function toMethods(fetcher: t.HttpFetcher): t.HttpFetchMethods {
   return {
     get: (path: string, params?: O) => fetcher('GET', path, { params }),
     post: (path: string, body: O, params?: O) => fetcher('POST', path, { body, params }),
