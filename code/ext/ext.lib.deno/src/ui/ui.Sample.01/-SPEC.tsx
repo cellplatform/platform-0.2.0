@@ -1,4 +1,4 @@
-import { Delete, Dev, Pkg, slug } from '../../test.ui';
+import { Hash, Delete, Dev, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 import { HttpState, type TState } from './-SPEC.HttpState';
@@ -201,7 +201,7 @@ export default Dev.describe(name, (e) => {
       const forcePublic = e.state.forcePublicUrl;
       const data = {
         origin: Http.origin({ forcePublic }),
-        jwt: accessToken ? `${accessToken.slice(0, 10)}...` : undefined,
+        jwt: !accessToken ? null : `${Hash.shorten(accessToken, 4)} (${accessToken.length})`,
         props: { ...props, code: props.code?.slice(0, 30) },
         deno,
       };

@@ -7,4 +7,4 @@ export const R = { descend, equals, prop, sortBy, sortWith, uniqBy } as const;
 /**
  * @system
  */
-export { Delete, Path, rx, slug } from 'sys.util';
+export { Delete, Hash, Path, rx, slug } from 'sys.util';
