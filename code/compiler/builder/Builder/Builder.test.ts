@@ -12,7 +12,7 @@ export async function test(
     ui?: boolean;
     coverage?: boolean;
     reporter?: 'default' | 'verbose' | 'json' | 'dot' | 'junit';
-    silentTestConsole?: boolean; // NB: silence console output from tests
+    silentTestConsole?: boolean; // NB: silence console output from tests.
     silent?: boolean;
   } = {},
 ) {
