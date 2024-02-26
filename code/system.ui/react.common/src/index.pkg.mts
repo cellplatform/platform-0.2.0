@@ -20,7 +20,7 @@ export const Pkg: ModuleDef = {
     'react-icons': '5.0.1',
     'react-spinners': '0.13.8',
     'react-inspector': '6.0.2',
-    'react-virtuoso': '4.7.0',
+    'react-virtuoso': '4.7.1',
     'sys.data.json': '0.0.0',
     'sys.text': '0.0.0',
     'sys.ui.dom': '0.0.0',
