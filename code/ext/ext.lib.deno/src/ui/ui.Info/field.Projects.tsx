@@ -22,30 +22,32 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
 
     const styles = {
       label: css({
-        display: 'grid',
-        gridTemplateColumns: 'auto auto',
-        alignItems: 'center',
         cursor: hasClickHandler ? 'pointer' : 'default',
+        display: 'grid',
+        gridTemplateColumns: 'auto auto auto',
+        alignItems: 'center',
+        columnGap: '5px',
+      }),
+      selected: css({
+        Size: 6,
+        backgroundColor: COLORS.BLUE,
+        borderRadius: '100%',
+        marginLeft: 10,
+        marginRight: 2,
+        visibility: selected ? 'visible' : 'hidden',
       }),
       value: css({
         display: 'grid',
         gridTemplateColumns: 'auto auto',
         cursor: hasClickHandler ? 'pointer' : 'default',
       }),
-      selected: css({
-        Size: 6,
-        backgroundColor: COLORS.BLUE,
-        borderRadius: '100%',
-        marginLeft: 5,
-        marginRight: 6,
-        visibility: selected ? 'visible' : 'hidden',
-      }),
     };
 
     const name = project.name || 'Unnamed';
     const label = (
       <div {...styles.label}>
-        <div {...styles.selected}></div>
+        <div {...styles.selected} />
+        <Icons.Server size={14} color={COLORS.DARK} />
         <div>{name}</div>
       </div>
     );
@@ -68,10 +70,8 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
   });
 
   // Title
-  const total = projects.list.length;
   res.push({
     label: 'Projects',
-    value: <div {...css({ paddingRight: 4 })}>{total === 0 ? '-' : total}</div>,
   });
 
   // Finish up.
