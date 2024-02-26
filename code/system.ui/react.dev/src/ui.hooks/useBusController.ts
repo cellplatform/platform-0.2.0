@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { filter } from 'rxjs/operators';
 import { DEFAULTS, DevBus, Time, rx, slug, type t } from './common';
 
 type Id = string;
@@ -28,7 +27,7 @@ export function useBusController(
    */
   useEffect(() => {
     const events = (eventsRef.current = DevBus.Controller({ instance }));
-    events.info.changed$.pipe(filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
+    events.info.changed$.pipe(rx.filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
 
     /**
      * Initialize.

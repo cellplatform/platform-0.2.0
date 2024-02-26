@@ -1,6 +1,5 @@
-import { Id, DEFAULTS, Is, R, rx, t } from './common';
+import { DEFAULTS, Id, Is, R, rx, type t } from './common';
 
-type O = Record<string, unknown>;
 type Revision = { number: number; message: string };
 
 export type ChangedHandler = (e: ChangedHandlerArgs) => void;

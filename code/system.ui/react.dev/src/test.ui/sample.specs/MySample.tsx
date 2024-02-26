@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Color, css, DEFAULTS, Keyboard, t } from '../common';
+import { Color, css, DEFAULTS, Keyboard, type t } from '../common';
 
 export type MySampleProps = {
   text?: string;

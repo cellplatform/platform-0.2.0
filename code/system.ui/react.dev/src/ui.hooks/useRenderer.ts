@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-
 import { DevBus } from '../logic.Bus';
-import { DEFAULTS, Is, t } from './common';
+import { DEFAULTS, Is, type t } from './common';
 import { useCurrentState } from './useCurrentState';
 import { useRedrawEvent } from './useRedrawEvent';
 

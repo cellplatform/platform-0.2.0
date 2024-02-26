@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { DebugPanelBodyRow as Row } from './Panel.Body.Row';
 
 export type DebugPanelBodyrops = {

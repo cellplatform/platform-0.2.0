@@ -1,7 +1,5 @@
-import { filter } from 'rxjs/operators';
-
-import { asArray, rx, slug, t } from './common';
 import { ContextState } from '../logic.Ctx/Context.State.mjs';
+import { asArray, rx, slug, type t } from './common';
 
 const DEFAULT = { TIMEOUT: 500 };
 
@@ -178,7 +176,7 @@ export function BusEvents(args: {
    */
   const state: t.DevEvents['state'] = {
     changed$: info.changed$.pipe(
-      filter((e) => {
+      rx.filter((e) => {
         const match: t.DevInfoChangeMessage[] = ['state:write', 'context:init'];
         return match.includes(e.message);
       }),
@@ -216,7 +214,7 @@ export function BusEvents(args: {
    */
   const props: t.DevEvents['props'] = {
     changed$: info.changed$.pipe(
-      filter((e) => {
+      rx.filter((e) => {
         const match: t.DevInfoChangeMessage[] = ['props:write', 'reset', 'context:init'];
         return match.includes(e.message);
       }),

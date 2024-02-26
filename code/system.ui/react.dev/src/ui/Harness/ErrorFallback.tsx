@@ -1,5 +1,5 @@
-import { COLORS, css, t } from '../common';
 import type { FallbackProps } from 'react-error-boundary';
+import { COLORS, css, type t } from '../common';
 
 export type ErrorFallbackProps = FallbackProps & {
   style?: t.CssValue;

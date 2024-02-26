@@ -1,4 +1,4 @@
-import { describe, expect, it, t } from '../test';
+import { describe, expect, it, type t } from '../test';
 import { Margin } from './Margin';
 
 describe('Margin', () => {
