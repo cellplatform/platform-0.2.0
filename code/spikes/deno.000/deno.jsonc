@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "start": "deno run --allow-net --allow-read src/main.ts",
-    "dev": "deno run --watch --allow-net --allow-read src/main.ts",
+    "dev": "deno run --check --watch --allow-net --allow-read src/main.ts",
     "check": "deno check src/main.ts",
+    "deploy": "deno task check && deployctl deploy --project=tdb --prod",
     "tmp": "deno run -A src/-tmp.ts"
   },
   "deploy": {
