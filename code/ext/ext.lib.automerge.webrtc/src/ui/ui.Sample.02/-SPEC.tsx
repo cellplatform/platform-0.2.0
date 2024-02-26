@@ -354,7 +354,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.footer.border(-0.1).render<T>((e) => {
+    dev.footer.border(-0.1).render<T>(async (e) => {
       const total = (edge: t.SampleEdge) => edge.model.index.doc.current.docs.length;
       const shorten = (uri: string) => Doc.Uri.id(uri, { shorten: 6 });
       const formatEdge = (edge: t.SampleEdge) => {
@@ -365,18 +365,10 @@ export default Dev.describe(name, async (e) => {
         };
       };
 
-      const formatSelected = (item?: t.StoreIndexDoc) => {
-        if (!item) return;
-
-        const shared = item.shared
-          ? { ...item.shared, version: item.shared.version?.value ?? -1 }
-          : undefined;
-
-        return {
-          ...item,
-          uri: Doc.Uri.automerge(item.uri, { shorten: 6 }),
-          shared,
-        };
+      const selectedDoc = async (edge: t.NetworkConnectionEdge, item: t.StoreIndexDoc) => {
+        if (!item || !edge) return;
+        const doc = await edge.network.store.doc.get(item.uri);
+        return doc?.toObject();
       };
 
       const data = {
@@ -387,7 +379,7 @@ export default Dev.describe(name, async (e) => {
         [`selected:uri`]: selected
           ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
           : undefined,
-        [`selected`]: formatSelected(selected?.item),
+        [`selected:doc`]: selected ? await selectedDoc(selected.edge, selected.item) : undefined,
       };
 
       return (
