@@ -1,27 +1,29 @@
-import { Color, css, DEFAULTS, Wrangle, type t } from './common';
-import { PropListLabel } from './Label';
-import { PropListValue } from './Value';
+import { Color, DEFAULTS, Wrangle, css, type t } from './common';
+import { PropListLabel } from './ui.Label';
+import { PropListValue } from './ui.Value';
+import { useHandler } from './use.Handler';
 
 export type PropListItemProps = {
-  data: t.PropListItem;
-  isFirst?: boolean;
-  isLast?: boolean;
+  item: t.PropListItem;
+  is: { first: boolean; last: boolean };
   defaults: t.PropListDefaults;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
-  const { data, isFirst, isLast, defaults } = props;
+  const { item, is, defaults } = props;
   const theme = Wrangle.theme(props.theme);
-  const hasLabel = Boolean(data.label);
-  const selected = Wrangle.selected(data, theme.is.dark);
-  const divider = data.divider ?? true;
+  const hasLabel = !!item.label;
+  const selected = Wrangle.selected(item, theme.is.dark);
+  const divider = item.divider ?? true;
+
+  const handler = useHandler(props.item, props.defaults, item.onClick);
 
   /**
    * Render
    */
-  const noBorder = isLast || !divider;
+  const noBorder = is.last || !divider;
   const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
@@ -30,6 +32,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       paddingTop: 4,
       paddingBottom: noBorder ? 0 : 4,
       minHeight: 16,
+      cursor: handler.cursor,
       fontSize: DEFAULTS.fontSize.sans,
       borderBottom: `solid ${noBorder ? 0 : 1}px ${borderColor}`,
       ':first-child': { paddingTop: 2 },
@@ -43,15 +46,15 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   };
 
   return (
-    <div {...styles.base} title={data.tooltip}>
-      {hasLabel && <PropListLabel data={data} defaults={defaults} theme={props.theme} />}
+    <div {...styles.base} title={item.tooltip} onClick={handler.onClick}>
+      {hasLabel && <PropListLabel data={item} defaults={defaults} theme={props.theme} />}
       <PropListValue
-        item={data}
+        item={item}
         hasLabel={hasLabel}
-        isFirst={isFirst}
-        isLast={isLast}
         defaults={defaults}
         theme={props.theme}
+        cursor={handler.cursor}
+        message={handler.message}
       />
     </div>
   );

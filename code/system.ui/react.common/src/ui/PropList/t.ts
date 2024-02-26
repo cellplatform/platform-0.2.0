@@ -61,24 +61,25 @@ export type PropListItemFactory = () => (PropListItem | t.Falsy) | (PropListItem
  * Default values used when optional properties are ommitted.
  */
 export type PropListDefaults = {
-  clipboard?: boolean;
-  monospace?: boolean;
+  readonly clipboard?: boolean;
+  readonly monospace?: boolean;
 };
 
 /**
  * A single row within a [PropList].
  */
 export type PropListItem = {
-  label?: string | number | JSX.Element;
-  value?: string | number | boolean | JSX.Element | PropListValue;
-  tooltip?: string;
-  visible?: boolean;
-  indent?: number;
-  selected?: boolean | PropListItemSelected;
-  divider?: boolean;
+  readonly label?: string | number | JSX.Element;
+  readonly value?: string | number | boolean | JSX.Element | PropListValue;
+  readonly tooltip?: string;
+  readonly visible?: boolean;
+  readonly indent?: number;
+  readonly selected?: boolean | PropListItemSelected;
+  readonly divider?: boolean;
+  readonly onClick?: t.PropListItemHandler;
 };
 
-export type PropListItemSelected = { color: string | number };
+export type PropListItemSelected = { readonly color: string | number };
 
 /**
  * The value portion of a [PropList] item.
@@ -86,14 +87,14 @@ export type PropListItemSelected = { color: string | number };
 export type PropListValue = PropListValueGeneric | PropListValueKinds;
 
 type ValueBase = {
-  monospace?: boolean;
-  clipboard?: string | boolean | (() => string | undefined);
-  color?: string | number;
-  fontSize?: number;
-  bold?: boolean;
-  opacity?: number;
-  indent?: number;
-  onClick?: (e: PropListValueEventArgs) => void;
+  readonly monospace?: boolean;
+  readonly clipboard?: string | boolean | (() => string | undefined);
+  readonly color?: string | number;
+  readonly fontSize?: number;
+  readonly bold?: boolean;
+  readonly opacity?: number;
+  readonly indent?: number;
+  readonly onClick?: t.PropListItemHandler;
 };
 
 export type PropListValueGeneric = ValueBase & {
@@ -102,16 +103,17 @@ export type PropListValueGeneric = ValueBase & {
 
 export type PropListValueKinds = PropListValueSwitch;
 export type PropListValueSwitch = ValueBase & {
-  kind: 'Switch';
-  data?: boolean;
-  enabled?: boolean;
+  readonly kind: 'Switch';
+  readonly data?: boolean;
+  readonly enabled?: boolean;
 };
 
 /**
  * CLICK event arguments.
  */
-export type PropListValueEventArgs = {
-  item: PropListItem;
-  value: PropListValue;
-  message: (value: JSX.Element | string, delay?: number) => void;
+export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
+export type PropListItemHandlerArgs = {
+  readonly item: PropListItem;
+  readonly value: PropListValue;
+  readonly message: (value: JSX.Element | string, delay?: number) => void;
 };

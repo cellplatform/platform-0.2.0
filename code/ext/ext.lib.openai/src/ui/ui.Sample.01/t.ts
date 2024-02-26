@@ -1,3 +1,4 @@
+import type { t } from './common';
 export type * from '../common/t';
 
 /**
@@ -32,3 +33,16 @@ export type Completion = {
   choices: CompletionChoice[];
   usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
 };
+
+/**
+ * UI Components
+ */
+export type SampleProps = {
+  text?: string;
+  style?: t.CssValue;
+  onChange?: t.EditorEventHandler;
+  onCmdEnterKey?: t.EditorEventHandler;
+};
+
+export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
+export type EditorEventHandlerArgs = { text: string };

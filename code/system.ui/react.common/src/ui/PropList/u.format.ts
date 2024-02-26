@@ -60,7 +60,7 @@ export function format(item: t.PropListItem) {
       if (res.value.clipboard || defaults?.clipboard) return true;
       return false;
     },
-  };
+  } as const;
 
   return res;
 }

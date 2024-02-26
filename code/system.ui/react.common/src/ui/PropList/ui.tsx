@@ -1,13 +1,12 @@
 import { Card, COLORS, css, DEFAULTS, type t } from './common';
-import { PropListItem } from './ui.Item/Item';
-import { PropListTitle } from './ui.Item/Title';
-import { Wrangle } from './util';
+import { Wrangle } from './u';
+import { PropListItem, PropListTitle } from './ui.Item';
 
 /**
  * Component
  */
 export const View: React.FC<t.PropListProps> = (props) => {
-  const { theme = DEFAULTS.theme } = props;
+  const { title, theme = DEFAULTS.theme } = props;
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
@@ -29,38 +28,30 @@ export const View: React.FC<t.PropListProps> = (props) => {
       maxWidth: width?.max,
       maxHeight: height?.max,
     }),
-    items: css({}),
-    title: css({}),
   };
 
   const elItems = items
-    .filter((item) => Boolean(item))
+    .filter((item) => !!item)
     .filter((item) => item?.visible ?? true)
     .map((item, i) => {
       return (
         <PropListItem
           key={i}
-          data={item as t.PropListItem}
-          isFirst={i == 0}
-          isLast={i === items.length - 1}
+          item={item!}
+          is={{ first: i === 0, last: i === items.length - 1 }}
           defaults={defaults}
           theme={theme}
         />
       );
     });
 
-  const elTitle = props.title && (
-    <PropListTitle
-      style={styles.title}
-      total={items.length}
-      theme={theme}
-      defaults={defaults}
-      data={props.title}
-    />
+  const hasTitle = Wrangle.hasTitle(title);
+  const elTitle = hasTitle && (
+    <PropListTitle total={items.length} theme={theme} defaults={defaults} data={title} />
   );
 
   // Exit if empty.
-  if (items.length === 0 && !Wrangle.hasTitle(props.title)) return null;
+  if (items.length === 0 && !hasTitle) return null;
 
   return (
     <Card
@@ -80,7 +71,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
         {elTitle}
-        {items.length > 0 && <div {...styles.items}>{elItems}</div>}
+        {items.length > 0 && <div>{elItems}</div>}
       </div>
     </Card>
   );

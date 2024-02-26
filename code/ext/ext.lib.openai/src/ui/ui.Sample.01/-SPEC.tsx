@@ -1,12 +1,12 @@
 import { Dev, Pkg } from '../../test.ui';
 import { DEFAULTS, Icons, type t } from './common';
 import { Http } from './http';
-import { Sample, type SampleProps } from './ui';
+import { Sample } from './ui';
 import { Message } from './ui.Message';
 import { EmptyMessage } from './ui.Message.Empty';
 
 type T = {
-  props: SampleProps;
+  props: t.SampleProps;
   model?: t.ModelName;
   completion?: t.Completion;
   debug: { running?: boolean; forcePublicUrl?: boolean };
@@ -19,7 +19,7 @@ const initial: T = { props: {}, debug: {} };
 const name = 'sample.api.openai';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
+  type LocalStore = Pick<t.SampleProps, 'text'> & T['debug'] & Pick<T, 'completion' | 'model'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     text: 'say hello world properly',
@@ -151,8 +151,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug, props, completion } = e.state;
-      const endpoint = Http.url(debug.forcePublicUrl);
-      const data = { endpoint, props, completion };
+      const data = {
+        origin: Http.url(debug.forcePublicUrl),
+        props,
+        completion,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

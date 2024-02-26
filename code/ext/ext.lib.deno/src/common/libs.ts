@@ -1,10 +1,10 @@
 /**
  * @external
  */
-import { equals } from 'ramda';
-export const R = { equals } as const;
+import { descend, equals, prop, sortBy, sortWith, uniqBy } from 'ramda';
+export const R = { descend, equals, prop, sortBy, sortWith, uniqBy } as const;
 
 /**
  * @system
  */
-export { rx } from 'sys.util';
+export { Delete, Hash, Path, rx, slug } from 'sys.util';

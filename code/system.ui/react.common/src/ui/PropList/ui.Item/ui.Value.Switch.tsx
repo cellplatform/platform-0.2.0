@@ -3,7 +3,7 @@ import { Color, css, type t } from './common';
 
 export type SwitchValueProps = {
   value: t.PropListValue;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
@@ -12,13 +12,13 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
 
   const styles = { base: css({}) };
   const value = item.data;
-  const isEnabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
+  const enabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
 
   return (
     <Switch
       height={12}
       value={value}
-      enabled={isEnabled}
+      enabled={enabled}
       track={Wrangle.track(item)}
       style={styles.base}
       theme={Switch.Theme.light.blue}

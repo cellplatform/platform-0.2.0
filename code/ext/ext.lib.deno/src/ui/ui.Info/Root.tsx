@@ -22,6 +22,7 @@ const View: React.FC<InfoProps> = (props) => {
     .field('Module', () => Field.module())
     .field('Module.Verify', () => Field.moduleVerify())
     .field('Component', () => Field.component(data.component))
+    .field('Projects.List', () => Field.listProjects(data, fields))
     .items(fields);
 
   return (

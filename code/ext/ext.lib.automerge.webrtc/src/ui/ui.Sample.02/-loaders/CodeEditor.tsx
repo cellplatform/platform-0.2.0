@@ -33,6 +33,12 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
         const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
         Monaco.Crdt.Syncer.listen<TDoc>(e.monaco, e.editor, lens, ['text']);
 
+        const onCmdEnter = () => {
+          // TODO
+          console.log('CMD + Enter');
+        };
+        e.editor.addCommand(e.monaco.KeyMod.CtrlCmd | e.monaco.KeyCode.Enter, onCmdEnter);
+
         lens.events().changed$.subscribe((e) => {
           console.log('lens changed:', e);
         });

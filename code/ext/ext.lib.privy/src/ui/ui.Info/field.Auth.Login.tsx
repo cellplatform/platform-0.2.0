@@ -1,4 +1,4 @@
-import { Button, COLORS, Spinner, type t } from './common';
+import { Button, COLORS, Icons, Spinner, type t, css } from './common';
 
 export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem | undefined {
   if (!privy.ready) enabled = false;
@@ -11,17 +11,25 @@ export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem
     if (privy.authenticated) privy.logout();
   };
 
+  const styles = {
+    logoutBody: css({
+      display: 'grid',
+      gridTemplateColumns: 'auto auto',
+      columnGap: '5px',
+    }),
+  };
+
   /**
    * Render
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const elButton = (
-    <Button
-      label={privy.authenticated ? 'Logout' : 'Login'}
-      style={{ color }}
-      enabled={enabled}
-      onClick={handleClick}
-    />
+    <Button style={{ color }} enabled={enabled} onClick={handleClick}>
+      <div {...styles.logoutBody}>
+        <div>{privy.authenticated ? 'logout' : 'login'}</div>
+        <Icons.Logout size={14} />
+      </div>
+    </Button>
   );
 
   const elSpinner = !privy.ready && (

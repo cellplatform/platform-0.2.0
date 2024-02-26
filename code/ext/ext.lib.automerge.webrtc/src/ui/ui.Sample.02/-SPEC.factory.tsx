@@ -21,6 +21,11 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
     return <CodeEditorAI store={store} docuri={docuri} />;
   }
 
+  if (e.name === 'Deno.Deploy') {
+    const { DenoDeploy } = await import('./-loaders/Deno.Deploy');
+    return <DenoDeploy store={store} docuri={docuri} />;
+  }
+
   if (e.name === 'DiagramEditor') {
     // @ts-ignore
     await import('@tldraw/tldraw/tldraw.css');

@@ -1,8 +1,7 @@
 import { isValidElement } from 'react';
-import { Color, COLORS, css, type t, DEFAULTS } from './common';
-
-import { Wrangle } from '../util';
-import { CopyIcon } from './CopyIcon';
+import { Wrangle } from '../u';
+import { COLORS, Color, DEFAULTS, css, type t } from './common';
+import { CopyIcon } from './ui.CopyIcon';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
@@ -12,7 +11,7 @@ export type SimpleValueProps = {
   isOver?: boolean;
   isCopyable?: boolean;
   theme?: t.PropListTheme;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
@@ -78,7 +77,7 @@ const wrangle = {
     if (value.color !== undefined) return Color.format(value.color);
 
     const theme = Wrangle.theme(props.theme);
-    if (props.message) return theme.color.alpha(0.3);
+    if (typeof props.message === 'string') return theme.color.alpha(0.3);
 
     const is = wrangle.flags(props);
     if (is.copyActive) return COLORS.BLUE;

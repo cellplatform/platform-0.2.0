@@ -39,6 +39,10 @@ export const Link = {
         dev.hr(line, margin);
         return api;
       },
+      title(text: string | [string, string]) {
+        dev.title(text);
+        return api;
+      },
     } as const;
     return api;
   },

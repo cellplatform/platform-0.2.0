@@ -1,10 +1,10 @@
-import { Wrangle } from './util';
 import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
+import { Wrangle } from './u';
 
 import { FieldSelector } from '../PropList.FieldSelector';
 import { FieldBuilder } from './FieldBuilder';
-import { Hash } from './ui.Item/Value.Hash';
 import { View } from './ui';
+import { Hash } from './ui.Item';
 
 type Fields = {
   THEMES: typeof THEMES;
