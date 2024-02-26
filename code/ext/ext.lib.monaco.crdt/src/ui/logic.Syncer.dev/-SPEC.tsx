@@ -30,7 +30,8 @@ export default Dev.describe(name, async (e) => {
 
     const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
-      Monaco.Crdt.Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], { debugLabel });
+      const Syncer = Monaco.Crdt.Syncer;
+      Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], { debugLabel });
     };
 
     ctx.debug.width(330);
