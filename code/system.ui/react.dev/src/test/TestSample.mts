@@ -12,13 +12,13 @@ export const TestSample = {
   async controller() {
     const instance = TestSample.instance();
     const events = DevBus.Controller({ instance });
-    return { events, instance };
+    return { events, instance } as const;
   },
 
   async preloaded() {
     const { events, instance } = await TestSample.controller();
     await events.load.fire(SAMPLES.Sample1);
-    return { events, instance };
+    return { events, instance } as const;
   },
 
   async context() {
@@ -30,6 +30,6 @@ export const TestSample = {
       context.dispose();
       events.dispose();
     };
-    return { context, ctx, instance, events, dispose };
+    return { context, ctx, instance, events, dispose } as const;
   },
 };
