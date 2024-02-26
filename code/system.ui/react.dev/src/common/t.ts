@@ -15,9 +15,11 @@ export type {
   IgnoredResponse,
   Json,
   JsonMap,
+  Lifecycle,
   ModuleImport,
   ModuleImporter,
   ModuleImports,
+  Msecs,
 } from 'sys.types/src/types';
 
 export type { CssValue } from 'sys.ui.react.css/src/types';

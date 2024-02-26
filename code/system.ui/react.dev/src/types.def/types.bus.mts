@@ -1,8 +1,7 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type Id = string;
 type SpecId = Id;
-type Milliseconds = number;
 type O = Record<string, unknown>;
 
 export type DevInstance = { bus: t.EventBus<any>; id: Id };
@@ -10,38 +9,37 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 /**
  * EVENT (API)
  */
-export type DevEvents = t.Disposable & {
+export type DevEvents = t.Lifecycle & {
   $: t.Observable<t.DevEvent>;
   instance: { bus: Id; id: Id };
-  disposed: boolean;
   is: { base(input: any): boolean };
   info: {
     req$: t.Observable<t.DevInfoReq>;
     res$: t.Observable<t.DevInfoRes>;
     changed$: t.Observable<t.DevInfoChanged>;
-    fire(options?: { timeout?: Milliseconds }): Promise<t.DevInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<t.DevInfo>;
+    fire(options?: { timeout?: t.Msecs }): Promise<t.DevInfoRes>;
+    get(options?: { timeout?: t.Msecs }): Promise<t.DevInfo>;
   };
   ctx: {
     req$: t.Observable<t.DevCtxReq>;
     res$: t.Observable<t.DevCtxRes>;
-    fire(options?: { timeout?: Milliseconds }): Promise<t.DevCtxRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<t.DevCtx>;
+    fire(options?: { timeout?: t.Msecs }): Promise<t.DevCtxRes>;
+    get(options?: { timeout?: t.Msecs }): Promise<t.DevCtx>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
     res$: t.Observable<t.DevLoadRes>;
-    fire(bundle?: t.BundleImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
+    fire(bundle?: t.BundleImport, options?: { timeout?: t.Msecs }): Promise<t.DevLoadRes>;
   };
   run: {
     req$: t.Observable<t.DevRunReq>;
     res$: t.Observable<t.DevRunRes>;
-    fire(options?: { only?: SpecId | SpecId[]; timeout?: Milliseconds }): Promise<t.DevRunRes>;
+    fire(options?: { only?: SpecId | SpecId[]; timeout?: t.Msecs }): Promise<t.DevRunRes>;
   };
   reset: {
     req$: t.Observable<t.DevResetReq>;
     res$: t.Observable<t.DevResetRes>;
-    fire(options?: { timeout?: Milliseconds }): Promise<DevResetRes>;
+    fire(options?: { timeout?: t.Msecs }): Promise<DevResetRes>;
   };
   state: {
     changed$: t.Observable<t.DevInfoChanged>;
@@ -51,7 +49,7 @@ export type DevEvents = t.Disposable & {
       fire<T extends O>(
         initial: T,
         mutate: t.DevInfoStateMutater<T> | T,
-        options?: { timeout?: Milliseconds },
+        options?: { timeout?: t.Msecs },
       ): Promise<DevStateChangeRes>;
     };
     object<T extends O>(initial: T): t.DevCtxState<T>;
@@ -63,7 +61,7 @@ export type DevEvents = t.Disposable & {
       res$: t.Observable<t.DevPropsChangeRes>;
       fire(
         mutate: t.DevInfoPropsMutater,
-        options?: { timeout?: Milliseconds },
+        options?: { timeout?: t.Msecs },
       ): Promise<DevStateChangeRes>;
     };
     flush: {

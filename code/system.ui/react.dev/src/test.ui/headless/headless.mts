@@ -3,8 +3,7 @@ import 'symbol-observable';
 import { DevBus } from '../../logic.Bus';
 import { Time, rx, slug, type t } from '../common';
 
-type Milliseconds = number;
-type Results = { ok: boolean; elapsed: Milliseconds; total: number; specs: ModuleResults[] };
+type Results = { ok: boolean; elapsed: t.Msecs; total: number; specs: ModuleResults[] };
 type ModuleResults = { ok: boolean; name: string; results?: t.TestSuiteRunResponse };
 
 /**

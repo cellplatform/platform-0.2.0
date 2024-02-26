@@ -1,6 +1,4 @@
-import { Keyboard, rx, DEFAULTS } from '../common';
-
-type Milliseconds = number;
+import { DEFAULTS, Keyboard, rx, type t } from '../common';
 
 export const DevKeyboard = {
   DEFAULTS: {
@@ -22,7 +20,7 @@ export const DevKeyboard = {
       cancelPrint?: boolean;
       newTab?: boolean;
       copyAddress?: boolean;
-      doubleEscapeDelay?: Milliseconds;
+      doubleEscapeDelay?: t.Msecs;
       onDoubleEscape?: (e: { delay: number }) => void;
     } = {},
   ) {

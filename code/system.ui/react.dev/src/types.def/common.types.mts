@@ -16,6 +16,8 @@ export type {
   ImmutableRef,
   Json,
   JsonMap,
+  Lifecycle,
+  Msecs,
 } from 'sys.types/src/types';
 
 export type {
