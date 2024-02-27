@@ -15,15 +15,7 @@ import { ErrorFallback } from './ErrorFallback';
 
 type Size = { width: number; height: number };
 
-export type HarnessProps = {
-  instance?: t.DevInstance;
-  spec?: t.SpecImport | t.TestSuiteModel;
-  allowRubberband?: boolean;
-  style?: t.CssValue;
-  background?: string | number;
-};
-
-export const Harness: React.FC<HarnessProps> = (props) => {
+export const Harness: React.FC<t.HarnessProps> = (props) => {
   useRubberband(props.allowRubberband ?? false);
 
   const baseRef = useRef<HTMLDivElement>(null);
