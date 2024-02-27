@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type Id = string;
 type O = Record<string, unknown>;
@@ -6,12 +6,14 @@ type O = Record<string, unknown>;
 export type DevInfo = {
   instance: { kind: 'dev:harness'; session: Id; bus: Id };
   spec?: t.TestSuiteModel;
-  render: {
-    revision: { props: number; state: number };
-    props?: t.DevRenderProps;
-    state?: O;
-  };
+  render: DevInfoRender;
   run: { count: number; results?: t.TestSuiteRunResponse };
+};
+
+export type DevInfoRender = {
+  revision: { props: number; state: number };
+  props?: t.DevRenderProps;
+  state?: O;
 };
 
 export type DevInfoMutater = (draft: t.DevInfo) => t.IgnoredResponse;

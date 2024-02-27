@@ -7,15 +7,15 @@ type Id = string;
  * Hook: Setup and lifecycle of the event-bus controller.
  */
 export function useBusController(
-  options: {
+  args: {
     bus?: t.EventBus;
     id?: Id;
     bundle?: t.SpecImport | t.TestSuiteModel;
     runOnLoad?: boolean;
   } = {},
 ) {
-  const id = options.id ?? useRef(`dev.instance.${slug()}`).current;
-  const bus = options.bus ?? useRef(rx.bus()).current;
+  const id = args.id ?? useRef(`dev.instance.${slug()}`).current;
+  const bus = args.bus ?? useRef(rx.bus()).current;
   const instance = { bus, id };
   const busid = rx.bus.instance(bus);
 
@@ -34,13 +34,13 @@ export function useBusController(
      */
     Time.delay(0, async () => {
       if (!events.disposed) {
-        await events.load.fire(options.bundle);
-        if (options.runOnLoad) events.run.fire();
+        await events.load.fire(args.bundle);
+        if (args.runOnLoad) events.run.fire();
       }
     });
 
-    return () => events.dispose();
-  }, [id, busid, Boolean(options.bundle)]);
+    return events.dispose;
+  }, [id, busid, !!args.bundle]);
 
   /**
    * API
@@ -52,7 +52,7 @@ export function useBusController(
       return eventsRef.current;
     },
     get ready() {
-      return Boolean(info.render.props);
+      return !!info.render.props;
     },
-  };
+  } as const;
 }
