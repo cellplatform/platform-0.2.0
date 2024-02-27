@@ -29,7 +29,7 @@
     "@automerge/automerge-repo-network-messagechannel": "1.1.1",
     "@automerge/automerge-repo-react-hooks": "1.1.1",
     "@automerge/automerge-repo-storage-indexeddb": "1.1.1",
-    "automerge-repo-network-peerjs": "0.0.12",
+    "automerge-repo-network-peerjs": "0.0.13",
     "@hatsprotocol/sdk-v1-core": "0.8.1",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",

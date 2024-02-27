@@ -1668,51 +1668,6 @@
     "@preact/signals-core" "^1.5.1"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.57.0":
-  version "1.57.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.57.0.tgz#cd6be1435c4d29fb8b3c9000861616d62c66fe4b"
-  integrity sha512-HuqZJlhrFS9odX5spXj8Xcig05JwE1EQfGQt6i3TefeJvzKSrjACwtdw59jOrFclVbbWgx1HAvMQ0cAsdeAOxA==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.9.0"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.11.1"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.5"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    react-use "^17.4.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-
 "@privy-io/react-auth@1.57.1":
   version "1.57.1"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.57.1.tgz#10dcdbca3144e102b4459d1ee0c53d36dac168ef"
@@ -3730,10 +3685,10 @@ atomic-sleep@^1.0.0:
   resolved "https://registry.yarnpkg.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
 
-automerge-repo-network-peerjs@0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-0.0.12.tgz#8aea38b80a3e5f40f8766a62dcd6d5e4e0469c52"
-  integrity sha512-C0uKNAdHrLx+uiDi3ejqIbnqc0zDhmzqAnYlpr08zoRYNYrQzdGtajh2YQ8ha53M9GA20VT+ksqrUXxsgO8eew==
+automerge-repo-network-peerjs@0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-0.0.13.tgz#cf82bc740757e1e448b242a00f5219ad1d65b6fb"
+  integrity sha512-L0gCzWDh8okPuILj0VZ7AoqIxhaWT/LSuosZGeMQqbZbfdFNWIu72Gps75ZzmsxLVDO6Lbh+pDqQcSvbezgSOA==
   dependencies:
     "@automerge/automerge-repo" "1.1.1"
     eventemitter3 "5.0.1"
