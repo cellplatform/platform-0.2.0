@@ -78,13 +78,16 @@ export function BusController(args: {
    * Load root spec
    */
   events.load.req$.subscribe(async (e) => {
-    const { tx } = e;
+    const { tx, env } = e;
     let error: string | undefined;
 
     try {
-      const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
+      const spec = e.bundle ? await Test.bundle(e.bundle) : undefined;
       await events.reset.fire();
-      await state.change('spec:load', (draft) => (draft.spec = root));
+      await state.change('spec:load', (draft) => {
+        draft.spec = spec;
+        draft.env = env;
+      });
     } catch (err: any) {
       error = err.message;
     }

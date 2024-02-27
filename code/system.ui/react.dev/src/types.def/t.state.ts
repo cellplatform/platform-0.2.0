@@ -6,6 +6,7 @@ type O = Record<string, unknown>;
 export type DevInfo = {
   instance: { kind: 'dev:harness'; session: Id; bus: Id };
   spec?: t.TestSuiteModel;
+  env?: O;
   render: DevInfoRender;
   run: { count: number; results?: t.TestSuiteRunResponse };
 };

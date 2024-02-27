@@ -99,7 +99,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.DevLoadReqEvent>($, 'sys.dev/load:req'),
     res$: rx.payload<t.DevLoadResEvent>($, 'sys.dev/load:res'),
     async fire(bundle, options = {}) {
-      const { timeout = DEFAULT.TIMEOUT } = options;
+      const { timeout = DEFAULT.TIMEOUT, env } = options;
       const tx = slug();
       const op = 'load';
       const res$ = load.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -107,7 +107,7 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'sys.dev/load:req',
-        payload: { tx, instance, bundle },
+        payload: { tx, instance, bundle, env },
       });
 
       const res = await first;
