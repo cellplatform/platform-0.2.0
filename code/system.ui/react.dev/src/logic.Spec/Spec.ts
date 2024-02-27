@@ -1,5 +1,5 @@
 import { Test, maybeWait, type t } from '../common';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 /**
  * Root API to the UI Spec Runner system.
