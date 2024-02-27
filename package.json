@@ -39,7 +39,7 @@
     "@onsetsoftware/automerge-patcher": "0.10.0",
     "@paralleldrive/cuid2": "2.2.2",
     "@preact/signals-react": "2.0.0",
-    "@privy-io/react-auth": "1.57.0",
+    "@privy-io/react-auth": "1.57.1",
     "@tauri-apps/api": "1.5.3",
     "@tldraw/tldraw": "2.0.0-alpha.18",
     "@vercel/edge": "1.1.1",
@@ -114,10 +114,10 @@
     "@types/diff": "5.0.9",
     "@types/fs-extra": "11.0.4",
     "@types/minimist": "1.2.5",
-    "@types/node": "20.11.20",
+    "@types/node": "20.11.21",
     "@types/qrcode": "1.5.5",
     "@types/ramda": "0.29.10",
-    "@types/react": "18.2.59",
+    "@types/react": "18.2.60",
     "@types/react-dom": "18.2.19",
     "@types/sanitize-html": "2.11.0",
     "@types/semver": "7.5.8",
@@ -135,7 +135,7 @@
     "happy-dom": "13.6.2",
     "million": "3.0.3",
     "svelte": "4.2.12",
-    "svelte-check": "3.6.4",
+    "svelte-check": "3.6.5",
     "svelte-preprocess": "5.1.3",
     "tslib": "2.6.2",
     "tsx": "4.7.1",
@@ -147,8 +147,7 @@
     "vitest": "1.3.1"
   },
   "resolutions": {
-    "axios": ">=1.6.7",
-    "es5-ext": ">=0.10.63"
+    "axios": ">=1.6.7"
   },
   "license": "MIT",
   "private": true
