@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DEFAULTS, DevBus, Time, rx, slug, type t } from './common';
 
 type Id = string;
+type O = Record<string, unknown>;
 
 /**
  * Hook: Setup and lifecycle of the event-bus controller.
@@ -11,6 +12,7 @@ export function useBusController(
     bus?: t.EventBus;
     id?: Id;
     bundle?: t.SpecImport | t.TestSuiteModel;
+    env?: O;
     runOnLoad?: boolean;
   } = {},
 ) {
@@ -33,14 +35,14 @@ export function useBusController(
      * Initialize.
      */
     Time.delay(0, async () => {
-      if (!events.disposed) {
-        await events.load.fire(args.bundle);
-        if (args.runOnLoad) events.run.fire();
-      }
+      if (events.disposed) return;
+      const env = args.env;
+      await events.load.fire(args.bundle, { env });
+      if (args.runOnLoad) events.run.fire();
     });
 
     return events.dispose;
-  }, [id, busid, !!args.bundle]);
+  }, [id, busid, !!args.bundle, !!args.env]);
 
   /**
    * API

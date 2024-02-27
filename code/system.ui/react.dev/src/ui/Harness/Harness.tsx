@@ -28,6 +28,7 @@ export const Harness: React.FC<t.HarnessProps> = (props) => {
     bus: props.instance?.bus,
     id: props.instance?.id,
     bundle: props.spec,
+    env: props.env,
     runOnLoad: true,
   });
   const { instance } = controller;
