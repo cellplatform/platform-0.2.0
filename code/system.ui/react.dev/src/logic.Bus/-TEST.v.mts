@@ -84,6 +84,16 @@ describe('DevBus', (e) => {
 
         events.dispose();
       });
+
+      it('{env}', async () => {
+        const env = { foo: 123 };
+        const events1 = DevBus.Controller({ instance: TestSample.instance(), env });
+        const events2 = DevBus.Controller({ instance: TestSample.instance() });
+        expect((await events1.info.get()).env).to.eql(env);
+        expect((await events2.info.get()).env).to.eql(undefined);
+        events1.dispose();
+        events2.dispose();
+      });
     });
 
     describe('ctx (get)', () => {
@@ -130,7 +140,6 @@ describe('DevBus', (e) => {
 
         expect(fired[2].message).to.eql('spec:load');
         expect(fired[2].info.spec).to.eql(info.spec);
-        expect(fired[2].info.env).to.eql(undefined);
 
         events.dispose();
       });
@@ -146,31 +155,20 @@ describe('DevBus', (e) => {
         expect(res.error).to.eql(undefined);
         expect(res.info?.spec).to.not.eql(undefined);
         expect(res.info?.spec).to.eql(root);
-        expect(res.info?.env).to.eql(undefined);
 
         expect(info.spec).to.eql(root);
-        expect(info.env).to.eql(undefined);
 
         events.dispose();
       });
 
       it('load with {env}', async () => {
         const instance = TestSample.instance();
-        const events = DevBus.Controller({ instance });
+        const env = { foo: 123, fn: () => '👋' };
+        const events = DevBus.Controller({ instance, env });
 
-        const { root } = await SAMPLES.Sample1;
-        const env = { foo: 123 };
-        const res1 = await events.load.fire(root, { env });
-        const info1 = await events.info.get();
-        expect(res1.info?.spec).to.eql(root);
-        expect(res1.info?.env).to.eql(env);
-        expect(info1.spec).to.eql(root);
-        expect(info1.env).to.eql(env);
-
-        const res2 = await events.load.fire(root);
-        const info2 = await events.info.get();
-        expect(res2.info?.env).to.eql(undefined);
-        expect(info2.env).to.eql(undefined);
+        const ctx = await events.ctx.get();
+        expect(ctx.env).to.eql(env);
+        expect((ctx.env as typeof env).fn()).to.eql('👋');
 
         events.dispose();
       });

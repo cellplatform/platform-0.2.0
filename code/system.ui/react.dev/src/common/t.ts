@@ -20,6 +20,7 @@ export type {
   ModuleImporter,
   ModuleImports,
   Msecs,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 export type { CssValue } from 'sys.ui.react.css/src/types';

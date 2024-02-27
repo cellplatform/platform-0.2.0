@@ -1,5 +1,6 @@
-import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
 import { type t } from './common';
+
+import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
 import { ContextState } from './Context.State.mjs';
 import { CtxProps } from './Ctx.Props.mjs';
 
@@ -9,7 +10,7 @@ export const Context = {
   /**
    * Create a new instance of the Context logic.
    */
-  async init(instance: t.DevInstance, options?: { dispose$: t.Observable<any> }) {
+  async init(instance: t.DevInstance, options?: { env?: O; dispose$?: t.UntilObservable }) {
     const events = BusEvents({ instance, dispose$: options?.dispose$ });
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
@@ -33,6 +34,7 @@ export const Context = {
 
     const ctx: t.DevCtx = {
       ...props.setters,
+      env: options?.env,
       dispose$,
       toObject,
 

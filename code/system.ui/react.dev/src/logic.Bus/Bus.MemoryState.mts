@@ -1,6 +1,7 @@
 import { DEFAULTS, Id, Is, R, rx, type t } from './common';
 
 type Revision = { number: number; message: string };
+type O = Record<string, unknown>;
 
 export type ChangedHandler = (e: ChangedHandlerArgs) => void;
 export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevInfo };
@@ -8,9 +9,14 @@ export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevI
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: ChangedHandler }) {
+export function BusMemoryState(args: {
+  instance: t.DevInstance;
+  onChanged?: ChangedHandler;
+  env?: O;
+}) {
+  const { env } = args;
   let _revision: Revision = { number: 0, message: 'initial' };
-  let _current: t.DevInfo = DEFAULTS.info;
+  let _current: t.DevInfo = { ...DEFAULTS.info, env };
 
   _current.instance.session = Id.ctx.create();
   _current.instance.bus = rx.bus.instance(args.instance.bus);

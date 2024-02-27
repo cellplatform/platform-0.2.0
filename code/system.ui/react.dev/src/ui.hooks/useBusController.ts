@@ -28,7 +28,8 @@ export function useBusController(
    * Lifecycle
    */
   useEffect(() => {
-    const events = (eventsRef.current = DevBus.Controller({ instance }));
+    const env = args.env;
+    const events = (eventsRef.current = DevBus.Controller({ instance, env }));
     events.info.changed$.pipe(rx.filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
 
     /**
@@ -36,8 +37,7 @@ export function useBusController(
      */
     Time.delay(0, async () => {
       if (events.disposed) return;
-      const env = args.env;
-      await events.load.fire(args.bundle, { env });
+      await events.load.fire(args.bundle);
       if (args.runOnLoad) events.run.fire();
     });
 

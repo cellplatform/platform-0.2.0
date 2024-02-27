@@ -3,8 +3,8 @@ import type { t } from './common';
 type Id = string;
 type SpecId = Id;
 type Color = string | number;
-type O = Record<string, unknown>;
 type NumberOrNil = number | null | undefined;
+type O = Record<string, unknown>;
 
 /**
  * Context wrapper that manages a {ctx} object passed
@@ -34,6 +34,7 @@ export type DevCtx = {
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
   readonly is: DevCtxIs;
+  readonly env?: O;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   redraw(target?: DevRedrawTarget): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;

@@ -3,14 +3,18 @@ import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { DEFAULTS, Id, Is, R, Test, rx, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
- * Event controller.
+ * Start the controller and return an event API.
  */
 export function BusController(args: {
   instance: t.DevInstance;
+  env?: O;
   filter?: (e: t.DevEvent) => boolean;
-  dispose$?: t.Observable<any>;
+  dispose$?: t.UntilObservable;
 }): t.DevEvents {
+  const { env } = args;
   const bus = rx.busAsType<t.DevEvent>(args.instance.bus);
   const instance = args.instance.id;
 
@@ -23,6 +27,7 @@ export function BusController(args: {
 
   const state = BusMemoryState({
     instance: args.instance,
+    env,
     onChanged(e) {
       const { message, info } = e;
       bus.fire({
@@ -38,7 +43,7 @@ export function BusController(args: {
       return Ctx._ || (Ctx._ = await Ctx.init());
     },
     async init() {
-      const context = await Context.init(args.instance, { dispose$ });
+      const context = await Context.init(args.instance, { env, dispose$ });
       await state.change('context:init', (draft) => Ctx.resetInfo(draft));
       return context;
     },
@@ -78,16 +83,13 @@ export function BusController(args: {
    * Load root spec
    */
   events.load.req$.subscribe(async (e) => {
-    const { tx, env } = e;
+    const { tx } = e;
     let error: string | undefined;
 
     try {
       const spec = e.bundle ? await Test.bundle(e.bundle) : undefined;
       await events.reset.fire();
-      await state.change('spec:load', (draft) => {
-        draft.spec = spec;
-        draft.env = env;
-      });
+      await state.change('spec:load', (draft) => (draft.spec = spec));
     } catch (err: any) {
       error = err.message;
     }

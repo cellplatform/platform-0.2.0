@@ -12,7 +12,7 @@ type Id = string;
 export function BusEvents(args: {
   instance: { bus: t.EventBus<any>; id: Id };
   filter?: (e: t.DevEvent) => boolean;
-  dispose$?: t.Observable<any>;
+  dispose$?: t.UntilObservable;
 }): t.DevEvents {
   let _disposed = false;
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
@@ -99,7 +99,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.DevLoadReqEvent>($, 'sys.dev/load:req'),
     res$: rx.payload<t.DevLoadResEvent>($, 'sys.dev/load:res'),
     async fire(bundle, options = {}) {
-      const { timeout = DEFAULT.TIMEOUT, env } = options;
+      const { timeout = DEFAULT.TIMEOUT } = options;
       const tx = slug();
       const op = 'load';
       const res$ = load.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -107,7 +107,7 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'sys.dev/load:req',
-        payload: { tx, instance, bundle, env },
+        payload: { tx, instance, bundle },
       });
 
       const res = await first;
