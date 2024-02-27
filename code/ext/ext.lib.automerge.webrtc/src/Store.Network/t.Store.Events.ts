@@ -8,7 +8,7 @@ type Id = string;
 export type WebrtcStoreEvents = t.Lifecycle & {
   readonly $: t.Observable<t.WebrtcStoreEvent>;
   readonly added$: t.Observable<t.WebrtcStoreAdapterAdded>;
-  readonly message$: t.Observable<t.WebrtcMessageAlert>;
+  readonly message$: t.Observable<t.NetworkMessageAlert>;
   readonly peer: t.OmitLifecycle<t.PeerModelEvents>;
   readonly shared: t.OmitLifecycle<t.CrdtSharedEvents>;
 };
@@ -32,5 +32,5 @@ export type WebrtcStoreAdapterAdded = {
 
 export type WebrtcStoreMessageEvent = {
   type: 'crdt:webrtc/Message';
-  payload: t.WebrtcMessageAlert;
+  payload: t.NetworkMessageAlert;
 };

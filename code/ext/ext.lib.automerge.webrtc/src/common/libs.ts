@@ -4,6 +4,7 @@
 import { equals } from 'ramda';
 export const R = { equals } as const;
 export { next as A } from '@automerge/automerge';
+export { PeerjsNetworkAdapter } from 'automerge-repo-network-peerjs';
 
 /**
  * @ext

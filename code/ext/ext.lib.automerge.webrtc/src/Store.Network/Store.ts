@@ -1,6 +1,6 @@
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
-import { WebrtcNetworkAdapter, rx, type t } from './common';
+import { PeerjsNetworkAdapter, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
@@ -54,7 +54,7 @@ export const WebrtcStore = {
       /**
        * Network adapter.
        */
-      const adapter = new WebrtcNetworkAdapter(conn);
+      const adapter = new PeerjsNetworkAdapter(conn);
       store.repo.networkSubsystem.addNetworkAdapter(adapter);
       monitorAdapter({ adapter, fire, dispose$ });
       total.added += 1;
