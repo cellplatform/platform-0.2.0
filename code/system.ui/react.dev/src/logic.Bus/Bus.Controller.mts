@@ -20,8 +20,8 @@ export function BusController(args: {
 
   const events = BusEvents({
     instance: args.instance,
-    dispose$: args.dispose$,
     filter: args.filter,
+    dispose$: args.dispose$,
   });
   const { dispose$ } = events;
 
