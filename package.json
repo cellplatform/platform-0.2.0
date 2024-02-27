@@ -148,7 +148,7 @@
   },
   "resolutions": {
     "axios": ">=1.6.7",
-    "undici": ">=6.6.1"
+    "es5-ext": ">=0.10.63"
   },
   "license": "MIT",
   "private": true
