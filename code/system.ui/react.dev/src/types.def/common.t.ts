@@ -18,6 +18,7 @@ export type {
   JsonMap,
   Lifecycle,
   Msecs,
+  UntilObservable,
 } from 'sys.types/src/types';
 
 export type {
