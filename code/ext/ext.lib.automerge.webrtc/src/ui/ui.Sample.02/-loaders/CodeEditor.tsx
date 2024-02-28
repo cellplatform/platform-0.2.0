@@ -18,9 +18,9 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
    */
   const styles = {
     base: css({
-      backgroundColor: Color.format(0.8),
       display: 'grid',
       gridTemplateRows: '1fr auto',
+      backgroundColor: Color.format(0.8),
     }),
   };
 
