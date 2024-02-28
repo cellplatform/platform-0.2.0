@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { DEFAULTS, DevBus, Time, rx, slug, type t } from './common';
 
 type Id = string;
-type O = Record<string, unknown>;
 
 /**
  * Hook: Setup and lifecycle of the event-bus controller.
@@ -12,7 +11,7 @@ export function useBusController(
     bus?: t.EventBus;
     id?: Id;
     bundle?: t.SpecImport | t.TestSuiteModel;
-    env?: O;
+    env?: t.DevEnvVars;
     runOnLoad?: boolean;
   } = {},
 ) {

@@ -29,12 +29,12 @@ export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
  * The context {ctx} interface passed into specs.
  */
 export type DevCtx = {
-  readonly dispose$: t.Observable<any>;
+  readonly dispose$: t.Observable<void>;
   readonly subject: DevCtxSubject;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
   readonly is: DevCtxIs;
-  readonly env?: O;
+  readonly env?: t.DevEnvVars;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   redraw(target?: DevRedrawTarget): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;

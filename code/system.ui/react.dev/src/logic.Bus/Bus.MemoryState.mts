@@ -12,7 +12,7 @@ export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevI
 export function BusMemoryState(args: {
   instance: t.DevInstance;
   onChanged?: ChangedHandler;
-  env?: O;
+  env?: t.DevEnvVars;
 }) {
   const { env } = args;
   let _revision: Revision = { number: 0, message: 'initial' };

@@ -5,6 +5,7 @@ type SpecId = Id;
 type O = Record<string, unknown>;
 
 export type DevInstance = { bus: t.EventBus<any>; id: Id };
+export type DevEnvVars = any;
 
 /**
  * EVENT (API)

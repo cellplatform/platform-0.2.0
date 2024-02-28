@@ -3,14 +3,12 @@ import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { DEFAULTS, Id, Is, R, Test, rx, type t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Start the controller and return an event API.
  */
 export function BusController(args: {
   instance: t.DevInstance;
-  env?: O;
+  env?: t.DevEnvVars;
   filter?: (e: t.DevEvent) => boolean;
   dispose$?: t.UntilObservable;
 }): t.DevEvents {

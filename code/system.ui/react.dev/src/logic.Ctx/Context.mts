@@ -10,7 +10,10 @@ export const Context = {
   /**
    * Create a new instance of the Context logic.
    */
-  async init(instance: t.DevInstance, options?: { env?: O; dispose$?: t.UntilObservable }) {
+  async init(
+    instance: t.DevInstance,
+    options?: { env?: t.DevEnvVars; dispose$?: t.UntilObservable },
+  ) {
     const events = BusEvents({ instance, dispose$: options?.dispose$ });
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
