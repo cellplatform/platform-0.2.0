@@ -15,7 +15,7 @@ export type NetworkStoreShared = t.OmitLifecycle<t.CrdtSharedState>;
 
 export type NetworkStoreTotals = {
   readonly added: number;
-  readonly bytes: { in: number; out: number };
+  readonly bytes: { readonly in: number; readonly out: number };
 };
 
 export type NetworkStoreConnectMetadata = t.PeerConnectMetadata & { shared: Uri };

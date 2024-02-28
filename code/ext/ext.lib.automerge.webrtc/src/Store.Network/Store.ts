@@ -118,11 +118,8 @@ export const WebrtcStore = {
      * - Monitor sync messages.
      */
     events.message$.subscribe((e) => {
-      if (e.message.type === 'sync') {
-        const bytes = e.message.data?.byteLength ?? 0;
-        if (e.direction === 'incoming') total.bytes.in += bytes;
-        if (e.direction === 'outgoing') total.bytes.out += bytes;
-      }
+      if (e.direction === 'incoming') total.bytes.in += e.bytes;
+      if (e.direction === 'outgoing') total.bytes.out += e.bytes;
     });
 
     /**
