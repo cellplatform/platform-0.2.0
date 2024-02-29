@@ -38,7 +38,6 @@ export default Dev.describe(name, async (e) => {
     right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
-    const resetReloadClose = () => state.change((d) => (d.reload = false));
     await state.change((d) => {});
 
     const monitor = (edge: t.SampleEdge) => {
@@ -95,7 +94,8 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.reload) return <TestDb.DevReload onCloseClick={resetReloadClose} />;
+        if (e.state.reload)
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
 
         const shared = Shared.harness!;
         const edge = shared?.current.edge;
