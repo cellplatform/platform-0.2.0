@@ -22,6 +22,7 @@ export type {
   LabelListEvents,
   LabelListItemTarget,
   LabelListState,
+  Pixels,
   PropListFieldSelectorClickHandler,
   PropListItem,
   PropListProps,

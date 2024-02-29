@@ -7,9 +7,11 @@ export type AvatarTrayProps = {
   size?: number;
   peer?: t.PeerModel;
   muted?: boolean;
+  gap?: t.Pixels;
   emptyMessage?: string | JSX.Element;
   style?: t.CssValue;
   onSelection?: t.PeerStreamSelectionHandler;
+  onTotalChanged?: AvatarTrayTotalChangedHandler;
 };
 
 /**
@@ -17,6 +19,13 @@ export type AvatarTrayProps = {
  */
 export type PeerStreamSelectionHandler = (e: PeerStreamSelectionHandlerArgs) => void;
 export type PeerStreamSelectionHandlerArgs = {
-  peer: t.PeerModel;
-  selected?: MediaStream;
+  readonly total: number;
+  readonly peer: t.PeerModel;
+  readonly selected?: MediaStream;
+};
+
+export type AvatarTrayTotalChangedHandler = (e: AvatarTrayTotalChangedHandlerArgs) => void;
+export type AvatarTrayTotalChangedHandlerArgs = {
+  readonly total: number;
+  readonly peer: t.PeerModel;
 };
