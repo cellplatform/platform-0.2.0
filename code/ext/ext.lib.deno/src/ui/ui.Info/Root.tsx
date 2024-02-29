@@ -21,8 +21,8 @@ const View: React.FC<InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())
     .field('Module.Verify', () => Field.moduleVerify())
-    .field('Component', () => Field.component(data.component))
     .field('Projects.List', () => Field.listProjects(data, fields))
+    .field('Auth.AccessToken', () => Field.auth.accessToken(data, fields))
     .items(fields);
 
   return (

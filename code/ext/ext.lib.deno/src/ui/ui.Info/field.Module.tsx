@@ -27,13 +27,3 @@ export function moduleVerify() {
     },
   });
 }
-
-/**
- * Component display
- */
-export function component(data: t.InfoData['component']): t.PropListItem {
-  return {
-    label: data?.label || 'Component',
-    value: data?.name || '(Unnamed)',
-  };
-}
