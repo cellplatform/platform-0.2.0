@@ -10,10 +10,10 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.lib.openai',
+  name: 'ext.lib.ai.openai',
   version: '0.0.0',
   dependencies: {
-    'react': '18.2.0',
+    react: '18.2.0',
     'react-dom': '18.2.0',
     'ext.lib.monaco': '0.0.0',
     'ext.lib.monaco.crdt': '0.0.0',

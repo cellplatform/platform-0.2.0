@@ -1,5 +1,5 @@
 {
-  "name": "ext.lib.openai",
+  "name": "ext.lib.ai.openai",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
