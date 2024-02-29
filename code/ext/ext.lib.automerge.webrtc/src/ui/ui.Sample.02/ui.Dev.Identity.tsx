@@ -1,13 +1,13 @@
 import { Auth } from 'ext.lib.privy';
 import { css, type t } from '../common';
 
-export type AuthLoginProps = {
+export type AuthIdentityProps = {
   style?: t.CssValue;
   jwt?: string;
   onAccessToken?: (jwt: string) => void;
 };
 
-export const AuthLogin: React.FC<AuthLoginProps> = (props) => {
+export const AuthIdentity: React.FC<AuthIdentityProps> = (props) => {
   const { jwt } = props;
   const styles = { base: css({}) };
   return (

@@ -1,13 +1,12 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { ShellDivider } from './ui.Debug.ShellDivider';
+import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { AuthLogin } from './ui.Auth';
-import { HeaderAvatars } from './ui.Header.Avatars';
+import { AuthIdentity } from './ui.Dev.Identity';
+import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Sample';
 
 type T = { reload?: boolean; accessToken?: string };
@@ -95,49 +94,49 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.reload) {
-          return <TestDb.DevReload onCloseClick={resetReloadClose} />;
-        } else {
-          const shared = sharedHarness!;
-          const edge = shared?.current.edge;
-          const store = left.network.store;
+        if (e.state.reload) return <TestDb.DevReload onCloseClick={resetReloadClose} />;
 
-          let elOverlay: JSX.Element | undefined;
-          const def = sharedMain?.current.module;
-          if (def && def.target === 'main') {
-            const { docuri, name: typename } = def;
-            const style = { backgroundColor: COLORS.WHITE };
-            const accessToken = state.current.accessToken;
-            elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
-          }
+        const shared = sharedHarness!;
+        const edge = shared?.current.edge;
+        const store = left.network.store;
 
-          return (
-            <Sample
-              left={{ ...left, visible: edge?.Left.visible }}
-              right={{ ...right, visible: edge?.Right.visible }}
-              overlay={elOverlay}
-            />
-          );
+        let elOverlay: JSX.Element | undefined;
+        const def = sharedMain?.current.module;
+        if (def && def.target === 'main') {
+          const { docuri, name: typename } = def;
+          const style = { backgroundColor: COLORS.WHITE };
+          const accessToken = state.current.accessToken;
+          elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
         }
-      });
-  });
 
-  e.it('ui:header', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
+        const elAvatars = (
+          <PeerUI.AvatarTray
+            peer={left.network.peer}
+            gap={10}
+            size={28}
+            style={{
+              Absolute: [null, null, 0 - (28 + 10), 10],
+              pointerEvents: elOverlay ? 'none' : 'auto',
+              opacity: elOverlay ? 1 : 0,
+              transition: 'opacity 0.3s',
+            }}
+          />
+        );
 
-    dev.header
-      .border(-0.1)
-      .padding(0)
-      .render<T>(async (e) => {
-        const peer = left.network.peer;
-        const connections = peer.current.connections;
-        const media = connections.filter((conn) => Peer.Is.kind.media(conn.kind));
+        const elSubject = (
+          <Sample
+            left={{ ...left, visible: edge?.Left.visible }}
+            right={{ ...right, visible: edge?.Right.visible }}
+            overlay={elOverlay}
+          />
+        );
 
-        media[0].kind;
-        const total = media.length;
-        if (total === 0) return null;
-        return <HeaderAvatars peer={peer} />;
+        return (
+          <>
+            {elSubject}
+            {elAvatars}
+          </>
+        );
       });
   });
 
@@ -147,7 +146,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row((e) => {
       return (
-        <AuthLogin
+        <AuthIdentity
           jwt={e.state.accessToken}
           onAccessToken={(jwt) => state.change((d) => (d.accessToken = jwt))}
         />
