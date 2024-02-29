@@ -9,6 +9,10 @@ import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Sample';
 
+type TShared = {
+  main?: t.Lens<t.SampleSharedMain>;
+  harness?: t.Lens<t.HarnessShared>;
+};
 type T = { reload?: boolean; accessToken?: string };
 const initial: T = {};
 
@@ -24,8 +28,7 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let sharedMain: t.Lens<t.SampleSharedMain> | undefined;
-  let sharedHarness: t.Lens<t.HarnessShared> | undefined;
+  const Shared: TShared = {};
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -63,8 +66,8 @@ export default Dev.describe(name, async (e) => {
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      sharedMain = ns.lens<t.SampleSharedMain>('foo.sample', {});
-      sharedHarness = ns.lens<t.HarnessShared>('dev.harness', {
+      Shared.main = ns.lens<t.SampleSharedMain>('foo.sample', {});
+      Shared.harness = ns.lens<t.HarnessShared>('dev.harness', {
         debugPanel: true,
         edge: {
           Left: { visible: true, showJson: true },
@@ -72,21 +75,19 @@ export default Dev.describe(name, async (e) => {
         },
       });
 
-      sharedHarness
-        .events()
-        .changed$.pipe(rx.debounceTime(100))
-        .subscribe(async (e) => {
-          const shared = e.after;
-          ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
-          dev.redraw();
-        });
+      const events = {
+        main: Shared.main.events(),
+        harness: Shared.harness.events(),
+      };
 
-      sharedMain
-        .events()
-        .changed$.pipe(rx.debounceTime(100))
-        .subscribe((e) => dev.redraw('subject'));
+      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => dev.redraw('subject'));
+      events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
+        const shared = e.after;
+        ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
+        dev.redraw();
+      });
 
-      monitorKeyboard(sharedHarness);
+      monitorKeyboard(Shared.harness);
     });
 
     ctx.debug.width(300);
@@ -96,12 +97,12 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         if (e.state.reload) return <TestDb.DevReload onCloseClick={resetReloadClose} />;
 
-        const shared = sharedHarness!;
+        const shared = Shared.harness!;
         const edge = shared?.current.edge;
         const store = left.network.store;
 
         let elOverlay: JSX.Element | undefined;
-        const def = sharedMain?.current.module;
+        const def = Shared.main?.current.module;
         if (def && def.target === 'main') {
           const { docuri, name: typename } = def;
           const style = { backgroundColor: COLORS.WHITE };
@@ -158,7 +159,7 @@ export default Dev.describe(name, async (e) => {
       const network = edge.network;
 
       dev.row((e) => {
-        const shared = sharedHarness;
+        const shared = Shared.harness;
         const getLayout = (d?: t.HarnessShared) => d?.edge[edge.kind];
         const layout = getLayout(shared?.current);
         const defaultFields: t.InfoField[] = [
@@ -266,7 +267,7 @@ export default Dev.describe(name, async (e) => {
 
       const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
         const isEnabled = () => {
-          if (!(sharedMain && sharedHarness)) return false;
+          if (!(Shared.main && Shared.harness)) return false;
           if (!selected?.item.uri) return false;
           return true;
         };
@@ -277,12 +278,12 @@ export default Dev.describe(name, async (e) => {
             .onClick((e) => {
               const docuri = selected?.item.uri;
 
-              if (!(sharedMain && sharedHarness)) return;
+              if (!(Shared.main && Shared.harness)) return;
               if (!docuri) return;
 
               const def: t.SampleModuleDef = { name, docuri, target };
-              if (target === 'main') sharedMain.change((d) => (d.module = def));
-              if (target === 'dev:header') sharedHarness.change((d) => (d.module = def));
+              if (target === 'main') Shared.main.change((d) => (d.module = def));
+              if (target === 'dev:header') Shared.harness.change((d) => (d.module = def));
               dev.redraw();
             });
         });
@@ -298,13 +299,13 @@ export default Dev.describe(name, async (e) => {
 
       const unloadButton = (target: t.SampleModuleDefTarget) => {
         dev.button((btn) => {
-          const isEnabled = () => !!sharedMain && !!selected?.item.uri;
+          const isEnabled = () => !!Shared.main && !!selected?.item.uri;
           btn
             .label(`ƒ → (unload ${target})`)
             .right((e) => '💥')
             .enabled((e) => isEnabled())
             .onClick((e) => {
-              if (target === 'main') sharedMain?.change((d) => delete d.module);
+              if (target === 'main') Shared.main?.change((d) => delete d.module);
               dev.redraw();
             });
         });
