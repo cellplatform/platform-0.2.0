@@ -22,7 +22,7 @@ app.use('/static/*', Server.serveStatic({ root: './' }) as any); // Hack (any).
  * Routes
  */
 app.get('/', (c) => c.text(`tdb ← (🦄 team:db)`));
-openai('/ai', app, EnvVars.openai);
+openai('/openai', app, EnvVars.openai);
 deno.subhosting('/deno', app, EnvVars.deno);
 
 /**

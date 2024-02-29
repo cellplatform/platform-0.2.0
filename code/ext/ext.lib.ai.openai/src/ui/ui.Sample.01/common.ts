@@ -4,8 +4,8 @@ export { type t };
 
 export const DEFAULTS = {
   origins: {
-    local: `http://localhost:8080/ai`,
-    prod: `https://api.db.team/ai`,
+    local: `http://localhost:8080/openai`,
+    prod: `https://api.db.team/openai`,
   },
   model: {
     get default(): t.ModelName {
