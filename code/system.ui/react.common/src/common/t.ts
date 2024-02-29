@@ -81,6 +81,7 @@ export type {
   DevCtxEdge,
   DevCtxInput,
   DevCtxState,
+  DevEnvVars,
   DevEvents,
   DevInfo,
   DevRedrawTarget,
