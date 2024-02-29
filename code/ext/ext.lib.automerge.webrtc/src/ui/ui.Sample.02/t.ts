@@ -47,7 +47,6 @@ export type HarnessShared = {
  * Dynamic Loader (factory)
  */
 export type SampleName =
-  | 'Auth'
   | 'CodeEditor'
   | 'CodeEditor.AI'
   | 'DiagramEditor'
