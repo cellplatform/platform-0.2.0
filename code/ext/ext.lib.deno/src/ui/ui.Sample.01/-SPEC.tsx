@@ -1,6 +1,5 @@
-import { Hash, Delete, Dev, Pkg, slug } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg, css, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
-
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
 import { Http, type t } from './common';
@@ -33,6 +32,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.code = local.code;
       d.forcePublicUrl = local.forcePublicUrl;
+      d.props.env = ctx.env;
     });
 
     HttpState.updateProjects(state);
@@ -62,8 +62,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
+    const accessToken = (dev.ctx.env?.accessToken ?? '') as string;
 
     dev.row(async (e) => {
+      if (accessToken) return;
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
@@ -78,15 +80,16 @@ export default Dev.describe(name, (e) => {
       );
     });
 
-    dev.hr(5, 20);
+    if (!accessToken) dev.hr(5, 20);
 
     dev.row((e) => {
       const deno = e.state.deno;
       return (
         <Info
           title={'Deno Subhosting'}
-          fields={['Projects.List']}
+          fields={['Auth.AccessToken', 'Projects.List']}
           data={{
+            auth: { accessToken },
             projects: {
               list: deno.projects,
               selected: deno.selectedProject,
@@ -195,13 +198,13 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props, deno, accessToken } = e.state;
+      const { props, deno } = e.state;
+      const jwt = e.state.accessToken;
       const forcePublic = e.state.forcePublicUrl;
       const data = {
         origin: Http.origin({ forcePublic }),
-        jwt: !accessToken ? null : `${Hash.shorten(accessToken, 4)} (${accessToken.length})`,
+        accessToken: !jwt ? null : `jwt:${Hash.shorten(jwt, 4)} (${jwt.length})`,
         props: { ...props, code: props.code?.slice(0, 30) },
         deno,
       };

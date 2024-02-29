@@ -1,6 +1,7 @@
 import { PatchState, rx, type t } from './common';
 
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
+import { PeerIs as Is } from '../Webrtc/Peer.Is';
 import { manageDataConnection } from './Peer.Conn.Data';
 import { manageMediaConnection } from './Peer.Conn.Media';
 import { eventFactory } from './Peer.events';
@@ -12,6 +13,8 @@ import { getFactory } from './u.get';
  * Peer model.
  */
 export const Peer: t.WebrtcPeer = {
+  Is,
+
   /**
    * Iniitalize a new PeerJS peer wrapped in an observable Model.
    */

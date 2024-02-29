@@ -1,4 +1,4 @@
-import { Spec, t } from '../common';
+import { Spec, type t } from '../common';
 import { ButtonSample } from './ui.Button';
 import { Hr } from './ui.Hr';
 

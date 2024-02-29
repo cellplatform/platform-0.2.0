@@ -109,8 +109,9 @@ export const Config = {
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        const modules = ['ext.lib.privy', 'dev.000'];
-        return modules.some((item) => modulePath.includes(item));
+        // const modules = ['ext.lib.privy', 'ext.lib.deno', 'dev.000'];
+        // return modules.some((item) => modulePath.includes(item));
+        return true;
       };
 
       if (addPolyfill()) {

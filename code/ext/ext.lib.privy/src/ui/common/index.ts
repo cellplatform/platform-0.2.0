@@ -4,4 +4,4 @@ export * from '../../common';
 export * from './libs.js';
 
 export { Balance, Chain, Wallet } from '../../evm';
-export { Icons } from '../Icons';
+export { Icons } from './Icons';

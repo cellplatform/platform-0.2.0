@@ -35,7 +35,6 @@ export default Dev.describe(name, (e) => {
         return (
           <AvatarTray
             {...e.state.props}
-            style={{ margin: 10 }}
             peer={self}
             size={Number(e.state.debug.sizePercent) * (AvatarTray.DEFAULTS.size * 2)}
             onSelection={(e) => {

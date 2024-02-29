@@ -13,6 +13,7 @@
     "moduleResolution": "Node",
     "esModuleInterop": false,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
 
     "useDefineForClassFields": true,
     "resolveJsonModule": true,

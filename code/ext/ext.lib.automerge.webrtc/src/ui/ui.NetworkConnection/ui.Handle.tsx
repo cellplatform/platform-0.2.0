@@ -20,10 +20,7 @@ export const Handle: React.FC<HandleProps> = (props) => {
   const COLOR = isTransmitting ? COLORS.MAGENTA : COLORS.DARK;
   const SECS = 0.5;
   const styles = {
-    base: css({
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    base: css({ display: 'grid', alignContent: 'center' }),
     body: css({ display: 'grid', alignContent: 'center', gridTemplateColumns: 'auto auto' }),
     bar: css({
       width: 30,

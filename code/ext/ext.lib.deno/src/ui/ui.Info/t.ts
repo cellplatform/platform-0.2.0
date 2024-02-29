@@ -3,11 +3,11 @@ import type { t } from './common';
 type Id = string;
 type Index = number;
 
-export type InfoField = 'Module' | 'Module.Verify' | 'Component' | 'Projects.List';
+export type InfoField = 'Module' | 'Module.Verify' | 'Auth.AccessToken' | 'Projects.List';
 
 export type InfoData = {
   url?: { href: string; title?: string };
-  component?: { label?: string; name?: string };
+  auth?: { label?: string; accessToken?: string };
   projects?: {
     list?: t.DenoProject[];
     selected?: Id;

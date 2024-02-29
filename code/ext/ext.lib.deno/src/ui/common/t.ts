@@ -4,7 +4,9 @@
 export type {
   CssEdgesInput,
   CssValue,
+  DevCtx,
   DevCtxState,
+  DevTools,
   PropListItem,
   PropListProps,
   RenderCountProps,

@@ -25,4 +25,4 @@ export { Video } from 'sys.ui.react.media';
 /**
  * @local
  */
-export { PeerUri, Webrtc, WebrtcIs } from '../../Webrtc';
+export { PeerUri, Webrtc, PeerIs } from '../../Webrtc';

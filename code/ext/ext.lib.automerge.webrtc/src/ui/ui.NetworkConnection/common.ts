@@ -6,4 +6,5 @@ export { usePeerMonitor, useTransmitMonitor } from '../use';
  */
 export const DEFAULTS = {
   displayName: 'NetworkConnection',
+  connectionLabel: 'WebRTC/data',
 } as const;

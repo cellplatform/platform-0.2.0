@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { COLORS, css, t } from '../common';
+import { COLORS, css, type t } from '../common';
 
 export type RenderCountProps = {
   absolute?: t.CssValue['Absolute'];

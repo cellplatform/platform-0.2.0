@@ -4,12 +4,18 @@ export type AvatarProps = {
   size?: number;
   stream?: MediaStream;
   muted?: boolean;
+  borderRadius?: t.Pixels;
   style?: t.CssValue;
   onClick?: () => void;
 };
 
 export const Avatar: React.FC<AvatarProps> = (props) => {
-  const { stream, size = DEFAULTS.size, muted = DEFAULTS.muted } = props;
+  const {
+    stream,
+    size = DEFAULTS.size,
+    muted = DEFAULTS.muted,
+    borderRadius = DEFAULTS.borderRadius,
+  } = props;
 
   /**
    * Render
@@ -21,7 +27,7 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onMouseDown={props.onClick}>
-      <Video stream={stream} muted={muted} style={styles.video} borderRadius={4} />
+      <Video stream={stream} muted={muted} style={styles.video} borderRadius={borderRadius} />
     </div>
   );
 };

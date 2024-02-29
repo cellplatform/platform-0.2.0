@@ -13,7 +13,7 @@ export const setup = async (debugLabel?: string) => {
   const network = await WebrtcStore.init(peer, store, index, { debugLabel });
 
   const added: t.WebrtcStoreAdapterAdded[] = [];
-  const messages: t.WebrtcMessageAlert[] = [];
+  const messages: t.NetworkMessageAlert[] = [];
   const events = network.events();
   events.added$.subscribe((e) => added.push(e));
   events.message$.subscribe((e) => messages.push(e));

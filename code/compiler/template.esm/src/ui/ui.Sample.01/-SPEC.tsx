@@ -34,10 +34,9 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Keyboard } from 'sys.ui.dom';
 
 import { DevBus } from '../../logic.Bus';
-import { COLORS, Color, Spec, css } from '../common';
+import { COLORS, Color, Spec, css, Time } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
 
@@ -79,8 +79,12 @@ export default Spec.describe('MySample', (e) => {
     debug.header.padding(0).render(<ComponentSample title={'header'} />);
     debug.footer.border(-0.15).render(<ComponentSample title={'footer'} />);
 
-    debug.row(<ComponentSample title={'simple element'} />);
-    debug.row(() => <ComponentSample title={'via function'} />);
+    debug.row(<ComponentSample title={'row: simple element'} />);
+    debug.row(() => <ComponentSample title={'row: via function'} />);
+    debug.row(async () => {
+      await Time.wait(1500);
+      return <ComponentSample title={'row: after delay'} />;
+    });
     dev.hr();
 
     dev
@@ -195,14 +199,14 @@ const ComponentSample = (props: P = {}) => {
   const { title = 'Plain Component' } = props;
   const styles = {
     base: css({
-      padding: 7,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      padding: 7,
       cursor: 'default',
     }),
     inner: css({
       Padding: [5, 10],
       border: `dashed 1px ${Color.format(-0.25)}`,
-      borderRadius: 7,
+      borderRadius: 5,
     }),
   };
   return (

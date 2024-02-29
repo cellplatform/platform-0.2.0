@@ -9,9 +9,6 @@ export const DebugPanelBodyRow: React.FC<DebugPanelBodyRow> = (props) => {
   const { instance, renderer } = props;
   const { element } = useRenderer(instance, renderer);
 
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({
       position: 'relative',

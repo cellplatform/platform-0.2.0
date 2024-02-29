@@ -7,6 +7,7 @@ type EscapeAction = 'ReloadRootUrl';
 type Options = {
   location?: t.UrlInput;
   badge?: t.ModuleListBadge;
+  env?: t.DevEnvVars;
   hrDepth?: number;
   keyboard?: boolean;
   doubleEscapeKeyAction?: null | EscapeAction;
@@ -38,7 +39,7 @@ export async function render(
   }
 
   if (spec) {
-    return <DevBase.Harness spec={spec} style={style} />;
+    return <DevBase.Harness spec={spec} env={options.env} style={style} />;
   }
 
   return (

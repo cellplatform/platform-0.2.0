@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
-import { Server } from './common/mod.ts';
-import openai from './route.openai/mod.ts';
-import deno from './route.deno/mod.ts';
+import { Server, EnvVars } from './common.ts';
+import openai from '../src.api.openai/mod.ts';
+import deno from '../src.api.deno/mod.ts';
 
 /**
  * Initialize a new HTTP server.
@@ -19,11 +19,11 @@ app.use('*', cors);
 app.use('/static/*', Server.serveStatic({ root: './' }) as any); // Hack (any).
 
 /**
- * Routes.
+ * Routes
  */
 app.get('/', (c) => c.text(`tdb ← (🦄 team:db)`));
-openai('/ai', app);
-deno('/deno', app);
+openai('/ai', app, EnvVars.openai);
+deno.subhosting('/deno', app, EnvVars.deno);
 
 /**
  * Start

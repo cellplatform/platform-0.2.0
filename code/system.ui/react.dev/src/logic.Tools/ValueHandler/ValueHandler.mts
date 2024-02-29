@@ -1,4 +1,4 @@
-import { DEFAULTS, R, t } from '../../common';
+import { DEFAULTS, R, type t } from '../../common';
 
 type O = Record<string, unknown>;
 

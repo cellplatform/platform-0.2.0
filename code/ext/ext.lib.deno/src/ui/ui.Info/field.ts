@@ -1,9 +1,10 @@
-import { component, module, moduleVerify } from './field.Module';
+import { auth } from './field.Auth';
+import { module, moduleVerify } from './field.Module';
 import { listProjects } from './field.Projects';
 
 export const Field = {
   module,
   moduleVerify,
-  component,
   listProjects,
+  auth,
 } as const;

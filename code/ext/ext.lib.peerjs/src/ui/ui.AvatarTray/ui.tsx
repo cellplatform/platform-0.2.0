@@ -4,7 +4,7 @@ import { Avatar } from './ui.Avatar';
 import { useMediaStreams } from './use.MediaStreams';
 
 export const View: React.FC<t.AvatarTrayProps> = (props) => {
-  const { peer, size = DEFAULTS.size } = props;
+  const { peer, emptyMessage, size = DEFAULTS.size, gap = DEFAULTS.gap } = props;
   const { self, streams, streamids } = useMediaStreams(peer);
   const total = streams.length + (self ? 1 : 0);
 
@@ -12,8 +12,7 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
    * Handlers
    */
   const handleClick = (selected?: MediaStream) => {
-    if (!peer) return;
-    props.onSelection?.({ peer, selected });
+    if (peer) props.onSelection?.({ peer, total, selected });
   };
 
   const handleClosed = (connid?: string) => {
@@ -21,15 +20,10 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
      * TODO 🐷
      */
     console.log(`TODO <${DEFAULTS.displayName}> handle Connection Closed`, connid);
-
-    // if (selected?.conn?.id === connid) {
-    //   const first = streams[0];
-    //   handleChange(first);
-    // }
   };
 
   /**
-   * Listen
+   * Lifecycle
    */
   useEffect(() => {
     const events = peer?.events();
@@ -40,6 +34,10 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
 
     return events?.dispose;
   }, [streamids, peer?.id]);
+
+  useEffect(() => {
+    if (peer) props.onTotalChanged?.({ total, peer });
+  }, [total, peer?.id]);
 
   /**
    * Render
@@ -53,11 +51,8 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
     }),
-    body: css({ display: 'flex', flexWrap: 'wrap', gap: '10px' }),
-    emptyMessage: css({
-      fontSize: 14,
-      color: Color.alpha(COLORS.DARK, 0.2),
-    }),
+    body: css({ display: 'flex', flexWrap: 'wrap', gap: `${gap}px` }),
+    empty: css({ fontSize: 14, color: Color.alpha(COLORS.DARK, 0.2) }),
   };
 
   const avatar = (stream: MediaStream, muted?: boolean) => {
@@ -74,10 +69,7 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
 
   const elSelf = self && avatar(self, true);
   const elOthers = streams.map((stream) => avatar(stream, props.muted));
-
-  const elEmpty = props.emptyMessage && total === 0 && (
-    <div {...styles.emptyMessage}>{props.emptyMessage}</div>
-  );
+  const elEmpty = emptyMessage && total === 0 && <div {...styles.empty}>{emptyMessage}</div>;
 
   const elBody = !elEmpty && (
     <div {...styles.body}>

@@ -4,6 +4,7 @@ import type { t } from './common';
 export type InfoField =
   | 'Module'
   | 'Module.Verify'
+  | 'AccessToken'
   | 'Id.User'
   | 'Id.User.Phone'
   | 'Id.App.Privy'
@@ -23,6 +24,7 @@ export type InfoField =
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
+  accessToken?: { label?: string; jwt?: string };
   chain?: {
     names?: t.EvmChainName[];
     selected?: t.EvmChainName;

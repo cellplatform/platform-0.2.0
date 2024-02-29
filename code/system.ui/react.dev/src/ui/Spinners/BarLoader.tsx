@@ -1,5 +1,5 @@
 import Bar from 'react-spinners/BarLoader';
-import { COLORS, css, t } from '../common';
+import { COLORS, css, type t } from '../common';
 
 export type BarLoaderProps = {
   style?: t.CssValue;

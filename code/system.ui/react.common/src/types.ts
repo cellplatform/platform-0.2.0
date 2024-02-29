@@ -13,6 +13,8 @@ export type {
   EdgePositionInput,
   EdgePositionX,
   EdgePositionY,
+  PixelOffset,
+  Pixels,
 } from 'sys.types/src/types';
 export type {
   KeyboardKeypress,

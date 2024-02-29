@@ -52,7 +52,12 @@ export type SampleName =
   | 'DiagramEditor'
   | 'Deno.Deploy'
   | 'ModuleNamespace';
-export type SampleFactoryCtx = { docuri: string; store: t.Store };
+
+export type SampleFactoryCtx = {
+  docuri: string;
+  store: t.Store;
+  accessToken?: string;
+};
 
 export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };
 export type SampleModuleDefTarget = 'dev:header' | 'main';

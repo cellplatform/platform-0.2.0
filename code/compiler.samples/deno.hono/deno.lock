@@ -65,6 +65,7 @@
     "https://deno.land/x/hono@v3.12.3/http-exception.ts": "6071df078b5f76d279684d52fe82a590f447a64ffe1b75eb5064d0c8a8d2d676",
     "https://deno.land/x/hono@v3.12.3/jsx/components.ts": "b5b48d6aa6ea871c0ad5f0fc162d2dccc864ba2220586fe20a69cb3682145304",
     "https://deno.land/x/hono@v3.12.3/jsx/index.ts": "32fb017b6417d6aa408dc297b4178288851bdbc034abc8bfb51e9976d5425b25",
+    "https://deno.land/x/hono@v3.12.3/jsx/intrinsic-elements.ts": "b1d22cfb6b08a13fda0de0071dbb8c830c3116add3d882bd2ce49f9ee030be66",
     "https://deno.land/x/hono@v3.12.3/mod.ts": "90114a97be9111b348129ad0143e764a64921f60dd03b8f3da529db98a0d3a82",
     "https://deno.land/x/hono@v3.12.3/request.ts": "71a67261d14bba95e9a8b4782a1c1704d12d54a77390ce404741df15ab99a109",
     "https://deno.land/x/hono@v3.12.3/router.ts": "880316f561918fc197481755aac2165fdbe2f530b925c5357a9f98d6e2cc85c7",
