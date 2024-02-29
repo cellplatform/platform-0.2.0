@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, Hash, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { ShellDivider } from './-SPEC.ShellDivider';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
@@ -287,18 +287,11 @@ export default Dev.describe(name, async (e) => {
             .enabled((e) => isEnabled())
             .onClick((e) => {
               if (target === 'main') sharedMain?.change((d) => delete d.module);
-              if (target === 'dev:header') {
-                sharedHarness?.change((d) => {
-                  delete d.module;
-                  dev.header.render(<Unloaded />);
-                });
-              }
               dev.redraw();
             });
         });
       };
       unloadButton('main');
-      unloadButton('dev:header');
 
       dev.hr(-1, 5);
 
@@ -368,9 +361,7 @@ export default Dev.describe(name, async (e) => {
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
-        [`selected:uri`]: selected
-          ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
-          : undefined,
+        [`selected:doc:uri`]: selected ? Doc.Uri.id(selected.item.uri, { shorten: 4 }) : undefined,
         [`selected:doc`]: selected ? await selectedDoc(selected.edge, selected.item) : undefined,
       };
 

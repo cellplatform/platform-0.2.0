@@ -25,4 +25,5 @@ export {
   useDragTarget,
   useFocus,
   useMouse,
+  useSizeObserver,
 } from 'sys.ui.react.common';
