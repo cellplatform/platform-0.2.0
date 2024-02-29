@@ -1,14 +1,14 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { ShellDivider } from './-SPEC.ShellDivider';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { AuthLogin } from './ui.Auth';
+import { HeaderAvatars } from './ui.Header.Avatars';
 import { Sample } from './ui.Sample';
-import { Unloaded } from './ui.Unloaded';
 
 type T = { reload?: boolean; accessToken?: string };
 const initial: T = {};
@@ -77,8 +77,8 @@ export default Dev.describe(name, async (e) => {
         .events()
         .changed$.pipe(rx.debounceTime(100))
         .subscribe(async (e) => {
-          const m = e.after;
-          ctx.debug.width(m.debugPanel ?? true ? 300 : 0);
+          const shared = e.after;
+          ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
           dev.redraw();
         });
 
@@ -103,9 +103,9 @@ export default Dev.describe(name, async (e) => {
           const store = left.network.store;
 
           let elOverlay: JSX.Element | undefined;
-          const mod = sharedMain?.current.module;
-          if (mod && mod.target === 'main') {
-            const { docuri, name: typename } = mod;
+          const def = sharedMain?.current.module;
+          if (def && def.target === 'main') {
+            const { docuri, name: typename } = def;
             const style = { backgroundColor: COLORS.WHITE };
             const accessToken = state.current.accessToken;
             elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
@@ -119,6 +119,25 @@ export default Dev.describe(name, async (e) => {
             />
           );
         }
+      });
+  });
+
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.header
+      .border(-0.1)
+      .padding(0)
+      .render<T>(async (e) => {
+        const peer = left.network.peer;
+        const connections = peer.current.connections;
+        const media = connections.filter((conn) => Peer.Is.kind.media(conn.kind));
+
+        media[0].kind;
+        const total = media.length;
+        if (total === 0) return null;
+        return <HeaderAvatars peer={peer} />;
       });
   });
 
