@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 import { COLORS, Delete, Dev, Doc, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { ShellDivider } from './-SPEC.ShellDivider';
+import { ShellDivider } from './ui.Debug.ShellDivider';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
