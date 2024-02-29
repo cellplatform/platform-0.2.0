@@ -15,7 +15,7 @@ export function accessToken(data: t.InfoData): t.PropListItem | undefined {
   const value = (
     <div {...styles.base}>
       {jwt ? <Icons.Key.On size={14} /> : <Icons.Key.Off size={14} />}
-      {jwt ? `${Hash.shorten(jwt, 6)}` : undefined}
+      {jwt ? `jwt:${Hash.shorten(jwt, 6)}` : undefined}
     </div>
   );
 
