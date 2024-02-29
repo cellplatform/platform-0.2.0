@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 import { DevTools } from '.';
-import { Dev, Pkg, RenderCount, type t } from '../../test.ui';
-import { css } from '../common';
+import { Dev, Pkg, Time, type t } from '../../test.ui';
+import { Sample } from './-SPEC.Sample';
 
-type T = { count: number; on: boolean; theme?: t.CommonTheme };
+export type T = { count: number; on: boolean; theme?: t.CommonTheme };
 const initial: T = { count: 0, on: true, theme: 'Light' };
 
 export default Dev.describe('DevTools', (e) => {
@@ -15,7 +13,7 @@ export default Dev.describe('DevTools', (e) => {
     ctx.subject
       .display('grid')
       .size([400, null])
-      .render<T>((e) => <Sample state={e.state} />);
+      .render<T>((e) => <Sample state={e.state} renderPosition={[-20, 5]} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -32,7 +30,6 @@ export default Dev.describe('DevTools', (e) => {
     /**
      * Buttons
      */
-
     dev.button((btn) =>
       btn.label('state: increment (+)').onClick(async (e) => {
         await e.state.change((draft) => draft.count++);
@@ -98,6 +95,10 @@ export default Dev.describe('DevTools', (e) => {
     });
 
     dev.row((e) => <Sample state={e.state} theme={'Light'} />);
+    dev.row(async (e) => {
+      await Time.wait(1500); // NB: spinner while delayed.
+      return <Sample state={e.state} theme={'Light'} />;
+    });
     dev.hr(-1, 5);
 
     const target = 'Module.Loader.Stateful';
@@ -109,27 +110,3 @@ export default Dev.describe('DevTools', (e) => {
       .ns(`external site: wikipedia`, 'https://www.wikipedia.org/');
   });
 });
-
-/**
- * Sample
- */
-
-export type SampleProps = { state: T; theme?: t.CommonTheme };
-export const Sample: React.FC<SampleProps> = (props) => {
-  /**
-   * NOTE: ensuring hooks behave as expected.
-   */
-  const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
-
-  const theme = props.theme ?? props.state.theme;
-  const styles = { base: css({ Padding: [5, 12], fontSize: 14 }) };
-  const data = { state: props.state, isOver };
-
-  return (
-    <div {...styles.base} onMouseEnter={over(true)} onMouseLeave={over(false)}>
-      <Dev.Object name={'state'} data={data} theme={theme} />
-      <RenderCount absolute={[-20, 5]} theme={theme} />
-    </div>
-  );
-};
