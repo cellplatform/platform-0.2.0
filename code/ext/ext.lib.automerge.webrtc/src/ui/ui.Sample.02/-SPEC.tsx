@@ -126,8 +126,13 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row(() => {
-      return <AuthLogin onAccessToken={(jwt) => state.change((d) => (d.accessToken = jwt))} />;
+    dev.row((e) => {
+      return (
+        <AuthLogin
+          jwt={e.state.accessToken}
+          onAccessToken={(jwt) => state.change((d) => (d.accessToken = jwt))}
+        />
+      );
     });
     dev.hr(5, 20);
 
@@ -367,7 +372,6 @@ export default Dev.describe(name, async (e) => {
           ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
           : undefined,
         [`selected:doc`]: selected ? await selectedDoc(selected.edge, selected.item) : undefined,
-        accessToken: jwt ? `jwt:${Hash.shorten(jwt, 4)} (${jwt.length})` : null,
       };
 
       return (
