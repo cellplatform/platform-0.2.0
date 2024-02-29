@@ -26,9 +26,9 @@ export type PeerIs = {
   peerid(input?: any): boolean;
   uri(input?: any): boolean;
   kind: {
-    data(input: any): input is t.PeerConnectionDataKind;
-    media(input: any): input is t.PeerConnectionMediaKind;
-    video(input: any): input is t.PeerConnectionMediaKindVideo;
-    screen(input: any): input is t.PeerConnectionMediaKindScreen;
+    data(input: any): input is t.PeerConnectionKindData;
+    media(input: any): input is t.PeerConnectionKindMedia;
+    video(input: any): input is t.PeerConnectionKindMediaVideo;
+    screen(input: any): input is t.PeerConnectionKindMediaScreen;
   };
 };

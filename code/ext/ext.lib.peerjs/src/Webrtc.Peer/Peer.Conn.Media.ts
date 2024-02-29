@@ -21,7 +21,7 @@ export function manageMediaConnection(args: {
       /**
        * Start an outgoing data connection.
        */
-      async outgoing(kind: t.PeerConnectionMediaKind, remote: Id) {
+      async outgoing(kind: t.PeerConnectionKindMedia, remote: Id) {
         return new Promise<t.PeerConnectedMedia>(async (resolve) => {
           const resolveError = (error: string) => {
             dispatch.connection('error', undefined, error);
@@ -74,7 +74,7 @@ export function manageMediaConnection(args: {
           return;
         }
 
-        const kind = metadata.kind as t.PeerConnectionMediaKind;
+        const kind = metadata.kind as t.PeerConnectionKindMedia;
         const id = conn.connectionId;
         const remote = conn.peer;
 
@@ -104,7 +104,7 @@ export function manageMediaConnection(args: {
     },
 
     monitor(
-      media: t.PeerConnectionMediaKind,
+      media: t.PeerConnectionKindMedia,
       direction: t.IODirection,
       conn: t.PeerJsConnMedia,
       localstream?: MediaStream,

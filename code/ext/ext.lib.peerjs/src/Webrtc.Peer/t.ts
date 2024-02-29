@@ -41,11 +41,11 @@ export type PeerConnection = {
 };
 export type PeerConnectionsByPeer = { [peer: string]: PeerConnection[] };
 
-export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKind;
-export type PeerConnectionDataKind = 'data';
-export type PeerConnectionMediaKind = PeerConnectionMediaKindVideo | PeerConnectionMediaKindScreen;
-export type PeerConnectionMediaKindVideo = 'media:video';
-export type PeerConnectionMediaKindScreen = 'media:screen';
+export type PeerConnectionKind = PeerConnectionKindData | PeerConnectionKindMedia;
+export type PeerConnectionKindData = 'data';
+export type PeerConnectionKindMedia = PeerConnectionKindMediaVideo | PeerConnectionKindMediaScreen;
+export type PeerConnectionKindMediaVideo = 'media:video';
+export type PeerConnectionKindMediaScreen = 'media:screen';
 
 export type PeerConnectMetadata = {
   kind: PeerConnectionKind | 'unknown';
@@ -69,7 +69,7 @@ export type PeerModel = t.Lifecycle & {
 
 export type PeerModelConnect = {
   data(remoteid: Id): Promise<t.PeerConnectedData>;
-  media(kind: t.PeerConnectionMediaKind, remoteid: Id): Promise<t.PeerConnectedMedia>;
+  media(kind: t.PeerConnectionKindMedia, remoteid: Id): Promise<t.PeerConnectedMedia>;
 };
 
 export type PeerModelGet = {
@@ -78,7 +78,7 @@ export type PeerModelGet = {
     readonly obj: PeerModelGetConnectionObject;
     item(id?: Id): t.PeerConnection | undefined;
   };
-  media(kind: t.PeerConnectionMediaKind): Promise<t.GetMediaResponse>;
+  media(kind: t.PeerConnectionKindMedia): Promise<t.GetMediaResponse>;
 };
 
 export type PeerModelGetConnectionObject = {

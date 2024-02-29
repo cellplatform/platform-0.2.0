@@ -22,7 +22,7 @@ export function manageDataConnection(args: {
        */
       outgoing(remote: Id) {
         return new Promise<t.PeerConnectedData>(async (resolve) => {
-          const kind: t.PeerConnectionDataKind = 'data';
+          const kind: t.PeerConnectionKindData = 'data';
           const metadata = await dispatch.beforeOutgoing(kind, self, remote);
           const conn = peerjs.connect(remote, { reliable: true, metadata });
           const id = conn.connectionId;

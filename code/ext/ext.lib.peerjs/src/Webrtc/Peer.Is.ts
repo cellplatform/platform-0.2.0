@@ -14,19 +14,19 @@ export const PeerIs: t.PeerIs = {
   },
 
   kind: {
-    data(input: any): input is t.PeerConnectionDataKind {
+    data(input: any): input is t.PeerConnectionKindData {
       return input === 'data';
     },
 
-    media(input: any): input is t.PeerConnectionMediaKind {
+    media(input: any): input is t.PeerConnectionKindMedia {
       return PeerIs.kind.video(input) || PeerIs.kind.screen(input);
     },
 
-    video(input: any): input is t.PeerConnectionMediaKindVideo {
+    video(input: any): input is t.PeerConnectionKindMediaVideo {
       return input === 'media:video';
     },
 
-    screen(input: any): input is t.PeerConnectionMediaKindScreen {
+    screen(input: any): input is t.PeerConnectionKindMediaScreen {
       return input === 'media:screen';
     },
   },
