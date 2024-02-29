@@ -19,6 +19,6 @@ export function accessToken(data: t.InfoData): t.PropListItem | undefined {
     </div>
   );
 
-  const label = accessToken?.label || 'Access Token (JWT)';
+  const label = accessToken?.label || 'Access Token';
   return { label, value };
 }

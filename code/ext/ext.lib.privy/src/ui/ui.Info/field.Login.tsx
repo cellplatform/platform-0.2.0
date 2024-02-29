@@ -27,7 +27,7 @@ export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem
     <Button style={{ color }} enabled={enabled} onClick={handleClick}>
       <div {...styles.logoutBody}>
         <div>{privy.authenticated ? 'logout' : 'login'}</div>
-        <Icons.Logout size={14} />
+        {privy.authenticated && <Icons.Logout size={14} />}
       </div>
     </Button>
   );
