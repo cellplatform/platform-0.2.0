@@ -1,5 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
-import { Sample, type SampleProps } from './ui';
+import { Sample, type SampleProps } from './Root';
 
 type TEnv = { stream?: MediaStream };
 type T = { props: SampleProps };
@@ -36,7 +36,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
-    dev.TODO();
+    // dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {
