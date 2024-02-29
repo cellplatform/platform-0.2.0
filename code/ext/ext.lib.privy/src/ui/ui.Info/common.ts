@@ -16,6 +16,7 @@ const allFields: t.InfoField[] = [
   'Login',
   'Login.SMS',
   'Login.Farcaster',
+  'AccessToken',
   'Link.Wallet',
   'Link.Farcaster',
   'Wallet.List',

@@ -50,6 +50,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => Field.moduleVerify(data))
+    .field('AccessToken', () => Field.accessToken(data))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))

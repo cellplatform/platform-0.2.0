@@ -5,7 +5,6 @@ type T = {
   props: t.InfoProps;
   privy?: t.PrivyInterface;
   status?: t.AuthStatus;
-  accessToken?: string;
   signature?: string;
 };
 const initial: T = { props: {} };
@@ -40,6 +39,7 @@ export default Dev.describe(name, (e) => {
 
       d.props.data = {
         provider: AuthEnv.provider,
+        accessToken: {},
         wallet: { list: { title: 'Public Key' } },
         chain: {
           selected: local.selectedChain,
@@ -69,12 +69,11 @@ export default Dev.describe(name, (e) => {
             margin={24}
             onReady={(e) => console.info(`⚡️ onReady`, e)}
             onChange={(e) => {
-              const accessToken = Hash.shorten(e.accessToken ?? '', 7);
-              console.info(`⚡️ onChange`, { ...e, accessToken });
+              console.info(`⚡️ onChange`, e);
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
-                d.accessToken = accessToken;
+                d.props.data!.accessToken!.jwt = e.accessToken;
               });
             }}
           />
@@ -228,7 +227,6 @@ export default Dev.describe(name, (e) => {
         status: e.state.status,
         'status:user': user,
         signature: e.state.signature,
-        accessToken: e.state.accessToken,
       };
 
       return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
