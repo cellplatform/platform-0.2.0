@@ -16,7 +16,7 @@ type TShared = {
 type T = { reload?: boolean; accessToken?: string };
 const initial: T = {};
 
-type SampleNamespace = 'foo.sample' | 'dev.harness';
+type SampleNamespace = 'foo.main' | 'foo.harness';
 
 /**
  * Spec
@@ -66,8 +66,8 @@ export default Dev.describe(name, async (e) => {
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      Shared.main = ns.lens<t.SampleSharedMain>('foo.sample', {});
-      Shared.harness = ns.lens<t.HarnessShared>('dev.harness', {
+      Shared.main = ns.lens<t.SampleSharedMain>('foo.main', {});
+      Shared.harness = ns.lens<t.HarnessShared>('foo.harness', {
         debugPanel: true,
         edge: {
           Left: { visible: true, showJson: true },
