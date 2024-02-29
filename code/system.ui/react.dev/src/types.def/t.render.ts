@@ -3,7 +3,8 @@ import type { t } from './common';
 type Id = string;
 type RendererId = Id;
 type O = Record<string, unknown>;
-type RenderedResult = JSX.Element | undefined | null;
+
+export type RenderedResult = JSX.Element | undefined | null;
 
 /**
  * Function that returns a renderable element.
