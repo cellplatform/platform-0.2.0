@@ -2,20 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 export type SampleProps = {
-  media?: MediaStream;
+  stream?: MediaStream;
   style?: t.CssValue;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  const { media } = props;
+  const { stream } = props;
   const videoRef = useRef<HTMLVideoElement>(null);
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    if (media && videoRef.current) videoRef.current.srcObject = media;
-  }, [media]);
+    const video = videoRef.current;
+    if (stream && video) video.srcObject = stream;
+  }, [stream]);
 
   /**
    * Render

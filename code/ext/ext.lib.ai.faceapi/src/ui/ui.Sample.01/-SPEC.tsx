@@ -1,21 +1,25 @@
 import { Dev, Pkg, type t } from '../../test.ui';
 import { Sample, type SampleProps } from './ui';
 
+type TEnv = { stream?: MediaStream };
 type T = { props: SampleProps };
 const initial: T = { props: {} };
 
 /**
  * Spec
+ * https://www.youtube.com/watch?v=CVClHLwv-4I
+ * https://github.com/justadudewhohacks/face-api.js
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    const env = dev.ctx.env ? (dev.ctx.env as TEnv) : undefined;
 
     const state = await ctx.state<T>(initial);
     await state.change(async (d) => {
-      d.props.media = await navigator.mediaDevices.getUserMedia({ video: {} });
+      d.props.stream = env?.stream ?? (await navigator.mediaDevices.getUserMedia({ video: {} }));
     });
 
     ctx.debug.width(330);
