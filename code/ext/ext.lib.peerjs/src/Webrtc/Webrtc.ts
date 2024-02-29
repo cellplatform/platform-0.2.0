@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-import { WebrtcIs as Is } from './Is';
+import { PeerIs as Is } from './Peer.Is';
 import { PeerUri } from './Peer.Uri';
 import { PeerJs } from '../Webrtc.PeerJs/PeerJs';
 import { Peer } from '../Webrtc.Peer';

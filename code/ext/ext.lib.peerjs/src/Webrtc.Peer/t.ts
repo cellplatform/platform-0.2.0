@@ -13,6 +13,7 @@ export type GetMediaResponse = { stream?: MediaStream; error?: Error };
  * Entry API
  */
 export type WebrtcPeer = {
+  readonly Is: t.PeerIs;
   init(options?: InitOptions): t.PeerModel;
   wrap(peer: t.PeerJs, dispose$?: t.UntilObservable): t.PeerModel;
 };
@@ -42,7 +43,9 @@ export type PeerConnectionsByPeer = { [peer: string]: PeerConnection[] };
 
 export type PeerConnectionKind = PeerConnectionDataKind | PeerConnectionMediaKind;
 export type PeerConnectionDataKind = 'data';
-export type PeerConnectionMediaKind = 'media:video' | 'media:screen';
+export type PeerConnectionMediaKind = PeerConnectionMediaKindVideo | PeerConnectionMediaKindScreen;
+export type PeerConnectionMediaKindVideo = 'media:video';
+export type PeerConnectionMediaKindScreen = 'media:screen';
 
 export type PeerConnectMetadata = {
   kind: PeerConnectionKind | 'unknown';

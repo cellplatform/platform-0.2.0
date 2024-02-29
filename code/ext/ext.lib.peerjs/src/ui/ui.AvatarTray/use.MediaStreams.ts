@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WebrtcIs, type t } from './common';
+import { PeerIs, type t } from './common';
 
 export function useMediaStreams(peer?: t.PeerModel) {
   const [self, setSelf] = useState<MediaStream>();
@@ -9,7 +9,7 @@ export function useMediaStreams(peer?: t.PeerModel) {
     const update = () => {
       if (!peer) return;
       const connections = peer.current.connections;
-      const media = connections.filter((conn) => WebrtcIs.kind.media(conn.kind));
+      const media = connections.filter((conn) => PeerIs.kind.media(conn.kind));
       const streams = media.map((conn) => Wrangle.stream(conn)).filter(Boolean);
       setStreams(() => streams);
       setSelf(Wrangle.self(peer));

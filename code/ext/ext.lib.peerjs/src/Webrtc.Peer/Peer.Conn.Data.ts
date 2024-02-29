@@ -1,4 +1,4 @@
-import { DEFAULTS, WebrtcIs, Time, slug, type t } from './common';
+import { DEFAULTS, PeerIs, Time, slug, type t } from './common';
 import { Dispatch } from './u.Dispatch';
 import { Wrangle } from './u.Wrangle';
 import { getFactory } from './u.get';
@@ -104,7 +104,7 @@ export function manageDataConnection(args: {
 
       conn.on('close', () => {
         state.current.connections
-          .filter(({ kind }) => WebrtcIs.kind.media(kind))
+          .filter(({ kind }) => PeerIs.kind.media(kind))
           .filter(({ peer }) => peer.remote === conn.peer)
           .forEach(({ id }) => model.disconnect(id)); // Close child-media connections.
 

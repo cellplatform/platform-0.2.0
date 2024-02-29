@@ -1,5 +1,5 @@
+export { PeerIs } from '../Webrtc/Peer.Is';
 export * from '../common';
-export { WebrtcIs } from '../Webrtc/Is';
 
 export const DEFAULTS = {
   connectionTimeout: 5 * 1000,

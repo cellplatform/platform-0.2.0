@@ -1,7 +1,7 @@
 import { type t } from './common';
 import { PeerId } from './Peer.Id';
 
-export const WebrtcIs: t.WebrtcIs = {
+export const PeerIs: t.PeerIs = {
   peerid(input) {
     if (typeof input !== 'string') return false;
     return PeerId.is(input.trim());
@@ -10,7 +10,7 @@ export const WebrtcIs: t.WebrtcIs = {
   uri(input) {
     if (typeof input !== 'string') return false;
     const parts = input.trim().split(':');
-    return parts[0] === 'peer' && WebrtcIs.peerid(parts[1]);
+    return parts[0] === 'peer' && PeerIs.peerid(parts[1]);
   },
 
   kind: {
@@ -19,7 +19,15 @@ export const WebrtcIs: t.WebrtcIs = {
     },
 
     media(input: any): input is t.PeerConnectionMediaKind {
-      return input === 'media:video' || input === 'media:screen';
+      return PeerIs.kind.video(input) || PeerIs.kind.screen(input);
+    },
+
+    video(input: any): input is t.PeerConnectionMediaKindVideo {
+      return input === 'media:video';
+    },
+
+    screen(input: any): input is t.PeerConnectionMediaKindScreen {
+      return input === 'media:screen';
     },
   },
 } as const;
