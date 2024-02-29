@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, PeerUI, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
@@ -13,7 +13,7 @@ type TShared = {
   main?: t.Lens<t.SampleSharedMain>;
   harness?: t.Lens<t.HarnessShared>;
 };
-type T = { reload?: boolean; accessToken?: string };
+type T = { reload?: boolean; accessToken?: string; stream?: MediaStream };
 const initial: T = {};
 
 type SampleNamespace = 'foo.main' | 'foo.harness';
@@ -29,6 +29,21 @@ export default Dev.describe(name, async (e) => {
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
   const Shared: TShared = {};
+
+  const findMediaStream = (id?: string) => {
+    if (!id) return;
+    const isMedia = Peer.Is.kind.media;
+    const peers = [left.network.peer, right.network.peer];
+
+    for (const peer of peers) {
+      const media = peer.current.connections.filter((conn) => isMedia(conn.kind));
+      for (const conn of media) {
+        if (conn.stream?.self?.id === id) return conn.stream.self;
+        if (conn.stream?.remote?.id === id) return conn.stream.remote;
+      }
+    }
+    return;
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -83,6 +98,7 @@ export default Dev.describe(name, async (e) => {
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
         ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
+        state.change((d) => (d.stream = findMediaStream(shared.selectedStream)));
         dev.redraw();
       });
 
@@ -107,8 +123,16 @@ export default Dev.describe(name, async (e) => {
           const { docuri, name: typename } = def;
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
-          elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
+          const stream = state.current.stream;
+          console.log('state.current.selectedStream', state.current.stream);
+          elOverlay = loader
+            .ctx({ store, docuri, accessToken, stream })
+            .render(typename, { style });
         }
+
+        const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
+          Shared.harness?.change((d) => (d.selectedStream = e.selected?.id));
+        };
 
         const elAvatars = (
           <PeerUI.AvatarTray
@@ -121,14 +145,17 @@ export default Dev.describe(name, async (e) => {
               opacity: elOverlay ? 1 : 0,
               transition: 'opacity 0.3s',
             }}
+            onSelection={onStreamSelection}
           />
         );
 
         const elSubject = (
           <Sample
+            overlay={elOverlay}
             left={{ ...left, visible: edge?.Left.visible }}
             right={{ ...right, visible: edge?.Right.visible }}
-            overlay={elOverlay}
+            stream={e.state.stream}
+            onStreamSelection={onStreamSelection}
           />
         );
 
@@ -294,6 +321,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
       loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
+      loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
 
       dev.hr(-1, 5);
 

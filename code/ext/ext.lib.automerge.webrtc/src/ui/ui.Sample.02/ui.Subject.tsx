@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { css, type t } from './common';
 import { SampleEdge } from './ui.Subject.Edge';
 import { SampleMiddle } from './ui.Subject.Middle';
@@ -8,16 +6,13 @@ export type SampleProps = {
   left: t.SampleEdge;
   right: t.SampleEdge;
   overlay?: JSX.Element;
+  stream?: MediaStream;
   style?: t.CssValue;
+  onStreamSelection?: t.PeerStreamSelectionHandler;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  const [stream, setStream] = useState<MediaStream>();
-
-  /**
-   * Handlers
-   */
-  const onStreamSelection: t.PeerStreamSelectionHandler = (e) => setStream(e.selected);
+  const { stream, onStreamSelection } = props;
 
   /**
    * Render

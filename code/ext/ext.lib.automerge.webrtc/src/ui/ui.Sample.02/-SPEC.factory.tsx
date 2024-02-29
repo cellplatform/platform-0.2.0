@@ -33,5 +33,10 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
     return <ModuleNamespace />;
   }
 
+  if (e.name === 'FaceAPI') {
+    const { Face } = await import('./-loaders/Face');
+    return <Face stream={e.ctx.stream} />;
+  }
+
   return null;
 });
