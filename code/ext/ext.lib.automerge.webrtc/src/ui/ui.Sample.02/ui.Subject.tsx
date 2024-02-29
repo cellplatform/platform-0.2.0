@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { css, type t } from './common';
-import { SampleEdge } from './ui.Sample.Edge';
-import { SampleMiddle } from './ui.Sample.Middle';
+import { SampleEdge } from './ui.Subject.Edge';
+import { SampleMiddle } from './ui.Subject.Middle';
 
 export type SampleProps = {
   left: t.SampleEdge;

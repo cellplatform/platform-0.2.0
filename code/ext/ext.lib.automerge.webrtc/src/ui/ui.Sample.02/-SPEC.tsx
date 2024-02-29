@@ -7,7 +7,7 @@ import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
-import { Sample } from './ui.Sample';
+import { Sample } from './ui.Subject';
 
 type TShared = {
   main?: t.Lens<t.SampleSharedMain>;
