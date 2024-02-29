@@ -1,11 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
-import { DEFAULTS, Env, Is, OpenAI, type t } from './u.common.ts';
+import { DEFAULTS, Is, OpenAI, type t } from './u.common.ts';
 
 /**
  * OpenAI route setup.
  */
-export default function init(path: string, app: t.HonoApp) {
-  const apiKey = Env.Vars.openai.apiKey;
+export default function init(path: string, app: t.HonoApp, env: { apiKey: string }) {
+  const { apiKey } = env;
   const openai = new OpenAI({ apiKey });
 
   /**

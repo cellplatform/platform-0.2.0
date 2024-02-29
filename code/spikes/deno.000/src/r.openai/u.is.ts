@@ -1,8 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
-import { Http, type t } from '../common/mod.ts';
+import { statusOK, type t } from '../common/mod.ts';
 
 export const Is = {
-  statusOK: Http.statusOK,
+  statusOK,
 
   messagePayload(input: any): input is t.MessagePayload {
     if (input === null || typeof input !== 'object') return false;
