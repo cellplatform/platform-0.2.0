@@ -1,15 +1,16 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, Hash, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { ShellDivider } from './-SPEC.ShellDivider';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
+import { AuthLogin } from './ui.Auth';
 import { Sample } from './ui.Sample';
 import { Unloaded } from './ui.Unloaded';
 
-type T = { reload?: boolean };
+type T = { reload?: boolean; accessToken?: string };
 const initial: T = {};
 
 type SampleNamespace = 'foo.sample' | 'dev.harness';
@@ -78,17 +79,6 @@ export default Dev.describe(name, async (e) => {
         .subscribe(async (e) => {
           const m = e.after;
           ctx.debug.width(m.debugPanel ?? true ? 300 : 0);
-
-          /**
-           * Header component.
-           */
-          if (m.module && m.module.target === 'dev:header') {
-            const { name: typename, docuri } = m.module;
-            const store = left.network.store;
-            const el = loader.ctx({ store, docuri }).render(typename);
-            dev.header.border(-0.1).render(el);
-          }
-
           dev.redraw();
         });
 
@@ -117,7 +107,8 @@ export default Dev.describe(name, async (e) => {
           if (mod && mod.target === 'main') {
             const { docuri, name: typename } = mod;
             const style = { backgroundColor: COLORS.WHITE };
-            elOverlay = loader.ctx({ store, docuri }).render(typename, { style });
+            const accessToken = state.current.accessToken;
+            elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
           }
 
           return (
@@ -135,34 +126,9 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Peers', (dev) => {
-      const isConnected = () => left.network.peer.current.connections.length > 0;
-      const disconnect = () => {
-        left.network.peer.disconnect();
-        state.change((d) => (d.reload = true));
-      };
-
-      const connectButton = (label: string, fn: () => void) => {
-        dev.button((btn) => {
-          btn
-            .label(() => `connect: ${label}`)
-            .right((e) => (!isConnected() ? '🌳' : ''))
-            .onClick((e) => fn());
-        });
-      };
-
-      connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
-      connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
-      dev.hr(-1, 5);
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'disconnect' : 'not connected'))
-          .right((e) => (isConnected() ? '💥' : ''))
-          .enabled((e) => isConnected())
-          .onClick((e) => disconnect());
-      });
+    dev.row(() => {
+      return <AuthLogin onAccessToken={(jwt) => state.change((d) => (d.accessToken = jwt))} />;
     });
-
     dev.hr(5, 20);
 
     const edgeDebug = (edge: t.SampleEdge) => {
@@ -220,6 +186,24 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('', (dev) => {
+      const isConnected = () => left.network.peer.current.connections.length > 0;
+
+      const connectButton = (label: string, fn: () => void) => {
+        dev.button((btn) => {
+          btn
+            .label(() => `connect: ${label}`)
+            .right((e) => (!isConnected() ? '🌳' : ''))
+            .onClick((e) => fn());
+        });
+      };
+
+      connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
+      connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Debug', (dev) => {
       dev.button('redraw', () => dev.redraw());
       dev.hr(-1, 5);
@@ -258,25 +242,28 @@ export default Dev.describe(name, async (e) => {
       };
 
       const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
-        const isEnabled = () => !!sharedMain && !!selected?.item.uri;
+        const isEnabled = () => {
+          if (!(sharedMain && sharedHarness)) return false;
+          if (!selected?.item.uri) return false;
+          return true;
+        };
         dev.button((btn) => {
           btn
             .label(label)
             .enabled(() => isEnabled())
             .onClick((e) => {
               const docuri = selected?.item.uri;
+
               if (!(sharedMain && sharedHarness)) return;
               if (!docuri) return;
 
-              const module: t.SampleModuleDef = { name, docuri, target };
-              if (target === 'main') sharedMain.change((d) => (d.module = module));
-              if (target === 'dev:header') sharedHarness.change((d) => (d.module = module));
+              const def: t.SampleModuleDef = { name, docuri, target };
+              if (target === 'main') sharedMain.change((d) => (d.module = def));
+              if (target === 'dev:header') sharedHarness.change((d) => (d.module = def));
               dev.redraw();
             });
         });
       };
-      loadButton(`ƒ → load → Auth`, 'Auth', 'dev:header');
-      dev.hr(-1, 5);
       loadButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'main');
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
@@ -371,8 +358,8 @@ export default Dev.describe(name, async (e) => {
         return doc?.toObject();
       };
 
+      const jwt = e.state.accessToken;
       const data = {
-        state: e.state,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
@@ -380,21 +367,15 @@ export default Dev.describe(name, async (e) => {
           ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
           : undefined,
         [`selected:doc`]: selected ? await selectedDoc(selected.edge, selected.item) : undefined,
+        accessToken: jwt ? `jwt:${Hash.shorten(jwt, 4)} (${jwt.length})` : null,
       };
 
       return (
         <Dev.Object
           name={name}
           data={Delete.empty(data)}
+          expand={{ level: 1, paths: ['$'] }}
           fontSize={11}
-          expand={{
-            level: 1,
-            paths: [
-              '$',
-              // '$.selected',
-              // '$.selected.shared',
-            ],
-          }}
         />
       );
     });
