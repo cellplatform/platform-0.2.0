@@ -4,12 +4,7 @@ import { ModuleLoader, type t } from './common';
  * A factory for code-split (dynamicly loaded) ESM module.
  */
 export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(async (e) => {
-  const { store, docuri } = e.ctx;
-
-  if (e.name === 'Auth') {
-    const { AuthLoader } = await import('./-loaders/Auth');
-    return <AuthLoader store={store} docuri={docuri} />;
-  }
+  const { store, docuri, accessToken } = e.ctx;
 
   if (e.name === 'CodeEditor') {
     const { CodeEditorLoader } = await import('./-loaders/CodeEditor'); // NB: dynamic code-splitting here.
@@ -23,7 +18,7 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
 
   if (e.name === 'Deno.Deploy') {
     const { DenoDeploy } = await import('./-loaders/Deno.Deploy');
-    return <DenoDeploy store={store} docuri={docuri} />;
+    return <DenoDeploy store={store} docuri={docuri} accessToken={accessToken} />;
   }
 
   if (e.name === 'DiagramEditor') {

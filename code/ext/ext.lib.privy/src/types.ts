@@ -4,8 +4,6 @@ export type * from './evm/Balance/t';
 export type * from './evm/Chain/t';
 export type * from './evm/Wallet/t';
 
-export type * from './http/Exchange/t';
-
 export type * from './ui/ui.Auth/t';
 export type * from './ui/ui.Info/t';
 

@@ -1,1 +1,1 @@
-export { Spec } from './Spec.mjs';
+export { Spec } from './Spec';

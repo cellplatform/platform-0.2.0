@@ -28,7 +28,7 @@ export const View: React.FC<t.MediaToolbarProps> = (props) => {
     }),
   };
 
-  const mediaButton = (kind: t.PeerConnectionMediaKind, marginRight?: number) => {
+  const mediaButton = (kind: t.PeerConnectionKindMedia, marginRight?: number) => {
     return (
       <MediaButton
         kind={kind}

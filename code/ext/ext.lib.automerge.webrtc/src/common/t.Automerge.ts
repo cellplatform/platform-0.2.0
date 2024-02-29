@@ -6,3 +6,9 @@ export type {
   StorageId as AutomergeStorageId,
   NetworkAdapter,
 } from '@automerge/automerge-repo';
+
+export type {
+  PeerjsNetworkAdapter,
+  NetworkMessage,
+  NetworkMessageAlert,
+} from 'automerge-repo-network-peerjs';

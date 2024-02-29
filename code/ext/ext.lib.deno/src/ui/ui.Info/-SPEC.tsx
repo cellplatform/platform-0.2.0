@@ -1,8 +1,12 @@
 import { Info, type InfoProps } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Dev, Pkg, type t, Hash } from '../../test.ui';
 import { Http } from './common';
 
-type T = { props: InfoProps; debug: { forcePublicUrl?: boolean } };
+type T = {
+  props: InfoProps;
+  accessToken?: string;
+  debug: { forcePublicUrl?: boolean };
+};
 const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -10,6 +14,7 @@ const DEFAULTS = Info.DEFAULTS;
  * Spec
  */
 const name = Info.displayName ?? 'Unknown';
+
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] } & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -23,9 +28,16 @@ export default Dev.describe(name, (e) => {
     return Http.client({ forcePublic });
   };
 
+  const getTokens = (ctx: t.DevCtx, state: T) => {
+    const env = (ctx.env?.accessToken ?? '') as string;
+    const prop = state.accessToken;
+    const accessToken = env || prop;
+    return { prop, env, accessToken } as const;
+  };
+
   e.it('ui:init', async (e) => {
-    const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     await state.change((d) => {
       d.debug.forcePublicUrl = local.forcePublicUrl;
@@ -42,13 +54,16 @@ export default Dev.describe(name, (e) => {
       };
     });
 
-    ctx.debug.width(300);
-    ctx.subject
+    dev.ctx.debug.width(300);
+    dev.ctx.subject
       .backgroundColor(1)
       .size([320, null])
       .display('grid')
-      .render<T>((e) => {
-        return <Info {...e.state.props} />;
+      .render<T>(async (e) => {
+        const props = e.state.props;
+        const accessToken = getTokens(dev.ctx, e.state).accessToken;
+        const data = { ...props.data, auth: { accessToken } };
+        return <Info {...props} data={data} />;
       });
   });
 
@@ -56,6 +71,26 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
+    const tokens = getTokens(dev.ctx, state.current);
+
+    dev.row(async (e) => {
+      if (tokens.env) return;
+
+      const { Auth } = await import('ext.lib.privy');
+      return (
+        <Auth.Info
+          title={'Identity'}
+          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
+          data={{ provider: Auth.Env.provider }}
+          onChange={(e) => {
+            console.info('⚡️ Auth.onChange:', e);
+            state.change((d) => (d.accessToken = e.accessToken));
+          }}
+        />
+      );
+    });
+
+    if (!tokens.env) dev.hr(5, 20);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -76,6 +111,8 @@ export default Dev.describe(name, (e) => {
         );
       });
     });
+
+    dev.hr(5, 20);
 
     dev.section('HTTP', (dev) => {
       dev.button('get: projects.list', async (e) => {
@@ -102,15 +139,18 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
+
+    dev.footer.border(-0.1).render<T>(async (e) => {
+      const tokens = getTokens(dev.ctx, e.state);
       const { debug, props } = e.state;
       const forcePublic = debug.forcePublicUrl;
       const data = {
-        origin: Http.origin({ forcePublic }),
         props,
+        origin: Http.origin({ forcePublic }),
+        accessToken: tokens.prop ? `${Hash.shorten(tokens.prop, 6)}` : undefined,
+        'accessToken.env': tokens.env ? `${Hash.shorten(tokens.env, 6)}` : undefined,
       };
-
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

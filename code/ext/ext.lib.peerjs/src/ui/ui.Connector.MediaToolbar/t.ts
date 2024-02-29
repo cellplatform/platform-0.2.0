@@ -12,5 +12,5 @@ export type MediaToolbarProps = {
 };
 
 export type MediaToolbarButtonProps = MediaToolbarProps & {
-  kind: t.PeerConnectionMediaKind;
+  kind: t.PeerConnectionKindMedia;
 };

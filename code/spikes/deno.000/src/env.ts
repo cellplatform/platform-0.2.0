@@ -4,24 +4,22 @@ const env = await load();
 /**
  * Environment Variables (.env file)
  */
-export const Env = {
-  Vars: {
-    /**
-     * OpenAI
-     * https://platform.openai.com/api-keys
-     */
-    openai: { apiKey: env['OPENAI_API_KEY'] },
+export const EnvVars = {
+  /**
+   * OpenAI
+   * https://platform.openai.com/api-keys
+   */
+  openai: { apiKey: env['OPENAI_API_KEY'] },
 
+  /**
+   * Deno Cloud
+   */
+  deno: {
     /**
-     * Deno Cloud
+     * Organization: "sys" (Subhosting)
+     * https://docs.deno.com/subhosting/manual
      */
-    deno: {
-      /**
-       * Organization: "sys" (Subhosting)
-       * https://docs.deno.com/subhosting/manual
-       */
-      accessToken: env['SYS_DEPLOY_ACCESS_TOKEN'],
-      orgId: env['SYS_DEPLOY_ORG_ID'],
-    },
+    accessToken: env['SYS_DEPLOY_ACCESS_TOKEN'],
+    orgId: env['SYS_DEPLOY_ORG_ID'],
   },
 } as const;

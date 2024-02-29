@@ -1,49 +1,49 @@
 import { useEffect, useState } from 'react';
-
 import { DevBus } from '../logic.Bus';
-import { DEFAULTS, Is, t } from './common';
+import { DEFAULTS, Is, type t } from './common';
 import { useCurrentState } from './useCurrentState';
 import { useRedrawEvent } from './useRedrawEvent';
 
 export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef) {
   const id = renderer?.id ?? '';
 
-  const [element, setElement] = useState<JSX.Element | null>(null);
+  const [element, setElement] = useState<t.RenderedResult>(null);
   const current = useCurrentState(instance, { filter: (e) => e.message === 'state:write' });
   const redraw = useRedrawEvent(instance, [renderer]);
 
   /**
-   * [Lifecycle]
+   * Lifecycle
    */
   useEffect(() => {
     const events = DevBus.events(instance);
-    render(events, renderer).then((el) => {
-      if (!events.disposed) setElement(el);
+
+    const update = async (res: t.RenderedResult | Promise<t.RenderedResult>) => {
+      const el = Is.promise(res) ? await res : res;
+      setElement(el);
+    };
+
+    events.info.fire().then(({ info }) => {
+      if (!renderer || !info || events.disposed) return;
+      update(render(info, renderer));
     });
-    return () => events.dispose();
-  }, [id, current.count, redraw.count]);
+
+    return events.dispose;
+  }, [id, current.count, redraw.count, !!renderer]);
 
   /**
-   * API.
+   * API
    */
-  return { element };
+  return { element } as const;
 }
 
 /**
  * Helpers
  */
 
-async function render(events: t.DevEvents, renderer?: t.DevRendererRef) {
-  if (!renderer) return null;
-  const id = renderer?.id ?? '';
-
-  const { info } = await events.info.fire();
-  if (!info) return null;
-
+function render(info: t.DevInfo, renderer: t.DevRendererRef) {
   const state = info.render.state ?? {};
   const size = info.render.props?.size ?? DEFAULTS.size;
+  const id = renderer.id;
   const res = renderer.fn({ id, state, size });
-  if (Is.promise(res)) await res;
-
-  return (res as JSX.Element) ?? null;
+  return res;
 }

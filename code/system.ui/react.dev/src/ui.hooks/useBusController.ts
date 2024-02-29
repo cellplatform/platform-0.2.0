@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { filter } from 'rxjs/operators';
 import { DEFAULTS, DevBus, Time, rx, slug, type t } from './common';
 
 type Id = string;
@@ -8,15 +7,16 @@ type Id = string;
  * Hook: Setup and lifecycle of the event-bus controller.
  */
 export function useBusController(
-  options: {
+  args: {
     bus?: t.EventBus;
     id?: Id;
     bundle?: t.SpecImport | t.TestSuiteModel;
+    env?: t.DevEnvVars;
     runOnLoad?: boolean;
   } = {},
 ) {
-  const id = options.id ?? useRef(`dev.instance.${slug()}`).current;
-  const bus = options.bus ?? useRef(rx.bus()).current;
+  const id = args.id ?? useRef(`dev.instance.${slug()}`).current;
+  const bus = args.bus ?? useRef(rx.bus()).current;
   const instance = { bus, id };
   const busid = rx.bus.instance(bus);
 
@@ -27,21 +27,21 @@ export function useBusController(
    * Lifecycle
    */
   useEffect(() => {
-    const events = (eventsRef.current = DevBus.Controller({ instance }));
-    events.info.changed$.pipe(filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
+    const env = args.env;
+    const events = (eventsRef.current = DevBus.Controller({ instance, env }));
+    events.info.changed$.pipe(rx.filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
 
     /**
      * Initialize.
      */
     Time.delay(0, async () => {
-      if (!events.disposed) {
-        await events.load.fire(options.bundle);
-        if (options.runOnLoad) events.run.fire();
-      }
+      if (events.disposed) return;
+      await events.load.fire(args.bundle);
+      if (args.runOnLoad) events.run.fire();
     });
 
-    return () => events.dispose();
-  }, [id, busid, Boolean(options.bundle)]);
+    return events.dispose;
+  }, [id, busid, !!args.bundle, !!args.env]);
 
   /**
    * API
@@ -53,7 +53,7 @@ export function useBusController(
       return eventsRef.current;
     },
     get ready() {
-      return Boolean(info.render.props);
+      return !!info.render.props;
     },
-  };
+  } as const;
 }

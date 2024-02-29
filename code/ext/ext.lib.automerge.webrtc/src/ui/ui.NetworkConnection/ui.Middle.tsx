@@ -1,14 +1,16 @@
-import { COLORS, Color, css, type t } from './common';
+import { COLORS, Color, DEFAULTS, css, useSizeObserver, type t } from './common';
 import { Line } from './ui.Middle.Line';
 
 export type MiddleProps = {
   isConnected: boolean;
   isTransmitting: boolean;
+  label?: string;
   style?: t.CssValue;
 };
 
 export const Middle: React.FC<MiddleProps> = (props) => {
-  const { isConnected, isTransmitting } = props;
+  const { isConnected, isTransmitting, label = DEFAULTS.connectionLabel } = props;
+  const size = useSizeObserver();
 
   /**
    * Render
@@ -42,12 +44,22 @@ export const Middle: React.FC<MiddleProps> = (props) => {
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.labelOuter}>
-        <div {...styles.labelText}>{'WebRTC/data'}</div>
-      </div>
+  const elLabel = size.rect.width > 130 && (
+    <div {...styles.labelOuter}>
+      <div {...styles.labelText}>{label}</div>
+    </div>
+  );
+
+  const elBody = size.ready && (
+    <>
+      {elLabel}
       <Line isConnected={isConnected} isTransmitting={isTransmitting} />
+    </>
+  );
+
+  return (
+    <div ref={size.ref} {...css(styles.base, props.style)}>
+      {elBody}
     </div>
   );
 };

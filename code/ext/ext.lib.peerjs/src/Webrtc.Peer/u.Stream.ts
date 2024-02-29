@@ -48,7 +48,7 @@ export const Stream = {
     let _video: MediaStream | undefined;
     let _screen: MediaStream | undefined;
 
-    const releaseIfUnused = (kind: t.PeerConnectionMediaKind, stream?: MediaStream) => {
+    const releaseIfUnused = (kind: t.PeerConnectionKindMedia, stream?: MediaStream) => {
       if (get.conn.itemsByKind(state.current, kind).length > 0) return stream;
       if (stream) Stream.stop(stream);
       return undefined;

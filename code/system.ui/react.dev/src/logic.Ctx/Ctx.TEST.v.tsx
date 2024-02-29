@@ -21,6 +21,20 @@ describe('Context', () => {
       events.dispose();
     });
 
+    it('init ← with {env} ', async () => {
+      const { events, instance } = await TestSample.controller();
+
+      const env = { foo: 'bar' };
+      const context1 = await Context.init(instance, { env });
+      const context2 = await Context.init(instance);
+      expect(context1.ctx.env).to.eql(env);
+      expect(context2.ctx.env).to.eql(undefined);
+
+      context1.dispose();
+      context2.dispose();
+      events.dispose();
+    });
+
     it('dispose (context)', async () => {
       const { dispose, context, events } = await TestSample.context();
 

@@ -12,7 +12,7 @@ export async function test(
     ui?: boolean;
     coverage?: boolean;
     reporter?: 'default' | 'verbose' | 'json' | 'dot' | 'junit';
-    silentTestConsole?: boolean; // NB: silence console output from tests
+    silentTestConsole?: boolean; // NB: silence console output from tests.
     silent?: boolean;
   } = {},
 ) {
@@ -56,6 +56,7 @@ export async function test(
 
   let ok = exitCode === 0;
   const stats = reporter === 'json' ? parseStats(stdout) : undefined;
+
   if (stats?.success === false || stats?.error) ok = false;
   return {
     ok,
@@ -72,7 +73,7 @@ export async function test(
  */
 function parseStats(json: string): t.TestStats | undefined {
   let lines = json.split('\n');
-  const index = lines.findIndex((line) => line === '{');
+  const index = lines.findIndex((line) => line.startsWith('{'));
   if (index < 0) return;
 
   try {

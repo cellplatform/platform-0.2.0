@@ -8,4 +8,6 @@ export const DEFAULTS = {
   displayName: 'AvatarTray',
   size: 48,
   muted: true,
+  gap: 10,
+  borderRadius: 4,
 } as const;

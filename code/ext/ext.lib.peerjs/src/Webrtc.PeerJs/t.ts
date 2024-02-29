@@ -13,7 +13,7 @@ export type PeerJsCreateArgs = {
  * Wrapper for working with peers
  */
 export type WebrtcPeerJs = {
-  readonly Is: t.WebrtcIs;
+  readonly Is: t.PeerIs;
   readonly Uri: t.WebrtcPeerUri;
   options(input?: Options): t.PeerJsOptions;
   create(): t.PeerJs;

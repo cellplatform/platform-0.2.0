@@ -29,7 +29,7 @@ export const Wrangle = {
     return Wrangle.connectionOfKind(props, ...kinds).length > 0;
   },
 
-  toConnectionKind(media: t.PeerConnectionMediaKind): t.PeerConnectionKind {
+  toConnectionKind(media: t.PeerConnectionKindMedia): t.PeerConnectionKind {
     if (media === 'media:video') return 'media:video';
     if (media === 'media:screen') return 'media:screen';
     throw new Error(`Media kind '${media}' not supported.`);

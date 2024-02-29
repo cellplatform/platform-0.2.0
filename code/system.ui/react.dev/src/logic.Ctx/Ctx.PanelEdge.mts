@@ -1,4 +1,4 @@
-import { Id, Margin, t } from './common';
+import { Id, Margin, type t } from './common';
 
 /**
  * The edge of a panel (eg header/footer).

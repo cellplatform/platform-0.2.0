@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { Wrangle } from './Wrangle';
 
 export type HostGridProps = {

@@ -2,7 +2,7 @@ import { Builder, LogTable, R, Time, Util, fs, ora, pc, type t } from './common/
 
 type Milliseconds = number;
 
-const parseError = (err?: string) => {
+const parseError = (err?: string): t.VitestResultsData | undefined => {
   const error = err ?? '';
   const text = error.substring(error.indexOf('\n'));
   try {

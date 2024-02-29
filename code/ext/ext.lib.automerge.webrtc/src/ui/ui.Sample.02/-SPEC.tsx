@@ -1,18 +1,22 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { ShellDivider } from './-SPEC.ShellDivider';
+import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
 import { loader } from './-SPEC.factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { Sample } from './ui.Sample';
-import { Unloaded } from './ui.Unloaded';
+import { AuthIdentity } from './ui.Dev.Identity';
+import { ShellDivider } from './ui.Dev.ShellDivider';
+import { Sample } from './ui.Subject';
 
-type T = { reload?: boolean };
+type TShared = {
+  main?: t.Lens<t.SampleSharedMain>;
+  harness?: t.Lens<t.HarnessShared>;
+};
+type T = { reload?: boolean; accessToken?: string };
 const initial: T = {};
 
-type SampleNamespace = 'foo.sample' | 'dev.harness';
+type SampleNamespace = 'foo.main' | 'foo.harness';
 
 /**
  * Spec
@@ -24,8 +28,7 @@ export default Dev.describe(name, async (e) => {
   let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
-  let sharedMain: t.Lens<t.SampleSharedMain> | undefined;
-  let sharedHarness: t.Lens<t.HarnessShared> | undefined;
+  const Shared: TShared = {};
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -35,7 +38,6 @@ export default Dev.describe(name, async (e) => {
     right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
-    const resetReloadClose = () => state.change((d) => (d.reload = false));
     await state.change((d) => {});
 
     const monitor = (edge: t.SampleEdge) => {
@@ -63,8 +65,8 @@ export default Dev.describe(name, async (e) => {
      */
     left.network.shared().then((shared) => {
       ns = shared.namespace.typed<SampleNamespace>();
-      sharedMain = ns.lens<t.SampleSharedMain>('foo.sample', {});
-      sharedHarness = ns.lens<t.HarnessShared>('dev.harness', {
+      Shared.main = ns.lens<t.SampleSharedMain>('foo.main', {});
+      Shared.harness = ns.lens<t.HarnessShared>('foo.harness', {
         debugPanel: true,
         edge: {
           Left: { visible: true, showJson: true },
@@ -72,32 +74,19 @@ export default Dev.describe(name, async (e) => {
         },
       });
 
-      sharedHarness
-        .events()
-        .changed$.pipe(rx.debounceTime(100))
-        .subscribe(async (e) => {
-          const m = e.after;
-          ctx.debug.width(m.debugPanel ?? true ? 300 : 0);
+      const events = {
+        main: Shared.main.events(),
+        harness: Shared.harness.events(),
+      };
 
-          /**
-           * Header component.
-           */
-          if (m.module && m.module.target === 'dev:header') {
-            const { name: typename, docuri } = m.module;
-            const store = left.network.store;
-            const el = loader.ctx({ store, docuri }).render(typename);
-            dev.header.border(-0.1).render(el);
-          }
+      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => dev.redraw('subject'));
+      events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
+        const shared = e.after;
+        ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
+        dev.redraw();
+      });
 
-          dev.redraw();
-        });
-
-      sharedMain
-        .events()
-        .changed$.pipe(rx.debounceTime(100))
-        .subscribe((e) => dev.redraw('subject'));
-
-      monitorKeyboard(sharedHarness);
+      monitorKeyboard(Shared.harness);
     });
 
     ctx.debug.width(300);
@@ -105,29 +94,50 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.reload) {
-          return <TestDb.DevReload onCloseClick={resetReloadClose} />;
-        } else {
-          const shared = sharedHarness!;
-          const edge = shared?.current.edge;
-          const store = left.network.store;
+        if (e.state.reload)
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
 
-          let elOverlay: JSX.Element | undefined;
-          const mod = sharedMain?.current.module;
-          if (mod && mod.target === 'main') {
-            const { docuri, name: typename } = mod;
-            const style = { backgroundColor: COLORS.WHITE };
-            elOverlay = loader.ctx({ store, docuri }).render(typename, { style });
-          }
+        const shared = Shared.harness!;
+        const edge = shared?.current.edge;
+        const store = left.network.store;
 
-          return (
-            <Sample
-              left={{ ...left, visible: edge?.Left.visible }}
-              right={{ ...right, visible: edge?.Right.visible }}
-              overlay={elOverlay}
-            />
-          );
+        let elOverlay: JSX.Element | undefined;
+        const def = Shared.main?.current.module;
+        if (def && def.target === 'main') {
+          const { docuri, name: typename } = def;
+          const style = { backgroundColor: COLORS.WHITE };
+          const accessToken = state.current.accessToken;
+          elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
         }
+
+        const elAvatars = (
+          <PeerUI.AvatarTray
+            peer={left.network.peer}
+            gap={10}
+            size={28}
+            style={{
+              Absolute: [null, null, 0 - (28 + 10), 10],
+              pointerEvents: elOverlay ? 'none' : 'auto',
+              opacity: elOverlay ? 1 : 0,
+              transition: 'opacity 0.3s',
+            }}
+          />
+        );
+
+        const elSubject = (
+          <Sample
+            left={{ ...left, visible: edge?.Left.visible }}
+            right={{ ...right, visible: edge?.Right.visible }}
+            overlay={elOverlay}
+          />
+        );
+
+        return (
+          <>
+            {elSubject}
+            {elAvatars}
+          </>
+        );
       });
   });
 
@@ -135,41 +145,21 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Peers', (dev) => {
-      const isConnected = () => left.network.peer.current.connections.length > 0;
-      const disconnect = () => {
-        left.network.peer.disconnect();
-        state.change((d) => (d.reload = true));
-      };
-
-      const connectButton = (label: string, fn: () => void) => {
-        dev.button((btn) => {
-          btn
-            .label(() => `connect: ${label}`)
-            .right((e) => (!isConnected() ? '🌳' : ''))
-            .onClick((e) => fn());
-        });
-      };
-
-      connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
-      connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
-      dev.hr(-1, 5);
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'disconnect' : 'not connected'))
-          .right((e) => (isConnected() ? '💥' : ''))
-          .enabled((e) => isConnected())
-          .onClick((e) => disconnect());
-      });
+    dev.row((e) => {
+      return (
+        <AuthIdentity
+          jwt={e.state.accessToken}
+          onAccessToken={(jwt) => state.change((d) => (d.accessToken = jwt))}
+        />
+      );
     });
-
     dev.hr(5, 20);
 
     const edgeDebug = (edge: t.SampleEdge) => {
       const network = edge.network;
 
       dev.row((e) => {
-        const shared = sharedHarness;
+        const shared = Shared.harness;
         const getLayout = (d?: t.HarnessShared) => d?.edge[edge.kind];
         const layout = getLayout(shared?.current);
         const defaultFields: t.InfoField[] = [
@@ -220,6 +210,24 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('', (dev) => {
+      const isConnected = () => left.network.peer.current.connections.length > 0;
+
+      const connectButton = (label: string, fn: () => void) => {
+        dev.button((btn) => {
+          btn
+            .label(() => `connect: ${label}`)
+            .right((e) => (!isConnected() ? '🌳' : ''))
+            .onClick((e) => fn());
+        });
+      };
+
+      connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
+      connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Debug', (dev) => {
       dev.button('redraw', () => dev.redraw());
       dev.hr(-1, 5);
@@ -258,25 +266,28 @@ export default Dev.describe(name, async (e) => {
       };
 
       const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
-        const isEnabled = () => !!sharedMain && !!selected?.item.uri;
+        const isEnabled = () => {
+          if (!(Shared.main && Shared.harness)) return false;
+          if (!selected?.item.uri) return false;
+          return true;
+        };
         dev.button((btn) => {
           btn
             .label(label)
             .enabled(() => isEnabled())
             .onClick((e) => {
               const docuri = selected?.item.uri;
-              if (!(sharedMain && sharedHarness)) return;
+
+              if (!(Shared.main && Shared.harness)) return;
               if (!docuri) return;
 
-              const module: t.SampleModuleDef = { name, docuri, target };
-              if (target === 'main') sharedMain.change((d) => (d.module = module));
-              if (target === 'dev:header') sharedHarness.change((d) => (d.module = module));
+              const def: t.SampleModuleDef = { name, docuri, target };
+              if (target === 'main') Shared.main.change((d) => (d.module = def));
+              if (target === 'dev:header') Shared.harness.change((d) => (d.module = def));
               dev.redraw();
             });
         });
       };
-      loadButton(`ƒ → load → Auth`, 'Auth', 'dev:header');
-      dev.hr(-1, 5);
       loadButton(`ƒ → load → <ModuleNamespace>`, 'ModuleNamespace', 'main');
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
@@ -288,25 +299,18 @@ export default Dev.describe(name, async (e) => {
 
       const unloadButton = (target: t.SampleModuleDefTarget) => {
         dev.button((btn) => {
-          const isEnabled = () => !!sharedMain && !!selected?.item.uri;
+          const isEnabled = () => !!Shared.main && !!selected?.item.uri;
           btn
             .label(`ƒ → (unload ${target})`)
             .right((e) => '💥')
             .enabled((e) => isEnabled())
             .onClick((e) => {
-              if (target === 'main') sharedMain?.change((d) => delete d.module);
-              if (target === 'dev:header') {
-                sharedHarness?.change((d) => {
-                  delete d.module;
-                  dev.header.render(<Unloaded />);
-                });
-              }
+              if (target === 'main') Shared.main?.change((d) => delete d.module);
               dev.redraw();
             });
         });
       };
       unloadButton('main');
-      unloadButton('dev:header');
 
       dev.hr(-1, 5);
 
@@ -371,14 +375,12 @@ export default Dev.describe(name, async (e) => {
         return doc?.toObject();
       };
 
+      const jwt = e.state.accessToken;
       const data = {
-        state: e.state,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
-        [`selected:uri`]: selected
-          ? Doc.Uri.automerge(selected.item.uri, { shorten: 4 })
-          : undefined,
+        [`selected:doc:uri`]: selected ? Doc.Uri.id(selected.item.uri, { shorten: 4 }) : undefined,
         [`selected:doc`]: selected ? await selectedDoc(selected.edge, selected.item) : undefined,
       };
 
@@ -386,15 +388,8 @@ export default Dev.describe(name, async (e) => {
         <Dev.Object
           name={name}
           data={Delete.empty(data)}
+          expand={{ level: 1, paths: ['$'] }}
           fontSize={11}
-          expand={{
-            level: 1,
-            paths: [
-              '$',
-              // '$.selected',
-              // '$.selected.shared',
-            ],
-          }}
         />
       );
     });

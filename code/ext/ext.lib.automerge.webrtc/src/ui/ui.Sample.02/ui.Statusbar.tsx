@@ -21,15 +21,16 @@ export const Statusbar: React.FC<StatusbarProps> = (props) => {
       gridTemplateColumns: '1fr auto auto',
     }),
     label: css({ Flex: 'x-center-center' }),
+    ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     mono: css({ fontFamily: 'monospace', fontSize: 10, paddingTop: 2 }),
-    span: css({ paddingTop: 1 }),
+    sans: css({ paddingTop: 1 }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.span}>{props.left}</div>
-      <div {...styles.label}>
-        <span {...styles.mono}>{props.right}</span>
+      <div {...css(styles.sans, styles.ellipsis)}>{props.left}</div>
+      <div {...css(styles.label, styles.ellipsis)}>
+        <span {...css(styles.mono)}>{props.right}</span>
         <Icons.Database size={15} margin={[0, 0, 0, 4]} />
         <Icons.Antenna size={15} margin={[0, 0, 0, 10]} />
       </div>

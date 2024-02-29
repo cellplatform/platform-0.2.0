@@ -1,5 +1,5 @@
-import { BusController as Controller } from './Bus.Controller.mjs';
-import { BusEvents as Events } from './Bus.Events.mjs';
+import { BusController } from './Bus.Controller.mjs';
+import { BusEvents } from './Bus.Events.mjs';
 import { Is, Spec, type t } from './common';
 
 export * from './Bus.Events.mjs';
@@ -7,13 +7,13 @@ export * from './Bus.Events.mjs';
 type InstanceInput = t.DevInstance | t.DevCtx | t.TestHandlerArgs;
 
 export const DevBus = {
-  Controller,
-  Events,
+  Controller: BusController,
+  Events: BusEvents,
 
   events(input: InstanceInput) {
-    const ctx = Wrangle.ctx(input);
+    const ctx = wrangle.ctx(input);
     const dispose$ = ctx ? ctx.dispose$ : undefined;
-    const instance = Wrangle.instance(input);
+    const instance = wrangle.instance(input);
     return DevBus.Events({ instance, dispose$ });
   },
 
@@ -23,20 +23,19 @@ export const DevBus = {
     if (Is.promise(res)) await res;
     events.dispose();
   },
-};
+} as const;
 
 /**
  * Helpers
  */
-
-const Wrangle = {
+const wrangle = {
   instance(input: InstanceInput) {
-    if (Is.testArgs(input)) input = Spec.ctx(input as t.TestHandlerArgs);
-    if (Is.ctx(input)) return (input as t.DevCtx).toObject().instance;
+    if (Is.testArgs(input)) input = Spec.ctx(input);
+    if (Is.ctx(input)) return input.toObject().instance;
     return input as t.DevInstance;
   },
   ctx(input: InstanceInput) {
-    if (Is.testArgs(input)) input = Spec.ctx(input as t.TestHandlerArgs);
-    return Is.ctx(input) ? (input as t.DevCtx) : undefined;
+    if (Is.testArgs(input)) input = Spec.ctx(input);
+    return Is.ctx(input) ? input : undefined;
   },
-};
+} as const;

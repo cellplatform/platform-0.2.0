@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { HostLayer } from './Host.Layer';
 
 export type HostLayersProps = {

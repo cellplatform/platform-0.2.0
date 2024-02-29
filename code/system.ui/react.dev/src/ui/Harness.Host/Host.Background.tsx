@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 
 export type DevHostBackgroundProps = {
   renderProps?: t.DevRenderProps;
