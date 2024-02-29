@@ -1,8 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
-import { Server, EnvVars } from './common/mod.ts';
-import openai from './r.openai/mod.ts';
-// import { Routes as deno } from '../../../ext/ext.lib.deno/src.deno/mod.ts';
-import { Routes as deno } from '../src.api.deno/mod.ts';
+import { Server, EnvVars } from './common.ts';
+import openai from '../src.api.openai/mod.ts';
+import deno from '../src.api.deno/mod.ts';
 
 /**
  * Initialize a new HTTP server.

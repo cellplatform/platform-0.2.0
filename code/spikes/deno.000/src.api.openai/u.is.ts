@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { statusOK, type t } from '../common/mod.ts';
+import type { t } from './u.common.ts';
+import { statusOK } from '../src/common.ts';
 
 export const Is = {
   statusOK,

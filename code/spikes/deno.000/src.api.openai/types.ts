@@ -1,3 +1,5 @@
+export type { HonoApp } from '../src.api.deno/types.ts';
+
 /**
  * https://platform.openai.com/docs
  */
