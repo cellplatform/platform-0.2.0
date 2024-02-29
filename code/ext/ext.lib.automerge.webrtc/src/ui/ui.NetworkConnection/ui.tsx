@@ -31,7 +31,6 @@ export const View: React.FC<t.NetworkConnectionProps> = (props) => {
 /**
  * Helpers
  */
-
 export const wrangle = {
   bytes: (input: number) => `${input} B`,
 } as const;
