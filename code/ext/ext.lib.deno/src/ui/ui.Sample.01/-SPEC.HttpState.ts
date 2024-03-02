@@ -27,6 +27,9 @@ export const HttpState = {
     if (projectId) {
       const uniq = R.uniqBy(R.prop('id'));
       const res = await client.deployments(projectId).list({ order: 'desc' });
+
+      console.log('deployments', res.deployments);
+
       state.change((d) => {
         let next = [...d.deno.deployments, ...res.deployments];
         next = next.filter((d) => d.status === 'success');

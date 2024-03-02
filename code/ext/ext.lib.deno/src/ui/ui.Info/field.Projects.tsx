@@ -52,11 +52,12 @@ export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropLis
       </div>
     );
 
+    const tooltip = `Open in new tab`;
     const value = (
       <div {...styles.value}>
         <div>{}</div>
-        <Button enabled={!!deployment} onClick={handleDeploymentClick}>
-          <Icons.Server size={14} />
+        <Button enabled={!!deployment} onClick={handleDeploymentClick} tooltip={tooltip}>
+          <Icons.Open size={14} />
         </Button>
       </div>
     );
