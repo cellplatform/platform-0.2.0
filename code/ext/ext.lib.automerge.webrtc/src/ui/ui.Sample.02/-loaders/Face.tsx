@@ -8,5 +8,5 @@ export type FaceProps = {
 
 export const Face: React.FC<FaceProps> = (props) => {
   const { stream } = props;
-  return <Dev.Harness spec={Sample.spec} env={{ stream }} />;
+  return <Dev.Harness spec={Sample.spec} env={{}} />;
 };

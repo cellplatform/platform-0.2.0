@@ -41,7 +41,6 @@ export type HarnessShared = {
   debugPanel: boolean;
   module?: SampleModuleDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
-  selectedStream?: string;
 };
 
 /**

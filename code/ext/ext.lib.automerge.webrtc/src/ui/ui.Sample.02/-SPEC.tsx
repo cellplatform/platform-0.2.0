@@ -30,21 +30,6 @@ export default Dev.describe(name, async (e) => {
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
   const Shared: TShared = {};
 
-  const findMediaStream = (id?: string) => {
-    if (!id) return;
-    const isMedia = Peer.Is.kind.media;
-    const peers = [left.network.peer, right.network.peer];
-
-    for (const peer of peers) {
-      const media = peer.current.connections.filter((conn) => isMedia(conn.kind));
-      for (const conn of media) {
-        if (conn.stream?.self?.id === id) return conn.stream.self;
-        if (conn.stream?.remote?.id === id) return conn.stream.remote;
-      }
-    }
-    return;
-  };
-
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -98,7 +83,6 @@ export default Dev.describe(name, async (e) => {
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
         ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
-        state.change((d) => (d.stream = findMediaStream(shared.selectedStream)));
         dev.redraw();
       });
 
@@ -124,14 +108,14 @@ export default Dev.describe(name, async (e) => {
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
           const stream = state.current.stream;
-          console.log('state.current.selectedStream', state.current.stream);
           elOverlay = loader
             .ctx({ store, docuri, accessToken, stream })
             .render(typename, { style });
         }
 
         const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
-          Shared.harness?.change((d) => (d.selectedStream = e.selected?.id));
+          state.change((d) => (d.stream = e.selected));
+          dev.redraw();
         };
 
         const elAvatars = (
