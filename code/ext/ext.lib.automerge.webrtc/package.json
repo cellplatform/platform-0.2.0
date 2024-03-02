@@ -30,6 +30,7 @@
     "sys.test.spec": "0.0.0",
     "sys.types": "0.0.0",
     "ext.lib.ai.faceapi": "0.0.0",
+    "ext.lib.ai.openai": "0.0.0",
     "ext.lib.deno": "0.0.0",
     "ext.lib.monaco": "0.0.0",
     "ext.lib.monaco.crdt": "0.0.0",
