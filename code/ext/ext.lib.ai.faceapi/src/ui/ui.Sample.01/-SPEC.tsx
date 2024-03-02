@@ -1,5 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
-import { Sample, type SampleProps } from './Root';
+import { Sample, type SampleProps } from './ui';
 
 type TEnv = { stream?: MediaStream };
 type T = { props: SampleProps };
@@ -7,8 +7,9 @@ const initial: T = { props: {} };
 
 /**
  * Spec
- * https://www.youtube.com/watch?v=CVClHLwv-4I
- * https://github.com/justadudewhohacks/face-api.js
+ *    Tutorial:    https://www.youtube.com/watch?v=CVClHLwv-4I
+ *    Library:     https://github.com/justadudewhohacks/face-api.js
+ *    Models used: https://github.com/WebDevSimplified/Face-Detection-JavaScript/tree/master/models
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
@@ -22,7 +23,7 @@ export default Dev.describe(name, (e) => {
       d.props.stream = env?.stream ?? (await navigator.mediaDevices.getUserMedia({ video: {} }));
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(0);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
