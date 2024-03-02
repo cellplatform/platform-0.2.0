@@ -1,8 +1,9 @@
 /**
  * Standard Lib.
  */
-import { join } from 'https://deno.land/std@0.142.0/path/mod.ts';
-export const Path = { join } as const;
+import { join, dirname, resolve } from 'https://deno.land/std@0.142.0/path/mod.ts';
+import { exists } from 'https://deno.land/std/fs/mod.ts';
+export const Path = { join, dirname, resolve, exists } as const;
 
 // Hono
 import { Hono } from 'npm:hono';

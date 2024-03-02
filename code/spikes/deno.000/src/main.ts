@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { Server, EnvVars } from './common.ts';
+import { Server, EnvVars, Path } from './common.ts';
 import openai from '../src.api.openai/mod.ts';
 import deno from '../src.api.deno/mod.ts';
 
@@ -24,6 +24,16 @@ app.use('/static/*', Server.serveStatic({ root: './' }) as any); // Hack (any).
 app.get('/', (c) => c.text(`tdb ← (🦄 team:db)`));
 openai('/openai', app, EnvVars.openai);
 deno.subhosting('/deno', app, EnvVars.deno);
+
+/**
+ * FaceAPI
+ */
+app.get('/faceapi/models/:name', async (c) => {
+  const name = c.req.param('name');
+  const path = Path.resolve('./src.api.face/models', name);
+  const exists = await Path.exists(path);
+  return exists ? c.body(await Deno.readFile(path)) : c.status(404);
+});
 
 /**
  * Start
