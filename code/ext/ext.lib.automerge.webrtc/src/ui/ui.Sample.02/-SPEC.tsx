@@ -2,7 +2,7 @@ import { type t } from './common';
 
 import { COLORS, Delete, Dev, Doc, PeerUI, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
-import { loader } from './-SPEC.factory';
+import { loader } from './-loaders/-factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
