@@ -106,7 +106,10 @@
     "yaml": "2.4.0",
     "zod": "3.22.4",
     "chai": "5.1.0",
-    "face-api.js": "0.22.2"
+    "face-api.js": "0.22.2",
+    "@tensorflow/tfjs-core": "4.17.0",
+    "@tensorflow/tfjs-backend-wasm": "4.17.0",
+    "@tensorflow-models/face-landmarks-detection": "1.0.5"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "3.0.2",
