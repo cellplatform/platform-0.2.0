@@ -1,7 +1,5 @@
 export * from '../common';
 
-import faceapi from 'face-api.js';
-
 /**
  * Constants
  */

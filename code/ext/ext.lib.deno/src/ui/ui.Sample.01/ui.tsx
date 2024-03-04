@@ -1,5 +1,5 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
-import { css, type t, Doc } from './common';
+import { Doc, css, type t } from './common';
 
 export const Sample: React.FC<t.SampleProps> = (props) => {
   const { env } = props;
