@@ -54,6 +54,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.text = local.text;
+      d.props.env = ctx.env;
       d.completion = local.completion;
       d.model = local.model;
       d.debug.forcePublicUrl = local.forcePublicUrl;

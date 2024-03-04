@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { Store } from 'ext.lib.automerge/src/types';
 
 /**
  * @system

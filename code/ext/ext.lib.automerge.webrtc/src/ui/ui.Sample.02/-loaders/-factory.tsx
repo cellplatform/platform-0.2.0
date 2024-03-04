@@ -13,7 +13,7 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
 
   if (e.name === 'CodeEditor.AI') {
     const { CodeEditorAI } = await import('./CodeEditor.AI');
-    return <CodeEditorAI store={store} docuri={docuri} />;
+    return <CodeEditorAI store={store} docuri={docuri} accessToken={accessToken} />;
   }
 
   if (e.name === 'Deno.Deploy') {

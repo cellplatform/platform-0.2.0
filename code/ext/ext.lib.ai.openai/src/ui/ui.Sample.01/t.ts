@@ -37,8 +37,15 @@ export type Completion = {
 /**
  * UI Components
  */
+export type SampleEnv = {
+  store: t.Store;
+  docuri: string;
+  accessToken?: string;
+};
+
 export type SampleProps = {
   text?: string;
+  env?: t.SampleEnv;
   style?: t.CssValue;
   onChange?: t.EditorEventHandler;
   onCmdEnterKey?: t.EditorEventHandler;

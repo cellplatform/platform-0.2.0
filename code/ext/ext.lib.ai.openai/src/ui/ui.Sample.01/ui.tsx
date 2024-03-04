@@ -1,7 +1,9 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
-import { css, type t } from './common';
+import { Doc, css, type t } from './common';
 
 export const Sample: React.FC<t.SampleProps> = (props) => {
+  const { env } = props;
+
   const styles = {
     base: css({ position: 'relative', display: 'grid' }),
   };
@@ -12,10 +14,19 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       focusOnLoad={true}
       text={props.text}
       language={'markdown'}
-      onReady={(e) => {
+      onReady={async (e) => {
         const { editor, monaco } = e;
         const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
+
+        console.log('env', env);
+        if (env) {
+          type TDoc = { text: string };
+          const { store, docuri } = env;
+          const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
+          const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
+          Monaco.Crdt.Syncer.listen<TDoc>(monaco, editor, lens, ['text']);
+        }
       }}
       onChange={(e) => props.onChange?.({ text: e.text })}
     />
