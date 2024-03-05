@@ -46,7 +46,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   };
 
   return (
-    <div {...styles.base} title={item.tooltip} onClick={handler.onClick}>
+    <div {...styles.base} title={item.tooltip} onMouseDown={handler.onClick}>
       {hasLabel && <PropListLabel data={item} defaults={defaults} theme={props.theme} />}
       <PropListValue
         item={item}
