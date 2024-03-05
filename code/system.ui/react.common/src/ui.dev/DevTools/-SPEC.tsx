@@ -43,6 +43,8 @@ export default Dev.describe('DevTools', (e) => {
 
     dev.hr(5, 20);
 
+    dev.row((e) => <Dev.RowSpinner margin={[null, null, 10, null]} />);
+
     dev.TODO();
 
     dev.section('Boolean', (dev) => {
