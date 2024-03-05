@@ -1,21 +1,10 @@
 import { DEFAULTS, FC, PropList, type t } from './common';
 import { Field } from './field';
 
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
-  data?: t.InfoData;
-  margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
-  style?: t.CssValue;
-};
-
 /**
  * Component
  */
-const View: React.FC<InfoProps> = (props) => {
+const View: React.FC<t.InfoProps> = (props) => {
   const { fields = DEFAULTS.fields.default, data = {} } = props;
 
   const items = PropList.builder<t.InfoField>()
@@ -43,7 +32,7 @@ const View: React.FC<InfoProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  title(props: InfoProps) {
+  title(props: t.InfoProps) {
     const title = PropList.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
@@ -56,7 +45,7 @@ const Wrangle = {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Info = FC.decorate<InfoProps, Fields>(
+export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },
