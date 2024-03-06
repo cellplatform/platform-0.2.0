@@ -18,3 +18,10 @@ export type ImmutableRef<T, E> = Immutable<T> & {
   readonly typename?: string; // Optional typename (for reflection).
   events(dispose$?: t.UntilObservable): E;
 };
+
+/**
+ * Generic immutable events observer.
+ * See: sys.util → Immutable.events()
+ */
+export type ImmutableEvents<T> = t.Lifecycle & { readonly $: t.Observable<ImmutableChange<T>> };
+export type ImmutableChange<T> = { readonly from: T; readonly to: T };

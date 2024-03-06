@@ -4,6 +4,7 @@ export { Dispose } from './Dispose';
 export { Filesize } from './Filesize';
 export { Hash } from './Hash/Hash.mjs';
 export { Id, cuid, slug } from './Id';
+export { Immutable } from './Immutable';
 export { Is } from './Is';
 export { Json } from './Json';
 export { Mime } from './Mime';
