@@ -32,15 +32,19 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
     }
 
     // Fetch.
-    console.info(`${method}: ${url.href}`);
-    const res = await fetch(url, { method, headers, body });
-    const status = res.status;
-    console.info(`${method} complete: ${status}`);
+    try {
+      console.info(`${method}: ${url.href}`);
+      const res = await fetch(url, { method, headers, body });
+      const status = res.status;
+      console.info(`${method} complete: ${status}`);
 
-    // Finish up.
-    const ok = statusOK(status);
-    const json = ok ? await res.json() : {};
-    return { ok, status, method, url: url.href, json };
+      // Finish up.
+      const ok = statusOK(status);
+      const json = ok ? await res.json() : {};
+      return { ok, status, method, url: url.href, json };
+    } catch (error) {
+      return { ok: false, status: 500, method, url: url.href, json: {} };
+    }
   };
 }
 

@@ -32,10 +32,22 @@ export function useStateController(args: Args) {
       args.onStateChange?.(state.current);
     });
 
-    client.projects.list().then((e) => {
-      state.change((d) => (wrangle.projects(d).list = e.ok ? e.projects : []));
-    });
+    const Update = {
+      async projects() {
+        state.change((d) => (wrangle.projects(d).loading = true));
+        const res = await client.projects.list();
+        state.change((d) => {
+          const projects = wrangle.projects(d);
+          projects.loading = false;
+          projects.list = res.ok ? res.projects : [];
+          if (!res.ok) projects.error = { message: 'Failed to load projects' };
+        });
+      },
+    } as const;
 
+    /**
+     * Override selection handler.
+     */
     state.change((d) => {
       wrangle.projects(d).onSelect = (e) => {
         state.change((d) => (wrangle.projects(d).selected = e.project.id));
@@ -43,6 +55,7 @@ export function useStateController(args: Args) {
       };
     });
 
+    Update.projects();
     return events.dispose;
   }, [is.endpointChanged, enabled]);
 

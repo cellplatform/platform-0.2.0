@@ -49,4 +49,4 @@ export type InfoDataDeployments = {
   list?: t.DenoDeployment[];
 };
 
-export type InfoError = { message: string; detail?: string };
+export type InfoError = { message: string; status?: number };

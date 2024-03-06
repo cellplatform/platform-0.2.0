@@ -1,4 +1,4 @@
-import { MdRefresh, MdVpnKey, MdVpnKeyOff, MdOpenInBrowser, MdEmergency } from 'react-icons/md';
+import { MdOpenInBrowser, MdRefresh, MdVpnKey, MdVpnKeyOff, MdWarning } from 'react-icons/md';
 import { TbNetwork } from 'react-icons/tb';
 import { Icon } from 'sys.ui.react.common';
 
@@ -12,5 +12,5 @@ export const Icons = {
   Server: icon(TbNetwork),
   Key: { On: icon(MdVpnKey), Off: icon(MdVpnKeyOff) },
   Open: icon(MdOpenInBrowser),
-  Error: icon(MdEmergency),
+  Error: icon(MdWarning),
 } as const;

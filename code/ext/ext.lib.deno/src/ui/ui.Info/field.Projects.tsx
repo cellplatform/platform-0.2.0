@@ -1,21 +1,21 @@
-import { Button, COLORS, Icons, R, css, type t, DEFAULTS } from './common';
+import { DEFAULTS, type t, Spinner } from './common';
 import { projectItem } from './field.Projects.item';
+import { Error } from './ui.Error';
 
 export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[] {
   const res: t.PropListItem[] = [];
-  const projects = data.projects;
-  if (!projects?.list) return res;
+  const projects = data.projects ?? {};
 
-  const sort = R.sortBy(R.prop('createdAt'));
-  const deployments = sort(data.deployments?.list ?? []);
-  deployments.reverse();
-
-  const items = projects.list.map((project, index): t.PropListItem => {
-    return projectItem(data, project, index);
+  const elSpinner = projects.loading && <Spinner.Bar width={30} />;
+  const elError = projects.error && <Error data={projects.error} />;
+  res.push({
+    label: data.projects?.label ?? DEFAULTS.projects.label,
+    value: elError || elSpinner || undefined,
   });
 
-  // Finish up.
-  res.push({ label: data.projects?.label ?? DEFAULTS.projects.label }); // Title
+  const items = (projects.list ?? []).map((project, i) => projectItem(data, project, i));
   res.push(...items);
+
+  // Finish up.
   return res;
 }
