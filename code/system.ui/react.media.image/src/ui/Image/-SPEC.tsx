@@ -1,8 +1,7 @@
-import { Dev, File, Filesize, Icons, SAMPLE, Slider, css, type t } from '../../../test.ui';
-
-import { Image } from '..';
-import { Util } from '../Util.mjs';
-import { DevDataController } from './-DEV.File';
+import { Image } from '.';
+import { Dev, File, Filesize, Icons, SAMPLE, Slider, css, type t } from '../../test.ui';
+import { Util } from './u';
+import { DevDataController } from './-SPEC.File';
 
 const DEFAULTS = Image.DEFAULTS;
 

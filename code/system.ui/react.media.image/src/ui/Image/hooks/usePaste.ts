@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Util } from '../Util.mjs';
+import { Util } from '../u';
 import { DEFAULTS, Keyboard, useFocus, type t } from '../common';
 
 const supportedMimetypes = DEFAULTS.supportedMimetypes;

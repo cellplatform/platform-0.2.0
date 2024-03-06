@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Util } from '../Util.mjs';
+import { Util } from '../u';
 import { rx, type t } from '../common';
 
 /**

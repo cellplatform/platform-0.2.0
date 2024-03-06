@@ -1,4 +1,4 @@
-import { Crdt, CrdtViews, TestFilesystem, type t } from '../../../test.ui';
+import { Crdt, CrdtViews, TestFilesystem, type t } from '../../test.ui';
 
 export type DevDataController = Awaited<ReturnType<typeof DevDataController>>;
 

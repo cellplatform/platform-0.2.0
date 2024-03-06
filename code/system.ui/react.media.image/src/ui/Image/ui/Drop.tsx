@@ -1,6 +1,6 @@
 import { type t } from '../common';
 
-import { Util } from '../Util.mjs';
+import { Util } from '../u';
 import { Overlay } from './Overlay';
 
 export type DropOverlayProps = {

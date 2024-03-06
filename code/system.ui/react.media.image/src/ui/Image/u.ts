@@ -32,4 +32,4 @@ export const Util = {
   notSupportedMessage(mimetype: string = 'Unknown') {
     return `File type '${mimetype}' is not supported.`;
   },
-};
+} as const;

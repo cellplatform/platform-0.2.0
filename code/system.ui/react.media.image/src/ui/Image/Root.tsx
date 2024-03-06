@@ -1,15 +1,13 @@
 import { useRef } from 'react';
 
 import { DEFAULTS, FC, css, type t, Color } from './common';
-import { useBinaryImage } from './hooks/useBinaryImage.mjs';
-import { useDrop } from './hooks/useDrop.mjs';
-import { usePaste } from './hooks/usePaste.mjs';
-import { useWarning } from './hooks/useWarning.mjs';
+import { useBinaryImage } from './hooks/useBinaryImage';
+import { useDrop } from './hooks/useDrop';
+import { usePaste } from './hooks/usePaste';
+import { useWarning } from './hooks/useWarning';
 import { DropOverlay } from './ui/Drop';
 import { Focused } from './ui/Focused';
 import { Warning } from './ui/Warning';
-
-export type { ImageProps } from './types.mjs';
 
 const View: React.FC<t.ImageProps> = (props) => {
   const { src, debug = false } = props;
@@ -56,9 +54,7 @@ const View: React.FC<t.ImageProps> = (props) => {
   const elWarn = warning.content && !elDrag && (
     <Warning settings={props.warning} message={warning.content} />
   );
-
   const elImage = backgroundImage && <div {...styles.image} />;
-
   const elDebug = debug && <div {...styles.debug} />;
 
   return (
@@ -80,9 +76,7 @@ const View: React.FC<t.ImageProps> = (props) => {
 /**
  * Export
  */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
+type Fields = { DEFAULTS: typeof DEFAULTS };
 export const Image = FC.decorate<t.ImageProps, Fields>(
   View,
   { DEFAULTS },

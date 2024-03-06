@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Util } from '../Util.mjs';
+import { Util } from '../u';
 import { DEFAULTS, useDragTarget, type t } from '../common';
 
 const supportedMimetypes = DEFAULTS.supportedMimetypes;
@@ -51,15 +51,12 @@ const Wrangle = {
   file(files: t.DroppedFile[]) {
     const file = Wrangle.toImageBinary(files[0]);
     const isSupported = file ? Util.isSupportedMimetype(file?.mimetype) : null;
-    return {
-      file,
-      isSupported,
-    };
+    return { file, isSupported } as const;
   },
 
   toImageBinary(file?: t.DroppedFile): t.ImageBinary | undefined {
     if (!file) return;
     const { data, mimetype } = file;
-    return { data, mimetype };
+    return { data, mimetype } as const;
   },
 };

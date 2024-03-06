@@ -5,5 +5,4 @@ export { Test, Tree } from 'sys.test.spec';
 export { Dev } from 'sys.ui.react.common';
 
 export * from './common';
-export * from './-SAMPLE.mjs';
-export { Icons } from '../ui/Icons.mjs';
+export * from './-SAMPLE';
