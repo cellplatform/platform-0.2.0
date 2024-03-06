@@ -79,7 +79,7 @@ export default Dev.describe(name, async (e) => {
           <Info
             {...props}
             data={data}
-            onStateUpdate={(data) => state.change((d) => (d.state = data))}
+            onStateChange={(data) => state.change((d) => (d.state = data))}
           />
         );
       });
@@ -196,7 +196,7 @@ export default Dev.describe(name, async (e) => {
         origin: Http.origin({ forcePublic }),
         accessToken: tokens.prop ? `${Hash.shorten(tokens.prop, 6)}` : undefined,
         'accessToken.env': tokens.env ? `${Hash.shorten(tokens.env, 6)}` : undefined,
-        'state:onUpdate': e.state.state ? e.state.state : undefined,
+        'state:onChange': e.state.state ? e.state.state : undefined,
       };
       return <Dev.Object name={name} data={Delete.undefined(data)} expand={1} fontSize={11} />;
     });

@@ -10,7 +10,7 @@ const View: React.FC<t.InfoProps> = (props) => {
   const { data } = useStateController({
     enabled: stateful,
     data: props.data,
-    onStateUpdate: props.onStateUpdate,
+    onStateChange: props.onStateChange,
   });
 
   const items = PropList.builder<t.InfoField>()

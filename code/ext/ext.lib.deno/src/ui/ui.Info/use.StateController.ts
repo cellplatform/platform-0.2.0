@@ -4,7 +4,7 @@ import { DEFAULTS, Http, PatchState, R, rx, type t, Immutable } from './common';
 type Args = {
   enabled?: boolean;
   data?: t.InfoData;
-  onStateUpdate?: (e: t.InfoData) => void;
+  onStateChange?: (e: t.InfoData) => void;
 };
 
 export function useStateController(args: Args) {
@@ -29,7 +29,7 @@ export function useStateController(args: Args) {
     const client = Http.client(state.current.endpoint ?? DEFAULTS.endpoint);
     events.$.pipe(rx.debounceTime(100)).subscribe(() => {
       redraw();
-      args.onStateUpdate?.(state.current);
+      args.onStateChange?.(state.current);
     });
 
     client.projects.list().then((e) => {

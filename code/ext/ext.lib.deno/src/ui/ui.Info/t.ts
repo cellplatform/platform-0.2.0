@@ -16,7 +16,7 @@ export type InfoProps = {
   flipped?: boolean;
   stateful?: boolean;
   style?: t.CssValue;
-  onStateUpdate?(e: InfoData): void;
+  onStateChange?(e: InfoData): void;
 };
 
 /**
