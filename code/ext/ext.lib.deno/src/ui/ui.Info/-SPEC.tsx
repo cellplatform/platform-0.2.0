@@ -1,9 +1,10 @@
 import { Info } from '.';
-import { Dev, Hash, Pkg, type t } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg, type t } from '../../test.ui';
 import { Http } from './common';
 
 type T = {
   props: t.InfoProps;
+  state?: t.InfoData;
   accessToken?: string;
   debug: { forcePublicUrl?: boolean };
 };
@@ -15,7 +16,7 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<t.InfoProps, 'fields' | 'stateful' | 'flipped'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
@@ -49,7 +50,7 @@ export default Dev.describe(name, (e) => {
       d.props.flipped = local.flipped;
       d.props.margin = 10;
       d.props.data = {
-        endpoint: { forcePublic: d.debug.forcePublicUrl },
+        endpoint: { forcePublic: local.forcePublicUrl },
         projects: {
           onSelect(e) {
             console.info('⚡️ projects.onSelect', e.project.id);
@@ -68,13 +69,19 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>(async (e) => {
-        const props = e.state.props;
+        const { props, debug } = e.state;
         const accessToken = getTokens(dev.ctx, e.state).accessToken;
         const data = {
           ...props.data,
           auth: { accessToken },
         };
-        return <Info {...props} data={data} />;
+        return (
+          <Info
+            {...props}
+            data={data}
+            onStateUpdate={(data) => state.change((d) => (d.state = data))}
+          />
+        );
       });
   });
 
@@ -189,8 +196,9 @@ export default Dev.describe(name, (e) => {
         origin: Http.origin({ forcePublic }),
         accessToken: tokens.prop ? `${Hash.shorten(tokens.prop, 6)}` : undefined,
         'accessToken.env': tokens.env ? `${Hash.shorten(tokens.env, 6)}` : undefined,
+        'state:onUpdate': e.state.state ? e.state.state : undefined,
       };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return <Dev.Object name={name} data={Delete.undefined(data)} expand={1} fontSize={11} />;
     });
   });
 });

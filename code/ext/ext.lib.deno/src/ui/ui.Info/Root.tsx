@@ -6,8 +6,12 @@ import { useStateController } from './use.StateController';
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
-  const { fields = DEFAULTS.fields.default, stateful = DEFAULTS.stateful, onStateUpdate } = props;
-  const { data } = useStateController({ enabled: stateful, data: props.data, onStateUpdate });
+  const { fields = DEFAULTS.fields.default, stateful = DEFAULTS.stateful } = props;
+  const { data } = useStateController({
+    enabled: stateful,
+    data: props.data,
+    onStateUpdate: props.onStateUpdate,
+  });
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())
@@ -15,8 +19,6 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Projects.List', () => Field.listProjects(data, fields))
     .field('Auth.AccessToken', () => Field.auth.accessToken(data, fields))
     .items(fields);
-
-  console.log('props.flipped', props.flipped);
 
   return (
     <PropList
