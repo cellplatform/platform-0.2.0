@@ -25,7 +25,6 @@ export type InfoProps = {
 export type InfoField = 'Module' | 'Module.Verify' | 'Auth.AccessToken' | 'Projects.List';
 
 export type InfoData = {
-  auth?: { label?: string; accessToken?: string };
   endpoint?: t.HttpOptions;
   projects?: InfoDataProjects;
   deployments?: InfoDataDeployments;
@@ -38,7 +37,7 @@ export type InfoDataProjects = {
   selected?: Id;
   loading?: boolean;
   onSelect?(e: { index: Index; project: t.DenoProject }): void;
-  onDeploymentClick?(e: {
+  onOpenDeployment?(e: {
     index: Index;
     project: t.DenoProject;
     deployment: t.DenoDeployment;

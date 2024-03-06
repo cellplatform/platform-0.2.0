@@ -16,7 +16,7 @@ export function projectItem(
   const handleDeploymentClick = () => {
     if (!hasDeployment) return;
     const deployment = Sort.createdAt.desc(deployments)[0];
-    projects.onDeploymentClick?.({ index, project, deployment });
+    projects.onOpenDeployment?.({ index, project, deployment });
   };
 
   const cursor = canSelect && !selected ? 'pointer' : 'default';

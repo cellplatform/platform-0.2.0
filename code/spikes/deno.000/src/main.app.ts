@@ -6,7 +6,7 @@ export const app = new Server.Hono();
 const cors = Server.cors({
   origin: '*', // Allowed origin or use '*' to allow all origins.
   allowMethods: ['GET', 'POST'],
-  allowHeaders: ['Content-Type'],
+  allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400, // Preflight cache age in seconds.
 });
 

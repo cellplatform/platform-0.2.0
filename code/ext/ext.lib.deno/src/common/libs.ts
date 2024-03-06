@@ -1,8 +1,17 @@
 /**
  * @external
  */
-import { descend, equals, prop, reverse, sortBy, sortWith, uniqBy } from 'ramda';
-export const R = { descend, equals, prop, reverse, sortBy, sortWith, uniqBy } as const;
+import { descend, equals, prop, reverse, sortBy, sortWith, uniqBy, mergeDeepRight } from 'ramda';
+export const R = {
+  descend,
+  equals,
+  prop,
+  reverse,
+  sortBy,
+  sortWith,
+  uniqBy,
+  merge: mergeDeepRight,
+} as const;
 
 export { Crdt } from 'ext.lib.automerge';
 

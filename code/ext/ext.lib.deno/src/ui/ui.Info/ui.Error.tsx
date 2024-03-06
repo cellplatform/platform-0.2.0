@@ -10,7 +10,10 @@ export const Error: React.FC<ErrorProps> = (props) => {
   const tooltip = `${data.status || ''} ${data.message}`.trim();
 
   const styles = {
-    base: css({ display: 'grid', gridTemplateColumns: 'auto auto' }),
+    base: css({
+      display: 'grid',
+      gridTemplateColumns: 'auto auto',
+    }),
   };
 
   return (

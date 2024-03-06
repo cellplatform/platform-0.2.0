@@ -2,7 +2,7 @@ import { DEFAULTS, type t, Spinner } from './common';
 import { projectItem } from './field.Projects.item';
 import { Error } from './ui.Error';
 
-export function listProjects(data: t.InfoData, fields: t.InfoField[]): t.PropListItem[] {
+export function listProjects(data: t.InfoData): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const projects = data.projects ?? {};
 

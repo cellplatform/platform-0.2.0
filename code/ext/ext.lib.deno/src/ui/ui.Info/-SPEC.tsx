@@ -50,7 +50,7 @@ export default Dev.describe(name, async (e) => {
       d.props.flipped = local.flipped;
       d.props.margin = 10;
       d.props.data = {
-        endpoint: { forcePublic: local.forcePublicUrl },
+        endpoint: {},
         projects: {
           onSelect(e) {
             console.info('⚡️ projects.onSelect', e.project.id);
@@ -71,9 +71,10 @@ export default Dev.describe(name, async (e) => {
       .render<T>(async (e) => {
         const { props, debug } = e.state;
         const accessToken = getTokens(dev.ctx, e.state).accessToken;
-        const data = {
+        const forcePublic = debug.forcePublicUrl;
+        const data: t.InfoData = {
           ...props.data,
-          auth: { accessToken },
+          endpoint: { ...props.data?.endpoint, forcePublic, accessToken },
         };
         return (
           <Info

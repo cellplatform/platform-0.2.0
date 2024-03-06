@@ -1,4 +1,4 @@
-import { Delete, Dev, Hash, Pkg, css, slug } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
@@ -36,8 +36,6 @@ export default Dev.describe(name, (e) => {
       d.props.env = ctx.env;
     });
 
-    HttpState.updateProjects(state);
-
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
@@ -47,10 +45,7 @@ export default Dev.describe(name, (e) => {
         return (
           <Sample
             {...e.state.props}
-            onChange={async (e) => {
-              local.code = e.text;
-              await state.change((d) => (d.props.code = e.text));
-            }}
+            onChange={(e) => state.change((d) => (local.code = d.props.code = e.text))}
             onCmdEnterKey={(e) => {
               console.info('⚡️ onCmdEnterKey', e);
             }}
@@ -90,13 +85,14 @@ export default Dev.describe(name, (e) => {
         <Info
           title={'Deno Subhosting'}
           fields={['Auth.AccessToken', 'Projects.List']}
+          stateful={true}
           data={{
-            auth: { accessToken },
+            endpoint: { accessToken },
             projects: {
               list: deno.projects,
               selected: deno.selectedProject,
               onSelect: (e) => state.change((d) => (d.deno.selectedProject = e.project.id)),
-              onDeploymentClick(e) {
+              onOpenDeployment(e) {
                 console.log('onDeploymentClick', e);
                 const domain = e.deployment.domains[0];
                 const href = `https://${domain}`;
@@ -147,7 +143,7 @@ export default Dev.describe(name, (e) => {
       });
       dev.hr(-1, 5);
 
-      dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
+      // dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
 
       dev.button((btn) => {
         btn
