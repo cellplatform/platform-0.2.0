@@ -5,6 +5,7 @@ import { SAMPLE } from './-SPEC.sample';
 import { Http, type t } from './common';
 import { Sample } from './ui';
 
+type TEnv = { accessToken?: string };
 type T = TState & { props: t.SampleProps; accessToken?: string };
 const initial: T = {
   props: {},
@@ -62,10 +63,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
-    const accessToken = (dev.ctx.env?.accessToken ?? '') as string;
+    const env = (dev.ctx.env || {}) as TEnv;
 
     dev.row(async (e) => {
-      if (accessToken) return;
+      if (env.accessToken) return;
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
@@ -80,10 +81,11 @@ export default Dev.describe(name, (e) => {
       );
     });
 
-    if (!accessToken) dev.hr(5, 20);
+    if (!env.accessToken) dev.hr(5, 20);
 
     dev.row((e) => {
       const deno = e.state.deno;
+      const accessToken = env.accessToken || e.state.accessToken;
       return (
         <Info
           title={'Deno Subhosting'}

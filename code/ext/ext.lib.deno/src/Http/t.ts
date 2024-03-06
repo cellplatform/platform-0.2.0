@@ -1,16 +1,18 @@
 import type { t } from './common';
+import type { client } from './Http.client';
 
 type O = Record<string, unknown>;
 
+export type HttpClient = ReturnType<typeof client>;
 export type HttpMethod = 'GET' | 'POST' | 'DELETE';
 export type HttpOrigins = { local: string; remote: string };
 export type HttpOptions = { forcePublic?: boolean; origins?: Partial<HttpOrigins> };
 
 export type HttpResponse = {
-  ok: boolean;
-  status: number;
   method: HttpMethod;
   url: string;
+  ok: boolean;
+  status: number;
   json: t.Json;
 };
 
