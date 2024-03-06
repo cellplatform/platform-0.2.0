@@ -3,7 +3,7 @@ import { Wrangle, css, type t } from './common';
 export type PropListLabelProps = {
   data: t.PropListItem;
   defaults: t.PropListDefaults;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

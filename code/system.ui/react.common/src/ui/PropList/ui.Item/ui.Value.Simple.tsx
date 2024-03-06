@@ -10,7 +10,7 @@ export type SimpleValueProps = {
   cursor?: t.CSSProperties['cursor'];
   isOver?: boolean;
   isCopyable?: boolean;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   onClick?: () => void;
 };
 

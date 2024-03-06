@@ -7,7 +7,7 @@ export type PropListItemProps = {
   item: t.PropListItem;
   is: { first: boolean; last: boolean };
   defaults: t.PropListDefaults;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
