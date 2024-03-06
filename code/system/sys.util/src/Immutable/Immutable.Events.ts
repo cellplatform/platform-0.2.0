@@ -9,7 +9,7 @@ export function events<T>(
 ): t.ImmutableEvents<T> {
   const life = rx.lifecycle(dispose$);
   const $ = rx.subject<t.ImmutableChange<T>>();
-  life.dispose$.pipe(rx.take(1)).subscribe(() => (source.change = change));
+  life.dispose$.subscribe(() => (source.change = change));
 
   /**
    * Override: change handler
@@ -17,7 +17,7 @@ export function events<T>(
   const change = source.change;
   source.change = (fn) => {
     const from = source.current;
-    change(fn);
+    change.call(source, fn);
     const to = source.current;
     $.next({ from, to });
   };
