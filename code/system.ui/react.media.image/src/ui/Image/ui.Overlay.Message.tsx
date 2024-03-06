@@ -1,4 +1,4 @@
-import { COLORS, Color, css, type t } from '../common';
+import { COLORS, Color, css, type t } from './common';
 
 export type OverlayMessageProps = {
   content?: string | JSX.Element;

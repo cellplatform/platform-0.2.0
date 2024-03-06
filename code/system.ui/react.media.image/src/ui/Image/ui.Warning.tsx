@@ -1,6 +1,6 @@
-import { type t } from '../common';
-import { Util } from '../u';
-import { Overlay } from './Overlay';
+import { type t } from './common';
+import { Util } from './u';
+import { Overlay } from './ui.Overlay';
 
 export type WarningProps = {
   settings?: t.ImageWarningSettings;

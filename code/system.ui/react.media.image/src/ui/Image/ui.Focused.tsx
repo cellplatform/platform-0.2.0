@@ -1,9 +1,6 @@
-import { COLORS, Color, css, type t } from '../common';
+import { COLORS, Color, css, type t } from './common';
 
-export type FocusedProps = {
-  style?: t.CssValue;
-};
-
+export type FocusedProps = { style?: t.CssValue };
 export const Focused: React.FC<FocusedProps> = (props) => {
   const styles = {
     base: css({

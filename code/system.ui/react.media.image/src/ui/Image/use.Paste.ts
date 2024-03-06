@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Util } from '../u';
-import { DEFAULTS, Keyboard, useFocus, type t } from '../common';
+import { DEFAULTS, Keyboard, useFocus, type t } from './common';
+import { Util } from './u';
 
 const supportedMimetypes = DEFAULTS.supportedMimetypes;
 

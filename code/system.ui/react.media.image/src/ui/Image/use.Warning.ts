@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Util } from '../u';
-import { rx, type t } from '../common';
+import { rx, type t } from './common';
+import { Util } from './u';
 
 /**
  * Hook to manage the transient display of a warning message.

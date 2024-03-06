@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Util } from '../u';
-import { DEFAULTS, useDragTarget, type t } from '../common';
+import { DEFAULTS, useDragTarget, type t } from './common';
+import { Util } from './u';
 
 const supportedMimetypes = DEFAULTS.supportedMimetypes;
 
