@@ -1,7 +1,7 @@
 import { Image } from '.';
-import { Dev, File, Filesize, Icons, SAMPLE, Slider, css, type t } from '../../test.ui';
-import { Util } from './u';
+import { Dev, File, Filesize, Icons, Pkg, SAMPLE, Slider, css, type t } from '../../test.ui';
 import { DevDataController } from './-SPEC.File';
+import { Util } from './u';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -19,10 +19,11 @@ const initial: T = {
   props: {},
   debug: {},
 };
+const name = 'Image';
 
-export default Dev.describe('Image', async (e) => {
+export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & Pick<t.ImageProps, 'debug'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Image');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     debug: false,
     bg: true,
@@ -293,7 +294,7 @@ export default Dev.describe('Image', async (e) => {
         mimetype,
       };
 
-      return <Dev.Object name={'Image'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });
