@@ -1,43 +1,48 @@
 import { Immutable } from '.';
-import { R, describe, expect, it, type t } from '../test';
+import { describe, expect, it, type t } from '../test';
 import { rx } from './common';
-
-const Sample = {
-  init<T>(initial: T): t.Immutable<T> {
-    let _current = R.clone(initial);
-    return {
-      get current() {
-        return _current;
-      },
-      change(fn) {
-        const next = R.clone(_current);
-        fn(next);
-        _current = next;
-      },
-    };
-  },
-} as const;
 
 describe('Immutable', () => {
   type D = { count: number };
 
-  it('sample', () => {
-    const obj = Sample.init<D>({ count: 0 });
-    expect(obj.current).to.eql({ count: 0 });
-    obj.change((d) => (d.count = 123));
-    expect(obj.current).to.eql({ count: 123 });
+  describe('Immutable.cloner', () => {
+    it('defaults', () => {
+      const initial = { count: 0 };
+      const obj = Immutable.cloner<D>(initial);
+      expect(obj.current).to.not.equal(initial);
+      expect(obj.current).to.eql({ count: 0 });
+      obj.change((d) => (d.count = 123));
+      expect(obj.current).to.eql({ count: 123 });
+    });
+
+    it('custom cloner', () => {
+      let count = 0;
+      const clone = <D>(input: D) => {
+        count++;
+        return { ...input };
+      };
+      const initial = { count: 0 };
+      const obj = Immutable.cloner<D>({ count: 0 }, { clone });
+      expect(obj.current).to.not.equal(initial);
+      expect(count).to.eql(1); // NB: initial clone
+      expect(obj.current).to.eql({ count: 0 });
+
+      obj.change((d) => (d.count = 123));
+      expect(obj.current).to.eql({ count: 123 });
+      expect(count).to.eql(2);
+    });
   });
 
-  describe('events', () => {
+  describe('Immutable.events', () => {
     it('overrides change handler', () => {
-      const obj = Sample.init<D>({ count: 0 });
+      const obj = Immutable.cloner<D>({ count: 0 });
       const change = obj.change;
       Immutable.events(obj);
       expect(obj.change).to.not.equal(change);
     });
 
     it('fires events by overriding change handler', () => {
-      const obj = Sample.init<D>({ count: 0 });
+      const obj = Immutable.cloner<D>({ count: 0 });
       const events = Immutable.events(obj);
 
       const fired: t.ImmutableChange<D>[] = [];
@@ -51,7 +56,7 @@ describe('Immutable', () => {
 
     describe('dispose', () => {
       it('via method', () => {
-        const obj = Sample.init<D>({ count: 0 });
+        const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj);
         const fired: t.ImmutableChange<D>[] = [];
         events.$.subscribe((e) => fired.push(e));
@@ -65,7 +70,7 @@ describe('Immutable', () => {
 
       it('via {dispose$} observable', () => {
         const life = rx.lifecycle();
-        const obj = Sample.init<D>({ count: 0 });
+        const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj, life.dispose$);
         const fired: t.ImmutableChange<D>[] = [];
         events.$.subscribe((e) => fired.push(e));
@@ -78,7 +83,7 @@ describe('Immutable', () => {
       });
 
       it('reverts handler upon dispose', () => {
-        const obj = Sample.init<D>({ count: 0 });
+        const obj = Immutable.cloner<D>({ count: 0 });
         const change = obj.change;
         const events = Immutable.events(obj);
         expect(obj.change).to.not.equal(change);
