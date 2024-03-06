@@ -17,9 +17,10 @@ export const Empty: React.FC<EmptyProps> = (props) => {
     base: css({
       fontSize: 14,
       fontStyle: 'italic',
+      color: theme === 'Light' ? Color.alpha(COLORS.DARK, 0.4) : Color.alpha(COLORS.WHITE, 0.6),
+      paddingTop: 8,
       display: 'grid',
       placeItems: 'center',
-      color: theme === 'Light' ? Color.alpha(COLORS.DARK, 0.4) : Color.alpha(COLORS.WHITE, 0.6),
     }),
   };
 
