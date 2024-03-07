@@ -20,7 +20,7 @@ export const Http = {
     const headers = {
       Authorization: `Bearer ${args.accessToken}`,
       'Content-Type': 'application/json',
-    };
+    } as const;
 
     const http = {
       fetch: (url: string, options?: R) => fetch(url, { ...options, headers }),

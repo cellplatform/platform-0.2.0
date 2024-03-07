@@ -1,5 +1,4 @@
-import { Http } from './u.Http.ts';
-import { Is, type t } from './u.common.ts';
+import { Is, Http, type t } from '../common.ts';
 
 /**
  * Routes for the "Deno Subhosting" manaagement API.

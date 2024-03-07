@@ -2,7 +2,7 @@
  * Standard Lib.
  */
 import { join, dirname, resolve } from 'https://deno.land/std@0.142.0/path/mod.ts';
-import { exists } from 'https://deno.land/std/fs/mod.ts';
+import { exists } from 'https://deno.land/std@0.218.2/fs/mod.ts';
 export const Path = { join, dirname, resolve, exists } as const;
 
 // Hono
