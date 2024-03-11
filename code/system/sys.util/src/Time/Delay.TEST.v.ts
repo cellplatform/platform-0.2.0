@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { describe, expect, expectRoughlySame, it, type t } from '../test';
-import { action, delay, wait } from './Delay.mjs';
+import { action, delay, wait } from './Delay';
 
 const now = () => new Date().getTime();
 const retry = 3;

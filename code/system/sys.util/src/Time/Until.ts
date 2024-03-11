@@ -1,7 +1,7 @@
 import { Subject, take, takeUntil } from 'rxjs';
-import { create } from '../Dispose/Dispose.create.mjs';
-import { delay as baseDelay } from './Delay.mjs';
-import { type t } from './common.mjs';
+import { create } from '../Dispose/Dispose.create';
+import { delay as baseDelay } from './Delay';
+import { type t } from './common';
 
 /**
  * Exposes timer functions that cease after a

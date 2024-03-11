@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { naturalCompare } from './Sort.String.naturalCompare.mjs';
+import { naturalCompare } from './Sort.String.naturalCompare';
 import { Sort } from '.';
 
 /**

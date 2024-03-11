@@ -1,9 +1,9 @@
-import { delay, wait, action } from './Delay.mjs';
-import { Duration } from './Duration.mjs';
-import { elapsed, timer } from './Timer.mjs';
-import { until } from './Until.mjs';
-import { utc } from './Utc.mjs';
-import { day, type t } from './common.mjs';
+import { delay, wait, action } from './Delay';
+import { Duration } from './Duration';
+import { elapsed, timer } from './Timer';
+import { until } from './Until';
+import { utc } from './Utc';
+import { day, type t } from './common';
 
 const Time: t.Time = {
   day,

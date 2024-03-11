@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Value } from './Value.mjs';
+import { Value } from './Value';
 
 describe('Value.toNumber', () => {
   it('returns the non-number value', () => {

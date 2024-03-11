@@ -1,1 +1,1 @@
-export * from './Time.mjs';
+export * from './Time';

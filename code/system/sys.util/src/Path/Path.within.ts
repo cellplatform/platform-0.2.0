@@ -1,5 +1,5 @@
-import { trimSlashes } from './Path.trim.mjs';
-import { join } from './Path.join.mjs';
+import { trimSlashes } from './Path.trim';
+import { join } from './Path.join';
 
 /**
  * Determine if the given path is within scope.

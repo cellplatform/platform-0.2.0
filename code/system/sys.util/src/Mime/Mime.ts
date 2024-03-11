@@ -1,4 +1,4 @@
-import { toMimetype } from './toMimetype.mjs';
+import { toMimetype } from './toMimetype';
 
 /**
  * Helpers for working with MIME types.

@@ -18,8 +18,8 @@ export { ora, pc, rimraf, execa, minimist, glob, filesize, semver };
 /**
  * @system
  */
-export { Sort } from '../../code/system/sys.util/src/Sort/Sort.mjs';
-export { Time } from '../../code/system/sys.util/src/Time/Time.mjs';
+export { Sort } from '../../code/system/sys.util/src/Sort/Sort';
+export { Time } from '../../code/system/sys.util/src/Time';
 export { LogTable } from '../../code/system/sys.util.node/src/index.mjs';
 
 /**

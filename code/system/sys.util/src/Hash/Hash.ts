@@ -10,7 +10,7 @@
 import { sha256 } from '@noble/hashes/sha256';
 import { sha1 } from '@noble/hashes/sha1';
 import { R } from '../common';
-import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash.mjs';
+import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash';
 
 export type HashOptions = {
   asString?: (input?: any) => string;

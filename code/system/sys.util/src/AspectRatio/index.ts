@@ -1,1 +1,1 @@
-export * from './AspectRatio.mjs';
+export * from './AspectRatio';

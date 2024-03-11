@@ -1,1 +1,1 @@
-export * from './WorkerMemoryStub.mjs';
+export * from './WorkerMemoryStub';

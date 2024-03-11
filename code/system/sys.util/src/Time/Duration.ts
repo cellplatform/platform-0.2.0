@@ -1,6 +1,6 @@
-import { round } from '../Value/Value.Math.mjs';
-import { toNumber } from '../Value/Value.To.mjs';
-import { day, type t } from './common.mjs';
+import { round } from '../Value/Value.Math';
+import { toNumber } from '../Value/Value.To';
+import { day, type t } from './common';
 
 const MSEC = 1;
 const SEC = MSEC * 1000;

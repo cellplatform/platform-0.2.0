@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { TopologicalSort } from './Sort.Topological.mjs';
+import { TopologicalSort } from './Sort.Topological';
 
 describe('Topological Sort', () => {
   describe('hasLoop', () => {

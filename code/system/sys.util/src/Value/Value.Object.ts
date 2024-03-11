@@ -1,5 +1,5 @@
 import { R } from '../common';
-export * from './Value.Object.keyPath.mjs';
+export * from './Value.Object.keyPath';
 
 /**
  * Walks an object tree (recursive descent) implementing

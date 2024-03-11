@@ -1,7 +1,7 @@
 import { describe, expect, it, type t } from '../test';
 
 import { Cell, Sheet } from '.';
-import { SheetCell } from './Sheet.Cell.mjs';
+import { SheetCell } from './Sheet.Cell';
 
 describe('Sheet', () => {
   it('exports', () => {

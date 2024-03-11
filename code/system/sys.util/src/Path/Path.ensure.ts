@@ -1,4 +1,4 @@
-import { trim, trimHttpPrefix, trimSlashesEnd, trimSlashesStart } from './Path.trim.mjs';
+import { trim, trimHttpPrefix, trimSlashesEnd, trimSlashesStart } from './Path.trim';
 
 /**
  * Ensure an "https://" OR "http://" prefix on the given string.

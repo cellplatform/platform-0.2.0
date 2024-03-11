@@ -1,1 +1,1 @@
-export * from './Json.mjs';
+export * from './Json';

@@ -1,2 +1,2 @@
-export * from './libs.mjs';
+export * from './libs';
 export type * as t from './t';

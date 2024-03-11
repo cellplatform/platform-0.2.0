@@ -1,4 +1,4 @@
-import { trimFilePrefix } from './Path.trim.mjs';
+import { trimFilePrefix } from './Path.trim';
 
 /**
  * Break a path into it's constituent parts.

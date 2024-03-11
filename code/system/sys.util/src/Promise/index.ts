@@ -1,1 +1,1 @@
-export * from './Promise.mjs';
+export * from './Promise';

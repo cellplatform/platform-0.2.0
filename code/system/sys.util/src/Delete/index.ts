@@ -1,1 +1,1 @@
-export { Delete } from './Delete.mjs';
+export { Delete } from './Delete';

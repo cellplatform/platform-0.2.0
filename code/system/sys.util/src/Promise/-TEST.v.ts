@@ -1,5 +1,5 @@
 import { describe, expect, it } from '../test';
-import { Promise, maybeWait } from './Promise.mjs';
+import { Promise, maybeWait } from '.';
 
 describe('Promise', () => {
   describe('maybeWait', () => {

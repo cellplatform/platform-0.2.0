@@ -1,2 +1,2 @@
-export { Value } from './Value.mjs';
-export { asArray } from './Value.Array.mjs';
+export { Value } from './Value';
+export { asArray } from './Value.Array';

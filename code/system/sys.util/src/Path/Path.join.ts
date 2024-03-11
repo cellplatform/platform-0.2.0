@@ -1,5 +1,3 @@
-import { trimSlashes } from './Path.trim.mjs';
-
 /**
  * Join multiple parts into a single "/" delimited path.
  * NB:
@@ -35,4 +33,3 @@ export function join(...segments: string[]) {
 
   return res.join('/');
 }
-

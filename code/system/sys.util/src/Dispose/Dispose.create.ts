@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { type t } from '../common';
-import { done } from './Dispose.done.mjs';
-import { until } from './Dispose.until.mjs';
+import { done } from './Dispose.done';
+import { until } from './Dispose.until';
 
 /**
  * Creates a generic disposable interface that is typically

@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { toMimetype } from './toMimetype.mjs';
+import { toMimetype } from './toMimetype';
 
 describe('toMimetype (content-type)', () => {
   it('no match - defaultType', () => {
