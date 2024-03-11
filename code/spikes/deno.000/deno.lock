@@ -2,11 +2,23 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@privy-io/server-auth": "npm:@privy-io/server-auth@1.7.1",
       "npm:hono": "npm:hono@4.0.10",
       "npm:openai": "npm:openai@4.28.4",
       "npm:ramda": "npm:ramda@0.29.1"
     },
     "npm": {
+      "@privy-io/server-auth@1.7.1": {
+        "integrity": "sha512-rjuji6Xxr0ILlQXiufGHKYSXi0e+7UWVXhmkXcAm15Ai8T61KlotEoiZHWXuLJx456AHNfbOkL2li4mdozEmUA==",
+        "dependencies": {
+          "dotenv": "dotenv@16.4.5",
+          "jose": "jose@4.15.4",
+          "node-fetch-native": "node-fetch-native@1.6.2",
+          "redaxios": "redaxios@0.5.1",
+          "ts-case-convert": "ts-case-convert@2.0.7",
+          "type-fest": "type-fest@3.13.1"
+        }
+      },
       "@types/node-fetch@2.6.11": {
         "integrity": "sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==",
         "dependencies": {
@@ -69,6 +81,10 @@
           "md5": "md5@2.3.0"
         }
       },
+      "dotenv@16.4.5": {
+        "integrity": "sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==",
+        "dependencies": {}
+      },
       "event-target-shim@5.0.1": {
         "integrity": "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==",
         "dependencies": {}
@@ -106,6 +122,10 @@
         "integrity": "sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==",
         "dependencies": {}
       },
+      "jose@4.15.4": {
+        "integrity": "sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==",
+        "dependencies": {}
+      },
       "md5@2.3.0": {
         "integrity": "sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==",
         "dependencies": {
@@ -132,6 +152,10 @@
         "integrity": "sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==",
         "dependencies": {}
       },
+      "node-fetch-native@1.6.2": {
+        "integrity": "sha512-69mtXOFZ6hSkYiXAVB5SqaRvrbITC/NPyqv7yuu/qw0nmgPyYbIMYYNIDhNtwPrzk0ptrimrLz/hhjvm4w5Z+w==",
+        "dependencies": {}
+      },
       "node-fetch@2.7.0": {
         "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
         "dependencies": {
@@ -156,8 +180,20 @@
         "integrity": "sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==",
         "dependencies": {}
       },
+      "redaxios@0.5.1": {
+        "integrity": "sha512-FSD2AmfdbkYwl7KDExYQlVvIrFz6Yd83pGfaGjBzM9F6rpq8g652Q4Yq5QD4c+nf4g2AgeElv1y+8ajUPiOYMg==",
+        "dependencies": {}
+      },
       "tr46@0.0.3": {
         "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
+        "dependencies": {}
+      },
+      "ts-case-convert@2.0.7": {
+        "integrity": "sha512-Kqj8wrkuduWsKUOUNRczrkdHCDt4ZNNd6HKjVw42EnMIGHQUABS4pqfy0acETVLwUTppc1fzo/yi11+uMTaqzw==",
+        "dependencies": {}
+      },
+      "type-fest@3.13.1": {
+        "integrity": "sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==",
         "dependencies": {}
       },
       "undici-types@5.26.5": {

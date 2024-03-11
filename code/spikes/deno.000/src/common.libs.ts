@@ -14,3 +14,6 @@ export const Server = { Hono, cors, serveStatic } as const;
 // Ramda
 import { uniq } from 'npm:ramda';
 export const R = { uniq } as const;
+
+// Authentication
+export { PrivyClient } from 'npm:@privy-io/server-auth';

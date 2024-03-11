@@ -1,4 +1,4 @@
-export type { HonoApp } from '../src.api.deno/types.ts';
+export type { HonoApp, RouteContext } from '../src/t.ts';
 
 /**
  * https://platform.openai.com/docs

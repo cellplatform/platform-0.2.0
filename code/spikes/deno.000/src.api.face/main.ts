@@ -3,7 +3,9 @@ import { Path, type t } from './u.common.ts';
 /**
  * FaceAPI
  */
-export default function routes(path: string, app: t.HonoApp) {
+export default function routes(path: string, ctx: t.RouteContext) {
+  const { app } = ctx;
+
   app.get(path, (c) => c.text(`faceapi:🦄`));
 
   app.get(`${path}/models/:name`, async (c) => {

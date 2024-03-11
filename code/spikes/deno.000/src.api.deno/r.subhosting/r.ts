@@ -1,11 +1,16 @@
-import { Is, Http, type t } from '../common.ts';
+import { Http, Is, type t } from '../common.ts';
 
 /**
  * Routes for the "Deno Subhosting" manaagement API.
  * https://docs.deno.com/subhosting/manual
  */
-export function route(path: string, app: t.HonoApp, env: { orgId: string; accessToken: string }) {
+export function routes(
+  path: string,
+  ctx: t.RouteContext,
+  env: { orgId: string; accessToken: string },
+) {
   const { orgId, accessToken } = env;
+  const { app } = ctx;
   const http = Http.init({ accessToken });
 
   /**
@@ -21,6 +26,9 @@ export function route(path: string, app: t.HonoApp, env: { orgId: string; access
    * GET List projects.
    */
   app.get(`${path}/projects`, async (c) => {
+    const claims = await ctx.auth.verify(c);
+    console.log('claims', claims);
+
     const qs = new URL(c.req.url).search;
     const url = Http.url('organizations', orgId, `projects${qs}`);
     const res = await http.get(url);
@@ -67,3 +75,8 @@ export function route(path: string, app: t.HonoApp, env: { orgId: string; access
     return c.json(deployment);
   });
 }
+
+/**
+ * Export
+ */
+export default routes;

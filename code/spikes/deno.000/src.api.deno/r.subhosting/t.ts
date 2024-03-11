@@ -1,1 +1,1 @@
-export type * from '../types.ts';
+export type * from '../t.ts';

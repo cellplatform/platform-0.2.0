@@ -1,4 +1,4 @@
-import type * as t from './types.ts';
+import type * as t from './t.ts';
 
 export * from './common.libs.ts';
 export { EnvVars } from './env.ts';

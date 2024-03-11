@@ -1,4 +1,4 @@
-import { Path } from './libs.ts';
+import { Path } from '../../src/common.libs.ts';
 
 const join = Path.join;
 const base = 'https://api.deno.com/v1';

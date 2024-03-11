@@ -1,4 +1,4 @@
-import { load } from 'https://deno.land/std/dotenv/mod.ts';
+import { load } from 'https://deno.land/std@0.218.2/dotenv/mod.ts';
 const env = await load();
 
 /**
@@ -19,7 +19,15 @@ export const EnvVars = {
      * Organization: "sys" (Subhosting)
      * https://docs.deno.com/subhosting/manual
      */
-    accessToken: env['SYS_DEPLOY_ACCESS_TOKEN'],
-    orgId: env['SYS_DEPLOY_ORG_ID'],
+    accessToken: env['DENO_SYS_DEPLOY_ACCESS_TOKEN'],
+    orgId: env['DENO_SYS_DEPLOY_ORG_ID'],
+  },
+
+  /**
+   * Auth: Privy
+   */
+  privy: {
+    appId: env['PRIVY_APP_ID'],
+    appSecret: env['PRIVY_APP_SECRET'],
   },
 } as const;

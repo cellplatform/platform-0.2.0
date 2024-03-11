@@ -1,6 +1,6 @@
 import OpenAI from 'npm:openai';
 export { OpenAI };
-export type * as t from './types.ts';
+export type * as t from './t.ts';
 
 export * from '../src/common.ts';
 export * from './u.is.ts';

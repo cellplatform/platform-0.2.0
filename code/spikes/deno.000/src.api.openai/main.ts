@@ -4,7 +4,8 @@ import { DEFAULTS, Is, OpenAI, type t } from './u.common.ts';
 /**
  * OpenAI route setup.
  */
-export default function routes(path: string, app: t.HonoApp, env: { apiKey: string }) {
+export default function routes(path: string, ctx: t.RouteContext, env: { apiKey: string }) {
+  const { app } = ctx;
   const { apiKey } = env;
   const openai = new OpenAI({ apiKey });
 
