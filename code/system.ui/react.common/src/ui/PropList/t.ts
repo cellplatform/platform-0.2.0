@@ -5,8 +5,6 @@ type ElementInput = JSX.Element | null | false;
 /**
  * Component: <PropList>
  */
-export type PropListTheme = t.CommonTheme;
-
 export type PropListTitleInput = PropListTitle['value'] | PropListTitle;
 export type PropListTitleContent = string | JSX.Element | null;
 export type PropListTitle = {
@@ -33,7 +31,7 @@ export type PropListProps = {
   margin?: t.CssEdgesInput;
   width?: number | t.PropListSize;
   height?: number | t.PropListSize;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 
   onMouseEnter?: React.MouseEventHandler;

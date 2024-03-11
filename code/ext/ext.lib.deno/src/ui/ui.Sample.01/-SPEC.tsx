@@ -1,10 +1,11 @@
-import { Delete, Dev, Hash, Pkg, css, slug } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
 import { Http, type t } from './common';
 import { Sample } from './ui';
 
+type TEnv = { accessToken?: string };
 type T = TState & { props: t.SampleProps; accessToken?: string };
 const initial: T = {
   props: {},
@@ -35,8 +36,6 @@ export default Dev.describe(name, (e) => {
       d.props.env = ctx.env;
     });
 
-    HttpState.updateProjects(state);
-
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
@@ -46,10 +45,7 @@ export default Dev.describe(name, (e) => {
         return (
           <Sample
             {...e.state.props}
-            onChange={async (e) => {
-              local.code = e.text;
-              await state.change((d) => (d.props.code = e.text));
-            }}
+            onChange={(e) => state.change((d) => (local.code = d.props.code = e.text))}
             onCmdEnterKey={(e) => {
               console.info('⚡️ onCmdEnterKey', e);
             }}
@@ -62,10 +58,10 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
-    const accessToken = (dev.ctx.env?.accessToken ?? '') as string;
+    const env = (dev.ctx.env || {}) as TEnv;
 
     dev.row(async (e) => {
-      if (accessToken) return;
+      if (env.accessToken) return;
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
@@ -80,21 +76,23 @@ export default Dev.describe(name, (e) => {
       );
     });
 
-    if (!accessToken) dev.hr(5, 20);
+    if (!env.accessToken) dev.hr(5, 20);
 
     dev.row((e) => {
       const deno = e.state.deno;
+      const accessToken = env.accessToken || e.state.accessToken;
       return (
         <Info
           title={'Deno Subhosting'}
           fields={['Auth.AccessToken', 'Projects.List']}
+          stateful={true}
           data={{
-            auth: { accessToken },
+            endpoint: { accessToken },
             projects: {
               list: deno.projects,
               selected: deno.selectedProject,
               onSelect: (e) => state.change((d) => (d.deno.selectedProject = e.project.id)),
-              onDeploymentClick(e) {
+              onOpenDeployment(e) {
                 console.log('onDeploymentClick', e);
                 const domain = e.deployment.domains[0];
                 const href = `https://${domain}`;
@@ -145,7 +143,7 @@ export default Dev.describe(name, (e) => {
       });
       dev.hr(-1, 5);
 
-      dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
+      // dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
 
       dev.button((btn) => {
         btn

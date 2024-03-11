@@ -1,1 +1,1 @@
-export * from './Mime.mjs';
+export * from './Mime';

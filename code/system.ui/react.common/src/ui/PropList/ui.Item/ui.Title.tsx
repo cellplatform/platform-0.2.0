@@ -4,7 +4,7 @@ export type PropListTitleProps = {
   total: number;
   data?: t.PropListTitleInput;
   defaults: t.PropListDefaults;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

@@ -28,6 +28,7 @@ export type {
 } from 'ext.lib.automerge/src/types';
 export type {
   PeerConnectMetadata,
+  PeerConnection,
   PeerJsConnData,
   PeerModel,
   PeerModelEvents,

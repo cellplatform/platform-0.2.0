@@ -1,7 +1,7 @@
-import { Info, type InfoProps } from '.';
+import { Info } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -10,10 +10,10 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = Pick<t.InfoProps, 'fields'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    fields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
@@ -51,9 +51,9 @@ export default Dev.describe(name, (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as InfoProps['fields']);
+                  : (ev.next as t.InfoProps['fields']);
               dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+              local.fields = fields?.length === 0 ? undefined : fields;
             }}
           />
         );

@@ -1,6 +1,7 @@
 import { Card, COLORS, css, DEFAULTS, type t } from './common';
 import { Wrangle } from './u';
 import { PropListItem, PropListTitle } from './ui.Item';
+import { Empty } from './ui.Empty';
 
 /**
  * Component
@@ -56,9 +57,9 @@ export const View: React.FC<t.PropListProps> = (props) => {
   return (
     <Card
       style={css(styles.base, props.style)}
-      showAsCard={Boolean(card)}
+      showAsCard={!!card}
       showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
-      backside={props.backside}
+      backside={props.backside || <Empty theme={theme} />}
       backsideHeader={props.backsideHeader}
       backsideFooter={props.backsideFooter}
       header={props.header}

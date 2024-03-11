@@ -7,6 +7,8 @@ import { DevSplash as Splash } from '../Dev.Splash';
 import { DevIcons as Icons } from '../Dev.Icons';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
+import { Spinner } from '../../ui/Spinner';
+import { RowSpinner } from '../Dev.RowSpinner';
 
 import { render } from './Dev.render';
 
@@ -25,6 +27,8 @@ export const Dev = {
   tools: DevTools.init,
 
   Icons,
+  Spinner,
+  RowSpinner,
   Splash,
   TestRunner,
   LocalStorage,

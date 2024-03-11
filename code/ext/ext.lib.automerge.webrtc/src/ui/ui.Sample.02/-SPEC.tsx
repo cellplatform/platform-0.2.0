@@ -1,8 +1,8 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, PeerUI, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
-import { loader } from './-SPEC.factory';
+import { loader } from './-loaders/-factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
@@ -13,7 +13,7 @@ type TShared = {
   main?: t.Lens<t.SampleSharedMain>;
   harness?: t.Lens<t.HarnessShared>;
 };
-type T = { reload?: boolean; accessToken?: string };
+type T = { reload?: boolean; accessToken?: string; stream?: MediaStream };
 const initial: T = {};
 
 type SampleNamespace = 'foo.main' | 'foo.harness';
@@ -107,8 +107,16 @@ export default Dev.describe(name, async (e) => {
           const { docuri, name: typename } = def;
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
-          elOverlay = loader.ctx({ store, docuri, accessToken }).render(typename, { style });
+          const stream = state.current.stream;
+          elOverlay = loader
+            .ctx({ store, docuri, accessToken, stream })
+            .render(typename, { style });
         }
+
+        const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
+          state.change((d) => (d.stream = e.selected));
+          dev.redraw();
+        };
 
         const elAvatars = (
           <PeerUI.AvatarTray
@@ -121,14 +129,17 @@ export default Dev.describe(name, async (e) => {
               opacity: elOverlay ? 1 : 0,
               transition: 'opacity 0.3s',
             }}
+            onSelection={onStreamSelection}
           />
         );
 
         const elSubject = (
           <Sample
+            overlay={elOverlay}
             left={{ ...left, visible: edge?.Left.visible }}
             right={{ ...right, visible: edge?.Right.visible }}
-            overlay={elOverlay}
+            stream={e.state.stream}
+            onStreamSelection={onStreamSelection}
           />
         );
 
@@ -294,6 +305,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
       loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
+      loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
 
       dev.hr(-1, 5);
 

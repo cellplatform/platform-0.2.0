@@ -1,1 +1,1 @@
-export { Hash } from './Hash.mjs';
+export { Hash } from './Hash';

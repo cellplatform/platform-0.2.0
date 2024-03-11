@@ -1,29 +1,27 @@
-// deno-lint-ignore-file no-explicit-any
-import { Server, EnvVars } from './common.ts';
-import openai from '../src.api.openai/mod.ts';
-import deno from '../src.api.deno/mod.ts';
+import deno from '../src.api.deno/main.ts';
+import faceapi from '../src.api.face/main.ts';
+import openai from '../src.api.openai/main.ts';
+import { Auth } from './auth.ts';
+import { EnvVars, type t } from './common.ts';
 
 /**
- * Initialize a new HTTP server.
+ * Initialize a new HTTP server
  */
-const app = new Server.Hono();
-
-const cors = Server.cors({
-  origin: '*', // Allowed origin or use '*' to allow all origins.
-  allowMethods: ['GET', 'POST'],
-  allowHeaders: ['Content-Type'],
-  maxAge: 86400, // Preflight cache age in seconds.
-});
-
-app.use('*', cors);
-app.use('/static/*', Server.serveStatic({ root: './' }) as any); // Hack (any).
+import { app } from './main.app.ts';
+const auth = Auth.init(EnvVars.privy);
+const ctx: t.RouteContext = { app, auth };
 
 /**
  * Routes
  */
-app.get('/', (c) => c.text(`tdb ← (🦄 team:db)`));
-openai('/ai', app, EnvVars.openai);
-deno.subhosting('/deno', app, EnvVars.deno);
+app.get('/', async (c) => {
+  const authentication = await auth.verify(c);
+  return c.json({ status: 200, message: `tdb ← (🦄 team:db)`, authentication });
+});
+
+deno.subhosting('/deno', ctx, EnvVars.deno);
+openai('/openai', ctx, EnvVars.openai);
+faceapi('/faceapi', ctx);
 
 /**
  * Start

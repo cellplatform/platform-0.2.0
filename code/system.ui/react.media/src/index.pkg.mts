@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.media',
   version: '0.0.0',
   dependencies: {
-    '@vimeo/player': '2.21.0',
+    '@vimeo/player': '2.22.0',
     'framer-motion': '11.0.8',
     'react': '18.2.0',
     'react-dom': '18.2.0',

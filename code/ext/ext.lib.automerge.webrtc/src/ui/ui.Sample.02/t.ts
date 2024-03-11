@@ -51,12 +51,14 @@ export type SampleName =
   | 'CodeEditor.AI'
   | 'DiagramEditor'
   | 'Deno.Deploy'
-  | 'ModuleNamespace';
+  | 'ModuleNamespace'
+  | 'FaceAPI';
 
 export type SampleFactoryCtx = {
   docuri: string;
   store: t.Store;
   accessToken?: string;
+  stream?: MediaStream;
 };
 
 export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };

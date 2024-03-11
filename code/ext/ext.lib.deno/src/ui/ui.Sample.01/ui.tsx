@@ -1,5 +1,5 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
-import { css, type t, Doc } from './common';
+import { Crdt, css, type t } from './common';
 
 export const Sample: React.FC<t.SampleProps> = (props) => {
   const { env } = props;
@@ -19,12 +19,11 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
         const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
-        console.log('env', env);
         if (env) {
           type TDoc = { code: string };
           const { store, docuri } = env;
           const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
-          const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
+          const lens = Crdt.Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
           Monaco.Crdt.Syncer.listen<TDoc>(monaco, editor, lens, ['code']);
         }
       }}

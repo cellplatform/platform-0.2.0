@@ -1,1 +1,1 @@
-export * from './Percent.mjs';
+export * from './Percent';

@@ -4,7 +4,7 @@ const ns = Pkg.name;
 
 export const Specs = {
   [`${ns}.tests`]: () => import('./-TestRunner'),
-  [`${ns}.ui.Image`]: () => import('../ui/Image/-dev/-SPEC'),
+  [`${ns}.ui.Image`]: () => import('../ui/Image/-SPEC'),
 };
 
 export default Specs;

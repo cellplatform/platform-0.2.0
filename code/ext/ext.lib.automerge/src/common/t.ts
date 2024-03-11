@@ -16,7 +16,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { PatchState, JsonPath } from 'sys.data.json/src/types';
+export type { JsonPath, PatchState } from 'sys.data.json/src/types';
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   CBOR,
@@ -24,6 +24,7 @@ export type {
   EventBus,
   IODirection,
   Immutable,
+  ImmutableChange,
   ImmutableNext,
   ImmutableRef,
   Lifecycle,

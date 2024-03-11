@@ -1,2 +1,2 @@
-export { Sort } from './Sort.mjs';
-export { TopologicalSort } from './Sort.Topological.mjs';
+export { Sort } from './Sort';
+export { TopologicalSort } from './Sort.Topological';

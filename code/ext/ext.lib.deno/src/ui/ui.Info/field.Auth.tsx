@@ -1,9 +1,7 @@
 import { Hash, Icons, css, type t } from './common';
 
-export function accessToken(data: t.InfoData, fields: t.InfoField[]): t.PropListItem | undefined {
-  const auth = data.auth;
-  const jwt = auth?.accessToken;
-
+export function accessToken(data: t.InfoData): t.PropListItem | undefined {
+  const accessToken = data.endpoint?.accessToken;
   const styles = {
     base: css({
       display: 'grid',
@@ -14,13 +12,15 @@ export function accessToken(data: t.InfoData, fields: t.InfoField[]): t.PropList
   };
   const value = (
     <div {...styles.base}>
-      {jwt ? <Icons.Key.On size={14} /> : <Icons.Key.Off size={14} />}
-      {jwt ? `${Hash.shorten(jwt, [6, 8])}` : undefined}
+      {accessToken ? <Icons.Key.On size={14} /> : <Icons.Key.Off size={14} />}
+      {accessToken ? `${Hash.shorten(accessToken, [6, 8])}` : undefined}
     </div>
   );
 
-  const label = auth?.label || 'Access Token (JWT)';
-  return { label, value };
+  return {
+    label: 'Access Token (JWT)',
+    value,
+  };
 }
 
 export const auth = { accessToken } as const;

@@ -10,7 +10,7 @@ export type SimpleValueProps = {
   cursor?: t.CSSProperties['cursor'];
   isOver?: boolean;
   isCopyable?: boolean;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   onClick?: () => void;
 };
 
@@ -46,7 +46,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
     <div {...css(styles.base)}>
       <div
         {...css(styles.content, !isValidElement(content) ? styles.text : styles.component)}
-        onClick={props.onClick}
+        onMouseDown={props.onClick}
       >
         {content}
       </div>

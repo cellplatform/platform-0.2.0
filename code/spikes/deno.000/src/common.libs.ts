@@ -1,8 +1,9 @@
 /**
  * Standard Lib.
  */
-import { join } from 'https://deno.land/std@0.142.0/path/mod.ts';
-export const Path = { join } as const;
+import { join, dirname, resolve } from 'https://deno.land/std@0.142.0/path/mod.ts';
+import { exists } from 'https://deno.land/std@0.218.2/fs/mod.ts';
+export const Path = { join, dirname, resolve, exists } as const;
 
 // Hono
 import { Hono } from 'npm:hono';
@@ -13,3 +14,6 @@ export const Server = { Hono, cors, serveStatic } as const;
 // Ramda
 import { uniq } from 'npm:ramda';
 export const R = { uniq } as const;
+
+// Authentication
+export { PrivyClient } from 'npm:@privy-io/server-auth';

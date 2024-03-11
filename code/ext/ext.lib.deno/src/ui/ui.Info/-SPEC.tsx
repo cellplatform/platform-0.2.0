@@ -1,9 +1,10 @@
-import { Info, type InfoProps } from '.';
-import { Dev, Pkg, type t, Hash } from '../../test.ui';
+import { Info } from '.';
+import { Delete, Dev, Hash, Pkg, type t } from '../../test.ui';
 import { Http } from './common';
 
 type T = {
-  props: InfoProps;
+  props: t.InfoProps;
+  state?: t.InfoData;
   accessToken?: string;
   debug: { forcePublicUrl?: boolean };
 };
@@ -15,11 +16,13 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 
-export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] } & T['debug'];
+export default Dev.describe(name, async (e) => {
+  type LocalStore = Pick<t.InfoProps, 'fields' | 'stateful' | 'flipped'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    fields: DEFAULTS.fields.default,
+    stateful: true,
+    flipped: false,
     forcePublicUrl: false,
   });
 
@@ -42,13 +45,19 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.debug.forcePublicUrl = local.forcePublicUrl;
 
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
+      d.props.stateful = local.stateful;
+      d.props.flipped = local.flipped;
       d.props.margin = 10;
       d.props.data = {
+        endpoint: {},
         projects: {
           onSelect(e) {
-            const projectId = e.project.id;
-            state.change((d) => (d.props.data!.projects!.selected = projectId));
+            console.info('⚡️ projects.onSelect', e.project.id);
+            if (!state.current.props.stateful) {
+              const id = e.project.id;
+              state.change((d) => (d.props.data!.projects!.selected = id));
+            }
           },
         },
       };
@@ -60,10 +69,20 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>(async (e) => {
-        const props = e.state.props;
+        const { props, debug } = e.state;
         const accessToken = getTokens(dev.ctx, e.state).accessToken;
-        const data = { ...props.data, auth: { accessToken } };
-        return <Info {...props} data={data} />;
+        const forcePublic = debug.forcePublicUrl;
+        const data: t.InfoData = {
+          ...props.data,
+          endpoint: { ...props.data?.endpoint, forcePublic, accessToken },
+        };
+        return (
+          <Info
+            {...props}
+            data={data}
+            onStateChange={(data) => state.change((d) => (d.state = data))}
+          />
+        );
       });
   });
 
@@ -75,17 +94,13 @@ export default Dev.describe(name, (e) => {
 
     dev.row(async (e) => {
       if (tokens.env) return;
-
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
           title={'Identity'}
           fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
           data={{ provider: Auth.Env.provider }}
-          onChange={(e) => {
-            console.info('⚡️ Auth.onChange:', e);
-            state.change((d) => (d.accessToken = e.accessToken));
-          }}
+          onChange={(e) => state.change((d) => (d.accessToken = e.accessToken))}
         />
       );
     });
@@ -93,6 +108,11 @@ export default Dev.describe(name, (e) => {
     if (!tokens.env) dev.hr(5, 20);
 
     dev.section('Fields', (dev) => {
+      const setFields = (fields?: t.InfoField[]) => {
+        dev.change((d) => (d.props.fields = fields));
+        local.fields = fields?.length === 0 ? undefined : fields;
+      };
+
       dev.row((e) => {
         const props = e.state.props;
         return (
@@ -103,12 +123,37 @@ export default Dev.describe(name, (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as InfoProps['fields']);
-              dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+                  : (ev.next as t.InfoProps['fields']);
+              setFields(fields);
             }}
           />
         );
+      });
+
+      dev.hr(0, 5);
+
+      dev.title('Common States');
+      dev.button('projects', (e) => {
+        e.change((d) => setFields(['Auth.AccessToken', 'Projects.List']));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.stateful;
+        btn
+          .label((e) => 'stateful')
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.flipped;
+        btn
+          .label((e) => 'flipped')
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
       });
     });
 
@@ -126,12 +171,15 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.forcePublicUrl);
+        const value = (state: T) => !!state.debug.forcePublicUrl;
         btn
           .label((e) => `force public url`)
           .value((e) => value(e.state))
           .onClick((e) => {
-            e.change((d) => (local.forcePublicUrl = Dev.toggle(d.debug, 'forcePublicUrl')));
+            e.change((d) => {
+              const next = (local.forcePublicUrl = Dev.toggle(d.debug, 'forcePublicUrl'));
+              d.props.data!.endpoint!.forcePublic = next;
+            });
           });
       });
     });
@@ -149,8 +197,9 @@ export default Dev.describe(name, (e) => {
         origin: Http.origin({ forcePublic }),
         accessToken: tokens.prop ? `${Hash.shorten(tokens.prop, 6)}` : undefined,
         'accessToken.env': tokens.env ? `${Hash.shorten(tokens.env, 6)}` : undefined,
+        'state:onChange': e.state.state ? e.state.state : undefined,
       };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return <Dev.Object name={name} data={Delete.undefined(data)} expand={1} fontSize={11} />;
     });
   });
 });

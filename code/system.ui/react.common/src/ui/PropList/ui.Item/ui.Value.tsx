@@ -9,7 +9,7 @@ export type PropListValueProps = {
   message?: string | JSX.Element;
   cursor?: string;
   defaults: t.PropListDefaults;
-  theme?: t.PropListTheme;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

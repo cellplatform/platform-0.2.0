@@ -1,6 +1,6 @@
 import { Color, COLORS, DEFAULTS, type t } from './common';
 
-export function theme(input?: t.PropListTheme) {
+export function theme(input?: t.CommonTheme) {
   const value = input ?? DEFAULTS.theme;
 
   const is = {
