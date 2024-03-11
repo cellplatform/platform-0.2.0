@@ -1,5 +1,4 @@
 import { R } from '../common';
-import { compact } from './Value.Array.mjs';
 
 /**
  * Builds an object from the given path
@@ -150,5 +149,6 @@ function prepareKeyPath(keyPath: string) {
   if (keyPath.startsWith('.') || keyPath.endsWith('.')) {
     throw new Error(`The keyPath cannot start or end with a period (.): "${keyPath}"`);
   }
-  return compact(keyPath.replace(/\s/g, '').split('.'));
+  const list = keyPath.replace(/\s/g, '').split('.');
+  return list.filter(Boolean);
 }
