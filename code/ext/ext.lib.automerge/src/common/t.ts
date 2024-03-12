@@ -1,16 +1,7 @@
-export type * from './t.Automerge';
-
 /**
  * @external
  */
-export type { next as A, Patch, PatchInfo } from '@automerge/automerge';
-export type {
-  AutomergeUrl,
-  DocHandle,
-  NetworkAdapter,
-  Repo,
-  StorageAdapter,
-} from '@automerge/automerge-repo';
+export type * from './t.Automerge';
 export type { Observable } from 'rxjs';
 
 /**

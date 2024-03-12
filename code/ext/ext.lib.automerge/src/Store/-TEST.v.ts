@@ -11,7 +11,7 @@ describe('Store (base)', async () => {
     return { store, initial, generator } as const;
   };
 
-  const { store, initial, generator } = testSetup();
+  const { store } = testSetup();
 
   it('Is.store', () => {
     const non = [true, 123, '', [], {}, null, undefined];

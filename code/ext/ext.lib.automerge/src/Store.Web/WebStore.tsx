@@ -9,7 +9,7 @@ import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, type t } from './common';
 
 type Init = {
-  network?: boolean | t.NetworkAdapter[];
+  network?: boolean | t.NetworkAdapterInterface[];
   storage?: boolean | string | { name?: string };
   dispose$?: t.UntilObservable;
 };
@@ -68,7 +68,7 @@ export const WebStore = {
  * Helpers
  */
 const Wrangle = {
-  network(options: Init): t.NetworkAdapter[] {
+  network(options: Init): t.NetworkAdapterInterface[] {
     const { network } = options;
     if (network === undefined || network === true) return [new BroadcastChannelNetworkAdapter()];
     if (Array.isArray(network)) return network;
