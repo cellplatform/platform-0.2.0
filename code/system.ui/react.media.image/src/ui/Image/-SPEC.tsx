@@ -1,5 +1,18 @@
 import { Image } from '.';
-import { Dev, File, Filesize, Icons, Pkg, SAMPLE, Slider, css, type t } from '../../test.ui';
+import {
+  Dev,
+  File,
+  Filesize,
+  Icons,
+  Pkg,
+  SAMPLE,
+  Slider,
+  css,
+  type t,
+  WebStore,
+  TestDb,
+  CrdtInfo,
+} from '../../test.ui';
 import { DevDataController } from './-SPEC.File';
 import { Util } from './u';
 
@@ -15,10 +28,7 @@ type T = {
     pastePrimary?: boolean;
   };
 };
-const initial: T = {
-  props: {},
-  debug: {},
-};
+const initial: T = { props: {}, debug: {} };
 const name = 'Image';
 
 export default Dev.describe(name, async (e) => {
@@ -33,18 +43,18 @@ export default Dev.describe(name, async (e) => {
     pastePrimary: false,
   });
 
-  const getDrop = (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop);
-  const getPaste = (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste);
   const crdt = await DevDataController();
+
+  const store = WebStore.init({ storage: TestDb.Spec.name });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      getDrop(d.props).enabled = local.dropEnabled;
-      getPaste(d.props).enabled = local.pasteEnabled;
-      getPaste(d.props).primary = local.pastePrimary;
+      wrangle.drop(d.props).enabled = local.dropEnabled;
+      wrangle.paste(d.props).enabled = local.pasteEnabled;
+      wrangle.paste(d.props).primary = local.pastePrimary;
       d.props.sizing = DEFAULTS.sizing;
       d.props.debug = local.debug;
 
@@ -83,48 +93,51 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.section(['Input', 'Properties'], (dev) => {
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.drop?.enabled ?? DEFAULTS.drop.enabled);
         btn
           .label((e) => `drop.enabled`)
-          .value((e) => Boolean(e.state.props.drop?.enabled ?? DEFAULTS.drop.enabled))
-          .onClick((e) =>
-            e.change((d) => (local.dropEnabled = Dev.toggle(getDrop(d.props), 'enabled'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.dropEnabled = Dev.toggle(wrangle.drop(d.props), 'enabled')));
+          });
+      });
 
       dev.hr(-1, 5);
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.paste?.enabled ?? DEFAULTS.paste.enabled);
         btn
           .label((e) => `paste.enabled`)
-          .value((e) => Boolean(e.state.props.paste?.enabled ?? DEFAULTS.paste.enabled))
-          .onClick((e) =>
-            e.change((d) => (local.pasteEnabled = Dev.toggle(getPaste(d.props), 'enabled'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.pasteEnabled = Dev.toggle(wrangle.paste(d.props), 'enabled')));
+          });
+      });
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.paste?.primary ?? DEFAULTS.paste.primary);
         btn
           .label((e) => `paste.primary`)
-          .value((e) => Boolean(e.state.props.paste?.primary ?? DEFAULTS.paste.primary))
-          .onClick((e) =>
-            e.change((d) => (local.pastePrimary = Dev.toggle(getPaste(d.props), 'primary'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.pastePrimary = Dev.toggle(wrangle.paste(d.props), 'primary')));
+          });
+      });
 
       dev.hr(-1, 5);
 
-      dev.button((btn) =>
+      dev.button((btn) => {
         btn
           .label((e) => '→ (disable as input)')
           .right('')
           .onClick((e) => {
             e.state.change((d) => {
-              getPaste(d.props).enabled = false;
-              getDrop(d.props).enabled = false;
+              wrangle.paste(d.props).enabled = false;
+              wrangle.drop(d.props).enabled = false;
             });
-          }),
-      );
+          });
+      });
     });
 
     dev.hr(2, 20);
@@ -307,3 +320,11 @@ const stripBinary = (file?: t.ImageBinary | null) => {
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
   return !file ? undefined : { ...file, data: `<Uint8Array>[${file.data.byteLength}]` };
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  drop: (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop),
+  paste: (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste),
+} as const;
