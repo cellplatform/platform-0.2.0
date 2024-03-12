@@ -26,18 +26,22 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
       gridTemplateColumns: 'auto auto',
       columnGap: '6px',
     }),
-
     pfp: css({ Size: 16, borderRadius: 16 }),
   };
 
   const elBody = (
     <div {...styles.body}>
-      <div>{`${user.username}`}</div>
+      <div>
+        <span {...css({ opacity: 0.4 })}>{'@'}</span>
+        <span>{`${user.username}`}</span>
+      </div>
       {user.pfp && <img src={user.pfp} {...styles.pfp} />}
     </div>
   );
 
-  const elButtonBody = props.onClick && <Button onClick={handleClick}>{elBody}</Button>;
-
-  return <div {...css(styles.base, props.style)}>{elButtonBody || elBody}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      {!props.onClick ? elBody : <Button onClick={handleClick}>{elBody}</Button>}
+    </div>
+  );
 };
