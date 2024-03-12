@@ -74,6 +74,11 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
+      const update = (fields?: t.InfoField[] | undefined) => {
+        dev.change((d) => (d.props.fields = fields));
+        local.selectedFields = fields?.length === 0 ? undefined : fields;
+      };
+
       dev.row((e) => {
         const props = e.state.props;
         return (
@@ -85,12 +90,14 @@ export default Dev.describe(name, async (e) => {
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
                   : (ev.next as t.InfoProps['fields']);
-              dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+              update(fields);
             }}
           />
         );
       });
+      dev.title('Common States');
+      dev.button('Repo / Doc', (e) => update(['Repo', 'Doc', 'Doc.URI']));
+      dev.button('Repo / Doc / Object', (e) => update(['Repo', 'Doc', 'Doc.URI', 'Doc.Object']));
     });
   });
 

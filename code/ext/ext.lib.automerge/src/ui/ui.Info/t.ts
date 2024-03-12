@@ -12,13 +12,22 @@ export type InfoField =
 export type InfoData = {
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
-  repo?: { label?: string; name?: string; store?: t.Store; index?: t.StoreIndexState };
-  document?: {
-    label?: string;
-    doc?: t.DocRef<unknown>;
-    object?: { name?: string; expand?: { level?: number; paths?: string[] } };
-    onIconClick?: (e: {}) => void;
-  };
+  repo?: InfoDataRepo;
+  document?: InfoDataDocument;
+};
+
+export type InfoDataRepo = {
+  label?: string;
+  name?: string;
+  store?: t.Store;
+  index?: t.StoreIndexState;
+};
+
+export type InfoDataDocument = {
+  label?: string;
+  doc?: t.DocRef<unknown>;
+  object?: { name?: string; expand?: { level?: number; paths?: string[] } };
+  onIconClick?: (e: {}) => void;
 };
 
 /**

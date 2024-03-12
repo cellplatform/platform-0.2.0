@@ -1,4 +1,4 @@
-import { Doc, Hash, ObjectView, css, type t, Icons, Button } from './common';
+import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoData['document'];
 
@@ -14,12 +14,12 @@ export function doc(data: D, fields: t.InfoField[]) {
   if (hasLabel) {
     const doc = data.doc;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
-
     const parts: JSX.Element[] = [];
 
     if (uri) {
       const id = Doc.Uri.id(uri);
-      const text = uri ? `crdt:automerge:${Hash.shorten(id, [4, 4])}` : undefined;
+      const shortened = Hash.shorten(id, [4, 4]);
+      const text = uri ? `crdt:automerge:${shortened}` : undefined;
       parts.push(<>{text}</>);
     }
 
@@ -44,11 +44,7 @@ export function doc(data: D, fields: t.InfoField[]) {
       </div>
     );
 
-    res.push({
-      label,
-      value,
-      divider: false,
-    });
+    res.push({ label, value, divider: false });
   }
 
   /**
@@ -88,7 +84,7 @@ const wrangle = {
             name={data?.object?.name}
             data={data?.doc?.current}
             fontSize={11}
-            style={{ marginLeft: 10, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
+            style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
               paths: wrangle.expandPaths(data),
