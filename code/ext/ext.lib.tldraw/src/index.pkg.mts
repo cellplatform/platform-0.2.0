@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.tldraw',
   version: '0.0.0',
   dependencies: {
-    '@tldraw/tldraw': '2.0.0',
+    '@tldraw/tldraw': '2.0.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
