@@ -52,7 +52,8 @@ export type SampleName =
   | 'DiagramEditor'
   | 'Deno.Deploy'
   | 'ModuleNamespace'
-  | 'FaceAPI';
+  | 'FaceAPI'
+  | 'ImageCrdt';
 
 export type SampleFactoryCtx = {
   docuri: string;

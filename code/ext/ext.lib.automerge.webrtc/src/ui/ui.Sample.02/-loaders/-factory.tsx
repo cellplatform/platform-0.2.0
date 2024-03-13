@@ -38,5 +38,10 @@ export const loader = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(asy
     return <Face stream={e.ctx.stream} />;
   }
 
+  if (e.name === 'ImageCrdt') {
+    const { ImageCrdt } = await import('./ImageCrdt');
+    return <ImageCrdt store={store} docuri={docuri} />;
+  }
+
   return null;
 });

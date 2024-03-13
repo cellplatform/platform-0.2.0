@@ -1,9 +1,9 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
-import { loader } from './-loaders/-factory';
 import { monitorKeyboard } from './-SPEC.keyboard';
+import { loader } from './-loaders/-factory';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
@@ -306,6 +306,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
       loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
+      loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
 
       dev.hr(-1, 5);
 
