@@ -7,14 +7,14 @@ import * as Util from './Value.Util';
 
 import { is } from '../Is';
 
-import * as object from './Value.Object';
+import * as Object from './Value.Object';
 
 /**
  * Value conversion and interpretation helpers.
  */
 export const Value = {
   is,
-  object,
+  Object,
   ...To,
   ...Array,
   ...Math,

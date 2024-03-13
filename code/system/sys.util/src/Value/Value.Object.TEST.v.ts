@@ -1,7 +1,7 @@
 import { expect, describe, it } from '../test';
 import { Value } from '.';
 
-describe('Value.object.walk', () => {
+describe('Value.Object.walk', () => {
   type T = { key: string | number; value: any };
 
   it('processes object', () => {
@@ -12,7 +12,7 @@ describe('Value.object.walk', () => {
       child: { enabled: true, list: [1, 2] },
     };
 
-    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+    Value.Object.walk(input, ({ key, value }) => walked.push({ key, value }));
 
     expect(walked).to.eql([
       { key: 'name', value: 'foo' },
@@ -29,7 +29,7 @@ describe('Value.object.walk', () => {
     const walked: T[] = [];
     const input = ['foo', 123, { enabled: true, list: [1, 2] }];
 
-    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+    Value.Object.walk(input, ({ key, value }) => walked.push({ key, value }));
 
     expect(walked).to.eql([
       { key: 0, value: 'foo' },
@@ -45,7 +45,7 @@ describe('Value.object.walk', () => {
   it('processes nothing (non-object / array)', () => {
     const test = (input: any) => {
       const walked: any[] = [];
-      Value.object.walk(input, (e) => walked.push(e));
+      Value.Object.walk(input, (e) => walked.push(e));
       expect(walked).to.eql([]); // NB: nothing walked.
     };
     [0, true, '', null, undefined].forEach((input) => test(input));
@@ -58,7 +58,7 @@ describe('Value.object.walk', () => {
       child: { enabled: true, list: [1, 2] },
     };
 
-    Value.object.walk(input, (e) => {
+    Value.Object.walk(input, (e) => {
       const { key, value } = e;
       if (value === true) return e.stop();
       walked.push({ key, value });
@@ -71,30 +71,30 @@ describe('Value.object.walk', () => {
   });
 });
 
-describe('Value.object.build', () => {
+describe('Value.Object.build', () => {
   it('return default root object (no keyPath)', () => {
-    expect(Value.object.build('', {})).to.eql({});
-    expect(Value.object.build('  ', {})).to.eql({});
+    expect(Value.Object.build('', {})).to.eql({});
+    expect(Value.Object.build('  ', {})).to.eql({});
   });
 
   it('returns clone of the given root object', () => {
     const obj = {};
-    expect(Value.object.build('', obj)).to.not.equal(obj);
+    expect(Value.Object.build('', obj)).to.not.equal(obj);
   });
 
   it('adds single level', () => {
-    expect(Value.object.build('foo', {})).to.eql({ foo: {} });
-    expect(Value.object.build(' foo  ', {})).to.eql({ foo: {} });
+    expect(Value.Object.build('foo', {})).to.eql({ foo: {} });
+    expect(Value.Object.build(' foo  ', {})).to.eql({ foo: {} });
   });
 
   it('adds multi-levels (path)', () => {
-    const res = Value.object.build('foo.bar', {});
+    const res = Value.Object.build('foo.bar', {});
     expect(res).to.eql({ foo: { bar: {} } });
   });
 
   it('adds multi-levels with custom value', () => {
     const test = (value: any) => {
-      const res = Value.object.build<any>('foo.bar.baz', {}, value);
+      const res = Value.Object.build<any>('foo.bar.baz', {}, value);
       expect(res.foo.bar.baz).to.eql(value);
     };
     test(0);
@@ -107,7 +107,7 @@ describe('Value.object.build', () => {
 
   it('does not replace existing object/value (cloned, single-level)', () => {
     const obj = { foo: { bar: 123 } };
-    const res = Value.object.build<any>('foo', obj);
+    const res = Value.Object.build<any>('foo', obj);
     expect(res).to.eql(obj);
     expect(res).to.not.equal(obj);
     expect(res.foo).to.not.equal(obj.foo);
@@ -115,7 +115,7 @@ describe('Value.object.build', () => {
 
   it('throws if path overwrites value', () => {
     const test = (keyPath: string, obj: Record<string, unknown>) => {
-      const fn = () => Value.object.build(keyPath, obj);
+      const fn = () => Value.Object.build(keyPath, obj);
       expect(fn).to.throw();
     };
     test('foo.bar', { foo: { bar: 123 } });
@@ -126,7 +126,7 @@ describe('Value.object.build', () => {
 
   it('throws if starts/ends with period (.)', () => {
     const test = (keyPath: string) => {
-      const fn = () => Value.object.build(keyPath, {});
+      const fn = () => Value.Object.build(keyPath, {});
       expect(fn).to.throw();
     };
     test('foo.bar.');
@@ -138,21 +138,21 @@ describe('Value.object.build', () => {
 
   it('appends existing object', () => {
     const obj = { foo: { bar: 123 } };
-    const res = Value.object.build('foo.baz', obj);
+    const res = Value.Object.build('foo.baz', obj);
     expect(res).to.eql({ foo: { bar: 123, baz: {} } });
   });
 });
 
-describe('Value.object.pluck', () => {
+describe('Value.Object.pluck', () => {
   it('returns [undefined] when no match', () => {
-    expect(Value.object.pluck('foo', {})).to.eql(undefined);
-    expect(Value.object.pluck('foo.bar', {})).to.eql(undefined);
-    expect(Value.object.pluck('foo.bar', { baz: 123 })).to.eql(undefined);
+    expect(Value.Object.pluck('foo', {})).to.eql(undefined);
+    expect(Value.Object.pluck('foo.bar', {})).to.eql(undefined);
+    expect(Value.Object.pluck('foo.bar', { baz: 123 })).to.eql(undefined);
   });
 
   it('gets value', () => {
     const test = (keyPath: string, root: any, value: any) => {
-      const res = Value.object.pluck(keyPath, root);
+      const res = Value.Object.pluck(keyPath, root);
       expect(res).to.eql(value, `The key-path "${keyPath}" should be [${value}]`);
     };
     test('foo', { foo: 123 }, 123);
@@ -163,7 +163,7 @@ describe('Value.object.pluck', () => {
 
   it('throws if starts/ends with period (.)', () => {
     const test = (key: string) => {
-      const fn = () => Value.object.pluck(key, {});
+      const fn = () => Value.Object.pluck(key, {});
       expect(fn).to.throw();
     };
     test('foo.bar.');
@@ -174,9 +174,9 @@ describe('Value.object.pluck', () => {
   });
 });
 
-describe('Value.object.remove', () => {
+describe('Value.Object.remove', () => {
   const test = (keyPath: string, root: any, expected: any) => {
-    const result = Value.object.remove(keyPath, root);
+    const result = Value.Object.remove(keyPath, root);
     const msg = `keyPath: "${keyPath}"`;
     expect(result).to.eql(expected, msg);
     expect(result).to.not.equal(root, msg);
@@ -211,9 +211,9 @@ describe('Value.object.remove', () => {
   });
 });
 
-describe('Value.object.prune', () => {
+describe('Value.Object.prune', () => {
   const test = (keyPath: string, root: any, expected: any) => {
-    const result = Value.object.prune(keyPath, root);
+    const result = Value.Object.prune(keyPath, root);
     const msg = `keyPath: "${keyPath}"`;
     expect(result).to.eql(expected, msg);
     expect(result).to.not.equal(root, msg);
@@ -234,7 +234,7 @@ describe('Value.object.prune', () => {
   });
 
   it('throws if wild card not at end of path', () => {
-    const fn = () => Value.object.prune('*.bar', {});
+    const fn = () => Value.Object.prune('*.bar', {});
     expect(fn).to.throw();
   });
 
@@ -259,7 +259,7 @@ describe('Value.object.prune', () => {
   });
 });
 
-describe('Value.object.toArray', () => {
+describe('Value.Object.toArray', () => {
   type IFoo = { count: number };
   type IFoos = {
     one: IFoo;
@@ -268,16 +268,16 @@ describe('Value.object.toArray', () => {
   const foos: IFoos = { one: { count: 1 }, two: { count: 2 } };
 
   it('empty', () => {
-    expect(Value.object.toArray({})).to.eql([]);
+    expect(Value.Object.toArray({})).to.eql([]);
   });
 
   it('converts to array (untyped)', () => {
-    const res = Value.object.toArray(foos);
+    const res = Value.Object.toArray(foos);
     expect(res.length).to.eql(2);
   });
 
   it('converts to array (typed object)', () => {
-    const res = Value.object.toArray<IFoos>(foos);
+    const res = Value.Object.toArray<IFoos>(foos);
     expect(res.length).to.eql(2);
 
     expect(res[0].key).to.eql('one');
@@ -289,12 +289,12 @@ describe('Value.object.toArray', () => {
 
   it('converts to array (typed key)', () => {
     type K = 'foo' | 'bar';
-    const res = Value.object.toArray<IFoos, K>(foos);
+    const res = Value.Object.toArray<IFoos, K>(foos);
     expect(res.length).to.eql(2);
   });
 });
 
-describe('Value.object.trimStringsDeep', () => {
+describe('Value.Object.trimStringsDeep', () => {
   it('shallow', () => {
     const name = 'foo'.repeat(100);
     const obj = {
@@ -307,8 +307,8 @@ describe('Value.object.trimStringsDeep', () => {
       nil: null,
     };
 
-    const res1 = Value.object.trimStringsDeep(obj);
-    const res2 = Value.object.trimStringsDeep(obj, { immutable: false });
+    const res1 = Value.Object.trimStringsDeep(obj);
+    const res2 = Value.Object.trimStringsDeep(obj, { immutable: false });
 
     const expected = {
       ...obj,
@@ -339,7 +339,7 @@ describe('Value.object.trimStringsDeep', () => {
       },
     };
 
-    const res = Value.object.trimStringsDeep(obj);
+    const res = Value.Object.trimStringsDeep(obj);
 
     expect(res).to.eql({
       name: `${name.substring(0, 35)}...`,
@@ -356,8 +356,8 @@ describe('Value.object.trimStringsDeep', () => {
     const name = 'foo'.repeat(100);
     const obj = { name };
 
-    const res1 = Value.object.trimStringsDeep(obj, {});
-    const res2 = Value.object.trimStringsDeep(obj, {
+    const res1 = Value.Object.trimStringsDeep(obj, {});
+    const res2 = Value.Object.trimStringsDeep(obj, {
       ellipsis: false,
       maxLength: 10,
     });
