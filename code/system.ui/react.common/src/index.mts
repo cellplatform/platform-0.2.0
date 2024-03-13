@@ -21,8 +21,8 @@ export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { LabelItem } from './ui/LabelItem';
 export { Layout } from './ui/Layout';
-export { ModuleNamespace } from './ui/Module.Namespace';
 export { ModuleLoader } from './ui/Module.Loader';
+export { ModuleNamespace } from './ui/Module.Namespace';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
@@ -47,8 +47,18 @@ export { useSizeObserver } from './ui/useSizeObserver';
 /**
  * Common up-stream modules
  */
-export { COLORS, Color, FC, Style, UserAgent, css, rx, useRubberband } from './common';
-export { File } from 'sys.ui.dom';
+export {
+  COLORS,
+  Color,
+  FC,
+  File,
+  Filesize,
+  Style,
+  UserAgent,
+  css,
+  rx,
+  useRubberband,
+} from './common';
 
 /**
  * Dev

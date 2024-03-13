@@ -6,7 +6,7 @@ export const Wrangle = {
     const { data, format = true } = props;
     if (!format || !data || data === null) return data;
     const formatter = typeof format === 'function' ? format : DEFAULTS.formatter;
-    return formatter(R.clone(data));
+    return formatter(data);
   },
 
   theme(props: t.ObjectViewProps) {
