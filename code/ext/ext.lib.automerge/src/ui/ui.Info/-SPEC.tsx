@@ -105,7 +105,7 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-      dev.button('write sample [Uint8Array]', async (e) => {
+      dev.button(['write sample BLOB', '[Uint8Array]'], async (e) => {
         type T = { binary?: Uint8Array };
         const doc = await docAtIndex<T>(0);
         const length = Value.random(5000, 15000);
