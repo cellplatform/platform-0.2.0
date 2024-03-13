@@ -3,11 +3,11 @@
  */
 export { Filesize, Time, rx } from 'sys.util';
 
-export { File } from 'sys.ui.dom';
 export {
   COLORS,
   Color,
   FC,
+  File,
   Keyboard,
   Slider,
   css,
