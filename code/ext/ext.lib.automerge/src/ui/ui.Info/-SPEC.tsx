@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Dev, Pkg, TestDb, WebStore, type t } from '../../test.ui';
+import { Dev, Pkg, TestDb, Value, WebStore, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps };
 const initial: T = { props: {} };
@@ -104,12 +104,14 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
-      dev.button('write sample Uint8Array', async (e) => {
+      dev.hr(-1, 5);
+      dev.button('write sample [Uint8Array]', async (e) => {
         type T = { binary?: Uint8Array };
         const doc = await docAtIndex<T>(0);
-        const binary = new Uint8Array([1, 2, 3, 4]);
+        const length = Value.random(5000, 15000);
+        const binary = new Uint8Array(new Array(length).fill(0));
         doc?.change((d) => (d.binary = binary));
+        dev.redraw();
       });
     });
   });

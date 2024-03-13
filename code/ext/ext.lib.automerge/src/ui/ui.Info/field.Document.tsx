@@ -102,7 +102,9 @@ const wrangle = {
     const obj = toObject(input);
     Value.Object.walk(obj, (e) => {
       if (!(e.value instanceof Uint8Array)) return;
-      (e.parent as any)[e.key] = `<Uint8Array>[${e.value.byteLength}]`;
+      const bytes = e.value.byteLength.toLocaleString();
+      const text = `<Uint8Array>[${bytes}]`;
+      (e.parent as any)[e.key] = text;
     });
     return obj;
   },
