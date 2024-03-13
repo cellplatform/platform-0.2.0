@@ -1,19 +1,18 @@
 import { Image } from '.';
 import {
   Dev,
+  DevReload,
   File,
   Filesize,
   Icons,
   Pkg,
   SAMPLE,
   Slider,
+  TestDb,
   css,
   type t,
-  WebStore,
-  TestDb,
-  CrdtInfo,
 } from '../../test.ui';
-import { DevDataController } from './-SPEC.File';
+import { BinaryCrdt } from './-SPEC.BinaryCrdt';
 import { Util } from './u';
 
 const DEFAULTS = Image.DEFAULTS;
@@ -22,6 +21,8 @@ type T = {
   props: t.ImageProps;
   debug: {
     bg?: boolean;
+    reload?: boolean;
+    docuri?: string;
     dataEnabled?: boolean;
     dropEnabled?: boolean;
     pasteEnabled?: boolean;
@@ -41,11 +42,11 @@ export default Dev.describe(name, async (e) => {
     dropEnabled: true,
     pasteEnabled: true,
     pastePrimary: false,
+    docuri: undefined,
   });
 
-  const crdt = await DevDataController();
-
-  const store = WebStore.init({ storage: TestDb.Spec.name });
+  const crdt = await BinaryCrdt.init(local.docuri);
+  local.docuri = crdt.doc.uri;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -63,7 +64,7 @@ export default Dev.describe(name, async (e) => {
     });
 
     if (state.current.debug.dataEnabled) {
-      await state.change((d) => (d.props.src = crdt.current.image));
+      await state.change((d) => (d.props.src = crdt.doc.current.image));
     }
 
     ctx.debug.width(350);
@@ -73,6 +74,9 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
+
+        if (e.state.debug.reload) return <DevReload />;
+
         return (
           <Image
             {...e.state.props}
@@ -225,15 +229,15 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['File', 'Data / State'], (dev) => {
+    dev.section('Persistence', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
-          .value((e) => Boolean(e.state.debug.dataEnabled))
+          .label((e) => `save to CRDT`)
+          .value((e) => !!e.state.debug.dataEnabled)
           .onClick((e) => {
             return e.change((d) => {
               local.dataEnabled = Dev.toggle(d.debug, 'dataEnabled');
-              if (local.dataEnabled) d.props.src = crdt.current.image;
+              if (local.dataEnabled) d.props.src = crdt.doc.current.image;
             });
           }),
       );
@@ -241,26 +245,19 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button((btn) =>
-        btn.label('download').onClick((e) => {
-          const image = crdt.current.image;
-          if (image) {
-            const filename = 'image.png';
-            const mimetype = image.mimetype;
-            File.download(filename, image.data, { mimetype });
-          }
-        }),
-      );
-
-      dev.button((btn) =>
         btn
-          .label('delete file ↓')
-          .enabled((e) => Boolean(e.state.debug.dataEnabled))
-          .onClick(async (e) => {
-            await crdt?.file.delete();
-            await e.change((d) => (d.props.src = undefined));
+          .label('download')
+          .enabled((e) => !!e.state.debug.dataEnabled)
+          .onClick((e) => {
+            const image = crdt.doc.current.image;
+            if (image) {
+              const { mimetype, data } = image;
+              File.download('image.png', data, { mimetype });
+            }
           }),
       );
 
+      dev.hr(0, 5);
       dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render() : null));
     });
 
@@ -270,18 +267,25 @@ export default Dev.describe(name, async (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `debug`)
-          .value((e) => Boolean(e.state.props.debug))
+          .value((e) => !!e.state.props.debug)
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug')))),
       );
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)
-          .value((e) => Boolean(e.state.debug.bg))
+          .value((e) => !!e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
       dev.hr(-1, 5);
       dev.button('redraw', (e) => dev.redraw());
-      dev.button('reset', (e) => e.change((d) => (d.props.src = null)));
+      dev.button(['reset', 'src = null'], (e) => e.change((d) => (d.props.src = null)));
+
+      dev.hr(-1, 5);
+
+      dev.button([`delete database: "${crdt.storage}"`, '💥'], async (e) => {
+        e.state.change((d) => (d.debug.reload = true));
+        await TestDb.Spec.deleteDatabase();
+      });
     });
   });
 
@@ -293,6 +297,7 @@ export default Dev.describe(name, async (e) => {
       const mimetype = srcBinary?.mimetype ?? undefined;
       const bytes = srcBinary?.data.byteLength ?? -1;
       const file = stripBinary(srcBinary);
+      const filesize = bytes > -1 ? Filesize(bytes) : undefined;
 
       const src = typeof srcValue === 'string' ? srcValue : Util.srcAsBinary(srcValue);
       const props = {
@@ -303,7 +308,7 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props,
         file,
-        filesize: bytes > -1 ? Filesize(bytes) : undefined,
+        filesize,
         mimetype,
       };
 
