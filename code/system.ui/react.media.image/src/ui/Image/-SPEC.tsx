@@ -82,10 +82,10 @@ export default Dev.describe(name, async (e) => {
             {...e.state.props}
             onDropOrPaste={(e) => {
               console.info('⚡️ onDropOrPaste:', e);
-              if (e.isSupported) {
-                state.change((d) => (d.props.src = e.file));
-                if (crdt && e.file) crdt.update(e.file);
-              }
+              if (!e.isSupported) return;
+
+              state.change((d) => (d.props.src = e.file));
+              if (crdt && e.file) crdt.update(e.file);
             }}
           />
         );
