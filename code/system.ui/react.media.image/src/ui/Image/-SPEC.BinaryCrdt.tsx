@@ -11,11 +11,12 @@ export const BinaryCrdt = {
     const doc = await store.doc.getOrCreate<TDoc>((d) => null, exists ? docuri : undefined);
 
     const update = (image: t.ImageBinary) => doc.change((d) => (d.image = image));
-    const render = () => {
+    const render = (style?: t.CssValue) => {
       return (
         <CrdtInfo
           fields={['Repo', 'Doc', 'Doc.URI']}
           data={{ repo: { store, index }, document: { doc } }}
+          style={style}
         />
       );
     };

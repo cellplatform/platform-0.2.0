@@ -246,7 +246,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.button((btn) =>
         btn
-          .label('download')
+          .label('download as file')
           .enabled((e) => !!e.state.debug.dataEnabled)
           .onClick((e) => {
             const image = crdt.doc.current.image;
@@ -257,8 +257,7 @@ export default Dev.describe(name, async (e) => {
           }),
       );
 
-      dev.hr(0, 5);
-      dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render() : null));
+      dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render({ Margin: [15, 0, 0, 0] }) : null));
     });
 
     dev.hr(5, 20);
