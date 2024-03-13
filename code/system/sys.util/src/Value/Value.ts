@@ -5,7 +5,7 @@ import * as Random from './Value.Random';
 import * as To from './Value.To';
 import * as Util from './Value.Util';
 
-import { is } from '../Is';
+import { Is } from '../Is';
 
 import * as Object from './Value.Object';
 
@@ -13,7 +13,7 @@ import * as Object from './Value.Object';
  * Value conversion and interpretation helpers.
  */
 export const Value = {
-  is,
+  Is,
   Object,
   ...To,
   ...Array,
