@@ -1,10 +1,14 @@
 import { ObjectView } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, Value, type t } from '../../test.ui';
 
 type T = t.ObjectViewProps;
+
+const length = Value.random(5000, 15000);
+const binary = new Uint8Array(new Array(length).fill(0));
+
 const initial: T = {
   name: 'Foo',
-  data: { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123, foo: false },
+  data: { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123, foo: false, binary },
 };
 
 export default Dev.describe('ObjectView', (e) => {
