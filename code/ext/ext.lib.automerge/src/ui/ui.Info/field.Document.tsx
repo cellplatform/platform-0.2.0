@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectView, Value, css, toObject, type t } from './common';
+import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoData['document'];
 
@@ -84,7 +84,7 @@ const wrangle = {
         <div {...styles.inner}>
           <ObjectView
             name={data?.object?.name}
-            data={wrangle.safeObject(data?.doc?.current)}
+            data={data?.doc?.current}
             fontSize={11}
             style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
             expand={{
@@ -95,17 +95,5 @@ const wrangle = {
         </div>
       </div>
     );
-  },
-
-  safeObject(input: unknown) {
-    if (!input) return input;
-    const obj = toObject(input);
-    Value.Object.walk(obj, (e) => {
-      if (!(e.value instanceof Uint8Array)) return;
-      const bytes = e.value.byteLength.toLocaleString();
-      const text = `<Uint8Array>[${bytes}]`;
-      (e.parent as any)[e.key] = text;
-    });
-    return obj;
   },
 } as const;
