@@ -25,6 +25,18 @@ describe('Value.Object.walk', () => {
     ]);
   });
 
+  it('passes parent in callback', () => {
+    const root = { child: { enabled: true, list: [1, 2] } };
+    const parents: any[] = [];
+    Value.Object.walk(root, (e) => parents.push(e.parent));
+    expect(parents.length).to.eql(5);
+    expect(parents[0]).to.eql(root);
+    expect(parents[1]).to.eql(root.child);
+    expect(parents[2]).to.eql(root.child);
+    expect(parents[3]).to.eql(root.child.list);
+    expect(parents[4]).to.eql(root.child.list);
+  });
+
   it('processes array', () => {
     const walked: T[] = [];
     const input = ['foo', 123, { enabled: true, list: [1, 2] }];

@@ -1,33 +1,35 @@
 import { R } from '../common';
 export * from './Value.Object.keyPath';
 
+type WalkCallback = (e: WalkArgs) => void;
+type WalkArgs = {
+  readonly parent: object | any[];
+  readonly key: string | number;
+  readonly value: any;
+  stop(): void;
+};
+
 /**
  * Walks an object tree (recursive descent) implementing
  * a visitor callback for each item.
  */
-export function walk<T>(
-  obj: T,
-  fn: (e: { key: string | number; value: any; stop(): void }) => void,
-) {
+export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
   let _stopped = false;
 
   const process = (key: string | number, value: any) => {
     if (_stopped) return;
-    fn({
-      key,
-      value,
-      stop: () => (_stopped = true),
-    });
-    const isObject = typeof obj === 'object' && obj !== null;
-    if (!_stopped && (isObject || Array.isArray(value))) {
-      walk(value, fn); // <== RECURSION 🌳
-    }
+    const stop = () => (_stopped = true);
+    fn({ parent, key, value, stop });
+    if (_stopped) return;
+    const isObject = typeof parent === 'object' && parent !== null;
+    const isArray = Array.isArray(value);
+    if (isObject || isArray) walk(value, fn); // <== RECURSION 🌳
   };
 
-  if (Array.isArray(obj)) {
-    obj.forEach((item, i) => process(i, item));
-  } else if (typeof obj === 'object' && obj !== null) {
-    Object.entries(obj).forEach(([key, value]) => process(key, value));
+  if (Array.isArray(parent)) {
+    parent.forEach((item, i) => process(i, item));
+  } else if (typeof parent === 'object' && parent !== null) {
+    Object.entries(parent).forEach(([key, value]) => process(key, value));
   }
 }
 
