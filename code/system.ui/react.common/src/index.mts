@@ -47,18 +47,7 @@ export { useSizeObserver } from './ui/useSizeObserver';
 /**
  * Common up-stream modules
  */
-export {
-  COLORS,
-  Color,
-  FC,
-  File,
-  Filesize,
-  Style,
-  UserAgent,
-  css,
-  rx,
-  useRubberband,
-} from './common';
+export { COLORS, Color, FC, File, Style, UserAgent, css, rx, useRubberband } from './common';
 
 /**
  * Dev

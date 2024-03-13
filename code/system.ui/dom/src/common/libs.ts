@@ -8,4 +8,4 @@ export { Subject } from 'rxjs';
 /**
  * @system
  */
-export { Time, Path, slug, rx } from 'sys.util';
+export { Filesize, Path, Time, rx, slug } from 'sys.util';
