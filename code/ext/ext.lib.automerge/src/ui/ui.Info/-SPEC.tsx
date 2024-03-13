@@ -15,10 +15,10 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ storage });
   const index = await WebStore.index(store);
 
-  const docAtIndex = async (i: number) => {
+  function docAtIndex<T>(i: number) {
     const doc = index.doc.current.docs[i];
-    return doc ? index.store.doc.get(doc.uri) : undefined;
-  };
+    return doc ? index.store.doc.get<T>(doc.uri) : undefined;
+  }
 
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -95,9 +95,22 @@ export default Dev.describe(name, async (e) => {
           />
         );
       });
-      dev.title('Common States');
+      dev.hr(0, [10, 10]).title('Common States');
       dev.button('Repo / Doc', (e) => update(['Repo', 'Doc', 'Doc.URI']));
       dev.button('Repo / Doc / Object', (e) => update(['Repo', 'Doc', 'Doc.URI', 'Doc.Object']));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+
+      dev.button('write sample Uint8Array', async (e) => {
+        type T = { binary?: Uint8Array };
+        const doc = await docAtIndex<T>(0);
+        const binary = new Uint8Array([1, 2, 3, 4]);
+        doc?.change((d) => (d.binary = binary));
+      });
     });
   });
 

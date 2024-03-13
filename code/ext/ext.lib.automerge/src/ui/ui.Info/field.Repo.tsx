@@ -11,15 +11,12 @@ export function repo(repo: t.InfoData['repo']) {
     text = `${text} ← ${index.total()} ${documents}`;
   }
 
-  const styles = {
-    base: css({ Flex: 'x-center-center' }),
-  };
-
+  const styles = { base: css({ Flex: 'x-center-center' }) };
   const value = (
     <div {...styles.base}>
       <Icons.Database size={14} offset={[0, 1]} style={{ marginRight: 3 }} />
       <div>{text}</div>
-      <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />
+      {index && <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />}
     </div>
   );
 

@@ -26,6 +26,7 @@ export type InfoDataRepo = {
 export type InfoDataDocument = {
   label?: string;
   doc?: t.DocRef<unknown>;
+  uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   onIconClick?: (e: {}) => void;
 };

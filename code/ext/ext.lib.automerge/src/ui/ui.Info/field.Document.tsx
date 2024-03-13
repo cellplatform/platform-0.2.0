@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
+import { Button, Doc, Hash, Icons, ObjectView, Value, css, toObject, type t } from './common';
 
 type D = t.InfoData['document'];
 
@@ -18,7 +18,8 @@ export function doc(data: D, fields: t.InfoField[]) {
 
     if (uri) {
       const id = Doc.Uri.id(uri);
-      const shortened = Hash.shorten(id, [4, 4]);
+      const length = data.uri?.shorten ?? [4, 4];
+      const shortened = Hash.shorten(id, length);
       const text = uri ? `crdt:automerge:${shortened}` : undefined;
       parts.push(<>{text}</>);
     }
@@ -38,8 +39,8 @@ export function doc(data: D, fields: t.InfoField[]) {
 
     const value = (
       <div {...styles.base}>
-        {parts.map((el, i) => {
-          return <div key={i}>{el}</div>;
+        {parts.map((el, index) => {
+          return <div key={index}>{el}</div>;
         })}
       </div>
     );
@@ -77,12 +78,13 @@ const wrangle = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
+
     return (
       <div {...styles.base}>
         <div {...styles.inner}>
           <ObjectView
             name={data?.object?.name}
-            data={data?.doc?.current}
+            data={wrangle.safeObject(data?.doc?.current)}
             fontSize={11}
             style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
             expand={{
@@ -93,5 +95,15 @@ const wrangle = {
         </div>
       </div>
     );
+  },
+
+  safeObject(input: unknown) {
+    if (!input) return input;
+    const obj = toObject(input);
+    Value.Object.walk(obj, (e) => {
+      if (!(e.value instanceof Uint8Array)) return;
+      (e.parent as any)[e.key] = `<Uint8Array>[${e.value.byteLength}]`;
+    });
+    return obj;
   },
 } as const;
