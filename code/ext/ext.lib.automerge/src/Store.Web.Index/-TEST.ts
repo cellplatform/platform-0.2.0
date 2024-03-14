@@ -1,5 +1,6 @@
 import { WebStore } from '../Store.Web';
-import { A, Test, TestDb, Time, Value, expect, toObject, type t } from '../test.ui';
+import { Store } from '../Store';
+import { A, Test, TestDb, Time, Value, expect, toObject, type t, expectError } from '../test.ui';
 
 type D = { count?: t.A.Counter };
 
@@ -14,6 +15,12 @@ export default Test.describe('Store.Web: Index', (e) => {
       const index = await WebStore.index(store);
       expect(index.kind === 'crdt.store.index').to.eql(true);
       expect(index.db.name).to.eql(WebStore.IndexDb.name(name));
+    });
+
+    e.it('initialise: throws if not WebStore', async (e) => {
+      const store = Store.init();
+      const fn = () => WebStore.index(store);
+      await expectError(fn, '[Store] is not a [WebStore]/');
     });
 
     e.it('disposes of Index events when store/repo is disposed', async (e) => {

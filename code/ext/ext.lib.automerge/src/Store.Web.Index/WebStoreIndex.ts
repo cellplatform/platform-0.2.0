@@ -1,6 +1,6 @@
 import { Store } from '../Store';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
-import { type t } from './common';
+import { Is, type t } from './common';
 
 export const WebStoreIndex = {
   Doc: Store.Doc,
@@ -9,7 +9,9 @@ export const WebStoreIndex = {
   /**
    * Create instance of the store/repo's document Index.
    */
-  async init(store: t.WebStore): Promise<t.WebStoreIndex> {
+  async init(store: t.Store): Promise<t.WebStoreIndex> {
+    if (!Is.webStore(store)) throw new Error('[Store] is not a [WebStore]');
+
     const dbname = StoreIndexDb.name(store);
     const db = await StoreIndexDb.init(dbname);
     const record = await db.getOrCreate(store);
