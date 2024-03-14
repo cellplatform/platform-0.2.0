@@ -1,9 +1,9 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, Peer, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { factory } from '../ui.Sample.02.loaders';
 import { createEdge } from './-SPEC.edge';
 import { monitorKeyboard } from './-SPEC.keyboard';
-import { factory } from '../ui.Sample.02.loaders';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
@@ -79,7 +79,9 @@ export default Dev.describe(name, async (e) => {
         harness: Shared.harness.events(),
       };
 
-      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => dev.redraw('subject'));
+      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
+        dev.redraw('subject');
+      });
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
         ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
@@ -89,7 +91,27 @@ export default Dev.describe(name, async (e) => {
       monitorKeyboard(Shared.harness);
     });
 
+    const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
+      state.change((d) => (d.stream = e.selected));
+      dev.redraw();
+    };
+
     ctx.debug.width(300);
+
+    ctx.debug.header.border(-0.1).render((e) => {
+      const conns = left.network.peer.current.connections;
+      const media = conns.filter((conn) => Peer.Is.kind.media(conn.kind));
+      if (media.length === 0) return null;
+      return (
+        <PeerUI.AvatarTray
+          //
+          peer={left.network.peer}
+          onSelection={onStreamSelection}
+          muted={true}
+        />
+      );
+    });
+
     ctx.subject
       .size('fill')
       .display('grid')
@@ -113,27 +135,7 @@ export default Dev.describe(name, async (e) => {
             .render(typename, { style });
         }
 
-        const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
-          state.change((d) => (d.stream = e.selected));
-          dev.redraw();
-        };
-
-        const elAvatars = (
-          <PeerUI.AvatarTray
-            peer={left.network.peer}
-            gap={10}
-            size={28}
-            style={{
-              Absolute: [null, null, 0 - (28 + 10), 10],
-              pointerEvents: elOverlay ? 'none' : 'auto',
-              opacity: elOverlay ? 1 : 0,
-              transition: 'opacity 0.3s',
-            }}
-            onSelection={onStreamSelection}
-          />
-        );
-
-        const elSubject = (
+        return (
           <Sample
             overlay={elOverlay}
             left={{ ...left, visible: edge?.Left.visible }}
@@ -141,13 +143,6 @@ export default Dev.describe(name, async (e) => {
             stream={e.state.stream}
             onStreamSelection={onStreamSelection}
           />
-        );
-
-        return (
-          <>
-            {elSubject}
-            {elAvatars}
-          </>
         );
       });
   });

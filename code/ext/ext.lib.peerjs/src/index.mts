@@ -22,7 +22,6 @@ import { Video } from './ui/ui.Video';
 
 export { Info };
 export const PeerUI = {
-  peer: Peer.init,
   Info,
   Connector,
   ConnectorConfig,
