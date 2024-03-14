@@ -1,4 +1,4 @@
-import { type t, Is } from './common';
+import { type t } from './common';
 import { PeerId } from './Peer.Id';
 
 export const PeerIs: t.PeerIs = {
