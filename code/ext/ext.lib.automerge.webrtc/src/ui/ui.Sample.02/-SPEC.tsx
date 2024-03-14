@@ -81,6 +81,7 @@ export default Dev.describe(name, async (e) => {
 
       events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         dev.redraw('subject');
+        dev.redraw('debug');
       });
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
@@ -101,7 +102,7 @@ export default Dev.describe(name, async (e) => {
     ctx.debug.header.border(-0.1).render((e) => {
       const conns = left.network.peer.current.connections;
       const media = conns.filter(Peer.Is.kind.media);
-      if (media.length === 0) return null;
+
       return (
         <PeerUI.AvatarTray
           //
