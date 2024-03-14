@@ -16,6 +16,7 @@ export type ImageCrdtProps = {
 export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const { store, docuri } = props;
 
+  const [overRight, setOverRight] = useState(false);
   const [index, setIndex] = useState<t.WebStoreIndex>();
   const [doc, setDoc] = useState<t.DocRef<TDoc>>();
   const [_, setRedraw] = useState(0);
@@ -44,13 +45,18 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({ display: 'grid', gridTemplateColumns: '1fr auto' }),
+    base: css({ display: 'grid', backgroundColor: COLORS.WHITE }),
     left: css({ display: 'grid' }),
     right: css({
-      display: 'grid',
-      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
+      Absolute: [0, 0, 0, null],
       width: 260,
       Padding: [8, 10],
+      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      backgroundColor: Color.alpha(COLORS.WHITE, 0.85),
+      opacity: overRight ? 1 : 0,
+      transition: `opacity 0.3s`,
+      backdropFilter: `blur(10px)`,
+      display: 'grid',
     }),
   };
 
@@ -64,7 +70,11 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
           }}
         />
       </div>
-      <div {...styles.right}>
+      <div
+        {...styles.right}
+        onMouseEnter={() => setOverRight(true)}
+        onMouseLeave={() => setOverRight(false)}
+      >
         <Info
           fields={['Repo', 'Doc', 'Doc.URI']}
           data={{ repo: { store, index }, document: { doc } }}
