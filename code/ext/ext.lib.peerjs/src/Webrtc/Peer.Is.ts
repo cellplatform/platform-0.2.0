@@ -13,13 +13,13 @@ export const PeerIs: t.PeerIs = {
     return parts[0] === 'peer' && PeerIs.peerid(parts[1]);
   },
 
-  kind: {
+  Kind: {
     data(input: any): input is t.PeerConnectionKindData {
       return wrangle.kind(input) === 'data';
     },
 
     media(input: any): input is t.PeerConnectionKindMedia {
-      return PeerIs.kind.video(input) || PeerIs.kind.screen(input);
+      return PeerIs.Kind.video(input) || PeerIs.Kind.screen(input);
     },
 
     video(input: any): input is t.PeerConnectionKindMediaVideo {
