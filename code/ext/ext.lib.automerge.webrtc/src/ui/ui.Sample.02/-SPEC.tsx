@@ -100,7 +100,7 @@ export default Dev.describe(name, async (e) => {
 
     ctx.debug.header.border(-0.1).render((e) => {
       const conns = left.network.peer.current.connections;
-      const media = conns.filter((conn) => Peer.Is.kind.media(conn.kind));
+      const media = conns.filter(Peer.Is.kind.media);
       if (media.length === 0) return null;
       return (
         <PeerUI.AvatarTray
