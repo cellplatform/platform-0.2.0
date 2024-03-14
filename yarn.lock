@@ -50,22 +50,6 @@
   dependencies:
     "@automerge/automerge-repo" "1.1.2"
 
-"@automerge/automerge-repo@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.1.tgz#87d2fcabb0191d48ab4a15c55935681381b0a605"
-  integrity sha512-fQq+4eUadubzHOUi2BIiC5f/XFUHixJ/kdfnbXRoh2xwzojMfQIlrRfZzxkuW5AdD9LOC2/LoWJs+ak4a9vq4Q==
-  dependencies:
-    "@automerge/automerge" "^2.1.9"
-    bs58check "^3.0.1"
-    cbor-x "^1.3.0"
-    debug "^4.3.4"
-    eventemitter3 "^5.0.1"
-    fast-sha256 "^1.3.0"
-    tiny-typed-emitter "^2.1.0"
-    ts-node "^10.9.1"
-    uuid "^9.0.0"
-    xstate "^4.37.0"
-
 "@automerge/automerge-repo@1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.2.tgz#3b6c3a4f84f9b4891c529fa84a2b55b8b1bd84c7"
@@ -552,24 +536,12 @@
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.9.1.tgz#4ffb0055f7ef676ebc3a5a91fb621393294e2f43"
   integrity sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==
 
-"@emotion/is-prop-valid@^0.8.2":
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz#db28b1c4368a259b60a97311d6a952d4fd01ac1a"
-  integrity sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==
-  dependencies:
-    "@emotion/memoize" "0.7.4"
-
 "@emotion/is-prop-valid@^1.1.0", "@emotion/is-prop-valid@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-1.2.1.tgz#23116cf1ed18bfeac910ec6436561ecb1a3885cc"
   integrity sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw==
   dependencies:
     "@emotion/memoize" "^0.8.1"
-
-"@emotion/memoize@0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
-  integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
 
 "@emotion/memoize@^0.8.1":
   version "0.8.1"
@@ -1699,51 +1671,6 @@
     "@preact/signals-core" "^1.5.1"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.59.2":
-  version "1.59.2"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.59.2.tgz#2a71991eddcd5ef7cb4e9a043913787cc739ded2"
-  integrity sha512-iIyeaMmcAhFNxe6UjhxO+hsWsc6oVvbsghXnisPJYGsmGyp8d4XJ85uek90Oorr+qtGd4vtIA9bjosvWZEB5kA==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.9.2"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.11.1"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.5"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    react-use "^17.4.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-
 "@privy-io/react-auth@1.59.3":
   version "1.59.3"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.59.3.tgz#6353bd43bafcb8ffe820c58c92028cb9a69fd7b5"
@@ -2730,27 +2657,6 @@
     "@testing-library/dom" "^9.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tldraw/editor@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.0.0.tgz#5c65b1ce50e02da9f4c1f7c09a2511d8dd6f9156"
-  integrity sha512-LfZr09NctyeaQr17HMM9ZZzTxMY2k2h9Qk/RKUwWnw//kidn65r/ODsgtnViDDrSymBA6zw9IlrzIENBMnczPA==
-  dependencies:
-    "@tldraw/state" "2.0.0"
-    "@tldraw/store" "2.0.0"
-    "@tldraw/tlschema" "2.0.0"
-    "@tldraw/utils" "2.0.0"
-    "@tldraw/validate" "2.0.0"
-    "@types/core-js" "^2.5.5"
-    "@use-gesture/react" "^10.2.27"
-    classnames "^2.3.2"
-    core-js "^3.31.1"
-    eventemitter3 "^4.0.7"
-    idb "^7.1.1"
-    is-plain-object "^5.0.0"
-    lodash.throttle "^4.1.1"
-    lodash.uniq "^4.5.0"
-    nanoid "4.0.2"
-
 "@tldraw/editor@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.0.1.tgz#e7141b2389d4779e563fc312af1d4f6f5b9a258b"
@@ -2772,25 +2678,10 @@
     lodash.uniq "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/state@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.0.0.tgz#0f7e845b464831c85399382f9df52bf71779d2f7"
-  integrity sha512-MaD8bVRouQ69OsgySDpFBNcGw7nhI1pc0vf/0Ryl2cMIo0lztPKj0mfgm+cU+dFYxZLdeEi83OOxk6uH6RZAnQ==
-
 "@tldraw/state@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.0.1.tgz#1b2a0d676c20ffe81e20e237d9871ee6e1bf6fa9"
   integrity sha512-sqEc2y4C5InfK9ZOJCpzgmanQXE76IB5cFkubOoY0Jr1M/W5nHfVZyFy+9wSd4X0vZLnoNgBA65kOZih13sqJQ==
-
-"@tldraw/store@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/store/-/store-2.0.0.tgz#1831497530cafd8a5f297fb86b9b77c3c2ede55e"
-  integrity sha512-2z+DF/eEgr/ruIzHpbO8VgtYl2gFjALK/LDm/fYDvi1DTUUvZtG/NN+9gSNf4UtsgVbjHJUupsB8spCCQ3QjdA==
-  dependencies:
-    "@tldraw/state" "2.0.0"
-    "@tldraw/utils" "2.0.0"
-    lodash.isequal "^4.5.0"
-    nanoid "4.0.2"
 
 "@tldraw/store@2.0.1":
   version "2.0.1"
@@ -2802,30 +2693,12 @@
     lodash.isequal "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/tldraw@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/tldraw/-/tldraw-2.0.0.tgz#52fc5a2fd8bd3c37c6b352ecf19b46b8270d27b3"
-  integrity sha512-u8r5GYGDsHxGEZ2CBOTrqElmoZg6I+Bsxm7IWtc+hqy8bnw1M5OedYQarqXkryZee4icuho/aY88VctIEKiuPw==
-  dependencies:
-    tldraw "2.0.0"
-
 "@tldraw/tldraw@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@tldraw/tldraw/-/tldraw-2.0.1.tgz#fb16abbdbb9c6f37414339df6029b3b2129f9d5c"
   integrity sha512-ZBly/v+OSc/5Om7njH+N8ib4M2dxN5WTjAzDCEgg0S+YirI0vNaunu2U7G/0UYacWj8yKQZ07r4UsGbZNwTchA==
   dependencies:
     tldraw "2.0.1"
-
-"@tldraw/tlschema@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/tlschema/-/tlschema-2.0.0.tgz#cea70faf7a6ad159f01245dc3adfd9413d4a4467"
-  integrity sha512-ylV+LhqOa5NULFt5LMvd78oQvx4xi4yB2Tz0PZnZ6kB840iTitlxI98qwXUIlXVBeKAgmhssvtzG26BAACa9Wg==
-  dependencies:
-    "@tldraw/state" "2.0.0"
-    "@tldraw/store" "2.0.0"
-    "@tldraw/utils" "2.0.0"
-    "@tldraw/validate" "2.0.0"
-    nanoid "4.0.2"
 
 "@tldraw/tlschema@2.0.1":
   version "2.0.1"
@@ -2838,22 +2711,10 @@
     "@tldraw/validate" "2.0.1"
     nanoid "4.0.2"
 
-"@tldraw/utils@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.0.0.tgz#25d2376ff9011726dbf93d942e789590c1e22af1"
-  integrity sha512-8EKrAOMlhO7fPDJMFdGEVdYzR/Enc9K5PBSWkiZGw4jWXbe3e828xk6m/sJ/iDBRZzdPPn7UnZPhY1mQ/ONgig==
-
 "@tldraw/utils@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.0.1.tgz#037cc3865ff1426bf534f9de14b6ce843c274ae0"
   integrity sha512-bRt8qWIEtd9rvPYaNQon5N8wWIJ7oLTMP5RJcd3Mucm8M6yNx+xIZOJImRjNV5DuuJmuJYwto2/h/ZVmu49fuQ==
-
-"@tldraw/validate@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tldraw/validate/-/validate-2.0.0.tgz#2df5f3773cbab60e2aee2a83f237cd0803101f9a"
-  integrity sha512-bnSEtYnr/+i/B5ej0IHshAiJnRFa3SgIHXI57b/Cctw17kdidMhQLokTPlUaWOzcFvySaGYqmO2aPo3Ede25jw==
-  dependencies:
-    "@tldraw/utils" "2.0.0"
 
 "@tldraw/validate@2.0.1":
   version "2.0.1"
@@ -3070,10 +2931,10 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@20.11.26":
-  version "20.11.26"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.26.tgz#3fbda536e51d5c79281e1d9657dcb0131baabd2d"
-  integrity sha512-YwOMmyhNnAWijOBQweOJnQPl068Oqd4K3OFbTc6AHJwzweUwwWG3GIFY74OKks2PJUDkQPeddOQES9mLn1CTEQ==
+"@types/node@20.11.27":
+  version "20.11.27"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.27.tgz#debe5cfc8a507dd60fe2a3b4875b1604f215c2ac"
+  integrity sha512-qyUZfMnCg1KEz57r7pzFtSGt49f6RPkPBis3Vo4PbS7roQEDn22hiHzl/Lo1q4i4hDEgBJmBF/NTNg2XR0HbFg==
   dependencies:
     undici-types "~5.26.4"
 
@@ -3128,10 +2989,10 @@
   dependencies:
     types-ramda "^0.29.9"
 
-"@types/react-dom@18.2.21":
-  version "18.2.21"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.21.tgz#b8c81715cebdebb2994378616a8d54ace54f043a"
-  integrity sha512-gnvBA/21SA4xxqNXEwNiVcP0xSGHh/gi1VhWv9Bl46a0ItbTT5nFY+G9VSQpaG/8N/qdJpJ+vftQ4zflTtnjLw==
+"@types/react-dom@18.2.22":
+  version "18.2.22"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.22.tgz#d332febf0815403de6da8a97e5fe282cbe609bae"
+  integrity sha512-fHkBXPeNtfvri6gdsMYyW+dW7RXFo6Ad09nLFK0VQWR7yGLai/Cyvyj696gbwYvBnhGtevUG9cET0pmUbMtoPQ==
   dependencies:
     "@types/react" "*"
 
@@ -3907,15 +3768,6 @@ atomic-sleep@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
-
-automerge-repo-network-peerjs@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.1.tgz#a136c3de232c850b3dad20451733dfb409c04317"
-  integrity sha512-0ZHGC0DxTdK8ClJR2PdhfsJTjgY40hbO9a9Vpb308KOTJHIK4tVIeiZ2Wu2b9fZNn3a3znyJwWsd5DHDDeKuww==
-  dependencies:
-    "@automerge/automerge-repo" "1.1.1"
-    eventemitter3 "5.0.1"
-    peerjs "1.5.2"
 
 automerge-repo-network-peerjs@1.1.2:
   version "1.1.2"
@@ -5612,15 +5464,6 @@ framer-motion@11.0.12:
   dependencies:
     tslib "^2.4.0"
 
-framer-motion@11.0.8:
-  version "11.0.8"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.8.tgz#8f97a18cbad5858d85b53bc325c40a03d0a5c203"
-  integrity sha512-1KSGNuqe1qZkS/SWQlDnqK2VCVzRVEoval379j0FiUBJAZoqgwyvqFkfvJbgW2IPFo4wX16K+M0k5jO23lCIjA==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
-
 fs-extra@11.2.0:
   version "11.2.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.2.0.tgz#e70e17dfad64232287d01929399e0ea7c86b0e5b"
@@ -5814,10 +5657,10 @@ h3@^1.10.0, h3@^1.8.2:
     uncrypto "^0.1.3"
     unenv "^1.8.0"
 
-happy-dom@13.8.2:
-  version "13.8.2"
-  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-13.8.2.tgz#ab6d74cd0f712403d07d3b88dac6baa32659c346"
-  integrity sha512-u9KxyeQNIzkJDR2iCitKeS5Uy0YUv5eOntpO8e7ZzbDVv4kP5Y77Zo2LnZitwMrss/1pY2Uc2e5qOVGkiKE5Gg==
+happy-dom@13.8.4:
+  version "13.8.4"
+  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-13.8.4.tgz#fe898a2a5116115e3f7519d1a60031fe70dfb582"
+  integrity sha512-FjLmsOMgwpX9gc00nz830RVGCG1V6Rj+AB4amdEAbKmbeIL3Ude1peC8bcTCzTvrtm2TFKimY3Ws6Xeh5Q1XhA==
   dependencies:
     entities "^4.5.0"
     webidl-conversions "^7.0.0"
@@ -7877,10 +7720,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai@4.28.4:
-  version "4.28.4"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.28.4.tgz#d4bf1f53a89ef151bf066ef284489e12e7dd1657"
-  integrity sha512-RNIwx4MT/F0zyizGcwS+bXKLzJ8QE9IOyigDG/ttnwB220d58bYjYFp0qjvGwEFBO6+pvFVIDABZPGDl46RFsg==
+openai@4.29.0:
+  version "4.29.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.29.0.tgz#4e69e6be5fc623d6783c1758de93126a3b27b315"
+  integrity sha512-ic6C681bSow1XQdKhADthM/OOKqNL05M1gCFLx1mRqLJ+yH49v6qnvaWQ76kwqI/IieCuVTXfRfTk3sz4cB45w==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -9674,25 +9517,6 @@ tinyspy@^2.2.0:
   resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-2.2.0.tgz#9dc04b072746520b432f77ea2c2d17933de5d6ce"
   integrity sha512-d2eda04AN/cPOR89F7Xv5bK/jrQEhmcLFe6HFldoeO9AJtps+fqEnh486vnT/8y4bw38pSyxDcTCAq+Ks2aJTg==
 
-tldraw@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.0.0.tgz#95b0145b03e576cb1dca3bddf6dd97ee9dca95b8"
-  integrity sha512-Q0rQ9pMhQxt+SZbLpnieZhfUFWuRNDabxbSCPlmBk7IMYq7bLrJMSARpM4fQesD/IfTNPzrQPS1dzteFBK3FaA==
-  dependencies:
-    "@radix-ui/react-alert-dialog" "^1.0.5"
-    "@radix-ui/react-context-menu" "^2.1.5"
-    "@radix-ui/react-dialog" "^1.0.5"
-    "@radix-ui/react-dropdown-menu" "^2.0.6"
-    "@radix-ui/react-popover" "^1.0.7"
-    "@radix-ui/react-select" "^1.2.0"
-    "@radix-ui/react-slider" "^1.1.0"
-    "@radix-ui/react-toast" "^1.1.1"
-    "@tldraw/editor" "2.0.0"
-    canvas-size "^1.2.6"
-    classnames "^2.3.2"
-    hotkeys-js "^3.11.2"
-    lz-string "^1.4.4"
-
 tldraw@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.0.1.tgz#0a40a01e50571e01d51dfaa9fb38db8c5ace2491"
@@ -10139,10 +9963,10 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.7.22:
-  version "2.7.22"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.22.tgz#b6991b73f348d8e3a151f4acea08fddfdc449805"
-  integrity sha512-R/d9AkWXkhiNF4Gk4/A389LSO5PGDdHUBFDKIUkhrdLTDpOhKzbNln6qDry3kYUcmH7lErx3C2eA6rajnc0s9A==
+viem@2.8.5:
+  version "2.8.5"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.8.5.tgz#c0120e7f228fbb5be760c625bb2637c7cfa1b8df"
+  integrity sha512-EAmZ/jP7Ycmu72zRrB+N/fINEXMVBaLLsUaHwu5LoIjAzmE/f/33RV9AlhUA6RNZ5kujomylSytIyDakzQYXCQ==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
@@ -10153,10 +9977,10 @@ viem@2.7.22:
     isows "1.0.3"
     ws "8.13.0"
 
-viem@2.8.5:
-  version "2.8.5"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.8.5.tgz#c0120e7f228fbb5be760c625bb2637c7cfa1b8df"
-  integrity sha512-EAmZ/jP7Ycmu72zRrB+N/fINEXMVBaLLsUaHwu5LoIjAzmE/f/33RV9AlhUA6RNZ5kujomylSytIyDakzQYXCQ==
+viem@2.8.6:
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.8.6.tgz#7467a0f113b4b13dd53fde4797aec1e686672f03"
+  integrity sha512-LqxLOSFtXfbC3tsiZ8Km8jKR4ktTOLfigL2dR9IN28He2+QrNhYvvwGPz3P4hbfU12Wvuxo6mWGZ2L1lpNtvrA==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
