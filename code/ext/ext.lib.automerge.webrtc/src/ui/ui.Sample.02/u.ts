@@ -2,7 +2,7 @@ import { Peer, type t } from './common';
 
 export const findMediaStream = (peers: t.PeerModel[], id?: string) => {
   if (!id) return;
-  const isMedia = Peer.Is.kind.media;
+  const isMedia = Peer.Is.Kind.media;
   for (const peer of peers) {
     const media = peer.current.connections.filter((conn) => isMedia(conn.kind));
     for (const conn of media) {
