@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t, Is } from './common';
 import { PeerId } from './Peer.Id';
 
 export const PeerIs: t.PeerIs = {
@@ -15,7 +15,7 @@ export const PeerIs: t.PeerIs = {
 
   kind: {
     data(input: any): input is t.PeerConnectionKindData {
-      return input === 'data';
+      return wrangle.kind(input) === 'data';
     },
 
     media(input: any): input is t.PeerConnectionKindMedia {
@@ -23,11 +23,23 @@ export const PeerIs: t.PeerIs = {
     },
 
     video(input: any): input is t.PeerConnectionKindMediaVideo {
-      return input === 'media:video';
+      return wrangle.kind(input) === 'media:video';
     },
 
     screen(input: any): input is t.PeerConnectionKindMediaScreen {
-      return input === 'media:screen';
+      return wrangle.kind(input) === 'media:screen';
     },
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  kind(input: any): string {
+    if (!input) return '';
+    if (typeof input === 'string') return input;
+    if (typeof input === 'object' && typeof input.kind === 'string') return input.kind;
+    return '';
   },
 } as const;

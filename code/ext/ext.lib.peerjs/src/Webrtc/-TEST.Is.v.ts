@@ -52,6 +52,7 @@ describe('Peer.Is', () => {
       NOT.forEach((v) => test(v, false));
       test(' data ', false);
       test('data', true);
+      test({ kind: 'data' }, true);
     });
 
     it('Is.kind.media', () => {
@@ -62,6 +63,8 @@ describe('Peer.Is', () => {
       test(' media:screen ', false);
       test('media:video', true);
       test('media:screen', true);
+      test({ kind: 'media:video' }, true);
+      test({ kind: 'media:screen' }, true);
     });
 
     it('Is.kind.video', () => {
@@ -69,8 +72,9 @@ describe('Peer.Is', () => {
         expect(PeerIs.kind.video(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test('data', false);
-      test('media:video', true);
       test('media:screen', false);
+      test('media:video', true);
+      test({ kind: 'media:video' }, true);
     });
 
     it('Is.kind.screen', () => {
@@ -80,6 +84,7 @@ describe('Peer.Is', () => {
       test('data', false);
       test('media:video', false);
       test('media:screen', true);
+      test({ kind: 'media:screen' }, true);
     });
   });
 });
