@@ -1,6 +1,5 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
-import { Color, Doc, css, type t } from '../common';
-import { Statusbar } from '../ui.Statusbar';
+import { Color, Doc, Statusbar, css, type t } from './common';
 
 export type TDoc = { text: string };
 

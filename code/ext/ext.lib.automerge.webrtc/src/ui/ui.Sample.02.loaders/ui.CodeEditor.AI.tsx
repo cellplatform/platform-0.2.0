@@ -1,5 +1,5 @@
-import { Dev, type t } from '../../../test.ui';
 import { Sample } from 'ext.lib.ai.openai';
+import { Dev, type t } from '../../test.ui';
 
 export type CodeEditorAIProps = {
   store: t.Store;

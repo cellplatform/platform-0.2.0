@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+
+import { Info } from 'ext.lib.automerge';
 import { Image } from 'sys.ui.react.media.image';
-import { COLORS, Color, css, rx, type t } from './-common';
+import { COLORS, Color, WebStore, css, rx, type t } from './common';
 
-import { ImageBinary } from 'sys.ui.react.media.image/src/types';
-
+import type { ImageBinary } from 'sys.ui.react.media.image/src/types';
 type TDoc = { image?: ImageBinary };
 
 export type ImageCrdtProps = {
@@ -15,6 +16,7 @@ export type ImageCrdtProps = {
 export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const { store, docuri } = props;
 
+  const [index, setIndex] = useState<t.WebStoreIndex>();
   const [doc, setDoc] = useState<t.DocRef<TDoc>>();
   const [_, setRedraw] = useState(0);
   const redraw = () => setRedraw((n) => n + 1);
@@ -24,6 +26,9 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
    */
   useEffect(() => {
     const life = rx.lifecycle();
+    WebStore.index(store).then((index) => {
+      if (life.disposed) setIndex(index);
+    });
 
     store.doc.get<TDoc>(docuri).then((doc) => {
       if (life.disposed || !doc) return;
@@ -44,7 +49,8 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
     right: css({
       display: 'grid',
       borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
-      width: 200,
+      width: 260,
+      Padding: [8, 10],
     }),
   };
 
@@ -54,18 +60,16 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
         <Image
           src={doc?.current.image}
           onDropOrPaste={(e) => {
-            console.info('⚡️ onDropOrPaste:', e);
-            if (!e.isSupported) return;
-
-            if (e.isSupported && doc) {
-              // state.change((d) => (d.props.src = e.file));
-              // if (crdt && e.file) crdt.update(e.file);
-              doc.change((d) => (d.image = e.file));
-            }
+            if (e.isSupported) doc?.change((d) => (d.image = e.file));
           }}
         />
       </div>
-      <div {...styles.right}>{`🐷 right`}</div>
+      <div {...styles.right}>
+        <Info
+          fields={['Repo', 'Doc', 'Doc.URI']}
+          data={{ repo: { store, index }, document: { doc } }}
+        />
+      </div>
     </div>
   );
 };

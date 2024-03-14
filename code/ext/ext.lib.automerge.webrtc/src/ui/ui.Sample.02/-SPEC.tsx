@@ -3,7 +3,7 @@ import { type t } from './common';
 import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { createEdge } from './-SPEC.edge';
 import { monitorKeyboard } from './-SPEC.keyboard';
-import { loader } from './-loaders/-factory';
+import { factory } from '../ui.Sample.02.loaders';
 import { PeerRepoList } from './common';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
@@ -108,7 +108,7 @@ export default Dev.describe(name, async (e) => {
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
           const stream = state.current.stream;
-          elOverlay = loader
+          elOverlay = factory
             .ctx({ store, docuri, accessToken, stream })
             .render(typename, { style });
         }

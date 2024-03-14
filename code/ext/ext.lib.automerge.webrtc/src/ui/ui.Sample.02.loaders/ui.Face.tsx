@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../../test.ui';
+import { Dev, type t } from '../../test.ui';
 import { Sample } from 'ext.lib.ai.faceapi';
 
 export type FaceProps = {
