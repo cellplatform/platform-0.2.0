@@ -3778,6 +3778,13 @@ automerge-repo-network-peerjs@1.1.2:
     eventemitter3 "5.0.1"
     peerjs "1.5.2"
 
+automerge-tldraw@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/automerge-tldraw/-/automerge-tldraw-0.2.0.tgz#75004c429ac6245249a62313840d21d94ae02b55"
+  integrity sha512-CcWIhVxLPu7G7e1RPzb7YGDpmg5BvHahBZ3tukZfB/MnkKeYapPpPzm3VzbNFYNdOY126O+u2VTs8Q93rueK9g==
+  dependencies:
+    lodash "^4.17.21"
+
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
