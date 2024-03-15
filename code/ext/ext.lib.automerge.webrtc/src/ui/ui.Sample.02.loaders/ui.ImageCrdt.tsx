@@ -16,11 +16,13 @@ export type ImageCrdtProps = {
 export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const { store, docuri } = props;
 
-  const [isOverRight, setOverRight] = useState(false);
+  const [isOver, setOver] = useState(false);
   const [index, setIndex] = useState<t.WebStoreIndex>();
   const [doc, setDoc] = useState<t.DocRef<TDoc>>();
   const [_, setRedraw] = useState(0);
+
   const redraw = () => setRedraw((n) => n + 1);
+  const over = (isOver: boolean) => () => setOver(isOver);
 
   /**
    * Lifecycle
@@ -53,8 +55,8 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
       Padding: [8, 10],
       borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       backgroundColor: Color.alpha(COLORS.WHITE, 0.85),
-      pointerEvents: isOverRight ? 'auto' : 'none',
-      opacity: isOverRight ? 1 : 0,
+      pointerEvents: 'none',
+      opacity: isOver ? 1 : 0,
       transition: `opacity 0.3s`,
       backdropFilter: `blur(10px)`,
       display: 'grid',
@@ -62,7 +64,7 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
       <div {...styles.left}>
         <Image
           src={doc?.current.image}
@@ -71,14 +73,14 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
           }}
         />
       </div>
-      <div
-        {...styles.right}
-        onMouseEnter={() => setOverRight(true)}
-        onMouseLeave={() => setOverRight(false)}
-      >
+      <div {...styles.right}>
         <Info
-          fields={['Repo', 'Doc', 'Doc.URI']}
-          data={{ repo: { store, index }, document: { doc } }}
+          fields={['Repo', 'Doc', 'Doc.URI', 'History']}
+          data={{
+            repo: { store, index },
+            document: { doc },
+            history: { doc },
+          }}
         />
       </div>
     </div>
