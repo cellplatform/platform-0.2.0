@@ -17,9 +17,12 @@ export const SampleCrdt = {
     const render = (style?: t.CssValue) => {
       return (
         <CrdtInfo
-          fields={['Repo', 'Doc', 'Doc.URI']}
-          data={{ repo: { store, index }, document: { doc } }}
           style={style}
+          fields={['Repo', 'Doc', 'Doc.URI']}
+          data={{
+            repo: { store, index },
+            document: { doc },
+          }}
         />
       );
     };
