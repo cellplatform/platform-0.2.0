@@ -154,7 +154,8 @@
   "resolutions": {
     "axios": ">=1.6.7",
     "node-fetch": ">=2.6.7",
-    "jose": ">=4.15.5"
+    "jose": ">=4.15.5",
+    "follow-redirects": ">=1.15.6"
   },
   "license": "MIT",
   "private": true
