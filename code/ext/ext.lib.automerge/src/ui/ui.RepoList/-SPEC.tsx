@@ -177,7 +177,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.reload = true));
+        await e.state.change((d) => (d.debug.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
     });

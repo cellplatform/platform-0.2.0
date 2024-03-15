@@ -1,8 +1,8 @@
 import { Info } from '.';
-import { Dev, Pkg, TestDb, Value, WebStore, type t } from '../../test.ui';
+import { Dev, Pkg, TestDb, Value, DevReload, WebStore, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps };
-const initial: T = { props: {} };
+type T = { props: t.InfoProps; debug: { reload?: boolean } };
+const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
@@ -41,6 +41,8 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>(async (e) => {
+        if (e.state.debug.reload) return <DevReload />;
+
         const fields = e.state.props.fields ?? [];
         const doc = fields.includes('Doc') ? await docAtIndex(0) : undefined;
 
@@ -108,6 +110,15 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
+      dev.button('create doc', async (e) => {
+        await store.doc.getOrCreate((d) => null);
+        dev.redraw();
+      });
+      dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
+        await e.state.change((d) => (d.debug.reload = true));
+        await TestDb.Spec.deleteDatabase();
+      });
+      dev.hr(-1, 5);
       dev.button(['write sample BLOB', '[Uint8Array]'], async (e) => {
         type T = { binary?: Uint8Array };
         const doc = await docAtIndex<T>(0);
@@ -116,13 +127,24 @@ export default Dev.describe(name, async (e) => {
         doc?.change((d) => (d.binary = binary));
         dev.redraw();
       });
+      dev.button(['increment', 'count + 1'], async (e) => {
+        type T = { count?: number };
+        const doc = await docAtIndex<T>(0);
+        doc?.change((d) => (d.count = (d.count ?? 0) + 1));
+      });
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+    dev.footer.border(-0.1).render<T>(async (e) => {
+      const { props } = e.state;
+      const crdt = (await docAtIndex(0))?.current;
+      const data = {
+        props,
+        'crdt:storage': storage,
+        crdt,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
