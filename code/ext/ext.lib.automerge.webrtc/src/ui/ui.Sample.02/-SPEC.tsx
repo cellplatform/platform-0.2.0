@@ -100,7 +100,6 @@ export default Dev.describe(name, async (e) => {
     ctx.debug.width(300);
 
     ctx.debug.header.border(-0.1).render((e) => {
-      const conns = left.network.peer.current.connections;
       return (
         <PeerUI.AvatarTray
           //
