@@ -99,6 +99,10 @@ export const Is = {
       typeof obj.list === 'function'
     );
   },
+
+  handle(input: any): input is typeof DocHandle {
+    return input instanceof DocHandle;
+  },
 } as const;
 
 /**
