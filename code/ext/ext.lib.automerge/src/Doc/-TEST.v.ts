@@ -200,5 +200,34 @@ describe('Store (base)', async () => {
     });
   });
 
+  describe('Doc.history', () => {
+    it('initial: <none>', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => null);
+      const history = Doc.history(doc);
+      expect(history.length).to.eql(1);
+      expect(history[0].snapshot).to.eql({});
+    });
+
+    it('initial: change', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
+      const history = Doc.history(doc);
+      expect(history.length).to.eql(2);
+      expect(history[0].snapshot).to.eql({});
+      expect(history[1].snapshot).to.eql({ msg: 'hello' });
+    });
+
+    it('change history', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => null);
+      expect(Doc.history(doc).length).to.eql(1);
+
+      doc.change((d) => (d.msg = 'hello'));
+
+      const history = Doc.history(doc);
+      expect(history.length).to.eql(2);
+      expect(history[0].snapshot).to.eql({});
+      expect(history[1].snapshot).to.eql({ msg: 'hello' });
+    });
+  });
+
   it('|test.dispose|', () => store.dispose());
 });

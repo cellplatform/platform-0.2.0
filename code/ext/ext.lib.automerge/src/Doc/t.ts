@@ -55,3 +55,9 @@ type TOptions = { timeout?: t.Msecs };
 export type DocWithMeta = { '.meta': DocMeta };
 export type DocMetaType = { name: string };
 export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
+
+/**
+ * History
+ */
+export type DocHistory<T> = DocHistoryItem<T>[];
+export type DocHistoryItem<T> = t.State<T>;

@@ -1,4 +1,4 @@
-export type { next as A, Patch, PatchInfo } from '@automerge/automerge';
+export type { next as A, Patch, PatchInfo, State } from '@automerge/automerge';
 
 export type {
   AutomergeUrl,
