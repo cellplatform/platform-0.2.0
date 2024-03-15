@@ -2,7 +2,10 @@ import { CrdtInfo, TestDb, WebStore, type t } from '../../test.ui';
 
 type TDoc = { image?: t.ImageBinary | null };
 
-export const BinaryCrdt = {
+export const SampleCrdt = {
+  /**
+   * Initialize a sample CRDT data store for the spec.
+   */
   async init(docuri?: string, options: { dispose$?: t.UntilObservable } = {}) {
     const storage = TestDb.Spec.name;
     const store = WebStore.init({ storage, dispose$: options?.dispose$ });

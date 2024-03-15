@@ -12,7 +12,7 @@ import {
   css,
   type t,
 } from '../../test.ui';
-import { BinaryCrdt } from './-SPEC.BinaryCrdt';
+import { SampleCrdt } from './-SPEC.crdt';
 import { Util } from './u';
 
 const DEFAULTS = Image.DEFAULTS;
@@ -36,16 +36,16 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & Pick<t.ImageProps, 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    debug: false,
     bg: true,
+    docuri: undefined,
+    debug: false,
     dataEnabled: false,
     dropEnabled: true,
     pasteEnabled: true,
     pastePrimary: false,
-    docuri: undefined,
   });
 
-  const crdt = await BinaryCrdt.init(local.docuri);
+  const crdt = await SampleCrdt.init(local.docuri);
   local.docuri = crdt.doc.uri;
 
   e.it('ui:init', async (e) => {
