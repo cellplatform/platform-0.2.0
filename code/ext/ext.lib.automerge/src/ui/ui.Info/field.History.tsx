@@ -2,7 +2,7 @@ import { Doc, Time, Value, type t } from './common';
 
 type D = t.InfoDataHistory;
 
-export function history(history: D, fields: t.InfoField[]) {
+export function history(history: D | undefined, fields: t.InfoField[]) {
   if (!history) return;
 
   const doc = history.doc;

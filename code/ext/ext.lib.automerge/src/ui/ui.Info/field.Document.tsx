@@ -2,7 +2,7 @@ import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoDataDocument;
 
-export function doc(data: D, fields: t.InfoField[]) {
+export function doc(data: D | undefined, fields: t.InfoField[]) {
   if (!data) return;
   const res: t.PropListItem[] = [];
   const label = data.label ?? 'Document';
