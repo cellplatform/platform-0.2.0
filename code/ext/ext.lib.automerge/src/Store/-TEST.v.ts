@@ -46,4 +46,29 @@ describe('Store (base)', async () => {
       expect(count).to.eql(1);
     });
   });
+
+  describe('Store.handle', () => {
+    it('invalid input', async () => {
+      const fails = [null, undefined, 123, [], {}, false];
+      fails.forEach((value: any) => {
+        const fn = () => Store.handle(value);
+        expect(fn).to.throw(/input does not have a handle/);
+      });
+    });
+
+    it('retrieve handle', async () => {
+      const { store, generator } = testSetup();
+
+      const docRef = await generator();
+      const docRefHandle = docRef as t.DocRefHandle<D>;
+      const handle1 = Store.handle(docRef);
+      const handle2 = Store.handle(docRefHandle);
+
+      expect(Is.handle(handle1)).to.eql(true);
+      expect(Is.handle(handle2)).to.eql(true);
+      expect(handle1).to.equal(handle2);
+
+      store.dispose();
+    });
+  });
 });

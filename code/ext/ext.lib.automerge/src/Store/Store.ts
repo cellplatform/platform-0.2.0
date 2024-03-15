@@ -80,4 +80,13 @@ export const Store = {
 
     return api;
   },
+
+  /**
+   * Retrieve handle
+   */
+  handle<T>(input: t.DocRef<T>) {
+    const handle = (input as t.DocRefHandle<T>)?.handle;
+    if (!Is.handle(handle)) throw new Error('input does not have a handle');
+    return handle;
+  },
 } as const;

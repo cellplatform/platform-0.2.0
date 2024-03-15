@@ -60,7 +60,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
   });
 
   e.describe('lifecycle', (e) => {
-    e.it('dispose', async (e) => {
+    e.it('dispose', (e) => {
       const store = WebStore.init({ storage: { name } });
       expect(store.disposed).to.eql(false);
       store.dispose();
@@ -99,6 +99,12 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       const doc2 = await store.doc.getOrCreate<D>(initial, doc1.uri);
       expect(doc1.uri).to.eql(doc2.uri);
       expect(doc1.current).to.equal(doc2.current);
+    });
+
+    e.it('WebStore.handle( ... )', async (e) => {
+      const doc = await store.doc.getOrCreate<D>(initial);
+      const handle = WebStore.handle(doc);
+      expect(Is.handle(handle)).to.eql(true);
     });
   });
 

@@ -20,7 +20,7 @@ export default Test.describe('Store.Web: Index', (e) => {
     e.it('initialise: throws if not WebStore', async (e) => {
       const store = Store.init();
       const fn = () => WebStore.index(store);
-      await expectError(fn, '[Store] is not a [WebStore]/');
+      await expectError(fn, '[Store] is not a [WebStore]');
     });
 
     e.it('disposes of Index events when store/repo is disposed', async (e) => {

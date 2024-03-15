@@ -19,6 +19,7 @@ type Init = {
  */
 export const WebStore = {
   Provider: RepoContext.Provider,
+  handle: Store.handle,
 
   get IndexDb() {
     return StoreIndexDb;
