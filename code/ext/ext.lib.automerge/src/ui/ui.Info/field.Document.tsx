@@ -1,6 +1,6 @@
 import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
-type D = t.InfoData['document'];
+type D = t.InfoDataDocument;
 
 export function doc(data: D, fields: t.InfoField[]) {
   if (!data) return;
@@ -45,7 +45,7 @@ export function doc(data: D, fields: t.InfoField[]) {
       </div>
     );
 
-    res.push({ label, value, divider: false });
+    res.push({ label, value });
   }
 
   /**

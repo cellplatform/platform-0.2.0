@@ -13,6 +13,7 @@ const View: React.FC<t.InfoProps> = (props) => {
     .field('Repo', () => InfoField.repo(data.repo))
     .field('Component', () => InfoField.component(data.component))
     .field('Doc', () => InfoField.doc(data.document, fields))
+    .field('History', () => InfoField.history(data.document, fields))
     .items(fields);
 
   return (

@@ -44,29 +44,31 @@ export default Dev.describe(name, async (e) => {
         const fields = e.state.props.fields ?? [];
         const doc = fields.includes('Doc') ? await docAtIndex(0) : undefined;
 
-        return (
-          <Info
-            {...e.state.props}
-            data={{
-              repo: { store, index },
-              document: {
-                // label: '',
-                doc,
-                object: { name: 'foobar', expand: { level: 2 } },
-                onIconClick(e) {
-                  console.info('⚡️ document.onIconClick', e);
-                  state.change((d) => {
-                    const fields = d.props.fields ?? [];
-                    d.props.fields = fields.includes('Doc.Object')
-                      ? fields.filter((f) => f !== 'Doc.Object')
-                      : [...fields, 'Doc.Object'];
-                    local.selectedFields = d.props.fields;
-                  });
-                },
-              },
-            }}
-          />
-        );
+        const toggleDocObjectVisibility = () => {
+          state.change((d) => {
+            const fields = d.props.fields ?? [];
+            d.props.fields = fields.includes('Doc.Object')
+              ? fields.filter((f) => f !== 'Doc.Object')
+              : [...fields, 'Doc.Object'];
+            local.selectedFields = d.props.fields;
+          });
+        };
+
+        const data: t.InfoData = {
+          repo: { store, index },
+          document: {
+            // label: '',
+            doc,
+            object: { name: 'foobar', expand: { level: 2 } },
+            onIconClick(e) {
+              console.info('⚡️ document.onIconClick', e);
+              toggleDocObjectVisibility();
+            },
+          },
+          history: { doc },
+        };
+
+        return <Info {...e.state.props} data={data} />;
       });
   });
 
@@ -98,6 +100,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(0, [10, 10]).title('Common States');
       dev.button('Repo / Doc', (e) => update(['Repo', 'Doc', 'Doc.URI']));
       dev.button('Repo / Doc / Object', (e) => update(['Repo', 'Doc', 'Doc.URI', 'Doc.Object']));
+      dev.button('Repo / Doc / History', (e) => update(['Repo', 'Doc', 'Doc.URI', 'History']));
     });
 
     dev.hr(5, 20);

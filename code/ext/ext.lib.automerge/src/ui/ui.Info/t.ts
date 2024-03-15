@@ -7,13 +7,15 @@ export type InfoField =
   | 'Repo'
   | 'Doc'
   | 'Doc.URI'
-  | 'Doc.Object';
+  | 'Doc.Object'
+  | 'History';
 
 export type InfoData = {
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   repo?: InfoDataRepo;
   document?: InfoDataDocument;
+  history?: InfoDataHistory;
 };
 
 export type InfoDataRepo = {
@@ -29,6 +31,11 @@ export type InfoDataDocument = {
   uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   onIconClick?: (e: {}) => void;
+};
+
+export type InfoDataHistory = {
+  label?: string;
+  doc?: t.DocRef<unknown>;
 };
 
 /**

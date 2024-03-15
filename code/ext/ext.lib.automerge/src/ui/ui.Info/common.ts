@@ -1,4 +1,5 @@
 import { type t } from '../common';
+
 export { Doc } from '../../Doc';
 export * from '../common';
 
@@ -9,7 +10,16 @@ export * from '../common';
 export const DEFAULTS = {
   fields: {
     get all(): t.InfoField[] {
-      return ['Module', 'Module.Verify', 'Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Object'];
+      return [
+        'Module',
+        'Module.Verify',
+        'Component',
+        'Repo',
+        'Doc',
+        'Doc.URI',
+        'Doc.Object',
+        'History',
+      ];
     },
     get default(): t.InfoField[] {
       return ['Module', 'Module.Verify'];
