@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { TLStoreSnapshot, TLStoreWithStatus } from '@tldraw/tldraw';
 
 /**
  * @system

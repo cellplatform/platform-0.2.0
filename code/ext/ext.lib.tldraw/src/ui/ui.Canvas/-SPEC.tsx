@@ -1,25 +1,33 @@
 import { Canvas } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, TestDb, type t } from '../../test.ui';
+import { SampleCrdt } from './-SPEC.crdt';
 import { Link } from './-SPEC.ui.Link';
+import { CanvasSample } from './-SPEC.ui.Sample';
 
-type T = { props: t.CanvasProps };
-const initial: T = { props: {} };
+type T = { props: t.CanvasProps; debug: { reload?: boolean; docuri?: string } };
+const initial: T = { props: {}, debug: {} };
 
 const URLS = {
   docs: 'https://tldraw.dev',
   repo: 'https://github.com/tldraw/tldraw?tab=readme-ov-file',
+  automergeTldraw: 'https://github.com/pvh/automerge-tldraw',
+  automergeTldrawExample: 'https://github.com/pvh/tldraw-automerge-example',
 } as const;
 
 /**
  * Spec
  */
 const name = 'Canvas';
-export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.CanvasProps, 'behaviors'>;
+export default Dev.describe(name, async (e) => {
+  type LocalStore = T['debug'] & Pick<t.CanvasProps, 'behaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     behaviors: Canvas.DEFAULTS.behaviors.default,
+    docuri: undefined,
   });
+
+  const crdt = await SampleCrdt.init(local.docuri);
+  local.docuri = crdt.doc.uri;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -36,7 +44,9 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Canvas {...e.state.props} />;
+        if (e.state.debug.reload) return <DevReload />;
+        const userId = 'foo-1234'; // TEMP 🐷
+        return <CanvasSample {...e.state.props} doc={crdt.doc} userId={userId} />;
       });
   });
 
@@ -48,8 +58,10 @@ export default Dev.describe(name, (e) => {
       const link = (title: string, href: string) => {
         dev.row((e) => <Link href={href} title={title} style={{ marginLeft: 8 }} />);
       };
-      link('(docs):', URLS.docs);
-      link('(repo):', URLS.repo);
+      link('docs:', URLS.docs);
+      link('repo:', URLS.repo);
+      link('automerge-tldraw', URLS.automergeTldraw);
+      link('automerge-tldraw-example', URLS.automergeTldrawExample);
     });
 
     dev.hr(5, 20);
@@ -66,13 +78,36 @@ export default Dev.describe(name, (e) => {
         />
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('State', (dev) => {
+      dev.row((e) => crdt?.render({ Margin: [15, 0, 0, 0] }));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
+      dev.button([`delete database: "${crdt.storage}"`, '💥'], async (e) => {
+        e.state.change((d) => (d.debug.reload = true));
+        await TestDb.Spec.deleteDatabase();
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { props } = e.state;
+      const data = {
+        props,
+        crdt: crdt.doc.current,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
