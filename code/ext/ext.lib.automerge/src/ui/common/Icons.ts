@@ -1,4 +1,4 @@
-import { LuShare } from 'react-icons/lu';
+import { LuGitCommit, LuShare } from 'react-icons/lu';
 import { MdAdd, MdClose, MdDone, MdRefresh, MdSettingsInputAntenna } from 'react-icons/md';
 import { TbDatabase } from 'react-icons/tb';
 import { VscRepo, VscSymbolClass } from 'react-icons/vsc';
@@ -19,4 +19,5 @@ export const Icons = {
   Share: icon(LuShare),
   Antenna: icon(MdSettingsInputAntenna),
   Object: icon(VscSymbolClass),
+  Git: { Commit: icon(LuGitCommit) },
 } as const;
