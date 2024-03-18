@@ -6,6 +6,10 @@ export const Wrangle = {
   format,
   theme,
 
+  fields<T extends string>(input?: (T | undefined | null)[]): T[] {
+    return (input ?? []).filter(Boolean) as T[];
+  },
+
   sizeProp(input?: t.PropListSize | number) {
     return typeof input === 'number' ? { fixed: input } : input;
   },

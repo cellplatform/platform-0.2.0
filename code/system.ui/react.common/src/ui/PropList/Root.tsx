@@ -9,7 +9,7 @@ import { Hash } from './ui.Item';
 type Fields = {
   THEMES: typeof THEMES;
   DEFAULTS: typeof DEFAULTS;
-  Wrangle: { title: typeof Wrangle.title };
+  Wrangle: { title: typeof Wrangle.title; fields: typeof Wrangle.fields };
   builder<F extends string>(): t.PropListFieldBuilder<F>;
   FieldBuilder: typeof FieldBuilder;
   FieldSelector: typeof FieldSelector;
@@ -22,7 +22,7 @@ export const PropList = FC.decorate<t.PropListProps, Fields>(
   {
     THEMES,
     DEFAULTS,
-    Wrangle: { title: Wrangle.title },
+    Wrangle: { title: Wrangle.title, fields: Wrangle.fields },
     builder: FieldBuilder,
     FieldBuilder,
     FieldSelector,
