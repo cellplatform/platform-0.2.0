@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Hash, Color, COLORS, css, DEFAULTS, FC, rx, type t, Icons } from './common';
+import { COLORS, Hash, Icons, css, type t } from './common';
 
 export type HistoryCommitProps = {
   index: number;
@@ -10,6 +9,12 @@ export type HistoryCommitProps = {
 export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
   const { index, commit } = props;
   const hash = commit.change.hash;
+
+  /**
+   * Handlers
+   */
+  const onClick = () => {
+  };
 
   /**
    * Render
@@ -34,7 +39,7 @@ export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onClick={onClick}>
       <div {...styles.left}>
         <Icons.Git.Commit size={16} style={{ transform: 'rotate(90deg)' }} />
       </div>

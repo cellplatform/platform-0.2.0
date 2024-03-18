@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { PropList, Dev, Pkg, TestDb, Value, DevReload, WebStore, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, PropList, TestDb, Value, WebStore, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps; debug: { reload?: boolean } };
 const initial: T = { props: {}, debug: {} };

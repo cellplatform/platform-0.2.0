@@ -37,6 +37,7 @@ export type InfoDataDocument = {
 export type InfoDataHistory = {
   label?: string;
   doc?: t.DocRef<unknown>;
+  list?: { page?: number; limit?: number; sort: 'asc' | 'desc' };
 };
 
 /**

@@ -8,6 +8,10 @@ export * from '../common';
  */
 
 export const DEFAULTS = {
+  history: {
+    label: 'History',
+    list: { page: 1, limit: 10, sort: 'desc' },
+  },
   fields: {
     get all(): t.InfoField[] {
       return [
