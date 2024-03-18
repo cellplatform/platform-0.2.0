@@ -1,12 +1,16 @@
-import { describe, it, expect, type t } from '../../../test';
 import { PropList } from '..';
+import { describe, expect, it } from '../../../test';
 
 describe('PropList', () => {
   describe('PropList.fields', () => {
     type TField = 'Foo' | 'Bar' | 'Zoo';
 
-    it('undefined', () => {
-      expect(PropList.Wrangle.fields()).to.eql([]);
+    it('undefined ← defaults', () => {
+      const defaults: TField[] = ['Foo', 'Zoo'];
+      const res1 = PropList.Wrangle.fields(undefined);
+      const res2 = PropList.Wrangle.fields(undefined, defaults);
+      expect(res1).to.eql([]);
+      expect(res2).to.eql(defaults);
     });
 
     it('dense array', async () => {

@@ -6,8 +6,8 @@ export const Wrangle = {
   format,
   theme,
 
-  fields<T extends string>(input?: (T | undefined | null)[]): T[] {
-    return (input ?? []).filter(Boolean) as T[];
+  fields<T extends string>(input: (T | undefined | null)[] | undefined, defaults?: T[]): T[] {
+    return (input ?? defaults ?? []).filter(Boolean) as T[];
   },
 
   sizeProp(input?: t.PropListSize | number) {
