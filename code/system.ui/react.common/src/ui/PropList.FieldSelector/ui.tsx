@@ -3,16 +3,16 @@ import { Button, css, DEFAULTS, KeyboardMonitor, rx, useMouse, type t } from './
 
 import { View as PropList } from '../PropList/ui';
 import { Label } from './ui.Label';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
-    selected = [],
     resettable = DEFAULTS.resettable,
     indexes = DEFAULTS.indexes,
     indent = DEFAULTS.indent,
   } = props;
-  const all = [...(props.all ?? [])];
+  const selected = Wrangle.fields(props.selected);
+  const all = Wrangle.fields([...(props.all ?? [])]);
   const isSelected = (field: string) => selected.includes(field);
 
   const mouse = useMouse();

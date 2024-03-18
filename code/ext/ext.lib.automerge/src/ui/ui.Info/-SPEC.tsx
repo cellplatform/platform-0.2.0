@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Dev, Pkg, TestDb, Value, DevReload, WebStore, type t } from '../../test.ui';
+import { PropList, Dev, Pkg, TestDb, Value, DevReload, WebStore, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps; debug: { reload?: boolean } };
 const initial: T = { props: {}, debug: {} };
@@ -52,7 +52,7 @@ export default Dev.describe(name, async (e) => {
             d.props.fields = fields.includes('Doc.Object')
               ? fields.filter((f) => f !== 'Doc.Object')
               : [...fields, 'Doc.Object'];
-            local.selectedFields = d.props.fields;
+            local.selectedFields = PropList.Wrangle.fields<t.InfoField>(d.props.fields);
           });
         };
 
@@ -82,6 +82,9 @@ export default Dev.describe(name, async (e) => {
         dev.change((d) => (d.props.fields = fields));
         local.selectedFields = fields?.length === 0 ? undefined : fields;
       };
+      const set = (label: string, fields: t.InfoField[]) => {
+        dev.button(label, (e) => update(fields));
+      };
 
       dev.row((e) => {
         const props = e.state.props;
@@ -93,16 +96,16 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               update(fields);
             }}
           />
         );
       });
       dev.hr(0, [10, 10]).title('Common States');
-      dev.button('Repo / Doc', (e) => update(['Repo', 'Doc', 'Doc.URI']));
-      dev.button('Repo / Doc / Object', (e) => update(['Repo', 'Doc', 'Doc.URI', 'Doc.Object']));
-      dev.button('Repo / Doc / History', (e) => update(['Repo', 'Doc', 'Doc.URI', 'History']));
+      set('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
+      set('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      set('Repo / Doc / History ( +List )', ['Repo', 'Doc', 'Doc.URI', 'History', 'History.List']);
     });
 
     dev.hr(5, 20);

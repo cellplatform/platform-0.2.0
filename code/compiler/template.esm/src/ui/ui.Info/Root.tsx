@@ -5,7 +5,8 @@ import { Field } from './field';
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
-  const { fields = DEFAULTS.fields.default, data = {} } = props;
+  const { data = {} } = props;
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())

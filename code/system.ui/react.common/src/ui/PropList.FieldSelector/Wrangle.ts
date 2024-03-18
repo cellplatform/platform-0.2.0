@@ -1,8 +1,11 @@
 import { type t } from './common';
+import { fields } from '../PropList/u.fields';
 
 type ClickArgs<F extends string = string> = t.PropListFieldSelectorClickHandlerArgs<F>;
 
 export const Wrangle = {
+  fields,
+
   isSubfield(all: string[], field: string) {
     if (!field.includes('.')) return false;
     const prefix = field.substring(0, field.lastIndexOf('.'));

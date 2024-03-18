@@ -6,4 +6,4 @@ export type { CssValue, CssEdgesInput, PropListProps } from 'sys.ui.react.common
 /**
  * @local
  */
-export type * from '../../common/types.mjs';
+export type * from '../../common/t';

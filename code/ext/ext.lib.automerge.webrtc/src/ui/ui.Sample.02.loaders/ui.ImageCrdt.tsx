@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import type { InfoField } from 'ext.lib.automerge/src/types';
 
+import { useEffect, useState } from 'react';
 import { Info } from 'ext.lib.automerge';
 import { Image } from 'sys.ui.react.media.image';
 import { COLORS, Color, WebStore, css, rx, type t } from './common';
@@ -16,6 +17,7 @@ export type ImageCrdtProps = {
 export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const { store, docuri } = props;
 
+  const [showDocJson, setShowDocJson] = useState(false);
   const [isOver, setOver] = useState(false);
   const [index, setIndex] = useState<t.WebStoreIndex>();
   const [doc, setDoc] = useState<t.DocRef<TDoc>>();
@@ -23,6 +25,7 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
 
   const redraw = () => setRedraw((n) => n + 1);
   const over = (isOver: boolean) => () => setOver(isOver);
+  // const toggleShowJson = () => setShowDocJson((prev) => !prev)
 
   /**
    * Lifecycle
@@ -49,19 +52,36 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const styles = {
     base: css({ display: 'grid', backgroundColor: COLORS.WHITE }),
     left: css({ display: 'grid' }),
-    right: css({
-      Absolute: [0, 0, 0, null],
-      width: 260,
-      Padding: [8, 10],
-      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      backgroundColor: Color.alpha(COLORS.WHITE, 0.85),
-      pointerEvents: 'none',
-      opacity: isOver ? 1 : 0,
-      transition: `opacity 0.3s`,
-      backdropFilter: `blur(10px)`,
-      display: 'grid',
-    }),
+    right: {
+      base: css({
+        Absolute: [0, 0, 0, null],
+        width: 280,
+        borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+        backgroundColor: Color.alpha(COLORS.WHITE, 0.85),
+        // pointerEvents: 'none',
+        opacity: isOver ? 1 : 0,
+        transition: `opacity 0.3s`,
+        backdropFilter: `blur(10px)`,
+        display: 'grid',
+      }),
+      inner: css({
+        Absolute: 0,
+        Scroll: true,
+        Padding: [8, 10, 10, 10],
+        display: 'grid',
+      }),
+    },
   };
+
+  type T = InfoField | undefined;
+  const fields: T[] = [
+    'Repo',
+    'Doc',
+    'Doc.URI',
+    showDocJson ? 'Doc.Object' : undefined,
+    'History',
+    'History.List',
+  ];
 
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
@@ -73,15 +93,21 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
           }}
         />
       </div>
-      <div {...styles.right}>
-        <Info
-          fields={['Repo', 'Doc', 'Doc.URI', 'History']}
-          data={{
-            repo: { store, index },
-            document: { doc },
-            history: { doc },
-          }}
-        />
+      <div {...styles.right.base}>
+        <div {...styles.right.inner}>
+          <Info
+            style={{ marginBottom: 30 }}
+            fields={fields.filter(Boolean) as InfoField[]}
+            data={{
+              repo: { store, index },
+              history: { doc },
+              document: {
+                doc,
+                onIconClick: () => setShowDocJson((prev) => !prev),
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

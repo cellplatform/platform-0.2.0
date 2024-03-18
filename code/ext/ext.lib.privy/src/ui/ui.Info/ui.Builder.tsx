@@ -8,10 +8,10 @@ import { Field } from './field';
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
-    fields = DEFAULTS.fields.default,
     clipboard = DEFAULTS.clipboard,
     data = DEFAULTS.data,
   } = props;
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
   const refresh$ = refreshRef$.current;

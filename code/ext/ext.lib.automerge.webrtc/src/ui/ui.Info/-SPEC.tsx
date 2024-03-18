@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
+import { PropList, COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
 type T = {
@@ -64,7 +64,7 @@ export default Dev.describe(name, async (e) => {
                     d.props.fields = fields.includes('Network.Shared.Json')
                       ? fields.filter((f) => f !== 'Network.Shared.Json')
                       : [...fields, 'Network.Shared.Json'];
-                    local.selectedFields = d.props.fields;
+                    local.selectedFields = PropList.Wrangle.fields(d.props.fields);
                   });
                 },
               },
@@ -101,7 +101,7 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               setFields(fields);
             }}
           />

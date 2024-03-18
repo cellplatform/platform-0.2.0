@@ -1,12 +1,13 @@
-import { Dev, PropList, type t } from '../../../test.ui';
-import { Info, type InfoProps } from '..';
+import { Info } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
+const name = Info.displayName ?? '';
 
-export default Dev.describe('Info', (e) => {
+export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.vime.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept');
   const local = localstore.object({
     selectedFields: Info.DEFAULTS.fields,
   });
@@ -42,7 +43,7 @@ export default Dev.describe('Info', (e) => {
             all={Info.FIELDS}
             selected={props.fields}
             onClick={(ev) => {
-              const fields = ev.next as InfoProps['fields'];
+              const fields = ev.next as t.InfoField[];
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}
@@ -56,7 +57,7 @@ export default Dev.describe('Info', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'Info'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

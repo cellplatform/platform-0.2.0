@@ -1,14 +1,12 @@
 import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
 import { format } from './u.format';
 import { theme } from './u.theme';
+import { fields } from './u.fields';
 
 export const Wrangle = {
   format,
   theme,
-
-  fields<T extends string>(input: (T | undefined | null)[] | undefined, defaults?: T[]): T[] {
-    return (input ?? defaults ?? []).filter(Boolean) as T[];
-  },
+  fields,
 
   sizeProp(input?: t.PropListSize | number) {
     return typeof input === 'number' ? { fixed: input } : input;
@@ -104,4 +102,4 @@ export const Wrangle = {
     const right = list[1] ?? null;
     return [left, right] as [t.PropListTitleContent, t.PropListTitleContent];
   },
-};
+} as const;

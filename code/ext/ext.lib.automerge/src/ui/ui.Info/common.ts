@@ -19,6 +19,7 @@ export const DEFAULTS = {
         'Doc.URI',
         'Doc.Object',
         'History',
+        'History.List',
       ];
     },
     get default(): t.InfoField[] {

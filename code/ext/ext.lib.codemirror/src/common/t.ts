@@ -12,4 +12,4 @@ export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types';
 /**
  * @local
  */
-export type * from '../types.mjs';
+export type * from '../types';

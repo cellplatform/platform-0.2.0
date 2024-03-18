@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}

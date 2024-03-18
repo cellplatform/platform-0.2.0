@@ -45,7 +45,7 @@ export type InfoProps = {
   enabled?: boolean;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
+  fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;

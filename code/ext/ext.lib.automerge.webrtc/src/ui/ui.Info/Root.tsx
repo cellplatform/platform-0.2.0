@@ -14,7 +14,8 @@ import { useRedraw } from './use.Redraw';
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
-  const { fields = DEFAULTS.fields.default, data = {} } = props;
+  const { data = {} } = props;
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   useRedraw(data);
   const shared = useShared(data.network);

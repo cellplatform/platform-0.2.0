@@ -39,7 +39,7 @@ export type InfoData = {
 export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
+  fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;

@@ -6,7 +6,8 @@ import { Field } from './field';
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { fields = DEFAULTS.fields.default, stateful = DEFAULTS.stateful } = props;
+  const { stateful = DEFAULTS.stateful } = props;
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
   const { data } = useStateController({
     enabled: stateful,
     data: props.data,

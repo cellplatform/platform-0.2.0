@@ -1,7 +1,7 @@
-import { Dev, PropList, type t } from '../../test.ui';
-import { Info, type InfoProps } from '.';
+import { Info } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
 
 /**
@@ -46,7 +46,7 @@ export default Dev.describe(name, (e) => {
             all={Info.FIELDS}
             selected={props.fields}
             onClick={(ev) => {
-              const fields = ev.next as InfoProps['fields'];
+              const fields = ev.next as t.InfoField[];
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}

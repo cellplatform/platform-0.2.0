@@ -204,28 +204,29 @@ describe('Store (base)', async () => {
     it('initial: <none>', async () => {
       const doc = await store.doc.getOrCreate<D>((d) => null);
       const history = Doc.history(doc);
-      expect(history.length).to.eql(1);
-      expect(history[0].snapshot).to.eql({});
+      const commits = history.commits;
+      expect(commits.length).to.eql(1);
+      expect(commits[0].snapshot).to.eql({});
     });
 
     it('initial: change', async () => {
       const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
       const history = Doc.history(doc);
-      expect(history.length).to.eql(2);
-      expect(history[0].snapshot).to.eql({});
-      expect(history[1].snapshot).to.eql({ msg: 'hello' });
+      const commits = history.commits;
+      expect(commits.length).to.eql(2);
+      expect(commits[0].snapshot).to.eql({});
+      expect(commits[1].snapshot).to.eql({ msg: 'hello' });
     });
 
     it('change history', async () => {
       const doc = await store.doc.getOrCreate<D>((d) => null);
-      expect(Doc.history(doc).length).to.eql(1);
+      expect(Doc.history(doc).commits.length).to.eql(1);
 
       doc.change((d) => (d.msg = 'hello'));
-
-      const history = Doc.history(doc);
-      expect(history.length).to.eql(2);
-      expect(history[0].snapshot).to.eql({});
-      expect(history[1].snapshot).to.eql({ msg: 'hello' });
+      const commits = Doc.history(doc).commits;
+      expect(commits.length).to.eql(2);
+      expect(commits[0].snapshot).to.eql({});
+      expect(commits[1].snapshot).to.eql({ msg: 'hello' });
     });
   });
 

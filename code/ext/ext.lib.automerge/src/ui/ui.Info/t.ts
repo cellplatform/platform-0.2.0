@@ -8,7 +8,8 @@ export type InfoField =
   | 'Doc'
   | 'Doc.URI'
   | 'Doc.Object'
-  | 'History';
+  | 'History'
+  | 'History.List';
 
 export type InfoData = {
   url?: { href: string; title?: string };
@@ -39,12 +40,12 @@ export type InfoDataHistory = {
 };
 
 /**
- * Component
+ * <Component>
  */
 export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
+  fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;

@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { AuthEnv, Delete, Dev, Hash, Pkg, Time, type t } from '../../test.ui';
+import { AuthEnv, Delete, Dev, Hash, Pkg, PropList, Time, type t } from '../../test.ui';
 
 type T = {
   props: t.InfoProps;
@@ -96,7 +96,7 @@ export default Dev.describe(name, (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}
@@ -117,7 +117,7 @@ export default Dev.describe(name, (e) => {
               if (!fn) return;
 
               const fields = {
-                prev: state.current.props.fields ?? [],
+                prev: PropList.Wrangle.fields(state.current.props.fields),
                 next: fn(),
               } as const;
 

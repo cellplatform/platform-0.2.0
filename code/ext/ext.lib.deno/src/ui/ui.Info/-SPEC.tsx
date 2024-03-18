@@ -123,7 +123,7 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               setFields(fields);
             }}
           />
