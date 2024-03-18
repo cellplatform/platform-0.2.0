@@ -1,4 +1,4 @@
-import { A, type t } from './common';
+import { A, DEFAULTS, R, Time, slug, type t } from './common';
 
 import { get } from './Doc.u.get';
 import { Handle } from './u.Handle';
@@ -26,13 +26,27 @@ export async function getOrCreate<T>(args: {
   }
 
   /**
-   * New document creation
+   * New document initialization.
    */
   const handle = repo.create<T>();
-  const options: A.ChangeOptions<T> = {};
-  handle.change((d: any) => args.initial(d), options);
+  await handle.whenReady();
 
-  const ref = Handle.wrap<T>(handle, { dispose$ });
-  await ref.handle.whenReady();
-  return ref;
+  const options: A.ChangeOptions<T> = {
+    message: DEFAULTS.message.initial,
+    time: Time.now.timestamp,
+  };
+  handle.change((d: any) => {
+    args.initial(d);
+
+    // Ensure the initializer function caused a change such that the
+    // initial genesis timestamp is written into the commit history.
+    if (R.equals(d, {})) {
+      const key = `__tmp:${slug()}`;
+      d[key] = 0;
+      delete d[key];
+    }
+  }, options);
+
+  // Finish up.
+  return Handle.wrap<T>(handle, { dispose$ });
 }
