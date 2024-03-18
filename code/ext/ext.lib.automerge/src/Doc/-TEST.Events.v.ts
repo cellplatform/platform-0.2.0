@@ -1,16 +1,7 @@
-import { Store } from '../Store';
-import { A, describe, expect, it, rx, type t } from '../test';
+import { describe, expect, it, rx, type t } from '../test';
+import { testSetup, type D } from './-TEST.u';
 
-type D = { count?: t.A.Counter; msg?: string };
-
-describe('Store (base)', async () => {
-  const testSetup = () => {
-    const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-    const generator = store.doc.factory<D>(initial);
-    return { store, initial, generator } as const;
-  };
-
+describe('Doc.Events', async () => {
   const { store, generator } = testSetup();
 
   describe('lifecycle', async () => {
@@ -76,19 +67,19 @@ describe('Store (base)', async () => {
       const fired: t.DocChanged<D>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
-      const increment = () => doc.change((d) => d.count?.increment(1));
+      const increment = () => doc.change((d) => (d.count += 1));
       increment();
-      expect(doc.current.count?.value).to.eql(1);
+      expect(doc.current.count).to.eql(1);
       expect(fired.length).to.eql(1);
 
       const e = fired[0];
       expect(e.uri).to.eql(doc.uri);
       expect(e.doc).to.eql(doc.current);
       expect(e.patches.length).to.eql(1);
-      expect(e.patches[0].action).to.eql('inc');
+      expect(e.patches[0].action).to.eql('put');
       expect(e.patchInfo.source).to.eql('change');
-      expect(e.patchInfo.before.count?.value).to.eql(0);
-      expect(e.patchInfo.after.count?.value).to.eql(1);
+      expect(e.patchInfo.before.count).to.eql(0);
+      expect(e.patchInfo.after.count).to.eql(1);
 
       events.dispose();
       increment();
@@ -118,8 +109,8 @@ describe('Store (base)', async () => {
       const doc = await generator();
       const events = doc.events();
 
-      doc.change((d) => d.count?.increment(5));
-      expect(doc.current.count?.value).to.eql(5);
+      doc.change((d) => (d.count += 5));
+      expect(doc.current.count).to.eql(5);
 
       const fired: t.DocDeleted<D>[] = [];
       events.deleted$.subscribe((e) => fired.push(e));
@@ -130,7 +121,7 @@ describe('Store (base)', async () => {
 
       expect(fired.length).to.eql(1);
       expect(fired[0].uri).to.eql(doc.uri);
-      expect(fired[0].doc.count?.value).to.eql(5);
+      expect(fired[0].doc.count).to.eql(5);
 
       events.dispose();
     });
@@ -138,7 +129,7 @@ describe('Store (base)', async () => {
     it('deleted$ ← via [repo.delete]', async () => {
       const doc = await generator();
       const events = doc.events();
-      doc.change((d) => d.count?.increment(5));
+      doc.change((d) => (d.count += 5));
 
       const fired: t.DocDeleted<D>[] = [];
       events.deleted$.subscribe((e) => fired.push(e));
@@ -149,7 +140,7 @@ describe('Store (base)', async () => {
 
       expect(fired.length).to.eql(1);
       expect(fired[0].uri).to.eql(doc.uri);
-      expect(fired[0].doc.count?.value).to.eql(5);
+      expect(fired[0].doc.count).to.eql(5);
 
       events.dispose();
     });

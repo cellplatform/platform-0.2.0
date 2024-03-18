@@ -3,21 +3,13 @@ import { Lens, Registry } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, type t } from '../test';
+import { testSetup, type D } from './-TEST.u';
 
-type D = { count?: t.A.Counter; msg?: string };
-
-describe('Store (base)', async () => {
+describe('Doc', async () => {
   const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
-  const testSetup = () => {
-    const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
-    const generator = store.doc.factory<D>(initial);
-    return { store, initial, generator } as const;
-  };
-
   const { store, initial, generator } = testSetup();
 
-  describe('API', () => {
+  describe('Doc API (index)', () => {
     it('splice', () => {
       expect(Doc.splice).to.equal(A.splice);
     });
@@ -34,15 +26,15 @@ describe('Store (base)', async () => {
     });
   });
 
-  describe('store.doc', () => {
+  describe('Doc', () => {
     it('create and change', async () => {
       const doc1 = await generator();
       const doc2 = await generator();
-      doc2.change((d) => d.count?.increment(5));
+      doc2.change((d) => (d.count += 5));
 
       expect(doc1.instance).to.not.eql(doc2.instance);
-      expect(doc1.current.count?.value).to.eql(0);
-      expect(doc2.current.count?.value).to.eql(5);
+      expect(doc1.current.count).to.eql(0);
+      expect(doc2.current.count).to.eql(5);
     });
 
     it('doc', async () => {
@@ -58,7 +50,7 @@ describe('Store (base)', async () => {
       const doc = await generator();
       expect(A.isAutomerge(doc.current)).to.eql(true);
       expect(A.isAutomerge(doc.toObject())).to.eql(false);
-      expect(doc.toObject()).to.eql({ count: { value: 0 } });
+      expect(doc.toObject()).to.eql({ count: 0 });
     });
 
     describe('store.doc.exists', () => {
@@ -197,36 +189,6 @@ describe('Store (base)', async () => {
         expect(res).to.eql(false);
         expect(doc.is.deleted).to.eql(false); // Still not deleted (ie. the URI above had nothing to do with the document).
       });
-    });
-  });
-
-  describe('Doc.history', () => {
-    it('initial: <none>', async () => {
-      const doc = await store.doc.getOrCreate<D>((d) => null);
-      const history = Doc.history(doc);
-      const commits = history.commits;
-      expect(commits.length).to.eql(1);
-      expect(commits[0].snapshot).to.eql({});
-    });
-
-    it('initial: change', async () => {
-      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
-      const history = Doc.history(doc);
-      const commits = history.commits;
-      expect(commits.length).to.eql(2);
-      expect(commits[0].snapshot).to.eql({});
-      expect(commits[1].snapshot).to.eql({ msg: 'hello' });
-    });
-
-    it('change history', async () => {
-      const doc = await store.doc.getOrCreate<D>((d) => null);
-      expect(Doc.history(doc).commits.length).to.eql(1);
-
-      doc.change((d) => (d.msg = 'hello'));
-      const commits = Doc.history(doc).commits;
-      expect(commits.length).to.eql(2);
-      expect(commits[0].snapshot).to.eql({});
-      expect(commits[1].snapshot).to.eql({ msg: 'hello' });
     });
   });
 

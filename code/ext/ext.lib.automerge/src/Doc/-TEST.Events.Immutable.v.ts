@@ -1,20 +1,11 @@
 import { Immutable } from 'sys.util';
-import { Store } from '../Store';
-// import { PatchState } from '../Json.PatchState';
 import { describe, expect, it, type t } from '../test';
+import { testSetup, type D } from './-TEST.u';
 
-describe('Immutable.events', () => {
-  type D = { count: number };
-
-  const testSetup = () => {
-    const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
-    const generator = store.doc.factory<D>(initial);
-    return { store, initial, generator } as const;
-  };
+describe('Doc.Events: Immutable', () => {
+  const { store, generator } = testSetup();
 
   it('fires events by overriding change handler', async () => {
-    const { store, generator } = testSetup();
     const doc = await generator();
 
     const change = doc.change;
@@ -46,6 +37,7 @@ describe('Immutable.events', () => {
     expect(fired1[1].patchInfo.after).to.eql({ count: 456 });
 
     events1.dispose();
-    store.dispose();
   });
+
+  it('|test.dispose|', () => store.dispose());
 });

@@ -1,17 +1,9 @@
 import { Doc } from '.';
 import { Store } from '../Store';
 import { describe, expect, it, type t } from '../test';
-
-type D = { count: number; msg?: string };
+import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Patch', async () => {
-  const testSetup = () => {
-    const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
-    const generator = store.doc.factory<D>(initial);
-    return { store, initial, generator } as const;
-  };
-
   const { store, generator } = testSetup();
 
   describe('Patch.apply', () => {
