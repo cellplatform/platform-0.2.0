@@ -37,34 +37,3 @@ export function get<T>(args: {
     handle.whenReady().then(() => done(Handle.wrap<T>(handle, { dispose$ })));
   });
 }
-
-/**
- * Find or initialize a new document from the repo.
- */
-export async function getOrCreate<T>(args: {
-  repo: t.Repo;
-  initial: t.ImmutableNext<T>;
-  uri?: Uri;
-  dispose$?: t.UntilObservable;
-  timeout?: t.Msecs;
-}): Promise<t.DocRefHandle<T>> {
-  const { repo, uri, timeout, dispose$ } = args;
-
-  /**
-   * Lookup existing URI requested.
-   */
-  if (uri) {
-    const res = await get({ repo, uri, timeout, dispose$, throw: true });
-    return res as t.DocRefHandle<T>;
-  }
-
-  /**
-   * New document creation
-   */
-  const handle = repo.create<T>();
-  handle.change((d: any) => args.initial(d));
-
-  const ref = Handle.wrap<T>(handle, { dispose$ });
-  await ref.handle.whenReady();
-  return ref;
-}
