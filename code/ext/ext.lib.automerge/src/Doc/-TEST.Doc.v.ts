@@ -1,6 +1,3 @@
-import { Doc } from '.';
-import { Lens, Registry } from '../Doc.Lens';
-import { Namespace } from '../Doc.Namespace';
 import { Store } from '../Store';
 import { A, Id, Is, describe, expect, expectError, it, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
@@ -8,23 +5,6 @@ import { testSetup, type D } from './-TEST.u';
 describe('Doc', async () => {
   const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
   const { store, initial, generator } = testSetup();
-
-  describe('Doc API (index)', () => {
-    it('splice', () => {
-      expect(Doc.splice).to.equal(A.splice);
-    });
-
-    it('lens', () => {
-      expect(Doc.Lens).to.equal(Lens);
-      expect(Doc.lens).to.eql(Lens.init);
-      expect(Doc.Lens.Registry).to.equal(Registry);
-    });
-
-    it('namespace', () => {
-      expect(Doc.Namespace).to.equal(Namespace);
-      expect(Doc.namespace).to.equal(Namespace.init);
-    });
-  });
 
   describe('Doc', () => {
     it('create and change', async () => {

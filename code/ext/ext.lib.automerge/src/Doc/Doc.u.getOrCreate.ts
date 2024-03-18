@@ -1,4 +1,4 @@
-import { type t, A } from './common';
+import { A, type t } from './common';
 
 import { get } from './Doc.u.get';
 import { Handle } from './u.Handle';
@@ -29,6 +29,7 @@ export async function getOrCreate<T>(args: {
    * New document creation
    */
   const handle = repo.create<T>();
+  const options: A.ChangeOptions<T> = {};
   handle.change((d: any) => args.initial(d), options);
 
   const ref = Handle.wrap<T>(handle, { dispose$ });
