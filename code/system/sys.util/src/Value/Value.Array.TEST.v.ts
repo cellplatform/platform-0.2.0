@@ -48,3 +48,26 @@ describe('asyncFilter', () => {
     expect(res).to.eql(['cat', 'hello cat']);
   });
 });
+
+describe('page', () => {
+  it('throw: inputs less than 1', () => {
+    const err = /Page and limit must be greater than zero/;
+    expect(() => Value.page([], 0, 50)).to.throw(err);
+    expect(() => Value.page([], 1, 0)).to.throw(err);
+  });
+
+  it('empty', () => {
+    const res = Value.page([], 1, 10);
+    expect(res).to.eql([]);
+  });
+
+  it('page-1, page-2', () => {
+    const list = [1, 2, 3, 4, 5, 6, 7, 8];
+    const page1 = Value.page(list, 1, 5);
+    const page2 = Value.page(list, 2, 5);
+    const page3 = Value.page(list, 99, 5);
+    expect(page1).to.eql([1, 2, 3, 4, 5]);
+    expect(page2).to.eql([6, 7, 8]);
+    expect(page3).to.eql([]);
+  });
+});
