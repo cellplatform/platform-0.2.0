@@ -59,8 +59,8 @@ export type Time = {
 
 export type DateTime = {
   readonly date: Date;
-  readonly timestamp: number;
-  readonly unix: number;
+  readonly timestamp: t.UnixTimestamp;
+  readonly unix: t.UnixEpoch;
   format(template?: string): string;
 };
 

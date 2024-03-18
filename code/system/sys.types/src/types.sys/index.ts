@@ -5,6 +5,7 @@ export type * from './t.dispose';
 export type * from './t.dom';
 export type * from './t.event';
 export type * from './t.event.pump';
+export type * from './t.hash';
 export type * from './t.immutable';
 export type * from './t.io';
 export type * from './t.json';
