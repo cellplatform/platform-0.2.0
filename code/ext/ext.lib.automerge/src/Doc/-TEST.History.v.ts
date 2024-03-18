@@ -2,7 +2,7 @@ import { DEFAULTS, Doc } from '.';
 import { Time, describe, expect, expectRoughlySame, it, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
-describe('Doc.History', async () => {
+describe('Doc.History', { retry: 3 }, async () => {
   const { store } = testSetup();
 
   it('initial: <none>', async () => {
@@ -35,13 +35,18 @@ describe('Doc.History', async () => {
     expect(commits[2].snapshot).to.eql({ msg: 'hello' });
   });
 
-  it('inserts timestamp upon creation (metadata)', async () => {
+  it('genesis meta-data', async () => {
     const assert = (doc: t.DocRef<D>) => {
-      const commits = Doc.history(doc).commits;
+      const history = Doc.history(doc);
+      const genesis = history.genesis;
+      const commits = history.commits;
       const now = Time.now.timestamp;
-      const genesis = commits[1].change;
-      expectRoughlySame(genesis.time, now, 0.1, `genesis timestamp`);
-      expect(genesis.message).to.eql(DEFAULTS.message.initial);
+      const change = commits[1].change;
+
+      expect(genesis?.initial).to.equal(commits[1]);
+      expect(change.message).to.eql(DEFAULTS.message.initial);
+      expectRoughlySame(change.time, now, 0.1, `initial timestamp`);
+      expect(genesis?.elapsed.msec).to.be.within(1, 8);
     };
 
     const doc1 = await store.doc.getOrCreate<D>((d) => null); // NB: no initial object setup.

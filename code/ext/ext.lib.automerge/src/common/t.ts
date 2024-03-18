@@ -20,11 +20,13 @@ export type {
   Index,
   Lifecycle,
   Msecs,
+  UnixTimestamp,
   UntilObservable,
 } from 'sys.types/src/types';
 
 export type { JsonPath, PatchState } from 'sys.data.json/src/types';
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { TimeDuration } from 'sys.util/src/types';
 
 /**
  * @local

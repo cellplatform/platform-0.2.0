@@ -59,5 +59,12 @@ export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
 /**
  * History
  */
-export type DocHistory<T = unknown> = { commits: DocHistoryCommit<T>[] };
+export type DocHistory<T = unknown> = {
+  readonly genesis?: DocHistoryGenesis<T>;
+  readonly commits: DocHistoryCommit<T>[];
+};
+export type DocHistoryGenesis<T = unknown> = {
+  initial: DocHistoryCommit<T>;
+  elapsed: t.TimeDuration;
+};
 export type DocHistoryCommit<T = unknown> = t.State<T>;
