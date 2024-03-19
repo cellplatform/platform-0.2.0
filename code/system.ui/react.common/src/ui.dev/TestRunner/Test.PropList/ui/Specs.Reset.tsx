@@ -5,11 +5,12 @@ export type SpecsResetProps = {
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
   enabled?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
-  const { enabled = true } = props;
+  const { enabled = true, theme } = props;
 
   const mouse = useMouse();
   const keyboard = Keyboard.useKeyboardState();
@@ -44,7 +45,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <Button onClick={handleResetClick} style={styles.button} enabled={enabled}>
+      <Button onClick={handleResetClick} style={styles.button} enabled={enabled} theme={theme}>
         {label}
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, Spinner, css, type t } from '../common';
+import { COLORS, DevIcons, Spinner, Theme, css, type t } from '../common';
 
 export type RunIconProps = {
   isSelected?: boolean;
@@ -6,20 +6,20 @@ export type RunIconProps = {
   isRunning?: boolean;
   enabled?: boolean;
   iconColor?: string;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const RunIcon: React.FC<RunIconProps> = (props) => {
-  const { isSelected, isOver, isRunning, iconColor = COLORS.DARK, enabled = true } = props;
+  const { isSelected, isOver, isRunning, theme, enabled = true } = props;
+  const color = Theme.color(theme);
+  const iconColor = props.iconColor ?? color;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      height: 16,
-    }),
+    base: css({ position: 'relative', height: 16 }),
     spinner: css({
       Absolute: 0,
       display: 'grid',

@@ -1,3 +1,5 @@
+import type { t } from '../common';
+
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -30,7 +32,7 @@ export const ModuleSpecs = {
   [`${ns}.RenderCount`]: () => import('../ui/RenderCount/-SPEC'),
   [`${ns}.ProgressBar`]: () => import('../ui/ProgressBar/-SPEC'),
   [`${ns}.PropList`]: () => import('../ui/PropList/-dev/-SPEC'),
-  [`${ns}.PropList.FieldSelector`]: () => import('../ui/PropList.FieldSelector/-dev/-SPEC'),
+  [`${ns}.PropList.FieldSelector`]: () => import('../ui/PropList.FieldSelector/-SPEC'),
   [`${ns}.ObjectView`]: () => import('../ui/ObjectView/-SPEC'),
   [`${ns}.QRCode`]: () => import('../ui/QRCode/-SPEC'),
   [`${ns}.Slider`]: () => import('../ui/Slider/-SPEC'),
@@ -41,14 +43,14 @@ export const ModuleSpecs = {
   [`${ns}.Text.Keyboard`]: () => import('../ui/Text.Keyboard/-dev/-SPEC'),
   [`${ns}.Text.Secret`]: () => import('../ui/Text.Secret/-SPEC'),
   [`${ns}.Text.Syntax`]: () => import('../ui/Text.Syntax/-SPEC'),
-};
+} as t.SpecImports;
 
 export const HookSpecs = {
   [`${ns}.useFocus`]: () => import('../ui/useFocus/-SPEC'),
   [`${ns}.useSizeObserver`]: () => import('../ui/useSizeObserver/-SPEC'),
   [`${ns}.useDragTarget`]: () => import('../ui/useDragTarget/-dev/-SPEC'),
   [`${ns}.useMouse`]: () => import('../ui/use/-SPEC.useMouse'),
-};
+} as t.SpecImports;
 
 export const DevSpecs = {
   [`sys.ui.dev.TestRunner.Results`]: () => import('../ui.dev/TestRunner/-dev/-SPEC.Results'),
@@ -66,12 +68,12 @@ export const DevSpecs = {
   [`sys.ui.dev.DevTools.Bdd`]: () => import('../ui.dev/DevTools.Bdd/-SPEC'),
   [`sys.ui.dev.DevTools.Title`]: () => import('../ui.dev/DevTools.Title/-SPEC'),
   [`sys.ui.dev.DevTools.Todo`]: () => import('../ui.dev/DevTools.Todo/-SPEC'),
-};
+} as t.SpecImports;
 
 export const SampleSpecs = {
   [`sys.ui.sample.Hash`]: () => import('../ui.sample/Hash/-SPEC'),
   [`sys.ui.sample.Signals`]: () => import('../ui.sample/Signals/-SPEC'),
-};
+} as t.SpecImports;
 
 export const Specs = {
   ...ModuleSpecs,

@@ -1,4 +1,4 @@
-import { COLORS, css, Spinner, type t } from './common';
+import { COLORS, css, Spinner, type t, Theme } from './common';
 import { Suite } from './ui.Suite';
 
 type R = t.TestSuiteRunResponse;
@@ -7,11 +7,12 @@ export type TestResultsProps = {
   data?: R | R[];
   spinning?: boolean;
   scroll?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const TestResults: React.FC<TestResultsProps> = (props) => {
-  const { data, spinning = false, scroll = true } = props;
+  const { data, spinning = false, scroll = true, theme } = props;
 
   const list = (Array.isArray(data) ? data : [data]).filter(Boolean) as R[];
   const isEmpty = list.length === 0;
@@ -20,11 +21,12 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
   /**
    * [Render]
    */
+  const color = Theme.color(theme);
   const styles = {
     base: css({
       position: 'relative',
       fontSize: 13,
-      color: COLORS.DARK,
+      color,
       cursor: 'default',
     }),
     empty: css({
@@ -54,7 +56,7 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner.Puff size={22} />
+      <Spinner.Puff size={22} color={color} />
     </div>
   );
 
@@ -63,7 +65,7 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
   const elBody = !spinning && (
     <div {...styles.body}>
       {list.map((data) => {
-        return <Suite key={data.tx} data={data} spinning={spinning} />;
+        return <Suite key={data.tx} data={data} spinning={spinning} theme={theme} />;
       })}
     </div>
   );

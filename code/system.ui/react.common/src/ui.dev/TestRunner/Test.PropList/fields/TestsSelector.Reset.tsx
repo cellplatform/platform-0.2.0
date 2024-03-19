@@ -10,10 +10,13 @@ export function FieldTestsSelectorReset(args: {
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
   enabled: boolean;
+  theme?: t.CommonTheme;
 }): t.PropListItem | undefined {
   if (!Util.isSelectable(args.data)) return;
 
-  return {
-    value: <SpecsReset data={args.data} groups={args.groups} enabled={args.enabled} />,
-  };
+  const el = (
+    <SpecsReset data={args.data} groups={args.groups} enabled={args.enabled} theme={args.theme} />
+  );
+
+  return { value: el };
 }

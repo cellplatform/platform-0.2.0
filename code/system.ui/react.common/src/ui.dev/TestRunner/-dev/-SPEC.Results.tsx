@@ -16,9 +16,10 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner', (e) => {
-  type LocalStore = TestCtx & T['debug'];
+  type LocalStore = TestCtx & T['debug'] & Pick<TestResultsProps, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
+    theme: undefined,
     fail: initial.ctx.fail,
     delay: initial.ctx.delay,
     noop: initial.debug.noop,
@@ -29,6 +30,7 @@ export default Dev.describe('TestRunner', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.ctx.fail = local.fail;
       d.ctx.delay = local.delay;
       d.debug.noop = local.noop;
@@ -36,10 +38,11 @@ export default Dev.describe('TestRunner', (e) => {
 
     ctx.subject
       .display('grid')
-      .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
-        return <Dev.TestRunner.Results {...e.state.props} />;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Dev.TestRunner.Results {...props} />;
       });
   });
 
@@ -126,6 +129,12 @@ export default Dev.describe('TestRunner', (e) => {
           .label('scroll')
           .value((e) => e.state.props.scroll)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'scroll'))),
+      );
+
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
       );
     });
   });

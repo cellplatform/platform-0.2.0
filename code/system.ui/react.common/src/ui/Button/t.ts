@@ -19,6 +19,7 @@ export type ButtonProps = {
   spinner?: t.PartialDeep<ButtonSpinner>;
 
   style?: t.CssValue;
+  theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
   padding?: t.CssEdgesInput;
   minWidth?: number;

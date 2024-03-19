@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, Test, Time, Value, css, type t } from '../common';
+import { COLORS, DevIcons, Test, Theme, Time, Value, css, type t } from '../common';
 import { RunIcon } from './Specs.Row.RunIcon';
 
 export type ResultsProps = {
@@ -6,24 +6,26 @@ export type ResultsProps = {
   isOver?: boolean;
   isRunnable?: boolean;
   results?: t.TestSuiteRunResponse[];
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const Results: React.FC<ResultsProps> = (props) => {
-  const { results = [], isOver = false, isColored = true, isRunnable = true } = props;
+  const { results = [], isOver = false, isColored = true, isRunnable = true, theme } = props;
   const stats = Test.Stats.merge(results);
-  const asColor = (color: string) => (isColored ? color : COLORS.DARK);
+  const color = Theme.color(theme);
+  const asColor = (value: string) => (isColored ? value : color);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', Flex: 'x-center-center', height: 15 }),
+    base: css({ position: 'relative', Flex: 'x-center-center', height: 15, color }),
     item: css({ Flex: 'x-center-center', transition: 'all 0.15s ease-in-out' }),
     failed: css({ color: asColor(COLORS.RED) }),
     passed: css({ color: asColor(COLORS.GREEN) }),
     skipped: css({ color: asColor(COLORS.YELLOW), opacity: isColored ? 1 : 0.3 }),
-    elapsed: css({ color: COLORS.DARK }),
+    elapsed: css({ color }),
     spacer: css({ width: 6 }),
     runIcon: css({ marginRight: 2, transform: 'translateY(1px)' }),
     runAgain: css({ marginLeft: 3, transition: 'opacity 0.15s ease-in-out' }),
@@ -35,7 +37,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
   if (!results || stats.total === 0) {
     return (
       <div {...styles.base}>
-        <DevIcons.Test.Run size={12} style={styles.runIcon} /> {'run tests'}
+        <DevIcons.Test.Run size={12} color={color} style={styles.runIcon} /> {'run tests'}
       </div>
     );
   }
@@ -95,7 +97,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
   const runAgainColor = isOver ? COLORS.BLUE : isColored ? COLORS.GREEN : undefined;
   const elRunAgain = isRunnable && (
     <div {...styles.runAgain}>
-      <RunIcon isSelected={true} iconColor={runAgainColor} />
+      <RunIcon isSelected={true} iconColor={runAgainColor} theme={theme} />
     </div>
   );
 

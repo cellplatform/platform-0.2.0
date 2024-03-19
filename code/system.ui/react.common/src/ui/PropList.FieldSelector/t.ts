@@ -14,8 +14,9 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   resettable?: boolean;
   indexes?: boolean;
 
-  switchColor?: string | number;
   indent?: number;
+  switchColor?: string | number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: PropListFieldSelectorClickHandler;
 };

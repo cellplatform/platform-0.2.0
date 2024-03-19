@@ -1,40 +1,51 @@
-import { Delete, Dev, type t } from '../../test.ui';
 import { Button } from '.';
+import { Delete, Dev, Pkg, type t } from '../../test.ui';
 
 const DEFAULTS = Button.DEFAULTS;
 
 type T = {
   props: t.ButtonProps;
-  debug: { bg: boolean; useLabel: boolean; padding: boolean };
+  debug: { useLabel?: boolean; padding?: boolean };
 };
 const initial: T = {
-  props: {
+  props: {},
+  debug: {},
+};
+
+const name = Button.displayName ?? 'Unknown';
+export default Dev.describe(name, (e) => {
+  type LocalStore = T['debug'] &
+    Pick<t.ButtonProps, 'theme' | 'enabled' | 'block' | 'spinning' | 'tooltip' | 'label'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    theme: undefined,
+    useLabel: true,
+    padding: false,
     enabled: DEFAULTS.enabled,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
     tooltip: 'My Button',
     label: 'Hello-🐷',
-  },
-  debug: { bg: true, useLabel: true, padding: false },
-};
+  });
 
-type LocalStore = T['debug'];
-const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Button');
-const local = localstore.object({ ...initial.debug });
-
-export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.bg = local.bg;
+      d.props.theme = local.theme;
+      d.props.enabled = local.enabled;
+      d.props.block = local.block;
+      d.props.spinning = local.spinning;
+      d.props.tooltip = local.tooltip;
+      d.props.label = local.label;
       d.debug.useLabel = local.useLabel;
+      d.debug.padding = local.padding;
     });
 
     ctx.subject.display('grid').render<T>((e) => {
       const { debug } = e.state;
-      ctx.subject.backgroundColor(debug.bg ? 1 : 0);
+      Dev.Theme.background(ctx, e.state.props.theme);
 
       const props = {
         ...e.state.props,
@@ -66,18 +77,24 @@ export default Dev.describe('Button', (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+
       dev.boolean((btn) =>
         btn
           .label('enabled')
           .value((e) => e.state.props.enabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
       );
 
       dev.boolean((btn) =>
         btn
           .label((e) => 'spinning')
           .value((e) => e.state.props.spinning)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
+          .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning')))),
       );
 
       dev.hr(-1, 5);
@@ -86,11 +103,11 @@ export default Dev.describe('Button', (e) => {
         btn
           .label('block')
           .value((e) => e.state.props.block)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'block'))),
+          .onClick((e) => e.change((d) => (local.block = Dev.toggle(d.props, 'block')))),
       );
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.overlay);
+        const value = (state: T) => !!state.props.overlay;
         btn
           .label((e) => `overlay (Element)`)
           .value((e) => value(e.state))
@@ -124,13 +141,6 @@ export default Dev.describe('Button', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `background (${e.state.debug.bg ? 'showing' : 'transparent'})`)
-          .value((e) => Boolean(e.state.debug.bg))
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
           .label((e) => `padding`)
           .value((e) => Boolean(e.state.debug.padding))
           .onClick((e) => e.change((d) => (local.padding = Dev.toggle(d.debug, 'padding')))),
@@ -140,12 +150,9 @@ export default Dev.describe('Button', (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        props: Delete.undefined(e.state.props),
-      };
-      return <Dev.Object name={'Button'} data={data} expand={1} />;
+      const data = { props: Delete.undefined(e.state.props) };
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

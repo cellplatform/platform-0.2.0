@@ -22,7 +22,7 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields' | 'enabled'> &
+  type LocalStore = Pick<P, 'card' | 'fields' | 'enabled' | 'theme'> &
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
@@ -31,6 +31,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     ellipsis: false,
     card: true,
     enabled: true,
+    theme: undefined,
     selected: [],
     selectable: true,
     label: '',
@@ -51,6 +52,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.props.fields = local.fields;
       d.props.card = local.card;
       d.props.enabled = local.enabled;
+      d.props.theme = local.theme;
 
       d.ctx.delay = local.delay;
       d.ctx.fail = local.fail;
@@ -104,13 +106,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     ctx.host.tracelineColor(-0.05);
     ctx.debug.width(300);
     ctx.subject
-      .backgroundColor(1)
       .size(getSize())
       .display('grid')
       .render<T>((e) => {
         const { props } = e.state;
-        ctx.subject.backgroundColor(props.card ? 0 : 1);
-        return <Dev.TestRunner.PropList {...props} style={{ margin: props.card ? 0 : 20 }} />;
+        Dev.Theme.background(ctx, props.theme, props.card ? 0 : 1);
+        const margin = props.card ? 0 : 20;
+        return <Dev.TestRunner.PropList {...props} style={{ margin }} />;
       });
   });
 
@@ -162,16 +164,26 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `enabled`)
-          .value((e) => e.state.props.enabled)
-          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
+          .label((e) => `selectable`)
+          .value((e) => e.state.debug.selectable)
+          .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
       );
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `selectable`)
-          .value((e) => e.state.debug.selectable)
-          .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
+          .label((e) => `enabled`)
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
       );
 
       dev.hr(-1, 5);
@@ -193,7 +205,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('debug', (dev) => {
+    dev.section('Debug', (dev) => {
       dev.button('redraw', () => dev.redraw());
 
       dev.boolean((btn) =>

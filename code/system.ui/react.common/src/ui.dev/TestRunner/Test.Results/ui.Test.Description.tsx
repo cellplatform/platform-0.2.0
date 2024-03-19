@@ -3,12 +3,14 @@ import { COLORS, Color, css, type t } from './common';
 export type DescriptionProps = {
   text: string;
   isSkipped?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const Description: React.FC<DescriptionProps> = (props) => {
-  const { isSkipped = false } = props;
+  const { isSkipped = false, theme } = props;
   const desc = parseDescription(props.text);
+  const isDark = theme === 'Dark';
 
   /**
    * [Render]
@@ -20,8 +22,8 @@ export const Description: React.FC<DescriptionProps> = (props) => {
       gridTemplateColumns: 'auto 1fr',
     }),
     todo: css({
-      backgroundColor: Color.alpha(COLORS.MAGENTA, 0.15),
-      color: Color.alpha(COLORS.MAGENTA, 0.5),
+      backgroundColor: Color.alpha(COLORS.MAGENTA, isDark ? 0.2 : 0.15),
+      color: Color.alpha(COLORS.MAGENTA, isDark ? 0.9 : 0.5),
       marginRight: 6,
       PaddingX: 5,
       paddingTop: 4,
@@ -33,7 +35,7 @@ export const Description: React.FC<DescriptionProps> = (props) => {
     copy: css({ marginLeft: 5, filter: 'scale(0.3)' }),
   };
 
-  const elTodo = desc.isTodo && <div {...styles.todo}>TODO</div>;
+  const elTodo = desc.isTodo && <div {...styles.todo}>{'TODO'}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>

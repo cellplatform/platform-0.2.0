@@ -13,7 +13,10 @@ export default Dev.describe('DevTools', (e) => {
     ctx.subject
       .display('grid')
       .size([400, null])
-      .render<T>((e) => <Sample state={e.state} renderPosition={[-20, 5]} />);
+      .render<T>((e) => {
+        Dev.Theme.background(ctx, e.state.theme);
+        return <Sample state={e.state} renderPosition={[-20, 5]} />;
+      });
   });
 
   e.it('ui:debug', async (e) => {

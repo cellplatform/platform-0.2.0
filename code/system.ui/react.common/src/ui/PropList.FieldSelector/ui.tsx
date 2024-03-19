@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, css, DEFAULTS, KeyboardMonitor, rx, useMouse, type t } from './common';
+import { Button, css, DEFAULTS, KeyboardMonitor, rx, useMouse, type t, COLORS } from './common';
 
 import { View as PropList } from '../PropList/ui';
 import { Label } from './ui.Label';
@@ -10,10 +10,12 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     resettable = DEFAULTS.resettable,
     indexes = DEFAULTS.indexes,
     indent = DEFAULTS.indent,
+    theme,
   } = props;
   const selected = Wrangle.fields(props.selected);
   const all = Wrangle.fields([...(props.all ?? [])]);
   const isSelected = (field: string) => selected.includes(field);
+  const isDark = theme === 'Dark';
 
   const mouse = useMouse();
   const [, setCount] = useState(0);
@@ -58,8 +60,9 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   /**
    * [Render]
    */
+  const color = isDark ? COLORS.WHITE : COLORS.DARK;
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({ position: 'relative', color }),
   };
 
   const items: t.PropListItem[] = all.map((field) => {
@@ -88,8 +91,12 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     const keyboard = KeyboardMonitor.state.current;
     const metaKey = keyboard.modifiers.meta;
     const label = mouse.is.over && metaKey ? DEFAULTS.label.clear : DEFAULTS.label.reset;
-    const el = <Button onClick={handleReset}>{label}</Button>;
-    items.push({ label: ``, value: { data: el } });
+    const el = (
+      <Button onClick={handleReset} theme={theme}>
+        {label}
+      </Button>
+    );
+    items.push({ label: ``, value: el });
   }
 
   return (
@@ -99,6 +106,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
         title={props.title}
         items={items}
         defaults={{ clipboard: false }}
+        theme={theme}
       />
     </div>
   );

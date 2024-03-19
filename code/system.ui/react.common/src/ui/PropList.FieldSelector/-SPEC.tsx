@@ -1,27 +1,27 @@
-import { FieldSelector } from '..';
-import { Dev, type t } from '../../../test.ui';
-import { SampleFields, type MyField } from './-common';
+import { FieldSelector } from '.';
+import { Dev, type t, Pkg } from '../../test.ui';
+import { SampleFields, type MyField } from '../PropList/-dev/-common';
 
 const DEFAULTS = FieldSelector.DEFAULTS;
 
+type P = t.PropListFieldSelectorProps;
 type T = {
-  props: t.PropListFieldSelectorProps;
+  props: P;
   debug: { hostBg?: boolean };
 };
 const initial: T = {
-  props: {
-    all: SampleFields.all,
-    defaults: SampleFields.defaults,
-  },
+  props: {},
   debug: {},
 };
 
-export default Dev.describe('PropList.FieldSelector', (e) => {
-  type LocalStore = Pick<t.PropListFieldSelectorProps, 'resettable' | 'indexes' | 'selected'> &
+const name = FieldSelector.displayName ?? 'Unknown';
+export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<P, 'resettable' | 'indexes' | 'selected' | 'theme'> &
     Pick<T['debug'], 'hostBg'> & { hasTitle?: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.PropList.FieldSelector');
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     selected: undefined,
+    theme: undefined,
     resettable: DEFAULTS.resettable,
     indexes: DEFAULTS.indexes,
     hostBg: false,
@@ -30,7 +30,6 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
@@ -38,24 +37,26 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
       d.props.resettable = local.resettable;
       d.props.indexes = local.indexes;
       d.props.selected = local.selected;
+      d.props.theme = local.theme;
       d.debug.hostBg = local.hostBg;
+      d.props.all = SampleFields.all;
+      d.props.defaults = SampleFields.defaults;
     });
 
     ctx.subject
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
-        const { debug } = e.state;
-        ctx.subject.backgroundColor(debug.hostBg ? 1 : 0);
+        const { props, debug } = e.state;
         const margin = debug.hostBg ? 10 : 0;
+        Dev.Theme.background(ctx, props.theme, debug.hostBg ? 1 : 0);
         return (
           <FieldSelector
-            {...e.state.props}
+            {...props}
             style={{ margin }}
             onClick={async (event) => {
               const { next } = event.as<MyField>();
-              await state.change((d) => (d.props.selected = next));
-              local.selected = next;
+              await state.change((d) => (local.selected = d.props.selected = next));
               console.log('⚡️ onClick:', event);
             }}
           />
@@ -99,6 +100,12 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.resettable = Dev.toggle(d.props, 'resettable'))));
       });
+
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);
@@ -119,7 +126,7 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'PropList.FieldSelector'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

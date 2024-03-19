@@ -2,26 +2,45 @@ import { COLORS, DevIcons, type t } from '../common';
 import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
+type Color = string | number;
 
 /**
  * Helpers for working with common themes within the harness.
  */
 export const Theme = {
   is(theme: t.CommonTheme = 'Light') {
-    return { dark: theme === 'Dark', light: theme === 'Light' } as const;
+    return {
+      dark: theme === 'Dark',
+      light: theme === 'Light',
+    } as const;
+  },
+
+  color(theme: t.CommonTheme = 'Light') {
+    const is = Theme.is(theme);
+    return is.dark ? COLORS.WHITE : COLORS.DARK;
   },
 
   /**
    * Adjust the theme of the DevHarness.
    */
-  background(input: t.DevCtx | t.DevTools, value: t.CommonTheme = 'Light') {
-    const is = Theme.is(value);
+  background(
+    input: t.DevCtx | t.DevTools,
+    theme: t.CommonTheme = 'Light',
+    subjectLight?: Color | null,
+    subjectDark?: Color | null,
+  ) {
+    const is = Theme.is(theme);
     const ctx = Wrangle.ctx(input);
     if (!ctx) throw new Error(`Dev {ctx} not retrieved`);
 
-    const host = ctx.host;
+    const { host, subject } = ctx;
     if (is.light) host.backgroundColor(null).tracelineColor(null);
     if (is.dark) host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
+
+    if (!!subjectLight || !!subjectDark) {
+      if (!!subjectLight) subject.backgroundColor(is.light ? subjectLight : 0);
+      if (!!subjectDark) subject.backgroundColor(is.dark ? subjectDark : 0);
+    }
   },
 
   /**
@@ -30,7 +49,7 @@ export const Theme = {
   switch<T extends O>(
     dev: t.DevTools<T>,
     current: (d: T) => t.CommonTheme | undefined,
-    update: (d: T, value: t.CommonTheme) => void,
+    mutate: (d: T, value: t.CommonTheme) => void,
   ) {
     const defaultTheme: t.CommonTheme = 'Light';
     dev.button((btn) => {
@@ -44,7 +63,7 @@ export const Theme = {
         .onClick((e) => {
           const prev = current(e.state.current) ?? defaultTheme;
           const next = prev === 'Light' ? 'Dark' : 'Light';
-          dev.change((d) => update(d, next));
+          dev.change((d) => mutate(d, next));
           Theme.background(dev.ctx, next);
         });
     });

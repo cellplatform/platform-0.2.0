@@ -1,13 +1,14 @@
 import { PropList } from '../../../ui/PropList';
-import { Dev, Pkg, type TestCtx } from './-common.mjs';
+import { Dev, Pkg, type TestCtx, type t } from './-common.mjs';
 
-type T = { ctx: TestCtx };
+type T = { ctx: TestCtx; theme?: t.CommonTheme };
 const initial: T = { ctx: { fail: false, delay: 2000 } };
 
 export default Dev.describe('TestPropList.runner', (e) => {
-  type LocalStore = TestCtx & {};
+  type LocalStore = TestCtx & Pick<T, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropsList.runner');
   const local = localstore.object({
+    theme: 'Light',
     fail: initial.ctx.fail,
     delay: initial.ctx.delay,
   });
@@ -17,16 +18,19 @@ export default Dev.describe('TestPropList.runner', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
+      d.theme = local.theme;
       d.ctx.delay = local.delay;
       d.ctx.fail = local.fail;
     });
 
     ctx.debug.width(300);
     ctx.subject
-      .backgroundColor(1)
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
+        const { theme } = e.state;
+        Dev.Theme.background(ctx, theme);
+
         /**
          * NB: Sample shows the "single runner" usage option
          *     This is useful when the runner is being embedded
@@ -34,6 +38,7 @@ export default Dev.describe('TestPropList.runner', (e) => {
          */
         const runner = Dev.TestRunner.PropList.runner({
           ctx: () => state.current.ctx,
+          theme,
           modules: [
             import('./-TEST.sample-1.mjs'),
             import('./-TEST.sample-2.mjs'),
@@ -43,6 +48,7 @@ export default Dev.describe('TestPropList.runner', (e) => {
 
         return (
           <PropList
+            theme={theme}
             items={[
               runner,
               { label: 'Module', value: Pkg.name },
@@ -75,6 +81,14 @@ export default Dev.describe('TestPropList.runner', (e) => {
               local.delay = d.ctx.delay = next;
             });
           }),
+      );
+
+      dev.hr(-1, 5);
+
+      Dev.Theme.switch(
+        dev,
+        (d) => d.theme,
+        (d, value) => (local.theme = d.theme = value),
       );
     });
 
