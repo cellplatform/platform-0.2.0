@@ -1,7 +1,8 @@
 import { Dev, Pkg, type t } from '../../test.ui';
 import { DEFAULTS, Root } from '.';
 
-type T = { props: t.RootProps; debug: {} };
+type P = t.RootProps;
+type T = { props: P; debug: {} };
 const initial: T = { props: {}, debug: {} };
 
 /**
@@ -9,7 +10,7 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<t.RootProps, 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
