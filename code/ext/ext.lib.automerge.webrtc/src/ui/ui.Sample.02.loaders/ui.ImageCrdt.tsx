@@ -1,7 +1,5 @@
-import type { InfoField } from 'ext.lib.automerge/src/types';
-
-import { useEffect, useState } from 'react';
 import { Info } from 'ext.lib.automerge';
+import { useEffect, useState } from 'react';
 import { Image } from 'sys.ui.react.media.image';
 import { COLORS, Color, WebStore, css, rx, type t } from './common';
 
@@ -25,7 +23,6 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
 
   const redraw = () => setRedraw((n) => n + 1);
   const over = (isOver: boolean) => () => setOver(isOver);
-  // const toggleShowJson = () => setShowDocJson((prev) => !prev)
 
   /**
    * Lifecycle
@@ -73,16 +70,6 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
     },
   };
 
-  type T = InfoField | undefined;
-  const fields: T[] = [
-    'Repo',
-    'Doc',
-    'Doc.URI',
-    showDocJson ? 'Doc.Object' : undefined,
-    'History',
-    'History.List',
-  ];
-
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
       <div {...styles.left}>
@@ -97,7 +84,15 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
         <div {...styles.right.inner}>
           <Info
             style={{ marginBottom: 30 }}
-            fields={fields.filter(Boolean) as InfoField[]}
+            fields={[
+              'Repo',
+              'Doc',
+              'Doc.URI',
+              showDocJson ? 'Doc.Object' : undefined,
+              'History',
+              'History.Genesis',
+              'History.List',
+            ]}
             data={{
               repo: { store, index },
               history: { doc },
