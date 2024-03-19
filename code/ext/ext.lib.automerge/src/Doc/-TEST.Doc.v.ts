@@ -1,5 +1,5 @@
 import { Doc } from '.';
-import { A, Id, describe, expect, it, toObject, type t } from '../test';
+import { A, Id, Time, describe, expect, expectRoughlySame, it, toObject, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc', async () => {
@@ -60,12 +60,49 @@ describe('Doc', async () => {
     });
   });
 
-  describe('Doc.asHandle', () => {
-    it('converts type', async () => {
+  it('Doc.asHandle', async () => {
+    const doc = await factory();
+    const handleRef = Doc.asHandle(doc);
+    expect(Doc.Is.handle(handleRef.handle)).to.be.true;
+  });
+
+  describe('Doc.Tag', () => {
+    it('commit: message + time (default)', async () => {
       const doc = await factory();
-      const handleRef = Doc.asHandle(doc);
-      expect(Doc.Is.handle(handleRef.handle)).to.be.true;
+      expect(Doc.history(doc).length).to.eql(2);
+
+      const res = Doc.Tag.commit(doc, 'foo');
+      expect(res.message).to.eql('foo');
+      expectRoughlySame(res.time, Time.now.timestamp, 0.1);
+
+      const history = Doc.history(doc);
+      expect(history.length).to.eql(3);
+      expect(history.latest.change.time).to.eql(res.time);
+      expect(history.latest.change.message).to.eql(res.message);
+    });
+
+    it('commit: pass handle', async () => {
+      const doc = await factory();
+      const handle = Doc.asHandle(doc).handle;
+      Doc.Tag.commit(handle, 'foo');
+
+      const history = Doc.history(doc);
+      expect(history.length).to.eql(3);
+      expect(history.latest.change.message).to.eql('foo');
+    });
+
+    it('commit: exclude timestamp', async () => {
+      const doc = await factory();
+      Doc.Tag.commit(doc, 'foo', { time: false });
+      expect(Doc.history(doc).latest.change.time).to.eql(0);
+    });
+
+    it('commit: custom timestamp', async () => {
+      const doc = await factory();
+      Doc.Tag.commit(doc, 'foo', { time: 1234 });
+      expect(Doc.history(doc).latest.change.time).to.eql(1234);
     });
   });
+
   it('|test.dispose|', () => store.dispose());
 });

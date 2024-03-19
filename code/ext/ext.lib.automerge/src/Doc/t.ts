@@ -60,6 +60,7 @@ export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
  * History
  */
 export type DocHistory<T = unknown> = {
+  readonly length: number;
   readonly commits: DocHistoryCommit<T>[];
   readonly latest: DocHistoryCommit<T>;
   readonly genesis?: DocHistoryGenesis<T>;

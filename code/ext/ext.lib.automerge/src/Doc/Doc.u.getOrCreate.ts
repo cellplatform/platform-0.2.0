@@ -31,22 +31,29 @@ export async function getOrCreate<T>(args: {
   const handle = repo.create<T>();
   await handle.whenReady();
 
-  const options: A.ChangeOptions<T> = {
-    message: DEFAULTS.message.initial,
-    time: Time.now.timestamp,
-  };
+  const message = DEFAULTS.message.initial;
+  const time = Time.now.timestamp;
+  const options: A.ChangeOptions<T> = { message, time };
+
   handle.change((d: any) => {
     args.initial(d);
 
     // Ensure the initializer function caused a change such that the
     // initial genesis timestamp is written into the commit history.
-    if (R.equals(d, {})) {
-      const key = `__tmp:${slug()}`;
-      d[key] = 0;
-      delete d[key]; // Clean up.
-    }
+    if (R.equals(d, {})) mutate.emptyChange(d);
   }, options);
 
   // Finish up.
   return Handle.wrap<T>(handle, { dispose$ });
 }
+
+/**
+ * Helpers
+ */
+const mutate = {
+  emptyChange(d: any) {
+    const key = `__tmp:${slug()}`;
+    d[key] = 0;
+    delete d[key]; // Clean up.
+  },
+} as const;

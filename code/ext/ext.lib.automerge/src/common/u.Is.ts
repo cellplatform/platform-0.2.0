@@ -100,7 +100,7 @@ export const Is = {
     );
   },
 
-  handle(input: any): input is typeof DocHandle {
+  handle<T>(input: any): input is typeof DocHandle<T> {
     return input instanceof DocHandle;
   },
 } as const;
