@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import { rx, type t } from './common';
 
-export function useRedraw(data: t.InfoData) {
+export function useRedrawOnChange(data: t.InfoData) {
   const crdt = {
     document: data.document?.doc,
     history: data.history?.doc,
   } as const;
 
   const [, setCount] = useState(0);
-  const redraw = () => {
-    console.log('redraw');
-    setCount((n) => n + 1);
-  };
+  const redraw = () => setCount((n) => n + 1);
 
   useEffect(() => {
     const life = rx.lifecycle();

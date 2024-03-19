@@ -1,6 +1,6 @@
 import { DEFAULTS, PropList, type t } from './common';
 import { InfoField } from './field';
-import { useRedraw } from './use.Redraw';
+import { useRedrawOnChange } from './use.RedrawOnChange';
 
 /**
  * Component
@@ -9,7 +9,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
   const { data = {} } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
-  useRedraw(data);
+  useRedrawOnChange(data);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => InfoField.module())
