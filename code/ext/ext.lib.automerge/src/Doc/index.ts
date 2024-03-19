@@ -1,2 +1,2 @@
 export { Doc } from './Doc';
-export { DEFAULTS } from './common';
+export { DEFAULTS, asHandle } from './common';

@@ -2,7 +2,6 @@ import { Lens } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
-import { asHandle } from './Doc.u';
 import { del } from './Doc.u.delete';
 import { get } from './Doc.u.get';
 import { getOrCreate } from './Doc.u.getOrCreate';
@@ -33,5 +32,4 @@ export const Doc = {
 
   history,
   heads,
-  asHandle,
 } as const;

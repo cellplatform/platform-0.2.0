@@ -1,4 +1,4 @@
-import { Doc } from '.';
+import { Doc, asHandle } from '.';
 import { A, Id, Time, describe, expect, expectRoughlySame, it, toObject, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
@@ -60,12 +60,6 @@ describe('Doc', async () => {
     });
   });
 
-  it('Doc.asHandle', async () => {
-    const doc = await factory();
-    const handleRef = Doc.asHandle(doc);
-    expect(Doc.Is.handle(handleRef.handle)).to.be.true;
-  });
-
   describe('Doc.Tag', () => {
     it('commit: message + time (default)', async () => {
       const doc = await factory();
@@ -83,8 +77,7 @@ describe('Doc', async () => {
 
     it('commit: pass handle', async () => {
       const doc = await factory();
-      const handle = Doc.asHandle(doc).handle;
-      Doc.Tag.commit(handle, 'foo');
+      Doc.Tag.commit(asHandle(doc), 'foo');
 
       const history = Doc.history(doc);
       expect(history.length).to.eql(3);
