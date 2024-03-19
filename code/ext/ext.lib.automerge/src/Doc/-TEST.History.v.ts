@@ -9,6 +9,7 @@ describe('Doc.History', { retry: 3 }, async () => {
     const doc = await store.doc.getOrCreate<D>((d) => null);
     const history = Doc.history(doc);
     const commits = history.commits;
+    expect(history.length).to.eql(2);
     expect(commits.length).to.eql(2);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({});
@@ -18,8 +19,9 @@ describe('Doc.History', { retry: 3 }, async () => {
   it('initial: change', async () => {
     const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
     const history = Doc.history(doc);
+    expect(history.length).to.eql(2);
+
     const commits = history.commits;
-    expect(commits.length).to.eql(2);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({ msg: 'hello' });
     expect(history.latest).to.eql(commits[1]);
@@ -32,8 +34,9 @@ describe('Doc.History', { retry: 3 }, async () => {
     doc.change((d) => (d.msg = 'hello'));
 
     const history = Doc.history(doc);
+    expect(history.length).to.eql(3);
+
     const commits = history.commits;
-    expect(commits.length).to.eql(3);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({});
     expect(commits[2].snapshot).to.eql({ msg: 'hello' });

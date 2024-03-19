@@ -9,6 +9,9 @@ export function history<T>(doc: t.DocRef<T>): t.DocHistory<T> {
 
   return {
     commits,
+    get length() {
+      return commits.length;
+    },
     get latest() {
       return commits[commits.length - 1];
     },
