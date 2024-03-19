@@ -20,7 +20,16 @@ export const SampleCrdt = {
       return (
         <CrdtInfo
           style={style}
-          fields={['Repo', 'Doc', 'Doc.URI', 'History']}
+          fields={[
+            'Repo',
+            'Doc',
+            'Doc.URI',
+            'History',
+            'History.Genesis',
+            'History.List',
+            'History.List.Detail',
+            'History.List.NavPaging',
+          ]}
           data={{
             repo: { store, index },
             document: { doc },
