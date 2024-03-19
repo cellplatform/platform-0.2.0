@@ -2,7 +2,7 @@ import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoDataDocument;
 
-export function doc(data: D | undefined, fields: t.InfoField[]) {
+export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
   if (!data) return;
   const res: t.PropListItem[] = [];
   const label = data.label ?? 'Document';
@@ -26,7 +26,13 @@ export function doc(data: D | undefined, fields: t.InfoField[]) {
 
     const elIcon = <Icons.Object size={14} />;
     if (!data.onIconClick) parts.push(elIcon);
-    else parts.push(<Button onClick={(e) => data.onIconClick?.({})}>{elIcon}</Button>);
+    else {
+      parts.push(
+        <Button theme={theme} onClick={() => data.onIconClick?.({})}>
+          {elIcon}
+        </Button>,
+      );
+    }
 
     const styles = {
       base: css({
@@ -52,7 +58,7 @@ export function doc(data: D | undefined, fields: t.InfoField[]) {
    * The <Object> component.
    */
   if (fields.includes('Doc.Object')) {
-    res.push({ value: wrangle.objectElement(data, hasLabel) });
+    res.push({ value: wrangle.objectElement(data, hasLabel, theme) });
   }
 
   // Finish up.
@@ -73,7 +79,7 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(data: D, hasLabel: boolean) {
+  objectElement(data: D, hasLabel: boolean, theme?: t.CommonTheme) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
@@ -86,6 +92,7 @@ const wrangle = {
             name={data?.object?.name}
             data={data?.doc?.current}
             fontSize={11}
+            theme={theme}
             style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),

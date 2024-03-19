@@ -1,12 +1,9 @@
 import { type t } from '../common';
-
-export { Doc } from '../../Doc';
 export * from '../common';
 
 /**
  * Constants
  */
-
 export const DEFAULTS = {
   history: {
     label: 'History',
@@ -23,7 +20,9 @@ export const DEFAULTS = {
         'Doc.URI',
         'Doc.Object',
         'History',
+        'History.Genesis',
         'History.List',
+        'History.List.Detail',
       ];
     },
     get default(): t.InfoField[] {

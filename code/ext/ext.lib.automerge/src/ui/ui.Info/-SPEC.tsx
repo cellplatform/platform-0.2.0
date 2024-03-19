@@ -1,7 +1,11 @@
 import { Info } from '.';
 import { Dev, DevReload, Pkg, PropList, TestDb, Value, WebStore, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps; debug: { reload?: boolean } };
+type T = {
+  props: t.InfoProps;
+  theme?: t.CommonTheme;
+  debug: { reload?: boolean; historyDesc?: boolean; historyDetail?: t.HashString };
+};
 const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -20,10 +24,12 @@ export default Dev.describe(name, async (e) => {
     return doc ? index.store.doc.get<T>(doc.uri) : undefined;
   }
 
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = Pick<T, 'theme'> & Pick<t.InfoProps, 'fields'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    theme: 'Light',
+    fields: DEFAULTS.fields.default,
+    historyDesc: DEFAULTS.history.list.sort === 'desc',
   });
 
   e.it('ui:init', async (e) => {
@@ -31,46 +37,60 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.theme = local.theme;
+      d.props.fields = local.fields;
       d.props.margin = 10;
+      d.debug.historyDesc = local.historyDesc;
     });
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([320, null])
       .display('grid')
       .render<T>(async (e) => {
-        if (e.state.debug.reload) return <DevReload />;
+        const { props, debug, theme } = e.state;
+        Dev.Theme.background(ctx, theme);
 
-        const fields = e.state.props.fields ?? [];
+        if (debug.reload) return <DevReload />;
+
+        const fields = props.fields ?? [];
         const doc = fields.includes('Doc') ? await docAtIndex(0) : undefined;
 
-        const toggleDocObjectVisibility = () => {
+        const toggleVisibile = (field: t.InfoField) => {
           state.change((d) => {
-            const fields = d.props.fields ?? [];
-            d.props.fields = fields.includes('Doc.Object')
-              ? fields.filter((f) => f !== 'Doc.Object')
-              : [...fields, 'Doc.Object'];
-            local.selectedFields = PropList.Wrangle.fields<t.InfoField>(d.props.fields);
+            const next = PropList.Wrangle.toggleField(d.props.fields, field);
+            local.fields = d.props.fields = next;
           });
         };
 
         const data: t.InfoData = {
           repo: { store, index },
           document: {
-            // label: '',
+            // label: 'Foo',
             doc,
             object: { name: 'foobar', expand: { level: 2 } },
             onIconClick(e) {
               console.info('⚡️ document.onIconClick', e);
-              toggleDocObjectVisibility();
+              toggleVisibile('Doc.Object');
             },
           },
-          history: { doc },
+          history: {
+            // label: 'Foo',
+            doc,
+            list: {
+              sort: debug.historyDesc ? 'desc' : 'asc',
+              showDetailFor: debug.historyDetail,
+            },
+            onItemClick(e) {
+              console.info('⚡️ history.onItemClick', e);
+              state.change((d) => {
+                d.debug.historyDetail = d.debug.historyDetail === e.hash ? undefined : e.hash;
+              });
+            },
+          },
         };
 
-        return <Info {...e.state.props} data={data} />;
+        return <Info {...props} data={data} theme={theme} />;
       });
   });
 
@@ -80,7 +100,7 @@ export default Dev.describe(name, async (e) => {
     dev.section('Fields', (dev) => {
       const update = (fields?: t.InfoField[] | undefined) => {
         dev.change((d) => (d.props.fields = fields));
-        local.selectedFields = fields?.length === 0 ? undefined : fields;
+        local.fields = fields?.length === 0 ? undefined : fields;
       };
       const set = (label: string, fields: t.InfoField[]) => {
         dev.button(label, (e) => update(fields));
@@ -105,13 +125,41 @@ export default Dev.describe(name, async (e) => {
       dev.hr(0, [10, 10]).title('Common States');
       set('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       set('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
-      set('Repo / Doc / History ( +List )', ['Repo', 'Doc', 'Doc.URI', 'History', 'History.List']);
+      set('Repo / Doc / History ( + List )', [
+        'Repo',
+        'Doc',
+        'Doc.URI',
+        'History',
+        'History.Genesis',
+        'History.List',
+        'History.List.Detail',
+      ]);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Data', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.historyDesc;
+        btn
+          .label((e) => `history.list.sort: "${value(e.state) ? 'desc' : 'asc'}"`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.historyDesc = Dev.toggle(d.debug, 'historyDesc')));
+          });
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(
+        dev,
+        (d) => d.theme,
+        (d, value) => (local.theme = d.theme = value),
+      );
+
       dev.hr(-1, 5);
       dev.button('create doc', async (e) => {
         await store.doc.getOrCreate((d) => null);
@@ -141,10 +189,11 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>(async (e) => {
-      const { props } = e.state;
+      const { props, debug } = e.state;
       const crdt = (await docAtIndex(0))?.current;
       const data = {
         props,
+        debug,
         'crdt:storage': storage,
         crdt,
       };

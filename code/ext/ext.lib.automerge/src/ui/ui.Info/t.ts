@@ -1,3 +1,4 @@
+import { queueScheduler } from 'rxjs';
 import type { t } from './common';
 
 export type InfoField =
@@ -9,7 +10,9 @@ export type InfoField =
   | 'Doc.URI'
   | 'Doc.Object'
   | 'History'
-  | 'History.List';
+  | 'History.Genesis'
+  | 'History.List'
+  | 'History.List.Detail';
 
 export type InfoData = {
   url?: { href: string; title?: string };
@@ -31,13 +34,19 @@ export type InfoDataDocument = {
   doc?: t.DocRef<unknown>;
   uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
-  onIconClick?: (e: {}) => void;
+  onIconClick?(e: {}): void;
 };
 
 export type InfoDataHistory = {
   label?: string;
   doc?: t.DocRef<unknown>;
-  list?: { page?: number; limit?: number; sort: 'asc' | 'desc' };
+  list?: {
+    page?: t.Index;
+    limit?: t.Index;
+    sort?: 'asc' | 'desc';
+    showDetailFor?: t.HashString | t.HashString[];
+  };
+  onItemClick?: InfoDataHistoryItemHandler;
 };
 
 /**
@@ -48,8 +57,20 @@ export type InfoProps = {
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
+  theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
   style?: t.CssValue;
+};
+
+/**
+ * Events
+ */
+export type InfoDataHistoryItemHandler = (e: InfoDataHistoryItemHandlerArgs) => void;
+export type InfoDataHistoryItemHandlerArgs = {
+  index: t.Index;
+  hash: t.HashString;
+  commit: t.DocHistoryCommit;
+  is: { first: boolean; last: boolean };
 };
