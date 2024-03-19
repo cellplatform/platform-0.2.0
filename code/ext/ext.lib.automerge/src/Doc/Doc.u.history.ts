@@ -29,9 +29,11 @@ export function history<T>(doc: t.DocRef<T>): t.DocHistory<T> {
   };
 }
 
-export function heads<T>(doc: t.DocRef<T>): t.DocHeads {
-  const heads = doc ? A.getHeads(doc.current as A.Doc<T>) : [];
-  return heads;
+/**
+ * Retrieve the list of hashes for the current HEAD.
+ */
+export function heads<T>(doc: t.DocRef<T> | undefined): t.HashString[] {
+  return doc ? A.getHeads(doc.current as A.Doc<T>) : [];
 }
 
 /**

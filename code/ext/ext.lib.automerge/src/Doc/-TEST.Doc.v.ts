@@ -35,6 +35,10 @@ describe('Doc', async () => {
   });
 
   describe('Doc.heads', () => {
+    it('undefined → []', () => {
+      expect(Doc.heads(undefined)).to.eql([]);
+    });
+
     it('initial head', async () => {
       const doc = await factory();
       const heads = Doc.heads(doc);

@@ -8,12 +8,11 @@ type Initial<T> = t.ImmutableNext<T>;
  * The address of a document within the repo/store.
  */
 export type DocUri = t.AutomergeUrl;
-export type DocHeads = t.HashString[];
 
 /**
  * An immutable/observable CRDT document reference.
  */
-export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
+export type DocRef<T = unknown> = t.ImmutableRef<T, t.DocEvents<T>> & {
   readonly uri: t.DocUri;
   readonly is: { ready: boolean; deleted: boolean };
   toObject(): T;
@@ -29,7 +28,7 @@ export type DocRef<T> = t.ImmutableRef<T, t.DocEvents<T>> & {
  *    being exposed. A DocRefHandle<T> can be cast from a DocRef<T>
  *    when and IF you know what you're doing.
  */
-export type DocRefHandle<T> = DocRef<T> & { readonly handle: t.DocHandle<T> };
+export type DocRefHandle<T = unknown> = DocRef<T> & { readonly handle: t.DocHandle<T> };
 
 /**
  * Generator function that produces a stongly-typed document
