@@ -1,6 +1,7 @@
 import { DEFAULTS, Doc, Value, type t } from './common';
 import { HistoryCommit } from './ui.History.Commit';
 import { HistoryValue } from './ui.History.Value';
+import { HistoryGrid } from '../ui.History.Grid';
 
 type D = t.InfoDataHistory;
 
@@ -35,6 +36,9 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
       );
       res.push({ value, divider: false });
     });
+
+    const grid = <HistoryGrid style={{ flex: 1 }} />;
+    res.push({ value: grid });
   }
 
   return res;

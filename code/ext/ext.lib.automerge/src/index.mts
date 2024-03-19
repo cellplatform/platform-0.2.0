@@ -26,6 +26,7 @@ export const Crdt = {
  */
 export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
+export { His } from './ui/ui.History.Grid';
 
 /**
  * Dev
