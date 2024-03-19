@@ -1,7 +1,7 @@
 export type * from '../common/t';
 import type { t } from './common';
 
-type S = string;
+export type * from '../ui.Sample.02.loaders/t';
 
 export type SampleEdge = {
   kind: t.NetworkConnectionEdgeKind;
@@ -43,24 +43,9 @@ export type HarnessShared = {
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
 };
 
-/**
- * Dynamic Loader (factory)
- */
-export type SampleName =
-  | 'CodeEditor'
-  | 'CodeEditor.AI'
-  | 'DiagramEditor'
-  | 'Deno.Deploy'
-  | 'ModuleNamespace'
-  | 'FaceAPI'
-  | 'ImageCrdt';
-
-export type SampleFactoryCtx = {
+export type SampleModuleDef = {
+  name: t.SampleName;
   docuri: string;
-  store: t.Store;
-  accessToken?: string;
-  stream?: MediaStream;
+  target: t.SampleModuleDefTarget;
 };
-
-export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };
 export type SampleModuleDefTarget = 'dev:header' | 'main';

@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, Peer, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
 import { factory } from '../ui.Sample.02.loaders';
 import { createEdge } from './-SPEC.edge';
 import { monitorKeyboard } from './-SPEC.keyboard';
@@ -284,7 +284,6 @@ export default Dev.describe(name, async (e) => {
 
               if (!(Shared.main && Shared.harness)) return;
               if (!docuri) return;
-
               const def: t.SampleModuleDef = { name, docuri, target };
               if (target === 'main') Shared.main.change((d) => (d.module = def));
               if (target === 'dev:header') Shared.harness.change((d) => (d.module = def));
@@ -300,6 +299,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
       loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
       loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
+      loadButton(`ƒ → load → Automerge.Info`, 'AutomergeInfo', 'main');
 
       dev.hr(-1, 5);
 

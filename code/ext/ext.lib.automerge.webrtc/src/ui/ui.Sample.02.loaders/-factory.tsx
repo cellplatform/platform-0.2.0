@@ -43,5 +43,10 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <ImageCrdt store={store} docuri={docuri} />;
   }
 
+  if (e.name === 'AutomergeInfo') {
+    const { AutomergeInfo } = await import('./ui.Automerge.Info');
+    return <AutomergeInfo store={store} docuri={docuri} />;
+  }
+
   return null;
 });
