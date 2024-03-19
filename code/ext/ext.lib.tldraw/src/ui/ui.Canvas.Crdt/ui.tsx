@@ -1,25 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { useAutomergeStore } from 'automerge-tldraw';
+import { Canvas } from '../ui.Canvas';
+import { Doc, css, type t } from './common';
+
+export type StatefulProps = Required<Pick<t.CanvasCrdtProps, 'userId' | 'doc'>>;
 
 export const View: React.FC<t.CanvasCrdtProps> = (props) => {
-  const { theme } = props;
-
-  /**
-   * Render
-   */
-  const color = Color.fromTheme(theme);
+  const { doc, userId } = props;
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      color,
-      display: 'grid',
-      placeItems: 'center',
-    }),
+    error: css({ display: 'grid', placeItems: 'center', padding: 8 }),
   };
+  if (!(doc && userId)) return <div {...styles.error}>{'The doc and userId not provided.'}</div>;
+  return <Stateful {...props} doc={doc} userId={userId} />;
+};
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${DEFAULTS.displayName}`}</div>
-    </div>
-  );
+const Stateful: React.FC<StatefulProps> = (props) => {
+  const { doc, userId } = props;
+  const handle = Doc.toHandle(doc);
+  const store = useAutomergeStore({ handle, userId });
+  return <Canvas {...props} store={store} />;
 };

@@ -1,8 +1,10 @@
 /**
  * @external
  */
-export type { Observable } from 'rxjs';
 export type { TLStoreSnapshot, TLStoreWithStatus } from '@tldraw/tldraw';
+export type { Observable } from 'rxjs';
+
+export type { DocRef, WebStore } from 'ext.lib.automerge/src/types';
 
 /**
  * @system

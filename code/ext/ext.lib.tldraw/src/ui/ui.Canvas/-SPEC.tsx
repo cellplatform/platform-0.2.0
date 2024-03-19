@@ -1,12 +1,12 @@
 import { Canvas } from '.';
-import { Dev, DevReload, Pkg, TestDb, type t, COLORS } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
 import { SampleCrdt } from './-SPEC-crdt';
 import { Link } from './-SPEC-ui.Link';
-import { CanvasSample } from './-SPEC-ui.Sample';
 
 type P = t.CanvasProps;
-type T = { props: P; debug: { reload?: boolean; docuri?: string } };
+type T = { props: P; debug: { docuri?: string } };
 const initial: T = { props: {}, debug: {} };
+const DEFAULTS = Canvas.DEFAULTS;
 
 const URLS = {
   docs: 'https://tldraw.dev',
@@ -24,8 +24,8 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
-    behaviors: Canvas.DEFAULTS.behaviors.default,
     docuri: undefined,
+    behaviors: DEFAULTS.behaviors.default,
   });
 
   const crdt = await SampleCrdt.init(local.docuri);
@@ -48,11 +48,8 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-        if (debug.reload) return <DevReload />;
-
         Dev.Theme.background(ctx, props.theme);
-        const userId = 'foo-1234'; // TEMP 🐷
-        return <CanvasSample {...props} doc={crdt.doc} userId={userId} />;
+        return <Canvas {...props} />;
       });
   });
 
@@ -87,12 +84,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('State', (dev) => {
-      dev.row((e) => crdt?.render({ Margin: [15, 0, 0, 0] }));
-    });
-
-    dev.hr(5, 20);
-
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(
         dev,
@@ -105,13 +96,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
-      dev.hr(-1, 5);
-
-      dev.button([`delete database: "${crdt.storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.reload = true));
-        await TestDb.Spec.deleteDatabase();
-      });
     });
   });
 
