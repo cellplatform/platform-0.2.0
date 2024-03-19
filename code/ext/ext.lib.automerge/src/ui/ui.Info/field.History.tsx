@@ -1,6 +1,6 @@
 import { HistoryGrid } from '../ui.History.Grid';
 import { DEFAULTS, Doc, Value, type t } from './common';
-import { HistoryCommit } from './ui.History.Commit';
+import { HistoryCommitRow } from './ui.History.Commit';
 import { HistoryValue } from './ui.History.Value';
 
 type D = t.InfoDataHistory;
@@ -24,7 +24,7 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
     list.forEach(({ index, commit }) => {
       const hash = commit.change.hash;
       const value = (
-        <HistoryCommit
+        <HistoryCommitRow
           style={style}
           index={index}
           total={list.length}

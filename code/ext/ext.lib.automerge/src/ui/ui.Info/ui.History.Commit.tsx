@@ -1,7 +1,7 @@
+import { HistoryCommit } from '../ui.History.Commit';
 import { COLORS, Hash, Icons, css, type t } from './common';
-import { HistoryCommit as HistoryCommit__NEXT } from '../ui.History.Commit';
 
-export type HistoryCommitProps = {
+export type HistoryCommitRowProps = {
   index: number;
   total: number;
   commit: t.DocHistoryCommit;
@@ -11,7 +11,7 @@ export type HistoryCommitProps = {
   onItemClick?: t.InfoDataHistoryItemHandler;
 };
 
-export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
+export const HistoryCommitRow: React.FC<HistoryCommitRowProps> = (props) => {
   const { index, commit, total, showDetail = false, theme } = props;
   const hash = commit.change.hash;
   const is = { first: index === 0, last: index === total - 1 };
@@ -48,7 +48,7 @@ export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
   );
 
   const elMain = (
-    <div {...styles.main} onClick={handleClick}>
+    <div {...styles.main} onMouseDown={handleClick}>
       <div {...css({ width: 10 })} />
       <div {...styles.left}>
         <Icons.Git.Commit size={16} style={{ transform: 'rotate(90deg)' }} />
@@ -59,10 +59,7 @@ export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
     </div>
   );
 
-  /**
-   * TODO 🐷
-   */
-  const elDetail = showDetail && <HistoryCommit__NEXT />;
+  const elDetail = showDetail && <HistoryCommit commit={commit} theme={theme} />;
 
   return (
     <div {...css(styles.base, props.style)}>

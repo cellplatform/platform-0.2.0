@@ -27,7 +27,7 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<T, 'theme'> & Pick<t.InfoProps, 'fields'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: 'Light',
+    theme: 'Dark',
     fields: DEFAULTS.fields.default,
     historyDesc: DEFAULTS.history.list.sort === 'desc',
   });
