@@ -1,5 +1,5 @@
 import { Canvas } from '.';
-import { Dev, DevReload, Pkg, TestDb, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, TestDb, type t, COLORS } from '../../test.ui';
 import { SampleCrdt } from './-SPEC-crdt';
 import { Link } from './-SPEC-ui.Link';
 import { CanvasSample } from './-SPEC-ui.Sample';
@@ -19,9 +19,10 @@ const URLS = {
  */
 const name = 'Canvas';
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<t.CanvasProps, 'behaviors'>;
+  type LocalStore = T['debug'] & Pick<t.CanvasProps, 'behaviors' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: undefined,
     behaviors: Canvas.DEFAULTS.behaviors.default,
     docuri: undefined,
   });
@@ -35,6 +36,7 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.props.behaviors = local.behaviors;
     });
 
@@ -44,9 +46,12 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <DevReload />;
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme);
+
+        if (debug.reload) return <DevReload />;
         const userId = 'foo-1234'; // TEMP 🐷
-        return <CanvasSample {...e.state.props} doc={crdt.doc} userId={userId} />;
+        return <CanvasSample {...props} doc={crdt.doc} userId={userId} />;
       });
   });
 
@@ -83,6 +88,16 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('State', (dev) => {
       dev.row((e) => crdt?.render({ Margin: [15, 0, 0, 0] }));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);

@@ -7,4 +7,4 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { rx } from 'sys.util';
+export { rx, slug } from 'sys.util';

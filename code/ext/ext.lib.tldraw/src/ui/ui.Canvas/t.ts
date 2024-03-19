@@ -9,5 +9,6 @@ export type CanvasBehavior = 'Foo' | 'Bar';
 export type CanvasProps = {
   behaviors?: t.CanvasBehavior[];
   store?: t.TLStoreWithStatus;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
