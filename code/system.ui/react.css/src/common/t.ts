@@ -6,7 +6,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { Falsy, Percent } from 'sys.types/src/types';
+export type { CommonTheme, Falsy, Percent } from 'sys.types/src/types';
 
 /**
  * @local
