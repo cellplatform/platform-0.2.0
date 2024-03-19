@@ -1,4 +1,5 @@
 import { COLORS, Hash, Icons, css, type t } from './common';
+import { HistoryCommit as HistoryCommit__NEXT } from '../ui.History.Commit';
 
 export type HistoryCommitProps = {
   index: number;
@@ -61,7 +62,7 @@ export const HistoryCommit: React.FC<HistoryCommitProps> = (props) => {
   /**
    * TODO 🐷
    */
-  const elDetail = showDetail && <div>{'🐷 TODO: Detail'}</div>;
+  const elDetail = showDetail && <HistoryCommit__NEXT />;
 
   return (
     <div {...css(styles.base, props.style)}>

@@ -1,7 +1,7 @@
 import { Dev, Pkg, type t } from '../../test.ui';
-import { DEFAULTS, HistoryGrid } from '.';
+import { DEFAULTS, HistoryCommit } from '.';
 
-type T = { props: t.HistoryGridProps };
+type T = { props: t.HistoryCommitProps };
 const initial: T = { props: {} };
 
 /**
@@ -22,7 +22,7 @@ export default Dev.describe(name, (e) => {
       .size([300, null])
       .display('grid')
       .render<T>((e) => {
-        return <HistoryGrid {...e.state.props} />;
+        return <HistoryCommit {...e.state.props} />;
       });
   });
 
