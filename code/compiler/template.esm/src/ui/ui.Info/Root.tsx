@@ -5,12 +5,12 @@ import { Field } from './field';
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
-  const { data = {} } = props;
+  const { theme, data = {} } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module())
-    .field('Module.Verify', () => Field.moduleVerify())
+    .field('Module.Verify', () => Field.moduleVerify(theme))
     .field('Component', () => Field.component(data.component))
     .items(fields);
 
@@ -20,6 +20,7 @@ const View: React.FC<t.InfoProps> = (props) => {
       items={items}
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
+      theme={theme}
       card={props.card}
       flipped={props.flipped}
       padding={props.card ? [20, 25, 30, 25] : undefined}

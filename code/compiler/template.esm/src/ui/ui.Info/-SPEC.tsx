@@ -10,9 +10,10 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.InfoProps, 'fields'>;
+  type LocalStore = Pick<t.InfoProps, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: 'Light',
     fields: DEFAULTS.fields.default,
   });
 
@@ -22,6 +23,7 @@ export default Dev.describe(name, (e) => {
 
     await state.change((d) => {
       d.props.fields = local.fields;
+      d.props.theme = local.theme;
       d.props.margin = 10;
     });
 
@@ -31,7 +33,9 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Info {...props} />;
       });
   });
 
@@ -58,6 +62,17 @@ export default Dev.describe(name, (e) => {
           />
         );
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
   });
 

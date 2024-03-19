@@ -8,6 +8,7 @@ export type InfoProps = {
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
+  theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
