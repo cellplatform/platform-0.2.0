@@ -1,12 +1,13 @@
 import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
+import { fields, toggleField } from './u.fields';
 import { format } from './u.format';
 import { theme } from './u.theme';
-import { fields } from './u.fields';
 
 export const Wrangle = {
   format,
   theme,
   fields,
+  toggleField,
 
   sizeProp(input?: t.PropListSize | number) {
     return typeof input === 'number' ? { fixed: input } : input;
