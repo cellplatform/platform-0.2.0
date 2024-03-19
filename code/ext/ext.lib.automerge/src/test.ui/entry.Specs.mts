@@ -11,6 +11,7 @@ export const Specs = {
   [`${ns}.ui.RepoList.Virtual`]: () => import('../ui/ui.RepoList.Virtual/-SPEC'),
   [`${ns}.ui.Doc.History.Grid`]: () => import('../ui/ui.History.Grid/-SPEC'),
   [`${ns}.ui.Doc.History.Commit`]: () => import('../ui/ui.History.Commit/-SPEC'),
+  [`${ns}.ui.Nav.Paging`]: () => import('../ui/ui.Nav.Paging/-SPEC'),
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
 } as t.SpecImports;
 

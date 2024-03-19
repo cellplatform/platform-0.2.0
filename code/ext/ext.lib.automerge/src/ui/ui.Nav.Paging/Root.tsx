@@ -5,7 +5,7 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const Root = FC.decorate<t.RootProps, Fields>(
+export const NavPaging = FC.decorate<t.NavPagingProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

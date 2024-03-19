@@ -12,6 +12,7 @@ export type * from './Store.Web/t';
 export type * from './ui/ui.History.Commit/t';
 export type * from './ui/ui.History.Grid/t';
 export type * from './ui/ui.Info/t';
+export type * from './ui/ui.Nav.Paging/t';
 export type * from './ui/ui.RepoList.Model/t';
 export type * from './ui/ui.RepoList.Virtual/t';
 export type * from './ui/ui.RepoList/t';
