@@ -2,11 +2,11 @@ import { describe, expect, it, rx, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Events', async () => {
-  const { store, generator } = testSetup();
+  const { store, factory } = testSetup();
 
   describe('lifecycle', async () => {
     it('multiple instances', async () => {
-      const doc = await generator();
+      const doc = await factory();
       const events1 = doc.events();
       const events2 = doc.events();
       expect(events1).to.not.equal(events2);
@@ -14,7 +14,7 @@ describe('Doc.Events', async () => {
 
     describe('dispose', () => {
       it('via .dispose()', async () => {
-        const doc = await generator();
+        const doc = await factory();
         const events = doc.events();
         let fired = 0;
         events.dispose$.subscribe(() => fired++);
@@ -27,7 +27,7 @@ describe('Doc.Events', async () => {
       });
 
       it('via { dispose$ }', async () => {
-        const doc = await generator();
+        const doc = await factory();
         const dispose$ = new rx.Subject<void>();
         const events = doc.events(dispose$);
 
@@ -42,8 +42,8 @@ describe('Doc.Events', async () => {
       });
 
       it('when parent store is disposed', async () => {
-        const { store, generator } = testSetup();
-        const doc = await generator();
+        const { store, factory } = testSetup();
+        const doc = await factory();
         const events = doc.events();
         let fired = 0;
         events.dispose$.subscribe(() => fired++);
@@ -61,7 +61,7 @@ describe('Doc.Events', async () => {
 
   describe('changed$', () => {
     it('fires', async () => {
-      const doc = await generator();
+      const doc = await factory();
       const events = doc.events();
 
       const fired: t.DocChanged<D>[] = [];
@@ -88,7 +88,7 @@ describe('Doc.Events', async () => {
     });
 
     it('does not fire when value not updated', async () => {
-      const doc = await generator();
+      const doc = await factory();
       const events = doc.events();
 
       const fired: t.DocChanged<D>[] = [];
@@ -106,7 +106,7 @@ describe('Doc.Events', async () => {
 
   describe('deleted$', () => {
     it('deleted$ ← via [store.doc.delete]', async () => {
-      const doc = await generator();
+      const doc = await factory();
       const events = doc.events();
 
       doc.change((d) => (d.count += 5));
@@ -127,7 +127,7 @@ describe('Doc.Events', async () => {
     });
 
     it('deleted$ ← via [repo.delete]', async () => {
-      const doc = await generator();
+      const doc = await factory();
       const events = doc.events();
       doc.change((d) => (d.count += 5));
 

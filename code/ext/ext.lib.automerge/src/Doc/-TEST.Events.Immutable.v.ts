@@ -3,10 +3,10 @@ import { describe, expect, it, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Events: Immutable', () => {
-  const { store, generator } = testSetup();
+  const { store, factory } = testSetup();
 
   it('fires events by overriding change handler', async () => {
-    const doc = await generator();
+    const doc = await factory();
 
     const change = doc.change;
     const events1 = doc.events();

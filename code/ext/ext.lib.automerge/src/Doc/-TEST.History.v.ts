@@ -12,6 +12,7 @@ describe('Doc.History', { retry: 3 }, async () => {
     expect(commits.length).to.eql(2);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({});
+    expect(history.latest).to.eql(commits[1]);
   });
 
   it('initial: change', async () => {
@@ -21,6 +22,7 @@ describe('Doc.History', { retry: 3 }, async () => {
     expect(commits.length).to.eql(2);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({ msg: 'hello' });
+    expect(history.latest).to.eql(commits[1]);
   });
 
   it('change history', async () => {
@@ -28,11 +30,14 @@ describe('Doc.History', { retry: 3 }, async () => {
     expect(Doc.history(doc).commits.length).to.eql(2);
 
     doc.change((d) => (d.msg = 'hello'));
-    const commits = Doc.history(doc).commits;
+
+    const history = Doc.history(doc);
+    const commits = history.commits;
     expect(commits.length).to.eql(3);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({});
     expect(commits[2].snapshot).to.eql({ msg: 'hello' });
+    expect(history.latest).to.eql(commits[2]);
   });
 
   it('genesis meta-data', async () => {

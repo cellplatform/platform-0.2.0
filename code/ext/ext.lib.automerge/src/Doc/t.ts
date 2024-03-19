@@ -8,6 +8,7 @@ type Initial<T> = t.ImmutableNext<T>;
  * The address of a document within the repo/store.
  */
 export type DocUri = t.AutomergeUrl;
+export type DocHeads = t.HashString[];
 
 /**
  * An immutable/observable CRDT document reference.
@@ -60,8 +61,9 @@ export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
  * History
  */
 export type DocHistory<T = unknown> = {
-  readonly genesis?: DocHistoryGenesis<T>;
   readonly commits: DocHistoryCommit<T>[];
+  readonly latest: DocHistoryCommit<T>;
+  readonly genesis?: DocHistoryGenesis<T>;
 };
 export type DocHistoryGenesis<T = unknown> = {
   initial: DocHistoryCommit<T>;

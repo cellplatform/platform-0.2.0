@@ -1,15 +1,14 @@
 import { Doc } from '.';
-import { Store } from '../Store';
 import { describe, expect, it, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Patch', async () => {
-  const { store, generator } = testSetup();
+  const { store, factory } = testSetup();
 
   describe('Patch.apply', () => {
     it('single patch', async () => {
-      const doc1 = await generator();
-      const doc2 = await generator();
+      const doc1 = await factory();
+      const doc2 = await factory();
       const events = doc1.events();
       let patches: t.Patch[] = [];
       events.changed$.subscribe((e) => (patches = e.patches));
@@ -27,8 +26,8 @@ describe('Doc.Patch', async () => {
     });
 
     it('multiple patches', async () => {
-      const doc1 = await generator();
-      const doc2 = await generator();
+      const doc1 = await factory();
+      const doc2 = await factory();
       const events = doc1.events();
       let patches: t.Patch[] = [];
       events.changed$.subscribe((e) => (patches = e.patches));
@@ -51,8 +50,8 @@ describe('Doc.Patch', async () => {
     });
 
     it('pass: docRef<T>', async () => {
-      const doc1 = await generator();
-      const doc2 = await generator();
+      const doc1 = await factory();
+      const doc2 = await factory();
       const events = doc1.events();
       let patches: t.Patch[] = [];
       events.changed$.subscribe((e) => (patches = e.patches));

@@ -43,7 +43,7 @@ export async function getOrCreate<T>(args: {
     if (R.equals(d, {})) {
       const key = `__tmp:${slug()}`;
       d[key] = 0;
-      delete d[key];
+      delete d[key]; // Clean up.
     }
   }, options);
 
