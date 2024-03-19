@@ -66,6 +66,7 @@ export const Paths = {
       'src/test.ui/entry.Specs.mts',
       'src/test.ui/entry.tsx',
       'src/test.ui/index.ts',
+      'src/test.ui/t.ts',
 
       'src/ui/common/Icons.ts',
       'src/ui/common/index.ts',
