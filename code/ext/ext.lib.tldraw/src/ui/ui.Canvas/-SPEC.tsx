@@ -4,7 +4,8 @@ import { SampleCrdt } from './-SPEC-crdt';
 import { Link } from './-SPEC-ui.Link';
 import { CanvasSample } from './-SPEC-ui.Sample';
 
-type T = { props: t.CanvasProps; debug: { reload?: boolean; docuri?: string } };
+type P = t.CanvasProps;
+type T = { props: P; debug: { reload?: boolean; docuri?: string } };
 const initial: T = { props: {}, debug: {} };
 
 const URLS = {
@@ -19,7 +20,7 @@ const URLS = {
  */
 const name = 'Canvas';
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<t.CanvasProps, 'behaviors' | 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'behaviors' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
