@@ -5,12 +5,14 @@ import { DocPatch as Patch } from './Doc.Patch';
 import { del } from './Doc.u.delete';
 import { get } from './Doc.u.get';
 import { getOrCreate } from './Doc.u.getOrCreate';
-import { history, heads } from './Doc.u.history';
-import { A, Data, DocUri as Uri, toObject, type t } from './common';
+import { heads, history } from './Doc.u.history';
+import { A, Data, DocUri as Uri, toObject, type t, Is } from './common';
+import { asHandle } from './Doc.u';
 
 type Uri = t.DocUri | string;
 
 export const Doc = {
+  Is,
   Uri,
   Meta,
   Data,
@@ -29,4 +31,5 @@ export const Doc = {
 
   history,
   heads,
+  asHandle,
 } as const;

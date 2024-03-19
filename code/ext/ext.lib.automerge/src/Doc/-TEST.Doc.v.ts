@@ -60,5 +60,12 @@ describe('Doc', async () => {
     });
   });
 
+  describe('Doc.asHandle', () => {
+    it('converts type', async () => {
+      const doc = await factory();
+      const handleRef = Doc.asHandle(doc);
+      expect(Doc.Is.handle(handleRef.handle)).to.be.true;
+    });
+  });
   it('|test.dispose|', () => store.dispose());
 });
