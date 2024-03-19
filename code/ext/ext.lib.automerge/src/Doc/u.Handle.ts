@@ -1,7 +1,16 @@
 import { eventsFactory } from './Doc.Events';
 import { slug, toObject, type t } from './common';
 
+/**
+ * Convert a DocRef → DocRefHandle.
+ */
+export function toHandle<T>(doc: t.DocRef<T>) {
+  return (doc as t.DocRefHandle<T>).handle;
+}
+
 export const Handle = {
+  toHandle,
+
   /**
    * Wrap a raw automerge document-handle as a [DocRefHandle].
    */

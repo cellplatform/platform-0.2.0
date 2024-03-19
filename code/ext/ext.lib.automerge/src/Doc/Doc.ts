@@ -8,6 +8,7 @@ import { getOrCreate } from './Doc.u.getOrCreate';
 import { heads, history } from './Doc.u.history';
 import { Tag } from './Doc.u.tag';
 import { A, Data, Is, DocUri as Uri, toObject, type t } from './common';
+import { toHandle } from './u';
 
 type Uri = t.DocUri | string;
 
@@ -32,4 +33,5 @@ export const Doc = {
 
   history,
   heads,
+  toHandle,
 } as const;

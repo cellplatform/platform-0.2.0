@@ -1,4 +1,5 @@
-import { A, Is, Time, asHandle, type t } from './common';
+import { A, Is, Time, type t } from './common';
+import { toHandle } from './u';
 
 /**
  * Stamp a commit message/timestamp into the document history.
@@ -28,6 +29,6 @@ const wrangle = {
 
   handle<T>(input: t.DocRef<T> | t.DocHandle<T>): t.DocHandle<T> {
     if (Is.handle(input)) return input as t.DocHandle<T>;
-    return asHandle(input as t.DocRef<T>);
+    return toHandle(input as t.DocRef<T>);
   },
 } as const;

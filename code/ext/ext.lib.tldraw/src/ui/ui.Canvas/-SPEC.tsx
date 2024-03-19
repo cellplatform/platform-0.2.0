@@ -47,9 +47,9 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-        Dev.Theme.background(ctx, props.theme);
-
         if (debug.reload) return <DevReload />;
+
+        Dev.Theme.background(ctx, props.theme);
         const userId = 'foo-1234'; // TEMP 🐷
         return <CanvasSample {...props} doc={crdt.doc} userId={userId} />;
       });

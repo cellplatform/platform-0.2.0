@@ -1,5 +1,5 @@
 import { WebStore } from '.';
-import { A, Is, Test, TestDb, expect, rx, type t } from '../test.ui';
+import { Doc, A, Is, Test, TestDb, expect, rx, type t } from '../test.ui';
 import { DEFAULTS } from './common';
 
 type D = { count?: t.A.Counter };
@@ -12,6 +12,10 @@ export default Test.describe('Store.Web (Repo)', (e) => {
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };
+
+  e.it('WebStore.Doc', (e) => {
+    expect(WebStore.Doc).to.equal(Doc);
+  });
 
   e.describe('initialize', (e) => {
     e.it('Is.webStore', (e) => {
@@ -99,12 +103,6 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       const doc2 = await store.doc.getOrCreate<D>(initial, doc1.uri);
       expect(doc1.uri).to.eql(doc2.uri);
       expect(doc1.current).to.equal(doc2.current);
-    });
-
-    e.it('WebStore.handle( ... )', async (e) => {
-      const doc = await store.doc.getOrCreate<D>(initial);
-      const handle = WebStore.handle(doc);
-      expect(Is.handle(handle)).to.eql(true);
     });
   });
 

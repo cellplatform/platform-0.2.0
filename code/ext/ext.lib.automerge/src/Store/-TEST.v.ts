@@ -1,5 +1,5 @@
 import { Store } from '.';
-import { A, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Doc, Is, describe, expect, it, rx, type t } from '../test';
 
 type D = { count?: t.A.Counter };
 
@@ -18,6 +18,10 @@ describe('Store (base)', async () => {
     non.forEach((value) => expect(Is.store(value)).to.eql(false));
     expect(Is.store(store)).to.eql(true);
     expect(Is.repo(store.repo)).to.eql(true);
+  });
+
+  it('WebStore.Doc', () => {
+    expect(Store.Doc).to.equal(Doc);
   });
 
   describe('lifecycle', () => {

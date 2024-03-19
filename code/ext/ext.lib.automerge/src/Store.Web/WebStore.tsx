@@ -3,6 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
+import { Doc } from '../Doc';
 import { Store } from '../Store';
 import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
@@ -18,8 +19,8 @@ type Init = {
  * Manage an Automerge "repo" on the browser.
  */
 export const WebStore = {
+  Doc,
   Provider: RepoContext.Provider,
-  handle: Store.handle,
 
   get IndexDb() {
     return StoreIndexDb;
