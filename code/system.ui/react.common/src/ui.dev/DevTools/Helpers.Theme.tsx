@@ -32,16 +32,18 @@ export const Theme = {
     current: (d: T) => t.CommonTheme | undefined,
     update: (d: T, value: t.CommonTheme) => void,
   ) {
+    const defaultTheme: t.CommonTheme = 'Light';
     dev.button((btn) => {
       btn
-        .label((e) => `theme: ${current(e.state)}`)
+        .label((e) => `theme: ${current(e.state) ?? defaultTheme}`)
         .right((e) => {
-          const is = Theme.is(current(e.state));
+          const is = Theme.is(current(e.state) ?? defaultTheme);
           const Icon = is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
           return <Icon size={16} />;
         })
         .onClick((e) => {
-          const next = current(e.state.current) === 'Light' ? 'Dark' : 'Light';
+          const prev = current(e.state.current) ?? defaultTheme;
+          const next = prev === 'Light' ? 'Dark' : 'Light';
           dev.change((d) => update(d, next));
           Theme.background(dev.ctx, next);
         });

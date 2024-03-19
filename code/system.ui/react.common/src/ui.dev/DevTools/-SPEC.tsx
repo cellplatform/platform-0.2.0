@@ -3,7 +3,7 @@ import { Dev, Pkg, Time, type t } from '../../test.ui';
 import { Sample } from './-SPEC.Sample';
 
 export type T = { count: number; on: boolean; theme?: t.CommonTheme };
-const initial: T = { count: 0, on: true, theme: 'Light' };
+const initial: T = { count: 0, on: true };
 
 export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
