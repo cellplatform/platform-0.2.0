@@ -133,6 +133,7 @@ export default Dev.describe(name, async (e) => {
         'History.Genesis',
         'History.List',
         'History.List.Detail',
+        'History.List.NavPaging',
       ]);
     });
 

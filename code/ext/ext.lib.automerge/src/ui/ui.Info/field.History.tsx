@@ -2,6 +2,7 @@ import { HistoryGrid } from '../ui.History.Grid';
 import { DEFAULTS, Doc, Value, type t } from './common';
 import { HistoryCommitRow } from './ui.History.Commit';
 import { HistoryValue } from './ui.History.Value';
+import { NavPaging } from '../ui.Nav.Paging';
 
 type D = t.InfoDataHistory;
 
@@ -17,27 +18,46 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
   };
   res.push(main);
 
+  /**
+   * History.
+   */
   if (fields.includes('History.List')) {
     const style: React.CSSProperties = { flex: 1, marginLeft: 0 };
     const list = wrangle.page(data);
 
     list.forEach(({ index, commit }) => {
       const hash = commit.change.hash;
-      const value = (
-        <HistoryCommitRow
-          style={style}
-          index={index}
-          total={list.length}
-          commit={commit}
-          theme={theme}
-          showDetail={hash === data.list?.showDetailFor}
-          onItemClick={data.onItemClick}
-        />
-      );
-      res.push({ value, divider: false });
+      res.push({
+        divider: false,
+        value: (
+          <HistoryCommitRow
+            style={style}
+            index={index}
+            total={list.length}
+            commit={commit}
+            theme={theme}
+            showDetail={hash === data.list?.showDetailFor}
+            onItemClick={data.onItemClick}
+          />
+        ),
+      });
     });
 
-    res.push({ value: <HistoryGrid style={{ flex: 1 }} /> });
+    /**
+     * History List (Grid).
+     */
+    const showNav = fields.includes('History.List.NavPaging');
+    res.push({
+      value: <HistoryGrid theme={theme} style={{ flex: 1 }} />,
+      divider: !showNav,
+    });
+
+    /**
+     * Navigation (Paging).
+     */
+    if (showNav) {
+      res.push({ value: <NavPaging theme={theme} style={{ flex: 1 }} /> });
+    }
   }
 
   return res;

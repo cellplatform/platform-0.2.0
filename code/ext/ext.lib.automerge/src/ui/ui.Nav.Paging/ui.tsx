@@ -10,6 +10,7 @@ export const View: React.FC<t.NavPagingProps> = (props) => {
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       display: 'grid',
       placeItems: 'center',
+      padding: 5,
     }),
   };
 

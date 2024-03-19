@@ -23,6 +23,7 @@ export const DEFAULTS = {
         'History.Genesis',
         'History.List',
         'History.List.Detail',
+        'History.List.NavPaging',
       ];
     },
     get default(): t.InfoField[] {

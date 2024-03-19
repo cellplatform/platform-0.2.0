@@ -12,7 +12,8 @@ export type InfoField =
   | 'History'
   | 'History.Genesis'
   | 'History.List'
-  | 'History.List.Detail';
+  | 'History.List.Detail'
+  | 'History.List.NavPaging';
 
 export type InfoData = {
   url?: { href: string; title?: string };
