@@ -1,8 +1,8 @@
 import { Canvas } from '.';
 import { Dev, DevReload, Pkg, TestDb, type t } from '../../test.ui';
-import { SampleCrdt } from './-SPEC.crdt';
-import { Link } from './-SPEC.ui.Link';
-import { CanvasSample } from './-SPEC.ui.Sample';
+import { SampleCrdt } from './-SPEC-crdt';
+import { Link } from './-SPEC-ui.Link';
+import { CanvasSample } from './-SPEC-ui.Sample';
 
 type T = { props: t.CanvasProps; debug: { reload?: boolean; docuri?: string } };
 const initial: T = { props: {}, debug: {} };
