@@ -1,6 +1,6 @@
 import { useAutomergeStore } from 'automerge-tldraw';
 import { Canvas } from '.';
-import { Doc, WebStore, type t } from '../../test.ui';
+import { Doc, type t } from '../../test.ui';
 
 export type CanvasSampleProps = t.CanvasProps & {
   userId: string;
