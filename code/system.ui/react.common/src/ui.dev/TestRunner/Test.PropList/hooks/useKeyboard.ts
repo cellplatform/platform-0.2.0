@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Util } from '../Util.mjs';
 import { Hash, Keyboard, type t } from '../common';
+import { Util } from '../u';
 
 /**
  * Manages keyboard shortcuts for the test runner.

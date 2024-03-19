@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { rx, type t } from '../common';
-import { TestPropListController } from '../logic/Controller.mjs';
+import { TestPropListController } from '../logic/Controller';
 
 export function useController(args: {
   initial?: t.TestPropListData;

@@ -1,5 +1,5 @@
-import { Util } from '../Util.mjs';
 import { Button, Keyboard, css, useMouse, type t } from '../common';
+import { Util } from '../u';
 
 export type SpecsResetProps = {
   data: t.TestPropListData;

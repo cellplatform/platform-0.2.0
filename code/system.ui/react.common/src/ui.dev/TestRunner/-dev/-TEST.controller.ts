@@ -1,6 +1,6 @@
 import { TestPropList } from '..';
-import { Util } from '../Test.PropList/Util.mjs';
-import { Dev, Time, expect, type t } from './-common.mjs';
+import { Util } from '../Test.PropList/u';
+import { Dev, Time, expect, type t } from './-common';
 
 export default Dev.describe('Controller Behavior', (e) => {
   e.it('init', async (e) => {
@@ -9,8 +9,8 @@ export default Dev.describe('Controller Behavior', (e) => {
     expect(controller.suites).to.eql([]);
   });
 
-  const import1 = import('./-TEST.sample-1.mjs');
-  const import2 = import('./-TEST.sample-2.mjs');
+  const import1 = import('./-TEST.sample-1');
+  const import2 = import('./-TEST.sample-2');
 
   const expectOrder = (modules: t.TestSuiteModel[]) => {
     const labels = modules.map((suite) => suite.description);

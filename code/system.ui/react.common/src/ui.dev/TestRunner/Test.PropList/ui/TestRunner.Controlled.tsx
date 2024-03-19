@@ -1,5 +1,5 @@
 import { type t } from '../common';
-import { useController } from '../hooks/useController.mjs';
+import { useController } from '../hooks/useController';
 import { TestRunner, type TestRunnerProps } from './TestRunner';
 
 export type TestRunnerControlledProps = Omit<TestRunnerProps, 'data'> & {

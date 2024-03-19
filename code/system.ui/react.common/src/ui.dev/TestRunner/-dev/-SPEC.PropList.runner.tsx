@@ -1,5 +1,5 @@
 import { PropList } from '../../../ui/PropList';
-import { Dev, Pkg, type TestCtx, type t } from './-common.mjs';
+import { Dev, Pkg, type TestCtx, type t } from './-common';
 
 type T = { ctx: TestCtx; theme?: t.CommonTheme };
 const initial: T = { ctx: { fail: false, delay: 2000 } };
@@ -40,9 +40,9 @@ export default Dev.describe('TestPropList.runner', (e) => {
           ctx: () => state.current.ctx,
           theme,
           modules: [
-            import('./-TEST.sample-1.mjs'),
-            import('./-TEST.sample-2.mjs'),
-            import('./-TEST.controller.mjs'),
+            import('./-TEST.sample-1'),
+            import('./-TEST.sample-2'),
+            import('./-TEST.controller'),
           ],
         });
 

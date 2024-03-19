@@ -1,4 +1,4 @@
-import { Dev, Time, Wrangle, expect } from './-common.mjs';
+import { Dev, Time, Wrangle, expect } from './-common';
 
 /**
  * Default export.

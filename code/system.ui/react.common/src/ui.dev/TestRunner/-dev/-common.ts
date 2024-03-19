@@ -1,5 +1,5 @@
 import { type t } from '../common';
-import type { TestCtx } from './-types.mjs';
+import type { TestCtx } from './-types';
 
 export type { TestCtx };
 export * from '../../../test.ui';

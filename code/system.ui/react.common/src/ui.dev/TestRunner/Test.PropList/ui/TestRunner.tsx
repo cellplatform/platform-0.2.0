@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Util } from '../Util.mjs';
+import { Util } from '../u';
 import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, useMouse, type t } from '../common';
 import { Results } from './TestRunner.Results';
 

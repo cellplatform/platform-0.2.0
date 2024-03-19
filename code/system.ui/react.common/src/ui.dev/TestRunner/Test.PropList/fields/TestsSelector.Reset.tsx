@@ -1,6 +1,6 @@
 import { type t } from '../common';
+import { Util } from '../u';
 import { SpecsReset } from '../ui/Specs.Reset';
-import { Util } from '../Util.mjs';
 
 /**
  * Reset row.

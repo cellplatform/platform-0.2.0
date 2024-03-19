@@ -1,5 +1,5 @@
-import { Util } from '../Util.mjs';
 import { Theme, css, type t } from '../common';
+import { Util } from '../u';
 
 import { Body } from './Specs.Row.Body';
 import { Switch } from './Specs.Row.Switch';

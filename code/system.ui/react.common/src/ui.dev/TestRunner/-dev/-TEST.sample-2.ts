@@ -1,4 +1,4 @@
-import { Dev, Lorem, Time, Wrangle, expect } from './-common.mjs';
+import { Dev, Lorem, Time, Wrangle, expect } from './-common';
 
 export default Dev.describe(`Sample-2: ${Lorem.words(20)}.`, (e) => {
   const length = 50;

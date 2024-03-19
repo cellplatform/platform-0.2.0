@@ -1,6 +1,6 @@
-import { Dev, type TestCtx } from './-common.mjs';
-import suite1 from './-TEST.sample-1.mjs';
-import suite2 from './-TEST.sample-2.mjs';
+import { Dev, type TestCtx } from './-common';
+import suite1 from './-TEST.sample-1';
+import suite2 from './-TEST.sample-2';
 
 import { type TestResultsProps } from '../Test.Results';
 
@@ -62,7 +62,7 @@ export default Dev.describe('TestRunner', (e) => {
            *     with an async import within an async function.
            *     This is to simulate the async nature of some use-cases.
            */
-          const { TESTS } = await import('./-TESTS.mjs');
+          const { TESTS } = await import('./-TESTS');
           return TESTS.all;
         })
         .onChanged(async (e) => {

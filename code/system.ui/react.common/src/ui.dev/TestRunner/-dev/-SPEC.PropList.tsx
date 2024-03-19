@@ -1,5 +1,5 @@
 import { type TestPropListProps } from '../Test.PropList';
-import { Dev, Pkg, t, type TestCtx } from './-common.mjs';
+import { Dev, Pkg, t, type TestCtx } from './-common';
 
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;
@@ -67,10 +67,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       async modules() {
         // NB: function or array (optionally async).
         return [
-          import('./-TEST.sample-1.mjs'),
-          import('./-TEST.sample-2.mjs'),
+          import('./-TEST.sample-1'),
+          import('./-TEST.sample-2'),
           'Internal',
-          import('./-TEST.controller.mjs'),
+          import('./-TEST.controller'),
         ];
       },
       run: {

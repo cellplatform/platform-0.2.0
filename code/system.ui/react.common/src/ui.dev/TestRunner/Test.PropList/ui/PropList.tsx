@@ -2,8 +2,8 @@ import { PropList as Base, DEFAULTS, type t } from '../common';
 import { FieldTestsRun } from '../fields/TestsRun';
 import { FieldTestsSelector } from '../fields/TestsSelector';
 import { FieldTestsSelectorReset } from '../fields/TestsSelector.Reset';
-import { useKeyboard } from '../hooks/useKeyboard.mjs';
-import { useSuites } from '../hooks/useSuites.mjs';
+import { useKeyboard } from '../hooks/useKeyboard';
+import { useSuites } from '../hooks/useSuites';
 
 export type TestPropListProps = {
   title?: t.PropListProps['title'];

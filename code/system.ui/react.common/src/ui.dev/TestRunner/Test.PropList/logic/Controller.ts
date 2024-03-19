@@ -1,5 +1,5 @@
 import { rx, type t } from '../common';
-import { State } from './Controller.State.mjs';
+import { State } from './Controller.State';
 
 /**
  * Default controller for the test runner PropList component.
