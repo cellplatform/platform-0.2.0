@@ -31,6 +31,8 @@ export { RepoList } from './ui/ui.RepoList';
  * Dev
  */
 export { TestDb } from './test.ui/TestDb';
+export { Specs } from './test.ui/entry.Specs.mjs';
+
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };

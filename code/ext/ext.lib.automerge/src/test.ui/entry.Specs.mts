@@ -1,3 +1,5 @@
+import { type t } from './common';
+
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -8,6 +10,6 @@ export const Specs = {
   [`${ns}.ui.RepoList.Virtual`]: () => import('../ui/ui.RepoList.Virtual/-SPEC'),
   [`${ns}.tests`]: () => import('./-TestRunner'),
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
-};
+} as t.SpecImports;
 
 export default Specs;
