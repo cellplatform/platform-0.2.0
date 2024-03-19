@@ -1,7 +1,7 @@
 /**
  * @libs
  */
-export { Info as CrdtInfo, TestDb, WebStore } from 'ext.lib.automerge';
+export { Info as CrdtInfo, TestDb } from 'ext.lib.automerge';
 export { DevReload } from 'sys.data.indexeddb';
 export { TestFilesystem } from 'sys.fs.indexeddb';
 export { expect, expectError } from 'sys.test';

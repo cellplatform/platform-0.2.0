@@ -1,6 +1,6 @@
 import { useAutomergeStore } from 'automerge-tldraw';
 import { Canvas } from '.';
-import { WebStore, type t } from '../../test.ui';
+import { Doc, WebStore, type t } from '../../test.ui';
 
 export type CanvasSampleProps = t.CanvasProps & {
   userId: string;
@@ -9,7 +9,7 @@ export type CanvasSampleProps = t.CanvasProps & {
 
 export const CanvasSample: React.FC<CanvasSampleProps> = (props) => {
   const { doc, userId } = props;
-  const handle = WebStore.handle(doc);
+  const handle = Doc.toHandle(doc);
   const store = useAutomergeStore({ handle, userId });
   return <Canvas {...props} store={store} />;
 };
