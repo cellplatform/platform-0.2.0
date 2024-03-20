@@ -181,7 +181,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <PeerRepoList.Info
-            title={edge.kind}
+            title={`${edge.kind} Column`}
             fields={layout?.fields ?? defaultFields}
             data={{
               network,

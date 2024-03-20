@@ -2,8 +2,9 @@ import { Info } from '.';
 import { PropList, COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
+type P = t.InfoProps;
 type T = {
-  props: t.InfoProps;
+  props: P;
   debug: { visible?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
@@ -25,10 +26,10 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = Pick<P, 'fields'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    fields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -36,7 +37,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
@@ -64,7 +65,7 @@ export default Dev.describe(name, async (e) => {
                     d.props.fields = fields.includes('Network.Shared.Json')
                       ? fields.filter((f) => f !== 'Network.Shared.Json')
                       : [...fields, 'Network.Shared.Json'];
-                    local.selectedFields = PropList.Wrangle.fields(d.props.fields);
+                    local.fields = PropList.Wrangle.fields(d.props.fields);
                   });
                 },
               },
@@ -88,7 +89,7 @@ export default Dev.describe(name, async (e) => {
     dev.section('Fields', (dev) => {
       const setFields = (fields?: t.InfoField[]) => {
         dev.change((d) => (d.props.fields = fields));
-        local.selectedFields = fields?.length === 0 ? undefined : fields;
+        local.fields = fields?.length === 0 ? undefined : fields;
       };
 
       dev.row((e) => {
