@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { PropList, COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, PeerUI, PropList, WebStore, css, type t } from '../../test.ui';
 import { createEdge } from '../ui.Sample.02';
 
 type P = t.InfoProps;
@@ -26,9 +26,10 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = Pick<P, 'fields'>;
+  type LocalStore = Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
   const local = localstore.object({
+    theme: undefined,
     fields: DEFAULTS.fields.default,
   });
 
@@ -126,8 +127,14 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('connect network', (e) => peer.self.connect.data(peer.remote.id));
       dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+      dev.hr(-1, 5);
+      dev.button('connect network', (e) => peer.self.connect.data(peer.remote.id));
     });
   });
 

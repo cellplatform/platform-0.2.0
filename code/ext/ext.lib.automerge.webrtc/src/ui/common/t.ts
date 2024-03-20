@@ -14,6 +14,7 @@ export type { ConnectorBehavior, PeerStreamSelectionHandler } from 'ext.lib.peer
 export type { SpecImport, SpecImports } from 'sys.test.spec/src/types';
 export type { ImmutableRef } from 'sys.types/src/types';
 export type {
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,
