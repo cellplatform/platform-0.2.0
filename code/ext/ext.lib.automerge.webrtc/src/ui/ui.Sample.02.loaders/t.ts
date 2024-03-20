@@ -9,7 +9,7 @@ export type * from '../ui.Sample.02/t';
 export type SampleName =
   | 'CodeEditor'
   | 'CodeEditor.AI'
-  | 'DiagramEditor'
+  | 'TLDraw'
   | 'Deno.Deploy'
   | 'ModuleNamespace'
   | 'FaceAPI'
@@ -21,4 +21,5 @@ export type SampleFactoryCtx = {
   store: t.Store;
   accessToken?: string;
   stream?: MediaStream;
+  peerid?: string;
 };

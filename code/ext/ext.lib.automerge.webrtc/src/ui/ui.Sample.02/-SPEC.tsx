@@ -128,8 +128,9 @@ export default Dev.describe(name, async (e) => {
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
           const stream = state.current.stream;
+          const peerid = left.network.peer.id;
           elOverlay = factory
-            .ctx({ store, docuri, accessToken, stream })
+            .ctx({ store, docuri, accessToken, stream, peerid })
             .render(typename, { style });
         }
 
@@ -295,7 +296,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
-      loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
+      loadButton(`ƒ → load → TLDraw`, 'TLDraw', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
       loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
       loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');

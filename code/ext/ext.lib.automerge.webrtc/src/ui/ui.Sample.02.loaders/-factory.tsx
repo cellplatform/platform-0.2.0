@@ -4,7 +4,7 @@ import { ModuleLoader, type t } from './common';
  * A factory for code-split (dynamicly loaded) ESM module.
  */
 export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(async (e) => {
-  const { store, docuri, accessToken } = e.ctx;
+  const { store, docuri, accessToken, peerid } = e.ctx;
 
   if (e.name === 'CodeEditor') {
     const { CodeEditorLoader } = await import('./ui.CodeEditor'); // NB: dynamic code-splitting here.
@@ -21,11 +21,9 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <DenoDeploy store={store} docuri={docuri} accessToken={accessToken} />;
   }
 
-  if (e.name === 'DiagramEditor') {
-    // @ts-ignore
-    await import('@tldraw/tldraw/tldraw.css');
-    const { Canvas } = await import('ext.lib.tldraw');
-    return <Canvas style={{ opacity: 0.9 }} />;
+  if (e.name === 'TLDraw') {
+    const { TLDraw: DiagramEditor } = await import('./ui.TLDraw');
+    return <DiagramEditor store={store} docuri={docuri} peerid={peerid} />;
   }
 
   if (e.name === 'ModuleNamespace') {
