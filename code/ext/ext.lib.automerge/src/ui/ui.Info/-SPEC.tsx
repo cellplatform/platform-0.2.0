@@ -1,9 +1,9 @@
 import { Info } from '.';
 import { Dev, DevReload, Pkg, PropList, TestDb, Value, WebStore, type t } from '../../test.ui';
 
+type P = t.InfoProps;
 type T = {
   props: t.InfoProps;
-  theme?: t.CommonTheme;
   debug: { reload?: boolean; historyDesc?: boolean; historyDetail?: t.HashString };
 };
 const initial: T = { props: {}, debug: {} };
@@ -24,7 +24,7 @@ export default Dev.describe(name, async (e) => {
     return doc ? index.store.doc.get<T>(doc.uri) : undefined;
   }
 
-  type LocalStore = Pick<T, 'theme'> & Pick<t.InfoProps, 'fields'> & T['debug'];
+  type LocalStore = T['debug'] & Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -37,7 +37,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.theme = local.theme;
+      d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
       d.debug.historyDesc = local.historyDesc;
@@ -48,8 +48,8 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>(async (e) => {
-        const { props, debug, theme } = e.state;
-        Dev.Theme.background(ctx, theme);
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme);
 
         if (debug.reload) return <DevReload />;
 
@@ -90,7 +90,7 @@ export default Dev.describe(name, async (e) => {
           },
         };
 
-        return <Info {...props} data={data} theme={theme} />;
+        return <Info {...props} data={data} />;
       });
   });
 
@@ -157,8 +157,8 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       Dev.Theme.switch(
         dev,
-        (d) => d.theme,
-        (d, value) => (local.theme = d.theme = value),
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
       );
 
       dev.hr(-1, 5);

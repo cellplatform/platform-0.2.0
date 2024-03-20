@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-export function visible(data: t.InfoData): t.PropListItem {
+export function visible(data: t.InfoData, theme?: t.CommonTheme): t.PropListItem {
   const enabled = data.visible ? data.visible.enabled ?? true : false;
   const selected = data.visible?.value ?? false;
   return {

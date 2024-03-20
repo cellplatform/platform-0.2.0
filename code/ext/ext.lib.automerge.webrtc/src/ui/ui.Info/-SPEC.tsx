@@ -38,41 +38,41 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return (
-          <Info
-            {...e.state.props}
-            data={{
-              network: self.network,
-              repo: { store, index },
-              visible: {
-                value: e.state.debug.visible,
-                onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
-              },
-              shared: {
-                onIconClick(e) {
-                  console.info('⚡️ shared.onIconClick', e);
-                  state.change((d) => {
-                    const fields = d.props.fields ?? [];
-                    d.props.fields = fields.includes('Network.Shared.Json')
-                      ? fields.filter((f) => f !== 'Network.Shared.Json')
-                      : [...fields, 'Network.Shared.Json'];
-                    local.fields = PropList.Wrangle.fields(d.props.fields);
-                  });
-                },
-              },
-            }}
-          />
-        );
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
+        const data: t.InfoData = {
+          network: self.network,
+          repo: { store, index },
+          visible: {
+            value: e.state.debug.visible,
+            onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
+          },
+          shared: {
+            onIconClick(e) {
+              console.info('⚡️ shared.onIconClick', e);
+              state.change((d) => {
+                const fields = d.props.fields ?? [];
+                d.props.fields = fields.includes('Network.Shared.Json')
+                  ? fields.filter((f) => f !== 'Network.Shared.Json')
+                  : [...fields, 'Network.Shared.Json'];
+                local.fields = PropList.Wrangle.fields(d.props.fields);
+              });
+            },
+          },
+        };
+
+        return <Info {...props} data={data} />;
       });
   });
 
@@ -114,7 +114,7 @@ export default Dev.describe(name, async (e) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      config('default', DEFAULTS.fields.default);
+      dev.title('Common States');
       config('info → PeerRepoList', [
         'Repo',
         'Peer',

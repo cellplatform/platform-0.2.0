@@ -4,7 +4,7 @@ type TBytes = { in: number; out: number };
 /**
  * Network data transfer.
  */
-export function transfer(bytes: TBytes, isTransmitting?: boolean) {
+export function transfer(bytes: TBytes, isTransmitting?: boolean, theme?: t.CommonTheme) {
   const total = bytes.in + bytes.out;
   const label = total === 0 ? '' : wrangle.label(bytes);
 

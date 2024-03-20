@@ -14,7 +14,7 @@ import { useRedraw } from './use.Redraw';
  * Component
  */
 const View: React.FC<t.InfoProps> = (props) => {
-  const { data = {} } = props;
+  const { theme, data = {} } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   useRedraw(data);
@@ -23,14 +23,14 @@ const View: React.FC<t.InfoProps> = (props) => {
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module())
-    .field('Module.Verify', () => Field.moduleVerify())
-    .field('Component', () => Field.component(data.component))
-    .field('Peer', () => Field.peer(data, fields))
-    .field('Repo', () => Field.repo(data, fields))
-    .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc))
-    .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting))
-    .field('Visible', () => Field.visible(data))
+    .field('Module', () => Field.module(theme))
+    .field('Module.Verify', () => Field.moduleVerify(theme))
+    .field('Component', () => Field.component(data.component, theme))
+    .field('Peer', () => Field.peer(data, fields, theme))
+    .field('Repo', () => Field.repo(data, fields, theme))
+    .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc, theme))
+    .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting, theme))
+    .field('Visible', () => Field.visible(data, theme))
     .items(fields);
 
   return (
@@ -43,6 +43,7 @@ const View: React.FC<t.InfoProps> = (props) => {
       flipped={props.flipped}
       padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
+      theme={theme}
       style={props.style}
     />
   );

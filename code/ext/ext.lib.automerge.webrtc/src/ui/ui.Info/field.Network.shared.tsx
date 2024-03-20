@@ -7,6 +7,7 @@ export function shared(
   data: t.InfoData,
   fields: t.InfoField[],
   shared?: t.DocRef<t.CrdtShared>,
+  theme?: t.CommonTheme,
 ): t.PropListItem[] {
   const network = data.network;
   if (!network) return [];
