@@ -14,8 +14,8 @@ export const SampleCrdt = {
     const storage = TestDb.Spec.name;
     const store = options.store ?? WebStore.init({ storage, dispose$: options?.dispose$ });
     const index = await WebStore.index(store);
-    const exists = await store.doc.exists(docuri);
 
+    const exists = await store.doc.exists(docuri);
     const doc = await store.doc.getOrCreate<TDoc>((d) => null, exists ? docuri : undefined);
     if (!doc.current.store) doc.change(init);
 

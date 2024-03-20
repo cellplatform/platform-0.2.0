@@ -1,10 +1,9 @@
 import { Canvas } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
-import { SampleCrdt } from './-SPEC-crdt';
 import { Link } from './-SPEC-ui.Link';
 
 type P = t.CanvasProps;
-type T = { props: P; debug: { docuri?: string } };
+type T = { props: P; debug: {} };
 const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Canvas.DEFAULTS;
 
@@ -24,12 +23,8 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
-    docuri: undefined,
     behaviors: DEFAULTS.behaviors.default,
   });
-
-  const crdt = await SampleCrdt.init(local.docuri);
-  local.docuri = crdt.doc.uri;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -103,11 +98,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props } = e.state;
-      const data = {
-        props,
-        crdt: crdt.doc.current,
-      };
+      const data = { ...e.state };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

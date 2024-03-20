@@ -24,12 +24,13 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
     const env = (ctx.env ?? {}) as TEnv;
+    console.info(`${name}:env:`, env);
 
-    console.log('env', env);
-
-    crdt = await SampleCrdt.init(local.docuri);
-    local.docuri = crdt.doc.uri;
+    // NB: pass store/docuri in from environemnt if available, otherwise local store will be used.
+    crdt = await SampleCrdt.init(env.docuri ?? local.docuri, { store: env.store });
+    if (!env.docuri) local.docuri = crdt.doc.uri;
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
@@ -89,8 +90,13 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const env = dev.ctx.env as TEnv | undefined;
+      const data = {
+        ...e.state,
+        env: { docuri: env?.docuri, peerid: env?.peerid },
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
