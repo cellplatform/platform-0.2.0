@@ -1,7 +1,8 @@
 import { CanvasCrdt, DEFAULTS } from '.';
 import { Dev, DevReload, Pkg, TestDb, type t } from '../../test.ui';
-import { SampleCrdt } from './-SPEC-crdt';
+import { SampleCrdt, type SampleCrdtRef } from './-SPEC-crdt';
 
+type TEnv = { store?: t.Store; docuri?: string; peerid?: string };
 type P = t.CanvasCrdtProps;
 type T = { props: P; debug: { docuri?: string; reload?: boolean } };
 const initial: T = { props: {}, debug: {} };
@@ -18,17 +19,22 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
-  const crdt = await SampleCrdt.init(local.docuri);
-  local.docuri = crdt.doc.uri;
+  let crdt: SampleCrdtRef | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    const env = (ctx.env ?? {}) as TEnv;
+
+    console.log('env', env);
+
+    crdt = await SampleCrdt.init(local.docuri);
+    local.docuri = crdt.doc.uri;
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.theme = local.theme;
-      d.props.userId = 'foo-1234'; // TEMP 🐷
+      d.props.userId = 'foo-1234';
     });
 
     ctx.debug.width(330);
@@ -40,13 +46,15 @@ export default Dev.describe(name, async (e) => {
         if (debug.reload) return <DevReload />;
 
         Dev.Theme.background(dev, props.theme);
-        return <CanvasCrdt {...props} doc={crdt.doc} />;
+        const userId = env.peerid || props.userId;
+        return <CanvasCrdt {...props} doc={crdt?.doc} userId={userId} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const env = (dev.ctx.env ?? {}) as TEnv;
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(
@@ -66,11 +74,15 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.button([`delete database: "${crdt.storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.reload = true));
-        await TestDb.Spec.deleteDatabase();
-      });
+
+      if (!env.store) {
+        // NB: only render button if the CRDT is generated locally and not passed into the environment.
+        dev.hr(-1, 5);
+        dev.button([`delete database: "${crdt?.storage}"`, '💥'], async (e) => {
+          e.state.change((d) => (d.debug.reload = true));
+          await TestDb.Spec.deleteDatabase();
+        });
+      }
     });
   });
 
