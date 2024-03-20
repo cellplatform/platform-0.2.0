@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@vimeo/player': '2.22.0',
-    'framer-motion': '11.0.15',
+    'framer-motion': '11.0.18',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.fs': '0.0.0',
