@@ -1,7 +1,8 @@
 import { Info } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps };
+type P = t.InfoProps;
+type T = { props: P };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -10,10 +11,10 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.InfoProps, 'fields' | 'theme'>;
+  type LocalStore = Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: 'Light',
+    theme: undefined,
     fields: DEFAULTS.fields.default,
   });
 
