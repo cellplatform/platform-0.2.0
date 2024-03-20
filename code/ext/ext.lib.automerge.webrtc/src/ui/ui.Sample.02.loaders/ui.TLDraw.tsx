@@ -13,5 +13,7 @@ export type TLDrawProps = {
 export const TLDraw: React.FC<TLDrawProps> = (props) => {
   const { store, docuri, peerid } = props;
   const spec = Specs['ext.lib.tldraw.ui.Canvas.Crdt'];
-  return <Dev.Harness spec={spec} env={{ store, docuri, peerid }} />;
+  const env = { store, docuri, peerid };
+  console.log('TLDraw Loader/env:', env);
+  return <Dev.Harness spec={spec} env={env} />;
 };

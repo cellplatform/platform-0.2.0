@@ -382,8 +382,8 @@ export default Dev.describe(name, async (e) => {
         return doc?.toObject();
       };
 
-      const jwt = e.state.accessToken;
       const data = {
+        peerid: left.network.peer.id,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,
