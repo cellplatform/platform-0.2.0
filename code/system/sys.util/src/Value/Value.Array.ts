@@ -1,3 +1,5 @@
+import { type t } from '../common';
+
 /**
  * Converts a nested set of arrays into a flat single-level array.
  */
@@ -30,13 +32,14 @@ export async function asyncFilter<T>(list: T[], predicate: (value: T) => Promise
 /**
  * Extract a "page" sub-set from the given array of items.
  * @param list The array of items to paginate.
- * @param page The page number (1-based index).
+ * @param index The page number (1-based index).
  * @param limit The number of items per page.
  * @returns An array containing the items for the specified page.
  */
-export function page<T>(list: T[], page: number, limit: number): T[] {
-  if (page < 1 || limit < 1) throw new Error('Page and limit must be greater than zero.');
-  const startIndex = (page - 1) * limit;
+export function page<T>(list: T[] = [], index: t.Index, limit: number): T[] {
+  index = Math.max(0, index);
+  limit = Math.max(0, limit);
+  const startIndex = index * limit;
   const endIndex = startIndex + limit;
   return list.slice(startIndex, endIndex);
 }
