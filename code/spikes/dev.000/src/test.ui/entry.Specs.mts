@@ -11,6 +11,8 @@ import '@vime/core/themes/light.css';
  */
 import '@tldraw/tldraw/tldraw.css';
 
+import type { t } from '../common';
+
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
 
 const { Specs: Crdt } = await import('sys.data.crdt/specs');
@@ -70,4 +72,4 @@ export const Specs = {
   ...ExtAutomergeWebrtc,
   ...ExtTldraw,
   ...ExtDeno,
-};
+} as t.SpecImports;

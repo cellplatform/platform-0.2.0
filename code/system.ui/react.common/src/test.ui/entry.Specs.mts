@@ -80,6 +80,6 @@ export const Specs = {
   ...HookSpecs,
   ...DevSpecs,
   ...SampleSpecs,
-};
+} as t.SpecImports;
 
 export default Specs;
