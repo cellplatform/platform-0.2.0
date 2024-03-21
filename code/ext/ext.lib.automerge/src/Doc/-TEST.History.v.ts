@@ -5,7 +5,15 @@ import { testSetup, type D } from './-TEST.u';
 describe('Doc.History', { retry: 3 }, async () => {
   const { store } = testSetup();
 
-  it('initial: <none>', async () => {
+  it('initial: <undefined>', async () => {
+    const history = Doc.history(undefined);
+    const commits = history.commits;
+    expect(history.length).to.eql(0);
+    expect(commits.length).to.eql(0);
+    expect(history.latest).to.eql(undefined);
+  });
+
+  it('initial: doc:<none>', async () => {
     const doc = await store.doc.getOrCreate<D>((d) => null);
     const history = Doc.history(doc);
     const commits = history.commits;
@@ -61,6 +69,85 @@ describe('Doc.History', { retry: 3 }, async () => {
     const doc2 = await store.doc.getOrCreate<D>((d) => (d.count = 123));
     assert(doc1);
     assert(doc2);
+  });
+
+  describe('page', () => {
+    const repeatChange = (doc: t.DocRef<D>, length: number) => {
+      Array.from({ length }).forEach(() => doc.change((d) => (d.count += 1)));
+    };
+
+    it('empty', async () => {
+      const history = Doc.history();
+      const page = history.page(0, 5);
+
+      expect(page.index).to.eql(0);
+      expect(page.limit).to.eql(5);
+      expect(page.length).to.eql(0);
+      expect(page.order).to.eql(DEFAULTS.page.sort);
+      expect(page.items).to.eql([]);
+      expect(page.commits).to.eql([]);
+    });
+
+    it('page: [0] ← defaults', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
+      repeatChange(doc, 4);
+
+      const history = Doc.history(doc);
+      const page = history.page(0, 5);
+
+      expect(page.index).to.eql(0);
+      expect(page.limit).to.eql(5);
+      expect(page.length).to.eql(5);
+      expect(page.order).to.eql(DEFAULTS.page.sort);
+      expect(page.items.map(({ index }) => index)).to.eql([0, 1, 2, 3, 4]);
+      expect(page.items.map(({ commit }) => commit)).to.eql(page.commits);
+    });
+
+    it('final page', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
+      repeatChange(doc, 5);
+
+      const history = Doc.history(doc);
+      const page1 = history.page(0, 5);
+      const page2 = history.page(1, 5);
+
+      expect(history.length).to.eql(7);
+      expect(page1.length).to.eql(5);
+      expect(page2.length).to.eql(2);
+    });
+
+    it('out of bounds', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
+      const history = Doc.history(doc);
+
+      const test = (index: number) => {
+        const page = history.page(index, 5);
+        expect(page.length).to.eql(0);
+        expect(page.items).to.eql([]);
+        expect(page.commits).to.eql([]);
+      };
+
+      test(-1);
+      test(2);
+      test(999);
+    });
+
+    it('sort order: asc/desc', async () => {
+      const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
+      repeatChange(doc, 4);
+
+      const history = Doc.history(doc);
+      const asc = history.page(0, 3);
+      const desc = history.page(0, 3, 'desc');
+      expect(asc.order).to.eql('asc');
+      expect(desc.order).to.eql('desc');
+
+      const ascIndexes = asc.items.map(({ index }) => index);
+      const descIndexes = desc.items.map(({ index }) => index);
+
+      expect(ascIndexes).to.eql([0, 1, 2]);
+      expect(descIndexes).to.eql([5, 4, 3]);
+    });
   });
 
   it('|test.dispose|', () => store.dispose());

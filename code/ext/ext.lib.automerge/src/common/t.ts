@@ -21,6 +21,7 @@ export type {
   Index,
   Lifecycle,
   Msecs,
+  SortOrder,
   UnixTimestamp,
   UntilObservable,
 } from 'sys.types/src/types';

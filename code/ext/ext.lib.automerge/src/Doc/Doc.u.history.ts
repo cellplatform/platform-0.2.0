@@ -1,20 +1,26 @@
-import { A, DEFAULTS, Time, type t } from './common';
+import { A, DEFAULTS, Time, Value, type t } from './common';
 
 /**
  * Retrieve the history of the given document.
  */
-export function history<T>(doc: t.DocRef<T>): t.DocHistory<T> {
-  const commits = A.getHistory<T>(doc.current);
+export function history<T>(doc?: t.DocRef<T>): t.DocHistory<T> {
+  const commits = doc ? A.getHistory<T>(doc.current) : [];
   let _genesis: t.DocHistoryGenesis<T> | false | undefined;
 
+  /**
+   * History
+   */
   return {
     commits,
+
     get length() {
       return commits.length;
     },
+
     get latest() {
       return commits[commits.length - 1];
     },
+
     get genesis() {
       if (_genesis === false) return undefined;
       if (_genesis) return _genesis;
@@ -28,6 +34,26 @@ export function history<T>(doc: t.DocRef<T>): t.DocHistory<T> {
       const now = Time.now.timestamp;
       const elapsed = Time.duration(now - initial.change.time);
       return (_genesis = { initial, elapsed });
+    },
+
+    page(index, limit, sort = DEFAULTS.page.sort) {
+      const list = index < 0 ? [] : commits.map((commit, index) => ({ index, commit }));
+      if (sort === 'desc') list.reverse();
+      const items = Value.page(list, index, limit);
+      const length = items.length;
+      const total = commits.length;
+      let _commits: t.DocHistoryCommit<T>[] | undefined;
+      return {
+        order: sort,
+        index,
+        limit,
+        length,
+        total,
+        items,
+        get commits() {
+          return _commits ?? (_commits = items.map((m) => m.commit));
+        },
+      };
     },
   };
 }

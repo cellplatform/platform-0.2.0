@@ -64,9 +64,25 @@ export type DocHistory<T = unknown> = {
   readonly commits: DocHistoryCommit<T>[];
   readonly latest: DocHistoryCommit<T>;
   readonly genesis?: DocHistoryGenesis<T>;
+  page(index: t.Index, limit: number, sort?: t.SortOrder): DocHistoryPage<T>;
 };
 export type DocHistoryGenesis<T = unknown> = {
-  initial: DocHistoryCommit<T>;
-  elapsed: t.TimeDuration;
+  readonly initial: DocHistoryCommit<T>;
+  readonly elapsed: t.TimeDuration;
 };
 export type DocHistoryCommit<T = unknown> = t.State<T>;
+
+export type DocHistoryListItem<T = unknown> = {
+  readonly index: t.Index;
+  readonly commit: t.DocHistoryCommit<T>;
+};
+
+export type DocHistoryPage<T = unknown> = {
+  readonly length: number;
+  readonly index: number;
+  readonly limit: number;
+  readonly total: number;
+  readonly order: t.SortOrder;
+  readonly items: DocHistoryListItem<T>[];
+  readonly commits: DocHistoryCommit<T>[];
+};
