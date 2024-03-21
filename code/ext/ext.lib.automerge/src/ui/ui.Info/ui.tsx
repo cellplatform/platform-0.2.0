@@ -17,6 +17,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Repo', () => InfoField.repo(data.repo, theme))
     .field('Component', () => InfoField.component(data.component))
     .field('Doc', () => InfoField.doc(data.document, fields, theme))
+    .field('Doc.Head', () => InfoField.head(data.document, fields, theme))
     .field('History', () => InfoField.history(data.history, fields, theme))
     .items(fields);
 

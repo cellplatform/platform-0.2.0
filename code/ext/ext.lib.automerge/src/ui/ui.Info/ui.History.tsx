@@ -1,14 +1,14 @@
 import { useHistory } from '../use';
 import { Value, css, type t } from './common';
 
-export type HistoryValueProps = {
+export type HistoryProps = {
   doc?: t.DocRef<unknown>;
   showGenesis?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
-export const HistoryValue: React.FC<HistoryValueProps> = (props) => {
+export const History: React.FC<HistoryProps> = (props) => {
   const { doc, theme } = props;
   const { history } = useHistory(doc);
   const showGenesis = props.showGenesis && !!history?.genesis;

@@ -1,4 +1,3 @@
-import { queueScheduler } from 'rxjs';
 import type { t } from './common';
 
 export type InfoField =
@@ -9,6 +8,7 @@ export type InfoField =
   | 'Doc'
   | 'Doc.URI'
   | 'Doc.Object'
+  | 'Doc.Head'
   | 'History'
   | 'History.Genesis'
   | 'History.List'
@@ -35,6 +35,7 @@ export type InfoDataDocument = {
   doc?: t.DocRef<unknown>;
   uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
+  head?: { label?: string; hashLength?: number };
   onIconClick?(e: {}): void;
 };
 
@@ -44,9 +45,10 @@ export type InfoDataHistory = {
   list?: {
     page?: t.Index;
     limit?: t.Index;
-    sort?: 'asc' | 'desc';
+    sort?: t.SortOrder;
     showDetailFor?: t.HashString | t.HashString[];
   };
+  item?: { hashLength?: number };
   onItemClick?: InfoDataHistoryItemHandler;
 };
 

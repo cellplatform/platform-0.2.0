@@ -1,8 +1,7 @@
 import { HistoryGrid } from '../ui.History.Grid';
-import { DEFAULTS, Doc, Value, type t } from './common';
-import { HistoryCommitRow } from './ui.History.Commit';
-import { HistoryValue } from './ui.History.Value';
 import { NavPaging } from '../ui.Nav.Paging';
+import { DEFAULTS, Doc, type t } from './common';
+import { History } from './ui.History';
 
 type D = t.InfoDataHistory;
 
@@ -14,46 +13,29 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
   const showGenesis = fields.includes('History.Genesis');
   const main: t.PropListItem = {
     label: data.label || DEFAULTS.history.label,
-    value: <HistoryValue doc={doc} showGenesis={showGenesis} theme={theme} />,
+    value: <History doc={doc} showGenesis={showGenesis} theme={theme} />,
   };
   res.push(main);
 
   /**
-   * History.
+   * History
    */
   if (fields.includes('History.List')) {
     const style: React.CSSProperties = { flex: 1, marginLeft: 0 };
-    const list = wrangle.page(data);
-
-    list.forEach(({ index, commit }) => {
-      const hash = commit.change.hash;
-      res.push({
-        divider: false,
-        value: (
-          <HistoryCommitRow
-            style={style}
-            index={index}
-            total={list.length}
-            commit={commit}
-            theme={theme}
-            showDetail={hash === data.list?.showDetailFor}
-            onItemClick={data.onItemClick}
-          />
-        ),
-      });
-    });
+    const page = wrangle.page(data);
 
     /**
-     * History List (Grid).
+     * History List (Grid)
      */
+    const hashLength = data.item?.hashLength ?? DEFAULTS.history.item.hashLength;
     const showNav = fields.includes('History.List.NavPaging');
     res.push({
-      value: <HistoryGrid theme={theme} style={{ flex: 1 }} />,
+      value: <HistoryGrid page={page} hashLength={hashLength} theme={theme} style={{ flex: 1 }} />,
       divider: !showNav,
     });
 
     /**
-     * Navigation (Paging).
+     * Navigation (Paging)
      */
     if (showNav) {
       res.push({ value: <NavPaging theme={theme} style={{ flex: 1 }} /> });
@@ -69,15 +51,8 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
 const wrangle = {
   page(data: D) {
     const doc = data.doc;
-    if (!doc) return [];
-
     const defaults = DEFAULTS.history.list;
     const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = data.list ?? {};
-
-    const commits = Doc.history(doc).commits;
-    const list = commits.map((commit, index) => ({ index, commit }));
-    if (sort === 'desc') list.reverse();
-
-    return Value.page(list, page, limit);
+    return Doc.history(doc).page(page, limit, sort);
   },
 } as const;

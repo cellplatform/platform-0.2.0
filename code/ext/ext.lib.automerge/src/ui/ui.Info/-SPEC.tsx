@@ -1,5 +1,6 @@
 import { Info } from '.';
 import { Dev, DevReload, Pkg, PropList, TestDb, Value, WebStore, type t } from '../../test.ui';
+import { sampleCrdt } from './-SPEC-crdt';
 
 type P = t.InfoProps;
 type T = {
@@ -15,14 +16,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? 'Unknown';
 
 export default Dev.describe(name, async (e) => {
-  const storage = TestDb.Spec.name;
-  const store = WebStore.init({ storage });
-  const index = await WebStore.index(store);
-
-  function docAtIndex<T>(i: number) {
-    const doc = index.doc.current.docs[i];
-    return doc ? index.store.doc.get<T>(doc.uri) : undefined;
-  }
+  const db = await sampleCrdt();
 
   type LocalStore = T['debug'] & Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -51,10 +45,10 @@ export default Dev.describe(name, async (e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(ctx, props.theme);
 
-        if (debug.reload) return <DevReload />;
+        if (debug.reload) return <DevReload theme={props.theme} />;
 
         const fields = props.fields ?? [];
-        const doc = fields.includes('Doc') ? await docAtIndex(0) : undefined;
+        const doc = fields.includes('Doc') ? await db.docAtIndex(0) : undefined;
 
         const toggleVisibile = (field: t.InfoField) => {
           state.change((d) => {
@@ -63,6 +57,7 @@ export default Dev.describe(name, async (e) => {
           });
         };
 
+        const { store, index } = db;
         const data: t.InfoData = {
           repo: { store, index },
           document: {
@@ -125,6 +120,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(0, [10, 10]).title('Common States');
       set('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       set('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      set('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI', 'Doc.Head']);
       set('Repo / Doc / History ( + List )', [
         'Repo',
         'Doc',
@@ -163,17 +159,23 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
       dev.button('create doc', async (e) => {
-        await store.doc.getOrCreate((d) => null);
+        await db.store.doc.getOrCreate((d) => null);
         dev.redraw();
       });
-      dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
+      dev.button(['💥 delete doc', ''], async (e) => {
+        const doc = await db.docAtIndex(0);
+        if (doc) await db.store.doc.delete(doc.uri);
+        dev.redraw();
+      });
+      dev.hr(-1, 5);
+      dev.button([`💥 delete database: "${db.storage.name}"`, '🤯'], async (e) => {
         await e.state.change((d) => (d.debug.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
       dev.hr(-1, 5);
       dev.button(['write sample BLOB', '[Uint8Array]'], async (e) => {
         type T = { binary?: Uint8Array };
-        const doc = await docAtIndex<T>(0);
+        const doc = await db.docAtIndex<T>(0);
         const length = Value.random(5000, 15000);
         const binary = new Uint8Array(new Array(length).fill(0));
         doc?.change((d) => (d.binary = binary));
@@ -181,7 +183,7 @@ export default Dev.describe(name, async (e) => {
       });
       dev.button(['increment', 'count + 1'], async (e) => {
         type T = { count?: number };
-        const doc = await docAtIndex<T>(0);
+        const doc = await db.docAtIndex<T>(0);
         doc?.change((d) => (d.count = (d.count ?? 0) + 1));
       });
     });
@@ -191,12 +193,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>(async (e) => {
       const { props, debug } = e.state;
-      const crdt = (await docAtIndex(0))?.current;
+      const crdt = (await db.docAtIndex(0))?.current;
       const data = {
         props,
         debug,
-        'crdt:storage': storage,
-        crdt,
+        'crdt:storage:db': db.storage.name,
+        'crdt:doc': crdt,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
