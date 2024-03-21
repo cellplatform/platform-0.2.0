@@ -9,9 +9,9 @@ const View: React.FC<t.InfoProps> = (props) => {
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module())
+    .field('Module', () => Field.module(theme))
     .field('Module.Verify', () => Field.moduleVerify(theme))
-    .field('Component', () => Field.component(data.component))
+    .field('Component', () => Field.component(data.component, theme))
     .items(fields);
 
   return (

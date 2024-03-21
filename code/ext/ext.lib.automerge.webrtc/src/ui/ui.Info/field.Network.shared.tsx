@@ -1,4 +1,4 @@
-import { Doc, Hash, ObjectView, css, type t, Icons, Button } from './common';
+import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 /**
  * Shared network state (transient document).
@@ -19,13 +19,13 @@ export function shared(
   res.push({
     label: 'Shared State',
     value: {
-      data: wrangle.displayValue(data, shared?.uri),
+      data: wrangle.displayValue(data, shared?.uri, theme),
       opacity: doc ? 1 : 0.3,
     },
   });
 
   if (fields.includes('Network.Shared.Json')) {
-    const obj = wrangle.jsonObject(data, shared);
+    const obj = wrangle.jsonObject(data, shared, theme);
     if (obj) res.push({ value: obj });
   }
 
@@ -36,7 +36,7 @@ export function shared(
  * Helpers
  */
 const wrangle = {
-  displayValue(data: t.InfoData, uri?: string) {
+  displayValue(data: t.InfoData, uri?: string, theme?: t.CommonTheme) {
     if (!uri) return '(not connected)';
     const docid = Doc.Uri.id(uri);
     const doc = Hash.shorten(docid, [4, 4]);
@@ -49,7 +49,12 @@ const wrangle = {
     const elIcon = <Icons.Object size={14} />;
     const onIconClick = data.shared?.onIconClick;
     if (!onIconClick) parts.push(elIcon);
-    else parts.push(<Button onClick={(e) => onIconClick({})}>{elIcon}</Button>);
+    else
+      parts.push(
+        <Button theme={theme} onClick={(e) => onIconClick({})}>
+          {elIcon}
+        </Button>,
+      );
 
     const styles = {
       base: css({
@@ -69,7 +74,7 @@ const wrangle = {
     );
   },
 
-  jsonObject(data: t.InfoData, shared?: t.DocRef<t.CrdtShared>) {
+  jsonObject(data: t.InfoData, shared?: t.DocRef<t.CrdtShared>, theme?: t.CommonTheme) {
     const network = data.network;
     if (!network) return;
 
@@ -96,6 +101,7 @@ const wrangle = {
             name={'Shared'}
             data={{ ...obj, sys: { ...obj.sys, docs } }}
             fontSize={11}
+            theme={theme}
             style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),

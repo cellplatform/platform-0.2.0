@@ -48,7 +48,7 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
         const data: t.InfoData = {
@@ -110,11 +110,12 @@ export default Dev.describe(name, async (e) => {
         );
       });
 
+      dev.title('Common States');
       const config = (label: string, fields?: t.InfoField[]) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      dev.title('Common States');
+      config('all', DEFAULTS.fields.all);
       config('info → PeerRepoList', [
         'Repo',
         'Peer',
@@ -134,7 +135,7 @@ export default Dev.describe(name, async (e) => {
         (d, value) => (local.theme = d.props.theme = value),
       );
       dev.hr(-1, 5);
-      dev.button('connect network', (e) => peer.self.connect.data(peer.remote.id));
+      dev.button(['connect network', '⚡️'], (e) => peer.self.connect.data(peer.remote.id));
     });
   });
 
@@ -152,7 +153,7 @@ export default Dev.describe(name, async (e) => {
         };
         return (
           <div {...styles.base}>
-            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
+            <Dev.Object name={name} data={data} expand={1} style={styles.obj} fontSize={11} />
             <PeerUI.Connector peer={peer.remote} style={styles.conn} />
           </div>
         );

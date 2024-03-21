@@ -9,6 +9,9 @@ export const DEFAULTS = {
     label: 'History',
     list: { page: 1, limit: 10, sort: 'desc' },
   },
+  repo: {
+    label: 'Store',
+  },
   fields: {
     get all(): t.InfoField[] {
       return [

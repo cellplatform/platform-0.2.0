@@ -1,4 +1,4 @@
-import { Icons, Is, Value, css, type t } from './common';
+import { Icons, Is, Value, css, type t, DEFAULTS } from './common';
 
 export function repo(repo: t.InfoData['repo'], theme?: t.CommonTheme) {
   if (!repo) return;
@@ -21,7 +21,7 @@ export function repo(repo: t.InfoData['repo'], theme?: t.CommonTheme) {
   );
 
   const res: t.PropListItem = {
-    label: repo.label || 'Repo',
+    label: repo.label || DEFAULTS.repo.label,
     value,
   };
 

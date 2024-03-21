@@ -10,5 +10,5 @@ export function peer(data: t.InfoData, parentFields: t.InfoField[], theme?: t.Co
   if (parentFields.includes('Peer.Remotes')) fields.push('Peer.Remotes');
   if (fields.length === 0) return;
 
-  return PeerInfo.Field.peer({ self }, fields);
+  return PeerInfo.Field.peer({ self }, fields, theme);
 }

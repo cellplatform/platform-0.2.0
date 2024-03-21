@@ -3,7 +3,7 @@ import { DEFAULTS, Pkg, TestRunner, type t } from './common';
 /**
  * Module package.
  */
-export function module(): t.PropListItem {
+export function module(theme?: t.CommonTheme): t.PropListItem {
   return { label: 'Module', value: `${Pkg.name}@${Pkg.version}` };
 }
 
@@ -32,7 +32,7 @@ export function moduleVerify(theme?: t.CommonTheme) {
 /**
  * Component display
  */
-export function component(data: t.InfoData['component']): t.PropListItem {
+export function component(data: t.InfoData['component'], theme?: t.CommonTheme): t.PropListItem {
   return {
     label: data?.label || 'Component',
     value: data?.name || '(Unnamed)',
