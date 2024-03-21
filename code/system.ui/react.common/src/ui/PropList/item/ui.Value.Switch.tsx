@@ -3,6 +3,7 @@ import { Color, css, type t } from './common';
 
 export type SwitchValueProps = {
   value: t.PropListValue;
+  theme?: t.CommonTheme;
   onClick?: () => void;
 };
 
@@ -10,9 +11,11 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
   const item = props.value as t.PropListValueSwitch;
   if (item.kind !== 'Switch') return null;
 
-  const styles = { base: css({}) };
   const value = item.data;
   const enabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
+  const isDark = props.theme === 'Dark';
+  const theme = isDark ? Switch.Theme.dark.blue : Switch.Theme.light.blue;
+  const styles = { base: css({}) };
 
   return (
     <Switch
@@ -21,7 +24,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
       enabled={enabled}
       track={Wrangle.track(item)}
       style={styles.base}
-      theme={Switch.Theme.light.blue}
+      theme={theme}
       onMouseDown={props.onClick}
     />
   );

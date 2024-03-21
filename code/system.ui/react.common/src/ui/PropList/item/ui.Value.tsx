@@ -14,7 +14,7 @@ export type PropListValueProps = {
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const { hasLabel = true } = props;
+  const { hasLabel = true, theme } = props;
   const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
@@ -42,7 +42,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
     const message = props.message ?? handler.message;
 
     if (kind === 'Switch') {
-      return <SwitchValue value={value} onClick={handler.onClick} />;
+      return <SwitchValue value={value} theme={theme} onClick={handler.onClick} />;
     }
 
     if (message || item.isSimple || item.isComponent) {
@@ -54,7 +54,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
           isCopyable={isCopyable}
           cursor={cursor}
           defaults={props.defaults}
-          theme={props.theme}
+          theme={theme}
           onClick={handler.onClick}
         />
       );

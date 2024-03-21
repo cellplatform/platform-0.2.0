@@ -3,8 +3,8 @@ import { Wrangle } from './u';
 
 import { FieldSelector } from '../PropList.FieldSelector';
 import { FieldBuilder } from './FieldBuilder';
+import { Hash } from './item';
 import { View } from './ui';
-import { Hash } from './ui.Item';
 
 type Fields = {
   THEMES: typeof THEMES;
