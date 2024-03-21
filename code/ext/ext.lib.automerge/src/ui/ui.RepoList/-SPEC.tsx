@@ -2,8 +2,9 @@ import { RepoList } from '.';
 import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
 import { SpecInfo } from './-SPEC.ui.Info';
 
+type P = t.RepoListProps;
 type T = {
-  props: t.RepoListProps;
+  props: P;
   debug: { reload?: boolean; cancelDelete?: boolean };
 };
 const name = RepoList.displayName ?? 'Unknown';
@@ -73,7 +74,8 @@ export default Dev.describe(name, async (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <DevReload />;
+        const { props, debug } = e.state;
+        if (debug.reload) return <DevReload />;
 
         const renderCount: t.RenderCountProps = {
           prefix: 'list.render-',
@@ -81,7 +83,7 @@ export default Dev.describe(name, async (e) => {
           opacity: 0.2,
         };
 
-        return <RepoList {...e.state.props} model={model} renderCount={renderCount} />;
+        return <RepoList {...props} model={model} renderCount={renderCount} />;
       });
   });
 
