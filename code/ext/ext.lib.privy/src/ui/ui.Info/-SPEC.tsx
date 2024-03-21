@@ -52,9 +52,7 @@ export default Dev.describe(name, (e) => {
           },
         },
         farcaster: {
-          onClick(e) {
-            console.info(`⚡️ farcaster.onClick`, e);
-          },
+          onClick: (e) => console.info(`⚡️ farcaster.onClick`, e),
         },
       };
     });
