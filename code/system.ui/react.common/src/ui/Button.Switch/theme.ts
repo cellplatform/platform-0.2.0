@@ -1,4 +1,4 @@
-import { Style, COLORS, R, type t } from '../common';
+import { COLORS, R, Style, type t } from '../common';
 
 const { GREEN, WHITE, BLUE } = COLORS;
 
@@ -8,15 +8,10 @@ export const SwitchTheme = {
     return R.clone(res);
   },
 
-  fromString(theme: t.SwitchThemeName) {
-    switch (theme) {
-      case 'Light':
-        return SwitchTheme.light;
-      case 'Dark':
-        return SwitchTheme.dark;
-      default:
-        throw new Error(`Theme name '${theme}' not supported.`);
-    }
+  fromString(theme: t.CommonTheme) {
+    if (theme === 'Light') return SwitchTheme.light;
+    if (theme === 'Dark') return SwitchTheme.dark;
+    throw new Error(`Theme name '${theme}' not supported.`);
   },
 
   toShadowCss(shadow: t.CssShadow) {
