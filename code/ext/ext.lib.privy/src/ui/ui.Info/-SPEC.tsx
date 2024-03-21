@@ -1,8 +1,9 @@
 import { Info } from '.';
 import { AuthEnv, Delete, Dev, Hash, Pkg, PropList, Time, type t } from '../../test.ui';
 
+type P = t.InfoProps;
 type T = {
-  props: t.InfoProps;
+  props: P;
   privy?: t.PrivyInterface;
   status?: t.AuthStatus;
   signature?: string;
@@ -16,14 +17,14 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[]; selectedChain?: t.EvmChainName } & Pick<
-    t.InfoProps,
-    'enabled' | 'clipboard'
-  >;
+  type LocalStore = Pick<P, 'fields' | 'enabled' | 'clipboard' | 'theme'> & {
+    selectedChain?: t.EvmChainName;
+  };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
+    theme: undefined,
     enabled: DEFAULTS.enabled,
-    selectedFields: DEFAULTS.fields.default,
+    fields: DEFAULTS.fields.default,
     selectedChain: DEFAULTS.data.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
@@ -33,8 +34,9 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.props.enabled = local.enabled;
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
       d.props.clipboard = local.clipboard;
 
       d.props.data = {
@@ -59,13 +61,15 @@ export default Dev.describe(name, (e) => {
 
     ctx.debug.width(380);
     ctx.subject
-      .backgroundColor(1)
       .size([360, null])
       .display('grid')
       .render<T>((e) => {
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
         return (
           <Info
-            {...e.state.props}
+            {...props}
             margin={24}
             onReady={(e) => console.info(`⚡️ onReady`, e)}
             onChange={(e) => {
@@ -98,16 +102,14 @@ export default Dev.describe(name, (e) => {
                   ? DEFAULTS.fields.default
                   : (ev.next as t.InfoField[]);
               dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+              local.fields = fields?.length === 0 ? undefined : fields;
             }}
           />
         );
       });
     });
 
-    dev.hr(5, 20);
-
-    dev.section('Field Samples', (dev) => {
+    dev.section('Common States', (dev) => {
       const button = (label: string, fn?: () => t.InfoField[]) => {
         dev.button((btn) => {
           btn
@@ -122,7 +124,7 @@ export default Dev.describe(name, (e) => {
               } as const;
 
               const value = e.is.meta ? [...fields.prev, ...fields.next] : fields.next;
-              e.change((d) => (local.selectedFields = d.props.fields = value));
+              e.change((d) => (local.fields = d.props.fields = value));
             });
         });
       };
@@ -163,6 +165,11 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn

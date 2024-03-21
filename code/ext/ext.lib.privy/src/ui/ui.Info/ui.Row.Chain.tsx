@@ -5,11 +5,12 @@ export type ChainRowProps = {
   chain: t.EvmChainName;
   modifiers: t.InfoFieldModifiers;
   data: t.InfoData;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const ChainRow: React.FC<ChainRowProps> = (props) => {
-  const { enabled = true, chain, modifiers } = props;
+  const { enabled = true, chain, modifiers, theme } = props;
   const data = props.data.chain ?? DEFAULTS.data.chain!;
 
   const name = Chain.displayName(chain);
@@ -58,7 +59,7 @@ export const ChainRow: React.FC<ChainRowProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.selection.base}>{is.selected && <div {...styles.selection.dot} />}</div>
-      <Button enabled={enabled} onClick={handleClick} style={styles.name}>
+      <Button style={styles.name} enabled={enabled} theme={theme} onClick={handleClick}>
         {name}
       </Button>
       <div {...styles.right.base}></div>

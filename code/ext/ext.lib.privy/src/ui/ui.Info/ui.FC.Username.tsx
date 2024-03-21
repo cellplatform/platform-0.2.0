@@ -3,12 +3,13 @@ import { Button, css, type t } from './common';
 
 export type FCUsernameProps = {
   user: Farcaster;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
 export const FCUsername: React.FC<FCUsernameProps> = (props) => {
-  const { user } = props;
+  const { user, theme, onClick } = props;
 
   /**
    * Handlers
@@ -39,9 +40,31 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
     </div>
   );
 
+  let el = elBody;
+  if (onClick)
+    el = (
+      <Button onClick={handleClick} theme={theme}>
+        {elBody}
+      </Button>
+    );
+
   return (
     <div {...css(styles.base, props.style)}>
-      {!props.onClick ? elBody : <Button onClick={handleClick}>{elBody}</Button>}
+      {el}
+      {/* {!onClick && elBody}
+      {onClick && (
+        <Button onClick={handleClick} theme={theme}>
+          {elBody}
+        </Button>
+      )}
+
+      {!props.onClick ? (
+        elBody
+      ) : (
+        <Button onClick={handleClick} theme={theme}>
+          {elBody}
+        </Button>
+      )} */}
     </div>
   );
 };

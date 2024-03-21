@@ -1,9 +1,10 @@
 import { DEFAULTS, TestRunner, type t } from './common';
 
-export function moduleVerify(data: t.InfoData, info?: {}) {
+export function moduleVerify(data: t.InfoData, theme?: t.CommonTheme) {
   const ctx = {};
   return TestRunner.PropList.runner({
     ctx,
+    theme,
 
     infoUrl() {
       const url = new URL(location.origin);

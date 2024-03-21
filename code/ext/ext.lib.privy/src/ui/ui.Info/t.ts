@@ -30,9 +30,7 @@ export type InfoData = {
     selected?: t.EvmChainName;
     onSelected?: InfoChainSelectedHandler;
   };
-  wallet?: {
-    list?: { title?: string };
-  };
+  wallet?: { list?: { title?: string } };
   farcaster?: { onClick?: InfoFarcasterClickHandler };
 };
 
@@ -51,6 +49,7 @@ export type InfoProps = {
   card?: boolean;
   clipboard?: boolean;
   flipped?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onReady?: t.InfoStatusHandler;
   onChange?: t.InfoStatusHandler;
