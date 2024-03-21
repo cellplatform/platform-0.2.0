@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export type { CSSProperties } from 'react';
+
+/**
  * @system
  */
 export type {
