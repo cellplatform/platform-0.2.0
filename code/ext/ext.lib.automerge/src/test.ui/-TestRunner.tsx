@@ -1,21 +1,25 @@
-import { Dev, IndexedDb, type t, TestDb } from '.';
+import { Dev, TestDb, type t } from '.';
 
 type T = {
   spinning?: boolean;
   results?: t.TestSuiteRunResponse[];
+  reload?: boolean;
 };
 const initial: T = {};
 
 export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
 
     ctx.debug.width(350);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
+        if (e.state.reload)
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
+
         const { spinning, results } = e.state;
         return (
           <Dev.TestRunner.Results
@@ -44,13 +48,16 @@ export default Dev.describe('TestRunner', (e) => {
     dev.hr(5, 20);
 
     dev.section('Maintenance', (dev) => {
-      dev.button('delete "unit test" databases', async (e) => {
-        await TestDb.deleteDatabases();
-      });
+      const del = (label: string, fn: () => Promise<void>) => {
+        dev.button([label, '💥'], async (e) => {
+          await fn();
+          await e.state.change((d) => (d.reload = true));
+        });
+      };
+
+      del('delete all "test" databases', () => TestDb.deleteDatabases());
+      del('delete "spec" (dev harness) databases', () => TestDb.Spec.deleteDatabase());
       dev.hr(-1, 5);
-      dev.button('delete "spec / harness" databases', async (e) => {
-        await TestDb.Spec.deleteDatabase();
-      });
     });
   });
 
