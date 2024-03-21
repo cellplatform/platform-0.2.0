@@ -1,8 +1,9 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Pkg, Webrtc, css, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 
-type T = { props: t.InfoProps };
+type P = t.InfoProps;
+type T = { props: P };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -14,10 +15,11 @@ export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
-  type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.Info');
+  type LocalStore = Pick<P, 'fields' | 'theme'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    theme: undefined,
+    fields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -25,17 +27,19 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.theme = local.theme;
+      d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} data={{ peer: { self } }} />;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Info {...props} data={{ peer: { self } }} />;
       });
   });
 
@@ -54,6 +58,11 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
+      const setFields = (fields?: t.InfoField[]) => {
+        dev.change((d) => (d.props.fields = fields));
+        local.fields = fields?.length === 0 ? undefined : fields;
+      };
+
       dev.row((e) => {
         const props = e.state.props;
         return (
@@ -65,18 +74,32 @@ export default Dev.describe(name, (e) => {
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
                   : (ev.next as t.InfoField[]);
-              dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+              setFields(fields);
             }}
           />
         );
       });
+
+      dev.title('Common States');
+      const config = (label: string, fields?: t.InfoField[]) => {
+        dev.button(label, (e) => setFields(fields));
+      };
+
+      config('all', DEFAULTS.fields.all);
+      config('peers + remotes', ['Peer', 'Peer.Remotes']);
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('connect', (e) => self.connect.data(remote.id));
+      dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+      dev.hr(-1, 5);
+      dev.button(['connect', '⚡️'], (e) => self.connect.data(remote.id));
     });
   });
 

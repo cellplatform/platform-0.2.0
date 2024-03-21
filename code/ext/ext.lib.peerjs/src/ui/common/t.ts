@@ -3,6 +3,7 @@
  */
 export type {
   ButtonProps,
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,
