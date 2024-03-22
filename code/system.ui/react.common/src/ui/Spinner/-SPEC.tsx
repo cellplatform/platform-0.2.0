@@ -1,9 +1,14 @@
-import { Dev, type t } from '../../test.ui';
+import { cloneElement } from 'react';
 import { Spinner } from '.';
+import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = { el?: JSX.Element };
+type T = { theme?: t.CommonTheme; el?: JSX.Element };
 const initial: T = {};
 
+/**
+ * Spec
+ */
+const name = 'Spinner';
 export default Dev.describe('Spinner', (e) => {
   const puff = async (dev: t.DevTools<T>, props?: t.SpinnerPuffProps) => {
     return dev.change((d) => (d.el = <Spinner.Puff {...props} />));
@@ -17,19 +22,34 @@ export default Dev.describe('Spinner', (e) => {
     return dev.change((d) => (d.el = <Spinner.Orbit {...props} />));
   };
 
+  type LocalStore = { theme?: t.CommonTheme };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({ theme: undefined });
+
   e.it('init', async (e) => {
-    const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
-    ctx.subject.render<T>((e) => e.state.el);
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    await state.change((d) => (d.theme = local.theme));
+
+    dev.ctx.debug.width(300);
+    dev.ctx.subject.render<T>((e) => {
+      const { el, theme } = e.state;
+      Dev.Theme.background(dev, theme);
+      return el ? cloneElement(el, { theme }) : null;
+    });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     await puff(dev);
 
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'Spinner'} data={e.state} expand={1} />);
+    Dev.Theme.switch(
+      dev,
+      (d) => d.theme,
+      (d, value) => (local.theme = d.theme = value),
+    );
+
+    dev.hr(5, 20);
 
     dev.section('Puff', (dev) => {
       dev.button('size: 16px', (e) => puff(dev, { size: 16 }));
@@ -55,5 +75,13 @@ export default Dev.describe('Spinner', (e) => {
     });
 
     dev.hr();
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+    });
   });
 });
