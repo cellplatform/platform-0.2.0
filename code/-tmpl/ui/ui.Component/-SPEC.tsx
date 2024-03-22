@@ -1,5 +1,6 @@
-import { Dev, Pkg, type t } from '../../test.ui';
 import { DEFAULTS, Root } from '.';
+import { Dev, Pkg } from '../../test.ui';
+import { type t } from './common';
 
 type P = t.RootProps;
 type T = { props: P; debug: {} };
