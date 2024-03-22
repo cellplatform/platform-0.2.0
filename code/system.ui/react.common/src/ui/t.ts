@@ -24,6 +24,7 @@ export type * from './Module.Namespace/t';
 export type * from './ObjectView/t';
 export type * from './ProgressBar/t';
 export type * from './PropList.FieldSelector/t';
+export type * from './PropList.InfoCommon/t';
 export type * from './PropList/t';
 export type * from './RenderCount/t';
 export type * from './Slider/t';

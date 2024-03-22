@@ -43,6 +43,7 @@ export default Dev.describe(name, (e) => {
       d.props.defaults = SampleFields.defaults;
     });
 
+    ctx.debug.width(330);
     ctx.subject
       .size([250, null])
       .display('grid')
