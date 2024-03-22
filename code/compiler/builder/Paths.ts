@@ -6,7 +6,8 @@ import { fs, type t } from './common';
  */
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
 const rootDir = fs.join(__dirname, '../../..');
-const tmplDir = fs.join(__dirname, '../template.esm');
+// const tmplDir = fs.join(__dirname, '../template.esm');
+const tmplDir = fs.join(__dirname, '../../-tmpl/-esm');
 const tsconfigDir = fs.join(__dirname, '../tsconfig');
 
 export const Paths = {
