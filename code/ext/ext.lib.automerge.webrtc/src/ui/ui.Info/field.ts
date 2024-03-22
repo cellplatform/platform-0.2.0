@@ -1,8 +1,10 @@
+import { PropList } from './common';
 import { component, module, moduleVerify } from './field.Module';
 import { network } from './field.Network';
 import { peer } from './field.Peer';
 import { repo } from './field.Repo';
-import { visible } from './field.Visible';
+
+const { visible } = PropList.Info.Fields;
 
 export const Field = {
   module,

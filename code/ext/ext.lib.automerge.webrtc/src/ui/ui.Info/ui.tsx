@@ -22,6 +22,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
+    .field('Visible', () => Field.visible(data.visible, theme))
     .field('Module', () => Field.module(theme))
     .field('Module.Verify', () => Field.moduleVerify(theme))
     .field('Component', () => Field.component(data.component, theme))
@@ -29,7 +30,6 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Repo', () => Field.repo(data, fields, theme))
     .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc, theme))
     .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting, theme))
-    .field('Visible', () => Field.visible(data, theme))
     .items(fields);
 
   return (

@@ -48,15 +48,16 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
+        const { props, debug } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
+        const visible = debug.visible ?? true;
         const data: t.InfoData = {
           network: self.network,
           repo: { store, index },
           visible: {
-            value: e.state.debug.visible,
-            onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
+            value: visible,
+            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
           },
           shared: {
             onIconClick(e) {
@@ -72,7 +73,14 @@ export default Dev.describe(name, async (e) => {
           },
         };
 
-        return <Info {...props} data={data} />;
+        return (
+          <Info
+            //
+            {...props}
+            data={data}
+            fields={visible ? props.fields : ['Visible']}
+          />
+        );
       });
   });
 
@@ -88,7 +96,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
-      const setFields = (fields?: t.InfoField[]) => {
+      const setFields = (fields?: (t.InfoField | undefined)[]) => {
         dev.change((d) => (d.props.fields = fields));
         local.fields = fields?.length === 0 ? undefined : fields;
       };
@@ -123,6 +131,11 @@ export default Dev.describe(name, async (e) => {
         'Network.Shared',
         // 'Network.Shared.Json',
       ]);
+      dev.hr(-1, 5);
+      dev.button('prepend: Visible', (e) => {
+        const fields = e.state.current.props.fields ?? [];
+        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
     });
 
     dev.hr(5, 20);

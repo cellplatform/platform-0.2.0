@@ -20,6 +20,7 @@ export type {
   DevCtxState,
   PropListItem,
   PropListProps,
+  InfoDataVisible,
 } from 'sys.ui.react.common/src/types';
 
 /**
