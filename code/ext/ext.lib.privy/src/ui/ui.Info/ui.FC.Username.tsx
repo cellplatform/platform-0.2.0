@@ -1,5 +1,5 @@
 import type { Farcaster } from '@privy-io/react-auth';
-import { Button, css, type t } from './common';
+import { Button, Color, css, type t } from './common';
 
 export type FCUsernameProps = {
   user: Farcaster;
@@ -19,8 +19,9 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
-    base: css({ height: 19 }),
+    base: css({ height: 19, color }),
     body: css({
       display: 'grid',
       placeItems: 'center',
@@ -41,30 +42,13 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
   );
 
   let el = elBody;
-  if (onClick)
+  if (onClick) {
     el = (
       <Button onClick={handleClick} theme={theme}>
         {elBody}
       </Button>
     );
+  }
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      {el}
-      {/* {!onClick && elBody}
-      {onClick && (
-        <Button onClick={handleClick} theme={theme}>
-          {elBody}
-        </Button>
-      )}
-
-      {!props.onClick ? (
-        elBody
-      ) : (
-        <Button onClick={handleClick} theme={theme}>
-          {elBody}
-        </Button>
-      )} */}
-    </div>
-  );
+  return <div {...css(styles.base, props.style)}>{el}</div>;
 };

@@ -20,6 +20,14 @@ export function linkFarcaster(args: {
 
   return {
     label: 'Farcaster',
-    value: <FCLink privy={privy} enabled={enabled} showClose={showClose} onClick={data?.onClick} />,
+    value: (
+      <FCLink
+        theme={theme}
+        privy={privy}
+        enabled={enabled}
+        showClose={showClose}
+        onClick={data?.onClick}
+      />
+    ),
   };
 }
