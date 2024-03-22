@@ -5,6 +5,31 @@ export { MonoHash } from '../ui.History.Grid';
 /**
  * Constants
  */
+
+const fields = {
+  get all(): t.InfoField[] {
+    return [
+      'Visible',
+      'Module',
+      'Module.Verify',
+      'Component',
+      'Repo',
+      'Doc',
+      'Doc.URI',
+      'Doc.Object',
+      'Doc.Head',
+      'History',
+      'History.Genesis',
+      'History.List',
+      'History.List.Detail',
+      'History.List.NavPaging',
+    ];
+  },
+  get default(): t.InfoField[] {
+    return ['Module', 'Module.Verify'];
+  },
+} as const;
+
 export const DEFAULTS = {
   repo: { label: 'Store' },
   history: {
@@ -15,27 +40,6 @@ export const DEFAULTS = {
   doc: {
     head: { label: 'Head', hashLength: 6 },
   },
-  fields: {
-    get all(): t.InfoField[] {
-      return [
-        'Module',
-        'Module.Verify',
-        'Component',
-        'Repo',
-        'Doc',
-        'Doc.URI',
-        'Doc.Object',
-        'Doc.Head',
-        'History',
-        'History.Genesis',
-        'History.List',
-        'History.List.Detail',
-        'History.List.NavPaging',
-      ];
-    },
-    get default(): t.InfoField[] {
-      return ['Module', 'Module.Verify'];
-    },
-  },
+  fields,
   query: { dev: 'dev' },
 } as const;

@@ -11,6 +11,7 @@ export type {
   CssValue,
   DevCtxState,
   GetLabelItem,
+  InfoDataVisible,
   LabelItem,
   LabelItemBehaviorKind,
   LabelItemDispatch,

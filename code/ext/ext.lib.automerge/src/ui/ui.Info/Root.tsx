@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
-import { InfoField } from './field';
+import { Field } from './field';
 import { View } from './ui';
 
 /**
@@ -7,10 +7,10 @@ import { View } from './ui';
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  Field: typeof InfoField;
+  Field: typeof Field;
 };
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
-  { DEFAULTS, Field: InfoField },
+  { DEFAULTS, Field },
   { displayName: 'Info' },
 );

@@ -1,5 +1,5 @@
 import { DEFAULTS, PropList, type t } from './common';
-import { InfoField } from './field';
+import { Field } from './field';
 import { useRedrawOnChange } from './use.RedrawOnChange';
 
 /**
@@ -12,13 +12,14 @@ export const View: React.FC<t.InfoProps> = (props) => {
   useRedrawOnChange(data);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => InfoField.module())
-    .field('Module.Verify', () => InfoField.moduleVerify(theme))
-    .field('Repo', () => InfoField.repo(data.repo, theme))
-    .field('Component', () => InfoField.component(data.component))
-    .field('Doc', () => InfoField.doc(data.document, fields, theme))
-    .field('Doc.Head', () => InfoField.head(data.document, fields, theme))
-    .field('History', () => InfoField.history(data.history, fields, theme))
+    .field('Visible', () => Field.visible(data.visible, theme))
+    .field('Module', () => Field.module())
+    .field('Module.Verify', () => Field.moduleVerify(theme))
+    .field('Repo', () => Field.repo(data.repo, theme))
+    .field('Component', () => Field.component(data.component))
+    .field('Doc', () => Field.doc(data.document, fields, theme))
+    .field('Doc.Head', () => Field.head(data.document, fields, theme))
+    .field('History', () => Field.history(data.history, fields, theme))
     .items(fields);
 
   return (

@@ -1,6 +1,7 @@
 import type { t } from './common';
 
 export type InfoField =
+  | 'Visible'
   | 'Module'
   | 'Module.Verify'
   | 'Component'
@@ -16,6 +17,7 @@ export type InfoField =
   | 'History.List.NavPaging';
 
 export type InfoData = {
+  visible?: t.InfoDataVisible;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   repo?: InfoDataRepo;

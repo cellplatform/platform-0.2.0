@@ -1,10 +1,13 @@
+import { PropList } from './common';
 import { doc } from './field.Document';
+import { head } from './field.Head';
+import { history } from './field.History';
 import { component, module, moduleVerify } from './field.Module';
 import { repo } from './field.Repo';
-import { history } from './field.History';
-import { head } from './field.Head';
 
-export const InfoField = {
+const { visible } = PropList.Info.Fields;
+
+export const Field = {
   module,
   moduleVerify,
   component,
@@ -12,4 +15,5 @@ export const InfoField = {
   doc,
   history,
   head,
+  visible,
 } as const;

@@ -1,11 +1,16 @@
 import { Info } from '.';
-import { Dev, DevReload, Pkg, PropList, TestDb, Value, WebStore, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, PropList, TestDb, Value, type t } from '../../test.ui';
 import { sampleCrdt } from './-SPEC-crdt';
 
 type P = t.InfoProps;
 type T = {
   props: t.InfoProps;
-  debug: { reload?: boolean; historyDesc?: boolean; historyDetail?: t.HashString };
+  debug: {
+    reload?: boolean;
+    visible?: boolean;
+    historyDesc?: boolean;
+    historyDetail?: t.HashString;
+  };
 };
 const initial: T = { props: {}, debug: {} };
 const DEFAULTS = Info.DEFAULTS;
@@ -58,6 +63,7 @@ export default Dev.describe(name, async (e) => {
         };
 
         const { store, index } = db;
+        const visible = debug.visible ?? true;
         const data: t.InfoData = {
           repo: { store, index },
           document: {
@@ -83,9 +89,20 @@ export default Dev.describe(name, async (e) => {
               });
             },
           },
+          visible: {
+            value: visible,
+            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
+          },
         };
 
-        return <Info {...props} data={data} />;
+        return (
+          <Info
+            //
+            {...props}
+            data={data}
+            fields={visible ? props.fields : ['Visible']}
+          />
+        );
       });
   });
 
@@ -93,12 +110,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
-      const update = (fields?: t.InfoField[] | undefined) => {
+      const setFields = (fields?: (t.InfoField | undefined)[]) => {
         dev.change((d) => (d.props.fields = fields));
         local.fields = fields?.length === 0 ? undefined : fields;
       };
-      const set = (label: string, fields: t.InfoField[]) => {
-        dev.button(label, (e) => update(fields));
+      const config = (label: string, fields: t.InfoField[]) => {
+        dev.button(label, (e) => setFields(fields));
       };
 
       dev.row((e) => {
@@ -112,16 +129,16 @@ export default Dev.describe(name, async (e) => {
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
                   : (ev.next as t.InfoField[]);
-              update(fields);
+              setFields(fields);
             }}
           />
         );
       });
-      dev.hr(0, [10, 10]).title('Common States');
-      set('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
-      set('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
-      set('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI', 'Doc.Head']);
-      set('Repo / Doc / History ( + List )', [
+      dev.title('Common States');
+      config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
+      config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI', 'Doc.Head']);
+      config('Repo / Doc / History ( + List )', [
         'Repo',
         'Doc',
         'Doc.URI',
@@ -131,6 +148,11 @@ export default Dev.describe(name, async (e) => {
         'History.List.Detail',
         'History.List.NavPaging',
       ]);
+      dev.hr(-1, 5);
+      dev.button('prepend: Visible', (e) => {
+        const fields = e.state.current.props.fields ?? [];
+        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
     });
 
     dev.hr(5, 20);
