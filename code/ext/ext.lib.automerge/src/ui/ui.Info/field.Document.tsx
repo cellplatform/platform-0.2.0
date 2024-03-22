@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
+import { Button, COLORS, Doc, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoDataDocument;
 
@@ -24,7 +24,10 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
       parts.push(<>{text}</>);
     }
 
-    const elIcon = <Icons.Object size={14} />;
+    // NB: "blue" when showing current-state <Object>.
+    const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
+    const elIcon = <Icons.Object size={14} color={color} />;
+
     if (!data.onIconClick) parts.push(elIcon);
     else {
       parts.push(
