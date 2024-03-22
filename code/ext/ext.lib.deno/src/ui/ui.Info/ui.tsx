@@ -6,7 +6,7 @@ import { Field } from './field';
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { stateful = DEFAULTS.stateful } = props;
+  const { theme, stateful = DEFAULTS.stateful } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
   const { data } = useStateController({
     enabled: stateful,
@@ -15,10 +15,10 @@ export const View: React.FC<t.InfoProps> = (props) => {
   });
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module())
-    .field('Module.Verify', () => Field.moduleVerify())
-    .field('Projects.List', () => Field.listProjects(data))
-    .field('Auth.AccessToken', () => Field.auth.accessToken(data))
+    .field('Module', () => Field.module(theme))
+    .field('Module.Verify', () => Field.moduleVerify(theme))
+    .field('Projects.List', () => Field.listProjects(data, theme))
+    .field('Auth.AccessToken', () => Field.auth.accessToken(data, theme))
     .items(fields);
 
   return (
@@ -31,6 +31,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
       flipped={props.flipped}
       padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
+      theme={theme}
       style={props.style}
     />
   );

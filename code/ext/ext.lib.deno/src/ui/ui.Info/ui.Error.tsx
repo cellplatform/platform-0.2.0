@@ -2,6 +2,7 @@ import { Icons, css, type t } from './common';
 
 export type ErrorProps = {
   data: t.InfoError;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

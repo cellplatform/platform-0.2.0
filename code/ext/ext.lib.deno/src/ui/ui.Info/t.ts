@@ -15,6 +15,7 @@ export type InfoProps = {
   card?: boolean;
   flipped?: boolean;
   stateful?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onStateChange?(e: InfoData): void;
 };
