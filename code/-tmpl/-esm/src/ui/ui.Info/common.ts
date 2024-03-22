@@ -4,7 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-const fields: {} = {
+const fields = {
   get all(): t.InfoField[] {
     return ['Module', 'Module.Verify', 'Component'];
   },

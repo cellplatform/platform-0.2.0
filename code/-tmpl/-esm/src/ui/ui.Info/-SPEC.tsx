@@ -1,10 +1,9 @@
-import { Info } from '.';
+import { DEFAULTS, Info } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
 type P = t.InfoProps;
 type T = { props: P };
 const initial: T = { props: {} };
-const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
