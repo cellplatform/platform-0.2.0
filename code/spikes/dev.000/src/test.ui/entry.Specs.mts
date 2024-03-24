@@ -15,7 +15,6 @@ import type { t } from '../common';
 
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
 
-const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 
@@ -46,7 +45,6 @@ const { Specs: ExtDeno } = await import('ext.lib.deno/specs');
 export const Specs = {
   ...App,
 
-  ...Crdt,
   ...IndexedDb,
   ...Common,
   ...ComonDev,
