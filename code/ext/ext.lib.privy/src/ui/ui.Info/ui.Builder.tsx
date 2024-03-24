@@ -2,7 +2,7 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect, useRef, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
+import { DEFAULTS, Hash, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
 import { Field } from './field';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
@@ -50,14 +50,19 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
 
   const c = { privy, data, enabled, theme, fields };
 
+  const shorten = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
+
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => Field.moduleVerify(data, theme))
     .field('AccessToken', () => Field.accessToken(data, theme))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
-    .field('Id.App.Privy', copyable('Privy App', provider?.appId))
-    .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
+    .field('Id.App.Privy', copyable('Privy App', `id:${shorten(provider?.appId, 4)}`))
+    .field(
+      'Id.App.WalletConnect',
+      copyable('WalletConnect Project', `id:${shorten(provider?.walletConnectId, 4)}`),
+    )
     .field('Login', () => Field.login(privy, enabled, theme))
     .field('Link.Wallet', () => user && Field.linkWallet({ ...c, wallets }))
     .field('Link.Farcaster', () => user && Field.linkFarcaster({ ...c, modifiers }))
