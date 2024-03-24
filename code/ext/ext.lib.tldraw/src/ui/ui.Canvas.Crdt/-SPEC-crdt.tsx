@@ -24,6 +24,7 @@ export const SampleCrdt = {
         <CrdtInfo
           style={style}
           fields={[
+            // 'Visible',
             'Repo',
             'Doc',
             'Doc.URI',
@@ -37,6 +38,7 @@ export const SampleCrdt = {
             repo: { store, index },
             document: { doc },
             history: { doc },
+            // visible: { value: true },
           }}
         />
       );
