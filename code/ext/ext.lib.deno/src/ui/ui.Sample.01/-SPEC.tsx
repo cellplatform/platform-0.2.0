@@ -6,7 +6,8 @@ import { Http, type t } from './common';
 import { Sample } from './ui';
 
 type TEnv = { accessToken?: string };
-type T = TState & { props: t.SampleProps; accessToken?: string };
+type P = t.SampleProps;
+type T = TState & { props: P; accessToken?: string };
 const initial: T = {
   props: {},
   deno: { projects: [], deployments: [] },
@@ -17,7 +18,7 @@ const initial: T = {
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SampleProps, 'code'> & Pick<T, 'forcePublicUrl'>;
+  type LocalStore = Pick<P, 'code'> & Pick<T, 'forcePublicUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({

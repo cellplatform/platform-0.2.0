@@ -14,6 +14,7 @@ export type SampleProps = {
   code?: string;
   style?: t.CssValue;
   env?: t.SampleEnv;
+  theme?: t.CommonTheme;
   onChange?: t.EditorEventHandler;
   onCmdEnterKey?: t.EditorEventHandler;
 };

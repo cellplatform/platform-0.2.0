@@ -143,11 +143,6 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.stateful;
         btn
@@ -155,6 +150,14 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
       });
+
+      dev.hr(-1, 5);
+
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.flipped;
         btn
