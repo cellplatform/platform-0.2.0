@@ -2,7 +2,7 @@ import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 import { Wrangle } from './u';
 
 import { FieldSelector } from '../PropList.FieldSelector';
-import { InfoCommon as Info } from '../PropList.InfoCommon';
+import { InfoPanel as Info } from '../PropList.InfoPanel';
 import { FieldBuilder } from './FieldBuilder';
 import { Hash } from './item';
 import { View } from './ui';
