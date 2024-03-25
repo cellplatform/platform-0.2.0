@@ -129,16 +129,6 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.textbox((txt) =>
-        txt
-          .margin([0, 0, 10, 0])
-          .label((e) => 'placeholder')
-          .placeholder('enter placeholder text')
-          .value((e) => e.state.props.placeholder)
-          .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
-          .onEnter((e) => {}),
-      );
-
       const tabSize = (size: number) => {
         const label = `tabSize: ${size}`;
         dev.button(label, (e) => e.change((d) => (d.props.tabSize = size)));
@@ -147,20 +137,17 @@ export default Dev.describe(name, (e) => {
       tabSize(4);
     });
 
-    // dev.hr(-1);
+    dev.hr(-1, 5);
 
-    // dev.section('EditorTheme', (dev) => {
-    //   const theme = (value: t.CommonTheme) => {
-    //     dev.button((btn) =>
-    //       btn
-    //         .label(() => `theme: "${value}"`)
-    //         .right((e) => (e.state.props.theme === value ? '← current' : ''))
-    //         .onClick((e) => e.change((d) => (local.theme = d.props.theme = value))),
-    //     );
-    //   };
-    //   theme('Light');
-    //   theme('Dark');
-    // });
+    dev.textbox((txt) =>
+      txt
+        .margin([0, 0, 10, 0])
+        .label((e) => 'placeholder')
+        .placeholder('enter placeholder text')
+        .value((e) => e.state.props.placeholder)
+        .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
+        .onEnter((e) => {}),
+    );
 
     dev.hr(5, 20);
 
