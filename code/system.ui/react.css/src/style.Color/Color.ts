@@ -1,3 +1,4 @@
+import type { ColorInput } from 'tinycolor2';
 import tinycolor from 'tinycolor2';
 import { type t } from '../common';
 
@@ -12,15 +13,16 @@ export const DARK = '#293042';
  * Creates a new tiny-color instance.
  * https://github.com/bgrins/TinyColor
  */
-export const create = (value: any) => tinycolor(value);
+export const create = (value: ColorInput) => tinycolor(value);
 export const black = () => create('black');
 export const white = () => create('white');
+export const dark = () => create(DARK);
 
 /**
  * Mixes two colors.
  * https://github.com/bgrins/TinyColor#color-utilities
  */
-export function mix(color1: tinycolor.ColorInput, color2: tinycolor.ColorInput, amount?: number) {
+export function mix(color1: ColorInput, color2: ColorInput, amount?: number) {
   return tinycolor.mix(color1, color2, amount);
 }
 

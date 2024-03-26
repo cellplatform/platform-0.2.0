@@ -3,19 +3,20 @@ import type { OnChange, OnMount } from '@monaco-editor/react';
 import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 import { DEFAULTS, FC, LANGUAGES, Wrangle, css, t } from './common';
+import { Theme } from './u.Theme';
 
 const View: React.FC<t.MonacoEditorProps> = (props) => {
   const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize, placeholder } = props;
-  const theme = Wrangle.toMonacoTheme(props.theme);
+  const theme = Theme.toName(props.theme);
 
   const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
   const editor = editorRef.current;
 
-  /**
-   * TODO 🐷
-   */
-  // console.log('placeholder', placeholder);
+  console.log('props.theme', props.theme);
+  console.log('Theme', Theme);
+  console.log('theme', theme);
+  console.log('-------------------------------------------');
 
   /**
    * [Lifecycle]
@@ -41,11 +42,13 @@ const View: React.FC<t.MonacoEditorProps> = (props) => {
    * [Handlers]
    */
   const handleEditorDidMount: OnMount = (ed, monaco) => {
+    Theme.init(monaco);
     monacoRef.current = monaco;
     const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     editor.getModel()?.updateOptions({ tabSize });
     if (props.focusOnLoad) editor.focus();
     props.onReady?.({ editor, monaco });
+    editor.updateOptions({ theme });
 
     /**
      * Customize theme
@@ -79,8 +82,8 @@ const View: React.FC<t.MonacoEditorProps> = (props) => {
         <EditorReact
           defaultLanguage={language}
           language={language}
-          theme={theme}
           defaultValue={text}
+          theme={theme}
           onMount={handleEditorDidMount}
           onChange={handleChange}
         />
