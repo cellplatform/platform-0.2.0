@@ -301,6 +301,7 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
       loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
       loadButton(`ƒ → load → Automerge.Info`, 'AutomergeInfo', 'main');
+      loadButton(`ƒ → load → common.CmdBar`, 'CmdBar', 'main');
 
       dev.hr(-1, 5);
 

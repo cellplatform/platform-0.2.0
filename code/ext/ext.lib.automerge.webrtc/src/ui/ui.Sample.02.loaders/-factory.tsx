@@ -46,5 +46,10 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <AutomergeInfo store={store} docuri={docuri} />;
   }
 
+  if (e.name === 'CmdBar') {
+    const { CmdBarLoader } = await import('./ui.CmdBar');
+    return <CmdBarLoader store={store} docuri={docuri} />;
+  }
+
   return null;
 });

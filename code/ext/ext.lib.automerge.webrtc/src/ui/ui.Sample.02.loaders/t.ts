@@ -14,7 +14,8 @@ export type SampleName =
   | 'ModuleNamespace'
   | 'FaceAPI'
   | 'ImageCrdt'
-  | 'AutomergeInfo';
+  | 'AutomergeInfo'
+  | 'CmdBar';
 
 export type SampleFactoryCtx = {
   docuri: string;
