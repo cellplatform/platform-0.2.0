@@ -8,6 +8,7 @@ type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
  */
 export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
+  env<T>(): T;
   state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
   redraw(target?: t.DevRedrawTarget): Promise<void>;
