@@ -1,6 +1,6 @@
 import { DevTools } from '.';
 import { Dev, Pkg, Time, type t } from '../../test.ui';
-import { Sample } from './-SPEC.Sample';
+import { Sample } from './-SPEC.-sample';
 
 export type T = { count: number; on: boolean; theme?: t.CommonTheme };
 const initial: T = { count: 0, on: true };
