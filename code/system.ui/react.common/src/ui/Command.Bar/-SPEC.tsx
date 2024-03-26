@@ -1,7 +1,9 @@
 import { CommandBar, DEFAULTS } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = { props: t.CommandBarProps };
+type TEnv = {};
+type P = t.CommandBarProps;
+type T = { props: P };
 const initial: T = { props: {} };
 
 /**
@@ -10,11 +12,12 @@ const initial: T = { props: {} };
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<
-    t.CommandBarProps,
-    'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text'
+    P,
+    'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text' | 'theme'
   >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: 'Dark',
     enabled: true,
     focusOnReady: true,
     placeholder: DEFAULTS.commandPlaceholder,
@@ -28,12 +31,12 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const p = d.props;
-      p.focusOnReady = local.focusOnReady;
-      p.enabled = local.enabled;
-      p.placeholder = local.placeholder;
-      p.hintKey = local.hintKey;
-      p.text = local.text;
+      d.props.theme = local.theme;
+      d.props.focusOnReady = local.focusOnReady;
+      d.props.enabled = local.enabled;
+      d.props.placeholder = local.placeholder;
+      d.props.hintKey = local.hintKey;
+      d.props.text = local.text;
     });
 
     ctx.debug.width(330);
@@ -42,10 +45,14 @@ export default Dev.describe(name, (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
+        const { props } = e.state;
+        Dev.Theme.background(dev, props.theme);
         return (
           <CommandBar
-            {...e.state.props}
-            onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
+            {...props}
+            onChange={(e) => {
+              state.change((d) => (local.text = d.props.text = e.to));
+            }}
           />
         );
       });
@@ -55,7 +62,16 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    const env = dev.env<TEnv>();
+    console.log('env', env);
+
     dev.section('Properties', (dev) => {
+      Dev.Theme.switch(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn
@@ -80,7 +96,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Common States', (dev) => {
-      dev.button('hint key: ↑ ↓ ⌘K', (e) => {
+      dev.button(['hint key', '↑ ↓ ⌘K'], (e) => {
         e.change((d) => (local.hintKey = d.props.hintKey = ['↑', '↓', '⌘K']));
       });
       dev.button('placholder: "namespace"', (e) => {
@@ -102,7 +118,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
       return <Dev.Object name={name} data={data} expand={1} />;

@@ -9,6 +9,7 @@ export type CommandBarProps = {
   hintKey?: string | string[];
   enabled?: boolean;
   focusOnReady?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onReady?: t.TextInputReadyHandler;
   onChange?: t.TextInputChangeEventHandler;
