@@ -54,7 +54,7 @@ export const Theme = {
     const defaultTheme: t.CommonTheme = 'Light';
     dev.button((btn) => {
       btn
-        .label((e) => `theme: ${current(e.state) ?? defaultTheme}`)
+        .label((e) => `theme: "${current(e.state) ?? defaultTheme}"`)
         .right((e) => {
           const is = Theme.is(current(e.state) ?? defaultTheme);
           const Icon = is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
