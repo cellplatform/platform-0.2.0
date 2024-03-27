@@ -2,15 +2,15 @@ import { DEFAULTS, Measure, type t } from './common';
 import { CssUtil } from './u.css';
 
 export function measureInput(props: t.TextInputProps) {
-  const { value: content, valueStyle = DEFAULTS.props.valueStyle } = props;
+  const { value, valueStyle = DEFAULTS.style(props.theme) } = props;
   const style = CssUtil.toText(valueStyle);
-  return Measure.size({ content, ...style });
+  return Measure.size({ content: value, ...style });
 }
 
 export function measureText(props: t.TextProps) {
-  const { children: content } = props;
+  const { children } = props;
   const style = { ...CssUtil.toText(props), ...props.style };
-  return Measure.size({ content, ...style });
+  return Measure.size({ content: children, ...style });
 }
 
 export async function toWidth(props: t.TextInputProps) {

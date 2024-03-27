@@ -15,6 +15,7 @@ export type HtmlInputProps = t.TextInputFocusProps &
     isEnabled?: boolean;
     isPassword?: boolean;
     disabledOpacity?: number;
+    theme?: t.CommonTheme;
     style?: t.CssValue;
     valueStyle?: t.TextInputStyle;
     selectionBackground?: number | string;
@@ -29,14 +30,11 @@ export type HtmlInputProps = t.TextInputFocusProps &
  * Component
  */
 export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
+  const { inputRef, value = '', selectionBackground, maxLength } = props;
   const {
-    inputRef,
-    value = '',
     isPassword = DEFAULTS.props.isPassword,
     isEnabled = DEFAULTS.props.isEnabled,
     disabledOpacity = DEFAULTS.props.disabledOpacity,
-    selectionBackground,
-    maxLength,
   } = props;
 
   const ref = TextInputRef(inputRef);
@@ -166,10 +164,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     } as t.CssValue;
   }
 
-  styles.base = R.mergeDeepRight(
-    styles.base,
-    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.props.valueStyle) as {},
-  );
+  styles.base = R.mergeDeepRight(styles.base, Util.css.toTextInput(props) as {});
   styles.base = {
     ...styles.base,
     opacity: isEnabled ? 1 : disabledOpacity,

@@ -5,25 +5,30 @@ export const CssUtil = {
    * Convert TextInput props to placeholder style.
    */
   toPlaceholder(props: t.TextInputProps): t.CssValue {
-    const { isEnabled = true, valueStyle = DEFAULTS.props.valueStyle, placeholderStyle } = props;
-    const styles = { ...R.clone(valueStyle), ...placeholderStyle };
-    return CssUtil.toTextInput(isEnabled, styles);
+    const { theme, placeholderStyle } = props;
+    const valueStyle = props.valueStyle ?? DEFAULTS.style(theme);
+    return CssUtil.toTextInput({
+      ...props,
+      valueStyle: { ...R.clone(valueStyle), ...placeholderStyle },
+    });
   },
 
   /**
    * Converts a set of TextInput styles into CSS.
    */
-  toTextInput(isEnabled: boolean, styles: t.TextInputStyle): t.CssValue {
+  toTextInput(props: t.TextInputProps): t.CssValue {
+    const { theme, isEnabled = true } = props;
+    const valueStyle = props.valueStyle ?? DEFAULTS.style(theme);
     return {
-      ...CssUtil.toText(styles),
-      color: isEnabled ? Color.format(styles.color) : Color.format(styles.disabledColor),
+      ...CssUtil.toText(valueStyle, theme),
+      color: isEnabled ? Color.format(valueStyle.color) : Color.format(valueStyle.disabledColor),
     };
   },
 
   /**
    * Converts <Text> style props to a CSS object.
    */
-  toText(props: t.TextStyle): t.CssValue {
+  toText(style: t.TextStyle, theme?: t.CommonTheme): t.CssValue {
     const {
       fontSize,
       color,
@@ -35,13 +40,13 @@ export const CssUtil = {
       lineHeight,
       textShadow,
       uppercase,
-    } = CssUtil.pluckText(props);
+    } = CssUtil.pluckText(style);
 
     return {
       color: Color.format(color),
       fontFamily,
       fontSize,
-      fontWeight: CssUtil.fontWeight(props.fontWeight),
+      fontWeight: CssUtil.fontWeight(style.fontWeight),
       fontStyle: italic ? 'italic' : undefined,
       textAlign: align,
       opacity,
@@ -60,7 +65,7 @@ export const CssUtil = {
     return weights.normal;
   },
 
-  pluckText(props: t.TextStyle): any {
+  pluckText(style: t.TextStyle, theme?: t.CommonTheme): any {
     const {
       color = -0.7,
       align = 'left',
@@ -68,10 +73,10 @@ export const CssUtil = {
       opacity = 1,
       textShadow,
       uppercase = false,
-    } = props;
+    } = style;
 
     return {
-      ...CssUtil.pluckFont(props),
+      ...CssUtil.pluckFont(style, theme),
       color,
       align,
       italic,
@@ -81,14 +86,14 @@ export const CssUtil = {
     };
   },
 
-  pluckFont(props: t.TextStyle): t.CssValue {
+  pluckFont(style: t.TextStyle, theme?: t.CommonTheme): t.CssValue {
     const {
-      fontSize = DEFAULTS.props.valueStyle.fontSize,
+      fontSize = DEFAULTS.style(theme).fontSize,
       fontFamily = DEFAULTS.systemFont.sans.family,
       fontWeight = 'normal',
       letterSpacing,
       lineHeight,
-    } = props;
+    } = style;
 
     return {
       fontFamily,

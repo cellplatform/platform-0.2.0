@@ -11,17 +11,13 @@ type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
  * Component
  */
 export const View: React.FC<Props> = (props) => {
+  const { inputRef, placeholder, maxLength, theme, placeholderStyle = {} } = props;
   const {
-    inputRef,
-    placeholder,
-    maxLength,
-    theme,
     isPassword = DEFAULTS.props.isPassword,
     isReadOnly = DEFAULTS.props.isReadOnly,
     isEnabled = DEFAULTS.props.isEnabled,
-    valueStyle = DEFAULTS.props.valueStyle,
     disabledOpacity = DEFAULTS.props.disabledOpacity,
-    placeholderStyle = {},
+    valueStyle = DEFAULTS.style(theme),
   } = props;
 
   const value = Util.value.format(props.value, maxLength);
@@ -123,8 +119,9 @@ export const View: React.FC<Props> = (props) => {
   const elInput = (
     <HtmlInput
       inputRef={inputRef}
-      style={styles.input}
       className={props.className}
+      theme={theme}
+      style={styles.input}
       value={value}
       isEnabled={isEnabled}
       isPassword={isPassword}

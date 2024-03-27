@@ -1,4 +1,4 @@
-import { type t, COLORS } from '../common';
+import { Color, type t } from '../common';
 
 const systemFont = {
   weights: { thin: 100, light: 300, normal: 400, bold: 900 },
@@ -12,35 +12,42 @@ const focusActions: t.TextInputFocusProps['focusAction'][] = [
   'Cursor:End',
 ];
 
-const valueStyle: t.TextInputStyle = {
-  opacity: 1,
-  color: COLORS.DARK,
-  disabledColor: COLORS.DARK,
-  italic: false,
-  fontSize: 16,
-  fontWeight: undefined,
-  fontFamily: undefined,
-  letterSpacing: undefined,
-  lineHeight: undefined,
+const toStyles = (theme: t.CommonTheme): t.TextInputStyle => {
+  const color = Color.fromTheme(theme);
+  return {
+    opacity: 1,
+    color,
+    disabledColor: color,
+    italic: false,
+    fontSize: 16,
+    fontWeight: undefined,
+    fontFamily: undefined,
+    letterSpacing: undefined,
+    lineHeight: undefined,
+  };
 };
 
-const props = {
-  isEnabled: true,
-  isReadOnly: false,
-  isPassword: false,
-  autoCapitalize: false,
-  autoComplete: false,
-  autoCorrect: false,
-  autoSize: false,
-  spellCheck: false,
-  focusOnLoad: false,
-  placeholderStyle: { italic: true, opacity: 0.3 },
-  disabledOpacity: 0.2,
-  valueStyle,
+const style = {
+  light: toStyles('Light'),
+  dark: toStyles('Dark'),
+  fromTheme: (theme: t.CommonTheme = 'Light') => (theme === 'Light' ? style.light : style.dark),
 } as const;
 
 export const DEFAULTS = {
-  props,
   focusActions,
   systemFont,
+  style: (theme: t.CommonTheme = 'Light') => (theme === 'Light' ? style.light : style.dark),
+  props: {
+    isEnabled: true,
+    isReadOnly: false,
+    isPassword: false,
+    autoCapitalize: false,
+    autoComplete: false,
+    autoCorrect: false,
+    autoSize: false,
+    spellCheck: false,
+    focusOnLoad: false,
+    placeholderStyle: { italic: true, opacity: 0.3 },
+    disabledOpacity: 0.2,
+  },
 } as const;
