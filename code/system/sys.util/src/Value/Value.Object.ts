@@ -1,8 +1,6 @@
 import { R } from '../common';
 export * from './Value.Object.keyPath';
 
-export { ObjectPath as Path } from '../ObjectPath';
-
 type WalkCallback = (e: WalkCallbackArgs) => void;
 type WalkCallbackArgs = {
   readonly parent: object | any[];

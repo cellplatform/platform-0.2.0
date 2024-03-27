@@ -1,7 +1,14 @@
-import { expect, describe, it } from '../test';
 import { Path } from '.';
+import { ObjectPath } from '../ObjectPath';
+import { describe, expect, it } from '../test';
 
 describe('Path', () => {
+  describe('Path.Object', () => {
+    it('exists on API', () => {
+      expect(Path.Object).to.equal(ObjectPath);
+    });
+  });
+
   it('join', () => {
     const test = (parts: string[], expected: string) => {
       const res = Path.join(...parts);

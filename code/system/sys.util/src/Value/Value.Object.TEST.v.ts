@@ -3,12 +3,6 @@ import { ObjectPath } from '../ObjectPath';
 import { describe, expect, it } from '../test';
 
 describe('Value.Object', () => {
-  describe('Value.Object.Path', () => {
-    it('exists on API', () => {
-      expect(Value.Object.Path).to.equal(ObjectPath);
-    });
-  });
-
   describe('Value.Object.walk', () => {
     type T = { key: string | number; value: any };
 
