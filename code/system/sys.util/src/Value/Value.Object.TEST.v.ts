@@ -1,5 +1,4 @@
 import { Value } from '.';
-import { ObjectPath } from '../ObjectPath';
 import { describe, expect, it } from '../test';
 
 describe('Value.Object', () => {
