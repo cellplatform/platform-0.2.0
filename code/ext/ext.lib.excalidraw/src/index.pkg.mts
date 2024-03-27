@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.excalidraw',
   version: '0.0.0',
   dependencies: {
+    '@excalidraw/excalidraw': '0.17.3',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',

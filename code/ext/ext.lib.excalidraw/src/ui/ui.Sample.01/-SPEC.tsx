@@ -1,4 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
+import { Excalidraw } from '@excalidraw/excalidraw';
 
 type T = {};
 const initial: T = {};
@@ -18,10 +19,13 @@ export default Dev.describe(name, (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+        /**
+         * TODO 🐷
+         */
+        return <Excalidraw />;
       });
   });
 
