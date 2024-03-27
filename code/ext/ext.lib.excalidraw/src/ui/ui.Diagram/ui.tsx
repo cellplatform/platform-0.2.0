@@ -1,30 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
-import { Excalidraw } from '@excalidraw/excalidraw';
+import { Color, Spinner, css, type t } from './common';
+import { Wrangle } from './u';
+import { useLoader } from './use.Loader';
 
 export const View: React.FC<t.DiagramProps> = (props) => {
-  // const theme
+  const { theme } = props;
+  const { loading, Components } = useLoader();
 
   /**
    * Render
    */
-  const color = Color.fromTheme(props.theme);
   const styles = {
-    base: css({ color, display: 'grid' }),
+    base: css({
+      position: 'relative',
+      color: Color.fromTheme(theme),
+      display: 'grid',
+      placeItems: loading ? 'center' : undefined,
+    }),
   };
+
+  const elSpinner = loading && <Spinner.Bar theme={theme} />;
+  const elExcalidraw = Components?.Excalidraw && (
+    <Components.Excalidraw theme={Wrangle.lowercaseTheme(theme)} />
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Excalidraw theme={wrangle.lowercaseTheme(props.theme)} />
+      {elSpinner}
+      {elExcalidraw}
     </div>
   );
 };
-
-/**
- * Helpers
- */
-const wrangle = {
-  lowercaseTheme(theme?: t.CommonTheme) {
-    return theme === 'Light' ? 'light' : 'dark';
-  },
-} as const;
