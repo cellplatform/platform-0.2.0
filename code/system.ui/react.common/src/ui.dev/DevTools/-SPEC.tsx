@@ -92,7 +92,9 @@ export default Dev.describe('DevTools', (e) => {
 
     const target = 'Module.Loader.Stateful';
     Dev.Link.button(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
-    Dev.Link.pkg(Pkg, dev)
+
+    const link = Dev.Link.pkg(Pkg, dev);
+    link
       .button(`pkg.dev (1): "Foo"`, target)
       .button(`pkg.dev (2): "Foo.Bar"`, target)
       .hr()

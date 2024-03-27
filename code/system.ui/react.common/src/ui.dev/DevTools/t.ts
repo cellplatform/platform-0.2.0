@@ -52,3 +52,12 @@ export type DevTools<S extends O = O> = {
 
   bdd(fn: t.DevBddHandler<S>): DevTools<S>;
 };
+
+/**
+ * Builder tool for constructing hyperlinks.
+ */
+export type DevLinks = {
+  title(text: string | [string, string]): DevLinks;
+  button(label: string, target: string): DevLinks;
+  hr(line?: number | [number, number], margin?: t.DevHrMargin): DevLinks;
+};

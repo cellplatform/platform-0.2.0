@@ -29,16 +29,16 @@ export const Link = {
    * Curried helper.
    */
   pkg<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>) {
-    const api = {
-      button(label: string, target: string) {
+    const api: t.DevLinks = {
+      button(label, target) {
         Link.button(pkg, dev, label, target);
         return api;
       },
-      hr(line: number | [number, number] = -1, margin?: t.DevHrMargin) {
+      hr(line = -1, margin) {
         dev.hr(line, margin);
         return api;
       },
-      title(text: string | [string, string]) {
+      title(text) {
         dev.title(text);
         return api;
       },
