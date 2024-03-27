@@ -1,9 +1,9 @@
 import { RefObject, useEffect, useState } from 'react';
 
 import { DEFAULTS, Time, css, type t } from './common';
-import { TextInputHint } from './ui.TextInput.Hint';
-import { HtmlInput } from './ui.TextInput.Html';
-import { Util } from './util';
+import { Util } from './u';
+import { TextInputHint } from './ui.Hint';
+import { HtmlInput } from './ui.Html';
 
 type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
 

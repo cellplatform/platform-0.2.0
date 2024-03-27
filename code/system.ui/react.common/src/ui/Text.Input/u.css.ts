@@ -108,4 +108,4 @@ export const CssUtil = {
     if (typeof value === 'string') return value as string;
     return `0px ${value[0]}px ${Color.format(value[1])}`;
   },
-};
+} as const;

@@ -1,5 +1,5 @@
 import { css, type t } from '../common';
-import { Util } from './util';
+import { Util } from './u';
 
 export type TextInputHintProps = {
   valueStyle: t.TextInputStyle;

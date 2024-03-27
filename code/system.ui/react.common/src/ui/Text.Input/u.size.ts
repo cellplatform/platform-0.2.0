@@ -1,5 +1,5 @@
 import { DEFAULTS, Measure, type t } from './common';
-import { CssUtil } from './util.css';
+import { CssUtil } from './u.css';
 
 export function measureInput(props: t.TextInputProps) {
   const { value: content, valueStyle = DEFAULTS.props.valueStyle } = props;
