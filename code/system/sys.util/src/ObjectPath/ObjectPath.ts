@@ -3,11 +3,11 @@ import { type t } from './common';
 /**
  * Helpers for working with arrays that represent object paths.
  */
-export const Path = {
+export const ObjectPath = {
   /**
    * Read into an object and return the resulting value at the given path.
    */
-  resolve<T>(root: unknown | unknown[], path: t.JsonPath): T | undefined {
+  resolve<T>(root: unknown | unknown[], path: t.ObjectPath): T | undefined {
     if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
     if (!path || path.length === 0) return root as T;
 
@@ -24,7 +24,7 @@ export const Path = {
    * Write a value to the given path on the root object.
    * If parts of the path do not exist, they are created as objects.
    */
-  mutate<T>(root: unknown, path: t.JsonPath, value: T): void {
+  mutate<T>(root: unknown, path: t.ObjectPath, value: T): void {
     if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
     if (!path || path.length === 0) throw new Error('path cannot be empty');
 

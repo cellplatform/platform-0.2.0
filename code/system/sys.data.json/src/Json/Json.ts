@@ -1,7 +1,6 @@
 import { Patch } from '../Json.Patch';
 import { PatchState } from '../Json.PatchState';
-import { Path } from '../Json.Path';
-import { Is, Json as Util } from '../common';
+import { Is, ObjectPath as Path, Json as Util } from '../common';
 
 export const Json = {
   Patch,
