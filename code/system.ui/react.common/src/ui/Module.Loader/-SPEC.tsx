@@ -77,10 +77,12 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = Dev.Link.pkg(Pkg, dev);
-      link.button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
-      link.button('see: ModuleLoader.Namespace', 'Module.Namespace');
+      link
+        .title('Links')
+        .button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful')
+        .button('see: ModuleLoader.Namespace', 'Module.Namespace')
+        .hr(-1, 5);
 
-      dev.hr(-1, 5);
       dev.button('reset', reset);
     });
 

@@ -87,9 +87,8 @@ export default Dev.describe(name, (e) => {
       .button('ModuleLoader (stateless)', 'Module.Loader')
       .button('ModuleLoader.Namespace', 'Module.Namespace')
       .hr(-1, 5)
-      .button('unit tests', 'tests');
-
-    dev.hr(5, 20);
+      .button('unit tests', 'tests')
+      .hr(5, 20);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
