@@ -1,5 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
-import { Excalidraw } from '@excalidraw/excalidraw';
+import { Diagram } from '../ui.Diagram';
 
 type T = {};
 const initial: T = {};
@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
         /**
          * TODO 🐷
          */
-        return <Excalidraw />;
+        return <Diagram />;
       });
   });
 
