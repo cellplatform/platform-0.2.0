@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react';
+import { RepoListRef } from './Ref';
+
 import { Renderers } from './Renderers';
 import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
@@ -7,8 +10,20 @@ export const View: React.FC<t.RepoListProps> = (props) => {
   const list = Wrangle.listState(props.model);
   const behaviors = Wrangle.listBehaviors(props);
 
+  const readyRef = useRef(false);
   const renderers = Renderers.init(props);
   const List = LabelItem.Stateful.useListController({ list, behaviors });
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    if (props.model && !readyRef.current) {
+      const ref = RepoListRef(props.model);
+      readyRef.current = true;
+      props.onReady?.({ ref });
+    }
+  }, [!!props.model]);
 
   /**
    * [Render]

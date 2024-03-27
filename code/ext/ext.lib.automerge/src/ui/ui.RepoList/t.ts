@@ -19,4 +19,11 @@ export type RepoListProps = {
   renderCount?: t.RenderCountProps;
   tabIndex?: number;
   style?: t.CssValue;
+  onReady?: RepoListReadyHandler;
 };
+
+/**
+ * Events
+ */
+export type RepoListReadyHandler = (e: RepoListReadyHandlerArgs) => void;
+export type RepoListReadyHandlerArgs = { ref: RepoListRef };

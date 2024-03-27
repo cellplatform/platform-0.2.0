@@ -1,6 +1,6 @@
 import { RepoList } from '.';
 import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
-import { SpecInfo } from './-SPEC.ui.Info';
+import { SpecInfo } from './-SPEC-ui.Info';
 
 type P = t.RepoListProps;
 type T = {
@@ -83,7 +83,17 @@ export default Dev.describe(name, async (e) => {
           opacity: 0.2,
         };
 
-        return <RepoList {...props} model={model} renderCount={renderCount} />;
+        return (
+          <RepoList
+            {...props}
+            model={model}
+            renderCount={renderCount}
+            onReady={(e) => {
+              console.info('⚡️ onReady', e);
+              // e.ref.select('First');
+            }}
+          />
+        );
       });
   });
 
