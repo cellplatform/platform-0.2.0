@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { TextInput } from '..';
-import { css, Color, Time, type t } from '../common';
-import { Hints } from './DEV.Hints';
+import { TextInput } from '.';
+import { Color, Time, css, type t } from '../common';
+import { Hints } from './-SPEC-Hints';
 
 export type DevSampleProps = {
   props: t.TextInputProps;

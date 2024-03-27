@@ -1,6 +1,6 @@
-import { Dev, type t } from '../../../test.ui';
-import { DEFAULTS, KeyboardMonitor, Time } from '../common';
-import { DevSample } from './DEV.Sample';
+import { Dev, type t } from '../../test.ui';
+import { DEFAULTS, KeyboardMonitor, Time } from './common';
+import { DevSample } from './-SPEC-Sample';
 
 type P = t.TextInputProps;
 type T = {

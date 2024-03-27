@@ -61,6 +61,7 @@ export type TextInputProps = t.TextInputFocusProps &
     autoSize?: boolean;
     selectionBackground?: number | string;
 
+    theme?: t.CommonTheme;
     style?: t.CssValue;
     valueStyle?: t.TextInputStyle;
     placeholderStyle?: t.TextInputStyle & { offset?: [number, number] };
