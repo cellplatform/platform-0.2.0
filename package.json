@@ -154,8 +154,6 @@
   },
   "resolutions": {
     "axios": ">=1.6.8",
-    "follow-redirects": ">=1.15.6",
-    "jose": ">=4.15.5",
     "node-fetch": ">=2.6.7",
     "web3-utils": ">=4.2.1"
   },
