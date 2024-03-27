@@ -42,6 +42,12 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
+    link
+      .title('Links')
+      .button('github', 'https://github.com/excalidraw/excalidraw')
+      .button('docs', 'https://docs.excalidraw.com/docs')
+      .hr(5, 20);
+
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
