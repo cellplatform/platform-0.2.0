@@ -13,7 +13,7 @@ export const Namespace = {
    */
   init<R extends O, N extends string = string>(
     root: t.DocRef<R>,
-    path?: t.JsonPath | (() => t.JsonPath),
+    path?: t.ObjectPath | (() => t.ObjectPath),
     options?: Options<R> | t.InitializeLens<R>,
   ): t.NamespaceManager<N> {
     const args = wrangle.options(options);
@@ -96,7 +96,7 @@ const wrangle = {
     return input ?? {};
   },
 
-  path(path?: t.JsonPath | (() => t.JsonPath)) {
+  path(path?: t.ObjectPath | (() => t.ObjectPath)) {
     return typeof path === 'function' ? path() : path ?? [];
   },
 } as const;

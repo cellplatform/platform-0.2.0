@@ -1,6 +1,6 @@
 import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { Path, rx, slug, toObject, type t } from './common';
+import { ObjectPath, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = {
@@ -14,7 +14,7 @@ type Options<R extends O> = {
  */
 export function init<R extends O, L extends O>(
   root: t.DocRef<R>,
-  path?: t.JsonPath | (() => t.JsonPath),
+  path?: t.ObjectPath | (() => t.ObjectPath),
   options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {
   const args = wrangle.options<R>(options);
@@ -24,7 +24,7 @@ export function init<R extends O, L extends O>(
   let _changing = false;
   let _lastValue: L | undefined;
 
-  const resolve = (root: R) => Path.resolve<L>(root, wrangle.path(path))!;
+  const resolve = (root: R) => ObjectPath.resolve<L>(root, wrangle.path(path))!;
   const events = root.events(args.dispose$);
 
   events.dispose$.subscribe(() => {
@@ -130,9 +130,9 @@ export function init<R extends O, L extends O>(
     /**
      * Create a new sub-lens from the current lens.
      */
-    lens<T extends O>(subpath: t.JsonPath, fn?: t.InitializeLens<L>) {
+    lens<T extends O>(subpath: t.ObjectPath, fn?: t.InitializeLens<L>) {
       const composite = [...wrangle.path(path), ...subpath];
-      if (fn && typeof Path.resolve(root, composite) !== 'object') api.change((d) => fn(d));
+      if (fn && typeof ObjectPath.resolve(root, composite) !== 'object') api.change((d) => fn(d));
       return init<R, T>(root, composite, { dispose$ });
     },
 
@@ -180,11 +180,11 @@ const wrangle = {
     return input ?? {};
   },
 
-  path(path?: t.JsonPath | (() => t.JsonPath)) {
+  path(path?: t.ObjectPath | (() => t.ObjectPath)) {
     return typeof path === 'function' ? path() : path ?? [];
   },
 
-  patches(patches: t.Patch[], path?: t.JsonPath | (() => t.JsonPath)) {
+  patches(patches: t.Patch[], path?: t.ObjectPath | (() => t.ObjectPath)) {
     const length = wrangle.path(path).length;
     return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
   },
