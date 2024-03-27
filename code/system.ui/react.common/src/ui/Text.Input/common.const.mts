@@ -24,7 +24,7 @@ const valueStyle: t.TextInputStyle = {
   lineHeight: undefined,
 };
 
-const prop = {
+const props = {
   isEnabled: true,
   isReadOnly: false,
   isPassword: false,
@@ -40,7 +40,7 @@ const prop = {
 } as const;
 
 export const DEFAULTS = {
-  prop,
+  props,
   focusActions,
   systemFont,
 } as const;

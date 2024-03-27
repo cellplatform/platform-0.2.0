@@ -15,17 +15,17 @@ export const View: React.FC<Props> = (props) => {
     inputRef,
     placeholder,
     maxLength,
-    isPassword = DEFAULTS.prop.isPassword,
-    isReadOnly = DEFAULTS.prop.isReadOnly,
-    isEnabled = DEFAULTS.prop.isEnabled,
-    valueStyle = DEFAULTS.prop.valueStyle,
-    disabledOpacity = DEFAULTS.prop.disabledOpacity,
+    theme,
+    isPassword = DEFAULTS.props.isPassword,
+    isReadOnly = DEFAULTS.props.isReadOnly,
+    isEnabled = DEFAULTS.props.isEnabled,
+    valueStyle = DEFAULTS.props.valueStyle,
+    disabledOpacity = DEFAULTS.props.disabledOpacity,
     placeholderStyle = {},
   } = props;
 
   const value = Util.value.format(props.value, maxLength);
   const hasValue = value.length > 0;
-
   const [width, setWidth] = useState<string | number>();
 
   /**

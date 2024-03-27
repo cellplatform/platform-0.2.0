@@ -5,7 +5,7 @@ export const CssUtil = {
    * Convert TextInput props to placeholder style.
    */
   toPlaceholder(props: t.TextInputProps): t.CssValue {
-    const { isEnabled = true, valueStyle = DEFAULTS.prop.valueStyle, placeholderStyle } = props;
+    const { isEnabled = true, valueStyle = DEFAULTS.props.valueStyle, placeholderStyle } = props;
     const styles = { ...R.clone(valueStyle), ...placeholderStyle };
     return CssUtil.toTextInput(isEnabled, styles);
   },
@@ -83,7 +83,7 @@ export const CssUtil = {
 
   pluckFont(props: t.TextStyle): t.CssValue {
     const {
-      fontSize = DEFAULTS.prop.valueStyle.fontSize,
+      fontSize = DEFAULTS.props.valueStyle.fontSize,
       fontFamily = DEFAULTS.systemFont.sans.family,
       fontWeight = 'normal',
       letterSpacing,

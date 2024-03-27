@@ -32,9 +32,9 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const {
     inputRef,
     value = '',
-    isPassword = DEFAULTS.prop.isPassword,
-    isEnabled = DEFAULTS.prop.isEnabled,
-    disabledOpacity = DEFAULTS.prop.disabledOpacity,
+    isPassword = DEFAULTS.props.isPassword,
+    isEnabled = DEFAULTS.props.isEnabled,
+    disabledOpacity = DEFAULTS.props.disabledOpacity,
     selectionBackground,
     maxLength,
   } = props;
@@ -168,7 +168,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
   styles.base = R.mergeDeepRight(
     styles.base,
-    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.prop.valueStyle) as {},
+    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.props.valueStyle) as {},
   );
   styles.base = {
     ...styles.base,

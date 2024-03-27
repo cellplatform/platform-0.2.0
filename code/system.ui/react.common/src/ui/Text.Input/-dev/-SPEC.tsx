@@ -2,8 +2,9 @@ import { Dev, type t } from '../../../test.ui';
 import { DEFAULTS, KeyboardMonitor, Time } from '../common';
 import { DevSample } from './DEV.Sample';
 
+type P = t.TextInputProps;
 type T = {
-  props: t.TextInputProps;
+  props: P;
   debug: {
     render: boolean;
     status?: t.TextInputStatus;
@@ -18,11 +19,11 @@ type T = {
 
 const initial: T = {
   props: {
-    ...DEFAULTS.prop,
+    ...DEFAULTS.props,
     placeholder: 'my placeholder',
     focusOnReady: true,
     placeholderStyle: {
-      ...DEFAULTS.prop.placeholderStyle,
+      ...DEFAULTS.props.placeholderStyle,
       // offset: [-10, -15],
     },
   },
@@ -37,10 +38,11 @@ const initial: T = {
 };
 
 export default Dev.describe('TextInput', (e) => {
-  type LocalStoreDebug = T['debug'] & Pick<t.TextInputProps, 'value'>;
+  type LocalStoreDebug = T['debug'] & Pick<P, 'value' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStoreDebug>('dev:sys.ui.TextInput');
   const local = localstore.object({
     ...initial.debug,
+    theme: undefined,
     value: '',
   });
 
@@ -50,6 +52,7 @@ export default Dev.describe('TextInput', (e) => {
     state.change((d) => {
       d.debug = local;
       d.props.value = local.value;
+      d.props.theme = local.theme;
     });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {
@@ -86,6 +89,7 @@ export default Dev.describe('TextInput', (e) => {
           },
         };
 
+        Dev.Theme.background(ctx, props.theme, 1);
         return <DevSample props={props} debug={debug} />;
       });
   });
@@ -111,6 +115,9 @@ export default Dev.describe('TextInput', (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      dev.hr(-1, 5);
+
       function boolean(key: keyof T['props']) {
         dev.boolean((btn) =>
           btn
