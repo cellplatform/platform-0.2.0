@@ -11,6 +11,7 @@ export const Specs = {
   [`${ns}.ui.Doc.History.Grid`]: () => import('../ui/ui.History.Grid/-SPEC'),
   [`${ns}.ui.Doc.History.Commit`]: () => import('../ui/ui.History.Commit/-SPEC'),
   [`${ns}.ui.Nav.Paging`]: () => import('../ui/ui.Nav.Paging/-SPEC'),
+  [`${ns}.sync.Textbox`]: () => import('../crdt.sync/TextboxSync/-SPEC'),
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
 } as t.SpecImports;
 
