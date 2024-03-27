@@ -1,4 +1,4 @@
-import { StoreIndex } from '../../logic';
+import { StoreIndex } from '../../crdt';
 import { Model, rx, toObject, type t } from './common';
 import { Data, type ItemInput } from './u.Data';
 

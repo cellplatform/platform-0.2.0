@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-import { StoreIndex } from '../../logic';
+import { StoreIndex } from '../../crdt';
 import { Wrangle } from './u';
 
 /**

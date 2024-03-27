@@ -1,4 +1,4 @@
-import { Doc } from '../../logic';
+import { Doc } from '../../crdt';
 import { HistoryGrid } from '../ui.History.Grid';
 import { NavPaging } from '../ui.Nav.Paging';
 import { DEFAULTS, type t } from './common';

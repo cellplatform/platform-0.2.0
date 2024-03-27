@@ -1,4 +1,4 @@
-import { StoreIndex, WebStore } from '../../logic';
+import { StoreIndex, WebStore } from '../../crdt';
 import { eventsFactory } from './Model.Events';
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';

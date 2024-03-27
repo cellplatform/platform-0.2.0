@@ -3,7 +3,7 @@ import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-networ
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
 import { Is } from '.';
-import { WebStore } from '../logic/Store.Web';
+import { WebStore } from '../crdt/Store.Web';
 import { Test, TestDb, expect } from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
 

@@ -1,13 +1,13 @@
-export type * from './logic/Doc.Lens/t';
-export type * from './logic/Doc.Namespace/t';
-export type * from './logic/Doc/t';
+export type * from './crdt/Doc.Lens/t';
+export type * from './crdt/Doc.Namespace/t';
+export type * from './crdt/Doc/t';
 
-export type * from './logic/Store.Index/t';
-export type * from './logic/Store/t';
+export type * from './crdt/Store.Index/t';
+export type * from './crdt/Store/t';
 
-export type * from './logic/Store.Web.Index/t';
-export type * from './logic/Store.Web.IndexDb/t';
-export type * from './logic/Store.Web/t';
+export type * from './crdt/Store.Web.Index/t';
+export type * from './crdt/Store.Web.IndexDb/t';
+export type * from './crdt/Store.Web/t';
 
 export type * from './ui/ui.History.Commit/t';
 export type * from './ui/ui.History.Grid/t';

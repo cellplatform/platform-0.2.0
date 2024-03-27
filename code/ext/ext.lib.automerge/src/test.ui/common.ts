@@ -6,7 +6,7 @@ export { Dev } from 'sys.ui.react.common';
 export * from '../ui/common';
 export * from './TestDb';
 
-export { Doc } from '../logic/Doc';
-export { StoreIndex } from '../logic/Store.Index';
-export { WebStore } from '../logic/Store.Web';
-export { StoreIndexDb } from '../logic/Store.Web.IndexDb';
+export { Doc } from '../crdt/Doc';
+export { StoreIndex } from '../crdt/Store.Index';
+export { WebStore } from '../crdt/Store.Web';
+export { StoreIndexDb } from '../crdt/Store.Web.IndexDb';

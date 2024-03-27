@@ -26,7 +26,7 @@ export type {
   UntilObservable,
 } from 'sys.types/src/types';
 
-export type { JsonPath, PatchState } from 'sys.data.json/src/types';
+export type { JsonPath, PatchState, TypedJsonPath } from 'sys.data.json/src/types';
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { TimeDuration } from 'sys.util/src/types';
 
