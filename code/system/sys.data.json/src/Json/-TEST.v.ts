@@ -1,7 +1,6 @@
 import { Json } from '.';
-import { describe, expect, it, type t, ObjectPath } from '../test';
-
 import { Patch } from '../Json.Patch';
+import { ObjectPath, describe, expect, it, type t } from '../test';
 
 describe('Json', () => {
   it('exposes [Patch]', () => {
@@ -11,8 +10,6 @@ describe('Json', () => {
   it('exposes [Path]', () => {
     expect(Json.Path).to.equal(ObjectPath);
   });
-
-  // it('exposees', () => {});
 
   it('isJson', () => {
     const test = (input: any, expected: boolean) => {
