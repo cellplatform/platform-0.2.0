@@ -58,7 +58,7 @@ export default Dev.describe(name, async (e) => {
     const env = (dev.ctx.env ?? {}) as TEnv;
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(
+      Dev.Theme.switcher(
         dev,
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),

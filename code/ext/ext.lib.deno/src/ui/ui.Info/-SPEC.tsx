@@ -153,11 +153,8 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.flipped;
         btn

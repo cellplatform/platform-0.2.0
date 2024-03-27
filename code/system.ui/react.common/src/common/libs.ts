@@ -16,6 +16,7 @@ export {
   Filesize,
   Hash,
   Is,
+  ObjectPath,
   Percent,
   Sheet,
   Time,

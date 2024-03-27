@@ -66,11 +66,7 @@ export default Dev.describe(name, (e) => {
     console.log('env', env);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);

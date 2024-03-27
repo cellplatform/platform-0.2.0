@@ -43,11 +43,7 @@ export default Dev.describe('Spinner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     await puff(dev);
 
-    Dev.Theme.switch(
-      dev,
-      (d) => d.theme,
-      (d, value) => (local.theme = d.theme = value),
-    );
+    Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
 
     dev.hr(5, 20);
 

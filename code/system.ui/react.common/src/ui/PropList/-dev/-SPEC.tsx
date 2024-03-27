@@ -110,23 +110,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
-      // dev.boolean((btn) =>
-      //   btn
-      //     .label((e) => `theme: "${e.state.props.theme}"`)
-      //     .value((e) => e.state.props.theme === 'Light')
-      //     .onClick((e) =>
-      //       e.change((d) => {
-      //         d.props.theme = e.current ? 'Dark' : 'Light';
-      //         Dev.Theme.background(dev.ctx, d.props.theme);
-      //       }),
-      //     ),
-      // );
-
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
 
       dev.boolean((btn) =>
         btn

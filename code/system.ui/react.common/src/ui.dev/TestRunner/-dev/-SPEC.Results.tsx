@@ -131,7 +131,7 @@ export default Dev.describe('TestRunner', (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'scroll'))),
       );
 
-      Dev.Theme.switch(
+      Dev.Theme.switcher(
         dev,
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),

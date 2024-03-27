@@ -102,11 +102,7 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => e.change((d) => (local.resettable = Dev.toggle(d.props, 'resettable'))));
       });
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

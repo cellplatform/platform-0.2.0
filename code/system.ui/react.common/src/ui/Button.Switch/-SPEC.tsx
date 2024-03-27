@@ -39,11 +39,7 @@ export default Dev.describe(name, (e) => {
     dev.button('toggle: enabled', (e) => e.change((d) => Dev.toggle(d.props, 'enabled')));
     dev.button('toggle: value', (e) => e.change((d) => Dev.toggle(d.props, 'value')));
     dev.hr(-1, 5);
-    Dev.Theme.switch(
-      dev,
-      (d) => d.props.theme as t.CommonTheme,
-      (d, value) => (local.theme = d.props.theme = value),
-    );
+    Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
   });
 
   e.it('ui:footer', async (e) => {

@@ -85,11 +85,7 @@ export default Dev.describe('TestPropList.runner', (e) => {
 
       dev.hr(-1, 5);
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.theme,
-        (d, value) => (local.theme = d.theme = value),
-      );
+      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

@@ -173,7 +173,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(
+      Dev.Theme.switcher(
         dev,
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),

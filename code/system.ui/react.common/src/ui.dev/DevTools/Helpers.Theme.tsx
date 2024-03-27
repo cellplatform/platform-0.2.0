@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, type t } from '../common';
+import { COLORS, DevIcons, type t, ObjectPath } from '../common';
 import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
@@ -44,15 +44,30 @@ export const Theme = {
   },
 
   /**
-   * Insert a boolean switch for selecting the theme.
+   * A theme selector switch using a typed {Object} path.
    */
   switch<T extends O>(
+    dev: t.DevTools<T>,
+    path: t.TypedObjectPath<T>,
+    onChange?: (value: t.CommonTheme) => void,
+  ) {
+    return Theme.switcher(
+      dev,
+      (d) => ObjectPath.resolve(d, path) as t.CommonTheme | undefined,
+      (d, value) => {
+        ObjectPath.mutate(d, path, value);
+        onChange?.(value);
+      },
+    );
+  },
+
+  switcher<T extends O>(
     dev: t.DevTools<T>,
     current: (d: T) => t.CommonTheme | undefined,
     mutate: (d: T, value: t.CommonTheme) => void,
   ) {
     const defaultTheme: t.CommonTheme = 'Light';
-    dev.button((btn) => {
+    return dev.button((btn) => {
       btn
         .label((e) => `theme: "${current(e.state) ?? defaultTheme}"`)
         .right((e) => {

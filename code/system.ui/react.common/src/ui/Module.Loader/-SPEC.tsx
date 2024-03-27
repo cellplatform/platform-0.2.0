@@ -101,11 +101,7 @@ export default Dev.describe(name, (e) => {
           );
       });
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

@@ -72,27 +72,11 @@ export default Dev.describe('DevTools', (e) => {
             .onClick((e) => {
               e.change((d) => (d.on = !e.current));
             });
-        })
-
-        .boolean((btn) =>
-          btn
-            .label((e) => `theme: "${e.state.theme}"`)
-            .value((e) => e.state.theme === 'Light')
-            .onClick((e) =>
-              e.change((d) => {
-                d.theme = e.current ? 'Dark' : 'Light';
-                Dev.Theme.background(dev.ctx, d.theme);
-              }),
-            ),
-        );
+        });
 
       dev.hr(5, 20);
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.theme,
-        (d, value) => (d.theme = value),
-      );
+      Dev.Theme.switch(dev, ['theme'], (v) => console.info('callback:', v)); // NB: same as above, but with path
 
       dev.hr(5, 20);
 

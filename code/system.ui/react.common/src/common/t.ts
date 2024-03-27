@@ -39,6 +39,7 @@ export type {
   RenderOutput,
   Seconds,
   Size,
+  TypedObjectPath,
   UntilObservable,
 } from 'sys.types/src/types';
 
