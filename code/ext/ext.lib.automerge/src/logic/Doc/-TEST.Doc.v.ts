@@ -10,7 +10,7 @@ import {
   it,
   toObject,
   type t,
-} from '../test';
+} from '../../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc', async () => {

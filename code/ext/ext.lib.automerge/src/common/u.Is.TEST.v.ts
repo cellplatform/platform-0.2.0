@@ -1,9 +1,9 @@
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 
 import { Is } from '.';
-import { Doc } from '../Doc';
-import { Store } from '../Store';
-import { WebStore } from '../Store.Web';
+import { Doc } from '../logic/Doc';
+import { Store } from '../logic/Store';
+import { WebStore } from '../logic/Store.Web';
 import { describe, expect, it, type t } from '../test';
 
 describe('Is (flags)', (e) => {

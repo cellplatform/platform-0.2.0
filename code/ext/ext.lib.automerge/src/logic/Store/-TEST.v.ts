@@ -1,5 +1,6 @@
 import { Store } from '.';
-import { A, Doc, Is, describe, expect, it, rx, type t } from '../test';
+import { A, Is, describe, expect, it, rx, type t } from '../../test';
+import { Doc } from '../Doc';
 
 type D = { count?: t.A.Counter };
 

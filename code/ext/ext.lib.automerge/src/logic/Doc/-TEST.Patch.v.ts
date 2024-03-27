@@ -1,5 +1,5 @@
 import { Doc } from '.';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it, type t } from '../../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Patch', async () => {

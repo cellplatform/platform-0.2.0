@@ -1,5 +1,5 @@
+import { type t } from '../../test';
 import { Store } from '../Store';
-import { type t } from '../test';
 
 export type D = { count: number; msg?: string };
 export function testSetup() {

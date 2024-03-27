@@ -1,7 +1,7 @@
 import { Lens } from '.';
+import { describe, expect, it } from '../../test';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { describe, expect, it } from '../test';
 import { Registry } from './Lens.Registry';
 
 describe('Doc.Lens', () => {

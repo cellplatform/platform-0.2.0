@@ -1,5 +1,5 @@
+import { Is, describe, expect, expectError, it, type t } from '../../test';
 import { Store } from '../Store';
-import { Is, describe, expect, expectError, it, type t } from '../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc', async () => {

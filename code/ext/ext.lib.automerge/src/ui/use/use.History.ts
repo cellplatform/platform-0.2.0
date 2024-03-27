@@ -1,5 +1,7 @@
+import type { t } from './common';
+
 import { useEffect, useState } from 'react';
-import { Doc, type t } from './common';
+import { Doc } from '../../logic';
 
 /**
  * Efficiently retrieves history from a doc.

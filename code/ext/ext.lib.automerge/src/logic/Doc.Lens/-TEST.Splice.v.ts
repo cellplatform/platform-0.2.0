@@ -1,6 +1,6 @@
+import { describe, expect, it, type t } from '../../test';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { expect, describe, it, type t } from '../test';
 
 describe('Doc.Lens: splice', () => {
   type TRoot = { child: TChild };

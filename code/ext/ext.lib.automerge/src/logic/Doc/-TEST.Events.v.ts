@@ -1,4 +1,4 @@
-import { describe, expect, it, rx, type t } from '../test';
+import { describe, expect, it, rx, type t } from '../../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Events', async () => {

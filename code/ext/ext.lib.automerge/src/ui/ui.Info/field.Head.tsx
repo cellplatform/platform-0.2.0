@@ -1,4 +1,5 @@
-import { DEFAULTS, Doc, MonoHash, type t } from './common';
+import { Doc } from '../../logic';
+import { DEFAULTS, MonoHash, type t } from './common';
 
 type D = t.InfoDataDocument;
 

@@ -1,6 +1,6 @@
+import { Time, describe, expect, expectError, it, rx, type t } from '../../test';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { Time, describe, expect, expectError, it, rx, type t } from '../test';
 
 type D = { count: number };
 const A = 'automerge:a';

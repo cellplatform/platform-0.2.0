@@ -1,7 +1,7 @@
 import { Doc } from '.';
+import { A, describe, expect, it } from '../../test';
 import { Lens, Registry } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
-import { A, describe, expect, it } from '../test';
 
 describe('Doc API (index)', () => {
   it('splice', () => {

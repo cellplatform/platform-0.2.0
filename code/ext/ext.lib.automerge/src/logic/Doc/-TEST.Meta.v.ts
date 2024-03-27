@@ -1,5 +1,5 @@
 import { DEFAULTS, Doc } from '.';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it, type t } from '../../test';
 
 describe('Doc.Meta', async () => {
   it('standard key', () => {

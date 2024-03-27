@@ -1,4 +1,5 @@
-import { Button, COLORS, Doc, Hash, Icons, ObjectView, css, type t } from './common';
+import { Doc } from '../../logic';
+import { Button, COLORS, Hash, Icons, ObjectView, css, type t } from './common';
 
 type D = t.InfoDataDocument;
 

@@ -1,6 +1,7 @@
+import { Doc } from '../../logic';
 import { HistoryGrid } from '../ui.History.Grid';
 import { NavPaging } from '../ui.Nav.Paging';
-import { DEFAULTS, Doc, type t } from './common';
+import { DEFAULTS, type t } from './common';
 import { History } from './ui.History';
 
 type D = t.InfoDataHistory;

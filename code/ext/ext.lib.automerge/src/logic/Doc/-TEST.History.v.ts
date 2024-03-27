@@ -1,5 +1,5 @@
 import { DEFAULTS, Doc } from '.';
-import { Time, describe, expect, expectRoughlySame, it, type t } from '../test';
+import { Time, describe, expect, expectRoughlySame, it, type t } from '../../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.History', { retry: 3 }, async () => {

@@ -1,5 +1,5 @@
 import { Immutable } from 'sys.util';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it, type t } from '../../test';
 import { testSetup, type D } from './-TEST.u';
 
 describe('Doc.Events: Immutable', () => {

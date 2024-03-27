@@ -7,14 +7,19 @@ export { Pkg };
 /**
  * Library
  */
-import { Doc } from './Doc';
-import { Store } from './Store';
-import { WebStore } from './Store.Web';
-export { WebStoreIndex } from './Store.Web.Index';
-export { StoreIndexDb } from './Store.Web.IndexDb';
 export { A, Data, Is, toObject } from './common';
 
-export { Doc, Store, WebStore };
+import { Doc } from './logic/Doc';
+import { Store } from './logic/Store';
+import { WebStore } from './logic/Store.Web';
+
+export { Doc } from './logic/Doc';
+export { Store } from './logic/Store';
+export { StoreIndex } from './logic/Store.Index';
+export { WebStore } from './logic/Store.Web';
+export { WebStoreIndex } from './logic/Store.Web.Index';
+export { StoreIndexDb } from './logic/Store.Web.IndexDb';
+
 export const Crdt = {
   Doc,
   Store,
@@ -34,8 +39,3 @@ export { RepoList } from './ui/ui.RepoList';
  */
 export { TestDb } from './test.ui/TestDb';
 export { Specs } from './test.ui/entry.Specs.mjs';
-
-export const dev = async () => {
-  const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Pkg, Specs };
-};

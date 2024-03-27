@@ -1,6 +1,6 @@
 import { StoreIndexDb } from '.';
 import { WebStore } from '../Store.Web';
-import { IndexedDb, Test, TestDb, expect, expectError } from '../test.ui';
+import { IndexedDb, Test, TestDb, expect, expectError } from '../../test.ui';
 import { Is } from './common';
 
 export default Test.describe('Store.Web: IndexDb', (e) => {

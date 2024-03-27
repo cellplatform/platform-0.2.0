@@ -1,5 +1,5 @@
 import { WebStore } from '.';
-import { Doc, A, Is, Test, TestDb, expect, rx, type t } from '../test.ui';
+import { A, Doc, Is, Test, TestDb, expect, rx, type t } from '../../test.ui';
 import { DEFAULTS } from './common';
 
 type D = { count?: t.A.Counter };

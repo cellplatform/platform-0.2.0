@@ -1,7 +1,7 @@
 import { Namespace } from '.';
+import { A, describe, expect, it, rx, type t } from '../../test';
 import { Doc } from '../Doc';
 import { Store } from '../Store';
-import { A, describe, expect, it, rx, type t } from '../test';
 
 describe('Namespace (Lens)', () => {
   type TRoot = { ns?: t.NamespaceMap; foo?: TFoo; list?: t.NamespaceMap[] };

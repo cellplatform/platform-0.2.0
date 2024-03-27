@@ -1,4 +1,6 @@
-import { type t, StoreIndex } from './common';
+import type { t } from './common';
+
+import { StoreIndex } from '../../logic';
 import { Wrangle } from './u';
 
 /**

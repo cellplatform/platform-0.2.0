@@ -1,5 +1,6 @@
+import { StoreIndex } from '../../logic';
+import { Model, rx, toObject, type t } from './common';
 import { Data, type ItemInput } from './u.Data';
-import { Model, StoreIndex, rx, toObject, type t } from './common';
 
 type Index = number;
 type Id = string;
