@@ -10,12 +10,9 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.lib.tldraw',
+  name: 'name',
   version: '0.0.0',
   dependencies: {
-    '@tldraw/tldraw': '2.0.1',
-    'ext.lib.automerge': '0.0.0',
-    'automerge-tldraw': '0.2.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',

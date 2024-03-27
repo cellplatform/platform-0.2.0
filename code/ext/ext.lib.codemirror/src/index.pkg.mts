@@ -10,10 +10,9 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.lib.codemirror',
+  name: 'name',
   version: '0.0.0',
   dependencies: {
-    'codemirror': '6.0.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
