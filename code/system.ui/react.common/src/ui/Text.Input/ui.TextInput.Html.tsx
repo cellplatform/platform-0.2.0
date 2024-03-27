@@ -2,7 +2,7 @@ import { RefObject, useEffect } from 'react';
 import { useFocus } from '../useFocus';
 import { TextInputRef } from './Ref';
 import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
-import { Util } from './util.mjs';
+import { Util } from './util';
 
 /**
  * Types

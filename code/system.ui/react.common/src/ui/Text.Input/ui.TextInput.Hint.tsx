@@ -1,5 +1,5 @@
 import { css, type t } from '../common';
-import { Util } from './util.mjs';
+import { Util } from './util';
 
 export type TextInputHintProps = {
   valueStyle: t.TextInputStyle;

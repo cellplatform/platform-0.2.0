@@ -3,7 +3,7 @@ import { RefObject, useEffect, useState } from 'react';
 import { DEFAULTS, Time, css, type t } from './common';
 import { TextInputHint } from './ui.TextInput.Hint';
 import { HtmlInput } from './ui.TextInput.Html';
-import { Util } from './util.mjs';
+import { Util } from './util';
 
 type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
 

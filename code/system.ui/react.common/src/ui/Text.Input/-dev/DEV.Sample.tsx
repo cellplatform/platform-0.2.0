@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { TextInput } from '..';
 import { css, Color, Time, type t } from '../common';
-import { Hints } from './DEV.Hints.mjs';
+import { Hints } from './DEV.Hints';
 
 export type DevSampleProps = {
   props: t.TextInputProps;
