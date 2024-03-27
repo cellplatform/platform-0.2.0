@@ -77,8 +77,8 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = Dev.Link.pkg(Pkg, dev);
-      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
-      link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
+      link.button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link.button('see: ModuleLoader.Namespace', 'Module.Namespace');
 
       dev.hr(-1, 5);
       dev.button('reset', reset);

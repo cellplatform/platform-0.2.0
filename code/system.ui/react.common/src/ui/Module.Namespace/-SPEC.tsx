@@ -65,10 +65,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      link.ns('see: ModuleLoader', 'Module.Loader');
-      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link.button('see: ModuleLoader', 'Module.Loader');
+      link.button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
       dev.hr(-1, 5);
-      link.ns('see: ModuleNamespace.List', 'Module.Namespace.List');
+      link.button('see: ModuleNamespace.List', 'Module.Namespace.List');
     });
     dev.hr(5, 20);
 

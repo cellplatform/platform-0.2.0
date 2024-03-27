@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
  * Link dev-harness helpers.
  */
 export const Link = {
-  ns<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
+  button<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
     const elRight = <DevIcons.NewTab size={16} />;
     dev.button((btn) => {
       btn
@@ -15,12 +15,11 @@ export const Link = {
         .onClick((e) => {
           const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
           const open = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
-          if (!targetIsUrl) {
+          if (targetIsUrl) open(target);
+          else {
             const url = new URL(location.href);
             url.searchParams.set('dev', `${pkg.name}.${target}`);
             open(url.href);
-          } else {
-            open(target);
           }
         });
     });
@@ -31,8 +30,8 @@ export const Link = {
    */
   pkg<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>) {
     const api = {
-      ns(label: string, target: string) {
-        Link.ns(pkg, dev, label, target);
+      button(label: string, target: string) {
+        Link.button(pkg, dev, label, target);
         return api;
       },
       hr(line: number | [number, number] = -1, margin?: t.DevHrMargin) {

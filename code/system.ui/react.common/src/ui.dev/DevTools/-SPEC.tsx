@@ -91,11 +91,11 @@ export default Dev.describe('DevTools', (e) => {
     dev.hr(-1, 5);
 
     const target = 'Module.Loader.Stateful';
-    Dev.Link.ns(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
+    Dev.Link.button(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
     Dev.Link.pkg(Pkg, dev)
-      .ns(`pkg.dev (1): "Foo"`, target)
-      .ns(`pkg.dev (2): "Foo.Bar"`, target)
+      .button(`pkg.dev (1): "Foo"`, target)
+      .button(`pkg.dev (2): "Foo.Bar"`, target)
       .hr()
-      .ns(`external site: wikipedia`, 'https://www.wikipedia.org/');
+      .button(`external site: wikipedia`, 'https://www.wikipedia.org/');
   });
 });
