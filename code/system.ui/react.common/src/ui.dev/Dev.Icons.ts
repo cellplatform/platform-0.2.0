@@ -23,7 +23,7 @@ import {
   MdWarning,
 } from 'react-icons/md';
 import { TbPrompt } from 'react-icons/tb';
-import { VscSymbolVariable } from 'react-icons/vsc';
+import { VscBook, VscBookmark, VscSymbolVariable } from 'react-icons/vsc';
 import { Icon } from '../ui/Icon';
 
 export { Icon };
@@ -36,6 +36,8 @@ const icon = Icon.renderer;
 export const DevIcons = {
   NewTab: icon(MdKeyboardTab),
   Link: icon(MdLink),
+  Book: icon(VscBook),
+  Bookmark: icon(VscBookmark),
   Info: icon(MdInfoOutline),
   Method: icon(VscSymbolVariable),
   Close: icon(MdClose),

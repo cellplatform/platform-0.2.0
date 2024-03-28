@@ -7,11 +7,13 @@ type O = Record<string, unknown>;
  */
 export const Link = {
   button<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
-    const elRight = <DevIcons.NewTab size={16} />;
+    const elIconLeft = <DevIcons.Book size={17} offset={[0, 3]} />;
+    const elIconRight = <DevIcons.NewTab size={16} />;
     dev.button((btn) => {
       btn
         .label(label)
-        .right((e) => elRight)
+        .icon((e) => elIconLeft)
+        .right((e) => elIconRight)
         .onClick((e) => {
           const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
           const open = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
