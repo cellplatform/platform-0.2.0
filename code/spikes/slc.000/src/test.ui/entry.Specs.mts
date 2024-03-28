@@ -1,3 +1,4 @@
+import type { t } from './common';
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -11,7 +12,7 @@ const importCommon = async () => {
     'sys.ui.common.Item.LabelItem.Stateful': Specs['sys.ui.common.LabelItem.Stateful'],
     'sys.ui.common.EdgePosition': Specs['sys.ui.common.EdgePosition'],
     'sys.ui.common.EdgePosition.Selector': Specs['sys.ui.common.EdgePosition.Selector'],
-  };
+  } as t.SpecImports;
 };
 
 const importConcept = async () => {
@@ -35,6 +36,6 @@ export const Specs = {
   // system
   ...(await importCommon()),
   ...(await importConcept()),
-};
+} as t.SpecImports;
 
 export default Specs;

@@ -1,3 +1,4 @@
+import type { t } from './common';
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -10,6 +11,6 @@ export const Specs = {
   [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
-};
+} as t.SpecImports;
 
 export default Specs;

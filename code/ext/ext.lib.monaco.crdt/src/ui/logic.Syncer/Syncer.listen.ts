@@ -12,7 +12,7 @@ export function listen<T extends O>(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
   lens: t.Lens<T>,
-  target: t.TypedJsonPath<T>,
+  target: t.TypedObjectPath<T>,
   options: { dispose$?: t.UntilObservable; debugLabel?: string } = {},
 ) {
   const { debugLabel } = options;
@@ -29,7 +29,7 @@ export function listen<T extends O>(
       return Lens.resolve(lens.current) ?? '';
     },
     resolve(doc: T) {
-      return Path.resolve<string>(doc, target);
+      return Path.Object.resolve<string>(doc, target);
     },
     splice(doc: T, index: number, del: number, text?: string) {
       Doc.splice(doc, [...target], index, del, text);
@@ -96,7 +96,7 @@ export function listen<T extends O>(
    * Initialize.
    */
   const initial = Lens.resolve(lens.current);
-  if (initial === undefined) lens.change((d) => Path.mutate(d, target, ''));
+  if (initial === undefined) lens.change((d) => Path.Object.mutate(d, target, ''));
   if (typeof initial === 'string') changeEditorText(initial);
 
   return life;

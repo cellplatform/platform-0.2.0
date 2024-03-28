@@ -1,7 +1,5 @@
 import type { t } from '../common';
 
-export type SwitchThemeName = 'Light' | 'Dark';
-
 type Color = string | number;
 
 /**
@@ -15,7 +13,7 @@ export type SwitchProps = {
   tooltip?: string;
   track?: Partial<t.SwitchTrack>;
   thumb?: Partial<t.SwitchThumb>;
-  theme?: t.SwitchThemeName | Partial<t.SwitchTheme>;
+  theme?: t.CommonTheme | Partial<t.SwitchTheme>;
   transitionSpeed?: number;
   style?: t.CssValue;
 

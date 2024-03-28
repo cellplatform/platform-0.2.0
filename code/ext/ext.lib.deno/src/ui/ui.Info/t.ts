@@ -9,12 +9,13 @@ type Index = number;
 export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
+  fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
   stateful?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onStateChange?(e: InfoData): void;
 };

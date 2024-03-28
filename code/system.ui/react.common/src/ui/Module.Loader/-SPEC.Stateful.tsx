@@ -81,22 +81,17 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('', (dev) => {
-      const link = Dev.Link.pkg(Pkg, dev);
-      link.ns('see: ModuleLoader (stateless)', 'Module.Loader');
-      link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
-      dev.hr(-1, 5);
-      link.ns('see: unit tests', 'tests');
-    });
-
-    dev.hr(5, 20);
+    const link = Dev.Link.pkg(Pkg, dev);
+    link
+      .title('Links')
+      .button('ModuleLoader (stateless)', 'Module.Loader')
+      .button('ModuleLoader.Namespace', 'Module.Namespace')
+      .hr(-1, 5)
+      .button('unit tests', 'tests')
+      .hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

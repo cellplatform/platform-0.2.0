@@ -3,6 +3,7 @@ import { type t } from '../common';
 export * from '../common';
 export { PropList } from '../../../ui/PropList';
 export { Switch } from '../../../ui/Button.Switch';
+export { Theme } from '../../DevTools/Helpers.Theme';
 
 /**
  * Constants

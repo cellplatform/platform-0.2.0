@@ -1,6 +1,18 @@
 import { Image } from '.';
-import { Dev, File, Filesize, Icons, Pkg, SAMPLE, Slider, css, type t } from '../../test.ui';
-import { DevDataController } from './-SPEC.File';
+import {
+  Dev,
+  DevReload,
+  File,
+  Filesize,
+  Icons,
+  Pkg,
+  SAMPLE,
+  Slider,
+  TestDb,
+  css,
+  type t,
+} from '../../test.ui';
+import { SampleCrdt } from './-SPEC.crdt';
 import { Util } from './u';
 
 const DEFAULTS = Image.DEFAULTS;
@@ -9,42 +21,41 @@ type T = {
   props: t.ImageProps;
   debug: {
     bg?: boolean;
+    reload?: boolean;
+    docuri?: string;
     dataEnabled?: boolean;
     dropEnabled?: boolean;
     pasteEnabled?: boolean;
     pastePrimary?: boolean;
   };
 };
-const initial: T = {
-  props: {},
-  debug: {},
-};
+const initial: T = { props: {}, debug: {} };
 const name = 'Image';
 
 export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & Pick<t.ImageProps, 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    debug: false,
     bg: true,
+    docuri: undefined,
+    debug: false,
     dataEnabled: false,
     dropEnabled: true,
     pasteEnabled: true,
     pastePrimary: false,
   });
 
-  const getDrop = (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop);
-  const getPaste = (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste);
-  const crdt = await DevDataController();
+  const crdt = await SampleCrdt.init(local.docuri);
+  local.docuri = crdt.doc.uri;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      getDrop(d.props).enabled = local.dropEnabled;
-      getPaste(d.props).enabled = local.pasteEnabled;
-      getPaste(d.props).primary = local.pastePrimary;
+      wrangle.drop(d.props).enabled = local.dropEnabled;
+      wrangle.paste(d.props).enabled = local.pasteEnabled;
+      wrangle.paste(d.props).primary = local.pastePrimary;
       d.props.sizing = DEFAULTS.sizing;
       d.props.debug = local.debug;
 
@@ -53,7 +64,7 @@ export default Dev.describe(name, async (e) => {
     });
 
     if (state.current.debug.dataEnabled) {
-      await state.change((d) => (d.props.src = crdt.current.image));
+      await state.change((d) => (d.props.src = crdt.doc.current.image));
     }
 
     ctx.debug.width(350);
@@ -63,15 +74,18 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
+
+        if (e.state.debug.reload) return <DevReload />;
+
         return (
           <Image
             {...e.state.props}
             onDropOrPaste={(e) => {
               console.info('⚡️ onDropOrPaste:', e);
-              if (e.isSupported) {
-                state.change((d) => (d.props.src = e.file));
-                if (crdt && e.file) crdt.update(e.file);
-              }
+              if (!e.isSupported) return;
+
+              state.change((d) => (d.props.src = e.file));
+              if (crdt && e.file) crdt.update(e.file);
             }}
           />
         );
@@ -83,48 +97,51 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.section(['Input', 'Properties'], (dev) => {
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.drop?.enabled ?? DEFAULTS.drop.enabled);
         btn
           .label((e) => `drop.enabled`)
-          .value((e) => Boolean(e.state.props.drop?.enabled ?? DEFAULTS.drop.enabled))
-          .onClick((e) =>
-            e.change((d) => (local.dropEnabled = Dev.toggle(getDrop(d.props), 'enabled'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.dropEnabled = Dev.toggle(wrangle.drop(d.props), 'enabled')));
+          });
+      });
 
       dev.hr(-1, 5);
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.paste?.enabled ?? DEFAULTS.paste.enabled);
         btn
           .label((e) => `paste.enabled`)
-          .value((e) => Boolean(e.state.props.paste?.enabled ?? DEFAULTS.paste.enabled))
-          .onClick((e) =>
-            e.change((d) => (local.pasteEnabled = Dev.toggle(getPaste(d.props), 'enabled'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.pasteEnabled = Dev.toggle(wrangle.paste(d.props), 'enabled')));
+          });
+      });
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => !!(state.props.paste?.primary ?? DEFAULTS.paste.primary);
         btn
           .label((e) => `paste.primary`)
-          .value((e) => Boolean(e.state.props.paste?.primary ?? DEFAULTS.paste.primary))
-          .onClick((e) =>
-            e.change((d) => (local.pastePrimary = Dev.toggle(getPaste(d.props), 'primary'))),
-          ),
-      );
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.pastePrimary = Dev.toggle(wrangle.paste(d.props), 'primary')));
+          });
+      });
 
       dev.hr(-1, 5);
 
-      dev.button((btn) =>
+      dev.button((btn) => {
         btn
           .label((e) => '→ (disable as input)')
           .right('')
           .onClick((e) => {
             e.state.change((d) => {
-              getPaste(d.props).enabled = false;
-              getDrop(d.props).enabled = false;
+              wrangle.paste(d.props).enabled = false;
+              wrangle.drop(d.props).enabled = false;
             });
-          }),
-      );
+          });
+      });
     });
 
     dev.hr(2, 20);
@@ -212,15 +229,15 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['File', 'Data / State'], (dev) => {
+    dev.section('Persistence', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
-          .value((e) => Boolean(e.state.debug.dataEnabled))
+          .label((e) => `save to CRDT`)
+          .value((e) => !!e.state.debug.dataEnabled)
           .onClick((e) => {
             return e.change((d) => {
               local.dataEnabled = Dev.toggle(d.debug, 'dataEnabled');
-              if (local.dataEnabled) d.props.src = crdt.current.image;
+              if (local.dataEnabled) d.props.src = crdt.doc.current.image;
             });
           }),
       );
@@ -228,27 +245,19 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button((btn) =>
-        btn.label('download').onClick((e) => {
-          const image = crdt.current.image;
-          if (image) {
-            const filename = 'image.png';
-            const mimetype = image.mimetype;
-            File.download(filename, image.data, { mimetype });
-          }
-        }),
-      );
-
-      dev.button((btn) =>
         btn
-          .label('delete file ↓')
-          .enabled((e) => Boolean(e.state.debug.dataEnabled))
-          .onClick(async (e) => {
-            await crdt?.file.delete();
-            await e.change((d) => (d.props.src = undefined));
+          .label('download as file')
+          .enabled((e) => !!e.state.debug.dataEnabled)
+          .onClick((e) => {
+            const image = crdt.doc.current.image;
+            if (image) {
+              const { mimetype, data } = image;
+              File.download('image.png', data, { mimetype });
+            }
           }),
       );
 
-      dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render() : null));
+      dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render({ Margin: [15, 0, 0, 0] }) : null));
     });
 
     dev.hr(5, 20);
@@ -257,18 +266,25 @@ export default Dev.describe(name, async (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `debug`)
-          .value((e) => Boolean(e.state.props.debug))
+          .value((e) => !!e.state.props.debug)
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug')))),
       );
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)
-          .value((e) => Boolean(e.state.debug.bg))
+          .value((e) => !!e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
       dev.hr(-1, 5);
       dev.button('redraw', (e) => dev.redraw());
-      dev.button('reset', (e) => e.change((d) => (d.props.src = null)));
+      dev.button(['reset', 'src = null'], (e) => e.change((d) => (d.props.src = null)));
+
+      dev.hr(-1, 5);
+
+      dev.button([`delete database: "${crdt.storage}"`, '💥'], async (e) => {
+        e.state.change((d) => (d.debug.reload = true));
+        await TestDb.Spec.deleteDatabase();
+      });
     });
   });
 
@@ -280,6 +296,7 @@ export default Dev.describe(name, async (e) => {
       const mimetype = srcBinary?.mimetype ?? undefined;
       const bytes = srcBinary?.data.byteLength ?? -1;
       const file = stripBinary(srcBinary);
+      const filesize = bytes > -1 ? Filesize(bytes) : undefined;
 
       const src = typeof srcValue === 'string' ? srcValue : Util.srcAsBinary(srcValue);
       const props = {
@@ -290,7 +307,7 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props,
         file,
-        filesize: bytes > -1 ? Filesize(bytes) : undefined,
+        filesize,
         mimetype,
       };
 
@@ -307,3 +324,11 @@ const stripBinary = (file?: t.ImageBinary | null) => {
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
   return !file ? undefined : { ...file, data: `<Uint8Array>[${file.data.byteLength}]` };
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  drop: (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop),
+  paste: (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste),
+} as const;

@@ -1,10 +1,11 @@
-import { Button, COLORS, Icons, R, css, type t } from './common';
+import { Button, COLORS, Color, Icons, css, type t } from './common';
 import { Sort } from './u.Sort';
 
 export function projectItem(
+  index: number,
   data: t.InfoData,
   project: t.DenoProject,
-  index: number,
+  theme?: t.CommonTheme,
 ): t.PropListItem {
   const projects = data.projects ?? {};
   const id = project.id;
@@ -19,9 +20,11 @@ export function projectItem(
     projects.onOpenDeployment?.({ index, project, deployment });
   };
 
+  const color = Color.fromTheme(theme);
   const cursor = canSelect && !selected ? 'pointer' : 'default';
   const styles = {
     label: css({
+      color,
       cursor,
       display: 'grid',
       gridTemplateColumns: 'auto auto auto',
@@ -47,7 +50,7 @@ export function projectItem(
   const label = (
     <div {...styles.label}>
       <div {...styles.selected} />
-      <Icons.Server size={14} color={COLORS.DARK} />
+      <Icons.Server size={14} />
       <div>{name}</div>
     </div>
   );
@@ -56,7 +59,12 @@ export function projectItem(
   const value = (
     <div {...styles.value}>
       <div>{}</div>
-      <Button enabled={!!hasDeployment} onClick={handleDeploymentClick} tooltip={tooltip}>
+      <Button
+        enabled={!!hasDeployment}
+        theme={theme}
+        onClick={handleDeploymentClick}
+        tooltip={tooltip}
+      >
         <Icons.Open size={14} margin={[0, 3, 0, 0]} />
       </Button>
     </div>

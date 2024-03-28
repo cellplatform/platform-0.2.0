@@ -1,5 +1,5 @@
-import { css, type t } from '../common';
-import { Util } from '../Util.mjs';
+import { Theme, css, type t } from '../common';
+import { Util } from '../u';
 
 import { Body } from './Specs.Row.Body';
 import { Switch } from './Specs.Row.Switch';
@@ -11,13 +11,14 @@ export type SpecsRowProps = {
   title: string;
   indent?: number;
   enabled?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const { data, suite, title, enabled = true } = props;
+  const { data, suite, title, enabled = true, theme } = props;
   const isSelected = Util.isSelected(data, suite);
   const isSelectable = Util.isSelectable(data);
 
@@ -45,10 +46,12 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   /**
    * [Render]
    */
+  const color = Theme.color(theme);
   const styles = {
     base: css({
       position: 'relative',
       flex: 1,
+      color,
     }),
     body: css({
       display: 'grid',
@@ -59,15 +62,10 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   };
 
   const elSwitch = isSelectable && (
-    <Switch
-      isSelected={isSelected}
-      // indent={props.indent}
-      onClick={handleSwitchClick}
-      enabled={enabled}
-    />
+    <Switch isSelected={isSelected} onClick={handleSwitchClick} enabled={enabled} />
   );
 
-  const elTitle = title && <Title text={title} />;
+  const elTitle = title && <Title text={title} theme={theme} />;
 
   const elBody = (
     <Body
@@ -75,6 +73,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       suite={suite}
       isSelected={isSelected}
       enabled={enabled}
+      theme={theme}
       onClick={handleBodyClick}
     />
   );

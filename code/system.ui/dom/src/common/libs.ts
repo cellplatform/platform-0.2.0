@@ -1,11 +1,12 @@
 /**
  * @external
  */
+export { Subject } from 'rxjs';
+
 import { clone, uniq } from 'ramda';
 export const R = { clone, uniq } as const;
-export { Subject } from 'rxjs';
 
 /**
  * @system
  */
-export { Time, Path, slug, rx } from 'sys.util';
+export { Filesize, Path, Time, rx, slug } from 'sys.util';

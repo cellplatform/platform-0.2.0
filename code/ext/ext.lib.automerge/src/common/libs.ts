@@ -9,5 +9,5 @@ export const R = { clone, equals, uniq, uniqBy } as const;
  * @system
  */
 export { IndexedDb } from 'sys.data.indexeddb';
-export { PatchState, Path } from 'sys.data.json';
-export { Delete, Hash, Id, Time, Value, cuid, rx, slug } from 'sys.util';
+export { PatchState } from 'sys.data.json';
+export { Delete, Hash, Id, ObjectPath, Time, Value, cuid, rx, slug } from 'sys.util';

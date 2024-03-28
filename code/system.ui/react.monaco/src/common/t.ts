@@ -1,5 +1,5 @@
-export type * from './t.monaco';
 export type * from './t.Automerge';
+export type * from './t.monaco';
 
 /**
  * @external
@@ -12,6 +12,8 @@ export type { Observable } from 'rxjs';
 export type { AutomergeText, CrdtDocFile, CrdtDocRef } from 'sys.data.crdt/src/types.mjs';
 export type {
   BundleImport,
+  SpecImport,
+  SpecImports,
   TestHandlerArgs,
   TestSuiteModel,
   TestSuiteRunResponse,

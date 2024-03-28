@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, COLORS, Icons, Spinner, Time, css, type t } from './common';
+import { Button, COLORS, Icons, Spinner, Time, css, type t, Color } from './common';
 import { FCUsername } from './ui.FC.Username';
 
 export type FCLinkProps = {
@@ -7,11 +7,12 @@ export type FCLinkProps = {
   enabled?: boolean;
   showClose?: boolean;
   style?: t.CssValue;
+  theme?: t.CommonTheme;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
 export const FCLink: React.FC<FCLinkProps> = (props) => {
-  const { privy, enabled = true } = props;
+  const { privy, enabled = true, theme } = props;
   const showClose = (props.showClose ?? false) && enabled;
   const fc = privy.user?.farcaster;
   const fid = fc?.fid;
@@ -50,23 +51,19 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
   /**
    * Render
    */
-  const color = enabled ? COLORS.BLUE : COLORS.DARK;
+  const color = enabled ? COLORS.BLUE : Color.fromTheme(theme);
   const styles = {
-    base: css({
-      height: 19,
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    base: css({ height: 19, display: 'grid', alignContent: 'center' }),
     close: css({}),
   };
 
   const button = (label: string, onClick: () => void) => (
-    <Button style={{ color }} label={label} enabled={enabled} onClick={onClick} />
+    <Button style={{ color }} label={label} enabled={enabled} theme={theme} onClick={onClick} />
   );
 
   const buttonIcon = (onClick: () => void) => {
     return (
-      <Button style={styles.close} enabled={enabled} onClick={onClick}>
+      <Button style={styles.close} enabled={enabled} theme={theme} onClick={onClick}>
         <Icons.Close size={16} />
       </Button>
     );
@@ -76,7 +73,7 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
   const elLink = !isAuthenticated && button('Connect', linkFarcaster);
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
   const elUsername = isAuthenticated && !elUnlink && (
-    <FCUsername user={fc} onClick={props.onClick} />
+    <FCUsername user={fc} theme={theme} onClick={props.onClick} />
   );
 
   return (

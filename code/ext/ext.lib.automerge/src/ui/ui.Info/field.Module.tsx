@@ -10,10 +10,11 @@ export function module(): t.PropListItem {
 /**
  * Test runner.
  */
-export function moduleVerify() {
+export function moduleVerify(theme?: t.CommonTheme) {
   const ctx = {};
   return TestRunner.PropList.runner({
     ctx,
+    theme,
 
     infoUrl() {
       const url = new URL(location.origin);

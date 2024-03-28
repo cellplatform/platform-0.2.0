@@ -77,10 +77,12 @@ export default Dev.describe(name, (e) => {
 
     dev.section('', (dev) => {
       const link = Dev.Link.pkg(Pkg, dev);
-      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
-      link.ns('see: ModuleLoader.Namespace', 'Module.Namespace');
+      link
+        .title('Links')
+        .button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful')
+        .button('see: ModuleLoader.Namespace', 'Module.Namespace')
+        .hr(-1, 5);
 
-      dev.hr(-1, 5);
       dev.button('reset', reset);
     });
 
@@ -101,11 +103,7 @@ export default Dev.describe(name, (e) => {
           );
       });
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (d.props.theme = value),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

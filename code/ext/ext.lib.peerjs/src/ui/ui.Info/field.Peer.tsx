@@ -8,7 +8,11 @@ const styles = {
   iconLeft: css({ marginRight: 5 }),
 };
 
-export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
+export function peer(
+  data: t.InfoData['peer'],
+  fields: t.InfoField[],
+  theme?: t.CommonTheme,
+): P | P[] | undefined {
   if (!data) return;
   const self = data?.self;
   const peer = self;
@@ -19,6 +23,7 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
   /**
    * Root Peer (Self)
    */
+  const themeColor = Color.fromTheme(theme);
   const root: P = {
     label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
@@ -28,7 +33,7 @@ export function peer(data: t.InfoData['peer'], fields: t.InfoField[]) {
           <Icons.Person
             size={14}
             style={styles.iconRight}
-            color={totalConnections > 0 ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.35)}
+            color={totalConnections > 0 ? COLORS.BLUE : Color.alpha(themeColor, 0.4)}
           />
         </div>
       ),
@@ -78,8 +83,8 @@ const Wrangle = {
 
   remotesLabel(input: t.PeerConnection[]) {
     const conns = {
-      data: input.filter((m) => Webrtc.Is.kind.data(m.kind)),
-      media: input.filter((m) => Webrtc.Is.kind.media(m.kind)),
+      data: input.filter((m) => Webrtc.Is.Kind.data(m.kind)),
+      media: input.filter((m) => Webrtc.Is.Kind.media(m.kind)),
     };
     const data = `${conns.data.length} data`;
     const media = conns.media.length > 0 ? `${conns.media.length} media` : '';

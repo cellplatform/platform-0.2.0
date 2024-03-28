@@ -2,16 +2,17 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect, useRef, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
+import { DEFAULTS, Hash, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
 import { Field } from './field';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
+    theme,
     enabled = DEFAULTS.enabled,
-    fields = DEFAULTS.fields.default,
     clipboard = DEFAULTS.clipboard,
     data = DEFAULTS.data,
   } = props;
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
   const refresh$ = refreshRef$.current;
@@ -47,22 +48,27 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     };
   };
 
+  const c = { privy, data, enabled, theme, fields };
+
+  const shorten = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
+
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => Field.moduleVerify(data))
-    .field('AccessToken', () => Field.accessToken(data))
+    .field('Module.Verify', () => Field.moduleVerify(data, theme))
+    .field('AccessToken', () => Field.accessToken(data, theme))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
-    .field('Id.App.Privy', copyable('Privy App', provider?.appId))
-    .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
-    .field('Login', () => Field.login(privy, enabled))
-    .field('Link.Wallet', () => user && Field.linkWallet(privy, data, wallets, fields, enabled))
-    .field('Link.Farcaster', () => user && Field.linkFarcaster({ privy, enabled, data, modifiers }))
-    .field('Wallet.List', () =>
-      Field.walletsList({ privy, data, wallets, enabled, modifiers, fields, refresh$ }),
+    .field('Id.App.Privy', copyable('Privy App', `id:${shorten(provider?.appId, 4)}`))
+    .field(
+      'Id.App.WalletConnect',
+      copyable('WalletConnect Project', `id:${shorten(provider?.walletConnectId, 4)}`),
     )
-    .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields }))
-    .field('Refresh', () => Field.refresh({ privy, data, wallets, fields, enabled, refresh }))
+    .field('Login', () => Field.login(privy, enabled, theme))
+    .field('Link.Wallet', () => user && Field.linkWallet({ ...c, wallets }))
+    .field('Link.Farcaster', () => user && Field.linkFarcaster({ ...c, modifiers }))
+    .field('Wallet.List', () => Field.walletsList({ ...c, wallets, modifiers, refresh$ }))
+    .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
+    .field('Refresh', () => Field.refresh({ ...c, wallets, refresh }))
     .items(fields);
 
   useEffect(() => {
@@ -89,6 +95,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       flipped={props.flipped}
       padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
+      theme={theme}
       style={props.style}
       onMouseEnter={mouse.handlers.onMouseEnter}
       onMouseLeave={mouse.handlers.onMouseLeave}

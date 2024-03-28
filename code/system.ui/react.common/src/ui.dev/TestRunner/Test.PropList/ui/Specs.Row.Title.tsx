@@ -2,6 +2,7 @@ import { css, type t } from '../common';
 
 export type TitleProps = {
   text?: string;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

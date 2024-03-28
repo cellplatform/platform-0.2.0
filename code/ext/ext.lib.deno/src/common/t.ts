@@ -7,7 +7,7 @@ export type { Store } from 'ext.lib.automerge/src/types';
 /**
  * @system
  */
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   Disposable,
   EventBus,

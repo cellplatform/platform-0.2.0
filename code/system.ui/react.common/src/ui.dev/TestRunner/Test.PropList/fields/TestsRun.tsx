@@ -6,6 +6,7 @@ export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];
   data: t.TestPropListData;
   enabled: boolean;
+  theme?: t.CommonTheme;
 }): t.PropListItem | undefined {
   const data = args.data;
   const run = data?.run;
@@ -15,7 +16,7 @@ export function FieldTestsRun(args: {
   const infoUrl = typeof run.infoUrl === 'function' ? run.infoUrl() : run.infoUrl;
 
   return {
-    label: <TestRunnerLabel label={label} infoUrl={infoUrl} />,
-    value: <TestRunner data={data} enabled={args.enabled} />,
+    label: <TestRunnerLabel label={label} infoUrl={infoUrl} theme={args.theme} />,
+    value: <TestRunner data={data} enabled={args.enabled} theme={args.theme} />,
   };
 }

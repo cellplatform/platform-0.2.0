@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { useController } from './hooks/useController.mjs';
+import { useController } from './hooks/useController';
 import { PropList, type TestPropListProps } from './ui/PropList';
 
 export type TestPropListControlledProps = Omit<TestPropListProps, 'data'> & {

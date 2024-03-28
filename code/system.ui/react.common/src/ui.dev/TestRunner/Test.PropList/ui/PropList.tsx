@@ -2,8 +2,8 @@ import { PropList as Base, DEFAULTS, type t } from '../common';
 import { FieldTestsRun } from '../fields/TestsRun';
 import { FieldTestsSelector } from '../fields/TestsSelector';
 import { FieldTestsSelectorReset } from '../fields/TestsSelector.Reset';
-import { useKeyboard } from '../hooks/useKeyboard.mjs';
-import { useSuites } from '../hooks/useSuites.mjs';
+import { useKeyboard } from '../hooks/useKeyboard';
+import { useSuites } from '../hooks/useSuites';
 
 export type TestPropListProps = {
   title?: t.PropListProps['title'];
@@ -11,6 +11,7 @@ export type TestPropListProps = {
   fields?: t.TestRunnerField[];
   data?: t.TestPropListData;
   margin?: t.CssEdgesInput;
+  theme?: t.CommonTheme;
   card?: boolean;
   flipped?: boolean;
   enabled?: boolean;
@@ -18,7 +19,7 @@ export type TestPropListProps = {
 };
 
 export const PropList: React.FC<TestPropListProps> = (props) => {
-  const { data = {}, enabled = true, fields = DEFAULTS.fields } = props;
+  const { theme, data = {}, enabled = true, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
   const { groups } = useSuites({ data });
   useKeyboard({ data, groups, enabled });
@@ -26,9 +27,11 @@ export const PropList: React.FC<TestPropListProps> = (props) => {
   const items = Base.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
-    .field('Tests.Run', () => FieldTestsRun({ fields, data, enabled }))
-    .field('Tests.Selector', () => FieldTestsSelector({ fields, data, groups, enabled }))
-    .field('Tests.Selector.Reset', () => FieldTestsSelectorReset({ fields, data, groups, enabled }))
+    .field('Tests.Run', () => FieldTestsRun({ fields, data, enabled, theme }))
+    .field('Tests.Selector', () => FieldTestsSelector({ fields, data, groups, enabled, theme }))
+    .field('Tests.Selector.Reset', () =>
+      FieldTestsSelectorReset({ fields, data, groups, enabled, theme }),
+    )
     .items(fields);
 
   return (
@@ -39,6 +42,7 @@ export const PropList: React.FC<TestPropListProps> = (props) => {
       defaults={{ clipboard: false }}
       card={props.card}
       flipped={props.flipped}
+      theme={theme}
       padding={props.card ? [20, 25, 20, 25] : undefined}
       margin={props.margin}
       style={props.style}

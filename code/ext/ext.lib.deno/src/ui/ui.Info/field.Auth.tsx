@@ -1,6 +1,6 @@
 import { Hash, Icons, css, type t } from './common';
 
-export function accessToken(data: t.InfoData): t.PropListItem | undefined {
+export function accessToken(data: t.InfoData, theme?: t.CommonTheme): t.PropListItem | undefined {
   const accessToken = data.endpoint?.accessToken;
   const styles = {
     base: css({

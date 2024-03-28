@@ -1,10 +1,11 @@
 import { AuthProvider } from '../ui.Auth/Auth.Provider';
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, PropList, type t } from './common';
 import { Builder } from './ui.Builder';
 import { Wrangle } from './Wrangle';
 
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { fields = [], data = DEFAULTS.data } = props;
+  const { data = DEFAULTS.data } = props;
+  const fields = PropList.Wrangle.fields(props.fields);
 
   return (
     <AuthProvider

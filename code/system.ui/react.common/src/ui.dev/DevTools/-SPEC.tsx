@@ -1,9 +1,9 @@
 import { DevTools } from '.';
 import { Dev, Pkg, Time, type t } from '../../test.ui';
-import { Sample } from './-SPEC.Sample';
+import { Sample } from './-SPEC.-sample';
 
 export type T = { count: number; on: boolean; theme?: t.CommonTheme };
-const initial: T = { count: 0, on: true, theme: 'Light' };
+const initial: T = { count: 0, on: true };
 
 export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
@@ -13,7 +13,10 @@ export default Dev.describe('DevTools', (e) => {
     ctx.subject
       .display('grid')
       .size([400, null])
-      .render<T>((e) => <Sample state={e.state} renderPosition={[-20, 5]} />);
+      .render<T>((e) => {
+        Dev.Theme.background(ctx, e.state.theme);
+        return <Sample state={e.state} renderPosition={[-20, 5]} />;
+      });
   });
 
   e.it('ui:debug', async (e) => {
@@ -69,27 +72,11 @@ export default Dev.describe('DevTools', (e) => {
             .onClick((e) => {
               e.change((d) => (d.on = !e.current));
             });
-        })
-
-        .boolean((btn) =>
-          btn
-            .label((e) => `theme: "${e.state.theme}"`)
-            .value((e) => e.state.theme === 'Light')
-            .onClick((e) =>
-              e.change((d) => {
-                d.theme = e.current ? 'Dark' : 'Light';
-                Dev.Theme.background(dev.ctx, d.theme);
-              }),
-            ),
-        );
+        });
 
       dev.hr(5, 20);
 
-      Dev.Theme.switch(
-        dev,
-        (d) => d.theme,
-        (d, value) => (d.theme = value),
-      );
+      Dev.Theme.switch(dev, ['theme'], (v) => console.info('callback:', v)); // NB: same as above, but with path
 
       dev.hr(5, 20);
 
@@ -104,11 +91,13 @@ export default Dev.describe('DevTools', (e) => {
     dev.hr(-1, 5);
 
     const target = 'Module.Loader.Stateful';
-    Dev.Link.ns(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
-    Dev.Link.pkg(Pkg, dev)
-      .ns(`pkg.dev (1): "Foo"`, target)
-      .ns(`pkg.dev (2): "Foo.Bar"`, target)
+    Dev.Link.button(Pkg, dev, `namespace: ƒ("Module.Loader")`, target);
+
+    const link = Dev.Link.pkg(Pkg, dev);
+    link
+      .button(`pkg.dev (1): "Foo"`, target)
+      .button(`pkg.dev (2): "Foo.Bar"`, target)
       .hr()
-      .ns(`external site: wikipedia`, 'https://www.wikipedia.org/');
+      .button(`external site: wikipedia`, 'https://www.wikipedia.org/');
   });
 });

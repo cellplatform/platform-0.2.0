@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { Button, COLORS, Color, DevIcons, Time, css, t } from './common';
+import { Button, COLORS, Color, DevIcons, Theme, Time, css, type t } from './common';
 import { Description } from './ui.Test.Description';
 import { TestError } from './ui.Test.Error';
 
 export type TestResultProps = {
   data: t.TestRunResponse;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const TestResult: React.FC<TestResultProps> = (props) => {
-  const { data } = props;
+  const { data, theme } = props;
   const excluded = data.excluded ?? [];
   const isSkipped = excluded.includes('skip');
   const isExcludedViaOnly = excluded.includes('only');
@@ -61,11 +62,11 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <DevIcons.Close size={16} color={COLORS.RED} offset={[0, 2]} />
   );
   const elSkippedIcon = isSkipped && (
-    <DevIcons.Skip size={16} color={Color.alpha(COLORS.DARK, 0.3)} offset={[0, 2]} />
+    <DevIcons.Skip size={16} color={Color.alpha(Theme.color(theme), 0.3)} offset={[0, 2]} />
   );
 
   const elCopy = isOver && (
-    <Button onClick={handleCopy}>
+    <Button onClick={handleCopy} theme={theme}>
       <DevIcons.Copy size={16} />
     </Button>
   );
@@ -79,10 +80,10 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   );
 
   const elNoopIcon = isNoop && (
-    <DevIcons.Wait size={16} color={Color.alpha(COLORS.DARK, 0.5)} offset={[0, 2]} />
+    <DevIcons.Wait size={16} color={Color.alpha(Theme.color(theme), 0.5)} offset={[0, 2]} />
   );
 
-  const elError = data.error && <TestError data={data} style={styles.error} />;
+  const elError = data.error && <TestError data={data} style={styles.error} theme={theme} />;
 
   const elapsed = Time.duration(data.time.elapsed).toString();
 
@@ -90,7 +91,11 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.line.base} onMouseEnter={over(true)} onMouseLeave={over(false)}>
         <div {...styles.line.icon}>{elNoopIcon || elIcons}</div>
-        <Description text={copied ? '(copied)' : data.description} isSkipped={isSkipped} />
+        <Description
+          text={copied ? '(copied)' : data.description}
+          isSkipped={isSkipped}
+          theme={theme}
+        />
         <div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>
       </div>
       {elError}

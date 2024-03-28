@@ -29,6 +29,10 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     footer,
     row,
 
+    env<T>() {
+      return ctx.env as T;
+    },
+
     redraw(target) {
       return ctx.redraw(target);
     },

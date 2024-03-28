@@ -1,9 +1,9 @@
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 
 import { Is } from '.';
-import { Doc } from '../Doc';
-import { Store } from '../Store';
-import { WebStore } from '../Store.Web';
+import { Doc } from '../crdt/Doc';
+import { Store } from '../crdt/Store';
+import { WebStore } from '../crdt/Store.Web';
 import { describe, expect, it, type t } from '../test';
 
 describe('Is (flags)', (e) => {
@@ -65,6 +65,17 @@ describe('Is (flags)', (e) => {
     const ns = Doc.namespace(doc);
     expect(Is.namespace(ns)).to.eql(true);
     NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
+    store.dispose();
+  });
+
+  it('Is.handle', async () => {
+    type TRoot = { count: number };
+    const store = Store.init();
+    const docRef = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
+    const docRefHandle = docRef as t.DocRefHandle<TRoot>;
+    expect(Is.handle(docRefHandle.handle)).to.eql(true);
+    expect(Is.handle(docRef)).to.eql(false);
+    NON_OBJECTS.forEach((value) => expect(Is.handle(value)).to.eql(false));
     store.dispose();
   });
 });

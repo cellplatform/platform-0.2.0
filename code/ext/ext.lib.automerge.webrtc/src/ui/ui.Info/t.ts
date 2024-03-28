@@ -4,6 +4,7 @@ import type { InfoData as AutomergeInfoData } from 'ext.lib.automerge/src/types'
 import type { InfoData as PeerInfoData } from 'ext.lib.peerjs/src/types';
 
 export type InfoField =
+  | 'Visible'
   | 'Module'
   | 'Module.Verify'
   | 'Component'
@@ -12,10 +13,10 @@ export type InfoField =
   | 'Repo'
   | 'Network.Shared'
   | 'Network.Shared.Json'
-  | 'Network.Transfer'
-  | 'Visible';
+  | 'Network.Transfer';
 
 export type InfoData = {
+  visible?: t.InfoDataVisible;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   peer?: PeerInfoData['peer'];
@@ -25,12 +26,6 @@ export type InfoData = {
     object?: { expand?: { level?: number; paths?: string[] } };
     onIconClick?: (e: {}) => void;
   };
-  visible?: {
-    value?: boolean;
-    enabled?: boolean;
-    label?: string;
-    onToggle?: (current: boolean) => void;
-  };
 };
 
 /**
@@ -39,10 +34,11 @@ export type InfoData = {
 export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
+  fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };

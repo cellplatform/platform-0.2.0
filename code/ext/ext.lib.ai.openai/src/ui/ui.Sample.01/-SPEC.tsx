@@ -88,7 +88,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
-    link.ns('see: docs (openai api)', 'https://platform.openai.com/docs').hr(5, 20);
+    link.button('see: docs (openai api)', 'https://platform.openai.com/docs').hr(5, 20);
 
     dev.section('', (dev) => {
       dev.button((btn) => {

@@ -17,12 +17,13 @@ export const Item = {
     ctx?: R['ctx'];
     label?: R['label'];
     infoUrl?: R['infoUrl'];
+    theme?: t.CommonTheme;
   }): t.PropListItem {
-    const { modules, ctx } = args;
+    const { modules, ctx, theme } = args;
     const data: t.TestPropListData = { modules, run: { ctx } };
     return {
-      label: <TestRunnerLabel label={args.label} infoUrl={args.infoUrl} />,
-      value: <TestRunnerControlled initial={data} />,
+      label: <TestRunnerLabel label={args.label} infoUrl={args.infoUrl} theme={theme} />,
+      value: <TestRunnerControlled initial={data} theme={theme} />,
     };
   },
 };

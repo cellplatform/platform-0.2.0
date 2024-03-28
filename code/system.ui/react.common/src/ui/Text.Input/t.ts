@@ -30,7 +30,10 @@ export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHand
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
 
 export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
-export type TextInputReadyHandlerArgs = TextInputRef;
+export type TextInputReadyHandlerArgs = {
+  ref: TextInputRef;
+  input: HTMLInputElement;
+};
 
 /**
  * Component
@@ -61,6 +64,7 @@ export type TextInputProps = t.TextInputFocusProps &
     autoSize?: boolean;
     selectionBackground?: number | string;
 
+    theme?: t.CommonTheme;
     style?: t.CssValue;
     valueStyle?: t.TextInputStyle;
     placeholderStyle?: t.TextInputStyle & { offset?: [number, number] };
@@ -152,7 +156,7 @@ export type TextInputKeyEvent = React.KeyboardEvent<HTMLInputElement> & {
 export type TextInputKeyEventHandler = (e: TextInputKeyEvent) => void;
 
 export type TextInputEventHandlers = {
-  onChanged?: TextInputChangeEventHandler;
+  onChange?: TextInputChangeEventHandler;
   onKeyDown?: TextInputKeyEventHandler;
   onKeyUp?: TextInputKeyEventHandler;
   onEnter?: TextInputKeyEventHandler;

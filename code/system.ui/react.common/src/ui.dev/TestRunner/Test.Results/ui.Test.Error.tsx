@@ -1,6 +1,10 @@
-import { css, t, ObjectView } from './common';
+import { ObjectView, css, type t } from './common';
 
-export type TestErrorProps = { data: t.TestRunResponse; style?: t.CssValue };
+export type TestErrorProps = {
+  data: t.TestRunResponse;
+  theme?: t.CommonTheme;
+  style?: t.CssValue;
+};
 
 export const TestError: React.FC<TestErrorProps> = (props) => {
   const { data } = props;
@@ -18,7 +22,7 @@ export const TestError: React.FC<TestErrorProps> = (props) => {
   const styles = { base: css({}) };
   return (
     <div {...css(styles.base, props.style)}>
-      <ObjectView data={error} fontSize={10} />
+      <ObjectView data={error} fontSize={10} theme={props.theme} />
     </div>
   );
 };

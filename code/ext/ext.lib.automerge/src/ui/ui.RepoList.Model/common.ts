@@ -1,8 +1,6 @@
 import { LabelItem, Typenames, type t } from './common';
 
 export * from '../common';
-export { StoreIndex } from '../../Store.Index';
-export { WebStore } from '../../Store.Web';
 export const Model = LabelItem.Stateful.Model;
 
 /**

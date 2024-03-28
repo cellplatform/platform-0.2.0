@@ -1,14 +1,16 @@
-import { Dev, PropList, type t } from '../../test.ui';
-import { Info, type InfoProps } from '.';
+import { Info } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
+
+const DEFAULTS = Info.DEFAULTS;
 
 export default Dev.describe('Info', (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.codemirror.Info');
   const local = localstore.object({
-    selectedFields: Info.DEFAULTS.fields,
+    selectedFields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -39,10 +41,10 @@ export default Dev.describe('Info', (e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            all={Info.FIELDS}
+            all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(ev) => {
-              const fields = ev.next as InfoProps['fields'];
+              const fields = ev.next as t.InfoField[];
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}

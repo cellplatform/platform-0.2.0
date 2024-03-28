@@ -1,25 +1,25 @@
-import { Info } from '.';
+import { Info, DEFAULTS } from '.';
 import { Delete, Dev, Hash, Pkg, type t } from '../../test.ui';
 import { Http } from './common';
 
+type P = t.InfoProps;
 type T = {
-  props: t.InfoProps;
+  props: P;
   state?: t.InfoData;
   accessToken?: string;
   debug: { forcePublicUrl?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
-const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
  */
 const name = Info.displayName ?? 'Unknown';
-
 export default Dev.describe(name, async (e) => {
-  type LocalStore = Pick<t.InfoProps, 'fields' | 'stateful' | 'flipped'> & T['debug'];
+  type LocalStore = Pick<P, 'fields' | 'stateful' | 'flipped' | 'theme'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: undefined,
     fields: DEFAULTS.fields.default,
     stateful: true,
     flipped: false,
@@ -45,6 +45,7 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.debug.forcePublicUrl = local.forcePublicUrl;
 
+      d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.stateful = local.stateful;
       d.props.flipped = local.flipped;
@@ -70,6 +71,7 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>(async (e) => {
         const { props, debug } = e.state;
+        Dev.Theme.background(dev, props.theme, 1);
         const accessToken = getTokens(dev.ctx, e.state).accessToken;
         const forcePublic = debug.forcePublicUrl;
         const data: t.InfoData = {
@@ -123,19 +125,19 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               setFields(fields);
             }}
           />
         );
       });
 
-      dev.hr(0, 5);
-
       dev.title('Common States');
-      dev.button('projects', (e) => {
-        e.change((d) => setFields(['Auth.AccessToken', 'Projects.List']));
-      });
+      const common = (label: string, fields: t.InfoField[]) => {
+        dev.button(label, (e) => e.change((d) => setFields(fields)));
+      };
+      common('all', DEFAULTS.fields.all);
+      common('projects', ['Auth.AccessToken', 'Projects.List']);
     });
 
     dev.hr(5, 20);
@@ -148,6 +150,11 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
       });
+
+      dev.hr(-1, 5);
+
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.flipped;
         btn

@@ -47,7 +47,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      link.ns('see: ModuleNamespace', 'Module.Namespace');
+      link.button('see: ModuleNamespace', 'Module.Namespace');
     });
     dev.hr(5, 20);
 

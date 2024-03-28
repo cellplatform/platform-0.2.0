@@ -1,8 +1,8 @@
 import { TestPropListControlled } from './Root.Controlled';
 import { Item } from './Root.Item';
 import { DEFAULTS, FC, FIELDS } from './common';
-import { useController } from './hooks/useController.mjs';
-import { TestPropListController as controller } from './logic/Controller.mjs';
+import { useController } from './hooks/useController';
+import { TestPropListController as controller } from './logic/Controller';
 import { PropList as View, type TestPropListProps } from './ui/PropList';
 import { PropListFieldSelector as FieldSelector } from './ui/PropList.FieldSelector';
 

@@ -8,6 +8,7 @@ export { Immutable } from './Immutable';
 export { Is } from './Is';
 export { Json } from './Json';
 export { Mime } from './Mime';
+export { ObjectPath } from './ObjectPath';
 export { Path } from './Path';
 export { Percent } from './Percent';
 export { Promise, maybeWait } from './Promise';

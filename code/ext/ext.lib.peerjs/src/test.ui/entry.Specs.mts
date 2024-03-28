@@ -1,3 +1,4 @@
+import type { t } from './common';
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -10,6 +11,6 @@ export const Specs = {
   [`${ns}.ui.Video`]: () => import('../ui/ui.Video/-SPEC'),
   [`${ns}.ui.Connector`]: () => import('../ui/ui.Connector/-SPEC'),
   [`${ns}.ui.Connector.MediaToolbar`]: () => import('../ui/ui.Connector.MediaToolbar/-SPEC'),
-};
+} as t.SpecImports;
 
 export default Specs;

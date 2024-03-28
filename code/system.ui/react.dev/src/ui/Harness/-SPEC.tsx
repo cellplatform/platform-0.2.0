@@ -1,5 +1,5 @@
-import { Spec, Dev } from '../../test.ui';
 import { Harness } from '.';
+import { Spec } from '../../test.ui';
 
 export default Spec.describe('Harness', (e) => {
   e.it('init', async (e) => {
@@ -10,7 +10,14 @@ export default Spec.describe('Harness', (e) => {
       .size('fill')
       .display('flex')
       .render((e) => {
-        return <Harness style={{ Absolute: 0 }} spec={bundle} />;
+        return (
+          <Harness
+            //
+            style={{ Absolute: 0 }}
+            spec={() => bundle}
+            // spec={bundle} // NB: This is the same as the line above.
+          />
+        );
       });
   });
 });

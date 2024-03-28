@@ -1,5 +1,5 @@
 import type { t } from '../../common';
-export type * from './Test.PropList/types.mjs';
+export type * from './Test.PropList/t';
 
 type Ctx = Record<string, unknown>;
 

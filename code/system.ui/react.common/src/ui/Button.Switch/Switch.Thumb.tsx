@@ -1,5 +1,5 @@
 import { Color, css, R, type t } from '../../common';
-import { SwitchTheme } from './theme.mjs';
+import { SwitchTheme } from './theme';
 
 export type SwitchThumbProps = {
   thumb: Partial<t.SwitchThumb>;

@@ -7,8 +7,9 @@ export function chainList(args: {
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
   fields: t.InfoField[];
+  theme?: t.CommonTheme;
 }): t.PropListItem[] {
-  const { privy, modifiers, fields, data } = args;
+  const { privy, modifiers, fields, data, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   if (!privy.authenticated) return [];
 
@@ -27,7 +28,16 @@ export function chainList(args: {
 
   res.push(
     ...chains.map((chain) => {
-      const value = <ChainRow data={data} chain={chain} modifiers={modifiers} enabled={enabled} />;
+      const value = (
+        <ChainRow
+          //
+          data={data}
+          chain={chain}
+          modifiers={modifiers}
+          enabled={enabled}
+          theme={theme}
+        />
+      );
       return { value };
     }),
   );

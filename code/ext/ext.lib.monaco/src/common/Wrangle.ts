@@ -1,19 +1,12 @@
 import type * as t from './t';
 
-import { DEFAULTS } from './constants';
 import { Is } from './Is';
-import { monaco } from './Wrangle.monaco';
 import { asRange } from './Wrangle.asRange';
+import { monaco } from './Wrangle.monaco';
+import { DEFAULTS } from './constants';
 
 export const Wrangle = {
   monaco,
-
-  toMonacoTheme(theme?: t.EditorTheme) {
-    if (typeof theme !== 'string') return undefined;
-    if (theme === 'Light') return 'light';
-    if (theme === 'Dark') return 'vs-dark';
-    return theme; // Defaults to 'light' within Monaco.
-  },
 
   editorClassName(editor?: t.MonacoCodeEditor) {
     let id = editor?.getId() ?? '';

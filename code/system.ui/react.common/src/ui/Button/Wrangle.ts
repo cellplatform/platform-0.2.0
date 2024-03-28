@@ -1,10 +1,10 @@
-import { DEFAULTS, COLORS, type t } from './common';
+import { COLORS, DEFAULTS, type t } from './common';
 
 export const Wrangle = {
-  color(args: { isEnabled: boolean; isOver: boolean }) {
-    const { isEnabled, isOver } = args;
-    if (!isEnabled) return COLORS.DARK;
-    return isOver ? COLORS.BLUE : COLORS.DARK;
+  color(args: { isEnabled: boolean; isOver: boolean; theme?: t.CommonTheme }) {
+    const color = args.theme === 'Dark' ? COLORS.WHITE : COLORS.DARK;
+    if (!args.isEnabled) return color;
+    return args.isOver ? COLORS.BLUE : color;
   },
 
   pressedOffset(args: {

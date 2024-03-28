@@ -1,6 +1,10 @@
-import { Button, COLORS, Icons, Spinner, type t, css } from './common';
+import { Button, COLORS, Icons, Spinner, css, type t } from './common';
 
-export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem | undefined {
+export function login(
+  privy: t.PrivyInterface,
+  enabled: boolean,
+  theme?: t.CommonTheme,
+): t.PropListItem | undefined {
   if (!privy.ready) enabled = false;
 
   /**
@@ -24,7 +28,7 @@ export function login(privy: t.PrivyInterface, enabled: boolean): t.PropListItem
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const elButton = (
-    <Button style={{ color }} enabled={enabled} onClick={handleClick}>
+    <Button style={{ color }} enabled={enabled} onClick={handleClick} theme={theme}>
       <div {...styles.logoutBody}>
         <div>{privy.authenticated ? 'logout' : 'login'}</div>
         {privy.authenticated && <Icons.Logout size={14} />}

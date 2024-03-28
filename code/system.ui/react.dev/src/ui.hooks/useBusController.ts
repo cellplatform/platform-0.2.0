@@ -10,7 +10,7 @@ export function useBusController(
   args: {
     bus?: t.EventBus;
     id?: Id;
-    bundle?: t.SpecImport | t.TestSuiteModel;
+    bundle?: t.SpecImport | t.SpecImporter | t.TestSuiteModel;
     env?: t.DevEnvVars;
     runOnLoad?: boolean;
   } = {},
@@ -36,7 +36,8 @@ export function useBusController(
      */
     Time.delay(0, async () => {
       if (events.disposed) return;
-      await events.load.fire(args.bundle);
+      const bundle = typeof args.bundle === 'function' ? args.bundle() : args.bundle;
+      await events.load.fire(bundle);
       if (args.runOnLoad) events.run.fire();
     });
 

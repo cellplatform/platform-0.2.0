@@ -1,4 +1,4 @@
-import { Button, COLORS, DEFAULTS, Hash, Icons, css, type t, Wallet } from './common';
+import { Button, COLORS, DEFAULTS, Hash, Icons, Wallet, css, type t } from './common';
 import { useBalance } from './use.Balance';
 
 export type WalletRowProps = {
@@ -8,11 +8,12 @@ export type WalletRowProps = {
   chain: t.EvmChainName;
   showClose?: boolean;
   refresh$?: t.Observable<void>;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const WalletRow: React.FC<WalletRowProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, wallet, privy, chain, refresh$ } = props;
+  const { enabled = DEFAULTS.enabled, wallet, privy, chain, refresh$, theme } = props;
   const { address } = wallet;
   const isEmbedded = Wrangle.isEmbedded(wallet);
   const showClose = (props.showClose ?? false) && enabled;
@@ -54,19 +55,25 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
   };
 
   const elAddress = (
-    <Button.Copy enabled={enabled} style={styles.address} onCopy={(e) => e.copy(address)}>
+    <Button.Copy
+      enabled={enabled}
+      style={styles.address}
+      theme={theme}
+      onCopy={(e) => e.copy(address)}
+    >
       {shortHash}
     </Button.Copy>
   );
 
   const elClose = showClose && !isEmbedded && (
-    <Button style={styles.close} enabled={enabled} onClick={unlinkWallet}>
+    <Button style={styles.close} enabled={enabled} theme={theme} onClick={unlinkWallet}>
       <Icons.Close size={Size} />
     </Button>
   );
   const elBalance = !elClose && (
     <Button.Copy
       style={styles.balance}
+      theme={theme}
       minWidth={80}
       enabled={enabled}
       spinning={balance.is.fetching}

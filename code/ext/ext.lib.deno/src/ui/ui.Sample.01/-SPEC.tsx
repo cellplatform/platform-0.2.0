@@ -6,7 +6,8 @@ import { Http, type t } from './common';
 import { Sample } from './ui';
 
 type TEnv = { accessToken?: string };
-type T = TState & { props: t.SampleProps; accessToken?: string };
+type P = t.SampleProps;
+type T = TState & { props: P; accessToken?: string };
 const initial: T = {
   props: {},
   deno: { projects: [], deployments: [] },
@@ -17,7 +18,7 @@ const initial: T = {
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SampleProps, 'code'> & Pick<T, 'forcePublicUrl'>;
+  type LocalStore = Pick<P, 'code'> & Pick<T, 'forcePublicUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({
@@ -78,6 +79,8 @@ export default Dev.describe(name, (e) => {
 
     if (!env.accessToken) dev.hr(5, 20);
 
+    dev.TODO();
+    dev.hr(0, 5);
     dev.row((e) => {
       const deno = e.state.deno;
       const accessToken = env.accessToken || e.state.accessToken;
@@ -109,12 +112,11 @@ export default Dev.describe(name, (e) => {
 
     link
       .title('References')
-      .ns('docs: deno → subhosting', 'https://docs.deno.com/subhosting')
+      .button('docs: deno → subhosting', 'https://docs.deno.com/subhosting')
       .hr()
-      .ns('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
-      .ns('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter');
-
-    dev.hr(5, 20);
+      .button('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
+      .button('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter')
+      .hr(5, 20);
 
     dev.section('Actions', (dev) => {
       dev.button('set sample: "code"', (e) => {

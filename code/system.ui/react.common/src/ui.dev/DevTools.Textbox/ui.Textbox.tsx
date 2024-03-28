@@ -100,7 +100,7 @@ const View: React.FC<TextboxProps> = (props) => {
         focusAction={props.focusAction ?? 'Select'}
         spellCheck={false}
         onFocusChange={(e) => setFocused(e.isFocused)}
-        onChanged={(e) => {
+        onChange={(e) => {
           if (isActive) props.onChange?.(e);
         }}
         onEnter={(e) => {

@@ -1,2 +1,2 @@
 export { Info } from './Root';
-export { InfoField } from './field';
+export { Field as InfoField } from './field';

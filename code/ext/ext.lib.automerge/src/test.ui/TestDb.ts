@@ -1,4 +1,4 @@
-import { IndexedDb, StoreIndexDb } from './common';
+import { IndexedDb, StoreIndexDb, DevReload } from './common';
 
 export async function deleteDatabase(name: string) {
   const index = StoreIndexDb.name(name);
@@ -34,6 +34,7 @@ export const IndexDb = {
  * Unit-test databases.
  */
 export const TestDb = {
+  DevReload,
   Spec: SpecDb,
   Unit: UnitDb,
   Index: IndexDb,

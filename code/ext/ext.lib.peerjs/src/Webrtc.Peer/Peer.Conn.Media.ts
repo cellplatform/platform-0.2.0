@@ -68,7 +68,7 @@ export function manageMediaConnection(args: {
       async incoming(conn: t.PeerJsConnMedia) {
         const metadata = Wrangle.metadata(conn);
 
-        if (!PeerIs.kind.media(metadata.kind)) {
+        if (!PeerIs.Kind.media(metadata.kind)) {
           const message = `Failed to establish incoming call. Connnection not of type "media".`;
           dispatch.error(message);
           return;

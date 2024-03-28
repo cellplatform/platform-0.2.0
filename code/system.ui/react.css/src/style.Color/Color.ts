@@ -1,3 +1,4 @@
+import type { ColorInput } from 'tinycolor2';
 import tinycolor from 'tinycolor2';
 import { type t } from '../common';
 
@@ -5,22 +6,23 @@ import { type t } from '../common';
  * Standard "ruby" RED color (semi-transparent).
  */
 export const RED = `rgba(255, 0, 0, 0.1)`;
+export const WHITE = '#fff';
+export const DARK = '#293042';
 
 /**
  * Creates a new tiny-color instance.
  * https://github.com/bgrins/TinyColor
  */
-export function create(value: any) {
-  return tinycolor(value);
-}
+export const create = (value: ColorInput) => tinycolor(value);
 export const black = () => create('black');
 export const white = () => create('white');
+export const dark = () => create(DARK);
 
 /**
  * Mixes two colors.
  * https://github.com/bgrins/TinyColor#color-utilities
  */
-export function mix(color1: tinycolor.ColorInput, color2: tinycolor.ColorInput, amount?: number) {
+export function mix(color1: ColorInput, color2: ColorInput, amount?: number) {
   return tinycolor.mix(color1, color2, amount);
 }
 
@@ -28,15 +30,9 @@ export function mix(color1: tinycolor.ColorInput, color2: tinycolor.ColorInput, 
  * Takes a value of various types and converts it into a color.
  */
 export function format(value: string | number | boolean | undefined): string | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  if (value === true) {
-    return RED;
-  }
-  if (typeof value === 'number') {
-    return toGrayAlpha(value);
-  }
+  if (value === undefined) return undefined;
+  if (value === true) return RED;
+  if (typeof value === 'number') return toGrayAlpha(value);
   if (typeof value === 'string') {
     if (value.includes('url(')) return value;
     if (!value.includes('#') && !value.includes('rgb')) return `#${value}`;
@@ -48,22 +44,11 @@ export function format(value: string | number | boolean | undefined): string | u
  * A number between -1 (black) and 1 (white).
  */
 export function toGrayAlpha(value: number): string {
-  if (value < -1) {
-    value = -1;
-  }
-  if (value > 1) {
-    value = 1;
-  }
+  if (value < -1) value = -1;
+  if (value > 1) value = 1;
 
-  // Black.
-  if (value < 0) {
-    return `rgba(0, 0, 0, ${Math.abs(value)})`;
-  }
-
-  // White.
-  if (value > 0) {
-    return `rgba(255, 255, 255, ${value})`;
-  }
+  if (value < 0) return `rgba(0, 0, 0, ${Math.abs(value)})`; // Black.
+  if (value > 0) return `rgba(255, 255, 255, ${value})`; // White.
 
   return `rgba(0, 0, 0, 0.0)`; // Transparent.
 }
@@ -72,12 +57,8 @@ export function toGrayAlpha(value: number): string {
  * A number between -1 (black) and 1 (white).
  */
 export function toGrayHex(value: number): string {
-  if (value < -1) {
-    value = -1;
-  }
-  if (value > 1) {
-    value = 1;
-  }
+  if (value < -1) value = -1;
+  if (value > 1) value = 1;
 
   // Black.
   if (value < 0) {
@@ -124,4 +105,17 @@ export function darken(color: string, amount: number) {
  */
 export function debug(debug?: boolean) {
   return (opacity: t.Percent) => (debug ? `rgba(255, 0, 0, ${opacity})` : undefined);
+}
+
+/**
+ * Base text/fore color derived from common theme name.
+ */
+export function fromTheme(
+  theme: t.CommonTheme = 'Light',
+  defaultLight?: string | null,
+  defaultDark?: string | null,
+) {
+  const light = defaultLight ?? DARK;
+  const dark = defaultDark ?? WHITE;
+  return theme === 'Dark' ? dark : light;
 }

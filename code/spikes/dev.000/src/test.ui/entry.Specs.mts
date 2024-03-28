@@ -11,9 +11,10 @@ import '@vime/core/themes/light.css';
  */
 import '@tldraw/tldraw/tldraw.css';
 
+import type { t } from '../common';
+
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
 
-const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 
@@ -39,12 +40,12 @@ const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
 const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 const { Specs: ExtTldraw } = await import('ext.lib.tldraw/specs');
+// const { Specs: ExtExcalidraw } = await import('ext.lib.excalidraw');
 const { Specs: ExtDeno } = await import('ext.lib.deno/specs');
 
 export const Specs = {
   ...App,
 
-  ...Crdt,
   ...IndexedDb,
   ...Common,
   ...ComonDev,
@@ -69,5 +70,6 @@ export const Specs = {
   ...ExtCodeMirror,
   ...ExtAutomergeWebrtc,
   ...ExtTldraw,
+  // ...ExtExcalidraw,
   ...ExtDeno,
-};
+} as t.SpecImports;

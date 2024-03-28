@@ -17,6 +17,7 @@ export {
   PropList,
   RenderCount,
   TestRunner,
+  TextInput,
   css,
   useDragTarget,
   useFocus,

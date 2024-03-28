@@ -1,23 +1,24 @@
 import { MonacoEditor } from '.';
-import { Dev, Wrangle, type t, Pkg, EditorCarets } from '../../test.ui';
-import { CODE_SAMPLES } from './-SPEC.Sample.code';
+import { Dev, EditorCarets, Pkg, Wrangle, type t } from '../../test.ui';
+import { CODE_SAMPLES } from './-SPEC.-sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
-type T = { props: t.MonacoEditorProps };
+type P = t.MonacoEditorProps;
+type T = { props: P };
 const initial: T = { props: { focusOnLoad: true } };
 
 const name = 'MonacoEditor';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.MonacoEditorProps, 'text' | 'language' | 'theme'> & {
+  type LocalStore = Pick<P, 'text' | 'language' | 'theme'> & {
     selection: t.EditorRange | null;
   };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    text: '',
+    theme: undefined,
     language: DEFAULTS.language,
-    theme: 'Light',
+    text: '',
     selection: null,
   });
 
@@ -27,17 +28,21 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const dev = Dev.tools<T>(ctx, initial);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
+      d.props.theme = local.theme;
       d.props.text = local.text;
       d.props.language = local.language;
-      d.props.theme = local.theme;
     });
 
     ctx.subject
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const { props } = e.state;
+        Dev.Theme.background(dev, props.theme, 1);
+
         return (
           <MonacoEditor
             {...e.state.props}
@@ -115,16 +120,10 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Options', (dev) => {
-      dev.textbox((txt) =>
-        txt
-          .margin([0, 0, 10, 0])
-          .label((e) => 'placeholder')
-          .placeholder('enter placeholder text')
-          .value((e) => e.state.props.placeholder)
-          .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
-          .onEnter((e) => {}),
-      );
+    dev.section('Properties', (dev) => {
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
+      dev.hr(-1, 5);
 
       const tabSize = (size: number) => {
         const label = `tabSize: ${size}`;
@@ -134,20 +133,17 @@ export default Dev.describe(name, (e) => {
       tabSize(4);
     });
 
-    dev.hr(-1);
+    dev.hr(-1, 5);
 
-    dev.section('EditorTheme', (dev) => {
-      const theme = (value: t.EditorTheme) => {
-        dev.button((btn) =>
-          btn
-            .label(() => `theme: "${value}"`)
-            .right((e) => (e.state.props.theme === value ? '← current' : ''))
-            .onClick((e) => e.change((d) => (local.theme = d.props.theme = value))),
-        );
-      };
-      theme('Light');
-      theme('Dark');
-    });
+    dev.textbox((txt) =>
+      txt
+        .margin([0, 0, 10, 0])
+        .label((e) => 'placeholder')
+        .placeholder('enter placeholder text')
+        .value((e) => e.state.props.placeholder)
+        .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
+        .onEnter((e) => {}),
+    );
 
     dev.hr(5, 20);
 

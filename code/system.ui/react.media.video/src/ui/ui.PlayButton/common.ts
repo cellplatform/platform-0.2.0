@@ -1,6 +1,4 @@
 import { type t } from './common';
-
-export { Icons } from '../Icons.mjs';
 export * from '../common';
 
 /**

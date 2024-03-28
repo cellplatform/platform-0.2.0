@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { css, FC, type t } from '../common';
 import { SwitchThumb } from './Switch.Thumb';
 import { SwitchTrack } from './Switch.Track';
-import { SwitchTheme } from './theme.mjs';
+import { SwitchTheme } from './theme';
 
 const View: React.FC<t.SwitchProps> = (props) => {
   const { track = {}, thumb = {} } = props;
@@ -89,10 +89,10 @@ const View: React.FC<t.SwitchProps> = (props) => {
  * [Helpers]
  */
 
-function toTheme(input?: t.SwitchThemeName | Partial<t.SwitchTheme>): t.SwitchTheme {
+function toTheme(input?: t.CommonTheme | Partial<t.SwitchTheme>): t.SwitchTheme {
   let theme = input || 'Light';
   if (typeof theme === 'string') {
-    theme = SwitchTheme.fromString(theme as t.SwitchThemeName).green;
+    theme = SwitchTheme.fromString(theme as t.CommonTheme).green;
   }
   return theme as t.SwitchTheme;
 }

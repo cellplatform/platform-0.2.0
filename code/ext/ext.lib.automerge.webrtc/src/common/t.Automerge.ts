@@ -1,3 +1,6 @@
+/**
+ * @ext
+ */
 export type { next as A } from '@automerge/automerge';
 export type {
   Message as AutomergeMessage,
@@ -12,3 +15,27 @@ export type {
   NetworkMessage,
   NetworkMessageAlert,
 } from 'automerge-repo-network-peerjs';
+
+/**
+ * @lib
+ */
+export type {
+  DocChanged,
+  DocEphemeralIn,
+  DocEphemeralOut,
+  DocMeta,
+  DocMetaType,
+  DocRef,
+  DocRefHandle,
+  DocUri,
+  DocWithMeta,
+  Lens,
+  NamespaceManager,
+  NamespaceMap,
+  Store,
+  StoreIndexDoc,
+  StoreIndexState,
+  StoreNetworkKind,
+  WebStore,
+  WebStoreIndex,
+} from 'ext.lib.automerge/src/types';

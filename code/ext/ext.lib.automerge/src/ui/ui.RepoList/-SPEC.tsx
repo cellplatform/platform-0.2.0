@@ -1,9 +1,10 @@
 import { RepoList } from '.';
 import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
-import { SpecInfo } from './-SPEC.ui.Info';
+import { Info } from '../ui.Info';
 
+type P = t.RepoListProps;
 type T = {
-  props: t.RepoListProps;
+  props: P;
   debug: { reload?: boolean; cancelDelete?: boolean };
 };
 const name = RepoList.displayName ?? 'Unknown';
@@ -73,7 +74,8 @@ export default Dev.describe(name, async (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <DevReload />;
+        const { props, debug } = e.state;
+        if (debug.reload) return <DevReload />;
 
         const renderCount: t.RenderCountProps = {
           prefix: 'list.render-',
@@ -81,14 +83,32 @@ export default Dev.describe(name, async (e) => {
           opacity: 0.2,
         };
 
-        return <RepoList {...e.state.props} model={model} renderCount={renderCount} />;
+        return (
+          <RepoList
+            {...props}
+            model={model}
+            renderCount={renderCount}
+            onReady={(e) => console.info('⚡️ onReady', e)}
+          />
+        );
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
+
+    dev.row((e) => {
+      const name = '<RepoList>';
+      const { store, index } = model;
+      return (
+        <Info
+          fields={['Component', 'Repo']}
+          data={{ repo: { store, index }, component: { name } }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
 
     dev.section((dev) => {
@@ -177,7 +197,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.reload = true));
+        await e.state.change((d) => (d.debug.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
     });

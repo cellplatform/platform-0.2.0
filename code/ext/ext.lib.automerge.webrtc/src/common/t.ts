@@ -8,25 +8,6 @@ export type * from './t.Automerge';
  * @ext
  */
 export type {
-  DocChanged,
-  DocEphemeralIn,
-  DocEphemeralOut,
-  DocMeta,
-  DocMetaType,
-  DocRef,
-  DocRefHandle,
-  DocUri,
-  DocWithMeta,
-  Lens,
-  NamespaceManager,
-  NamespaceMap,
-  Store,
-  StoreIndexDoc,
-  StoreIndexState,
-  StoreNetworkKind,
-  WebStore,
-} from 'ext.lib.automerge/src/types';
-export type {
   PeerConnectMetadata,
   PeerConnection,
   PeerJsConnData,
@@ -48,7 +29,7 @@ export type {
   UntilObservable,
 } from 'sys.types/src/types';
 
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { UserAgent } from 'sys.ui.dom/src/types';
 
 /**

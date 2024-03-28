@@ -13,8 +13,6 @@ export type EditorLanguage =
   | 'go'
   | 'python';
 
-export type EditorTheme = 'Light' | 'Dark';
-
 /**
  * Selection and position.
  */

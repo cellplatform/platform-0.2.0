@@ -1,13 +1,16 @@
 import { Button, Chain, COLORS, Icons, Value, type t } from './common';
 import { Wrangle } from './Wrangle';
 
-export function linkWallet(
-  privy: t.PrivyInterface,
-  data: t.InfoData,
-  wallets: t.ConnectedWallet[],
-  fields: t.InfoField[],
-  enabled: boolean,
-): t.PropListItem | undefined {
+export function linkWallet(args: {
+  privy: t.PrivyInterface;
+  data: t.InfoData;
+  wallets: t.ConnectedWallet[];
+  fields: t.InfoField[];
+  enabled: boolean;
+  theme?: t.CommonTheme;
+}): t.PropListItem | undefined {
+  const { privy, data, wallets, fields, theme } = args;
+  let enabled = args.enabled;
   if (!privy.ready || !privy.authenticated) enabled = false;
   if (wallets.length === 0) enabled = false;
   const chain = Wrangle.chain(data);
@@ -25,7 +28,7 @@ export function linkWallet(
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const value = (
-    <Button style={{ color }} enabled={enabled} onClick={linkWallet}>
+    <Button style={{ color }} enabled={enabled} onClick={linkWallet} theme={theme}>
       <Icons.Add size={16} margin={[0, 2, 0, 0]} />
     </Button>
   );

@@ -14,10 +14,20 @@ export const AuthIdentity: React.FC<AuthIdentityProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Auth.Info
         title={'Identity'}
-        fields={['Login', 'AccessToken', 'Login.SMS', 'Login.Farcaster', 'Link.Farcaster']}
+        fields={[
+          'Login',
+          'AccessToken',
+          'Login.SMS',
+          'Login.Farcaster',
+          'Link.Farcaster',
+          'Wallet.List',
+          'Wallet.List.Title',
+          'Refresh',
+        ]}
         data={{
           provider: Auth.Env.provider,
           accessToken: { jwt },
+          wallet: { list: { title: 'Public Key' } },
         }}
         onChange={(e) => {
           if (e.accessToken) props.onAccessToken?.(e.accessToken);

@@ -104,7 +104,7 @@ export function manageDataConnection(args: {
 
       conn.on('close', () => {
         state.current.connections
-          .filter(({ kind }) => PeerIs.kind.media(kind))
+          .filter(({ kind }) => PeerIs.Kind.media(kind))
           .filter(({ peer }) => peer.remote === conn.peer)
           .forEach(({ id }) => model.disconnect(id)); // Close child-media connections.
 

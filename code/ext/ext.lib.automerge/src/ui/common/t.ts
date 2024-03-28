@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export type { CSSProperties } from 'react';
+
+/**
  * @system
  */
 export type {
@@ -6,6 +11,7 @@ export type {
   CssValue,
   DevCtxState,
   GetLabelItem,
+  InfoDataVisible,
   LabelItem,
   LabelItemBehaviorKind,
   LabelItemDispatch,

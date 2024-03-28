@@ -9,8 +9,8 @@ const DEFAULT = {
 export type ButtonProps = {
   enabled?: boolean;
   label?: string | JSX.Element;
+  iconElement?: JSX.Element;
   rightElement?: JSX.Element;
-
   style?: t.CssValue;
   labelOpacity?: number;
   onClick?: React.MouseEventHandler;
@@ -68,6 +68,7 @@ const View: React.FC<ButtonProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={handlerClick}>
       <ButtonIcon
+        iconElement={props.iconElement}
         isActive={isActive}
         isDown={mouse.is.down}
         isOver={mouse.is.over}

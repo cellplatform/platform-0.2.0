@@ -14,7 +14,7 @@ const filter = (path: string) => {
 
   if (path.includes('code/compiler.samples/')) return false;
   if (path.includes('code/spikes/')) return false;
-  if (path.includes('code/templates/')) return false;
+  if (path.includes('code/-tmpl/')) return false;
   if (path.includes('_legacy')) return false;
   return true;
 };

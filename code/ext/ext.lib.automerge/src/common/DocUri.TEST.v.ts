@@ -1,5 +1,5 @@
 import { DocUri } from '.';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it } from '../test';
 
 describe('Store.DocUri', () => {
   describe('DocUri.id', () => {

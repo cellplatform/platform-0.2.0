@@ -5,11 +5,12 @@ export type ButtonIconProps = {
   isDown?: boolean;
   isOver?: boolean;
   icon?: t.IconRenderer;
+  iconElement?: JSX.Element;
   style?: t.CssValue;
 };
 
 export const ButtonIcon: React.FC<ButtonIconProps> = (props) => {
-  const { isOver, isActive = true } = props;
+  const { isOver, isActive = true, iconElement } = props;
   const Size = 22;
   const color = isOver && isActive ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.6);
   const Icon = props.icon ?? DevIcons.Method;
@@ -21,15 +22,14 @@ export const ButtonIcon: React.FC<ButtonIconProps> = (props) => {
     base: css({
       Size,
       display: 'grid',
-      justifyContent: 'center',
-      alignContent: 'start',
+      placeItems: 'center',
       opacity: isActive ? 1 : 0.3,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Icon size={Size} color={color} />
+      {iconElement ?? <Icon size={Size} color={color} />}
     </div>
   );
 };
