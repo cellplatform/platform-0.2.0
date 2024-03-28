@@ -5,8 +5,8 @@ export const CssUtil = {
    * Convert TextInput props to placeholder style.
    */
   toPlaceholder(props: t.TextInputProps): t.CssValue {
-    const { theme, placeholderStyle = DEFAULTS.props.placeholderStyle } = props;
-    const valueStyle = props.valueStyle ?? DEFAULTS.style(theme);
+    const { theme, placeholderStyle = DEFAULTS.style.placeholder } = props;
+    const valueStyle = props.valueStyle ?? DEFAULTS.theme(theme);
     return CssUtil.toTextInput({
       ...props,
       valueStyle: { ...R.clone(valueStyle), ...placeholderStyle },
@@ -18,7 +18,7 @@ export const CssUtil = {
    */
   toTextInput(props: t.TextInputProps): t.CssValue {
     const { theme, isEnabled = true } = props;
-    const valueStyle = props.valueStyle ?? DEFAULTS.style(theme);
+    const valueStyle = props.valueStyle ?? DEFAULTS.theme(theme);
     return {
       ...CssUtil.toText(valueStyle, theme),
       color: isEnabled ? Color.format(valueStyle.color) : Color.format(valueStyle.disabledColor),
@@ -40,7 +40,7 @@ export const CssUtil = {
       lineHeight,
       textShadow,
       uppercase,
-    } = CssUtil.pluckText(style);
+    } = CssUtil.pluckText(style, theme);
 
     return {
       color: Color.format(color),
@@ -88,7 +88,7 @@ export const CssUtil = {
 
   pluckFont(style: t.TextStyle, theme?: t.CommonTheme): t.CssValue {
     const {
-      fontSize = DEFAULTS.style(theme).fontSize,
+      fontSize = DEFAULTS.theme(theme).fontSize,
       fontFamily = DEFAULTS.systemFont.sans.family,
       fontWeight = 'normal',
       letterSpacing,

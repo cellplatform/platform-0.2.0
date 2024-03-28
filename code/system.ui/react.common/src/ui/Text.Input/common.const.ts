@@ -30,13 +30,14 @@ const toStyles = (theme: t.CommonTheme): t.TextInputStyle => {
 const style = {
   light: toStyles('Light'),
   dark: toStyles('Dark'),
-  fromTheme: (theme: t.CommonTheme = 'Light') => (theme === 'Light' ? style.light : style.dark),
+  placeholder: { italic: false, opacity: 0.3 },
 } as const;
 
 export const DEFAULTS = {
   focusActions,
   systemFont,
-  style: (theme: t.CommonTheme = 'Light') => (theme === 'Light' ? style.light : style.dark),
+  style,
+  theme: (theme: t.CommonTheme = 'Light') => (theme === 'Light' ? style.light : style.dark),
   props: {
     isEnabled: true,
     isReadOnly: false,
@@ -47,7 +48,6 @@ export const DEFAULTS = {
     autoSize: false,
     spellCheck: false,
     focusOnLoad: false,
-    placeholderStyle: { italic: true, opacity: 0.3 },
     disabledOpacity: 0.2,
   },
 } as const;

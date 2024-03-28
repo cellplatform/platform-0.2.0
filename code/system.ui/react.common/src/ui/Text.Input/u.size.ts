@@ -2,7 +2,7 @@ import { DEFAULTS, Measure, type t } from './common';
 import { CssUtil } from './u.css';
 
 export function measureInput(props: t.TextInputProps) {
-  const { value, valueStyle = DEFAULTS.style(props.theme) } = props;
+  const { value, valueStyle = DEFAULTS.theme(props.theme) } = props;
   const style = CssUtil.toText(valueStyle);
   return Measure.size({ content: value, ...style });
 }

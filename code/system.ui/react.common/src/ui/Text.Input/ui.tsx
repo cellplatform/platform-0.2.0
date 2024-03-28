@@ -17,7 +17,7 @@ export const View: React.FC<Props> = (props) => {
     isReadOnly = DEFAULTS.props.isReadOnly,
     isEnabled = DEFAULTS.props.isEnabled,
     disabledOpacity = DEFAULTS.props.disabledOpacity,
-    valueStyle = DEFAULTS.style(theme),
+    valueStyle = DEFAULTS.theme(theme),
     placeholderStyle,
   } = props;
 
