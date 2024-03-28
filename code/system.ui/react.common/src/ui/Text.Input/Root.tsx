@@ -19,7 +19,7 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
     const { focusOnReady, selectOnReady } = props;
     const ref = getOrCreateHandle();
     if (focusOnReady) Time.delay(0, () => ref.focus(selectOnReady));
-    props.onReady?.(ref);
+    props.onReady?.({ ref });
   }, []);
 
   return <View {...props} inputRef={inputRef} />;

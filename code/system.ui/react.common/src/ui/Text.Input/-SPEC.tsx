@@ -74,9 +74,9 @@ export default Dev.describe('TextInput', (e) => {
         const props: t.TextInputProps = {
           ...e.state.props,
           onChanged: (e) => (local.value = e.to),
-          onReady(ref) {
-            console.log('⚡️ onReady:', ref);
-            state.change((d) => (d.ref = ref));
+          onReady(e) {
+            console.log('⚡️ onReady:', e);
+            state.change((d) => (d.ref = e.ref));
           },
           onEnter(e) {
             console.info('⚡️ onEnter', e);
