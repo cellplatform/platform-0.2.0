@@ -1,6 +1,6 @@
 import { DEFAULTS, HistoryGrid } from '.';
 import { Dev, Doc, Pkg, type t } from '../../test.ui';
-import { sampleCrdt } from '../ui.Info/-SPEC-crdt';
+import { sampleCrdt } from '../ui.Info/-SPEC.crdt';
 
 type P = t.HistoryGridProps;
 type T = { props: P };
