@@ -11,6 +11,12 @@ export type TextInputRef = {
   blur(): void;
   cursorToStart(): void;
   cursorToEnd(): void;
+  selectAll(): void;
+  selectRange(
+    start: number | null,
+    end: number | null,
+    direction?: 'none' | 'forward' | 'backward',
+  ): void;
 };
 
 export type TextInputLabelKind = 'ReadOnly' | 'Placeholder';

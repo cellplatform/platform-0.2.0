@@ -20,6 +20,10 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       ref.current?.select();
     },
 
+    selectRange(start, end, direction) {
+      ref.current?.setSelectionRange(start, end, direction);
+    },
+
     cursorToStart() {
       const el = ref.current as any;
       if (el) {
