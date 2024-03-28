@@ -59,7 +59,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         theme={theme}
         placeholder={'string (crdt)'}
         onReady={(e) => console.info('⚡️ onReady', e)}
-        onChanged={(e) => setValue(e.to)}
+        onChange={(e) => setValue(e.to)}
       />
     </div>
   );
