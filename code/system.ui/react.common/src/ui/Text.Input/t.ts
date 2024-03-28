@@ -30,7 +30,10 @@ export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHand
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
 
 export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
-export type TextInputReadyHandlerArgs = { ref: TextInputRef };
+export type TextInputReadyHandlerArgs = {
+  ref: TextInputRef;
+  input: HTMLInputElement;
+};
 
 /**
  * Component
