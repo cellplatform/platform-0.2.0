@@ -126,8 +126,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const { focusAction } = props;
     if (focusAction === 'Select') ref.selectAll();
-    if (focusAction === 'Cursor:Start') ref.cursorToStart();
-    if (focusAction === 'Cursor:End') ref.cursorToEnd();
+    if (focusAction === 'Cursor:Start') ref.caretToStart();
+    if (focusAction === 'Cursor:End') ref.caretToEnd();
     props.onFocus?.(e);
   };
 

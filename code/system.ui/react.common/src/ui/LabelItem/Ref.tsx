@@ -6,7 +6,7 @@ export function Ref(ref: RefObject<t.TextInputRef>): t.LabelItemRef {
     focus: () => ref.current?.focus(),
     blur: () => ref.current?.blur(),
     selectAll: () => ref.current?.selectAll(),
-    cursorToStart: () => ref.current?.cursorToStart(),
-    cursorToEnd: () => ref.current?.cursorToEnd(),
+    cursorToStart: () => ref.current?.caretToStart(),
+    cursorToEnd: () => ref.current?.caretToEnd(),
   };
 }

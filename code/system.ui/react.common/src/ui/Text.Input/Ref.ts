@@ -24,7 +24,7 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       ref.current?.setSelectionRange(start, end, direction);
     },
 
-    cursorToStart() {
+    caretToStart() {
       const el = ref.current as any;
       if (el) {
         el.focus();
@@ -42,7 +42,7 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       }
     },
 
-    cursorToEnd() {
+    caretToEnd() {
       const el = ref.current as any;
       if (el) {
         el.focus();

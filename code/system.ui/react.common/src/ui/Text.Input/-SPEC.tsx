@@ -162,8 +162,8 @@ export default Dev.describe('TextInput', (e) => {
       dev.hr(-1, 5);
       action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));
       dev.hr(-1, 5);
-      action('cursorTo → Start', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
-      action('cursorTo → End', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
+      action('cursorTo → Start', (ref) => focusThen(0, ref, () => ref.caretToStart()));
+      action('cursorTo → End', (ref) => focusThen(0, ref, () => ref.caretToEnd()));
     });
 
     dev.hr(5, 20);

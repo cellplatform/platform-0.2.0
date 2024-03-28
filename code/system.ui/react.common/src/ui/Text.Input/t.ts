@@ -9,8 +9,8 @@ type Pixels = number;
 export type TextInputRef = {
   focus(select?: boolean): void;
   blur(): void;
-  cursorToStart(): void;
-  cursorToEnd(): void;
+  caretToStart(): void;
+  caretToEnd(): void;
   selectAll(): void;
   selectRange(
     start: number | null,
