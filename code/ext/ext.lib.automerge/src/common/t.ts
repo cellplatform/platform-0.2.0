@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export type { Observable } from 'rxjs';
+export type { Observable, Subject } from 'rxjs';
 export type * from './t.Automerge';
 
 /**

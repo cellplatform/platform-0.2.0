@@ -28,6 +28,8 @@ export type {
   PropListItem,
   PropListProps,
   RenderCountProps,
+  TextInputChangeEvent,
+  TextInputRef,
 } from 'sys.ui.react.common/src/types';
 
 /**
