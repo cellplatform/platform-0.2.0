@@ -54,7 +54,7 @@ export const View: React.FC<t.CommandBarProps> = (props) => {
       selectOnReady={focusOnReady}
       onFocusChange={props.onFocusChange}
       onReady={props.onReady}
-      onChanged={props.onChange}
+      onChange={props.onChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
     />

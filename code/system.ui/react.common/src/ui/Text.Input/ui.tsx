@@ -142,7 +142,7 @@ export const View: React.FC<Props> = (props) => {
       onBlur={(e) => handleFocusChange(e, false)}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
-      onChanged={(e) => props.onChanged?.(e)}
+      onChange={(e) => props.onChange?.(e)}
       onEnter={props.onEnter}
       onEscape={props.onEscape}
       onTab={props.onTab}

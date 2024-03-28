@@ -156,7 +156,7 @@ export type TextInputKeyEvent = React.KeyboardEvent<HTMLInputElement> & {
 export type TextInputKeyEventHandler = (e: TextInputKeyEvent) => void;
 
 export type TextInputEventHandlers = {
-  onChanged?: TextInputChangeEventHandler;
+  onChange?: TextInputChangeEventHandler;
   onKeyDown?: TextInputKeyEventHandler;
   onKeyUp?: TextInputKeyEventHandler;
   onEnter?: TextInputKeyEventHandler;

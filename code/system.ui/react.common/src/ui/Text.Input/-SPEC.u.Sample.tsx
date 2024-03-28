@@ -67,7 +67,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
       value={value}
       hint={debug.isHintEnabled ? hint : undefined}
       placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
-      onChanged={async (e) => {
+      onChange={async (e) => {
         if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
         if (debug.isUpdateEnabled) {
           setValue(e.to);
@@ -76,7 +76,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
           setHint('');
         }
         console.info('⚡️ onChanged', e);
-        dev.props.onChanged?.(e);
+        dev.props.onChange?.(e);
       }}
     />
   );

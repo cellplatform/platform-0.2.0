@@ -66,7 +66,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
    * [Handlers]
    */
   const handleChange = (e: React.ChangeEvent) => {
-    const { onChanged, maxLength } = props;
+    const { onChange, maxLength } = props;
 
     // Derive values.
     const from = value;
@@ -78,7 +78,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
       const selection = Wrangle.selection(inputRef.current);
-      onChanged?.({
+      onChange?.({
         from,
         to,
         isMax,
