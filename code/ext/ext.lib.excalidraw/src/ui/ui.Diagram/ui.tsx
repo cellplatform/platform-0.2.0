@@ -20,7 +20,19 @@ export const View: React.FC<t.DiagramProps> = (props) => {
 
   const elSpinner = loading && <Spinner.Bar theme={theme} />;
   const elExcalidraw = Components?.Excalidraw && (
-    <Components.Excalidraw theme={Wrangle.lowercaseTheme(theme)} />
+    <Components.Excalidraw
+      theme={Wrangle.lowercaseTheme(theme)}
+      onChange={(elements, appState, files) => {
+        /**
+         * TODO 🐷
+         */
+        console.group('🌳 onChange');
+        console.log('elements', elements);
+        console.log('appState', appState);
+        console.log('files', files);
+        console.groupEnd();
+      }}
+    />
   );
 
   return (
