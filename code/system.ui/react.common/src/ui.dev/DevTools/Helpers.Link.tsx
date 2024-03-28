@@ -7,15 +7,15 @@ type O = Record<string, unknown>;
  */
 export const Link = {
   button<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
-    const elIconLeft = <DevIcons.Book size={17} offset={[0, 3]} />;
+    const elIconLeft = <DevIcons.Link size={18} offset={[0, 2]} />;
     const elIconRight = <DevIcons.NewTab size={16} />;
+    const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
     dev.button((btn) => {
       btn
         .label(label)
         .icon((e) => elIconLeft)
         .right((e) => elIconRight)
         .onClick((e) => {
-          const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
           const open = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
           if (targetIsUrl) open(target);
           else {
