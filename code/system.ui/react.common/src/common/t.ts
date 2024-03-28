@@ -23,6 +23,7 @@ export type {
   Immutable,
   ImmutableNext,
   ImmutableRef,
+  Index,
   JsonMapU,
   JsonU,
   Lifecycle,

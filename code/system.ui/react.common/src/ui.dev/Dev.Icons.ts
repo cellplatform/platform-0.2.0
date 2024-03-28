@@ -27,7 +27,6 @@ import { VscBook, VscBookmark, VscSymbolVariable } from 'react-icons/vsc';
 import { Icon } from '../ui/Icon';
 
 export { Icon };
-
 const icon = Icon.renderer;
 
 /**
