@@ -1,6 +1,6 @@
-import { Dev, Pkg, type t, TestDb, WebStore, DevReload } from '../../test.ui';
 import { RepoListVirtual } from '.';
-import { SpecInfo } from '../ui.RepoList/-SPEC.ui.Info';
+import { Dev, DevReload, Pkg, TestDb, WebStore, type t } from '../../test.ui';
+import { Info } from '../ui.Info';
 
 type T = {
   props: t.RepoListVirtualProps;
@@ -50,8 +50,19 @@ export default Dev.describe(name, (e) => {
 
     dev.TODO();
 
-    dev.row((e) => <SpecInfo model={model} name={'<RepoList.Virtual>'} />);
+    dev.row((e) => {
+      const name = '<RepoList.Virtual>';
+      const { store, index } = model;
+      return (
+        <Info
+          fields={['Component', 'Repo']}
+          data={{ repo: { store, index }, component: { name } }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
+
     dev.row((e) => {
       return (
         <RepoListVirtual.Config

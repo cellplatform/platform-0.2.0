@@ -1,6 +1,6 @@
 import { RepoList } from '.';
 import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
-import { SpecInfo } from './-SPEC-ui.Info';
+import { Info } from '../ui.Info';
 
 type P = t.RepoListProps;
 type T = {
@@ -88,10 +88,7 @@ export default Dev.describe(name, async (e) => {
             {...props}
             model={model}
             renderCount={renderCount}
-            onReady={(e) => {
-              console.info('⚡️ onReady', e);
-              // e.ref.select('First');
-            }}
+            onReady={(e) => console.info('⚡️ onReady', e)}
           />
         );
       });
@@ -100,7 +97,18 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
+
+    dev.row((e) => {
+      const name = '<RepoList>';
+      const { store, index } = model;
+      return (
+        <Info
+          fields={['Component', 'Repo']}
+          data={{ repo: { store, index }, component: { name } }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
 
     dev.section((dev) => {
