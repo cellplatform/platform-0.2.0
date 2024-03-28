@@ -6,7 +6,7 @@ import { Is, rx, type t } from './common';
  */
 export function useDoc<T = unknown>(
   store?: t.Store,
-  ref?: t.UriString | t.DocRef,
+  ref?: t.UriString | t.DocRef<T>,
   options: { timeout?: t.Msecs } = {},
 ) {
   const { timeout } = options;
