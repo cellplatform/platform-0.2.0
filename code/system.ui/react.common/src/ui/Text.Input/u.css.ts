@@ -5,7 +5,7 @@ export const CssUtil = {
    * Convert TextInput props to placeholder style.
    */
   toPlaceholder(props: t.TextInputProps): t.CssValue {
-    const { theme, placeholderStyle } = props;
+    const { theme, placeholderStyle = DEFAULTS.props.placeholderStyle } = props;
     const valueStyle = props.valueStyle ?? DEFAULTS.style(theme);
     return CssUtil.toTextInput({
       ...props,

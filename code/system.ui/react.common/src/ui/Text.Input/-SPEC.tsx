@@ -1,5 +1,5 @@
 import { Dev, type t } from '../../test.ui';
-import { DevSample } from './-SPEC-Sample';
+import { DevSample } from './-SPEC.u.Sample';
 import { DEFAULTS, KeyboardMonitor, Time } from './common';
 
 type P = t.TextInputProps;
@@ -42,14 +42,17 @@ export default Dev.describe('TextInput', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
-      d.debug = local;
-      d.props = {
-        ...DEFAULTS.props,
-        theme: local.theme,
-        value: local.value,
-        placeholder: 'my placeholder',
-        focusOnReady: true,
-      };
+      d.props.value = local.value;
+      d.props.theme = local.theme;
+      d.props.placeholder = 'my placeholder';
+      d.props.focusOnReady = true;
+
+      d.debug.render = local.render;
+      d.debug.isHintEnabled = local.isHintEnabled;
+      d.debug.isNumericMask = local.isNumericMask;
+      d.debug.isUpdateEnabled = local.isUpdateEnabled;
+      d.debug.isUpdateAsync = local.isUpdateAsync;
+      d.debug.elementPlaceholder = local.elementPlaceholder;
     });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {

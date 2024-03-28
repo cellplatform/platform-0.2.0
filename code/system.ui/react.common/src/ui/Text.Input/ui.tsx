@@ -11,13 +11,14 @@ type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
  * Component
  */
 export const View: React.FC<Props> = (props) => {
-  const { inputRef, placeholder, maxLength, theme, placeholderStyle = {} } = props;
+  const { inputRef, placeholder, maxLength, theme } = props;
   const {
     isPassword = DEFAULTS.props.isPassword,
     isReadOnly = DEFAULTS.props.isReadOnly,
     isEnabled = DEFAULTS.props.isEnabled,
     disabledOpacity = DEFAULTS.props.disabledOpacity,
     valueStyle = DEFAULTS.style(theme),
+    placeholderStyle,
   } = props;
 
   const value = Util.value.format(props.value, maxLength);
@@ -76,7 +77,7 @@ export const View: React.FC<Props> = (props) => {
       userSelect: 'none',
       pointerEvents: 'none',
 
-      transform: placeholderStyle.offset
+      transform: placeholderStyle?.offset
         ? `translate(${placeholderStyle.offset[0]}px, ${placeholderStyle.offset[1]}px)`
         : undefined,
 
