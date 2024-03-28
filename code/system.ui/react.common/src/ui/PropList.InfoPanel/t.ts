@@ -1,7 +1,8 @@
-export type InfoDataVisible = {
+export type InfoDataVisible<InfoField extends string = string> = {
   value?: boolean;
   enabled?: boolean;
   label?: string;
+  filter?: (e: { visible: boolean; fields: InfoField[] }) => InfoField[];
   onToggle?: InfoDataVisibleToggle;
 };
 

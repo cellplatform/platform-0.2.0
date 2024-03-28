@@ -17,7 +17,7 @@ export type InfoField =
   | 'History.List.NavPaging';
 
 export type InfoData = {
-  visible?: t.InfoDataVisible;
+  visible?: t.InfoDataVisible<InfoField>;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   repo?: InfoDataRepo;
@@ -58,6 +58,7 @@ export type InfoDataHistory = {
  * <Component>
  */
 export type InfoProps = {
+  stateful?: boolean;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];

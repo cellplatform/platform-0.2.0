@@ -1,16 +1,14 @@
 import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
-import { useData } from './use.Data';
 import { useRedrawOnChange } from './use.RedrawOnChange';
+import { useStateful } from './use.Stateful';
 
 /**
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
-  const data = useData(props.data);
-
+  const { theme, stateful = DEFAULTS.stateful } = props;
+  const { fields, data } = useStateful(stateful, props.fields, props.data);
   useRedrawOnChange(data);
 
   const items = PropList.builder<t.InfoField>()

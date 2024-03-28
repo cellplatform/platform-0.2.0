@@ -24,10 +24,11 @@ const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
   const db = await sampleCrdt();
 
-  type LocalStore = T['debug'] & Pick<P, 'fields' | 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'fields' | 'theme' | 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
+    stateful: DEFAULTS.stateful,
     fields: DEFAULTS.fields.default,
     historyDesc: DEFAULTS.history.list.sort === 'desc',
     useUris: true,
@@ -41,6 +42,8 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
+      d.props.stateful = local.stateful;
+
       d.debug.historyDesc = local.historyDesc;
       d.debug.useUris = local.useUris;
     });
@@ -95,7 +98,10 @@ export default Dev.describe(name, async (e) => {
           },
           visible: {
             value: visible,
-            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
+            onToggle(e) {
+              console.info('⚡️ visible.onToggle', e);
+              // state.change((d) => (d.debug.visible = e.next));
+            },
           },
         };
 
@@ -156,6 +162,18 @@ export default Dev.describe(name, async (e) => {
       dev.button('prepend: Visible', (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.stateful;
+        btn
+          .label((e) => `stateful`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
       });
     });
 
