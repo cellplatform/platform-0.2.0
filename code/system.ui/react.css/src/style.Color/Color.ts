@@ -110,6 +110,12 @@ export function debug(debug?: boolean) {
 /**
  * Base text/fore color derived from common theme name.
  */
-export function fromTheme(theme: t.CommonTheme = 'Light') {
-  return theme === 'Dark' ? WHITE : DARK;
+export function fromTheme(
+  theme: t.CommonTheme = 'Light',
+  defaultLight?: string | null,
+  defaultDark?: string | null,
+) {
+  const light = defaultLight ?? DARK;
+  const dark = defaultDark ?? WHITE;
+  return theme === 'Dark' ? dark : light;
 }
