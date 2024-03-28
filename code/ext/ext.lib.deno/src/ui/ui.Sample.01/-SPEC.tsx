@@ -112,12 +112,11 @@ export default Dev.describe(name, (e) => {
 
     link
       .title('References')
-      .ns('docs: deno → subhosting', 'https://docs.deno.com/subhosting')
+      .button('docs: deno → subhosting', 'https://docs.deno.com/subhosting')
       .hr()
-      .ns('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
-      .ns('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter');
-
-    dev.hr(5, 20);
+      .button('tutorial (video)', 'https://github.com/denoland/subhosting_ide_starter')
+      .button('tutorial (sample repo)', 'https://github.com/denoland/subhosting_ide_starter')
+      .hr(5, 20);
 
     dev.section('Actions', (dev) => {
       dev.button('set sample: "code"', (e) => {
