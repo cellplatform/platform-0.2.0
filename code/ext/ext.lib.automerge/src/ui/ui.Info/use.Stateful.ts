@@ -19,7 +19,19 @@ export function useStateful(
   /**
    * Rebuild data object with stateful properties.
    */
-  if (isStateful) {
+  if (isStateful && data.document) {
+    const onIconClick = data.document.onIconClick;
+    const document: t.InfoDataDocument = {
+      ...data.document,
+      onIconClick(e) {
+        setFields(() => PropList.Wrangle.toggleField(fields, 'Doc.Object'));
+        onIconClick?.(e);
+      },
+    };
+    data = { ...data, document };
+  }
+
+  if (isStateful && data.visible) {
     const onToggle = data.visible?.onToggle;
     const visible: t.InfoData['visible'] = {
       ...data.visible,
@@ -31,9 +43,11 @@ export function useStateful(
         onToggle?.(e);
       },
     };
-
     data = { ...data, visible };
   }
 
+  /**
+   * API
+   */
   return { fields, data } as const;
 }

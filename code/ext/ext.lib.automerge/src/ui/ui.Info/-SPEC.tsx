@@ -62,13 +62,6 @@ export default Dev.describe(name, async (e) => {
         const doc = fields.includes('Doc') ? await db.docAtIndex(0) : undefined;
         const useUris = debug.useUris;
 
-        const toggleVisibile = (field: t.InfoField) => {
-          state.change((d) => {
-            const next = PropList.Wrangle.toggleField(d.props.fields, field);
-            local.fields = d.props.fields = next;
-          });
-        };
-
         const { store, index } = db;
         const visible = debug.visible ?? true;
         const data: t.InfoData = {
@@ -79,7 +72,6 @@ export default Dev.describe(name, async (e) => {
             object: { name: 'foobar', expand: { level: 2 } },
             onIconClick(e) {
               console.info('⚡️ document.onIconClick', e);
-              toggleVisibile('Doc.Object');
             },
           },
           history: {
