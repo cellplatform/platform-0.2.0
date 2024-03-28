@@ -2,6 +2,7 @@ import { COLORS, Spinner, t, ValueHandler } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
+type IconInput = JSX.Element | false;
 type RightInput = string | false | JSX.Element;
 type SpinnerInput = boolean;
 
@@ -19,6 +20,7 @@ export function button<S extends O = O>(
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
   const values = {
     enabled: ValueHandler<boolean, S>(events),
+    icon: ValueHandler<IconInput, S>(events),
     label: ValueHandler<string, S>(events),
     right: ValueHandler<RightInput, S>(events),
     spinner: ValueHandler<SpinnerInput, S>(events),
@@ -27,9 +29,14 @@ export function button<S extends O = O>(
   const wrangle = {
     rightElement() {
       if (values.spinner.current) return <Spinner.Bar color={COLORS.BLUE} width={35} />;
-      const right = values.right.current;
-      if (right === false) return undefined;
-      return typeof right === 'string' ? <div>{right}</div> : right;
+      const value = values.right.current;
+      if (value === false) return undefined;
+      return typeof value === 'string' ? <div>{value}</div> : value;
+    },
+    iconElement() {
+      const value = values.icon.current;
+      if (value === false) return undefined;
+      return typeof value === 'string' ? <div>{value}</div> : value;
     },
   };
 
@@ -37,6 +44,10 @@ export function button<S extends O = O>(
     ctx,
     enabled(value) {
       values.enabled.handler(value);
+      return args;
+    },
+    icon(value) {
+      values.icon.handler(value);
       return args;
     },
     label(value) {
@@ -75,6 +86,7 @@ export function button<S extends O = O>(
     return (
       <Button
         label={values.label.current}
+        iconElement={wrangle.iconElement()}
         rightElement={wrangle.rightElement()}
         enabled={isEnabled}
         onClick={hasHandlers ? onClick : undefined}
