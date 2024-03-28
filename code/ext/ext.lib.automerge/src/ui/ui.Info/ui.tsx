@@ -1,13 +1,15 @@
 import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
+import { useData } from './use.Data';
 import { useRedrawOnChange } from './use.RedrawOnChange';
 
 /**
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { data = {}, theme } = props;
+  const { theme } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+  const data = useData(props.data);
 
   useRedrawOnChange(data);
 

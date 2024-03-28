@@ -2,7 +2,7 @@ import { useHistory } from '../use';
 import { Value, css, type t } from './common';
 
 export type HistoryProps = {
-  doc?: t.DocRef<unknown>;
+  doc?: t.DocRef;
   showGenesis?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;

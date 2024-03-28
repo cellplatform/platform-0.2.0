@@ -1,14 +1,16 @@
 import { Doc } from '../../crdt';
 import { HistoryGrid } from '../ui.History.Grid';
 import { NavPaging } from '../ui.Nav.Paging';
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, Is, type t } from './common';
 import { History } from './ui.History';
 
 type D = t.InfoDataHistory;
 
 export function history(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
-  if (!data) return;
   const res: t.PropListItem[] = [];
+  if (!data) return res;
+  if (!Is.docRef(data.doc)) return res;
+
   const doc = data.doc;
 
   const showGenesis = fields.includes('History.Genesis');
@@ -22,8 +24,7 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
    * History
    */
   if (fields.includes('History.List')) {
-    const style: React.CSSProperties = { flex: 1, marginLeft: 0 };
-    const page = wrangle.page(data);
+    const page = wrangle.page(data.doc, data.list);
 
     /**
      * History List (Grid)
@@ -50,10 +51,9 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
  * Helpers
  */
 const wrangle = {
-  page(data: D) {
-    const doc = data.doc;
+  page(doc: t.DocRef, list: t.InfoDataHistory['list'] = {}) {
     const defaults = DEFAULTS.history.list;
-    const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = data.list ?? {};
+    const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = list;
     return Doc.history(doc).page(page, limit, sort);
   },
 } as const;

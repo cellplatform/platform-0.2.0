@@ -34,7 +34,7 @@ export type InfoDataRepo = {
 
 export type InfoDataDocument = {
   label?: string;
-  doc?: t.DocRef<unknown>;
+  doc?: t.DocRef | t.UriString;
   uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   head?: { label?: string; hashLength?: number };
@@ -43,7 +43,7 @@ export type InfoDataDocument = {
 
 export type InfoDataHistory = {
   label?: string;
-  doc?: t.DocRef<unknown>;
+  doc?: t.DocRef | t.UriString;
   list?: {
     page?: t.Index;
     limit?: t.Index;

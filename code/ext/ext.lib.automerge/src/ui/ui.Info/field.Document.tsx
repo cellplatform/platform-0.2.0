@@ -1,11 +1,13 @@
 import { Doc } from '../../crdt';
-import { Button, COLORS, Hash, Icons, ObjectView, css, type t } from './common';
+import { Button, COLORS, Hash, Icons, Is, ObjectView, css, type t } from './common';
 
 type D = t.InfoDataDocument;
 
 export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
-  if (!data) return;
   const res: t.PropListItem[] = [];
+  if (!data) return res;
+  if (!Is.docRef(data.doc)) return res;
+
   const label = data.label ?? 'Document';
   const hasLabel = !!label.trim();
 
@@ -25,17 +27,21 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
       parts.push(<>{text}</>);
     }
 
-    // NB: "blue" when showing current-state <Object>.
-    const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
-    const elIcon = <Icons.Object size={14} color={color} />;
+    if (doc) {
+      // NB: "blue" when showing current-state <Object>.
+      const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
+      const elIcon = <Icons.Object size={14} color={color} />;
 
-    if (!data.onIconClick) parts.push(elIcon);
-    else {
-      parts.push(
-        <Button theme={theme} onClick={() => data.onIconClick?.({})}>
-          {elIcon}
-        </Button>,
-      );
+      if (!data.onIconClick) parts.push(elIcon);
+      else {
+        parts.push(
+          <Button theme={theme} onClick={() => data.onIconClick?.({})}>
+            {elIcon}
+          </Button>,
+        );
+      }
+    } else {
+      parts.push(<>{'-'}</>);
     }
 
     const styles = {
@@ -89,12 +95,14 @@ const wrangle = {
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
+    const current = Is.docRef(data.doc) ? data.doc.current : undefined;
+
     return (
       <div {...styles.base}>
         <div {...styles.inner}>
           <ObjectView
             name={data?.object?.name}
-            data={data?.doc?.current}
+            data={current}
             fontSize={11}
             theme={theme}
             style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}

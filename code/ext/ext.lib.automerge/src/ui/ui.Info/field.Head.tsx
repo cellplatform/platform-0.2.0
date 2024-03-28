@@ -1,10 +1,10 @@
 import { Doc } from '../../crdt';
-import { DEFAULTS, MonoHash, type t } from './common';
+import { DEFAULTS, Is, MonoHash, type t } from './common';
 
 type D = t.InfoDataDocument;
 
 export function head(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
-  if (!data) return;
+  if (!data || !Is.docRef(data.doc)) return;
 
   const res: t.PropListItem[] = [];
   const doc = data.doc;

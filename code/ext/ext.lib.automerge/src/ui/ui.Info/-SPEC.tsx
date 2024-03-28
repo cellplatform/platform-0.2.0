@@ -1,6 +1,6 @@
 import { Info } from '.';
 import { Dev, DevReload, Pkg, PropList, TestDb, Value, type t } from '../../test.ui';
-import { sampleCrdt } from './-SPEC-crdt';
+import { sampleCrdt } from './-SPEC.crdt';
 
 type P = t.InfoProps;
 type T = {
@@ -10,6 +10,7 @@ type T = {
     visible?: boolean;
     historyDesc?: boolean;
     historyDetail?: t.HashString;
+    useUris?: boolean;
   };
 };
 const initial: T = { props: {}, debug: {} };
@@ -29,6 +30,7 @@ export default Dev.describe(name, async (e) => {
     theme: 'Dark',
     fields: DEFAULTS.fields.default,
     historyDesc: DEFAULTS.history.list.sort === 'desc',
+    useUris: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,6 +42,7 @@ export default Dev.describe(name, async (e) => {
       d.props.fields = local.fields;
       d.props.margin = 10;
       d.debug.historyDesc = local.historyDesc;
+      d.debug.useUris = local.useUris;
     });
 
     ctx.debug.width(330);
@@ -54,6 +57,7 @@ export default Dev.describe(name, async (e) => {
 
         const fields = props.fields ?? [];
         const doc = fields.includes('Doc') ? await db.docAtIndex(0) : undefined;
+        const useUris = debug.useUris;
 
         const toggleVisibile = (field: t.InfoField) => {
           state.change((d) => {
@@ -68,7 +72,7 @@ export default Dev.describe(name, async (e) => {
           repo: { store, index },
           document: {
             // label: 'Foo',
-            doc,
+            doc: useUris ? doc?.uri : doc,
             object: { name: 'foobar', expand: { level: 2 } },
             onIconClick(e) {
               console.info('⚡️ document.onIconClick', e);
@@ -77,7 +81,7 @@ export default Dev.describe(name, async (e) => {
           },
           history: {
             // label: 'Foo',
-            doc,
+            doc: useUris ? doc?.uri : doc,
             list: {
               sort: debug.historyDesc ? 'desc' : 'asc',
               showDetailFor: debug.historyDetail,
@@ -179,6 +183,14 @@ export default Dev.describe(name, async (e) => {
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.useUris;
+        btn
+          .label((e) => `use doc uris`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.useUris = Dev.toggle(d.debug, 'useUris'))));
+      });
 
       dev.hr(-1, 5);
       dev.button('create doc', async (e) => {
