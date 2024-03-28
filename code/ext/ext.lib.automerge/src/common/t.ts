@@ -26,6 +26,7 @@ export type {
   TypedObjectPath,
   UnixTimestamp,
   UntilObservable,
+  UriString,
 } from 'sys.types/src/types';
 
 export type { PatchState } from 'sys.data.json/src/types';
