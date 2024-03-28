@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Dev, DevReload, Pkg, PropList, TestDb, Value, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, TestDb, Value, type t } from '../../test.ui';
 import { sampleCrdt } from './-SPEC.crdt';
 
 type P = t.InfoProps;
@@ -7,7 +7,6 @@ type T = {
   props: t.InfoProps;
   debug: {
     reload?: boolean;
-    visible?: boolean;
     historyDesc?: boolean;
     historyDetail?: t.HashString;
     useUris?: boolean;
@@ -63,7 +62,6 @@ export default Dev.describe(name, async (e) => {
         const useUris = debug.useUris;
 
         const { store, index } = db;
-        const visible = debug.visible ?? true;
         const data: t.InfoData = {
           repo: { store, index },
           document: {
@@ -89,22 +87,13 @@ export default Dev.describe(name, async (e) => {
             },
           },
           visible: {
-            value: visible,
             onToggle(e) {
               console.info('⚡️ visible.onToggle', e);
-              // state.change((d) => (d.debug.visible = e.next));
             },
           },
         };
 
-        return (
-          <Info
-            //
-            {...props}
-            data={data}
-            fields={visible ? props.fields : ['Visible']}
-          />
-        );
+        return <Info {...props} data={data} fields={props.fields} />;
       });
   });
 
