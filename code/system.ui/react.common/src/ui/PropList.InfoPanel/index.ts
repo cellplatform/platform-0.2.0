@@ -1,3 +1,3 @@
-export * from './Info.Common';
-export * from './Info.Common.Fields';
+export * from './Common.Info';
+export * from './Common.Info.Fields';
 export { DEFAULTS } from './common';

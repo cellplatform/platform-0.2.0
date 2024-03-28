@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-export const InfoCommonFields = {
+export const CommonInfoFields = {
   visible(data?: t.InfoDataVisible, theme?: t.CommonTheme) {
     const enabled = data?.enabled ?? true;
     const selected = data?.value ?? false;
