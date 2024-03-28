@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import { useEffect, type RefObject } from 'react';
 import { useFocus } from '../useFocus';
 import { TextInputRef } from './Ref';
 import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
@@ -72,7 +72,10 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     const from = value;
     let to = ((e.target as any).value as string) || '';
     to = Util.value.format(to, maxLength);
-    const isMax = maxLength === undefined ? null : to.length === maxLength;
+
+    const is = {
+      max: maxLength === undefined ? null : to.length === maxLength,
+    };
 
     // Update state and alert listeners.
     if (from !== to) {
@@ -81,7 +84,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
       onChange?.({
         from,
         to,
-        isMax,
+        is,
         modifierKeys,
         selection,
         get diff() {

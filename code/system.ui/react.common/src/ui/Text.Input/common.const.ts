@@ -30,7 +30,10 @@ const toStyles = (theme: t.CommonTheme): t.TextInputStyle => {
 const style = {
   light: toStyles('Light'),
   dark: toStyles('Dark'),
-  placeholder: { italic: false, opacity: 0.3 },
+  placeholder: {
+    italic: false,
+    opacity: { light: 0.2, dark: 0.23 },
+  },
 } as const;
 
 export const DEFAULTS = {

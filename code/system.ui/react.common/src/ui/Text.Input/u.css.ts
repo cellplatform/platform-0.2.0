@@ -5,11 +5,19 @@ export const CssUtil = {
    * Convert TextInput props to placeholder style.
    */
   toPlaceholder(props: t.TextInputProps): t.CssValue {
-    const { theme, placeholderStyle = DEFAULTS.style.placeholder } = props;
-    const valueStyle = props.valueStyle ?? DEFAULTS.theme(theme);
+    const { theme, placeholderStyle } = props;
+    const isDark = theme === 'Dark';
+    const vStyle = props.valueStyle ?? DEFAULTS.theme(theme);
+
+    const pDefaults = DEFAULTS.style.placeholder;
+    const pStyle: t.TextInputStyle = {
+      italic: placeholderStyle?.italic ?? pDefaults.italic,
+      opacity: isDark ? pDefaults.opacity.dark : pDefaults.opacity.light,
+    };
+
     return CssUtil.toTextInput({
       ...props,
-      valueStyle: { ...R.clone(valueStyle), ...placeholderStyle },
+      valueStyle: { ...R.clone(vStyle), ...pStyle },
     });
   },
 
