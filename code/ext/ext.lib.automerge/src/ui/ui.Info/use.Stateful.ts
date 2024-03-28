@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { DEFAULTS, PropList, type t } from './common';
+import { useEffect, useState } from 'react';
+import { DEFAULTS, PropList, R, type t } from './common';
 import { useData } from './use.Data';
 
 /**
@@ -10,11 +10,19 @@ export function useStateful(
   fieldsInput: (t.InfoField | undefined)[] = DEFAULTS.fields.default,
   dataInput?: t.InfoData,
 ) {
-  const rawFields = PropList.Wrangle.fields(fieldsInput);
   let data = useData(dataInput);
+  const rawFields = PropList.Wrangle.fields(fieldsInput);
+  const rawVisible = data.visible?.value ?? true;
 
   const [fields, setFields] = useState(rawFields);
-  const [isVisible, setVisible] = useState(data.visible?.value ?? true);
+  const [isVisible, setVisible] = useState(rawVisible);
+
+  useEffect(() => {
+    if (!isStateful) {
+      if (!R.equals(rawFields, fields)) setFields(rawFields);
+      if (!R.equals(rawVisible, isVisible)) setVisible(rawVisible);
+    }
+  }, [isStateful, rawFields, rawVisible]);
 
   /**
    * Rebuild data object with stateful properties.
