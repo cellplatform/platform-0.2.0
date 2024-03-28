@@ -1,4 +1,4 @@
-export type InfoDataVisible<InfoField extends string = string> = {
+export type InfoDataVisible<InfoField extends string = any> = {
   value?: boolean;
   enabled?: boolean;
   label?: string;
