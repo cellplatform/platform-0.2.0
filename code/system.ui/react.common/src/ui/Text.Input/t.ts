@@ -1,13 +1,14 @@
 import type { MouseEventHandler } from 'react';
 import type { t } from './common';
 
+export type * from './t.Events';
+
 type Id = string;
 type Pixels = number;
 
 export type TextInputRef = {
   focus(select?: boolean): void;
   blur(): void;
-  selectAll(): void;
   cursorToStart(): void;
   cursorToEnd(): void;
 };
@@ -24,7 +25,7 @@ export type TextInputStatus = {
   selection: TextInputSelection;
 };
 
-export type TextInputSelection = { start: number; end: number };
+export type TextInputSelection = { start: t.Index; end: t.Index };
 
 export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
@@ -96,52 +97,9 @@ export type TextInputFocusProps = {
 };
 
 /**
- * EVENTS (API)
- */
-type E = TextInputEvents;
-export type TextInputEventsDisposable = t.Disposable & E & { clone(): E };
-export type TextInputEvents = {
-  toString(): string;
-  instance: { bus: Id; id: Id };
-
-  $: t.Observable<t.TextInputEvent>;
-  dispose$: t.Observable<void>;
-
-  status: {
-    req$: t.Observable<t.TextInputStatusReq>;
-    res$: t.Observable<t.TextInputStatusRes>;
-    get(options?: { timeout?: t.Milliseconds }): Promise<TextInputStatusRes>;
-  };
-
-  text: {
-    changing$: t.Observable<TextInputChanging>;
-    changed$: t.Observable<TextInputChanged>;
-  };
-
-  focus: {
-    $: t.Observable<TextInputFocus>;
-    fire(focus?: boolean): void;
-  };
-
-  select: {
-    $: t.Observable<TextInputSelect>;
-    fire(): void;
-  };
-
-  cursor: {
-    $: t.Observable<TextInputCursor>;
-    fire(action: TextInputCursorAction): void;
-    start(): void;
-    end(): void;
-  };
-
-  mouse: { labelDoubleClicked$: t.Observable<TextInputLabelDoubleClicked> };
-};
-
-/**
  * EVENT (Callback Definitions)
  */
-export type TextInputChangeEventHandler = (e: TextInputChangeEvent) => void;
+export type TextInputChangeEventHandler = (e: t.TextInputChangeEvent) => void;
 
 export type TextInputTabEvent = {
   modifierKeys: t.KeyboardModifierFlags;
@@ -171,126 +129,4 @@ export type TextInputFocusChangeHandler = (e: TextInputFocusChangeHandlerArgs) =
 export type TextInputFocusChangeHandlerArgs = {
   isFocused: boolean;
   event: React.FocusEvent<HTMLInputElement>;
-};
-
-/**
- * EVENT (Definitions)
- */
-export type TextInputEvent =
-  | TextInputStatusReqEvent
-  | TextInputStatusResEvent
-  | TextInputChangingEvent
-  | TextInputChangedEvent
-  | TextInputKeypressEvent
-  | TextInputFocusEvent
-  | TextInputLabelDoubleClickedEvent
-  | TextInputSelectEvent
-  | TextInputCursorEvent;
-
-/**
- * Textbox status
- */
-export type TextInputStatusReqEvent = {
-  type: 'sys.ui.TextInput/Status:req';
-  payload: TextInputStatusReq;
-};
-export type TextInputStatusReq = { instance: Id; tx: Id };
-
-export type TextInputStatusResEvent = {
-  type: 'sys.ui.TextInput/Status:res';
-  payload: TextInputStatusRes;
-};
-export type TextInputStatusRes = {
-  instance: Id;
-  tx: Id;
-  status?: TextInputStatus;
-  error?: string;
-};
-
-/**
- * Change.
- */
-export type TextInputChangingEvent = {
-  type: 'sys.ui.TextInput/Changing';
-  payload: TextInputChanging;
-};
-export type TextInputChanging = TextInputChangeEvent & {
-  instance: Id;
-  isCancelled: boolean;
-  cancel(): void;
-};
-
-export type TextInputChangedEvent = {
-  type: 'sys.ui.TextInput/Changed';
-  payload: TextInputChanged;
-};
-export type TextInputChanged = TextInputChangeEvent;
-
-export type TextInputChangeEvent = {
-  from: string;
-  to: string;
-  isMax: boolean | null;
-  modifierKeys: t.KeyboardModifierFlags;
-  selection: TextInputSelection;
-  diff: t.TextCharDiff[];
-};
-
-/**
- * Keypress
- */
-export type TextInputKeypressEvent = {
-  type: 'sys.ui.TextInput/Keypress';
-  payload: TextInputKeypress;
-};
-export type TextInputKeypress = {
-  instance: Id;
-  pressed: boolean;
-  key: TextInputKeyEvent['key'];
-  event: TextInputKeyEvent;
-};
-
-/**
- * Focus
- */
-export type TextInputFocusEvent = {
-  type: 'sys.ui.TextInput/Focus';
-  payload: TextInputFocus;
-};
-export type TextInputFocus = {
-  instance: Id;
-  focus: boolean;
-};
-
-/**
- * Mouse
- */
-export type TextInputLabelDoubleClickedEvent = {
-  type: 'sys.ui.TextInput/Label/DoubleClicked';
-  payload: TextInputLabelDoubleClicked;
-};
-export type TextInputLabelDoubleClicked = {
-  instance: Id;
-  target: 'ReadOnly' | 'Placeholder';
-  button: 'Left' | 'Right';
-};
-
-/**
- * Selection
- */
-export type TextInputSelectEvent = {
-  type: 'sys.ui.TextInput/Select';
-  payload: TextInputSelect;
-};
-export type TextInputSelect = { instance: Id };
-
-/**
- * Cursor
- */
-export type TextInputCursorEvent = {
-  type: 'sys.ui.TextInput/Cursor';
-  payload: TextInputCursor;
-};
-export type TextInputCursor = {
-  instance: Id;
-  action: TextInputCursorAction;
 };
