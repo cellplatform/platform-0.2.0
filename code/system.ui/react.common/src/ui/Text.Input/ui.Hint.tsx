@@ -14,7 +14,7 @@ export type TextInputHintProps = {
 export const TextInputHint: React.FC<TextInputHintProps> = (props) => {
   const { value, hint, valueStyle } = props;
   const isString = typeof hint === 'string';
-  const fontProps = Util.css.pluckFont(valueStyle);
+  const fontProps = Util.Css.pluckFont(valueStyle);
 
   /**
    * [Render]

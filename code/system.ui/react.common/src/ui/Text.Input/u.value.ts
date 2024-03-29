@@ -1,7 +1,7 @@
 /**
  * Textbox value helpers.
  */
-export const ValueUtil = {
+export const Value = {
   format(value?: string, maxLength?: number) {
     value = value || '';
     if (typeof maxLength === 'number' && value.length > maxLength) {
@@ -9,4 +9,4 @@ export const ValueUtil = {
     }
     return value;
   },
-};
+} as const;

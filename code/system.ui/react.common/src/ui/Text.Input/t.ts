@@ -7,6 +7,8 @@ type Id = string;
 type Pixels = number;
 
 export type TextInputRef = {
+  readonly current: string;
+  readonly selection: TextInputSelection;
   focus(select?: boolean): void;
   blur(): void;
   caretToStart(): void;
@@ -14,7 +16,7 @@ export type TextInputRef = {
   selectAll(): void;
   selectRange(
     start: number | null,
-    end: number | null,
+    end?: number | null,
     direction?: 'none' | 'forward' | 'backward',
   ): void;
 };
@@ -37,20 +39,12 @@ export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHand
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
 
 export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
-export type TextInputReadyHandlerArgs = {
-  ref: TextInputRef;
-  input: HTMLInputElement;
-};
+export type TextInputReadyHandlerArgs = { ref: TextInputRef; input: HTMLInputElement };
 
 /**
- * Component
+ * <Component>
  */
-export type TextInputValue = {
-  value?: string;
-  hint?: string | JSX.Element;
-  maxLength?: number;
-};
-
+export type TextInputValue = { value?: string; hint?: string | JSX.Element; maxLength?: number };
 export type TextInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   TextInputValue & {

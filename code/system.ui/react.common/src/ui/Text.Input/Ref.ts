@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
-import { type t } from './common';
+import type { t } from './common';
+import { Wrangle } from './u';
 
 /**
  * The "ref={ ƒ }" API for manipulating the component
@@ -7,6 +8,20 @@ import { type t } from './common';
  */
 export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
   const api: t.TextInputRef = {
+    /**
+     * Current input value (read-only).
+     * NB: Read only so that the clean immutable change loop can be respected.
+     *     All the other state manipulations afforded by this object are for
+     *     transient textbox state like caret position, selection or focus.
+     */
+    get current() {
+      return ref.current?.value || '';
+    },
+
+    get selection() {
+      return Wrangle.selection(ref.current);
+    },
+
     focus(select) {
       ref.current?.focus();
       if (select) api.selectAll();
@@ -20,7 +35,7 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       ref.current?.select();
     },
 
-    selectRange(start, end, direction) {
+    selectRange(start, end = start, direction) {
       ref.current?.setSelectionRange(start, end, direction);
     },
 

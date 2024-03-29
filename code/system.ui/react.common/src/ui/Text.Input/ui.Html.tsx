@@ -2,7 +2,7 @@ import { useEffect, type RefObject } from 'react';
 import { useFocus } from '../useFocus';
 import { TextInputRef } from './Ref';
 import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
-import { Util } from './u';
+import { Util, Wrangle } from './u';
 
 /**
  * Types
@@ -71,7 +71,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     // Derive values.
     const from = value;
     let to = ((e.target as any).value as string) || '';
-    to = Util.value.format(to, maxLength);
+    to = Util.Value.format(to, maxLength);
 
     const is = {
       max: maxLength === undefined ? null : to.length === maxLength,
@@ -167,7 +167,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     } as t.CssValue;
   }
 
-  styles.base = R.mergeDeepRight(styles.base, Util.css.toTextInput(props) as {});
+  styles.base = R.mergeDeepRight(styles.base, Util.Css.toTextInput(props) as {});
   styles.base = {
     ...styles.base,
     opacity: isEnabled ? 1 : disabledOpacity,
@@ -202,12 +202,4 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
 const cloneModifierKeys = () => {
   return { ...KeyboardMonitor.state.current.modifiers };
-};
-
-const Wrangle = {
-  selection(el?: HTMLInputElement | null) {
-    const start = el?.selectionStart ?? -1;
-    const end = el?.selectionEnd ?? -1;
-    return { start, end };
-  },
 };

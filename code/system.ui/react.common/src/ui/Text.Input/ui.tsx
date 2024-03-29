@@ -21,7 +21,7 @@ export const View: React.FC<Props> = (props) => {
     placeholderStyle,
   } = props;
 
-  const value = Util.value.format(props.value, maxLength);
+  const value = Util.Value.format(props.value, maxLength);
   const hasValue = value.length > 0;
   const [width, setWidth] = useState<string | number>();
 
@@ -30,7 +30,7 @@ export const View: React.FC<Props> = (props) => {
    */
   useEffect(() => {
     const { autoSize } = props;
-    if (autoSize) Time.delay(0, async () => setWidth(await Util.css.toWidth(props))); // NB: Delay is so size measurement returns accurate number.
+    if (autoSize) Time.delay(0, async () => setWidth(await Util.Css.toWidth(props))); // NB: Delay is so size measurement returns accurate number.
     if (!autoSize) setWidth(undefined);
   }, [value, props.autoSize]);
 
@@ -97,7 +97,7 @@ export const View: React.FC<Props> = (props) => {
 
   const elPlaceholder = !hasValue && placeholder && (
     <div
-      {...css(styles.placeholder, Util.css.toPlaceholder(props))}
+      {...css(styles.placeholder, Util.Css.toPlaceholder(props))}
       onDoubleClick={Wrangle.labelDoubleClickHandler(props, 'Placeholder')}
     >
       {placeholder}

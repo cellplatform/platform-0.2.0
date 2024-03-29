@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { Time, type t } from './common';
-
 import { TextInputRef } from './Ref';
+import { Time, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -22,7 +21,8 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
     if (focusOnReady) Time.delay(0, () => ref.focus(selectOnReady));
     if (!readyRef.current) {
       readyRef.current = true;
-      props.onReady?.({ ref, input: inputRef.current! });
+      const input = inputRef.current!;
+      props.onReady?.({ ref, input });
     }
   }, []);
 
