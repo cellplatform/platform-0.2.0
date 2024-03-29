@@ -50,8 +50,10 @@ export type InfoDataHistory = {
     sort?: t.SortOrder;
     showDetailFor?: t.HashString | t.HashString[];
   };
-  item?: { hashLength?: number };
-  onItemClick?: InfoDataHistoryItemHandler;
+  item?: {
+    hashLength?: number;
+    onClick?: InfoDataHistoryItemHandler;
+  };
 };
 
 /**

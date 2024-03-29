@@ -79,11 +79,13 @@ export default Dev.describe(name, async (e) => {
               sort: debug.historyDesc ? 'desc' : 'asc',
               showDetailFor: debug.historyDetail,
             },
-            onItemClick(e) {
-              console.info('⚡️ history.onItemClick', e);
-              state.change((d) => {
-                d.debug.historyDetail = d.debug.historyDetail === e.hash ? undefined : e.hash;
-              });
+            item: {
+              onClick(e) {
+                console.info('⚡️ history.item.onClick', e);
+                state.change((d) => {
+                  d.debug.historyDetail = d.debug.historyDetail === e.hash ? undefined : e.hash;
+                });
+              },
             },
           },
           visible: {
