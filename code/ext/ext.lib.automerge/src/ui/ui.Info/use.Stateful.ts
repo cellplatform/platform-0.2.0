@@ -3,43 +3,44 @@ import { DEFAULTS, PropList, R, type t } from './common';
 import { useData } from './use.Data';
 
 /**
- * Handles state.
+ * Hook that when the property {stateful:true} manages
+ * state internally to the component.
  */
-export function useStateful(
-  isStateful: boolean = true,
-  fieldsInput: (t.InfoField | undefined)[] = DEFAULTS.fields.default,
-  dataInput?: t.InfoData,
-) {
-  let data = useData(dataInput);
-  const rawFields = PropList.Wrangle.fields(fieldsInput);
+export function useStateful(props: t.InfoProps) {
+  const { stateful = DEFAULTS.stateful } = props;
+  let data = useData(props.data);
+  const rawFields = PropList.Wrangle.fields(props.fields);
   const rawVisible = data.visible?.value ?? true;
 
   const [fields, setFields] = useState(rawFields);
   const [isVisible, setVisible] = useState(rawVisible);
 
   useEffect(() => {
-    if (!isStateful) {
+    if (!stateful) {
       if (!R.equals(rawFields, fields)) setFields(rawFields);
       if (!R.equals(rawVisible, isVisible)) setVisible(rawVisible);
     }
-  }, [isStateful, rawFields, rawVisible]);
+  }, [stateful, rawFields, rawVisible]);
 
   /**
    * Rebuild data object with stateful properties.
    */
-  if (isStateful && data.document) {
-    const onIconClick = data.document.onIconClick;
+  if (stateful && data.document) {
+    const onIconClick = data.document.icon?.onClick;
     const document: t.InfoDataDocument = {
       ...data.document,
-      onIconClick(e) {
-        setFields(() => PropList.Wrangle.toggleField(fields, 'Doc.Object'));
-        onIconClick?.(e);
+      icon: {
+        ...data.document.icon,
+        onClick(e) {
+          setFields(() => PropList.Wrangle.toggleField(fields, 'Doc.Object'));
+          onIconClick?.(e);
+        },
       },
     };
     data = { ...data, document };
   }
 
-  if (isStateful && data.visible) {
+  if (stateful && data.visible) {
     const onToggle = data.visible?.onToggle;
     const visible: t.InfoData['visible'] = {
       ...data.visible,

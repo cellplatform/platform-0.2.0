@@ -32,10 +32,10 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
       const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
       const elIcon = <Icons.Object size={14} color={color} />;
 
-      if (!data.onIconClick) parts.push(elIcon);
+      if (!data.icon?.onClick) parts.push(elIcon);
       else {
         parts.push(
-          <Button theme={theme} onClick={() => data.onIconClick?.({})}>
+          <Button theme={theme} onClick={() => data.icon?.onClick?.({})}>
             {elIcon}
           </Button>,
         );

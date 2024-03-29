@@ -38,7 +38,7 @@ export type InfoDataDocument = {
   uri?: { shorten?: number | [number, number] };
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   head?: { label?: string; hashLength?: number };
-  onIconClick?(e: {}): void;
+  icon?: { onClick?(e: {}): void };
 };
 
 export type InfoDataHistory = {
@@ -70,6 +70,7 @@ export type InfoProps = {
   card?: boolean;
   flipped?: boolean;
   style?: t.CssValue;
+  onStateChange?: InfoStatefulChangeHandler;
 };
 
 /**
@@ -82,3 +83,6 @@ export type InfoDataHistoryItemHandlerArgs = {
   commit: t.DocHistoryCommit;
   is: { first: boolean; last: boolean };
 };
+
+export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
+export type InfoStatefulChangeHandlerArgs = {};

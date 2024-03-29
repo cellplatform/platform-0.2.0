@@ -68,9 +68,7 @@ export default Dev.describe(name, async (e) => {
             // label: 'Foo',
             doc: useUris ? doc?.uri : doc,
             object: { name: 'foobar', expand: { level: 2 } },
-            onIconClick(e) {
-              console.info('⚡️ document.onIconClick', e);
-            },
+            icon: { onClick: (e) => console.info('⚡️ document.onIconClick', e) },
           },
           history: {
             // label: 'Foo',
@@ -95,7 +93,14 @@ export default Dev.describe(name, async (e) => {
           },
         };
 
-        return <Info {...props} data={data} fields={props.fields} />;
+        return (
+          <Info
+            {...props}
+            data={data}
+            fields={props.fields}
+            onStateChange={(e) => console.info('⚡️ onStateChange', e)}
+          />
+        );
       });
   });
 
@@ -103,12 +108,17 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
-      const setFields = (fields?: (t.InfoField | undefined)[]) => {
-        dev.change((d) => (d.props.fields = fields));
+      const setFields = async (fields?: (t.InfoField | undefined)[]) => {
         local.fields = fields?.length === 0 ? undefined : fields;
+        await dev.change((d) => (d.props.fields = fields));
       };
       const config = (label: string, fields: t.InfoField[]) => {
-        dev.button(label, (e) => setFields(fields));
+        const toggle = () => dev.change((d) => (d.props.stateful = !d.props.stateful));
+        dev.button(label, async (e) => {
+          await setFields(fields);
+          await toggle();
+          await toggle(); // NB: toggle to reset the [useStateful] hook.
+        });
       };
 
       dev.row((e) => {
