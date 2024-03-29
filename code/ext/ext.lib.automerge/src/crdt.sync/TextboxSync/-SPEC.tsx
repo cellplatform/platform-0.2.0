@@ -1,7 +1,7 @@
 import { Dev, Pkg, TestDb, WebStore, type t } from '../../test.ui';
 import { Info } from '../../ui/ui.Info';
 import { RepoList } from '../../ui/ui.RepoList';
-import { Layout } from './-SPEC.ui';
+import { Layout, type TDoc } from './-SPEC.ui';
 
 type T = { theme?: t.CommonTheme; docuri?: string };
 const initial: T = {};
@@ -71,6 +71,18 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+
+      dev.button('clear text', async (e) => {
+        const uri = e.state.current.docuri;
+        const doc = await store.doc.get<TDoc>(uri);
+        doc?.change((d) => (d.text = ''));
+      });
     });
   });
 
