@@ -52,7 +52,7 @@ export const View: React.FC<Props> = (props) => {
   ) => {
     if (isFocused) props.onFocus?.(event);
     if (!isFocused) props.onBlur?.(event);
-    props.onFocusChange?.({ event, isFocused });
+    props.onFocusChange?.({ event, is: { focused: isFocused } });
   };
 
   /**

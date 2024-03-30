@@ -81,7 +81,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     props.onItemSelect?.(e);
   };
 
-  const handleKeyboard = (e: t.TextInputKeyEvent) => {
+  const handleKeyboard = (e: t.TextInputKeyHandlerArgs) => {
     const done = () => e.preventDefault();
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
@@ -128,7 +128,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}
       onChanged={handleCommandChanged}
-      onCmdFocusChange={(e) => setFocused(e.isFocused)}
+      onCmdFocusChange={(e) => setFocused(e.is.focused)}
       onKeyDown={handleKeyboard}
       onItemVisibility={(e) => setItems(e.children)}
       onItemSelect={handleItemSelected}

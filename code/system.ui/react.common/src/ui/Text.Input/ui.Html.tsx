@@ -102,14 +102,14 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (onEscape && e.key === 'Escape') onEscape(event);
 
     if (onTab && e.key === 'Tab') {
-      let isCancelled = false;
+      let cancelled = false;
       onTab({
         modifierKeys: cloneModifierKeys(),
-        get isCancelled() {
-          return isCancelled;
+        get is() {
+          return { cancelled };
         },
         cancel() {
-          isCancelled = true;
+          cancelled = true;
           e.preventDefault();
         },
       });
@@ -134,7 +134,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   /**
    * [Utility]
    */
-  const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyEvent => {
+  const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyHandlerArgs => {
     return {
       ...e,
       modifierKeys: cloneModifierKeys(),

@@ -12,8 +12,8 @@ export type CommandBarProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onReady?: t.TextInputReadyHandler;
-  onChange?: t.TextInputChangeEventHandler;
-  onFocusChange?: t.TextInputFocusChangeHandler;
-  onKeyDown?: t.TextInputKeyEventHandler;
-  onKeyUp?: t.TextInputKeyEventHandler;
+  onChange?: t.TextInputChangeHandler;
+  onFocusChange?: t.TextInputFocusHandler;
+  onKeyDown?: t.TextInputKeyHandler;
+  onKeyUp?: t.TextInputKeyHandler;
 };

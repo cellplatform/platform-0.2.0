@@ -7,7 +7,7 @@ type T = {
   props: P;
   debug: {
     render: boolean;
-    status?: t.TextInputStatus;
+    status?: t.TextInputStatus__;
     isHintEnabled: boolean;
     isNumericMask: boolean;
     isUpdateEnabled: boolean;

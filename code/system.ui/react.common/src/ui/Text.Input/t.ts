@@ -2,10 +2,16 @@ import type { MouseEventHandler } from 'react';
 import type { t } from './common';
 
 export type * from './t.Events';
+export type * from './t.Events__';
 
 type Id = string;
 type Pixels = number;
 
+/**
+ * A reference to the <Input> acting as an API
+ * for manipulating the non-data-stateful state
+ * such as focus/caret/selection etc.
+ */
 export type TextInputRef = {
   readonly current: string;
   readonly selection: TextInputSelection;
@@ -23,8 +29,12 @@ export type TextInputRef = {
 
 export type TextInputLabelKind = 'ReadOnly' | 'Placeholder';
 export type TextInputCursorAction = 'Cursor:Start' | 'Cursor:End';
+export type TextInputSelection = { start: t.Index; end: t.Index };
 
-export type TextInputStatus = {
+/**
+ * TODO 🐷
+ */
+export type TextInputStatus__ = {
   instance: { bus: Id; id: Id };
   focused: boolean;
   empty: boolean;
@@ -33,16 +43,8 @@ export type TextInputStatus = {
   selection: TextInputSelection;
 };
 
-export type TextInputSelection = { start: t.Index; end: t.Index };
-
-export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
-export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
-
-export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
-export type TextInputReadyHandlerArgs = { ref: TextInputRef; input: HTMLInputElement };
-
 /**
- * <Component>
+ * Component: <TextInput>
  */
 export type TextInputValue = { value?: string; hint?: string | JSX.Element; maxLength?: number };
 export type TextInputProps = t.TextInputFocusProps &
@@ -71,23 +73,23 @@ export type TextInputProps = t.TextInputFocusProps &
     placeholderStyle?: t.TextInputStyle & { offset?: [number, number] };
     className?: string;
 
-    onReady?: TextInputReadyHandler;
+    onReady?: t.TextInputReadyHandler;
     onClick?: MouseEventHandler;
     onDoubleClick?: MouseEventHandler;
     onMouseDown?: MouseEventHandler;
     onMouseUp?: MouseEventHandler;
     onMouseEnter?: MouseEventHandler;
     onMouseLeave?: MouseEventHandler;
-    onLabelDoubleClick?: TextInputLabelDoubleClickHandler;
+    onLabelDoubleClick?: t.TextInputLabelDoubleClickHandler;
   };
 
 /**
- * Style
+ * Component: <TextInput>:Style
  */
 export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
 
 /**
- * Input
+ * Component: <TextInput>:Input
  */
 export type TextInputFocusAction = 'Select' | TextInputCursorAction;
 export type TextInputFocusProps = {
@@ -97,36 +99,17 @@ export type TextInputFocusProps = {
 };
 
 /**
- * EVENT (Callback Definitions)
+ *
+ * Component: <TextInput>: event callbacks(ƒ)
  */
-export type TextInputChangeEventHandler = (e: t.TextInputChangeEvent) => void;
-
-export type TextInputTabEvent = {
-  modifierKeys: t.KeyboardModifierFlags;
-  isCancelled: boolean;
-  cancel(): void;
-};
-export type TextInputTabEventHandler = (e: TextInputTabEvent) => void;
-
-export type TextInputKeyEvent = React.KeyboardEvent<HTMLInputElement> & {
-  modifierKeys: t.KeyboardModifierFlags;
-};
-export type TextInputKeyEventHandler = (e: TextInputKeyEvent) => void;
-
 export type TextInputEventHandlers = {
-  onChange?: TextInputChangeEventHandler;
-  onKeyDown?: TextInputKeyEventHandler;
-  onKeyUp?: TextInputKeyEventHandler;
-  onEnter?: TextInputKeyEventHandler;
-  onEscape?: TextInputKeyEventHandler;
-  onTab?: TextInputTabEventHandler;
+  onChange?: t.TextInputChangeHandler;
+  onKeyDown?: t.TextInputKeyHandler;
+  onKeyUp?: t.TextInputKeyHandler;
+  onEnter?: t.TextInputKeyHandler;
+  onEscape?: t.TextInputKeyHandler;
+  onTab?: t.TextInputTabHandler;
   onFocus?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
   onBlur?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
-  onFocusChange?: TextInputFocusChangeHandler;
-};
-
-export type TextInputFocusChangeHandler = (e: TextInputFocusChangeHandlerArgs) => void;
-export type TextInputFocusChangeHandlerArgs = {
-  isFocused: boolean;
-  event: React.FocusEvent<HTMLInputElement>;
+  onFocusChange?: t.TextInputFocusHandler;
 };
