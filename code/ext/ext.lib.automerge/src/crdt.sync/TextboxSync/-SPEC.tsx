@@ -3,7 +3,11 @@ import { Info } from '../../ui/ui.Info';
 import { RepoList } from '../../ui/ui.RepoList';
 import { Layout, type TDoc } from './-SPEC.ui';
 
-type T = { theme?: t.CommonTheme; docuri?: string };
+type T = {
+  fields?: t.InfoField[];
+  theme?: t.CommonTheme;
+  docuri?: string;
+};
 const initial: T = {};
 
 /**
@@ -15,9 +19,12 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ storage });
   let model: t.RepoListModel;
 
-  type LocalStore = Pick<T, 'theme'>;
+  type LocalStore = Pick<T, 'theme' | 'fields'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({ theme: 'Dark' });
+  const local = localstore.object({
+    theme: 'Dark',
+    fields: ['Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Head'],
+  });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -26,6 +33,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.theme = local.theme;
+      d.fields = local.fields;
     });
 
     model = await RepoList.model(store, {
@@ -57,11 +65,14 @@ export default Dev.describe(name, async (e) => {
       return (
         <Info
           stateful={true}
-          fields={['Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Head']}
+          fields={e.state.fields}
           data={{
             component: { name },
             repo: { store, index },
             document: { doc: e.state.docuri },
+          }}
+          onStateChange={(e) => {
+            dev.change((d) => (local.fields = d.fields = e.fields));
           }}
         />
       );
