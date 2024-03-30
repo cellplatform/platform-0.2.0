@@ -14,7 +14,8 @@ export function TextInputRef(
   const api: t.TextInputRef = {
     /**
      * Current input value (read-only).
-     * NB: Read only so that the clean immutable change loop can be respected.
+     *
+     * NB: Read only so that the [Immutable] "value" change-loop can be respected.
      *     All the other state manipulations afforded by this object are for
      *     transient textbox state like caret position, selection or focus.
      */
