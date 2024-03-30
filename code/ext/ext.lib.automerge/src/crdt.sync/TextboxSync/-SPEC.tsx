@@ -1,7 +1,7 @@
 import { Dev, Pkg, TestDb, WebStore, type t } from '../../test.ui';
 import { Info } from '../../ui/ui.Info';
 import { RepoList } from '../../ui/ui.RepoList';
-import { Layout, type TDoc } from './-SPEC.ui';
+import { Layout, type TDoc } from './-SPEC.u';
 
 type T = {
   fields?: t.InfoField[];

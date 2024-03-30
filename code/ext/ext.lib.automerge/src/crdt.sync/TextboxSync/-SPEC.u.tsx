@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { COLORS, Color, TextInput, css, rx, type t } from '../../test.ui';
 import { useDoc } from '../../ui/use';
-import { listen, type TDoc } from './-SPEC.ui.splice';
+import { listen, type TDoc } from './-SPEC.u.logic';
 
 export type { TDoc };
 
@@ -53,20 +53,20 @@ export type TextboxProps = {
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const { doc, theme, debug } = props;
 
-  const changeRef$ = useRef(rx.subject<t.TextInputChangeArgs>());
   const [value, setValue] = useState('');
   const [input, setInput] = useState<t.TextInputRef>();
 
   useEffect(() => {
-    const life = rx.lifecycle();
-    const input$ = changeRef$.current;
+    const life = rx.disposable();
+    const { dispose$ } = life;
     if (doc && input) {
       setValue(doc.current.text || '');
-      listen(doc, input, input$, life.dispose$, {
+      listen({
         debug,
-        onChange(e) {
-          setValue(e.text);
-        },
+        doc,
+        input,
+        dispose$,
+        onChange: (e) => setValue(e.text),
       });
     }
     return life.dispose;
@@ -100,14 +100,8 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         placeholder={'string (crdt)'}
         focusOnReady={props.focus}
         spellCheck={false}
-        onReady={(e) => {
-          console.info('⚡️ onReady', e);
-          setInput(e.ref);
-        }}
-        onChange={(e) => {
-          changeRef$.current.next(e);
-          setValue(e.to);
-        }}
+        onReady={(e) => setInput(e.ref)}
+        onChange={(e) => setValue(e.to)}
       />
     </div>
   );
