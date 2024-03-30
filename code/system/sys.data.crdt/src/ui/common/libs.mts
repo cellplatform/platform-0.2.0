@@ -16,7 +16,6 @@ export {
   Style,
   TestRunner,
   TextInput,
-  TextInputRef,
   css,
   useClickOutside,
   useFocus,
