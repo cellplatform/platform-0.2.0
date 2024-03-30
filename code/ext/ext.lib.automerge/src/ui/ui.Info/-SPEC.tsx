@@ -57,6 +57,11 @@ export default Dev.describe(name, async (e) => {
       d.debug.useUris = local.useUris;
     });
 
+    /**
+     * TODO 🐷
+     * - BUG FIX: focus state on <RepoList>
+     * - Have <Info> load from the selected "doc:uri"
+     */
     model = await RepoList.model(db.store, {
       behaviors: ['Copyable', 'Deletable'],
       onActiveChanged: (e) => {
