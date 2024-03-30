@@ -3,11 +3,7 @@ import { Info } from '../../ui/ui.Info';
 import { RepoList } from '../../ui/ui.RepoList';
 import { Layout, type TDoc } from './-SPEC.u';
 
-type T = {
-  fields?: t.InfoField[];
-  theme?: t.CommonTheme;
-  docuri?: string;
-};
+type T = { fields?: t.InfoField[]; theme?: t.CommonTheme; docuri?: string };
 const initial: T = {};
 
 /**
