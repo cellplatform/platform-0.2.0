@@ -10,6 +10,7 @@ export type {
   CssEdgesInput,
   CssValue,
   DevCtxState,
+  DevTools,
   GetLabelItem,
   InfoDataVisible,
   LabelItem,

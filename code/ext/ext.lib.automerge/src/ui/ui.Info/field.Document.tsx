@@ -68,7 +68,8 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
    * The <Object> component.
    */
   if (fields.includes('Doc.Object')) {
-    res.push({ value: wrangle.objectElement(data, hasLabel, theme) });
+    const elObject = wrangle.objectElement(data, hasLabel, theme);
+    res.push({ value: elObject });
   }
 
   // Finish up.

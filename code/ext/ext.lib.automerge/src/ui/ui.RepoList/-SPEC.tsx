@@ -114,7 +114,11 @@ export default Dev.describe(name, async (e) => {
     dev.section((dev) => {
       dev.row((e) => {
         return (
-          <RepoList.Config selected={local.behaviors} onChange={(e) => setBehaviors(e.next)} />
+          <RepoList.Config
+            //
+            selected={local.behaviors}
+            onChange={(e) => setBehaviors(e.next)}
+          />
         );
       });
 

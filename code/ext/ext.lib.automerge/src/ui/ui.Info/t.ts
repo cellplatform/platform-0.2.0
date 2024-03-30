@@ -60,7 +60,6 @@ export type InfoDataHistory = {
  * <Component>
  */
 export type InfoProps = {
-  stateful?: boolean;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
@@ -69,6 +68,10 @@ export type InfoProps = {
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
+
+  stateful?: boolean;
+  resetState$?: t.Observable<any>;
+
   style?: t.CssValue;
   onStateChange?: InfoStatefulChangeHandler;
 };
@@ -85,4 +88,7 @@ export type InfoDataHistoryItemHandlerArgs = {
 };
 
 export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
-export type InfoStatefulChangeHandlerArgs = {};
+export type InfoStatefulChangeHandlerArgs = {
+  readonly fields: InfoField[];
+  readonly data: InfoData;
+};

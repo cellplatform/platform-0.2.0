@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, PropList, R, type t } from './common';
+import { DEFAULTS, PropList, R, rx, type t } from './common';
 import { useData } from './use.Data';
 
 /**
- * Hook that when the property {stateful:true} manages
- * state internally to the component.
+ * Hook that when {stateful:true} manages
+ * state internally to the <Info> component.
  */
 export function useStateful(props: t.InfoProps) {
   const { stateful = DEFAULTS.stateful } = props;
@@ -14,13 +14,31 @@ export function useStateful(props: t.InfoProps) {
 
   const [fields, setFields] = useState(rawFields);
   const [isVisible, setVisible] = useState(rawVisible);
+  const [resetCount, setReset] = useState(0);
+  const reset = () => setReset((n) => n + 1);
+
+  const fire = (fields: t.InfoField[]) => {
+    if (stateful) props.onStateChange?.({ fields, data });
+  };
+
+  /**
+   * Lifecycle.
+   */
+  useEffect(() => {
+    if (!stateful) reset();
+  }, [stateful]);
 
   useEffect(() => {
-    if (!stateful) {
-      if (!R.equals(rawFields, fields)) setFields(rawFields);
-      if (!R.equals(rawVisible, isVisible)) setVisible(rawVisible);
-    }
-  }, [stateful, rawFields, rawVisible]);
+    if (!R.equals(rawFields, fields)) setFields(rawFields);
+    if (!R.equals(rawVisible, isVisible)) setVisible(rawVisible);
+  }, [resetCount]);
+
+  useEffect(() => {
+    const life = rx.disposable();
+    const $ = props.resetState$?.pipe(rx.takeUntil(life.dispose$), rx.debounceTime(10));
+    $?.subscribe(reset);
+    return life.dispose;
+  }, [props.resetState$]);
 
   /**
    * Rebuild data object with stateful properties.
@@ -32,8 +50,10 @@ export function useStateful(props: t.InfoProps) {
       icon: {
         ...data.document.icon,
         onClick(e) {
-          setFields(() => PropList.Wrangle.toggleField(fields, 'Doc.Object'));
-          onIconClick?.(e);
+          const next = PropList.Wrangle.toggleField(fields, 'Doc.Object');
+          setFields(next);
+          fire(next);
+          onIconClick?.(e); // Bubble to root handler.
         },
       },
     };
@@ -46,10 +66,10 @@ export function useStateful(props: t.InfoProps) {
       ...data.visible,
       value: isVisible,
       onToggle(e) {
-        const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
-        setFields(() => filter({ visible: e.next, fields: rawFields }));
-        setVisible(e.next);
-        onToggle?.(e);
+        const isVisible = e.next;
+        setVisible(isVisible);
+        fire(fields);
+        onToggle?.(e); // Bubble to root handler.
       },
     };
     data = { ...data, visible };
@@ -58,5 +78,16 @@ export function useStateful(props: t.InfoProps) {
   /**
    * API
    */
-  return { fields, data } as const;
+  const api = {
+    data,
+    get fields() {
+      if (stateful && data.visible?.value === false) {
+        const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
+        return filter({ visible: false, fields });
+      } else {
+        return fields;
+      }
+    },
+  } as const;
+  return api;
 }

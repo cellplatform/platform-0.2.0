@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Dev, DevReload, Pkg, TestDb, Value, type t } from '../../test.ui';
+import { Dev, DevReload, Pkg, TestDb, Value, rx, type t } from '../../test.ui';
 import { sampleCrdt } from './-SPEC.crdt';
 
 type P = t.InfoProps;
@@ -33,8 +33,15 @@ export default Dev.describe(name, async (e) => {
     useUris: true,
   });
 
+  const resetState$ = rx.subject();
+  const setFields = async (dev: t.DevTools<T>, fields?: (t.InfoField | undefined)[]) => {
+    local.fields = fields?.length === 0 ? undefined : fields;
+    await dev.change((d) => (d.props.fields = fields));
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
@@ -68,7 +75,7 @@ export default Dev.describe(name, async (e) => {
             // label: 'Foo',
             doc: useUris ? doc?.uri : doc,
             object: { name: 'foobar', expand: { level: 2 } },
-            icon: { onClick: (e) => console.info('⚡️ document.onIconClick', e) },
+            icon: { onClick: (e) => console.info('⚡️ document.icon.onClick', e) },
           },
           history: {
             // label: 'Foo',
@@ -96,9 +103,14 @@ export default Dev.describe(name, async (e) => {
         return (
           <Info
             {...props}
+            style={{ minHeight: 300 }}
             data={data}
             fields={props.fields}
-            onStateChange={(e) => console.info('⚡️ onStateChange', e)}
+            resetState$={resetState$}
+            onStateChange={(e) => {
+              console.info('⚡️ onStateChange', e);
+              setFields(dev, e.fields);
+            }}
           />
         );
       });
@@ -108,19 +120,6 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
-      const setFields = async (fields?: (t.InfoField | undefined)[]) => {
-        local.fields = fields?.length === 0 ? undefined : fields;
-        await dev.change((d) => (d.props.fields = fields));
-      };
-      const config = (label: string, fields: t.InfoField[]) => {
-        const toggle = () => dev.change((d) => (d.props.stateful = !d.props.stateful));
-        dev.button(label, async (e) => {
-          await setFields(fields);
-          await toggle();
-          await toggle(); // NB: toggle to reset the [useStateful] hook.
-        });
-      };
-
       dev.row((e) => {
         const props = e.state.props;
         return (
@@ -132,12 +131,28 @@ export default Dev.describe(name, async (e) => {
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
                   : (ev.next as t.InfoField[]);
-              setFields(fields);
+              setFields(dev, fields);
+              resetState$.next();
             }}
           />
         );
       });
+
       dev.title('Common States');
+
+      const config = (label: string, fields: t.InfoField[]) => {
+        dev.button(label, async (e) => {
+          await setFields(dev, fields);
+          resetState$.next();
+        });
+      };
+
+      dev.button('prepend: Visible', (e) => {
+        const fields = e.state.current.props.fields ?? [];
+        if (!fields.includes('Visible')) setFields(dev, ['Visible', ...fields]);
+        resetState$.next();
+      });
+      dev.hr(-1, 5);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
       config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI', 'Doc.Head']);
@@ -151,11 +166,6 @@ export default Dev.describe(name, async (e) => {
         'History.List.Detail',
         'History.List.NavPaging',
       ]);
-      dev.hr(-1, 5);
-      dev.button('prepend: Visible', (e) => {
-        const fields = e.state.current.props.fields ?? [];
-        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
-      });
     });
 
     dev.hr(5, 20);
@@ -168,6 +178,12 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
       });
+
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);
@@ -182,27 +198,20 @@ export default Dev.describe(name, async (e) => {
             e.change((d) => (local.historyDesc = Dev.toggle(d.debug, 'historyDesc')));
           });
       });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.useUris;
+        btn
+          .label((e) => `pass doc as URI (string)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.useUris = Dev.toggle(d.debug, 'useUris'))));
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
-      Dev.Theme.switcher(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
-
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.useUris;
-        btn
-          .label((e) => `use doc uris`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.useUris = Dev.toggle(d.debug, 'useUris'))));
-      });
-
+      dev.button('reset state', (e) => resetState$.next());
       dev.hr(-1, 5);
       dev.button('create doc', async (e) => {
         await db.store.doc.getOrCreate((d) => null);
