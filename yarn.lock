@@ -5779,13 +5779,6 @@ formdata-polyfill@^4.0.10:
   dependencies:
     fetch-blob "^3.1.2"
 
-framer-motion@11.0.22:
-  version "11.0.22"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.22.tgz#15fa88138b26d7fed15980b08175b67a6445b3c7"
-  integrity sha512-kWyldNJLyKDvLWjPYFmgngQYLiU8973BtAeVBc83r2cnil/NBUQJb1ff/6/EweNQYb5BW3PaXFjZa4D3pn/W2Q==
-  dependencies:
-    tslib "^2.4.0"
-
 framer-motion@11.0.24:
   version "11.0.24"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.24.tgz#d6ac88cd7d627e2ce57eb9bac05c60469fca6223"
@@ -8875,11 +8868,6 @@ react-usestateref@^1.0.8:
   resolved "https://registry.yarnpkg.com/react-usestateref/-/react-usestateref-1.0.8.tgz#b40519af0d6f3b3822c70eb5db80f7d47f1b1ff5"
   integrity sha512-whaE6H0XGarFKwZ3EYbpHBsRRCLZqdochzg/C7e+b6VFMTA3LS3K4ZfpI4NT40iy83jG89rGXrw70P9iDfOdsA==
 
-react-virtuoso@4.7.4:
-  version "4.7.4"
-  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.7.4.tgz#9ac8862231c9b34fc68ffb2edae3f471f23335b2"
-  integrity sha512-aYD+ClOCtYxURuT/GK5GamcD7XFTtmagKakEDQ07EyCPBUFy7Oc6xC2I24zSGcY5rDj+QZf/R5Iiks9Ael8pCA==
-
 react-virtuoso@4.7.7:
   version "4.7.7"
   resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.7.7.tgz#aa651f3728bfec091726dbc79ac0d8e21c84df10"
@@ -10334,20 +10322,6 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
-
-viem@2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.2.tgz#29bd2425222be136bf969a90dd3a8d6032221904"
-  integrity sha512-GRakUTNiYE9W+vL+Be9JkQfzWnkczerHtSpEe2JR/jEGTYZAs4shrA4WLgiaVCI9JxpnduZhQfRWNvy2dlyP2g==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    abitype "1.0.0"
-    isows "1.0.3"
-    ws "8.13.0"
 
 viem@2.9.5:
   version "2.9.5"

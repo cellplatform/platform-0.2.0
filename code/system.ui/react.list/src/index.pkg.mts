@@ -10,22 +10,15 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react.common',
+  name: 'sys.ui.react.list',
   version: '0.0.0',
   dependencies: {
-    '@preact/signals-react': '2.0.1',
-    'qrcode': '1.5.3',
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'react-icons': '5.0.1',
-    'react-spinners': '0.13.8',
-    'react-inspector': '6.0.2',
+    'react-virtuoso': '4.7.7',
     'sys.data.json': '0.0.0',
-    'sys.text': '0.0.0',
-    'sys.ui.dom': '0.0.0',
-    'sys.ui.react.util': '0.0.0',
-    'sys.ui.react.css': '0.0.0',
     'sys.util': '0.0.0',
+    'sys.ui.react.common': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

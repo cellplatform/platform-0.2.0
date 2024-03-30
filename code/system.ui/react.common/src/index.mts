@@ -15,11 +15,10 @@ export { Chip } from './ui/Chip';
 export { EdgePosition } from './ui/EdgePosition';
 export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';
-export { Focus } from './ui/Focus';
+export { ActiveElement, Focus } from './ui/Focus';
 export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
-export { LabelItem } from './ui/LabelItem';
 export { Layout } from './ui/Layout';
 export { ModuleLoader } from './ui/Module.Loader';
 export { ModuleNamespace } from './ui/Module.Namespace';
@@ -40,6 +39,7 @@ export { TextSyntax } from './ui/Text.Syntax';
  * Hooks
  */
 export { useClickInside, useClickOutside, useMouse } from './common';
+export { useReady, useRedraw } from './ui/use';
 export { useDragTarget } from './ui/useDragTarget';
 export { useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';
@@ -52,8 +52,8 @@ export { COLORS, Color, FC, File, Style, UserAgent, css, rx, useRubberband } fro
 /**
  * Dev
  */
-export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
 export { Specs } from './test.ui/entry.Specs.mjs';
+export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
   return { Pkg, Specs };

@@ -1,51 +1,38 @@
 {
-  "name": "sys.ui.react.common",
+  "name": "sys.ui.react.list",
   "version": "0.0.0",
   "type": "module",
-  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "tsx ../../../script.ts/cmd.test.ts",
+    "test": "tsx  ../../../script.ts/cmd.test.ts",
     "build": "tsx ../../../script.ts/cmd.build.ts",
     "clean": "tsx ../../../script.ts/cmd.clean.ts",
-    "tmp": "tsx   ./script.ts/tmp.mts"
+    "tmp": "tsx   ./script.ts/tmp.ts"
   },
   "dependencies": {
-    "@preact/signals-react": "2.0.1",
-    "qrcode": "1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "5.0.1",
-    "react-spinners": "0.13.8",
-    "react-inspector": "6.0.2",
+    "react-virtuoso": "4.7.7",
     "sys.data.json": "0.0.0",
-    "sys.text": "0.0.0",
-    "sys.ui.dom": "0.0.0",
-    "sys.ui.react.util": "0.0.0",
-    "sys.ui.react.css": "0.0.0",
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "sys.ui.react.common": "0.0.0"
   },
   "devDependencies": {
-    "@types/qrcode": "1.5.5",
-    "sys.fs": "0.0.0",
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0",
-    "sys.ui.react.dev": "0.0.0"
+    "sys.test.spec": "0.0.0",
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,
+  "sideEffects": false,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./dev": "./dist/web/dev.js",
     "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "dev": [
-        "./dist/types.d/ui.dev/index.d.ts"
-      ],
       "specs": [
         "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
