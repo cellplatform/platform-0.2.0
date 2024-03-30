@@ -10,6 +10,7 @@ import { Util, Wrangle } from './u';
 export type HtmlInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   t.TextInputValue & {
+    bus: t.TextInputBus;
     inputRef: RefObject<HTMLInputElement>;
     className?: string;
     isEnabled?: boolean;
@@ -30,14 +31,14 @@ export type HtmlInputProps = t.TextInputFocusProps &
  * Component
  */
 export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
-  const { inputRef, value = '', selectionBackground, maxLength } = props;
+  const { bus, inputRef, value = '', selectionBackground, maxLength } = props;
   const {
     isPassword = DEFAULTS.props.isPassword,
     isEnabled = DEFAULTS.props.isEnabled,
     disabledOpacity = DEFAULTS.props.disabledOpacity,
   } = props;
 
-  const ref = TextInputRef(inputRef);
+  const ref = TextInputRef(inputRef, bus.$);
   useFocus(inputRef, { redraw: false });
 
   /**
@@ -65,6 +66,14 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   /**
    * [Handlers]
    */
+  type A = t.TextInputKeyEventPayload['action'];
+  const fireKeyEvent = (action: A, event: t.TextInputKeyArgs) => {
+    bus.fire({
+      type: 'sys.TextInput:Key',
+      payload: { action, event },
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent) => {
     const { onChange, maxLength } = props;
 
@@ -81,7 +90,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
       const selection = Wrangle.selection(inputRef.current);
-      onChange?.({
+      const payload: t.TextInputChangeArgs = {
         from,
         to,
         is,
@@ -90,20 +99,28 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
         get diff() {
           return Diff.chars(from, to, { ignoreCase: false });
         },
-      });
+      };
+      onChange?.(payload);
+      bus.fire({ type: 'sys.TextInput:Change', payload });
     }
   };
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { onKeyDown, onEscape, onTab } = props;
+    const {} = props;
     const event = toKeyboardEvent(e);
 
-    onKeyDown?.(event);
-    if (onEscape && e.key === 'Escape') onEscape(event);
+    props.onKeyDown?.(event);
+    fireKeyEvent('KeyDown', event);
 
-    if (onTab && e.key === 'Tab') {
+    if (e.key === 'Escape') {
+      props.onEscape?.(event);
+      fireKeyEvent('Escape', event);
+    }
+
+    if (e.key === 'Tab') {
       let cancelled = false;
-      onTab({
+
+      const payload: t.TextInputTabArgs = {
         modifierKeys: cloneModifierKeys(),
         get is() {
           return { cancelled };
@@ -112,23 +129,38 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
           cancelled = true;
           e.preventDefault();
         },
-      });
+      };
+
+      props.onTab?.(payload);
+      bus.fire({ type: 'sys.TextInput:Tab', payload });
     }
   };
 
   const handleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const event = toKeyboardEvent(e);
-    if (e.key === 'Enter') props.onEnter?.(event);
+
     props.onKeyUp?.(event);
+    fireKeyEvent('KeyUp', event);
+
+    if (e.key === 'Enter') {
+      props.onEnter?.(event);
+      fireKeyEvent('Enter', event);
+    }
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => props.onBlur?.(e);
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const payload: t.TextInputFocusArgs = { event, is: { focused: false } };
+    props.onBlur?.(payload);
+    bus.fire({ type: 'sys.TextInput:Focus', payload });
+  };
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     const { focusAction } = props;
     if (focusAction === 'Select') ref.selectAll();
     if (focusAction === 'Cursor:Start') ref.caretToStart();
     if (focusAction === 'Cursor:End') ref.caretToEnd();
-    props.onFocus?.(e);
+    const payload: t.TextInputFocusArgs = { event, is: { focused: true } };
+    props.onFocus?.(payload);
+    bus.fire({ type: 'sys.TextInput:Focus', payload });
   };
 
   /**

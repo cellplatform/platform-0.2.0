@@ -2,10 +2,7 @@ import type { MouseEventHandler } from 'react';
 import type { t } from './common';
 
 export type * from './t.Events';
-export type * from './t.Events__';
-
-type Id = string;
-type Pixels = number;
+export type * from './t.Events.$';
 
 /**
  * A reference to the <Input> acting as an API
@@ -15,12 +12,13 @@ type Pixels = number;
 export type TextInputRef = {
   readonly current: string;
   readonly selection: TextInputSelection;
+  events(dispose?: t.UntilObservable): t.TextInputEvents;
   focus(select?: boolean): void;
   blur(): void;
   caretToStart(): void;
   caretToEnd(): void;
   selectAll(): void;
-  selectRange(
+  select(
     start: number | null,
     end?: number | null,
     direction?: 'none' | 'forward' | 'backward',
@@ -30,18 +28,6 @@ export type TextInputRef = {
 export type TextInputLabelKind = 'ReadOnly' | 'Placeholder';
 export type TextInputCursorAction = 'Cursor:Start' | 'Cursor:End';
 export type TextInputSelection = { start: t.Index; end: t.Index };
-
-/**
- * TODO 🐷
- */
-export type TextInputStatus__ = {
-  instance: { bus: Id; id: Id };
-  focused: boolean;
-  empty: boolean;
-  value: string;
-  size: { width: Pixels; height: Pixels };
-  selection: TextInputSelection;
-};
 
 /**
  * Component: <TextInput>
@@ -96,20 +82,4 @@ export type TextInputFocusProps = {
   focusAction?: TextInputFocusAction;
   focusOnReady?: boolean;
   selectOnReady?: boolean;
-};
-
-/**
- *
- * Component: <TextInput>: event callbacks(ƒ)
- */
-export type TextInputEventHandlers = {
-  onChange?: t.TextInputChangeHandler;
-  onKeyDown?: t.TextInputKeyHandler;
-  onKeyUp?: t.TextInputKeyHandler;
-  onEnter?: t.TextInputKeyHandler;
-  onEscape?: t.TextInputKeyHandler;
-  onTab?: t.TextInputTabHandler;
-  onFocus?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
-  onBlur?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
-  onFocusChange?: t.TextInputFocusHandler;
 };

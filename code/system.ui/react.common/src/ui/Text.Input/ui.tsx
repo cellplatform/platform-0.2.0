@@ -5,13 +5,16 @@ import { Util } from './u';
 import { TextInputHint } from './ui.Hint';
 import { HtmlInput } from './ui.Html';
 
-type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
+type Props = t.TextInputProps & {
+  bus: t.TextInputBus;
+  inputRef: RefObject<HTMLInputElement>;
+};
 
 /**
  * Component
  */
 export const View: React.FC<Props> = (props) => {
-  const { inputRef, placeholder, maxLength, theme } = props;
+  const { bus, inputRef, placeholder, maxLength, theme } = props;
   const {
     isPassword = DEFAULTS.props.isPassword,
     isReadOnly = DEFAULTS.props.isReadOnly,
@@ -44,15 +47,6 @@ export const View: React.FC<Props> = (props) => {
       const handler = Wrangle.labelDoubleClickHandler(props, 'Placeholder');
       handler(e);
     }
-  };
-
-  const handleFocusChange = (
-    event: React.FocusEvent<HTMLInputElement, Element>,
-    isFocused: boolean,
-  ) => {
-    if (isFocused) props.onFocus?.(event);
-    if (!isFocused) props.onBlur?.(event);
-    props.onFocusChange?.({ event, is: { focused: isFocused } });
   };
 
   /**
@@ -119,6 +113,7 @@ export const View: React.FC<Props> = (props) => {
 
   const elInput = (
     <HtmlInput
+      bus={bus}
       inputRef={inputRef}
       className={props.className}
       theme={theme}
@@ -138,8 +133,9 @@ export const View: React.FC<Props> = (props) => {
       autoComplete={props.autoComplete}
       selectionBackground={props.selectionBackground}
       //
-      onFocus={(e) => handleFocusChange(e, true)}
-      onBlur={(e) => handleFocusChange(e, false)}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
+      onFocusChange={props.onFocusChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
       onChange={(e) => props.onChange?.(e)}

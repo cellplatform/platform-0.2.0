@@ -1,5 +1,5 @@
 import { Dev, type t } from '../../test.ui';
-import { DevSample } from './-SPEC.u.Sample';
+import { Sample } from './-SPEC.u.Sample';
 import { DEFAULTS, KeyboardMonitor, Time } from './common';
 
 type P = t.TextInputProps;
@@ -76,6 +76,9 @@ export default Dev.describe('TextInput', (e) => {
           onReady(e) {
             console.log('⚡️ onReady:', e);
             state.change((d) => (d.ref = e.ref));
+
+            const events = e.ref.events();
+            events.$.subscribe((e) => console.info('⚡️ events.$:', e));
           },
           onEnter(e) {
             console.info('⚡️ onEnter', e);
@@ -89,7 +92,7 @@ export default Dev.describe('TextInput', (e) => {
         };
 
         Dev.Theme.background(ctx, props.theme, 1, 0.02);
-        return <DevSample props={props} debug={debug} />;
+        return <Sample props={props} debug={debug} />;
       });
   });
 

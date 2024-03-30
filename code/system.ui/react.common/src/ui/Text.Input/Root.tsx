@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { TextInputRef } from './Ref';
-import { Time, type t } from './common';
+import { Time, rx, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -10,7 +10,10 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
   const readyRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const handleRef = useRef<t.TextInputRef>();
-  const createHandle = () => (handleRef.current = TextInputRef(inputRef));
+  const busRef = useRef(rx.bus<t.TextInputEvent>());
+  const bus = busRef.current;
+
+  const createHandle = () => (handleRef.current = TextInputRef(inputRef, bus.$));
   const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
@@ -26,5 +29,5 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
     }
   }, []);
 
-  return <View {...props} inputRef={inputRef} />;
+  return <View {...props} bus={bus} inputRef={inputRef} />;
 });

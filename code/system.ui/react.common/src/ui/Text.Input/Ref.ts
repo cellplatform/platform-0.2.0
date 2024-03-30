@@ -1,12 +1,16 @@
 import type { RefObject } from 'react';
 import type { t } from './common';
+import { eventsFactory } from './events';
 import { Wrangle } from './u';
 
 /**
  * The "ref={ ƒ }" API for manipulating the component
  * for things like focus/blur/select.
  */
-export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
+export function TextInputRef(
+  ref: RefObject<HTMLInputElement>,
+  $: t.Observable<t.TextInputEvent>,
+): t.TextInputRef {
   const api: t.TextInputRef = {
     /**
      * Current input value (read-only).
@@ -22,6 +26,10 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       return Wrangle.selection(ref.current);
     },
 
+    events(dispose$) {
+      return eventsFactory($, { dispose$ });
+    },
+
     focus(select) {
       ref.current?.focus();
       if (select) api.selectAll();
@@ -35,7 +43,7 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       ref.current?.select();
     },
 
-    selectRange(start, end = start, direction) {
+    select(start, end = start, direction) {
       ref.current?.setSelectionRange(start, end, direction);
     },
 

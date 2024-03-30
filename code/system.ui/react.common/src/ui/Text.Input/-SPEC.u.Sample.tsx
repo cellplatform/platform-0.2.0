@@ -4,7 +4,7 @@ import { TextInput } from '.';
 import { Color, Time, css, type t } from '../common';
 import { Hints } from './-SPEC.u.Hints';
 
-export type DevSampleProps = {
+export type SampleProps = {
   props: t.TextInputProps;
   debug: {
     isHintEnabled: boolean;
@@ -14,7 +14,7 @@ export type DevSampleProps = {
   };
 };
 
-export const DevSample: React.FC<DevSampleProps> = (dev) => {
+export const Sample: React.FC<SampleProps> = (dev) => {
   const { debug } = dev;
 
   const inputRef = useRef<t.TextInputRef>(null);
