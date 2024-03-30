@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Hash } from './common';
+import { useState } from 'react';
+import { Button, Color, DEFAULTS, Hash, Time, css, type t } from './common';
 
 export type MonoHashProps = {
   hash?: string;
@@ -11,6 +11,16 @@ export type MonoHashProps = {
 export const MonoHash: React.FC<MonoHashProps> = (props) => {
   const { hash = '', theme, length = DEFAULTS.hash.length } = props;
   const short = Hash.shorten(hash, [0, length]);
+  const [message, setMessage] = useState('');
+
+  /**
+   * Handlers
+   */
+  const handleClick = () => {
+    navigator.clipboard.writeText(hash);
+    setMessage('Copied');
+    Time.delay(2000, () => setMessage(''));
+  };
 
   /**
    * Render
@@ -24,8 +34,12 @@ export const MonoHash: React.FC<MonoHashProps> = (props) => {
 
   return (
     <div {...css(styles.base, styles.mono, props.style)}>
-      <span {...styles.pound}>{`#`}</span>
-      <span>{short}</span>
+      <Button theme={theme} onClick={handleClick} overlay={message}>
+        <>
+          <span {...styles.pound}>{`#`}</span>
+          <span>{short}</span>
+        </>
+      </Button>
     </div>
   );
 };
