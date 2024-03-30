@@ -2,7 +2,7 @@ import type { MouseEventHandler } from 'react';
 import type { t } from './common';
 
 export type * from './t.Events';
-export type * from './t.Events.$';
+export type * from './t.Event$';
 
 /**
  * A reference to the <Input> acting as an API

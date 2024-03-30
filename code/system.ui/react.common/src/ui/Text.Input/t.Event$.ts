@@ -27,6 +27,17 @@ export type TextInputEvents = t.Lifecycle & {
   readonly change$: t.Observable<t.TextInputChangeArgs>;
   readonly focus$: t.Observable<t.TextInputFocusArgs>;
   readonly key$: t.Observable<t.TextInputKeyEventPayload>;
+  readonly tab$: t.Observable<t.TextInputTabArgs>;
+
+  onChange(fn: t.TextInputChangeHandler): void;
+  onKeyDown(fn: t.TextInputKeyHandler): void;
+  onKeyUp(fn: t.TextInputKeyHandler): void;
+  onEnter(fn: t.TextInputKeyHandler): void;
+  onEscape(fn: t.TextInputKeyHandler): void;
+  onTab(fn: t.TextInputTabHandler): void;
+  onFocus(fn: t.TextInputFocusHandler): void;
+  onBlur(fn: t.TextInputFocusHandler): void;
+  onFocusChange(fn: t.TextInputFocusHandler): void;
 };
 
 /**

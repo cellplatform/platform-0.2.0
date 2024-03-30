@@ -9,14 +9,39 @@ export function eventsFactory(
 ): t.TextInputEvents {
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
-
   const $ = source$.pipe(rx.takeUntil(dispose$));
+  const key$ = rx.payload<t.TextInputKeyEvent>($, 'sys.TextInput:Key');
+  const focus$ = rx.payload<t.TextInputFocusEvent>($, 'sys.TextInput:Focus');
+
+  type A = t.TextInputKeyEventPayload['action'];
+  const keyHandler = (action: A) => {
+    const $ = key$.pipe(rx.filter((e) => e.action === action));
+    return (fn: t.TextInputKeyHandler) => $.subscribe((e) => fn(e.event));
+  };
+  const focusHandler = (focused: boolean | null) => {
+    type A = t.TextInputFocusArgs;
+    const isMatch = (e: A) => (focused === null ? true : (e.is.focused = focused));
+    const $ = focus$.pipe(rx.filter(isMatch));
+    return (fn: t.TextInputFocusHandler) => $.subscribe(fn);
+  };
 
   const api: t.TextInputEvents = {
     $,
     change$: rx.payload<t.TextInputChangeEvent>($, 'sys.TextInput:Change'),
-    focus$: rx.payload<t.TextInputFocusEvent>($, 'sys.TextInput:Focus'),
-    key$: rx.payload<t.TextInputKeyEvent>($, 'sys.TextInput:Key'),
+    focus$,
+    key$,
+    tab$: rx.payload<t.TextInputTabEvent>($, 'sys.TextInput:Tab'),
+
+    onChange: (fn) => api.change$.subscribe(fn),
+    onKeyDown: keyHandler('KeyDown'),
+    onKeyUp: keyHandler('KeyUp'),
+    onEnter: keyHandler('Enter'),
+    onEscape: keyHandler('Escape'),
+    onTab: (fn) => api.tab$.subscribe(fn),
+
+    onFocus: (fn) => focusHandler(true),
+    onBlur: (fn) => focusHandler(false),
+    onFocusChange: (fn) => focusHandler(null),
 
     dispose,
     dispose$,

@@ -77,8 +77,10 @@ export default Dev.describe('TextInput', (e) => {
             console.log('⚡️ onReady:', e);
             state.change((d) => (d.ref = e.ref));
 
+            // NB: disposable event subscriptions from [Ref].
             const events = e.ref.events();
-            events.$.subscribe((e) => console.info('⚡️ events.$:', e));
+            // events.$.subscribe((e) => console.info('⚡️ events.$:', e));
+            events.onChange((e) => console.info('⚡️ events.onChange:', e));
           },
           onEnter(e) {
             console.info('⚡️ onEnter', e);
