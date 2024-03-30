@@ -1,10 +1,12 @@
 import { Info } from '.';
-import { Dev, DevReload, Pkg, TestDb, Value, rx, type t } from '../../test.ui';
+import { Doc, Color, Dev, DevReload, Pkg, TestDb, Value, css, rx, type t } from '../../test.ui';
+import { RepoList } from '../../ui/ui.RepoList';
 import { sampleCrdt } from './-SPEC.crdt';
 
 type P = t.InfoProps;
 type T = {
   props: t.InfoProps;
+  docuri?: t.UriString;
   debug: {
     reload?: boolean;
     historyDesc?: boolean;
@@ -22,6 +24,7 @@ const name = Info.displayName ?? 'Unknown';
 
 export default Dev.describe(name, async (e) => {
   const db = await sampleCrdt();
+  let model: t.RepoListModel;
 
   type LocalStore = T['debug'] & Pick<P, 'fields' | 'theme' | 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -52,6 +55,14 @@ export default Dev.describe(name, async (e) => {
 
       d.debug.historyDesc = local.historyDesc;
       d.debug.useUris = local.useUris;
+    });
+
+    model = await RepoList.model(db.store, {
+      behaviors: ['Copyable', 'Deletable'],
+      onActiveChanged: (e) => {
+        console.info(`⚡️ onActiveChanged`, e);
+        state.change((d) => (d.docuri = e.item.uri));
+      },
     });
 
     ctx.debug.width(330);
@@ -246,16 +257,44 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>(async (e) => {
-      const { props, debug } = e.state;
-      const crdt = (await db.docAtIndex(0))?.current;
-      const data = {
-        props,
-        debug,
-        'crdt:storage:db': db.storage.name,
-        'crdt:doc': crdt,
-      };
-      return <Dev.Object name={name} data={data} expand={1} />;
-    });
+    dev.footer
+      .border(-0.1)
+      .padding(0)
+      .render<T>(async (e) => {
+        const { props, debug } = e.state;
+        const crdt = (await db.docAtIndex(0))?.current;
+        const data = {
+          docuri: Doc.Uri.id(e.state.docuri, { shorten: 5 }),
+          props,
+          debug,
+          'crdt:storage:db': db.storage.name,
+          'crdt:doc': crdt,
+        };
+
+        const styles = {
+          base: css({ position: 'relative' }),
+          object: css({ padding: 10 }),
+          list: css({ border: `solid 1px ${Color.alpha(Color.DARK, 0.15)}` }),
+        };
+
+        const elObject = (
+          <div {...styles.object}>
+            <Dev.Object name={name} data={data} expand={1} fontSize={11} />
+          </div>
+        );
+
+        const elList = (
+          <div {...styles.list}>
+            <RepoList model={model} onReady={(e) => e.ref.select(0)} />
+          </div>
+        );
+
+        return (
+          <div {...styles.base}>
+            {elObject}
+            {elList}
+          </div>
+        );
+      });
   });
 });
