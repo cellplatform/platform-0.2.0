@@ -1,53 +1,59 @@
 import type { t } from './common';
 
-/**
- * Ready
- */
-export type TextInputReadyHandler = (e: TextInputReadyArgs) => void;
-export type TextInputReadyArgs = { ref: t.TextInputRef; input: HTMLInputElement };
+export type TextInputBus = t.EventBus<t.TextInputEvent>;
 
 /**
- * Label: double-click
+ * Component: <TextInput>: event callbacks(ƒ)
  */
-export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickArgs) => void;
-export type TextInputLabelDoubleClickArgs = { target: t.TextInputLabelKind };
+export type TextInputEventHandlers = {
+  onChange?: t.TextInputChangeHandler;
 
-/**
- * Change
- */
-export type TextInputChangeHandler = (e: t.TextInputChangeArgs) => void;
-export type TextInputChangeArgs = {
-  readonly from: string;
-  readonly to: string;
-  readonly is: { max: boolean | null };
-  readonly modifierKeys: t.KeyboardModifierFlags;
-  readonly selection: t.TextInputSelection;
-  readonly diff: t.TextCharDiff[];
+  onKeyDown?: t.TextInputKeyHandler;
+  onKeyUp?: t.TextInputKeyHandler;
+  onEnter?: t.TextInputKeyHandler;
+  onEscape?: t.TextInputKeyHandler;
+  onTab?: t.TextInputTabHandler;
+
+  onFocus?: t.TextInputFocusHandler;
+  onBlur?: t.TextInputFocusHandler;
+  onFocusChange?: t.TextInputFocusHandler;
 };
 
 /**
- * Keyboard: Keypress
+ * Events API.
  */
-type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
+export type TextInputEvents = t.Lifecycle & {
+  readonly $: t.Observable<TextInputEvent>;
+  readonly change$: t.Observable<t.TextInputChangeArgs>;
+  readonly focus$: t.Observable<t.TextInputFocusArgs>;
+  readonly key$: t.Observable<t.TextInputKeyEventPayload>;
+  readonly tab$: t.Observable<t.TextInputTabArgs>;
 
-export type TextInputKeyHandler = (e: TextInputKeyArgs) => void;
-export type TextInputKeyArgs = KeyboardEvent & { modifierKeys: t.KeyboardModifierFlags };
-
-/**
- * Keyboard: Tab
- */
-export type TextInputTabHandler = (e: TextInputTabArgs) => void;
-export type TextInputTabArgs = {
-  readonly modifierKeys: t.KeyboardModifierFlags;
-  readonly is: { cancelled: boolean };
-  cancel(): void;
+  onChange(fn: t.TextInputChangeHandler): void;
+  onKeyDown(fn: t.TextInputKeyHandler): void;
+  onKeyUp(fn: t.TextInputKeyHandler): void;
+  onEnter(fn: t.TextInputKeyHandler): void;
+  onEscape(fn: t.TextInputKeyHandler): void;
+  onTab(fn: t.TextInputTabHandler): void;
+  onFocus(fn: t.TextInputFocusHandler): void;
+  onBlur(fn: t.TextInputFocusHandler): void;
+  onFocusChange(fn: t.TextInputFocusHandler): void;
 };
 
 /**
- * Focus
+ * Event Definitions
  */
-export type TextInputFocusHandler = (e: TextInputFocusArgs) => void;
-export type TextInputFocusArgs = {
-  readonly is: { focused: boolean };
-  readonly event: React.FocusEvent<HTMLInputElement>;
+export type TextInputEvent =
+  | TextInputChangeEvent
+  | TextInputFocusEvent
+  | TextInputTabEvent
+  | TextInputKeyEvent;
+
+export type TextInputChangeEvent = { type: 'sys.TextInput:Change'; payload: t.TextInputChangeArgs };
+export type TextInputFocusEvent = { type: 'sys.TextInput:Focus'; payload: t.TextInputFocusArgs };
+export type TextInputTabEvent = { type: 'sys.TextInput:Tab'; payload: t.TextInputTabArgs };
+export type TextInputKeyEvent = { type: 'sys.TextInput:Key'; payload: TextInputKeyEventPayload };
+export type TextInputKeyEventPayload = {
+  action: 'KeyDown' | 'KeyUp' | 'Enter' | 'Escape';
+  event: t.TextInputKeyArgs;
 };
