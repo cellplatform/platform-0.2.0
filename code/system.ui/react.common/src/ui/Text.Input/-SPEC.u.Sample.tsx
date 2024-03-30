@@ -30,20 +30,11 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
    * [Render]
    */
   const styles = {
-    placeholder: css({
-      display: 'grid',
-      gridTemplateColumns: 'auto auto 1fr',
-      columnGap: 10,
-    }),
-    label: css({
-      fontStyle: 'normal',
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    placeholder: css({ display: 'grid', gridTemplateColumns: 'auto auto 1fr', columnGap: 10 }),
+    label: css({ fontStyle: 'normal', display: 'grid', alignContent: 'center' }),
     key: css({
       fontSize: 10,
       border: `solid 1px ${Color.format(-0.4)}`,
-      // backgroundColor: Color.format(1),
       borderRadius: 5,
       fontStyle: 'normal',
       fontWeight: 600,
@@ -75,7 +66,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
         } else {
           setHint('');
         }
-        console.info('⚡️ onChanged', e);
+        console.info('⚡️ onChange', e);
         dev.props.onChange?.(e);
       }}
     />
