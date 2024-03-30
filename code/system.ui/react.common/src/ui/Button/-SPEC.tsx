@@ -121,14 +121,14 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       dev.button((btn) =>
         btn
-          .label('content: Element')
+          .label('content: <Element>')
           .right((e) => (!e.state.debug.useLabel ? '← current' : ''))
           .onClick((e) => e.change((d) => (local.useLabel = d.debug.useLabel = false))),
       );
 
       dev.button((btn) =>
         btn
-          .label('content: "label" property')
+          .label('content: "label" property (string)')
           .right((e) => (e.state.debug.useLabel ? '← current' : ''))
           .onClick((e) => e.change((d) => (local.useLabel = d.debug.useLabel = true))),
       );
