@@ -31,7 +31,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Slider } from './ui/Slider';
 export { Spinner } from './ui/Spinner';
 export { Text } from './ui/Text';
-export { TextInput, TextInputRef } from './ui/Text.Input';
+export { TextInput } from './ui/Text.Input';
 export { Keyboard } from './ui/Text.Keyboard';
 export { TextSecret } from './ui/Text.Secret';
 export { TextSyntax } from './ui/Text.Syntax';
