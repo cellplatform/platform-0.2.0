@@ -81,7 +81,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
     props.onItemSelect?.(e);
   };
 
-  const handleKeyboard = (e: t.TextInputKeyHandlerArgs) => {
+  const handleKeyboard = (e: t.TextInputKeyArgs) => {
     const done = () => e.preventDefault();
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {

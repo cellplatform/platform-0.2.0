@@ -7,7 +7,7 @@ export type TDoc = { text?: string };
 export function listen(
   doc: t.DocRef<TDoc>,
   input: t.TextInputRef,
-  input$: t.Observable<t.TextInputChangeEvent>,
+  input$: t.Observable<t.TextInputChangeArgs>,
   dispose$: t.UntilObservable,
   options: {
     debug?: string;

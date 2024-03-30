@@ -53,7 +53,7 @@ export type TextboxProps = {
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const { doc, theme, debug } = props;
 
-  const changeRef$ = useRef(rx.subject<t.TextInputChangeEvent>());
+  const changeRef$ = useRef(rx.subject<t.TextInputChangeArgs>());
   const [value, setValue] = useState('');
   const [input, setInput] = useState<t.TextInputRef>();
 

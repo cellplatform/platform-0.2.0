@@ -134,7 +134,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   /**
    * [Utility]
    */
-  const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyHandlerArgs => {
+  const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyArgs => {
     return {
       ...e,
       modifierKeys: cloneModifierKeys(),

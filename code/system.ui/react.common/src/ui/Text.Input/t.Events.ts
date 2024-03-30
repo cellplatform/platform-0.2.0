@@ -3,20 +3,20 @@ import type { t } from './common';
 /**
  * Ready
  */
-export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
-export type TextInputReadyHandlerArgs = { ref: t.TextInputRef; input: HTMLInputElement };
+export type TextInputReadyHandler = (e: TextInputReadyArgs) => void;
+export type TextInputReadyArgs = { ref: t.TextInputRef; input: HTMLInputElement };
 
 /**
  * Label: double-click
  */
-export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
-export type TextInputLabelDoubleClickHandlerArgs = { target: t.TextInputLabelKind };
+export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickArgs) => void;
+export type TextInputLabelDoubleClickArgs = { target: t.TextInputLabelKind };
 
 /**
  * Change
  */
-export type TextInputChangeHandler = (e: t.TextInputChangeHandlerArgs) => void;
-export type TextInputChangeHandlerArgs = {
+export type TextInputChangeHandler = (e: t.TextInputChangeArgs) => void;
+export type TextInputChangeArgs = {
   readonly from: string;
   readonly to: string;
   readonly is: { max: boolean | null };
@@ -30,14 +30,14 @@ export type TextInputChangeHandlerArgs = {
  */
 type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
 
-export type TextInputKeyHandler = (e: TextInputKeyHandlerArgs) => void;
-export type TextInputKeyHandlerArgs = KeyboardEvent & { modifierKeys: t.KeyboardModifierFlags };
+export type TextInputKeyHandler = (e: TextInputKeyArgs) => void;
+export type TextInputKeyArgs = KeyboardEvent & { modifierKeys: t.KeyboardModifierFlags };
 
 /**
  * Keyboard: Tab
  */
-export type TextInputTabHandler = (e: TextInputTabHandlerArgs) => void;
-export type TextInputTabHandlerArgs = {
+export type TextInputTabHandler = (e: TextInputTabArgs) => void;
+export type TextInputTabArgs = {
   readonly modifierKeys: t.KeyboardModifierFlags;
   readonly is: { cancelled: boolean };
   cancel(): void;
@@ -46,8 +46,8 @@ export type TextInputTabHandlerArgs = {
 /**
  * Focus
  */
-export type TextInputFocusHandler = (e: TextInputFocusHandlerArgs) => void;
-export type TextInputFocusHandlerArgs = {
+export type TextInputFocusHandler = (e: TextInputFocusArgs) => void;
+export type TextInputFocusArgs = {
   readonly is: { focused: boolean };
   readonly event: React.FocusEvent<HTMLInputElement>;
 };
