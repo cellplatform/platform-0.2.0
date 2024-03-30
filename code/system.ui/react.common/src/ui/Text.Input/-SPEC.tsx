@@ -89,7 +89,7 @@ export default Dev.describe('TextInput', (e) => {
           },
         };
 
-        Dev.Theme.background(ctx, props.theme, 1);
+        Dev.Theme.background(ctx, props.theme, 1, 0.02);
         return <DevSample props={props} debug={debug} />;
       });
   });
@@ -99,20 +99,6 @@ export default Dev.describe('TextInput', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'TextInput'} data={e.state} expand={1} />);
-
-    dev.section('Configurations', (dev) => {
-      const value = (value: string, label?: string) => {
-        dev.button(`text: ${label ?? value}`, (e) => {
-          e.change((d) => (local.value = d.props.value = value));
-        });
-      };
-      value('hello 👋');
-      value(dev.lorem(50), 'long (lorem)');
-      dev.hr(-1, 5);
-      value('', '(clear)');
-    });
-
-    dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
@@ -139,6 +125,22 @@ export default Dev.describe('TextInput', (e) => {
       boolean('autoSize');
       boolean('focusOnReady');
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Sample States', (dev) => {
+      const value = (value: string, label?: string) => {
+        dev.button(`text: ${label ?? value}`, (e) => {
+          e.change((d) => (local.value = d.props.value = value));
+        });
+      };
+      value('hello 👋');
+      value(dev.lorem(50), 'long (lorem)');
+      dev.hr(-1, 5);
+      value('', '(clear)');
+    });
+
+    dev.hr(5, 20);
 
     dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
 
