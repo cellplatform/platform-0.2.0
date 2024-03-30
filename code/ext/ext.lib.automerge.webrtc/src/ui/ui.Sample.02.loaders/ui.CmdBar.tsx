@@ -9,6 +9,6 @@ export type CmdBarLoaderProps = {
 
 export const CmdBarLoader: React.FC<CmdBarLoaderProps> = (props) => {
   const { store, docuri } = props;
-  const spec = Specs['sys.ui.react.common.Command.Bar'];
+  const spec = Specs['sys.ui.react.common.Cmd.Bar'];
   return <Dev.Harness spec={spec} env={{ store, docuri }} />;
 };

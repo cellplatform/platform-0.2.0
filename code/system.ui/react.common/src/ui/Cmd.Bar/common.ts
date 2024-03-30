@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'CommandBar',
+  displayName: 'Cmd.Bar',
   enabled: true,
   focusOnReady: true,
   commandPlaceholder: 'command',

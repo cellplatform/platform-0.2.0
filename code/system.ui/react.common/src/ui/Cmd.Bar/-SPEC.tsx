@@ -1,8 +1,8 @@
-import { CommandBar, DEFAULTS } from '.';
+import { CmdBar, DEFAULTS } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
 type TEnv = {};
-type P = t.CommandBarProps;
+type P = t.CmdBarProps;
 type T = { props: P };
 const initial: T = { props: {} };
 
@@ -48,7 +48,7 @@ export default Dev.describe(name, (e) => {
         const { props } = e.state;
         Dev.Theme.background(dev, props.theme);
         return (
-          <CommandBar
+          <CmdBar
             {...props}
             onChange={(e) => {
               state.change((d) => (local.text = d.props.text = e.to));

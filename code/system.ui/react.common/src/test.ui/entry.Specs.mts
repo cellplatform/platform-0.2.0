@@ -12,7 +12,7 @@ export const ModuleSpecs = {
   [`${ns}.Card`]: () => import('../ui/Card/-SPEC'),
   [`${ns}.Center`]: () => import('../ui/Center/-SPEC'),
   [`${ns}.Chip`]: () => import('../ui/Chip/-SPEC'),
-  [`${ns}.Command.Bar`]: () => import('../ui/Command.Bar/-SPEC'),
+  [`${ns}.Cmd.Bar`]: () => import('../ui/Cmd.Bar/-SPEC'),
   [`${ns}.ContainerQuery`]: () => import('../ui/ContainerQuery/-SPEC'),
   [`${ns}.EdgePosition`]: () => import('../ui/EdgePosition/-SPEC'),
   [`${ns}.EdgePosition.Selector`]: () => import('../ui/EdgePosition.Selector/-SPEC'),
@@ -58,7 +58,7 @@ export const DevSpecs = {
   [`sys.ui.dev.TestRunner.PropList`]: () => import('../ui.dev/TestRunner/-dev/-SPEC.PropList'),
   'sys.ui.dev.TestRunner.PropList.runner': () =>
     import('../ui.dev/TestRunner/-dev/-SPEC.PropList.runner'),
-  [`sys.ui.dev.CmdHost`]: () => import('../ui.dev/Dev.CmdHost/-SPEC'),
+  [`sys.ui.dev.Cmd.Host`]: () => import('../ui.dev/Dev.CmdHost/-SPEC'),
   [`sys.ui.dev.ModuleList`]: () => import('../ui.dev/-SPEC/-SPEC.ModuleList'),
   [`sys.ui.dev.DevSplash`]: () => import('../ui.dev/Dev.Splash/-SPEC'),
   [`sys.ui.dev.DevTools`]: () => import('../ui.dev/DevTools/-SPEC'),

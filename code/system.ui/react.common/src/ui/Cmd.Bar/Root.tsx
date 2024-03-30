@@ -7,7 +7,7 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const CommandBar = FC.decorate<t.CommandBarProps, Fields>(
+export const CmdBar = FC.decorate<t.CmdBarProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

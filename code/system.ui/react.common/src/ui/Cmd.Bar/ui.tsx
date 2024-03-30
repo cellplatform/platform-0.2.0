@@ -1,7 +1,7 @@
 import { Color, COLORS, DEFAULTS, TextInput, css, type t } from './common';
 import { HintKey } from './ui.HintKey';
 
-export const View: React.FC<t.CommandBarProps> = (props) => {
+export const View: React.FC<t.CmdBarProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     focusOnReady = DEFAULTS.focusOnReady,
@@ -79,7 +79,7 @@ export const View: React.FC<t.CommandBarProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  hintKeys(props: t.CommandBarProps) {
+  hintKeys(props: t.CmdBarProps) {
     if (!props.hintKey) return [];
     return Array.isArray(props.hintKey) ? props.hintKey : [props.hintKey];
   },

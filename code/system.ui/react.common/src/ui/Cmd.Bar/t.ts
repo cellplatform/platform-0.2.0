@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type CommandBarProps = {
+export type CmdBarProps = {
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];

@@ -1,9 +1,9 @@
-import { COLORS, Color, CommandBar, DEFAULTS, Flip, css, type t } from './common';
+import { COLORS, Color, CmdBar, DEFAULTS, Flip, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
   const { flipped = false } = props;
-  const command: t.ModuleNamespaceCommandbarProps = { ...DEFAULTS.command, ...props.commandbar };
+  const command: t.ModuleNamespaceCmdbarProps = { ...DEFAULTS.cmdbar, ...props.cmdbar };
   const is = Wrangle.is(props);
 
   /**
@@ -17,7 +17,7 @@ export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
     }),
     body: css({ display: 'grid', gridTemplateRows: '1fr auto' }),
     main: css({ display: 'grid', placeItems: 'center' }),
-    commandbar: css({
+    cmdbar: css({
       display: command.visible ? 'block' : 'none',
       borderTop: `solid 1px ${Color.alpha(COLORS.WHITE, is.dark ? 0.1 : 0)}`,
     }),
@@ -26,8 +26,8 @@ export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
   const elBody = (
     <div {...styles.body}>
       <div {...styles.main}>{`🐷 ${DEFAULTS.displayName}`}</div>
-      <div {...styles.commandbar}>
-        <CommandBar />
+      <div {...styles.cmdbar}>
+        <CmdBar />
       </div>
     </div>
   );
