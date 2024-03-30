@@ -7,7 +7,6 @@ export {
   Color,
   FC,
   Keyboard,
-  LabelItem,
   ObjectView,
   PropList,
   RenderCount,
@@ -20,9 +19,10 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
+export { LabelItem } from 'sys.ui.react.list';
 export { Video } from 'sys.ui.react.media';
 
 /**
  * @local
  */
-export { PeerUri, Webrtc, PeerIs } from '../../Webrtc';
+export { PeerIs, PeerUri, Webrtc } from '../../Webrtc';

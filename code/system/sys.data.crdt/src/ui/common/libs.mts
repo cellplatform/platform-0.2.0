@@ -8,7 +8,6 @@ export {
   Color,
   FC,
   Focus,
-  LabelItem,
   Keyboard,
   PropList,
   QRCode,

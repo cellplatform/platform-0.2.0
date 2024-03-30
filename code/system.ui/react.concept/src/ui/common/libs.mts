@@ -1,16 +1,16 @@
 /**
  * @system
  */
-export { File } from 'sys.ui.dom';
 export {
   Button,
   COLORS,
   Color,
   EdgePosition,
   FC,
+  File,
   Grid,
-  LabelItem,
   Keyboard,
+  Layout,
   ProgressBar,
   PropList,
   Slider,
@@ -22,7 +22,7 @@ export {
   useMouse,
   useRubberband,
   useSizeObserver,
-  Layout,
 } from 'sys.ui.react.common';
+export { LabelItem } from 'sys.ui.react.list';
 export { Image } from 'sys.ui.react.media.image';
 export { Video } from 'sys.ui.react.media.video';

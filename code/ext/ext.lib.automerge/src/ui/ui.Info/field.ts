@@ -5,7 +5,7 @@ import { history } from './field.History';
 import { component, module, moduleVerify } from './field.Module';
 import { repo } from './field.Repo';
 
-const { visible } = PropList.Info.Fields;
+const { visible } = PropList.InfoPanel.Fields;
 
 export const Field = {
   module,

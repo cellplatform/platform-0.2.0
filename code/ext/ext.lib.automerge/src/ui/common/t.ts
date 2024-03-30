@@ -11,8 +11,17 @@ export type {
   CssValue,
   DevCtxState,
   DevTools,
-  GetLabelItem,
   InfoDataVisible,
+  PropListFieldSelectorClickHandler,
+  PropListItem,
+  PropListProps,
+  RenderCountProps,
+  TextInputChangeArgs,
+  TextInputRef,
+} from 'sys.ui.react.common/src/types';
+
+export type {
+  GetLabelItem,
   LabelItem,
   LabelItemBehaviorKind,
   LabelItemDispatch,
@@ -25,13 +34,7 @@ export type {
   LabelListDispatch,
   LabelListItemTarget,
   LabelListState,
-  PropListFieldSelectorClickHandler,
-  PropListItem,
-  PropListProps,
-  RenderCountProps,
-  TextInputChangeArgs,
-  TextInputRef,
-} from 'sys.ui.react.common/src/types';
+} from 'sys.ui.react.list/src/types';
 
 /**
  * @local

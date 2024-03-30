@@ -12,7 +12,6 @@ export {
   Color,
   FC,
   Keyboard,
-  LabelItem,
   ObjectView,
   PropList,
   RenderCount,
@@ -23,3 +22,5 @@ export {
   useFocus,
   useMouse,
 } from 'sys.ui.react.common';
+
+export { LabelItem } from 'sys.ui.react.list';
