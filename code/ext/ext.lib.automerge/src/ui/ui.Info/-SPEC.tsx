@@ -147,7 +147,7 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
-      dev.button('prepend: Visible', (e) => {
+      dev.button('(prepend): Visible', (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(dev, ['Visible', ...fields]);
         resetState$.next();
