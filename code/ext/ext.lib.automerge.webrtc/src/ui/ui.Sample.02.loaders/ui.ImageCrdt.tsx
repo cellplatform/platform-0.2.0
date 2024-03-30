@@ -96,10 +96,7 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
             data={{
               repo: { store, index },
               history: { doc },
-              document: {
-                doc,
-                onIconClick: () => setShowDocJson((prev) => !prev),
-              },
+              document: { doc, icon: { onClick: () => setShowDocJson((prev) => !prev) } },
             }}
           />
         </div>
