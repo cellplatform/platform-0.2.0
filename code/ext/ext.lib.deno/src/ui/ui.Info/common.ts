@@ -1,7 +1,7 @@
 import { type t } from '../common';
-import { DEFAULTS as HTTP_DEFAULTS } from '../../Http';
+import { DEFAULTS as HTTP_DEFAULTS } from '../../http';
 
-export { Http } from '../../Http';
+export { Http } from '../../http';
 export * from '../common';
 
 /**
