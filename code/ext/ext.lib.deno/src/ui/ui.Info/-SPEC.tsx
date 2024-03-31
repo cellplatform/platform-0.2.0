@@ -19,7 +19,7 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<P, 'fields' | 'stateful' | 'flipped' | 'theme'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
     fields: DEFAULTS.fields.default,
     stateful: true,
     flipped: false,
