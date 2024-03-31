@@ -2,7 +2,7 @@ import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 import { Wrangle } from './u';
 
 import { FieldSelector } from '../PropList.FieldSelector';
-import { InfoPanel } from '../PropList.InfoPanel';
+import { CommonInfo } from '../PropList.InfoPanel';
 import { FieldBuilder } from './FieldBuilder';
 import { Hash } from './item';
 import { View } from './ui';
@@ -18,7 +18,7 @@ type Fields = {
   builder<F extends string>(): t.PropListFieldBuilder<F>;
   FieldBuilder: typeof FieldBuilder;
   FieldSelector: typeof FieldSelector;
-  InfoPanel: typeof InfoPanel;
+  Info: typeof CommonInfo;
   Hash: typeof Hash;
   Chip: typeof Chip;
 };
@@ -31,7 +31,7 @@ export const PropList = FC.decorate<t.PropListProps, Fields>(
     builder: FieldBuilder,
     FieldBuilder,
     FieldSelector,
-    InfoPanel,
+    Info: CommonInfo,
     Hash,
     Chip,
     Wrangle: {

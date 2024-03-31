@@ -1,3 +1,26 @@
+import type { t } from './common';
+
+type O = Record<string, unknown>;
+
+/**
+ * Props: <Component>
+ */
+export type CommonInfoProps<F extends string = string, D extends O = {}> = {
+  title?: t.PropListProps['title'];
+  width?: t.PropListProps['width'];
+  fields?: (F | undefined)[];
+  data?: D;
+  margin?: t.CssEdgesInput;
+  card?: boolean;
+  flipped?: boolean;
+  stateful?: boolean;
+  theme?: t.CommonTheme;
+  style?: t.CssValue;
+};
+
+/**
+ * Prop: Data
+ */
 export type InfoDataVisible<InfoField extends string = any> = {
   value?: boolean;
   enabled?: boolean;

@@ -2,9 +2,6 @@ import { useStateController } from '../ui.Info.State';
 import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
 
-/**
- * Component
- */
 export const View: React.FC<t.InfoProps> = (props) => {
   const { theme, stateful = DEFAULTS.stateful } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
@@ -23,7 +20,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
 
   return (
     <PropList
-      title={wrangle.title(props)}
+      title={PropList.Info.Wrangle.title(props)}
       items={items}
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
@@ -35,15 +32,4 @@ export const View: React.FC<t.InfoProps> = (props) => {
       style={props.style}
     />
   );
-};
-
-/**
- * Helpers
- */
-const wrangle = {
-  title(props: t.InfoProps) {
-    const title = PropList.Wrangle.title(props.title);
-    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
-    return title;
-  },
 };
