@@ -10,4 +10,4 @@ export const Http = {
   fetch,
   toRawHeaders,
   fromRawHeaders,
-};
+} as const;
