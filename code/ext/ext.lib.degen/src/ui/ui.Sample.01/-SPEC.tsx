@@ -1,4 +1,4 @@
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Dev, Pkg, type t, DegenHttp } from '../../test.ui';
 
 type T = { theme?: t.CommonTheme };
 const initial: T = {};
@@ -41,6 +41,23 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+
+      dev.hr(5, 20);
+
+      dev.button('tmp', async (e) => {
+        const http = DegenHttp.http();
+
+        /**
+         * Causing a CORS error
+         * TODO 🐷
+         * - pass through our own proxy (deno instance)
+         * - validate with JWT
+         */
+        const url = 'https://www.degen.tips/api/airdrop2/tip-allowance?fid=12567';
+        const res = await http.get(url);
+        console.log('url', url);
+        console.log('res', res);
+      });
     });
   });
 
