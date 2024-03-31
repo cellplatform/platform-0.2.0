@@ -1,6 +1,6 @@
 import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = {};
+type T = { theme?: t.CommonTheme };
 const initial: T = {};
 
 /**
@@ -8,12 +8,18 @@ const initial: T = {};
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<T, 'theme'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({ theme: undefined });
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.theme = local.theme;
+    });
 
     ctx.debug.width(330);
     ctx.subject
@@ -21,6 +27,7 @@ export default Dev.describe(name, (e) => {
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
+        Dev.Theme.background(ctx, e.state.theme, 1);
         return <div>{`🐷 ${name}`}</div>;
       });
   });
@@ -30,6 +37,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
     dev.TODO();
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+    });
   });
 
   e.it('ui:footer', async (e) => {

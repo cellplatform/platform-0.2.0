@@ -13,7 +13,7 @@ export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
     fields: DEFAULTS.fields.default,
   });
 
