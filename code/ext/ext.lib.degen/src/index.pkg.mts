@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'sys.net.http': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },
