@@ -1,1 +1,1 @@
-export { Http, http } from './Http/index.mjs';
+export { Http, http } from './Http';

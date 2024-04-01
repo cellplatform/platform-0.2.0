@@ -1,4 +1,4 @@
-import { Value } from './libs.mjs';
+import { Value } from './libs';
 
 /**
  * Generate a random port.

@@ -1,8 +1,8 @@
 import { Subject } from 'rxjs';
 
-import { rx, t } from '../common/index.mjs';
-import { fetch } from './fetch.mjs';
-import { fetcher } from './Http.fetcher.mjs';
+import { rx, type t } from '../common';
+import { fetch } from './fetch';
+import { fetcher } from './Http.fetcher';
 
 export const create: t.HttpCreate = (options = {}) => {
   const mergeOptions = (methodOptions: t.HttpOptions = {}) => {

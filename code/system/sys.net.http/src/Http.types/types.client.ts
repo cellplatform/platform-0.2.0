@@ -1,4 +1,4 @@
-import { t, Observable } from './common.mjs';
+import type { Observable, t } from './common';
 
 /**
  * Client (HTTP)

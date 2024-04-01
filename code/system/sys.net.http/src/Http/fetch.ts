@@ -1,4 +1,4 @@
-import { t, Util, CrossFetch } from '../common/index.mjs';
+import { CrossFetch, Util, type t } from '../common';
 
 export const fetch: t.HttpFetch = async (req) => {
   const { url, method, mode, data } = req;

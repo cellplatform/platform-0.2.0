@@ -1,4 +1,4 @@
-import { t, Json } from './common.mjs';
+import type { Json, t } from './common';
 
 type O = Record<string, unknown>;
 

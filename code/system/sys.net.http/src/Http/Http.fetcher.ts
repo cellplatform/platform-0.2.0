@@ -1,4 +1,4 @@
-import { t, Util, slug, Time, Delete, Headers } from '../common/index.mjs';
+import { Delete, Headers, Time, Util, slug, type t } from '../common';
 
 export const fetcher = async (args: {
   url: string;

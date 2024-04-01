@@ -1,5 +1,4 @@
-import type * as t from './types.mjs';
-export type { t };
+export type * as t from './types';
 
 export type { Observable } from 'rxjs';
 export type { Json } from 'sys.types/src/types';

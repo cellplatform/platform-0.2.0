@@ -1,7 +1,7 @@
 import type * as t from './t';
 
-import { IS_PROD } from './constants.mjs';
-import { Headers, Is, Mime, Value } from './libs.mjs';
+import { IS_PROD } from './constants';
+import { Headers, Is, Mime, Value } from './libs';
 
 export const response = {
   /**

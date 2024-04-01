@@ -1,9 +1,9 @@
 import { createServer } from 'http';
 import { Readable } from 'stream';
 
-import { t, Time, Util } from '../common/index.mjs';
-import { beforeEach, NodeFs, describe, expect, it, randomPort } from '../test/index.mjs';
-import { Http, http } from './index.mjs';
+import { t, Time, Util } from '../common';
+import { beforeEach, describe, expect, it, NodeFs, randomPort } from '../test';
+import { Http, http } from './index';
 
 describe('http', () => {
   describe('default instance (singleton)', () => {

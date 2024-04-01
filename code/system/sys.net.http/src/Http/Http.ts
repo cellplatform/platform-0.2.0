@@ -1,6 +1,6 @@
-import { Util, Mime } from '../common/index.mjs';
-import { fetch } from './fetch.mjs';
-import { create } from './Http.create.mjs';
+import { Mime, Util } from '../common';
+import { fetch } from './fetch';
+import { create } from './Http.create';
 
 const { toRawHeaders, fromRawHeaders } = Util;
 
