@@ -4,7 +4,9 @@ import type { client } from './Http.client';
 type O = Record<string, unknown>;
 
 export type HttpClient = ReturnType<typeof client>;
+
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE';
+
 export type HttpOrigins = { local: string; remote: string };
 export type HttpOptions = {
   origins?: Partial<HttpOrigins>;
