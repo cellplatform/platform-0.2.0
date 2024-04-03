@@ -1,8 +1,8 @@
 import { Http } from '.';
 import { Path, TestServer, describe, expect, it } from '../test';
 
-describe('Http', () => {
-  describe('init: methods', () => {
+describe('Http.methods', () => {
+  describe('init', () => {
     it('create from [fetcher] function', async () => {
       const server = TestServer.listen({ count: 123 });
       const methods = Http.methods(Http.fetcher());
@@ -21,16 +21,25 @@ describe('Http', () => {
       expect(res1.status).to.eql(200);
       expect(res2.status).to.eql(401);
     });
+
+    it('create with "origin" domain', async () => {
+      const urls: string[] = [];
+      const server = TestServer.listen(
+        { count: 123 },
+        { onRequest: (req) => urls.push(req.url || '') },
+      );
+      const host = Http.origin({}, server.url);
+      const res = await host.get('foo/bar');
+      server.close();
+
+      expect(urls[0]).to.eql('/foo/bar');
+      expect(res.data).to.eql({ count: 123 });
+      expect(res.url).to.eql(`${server.url}foo/bar`);
+    });
   });
 
-  describe('init: origin', () => {
-    /**
-     * TODO 🐷
-     */
-  });
-
-  describe('methods', () => {
-    it('get', async () => {
+  describe('verbs', () => {
+    it('GET', async () => {
       const data = { foo: 123 };
       const server = TestServer.listen(data);
 
