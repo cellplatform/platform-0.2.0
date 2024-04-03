@@ -85,8 +85,6 @@ export const fetcher = async (args: {
       // Invoke the HTTP service end-point.
       const fetched = await args.fetch({ url, mode, method, headers, data });
 
-      console.log('fetched.blog |||', fetched.blob);
-
       return done(fetched);
     } catch (error: any) {
       /**
