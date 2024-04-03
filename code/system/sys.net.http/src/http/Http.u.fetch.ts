@@ -40,7 +40,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
         status,
         method,
         url: url.href,
-        contentType: mime as R['contentType'],
+        type: mime as R['type'],
         data: data as any,
         get headers() {
           return HttpHeaders.fromRaw(fetched.headers);
@@ -53,7 +53,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
         status: 500,
         method,
         url: url.href,
-        contentType: 'ERROR',
+        type: 'ERROR',
         data: undefined,
         headers: {},
       };

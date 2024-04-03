@@ -45,16 +45,16 @@ type CommonRespone = {
 export type HttpResponse = HttpResponseJson | HttpResponseBinary | HttpResponseError;
 
 export type HttpResponseJson = CommonRespone & {
-  contentType: 'application/json';
+  type: 'application/json';
   data: t.Json;
 };
 
 export type HttpResponseBinary = CommonRespone & {
-  contentType: 'application/octet-stream';
+  type: 'application/octet-stream';
   data: Blob;
 };
 
 export type HttpResponseError = CommonRespone & {
-  contentType: 'ERROR';
+  type: 'ERROR';
   data: undefined;
 };

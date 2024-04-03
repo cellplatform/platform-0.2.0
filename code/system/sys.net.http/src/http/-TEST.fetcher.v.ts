@@ -17,8 +17,8 @@ describe('Http', () => {
 
       expect(res.method).to.eql('GET');
       expect(res.url).to.eql(url);
-      expect(res.contentType).to.eql('application/json');
-      if (res.contentType === 'application/json') {
+      expect(res.type).to.eql('application/json');
+      if (res.type === 'application/json') {
         expect(res.data).to.eql(data);
       }
     });
@@ -48,9 +48,9 @@ describe('Http', () => {
 
       expect(res.method).to.eql('POST');
       expect(res.url).to.eql(server.url);
-      expect(res.contentType).to.eql('application/octet-stream');
-      if (res.contentType === 'application/octet-stream') {
-        expect(res.data.type).to.eql(res.contentType);
+      expect(res.type).to.eql('application/octet-stream');
+      if (res.type === 'application/octet-stream') {
+        expect(res.data.type).to.eql(res.type);
         expect(res.data.size).to.eql(data.length);
         expect(await Http.toUint8Array(res.data)).to.eql(data);
       }
