@@ -49,4 +49,19 @@ export const TestServer = {
       close: () => server.close(),
     } as const;
   },
+
+  requestData<T>(req: IncomingMessage) {
+    return new Promise<string>((resolve, reject) => {
+      let body = '';
+
+      // Listen for data chunks
+      req.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+
+      req.on('end', () => {
+        resolve(body);
+      });
+    });
+  },
 } as const;

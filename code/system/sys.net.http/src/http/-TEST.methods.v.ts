@@ -1,5 +1,6 @@
 import { Http } from '.';
 import { Path, TestServer, describe, expect, it } from '../test';
+import type { IncomingMessage } from 'node:http';
 
 describe('Http.methods', () => {
   describe('init', () => {
@@ -28,8 +29,8 @@ describe('Http.methods', () => {
         { count: 123 },
         { onRequest: (req) => urls.push(req.url || '') },
       );
-      const host = Http.origin({}, server.url);
-      const res = await host.get('foo/bar');
+      const origin = Http.origin({}, server.url);
+      const res = await origin.get('foo/bar');
       server.close();
 
       expect(urls[0]).to.eql('/foo/bar');
@@ -42,18 +43,76 @@ describe('Http.methods', () => {
     it('GET', async () => {
       const data = { foo: 123 };
       const server = TestServer.listen(data);
-
       const fetch = Http.fetcher();
       const raw = Http.methods(fetch);
       const origin = Http.origin(fetch, server.url);
 
       const res1 = await raw.get(server.url);
-      const res2 = await origin.get('foo/bar');
+      const res2 = await origin.get('foo/bar', { msg: 'hello' });
       server.close();
 
+      expect(res1.method).to.eql('GET');
       expect(res1.data).to.eql(data);
       expect(res2.data).to.eql(data);
-      expect(res2.url).to.eql(Path.join(server.url, 'foo/bar'));
+      expect(res2.url).to.eql(Path.join(server.url, 'foo/bar?msg=hello'));
+    });
+
+    it('PUT', async () => {
+      let json = '';
+      const payload = { foo: 123 };
+      const server = TestServer.listen(
+        {},
+        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+      );
+      const origin = Http.origin({}, server.url);
+      const res = await origin.put('foo/bar', payload, { msg: 'hello' });
+      server.close();
+      expect(res.status).to.eql(200);
+      expect(res.method).to.eql('PUT');
+      expect(res.url).to.eql(Path.join(server.url, '/foo/bar?msg=hello'));
+      expect(JSON.parse(json)).to.eql(payload);
+    });
+
+    it('POST', async () => {
+      let json = '';
+      const payload = { foo: 123 };
+      const server = TestServer.listen(
+        {},
+        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+      );
+      const origin = Http.origin({}, server.url);
+      const res = await origin.post('foo/bar', payload, { msg: 'hello' });
+      server.close();
+      expect(res.status).to.eql(200);
+      expect(res.method).to.eql('POST');
+      expect(res.url).to.eql(Path.join(server.url, '/foo/bar?msg=hello'));
+      expect(JSON.parse(json)).to.eql(payload);
+    });
+
+    it('PATCH', async () => {
+      let json = '';
+      const payload = { foo: 123 };
+      const server = TestServer.listen(
+        {},
+        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+      );
+      const origin = Http.origin({}, server.url);
+      const res = await origin.patch('foo/bar', payload, { msg: 'hello' });
+      server.close();
+      expect(res.status).to.eql(200);
+      expect(res.method).to.eql('PATCH');
+      expect(res.url).to.eql(Path.join(server.url, '/foo/bar?msg=hello'));
+      expect(JSON.parse(json)).to.eql(payload);
+    });
+
+    it('DELETE', async () => {
+      const server = TestServer.listen({});
+      const origin = Http.origin({}, server.url);
+      const res = await origin.delete('foo/bar', { msg: 'hello' });
+      server.close();
+      expect(res.status).to.eql(200);
+      expect(res.method).to.eql('DELETE');
+      expect(res.url).to.eql(Path.join(server.url, '/foo/bar?msg=hello'));
     });
   });
 });
