@@ -1,4 +1,4 @@
-import { Delete, Headers, Time, Util, slug, type t } from '../common';
+import { Delete, Time, Util, slug, type t } from '../common';
 
 export const fetcher = async (args: {
   url: string;
@@ -25,11 +25,8 @@ export const fetcher = async (args: {
     header(key: string, value: string) {
       before.isModified = true;
       const headers = modifications.headers || {};
-      if (value) {
-        headers[key] = value;
-      } else {
-        delete headers[key];
-      }
+      if (value) headers[key] = value;
+      else delete headers[key];
       modifications.headers = headers;
     },
     headers: {
@@ -63,7 +60,7 @@ export const fetcher = async (args: {
     // Exit with faked/overridden response if one was returned via the BEFORE event.
     const respond = modifications.respond;
     const payload = typeof respond === 'function' ? await respond() : respond;
-    const response = await Util.response.fromPayload(payload, modifications);
+    const response = await Util.Response.fromPayload(payload, modifications);
     const elapsed = timer.elapsed.msec;
     const { ok, status } = response;
     fire({
@@ -73,7 +70,7 @@ export const fetcher = async (args: {
     return response;
   } else {
     const done = async (fetched: t.HttpFetchResponse) => {
-      const response = await Util.response.fromFetch(fetched);
+      const response = await Util.Response.fromFetch(fetched);
       const elapsed = timer.elapsed.msec;
       const { ok, status } = response;
       fire({
@@ -87,6 +84,9 @@ export const fetcher = async (args: {
     try {
       // Invoke the HTTP service end-point.
       const fetched = await args.fetch({ url, mode, method, headers, data });
+
+      console.log('fetched.blog |||', fetched.blob);
+
       return done(fetched);
     } catch (error: any) {
       /**

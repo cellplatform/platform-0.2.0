@@ -11,8 +11,7 @@
     "tmp": "tsx script.ts/tmp.mts"
   },
   "dependencies": {
-    "sys.util": "0.0.0",
-    "cross-fetch": "4.0.0"
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.fs.node": "0.0.0",

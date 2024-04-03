@@ -1,6 +1,6 @@
-import { CrossFetch, Util, type t } from '../common';
+import { Util, type t } from '../common';
 
-export const fetch: t.HttpFetch = async (req) => {
+export const httpFetch: t.HttpFetch = async (req) => {
   const { url, method, mode, data } = req;
 
   const onError = () =>
@@ -16,5 +16,5 @@ export const fetch: t.HttpFetch = async (req) => {
   const headers = Util.toRawHeaders(req.headers);
   const body = ['GET', 'HEAD'].includes(method) ? undefined : toBody();
 
-  return CrossFetch(url, { method, mode, body, headers });
+  return fetch(url, { method, mode, body, headers });
 };

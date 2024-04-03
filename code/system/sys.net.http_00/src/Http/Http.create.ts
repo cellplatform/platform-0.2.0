@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 
 import { rx, type t } from '../common';
-import { fetch } from './fetch';
+import { httpFetch } from './fetch';
 import { fetcher } from './Http.fetcher';
 
 export const create: t.HttpCreate = (options = {}) => {
@@ -21,7 +21,7 @@ export const create: t.HttpCreate = (options = {}) => {
   ) => {
     const { mode, headers } = mergeOptions(args.options);
     const { url, data } = args;
-    return fetcher({ method, url, mode, headers, data, fire, fetch: options.fetch || fetch });
+    return fetcher({ method, url, mode, headers, data, fire, fetch: options.fetch || httpFetch });
   };
 
   const $ = new Subject<t.HttpEvent>();
