@@ -7,6 +7,7 @@ export { Pkg };
 /**
  * Library
  */
+export { Http } from './http';
 
 /**
  * Dev
