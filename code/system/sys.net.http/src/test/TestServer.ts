@@ -1,5 +1,6 @@
-import { createServer } from 'node:http';
-import { DEFAULTS, randomPort, type t } from './common';
+import { createServer, type IncomingMessage } from 'node:http';
+import { HttpHeaders } from '../http';
+import { DEFAULTS, randomPort, statusOK, type t } from './common';
 
 export const TestServer = {
   /**
@@ -7,24 +8,45 @@ export const TestServer = {
    */
   listen(
     data?: t.Json | Uint8Array,
-    options: { port?: number; status?: number; contentType?: string; headers?: t.HttpHeaders } = {},
+    options: {
+      port?: number;
+      status?: number;
+      contentType?: string;
+      headers?: t.HttpHeaders;
+      accessToken?: string;
+      onRequest?: (req: IncomingMessage) => void;
+    } = {},
   ) {
-    const { status = 200 } = options;
+    const MIME = DEFAULTS.mime;
     const port = options.port ?? randomPort();
-
     const isBinary = data instanceof Uint8Array;
-    const mime = DEFAULTS.mime;
-    const contentType = options.contentType ?? (isBinary ? mime.binary : mime.json);
+    const contentType = options.contentType ?? (isBinary ? MIME.binary : MIME.json);
     const payload = isBinary ? Buffer.from(data) : JSON.stringify(data);
 
     const server = createServer((req, res) => {
-      res.writeHead(status, { 'Content-Type': contentType, ...options.headers });
-      res.write(payload);
+      options.onRequest?.(req);
+      let status = options.status ?? 200;
+      if (options.accessToken) {
+        const jwt = HttpHeaders.value(req.headers as any, 'Authorization');
+        if (jwt !== `Bearer ${options.accessToken}`) status = 401; // Not Authorized.
+      }
+
+      const headers: t.HttpHeaders = {
+        'Content-Type': contentType,
+        ...options.headers,
+      };
+
+      res.writeHead(status, headers);
+      if (statusOK(status)) res.write(payload);
       res.end();
     }).listen(port);
 
-    const url = `http://localhost:${port}/`;
-    const close = () => server.close();
-    return { port, url, close } as const;
+    const host = `localhost:${port}`;
+    return {
+      port,
+      host,
+      url: `http://${host}/`,
+      close: () => server.close(),
+    } as const;
   },
 } as const;

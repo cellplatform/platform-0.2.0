@@ -1,15 +1,12 @@
-import { Delete, statusOK, type t } from './common';
+import { DEFAULTS, Delete, statusOK, type t } from './common';
 import { HttpHeaders } from './Http.m.Headers';
 
 /**
  * Initialize a new HTTP fetcher
  */
 export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
-  const { accessToken, contentType = 'application/json', silent = true } = options;
-  const baseHeaders = Delete.empty({
-    'Content-Type': contentType,
-    Authorization: accessToken ? `Bearer ${accessToken}` : '',
-  } as const);
+  const { silent = true } = options;
+  const base = options;
 
   return async (method, address, options = {}) => {
     // Prepare.
@@ -21,10 +18,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
     // Fetch.
     try {
       if (!silent) console.info(`${method}: ${url.href}`);
-      const headers = {
-        ...baseHeaders,
-        'Content-Type': options.contentType ?? contentType,
-      };
+      const headers = wrangle.headers(options, base);
       const fetched = await fetch(url, { method, headers, body });
       const status = fetched.status;
       if (!silent) console.info(`${method} complete: ${status}`);
@@ -34,17 +28,18 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
       const data = ok ? await wrangle.data(fetched) : {};
 
       type R = t.HttpResponseBinary | t.HttpResponseJson;
-      const mime = HttpHeaders.value(fetched.headers, 'content-type');
+      const type = HttpHeaders.value(fetched.headers, 'content-type') as R['type'];
       const res: R = {
         ok,
         status,
         method,
         url: url.href,
-        type: mime as R['type'],
+        type,
         data: data as any,
         get headers() {
           return HttpHeaders.fromRaw(fetched.headers);
         },
+        header: (key) => HttpHeaders.value(fetched.headers, key),
       };
       return res;
     } catch (err: any) {
@@ -56,6 +51,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
         type: 'ERROR',
         data: undefined,
         headers: {},
+        header: (key) => '',
       };
       return error;
     }
@@ -66,6 +62,21 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
  * Helpers
  */
 const wrangle = {
+  bearer(jwt?: string) {
+    return jwt ? `Bearer ${jwt}` : '';
+  },
+
+  headers(method: t.HttpFetchOptions, base: t.HttpOptions) {
+    const mime = method.contentType ?? base.contentType ?? DEFAULTS.mime.json;
+    const accessToken = method.accessToken ?? base.accessToken;
+    const headers = method.headers ?? base.headers;
+    return Delete.empty({
+      'Content-Type': mime,
+      Authorization: wrangle.bearer(accessToken),
+      ...headers,
+    });
+  },
+
   async data(res: Response): Promise<t.Json | Blob | undefined> {
     const type = HttpHeaders.value(res.headers, 'content-type');
     if (type === HttpHeaders.mime.json) return res.json();

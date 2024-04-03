@@ -6,6 +6,7 @@ export type HttpMethod = 'HEAD' | 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 
 export type HttpHeaders = { [key: string]: string };
 
 export type HttpOptions = {
+  headers?: t.HttpHeaders;
   contentType?: string;
   accessToken?: string; // JWT: https://www.rfc-editor.org/rfc/rfc7519
   silent?: boolean; // Supress console logging.
@@ -17,8 +18,16 @@ export type HttpOptions = {
 export type HttpFetcher = (
   method: t.HttpMethod,
   url: string,
-  options?: { body?: O; params?: O; contentType?: string },
+  options?: HttpFetchOptions,
 ) => Promise<HttpResponse>;
+
+export type HttpFetchOptions = {
+  headers?: t.HttpHeaders;
+  body?: O;
+  params?: O;
+  contentType?: string;
+  accessToken?: string;
+};
 
 /**
  * Http Methods
@@ -35,26 +44,27 @@ export type HttpFetchMethods = {
  * Response
  */
 type CommonRespone = {
-  method: HttpMethod;
-  url: string;
-  ok: boolean;
-  status: number;
-  headers: t.HttpHeaders;
+  readonly method: HttpMethod;
+  readonly url: string;
+  readonly ok: boolean;
+  readonly status: number;
+  readonly headers: t.HttpHeaders;
+  header(key: string): string;
 };
 
 export type HttpResponse = HttpResponseJson | HttpResponseBinary | HttpResponseError;
 
 export type HttpResponseJson = CommonRespone & {
-  type: 'application/json';
-  data: t.Json;
+  readonly type: 'application/json';
+  readonly data: t.Json;
 };
 
 export type HttpResponseBinary = CommonRespone & {
-  type: 'application/octet-stream';
-  data: Blob;
+  readonly type: 'application/octet-stream';
+  readonly data: Blob;
 };
 
 export type HttpResponseError = CommonRespone & {
-  type: 'ERROR';
-  data: undefined;
+  readonly type: 'ERROR';
+  readonly data: undefined;
 };

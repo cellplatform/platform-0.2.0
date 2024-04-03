@@ -1,6 +1,6 @@
 import { Http, HttpHeaders } from '.';
-import { describe, expect, it, type t } from '../test';
-
+import { describe, expect, it, type t, TestServer } from '../test';
+import type { IncomingMessage } from 'node:http';
 describe('Http.Headers', () => {
   it('exposed from root API', () => {
     expect(Http.Headers).to.equal(HttpHeaders);
@@ -52,9 +52,19 @@ describe('Http.Headers', () => {
     expect(value(res4, 'content-type')).to.eql('text/plain');
   });
 
-  it('HttpHeaders.fromRaw', () => {
+  it('HttpHeaders.fromRaw: {object}', () => {
     const input = { foo: '123', bar: 'cheese' };
     const headers = HttpHeaders.toRaw(input);
     expect(Http.Headers.fromRaw(headers)).to.eql(input);
+  });
+
+  it('HttpHeaders.fromRaw: req.headers', async () => {
+    const requests: IncomingMessage[] = [];
+    const server = TestServer.listen({}, { onRequest: (req) => requests.push(req) });
+    await Http.fetcher()('GET', server.url);
+    server.close();
+
+    const res = Http.Headers.fromRaw(requests[0].headers);
+    expect(res['host']).to.eql(server.host);
   });
 });

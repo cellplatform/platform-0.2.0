@@ -1,6 +1,9 @@
 import { HttpIs } from './Http.m.Is';
 import { DEFAULTS, type t } from './common';
 
+import type { IncomingHttpHeaders, OutgoingHttpHeaders } from 'node:http';
+type RawHeadersInput = Headers | IncomingHttpHeaders | OutgoingHttpHeaders;
+
 /**
  * Helpers for working with headers
  */
@@ -10,14 +13,14 @@ export const HttpHeaders = {
   /**
    * Retrieve the value for the given header.
    */
-  value(headers: t.HttpHeaders | Headers | undefined, key: string) {
+  value(headers: t.HttpHeaders | RawHeadersInput | undefined, key: string): string {
     key = key.trim().toLowerCase();
     const obj = (HttpIs.nativeHeaders(headers) ? HttpHeaders.fromRaw(headers) : headers) || {};
     const matchKey =
       Object.keys(obj)
         .filter((k) => k.trim().toLowerCase() === key)
         .find((k) => obj[k]) || '';
-    return matchKey ? obj[matchKey] : '';
+    return String(matchKey ? obj[matchKey] : '');
   },
 
   /**
@@ -35,33 +38,21 @@ export const HttpHeaders = {
   /**
    * Converts fetch [Headers] to a simple object.
    */
-  fromRaw(input: Headers): t.HttpHeaders {
-    const hasEntries = typeof input.entries === 'function';
-    const obj = hasEntries
-      ? walkHeaderEntries(input) // NB: Properly formed fetch object (probably in browser)
-      : ((input as any) || {})._headers || {}; // HACK: reach into the server object's internals.
-
-    return Object.keys(obj).reduce((acc, key) => {
-      const value = Array.isArray(obj[key]) ? obj[key][0] : obj[key];
-      acc[key] = value;
-      return acc;
-    }, {} as any);
+  fromRaw(input: RawHeadersInput): t.HttpHeaders {
+    const res: t.HttpHeaders = {};
+    wrangle.entries(input).forEach(([key, value]) => (res[key] = value));
+    return res;
   },
 } as const;
 
 /**
  * Helpers
  */
-const walkHeaderEntries = (input: Headers) => {
-  const res: t.HttpHeaders = {};
-  const entries = input.entries();
-  let next: IteratorResult<[string, string], any> | undefined;
-  do {
-    next = entries.next();
-    if (next.value) {
-      const [key, value] = next.value;
-      res[key] = value;
-    }
-  } while (!next?.done);
-  return res;
-};
+const wrangle = {
+  entries(headers: RawHeadersInput): [string, string][] {
+    if (typeof headers.entries === 'function') return Array.from(headers.entries());
+    return Object.entries(headers).map(([key, value]) => {
+      return [key, Array.isArray(value) ? value.join('; ') : value];
+    });
+  },
+} as const;
