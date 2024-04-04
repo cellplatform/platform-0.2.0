@@ -23,6 +23,8 @@ const {
   DevSpecs: ComonDev,
   SampleSpecs: CommonSample,
 } = await import('sys.ui.react.common/specs');
+const { Specs: List } = await import('sys.ui.react.list');
+
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
@@ -50,6 +52,7 @@ export const Specs = {
   ...Common,
   ...ComonDev,
   ...CommonSample,
+  ...List,
   ...Dev,
   ...Media,
   ...MediaImage,
