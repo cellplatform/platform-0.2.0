@@ -14,8 +14,9 @@ export function methods(fetcher: t.HttpFetchInput = {}): t.HttpMethods {
 /**
  * HTTP methods for a specific host origin.
  */
-export function origin(fetcher: t.HttpFetchInput, domain: string): t.HttpMethods {
-  return toMethods(fetcher, (path) => Path.join(domain, path));
+export function origin(fetcher: t.HttpFetchInput, domain: string | t.PortNumber): t.HttpMethods {
+  const host = wrangle.host(domain);
+  return toMethods(fetcher, (path) => Path.join(host, path));
 }
 
 /**
@@ -41,5 +42,9 @@ const wrangle = {
     if (typeof input === 'function') return input;
     if (typeof input === 'object') return fetcher(input);
     throw new Error('Fetcher input not supporter');
+  },
+
+  host(input: string | t.PortNumber) {
+    return typeof input === 'string' ? input : `http://localhost:${input}`;
   },
 } as const;

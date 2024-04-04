@@ -4,7 +4,9 @@ export { type t };
 /**
  * Libs
  */
-export { Hono } from 'npm:hono';
+import { Hono } from 'npm:hono';
+import { cors } from 'npm:hono/cors';
+export const Server = { Hono, cors } as const;
 
 /**
  * Helpers

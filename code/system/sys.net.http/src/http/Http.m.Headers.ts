@@ -8,7 +8,7 @@ type RawHeadersInput = Headers | IncomingHttpHeaders | OutgoingHttpHeaders;
  * Helpers for working with headers
  */
 export const HttpHeaders = {
-  mime: DEFAULTS.mime,
+  Mime: DEFAULTS.mime,
 
   /**
    * Retrieve the value for the given header.

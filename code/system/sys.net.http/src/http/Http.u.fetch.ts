@@ -71,8 +71,8 @@ const wrangle = {
   },
 
   async data(type: t.HttpResponseType, res: Response): Promise<t.Json | Blob | undefined> {
-    if (type === HttpHeaders.mime.json) return res.json();
-    if (type === HttpHeaders.mime.binary) return res.blob();
+    if (type === HttpHeaders.Mime.json) return res.json();
+    if (type === HttpHeaders.Mime.binary) return res.blob();
     return undefined;
   },
 
