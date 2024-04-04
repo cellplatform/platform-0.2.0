@@ -1,13 +1,16 @@
 import { type t } from '../common';
 import { DEFAULTS as HTTP_DEFAULTS } from '../../http';
 
-export { Http } from '../../http';
+export { DenoHttp } from '../../http';
 export * from '../common';
 
 /**
  * Constants
  */
-const endpoint: t.HttpOptions = { forcePublic: false, origins: HTTP_DEFAULTS.origins };
+const endpoint: t.DenoHttpOptions = {
+  forcePublic: false,
+  origins: HTTP_DEFAULTS.origins,
+};
 
 export const DEFAULTS = {
   displayName: 'Info',

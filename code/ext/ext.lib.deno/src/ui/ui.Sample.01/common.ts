@@ -2,7 +2,7 @@ import type * as t from './t.ts';
 export { type t };
 
 export * from '../common';
-export { Http } from '../../http';
+export { DenoHttp as Http } from '../../http';
 
 export const DEFAULTS = {
   origins: {

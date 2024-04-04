@@ -1,6 +1,6 @@
 import { Info, DEFAULTS } from '.';
 import { Delete, Dev, Hash, Pkg, type t } from '../../test.ui';
-import { Http } from './common';
+import { DenoHttp } from './common';
 
 type P = t.InfoProps;
 type T = {
@@ -28,7 +28,7 @@ export default Dev.describe(name, async (e) => {
 
   const getClient = (state: T) => {
     const forcePublic = state.debug.forcePublicUrl;
-    return Http.client({ forcePublic });
+    return DenoHttp.client({ forcePublic });
   };
 
   const getTokens = (ctx: t.DevCtx, state: T) => {
@@ -170,6 +170,7 @@ export default Dev.describe(name, async (e) => {
       dev.button('get: projects.list', async (e) => {
         const client = getClient(state.current);
         const res = await client.projects.list();
+        console.log('res', res);
         await e.change((d) => (d.props.data!.projects!.list = res.projects));
       });
     });
@@ -177,6 +178,7 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
       dev.boolean((btn) => {
         const value = (state: T) => !!state.debug.forcePublicUrl;
         btn
@@ -201,7 +203,7 @@ export default Dev.describe(name, async (e) => {
       const forcePublic = debug.forcePublicUrl;
       const data = {
         props,
-        origin: Http.origin({ forcePublic }),
+        origin: DenoHttp.origin({ forcePublic }),
         accessToken: tokens.prop ? `${Hash.shorten(tokens.prop, 6)}` : undefined,
         'accessToken.env': tokens.env ? `${Hash.shorten(tokens.env, 6)}` : undefined,
         'state:onChange': e.state.state ? e.state.state : undefined,

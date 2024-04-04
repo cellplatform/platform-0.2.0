@@ -1,4 +1,4 @@
-import { DEFAULTS, Http, PatchState, R, type t } from './common';
+import { DEFAULTS, DenoHttp, PatchState, R, type t } from './common';
 
 /**
  * Helpers
@@ -8,9 +8,9 @@ export const Wrangle = {
     return PatchState.init({ initial });
   },
 
-  client(data: t.InfoData): t.HttpClient {
-    const options: t.HttpOptions = R.merge(DEFAULTS.endpoint, data.endpoint ?? {});
-    return Http.client(options);
+  client(data: t.InfoData): t.DenoHttpClient {
+    const options: t.DenoHttpOptions = R.merge(DEFAULTS.endpoint, data.endpoint ?? {});
+    return DenoHttp.client(options);
   },
 
   projects: (d: t.InfoData) => d.projects || (d.projects = {}),

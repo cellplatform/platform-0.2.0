@@ -16,7 +16,7 @@ export type InfoProps = t.CommonInfoProps<InfoField, InfoData> & {
 export type InfoField = 'Module' | 'Module.Verify' | 'Auth.AccessToken' | 'Projects.List';
 
 export type InfoData = {
-  endpoint?: t.HttpOptions;
+  endpoint?: t.DenoHttpOptions;
   projects?: InfoDataProjects;
   deployments?: InfoDataDeployments;
 };

@@ -125,22 +125,22 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      const getHttp = () => {
-        const forcePublic = state.current.forcePublicUrl;
-        const fetch = Http.fetcher({ forcePublic });
-        const http = Http.toMethods(fetch);
-        const client = Http.client(fetch);
-        return { http, client } as const;
-      };
+      // const getHttp = () => {
+      //   const forcePublic = state.current.forcePublicUrl;
+      //   const fetch = Http.fetcher({ forcePublic });
+      //   const http = Http.toMethods(fetch);
+      //   const client = Http.client(fetch);
+      //   return { http, client } as const;
+      // };
       const getSelectedProject = () => state.current.deno.selectedProject;
 
       dev.button('💦 create project', async (e) => {
-        const http = getHttp().http;
-        const body = {
-          // name: `foo-${slug()}`,
-          description: `Sample project ${slug()}`,
-        };
-        const res = await http.post('deno/projects', body);
+        // const http = getHttp().http;
+        // const body = {
+        //   // name: `foo-${slug()}`,
+        //   description: `Sample project ${slug()}`,
+        // };
+        // const res = await http.post('deno/projects', body);
         // e.change((d) => (d.tmp = res.json));
       });
       dev.hr(-1, 5);
@@ -162,7 +162,7 @@ export default Dev.describe(name, (e) => {
           .enabled((e) => !!getSelectedProject())
           .onClick(async (e) => {
             const projectId = getSelectedProject();
-            const http = getHttp().http;
+            // const http = getHttp().http;
 
             const content = state.current.props.code ?? '';
             const body: t.DenoDeployArgs = {
@@ -172,11 +172,11 @@ export default Dev.describe(name, (e) => {
             };
 
             const path = `deno/projects/${projectId}/deployments`;
-            const res = await http.post(path, body);
+            // const res = await http.post(path, body);
 
             console.log('-------------------------------------------');
-            console.log('res', res);
-            await HttpState.updateDeployments(state);
+            // console.log('res', res);
+            // await HttpState.updateDeployments(state);
           });
       });
     });

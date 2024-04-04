@@ -1,9 +1,7 @@
 import { client } from './Http.client';
-import { fetcher, origin, toMethods } from './Http.fetch';
+import { origin } from './Http.u';
 
-export const Http = {
+export const DenoHttp = {
   origin,
   client,
-  fetcher,
-  toMethods,
 } as const;
