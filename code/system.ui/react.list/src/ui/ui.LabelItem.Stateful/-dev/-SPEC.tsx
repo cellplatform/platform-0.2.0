@@ -1,7 +1,7 @@
 import { css, Color, Dev, Time, Value, rx, type t } from '../../../test.ui';
 import { LabelItem } from '../../ui.LabelItem';
-import { Sample, type SampleActionKind } from './-Sample.renderers';
-import { SampleList } from './-Sample.List';
+import { Sample, type SampleActionKind } from './-SPEC.renderers';
+import { SampleList } from './-SPEC.Sample.List';
 
 const Model = LabelItem.Model;
 const DEFAULTS = LabelItem.Stateful.DEFAULTS;
