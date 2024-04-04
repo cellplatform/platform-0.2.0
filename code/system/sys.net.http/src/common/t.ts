@@ -11,6 +11,7 @@ export type {
   EventBus,
   Json,
   Lifecycle,
+  Msecs,
   PortNumber,
   UntilObservable,
 } from 'sys.types/src/types';

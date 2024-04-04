@@ -1,4 +1,4 @@
-import { DEFAULTS, Delete, statusOK, type t } from './common';
+import { DEFAULTS, Delete, statusOK, Time, type t } from './common';
 import { HttpHeaders } from './Http.m.Headers';
 
 /**
@@ -12,41 +12,25 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
     // Prepare.
     const { params } = options;
     const url = new URL(address);
+    const res = wrangle.response(method, url);
+    const headers = wrangle.headers(options, base);
     const body = options.body ? JSON.stringify(options.body) : undefined;
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)));
 
     // Fetch.
     try {
       if (!silent) console.info(`${method}: ${url.href}`);
-      const headers = wrangle.headers(options, base);
       const fetched = await fetch(url, { method, headers, body });
       const status = fetched.status;
-      if (!silent) console.info(`${method} complete: ${status}`);
+      const type = wrangle.contentType(fetched);
+      if (!silent) console.info(`${method} complete: ${status}, elapsed: ${res.elapsed}`);
 
-      // Finish up.
-      const ok = statusOK(status);
-      const type = wrangle.contentType(fetched.headers);
-      const data = ok ? await wrangle.data(type, fetched) : {};
-      if (type === 'ERROR') return wrangle.error(400, method, url.href);
-
-      /**
-       * Success
-       */
-      const res: t.HttpResponseSuccess = {
-        ok,
-        status,
-        method,
-        url: url.href,
-        type,
-        data: data as any, // NB: type hack.
-        get headers() {
-          return HttpHeaders.fromRaw(fetched.headers);
-        },
-        header: (key) => HttpHeaders.value(fetched.headers, key),
-      };
-      return res;
+      if (type === 'ERROR') return res.error(status);
+      if (type === 'application/json') return res.json(fetched);
+      if (type === 'application/octet-stream') return res.binary(fetched);
+      return res.error(400);
     } catch (err: any) {
-      return wrangle.error(500, method, url.href);
+      return res.error(400);
     }
   };
 }
@@ -70,29 +54,90 @@ const wrangle = {
     });
   },
 
-  async data(type: t.HttpResponseType, res: Response): Promise<t.Json | Blob | undefined> {
-    if (type === HttpHeaders.Mime.json) return res.json();
-    if (type === HttpHeaders.Mime.binary) return res.blob();
-    return undefined;
-  },
-
-  contentType(headers: Headers): t.HttpResponseType {
-    const contentType = HttpHeaders.value(headers, 'content-type');
+  contentType(fetched: Response): t.HttpResponseType {
+    if (!statusOK(fetched.status)) return 'ERROR';
+    const contentType = HttpHeaders.value(fetched.headers, 'content-type');
     const parts = contentType.split(';');
     const type = parts.find((text) => text.includes('/'));
     return (type ? type.trim() : 'ERROR') as t.HttpResponseType;
   },
 
-  error(status: number, method: t.HttpMethod, url: string): t.HttpResponseError {
-    return {
-      ok: false,
-      status,
-      method,
-      url,
-      type: 'ERROR',
-      data: undefined,
-      headers: {},
-      header: (key) => '',
-    };
+  status(fetched: Response) {
+    const status = fetched.status;
+    const ok = statusOK(status);
+    return { ok, status } as const;
+  },
+
+  response(method: t.HttpMethod, url: URL) {
+    const timer = Time.timer();
+    async function tryOrError(fn: () => Promise<t.HttpResponse>) {
+      try {
+        return await fn();
+      } catch (err: any) {
+        return api.error(400);
+      }
+    }
+
+    const api = {
+      get elapsed() {
+        return timer.elapsed;
+      },
+
+      json(fetched: Response) {
+        return tryOrError(async () => {
+          const { ok, status } = wrangle.status(fetched);
+          const res: t.HttpResponseJson = {
+            ok,
+            status,
+            method,
+            url: url.href,
+            elapsed: api.elapsed.msec,
+            type: 'application/json',
+            data: (await fetched.json()) as t.Json,
+            get headers() {
+              return HttpHeaders.fromRaw(fetched.headers);
+            },
+            header: (key) => HttpHeaders.value(fetched.headers, key),
+          };
+          return res;
+        });
+      },
+
+      async binary(fetched: Response) {
+        return tryOrError(async () => {
+          const { ok, status } = wrangle.status(fetched);
+          const res: t.HttpResponseBinary = {
+            ok,
+            status,
+            method,
+            url: url.href,
+            elapsed: api.elapsed.msec,
+            type: 'application/octet-stream',
+            data: await fetched.blob(),
+            get headers() {
+              return HttpHeaders.fromRaw(fetched.headers);
+            },
+            header: (key) => HttpHeaders.value(fetched.headers, key),
+          };
+          return res;
+        });
+      },
+
+      error(status: number): t.HttpResponseError {
+        return {
+          ok: false,
+          status,
+          method,
+          url: url.href,
+          elapsed: api.elapsed.msec,
+          type: 'ERROR',
+          data: undefined,
+          headers: {},
+          header: (key) => '',
+        };
+      },
+    } as const;
+
+    return api;
   },
 } as const;

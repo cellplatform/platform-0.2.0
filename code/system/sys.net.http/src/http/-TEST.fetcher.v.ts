@@ -2,7 +2,7 @@ import type { IncomingMessage } from 'node:http';
 import { Http } from '.';
 import { TestServer, describe, expect, it } from '../test';
 
-describe('Http', () => {
+describe('Http.fetcher', () => {
   it('GET (defaults): OK', async () => {
     const data = { foo: 123 };
     const server = TestServer.listen(data);
@@ -14,6 +14,7 @@ describe('Http', () => {
 
     expect(res.ok).to.eql(true);
     expect(res.status).to.eql(200);
+    expect(res.elapsed).to.greaterThan(0);
 
     expect(res.method).to.eql('GET');
     expect(res.url).to.eql(url);
@@ -51,6 +52,7 @@ describe('Http', () => {
     const res2 = await Http.fetcher()('GET', server.url, { accessToken });
     const res3 = await Http.fetcher()('GET', server.url); // NB: fail.
     server.close();
+
     expect(res1.status).to.eql(200);
     expect(res2.status).to.eql(200);
     expect(res3.status).to.eql(401);

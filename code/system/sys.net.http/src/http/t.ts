@@ -44,30 +44,32 @@ export type HttpMethods = {
 /**
  * Response
  */
-type CommonRespone = {
-  readonly method: HttpMethod;
-  readonly url: string;
-  readonly ok: boolean;
-  readonly status: number;
-  readonly headers: t.HttpHeaders;
-  header(key: string): string;
-};
 
 export type HttpResponse = HttpResponseJson | HttpResponseBinary | HttpResponseError;
 export type HttpResponseType = HttpResponse['type'];
 export type HttpResponseSuccess = Exclude<HttpResponse, HttpResponseError>;
 
-export type HttpResponseJson = CommonRespone & {
+export type HttpResponseCommon = {
+  readonly ok: boolean;
+  readonly status: number;
+  readonly method: HttpMethod;
+  readonly url: string;
+  readonly elapsed: t.Msecs;
+  readonly headers: t.HttpHeaders;
+  header(key: string): string;
+};
+
+export type HttpResponseJson = HttpResponseCommon & {
   readonly type: 'application/json';
   readonly data: t.Json;
 };
 
-export type HttpResponseBinary = CommonRespone & {
+export type HttpResponseBinary = HttpResponseCommon & {
   readonly type: 'application/octet-stream';
   readonly data: Blob;
 };
 
-export type HttpResponseError = CommonRespone & {
+export type HttpResponseError = HttpResponseCommon & {
   readonly type: 'ERROR';
   readonly data: undefined;
 };
