@@ -14,23 +14,38 @@ type WalkCallbackArgs = {
  * a visitor callback for each item.
  */
 export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
-  let _stopped = false;
+  /**
+   * Inner implementation
+   */
+  const walked = new Map<any, boolean>(); // NB: protect against circular-references.
 
-  const process = (key: string | number, value: any) => {
-    if (_stopped) return;
+  const walk = <T extends object | any[]>(parent: T, fn: WalkCallback) => {
+    let _stopped = false;
     const stop = () => (_stopped = true);
-    fn({ parent, key, value, stop });
-    if (_stopped) return;
-    const isObject = typeof parent === 'object' && parent !== null;
-    const isArray = Array.isArray(value);
-    if (isObject || isArray) walk(value, fn); // <== RECURSION 🌳
+
+    const process = (key: string | number, value: any) => {
+      if (_stopped || walked.has(value)) return; // Skip if stopped or already walked.
+
+      fn({ parent, key, value, stop });
+      if (_stopped) return;
+
+      const isObject = typeof parent === 'object' && parent !== null;
+      const isArray = Array.isArray(value);
+      if (isObject || isArray) {
+        walked.set(value, true);
+        walk(value, fn); // <== RECURSION 🌳
+      }
+    };
+
+    if (Array.isArray(parent)) {
+      parent.forEach((item, i) => process(i, item));
+    } else if (typeof parent === 'object' && parent !== null) {
+      Object.entries(parent).forEach(([key, value]) => process(key, value));
+    }
   };
 
-  if (Array.isArray(parent)) {
-    parent.forEach((item, i) => process(i, item));
-  } else if (typeof parent === 'object' && parent !== null) {
-    Object.entries(parent).forEach(([key, value]) => process(key, value));
-  }
+  // Start.
+  walk<T>(parent, fn);
 }
 
 /**

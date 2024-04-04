@@ -82,6 +82,17 @@ describe('Value.Object', () => {
         { key: 'child', value: { enabled: true, list: [1, 2] } },
       ]);
     });
+
+    it('circular reference', () => {
+      let count = 0;
+
+      const a = { b: null as any };
+      const b = { a, child: [1, { msg: 'hello' }] };
+      a.b = b; // Setup ciruclar reference.
+
+      Value.Object.walk(a, (e) => count++);
+      expect(count).to.eql(6); // NB: with no infinite loop.
+    });
   });
 
   describe('Value.Object.build', () => {
