@@ -27,13 +27,14 @@ export function routes(
    */
   app.get(`${path}/projects`, async (c) => {
     const claims = await ctx.auth.verify(c);
-    console.log('claims', claims);
+    // console.log('claims', claims);
 
     const qs = new URL(c.req.url).search;
     const url = Http.url('organizations', orgId, `projects${qs}`);
     const res = await http.get(url);
     if (!Is.statusOK(res)) return c.text(Http.failedUpstream(res), 500);
     const projects = (await res.json()) as t.DenoProject[];
+    console.log('projects', projects);
     return c.json(projects);
   });
 
