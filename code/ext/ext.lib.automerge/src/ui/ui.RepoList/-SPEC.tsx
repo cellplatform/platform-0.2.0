@@ -1,11 +1,24 @@
 import { RepoList } from '.';
-import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
+import {
+  Color,
+  Dev,
+  DevReload,
+  Doc,
+  Pkg,
+  TestDb,
+  Time,
+  WebStore,
+  css,
+  rx,
+  slug,
+  type t,
+} from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = t.RepoListProps;
 type T = {
   props: P;
-  debug: { reload?: boolean; cancelDelete?: boolean };
+  debug: { reload?: boolean; cancelDelete?: boolean; inSidebar?: boolean };
 };
 const name = RepoList.displayName ?? 'Unknown';
 const initial: T = { props: {}, debug: {} };
@@ -19,7 +32,7 @@ export default Dev.describe(name, async (e) => {
   let active: t.RepoListActiveChangedEventArgs | undefined;
 
   type LocalStore = Pick<t.RepoListProps, 'newlabel'> &
-    Pick<T['debug'], 'cancelDelete'> &
+    Pick<T['debug'], 'cancelDelete' | 'inSidebar'> &
     Pick<t.RepoListModel, 'behaviors'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
@@ -27,6 +40,7 @@ export default Dev.describe(name, async (e) => {
     behaviors: DEFAULTS.behaviors.default,
     newlabel: DEFAULTS.newlabel,
     cancelDelete: false,
+    inSidebar: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -49,6 +63,7 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.props.newlabel = local.newlabel;
       d.debug.cancelDelete = local.cancelDelete;
+      d.debug.inSidebar = local.inSidebar;
     });
 
     const events = {
@@ -76,8 +91,9 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         const { props, debug } = e.state;
         if (debug.reload) return <DevReload />;
+        if (debug.inSidebar) return null;
 
-        const renderCount: t.RenderCountProps = {
+        const count: t.RenderCountProps = {
           prefix: 'list.render-',
           absolute: [-20, 2, null, null],
           opacity: 0.2,
@@ -87,7 +103,7 @@ export default Dev.describe(name, async (e) => {
           <RepoList
             {...props}
             model={model}
-            renderCount={renderCount}
+            renderCount={count}
             onReady={(e) => console.info('⚡️ onReady', e)}
           />
         );
@@ -148,13 +164,21 @@ export default Dev.describe(name, async (e) => {
         Time.delay(0, () => ref.select(target, focus));
       };
       dev.button('select: first', (e) => select('First', false));
-      dev.button(['select: last', 'focus'], (e) => select('Last', true));
+      dev.button(['select: last', '(and focus)'], (e) => select('Last', true));
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.inSidebar;
+        btn
+          .label((e) => `render in sidebar`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.inSidebar = Dev.toggle(d.debug, 'inSidebar'))));
+      });
 
       dev.hr(-1, 5);
 
@@ -209,18 +233,34 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      if (!model) return;
-      const data = {
-        props: e.state.props,
-        'model:list': model.list.state.current,
-        db: storage,
-        'db:index': `${model.index.db.name}[${model.index.total()}]`,
-        'db:index.doc': model.index.doc.toObject(),
-        'active:focus': !!active?.focused,
-        'active:item': active?.item || undefined,
-      };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
-    });
+    dev.footer
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        if (!model) return;
+        const { props, debug } = e.state;
+        const data = {
+          props,
+          'model:list': model.list.state.current,
+          db: storage,
+          'db:index': `${model.index.db.name}[${model.index.total()}]`,
+          'db:index.doc': model.index.doc.toObject(),
+          'active:focus': !!active?.focused,
+          'active:item': active?.item || undefined,
+        };
+
+        const styles = {
+          base: css({}),
+          obj: css({ margin: 8 }),
+          list: css({ borderTop: `solid 1px ${Color.alpha(Color.DARK, 0.1)}` }),
+        };
+
+        return (
+          <div {...styles.base}>
+            <Dev.Object name={name} data={data} expand={1} fontSize={11} style={styles.obj} />
+            {debug.inSidebar && <RepoList {...props} model={model} style={styles.list} />}
+          </div>
+        );
+      });
   });
 });
