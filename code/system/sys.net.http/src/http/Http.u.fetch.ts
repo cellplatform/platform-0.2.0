@@ -25,17 +25,20 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
 
       // Finish up.
       const ok = statusOK(status);
-      const data = ok ? await wrangle.data(fetched) : {};
+      const type = wrangle.contentType(fetched.headers);
+      const data = ok ? await wrangle.data(type, fetched) : {};
+      if (type === 'ERROR') return wrangle.error(400, method, url.href);
 
-      type R = t.HttpResponseBinary | t.HttpResponseJson;
-      const type = HttpHeaders.value(fetched.headers, 'content-type') as R['type'];
-      const res: R = {
+      /**
+       * Success
+       */
+      const res: t.HttpResponseSuccess = {
         ok,
         status,
         method,
         url: url.href,
         type,
-        data: data as any,
+        data: data as any, // NB: type hack.
         get headers() {
           return HttpHeaders.fromRaw(fetched.headers);
         },
@@ -43,17 +46,7 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
       };
       return res;
     } catch (err: any) {
-      const error: t.HttpResponseError = {
-        ok: false,
-        status: 500,
-        method,
-        url: url.href,
-        type: 'ERROR',
-        data: undefined,
-        headers: {},
-        header: (key) => '',
-      };
-      return error;
+      return wrangle.error(500, method, url.href);
     }
   };
 }
@@ -77,10 +70,29 @@ const wrangle = {
     });
   },
 
-  async data(res: Response): Promise<t.Json | Blob | undefined> {
-    const type = HttpHeaders.value(res.headers, 'content-type');
+  async data(type: t.HttpResponseType, res: Response): Promise<t.Json | Blob | undefined> {
     if (type === HttpHeaders.mime.json) return res.json();
     if (type === HttpHeaders.mime.binary) return res.blob();
     return undefined;
+  },
+
+  contentType(headers: Headers): t.HttpResponseType {
+    const contentType = HttpHeaders.value(headers, 'content-type');
+    const parts = contentType.split(';');
+    const type = parts.find((text) => text.includes('/'));
+    return (type ? type.trim() : 'ERROR') as t.HttpResponseType;
+  },
+
+  error(status: number, method: t.HttpMethod, url: string): t.HttpResponseError {
+    return {
+      ok: false,
+      status,
+      method,
+      url,
+      type: 'ERROR',
+      data: undefined,
+      headers: {},
+      header: (key) => '',
+    };
   },
 } as const;

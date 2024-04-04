@@ -33,6 +33,17 @@ describe('Http', () => {
     expect(res.header('bar')).to.eql('');
   });
 
+  it('GET: content-type: application/json; charset=UTF-8 (← multi-part value)', async () => {
+    const contentType = 'application/json; charset=UTF-8';
+    const server = TestServer.listen({ foo: 123 }, { contentType });
+    const fetch = Http.fetcher();
+    const res = await fetch('GET', server.url);
+
+    expect(res.header('Content-Type')).to.eql(contentType);
+    expect(res.type).to.eql('application/json');
+    expect(res.data).to.eql({ foo: 123 });
+  });
+
   it('GET: 401 (not authorized)', async () => {
     const accessToken = '0xAbc';
     const server = TestServer.listen({}, { accessToken });

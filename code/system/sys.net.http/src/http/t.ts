@@ -54,6 +54,8 @@ type CommonRespone = {
 };
 
 export type HttpResponse = HttpResponseJson | HttpResponseBinary | HttpResponseError;
+export type HttpResponseType = HttpResponse['type'];
+export type HttpResponseSuccess = Exclude<HttpResponse, HttpResponseError>;
 
 export type HttpResponseJson = CommonRespone & {
   readonly type: 'application/json';
