@@ -20,8 +20,9 @@ export const TestServer = {
     const MIME = DEFAULTS.mime;
     const port = options.port ?? randomPort();
     const isBinary = data instanceof Uint8Array;
-    const contentType = options.contentType ?? (isBinary ? MIME.binary : MIME.json);
-    const payload = isBinary ? Buffer.from(data) : JSON.stringify(data);
+    const isString = typeof data === 'string';
+    const mime = options.contentType ?? (isBinary ? MIME.binary : isString ? MIME.text : MIME.json);
+    const payload = isBinary ? Buffer.from(data) : isString ? data : JSON.stringify(data);
 
     const server = createServer((req, res) => {
       options.onRequest?.(req);
@@ -32,7 +33,7 @@ export const TestServer = {
       }
 
       const headers: t.HttpHeaders = {
-        'Content-Type': contentType,
+        'Content-Type': mime,
         ...options.headers,
       };
 
@@ -50,18 +51,25 @@ export const TestServer = {
     } as const;
   },
 
-  requestData<T>(req: IncomingMessage) {
-    return new Promise<string>((resolve, reject) => {
-      let body = '';
-
-      // Listen for data chunks
-      req.on('data', (chunk) => {
-        body += chunk.toString();
-      });
-
-      req.on('end', () => {
-        resolve(body);
-      });
-    });
+  /**
+   * Helpers for reading data pass in via the HTTP Request object.
+   */
+  data(req: IncomingMessage) {
+    return {
+      string() {
+        return new Promise<string>((resolve) => {
+          let body = '';
+          req.on('data', (chunk) => (body += chunk.toString()));
+          req.on('end', () => resolve(body));
+        });
+      },
+      uint8Array() {
+        return new Promise<Uint8Array>((resolve) => {
+          const chunks: Buffer[] = [];
+          req.on('data', (chunk) => chunks.push(chunk));
+          req.on('end', () => resolve(new Uint8Array(Buffer.concat(chunks))));
+        });
+      },
+    } as const;
   },
 } as const;

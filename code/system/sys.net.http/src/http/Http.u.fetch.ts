@@ -1,5 +1,7 @@
-import { DEFAULTS, Delete, statusOK, Time, type t, toUint8Array } from './common';
+import { DEFAULTS, Delete, statusOK, Time, toUint8Array, type t } from './common';
 import { HttpHeaders } from './Http.m.Headers';
+
+const MIME = DEFAULTS.mime;
 
 /**
  * Initialize a new HTTP fetcher
@@ -13,8 +15,8 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
     const { params } = options;
     const url = new URL(address);
     const res = wrangle.response(method, url);
-    const headers = wrangle.headers(options, base);
-    const body = options.body ? JSON.stringify(options.body) : undefined;
+    const headers = wrangle.requestHeaders(options, base, options.body);
+    const body = wrangle.requestBody(options);
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)));
 
     // Fetch.
@@ -22,10 +24,11 @@ export function fetcher(options: t.HttpOptions = {}): t.HttpFetcher {
       if (!silent) console.info(`${method}: ${url.href}`);
       const fetched = await fetch(url, { method, headers, body });
       const status = fetched.status;
-      const type = wrangle.contentType(fetched);
+      const type = wrangle.responseType(fetched);
       if (!silent) console.info(`${method} complete: ${status}, elapsed: ${res.elapsed}`);
 
       if (type === 'ERROR') return res.error(status);
+      if (type === 'text/plain') return res.text(fetched);
       if (type === 'application/json') return res.json(fetched);
       if (type === 'application/octet-stream') return res.binary(fetched);
       return res.error(400);
@@ -43,18 +46,35 @@ const wrangle = {
     return jwt ? `Bearer ${jwt}` : '';
   },
 
-  headers(method: t.HttpFetchOptions, base: t.HttpOptions) {
-    const mime = method.contentType ?? base.contentType ?? DEFAULTS.mime.json;
+  requestBody(options: t.HttpFetchOptions) {
+    const body = options.body;
+    if (!body) return undefined;
+    if (body instanceof Uint8Array) return body;
+    if (typeof body === 'string') return body;
+    return JSON.stringify(body);
+  },
+
+  requestHeaders(method: t.HttpFetchOptions, base: t.HttpOptions, body?: t.HttpBodyPayload) {
+    const isString = typeof body === 'string';
+    const isBinary = body instanceof Uint8Array;
+    const specifiedMime = method.contentType ?? base.contentType;
+    const type = specifiedMime ?? isBinary ? MIME.binary : isString ? MIME.text : MIME.json;
     const accessToken = method.accessToken ?? base.accessToken;
     const headers = method.headers ?? base.headers;
     return Delete.empty({
-      'Content-Type': mime,
+      'Content-Type': type,
       Authorization: wrangle.bearer(accessToken),
       ...headers,
     });
   },
 
-  contentType(fetched: Response): t.HttpResponseType {
+  responseStatus(fetched: Response) {
+    const status = fetched.status;
+    const ok = statusOK(status);
+    return { ok, status } as const;
+  },
+
+  responseType(fetched: Response): t.HttpResponseType {
     if (!statusOK(fetched.status)) return 'ERROR';
     const contentType = HttpHeaders.value(fetched.headers, 'content-type');
     const parts = contentType.split(';');
@@ -62,15 +82,9 @@ const wrangle = {
     return (type ? type.trim() : 'ERROR') as t.HttpResponseType;
   },
 
-  status(fetched: Response) {
-    const status = fetched.status;
-    const ok = statusOK(status);
-    return { ok, status } as const;
-  },
-
   response(method: t.HttpMethod, url: URL) {
     const timer = Time.timer();
-    async function tryOrError(fn: () => Promise<t.HttpResponse>) {
+    async function tryOrThrow<T extends t.HttpResponse>(fn: () => Promise<T>) {
       try {
         return await fn();
       } catch (err: any) {
@@ -83,46 +97,66 @@ const wrangle = {
         return timer.elapsed;
       },
 
+      text(fetched: Response) {
+        return tryOrThrow<t.HttpResponseText>(async () => {
+          const { ok, status } = wrangle.responseStatus(fetched);
+          const data = await fetched.text();
+          return {
+            ok,
+            status,
+            method,
+            url: url.href,
+            elapsed: api.elapsed.msec,
+            type: 'text/plain',
+            data,
+            header: (key) => HttpHeaders.value(fetched.headers, key),
+            get headers() {
+              return HttpHeaders.fromRaw(fetched.headers);
+            },
+          };
+        });
+      },
+
       json(fetched: Response) {
-        return tryOrError(async () => {
-          const { ok, status } = wrangle.status(fetched);
-          const res: t.HttpResponseJson = {
+        return tryOrThrow<t.HttpResponseJson>(async () => {
+          const { ok, status } = wrangle.responseStatus(fetched);
+          const data = (await fetched.json()) as t.Json;
+          return {
             ok,
             status,
             method,
             url: url.href,
             elapsed: api.elapsed.msec,
             type: 'application/json',
-            data: (await fetched.json()) as t.Json,
+            data,
+            header: (key) => HttpHeaders.value(fetched.headers, key),
+            json: <T>() => data as T,
             get headers() {
               return HttpHeaders.fromRaw(fetched.headers);
             },
-            header: (key) => HttpHeaders.value(fetched.headers, key),
-            toJson: <T>() => res.data as T,
           };
-          return res;
         });
       },
 
       async binary(fetched: Response) {
-        return tryOrError(async () => {
-          const { ok, status } = wrangle.status(fetched);
-          let _data: Uint8Array | undefined;
-          const res: t.HttpResponseBinary = {
+        return tryOrThrow<t.HttpResponseBinary>(async () => {
+          const { ok, status } = wrangle.responseStatus(fetched);
+          const data = await fetched.blob();
+          let _binary: Uint8Array | undefined;
+          return {
             ok,
             status,
             method,
             url: url.href,
             elapsed: api.elapsed.msec,
             type: 'application/octet-stream',
-            data: await fetched.blob(),
+            data,
+            header: (key) => HttpHeaders.value(fetched.headers, key),
+            binary: async () => _binary || (_binary = await toUint8Array(data)),
             get headers() {
               return HttpHeaders.fromRaw(fetched.headers);
             },
-            header: (key) => HttpHeaders.value(fetched.headers, key),
-            toUint8Array: async () => _data || (_data = await toUint8Array(res.data)),
           };
-          return res;
         });
       },
 

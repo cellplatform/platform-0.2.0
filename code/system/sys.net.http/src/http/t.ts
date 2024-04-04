@@ -24,7 +24,7 @@ export type HttpFetcher = (
 
 export type HttpFetchOptions = {
   headers?: t.HttpHeaders;
-  body?: O;
+  body?: B;
   params?: O;
   contentType?: string;
   accessToken?: string;
@@ -33,19 +33,24 @@ export type HttpFetchOptions = {
 /**
  * Http Methods
  */
+type B = HttpBodyPayload;
+export type HttpBodyPayload = O | Uint8Array | string;
 export type HttpMethods = {
   get(path: string, params?: O): Promise<HttpResponse>;
-  put(path: string, body: O, params?: O): Promise<HttpResponse>;
-  post(path: string, body: O, params?: O): Promise<HttpResponse>;
-  patch(path: string, body: O, params?: O): Promise<HttpResponse>;
+  put(path: string, body: B, params?: O): Promise<HttpResponse>;
+  post(path: string, body: B, params?: O): Promise<HttpResponse>;
+  patch(path: string, body: B, params?: O): Promise<HttpResponse>;
   delete(path: string, params?: O): Promise<HttpResponse>;
 };
 
 /**
  * Response
  */
-
-export type HttpResponse = HttpResponseJson | HttpResponseBinary | HttpResponseError;
+export type HttpResponse =
+  | HttpResponseText
+  | HttpResponseJson
+  | HttpResponseBinary
+  | HttpResponseError;
 export type HttpResponseType = HttpResponse['type'];
 export type HttpResponseSuccess = Exclude<HttpResponse, HttpResponseError>;
 
@@ -59,16 +64,21 @@ export type HttpResponseCommon = {
   header(key: string): string;
 };
 
+export type HttpResponseText = HttpResponseCommon & {
+  readonly type: 'text/plain';
+  readonly data: string;
+};
+
 export type HttpResponseJson = HttpResponseCommon & {
   readonly type: 'application/json';
   readonly data: t.Json;
-  toJson<T extends t.Json>(): T;
+  json<T extends t.Json>(): T;
 };
 
 export type HttpResponseBinary = HttpResponseCommon & {
   readonly type: 'application/octet-stream';
   readonly data: Blob;
-  toUint8Array(): Promise<Uint8Array>;
+  binary(): Promise<Uint8Array>;
 };
 
 export type HttpResponseError = HttpResponseCommon & {

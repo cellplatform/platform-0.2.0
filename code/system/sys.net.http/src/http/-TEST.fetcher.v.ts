@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'node:http';
 import { Http } from '.';
-import { TestServer, describe, expect, it } from '../test';
+import { TestServer, describe, expect, it, slug } from '../test';
 
 describe('Http.fetcher', () => {
   it('GET (defaults): OK', async () => {
@@ -22,7 +22,7 @@ describe('Http.fetcher', () => {
     expect(res.type).to.eql('application/json');
     if (res.type === 'application/json') {
       expect(res.data).to.eql(data);
-      expect(res.toJson<T>()).to.eql(data);
+      expect(res.json<T>()).to.eql(data);
     }
   });
 
@@ -78,10 +78,10 @@ describe('Http.fetcher', () => {
   });
 
   it('POST: binary', async () => {
-    const data = new Uint8Array([1, 2, 3, 4]);
-    const server = TestServer.listen(data);
+    const body = new Uint8Array([1, 2, 3, 4]);
+    const server = TestServer.listen(body);
     const fetch = Http.fetcher();
-    const res = await fetch('POST', server.url);
+    const res = await fetch('POST', server.url, { body });
     server.close();
 
     expect(res.method).to.eql('POST');
@@ -89,13 +89,25 @@ describe('Http.fetcher', () => {
     expect(res.type).to.eql('application/octet-stream');
     if (res.type === 'application/octet-stream') {
       expect(res.data.type).to.eql(res.type);
-      expect(res.data.size).to.eql(data.length);
-      expect(await Http.toUint8Array(res.data)).to.eql(data);
+      expect(res.data.size).to.eql(body.length);
+      expect(await Http.toUint8Array(res.data)).to.eql(body);
 
-      const d1 = await res.toUint8Array();
-      const d2 = await res.toUint8Array();
+      const d1 = await res.binary();
+      const d2 = await res.binary();
       expect(d1).to.equal(d2); // NB: same instance (cached after first call).
-      expect(d1).to.eql(data);
+      expect(d1).to.eql(body);
     }
+  });
+
+  it('POST: text', async () => {
+    const body = `hello-${slug()}`;
+    const server = TestServer.listen(body);
+    const fetch = Http.fetcher();
+    const res = await fetch('POST', server.url, { body });
+    server.close();
+
+    expect(res.status).to.eql(200);
+    expect(res.type).to.eql('text/plain');
+    expect(res.data).to.eql(body);
   });
 });

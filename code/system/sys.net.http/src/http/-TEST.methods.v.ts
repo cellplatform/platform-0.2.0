@@ -61,7 +61,7 @@ describe('Http.methods', () => {
       const payload = { foo: 123 };
       const server = TestServer.listen(
         {},
-        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+        { onRequest: async (req) => (json = await TestServer.data(req).string()) },
       );
       const origin = Http.origin({}, server.url);
       const res = await origin.put('foo/bar', payload, { msg: 'hello' });
@@ -72,12 +72,12 @@ describe('Http.methods', () => {
       expect(JSON.parse(json)).to.eql(payload);
     });
 
-    it('POST', async () => {
+    it('POST: json', async () => {
       let json = '';
       const payload = { foo: 123 };
       const server = TestServer.listen(
         {},
-        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+        { onRequest: async (req) => (json = await TestServer.data(req).string()) },
       );
       const origin = Http.origin({}, server.url);
       const res = await origin.post('foo/bar', payload, { msg: 'hello' });
@@ -88,12 +88,26 @@ describe('Http.methods', () => {
       expect(JSON.parse(json)).to.eql(payload);
     });
 
+    it('POST: binary', async () => {
+      let binary: Uint8Array | undefined;
+      const payload = new Uint8Array([1, 2, 3]);
+      const server = TestServer.listen(
+        {},
+        { onRequest: async (req) => (binary = await TestServer.data(req).uint8Array()) },
+      );
+      const origin = Http.origin({}, server.url);
+      const res = await origin.post('foo/bar', payload);
+      server.close();
+      expect(res.status).to.eql(200);
+      expect(binary).to.eql(payload);
+    });
+
     it('PATCH', async () => {
       let json = '';
       const payload = { foo: 123 };
       const server = TestServer.listen(
         {},
-        { onRequest: async (req) => (json = await TestServer.requestData(req)) },
+        { onRequest: async (req) => (json = await TestServer.data(req).string()) },
       );
       const origin = Http.origin({}, server.url);
       const res = await origin.patch('foo/bar', payload, { msg: 'hello' });
