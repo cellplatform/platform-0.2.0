@@ -62,11 +62,13 @@ export type HttpResponseCommon = {
 export type HttpResponseJson = HttpResponseCommon & {
   readonly type: 'application/json';
   readonly data: t.Json;
+  toJson<T extends t.Json>(): T;
 };
 
 export type HttpResponseBinary = HttpResponseCommon & {
   readonly type: 'application/octet-stream';
   readonly data: Blob;
+  toUint8Array(): Promise<Uint8Array>;
 };
 
 export type HttpResponseError = HttpResponseCommon & {

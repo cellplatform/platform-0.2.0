@@ -1,4 +1,4 @@
-import { DEFAULTS, Delete, statusOK, Time, type t } from './common';
+import { DEFAULTS, Delete, statusOK, Time, type t, toUint8Array } from './common';
 import { HttpHeaders } from './Http.m.Headers';
 
 /**
@@ -98,6 +98,7 @@ const wrangle = {
               return HttpHeaders.fromRaw(fetched.headers);
             },
             header: (key) => HttpHeaders.value(fetched.headers, key),
+            toJson: <T>() => res.data as T,
           };
           return res;
         });
@@ -106,6 +107,7 @@ const wrangle = {
       async binary(fetched: Response) {
         return tryOrError(async () => {
           const { ok, status } = wrangle.status(fetched);
+          let _data: Uint8Array | undefined;
           const res: t.HttpResponseBinary = {
             ok,
             status,
@@ -118,6 +120,7 @@ const wrangle = {
               return HttpHeaders.fromRaw(fetched.headers);
             },
             header: (key) => HttpHeaders.value(fetched.headers, key),
+            toUint8Array: async () => _data || (_data = await toUint8Array(res.data)),
           };
           return res;
         });

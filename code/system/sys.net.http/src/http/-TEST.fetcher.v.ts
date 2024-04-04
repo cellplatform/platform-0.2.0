@@ -4,7 +4,8 @@ import { TestServer, describe, expect, it } from '../test';
 
 describe('Http.fetcher', () => {
   it('GET (defaults): OK', async () => {
-    const data = { foo: 123 };
+    type T = { foo: number };
+    const data: T = { foo: 123 };
     const server = TestServer.listen(data);
     const fetch = Http.fetcher();
 
@@ -21,6 +22,7 @@ describe('Http.fetcher', () => {
     expect(res.type).to.eql('application/json');
     if (res.type === 'application/json') {
       expect(res.data).to.eql(data);
+      expect(res.toJson<T>()).to.eql(data);
     }
   });
 
@@ -89,6 +91,11 @@ describe('Http.fetcher', () => {
       expect(res.data.type).to.eql(res.type);
       expect(res.data.size).to.eql(data.length);
       expect(await Http.toUint8Array(res.data)).to.eql(data);
+
+      const d1 = await res.toUint8Array();
+      const d2 = await res.toUint8Array();
+      expect(d1).to.equal(d2); // NB: same instance (cached after first call).
+      expect(d1).to.eql(data);
     }
   });
 });
