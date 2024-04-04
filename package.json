@@ -155,6 +155,7 @@
   "resolutions": {
     "axios": ">=1.6.8",
     "node-fetch": ">=2.6.7",
+    "undici": ">=6.11.1",
     "vite": ">=5.0.13",
     "web3-utils": ">=4.2.1"
   },
