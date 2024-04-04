@@ -1,8 +1,8 @@
 import { Model } from '../ui.RepoList.Model';
 import { RepoListRef as Ref } from './Ref';
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './ui';
 import { RepoListConfig as Config } from './ui.Config';
+import { MemoView } from './ui.Memo';
 
 const model = Model.init;
 
@@ -17,7 +17,7 @@ type Fields = {
   Config: typeof Config;
 };
 export const RepoList = FC.decorate<t.RepoListProps, Fields>(
-  View,
+  MemoView,
   { DEFAULTS, Ref, Model, model, Config },
   { displayName: 'Crdt.RepoList' },
 );

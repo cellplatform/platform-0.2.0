@@ -19,8 +19,8 @@ export const View: React.FC<t.RepoListProps> = (props) => {
    */
   useEffect(() => {
     if (props.model && !readyRef.current) {
-      const ref = RepoListRef(props.model);
       readyRef.current = true;
+      const ref = RepoListRef(props.model);
       props.onReady?.({ ref });
     }
   }, [!!props.model]);
