@@ -1,4 +1,4 @@
-import { Dev, Time, Value, rx, type t } from '../../../test.ui';
+import { css, Color, Dev, Time, Value, rx, type t } from '../../../test.ui';
 import { LabelItem } from '../../ui.LabelItem';
 import { Sample, type SampleActionKind } from './-Sample.renderers';
 import { SampleList } from './-Sample.List';
@@ -13,6 +13,7 @@ type T = {
     behaviors?: t.LabelItemBehaviorKind[];
     renderCount?: boolean;
     isList?: boolean;
+    inSidebar?: boolean;
     editOnActionAdd?: boolean;
     cancelOnEditCmd?: boolean;
   };
@@ -21,12 +22,16 @@ const initial: T = { debug: {} };
 const name = LabelItem.Stateful.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<
+  type LocalStore = { total: number } & Pick<
     T['debug'],
-    'behaviors' | 'renderCount' | 'debug' | 'isList' | 'editOnActionAdd' | 'cancelOnEditCmd'
-  > & {
-    total: number;
-  };
+    | 'behaviors'
+    | 'renderCount'
+    | 'debug'
+    | 'isList'
+    | 'editOnActionAdd'
+    | 'cancelOnEditCmd'
+    | 'inSidebar'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     behaviors: DEFAULTS.behaviors.defaults,
@@ -34,6 +39,7 @@ export default Dev.describe(name, (e) => {
     debug: false,
     renderCount: true,
     isList: true,
+    inSidebar: false,
     editOnActionAdd: true,
     cancelOnEditCmd: false,
   });
@@ -116,6 +122,20 @@ export default Dev.describe(name, (e) => {
     },
   };
 
+  const renderSubject = (state: T, props: { style?: t.CssValue } = {}) => {
+    const { debug } = state;
+    const { isList, renderCount } = debug;
+    return (
+      <SampleList
+        list={TestState.list}
+        // renderers={Sample.renderers}
+        behaviors={debug.behaviors}
+        debug={{ isList, renderCount, ruby: debug.debug }}
+        style={props.style}
+      />
+    );
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -125,6 +145,7 @@ export default Dev.describe(name, (e) => {
       d.debug.renderCount = local.renderCount;
       d.debug.debug = local.debug;
       d.debug.isList = local.isList;
+      d.debug.inSidebar = local.inSidebar;
       d.debug.editOnActionAdd = local.editOnActionAdd;
       d.debug.cancelOnEditCmd = local.cancelOnEditCmd;
     });
@@ -137,16 +158,7 @@ export default Dev.describe(name, (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
-        const { debug } = e.state;
-        const { isList, renderCount } = debug;
-        return (
-          <SampleList
-            list={TestState.list}
-            // renderers={Sample.renderers}
-            behaviors={debug.behaviors}
-            debug={{ isList, renderCount, ruby: debug.debug }}
-          />
-        );
+        return e.state.debug.inSidebar ? null : renderSubject(e.state);
       });
   });
 
@@ -270,12 +282,23 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.inSidebar;
+        btn
+          .label((e) => `render in sidebar`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.inSidebar = Dev.toggle(d.debug, 'inSidebar'))));
+      });
+
+      dev.hr(-1, 5);
+
       dev.textbox((txt) => {
         txt
-          .placeholder('sample focus textbox')
+          .placeholder('sample no-op textbox (pull focus)')
           .onChange((e) => {})
           .onEnter((e) => {});
       });
+      dev.hr(0, 5);
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debug);
@@ -313,19 +336,41 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.footer.border(-0.1).render<T>((e) => {
-      const items = TestState.array.items.reduce((acc, next, i) => {
-        const key = `${i}.${next.instance}`;
-        acc[key] = next.current;
-        return acc;
-      }, {} as Record<string, t.LabelItemState['current']>);
+    dev.footer
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        const { debug } = e.state;
+        const { isList, renderCount } = debug;
 
-      const data = {
-        list: TestState.list.current,
-        items,
-      };
+        const items = TestState.array.items.reduce((acc, next, i) => {
+          const key = `${i}.${next.instance}`;
+          acc[key] = next.current;
+          return acc;
+        }, {} as Record<string, t.LabelItemState['current']>);
 
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$'] }} />;
-    });
+        const data = {
+          list: TestState.list.current,
+          items,
+        };
+
+        const styles = {
+          base: css({}),
+          obj: css({ margin: 8 }),
+          list: css({ borderTop: `solid 1px ${Color.alpha(Color.DARK, 0.1)}` }),
+        };
+
+        return (
+          <div {...styles.base}>
+            <Dev.Object
+              name={name}
+              data={data}
+              expand={{ level: 1, paths: ['$'] }}
+              style={styles.obj}
+            />
+            {debug.inSidebar && renderSubject(e.state, { style: styles.list })}
+          </div>
+        );
+      });
   });
 });
