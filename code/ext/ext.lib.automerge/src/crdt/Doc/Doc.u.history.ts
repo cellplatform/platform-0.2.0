@@ -62,7 +62,7 @@ export function history<T>(doc?: t.DocRef<T>): t.DocHistory<T> {
  * Retrieve the list of hashes for the current HEAD.
  */
 export function heads<T>(doc: t.DocRef<T> | undefined): t.HashString[] {
-  return doc ? A.getHeads(doc.current as A.Doc<T>) : [];
+  return doc?.current ? A.getHeads(doc.current as A.Doc<T>) : [];
 }
 
 /**
