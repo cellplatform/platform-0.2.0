@@ -3,26 +3,25 @@ import { fetcher } from './Http.u.fetch';
 
 type O = Record<string, unknown>;
 type ModifyPath = (path: string) => string;
-type FetchInput = t.HttpFetcher | t.HttpOptions;
 
 /**
  * HTTP methods.
  */
-export function methods(fetcher: FetchInput = {}): t.HttpFetchMethods {
+export function methods(fetcher: t.HttpFetchInput = {}): t.HttpMethods {
   return toMethods(fetcher);
 }
 
 /**
  * HTTP methods for a specific host origin.
  */
-export function origin(fetcher: FetchInput, domain: string): t.HttpFetchMethods {
+export function origin(fetcher: t.HttpFetchInput, domain: string): t.HttpMethods {
   return toMethods(fetcher, (path) => Path.join(domain, path));
 }
 
 /**
  * Implementation
  */
-function toMethods(input: FetchInput, modifyPath?: ModifyPath): t.HttpFetchMethods {
+function toMethods(input: t.HttpFetchInput, modifyPath?: ModifyPath): t.HttpMethods {
   const f: ModifyPath = (path) => (modifyPath ? modifyPath(path) : path);
   const fetch = wrangle.fetch(input);
   return {
@@ -38,7 +37,7 @@ function toMethods(input: FetchInput, modifyPath?: ModifyPath): t.HttpFetchMetho
  * Helpers
  */
 const wrangle = {
-  fetch(input: FetchInput) {
+  fetch(input: t.HttpFetchInput) {
     if (typeof input === 'function') return input;
     if (typeof input === 'object') return fetcher(input);
     throw new Error('Fetcher input not supporter');

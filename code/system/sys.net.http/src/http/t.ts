@@ -4,6 +4,7 @@ type O = Record<string, unknown>;
 
 export type HttpMethod = 'HEAD' | 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
 export type HttpHeaders = { [key: string]: string };
+export type HttpFetchInput = t.HttpFetcher | t.HttpOptions;
 
 export type HttpOptions = {
   headers?: t.HttpHeaders;
@@ -32,7 +33,7 @@ export type HttpFetchOptions = {
 /**
  * Http Methods
  */
-export type HttpFetchMethods = {
+export type HttpMethods = {
   get(path: string, params?: O): Promise<HttpResponse>;
   put(path: string, body: O, params?: O): Promise<HttpResponse>;
   post(path: string, body: O, params?: O): Promise<HttpResponse>;

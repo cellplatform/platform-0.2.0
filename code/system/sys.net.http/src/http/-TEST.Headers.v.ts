@@ -1,6 +1,6 @@
-import { Http, HttpHeaders } from '.';
-import { describe, expect, it, type t, TestServer } from '../test';
 import type { IncomingMessage } from 'node:http';
+import { Http, HttpHeaders } from '.';
+import { TestServer, describe, expect, it, type t } from '../test';
 describe('Http.Headers', () => {
   it('exposed from root API', () => {
     expect(Http.Headers).to.equal(HttpHeaders);

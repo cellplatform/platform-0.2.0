@@ -1,6 +1,5 @@
 import { Http } from '.';
 import { Path, TestServer, describe, expect, it } from '../test';
-import type { IncomingMessage } from 'node:http';
 
 describe('Http.methods', () => {
   describe('init', () => {
