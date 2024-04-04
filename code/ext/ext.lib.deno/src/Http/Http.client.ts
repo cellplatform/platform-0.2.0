@@ -11,9 +11,11 @@ export function client(options: t.DenoHttpOptions) {
   const endpoint = origin(options);
   const http = Http.origin({ accessToken }, endpoint);
 
-  const api = {
-    endpoint,
-    host: new URL(endpoint).host,
+  const api: t.DenoHttpClient = {
+    url: {
+      endpoint,
+      host: new URL(endpoint).host,
+    },
 
     /**
      * Projects
@@ -31,10 +33,10 @@ export function client(options: t.DenoHttpOptions) {
     /**
      * Deployments
      */
-    deployments(projectId: string) {
+    deployments(project: t.IdString) {
       return {
         async list(params?: t.DenoListDeploymentsParams) {
-          const path = `deno/projects/${projectId}/deployments`;
+          const path = `deno/projects/${project}/deployments`;
           const res = await http.get(path, params);
           const { ok, status, data } = res;
           const deployments = ok ? (data as t.DenoDeployment[]) : [];
