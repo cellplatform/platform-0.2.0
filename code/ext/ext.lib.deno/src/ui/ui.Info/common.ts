@@ -1,5 +1,5 @@
-import { type t } from '../common';
 import { DEFAULTS as HTTP_DEFAULTS } from '../../http';
+import { type t } from '../common';
 
 export { DenoHttp } from '../../http';
 export * from '../common';

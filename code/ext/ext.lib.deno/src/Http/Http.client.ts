@@ -8,11 +8,12 @@ import { type t } from './common';
  */
 export function client(options: t.DenoHttpOptions) {
   const { accessToken } = options;
-  const domain = origin(options);
-  const http = Http.origin({ accessToken }, domain);
+  const endpoint = origin(options);
+  const http = Http.origin({ accessToken }, endpoint);
 
   const api = {
-    domain,
+    endpoint,
+    host: new URL(endpoint).host,
 
     /**
      * Projects
