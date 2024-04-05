@@ -21,6 +21,15 @@ export const ObjectPath = {
   },
 
   /**
+   * Return a strongly typed version of the resolve ƒ(🌳);
+   */
+  resolver<T>() {
+    return (root: unknown | unknown[], path: t.ObjectPath): T | undefined => {
+      return ObjectPath.resolve<T>(root, path);
+    };
+  },
+
+  /**
    * Write a value to the given path on the root object.
    * If parts of the path do not exist, they are created as objects.
    */

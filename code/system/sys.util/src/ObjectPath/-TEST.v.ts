@@ -20,6 +20,12 @@ describe('ObjectPath', () => {
       list: [1, { msg: 'two' }, ['a', 'b', null]],
     };
 
+    it('resolver (<T> curried function)', () => {
+      const string = ObjectPath.resolver<string>();
+      const res = string(root, ['msg']);
+      expect(res).to.eql('hello');
+    });
+
     it('returns {root} ← param []', () => {
       const res = ObjectPath.resolve<R>(root, []);
       expect(res).to.eql(root);
