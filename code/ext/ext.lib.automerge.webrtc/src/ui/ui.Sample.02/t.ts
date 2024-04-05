@@ -41,6 +41,7 @@ export type HarnessShared = {
   debugPanel: boolean;
   module?: SampleModuleDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
+  cmdbar?: string;
 };
 
 export type SampleModuleDef = {

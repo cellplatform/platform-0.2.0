@@ -1,10 +1,23 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, TestDb, WebrtcStore, rx } from '../../test.ui';
+import {
+  css,
+  COLORS,
+  Delete,
+  Dev,
+  Doc,
+  Peer,
+  PeerUI,
+  TestDb,
+  WebrtcStore,
+  rx,
+  Icons,
+} from '../../test.ui';
 import { factory } from '../ui.Sample.02.loaders';
 import { createEdge } from './-SPEC.edge';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
+import { DevBar } from './ui.Dev.Bar';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Subject';
@@ -100,7 +113,20 @@ export default Dev.describe(name, async (e) => {
     ctx.debug.width(300);
 
     ctx.debug.header.border(-0.1).render((e) => {
-      return (
+      const conns = left.network.peer.current.connections;
+      const media = conns.filter((c) => Peer.Is.Kind.media(c));
+      const total = media.length;
+      const empty = total === 0;
+
+      const styles = {
+        base: css({ display: 'grid', placeItems: 'center' }),
+      };
+      const elEmpty = empty && (
+        <div {...styles.base}>
+          <Icons.Person opacity={0.3} />
+        </div>
+      );
+      const elAvatars = !empty && (
         <PeerUI.AvatarTray
           //
           peer={left.network.peer}
@@ -108,6 +134,8 @@ export default Dev.describe(name, async (e) => {
           muted={true}
         />
       );
+
+      return elAvatars || elEmpty || null;
     });
 
     ctx.subject
@@ -149,6 +177,13 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.ctx.host.footer
+      .padding(0)
+      .border(null)
+      .render((e) => {
+        return <DevBar doc={Shared.harness} />;
+      });
 
     dev.row((e) => {
       return (
