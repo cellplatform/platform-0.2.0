@@ -74,12 +74,12 @@ describe('Doc.Events', async () => {
 
       const e = fired[0];
       expect(e.uri).to.eql(doc.uri);
-      expect(e.doc).to.eql(doc.current);
+      expect(e.after).to.eql(doc.current);
       expect(e.patches.length).to.eql(1);
       expect(e.patches[0].action).to.eql('put');
-      expect(e.patchInfo.source).to.eql('change');
-      expect(e.patchInfo.before.count).to.eql(0);
-      expect(e.patchInfo.after.count).to.eql(1);
+      expect(e.source).to.eql('change');
+      expect(e.before.count).to.eql(0);
+      expect(e.after.count).to.eql(1);
 
       events.dispose();
       increment();

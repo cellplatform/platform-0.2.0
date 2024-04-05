@@ -37,11 +37,12 @@ export type DocChangedEvent<T extends O> = {
   payload: DocChanged<T>;
 };
 
-export type DocChanged<T extends O = O> = {
+export type DocChanged<L extends O = O> = {
   uri: t.DocUri;
-  doc: T;
+  before: L;
+  after: L;
   patches: t.Patch[];
-  patchInfo: t.PatchInfo<T>;
+  source: t.PatchSource;
 };
 
 /**
@@ -65,7 +66,7 @@ export type DocEphemeralInEvent<T extends O = O, M extends t.CBOR = t.CBOR> = {
   type: 'crdt:doc/Ephemeral:in';
   payload: DocEphemeralIn<T, M>;
 };
-export type DocEphemeralIn<T extends O = O, M extends t.CBOR = t.CBOR> = DocEphemeralCommon<T> & {
+export type DocEphemeralIn<T extends O = O, M extends t.CBOR = t.CBOR> = EphemeralCommon<T> & {
   direction: 'incoming';
   sender: { id: string };
   message: M;
@@ -75,8 +76,8 @@ export type DocEphemeralOutEvent<T extends O = O> = {
   type: 'crdt:doc/Ephemeral:out';
   payload: DocEphemeralOut<T>;
 };
-export type DocEphemeralOut<T extends O = O> = DocEphemeralCommon<T> & {
+export type DocEphemeralOut<T extends O = O> = EphemeralCommon<T> & {
   direction: 'outgoing';
   data: Uint8Array;
 };
-type DocEphemeralCommon<T extends O = O> = { doc: t.DocRefHandle<T> };
+type EphemeralCommon<T extends O = O> = { doc: t.DocRefHandle<T> };

@@ -37,10 +37,10 @@ export function init<R extends O, L extends O>(
 
   const fire = {
     changed(e: t.DocChanged<R>) {
-      const before = resolve(e.patchInfo.before);
-      const after = resolve(e.patchInfo.after);
+      const before = resolve(e.before);
+      const after = resolve(e.after);
       const patches = wrangle.patches(e.patches, path);
-      const source = e.patchInfo.source;
+      const source = e.source;
       subject$.next({
         type: 'crdt:lens/Changed',
         payload: { uri, source, before, after, patches },

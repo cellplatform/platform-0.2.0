@@ -55,7 +55,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const events = index.doc.events();
 
       const fired: t.StoreIndex[] = [];
-      events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
+      events.changed$.subscribe((e) => fired.push(toObject(e.after)));
 
       const totalBefore = index.total();
       const sample = await store.doc.getOrCreate(initial);
@@ -77,7 +77,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const events = index.doc.events();
 
       const fired: t.StoreIndex[] = [];
-      events.changed$.subscribe((e) => fired.push(toObject(e.doc)));
+      events.changed$.subscribe((e) => fired.push(toObject(e.after)));
 
       const sample = await store.doc.getOrCreate(initial);
       await Time.wait(0);

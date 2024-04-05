@@ -38,8 +38,12 @@ export function eventsFactory<T extends O>(
    * Handlers.
    */
   const onChange = (e: t.DocHandleChangePayload<T>) => {
-    const { doc, patches, patchInfo } = e;
-    fire({ type: 'crdt:doc/Changed', payload: { uri, doc, patches, patchInfo } });
+    const { patches } = e;
+    const { before, after, source } = e.patchInfo;
+    fire({
+      type: 'crdt:doc/Changed',
+      payload: { uri, source, before, after, patches },
+    });
   };
 
   const onDelete = (e: t.DocHandleDeletePayload<T>) => {

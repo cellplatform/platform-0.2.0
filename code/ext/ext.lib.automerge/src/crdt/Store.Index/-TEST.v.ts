@@ -511,7 +511,7 @@ describe('StoreIndex', () => {
 
         await index.add({ uri: 'automerge:foobar' });
         expect(fired.length).to.eql(1);
-        expect(fired[0].doc.docs[0].uri).to.eql('automerge:foobar');
+        expect(fired[0].after.docs[0].uri).to.eql('automerge:foobar');
 
         store.dispose();
       });

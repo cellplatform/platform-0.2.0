@@ -30,8 +30,8 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const item = e.patchInfo.after.docs[index];
-      const total = getTotal(e.patchInfo.after);
+      const item = e.after.docs[index];
+      const total = getTotal(e.after);
       fire('crdt:store:index/Added', index, total, item);
     });
 
@@ -42,8 +42,8 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const item = e.patchInfo.before.docs[index];
-      const total = getTotal(e.patchInfo.after);
+      const item = e.before.docs[index];
+      const total = getTotal(e.after);
       fire('crdt:store:index/Removed', index, total, item);
     });
 
@@ -54,8 +54,8 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const item = e.patchInfo.after.docs[index];
-      const total = getTotal(e.patchInfo.after);
+      const item = e.after.docs[index];
+      const total = getTotal(e.after);
       fire('crdt:store:index/Shared', index, total, item);
     });
 
@@ -66,8 +66,8 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
     )
     .subscribe((e) => {
       const index = e.patches[0].path[1] as number;
-      const item = e.patchInfo.after.docs[index];
-      const total = getTotal(e.patchInfo.after);
+      const item = e.after.docs[index];
+      const total = getTotal(e.after);
       fire('crdt:store:index/Renamed', index, total, item);
     });
 
