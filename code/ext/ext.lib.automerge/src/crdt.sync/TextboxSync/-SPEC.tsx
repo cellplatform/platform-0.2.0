@@ -1,9 +1,14 @@
 import { Dev, Pkg, TestDb, WebStore, type t } from '../../test.ui';
 import { Info } from '../../ui/ui.Info';
 import { RepoList } from '../../ui/ui.RepoList';
-import { Layout, type TDoc } from './-SPEC.u';
+import { Layout, type TDoc } from './-SPEC.ui';
 
-type T = { fields?: t.InfoField[]; theme?: t.CommonTheme; docuri?: string };
+type T = {
+  fields?: t.InfoField[];
+  path?: t.ObjectPath;
+  theme?: t.CommonTheme;
+  docuri?: string;
+};
 const initial: T = {};
 
 /**
@@ -15,21 +20,21 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ storage });
   let model: t.RepoListModel;
 
-  type LocalStore = Pick<T, 'theme' | 'fields'>;
+  type LocalStore = Pick<T, 'theme' | 'fields' | 'path'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    path: ['text'],
     theme: 'Dark',
     fields: ['Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Head'],
   });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.theme = local.theme;
       d.fields = local.fields;
+      d.path = local.path;
     });
 
     model = await RepoList.model(store, {
@@ -45,9 +50,9 @@ export default Dev.describe(name, async (e) => {
       .size([null, null])
       .display('grid')
       .render<T>((e) => {
-        const { theme, docuri } = e.state;
+        const { path, theme, docuri } = e.state;
         Dev.Theme.background(ctx, theme);
-        return <Layout theme={theme} repo={model} docuri={docuri} />;
+        return <Layout theme={theme} repo={model} docuri={docuri} path={path} />;
       });
   });
 
@@ -55,6 +60,11 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
+
+    const getDoc = () => {
+      const uri = state.current.docuri;
+      return store.doc.get<TDoc>(uri);
+    };
 
     dev.row((e) => {
       const { store, index } = model;
@@ -78,6 +88,16 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+
+      dev.hr(-1, 5);
+
+      const path = (path: t.ObjectPath) => {
+        dev.button(`path: ${path?.join('.')}`, (e) => {
+          e.change((d) => (local.path = d.path = path));
+        });
+      };
+      path(['text']);
+      path(['foo', 'text']);
     });
 
     dev.hr(5, 20);
@@ -86,9 +106,15 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
 
       dev.button('clear text', async (e) => {
-        const uri = e.state.current.docuri;
-        const doc = await store.doc.get<TDoc>(uri);
+        const doc = await getDoc();
         doc?.change((d) => (d.text = ''));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('tmp', async (e) => {
+        const doc = await getDoc();
+        doc?.change((d) => (d.text = { foo: 123 } as any));
       });
     });
   });

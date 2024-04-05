@@ -12,6 +12,7 @@ export { A, Data, Is, toObject } from './common';
 import { Doc } from './crdt/Doc';
 import { Store } from './crdt/Store';
 import { WebStore } from './crdt/Store.Web';
+import { Sync } from './crdt.sync';
 
 export { Doc } from './crdt/Doc';
 export { Store } from './crdt/Store';
@@ -20,8 +21,11 @@ export { WebStore } from './crdt/Store.Web';
 export { WebStoreIndex } from './crdt/Store.Web.Index';
 export { StoreIndexDb } from './crdt/Store.Web.IndexDb';
 
+export { Sync } from './crdt.sync';
+
 export const Crdt = {
   Doc,
+  Sync,
   Store,
   WebStore,
 } as const;

@@ -2,6 +2,8 @@ export type * from './crdt/Doc.Lens/t';
 export type * from './crdt/Doc.Namespace/t';
 export type * from './crdt/Doc/t';
 
+export type * from './crdt.sync/TextboxSync/t';
+
 export type * from './crdt/Store.Index/t';
 export type * from './crdt/Store/t';
 
