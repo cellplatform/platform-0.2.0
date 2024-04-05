@@ -7,18 +7,18 @@ type O = Record<string, unknown>;
  * Sync listener.
  */
 export function listen<T extends O>(
-  input: t.TextInputRef,
-  doc: t.DocRef<T>,
+  textbox: t.TextInputRef,
+  doc: t.DocRef<T> | t.Lens<T>,
   path: t.ObjectPath,
-  options: { dispose$?: t.UntilObservable; debug?: string },
+  options: { dispose$?: t.UntilObservable; debug?: string } = {},
 ) {
   const { debug = 'unknown' } = options;
-  const resolve = ObjectPath.resolve;
+  const resolve = ObjectPath.resolver<string>();
 
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
   const event = {
-    input: input.events(dispose$),
+    textbox: textbox.events(dispose$),
     doc: doc.events(dispose$),
     handlers: { change: new Set<t.TextboxSyncChangeHandler>() },
   } as const;
@@ -27,7 +27,7 @@ export function listen<T extends O>(
   /**
    * Ensure property target exists.
    */
-  const initial = resolve<string>(doc.current, path);
+  const initial = resolve(doc.current, path);
   if (typeof initial !== 'string') {
     if (initial !== undefined) throw new Error(`The sync path [${path}] is not of type string.`);
     doc.change((d) => ObjectPath.mutate(d, path, ''));
@@ -36,7 +36,7 @@ export function listen<T extends O>(
   /**
    * Changes from the <input> element.
    */
-  const input$ = event.input.change$.pipe(
+  const input$ = event.textbox.change$.pipe(
     rx.map((e) => Calc.diff(e.from, e.to, e.selection.start)),
     rx.filter((diff) => diff.index >= 0),
   );
@@ -51,10 +51,10 @@ export function listen<T extends O>(
    * Changes from CRDT document.
    */
   event.doc.changed$
-    .pipe(rx.filter((e) => resolve<string>(e.doc, path) !== input.current))
+    .pipe(rx.filter((e) => resolve(e.after, path) !== textbox.current))
     .subscribe((e) => {
-      const text = resolve<string>(e.doc, path) ?? '';
-      const pos = input.selection.start;
+      const text = resolve(e.after, path) ?? '';
+      const pos = textbox.selection.start;
       event.handlers.change.forEach((fn) => fn({ text, pos }));
     });
 
