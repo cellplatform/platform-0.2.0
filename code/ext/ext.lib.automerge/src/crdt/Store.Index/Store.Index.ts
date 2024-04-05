@@ -1,4 +1,4 @@
-import { Data, Delete, DocUri, Is, R, type t } from './common';
+import { Data, Delete, DocUri, Is, R, Symbols, type t } from './common';
 
 import { Doc } from '../Doc';
 import { events } from './Store.Index.Events';
@@ -19,7 +19,7 @@ export const StoreIndex = {
   events,
 
   get type(): t.DocMetaType {
-    const name: t.StoreIndexState['kind'] = 'crdt.store.index';
+    const name = 'crdt.store.index';
     return { name };
   },
 
@@ -73,7 +73,6 @@ export const StoreIndex = {
 
     // Finish up.
     const api: t.StoreIndexState = {
-      kind: 'crdt.store.index',
       store,
       doc,
 
@@ -177,6 +176,7 @@ export const StoreIndex = {
       },
     };
 
+    (api as any)[Symbols.kind] = Symbols.StoreIndex;
     return api;
   },
 } as const;

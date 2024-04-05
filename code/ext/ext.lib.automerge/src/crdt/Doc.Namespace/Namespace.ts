@@ -1,4 +1,4 @@
-import { Lens, rx, toObject, type t } from './common';
+import { Lens, Symbols, rx, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.InitializeLens<R> };
@@ -28,8 +28,6 @@ export const Namespace = {
      * API
      */
     const api: t.NamespaceManager<N> = {
-      kind: 'crdt:namespace',
-
       get container() {
         type T = t.NamespaceMap<N>;
         if (api.disposed) return {} as T;
@@ -83,6 +81,7 @@ export const Namespace = {
       },
     };
 
+    (api as any)[Symbols.kind] = Symbols.Namespace;
     return api;
   },
 } as const;

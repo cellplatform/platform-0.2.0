@@ -1,13 +1,9 @@
 import { Doc } from '.';
-import { A, describe, expect, it } from '../../test';
+import { describe, expect, it } from '../../test';
 import { Lens, Registry } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
 
 describe('Doc API (index)', () => {
-  it('splice', () => {
-    expect(Doc.splice).to.equal(A.splice);
-  });
-
   it('lens', () => {
     expect(Doc.Lens).to.equal(Lens);
     expect(Doc.lens).to.eql(Lens.init);

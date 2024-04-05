@@ -1,18 +1,5 @@
 import { DEFAULTS, RepoList } from '.';
-import {
-  Color,
-  Dev,
-  DevReload,
-  Doc,
-  Pkg,
-  TestDb,
-  Time,
-  WebStore,
-  css,
-  rx,
-  slug,
-  type t,
-} from '../../test.ui';
+import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = t.RepoListProps;

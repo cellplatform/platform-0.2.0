@@ -7,7 +7,7 @@ import { Doc } from '../Doc';
 import { Store } from '../Store';
 import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
-import { DEFAULTS, Delete, Is, type t } from './common';
+import { DEFAULTS, Delete, Is, Symbols, type t } from './common';
 
 type Init = {
   network?: boolean | t.NetworkAdapterInterface[];
@@ -62,6 +62,7 @@ export const WebStore = {
       },
     };
 
+    (store as any)[Symbols.kind] = Symbols.WebStore;
     return store;
   },
 } as const;

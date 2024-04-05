@@ -13,7 +13,6 @@ export type Namespace<L extends O, N extends string = string> = {
  * where the "keys" are the namespace "names".
  */
 export type NamespaceManager<N extends string = string> = t.Lifecycle & {
-  readonly kind: 'crdt:namespace';
   readonly container: Readonly<NamespaceMap<N>>;
   list<L extends O>(): Namespace<L, N>[];
   lens<L extends O>(namespace: N, initial: L, options?: { typename?: string }): t.Lens<L>;

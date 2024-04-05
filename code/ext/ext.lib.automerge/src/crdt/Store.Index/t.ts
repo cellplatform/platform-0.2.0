@@ -11,7 +11,6 @@ type AddInput = t.StoreIndexAddParam | Uri;
  * A CRDT that represents an index of a store/repo.
  */
 export type StoreIndexState = {
-  readonly kind: 'crdt.store.index';
   readonly store: t.Store;
   readonly doc: t.DocRef<t.StoreIndex>;
   readonly toggleShared: t.StoreIndexToggleShared;

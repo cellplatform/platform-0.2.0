@@ -1,6 +1,6 @@
-import { WebStore } from '../Store.Web';
+import { A, Test, TestDb, Time, Value, expect, expectError, toObject, type t } from '../../test.ui';
 import { Store } from '../Store';
-import { A, Test, TestDb, Time, Value, expect, toObject, type t, expectError } from '../../test.ui';
+import { WebStore } from '../Store.Web';
 
 type D = { count?: t.A.Counter };
 
@@ -13,7 +13,6 @@ export default Test.describe('Store.Web: Index', (e) => {
     e.it('initialize', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
       const index = await WebStore.index(store);
-      expect(index.kind === 'crdt.store.index').to.eql(true);
       expect(index.db.name).to.eql(WebStore.IndexDb.name(name));
     });
 

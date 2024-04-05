@@ -18,8 +18,8 @@ describe('Namespace (Lens)', () => {
     const doc = await setup();
     const ns1 = Namespace.init<TRoot>(doc);
     const ns2 = Doc.namespace<TRoot>(doc);
-    expect(ns1.kind).to.eql('crdt:namespace');
-    expect(ns2.kind).to.eql('crdt:namespace');
+    expect(Doc.Is.namespace(ns1)).to.eql(true);
+    expect(Doc.Is.namespace(ns2)).to.eql(true);
   });
 
   it('toType<T>() conversion', async () => {

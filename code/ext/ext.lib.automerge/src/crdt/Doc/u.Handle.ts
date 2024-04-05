@@ -1,5 +1,5 @@
 import { eventsFactory } from './Doc.Events';
-import { slug, toObject, type t } from './common';
+import { Symbols, slug, toObject, type t } from './common';
 
 /**
  * Convert a DocRef → DocRefHandle.
@@ -43,6 +43,7 @@ export const Handle = {
         return toObject<T>(api.current);
       },
     };
+    (api as any)[Symbols.kind] = Symbols.DocRef;
     return api;
   },
 } as const;

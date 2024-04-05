@@ -53,9 +53,5 @@ export { COLORS, Color, FC, File, Style, UserAgent, css, rx, useRubberband } fro
 /**
  * Dev
  */
-export { Specs, DevSpecs, ModuleSpecs, SampleSpecs } from './test.ui/entry.Specs.mjs';
+export { DevSpecs, ModuleSpecs, SampleSpecs, Specs } from './test.ui/entry.Specs.mjs';
 export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
-// export const dev = async () => {
-//   const { Specs } = await import('./test.ui/entry.Specs.mjs');
-//   return { Pkg, Specs };
-// };

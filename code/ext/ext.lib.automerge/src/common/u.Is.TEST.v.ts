@@ -25,6 +25,18 @@ describe('Is (flags)', (e) => {
     store.dispose();
   });
 
+  it('Is.lens', async () => {
+    type T = { child: { count: number } };
+    NON_OBJECTS.forEach((v) => expect(Is.lens(v)).to.eql(false));
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<T>((d) => (d.child = { count: 0 }));
+    const lens = Doc.lens(doc, ['child']);
+
+    expect(Is.lens(doc)).to.eql(false);
+    expect(Is.lens(lens)).to.eql(true);
+    store.dispose();
+  });
+
   it('Is.store', () => {
     const store = Store.init();
     expect(Is.store(store)).to.eql(true);

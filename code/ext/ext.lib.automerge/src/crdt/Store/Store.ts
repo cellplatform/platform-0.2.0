@@ -1,7 +1,7 @@
 import { Repo } from '@automerge/automerge-repo';
 import { Doc } from '../Doc';
 import { StoreIndex as Index } from '../Store.Index';
-import { Is, rx, type t } from './common';
+import { Is, Symbols, rx, type t } from './common';
 
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
@@ -78,6 +78,7 @@ export const Store = {
       },
     };
 
+    (api as any)[Symbols.kind] = Symbols.Store;
     return api;
   },
 

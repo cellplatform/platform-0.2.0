@@ -1,6 +1,6 @@
 import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { ObjectPath, rx, slug, toObject, type t } from './common';
+import { ObjectPath, Symbols, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = {
@@ -168,6 +168,7 @@ export function init<R extends O, L extends O>(
   api.change(() => null); // NB: Ensure the lens is initialized.
   _lastValue = api.current;
 
+  (api as any)[Symbols.kind] = Symbols.Lens;
   return api;
 }
 
