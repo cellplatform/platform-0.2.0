@@ -12,6 +12,7 @@ export { Switch } from './ui/Button.Switch';
 export { Card } from './ui/Card';
 export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
+export { CmdBar } from './ui/Cmd.Bar';
 export { EdgePosition } from './ui/EdgePosition';
 export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';
@@ -52,9 +53,9 @@ export { COLORS, Color, FC, File, Style, UserAgent, css, rx, useRubberband } fro
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs, DevSpecs, ModuleSpecs, SampleSpecs } from './test.ui/entry.Specs.mjs';
 export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';
-export const dev = async () => {
-  const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Pkg, Specs };
-};
+// export const dev = async () => {
+//   const { Specs } = await import('./test.ui/entry.Specs.mjs');
+//   return { Pkg, Specs };
+// };

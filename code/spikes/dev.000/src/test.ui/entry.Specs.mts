@@ -22,7 +22,7 @@ const {
   ModuleSpecs: Common,
   DevSpecs: ComonDev,
   SampleSpecs: CommonSample,
-} = await import('sys.ui.react.common/specs');
+} = await import('sys.ui.react.common');
 const { Specs: List } = await import('sys.ui.react.list');
 
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
