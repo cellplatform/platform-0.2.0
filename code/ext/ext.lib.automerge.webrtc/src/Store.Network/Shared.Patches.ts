@@ -12,7 +12,7 @@ export const Patches = {
     const uri = path[0] === KEY_SYS && path[1] === KEY_DOCS ? first.path[2] : undefined;
     if (!uri) return undefined;
 
-    const item = e.patchInfo.after.sys.docs[uri];
+    const item = e.after.sys.docs[uri];
     return {
       uri: String(uri),
       shared: item?.shared,

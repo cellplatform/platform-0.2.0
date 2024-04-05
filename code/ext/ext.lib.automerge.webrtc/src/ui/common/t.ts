@@ -18,9 +18,10 @@ export type {
   CssEdgesInput,
   CssValue,
   DevCtxState,
+  InfoDataVisible,
   PropListItem,
   PropListProps,
-  InfoDataVisible,
+  TextInputRef,
 } from 'sys.ui.react.common/src/types';
 
 /**

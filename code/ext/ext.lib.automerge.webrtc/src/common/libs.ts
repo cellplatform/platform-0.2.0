@@ -9,7 +9,7 @@ export { PeerjsNetworkAdapter } from 'automerge-repo-network-peerjs';
 /**
  * @ext
  */
-export { Doc, Store, WebStore, toObject } from 'ext.lib.automerge';
+export { Doc, Store, Sync, WebStore, toObject } from 'ext.lib.automerge';
 
 /**
  * @system

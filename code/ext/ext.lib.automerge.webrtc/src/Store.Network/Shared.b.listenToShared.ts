@@ -11,10 +11,9 @@ export function listenToShared(
 ) {
   const { dispose$, debugLabel } = options;
   const events = shared.events(dispose$);
-
   events.changed$
     .pipe(
-      rx.map((e) => e.doc.sys.docs),
+      rx.map((e) => e.after.sys.docs),
       rx.distinctWhile((prev, next) => R.equals(prev, next)),
       rx.debounceTime(100),
     )
