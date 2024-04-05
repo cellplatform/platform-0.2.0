@@ -31,16 +31,22 @@ export type LensEvent<L extends O> = LensChangedEvent<L> | LensDeletedEvent<L>;
  * - Changed
  */
 export type LensChangedEvent<L extends O> = {
-  type: 'crdt:lens:changed';
+  type: 'crdt:lens/Changed';
   payload: LensChanged<L>;
 };
-export type LensChanged<L extends O> = { before: L; after: L; patches: t.Patch[] };
+export type LensChanged<L extends O> = {
+  uri: t.DocUri;
+  before: L;
+  after: L;
+  patches: t.Patch[];
+  source: t.PatchSource;
+};
 
 /**
  * - Deleted
  */
 export type LensDeletedEvent<L extends O> = {
-  type: 'crdt:lens:deleted';
+  type: 'crdt:lens/Deleted';
   payload: LensDeleted<L>;
 };
-export type LensDeleted<L extends O> = { before: L; after: undefined };
+export type LensDeleted<L extends O> = { uri: t.DocUri; before: L; after: undefined };

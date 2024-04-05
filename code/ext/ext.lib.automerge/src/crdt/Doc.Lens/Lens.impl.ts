@@ -18,6 +18,7 @@ export function init<R extends O, L extends O>(
   options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {
   const args = wrangle.options<R>(options);
+  const uri = root.uri;
 
   Registry.add(root);
   let _count = 0;
@@ -39,17 +40,18 @@ export function init<R extends O, L extends O>(
       const before = resolve(e.patchInfo.before);
       const after = resolve(e.patchInfo.after);
       const patches = wrangle.patches(e.patches, path);
+      const source = e.patchInfo.source;
       subject$.next({
-        type: 'crdt:lens:changed',
-        payload: { before, after, patches },
+        type: 'crdt:lens/Changed',
+        payload: { uri, source, before, after, patches },
       });
     },
     deleted(e: t.DocDeleted<R>) {
       const before = resolve(e.doc);
       const after = undefined;
       subject$.next({
-        type: 'crdt:lens:deleted',
-        payload: { before, after },
+        type: 'crdt:lens/Deleted',
+        payload: { uri, before, after },
       });
     },
   } as const;

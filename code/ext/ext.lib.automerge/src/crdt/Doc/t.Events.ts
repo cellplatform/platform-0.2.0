@@ -9,13 +9,12 @@ export type DocEvents<T> = t.Lifecycle & {
   readonly $: t.Observable<t.DocEvent<T>>;
   readonly changed$: t.Observable<t.DocChanged<T>>;
   readonly deleted$: t.Observable<t.DocDeleted<T>>;
-  readonly ephemeral: {
-    readonly in$: t.Observable<t.DocEphemeralIn<T>>;
-    readonly out$: t.Observable<t.DocEphemeralOut<T>>;
-    type$<M extends t.CBOR>(
-      filter?: DocEphemeralFilter<T, M>,
-    ): t.Observable<t.DocEphemeralIn<T, M>>;
-  };
+  readonly ephemeral: DocEventsEphemeral<T>;
+};
+export type DocEventsEphemeral<T> = {
+  readonly in$: t.Observable<t.DocEphemeralIn<T>>;
+  readonly out$: t.Observable<t.DocEphemeralOut<T>>;
+  type$<M extends t.CBOR>(filter?: DocEphemeralFilter<T, M>): t.Observable<t.DocEphemeralIn<T, M>>;
 };
 
 export type DocEphemeralFilter<T, M extends t.CBOR> = (e: t.DocEphemeralIn<T, M>) => boolean;
