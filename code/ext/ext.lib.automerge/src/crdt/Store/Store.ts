@@ -3,6 +3,7 @@ import { Doc } from '../Doc';
 import { StoreIndex as Index } from '../Store.Index';
 import { Is, Symbols, rx, type t } from './common';
 
+type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
 type Options = { timeout?: t.Msecs };
 
@@ -31,14 +32,18 @@ export const Store = {
         /**
          * Create an "initial constructor" factory for typed docs.
          */
-        factory<T>(initial: t.ImmutableNext<T>) {
+        factory<T extends O>(initial: t.ImmutableNext<T>) {
           return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
         },
 
         /**
          * Find or create a new CRDT document from the repo.
          */
-        async getOrCreate<T>(initial: t.ImmutableNext<T>, uri?: Uri, options: Options = {}) {
+        async getOrCreate<T extends O>(
+          initial: t.ImmutableNext<T>,
+          uri?: Uri,
+          options: Options = {},
+        ) {
           const { timeout } = options;
           return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
         },
@@ -46,7 +51,7 @@ export const Store = {
         /**
          * Find the existing CRDT document in the repo (or return nothing).
          */
-        async get<T>(uri?: Uri, options: Options = {}) {
+        async get<T extends O>(uri?: Uri, options: Options = {}) {
           const { timeout } = options;
           return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
         },
@@ -85,7 +90,7 @@ export const Store = {
   /**
    * Retrieve handle
    */
-  handle<T>(input: t.DocRef<T>) {
+  handle<T extends O>(input: t.DocRef<T>) {
     const handle = (input as t.DocRefHandle<T>)?.handle;
     if (!Is.handle(handle)) throw new Error('input does not have a handle');
     return handle;

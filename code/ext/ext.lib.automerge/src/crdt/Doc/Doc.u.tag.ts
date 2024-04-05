@@ -1,11 +1,13 @@
 import { A, Is, Time, type t } from './common';
 import { toHandle } from './u';
 
+type O = Record<string, unknown>;
+
 /**
  * Stamp a commit message/timestamp into the document history.
  */
 export const Tag = {
-  commit<T>(
+  commit<T extends O>(
     doc: t.DocRef<T> | t.DocHandle<T>,
     message: string,
     options: { time?: t.UnixTimestamp | boolean } = {},
@@ -27,7 +29,7 @@ const wrangle = {
     return input;
   },
 
-  handle<T>(input: t.DocRef<T> | t.DocHandle<T>): t.DocHandle<T> {
+  handle<T extends O>(input: t.DocRef<T> | t.DocHandle<T>): t.DocHandle<T> {
     if (Is.handle(input)) return input as t.DocHandle<T>;
     return toHandle(input as t.DocRef<T>);
   },

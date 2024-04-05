@@ -1,6 +1,7 @@
 import type { t } from './common';
 export type * from './t.Events';
 
+type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
 type Initial<T> = t.ImmutableNext<T>;
 
@@ -12,7 +13,7 @@ export type DocUri = t.AutomergeUrl;
 /**
  * An immutable/observable CRDT document reference.
  */
-export type DocRef<T = unknown> = t.ImmutableRef<T, t.DocEvents<T>> & {
+export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>> & {
   readonly uri: t.DocUri;
   readonly is: { ready: boolean; deleted: boolean };
   toObject(): T;
@@ -28,22 +29,26 @@ export type DocRef<T = unknown> = t.ImmutableRef<T, t.DocEvents<T>> & {
  *    being exposed. A DocRefHandle<T> can be cast from a DocRef<T>
  *    when and IF you know what you're doing.
  */
-export type DocRefHandle<T = unknown> = DocRef<T> & { readonly handle: t.DocHandle<T> };
+export type DocRefHandle<T extends O = O> = DocRef<T> & { readonly handle: t.DocHandle<T> };
 
 /**
  * Generator function that produces a stongly-typed document
  * with a curried initial state.
  */
-export type DocFactory<T> = (uri?: Uri) => Promise<t.DocRef<T>>;
+export type DocFactory<T extends O> = (uri?: Uri) => Promise<t.DocRef<T>>;
 
 /**
  * Document access exposed from a store/repo.
  */
 export type DocStore = {
-  factory<T>(initial: Initial<T>): t.DocFactory<T>;
+  factory<T extends O>(initial: Initial<T>): t.DocFactory<T>;
   exists(uri?: Uri, options?: TOptions): Promise<boolean>;
-  get<T>(uri?: Uri, options?: TOptions): Promise<t.DocRef<T> | undefined>;
-  getOrCreate<T>(initial: Initial<T>, uri?: Uri, options?: TOptions): Promise<t.DocRef<T>>;
+  get<T extends O>(uri?: Uri, options?: TOptions): Promise<t.DocRef<T> | undefined>;
+  getOrCreate<T extends O>(
+    initial: Initial<T>,
+    uri?: Uri,
+    options?: TOptions,
+  ): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: TOptions): Promise<boolean>;
 };
 type TOptions = { timeout?: t.Msecs };
@@ -59,25 +64,25 @@ export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
 /**
  * History
  */
-export type DocHistory<T = unknown> = {
+export type DocHistory<T extends O = O> = {
   readonly length: number;
   readonly commits: DocHistoryCommit<T>[];
   readonly latest: DocHistoryCommit<T>;
   readonly genesis?: DocHistoryGenesis<T>;
   page(index: t.Index, limit: number, sort?: t.SortOrder): DocHistoryPage<T>;
 };
-export type DocHistoryGenesis<T = unknown> = {
+export type DocHistoryGenesis<T extends O = O> = {
   readonly initial: DocHistoryCommit<T>;
   readonly elapsed: t.TimeDuration;
 };
-export type DocHistoryCommit<T = unknown> = t.State<T>;
+export type DocHistoryCommit<T extends O = O> = t.State<T>;
 
-export type DocHistoryListItem<T = unknown> = {
+export type DocHistoryListItem<T extends O = O> = {
   readonly index: t.Index;
   readonly commit: t.DocHistoryCommit<T>;
 };
 
-export type DocHistoryPage<T = unknown> = {
+export type DocHistoryPage<T extends O = O> = {
   readonly length: number;
   readonly index: number;
   readonly limit: number;

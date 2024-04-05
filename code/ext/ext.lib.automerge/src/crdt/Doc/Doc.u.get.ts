@@ -1,12 +1,13 @@
 import { DEFAULTS, Is, Time, rx, type t } from './common';
 import { Handle } from './u.Handle';
 
+type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
 
 /**
  * Find the document document from the repo.
  */
-export function get<T>(args: {
+export function get<T extends O>(args: {
   repo: t.Repo;
   uri: Uri;
   timeout?: t.Msecs;

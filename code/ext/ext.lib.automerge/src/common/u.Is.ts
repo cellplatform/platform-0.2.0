@@ -12,7 +12,7 @@ export const Is = {
     return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
   },
 
-  docRef<T>(input: any): input is t.DocRef<T> {
+  docRef<T extends O>(input: any): input is t.DocRef<T> {
     return isObjectType(input, Symbols.DocRef);
   },
 
@@ -84,7 +84,7 @@ export const Is = {
     return isObjectType(input, Symbols.Namespace);
   },
 
-  handle<T>(input: any): input is typeof DocHandle<T> {
+  handle<T extends O>(input: any): input is typeof DocHandle<T> {
     return input instanceof DocHandle;
   },
 } as const;

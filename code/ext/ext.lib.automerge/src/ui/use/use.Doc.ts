@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Is, rx, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Retrieves a doc (by URI) from a store.
  */
-export function useDoc<T = unknown>(
+export function useDoc<T extends O>(
   store?: t.Store,
   ref?: t.UriString | t.DocRef<T>,
   options: { timeout?: t.Msecs } = {},

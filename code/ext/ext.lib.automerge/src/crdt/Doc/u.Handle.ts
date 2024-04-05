@@ -1,10 +1,12 @@
 import { eventsFactory } from './Doc.Events';
 import { Symbols, slug, toObject, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Convert a DocRef → DocRefHandle.
  */
-export function toHandle<T>(doc: t.DocRef<T>) {
+export function toHandle<T extends O>(doc: t.DocRef<T>) {
   return (doc as t.DocRefHandle<T>).handle;
 }
 
@@ -14,7 +16,7 @@ export const Handle = {
   /**
    * Wrap a raw automerge document-handle as a [DocRefHandle].
    */
-  wrap<T>(
+  wrap<T extends O>(
     handle: t.DocHandle<T>,
     options: { dispose$?: t.UntilObservable } = {},
   ): t.DocRefHandle<T> {

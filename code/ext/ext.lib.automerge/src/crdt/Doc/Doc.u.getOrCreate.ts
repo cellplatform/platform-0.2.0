@@ -3,12 +3,13 @@ import { A, DEFAULTS, R, Time, slug, type t } from './common';
 import { get } from './Doc.u.get';
 import { Handle } from './u.Handle';
 
+type O = Record<string, unknown>;
 type Uri = t.DocUri | string;
 
 /**
  * Find or initialize a new document from the repo.
  */
-export async function getOrCreate<T>(args: {
+export async function getOrCreate<T extends O>(args: {
   repo: t.Repo;
   initial: t.ImmutableNext<T>;
   uri?: Uri;

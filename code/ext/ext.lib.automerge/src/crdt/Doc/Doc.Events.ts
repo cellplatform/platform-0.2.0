@@ -1,9 +1,11 @@
 import { rx, type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Generate a new events wrapper for the given handle.
  */
-export function eventsFactory<T>(
+export function eventsFactory<T extends O>(
   doc: t.DocRefHandle<T>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {

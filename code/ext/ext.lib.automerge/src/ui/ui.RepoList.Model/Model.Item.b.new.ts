@@ -15,7 +15,7 @@ export function newBehavior(args: { ctx: t.GetRepoListModel; item: t.RepoItemMod
     // NB: The addition of a new item to the list-total and setting
     //     to "edit mode" is handed in the [list-behavior] controller.
     const { store } = args.ctx();
-    await store.doc.getOrCreate<unknown>((d) => ({}));
+    await store.doc.getOrCreate((d) => ({}));
   };
 
   /**

@@ -5,33 +5,39 @@ type O = Record<string, unknown>;
 /**
  * Event API
  */
-export type DocEvents<T> = t.Lifecycle & {
+export type DocEvents<T extends O> = t.Lifecycle & {
   readonly $: t.Observable<t.DocEvent<T>>;
   readonly changed$: t.Observable<t.DocChanged<T>>;
   readonly deleted$: t.Observable<t.DocDeleted<T>>;
   readonly ephemeral: DocEventsEphemeral<T>;
 };
-export type DocEventsEphemeral<T> = {
+export type DocEventsEphemeral<T extends O> = {
   readonly in$: t.Observable<t.DocEphemeralIn<T>>;
   readonly out$: t.Observable<t.DocEphemeralOut<T>>;
   type$<M extends t.CBOR>(filter?: DocEphemeralFilter<T, M>): t.Observable<t.DocEphemeralIn<T, M>>;
 };
 
-export type DocEphemeralFilter<T, M extends t.CBOR> = (e: t.DocEphemeralIn<T, M>) => boolean;
+export type DocEphemeralFilter<T extends O, M extends t.CBOR> = (
+  e: t.DocEphemeralIn<T, M>,
+) => boolean;
 
 /**
  * Events
  */
-export type DocEvent<T = O> = DocChangedEvent<T> | DocDeletedEvent<T> | DocEphemeralEvent<T>;
+export type DocEvent<T extends O = O> =
+  | DocChangedEvent<T>
+  | DocDeletedEvent<T>
+  | DocEphemeralEvent<T>;
 
 /**
  * Event: Document change.
  */
-export type DocChangedEvent<T> = {
+export type DocChangedEvent<T extends O> = {
   type: 'crdt:doc/Changed';
   payload: DocChanged<T>;
 };
-export type DocChanged<T = O> = {
+
+export type DocChanged<T extends O = O> = {
   uri: t.DocUri;
   doc: T;
   patches: t.Patch[];
@@ -41,11 +47,11 @@ export type DocChanged<T = O> = {
 /**
  * Event: Document deleted.
  */
-export type DocDeletedEvent<T> = {
+export type DocDeletedEvent<T extends O = O> = {
   type: 'crdt:doc/Deleted';
   payload: DocDeleted<T>;
 };
-export type DocDeleted<T = O> = {
+export type DocDeleted<T extends O = O> = {
   uri: t.DocUri;
   doc: T;
 };
@@ -54,23 +60,23 @@ export type DocDeleted<T = O> = {
  * Event: Ephemeral message.
  * https://automerge.org/docs/repositories/ephemeral
  */
-export type DocEphemeralEvent<T = O> = DocEphemeralInEvent<T> | DocEphemeralOutEvent<T>;
-export type DocEphemeralInEvent<T = O, M extends t.CBOR = t.CBOR> = {
+export type DocEphemeralEvent<T extends O = O> = DocEphemeralInEvent<T> | DocEphemeralOutEvent<T>;
+export type DocEphemeralInEvent<T extends O = O, M extends t.CBOR = t.CBOR> = {
   type: 'crdt:doc/Ephemeral:in';
   payload: DocEphemeralIn<T, M>;
 };
-export type DocEphemeralIn<T = O, M extends t.CBOR = t.CBOR> = DocEphemeralCommon<T> & {
+export type DocEphemeralIn<T extends O = O, M extends t.CBOR = t.CBOR> = DocEphemeralCommon<T> & {
   direction: 'incoming';
   sender: { id: string };
   message: M;
 };
 
-export type DocEphemeralOutEvent<T = O> = {
+export type DocEphemeralOutEvent<T extends O = O> = {
   type: 'crdt:doc/Ephemeral:out';
   payload: DocEphemeralOut<T>;
 };
-export type DocEphemeralOut<T = O> = DocEphemeralCommon<T> & {
+export type DocEphemeralOut<T extends O = O> = DocEphemeralCommon<T> & {
   direction: 'outgoing';
   data: Uint8Array;
 };
-type DocEphemeralCommon<T = O> = { doc: t.DocRefHandle<T> };
+type DocEphemeralCommon<T extends O = O> = { doc: t.DocRefHandle<T> };
