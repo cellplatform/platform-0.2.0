@@ -1,5 +1,5 @@
 import { Http } from 'sys.net.http';
-import { origin } from './Http.origin';
+import { origin } from './DenoHttp.origin';
 import { type t } from './common';
 
 /**

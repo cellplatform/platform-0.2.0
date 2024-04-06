@@ -1,2 +1,2 @@
-export * from './Http';
+export * from './DenoHttp';
 export { DEFAULTS } from './common';

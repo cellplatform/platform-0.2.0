@@ -2,7 +2,7 @@ import { Delete, Dev, Hash, Pkg, slug } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
-import { Http, type t } from './common';
+import { DenoHttp, type t } from './common';
 import { Sample } from './ui';
 
 type TEnv = { accessToken?: string };
@@ -203,7 +203,7 @@ export default Dev.describe(name, (e) => {
       const jwt = e.state.accessToken;
       const forcePublic = e.state.forcePublicUrl;
       const data = {
-        origin: Http.origin({ forcePublic }),
+        origin: DenoHttp.origin({ forcePublic }),
         accessToken: !jwt ? null : `jwt:${Hash.shorten(jwt, 4)} (${jwt.length})`,
         props: { ...props, code: props.code?.slice(0, 30) },
         deno,
