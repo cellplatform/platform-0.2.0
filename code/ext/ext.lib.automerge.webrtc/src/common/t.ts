@@ -24,6 +24,7 @@ export type {
   IODirection,
   Lifecycle,
   Msecs,
+  ObjectPath,
   OmitLifecycle,
   Percent,
   UntilObservable,

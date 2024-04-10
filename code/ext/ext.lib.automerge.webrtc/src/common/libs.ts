@@ -15,4 +15,4 @@ export { Doc, Store, Sync, WebStore, toObject } from 'ext.lib.automerge';
  * @system
  */
 export { UserAgent } from 'sys.ui.dom';
-export { Delete, Filesize, Hash, Time, cuid, rx } from 'sys.util';
+export { Delete, Filesize, Hash, ObjectPath, Time, cuid, rx } from 'sys.util';

@@ -2,7 +2,7 @@
  * @external
  */
 
-export { RepoList } from 'ext.lib.automerge';
+export { RepoList, useDoc } from 'ext.lib.automerge';
 export { Peer, PeerUI } from 'ext.lib.peerjs';
 
 /**
@@ -21,6 +21,7 @@ export {
   PropList,
   Spinner,
   TestRunner,
+  TextInput,
   css,
   useDragTarget,
   useFocus,
