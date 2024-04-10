@@ -1,5 +1,11 @@
 import type { t } from './common';
 
+export type TextDiff = {
+  readonly index: number;
+  readonly delCount: number;
+  readonly newText?: string;
+};
+
 /**
  * A live listener that is syncing an <input> textbox
  * with a CRDT document.
