@@ -37,6 +37,7 @@ export { HistoryCommit } from './ui/ui.History.Commit';
 export { HistoryGrid } from './ui/ui.History.Grid';
 export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
+export { useDoc } from './ui/use';
 
 /**
  * Dev
