@@ -4,17 +4,19 @@ import { PeerRepoList } from '../ui.PeerRepoList';
 import { SampleLayout } from './-SPEC.ui';
 
 type TLens = { text: string };
+type L = t.Lens<TLens>;
+
 type T = { theme?: t.CommonTheme };
 const initial: T = {};
 
 /**
  * Spec
  */
-const name = 'TextboxSync';
+const name = 'Sample.TextboxSync';
 export default Dev.describe(name, async (e) => {
   const left = await createEdge('Left');
   const right = await createEdge('Right');
-  let lens: t.Lens<TLens> | undefined;
+  const lenses: { left?: L | undefined; right?: L } = {};
 
   type LocalStore = {};
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -29,25 +31,27 @@ export default Dev.describe(name, async (e) => {
 
     const monitorPeer = (
       edge: t.NetworkConnectionEdge,
-      onShared?: (e: t.NetworkStoreShared) => void,
+      onLens?: (e: { shared: t.NetworkStoreShared; lens: L }) => void,
     ) => {
       edge.network.peer.events().cmd.conn$.subscribe(async (e) => {
-        if (onShared) onShared(await edge.network.shared());
+        if (onLens) {
+          const shared = await edge.network.shared();
+          const lens = shared.namespace.lens<TLens>('foo', { text: '' });
+          onLens({ shared, lens });
+          dev.redraw('subject');
+        }
         dev.redraw('debug');
       });
     };
-    monitorPeer(right);
-    monitorPeer(left, (shared) => {
-      lens = shared.namespace.lens<TLens>('foo', { text: '' });
-      dev.redraw('subject');
-    });
+    monitorPeer(left, (e) => (lenses.left = e.lens));
+    monitorPeer(right, (e) => (lenses.right = e.lens));
 
     const theme: t.CommonTheme = 'Dark';
     Dev.Theme.background(ctx, theme);
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>(async (e) => {
-      if (!lens) return null;
-      return <SampleLayout doc={lens} path={['text']} theme={theme} />;
+      if (!(lenses.left && lenses.right)) return null;
+      return <SampleLayout left={lenses.left} right={lenses.right} path={['text']} theme={theme} />;
     });
   });
 
@@ -87,7 +91,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    //
     const renderInfo = (network: t.NetworkStore) => {
       return (
         <PeerRepoList.Info

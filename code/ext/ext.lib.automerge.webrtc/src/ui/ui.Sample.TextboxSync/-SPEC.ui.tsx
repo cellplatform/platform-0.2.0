@@ -5,13 +5,14 @@ import { COLORS, Color, ObjectPath, Sync, TextInput, css, rx, type t } from '../
  * <Layout>
  */
 export type SampleLayoutProps = {
-  doc?: t.Lens;
+  left?: t.Lens;
+  right?: t.Lens;
   path?: t.ObjectPath;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
-  const { doc, theme, path } = props;
+  const { left, right, theme, path } = props;
 
   /**
    * Render
@@ -25,11 +26,11 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.textbox}>
-        <Textbox debug={'🐷'} theme={theme} doc={doc} path={path} focus={true} />
+        <Textbox debug={'🐷'} theme={theme} doc={left} path={path} focus={true} />
       </div>
       <div></div>
       <div {...styles.textbox}>
-        <Textbox debug={'🌼'} theme={theme} doc={doc} path={path} />
+        <Textbox debug={'🌼'} theme={theme} doc={right} path={path} />
       </div>
     </div>
   );
@@ -72,8 +73,8 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   const color = Color.fromTheme(theme);
   const styles = {
     base: css({
-      position: 'relative',
       color,
+      position: 'relative',
       Padding: [5, 7],
       borderBottom: `dashed 1px ${Color.alpha(COLORS.CYAN, enabled ? 0.9 : 0.2)}`,
     }),

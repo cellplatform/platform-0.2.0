@@ -9,7 +9,7 @@ export const Specs = {
   [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
   [`${ns}.ui.NetworkConnection`]: () => import('../ui/ui.NetworkConnection/-SPEC'),
   [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
-  [`${ns}.ui.TextboxSync`]: () => import('../ui/ui.TextboxSync/-SPEC'),
+  [`${ns}.ui.Sample.TextboxSync`]: () => import('../ui/ui.Sample.TextboxSync/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
 } as t.SpecImports;
