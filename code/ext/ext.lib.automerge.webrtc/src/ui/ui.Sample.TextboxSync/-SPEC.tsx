@@ -33,15 +33,20 @@ export default Dev.describe(name, async (e) => {
       edge: t.NetworkConnectionEdge,
       onLens?: (e: { shared: t.NetworkStoreShared; lens: L }) => void,
     ) => {
-      edge.network.peer.events().cmd.conn$.subscribe(async (e) => {
-        if (onLens) {
-          const shared = await edge.network.shared();
-          const lens = shared.namespace.lens<TLens>('foo', { text: '' });
-          onLens({ shared, lens });
-          dev.redraw('subject');
-        }
+      const deriveLens = async () => {
+        if (!onLens) return;
+        const shared = await edge.network.shared();
+        const lens = shared.namespace.lens<TLens>('foo', { text: '' });
+        onLens({ shared, lens });
+        dev.redraw('subject');
+      };
+
+      const handleConnection = async () => {
+        await deriveLens();
         dev.redraw('debug');
-      });
+      };
+
+      edge.network.peer.events().cmd.conn$.subscribe(handleConnection);
     };
     monitorPeer(left, (e) => (lenses.left = e.lens));
     monitorPeer(right, (e) => (lenses.right = e.lens));
