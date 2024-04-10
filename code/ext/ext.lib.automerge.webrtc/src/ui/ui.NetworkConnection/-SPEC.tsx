@@ -10,7 +10,7 @@ const initial: T = {
   debug: { count: 0 },
 };
 
-const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
+export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
   const db = TestDb.EdgeSample.edge(kind);
   const peer = Peer.init();
   const store = WebStore.init({

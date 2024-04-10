@@ -1,17 +1,17 @@
 import { type t } from './common';
 
 import {
-  css,
   COLORS,
   Delete,
   Dev,
   Doc,
+  Icons,
   Peer,
   PeerUI,
   TestDb,
   WebrtcStore,
+  css,
   rx,
-  Icons,
 } from '../../test.ui';
 import { factory } from '../ui.Sample.02.loaders';
 import { createEdge } from './-SPEC.edge';
