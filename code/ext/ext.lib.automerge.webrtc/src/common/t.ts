@@ -22,6 +22,7 @@ export type {
   Disposable,
   EventBus,
   IODirection,
+  Index,
   Lifecycle,
   Msecs,
   ObjectPath,

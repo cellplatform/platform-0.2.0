@@ -1,6 +1,6 @@
-import { Dev, PeerUI, Pkg, type t, css } from '../../test.ui';
-import { PeerRepoList } from '../ui.PeerRepoList';
+import { Dev, PeerUI, Pkg, type t } from '../../test.ui';
 import { createEdge } from '../ui.NetworkConnection/-SPEC';
+import { PeerRepoList } from '../ui.PeerRepoList';
 import { SampleLayout } from './-SPEC.ui';
 
 type TLens = { text: string };
@@ -31,8 +31,7 @@ export default Dev.describe(name, async (e) => {
       edge: t.NetworkConnectionEdge,
       onShared?: (e: t.NetworkStoreShared) => void,
     ) => {
-      const peer = edge.network.peer.events();
-      peer.cmd.conn$.subscribe(async (e) => {
+      edge.network.peer.events().cmd.conn$.subscribe(async (e) => {
         if (onShared) onShared(await edge.network.shared());
         dev.redraw('debug');
       });
@@ -88,16 +87,19 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.row((e) => {
-      const network = left.network;
-
+    //
+    const renderInfo = (network: t.NetworkStore) => {
       return (
         <PeerRepoList.Info
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
           data={{ network }}
         />
       );
-    });
+    };
+
+    dev.row((e) => renderInfo(left.network));
+    dev.hr(5, 20);
+    dev.row((e) => renderInfo(right.network));
   });
 
   e.it('ui:footer', (e) => {
