@@ -1,7 +1,9 @@
-import { Peer, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
+import { PeerRepoList } from '../ui/ui.PeerRepoList';
+import { Peer, PeerUI, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
 type B = t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
+type N = t.NetworkStore;
 
 /**
  * Root creation factory.
@@ -34,25 +36,54 @@ const createEdge = async (kind: K, behaviors?: B) => {
 /**
  * DevHarness: buttons for quick connection of peers (left/right).
  */
-const peersSection = (dev: t.DevTools, left: t.NetworkStore, right: t.NetworkStore) => {
+const peersSection = (dev: t.DevTools, left: N, right: N) => {
   const connect = () => left.peer.connect.data(right.peer.id);
   const disconnect = () => left.peer.disconnect();
   const isConnected = () => left.peer.current.connections.length > 0;
   dev.button((btn) => {
     btn
       .label(() => (isConnected() ? 'connected' : 'connect'))
-      .right((e) => (!isConnected() ? '🌳' : ''))
-      .enabled((e) => !isConnected())
-      .onClick((e) => connect());
+      .right(() => (!isConnected() ? '🌳' : ''))
+      .enabled(() => !isConnected())
+      .onClick(() => connect());
   });
   dev.button((btn) => {
     btn
       .label(() => (isConnected() ? 'disconnect' : 'not connected'))
-      .right((e) => (isConnected() ? '💥' : ''))
-      .enabled((e) => isConnected())
-      .onClick((e) => disconnect());
+      .right(() => (isConnected() ? '💥' : ''))
+      .enabled(() => isConnected())
+      .onClick(() => disconnect());
   });
   return dev;
+};
+
+/**
+ * Add the <Connector> components to the header/footer of the harness debug panel.
+ */
+const headerFooterConnectors = (dev: t.DevTools, left: N, right: N) => {
+  dev.header
+    .padding(0)
+    .border(-0.1)
+    .render(() => <PeerUI.Connector peer={left.peer} />);
+
+  dev.footer
+    .padding(0)
+    .border(-0.1)
+    .render(() => <PeerUI.Connector peer={right.peer} />);
+};
+
+const infoPanels = (dev: t.DevTools, left: N, right: N) => {
+  const render = (network: t.NetworkStore) => {
+    return (
+      <PeerRepoList.Info
+        fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
+        data={{ network }}
+      />
+    );
+  };
+  dev.row((e) => render(left));
+  dev.hr(5, 20);
+  dev.row((e) => render(right));
 };
 
 /**
@@ -61,5 +92,5 @@ const peersSection = (dev: t.DevTools, left: t.NetworkStore, right: t.NetworkSto
 export const TestEdge = {
   create,
   createEdge,
-  peersSection,
+  dev: { peersSection, headerFooterConnectors, infoPanels },
 } as const;

@@ -1,5 +1,5 @@
 import { NetworkConnection } from '.';
-import { Dev, PeerUI, TestEdge, type t } from '../../test.ui';
+import { Dev, TestEdge, type t } from '../../test.ui';
 
 type T = {
   props: t.NetworkConnectionProps;
@@ -17,9 +17,7 @@ export default Dev.describe(name, async (e) => {
 
   type LocalStore = Pick<T['debug'], 'debugBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc');
-  const local = localstore.object({
-    debugBg: true,
-  });
+  const local = localstore.object({ debugBg: true });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -57,25 +55,16 @@ export default Dev.describe(name, async (e) => {
       });
   });
 
-  e.it('ui:header', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.header
-      .padding(0)
-      .border(-0.1)
-      .render((e) => <PeerUI.Connector peer={left.network.peer} />);
-  });
-
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    TestEdge.peersSection(dev, left.network, right.network).hr(5, 20);
+    TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
+    TestEdge.dev.peersSection(dev, left.network, right.network).hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
       dev.hr(-1, 5);
-
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.debugBg);
         btn
@@ -98,13 +87,5 @@ export default Dev.describe(name, async (e) => {
       sendButton(left);
       sendButton(right);
     });
-  });
-
-  e.it('ui:footer', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .padding(0)
-      .border(-0.1)
-      .render((e) => <PeerUI.Connector peer={right.network.peer} />);
   });
 });

@@ -1,6 +1,4 @@
-import { Dev, PeerUI, Pkg, type t } from '../../test.ui';
-import { PeerRepoList } from '../ui.PeerRepoList';
-import { initSampleCrdt } from './state.crdt';
+import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
 import { SampleLayout } from './ui';
 
 type L = t.Lens;
@@ -12,8 +10,9 @@ const initial: T = {};
  */
 const name = 'Sample.TextboxSync';
 export default Dev.describe(name, async (e) => {
+  const left = await TestEdge.createEdge('Left');
+  const right = await TestEdge.createEdge('Right');
   const lenses: { left?: L | undefined; right?: L } = {};
-  const { left, right, monitorPeer, peersSection } = await initSampleCrdt();
 
   type LocalStore = {};
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -25,8 +24,9 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    monitorPeer(dev, left, (e) => (lenses.left = e.lens));
-    monitorPeer(dev, right, (e) => (lenses.right = e.lens));
+    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', { text: '' });
+    monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
+    monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
 
     const theme: t.CommonTheme = 'Dark';
     Dev.Theme.background(ctx, theme);
@@ -37,40 +37,29 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
-  e.it('ui:header', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.header
-      .padding(0)
-      .border(-0.1)
-      .render((e) => <PeerUI.Connector peer={left.network.peer} />);
-  });
-
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
-    peersSection(dev).hr(5, 20);
-
-    const renderInfo = (network: t.NetworkStore) => {
-      return (
-        <PeerRepoList.Info
-          fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-          data={{ network }}
-        />
-      );
-    };
-
-    dev.row((e) => renderInfo(left.network));
+    TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
+    TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
-    dev.row((e) => renderInfo(right.network));
-  });
-
-  e.it('ui:footer', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .padding(0)
-      .border(-0.1)
-      .render((e) => <PeerUI.Connector peer={right.network.peer} />);
+    TestEdge.dev.infoPanels(dev, left.network, right.network);
   });
 });
+
+/**
+ * Helpers
+ */
+const monitorPeer = (
+  dev: t.DevTools,
+  edge: t.NetworkConnectionEdge,
+  toLens?: (shared: t.NetworkStoreShared) => t.Lens,
+) => {
+  const handleConnection = async () => {
+    toLens?.(await edge.network.shared());
+    dev.redraw();
+  };
+  edge.network.peer.events().cmd.conn$.subscribe(handleConnection);
+};
