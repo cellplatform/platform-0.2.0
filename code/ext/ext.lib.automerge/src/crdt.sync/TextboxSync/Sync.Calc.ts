@@ -4,6 +4,13 @@ import { type t } from './common';
  * Syncer for a text <input> element.
  */
 export const Calc = {
+  /**
+   * Calculate a diff between two string providing parameters to pass
+   * into a `.splice(..)` function.
+   *
+   * Ref:
+   *    https://automerge.org/automerge/api-docs/js/functions/next.splice.html
+   */
   diff(from: string, to: string, caret: number): t.TextDiff {
     const index = wrangle.firstDiff(from, to);
     const commonSuffixLength = wrangle.commonSuffixLength(from, to, index);
@@ -13,9 +20,6 @@ export const Calc = {
   },
 } as const;
 
-/**
- * Helpers
- */
 /**
  * Helpers
  */
