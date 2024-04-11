@@ -1,6 +1,6 @@
 import type { t } from './common';
+export { Dev } from '../Dev';
 export { Pkg } from '../index.pkg.mjs';
-export { Dev } from '../Dev.mjs';
 
 export const ModuleSpecs = {
   'sys.ui.dev.Harness': () => import('../ui/Harness/-SPEC'),
@@ -16,4 +16,7 @@ export const SampleSpecs = {
   // 'dev.sample.Fail': () => import('../test.ui/sample.specs/-SPEC.Fail'),
 } as t.SpecImports;
 
-export const Specs = { ...ModuleSpecs, ...SampleSpecs };
+export const Specs = {
+  ...ModuleSpecs,
+  ...SampleSpecs,
+} as t.SpecImports;
