@@ -151,6 +151,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const payload: t.TextInputFocusArgs = { event, is: { focused: false } };
     props.onBlur?.(payload);
+    props.onFocusChange?.(payload);
     bus.fire({ type: 'sys.TextInput:Focus', payload });
   };
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -160,6 +161,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (focusAction === 'Cursor:End') ref.caretToEnd();
     const payload: t.TextInputFocusArgs = { event, is: { focused: true } };
     props.onFocus?.(payload);
+    props.onFocusChange?.(payload);
     bus.fire({ type: 'sys.TextInput:Focus', payload });
   };
 
