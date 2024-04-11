@@ -1,5 +1,5 @@
 import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
-import { SampleLayout } from './ui';
+import { Layout } from './ui.Layout';
 
 type L = t.Lens;
 type T = { theme?: t.CommonTheme };
@@ -33,7 +33,7 @@ export default Dev.describe(name, async (e) => {
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>(async (e) => {
       if (!(lenses.left && lenses.right)) return null;
-      return <SampleLayout left={lenses.left} right={lenses.right} path={['text']} theme={theme} />;
+      return <Layout left={lenses.left} right={lenses.right} path={['text']} theme={theme} />;
     });
   });
 

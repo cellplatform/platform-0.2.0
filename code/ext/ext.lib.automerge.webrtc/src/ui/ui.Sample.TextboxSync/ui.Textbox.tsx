@@ -2,41 +2,6 @@ import { useEffect, useState } from 'react';
 import { COLORS, Color, ObjectPath, Sync, TextInput, css, rx, type t } from '../../test.ui';
 
 /**
- * <Layout>
- */
-export type SampleLayoutProps = {
-  left?: t.Lens;
-  right?: t.Lens;
-  path?: t.ObjectPath;
-  theme?: t.CommonTheme;
-  style?: t.CssValue;
-};
-export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
-  const { left, right, theme, path } = props;
-
-  /**
-   * Render
-   */
-  const color = Color.fromTheme(theme);
-  const styles = {
-    base: css({ color, display: 'grid', rowGap: '30px', userSelect: 'none' }),
-    textbox: css({ width: 260 }),
-  };
-
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>
-        <Textbox debug={'🐷'} theme={theme} doc={left} path={path} focus={true} />
-      </div>
-      <div></div>
-      <div {...styles.textbox}>
-        <Textbox debug={'🌼'} theme={theme} doc={right} path={path} />
-      </div>
-    </div>
-  );
-};
-
-/**
  * <Textbox>
  */
 export type TextboxProps = {

@@ -1,5 +1,5 @@
 import { DEFAULTS, PeerRepoList } from '.';
-import { COLORS, Color, Dev, TestEdge, Doc, PeerUI, Pkg, TestDb, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Doc, PeerUI, Pkg, TestDb, TestEdge, css, type t } from '../../test.ui';
 
 type T = { props: t.PeerRepoListProps; debug: { reload?: boolean } };
 const initial: T = { props: {}, debug: {} };
