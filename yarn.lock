@@ -1794,6 +1794,52 @@
     web3-core "^1.8.0"
     web3-core-helpers "^1.8.0"
 
+"@privy-io/react-auth@1.60.3":
+  version "1.60.3"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.60.3.tgz#1672bc20ea210b7ab944f0059c72ecc397200a71"
+  integrity sha512-3imsg1aXtJK6dwvRnEUkFjRuCbxz2dA7/TPenCE5J4r2etEbrLiN7C5v+sL6wsMUtvZq1ypQS5p8p6xBnD5NWQ==
+  dependencies:
+    "@coinbase/wallet-sdk" "3.9.3"
+    "@ethersproject/abstract-signer" "^5.7.0"
+    "@ethersproject/address" "^5.7.0"
+    "@ethersproject/bignumber" "^5.7.0"
+    "@ethersproject/bytes" "^5.7.0"
+    "@ethersproject/contracts" "^5.7.0"
+    "@ethersproject/logger" "^5.7.0"
+    "@ethersproject/providers" "^5.7.1"
+    "@ethersproject/strings" "^5.7.0"
+    "@ethersproject/transactions" "^5.7.0"
+    "@ethersproject/units" "^5.7.0"
+    "@headlessui/react" "^1.7.18"
+    "@heroicons/react" "^2.0.18"
+    "@marsidev/react-turnstile" "^0.4.1"
+    "@metamask/eth-sig-util" "^6.0.0"
+    "@simplewebauthn/browser" "^9.0.1"
+    "@walletconnect/ethereum-provider" "^2.11.1"
+    "@walletconnect/modal" "^2.6.2"
+    base64-js "^1.5.1"
+    dotenv "^16.0.3"
+    encoding "^0.1.13"
+    eventemitter3 "^5.0.1"
+    fast-password-entropy "^1.1.1"
+    jose "^4.15.5"
+    js-cookie "^3.0.5"
+    libphonenumber-js "^1.10.14"
+    lokijs "^1.5.12"
+    md5 "^2.3.0"
+    mipd "^0.0.5"
+    ofetch "^1.3.4"
+    pino-pretty "^10.0.0"
+    qrcode "^1.5.1"
+    react-device-detect "^2.2.2"
+    react-use "^17.4.2"
+    secure-password-utilities "^0.2.1"
+    styled-components "^5.3.6"
+    tinycolor2 "^1.6.0"
+    uuid ">=8 <10"
+    web3-core "^1.8.0"
+    web3-core-helpers "^1.8.0"
+
 "@radix-ui/number@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/number/-/number-1.0.1.tgz#644161a3557f46ed38a042acf4a770e826021674"
@@ -3106,10 +3152,10 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/react@18.2.76":
-  version "18.2.76"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.76.tgz#49bf63dac2ade25289d5be9c5af9adda2cb8a18e"
-  integrity sha512-T6z/v7YxpswDM61Vq5KoSPTJqCkroJfsDIsvXCr4+qOY6gik5Ju4w0jf67cpC5z7ydOnp/E0V0W08pDRy8u9Xw==
+"@types/react@18.2.77":
+  version "18.2.77"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.77.tgz#af2f857b6a6dfb6ca89ec102ebc147b1f1616880"
+  integrity sha512-CUT9KUUF+HytDM7WiXKLF9qUSg4tGImwy4FXTlfEDPEkkNUzJ7rVFolYweJ9fS1ljoIaP7M7Rdjc5eUm/Yu5AA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -5609,13 +5655,6 @@ formdata-polyfill@^4.0.10:
   dependencies:
     fetch-blob "^3.1.2"
 
-framer-motion@11.0.25:
-  version "11.0.25"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.25.tgz#9d5075aa82a6f336814273b7a5ea4cc93462ced0"
-  integrity sha512-mRt7vQGzA7++wTgb+PW1TrlXXgndqR6hCiJ48fXr2X9alte2hPQiAq556HRwDCt0Q5X98MNvcSe4KUa27Gm5Lg==
-  dependencies:
-    tslib "^2.4.0"
-
 framer-motion@11.0.28:
   version "11.0.28"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.0.28.tgz#b55a61d12c61a3a9e89084a1ff006b20e367436a"
@@ -7695,7 +7734,7 @@ oboe@2.1.5:
   dependencies:
     http-https "^1.0.0"
 
-ofetch@^1.2.0, ofetch@^1.3.3:
+ofetch@^1.2.0, ofetch@^1.3.3, ofetch@^1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ofetch/-/ofetch-1.3.4.tgz#7ea65ced3c592ec2b9906975ae3fe1d26a56f635"
   integrity sha512-KLIET85ik3vhEfS+3fDlc/BAZiAp+43QEC/yCo5zkNoY2YaKvNkOaFr/6wCFgFH1kuYQM5pMNi0Tg8koiIemtw==
@@ -9783,20 +9822,6 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
-
-viem@2.9.15:
-  version "2.9.15"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.15.tgz#a176f3c3504a6785333ac0f948666854c3a29e30"
-  integrity sha512-7kcmHqybc3JhpjL8gKY7YxBYpZt1//qhoTZIU5Ez9JdyRCnYMMnJu20s7wd7Gv6a3zPbq8jV8dCp94a/NLJJcA==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    abitype "1.0.0"
-    isows "1.0.3"
-    ws "8.13.0"
 
 viem@2.9.16:
   version "2.9.16"
