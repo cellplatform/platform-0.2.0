@@ -27,8 +27,7 @@ export default Dev.describe(name, async (e) => {
     monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
     monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
 
-    const theme: t.CommonTheme = 'Dark';
-    Dev.Theme.background(ctx, theme);
+    Dev.Theme.background(ctx, 'Dark');
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>(async (e) => {
       if (!(lenses.left && lenses.right)) return null;

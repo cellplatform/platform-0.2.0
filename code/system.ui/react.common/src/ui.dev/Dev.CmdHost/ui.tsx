@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { CmdBar, Filter, SpecList, css, type t } from './common';
-
-import { useKeyboard } from './useKeyboard.mjs';
+import { useKeyboard } from './useKeyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
   const { pkg, applyFilter = true } = props;
