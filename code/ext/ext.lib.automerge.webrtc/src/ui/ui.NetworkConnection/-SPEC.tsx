@@ -1,5 +1,5 @@
 import { NetworkConnection } from '.';
-import { Dev, Peer, PeerUI, TestDb, WebStore, WebrtcStore, type t } from '../../test.ui';
+import { Dev, PeerUI, TestEdge, type t } from '../../test.ui';
 
 type T = {
   props: t.NetworkConnectionProps;
@@ -10,23 +10,10 @@ const initial: T = {
   debug: { count: 0 },
 };
 
-export const createEdge = async (kind: t.NetworkConnectionEdgeKind) => {
-  const db = TestDb.EdgeSample.edge(kind);
-  const peer = Peer.init();
-  const store = WebStore.init({
-    storage: db.name,
-    network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
-  });
-  const index = await WebStore.index(store);
-  const network = await WebrtcStore.init(peer, store, index);
-  const edge: t.NetworkConnectionEdge = { kind, network };
-  return edge;
-};
-
 const name = NetworkConnection.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const left = await createEdge('Left');
-  const right = await createEdge('Right');
+  const left = await TestEdge.createEdge('Left');
+  const right = await TestEdge.createEdge('Right');
 
   type LocalStore = Pick<T['debug'], 'debugBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc');
@@ -82,28 +69,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Peers', (dev) => {
-      const connect = () => left.network.peer.connect.data(right.network.peer.id);
-      const disconnect = () => left.network.peer.disconnect();
-      const isConnected = () => left.network.peer.current.connections.length > 0;
-
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'connected' : 'connect'))
-          .right((e) => (!isConnected() ? '🌳' : ''))
-          .enabled((e) => !isConnected())
-          .onClick((e) => connect());
-      });
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'disconnect' : 'not connected'))
-          .right((e) => (isConnected() ? '💥' : ''))
-          .enabled((e) => isConnected())
-          .onClick((e) => disconnect());
-      });
-    });
-
-    dev.hr(5, 20);
+    TestEdge.peersSection(dev, left.network, right.network).hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());

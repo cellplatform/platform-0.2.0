@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { CmdBar } from 'sys.ui.react.common';
 import { Sync, css, rx, type t } from './common';
 
-export type DevBarProps = {
+export type DevCmdBarProps = {
   doc?: t.Lens<t.HarnessShared>;
   style?: t.CssValue;
 };
 
-export const DevBar: React.FC<DevBarProps> = (props) => {
+export const DevCmdBar: React.FC<DevCmdBarProps> = (props) => {
   const { doc } = props;
   const enabled = !!doc?.instance;
   const textboxRef = useRef<t.TextInputRef>();

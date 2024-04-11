@@ -9,15 +9,15 @@ import {
   Peer,
   PeerUI,
   TestDb,
+  TestEdge,
   WebrtcStore,
   css,
   rx,
 } from '../../test.ui';
 import { factory } from '../ui.Sample.02.loaders';
-import { createEdge } from './-SPEC.edge';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { DevBar } from './ui.Dev.Bar';
+import { DevCmdBar } from './ui.Dev.CmdBar';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Subject';
@@ -47,8 +47,13 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
-    right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
+    left = await TestEdge.create('Left', [
+      'Focus.OnArrowKey',
+      'Shareable',
+      'Deletable',
+      'Copyable',
+    ]);
+    right = await TestEdge.create('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -111,7 +116,6 @@ export default Dev.describe(name, async (e) => {
     };
 
     ctx.debug.width(300);
-
     ctx.debug.header.border(-0.1).render((e) => {
       const conns = left.network.peer.current.connections;
       const media = conns.filter((c) => Peer.Is.Kind.media(c));
@@ -138,6 +142,9 @@ export default Dev.describe(name, async (e) => {
       return elAvatars || elEmpty || null;
     });
 
+    /**
+     * Subject
+     */
     ctx.subject
       .size('fill')
       .display('grid')
@@ -164,26 +171,27 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <Sample
+            left={left}
+            right={right}
             overlay={elOverlay}
-            left={{ ...left, visible: edge?.Left.visible }}
-            right={{ ...right, visible: edge?.Right.visible }}
             stream={e.state.stream}
             onStreamSelection={onStreamSelection}
           />
         );
       });
+
+    /**
+     * Subject: Footer
+     */
+    dev.ctx.host.footer
+      .padding(0)
+      .border(null)
+      .render((e) => <DevCmdBar doc={Shared.harness} />);
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
-    dev.ctx.host.footer
-      .padding(0)
-      .border(null)
-      .render((e) => {
-        return <DevBar doc={Shared.harness} />;
-      });
 
     dev.row((e) => {
       return (
@@ -202,13 +210,7 @@ export default Dev.describe(name, async (e) => {
         const shared = Shared.harness;
         const getLayout = (d?: t.HarnessShared) => d?.edge[edge.kind];
         const layout = getLayout(shared?.current);
-        const defaultFields: t.InfoField[] = [
-          'Visible',
-          'Repo',
-          'Peer',
-          'Network.Transfer',
-          'Network.Shared',
-        ];
+        const defaultFields: t.InfoField[] = ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared'];
 
         if (!layout?.fields) {
           shared?.change((d) => (d.edge[edge.kind].fields = defaultFields));
@@ -220,13 +222,6 @@ export default Dev.describe(name, async (e) => {
             fields={layout?.fields ?? defaultFields}
             data={{
               network,
-              visible: {
-                value: layout?.visible ?? true,
-                enabled: !!layout,
-                onToggle(visible) {
-                  shared?.change((d) => (d.edge[edge.kind].visible = !visible));
-                },
-              },
               shared: {
                 onIconClick(e) {
                   shared?.change((d) => {

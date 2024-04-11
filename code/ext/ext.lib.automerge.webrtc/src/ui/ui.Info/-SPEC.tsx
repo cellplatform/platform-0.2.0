@@ -1,6 +1,15 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, PeerUI, PropList, WebStore, css, type t } from '../../test.ui';
-import { createEdge } from '../ui.Sample.02';
+import {
+  COLORS,
+  Color,
+  Dev,
+  PeerUI,
+  PropList,
+  TestEdge,
+  WebStore,
+  css,
+  type t,
+} from '../../test.ui';
 
 type P = t.InfoProps;
 type T = {
@@ -15,8 +24,8 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
-  const self = await createEdge('Left');
-  const remote = await createEdge('Right');
+  const self = await TestEdge.create('Left');
+  const remote = await TestEdge.create('Right');
 
   const peer = {
     self: self.network.peer,

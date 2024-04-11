@@ -1,11 +1,9 @@
 import { Dev, PeerUI, Pkg, type t } from '../../test.ui';
-import { createEdge } from '../ui.NetworkConnection/-SPEC';
 import { PeerRepoList } from '../ui.PeerRepoList';
-import { SampleLayout } from './-SPEC.ui';
+import { initSampleCrdt } from './state.crdt';
+import { SampleLayout } from './ui';
 
-type TLens = { text: string };
-type L = t.Lens<TLens>;
-
+type L = t.Lens;
 type T = { theme?: t.CommonTheme };
 const initial: T = {};
 
@@ -14,9 +12,8 @@ const initial: T = {};
  */
 const name = 'Sample.TextboxSync';
 export default Dev.describe(name, async (e) => {
-  const left = await createEdge('Left');
-  const right = await createEdge('Right');
   const lenses: { left?: L | undefined; right?: L } = {};
+  const { left, right, monitorPeer, peersSection } = await initSampleCrdt();
 
   type LocalStore = {};
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -25,31 +22,11 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    const monitorPeer = (
-      edge: t.NetworkConnectionEdge,
-      onLens?: (e: { shared: t.NetworkStoreShared; lens: L }) => void,
-    ) => {
-      const deriveLens = async () => {
-        if (!onLens) return;
-        const shared = await edge.network.shared();
-        const lens = shared.namespace.lens<TLens>('foo', { text: '' });
-        onLens({ shared, lens });
-        dev.redraw('subject');
-      };
-
-      const handleConnection = async () => {
-        await deriveLens();
-        dev.redraw('debug');
-      };
-
-      edge.network.peer.events().cmd.conn$.subscribe(handleConnection);
-    };
-    monitorPeer(left, (e) => (lenses.left = e.lens));
-    monitorPeer(right, (e) => (lenses.right = e.lens));
+    monitorPeer(dev, left, (e) => (lenses.left = e.lens));
+    monitorPeer(dev, right, (e) => (lenses.right = e.lens));
 
     const theme: t.CommonTheme = 'Dark';
     Dev.Theme.background(ctx, theme);
@@ -73,28 +50,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
 
-    dev.section('Peers', (dev) => {
-      const connect = () => left.network.peer.connect.data(right.network.peer.id);
-      const disconnect = () => left.network.peer.disconnect();
-      const isConnected = () => left.network.peer.current.connections.length > 0;
-
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'connected' : 'connect'))
-          .right((e) => (!isConnected() ? '🌳' : ''))
-          .enabled((e) => !isConnected())
-          .onClick((e) => connect());
-      });
-      dev.button((btn) => {
-        btn
-          .label(() => (isConnected() ? 'disconnect' : 'not connected'))
-          .right((e) => (isConnected() ? '💥' : ''))
-          .enabled((e) => isConnected())
-          .onClick((e) => disconnect());
-      });
-    });
-
-    dev.hr(5, 20);
+    peersSection(dev).hr(5, 20);
 
     const renderInfo = (network: t.NetworkStore) => {
       return (

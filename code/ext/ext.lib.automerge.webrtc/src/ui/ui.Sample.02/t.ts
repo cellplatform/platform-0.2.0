@@ -1,21 +1,13 @@
-export type * from '../common/t';
 import type { t } from './common';
-
+export type * from '../../test.ui/t';
 export type * from '../ui.Sample.02.loaders/t';
-
-export type SampleEdge = {
-  kind: t.NetworkConnectionEdgeKind;
-  model: t.RepoListModel;
-  network: t.NetworkStore;
-  visible?: boolean;
-};
 
 /**
  * Sample: <Component>
  */
 export type SampleEdgeProps = {
   edge: t.SampleEdge;
-  offsetLabel?: t.SampleEdgeLabel;
+  offsetLabel?: SampleEdgeLabel;
   focusOnLoad?: boolean;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
