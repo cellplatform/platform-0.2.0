@@ -1,10 +1,11 @@
+import { StoreIndex, WebStore } from '../../crdt';
 import { eventsFactory } from './Model.Events';
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
 import { listSelectionBehavior } from './Model.List.b.selection';
-import { DEFAULTS, Model, WebStore, StoreIndex, rx, type t } from './common';
+import { DEFAULTS, Model, rx, type t } from './common';
 
 type Options = {
   dispose$?: t.UntilObservable;

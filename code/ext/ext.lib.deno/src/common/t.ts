@@ -7,7 +7,6 @@ export type { Store } from 'ext.lib.automerge/src/types';
 /**
  * @system
  */
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   Disposable,
   EventBus,
@@ -17,7 +16,11 @@ export type {
   JsonMap,
   Lifecycle,
   UntilObservable,
+  IdString,
 } from 'sys.types/src/types';
+
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { HttpMethods } from 'sys.net.http/src/types';
 
 /**
  * @local

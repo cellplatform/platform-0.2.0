@@ -6,7 +6,7 @@ import type { t } from './common';
 export type MonacoEditorProps = {
   text?: string;
   language?: t.EditorLanguage;
-  theme?: t.EditorTheme;
+  theme?: t.CommonTheme;
   placeholder?: string;
   focusOnLoad?: boolean;
   tabSize?: number;

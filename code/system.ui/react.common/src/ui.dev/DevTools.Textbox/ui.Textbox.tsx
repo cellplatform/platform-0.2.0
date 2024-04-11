@@ -22,8 +22,8 @@ export type TextboxProps = t.TextInputFocusProps & {
   error?: ErrorInput;
   style?: t.CssValue;
   margin?: MarginOrNil;
-  onChange?: t.TextInputChangeEventHandler;
-  onEnter?: t.TextInputKeyEventHandler;
+  onChange?: t.TextInputChangeHandler;
+  onEnter?: t.TextInputKeyHandler;
 };
 
 const View: React.FC<TextboxProps> = (props) => {
@@ -99,8 +99,8 @@ const View: React.FC<TextboxProps> = (props) => {
         focusOnReady={props.focusOnReady ?? false}
         focusAction={props.focusAction ?? 'Select'}
         spellCheck={false}
-        onFocusChange={(e) => setFocused(e.isFocused)}
-        onChanged={(e) => {
+        onFocusChange={(e) => setFocused(e.is.focused)}
+        onChange={(e) => {
           if (isActive) props.onChange?.(e);
         }}
         onEnter={(e) => {

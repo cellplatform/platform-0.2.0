@@ -6,7 +6,7 @@ export const TestRunner = {
   Results: TestResults,
   PropList: TestPropList,
   bundle: Test.bundle,
-};
+} as const;
 
 export { TestResults, TestPropList };
 export default TestRunner;

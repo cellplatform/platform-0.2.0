@@ -1,1 +1,1 @@
-export { createEdge } from './-SPEC.edge';
+export {};

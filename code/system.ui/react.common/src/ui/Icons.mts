@@ -12,7 +12,6 @@ import {
 } from 'react-icons/md';
 import { RxOpenInNewWindow } from 'react-icons/rx';
 import { TbCopy } from 'react-icons/tb';
-import { VscRepo, VscSymbolClass } from 'react-icons/vsc';
 
 const icon = Icon.renderer;
 
@@ -26,8 +25,6 @@ export const Icons = {
   Copy: icon(TbCopy),
   Visibility: { On: icon(MdVisibility), Off: icon(MdVisibilityOff) },
   Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
-  Repo: icon(VscRepo),
-  ObjectTree: icon(VscSymbolClass),
   Align: { Center: icon(MdOutlineVerticalAlignCenter) },
   NewTab: icon(RxOpenInNewWindow),
 } as const;

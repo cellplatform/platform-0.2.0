@@ -1,9 +1,19 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, PeerUI, WebStore, css, type t } from '../../test.ui';
-import { createEdge } from '../ui.Sample.02';
+import {
+  COLORS,
+  Color,
+  Dev,
+  PeerUI,
+  PropList,
+  TestEdge,
+  WebStore,
+  css,
+  type t,
+} from '../../test.ui';
 
+type P = t.InfoProps;
 type T = {
-  props: t.InfoProps;
+  props: P;
   debug: { visible?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
@@ -14,8 +24,8 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
-  const self = await createEdge('Left');
-  const remote = await createEdge('Right');
+  const self = await TestEdge.create('Left');
+  const remote = await TestEdge.create('Right');
 
   const peer = {
     self: self.network.peer,
@@ -25,10 +35,11 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
   const local = localstore.object({
-    selectedFields: DEFAULTS.fields.default,
+    theme: undefined,
+    fields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -36,39 +47,47 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.theme = local.theme;
+      d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
+        const visible = debug.visible ?? true;
+        const data: t.InfoData = {
+          network: self.network,
+          repo: { store, index },
+          visible: {
+            value: visible,
+            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
+          },
+          shared: {
+            onIconClick(e) {
+              console.info('⚡️ shared.onIconClick', e);
+              state.change((d) => {
+                const fields = d.props.fields ?? [];
+                d.props.fields = fields.includes('Network.Shared.Json')
+                  ? fields.filter((f) => f !== 'Network.Shared.Json')
+                  : [...fields, 'Network.Shared.Json'];
+                local.fields = PropList.Wrangle.fields(d.props.fields);
+              });
+            },
+          },
+        };
+
         return (
           <Info
-            {...e.state.props}
-            data={{
-              network: self.network,
-              repo: { store, index },
-              visible: {
-                value: e.state.debug.visible,
-                onToggle: (current) => state.change((d) => (d.debug.visible = !current)),
-              },
-              shared: {
-                onIconClick(e) {
-                  console.info('⚡️ shared.onIconClick', e);
-                  state.change((d) => {
-                    const fields = d.props.fields ?? [];
-                    d.props.fields = fields.includes('Network.Shared.Json')
-                      ? fields.filter((f) => f !== 'Network.Shared.Json')
-                      : [...fields, 'Network.Shared.Json'];
-                    local.selectedFields = d.props.fields;
-                  });
-                },
-              },
-            }}
+            //
+            {...props}
+            data={data}
+            fields={visible ? props.fields : ['Visible']}
           />
         );
       });
@@ -86,9 +105,9 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Fields', (dev) => {
-      const setFields = (fields?: t.InfoField[]) => {
+      const setFields = (fields?: (t.InfoField | undefined)[]) => {
         dev.change((d) => (d.props.fields = fields));
-        local.selectedFields = fields?.length === 0 ? undefined : fields;
+        local.fields = fields?.length === 0 ? undefined : fields;
       };
 
       dev.row((e) => {
@@ -101,18 +120,19 @@ export default Dev.describe(name, async (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               setFields(fields);
             }}
           />
         );
       });
 
+      dev.title('Common States');
       const config = (label: string, fields?: t.InfoField[]) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      config('default', DEFAULTS.fields.default);
+      config('all', DEFAULTS.fields.all);
       config('info → PeerRepoList', [
         'Repo',
         'Peer',
@@ -120,13 +140,24 @@ export default Dev.describe(name, async (e) => {
         'Network.Shared',
         // 'Network.Shared.Json',
       ]);
+      dev.hr(-1, 5);
+      dev.button('prepend: Visible', (e) => {
+        const fields = e.state.current.props.fields ?? [];
+        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('connect network', (e) => peer.self.connect.data(peer.remote.id));
       dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+      dev.hr(-1, 5);
+      dev.button(['connect network', '⚡️'], (e) => peer.self.connect.data(peer.remote.id));
     });
   });
 
@@ -144,7 +175,7 @@ export default Dev.describe(name, async (e) => {
         };
         return (
           <div {...styles.base}>
-            <Dev.Object name={name} data={data} expand={1} style={styles.obj} />
+            <Dev.Object name={name} data={data} expand={1} style={styles.obj} fontSize={11} />
             <PeerUI.Connector peer={peer.remote} style={styles.conn} />
           </div>
         );

@@ -11,13 +11,13 @@ export type ModuleNamespaceProps<N extends string = string> = {
   name?: N;
   imports?: t.ModuleImports;
   render?: t.ModuleNamespaceRenderer<any>;
-  commandbar?: t.ModuleNamespaceCommandbarProps;
+  cmdbar?: t.ModuleNamespaceCmdbarProps;
   flipped?: boolean;
   theme?: t.ModuleNamespaceTheme;
   style?: t.CssValue;
 };
 
-export type ModuleNamespaceCommandbarProps = {
+export type ModuleNamespaceCmdbarProps = {
   visible?: boolean;
 };
 

@@ -1,31 +1,31 @@
 import { RefObject, useEffect, useState } from 'react';
 
 import { DEFAULTS, Time, css, type t } from './common';
-import { TextInputHint } from './ui.TextInput.Hint';
-import { HtmlInput } from './ui.TextInput.Html';
-import { Util } from './util.mjs';
+import { Util } from './u';
+import { TextInputHint } from './ui.Hint';
+import { HtmlInput } from './ui.Html';
 
-type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
+type Props = t.TextInputProps & {
+  bus: t.TextInputBus;
+  inputRef: RefObject<HTMLInputElement>;
+};
 
 /**
  * Component
  */
 export const View: React.FC<Props> = (props) => {
+  const { bus, inputRef, placeholder, maxLength, theme } = props;
   const {
-    inputRef,
-    placeholder,
-    maxLength,
-    isPassword = DEFAULTS.prop.isPassword,
-    isReadOnly = DEFAULTS.prop.isReadOnly,
-    isEnabled = DEFAULTS.prop.isEnabled,
-    valueStyle = DEFAULTS.prop.valueStyle,
-    disabledOpacity = DEFAULTS.prop.disabledOpacity,
-    placeholderStyle = {},
+    isPassword = DEFAULTS.props.isPassword,
+    isReadOnly = DEFAULTS.props.isReadOnly,
+    isEnabled = DEFAULTS.props.isEnabled,
+    disabledOpacity = DEFAULTS.props.disabledOpacity,
+    valueStyle = DEFAULTS.theme(theme),
+    placeholderStyle,
   } = props;
 
-  const value = Util.value.format(props.value, maxLength);
+  const value = Util.Value.format(props.value, maxLength);
   const hasValue = value.length > 0;
-
   const [width, setWidth] = useState<string | number>();
 
   /**
@@ -33,7 +33,7 @@ export const View: React.FC<Props> = (props) => {
    */
   useEffect(() => {
     const { autoSize } = props;
-    if (autoSize) Time.delay(0, async () => setWidth(await Util.css.toWidth(props))); // NB: Delay is so size measurement returns accurate number.
+    if (autoSize) Time.delay(0, async () => setWidth(await Util.Css.toWidth(props))); // NB: Delay is so size measurement returns accurate number.
     if (!autoSize) setWidth(undefined);
   }, [value, props.autoSize]);
 
@@ -47,15 +47,6 @@ export const View: React.FC<Props> = (props) => {
       const handler = Wrangle.labelDoubleClickHandler(props, 'Placeholder');
       handler(e);
     }
-  };
-
-  const handleFocusChange = (
-    event: React.FocusEvent<HTMLInputElement, Element>,
-    isFocused: boolean,
-  ) => {
-    if (isFocused) props.onFocus?.(event);
-    if (!isFocused) props.onBlur?.(event);
-    props.onFocusChange?.({ event, isFocused });
   };
 
   /**
@@ -80,7 +71,7 @@ export const View: React.FC<Props> = (props) => {
       userSelect: 'none',
       pointerEvents: 'none',
 
-      transform: placeholderStyle.offset
+      transform: placeholderStyle?.offset
         ? `translate(${placeholderStyle.offset[0]}px, ${placeholderStyle.offset[1]}px)`
         : undefined,
 
@@ -100,7 +91,7 @@ export const View: React.FC<Props> = (props) => {
 
   const elPlaceholder = !hasValue && placeholder && (
     <div
-      {...css(styles.placeholder, Util.css.toPlaceholder(props))}
+      {...css(styles.placeholder, Util.Css.toPlaceholder(props))}
       onDoubleClick={Wrangle.labelDoubleClickHandler(props, 'Placeholder')}
     >
       {placeholder}
@@ -122,9 +113,11 @@ export const View: React.FC<Props> = (props) => {
 
   const elInput = (
     <HtmlInput
+      bus={bus}
       inputRef={inputRef}
-      style={styles.input}
       className={props.className}
+      theme={theme}
+      style={styles.input}
       value={value}
       isEnabled={isEnabled}
       isPassword={isPassword}
@@ -140,11 +133,12 @@ export const View: React.FC<Props> = (props) => {
       autoComplete={props.autoComplete}
       selectionBackground={props.selectionBackground}
       //
-      onFocus={(e) => handleFocusChange(e, true)}
-      onBlur={(e) => handleFocusChange(e, false)}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
+      onFocusChange={props.onFocusChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
-      onChanged={(e) => props.onChanged?.(e)}
+      onChange={(e) => props.onChange?.(e)}
       onEnter={props.onEnter}
       onEscape={props.onEscape}
       onTab={props.onTab}

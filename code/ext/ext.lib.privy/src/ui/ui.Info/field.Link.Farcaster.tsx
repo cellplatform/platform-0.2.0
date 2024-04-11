@@ -9,8 +9,9 @@ export function linkFarcaster(args: {
   data: t.InfoData;
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
+  theme?: t.CommonTheme;
 }): t.PropListItem | undefined {
-  const { privy, modifiers } = args;
+  const { privy, modifiers, theme } = args;
   const data = args.data.farcaster;
   const showClose = modifiers.is.over && modifiers.keys.alt;
 
@@ -19,6 +20,14 @@ export function linkFarcaster(args: {
 
   return {
     label: 'Farcaster',
-    value: <FCLink privy={privy} enabled={enabled} showClose={showClose} onClick={data?.onClick} />,
+    value: (
+      <FCLink
+        theme={theme}
+        privy={privy}
+        enabled={enabled}
+        showClose={showClose}
+        onClick={data?.onClick}
+      />
+    ),
   };
 }

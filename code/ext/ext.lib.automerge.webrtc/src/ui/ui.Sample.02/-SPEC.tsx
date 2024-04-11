@@ -1,10 +1,23 @@
 import { type t } from './common';
 
-import { COLORS, Delete, Dev, Doc, PeerUI, Peer, TestDb, WebrtcStore, rx } from '../../test.ui';
-import { createEdge } from './-SPEC.edge';
-import { loader } from './-loaders/-factory';
+import {
+  COLORS,
+  Delete,
+  Dev,
+  Doc,
+  Icons,
+  Peer,
+  PeerUI,
+  TestDb,
+  TestEdge,
+  WebrtcStore,
+  css,
+  rx,
+} from '../../test.ui';
+import { factory } from '../ui.Sample.02.loaders';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
+import { DevCmdBar } from './ui.Dev.CmdBar';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Subject';
@@ -34,8 +47,13 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
-    right = await createEdge('Right', ['Shareable', 'Deletable', 'Copyable']);
+    left = await TestEdge.create('Left', [
+      'Focus.OnArrowKey',
+      'Shareable',
+      'Deletable',
+      'Copyable',
+    ]);
+    right = await TestEdge.create('Right', ['Shareable', 'Deletable', 'Copyable']);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -79,7 +97,10 @@ export default Dev.describe(name, async (e) => {
         harness: Shared.harness.events(),
       };
 
-      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => dev.redraw('subject'));
+      events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
+        dev.redraw('subject');
+        dev.redraw('debug');
+      });
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
         ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
@@ -89,7 +110,41 @@ export default Dev.describe(name, async (e) => {
       monitorKeyboard(Shared.harness);
     });
 
+    const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
+      state.change((d) => (d.stream = e.selected));
+      dev.redraw();
+    };
+
     ctx.debug.width(300);
+    ctx.debug.header.border(-0.1).render((e) => {
+      const conns = left.network.peer.current.connections;
+      const media = conns.filter((c) => Peer.Is.Kind.media(c));
+      const total = media.length;
+      const empty = total === 0;
+
+      const styles = {
+        base: css({ display: 'grid', placeItems: 'center' }),
+      };
+      const elEmpty = empty && (
+        <div {...styles.base}>
+          <Icons.Person opacity={0.3} />
+        </div>
+      );
+      const elAvatars = !empty && (
+        <PeerUI.AvatarTray
+          //
+          peer={left.network.peer}
+          onSelection={onStreamSelection}
+          muted={true}
+        />
+      );
+
+      return elAvatars || elEmpty || null;
+    });
+
+    /**
+     * Subject
+     */
     ctx.subject
       .size('fill')
       .display('grid')
@@ -108,48 +163,30 @@ export default Dev.describe(name, async (e) => {
           const style = { backgroundColor: COLORS.WHITE };
           const accessToken = state.current.accessToken;
           const stream = state.current.stream;
-          elOverlay = loader
-            .ctx({ store, docuri, accessToken, stream })
+          const peerid = left.network.peer.id;
+          elOverlay = factory
+            .ctx({ store, docuri, accessToken, stream, peerid })
             .render(typename, { style });
         }
 
-        const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
-          state.change((d) => (d.stream = e.selected));
-          dev.redraw();
-        };
-
-        const elAvatars = (
-          <PeerUI.AvatarTray
-            peer={left.network.peer}
-            gap={10}
-            size={28}
-            style={{
-              Absolute: [null, null, 0 - (28 + 10), 10],
-              pointerEvents: elOverlay ? 'none' : 'auto',
-              opacity: elOverlay ? 1 : 0,
-              transition: 'opacity 0.3s',
-            }}
-            onSelection={onStreamSelection}
-          />
-        );
-
-        const elSubject = (
+        return (
           <Sample
+            left={left}
+            right={right}
             overlay={elOverlay}
-            left={{ ...left, visible: edge?.Left.visible }}
-            right={{ ...right, visible: edge?.Right.visible }}
             stream={e.state.stream}
             onStreamSelection={onStreamSelection}
           />
         );
-
-        return (
-          <>
-            {elSubject}
-            {elAvatars}
-          </>
-        );
       });
+
+    /**
+     * Subject: Footer
+     */
+    dev.ctx.host.footer
+      .padding(0)
+      .border(null)
+      .render((e) => <DevCmdBar doc={Shared.harness} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -173,13 +210,7 @@ export default Dev.describe(name, async (e) => {
         const shared = Shared.harness;
         const getLayout = (d?: t.HarnessShared) => d?.edge[edge.kind];
         const layout = getLayout(shared?.current);
-        const defaultFields: t.InfoField[] = [
-          'Visible',
-          'Repo',
-          'Peer',
-          'Network.Transfer',
-          'Network.Shared',
-        ];
+        const defaultFields: t.InfoField[] = ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared'];
 
         if (!layout?.fields) {
           shared?.change((d) => (d.edge[edge.kind].fields = defaultFields));
@@ -187,17 +218,10 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <PeerRepoList.Info
-            title={edge.kind}
+            title={`${edge.kind} Column`}
             fields={layout?.fields ?? defaultFields}
             data={{
               network,
-              visible: {
-                value: layout?.visible ?? true,
-                enabled: !!layout,
-                onToggle(visible) {
-                  shared?.change((d) => (d.edge[edge.kind].visible = !visible));
-                },
-              },
               shared: {
                 onIconClick(e) {
                   shared?.change((d) => {
@@ -291,7 +315,6 @@ export default Dev.describe(name, async (e) => {
 
               if (!(Shared.main && Shared.harness)) return;
               if (!docuri) return;
-
               const def: t.SampleModuleDef = { name, docuri, target };
               if (target === 'main') Shared.main.change((d) => (d.module = def));
               if (target === 'dev:header') Shared.harness.change((d) => (d.module = def));
@@ -303,9 +326,12 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
-      loadButton(`ƒ → load → DiagramEditor`, 'DiagramEditor', 'main');
+      loadButton(`ƒ → load → TLDraw`, 'TLDraw', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
       loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
+      loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
+      loadButton(`ƒ → load → Automerge.Info`, 'AutomergeInfo', 'main');
+      loadButton(`ƒ → load → common.CmdBar`, 'CmdBar', 'main');
 
       dev.hr(-1, 5);
 
@@ -387,8 +413,8 @@ export default Dev.describe(name, async (e) => {
         return doc?.toObject();
       };
 
-      const jwt = e.state.accessToken;
       const data = {
+        peerid: left.network.peer.id,
         [`left[${total(left)}]`]: formatEdge(left),
         [`right[${total(right)}]`]: formatEdge(right),
         [`selected:edge`]: selected ? selected.edge.kind : undefined,

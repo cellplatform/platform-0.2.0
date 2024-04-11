@@ -12,6 +12,7 @@ export const DEFAULTS = {
   fields: {
     get all(): t.InfoField[] {
       return [
+        'Visible',
         'Module',
         'Module.Verify',
         'Component',
@@ -21,7 +22,6 @@ export const DEFAULTS = {
         'Network.Shared',
         'Network.Shared.Json',
         'Network.Transfer',
-        'Visible',
       ];
     },
     get default(): t.InfoField[] {

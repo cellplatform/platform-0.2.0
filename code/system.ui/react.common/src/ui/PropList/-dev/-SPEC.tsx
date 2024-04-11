@@ -1,13 +1,14 @@
 import { PropList } from '..';
-import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
+import { COLORS, Color, Dev, Keyboard, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
 import { BuilderSample } from './-SPEC.Sample.Builder';
 import { sampleItems } from './-SPEC.Samples';
 import { SampleFields, type MyField } from './-common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
+type P = t.PropListProps;
 type T = {
-  props: t.PropListProps;
+  props: P;
   debug: {
     source: SampleKind;
     fields?: MyField[];
@@ -21,10 +22,17 @@ const initial: T = {
   debug: { source: 'Samples', header: true, footer: true },
 };
 
-export default Dev.describe('PropList', (e) => {
-  type LocalStore = { card: boolean; flipped: boolean; header: boolean; footer: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.PropList');
+const name = PropList.displayName ?? 'Unknown';
+export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<P, 'theme'> & {
+    card: boolean;
+    flipped: boolean;
+    header: boolean;
+    footer: boolean;
+  };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: undefined,
     card: false,
     flipped: false,
     header: false,
@@ -37,6 +45,7 @@ export default Dev.describe('PropList', (e) => {
     await Util.setSample(ctx, state.current.debug.source);
 
     state.change((d) => {
+      d.props.theme = local.theme;
       d.props.card = local.card;
       d.props.flipped = local.flipped;
       d.debug.header = local.header;
@@ -49,6 +58,7 @@ export default Dev.describe('PropList', (e) => {
       .size([250, null])
       .render<T>((e) => {
         const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
 
         const isCard = Boolean(props.card);
         ctx.subject.size([isCard ? 250 + 25 * 2 : 250, null]);
@@ -100,17 +110,7 @@ export default Dev.describe('PropList', (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `theme: "${e.state.props.theme}"`)
-          .value((e) => e.state.props.theme === 'Light')
-          .onClick((e) =>
-            e.change((d) => {
-              d.props.theme = e.current ? 'Dark' : 'Light';
-              Dev.Theme.background(dev.ctx, d.props.theme);
-            }),
-          ),
-      );
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
 
       dev.boolean((btn) =>
         btn
@@ -239,7 +239,6 @@ export default Dev.describe('PropList', (e) => {
             Util.setSample(dev.ctx, 'Builder');
           },
         };
-
         return <PropList.FieldSelector {...props} style={{ Margin: [20, 0, 20, 30] }} />;
       });
     });
@@ -248,9 +247,10 @@ export default Dev.describe('PropList', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'PropList'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+    });
   });
 });
 

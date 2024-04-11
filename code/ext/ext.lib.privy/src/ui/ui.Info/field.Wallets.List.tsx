@@ -1,5 +1,6 @@
-import { Wrangle } from './Wrangle';
 import { Value, type t } from './common';
+
+import { Wrangle } from './Wrangle';
 import { WalletRow } from './ui.Row.Wallet';
 
 export function walletsList(args: {
@@ -10,8 +11,9 @@ export function walletsList(args: {
   modifiers: t.InfoFieldModifiers;
   fields: t.InfoField[];
   refresh$?: t.Observable<void>;
+  theme?: t.CommonTheme;
 }): t.PropListItem[] {
-  const { privy, wallets, modifiers, fields, data, refresh$ } = args;
+  const { privy, wallets, modifiers, fields, data, refresh$, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   const showClose = modifiers.is.over && modifiers.keys.alt;
   const chain = Wrangle.chain(data);
@@ -35,6 +37,7 @@ export function walletsList(args: {
           enabled={enabled}
           showClose={showClose}
           refresh$={refresh$}
+          theme={theme}
         />
       );
       return { value };

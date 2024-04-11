@@ -3,10 +3,19 @@
  */
 export type {
   ButtonProps,
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,
   DevTools,
+  Pixels,
+  PropListFieldSelectorClickHandler,
+  PropListItem,
+  PropListProps,
+  RenderCountProps,
+} from 'sys.ui.react.common/src/types';
+
+export type {
   GetLabelItem,
   GetLabelItemRenderers,
   LabelItem,
@@ -22,12 +31,7 @@ export type {
   LabelListEvents,
   LabelListItemTarget,
   LabelListState,
-  Pixels,
-  PropListFieldSelectorClickHandler,
-  PropListItem,
-  PropListProps,
-  RenderCountProps,
-} from 'sys.ui.react.common/src/types';
+} from 'sys.ui.react.list/src/types';
 
 /**
  * @local

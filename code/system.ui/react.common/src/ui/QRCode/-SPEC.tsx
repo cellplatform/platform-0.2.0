@@ -46,7 +46,7 @@ export default Dev.describe('QRCode', (e) => {
             value={e.state.props.value}
             placeholder={'value (eg. URL)'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
-            onChanged={(e) => dev.change((d) => (d.props.value = e.to))}
+            onChange={(e) => dev.change((d) => (d.props.value = e.to))}
           />
         );
       });

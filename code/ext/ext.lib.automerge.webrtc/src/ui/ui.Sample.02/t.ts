@@ -1,21 +1,13 @@
-export type * from '../common/t';
 import type { t } from './common';
-
-type S = string;
-
-export type SampleEdge = {
-  kind: t.NetworkConnectionEdgeKind;
-  model: t.RepoListModel;
-  network: t.NetworkStore;
-  visible?: boolean;
-};
+export type * from '../../test.ui/t';
+export type * from '../ui.Sample.02.loaders/t';
 
 /**
  * Sample: <Component>
  */
 export type SampleEdgeProps = {
   edge: t.SampleEdge;
-  offsetLabel?: t.SampleEdgeLabel;
+  offsetLabel?: SampleEdgeLabel;
   focusOnLoad?: boolean;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
@@ -41,25 +33,12 @@ export type HarnessShared = {
   debugPanel: boolean;
   module?: SampleModuleDef;
   edge: { Left: SampleEdgeLayout; Right: SampleEdgeLayout };
+  cmdbar?: string;
 };
 
-/**
- * Dynamic Loader (factory)
- */
-export type SampleName =
-  | 'CodeEditor'
-  | 'CodeEditor.AI'
-  | 'DiagramEditor'
-  | 'Deno.Deploy'
-  | 'ModuleNamespace'
-  | 'FaceAPI';
-
-export type SampleFactoryCtx = {
+export type SampleModuleDef = {
+  name: t.SampleName;
   docuri: string;
-  store: t.Store;
-  accessToken?: string;
-  stream?: MediaStream;
+  target: t.SampleModuleDefTarget;
 };
-
-export type SampleModuleDef = { name: SampleName; docuri: string; target: SampleModuleDefTarget };
 export type SampleModuleDefTarget = 'dev:header' | 'main';

@@ -1,7 +1,11 @@
-import { expect, describe, it } from '../test';
+import { expect, describe, it, Filesize } from '../test';
 import { File } from '.';
 
 describe('File', () => {
+  it('File.Size', () => {
+    expect(File.size).to.equal(Filesize);
+  });
+
   describe('toBlob', () => {
     it('with mimetype', () => {
       const data = new Uint8Array([1, 2, 3]);

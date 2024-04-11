@@ -1,9 +1,9 @@
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 
 import { Is } from '.';
-import { Doc } from '../Doc';
-import { Store } from '../Store';
-import { WebStore } from '../Store.Web';
+import { Doc } from '../crdt/Doc';
+import { Store } from '../crdt/Store';
+import { WebStore } from '../crdt/Store.Web';
 import { describe, expect, it, type t } from '../test';
 
 describe('Is (flags)', (e) => {
@@ -22,6 +22,18 @@ describe('Is (flags)', (e) => {
     const store = Store.init();
     const doc = await store.doc.getOrCreate<T>((d) => (d.count = 0));
     expect(Is.docRef(doc)).to.eql(true);
+    store.dispose();
+  });
+
+  it('Is.lens', async () => {
+    type T = { child: { count: number } };
+    NON_OBJECTS.forEach((v) => expect(Is.lens(v)).to.eql(false));
+    const store = Store.init();
+    const doc = await store.doc.getOrCreate<T>((d) => (d.child = { count: 0 }));
+    const lens = Doc.lens(doc, ['child']);
+
+    expect(Is.lens(doc)).to.eql(false);
+    expect(Is.lens(lens)).to.eql(true);
     store.dispose();
   });
 
@@ -65,6 +77,17 @@ describe('Is (flags)', (e) => {
     const ns = Doc.namespace(doc);
     expect(Is.namespace(ns)).to.eql(true);
     NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
+    store.dispose();
+  });
+
+  it('Is.handle', async () => {
+    type TRoot = { count: number };
+    const store = Store.init();
+    const docRef = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
+    const docRefHandle = docRef as t.DocRefHandle<TRoot>;
+    expect(Is.handle(docRefHandle.handle)).to.eql(true);
+    expect(Is.handle(docRef)).to.eql(false);
+    NON_OBJECTS.forEach((value) => expect(Is.handle(value)).to.eql(false));
     store.dispose();
   });
 });

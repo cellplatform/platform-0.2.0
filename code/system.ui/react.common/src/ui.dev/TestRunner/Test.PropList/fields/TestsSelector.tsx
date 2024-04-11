@@ -9,8 +9,9 @@ export function FieldTestsSelector(args: {
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
   enabled: boolean;
+  theme?: t.CommonTheme;
 }): t.PropListItem[] {
-  const { data, groups } = args;
+  const { data, groups, theme } = args;
   const run = data?.run ?? {};
   const specs = data?.specs ?? {};
   const res: t.PropListItem[] = [];
@@ -33,6 +34,7 @@ export function FieldTestsSelector(args: {
           title={isDifferentTitle ? title : ''}
           indent={title ? 10 : undefined}
           enabled={args.enabled}
+          theme={theme}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />

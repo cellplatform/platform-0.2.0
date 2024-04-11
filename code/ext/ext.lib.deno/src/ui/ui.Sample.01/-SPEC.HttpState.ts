@@ -1,4 +1,4 @@
-import { R, Http, type t } from './common';
+import { R, DenoHttp, type t } from './common';
 
 export type TState = {
   forcePublicUrl?: boolean;
@@ -12,7 +12,7 @@ export type TState = {
 export const HttpState = {
   client(state: t.Immutable<TState>) {
     const forcePublic = state.current.forcePublicUrl;
-    return Http.client({ forcePublic });
+    return DenoHttp.client({ forcePublic });
   },
 
   async updateProjects(state: t.Immutable<TState>) {

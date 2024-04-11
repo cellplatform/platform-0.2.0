@@ -8,7 +8,6 @@ export type SampleEdgeProps = {
 
 export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const { edge } = props;
-  const visible = edge.visible ?? true;
 
   /**
    * Render
@@ -16,10 +15,10 @@ export const SampleEdge: React.FC<SampleEdgeProps> = (props) => {
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
-      width: visible ? 250 : 0,
+      width: 250,
       overflow: 'hidden',
-      borderLeft: visible && edge.kind === 'Right' ? border : undefined,
-      borderRight: visible && edge.kind === 'Left' ? border : undefined,
+      borderLeft: edge.kind === 'Right' ? border : undefined,
+      borderRight: edge.kind === 'Left' ? border : undefined,
       display: 'grid',
     }),
   };

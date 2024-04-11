@@ -22,9 +22,9 @@ export type CmdHostProps<T = t.SpecModule> = {
   focusOnReady?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
   onChanged?: t.CmdHostChangedHandler;
-  onCmdFocusChange?: t.TextInputFocusChangeHandler;
-  onKeyDown?: t.TextInputKeyEventHandler;
-  onKeyUp?: t.TextInputKeyEventHandler;
+  onCmdFocusChange?: t.TextInputFocusHandler;
+  onKeyDown?: t.TextInputKeyHandler;
+  onKeyUp?: t.TextInputKeyHandler;
   onItemVisibility?: t.ModuleListItemVisibilityHandler;
   onItemClick?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;

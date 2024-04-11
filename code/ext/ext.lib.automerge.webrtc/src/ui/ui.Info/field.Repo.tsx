@@ -4,7 +4,7 @@ import { type t } from './common';
 /**
  * Delegate to the base Automerge library.
  */
-export function repo(data: t.InfoData, fields: t.InfoField[]) {
+export function repo(data: t.InfoData, fields: t.InfoField[], theme?: t.CommonTheme) {
   if (data.repo) return InfoField.repo(data.repo);
   if (data.network) return wrangle.fromNetwork(data.network);
   return undefined;

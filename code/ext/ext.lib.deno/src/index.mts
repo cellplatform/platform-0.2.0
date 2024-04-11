@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Library
+ */
+export { DenoHttp } from './DenoHttp';
+
+/**
  * Dev
  */
 import SpecSample from './ui/ui.Sample.01/-SPEC';

@@ -13,21 +13,33 @@ export const PeerIs: t.PeerIs = {
     return parts[0] === 'peer' && PeerIs.peerid(parts[1]);
   },
 
-  kind: {
+  Kind: {
     data(input: any): input is t.PeerConnectionKindData {
-      return input === 'data';
+      return wrangle.kind(input) === 'data';
     },
 
     media(input: any): input is t.PeerConnectionKindMedia {
-      return PeerIs.kind.video(input) || PeerIs.kind.screen(input);
+      return PeerIs.Kind.video(input) || PeerIs.Kind.screen(input);
     },
 
     video(input: any): input is t.PeerConnectionKindMediaVideo {
-      return input === 'media:video';
+      return wrangle.kind(input) === 'media:video';
     },
 
     screen(input: any): input is t.PeerConnectionKindMediaScreen {
-      return input === 'media:screen';
+      return wrangle.kind(input) === 'media:screen';
     },
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  kind(input: any): string {
+    if (!input) return '';
+    if (typeof input === 'string') return input;
+    if (typeof input === 'object' && typeof input.kind === 'string') return input.kind;
+    return '';
   },
 } as const;

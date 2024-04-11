@@ -1,7 +1,7 @@
 import { type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
-type C = t.HttpClient;
+type C = t.DenoHttpClient;
 type S = t.Immutable<t.InfoData>;
 
 /**

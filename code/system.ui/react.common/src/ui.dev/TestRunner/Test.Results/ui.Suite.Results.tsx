@@ -5,11 +5,12 @@ import { TestResult } from './ui.Test';
 
 export type SuiteResultsProps = {
   data: t.TestSuiteRunResponse;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
-  const { data } = props;
+  const { data, theme } = props;
   const elapsed = Time.duration(data.time.elapsed).toString();
 
   const isEmpty = useMemo(() => Tree.Results.isEmpty(data), [data.id]);
@@ -28,13 +29,15 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
     },
   };
 
-  const elTests = data.tests.map((test) => <TestResult key={test.id} data={test} />);
-  const elChildren = data.children.map((suite) => <SuiteResults key={suite.id} data={suite} />);
+  const elTests = data.tests.map((test) => <TestResult key={test.id} data={test} theme={theme} />);
+  const elChildren = data.children.map((suite) => (
+    <SuiteResults key={suite.id} data={suite} theme={theme} />
+  ));
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title.base}>
-        <Description text={data.description} style={styles.title.description} />
+        <Description text={data.description} style={styles.title.description} theme={theme} />
         <div {...styles.title.elapsed}>{elapsed}</div>
       </div>
       <div {...styles.body}>

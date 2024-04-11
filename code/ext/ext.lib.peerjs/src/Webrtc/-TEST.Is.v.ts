@@ -48,38 +48,43 @@ describe('Peer.Is', () => {
 
     it('Is.kind.data', () => {
       const test = (input: any, expected: boolean) =>
-        expect(PeerIs.kind.data(input)).to.eql(expected);
+        expect(PeerIs.Kind.data(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test(' data ', false);
       test('data', true);
+      test({ kind: 'data' }, true);
     });
 
     it('Is.kind.media', () => {
       const test = (input: any, expected: boolean) =>
-        expect(PeerIs.kind.media(input)).to.eql(expected);
+        expect(PeerIs.Kind.media(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test(' media:video ', false);
       test(' media:screen ', false);
       test('media:video', true);
       test('media:screen', true);
+      test({ kind: 'media:video' }, true);
+      test({ kind: 'media:screen' }, true);
     });
 
     it('Is.kind.video', () => {
       const test = (input: any, expected: boolean) =>
-        expect(PeerIs.kind.video(input)).to.eql(expected);
+        expect(PeerIs.Kind.video(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test('data', false);
-      test('media:video', true);
       test('media:screen', false);
+      test('media:video', true);
+      test({ kind: 'media:video' }, true);
     });
 
     it('Is.kind.screen', () => {
       const test = (input: any, expected: boolean) =>
-        expect(PeerIs.kind.screen(input)).to.eql(expected);
+        expect(PeerIs.Kind.screen(input)).to.eql(expected);
       NOT.forEach((v) => test(v, false));
       test('data', false);
       test('media:video', false);
       test('media:screen', true);
+      test({ kind: 'media:screen' }, true);
     });
   });
 });

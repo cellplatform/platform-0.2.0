@@ -9,7 +9,7 @@ export function useMediaStreams(peer?: t.PeerModel) {
     const update = () => {
       if (!peer || events?.disposed) return;
       const connections = peer.current.connections;
-      const isMedia = PeerIs.kind.media;
+      const isMedia = PeerIs.Kind.media;
       const media = connections.filter((conn) => isMedia(conn.kind));
       const streams = media.map((conn) => Wrangle.stream(conn)).filter(Boolean);
       setStreams(() => streams);

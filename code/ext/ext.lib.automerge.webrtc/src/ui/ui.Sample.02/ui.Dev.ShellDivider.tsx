@@ -9,6 +9,7 @@ export const ShellDivider: React.FC<ShellDividerProps> = (props) => {
       gridTemplateColumns: 'auto 1fr auto 1fr auto',
       columnGap: '5px',
       minHeight: 70,
+      userSelect: 'none',
     }),
     divider: {
       base: css({ display: 'grid', alignContent: 'center' }),

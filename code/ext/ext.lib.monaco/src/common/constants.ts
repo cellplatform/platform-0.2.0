@@ -1,13 +1,6 @@
 import type * as t from './t';
 
-export const COLORS = {
-  BLACK: '#000',
-  WHITE: '#fff',
-  DARK: '#293042', // Inky blue/black.
-  CYAN: '#00C2FF',
-  MAGENTA: '#FE0064',
-  BLUE: '#4D7EF7',
-} as const;
+export { COLORS } from 'sys.ui.react.common';
 
 export const CSS = {
   CLASS: {

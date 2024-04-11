@@ -2,7 +2,7 @@ import { Color } from '.';
 import { describe, expect, it } from '../test';
 
 describe('color', () => {
-  describe('Color.format()', () => {
+  describe('Color.format', () => {
     const test = (value: string | number | boolean | undefined, output: string | undefined) => {
       expect(Color.format(value)).to.eql(output);
     };
@@ -48,7 +48,7 @@ describe('color', () => {
     });
   });
 
-  describe('debugColor', () => {
+  describe('Color.debug', () => {
     it('debugging: true', () => {
       const debugColor = Color.debug(true);
       expect(debugColor(0.3)).to.eql('rgba(255, 0, 0, 0.3)');
@@ -62,6 +62,24 @@ describe('color', () => {
     it('not debugging: (undefined)', () => {
       const debugColor = Color.debug();
       expect(debugColor(0.3)).to.eql(undefined);
+    });
+  });
+
+  describe('Color.fromTheme', () => {
+    it('theme: Light (default)', () => {
+      const res1 = Color.fromTheme();
+      const res2 = Color.fromTheme('Light');
+      const res3 = Color.fromTheme('Light', 'red');
+      expect(res1).to.eql(Color.DARK);
+      expect(res2).to.eql(Color.DARK);
+      expect(res3).to.eql('red');
+    });
+
+    it('theme: Dark', () => {
+      const res1 = Color.fromTheme('Dark');
+      const res2 = Color.fromTheme('Dark', null, 'red');
+      expect(res1).to.eql(Color.WHITE);
+      expect(res2).to.eql('red');
     });
   });
 });

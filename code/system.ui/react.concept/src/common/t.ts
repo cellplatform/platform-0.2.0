@@ -25,7 +25,7 @@ export type {
 
 export type { CrdtDocFile, CrdtDocRef, CrdtDocSync } from 'sys.data.crdt/src/types.mjs';
 export type { Fs } from 'sys.fs';
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   CssEdgesInput,
   CssValue,

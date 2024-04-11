@@ -25,7 +25,7 @@ export type WebrtcPeerUri = {
 export type PeerIs = {
   peerid(input?: any): boolean;
   uri(input?: any): boolean;
-  kind: {
+  Kind: {
     data(input: any): input is t.PeerConnectionKindData;
     media(input: any): input is t.PeerConnectionKindMedia;
     video(input: any): input is t.PeerConnectionKindMediaVideo;

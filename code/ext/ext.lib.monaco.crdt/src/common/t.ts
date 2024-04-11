@@ -18,9 +18,16 @@ export type {
 /**
  * @system
  */
-export type { TypedJsonPath } from 'sys.data.json/src/types';
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types';
-export type { Disposable, EventBus, Lifecycle, Msecs, UntilObservable } from 'sys.types/src/types';
+export type {
+  Disposable,
+  EventBus,
+  Lifecycle,
+  Msecs,
+  TypedObjectPath,
+  UntilObservable,
+} from 'sys.types/src/types';
+
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 
 /**
  * @local

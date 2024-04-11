@@ -1,8 +1,6 @@
 import { Json } from '.';
-import { describe, expect, it, type t } from '../test';
-
 import { Patch } from '../Json.Patch';
-import { Path } from '../Json.Path';
+import { ObjectPath, describe, expect, it, type t } from '../test';
 
 describe('Json', () => {
   it('exposes [Patch]', () => {
@@ -10,7 +8,7 @@ describe('Json', () => {
   });
 
   it('exposes [Path]', () => {
-    expect(Json.Path).to.eql(Path);
+    expect(Json.Path).to.equal(ObjectPath);
   });
 
   it('isJson', () => {

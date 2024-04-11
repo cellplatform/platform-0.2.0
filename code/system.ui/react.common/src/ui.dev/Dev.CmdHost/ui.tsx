@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { CommandBar, Filter, SpecList, css, type t } from './common';
-
-import { useKeyboard } from './useKeyboard.mjs';
+import { CmdBar, Filter, SpecList, css, type t } from './common';
+import { useKeyboard } from './useKeyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
   const { pkg, applyFilter = true } = props;
@@ -45,12 +44,12 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           onItemSelect={props.onItemSelect}
         />
       </div>
-      <CommandBar
+      <CmdBar
         text={props.command}
         placeholder={props.commandPlaceholder}
         hintKey={props.hintKey}
         focusOnReady={props.focusOnReady ?? true}
-        onReady={(ref) => setTextboxRef(ref)}
+        onReady={(e) => setTextboxRef(e.ref)}
         onChange={(e) => filterChanged(e.to)}
         onFocusChange={props.onCmdFocusChange}
         onKeyDown={props.onKeyDown}

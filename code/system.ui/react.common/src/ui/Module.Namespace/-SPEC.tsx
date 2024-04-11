@@ -23,13 +23,13 @@ const renderer: t.ModuleNamespaceRenderer<K> = async (e) => {
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.ModuleNamespaceProps, 'flipped' | 'commandbar' | 'theme'> &
+  type LocalStore = Pick<t.ModuleNamespaceProps, 'flipped' | 'cmdbar' | 'theme'> &
     Pick<T['debug'], 'debugBg' | 'debugFill'>;
 
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     flipped: false,
-    commandbar: DEFAULTS.command,
+    cmdbar: DEFAULTS.cmdbar,
     theme: DEFAULTS.theme,
     debugBg: true,
     debugFill: true,
@@ -42,7 +42,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.flipped = local.flipped;
-      d.props.commandbar = local.commandbar;
+      d.props.cmdbar = local.cmdbar;
       d.props.theme = local.theme;
       d.props.imports = sampleImports;
       d.debug.debugBg = local.debugBg;
@@ -65,10 +65,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('', (dev) => {
-      link.ns('see: ModuleLoader', 'Module.Loader');
-      link.ns('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
+      link.button('see: ModuleLoader', 'Module.Loader');
+      link.button('see: ModuleLoader.Stateful', 'Module.Loader.Stateful');
       dev.hr(-1, 5);
-      link.ns('see: ModuleNamespace.List', 'Module.Namespace.List');
+      link.button('see: ModuleNamespace.List', 'Module.Namespace.List');
     });
     dev.hr(5, 20);
 
@@ -84,24 +84,19 @@ export default Dev.describe(name, (e) => {
       });
     });
 
-    Dev.Theme.switch(
-      dev,
-      (d) => d.props.theme,
-      (d, value) => (d.props.theme = value),
-    );
-
+    Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     dev.hr(-1, 5);
 
     dev.boolean((btn) => {
-      const value = (state: T) => Boolean(state.props.commandbar?.visible);
+      const value = (state: T) => Boolean(state.props.cmdbar?.visible);
       btn
         .label((e) => `command.visible`)
         .value((e) => value(e.state))
         .onClick((e) =>
           e.change((d) => {
-            const command = d.props.commandbar || (d.props.commandbar = DEFAULTS.command);
+            const command = d.props.cmdbar || (d.props.cmdbar = DEFAULTS.cmdbar);
             Dev.toggle(command, 'visible');
-            local.commandbar = command;
+            local.cmdbar = command;
           }),
         );
     });

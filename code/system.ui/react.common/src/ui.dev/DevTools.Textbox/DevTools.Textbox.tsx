@@ -96,7 +96,7 @@ export function textbox<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
 
-    const onChange: t.TextInputChangeEventHandler = (e) => {
+    const onChange: t.TextInputChangeHandler = (e) => {
       const { selection } = e;
       const to: t.DevTextboxChangeHandlerTo = {
         value: e.to,
@@ -109,7 +109,7 @@ export function textbox<S extends O = O>(
       changeHandlers.forEach((fn) => fn({ ...args, dev, to, state, change }));
     };
 
-    const onEnter: t.TextInputKeyEventHandler = (e) => {
+    const onEnter: t.TextInputKeyHandler = (e) => {
       const dev = ctx.toObject().props;
       enterHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
     };

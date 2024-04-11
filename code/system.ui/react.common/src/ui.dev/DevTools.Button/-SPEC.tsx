@@ -1,4 +1,4 @@
-import { css, Dev } from '../../test.ui';
+import { css, Dev, Icons } from '../../test.ui';
 import { Switch } from '../common';
 import { Button } from './ui.Button';
 
@@ -31,6 +31,15 @@ export default Dev.describe('Button', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.button((btn) => {
+      btn
+        .label(`my icon`)
+        .icon(() => <Icons.Face size={18} offset={[0, 2]} />)
+        .onClick((e) => {});
+    });
+
+    dev.hr(-1, 5);
 
     dev.section((dev) => {
       dev

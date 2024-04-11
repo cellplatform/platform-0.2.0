@@ -1,3 +1,5 @@
+import type { t } from '../common';
+
 import { Pkg } from '../index.pkg.mjs';
 export { Pkg };
 const ns = Pkg.name;
@@ -10,7 +12,7 @@ export const ModuleSpecs = {
   [`${ns}.Card`]: () => import('../ui/Card/-SPEC'),
   [`${ns}.Center`]: () => import('../ui/Center/-SPEC'),
   [`${ns}.Chip`]: () => import('../ui/Chip/-SPEC'),
-  [`${ns}.Command.Bar`]: () => import('../ui/Command.Bar/-SPEC'),
+  [`${ns}.Cmd.Bar`]: () => import('../ui/Cmd.Bar/-SPEC'),
   [`${ns}.ContainerQuery`]: () => import('../ui/ContainerQuery/-SPEC'),
   [`${ns}.EdgePosition`]: () => import('../ui/EdgePosition/-SPEC'),
   [`${ns}.EdgePosition.Selector`]: () => import('../ui/EdgePosition.Selector/-SPEC'),
@@ -18,9 +20,6 @@ export const ModuleSpecs = {
   [`${ns}.Grid`]: () => import('../ui/Grid/-dev/-SPEC'),
   [`${ns}.Icon`]: () => import('../ui/Icon/-SPEC'),
   [`${ns}.IFrame`]: () => import('../ui/IFrame/-SPEC'),
-  [`${ns}.LabelItem`]: () => import('../ui/LabelItem/-dev/-SPEC'),
-  [`${ns}.LabelItem.Stateful`]: () => import('../ui/LabelItem.Stateful/-dev/-SPEC'),
-  [`${ns}.LabelItem.VirtualList`]: () => import('../ui/LabelItem.VirtualList/-SPEC'),
   [`${ns}.Layout.Split`]: () => import('../ui/Layout.Split/-SPEC'),
   [`${ns}.Measure`]: () => import('../ui.tools/Measure/-SPEC'),
   [`${ns}.Module.Loader`]: () => import('../ui/Module.Loader/-SPEC'),
@@ -30,32 +29,33 @@ export const ModuleSpecs = {
   [`${ns}.RenderCount`]: () => import('../ui/RenderCount/-SPEC'),
   [`${ns}.ProgressBar`]: () => import('../ui/ProgressBar/-SPEC'),
   [`${ns}.PropList`]: () => import('../ui/PropList/-dev/-SPEC'),
-  [`${ns}.PropList.FieldSelector`]: () => import('../ui/PropList.FieldSelector/-dev/-SPEC'),
+  [`${ns}.PropList.FieldSelector`]: () => import('../ui/PropList.FieldSelector/-SPEC'),
+  [`${ns}.PropList.InfoPanel`]: () => import('../ui/PropList.InfoPanel/-SPEC'),
   [`${ns}.ObjectView`]: () => import('../ui/ObjectView/-SPEC'),
   [`${ns}.QRCode`]: () => import('../ui/QRCode/-SPEC'),
   [`${ns}.Slider`]: () => import('../ui/Slider/-SPEC'),
   [`${ns}.Spinner`]: () => import('../ui/Spinner/-SPEC'),
   [`${ns}.Text`]: () => import('../ui/Text/-dev/-SPEC'),
   [`${ns}.Text.Font`]: () => import('../ui/Text.Font/-SPEC'),
-  [`${ns}.Text.Input`]: () => import('../ui/Text.Input/-dev/-SPEC'),
+  [`${ns}.Text.Input`]: () => import('../ui/Text.Input/-SPEC'),
   [`${ns}.Text.Keyboard`]: () => import('../ui/Text.Keyboard/-dev/-SPEC'),
   [`${ns}.Text.Secret`]: () => import('../ui/Text.Secret/-SPEC'),
   [`${ns}.Text.Syntax`]: () => import('../ui/Text.Syntax/-SPEC'),
-};
+} as t.SpecImports;
 
 export const HookSpecs = {
   [`${ns}.useFocus`]: () => import('../ui/useFocus/-SPEC'),
   [`${ns}.useSizeObserver`]: () => import('../ui/useSizeObserver/-SPEC'),
   [`${ns}.useDragTarget`]: () => import('../ui/useDragTarget/-dev/-SPEC'),
   [`${ns}.useMouse`]: () => import('../ui/use/-SPEC.useMouse'),
-};
+} as t.SpecImports;
 
 export const DevSpecs = {
   [`sys.ui.dev.TestRunner.Results`]: () => import('../ui.dev/TestRunner/-dev/-SPEC.Results'),
   [`sys.ui.dev.TestRunner.PropList`]: () => import('../ui.dev/TestRunner/-dev/-SPEC.PropList'),
   'sys.ui.dev.TestRunner.PropList.runner': () =>
     import('../ui.dev/TestRunner/-dev/-SPEC.PropList.runner'),
-  [`sys.ui.dev.CmdHost`]: () => import('../ui.dev/Dev.CmdHost/-SPEC'),
+  [`sys.ui.dev.Cmd.Host`]: () => import('../ui.dev/Dev.CmdHost/-SPEC'),
   [`sys.ui.dev.ModuleList`]: () => import('../ui.dev/-SPEC/-SPEC.ModuleList'),
   [`sys.ui.dev.DevSplash`]: () => import('../ui.dev/Dev.Splash/-SPEC'),
   [`sys.ui.dev.DevTools`]: () => import('../ui.dev/DevTools/-SPEC'),
@@ -66,18 +66,18 @@ export const DevSpecs = {
   [`sys.ui.dev.DevTools.Bdd`]: () => import('../ui.dev/DevTools.Bdd/-SPEC'),
   [`sys.ui.dev.DevTools.Title`]: () => import('../ui.dev/DevTools.Title/-SPEC'),
   [`sys.ui.dev.DevTools.Todo`]: () => import('../ui.dev/DevTools.Todo/-SPEC'),
-};
+} as t.SpecImports;
 
 export const SampleSpecs = {
   [`sys.ui.sample.Hash`]: () => import('../ui.sample/Hash/-SPEC'),
   [`sys.ui.sample.Signals`]: () => import('../ui.sample/Signals/-SPEC'),
-};
+} as t.SpecImports;
 
 export const Specs = {
   ...ModuleSpecs,
   ...HookSpecs,
   ...DevSpecs,
   ...SampleSpecs,
-};
+} as t.SpecImports;
 
 export default Specs;

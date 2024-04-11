@@ -1,4 +1,4 @@
-import { Time } from '../common';
+import { Time, Filesize } from '../common';
 
 const DEFAULTS = {
   mimetype: 'application/octet-stream',
@@ -9,6 +9,7 @@ const DEFAULTS = {
  */
 export const File = {
   DEFAULTS,
+  size: Filesize,
 
   /**
    * Convert a [Uint8Array] to a [Blob].

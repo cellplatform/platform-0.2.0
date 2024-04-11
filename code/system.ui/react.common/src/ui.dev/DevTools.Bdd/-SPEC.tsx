@@ -1,5 +1,5 @@
 import { Dev, css } from '../../test.ui';
-import { type TestCtx } from '../TestRunner/-dev/-types.mjs';
+import { type TestCtx } from '../TestRunner/-dev/-types';
 
 type T = { ctx: TestCtx };
 const initial: T = {
@@ -37,7 +37,7 @@ export default Dev.describe('BDD (TestRunner)', (e) => {
            *     This is to simulate the async nature of some common
            *     usage scenarios.
            */
-          const { TESTS } = await import('../TestRunner/-dev/-TESTS.mjs');
+          const { TESTS } = await import('../TestRunner/-dev/-TESTS');
           return TESTS.all;
         })
         .onChanged((e) => {

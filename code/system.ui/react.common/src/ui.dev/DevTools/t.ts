@@ -8,6 +8,7 @@ type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
  */
 export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
+  env<T>(): T;
   state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
   redraw(target?: t.DevRedrawTarget): Promise<void>;
@@ -50,4 +51,13 @@ export type DevTools<S extends O = O> = {
   hr(fn: t.DevHrHandler<S>): DevTools<S>;
 
   bdd(fn: t.DevBddHandler<S>): DevTools<S>;
+};
+
+/**
+ * Builder tool for constructing hyperlinks.
+ */
+export type DevLinks = {
+  title(text: string | [string, string]): DevLinks;
+  button(label: string, target: string): DevLinks;
+  hr(line?: number | [number, number], margin?: t.DevHrMargin): DevLinks;
 };

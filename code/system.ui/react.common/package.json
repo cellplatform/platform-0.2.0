@@ -12,14 +12,13 @@
     "tmp": "tsx   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@preact/signals-react": "2.0.0",
+    "@preact/signals-react": "2.0.1",
     "qrcode": "1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "5.0.1",
     "react-spinners": "0.13.8",
     "react-inspector": "6.0.2",
-    "react-virtuoso": "4.7.2",
     "sys.data.json": "0.0.0",
     "sys.text": "0.0.0",
     "sys.ui.dom": "0.0.0",

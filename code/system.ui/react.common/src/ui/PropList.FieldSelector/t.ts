@@ -7,15 +7,16 @@ export type PropListFieldSelectorAction = 'Select' | 'Deselect' | 'Reset:Default
  */
 export type PropListFieldSelectorProps<F extends string = string> = {
   title?: t.PropListTitleInput;
-  all?: F[];
-  selected?: F[];
+  all?: (F | undefined | null)[];
+  selected?: (F | undefined | null)[];
   defaults?: F[];
 
   resettable?: boolean;
   indexes?: boolean;
 
-  switchColor?: string | number;
   indent?: number;
+  switchColor?: string | number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: PropListFieldSelectorClickHandler;
 };

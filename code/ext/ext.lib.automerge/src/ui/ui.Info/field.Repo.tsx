@@ -1,6 +1,6 @@
-import { Icons, Is, Value, css, type t } from './common';
+import { Icons, Is, Value, css, type t, DEFAULTS } from './common';
 
-export function repo(repo: t.InfoData['repo']) {
+export function repo(repo: t.InfoData['repo'], theme?: t.CommonTheme) {
   if (!repo) return;
 
   const index = repo.index;
@@ -11,20 +11,17 @@ export function repo(repo: t.InfoData['repo']) {
     text = `${text} ← ${index.total()} ${documents}`;
   }
 
-  const styles = {
-    base: css({ Flex: 'x-center-center' }),
-  };
-
+  const styles = { base: css({ Flex: 'x-center-center' }) };
   const value = (
     <div {...styles.base}>
       <Icons.Database size={14} offset={[0, 1]} style={{ marginRight: 3 }} />
       <div>{text}</div>
-      <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />
+      {index && <Icons.Repo size={14} offset={[0, 1]} style={{ marginLeft: 4 }} />}
     </div>
   );
 
   const res: t.PropListItem = {
-    label: repo.label || 'Repo',
+    label: repo.label || DEFAULTS.repo.label,
     value,
   };
 

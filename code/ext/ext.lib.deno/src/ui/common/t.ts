@@ -2,6 +2,8 @@
  * @system
  */
 export type {
+  CommonInfoProps,
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtx,

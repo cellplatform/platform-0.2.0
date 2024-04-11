@@ -1,7 +1,7 @@
 /**
  * @external
  */
-import { descend, equals, prop, reverse, sortBy, sortWith, uniqBy, mergeDeepRight } from 'ramda';
+import { descend, equals, mergeDeepRight, prop, reverse, sortBy, sortWith, uniqBy } from 'ramda';
 export const R = {
   descend,
   equals,

@@ -1,7 +1,7 @@
-import { Info, type InfoProps } from '.';
+import { Info } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -49,7 +49,7 @@ export default Dev.describe(name, (e) => {
               const fields =
                 ev.action === 'Reset:Default'
                   ? DEFAULTS.fields.default
-                  : (ev.next as InfoProps['fields']);
+                  : (ev.next as t.InfoField[]);
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}

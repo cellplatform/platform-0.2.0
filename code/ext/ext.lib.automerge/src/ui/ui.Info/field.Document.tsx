@@ -1,10 +1,13 @@
-import { Doc, Hash, ObjectView, css, type t, Icons, Button } from './common';
+import { Doc } from '../../crdt';
+import { Button, COLORS, Hash, Icons, Is, ObjectView, css, type t } from './common';
 
-type D = t.InfoData['document'];
+type D = t.InfoDataDocument;
 
-export function doc(data: D, fields: t.InfoField[]) {
-  if (!data) return;
+export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
   const res: t.PropListItem[] = [];
+  if (!data) return res;
+  if (!Is.docRef(data.doc)) return res;
+
   const label = data.label ?? 'Document';
   const hasLabel = !!label.trim();
 
@@ -14,18 +17,32 @@ export function doc(data: D, fields: t.InfoField[]) {
   if (hasLabel) {
     const doc = data.doc;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
-
     const parts: JSX.Element[] = [];
 
     if (uri) {
       const id = Doc.Uri.id(uri);
-      const text = uri ? `crdt:automerge:${Hash.shorten(id, [4, 4])}` : undefined;
+      const length = data.uri?.shorten ?? [4, 4];
+      const shortened = Hash.shorten(id, length);
+      const text = uri ? `crdt:automerge:${shortened}` : undefined;
       parts.push(<>{text}</>);
     }
 
-    const elIcon = <Icons.Object size={14} />;
-    if (!data.onIconClick) parts.push(elIcon);
-    else parts.push(<Button onClick={(e) => data.onIconClick?.({})}>{elIcon}</Button>);
+    if (doc) {
+      // NB: "blue" when showing current-state <Object>.
+      const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
+      const elIcon = <Icons.Object size={14} color={color} />;
+
+      if (!data.icon?.onClick) parts.push(elIcon);
+      else {
+        parts.push(
+          <Button theme={theme} onClick={() => data.icon?.onClick?.({})}>
+            {elIcon}
+          </Button>,
+        );
+      }
+    } else {
+      parts.push(<>{'-'}</>);
+    }
 
     const styles = {
       base: css({
@@ -38,24 +55,21 @@ export function doc(data: D, fields: t.InfoField[]) {
 
     const value = (
       <div {...styles.base}>
-        {parts.map((el, i) => {
-          return <div key={i}>{el}</div>;
+        {parts.map((el, index) => {
+          return <div key={index}>{el}</div>;
         })}
       </div>
     );
 
-    res.push({
-      label,
-      value,
-      divider: false,
-    });
+    res.push({ label, value });
   }
 
   /**
    * The <Object> component.
    */
   if (fields.includes('Doc.Object')) {
-    res.push({ value: wrangle.objectElement(data, hasLabel) });
+    const elObject = wrangle.objectElement(data, hasLabel, theme);
+    res.push({ value: elObject });
   }
 
   // Finish up.
@@ -76,19 +90,23 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(data: D, hasLabel: boolean) {
+  objectElement(data: D, hasLabel: boolean, theme?: t.CommonTheme) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
+
+    const current = Is.docRef(data.doc) ? data.doc.current : undefined;
+
     return (
       <div {...styles.base}>
         <div {...styles.inner}>
           <ObjectView
             name={data?.object?.name}
-            data={data?.doc?.current}
+            data={current}
             fontSize={11}
-            style={{ marginLeft: 10, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
+            theme={theme}
+            style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
               paths: wrangle.expandPaths(data),

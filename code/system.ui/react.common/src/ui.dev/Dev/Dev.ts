@@ -1,19 +1,19 @@
 import { DEFAULTS, DevBase, LocalStorage, Test, Value } from '../common';
 
-import { PropList } from '../../ui/PropList';
 import { Lorem } from '../../ui.tools';
 import { ObjectView } from '../../ui/ObjectView';
-import { DevSplash as Splash } from '../Dev.Splash';
+import { PropList } from '../../ui/PropList';
+import { Spinner } from '../../ui/Spinner';
 import { DevIcons as Icons } from '../Dev.Icons';
+import { RowSpinner } from '../Dev.RowSpinner';
+import { DevSplash as Splash } from '../Dev.Splash';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
-import { Spinner } from '../../ui/Spinner';
-import { RowSpinner } from '../Dev.RowSpinner';
 
 import { render } from './Dev.render';
 
 const { describe, ctx } = DevBase.Spec;
-const { trimStringsDeep } = Value.object;
+const { trimStringsDeep } = Value.Object;
 const qs = DEFAULTS.qs;
 
 export const Dev = {

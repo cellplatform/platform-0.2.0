@@ -10,7 +10,6 @@ export default Test.describe('RepoList.Model', (e) => {
     e.it('initialize', async (e) => {
       const model = await Model.init(store);
       expect(model.store).to.equal(store);
-      expect(model.index.kind === 'crdt.store.index').to.eql(true);
       expect(model.list.state.typename).to.eql(DEFAULTS.typename.List);
     });
 

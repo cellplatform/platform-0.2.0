@@ -48,3 +48,29 @@ describe('asyncFilter', () => {
     expect(res).to.eql(['cat', 'hello cat']);
   });
 });
+
+describe('page', () => {
+  it('(undefined)', () => {
+    const res = Value.page(undefined, 1, 10);
+    expect(res).to.eql([]);
+  });
+
+  it('empty', () => {
+    const res = Value.page([], 1, 10);
+    expect(res).to.eql([]);
+  });
+
+  it('page-1, page-2', () => {
+    const list = [1, 2, 3, 4, 5, 6, 7, 8];
+
+    const page0 = Value.page(list, -1, -1); // NB: out-of-range (correct to: → 0)
+    const page1 = Value.page(list, 0, 5);
+    const page2 = Value.page(list, 1, 5);
+    const page3 = Value.page(list, 99, 5);
+
+    expect(page0).to.eql([]);
+    expect(page1).to.eql([1, 2, 3, 4, 5]);
+    expect(page2).to.eql([6, 7, 8]);
+    expect(page3).to.eql([]);
+  });
+});

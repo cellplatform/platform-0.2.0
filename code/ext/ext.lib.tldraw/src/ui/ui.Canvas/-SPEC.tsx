@@ -1,24 +1,29 @@
 import { Canvas } from '.';
 import { Dev, Pkg, type t } from '../../test.ui';
-import { Link } from './-SPEC.ui.Link';
+import { Link } from './-SPEC-ui.Link';
 
-type T = { props: t.CanvasProps };
-const initial: T = { props: {} };
+type P = t.CanvasProps;
+type T = { props: P; debug: {} };
+const initial: T = { props: {}, debug: {} };
+const DEFAULTS = Canvas.DEFAULTS;
 
 const URLS = {
   docs: 'https://tldraw.dev',
   repo: 'https://github.com/tldraw/tldraw?tab=readme-ov-file',
+  automergeTldraw: 'https://github.com/pvh/automerge-tldraw',
+  automergeTldrawExample: 'https://github.com/pvh/tldraw-automerge-example',
 } as const;
 
 /**
  * Spec
  */
 const name = 'Canvas';
-export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.CanvasProps, 'behaviors'>;
+export default Dev.describe(name, async (e) => {
+  type LocalStore = T['debug'] & Pick<P, 'behaviors' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    behaviors: Canvas.DEFAULTS.behaviors.default,
+    theme: undefined,
+    behaviors: DEFAULTS.behaviors.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -27,6 +32,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.props.behaviors = local.behaviors;
     });
 
@@ -36,7 +42,9 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Canvas {...e.state.props} />;
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme);
+        return <Canvas {...props} />;
       });
   });
 
@@ -48,8 +56,10 @@ export default Dev.describe(name, (e) => {
       const link = (title: string, href: string) => {
         dev.row((e) => <Link href={href} title={title} style={{ marginLeft: 8 }} />);
       };
-      link('(docs):', URLS.docs);
-      link('(repo):', URLS.repo);
+      link('docs:', URLS.docs);
+      link('repo:', URLS.repo);
+      link('automerge-tldraw', URLS.automergeTldraw);
+      link('automerge-tldraw-example', URLS.automergeTldrawExample);
     });
 
     dev.hr(5, 20);
@@ -66,13 +76,25 @@ export default Dev.describe(name, (e) => {
         />
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = { ...e.state };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

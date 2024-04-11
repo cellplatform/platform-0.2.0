@@ -12,13 +12,15 @@ export {
   Color,
   FC,
   Keyboard,
-  LabelItem,
   ObjectView,
   PropList,
   RenderCount,
   TestRunner,
+  TextInput,
   css,
   useDragTarget,
   useFocus,
   useMouse,
 } from 'sys.ui.react.common';
+
+export { LabelItem } from 'sys.ui.react.list';

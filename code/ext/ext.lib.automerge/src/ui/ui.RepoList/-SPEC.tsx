@@ -1,14 +1,14 @@
-import { RepoList } from '.';
+import { DEFAULTS, RepoList } from '.';
 import { Dev, DevReload, Doc, Pkg, TestDb, Time, WebStore, rx, slug, type t } from '../../test.ui';
-import { SpecInfo } from './-SPEC.ui.Info';
+import { Info } from '../ui.Info';
 
+type P = t.RepoListProps;
 type T = {
-  props: t.RepoListProps;
+  props: P;
   debug: { reload?: boolean; cancelDelete?: boolean };
 };
 const name = RepoList.displayName ?? 'Unknown';
 const initial: T = { props: {}, debug: {} };
-const DEFAULTS = RepoList.DEFAULTS;
 
 export default Dev.describe(name, async (e) => {
   const storage = TestDb.Spec.name;
@@ -73,28 +73,51 @@ export default Dev.describe(name, async (e) => {
       .size([330, null])
       .display('grid')
       .render<T>((e) => {
-        if (e.state.debug.reload) return <DevReload />;
+        const { props, debug } = e.state;
+        if (debug.reload) return <DevReload />;
 
-        const renderCount: t.RenderCountProps = {
+        const count: t.RenderCountProps = {
           prefix: 'list.render-',
           absolute: [-20, 2, null, null],
           opacity: 0.2,
         };
 
-        return <RepoList {...e.state.props} model={model} renderCount={renderCount} />;
+        return (
+          <RepoList
+            {...props}
+            model={model}
+            renderCount={count}
+            onReady={(e) => console.info('⚡️ onReady', e)}
+          />
+        );
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.row((e) => <SpecInfo model={model} name={'<RepoList>'} />);
+
+    dev.row((e) => {
+      const name = '<RepoList>';
+      const { store, index } = model;
+      return (
+        <Info
+          fields={['Component', 'Repo']}
+          data={{ repo: { store, index }, component: { name } }}
+        />
+      );
+    });
+
     dev.hr(5, 20);
 
     dev.section((dev) => {
       dev.row((e) => {
         return (
-          <RepoList.Config selected={local.behaviors} onChange={(e) => setBehaviors(e.next)} />
+          <RepoList.Config
+            //
+            selected={local.behaviors}
+            onChange={(e) => setBehaviors(e.next)}
+          />
         );
       });
 
@@ -124,15 +147,13 @@ export default Dev.describe(name, async (e) => {
         Time.delay(0, () => ref.select(target, focus));
       };
       dev.button('select: first', (e) => select('First', false));
-      dev.button(['select: last', 'focus'], (e) => select('Last', true));
+      dev.button(['select: last', '(and focus)'], (e) => select('Last', true));
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
-      dev.hr(-1, 5);
 
       dev.boolean((btn) => {
         const value = (state: T) => !!state.debug.cancelDelete;
@@ -177,7 +198,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       dev.button([`delete database: "${storage}"`, '💥'], async (e) => {
-        e.state.change((d) => (d.debug.reload = true));
+        await e.state.change((d) => (d.debug.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
     });
@@ -187,8 +208,9 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       if (!model) return;
+      const { props } = e.state;
       const data = {
-        props: e.state.props,
+        props,
         'model:list': model.list.state.current,
         db: storage,
         'db:index': `${model.index.db.name}[${model.index.total()}]`,

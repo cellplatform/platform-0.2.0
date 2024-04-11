@@ -1,8 +1,9 @@
 import { DEFAULTS, DevReload } from '.';
 import { COLORS, Dev, Pkg, type t } from '../../test.ui';
 
+type P = t.DevReloadProps;
 type T = {
-  props: t.DevReloadProps;
+  props: P;
   debug: { hidden?: boolean; onCloseClick?: boolean; onReloadClick?: boolean };
 };
 const initial: T = { props: {}, debug: {} };
@@ -12,10 +13,11 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DevReload.displayName ?? '';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.DevReloadProps, 'isCloseable' | 'isReloadRequired'> &
+  type LocalStore = Pick<P, 'isCloseable' | 'isReloadRequired' | 'theme'> &
     Pick<T['debug'], 'onCloseClick' | 'onReloadClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: undefined,
     isCloseable: DEFAULTS.isCloseable,
     isReloadRequired: DEFAULTS.isReloadRequired,
     onCloseClick: true,
@@ -28,6 +30,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.props.isCloseable = local.isCloseable;
       d.props.isReloadRequired = local.isReloadRequired;
       d.debug.onCloseClick = local.onCloseClick;
@@ -42,15 +45,15 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const debug = e.state.debug;
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1, 0.06);
         if (debug.hidden) return <div />;
 
         return (
           <DevReload
-            {...e.state.props}
+            {...props}
             onCloseClick={debug.onCloseClick ? onCloseClick : undefined}
             onReloadClick={debug.onReloadClick ? onReloadClick : undefined}
-            style={{ backgroundColor: COLORS.WHITE }}
           />
         );
       });
@@ -80,6 +83,10 @@ export default Dev.describe(name, (e) => {
             e.change((d) => (local.isReloadRequired = Dev.toggle(d.props, 'isReloadRequired'))),
           );
       });
+
+      dev.hr(-1, 5);
+
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
 
     dev.hr(5, 20);

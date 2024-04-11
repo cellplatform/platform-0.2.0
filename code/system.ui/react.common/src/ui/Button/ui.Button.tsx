@@ -5,15 +5,17 @@ import { DEFAULTS, Style, css, type t } from './common';
 
 export const View: React.FC<t.ButtonProps> = (props) => {
   const {
-    enabled: isEnabled = DEFAULTS.enabled,
+    enabled = DEFAULTS.enabled,
     block = DEFAULTS.block,
     disabledOpacity = DEFAULTS.disabledOpacity,
     userSelect = DEFAULTS.userSelect,
     pressedOffset = DEFAULTS.pressedOffset,
     spinning = DEFAULTS.spinning,
     overlay,
+    theme,
   } = props;
-  const isBlurred = Boolean(spinning || overlay);
+  const isBlurred = !!(spinning || overlay);
+  const isEnabled = enabled;
   const spinner = Wrangle.spinner(props.spinner);
 
   const [isOver, setOver] = useState(false);
@@ -26,7 +28,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
     return (e) => {
       setOver(isOver);
       if (!isOver && isDown) setDown(false);
-      if (isEnabled) {
+      if (enabled) {
         if (isOver && props.onMouseEnter) props.onMouseEnter(e);
         if (!isOver && props.onMouseLeave) props.onMouseLeave(e);
       }
@@ -43,7 +45,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
   const down = (isDown: boolean): React.MouseEventHandler => {
     return (e) => {
       setDown(isDown);
-      if (isEnabled) {
+      if (enabled) {
         if (isDown && props.onMouseDown) props.onMouseDown(e);
         if (!isDown && props.onMouseUp) props.onMouseUp(e);
         if (!isDown && props.onClick && !isBlurred) props.onClick(e);
@@ -69,12 +71,12 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       display: block ? 'block' : 'inline-block',
       minWidth: props.minWidth,
       maxWidth: props.maxWidth,
-      opacity: isEnabled ? 1 : disabledOpacity,
-      cursor: isEnabled && !isBlurred ? 'pointer' : 'default',
+      opacity: enabled ? 1 : disabledOpacity,
+      cursor: enabled && !isBlurred ? 'pointer' : 'default',
       userSelect: userSelect ? 'auto' : 'none',
     }),
     body: css({
-      color: Wrangle.color({ isEnabled, isOver }),
+      color: Wrangle.color({ isEnabled, isOver, theme }),
       transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
       opacity: isBlurred ? 0.15 : 1,
       filter: `blur(${isBlurred ? 3 : 0}px) grayscale(${isBlurred ? 100 : 0}%)`,
@@ -89,7 +91,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       <Spinner.Bar
         {...styles.spinner}
         width={spinner.width}
-        color={isEnabled ? spinner.color.enabled : spinner.color.disabled}
+        color={enabled ? spinner.color.enabled : spinner.color.disabled}
       />
     </div>
   );

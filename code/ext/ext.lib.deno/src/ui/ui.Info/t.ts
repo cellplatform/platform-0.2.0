@@ -6,16 +6,7 @@ type Index = number;
 /**
  * <Component>
  */
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
-  fields?: t.InfoField[];
-  data?: t.InfoData;
-  margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
-  stateful?: boolean;
-  style?: t.CssValue;
+export type InfoProps = t.CommonInfoProps<InfoField, InfoData> & {
   onStateChange?(e: InfoData): void;
 };
 
@@ -25,7 +16,7 @@ export type InfoProps = {
 export type InfoField = 'Module' | 'Module.Verify' | 'Auth.AccessToken' | 'Projects.List';
 
 export type InfoData = {
-  endpoint?: t.HttpOptions;
+  endpoint?: t.DenoHttpOptions;
   projects?: InfoDataProjects;
   deployments?: InfoDataDeployments;
 };

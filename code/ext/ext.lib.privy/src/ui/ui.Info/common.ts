@@ -6,28 +6,34 @@ export * from '../common';
 /**
  * Constants
  */
-const allFields: t.InfoField[] = [
-  'Module',
-  'Module.Verify',
-  'Id.User',
-  'Id.User.Phone',
-  'Id.App.Privy',
-  'Id.App.WalletConnect',
-  'Login',
-  'Login.SMS',
-  'Login.Farcaster',
-  'AccessToken',
-  'Link.Wallet',
-  'Link.Farcaster',
-  'Wallet.List',
-  'Wallet.List.Title',
-  'Chain.List',
-  'Chain.List.Title',
-  'Chain.List.Testnets',
-  'Refresh',
-  'Refresh.Label',
-];
-const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Login', 'Link.Wallet'];
+const fields = {
+  get all(): t.InfoField[] {
+    return [
+      'Module',
+      'Module.Verify',
+      'Id.User',
+      'Id.User.Phone',
+      'Id.App.Privy',
+      'Id.App.WalletConnect',
+      'Login',
+      'Login.SMS',
+      'Login.Farcaster',
+      'AccessToken',
+      'Link.Farcaster',
+      'Link.Wallet',
+      'Wallet.List',
+      'Wallet.List.Title',
+      'Chain.List',
+      'Chain.List.Title',
+      'Chain.List.Testnets',
+      'Refresh',
+      'Refresh.Label',
+    ];
+  },
+  get default(): t.InfoField[] {
+    return ['Module', 'Id.User', 'Login', 'Link.Wallet'];
+  },
+} as const;
 
 const data: t.InfoData = {
   chain: {
@@ -38,7 +44,7 @@ const data: t.InfoData = {
 
 export const DEFAULTS = {
   query: { dev: 'dev' },
-  fields: { all: allFields, default: defaultFields },
+  fields,
   enabled: true,
   clipboard: true,
   data,

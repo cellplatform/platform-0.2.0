@@ -6,21 +6,22 @@ type O = Record<string, unknown>;
  * Link dev-harness helpers.
  */
 export const Link = {
-  ns<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
-    const elRight = <DevIcons.NewTab size={16} />;
+  button<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>, label: string, target: string) {
+    const elIconLeft = <DevIcons.Link size={18} offset={[0, 2]} />;
+    const elIconRight = <DevIcons.NewTab size={16} />;
+    const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
     dev.button((btn) => {
       btn
         .label(label)
-        .right((e) => elRight)
+        .icon((e) => elIconLeft)
+        .right((e) => elIconRight)
         .onClick((e) => {
-          const targetIsUrl = target.startsWith('https://') || target.startsWith('http://');
           const open = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
-          if (!targetIsUrl) {
+          if (targetIsUrl) open(target);
+          else {
             const url = new URL(location.href);
             url.searchParams.set('dev', `${pkg.name}.${target}`);
             open(url.href);
-          } else {
-            open(target);
           }
         });
     });
@@ -30,16 +31,16 @@ export const Link = {
    * Curried helper.
    */
   pkg<T extends O>(pkg: t.ModuleDef, dev: t.DevTools<T>) {
-    const api = {
-      ns(label: string, target: string) {
-        Link.ns(pkg, dev, label, target);
+    const api: t.DevLinks = {
+      button(label, target) {
+        Link.button(pkg, dev, label, target);
         return api;
       },
-      hr(line: number | [number, number] = -1, margin?: t.DevHrMargin) {
+      hr(line = -1, margin) {
         dev.hr(line, margin);
         return api;
       },
-      title(text: string | [string, string]) {
+      title(text) {
         dev.title(text);
         return api;
       },

@@ -14,10 +14,10 @@ export const Is = {
   },
 
   numeric(input: string) {
-    return Value.is.numeric(input);
+    return Value.Is.numeric(input);
   },
 
   http(input: string, forceHttps?: boolean) {
-    return Value.is.http(input, forceHttps);
+    return Value.Is.http(input, forceHttps);
   },
 } as const;

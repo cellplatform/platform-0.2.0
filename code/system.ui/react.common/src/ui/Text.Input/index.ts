@@ -1,5 +1,4 @@
 export { TextInput } from './Root';
-export { TextInputRef } from './Ref';
 
 /**
  * TODO 🐷

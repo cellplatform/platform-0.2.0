@@ -1,6 +1,5 @@
 import { DEFAULTS, PeerRepoList } from '.';
-import { COLORS, Color, Dev, Doc, PeerUI, Pkg, TestDb, css, type t } from '../../test.ui';
-import { createEdge } from '../ui.Sample.02';
+import { COLORS, Color, Dev, Doc, PeerUI, Pkg, TestDb, TestEdge, css, type t } from '../../test.ui';
 
 type T = { props: t.PeerRepoListProps; debug: { reload?: boolean } };
 const initial: T = { props: {}, debug: {} };
@@ -10,8 +9,13 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const self = await createEdge('Left', ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable']);
-  const remote = await createEdge('Right');
+  const self = await TestEdge.create('Left', [
+    'Focus.OnArrowKey',
+    'Shareable',
+    'Deletable',
+    'Copyable',
+  ]);
+  const remote = await TestEdge.create('Right');
   const peer = {
     self: self.network.peer,
     remote: remote.network.peer,

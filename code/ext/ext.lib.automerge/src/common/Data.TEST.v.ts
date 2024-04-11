@@ -1,4 +1,4 @@
-import { Store } from '../Store';
+import { Store } from '../crdt/Store';
 import { describe, expect, it } from '../test';
 import { Data } from './Data';
 
