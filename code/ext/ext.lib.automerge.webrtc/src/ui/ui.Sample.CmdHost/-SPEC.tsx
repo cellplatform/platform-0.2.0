@@ -1,4 +1,5 @@
 import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
+import { SampleLayout } from './ui.Layout';
 
 type L = t.Lens;
 type T = { theme?: t.CommonTheme };
@@ -7,44 +8,60 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'Sample.CmdBar';
+const name = 'Sample.CmdHost';
 export default Dev.describe(name, async (e) => {
   const left = await TestEdge.createEdge('Left');
   const right = await TestEdge.createEdge('Right');
   const lenses: { left?: L | undefined; right?: L } = {};
 
-  type LocalStore = {};
+  type LocalStore = Pick<T, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({});
+  const local = localstore.object({ theme: 'Dark' });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.theme = local.theme;
+    });
 
     const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', { text: '' });
     monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
     monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
 
-    Dev.Theme.background(ctx, 'Dark');
     ctx.debug.width(330);
-    ctx.subject.display('grid').render<T>(async (e) => {
-      if (!(lenses.left && lenses.right)) return null;
-      // return <Layout left={lenses.left} right={lenses.right} path={['text']} theme={theme} />;
-      return null;
-    });
+    ctx.subject
+      .display('grid')
+      .size('fill')
+      .render<T>(async (e) => {
+        const { theme } = e.state;
+        Dev.Theme.background(ctx, theme, 1);
+        return (
+          <SampleLayout
+            pkg={Pkg}
+            theme={theme}
+            left={lenses.left}
+            right={lenses.right}
+            path={['text']}
+          />
+        );
+      });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
 
     TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
     TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
     TestEdge.dev.infoPanels(dev, left.network, right.network);
+
+    dev.hr(5, 20);
+    dev.section('Properties', (dev) => {
+      Dev.Theme.switch(dev, ['theme'], (e) => (local.theme = e));
+    });
   });
 });
 

@@ -51,10 +51,10 @@ export function listen<T extends O>(
    * Changes from CRDT document.
    */
   event.doc.changed$
-    .pipe(rx.filter((e) => resolve(e.after, path) !== textbox.current))
+    .pipe(rx.filter((e) => resolve(e.after, path) !== textbox.current.value))
     .subscribe((e) => {
       const text = resolve(e.after, path) ?? '';
-      const pos = textbox.selection.start;
+      const pos = textbox.current.selection.start;
       event.handlers.change.forEach((fn) => fn({ text, pos }));
     });
 

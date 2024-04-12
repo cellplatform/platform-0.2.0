@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, ObjectPath, Sync, TextInput, css, rx, type t } from '../../test.ui';
+import { CmdHost } from 'sys.ui.react.common';
+import { Specs } from '../../test.ui/entry.Specs.mjs';
+import { Color, ObjectPath, Sync, css, rx, type t } from './common';
 
-/**
- * <Textbox>
- */
-export type TextboxProps = {
+export type SampleProps = {
+  pkg: t.ModuleDef;
   doc?: t.Lens;
   path?: t.ObjectPath;
-  focus?: boolean;
-  debug?: string;
   theme?: t.CommonTheme;
+  enabled?: boolean;
+  debug?: string;
   style?: t.CssValue;
 };
-export const Textbox: React.FC<TextboxProps> = (props) => {
-  const { doc, theme, debug, path = [] } = props;
-  const enabled = !!doc;
+
+export const Sample: React.FC<SampleProps> = (props) => {
+  const { theme, enabled = true, doc, path = [] } = props;
 
   const [value, setValue] = useState('');
   const [input, setInput] = useState<t.TextInputRef>();
@@ -24,9 +24,9 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     const { dispose$ } = life;
     if (doc && input) {
       const initial = ObjectPath.resolve<string>(doc.current, path);
-      setValue(initial ?? '');
-      const listener = Sync.Textbox.listen(input, doc, path, { debug, dispose$ });
+      const listener = Sync.Textbox.listen(input, doc, path, { dispose$ });
       listener.onChange((e) => setValue(e.text));
+      setValue(initial ?? '');
     }
     return life.dispose;
   }, [doc?.instance, !!input, path?.join('.')]);
@@ -37,13 +37,12 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   const color = Color.fromTheme(theme);
   const styles = {
     base: css({
-      color,
       position: 'relative',
-      Padding: [5, 7],
-      borderBottom: `dashed 1px ${Color.alpha(COLORS.CYAN, enabled ? 0.9 : 0.2)}`,
+      display: 'grid',
+      color,
     }),
     debug: css({
-      Absolute: [3, null, 0, -30],
+      Absolute: [-12, null, null, -12],
       display: 'grid',
       placeItems: 'center',
       fontSize: 22,
@@ -52,17 +51,18 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.debug}>{debug}</div>
-      <TextInput
-        value={value}
+      <CmdHost.Stateful
+        enabled={enabled}
+        pkg={props.pkg}
+        specs={Specs}
+        command={value}
+        mutateUrl={false}
+        autoGrabFocus={false}
         theme={theme}
-        isEnabled={enabled}
-        placeholder={'string (crdt)'}
-        focusOnReady={props.focus}
-        spellCheck={false}
-        onReady={(e) => setInput(e.ref)}
-        onChange={(e) => setValue(e.to)}
+        listMinWidth={300}
+        onReady={(e) => setInput(e.input)}
       />
+      <div {...styles.debug}>{props.debug}</div>
     </div>
   );
 };
