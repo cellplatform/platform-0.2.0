@@ -1,6 +1,7 @@
 import { Color, css, type t } from '../common';
 
 export type TitleProps = {
+  enabled?: boolean;
   title?: string;
   version?: string;
   badge?: t.ModuleListBadge;

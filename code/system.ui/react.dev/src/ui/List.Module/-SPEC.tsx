@@ -39,6 +39,7 @@ export default Spec.describe('ModuleList', (e) => {
             imports={specs}
             hrDepth={2}
             scroll={true}
+            // enabled={false}
             // filter={'foo'}
             theme={theme}
             selectedIndex={0}

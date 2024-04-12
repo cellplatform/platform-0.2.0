@@ -18,6 +18,7 @@ export type ModuleListProps<T = unknown> = {
   badge?: t.ModuleListBadge;
   showParamDev?: boolean;
   allowRubberband?: boolean;
+  enabled?: boolean;
   focused?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;

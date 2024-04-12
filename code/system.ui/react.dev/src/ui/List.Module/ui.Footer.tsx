@@ -1,6 +1,7 @@
 import { Color, css, type t } from '../common';
 
 export type FooterProps = {
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

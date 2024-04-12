@@ -3,6 +3,7 @@ import { VscSymbolClass } from 'react-icons/vsc';
 import { COLORS, Calc, Color, DEFAULTS, css, type t } from './common';
 
 export type ListItemProps = {
+  enabled?: boolean;
   index: number;
   url: URL;
   imports: t.ModuleImports;

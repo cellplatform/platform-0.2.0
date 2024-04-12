@@ -3,6 +3,7 @@ import { Color, css, DEFAULTS, type t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
+  enabled?: boolean;
   imports: t.ModuleImports;
   url: URL;
   focused: boolean;
@@ -18,7 +19,7 @@ export type ListProps = {
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url, showParamDev = true, focused, theme } = props;
+  const { imports, url, showParamDev = true, enabled = true, focused, theme } = props;
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
@@ -59,6 +60,7 @@ export const List: React.FC<ListProps> = (props) => {
       <ListItem
         key={index}
         index={index}
+        enabled={enabled}
         selected={selected}
         focused={focused}
         url={url}
