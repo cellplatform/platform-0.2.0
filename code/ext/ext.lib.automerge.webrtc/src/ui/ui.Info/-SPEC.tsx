@@ -74,7 +74,7 @@ export default Dev.describe(name, async (e) => {
             onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
           },
           shared: {
-            lens: useLens ? ['sys'] : undefined,
+            lens: useLens ? ['sys', 'peers'] : undefined,
             onIconClick(e) {
               console.info('⚡️ shared.onIconClick', e);
               state.change((d) => {
