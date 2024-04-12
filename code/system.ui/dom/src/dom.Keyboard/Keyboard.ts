@@ -11,9 +11,10 @@ export const Keyboard = {
   Monitor,
   Match,
 
-  on: Monitor.on,
   onKeydown: KeyListener.keydown,
   onKeyup: KeyListener.keyup,
+  on: Monitor.on,
+  filter: Monitor.filter,
 
   until,
   toKeypress: Util.toKeypress,

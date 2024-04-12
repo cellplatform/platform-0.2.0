@@ -40,6 +40,7 @@ export type KeyboardMonitor = KeyboardMonitorOn & {
   start(): KeyboardMonitor;
   stop(): void;
   subscribe(fn: (e: t.KeyboardState) => void): KeyListenerHandle;
+  filter(fn: () => boolean): KeyboardMonitorOn;
 };
 
 export type KeyboardMonitorOn = {

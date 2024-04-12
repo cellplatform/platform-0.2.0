@@ -1,4 +1,4 @@
-import { KeyboardMonitor as Monitor } from './Keyboard.Monitor';
+import { KeyboardMonitor, handlerFiltered, handlerOnOverloaded } from './Keyboard.Monitor';
 import { rx, type t } from './common';
 
 /**
@@ -6,24 +6,27 @@ import { rx, type t } from './common';
  * dispose signal is received.
  */
 export function until(until$?: t.UntilObservable) {
-  const lifecycle = rx.lifecycle(until$);
-  const { dispose, dispose$ } = lifecycle;
+  const life = rx.lifecycle(until$);
+  const { dispose, dispose$ } = life;
 
   const on: t.KeyboardMonitor['on'] = (...args: any) => {
-    const listener = Monitor.on.apply(Monitor, args);
-    dispose$.pipe(rx.take(1)).subscribe(() => listener.dispose());
-    return listener;
+    return handlerOnOverloaded(args, { dispose$ });
   };
 
-  const $ = Monitor.$.pipe(rx.takeUntil(dispose$));
+  const filter: t.KeyboardMonitor['filter'] = (fn) => {
+    return handlerFiltered(fn, { dispose$ });
+  };
+
+  const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$));
   const down$ = $.pipe(rx.filter((e) => e.last?.stage === 'Down'));
   const up$ = $.pipe(rx.filter((e) => e.last?.stage === 'Up'));
 
-  const api = {
-    on,
+  return {
     $,
     up$,
     down$,
+    on,
+    filter,
 
     /**
      * Lifecycle
@@ -31,8 +34,7 @@ export function until(until$?: t.UntilObservable) {
     dispose$,
     dispose,
     get disposed() {
-      return lifecycle.disposed;
+      return life.disposed;
     },
   } as const;
-  return api;
 }

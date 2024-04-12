@@ -73,9 +73,12 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
   },
 
   on(...args: any[]) {
-    return overloadedOn(args);
+    return handlerOnOverloaded(args);
   },
 
+  filter(fn) {
+    return handlerFiltered(fn);
+  },
 };
 
 /**
@@ -190,24 +193,41 @@ function updatePressedKeys(e: t.KeyboardKeypress) {
   });
 }
 
-function overloadedOn(args: any[], options: { filter?: () => boolean } = {}): t.Lifecycle {
+export function handlerFiltered(
+  filter: () => boolean,
+  options: { dispose$?: t.UntilObservable } = {},
+): t.KeyboardMonitorOn {
+  const { dispose$ } = options;
+  return {
+    on(...args: any[]) {
+      return handlerOnOverloaded(args, { filter, dispose$ });
+    },
+  };
+}
+
+export function handlerOnOverloaded(
+  args: any[],
+  options: { filter?: () => boolean; dispose$?: t.UntilObservable } = {},
+): t.Lifecycle {
   if (typeof args[0] === 'object') {
-    const life = rx.lifecycle();
+    const life = rx.lifecycle(options.dispose$);
     const { dispose$ } = life;
     const { filter } = options;
     const patterns = args[0] as t.KeyMatchPatterns;
-    Object.entries(patterns).forEach(([pattern, fn]) => on(pattern, fn, { dispose$, filter }));
+    Object.entries(patterns).forEach(([pattern, fn]) => {
+      handlerOn(pattern, fn, { dispose$, filter });
+    });
     return life;
   }
 
   if (typeof args[0] === 'string' && typeof args[1] === 'function') {
-    return on(args[0], args[1]);
+    return handlerOn(args[0], args[1]);
   }
 
   throw new Error('Input paramters for [Keyboard.on] not matched.');
 }
 
-function on(
+function handlerOn(
   pattern: t.KeyPattern,
   fn: t.KeyMatchSubscriberHandler,
   options: { dispose$?: t.UntilObservable; filter?: () => boolean } = {},
