@@ -23,6 +23,8 @@ export type InfoData = {
   repo?: AutomergeInfoData['repo'];
   network?: t.NetworkStore;
   shared?: {
+    name?: string;
+    lens?: t.ObjectPath;
     object?: { expand?: { level?: number; paths?: string[] } };
     onIconClick?: (e: {}) => void;
   };

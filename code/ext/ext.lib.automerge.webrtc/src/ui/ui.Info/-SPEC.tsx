@@ -4,6 +4,7 @@ import {
   Color,
   Dev,
   PeerUI,
+  Pkg,
   PropList,
   TestEdge,
   WebStore,
@@ -15,8 +16,9 @@ type P = t.InfoProps;
 type T = {
   props: P;
   debug: { visible?: boolean };
+  data: { useLens?: boolean };
 };
-const initial: T = { props: {}, debug: {} };
+const initial: T = { props: {}, debug: {}, data: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
@@ -35,11 +37,12 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = Pick<P, 'fields' | 'theme'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
+  type LocalStore = Pick<P, 'fields' | 'theme'> & Pick<T['data'], 'useLens'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
     fields: DEFAULTS.fields.default,
+    theme: undefined,
+    useLens: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -50,6 +53,7 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
+      d.data.useLens = local.useLens;
     });
 
     ctx.debug.width(330);
@@ -60,6 +64,7 @@ export default Dev.describe(name, async (e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
+        const useLens = e.state.data.useLens;
         const visible = debug.visible ?? true;
         const data: t.InfoData = {
           network: self.network,
@@ -69,6 +74,7 @@ export default Dev.describe(name, async (e) => {
             onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
           },
           shared: {
+            lens: useLens ? ['sys'] : undefined,
             onIconClick(e) {
               console.info('⚡️ shared.onIconClick', e);
               state.change((d) => {
@@ -144,6 +150,18 @@ export default Dev.describe(name, async (e) => {
       dev.button('prepend: Visible', (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Data', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.data.useLens;
+        btn
+          .label((e) => `use shared.lens`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.useLens = Dev.toggle(d.data, 'useLens'))));
       });
     });
 

@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectView, css, type t } from './common';
+import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, css, type t } from './common';
 
 /**
  * Shared network state (transient document).
@@ -94,12 +94,20 @@ const wrangle = {
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
+    let output: any = { ...obj, sys: { ...obj.sys, docs } };
+    const lens = data.shared?.lens;
+    if (lens) output = ObjectPath.resolve(output, lens);
+
+    let name = data.shared?.name ?? '';
+    if (!name && lens) name = lens.join('.');
+    name = name || 'Shared';
+
     return (
       <div {...styles.base}>
         <div {...styles.inner}>
           <ObjectView
-            name={'Shared'}
-            data={{ ...obj, sys: { ...obj.sys, docs } }}
+            name={name}
+            data={output}
             fontSize={11}
             theme={theme}
             style={{ marginLeft: 10, marginTop: 3, marginBottom: 4 }}
