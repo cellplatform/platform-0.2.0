@@ -32,31 +32,6 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
     return singleton.state;
   },
 
-  subscribe(fn: (e: t.KeyboardState) => void) {
-    const disposable = rx.disposable();
-    if (KeyboardMonitor.is.supported) {
-      const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$));
-      $.subscribe(fn);
-    }
-    return disposable;
-  },
-
-  on(...args: any[]) {
-    if (typeof args[0] === 'object') {
-      const disposable = rx.disposable();
-      const { dispose$ } = disposable;
-      const patterns = args[0] as t.KeyMatchPatterns;
-      Object.entries(patterns).forEach(([pattern, fn]) => on(pattern, fn, { dispose$ }));
-      return disposable;
-    }
-
-    if (typeof args[0] === 'string' && typeof args[1] === 'function') {
-      return on(args[0], args[1]);
-    }
-
-    throw new Error('Input paramters for [Keyboard.on] not matched.');
-  },
-
   /**
    * Singleton: start listening to the keyboard events.
    * NOTE: Safe to call multiple times, will only ever attach once
@@ -87,12 +62,25 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
       singleton.isListening = false;
     }
   },
+
+  subscribe(fn: (e: t.KeyboardState) => void) {
+    const life = rx.lifecycle();
+    if (KeyboardMonitor.is.supported) {
+      const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$), rx.takeUntil(life.dispose$));
+      $.subscribe(fn);
+    }
+    return life;
+  },
+
+  on(...args: any[]) {
+    return overloadedOn(args);
+  },
+
 };
 
 /**
  * Helpers
  */
-
 function ensureStarted() {
   if (!KeyboardMonitor.is.supported) return;
   if (!singleton.isListening) KeyboardMonitor.start();
@@ -202,13 +190,31 @@ function updatePressedKeys(e: t.KeyboardKeypress) {
   });
 }
 
+function overloadedOn(args: any[], options: { filter?: () => boolean } = {}): t.Lifecycle {
+  if (typeof args[0] === 'object') {
+    const life = rx.lifecycle();
+    const { dispose$ } = life;
+    const { filter } = options;
+    const patterns = args[0] as t.KeyMatchPatterns;
+    Object.entries(patterns).forEach(([pattern, fn]) => on(pattern, fn, { dispose$, filter }));
+    return life;
+  }
+
+  if (typeof args[0] === 'string' && typeof args[1] === 'function') {
+    return on(args[0], args[1]);
+  }
+
+  throw new Error('Input paramters for [Keyboard.on] not matched.');
+}
+
 function on(
   pattern: t.KeyPattern,
   fn: t.KeyMatchSubscriberHandler,
-  options: { dispose$?: t.Observable<any> } = {},
+  options: { dispose$?: t.UntilObservable; filter?: () => boolean } = {},
 ) {
-  const disposable = rx.disposable(options.dispose$);
-  if (!KeyboardMonitor.is.supported) return disposable;
+  const { filter } = options;
+  const life = rx.lifecycle(options.dispose$);
+  if (!KeyboardMonitor.is.supported) return life;
 
   ensureStarted();
   const matcher = Match.pattern(pattern);
@@ -216,7 +222,8 @@ function on(
   singleton$
     .pipe(
       rx.takeUntil(dispose$),
-      rx.takeUntil(disposable.dispose$),
+      rx.takeUntil(life.dispose$),
+      rx.filter((e) => (filter ? filter() : true)),
       rx.filter((e) => Boolean(e.last)),
       rx.filter((e) => !Boolean(e.last?.is.handled)),
       rx.filter((e) => e.current.pressed.length > 0),
@@ -236,5 +243,5 @@ function on(
       }
     });
 
-  return disposable;
+  return life;
 }

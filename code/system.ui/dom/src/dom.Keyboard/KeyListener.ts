@@ -16,7 +16,7 @@ export const KeyListener = {
  */
 function listener(event: 'keydown' | 'keyup') {
   return (handler: KeyHandler): t.KeyListenerHandle => {
-    const disposable = rx.disposable();
+    const disposable = rx.lifecycle();
     document?.addEventListener(event, handler);
     disposable.dispose$.subscribe(() => document?.removeEventListener(event, handler));
     return disposable;
