@@ -57,6 +57,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           focused={props.focused}
           enabled={enabled}
           theme={theme}
+          listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}
           selectedIndex={props.selectedIndex}

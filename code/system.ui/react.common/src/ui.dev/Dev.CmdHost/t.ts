@@ -17,6 +17,7 @@ export type CmdHostProps<T = t.SpecModule> = {
   focused?: boolean;
   showParamDev?: boolean;
   autoGrabFocus?: boolean;
+  listMinWidth?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;

@@ -20,6 +20,7 @@ export type ModuleListProps<T = unknown> = {
   allowRubberband?: boolean;
   enabled?: boolean;
   focused?: boolean;
+  listMinWidth?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   scroll?: boolean;

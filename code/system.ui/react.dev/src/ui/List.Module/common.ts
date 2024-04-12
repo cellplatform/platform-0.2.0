@@ -12,6 +12,7 @@ const badge: t.ModuleListBadge = {
 } as const;
 
 export const DEFAULTS = {
-  badge,
   qs: DEFAULTS_BASE.qs,
+  badge,
+  list: { minWidth: 550 },
 } as const;

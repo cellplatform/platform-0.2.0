@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Color, css, useRubberband, type t } from './common';
+import { Color, css, useRubberband, type t, DEFAULTS } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -63,7 +63,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
     title: css({ marginBottom: 20 }),
     list: {
       outer: css({ marginTop: 30, display: 'grid' }),
-      inner: css({ minWidth: 550, MarginX: 50 }),
+      inner: css({ minWidth: props.listMinWidth ?? DEFAULTS.list.minWidth, MarginX: 50 }),
     },
   };
 
