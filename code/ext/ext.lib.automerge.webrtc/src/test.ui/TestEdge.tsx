@@ -39,7 +39,10 @@ const createEdge = async (kind: K, behaviors?: B) => {
 const peersSection = (dev: t.DevTools, left: N, right: N) => {
   const connect = () => left.peer.connect.data(right.peer.id);
   const disconnect = () => left.peer.disconnect();
-  const isConnected = () => left.peer.current.connections.length > 0;
+  const isConnected = () => {
+    const conns = { left: left.peer.current.connections, right: right.peer.current.connections };
+    return conns.left.some((left) => conns.right.some((right) => left.id === right.id));
+  };
   dev.button((btn) => {
     btn
       .label(() => (isConnected() ? 'connected' : 'connect'))
