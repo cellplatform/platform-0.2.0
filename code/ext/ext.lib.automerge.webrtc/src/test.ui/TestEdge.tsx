@@ -1,5 +1,5 @@
 import { PeerRepoList } from '../ui/ui.PeerRepoList';
-import { Peer, PeerUI, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
+import { Peer, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
 type B = t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
@@ -75,12 +75,13 @@ const headerFooterConnectors = (dev: t.DevTools, left: N, right: N) => {
     .render(() => <PeerUI.Connector peer={right.peer} />);
 };
 
-const infoPanels = (dev: t.DevTools, left: N, right: N) => {
+const infoPanels = (dev: t.DevTools, left: N, right: N, options?: t.InfoData) => {
   const render = (network: t.NetworkStore) => {
+    const data = R.merge(options ?? {}, { network }) as t.InfoData;
     return (
       <PeerRepoList.Info
         fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-        data={{ network }}
+        data={data}
       />
     );
   };
