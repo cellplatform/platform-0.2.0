@@ -45,7 +45,7 @@ export async function render(
   return (
     <CmdHostStateful
       pkg={pkg}
-      specs={specs}
+      imports={specs}
       badge={options.badge}
       hrDepth={options.hrDepth}
       style={style}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CmdBar, Color, DEFAULTS, Filter, SpecList, css, type t } from './common';
+import { CmdBar, Color, DEFAULTS, Filter, ModuleList, css, type t } from './common';
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
@@ -10,7 +10,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     applyFilter = DEFAULTS.applyFilter,
     focusOnClick = DEFAULTS.focusOnClick,
   } = props;
-  const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
+  const filteredSpecs = applyFilter ? Filter.imports(props.imports, props.command) : props.imports;
 
   const readyRef = useRef(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
@@ -55,7 +55,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} onClick={handleClick}>
       <div {...styles.body}>
-        <SpecList
+        <ModuleList
           title={pkg.name}
           version={pkg.version}
           imports={filteredSpecs}

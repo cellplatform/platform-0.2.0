@@ -14,14 +14,14 @@ export const Filter = {
    *
    * Multiple filters can be applied by specifying " | " between each filter.
    */
-  specs(all?: t.SpecImports, filter?: string, options: Options = {}): t.SpecImports {
+  imports(all?: t.ModuleImports, filter?: string, options: Options = {}): t.ModuleImports {
     if (!all) return {};
 
     const text = (filter || '').trim();
     const filters = text.split(' | ').map((f) => f.trim());
     if (!text) return all;
 
-    const res: t.SpecImports = {};
+    const res: t.ModuleImports = {};
     filters.forEach((filter) => {
       const filtered = Filter.namespaces(Object.keys(all), filter, options);
       filtered.forEach((ns) => (res[ns] = all[ns]));
@@ -46,4 +46,4 @@ export const Filter = {
     // ↓ RECURSION 🌳
     return Filter.namespaces(filtered, parts.slice(1).join(' '), options);
   },
-};
+} as const;

@@ -3,9 +3,9 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type CmdHostProps<T = t.SpecModule> = {
+export type CmdHostProps = {
   pkg: { name: string; version: string };
-  specs?: t.ModuleImports<T>;
+  imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;
   applyFilter?: boolean;
