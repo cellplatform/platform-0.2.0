@@ -3,7 +3,7 @@ import { Wrangle } from './Wrangle';
 
 export type HostGridProps = {
   children?: JSX.Element;
-  border: string;
+  border?: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
 };
