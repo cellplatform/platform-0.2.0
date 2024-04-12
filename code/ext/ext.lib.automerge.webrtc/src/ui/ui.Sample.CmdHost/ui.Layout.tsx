@@ -3,6 +3,7 @@ import { SampleHost } from './ui.Host';
 
 export type SampleLayoutProps = {
   pkg: t.ModuleDef;
+  imports?: t.ModuleImports;
   left?: t.Lens;
   right?: t.Lens;
   path?: t.CmdHostPaths;
@@ -11,7 +12,7 @@ export type SampleLayoutProps = {
 };
 
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
-  const { pkg, left, right, path, theme } = props;
+  const { left, right, theme } = props;
 
   /**
    * Render
@@ -25,13 +26,13 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const renderHost = (doc?: t.Lens, debug?: string) => {
     return (
       <SampleHost
-        //
-        pkg={pkg}
         debug={debug}
-        doc={doc}
-        path={path}
-        theme={theme}
         enabled={!!doc}
+        pkg={props.pkg}
+        imports={props.imports}
+        doc={doc}
+        path={props.path}
+        theme={theme}
       />
     );
   };

@@ -25,6 +25,8 @@ export type {
   Index,
   Lifecycle,
   ModuleDef,
+  ModuleImporter,
+  ModuleImports,
   Msecs,
   ObjectPath,
   OmitLifecycle,

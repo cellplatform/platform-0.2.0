@@ -1,10 +1,10 @@
 import { CmdHost } from 'sys.ui.react.common';
-import { Specs } from '../../test.ui/entry.Specs.mjs';
 import { Color, DEFAULTS, css, type t } from './common';
 import { useController } from './use.Controller';
 
 export type SampleHostProps = {
   pkg: t.ModuleDef;
+  imports?: t.ModuleImports;
   doc?: t.Lens;
   path?: t.CmdHostPaths;
   theme?: t.CommonTheme;
@@ -14,8 +14,9 @@ export type SampleHostProps = {
 };
 
 export const SampleHost: React.FC<SampleHostProps> = (props) => {
-  const { theme, doc, path = DEFAULTS.paths, enabled = true } = props;
-  const controller = useController({ enabled, doc, path });
+  const { theme, doc, path = DEFAULTS.paths, enabled = true, debug, imports } = props;
+
+  const controller = useController({ enabled, doc, path, imports, debug });
 
   /**
    * Render
@@ -36,7 +37,7 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
       <CmdHost.Stateful
         enabled={enabled}
         pkg={props.pkg}
-        specs={Specs}
+        imports={imports}
         command={controller.value}
         mutateUrl={false}
         autoGrabFocus={false}
@@ -44,8 +45,7 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
         focusOnClick={true}
         theme={theme}
         onReady={(e) => controller.onTextboxReady(e.textbox)}
-        onItemClick={async (e) => {
-        }}
+        onItemClick={(e) => controller.load(e.address)}
       />
       <div {...styles.debug}>{props.debug}</div>
     </div>

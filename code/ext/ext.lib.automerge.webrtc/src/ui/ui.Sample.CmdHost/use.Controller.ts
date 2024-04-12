@@ -22,6 +22,15 @@ export function useController(args: { enabled?: boolean; doc?: t.Lens; path?: t.
     return life.dispose;
   }, [enabled, doc?.instance, !!textbox, path.cmd.join('.')]);
 
+      /**
+       * TODO 🐷
+       */
+      console.group(debug);
+      console.log('address', address);
+      console.log('importer', importer);
+      const m = await importer?.();
+      console.log('m', m);
+      console.groupEnd();
   /**
    * API
    */
