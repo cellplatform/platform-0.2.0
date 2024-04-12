@@ -1,6 +1,6 @@
 import { describe, expect, it, Time } from '../test';
 import { KeyListener } from './KeyListener';
-import { Mock } from './Util.Mock';
+import { Mock } from './u.Mock';
 
 describe('KeyListener', () => {
   it('fires (keydown | keyup)', async () => {

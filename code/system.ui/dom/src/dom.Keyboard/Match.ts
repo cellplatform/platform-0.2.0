@@ -1,5 +1,5 @@
-import { slug, t } from './common';
-import { Util } from './Util';
+import { slug, type t } from './common';
+import { Util } from './u';
 
 export const Match = {
   /**
@@ -23,7 +23,7 @@ export const Match = {
       },
     };
   },
-};
+} as const;
 
 /**
  * [Helpers]

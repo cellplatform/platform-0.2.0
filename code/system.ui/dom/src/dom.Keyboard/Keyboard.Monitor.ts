@@ -1,6 +1,6 @@
 import { Match } from './Match';
-import { Util } from './Util';
 import { DEFAULTS, R, rx, type t } from './common';
+import { Util } from './u';
 
 const singleton = {
   isListening: false,

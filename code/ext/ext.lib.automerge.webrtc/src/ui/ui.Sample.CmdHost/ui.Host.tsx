@@ -3,7 +3,7 @@ import { CmdHost } from 'sys.ui.react.common';
 import { Specs } from '../../test.ui/entry.Specs.mjs';
 import { Color, ObjectPath, Sync, css, rx, type t } from './common';
 
-export type SampleProps = {
+export type SampleHostProps = {
   pkg: t.ModuleDef;
   doc?: t.Lens;
   path?: t.ObjectPath;
@@ -13,7 +13,7 @@ export type SampleProps = {
   style?: t.CssValue;
 };
 
-export const Sample: React.FC<SampleProps> = (props) => {
+export const SampleHost: React.FC<SampleHostProps> = (props) => {
   const { theme, enabled = true, doc, path = [] } = props;
 
   const [value, setValue] = useState('');
@@ -36,11 +36,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
    */
   const color = Color.fromTheme(theme);
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-      color,
-    }),
+    base: css({ position: 'relative', display: 'grid', color }),
     debug: css({
       Absolute: [-12, null, null, -12],
       display: 'grid',

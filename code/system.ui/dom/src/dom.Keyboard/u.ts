@@ -1,4 +1,4 @@
-import { t, UserAgent } from './common';
+import { UserAgent, type t } from './common';
 
 export const Util = {
   isModifier(value: string) {
@@ -95,4 +95,4 @@ export const Util = {
     e.stopPropagation();
     e.stopImmediatePropagation();
   },
-};
+} as const;

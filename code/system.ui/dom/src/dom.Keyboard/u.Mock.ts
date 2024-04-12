@@ -5,4 +5,4 @@ export const Mock = {
   keyupEvent(key = 'z', keyCode = 90) {
     return new window.KeyboardEvent('keydown', { key, keyCode });
   },
-};
+} as const;

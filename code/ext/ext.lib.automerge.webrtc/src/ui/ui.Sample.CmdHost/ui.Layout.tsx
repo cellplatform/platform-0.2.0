@@ -1,5 +1,5 @@
 import { Color, css, type t } from './common';
-import { Sample } from './ui.Sample';
+import { SampleHost } from './ui.Host';
 
 export type SampleLayoutProps = {
   pkg: t.ModuleDef;
@@ -23,8 +23,17 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   };
 
   const renderHost = (doc?: t.Lens, debug?: string) => {
-    const enabled = !!doc;
-    return <Sample pkg={pkg} debug={debug} doc={doc} path={path} theme={theme} enabled={enabled} />;
+    return (
+      <SampleHost
+        //
+        pkg={pkg}
+        debug={debug}
+        doc={doc}
+        path={path}
+        theme={theme}
+        enabled={!!doc}
+      />
+    );
   };
 
   return (

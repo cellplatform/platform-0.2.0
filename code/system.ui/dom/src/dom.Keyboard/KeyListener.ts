@@ -1,4 +1,4 @@
-import { rx, t } from './common';
+import { rx, type t } from './common';
 
 type KeyHandler = (e: KeyboardEvent) => any;
 
@@ -8,7 +8,7 @@ export const KeyListener = {
   get isSupported() {
     return typeof document === 'object';
   },
-};
+} as const;
 
 /**
  * Produces an event-binding factory for a keyboard event

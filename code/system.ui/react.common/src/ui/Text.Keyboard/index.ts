@@ -1,1 +1,1 @@
-export * from './Keyboard.mjs';
+export * from './Keyboard';
