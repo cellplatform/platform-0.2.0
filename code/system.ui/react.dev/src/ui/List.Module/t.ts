@@ -19,6 +19,7 @@ export type ModuleListProps<T = unknown> = {
   showParamDev?: boolean;
   allowRubberband?: boolean;
   focused?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   scroll?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;

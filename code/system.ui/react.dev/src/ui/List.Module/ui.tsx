@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { COLORS, css, useRubberband, type t } from './common';
+import { COLORS, css, useRubberband, type t, Color } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -9,7 +9,7 @@ import { useScrollObserver } from './useScrollObserver.mjs';
 type LiMap = Map<number, HTMLLIElement>;
 
 export const View: React.FC<t.ModuleListProps> = (props) => {
-  const { scroll = false, focused = true } = props;
+  const { scroll = false, focused = true, theme } = props;
   const url = new URL(props.href ?? window.location.href);
   const imports = (props.imports ?? {}) as t.ModuleImports;
 
@@ -41,6 +41,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
     base: css({
       position: 'relative',
@@ -52,7 +53,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
       cursor: 'default',
       fontFamily: 'sans-serif',
       lineHeight: '2em',
-      color: COLORS.DARK,
+      color,
       boxSizing: 'border-box',
       padding: 30,
       paddingTop: 20,
@@ -68,6 +69,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
     <div {...styles.list.outer}>
       <div {...styles.list.inner}>
         <List
+          theme={theme}
           url={url}
           imports={imports}
           selectedIndex={props.selectedIndex}
@@ -84,9 +86,15 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
+      <Title
+        title={props.title}
+        version={props.version}
+        badge={props.badge}
+        theme={theme}
+        style={styles.title}
+      />
       {elList}
-      <Footer />
+      <Footer theme={theme} />
     </div>
   );
 

@@ -13,6 +13,7 @@ export type ListItemProps = {
   Icon?: t.IconType;
   ns?: boolean;
   hrDepth?: number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onReadyChange?: t.ModuleListItemReadyHandler;
   onClick?: t.ModuleListItemHandler;
@@ -69,6 +70,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({
       paddingLeft: beyondBounds ? 0 : 20,
@@ -76,7 +78,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     }),
     hr: css({
       border: 'none',
-      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
+      borderTop: `solid 1px ${Color.alpha(color, 0.12)}`,
     }),
     link: css({
       color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
@@ -84,16 +86,12 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     }),
     linkDimmed: css({
       userSelect: 'none',
-      color: Color.alpha(COLORS.DARK, 0.4),
+      color: Color.alpha(color, 0.4),
       ':hover': { color: COLORS.BLUE },
     }),
     row: {
       base: css({
-        backgroundColor: selected
-          ? focused
-            ? COLORS.BLUE
-            : Color.alpha(COLORS.DARK, 0.08)
-          : undefined,
+        backgroundColor: selected ? (focused ? COLORS.BLUE : Color.alpha(color, 0.08)) : undefined,
         borderRadius: 3,
         position: 'relative',
         display: 'grid',

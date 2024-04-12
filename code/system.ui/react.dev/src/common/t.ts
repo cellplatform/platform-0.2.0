@@ -8,6 +8,7 @@ export type { Observable } from 'rxjs';
  * @system
  */
 export type {
+  CommonTheme,
   Disposable,
   DomRect,
   Event,

@@ -1,5 +1,5 @@
 import { VscSymbolClass } from 'react-icons/vsc';
-import { Color, COLORS, css, DEFAULTS, type t } from './common';
+import { Color, css, DEFAULTS, type t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
@@ -10,6 +10,7 @@ export type ListProps = {
   selectedIndex?: number;
   showParamDev?: boolean;
   hrDepth?: number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onItemReadyChange?: t.ModuleListItemReadyHandler;
   onItemClick?: t.ModuleListItemHandler;
@@ -17,24 +18,25 @@ export type ListProps = {
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url, showParamDev = true, focused } = props;
+  const { imports, url, showParamDev = true, focused, theme } = props;
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
     base: css({
       listStyleType: 'none',
-      color: COLORS.DARK,
-      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
+      color,
+      borderLeft: `solid 1px ${Color.alpha(color, 0.03)}`,
       padding: 0,
       margin: 0,
     }),
     hrDashed: css({
       border: 'none',
-      borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,
+      borderTop: `dashed 1px ${Color.alpha(color, 0.4)}`,
       marginTop: 30,
       marginBottom: 10,
     }),
@@ -50,11 +52,7 @@ export const List: React.FC<ListProps> = (props) => {
   const item = (
     index: number,
     address: string | undefined,
-    options: {
-      title?: string;
-      ns?: boolean;
-      Icon?: t.IconType;
-    } = {},
+    options: { title?: string; ns?: boolean; Icon?: t.IconType } = {},
   ) => {
     const selected = !options.ns ? false : index === props.selectedIndex;
     return (
@@ -70,6 +68,7 @@ export const List: React.FC<ListProps> = (props) => {
         ns={options.ns}
         Icon={options.Icon}
         hrDepth={props.hrDepth}
+        theme={theme}
         onReadyChange={props.onItemReadyChange}
         onClick={props.onItemClick}
         onSelect={props.onItemSelect}

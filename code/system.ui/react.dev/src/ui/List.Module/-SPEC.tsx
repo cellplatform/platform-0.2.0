@@ -1,14 +1,18 @@
 import { DEFAULTS, ModuleList } from '.';
-import { Pkg, Spec, type t } from '../../test.ui';
+import { COLORS, Pkg, Spec, type t } from '../../test.ui';
 
 export default Spec.describe('ModuleList', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
 
+    let theme: t.CommonTheme | undefined;
+    theme = 'Dark';
+    const isDark = theme === 'Dark';
+
     ctx.debug.width(0);
     ctx.subject
       .size('fill', 100)
-      .backgroundColor(1)
+      .backgroundColor(isDark ? COLORS.DARK : 1)
       .render(async (e) => {
         const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs.mjs');
 
@@ -36,6 +40,7 @@ export default Spec.describe('ModuleList', (e) => {
             hrDepth={2}
             scroll={true}
             // filter={'foo'}
+            theme={theme}
             selectedIndex={0}
             onItemVisibility={(e) => console.info('⚡️ onItemVisibility', e)}
             onItemClick={(e) => console.info('⚡️ onItemClick', e)}
