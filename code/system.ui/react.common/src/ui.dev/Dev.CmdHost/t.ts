@@ -21,6 +21,7 @@ export type CmdHostProps<T = t.SpecModule> = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;
+  focusOnClick?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
   onReady?: CmdHostReadyHandler;
   onChanged?: CmdHostChangedHandler;

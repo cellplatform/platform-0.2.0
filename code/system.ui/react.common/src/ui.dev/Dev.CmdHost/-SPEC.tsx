@@ -34,6 +34,7 @@ export default Dev.describe(name, (e) => {
     | 'showParamDev'
     | 'autoGrabFocus'
     | 'focusOnReady'
+    | 'focusOnClick'
     | 'enabled'
   > &
     Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
@@ -48,6 +49,7 @@ export default Dev.describe(name, (e) => {
     useOnItemClick: true,
     autoGrabFocus: DEFAULTS.autoGrabFocus,
     focusOnReady: DEFAULTS.focusOnReady,
+    focusOnClick: DEFAULTS.focusOnClick,
   });
 
   e.it('init', async (e) => {
@@ -64,6 +66,7 @@ export default Dev.describe(name, (e) => {
       d.props.showParamDev = local.showParamDev;
       d.props.autoGrabFocus = local.autoGrabFocus;
       d.props.focusOnReady = local.focusOnReady;
+      d.props.focusOnClick = local.focusOnClick;
 
       d.debug.stateful = local.stateful;
       d.debug.useOnItemClick = local.useOnItemClick;
@@ -78,8 +81,8 @@ export default Dev.describe(name, (e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(ctx, props.theme, 1, 0.02);
 
-        const Component = debug.stateful ? CmdHost.Stateful : CmdHost;
         const onItemClick: t.ModuleListItemHandler = (e) => console.info('⚡️ onItemClick', e);
+        const Component = debug.stateful ? CmdHost.Stateful : CmdHost;
         return (
           <Component
             {...e.state.props}
@@ -137,9 +140,19 @@ export default Dev.describe(name, (e) => {
         btn
           .label((e) => `focusOnReady`)
           .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
-          );
+          .onClick((e) => {
+            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusOnClick;
+        btn
+          .label((e) => `focusOnClick`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.focusOnClick = Dev.toggle(d.props, 'focusOnClick')));
+          });
       });
 
       dev.hr(-1, 5);

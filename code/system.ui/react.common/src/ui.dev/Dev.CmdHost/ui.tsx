@@ -3,7 +3,13 @@ import { CmdBar, Color, DEFAULTS, Filter, SpecList, css, type t } from './common
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
-  const { pkg, theme, enabled = true, applyFilter = DEFAULTS.applyFilter } = props;
+  const {
+    pkg,
+    theme,
+    enabled = true,
+    applyFilter = DEFAULTS.applyFilter,
+    focusOnClick = DEFAULTS.focusOnClick,
+  } = props;
   const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
 
   const readyRef = useRef(false);
@@ -29,6 +35,9 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
    * Handlers
    */
   const filterChanged = (command: string) => props.onChanged?.({ command });
+  const handleClick = () => {
+    if (focusOnClick && textbox) textbox.focus();
+  };
 
   /**
    * Render
@@ -44,7 +53,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onClick={handleClick}>
       <div {...styles.body}>
         <SpecList
           title={pkg.name}

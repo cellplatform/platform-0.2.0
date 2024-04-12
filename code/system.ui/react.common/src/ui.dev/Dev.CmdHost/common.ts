@@ -12,6 +12,7 @@ export const DEFAULTS = {
   badge: SpecList.DEFAULTS.badge,
   commandPlaceholder: 'command',
   focusOnReady: true,
+  focusOnClick: false,
   autoGrabFocus: true,
   applyFilter: true,
   qs: BASE.qs,
