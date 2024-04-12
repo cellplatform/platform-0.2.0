@@ -13,6 +13,7 @@ export type CmdHostProps<T = t.SpecModule> = {
   hintKey?: string | string[];
   hrDepth?: number;
   badge?: t.ModuleListBadge;
+  enabled?: boolean;
   focused?: boolean;
   showParamDev?: boolean;
   autoGrabFocus?: boolean;

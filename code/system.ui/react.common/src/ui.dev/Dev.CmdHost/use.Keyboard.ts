@@ -9,19 +9,21 @@ export type ArrowKeyHandlerArgs = { key: ArrowKey; meta: boolean };
  * Keyboard shortcuts.
  */
 export function useKeyboard(
-  textboxRef?: t.TextInputRef,
+  textbox?: t.TextInputRef,
   options: {
+    enabled?: boolean;
+    autoGrabFocus?: boolean;
     onArrowKey?: ArrowKeyHandler;
     onClear?: () => void;
-    autoGrabFocus?: boolean;
   } = {},
 ) {
-  const { autoGrabFocus = DEFAULTS.autoGrabFocus } = options;
+  const { enabled = true, autoGrabFocus = DEFAULTS.autoGrabFocus } = options;
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
     const arrowKey = (e: t.KeyMatchSubscriberHandlerArgs, key: ArrowKey) => {
+      if (!autoGrabFocus && !textbox?.current.focused) return;
       e.handled();
       const meta = e.state.modifiers.meta;
       options.onArrowKey?.({ key, meta });
@@ -30,11 +32,11 @@ export function useKeyboard(
     const handlers = Keyboard.on({
       ['ALT + KeyJ'](e) {
         e.handled();
-        textboxRef?.focus();
-        textboxRef?.selectAll();
+        textbox?.focus();
+        textbox?.selectAll();
       },
 
-      ['Escape']: (e) => textboxRef?.blur(),
+      ['Escape']: (e) => textbox?.blur(),
       ['CMD + KeyK']: (e) => options.onClear?.(),
 
       ['ArrowUp']: (e) => arrowKey(e, 'Up'),
@@ -46,14 +48,15 @@ export function useKeyboard(
     const keypress = Keyboard.until(dispose$);
     keypress.down$
       .pipe(
-        rx.filter(() => autoGrabFocus),
+        rx.filter((e) => enabled && autoGrabFocus),
         rx.filter((e) => !!(e.last?.is.letter || e.last?.is.number)),
       )
-      .subscribe((e) => textboxRef?.focus());
+      .subscribe((e) => textbox?.focus());
 
+    if (!enabled) handlers.dispose();
     return () => {
       handlers.dispose();
       dispose();
     };
-  }, [textboxRef]);
+  }, [textbox, enabled, autoGrabFocus]);
 }

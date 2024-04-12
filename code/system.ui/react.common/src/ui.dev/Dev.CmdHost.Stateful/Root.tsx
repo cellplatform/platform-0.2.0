@@ -9,7 +9,7 @@ type T = t.Subject<t.ModuleListScrollTarget>;
  * A version of <CmdHost> that manages state interanally.
  */
 export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
-  const { mutateUrl = true } = props;
+  const { mutateUrl = true, enabled = true } = props;
 
   const readyRef = useRef(false);
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
@@ -82,6 +82,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   };
 
   const handleKeyboard = (e: t.TextInputKeyArgs) => {
+    if (!enabled) return;
     const done = () => e.preventDefault();
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
@@ -124,6 +125,7 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
       command={command}
       applyFilter={false} // NB: Filter already applied above.
       selectedIndex={selectedIndex}
+      enabled={enabled}
       focused={focused}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}

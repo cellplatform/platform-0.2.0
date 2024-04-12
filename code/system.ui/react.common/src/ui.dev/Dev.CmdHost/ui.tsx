@@ -3,12 +3,13 @@ import { CmdBar, Color, DEFAULTS, Filter, SpecList, css, type t } from './common
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
-  const { pkg, applyFilter = DEFAULTS.applyFilter, theme } = props;
+  const { pkg, theme, enabled = true, applyFilter = DEFAULTS.applyFilter } = props;
   const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
 
   const readyRef = useRef(false);
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
   useKeyboard(textboxRef, {
+    enabled,
     autoGrabFocus: props.autoGrabFocus,
     onArrowKey: () => textboxRef?.focus(),
     onClear: () => filterChanged(''),
@@ -54,6 +55,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           hrDepth={props.hrDepth}
           showParamDev={props.showParamDev}
           focused={props.focused}
+          enabled={enabled}
           theme={theme}
           scroll={true}
           scrollTo$={props.scrollTo$}
@@ -65,6 +67,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
       </div>
       <div {...styles.bar}>
         <CmdBar
+          enabled={enabled}
           text={props.command}
           placeholder={props.commandPlaceholder}
           hintKey={props.hintKey}

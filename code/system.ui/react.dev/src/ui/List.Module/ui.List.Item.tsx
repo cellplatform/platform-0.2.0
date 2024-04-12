@@ -22,7 +22,19 @@ export type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { index, Icon, hrDepth = -1, ns, title, imports, address, url, selected, focused } = props;
+  const {
+    index,
+    Icon,
+    hrDepth = -1,
+    ns,
+    title,
+    imports,
+    address,
+    url,
+    selected,
+    focused,
+    enabled = true,
+  } = props;
   const importsKeys = Object.keys(imports);
 
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
@@ -71,6 +83,9 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Render
    */
+
+  const { WHITE, BLUE } = COLORS;
+
   const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({
@@ -82,24 +97,28 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(color, 0.12)}`,
     }),
     link: css({
-      color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
+      color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
       textDecoration: 'none',
     }),
     linkDimmed: css({
       userSelect: 'none',
       color: Color.alpha(color, 0.4),
-      ':hover': { color: COLORS.BLUE },
+      ':hover': { color: BLUE },
     }),
     row: {
       base: css({
-        backgroundColor: selected ? (focused ? COLORS.BLUE : Color.alpha(color, 0.08)) : undefined,
+        backgroundColor: selected
+          ? focused && enabled
+            ? BLUE
+            : Color.alpha(color, 0.08)
+          : undefined,
         borderRadius: 3,
         position: 'relative',
         display: 'grid',
         gridTemplateColumns: 'auto auto 1fr',
       }),
       icon: css({
-        color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
+        color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
         marginLeft: 10,
         marginRight: 10,
         display: 'grid',

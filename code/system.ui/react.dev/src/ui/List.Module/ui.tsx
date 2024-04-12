@@ -48,6 +48,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
       position: 'relative',
       Scroll: scroll,
       Absolute: scroll ? 0 : undefined,
+      pointerEvents: enabled ? 'auto' : 'none',
     }),
     body: css({
       position: 'relative',
@@ -62,12 +63,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
     title: css({ marginBottom: 20 }),
     list: {
       outer: css({ marginTop: 30, display: 'grid' }),
-      inner: css({
-        minWidth: 550,
-        MarginX: 50,
-        filter: enabled ? undefined : 'grayscale(100%)',
-        opacity: enabled ? 1 : 0.3,
-      }),
+      inner: css({ minWidth: 550, MarginX: 50 }),
     },
   };
 
