@@ -6,7 +6,7 @@ describe('Dev', () => {
   it('imports base methods from underlying module', () => {
     expect(Dev.Bus).to.be.an('object');
     expect(Dev.Spec).to.be.an('object');
-    expect(Dev.SpecList).to.be.an('function');
+    expect(Dev.ModuleList).to.be.an('function');
     expect(Dev.Harness).to.be.an('function');
     expect(Dev.render).to.be.an('function');
     expect(Dev.headless).to.be.an('function');
