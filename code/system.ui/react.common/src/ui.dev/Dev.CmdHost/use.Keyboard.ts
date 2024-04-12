@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Keyboard, rx, type t } from './common';
+import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 export type ArrowKey = 'Up' | 'Down';
 export type ArrowKeyHandler = (e: ArrowKeyHandlerArgs) => void;
@@ -13,8 +13,11 @@ export function useKeyboard(
   options: {
     onArrowKey?: ArrowKeyHandler;
     onClear?: () => void;
+    autoGrabFocus?: boolean;
   } = {},
 ) {
+  const { autoGrabFocus = DEFAULTS.autoGrabFocus } = options;
+
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
@@ -42,7 +45,10 @@ export function useKeyboard(
 
     const keypress = Keyboard.until(dispose$);
     keypress.down$
-      .pipe(rx.filter((e) => Boolean(e.last?.is.letter || e.last?.is.number)))
+      .pipe(
+        rx.filter(() => autoGrabFocus),
+        rx.filter((e) => !!(e.last?.is.letter || e.last?.is.number)),
+      )
       .subscribe((e) => textboxRef?.focus());
 
     return () => {

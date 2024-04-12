@@ -1,8 +1,5 @@
 import type { t } from './common';
 
-export type CmdHostChangedHandler = (e: CmdHostChangedHandlerArgs) => void;
-export type CmdHostChangedHandlerArgs = { command: string };
-
 /**
  * <Component>
  */
@@ -18,10 +15,13 @@ export type CmdHostProps<T = t.SpecModule> = {
   badge?: t.ModuleListBadge;
   focused?: boolean;
   showParamDev?: boolean;
+  autoGrabFocus?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
-  onChanged?: t.CmdHostChangedHandler;
+  onReady?: CmdHostReadyHandler;
+  onChanged?: CmdHostChangedHandler;
   onCmdFocusChange?: t.TextInputFocusHandler;
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
@@ -29,3 +29,12 @@ export type CmdHostProps<T = t.SpecModule> = {
   onItemClick?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;
 };
+
+/**
+ * Events
+ */
+export type CmdHostChangedHandler = (e: CmdHostChangedHandlerArgs) => void;
+export type CmdHostChangedHandlerArgs = { command: string };
+
+export type CmdHostReadyHandler = (e: CmdHostReadyHandlerArgs) => void;
+export type CmdHostReadyHandlerArgs = { input: t.TextInputRef };
