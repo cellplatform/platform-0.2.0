@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TextInput } from '.';
 import { Color, Time, css, type t } from '../common';
 
@@ -16,7 +16,12 @@ export const Sample: React.FC<SampleProps> = (dev) => {
   const { debug, props } = dev;
   const inputRef = useRef<t.TextInputRef>(null);
 
-  const [value, setValue] = useState(props.value); // NB: done to simulate immediate (sync) updates.
+  /**
+   * Manage value state
+   * NB: done to simulate immediate (sync) updates.
+   */
+  const [value, setValue] = useState(props.value);
+  useEffect(() => setValue(props.value), [props.value]);
 
   /**
    * [Render]
