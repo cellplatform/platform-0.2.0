@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
 import { CmdHost } from 'sys.ui.react.common';
 import { Specs } from '../../test.ui/entry.Specs.mjs';
-import { Color, ObjectPath, Sync, css, rx, type t } from './common';
+import { Color, DEFAULTS, css, type t } from './common';
+import { useController } from './use.Controller';
 
 export type SampleHostProps = {
   pkg: t.ModuleDef;
   doc?: t.Lens;
-  path?: t.ObjectPath;
+  path?: t.CmdHostPaths;
   theme?: t.CommonTheme;
   enabled?: boolean;
   debug?: string;
@@ -14,22 +14,8 @@ export type SampleHostProps = {
 };
 
 export const SampleHost: React.FC<SampleHostProps> = (props) => {
-  const { theme, enabled = true, doc, path = [] } = props;
-
-  const [value, setValue] = useState('');
-  const [input, setInput] = useState<t.TextInputRef>();
-
-  useEffect(() => {
-    const life = rx.disposable();
-    const { dispose$ } = life;
-    if (doc && input) {
-      const initial = ObjectPath.resolve<string>(doc.current, path);
-      const listener = Sync.Textbox.listen(input, doc, path, { dispose$ });
-      listener.onChange((e) => setValue(e.text));
-      setValue(initial ?? '');
-    }
-    return life.dispose;
-  }, [doc?.instance, !!input, path?.join('.')]);
+  const { theme, doc, path = DEFAULTS.paths, enabled = true } = props;
+  const controller = useController({ enabled, doc, path });
 
   /**
    * Render
@@ -51,12 +37,15 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
         enabled={enabled}
         pkg={props.pkg}
         specs={Specs}
-        command={value}
+        command={controller.value}
         mutateUrl={false}
         autoGrabFocus={false}
-        theme={theme}
         listMinWidth={300}
-        onReady={(e) => setInput(e.input)}
+        focusOnClick={true}
+        theme={theme}
+        onReady={(e) => controller.onTextboxReady(e.textbox)}
+        onItemClick={async (e) => {
+        }}
       />
       <div {...styles.debug}>{props.debug}</div>
     </div>

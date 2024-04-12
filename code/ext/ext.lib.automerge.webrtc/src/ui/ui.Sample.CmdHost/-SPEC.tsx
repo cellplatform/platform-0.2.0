@@ -1,5 +1,6 @@
 import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
 import { SampleLayout } from './ui.Layout';
+import { DEFAULTS } from './common';
 
 type L = t.Lens;
 type T = { theme?: t.CommonTheme };
@@ -26,7 +27,7 @@ export default Dev.describe(name, async (e) => {
       d.theme = local.theme;
     });
 
-    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', { text: '' });
+    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
     monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
     monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
 
@@ -43,7 +44,7 @@ export default Dev.describe(name, async (e) => {
             theme={theme}
             left={lenses.left}
             right={lenses.right}
-            path={['text']}
+            path={DEFAULTS.paths}
           />
         );
       });
