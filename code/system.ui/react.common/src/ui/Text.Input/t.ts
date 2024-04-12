@@ -10,8 +10,11 @@ export type * from './t.Events';
  * such as focus/caret/selection etc.
  */
 export type TextInputRef = {
-  readonly current: string;
-  readonly selection: TextInputSelection;
+  readonly current: {
+    readonly value: string;
+    readonly selection: TextInputSelection;
+    readonly focused: boolean;
+  };
   events(dispose?: t.UntilObservable): t.TextInputEvents;
   focus(select?: boolean): void;
   blur(): void;
