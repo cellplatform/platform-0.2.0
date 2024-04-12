@@ -7,7 +7,7 @@ import { Util, Wrangle } from './u';
 /**
  * Types
  */
-export type HtmlInputProps = t.TextInputFocusProps &
+export type InputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   t.TextInputValue & {
     bus: t.TextInputBus;
@@ -30,7 +30,7 @@ export type HtmlInputProps = t.TextInputFocusProps &
 /**
  * Component
  */
-export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
+export const Input: React.FC<InputProps> = (props) => {
   const { bus, inputRef, value = '', selectionBackground, maxLength } = props;
   const {
     isPassword = DEFAULTS.props.isPassword,

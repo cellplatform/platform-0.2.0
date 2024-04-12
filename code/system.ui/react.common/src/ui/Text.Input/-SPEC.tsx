@@ -1,4 +1,5 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
+import { Hints } from './-SPEC.u.Hints';
 import { Sample } from './-SPEC.u.Sample';
 import { DEFAULTS, KeyboardMonitor, Time } from './common';
 
@@ -28,9 +29,10 @@ const initial: T = {
   },
 };
 
-export default Dev.describe('TextInput', (e) => {
+const name = 'TextInput';
+export default Dev.describe(name, (e) => {
   type LocalStoreDebug = T['debug'] & Pick<P, 'value' | 'theme'>;
-  const localstore = Dev.LocalStorage<LocalStoreDebug>('dev:sys.ui.TextInput');
+  const localstore = Dev.LocalStorage<LocalStoreDebug>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     ...initial.debug,
     theme: undefined,
@@ -54,7 +56,7 @@ export default Dev.describe('TextInput', (e) => {
       d.debug.elementPlaceholder = local.elementPlaceholder;
     });
 
-    KeyboardMonitor.on('CMD + KeyP', async (e) => {
+    KeyboardMonitor.on('CMD + KeyP', (e) => {
       e.handled();
       state.current.ref?.focus();
     });
@@ -72,7 +74,18 @@ export default Dev.describe('TextInput', (e) => {
 
         const props: t.TextInputProps = {
           ...e.state.props,
-          onChange: (e) => (local.value = e.to),
+          value: local.value,
+          onChange: async (e) => {
+            console.info('⚡️ onChange', e);
+            if (!debug.isUpdateEnabled) return;
+            local.value = e.to;
+            if (debug.isHintEnabled) {
+              const hint = Hints.lookup(e.to) ?? '';
+              await state.change((d) => (d.props.hint = hint));
+            } else {
+              await state.change((d) => (d.props.hint = ''));
+            }
+          },
           onReady(e) {
             console.log('⚡️ onReady:', e);
             state.change((d) => (d.ref = e.ref));
@@ -80,7 +93,7 @@ export default Dev.describe('TextInput', (e) => {
             // NB: disposable event subscriptions from [Ref].
             const events = e.ref.events();
             // events.$.subscribe((e) => console.info('⚡️ events.$:', e));
-            events.onChange((e) => console.info('⚡️ events.onChange:', e));
+            events.onChange((e) => console.info('⚡️ events$.onChange:', e));
           },
           onEnter(e) {
             console.info('⚡️ onEnter', e);
@@ -100,9 +113,7 @@ export default Dev.describe('TextInput', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'TextInput'} data={e.state} expand={1} />);
+    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
@@ -234,6 +245,14 @@ export default Dev.describe('TextInput', (e) => {
             });
           });
       });
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

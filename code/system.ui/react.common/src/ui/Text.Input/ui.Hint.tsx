@@ -1,17 +1,18 @@
-import { css, type t } from '../common';
+import { css, type t, Color } from '../common';
 import { Util } from './u';
 
-export type TextInputHintProps = {
+export type HintProps = {
   valueStyle: t.TextInputStyle;
   value: string;
   hint: string | JSX.Element;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 /**
  * Used for displaying an auto-complete "hint".
  */
-export const TextInputHint: React.FC<TextInputHintProps> = (props) => {
+export const Hint: React.FC<HintProps> = (props) => {
   const { value, hint, valueStyle } = props;
   const isString = typeof hint === 'string';
   const fontProps = Util.Css.pluckFont(valueStyle);
@@ -19,6 +20,7 @@ export const TextInputHint: React.FC<TextInputHintProps> = (props) => {
   /**
    * [Render]
    */
+  const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({
       Absolute: 0,
@@ -26,6 +28,7 @@ export const TextInputHint: React.FC<TextInputHintProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: `auto 1fr`,
       alignContent: 'center',
+      color,
     }),
     value: css({
       ...fontProps,

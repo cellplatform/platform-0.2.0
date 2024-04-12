@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-
+import { useRef, useState } from 'react';
 import { TextInput } from '.';
 import { Color, Time, css, type t } from '../common';
-import { Hints } from './-SPEC.u.Hints';
 
 export type SampleProps = {
   props: t.TextInputProps;
@@ -15,16 +13,10 @@ export type SampleProps = {
 };
 
 export const Sample: React.FC<SampleProps> = (dev) => {
-  const { debug } = dev;
-
+  const { debug, props } = dev;
   const inputRef = useRef<t.TextInputRef>(null);
-  const [value, setValue] = useState(dev.props.value);
-  const [hint, setHint] = useState(dev.props.hint);
 
-  /**
-   * Lifecycle
-   */
-  useEffect(() => setValue(dev.props.value), [dev.props.value]);
+  const [value, setValue] = useState(props.value); // NB: done to simulate immediate (sync) updates.
 
   /**
    * [Render]
@@ -34,8 +26,8 @@ export const Sample: React.FC<SampleProps> = (dev) => {
     label: css({ fontStyle: 'normal', display: 'grid', alignContent: 'center' }),
     key: css({
       fontSize: 10,
-      border: `solid 1px ${Color.format(-0.4)}`,
       borderRadius: 5,
+      border: `solid 1px ${Color.format(-0.4)}`,
       fontStyle: 'normal',
       fontWeight: 600,
       display: 'grid',
@@ -56,18 +48,12 @@ export const Sample: React.FC<SampleProps> = (dev) => {
       {...dev.props}
       ref={inputRef}
       value={value}
-      hint={debug.isHintEnabled ? hint : undefined}
-      placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
+      hint={props.hint}
+      placeholder={debug.elementPlaceholder ? elPlaceholder : props.placeholder}
       onChange={async (e) => {
         if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
-        if (debug.isUpdateEnabled) {
-          setValue(e.to);
-          if (debug.isHintEnabled) setHint(Hints.lookup(e.to ?? ''));
-        } else {
-          setHint('');
-        }
-        console.info('⚡️ onChange', e);
-        dev.props.onChange?.(e);
+        if (debug.isUpdateEnabled) setValue(e.to);
+        props.onChange?.(e);
       }}
     />
   );
