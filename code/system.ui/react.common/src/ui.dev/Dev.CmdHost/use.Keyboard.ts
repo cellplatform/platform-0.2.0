@@ -29,7 +29,7 @@ export function useKeyboard(
       options.onArrowKey?.({ key, meta });
     };
 
-    const handlers = Keyboard.on({
+    const handlers = Keyboard.until(dispose$).on({
       ['ALT + KeyJ'](e) {
         e.handled();
         textbox?.focus();
@@ -54,9 +54,6 @@ export function useKeyboard(
       .subscribe((e) => textbox?.focus());
 
     if (!enabled) handlers.dispose();
-    return () => {
-      handlers.dispose();
-      dispose();
-    };
+    return dispose;
   }, [textbox, enabled, autoGrabFocus]);
 }

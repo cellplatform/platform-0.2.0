@@ -39,4 +39,4 @@ export type CmdHostChangedHandler = (e: CmdHostChangedHandlerArgs) => void;
 export type CmdHostChangedHandlerArgs = { command: string };
 
 export type CmdHostReadyHandler = (e: CmdHostReadyHandlerArgs) => void;
-export type CmdHostReadyHandlerArgs = { input: t.TextInputRef };
+export type CmdHostReadyHandlerArgs = { textbox: t.TextInputRef };

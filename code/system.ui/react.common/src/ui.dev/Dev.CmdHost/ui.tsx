@@ -7,11 +7,11 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
 
   const readyRef = useRef(false);
-  const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
-  useKeyboard(textboxRef, {
+  const [textbox, setTextbox] = useState<t.TextInputRef>();
+  useKeyboard(textbox, {
     enabled,
     autoGrabFocus: props.autoGrabFocus,
-    onArrowKey: () => textboxRef?.focus(),
+    onArrowKey: () => textbox?.focus(),
     onClear: () => filterChanged(''),
   });
 
@@ -19,12 +19,11 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const input = textboxRef;
-    if (input && !readyRef.current) {
+    if (textbox && !readyRef.current) {
       readyRef.current = true;
-      props.onReady?.({ input });
+      props.onReady?.({ textbox });
     }
-  }, [!!textboxRef]);
+  }, [!!textbox]);
 
   /**
    * Handlers
@@ -73,7 +72,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           placeholder={props.commandPlaceholder}
           hintKey={props.hintKey}
           focusOnReady={props.focusOnReady ?? true}
-          onReady={(e) => setTextboxRef(e.ref)}
+          onReady={(e) => setTextbox(e.ref)}
           onChange={(e) => filterChanged(e.to)}
           onFocusChange={props.onCmdFocusChange}
           onKeyDown={props.onKeyDown}
