@@ -38,14 +38,18 @@ export default Dev.describe(name, async (e) => {
       .render<T>(async (e) => {
         const { theme } = e.state;
         Dev.Theme.background(ctx, theme, 1);
+
         /**
          * TODO 🐷
          * - optionally load for env-var.
          */
+        const { Specs } = await import('../../test.ui/entry.Specs.mjs');
+
         return (
           <SampleLayout
             pkg={Pkg}
             theme={theme}
+            imports={Specs}
             left={lenses.left}
             right={lenses.right}
             path={DEFAULTS.paths}
