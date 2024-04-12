@@ -18,7 +18,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     enabled,
     autoGrabFocus: props.autoGrabFocus,
     onArrowKey: () => textbox?.focus(),
-    onClear: () => filterChanged(''),
+    onClear: () => handleFilterChanged(''),
   });
 
   /**
@@ -34,7 +34,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Handlers
    */
-  const filterChanged = (command: string) => props.onChanged?.({ command });
+  const handleFilterChanged = (command: string) => props.onChanged?.({ command });
   const handleClick = () => {
     if (focusOnClick && textbox) textbox.focus();
   };
@@ -82,7 +82,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           hintKey={props.hintKey}
           focusOnReady={props.focusOnReady ?? true}
           onReady={(e) => setTextbox(e.ref)}
-          onChange={(e) => filterChanged(e.to)}
+          onChange={(e) => handleFilterChanged(e.to)}
           onFocusChange={props.onCmdFocusChange}
           onKeyDown={props.onKeyDown}
           onKeyUp={props.onKeyUp}
