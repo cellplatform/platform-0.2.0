@@ -26,7 +26,11 @@ type TShared = {
   main?: t.Lens<t.SampleSharedMain>;
   harness?: t.Lens<t.HarnessShared>;
 };
-type T = { reload?: boolean; accessToken?: string; stream?: MediaStream };
+type T = {
+  reload?: boolean;
+  accessToken?: string;
+  stream?: MediaStream;
+};
 const initial: T = {};
 
 type SampleNamespace = 'foo.main' | 'foo.harness';
