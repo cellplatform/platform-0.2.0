@@ -1,3 +1,4 @@
+import { isValidElement } from 'react';
 import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
 import { fields, toggleField } from './u.fields';
 import { format } from './u.format';
@@ -83,6 +84,8 @@ export const Wrangle = {
   },
 
   title(input?: t.PropListTitleInput): t.PropListTitle {
+    if (isValidElement(input)) return { value: input };
+
     if (!input) return { value: [null, null] };
 
     if (typeof input === 'object' && !Array.isArray(input)) {
