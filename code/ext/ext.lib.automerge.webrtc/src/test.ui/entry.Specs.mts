@@ -14,6 +14,7 @@ export const Specs = {
   [`${ns}.ui.Sample.CmdHost`]: () => import('../ui/ui.Sample.CmdHost/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
+  [`${ns}.ui.Sample.03`]: () => import('../ui/ui.Sample.03/-SPEC'),
 } as t.SpecImports;
 
 export default Specs;
