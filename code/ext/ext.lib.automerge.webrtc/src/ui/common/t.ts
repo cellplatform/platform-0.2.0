@@ -21,6 +21,7 @@ export type {
   DevCtxState,
   DevTools,
   InfoDataVisible,
+  MarginInput,
   PropListItem,
   PropListProps,
   TextInputRef,
