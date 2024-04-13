@@ -40,9 +40,10 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
    */
   useEffect(() => {
     const { selected } = Wrangle.url();
-    let index = 0;
-    if (selected && imports[selected])
+    let index = selectedIndex;
+    if (selected && imports[selected]) {
       index = Wrangle.selectedIndexFromNamespace(imports, selected);
+    }
     setSelectedIndex(index);
   }, [total, command]);
 
