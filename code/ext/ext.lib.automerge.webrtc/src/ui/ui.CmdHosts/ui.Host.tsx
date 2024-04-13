@@ -2,16 +2,7 @@ import { CmdHost } from 'sys.ui.react.common';
 import { Color, DEFAULTS, css, type t } from './common';
 import { useController } from './use.Controller';
 
-export type SampleHostProps = {
-  pkg: t.ModuleDef;
-  imports?: t.ModuleImports;
-  doc?: t.Lens;
-  path?: t.CmdHostPaths;
-  theme?: t.CommonTheme;
-  enabled?: boolean;
-  debug?: string;
-  style?: t.CssValue;
-};
+export type SampleHostProps = t.NetworkCmdhost & { debug?: string };
 
 export const SampleHost: React.FC<SampleHostProps> = (props) => {
   const { theme, doc, path = DEFAULTS.paths, enabled = true, debug, imports } = props;
@@ -25,15 +16,16 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
     base: css({ position: 'relative', display: 'grid', color }),
     debug: css({
       Absolute: [-12, null, null, -12],
+      fontSize: 22,
       display: 'grid',
       placeItems: 'center',
-      fontSize: 22,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <CmdHost.Stateful
+        theme={theme}
         enabled={enabled}
         pkg={props.pkg}
         imports={imports}
@@ -43,7 +35,6 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
         autoGrabFocus={false}
         listMinWidth={300}
         focusOnClick={true}
-        theme={theme}
         onReady={(e) => controller.onTextboxReady(e.textbox)}
         onItemSelect={(e) => controller.onSelectionChange(e.index)}
         onItemClick={(e) => controller.load(e.address)}

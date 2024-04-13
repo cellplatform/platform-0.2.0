@@ -4,9 +4,9 @@ import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
   const {
-    pkg,
     theme,
     enabled = true,
+    pkg = DEFAULTS.pkg,
     applyFilter = DEFAULTS.applyFilter,
     focusOnClick = DEFAULTS.focusOnClick,
   } = props;

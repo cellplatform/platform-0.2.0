@@ -4,7 +4,7 @@ import type { t } from './common';
  * <Component>
  */
 export type CmdHostProps = {
-  pkg: { name: string; version: string };
+  pkg?: { name: string; version: string };
   imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;

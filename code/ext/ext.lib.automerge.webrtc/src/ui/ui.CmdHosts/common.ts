@@ -4,7 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-const paths: t.CmdHostPaths = {
+const paths: t.CmdhostPaths = {
   cmd: ['cmd'],
   address: ['address'],
   selected: ['selected'],

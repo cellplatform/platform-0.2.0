@@ -6,7 +6,7 @@ export type SampleLayoutProps = {
   imports?: t.ModuleImports;
   left?: t.Lens;
   right?: t.Lens;
-  path?: t.CmdHostPaths;
+  path?: t.CmdhostPaths;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

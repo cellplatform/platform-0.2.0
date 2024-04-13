@@ -2,7 +2,7 @@ import { DEFAULTS, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
 
-export const resolver = (path: t.CmdHostPaths = DEFAULTS.paths) => {
+export const resolver = (path: t.CmdhostPaths = DEFAULTS.paths) => {
   const resolve = ObjectPath.resolve;
   return {
     cmd: (doc: O) => resolve<string>(doc, path.cmd),

@@ -11,7 +11,7 @@ type E = t.LensEvents | t.DocEvents;
 export function useController(args: {
   enabled?: boolean;
   doc?: t.Lens | t.DocRef;
-  path?: t.CmdHostPaths;
+  path?: t.CmdhostPaths;
   imports?: t.ModuleImports;
   debug?: string;
 }) {
