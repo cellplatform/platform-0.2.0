@@ -3,6 +3,7 @@
  */
 import { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } from 'ramda';
 export const R = { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } as const;
+
 export { ErrorBoundary } from 'react-error-boundary';
 export { Observable, Subject } from 'rxjs';
 

@@ -7,7 +7,9 @@ import { Dev } from '../ui.dev';
   console.info(`Pkg:`, Pkg);
   const badge = Dev.ModuleList.DEFAULTS.badge;
   const { Specs } = await import('./entry.Specs.mjs');
-  const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
+
+  const keyboard = false;
+  const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3, keyboard });
   const root = createRoot(document.getElementById('root')!);
   root.render(<StrictMode>{el}</StrictMode>);
 })();
