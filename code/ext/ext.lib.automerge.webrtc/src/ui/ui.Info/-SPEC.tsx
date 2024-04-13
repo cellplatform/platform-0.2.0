@@ -1,24 +1,10 @@
 import { Info } from '.';
-import {
-  COLORS,
-  Color,
-  Dev,
-  PeerUI,
-  Pkg,
-  PropList,
-  TestEdge,
-  WebStore,
-  css,
-  type t,
-} from '../../test.ui';
+import { COLORS, Color, Dev, PeerUI, Pkg, TestEdge, WebStore, css, type t } from '../../test.ui';
 
 type P = t.InfoProps;
-type T = {
-  props: P;
-  debug: { visible?: boolean };
-  data: { useLens?: boolean };
-};
-const initial: T = { props: {}, debug: {}, data: {} };
+type D = { dataUseLens?: boolean; dataVisible?: boolean; dataJsonVisible?: boolean };
+type T = D & { props: P };
+const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
@@ -37,12 +23,13 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = Pick<P, 'fields' | 'theme'> & Pick<T['data'], 'useLens'>;
+  type LocalStore = D & Pick<P, 'fields' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     fields: DEFAULTS.fields.default,
     theme: undefined,
-    useLens: false,
+    dataUseLens: false,
+    dataJsonVisible: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -53,7 +40,8 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
-      d.data.useLens = local.useLens;
+      d.dataUseLens = local.dataUseLens;
+      d.dataJsonVisible = local.dataJsonVisible;
     });
 
     ctx.debug.width(330);
@@ -61,29 +49,23 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { props, dataVisible, dataJsonVisible, dataUseLens } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
-        const useLens = e.state.data.useLens;
-        const visible = debug.visible ?? true;
+        const visible = dataVisible ?? true;
         const data: t.InfoData = {
           network: self.network,
           repo: { store, index },
           visible: {
             value: visible,
-            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
+            onToggle: (e) => state.change((d) => (d.dataVisible = e.next)),
           },
           shared: {
-            lens: useLens ? ['sys', 'peers'] : undefined,
+            lens: dataUseLens ? ['sys', 'peers'] : undefined,
+            object: { visible: dataJsonVisible },
             onIconClick(e) {
               console.info('⚡️ shared.onIconClick', e);
-              state.change((d) => {
-                const fields = d.props.fields ?? [];
-                d.props.fields = fields.includes('Network.Shared.Json')
-                  ? fields.filter((f) => f !== 'Network.Shared.Json')
-                  : [...fields, 'Network.Shared.Json'];
-                local.fields = PropList.Wrangle.fields(d.props.fields);
-              });
+              state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
             },
           },
         };
@@ -157,11 +139,11 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Data', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.data.useLens;
+        const value = (state: T) => !!state.dataUseLens;
         btn
           .label((e) => `use shared.lens`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.useLens = Dev.toggle(d.data, 'useLens'))));
+          .onClick((e) => e.change((d) => (local.dataUseLens = Dev.toggle(d, 'dataUseLens'))));
       });
     });
 
