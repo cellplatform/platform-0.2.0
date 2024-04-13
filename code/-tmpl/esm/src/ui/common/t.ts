@@ -12,6 +12,7 @@ export type {
   CssEdgesInput,
   CssValue,
   DevCtxState,
+  MarginInput,
   PropListItem,
   PropListProps,
   RenderCountProps,

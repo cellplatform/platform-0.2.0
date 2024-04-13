@@ -46,6 +46,12 @@ export default Dev.describe(name, (e) => {
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+    });
   });
 
   e.it('ui:footer', async (e) => {
