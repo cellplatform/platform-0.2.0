@@ -17,13 +17,13 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       pkg={props.pkg}
       imports={imports}
       command={controller.cmd}
-      selectedIndex={controller.selected}
+      selectedIndex={controller.selected.index}
       mutateUrl={false}
       autoGrabFocus={false}
       listMinWidth={300}
       focusOnClick={true}
       onReady={(e) => controller.onTextboxReady(e.textbox)}
-      onItemSelect={(e) => controller.onSelectionChange(e.index)}
+      onItemSelect={(e) => controller.onSelectionChange(e.address)}
       onItemClick={(e) => controller.load(e.address)}
     />
   );

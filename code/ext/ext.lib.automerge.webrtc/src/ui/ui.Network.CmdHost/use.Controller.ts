@@ -16,7 +16,7 @@ export function useController(args: {
   debug?: string;
 }) {
   const { enabled = true, doc, path = DEFAULTS.paths, debug, imports } = args;
-  const [selected, setSelected] = useState(0);
+  const [selectedUri, setSelectedUri] = useState('');
   const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
@@ -46,12 +46,12 @@ export function useController(args: {
   }, [enabled, doc?.instance, !!textbox, path.cmd.join('.')]);
 
   /**
-   * Selected index
+   * Selected item
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.selected(doc) ?? 0);
-    changed$?.subscribe((value) => setSelected(value));
+    const changed$ = changedValue(events, (doc) => resolve.selected(doc) ?? '');
+    changed$?.subscribe((uri) => setSelectedUri(uri));
     return events?.dispose;
   }, [enabled, doc?.instance, path.selected.join('.')]);
 
@@ -67,6 +67,7 @@ export function useController(args: {
 
       /**
        * TODO 🐷
+       * Load the module, render and display it <somehow/somewhere>.
        */
       console.log(debug, 'URI', uri, await importer?.());
     });
@@ -79,15 +80,24 @@ export function useController(args: {
   return {
     cmd,
     textbox,
-    selected,
-    async load(address?: string) {
+    selected: {
+      uri: selectedUri,
+      get index() {
+        if (!imports) return -1;
+        return Object.keys(imports).findIndex((uri) => uri === selectedUri);
+      },
+    },
+
+    async load(address?: t.UriString) {
       doc?.change((d) => ObjectPath.mutate(d, path.uri, address));
     },
+
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);
     },
-    onSelectionChange(index: t.Index) {
-      doc?.change((d) => ObjectPath.mutate(d, path.selected, index));
+
+    onSelectionChange(uri?: t.UriString) {
+      doc?.change((d) => ObjectPath.mutate(d, path.selected, uri));
     },
   } as const;
 }
