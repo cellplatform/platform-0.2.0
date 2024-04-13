@@ -62,7 +62,12 @@ export default Dev.describe(name, async (e) => {
           },
           shared: {
             lens: dataUseLens ? ['sys', 'peers'] : undefined,
-            object: { visible: dataJsonVisible },
+            object: {
+              visible: dataJsonVisible,
+              mutate(obj: any) {
+                // obj['foo'] = 123;
+              },
+            },
             onIconClick(e) {
               console.info('⚡️ shared.onIconClick', e);
               state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));

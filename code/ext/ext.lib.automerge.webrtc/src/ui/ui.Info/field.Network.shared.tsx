@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, css, type t } from './common';
+import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, R, css, type t } from './common';
 
 /**
  * Shared network state (transient document).
@@ -98,6 +98,9 @@ const wrangle = {
     let output: any = { ...obj, sys: { ...obj.sys, docs } };
     const lens = data.shared?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
+
+    const formatOutput = data.shared?.object?.mutate;
+    if (formatOutput) formatOutput(output);
 
     let name = data.shared?.name ?? '';
     if (!name && lens) name = lens.join('.');

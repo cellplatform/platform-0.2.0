@@ -22,12 +22,20 @@ export type InfoData = {
   peer?: PeerInfoData['peer'];
   repo?: AutomergeInfoData['repo'];
   network?: t.NetworkStore;
-  shared?: {
-    name?: string;
-    lens?: t.ObjectPath;
-    object?: { visible?: boolean; expand?: { level?: number; paths?: string[] } };
-    onIconClick?: (e: {}) => void;
-  };
+  shared?: InfoDataShared;
+};
+
+export type InfoDataShared = {
+  name?: string;
+  lens?: t.ObjectPath;
+  object?: InfoDataObject;
+  onIconClick?: (e: {}) => void;
+};
+
+export type InfoDataObject = {
+  visible?: boolean;
+  expand?: { level?: number; paths?: string[] };
+  mutate?: <T>(fn: (mutate: T) => void) => void;
 };
 
 /**
