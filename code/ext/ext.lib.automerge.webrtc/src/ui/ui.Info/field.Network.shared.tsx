@@ -77,6 +77,7 @@ const wrangle = {
   jsonObject(data: t.InfoData, shared?: t.DocRef<t.CrdtShared>, theme?: t.CommonTheme) {
     const network = data.network;
     if (!network) return;
+    if (data.shared?.object?.visible === false) return;
 
     const formatUri = (uri: string) => Doc.Uri.automerge(uri, { shorten: 4 });
     const obj = shared?.toObject();

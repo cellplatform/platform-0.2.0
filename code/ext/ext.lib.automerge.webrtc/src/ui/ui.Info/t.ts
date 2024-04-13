@@ -25,7 +25,7 @@ export type InfoData = {
   shared?: {
     name?: string;
     lens?: t.ObjectPath;
-    object?: { expand?: { level?: number; paths?: string[] } };
+    object?: { visible?: boolean; expand?: { level?: number; paths?: string[] } };
     onIconClick?: (e: {}) => void;
   };
 };
