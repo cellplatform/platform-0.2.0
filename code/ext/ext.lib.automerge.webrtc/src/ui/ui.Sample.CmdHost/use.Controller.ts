@@ -14,7 +14,7 @@ export function useController(args: {
   debug?: string;
 }) {
   const { enabled = true, doc, path = DEFAULTS.paths, debug, imports } = args;
-  const [value, setValue] = useState('');
+  const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
   /**
@@ -26,8 +26,8 @@ export function useController(args: {
     if (enabled && doc && textbox) {
       const initial = ObjectPath.resolve<string>(doc.current, path.cmd);
       const listener = Sync.Textbox.listen(textbox, doc, path.cmd, { dispose$ });
-      listener.onChange((e) => setValue(e.text));
-      setValue(initial ?? '');
+      listener.onChange((e) => setCmd(e.text));
+      setCmd(initial ?? '');
     }
     return life.dispose;
   }, [enabled, doc?.instance, !!textbox, path.cmd.join('.')]);
@@ -47,6 +47,18 @@ export function useController(args: {
     changed$?.subscribe(async (doc) => {
       const address = resolve(doc) || '';
       const importer = imports?.[address];
+
+      /**
+       * TODO 🐷
+       */
+      console.group(debug);
+
+      console.log('address', address);
+      console.log('importer', importer);
+      const m = await importer?.();
+      console.log('m', m);
+
+      console.groupEnd();
     });
     return events?.dispose;
   }, [!!imports, !!doc]);
@@ -55,11 +67,9 @@ export function useController(args: {
    * API
    */
   return {
-    value,
+    cmd,
     textbox,
-    onTextboxReady(textbox: t.TextInputRef) {
-      setTextbox(textbox);
-    },
+    onTextboxReady: (textbox: t.TextInputRef) => setTextbox(textbox),
     async load(address?: string) {
       doc?.change((d) => ObjectPath.mutate(d, path.address, address));
     },

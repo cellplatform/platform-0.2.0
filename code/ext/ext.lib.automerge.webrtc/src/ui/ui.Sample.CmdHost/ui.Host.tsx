@@ -37,7 +37,7 @@ export const SampleHost: React.FC<SampleHostProps> = (props) => {
         enabled={enabled}
         pkg={props.pkg}
         imports={imports}
-        command={controller.value}
+        command={controller.cmd}
         mutateUrl={false}
         autoGrabFocus={false}
         listMinWidth={300}
