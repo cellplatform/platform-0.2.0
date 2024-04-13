@@ -9,7 +9,7 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'Sample.CmdHost';
+const name = 'Network.CmdHosts';
 export default Dev.describe(name, async (e) => {
   const left = await TestEdge.createEdge('Left');
   const right = await TestEdge.createEdge('Right');
