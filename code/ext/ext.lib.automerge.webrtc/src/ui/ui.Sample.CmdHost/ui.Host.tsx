@@ -15,7 +15,6 @@ export type SampleHostProps = {
 
 export const SampleHost: React.FC<SampleHostProps> = (props) => {
   const { theme, doc, path = DEFAULTS.paths, enabled = true, debug, imports } = props;
-
   const controller = useController({ enabled, doc, path, imports, debug });
 
   /**

@@ -1,6 +1,6 @@
 import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
-import { SampleLayout } from './ui.Layout';
 import { DEFAULTS } from './common';
+import { SampleLayout } from './ui.Layout';
 
 type L = t.Lens;
 type T = { theme?: t.CommonTheme };
@@ -65,12 +65,15 @@ export default Dev.describe(name, async (e) => {
     TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
     TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
-    TestEdge.dev.infoPanels(dev, left.network, right.network);
+    TestEdge.dev.infoPanels(dev, left.network, right.network, { shared: { lens: ['ns', 'foo'] } });
 
     dev.hr(5, 20);
+
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (e) => (local.theme = e));
     });
+
+    dev.hr(5, 20);
   });
 });
 
