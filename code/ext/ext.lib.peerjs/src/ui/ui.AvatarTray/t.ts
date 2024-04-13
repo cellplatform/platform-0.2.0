@@ -10,6 +10,7 @@ export type AvatarTrayProps = {
   gap?: t.Pixels;
   borderRadius?: t.Pixels;
   emptyMessage?: string | JSX.Element;
+  margin?: t.MarginInput;
   style?: t.CssValue;
   onSelection?: t.PeerStreamSelectionHandler;
   onTotalChanged?: AvatarTrayTotalChangedHandler;

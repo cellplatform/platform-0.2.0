@@ -7,6 +7,7 @@ export type { CSSProperties } from 'react';
  * @system
  */
 export type {
+  CommonTheme,
   DomRect,
   EdgePos,
   EdgePosition,
@@ -15,6 +16,8 @@ export type {
   EdgePositionY,
   PixelOffset,
   Pixels,
+  Margin,
+  MarginInput,
 } from 'sys.types/src/types';
 export type {
   KeyboardKeypress,
@@ -33,8 +36,3 @@ export type { DevCtx, DevCtxState } from './common/t';
 export type * from './ui.dev/t';
 export type * from './ui.tools/t';
 export type * from './ui/t';
-
-/**
- * Common Types
- */
-export type CommonTheme = 'Light' | 'Dark';

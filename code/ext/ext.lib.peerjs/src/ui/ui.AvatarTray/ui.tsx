@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { COLORS, Color, DEFAULTS, css, rx, type t } from './common';
+import { COLORS, Color, DEFAULTS, Style, css, rx, type t } from './common';
 import { Avatar } from './ui.Avatar';
 import { useMediaStreams } from './use.MediaStreams';
 
@@ -50,6 +50,7 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
       minHeight: size,
       display: 'grid',
       placeItems: 'center',
+      ...Style.toMargins(props.margin),
     }),
     body: css({ display: 'flex', flexWrap: 'wrap', gap: `${gap}px` }),
     empty: css({ fontSize: 14, color: Color.alpha(COLORS.DARK, 0.2) }),

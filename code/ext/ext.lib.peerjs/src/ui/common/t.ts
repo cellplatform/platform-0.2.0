@@ -8,6 +8,7 @@ export type {
   CssValue,
   DevCtxState,
   DevTools,
+  MarginInput,
   Pixels,
   PropListFieldSelectorClickHandler,
   PropListItem,
