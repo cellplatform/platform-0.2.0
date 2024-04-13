@@ -37,6 +37,7 @@ export function listen<T extends O>(
    * Changes from the <input> element.
    */
   const input$ = event.textbox.change$.pipe(
+    rx.filter((e) => e.to !== resolve(doc.current, path)),
     rx.map((e) => Calc.diff(e.from, e.to, e.selection.start)),
     rx.filter((diff) => diff.index >= 0),
   );
