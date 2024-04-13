@@ -80,14 +80,14 @@ export function useController(args: {
     cmd,
     textbox,
     selected,
+    async load(address?: string) {
+      doc?.change((d) => ObjectPath.mutate(d, path.address, address));
+    },
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);
     },
     onSelectionChange(index: t.Index) {
       doc?.change((d) => ObjectPath.mutate(d, path.selected, index));
-    },
-    async load(address?: string) {
-      doc?.change((d) => ObjectPath.mutate(d, path.address, address));
     },
   } as const;
 }
