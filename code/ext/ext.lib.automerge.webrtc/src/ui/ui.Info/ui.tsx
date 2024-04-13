@@ -57,4 +57,4 @@ const Wrangle = {
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
   },
-};
+} as const;

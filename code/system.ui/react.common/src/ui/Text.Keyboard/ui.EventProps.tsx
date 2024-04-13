@@ -1,5 +1,5 @@
-import { css, FC, type t } from './common';
 import { PropList } from '../PropList';
+import { css, FC, type t } from './common';
 
 export type EventPropsProps = {
   event?: t.KeyboardKeypress;

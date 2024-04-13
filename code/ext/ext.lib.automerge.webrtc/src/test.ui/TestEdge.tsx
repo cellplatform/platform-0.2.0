@@ -78,7 +78,7 @@ const headerFooterConnectors = (dev: t.DevTools, left: N, right: N) => {
 /**
  * Info Panels
  */
-type InfoPanelOptions = { data?: t.InfoData; margin?: t.MarginInput };
+type InfoPanelOptions = { title?: t.RenderInput; data?: t.InfoData; margin?: t.MarginInput };
 
 const infoPanels = (dev: t.DevTools, left: N, right: N, options: InfoPanelOptions = {}) => {
   const render = (network: N) => {
@@ -93,6 +93,7 @@ const infoPanel = (dev: t.DevTools, network: N, options: InfoPanelOptions = {}) 
   const data = R.merge(options.data ?? {}, { network }) as t.InfoData;
   return (
     <PeerRepoList.Info
+      title={options.title}
       margin={options.margin}
       fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
       data={data}

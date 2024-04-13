@@ -11,8 +11,9 @@ export type { ConnectorBehavior, PeerStreamSelectionHandler } from 'ext.lib.peer
 /**
  * @system
  */
-export type { SpecImport, SpecImports } from 'sys.test.spec/src/types';
 export type { ImmutableRef } from 'sys.types/src/types';
+
+export type { SpecImport, SpecImports } from 'sys.test.spec/src/types';
 export type {
   CommonTheme,
   CssEdgesInput,
@@ -25,6 +26,7 @@ export type {
   PropListItem,
   PropListProps,
   TextInputRef,
+  RenderInput,
 } from 'sys.ui.react.common/src/types';
 
 /**

@@ -4,10 +4,6 @@ export * from '../common';
 /**
  * Constants
  */
-const paths: t.CmdhostPaths = {
-  cmd: ['cmd'],
-  address: ['address'],
-  selected: ['selected'],
-};
+import { paths } from '../ui.Network.CmdHost/common';
 
 export const DEFAULTS = { paths } as const;

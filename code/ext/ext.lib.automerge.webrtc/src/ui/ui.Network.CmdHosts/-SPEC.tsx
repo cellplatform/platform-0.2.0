@@ -1,4 +1,5 @@
-import { Dev, Pkg, TestEdge, type t } from '../../test.ui';
+import { css, Dev, Pkg, TestEdge, type t } from '../../test.ui';
+import { monitorPeer } from '../ui.Network.CmdHost/-SPEC';
 import { DEFAULTS } from './common';
 import { SampleLayout } from './ui.Layout';
 
@@ -13,7 +14,7 @@ const name = 'Network.CmdHosts';
 export default Dev.describe(name, async (e) => {
   const left = await TestEdge.createEdge('Left');
   const right = await TestEdge.createEdge('Right');
-  const lenses: { left?: L | undefined; right?: L } = {};
+  const lenses: { left?: L; right?: L } = {};
 
   type LocalStore = Pick<T, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -28,8 +29,8 @@ export default Dev.describe(name, async (e) => {
     });
 
     const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
-    monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
-    monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
+    monitorPeer(dev, left.network, (shared) => (lenses.left = toLens(shared)));
+    monitorPeer(dev, right.network, (shared) => (lenses.right = toLens(shared)));
 
     ctx.debug.width(330);
     ctx.subject
@@ -41,7 +42,7 @@ export default Dev.describe(name, async (e) => {
 
         /**
          * TODO 🐷
-         * - optionally load for env-var.
+         * - optionally load from env-var.
          */
         const { Specs } = await import('../../test.ui/entry.Specs.mjs');
 
@@ -65,7 +66,18 @@ export default Dev.describe(name, async (e) => {
     TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
     TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
-    TestEdge.dev.infoPanels(dev, left.network, right.network, { shared: { lens: ['ns', 'foo'] } });
+
+    const data: t.InfoData = { shared: { lens: ['ns', 'foo'] } };
+    const render = (title: string, network: t.NetworkStore) => {
+      const elTitle = <div {...css({ fontSize: 22 })}>{title}</div>;
+      return dev.row((e) => {
+        return TestEdge.dev.infoPanel(dev, network, { title: elTitle, data });
+      });
+    };
+
+    render('🐷', left.network);
+    dev.hr(5, 20);
+    render('🌼', right.network);
 
     dev.hr(5, 20);
 
@@ -76,18 +88,3 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
   });
 });
-
-/**
- * Helpers
- */
-const monitorPeer = (
-  dev: t.DevTools,
-  edge: t.NetworkConnectionEdge,
-  toLens?: (shared: t.NetworkStoreShared) => t.Lens,
-) => {
-  const handleConnection = async () => {
-    toLens?.(await edge.network.shared());
-    dev.redraw();
-  };
-  edge.network.peer.events().cmd.conn$.subscribe(handleConnection);
-};

@@ -1,22 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { CmdHost } from 'sys.ui.react.common';
+import { DEFAULTS, type t } from './common';
+import { useController } from './use.Controller';
 
-export const View: React.FC<t.NetworkCmdhost> = (props) => {
-  const { theme } = props;
+export const View: React.FC<t.NetworkCmdHost> = (props) => {
+  const { theme, doc, path = DEFAULTS.paths, enabled = true, imports, debug } = props;
+  const controller = useController({ enabled, doc, path, imports, debug });
 
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
-  const styles = {
-    base: css({
-      color,
-      display: 'grid',
-    }),
-  };
-
   return (
-    <div {...css(styles.base, props.style)}>
-    </div>
+    <CmdHost.Stateful
+      style={props.style}
+      theme={theme}
+      enabled={enabled}
+      pkg={props.pkg}
+      imports={imports}
+      command={controller.cmd}
+      selectedIndex={controller.selected}
+      mutateUrl={false}
+      autoGrabFocus={false}
+      listMinWidth={300}
+      focusOnClick={true}
+      onReady={(e) => controller.onTextboxReady(e.textbox)}
+      onItemSelect={(e) => controller.onSelectionChange(e.index)}
+      onItemClick={(e) => controller.load(e.address)}
+    />
   );
 };

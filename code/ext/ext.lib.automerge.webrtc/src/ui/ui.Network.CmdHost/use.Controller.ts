@@ -11,7 +11,7 @@ type E = t.LensEvents | t.DocEvents;
 export function useController(args: {
   enabled?: boolean;
   doc?: t.Lens | t.DocRef;
-  path?: t.CmdhostPaths;
+  path?: t.CmdHostPaths;
   imports?: t.ModuleImports;
   debug?: string;
 }) {
@@ -56,19 +56,19 @@ export function useController(args: {
   }, [enabled, doc?.instance, path.selected.join('.')]);
 
   /**
-   * Importer
+   * Importer (URI)
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.address(doc) ?? '');
+    const changed$ = changedValue(events, (doc) => resolve.uri(doc) ?? '');
 
-    changed$?.pipe(rx.filter((address) => !!address)).subscribe(async (address) => {
-      const importer = imports?.[address];
+    changed$?.pipe(rx.filter((uri) => !!uri)).subscribe(async (uri) => {
+      const importer = imports?.[uri];
 
       /**
        * TODO 🐷
        */
-      console.log(debug, 'address', address, await importer?.());
+      console.log(debug, 'URI', uri, await importer?.());
     });
     return events?.dispose;
   }, [enabled, !!imports, doc?.instance]);
@@ -81,7 +81,7 @@ export function useController(args: {
     textbox,
     selected,
     async load(address?: string) {
-      doc?.change((d) => ObjectPath.mutate(d, path.address, address));
+      doc?.change((d) => ObjectPath.mutate(d, path.uri, address));
     },
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);

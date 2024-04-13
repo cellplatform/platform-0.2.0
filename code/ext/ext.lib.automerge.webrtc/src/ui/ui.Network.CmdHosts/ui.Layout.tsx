@@ -1,18 +1,19 @@
+import { NetworkCmdHost } from '../ui.Network.CmdHost';
 import { Color, css, type t } from './common';
-import { SampleHost } from './ui.Host';
 
 export type SampleLayoutProps = {
   pkg: t.ModuleDef;
   imports?: t.ModuleImports;
   left?: t.Lens;
   right?: t.Lens;
-  path?: t.CmdhostPaths;
+  path?: t.CmdHostPaths;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const { left, right, theme } = props;
+  const isDark = theme === 'Dark';
 
   /**
    * Render
@@ -29,29 +30,45 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
       }),
       footer: css({ height: 35, backgroundColor: Color.lighten(Color.DARK, 10) }),
     },
+    host: {
+      base: css({
+        position: 'relative',
+        display: 'grid',
+        backgroundColor: Color.format(isDark ? 0.01 : 0),
+      }),
+      debug: css({
+        Absolute: [-12, null, null, -12],
+        fontSize: 22,
+        display: 'grid',
+        placeItems: 'center',
+      }),
+    },
   };
 
-  const renderHost = (doc?: t.Lens, debug?: string) => {
+  const renderCmdHost = (doc?: t.Lens, debug?: string) => {
     return (
-      <SampleHost
-        debug={debug}
-        enabled={!!doc}
-        pkg={props.pkg}
-        imports={props.imports}
-        doc={doc}
-        path={props.path}
-        theme={theme}
-      />
+      <div {...styles.host.base}>
+        <NetworkCmdHost
+          debug={debug}
+          enabled={!!doc}
+          pkg={props.pkg}
+          imports={props.imports}
+          doc={doc}
+          path={props.path}
+          theme={theme}
+        />
+        <div {...styles.host.debug}>{debug}</div>
+      </div>
     );
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      {renderHost(left, '🐷')}
+      {renderCmdHost(left, '🐷')}
       <div {...styles.div.base}>
         <div {...styles.div.footer} />
       </div>
-      {renderHost(right, '🌼')}
+      {renderCmdHost(right, '🌼')}
     </div>
   );
 };

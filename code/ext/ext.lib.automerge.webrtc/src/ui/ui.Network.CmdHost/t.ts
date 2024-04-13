@@ -3,21 +3,22 @@ import type { t } from './common';
 /**
  * Abstract path resolvers.
  */
-export type CmdhostPaths = {
+export type CmdHostPaths = {
   cmd: t.ObjectPath;
-  address: t.ObjectPath;
+  uri: t.ObjectPath;
   selected: t.ObjectPath;
 };
 
 /**
  * <Component>
  */
-export type NetworkCmdhost = {
+export type NetworkCmdHost = {
   pkg?: { name: string; version: string };
   imports?: t.ModuleImports;
   doc?: t.Lens;
-  path?: t.CmdhostPaths;
+  path?: t.CmdHostPaths;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  debug?: string;
 };
