@@ -1,8 +1,8 @@
 import { PropList } from '..';
 import { COLORS, Color, Dev, Keyboard, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
-import { BuilderSample } from './-SPEC.Sample.Builder';
-import { sampleItems } from './-SPEC.Samples';
+import { BuilderSample } from './-SPEC.ui.Builder';
+import { sampleItems } from './-SPEC.ui';
 import { SampleFields, type MyField } from './-common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
@@ -184,6 +184,9 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       titleButton('"MyTitle"', 'MyTitle');
       titleButton('long (50 words)', lorem);
+      const elTitle = <div {...css({ fontSize: 32 })}>{'🐷'}</div>;
+      titleButton('<Element>', elTitle);
+      titleButton('[<Element>, <Element>]', [elTitle, elTitle]);
       dev.hr(-1, 5);
       titleButton('[ "Left", "Right" ]', ['Left', 'Right']);
       titleButton('[ (long), "Right" ]', [lorem, 'Right']);
