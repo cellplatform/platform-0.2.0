@@ -20,7 +20,15 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const color = Color.fromTheme(theme);
   const styles = {
     base: css({ color, display: 'grid', gridTemplateColumns: '1fr auto 1fr' }),
-    divider: css({ width: 1, backgroundColor: Color.alpha(color, 0.1) }),
+    div: {
+      base: css({
+        width: 1,
+        backgroundColor: Color.alpha(color, 0.1),
+        display: 'grid',
+        alignContent: 'end',
+      }),
+      footer: css({ height: 35, backgroundColor: Color.lighten(Color.DARK, 10) }),
+    },
   };
 
   const renderHost = (doc?: t.Lens, debug?: string) => {
@@ -40,7 +48,9 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {renderHost(left, '🐷')}
-      <div {...styles.divider} />
+      <div {...styles.div.base}>
+        <div {...styles.div.footer} />
+      </div>
       {renderHost(right, '🌼')}
     </div>
   );
