@@ -184,9 +184,8 @@ export default Dev.describe(name, (e) => {
       e.change((d) => (d.props.command = 'foobar'));
     });
     dev.hr(-1, 5);
-    dev.button('selectedIndex → 0', (e) => {
-      e.change((d) => (d.props.selectedIndex = 0));
-    });
+    dev.button('selectedIndex → 0', (e) => e.change((d) => (d.props.selectedIndex = 0)));
+    dev.button('selectedIndex → 2', (e) => e.change((d) => (d.props.selectedIndex = 2)));
 
     dev.hr(5, 20);
 
