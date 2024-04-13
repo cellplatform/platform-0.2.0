@@ -75,19 +75,29 @@ const headerFooterConnectors = (dev: t.DevTools, left: N, right: N) => {
     .render(() => <PeerUI.Connector peer={right.peer} />);
 };
 
-const infoPanels = (dev: t.DevTools, left: N, right: N, options?: t.InfoData) => {
-  const render = (network: t.NetworkStore) => {
-    const data = R.merge(options ?? {}, { network }) as t.InfoData;
-    return (
-      <PeerRepoList.Info
-        fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
-        data={data}
-      />
-    );
+/**
+ * Info Panels
+ */
+type InfoPanelOptions = { data?: t.InfoData; margin?: t.MarginInput };
+
+const infoPanels = (dev: t.DevTools, left: N, right: N, options: InfoPanelOptions = {}) => {
+  const render = (network: N) => {
+    return dev.row((e) => infoPanel(dev, network, options));
   };
-  dev.row((e) => render(left));
+  render(left);
   dev.hr(5, 20);
-  dev.row((e) => render(right));
+  render(right);
+};
+
+const infoPanel = (dev: t.DevTools, network: N, options: InfoPanelOptions = {}) => {
+  const data = R.merge(options.data ?? {}, { network }) as t.InfoData;
+  return (
+    <PeerRepoList.Info
+      margin={options.margin}
+      fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
+      data={data}
+    />
+  );
 };
 
 /**
@@ -96,5 +106,10 @@ const infoPanels = (dev: t.DevTools, left: N, right: N, options?: t.InfoData) =>
 export const TestEdge = {
   create,
   createEdge,
-  dev: { peersSection, headerFooterConnectors, infoPanels },
+  dev: {
+    peersSection,
+    headerFooterConnectors,
+    infoPanel,
+    infoPanels,
+  },
 } as const;
