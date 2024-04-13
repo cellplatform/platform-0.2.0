@@ -1,14 +1,14 @@
 import { Command } from './Command';
 import { Is } from './PatchState.Is';
-import { init } from './PatchState.init';
+import { create } from './PatchState.impl';
 import { toObject } from './common';
 
 /**
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
-  init,
+  create,
+  toObject,
   Is,
   Command,
-  toObject,
 } as const;

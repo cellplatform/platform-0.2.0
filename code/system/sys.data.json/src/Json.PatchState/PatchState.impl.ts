@@ -2,19 +2,20 @@ import { Patch, rx, slug, type t } from './common';
 import { defaultEvents } from './PatchState.events';
 
 type O = Record<string, unknown>;
-type Args<T extends O, E> = {
-  initial: T;
-  typename?: string;
-  events?: t.PatchStateEventFactory<T, E>;
-  onChange?: t.PatchChangeHandler<T>;
-};
 
 /**
  * Initialize a new [PatchState] object.
  */
-export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): t.PatchState<T, E> {
+export function create<T extends O, E = t.PatchStateEvents<T>>(
+  initial: T,
+  options: {
+    typename?: string;
+    events?: t.PatchStateEventFactory<T, E>;
+    onChange?: t.PatchChangeHandler<T>;
+  } = {},
+): t.PatchState<T, E> {
   const $ = rx.subject<t.PatchChange<T>>();
-  let _current = { ...args.initial };
+  let _current = { ...initial };
   const state: t.PatchState<T, E> = {
     /**
      * Unique instance identifier.
@@ -23,7 +24,6 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
      *     cheap object instance comparison (eg. in hooks).
      */
     instance: slug(),
-    // type: args.type,
 
     /**
      * Current state.
@@ -38,7 +38,7 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
     change(fn) {
       const e = Patch.change<T>(_current, fn);
       _current = e.to;
-      args.onChange?.(e);
+      options.onChange?.(e);
       $.next(e);
     },
 
@@ -46,15 +46,11 @@ export function init<T extends O, E = t.PatchStateEvents<T>>(args: Args<T, E>): 
      * Observable event listener with controllable lifetime.
      */
     events(dispose$?: t.UntilObservable) {
-      const factory = args.events ?? defaultEvents;
+      const factory = options.events ?? defaultEvents;
       return factory($, dispose$) as E;
     },
   };
 
-  if (args.typename) {
-    // @ts-ignore
-    state.typename = args.typename;
-  }
-
+  if (options.typename) (state as any).typename = options.typename;
   return state;
 }
