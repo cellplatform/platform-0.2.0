@@ -1,9 +1,9 @@
-import { DEFAULTS, Root } from '.';
+import { DEFAULTS, NetworkCmdHost } from '.';
 import { Dev, Pkg } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.NetworkCmdhost;
-type T = { props: P; debug: {} };
+type T = { props: P; debug: { debugFullScreen?: boolean } };
 const initial: T = { props: {}, debug: {} };
 
 /**
@@ -14,7 +14,8 @@ export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
+    debugFullScreen: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -24,17 +25,17 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.theme = local.theme;
+      d.debug.debugFullScreen = local.debugFullScreen;
     });
 
     ctx.debug.width(330);
-    ctx.subject
-      .size('fill')
-      .display('grid')
-      .render<T>((e) => {
-        const { props } = e.state;
-        Dev.Theme.background(dev, props.theme, 1);
-        return <Root {...props} />;
-      });
+    ctx.subject.display('grid').render<T>((e) => {
+      const { props, debug } = e.state;
+      const padding = debug.debugFullScreen ? 0 : undefined;
+      ctx.subject.size('fill', padding);
+      Dev.Theme.background(dev, props.theme, 1);
+      return <NetworkCmdHost {...props} />;
+    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -48,6 +49,18 @@ export default Dev.describe(name, (e) => {
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.debugFullScreen;
+        btn
+          .label((e) => `Full Screen`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'debugFullScreen')));
+      });
     });
   });
 

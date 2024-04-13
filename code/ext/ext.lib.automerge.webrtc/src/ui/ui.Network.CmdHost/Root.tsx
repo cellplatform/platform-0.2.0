@@ -5,7 +5,7 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const Root = FC.decorate<t.NetworkCmdhost, Fields>(
+export const NetworkCmdHost = FC.decorate<t.NetworkCmdhost, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },
