@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, ObjectPath, Sync, rx, type t } from './common';
 import { resolver } from './u';
 
+type O = Record<string, unknown>;
+type E = t.LensEvents | t.DocEvents;
+
 /**
  * Controls the interaction between a <CmdHost> and a CRDT document.
  */
@@ -18,6 +21,14 @@ export function useController(args: {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
   const resolve = resolver(path);
+  function changedValue<T>(events: E | undefined, resolve: (doc: O) => T) {
+    return events?.changed$.pipe(
+      rx.filter(() => !!doc),
+      rx.map((e) => e.after),
+      rx.distinctWhile((prev, next) => resolve(prev) === resolve(next)),
+      rx.map((after) => resolve(after)),
+    );
+  }
 
   /**
    * Textbox syncer (splice)
@@ -39,13 +50,8 @@ export function useController(args: {
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = events?.changed$?.pipe(
-      rx.map((e) => e.after),
-      rx.distinctWhile((prev, next) => resolve.selected(prev) === resolve.selected(next)),
-    );
-    changed$?.subscribe((e) => {
-      if (doc) setSelected(resolve.selected(doc.current) ?? 0);
-    });
+    const changed$ = changedValue(events, (doc) => resolve.selected(doc) ?? 0);
+    changed$?.subscribe((value) => setSelected(value));
     return events?.dispose;
   }, [enabled, doc?.instance, path.selected.join('.')]);
 
@@ -54,24 +60,15 @@ export function useController(args: {
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = events?.changed$?.pipe(
-      rx.map((e) => e.after),
-      rx.distinctWhile((prev, next) => resolve.address(prev) === resolve.address(next)),
-    );
-    changed$?.subscribe(async (doc) => {
-      const address = resolve.address(doc) || '';
+    const changed$ = changedValue(events, (doc) => resolve.address(doc) ?? '');
+
+    changed$?.pipe(rx.filter((address) => !!address)).subscribe(async (address) => {
       const importer = imports?.[address];
 
       /**
        * TODO 🐷
        */
-      console.group(debug);
-      console.log('address', address);
-      console.log('importer', importer);
-      const m = await importer?.();
-      console.log('m', m);
-
-      console.groupEnd();
+      console.log(debug, 'address', address, await importer?.());
     });
     return events?.dispose;
   }, [enabled, !!imports, doc?.instance]);

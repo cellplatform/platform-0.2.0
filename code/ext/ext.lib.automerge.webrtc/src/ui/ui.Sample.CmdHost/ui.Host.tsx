@@ -1,6 +1,5 @@
 import { CmdHost } from 'sys.ui.react.common';
 import { Color, DEFAULTS, css, type t } from './common';
-import { resolver } from './u';
 import { useController } from './use.Controller';
 
 export type SampleHostProps = {
@@ -17,7 +16,6 @@ export type SampleHostProps = {
 export const SampleHost: React.FC<SampleHostProps> = (props) => {
   const { theme, doc, path = DEFAULTS.paths, enabled = true, debug, imports } = props;
   const controller = useController({ enabled, doc, path, imports, debug });
-  const resolve = resolver(path);
 
   /**
    * Render
