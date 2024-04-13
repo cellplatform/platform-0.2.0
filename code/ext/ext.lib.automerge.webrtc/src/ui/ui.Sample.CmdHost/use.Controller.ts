@@ -13,6 +13,7 @@ export function useController(args: {
   debug?: string;
 }) {
   const { enabled = true, doc, path = DEFAULTS.paths, debug, imports } = args;
+  const [selected, setSelected] = useState(0);
   const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
@@ -34,6 +35,21 @@ export function useController(args: {
   }, [enabled, doc?.instance, !!textbox, path.cmd.join('.')]);
 
   /**
+   * Selected index
+   */
+  useEffect(() => {
+    const events = doc?.events();
+    const changed$ = events?.changed$?.pipe(
+      rx.map((e) => e.after),
+      rx.distinctWhile((prev, next) => resolve.selected(prev) === resolve.selected(next)),
+    );
+    changed$?.subscribe((e) => {
+      if (doc) setSelected(resolve.selected(doc.current) ?? 0);
+    });
+    return events?.dispose;
+  }, [enabled, doc?.instance, path.selected.join('.')]);
+
+  /**
    * Importer
    */
   useEffect(() => {
@@ -50,7 +66,6 @@ export function useController(args: {
        * TODO 🐷
        */
       console.group(debug);
-
       console.log('address', address);
       console.log('importer', importer);
       const m = await importer?.();
@@ -59,7 +74,7 @@ export function useController(args: {
       console.groupEnd();
     });
     return events?.dispose;
-  }, [!!imports, !!doc]);
+  }, [enabled, !!imports, doc?.instance]);
 
   /**
    * API
@@ -67,7 +82,13 @@ export function useController(args: {
   return {
     cmd,
     textbox,
-    onTextboxReady: (textbox: t.TextInputRef) => setTextbox(textbox),
+    selected,
+    onTextboxReady(textbox: t.TextInputRef) {
+      setTextbox(textbox);
+    },
+    onSelectionChange(index: t.Index) {
+      doc?.change((d) => ObjectPath.mutate(d, path.selected, index));
+    },
     async load(address?: string) {
       doc?.change((d) => ObjectPath.mutate(d, path.address, address));
     },
