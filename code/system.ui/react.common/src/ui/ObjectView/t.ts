@@ -11,6 +11,7 @@ export type ObjectViewProps = {
   sortObjectKeys?: boolean;
   fontSize?: number;
   theme?: t.CommonTheme;
+  margin?: t.MarginInput;
   style?: t.CssValue;
 };
 
