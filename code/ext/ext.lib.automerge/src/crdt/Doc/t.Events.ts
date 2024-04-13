@@ -5,7 +5,7 @@ type O = Record<string, unknown>;
 /**
  * Event API
  */
-export type DocEvents<T extends O> = t.Lifecycle & {
+export type DocEvents<T extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.DocEvent<T>>;
   readonly changed$: t.Observable<t.DocChanged<T>>;
   readonly deleted$: t.Observable<t.DocDeleted<T>>;

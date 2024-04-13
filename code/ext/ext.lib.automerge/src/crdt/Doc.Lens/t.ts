@@ -16,7 +16,7 @@ export type Lens<L extends O = O> = t.ImmutableRef<L, LensEvents<L>> & {
 /**
  * Events API
  */
-export type LensEvents<L extends O> = t.Lifecycle & {
+export type LensEvents<L extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<LensEvent<L>>;
   readonly changed$: t.Observable<LensChanged<L>>;
   readonly deleted$: t.Observable<LensDeleted<L>>;
