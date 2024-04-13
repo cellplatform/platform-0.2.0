@@ -11,7 +11,7 @@ export type TextInputRef = {
     readonly selection: t.TextInputSelection;
     readonly focused: boolean;
   };
-  events(dispose?: t.UntilObservable): t.TextInputEvents;
+  events(dispose$?: t.UntilObservable): t.TextInputEvents;
   focus(select?: boolean): void;
   blur(): void;
   caretToStart(): void;

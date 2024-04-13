@@ -1,11 +1,11 @@
-import { Dev, Pkg, type t } from '../../test.ui';
+import { rx, Dev, Pkg, type t } from '../../test.ui';
 import { Hints } from './-SPEC.u.Hints';
 import { Sample } from './-SPEC.u.Sample';
-import { DEFAULTS, KeyboardMonitor, Time } from './common';
+import { DEFAULTS, KeyboardMonitor, PatchState, Time } from './common';
 
 type P = t.TextInputProps;
 type T = {
-  props: P;
+  theme?: t.CommonTheme;
   debug: {
     render: boolean;
     isHintEnabled: boolean;
@@ -14,11 +14,9 @@ type T = {
     isUpdateAsync: boolean;
     elementPlaceholder: boolean;
   };
-  ref?: t.TextInputRef;
 };
 
 const initial: T = {
-  props: {},
   debug: {
     render: true,
     isHintEnabled: true,
@@ -39,14 +37,21 @@ export default Dev.describe(name, (e) => {
     value: '',
   });
 
+  let ref: t.TextInputRef | undefined;
+
+  // NB: used for sync changes to the state.
+  const props = PatchState.create<P>({
+    value: local.value,
+    theme: local.theme,
+    placeholder: 'my placeholder',
+    focusOnReady: true,
+  });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
-      d.props.value = local.value;
-      d.props.theme = local.theme;
-      d.props.placeholder = 'my placeholder';
-      d.props.focusOnReady = true;
+      d.theme = local.theme;
 
       d.debug.render = local.render;
       d.debug.isHintEnabled = local.isHintEnabled;
@@ -56,44 +61,51 @@ export default Dev.describe(name, (e) => {
       d.debug.elementPlaceholder = local.elementPlaceholder;
     });
 
-    KeyboardMonitor.on('CMD + KeyP', (e) => {
-      e.handled();
-      state.current.ref?.focus();
+    props
+      .events()
+      .$.pipe(rx.debounceTime(50))
+      .subscribe(() => ctx.redraw('subject'));
+
+    KeyboardMonitor.on({
+      ['CMD + KeyK']: (e) => props.change((d) => (d.value = '')),
+      ['CMD + KeyP'](e) {
+        e.handled();
+        ref?.focus();
+      },
     });
 
     ctx.subject
       .display('grid')
       .size([300, null])
       .render<T>((e) => {
-        const { debug } = e.state;
+        const { debug, theme } = e.state;
         if (!debug.render) return;
 
-        const autoSize = e.state.props.autoSize;
+        const { autoSize } = props.current;
+        Dev.Theme.background(ctx, theme, 1, 0.02);
         if (autoSize) ctx.subject.size('fill-x');
-        if (!autoSize) ctx.subject.size([300, null]);
+        else ctx.subject.size([300, null]);
 
-        const props: t.TextInputProps = {
-          ...e.state.props,
-          value: local.value,
-          onChange: async (e) => {
-            console.info('⚡️ onChange', e);
-            if (!debug.isUpdateEnabled) return;
-            local.value = e.to;
-            if (debug.isHintEnabled) {
-              const hint = Hints.lookup(e.to) ?? '';
-              await state.change((d) => (d.props.hint = hint));
-            } else {
-              await state.change((d) => (d.props.hint = ''));
-            }
-          },
+        const p: t.TextInputProps = {
+          ...props.current,
+          theme,
           onReady(e) {
             console.log('⚡️ onReady:', e);
-            state.change((d) => (d.ref = e.ref));
+            ref = e.ref;
+            ctx.redraw();
 
             // NB: disposable event subscriptions from [Ref].
             const events = e.ref.events();
-            // events.$.subscribe((e) => console.info('⚡️ events.$:', e));
             events.onChange((e) => console.info('⚡️ events$.onChange:', e));
+          },
+          onChange: async (e) => {
+            console.info('⚡️ onChange', e);
+            if (!debug.isUpdateEnabled) return;
+            props.change((d) => {
+              local.value = d.value = e.to;
+              d.hint = debug.isHintEnabled ? Hints.lookup(e.to) : '';
+            });
+            ctx.redraw('subject');
           },
           onEnter(e) {
             console.info('⚡️ onEnter', e);
@@ -106,8 +118,7 @@ export default Dev.describe(name, (e) => {
           },
         };
 
-        Dev.Theme.background(ctx, props.theme, 1, 0.02);
-        return <Sample props={props} debug={debug} />;
+        return <Sample props={p} debug={debug} />;
       });
   });
 
@@ -116,27 +127,28 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+
       dev.hr(-1, 5);
 
-      function boolean(key: keyof T['props']) {
+      function boolean(key: keyof P) {
         dev.boolean((btn) =>
           btn
             .label(key)
-            .value((e) => Boolean(e.state.props[key]))
-            .onClick((e) => e.change((d) => Dev.toggle(d.props, key))),
+            .value((e) => !!props.current[key])
+            .onClick((e) => props.change((d) => Dev.toggle(d, key))),
         );
       }
 
       boolean('isEnabled');
       boolean('isReadOnly');
       boolean('isPassword');
-      dev.hr();
+      dev.hr(-1, 5);
       boolean('autoCapitalize');
       boolean('autoCorrect');
       boolean('autoComplete');
       boolean('spellCheck');
-      dev.hr();
+      dev.hr(-1, 5);
       boolean('autoSize');
       boolean('focusOnReady');
     });
@@ -146,7 +158,7 @@ export default Dev.describe(name, (e) => {
     dev.section('Sample States', (dev) => {
       const value = (value: string, label?: string) => {
         dev.button(`text: ${label ?? value}`, (e) => {
-          e.change((d) => (local.value = d.props.value = value));
+          props.change((d) => (local.value = d.value = value));
         });
       };
       value('hello 👋');
@@ -169,7 +181,6 @@ export default Dev.describe(name, (e) => {
       };
       const action = (label: string, fn: F) => {
         dev.button(label, (e) => {
-          const ref = e.state.current.ref;
           if (ref) fn(ref);
         });
       };
@@ -186,6 +197,8 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
       dev.boolean((btn) =>
         btn
           .label('render')
@@ -251,7 +264,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = { ref, props: props.current };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });

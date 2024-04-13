@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { useFocus } from '../useFocus';
 import { TextInputRef } from './Ref';
 import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
@@ -38,11 +38,12 @@ export const Input: React.FC<InputProps> = (props) => {
     disabledOpacity = DEFAULTS.props.disabledOpacity,
   } = props;
 
+  const lastChangeFired = useRef(value);
   const ref = TextInputRef(inputRef, bus.$);
   useFocus(inputRef, { redraw: false });
 
   /**
-   * [Lifecycle]
+   * Lifecycle
    */
   useEffect(() => {
     /**
@@ -51,7 +52,7 @@ export const Input: React.FC<InputProps> = (props) => {
      *    This means that the value is not managed by React, so
      *    we update the value manually here when it changes.
      *
-     * RATAIONLE:
+     * RATAIONALE:
      *    This is done do preserve the caret/selection position
      *    within the textbox when the value is changed externally
      *    via the [value] prop, which causes problems if there is
@@ -61,10 +62,15 @@ export const Input: React.FC<InputProps> = (props) => {
      */
     const el = inputRef.current;
     if (el) el.value = value;
+
+    if (value !== lastChangeFired.current) {
+      // NB: ensure the [onChange] event is fired when the value is changed externally.
+      handleChange(lastChangeFired.current, value);
+    }
   }, [value]);
 
   /**
-   * [Handlers]
+   * Handlers
    */
   type A = t.TextInputKeyEventPayload['action'];
   const fireKeyEvent = (action: A, event: t.TextInputKeyArgs) => {
@@ -74,35 +80,31 @@ export const Input: React.FC<InputProps> = (props) => {
     });
   };
 
-  const handleChange = (e: React.ChangeEvent) => {
+  const handleChange = (from: string, to: string) => {
     const { onChange, maxLength } = props;
 
     // Derive values.
-    const from = value;
-    let to = ((e.target as any).value as string) || '';
     to = Util.Value.format(to, maxLength);
-
-    const is = {
-      max: maxLength === undefined ? null : to.length === maxLength,
-    };
+    const max = maxLength === undefined ? null : to.length === maxLength;
+    const is = { max };
+    if (from === to) return; // NB: not changed.
 
     // Update state and alert listeners.
-    if (from !== to) {
-      const modifierKeys = cloneModifierKeys();
-      const selection = Wrangle.selection(inputRef.current);
-      const payload: t.TextInputChangeArgs = {
-        from,
-        to,
-        is,
-        modifierKeys,
-        selection,
-        get diff() {
-          return Diff.chars(from, to, { ignoreCase: false });
-        },
-      };
-      onChange?.(payload);
-      bus.fire({ type: 'sys.TextInput:Change', payload });
-    }
+    const modifierKeys = cloneModifierKeys();
+    const selection = Wrangle.selection(inputRef.current);
+    const payload: t.TextInputChangeArgs = {
+      from,
+      to,
+      is,
+      modifierKeys,
+      selection,
+      get diff() {
+        return Diff.chars(from, to, { ignoreCase: false });
+      },
+    };
+    lastChangeFired.current = to;
+    onChange?.(payload);
+    bus.fire({ type: 'sys.TextInput:Change', payload });
   };
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -220,7 +222,7 @@ export const Input: React.FC<InputProps> = (props) => {
       autoCapitalize={props.autoCapitalize === false ? 'off' : undefined}
       autoCorrect={props.autoCorrect === false ? 'off' : undefined}
       autoComplete={props.autoComplete === false ? 'off' : undefined}
-      onChange={handleChange}
+      onChange={(e) => handleChange(value, e.target.value || '')}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeydown}
@@ -233,7 +235,6 @@ export const Input: React.FC<InputProps> = (props) => {
 /**
  * Helpers
  */
-
-const cloneModifierKeys = () => {
+function cloneModifierKeys() {
   return { ...KeyboardMonitor.state.current.modifiers };
-};
+}
