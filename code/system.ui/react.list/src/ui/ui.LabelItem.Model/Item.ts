@@ -24,8 +24,7 @@ export const Item = {
     type T = t.LabelItem<A, D>;
     type E = t.LabelItemEvents<A, D>;
     const { typename, onChange } = options;
-    return PatchState.init<T, E>({
-      initial,
+    return PatchState.create<T, E>(initial, {
       typename,
       onChange,
       events($, dispose$) {
