@@ -87,6 +87,8 @@ export const Input: React.FC<InputProps> = (props) => {
     to = Util.Value.format(to, maxLength);
     const max = maxLength === undefined ? null : to.length === maxLength;
     const is = { max };
+
+    lastChangeFired.current = to;
     if (from === to) return; // NB: not changed.
 
     // Update state and alert listeners.
@@ -102,7 +104,6 @@ export const Input: React.FC<InputProps> = (props) => {
         return Diff.chars(from, to, { ignoreCase: false });
       },
     };
-    lastChangeFired.current = to;
     onChange?.(payload);
     bus.fire({ type: 'sys.TextInput:Change', payload });
   };
