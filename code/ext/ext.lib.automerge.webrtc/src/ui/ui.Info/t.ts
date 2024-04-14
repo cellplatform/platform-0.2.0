@@ -35,7 +35,7 @@ export type InfoDataShared = {
 export type InfoDataObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };
-  mutate?: <T>(fn: (mutate: T) => void) => void;
+  beforeRender?: (mutate: unknown) => void;
 };
 
 /**
