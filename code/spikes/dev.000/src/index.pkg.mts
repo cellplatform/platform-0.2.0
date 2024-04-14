@@ -11,14 +11,14 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.92',
+  version: '0.6.94',
   dependencies: {
     '@automerge/automerge': '2.1.10',
     '@automerge/automerge-repo': '1.1.2',
     '@automerge/automerge-repo-network-messagechannel': '1.1.2',
     '@automerge/automerge-repo-react-hooks': '1.1.2',
     '@automerge/automerge-repo-storage-indexeddb': '1.1.2',
-    '@excalidraw/excalidraw': '0.17.3',
+    '@excalidraw/excalidraw': '0.17.5',
     'ext.lib.ai.faceapi': '0.0.0',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
