@@ -78,7 +78,11 @@ const headerFooterConnectors = (dev: t.DevTools, left: N, right: N) => {
 /**
  * Info Panels
  */
-type InfoPanelOptions = { title?: t.RenderInput; data?: t.InfoData; margin?: t.MarginInput };
+type InfoPanelOptions = {
+  title?: t.RenderInput | [t.RenderInput, t.RenderInput];
+  data?: t.InfoData;
+  margin?: t.MarginInput;
+};
 
 const infoPanels = (dev: t.DevTools, left: N, right: N, options: InfoPanelOptions = {}) => {
   const render = (network: N) => {
