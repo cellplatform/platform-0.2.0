@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DEFAULTS, ObjectPath, Sync, rx, type t } from './common';
-import { resolver } from './u';
+import { CmdHostPath } from './u';
 
 type O = Record<string, unknown>;
 type E = t.LensEvents | t.DocEvents;
@@ -20,7 +20,7 @@ export function useController(args: {
   const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
-  const resolve = resolver(path);
+  const resolve = CmdHostPath.resolver(path);
   function changedValue<T>(events: E | undefined, resolve: (doc: O) => T) {
     return events?.changed$.pipe(
       rx.filter(() => !!doc),
@@ -37,30 +37,30 @@ export function useController(args: {
     const life = rx.disposable();
     const { dispose$ } = life;
     if (enabled && doc && textbox) {
-      const initial = resolve.cmd(doc.current);
-      const listener = Sync.Textbox.listen(textbox, doc, path.cmd, { dispose$ });
+      const initial = resolve.cmd.text(doc.current);
+      const listener = Sync.Textbox.listen(textbox, doc, path.cmd.text, { dispose$ });
       setCmd(initial ?? '');
-      listener.onChange((e) => setCmd(e.text));
+      listener.onChange((e) => setCmd(e.text || ''));
     }
     return life.dispose;
-  }, [enabled, doc?.instance, !!textbox, path.cmd.join('.')]);
+  }, [enabled, doc?.instance, !!textbox, path.cmd.text.join('.')]);
 
   /**
    * Selected item
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.selected(doc) ?? '');
+    const changed$ = changedValue(events, (doc) => resolve.uri.selected(doc) ?? '');
     changed$?.subscribe((uri) => setSelectedUri(uri));
     return events?.dispose;
-  }, [enabled, doc?.instance, path.selected.join('.')]);
+  }, [enabled, doc?.instance, path.uri.selected.join('.')]);
 
   /**
-   * Importer (URI)
+   * Loader (URI)
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.uri(doc) ?? '');
+    const changed$ = changedValue(events, (doc) => resolve.uri.loaded(doc) ?? '');
 
     changed$?.pipe(rx.filter((uri) => !!uri)).subscribe(async (uri) => {
       const importer = imports?.[uri];
@@ -89,7 +89,7 @@ export function useController(args: {
     },
 
     async load(address?: t.UriString) {
-      doc?.change((d) => ObjectPath.mutate(d, path.uri, address));
+      doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, address || ''));
     },
 
     onTextboxReady(textbox: t.TextInputRef) {
@@ -97,7 +97,7 @@ export function useController(args: {
     },
 
     onSelectionChange(uri?: t.UriString) {
-      doc?.change((d) => ObjectPath.mutate(d, path.selected, uri));
+      doc?.change((d) => ObjectPath.mutate(d, path.uri.selected, uri || ''));
     },
   } as const;
 }

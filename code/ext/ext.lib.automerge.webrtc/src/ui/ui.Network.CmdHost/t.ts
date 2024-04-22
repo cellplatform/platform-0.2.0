@@ -4,9 +4,16 @@ import type { t } from './common';
  * Abstract path resolvers.
  */
 export type CmdHostPaths = {
-  cmd: t.ObjectPath;
-  uri: t.ObjectPath;
-  selected: t.ObjectPath;
+  uri: { loaded: t.ObjectPath; selected: t.ObjectPath };
+  cmd: { text: t.ObjectPath };
+};
+
+/**
+ * The shape of the default [CmdHostPaths] as an object.
+ */
+export type CmdHostPathLens = {
+  cmd?: { text?: string };
+  uri?: { selected?: t.UriString; loaded?: t.UriString };
 };
 
 /**

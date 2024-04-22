@@ -5,9 +5,8 @@ export * from '../common';
  * Constants
  */
 export const paths: t.CmdHostPaths = {
-  cmd: ['cmd'],
-  uri: ['uri'],
-  selected: ['selected'],
+  uri: { selected: ['uri', 'selected'], loaded: ['uri', 'loaded'] },
+  cmd: { text: ['cmd', 'text'] },
 };
 
 export const DEFAULTS = {

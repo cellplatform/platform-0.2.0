@@ -1,16 +1,16 @@
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { resolver } from './u';
+import { CmdHostPath as Path } from './u';
 
 /**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  resolver: typeof resolver;
+  Path: typeof Path;
 };
 export const NetworkCmdHost = FC.decorate<t.NetworkCmdHost, Fields>(
   View,
-  { DEFAULTS, resolver },
+  { DEFAULTS, Path },
   { displayName: DEFAULTS.displayName },
 );
