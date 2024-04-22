@@ -64,8 +64,8 @@ export default Dev.describe(name, async (e) => {
             lens: dataUseLens ? ['sys', 'peers'] : undefined,
             object: {
               visible: dataJsonVisible,
-              beforeRender(mutate) {
-                // mutate['foo'] = 123;
+              beforeRender(mutate: any) {
+                mutate['foo'] = 123; // Sample render mutation 🐷
               },
             },
             onIconClick(e) {
