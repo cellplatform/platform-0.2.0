@@ -34,7 +34,7 @@ export function listen<T extends O>(
   }
 
   /**
-   * Changes from the <input> element.
+   * Changes from the <input> element → CRDT
    */
   const input$ = event.textbox.change$.pipe(
     rx.filter((e) => e.to !== resolve(doc.current, path)),
@@ -43,13 +43,11 @@ export function listen<T extends O>(
   );
 
   input$.subscribe((diff) => {
-    doc.change((d) => {
-      Doc.splice(d, path, diff.index, diff.delCount, diff.newText);
-    });
+    doc.change((d) => Doc.splice(d, path, diff.index, diff.delCount, diff.newText));
   });
 
   /**
-   * Changes from CRDT document.
+   * Changes from CRDT → <input>
    */
   event.doc.changed$
     .pipe(rx.filter((e) => resolve(e.after, path) !== textbox.current.value))

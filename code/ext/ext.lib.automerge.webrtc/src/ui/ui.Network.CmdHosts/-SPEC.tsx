@@ -71,7 +71,7 @@ export default Dev.describe(name, async (e) => {
     const render = (title: string, network: t.NetworkStore) => {
       const elTitle = <div {...css({ fontSize: 22 })}>{title}</div>;
       return dev.row((e) => {
-        return TestEdge.dev.infoPanel(dev, network, { title: ['', elTitle], data });
+        return TestEdge.dev.infoPanel(dev, network, { title: elTitle, data });
       });
     };
 
