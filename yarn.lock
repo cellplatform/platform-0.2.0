@@ -22,12 +22,28 @@
   dependencies:
     "@automerge/automerge-repo" "1.1.2"
 
+"@automerge/automerge-repo-network-broadcastchannel@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-broadcastchannel/-/automerge-repo-network-broadcastchannel-1.1.5.tgz#d972bab63d9c50bfa3fecb9f3288acc066195d05"
+  integrity sha512-2w2J+vC3Pu1s19mhrbvvCVHpybMFNE1/a12mT1m/EMcvr2VDfsbrs61XSh4uf4PRDnfscf5A7JyH/0Lod4Yd4w==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.5"
+
 "@automerge/automerge-repo-network-messagechannel@1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.1.2.tgz#5f8d81cc89913b4125637ac4b819f2bfe70d086d"
   integrity sha512-U0QlfzjWXCwApxNaoVMfKxSpYj0bGqNYIfzr4mW8pkI0yBynvhL8MFcfLz+fqFpYPNOgqhK3HjHMi5zYT1QqGA==
   dependencies:
     "@automerge/automerge-repo" "1.1.2"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
+
+"@automerge/automerge-repo-network-messagechannel@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.1.5.tgz#a50a7f1af15071120cf31428fc1b18ce1de4caf8"
+  integrity sha512-XH0J6ZdXHaxLbiSvFnix/9veZwvI7lQTByYpqJqDiEAf/cP6uMueX8XQhE25fMXnMGx5I1eKjVGrwLxdZoNMlA==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.5"
     debug "^4.3.4"
     eventemitter3 "^5.0.1"
 
@@ -43,12 +59,31 @@
     react-dom "^18.2.0"
     react-usestateref "^1.0.8"
 
+"@automerge/automerge-repo-react-hooks@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-react-hooks/-/automerge-repo-react-hooks-1.1.5.tgz#be733f458a665b00c5a05971211214d9f9d12fdf"
+  integrity sha512-iwEusroukIZbaKkZ9sc/AWGOhgrpeG8kGzXOma4Vc6a/XvOpDVBBYkFyWYb+CJq1mGQkFJ4XE2uoPDWAsydNrw==
+  dependencies:
+    "@automerge/automerge" "^2.1.9"
+    "@automerge/automerge-repo" "1.1.5"
+    eventemitter3 "^5.0.1"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    react-usestateref "^1.0.8"
+
 "@automerge/automerge-repo-storage-indexeddb@1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.1.2.tgz#dc8ff9180a0bd268fd625e20992c608134066c27"
   integrity sha512-VAQwyKkoKYjreT6j/iXDP9r+NELhxQjwYEk2L7Nfid/86BIDkO5jl/GjCrVMnjZD2S7KyLV/M3FLC70dd0ntXw==
   dependencies:
     "@automerge/automerge-repo" "1.1.2"
+
+"@automerge/automerge-repo-storage-indexeddb@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.1.5.tgz#ec42c53d620c2844904d0445048bf5e5b9666310"
+  integrity sha512-esxHyFeFJ0cISP9TdGCQshPmaMCnC/RQDlZjndfMxlaph1JqZc4PRYWTtJ2wHQFsgimYd9Lwc2S8tbrLsbEAnw==
+  dependencies:
+    "@automerge/automerge-repo" "1.1.5"
 
 "@automerge/automerge-repo@1.1.2":
   version "1.1.2"
@@ -70,6 +105,22 @@
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.4.tgz#53645048e723dd46073ebded9c604fcf2d5f551e"
   integrity sha512-EuY/+hwPkR0bLkMzi2obRFzW3fsUtlih7S0Te/nJRvsXS7a5mrzmqnQpFwYZPZzeBsPrxaBC2vVrcNqferlaLQ==
+  dependencies:
+    "@automerge/automerge" "^2.1.9"
+    bs58check "^3.0.1"
+    cbor-x "^1.3.0"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
+    fast-sha256 "^1.3.0"
+    tiny-typed-emitter "^2.1.0"
+    ts-node "^10.9.1"
+    uuid "^9.0.0"
+    xstate "^4.37.0"
+
+"@automerge/automerge-repo@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.5.tgz#2fb32b11e6da19ac1720cdbf787114a6d7eac78d"
+  integrity sha512-SwXWwkasugfdGwQy4RuS/pn2FrI+YDtzrwvUbXkLVRiX83Zt3UQBXlL+QW+5QbH7uQ2mK0l3rOkRlQwnsYHUNg==
   dependencies:
     "@automerge/automerge" "^2.1.9"
     bs58check "^3.0.1"
@@ -2711,16 +2762,16 @@
     "@testing-library/dom" "^10.0.0"
     "@types/react-dom" "^18.0.0"
 
-"@tldraw/editor@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.0.1.tgz#e7141b2389d4779e563fc312af1d4f6f5b9a258b"
-  integrity sha512-nC2/tpG2N+e5csjWcXURWXizYCRk7W+RIOBIFt0InRkp4WlBRpOZk81hFyssmJt+YTGDjATADsiEoqKGWFVuxg==
+"@tldraw/editor@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.0.2.tgz#2e4fd3c14fd2d079554d7d111531ab4bbc4861cc"
+  integrity sha512-ik7JvBQv9AsvkGhBfNkPdM0m+cBiarfPLrzlgyB2dec4lWQOIIL/p9J+28FUWQ4bzDvD6JN0eGXnsGj754ypQg==
   dependencies:
-    "@tldraw/state" "2.0.1"
-    "@tldraw/store" "2.0.1"
-    "@tldraw/tlschema" "2.0.1"
-    "@tldraw/utils" "2.0.1"
-    "@tldraw/validate" "2.0.1"
+    "@tldraw/state" "2.0.2"
+    "@tldraw/store" "2.0.2"
+    "@tldraw/tlschema" "2.0.2"
+    "@tldraw/utils" "2.0.2"
+    "@tldraw/validate" "2.0.2"
     "@types/core-js" "^2.5.5"
     "@use-gesture/react" "^10.2.27"
     classnames "^2.3.2"
@@ -2732,50 +2783,50 @@
     lodash.uniq "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/state@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.0.1.tgz#1b2a0d676c20ffe81e20e237d9871ee6e1bf6fa9"
-  integrity sha512-sqEc2y4C5InfK9ZOJCpzgmanQXE76IB5cFkubOoY0Jr1M/W5nHfVZyFy+9wSd4X0vZLnoNgBA65kOZih13sqJQ==
+"@tldraw/state@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.0.2.tgz#f23c724476c6d954d4f3f3e3b71e0bd33407f1c0"
+  integrity sha512-8736faV/vTDipYa6xpTG2l3XJgwu1lR4wAwobW/AdiflWBoxiejK4GZyVhb1HtSvcb9EV/ZDOG9SAwG2cKUw9A==
 
-"@tldraw/store@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/store/-/store-2.0.1.tgz#970b5a6127a0741d21be90fa9b521f2d08268f85"
-  integrity sha512-MhuFgCpRAkI+3rrIOGhl0UdKOTITPH2uzgH0Ukx6lvDnQu6/HxYL98muLX3iDUcC2Xi89rIvRXqrPUQ8YZTd5w==
+"@tldraw/store@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/store/-/store-2.0.2.tgz#36090dfefa6945d3002668e19761665cf8db9e5f"
+  integrity sha512-02Wg37GiVGoUXxpcyLaoyOMUXn62OxuwcN3Ij7nVxHs7XGJmeMdWKodFMSss1Jh7lzJJMS5r8BJ3knB/ENdcWA==
   dependencies:
-    "@tldraw/state" "2.0.1"
-    "@tldraw/utils" "2.0.1"
+    "@tldraw/state" "2.0.2"
+    "@tldraw/utils" "2.0.2"
     lodash.isequal "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/tldraw@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/tldraw/-/tldraw-2.0.1.tgz#fb16abbdbb9c6f37414339df6029b3b2129f9d5c"
-  integrity sha512-ZBly/v+OSc/5Om7njH+N8ib4M2dxN5WTjAzDCEgg0S+YirI0vNaunu2U7G/0UYacWj8yKQZ07r4UsGbZNwTchA==
+"@tldraw/tldraw@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/tldraw/-/tldraw-2.0.2.tgz#b53be55b0a8e727ccaaf0fa171d4b97f7dbdf179"
+  integrity sha512-34GK/SjYMyvPSrO7D0DR0sg3qi0XtFhyNKS4ls4PNGNa24Ov4Etm3MVEmbOe+stqAi8FC4hlfSDd7eE/vIsU5w==
   dependencies:
-    tldraw "2.0.1"
+    tldraw "2.0.2"
 
-"@tldraw/tlschema@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/tlschema/-/tlschema-2.0.1.tgz#d218f70386d54f85e95170b9c7d25122dccbb984"
-  integrity sha512-o7eLIho1Ohz1Y48L7IePRHBYjxzX0JN2lCJMrW3+fA/iMbfTpz6Jotux/JZFdVoXFAb3m74YsT0pSBVrI9XnUg==
+"@tldraw/tlschema@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/tlschema/-/tlschema-2.0.2.tgz#b4925a9155d74354b0b3608276f3fdf2e78d8b76"
+  integrity sha512-gpSdyl7n5vMutgSX7+1dvZj6DGxQhCyDMhOmuWQGkTuQrbp/RmOIRwxAfLRIZCJstKKohy/skc3XzAhL5wEbHQ==
   dependencies:
-    "@tldraw/state" "2.0.1"
-    "@tldraw/store" "2.0.1"
-    "@tldraw/utils" "2.0.1"
-    "@tldraw/validate" "2.0.1"
+    "@tldraw/state" "2.0.2"
+    "@tldraw/store" "2.0.2"
+    "@tldraw/utils" "2.0.2"
+    "@tldraw/validate" "2.0.2"
     nanoid "4.0.2"
 
-"@tldraw/utils@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.0.1.tgz#037cc3865ff1426bf534f9de14b6ce843c274ae0"
-  integrity sha512-bRt8qWIEtd9rvPYaNQon5N8wWIJ7oLTMP5RJcd3Mucm8M6yNx+xIZOJImRjNV5DuuJmuJYwto2/h/ZVmu49fuQ==
+"@tldraw/utils@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.0.2.tgz#692e7a937efbb6e26575a9c258ccc2eec91cdd33"
+  integrity sha512-oXqCF2fERXG7e30npML/zMGtyRWIfgUXVvgdXtWR/S7/mwVU0MeY9YJ7eAuY+iIFshpV9MM99tQxqUZKVJ6NNw==
 
-"@tldraw/validate@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tldraw/validate/-/validate-2.0.1.tgz#689e5adec3f35819dd2ea2a66d7a908f7829219a"
-  integrity sha512-IFw7lbsZQodHw7ZiBl90buOyOcRX0nK6E+RV6JMuEd4wU4/QAr4XqrnMDQmMo/Kq/IP9fQtjk+Dj4HZ/BnxGtA==
+"@tldraw/validate@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/validate/-/validate-2.0.2.tgz#e03948a25d581f87167af7ffcdcc4d9cff937471"
+  integrity sha512-dc2WxVwDf4HKP0/5AXukv/gqjrEg2fNCbKTRrxGDgvXfsRe1Gg8o9cVYlzZLRmbvj1DL8ggw4DAvbyL1FZh5Gg==
   dependencies:
-    "@tldraw/utils" "2.0.1"
+    "@tldraw/utils" "2.0.2"
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"
@@ -9238,10 +9289,10 @@ tinyspy@^2.2.0:
   resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-2.2.1.tgz#117b2342f1f38a0dbdcc73a50a454883adf861d1"
   integrity sha512-KYad6Vy5VDWV4GH3fjpseMQ/XU2BhIYP7Vzd0LG44qRWm/Yt2WCOTicFdvmgo6gWaqooMQCawTtILVQJupKu7A==
 
-tldraw@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.0.1.tgz#0a40a01e50571e01d51dfaa9fb38db8c5ace2491"
-  integrity sha512-hyiGVFINEmgoBdfWyRQoi1PUszgpYd4ubSHTVH+pvfq/NuuYCwyLAzoBFMWO91uu2003ODbsozfkC4u5dOYHZw==
+tldraw@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.0.2.tgz#2d4efd6671c363ceec53d1ea57b872fbd90c1f1d"
+  integrity sha512-qWIbsZkbCVcexGHtUBBjT28+upgzwSu3yImtQXRbfwDj8wbVadxxczAK9Uh6gSsRqlEx8WaQRu3Nkv/3QJSTQQ==
   dependencies:
     "@radix-ui/react-alert-dialog" "^1.0.5"
     "@radix-ui/react-context-menu" "^2.1.5"
@@ -9251,7 +9302,7 @@ tldraw@2.0.1:
     "@radix-ui/react-select" "^1.2.0"
     "@radix-ui/react-slider" "^1.1.0"
     "@radix-ui/react-toast" "^1.1.1"
-    "@tldraw/editor" "2.0.1"
+    "@tldraw/editor" "2.0.2"
     canvas-size "^1.2.6"
     classnames "^2.3.2"
     hotkeys-js "^3.11.2"
