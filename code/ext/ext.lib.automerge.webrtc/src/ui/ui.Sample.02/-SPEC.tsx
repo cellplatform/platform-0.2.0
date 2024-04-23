@@ -17,7 +17,6 @@ import {
 import { factory } from '../ui.Sample.02.loaders';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { DevCmdBar } from './ui.Dev.CmdBar';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Subject';
@@ -183,14 +182,6 @@ export default Dev.describe(name, async (e) => {
           />
         );
       });
-
-    /**
-     * Subject: Footer
-     */
-    dev.ctx.host.footer
-      .padding(0)
-      .border(null)
-      .render((e) => <DevCmdBar doc={Shared.harness} />);
   });
 
   e.it('ui:debug', async (e) => {
