@@ -1,6 +1,6 @@
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
-import { PeerjsNetworkAdapter, rx, type t } from './common';
+import { PeerjsNetworkAdapter, Time, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
@@ -29,12 +29,23 @@ export const WebrtcStore = {
 
     let _shared: t.CrdtSharedState | undefined;
     const initShared = async (uri?: string) => {
-      if (_shared) return;
-      _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
-      fire({
-        type: 'crdt:webrtc:shared/Ready',
-        payload: _shared,
-      });
+      if (_shared) {
+        // TEMP
+        console.group('🐷 Shared Document Already exists');
+        console.debug('requested uri:', uri);
+        console.debug('existing uri:', _shared.doc.uri);
+        console.groupEnd();
+        return;
+      }
+      try {
+        _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
+        fire({ type: 'crdt:webrtc:shared/Ready', payload: _shared });
+      } catch (error: any) {
+        console.group('🐷 Shared Document Failed to Create');
+        console.debug('requested uri:', uri);
+        console.debug('error:', error.message);
+        console.groupEnd();
+      }
     };
 
     /**
@@ -141,6 +152,7 @@ export const WebrtcStore = {
      */
     events.peer.cmd.beforeOutgoing$.subscribe((e) => {
       e.metadata<t.NetworkStoreConnectMetadata>(async (metadata) => {
+        console.debug('beforeOutgoing/_shared', _shared, metadata, api.peer.id);
         if (!_shared) await initShared();
         metadata.shared = _shared!.doc.uri;
       });
