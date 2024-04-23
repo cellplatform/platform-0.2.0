@@ -22,4 +22,15 @@ export const CmdHostPath = {
       },
     } as const;
   },
+
+  /**
+   * Helper for shortening path URIs when displaying in debug UI.
+   */
+  shortenUris(mutate: t.CmdHostPathLens) {
+    if (typeof mutate !== 'object' || mutate === null) return;
+    if (!mutate.uri) return;
+    const shorten = (value?: string) => (value ? `..${value.slice(-20)}` : '');
+    mutate.uri.loaded = shorten(mutate.uri.loaded);
+    mutate.uri.selected = shorten(mutate.uri.selected);
+  },
 } as const;

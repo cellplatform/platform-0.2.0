@@ -1,6 +1,6 @@
 import { css, Dev, Pkg, TestEdge, type t } from '../../test.ui';
 import { monitorPeer } from '../ui.Network.CmdHost/-SPEC';
-import { DEFAULTS } from './common';
+import { DEFAULTS, NetworkCmdHost } from './common';
 import { SampleLayout } from './ui.Layout';
 
 type L = t.Lens;
@@ -67,7 +67,17 @@ export default Dev.describe(name, async (e) => {
     TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
 
-    const data: t.InfoData = { shared: { lens: ['ns', 'foo'] } };
+    const data: t.InfoData = {
+      shared: {
+        lens: ['ns', 'foo'],
+        object: {
+          beforeRender(mutate) {
+            NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
+          },
+        },
+      },
+    };
+
     const render = (title: string, network: t.NetworkStore) => {
       const elTitle = <div {...css({ fontSize: 22 })}>{title}</div>;
       return dev.row((e) => {

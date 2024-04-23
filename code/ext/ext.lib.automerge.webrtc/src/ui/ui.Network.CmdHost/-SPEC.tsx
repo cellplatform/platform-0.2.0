@@ -144,7 +144,12 @@ export default Dev.describe(name, async (e) => {
             data: {
               shared: {
                 lens: ['ns', 'foo'],
-                object: { visible: e.state.debugShowJson },
+                object: {
+                  visible: e.state.debugShowJson,
+                  beforeRender(mutate) {
+                    NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
+                  },
+                },
                 onIconClick() {
                   state.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
                 },

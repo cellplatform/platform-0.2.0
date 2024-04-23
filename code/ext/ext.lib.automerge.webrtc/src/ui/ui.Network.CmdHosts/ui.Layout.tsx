@@ -1,5 +1,4 @@
-import { NetworkCmdHost } from '../ui.Network.CmdHost';
-import { Color, css, type t } from './common';
+import { Color, NetworkCmdHost, css, type t } from './common';
 
 export type SampleLayoutProps = {
   pkg: t.ModuleDef;

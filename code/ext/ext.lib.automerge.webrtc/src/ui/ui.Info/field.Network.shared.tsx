@@ -99,8 +99,8 @@ const wrangle = {
     const lens = data.shared?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 
-    const formatOutput = data.shared?.object?.beforeRender;
-    if (formatOutput) formatOutput(output);
+    const formatBeforeRender = data.shared?.object?.beforeRender;
+    if (formatBeforeRender) formatBeforeRender(output);
 
     let name = data.shared?.name ?? '';
     if (!name && lens) name = lens.join('.');
