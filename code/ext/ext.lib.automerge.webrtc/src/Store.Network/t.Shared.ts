@@ -1,7 +1,5 @@
 import type { t } from './common';
 
-type O = Record<string, unknown>;
-
 export type CrdtSharedMutateAction = 'unshare';
 
 export type CrdtSharedState = t.Lifecycle & {
