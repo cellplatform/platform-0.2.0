@@ -2,13 +2,16 @@ import { PeerRepoList } from '../ui/ui.PeerRepoList';
 import { Peer, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
-type B = t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
 type N = t.NetworkStore;
+type CreateOptions = {
+  behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
+  loglevel?: t.LogLevel;
+};
 
 /**
  * Root creation factory.
  */
-const create = async (kind: K, behaviors?: B): Promise<t.SampleEdge> => {
+const create = async (kind: K, options: CreateOptions = {}): Promise<t.SampleEdge> => {
   /**
    * CRDT and Network objects.
    */
@@ -18,17 +21,18 @@ const create = async (kind: K, behaviors?: B): Promise<t.SampleEdge> => {
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
+  const { behaviors, loglevel } = options;
   const model = await RepoList.model(store, { behaviors });
   const index = model.index;
-  const network = await WebrtcStore.init(peer, store, index);
+  const network = await WebrtcStore.init(peer, store, index, { loglevel });
   return { kind, model, network } as const;
 };
 
 /**
  * Creation factory returning just the [Edge].
  */
-const createEdge = async (kind: K, behaviors?: B) => {
-  const { network } = await create(kind, behaviors);
+const createEdge = async (kind: K, options: CreateOptions = {}) => {
+  const { network } = await create(kind, options);
   const edge: t.NetworkConnectionEdge = { kind, network };
   return edge;
 };

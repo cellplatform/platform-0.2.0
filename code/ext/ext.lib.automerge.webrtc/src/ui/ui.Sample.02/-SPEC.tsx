@@ -50,13 +50,14 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await TestEdge.create('Left', [
-      'Focus.OnArrowKey',
-      'Shareable',
-      'Deletable',
-      'Copyable',
-    ]);
-    right = await TestEdge.create('Right', ['Shareable', 'Deletable', 'Copyable']);
+    const loglevel = 'Debug';
+    left = await TestEdge.create('Left', {
+      behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
+      loglevel,
+    });
+    right = await TestEdge.create('Right', {
+      behaviors: ['Shareable', 'Deletable', 'Copyable'],
+    });
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -189,6 +190,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row((e) => {
+      return null; // TEMP 🐷
       return (
         <AuthIdentity
           jwt={e.state.accessToken}
@@ -196,7 +198,7 @@ export default Dev.describe(name, async (e) => {
         />
       );
     });
-    dev.hr(5, 20);
+    // dev.hr(5, 20);
 
     const edgeDebug = (edge: t.SampleEdge) => {
       const network = edge.network;
@@ -254,6 +256,26 @@ export default Dev.describe(name, async (e) => {
 
       connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
       connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
+      dev.hr(-1, 5);
+
+      /**
+       * TODO 🐷 DEBUG
+       * Force create the shared document on remotes.
+       */
+      dev.button('force create shared', (e) => {
+        console.log('left.network.peer.get.conn.remotes', left.network.peer.get.conn.remotes);
+        const peer = left.network.peer;
+        const remotes = peer.get.conn.remotes;
+        Object.entries(remotes).forEach(([key, value]) => {
+          value
+            .filter((item) => item.kind === 'data')
+            .forEach(async (item) => {
+              const conn = peer.get.conn.obj(item.id) as t.PeerJsConnData;
+              const uri = (await left.network.shared()).doc.uri;
+              conn.send({ type: 'TMP/forceShared', payload: { uri } });
+            });
+        });
+      });
     });
 
     dev.hr(5, 20);

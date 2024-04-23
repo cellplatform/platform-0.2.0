@@ -24,6 +24,7 @@ export type {
   IODirection,
   Index,
   Lifecycle,
+  LogLevel,
   ModuleDef,
   ModuleImporter,
   ModuleImports,

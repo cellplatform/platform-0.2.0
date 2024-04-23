@@ -1,6 +1,6 @@
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
-import { PeerjsNetworkAdapter, Time, rx, type t } from './common';
+import { Log, PeerjsNetworkAdapter, rx, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
@@ -16,12 +16,15 @@ export const WebrtcStore = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndexState,
-    options: { debugLabel?: string } = {},
+    options: { debugLabel?: string; loglevel?: t.LogLevel } = {},
   ): Promise<t.NetworkStore> {
     const { debugLabel } = options;
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
     const total = { added: 0, bytes: { in: 0, out: 0 } };
+
+    const log = Log.level(options.loglevel);
+    log.debug(`Debug Logging Webrtc.Store/peer:${peer.id}`);
 
     const $$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
@@ -30,21 +33,18 @@ export const WebrtcStore = {
     let _shared: t.CrdtSharedState | undefined;
     const initShared = async (uri?: string) => {
       if (_shared) {
-        // TEMP
-        console.group('🐷 Shared Document Already exists');
-        console.debug('requested uri:', uri);
-        console.debug('existing uri:', _shared.doc.uri);
-        console.groupEnd();
+        log.debug('🐷 Shared Document Already exists');
+        log.debug(' - requested uri:', uri);
+        log.debug(' - existing uri:', _shared.doc.uri);
         return;
       }
       try {
         _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
         fire({ type: 'crdt:webrtc:shared/Ready', payload: _shared });
       } catch (error: any) {
-        console.group('🐷 Shared Document Failed to Create');
-        console.debug('requested uri:', uri);
-        console.debug('error:', error.message);
-        console.groupEnd();
+        log.debug('🐷 Shared Document Failed to Create');
+        log.debug(' - requested uri:', uri);
+        log.debug(' - error:', error.message);
       }
     };
 
@@ -61,6 +61,17 @@ export const WebrtcStore = {
       const { dispose$, dispose } = rx.disposable([peer.dispose$, store.dispose$]);
       dispose$.subscribe(() => adapter.disconnect());
       conn.on('close', dispose);
+
+      /**
+       * TODO 🐷 debugging
+       */
+      conn.on('data', async (d: any) => {
+        if (d.type === 'TMP/forceShared') {
+          const uri = d.payload.uri;
+          log.debug('🐷 Force creating shared doc', uri);
+          initShared(uri);
+        }
+      });
 
       /**
        * Network adapter.
@@ -81,6 +92,7 @@ export const WebrtcStore = {
        * Setup shared-doc.
        */
       if (direction === 'incoming') {
+        log.debug('incoming connection', conn);
         const metadata = conn.metadata as t.NetworkStoreConnectMetadata;
         if (metadata.shared) {
           const uri = metadata.shared;
@@ -152,9 +164,11 @@ export const WebrtcStore = {
      */
     events.peer.cmd.beforeOutgoing$.subscribe((e) => {
       e.metadata<t.NetworkStoreConnectMetadata>(async (metadata) => {
-        console.debug('beforeOutgoing/_shared', _shared, metadata, api.peer.id);
         if (!_shared) await initShared();
         metadata.shared = _shared!.doc.uri;
+        log.debug('⚡️ beforeOutgoing connection', e);
+        log.debug(' - shared:', _shared);
+        log.debug(' - peer.id (self):', api.peer.id);
       });
     });
 

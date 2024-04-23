@@ -61,10 +61,7 @@ export const Shared = {
      */
     const doc = await Shared.getOrCreate(store, args.uri);
     const fireChanged = (payload: t.DocChanged<t.CrdtShared>) => {
-      args.fire?.({
-        type: 'crdt:webrtc:shared/Changed',
-        payload,
-      });
+      args.fire?.({ type: 'crdt:webrtc:shared/Changed', payload });
     };
 
     /**
