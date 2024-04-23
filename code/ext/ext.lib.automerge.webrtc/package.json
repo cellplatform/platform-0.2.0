@@ -26,7 +26,6 @@
     "sys.ui.react.common": "0.0.0"
   },
   "devDependencies": {
-    "ext.lib.ai.faceapi": "0.0.0",
     "ext.lib.ai.openai": "0.0.0",
     "ext.lib.deno": "0.0.0",
     "ext.lib.monaco": "0.0.0",

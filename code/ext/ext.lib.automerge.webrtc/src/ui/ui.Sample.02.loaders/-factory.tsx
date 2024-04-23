@@ -31,11 +31,6 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <ModuleNamespace />;
   }
 
-  if (e.name === 'FaceAPI') {
-    const { Face } = await import('./ui.Face');
-    return <Face stream={e.ctx.stream} />;
-  }
-
   if (e.name === 'ImageCrdt') {
     const { ImageCrdt } = await import('./ui.ImageCrdt');
     return <ImageCrdt store={store} docuri={docuri} />;

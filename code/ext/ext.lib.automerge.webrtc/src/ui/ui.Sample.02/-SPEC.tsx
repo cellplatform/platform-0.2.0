@@ -332,7 +332,6 @@ export default Dev.describe(name, async (e) => {
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
       loadButton(`ƒ → load → TLDraw`, 'TLDraw', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
-      loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
       loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
       loadButton(`ƒ → load → Automerge.Info`, 'AutomergeInfo', 'main');
       loadButton(`ƒ → load → common.CmdBar`, 'CmdBar', 'main');

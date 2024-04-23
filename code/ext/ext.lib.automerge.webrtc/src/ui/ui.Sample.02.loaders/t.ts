@@ -12,7 +12,6 @@ export type SampleName =
   | 'TLDraw'
   | 'Deno.Deploy'
   | 'ModuleNamespace'
-  | 'FaceAPI'
   | 'ImageCrdt'
   | 'AutomergeInfo'
   | 'CmdBar';

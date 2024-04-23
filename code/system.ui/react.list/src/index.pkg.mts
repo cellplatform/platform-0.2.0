@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'react-virtuoso': '4.7.8',
+    'react-virtuoso': '4.7.10',
     'sys.data.json': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
