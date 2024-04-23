@@ -7,6 +7,7 @@ export { Id, cuid, slug } from './Id';
 export { Immutable } from './Immutable';
 export { Is } from './Is';
 export { Json } from './Json';
+export { Log } from './Log';
 export { Mime } from './Mime';
 export { ObjectPath } from './ObjectPath';
 export { Path } from './Path';
