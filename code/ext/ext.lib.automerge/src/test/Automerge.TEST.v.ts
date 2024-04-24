@@ -9,6 +9,8 @@ describe('Automerge', () => {
   /**
    * Hard coded byte array hack.
    * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
+   *   - https://discord.com/channels/1200006940210757672/1231799313995403384
+   *   - https://discord.com/channels/1200006940210757672/1230453235207110666/1230520148478267402
    */
   describe('hard coded byte array hack', () => {
     it('init → Uint8Array → merge', () => {
