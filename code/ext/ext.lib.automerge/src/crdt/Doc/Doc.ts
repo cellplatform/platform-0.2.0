@@ -11,7 +11,7 @@ import { Tag } from './Doc.u.tag';
 import { Data, Is, DocUri as Uri, toObject, type t } from './common';
 import { toHandle } from './u';
 
-type Uri = t.DocUri | string;
+type Uri = t.DocUri | t.UriString;
 
 export const Doc = {
   Is,

@@ -4,7 +4,7 @@ import { get } from './Doc.u.get';
 import { Handle } from './u.Handle';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | string;
+type Uri = t.DocUri | t.UriString;
 
 /**
  * Find or initialize a new document from the repo.

@@ -2,7 +2,7 @@ import { DEFAULTS, Is, Time, rx, type t } from './common';
 import { Handle } from './u.Handle';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | string;
+type Uri = t.DocUri | t.UriString;
 
 /**
  * Find the document document from the repo.
