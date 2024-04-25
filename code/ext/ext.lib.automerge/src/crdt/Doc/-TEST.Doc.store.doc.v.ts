@@ -1,6 +1,8 @@
-import { Is, describe, expect, expectError, it, type t } from '../../test';
+import { rx, A, Is, describe, expect, expectError, it, type t } from '../../test';
 import { Store } from '../Store';
 import { testSetup, type D } from './-TEST.u';
+
+import { DocHandle } from '@automerge/automerge-repo';
 
 describe('Doc', async () => {
   const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
@@ -113,6 +115,87 @@ describe('Doc', async () => {
       const doc1 = await factory();
       const doc2 = await factory(`${doc1.uri}`);
       expect(doc1.uri).to.eql(doc2.uri);
+    });
+  });
+
+  describe('store.doc.fromBinary', () => {
+    type D = { count: number };
+    const Uri = Store.Doc.Uri;
+    const getBinary = () => {
+      const doc = A.change(A.init<D>(), (d) => (d.count = 0));
+      return A.save(doc);
+    };
+
+    it('from pre-existing URI', async () => {
+      const store = Store.init();
+      const binary = getBinary();
+      const uri = Uri.generate.uri();
+
+      const exists = () => store.doc.exists(uri, { timeout: 30 });
+      expect(await exists()).to.eql(false);
+
+      const doc = store.doc.fromBinary(binary, { uri });
+      store.dispose();
+
+      expect(doc.is.ready).to.eql(true);
+      expect(doc.current).to.eql({ count: 0 });
+      expect(await exists()).to.eql(true);
+    });
+
+    it('generates URI', async () => {
+      const store = Store.init();
+      const binary = getBinary();
+      const doc = store.doc.fromBinary(binary);
+      store.dispose();
+
+      expect(await store.doc.exists(doc.uri, { timeout: 30 })).to.eql(true);
+      expect(doc.current).to.eql({ count: 0 });
+    });
+
+    it('dispose$', async () => {
+      const store = Store.init();
+      const binary = getBinary();
+      const { dispose, dispose$ } = rx.disposable();
+
+      const doc1 = store.doc.fromBinary(binary, { dispose$ });
+      const doc2 = store.doc.fromBinary(binary);
+      const doc3 = await store.doc.getOrCreate<D>((d) => (d.count = 123));
+      const events1 = doc1.events();
+      const events2 = doc2.events();
+      const events3 = doc3.events();
+
+      expect(events1.disposed).to.eql(false);
+      expect(events2.disposed).to.eql(false);
+      expect(events3.disposed).to.eql(false);
+
+      expect(events1.disposed).to.eql(false);
+      expect(events2.disposed).to.eql(false);
+      expect(events3.disposed).to.eql(false);
+
+      dispose();
+      expect(events1.disposed).to.eql(true);
+      expect(events2.disposed).to.eql(false);
+      expect(events3.disposed).to.eql(false);
+
+      store.dispose();
+      expect(events1.disposed).to.eql(true);
+      expect(events2.disposed).to.eql(true);
+      expect(events3.disposed).to.eql(true);
+    });
+
+    it('throw: invalid URI', async () => {
+      const store = Store.init();
+      const binary = getBinary();
+      const fn = () => store.doc.fromBinary(binary, { uri: 'foo' });
+      expect(fn).to.throw(/Invalid document URI/);
+      store.dispose();
+    });
+
+    it('throw: invalid binary', async () => {
+      const store = Store.init();
+      const fn = () => store.doc.fromBinary(new Uint8Array([1, 2, 3]));
+      expect(fn).to.throw(/Invalid document binary/);
+      store.dispose();
     });
   });
 

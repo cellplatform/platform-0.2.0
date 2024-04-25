@@ -41,17 +41,20 @@ export type DocFactory<T extends O> = (uri?: Uri) => Promise<t.DocRef<T>>;
  * Document access exposed from a store/repo.
  */
 export type DocStore = {
-  factory<T extends O>(initial: Initial<T>): t.DocFactory<T>;
-  exists(uri?: Uri, options?: TOptions): Promise<boolean>;
-  get<T extends O>(uri?: Uri, options?: TOptions): Promise<t.DocRef<T> | undefined>;
+  exists(uri?: Uri, options?: GetOptions): Promise<boolean>;
+  get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.DocRef<T> | undefined>;
   getOrCreate<T extends O>(
     initial: Initial<T>,
     uri?: Uri,
-    options?: TOptions,
+    options?: GetOptions,
   ): Promise<t.DocRef<T>>;
-  delete(uri?: Uri, options?: TOptions): Promise<boolean>;
+  delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
+  factory<T extends O>(initial: Initial<T>): t.DocFactory<T>;
+  fromBinary<T extends O>(binary: Uint8Array, options?: FromBinaryOptions): t.DocRef<T>;
 };
-type TOptions = { timeout?: t.Msecs };
+
+type GetOptions = { timeout?: t.Msecs };
+type FromBinaryOptions = { uri?: Uri; dispose$?: t.UntilObservable };
 
 /**
  * Common meta-data object that can decorate CRDT documents

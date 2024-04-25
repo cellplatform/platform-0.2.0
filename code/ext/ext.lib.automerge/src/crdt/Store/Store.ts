@@ -4,8 +4,9 @@ import { StoreIndex as Index } from '../Store.Index';
 import { Is, Symbols, rx, type t } from './common';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | string;
-type Options = { timeout?: t.Msecs };
+type Uri = t.DocUri | t.UriString;
+type GetOptions = { timeout?: t.Msecs };
+type FromBinaryOptions = { uri?: Uri; dispose$?: t.UntilObservable };
 
 /**
  * Manage an Automerge repo.
@@ -37,12 +38,20 @@ export const Store = {
         },
 
         /**
+         * Determine if the given document exists within the repo.
+         */
+        async exists(uri?: Uri, options: GetOptions = {}) {
+          const res = await api.doc.get(uri, options);
+          return !!res;
+        },
+
+        /**
          * Find or create a new CRDT document from the repo.
          */
         async getOrCreate<T extends O>(
           initial: t.ImmutableNext<T>,
           uri?: Uri,
-          options: Options = {},
+          options: GetOptions = {},
         ) {
           const { timeout } = options;
           return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
@@ -51,17 +60,19 @@ export const Store = {
         /**
          * Find the existing CRDT document in the repo (or return nothing).
          */
-        async get<T extends O>(uri?: Uri, options: Options = {}) {
+        async get<T extends O>(uri?: Uri, options: GetOptions = {}) {
           const { timeout } = options;
           return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
         },
 
         /**
-         * Determine if the given document exists within the repo.
+         * Generate a new document from a stored binary.
+         * NOTE: this uses the "hard coded byte array hack"
          */
-        async exists(uri?: Uri, options: Options = {}) {
-          const res = await api.doc.get(uri, options);
-          return !!res;
+        fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions = {}) {
+          const { uri } = options;
+          const { dispose$ } = rx.disposable([options.dispose$, life.dispose$]);
+          return Doc.fromBinary<T>({ repo, binary, uri, dispose$ });
         },
 
         /**

@@ -10,6 +10,7 @@ import { splice } from './Doc.u.splice';
 import { Tag } from './Doc.u.tag';
 import { Data, Is, DocUri as Uri, toObject, type t } from './common';
 import { toHandle } from './u';
+import { fromBinary } from './Doc.u.fromBinary';
 
 type Uri = t.DocUri | t.UriString;
 
@@ -30,6 +31,7 @@ export const Doc = {
   get,
   getOrCreate,
   delete: del,
+  fromBinary,
   splice,
 
   history,
