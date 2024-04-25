@@ -1,5 +1,6 @@
 import { DocUri } from '.';
 import { describe, expect, it } from '../test';
+import { Is } from './u';
 
 describe('Store.DocUri', () => {
   describe('DocUri.id', () => {
@@ -59,6 +60,31 @@ describe('Store.DocUri', () => {
       const res2 = DocUri.automerge(uri, { shorten: [2, 3] });
       expect(res1).to.eql('automerge:3xFT..Fdfe');
       expect(res2).to.eql('automerge:3x..dfe');
+    });
+  });
+
+  describe('DocUri.generate', () => {
+    it('generate.docid.binary', () => {
+      const res1 = DocUri.generate.docid.binary();
+      const res2 = DocUri.generate.docid.binary();
+      expect(res1).to.not.eql(res2); // NB: random on each call.
+      expect(res1 instanceof Uint8Array).to.be.true;
+    });
+
+    it('generate.docid.string', () => {
+      const res = DocUri.generate.docid.string();
+      expect(res).to.be.string;
+    });
+
+    it('generate.uri: random/unique', () => {
+      const res1 = DocUri.generate.uri();
+      const res2 = DocUri.generate.uri();
+      expect(res1).to.not.eql(res2); // NB: random on each call.
+    });
+
+    it('generate.uri: is an automerge URL', () => {
+      const uri = DocUri.generate.uri();
+      expect(Is.automergeUrl(uri)).to.eql(true);
     });
   });
 });

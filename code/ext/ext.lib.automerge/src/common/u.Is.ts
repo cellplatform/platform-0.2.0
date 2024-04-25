@@ -2,6 +2,7 @@ import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Symbols, Typenames } from './constants';
 import { PatchState } from './libs';
+
 import type * as t from './t';
 
 type O = Record<string, unknown>;

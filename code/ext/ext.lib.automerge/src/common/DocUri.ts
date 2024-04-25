@@ -1,4 +1,8 @@
+import { stringifyAutomergeUrl, parseAutomergeUrl } from '@automerge/automerge-repo';
+import { v4 } from 'uuid';
 import { Hash } from './libs';
+
+import type * as t from './t';
 
 type ShortenInput = number | [number, number];
 
@@ -29,5 +33,24 @@ export const DocUri = {
   automerge(input: any, options: { shorten?: ShortenInput } = {}): string {
     const id = DocUri.id(input, options);
     return id ? `automerge:${id}` : '';
+  },
+
+  /**
+   * Generate a new URI with a randomly generated document-id.
+   */
+  generate: {
+    uri() {
+      const documentId = DocUri.generate.docid.binary();
+      return stringifyAutomergeUrl({ documentId });
+    },
+    docid: {
+      binary() {
+        return v4(null, new Uint8Array(16)) as t.BinaryDocumentId;
+      },
+      string() {
+        const { documentId } = parseAutomergeUrl(DocUri.generate.uri());
+        return documentId;
+      },
+    },
   },
 } as const;
