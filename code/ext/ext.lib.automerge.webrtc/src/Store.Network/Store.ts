@@ -40,7 +40,10 @@ export const WebrtcStore = {
       }
       try {
         _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
-        fire({ type: 'crdt:webrtc:shared/Ready', payload: _shared });
+        fire({
+          type: 'crdt:webrtc:shared/Ready',
+          payload: _shared,
+        });
       } catch (error: any) {
         log.debug('🐷 Shared Document Failed to Create');
         log.debug(' - requested uri:', uri);
