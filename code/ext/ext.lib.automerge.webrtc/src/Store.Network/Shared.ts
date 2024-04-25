@@ -21,8 +21,11 @@ export const Shared = {
   },
 
   get meta(): t.DocMeta {
-    const type = Shared.type;
-    return { ...Doc.Meta.default, type, ephemeral: true };
+    return {
+      ...Doc.Meta.default,
+      type: Shared.type,
+      ephemeral: true,
+    };
   },
 
   /**
