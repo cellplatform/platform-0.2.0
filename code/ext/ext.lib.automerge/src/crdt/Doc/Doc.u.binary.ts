@@ -47,6 +47,17 @@ export function fromBinary<T extends O>(args: {
 }
 
 /**
+ * Convert a document to a [Uint8Array] for storage.
+ *
+ *    See the "hard-coded byte array hack"
+ *    https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
+ */
+export function toBinary<T extends O>(init: t.ImmutableNext<T>): Uint8Array {
+  const doc = A.change(A.init<T>(), (d) => init(d));
+  return A.save(doc);
+}
+
+/**
  * Helpers
  */
 function tryLoadBinary(data: Uint8Array) {

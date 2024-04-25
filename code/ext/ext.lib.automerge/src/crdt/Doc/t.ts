@@ -3,7 +3,7 @@ export type * from './t.Events';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
-type Initial<T> = t.ImmutableNext<T>;
+type Init<T> = t.ImmutableNext<T>;
 
 /**
  * The address of a document within the repo/store.
@@ -43,14 +43,11 @@ export type DocFactory<T extends O> = (uri?: Uri) => Promise<t.DocRef<T>>;
 export type DocStore = {
   exists(uri?: Uri, options?: GetOptions): Promise<boolean>;
   get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.DocRef<T> | undefined>;
-  getOrCreate<T extends O>(
-    initial: Initial<T>,
-    uri?: Uri,
-    options?: GetOptions,
-  ): Promise<t.DocRef<T>>;
+  getOrCreate<T extends O>(initial: Init<T>, uri?: Uri, options?: GetOptions): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
-  factory<T extends O>(initial: Initial<T>): t.DocFactory<T>;
+  factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
   fromBinary<T extends O>(binary: Uint8Array, options?: FromBinaryOptions): t.DocRef<T>;
+  toBinary<T extends O>(init: t.ImmutableNext<T>): Uint8Array;
 };
 
 type GetOptions = { timeout?: t.Msecs };

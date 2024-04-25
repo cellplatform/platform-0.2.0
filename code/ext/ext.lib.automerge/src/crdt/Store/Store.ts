@@ -24,64 +24,74 @@ export const Store = {
     const { dispose$, dispose } = life;
     const repo = options.repo ?? new Repo({ network: [] });
 
-    const api: t.Store = {
-      get repo() {
-        return repo;
+    const doc: t.DocStore = {
+      /**
+       * Create an "initial constructor" factory for typed docs.
+       */
+      factory<T extends O>(initial: t.ImmutableNext<T>) {
+        return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
       },
 
-      doc: {
-        /**
-         * Create an "initial constructor" factory for typed docs.
-         */
-        factory<T extends O>(initial: t.ImmutableNext<T>) {
-          return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
-        },
+      /**
+       * Determine if the given document exists within the repo.
+       */
+      async exists(uri?: Uri, options: GetOptions = {}) {
+        const res = await api.doc.get(uri, options);
+        return !!res;
+      },
 
-        /**
-         * Determine if the given document exists within the repo.
-         */
-        async exists(uri?: Uri, options: GetOptions = {}) {
-          const res = await api.doc.get(uri, options);
-          return !!res;
-        },
+      /**
+       * Find or create a new CRDT document from the repo.
+       */
+      async getOrCreate<T extends O>(
+        initial: t.ImmutableNext<T>,
+        uri?: Uri,
+        options: GetOptions = {},
+      ) {
+        const { timeout } = options;
+        return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
+      },
 
-        /**
-         * Find or create a new CRDT document from the repo.
-         */
-        async getOrCreate<T extends O>(
-          initial: t.ImmutableNext<T>,
-          uri?: Uri,
-          options: GetOptions = {},
-        ) {
-          const { timeout } = options;
-          return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
-        },
+      /**
+       * Find the existing CRDT document in the repo (or return nothing).
+       */
+      async get<T extends O>(uri?: Uri, options: GetOptions = {}) {
+        const { timeout } = options;
+        return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
+      },
 
-        /**
-         * Find the existing CRDT document in the repo (or return nothing).
-         */
-        async get<T extends O>(uri?: Uri, options: GetOptions = {}) {
-          const { timeout } = options;
-          return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
-        },
+      /**
+       * Generate a new document from a stored binary.
+       * NOTE: this uses the "hard coded byte array hack"
+       */
+      fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions = {}) {
+        const { uri } = options;
+        const { dispose$ } = rx.disposable([options.dispose$, life.dispose$]);
+        return Doc.fromBinary<T>({ repo, binary, uri, dispose$ });
+      },
 
-        /**
-         * Generate a new document from a stored binary.
-         * NOTE: this uses the "hard coded byte array hack"
-         */
-        fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions = {}) {
-          const { uri } = options;
-          const { dispose$ } = rx.disposable([options.dispose$, life.dispose$]);
-          return Doc.fromBinary<T>({ repo, binary, uri, dispose$ });
-        },
+      /**
+       * Convert a document to a Uint8Array for storage.
+       * See the "hard-coded byte array hack"
+       * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
+       */
+      toBinary<T extends O>(init: (doc: T) => void) {
+        return Doc.toBinary<T>(init);
+      },
 
-        /**
-         * Delete the specified document.
-         */
-        async delete(uri?: Uri, options = {}) {
-          const { timeout } = options;
-          return Doc.delete({ repo, uri, timeout });
-        },
+      /**
+       * Delete the specified document.
+       */
+      async delete(uri?: Uri, options = {}) {
+        const { timeout } = options;
+        return Doc.delete({ repo, uri, timeout });
+      },
+    };
+
+    const api: t.Store = {
+      doc,
+      get repo() {
+        return repo;
       },
 
       /**

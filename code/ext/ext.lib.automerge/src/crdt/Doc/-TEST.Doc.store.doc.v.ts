@@ -1,8 +1,6 @@
-import { rx, A, Is, describe, expect, expectError, it, type t } from '../../test';
+import { Is, describe, expect, expectError, it, rx, type t } from '../../test';
 import { Store } from '../Store';
 import { testSetup, type D } from './-TEST.u';
-
-import { DocHandle } from '@automerge/automerge-repo';
 
 describe('Doc', async () => {
   const FAIL_URI = 'automerge:2eE9k3p2iGcsHkpKy6t1jivjDeXJ';
@@ -121,10 +119,7 @@ describe('Doc', async () => {
   describe('store.doc.fromBinary', () => {
     type D = { count: number };
     const Uri = Store.Doc.Uri;
-    const getBinary = () => {
-      const doc = A.change(A.init<D>(), (d) => (d.count = 0));
-      return A.save(doc);
-    };
+    const getBinary = () => Store.Doc.toBinary<D>((d) => (d.count = 0));
 
     it('from pre-existing URI', async () => {
       const store = Store.init();

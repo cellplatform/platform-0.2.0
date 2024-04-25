@@ -2,6 +2,7 @@ import { Lens } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
+import { fromBinary, toBinary } from './Doc.u.binary';
 import { del } from './Doc.u.delete';
 import { get } from './Doc.u.get';
 import { getOrCreate } from './Doc.u.getOrCreate';
@@ -10,7 +11,6 @@ import { splice } from './Doc.u.splice';
 import { Tag } from './Doc.u.tag';
 import { Data, Is, DocUri as Uri, toObject, type t } from './common';
 import { toHandle } from './u';
-import { fromBinary } from './Doc.u.fromBinary';
 
 type Uri = t.DocUri | t.UriString;
 
@@ -28,11 +28,13 @@ export const Doc = {
   namespace: Namespace.init,
 
   toObject,
+  splice,
+
   get,
   getOrCreate,
   delete: del,
   fromBinary,
-  splice,
+  toBinary,
 
   history,
   heads,
