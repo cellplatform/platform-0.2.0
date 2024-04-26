@@ -1,5 +1,5 @@
 import { PeerRepoList } from '../ui/ui.PeerRepoList';
-import { Peer, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
+import { Peer, rx, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
 type N = t.NetworkStore;
@@ -41,16 +41,21 @@ const createEdge = async (kind: K, options: CreateOptions = {}) => {
  * DevHarness: buttons for quick connection of peers (left/right).
  */
 const peersSection = (dev: t.DevTools, left: N, right: N) => {
+  const events = { left: left.events(), right: right.events() } as const;
+  const $ = rx.merge(events.left.peer.$, events.right.peer.$);
+  $.pipe(rx.debounceTime(150)).subscribe(() => dev.redraw('debug'));
+
   const connect = () => left.peer.connect.data(right.peer.id);
   const disconnect = () => left.peer.disconnect();
   const isConnected = () => {
     const conns = { left: left.peer.current.connections, right: right.peer.current.connections };
     return conns.left.some((left) => conns.right.some((right) => left.id === right.id));
   };
+
   dev.button((btn) => {
     btn
-      .label(() => (isConnected() ? 'connected' : 'connect'))
-      .right(() => (!isConnected() ? '🌳' : ''))
+      .label(() => (isConnected() ? 'connected (locally)' : 'connect network (locally)'))
+      .right(() => (!isConnected() ? '⚡️' : ''))
       .enabled(() => !isConnected())
       .onClick(() => connect());
   });
