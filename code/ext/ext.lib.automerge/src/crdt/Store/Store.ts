@@ -89,7 +89,9 @@ export const Store = {
     };
 
     const api: t.Store = {
-      doc,
+      get doc() {
+        return doc;
+      },
       get repo() {
         return repo;
       },
