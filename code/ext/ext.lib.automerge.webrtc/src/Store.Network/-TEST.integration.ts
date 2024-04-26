@@ -3,7 +3,7 @@ import { setup, type TParts } from './-TEST';
 
 type D = { count: number };
 
-export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdapter', (e) => {
+export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
   e.timeout(5000);
 
   let self: TParts;
