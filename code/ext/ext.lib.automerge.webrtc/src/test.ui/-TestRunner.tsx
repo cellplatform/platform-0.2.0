@@ -1,4 +1,4 @@
-import { Dev, type t } from '.';
+import { Dev, TestEdge, type t } from '.';
 
 type T = {
   spinning?: boolean;
@@ -6,7 +6,10 @@ type T = {
 };
 const initial: T = {};
 
-export default Dev.describe('TestRunner', (e) => {
+export default Dev.describe('TestRunner', async (e) => {
+  const left = await TestEdge.createEdge('Left');
+  const right = await TestEdge.createEdge('Right');
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -32,6 +35,10 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
+
+    dev.hr(0, 5);
+    dev.title('Test Runner');
     dev.bdd((runner) =>
       runner
         .run({})
@@ -40,13 +47,12 @@ export default Dev.describe('TestRunner', (e) => {
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
-  });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = { Results: e.state.results };
-      return <Dev.Object name={'TestRunner'} data={data} expand={1} />;
+    dev.hr(5, 20);
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+      TestEdge.dev.peersSection(dev, left.network, right.network);
     });
   });
 });
