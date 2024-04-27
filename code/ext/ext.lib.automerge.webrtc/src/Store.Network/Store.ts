@@ -39,7 +39,7 @@ export const WebrtcStore = {
         return;
       }
       try {
-        _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
+        _shared = await Shared.create({ $, peer, store, index, uri, debugLabel, fire });
         fire({
           type: 'crdt:webrtc:shared/Ready',
           payload: _shared,
