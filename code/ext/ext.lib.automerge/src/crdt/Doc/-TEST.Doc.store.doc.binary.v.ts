@@ -37,12 +37,16 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
       const exists = () => store.doc.exists(uri, { timeout: 30 });
       expect(await exists()).to.eql(false);
 
-      const doc = store.doc.fromBinary(binary, { uri });
+      const doc1 = store.doc.fromBinary(binary, { uri });
+      const doc2 = store.doc.fromBinary(binary, uri);
       store.dispose();
 
-      expect(doc.is.ready).to.eql(true);
-      expect(doc.current).to.eql({ count: 0 });
+      expect(doc1.is.ready).to.eql(true);
+      expect(doc1.current).to.eql({ count: 0 });
       expect(await exists()).to.eql(true);
+
+      expect(doc1.uri).to.eql(doc2.uri);
+      expect(doc1.current).to.eql(doc2.current);
     });
 
     it('generates URI', async () => {
@@ -124,7 +128,7 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
       store.dispose();
     });
 
-    it('change URI', () => {
+    it('clone and merge → to target document with new uri', () => {
       const store = Store.init();
       const binary = getBinary();
 
@@ -135,14 +139,13 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
 
       doc2.change((d) => (d.count = 888));
 
-      function cloneAsUri<T extends O>(source: t.DocRef<T>, target: t.DocRef<T>) {
-        const uri = target.uri;
-        const res = store.doc.fromBinary(Doc.toBinary(source), { uri });
-        Doc.merge(target, res);
-        return res;
+      function cloneAndMerge<T extends O>(source: t.DocRef<T>, target: t.DocRef<T>) {
+        const doc = store.doc.fromBinary(Doc.toBinary(source), target.uri);
+        Doc.merge(target, doc);
+        return doc;
       }
 
-      const doc3 = cloneAsUri(doc1, doc2);
+      const doc3 = cloneAndMerge(doc1, doc2);
       expect(doc3.uri).to.eql(doc2.uri);
       expect(doc3.current.count).to.eql(888);
     });

@@ -46,8 +46,11 @@ export type DocStore = {
   getOrCreate<T extends O>(initial: Init<T>, uri?: Uri, options?: GetOptions): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
   factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
-  fromBinary<T extends O>(binary: Uint8Array, options?: FromBinaryOptions): t.DocRef<T>;
-  toBinary<T extends O>(init: t.ImmutableNext<T>): Uint8Array;
+  toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>): Uint8Array;
+  fromBinary<T extends O>(
+    binary: Uint8Array,
+    options?: FromBinaryOptions | t.UriString,
+  ): t.DocRef<T>;
 };
 
 type GetOptions = { timeout?: t.Msecs };

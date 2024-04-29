@@ -65,10 +65,14 @@ export const Store = {
        * Generate a new document from a stored binary.
        * NOTE: this uses the "hard coded byte array hack"
        */
-      fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions = {}) {
-        const { uri } = options;
-        const { dispose$ } = rx.disposable([options.dispose$, life.dispose$]);
-        return fromBinary<T>({ repo, binary, uri, dispose$ });
+      fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions | t.UriString) {
+        const { uri, dispose$ } = wrangle.fromBinaryOptions(options);
+        return fromBinary<T>({
+          repo,
+          binary,
+          uri,
+          dispose$: rx.disposable([dispose$, life.dispose$]).dispose$,
+        });
       },
 
       /**
@@ -76,8 +80,8 @@ export const Store = {
        * See the "hard-coded byte array hack"
        * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
        */
-      toBinary<T extends O>(init: (doc: T) => void) {
-        return toBinary<T>(init);
+      toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>) {
+        return toBinary<T>(initOrDoc);
       },
 
       /**
@@ -118,5 +122,16 @@ export const Store = {
     const handle = (input as t.DocRefHandle<T>)?.handle;
     if (!Is.handle(handle)) throw new Error('input does not have a handle');
     return handle;
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  fromBinaryOptions(options?: FromBinaryOptions | t.UriString): FromBinaryOptions {
+    if (typeof options === 'string') return { uri: options };
+    if (typeof options === 'object') return options;
+    return {};
   },
 } as const;
