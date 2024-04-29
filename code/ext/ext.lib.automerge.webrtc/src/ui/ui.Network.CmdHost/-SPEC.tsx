@@ -94,7 +94,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.button(['connect sample peer', '⚡️'], async (e) => {
+      dev.button(['connect peer (sample)', '⚡️'], async (e) => {
         const edge = await TestEdge.create('Right');
         network.peer.connect.data(edge.network.peer.id);
       });
@@ -143,7 +143,7 @@ export default Dev.describe(name, async (e) => {
             margin: [12, 28],
             data: {
               shared: {
-                lens: ['ns', 'foo'],
+                // lens: ['ns', 'foo'],
                 object: {
                   visible: e.state.debugShowJson,
                   beforeRender(mutate) {
