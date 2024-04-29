@@ -45,7 +45,7 @@ export const Store = {
        * Find or create a new CRDT document from the repo.
        */
       async getOrCreate<T extends O>(
-        initial: t.ImmutableNext<T>,
+        initial: t.ImmutableNext<T> | Uint8Array,
         uri?: Uri,
         options: GetOptions = {},
       ) {

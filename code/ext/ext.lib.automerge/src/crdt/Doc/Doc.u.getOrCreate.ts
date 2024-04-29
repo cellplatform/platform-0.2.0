@@ -2,6 +2,7 @@ import { A, DEFAULTS, R, Time, slug, type t } from './common';
 
 import { get } from './Doc.u.get';
 import { Handle } from './u.Handle';
+import { fromBinary } from './Doc.u.binary';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
@@ -11,12 +12,12 @@ type Uri = t.DocUri | t.UriString;
  */
 export async function getOrCreate<T extends O>(args: {
   repo: t.Repo;
-  initial: t.ImmutableNext<T>;
+  initial: t.ImmutableNext<T> | Uint8Array;
   uri?: Uri;
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
 }): Promise<t.DocRefHandle<T>> {
-  const { repo, uri, timeout, dispose$ } = args;
+  const { initial, repo, uri, timeout, dispose$ } = args;
 
   /**
    * Lookup existing URI requested.
@@ -24,6 +25,14 @@ export async function getOrCreate<T extends O>(args: {
   if (uri) {
     const res = await get({ repo, uri, timeout, dispose$, throw: true });
     return res as t.DocRefHandle<T>;
+  }
+
+  /**
+   * From binary: "hard-coded byte array hack"
+   */
+  if (initial instanceof Uint8Array) {
+    const binary = initial;
+    return fromBinary({ repo, binary, uri, dispose$ });
   }
 
   /**
@@ -37,7 +46,7 @@ export async function getOrCreate<T extends O>(args: {
   const options: A.ChangeOptions<T> = { message, time };
 
   handle.change((d: any) => {
-    args.initial(d);
+    initial(d);
 
     // Ensure the initializer function caused a change such that the
     // initial genesis timestamp is written into the commit history.

@@ -43,7 +43,11 @@ export type DocFactory<T extends O> = (uri?: Uri) => Promise<t.DocRef<T>>;
 export type DocStore = {
   exists(uri?: Uri, options?: GetOptions): Promise<boolean>;
   get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.DocRef<T> | undefined>;
-  getOrCreate<T extends O>(initial: Init<T>, uri?: Uri, options?: GetOptions): Promise<t.DocRef<T>>;
+  getOrCreate<T extends O>(
+    initial: Init<T> | Uint8Array,
+    uri?: Uri,
+    options?: GetOptions,
+  ): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
   factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
   toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>): Uint8Array;
