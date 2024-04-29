@@ -51,24 +51,28 @@ describe('Doc.History', { retry: 3 }, async () => {
     expect(history.latest).to.eql(commits[2]);
   });
 
-  it('genesis meta-data', async () => {
-    const assert = (doc: t.DocRef<D>) => {
+  it('genesis meta-data (timestamp)', async () => {
+    const assert = (doc: t.DocRef<D>, commitIndex: number) => {
       const history = Doc.history(doc);
       const genesis = history.genesis;
       const commits = history.commits;
       const now = Time.now.timestamp;
-      const change = commits[1].change;
+      const change = commits[commitIndex].change;
 
-      expect(genesis?.initial).to.equal(commits[1]);
-      expect(change.message).to.eql(DEFAULTS.message.initial);
-      expectRoughlySame(change.time, now, 0.1, `initial timestamp`);
+      expect(genesis?.initial).to.equal(commits[commitIndex]);
+      expect(change.message).to.eql(DEFAULTS.genesis.message);
+      expectRoughlySame(change.time, now, 0.1, 'initial timestamp');
       expect(genesis?.elapsed.msec).to.be.within(1, 8);
     };
 
+    const binary = store.doc.toBinary<D>((d) => (d.count = 123));
     const doc1 = await store.doc.getOrCreate<D>((d) => null); // NB: no initial object setup.
     const doc2 = await store.doc.getOrCreate<D>((d) => (d.count = 123));
-    assert(doc1);
-    assert(doc2);
+    const doc3 = await store.doc.getOrCreate<D>(binary);
+
+    assert(doc1, 1);
+    assert(doc2, 1);
+    assert(doc3, 0); // Binary.
   });
 
   describe('page', () => {

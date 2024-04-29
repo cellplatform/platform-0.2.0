@@ -1,5 +1,5 @@
 import { DocHandle } from '@automerge/automerge-repo';
-import { A, DocUri, Is, type t } from './common';
+import { A, DEFAULTS, DocUri, Is, type t } from './common';
 import { Handle } from './u.Handle';
 
 type O = Record<string, unknown>;
@@ -53,8 +53,7 @@ export function fromBinary<T extends O>(args: {
  *    https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
  */
 export function toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>): Uint8Array {
-  const isFunc = typeof initOrDoc === 'function';
-  const doc = isFunc ? A.change(A.init<T>(), (d) => initOrDoc(d)) : initOrDoc.current;
+  const doc = wrangle.doc<T>(initOrDoc);
   return A.save(doc);
 }
 
@@ -68,3 +67,14 @@ function tryLoadBinary(data: Uint8Array) {
     return undefined;
   }
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  doc<T extends O>(input: t.ImmutableNext<T> | t.DocRef<T>) {
+    return Is.docRef(input)
+      ? input.current
+      : A.change(A.init<T>(), DEFAULTS.genesis.options(), (d) => input(d));
+  },
+} as const;

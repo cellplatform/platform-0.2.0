@@ -1,8 +1,7 @@
-import { A, DEFAULTS, R, Time, slug, type t } from './common';
-
-import { get } from './Doc.u.get';
-import { Handle } from './u.Handle';
+import { A, DEFAULTS, R, Time, type t } from './common';
 import { fromBinary } from './Doc.u.binary';
+import { get } from './Doc.u.get';
+import { Handle, Mutate } from './u';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
@@ -41,16 +40,13 @@ export async function getOrCreate<T extends O>(args: {
   const handle = repo.create<T>();
   await handle.whenReady();
 
-  const message = DEFAULTS.message.initial;
-  const time = Time.now.timestamp;
-  const options: A.ChangeOptions<T> = { message, time };
-
+  const options = DEFAULTS.genesis.options();
   handle.change((d: any) => {
     initial(d);
 
     // Ensure the initializer function caused a change such that the
     // initial genesis timestamp is written into the commit history.
-    if (R.equals(d, {})) mutate.emptyChange(d);
+    if (R.equals(d, {})) Mutate.emptyChange(d);
   }, options);
 
   // Finish up.
@@ -60,10 +56,3 @@ export async function getOrCreate<T extends O>(args: {
 /**
  * Helpers
  */
-const mutate = {
-  emptyChange(d: any) {
-    const key = `__tmp:${slug()}`;
-    d[key] = 0;
-    delete d[key]; // Clean up.
-  },
-} as const;
