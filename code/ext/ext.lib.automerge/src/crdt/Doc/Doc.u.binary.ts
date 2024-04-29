@@ -52,8 +52,11 @@ export function fromBinary<T extends O>(args: {
  *    See the "hard-coded byte array hack"
  *    https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
  */
-export function toBinary<T extends O>(init: t.ImmutableNext<T>): Uint8Array {
-  const doc = A.change(A.init<T>(), (d) => init(d));
+export function toBinary<T extends O>(docOrInit: t.ImmutableNext<T> | t.DocRef<T>): Uint8Array {
+  const doc =
+    typeof docOrInit === 'function'
+      ? A.change(A.init<T>(), (d) => docOrInit(d))
+      : docOrInit.current;
   return A.save(doc);
 }
 

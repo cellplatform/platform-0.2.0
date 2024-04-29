@@ -1,5 +1,6 @@
 import { Repo } from '@automerge/automerge-repo';
 import { Doc } from '../Doc';
+import { fromBinary, toBinary } from '../Doc/Doc.u.binary';
 import { StoreIndex as Index } from '../Store.Index';
 import { Is, Symbols, rx, type t } from './common';
 
@@ -67,7 +68,7 @@ export const Store = {
       fromBinary<T extends O>(binary: Uint8Array, options: FromBinaryOptions = {}) {
         const { uri } = options;
         const { dispose$ } = rx.disposable([options.dispose$, life.dispose$]);
-        return Doc.fromBinary<T>({ repo, binary, uri, dispose$ });
+        return fromBinary<T>({ repo, binary, uri, dispose$ });
       },
 
       /**
@@ -76,7 +77,7 @@ export const Store = {
        * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
        */
       toBinary<T extends O>(init: (doc: T) => void) {
-        return Doc.toBinary<T>(init);
+        return toBinary<T>(init);
       },
 
       /**
