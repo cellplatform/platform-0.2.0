@@ -50,10 +50,10 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    const loglevel = 'Debug';
+    const logLevel = 'Debug';
     left = await TestEdge.create('Left', {
       behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
-      loglevel,
+      logLevel,
     });
     right = await TestEdge.create('Right', {
       behaviors: ['Shareable', 'Deletable', 'Copyable'],
@@ -85,7 +85,8 @@ export default Dev.describe(name, async (e) => {
      * When the shared namespace becomes ready (i.e. the network is now connected)
      * the initialize the sample namespace.
      */
-    left.network.shared().then((shared) => {
+    (() => {
+      const shared = left.network.shared;
       ns = shared.namespace.typed<SampleNamespace>();
       Shared.main = ns.lens<t.SampleSharedMain>('foo.main', {});
       Shared.harness = ns.lens<t.HarnessShared>('foo.harness', {
@@ -99,7 +100,7 @@ export default Dev.describe(name, async (e) => {
       const events = {
         main: Shared.main.events(),
         harness: Shared.harness.events(),
-      };
+      } as const;
 
       events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         dev.redraw('subject');
@@ -112,7 +113,7 @@ export default Dev.describe(name, async (e) => {
       });
 
       monitorKeyboard(Shared.harness);
-    });
+    })();
 
     const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
       state.change((d) => (d.stream = e.selected));
@@ -257,25 +258,6 @@ export default Dev.describe(name, async (e) => {
       connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
       connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
       dev.hr(-1, 5);
-
-      /**
-       * TODO 🐷 DEBUG
-       * Force create the shared document on remotes.
-       */
-      dev.button('force create shared', (e) => {
-        console.log('left.network.peer.get.conn.remotes', left.network.peer.get.conn.remotes);
-        const peer = left.network.peer;
-        const remotes = peer.get.conn.remotes;
-        Object.entries(remotes).forEach(([key, value]) => {
-          value
-            .filter((item) => item.kind === 'data')
-            .forEach(async (item) => {
-              const conn = peer.get.conn.obj(item.id) as t.PeerJsConnData;
-              const uri = (await left.network.shared()).doc.uri;
-              conn.send({ type: 'TMP/forceShared', payload: { uri } });
-            });
-        });
-      });
     });
 
     dev.hr(5, 20);
@@ -286,8 +268,8 @@ export default Dev.describe(name, async (e) => {
 
       const getShared = async () => {
         return {
-          left: await left.network.shared(),
-          right: await right.network.shared(),
+          left: left.network.shared,
+          right: right.network.shared,
         } as const;
       };
 
