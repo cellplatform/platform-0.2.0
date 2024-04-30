@@ -51,7 +51,3 @@ export async function getOrCreate<T extends O>(args: {
   // Finish up.
   return Handle.wrap<T>(handle, { dispose$ });
 }
-
-/**
- * Helpers
- */
