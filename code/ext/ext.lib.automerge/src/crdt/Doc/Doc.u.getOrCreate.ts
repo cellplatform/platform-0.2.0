@@ -1,4 +1,4 @@
-import { A, DEFAULTS, R, Time, type t } from './common';
+import { DEFAULTS, R, type t } from './common';
 import { fromBinary } from './Doc.u.binary';
 import { get } from './Doc.u.get';
 import { Handle, Mutate } from './u';
