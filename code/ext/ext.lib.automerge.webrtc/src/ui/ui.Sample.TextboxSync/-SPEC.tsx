@@ -57,8 +57,8 @@ const monitorPeer = (
   edge: t.NetworkConnectionEdge,
   toLens?: (shared: t.NetworkStoreShared) => t.Lens,
 ) => {
-  const handleConnection = async () => {
-    toLens?.(await edge.network.shared());
+  const handleConnection = () => {
+    toLens?.(edge.network.shared);
     dev.redraw();
   };
   edge.network.peer.events().cmd.conn$.subscribe(handleConnection);

@@ -199,7 +199,7 @@ export const monitorPeer = (
   toLens?: (shared: t.NetworkStoreShared) => t.Lens,
 ) => {
   const handleConnection = async () => {
-    toLens?.(await network.shared());
+    toLens?.(network.shared);
     dev.redraw();
   };
   network.peer.events().cmd.conn$.subscribe(handleConnection);
