@@ -19,16 +19,11 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
     expect(self.network.total.added).to.eql(0);
     expect(remote.network.total.added).to.eql(0);
 
-    let sharedReadyCount = 0;
-    self.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
-    remote.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
-
     const res = await self.peer.connect.data(remote.peer.id);
     expect(res.error).to.eql(undefined);
 
     expect(self.network.total.added).to.eql(1);
     expect(remote.network.total.added).to.eql(1);
-    expect(sharedReadyCount).to.eql(2); // NB: both self AND remote fired [shared.ready$]
 
     expect(self.fired.added.length).to.eql(1);
     expect(remote.fired.added.length).to.eql(1);
@@ -84,8 +79,8 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
 
   e.it('shared (doc / state → namespace)', async (e) => {
     const shared = {
-      self: await self.network.shared(),
-      remote: await remote.network.shared(),
+      self: self.network.shared,
+      remote: remote.network.shared,
     } as const;
 
     expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);

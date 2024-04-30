@@ -11,16 +11,15 @@ export function eventsFactory(args: {
   const { dispose, dispose$ } = life;
 
   type TEventType = t.CrdtSharedEvent['type'];
-  const sharedTypes: TEventType[] = ['crdt:webrtc:shared/Ready', 'crdt:webrtc:shared/Changed'];
+  const sharedEventTypes: TEventType[] = ['crdt:webrtc:shared/Changed'];
   const $ = args.$.pipe(
     rx.takeUntil(dispose$),
-    rx.filter((e) => sharedTypes.includes(e.type as TEventType)),
+    rx.filter((e) => sharedEventTypes.includes(e.type as TEventType)),
     rx.map((e) => e as t.CrdtSharedEvent),
   );
 
   const api: t.CrdtSharedEvents = {
     $,
-    ready$: rx.payload<t.CrdtSharedReadyEvent>($, 'crdt:webrtc:shared/Ready'),
     changed$: rx.payload<t.CrdtSharedChangedEvent>($, 'crdt:webrtc:shared/Changed'),
 
     /**

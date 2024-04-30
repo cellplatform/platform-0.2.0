@@ -93,16 +93,14 @@ export const Shared = {
     let _ns: t.NamespaceManager | undefined;
     const api: t.CrdtSharedState = {
       kind: 'crdt.network.shared',
-      store,
-      index,
       doc,
-
-      events(dispose$) {
-        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
-      },
 
       get namespace() {
         return _ns || (_ns = Shared.namespace(doc));
+      },
+
+      events(dispose$) {
+        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
       },
 
       /**

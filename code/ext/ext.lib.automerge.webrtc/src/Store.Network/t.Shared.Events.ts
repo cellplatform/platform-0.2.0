@@ -5,20 +5,17 @@ import type { t } from './common';
  */
 export type CrdtSharedEvents = t.Lifecycle & {
   readonly $: t.Observable<t.CrdtSharedEvent>;
-  readonly ready$: t.Observable<t.CrdtSharedState>;
   readonly changed$: t.Observable<t.CrdtSharedChanged>;
 };
 
 /**
  * Events
  */
-export type CrdtSharedEvent = CrdtSharedReadyEvent | CrdtSharedChangedEvent;
+export type CrdtSharedEvent = CrdtSharedChangedEvent;
 
-export type CrdtSharedReadyEvent = {
-  type: 'crdt:webrtc:shared/Ready';
-  payload: t.CrdtSharedState;
-};
-
+/**
+ * Fired when the shared doc changes.
+ */
 export type CrdtSharedChangedEvent = {
   type: 'crdt:webrtc:shared/Changed';
   payload: t.CrdtSharedChanged;
