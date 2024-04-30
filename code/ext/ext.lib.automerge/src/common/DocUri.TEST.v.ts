@@ -30,8 +30,12 @@ describe('Store.DocUri', () => {
       const uri = 'automerge:3xFTnhG6Z3fzdxqiEoLMRrWHFdfe';
       const res1 = DocUri.id(uri, { shorten: 4 });
       const res2 = DocUri.id(uri, { shorten: [2, 3] });
+      const res3 = DocUri.shorten(uri);
+      const res4 = DocUri.shorten(uri, [2, 3]);
       expect(res1).to.eql('3xFT..Fdfe');
       expect(res2).to.eql('3x..dfe');
+      expect(res3).to.eql(res1);
+      expect(res4).to.eql(res2);
     });
   });
 

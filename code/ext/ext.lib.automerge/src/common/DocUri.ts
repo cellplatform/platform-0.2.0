@@ -4,7 +4,8 @@ import { Hash } from './libs';
 
 import type * as t from './t';
 
-type ShortenInput = number | [number, number];
+type Shorten = number | [number, number];
+type ShortenInput = Shorten | boolean;
 
 /**
  * Helpers for working with document URIs.
@@ -18,7 +19,8 @@ export const DocUri = {
     if (typeof input !== 'string') return '';
 
     const done = (id: string) => {
-      if (options.shorten) id = Hash.shorten(id, options.shorten);
+      const shorten = wrangle.shorten(options.shorten);
+      if (shorten) id = Hash.shorten(id, shorten);
       return id;
     };
 
@@ -33,6 +35,13 @@ export const DocUri = {
   automerge(input: any, options: { shorten?: ShortenInput } = {}): string {
     const id = DocUri.id(input, options);
     return id ? `automerge:${id}` : '';
+  },
+
+  /**
+   * Convenience method to extract a shortened ID from the URI.
+   */
+  shorten(input: any, shorten?: ShortenInput) {
+    return DocUri.id(input, { shorten: shorten ?? true });
   },
 
   /**
@@ -52,5 +61,16 @@ export const DocUri = {
         return documentId;
       },
     },
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  shorten(shorten?: ShortenInput): Shorten | undefined {
+    if (!shorten) return;
+    if (shorten === true) return [4, 4];
+    return shorten;
   },
 } as const;
