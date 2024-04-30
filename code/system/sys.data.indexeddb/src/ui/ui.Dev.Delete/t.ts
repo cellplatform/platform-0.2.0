@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type DevDeleteProps = {
   filter?: t.DevDeleteFilter;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 

@@ -1,22 +1,24 @@
-import { Button, COLORS, Icons, css, type t } from './common';
+import { Button, Color, Icons, css, type t } from './common';
 
 export type ListItemProps = {
   index: number;
   item: t.DevDbItem;
   deleted?: boolean;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onDeleteClick?: t.DevDbDeleteClickHandler;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { item, index, deleted = false } = props;
+  const { item, index, deleted = false, theme } = props;
 
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
     base: css({
-      color: COLORS.DARK,
+      color,
       fontSize: 14,
       userSelect: 'none',
       marginBottom: 8,

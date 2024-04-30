@@ -1,15 +1,16 @@
-import { css, type t, DEFAULTS } from './common';
+import { DEFAULTS, css, type t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
   items: t.DevDbItem[];
   deleted: t.DevDbItem['name'][];
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onDeleteClick?: t.DevDbDeleteClickHandler;
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { items = [], deleted = [] } = props;
+  const { items = [], deleted = [], theme } = props;
 
   /**
    * Render
@@ -34,6 +35,7 @@ export const List: React.FC<ListProps> = (props) => {
               item={item}
               deleted={wrangle.isDeleted(item, deleted)}
               onDeleteClick={props.onDeleteClick}
+              theme={theme}
             />
           );
         })}
