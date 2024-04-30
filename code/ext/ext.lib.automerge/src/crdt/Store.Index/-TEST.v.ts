@@ -293,6 +293,23 @@ describe('StoreIndex', () => {
       store.dispose();
     });
 
+    it('new document from binary', async () => {
+      const { store } = setup();
+      const index = await Store.index(store);
+      expect(index.total()).to.eql(0);
+
+      const binary = Store.Doc.toBinary<D>((d) => (d.count = 123));
+      const doc = await store.doc.getOrCreate(binary);
+
+      await Time.wait(0);
+      expect(index.total()).to.eql(1);
+
+      const entry = index.doc.current.docs[0];
+      expect(entry.uri).to.eql(doc.uri);
+
+      store.dispose();
+    });
+
     describe('document automatically removed from index upon delete', async () => {
       const { store, initial } = setup();
 
