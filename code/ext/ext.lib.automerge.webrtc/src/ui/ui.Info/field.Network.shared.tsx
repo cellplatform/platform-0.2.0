@@ -1,4 +1,4 @@
-import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, R, css, type t } from './common';
+import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, css, type t } from './common';
 
 /**
  * Shared network state (transient document).
