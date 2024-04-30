@@ -136,12 +136,16 @@ describe('Webrtc: Shared', () => {
       listenToIndex(index, shared);
       expect(shared.current.sys.docs).to.eql({});
 
-      const uri = 'automerge:foo';
+      const uri = `automerge:foo`;
       await index.add({ uri });
       expect(shared.current.sys.docs).to.eql({}); // NB: not yet shared.
 
       // Share.
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { shared: true }));
+      index.doc.change((d) => {
+        const doc = d.docs.find((item) => item.uri === uri);
+        Store.Index.Mutate.toggleShared(doc!, { shared: true });
+      });
+
       expect(shared.current.sys.docs[uri]).to.eql({ shared: true, version: 1 }); // NB: entry now exists on the shared-doc.
 
       // Remove.

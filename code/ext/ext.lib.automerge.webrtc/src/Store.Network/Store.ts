@@ -19,9 +19,9 @@ export const WebrtcStore = {
     options: { debugLabel?: string; loglevel?: t.LogLevel } = {},
   ): Promise<t.NetworkStore> {
     const { debugLabel } = options;
+    const total = { added: 0, bytes: { in: 0, out: 0 } };
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
-    const total = { added: 0, bytes: { in: 0, out: 0 } };
 
     const log = Log.level(options.loglevel);
     log.debug(`Debug Logging Webrtc.Store/peer:${peer.id}`);

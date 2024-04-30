@@ -36,7 +36,8 @@ export const Shared = {
      * Get or create a [Shared] document type from the given store.
      */
     async getOrCreate(store: t.Store, uri?: string) {
-      return store.doc.getOrCreate<t.CrdtShared>((d) => Shared.Doc.init(d), uri);
+      const { binary } = await import('./Shared.binary');
+      return store.doc.getOrCreate<t.CrdtShared>(binary, uri);
     },
   },
 

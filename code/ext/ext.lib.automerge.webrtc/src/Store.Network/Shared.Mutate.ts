@@ -32,7 +32,9 @@ export const Mutate = {
     if (index.meta?.ephemeral) return done('Invalid index item (ephemeral)');
 
     const version = getVersions();
-    if (version.index < 0 && version.shared < 0) return done('Not ready to sync');
+    if (version.index < 0 && version.shared < 0) {
+      return done('Not ready to sync');
+    }
 
     const changeShared = (fn: (shared: t.CrdtSharedDoc) => void) => {
       const shared = draft.sys.docs[uri] ?? { shared: false, version: 0 };
