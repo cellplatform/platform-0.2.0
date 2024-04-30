@@ -1,4 +1,4 @@
-import { css, type t } from './common';
+import { css, type t, DEFAULTS } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
@@ -24,15 +24,19 @@ export const List: React.FC<ListProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {items.map((item, i) => (
-        <ListItem
-          key={i}
-          deleted={wrangle.isDeleted(item, deleted)}
-          index={i}
-          item={item}
-          onDeleteClick={props.onDeleteClick}
-        />
-      ))}
+      {items
+        .filter((item) => !item.name.endsWith(DEFAULTS.systemSuffix))
+        .map((item, i) => {
+          return (
+            <ListItem
+              key={i}
+              index={i}
+              item={item}
+              deleted={wrangle.isDeleted(item, deleted)}
+              onDeleteClick={props.onDeleteClick}
+            />
+          );
+        })}
     </div>
   );
 };

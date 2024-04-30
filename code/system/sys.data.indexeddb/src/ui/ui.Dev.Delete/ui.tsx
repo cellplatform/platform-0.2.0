@@ -13,12 +13,22 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   /**
    * Handlers
    */
-  const handleDelete = async (e: t.DevDbDeleteClickHandlerArgs) => {
-    if (!e.item.isDeletable) return;
-    const name = e.item.name;
+  const systemSibling = (name: string) => `${name}${DEFAULTS.systemSuffix}`;
+  const hasSystemSibling = (name: string) => {
+    return items.some((item) => item.name === systemSibling(name));
+  };
+
+  const deleteDatabase = async (name: string) => {
     setReloadRequired(true);
     setDeleted(R.uniq([...deleted, name]));
     await IndexedDb.delete(name);
+  };
+
+  const handleDelete = async (e: t.DevDbDeleteClickHandlerArgs) => {
+    if (!e.item.isDeletable) return;
+    const name = e.item.name;
+    await deleteDatabase(name);
+    if (hasSystemSibling(name)) await deleteDatabase(systemSibling(name));
   };
 
   /**
@@ -27,7 +37,8 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   useEffect(() => {
     const life = rx.lifecycle();
     indexedDB.databases().then((dbs) => {
-      if (!life.disposed) setItems(wrangle.items(dbs, filter));
+      if (life.disposed) return;
+      setItems(wrangle.items(dbs, filter));
     });
     return life.dispose;
   }, [reloadRequired, items.length, deleted.length]);
