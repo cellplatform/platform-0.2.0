@@ -1,4 +1,3 @@
-export type * from './Store.Network.Shared/t';
 export type * from './Store.Network/t';
 
 export type * from './ui/ui.Info/t';
