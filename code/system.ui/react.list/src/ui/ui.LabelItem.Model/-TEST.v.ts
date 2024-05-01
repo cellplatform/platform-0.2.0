@@ -498,8 +498,8 @@ describe('LabelItem.Model', () => {
         const fired2: t.Event[] = [];
         const fired3: t.Event[] = [];
         events.cmd.$.subscribe((e) => fired1.push(e));
-        events.cmd.type$<Event>((e) => e.type === 'bar').subscribe((e) => fired2.push(e));
-        events.cmd.type$<Event>().subscribe((e) => fired3.push(e));
+        events.cmd.filter<Event>((e) => e.type === 'bar').subscribe((e) => fired2.push(e));
+        events.cmd.filter<Event>().subscribe((e) => fired3.push(e));
 
         const foo: FooEvent = { type: 'foo', payload: { count: 123 } };
         const bar: BarEvent = { type: 'bar', payload: { msg: 'hello' } };
