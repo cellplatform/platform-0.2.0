@@ -9,8 +9,6 @@ import '@vime/core/themes/light.css';
  * Tldraw (Whiteboard)
  * https://tldraw.dev
  */
-import '@tldraw/tldraw/tldraw.css';
-
 import type { t } from '../common';
 
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
