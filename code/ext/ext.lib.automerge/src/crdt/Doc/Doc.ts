@@ -3,6 +3,7 @@ import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
 import { toBinary } from './Doc.u.binary';
+import { ephemeral } from './Doc.u.ephemeral';
 import { del } from './Doc.u.delete';
 import { get } from './Doc.u.get';
 import { getOrCreate } from './Doc.u.getOrCreate';
@@ -36,6 +37,7 @@ export const Doc = {
   splice,
   merge,
 
+  ephemeral,
   history,
   heads,
   toHandle,

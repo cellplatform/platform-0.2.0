@@ -293,10 +293,11 @@ export default Dev.describe(name, async (e) => {
           // loadCodeEditor(state);
         });
 
-        const foo$ = events.right.ephemeral.type$<TFoo>(
-          (e) => typeof e.message === 'object' && e.message?.type === 'foo',
-        );
-        foo$.subscribe((e) => console.log('foo$', e));
+        events.right.ephemeral
+          .in<TFoo>()
+          .filter((e) => typeof e.message === 'object')
+          .filter((e) => e.message?.type === 'foo')
+          .subscribe((e) => console.log('ephemeral foo$', e));
       };
 
       const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
@@ -355,8 +356,7 @@ export default Dev.describe(name, async (e) => {
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
-          type T = t.DocRefHandle<t.CrdtShared>;
-          (shared.left.doc as T)?.handle.broadcast(data);
+          Doc.ephemeral.broadcast(shared.left.doc, data);
         };
 
         console.log('------------------- send ---------------------');
