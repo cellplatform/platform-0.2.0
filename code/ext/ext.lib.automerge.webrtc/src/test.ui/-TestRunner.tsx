@@ -78,7 +78,6 @@ export default Dev.describe('TestRunner', async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
       dev.boolean((btn) => {
         const value = (state: T) => !!state.useExistingConnections;
         btn
