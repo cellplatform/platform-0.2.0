@@ -1,10 +1,10 @@
-import { css, Dev, Pkg, TestEdge, type t } from '../../test.ui';
+import { WebrtcStore, css, Dev, Pkg, TestEdge, type t, TestDb } from '../../test.ui';
 import { monitorPeer } from '../ui.Network.CmdHost/-SPEC';
 import { DEFAULTS, NetworkCmdHost } from './common';
 import { SampleLayout } from './ui.Layout';
 
 type L = t.Lens;
-type T = { theme?: t.CommonTheme };
+type T = { reload?: boolean; theme?: t.CommonTheme };
 const initial: T = {};
 
 /**
@@ -40,6 +40,14 @@ export default Dev.describe(name, async (e) => {
       .render<T>(async (e) => {
         const { theme } = e.state;
         Dev.Theme.background(ctx, theme, 1);
+
+        if (e.state.reload)
+          return (
+            <TestDb.DevReload
+              theme={theme}
+              onCloseClick={() => state.change((d) => (d.reload = false))}
+            />
+          );
 
         /**
          * TODO 🐷
@@ -102,6 +110,12 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.button(['purge ephemeral', '💦'], (e) => {
+        WebrtcStore.Shared.purge(left.network.index);
+        WebrtcStore.Shared.purge(right.network.index);
+        e.change((d) => (d.reload = true));
+      });
     });
 
     dev.hr(5, 20);
