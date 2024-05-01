@@ -19,6 +19,7 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       command={controller.cmd}
       selectedIndex={controller.selected.index}
       mutateUrl={false}
+      showParamDev={false}
       autoGrabFocus={false}
       listMinWidth={300}
       focusOnClick={true}
