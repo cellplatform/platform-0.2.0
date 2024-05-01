@@ -12,8 +12,9 @@ const initial: T = {};
  */
 const name = 'Network.CmdHosts';
 export default Dev.describe(name, async (e) => {
-  const left = await TestEdge.createEdge('Left');
-  const right = await TestEdge.createEdge('Right');
+  const logLevel = 'Debug';
+  const left = await TestEdge.createEdge('Left', { logLevel, debugLabel: '🐷' });
+  const right = await TestEdge.createEdge('Right', { logLevel, debugLabel: '🌼' });
   const lenses: { left?: L; right?: L } = {};
 
   type LocalStore = Pick<T, 'theme'>;
@@ -69,10 +70,12 @@ export default Dev.describe(name, async (e) => {
 
     const data: t.InfoData = {
       shared: {
-        lens: ['ns', 'foo'],
+        // lens: ['ns', 'foo'],
         object: {
           beforeRender(mutate) {
-            NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
+            const doc = mutate as Partial<t.CrdtShared>;
+            delete doc['.meta'];
+            // NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
           },
         },
       },
@@ -93,6 +96,12 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (e) => (local.theme = e));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
 
     dev.hr(5, 20);
