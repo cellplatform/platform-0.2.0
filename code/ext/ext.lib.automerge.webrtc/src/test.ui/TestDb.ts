@@ -1,5 +1,5 @@
 import { TestDb as Base } from 'ext.lib.automerge';
-import { type t, DevReload } from './common';
+import { DevReload, type t } from './common';
 
 const edge = (kind: t.NetworkConnectionEdgeKind, name: string) => {
   return {

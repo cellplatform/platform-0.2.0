@@ -1,11 +1,12 @@
 import { PeerRepoList } from '../ui/ui.PeerRepoList';
-import { Peer, rx, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, type t } from './common';
+import { Peer, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, rx, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
 type N = t.NetworkStore;
 type CreateOptions = {
   behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
-  loglevel?: t.LogLevel;
+  logLevel?: t.LogLevel;
+  debugLabel?: string;
 };
 
 /**
@@ -21,10 +22,10 @@ const create = async (kind: K, options: CreateOptions = {}): Promise<t.SampleEdg
     storage: db.name,
     network: [], // NB: ensure the local "BroadcastNetworkAdapter" is not used so we actually test WebRTC.
   });
-  const { behaviors, loglevel } = options;
+  const { behaviors, logLevel, debugLabel } = options;
   const model = await RepoList.model(store, { behaviors });
   const index = model.index;
-  const network = await WebrtcStore.init(peer, store, index, { loglevel });
+  const network = await WebrtcStore.init(peer, store, index, { logLevel, debugLabel });
   return { kind, model, network } as const;
 };
 
