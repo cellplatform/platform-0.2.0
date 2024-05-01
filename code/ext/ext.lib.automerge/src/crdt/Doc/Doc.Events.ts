@@ -27,10 +27,10 @@ export function eventsFactory<T extends O>(
   const ephemeral: E['ephemeral'] = {
     in$: rx.payload<t.DocEphemeralInEvent<T>>($, 'crdt:doc/Ephemeral:in'),
     out$: rx.payload<t.DocEphemeralOutEvent<T>>($, 'crdt:doc/Ephemeral:out'),
-    type$<M extends t.CBOR>(filter?: t.DocEphemeralFilter<T, M>) {
+    filter<M extends t.CBOR>(fn?: t.DocEphemeralFilter<T, M>) {
       type TIncoming = t.DocEphemeralIn<T, M>;
       const $ = ephemeral.in$ as t.Observable<TIncoming>;
-      return filter ? $.pipe(rx.filter(filter)) : $;
+      return fn ? $.pipe(rx.filter(fn)) : $;
     },
   };
 

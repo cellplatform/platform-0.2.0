@@ -14,7 +14,7 @@ export type DocEvents<T extends O = O> = t.Lifecycle & {
 export type DocEventsEphemeral<T extends O> = {
   readonly in$: t.Observable<t.DocEphemeralIn<T>>;
   readonly out$: t.Observable<t.DocEphemeralOut<T>>;
-  type$<M extends t.CBOR>(filter?: DocEphemeralFilter<T, M>): t.Observable<t.DocEphemeralIn<T, M>>;
+  filter<M extends t.CBOR>(fn?: DocEphemeralFilter<T, M>): t.Observable<t.DocEphemeralIn<T, M>>;
 };
 
 export type DocEphemeralFilter<T extends O, M extends t.CBOR> = (
