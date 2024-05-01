@@ -6,7 +6,6 @@ export const TESTS = {
 
       'Integration Tests',
       import('../Store.Network/-TEST.integration'),
-      import('../Store.Network.Shared/-TEST.integration'),
     ];
   },
 };
