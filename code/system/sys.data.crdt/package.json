@@ -12,7 +12,7 @@
     "tmp": "tsx   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@automerge/automerge": "2.1.10",
+    "@automerge/automerge": "2.2.1",
     "sys.data.json": "0.0.0",
     "sys.fs": "0.0.0",
     "sys.text": "0.0.0",
