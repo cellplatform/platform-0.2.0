@@ -1,5 +1,4 @@
 import { type t } from './common';
-type L = t.LogLevel | t.LogLevel[];
 
 /**
  * Console logging helpers.
@@ -8,21 +7,22 @@ export const Log = {
   /**
    * Create a logger for the given level(s).
    */
-  level(level?: L, options: { prefix?: string } = {}) {
-    const levels = wrangle.levels(level);
+  level(level?: t.LogLevelInput, options: { prefix?: string } = {}) {
+    const levels = () => wrangle.levels(level);
+    const includes = (level: t.LogLevel) => levels().includes(level);
     const format = (msg: any[]) => (options.prefix ? [options.prefix, ...msg] : msg);
     return {
       debug(...msg: any[]) {
-        if (levels.includes('Debug')) console.debug(...format(msg));
+        if (includes('Debug')) console.debug(...format(msg));
       },
       info(...msg: any[]) {
-        if (levels.includes('Info')) console.info(...format(msg));
+        if (includes('Info')) console.info(...format(msg));
       },
       warn(...msg: any[]) {
-        if (levels.includes('Warn')) console.warn(...format(msg));
+        if (includes('Warn')) console.warn(...format(msg));
       },
       error(...msg: any[]) {
-        if (levels.includes('Error')) console.error(...format(msg));
+        if (includes('Error')) console.error(...format(msg));
       },
     } as const;
   },
@@ -32,8 +32,9 @@ export const Log = {
  * Helpers
  */
 const wrangle = {
-  levels(level?: L) {
+  levels(level: t.LogLevelInput) {
     if (level === undefined) return [];
-    return Array.isArray(level) ? level : [level];
+    const value = typeof level === 'function' ? level() : level;
+    return (Array.isArray(value) ? value : [value]).filter(Boolean);
   },
 } as const;
