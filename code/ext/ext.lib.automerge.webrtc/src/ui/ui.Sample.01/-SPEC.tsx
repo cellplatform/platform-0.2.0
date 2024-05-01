@@ -7,11 +7,9 @@ import { Sample } from './ui.Sample';
 type T = {
   user?: string;
   docuri?: string;
-  debug: { connectingData?: boolean };
+  reload?: boolean;
 };
-const initial: T = {
-  debug: {},
-};
+const initial: T = {};
 
 /**
  * Spec
@@ -40,9 +38,9 @@ export default Dev.describe(name, async (e) => {
   let doc: t.DocRef<t.SampleDoc>;
   const initDoc = async (state: t.DevCtxState<T>) => {
     try {
+      console.log('initialize new doc');
       doc = await generator(local.docuri);
-      local.docuri = doc.uri;
-      state.change((d) => (d.docuri = doc.uri));
+      state.change((d) => (local.docuri = d.docuri = doc.uri));
     } catch (error) {
       console.error('failed to load localstorage docuri:', local.docuri, error);
       local.docuri = undefined;
@@ -57,7 +55,9 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.docuri = local.docuri;
     });
-    await initDoc(state);
+
+    const exists = await store.doc.exists(local.docuri);
+    if (!exists) await initDoc(state);
 
     const network = await WebrtcStore.init(self, store, index);
     const events = network.events();
@@ -69,6 +69,9 @@ export default Dev.describe(name, async (e) => {
       .size([350, 150])
       .display('grid')
       .render<T>((e) => {
+        if (e.state.reload)
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
+
         return (
           <store.Provider>
             <Sample user={e.state.user} docUri={doc?.uri} />
@@ -82,9 +85,7 @@ export default Dev.describe(name, async (e) => {
     dev.header
       .padding(0)
       .border(-0.1)
-      .render((e) => {
-        return <PeerUI.Connector peer={self} />;
-      });
+      .render((e) => <PeerUI.Connector peer={self} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -105,23 +106,36 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.textbox((txt) => {
-      txt
-        .label((e) => 'Document URI')
-        .value((e) => e.state.docuri ?? '')
-        .onChange((e) => e.change((d) => (d.docuri = e.to.value)))
-        .onEnter((e) => {
-          // 🐷 Hack
-          local.docuri = e.state.current.docuri || undefined;
-          initDoc(state);
-        });
+    dev.section(['Document URI', 'CRDT'], (dev) => {
+      dev.textbox((txt) => {
+        txt
+          .value((e) => e.state.docuri ?? '')
+          .onChange((e) => e.change((d) => (d.docuri = e.to.value)))
+          .onEnter((e) => {
+            // 🐷 Hack
+            local.docuri = e.state.current.docuri || undefined;
+            initDoc(state);
+          });
+      });
+
+      dev.hr(0, 8);
+      dev.button(['copy', 'clipboard'], (e) => {
+        const uri = e.state.current.docuri || '';
+        navigator.clipboard.writeText(uri);
+      });
+      dev.button(['create new', '🌳'], async (e) => {
+        local.docuri = undefined;
+        await initDoc(state);
+      });
     });
 
-    dev.hr(0, 5);
+    dev.hr(5, 20);
 
-    dev.button('new doc', async (e) => {
-      local.docuri = undefined;
-      await initDoc(state);
+    dev.section('Debug', (dev) => {
+      dev.button(['purge ephemeral', '💦'], (e) => {
+        WebrtcStore.Shared.purge(index);
+        e.change((d) => (d.reload = true));
+      });
     });
   });
 

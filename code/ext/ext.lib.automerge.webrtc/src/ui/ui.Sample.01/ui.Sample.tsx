@@ -16,13 +16,8 @@ export const Sample: React.FC<SampleProps> = (props) => {
   };
 
   const styles = {
-    base: css({
-      padding: 10,
-      lineHeight: 1.5,
-    }),
-    body: css({
-      display: 'grid',
-    }),
+    base: css({ Padding: [10, 12], lineHeight: 1.5 }),
+    body: css({ display: 'grid' }),
     title: css({ fontWeight: 'bold' }),
     icon: css({ opacity: props.user ? 1 : 0.3, marginRight: 5 }),
     right: css({
