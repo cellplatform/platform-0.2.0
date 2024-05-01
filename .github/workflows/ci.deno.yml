@@ -8,25 +8,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Record start time
-        run: echo "START_TIME=$(date +%s%N)" >> $GITHUB_ENV
+      - name: Check out repo
+        uses: actions/checkout@v3
 
-      - uses: actions/checkout@v2
-      - uses: denolib/setup-deno@v2
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x
+          deno-version: '1.x'
 
-      - name: Info
+      - name: Record start time
+        id: start-time
+        run: echo "::set-output name=time::$(date +%s%N)"
+
+      - name: Deno Info
         run: |
           deno --version
           deno run --allow-env script.deno/info.ts
 
       - name: Record end time
-        run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
+        id: end-time
+        run: echo "::set-output name=time::$(date +%s%N)"
 
       - name: Calculate elapsed time
         run: |
-          ELAPSED_MSECS=$((($END_TIME - $START_TIME)/1000000))
-          ELAPSED_SECS=$(($ELAPSED_MSECS / 1000))
-          echo "Elapsed time: $ELAPSED_MSECS msecs"
-          echo "Elapsed time: $ELAPSED_SECS secs"
+          ELAPSED_NANOSECONDS=$((${{ steps.end-time.outputs.time }} - ${{ steps.start-time.outputs.time }}))
+          ELAPSED_MILLISECONDS=$(($ELAPSED_NANOSECONDS / 1000000))
+          ELAPSED_SECONDS=$(($ELAPSED_MILLISECONDS / 1000))
+          echo "Elapsed time: $ELAPSED_MILLISECONDS ms"
+          echo "Elapsed time: $ELAPSED_SECONDS s"
+        shell: bash
