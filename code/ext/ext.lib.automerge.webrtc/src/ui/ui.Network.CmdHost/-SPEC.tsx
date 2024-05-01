@@ -146,6 +146,7 @@ export default Dev.describe(name, async (e) => {
                 // lens: ['ns', 'foo'],
                 object: {
                   visible: e.state.debugShowJson,
+                  dotMeta: false,
                   beforeRender(mutate) {
                     NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
                   },

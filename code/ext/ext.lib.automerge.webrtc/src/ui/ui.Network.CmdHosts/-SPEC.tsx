@@ -79,13 +79,7 @@ export default Dev.describe(name, async (e) => {
     const data: t.InfoData = {
       shared: {
         // lens: ['ns', 'foo'],
-        object: {
-          beforeRender(mutate) {
-            const doc = mutate as Partial<t.CrdtShared>;
-            delete doc['.meta'];
-            // NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
-          },
-        },
+        object: { dotMeta: false },
       },
     };
 

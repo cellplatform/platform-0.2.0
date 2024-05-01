@@ -36,6 +36,7 @@ export type InfoDataObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };
   beforeRender?: (mutate: unknown) => void;
+  dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
 };
 
 /**
