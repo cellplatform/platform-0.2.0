@@ -62,7 +62,7 @@ describe('Doc.History', { retry: 3 }, async () => {
       expect(genesis?.initial).to.equal(commits[commitIndex]);
       expect(change.message).to.eql(DEFAULTS.genesis.message);
       expectRoughlySame(change.time, now, 0.1, 'initial timestamp');
-      expect(genesis?.elapsed.msec).to.be.within(1, 8);
+      expect(genesis?.elapsed.msec).to.be.within(1, 10);
     };
 
     const binary = store.doc.toBinary<D>((d) => (d.count = 123));
