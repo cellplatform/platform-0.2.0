@@ -75,7 +75,7 @@ export const WebrtcStore = {
         const metadata = conn.metadata as t.NetworkStoreConnectMetadata;
         if (metadata.shared) {
           const uri = metadata.shared;
-          log.debug('incoming/remote shared state (doc uri):', Uri.shorten(uri));
+          log.debug('incoming/remote shared state (doc uri):', uri);
 
           /**
            * Retrieve remote state.
