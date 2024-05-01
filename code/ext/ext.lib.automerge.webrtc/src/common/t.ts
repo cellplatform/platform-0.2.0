@@ -26,6 +26,7 @@ export type {
   Index,
   Lifecycle,
   LogLevel,
+  LogLevelInput,
   ModuleDef,
   ModuleImporter,
   ModuleImports,

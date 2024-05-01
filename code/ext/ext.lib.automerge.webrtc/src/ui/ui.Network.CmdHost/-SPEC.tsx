@@ -1,27 +1,30 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { Color, Dev, Doc, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
+import { Color, Dev, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
 import { type t } from './common';
 
-type L = t.Lens;
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
   debugShowJson?: boolean;
+  debugLogging?: boolean;
 };
-type T = D & {
-  props: P;
-  stream?: MediaStream;
-};
+type T = D & { props: P; stream?: MediaStream };
 const initial: T = { props: {} };
+
+const createStores = async (state: t.DevCtxState<T>) => {
+  const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
+  const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
+  const lens = network.shared.namespace.lens('foo', {});
+  return { network, lens } as const;
+};
 
 /**
  * Spec
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  const edge = await TestEdge.create('Left', { logLevel: 'Debug' });
-  const network = edge.network;
-  const lens = network.shared.namespace.lens('foo', {});
+  let network: t.NetworkStore;
+  let lens: t.Lens;
 
   type LocalStore = D & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -29,6 +32,7 @@ export default Dev.describe(name, async (e) => {
     theme: 'Dark',
     debugPadding: true,
     debugShowJson: false,
+    debugLogging: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -39,7 +43,12 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
       d.debugShowJson = local.debugShowJson;
+      d.debugLogging = local.debugLogging;
     });
+
+    const stores = await createStores(state);
+    network = stores.network;
+    lens = stores.lens;
 
     /**
      * Monitoring
@@ -92,11 +101,13 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.button(['connect peer (sample)', '⚡️'], async (e) => {
-        const edge = await TestEdge.create('Right');
-        network.peer.connect.data(edge.network.peer.id);
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debugLogging;
+        btn
+          .label((e) => `logging ${value(e.state) ? '("Debug")' : ''}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debugLogging = Dev.toggle(d, 'debugLogging'))));
       });
-      dev.hr(-1, 5);
       dev.boolean((btn) => {
         const value = (state: T) => !!state.debugPadding;
         btn
@@ -104,12 +115,10 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => Dev.toggle(d, 'debugPadding')));
       });
-
       dev.hr(-1, 5);
-
-      dev.button('🐷 temp', (e) => {
-        const broadcast = Doc.ephemeral.broadcaster(network.shared.doc);
-        broadcast({ msg: 'hello' });
+      dev.button(['connect peer (sample)', '⚡️'], async (e) => {
+        const edge = await TestEdge.create('Right');
+        network.peer.connect.data(edge.network.peer.id);
       });
     });
   });

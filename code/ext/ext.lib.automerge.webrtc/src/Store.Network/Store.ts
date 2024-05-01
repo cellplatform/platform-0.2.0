@@ -16,7 +16,7 @@ export const WebrtcStore = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndexState,
-    options: { debugLabel?: string; logLevel?: t.LogLevel } = {},
+    options: { debugLabel?: string; logLevel?: t.LogLevel | (() => t.LogLevel) } = {},
   ): Promise<t.NetworkStore> {
     const Uri = Doc.Uri;
     const { debugLabel } = options;

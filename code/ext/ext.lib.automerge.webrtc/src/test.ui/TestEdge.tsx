@@ -5,7 +5,7 @@ type K = t.NetworkConnectionEdgeKind;
 type N = t.NetworkStore;
 type CreateOptions = {
   behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
-  logLevel?: t.LogLevel;
+  logLevel?: t.LogLevelInput;
   debugLabel?: string;
 };
 
@@ -32,10 +32,18 @@ const create = async (kind: K, options: CreateOptions = {}): Promise<t.SampleEdg
 /**
  * Creation factory returning just the [Edge].
  */
-const createEdge = async (kind: K, options: CreateOptions = {}) => {
+const createEdge = async (kind: K, options?: CreateOptions) => {
   const { network } = await create(kind, options);
   const edge: t.NetworkConnectionEdge = { kind, network };
   return edge;
+};
+
+/**
+ * Creation factory returning just the [Edge] network.
+ */
+const createNetwork = async (kind: K, options?: CreateOptions) => {
+  const { network } = await create(kind, options);
+  return network;
 };
 
 /**
@@ -121,6 +129,7 @@ const infoPanel = (dev: t.DevTools, network: N, options: InfoPanelOptions = {}) 
 export const TestEdge = {
   create,
   createEdge,
+  createNetwork,
   dev: {
     peersSection,
     headerFooterConnectors,
