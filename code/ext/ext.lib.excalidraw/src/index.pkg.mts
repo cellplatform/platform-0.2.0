@@ -14,8 +14,8 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@excalidraw/excalidraw': '0.17.6',
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
+    'react': '18.3.1',
+    'react-dom': '18.3.1',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },

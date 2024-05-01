@@ -35,7 +35,6 @@ const { Specs: ExtMonaco } = await import('ext.lib.monaco/specs');
 const { Specs: ExtMonacoCrdt } = await import('ext.lib.monaco.crdt/specs');
 const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
 const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
-const { Specs: ExtProtocolHats } = await import('ext.lib.protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
@@ -63,7 +62,6 @@ export const Specs = {
   ...ExtMonacoCrdt,
 
   ...ExtStripe,
-  ...ExtProtocolHats,
   ...ExtVimeo,
 
   ...ExtAuthPrivy,
