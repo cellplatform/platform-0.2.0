@@ -1,5 +1,5 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { Color, Dev, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
+import { Color, Dev, Doc, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
 import { type t } from './common';
 
 type L = t.Lens;
@@ -19,9 +19,9 @@ const initial: T = { props: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  const edge = await TestEdge.create('Left');
+  const edge = await TestEdge.create('Left', { logLevel: 'Debug' });
   const network = edge.network;
-  let lens: L | undefined;
+  const lens = network.shared.namespace.lens('foo', {});
 
   type LocalStore = D & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -44,8 +44,6 @@ export default Dev.describe(name, async (e) => {
     /**
      * Monitoring
      */
-    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
-    monitorPeer(dev, network, (shared) => (lens = toLens(shared)));
     network.peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
 
     /**
@@ -105,6 +103,13 @@ export default Dev.describe(name, async (e) => {
           .label((e) => `full screen`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => Dev.toggle(d, 'debugPadding')));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('🐷 temp', (e) => {
+        const broadcast = Doc.ephemeral.broadcaster(network.shared.doc);
+        broadcast({ msg: 'hello' });
       });
     });
   });
@@ -190,18 +195,3 @@ export default Dev.describe(name, async (e) => {
     });
   });
 });
-
-/**
- * Helpers
- */
-export const monitorPeer = (
-  dev: t.DevTools,
-  network: t.NetworkStore,
-  toLens?: (shared: t.NetworkStoreShared) => t.Lens,
-) => {
-  const handleConnection = async () => {
-    toLens?.(network.shared);
-    dev.redraw();
-  };
-  network.peer.events().cmd.conn$.subscribe(handleConnection);
-};

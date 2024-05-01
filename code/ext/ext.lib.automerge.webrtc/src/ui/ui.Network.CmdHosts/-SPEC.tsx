@@ -1,9 +1,7 @@
-import { WebrtcStore, css, Dev, Pkg, TestEdge, type t, TestDb } from '../../test.ui';
-import { monitorPeer } from '../ui.Network.CmdHost/-SPEC';
-import { DEFAULTS, NetworkCmdHost } from './common';
+import { Dev, Pkg, TestDb, TestEdge, WebrtcStore, css, type t } from '../../test.ui';
+import { DEFAULTS } from './common';
 import { SampleLayout } from './ui.Layout';
 
-type L = t.Lens;
 type T = { reload?: boolean; theme?: t.CommonTheme };
 const initial: T = {};
 
@@ -13,9 +11,14 @@ const initial: T = {};
 const name = 'Network.CmdHosts';
 export default Dev.describe(name, async (e) => {
   const logLevel = 'Debug';
-  const left = await TestEdge.createEdge('Left', { logLevel, debugLabel: '🐷' });
-  const right = await TestEdge.createEdge('Right', { logLevel, debugLabel: '🌼' });
-  const lenses: { left?: L; right?: L } = {};
+  const left = (await TestEdge.createEdge('Left', { logLevel, debugLabel: '🐷' })).network;
+  const right = (await TestEdge.createEdge('Right', { logLevel, debugLabel: '🌼' })).network;
+
+  const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
+  const lenses = {
+    left: toLens(left.shared),
+    right: toLens(right.shared),
+  } as const;
 
   type LocalStore = Pick<T, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -28,10 +31,6 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {
       d.theme = local.theme;
     });
-
-    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
-    monitorPeer(dev, left.network, (shared) => (lenses.left = toLens(shared)));
-    monitorPeer(dev, right.network, (shared) => (lenses.right = toLens(shared)));
 
     ctx.debug.width(330);
     ctx.subject
@@ -72,8 +71,8 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
-    TestEdge.dev.peersSection(dev, left.network, right.network);
+    TestEdge.dev.headerFooterConnectors(dev, left, right);
+    TestEdge.dev.peersSection(dev, left, right);
     dev.hr(5, 20);
 
     const data: t.InfoData = {
@@ -90,9 +89,9 @@ export default Dev.describe(name, async (e) => {
       });
     };
 
-    render('🐷', left.network);
+    render('🐷', left);
     dev.hr(5, 20);
-    render('🌼', right.network);
+    render('🌼', right);
 
     dev.hr(5, 20);
 
@@ -106,8 +105,8 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
 
       dev.button(['purge ephemeral', '💦'], (e) => {
-        WebrtcStore.Shared.purge(left.network.index);
-        WebrtcStore.Shared.purge(right.network.index);
+        WebrtcStore.Shared.purge(left.index);
+        WebrtcStore.Shared.purge(right.index);
         e.change((d) => (d.reload = true));
       });
     });
