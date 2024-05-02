@@ -18,9 +18,7 @@ const name = 'Sample.01';
 export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<T, 'docuri'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    docuri: undefined,
-  });
+  const local = localstore.object({ docuri: undefined });
 
   /**
    * Network Peers
@@ -35,16 +33,19 @@ export default Dev.describe(name, async (e) => {
   const index = await WebStore.index(store);
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
-  let doc: t.DocRef<t.SampleDoc>;
+  let _doc: t.DocRef<t.SampleDoc> | undefined;
   const initDoc = async (state: t.DevCtxState<T>) => {
     try {
-      console.log('initialize new doc');
-      doc = await generator(local.docuri);
+      const doc = await generator(local.docuri);
       state.change((d) => (local.docuri = d.docuri = doc.uri));
     } catch (error) {
       console.error('failed to load localstorage docuri:', local.docuri, error);
       local.docuri = undefined;
     }
+  };
+  const updateDoc = async (uri?: t.UriString) => {
+    if (!uri) return;
+    _doc = await store.doc.get<t.SampleDoc>(uri);
   };
 
   e.it('ui:init', async (e) => {
@@ -68,15 +69,13 @@ export default Dev.describe(name, async (e) => {
       .backgroundColor(1)
       .size([350, 150])
       .display('grid')
-      .render<T>((e) => {
-        if (e.state.reload)
+      .render<T>(async (e) => {
+        if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
-
-        return (
-          <store.Provider>
-            <Sample user={e.state.user} docUri={doc?.uri} />
-          </store.Provider>
-        );
+        } else {
+          await updateDoc(e.state.docuri);
+          return <Sample user={e.state.user} doc={_doc} />;
+        }
       });
   });
 
@@ -112,7 +111,7 @@ export default Dev.describe(name, async (e) => {
           .value((e) => e.state.docuri ?? '')
           .onChange((e) => e.change((d) => (d.docuri = e.to.value)))
           .onEnter((e) => {
-            // 🐷 Hack
+            // 🐷 Hack.
             local.docuri = e.state.current.docuri || undefined;
             initDoc(state);
           });
