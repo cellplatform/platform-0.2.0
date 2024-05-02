@@ -37,7 +37,6 @@ const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
-const { Specs: ExtCodeMirror } = await import('ext.lib.codemirror/specs');
 const { Specs: ExtDeno } = await import('ext.lib.deno/specs');
 
 export const Specs = {
@@ -64,7 +63,6 @@ export const Specs = {
   ...ExtAuthPrivy,
   ...ExtPeerJs,
   ...ExtAutomerge,
-  ...ExtCodeMirror,
   ...ExtAutomergeWebrtc,
   ...ExtDeno,
 } as t.SpecImports;
