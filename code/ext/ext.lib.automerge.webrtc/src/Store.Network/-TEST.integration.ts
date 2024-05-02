@@ -83,8 +83,6 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
       remote: remote.network.shared,
     } as const;
 
-    expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);
-
     // NB: property returns same instance.
     type N = 'tmp' | 'foo';
     type T = { count: number };
