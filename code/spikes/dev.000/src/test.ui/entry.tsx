@@ -12,9 +12,9 @@ const isLocalhost = url.hostname === 'localhost' && url.port !== '3000'; // NB: 
 type Subject = 'Dev' | 'Dev:Localhost' | 'DefaultEntry';
 
 const render = async (content: Subject) => {
-  const root = createRoot(document.getElementById('root')!);
   const { BADGES } = await import('../common');
   const badge = BADGES.ci.node;
+  const root = createRoot(document.getElementById('root')!);
 
   if (content === 'Dev') {
     const { Dev } = await import('sys.ui.react.common');
