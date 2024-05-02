@@ -105,6 +105,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
         const value = (state: T) => !!state.debugLogging;
         btn
