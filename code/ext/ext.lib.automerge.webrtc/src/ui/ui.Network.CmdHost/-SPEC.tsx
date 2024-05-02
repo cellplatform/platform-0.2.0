@@ -168,7 +168,7 @@ export default Dev.describe(name, async (e) => {
             margin: [12, 28],
             data: {
               shared: {
-                lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
+                lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host', 'uri'],
                 object: {
                   visible: e.state.debugShowJson,
                   dotMeta: false,

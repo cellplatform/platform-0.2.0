@@ -103,7 +103,7 @@ const wrangle = {
     if (formatBeforeRender) formatBeforeRender(output);
 
     const dotMeta = data.shared?.object?.dotMeta ?? true;
-    if (!dotMeta) delete output['.meta'];
+    if (!dotMeta && output) delete output['.meta'];
 
     let name = data.shared?.name ?? '';
     if (!name && lens) name = lens.join('.');
