@@ -22,7 +22,7 @@ export type WebrtcStoreEvent =
   | t.CrdtSharedEvent;
 
 export type WebrtcStoreAdapterAddedEvent = {
-  type: 'crdt:webrtc/AdapterAdded';
+  type: 'crdt:net:webrtc/AdapterAdded';
   payload: WebrtcStoreAdapterAdded;
 };
 export type WebrtcStoreAdapterAdded = {
@@ -31,6 +31,6 @@ export type WebrtcStoreAdapterAdded = {
 };
 
 export type WebrtcStoreMessageEvent = {
-  type: 'crdt:webrtc/Message';
+  type: 'crdt:net:webrtc/Message';
   payload: t.NetworkMessageAlert;
 };

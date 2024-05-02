@@ -33,8 +33,7 @@ export const Peer: t.WebrtcPeer = {
 
     const get = getFactory(peerjs);
     const initial: t.Peer = { open: false, connections: [] };
-    const state: t.PeerModelState = PatchState.init<t.Peer, t.PeerModelEvents>({
-      initial,
+    const state: t.PeerModelState = PatchState.create<t.Peer, t.PeerModelEvents>(initial, {
       events: ($, dispose$) => eventFactory($, [dispose$, life.dispose$]),
     });
 

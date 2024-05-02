@@ -2,6 +2,7 @@
  * @external
  */
 export { next as A } from '@automerge/automerge';
+
 import { clone, equals, uniq, uniqBy } from 'ramda';
 export const R = { clone, equals, uniq, uniqBy } as const;
 

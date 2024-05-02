@@ -17,6 +17,9 @@ export function shortenHash(
   if (!hash) return '';
 
   const lengths = Array.isArray(length) ? length : [length, length];
+  const total = lengths[0] + lengths[1];
+  if (total >= hash.length) return hash;
+
   const left = hash.slice(0, lengths[0]);
   const right = hash.slice(0 - lengths[1]);
 

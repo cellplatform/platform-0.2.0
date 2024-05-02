@@ -3,6 +3,7 @@
  */
 import { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } from 'ramda';
 export const R = { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, uniq } as const;
+
 export { ErrorBoundary } from 'react-error-boundary';
 export { Observable, Subject } from 'rxjs';
 
@@ -32,5 +33,5 @@ export {
  */
 export { File, KeyboardMonitor, LocalStorage, UserAgent } from 'sys.ui.dom';
 export { Color, Style, css } from 'sys.ui.react.css';
-export { useRubberband } from 'sys.ui.react.dev';
+export { BADGES, useRubberband } from 'sys.ui.react.dev';
 export { FC, useClickInside, useClickOutside, useMouse } from 'sys.ui.react.util';

@@ -51,7 +51,6 @@ export const StoreIndex = {
      * Store the URI to new documents in the index.
      */
     const onDocument = async (e: t.DocumentPayload) => {
-      if (!e.isNew) return;
       const uri = e.handle.url;
       await api.add({ uri });
     };

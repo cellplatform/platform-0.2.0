@@ -31,7 +31,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
+        const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
         return <Root {...props} />;
       });
@@ -45,6 +45,12 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 

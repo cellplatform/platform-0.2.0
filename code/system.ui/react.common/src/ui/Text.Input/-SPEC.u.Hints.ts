@@ -1,4 +1,4 @@
-const HINTS = [
+const list = [
   'cartography',
   'catamaran',
   'sovereign',
@@ -9,8 +9,9 @@ const HINTS = [
 ].sort();
 
 export const Hints = {
+  list,
   lookup(value: string) {
-    const hint = HINTS.find((item) => item.startsWith(value.toLowerCase()));
-    return hint ? hint.substring(value.length) : undefined;
+    const hint = list.find((item) => item.startsWith(value.toLowerCase()));
+    return hint ? hint.substring(value.length) : '';
   },
-};
+} as const;

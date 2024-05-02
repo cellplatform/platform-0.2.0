@@ -3,7 +3,7 @@ import { Wrangle } from './Wrangle';
 
 export type HostComponentProps = {
   instance: t.DevInstance;
-  border: string;
+  border?: string;
   renderProps?: t.DevRenderProps;
   subjectRef?: React.RefObject<HTMLDivElement>;
   style?: t.CssValue;

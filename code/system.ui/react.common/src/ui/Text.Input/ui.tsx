@@ -1,9 +1,8 @@
 import { RefObject, useEffect, useState } from 'react';
-
 import { DEFAULTS, Time, css, type t } from './common';
 import { Util } from './u';
-import { TextInputHint } from './ui.Hint';
-import { HtmlInput } from './ui.Html';
+import { Hint } from './ui.Hint';
+import { Input } from './ui.Input';
 
 type Props = t.TextInputProps & {
   bus: t.TextInputBus;
@@ -108,11 +107,11 @@ export const View: React.FC<Props> = (props) => {
   );
 
   const elHint = hasValue && props.hint && (
-    <TextInputHint valueStyle={valueStyle} value={value} hint={props.hint} />
+    <Hint valueStyle={valueStyle} value={value} hint={props.hint} theme={theme} />
   );
 
   const elInput = (
-    <HtmlInput
+    <Input
       bus={bus}
       inputRef={inputRef}
       className={props.className}

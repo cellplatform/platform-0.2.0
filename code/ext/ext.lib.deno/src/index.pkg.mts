@@ -13,8 +13,8 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.deno',
   version: '0.0.0',
   dependencies: {
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
+    'react': '18.3.1',
+    'react-dom': '18.3.1',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.monaco': '0.0.0',
     'ext.lib.monaco.crdt': '0.0.0',

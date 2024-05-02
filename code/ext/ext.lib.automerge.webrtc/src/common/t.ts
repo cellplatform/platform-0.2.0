@@ -9,6 +9,7 @@ export type * from './t.Automerge';
  */
 export type {
   PeerConnectMetadata,
+  PeerConnectedData,
   PeerConnection,
   PeerJsConnData,
   PeerModel,
@@ -24,14 +25,25 @@ export type {
   IODirection,
   Index,
   Lifecycle,
+  LogLevel,
+  LogLevelInput,
+  ModuleDef,
+  ModuleImporter,
+  ModuleImports,
   Msecs,
   ObjectPath,
   OmitLifecycle,
   Percent,
   UntilObservable,
+  UriString,
 } from 'sys.types/src/types';
 
-export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type {
+  SpecImport,
+  SpecImports,
+  TestHandlerArgs,
+  TestSuiteRunResponse,
+} from 'sys.test.spec/src/types';
 export type { UserAgent } from 'sys.ui.dom/src/types';
 
 /**

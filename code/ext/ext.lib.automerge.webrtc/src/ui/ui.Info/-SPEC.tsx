@@ -1,22 +1,16 @@
 import { Info } from '.';
-import {
-  COLORS,
-  Color,
-  Dev,
-  PeerUI,
-  PropList,
-  TestEdge,
-  WebStore,
-  css,
-  type t,
-} from '../../test.ui';
+import { COLORS, Color, Dev, PeerUI, Pkg, TestEdge, WebStore, css, type t } from '../../test.ui';
 
 type P = t.InfoProps;
-type T = {
-  props: P;
-  debug: { visible?: boolean };
+type D = {
+  dataSharedLens?: boolean;
+  dataSharedArray?: boolean;
+  dataSharedDotMeta?: boolean;
+  dataVisible?: boolean;
+  dataJsonVisible?: boolean;
 };
-const initial: T = { props: {}, debug: {} };
+type T = D & { props: P };
+const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
@@ -35,11 +29,15 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = Pick<P, 'fields' | 'theme'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.automerge.webrtc.Info');
+  type LocalStore = D & Pick<P, 'fields' | 'theme'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
     fields: DEFAULTS.fields.default,
+    theme: undefined,
+    dataSharedLens: false,
+    dataSharedArray: false,
+    dataSharedDotMeta: true,
+    dataJsonVisible: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -50,6 +48,10 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
+      d.dataSharedLens = local.dataSharedLens;
+      d.dataSharedArray = local.dataSharedArray;
+      d.dataSharedDotMeta = local.dataSharedDotMeta;
+      d.dataJsonVisible = local.dataJsonVisible;
     });
 
     ctx.debug.width(330);
@@ -57,29 +59,46 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const {
+          props,
+          dataVisible,
+          dataJsonVisible,
+          dataSharedArray,
+          dataSharedDotMeta,
+          dataSharedLens,
+        } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
-        const visible = debug.visible ?? true;
+        const isDataVisible = dataVisible ?? true;
+
+        const shared: t.InfoDataShared = {
+          lens: dataSharedLens ? ['sys', 'peers'] : undefined,
+          object: {
+            visible: dataJsonVisible,
+            dotMeta: dataSharedDotMeta,
+            beforeRender(mutate: any) {
+              mutate['foo'] = 123; // Sample render mutation 🐷
+            },
+          },
+          onIconClick(e) {
+            console.info('⚡️ shared.onIconClick', e);
+            state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
+          },
+        };
+
         const data: t.InfoData = {
           network: self.network,
           repo: { store, index },
           visible: {
-            value: visible,
-            onToggle: (e) => state.change((d) => (d.debug.visible = e.next)),
+            value: isDataVisible,
+            onToggle: (e) => state.change((d) => (d.dataVisible = e.next)),
           },
-          shared: {
-            onIconClick(e) {
-              console.info('⚡️ shared.onIconClick', e);
-              state.change((d) => {
-                const fields = d.props.fields ?? [];
-                d.props.fields = fields.includes('Network.Shared.Json')
-                  ? fields.filter((f) => f !== 'Network.Shared.Json')
-                  : [...fields, 'Network.Shared.Json'];
-                local.fields = PropList.Wrangle.fields(d.props.fields);
-              });
-            },
-          },
+          shared: !dataSharedArray
+            ? shared
+            : [
+                { ...shared, name: 'Foo', label: 'Shared One' },
+                { ...shared, name: 'Bar', label: 'Shared Two' },
+              ],
         };
 
         return (
@@ -87,7 +106,7 @@ export default Dev.describe(name, async (e) => {
             //
             {...props}
             data={data}
-            fields={visible ? props.fields : ['Visible']}
+            fields={isDataVisible ? props.fields : ['Visible']}
           />
         );
       });
@@ -138,12 +157,44 @@ export default Dev.describe(name, async (e) => {
         'Peer',
         'Network.Transfer',
         'Network.Shared',
-        // 'Network.Shared.Json',
+        'Network.Shared.Json',
       ]);
       dev.hr(-1, 5);
-      dev.button('prepend: Visible', (e) => {
+      dev.button(['visible', '(prepend)'], (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Data', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.dataSharedLens;
+        btn
+          .label((e) => `data.shared.lens`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedLens = Dev.toggle(d, 'dataSharedLens'))),
+          );
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.dataSharedDotMeta;
+        btn
+          .label((e) => `data.shared.dotMeta`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedDotMeta = Dev.toggle(d, 'dataSharedDotMeta'))),
+          );
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.dataSharedArray;
+        btn
+          .label((e) => `data.[shared] ← array`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedArray = Dev.toggle(d, 'dataSharedArray'))),
+          );
       });
     });
 

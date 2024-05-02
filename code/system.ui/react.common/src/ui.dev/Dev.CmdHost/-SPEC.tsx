@@ -1,5 +1,5 @@
-import { CmdHost } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { CmdHost, DEFAULTS } from '.';
+import { BADGES, Dev, Pkg, type t } from '../../test.ui';
 
 const fn = () => import('../DevTools/-SPEC');
 
@@ -21,19 +21,35 @@ type T = {
   debug: { stateful?: boolean; useOnItemClick?: boolean };
 };
 
-const badge = CmdHost.DEFAULTS.badge;
+const badge = BADGES.ci.node;
 const initial: T = { props: { pkg: Pkg }, debug: {} };
 
-export default Dev.describe('CmdHost', (e) => {
-  type LocalStore = Pick<t.CmdHostStatefulProps, 'hrDepth' | 'mutateUrl' | 'showParamDev'> &
+const name = 'CmdHost';
+export default Dev.describe(name, (e) => {
+  type LocalStore = Pick<
+    t.CmdHostStatefulProps,
+    | 'theme'
+    | 'hrDepth'
+    | 'mutateUrl'
+    | 'showParamDev'
+    | 'autoGrabFocus'
+    | 'focusOnReady'
+    | 'focusOnClick'
+    | 'enabled'
+  > &
     Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: 'Dark',
+    enabled: true,
     hrDepth: 2,
     mutateUrl: true,
     showParamDev: true,
     stateful: true,
     useOnItemClick: true,
+    autoGrabFocus: DEFAULTS.autoGrabFocus,
+    focusOnReady: DEFAULTS.focusOnReady,
+    focusOnClick: DEFAULTS.focusOnClick,
   });
 
   e.it('init', async (e) => {
@@ -41,12 +57,17 @@ export default Dev.describe('CmdHost', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
+      d.props.theme = local.theme;
+      d.props.enabled = local.enabled;
       d.props.badge = badge;
-      d.props.specs = specs;
-
+      d.props.imports = specs;
       d.props.hrDepth = local.hrDepth;
       d.props.mutateUrl = local.mutateUrl;
       d.props.showParamDev = local.showParamDev;
+      d.props.autoGrabFocus = local.autoGrabFocus;
+      d.props.focusOnReady = local.focusOnReady;
+      d.props.focusOnClick = local.focusOnClick;
+
       d.debug.stateful = local.stateful;
       d.debug.useOnItemClick = local.useOnItemClick;
     });
@@ -57,21 +78,18 @@ export default Dev.describe('CmdHost', (e) => {
       .display('grid')
       .backgroundColor(1)
       .render<T>((e) => {
-        const debug = e.state.debug;
-        const Component = debug.stateful ? CmdHost.Stateful : CmdHost;
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1, 0.02);
 
+        const onItemClick: t.ModuleListItemHandler = (e) => console.info('⚡️ onItemClick', e);
+        const Component = debug.stateful ? CmdHost.Stateful : CmdHost;
         return (
           <Component
             {...e.state.props}
+            onReady={(e) => console.info('⚡️ onReady', e)}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
             onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
-            onItemClick={
-              !debug.useOnItemClick
-                ? undefined
-                : (e) => {
-                    console.info('⚡️ onItemClick', e);
-                  }
-            }
+            onItemClick={!debug.useOnItemClick ? undefined : onItemClick}
           />
         );
       });
@@ -79,13 +97,18 @@ export default Dev.describe('CmdHost', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'Dev.CmdHost'} data={e.state} expand={1} />);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.mutateUrl);
+        const value = (state: T) => !!state.props.enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.mutateUrl;
         btn
           .label((e) => `mutateUrl`)
           .value((e) => value(e.state))
@@ -93,13 +116,43 @@ export default Dev.describe('CmdHost', (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.showParamDev);
+        const value = (state: T) => !!state.props.showParamDev;
         btn
           .label((e) => `showParamDev`)
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => (local.showParamDev = Dev.toggle(d.props, 'showParamDev'))),
           );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.autoGrabFocus;
+        btn
+          .label((e) => `autoGrabFocus`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.autoGrabFocus = Dev.toggle(d.props, 'autoGrabFocus'))),
+          );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusOnReady;
+        btn
+          .label((e) => `focusOnReady`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusOnClick;
+        btn
+          .label((e) => `focusOnClick`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.focusOnClick = Dev.toggle(d.props, 'focusOnClick')));
+          });
       });
 
       dev.hr(-1, 5);
@@ -115,17 +168,31 @@ export default Dev.describe('CmdHost', (e) => {
       [undefined, 2, 3].forEach((value) => depth(value));
 
       dev.hr(-1, 5);
-      dev.button('command → (empty)', (e) => {
-        e.change((d) => (d.props.command = ''));
-      });
-      dev.button('command → "foobar"', (e) => {
-        e.change((d) => (d.props.command = 'foobar'));
-      });
-      dev.hr(-1, 5);
-      dev.button('selectedIndex → 0', (e) => {
-        e.change((d) => (d.props.selectedIndex = 0));
-      });
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
+
+    dev.hr(5, 20);
+
+    dev.button(['command → ""', '(clear)'], (e) => {
+      e.change((d) => (d.props.command = ''));
+    });
+    dev.button('command → "foobar"', (e) => {
+      e.change((d) => (d.props.command = 'foobar'));
+    });
+    dev.hr(-1, 5);
+    const selectedButton = (value: string) => {
+      dev.button(`selected → "${value}"`, (e) => {
+        e.change((d) => (d.props.selected = value));
+      });
+    };
+    const keys = Object.keys(specs);
+    selectedButton(keys[0]);
+    selectedButton(keys[1]);
+    selectedButton(keys[keys.length - 1]);
 
     dev.hr(5, 20);
 
@@ -147,6 +214,15 @@ export default Dev.describe('CmdHost', (e) => {
             e.change((d) => (local.useOnItemClick = Dev.toggle(d.debug, 'useOnItemClick')));
           });
       });
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

@@ -6,7 +6,7 @@ describe('Immutable.events', () => {
   type D = { count: number };
 
   it('fires events by overriding change handler', () => {
-    const obj = PatchState.init<D>({ initial: { count: 0 } });
+    const obj = PatchState.create<D>({ count: 0 });
     const change = obj.change;
     const events1 = obj.events();
     const events2 = Immutable.events(obj);

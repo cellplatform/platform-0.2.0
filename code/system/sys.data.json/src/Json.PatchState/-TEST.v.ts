@@ -8,29 +8,29 @@ describe('PatchState', () => {
 
   describe('init', () => {
     it('init: (default)', (e) => {
-      const state = PatchState.init<T>({ initial });
+      const state = PatchState.create<T>(initial);
       const value = state.current;
       expect(value).to.eql(initial);
       expect(state.current).to.equal(value); // NB: no change, same instance.
     });
 
     it('init: specified {initial}', (e) => {
-      const state = PatchState.init({ initial });
+      const state = PatchState.create(initial);
       const value = state.current;
       expect(value).to.eql({ label: 'foo' });
       expect(state.current).to.equal(value); // NB: no change, same instance.
     });
 
     it('init: instance { id }', (e) => {
-      const state1 = PatchState.init({ initial });
-      const state2 = PatchState.init({ initial });
+      const state1 = PatchState.create(initial);
+      const state2 = PatchState.create(initial);
       expect(state1.instance).to.not.eql(state2.instance);
     });
 
     it('init: <typename>', () => {
       const typename = 'foo.bar';
-      const state1 = PatchState.init({ initial });
-      const state2 = PatchState.init({ initial, typename });
+      const state1 = PatchState.create(initial);
+      const state2 = PatchState.create(initial, { typename });
       expect(state1.typename).to.eql(undefined);
       expect(state2.typename).to.eql(typename);
     });
@@ -38,8 +38,7 @@ describe('PatchState', () => {
 
   describe('change', () => {
     it('change', (e) => {
-      const state = PatchState.init({ initial });
-
+      const state = PatchState.create(initial);
       const before = state.current;
       state.change((draft) => (draft.label = 'hello'));
       const after = state.current;
@@ -51,11 +50,7 @@ describe('PatchState', () => {
 
     it('onChange (callback → patches)', (e) => {
       const fired: t.PatchChange<T>[] = [];
-      const state = PatchState.init({
-        initial,
-        onChange: (e) => fired.push(e),
-      });
-
+      const state = PatchState.create(initial, { onChange: (e) => fired.push(e) });
       state.change((draft) => (draft.label = 'hello'));
 
       expect(fired.length).to.eql(1);
@@ -68,14 +63,14 @@ describe('PatchState', () => {
 
   describe('events → default', () => {
     it('distinct instances', () => {
-      const state = PatchState.init({ initial });
+      const state = PatchState.create(initial);
       const events1 = state.events();
       const events2 = state.events();
       expect(events1).to.not.equal(events2);
     });
 
     it('fires patch/change event', () => {
-      const state = PatchState.init({ initial });
+      const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const events = state.events();
       events.$.subscribe((e) => fired.push(e));
@@ -89,7 +84,7 @@ describe('PatchState', () => {
     });
 
     it('dispose() ← via method', () => {
-      const state = PatchState.init({ initial });
+      const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const events = state.events();
       events.$.subscribe((e) => fired.push(e));
@@ -99,7 +94,7 @@ describe('PatchState', () => {
     });
 
     it('dispose$ ← via observable', () => {
-      const state = PatchState.init({ initial });
+      const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const dispose$ = rx.subject();
       const events = state.events(dispose$);
@@ -134,7 +129,7 @@ describe('PatchState', () => {
         return exampleFactory($, dispose$);
       };
 
-      const state = PatchState.init<T, E>({ initial, events });
+      const state = PatchState.create<T, E>(initial, { events });
       const res = state.events();
 
       expect(count).to.eql(1);
@@ -148,7 +143,7 @@ describe('PatchState', () => {
 
     it('dispose', () => {
       const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
-      const state = PatchState.init<T, E>({ initial, events });
+      const state = PatchState.create<T, E>(initial, { events });
 
       const dispose$ = rx.subject();
       const res = state.events(dispose$);
@@ -160,7 +155,7 @@ describe('PatchState', () => {
 
     it('change$', () => {
       const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
-      const state = PatchState.init<T, E>({ initial, events });
+      const state = PatchState.create<T, E>(initial, { events });
       const res = state.events();
 
       const fired: T[] = [];
@@ -185,7 +180,7 @@ describe('PatchState', () => {
     });
 
     it('Is.state ← true', () => {
-      const state = PatchState.init<T>({ initial });
+      const state = PatchState.create<T>(initial);
       expect(PatchState.Is.state(state)).to.eql(true);
     });
 
@@ -197,13 +192,13 @@ describe('PatchState', () => {
 
     it('Is.type ← true', () => {
       const typename = 'foo.bar';
-      const state = PatchState.init<T>({ initial, typename });
+      const state = PatchState.create<T>(initial, { typename });
       expect(PatchState.Is.type(state, typename)).to.eql(true);
     });
 
     it('Is.type ← false', () => {
       const type = 'foo.bar';
-      const state = PatchState.init<T>({ initial });
+      const state = PatchState.create<T>(initial);
       expect(PatchState.Is.type(state, type)).to.eql(false); // NB: no "type" field.
       [undefined, null, {}, [], '', 123, true].forEach((value) => {
         expect(PatchState.Is.type(value, type)).to.eql(false);
@@ -249,7 +244,7 @@ describe('PatchState', () => {
     });
 
     it('dispatches a command', async () => {
-      const state = PatchState.init<T, E>({ initial: {}, events: factory });
+      const state = PatchState.create<T, E>({}, { events: factory });
       const events = state.events();
 
       const firedOne: One[] = [];

@@ -1,4 +1,4 @@
-import { NetworkConnection } from '../ui.NetworkConnection';
+import { NetworkConnection } from '../ui.Network.Connection';
 import { COLORS, Color, PeerUI, css, type t } from './common';
 
 export type SampleMiddleProps = {

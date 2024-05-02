@@ -15,31 +15,36 @@ export const Shared = {
   Patches,
   Mutate,
 
-  get type(): t.DocMetaType {
-    const name: t.CrdtSharedState['kind'] = 'crdt.network.shared';
-    return { name };
-  },
-
-  get meta(): t.DocMeta {
-    const type = Shared.type;
-    return { ...Doc.Meta.default, type, ephemeral: true };
-  },
-
-  /**
-   * Get or create a [Shared] document type from the given store.
-   */
-  async getOrCreate(store: t.Store, uri?: string) {
-    return store.doc.getOrCreate<t.CrdtShared>((d) => {
-      Doc.Meta.ensure(d, Shared.meta);
+  Doc: {
+    init(d: t.CrdtShared) {
+      Doc.Meta.ensure(d, Shared.Doc.meta);
       d.sys = { peers: {}, docs: {} };
       d.ns = {};
-    }, uri);
+    },
+
+    get type(): t.DocMetaType {
+      const name: t.CrdtSharedState['kind'] = 'crdt.network.shared';
+      return { name };
+    },
+
+    get meta(): t.DocMeta {
+      const type = Shared.Doc.type;
+      return { ...Doc.Meta.default, type, ephemeral: true };
+    },
+
+    /**
+     * Get or create a [Shared] document type from the given store.
+     */
+    async getOrCreate(store: t.Store, uri?: string) {
+      const { binary } = await import('./Shared.binary');
+      return store.doc.getOrCreate<t.CrdtShared>(binary, uri);
+    },
   },
 
   /**
-   * Setup a new ephemeral document manager for a store/peer.
+   * Create a new ephemeral document manager for a store/peer.
    */
-  async init(args: {
+  async create(args: {
     $: t.Observable<t.WebrtcStoreEvent>;
     peer: t.PeerModel;
     store: t.Store;
@@ -59,12 +64,9 @@ export const Shared = {
     /**
      * Setup the "shared" CRDT syncing document.
      */
-    const doc = await Shared.getOrCreate(store, args.uri);
+    const doc = await Shared.Doc.getOrCreate(store, args.uri);
     const fireChanged = (payload: t.DocChanged<t.CrdtShared>) => {
-      args.fire?.({
-        type: 'crdt:webrtc:shared/Changed',
-        payload,
-      });
+      args.fire?.({ type: 'crdt:net:shared/Changed', payload });
     };
 
     /**
@@ -91,16 +93,14 @@ export const Shared = {
     let _ns: t.NamespaceManager | undefined;
     const api: t.CrdtSharedState = {
       kind: 'crdt.network.shared',
-      store,
-      index,
       doc,
-
-      events(dispose$) {
-        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
-      },
 
       get namespace() {
         return _ns || (_ns = Shared.namespace(doc));
+      },
+
+      events(dispose$) {
+        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
       },
 
       /**

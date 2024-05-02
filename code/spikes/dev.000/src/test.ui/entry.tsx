@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
-import { badge } from './ci.badge';
 
 const url = new URL(location.href);
 const params = url.searchParams;
@@ -13,6 +12,8 @@ const isLocalhost = url.hostname === 'localhost' && url.port !== '3000'; // NB: 
 type Subject = 'Dev' | 'Dev:Localhost' | 'DefaultEntry';
 
 const render = async (content: Subject) => {
+  const { BADGES } = await import('../common');
+  const badge = BADGES.ci.node;
   const root = createRoot(document.getElementById('root')!);
 
   if (content === 'Dev') {

@@ -54,10 +54,10 @@ export function events<D extends O = O>(
         rx.filter((e) => !e.focus),
         mapVoid,
       ),
-      type$<T>(filter?: (e: T) => boolean) {
+      filter<T>(fn?: (e: T) => boolean) {
         return cmd$.pipe(
           rx.map((e) => e as T),
-          rx.filter((e) => (filter ? filter(e) : true)),
+          rx.filter((e) => (fn ? fn(e) : true)),
         );
       },
     },

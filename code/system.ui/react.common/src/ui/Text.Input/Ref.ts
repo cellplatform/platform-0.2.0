@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import type { t } from './common';
+import { Focus, type t } from './common';
 import { eventsFactory } from './events';
 import { Wrangle } from './u';
 
@@ -20,11 +20,11 @@ export function TextInputRef(
      *     transient textbox state like caret position, selection or focus.
      */
     get current() {
-      return ref.current?.value || '';
-    },
-
-    get selection() {
-      return Wrangle.selection(ref.current);
+      return {
+        value: ref.current?.value || '',
+        selection: Wrangle.selection(ref.current),
+        focused: Focus.containsFocus(ref),
+      };
     },
 
     events(dispose$) {

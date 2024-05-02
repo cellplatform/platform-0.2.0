@@ -28,12 +28,9 @@ export const List = {
     type T = t.LabelList<D>;
     type E = t.LabelListEvents<D>;
     const { typename } = options;
-    return PatchState.init<T, E>({
-      initial: initial ?? (DEFAULTS.data.list as t.LabelList<D>),
+    return PatchState.create<T, E>(initial ?? (DEFAULTS.data.list as t.LabelList<D>), {
       typename,
-      events($, dispose$) {
-        return events<D>($, [dispose$, options.dispose$]);
-      },
+      events: ($, dispose$) => events<D>($, [dispose$, options.dispose$]),
     });
   },
 } as const;

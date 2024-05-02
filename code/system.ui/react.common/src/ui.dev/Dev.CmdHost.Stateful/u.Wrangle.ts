@@ -9,28 +9,24 @@ export const Wrangle = {
     return { url, params, filter, selected };
   },
 
-  selected(specs: t.SpecImports | undefined, next: number) {
-    if (!specs) return -1;
-    const total = Object.keys(specs).length - 1;
+  selected(imports: t.ModuleImports | undefined, next: number) {
+    if (!imports) return -1;
+    const total = Object.keys(imports).length - 1;
     return total >= 0 ? R.clamp(0, total, next) : -1;
   },
 
-  selectedIndexFromNamespace(specs: t.SpecImports | undefined, namespace: string) {
-    if (!specs || !namespace || namespace === 'true') return -1;
-    const index = Object.keys(specs).indexOf(namespace);
-    return Wrangle.selected(specs, index);
+  selectedIndexFromNamespace(imports?: t.ModuleImports | undefined, namespace?: string) {
+    if (!imports || !namespace || namespace === 'true') return -1;
+    const index = Object.keys(imports).indexOf(namespace);
+    return Wrangle.selected(imports, index);
   },
 
-  selectedNamespaceFromIndex(specs: t.SpecImports | undefined, index: number) {
-    return Object.keys(specs ?? {})[index];
+  selectedNamespaceFromIndex(imports?: t.ModuleImports | undefined, index?: number) {
+    if (!imports || index === undefined) return undefined;
+    return Object.keys(imports ?? {})[index];
   },
 
-  hintKey(args: {
-    focused: boolean;
-    specs?: t.SpecImports;
-    selectedIndex: number;
-    command: string;
-  }) {
+  hintKey(args: { focused: boolean; command: string }) {
     if (!args.focused) return ['↑', '↓', '⌘K'];
     return ['↑', '↓', 'enter'];
   },

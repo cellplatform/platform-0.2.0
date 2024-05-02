@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../index.pkg.mjs';
 import { Dev } from 'sys.ui.react.common';
+import { Pkg } from '../index.pkg.mjs';
 
 (async () => {
   console.info(`Pkg:`, Pkg);

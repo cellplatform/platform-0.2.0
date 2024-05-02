@@ -25,7 +25,6 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     if (doc && input) {
       const initial = ObjectPath.resolve<string>(doc.current, path);
       setValue(initial ?? '');
-
       const listener = Sync.Textbox.listen(input, doc, path, { debug, dispose$ });
       listener.onChange((e) => setValue(e.text));
     }

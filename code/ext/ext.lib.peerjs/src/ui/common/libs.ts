@@ -12,6 +12,7 @@ export {
   RenderCount,
   Slider,
   Spinner,
+  Style,
   TestRunner,
   css,
   useDragTarget,

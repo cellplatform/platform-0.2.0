@@ -1,33 +1,24 @@
 import { Peer, PeerUI } from 'ext.lib.peerjs';
-
-import { Dev, Pkg } from '../../test.ui';
+import { Dev, Pkg, TestDb } from '../../test.ui';
 import { Info } from '../ui.Info';
-import { A, WebStore, WebrtcStore, cuid, type t } from './common';
+import { A, Doc, WebStore, WebrtcStore, type t } from './common';
 import { Sample } from './ui.Sample';
 
 type T = {
   user?: string;
-  docUri?: string;
-  peerid: { local: string; remote: string };
-  debug: { connectingData?: boolean };
+  docuri?: string;
+  reload?: boolean;
 };
-const initial: T = {
-  peerid: { local: '', remote: '' },
-  debug: {},
-};
+const initial: T = {};
 
 /**
  * Spec
  */
 const name = 'Sample.01';
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { localPeer: string; remotePeer: string; docUri?: string };
+  type LocalStore = Pick<T, 'docuri'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    localPeer: cuid(),
-    remotePeer: '',
-    docUri: undefined,
-  });
+  const local = localstore.object({ docuri: undefined });
 
   /**
    * Network Peers
@@ -37,15 +28,24 @@ export default Dev.describe(name, async (e) => {
   /**
    * CRDT (Automerge)
    */
-  const store = WebStore.init({ network: [] });
+  const storage = TestDb.EdgeSample.name;
+  const store = WebStore.init({ network: [], storage });
   const index = await WebStore.index(store);
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
-  let doc: t.DocRef<t.SampleDoc>;
+  let _doc: t.DocRef<t.SampleDoc> | undefined;
   const initDoc = async (state: t.DevCtxState<T>) => {
-    doc = await generator(local.docUri);
-    local.docUri = doc.uri;
-    state.change((d) => (d.docUri = doc.uri));
+    try {
+      const doc = await generator(local.docuri);
+      state.change((d) => (local.docuri = d.docuri = doc.uri));
+    } catch (error) {
+      console.error('failed to load localstorage docuri:', local.docuri, error);
+      local.docuri = undefined;
+    }
+  };
+  const updateDoc = async (uri?: t.UriString) => {
+    if (!uri) return;
+    _doc = await store.doc.get<t.SampleDoc>(uri);
   };
 
   e.it('ui:init', async (e) => {
@@ -54,11 +54,11 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.docUri = local.docUri;
-      d.peerid.local = local.localPeer;
-      d.peerid.remote = local.remotePeer;
+      d.docuri = local.docuri;
     });
-    await initDoc(state);
+
+    const exists = await store.doc.exists(local.docuri);
+    if (!exists) await initDoc(state);
 
     const network = await WebrtcStore.init(self, store, index);
     const events = network.events();
@@ -69,12 +69,13 @@ export default Dev.describe(name, async (e) => {
       .backgroundColor(1)
       .size([350, 150])
       .display('grid')
-      .render<T>((e) => {
-        return (
-          <store.Provider>
-            <Sample user={e.state.user} docUri={doc?.uri} />
-          </store.Provider>
-        );
+      .render<T>(async (e) => {
+        if (e.state.reload) {
+          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
+        } else {
+          await updateDoc(e.state.docuri);
+          return <Sample user={e.state.user} doc={_doc} />;
+        }
       });
   });
 
@@ -83,9 +84,7 @@ export default Dev.describe(name, async (e) => {
     dev.header
       .padding(0)
       .border(-0.1)
-      .render((e) => {
-        return <PeerUI.Connector peer={self} />;
-      });
+      .render((e) => <PeerUI.Connector peer={self} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -98,7 +97,7 @@ export default Dev.describe(name, async (e) => {
           fields={['Module', 'Repo', 'Peer', 'Peer.Remotes']}
           data={{
             peer: { self },
-            repo: { store },
+            repo: { store, index },
           }}
         />
       );
@@ -106,23 +105,36 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.textbox((txt) => {
-      txt
-        .label((e) => 'docUri')
-        .value((e) => e.state.docUri ?? '')
-        .onChange((e) => e.change((d) => (d.docUri = e.to.value)))
-        .onEnter(async (e) => {
-          // 🐷 Hack
-          local.docUri = e.state.current.docUri || undefined;
-          initDoc(state);
-        });
+    dev.section(['Document URI', 'CRDT'], (dev) => {
+      dev.textbox((txt) => {
+        txt
+          .value((e) => e.state.docuri ?? '')
+          .onChange((e) => e.change((d) => (d.docuri = e.to.value)))
+          .onEnter((e) => {
+            // 🐷 Hack.
+            local.docuri = e.state.current.docuri || undefined;
+            initDoc(state);
+          });
+      });
+
+      dev.hr(0, 8);
+      dev.button(['copy', 'clipboard'], (e) => {
+        const uri = e.state.current.docuri || '';
+        navigator.clipboard.writeText(uri);
+      });
+      dev.button(['create new', '🌳'], async (e) => {
+        local.docuri = undefined;
+        await initDoc(state);
+      });
     });
 
-    dev.hr(0, 5);
+    dev.hr(5, 20);
 
-    dev.button('new doc', async (e) => {
-      local.docUri = undefined;
-      await initDoc(state);
+    dev.section('Debug', (dev) => {
+      dev.button(['purge ephemeral', '💦'], (e) => {
+        WebrtcStore.Shared.purge(index);
+        e.change((d) => (d.reload = true));
+      });
     });
   });
 
@@ -132,7 +144,7 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         user: e.state.user,
-        docUri: e.state.docUri,
+        docUri: Doc.Uri.shorten(e.state.docuri),
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

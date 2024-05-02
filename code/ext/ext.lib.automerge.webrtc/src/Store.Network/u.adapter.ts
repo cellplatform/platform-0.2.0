@@ -7,6 +7,6 @@ export function monitorAdapter(args: {
 }) {
   const { adapter, fire } = args;
   const { dispose$ } = rx.disposable(args.dispose$);
-  const detach = adapter.onData((payload) => fire?.({ type: 'crdt:webrtc/Message', payload }));
+  const detach = adapter.onData((payload) => fire?.({ type: 'crdt:net:webrtc/Message', payload }));
   dispose$.subscribe(() => detach());
 }

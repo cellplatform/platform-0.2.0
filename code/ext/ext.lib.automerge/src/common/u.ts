@@ -1,5 +1,7 @@
 import { R } from './libs';
 
+export * from './u.Is';
+
 /**
  * Convert the given input to a simple object (deep).
  */

@@ -38,7 +38,7 @@ describe('Doc', async () => {
       expect(doc.is.deleted).to.eql(false);
 
       const test = async (expected: boolean) => {
-        const exists = await store.doc.exists(doc.uri);
+        const exists = await store.doc.exists(doc.uri, { timeout: 50 });
         expect(exists).to.eql(expected, doc.uri);
       };
 
@@ -82,6 +82,14 @@ describe('Doc', async () => {
       expect(doc.is.ready).to.eql(true);
       expect(doc.is.deleted).to.eql(false);
       store.dispose();
+    });
+
+    it('initial as binary (Uint8Array)', async () => {
+      const binary = store.doc.toBinary<D>((d) => (d.count = 123));
+      const doc1 = await store.doc.getOrCreate(initial);
+      const doc2 = await store.doc.getOrCreate(binary);
+      expect(doc1.current.count).to.eql(0);
+      expect(doc2.current.count).to.eql(123);
     });
 
     it('throw: bad URI times out', async () => {

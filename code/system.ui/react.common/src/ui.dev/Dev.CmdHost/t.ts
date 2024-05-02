@@ -1,27 +1,30 @@
 import type { t } from './common';
 
-export type CmdHostChangedHandler = (e: CmdHostChangedHandlerArgs) => void;
-export type CmdHostChangedHandlerArgs = { command: string };
-
 /**
  * <Component>
  */
-export type CmdHostProps<T = t.SpecModule> = {
-  pkg: { name: string; version: string };
-  specs?: t.ModuleImports<T>;
+export type CmdHostProps = {
+  pkg?: { name: string; version: string };
+  imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;
   applyFilter?: boolean;
-  selectedIndex?: number;
+  selected?: string;
   hintKey?: string | string[];
   hrDepth?: number;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
+  enabled?: boolean;
   focused?: boolean;
   showParamDev?: boolean;
+  autoGrabFocus?: boolean;
+  listMinWidth?: number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;
+  focusOnClick?: boolean;
   scrollTo$?: t.Observable<t.ModuleListScrollTarget>;
-  onChanged?: t.CmdHostChangedHandler;
+  onReady?: CmdHostReadyHandler;
+  onChanged?: CmdHostChangedHandler;
   onCmdFocusChange?: t.TextInputFocusHandler;
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
@@ -29,3 +32,12 @@ export type CmdHostProps<T = t.SpecModule> = {
   onItemClick?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;
 };
+
+/**
+ * Events
+ */
+export type CmdHostChangedHandler = (e: CmdHostChangedHandlerArgs) => void;
+export type CmdHostChangedHandlerArgs = { command: string };
+
+export type CmdHostReadyHandler = (e: CmdHostReadyHandlerArgs) => void;
+export type CmdHostReadyHandlerArgs = { textbox: t.TextInputRef };

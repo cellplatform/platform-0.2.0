@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { COLORS, css, useRubberband, type t } from './common';
+import { Color, DEFAULTS, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -9,7 +9,7 @@ import { useScrollObserver } from './useScrollObserver.mjs';
 type LiMap = Map<number, HTMLLIElement>;
 
 export const View: React.FC<t.ModuleListProps> = (props) => {
-  const { scroll = false, focused = true } = props;
+  const { theme, scroll = false, focused = true, enabled = true } = props;
   const url = new URL(props.href ?? window.location.href);
   const imports = (props.imports ?? {}) as t.ModuleImports;
 
@@ -24,10 +24,11 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
+    if (!enabled) return;
     const i = props.selectedIndex;
     const isUnselected = i === undefined || (typeof i === 'number' && i < 0);
     if (isUnselected) props.onItemSelect?.({ index: -1 });
-  }, [props.selectedIndex]);
+  }, [props.selectedIndex, enabled]);
 
   /**
    * Handlers
@@ -41,18 +42,20 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
     base: css({
       position: 'relative',
       Scroll: scroll,
       Absolute: scroll ? 0 : undefined,
+      pointerEvents: enabled ? 'auto' : 'none',
     }),
     body: css({
       position: 'relative',
       cursor: 'default',
       fontFamily: 'sans-serif',
       lineHeight: '2em',
-      color: COLORS.DARK,
+      color,
       boxSizing: 'border-box',
       padding: 30,
       paddingTop: 20,
@@ -60,7 +63,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
     title: css({ marginBottom: 20 }),
     list: {
       outer: css({ marginTop: 30, display: 'grid' }),
-      inner: css({ minWidth: 550, MarginX: 50 }),
+      inner: css({ minWidth: props.listMinWidth ?? DEFAULTS.list.minWidth, MarginX: 50 }),
     },
   };
 
@@ -70,6 +73,8 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
         <List
           url={url}
           imports={imports}
+          theme={theme}
+          enabled={enabled}
           selectedIndex={props.selectedIndex}
           focused={focused}
           hrDepth={props.hrDepth}
@@ -84,9 +89,16 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
+      <Title
+        enabled={enabled}
+        title={props.title}
+        version={props.version}
+        badge={props.badge}
+        theme={theme}
+        style={styles.title}
+      />
       {elList}
-      <Footer />
+      <Footer theme={theme} enabled={enabled} />
     </div>
   );
 

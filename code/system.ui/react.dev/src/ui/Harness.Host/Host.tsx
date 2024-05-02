@@ -5,6 +5,7 @@ import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostLayers } from './Host.Layers';
+import { Wrangle } from './Wrangle';
 
 const DEFAULT = DEFAULTS.props.host;
 
@@ -21,13 +22,13 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
   const host = renderProps?.host;
-  const layersAbove = Wrangle.layers(host, (i) => i > 0);
-  const layersBelow = Wrangle.layers(host, (i) => i < 0);
+  const layersAbove = wrangle.layers(host, (i) => i > 0);
+  const layersBelow = wrangle.layers(host, (i) => i < 0);
 
   /**
-   * [Render]
+   * Render
    */
-  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? DEFAULT.tracelineColor)}`;
+  const cropmark = wrangle.cropmark(renderProps);
   const backgroundColor =
     host?.backgroundColor === undefined
       ? Color.format(DEFAULT.backgroundColor)
@@ -100,7 +101,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 /**
  * Helpers
  */
-
 const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
   const prev = p.info;
   const next = n.info;
@@ -109,7 +109,7 @@ const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
   return true;
 };
 
-const Wrangle = {
+const wrangle = {
   layers(host: t.DevRenderPropsHost | undefined, filter: (index: number) => boolean) {
     const obj = host?.layers ?? {};
     const items = Object.keys(obj)
@@ -117,4 +117,17 @@ const Wrangle = {
       .filter((item) => filter(item.index));
     return R.sortBy(R.prop('index'), items);
   },
-};
+
+  cropmark(renderProps?: t.DevRenderProps) {
+    const host = renderProps?.host;
+    if (host?.tracelineColor === 0) return undefined;
+
+    const subject = renderProps?.subject;
+    const size = subject?.size;
+    if (size?.mode === 'fill') {
+      if (R.equals(Wrangle.fillMargin(size), [0, 0, 0, 0])) return undefined;
+    }
+
+    return `solid 1px ${Color.format(host?.tracelineColor ?? DEFAULT.tracelineColor)}`;
+  },
+} as const;

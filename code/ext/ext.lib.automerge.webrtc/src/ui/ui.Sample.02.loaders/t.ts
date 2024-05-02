@@ -9,10 +9,8 @@ export type * from '../ui.Sample.02/t';
 export type SampleName =
   | 'CodeEditor'
   | 'CodeEditor.AI'
-  | 'TLDraw'
   | 'Deno.Deploy'
   | 'ModuleNamespace'
-  | 'FaceAPI'
   | 'ImageCrdt'
   | 'AutomergeInfo'
   | 'CmdBar';

@@ -9,17 +9,17 @@ type T = t.Subject<t.ModuleListScrollTarget>;
  * A version of <CmdHost> that manages state interanally.
  */
 export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
-  const { mutateUrl = true } = props;
+  const { mutateUrl = true, enabled = true } = props;
 
   const readyRef = useRef(false);
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
   const [focused, setFocused] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
-  const [selectedItem, setSelectedItem] = useState<t.ModuleListItemHandlerArgs>();
+  const [selected, setSelected] = useState<string>();
 
-  const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
-  const total = Object.keys(specs).length;
-  const hintKeys = Wrangle.hintKey({ focused, selectedIndex, specs, command });
+  const imports = Filter.imports(props.imports, command, { maxErrors: 1 });
+  const total = Object.keys(imports).length;
+  const hintKeys = Wrangle.hintKey({ focused, command });
+  const selectedIndex = Wrangle.selectedIndexFromNamespace(imports, selected);
 
   const [items, setItems] = useState<t.ModuleListItemVisibility[]>([]);
   const selectionChangeTrigger = items.map((item) => item.isVisible).join(',');
@@ -36,24 +36,17 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   }, [selectedIndex, selectionChangeTrigger]);
 
   /**
-   * Reset the selection when the command/filter changes or on initial load.
-   */
-  useEffect(() => {
-    const { selected } = Wrangle.url();
-    let index = 0;
-    if (selected && specs[selected]) index = Wrangle.selectedIndexFromNamespace(specs, selected);
-    setSelectedIndex(index);
-  }, [total, command]);
-
-  /**
    * Keep state in sync with passed-in properties when they change.
    */
   useEffect(() => {
     const ready = readyRef.current;
-    const prop = props.selectedIndex ?? 0;
-    if (ready && prop !== selectedIndex) setSelectedIndex(prop);
-  }, [props.selectedIndex]);
+    const prop = props.selected;
+    if (ready && prop !== selected) setSelected(prop);
+  }, [props.selected]);
 
+  /**
+   * Keey comand in sync with passed-in properties when they change.
+   */
   useEffect(() => {
     const ready = readyRef.current;
     const prop = props.command ?? '';
@@ -77,38 +70,41 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   };
 
   const handleItemSelected: t.ModuleListItemHandler = (e) => {
-    setSelectedItem(e.index > -1 ? e : undefined);
+    setSelected(e.index > -1 ? e.address : undefined);
     props.onItemSelect?.(e);
   };
 
   const handleKeyboard = (e: t.TextInputKeyArgs) => {
+    if (!enabled) return;
     const done = () => e.preventDefault();
+    const index = Wrangle.selectedIndexFromNamespace(imports, selected);
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
-      setSelectedIndex(Wrangle.selected(specs, 0));
+      setSelected(Wrangle.selectedNamespaceFromIndex(imports, 0));
       return done();
     }
     if (e.key === 'End' || (e.key === 'ArrowDown' && e.metaKey)) {
-      setSelectedIndex(Wrangle.selected(specs, total - 1));
+      setSelected(Wrangle.selectedNamespaceFromIndex(imports, total - 1));
       return done();
     }
     if (e.key === 'ArrowUp') {
-      const next = selectedIndex - (e.altKey ? 5 : 1);
-      setSelectedIndex(Wrangle.selected(specs, next));
+      const next = Math.max(0, index - (e.altKey ? 5 : 1));
+      setSelected(Wrangle.selectedNamespaceFromIndex(imports, next));
       return done();
     }
     if (e.key === 'ArrowDown') {
-      const next = selectedIndex + (e.altKey ? 5 : 1);
-      setSelectedIndex(Wrangle.selected(specs, next));
+      const next = Math.min(total - 1, index + (e.altKey ? 5 : 1));
+      setSelected(Wrangle.selectedNamespaceFromIndex(imports, next));
       return done();
     }
     if (e.key === 'Enter') {
       if (mutateUrl) {
-        Url.mutateLoadedNamespace(selectedIndex, specs, { reload: true });
+        Url.mutateLoadedNamespace(index, imports, { reload: true });
         done();
       }
-      if (props.onItemClick && selectedItem) {
-        props.onItemClick(selectedItem);
+      if (props.onItemClick && selected) {
+        const address = Wrangle.selectedNamespaceFromIndex(imports, index);
+        props.onItemClick({ index, address });
         done();
       }
     }
@@ -120,10 +116,11 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
   return (
     <CmdHost
       {...props}
-      specs={specs}
+      imports={imports}
       command={command}
       applyFilter={false} // NB: Filter already applied above.
-      selectedIndex={selectedIndex}
+      selected={selected}
+      enabled={enabled}
       focused={focused}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}

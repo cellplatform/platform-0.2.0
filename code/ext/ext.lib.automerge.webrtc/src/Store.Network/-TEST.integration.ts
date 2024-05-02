@@ -3,7 +3,7 @@ import { setup, type TParts } from './-TEST';
 
 type D = { count: number };
 
-export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdapter', (e) => {
+export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
   e.timeout(5000);
 
   let self: TParts;
@@ -19,16 +19,11 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
     expect(self.network.total.added).to.eql(0);
     expect(remote.network.total.added).to.eql(0);
 
-    let sharedReadyCount = 0;
-    self.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
-    remote.network.events().shared.ready$.subscribe((e) => sharedReadyCount++);
-
     const res = await self.peer.connect.data(remote.peer.id);
     expect(res.error).to.eql(undefined);
 
     expect(self.network.total.added).to.eql(1);
     expect(remote.network.total.added).to.eql(1);
-    expect(sharedReadyCount).to.eql(2); // NB: both self AND remote fired [shared.ready$]
 
     expect(self.fired.added.length).to.eql(1);
     expect(remote.fired.added.length).to.eql(1);
@@ -84,11 +79,9 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
 
   e.it('shared (doc / state → namespace)', async (e) => {
     const shared = {
-      self: await self.network.shared(),
-      remote: await remote.network.shared(),
+      self: self.network.shared,
+      remote: remote.network.shared,
     } as const;
-
-    expect(shared.self.doc?.uri).to.eql(shared.remote.doc?.uri);
 
     // NB: property returns same instance.
     type N = 'tmp' | 'foo';
@@ -126,13 +119,14 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
       const fired = {
         out$: [] as t.DocEphemeralOut<D>[],
         in$: [] as t.DocEphemeralIn<D>[],
-        inTyped$: [] as t.DocEphemeralIn<D, TData>[],
+        inTyped: [] as t.DocEphemeralIn<D, TData>[],
       };
       events.ephemeral.in$.subscribe((e) => fired.in$.push(e));
       events.ephemeral.out$.subscribe((e) => fired.out$.push(e));
       events.ephemeral
-        .type$<TData>((e) => e.message.count <= 10)
-        .subscribe((e) => fired.inTyped$.push(e));
+        .in<TData>()
+        .filter((e) => e.message.count <= 10)
+        .subscribe((e) => fired.inTyped.push(e));
       return fired;
     };
 
@@ -149,15 +143,15 @@ export default Test.describe('WebrtcStore: 🍌 Integration Test ← NetworkAdap
     await wait(500);
 
     expect(fired.self.in$.length).to.eql(0);
-    expect(fired.self.inTyped$.length).to.eql(0);
+    expect(fired.self.inTyped.length).to.eql(0);
     expect(fired.self.out$.length).to.eql(3);
 
     expect(fired.remote.in$.length).to.eql(3);
-    expect(fired.remote.inTyped$.length).to.eql(2);
+    expect(fired.remote.inTyped.length).to.eql(2);
     expect(fired.remote.out$.length).to.eql(0);
 
-    expect(fired.remote.inTyped$[0].message.count).to.eql(0);
-    expect(fired.remote.inTyped$[1].message.count).to.eql(10);
+    expect(fired.remote.inTyped[0].message.count).to.eql(0);
+    expect(fired.remote.inTyped[1].message.count).to.eql(10);
   });
 
   e.it('dispose', (e) => {

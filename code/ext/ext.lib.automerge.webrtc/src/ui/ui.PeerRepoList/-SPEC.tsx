@@ -9,12 +9,9 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = PeerRepoList.displayName ?? '';
 export default Dev.describe(name, async (e) => {
-  const self = await TestEdge.create('Left', [
-    'Focus.OnArrowKey',
-    'Shareable',
-    'Deletable',
-    'Copyable',
-  ]);
+  const self = await TestEdge.create('Left', {
+    behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
+  });
   const remote = await TestEdge.create('Right');
   const peer = {
     self: self.network.peer,

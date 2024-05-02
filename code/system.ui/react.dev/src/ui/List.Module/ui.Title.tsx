@@ -1,9 +1,11 @@
-import { Color, COLORS, css, type t } from '../common';
+import { Color, css, type t } from '../common';
 
 export type TitleProps = {
+  enabled?: boolean;
   title?: string;
   version?: string;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
@@ -16,12 +18,13 @@ export const Title: React.FC<TitleProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(props.theme);
   const styles = {
-    base: css({ display: 'grid', gridTemplateColumns: `1fr auto` }),
+    base: css({ display: 'grid', gridTemplateColumns: `1fr auto`, color }),
     left: css({ fontWeight: 'bold' }),
     right: css({ display: 'grid', alignContent: 'center' }),
     block: css({ display: 'block' }),
-    version: css({ color: Color.alpha(COLORS.DARK, 0.3), marginLeft: 3 }),
+    version: css({ color: Color.alpha(color, 0.3), marginLeft: 3 }),
   };
 
   const elBadge = badge && (

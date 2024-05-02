@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, type t } from './common';
+import { type t } from './common';
 
 /**
  * Provides the async [Shared] network state when it's ready.
@@ -8,19 +8,9 @@ export function useShared(network?: t.NetworkStore) {
   const peer = network?.peer;
   const [shared, setShared] = useState<t.OmitLifecycle<t.CrdtSharedState>>();
 
-  /**
-   * Monitor peer total.
-   */
   useEffect(() => {
-    const life = rx.lifecycle();
-    network?.shared().then((shared) => {
-      if (!life.disposed) setShared(shared);
-    });
-    return life.dispose;
-  }, [peer?.id]);
+    setShared(network?.shared);
+  }, [peer?.id, network?.shared?.doc.uri]);
 
-  /**
-   * API
-   */
   return shared;
 }

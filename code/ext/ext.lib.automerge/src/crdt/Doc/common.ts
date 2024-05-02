@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { A, Time, type t } from './common';
 export * from '../common';
 
 /**
@@ -8,7 +8,14 @@ const meta: t.DocMeta = {};
 
 export const DEFAULTS = {
   initial: { meta },
-  message: { initial: 'sys: initial commit' },
   page: { sort: 'asc' },
   timeout: { get: 1500 },
+  genesis: {
+    message: 'sys: initial commit',
+    options<T>(): A.ChangeOptions<T> {
+      const message = DEFAULTS.genesis.message;
+      const time = Time.now.timestamp;
+      return { message, time };
+    },
+  },
 } as const;

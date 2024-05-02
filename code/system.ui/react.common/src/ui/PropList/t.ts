@@ -6,7 +6,7 @@ type ElementInput = JSX.Element | null | false;
  * Component: <PropList>
  */
 export type PropListTitleInput = PropListTitle['value'] | PropListTitle;
-export type PropListTitleContent = string | JSX.Element | null;
+export type PropListTitleContent = t.RenderInput;
 export type PropListTitle = {
   value?: PropListTitleContent | [PropListTitleContent, PropListTitleContent];
   ellipsis?: boolean;

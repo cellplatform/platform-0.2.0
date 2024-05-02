@@ -1,6 +1,6 @@
-import { type t } from '../common';
+import type { t } from '../common';
 
-export type KeyListenerHandle = t.Disposable;
+export type KeyListenerHandle = t.Lifecycle;
 
 export type KeyPattern = string; // eg. "CMD + K"
 export type KeyPressStage = 'Down' | 'Up';
@@ -30,7 +30,7 @@ export type KeyboardKeyFlags = {
 /**
  * Keyboard Monitor.
  */
-export type KeyboardMonitor = {
+export type KeyboardMonitor = KeyboardMonitorOn & {
   readonly $: t.Observable<t.KeyboardState>;
   readonly state: t.KeyboardState;
   readonly is: {
@@ -40,6 +40,10 @@ export type KeyboardMonitor = {
   start(): KeyboardMonitor;
   stop(): void;
   subscribe(fn: (e: t.KeyboardState) => void): KeyListenerHandle;
+  filter(fn: () => boolean): KeyboardMonitorOn;
+};
+
+export type KeyboardMonitorOn = {
   on(pattern: t.KeyPattern, fn: t.KeyMatchSubscriberHandler): KeyListenerHandle;
   on(patterns: KeyMatchPatterns): KeyListenerHandle;
 };

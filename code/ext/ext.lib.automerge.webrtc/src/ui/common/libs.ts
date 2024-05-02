@@ -10,6 +10,7 @@ export { Peer, PeerUI } from 'ext.lib.peerjs';
  */
 export { IndexedDb } from 'sys.data.indexeddb';
 export {
+  BADGES,
   Button,
   COLORS,
   Color,

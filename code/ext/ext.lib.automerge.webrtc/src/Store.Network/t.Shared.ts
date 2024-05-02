@@ -1,13 +1,9 @@
 import type { t } from './common';
 
-type O = Record<string, unknown>;
-
 export type CrdtSharedMutateAction = 'unshare';
 
 export type CrdtSharedState = t.Lifecycle & {
   readonly kind: 'crdt.network.shared';
-  readonly store: t.Store;
-  readonly index: t.StoreIndexState;
   readonly doc: t.DocRef<t.CrdtShared>;
   readonly namespace: t.NamespaceManager<string>;
   events(dispose$?: t.UntilObservable): t.CrdtSharedEvents;

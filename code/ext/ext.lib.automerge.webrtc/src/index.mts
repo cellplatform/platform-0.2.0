@@ -14,7 +14,7 @@ export { PeerjsNetworkAdapter } from './common';
  * Library: UI
  */
 export { Info } from './ui/ui.Info';
-export { NetworkConnection } from './ui/ui.NetworkConnection';
+export { NetworkConnection } from './ui/ui.Network.Connection';
 export { PeerRepoList } from './ui/ui.PeerRepoList';
 
 /**

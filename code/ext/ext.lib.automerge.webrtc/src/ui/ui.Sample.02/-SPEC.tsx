@@ -17,7 +17,6 @@ import {
 import { factory } from '../ui.Sample.02.loaders';
 import { monitorKeyboard } from './-SPEC.keyboard';
 import { PeerRepoList } from './common';
-import { DevCmdBar } from './ui.Dev.CmdBar';
 import { AuthIdentity } from './ui.Dev.Identity';
 import { ShellDivider } from './ui.Dev.ShellDivider';
 import { Sample } from './ui.Subject';
@@ -26,7 +25,11 @@ type TShared = {
   main?: t.Lens<t.SampleSharedMain>;
   harness?: t.Lens<t.HarnessShared>;
 };
-type T = { reload?: boolean; accessToken?: string; stream?: MediaStream };
+type T = {
+  reload?: boolean;
+  accessToken?: string;
+  stream?: MediaStream;
+};
 const initial: T = {};
 
 type SampleNamespace = 'foo.main' | 'foo.harness';
@@ -47,13 +50,14 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
-    left = await TestEdge.create('Left', [
-      'Focus.OnArrowKey',
-      'Shareable',
-      'Deletable',
-      'Copyable',
-    ]);
-    right = await TestEdge.create('Right', ['Shareable', 'Deletable', 'Copyable']);
+    const logLevel = 'Debug';
+    left = await TestEdge.create('Left', {
+      behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
+      logLevel,
+    });
+    right = await TestEdge.create('Right', {
+      behaviors: ['Shareable', 'Deletable', 'Copyable'],
+    });
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -81,7 +85,8 @@ export default Dev.describe(name, async (e) => {
      * When the shared namespace becomes ready (i.e. the network is now connected)
      * the initialize the sample namespace.
      */
-    left.network.shared().then((shared) => {
+    (() => {
+      const shared = left.network.shared;
       ns = shared.namespace.typed<SampleNamespace>();
       Shared.main = ns.lens<t.SampleSharedMain>('foo.main', {});
       Shared.harness = ns.lens<t.HarnessShared>('foo.harness', {
@@ -95,7 +100,7 @@ export default Dev.describe(name, async (e) => {
       const events = {
         main: Shared.main.events(),
         harness: Shared.harness.events(),
-      };
+      } as const;
 
       events.main.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         dev.redraw('subject');
@@ -108,7 +113,7 @@ export default Dev.describe(name, async (e) => {
       });
 
       monitorKeyboard(Shared.harness);
-    });
+    })();
 
     const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
       state.change((d) => (d.stream = e.selected));
@@ -179,14 +184,6 @@ export default Dev.describe(name, async (e) => {
           />
         );
       });
-
-    /**
-     * Subject: Footer
-     */
-    dev.ctx.host.footer
-      .padding(0)
-      .border(null)
-      .render((e) => <DevCmdBar doc={Shared.harness} />);
   });
 
   e.it('ui:debug', async (e) => {
@@ -194,6 +191,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row((e) => {
+      return null; // TEMP 🐷
       return (
         <AuthIdentity
           jwt={e.state.accessToken}
@@ -201,7 +199,7 @@ export default Dev.describe(name, async (e) => {
         />
       );
     });
-    dev.hr(5, 20);
+    // dev.hr(5, 20);
 
     const edgeDebug = (edge: t.SampleEdge) => {
       const network = edge.network;
@@ -259,6 +257,7 @@ export default Dev.describe(name, async (e) => {
 
       connectButton('left → right', () => left.network.peer.connect.data(right.network.peer.id));
       connectButton('left ← right', () => right.network.peer.connect.data(left.network.peer.id));
+      dev.hr(-1, 5);
     });
 
     dev.hr(5, 20);
@@ -269,8 +268,8 @@ export default Dev.describe(name, async (e) => {
 
       const getShared = async () => {
         return {
-          left: await left.network.shared(),
-          right: await right.network.shared(),
+          left: left.network.shared,
+          right: right.network.shared,
         } as const;
       };
 
@@ -294,10 +293,11 @@ export default Dev.describe(name, async (e) => {
           // loadCodeEditor(state);
         });
 
-        const foo$ = events.right.ephemeral.type$<TFoo>(
-          (e) => typeof e.message === 'object' && e.message?.type === 'foo',
-        );
-        foo$.subscribe((e) => console.log('foo$', e));
+        events.right.ephemeral
+          .in<TFoo>()
+          .filter((e) => typeof e.message === 'object')
+          .filter((e) => e.message?.type === 'foo')
+          .subscribe((e) => console.log('ephemeral foo$', e));
       };
 
       const loadButton = (label: string, name: t.SampleName, target: t.SampleModuleDefTarget) => {
@@ -326,9 +326,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
       loadButton(`ƒ → load → CodeEditor`, 'CodeEditor', 'main');
       loadButton(`ƒ → load → CodeEditor (AI)`, 'CodeEditor.AI', 'main');
-      loadButton(`ƒ → load → TLDraw`, 'TLDraw', 'main');
       loadButton(`ƒ → load → Deno Deploy`, 'Deno.Deploy', 'main');
-      loadButton(`ƒ → load → FaceAPI`, 'FaceAPI', 'main');
       loadButton(`ƒ → load → Image (Crdt)`, 'ImageCrdt', 'main');
       loadButton(`ƒ → load → Automerge.Info`, 'AutomergeInfo', 'main');
       loadButton(`ƒ → load → common.CmdBar`, 'CmdBar', 'main');
@@ -358,8 +356,7 @@ export default Dev.describe(name, async (e) => {
         if (!shared.left || !shared.right) return;
 
         const send = (data: any) => {
-          type T = t.DocRefHandle<t.CrdtShared>;
-          (shared.left.doc as T)?.handle.broadcast(data);
+          Doc.ephemeral.broadcast(shared.left.doc, data);
         };
 
         console.log('------------------- send ---------------------');

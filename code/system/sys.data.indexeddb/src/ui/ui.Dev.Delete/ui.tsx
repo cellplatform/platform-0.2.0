@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { IndexedDb } from '../../IndexedDb';
 import { DevReload } from '../ui.Dev.Reload';
-import { COLORS, Color, DEFAULTS, R, css, rx, type t } from './common';
+import { Color, DEFAULTS, R, css, rx, type t } from './common';
 import { List } from './ui.List';
 
 export const View: React.FC<t.DevDeleteProps> = (props) => {
-  const { filter = DEFAULTS.filter } = props;
+  const { filter = DEFAULTS.filter, theme } = props;
   const [reloadRequired, setReloadRequired] = useState(false);
   const [items, setItems] = useState<t.DevDbItem[]>([]);
   const [deleted, setDeleted] = useState<t.DevDbItem['name'][]>([]);
@@ -13,12 +13,22 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   /**
    * Handlers
    */
-  const handleDelete = async (e: t.DevDbDeleteClickHandlerArgs) => {
-    if (!e.item.isDeletable) return;
-    const name = e.item.name;
+  const systemSibling = (name: string) => `${name}${DEFAULTS.systemSuffix}`;
+  const hasSystemSibling = (name: string) => {
+    return items.some((item) => item.name === systemSibling(name));
+  };
+
+  const deleteDatabase = async (name: string) => {
     setReloadRequired(true);
     setDeleted(R.uniq([...deleted, name]));
     await IndexedDb.delete(name);
+  };
+
+  const handleDelete = async (e: t.DevDbDeleteClickHandlerArgs) => {
+    if (!e.item.isDeletable) return;
+    const name = e.item.name;
+    await deleteDatabase(name);
+    if (hasSystemSibling(name)) await deleteDatabase(systemSibling(name));
   };
 
   /**
@@ -27,7 +37,8 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   useEffect(() => {
     const life = rx.lifecycle();
     indexedDB.databases().then((dbs) => {
-      if (!life.disposed) setItems(wrangle.items(dbs, filter));
+      if (life.disposed) return;
+      setItems(wrangle.items(dbs, filter));
     });
     return life.dispose;
   }, [reloadRequired, items.length, deleted.length]);
@@ -35,6 +46,7 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   /**
    * Render
    */
+  const color = Color.fromTheme(theme);
   const styles = {
     base: css({
       position: 'relative',
@@ -45,14 +57,19 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
     }),
     reload: css({
       minWidth: 200,
-      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      borderLeft: `solid 1px ${Color.alpha(color, 0.1)}`,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <List items={items} deleted={deleted} onDeleteClick={handleDelete} />
-      <DevReload style={styles.reload} isReloadRequired={reloadRequired} isCloseable={false} />
+      <List items={items} deleted={deleted} onDeleteClick={handleDelete} theme={theme} />
+      <DevReload
+        style={styles.reload}
+        theme={theme}
+        isReloadRequired={reloadRequired}
+        isCloseable={false}
+      />
     </div>
   );
 };

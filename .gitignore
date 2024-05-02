@@ -21,6 +21,7 @@ dist-ssr/
 coverage/
 types.d/
 vite.config.mts.timestamp*
+tmp.bundle-analysis.html
 
 # Editor directories and files
 .vscode/*

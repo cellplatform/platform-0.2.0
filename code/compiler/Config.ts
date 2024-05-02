@@ -179,6 +179,18 @@ export const Config = {
         config.plugins?.push(svelte());
       }
 
+      if (hasPlugin('rollup:visualizer')) {
+        const { visualizer } = await import('rollup-plugin-visualizer');
+        config.plugins?.push(
+          visualizer({
+            title: `${pkg.name} - bundle`,
+            filename: 'tmp.bundle-analysis.html',
+            open: true,
+            gzipSize: true,
+          }),
+        );
+      }
+
       /**
        * Configure for target environment.
        */

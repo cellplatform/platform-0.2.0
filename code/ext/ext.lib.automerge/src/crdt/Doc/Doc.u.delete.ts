@@ -1,7 +1,7 @@
 import { get } from './Doc.u.get';
 import { type t } from './common';
 
-type Uri = t.DocUri | string;
+type Uri = t.DocUri | t.UriString;
 
 /**
  * Delete the specified document.

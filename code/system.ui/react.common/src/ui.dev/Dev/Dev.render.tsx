@@ -1,4 +1,4 @@
-import { COLORS, t, DevBase, DevWrangle, DevKeyboard } from '../common';
+import { COLORS, DevBase, DevKeyboard, DevWrangle, t } from '../common';
 import { CmdHostStateful } from '../Dev.CmdHost.Stateful';
 import { KeyboardActions } from './Keyboard';
 
@@ -6,7 +6,7 @@ type EscapeAction = 'ReloadRootUrl';
 
 type Options = {
   location?: t.UrlInput;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
   env?: t.DevEnvVars;
   hrDepth?: number;
   keyboard?: boolean;
@@ -45,7 +45,7 @@ export async function render(
   return (
     <CmdHostStateful
       pkg={pkg}
-      specs={specs}
+      imports={specs}
       badge={options.badge}
       hrDepth={options.hrDepth}
       style={style}

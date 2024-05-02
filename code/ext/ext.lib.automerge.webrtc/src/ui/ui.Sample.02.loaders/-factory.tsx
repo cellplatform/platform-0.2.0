@@ -21,19 +21,9 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <DenoDeploy store={store} docuri={docuri} accessToken={accessToken} />;
   }
 
-  if (e.name === 'TLDraw') {
-    const { TLDraw: DiagramEditor } = await import('./ui.TLDraw');
-    return <DiagramEditor store={store} docuri={docuri} peerid={peerid} />;
-  }
-
   if (e.name === 'ModuleNamespace') {
     const { ModuleNamespace } = await import('sys.ui.react.common');
     return <ModuleNamespace />;
-  }
-
-  if (e.name === 'FaceAPI') {
-    const { Face } = await import('./ui.Face');
-    return <Face stream={e.ctx.stream} />;
   }
 
   if (e.name === 'ImageCrdt') {

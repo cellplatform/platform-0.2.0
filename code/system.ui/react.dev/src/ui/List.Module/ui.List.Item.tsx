@@ -3,6 +3,7 @@ import { VscSymbolClass } from 'react-icons/vsc';
 import { COLORS, Calc, Color, DEFAULTS, css, type t } from './common';
 
 export type ListItemProps = {
+  enabled?: boolean;
   index: number;
   url: URL;
   imports: t.ModuleImports;
@@ -13,6 +14,7 @@ export type ListItemProps = {
   Icon?: t.IconType;
   ns?: boolean;
   hrDepth?: number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onReadyChange?: t.ModuleListItemReadyHandler;
   onClick?: t.ModuleListItemHandler;
@@ -20,7 +22,9 @@ export type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { index, Icon, hrDepth = -1, ns, title, imports, address, url, selected, focused } = props;
+  const { index, Icon, hrDepth = -1, ns, title, imports } = props;
+  const { address, url, selected, focused, enabled = true } = props;
+
   const importsKeys = Object.keys(imports);
 
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
@@ -54,9 +58,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
    * Handlers
    */
   const getArgs = (): t.ModuleListItemHandlerArgs => {
-    const match = address ? imports[address] : undefined;
-    const importer = typeof match === 'function' ? match : undefined;
-    return { index, address, importer };
+    return { index, address };
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -69,6 +71,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Render
    */
+  const { WHITE, BLUE } = COLORS;
+  const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({
       paddingLeft: beyondBounds ? 0 : 20,
@@ -76,53 +80,60 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     }),
     hr: css({
       border: 'none',
-      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
+      borderTop: `solid 1px ${Color.alpha(color, 0.12)}`,
     }),
     link: css({
-      color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
+      color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
       textDecoration: 'none',
     }),
     linkDimmed: css({
       userSelect: 'none',
-      color: Color.alpha(COLORS.DARK, 0.4),
-      ':hover': { color: COLORS.BLUE },
+      color: Color.alpha(color, 0.4),
+      ':hover': { color: BLUE },
     }),
     row: {
       base: css({
         backgroundColor: selected
-          ? focused
-            ? COLORS.BLUE
-            : Color.alpha(COLORS.DARK, 0.08)
+          ? focused && enabled
+            ? BLUE
+            : Color.alpha(color, 0.08)
           : undefined,
         borderRadius: 3,
         position: 'relative',
         display: 'grid',
-        gridTemplateColumns: 'auto auto 1fr',
+        gridTemplateColumns: 'auto minmax(0, 1fr) auto',
       }),
       icon: css({
-        color: selected && focused ? COLORS.WHITE : COLORS.BLUE,
+        color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
         marginLeft: 10,
         marginRight: 10,
         display: 'grid',
         placeItems: 'center',
       }),
-      label: css({ ':hover': { textDecoration: 'underline' } }),
+      label: css({
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
+        ':hover': { textDecoration: 'underline' },
+      }),
     },
   };
+
+  const linkStyle = css(styles.link, !ns ? styles.linkDimmed : undefined);
+  const elLink = (
+    <a href={url.href} onClick={handleClick} {...linkStyle}>
+      <div {...styles.row.label}>{title ?? address}</div>
+    </a>
+  );
 
   return (
     <li ref={baseRef} {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
       <div {...styles.row.base}>
         <div {...styles.row.icon}>{Icon && <VscSymbolClass />}</div>
-        <a
-          href={url.href}
-          onClick={handleClick}
-          {...css(styles.link, !ns ? styles.linkDimmed : undefined)}
-        >
-          <div {...styles.row.label}>{title ?? address}</div>
-        </a>
-        <div />
+        {elLink}
+        <div style={{ width: 20 }} />
       </div>
     </li>
   );

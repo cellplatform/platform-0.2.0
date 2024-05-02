@@ -72,6 +72,6 @@ export function heads<T extends O>(doc: t.DocRef<T> | undefined): t.HashString[]
  */
 function isInitial(item: t.DocHistoryCommit) {
   const { change } = item;
-  const message = DEFAULTS.message.initial;
+  const message = DEFAULTS.genesis.message;
   return change.time > 0 && change.message === message;
 }

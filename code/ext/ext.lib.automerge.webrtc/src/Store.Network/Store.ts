@@ -1,6 +1,6 @@
 import { Shared } from './Shared';
 import { eventsFactory } from './Store.Events';
-import { PeerjsNetworkAdapter, rx, type t } from './common';
+import { Doc, Log, PeerjsNetworkAdapter, rx, toObject, type t } from './common';
 import { monitorAdapter } from './u.adapter';
 
 /**
@@ -16,33 +16,62 @@ export const WebrtcStore = {
     peer: t.PeerModel,
     store: t.Store,
     index: t.StoreIndexState,
-    options: { debugLabel?: string } = {},
+    options: { debugLabel?: string; logLevel?: t.LogLevelInput } = {},
   ): Promise<t.NetworkStore> {
+    const Uri = Doc.Uri;
     const { debugLabel } = options;
+    const total = { added: 0, bytes: { in: 0, out: 0 } };
     const life = rx.lifecycle([peer.dispose$, store.dispose$]);
     const { dispose, dispose$ } = life;
-    const total = { added: 0, bytes: { in: 0, out: 0 } };
+
+    const log = Log.level(options.logLevel, { prefix: debugLabel });
+    log.debug(`Debug Logging Webrtc.Store/peer:${peer.id}`);
 
     const $$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const fire = (e: t.WebrtcStoreEvent) => $$.next(e);
+    const shared = await Shared.create({ $, peer, store, index, debugLabel, fire });
 
-    let _shared: t.CrdtSharedState | undefined;
-    const initShared = async (uri?: string) => {
-      if (_shared) return;
-      _shared = await Shared.init({ $, peer, store, index, uri, debugLabel, fire });
-      fire({
-        type: 'crdt:webrtc:shared/Ready',
-        payload: _shared,
-      });
+    /**
+     * Retrieve and monitor remote [Shared] document.
+     */
+    const retrieveAndMonitorRemote = async (io: t.IODirection, uri: t.UriString) => {
+      log.debug(`${io}/remote shared state (doc uri):`, uri);
+      const remote = await store.doc.get<t.CrdtShared>(uri);
+
+      if (!remote) {
+        log.debug(`${io}/remote crdt could not be retrieved (error).`, Uri.shorten(uri));
+      } else {
+        log.debug(`${io}/remote shared state retrieved (crdt):`, toObject(remote.current));
+        fire({ type: 'crdt:net:shared/RemoteConnected', payload: { shared: { uri } } });
+
+        const merge = () => {
+          const local = shared.doc;
+          const before = local.current;
+          Doc.merge(remote, local);
+          const after = local.current;
+
+          const payload: t.CrdtSharedChanged = { uri: local.uri, before, after };
+          log.debug(`${io}:shared/changed`, payload);
+          fire({ type: 'crdt:net:shared/Changed', payload });
+        };
+
+        remote.events(dispose$).changed$.subscribe(merge);
+        merge();
+      }
+
+      return remote;
     };
 
     /**
      * Initialize a network adapter for the given connection ID.
      */
-    const initAdapter = async (connid: string, direction: t.IODirection) => {
+    const initializeAdapter = async (connid: string, io: t.IODirection) => {
       const conn = peer.get.conn.obj.data(connid);
       if (!conn) throw new Error(`Failed to retrieve WebRTC data-connection with id "${connid}".`);
+
+      log.debug(`${io}/connection`, conn.connectionId);
+      const metadata = conn.metadata as t.NetworkStoreConnectMetadata;
 
       /**
        * Lifecycle
@@ -59,22 +88,34 @@ export const WebrtcStore = {
       monitorAdapter({ adapter, fire, dispose$ });
       total.added += 1;
       fire({
-        type: 'crdt:webrtc/AdapterAdded',
-        payload: {
-          peer: { local: peer.id, remote: conn.peer },
-          conn: { id: connid },
-        },
+        type: 'crdt:net:webrtc/AdapterAdded',
+        payload: { peer: { local: peer.id, remote: conn.peer }, conn: { id: connid } },
+      });
+
+      type E = t.CrdtSharedRemoteConnectedEvent;
+      conn.on('data', (data: any) => {
+        const type: E['type'] = 'crdt:net:shared/RemoteConnected';
+        if (typeof data === 'object' && data.type === type) {
+          const e = data as E;
+          const uri = e.payload.shared.uri;
+          retrieveAndMonitorRemote('outgoing', uri);
+        }
       });
 
       /**
-       * Setup shared-doc.
+       * Incoming: shared-doc sync monitor.
        */
-      if (direction === 'incoming') {
-        const metadata = conn.metadata as t.NetworkStoreConnectMetadata;
-        if (metadata.shared) {
-          const uri = metadata.shared;
-          await initShared(uri);
-        }
+      if (io === 'incoming' && metadata.shared) {
+        const remoteUri = metadata.shared;
+        log.debug('incoming/remote shared state (doc uri):', remoteUri);
+        whenOpen(conn, () => {
+          const e: E = {
+            type: 'crdt:net:shared/RemoteConnected',
+            payload: { shared: { uri: shared.doc.uri } },
+          };
+          conn.send(e);
+          retrieveAndMonitorRemote('incoming', remoteUri);
+        });
       }
     };
 
@@ -85,6 +126,7 @@ export const WebrtcStore = {
       peer,
       store,
       index,
+      shared,
 
       get total() {
         return total;
@@ -92,11 +134,6 @@ export const WebrtcStore = {
 
       events(dispose$) {
         return eventsFactory({ $, store, peer, dispose$: [dispose$, api.dispose$] });
-      },
-
-      async shared() {
-        if (_shared) return _shared;
-        return rx.firstValueFrom(events.shared.ready$.pipe(rx.take(1)));
       },
 
       /**
@@ -132,7 +169,7 @@ export const WebrtcStore = {
         rx.filter((e) => Boolean(e.connection?.id && e.direction)),
         rx.map((e) => ({ connid: e.connection?.id!, direction: e.direction! })),
       )
-      .subscribe((e) => initAdapter(e.connid, e.direction));
+      .subscribe((e) => initializeAdapter(e.connid, e.direction));
 
     /**
      * [Shared] network document setup.
@@ -140,10 +177,9 @@ export const WebrtcStore = {
      *    the store's URI to it's [Shared] state document.
      */
     events.peer.cmd.beforeOutgoing$.subscribe((e) => {
-      e.metadata<t.NetworkStoreConnectMetadata>(async (metadata) => {
-        if (!_shared) await initShared();
-        metadata.shared = _shared!.doc.uri;
-      });
+      type M = t.NetworkStoreConnectMetadata;
+      e.metadata<M>((metadata) => (metadata.shared = shared.doc.uri));
+      log.debug('outgoing/before connection (data):', e.peer);
     });
 
     /**
@@ -152,3 +188,11 @@ export const WebrtcStore = {
     return api;
   },
 } as const;
+
+/**
+ * Helpers
+ */
+const whenOpen = (conn: t.PeerJsConnData, fn: () => void) => {
+  if (conn.open) fn();
+  else conn.once('open', fn);
+};

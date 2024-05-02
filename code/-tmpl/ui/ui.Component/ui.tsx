@@ -4,6 +4,8 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 export const View: React.FC<t.RootProps> = (props) => {
   const { theme } = props;
 
+  console.log(DEFAULTS.displayName, props); // TEMP 🐷
+
   /**
    * Render
    */

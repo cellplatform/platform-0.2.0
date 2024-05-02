@@ -1,4 +1,4 @@
-import { rx, t } from './common';
+import { rx, type t } from './common';
 
 type KeyHandler = (e: KeyboardEvent) => any;
 
@@ -8,7 +8,7 @@ export const KeyListener = {
   get isSupported() {
     return typeof document === 'object';
   },
-};
+} as const;
 
 /**
  * Produces an event-binding factory for a keyboard event
@@ -16,7 +16,7 @@ export const KeyListener = {
  */
 function listener(event: 'keydown' | 'keyup') {
   return (handler: KeyHandler): t.KeyListenerHandle => {
-    const disposable = rx.disposable();
+    const disposable = rx.lifecycle();
     document?.addEventListener(event, handler);
     disposable.dispose$.subscribe(() => document?.removeEventListener(event, handler));
     return disposable;

@@ -1,5 +1,6 @@
 import { ObjectInspector } from 'react-inspector';
-import { css, DEFAULTS, type t } from './common';
+
+import { DEFAULTS, Style, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 import { renderer } from './ui.Renderer';
 
@@ -18,6 +19,7 @@ export const View: React.FC<t.ObjectViewProps> = (props) => {
     base: css({
       position: 'relative',
       fontSize,
+      ...Style.toMargins(props.margin),
     }),
   };
 

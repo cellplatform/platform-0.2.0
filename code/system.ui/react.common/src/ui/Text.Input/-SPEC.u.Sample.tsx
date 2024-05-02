@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-
+import { useRef } from 'react';
 import { TextInput } from '.';
-import { Color, Time, css, type t } from '../common';
-import { Hints } from './-SPEC.u.Hints';
+import { Color, css, type t } from '../common';
 
 export type SampleProps = {
   props: t.TextInputProps;
@@ -15,32 +13,24 @@ export type SampleProps = {
 };
 
 export const Sample: React.FC<SampleProps> = (dev) => {
-  const { debug } = dev;
-
+  const { debug, props } = dev;
   const inputRef = useRef<t.TextInputRef>(null);
-  const [value, setValue] = useState(dev.props.value);
-  const [hint, setHint] = useState(dev.props.hint);
 
   /**
-   * Lifecycle
-   */
-  useEffect(() => setValue(dev.props.value), [dev.props.value]);
-
-  /**
-   * [Render]
+   * Render
    */
   const styles = {
     placeholder: css({ display: 'grid', gridTemplateColumns: 'auto auto 1fr', columnGap: 10 }),
     label: css({ fontStyle: 'normal', display: 'grid', alignContent: 'center' }),
     key: css({
+      PaddingX: 5,
       fontSize: 10,
-      border: `solid 1px ${Color.format(-0.4)}`,
       borderRadius: 5,
+      border: `solid 1px ${Color.format(-0.4)}`,
       fontStyle: 'normal',
       fontWeight: 600,
       display: 'grid',
       placeItems: 'center',
-      PaddingX: 5,
     }),
   };
 
@@ -55,20 +45,7 @@ export const Sample: React.FC<SampleProps> = (dev) => {
     <TextInput
       {...dev.props}
       ref={inputRef}
-      value={value}
-      hint={debug.isHintEnabled ? hint : undefined}
-      placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
-      onChange={async (e) => {
-        if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
-        if (debug.isUpdateEnabled) {
-          setValue(e.to);
-          if (debug.isHintEnabled) setHint(Hints.lookup(e.to ?? ''));
-        } else {
-          setHint('');
-        }
-        console.info('⚡️ onChange', e);
-        dev.props.onChange?.(e);
-      }}
+      placeholder={debug.elementPlaceholder ? elPlaceholder : props.placeholder}
     />
   );
 };

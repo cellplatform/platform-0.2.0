@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { equals } from 'ramda';
-export const R = { equals } as const;
+import { equals, mergeDeepRight as merge } from 'ramda';
+export const R = { equals, merge } as const;
 export { next as A } from '@automerge/automerge';
 export { PeerjsNetworkAdapter } from 'automerge-repo-network-peerjs';
 
@@ -15,4 +15,4 @@ export { Doc, Store, Sync, WebStore, toObject } from 'ext.lib.automerge';
  * @system
  */
 export { UserAgent } from 'sys.ui.dom';
-export { Delete, Filesize, Hash, ObjectPath, Time, cuid, rx } from 'sys.util';
+export { Delete, Filesize, Hash, Log, ObjectPath, Time, Value, cuid, rx } from 'sys.util';

@@ -11,9 +11,9 @@ export type {
 } from '@automerge/automerge-repo';
 
 export type {
-  PeerjsNetworkAdapter,
   NetworkMessage,
   NetworkMessageAlert,
+  PeerjsNetworkAdapter,
 } from 'automerge-repo-network-peerjs';
 
 /**
@@ -23,6 +23,7 @@ export type {
   DocChanged,
   DocEphemeralIn,
   DocEphemeralOut,
+  DocEvents,
   DocMeta,
   DocMetaType,
   DocRef,
@@ -30,6 +31,7 @@ export type {
   DocUri,
   DocWithMeta,
   Lens,
+  LensEvents,
   NamespaceManager,
   NamespaceMap,
   Store,

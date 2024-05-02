@@ -17,14 +17,14 @@ export const Url = {
 
   mutateLoadedNamespace(
     index: number,
-    specs: t.SpecImports | undefined,
+    imports: t.ModuleImports | undefined,
     options: { reload?: boolean } = {},
   ) {
-    if (!specs) return;
+    if (!imports) return;
     if (index < 0) return;
 
     const { url, params } = Wrangle.url();
-    const namespace = Wrangle.selectedNamespaceFromIndex(specs, index);
+    const namespace = Wrangle.selectedNamespaceFromIndex(imports, index);
     if (!namespace) return;
 
     params.set(DEFAULTS.qs.dev, namespace);

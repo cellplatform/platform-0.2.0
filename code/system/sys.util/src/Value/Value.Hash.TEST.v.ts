@@ -41,6 +41,19 @@ describe('Value.Hash', () => {
       expect(res).to.eql('123-890');
     });
 
+    it('hash string already short', () => {
+      const test = (value: string, length: number | [number, number]) => {
+        const res = Value.shortenHash(value, length);
+        expect(res).to.eql(value);
+      };
+      test('1', 3);
+      test('12', 3);
+      test('123', 3);
+      test('1234', [1, 3]);
+      test('1234', [0, 4]);
+      test('1234', [4, 0]);
+    });
+
     describe('trim prefix', () => {
       it('true', () => {
         const test = (hash: string) => {

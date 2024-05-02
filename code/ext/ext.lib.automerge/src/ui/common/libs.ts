@@ -1,9 +1,4 @@
 /**
- * @external
- */
-export { useDocument } from '@automerge/automerge-repo-react-hooks';
-
-/**
  * @system
  */
 export {

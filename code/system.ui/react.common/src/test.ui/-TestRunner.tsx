@@ -1,9 +1,6 @@
 import { Dev, Pkg, type t } from '.';
 
-type T = {
-  spinning?: boolean;
-  results?: t.TestSuiteRunResponse[];
-};
+type T = { spinning?: boolean; results?: t.TestSuiteRunResponse[] };
 const initial: T = {};
 
 export default Dev.describe('TestRunner', (e) => {

@@ -4,13 +4,13 @@ import { Spec } from './logic.Spec';
 import { ValueHandler } from './logic.Tools';
 import { headless } from './test.ui/headless';
 import { Harness } from './ui/Harness';
-import { SpecList } from './ui/List.Spec';
+import { ModuleList } from './ui/List.Module';
 
 export const Dev = {
   Context,
   Bus,
   Spec,
-  SpecList,
+  ModuleList,
   Harness,
   ValueHandler,
   headless,

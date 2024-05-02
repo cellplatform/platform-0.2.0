@@ -6,7 +6,14 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { DomRect, JsonU, JsonMapU, Disposable, UntilObservable } from 'sys.types/src/types';
+export type {
+  Disposable,
+  DomRect,
+  JsonMapU,
+  JsonU,
+  Lifecycle,
+  UntilObservable,
+} from 'sys.types/src/types';
 
 /**
  * @local

@@ -14,8 +14,8 @@ export function eventsFactory(args: {
   const { dispose, dispose$ } = life;
 
   const $ = args.$.pipe(rx.takeUntil(dispose$));
-  const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:webrtc/AdapterAdded');
-  const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:webrtc/Message');
+  const added$ = rx.payload<t.WebrtcStoreAdapterAddedEvent>($, 'crdt:net:webrtc/AdapterAdded');
+  const message$ = rx.payload<t.WebrtcStoreMessageEvent>($, 'crdt:net:webrtc/Message');
 
   let _peer: t.PeerModelEvents;
   let _shared: t.CrdtSharedEvents;

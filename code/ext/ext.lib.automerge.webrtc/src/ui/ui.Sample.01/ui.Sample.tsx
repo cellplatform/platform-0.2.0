@@ -1,28 +1,38 @@
-import { useDocument } from '@automerge/automerge-repo-react-hooks';
+import { useEffect, useState } from 'react';
 import { Button, css, type t } from './common';
 
 export type SampleProps = {
   user?: string;
-  docUri?: t.DocUri;
+  doc?: t.DocRef<t.SampleDoc>;
   style?: t.CssValue;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  const [doc, changeDoc] = useDocument<t.SampleDoc>(props.docUri);
-  const count = doc?.count?.value ?? 0;
+  const { doc } = props;
+  const count = doc?.current.count?.value ?? 0;
+
+  const [, setRedraw] = useState(0);
+  const redraw = () => setRedraw((n) => n + 1);
+
+  /**
+   * Redraw
+   */
+  useEffect(() => {
+    const events = doc?.events();
+    events?.changed$.subscribe(redraw);
+    return events?.dispose;
+  }, []);
 
   const increment = () => {
-    changeDoc((d: any) => d.count?.increment(1));
+    doc?.change((d) => d.count?.increment(1));
   };
 
+  /**
+   * Render
+   */
   const styles = {
-    base: css({
-      padding: 10,
-      lineHeight: 1.5,
-    }),
-    body: css({
-      display: 'grid',
-    }),
+    base: css({ Padding: [10, 12], lineHeight: 1.5 }),
+    body: css({ display: 'grid' }),
     title: css({ fontWeight: 'bold' }),
     icon: css({ opacity: props.user ? 1 : 0.3, marginRight: 5 }),
     right: css({

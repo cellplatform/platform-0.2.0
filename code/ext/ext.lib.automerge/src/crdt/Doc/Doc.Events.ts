@@ -25,12 +25,18 @@ export function eventsFactory<T extends O>(
   const fire = (e: t.DocEvent<T>) => fire$.next(e);
 
   const ephemeral: E['ephemeral'] = {
-    in$: rx.payload<t.DocEphemeralInEvent<T>>($, 'crdt:doc/Ephemeral:in'),
     out$: rx.payload<t.DocEphemeralOutEvent<T>>($, 'crdt:doc/Ephemeral:out'),
-    type$<M extends t.CBOR>(filter?: t.DocEphemeralFilter<T, M>) {
-      type TIncoming = t.DocEphemeralIn<T, M>;
-      const $ = ephemeral.in$ as t.Observable<TIncoming>;
-      return filter ? $.pipe(rx.filter(filter)) : $;
+    in$: rx.payload<t.DocEphemeralInEvent<T>>($, 'crdt:doc/Ephemeral:in'),
+    in<M extends t.CBOR>(filter?: t.DocEphemeralFilter<T, M>) {
+      type O = t.Observable<t.DocEphemeralIn<T, M>>;
+      function monad(
+        ob$: t.Observable<t.DocEphemeralIn<T, M>>,
+        fn?: t.DocEphemeralFilter<T, M>,
+      ): t.DocEphemeralFilterMonad<T, M> {
+        const $ = fn ? ob$.pipe(rx.filter(fn)) : ob$;
+        return { $, filter: (fn) => monad($, fn), subscribe: (fn) => $.subscribe(fn) };
+      }
+      return monad(ephemeral.in$ as O, filter);
     },
   };
 

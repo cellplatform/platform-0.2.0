@@ -7,7 +7,7 @@ describe('Webrtc: Shared', () => {
   describe('Shared', () => {
     it('getOrCreate', async () => {
       const store = Store.init();
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
       expect(doc.current.sys.docs).to.eql({});
       expect(doc.current.sys.peers).to.eql({});
       expect(doc.current.ns).to.eql({});
@@ -15,7 +15,7 @@ describe('Webrtc: Shared', () => {
 
       const meta = Doc.Meta.get(doc.current);
       expect(meta?.ephemeral).to.eql(true);
-      expect(meta?.type?.name).to.eql(Shared.type.name);
+      expect(meta?.type?.name).to.eql(Shared.Doc.type.name);
 
       store.dispose();
     });
@@ -25,7 +25,7 @@ describe('Webrtc: Shared', () => {
       const index = await Store.index(store);
       expect(index.total()).to.eql(0);
 
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
 
       await Time.wait(0);
       expect(index.total()).to.eql(1);
@@ -37,7 +37,7 @@ describe('Webrtc: Shared', () => {
       const index = await Store.index(store);
 
       expect(index.total()).to.eql(0);
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
 
       await Time.wait(0);
       expect(index.total()).to.eql(1);
@@ -55,7 +55,7 @@ describe('Webrtc: Shared', () => {
 
     it('retrieves {ns} with loosley and strongly typed key', async () => {
       const store = Store.init();
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
       const ns1 = Shared.namespace(doc);
       const ns2 = Shared.namespace<N>(doc);
 
@@ -74,7 +74,7 @@ describe('Webrtc: Shared', () => {
 
     it('retrieves shared instances of namespace lens', async () => {
       const store = Store.init();
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
       const ns = Shared.namespace<N>(doc);
 
       const lens1 = ns.lens('foo', {});
@@ -89,7 +89,7 @@ describe('Webrtc: Shared', () => {
     const setup = async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
 
       const events = {
         doc: doc.events(),
@@ -131,17 +131,21 @@ describe('Webrtc: Shared', () => {
     it('Sync.listenToIndex: add → rename → remove', async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const shared = await Shared.getOrCreate(store);
+      const shared = await Shared.Doc.getOrCreate(store);
 
       listenToIndex(index, shared);
       expect(shared.current.sys.docs).to.eql({});
 
-      const uri = 'automerge:foo';
+      const uri = `automerge:foo`;
       await index.add({ uri });
       expect(shared.current.sys.docs).to.eql({}); // NB: not yet shared.
 
       // Share.
-      index.doc.change((d) => Store.Index.Mutate.toggleShared(d.docs[1], { shared: true }));
+      index.doc.change((d) => {
+        const doc = d.docs.find((item) => item.uri === uri);
+        Store.Index.Mutate.toggleShared(doc!, { shared: true });
+      });
+
       expect(shared.current.sys.docs[uri]).to.eql({ shared: true, version: 1 }); // NB: entry now exists on the shared-doc.
 
       // Remove.
@@ -154,7 +158,7 @@ describe('Webrtc: Shared', () => {
     it('Sync.listenToShared', async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const shared = await Shared.getOrCreate(store);
+      const shared = await Shared.Doc.getOrCreate(store);
       const get = (uri: string) => shared.current.sys.docs[uri];
 
       await Time.wait(0);
@@ -174,7 +178,7 @@ describe('Webrtc: Shared', () => {
     it('Sync.indexToShared (all items from pre-existing [Index])', async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
 
       await index.add({ uri: 'automerge:a' }); // Not shared.
       await index.add({ uri: 'automerge:b' });
@@ -198,7 +202,7 @@ describe('Webrtc: Shared', () => {
     it('Sync.sharedToIndex', async () => {
       const store = Store.init();
       const index = await Store.index(store);
-      const doc = await Shared.getOrCreate(store);
+      const doc = await Shared.Doc.getOrCreate(store);
 
       const Mutate = Store.Index.Mutate;
       await index.add({ uri: 'automerge:a' }); // Not shared.

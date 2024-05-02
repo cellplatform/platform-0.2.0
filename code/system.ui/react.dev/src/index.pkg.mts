@@ -19,8 +19,8 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
     'sys.test.spec': '0.0.0',
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
+    'react': '18.3.1',
+    'react-dom': '18.3.1',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

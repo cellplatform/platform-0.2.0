@@ -5,16 +5,26 @@ type O = Record<string, unknown>;
 /**
  * Event API
  */
-export type DocEvents<T extends O> = t.Lifecycle & {
+export type DocEvents<T extends O = O> = t.Lifecycle & {
   readonly $: t.Observable<t.DocEvent<T>>;
   readonly changed$: t.Observable<t.DocChanged<T>>;
   readonly deleted$: t.Observable<t.DocDeleted<T>>;
   readonly ephemeral: DocEventsEphemeral<T>;
 };
+
+/**
+ * Ephemeral
+ */
 export type DocEventsEphemeral<T extends O> = {
-  readonly in$: t.Observable<t.DocEphemeralIn<T>>;
   readonly out$: t.Observable<t.DocEphemeralOut<T>>;
-  type$<M extends t.CBOR>(filter?: DocEphemeralFilter<T, M>): t.Observable<t.DocEphemeralIn<T, M>>;
+  readonly in$: t.Observable<t.DocEphemeralIn<T>>;
+  in<M extends t.CBOR>(filter?: DocEphemeralFilter<T, M>): DocEphemeralFilterMonad<T, M>;
+};
+
+export type DocEphemeralFilterMonad<T extends O, M extends t.CBOR> = {
+  readonly $: t.Observable<t.DocEphemeralIn<T, M>>;
+  filter(fn: DocEphemeralFilter<T, M>): DocEphemeralFilterMonad<T, M>;
+  subscribe(fn: (e: t.DocEphemeralIn<T, M>) => void): void;
 };
 
 export type DocEphemeralFilter<T extends O, M extends t.CBOR> = (
@@ -38,7 +48,7 @@ export type DocChangedEvent<T extends O> = {
 };
 
 export type DocChanged<L extends O = O> = {
-  uri: t.DocUri;
+  uri: t.UriString;
   before: L;
   after: L;
   patches: t.Patch[];
