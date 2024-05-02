@@ -11,6 +11,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     focusOnClick = DEFAULTS.focusOnClick,
   } = props;
   const filteredSpecs = applyFilter ? Filter.imports(props.imports, props.command) : props.imports;
+  const selectedIndex = wrangle.selectedIndex(filteredSpecs, props.selected);
 
   const readyRef = useRef(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
@@ -70,7 +71,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}
-          selectedIndex={props.selectedIndex}
+          selectedIndex={selectedIndex}
           onItemVisibility={props.onItemVisibility}
           onItemClick={props.onItemClick}
           onItemSelect={props.onItemSelect}
@@ -93,3 +94,13 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  selectedIndex(specs?: t.ModuleImports, selected?: string) {
+    if (!specs || !selected) return;
+    return Object.keys(specs).indexOf(selected);
+  },
+} as const;

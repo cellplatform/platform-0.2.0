@@ -15,17 +15,18 @@ export const Wrangle = {
     return total >= 0 ? R.clamp(0, total, next) : -1;
   },
 
-  selectedIndexFromNamespace(imports: t.ModuleImports | undefined, namespace: string) {
+  selectedIndexFromNamespace(imports?: t.ModuleImports | undefined, namespace?: string) {
     if (!imports || !namespace || namespace === 'true') return -1;
     const index = Object.keys(imports).indexOf(namespace);
     return Wrangle.selected(imports, index);
   },
 
-  selectedNamespaceFromIndex(imports: t.ModuleImports | undefined, index: number) {
+  selectedNamespaceFromIndex(imports?: t.ModuleImports | undefined, index?: number) {
+    if (!imports || index === undefined) return undefined;
     return Object.keys(imports ?? {})[index];
   },
 
-  hintKey(args: { focused: boolean; selectedIndex: number; command: string }) {
+  hintKey(args: { focused: boolean; command: string }) {
     if (!args.focused) return ['↑', '↓', '⌘K'];
     return ['↑', '↓', 'enter'];
   },

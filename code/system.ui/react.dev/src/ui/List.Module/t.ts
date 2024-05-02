@@ -61,5 +61,4 @@ export type ModuleListItemHandler = (e: ModuleListItemHandlerArgs) => void;
 export type ModuleListItemHandlerArgs = {
   index: number;
   address?: string;
-  importer?: t.ModuleImporter;
 };

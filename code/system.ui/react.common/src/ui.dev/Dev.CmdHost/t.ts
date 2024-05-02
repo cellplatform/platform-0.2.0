@@ -9,7 +9,7 @@ export type CmdHostProps = {
   command?: string;
   commandPlaceholder?: string;
   applyFilter?: boolean;
-  selectedIndex?: number;
+  selected?: string;
   hintKey?: string | string[];
   hrDepth?: number;
   badge?: t.ImageBadge;

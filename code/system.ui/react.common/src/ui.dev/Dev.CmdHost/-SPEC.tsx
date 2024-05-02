@@ -184,8 +184,15 @@ export default Dev.describe(name, (e) => {
       e.change((d) => (d.props.command = 'foobar'));
     });
     dev.hr(-1, 5);
-    dev.button('selectedIndex → 0', (e) => e.change((d) => (d.props.selectedIndex = 0)));
-    dev.button('selectedIndex → 2', (e) => e.change((d) => (d.props.selectedIndex = 2)));
+    const selectedButton = (value: string) => {
+      dev.button(`selected → "${value}"`, (e) => {
+        e.change((d) => (d.props.selected = value));
+      });
+    };
+    const keys = Object.keys(specs);
+    selectedButton(keys[0]);
+    selectedButton(keys[1]);
+    selectedButton(keys[keys.length - 1]);
 
     dev.hr(5, 20);
 
