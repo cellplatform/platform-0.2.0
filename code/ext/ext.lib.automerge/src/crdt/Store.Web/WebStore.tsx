@@ -1,6 +1,5 @@
 import { Repo } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
-import { RepoContext } from '@automerge/automerge-repo-react-hooks';
 import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
 
 import { Doc } from '../Doc';
@@ -20,7 +19,6 @@ type Init = {
  */
 export const WebStore = {
   Doc,
-  Provider: RepoContext.Provider,
 
   get IndexDb() {
     return StoreIndexDb;
@@ -52,13 +50,6 @@ export const WebStore = {
        */
       get info() {
         return Wrangle.info(options);
-      },
-
-      /**
-       * The react <Provider> context.
-       */
-      Provider(props: { children?: React.ReactNode }) {
-        return <WebStore.Provider value={repo}>{props.children}</WebStore.Provider>;
       },
     };
 
