@@ -5,8 +5,9 @@ import { type t } from './common';
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
-  debugShowJson?: boolean;
   debugLogging?: boolean;
+  debugShowJson?: boolean;
+  debugRootJson?: boolean;
 };
 type T = D & { props: P; stream?: MediaStream };
 const initial: T = { props: {} };
@@ -14,7 +15,7 @@ const initial: T = { props: {} };
 const createStores = async (state: t.DevCtxState<T>) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
-  const lens = network.shared.namespace.lens('foo', {});
+  const lens = network.shared.namespace.lens('cmd.host', {});
   return { network, lens } as const;
 };
 
@@ -31,8 +32,9 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({
     theme: 'Dark',
     debugPadding: true,
-    debugShowJson: false,
     debugLogging: false,
+    debugShowJson: false,
+    debugRootJson: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -43,8 +45,9 @@ export default Dev.describe(name, async (e) => {
       d.props.badge = BADGES.ci.node;
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
-      d.debugShowJson = local.debugShowJson;
       d.debugLogging = local.debugLogging;
+      d.debugShowJson = local.debugShowJson;
+      d.debugRootJson = local.debugRootJson;
     });
 
     const stores = await createStores(state);
@@ -116,6 +119,13 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => Dev.toggle(d, 'debugPadding')));
       });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debugRootJson;
+        btn
+          .label((e) => `json root`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debugRootJson = Dev.toggle(d, 'debugRootJson'))));
+      });
       dev.hr(-1, 5);
       dev.button(['connect peer (sample)', '⚡️'], async (e) => {
         const edge = await TestEdge.create('Right');
@@ -158,7 +168,7 @@ export default Dev.describe(name, async (e) => {
             margin: [12, 28],
             data: {
               shared: {
-                // lens: ['ns', 'foo'],
+                lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
                 object: {
                   visible: e.state.debugShowJson,
                   dotMeta: false,
