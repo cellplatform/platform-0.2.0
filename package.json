@@ -29,7 +29,7 @@
     "@automerge/automerge-repo-network-messagechannel": "1.1.9",
     "@automerge/automerge-repo-react-hooks": "1.1.9",
     "@automerge/automerge-repo-storage-indexeddb": "1.1.9",
-    "automerge-repo-network-peerjs": "1.1.4",
+    "automerge-repo-network-peerjs": "1.1.9",
     "@excalidraw/excalidraw": "0.17.6",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",

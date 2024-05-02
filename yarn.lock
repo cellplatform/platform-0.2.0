@@ -50,22 +50,6 @@
   dependencies:
     "@automerge/automerge-repo" "1.1.9"
 
-"@automerge/automerge-repo@1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.4.tgz#53645048e723dd46073ebded9c604fcf2d5f551e"
-  integrity sha512-EuY/+hwPkR0bLkMzi2obRFzW3fsUtlih7S0Te/nJRvsXS7a5mrzmqnQpFwYZPZzeBsPrxaBC2vVrcNqferlaLQ==
-  dependencies:
-    "@automerge/automerge" "^2.1.9"
-    bs58check "^3.0.1"
-    cbor-x "^1.3.0"
-    debug "^4.3.4"
-    eventemitter3 "^5.0.1"
-    fast-sha256 "^1.3.0"
-    tiny-typed-emitter "^2.1.0"
-    ts-node "^10.9.1"
-    uuid "^9.0.0"
-    xstate "^4.37.0"
-
 "@automerge/automerge-repo@1.1.9":
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.1.9.tgz#3afcc73c93008cfdd6a6db2e849dd5e2adee8ca9"
@@ -82,11 +66,6 @@
     uuid "^9.0.0"
     xstate "^5.9.1"
 
-"@automerge/automerge-wasm@0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.12.0.tgz#d921ae6c168cf3186ad17b961a7718d0d1b213c2"
-  integrity sha512-MJVmw/83Uy7WuqA9Dac3VcLXpXENZSDu7hqxttdFyAYZXQYQugiU7R+RUO2sP7081J9gRUb2+73sYpNnSTwzYQ==
-
 "@automerge/automerge-wasm@0.16.0":
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.16.0.tgz#b5a8b8a11c29b795a4766243662642101ff3eba3"
@@ -98,14 +77,6 @@
   integrity sha512-LJwvVapEgAox0sEp0iDihE4wqsDAUyKt41Y5m3z1hHdF5DHa7IhqiHhGNCc59H8t3Zl3fnbTgtKabcMWFffvCQ==
   dependencies:
     "@automerge/automerge-wasm" "0.16.0"
-    uuid "^9.0.0"
-
-"@automerge/automerge@^2.1.9":
-  version "2.1.13"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.1.13.tgz#53fc1597eb92e227be87a6a5bbb9fe8648241fd3"
-  integrity sha512-9t185MgkFvwvqccmA45yKq61If2KCpKxZg19gukwO9G15bvxuh5ulWv2PWvMZ+iTvhDYCH+pZwXmFkD4nufScw==
-  dependencies:
-    "@automerge/automerge-wasm" "0.12.0"
     uuid "^9.0.0"
 
 "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.23.5", "@babel/code-frame@^7.24.1", "@babel/code-frame@^7.24.2":
@@ -1372,52 +1343,6 @@
   dependencies:
     "@preact/signals-core" "^1.6.0"
     use-sync-external-store "^1.2.0"
-
-"@privy-io/react-auth@1.61.0":
-  version "1.61.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.61.0.tgz#e30e87fd0c383107e61a3f7bd5da019666515ab6"
-  integrity sha512-0Bt/a97oEx6Av0bOMcDxNQ5/Ut8zzOceV8mlIgkFYr0ofvVEiTu+kxFPQvt4+QEpA9RSoYdLG2J+v1xoGok87g==
-  dependencies:
-    "@coinbase/wallet-sdk" "3.9.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.0.18"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@simplewebauthn/browser" "^9.0.1"
-    "@walletconnect/ethereum-provider" "^2.11.1"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.7"
-    ofetch "^1.3.4"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    react-use "^17.4.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
 
 "@privy-io/react-auth@1.62.0":
   version "1.62.0"
@@ -2790,14 +2715,10 @@ atomic-sleep@^1.0.0:
   resolved "https://registry.yarnpkg.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
 
-automerge-repo-network-peerjs@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.4.tgz#6fa6443fae5106542894822808188fde2dde875e"
-  integrity sha512-iOJhU5GbZdR+VuM8n/EAmCnMyo27554KDIfRiATAOk58WPaF3EVILCQVPiH1dETA9ZJ7yb9y95E7J7KhM2ZseQ==
-  dependencies:
-    "@automerge/automerge-repo" "1.1.4"
-    eventemitter3 "5.0.1"
-    peerjs "1.5.2"
+automerge-repo-network-peerjs@1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.9.tgz#a5323b5ad5756caa97f1174b31b88e1f40641bf9"
+  integrity sha512-wgMiJTPgRr5dAWBK9Tx/K5a6/fZTNJlxCMbwBGSKA0qvfH943JR++UrXB0pFcFe66p0LGhso9uQqHwwkrvORwQ==
 
 automerge-tldraw@0.2.0:
   version "0.2.0"
@@ -4085,15 +4006,15 @@ eventemitter3@4.0.4:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.4.tgz#b5463ace635a083d018bdc7c917b4c5f10a85384"
   integrity sha512-rlaVLnVxtxvoyLsQQFBx53YmXHDxRIzzTLbdfxqi4yocpSjAxXwkU0cScM5JgSKMqEhrZpnvQ2D9gjylR0AimQ==
 
-eventemitter3@5.0.1, eventemitter3@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
-  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
-
 eventemitter3@^4.0.7:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
+eventemitter3@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
+  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
 
 events@^3.0.0, events@^3.3.0:
   version "3.3.0"
@@ -8538,11 +8459,6 @@ ws@^7.5.1:
   version "7.5.9"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
-
-xstate@^4.37.0:
-  version "4.38.3"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.38.3.tgz#4e15e7ad3aa0ca1eea2010548a5379966d8f1075"
-  integrity sha512-SH7nAaaPQx57dx6qvfcIgqKRXIh4L0A1iYEqim4s1u7c9VoCgzZc+63FY90AKU4ZzOC2cfJzTnpO4zK7fCUzzw==
 
 xstate@^5.9.1:
   version "5.12.0"
