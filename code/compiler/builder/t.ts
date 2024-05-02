@@ -13,7 +13,7 @@ export type PathFilter = (path: PathString) => boolean;
 export type TsEnv = 'web' | 'web:react' | 'web:svelte';
 
 export type ViteTarget = 'web' | 'node';
-export type VitePlugin = 'web:react' | 'web:svelte';
+export type VitePlugin = 'web:react' | 'web:svelte' | 'rollup:visualizer';
 
 /**
  * [tsconfig.json] file.
