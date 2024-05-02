@@ -5,7 +5,7 @@ import { ModuleList } from './ui/List.Module';
 
 type Options = {
   location?: t.UrlInput;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
   hrDepth?: number;
   keyboard?: boolean;
   style?: t.CssValue;

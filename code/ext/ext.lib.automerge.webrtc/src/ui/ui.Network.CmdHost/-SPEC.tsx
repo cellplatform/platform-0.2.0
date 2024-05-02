@@ -1,5 +1,5 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { Color, Dev, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
+import { BADGES, Color, Dev, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.NetworkCmdHost;
@@ -40,6 +40,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.badge = BADGES.ci.node;
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
       d.debugShowJson = local.debugShowJson;

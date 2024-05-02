@@ -4,7 +4,7 @@ export type TitleProps = {
   enabled?: boolean;
   title?: string;
   version?: string;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

@@ -1,11 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BADGES } from '../common';
 import { Pkg } from '../index.pkg.mjs';
 import { Dev } from '../ui.dev';
 
 (async () => {
   console.info(`Pkg:`, Pkg);
-  const badge = Dev.ModuleList.DEFAULTS.badge;
+  const badge = BADGES.ci.node;
   const { Specs } = await import('./entry.Specs.mjs');
 
   const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });

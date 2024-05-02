@@ -1,7 +1,6 @@
 import { Dev, Pkg, css, type t } from '../test.ui';
-import { badge } from '../test.ui/ci.badge';
 import { View } from './-SPEC.000.View';
-import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
+import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -96,10 +95,7 @@ export default Dev.describe(name, async (e) => {
       .border(-0.1)
       .render<T>((e) => {
         const styles = {
-          base: css({
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-          }),
+          base: css({ display: 'grid', gridTemplateColumns: '1fr 1fr' }),
           block: css({ display: 'block' }),
           version: css({
             fontFamily: 'monospace',
@@ -109,6 +105,7 @@ export default Dev.describe(name, async (e) => {
           }),
         };
 
+        const badge = BADGES.ci.node;
         const elBadge = (
           <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
             <img {...styles.block} src={badge?.image} />

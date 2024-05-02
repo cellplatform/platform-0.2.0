@@ -14,6 +14,7 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       style={props.style}
       theme={theme}
       enabled={enabled}
+      badge={props.badge}
       pkg={props.pkg}
       imports={imports}
       command={controller.cmd}

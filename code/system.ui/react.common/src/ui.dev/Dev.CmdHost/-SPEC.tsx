@@ -1,5 +1,5 @@
 import { CmdHost, DEFAULTS } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { BADGES, Dev, Pkg, type t } from '../../test.ui';
 
 const fn = () => import('../DevTools/-SPEC');
 
@@ -21,7 +21,7 @@ type T = {
   debug: { stateful?: boolean; useOnItemClick?: boolean };
 };
 
-const badge = CmdHost.DEFAULTS.badge;
+const badge = BADGES.ci.node;
 const initial: T = { props: { pkg: Pkg }, debug: {} };
 
 const name = 'CmdHost';

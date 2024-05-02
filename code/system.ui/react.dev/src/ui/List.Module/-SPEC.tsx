@@ -1,5 +1,5 @@
-import { DEFAULTS, ModuleList } from '.';
-import { COLORS, Pkg, Spec, type t } from '../../test.ui';
+import { ModuleList } from '.';
+import { BADGES, COLORS, Pkg, Spec, type t } from '../../test.ui';
 
 export default Spec.describe('ModuleList', (e) => {
   e.it('init', async (e) => {
@@ -35,7 +35,7 @@ export default Spec.describe('ModuleList', (e) => {
           <ModuleList
             title={Pkg.name}
             version={Pkg.version}
-            badge={DEFAULTS.badge}
+            badge={BADGES.ci.node}
             imports={specs}
             hrDepth={2}
             scroll={true}

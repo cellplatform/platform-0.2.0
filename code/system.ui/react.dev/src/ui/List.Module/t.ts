@@ -1,9 +1,6 @@
 import type { t } from './common';
 
-type Url = string;
 type Percent = number; // 0..1
-
-export type ModuleListBadge = { image: Url; href: Url };
 
 /**
  * <Component>
@@ -15,7 +12,7 @@ export type ModuleListProps<T = unknown> = {
   selectedIndex?: number;
   href?: string;
   hrDepth?: number;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
   showParamDev?: boolean;
   allowRubberband?: boolean;
   enabled?: boolean;

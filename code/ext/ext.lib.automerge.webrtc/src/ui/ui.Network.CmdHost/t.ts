@@ -24,6 +24,7 @@ export type NetworkCmdHost = {
   imports?: t.ModuleImports;
   doc?: t.Lens;
   path?: t.CmdHostPaths;
+  badge?: t.ImageBadge;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;

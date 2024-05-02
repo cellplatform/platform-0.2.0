@@ -1,6 +1,6 @@
-import { Pkg, css, Dev, type t } from '../../test.ui';
 import { ModuleList } from 'sys.ui.react.dev';
 import { type ModuleListProps } from 'sys.ui.react.dev/src/types';
+import { BADGES, Dev, Pkg, css } from '../../test.ui';
 
 type T = { props: ModuleListProps };
 const initial: T = { props: {} };
@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
       p.showParamDev = local.showParamDev;
 
       p.imports = Specs;
-      p.badge = ModuleList.DEFAULTS.badge;
+      p.badge = BADGES.ci.node;
       p.hrDepth = 3;
     });
 

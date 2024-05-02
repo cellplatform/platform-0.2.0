@@ -14,6 +14,7 @@ export type {
   Event,
   EventBus,
   IgnoredResponse,
+  ImageBadge,
   Json,
   JsonMap,
   Lifecycle,

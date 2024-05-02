@@ -12,7 +12,7 @@ export type CmdHostProps = {
   selectedIndex?: number;
   hintKey?: string | string[];
   hrDepth?: number;
-  badge?: t.ModuleListBadge;
+  badge?: t.ImageBadge;
   enabled?: boolean;
   focused?: boolean;
   showParamDev?: boolean;
