@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Color, css, useRubberband, type t, DEFAULTS } from './common';
+import { Color, DEFAULTS, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
