@@ -16,7 +16,6 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge': '2.2.1',
     '@automerge/automerge-repo': '1.1.9',
     '@automerge/automerge-repo-network-messagechannel': '1.1.9',
-    '@automerge/automerge-repo-react-hooks': '1.1.9',
     '@automerge/automerge-repo-storage-indexeddb': '1.1.9',
     'automerge-repo-network-peerjs': '1.1.9',
     'ext.lib.ai.openai': '0.0.0',

@@ -16,7 +16,6 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge': '2.2.1',
     '@automerge/automerge-repo': '1.1.9',
     '@automerge/automerge-repo-network-broadcastchannel': '1.1.9',
-    '@automerge/automerge-repo-react-hooks': '1.1.9',
     '@automerge/automerge-repo-storage-indexeddb': '1.1.9',
     '@onsetsoftware/automerge-patcher': '0.13.0',
     'react': '18.3.1',
