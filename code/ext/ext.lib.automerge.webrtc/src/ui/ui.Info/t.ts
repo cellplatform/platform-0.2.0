@@ -22,10 +22,11 @@ export type InfoData = {
   peer?: PeerInfoData['peer'];
   repo?: AutomergeInfoData['repo'];
   network?: t.NetworkStore;
-  shared?: InfoDataShared;
+  shared?: InfoDataShared | InfoDataShared[];
 };
 
 export type InfoDataShared = {
+  label?: string;
   name?: string;
   lens?: t.ObjectPath;
   object?: InfoDataObject;

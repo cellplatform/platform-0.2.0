@@ -2,7 +2,13 @@ import { Info } from '.';
 import { COLORS, Color, Dev, PeerUI, Pkg, TestEdge, WebStore, css, type t } from '../../test.ui';
 
 type P = t.InfoProps;
-type D = { dataUseLens?: boolean; dataVisible?: boolean; dataJsonVisible?: boolean };
+type D = {
+  dataSharedLens?: boolean;
+  dataSharedArray?: boolean;
+  dataSharedDotMeta?: boolean;
+  dataVisible?: boolean;
+  dataJsonVisible?: boolean;
+};
 type T = D & { props: P };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
@@ -28,7 +34,9 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({
     fields: DEFAULTS.fields.default,
     theme: undefined,
-    dataUseLens: false,
+    dataSharedLens: false,
+    dataSharedArray: false,
+    dataSharedDotMeta: true,
     dataJsonVisible: true,
   });
 
@@ -40,7 +48,9 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
-      d.dataUseLens = local.dataUseLens;
+      d.dataSharedLens = local.dataSharedLens;
+      d.dataSharedArray = local.dataSharedArray;
+      d.dataSharedDotMeta = local.dataSharedDotMeta;
       d.dataJsonVisible = local.dataJsonVisible;
     });
 
@@ -49,30 +59,46 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const { props, dataVisible, dataJsonVisible, dataUseLens } = e.state;
+        const {
+          props,
+          dataVisible,
+          dataJsonVisible,
+          dataSharedArray,
+          dataSharedDotMeta,
+          dataSharedLens,
+        } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
-        const visible = dataVisible ?? true;
+        const isDataVisible = dataVisible ?? true;
+
+        const shared: t.InfoDataShared = {
+          lens: dataSharedLens ? ['sys', 'peers'] : undefined,
+          object: {
+            visible: dataJsonVisible,
+            dotMeta: dataSharedDotMeta,
+            beforeRender(mutate: any) {
+              mutate['foo'] = 123; // Sample render mutation 🐷
+            },
+          },
+          onIconClick(e) {
+            console.info('⚡️ shared.onIconClick', e);
+            state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
+          },
+        };
+
         const data: t.InfoData = {
           network: self.network,
           repo: { store, index },
           visible: {
-            value: visible,
+            value: isDataVisible,
             onToggle: (e) => state.change((d) => (d.dataVisible = e.next)),
           },
-          shared: {
-            lens: dataUseLens ? ['sys', 'peers'] : undefined,
-            object: {
-              visible: dataJsonVisible,
-              beforeRender(mutate: any) {
-                mutate['foo'] = 123; // Sample render mutation 🐷
-              },
-            },
-            onIconClick(e) {
-              console.info('⚡️ shared.onIconClick', e);
-              state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
-            },
-          },
+          shared: !dataSharedArray
+            ? shared
+            : [
+                { ...shared, name: 'Foo', label: 'Shared One' },
+                { ...shared, name: 'Bar', label: 'Shared Two' },
+              ],
         };
 
         return (
@@ -80,7 +106,7 @@ export default Dev.describe(name, async (e) => {
             //
             {...props}
             data={data}
-            fields={visible ? props.fields : ['Visible']}
+            fields={isDataVisible ? props.fields : ['Visible']}
           />
         );
       });
@@ -131,10 +157,10 @@ export default Dev.describe(name, async (e) => {
         'Peer',
         'Network.Transfer',
         'Network.Shared',
-        // 'Network.Shared.Json',
+        'Network.Shared.Json',
       ]);
       dev.hr(-1, 5);
-      dev.button('prepend: Visible', (e) => {
+      dev.button(['visible', '(prepend)'], (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
       });
@@ -144,11 +170,31 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Data', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.dataUseLens;
+        const value = (state: T) => !!state.dataSharedLens;
         btn
-          .label((e) => `use shared.lens`)
+          .label((e) => `data.shared.lens`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.dataUseLens = Dev.toggle(d, 'dataUseLens'))));
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedLens = Dev.toggle(d, 'dataSharedLens'))),
+          );
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.dataSharedDotMeta;
+        btn
+          .label((e) => `data.shared.dotMeta`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedDotMeta = Dev.toggle(d, 'dataSharedDotMeta'))),
+          );
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.dataSharedArray;
+        btn
+          .label((e) => `data.[shared] ← array`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.dataSharedArray = Dev.toggle(d, 'dataSharedArray'))),
+          );
       });
     });
 
