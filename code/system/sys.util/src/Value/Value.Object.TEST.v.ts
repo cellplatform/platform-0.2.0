@@ -93,6 +93,16 @@ describe('Value.Object', () => {
       Value.Object.walk(a, (e) => count++);
       expect(count).to.eql(6); // NB: with no infinite loop.
     });
+
+    it('mutates key/value', () => {
+      const root = { child: { enabled: true, list: [1, 2] } };
+      Value.Object.walk(root, (e) => {
+        if (e.key === 'enabled') e.mutate(false);
+        if (e.key === 0) e.mutate('hello');
+      });
+      expect(root.child.enabled).to.eql(false);
+      expect(root.child.list[0]).to.eql('hello');
+    });
   });
 
   describe('Value.Object.build', () => {

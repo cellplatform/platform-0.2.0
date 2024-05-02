@@ -7,6 +7,7 @@ type WalkCallbackArgs = {
   readonly key: string | number;
   readonly value: any;
   stop(): void;
+  mutate<T>(value: T): void;
 };
 
 /**
@@ -26,7 +27,8 @@ export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
     const process = (key: string | number, value: any) => {
       if (_stopped || walked.has(value)) return; // Skip if stopped or already walked.
 
-      fn({ parent, key, value, stop });
+      const mutate = <T>(value: T) => ((parent as any)[key] = value);
+      fn({ parent, key, value, stop, mutate });
       if (_stopped) return;
 
       const isObject = typeof parent === 'object' && parent !== null;
