@@ -8,16 +8,18 @@ export default Config.vite(import.meta.url, (e) => {
   e.target('web');
   e.plugin('web:react');
 
-  e.chunk('lib.react', 'react');
-  e.chunk('lib.react.dom', 'react-dom');
-  e.chunk('lib.framer-motion', 'framer-motion');
-  e.chunk('lib.ua-parser', 'ua-parser-js');
+  e.chunk('lib.ext.react', 'react');
+  e.chunk('lib.ext.react.dom', 'react-dom');
+  e.chunk('lib.ext.framer-motion', 'framer-motion');
+  e.chunk('lib.ext.ua-parser', 'ua-parser-js');
 
-  e.chunk('lib.privy', '@privy-io/react-auth');
-  e.chunk('lib.automerge', '@automerge/automerge');
-  e.chunk('lib.automerge.wasm', '@automerge/automerge-wasm');
-  e.chunk('ext.lib.automerge');
-  e.chunk('ext.lib.automerge.webrtc');
+  e.chunk('lib.ext.privy', '@privy-io/react-auth');
+  e.chunk('lib.privy', 'ext.lib.privy');
+
+  e.chunk('lib.ext.automerge', '@automerge/automerge');
+  e.chunk('lib.ext.automerge.wasm', '@automerge/automerge-wasm');
+  e.chunk('lib.automerge', 'ext.lib.automerge');
+  e.chunk('lib.automerge.webrtc', 'ext.lib.automerge.webrtc');
 
   e.chunk('sys.util', 'sys.util');
   e.chunk('sys.text', 'sys.text');
