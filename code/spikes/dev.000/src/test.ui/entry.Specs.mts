@@ -12,7 +12,6 @@ import '@vime/core/themes/light.css';
 import type { t } from '../common';
 
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
-
 const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 
