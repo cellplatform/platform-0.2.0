@@ -22,19 +22,9 @@ export type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const {
-    index,
-    Icon,
-    hrDepth = -1,
-    ns,
-    title,
-    imports,
-    address,
-    url,
-    selected,
-    focused,
-    enabled = true,
-  } = props;
+  const { index, Icon, hrDepth = -1, ns, title, imports } = props;
+  const { address, url, selected, focused, enabled = true } = props;
+
   const importsKeys = Object.keys(imports);
 
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
@@ -81,9 +71,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Render
    */
-
   const { WHITE, BLUE } = COLORS;
-
   const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({
@@ -113,7 +101,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         borderRadius: 3,
         position: 'relative',
         display: 'grid',
-        gridTemplateColumns: 'auto auto 1fr',
+        gridTemplateColumns: 'auto minmax(0, 1fr) auto',
       }),
       icon: css({
         color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
@@ -122,23 +110,30 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         display: 'grid',
         placeItems: 'center',
       }),
-      label: css({ ':hover': { textDecoration: 'underline' } }),
+      label: css({
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
+        ':hover': { textDecoration: 'underline' },
+      }),
     },
   };
+
+  const linkStyle = css(styles.link, !ns ? styles.linkDimmed : undefined);
+  const elLink = (
+    <a href={url.href} onClick={handleClick} {...linkStyle}>
+      <div {...styles.row.label}>{title ?? address}</div>
+    </a>
+  );
 
   return (
     <li ref={baseRef} {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
       <div {...styles.row.base}>
         <div {...styles.row.icon}>{Icon && <VscSymbolClass />}</div>
-        <a
-          href={url.href}
-          onClick={handleClick}
-          {...css(styles.link, !ns ? styles.linkDimmed : undefined)}
-        >
-          <div {...styles.row.label}>{title ?? address}</div>
-        </a>
-        <div />
+        {elLink}
+        <div style={{ width: 20 }} />
       </div>
     </li>
   );

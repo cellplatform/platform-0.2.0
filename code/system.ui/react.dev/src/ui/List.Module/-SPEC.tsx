@@ -21,6 +21,7 @@ export default Spec.describe('ModuleList', (e) => {
           ...SampleSpecs,
           ...ModuleSpecs,
           foo: fn,
+          'foo.bar.baz.zoo.foo.foo.bar.baz.zoo.foo.zoo.bar.foo.zoo.bar': fn, // NB: test ellipsis (...) overflow.
         };
 
         const NUMBERS = ['one', 'two', 'three', 'four'];

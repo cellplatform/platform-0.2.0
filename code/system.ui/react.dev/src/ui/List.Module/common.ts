@@ -8,5 +8,5 @@ export * from './common.Calc';
  */
 export const DEFAULTS = {
   qs: BASE.qs,
-  list: { minWidth: 550 },
+  list: { minWidth: 360 },
 } as const;
