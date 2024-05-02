@@ -103,9 +103,7 @@ type InfoPanelOptions = {
 };
 
 const infoPanels = (dev: t.DevTools, left: N, right: N, options: InfoPanelOptions = {}) => {
-  const render = (network: N) => {
-    return dev.row((e) => infoPanel(dev, network, options));
-  };
+  const render = (network: N) => dev.row((e) => infoPanel(dev, network, options));
   render(left);
   dev.hr(5, 20);
   render(right);

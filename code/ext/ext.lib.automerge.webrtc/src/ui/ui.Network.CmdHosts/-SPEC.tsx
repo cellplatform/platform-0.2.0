@@ -1,4 +1,4 @@
-import { Dev, Pkg, TestDb, TestEdge, WebrtcStore, css, type t } from '../../test.ui';
+import { Color, Dev, Pkg, TestDb, TestEdge, WebrtcStore, css, type t, PeerUI } from '../../test.ui';
 import { DEFAULTS } from './common';
 import { SampleLayout } from './ui.Layout';
 
@@ -90,7 +90,6 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    TestEdge.dev.headerFooterConnectors(dev, left, right);
     TestEdge.dev.peersSection(dev, left, right);
     dev.hr(5, 20);
 
@@ -102,9 +101,20 @@ export default Dev.describe(name, async (e) => {
     };
 
     const render = (title: string, network: t.NetworkStore) => {
-      const elTitle = <div {...css({ fontSize: 22 })}>{title}</div>;
-      return dev.row((e) => {
-        return TestEdge.dev.infoPanel(dev, network, { title: elTitle, data });
+      return dev.row(() => {
+        return (
+          <>
+            <div {...css({ fontSize: 22 })}>{title}</div>
+            <PeerUI.Connector
+              peer={network.peer}
+              style={{
+                borderBottom: `solid 3px ${Color.alpha(Color.DARK, 0.15)}`,
+                marginBottom: 20,
+              }}
+            />
+            {TestEdge.dev.infoPanel(dev, network, { data })}
+          </>
+        );
       });
     };
 
@@ -131,12 +141,11 @@ export default Dev.describe(name, async (e) => {
       });
       dev.hr(-1, 5);
       dev.button(['purge ephemeral', '💦'], (e) => {
-        WebrtcStore.Shared.purge(left.index);
-        WebrtcStore.Shared.purge(right.index);
+        const purge = WebrtcStore.Shared.purge;
+        purge(left.index);
+        purge(right.index);
         e.change((d) => (d.reload = true));
       });
     });
-
-    dev.hr(5, 20);
   });
 });
