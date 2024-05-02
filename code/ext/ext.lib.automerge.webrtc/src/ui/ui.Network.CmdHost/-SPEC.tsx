@@ -1,5 +1,5 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { BADGES, Color, Dev, Peer, PeerUI, Pkg, TestEdge, css } from '../../test.ui';
+import { BADGES, Color, Dev, Hash, Peer, PeerUI, Pkg, TestEdge, Value, css } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.NetworkCmdHost;
@@ -173,7 +173,9 @@ export default Dev.describe(name, async (e) => {
                   visible: e.state.debugShowJson,
                   dotMeta: false,
                   beforeRender(mutate) {
-                    NetworkCmdHost.Path.shortenUris(mutate as t.CmdHostPathLens);
+                    Value.Object.walk(mutate!, (e) => {
+                      if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, 8));
+                    });
                   },
                 },
                 onIconClick() {
