@@ -18,24 +18,28 @@ export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
   /**
    * Inner implementation
    */
-  const walked = new Map<any, boolean>(); // NB: protect against circular-references.
+  const walked = new Map<any, string>(); // NB: protect against circular-references.
+  const hasWalked = (value: any, path: string[]) => {
+    return walked.has(value) && walked.get(value) === path.join('.');
+  };
 
-  const walk = <T extends object | any[]>(parent: T, fn: WalkCallback) => {
+  const walk = <T extends object | any[]>(parent: T, levelPath: string[], fn: WalkCallback) => {
     let _stopped = false;
     const stop = () => (_stopped = true);
 
     const process = (key: string | number, value: any) => {
-      if (_stopped || walked.has(value)) return; // Skip if stopped or already walked.
+      const isObject = typeof parent === 'object' && parent !== null;
+      const isArray = Array.isArray(value);
+      const path = [...levelPath, String(key)];
+      if (_stopped || hasWalked(value, path)) return; // Skip if stopped or already walked.
 
       const mutate = <T>(value: T) => ((parent as any)[key] = value);
       fn({ parent, key, value, stop, mutate });
       if (_stopped) return;
 
-      const isObject = typeof parent === 'object' && parent !== null;
-      const isArray = Array.isArray(value);
       if (isObject || isArray) {
-        walked.set(value, true);
-        walk(value, fn); // <== RECURSION 🌳
+        walked.set(value, path.join('.'));
+        walk(value, levelPath, fn); // <== RECURSION 🌳
       }
     };
 
@@ -47,7 +51,7 @@ export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
   };
 
   // Start.
-  walk<T>(parent, fn);
+  walk<T>(parent, [], fn);
 }
 
 /**

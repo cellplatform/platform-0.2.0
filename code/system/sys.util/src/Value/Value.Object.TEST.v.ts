@@ -84,14 +84,20 @@ describe('Value.Object', () => {
     });
 
     it('circular reference', () => {
-      let count = 0;
-
       const a = { b: null as any };
       const b = { a, child: [1, { msg: 'hello' }] };
-      a.b = b; // Setup ciruclar reference.
+      a.b = b; // Setup circular reference.
 
+      let count = 0;
       Value.Object.walk(a, (e) => count++);
       expect(count).to.eql(6); // NB: with no infinite loop.
+    });
+
+    it('multiple fields with same value (NB: not short-circuited by circular reference check)', () => {
+      const obj = { child: { foo: 'hello', bar: 'hello' } };
+      const keys: string[] = [];
+      Value.Object.walk(obj, (e) => keys.push(String(e.key)));
+      expect(keys).to.eql(['child', 'foo', 'bar']);
     });
 
     it('mutates key/value', () => {
