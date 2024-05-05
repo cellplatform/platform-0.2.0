@@ -14,7 +14,7 @@
     "nuke": "tsx script.node/cmd.nuke.ts",
     "mit": "fossa analyze --debug",
     "deno.count": "deno run --allow-read script.deno/info.count.ts",
-    "tmp": "tsx script.deno/tmp.ts"
+    "tmp": "deno run -A script.deno/tmp.ts"
   },
   "workspaces": {
     "packages": [

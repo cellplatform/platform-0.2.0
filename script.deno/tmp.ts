@@ -1,3 +1,21 @@
-// import { Fs } from './u.ts';
+import { fs, c } from './u.ts';
 
-console.log('Hello');
+const currentDir = fs.currentDir(import.meta.url);
+const exclude = [
+  '**/node_modules/**',
+  '**/spikes/**',
+  '**/compiler/**',
+  '**/compiler.samnples/**',
+  '**/*.d.mts',
+];
+
+const pattern = fs.join(currentDir, 'code/**/*.mts');
+const paths = await fs.glob(pattern, { exclude });
+
+paths.forEach((file) => {
+  console.log('> ', file.path);
+});
+
+console.log();
+console.log('.mts files ↑');
+console.log(c.cyan('paths.length'), paths.length);
