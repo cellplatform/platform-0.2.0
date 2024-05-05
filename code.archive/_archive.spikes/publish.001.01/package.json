@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist.cell/.latest/app && serve",
-    "test": "ts-node-esm   -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm  -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm  -T ../../../script.ts/cmd.clean.mts",
+    "test": "ts-node-esm   -T ../../../script.node/cmd.test.mts",
+    "build": "ts-node-esm  -T ../../../script.node/cmd.build.mts",
+    "clean": "ts-node-esm  -T ../../../script.node/cmd.clean.mts",
     "bundle": "ts-node-esm -T ./script/bundle.mts",
     "bundle.clean": "rm -rf public/data",
     "patch": "yarn version --patch --no-git-tag-version",

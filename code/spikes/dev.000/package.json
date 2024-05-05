@@ -9,9 +9,9 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",
-    "test": "tsx ../../../script.ts/cmd.test.ts",
-    "build": "tsx ../../../script.ts/cmd.build.ts",
-    "clean": "tsx ../../../script.ts/cmd.clean.ts",
+    "test": "tsx ../../../script.node/cmd.test.ts",
+    "build": "tsx ../../../script.node/cmd.build.ts",
+    "clean": "tsx ../../../script.node/cmd.clean.ts",
     "bundle": "tsx ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",

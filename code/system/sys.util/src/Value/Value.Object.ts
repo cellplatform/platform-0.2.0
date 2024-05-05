@@ -1,9 +1,11 @@
 import { R } from '../common';
 export * from './Value.Object.keyPath';
 
+type PathArray = (string | number)[];
 type WalkCallback = (e: WalkCallbackArgs) => void;
 type WalkCallbackArgs = {
   readonly parent: object | any[];
+  readonly path: PathArray;
   readonly key: string | number;
   readonly value: any;
   stop(): void;
@@ -15,27 +17,26 @@ type WalkCallbackArgs = {
  * a visitor callback for each item.
  */
 export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
-  /**
-   * Inner implementation
-   */
   const walked = new Map<any, boolean>(); // NB: protect against circular-references.
 
-  const walk = <T extends object | any[]>(parent: T, fn: WalkCallback) => {
+  const walk = <T extends object | any[]>(parent: T, levelPath: PathArray, fn: WalkCallback) => {
     let _stopped = false;
     const stop = () => (_stopped = true);
 
     const process = (key: string | number, value: any) => {
-      if (_stopped || walked.has(value)) return; // Skip if stopped or already walked.
+      const isArray = Array.isArray(value);
+      const isObject = value !== null && typeof value === 'object';
+      const hasWalked = (isObject || isArray) && walked.has(value);
+      if (_stopped || hasWalked) return; // Skip if stopped or already walked.
 
       const mutate = <T>(value: T) => ((parent as any)[key] = value);
-      fn({ parent, key, value, stop, mutate });
+      const path = [...levelPath, key];
+      fn({ parent, path, key, value, stop, mutate });
       if (_stopped) return;
 
-      const isObject = typeof parent === 'object' && parent !== null;
-      const isArray = Array.isArray(value);
       if (isObject || isArray) {
         walked.set(value, true);
-        walk(value, fn); // <== RECURSION 🌳
+        walk(value, path, fn); // <== RECURSION 🌳
       }
     };
 
@@ -47,7 +48,7 @@ export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
   };
 
   // Start.
-  walk<T>(parent, fn);
+  walk<T>(parent, [], fn);
 }
 
 /**

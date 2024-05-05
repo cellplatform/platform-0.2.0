@@ -77,7 +77,7 @@ export default Dev.describe(name, async (e) => {
             visible: dataJsonVisible,
             dotMeta: dataSharedDotMeta,
             beforeRender(mutate: any) {
-              mutate['foo'] = 123; // Sample render mutation 🐷
+              mutate['foo'] = 123; // Sample render mutation 🐷.
             },
           },
           onIconClick(e) {

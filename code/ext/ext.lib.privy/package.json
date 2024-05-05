@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "tsx ../../../script.ts/cmd.test.ts",
-    "build": "tsx ../../../script.ts/cmd.build.ts",
-    "clean": "tsx ../../../script.ts/cmd.clean.ts",
-    "tmp": "tsx   ./script.ts/tmp.mts"
+    "test": "tsx ../../../script.node/cmd.test.ts",
+    "build": "tsx ../../../script.node/cmd.build.ts",
+    "clean": "tsx ../../../script.node/cmd.clean.ts",
+    "tmp": "tsx   ./script.node/tmp.mts"
   },
   "dependencies": {
-    "@privy-io/react-auth": "1.62.0",
+    "@privy-io/react-auth": "1.63.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "sys.util": "0.0.0",

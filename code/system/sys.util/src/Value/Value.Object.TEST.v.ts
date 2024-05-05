@@ -3,7 +3,7 @@ import { describe, expect, it } from '../test';
 
 describe('Value.Object', () => {
   describe('Value.Object.walk', () => {
-    type T = { key: string | number; value: any };
+    type T = { key: string | number; value: any; path: (string | number)[] };
 
     it('processes object', () => {
       const walked: T[] = [];
@@ -13,16 +13,16 @@ describe('Value.Object', () => {
         child: { enabled: true, list: [1, 2] },
       };
 
-      Value.Object.walk(input, ({ key, value }) => walked.push({ key, value }));
+      Value.Object.walk(input, ({ key, value, path }) => walked.push({ key, value, path }));
 
       expect(walked).to.eql([
-        { key: 'name', value: 'foo' },
-        { key: 'count', value: 123 },
-        { key: 'child', value: { enabled: true, list: [1, 2] } },
-        { key: 'enabled', value: true },
-        { key: 'list', value: [1, 2] },
-        { key: 0, value: 1 },
-        { key: 1, value: 2 },
+        { key: 'name', value: 'foo', path: ['name'] },
+        { key: 'count', value: 123, path: ['count'] },
+        { key: 'child', value: { enabled: true, list: [1, 2] }, path: ['child'] },
+        { key: 'enabled', value: true, path: ['child', 'enabled'] },
+        { key: 'list', value: [1, 2], path: ['child', 'list'] },
+        { key: 0, value: 1, path: ['child', 'list', 0] },
+        { key: 1, value: 2, path: ['child', 'list', 1] },
       ]);
     });
 
@@ -42,16 +42,16 @@ describe('Value.Object', () => {
       const walked: T[] = [];
       const input = ['foo', 123, { enabled: true, list: [1, 2] }];
 
-      Value.Object.walk(input, ({ key, value }) => walked.push({ key, value }));
+      Value.Object.walk(input, ({ key, value, path }) => walked.push({ key, value, path }));
 
       expect(walked).to.eql([
-        { key: 0, value: 'foo' },
-        { key: 1, value: 123 },
-        { key: 2, value: { enabled: true, list: [1, 2] } },
-        { key: 'enabled', value: true },
-        { key: 'list', value: [1, 2] },
-        { key: 0, value: 1 },
-        { key: 1, value: 2 },
+        { key: 0, value: 'foo', path: [0] },
+        { key: 1, value: 123, path: [1] },
+        { key: 2, value: { enabled: true, list: [1, 2] }, path: [2] },
+        { key: 'enabled', value: true, path: [2, 'enabled'] },
+        { key: 'list', value: [1, 2], path: [2, 'list'] },
+        { key: 0, value: 1, path: [2, 'list', 0] },
+        { key: 1, value: 2, path: [2, 'list', 1] },
       ]);
     });
 
@@ -72,26 +72,32 @@ describe('Value.Object', () => {
       };
 
       Value.Object.walk(input, (e) => {
-        const { key, value } = e;
+        const { key, value, path } = e;
         if (value === true) return e.stop();
-        walked.push({ key, value });
+        walked.push({ key, value, path });
       });
 
       expect(walked).to.eql([
-        { key: 'name', value: 'foo' },
-        { key: 'child', value: { enabled: true, list: [1, 2] } },
+        { key: 'name', value: 'foo', path: ['name'] },
+        { key: 'child', value: { enabled: true, list: [1, 2] }, path: ['child'] },
       ]);
     });
 
     it('circular reference', () => {
-      let count = 0;
-
       const a = { b: null as any };
       const b = { a, child: [1, { msg: 'hello' }] };
-      a.b = b; // Setup ciruclar reference.
+      a.b = b; // Setup circular reference.
 
+      let count = 0;
       Value.Object.walk(a, (e) => count++);
       expect(count).to.eql(6); // NB: with no infinite loop.
+    });
+
+    it('multiple fields with same value (NB: not short-circuited by circular reference check)', () => {
+      const obj = { child: { foo: 'hello', bar: 'hello' } };
+      const keys: string[] = [];
+      Value.Object.walk(obj, (e) => keys.push(String(e.key)));
+      expect(keys).to.eql(['child', 'foo', 'bar']);
     });
 
     it('mutates key/value', () => {
