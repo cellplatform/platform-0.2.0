@@ -6,12 +6,12 @@
   "scripts": {
     "ci": "yarn audit && yarn build && yarn test && yarn count",
     "prepare": "cp code/compiler/tsconfig/tsconfig.json ./tsconfig.json",
-    "build": "tsx script.ts/cmd.all.build.ts",
-    "test": "tsx script.ts/cmd.all.test.ts",
-    "clean": "tsx script.ts/cmd.all.clean.ts",
-    "ls": "tsx script.ts/cmd.all.list.ts",
-    "count": "tsx script.ts/cmd.count.ts",
-    "nuke": "tsx script.ts/cmd.nuke.ts",
+    "build": "tsx script.node/cmd.all.build.ts",
+    "test": "tsx script.node/cmd.all.test.ts",
+    "clean": "tsx script.node/cmd.all.clean.ts",
+    "ls": "tsx script.node/cmd.all.list.ts",
+    "count": "tsx script.node/cmd.count.ts",
+    "nuke": "tsx script.node/cmd.nuke.ts",
     "mit": "fossa analyze --debug",
     "deno.count": "deno run --allow-read script.deno/info.count.ts",
     "tmp": "tsx script.deno/tmp.ts"

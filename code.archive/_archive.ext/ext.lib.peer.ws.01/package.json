@@ -6,10 +6,10 @@
     "start": "node ./dist/node/index.js",
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "test": "ts-node-esm  -T ../../../script.node/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.node/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.node/cmd.clean.mts",
+    "tmp": "ts-node-esm -T   ./script.node/tmp.mts"
   },
   "dependencies": {
     "sys.util": "0.0.0",

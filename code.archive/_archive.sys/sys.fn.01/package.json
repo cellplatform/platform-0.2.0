@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "tsx  ../../../script.ts/cmd.test.mts",
-    "build": "tsx ../../../script.ts/cmd.build.mts",
-    "clean": "tsx ../../../script.ts/cmd.clean.mts",
-    "tmp": "tsx   ./script.ts/tmp.ts"
+    "test": "tsx  ../../../script.node/cmd.test.mts",
+    "build": "tsx ../../../script.node/cmd.build.mts",
+    "clean": "tsx ../../../script.node/cmd.clean.mts",
+    "tmp": "tsx   ./script.node/tmp.ts"
   },
   "dependencies": {
     "react": "18.2.0",

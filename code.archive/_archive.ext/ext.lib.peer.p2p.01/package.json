@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "test": "ts-node-esm  -T ../../../script.node/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.node/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.node/cmd.clean.mts",
     "ws": "deno run --allow-net src.deno/server.ts",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "tmp": "ts-node-esm -T   ./script.node/tmp.mts"
   },
   "dependencies": {
     "@libp2p/bootstrap": "10.0.6",

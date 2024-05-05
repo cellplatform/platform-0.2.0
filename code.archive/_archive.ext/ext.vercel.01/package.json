@@ -5,12 +5,12 @@
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "test": "tsx ../../../script.ts/cmd.test.mts",
-    "build": "tsx ../../../script.ts/cmd.build.mts",
-    "clean": "tsx ../../../script.ts/cmd.clean.mts",
-    "deploy-sample": "tsx script.ts/deploy.sample.mts",
-    "deploy-crdt": "tsx script.ts/deploy.crdt.mts",
-    "tmp": "tsx script.ts/tmp.mts"
+    "test": "tsx ../../../script.node/cmd.test.mts",
+    "build": "tsx ../../../script.node/cmd.build.mts",
+    "clean": "tsx ../../../script.node/cmd.clean.mts",
+    "deploy-sample": "tsx script.node/deploy.sample.mts",
+    "deploy-crdt": "tsx script.node/deploy.crdt.mts",
+    "tmp": "tsx script.node/tmp.mts"
   },
   "dependencies": {
     "@vercel/edge": "1.1.1",
