@@ -20,7 +20,7 @@ jobs:
       - name: Info
         run: |
           deno --version
-          deno run --allow-env --allow-read script.deno/info.ts
+          deno run --allow-env --allow-read --quiet script.deno/info.ts
 
       - name: Record end time
         run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
