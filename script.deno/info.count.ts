@@ -1,5 +1,5 @@
-import { expandGlob } from 'https://deno.land/std/fs/mod.ts';
-import { join, dirname, fromFileUrl, resolve } from 'https://deno.land/std/path/mod.ts';
+import { expandGlob } from 'https://deno.land/std@0.224.0/fs/mod.ts';
+import { join, dirname, fromFileUrl, resolve } from 'https://deno.land/std@0.224.0/path/mod.ts';
 
 async function findFiles(globPattern: string): Promise<string[]> {
   const files: string[] = [];
