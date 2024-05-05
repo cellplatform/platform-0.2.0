@@ -1,52 +1,17 @@
-import { expandGlob } from 'https://deno.land/std@0.224.0/fs/mod.ts';
-import { join, dirname, fromFileUrl, resolve } from 'https://deno.land/std@0.224.0/path/mod.ts';
+import { fs, c } from './u.ts';
 
-async function findFiles(globPattern: string): Promise<string[]> {
-  const files: string[] = [];
+const exclude = [
+  '**/node_modules/**',
+  '**/_archive/**',
+  '**/spikes/**',
+  '**/compiler/**',
+  '**/compiler.samples/**',
+  '**/dist/**',
+];
+const dir = fs.currentDir(import.meta.url);
+const pattern = fs.join(dir, 'code/**/*.{ts,tsx,mts}'); // Adjust the pattern as needed
+const files = await fs.glob(pattern, { exclude });
 
-  for await (const file of expandGlob(globPattern, {
-    exclude: [
-      '**/node_modules/**',
-      '**/_archive/**',
-      '**/spikes/**',
-      '**/compiler/**',
-      '**/compiler.samnples/**',
-    ],
-  })) {
-    files.push(file.path);
-  }
-  return files;
-}
-
-// Get the directory of the current script
-// Define your glob pattern (e.g., "*.txt" for all text files)
-const currentDir = resolve(dirname(fromFileUrl(import.meta.url)), '..');
-
-console.log('import.meta.url', import.meta.url);
-
-export async function count() {
-  // await Deno.watchFs()
-  console.log('count', count);
-  console.log('currentDir', currentDir);
-
-  const globPattern = join(currentDir, 'code/**/*.{ts,tsx,mts}'); // Adjust the pattern as needed
-  const res = await findFiles(globPattern);
-
-  // console.log('res', res);
-  // console.log('-------------------------------------------');
-
-  res.forEach((path) => {
-    // const relative = path.substring(currentDir.length);
-    // console.log('relative', relative);
-    // console.log(' > path', path);
-  });
-
-  console.log('-------------------------------------------');
-  console.log('currentDir', currentDir);
-  console.log('res.length', res.length);
-
-  const m = res.filter((path) => path.includes('/_archive'));
-  console.log('m', m);
-}
-
-await count();
+console.log();
+console.log('pattern:  ', c.green(pattern));
+console.log('files:    ', c.yellow(files.length.toLocaleString()));
