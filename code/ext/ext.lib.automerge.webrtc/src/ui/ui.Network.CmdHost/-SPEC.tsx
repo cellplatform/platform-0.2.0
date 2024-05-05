@@ -27,10 +27,11 @@ export default Dev.describe(name, async (e) => {
   let network: t.NetworkStore;
   let lens: t.Lens;
 
-  type LocalStore = D & Pick<P, 'theme'>;
+  type LocalStore = D & Pick<P, 'theme' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
+    enabled: true,
     debugPadding: true,
     debugLogging: false,
     debugShowJson: false,
@@ -43,6 +44,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.badge = BADGES.ci.node;
+      d.props.enabled = local.enabled;
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
       d.debugLogging = local.debugLogging;
@@ -99,6 +101,14 @@ export default Dev.describe(name, async (e) => {
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
     });
 
     dev.hr(5, 20);

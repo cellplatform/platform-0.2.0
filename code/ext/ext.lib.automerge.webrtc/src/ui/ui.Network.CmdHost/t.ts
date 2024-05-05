@@ -26,7 +26,7 @@ export type NetworkCmdHost = {
   path?: t.CmdHostPaths;
   badge?: t.ImageBadge;
   enabled?: boolean;
+  debug?: string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
-  debug?: string;
 };
