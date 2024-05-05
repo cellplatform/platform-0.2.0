@@ -1,6 +1,5 @@
 import { fs, c } from './u.ts';
 
-const currentDir = fs.currentDir(import.meta.url);
 const exclude = [
   '**/node_modules/**',
   '**/spikes/**',
@@ -8,12 +7,12 @@ const exclude = [
   '**/compiler.samnples/**',
   '**/*.d.mts',
 ];
-
-const pattern = fs.join(currentDir, 'code/**/*.mts');
+const dir = fs.currentDir(import.meta.url);
+const pattern = fs.join(dir, 'code/**/*.mts');
 const paths = await fs.glob(pattern, { exclude });
 
 paths.forEach((file) => {
-  console.log('> ', file.path);
+  console.log('>', file.path);
 });
 
 console.log();
