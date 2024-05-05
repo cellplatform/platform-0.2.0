@@ -9,8 +9,8 @@ const exclude = [
   '**/dist/**',
 ];
 const dir = fs.currentDir(import.meta.url);
-const pattern = fs.join(dir, 'code/**/*.{ts,tsx,mts}'); // Adjust the pattern as needed
-const files = await fs.glob(pattern, { exclude });
+const pattern = 'code/**/*.{ts,tsx,mts}';
+const files = await fs.glob(dir).find(pattern, { exclude });
 
 console.log();
 console.log('pattern:  ', c.green(pattern));

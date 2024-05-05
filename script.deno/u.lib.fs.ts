@@ -13,13 +13,20 @@ function currentDir(importUrl: string) {
 /**
  * Run a glob pattern against the file-system.
  */
-async function glob(pattern: string, options: { exclude?: string[] } = {}): Promise<WalkEntry[]> {
-  const { exclude } = options;
-  const res: WalkEntry[] = [];
-  for await (const file of expandGlob(pattern, { exclude })) {
-    res.push(file);
-  }
-  return res;
+function glob(dir: string = '') {
+  return {
+    async find(pattern: string, options: { exclude?: string[] } = {}): Promise<WalkEntry[]> {
+      const { exclude } = options;
+      const res: WalkEntry[] = [];
+      for await (const file of expandGlob(join(dir, pattern), { exclude })) {
+        res.push(file);
+      }
+      return res;
+    },
+    dir(path: string) {
+      return glob(join(dir, path));
+    },
+  } as const;
 }
 
 /**

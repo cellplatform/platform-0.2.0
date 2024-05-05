@@ -8,8 +8,8 @@ const exclude = [
   '**/*.d.mts',
 ];
 const dir = fs.currentDir(import.meta.url);
-const pattern = fs.join(dir, 'code/**/*.mts');
-const paths = await fs.glob(pattern, { exclude });
+const pattern = 'code/**/*.mts';
+const paths = await fs.glob(dir).find(pattern, { exclude });
 
 paths.forEach((file) => {
   console.log('>', file.path);
