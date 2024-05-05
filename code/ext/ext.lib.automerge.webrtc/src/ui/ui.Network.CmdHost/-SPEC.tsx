@@ -12,7 +12,7 @@ type D = {
 type T = D & { props: P; stream?: MediaStream };
 const initial: T = { props: {} };
 
-const createStores = async (state: t.DevCtxState<T>) => {
+const createStore = async (state: t.DevCtxState<T>) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
   const lens = network.shared.namespace.lens('cmd.host', {});
@@ -52,9 +52,9 @@ export default Dev.describe(name, async (e) => {
       d.debugRootJson = local.debugRootJson;
     });
 
-    const stores = await createStores(state);
-    network = stores.network;
-    lens = stores.lens;
+    const store = await createStore(state);
+    network = store.network;
+    lens = store.lens;
 
     /**
      * Monitoring
