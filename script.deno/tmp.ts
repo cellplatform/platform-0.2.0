@@ -17,5 +17,5 @@ paths.forEach((file) => {
 });
 
 console.log();
-console.log('.mts files ↑');
+console.log(`${c.yellow('.mts')} files ↑`);
 console.log(c.cyan('paths.length'), paths.length);
