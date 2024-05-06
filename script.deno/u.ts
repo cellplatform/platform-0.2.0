@@ -1,1 +1,1 @@
-export * from './u.lib.ts';
+export * from '../code/deno/u.ts';
