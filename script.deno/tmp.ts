@@ -7,9 +7,12 @@ const exclude = [
   '**/compiler.samnples/**',
   '**/*.d.mts',
 ];
-const dir = fs.currentDir(import.meta.url);
+
 const pattern = 'code/**/*.mts';
-const paths = await fs.glob(dir).find(pattern, { exclude });
+const paths = await fs
+  .glob(import.meta.dirname)
+  .dir('..')
+  .find(pattern, { exclude });
 
 paths.forEach((file) => {
   console.log('>', file.path);
