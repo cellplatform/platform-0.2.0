@@ -83,23 +83,6 @@ describe('Value.Object', () => {
       ]);
     });
 
-    it('circular reference', () => {
-      const a = { b: null as any };
-      const b = { a, child: [1, { msg: 'hello' }] };
-      a.b = b; // Setup circular reference.
-
-      let count = 0;
-      Value.Object.walk(a, (e) => count++);
-      expect(count).to.eql(6); // NB: with no infinite loop.
-    });
-
-    it('multiple fields with same value (NB: not short-circuited by circular reference check)', () => {
-      const obj = { child: { foo: 'hello', bar: 'hello' } };
-      const keys: string[] = [];
-      Value.Object.walk(obj, (e) => keys.push(String(e.key)));
-      expect(keys).to.eql(['child', 'foo', 'bar']);
-    });
-
     it('mutates key/value', () => {
       const root = { child: { enabled: true, list: [1, 2] } };
       Value.Object.walk(root, (e) => {
@@ -108,6 +91,48 @@ describe('Value.Object', () => {
       });
       expect(root.child.enabled).to.eql(false);
       expect(root.child.list[0]).to.eql('hello');
+    });
+
+    describe('circular reference', () => {
+      it('walks without error: {object}', () => {
+        const a = { b: null as any };
+        const b = { a, child: [1, { msg: 'hello' }] };
+        a.b = b; // Setup circular reference.
+
+        let count = 0;
+        Value.Object.walk(a, (e) => count++);
+        expect(count).to.eql(7); // NB: with no infinite loop.
+      });
+
+      it('walks without error: [array]', () => {
+        const a: any[] = [0];
+        const b: any[] = [a];
+        b.push(b);
+        a.push(b); // Setup circular references.
+
+        let count = 0;
+        Value.Object.walk(a, (e) => count++);
+        expect(count).to.eql(6); // NB: with no infinite loop.
+      });
+
+      it('multiple fields with same value (NB: not short-circuited by circular reference check)', () => {
+        const test = (obj: any, expectKeys?: string[]) => {
+          const keys: string[] = [];
+          Value.Object.walk(obj, (e) => keys.push(String(e.key)));
+          if (expectKeys) expect(keys).to.eql(expectKeys);
+          return keys;
+        };
+
+        const a: any = {};
+        const b: any = {};
+        a.b = b;
+        b.a = a;
+        const obj1 = { strings: { foo: 'hello', bar: 'hello' } }; // simple values.
+        const obj2 = { foo: a, bar: a }; // NB: does process the {object} but does not recurse on the second one.
+
+        test(obj1, ['strings', 'foo', 'bar']);
+        test(obj2, ['foo', 'b', 'a', 'bar']);
+      });
     });
   });
 
