@@ -27,6 +27,7 @@ export type {
   PropListProps,
   TextInputRef,
   RenderInput,
+  RenderOutput,
 } from 'sys.ui.react.common/src/types';
 
 /**
