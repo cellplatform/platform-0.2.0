@@ -9,7 +9,7 @@
     "test": "tsx ../../../script.node/cmd.test.ts",
     "build": "tsx ../../../script.node/cmd.build.ts",
     "clean": "tsx ../../../script.node/cmd.clean.ts",
-    "tmp": "tsx   ./script.node/tmp.mts"
+    "tmp": "deno run -A --allow-env script.deno/pull.ts"
   },
   "dependencies": {
     "akahu": "1.15.3",
