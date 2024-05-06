@@ -6,7 +6,7 @@ export * from '../common';
  */
 export const paths: t.CmdHostPaths = {
   uri: { selected: ['uri', 'selected'], loaded: ['uri', 'loaded'] },
-  cmd: { text: ['cmd', 'text'] },
+  cmd: { text: ['cmd', 'text'], enter: ['cmd', 'enter'] },
 };
 
 export const DEFAULTS = {
