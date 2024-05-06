@@ -52,7 +52,7 @@ async function fetchTransactions(start: string, end: string, accountId: string) 
 }
 
 /**
- * Convert a set of tranasactions into a CSV.
+ * Convert a set of tranasactions into a formatted CSV string for file export.
  */
 function toCSV(args: {
   account: t.Account;
@@ -79,13 +79,11 @@ function toCSV(args: {
 }
 
 /**
- * Execute
+ * EXECUTE SCRIPT
  */
 console.log();
 const accounts = await client.accounts.list(userToken);
-accounts.forEach((account) => {
-  console.log(c.green(account.name));
-});
+accounts.forEach((account) => console.log(c.green(account.name)));
 
 /**
  * Use Case:
