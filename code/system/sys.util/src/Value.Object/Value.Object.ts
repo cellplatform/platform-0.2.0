@@ -1,5 +1,4 @@
 import { R } from '../common';
-export * from './Value.Object.keyPath';
 
 type PathArray = (string | number)[];
 type WalkCallback = (e: WalkCallbackArgs) => void;
