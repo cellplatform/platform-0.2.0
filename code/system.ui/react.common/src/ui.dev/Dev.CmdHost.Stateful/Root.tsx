@@ -108,6 +108,8 @@ export const CmdHostStateful: React.FC<t.CmdHostStatefulProps> = (props) => {
         done();
       }
     }
+
+    props.onKeyDown?.(e);
   };
 
   /**
