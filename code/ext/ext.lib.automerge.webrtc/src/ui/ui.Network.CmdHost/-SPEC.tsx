@@ -58,6 +58,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.badge = BADGES.ci.node;
+      d.props.hrDepth = 2;
       d.props.enabled = local.enabled;
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;

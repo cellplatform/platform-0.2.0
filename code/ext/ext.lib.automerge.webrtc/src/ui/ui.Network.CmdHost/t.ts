@@ -25,6 +25,7 @@ export type NetworkCmdHost = {
   doc?: t.Lens;
   path?: t.CmdHostPaths;
   badge?: t.ImageBadge;
+  hrDepth?: t.CmdHostProps['hrDepth'];
   enabled?: boolean;
   debug?: string;
   theme?: t.CommonTheme;

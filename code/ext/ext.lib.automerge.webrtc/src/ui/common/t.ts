@@ -16,6 +16,7 @@ export type { ImageBadge, ImmutableRef } from 'sys.types/src/types';
 export type { SpecImport, SpecImports } from 'sys.test.spec/src/types';
 export type {
   CmdHostFilter,
+  CmdHostProps,
   CommonTheme,
   CssEdgesInput,
   CssValue,

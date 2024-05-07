@@ -19,6 +19,7 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       filter={controller.filter}
       command={controller.cmd}
       selected={controller.selected.uri}
+      hrDepth={props.hrDepth}
       mutateUrl={false}
       showParamDev={false}
       autoGrabFocus={false}
