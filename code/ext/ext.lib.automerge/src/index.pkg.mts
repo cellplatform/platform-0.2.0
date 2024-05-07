@@ -14,9 +14,9 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@automerge/automerge': '2.2.1',
-    '@automerge/automerge-repo': '1.1.9',
-    '@automerge/automerge-repo-network-broadcastchannel': '1.1.9',
-    '@automerge/automerge-repo-storage-indexeddb': '1.1.9',
+    '@automerge/automerge-repo': '1.1.11',
+    '@automerge/automerge-repo-network-broadcastchannel': '1.1.11',
+    '@automerge/automerge-repo-storage-indexeddb': '1.1.11',
     '@onsetsoftware/automerge-patcher': '0.13.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
