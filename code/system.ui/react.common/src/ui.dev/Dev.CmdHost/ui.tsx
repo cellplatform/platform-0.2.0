@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { CmdBar, Color, DEFAULTS, Filter, ModuleList, css, type t } from './common';
+import { CmdBar, Color, DEFAULTS, ModuleList, css, type t } from './common';
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
-  const {
-    theme,
-    enabled = true,
-    pkg = DEFAULTS.pkg,
-    applyFilter = DEFAULTS.applyFilter,
-    focusOnClick = DEFAULTS.focusOnClick,
-  } = props;
-  const filteredSpecs = applyFilter ? Filter.imports(props.imports, props.command) : props.imports;
-  const selectedIndex = wrangle.selectedIndex(filteredSpecs, props.selected);
+  const { theme, enabled = true, pkg = DEFAULTS.pkg, focusOnClick = DEFAULTS.focusOnClick } = props;
+  const imports = wrangle.filteredImports(props);
+  const selectedIndex = wrangle.selectedIndex(imports, props.selected);
 
   const readyRef = useRef(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
@@ -61,7 +55,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
         <ModuleList
           title={pkg.name}
           version={pkg.version}
-          imports={filteredSpecs}
+          imports={imports}
           badge={props.badge}
           hrDepth={props.hrDepth}
           showParamDev={props.showParamDev}
@@ -102,5 +96,10 @@ const wrangle = {
   selectedIndex(specs?: t.ModuleImports, selected?: string) {
     if (!specs || !selected) return;
     return Object.keys(specs).indexOf(selected);
+  },
+  filteredImports(props: t.CmdHostProps) {
+    const { filter = DEFAULTS.filter, imports, command } = props;
+    if (!imports || filter === null) return imports;
+    return filter(imports, command);
   },
 } as const;

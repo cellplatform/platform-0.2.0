@@ -8,7 +8,7 @@ export type CmdHostProps = {
   imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;
-  applyFilter?: boolean;
+  filter?: t.CmdHostFilter | null;
   selected?: string;
   hintKey?: string | string[];
   hrDepth?: number;
@@ -32,6 +32,8 @@ export type CmdHostProps = {
   onItemClick?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;
 };
+
+export type CmdHostFilter = (imports: t.ModuleImports, command?: string) => t.ModuleImports;
 
 /**
  * Events

@@ -30,4 +30,10 @@ export const Wrangle = {
     if (!args.focused) return ['↑', '↓', '⌘K'];
     return ['↑', '↓', 'enter'];
   },
+
+  filteredImports(props: Pick<t.CmdHostStatefulProps, 'filter' | 'imports' | 'command'>) {
+    const { filter = DEFAULTS.filter, imports = {}, command } = props;
+    if (!imports || filter === null) return imports;
+    return filter(imports, command);
+  },
 } as const;

@@ -24,7 +24,7 @@ type T = {
 const badge = BADGES.ci.node;
 const initial: T = { props: { pkg: Pkg }, debug: {} };
 
-const name = 'CmdHost';
+const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<
     t.CmdHostStatefulProps,
@@ -90,6 +90,7 @@ export default Dev.describe(name, (e) => {
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
             onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
             onItemClick={!debug.useOnItemClick ? undefined : onItemClick}
+            // filter={null}
           />
         );
       });
