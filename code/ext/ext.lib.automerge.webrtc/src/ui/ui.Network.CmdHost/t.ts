@@ -1,19 +1,19 @@
-import type { t } from './common';
+import type { A, t } from './common';
 
 /**
  * Abstract path resolvers.
  */
 export type CmdHostPaths = {
   uri: { loaded: t.ObjectPath; selected: t.ObjectPath };
-  cmd: { text: t.ObjectPath };
+  cmd: { text: t.ObjectPath; enter: t.ObjectPath };
 };
 
 /**
  * The shape of the default [CmdHostPaths] as an object.
  */
 export type CmdHostPathLens = {
-  cmd?: { text?: string };
   uri?: { selected?: t.UriString; loaded?: t.UriString };
+  cmd?: { text?: string; enter?: A.Counter };
 };
 
 /**
@@ -29,4 +29,11 @@ export type NetworkCmdHost = {
   debug?: string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onLoad?: CmdHostLoadHandler;
 };
+
+/**
+ * Events
+ */
+export type CmdHostLoadHandler = (e: CmdHostLoadHandlerArgs) => void;
+export type CmdHostLoadHandlerArgs = { uri: t.UriString; cmd: string };

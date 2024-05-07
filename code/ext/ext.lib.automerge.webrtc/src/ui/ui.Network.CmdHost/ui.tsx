@@ -1,10 +1,7 @@
-import { CmdHost } from 'sys.ui.react.common';
-import { DEFAULTS, type t } from './common';
+import { CmdHost, DEFAULTS, type t } from './common';
 import { useController } from './use.Controller';
 
 export const View: React.FC<t.NetworkCmdHost> = (props) => {
-  const { theme, doc, path = DEFAULTS.paths, enabled = true, imports, debug } = props;
-  const controller = useController({ enabled, doc, path, imports, debug });
   const { theme, doc, path = DEFAULTS.paths, enabled = true, imports, debug, onLoad } = props;
   const controller = useController({ enabled, doc, path, imports, debug, onLoad });
 
@@ -29,7 +26,10 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       focusOnClick={true}
       onReady={(e) => controller.onTextboxReady(e.textbox)}
       onItemSelect={(e) => controller.onSelectionChange(e.address)}
-      onItemClick={(e) => controller.load(e.address)}
+      onItemClick={(e) => controller.onLoadedChange(e.address)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') controller.onEnter();
+      }}
     />
   );
 };

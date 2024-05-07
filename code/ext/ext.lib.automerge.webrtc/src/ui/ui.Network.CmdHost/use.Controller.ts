@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CmdHost, DEFAULTS, ObjectPath, Sync, rx, type t } from './common';
+import { CmdHost, DEFAULTS, Doc, ObjectPath, Sync, rx, type t } from './common';
 import { CmdHostPath } from './u';
 
 type O = Record<string, unknown>;
@@ -14,6 +14,7 @@ export function useController(args: {
   path?: t.CmdHostPaths;
   imports?: t.ModuleImports;
   debug?: string;
+  onLoad?: t.CmdHostLoadHandler;
 }) {
   const { enabled = true, doc, path = DEFAULTS.paths, debug, imports } = args;
   const [selectedUri, setSelectedUri] = useState('');
@@ -36,8 +37,27 @@ export function useController(args: {
     return CmdHost.DEFAULTS.filter(imports, cmd.replace(/^\?/, ''));
   };
 
+  const clearCommand = () => {
+    doc?.change((d) => {
+      const uri = resolve.uri.loaded(d) || '';
+      const cmd = resolve.cmd.text(d) || '';
+      if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
+      if (uri) Doc.splice(d, path.uri.loaded, 0, uri.length);
+    });
+  };
+
+  const handleLoad: t.CmdHostLoadHandler = (e) => {
+    const cmd = (e.cmd || '').trim();
+
+    // Interpret DSL.
+    if (cmd === 'exit') return clearCommand(); // Unloaded.
+
+    // Run loader.
+    args.onLoad?.(e);
+  };
+
   /**
-   * Textbox syncer (splice)
+   * Textbox syncer (splice).
    */
   useEffect(() => {
     const life = rx.disposable();
@@ -52,7 +72,17 @@ export function useController(args: {
   }, [enabled, doc?.instance, !!textbox, path.cmd.text.join('.')]);
 
   /**
-   * Selected item
+   * CRDT Doc (handles direct changes to document).
+   */
+  useEffect(() => {
+    const events = doc?.events();
+    const changed$ = changedValue(events, (doc) => resolve.cmd.text(doc) ?? '');
+    changed$?.subscribe((text) => setCmd(text));
+    return events?.dispose;
+  }, [enabled, doc?.instance]);
+
+  /**
+   * Selected item.
    */
   useEffect(() => {
     const events = doc?.events();
@@ -62,28 +92,25 @@ export function useController(args: {
   }, [enabled, doc?.instance, path.uri.selected.join('.')]);
 
   /**
-   * Loader (URI)
+   * Loader (URI).
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.uri.loaded(doc) ?? '');
-
-    changed$?.pipe(rx.filter((uri) => !!uri)).subscribe(async (uri) => {
-      const importer = imports?.[uri];
-
-      /**
-       * TODO 🐷
-       * Load the module, render and display it <somehow/somewhere>.
-       */
-      console.log(debug, 'URI', uri, await importer?.());
-    });
+    const enter$ = changedValue(events, (doc) => resolve.cmd.enter(doc) ?? 0);
+    if (doc && enter$) {
+      enter$.subscribe((e) => {
+        const uri = resolve.uri.loaded(doc.current) ?? '';
+        const cmd = resolve.cmd.text(doc.current) ?? '';
+        handleLoad({ uri, cmd });
+      });
+    }
     return events?.dispose;
-  }, [enabled, !!imports, doc?.instance]);
+  }, [enabled, doc?.instance, !!imports]);
 
   /**
    * API
    */
-  return {
+  const api = {
     filter,
     cmd,
     textbox,
@@ -95,10 +122,6 @@ export function useController(args: {
       },
     },
 
-    async load(address?: t.UriString) {
-      doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, address || ''));
-    },
-
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);
     },
@@ -106,5 +129,15 @@ export function useController(args: {
     onSelectionChange(uri?: t.UriString) {
       doc?.change((d) => ObjectPath.mutate(d, path.uri.selected, uri || ''));
     },
+
+    onLoadedChange(address?: t.UriString) {
+      doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, address || ''));
+      api.onEnter();
+    },
+
+    onEnter() {
+      doc?.change((d) => resolve.cmd.enter(d)?.increment(1));
+    },
   } as const;
+  return api;
 }

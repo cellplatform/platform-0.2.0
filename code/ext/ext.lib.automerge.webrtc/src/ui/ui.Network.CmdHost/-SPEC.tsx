@@ -1,5 +1,18 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { BADGES, Color, Dev, Hash, Peer, PeerUI, Pkg, TestEdge, Value, css } from '../../test.ui';
+import {
+  A,
+  BADGES,
+  Color,
+  Dev,
+  Hash,
+  Peer,
+  PeerUI,
+  Pkg,
+  TestEdge,
+  Value,
+  css,
+} from '../../test.ui';
+import { Loader } from './-SPEC.loader';
 import { type t } from './common';
 
 type P = t.NetworkCmdHost;
@@ -9,7 +22,7 @@ type D = {
   debugShowJson?: boolean;
   debugRootJson?: boolean;
 };
-type T = D & { props: P; stream?: MediaStream };
+type T = D & { props: P; stream?: MediaStream; overlay?: JSX.Element | null | false };
 const initial: T = { props: {} };
 
 const createStore = async (state: t.DevCtxState<T>) => {
@@ -59,7 +72,31 @@ export default Dev.describe(name, async (e) => {
     /**
      * Monitoring
      */
-    network.peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
+    const peer = network.peer;
+    peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
+
+    /**
+     * Imports
+     */
+    const { Specs } = await import('../../test.ui/entry.Specs.mjs');
+    const imports = {
+      ...Object.entries(Specs).reduce((acc, [key, value]) => {
+        (acc as any)[`dev:${key}`] = value;
+        return acc;
+      }, {}),
+
+      async 'media.video'() {
+        const peer = network.peer;
+        const conns = peer.current.connections;
+        const media = conns.filter((d) => Peer.Is.Kind.video(d));
+        const stream = media[0]?.stream?.remote;
+
+        if (!stream) return null;
+        return <PeerUI.Video stream={stream} muted={true} />;
+      },
+    } as t.ModuleImports;
+
+    const loader = Loader({ imports, peer });
 
     /**
      * Render: Subject
@@ -75,25 +112,36 @@ export default Dev.describe(name, async (e) => {
        * TODO 🐷
        * - optionally load from env-var.
        */
-      const { Specs } = await import('../../test.ui/entry.Specs.mjs');
 
-      return <NetworkCmdHost {...props} imports={Specs} doc={lens} pkg={Pkg} />;
+      return (
+        <NetworkCmdHost
+          {...props}
+          imports={imports}
+          doc={lens}
+          pkg={Pkg}
+          onLoad={async (e) => {
+            const el = await loader.load(e);
+            state.change((d) => (d.overlay = el));
+          }}
+        />
+      );
     });
 
     /**
-     * Render: Video (Overlay)
+     * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const stream = state.current.stream;
-      if (!stream) return;
-      return <PeerUI.Video stream={stream} muted={true} />;
+      const elBody = state.current.overlay;
+      if (!elBody) return null;
+
+      const style = css({ Absolute: [0, 0, 36, 0], display: 'grid' });
+      return <div {...style}>{elBody}</div>;
     });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switcher(
@@ -149,11 +197,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
-      state.change((d) => {
+    const onStreamSelection: t.PeerStreamSelectionHandler = async (e) => {
+      await state.change((d) => {
         d.stream = d.stream === e.selected ? undefined : e.selected;
       });
       dev.redraw();
+      console.log('state.current.stream', state.current.stream);
     };
 
     dev.footer.padding(0).render<T>((e) => {
@@ -183,9 +232,11 @@ export default Dev.describe(name, async (e) => {
                 object: {
                   visible: e.state.debugShowJson,
                   dotMeta: false,
+                  expand: { level: 5 },
                   beforeRender(mutate) {
                     Value.Object.walk(mutate!, (e) => {
                       if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, 8));
+                      if (e.value instanceof A.Counter) e.mutate(e.value.value);
                     });
                   },
                 },
