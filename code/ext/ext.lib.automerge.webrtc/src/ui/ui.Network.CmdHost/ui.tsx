@@ -5,6 +5,8 @@ import { useController } from './use.Controller';
 export const View: React.FC<t.NetworkCmdHost> = (props) => {
   const { theme, doc, path = DEFAULTS.paths, enabled = true, imports, debug } = props;
   const controller = useController({ enabled, doc, path, imports, debug });
+  const { theme, doc, path = DEFAULTS.paths, enabled = true, imports, debug, onLoad } = props;
+  const controller = useController({ enabled, doc, path, imports, debug, onLoad });
 
   /**
    * Render
@@ -17,6 +19,7 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       badge={props.badge}
       pkg={props.pkg}
       imports={imports}
+      filter={controller.filter}
       command={controller.cmd}
       selected={controller.selected.uri}
       mutateUrl={false}

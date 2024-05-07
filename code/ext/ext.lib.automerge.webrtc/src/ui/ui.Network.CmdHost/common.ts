@@ -1,4 +1,6 @@
-import { type t } from './common';
+import type { t } from './common';
+
+export { CmdHost } from 'sys.ui.react.common';
 export * from '../common';
 
 /**

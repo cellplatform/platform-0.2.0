@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, ObjectPath, Sync, rx, type t } from './common';
+import { CmdHost, DEFAULTS, ObjectPath, Sync, rx, type t } from './common';
 import { CmdHostPath } from './u';
 
 type O = Record<string, unknown>;
@@ -29,6 +29,12 @@ export function useController(args: {
       rx.map((after) => resolve(after)),
     );
   }
+
+  const filter: t.CmdHostFilter = (imports, command) => {
+    let cmd = (command || '').trim();
+    if (!cmd.trim().startsWith('?')) return imports;
+    return CmdHost.DEFAULTS.filter(imports, cmd.replace(/^\?/, ''));
+  };
 
   /**
    * Textbox syncer (splice)
@@ -78,6 +84,7 @@ export function useController(args: {
    * API
    */
   return {
+    filter,
     cmd,
     textbox,
     selected: {
