@@ -12,7 +12,8 @@ import {
   Value,
   css,
 } from '../../test.ui';
-import { Loader } from './-SPEC.loader';
+import { createLoader } from './-SPEC.loader';
+import { createImports } from './-SPEC.imports';
 import { type t } from './common';
 
 type P = t.NetworkCmdHost;
@@ -78,25 +79,9 @@ export default Dev.describe(name, async (e) => {
     /**
      * Imports
      */
-    const { Specs } = await import('../../test.ui/entry.Specs.mjs');
-    const imports = {
-      ...Object.entries(Specs).reduce((acc, [key, value]) => {
-        (acc as any)[`dev:${key}`] = value;
-        return acc;
-      }, {}),
-
-      async 'media.video'() {
-        const peer = network.peer;
-        const conns = peer.current.connections;
-        const media = conns.filter((d) => Peer.Is.Kind.video(d));
-        const stream = media[0]?.stream?.remote;
-
-        if (!stream) return null;
-        return <PeerUI.Video stream={stream} muted={true} />;
-      },
-    } as t.ModuleImports;
-
-    const loader = Loader({ imports, peer });
+    const { Specs: specs } = await import('../../test.ui/entry.Specs.mjs');
+    const imports = createImports({ peer, specs });
+    const loader = createLoader(imports);
 
     /**
      * Render: Subject
@@ -131,11 +116,9 @@ export default Dev.describe(name, async (e) => {
      * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const elBody = state.current.overlay;
-      if (!elBody) return null;
-
       const style = css({ Absolute: [0, 0, 36, 0], display: 'grid' });
-      return <div {...style}>{elBody}</div>;
+      const el = state.current.overlay;
+      return el ? <div {...style}>{el}</div> : null;
     });
   });
 

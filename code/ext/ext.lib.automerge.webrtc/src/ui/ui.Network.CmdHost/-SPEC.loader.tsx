@@ -1,14 +1,14 @@
 import { isValidElement } from 'react';
-import { Color, css, type t } from './common';
+import { type t } from './common';
 
 /**
  * Sample module loader.
  */
-export function Loader(ctx: { imports: t.ModuleImports<any>; peer: t.PeerModel }) {
+export function createLoader(imports: t.ModuleImports<any>) {
   return {
     async load(e: t.CmdHostLoadHandlerArgs) {
       const uri = e.uri;
-      const fn = ctx.imports[uri];
+      const fn = imports[uri];
 
       if (!uri) return null;
       if (typeof fn !== 'function') return null;
