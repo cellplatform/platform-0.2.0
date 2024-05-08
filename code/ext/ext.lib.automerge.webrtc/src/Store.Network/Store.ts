@@ -25,7 +25,7 @@ export const WebrtcStore = {
     const { dispose, dispose$ } = life;
 
     const log = Log.level(options.logLevel, { prefix: debugLabel });
-    log.debug(`Debug Logging Webrtc.Store/peer:${peer.id}`);
+    log.debug(`Debug Logging → Webrtc.Store/peer:${peer.id}`);
 
     const $$ = rx.subject<t.WebrtcStoreEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
