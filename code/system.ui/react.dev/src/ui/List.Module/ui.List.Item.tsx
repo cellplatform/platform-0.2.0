@@ -81,7 +81,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(color, 0.12)}`,
     }),
     link: css({
-      color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
+      color: selected && focused && enabled ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
       textDecoration: 'none',
     }),
     linkDimmed: css({
@@ -102,7 +102,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         gridTemplateColumns: 'auto minmax(0, 1fr) auto',
       }),
       icon: css({
-        color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
+        color: selected && focused && enabled ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
         marginLeft: 10,
         marginRight: 10,
         display: 'grid',
