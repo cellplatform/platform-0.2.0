@@ -27,6 +27,9 @@ export function theme(
   return {
     name,
     color: fromTheme(name, defaultLight, defaultDark),
-    is: { light: name === 'Light', dark: name === 'Dark' },
+    is: {
+      light: name === 'Light',
+      dark: name === 'Dark',
+    },
   } as const;
 }
