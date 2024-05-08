@@ -5,7 +5,7 @@ import type { A, t } from './common';
  */
 export type CmdHostPaths = {
   uri: { loaded: t.ObjectPath; selected: t.ObjectPath };
-  cmd: { text: t.ObjectPath; enter: t.ObjectPath };
+  cmd: { text: t.ObjectPath; invoked: t.ObjectPath };
 };
 
 /**
@@ -13,7 +13,15 @@ export type CmdHostPaths = {
  */
 export type CmdHostPathLens = {
   uri?: { selected?: t.UriString; loaded?: t.UriString };
-  cmd?: { text?: string; enter?: A.Counter };
+  cmd?: { text?: string; invoked?: A.Counter };
+};
+
+/**
+ * A fully resolved document object for a <CmdHost>.
+ */
+export type CmdHostDocObject = {
+  uri: { selected: t.UriString; loaded: t.UriString };
+  cmd: { text: string; invoked: number };
 };
 
 /**
@@ -31,6 +39,7 @@ export type NetworkCmdHost = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onLoad?: CmdHostLoadHandler;
+  onCommand?: CmdHostCommandHandler;
 };
 
 /**
@@ -38,3 +47,9 @@ export type NetworkCmdHost = {
  */
 export type CmdHostLoadHandler = (e: CmdHostLoadHandlerArgs) => void;
 export type CmdHostLoadHandlerArgs = { uri: t.UriString; cmd: string };
+
+export type CmdHostCommandHandler = (e: CmdHostCommandHandlerArgs) => void;
+export type CmdHostCommandHandlerArgs = {
+  readonly cmd: { text: string; clear(): void };
+  unload(): void;
+};

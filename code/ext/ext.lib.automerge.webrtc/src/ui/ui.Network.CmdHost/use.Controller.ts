@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 import { CmdHost, DEFAULTS, Doc, ObjectPath, Sync, rx, type t } from './common';
 import { CmdHostPath } from './u';
 
-type O = Record<string, unknown>;
-type E = t.LensEvents | t.DocEvents;
-
 /**
  * Controls the interaction between a <CmdHost> and a CRDT document.
  */
@@ -15,21 +12,15 @@ export function useController(args: {
   imports?: t.ModuleImports;
   debug?: string;
   onLoad?: t.CmdHostLoadHandler;
+  onCommand?: t.CmdHostCommandHandler;
 }) {
-  const { enabled = true, doc, path = DEFAULTS.paths, debug, imports } = args;
+  const { enabled = true, doc, path = DEFAULTS.paths, imports, debug } = args;
+  const resolve = CmdHostPath.resolver(path);
+
+  const [listEnabled, setListEnabled] = useState(true);
   const [selectedUri, setSelectedUri] = useState('');
   const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
-
-  const resolve = CmdHostPath.resolver(path);
-  function changedValue<T>(events: E | undefined, resolve: (doc: O) => T) {
-    return events?.changed$.pipe(
-      rx.filter(() => !!doc),
-      rx.map((e) => e.after),
-      rx.distinctWhile((prev, next) => resolve(prev) === resolve(next)),
-      rx.map((after) => resolve(after)),
-    );
-  }
 
   const filter: t.CmdHostFilter = (imports, command) => {
     let cmd = (command || '').trim();
@@ -37,23 +28,37 @@ export function useController(args: {
     return CmdHost.DEFAULTS.filter(imports, cmd.replace(/^\?/, ''));
   };
 
-  const clearCommand = () => {
-    doc?.change((d) => {
-      const uri = resolve.uri.loaded(d) || '';
-      const cmd = resolve.cmd.text(d) || '';
-      if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
-      if (uri) Doc.splice(d, path.uri.loaded, 0, uri.length);
+  /**
+   * Document actions.
+   */
+  const Action = {
+    clearCmd() {
+      doc?.change((d) => {
+        const cmd = resolve.cmd.text(d);
+        if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
+      });
+    },
+
+    unload() {
+      doc?.change((d) => {
+        const uri = resolve.uri.loaded(d);
+        if (uri) Doc.splice(d, path.uri.loaded, 0, uri.length);
+      });
+    },
+  } as const;
+
+  /**
+   * Runs when a command is invoked.
+   */
+  const invokeCommand = (e: t.CmdHostDocObject) => {
+    const text = e.cmd.text.trim();
+    const res = { clearCmd: false, unload: false };
+    args.onCommand?.({
+      cmd: { text, clear: () => (res.clearCmd = true) },
+      unload: () => (res.unload = true),
     });
-  };
-
-  const handleLoad: t.CmdHostLoadHandler = (e) => {
-    const cmd = (e.cmd || '').trim();
-
-    // Interpret DSL.
-    if (cmd === 'exit') return clearCommand(); // Unloaded.
-
-    // Run loader.
-    args.onLoad?.(e);
+    if (res.clearCmd) Action.clearCmd();
+    if (res.unload) Action.unload();
   };
 
   /**
@@ -65,45 +70,57 @@ export function useController(args: {
     if (enabled && doc && textbox) {
       const initial = resolve.cmd.text(doc.current);
       const listener = Sync.Textbox.listen(textbox, doc, path.cmd.text, { dispose$ });
-      setCmd(initial ?? '');
-      listener.onChange((e) => setCmd(e.text || ''));
+      setCmd(initial);
+      listener.onChange((e) => setCmd(e.text));
     }
     return life.dispose;
   }, [enabled, doc?.instance, !!textbox, path.cmd.text.join('.')]);
 
   /**
-   * CRDT Doc (handles direct changes to document).
+   * Doc change listeners.
    */
   useEffect(() => {
     const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.cmd.text(doc) ?? '');
-    changed$?.subscribe((text) => setCmd(text));
-    return events?.dispose;
-  }, [enabled, doc?.instance]);
+    if (enabled && events && doc) {
+      const mutate = ObjectPath.mutate;
+      const $ = events.changed$.pipe(rx.map((d) => resolve.doc(d.after)));
 
-  /**
-   * Selected item.
-   */
-  useEffect(() => {
-    const events = doc?.events();
-    const changed$ = changedValue(events, (doc) => resolve.uri.selected(doc) ?? '');
-    changed$?.subscribe((uri) => setSelectedUri(uri));
-    return events?.dispose;
-  }, [enabled, doc?.instance, path.uri.selected.join('.')]);
+      // Command text.
+      $.pipe(
+        rx.tap(),
+        rx.distinctWhile((p, n) => p.cmd.text === n.cmd.text),
+      ).subscribe((e) => setCmd(e.cmd.text));
 
-  /**
-   * Loader (URI).
-   */
-  useEffect(() => {
-    const events = doc?.events();
-    const enter$ = changedValue(events, (doc) => resolve.cmd.enter(doc) ?? 0);
-    if (doc && enter$) {
-      enter$.subscribe((e) => {
-        const uri = resolve.uri.loaded(doc.current) ?? '';
-        const cmd = resolve.cmd.text(doc.current) ?? '';
-        handleLoad({ uri, cmd });
+      // Selected URI.
+      $.pipe(
+        rx.tap(),
+        rx.distinctWhile((p, n) => p.uri.selected === n.uri.selected),
+      ).subscribe((e) => setSelectedUri(e.uri.selected));
+
+      // Load (⚡️:action).
+      $.pipe(
+        rx.tap(),
+        rx.distinctWhile((p, n) => p.uri.loaded === n.uri.loaded),
+      ).subscribe((e) => {
+        const uri = e.uri.loaded;
+        const cmd = e.cmd.text;
+        setListEnabled(!uri);
+        args.onLoad?.({ uri, cmd });
       });
+
+      // Loaded URI (on invoke).
+      $.pipe(
+        rx.distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
+        rx.distinctWhile((p, n) => p.uri.selected === n.uri.selected),
+      ).subscribe((e) => doc.change((d) => mutate(d, path.uri.loaded, e.uri.selected)));
+
+      // Command (⚡️:action).
+      $.pipe(
+        rx.distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
+        rx.debounceTime(10),
+      ).subscribe((e) => invokeCommand(e));
     }
+
     return events?.dispose;
   }, [enabled, doc?.instance, !!imports]);
 
@@ -114,13 +131,8 @@ export function useController(args: {
     filter,
     cmd,
     textbox,
-    selected: {
-      uri: selectedUri,
-      get index() {
-        if (!imports) return -1;
-        return Object.keys(imports).findIndex((uri) => uri === selectedUri);
-      },
-    },
+    listEnabled: enabled && listEnabled,
+    selectedUri,
 
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);
@@ -130,13 +142,8 @@ export function useController(args: {
       doc?.change((d) => ObjectPath.mutate(d, path.uri.selected, uri || ''));
     },
 
-    onLoadedChange(address?: t.UriString) {
-      doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, address || ''));
-      api.onEnter();
-    },
-
-    onEnter() {
-      doc?.change((d) => resolve.cmd.enter(d)?.increment(1));
+    onInvoke() {
+      doc?.change((d) => resolve.cmd.invoked(d)?.increment(1));
     },
   } as const;
   return api;

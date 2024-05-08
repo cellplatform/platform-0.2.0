@@ -11,11 +11,13 @@ import {
   TestEdge,
   Value,
   css,
+  rx,
 } from '../../test.ui';
-import { createLoader } from './-SPEC.loader';
 import { createImports } from './-SPEC.imports';
+import { createLoader } from './-SPEC.loader';
 import { type t } from './common';
 
+type TDevLens = { debugWidth: number };
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
@@ -29,8 +31,10 @@ const initial: T = { props: {} };
 const createStore = async (state: t.DevCtxState<T>) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
-  const lens = network.shared.namespace.lens('cmd.host', {});
-  return { network, lens } as const;
+  const namespace = network.shared.namespace;
+  const lens = namespace.lens('cmd.host', {});
+  const harness = namespace.lens<TDevLens>('harness', { debugWidth: 330 });
+  return { network, lens, harness } as const;
 };
 
 /**
@@ -68,6 +72,7 @@ export default Dev.describe(name, async (e) => {
     });
 
     const store = await createStore(state);
+    const harness = store.harness;
     network = store.network;
     lens = store.lens;
 
@@ -76,6 +81,11 @@ export default Dev.describe(name, async (e) => {
      */
     const peer = network.peer;
     peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
+
+    const harness$ = harness.events().changed$;
+    harness$
+      .pipe(rx.distinctWhile((p, n) => p.after.debugWidth === n.after.debugWidth))
+      .subscribe((e) => ctx.debug.width(e.after.debugWidth ?? 330));
 
     /**
      * Imports
@@ -109,6 +119,25 @@ export default Dev.describe(name, async (e) => {
             const el = await loader.load(e);
             state.change((d) => (d.overlay = el));
           }}
+          onCommand={(e) => {
+            /**
+             * Command-line DSL.
+             */
+            if (e.cmd.text === 'close') {
+              e.cmd.clear();
+              e.unload();
+            }
+
+            if (e.cmd.text === 'dev.hide') {
+              harness.change((d) => (d.debugWidth = 0));
+              e.cmd.clear();
+            }
+
+            if (e.cmd.text === 'dev.show') {
+              harness.change((d) => (d.debugWidth = 330));
+              e.cmd.clear();
+            }
+          }}
         />
       );
     });
@@ -117,7 +146,7 @@ export default Dev.describe(name, async (e) => {
      * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const style = css({ Absolute: [0, 0, 36, 0], display: 'grid' });
+      const style = css({ Absolute: [0, 0, 36, 0], overflow: 'hidden', display: 'grid' });
       const el = state.current.overlay;
       return el ? <div {...style}>{el}</div> : null;
     });
@@ -205,29 +234,38 @@ export default Dev.describe(name, async (e) => {
         avatars: css({ display: 'grid', placeItems: 'center' }),
       };
 
+      const cmdState: t.InfoDataShared = {
+        label: 'CmdHost State',
+        lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
+        object: {
+          visible: e.state.debugShowJson,
+          dotMeta: false,
+          expand: { level: 5 },
+          beforeRender(mutate) {
+            Value.Object.walk(mutate!, (e) => {
+              if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, [6, 12]));
+              if (e.value instanceof A.Counter) e.mutate(e.value.value);
+            });
+          },
+        },
+        onIconClick() {
+          state.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
+        },
+      };
+
+      const harnessState: t.InfoDataShared = {
+        label: 'Harness State',
+        lens: ['ns', 'harness'],
+        object: {},
+      };
+
       const elInfoPanel = (
         <>
           <div {...css(styles.hr)} />
           {TestEdge.dev.infoPanel(dev, network, {
             margin: [12, 28],
             data: {
-              shared: {
-                lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
-                object: {
-                  visible: e.state.debugShowJson,
-                  dotMeta: false,
-                  expand: { level: 5 },
-                  beforeRender(mutate) {
-                    Value.Object.walk(mutate!, (e) => {
-                      if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, 8));
-                      if (e.value instanceof A.Counter) e.mutate(e.value.value);
-                    });
-                  },
-                },
-                onIconClick() {
-                  state.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
-                },
-              },
+              shared: [cmdState, harnessState],
             },
           })}
         </>

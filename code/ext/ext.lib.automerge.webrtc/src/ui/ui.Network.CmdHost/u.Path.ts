@@ -12,19 +12,26 @@ export const CmdHostPath = {
    */
   resolver(path: t.CmdHostPaths = DEFAULTS.paths) {
     const resolve = ObjectPath.resolve;
-    return {
+    const api = {
       uri: {
-        loaded: (doc: O) => resolve<t.UriString>(doc, path.uri.loaded),
-        selected: (doc: O) => resolve<t.UriString>(doc, path.uri.selected),
+        loaded: (d: O) => resolve<t.UriString>(d, path.uri.loaded) || '',
+        selected: (d: O) => resolve<t.UriString>(d, path.uri.selected) || '',
       },
       cmd: {
-        text: (doc: O) => resolve<string>(doc, path.cmd.text),
-        enter: (doc: O) => {
-          const get = () => resolve<t.A.Counter>(doc, path.cmd.enter);
-          if (!get()) ObjectPath.mutate(doc, path.cmd.enter, new A.Counter(0));
-          return get();
+        text: (d: O) => resolve<string>(d, path.cmd.text) || '',
+        invoked: (d: O) => {
+          const get = () => resolve<t.A.Counter>(d, path.cmd.invoked);
+          if (!get()) ObjectPath.mutate(d, path.cmd.invoked, new A.Counter(0));
+          return get()!;
         },
       },
+      doc(d: O): t.CmdHostDocObject {
+        return {
+          uri: { selected: api.uri.selected(d), loaded: api.uri.loaded(d) },
+          cmd: { text: api.cmd.text(d), invoked: api.cmd.invoked(d).value ?? 0 },
+        };
+      },
     } as const;
+    return api;
   },
 } as const;
