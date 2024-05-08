@@ -30,14 +30,18 @@ export function useKeyboard(
     };
 
     const handlers = Keyboard.until(dispose$).on({
-      ['ALT + KeyJ'](e) {
+      ['Escape']: (e) => textbox?.blur(),
+      ['CMD + KeyJ'](e) {
         e.handled();
         textbox?.focus();
         textbox?.selectAll();
       },
 
-      ['Escape']: (e) => textbox?.blur(),
-      ['CMD + KeyK']: (e) => options.onClear?.(),
+      ['CMD + KeyK'](e) {
+        e.handled();
+        options.onClear?.();
+        textbox?.focus();
+      },
 
       ['ArrowUp']: (e) => arrowKey(e, 'Up'),
       ['ArrowDown']: (e) => arrowKey(e, 'Down'),
