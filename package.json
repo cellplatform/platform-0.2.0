@@ -22,7 +22,7 @@
     ]
   },
   "dependencies": {
-    "@automerge/automerge": "2.2.1",
+    "@automerge/automerge": "2.2.2",
     "@automerge/automerge-repo": "1.1.11",
     "@automerge/automerge-repo-network-broadcastchannel": "1.1.11",
     "@automerge/automerge-repo-network-messagechannel": "1.1.11",
@@ -92,7 +92,7 @@
     "unified": "11.0.4",
     "unist-util-select": "5.1.0",
     "uuid": "9.0.1",
-    "viem": "2.10.1",
+    "viem": "2.10.2",
     "yaml": "2.4.2",
     "zod": "3.23.7",
     "chai": "5.1.0",

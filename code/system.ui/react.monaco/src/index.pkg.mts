@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.monaco',
   version: '0.0.0',
   dependencies: {
-    '@automerge/automerge': '2.2.1',
+    '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.11',
     '@monaco-editor/react': '4.6.0',
     'diff': '5.2.0',

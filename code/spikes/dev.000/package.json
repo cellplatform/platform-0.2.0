@@ -20,7 +20,7 @@
     "tmp": "yarn prepare-vercel"
   },
   "dependencies": {
-    "@automerge/automerge": "2.2.1",
+    "@automerge/automerge": "2.2.2",
     "@automerge/automerge-repo": "1.1.11",
     "@automerge/automerge-repo-network-messagechannel": "1.1.11",
     "@automerge/automerge-repo-storage-indexeddb": "1.1.11",
