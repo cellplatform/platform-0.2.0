@@ -36,12 +36,14 @@ export default Dev.describe(name, (e) => {
     | 'focusOnReady'
     | 'focusOnClick'
     | 'enabled'
+    | 'listEnabled'
   > &
     Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
+    listEnabled: true,
     hrDepth: 2,
     mutateUrl: true,
     showParamDev: true,
@@ -59,6 +61,7 @@ export default Dev.describe(name, (e) => {
     state.change((d) => {
       d.props.theme = local.theme;
       d.props.enabled = local.enabled;
+      d.props.listEnabled = local.listEnabled;
       d.props.badge = badge;
       d.props.imports = specs;
       d.props.hrDepth = local.hrDepth;
@@ -89,7 +92,7 @@ export default Dev.describe(name, (e) => {
             onReady={(e) => console.info('⚡️ onReady', e)}
             onChanged={(e) => state.change((d) => (d.props.command = e.command))}
             onItemSelect={(e) => console.info('⚡️ onItemSelect', e)}
-            onItemClick={!debug.useOnItemClick ? undefined : onItemClick}
+            onItemInvoke={!debug.useOnItemClick ? undefined : onItemClick}
             // filter={null}
           />
         );
@@ -106,6 +109,18 @@ export default Dev.describe(name, (e) => {
           .label((e) => `enabled`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.listEnabled;
+        btn
+          .label((e) => `list enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => {
+              local.listEnabled = Dev.toggle(d.props, 'listEnabled');
+            });
+          });
       });
 
       dev.boolean((btn) => {

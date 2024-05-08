@@ -3,7 +3,13 @@ import { CmdBar, Color, DEFAULTS, ModuleList, css, type t } from './common';
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
-  const { theme, enabled = true, pkg = DEFAULTS.pkg, focusOnClick = DEFAULTS.focusOnClick } = props;
+  const {
+    theme,
+    pkg = DEFAULTS.pkg,
+    enabled = true,
+    listEnabled = true,
+    focusOnClick = DEFAULTS.focusOnClick,
+  } = props;
   const imports = wrangle.filteredImports(props);
   const selectedIndex = wrangle.selectedIndex(imports, props.selected);
 
@@ -60,14 +66,14 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           hrDepth={props.hrDepth}
           showParamDev={props.showParamDev}
           focused={props.focused}
-          enabled={enabled}
+          enabled={enabled && listEnabled}
           theme={theme}
           listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}
           selectedIndex={selectedIndex}
           onItemVisibility={props.onItemVisibility}
-          onItemClick={props.onItemClick}
+          onItemClick={props.onItemInvoke}
           onItemSelect={props.onItemSelect}
         />
       </div>

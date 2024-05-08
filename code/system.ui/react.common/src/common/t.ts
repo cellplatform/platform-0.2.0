@@ -43,6 +43,7 @@ export type {
   Size,
   TypedObjectPath,
   UntilObservable,
+  UriString,
 } from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';

@@ -9,7 +9,7 @@ type T = t.Subject<t.ModuleListScrollTarget>;
  * A version of <CmdHost> that manages state interanally.
  */
 export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
-  const { mutateUrl = true, enabled = true } = props;
+  const { mutateUrl = true, enabled = true, listEnabled = true } = props;
 
   const readyRef = useRef(false);
   const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
@@ -70,31 +70,41 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
   };
 
   const handleItemSelected: t.ModuleListItemHandler = (e) => {
+    if (!listEnabled) return;
     setSelected(e.index > -1 ? e.uri : undefined);
     props.onItemSelect?.(e);
   };
 
+  const handleItemInvoke: t.ModuleListItemHandler = (e) => {
+    if (!listEnabled) return;
+    props.onItemInvoke?.(e);
+  };
+
   const handleKeyboard = (e: t.TextInputKeyArgs) => {
     if (!enabled) return;
-    const done = () => e.preventDefault();
     const index = Wrangle.selectedIndexFromUri(imports, selected);
+    const done = () => e.preventDefault();
+    const select = (uri?: t.UriString) => {
+      if (!listEnabled) return;
+      setSelected(uri);
+    };
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
-      setSelected(Wrangle.selectedUriFromIndex(imports, 0));
+      select(Wrangle.selectedUriFromIndex(imports, 0));
       return done();
     }
     if (e.key === 'End' || (e.key === 'ArrowDown' && e.metaKey)) {
-      setSelected(Wrangle.selectedUriFromIndex(imports, total - 1));
+      select(Wrangle.selectedUriFromIndex(imports, total - 1));
       return done();
     }
     if (e.key === 'ArrowUp') {
       const next = Math.max(0, index - (e.altKey ? 5 : 1));
-      setSelected(Wrangle.selectedUriFromIndex(imports, next));
+      select(Wrangle.selectedUriFromIndex(imports, next));
       return done();
     }
     if (e.key === 'ArrowDown') {
       const next = Math.min(total - 1, index + (e.altKey ? 5 : 1));
-      setSelected(Wrangle.selectedUriFromIndex(imports, next));
+      select(Wrangle.selectedUriFromIndex(imports, next));
       return done();
     }
     if (e.key === 'Enter') {
@@ -102,9 +112,9 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
         Url.mutateLoadedNamespace(index, imports, { reload: true });
         done();
       }
-      if (props.onItemClick && selected) {
+      if (props.onItemInvoke && selected) {
         const uri = Wrangle.selectedUriFromIndex(imports, index);
-        props.onItemClick({ index, uri });
+        handleItemInvoke({ index, uri });
         done();
       }
     }
@@ -131,6 +141,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
       onKeyDown={handleKeyboard}
       onItemVisibility={(e) => setItems(e.children)}
       onItemSelect={handleItemSelected}
+      onItemInvoke={handleItemInvoke}
     />
   );
 };

@@ -18,6 +18,7 @@ export type CmdHostProps = {
   showParamDev?: boolean;
   autoGrabFocus?: boolean;
   listMinWidth?: number;
+  listEnabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;
@@ -29,7 +30,7 @@ export type CmdHostProps = {
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
   onItemVisibility?: t.ModuleListItemVisibilityHandler;
-  onItemClick?: t.ModuleListItemHandler;
+  onItemInvoke?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;
 };
 
