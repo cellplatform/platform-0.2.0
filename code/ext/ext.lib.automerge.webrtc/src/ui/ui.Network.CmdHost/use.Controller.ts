@@ -22,9 +22,10 @@ export function useController(args: {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
   const [cmd, setCmd] = useState('');
 
+  const isFilter = (command: string) => (command || '').trim().startsWith('?');
   const filter: t.CmdHostFilter = (imports, command) => {
     const cmd = (command || '').trim();
-    if (!cmd.trim().startsWith('?')) return imports;
+    if (!isFilter(cmd)) return imports;
     return CmdHost.DEFAULTS.filter(imports, cmd.replace(/^\?/, ''));
   };
 
@@ -32,7 +33,7 @@ export function useController(args: {
    * Document actions.
    */
   const Action = {
-    clearCmd() {
+    clearCommand() {
       doc?.change((d) => {
         const cmd = resolve.cmd.text(d);
         if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
@@ -40,9 +41,7 @@ export function useController(args: {
     },
 
     unload() {
-      doc?.change((d) => {
-        ObjectPath.mutate(d, path.uri.loaded, '');
-      });
+      doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, ''));
     },
   } as const;
 
@@ -56,7 +55,7 @@ export function useController(args: {
       cmd: { text, clear: () => (res.clearCmd = true) },
       unload: () => (res.unload = true),
     });
-    if (res.clearCmd) Action.clearCmd();
+    if (res.clearCmd) Action.clearCommand();
     if (res.unload) Action.unload();
   };
 
@@ -81,7 +80,7 @@ export function useController(args: {
   useEffect(() => {
     const events = doc?.events();
     if (enabled && events && doc) {
-      const { tap, distinctWhile, debounceTime } = rx;
+      const { tap, distinctWhile, debounceTime, filter } = rx;
       const mutate = ObjectPath.mutate;
       const $ = events.changed$.pipe(rx.map((d) => resolve.doc(d.after)));
 
@@ -108,8 +107,9 @@ export function useController(args: {
         args.onLoad?.({ uri, cmd });
       });
 
-      // Loaded URI (on invoke).
+      // Set "Loaded" URI (on invoke).
       $.pipe(
+        filter((d) => d.cmd.text === '' || isFilter(d.cmd.text)), // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
         distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
         distinctWhile((p, n) => p.uri.selected === n.uri.selected && p.uri.loaded === n.uri.loaded),
       ).subscribe((e) => doc.change((d) => mutate(d, path.uri.loaded, e.uri.selected)));
@@ -131,8 +131,13 @@ export function useController(args: {
     filter,
     cmd,
     textbox,
-    listEnabled: enabled && listEnabled,
     selectedUri,
+
+    get listEnabled() {
+      if (!(enabled && listEnabled)) return false;
+      if (cmd && !isFilter(cmd)) return false; // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
+      return true;
+    },
 
     onTextboxReady(textbox: t.TextInputRef) {
       setTextbox(textbox);
