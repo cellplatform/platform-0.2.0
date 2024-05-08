@@ -82,4 +82,28 @@ describe('color', () => {
       expect(res2).to.eql('red');
     });
   });
+
+  describe('Color.theme', () => {
+    it('name: Light (default)', () => {
+      const res1 = Color.theme();
+      const res2 = Color.theme('Light');
+      const res3 = Color.theme('Light', 'red');
+      expect(res1.name).to.eql('Light');
+      expect(res1.is.light).to.eql(true);
+      expect(res1.is.dark).to.eql(false);
+      expect(res1.color).to.eql(Color.DARK);
+      expect(res2.color).to.eql(Color.DARK);
+      expect(res3.color).to.eql('red');
+    });
+
+    it('name: Dark', () => {
+      const res1 = Color.theme('Dark');
+      const res2 = Color.theme('Dark', null, 'red');
+      expect(res1.name).to.eql('Dark');
+      expect(res1.is.light).to.eql(false);
+      expect(res1.is.dark).to.eql(true);
+      expect(res1.color).to.eql(Color.WHITE);
+      expect(res2.color).to.eql('red');
+    });
+  });
 });

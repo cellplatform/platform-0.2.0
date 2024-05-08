@@ -1,13 +1,11 @@
 import type { ColorInput } from 'tinycolor2';
-import tinycolor from 'tinycolor2';
-import { type t } from '../common';
+import type { t } from '../common';
 
-/**
- * Standard "ruby" RED color (semi-transparent).
- */
-export const RED = `rgba(255, 0, 0, 0.1)`;
-export const WHITE = '#fff';
-export const DARK = '#293042';
+import tinycolor from 'tinycolor2';
+import { DARK, RED } from './Color.const';
+
+export * from './Color.const';
+export * from './Color.theme';
 
 /**
  * Creates a new tiny-color instance.
@@ -105,17 +103,4 @@ export function darken(color: string, amount: number) {
  */
 export function debug(debug?: boolean) {
   return (opacity: t.Percent) => (debug ? `rgba(255, 0, 0, ${opacity})` : undefined);
-}
-
-/**
- * Base text/fore color derived from common theme name.
- */
-export function fromTheme(
-  theme: t.CommonTheme = 'Light',
-  defaultLight?: string | null,
-  defaultDark?: string | null,
-) {
-  const light = defaultLight ?? DARK;
-  const dark = defaultDark ?? WHITE;
-  return theme === 'Dark' ? dark : light;
 }
