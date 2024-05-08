@@ -11,12 +11,12 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.111',
+  version: '0.6.112',
   dependencies: {
     '@automerge/automerge': '2.2.2',
-    '@automerge/automerge-repo': '1.1.11',
-    '@automerge/automerge-repo-network-messagechannel': '1.1.11',
-    '@automerge/automerge-repo-storage-indexeddb': '1.1.11',
+    '@automerge/automerge-repo': '1.1.12',
+    '@automerge/automerge-repo-network-messagechannel': '1.1.12',
+    '@automerge/automerge-repo-storage-indexeddb': '1.1.12',
     'automerge-repo-network-peerjs': '1.1.9',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
