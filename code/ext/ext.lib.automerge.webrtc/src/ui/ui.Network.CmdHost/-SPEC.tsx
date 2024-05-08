@@ -17,23 +17,34 @@ import { createImports } from './-SPEC.imports';
 import { createLoader } from './-SPEC.loader';
 import { type t } from './common';
 
-type TDevLens = { debugWidth: number };
+type LocalStore = D & Pick<P, 'theme' | 'enabled'> & Pick<THarness, 'debugShowJson'>;
+type THarness = {
+  theme?: t.CommonTheme;
+  debugWidth: number;
+  debugShowJson?: boolean;
+};
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
   debugLogging?: boolean;
-  debugShowJson?: boolean;
   debugRootJson?: boolean;
+  debugLoadedOpacity?: number;
 };
 type T = D & { props: P; stream?: MediaStream; overlay?: JSX.Element | null | false };
 const initial: T = { props: {} };
 
-const createStore = async (state: t.DevCtxState<T>) => {
+const createStore = async (state: t.DevCtxState<T>, local: LocalStore) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
   const namespace = network.shared.namespace;
   const lens = namespace.lens('cmd.host', {});
-  const harness = namespace.lens<TDevLens>('harness', { debugWidth: 330 });
+
+  const s = state.current;
+  const harness = namespace.lens<THarness>('harness', {
+    theme: s.props.theme,
+    debugWidth: 330,
+    debugShowJson: local.debugShowJson,
+  });
   return { network, lens, harness } as const;
 };
 
@@ -44,8 +55,8 @@ const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
   let network: t.NetworkStore;
   let lens: t.Lens;
+  let harness: t.Lens<THarness>;
 
-  type LocalStore = D & Pick<P, 'theme' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -54,6 +65,7 @@ export default Dev.describe(name, async (e) => {
     debugLogging: false,
     debugShowJson: false,
     debugRootJson: false,
+    debugLoadedOpacity: 1,
   });
 
   e.it('ui:init', async (e) => {
@@ -67,13 +79,13 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
       d.debugLogging = local.debugLogging;
-      d.debugShowJson = local.debugShowJson;
       d.debugRootJson = local.debugRootJson;
+      d.debugLoadedOpacity = local.debugLoadedOpacity;
     });
 
-    const store = await createStore(state);
-    const harness = store.harness;
+    const store = await createStore(state, local);
     network = store.network;
+    harness = store.harness;
     lens = store.lens;
 
     /**
@@ -82,10 +94,15 @@ export default Dev.describe(name, async (e) => {
     const peer = network.peer;
     peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
 
-    const harness$ = harness.events().changed$;
-    harness$
-      .pipe(rx.distinctWhile((p, n) => p.after.debugWidth === n.after.debugWidth))
-      .subscribe((e) => ctx.debug.width(e.after.debugWidth ?? 330));
+    const monitorHarness = (doc: t.Lens<THarness>) => {
+      const $ = doc.events().changed$.pipe(rx.map((d) => d.after));
+      const on = (key: keyof THarness) => $.pipe(rx.distinctWhile((p, n) => p[key] === n[key]));
+      on('debugWidth').subscribe((e) => ctx.debug.width(e.debugWidth ?? 330));
+      on('theme').subscribe((e) => state.change((d) => (d.props.theme = e.theme)));
+      on('debugShowJson').subscribe(() => dev.redraw('debug'));
+    };
+
+    monitorHarness(harness);
 
     /**
      * Imports
@@ -146,8 +163,15 @@ export default Dev.describe(name, async (e) => {
      * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const style = css({ Absolute: [0, 0, 36, 0], overflow: 'hidden', display: 'grid' });
-      const el = state.current.overlay;
+      const s = state.current;
+      const style = css({
+        Absolute: [0, 0, 36, 0],
+        overflow: 'hidden',
+        opacity: s.debugLoadedOpacity,
+        backgroundColor: Color.fromTheme(s.props.theme),
+        display: 'grid',
+      });
+      const el = s.overlay;
       return el ? <div {...style}>{el}</div> : null;
     });
   });
@@ -160,7 +184,10 @@ export default Dev.describe(name, async (e) => {
       Dev.Theme.switcher(
         dev,
         (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
+        (d, value) => {
+          local.theme = d.props.theme = value;
+          harness.change((d) => (d.theme = value));
+        },
       );
 
       dev.boolean((btn) => {
@@ -198,6 +225,18 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugRootJson = Dev.toggle(d, 'debugRootJson'))));
       });
+      dev.boolean((btn) => {
+        const value = (state: T) => state.debugLoadedOpacity ?? 1;
+        btn
+          .label((e) => `loaded opacity (${value(e.state) * 100}%)`)
+          .value((e) => value(e.state) === 1)
+          .onClick((e) => {
+            e.change((d) => {
+              const next = value(e.state.current) === 1 ? 0.8 : 1;
+              local.debugLoadedOpacity = d.debugLoadedOpacity = next;
+            });
+          });
+      });
       dev.hr(-1, 5);
       dev.button(['connect peer (sample)', '⚡️'], async (e) => {
         const edge = await TestEdge.create('Right');
@@ -234,11 +273,15 @@ export default Dev.describe(name, async (e) => {
         avatars: css({ display: 'grid', placeItems: 'center' }),
       };
 
+      const onIconClick = () => {
+        harness.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
+      };
       const cmdState: t.InfoDataShared = {
         label: 'CmdHost State',
         lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
+        onIconClick,
         object: {
-          visible: e.state.debugShowJson,
+          visible: harness.current.debugShowJson,
           dotMeta: false,
           expand: { level: 5 },
           beforeRender(mutate) {
@@ -248,15 +291,13 @@ export default Dev.describe(name, async (e) => {
             });
           },
         },
-        onIconClick() {
-          state.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
-        },
       };
 
       const harnessState: t.InfoDataShared = {
         label: 'Harness State',
         lens: ['ns', 'harness'],
-        object: {},
+        onIconClick,
+        object: { visible: harness.current.debugShowJson },
       };
 
       const elInfoPanel = (
@@ -264,9 +305,7 @@ export default Dev.describe(name, async (e) => {
           <div {...css(styles.hr)} />
           {TestEdge.dev.infoPanel(dev, network, {
             margin: [12, 28],
-            data: {
-              shared: [cmdState, harnessState],
-            },
+            data: { shared: [cmdState, harnessState] },
           })}
         </>
       );
@@ -276,8 +315,8 @@ export default Dev.describe(name, async (e) => {
           <div {...css(styles.hr, styles.showAvatars)} />
           <PeerUI.AvatarTray
             style={css(styles.showAvatars, styles.avatars)}
-            peer={network.peer}
             onSelection={onStreamSelection}
+            peer={network.peer}
             muted={false}
             margin={8}
           />
