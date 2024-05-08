@@ -4,7 +4,6 @@ import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
   const {
-    theme,
     pkg = DEFAULTS.pkg,
     enabled = true,
     listEnabled = true,
@@ -45,13 +44,13 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.fromTheme(props.theme);
   const styles = {
     base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto', color }),
     body: css({ userSelect: 'none', position: 'relative', display: 'grid' }),
     bar: css({
       display: 'grid',
-      borderTop: theme === 'Dark' ? `solid 1px ${Color.format(0.15)}` : undefined,
+      borderTop: props.theme === 'Dark' ? `solid 1px ${Color.format(0.15)}` : undefined,
     }),
   };
 
@@ -67,7 +66,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           showParamDev={props.showParamDev}
           focused={props.focused}
           enabled={enabled && listEnabled}
-          theme={theme}
+          theme={props.theme}
           listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}
