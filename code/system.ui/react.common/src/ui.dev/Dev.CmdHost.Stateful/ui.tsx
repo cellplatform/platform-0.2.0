@@ -19,7 +19,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
   const imports = Wrangle.filteredImports({ ...props, command });
   const total = Object.keys(imports).length;
   const hintKeys = Wrangle.hintKey({ focused, command });
-  const selectedIndex = Wrangle.selectedIndexFromNamespace(imports, selected);
+  const selectedIndex = Wrangle.selectedIndexFromUri(imports, selected);
 
   const [items, setItems] = useState<t.ModuleListItemVisibility[]>([]);
   const selectionChangeTrigger = items.map((item) => item.isVisible).join(',');
@@ -45,7 +45,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
   }, [props.selected]);
 
   /**
-   * Keey comand in sync with passed-in properties when they change.
+   * Key comand in sync with passed-in properties when they change.
    */
   useEffect(() => {
     const ready = readyRef.current;
@@ -70,31 +70,31 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
   };
 
   const handleItemSelected: t.ModuleListItemHandler = (e) => {
-    setSelected(e.index > -1 ? e.address : undefined);
+    setSelected(e.index > -1 ? e.uri : undefined);
     props.onItemSelect?.(e);
   };
 
   const handleKeyboard = (e: t.TextInputKeyArgs) => {
     if (!enabled) return;
     const done = () => e.preventDefault();
-    const index = Wrangle.selectedIndexFromNamespace(imports, selected);
+    const index = Wrangle.selectedIndexFromUri(imports, selected);
 
     if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
-      setSelected(Wrangle.selectedNamespaceFromIndex(imports, 0));
+      setSelected(Wrangle.selectedUriFromIndex(imports, 0));
       return done();
     }
     if (e.key === 'End' || (e.key === 'ArrowDown' && e.metaKey)) {
-      setSelected(Wrangle.selectedNamespaceFromIndex(imports, total - 1));
+      setSelected(Wrangle.selectedUriFromIndex(imports, total - 1));
       return done();
     }
     if (e.key === 'ArrowUp') {
       const next = Math.max(0, index - (e.altKey ? 5 : 1));
-      setSelected(Wrangle.selectedNamespaceFromIndex(imports, next));
+      setSelected(Wrangle.selectedUriFromIndex(imports, next));
       return done();
     }
     if (e.key === 'ArrowDown') {
       const next = Math.min(total - 1, index + (e.altKey ? 5 : 1));
-      setSelected(Wrangle.selectedNamespaceFromIndex(imports, next));
+      setSelected(Wrangle.selectedUriFromIndex(imports, next));
       return done();
     }
     if (e.key === 'Enter') {
@@ -103,8 +103,8 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
         done();
       }
       if (props.onItemClick && selected) {
-        const address = Wrangle.selectedNamespaceFromIndex(imports, index);
-        props.onItemClick({ index, address });
+        const uri = Wrangle.selectedUriFromIndex(imports, index);
+        props.onItemClick({ index, uri });
         done();
       }
     }

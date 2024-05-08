@@ -15,13 +15,13 @@ export const Wrangle = {
     return total >= 0 ? R.clamp(0, total, next) : -1;
   },
 
-  selectedIndexFromNamespace(imports?: t.ModuleImports | undefined, namespace?: string) {
-    if (!imports || !namespace || namespace === 'true') return -1;
-    const index = Object.keys(imports).indexOf(namespace);
+  selectedIndexFromUri(imports?: t.ModuleImports | undefined, uri?: string) {
+    if (!imports || !uri || uri === 'true') return -1;
+    const index = Object.keys(imports).indexOf(uri);
     return Wrangle.selected(imports, index);
   },
 
-  selectedNamespaceFromIndex(imports?: t.ModuleImports | undefined, index?: number) {
+  selectedUriFromIndex(imports?: t.ModuleImports | undefined, index?: number) {
     if (!imports || index === undefined) return undefined;
     return Object.keys(imports ?? {})[index];
   },

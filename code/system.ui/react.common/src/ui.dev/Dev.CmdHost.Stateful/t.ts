@@ -1,3 +1,5 @@
 import { type t } from './common';
 
-export type CmdHostStatefulProps = t.CmdHostProps & { mutateUrl?: boolean };
+export type CmdHostStatefulProps = t.CmdHostProps & {
+  mutateUrl?: boolean;
+};
