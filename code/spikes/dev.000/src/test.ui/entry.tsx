@@ -19,7 +19,8 @@ const render = async (content: Subject) => {
   if (content === 'Dev') {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('./entry.Specs.mjs');
-    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
+    const env = { Specs };
+    const el = await Dev.render(Pkg, Specs, { badge, env, hrDepth: 3 });
     root.render(el);
     return;
   }
@@ -27,7 +28,8 @@ const render = async (content: Subject) => {
   if (content === 'Dev:Localhost') {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('./entry.Specs.Localhost.mjs');
-    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 1 });
+    const env = { Specs };
+    const el = await Dev.render(Pkg, Specs, { badge, env, hrDepth: 1 });
     root.render(el);
     return;
   }

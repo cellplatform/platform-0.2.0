@@ -7,7 +7,8 @@ import { Pkg } from '../index.pkg.mjs';
   console.info(`Pkg:`, Pkg);
   const { Specs } = await import('./entry.Specs.mjs');
 
-  const el = await Dev.render(Pkg, Specs, { hrDepth: 3 });
+  const env = { Specs };
+  const el = await Dev.render(Pkg, Specs, { hrDepth: 3, env });
   const root = createRoot(document.getElementById('root')!);
   root.render(<StrictMode>{el}</StrictMode>);
 })();

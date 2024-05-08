@@ -17,6 +17,7 @@ import { createImports } from './-SPEC.imports';
 import { createLoader } from './-SPEC.loader';
 import { type t } from './common';
 
+type TEnv = { Specs?: t.SpecImports };
 type LocalStore = D & Pick<P, 'theme' | 'enabled'> & Pick<THarness, 'debugShowJson'>;
 type THarness = {
   theme?: t.CommonTheme;
@@ -71,6 +72,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    const env = dev.env<TEnv>();
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.badge = BADGES.ci.node;
@@ -107,7 +109,7 @@ export default Dev.describe(name, async (e) => {
     /**
      * Imports
      */
-    const { Specs: specs } = await import('../../test.ui/entry.Specs.mjs');
+    const specs = env.Specs;
     const imports = createImports({ peer, specs });
     const loader = createLoader(imports);
 
