@@ -44,13 +44,14 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(props.theme);
+  const theme = Color.theme(props.theme);
+  const color = theme.color;
   const styles = {
     base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto', color }),
     body: css({ userSelect: 'none', position: 'relative', display: 'grid' }),
     bar: css({
       display: 'grid',
-      borderTop: props.theme === 'Dark' ? `solid 1px ${Color.format(0.15)}` : undefined,
+      borderTop: theme.is.dark ? `solid 1px ${Color.format(0.15)}` : undefined,
     }),
   };
 
