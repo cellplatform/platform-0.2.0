@@ -52,7 +52,7 @@ export const List: React.FC<ListProps> = (props) => {
 
   const item = (
     index: number,
-    address: string | undefined,
+    uri: string | undefined,
     options: { title?: string; ns?: boolean; Icon?: t.IconType } = {},
   ) => {
     const selected = !options.ns ? false : index === props.selectedIndex;
@@ -65,7 +65,7 @@ export const List: React.FC<ListProps> = (props) => {
         focused={focused}
         url={url}
         imports={imports}
-        address={address}
+        uri={uri}
         title={options.title}
         ns={options.ns}
         Icon={options.Icon}
