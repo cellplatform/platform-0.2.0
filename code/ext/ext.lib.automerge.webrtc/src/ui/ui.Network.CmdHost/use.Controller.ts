@@ -19,11 +19,11 @@ export function useController(args: {
 
   const [listEnabled, setListEnabled] = useState(true);
   const [selectedUri, setSelectedUri] = useState('');
-  const [cmd, setCmd] = useState('');
   const [textbox, setTextbox] = useState<t.TextInputRef>();
+  const [cmd, setCmd] = useState('');
 
   const filter: t.CmdHostFilter = (imports, command) => {
-    let cmd = (command || '').trim();
+    const cmd = (command || '').trim();
     if (!cmd.trim().startsWith('?')) return imports;
     return CmdHost.DEFAULTS.filter(imports, cmd.replace(/^\?/, ''));
   };
@@ -41,8 +41,7 @@ export function useController(args: {
 
     unload() {
       doc?.change((d) => {
-        const uri = resolve.uri.loaded(d);
-        if (uri) Doc.splice(d, path.uri.loaded, 0, uri.length);
+        ObjectPath.mutate(d, path.uri.loaded, '');
       });
     },
   } as const;
@@ -82,25 +81,26 @@ export function useController(args: {
   useEffect(() => {
     const events = doc?.events();
     if (enabled && events && doc) {
+      const { tap, distinctWhile, debounceTime } = rx;
       const mutate = ObjectPath.mutate;
       const $ = events.changed$.pipe(rx.map((d) => resolve.doc(d.after)));
 
       // Command text.
       $.pipe(
-        rx.tap(),
-        rx.distinctWhile((p, n) => p.cmd.text === n.cmd.text),
+        tap(),
+        distinctWhile((p, n) => p.cmd.text === n.cmd.text),
       ).subscribe((e) => setCmd(e.cmd.text));
 
       // Selected URI.
       $.pipe(
-        rx.tap(),
-        rx.distinctWhile((p, n) => p.uri.selected === n.uri.selected),
+        tap(),
+        distinctWhile((p, n) => p.uri.selected === n.uri.selected),
       ).subscribe((e) => setSelectedUri(e.uri.selected));
 
       // Load (⚡️:action).
       $.pipe(
-        rx.tap(),
-        rx.distinctWhile((p, n) => p.uri.loaded === n.uri.loaded),
+        tap(),
+        distinctWhile((p, n) => p.uri.loaded === n.uri.loaded),
       ).subscribe((e) => {
         const uri = e.uri.loaded;
         const cmd = e.cmd.text;
@@ -110,14 +110,14 @@ export function useController(args: {
 
       // Loaded URI (on invoke).
       $.pipe(
-        rx.distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
-        rx.distinctWhile((p, n) => p.uri.selected === n.uri.selected),
+        distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
+        distinctWhile((p, n) => p.uri.selected === n.uri.selected && p.uri.loaded === n.uri.loaded),
       ).subscribe((e) => doc.change((d) => mutate(d, path.uri.loaded, e.uri.selected)));
 
       // Command (⚡️:action).
       $.pipe(
-        rx.distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
-        rx.debounceTime(10),
+        distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
+        debounceTime(10),
       ).subscribe((e) => invokeCommand(e));
     }
 

@@ -123,7 +123,7 @@ export default Dev.describe(name, async (e) => {
             /**
              * Command-line DSL.
              */
-            if (e.cmd.text === 'close') {
+            if (e.cmd.text === 'close' || e.cmd.text === 'x') {
               e.cmd.clear();
               e.unload();
             }
