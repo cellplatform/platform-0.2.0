@@ -19,7 +19,7 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({ height: 19, color }),
     body: css({

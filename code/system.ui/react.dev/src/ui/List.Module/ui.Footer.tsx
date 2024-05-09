@@ -11,7 +11,7 @@ export type FooterProps = {
  *    Acts as a spacer for the bottom of the list for scrolling.
  */
 export const Footer: React.FC<FooterProps> = (props) => {
-  const color = Color.fromTheme(props.theme);
+  const color = Color.theme(props.theme).color;
   const styles = {
     base: css({ height: 80, color }),
   };

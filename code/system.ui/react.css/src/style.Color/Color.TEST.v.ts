@@ -82,24 +82,6 @@ describe('color', () => {
     });
   });
 
-  describe('Color.fromTheme', () => {
-    it('theme: Light (default)', () => {
-      const res1 = Color.fromTheme();
-      const res2 = Color.fromTheme('Light');
-      const res3 = Color.fromTheme('Light', 'red');
-      expect(res1).to.eql(Color.DARK);
-      expect(res2).to.eql(Color.DARK);
-      expect(res3).to.eql('red');
-    });
-
-    it('theme: Dark', () => {
-      const res1 = Color.fromTheme('Dark');
-      const res2 = Color.fromTheme('Dark', null, 'red');
-      expect(res1).to.eql(Color.WHITE);
-      expect(res2).to.eql('red');
-    });
-  });
-
   describe('Color.theme', () => {
     it('name: Light (default)', () => {
       const res1 = Color.theme();

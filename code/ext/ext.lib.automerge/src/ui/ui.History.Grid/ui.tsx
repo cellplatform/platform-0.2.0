@@ -10,7 +10,7 @@ export const View: React.FC<t.HistoryGridProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({ position: 'relative', color }),
     empty: css({

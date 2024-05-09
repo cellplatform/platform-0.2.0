@@ -21,7 +21,7 @@ export const View: React.FC<t.CanvasProps> = (props) => {
    */
   const styles = {
     base: css({
-      color: Color.fromTheme(props.theme),
+      color: Color.theme(props.theme).color,
       position: 'relative',
       display: 'grid',
     }),

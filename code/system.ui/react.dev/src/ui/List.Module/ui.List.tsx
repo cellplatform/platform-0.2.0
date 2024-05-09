@@ -26,7 +26,7 @@ export const List: React.FC<ListProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({
       listStyleType: 'none',

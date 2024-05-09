@@ -20,7 +20,7 @@ export const DevReload: React.FC<t.DevReloadProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({
       position: 'relative',

@@ -11,7 +11,7 @@ const styles = {
 export function peer(
   data: t.InfoData['peer'],
   fields: t.InfoField[],
-  theme?: t.CommonTheme,
+  themeName?: t.CommonTheme,
 ): P | P[] | undefined {
   if (!data) return;
   const self = data?.self;
@@ -23,7 +23,7 @@ export function peer(
   /**
    * Root Peer (Self)
    */
-  const themeColor = Color.fromTheme(theme);
+  const theme = Color.theme(themeName);
   const root: P = {
     label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
@@ -33,7 +33,7 @@ export function peer(
           <Icons.Person
             size={14}
             style={styles.iconRight}
-            color={totalConnections > 0 ? COLORS.BLUE : Color.alpha(themeColor, 0.4)}
+            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha(0.4)}
           />
         </div>
       ),

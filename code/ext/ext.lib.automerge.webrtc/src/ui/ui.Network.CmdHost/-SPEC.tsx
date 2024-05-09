@@ -147,7 +147,7 @@ export default Dev.describe(name, async (e) => {
         Absolute: [0, 0, 36, 0],
         overflow: 'hidden',
         opacity: s.debugLoadedOpacity,
-        backgroundColor: Color.fromTheme(s.props.theme),
+        backgroundColor: Color.theme(s.props.theme).color,
         display: 'grid',
       });
       const el = s.overlay;

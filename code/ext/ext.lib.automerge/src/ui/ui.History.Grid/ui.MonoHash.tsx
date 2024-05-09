@@ -25,7 +25,7 @@ export const MonoHash: React.FC<MonoHashProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(DEFAULTS.mono),

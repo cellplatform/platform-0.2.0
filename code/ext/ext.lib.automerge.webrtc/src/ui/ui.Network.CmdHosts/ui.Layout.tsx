@@ -17,7 +17,7 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({ color, display: 'grid', gridTemplateColumns: '1fr auto 1fr' }),
     div: {
