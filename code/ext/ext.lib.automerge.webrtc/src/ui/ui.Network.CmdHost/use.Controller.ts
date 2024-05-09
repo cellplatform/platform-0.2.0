@@ -39,7 +39,6 @@ export function useController(args: {
         if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
       });
     },
-
     unload() {
       doc?.change((d) => ObjectPath.mutate(d, path.uri.loaded, ''));
     },
@@ -108,9 +107,9 @@ export function useController(args: {
 
       // Set "Loaded" URI (on invoke).
       $.pipe(
-        filter((d) => d.cmd.text === '' || isFilter(d.cmd.text)), // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
         distinctWhile((p, n) => p.cmd.invoked === n.cmd.invoked),
         distinctWhile((p, n) => p.uri.selected === n.uri.selected && p.uri.loaded === n.uri.loaded),
+        filter((d) => d.cmd.text === '' || isFilter(d.cmd.text)), // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
       ).subscribe((e) => doc.change((d) => mutate(d, path.uri.loaded, e.uri.selected)));
 
       // Command (⚡️:action).
