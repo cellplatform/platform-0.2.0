@@ -121,11 +121,6 @@ export default Dev.describe(name, async (e) => {
       ctx.subject.size('fill', padding);
       Dev.Theme.background(dev, props.theme, 1);
 
-      /**
-       * TODO 🐷
-       * - optionally load from env-var.
-       */
-
       return (
         <NetworkCmdHost
           {...props}
@@ -142,16 +137,14 @@ export default Dev.describe(name, async (e) => {
      * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const s = state.current;
+      const { overlay, debugLoadedOpacity } = state.current;
       const style = css({
         Absolute: [0, 0, 36, 0],
         overflow: 'hidden',
-        opacity: s.debugLoadedOpacity,
-        backgroundColor: Color.theme(s.props.theme).color,
+        opacity: debugLoadedOpacity,
         display: 'grid',
       });
-      const el = s.overlay;
-      return el ? <div {...style}>{el}</div> : null;
+      return overlay ? <div {...style}>{overlay}</div> : null;
     });
   });
 
