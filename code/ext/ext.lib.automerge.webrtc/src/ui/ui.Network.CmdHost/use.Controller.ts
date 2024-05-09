@@ -22,7 +22,7 @@ export function useController(args: {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
   const [cmd, setCmd] = useState('');
 
-  const isFilter = (command: string) => (command || '').trim().startsWith('?');
+  const isFilter = (command: string) => (command || '').trimStart().startsWith('?');
   const filter: t.CmdHostFilter = (imports, command) => {
     const cmd = (command || '').trim();
     if (!isFilter(cmd)) return imports;
@@ -60,16 +60,15 @@ export function useController(args: {
   };
 
   /**
-   * Textbox syncer (splice).
+   * Textbox CRDT syncer (splice).
    */
   useEffect(() => {
     const life = rx.disposable();
     const { dispose$ } = life;
     if (enabled && doc && textbox) {
-      const initial = resolve.cmd.text(doc.current);
       const listener = Sync.Textbox.listen(textbox, doc, path.cmd.text, { dispose$ });
-      setCmd(initial);
       listener.onChange((e) => setCmd(e.text));
+      setCmd(resolve.cmd.text(doc.current)); // initial.
     }
     return life.dispose;
   }, [enabled, doc?.instance, !!textbox, path.cmd.text.join('.')]);
