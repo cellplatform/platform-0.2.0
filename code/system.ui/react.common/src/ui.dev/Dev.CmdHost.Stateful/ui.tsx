@@ -77,6 +77,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
 
   const handleItemInvoke: t.ModuleListItemHandler = (e) => {
     if (!listEnabled) return;
+    if (mutateUrl) Url.mutateLoadedNamespace(e.index, imports, { reload: true });
     props.onItemInvoke?.(e);
   };
 
@@ -108,11 +109,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
       return done();
     }
     if (e.key === 'Enter') {
-      if (mutateUrl) {
-        Url.mutateLoadedNamespace(index, imports, { reload: true });
-        done();
-      }
-      if (props.onItemInvoke && selected) {
+      if (selected) {
         const uri = Wrangle.selectedUriFromIndex(imports, index);
         handleItemInvoke({ index, uri });
         done();
@@ -138,10 +135,10 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
       scrollTo$={scrollToRef$.current}
       onChanged={handleCommandChanged}
       onCmdFocusChange={(e) => setFocused(e.is.focused)}
-      onKeyDown={handleKeyboard}
       onItemVisibility={(e) => setItems(e.children)}
       onItemSelect={handleItemSelected}
       onItemInvoke={handleItemInvoke}
+      onKeyDown={handleKeyboard}
     />
   );
 };
