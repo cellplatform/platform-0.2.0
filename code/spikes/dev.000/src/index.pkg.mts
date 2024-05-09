@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.113',
+  version: '0.6.114',
   dependencies: {
     '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.12',
@@ -30,7 +30,6 @@ export const Pkg: ModuleDef = {
     'react': '18.3.1',
     'react-dom': '18.3.1',
     'sys.data.indexeddb': '0.0.0',
-    'sys.fs': '0.0.0',
     'sys.fs.indexeddb': '0.0.0',
     'sys.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
