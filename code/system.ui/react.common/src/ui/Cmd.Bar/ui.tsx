@@ -1,12 +1,9 @@
-import { Color, COLORS, DEFAULTS, TextInput, css, type t } from './common';
+import { COLORS, DEFAULTS, css, type t } from './common';
 import { HintKey } from './ui.HintKey';
+import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const {
-    enabled = DEFAULTS.enabled,
-    focusOnReady = DEFAULTS.focusOnReady,
-    placeholder = DEFAULTS.commandPlaceholder,
-  } = props;
+  const { enabled = DEFAULTS.enabled } = props;
   const hintKeys = wrangle.hintKeys(props);
   const hasHintKeys = hintKeys.length > 0;
 
@@ -30,34 +27,9 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
   };
 
   const elTextbox = (
-    <TextInput
-      value={props.text}
-      placeholder={placeholder}
-      placeholderStyle={{
-        opacity: 0.4,
-        color: COLORS.WHITE,
-        fontFamily: 'sans-serif',
-        disabledColor: Color.alpha(COLORS.WHITE, 0.5),
-      }}
-      valueStyle={{
-        color: COLORS.WHITE,
-        fontFamily: 'monospace',
-        fontWeight: 'normal',
-        fontSize: 16,
-        disabledColor: COLORS.WHITE,
-      }}
-      isEnabled={enabled}
-      spellCheck={false}
-      autoCorrect={false}
-      autoCapitalize={false}
-      focusOnReady={focusOnReady}
-      selectOnReady={focusOnReady}
-      onFocusChange={props.onFocusChange}
-      onReady={props.onReady}
-      onChange={props.onChange}
-      onKeyDown={props.onKeyDown}
-      onKeyUp={props.onKeyUp}
-    />
+    <div {...styles.textbox}>
+      <Textbox {...props} />
+    </div>
   );
 
   const elHintKeys =
@@ -65,7 +37,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>{elTextbox}</div>
+      {elTextbox}
       {elHintKeys && (
         <div {...styles.hintKeys.base}>
           <div {...styles.hintKeys.inner}>{elHintKeys}</div>
