@@ -83,6 +83,8 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           text={props.command}
           placeholder={props.commandPlaceholder}
           hintKey={props.hintKey}
+          prefix={props.commandPrefix}
+          suffix={props.commandSuffix}
           focusOnReady={props.focusOnReady ?? true}
           onReady={(e) => setTextbox(e.ref)}
           onChange={(e) => handleFilterChanged(e.to)}

@@ -8,6 +8,8 @@ export type CmdHostProps = {
   imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;
+  commandPrefix?: t.CmdBarProps['prefix'];
+  commandSuffix?: t.CmdBarProps['suffix'];
   filter?: t.CmdHostFilter | null;
   selected?: string;
   hintKey?: string | string[];
