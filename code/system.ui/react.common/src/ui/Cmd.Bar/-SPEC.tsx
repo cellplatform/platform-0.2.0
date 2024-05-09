@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Color, Dev, DevIcons, Pkg, css, type t } from '../../test.ui';
 
 type TEnv = {};
 type P = t.CmdBarProps;
@@ -28,7 +28,6 @@ export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.theme = local.theme;
@@ -61,9 +60,6 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
-    const env = dev.env<TEnv>();
-    console.log('env', env);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
@@ -98,12 +94,38 @@ export default Dev.describe(name, (e) => {
       dev.button('placholder: "namespace"', (e) => {
         e.change((d) => (local.placeholder = d.props.placeholder = 'namespace'));
       });
+      dev.hr(-1, 5);
+
+      const Sample = (props: { width?: number } = {}) => {
+        const { width = 30 } = props;
+        const styles = {
+          base: css({ backgroundColor: 'rgba(255, 0, 0, 0.1)', PaddingX: 10 }),
+          grid: css({ display: 'grid', placeItems: 'center' }),
+          size: css({ width, transition: `width 300ms ease` }),
+        };
+        return (
+          <div {...css(styles.base, styles.grid, styles.size)}>
+            <DevIcons.ObjectTree size={22} color={Color.WHITE} />
+          </div>
+        );
+      };
+
+      const prefix = (el: JSX.Element) => state.change((d) => (d.props.prefix = el));
+      const suffix = (el: JSX.Element) => state.change((d) => (d.props.suffix = el));
+
+      dev.button('element: prefix', (e) => prefix(<Sample />));
+      dev.button(['element: prefix', '(wide)'], (e) => prefix(<Sample width={250} />));
+      dev.hr(-1, 5);
+      dev.button('element: suffix', (e) => suffix(<Sample />));
+      dev.button(['element: suffix', '(wide)'], (e) => suffix(<Sample width={250} />));
 
       dev.hr(-1, 5);
       dev.button(['reset', '(defaults)'], (e) => {
         e.change((d) => {
           const p = d.props;
           p.hintKey = undefined;
+          p.prefix = undefined;
+          p.suffix = undefined;
           local.enabled = p.enabled = DEFAULTS.enabled;
           local.focusOnReady = p.focusOnReady = DEFAULTS.focusOnReady;
           local.placeholder = p.placeholder = DEFAULTS.commandPlaceholder;

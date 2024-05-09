@@ -1,11 +1,9 @@
 import { COLORS, DEFAULTS, css, type t } from './common';
-import { HintKey } from './ui.HintKey';
+import { HintKeys } from './ui.HintKeys';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
-  const hintKeys = wrangle.hintKeys(props);
-  const hasHintKeys = hintKeys.length > 0;
 
   /**
    * Render
@@ -16,33 +14,28 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       backgroundColor: COLORS.DARK,
       color: COLORS.WHITE,
       userSelect: 'none',
+    }),
+    grid: css({
       display: 'grid',
-      gridTemplateColumns: '1fr auto',
+      gridTemplateColumns: wrangle.columns(props),
     }),
     textbox: css({ boxSizing: 'border-box', Padding: [7, 7], display: 'grid' }),
-    hintKeys: {
-      base: css({ paddingLeft: 6, paddingRight: 6, display: 'grid', placeItems: 'center' }),
-      inner: css({ Flex: 'x-center-center' }),
-    },
   };
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} />
+      <Textbox {...props} enabled={enabled} />
     </div>
   );
 
-  const elHintKeys =
-    enabled && hasHintKeys && hintKeys.map((key, i) => <HintKey key={i} text={key} />);
+  const elHintKeys = <HintKeys {...props} enabled={enabled} />;
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, styles.grid, props.style)}>
+      {props.prefix}
       {elTextbox}
-      {elHintKeys && (
-        <div {...styles.hintKeys.base}>
-          <div {...styles.hintKeys.inner}>{elHintKeys}</div>
-        </div>
-      )}
+      {elHintKeys}
+      {props.suffix}
     </div>
   );
 };
@@ -51,8 +44,10 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  hintKeys(props: t.CmdBarProps) {
-    if (!props.hintKey) return [];
-    return Array.isArray(props.hintKey) ? props.hintKey : [props.hintKey];
+  columns(props: t.CmdBarProps) {
+    let res = '1fr auto';
+    if (props.prefix) res = `auto ${res}`;
+    if (props.suffix) res = `${res} auto`;
+    return res;
   },
-};
+} as const;
