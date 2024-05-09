@@ -1,6 +1,5 @@
-import { rx, Dev, Filesystem, expect, Path, t, slug } from '../common';
-import { MemoryMock } from 'sys.fs.spec';
 import { Spec } from 'sys.fs.spec';
+import { Dev, Filesystem, Path, expect, slug, t } from '../common';
 
 export default Dev.describe('Functional Specification (IndexedDb)', (e) => {
   console.log('Spec', Spec);

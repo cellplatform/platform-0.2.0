@@ -13,7 +13,6 @@ import type { t } from '../common';
 
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
 const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
-const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 
 const {
   ModuleSpecs: Common,
@@ -50,7 +49,6 @@ export const Specs = {
   ...Media,
   ...MediaImage,
   ...MediaVideo,
-  ...Fs,
   ...Concept,
 
   ...ExtMonaco,
