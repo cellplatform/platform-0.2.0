@@ -131,10 +131,17 @@ export function useController(args: {
     textbox,
     selectedUri,
 
-    get listEnabled() {
-      if (!(enabled && listEnabled)) return false;
-      if (cmd && !isFilter(cmd)) return false; // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
-      return true;
+    is: {
+      enabled,
+      get listEnabled() {
+        if (!(enabled && listEnabled)) return false;
+        if (cmd && !isFilter(cmd)) return false; // TEMP: 🐷 change this to disabled when text, and filter added as stack/prefix.
+        return true;
+      },
+      get loaded() {
+        const res = !!resolve.uri.loaded(doc?.current);
+        return res;
+      },
     },
 
     onTextboxReady(textbox: t.TextInputRef) {

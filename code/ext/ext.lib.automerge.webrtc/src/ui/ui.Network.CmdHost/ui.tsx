@@ -1,3 +1,4 @@
+import { Prefix } from '../ui.Network.CmdHost.Prefix';
 import { CmdHost, DEFAULTS, type t } from './common';
 import { useController } from './use.Controller';
 
@@ -9,6 +10,8 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
   /**
    * Render
    */
+  const elPrefix = controller.is.loaded && <Prefix theme={theme} />;
+
   return (
     <CmdHost.Stateful
       style={props.style}
@@ -23,9 +26,10 @@ export const View: React.FC<t.NetworkCmdHost> = (props) => {
       listMinWidth={300}
       focusOnClick={true}
       hrDepth={props.hrDepth}
-      listEnabled={controller.listEnabled}
+      listEnabled={controller.is.listEnabled}
       filter={controller.filter}
       command={controller.cmd}
+      commandPrefix={elPrefix}
       selected={controller.selectedUri}
       onReady={(e) => controller.onTextboxReady(e.textbox)}
       onItemSelect={(e) => controller.onSelectionChange(e.uri)}
