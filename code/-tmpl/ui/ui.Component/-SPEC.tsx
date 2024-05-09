@@ -1,5 +1,5 @@
 import { DEFAULTS, Root } from '.';
-import { Dev, Pkg } from '../../test.ui';
+import { css, Color, Dev, Pkg } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.RootProps;
