@@ -63,7 +63,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
-
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn
@@ -73,7 +73,6 @@ export default Dev.describe(name, (e) => {
             e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')));
           });
       });
-
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.focusOnReady);
         btn
