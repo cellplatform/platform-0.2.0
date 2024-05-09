@@ -25,7 +25,6 @@ const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 const { Specs: MediaVideo } = await import('sys.ui.react.media.video/specs');
-const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 
 const { Specs: ExtMonaco } = await import('ext.lib.monaco/specs');
 const { Specs: ExtMonacoCrdt } = await import('ext.lib.monaco.crdt/specs');
@@ -49,7 +48,6 @@ export const Specs = {
   ...Media,
   ...MediaImage,
   ...MediaVideo,
-  ...Concept,
 
   ...ExtMonaco,
   ...ExtMonacoCrdt,

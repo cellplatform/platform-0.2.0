@@ -32,7 +32,6 @@ export const Pkg: ModuleDef = {
     'sys.data.indexeddb': '0.0.0',
     'sys.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.concept': '0.0.0',
     'sys.ui.react.dev': '0.0.0',
     'sys.ui.react.list': '0.0.0',
     'sys.ui.react.media': '0.0.0',
