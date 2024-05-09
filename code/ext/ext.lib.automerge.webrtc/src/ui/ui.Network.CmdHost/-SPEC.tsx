@@ -15,15 +15,12 @@ import {
 } from '../../test.ui';
 import { createImports } from './-SPEC.imports';
 import { createLoader } from './-SPEC.loader';
-import { type t } from './common';
+import { createDSL } from './-SPEC.dsl';
 
-type TEnv = { Specs?: t.SpecImports };
+import type { TEnv, THarness } from './-SPEC.t';
+import type { t } from './common';
+
 type LocalStore = D & Pick<P, 'theme' | 'enabled'> & Pick<THarness, 'debugShowJson'>;
-type THarness = {
-  theme?: t.CommonTheme;
-  debugWidth: number;
-  debugShowJson?: boolean;
-};
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
@@ -89,6 +86,7 @@ export default Dev.describe(name, async (e) => {
     network = store.network;
     harness = store.harness;
     lens = store.lens;
+    const dsl = createDSL({ harness });
 
     /**
      * Monitoring
@@ -134,29 +132,8 @@ export default Dev.describe(name, async (e) => {
           imports={imports}
           doc={lens}
           pkg={Pkg}
-          onLoad={async (e) => {
-            const el = await loader.load(e);
-            state.change((d) => (d.overlay = el));
-          }}
-          onCommand={(e) => {
-            /**
-             * Command-line DSL.
-             */
-            if (e.cmd.text === 'close' || e.cmd.text === 'x') {
-              e.cmd.clear();
-              e.unload();
-            }
-
-            if (e.cmd.text === 'dev.hide') {
-              harness.change((d) => (d.debugWidth = 0));
-              e.cmd.clear();
-            }
-
-            if (e.cmd.text === 'dev.show') {
-              harness.change((d) => (d.debugWidth = 330));
-              e.cmd.clear();
-            }
-          }}
+          onLoad={(e) => state.change(async (d) => (d.overlay = await loader.load(e)))}
+          onCommand={(e) => dsl(e)}
         />
       );
     });
