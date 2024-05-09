@@ -4,7 +4,6 @@ export type * from './ui/ui.MonacoEditor/t';
 
 export type * from './ui.logic/Editor.Carets/t';
 export type * from './ui.logic/Editor.Crdt/t';
-export type * from './ui.logic/MonacoCrdt__OLD/t';
 
 /**
  * Supported languages.

@@ -9,7 +9,6 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { AutomergeText, CrdtDocFile, CrdtDocRef } from 'sys.data.crdt/src/types.mjs';
 export type {
   BundleImport,
   SpecImport,
