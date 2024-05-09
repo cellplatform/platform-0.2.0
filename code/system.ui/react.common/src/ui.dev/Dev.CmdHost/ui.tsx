@@ -34,9 +34,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Handlers
    */
-  const handleFilterChanged = (command: string) => {
-    props.onChanged?.({ command });
-  };
+  const handleFilterChanged = (command: string) => props.onChanged?.({ command });
   const handleClick = () => {
     if (focusOnClick && textbox) textbox.focus();
   };
