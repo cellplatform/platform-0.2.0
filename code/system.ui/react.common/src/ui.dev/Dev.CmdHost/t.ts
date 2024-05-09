@@ -8,7 +8,9 @@ export type CmdHostProps = {
   imports?: t.ModuleImports;
   command?: string;
   commandPlaceholder?: string;
-  applyFilter?: boolean;
+  commandPrefix?: t.CmdBarProps['prefix'];
+  commandSuffix?: t.CmdBarProps['suffix'];
+  filter?: t.CmdHostFilter | null;
   selected?: string;
   hintKey?: string | string[];
   hrDepth?: number;
@@ -18,6 +20,7 @@ export type CmdHostProps = {
   showParamDev?: boolean;
   autoGrabFocus?: boolean;
   listMinWidth?: number;
+  listEnabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   focusOnReady?: boolean;
@@ -29,9 +32,11 @@ export type CmdHostProps = {
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
   onItemVisibility?: t.ModuleListItemVisibilityHandler;
-  onItemClick?: t.ModuleListItemHandler;
+  onItemInvoke?: t.ModuleListItemHandler;
   onItemSelect?: t.ModuleListItemHandler;
 };
+
+export type CmdHostFilter = (imports: t.ModuleImports, command?: string) => t.ModuleImports;
 
 /**
  * Events

@@ -18,7 +18,7 @@ export const Title: React.FC<TitleProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(props.theme);
+  const color = Color.theme(props.theme).color;
   const styles = {
     base: css({ display: 'grid', gridTemplateColumns: `1fr auto`, color }),
     left: css({ fontWeight: 'bold' }),

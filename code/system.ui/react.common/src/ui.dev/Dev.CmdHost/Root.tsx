@@ -1,5 +1,5 @@
 import { CmdHostStateful as Stateful } from '../Dev.CmdHost.Stateful';
-import { DEFAULTS, FC, type t } from './common';
+import { DEFAULTS, FC, Filter, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -8,9 +8,10 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Stateful: typeof Stateful;
+  Filter: typeof Filter;
 };
 export const CmdHost = FC.decorate<t.CmdHostProps, Fields>(
   View,
-  { DEFAULTS, Stateful },
-  { displayName: 'CmdHost' },
+  { DEFAULTS, Stateful, Filter },
+  { displayName: DEFAULTS.displayName },
 );

@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.data.crdt',
   version: '0.0.0',
   dependencies: {
-    '@automerge/automerge': '2.2.1',
+    '@automerge/automerge': '2.2.2',
     'sys.data.json': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.text': '0.0.0',

@@ -1,4 +1,6 @@
-import { type t } from './common';
+import type { t } from './common';
+
+export { CmdHost } from 'sys.ui.react.common';
 export * from '../common';
 
 /**
@@ -6,7 +8,7 @@ export * from '../common';
  */
 export const paths: t.CmdHostPaths = {
   uri: { selected: ['uri', 'selected'], loaded: ['uri', 'loaded'] },
-  cmd: { text: ['cmd', 'text'] },
+  cmd: { text: ['cmd', 'text'], invoked: ['cmd', 'invoked'] },
 };
 
 export const DEFAULTS = {

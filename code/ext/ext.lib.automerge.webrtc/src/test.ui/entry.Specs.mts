@@ -12,6 +12,7 @@ export const Specs = {
   [`${ns}.ui.Network.Connection`]: () => import('../ui/ui.Network.Connection/-SPEC'),
   [`${ns}.ui.Network.CmdHost`]: () => import('../ui/ui.Network.CmdHost/-SPEC'),
   [`${ns}.ui.Network.CmdHosts`]: () => import('../ui/ui.Network.CmdHosts/-SPEC'),
+  [`${ns}.ui.Network.CmdHost.Prefix`]: () => import('../ui/ui.Network.CmdHost.Prefix/-SPEC'),
   [`${ns}.ui.Sample.TextboxSync`]: () => import('../ui/ui.Sample.TextboxSync/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),

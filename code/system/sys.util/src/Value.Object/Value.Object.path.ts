@@ -142,8 +142,9 @@ export function prune(keyPath: string, root: { [key: string]: any }) {
 }
 
 /**
- * [Helpers]
+ * Helpers
  */
+
 function prepareKeyPath(keyPath: string) {
   keyPath = keyPath.trim();
   if (keyPath.startsWith('.') || keyPath.endsWith('.')) {

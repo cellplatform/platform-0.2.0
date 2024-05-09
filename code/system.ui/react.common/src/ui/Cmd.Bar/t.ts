@@ -7,6 +7,8 @@ export type CmdBarProps = {
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
+  prefix?: JSX.Element | null | false;
+  suffix?: JSX.Element | null | false;
   enabled?: boolean;
   focusOnReady?: boolean;
   theme?: t.CommonTheme;

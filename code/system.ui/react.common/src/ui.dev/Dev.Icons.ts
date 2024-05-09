@@ -23,7 +23,7 @@ import {
   MdWarning,
 } from 'react-icons/md';
 import { TbPrompt } from 'react-icons/tb';
-import { VscBook, VscBookmark, VscSymbolVariable } from 'react-icons/vsc';
+import { VscBook, VscBookmark, VscSymbolClass, VscSymbolVariable } from 'react-icons/vsc';
 import { Icon } from '../ui/Icon';
 
 export { Icon };
@@ -39,6 +39,7 @@ export const DevIcons = {
   Bookmark: icon(VscBookmark),
   Info: icon(MdInfoOutline),
   Method: icon(VscSymbolVariable),
+  ObjectTree: icon(VscSymbolClass),
   Close: icon(MdClose),
   Copy: icon(MdContentCopy),
   Tick: icon(MdCheck),

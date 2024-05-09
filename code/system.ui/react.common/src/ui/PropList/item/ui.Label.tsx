@@ -1,4 +1,4 @@
-import { Wrangle, css, type t } from './common';
+import { Color, css, type t } from './common';
 
 export type PropListLabelProps = {
   data: t.PropListItem;
@@ -8,14 +8,14 @@ export type PropListLabelProps = {
 };
 
 export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
-  const theme = Wrangle.theme(props.theme);
+  const theme = Color.theme(props.theme);
 
   const styles = {
     base: css({
       userSelect: 'none',
       position: 'relative',
       marginLeft: props.data.indent,
-      color: theme.color.alpha(0.4),
+      color: theme.alpha(0.4),
       display: 'grid',
       alignContent: 'center',
     }),

@@ -51,7 +51,7 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
   /**
    * Render
    */
-  const color = enabled ? COLORS.BLUE : Color.fromTheme(theme);
+  const color = enabled ? COLORS.BLUE : Color.theme(theme).color;
   const styles = {
     base: css({ height: 19, display: 'grid', alignContent: 'center' }),
     close: css({}),

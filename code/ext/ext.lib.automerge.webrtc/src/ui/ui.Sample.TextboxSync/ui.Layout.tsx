@@ -17,7 +17,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const color = Color.theme(theme).color;
   const styles = {
     base: css({ color, display: 'grid', rowGap: '30px', userSelect: 'none' }),
     textbox: css({ width: 260 }),

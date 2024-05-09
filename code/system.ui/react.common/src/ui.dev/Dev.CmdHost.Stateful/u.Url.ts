@@ -24,7 +24,7 @@ export const Url = {
     if (index < 0) return;
 
     const { url, params } = Wrangle.url();
-    const namespace = Wrangle.selectedNamespaceFromIndex(imports, index);
+    const namespace = Wrangle.selectedUriFromIndex(imports, index);
     if (!namespace) return;
 
     params.set(DEFAULTS.qs.dev, namespace);

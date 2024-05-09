@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { CmdBar, Color, DEFAULTS, Filter, ModuleList, css, type t } from './common';
+import { CmdBar, Color, DEFAULTS, ModuleList, css, type t } from './common';
 import { useKeyboard } from './use.Keyboard';
 
 export const View: React.FC<t.CmdHostProps> = (props) => {
   const {
-    theme,
-    enabled = true,
     pkg = DEFAULTS.pkg,
-    applyFilter = DEFAULTS.applyFilter,
+    enabled = true,
+    listEnabled = true,
     focusOnClick = DEFAULTS.focusOnClick,
   } = props;
-  const filteredSpecs = applyFilter ? Filter.imports(props.imports, props.command) : props.imports;
-  const selectedIndex = wrangle.selectedIndex(filteredSpecs, props.selected);
+  const imports = wrangle.filteredImports(props);
+  const selectedIndex = wrangle.selectedIndex(imports, props.selected);
 
   const readyRef = useRef(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
@@ -35,9 +34,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Handlers
    */
-  const handleFilterChanged = (command: string) => {
-    props.onChanged?.({ command });
-  };
+  const handleFilterChanged = (command: string) => props.onChanged?.({ command });
   const handleClick = () => {
     if (focusOnClick && textbox) textbox.focus();
   };
@@ -45,14 +42,13 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.fromTheme(theme);
+  const theme = Color.theme(props.theme);
+  const color = theme.color;
+  const borderTop = theme.is.dark ? `solid 1px ${Color.format(0.15)}` : undefined;
   const styles = {
     base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto', color }),
     body: css({ userSelect: 'none', position: 'relative', display: 'grid' }),
-    bar: css({
-      display: 'grid',
-      borderTop: theme === 'Dark' ? `solid 1px ${Color.format(0.15)}` : undefined,
-    }),
+    bar: css({ display: 'grid', borderTop }),
   };
 
   return (
@@ -61,19 +57,19 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
         <ModuleList
           title={pkg.name}
           version={pkg.version}
-          imports={filteredSpecs}
+          imports={imports}
           badge={props.badge}
           hrDepth={props.hrDepth}
           showParamDev={props.showParamDev}
           focused={props.focused}
-          enabled={enabled}
-          theme={theme}
+          enabled={enabled && listEnabled}
+          theme={props.theme}
           listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}
           selectedIndex={selectedIndex}
           onItemVisibility={props.onItemVisibility}
-          onItemClick={props.onItemClick}
+          onItemClick={props.onItemInvoke}
           onItemSelect={props.onItemSelect}
         />
       </div>
@@ -83,6 +79,8 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           text={props.command}
           placeholder={props.commandPlaceholder}
           hintKey={props.hintKey}
+          prefix={props.commandPrefix}
+          suffix={props.commandSuffix}
           focusOnReady={props.focusOnReady ?? true}
           onReady={(e) => setTextbox(e.ref)}
           onChange={(e) => handleFilterChanged(e.to)}
@@ -102,5 +100,10 @@ const wrangle = {
   selectedIndex(specs?: t.ModuleImports, selected?: string) {
     if (!specs || !selected) return;
     return Object.keys(specs).indexOf(selected);
+  },
+  filteredImports(props: t.CmdHostProps) {
+    const { filter = DEFAULTS.filter, imports, command } = props;
+    if (!imports || filter === null) return imports;
+    return filter(imports, command);
   },
 } as const;

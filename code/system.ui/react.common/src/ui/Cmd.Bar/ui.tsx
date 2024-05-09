@@ -1,14 +1,9 @@
-import { Color, COLORS, DEFAULTS, TextInput, css, type t } from './common';
-import { HintKey } from './ui.HintKey';
+import { COLORS, DEFAULTS, css, type t } from './common';
+import { HintKeys } from './ui.HintKeys';
+import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const {
-    enabled = DEFAULTS.enabled,
-    focusOnReady = DEFAULTS.focusOnReady,
-    placeholder = DEFAULTS.commandPlaceholder,
-  } = props;
-  const hintKeys = wrangle.hintKeys(props);
-  const hasHintKeys = hintKeys.length > 0;
+  const { enabled = DEFAULTS.enabled } = props;
 
   /**
    * Render
@@ -19,58 +14,25 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       backgroundColor: COLORS.DARK,
       color: COLORS.WHITE,
       userSelect: 'none',
-      display: 'grid',
-      gridTemplateColumns: '1fr auto',
     }),
+    grid: css({ display: 'grid', gridTemplateColumns: wrangle.columns(props) }),
     textbox: css({ boxSizing: 'border-box', Padding: [7, 7], display: 'grid' }),
-    hintKeys: {
-      base: css({ paddingLeft: 6, paddingRight: 6, display: 'grid', placeItems: 'center' }),
-      inner: css({ Flex: 'x-center-center' }),
-    },
   };
 
   const elTextbox = (
-    <TextInput
-      value={props.text}
-      placeholder={placeholder}
-      placeholderStyle={{
-        opacity: 0.4,
-        color: COLORS.WHITE,
-        fontFamily: 'sans-serif',
-        disabledColor: Color.alpha(COLORS.WHITE, 0.5),
-      }}
-      valueStyle={{
-        color: COLORS.WHITE,
-        fontFamily: 'monospace',
-        fontWeight: 'normal',
-        fontSize: 16,
-        disabledColor: COLORS.WHITE,
-      }}
-      isEnabled={enabled}
-      spellCheck={false}
-      autoCorrect={false}
-      autoCapitalize={false}
-      focusOnReady={focusOnReady}
-      selectOnReady={focusOnReady}
-      onFocusChange={props.onFocusChange}
-      onReady={props.onReady}
-      onChange={props.onChange}
-      onKeyDown={props.onKeyDown}
-      onKeyUp={props.onKeyUp}
-    />
+    <div {...styles.textbox}>
+      <Textbox {...props} enabled={enabled} />
+    </div>
   );
 
-  const elHintKeys =
-    enabled && hasHintKeys && hintKeys.map((key, i) => <HintKey key={i} text={key} />);
+  const elHintKeys = <HintKeys {...props} enabled={enabled} />;
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>{elTextbox}</div>
-      {elHintKeys && (
-        <div {...styles.hintKeys.base}>
-          <div {...styles.hintKeys.inner}>{elHintKeys}</div>
-        </div>
-      )}
+    <div {...css(styles.base, styles.grid, props.style)}>
+      {props.prefix}
+      {elTextbox}
+      {elHintKeys}
+      {props.suffix}
     </div>
   );
 };
@@ -79,8 +41,10 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  hintKeys(props: t.CmdBarProps) {
-    if (!props.hintKey) return [];
-    return Array.isArray(props.hintKey) ? props.hintKey : [props.hintKey];
+  columns(props: t.CmdBarProps) {
+    let res = '1fr auto';
+    if (props.prefix) res = `auto ${res}`;
+    if (props.suffix) res = `${res} auto`;
+    return res;
   },
-};
+} as const;

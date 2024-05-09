@@ -1,4 +1,4 @@
-import { DEFAULTS, Style, Wrangle, css, type t } from './common';
+import { Color, DEFAULTS, Style, Wrangle, css, type t } from './common';
 
 export type PropListTitleProps = {
   total: number;
@@ -16,7 +16,7 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
     margin = [0, 0, total > 0 ? 10 : 0, 0],
   } = Wrangle.title(props.data);
   const content = Wrangle.titleValue(value);
-  const theme = Wrangle.theme(props.theme);
+  const theme = Color.theme(props.theme);
 
   if (!content[0] && !content[1]) return null;
 
@@ -34,7 +34,7 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
     edge: css({
       fontWeight: 'bold',
       fontSize: DEFAULTS.fontSize.sans + 1,
-      color: theme.color.base,
+      color: theme.color,
     }),
     ellipsis: css({
       whiteSpace: 'nowrap',

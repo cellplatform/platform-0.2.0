@@ -7,7 +7,7 @@ export type ListItemProps = {
   index: number;
   url: URL;
   imports: t.ModuleImports;
-  address?: string;
+  uri?: string;
   title?: string;
   selected?: boolean;
   focused: boolean;
@@ -23,7 +23,7 @@ export type ListItemProps = {
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
   const { index, Icon, hrDepth = -1, ns, title, imports } = props;
-  const { address, url, selected, focused, enabled = true } = props;
+  const { uri, url, selected, focused, enabled = true } = props;
 
   const importsKeys = Object.keys(imports);
 
@@ -34,8 +34,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const next = importsKeys[index];
   const showHr = !beyondBounds && Calc.showHr(hrDepth, prev, next);
 
-  if (address) params.set(DEFAULTS.qs.dev, address);
-  if (!address) params.delete(DEFAULTS.qs.dev);
+  if (uri) params.set(DEFAULTS.qs.dev, uri);
+  if (!uri) params.delete(DEFAULTS.qs.dev);
 
   const baseRef = useRef<HTMLLIElement>(null);
 
@@ -57,9 +57,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   /**
    * Handlers
    */
-  const getArgs = (): t.ModuleListItemHandlerArgs => {
-    return { index, address };
-  };
+  const getArgs = (): t.ModuleListItemHandlerArgs => ({ index, uri });
 
   const handleClick = (e: React.MouseEvent) => {
     if (props.onClick) {
@@ -72,7 +70,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
    * Render
    */
   const { WHITE, BLUE } = COLORS;
-  const color = Color.fromTheme(props.theme);
+  const color = Color.theme(props.theme).color;
   const styles = {
     base: css({
       paddingLeft: beyondBounds ? 0 : 20,
@@ -83,7 +81,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       borderTop: `solid 1px ${Color.alpha(color, 0.12)}`,
     }),
     link: css({
-      color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
+      color: selected && focused && enabled ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
       textDecoration: 'none',
     }),
     linkDimmed: css({
@@ -104,7 +102,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         gridTemplateColumns: 'auto minmax(0, 1fr) auto',
       }),
       icon: css({
-        color: selected && focused ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
+        color: selected && focused && enabled ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
         marginLeft: 10,
         marginRight: 10,
         display: 'grid',
@@ -123,7 +121,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const linkStyle = css(styles.link, !ns ? styles.linkDimmed : undefined);
   const elLink = (
     <a href={url.href} onClick={handleClick} {...linkStyle}>
-      <div {...styles.row.label}>{title ?? address}</div>
+      <div {...styles.row.label}>{title ?? uri}</div>
     </a>
   );
 

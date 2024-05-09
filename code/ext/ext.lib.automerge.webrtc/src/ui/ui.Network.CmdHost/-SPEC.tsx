@@ -1,22 +1,49 @@
 import { DEFAULTS, NetworkCmdHost } from '.';
-import { BADGES, Color, Dev, Hash, Peer, PeerUI, Pkg, TestEdge, Value, css } from '../../test.ui';
-import { type t } from './common';
+import {
+  A,
+  BADGES,
+  Color,
+  Dev,
+  Hash,
+  Peer,
+  PeerUI,
+  Pkg,
+  TestEdge,
+  Value,
+  css,
+  rx,
+} from '../../test.ui';
+import { createImports } from './-SPEC.imports';
+import { createLoader } from './-SPEC.loader';
+import { createDSL } from './-SPEC.dsl';
 
+import type { TEnv, THarness } from './-SPEC.t';
+import type { t } from './common';
+
+type LocalStore = D & Pick<P, 'theme' | 'enabled'> & Pick<THarness, 'debugShowJson'>;
 type P = t.NetworkCmdHost;
 type D = {
   debugPadding?: boolean;
   debugLogging?: boolean;
-  debugShowJson?: boolean;
   debugRootJson?: boolean;
+  debugLoadedOpacity?: number;
 };
-type T = D & { props: P; stream?: MediaStream };
+type T = D & { props: P; stream?: MediaStream; overlay?: JSX.Element | null | false };
 const initial: T = { props: {} };
 
-const createStores = async (state: t.DevCtxState<T>) => {
+const createStore = async (state: t.DevCtxState<T>, local: LocalStore) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
-  const lens = network.shared.namespace.lens('cmd.host', {});
-  return { network, lens } as const;
+  const namespace = network.shared.namespace;
+  const lens = namespace.lens('cmd.host', {});
+
+  const s = state.current;
+  const harness = namespace.lens<THarness>('harness', {
+    theme: s.props.theme,
+    debugWidth: 330,
+    debugShowJson: local.debugShowJson,
+  });
+  return { network, lens, harness } as const;
 };
 
 /**
@@ -26,38 +53,63 @@ const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
   let network: t.NetworkStore;
   let lens: t.Lens;
+  let harness: t.Lens<THarness>;
 
-  type LocalStore = D & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
+    enabled: true,
     debugPadding: true,
     debugLogging: false,
     debugShowJson: false,
     debugRootJson: false,
+    debugLoadedOpacity: 1,
   });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    const env = dev.env<TEnv>();
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.badge = BADGES.ci.node;
+      d.props.hrDepth = 2;
+      d.props.enabled = local.enabled;
       d.props.theme = local.theme;
       d.debugPadding = local.debugPadding;
       d.debugLogging = local.debugLogging;
-      d.debugShowJson = local.debugShowJson;
       d.debugRootJson = local.debugRootJson;
+      d.debugLoadedOpacity = local.debugLoadedOpacity;
     });
 
-    const stores = await createStores(state);
-    network = stores.network;
-    lens = stores.lens;
+    const store = await createStore(state, local);
+    network = store.network;
+    harness = store.harness;
+    lens = store.lens;
+    const dsl = createDSL({ network, harness });
 
     /**
      * Monitoring
      */
-    network.peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
+    const peer = network.peer;
+    peer.events().cmd.conn$.subscribe(() => dev.redraw('debug'));
+
+    const monitorHarness = (doc: t.Lens<THarness>) => {
+      const $ = doc.events().changed$.pipe(rx.map((d) => d.after));
+      const on = (key: keyof THarness) => $.pipe(rx.distinctWhile((p, n) => p[key] === n[key]));
+      on('debugWidth').subscribe((e) => ctx.debug.width(e.debugWidth ?? 330));
+      on('theme').subscribe((e) => state.change((d) => (d.props.theme = e.theme)));
+      on('debugShowJson').subscribe(() => dev.redraw('debug'));
+    };
+
+    monitorHarness(harness);
+
+    /**
+     * Imports
+     */
+    const specs = env.Specs;
+    const imports = createImports({ peer, specs });
+    const loader = createLoader(imports);
 
     /**
      * Render: Subject
@@ -69,36 +121,54 @@ export default Dev.describe(name, async (e) => {
       ctx.subject.size('fill', padding);
       Dev.Theme.background(dev, props.theme, 1);
 
-      /**
-       * TODO 🐷
-       * - optionally load from env-var.
-       */
-      const { Specs } = await import('../../test.ui/entry.Specs.mjs');
-
-      return <NetworkCmdHost {...props} imports={Specs} doc={lens} pkg={Pkg} />;
+      return (
+        <NetworkCmdHost
+          {...props}
+          imports={imports}
+          doc={lens}
+          pkg={Pkg}
+          onLoad={(e) => state.change(async (d) => (d.overlay = await loader.load(e)))}
+          onCommand={(e) => dsl(e)}
+        />
+      );
     });
 
     /**
-     * Render: Video (Overlay)
+     * Render: (Overlay)
      */
     ctx.host.layer(1).render((e) => {
-      const stream = state.current.stream;
-      if (!stream) return;
-      return <PeerUI.Video stream={stream} muted={true} />;
+      const { overlay, debugLoadedOpacity } = state.current;
+      const style = css({
+        Absolute: [0, 0, 36, 0],
+        overflow: 'hidden',
+        opacity: debugLoadedOpacity,
+        display: 'grid',
+      });
+      return overlay ? <div {...style}>{overlay}</div> : null;
     });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switcher(
         dev,
         (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
+        (d, value) => {
+          local.theme = d.props.theme = value;
+          harness.change((d) => (d.theme = value));
+        },
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
     });
 
     dev.hr(5, 20);
@@ -127,6 +197,18 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debugRootJson = Dev.toggle(d, 'debugRootJson'))));
       });
+      dev.boolean((btn) => {
+        const value = (state: T) => state.debugLoadedOpacity ?? 1;
+        btn
+          .label((e) => `loaded opacity (${value(e.state) * 100}%)`)
+          .value((e) => value(e.state) === 1)
+          .onClick((e) => {
+            e.change((d) => {
+              const next = value(e.state.current) === 1 ? 0.8 : 1;
+              local.debugLoadedOpacity = d.debugLoadedOpacity = next;
+            });
+          });
+      });
       dev.hr(-1, 5);
       dev.button(['connect peer (sample)', '⚡️'], async (e) => {
         const edge = await TestEdge.create('Right');
@@ -139,11 +221,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const onStreamSelection: t.PeerStreamSelectionHandler = (e) => {
-      state.change((d) => {
+    const onStreamSelection: t.PeerStreamSelectionHandler = async (e) => {
+      await state.change((d) => {
         d.stream = d.stream === e.selected ? undefined : e.selected;
       });
       dev.redraw();
+      console.log('state.current.stream', state.current.stream);
     };
 
     dev.footer.padding(0).render<T>((e) => {
@@ -162,28 +245,39 @@ export default Dev.describe(name, async (e) => {
         avatars: css({ display: 'grid', placeItems: 'center' }),
       };
 
+      const onIconClick = () => {
+        harness.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
+      };
+      const cmdState: t.InfoDataShared = {
+        label: 'CmdHost State',
+        lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
+        onIconClick,
+        object: {
+          visible: harness.current.debugShowJson,
+          dotMeta: false,
+          expand: { level: 5 },
+          beforeRender(mutate) {
+            Value.Object.walk(mutate!, (e) => {
+              if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, [6, 12]));
+              if (e.value instanceof A.Counter) e.mutate(e.value.value);
+            });
+          },
+        },
+      };
+
+      const harnessState: t.InfoDataShared = {
+        label: 'Harness State',
+        lens: ['ns', 'harness'],
+        onIconClick,
+        object: { visible: harness.current.debugShowJson },
+      };
+
       const elInfoPanel = (
         <>
           <div {...css(styles.hr)} />
           {TestEdge.dev.infoPanel(dev, network, {
             margin: [12, 28],
-            data: {
-              shared: {
-                lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
-                object: {
-                  visible: e.state.debugShowJson,
-                  dotMeta: false,
-                  beforeRender(mutate) {
-                    Value.Object.walk(mutate!, (e) => {
-                      if (typeof e.value === 'string') e.mutate(Hash.shorten(e.value, 8));
-                    });
-                  },
-                },
-                onIconClick() {
-                  state.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
-                },
-              },
-            },
+            data: { shared: [cmdState, harnessState] },
           })}
         </>
       );
@@ -193,8 +287,8 @@ export default Dev.describe(name, async (e) => {
           <div {...css(styles.hr, styles.showAvatars)} />
           <PeerUI.AvatarTray
             style={css(styles.showAvatars, styles.avatars)}
-            peer={network.peer}
             onSelection={onStreamSelection}
+            peer={network.peer}
             muted={false}
             margin={8}
           />

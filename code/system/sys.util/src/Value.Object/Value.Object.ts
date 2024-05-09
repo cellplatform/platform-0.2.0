@@ -1,5 +1,4 @@
 import { R } from '../common';
-export * from './Value.Object.keyPath';
 
 type PathArray = (string | number)[];
 type WalkCallback = (e: WalkCallbackArgs) => void;
@@ -27,13 +26,13 @@ export function walk<T extends object | any[]>(parent: T, fn: WalkCallback) {
       const isArray = Array.isArray(value);
       const isObject = value !== null && typeof value === 'object';
       const hasWalked = (isObject || isArray) && walked.has(value);
-      if (_stopped || hasWalked) return; // Skip if stopped or already walked.
+      if (_stopped) return;
 
       const mutate = <T>(value: T) => ((parent as any)[key] = value);
       const path = [...levelPath, key];
       fn({ parent, path, key, value, stop, mutate });
-      if (_stopped) return;
 
+      if (_stopped || hasWalked) return; // NB: visit if already walked, but don't recurse.
       if (isObject || isArray) {
         walked.set(value, true);
         walk(value, path, fn); // <== RECURSION 🌳
