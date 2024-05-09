@@ -122,5 +122,18 @@ describe('color', () => {
       expect(res1.color).to.eql(Color.WHITE);
       expect(res2.color).to.eql('red');
     });
+
+    it('alpha', () => {
+      const light = Color.theme();
+      const dark = Color.theme('Dark');
+
+      const res1 = light.alpha();
+      const res2 = light.alpha(0.5);
+      const res3 = dark.alpha(0.3);
+
+      expect(res1).to.eql('rgb(41, 48, 66)');
+      expect(res2).to.eql('rgba(41, 48, 66, 0.5)');
+      expect(res3).to.eql('rgba(255, 255, 255, 0.3)');
+    });
   });
 });
