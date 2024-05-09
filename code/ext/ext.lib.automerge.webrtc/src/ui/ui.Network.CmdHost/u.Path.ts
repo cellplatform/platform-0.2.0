@@ -14,11 +14,11 @@ export const CmdHostPath = {
     const resolve = ObjectPath.resolve;
     const api = {
       uri: {
-        loaded: (d: O) => resolve<t.UriString>(d, path.uri.loaded) || '',
-        selected: (d: O) => resolve<t.UriString>(d, path.uri.selected) || '',
+        loaded: (d?: O) => resolve<t.UriString>(d, path.uri.loaded) || '',
+        selected: (d?: O) => resolve<t.UriString>(d, path.uri.selected) || '',
       },
       cmd: {
-        text: (d: O) => resolve<string>(d, path.cmd.text) || '',
+        text: (d?: O) => resolve<string>(d, path.cmd.text) || '',
         invoked: (d: O) => {
           const get = () => resolve<t.A.Counter>(d, path.cmd.invoked);
           if (!get()) ObjectPath.mutate(d, path.cmd.invoked, new A.Counter(0));
