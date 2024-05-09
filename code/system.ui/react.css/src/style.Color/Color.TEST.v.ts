@@ -51,6 +51,7 @@ describe('color', () => {
   describe('Color.debug', () => {
     it('debugging: true', () => {
       const debugColor = Color.debug(true);
+      expect(debugColor()).to.eql('rgba(255, 0, 0, 0.3)');
       expect(debugColor(0.3)).to.eql('rgba(255, 0, 0, 0.3)');
     });
 
@@ -62,6 +63,22 @@ describe('color', () => {
     it('not debugging: (undefined)', () => {
       const debugColor = Color.debug();
       expect(debugColor(0.3)).to.eql(undefined);
+    });
+  });
+
+  describe('Color.alpha', () => {
+    it('DARK', () => {
+      const res = Color.alpha(Color.DARK, 0.3);
+      expect(res).to.eql('rgba(41, 48, 66, 0.3)');
+    });
+
+    it('WHITE', () => {
+      const res1 = Color.alpha(Color.WHITE, 0.5);
+      const res2 = Color.alpha('white', 0.5);
+      const res3 = Color.alpha('#fff', 0.5);
+      expect(res1).to.eql('rgba(255, 255, 255, 0.5)');
+      expect(res2).to.eql('rgba(255, 255, 255, 0.5)');
+      expect(res3).to.eql('rgba(255, 255, 255, 0.5)');
     });
   });
 
