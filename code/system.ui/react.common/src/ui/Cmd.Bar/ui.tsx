@@ -15,10 +15,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       color: COLORS.WHITE,
       userSelect: 'none',
     }),
-    grid: css({
-      display: 'grid',
-      gridTemplateColumns: wrangle.columns(props),
-    }),
+    grid: css({ display: 'grid', gridTemplateColumns: wrangle.columns(props) }),
     textbox: css({ boxSizing: 'border-box', Padding: [7, 7], display: 'grid' }),
   };
 
