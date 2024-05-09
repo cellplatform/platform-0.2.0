@@ -86,7 +86,7 @@ export default Dev.describe(name, async (e) => {
     network = store.network;
     harness = store.harness;
     lens = store.lens;
-    const dsl = createDSL({ harness });
+    const dsl = createDSL({ network, harness });
 
     /**
      * Monitoring
