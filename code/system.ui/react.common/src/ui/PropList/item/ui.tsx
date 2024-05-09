@@ -13,7 +13,7 @@ export type PropListItemProps = {
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const { item, is, defaults } = props;
-  const theme = Wrangle.theme(props.theme);
+  const theme = Color.theme(props.theme);
   const hasLabel = !!item.label;
   const selected = Wrangle.selected(item, theme.is.dark);
   const divider = item.divider ?? true;
@@ -24,7 +24,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
    * Render
    */
   const noBorder = is.last || !divider;
-  const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
+  const borderColor = theme.alpha(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
       backgroundColor: selected ? Color.format(selected.color) : undefined,

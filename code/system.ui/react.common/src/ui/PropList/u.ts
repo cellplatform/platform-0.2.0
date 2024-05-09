@@ -2,11 +2,9 @@ import { isValidElement } from 'react';
 import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
 import { fields, toggleField } from './u.fields';
 import { format } from './u.format';
-import { theme } from './u.theme';
 
 export const Wrangle = {
   format,
-  theme,
   fields,
   toggleField,
 

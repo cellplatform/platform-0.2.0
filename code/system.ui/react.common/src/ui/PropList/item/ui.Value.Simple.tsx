@@ -1,5 +1,4 @@
 import { isValidElement } from 'react';
-import { Wrangle } from '../u';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 import { CopyIcon } from './ui.CopyIcon';
 
@@ -76,14 +75,14 @@ const wrangle = {
     const value = wrangle.valueObject(props);
     if (value.color !== undefined) return Color.format(value.color);
 
-    const theme = Wrangle.theme(props.theme);
-    if (typeof props.message === 'string') return theme.color.alpha(0.3);
+    const theme = Color.theme(props.theme);
+    if (typeof props.message === 'string') return theme.alpha(0.3);
 
     const is = wrangle.flags(props);
     if (is.copyActive) return COLORS.BLUE;
     if (is.boolean) return COLORS.PURPLE;
 
-    return theme.color.base;
+    return theme.color;
   },
 
   renderValue(props: SimpleValueProps) {
