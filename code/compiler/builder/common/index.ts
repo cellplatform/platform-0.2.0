@@ -1,10 +1,10 @@
-import type * as t from '../t';
 import { fs } from './fs';
 
+export type * as t from '../t';
 export * from './libs';
 
-export { FindUtil } from './util.Find';
-export { JsonUtil, PackageJsonUtil } from './util.Json';
-export { LogTable } from './util.LogTable';
-export { Util, asArray } from './util';
-export { fs, type t };
+export { FindUtil } from './u.Find';
+export { JsonUtil, PackageJsonUtil } from './u.Json';
+export { LogTable } from './u.LogTable';
+export { Util, asArray } from './u';
+export { fs };

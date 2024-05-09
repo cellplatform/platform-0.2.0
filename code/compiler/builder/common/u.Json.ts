@@ -2,7 +2,7 @@ import type * as t from '../t';
 
 import { fs } from './fs';
 import { R } from './libs';
-import { VersionUtil } from './util.Version';
+import { VersionUtil } from './u.Version';
 
 /**
  * [package.json] file specific operations.

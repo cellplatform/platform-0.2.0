@@ -1,10 +1,10 @@
 import type * as t from '../t';
 
 import { fs } from './fs';
-import { FindUtil } from './util.Find';
-import { folderSize } from './util.FolderSize';
-import { JsonUtil, PackageJsonUtil } from './util.Json';
-import { VersionUtil } from './util.Version';
+import { FindUtil } from './u.Find';
+import { folderSize } from './u.FolderSize';
+import { JsonUtil, PackageJsonUtil } from './u.Json';
+import { VersionUtil } from './u.Version';
 
 /**
  * Common helpers.

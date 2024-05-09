@@ -1,7 +1,7 @@
 import { Paths } from '../Paths';
 import { fs } from './fs';
-import { PackageJsonUtil } from './util.Json';
-import { TopologicalSort } from './util.TopologicalSort';
+import { PackageJsonUtil } from './u.Json';
+import { TopologicalSort } from './u.TopologicalSort';
 
 import type * as t from '../t';
 
