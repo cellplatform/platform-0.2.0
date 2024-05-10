@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'CmdHost',
+  displayName: 'CmdHost.Prefix',
 } as const;

@@ -14,6 +14,7 @@ export const Specs = {
   [`${ns}.ui.Doc.History.Commit`]: () => import('../ui/ui.History.Commit/-SPEC'),
   [`${ns}.ui.Nav.Paging`]: () => import('../ui/ui.Nav.Paging/-SPEC'),
   [`${ns}.ui.CmdHost`]: () => import('../ui/ui.CmdHost/-SPEC'),
+  [`${ns}.ui.CmdHost.Prefix`]: () => import('../ui/ui.CmdHost.Prefix/-SPEC'),
 } as t.SpecImports;
 
 export default Specs;
