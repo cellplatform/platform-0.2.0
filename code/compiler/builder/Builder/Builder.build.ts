@@ -33,13 +33,8 @@ export async function build(
     if (!tsBuildOutput.ok) return tsBuildOutput;
 
     // - ESM bundling.
-    try {
-      const viteBuildOutput = await Vite.build(dir, { silent });
-      console.log('viteBuildOutput', viteBuildOutput);
-      if (!viteBuildOutput.ok) return viteBuildOutput;
-    } catch (error) {
-      console.error('VITE BUILD ERROR:', error);
-    }
+    const viteBuildOutput = await Vite.build(dir, { silent });
+    if (!viteBuildOutput.ok) return viteBuildOutput;
 
     // Post build.
     await fs.remove(fs.join(dir, Paths.types.dist));

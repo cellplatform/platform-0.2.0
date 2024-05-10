@@ -56,6 +56,7 @@ for (const path of paths) {
     const error = res.ok ? undefined : `Failed to build (${res.errorCode})`;
     pushResult(path, timer.elapsed.msec, error);
   } catch (error: any) {
+    console.log('BUILD ERROR', error); // TEMP 🐷
     pushResult(path, timer.elapsed.msec, error.message);
   }
 }
