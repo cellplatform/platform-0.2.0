@@ -1,3 +1,3 @@
 export { FC } from './ui/FC/index';
-export { useClickInside, useClickOutside } from './use/use.Click';
-export { useMouse } from './use/use.Mouse';
+export { useClickInside, useClickOutside } from './ui.use/use.Click';
+export { useMouse } from './ui.use/use.Mouse';
