@@ -34,7 +34,7 @@ export type {
   LabelListDispatch,
   LabelListItemTarget,
   LabelListState,
-} from 'sys.ui.react.list/src/types';
+} from 'sys.ui.react.common.list/src/types';
 
 /**
  * @local

@@ -20,7 +20,7 @@ export {
   useMouse,
 } from 'sys.ui.react.common';
 
-export { LabelItem } from 'sys.ui.react.list';
+export { LabelItem } from 'sys.ui.react.common.list';
 export { Video } from 'sys.ui.react.media';
 
 /**

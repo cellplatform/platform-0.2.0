@@ -19,7 +19,7 @@ const {
   DevSpecs: ComonDev,
   SampleSpecs: CommonSample,
 } = await import('sys.ui.react.common');
-const { Specs: List } = await import('sys.ui.react.list');
+const { Specs: List } = await import('sys.ui.react.common.list');
 
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');

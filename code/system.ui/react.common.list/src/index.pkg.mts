@@ -10,10 +10,10 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react.list',
+  name: 'sys.ui.react.common.list',
   version: '0.0.0',
   dependencies: {
-    'react': '18.3.1',
+    react: '18.3.1',
     'react-dom': '18.3.1',
     'react-virtuoso': '4.7.10',
     'sys.data.json': '0.0.0',
