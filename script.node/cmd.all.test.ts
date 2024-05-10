@@ -1,4 +1,4 @@
-import { Builder, LogTable, R, Time, Util, fs, ora, pc, type t } from './common/index.mjs';
+import { Builder, LogTable, R, Time, Util, fs, ora, pc, type t } from './common';
 
 type Milliseconds = number;
 

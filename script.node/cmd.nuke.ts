@@ -1,4 +1,4 @@
-import { Builder, fs, pc, rimraf, Util } from './common/index.mjs';
+import { Builder, fs, pc, rimraf, Util } from './common';
 
 async function remove(path: string) {
   path = fs.resolve(path);

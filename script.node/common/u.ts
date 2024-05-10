@@ -1,4 +1,4 @@
-import { pc, fs, glob, filesize } from './libs.mjs';
+import { pc, fs, glob, filesize } from './libs';
 
 export const Util = {
   async loadPackageJson() {
@@ -60,4 +60,4 @@ export const Util = {
       await fs.rename(from, to);
     }
   },
-};
+} as const;
