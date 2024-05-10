@@ -1,2 +1,2 @@
-export { WorkerBus } from 'sys.net';
+export { WorkerBus } from 'sys.worker';
 export { Time, rx, slug } from 'sys.util';

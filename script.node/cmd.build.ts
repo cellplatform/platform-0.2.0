@@ -1,4 +1,4 @@
-import { Builder } from './common/index.mjs';
+import { Builder } from './common';
 
 const dir = process.cwd();
 Builder.build(dir, { syncDeps: true });

@@ -17,7 +17,7 @@
     "sys.util": "0.0.0",
     "sys.data.json": "0.0.0",
     "sys.ui.react.common": "0.0.0",
-    "sys.ui.react.list": "0.0.0"
+    "sys.ui.react.common.list": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

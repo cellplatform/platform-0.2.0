@@ -24,7 +24,7 @@ export const Pkg: ModuleDef = {
     'sys.data.json': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.list': '0.0.0',
+    'sys.ui.react.common.list': '0.0.0',
     'uuid': '9.0.1',
   },
   toString() {

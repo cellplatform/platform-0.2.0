@@ -1,4 +1,4 @@
-import { WorkerBus } from 'sys.net';
+import { WorkerBus } from 'sys.worker';
 import { rx } from 'sys.util';
 
 import type { WorkerGlobal } from 'sys.types/src/types';

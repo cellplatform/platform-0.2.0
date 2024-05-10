@@ -1,0 +1,48 @@
+{
+  "name": "sys.ui.react.monaco",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist && serve",
+    "test": "tsx ../../../script.node/cmd.test.ts",
+    "build": "tsx ../../../script.node/cmd.build.ts",
+    "clean": "tsx ../../../script.node/cmd.clean.ts",
+    "tmp": "tsx   ./script.node/tmp.mts"
+  },
+  "dependencies": {
+    "@automerge/automerge": "2.2.2",
+    "@automerge/automerge-repo": "1.1.12",
+    "@monaco-editor/react": "4.6.0",
+    "diff": "5.2.0",
+    "ext.lib.automerge": "0.0.0",
+    "monaco-editor": "0.48.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sys.text": "0.0.0",
+    "sys.ui.react.common": "0.0.0",
+    "sys.ui.react.util": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0",
+    "sys.data.indexeddb": "0.0.0",
+    "sys.ui.react.dev": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
+  }
+}

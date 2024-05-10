@@ -1,4 +1,4 @@
-import { Count, fs } from './common/index.mjs';
+import { Count, fs } from './common';
 
 const base = fs.resolve('.');
 const system = await Count.modules(fs.join(base, 'code/system'));

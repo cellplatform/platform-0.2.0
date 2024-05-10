@@ -1,0 +1,25 @@
+{
+  "name": "sys.worker",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "test": "tsx ../../../script.node/cmd.test.ts",
+    "build": "tsx ../../../script.node/cmd.build.ts",
+    "clean": "tsx ../../../script.node/cmd.clean.ts"
+  },
+  "dependencies": {
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js"
+  }
+}

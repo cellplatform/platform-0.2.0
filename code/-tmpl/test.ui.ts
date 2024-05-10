@@ -1,1 +1,1 @@
-export * from '../system.ui/react.common/src/test.ui';
+export * from '../sys.ui/react.common/src/test.ui';
