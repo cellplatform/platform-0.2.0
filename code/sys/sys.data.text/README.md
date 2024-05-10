@@ -1,4 +1,4 @@
-# sys.text
+# sys.data.text
 
 Text processing library.
 
@@ -6,7 +6,7 @@ Text processing library.
 
 
 ```ts
-import { Text } from 'sys.text'
+import { Text } from 'sys.data.text'
 
 
 /**

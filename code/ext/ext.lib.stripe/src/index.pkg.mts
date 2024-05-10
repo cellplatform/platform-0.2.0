@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'sys.ui.react.common': '0.0.0',
-    'sys.text': '0.0.0',
+    'sys.data.text': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {

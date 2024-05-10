@@ -58,7 +58,7 @@ export type {
   TestSuiteRunResponse,
   TestSuiteRunStats,
 } from 'sys.test.spec/src/types';
-export type { TextCharDiff } from 'sys.text/src/types';
+export type { TextCharDiff } from 'sys.data.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 
 /**

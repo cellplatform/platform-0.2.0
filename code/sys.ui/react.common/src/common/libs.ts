@@ -11,7 +11,7 @@ export { Observable, Subject } from 'rxjs';
  * @system
  */
 export { Patch, PatchState } from 'sys.data.json';
-export { Diff, Fuzzy, Text } from 'sys.text';
+export { Diff, Fuzzy, Text } from 'sys.data.text';
 export {
   Delete,
   Filesize,

@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.text',
+  name: 'sys.data.text',
   version: '0.0.0',
   dependencies: {
     'approx-string-match': '2.0.0',

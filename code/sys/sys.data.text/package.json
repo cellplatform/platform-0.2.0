@@ -1,5 +1,5 @@
 {
-  "name": "sys.text",
+  "name": "sys.data.text",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,

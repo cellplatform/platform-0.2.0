@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'react-inspector': '6.0.2',
     'sys.util': '0.0.0',
-    'sys.text': '0.0.0',
+    'sys.data.text': '0.0.0',
     'sys.ui.react.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
     'sys.test.spec': '0.0.0',

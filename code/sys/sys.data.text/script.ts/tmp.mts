@@ -1,4 +1,4 @@
-import { Markdown } from 'sys.text';
+import { Markdown } from 'sys.data.text';
 
 const md = `# Hello`;
 const html = await Markdown.toHtml(md);
