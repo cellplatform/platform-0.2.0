@@ -1,1 +1,1 @@
-export * from '../code/deno/u.ts';
+export * from '../code/deno/common/u.ts';
