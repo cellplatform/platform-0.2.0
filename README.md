@@ -11,7 +11,7 @@ Monorepo comprising the core set of shared `/sys` system modules that flexibly c
 
 - [compilation](/code/compiler/) toolchain (W3C standards)
 - modules: [system](/code/sys/) 
-- modules: [system.ui](/code/system.ui/) 
+- modules: [system.ui](/code/sys.ui/) 
 - modules: [ext.lib](/code/ext/) 
 
 (built on, and commited to, [Web Standards](https://wintercg.org/))
@@ -226,7 +226,7 @@ In the arena of remote code-module execution on either user-controlled machines,
 
 **UI Framework Agnostic:** In the arena of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI modules (`system.ui`) are partitioned clearly as distinct to the `pure functional` "logic only" libraries (`system`).  This is because UI invariably tends towards a much higher volatility in technical architecutre over time, and is generally swapped out more frequently over the software lifecycle. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone. And down at the straight forward engineering level, much hidden complexity is often lurking in and around UI code.
 
-Organizing for all this is expressed within the distinct folders `/sys/` and `/system.ui/` in the code root. The purpose of the `system.ui`'s child-folder structure is to isolate and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
+Organizing for all this is expressed within the distinct folders `/sys/` and `/sys.ui/` in the code root. The purpose of the `system.ui`'s child-folder structure is to isolate and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
 
 
 ```

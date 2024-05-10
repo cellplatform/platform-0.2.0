@@ -5,8 +5,7 @@ coupling with any particular UI library/framework, which is spelled out at the r
 each modules folder name, eg:
 
 ```
-   /system.ui/
-             /react.*
-             /(etc).*
-
+   /sys.ui/
+          /react.*
+          /(etc).*
 ```
