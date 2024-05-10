@@ -23,6 +23,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.automerge.webrtc': '0.0.0',
     'ext.lib.deno': '0.0.0',
     'ext.lib.monaco': '0.0.0',
+    'ext.lib.monaco.crdt': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
     'ext.lib.privy': '0.0.0',
     'ext.lib.stripe': '0.0.0',
@@ -37,7 +38,6 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media': '0.0.0',
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
-    'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {
