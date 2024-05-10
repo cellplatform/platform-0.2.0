@@ -1,5 +1,5 @@
-import { describe, it, expect, t } from '../test';
 import { Diff } from '.';
+import { describe, expect, it } from '../test';
 
 describe('Diff', () => {
   it('no change', () => {

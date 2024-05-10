@@ -1,1 +1,1 @@
-export * from './Markdown.mjs';
+export * from './Markdown';

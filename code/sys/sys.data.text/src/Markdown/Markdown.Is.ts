@@ -1,7 +1,7 @@
-import { is as node } from 'unist-util-is';
+import type { t } from '../common';
 
-import { type t } from '../common';
-import { MarkdownFind as Find } from './Markdown.Find.mjs';
+import { is as node } from 'unist-util-is';
+import { MarkdownFind as Find } from './Markdown.Find';
 
 /**
  * Flags for looking at markdown.

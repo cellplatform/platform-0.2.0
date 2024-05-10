@@ -1,2 +1,2 @@
-export { Text } from './Text.mjs';
-export { Is } from './Text.Is.mjs';
+export { Text } from './Text';
+export { Is } from './Text.Is';

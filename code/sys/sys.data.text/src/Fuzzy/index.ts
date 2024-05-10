@@ -1,1 +1,1 @@
-export * from './Fuzzy.mjs';
+export * from './Fuzzy';

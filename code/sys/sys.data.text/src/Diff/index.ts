@@ -1,1 +1,1 @@
-export * from './Diff.mjs';
+export * from './Diff';

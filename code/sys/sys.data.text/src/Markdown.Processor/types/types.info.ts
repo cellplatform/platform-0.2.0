@@ -1,4 +1,4 @@
-import { type t } from './common.mjs';
+import type { t } from './common';
 
 /**
  * Derived information about the structure of some markdown

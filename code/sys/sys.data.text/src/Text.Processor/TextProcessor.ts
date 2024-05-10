@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import type { t } from '../common';
 import { MarkdownProcessor as markdown } from '../Markdown.Processor';
 
 /**

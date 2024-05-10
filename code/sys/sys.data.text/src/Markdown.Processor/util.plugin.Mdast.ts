@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import { CONTINUATION, isContinuation, t, Is } from './common.mjs';
+import { CONTINUATION, isContinuation, t, Is } from './common';
 
 /**
  * Tools for manipulating an MARKDOWN (MD-AST) tree.

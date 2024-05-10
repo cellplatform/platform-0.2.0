@@ -1,4 +1,4 @@
-export type * from './types.code.mjs';
-export type * from './types.info.mjs';
-export type * from './types.mutate.mjs';
-export type * from './types.process.mjs';
+export type * from './types.code';
+export type * from './types.info';
+export type * from './types.mutate';
+export type * from './types.process';

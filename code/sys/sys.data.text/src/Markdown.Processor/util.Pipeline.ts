@@ -7,11 +7,11 @@ import remarkToRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 
-import { type t } from './common.mjs';
-import { CodeBlock } from './util.plugin.CodeBlock.mjs';
-import { Hast } from './util.plugin.Hast.mjs';
-import { Mdast } from './util.plugin.Mdast.mjs';
-import { Sanatize } from './util.Sanitize.mjs';
+import { type t } from './common';
+import { CodeBlock } from './util.plugin.CodeBlock';
+import { Hast } from './util.plugin.Hast';
+import { Mdast } from './util.plugin.Mdast';
+import { Sanatize } from './util.Sanitize';
 
 export const Pipeline = {
   /**
