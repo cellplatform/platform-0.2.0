@@ -54,6 +54,7 @@ for (const path of paths) {
     console.log(`💦 ${Util.formatPath(path)}`);
     const res = await Builder.build(path, { exitOnError: false, silent: false });
     const error = res.ok ? undefined : `Failed to build (${res.errorCode})`;
+    console.log('DONE', res);
     pushResult(path, timer.elapsed.msec, error);
   } catch (error: any) {
     console.log('BUILD ERROR', error); // TEMP 🐷
