@@ -1,8 +1,8 @@
-import { DEFAULTS, Prefix } from '.';
+import { DEFAULTS, CmdBar } from '.';
 import { css, Color, Dev, Pkg } from '../../test.ui';
 import { type t } from './common';
 
-type P = t.RootProps;
+type P = t.CmdBarProps;
 type T = { props: P; debug: {} };
 const initial: T = { props: {}, debug: {} };
 
@@ -28,12 +28,12 @@ export default Dev.describe(name, (e) => {
 
     ctx.debug.width(330);
     ctx.subject
-      .size([null, 35])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
-        return <Prefix {...props} />;
+        return <CmdBar {...props} />;
       });
   });
 

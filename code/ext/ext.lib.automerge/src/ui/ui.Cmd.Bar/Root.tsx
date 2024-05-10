@@ -5,7 +5,7 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const Prefix = FC.decorate<t.RootProps, Fields>(
+export const CmdBar = FC.decorate<t.CmdBarProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

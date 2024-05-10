@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type RootProps = {
+export type CmdPrefixProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
