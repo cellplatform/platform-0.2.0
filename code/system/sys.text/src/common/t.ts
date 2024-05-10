@@ -8,11 +8,6 @@ export type Yaml = {
 };
 
 /**
- * @system
- */
-export type { Fs } from 'sys.fs/src/types';
-
-/**
  * @local
  */
 export * from '../types';

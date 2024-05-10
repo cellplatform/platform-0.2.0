@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useDragTarget } from '../../ui/useDragTarget';
-import { Color, COLORS, Hash, css, type t } from '../common';
-import { Filesize } from 'sys.fs';
+import { COLORS, Color, Filesize, Hash, css, type t } from '../common';
 
 export type DropProps = {
   style?: t.CssValue;

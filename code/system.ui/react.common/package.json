@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@types/qrcode": "1.5.5",
-    "sys.fs": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
     "sys.ui.react.dev": "0.0.0"

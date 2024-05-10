@@ -7,7 +7,6 @@ export const R = { clamp, mergeDeepRight, prop, sortBy } as const;
 /**
  * @system
  */
-export { Path } from 'sys.fs';
 export { Delete, Time, Value, cuid, rx, slug } from 'sys.util';
 
 /**
