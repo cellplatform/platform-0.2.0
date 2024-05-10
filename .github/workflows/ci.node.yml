@@ -28,8 +28,6 @@ jobs:
           cache: 'yarn'
 
       - run: yarn install
-      - run: yarn nuke
-      - run: yarn install
       - run: yarn audit
       - run: yarn ls --topo
       - run: yarn build
