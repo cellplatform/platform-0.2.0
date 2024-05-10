@@ -1,5 +1,5 @@
 import type { Event } from 'sys.types/src/types';
-export * from './WorkerBus/types.mjs';
+export type * from './WorkerBus/t';
 
 type Id = string;
 

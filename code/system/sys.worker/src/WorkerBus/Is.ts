@@ -1,4 +1,4 @@
-import { rx, t } from '../common/index.mjs';
+import { rx, t } from '../common';
 
 /**
  * Boolean checks (flags).

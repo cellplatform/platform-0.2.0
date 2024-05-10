@@ -1,5 +1,5 @@
-import { rx, slug, t } from '../common/index.mjs';
-import { Is } from './Is.mjs';
+import { rx, slug, t } from '../common';
+import { Is } from './Is';
 
 const DEFAULTS = {
   MAIN: 'Main',

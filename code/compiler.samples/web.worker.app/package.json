@@ -12,7 +12,8 @@
     "tmp": "tsx   ./script.node/tmp.mts"
   },
   "dependencies": {
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "sys.worker": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

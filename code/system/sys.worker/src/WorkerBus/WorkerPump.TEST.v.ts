@@ -1,6 +1,6 @@
-import { rx, slug, t } from '../common/index.mjs';
-import { describe, expect, it, WorkerMemoryStub } from '../test/index.mjs';
-import { WorkerPump } from './index.mjs';
+import { rx, slug, t } from '../common';
+import { describe, expect, it, WorkerMemoryStub } from '../test';
+import { WorkerPump } from '.';
 
 describe('WorkerPump', () => {
   it('fires between [worker] and [main]', () => {

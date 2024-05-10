@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.net',
+  name: 'sys.worker',
   version: '0.0.0',
   dependencies: {
     'sys.util': '0.0.0',
