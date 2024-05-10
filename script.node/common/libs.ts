@@ -18,8 +18,8 @@ export { execa, filesize, glob, minimist, ora, pc, rimraf, semver };
 /**
  * @system
  */
-export { Sort } from '../../code/system/sys.util/src/Sort/Sort';
-export { Time } from '../../code/system/sys.util/src/Time';
+export { Sort } from '../../code/sys/sys.util/src/Sort/Sort';
+export { Time } from '../../code/sys/sys.util/src/Time';
 
 /**
  * @local
