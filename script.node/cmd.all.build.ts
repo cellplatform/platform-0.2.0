@@ -12,20 +12,6 @@ const filter = (path: string) => {
   if (path.includes('code/spikes/dev.000')) return false;
   if (path.includes('code/spikes/slc.000')) return false;
 
-  const tmp = [
-    'code/sys/sys.types',
-    'code/sys/sys.test',
-    'code/sys/sys.util',
-    'code/sys.ui/react.util',
-    'code/sys/sys.data.json',
-    'code/sys/sys.data.text',
-  ];
-
-  for (const item of tmp) {
-    if (path.includes(item)) return true; // TEMP 🐷
-  }
-  return false; // TEMP 🐷
-
   if (path.includes('code/compiler.samples/')) return false;
   if (path.includes('code/spikes/')) return false;
   if (path.includes('code/-tmpl/')) return false;
@@ -54,10 +40,8 @@ for (const path of paths) {
     console.log(`💦 ${Util.formatPath(path)}`);
     const res = await Builder.build(path, { exitOnError: false, silent: false });
     const error = res.ok ? undefined : `Failed to build (${res.errorCode})`;
-    console.log('DONE', res);
     pushResult(path, timer.elapsed.msec, error);
   } catch (error: any) {
-    console.log('BUILD ERROR', error); // TEMP 🐷
     pushResult(path, timer.elapsed.msec, error.message);
   }
 }
