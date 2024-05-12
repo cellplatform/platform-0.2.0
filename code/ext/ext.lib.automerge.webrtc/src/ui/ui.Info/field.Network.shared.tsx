@@ -1,4 +1,15 @@
-import { Button, Doc, Hash, Icons, ObjectPath, ObjectView, css, type t } from './common';
+import {
+  Color,
+  COLORS,
+  Button,
+  Doc,
+  Hash,
+  Icons,
+  ObjectPath,
+  ObjectView,
+  css,
+  type t,
+} from './common';
 
 /**
  * Shared network state (transient document).
@@ -23,7 +34,7 @@ export function shared(
     res.push({
       label: shared.label ?? 'Shared State',
       value: {
-        data: wrangle.displayValue(shared, sharedDoc?.uri, theme),
+        data: wrangle.displayValue(shared, sharedDoc?.uri, theme, showObject),
         opacity: doc ? 1 : 0.3,
       },
       divider: !obj,
@@ -38,17 +49,22 @@ export function shared(
  * Helpers
  */
 const wrangle = {
-  displayValue(shared: t.InfoDataShared, uri?: string, theme?: t.CommonTheme) {
+  displayValue(
+    shared: t.InfoDataShared,
+    uri?: string,
+    theme?: t.CommonTheme,
+    showObject?: boolean,
+  ) {
     if (!uri) return '(not connected)';
     const docid = Doc.Uri.id(uri);
     const doc = Hash.shorten(docid, [4, 4]);
-
     const parts: JSX.Element[] = [];
 
     const text = `crdt:${doc}`;
     parts.push(<>{text}</>);
 
-    const elIcon = <Icons.Object size={14} />;
+    const color = showObject ? COLORS.BLUE : Color.theme(theme).color;
+    const elIcon = <Icons.Object size={14} color={color} />;
     const onIconClick = shared?.onIconClick;
     if (!onIconClick) parts.push(elIcon);
     else

@@ -61,7 +61,8 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
       </div>
     );
 
-    res.push({ label, value });
+    const divider = !fields.includes('Doc.Object');
+    res.push({ label, value, divider });
   }
 
   /**
@@ -106,7 +107,7 @@ const wrangle = {
             data={current}
             fontSize={11}
             theme={theme}
-            style={{ marginLeft: 8, marginTop: hasLabel ? 2 : 5, marginBottom: 4 }}
+            style={{ marginLeft: 10, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
               paths: wrangle.expandPaths(data),
