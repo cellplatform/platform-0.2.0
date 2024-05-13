@@ -90,12 +90,12 @@ describe('color', () => {
       expect(res1.name).to.eql('Light');
       expect(res1.is.light).to.eql(true);
       expect(res1.is.dark).to.eql(false);
-      expect(res1.color).to.eql(Color.DARK);
-      expect(res1.background).to.eql(Color.WHITE);
-      expect(res2.color).to.eql(Color.DARK);
-      expect(res2.background).to.eql(Color.WHITE);
-      expect(res3.color).to.eql('red');
-      expect(res3.background).to.eql('salmon');
+      expect(res1.fg).to.eql(Color.DARK);
+      expect(res1.bg).to.eql(Color.WHITE);
+      expect(res2.fg).to.eql(Color.DARK);
+      expect(res2.bg).to.eql(Color.WHITE);
+      expect(res3.fg).to.eql('red');
+      expect(res3.bg).to.eql('salmon');
     });
 
     it('name: Dark', () => {
@@ -104,23 +104,35 @@ describe('color', () => {
       expect(res1.name).to.eql('Dark');
       expect(res1.is.light).to.eql(false);
       expect(res1.is.dark).to.eql(true);
-      expect(res1.color).to.eql(Color.WHITE);
-      expect(res2.color).to.eql('red');
-      expect(res1.background).to.eql(Color.DARK);
-      expect(res2.background).to.eql(Color.DARK);
+      expect(res1.fg).to.eql(Color.WHITE);
+      expect(res2.fg).to.eql('red');
+      expect(res1.bg).to.eql(Color.DARK);
+      expect(res2.bg).to.eql(Color.DARK);
     });
 
-    it('alpha', () => {
+    it('alpha.fg (foreground)', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
 
-      const res1 = light.alpha();
-      const res2 = light.alpha(0.5);
-      const res3 = dark.alpha(0.3);
+      const res1 = light.alpha.fg();
+      const res2 = light.alpha.fg(0.5);
+      const res3 = dark.alpha.fg(0.3);
 
       expect(res1).to.eql('rgb(41, 48, 66)');
       expect(res2).to.eql('rgba(41, 48, 66, 0.5)');
       expect(res3).to.eql('rgba(255, 255, 255, 0.3)');
+    });
+
+    it('alpha.bg (background)', () => {
+      const light = Color.theme();
+      const dark = Color.theme('Dark');
+
+      const res1 = light.alpha.bg();
+      const res2 = light.alpha.bg(0.5);
+      const res3 = dark.alpha.bg(0.3);
+
+      expect(res1).to.eql('rgb(255, 255, 255)');
+      expect(res2).to.eql('rgba(255, 255, 255, 0.5)');
     });
   });
 });

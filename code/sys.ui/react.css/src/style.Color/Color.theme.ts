@@ -9,14 +9,17 @@ type Color = string | null;
  * A theme helper object.
  */
 export function theme(name: t.CommonTheme = DEFAULT, defaultLight?: Color, defaultDark?: Color) {
-  const color = wrangle.color(name, defaultLight, defaultDark);
-  const background = wrangle.color(wrangle.opposite(name), defaultLight, defaultDark);
+  const fg = wrangle.color(name, defaultLight, defaultDark);
+  const bg = wrangle.color(wrangle.opposite(name), defaultLight, defaultDark);
   return {
     name,
-    color,
-    background,
+    fg,
+    bg,
     is: { light: name === 'Light', dark: name === 'Dark' },
-    alpha: (percent: t.Percent = 1) => alpha(color, percent),
+    alpha: {
+      fg: (percent: t.Percent = 1) => alpha(fg, percent),
+      bg: (percent: t.Percent = 1) => alpha(bg, percent),
+    },
   } as const;
 }
 
