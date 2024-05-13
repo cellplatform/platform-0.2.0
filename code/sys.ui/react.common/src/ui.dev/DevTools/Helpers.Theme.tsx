@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, type t, ObjectPath } from '../common';
+import { COLORS, Color, DevIcons, ObjectPath, type t } from '../common';
 import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
@@ -34,8 +34,8 @@ export const Theme = {
     if (!ctx) throw new Error(`Dev {ctx} not retrieved`);
 
     const { host, subject } = ctx;
-    if (is.light) host.backgroundColor(null).tracelineColor(null);
-    if (is.dark) host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
+    if (is.light) host.color(null).backgroundColor(null).tracelineColor(null);
+    if (is.dark) host.color(COLORS.WHITE).backgroundColor(COLORS.DARK).tracelineColor(0.08);
 
     if (!!subjectLight || !!subjectDark) {
       if (!!subjectLight) subject.backgroundColor(is.light ? subjectLight : 0);
