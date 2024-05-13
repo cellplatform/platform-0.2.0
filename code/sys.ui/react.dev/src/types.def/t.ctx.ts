@@ -63,7 +63,8 @@ export type DevCtxObject = {
  */
 export type DevCtxSubject = {
   display(value: DevPropDisplay): DevCtxSubject;
-  backgroundColor(value?: Color): DevCtxSubject;
+  color(value?: Color | null): DevCtxSubject;
+  backgroundColor(value?: Color | null): DevCtxSubject;
   size(value: [NumberOrNil, NumberOrNil]): DevCtxSubject;
   size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxSubject;
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxSubject;
@@ -75,6 +76,7 @@ export type DevCtxSubject = {
 export type DevCtxHost<S extends O = O> = {
   readonly header: DevCtxEdge<S>;
   readonly footer: DevCtxEdge<S>;
+  color(value: Color | null): DevCtxHost<S>;
   backgroundColor(value: Color | null): DevCtxHost<S>;
   backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost<S>;
   tracelineColor(value: Color | null): DevCtxHost<S>;

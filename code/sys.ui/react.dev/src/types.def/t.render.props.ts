@@ -39,6 +39,7 @@ export type DevRenderPropsSubject = {
   size?: DevRenderSize;
   display?: t.DevPropDisplay;
   backgroundColor?: Color;
+  color?: Color;
 };
 
 /**
@@ -46,6 +47,7 @@ export type DevRenderPropsSubject = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
+  color?: Color;
   backgroundImage?: DevBackgroundImage;
   tracelineColor?: Color;
   header: DevRenderPropsEdge;

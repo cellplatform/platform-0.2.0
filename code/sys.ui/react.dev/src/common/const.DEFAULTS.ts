@@ -16,6 +16,7 @@ export const DEFAULTS = {
   get props(): t.DevRenderProps {
     return {
       host: {
+        color: COLORS.DARK,
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
         tracelineColor: Color.alpha(COLORS.DARK, 0.05),
         backgroundImage: { url: '', size: 'cover', margin: [0, 0, 0, 0] },

@@ -33,25 +33,17 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     host?.backgroundColor === undefined
       ? Color.format(DEFAULT.backgroundColor)
       : Color.format(host.backgroundColor);
+  const color =
+    host?.color === undefined
+      ? //
+        Color.format(DEFAULT.color)
+      : Color.format(host.color);
+
   const styles = {
-    base: css({
-      position: 'relative',
-      overflow: 'hidden',
-      color: COLORS.DARK,
-      backgroundColor,
-    }),
-    body: css({
-      Absolute: 0,
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr auto',
-    }),
-    main: css({
-      position: 'relative',
-      display: 'grid',
-    }),
-    empty: {
-      base: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),
-    },
+    base: css({ position: 'relative', overflow: 'hidden', backgroundColor, color }),
+    body: css({ Absolute: 0, display: 'grid', gridTemplateRows: 'auto 1fr auto' }),
+    main: css({ position: 'relative', display: 'grid' }),
+    empty: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),
   };
 
   const elBackground = renderProps && <HostBackground renderProps={renderProps} />;
@@ -84,7 +76,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   );
 
   const elEmpty = !renderProps && (
-    <div {...styles.empty.base}>
+    <div {...styles.empty}>
       <BarLoader />
     </div>
   );

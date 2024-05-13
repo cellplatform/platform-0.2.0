@@ -1,6 +1,9 @@
 import { Context } from '.';
 import { DEFAULTS, Id, TestSample, describe, expect, it, type t } from '../test';
 
+const HOST = DEFAULTS.props.host;
+const SUBJECT = DEFAULTS.props.subject;
+
 export function expectRendererId(value?: string) {
   expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);
 }
@@ -93,6 +96,13 @@ describe('Context', () => {
       expect(info3.render.props?.subject.backgroundColor).to.eql(-0.3);
       expect(context.pending).to.eql(false);
 
+      ctx.subject.backgroundColor(null).color(null);
+      await context.flush();
+
+      const info4 = await events.info.get();
+      expect(info4.render.props?.subject.backgroundColor).to.eql(SUBJECT.backgroundColor);
+      expect(info4.render.props?.subject.color).to.eql(SUBJECT.color);
+
       dispose();
     });
 
@@ -179,14 +189,13 @@ describe('Context', () => {
   });
 
   describe('props.host', () => {
-    const HOST = DEFAULTS.props.host;
-
-    it('backgroundColor | tracelineColor', async () => {
+    it('color | backgroundColor | tracelineColor', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const getHost = async () => (await events.info.get()).render?.props?.host!;
 
+      ctx.host.color(-1);
       ctx.host.backgroundColor(-0.123);
       ctx.host.tracelineColor(-0.456);
       expect(context.pending).to.eql(true);
@@ -194,15 +203,18 @@ describe('Context', () => {
       expect(context.pending).to.eql(false);
 
       const info1 = await getHost();
+      expect(info1.color).to.eql(-1);
       expect(info1.backgroundColor).to.eql(-0.123);
       expect(info1.tracelineColor).to.eql(-0.456);
 
+      ctx.host.color(null);
       ctx.host.backgroundColor(null);
       ctx.host.tracelineColor(null);
       await context.flush();
 
       const info2 = await getHost();
       expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
+      expect(info2.color).to.eql(HOST.color);
       expect(info2.tracelineColor).to.eql(HOST.tracelineColor);
 
       dispose();

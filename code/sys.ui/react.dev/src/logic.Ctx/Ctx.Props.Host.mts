@@ -1,6 +1,5 @@
-import { DEFAULTS, Id, Margin, type t } from './common';
 import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
-
+import { DEFAULTS, Id, Margin, type t } from './common';
 import type { PropArgs } from './common.types';
 
 const HOST = DEFAULTS.props.host;
@@ -10,6 +9,12 @@ export function CtxPropsHost(props: PropArgs) {
     backgroundColor(value) {
       if (value === null) value = HOST.backgroundColor!;
       props.current().host.backgroundColor = value;
+      props.changed();
+      return api;
+    },
+    color(value) {
+      if (value === null) value = HOST.color!;
+      props.current().host.color = value;
       props.changed();
       return api;
     },

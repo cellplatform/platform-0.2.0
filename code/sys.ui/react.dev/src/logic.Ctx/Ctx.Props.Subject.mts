@@ -1,6 +1,7 @@
-import { Id, Is, Margin, type t } from './common';
-
+import { DEFAULTS, Id, Is, Margin, type t } from './common';
 import type { PropArgs } from './common.types';
+
+const SUBJECT = DEFAULTS.props.subject;
 
 export function CtxPropsSubject(props: PropArgs) {
   const api: t.DevCtxSubject = {
@@ -52,7 +53,15 @@ export function CtxPropsSubject(props: PropArgs) {
     },
 
     backgroundColor(value) {
+      if (value === null) value = SUBJECT.backgroundColor!;
       props.current().subject.backgroundColor = value;
+      props.changed();
+      return api;
+    },
+
+    color(value) {
+      if (value === null) value = SUBJECT.color!;
+      props.current().subject.color = value;
       props.changed();
       return api;
     },

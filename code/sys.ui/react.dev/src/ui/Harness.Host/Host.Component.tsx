@@ -33,6 +33,7 @@ export const HostComponent: React.FC<HostComponentProps> = (props) => {
       display: component.display,
       width: size.width,
       height: size.height,
+      color: Color.format(component.color),
       backgroundColor: Color.format(component.backgroundColor),
     }),
   };

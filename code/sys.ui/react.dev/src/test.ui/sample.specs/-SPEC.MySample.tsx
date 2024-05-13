@@ -153,15 +153,17 @@ export default Spec.describe('MySample', (e) => {
     debug.row(<div>Host</div>);
     dev
       .button((btn) =>
-        btn
-          .label('theme: light')
-          .onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
+        btn.label('theme: light').onClick((e) => {
+          ctx.host.color(null).backgroundColor(null).tracelineColor(null);
+          // ctx.subject.color(COLORS.DARK);
+        }),
       )
 
       .button((btn) =>
-        btn
-          .label('theme: dark')
-          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1)),
+        btn.label('theme: dark').onClick((e) => {
+          ctx.host.color(COLORS.WHITE).backgroundColor(COLORS.DARK).tracelineColor(0.1);
+          // ctx.subject.color(COLORS.WHITE);
+        }),
       )
       .button((btn) =>
         btn.label('background image: "url"').onClick((e) => {
