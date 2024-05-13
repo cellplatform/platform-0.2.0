@@ -25,7 +25,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({ color, display: 'grid', rowGap: '30px', userSelect: 'none' }),
     textbox: css({ width: 260 }),
@@ -78,7 +78,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({
       position: 'relative',

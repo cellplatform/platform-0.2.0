@@ -20,7 +20,7 @@ export const Hint: React.FC<HintProps> = (props) => {
   /**
    * [Render]
    */
-  const color = Color.theme(props.theme).color;
+  const color = Color.theme(props.theme).fg;
   const styles = {
     base: css({
       Absolute: 0,

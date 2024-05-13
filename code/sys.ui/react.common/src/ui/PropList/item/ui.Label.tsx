@@ -15,7 +15,7 @@ export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
       userSelect: 'none',
       position: 'relative',
       marginLeft: props.data.indent,
-      color: theme.alpha(0.4),
+      color: theme.alpha.fg(0.4),
       display: 'grid',
       alignContent: 'center',
     }),

@@ -2,8 +2,8 @@ import type { t } from '../common';
 import { DARK, WHITE } from './Color.const';
 import { alpha } from './Color.format';
 
-const DEFAULT: t.CommonTheme = 'Light';
 type Color = string | null;
+const DEFAULT: t.CommonTheme = 'Light';
 
 /**
  * A theme helper object.

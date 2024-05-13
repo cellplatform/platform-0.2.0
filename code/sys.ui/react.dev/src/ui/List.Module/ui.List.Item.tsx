@@ -70,7 +70,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
    * Render
    */
   const { WHITE, BLUE } = COLORS;
-  const color = Color.theme(props.theme).color;
+  const color = Color.theme(props.theme).fg;
   const styles = {
     base: css({
       paddingLeft: beyondBounds ? 0 : 20,

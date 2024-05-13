@@ -12,7 +12,7 @@ export function transfer(bytes: TBytes, isTransmitting?: boolean, theme?: t.Comm
     center: css({ Flex: 'x-center-center' }),
     iconRight: css({
       marginLeft: 5,
-      color: isTransmitting ? COLORS.BLUE : Color.theme(theme).color,
+      color: isTransmitting ? COLORS.BLUE : Color.theme(theme).fg,
       opacity: total > 0 || isTransmitting ? 1 : 0.3,
       transition: 'opacity 0.2s, color 0.2s',
     }),

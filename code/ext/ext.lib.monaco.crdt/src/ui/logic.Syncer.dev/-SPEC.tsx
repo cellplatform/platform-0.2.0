@@ -76,7 +76,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
-            document: { doc, object: { expand: { level: 3 } } },
+            document: { ref: doc, object: { expand: { level: 3 } } },
           }}
         />
       );

@@ -11,7 +11,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      color: theme.color,
+      color: theme.fg,
       display: 'grid',
       placeItems: 'center',
     }),

@@ -13,7 +13,7 @@ const focusActions: t.TextInputFocusProps['focusAction'][] = [
 ];
 
 const toStyles = (theme: t.CommonTheme): t.TextInputStyle => {
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   return {
     opacity: 1,
     color,

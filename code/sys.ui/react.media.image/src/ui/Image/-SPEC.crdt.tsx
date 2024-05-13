@@ -21,7 +21,7 @@ export const SampleCrdt = {
           fields={['Repo', 'Doc', 'Doc.URI']}
           data={{
             repo: { store, index },
-            document: { doc },
+            document: { ref: doc },
           }}
         />
       );

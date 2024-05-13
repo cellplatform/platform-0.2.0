@@ -76,13 +76,13 @@ const wrangle = {
     if (value.color !== undefined) return Color.format(value.color);
 
     const theme = Color.theme(props.theme);
-    if (typeof props.message === 'string') return theme.alpha(0.3);
+    if (typeof props.message === 'string') return theme.alpha.fg(0.3);
 
     const is = wrangle.flags(props);
     if (is.copyActive) return COLORS.BLUE;
     if (is.boolean) return COLORS.PURPLE;
 
-    return theme.color;
+    return theme.fg;
   },
 
   renderValue(props: SimpleValueProps) {

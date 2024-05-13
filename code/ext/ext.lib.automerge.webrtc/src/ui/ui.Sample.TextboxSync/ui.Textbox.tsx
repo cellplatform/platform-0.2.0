@@ -34,7 +34,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({
       color,

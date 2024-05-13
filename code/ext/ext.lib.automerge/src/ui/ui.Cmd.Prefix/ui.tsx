@@ -16,8 +16,8 @@ export const View: React.FC<t.CmdPrefixProps> = (props) => {
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      color: theme.color,
-      borderRight: `solid 1px ${theme.alpha(0.1)}`,
+      color: theme.fg,
+      borderRight: `solid 1px ${theme.alpha.fg(0.1)}`,
     }),
     grid: css({ display: 'grid', placeItems: 'center' }),
     size: {
@@ -28,7 +28,7 @@ export const View: React.FC<t.CmdPrefixProps> = (props) => {
 
   return (
     <div {...css(styles.base, styles.grid, styles.size, props.style)} onMouseDown={handleClick}>
-      <Icons.Object size={20} color={theme.color} />
+      <Icons.Object size={20} color={theme.fg} />
     </div>
   );
 };
