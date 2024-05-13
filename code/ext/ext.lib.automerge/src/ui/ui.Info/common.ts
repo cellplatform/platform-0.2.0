@@ -1,6 +1,9 @@
+import { Doc } from '../../crdt';
 import { type t } from '../common';
+
 export * from '../common';
 export { MonoHash } from '../ui.History.Grid';
+export { Doc };
 
 /**
  * Constants
@@ -28,17 +31,23 @@ const fields = {
   get default(): t.InfoField[] {
     return ['Module', 'Module.Verify'];
   },
-} as const;
+};
 
 const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
+};
+
+const uri: Required<t.InfoDataDocumentUri> = {
+  shorten: [4, 4],
+  prefix: 'crdt:automerge',
+  clipboard: (uri) => Doc.Uri.id(uri),
 };
 
 export const DEFAULTS = {
   stateful: false,
   visibleFilter,
   repo: { label: 'Store' },
-  doc: { head: { label: 'Head', hashLength: 6 } },
+  doc: { head: { label: 'Head', hashLength: 6 }, uri },
   history: {
     label: 'History',
     list: { page: 0, limit: 5, sort: 'desc' },

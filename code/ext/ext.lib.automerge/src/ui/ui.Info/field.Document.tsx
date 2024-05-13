@@ -1,5 +1,5 @@
-import { Doc } from '../../crdt';
-import { Button, COLORS, Hash, Icons, Is, ObjectView, css, type t } from './common';
+import { Button, COLORS, Icons, Is, ObjectView, css, type t } from './common';
+import { UriButton } from './ui.Button.Uri';
 
 type D = t.InfoDataDocument;
 
@@ -20,11 +20,16 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
     const parts: JSX.Element[] = [];
 
     if (uri) {
-      const id = Doc.Uri.id(uri);
-      const length = data.uri?.shorten ?? [4, 4];
-      const shortened = Hash.shorten(id, length);
-      const text = uri ? `crdt:automerge:${shortened}` : undefined;
-      parts.push(<>{text}</>);
+      const { shorten, prefix, clipboard } = data.uri ?? {};
+      parts.push(
+        <UriButton
+          theme={theme}
+          uri={uri}
+          shorten={shorten}
+          prefix={prefix}
+          clipboard={clipboard}
+        />,
+      );
     }
 
     if (doc) {

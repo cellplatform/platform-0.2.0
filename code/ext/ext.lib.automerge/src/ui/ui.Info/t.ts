@@ -35,10 +35,16 @@ export type InfoDataRepo = {
 export type InfoDataDocument = {
   label?: string;
   doc?: t.DocRef | t.UriString;
-  uri?: { shorten?: number | [number, number] };
+  uri?: InfoDataDocumentUri;
   object?: { name?: string; expand?: { level?: number; paths?: string[] } };
   head?: { label?: string; hashLength?: number };
   icon?: { onClick?(e: {}): void };
+};
+
+export type InfoDataDocumentUri = {
+  shorten?: number | [number, number];
+  prefix?: string | null;
+  clipboard?: (uri: t.UriString) => string;
 };
 
 export type InfoDataHistory = {

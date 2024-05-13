@@ -92,6 +92,10 @@ export default Dev.describe(name, async (e) => {
             doc: useUris ? doc?.uri : doc,
             object: { name: 'foobar', expand: { level: 2 } },
             icon: { onClick: (e) => console.info('⚡️ document.icon.onClick', e) },
+            uri: {
+              // prefix: 'foo:::',
+              // prefix: null,
+            },
           },
           history: {
             // label: 'Foo',
