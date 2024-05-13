@@ -30,7 +30,7 @@ export type InfoDataShared = {
   name?: string;
   lens?: t.ObjectPath;
   object?: InfoDataObject;
-  uri?: t.InfoDataDocumentUri;
+  uri?: t.InfoDataDocUri;
   onIconClick?: (e: {}) => void;
 };
 

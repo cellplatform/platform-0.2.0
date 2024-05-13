@@ -21,11 +21,11 @@ const fields = {
       'Doc.URI',
       'Doc.Object',
       'Doc.Head',
-      'History',
-      'History.Genesis',
-      'History.List',
-      'History.List.Detail',
-      'History.List.NavPaging',
+      'Doc.History',
+      'Doc.History.Genesis',
+      'Doc.History.List',
+      'Doc.History.List.Detail',
+      'Doc.History.List.NavPaging',
     ];
   },
   get default(): t.InfoField[] {
@@ -37,7 +37,7 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 
-const uri: Required<t.InfoDataDocumentUri> = {
+const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
   clipboard: (uri) => Doc.Uri.id(uri),

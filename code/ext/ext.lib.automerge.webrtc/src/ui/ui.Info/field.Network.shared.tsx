@@ -72,7 +72,7 @@ const wrangle = {
       />,
     );
 
-    const color = showObject ? COLORS.BLUE : Color.theme(theme).color;
+    const color = showObject ? COLORS.BLUE : Color.theme(theme).fg;
     const elIcon = <Icons.Object size={14} color={color} />;
     const onIconClick = shared?.onIconClick;
     if (!onIconClick) parts.push(elIcon);
@@ -124,8 +124,8 @@ const wrangle = {
     const lens = shared.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 
-    const formatBeforeRender = shared.object?.beforeRender;
-    if (formatBeforeRender) formatBeforeRender(output);
+    const mutate = shared.object?.beforeRender;
+    if (typeof mutate === 'function') mutate(output);
 
     const dotMeta = shared.object?.dotMeta ?? true;
     if (!dotMeta && output) delete output['.meta'];
