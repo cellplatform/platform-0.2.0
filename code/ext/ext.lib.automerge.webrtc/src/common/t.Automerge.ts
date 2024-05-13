@@ -31,7 +31,7 @@ export type {
   DocRefHandle,
   DocUri,
   DocWithMeta,
-  InfoDataDocumentUri,
+  InfoDataDocUri,
   Lens,
   LensEvents,
   NamespaceManager,
