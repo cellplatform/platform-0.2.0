@@ -190,7 +190,7 @@ export default Dev.describe(name, async (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => !!state.dataSharedArray;
         btn
-          .label((e) => `data.[shared] ← array`)
+          .label((e) => `data.shared ← [array]`)
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => (local.dataSharedArray = Dev.toggle(d, 'dataSharedArray'))),
