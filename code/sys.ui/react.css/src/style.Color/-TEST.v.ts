@@ -86,13 +86,16 @@ describe('color', () => {
     it('name: Light (default)', () => {
       const res1 = Color.theme();
       const res2 = Color.theme('Light');
-      const res3 = Color.theme('Light', 'red');
+      const res3 = Color.theme('Light', 'red', 'salmon');
       expect(res1.name).to.eql('Light');
       expect(res1.is.light).to.eql(true);
       expect(res1.is.dark).to.eql(false);
       expect(res1.color).to.eql(Color.DARK);
+      expect(res1.background).to.eql(Color.WHITE);
       expect(res2.color).to.eql(Color.DARK);
+      expect(res2.background).to.eql(Color.WHITE);
       expect(res3.color).to.eql('red');
+      expect(res3.background).to.eql('salmon');
     });
 
     it('name: Dark', () => {
@@ -103,6 +106,8 @@ describe('color', () => {
       expect(res1.is.dark).to.eql(true);
       expect(res1.color).to.eql(Color.WHITE);
       expect(res2.color).to.eql('red');
+      expect(res1.background).to.eql(Color.DARK);
+      expect(res2.background).to.eql(Color.DARK);
     });
 
     it('alpha', () => {
