@@ -1,7 +1,9 @@
 import {
-  Color,
-  COLORS,
+  AutomergeInfo,
   Button,
+  COLORS,
+  Color,
+  DEFAULTS,
   Doc,
   Hash,
   Icons,
@@ -32,12 +34,12 @@ export function shared(
     const showObject = fields.includes('Network.Shared.Json');
     const obj = showObject ? wrangle.jsonObject(shared, sharedDoc, theme) : undefined;
     res.push({
+      divider: !obj,
       label: shared.label ?? 'Shared State',
       value: {
         data: wrangle.displayValue(shared, sharedDoc?.uri, theme, showObject),
         opacity: doc ? 1 : 0.3,
       },
-      divider: !obj,
     });
     if (obj) res.push({ value: obj });
   });
@@ -57,11 +59,18 @@ const wrangle = {
   ) {
     if (!uri) return '(not connected)';
     const docid = Doc.Uri.id(uri);
-    const doc = Hash.shorten(docid, [4, 4]);
     const parts: JSX.Element[] = [];
 
-    const text = `crdt:${doc}`;
-    parts.push(<>{text}</>);
+    const { shorten, prefix, clipboard } = shared.uri ?? DEFAULTS.doc.uri;
+    parts.push(
+      <AutomergeInfo.UriButton
+        theme={theme}
+        uri={uri}
+        shorten={shorten}
+        prefix={prefix}
+        clipboard={clipboard}
+      />,
+    );
 
     const color = showObject ? COLORS.BLUE : Color.theme(theme).color;
     const elIcon = <Icons.Object size={14} color={color} />;
