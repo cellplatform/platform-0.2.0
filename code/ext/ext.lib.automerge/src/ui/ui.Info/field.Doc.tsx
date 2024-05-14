@@ -1,12 +1,20 @@
-import { Button, COLORS, Icons, Is, ObjectView, css, type t } from './common';
+import { Button, COLORS, Icons, Is, ObjectPath, ObjectView, css, type t } from './common';
+import { head } from './field.Doc.Head';
+import { history } from './field.Doc.History';
 import { UriButton } from './ui.Button.Uri';
 
-type D = t.InfoDataDocument;
+type D = t.InfoDataDoc;
 
-export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+export function document(data: D | D[] | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+  if (!data) return [];
+  const docs = Array.isArray(data) ? data : [data];
+  return docs.map((data) => render(data, fields, theme)).flat();
+}
+
+function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
   const res: t.PropListItem[] = [];
   if (!data) return res;
-  if (!Is.docRef(data.doc)) return res;
+  if (!Is.docRef(data.ref)) return res;
 
   const label = data.label ?? 'Document';
   const hasLabel = !!label.trim();
@@ -15,7 +23,7 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
    * Title
    */
   if (hasLabel) {
-    const doc = data.doc;
+    const doc = data.ref;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
     const parts: JSX.Element[] = [];
 
@@ -78,6 +86,16 @@ export function doc(data: D | undefined, fields: t.InfoField[], theme?: t.Common
     res.push({ value: elObject });
   }
 
+  /**
+   * The <Head> component.
+   */
+  if (fields.includes('Doc.Head')) res.push(...head(data, fields, theme));
+
+  /**
+   * The <History> component.
+   */
+  if (fields.includes('Doc.History')) res.push(...history(data, fields, theme));
+
   // Finish up.
   return res;
 }
@@ -102,14 +120,26 @@ const wrangle = {
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
-    const current = Is.docRef(data.doc) ? data.doc.current : undefined;
+    let output = Is.docRef(data.ref) ? data.ref.current : undefined;
+    const lens = data.object?.lens;
+    if (lens) output = ObjectPath.resolve(output, lens);
+
+    const mutate = data.object?.beforeRender;
+    if (typeof mutate === 'function') {
+      output = { ...output };
+      mutate(output);
+    }
+
+    let name = data.object?.name ?? '';
+    if (!name && lens) name = lens.join('.');
+    name = name;
 
     return (
       <div {...styles.base}>
         <div {...styles.inner}>
           <ObjectView
-            name={data?.object?.name}
-            data={current}
+            name={name || undefined}
+            data={output}
             fontSize={11}
             theme={theme}
             style={{ marginLeft: 10, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}

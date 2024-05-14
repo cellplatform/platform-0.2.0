@@ -1,6 +1,5 @@
 import { PropList, type t } from './common';
 import { Field } from './field';
-import { useRedrawOnChange } from './use.RedrawOnChange';
 import { useStateful } from './use.Stateful';
 
 /**
@@ -9,7 +8,6 @@ import { useStateful } from './use.Stateful';
 export const View: React.FC<t.InfoProps> = (props) => {
   const { theme } = props;
   const { fields, data } = useStateful(props);
-  useRedrawOnChange(data);
 
   const items = PropList.builder<t.InfoField>()
     .field('Visible', () => Field.visible(data.visible, theme))
@@ -17,9 +15,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Module.Verify', () => Field.moduleVerify(theme))
     .field('Repo', () => Field.repo(data.repo, theme))
     .field('Component', () => Field.component(data.component))
-    .field('Doc', () => Field.doc(data.document, fields, theme))
-    .field('Doc.Head', () => Field.head(data.document, fields, theme))
-    .field('History', () => Field.history(data.history, fields, theme))
+    .field('Doc', () => Field.document(data.document, fields, theme))
     .items(fields);
 
   return (

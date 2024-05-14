@@ -9,10 +9,10 @@ export { Pkg };
  */
 export { A, Data, Is, toObject } from './common';
 
+import { Sync } from './crdt.sync';
 import { Doc } from './crdt/Doc';
 import { Store } from './crdt/Store';
 import { WebStore } from './crdt/Store.Web';
-import { Sync } from './crdt.sync';
 
 export { Doc } from './crdt/Doc';
 export { Store } from './crdt/Store';
@@ -37,7 +37,7 @@ export { HistoryCommit } from './ui/ui.History.Commit';
 export { HistoryGrid } from './ui/ui.History.Grid';
 export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
-export { useDoc } from './ui/use';
+export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui/use';
 
 /**
  * Dev

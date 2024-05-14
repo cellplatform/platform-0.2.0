@@ -8,6 +8,7 @@ import { useData } from './use.Data';
  */
 export function useStateful(props: t.InfoProps) {
   const { stateful = DEFAULTS.stateful } = props;
+
   let data = useData(props.data);
   const rawFields = PropList.Wrangle.fields(props.fields);
   const rawVisible = data.visible?.value ?? true;
@@ -44,19 +45,26 @@ export function useStateful(props: t.InfoProps) {
    * Rebuild data object with stateful properties.
    */
   if (stateful && data.document) {
-    const onIconClick = data.document.icon?.onClick;
-    const document: t.InfoDataDocument = {
-      ...data.document,
-      icon: {
-        ...data.document.icon,
-        onClick(e) {
-          const next = PropList.Wrangle.toggleField(fields, 'Doc.Object');
-          setFields(next);
-          fire(next);
-          onIconClick?.(e); // Bubble to root handler.
+    const rebuild = (document: t.InfoDataDoc): t.InfoDataDoc => {
+      const onIconClick = document.icon?.onClick;
+      return {
+        ...document,
+        icon: {
+          ...document.icon,
+          onClick(e) {
+            const next = PropList.Wrangle.toggleField(fields, 'Doc.Object');
+            setFields(next);
+            fire(next);
+            onIconClick?.(e); // Bubble to root handler.
+          },
         },
-      },
+      };
     };
+
+    const document = Array.isArray(data.document)
+      ? data.document.map(rebuild)
+      : rebuild(data.document);
+
     data = { ...data, document };
   }
 

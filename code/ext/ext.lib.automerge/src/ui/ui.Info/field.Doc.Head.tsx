@@ -1,13 +1,13 @@
 import { Doc } from '../../crdt';
 import { DEFAULTS, Is, MonoHash, type t } from './common';
 
-type D = t.InfoDataDocument;
+type D = t.InfoDataDoc;
 
 export function head(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
-  if (!data || !Is.docRef(data.doc)) return;
-
   const res: t.PropListItem[] = [];
-  const doc = data.doc;
+  if (!data || !Is.docRef(data.ref)) return res;
+
+  const doc = data.ref;
   const heads = Doc.heads(doc);
 
   const title = data.head?.label ?? DEFAULTS.doc.head.label;
@@ -21,10 +21,7 @@ export function head(data: D | undefined, fields: t.InfoField[], theme?: t.Commo
     return <MonoHash hash={hash} theme={theme} length={hashLength} />;
   };
 
-  res.push({
-    label: title,
-    value: hashElement(heads[0]),
-  });
+  res.push({ label: title, value: hashElement(heads[0]) });
   heads.slice(1).forEach((hash) => res.push({ value: hashElement(hash) }));
 
   return res;

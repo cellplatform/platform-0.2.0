@@ -4,16 +4,16 @@ import { NavPaging } from '../ui.Nav.Paging';
 import { DEFAULTS, Is, type t } from './common';
 import { History } from './ui.History';
 
-type D = t.InfoDataHistory;
+type D = t.InfoDataDoc;
 
 export function history(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
   const res: t.PropListItem[] = [];
-  if (!data) return res;
-  if (!Is.docRef(data.doc)) return res;
+  const history = data?.history;
+  if (!data || !history) return res;
+  if (!Is.docRef(data.ref)) return res;
 
-  const doc = data.doc;
-
-  const showGenesis = fields.includes('History.Genesis');
+  const doc = data.ref;
+  const showGenesis = fields.includes('Doc.History.Genesis');
   const main: t.PropListItem = {
     label: data.label || DEFAULTS.history.label,
     value: <History doc={doc} showGenesis={showGenesis} theme={theme} />,
@@ -23,14 +23,14 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
   /**
    * History
    */
-  if (fields.includes('History.List')) {
-    const page = wrangle.page(data.doc, data.list);
+  if (fields.includes('Doc.History.List')) {
+    const page = wrangle.page(data.ref, history.list);
 
     /**
      * History List (Grid)
      */
-    const hashLength = data.item?.hashLength ?? DEFAULTS.history.item.hashLength;
-    const showNav = fields.includes('History.List.NavPaging');
+    const hashLength = history.item?.hashLength ?? DEFAULTS.history.item.hashLength;
+    const showNav = fields.includes('Doc.History.List.NavPaging');
     res.push({
       value: <HistoryGrid page={page} hashLength={hashLength} theme={theme} style={{ flex: 1 }} />,
       divider: !showNav,
@@ -51,7 +51,7 @@ export function history(data: D | undefined, fields: t.InfoField[], theme?: t.Co
  * Helpers
  */
 const wrangle = {
-  page(doc: t.DocRef, list: t.InfoDataHistory['list'] = {}) {
+  page(doc: t.DocRef, list: t.InfoDataDocHistory['list'] = {}) {
     const defaults = DEFAULTS.history.list;
     const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = list;
     return Doc.history(doc).page(page, limit, sort);

@@ -20,7 +20,7 @@ export type LayoutProps = {
 };
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { theme, repo, path } = props;
-  const { doc } = useDoc<TDoc>(repo?.store, props.docuri);
+  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
 
   /**
    * Render

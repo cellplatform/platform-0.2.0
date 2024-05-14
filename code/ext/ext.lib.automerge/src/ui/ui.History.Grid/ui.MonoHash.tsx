@@ -18,7 +18,7 @@ export const MonoHash: React.FC<MonoHashProps> = (props) => {
    */
   const handleClick = () => {
     navigator.clipboard.writeText(hash);
-    setMessage(<div {...styles.copied}>{'Copied'}</div>);
+    setMessage(<div {...styles.copied}>{'copied'}</div>);
     Time.delay(2000, () => setMessage(undefined));
   };
 
@@ -29,17 +29,15 @@ export const MonoHash: React.FC<MonoHashProps> = (props) => {
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(DEFAULTS.mono),
-    pound: css({ color, opacity: 0.4, marginRight: 3 }),
-    copied: css({
-      color: COLORS.GREEN,
-    }),
+    prefix: css({ color, opacity: 0.4, marginRight: 3 }),
+    copied: css({ color: COLORS.GREEN }),
   };
 
   return (
     <div {...css(styles.base, styles.mono, props.style)}>
       <Button theme={theme} onClick={handleClick} overlay={message}>
         <>
-          <span {...styles.pound}>{`#`}</span>
+          <span {...styles.prefix}>{`#`}</span>
           <span>{short}</span>
         </>
       </Button>

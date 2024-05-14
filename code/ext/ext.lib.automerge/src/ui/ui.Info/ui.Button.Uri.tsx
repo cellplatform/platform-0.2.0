@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, DEFAULTS, Doc, Hash, Time, type t } from './common';
 
-type D = t.InfoDataDocumentUri;
+type D = t.InfoDataDocUri;
 
 export type UriButtonProps = {
   uri?: t.UriString;
