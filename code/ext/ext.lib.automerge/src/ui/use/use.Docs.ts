@@ -27,12 +27,14 @@ export function useDocs<T extends O>(
   const is = {
     ok: errors.length === 0,
     fetching: fetching.length > 0,
-    ready: docs.length === uris.length,
+    ready: fetching.length === 0,
   } as const;
 
   /**
    * Lifecycle.
    */
+  useEffect(() => setErrors([]), [uris.join()]);
+
   useEffect(() => {
     const life = rx.lifecycle();
     setDocs((prev) => prev.filter((doc) => uris.includes(doc.uri)));
@@ -98,7 +100,7 @@ export function useDocs<T extends O>(
         .forEach((uri) => fetch(store, uri));
     }
     return life.dispose;
-  }, [!!store, uris.join(';')]);
+  }, [!!store, uris.join()]);
 
   /**
    * API
@@ -110,7 +112,6 @@ export function useDocs<T extends O>(
     refs: docs,
     fetching,
     errors,
-    // docs: Is.docRef(ref) ? ref : doc,
   } as const;
 }
 

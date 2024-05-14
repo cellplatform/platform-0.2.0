@@ -1,7 +1,7 @@
 import { Dev, DevReload, Pkg, TestDb, css, type t } from '../../test.ui';
 import { sampleCrdt } from '../ui.Info/-SPEC.crdt';
 import { RepoList } from '../ui.RepoList';
-import { SampleUseDocs, SampleUseDoc } from './-SPEC.useDocs.views';
+import { SampleUseDoc, SampleUseDocs } from './-SPEC.useDocs.views';
 
 type Hook = 'useDocs' | 'useDoc';
 type Scope = 'all' | 'one' | 'none' | 'error';
@@ -14,6 +14,7 @@ type T = {
 const initial: T = {};
 
 const LOAD_DELAY = 1500;
+const ERROR_URI = 'automerge:fail';
 
 /**
  * Spec
@@ -37,7 +38,7 @@ export default Dev.describe(name, async (e) => {
     if (scope === 'none') return [];
     const uris = index.doc.current.docs.map((item) => item.uri);
     const res = (scope === 'one' ? [uris[0]] : uris).filter(Boolean);
-    return scope === 'error' ? [...res, 'automerge:fail'] : res;
+    return scope === 'error' ? [...res, ERROR_URI] : res;
   };
 
   e.it('ui:init', async (e) => {
@@ -64,16 +65,16 @@ export default Dev.describe(name, async (e) => {
       .size([380, null])
       .display('grid')
       .render<T>((e) => {
-        const { reload, hook } = e.state;
+        const { reload, hook, scope } = e.state;
+        const refs = getUris(scope);
         if (reload) return <DevReload theme={theme} />;
 
         if (hook === 'useDocs') {
-          const refs = getUris(e.state.scope);
           return <SampleUseDocs theme={theme} store={db.store} refs={refs} />;
         }
 
         if (hook === 'useDoc') {
-          const ref = getUris(e.state.scope)[0];
+          const ref = scope === 'error' ? ERROR_URI : getUris(e.state.scope)[0];
           return <SampleUseDoc theme={theme} refs={ref} store={db.store} />;
         }
 

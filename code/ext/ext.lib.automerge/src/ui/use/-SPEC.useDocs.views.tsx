@@ -1,5 +1,5 @@
-import { useDocs, useDoc } from '.';
-import { Spinner, Color, ObjectView, css, type t } from './common';
+import { useDoc, useDocs } from '.';
+import { Color, ObjectView, Spinner, css, type t } from './common';
 
 /**
  * Sample: useDocs (plural)
