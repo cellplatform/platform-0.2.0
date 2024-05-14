@@ -12,6 +12,7 @@ type Init = {
   network?: boolean | t.NetworkAdapterInterface[];
   storage?: boolean | string | { name?: string };
   dispose$?: t.UntilObservable;
+  debug?: t.StoreDebug;
 };
 
 /**
@@ -34,11 +35,12 @@ export const WebStore = {
    * Initialize a new instance of a CRDT store/repo.
    */
   init(options: Init = {}) {
+    const { debug } = options;
     const network = Wrangle.network(options);
     const storage = Wrangle.storage(options);
     const repo = new Repo({ network, storage });
 
-    const base = Store.init({ repo, dispose$: options.dispose$ });
+    const base = Store.init({ repo, dispose$: options.dispose$, debug });
     const store: t.WebStore = {
       ...base,
       get disposed() {

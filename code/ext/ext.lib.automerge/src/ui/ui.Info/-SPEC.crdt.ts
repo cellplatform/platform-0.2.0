@@ -1,13 +1,14 @@
-import { TestDb, WebStore } from '../../test.ui';
+import { TestDb, WebStore, type t } from '../../test.ui';
 
 type O = Record<string, unknown>;
 
 /**
  * Sample spec CRDT state.
  */
-export async function sampleCrdt() {
+export async function sampleCrdt(options: { debug?: t.StoreDebug } = {}) {
+  const { debug } = options;
   const storage = TestDb.Spec.name;
-  const store = WebStore.init({ storage });
+  const store = WebStore.init({ storage, debug });
   const index = await WebStore.index(store);
 
   async function docAtIndex<T extends O>(i: number) {

@@ -2,7 +2,7 @@ import { Repo } from '@automerge/automerge-repo';
 import { Doc } from '../Doc';
 import { fromBinary, toBinary } from '../Doc/Doc.u.binary';
 import { StoreIndex as Index } from '../Store.Index';
-import { Is, Symbols, rx, type t } from './common';
+import { Is, Symbols, Time, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
@@ -20,10 +20,13 @@ export const Store = {
   /**
    * Initialize a new instance of a CRDT repo.
    */
-  init(options: { repo?: t.Repo; dispose$?: t.UntilObservable } = {}) {
+  init(options: { repo?: t.Repo; dispose$?: t.UntilObservable; debug?: t.StoreDebug } = {}) {
+    const { debug } = options;
     const life = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = life;
     const repo = options.repo ?? new Repo({ network: [] });
+
+    console.log('debug', debug);
 
     const doc: t.DocStore = {
       /**
@@ -50,6 +53,7 @@ export const Store = {
         options: GetOptions = {},
       ) {
         const { timeout } = options;
+        await Debug.loadDelay(debug);
         return Doc.getOrCreate<T>({ repo, initial, uri, timeout, dispose$ });
       },
 
@@ -58,6 +62,7 @@ export const Store = {
        */
       async get<T extends O>(uri?: Uri, options: GetOptions = {}) {
         const { timeout } = options;
+        await Debug.loadDelay(debug);
         return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
       },
 
@@ -134,4 +139,16 @@ const wrangle = {
     if (typeof options === 'object') return options;
     return {};
   },
+
+  loadDelay(debug?: t.StoreDebug) {
+    if (!debug || !debug.loadDelay) return 0;
+    return typeof debug.loadDelay === 'function' ? debug.loadDelay() : debug.loadDelay;
+  },
 } as const;
+
+const Debug = {
+  async loadDelay(debug?: t.StoreDebug) {
+    const msecs = wrangle.loadDelay(debug);
+    if (msecs > 0) await Time.wait(msecs);
+  },
+};
