@@ -1,4 +1,4 @@
-import { Dev, DevReload, Pkg, TestDb, css, type t } from '../../test.ui';
+import { COLORS, Dev, DevReload, Pkg, TestDb, css, type t } from '../../test.ui';
 import { sampleCrdt } from '../ui.Info/-SPEC.crdt';
 import { RepoList } from '../ui.RepoList';
 import { SampleUseDoc, SampleUseDocs } from './-SPEC.useDocs.views';
@@ -10,9 +10,9 @@ type T = {
   scope?: Scope;
   loadDelay?: boolean;
   hook?: Hook;
+  options: t.UseDocsOptions;
 };
-const initial: T = {};
-
+const initial: T = { options: {} };
 const LOAD_DELAY = 1500;
 const ERROR_URI = 'automerge:fail';
 
@@ -26,12 +26,14 @@ export default Dev.describe(name, async (e) => {
   const index = db.index;
   let model: t.RepoListModel;
 
-  type LocalStore = Pick<T, 'scope' | 'loadDelay' | 'hook'>;
+  type LocalStore = Pick<T, 'scope' | 'loadDelay' | 'hook'> &
+    Pick<t.UseDocsOptions, 'redrawOnChange'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     scope: 'all',
     loadDelay: true,
     hook: 'useDocs',
+    redrawOnChange: true,
   });
 
   const getUris = (scope: Scope = 'all') => {
@@ -50,6 +52,7 @@ export default Dev.describe(name, async (e) => {
       d.scope = local.scope;
       d.loadDelay = local.loadDelay;
       d.hook = local.hook;
+      d.options.redrawOnChange = local.redrawOnChange;
     });
 
     model = await RepoList.model(db.store, {
@@ -65,17 +68,17 @@ export default Dev.describe(name, async (e) => {
       .size([380, null])
       .display('grid')
       .render<T>((e) => {
-        const { reload, hook, scope } = e.state;
+        const { reload, hook, scope, options } = e.state;
         const refs = getUris(scope);
         if (reload) return <DevReload theme={theme} />;
 
         if (hook === 'useDocs') {
-          return <SampleUseDocs theme={theme} store={db.store} refs={refs} />;
+          return <SampleUseDocs theme={theme} store={db.store} refs={refs} options={options} />;
         }
 
         if (hook === 'useDoc') {
           const ref = scope === 'error' ? ERROR_URI : getUris(e.state.scope)[0];
-          return <SampleUseDoc theme={theme} refs={ref} store={db.store} />;
+          return <SampleUseDoc theme={theme} refs={ref} store={db.store} options={options} />;
         }
 
         return null;
@@ -98,6 +101,16 @@ export default Dev.describe(name, async (e) => {
       };
       hook('useDocs');
       hook('useDoc');
+      dev.hr(-1, 5);
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.options.redrawOnChange;
+        btn
+          .label((e) => `redrawOnChange`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.redrawOnChange = Dev.toggle(d.options, 'redrawOnChange')));
+          });
+      });
     });
 
     dev.hr(5, 20);
@@ -122,9 +135,14 @@ export default Dev.describe(name, async (e) => {
         const styles = {
           base: css({ fontFamily: 'monospace', fontSize: 11, lineHeight: 1.6 }),
           empty: css({ display: 'grid', placeItems: 'center' }),
+          bullet: css({ color: COLORS.MAGENTA, opacity: 0.4 }),
         };
         const uris = getUris(e.state.scope);
-        const elUris = uris.map((uri, i) => <div key={uri}>{`${i + 1}. ${uri}`}</div>);
+        const elUris = uris.map((uri, i) => (
+          <div key={uri}>
+            <span {...styles.bullet}>{`${i + 1}.`}</span> <span>{`${uri}`}</span>
+          </div>
+        ));
         const elEmpty = elUris.length === 0 && <div {...styles.empty}>{'(empty)'}</div>;
         return <div {...styles.base}>{elEmpty || elUris}</div>;
       });

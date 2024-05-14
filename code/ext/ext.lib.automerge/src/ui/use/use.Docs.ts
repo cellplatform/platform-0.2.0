@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Redraw } from '../use';
 import { Is, R, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 type Ref<T extends O> = t.UriString | t.DocRef<T>;
 type RefsInput<T extends O> = Ref<T> | (Ref<T> | undefined)[];
-type Error = {
-  uri: t.UriString;
-  type: 'Timeout' | 'NotFound' | 'Unknown';
-  message: string;
-};
 
 /**
  * Retrieves documents by URI from a store.
@@ -16,14 +12,17 @@ type Error = {
 export function useDocs<T extends O>(
   store?: t.Store,
   refs?: RefsInput<T>,
-  options: { timeout?: t.Msecs } = {},
+  options: t.UseDocsOptions = {},
 ) {
   const { timeout } = options;
   const uris = wrangle.uris(refs);
 
+  const redrawListeners = useRef(new Map<t.UriString, t.Lifecycle>());
   const [fetching, setFetching] = useState<t.UriString[]>([]);
-  const [errors, setErrors] = useState<Error[]>([]);
-  const [docs, setDocs] = useState<t.DocRef<T>[]>(wrangle.docs<T>(refs));
+  const [errors, setErrors] = useState<t.UseDocsError[]>([]);
+  const [docs, setDocs] = useState<t.DocRef<T>[]>([]);
+  const [, setCount] = useState(0); // Redraw.
+
   const is = {
     ok: errors.length === 0,
     fetching: fetching.length > 0,
@@ -31,8 +30,54 @@ export function useDocs<T extends O>(
   } as const;
 
   /**
+   * Fetching state helpers.
+   */
+  const Fetching = {
+    remove: (uri: t.UriString) => setFetching((prev) => prev.filter((item) => item !== uri)),
+    add: (uri: t.UriString) => setFetching((prev) => R.uniq([...prev, uri])),
+  } as const;
+
+  /**
+   * Error state helpers.
+   */
+  const Errors = {
+    remove: (uri: t.UriString) => setErrors((prev) => prev.filter((item) => item.uri !== uri)),
+    add(uri: t.UriString, type: t.UseDocsErrorType, message: string = '') {
+      Errors.remove(uri);
+      setErrors((prev) => [...prev, { uri, type, message }]);
+    },
+  } as const;
+
+  /**
+   * Retrieved documents state helpers.
+   */
+  const Docs = {
+    get listeners() {
+      return redrawListeners.current;
+    },
+
+    remove(uri: t.UriString) {
+      setDocs((prev) => prev.filter((doc) => doc.uri !== uri));
+      Docs.listeners.get(uri)?.dispose();
+      Docs.listeners.delete(uri);
+    },
+    add(doc: t.DocRef<T>) {
+      Docs.remove(doc.uri);
+      setDocs((prev) => [...prev, doc]);
+
+      const redraw = wrangle.redraw(options);
+      if (redraw.required) {
+        const inc = () => setCount((n) => n + 1);
+        const listener = Redraw.onChange(doc, inc, redraw.options);
+        Docs.listeners.set(doc.uri, listener);
+      }
+    },
+  } as const;
+
+  /**
    * Lifecycle.
    */
+  useEffect(() => wrangle.docs<T>(refs).forEach((doc) => Docs.add(doc)), []); // Initial store of existing loaded documents.
   useEffect(() => setErrors([]), [uris.join()]);
 
   useEffect(() => {
@@ -42,36 +87,6 @@ export function useDocs<T extends O>(
       const loaded = docs.map(({ uri }) => uri as string);
       return prev.filter((fetching) => loaded.includes(fetching));
     });
-
-    /**
-     * Fetching state helpers.
-     */
-    const Fetching = {
-      remove: (uri: t.UriString) => setFetching((prev) => prev.filter((item) => item !== uri)),
-      add: (uri: t.UriString) => setFetching((prev) => R.uniq([...prev, uri])),
-    } as const;
-
-    /**
-     * Error state helpers.
-     */
-    const Errors = {
-      remove: (uri: t.UriString) => setErrors((prev) => prev.filter((item) => item.uri !== uri)),
-      add(uri: t.UriString, type: Error['type'], message: string = '') {
-        Errors.remove(uri);
-        setErrors((prev) => [...prev, { uri, type, message }]);
-      },
-    } as const;
-
-    /**
-     * Retrieved documents state helpers.
-     */
-    const Docs = {
-      remove: (uri: t.UriString) => setDocs((prev) => prev.filter((doc) => doc.uri !== uri)),
-      add(doc: t.DocRef<T>) {
-        Docs.remove(doc.uri);
-        setDocs((prev) => [...prev, doc]);
-      },
-    } as const;
 
     /**
      * Retrieve the given document from the store.
@@ -133,5 +148,16 @@ const wrangle = {
   docs<T extends O>(refs?: RefsInput<T>) {
     const list = wrangle.list(refs);
     return list.filter((item) => Is.docRef(item)) as t.DocRef<T>[];
+  },
+
+  redraw(args: t.UseDocsOptions = {}) {
+    const { redrawOnChange = true } = args;
+    const isNumber = typeof redrawOnChange === 'number';
+    const debounce = isNumber ? redrawOnChange : 100;
+    const options: t.UseRedrawOnChangeOptions = { debounce };
+    return {
+      required: isNumber ? true : redrawOnChange,
+      options,
+    } as const;
   },
 } as const;

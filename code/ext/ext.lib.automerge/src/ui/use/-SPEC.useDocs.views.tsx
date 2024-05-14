@@ -7,12 +7,13 @@ import { Color, ObjectView, Spinner, css, type t } from './common';
 export type SampleUseDocsProps = {
   store?: t.Store;
   refs?: t.UriString[];
+  options?: t.UseDocsOptions;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 export const SampleUseDocs: React.FC<SampleUseDocsProps> = (props) => {
-  const { store, refs } = props;
-  const docs = useDocs(store, refs);
+  const { store, refs, options } = props;
+  const docs = useDocs(store, refs, options);
 
   const theme = Color.theme(props.theme);
   const styles = {
@@ -48,12 +49,13 @@ export const SampleUseDocs: React.FC<SampleUseDocsProps> = (props) => {
 export type SampleUseDocProps = {
   store?: t.Store;
   refs?: t.UriString;
+  options?: t.UseDocsOptions;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 export const SampleUseDoc: React.FC<SampleUseDocProps> = (props) => {
-  const { store, refs } = props;
-  const doc = useDoc(store, refs);
+  const { store, refs, options } = props;
+  const doc = useDoc(store, refs, options);
 
   /**
    * Render

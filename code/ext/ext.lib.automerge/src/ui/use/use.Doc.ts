@@ -7,11 +7,7 @@ type D<T extends O> = t.UriString | t.DocRef<T>;
 /**
  * Retrieves a doc (by URI) from a store.
  */
-export function useDoc<T extends O>(
-  store?: t.Store,
-  ref?: D<T>,
-  options: { timeout?: t.Msecs } = {},
-) {
+export function useDoc<T extends O>(store?: t.Store, ref?: D<T>, options: t.UseDocsOptions = {}) {
   const docs = useDocs<T>(store, ref, options);
   return {
     is: docs.is,
