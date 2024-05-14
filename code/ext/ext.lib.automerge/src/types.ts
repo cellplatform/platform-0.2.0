@@ -11,9 +11,10 @@ export type * from './crdt/Store.Web.Index/t';
 export type * from './crdt/Store.Web.IndexDb/t';
 export type * from './crdt/Store.Web/t';
 
+export type * from './ui/ui.Buttons/t';
+export type * from './ui/ui.Cmd.Bar/t';
 export type * from './ui/ui.Cmd.Host/t';
 export type * from './ui/ui.Cmd.Prefix/t';
-export type * from './ui/ui.Cmd.Bar/t';
 export type * from './ui/ui.History.Commit/t';
 export type * from './ui/ui.History.Grid/t';
 export type * from './ui/ui.Info/t';
