@@ -45,6 +45,7 @@ export type InfoDataDocObject = {
   lens?: t.ObjectPath;
   name?: string;
   expand?: { level?: number; paths?: string[] };
+  dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
   beforeRender?: (mutate: unknown) => void;
 };
 

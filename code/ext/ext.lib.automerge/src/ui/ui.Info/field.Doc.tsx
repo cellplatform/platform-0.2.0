@@ -135,6 +135,9 @@ const wrangle = {
       mutate(output);
     }
 
+    const dotMeta = data.object?.dotMeta ?? true;
+    if (!dotMeta && output) delete output['.meta'];
+
     let name = data.object?.name ?? '';
     if (!name && lens) name = lens.join('.');
     name = name;
