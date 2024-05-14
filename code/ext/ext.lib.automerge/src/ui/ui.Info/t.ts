@@ -22,8 +22,6 @@ export type InfoData = {
   component?: { label?: string; name?: string };
   repo?: InfoDataRepo;
   document?: InfoDataDoc | InfoDataDoc[];
-  // document?: InfoDataDoc;
-  history?: InfoDataDocHistory; // TEMP 🐷
 };
 
 export type InfoDataRepo = {
