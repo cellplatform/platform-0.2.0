@@ -26,8 +26,6 @@ export const Store = {
     const { dispose$, dispose } = life;
     const repo = options.repo ?? new Repo({ network: [] });
 
-    console.log('debug', debug);
-
     const doc: t.DocStore = {
       /**
        * Create an "initial constructor" factory for typed docs.
