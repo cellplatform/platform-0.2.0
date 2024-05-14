@@ -101,7 +101,9 @@ export default Dev.describe(name, async (e) => {
               // mutate['foo'] = 123;
             },
           },
-          icon: { onClick: (e) => console.info('⚡️ document.icon.onClick', e) },
+          icon: {
+            onClick: (e) => console.info('⚡️ document.icon.onClick', e),
+          },
           uri: {
             // prefix: 'foo:::',
             // prefix: null,

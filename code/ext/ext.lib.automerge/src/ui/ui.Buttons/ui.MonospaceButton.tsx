@@ -34,7 +34,7 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(FONTS.mono),
-    prefix: css({ color, opacity: 0.4, marginRight: 3 }),
+    prefix: css({ color, opacity: 0.4, marginRight: props.prefixMargin }),
     copied: css({ color: COLORS.GREEN }),
   };
 

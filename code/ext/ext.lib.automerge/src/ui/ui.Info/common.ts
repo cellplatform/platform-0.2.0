@@ -2,6 +2,7 @@ import { Doc } from '../../crdt';
 import { type t } from '../common';
 
 export * from '../common';
+export { MonospaceButton } from '../ui.Buttons';
 export { MonoHash } from '../ui.History.Grid';
 export { Doc };
 

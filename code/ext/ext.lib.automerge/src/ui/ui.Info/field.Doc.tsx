@@ -1,7 +1,7 @@
 import { Button, COLORS, Icons, Is, ObjectPath, ObjectView, css, type t } from './common';
 import { head } from './field.Doc.Head';
 import { history } from './field.Doc.History';
-import { UriButton } from './ui.Button.Uri';
+import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
@@ -30,7 +30,7 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     if (uri) {
       const { shorten, prefix, clipboard } = data.uri ?? {};
       parts.push(
-        <UriButton
+        <DocUriButton
           theme={theme}
           uri={uri}
           shorten={shorten}
@@ -43,12 +43,15 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     if (doc) {
       // NB: "blue" when showing current-state <Object>.
       const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
-      const elIcon = <Icons.Object size={14} color={color} />;
+      const height = 14;
+      const elIcon = <Icons.Object size={height} color={color} />;
 
-      if (!data.icon?.onClick) parts.push(elIcon);
-      else {
+      if (!data.icon?.onClick) {
+        parts.push(elIcon);
+      } else {
+        const handleClick = () => data.icon?.onClick?.({});
         parts.push(
-          <Button theme={theme} onClick={() => data.icon?.onClick?.({})}>
+          <Button theme={theme} onClick={handleClick} style={{ height }}>
             {elIcon}
           </Button>,
         );
@@ -60,19 +63,21 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     const styles = {
       base: css({
         display: 'grid',
-        alignContent: 'center',
         gridTemplateColumns: `repeat(${parts.length}, auto)`,
         columnGap: '5px',
       }),
+      part: css({
+        display: 'grid',
+        alignContent: 'center',
+      }),
     };
 
-    const value = (
-      <div {...styles.base}>
-        {parts.map((el, index) => {
-          return <div key={index}>{el}</div>;
-        })}
+    const elParts = parts.map((el, i) => (
+      <div key={i} {...styles.part}>
+        {el}
       </div>
-    );
+    ));
+    const value = <div {...styles.base}>{elParts}</div>;
 
     const divider = !fields.includes('Doc.Object');
     res.push({ label, value, divider });

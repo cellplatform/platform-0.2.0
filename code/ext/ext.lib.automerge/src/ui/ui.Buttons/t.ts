@@ -6,6 +6,7 @@ import type { t } from './common';
 export type MonospaceButtonProps = {
   text?: string;
   prefix?: string;
+  prefixMargin?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;

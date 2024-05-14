@@ -12,7 +12,9 @@ export const MonoHash: React.FC<MonoHashProps> = (props) => {
   const { hash = '', theme, length = DEFAULTS.hash.length } = props;
   return (
     <MonospaceButton
+      style={props.style}
       prefix={'#'}
+      prefixMargin={3}
       text={Hash.shorten(hash, [0, length])}
       theme={theme}
       onClipboard={(e) => e.write(hash)}

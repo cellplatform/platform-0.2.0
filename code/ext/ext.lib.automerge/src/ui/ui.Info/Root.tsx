@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
 import { Field } from './field';
 import { View } from './ui';
-import { UriButton } from './ui.Button.Uri';
+import { DocUriButton } from './ui.Doc.UriButton';
 
 /**
  * Export
@@ -9,10 +9,10 @@ import { UriButton } from './ui.Button.Uri';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Field: typeof Field;
-  UriButton: typeof UriButton;
+  DocUriButton: typeof DocUriButton;
 };
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
-  { DEFAULTS, Field, UriButton },
+  { DEFAULTS, Field, DocUriButton },
   { displayName: 'Info' },
 );
