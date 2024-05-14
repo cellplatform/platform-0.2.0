@@ -10,6 +10,7 @@ export {
   ObjectView,
   PropList,
   RenderCount,
+  Spinner,
   TestRunner,
   TextInput,
   css,
