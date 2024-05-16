@@ -95,6 +95,7 @@ export default Dev.describe(name, async (e) => {
           ref: debug.dataUris ? doc?.uri : doc,
           object: {
             // name: 'foobar',
+            // visible: false,
             lens: debug.dataDocLens ? ['child'] : undefined,
             expand: { level: 2 },
             beforeRender(mutate: any) {
@@ -131,10 +132,9 @@ export default Dev.describe(name, async (e) => {
           document: !debug.dataDocArray
             ? document
             : [
-                { ...document, label: 'Doc One' },
-                { ...document, label: 'Doc Two' },
+                { ...document, label: 'My One' },
+                { ...document, label: 'My Two' },
               ],
-          // document,
           visible: {
             onToggle(e) {
               console.info('⚡️ visible.onToggle', e);
