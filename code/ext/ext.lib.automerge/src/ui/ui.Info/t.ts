@@ -37,11 +37,12 @@ export type InfoDataDoc = {
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
-  icon?: { onClick?(e: {}): void };
+  icon?: { onClick?(e: { uri: t.UriString }): void };
   history?: InfoDataDocHistory;
 };
 
 export type InfoDataDocObject = {
+  visible?: boolean;
   lens?: t.ObjectPath;
   name?: string;
   expand?: { level?: number; paths?: string[] };
@@ -94,14 +95,17 @@ export type InfoProps = {
  */
 export type InfoDataHistoryItemHandler = (e: InfoDataHistoryItemHandlerArgs) => void;
 export type InfoDataHistoryItemHandlerArgs = {
-  index: t.Index;
-  hash: t.HashString;
-  commit: t.DocHistoryCommit;
-  is: { first: boolean; last: boolean };
+  readonly index: t.Index;
+  readonly hash: t.HashString;
+  readonly commit: t.DocHistoryCommit;
+  readonly is: { first: boolean; last: boolean };
 };
 
 export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
 export type InfoStatefulChangeHandlerArgs = {
+  readonly action: InfoStatefulChangeAction;
   readonly fields: InfoField[];
   readonly data: InfoData;
 };
+
+export type InfoStatefulChangeAction = 'Toggle:Visible' | 'Toggle:ObjectVisible';

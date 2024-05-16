@@ -1,6 +1,6 @@
 import { useDocs } from '../use';
 import { Is, type t } from './common';
-import { WrangleData } from './u';
+import { Data } from './u';
 
 /**
  * Hook that performs clean-up on the raw input {data}.
@@ -11,8 +11,12 @@ export function useData(data?: t.InfoData): t.InfoData {
   return { ...data, document } as const;
 }
 
+/**
+ * CRDT DocRef loader that swaps loads and swaps out any
+ * URI references with the actual retrieved documents.
+ */
 function useDocuments(data?: t.InfoData): t.InfoDataDoc[] {
-  const list = WrangleData.asDocArray(data);
+  const list = Data.document.list(data?.document);
   const store = data?.repo?.store;
   const docs = useDocs(
     store,

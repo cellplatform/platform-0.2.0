@@ -18,6 +18,7 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
 
   const label = data.label ?? 'Document';
   const hasLabel = !!label.trim();
+  const isObjectVisible = fields.includes('Doc.Object') && (data.object?.visible ?? true);
 
   /**
    * Title
@@ -40,22 +41,27 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
       );
     }
 
-    if (doc) {
+    const pushIcon = () => {
       // NB: "blue" when showing current-state <Object>.
-      const color = fields.includes('Doc.Object') ? COLORS.BLUE : undefined;
+      const color = isObjectVisible ? COLORS.BLUE : undefined;
       const height = 14;
       const elIcon = <Icons.Object size={height} color={color} />;
 
       if (!data.icon?.onClick) {
         parts.push(elIcon);
       } else {
-        const handleClick = () => data.icon?.onClick?.({});
+        const uri = doc.uri;
+        const handleClick = () => data.icon?.onClick?.({ uri });
         parts.push(
           <Button theme={theme} onClick={handleClick} style={{ height }}>
             {elIcon}
           </Button>,
         );
       }
+    };
+
+    if (doc) {
+      if (fields.includes('Doc.Object')) pushIcon();
     } else {
       parts.push(<>{'-'}</>);
     }
@@ -86,9 +92,9 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
   /**
    * The <Object> component.
    */
-  if (fields.includes('Doc.Object')) {
-    const elObject = wrangle.objectElement(data, hasLabel, theme);
-    res.push({ value: elObject });
+  if (isObjectVisible) {
+    const value = wrangle.objectElement(data, hasLabel, theme);
+    res.push({ value });
   }
 
   /**

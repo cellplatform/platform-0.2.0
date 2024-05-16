@@ -1,12 +1,8 @@
-import { type t } from './common';
+import { Data } from './u.data';
+import { Diff } from './u.diff';
 
-/**
- * Helpers for wrangling the {data} property object.
- */
-export const WrangleData = {
-  asDocArray(data?: t.InfoData): t.InfoDataDoc[] {
-    if (!data) return [];
-    const res = Array.isArray(data.document) ? data.document : [data.document];
-    return res.filter(Boolean) as t.InfoDataDoc[];
-  },
+export { Data, Diff };
+export const Wrangle = {
+  Data,
+  Diff,
 } as const;
