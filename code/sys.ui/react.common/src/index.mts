@@ -44,6 +44,7 @@ export {
   useDragTarget,
   useFocus,
   useObservableReset,
+  useProxy,
   useReady,
   useRedraw,
   useSizeObserver,
