@@ -41,6 +41,8 @@ export const Theme = {
       if (!!subjectLight) subject.backgroundColor(is.light ? subjectLight : 0);
       if (!!subjectDark) subject.backgroundColor(is.dark ? subjectDark : 0);
     }
+
+    return theme;
   },
 
   /**
