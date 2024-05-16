@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { DEFAULTS, type t } from './common';
-import { readDropEvent } from './util.mjs';
+import { readDropEvent } from './u';
 
-type Input<T extends HTMLElement> = Partial<t.DragTargetHookArgs<T>> | t.DragTargetDropHandler;
+type H = HTMLElement;
+type Div = HTMLDivElement;
+type Input<T extends H> = Partial<t.DragTargetHookArgs<T>> | t.DragTargetDropHandler;
 
 /**
  * Provides hooks for treating a DIV element as a "drag-n-drop" target.
  */
-export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
-  input?: Input<T>,
-): t.DragTargetHook<T> {
+export function useDragTarget<T extends H = Div>(input?: Input<T>): t.DragTargetHook<T> {
   const args = wrangle<T>(useRef<T>(null), input);
   const {
     ref,

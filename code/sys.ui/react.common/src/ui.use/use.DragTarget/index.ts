@@ -1,1 +1,1 @@
-export * from './useDragTarget.mjs';
+export * from './useDragTarget';
