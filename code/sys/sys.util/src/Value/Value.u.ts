@@ -18,8 +18,9 @@ export function toggle<T extends O | any[]>(
   mutate: T,
   key: T extends any[] ? number : keyof T,
 ): boolean {
-  if (mutate === null) return false;
-  if (typeof mutate !== 'object') return false;
+  if (mutate === null || typeof mutate !== 'object') {
+    throw new Error(`Object or Array required.`);
+  }
 
   const current = (mutate as any)[key];
   if (typeof current !== 'boolean' && current !== undefined) return false;

@@ -25,13 +25,6 @@ describe('plural', () => {
 });
 
 describe('toggle', () => {
-  it('invalid input', () => {
-    [null, 123, '', true].forEach((value: any) => {
-      const res = Value.toggle(value, 'foo');
-      expect(res).to.eql(false, `value: ${value}`);
-    });
-  });
-
   it('toggle: {object}', () => {
     const obj = { foo: true, bar: '👋' };
 
@@ -63,5 +56,12 @@ describe('toggle', () => {
     expect(list[0]).to.eql(false);
     expect(list[1]).to.eql('👋');
     expect(list[999]).to.eql(false);
+  });
+
+  it('throw: invalid input', () => {
+    [null, 123, '', true].forEach((value: any) => {
+      const fn = () => Value.toggle(value, 'foo');
+      expect(fn).to.throw(/Object or Array required/);
+    });
   });
 });
