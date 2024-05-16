@@ -12,7 +12,6 @@ export type InfoField =
   | 'Peer.Remotes'
   | 'Repo'
   | 'Network.Shared'
-  | 'Network.Shared.Json'
   | 'Network.Transfer';
 
 export type InfoData = {
@@ -25,14 +24,7 @@ export type InfoData = {
   shared?: InfoDataShared | InfoDataShared[];
 };
 
-export type InfoDataShared = {
-  label?: string;
-  name?: string;
-  lens?: t.ObjectPath;
-  object?: InfoDataObject;
-  uri?: t.InfoDataDocUri;
-  onIconClick?: (e: {}) => void;
-};
+export type InfoDataShared = t.InfoDataDoc;
 
 export type InfoDataObject = {
   visible?: boolean;

@@ -26,7 +26,6 @@ const fields = {
       'Peer.Remotes',
       'Repo',
       'Network.Shared',
-      'Network.Shared.Json',
       'Network.Transfer',
     ];
   },

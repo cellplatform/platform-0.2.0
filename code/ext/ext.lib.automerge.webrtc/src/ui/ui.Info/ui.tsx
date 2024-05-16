@@ -28,7 +28,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Component', () => Field.component(data.component, theme))
     .field('Peer', () => Field.peer(data, fields, theme))
     .field('Repo', () => Field.repo(data, fields, theme))
-    .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc, theme))
+    .field('Network.Shared', () => Field.network.shared(data, shared?.doc, theme))
     .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting, theme))
     .items(fields);
 

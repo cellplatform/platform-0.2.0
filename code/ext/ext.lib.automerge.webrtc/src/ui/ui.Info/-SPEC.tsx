@@ -72,17 +72,19 @@ export default Dev.describe(name, async (e) => {
         const isDataVisible = dataVisible ?? true;
 
         const shared: t.InfoDataShared = {
-          lens: dataSharedLens ? ['sys', 'peers'] : undefined,
           object: {
+            lens: dataSharedLens ? ['sys', 'peers'] : undefined,
             visible: dataJsonVisible,
             dotMeta: dataSharedDotMeta,
             beforeRender(mutate: any) {
               mutate['foo'] = 123; // Sample render mutation 🐷.
             },
           },
-          onIconClick(e) {
-            console.info('⚡️ shared.onIconClick', e);
-            state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
+          icon: {
+            onClick(e) {
+              console.info('⚡️ shared.onIconClick', e);
+              state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
+            },
           },
         };
 
@@ -96,8 +98,8 @@ export default Dev.describe(name, async (e) => {
           shared: !dataSharedArray
             ? shared
             : [
-                { ...shared, name: 'Foo', label: 'Shared One' },
-                { ...shared, name: 'Bar', label: 'Shared Two' },
+                { ...shared, label: 'Shared One', object: { ...shared.object, name: 'Foo' } },
+                { ...shared, label: 'Shared Two', object: { ...shared.object, name: 'Bar' } },
               ],
         };
 
@@ -152,13 +154,7 @@ export default Dev.describe(name, async (e) => {
       };
 
       config('all', DEFAULTS.fields.all);
-      config('info → PeerRepoList', [
-        'Repo',
-        'Peer',
-        'Network.Transfer',
-        'Network.Shared',
-        'Network.Shared.Json',
-      ]);
+      config('info → PeerRepoList', ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']);
       dev.hr(-1, 5);
       dev.button(['visible', '(prepend)'], (e) => {
         const fields = e.state.current.props.fields ?? [];

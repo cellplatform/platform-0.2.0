@@ -4,4 +4,7 @@ import { transfer } from './field.Network.transfer';
 /**
  * Export
  */
-export const network = { shared, transfer } as const;
+export const network = {
+  transfer,
+  shared,
+} as const;
