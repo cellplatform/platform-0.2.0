@@ -40,10 +40,14 @@ export { TextSyntax } from './ui/Text.Syntax';
  * Hooks
  */
 export { useClickInside, useClickOutside, useMouse } from './common';
-export { useReady, useRedraw } from './ui.use/use';
-export { useDragTarget } from './ui.use/useDragTarget';
-export { useFocus } from './ui.use/useFocus';
-export { useSizeObserver } from './ui.use/useSizeObserver';
+export {
+  useDragTarget,
+  useFocus,
+  useObservableReset,
+  useReady,
+  useRedraw,
+  useSizeObserver,
+} from './ui.use';
 
 /**
  * Common up-stream modules
