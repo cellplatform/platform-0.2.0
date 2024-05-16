@@ -44,9 +44,9 @@ export const ModuleSpecs = {
 } as t.SpecImports;
 
 export const HookSpecs = {
-  [`${ns}.useFocus`]: () => import('../ui.use/useFocus/-SPEC'),
-  [`${ns}.useSizeObserver`]: () => import('../ui.use/useSizeObserver/-SPEC'),
-  [`${ns}.useDragTarget`]: () => import('../ui.use/useDragTarget/-dev/-SPEC'),
+  [`${ns}.useFocus`]: () => import('../ui.use/use.Focus/-SPEC'),
+  [`${ns}.useSizeObserver`]: () => import('../ui.use/use.SizeObserver/-SPEC'),
+  [`${ns}.useDragTarget`]: () => import('../ui.use/use.DragTarget/-dev/-SPEC'),
   [`${ns}.useMouse`]: () => import('../ui.use/use/-SPEC.useMouse'),
 } as t.SpecImports;
 

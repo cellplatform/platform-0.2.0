@@ -1,4 +1,4 @@
 export * from './use';
-export * from './useDragTarget';
-export * from './useFocus';
-export * from './useSizeObserver';
+export * from './use.DragTarget';
+export * from './use.Focus';
+export * from './use.SizeObserver';

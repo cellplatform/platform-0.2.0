@@ -1,4 +1,4 @@
 export type * from './use/t';
-export type * from './useDragTarget/t';
-export type * from './useFocus/t';
-export type * from './useSizeObserver/t';
+export type * from './use.DragTarget/t';
+export type * from './use.Focus/t';
+export type * from './use.SizeObserver/t';
