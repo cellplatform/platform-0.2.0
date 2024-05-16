@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { ActiveElement, Focus } from '../Focus';
+import { ActiveElement, Focus } from '../../ui/Focus';
 import { R, type t } from '../common';
 
 /**

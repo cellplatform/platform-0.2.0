@@ -38,3 +38,4 @@ export type { DevCtx, DevCtxState } from './common/t';
 export type * from './ui.dev/t';
 export type * from './ui.tools/t';
 export type * from './ui/t';
+export type * from './ui.use/t';

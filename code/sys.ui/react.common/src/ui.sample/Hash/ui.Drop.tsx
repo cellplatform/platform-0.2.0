@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDragTarget } from '../../ui/useDragTarget';
+import { useDragTarget } from '../../ui.use';
 import { COLORS, Color, Filesize, Hash, css, type t } from '../common';
 
 export type DropProps = {

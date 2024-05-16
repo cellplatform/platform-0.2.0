@@ -1,7 +1,7 @@
 import { Color, COLORS, type t } from './common';
 
+export { useRedraw } from '../../ui.use';
 export * from '../common';
-export { useRedraw } from '../use';
 
 type Mutate<T> = (draft: T) => void;
 

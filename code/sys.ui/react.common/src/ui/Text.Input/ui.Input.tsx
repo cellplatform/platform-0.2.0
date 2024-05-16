@@ -1,7 +1,6 @@
 import { useEffect, useRef, type RefObject } from 'react';
-import { useFocus } from '../useFocus';
 import { TextInputRef } from './Ref';
-import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, type t } from './common';
+import { Color, DEFAULTS, Diff, KeyboardMonitor, R, css, useFocus, type t } from './common';
 import { Util, Wrangle } from './u';
 
 /**
