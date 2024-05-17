@@ -238,11 +238,17 @@ export default Dev.describe(name, (e) => {
           all: SampleFields.all,
           selected: debug.fields,
           async onClick(ev) {
-            await dev.change((d) => (d.debug.fields = ev.next as MyField[]));
+            await dev.change((d) => (d.debug.fields = ev.next(SampleFields.defaults)));
             Util.setSample(dev.ctx, 'Builder');
           },
         };
-        return <PropList.FieldSelector {...props} style={{ Margin: [20, 0, 20, 30] }} />;
+        return (
+          <PropList.FieldSelector
+            //
+            {...props}
+            style={{ Margin: [20, 0, 20, 30] }}
+          />
+        );
       });
     });
   });

@@ -20,7 +20,7 @@ export const Wrangle = {
       if (action === 'Select') next = Wrangle.addSubfields(all, next, field);
       if (action === 'Deselect') next = Wrangle.removeSubfields(all, next, field);
     }
-    return { action, next } as const;
+    return { action, prev: [...selected], next } as const;
   },
 
   subfields(all: string[], field: string) {
@@ -41,9 +41,26 @@ export const Wrangle = {
     return selected.filter((f) => !subfields.includes(f));
   },
 
-  clickArgs(input: Omit<ClickArgs, 'as'>): ClickArgs {
+  clickArgs<F extends string = string>(args: {
+    action: t.PropListFieldSelectorAction;
+    field?: F;
+    prev?: F[];
+    next?: F[];
+  }): ClickArgs {
+    const { action, field } = args;
+    const value = {
+      prev: args.prev ? [...args.prev] : undefined,
+      next: args.next ? [...args.next] : undefined,
+    };
     const payload: ClickArgs = {
-      ...input,
+      action,
+      field,
+      value,
+      next<T extends string>(defaults?: T[]) {
+        if (action === 'Reset:Clear') return [];
+        if (action === 'Reset:Default') return defaults;
+        return value.next as unknown as T[];
+      },
       as<T extends string>() {
         return payload as ClickArgs<T>;
       },

@@ -27,8 +27,8 @@ export const ConnectorConfig: React.FC<ConnectorConfigProps> = (props) => {
       indexes={false}
       resettable={true}
       onClick={(e) => {
-        const { previous, next } = e.as<t.ConnectorBehavior>();
-        props.onChange?.({ previous, next });
+        const { value } = e.as<t.ConnectorBehavior>();
+        props.onChange?.(value);
         props.onClick?.(e);
       }}
     />

@@ -1,14 +1,15 @@
 import { Info } from '.';
 import { Dev, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps };
+type P = t.InfoProps;
+type T = { props: P };
 const initial: T = { props: {} };
 
 export default Dev.describe('Info', (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = Pick<P, 'fields'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.vime.Info');
   const local = localstore.object({
-    selectedFields: Info.DEFAULTS.fields,
+    fields: Info.DEFAULTS.fields,
   });
 
   e.it('ui:init', async (e) => {
@@ -16,7 +17,7 @@ export default Dev.describe('Info', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
       d.props.margin = 10;
     });
 
@@ -41,10 +42,9 @@ export default Dev.describe('Info', (e) => {
           <Dev.FieldSelector
             all={Info.FIELDS}
             selected={props.fields}
-            onClick={(ev) => {
-              const fields = ev.next as t.InfoField[];
-              dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+            onClick={(e) => {
+              const next = e.next<t.InfoField>();
+              dev.change((d) => (local.fields = d.props.fields = next));
             }}
           />
         );

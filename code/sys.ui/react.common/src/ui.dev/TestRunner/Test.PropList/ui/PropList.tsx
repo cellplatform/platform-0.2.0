@@ -19,7 +19,7 @@ export type TestPropListProps = {
 };
 
 export const PropList: React.FC<TestPropListProps> = (props) => {
-  const { theme, data = {}, enabled = true, fields = DEFAULTS.fields } = props;
+  const { theme, data = {}, enabled = true, fields = DEFAULTS.fields.default } = props;
   const { pkg } = data;
   const { groups } = useSuites({ data });
   useKeyboard({ data, groups, enabled });

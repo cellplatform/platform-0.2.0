@@ -1,5 +1,5 @@
 import { type TestPropListProps } from '../Test.PropList';
-import { Dev, Pkg, t, type TestCtx } from './-common';
+import { Dev, Pkg, type TestCtx } from './-common';
 
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;
@@ -26,7 +26,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
-    fields: DEFAULTS.fields,
+    fields: DEFAULTS.fields.default,
     infoUrl: true,
     ellipsis: false,
     card: true,
@@ -124,12 +124,9 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       dev.row((e) => {
         return (
           <Dev.TestRunner.PropList.FieldSelector
-            style={{ Margin: [10, 30, 10, 25] }}
             selected={e.state.props.fields}
             onClick={(ev) => {
-              const fields = ev.next as t.TestRunnerField[];
-              dev.change((d) => (d.props.fields = fields));
-              local.fields = fields?.length === 0 ? undefined : fields;
+              dev.change((d) => (local.fields = d.props.fields = ev.next()));
             }}
           />
         );

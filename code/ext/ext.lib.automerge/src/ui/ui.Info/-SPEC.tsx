@@ -168,12 +168,8 @@ export default Dev.describe(name, async (e) => {
           <Dev.FieldSelector
             all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(ev) => {
-              const fields =
-                ev.action === 'Reset:Default'
-                  ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoField[]);
-              setFields(dev, fields);
+            onClick={(e) => {
+              setFields(dev, e.next<t.InfoField>());
               resetState$.next();
             }}
           />

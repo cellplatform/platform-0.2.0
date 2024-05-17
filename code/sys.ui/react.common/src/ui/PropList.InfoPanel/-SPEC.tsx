@@ -48,9 +48,8 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Fields', (dev) => {
-      const update = (fields: t.InfoField[]) => {
-        dev.change((d) => (d.props.fields = fields));
-        local.fields = fields?.length === 0 ? undefined : fields;
+      const update = (fields?: t.InfoField[]) => {
+        dev.change((d) => (local.fields = d.props.fields = fields));
       };
 
       dev.row((e) => {
@@ -59,13 +58,7 @@ export default Dev.describe(name, (e) => {
           <Dev.FieldSelector
             all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(ev) => {
-              const fields =
-                ev.action === 'Reset:Default'
-                  ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoField[]);
-              update(fields);
-            }}
+            onClick={(e) => update(e.next())}
           />
         );
       });
