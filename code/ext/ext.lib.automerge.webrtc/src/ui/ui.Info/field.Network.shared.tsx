@@ -1,6 +1,4 @@
-import { AutomergeInfo, type t } from './common';
-
-const Field = AutomergeInfo.Field;
+import { AutomergeInfo, type t, DEFAULTS } from './common';
 
 /**
  * Shared network state (transient document).
@@ -12,12 +10,23 @@ export function shared(
 ): t.PropListItem[] {
   const network = data.network;
   const res: t.PropListItem[] = [];
-  if (!network || !data.shared) return res;
+  if (!network) return res;
 
+  const toDocument = (shared: t.InfoDataDoc): t.InfoDataDoc => {
+    const label = shared.label ?? DEFAULTS.shared.label;
+    const dotMeta = shared.object?.dotMeta ?? DEFAULTS.shared.dotMeta;
+    return {
+      ...shared,
+      ref,
+      label,
+      object: { ...shared.object, dotMeta },
+    };
+  };
+
+  const Field = AutomergeInfo.Field;
   const shared = Array.isArray(data.shared) ? data.shared : [data.shared];
   shared
-    .filter(Boolean)
-    .map((shared) => ({ ...shared, ref }))
+    .map((shared) => toDocument(shared ?? {}))
     .map((shared) => Field.document(shared, ['Doc', 'Doc.URI', 'Doc.Object'], theme))
     .forEach((fields) => res.push(...fields));
 

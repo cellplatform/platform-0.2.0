@@ -38,4 +38,5 @@ export const DEFAULTS = {
   fields,
   doc: { uri },
   query: { dev: 'dev' },
+  shared: { label: 'Shared State', dotMeta: false },
 } as const;
