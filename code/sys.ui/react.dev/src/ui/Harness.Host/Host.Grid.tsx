@@ -1,5 +1,5 @@
 import { css, type t } from '../common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 export type HostGridProps = {
   children?: JSX.Element;

@@ -5,7 +5,7 @@ import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostLayers } from './Host.Layers';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 const DEFAULT = DEFAULTS.props.host;
 
