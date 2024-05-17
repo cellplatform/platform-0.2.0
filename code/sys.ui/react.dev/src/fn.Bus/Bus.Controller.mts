@@ -1,4 +1,4 @@
-import { Context } from '../logic.Ctx';
+import { Context } from '../fn.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { DEFAULTS, Id, Is, R, Test, rx, type t } from './common';
