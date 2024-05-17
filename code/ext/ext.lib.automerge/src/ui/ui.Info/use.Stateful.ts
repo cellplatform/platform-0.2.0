@@ -4,8 +4,6 @@ import { Diff } from './u';
 import { useData } from './use.Data';
 import { rebuild } from './use.Stateful.rebuild';
 
-const diff = (prev: t.InfoData, next: t.InfoData) => Diff.isEqual(prev, next);
-
 /**
  * Hook that when {stateful:true} manages
  * state internally to the <Info> component.
@@ -16,7 +14,7 @@ export function useStateful(props: t.InfoProps) {
 
   const data = useData(props.data);
   const reset = useObservableReset(props.resetState$);
-  const proxy = useProxy(data, diff, reset.count);
+  const proxy = useProxy(data, Diff.document.isEqual, reset.count);
   const [ready, setReady] = useState(false);
 
   const fireChanged = (action: t.InfoStatefulChangeAction) => {

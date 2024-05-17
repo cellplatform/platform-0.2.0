@@ -4,7 +4,7 @@ import { Data } from './u.data';
 /**
  * Helpers for performing object comparisons.
  */
-export const Diff = {
+const document = {
   /**
    * Compre two {data} property objects.
    */
@@ -12,8 +12,8 @@ export const Diff = {
     if (!prev && !next) return false;
     if ((!prev && next) || (prev && !next)) return true;
 
-    const a = Diff.simplify(prev);
-    const b = Diff.simplify(next);
+    const a = document.simplify(prev);
+    const b = document.simplify(next);
 
     if (!R.equals(a.docUris, b.docUris)) return true;
     if (!R.equals(a.data, b.data)) return true;
@@ -51,3 +51,8 @@ export const Diff = {
     } as const;
   },
 } as const;
+
+/**
+ * Export
+ */
+export const Diff = { document } as const;
