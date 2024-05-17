@@ -30,6 +30,8 @@ export default Spec.describe('EmptyDiv', (e) => {
     button('<div/>', <div />);
     button('null', null);
     button('undefined', undefined);
+    dev.hr();
+    button('<div> content </div>', <div>{'👋 hello'}</div>);
 
     dev.hr();
     dev.button((btn) => btn.label('redraw').onClick(() => ctx.redraw()));

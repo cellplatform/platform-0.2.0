@@ -9,15 +9,17 @@ export type HostGridProps = {
 };
 
 export const HostGrid: React.FC<HostGridProps> = (props) => {
-  const { renderProps, border } = props;
+  const { renderProps } = props;
   if (!renderProps?.subject.renderer) return null;
 
   const { size } = renderProps.subject;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 
-  const isFillX = size?.mode === 'fill' && size.x && !size.y;
-  const isFillY = size?.mode === 'fill' && !size.x && size.y;
+  const is = {
+    x: size?.mode === 'fill' && size.x && !size.y,
+    y: size?.mode === 'fill' && !size.x && size.y,
+  } as const;
 
   const GRID = {
     FILL: {
@@ -28,25 +30,29 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
       COLUMNS: `[left] 1fr [body-x] auto [right] 1fr`,
       ROWS: `[top] 1fr [body-y] auto [bottom] 1fr`,
     },
-  };
+  } as const;
 
   /**
    * [Render]
    */
+  const border = props.border;
+  const borderLeft = border;
+  const borderRight = border;
+  const borderTop = border;
+  const borderBottom = border;
+
   const styles = {
     base: css({ Absolute: 0, display: 'grid' }),
+    block: css({ boxSizing: 'border-box', padding: 1 }),
     grid: {
       fill: css({
-        gridTemplateColumns: isFillY ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,
-        gridTemplateRows: isFillX ? GRID.CENTER.ROWS : GRID.FILL.ROWS,
+        gridTemplateColumns: is.y ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,
+        gridTemplateRows: is.x ? GRID.CENTER.ROWS : GRID.FILL.ROWS,
       }),
       center: css({
         gridTemplateColumns: GRID.CENTER.COLUMNS,
         gridTemplateRows: GRID.CENTER.ROWS,
       }),
-    },
-    block: {
-      base: css({ boxSizing: 'border-box', padding: 1 }),
     },
   };
 
@@ -59,15 +65,15 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
         props.style,
       )}
     >
-      <div {...styles.block.base} />
-      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
-      <div {...css(styles.block.base)} />
-      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
+      <div {...styles.block} />
+      <div {...css(styles.block, { borderLeft, borderRight })} />
+      <div {...css(styles.block)} />
+      <div {...css(styles.block, { borderTop, borderBottom })} />
       {props.children}
-      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
-      <div {...css(styles.block.base)} />
-      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
-      <div {...css(styles.block.base)} />
+      <div {...css(styles.block, { borderTop, borderBottom })} />
+      <div {...css(styles.block)} />
+      <div {...css(styles.block, { borderLeft, borderRight })} />
+      <div {...css(styles.block)} />
     </div>
   );
 };
