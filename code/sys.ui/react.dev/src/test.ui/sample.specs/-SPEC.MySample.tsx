@@ -25,7 +25,6 @@ export default Spec.describe('MySample', (e) => {
       // NB: Test helpful to ensure errors don't occur on headless run (aka. server/CI).
       console.log('keyboard', e.pattern);
     });
-
     ctx.host.header.render<T>((e) => {
       return <div>Header</div>;
       // return null;
