@@ -85,7 +85,7 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     ));
     const value = <div {...styles.base}>{elParts}</div>;
 
-    const divider = !fields.includes('Doc.Object');
+    const divider = fields.includes('Doc.Object') ? !isObjectVisible : undefined;
     res.push({ label, value, divider });
   }
 
