@@ -11,6 +11,7 @@ export const ModuleSpecs = {
 export const SampleSpecs = {
   'dev.sample.MySample': () => import('../test.ui/sample.specs/-SPEC.MySample'),
   'dev.sample.DevTools': () => import('../test.ui/sample.DevTools/-SPEC'),
+  'dev.sample.EmptyDiv': () => import('../test.ui/sample.specs/-SPEC.EmptyDiv'),
   'dev.sample.Empty': () => import('../test.ui/sample.specs/-SPEC.Empty'),
   // 'dev.sample.Error': () => import('../test.ui/sample.specs/-SPEC.Error'),
   // 'dev.sample.Fail': () => import('../test.ui/sample.specs/-SPEC.Fail'),
