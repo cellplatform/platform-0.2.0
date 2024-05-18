@@ -2,6 +2,7 @@ import type * as t from './-SPEC.t';
 
 import { PropList } from '../PropList';
 import { Field } from './-SPEC.field';
+import { Pkg } from './common';
 
 const fields = {
   get all(): t.InfoField[] {
@@ -12,7 +13,7 @@ const fields = {
   },
 };
 export const DEFAULTS = {
-  displayName: 'Info',
+  displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
 } as const;

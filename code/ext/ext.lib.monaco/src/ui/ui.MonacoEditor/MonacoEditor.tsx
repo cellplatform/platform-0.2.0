@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, LANGUAGES, Wrangle, t } from './common';
+import { DEFAULTS, FC, LANGUAGES, Wrangle, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -16,5 +16,5 @@ export const MonacoEditor = FC.decorate<t.MonacoEditorProps, Fields>(
     languages: LANGUAGES,
     className: Wrangle.editorClassName,
   },
-  { displayName: 'MonacoEditor' },
+  { displayName: DEFAULTS.displayName },
 );

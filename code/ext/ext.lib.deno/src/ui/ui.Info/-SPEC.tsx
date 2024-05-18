@@ -1,4 +1,4 @@
-import { Info, DEFAULTS } from '.';
+import { DEFAULTS, Info } from '.';
 import { Delete, Dev, Hash, Pkg, type t } from '../../test.ui';
 import { DenoHttp } from './common';
 

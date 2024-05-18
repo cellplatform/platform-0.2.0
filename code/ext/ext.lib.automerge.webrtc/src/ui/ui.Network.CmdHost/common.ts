@@ -1,4 +1,4 @@
-import type { t } from './common';
+import { Pkg, type t } from './common';
 
 export { CmdHost } from 'sys.ui.react.common';
 export * from '../common';
@@ -12,6 +12,6 @@ export const paths: t.CmdHostPaths = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Network.CmdHost',
+  displayName: `${Pkg.name}.Network.CmdHost`,
   paths,
 } as const;

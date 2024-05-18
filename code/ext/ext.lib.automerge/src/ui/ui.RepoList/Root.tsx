@@ -19,5 +19,5 @@ type Fields = {
 export const RepoList = FC.decorate<t.RepoListProps, Fields>(
   MemoView,
   { DEFAULTS, Ref, Model, model, Config },
-  { displayName: 'Crdt.RepoList' },
+  { displayName: DEFAULTS.displayName },
 );

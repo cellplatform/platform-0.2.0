@@ -1,11 +1,11 @@
-import { type t } from './common';
+import { Pkg } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'AvatarTray',
+  displayName: `${Pkg.name}.AvatarTray`,
   size: 48,
   muted: true,
   gap: 10,

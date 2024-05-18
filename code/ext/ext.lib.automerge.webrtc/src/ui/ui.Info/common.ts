@@ -1,5 +1,4 @@
-import { Doc, type t } from '../common';
-
+import { Doc, Pkg, type t } from '../common';
 export { Info as AutomergeInfo } from 'ext.lib.automerge';
 export { Info as PeerInfo } from 'ext.lib.peerjs';
 
@@ -35,7 +34,7 @@ const fields = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Automerge.Webrtc.Info',
+  displayName: `${Pkg.name}.Info`,
   fields,
   doc: { uri },
   query: { dev: 'dev' },

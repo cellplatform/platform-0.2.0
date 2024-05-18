@@ -1,5 +1,5 @@
 import { Doc } from '../../crdt';
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 
 export * from '../common';
 export { MonospaceButton } from '../ui.Buttons';
@@ -45,7 +45,7 @@ const uri: Required<t.InfoDataDocUri> = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Automerge.Info',
+  displayName: `${Pkg.name}.Info`,
   stateful: false,
   visibleFilter,
   repo: { label: 'Store' },

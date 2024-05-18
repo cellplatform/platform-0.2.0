@@ -1,11 +1,11 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'Info',
+  displayName: `${Pkg.name}.Info`,
   fields: {
     get all(): t.InfoField[] {
       return ['Module', 'Module.Verify', 'Component'];

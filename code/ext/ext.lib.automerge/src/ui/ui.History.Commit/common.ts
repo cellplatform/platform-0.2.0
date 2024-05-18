@@ -1,9 +1,9 @@
-import { type t } from './common';
+import { Pkg } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'History.Commit',
+  displayName: `${Pkg.name}.History.Commit`,
 } as const;

@@ -1,10 +1,10 @@
-import { type t } from './common';
+import { Pkg } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'PeerRepoList',
+  displayName: `${Pkg.name}.PeerRepoList`,
   focusPeerOnLoad: true,
 } as const;

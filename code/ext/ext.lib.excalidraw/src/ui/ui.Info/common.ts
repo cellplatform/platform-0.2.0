@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 export * from '../common';
 
 /**
@@ -14,7 +14,7 @@ const fields = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Info',
+  displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
 } as const;

@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 
 export { CmdBar } from '../Cmd.Bar';
 export { Flip } from '../Flip';
@@ -15,7 +15,7 @@ const cmdbar: t.ModuleNamespaceCmdbarProps = {
 };
 
 export const DEFAULTS = {
-  displayName: 'ModuleNamespace',
+  displayName: `${Pkg.name}.ModuleNamespace`,
   cmdbar,
   theme,
 } as const;

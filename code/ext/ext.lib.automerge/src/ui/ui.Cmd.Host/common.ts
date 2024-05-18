@@ -1,9 +1,9 @@
-import { type t } from './common';
+import { Pkg } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'CmdHost',
+  displayName: `${Pkg.name}.CmdHost`,
 } as const;
