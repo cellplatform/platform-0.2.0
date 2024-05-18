@@ -65,12 +65,12 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(0, 5);
 
-      const common = (label: string, fields: t.InfoField[]) => {
-        dev.button(label, (e) => update(fields));
-      };
+      type F = t.InfoField;
+      const common = (label: string, fields: F[]) => dev.button(label, (e) => update(fields));
 
-      common('single', ['Module']);
       common('all', DEFAULTS.fields.all);
+      common('single', ['Module']);
+      common('none', []);
     });
 
     dev.hr(5, 20);
