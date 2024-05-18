@@ -43,6 +43,7 @@ const data: t.InfoData = {
 };
 
 export const DEFAULTS = {
+  displayName: 'Privy.Info',
   query: { dev: 'dev' },
   fields,
   enabled: true,

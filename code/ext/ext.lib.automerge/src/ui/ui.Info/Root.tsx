@@ -16,5 +16,5 @@ type Fields = {
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
   { DEFAULTS, Field, Diff, DocUriButton },
-  { displayName: 'Info' },
+  { displayName: DEFAULTS.displayName },
 );

@@ -22,8 +22,8 @@ export const DEFAULTS = {
  */
 export const Info: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
-  const title = PropList.Wrangle.title(props.title);
+  const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
+  const title = PropList.Info.title(props);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module(theme))
@@ -38,7 +38,7 @@ export const Info: React.FC<t.InfoProps> = (props) => {
     <PropList
       title={title}
       items={items}
-      width={props.width ?? { min: 230 }}
+      width={PropList.Info.width(props)}
       defaults={{ clipboard: false }}
       theme={theme}
       margin={props.margin}

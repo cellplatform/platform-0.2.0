@@ -1,7 +1,12 @@
 /**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListProps } from 'sys.ui.react.common/src/types';
+export type {
+  CommonTheme,
+  CssEdgesInput,
+  CssValue,
+  PropListProps,
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

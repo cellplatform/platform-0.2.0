@@ -15,6 +15,7 @@ type Fields = {
     fields: typeof Wrangle.fields;
     toggleField: typeof Wrangle.toggleField;
   };
+  fields: typeof Wrangle.fields;
   builder<F extends string>(): t.PropListFieldBuilder<F>;
   FieldBuilder: typeof FieldBuilder;
   FieldSelector: typeof FieldSelector;
@@ -28,6 +29,12 @@ export const PropList = FC.decorate<t.PropListProps, Fields>(
   View,
   {
     DEFAULTS,
+    Wrangle: {
+      title: Wrangle.title,
+      fields: Wrangle.fields,
+      toggleField: Wrangle.toggleField,
+    },
+    fields: Wrangle.fields,
     builder: FieldBuilder,
     FieldBuilder,
     FieldSelector,
@@ -35,11 +42,6 @@ export const PropList = FC.decorate<t.PropListProps, Fields>(
     Hash,
     Chip,
     Empty,
-    Wrangle: {
-      title: Wrangle.title,
-      fields: Wrangle.fields,
-      toggleField: Wrangle.toggleField,
-    },
   },
   { displayName: 'PropList' },
 );

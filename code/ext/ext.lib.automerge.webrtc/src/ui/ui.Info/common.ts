@@ -35,6 +35,7 @@ const fields = {
 };
 
 export const DEFAULTS = {
+  displayName: 'Automerge.Webrtc.Info',
   fields,
   doc: { uri },
   query: { dev: 'dev' },

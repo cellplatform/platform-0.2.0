@@ -10,7 +10,7 @@ import { rebuild } from './use.Stateful.rebuild';
  */
 export function useStateful(props: t.InfoProps) {
   const { stateful = DEFAULTS.stateful } = props;
-  const fields = PropList.Wrangle.fields(props.fields);
+  const fields = PropList.fields(props.fields);
 
   const data = useData(props.data);
   const reset = useObservableReset(props.resetState$);

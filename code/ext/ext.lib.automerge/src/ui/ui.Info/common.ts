@@ -45,6 +45,7 @@ const uri: Required<t.InfoDataDocUri> = {
 };
 
 export const DEFAULTS = {
+  displayName: 'Automerge.Info',
   stateful: false,
   visibleFilter,
   repo: { label: 'Store' },

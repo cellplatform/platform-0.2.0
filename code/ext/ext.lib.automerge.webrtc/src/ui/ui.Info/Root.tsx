@@ -9,5 +9,5 @@ type Fields = {
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
   { DEFAULTS, useRedraw },
-  { displayName: 'Info' },
+  { displayName: DEFAULTS.displayName },
 );

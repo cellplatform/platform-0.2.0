@@ -5,6 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
+  displayName: 'PeerJS.Info',
   fields: {
     get all(): t.InfoField[] {
       return ['Module', 'Module.Verify', 'Component', 'Peer', 'Peer.Remotes'];

@@ -12,7 +12,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     clipboard = DEFAULTS.clipboard,
     data = DEFAULTS.data,
   } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+  const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
 
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
   const refresh$ = refreshRef$.current;
@@ -87,13 +87,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
 
   return (
     <PropList
-      title={Wrangle.title(props)}
+      title={PropList.Info.title(props)}
       items={items}
-      width={props.width ?? { min: 230 }}
+      width={PropList.Info.width(props)}
       defaults={{ clipboard: false }}
-      card={props.card}
-      flipped={props.flipped}
-      padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       theme={theme}
       style={props.style}

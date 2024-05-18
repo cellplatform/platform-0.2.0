@@ -16,13 +16,12 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
-  type LocalStore = Pick<P, 'fields' | 'stateful' | 'flipped' | 'theme'> & T['debug'];
+  type LocalStore = Pick<P, 'fields' | 'stateful' | 'theme'> & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     fields: DEFAULTS.fields.default,
     stateful: true,
-    flipped: false,
     forcePublicUrl: false,
   });
 
@@ -48,7 +47,6 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.stateful = local.stateful;
-      d.props.flipped = local.flipped;
       d.props.margin = 10;
       d.props.data = {
         endpoint: {},
@@ -148,14 +146,6 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
-
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.flipped;
-        btn
-          .label((e) => 'flipped')
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped'))));
-      });
     });
 
     dev.hr(5, 20);

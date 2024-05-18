@@ -80,8 +80,6 @@ export type InfoProps = {
   data?: t.InfoData;
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
 
   stateful?: boolean;
   resetState$?: t.Observable<any>;

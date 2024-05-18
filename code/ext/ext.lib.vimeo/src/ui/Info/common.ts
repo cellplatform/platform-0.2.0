@@ -4,10 +4,17 @@ export * from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.InfoField[] = ['Module', 'Module.Verify'];
-const fields = ['Module', 'Module.Verify'] as t.InfoField[];
+const fields = {
+  get all(): t.InfoField[] {
+    return ['Module', 'Module.Verify'];
+  },
+  get default(): t.InfoField[] {
+    return ['Module', 'Module.Verify'];
+  },
+};
 
 export const DEFAULTS = {
+  displayName: 'Vimeo.Info',
   fields,
   query: { dev: 'dev' },
 } as const;

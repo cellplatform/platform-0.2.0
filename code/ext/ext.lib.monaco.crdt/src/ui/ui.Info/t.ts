@@ -15,7 +15,5 @@ export type InfoProps = {
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
   style?: t.CssValue;
 };
