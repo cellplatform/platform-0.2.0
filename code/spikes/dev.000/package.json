@@ -18,7 +18,7 @@
     "@automerge/automerge-repo": "1.1.12",
     "@automerge/automerge-repo-network-messagechannel": "1.1.12",
     "@automerge/automerge-repo-storage-indexeddb": "1.1.12",
-    "automerge-repo-network-peerjs": "1.1.12",
+    "automerge-repo-network-peerjs": "1.1.13",
     "ext.lib.ai.openai": "0.0.0",
     "ext.lib.automerge": "0.0.0",
     "ext.lib.automerge.webrtc": "0.0.0",

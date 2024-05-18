@@ -27,7 +27,8 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const borderColor = theme.alpha.fg(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
-      backgroundColor: selected ? Color.format(selected.color) : undefined,
+      // backgroundColor: selected ? Color.format(selected.color) : undefined,
+      backgroundColor: 'rgba(255, 0, 0, 0.3)' /* RED */,
       position: 'relative',
       paddingTop: 4,
       paddingBottom: noBorder ? 0 : 4,

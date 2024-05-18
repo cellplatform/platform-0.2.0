@@ -1249,51 +1249,6 @@
     "@preact/signals-core" "^1.6.0"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.64.0":
-  version "1.64.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.64.0.tgz#84496cbd34ac87f2c6749e8d90cabd7116cbf215"
-  integrity sha512-UNaZXWCu+7+RTWlmxo94AWDBHo3u1OJ70K1LQJ1yQtVm4uGKoBXxPY2ok1Ydru0OKoIuMAYaeL+mlRRSmZaLqA==
-  dependencies:
-    "@coinbase/wallet-sdk" "3.9.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.1.1"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@simplewebauthn/browser" "^9.0.1"
-    "@walletconnect/ethereum-provider" "^2.11.1"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.7"
-    ofetch "^1.3.4"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-
 "@privy-io/react-auth@1.65.0":
   version "1.65.0"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.65.0.tgz#559b55aea897d46a836997257da52989ec1529d2"
@@ -2656,6 +2611,11 @@ automerge-repo-network-peerjs@1.1.12:
   resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.12.tgz#a9c772c06128234050856546e512d393911d49a7"
   integrity sha512-ApbHKm0ck9uoHsxSXWjYYSYawGYE8OuyUyTpfEHJdLpLWzQpPOvyC8AuqaljciUm2HAEQKDv44IIaiXfJO+bug==
 
+automerge-repo-network-peerjs@1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.13.tgz#17eaa583d21899dc10c73c042ad00d0fea7e4dae"
+  integrity sha512-gcq+HsOeMsDzSpy3BEdxf5ptefCyznj4wLsOE0oMd/ywZnf+JNCP7DCZHZuzhEM4X5UnTFmhLiAs5kHkbNG8Hw==
+
 automerge-tldraw@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/automerge-tldraw/-/automerge-tldraw-0.2.0.tgz#75004c429ac6245249a62313840d21d94ae02b55"
@@ -2952,7 +2912,7 @@ caniuse-lite@^1.0.30001587:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001617.tgz#809bc25f3f5027ceb33142a7d6c40759d7a901eb"
   integrity sha512-mLyjzNI9I+Pix8zwcrpxEbGlfqOkF9kM3ptzmKNw5tizSyYwMe+nGLTqMK9cO+0E+Bh6TsBxNAaHWEM8xwSsmA==
 
-cbor-extract@^2.1.1, cbor-extract@^2.2.0:
+cbor-extract@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cbor-extract/-/cbor-extract-2.2.0.tgz#cee78e630cbeae3918d1e2e58e0cebaf3a3be840"
   integrity sha512-Ig1zM66BjLfTXpNgKpvBePq271BPOvu8MR0Jl080yG7Jsl+wAZunfrwiwA+9ruzm/WEdIV5QF/bjDZTqyAIVHA==
@@ -2965,13 +2925,6 @@ cbor-extract@^2.1.1, cbor-extract@^2.2.0:
     "@cbor-extract/cbor-extract-linux-arm64" "2.2.0"
     "@cbor-extract/cbor-extract-linux-x64" "2.2.0"
     "@cbor-extract/cbor-extract-win32-x64" "2.2.0"
-
-cbor-x@1.5.4:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/cbor-x/-/cbor-x-1.5.4.tgz#8f0754fa8589cbd7339b613b2b5717d133508e98"
-  integrity sha512-PVKILDn+Rf6MRhhcyzGXi5eizn1i0i3F8Fe6UMMxXBnWkalq9+C5+VTmlIjAYM4iF2IYF2N+zToqAfYOp+3rfw==
-  optionalDependencies:
-    cbor-extract "^2.1.1"
 
 cbor-x@^1.3.0:
   version "1.5.9"
@@ -4124,13 +4077,6 @@ formdata-node@^4.3.2:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
 
-framer-motion@11.1.9:
-  version "11.1.9"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.1.9.tgz#1ef021fc35615eb83d6baa903a47ba872be99187"
-  integrity sha512-flECDIPV4QDNcOrDafVFiIazp8X01HFpzc01eDKJsdNH/wrATcYydJSH9JbPWMS8UD5lZlw+J1sK8LG2kICgqw==
-  dependencies:
-    tslib "^2.4.0"
-
 framer-motion@11.2.4:
   version "11.2.4"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.2.4.tgz#d4e37071f12c1f2ac77673a179f9d24d0faad820"
@@ -4874,11 +4820,6 @@ isomorphic-unfetch@3.1.0:
   dependencies:
     node-fetch "^2.6.1"
     unfetch "^4.2.0"
-
-isows@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.3.tgz#93c1cf0575daf56e7120bab5c8c448b0809d0d74"
-  integrity sha512-2cKei4vlmg2cxEjm3wVSqn8pcoRF/LX/wpifuuNquFO4SQmPwarClT+SUCA2lt+l581tTeZIPIZuIDo2jWN1fg==
 
 isows@1.0.4:
   version "1.0.4"
@@ -6328,17 +6269,6 @@ peerjs-js-binarypack@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/peerjs-js-binarypack/-/peerjs-js-binarypack-2.1.0.tgz#f0fc822d3cb54ab1022f4bd580308475e8f77b70"
   integrity sha512-YIwCC+pTzp3Bi8jPI9UFKO0t0SLo6xALnHkiNt/iUFmUUZG0fEEmEyFKvjsDKweiFitzHRyhuh6NvyJZ4nNxMg==
-
-peerjs@1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/peerjs/-/peerjs-1.5.3.tgz#be08a44cdef307e39d8ff38412427430fdf3d52c"
-  integrity sha512-C0i/PnmMxfqJnNjm/39CSwBDtJScnBYRd49zYn85ArLoseIYIj28CJbpg5qDgkhftpV2qXsk9yNDmRHpLRT54g==
-  dependencies:
-    "@msgpack/msgpack" "^2.8.0"
-    cbor-x "1.5.4"
-    eventemitter3 "^4.0.7"
-    peerjs-js-binarypack "^2.1.0"
-    webrtc-adapter "^8.0.0"
 
 peerjs@1.5.4:
   version "1.5.4"
@@ -7898,20 +7828,6 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.10.3:
-  version "2.10.3"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.10.3.tgz#7ddbbd6dd7ae356546b7afc1b878b8b054833c3b"
-  integrity sha512-GmPMH+D/SDSXpVSjLM0GN1H1/h4NUPHaIqnFLwAit8nkfCiDuajKflGFiMPCIs1h7QZlBICuKvON/rc09H+w6Q==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.2.0"
-    "@noble/hashes" "1.3.2"
-    "@scure/bip32" "1.3.2"
-    "@scure/bip39" "1.2.1"
-    abitype "1.0.0"
-    isows "1.0.3"
-    ws "8.13.0"
-
 viem@2.10.9:
   version "2.10.9"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.10.9.tgz#2ccd69cb073b547507ea86c42c122daa3128af55"
@@ -8189,13 +8105,6 @@ webpack-virtual-modules@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.6.1.tgz#ac6fdb9c5adb8caecd82ec241c9631b7a3681b6f"
   integrity sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==
-
-webrtc-adapter@^8.0.0:
-  version "8.2.3"
-  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-8.2.3.tgz#85e5e52ea68e808be8d6db85e338aa5c95e80022"
-  integrity sha512-gnmRz++suzmvxtp3ehQts6s2JtAGPuDPjA1F3a9ckNpG1kYdYuHWYpazoAnL9FS5/B21tKlhkorbdCXat0+4xQ==
-  dependencies:
-    sdp "^3.2.0"
 
 webrtc-adapter@^9.0.0:
   version "9.0.1"
