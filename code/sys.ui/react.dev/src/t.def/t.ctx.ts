@@ -22,6 +22,7 @@ export type DevContext = t.Disposable & {
 
 export type DevRedrawTarget = 'all' | 'subject' | 'harness' | 'debug';
 export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
+export type DevSubjectSize = [NumberOrNil, NumberOrNil];
 export type DevPropDisplay = 'flex' | 'grid' | undefined;
 export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
 
@@ -65,7 +66,7 @@ export type DevCtxSubject = {
   display(value: DevPropDisplay): DevCtxSubject;
   color(value?: Color | null): DevCtxSubject;
   backgroundColor(value?: Color | null): DevCtxSubject;
-  size(value: [NumberOrNil, NumberOrNil]): DevCtxSubject;
+  size(value: DevSubjectSize): DevCtxSubject;
   size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxSubject;
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxSubject;
 };

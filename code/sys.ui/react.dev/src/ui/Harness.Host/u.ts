@@ -5,12 +5,12 @@ export const Wrangle = {
     let width: number | undefined;
     let height: number | undefined;
 
-    if (!value) return { width, height };
-    if (value.mode === 'fill') return { width, height };
+    if (!value) return { width, height } as const;
+    if (value.mode === 'fill') return { width, height } as const;
 
     width = value.width;
     height = value.height;
-    return { width, height };
+    return { width, height } as const;
   },
 
   fillMargin(value?: t.DevRenderSize) {
@@ -23,4 +23,4 @@ export const Wrangle = {
   asMargin(value: number): t.Margin {
     return Margin.toArray(value);
   },
-};
+} as const;

@@ -15,12 +15,14 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
   const { size } = renderProps.subject;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
-
   const is = {
     x: size?.mode === 'fill' && size.x && !size.y,
     y: size?.mode === 'fill' && !size.x && size.y,
   } as const;
 
+  /**
+   * [Render]
+   */
   const GRID = {
     FILL: {
       COLUMNS: `[left] ${fillMargin[3]}px [body-x] 1fr [right] ${fillMargin[1]}px`,
@@ -32,9 +34,19 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
     },
   } as const;
 
-  /**
-   * [Render]
-   */
+  const fill = {
+    gridTemplateColumns: is.y ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,
+    gridTemplateRows: is.x ? GRID.CENTER.ROWS : GRID.FILL.ROWS,
+  };
+  const center = {
+    gridTemplateColumns: GRID.CENTER.COLUMNS,
+    gridTemplateRows: GRID.CENTER.ROWS,
+  };
+  const grid = {
+    center: sizeMode === 'center' && center,
+    fill: sizeMode === 'fill' && fill,
+  };
+
   const border = props.border;
   const borderLeft = border;
   const borderRight = border;
@@ -43,25 +55,15 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
 
   const styles = {
     base: css({ Absolute: 0, display: 'grid' }),
-    block: css({ boxSizing: 'border-box', padding: 1 }),
-    grid: {
-      fill: css({
-        gridTemplateColumns: is.y ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,
-        gridTemplateRows: is.x ? GRID.CENTER.ROWS : GRID.FILL.ROWS,
-      }),
-      center: css({
-        gridTemplateColumns: GRID.CENTER.COLUMNS,
-        gridTemplateRows: GRID.CENTER.ROWS,
-      }),
-    },
+    block: css({}),
   };
 
   return (
     <div
       {...css(
         styles.base,
-        sizeMode === 'center' ? styles.grid.center : undefined,
-        sizeMode === 'fill' ? styles.grid.fill : undefined,
+        sizeMode === 'center' ? grid.center : undefined,
+        sizeMode === 'fill' ? grid.fill : undefined,
         props.style,
       )}
     >

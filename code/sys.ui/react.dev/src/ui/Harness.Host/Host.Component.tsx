@@ -10,39 +10,34 @@ export type HostComponentProps = {
 };
 
 export const HostComponent: React.FC<HostComponentProps> = (props) => {
-  const { instance } = props;
+  const { instance, border } = props;
   const component = props.renderProps?.subject;
   const renderer = component?.renderer;
-  const { element } = useRenderer(instance, renderer);
 
-  if (!component || !element) return <div />;
+  const { element } = useRenderer(instance, renderer);
 
   /**
    * [Render]
    */
-  const size = Wrangle.componentSize(component?.size);
+  const { width, height } = Wrangle.componentSize(component?.size);
   const styles = {
-    base: css({
+    base: css({ position: 'relative', display: 'grid', border }),
+    body: css({
       position: 'relative',
-      border: props.border,
-      display: 'flex',
-    }),
-    container: css({
-      flex: 1,
-      position: 'relative',
-      display: component.display,
-      width: size.width,
-      height: size.height,
-      color: Color.format(component.color),
-      backgroundColor: Color.format(component.backgroundColor),
+      display: component?.display,
+      color: Color.format(component?.color),
+      // backgroundColor: Color.format(component?.backgroundColor),
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      width,
+      height,
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div ref={props.subjectRef} {...styles.container} className={'ComponentHost'}>
-        {element}
-      </div>
+  const elBody = element && (
+    <div ref={props.subjectRef} {...styles.body} className={'ComponentHost'}>
+      {element}
     </div>
   );
+
+  return <div {...css(styles.base, props.style)}>{elBody}</div>;
 };
