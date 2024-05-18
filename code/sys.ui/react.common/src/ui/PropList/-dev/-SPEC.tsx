@@ -1,7 +1,7 @@
 import { PropList } from '..';
-import { COLORS, Color, Dev, Keyboard, Pkg, css, type t } from '../../../test.ui';
+import { Dev, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
-import { sampleItems } from './-SPEC.ui';
+import sampleItems from './-SPEC.ui';
 import { BuilderSample } from './-SPEC.ui.Builder';
 import { SampleFields, type MyField } from './-common';
 
@@ -24,19 +24,10 @@ const initial: T = {
 
 const name = PropList.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'theme'> & {
-    card: boolean;
-    flipped: boolean;
-    header: boolean;
-    footer: boolean;
-  };
+  type LocalStore = Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
-    card: false,
-    flipped: false,
-    header: false,
-    footer: false,
   });
 
   e.it('init', async (e) => {
@@ -46,10 +37,6 @@ export default Dev.describe(name, (e) => {
 
     state.change((d) => {
       d.props.theme = local.theme;
-      d.props.card = local.card;
-      d.props.flipped = local.flipped;
-      d.debug.header = local.header;
-      d.debug.footer = local.footer;
     });
 
     ctx.debug.width(330);
@@ -57,53 +44,10 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .size([250, null])
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
-
-        const isCard = Boolean(props.card);
-        ctx.subject.size([isCard ? 250 + 25 * 2 : 250, null]);
-        ctx.host.tracelineColor(isCard ? -0.03 : -0.05);
-
-        const styles = {
-          header: css({
-            Padding: [8, 10],
-            borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-          }),
-          footer: css({
-            Padding: [8, 10],
-            borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-          }),
-        };
-
-        const backside = <div>🐷 Sample Backside</div>;
-        const elHeader = debug.header && <div {...styles.header}>Header</div>;
-        const elFooter = debug.footer && <div {...styles.footer}>Footer</div>;
-
-        return (
-          <PropList
-            {...props}
-            header={elHeader}
-            footer={elFooter}
-            backside={backside}
-            backsideHeader={elHeader}
-            backsideFooter={elFooter}
-          />
-        );
+        return <PropList {...props} />;
       });
-  });
-
-  e.it('init:keyboard', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    Keyboard.on({
-      Enter(e) {
-        e.handled();
-        state.change((d) => {
-          local.flipped = Dev.toggle(d.props, 'flipped');
-          local.card = d.props.card = true;
-        });
-      },
-    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -124,38 +68,6 @@ export default Dev.describe(name, (e) => {
           .label('defaults.monospace')
           .value((e) => e.state.props.defaults?.monospace)
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label('card')
-          .value((e) => Boolean(e.state.props.card))
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `flipped (← Enter)`)
-          .value((e) => Boolean(e.state.props.flipped))
-          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `header`)
-          .value((e) => Boolean(e.state.debug.header))
-          .onClick((e) => e.change((d) => (local.header = Dev.toggle(d.debug, 'header')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `footer`)
-          .value((e) => Boolean(e.state.debug.footer))
-          .onClick((e) => e.change((d) => (local.footer = Dev.toggle(d.debug, 'footer')))),
       );
 
       dev.hr(5, 20);

@@ -1,8 +1,6 @@
-import { type t } from '../../common';
+import type { t } from '../../common';
 
 export { Button } from '../Button';
-export { Card } from '../Card';
-export { Wrangle as WrangleCard } from '../Card/Wrangle.mjs';
 export { Chip } from '../Chip';
 
 export * from '../common';
@@ -10,9 +8,9 @@ export * from '../common';
 /**
  * Constants
  */
-export const THEMES: t.CommonTheme[] = ['Light', 'Dark'];
+const theme: t.CommonTheme = 'Light';
 export const DEFAULTS = {
-  theme: THEMES[0],
+  theme,
   fontSize: { sans: 12, mono: 11 },
   messageDelay: 1500,
 } as const;

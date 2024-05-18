@@ -1,23 +1,22 @@
-import { Card, COLORS, css, DEFAULTS, type t } from './common';
+import { COLORS, Color, DEFAULTS, Style, css, type t } from './common';
 import { PropListItem, PropListTitle } from './item';
 import { Wrangle } from './u';
-import { Empty } from './ui.Empty';
 
 /**
  * Component
  */
 export const View: React.FC<t.PropListProps> = (props) => {
-  const { title, theme = DEFAULTS.theme } = props;
+  const { title } = props;
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
-  const card = Wrangle.cardProps(props);
 
   const defaults: t.PropListDefaults = {
     clipboard: false,
     ...props.defaults,
   };
 
+  const theme = Color.theme(props.theme ?? DEFAULTS.theme);
   const styles = {
     base: css({
       position: 'relative',
@@ -28,6 +27,9 @@ export const View: React.FC<t.PropListProps> = (props) => {
       minHeight: height?.min ?? 10,
       maxWidth: width?.max,
       maxHeight: height?.max,
+      boxSizing: 'border-box',
+      ...Style.toPadding(props.padding),
+      ...Style.toMargins(props.margin),
     }),
   };
 
@@ -41,39 +43,33 @@ export const View: React.FC<t.PropListProps> = (props) => {
           item={item!}
           is={{ first: i === 0, last: i === items.length - 1 }}
           defaults={defaults}
-          theme={theme}
+          theme={theme.name}
         />
       );
     });
 
   const hasTitle = Wrangle.hasTitle(title);
   const elTitle = hasTitle && (
-    <PropListTitle total={items.length} theme={theme} defaults={defaults} data={title} />
+    <PropListTitle
+      //
+      total={items.length}
+      theme={theme.name}
+      defaults={defaults}
+      data={title}
+    />
   );
 
   // Exit if empty.
   if (items.length === 0 && !hasTitle) return null;
 
   return (
-    <Card
-      style={css(styles.base, props.style)}
-      showAsCard={!!card}
-      showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
-      backside={props.backside || <Empty theme={theme} />}
-      backsideHeader={props.backsideHeader}
-      backsideFooter={props.backsideFooter}
-      header={props.header}
-      footer={props.footer}
-      shadow={card?.shadow}
-      background={card?.background}
-      border={card?.border}
-      padding={props.padding ?? card ? [20, 25] : undefined}
-      margin={props.margin}
+    <div
+      {...css(styles.base, props.style)}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
     >
-      <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
-        {elTitle}
-        {items.length > 0 && <div>{elItems}</div>}
-      </div>
-    </Card>
+      {elTitle}
+      {items.length > 0 && <div>{elItems}</div>}
+    </div>
   );
 };

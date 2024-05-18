@@ -36,7 +36,7 @@ export default Spec.describe('Size/Empty', (e) => {
     renderButton('null', null);
     renderButton('undefined', undefined);
     dev.hr();
-    const bgr = { backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ };
+    const bgr = { backgroundColor: 'rgba(255, 0, 0, 0.5)' };
     const renderDiv = (style: t.CssValue) => <div style={{ ...style, ...bgr }} />;
     renderButton('<div> ← flat (height: 1px)', renderDiv({ width: 300, height: 1 }));
     renderButton('<div> ← narrow (width: 1px)', renderDiv({ width: 1, height: 300 }));

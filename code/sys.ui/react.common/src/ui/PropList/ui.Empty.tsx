@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { Color, DEFAULTS, css, type t } from './common';
 
 export type EmptyProps = {
   text?: string;
@@ -8,16 +7,17 @@ export type EmptyProps = {
 };
 
 export const Empty: React.FC<EmptyProps> = (props) => {
-  const { text = 'Nothing to display.', theme = DEFAULTS.theme } = props;
+  const { text = 'Nothing to display.' } = props;
 
   /**
    * Render
    */
+  const theme = Color.theme(props.theme ?? DEFAULTS.theme);
   const styles = {
     base: css({
       fontSize: 14,
       fontStyle: 'italic',
-      color: theme === 'Light' ? Color.alpha(COLORS.DARK, 0.4) : Color.alpha(COLORS.WHITE, 0.6),
+      color: theme.is.light ? theme.alpha.fg(0.4) : theme.alpha.fg(0.6),
       paddingTop: 8,
       display: 'grid',
       placeItems: 'center',

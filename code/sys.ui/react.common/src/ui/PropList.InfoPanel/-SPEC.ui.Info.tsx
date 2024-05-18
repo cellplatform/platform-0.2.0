@@ -23,6 +23,7 @@ export const DEFAULTS = {
 export const Info: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
   const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+  const title = PropList.Wrangle.title(props.title);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module(theme))
@@ -35,27 +36,13 @@ export const Info: React.FC<t.InfoProps> = (props) => {
    */
   return (
     <PropList
-      title={Wrangle.title(props)}
+      title={title}
       items={items}
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
       theme={theme}
-      card={props.card}
-      flipped={props.flipped}
-      padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       style={props.style}
     />
   );
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  title(props: t.InfoProps) {
-    const title = PropList.Wrangle.title(props.title);
-    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
-    return title;
-  },
 };
