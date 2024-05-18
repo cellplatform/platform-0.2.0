@@ -35,9 +35,11 @@ export default Spec.describe('Size/Empty', (e) => {
     renderButton('<div/>', <div />);
     renderButton('null', null);
     renderButton('undefined', undefined);
+    dev.hr();
     const bgr = { backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ };
-    renderButton('<div> ← flat (1px)', <div style={{ width: 300, height: 1, ...bgr }} />);
-    renderButton('<div> ← narrow (1px)', <div style={{ width: 1, height: 300, ...bgr }} />);
+    const renderDiv = (style: t.CssValue) => <div style={{ ...style, ...bgr }} />;
+    renderButton('<div> ← flat (height: 1px)', renderDiv({ width: 300, height: 1 }));
+    renderButton('<div> ← narrow (width: 1px)', renderDiv({ width: 1, height: 300 }));
     renderButton('<div> content </div>', <div>{'👋 hello'}</div>);
 
     dev.hr();

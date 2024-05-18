@@ -5,7 +5,6 @@ export { Pkg } from '../index.pkg.mjs';
 export const ModuleSpecs = {
   'sys.ui.dev.Harness': () => import('../ui/Harness/-SPEC'),
   'sys.ui.dev.ModuleList': () => import('../ui/List.Module/-SPEC'),
-  // 'sys.ui.dev.list.SpecList': () => import('../ui/List.Spec/-SPEC'),
 } as t.SpecImports;
 
 export const SampleSpecs = {
