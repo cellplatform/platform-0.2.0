@@ -1,6 +1,11 @@
+import { type t } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
-export const DEFAULTS = { query: { dev: 'dev' } } as const;
+const width: t.PropListSize = { min: 230 };
+export const DEFAULTS = {
+  query: { dev: 'dev' },
+  width,
+} as const;

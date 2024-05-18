@@ -11,8 +11,6 @@ export type CommonInfoProps<F extends string = string, D extends O = {}> = {
   fields?: (F | undefined)[];
   data?: D;
   margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
   stateful?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
