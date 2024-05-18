@@ -137,7 +137,7 @@ export default Dev.describe(name, async (e) => {
           <Dev.FieldSelector
             all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(e) => setFields(e.next<t.InfoField>())}
+            onClick={(e) => setFields(e.next<t.InfoField>(DEFAULTS.fields.default))}
           />
         );
       });

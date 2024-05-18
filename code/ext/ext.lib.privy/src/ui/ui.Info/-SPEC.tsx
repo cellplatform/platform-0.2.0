@@ -95,7 +95,7 @@ export default Dev.describe(name, (e) => {
             all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(e) => {
-              const next = e.next<t.InfoField>();
+              const next = e.next<t.InfoField>(DEFAULTS.fields.default);
               dev.change((d) => (local.fields = d.props.fields = next));
             }}
           />

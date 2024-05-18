@@ -38,7 +38,6 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
-
         return <Info {...props} />;
       });
   });
@@ -58,7 +57,7 @@ export default Dev.describe(name, (e) => {
           <Dev.FieldSelector
             all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(e) => update(e.next())}
+            onClick={(e) => update(e.next(DEFAULTS.fields.default))}
           />
         );
       });

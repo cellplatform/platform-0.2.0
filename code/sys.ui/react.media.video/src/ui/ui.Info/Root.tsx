@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
+import { DEFAULTS, FC, Pkg, PropList, type t } from './common';
 import { FieldModuleVerify } from './fields/Module.Verify';
 
 /**
@@ -6,7 +6,7 @@ import { FieldModuleVerify } from './fields/Module.Verify';
  */
 const View: React.FC<t.InfoProps> = (props) => {
   const { data = {} } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields);
+  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
@@ -42,12 +42,5 @@ const Wrangle = {
 /**
  * Export
  */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-  FIELDS: typeof FIELDS;
-};
-export const Info = FC.decorate<t.InfoProps, Fields>(
-  View,
-  { DEFAULTS, FIELDS },
-  { displayName: 'Info' },
-);
+type Fields = { DEFAULTS: typeof DEFAULTS };
+export const Info = FC.decorate<t.InfoProps, Fields>(View, { DEFAULTS }, { displayName: 'Info' });

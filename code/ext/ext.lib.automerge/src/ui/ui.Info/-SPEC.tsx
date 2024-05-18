@@ -169,7 +169,7 @@ export default Dev.describe(name, async (e) => {
             all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(e) => {
-              setFields(dev, e.next<t.InfoField>());
+              setFields(dev, e.next<t.InfoField>(DEFAULTS.fields.default));
               resetState$.next();
             }}
           />

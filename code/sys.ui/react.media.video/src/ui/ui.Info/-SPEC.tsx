@@ -1,4 +1,4 @@
-import { Info } from '.';
+import { Info, DEFAULTS } from '.';
 import { Dev, type t } from '../../test.ui';
 
 type P = t.InfoProps;
@@ -9,7 +9,7 @@ export default Dev.describe('Info', (e) => {
   type LocalStore = Pick<P, 'fields'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.vime.Info');
   const local = localstore.object({
-    fields: Info.DEFAULTS.fields,
+    fields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,10 +40,10 @@ export default Dev.describe('Info', (e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            all={Info.FIELDS}
+            all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(e) => {
-              const next = e.next<t.InfoField>();
+              const next = e.next<t.InfoField>(DEFAULTS.fields.default);
               dev.change((d) => (local.fields = d.props.fields = next));
             }}
           />
