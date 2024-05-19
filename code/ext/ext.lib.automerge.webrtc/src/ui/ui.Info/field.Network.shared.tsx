@@ -1,4 +1,4 @@
-import { AutomergeInfo, type t, DEFAULTS } from './common';
+import { AutomergeInfo, DEFAULTS, type t } from './common';
 
 /**
  * Shared network state (transient document).
@@ -10,7 +10,9 @@ export function shared(
 ): t.PropListItem[] {
   const network = data.network;
   const res: t.PropListItem[] = [];
+
   if (!network) return res;
+  const { store, index } = network;
 
   const toDocument = (shared: t.InfoDataDoc): t.InfoDataDoc => {
     const label = shared.label ?? DEFAULTS.shared.label;
@@ -23,12 +25,23 @@ export function shared(
     };
   };
 
-  const Field = AutomergeInfo.Field;
+  const toInfoComponent = (document: t.InfoDataDoc) => {
+    return (
+      <AutomergeInfo
+        stateful={ctx.stateful}
+        fields={['Doc', 'Doc.URI', 'Doc.Object']}
+        data={{ repo: { store, index }, document }}
+        theme={ctx.theme}
+        style={{ flex: 1 }}
+      />
+    );
+  };
+
   const shared = Array.isArray(data.shared) ? data.shared : [data.shared];
   shared
     .map((shared) => toDocument(shared ?? {}))
-    .map((shared) => Field.document(shared, ['Doc', 'Doc.URI', 'Doc.Object'], theme))
-    .forEach((fields) => res.push(...fields));
+    .map((shared) => toInfoComponent(shared))
+    .forEach((value) => res.push({ value }));
 
   return res;
 }
