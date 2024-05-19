@@ -37,7 +37,7 @@ export type InfoDataDoc = {
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
-  icon?: { onClick?(e: { uri: t.UriString }): void };
+  icon?: { onClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void };
   history?: InfoDataDocHistory;
 };
 

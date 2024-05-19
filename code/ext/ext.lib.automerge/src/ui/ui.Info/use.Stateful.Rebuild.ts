@@ -41,28 +41,42 @@ function overloader(state: State, fire: FireChanged) {
    */
   function documents(draft: t.InfoData) {
     if (!draft.document) return;
-    draft.document = Array.isArray(draft.document)
-      ? draft.document.map((item, i) => document(item, i))
-      : document(draft.document, 0);
+    const docs = Data.document.list(draft.document);
+    docs.map((_, i) => document(docs, i));
   }
 
-  function document(draft: t.InfoDataDoc, index: number) {
-    if (draft.icon) {
-      // Toggle open/close when document icon clicked.
-      const bubble = draft.icon.onClick;
-      draft.icon.onClick = (e) => {
+  function document(docs: t.InfoDataDoc[], index: number) {
+    const doc = docs[index];
+    if (doc.icon) {
+      /**
+       * Toggle open/close when document icon clicked.
+       */
+      const bubble = doc.icon.onClick;
+      const toggle = (index: number, isVisible?: boolean) => {
+        let res = false;
         state.change((d) => {
           const item = Data.document.item(d.document, index);
           if (item) {
             const object = item.object || (item.object = {});
-            object.visible = !Boolean(object.visible ?? true);
+            object.visible = isVisible ?? !Boolean(object.visible ?? true);
+            res = object.visible;
           }
         });
+        return res;
+      };
+
+      doc.icon.onClick = (e) => {
+        const isVisible = toggle(index);
+        if (e.modifiers.meta) {
+          docs.forEach((_, i) => {
+            if (i !== index) toggle(i, isVisible);
+          });
+        }
         bubble?.(e);
         fire('Toggle:ObjectVisible');
       };
     }
-    return draft;
+    return doc;
   }
 
   return {

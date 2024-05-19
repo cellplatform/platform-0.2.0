@@ -1,4 +1,14 @@
-import { Button, COLORS, Icons, Is, ObjectPath, ObjectView, css, type t } from './common';
+import {
+  ReactEvent,
+  Button,
+  COLORS,
+  Icons,
+  Is,
+  ObjectPath,
+  ObjectView,
+  css,
+  type t,
+} from './common';
 import { head } from './field.Doc.Head';
 import { history } from './field.Doc.History';
 import { DocUriButton } from './ui.Doc.UriButton';
@@ -51,7 +61,10 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
         parts.push(elIcon);
       } else {
         const uri = doc.uri;
-        const handleClick = () => data.icon?.onClick?.({ uri });
+        const handleClick: React.MouseEventHandler = (e) => {
+          const modifiers = ReactEvent.modifiers(e);
+          data.icon?.onClick?.({ uri, modifiers });
+        };
         parts.push(
           <Button theme={theme} onClick={handleClick} style={{ height }}>
             {elIcon}

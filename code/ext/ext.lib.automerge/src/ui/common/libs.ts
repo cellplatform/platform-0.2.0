@@ -9,6 +9,7 @@ export {
   Keyboard,
   ObjectView,
   PropList,
+  ReactEvent,
   RenderCount,
   Spinner,
   TestRunner,

@@ -25,8 +25,11 @@ export function shared(
     };
   };
 
-  const toInfoComponent = (document: t.InfoDataDoc) => {
-    return (
+  const shared = Array.isArray(data.shared) ? data.shared : [data.shared];
+  const document = shared.map((shared) => toDocument(shared ?? {}));
+
+  if (document.length > 0) {
+    const value = (
       <AutomergeInfo
         stateful={ctx.stateful}
         fields={['Doc', 'Doc.URI', 'Doc.Object']}
@@ -35,13 +38,8 @@ export function shared(
         style={{ flex: 1 }}
       />
     );
-  };
-
-  const shared = Array.isArray(data.shared) ? data.shared : [data.shared];
-  shared
-    .map((shared) => toDocument(shared ?? {}))
-    .map((shared) => toInfoComponent(shared))
-    .forEach((value) => res.push({ value }));
+    res.push({ value });
+  }
 
   return res;
 }
