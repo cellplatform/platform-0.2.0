@@ -1,5 +1,5 @@
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, FC, PlayButton, css, type t } from './common';
+import { DEFAULTS, PlayButton, css, type t } from './common';
 import { Progress } from './ui.Progress';
 import { useKeyboard } from './use.Keyboard.mjs';
 
@@ -73,17 +73,3 @@ export const View: React.FC<t.PlayBarProps> = (props) => {
     </div>
   );
 };
-
-/**
- * Export
- */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-  sizes: typeof DEFAULTS.sizes;
-  useKeyboard: typeof useKeyboard;
-};
-export const PlayBar = FC.decorate<t.PlayBarProps, Fields>(
-  View,
-  { DEFAULTS, sizes: DEFAULTS.sizes, useKeyboard },
-  { displayName: 'PlayBar' },
-);

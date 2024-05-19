@@ -1,5 +1,9 @@
-import { t, COLORS } from '../common';
+import { COLORS, Pkg, type t } from '../common';
+export * from '../common';
 
+/**
+ * Constants
+ */
 const style: Required<t.DevTitleStyle> = {
   color: COLORS.DARK,
   margin: [0, 0, 6, 0],
@@ -10,7 +14,8 @@ const style: Required<t.DevTitleStyle> = {
   opacity: 1,
 };
 
-export const DEFAULT = {
+export const DEFAULTS = {
+  displayName: `${Pkg.name}.DevTools.Title`,
   title: 'Untitled',
   style,
 } as const;

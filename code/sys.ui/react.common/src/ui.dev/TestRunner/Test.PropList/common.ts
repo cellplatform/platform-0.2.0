@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 
 export * from '../common';
 export { PropList } from '../../../ui/PropList';
@@ -16,6 +16,9 @@ const keyboard: t.TestPropListKeyboard = {
 };
 
 export const DEFAULTS = {
+  displayName: {
+    TestPropList: `${Pkg.name}.TestPropList`,
+  },
   ellipsis: true,
   colorDelay: 1000 * 8,
   keyboard,

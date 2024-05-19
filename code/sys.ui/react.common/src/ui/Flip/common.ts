@@ -5,7 +5,6 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Video`,
-  muted: true,
-  empty: 'Nothing to display.',
+  displayName: `${Pkg.name}.Flip`,
+  speed: 300,
 } as const;

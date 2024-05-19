@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { css, FC, type t } from '../common';
+import { css, FC, type t, DEFAULTS } from './common';
 import { SwitchThumb } from './Switch.Thumb';
 import { SwitchTrack } from './Switch.Track';
 import { SwitchTheme } from './theme';
@@ -102,10 +102,11 @@ function toTheme(input?: t.CommonTheme | Partial<t.SwitchTheme>): t.SwitchTheme 
  */
 
 type Fields = {
+  DEFAULTS: typeof DEFAULTS;
   Theme: typeof SwitchTheme;
 };
 export const Switch = FC.decorate<t.SwitchProps, Fields>(
   View,
-  { Theme: SwitchTheme },
-  { displayName: 'Switch' },
+  { DEFAULTS, Theme: SwitchTheme },
+  { displayName: DEFAULTS.displayName },
 );

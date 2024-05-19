@@ -1,7 +1,5 @@
-import { FC, Switch, type t } from '../common';
 import { Button } from '../DevTools.Button';
-
-const DEFAULT = { ...Button.DEFAULT, value: false };
+import { DEFAULTS, FC, Switch, type t } from './common';
 
 export type BooleanProps = {
   isEnabled?: boolean;
@@ -14,7 +12,7 @@ export type BooleanProps = {
 };
 
 const View: React.FC<BooleanProps> = (props) => {
-  const { value = DEFAULT.value } = props;
+  const { value = DEFAULTS.value } = props;
   const isActive = Wrangle.isActive(props);
 
   /**
@@ -57,7 +55,7 @@ const View: React.FC<BooleanProps> = (props) => {
 
 const Wrangle = {
   isActive(props: BooleanProps): boolean {
-    const { isEnabled = DEFAULT.enabled } = props;
+    const { isEnabled = DEFAULTS.enabled } = props;
     if (!isEnabled) return false;
     if (!props.onClick) return false;
     return true;
@@ -68,11 +66,11 @@ const Wrangle = {
  * Export
  */
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULT: typeof DEFAULTS;
   isActive: typeof Wrangle.isActive;
 };
 export const Boolean = FC.decorate<BooleanProps, Fields>(
   View,
-  { DEFAULT, isActive: Wrangle.isActive },
-  { displayName: 'Button.Boolean' },
+  { DEFAULT: DEFAULTS, isActive: Wrangle.isActive },
+  { displayName: DEFAULTS.displayName },
 );

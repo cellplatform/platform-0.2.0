@@ -1,4 +1,4 @@
-import { COLORS, type t } from '../common';
+import { Pkg, COLORS, type t } from '../common';
 export * from '../common';
 
 /**
@@ -13,6 +13,7 @@ const spinner: t.ButtonSpinner = {
 spinner.color;
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Button`,
   enabled: true,
   block: false,
   spinning: false,

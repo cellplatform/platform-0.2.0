@@ -10,5 +10,5 @@ type Fields = {
 export const ModuleList = FC.decorate<t.ModuleListProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'ModuleList' },
+  { displayName: DEFAULTS.displayName },
 );

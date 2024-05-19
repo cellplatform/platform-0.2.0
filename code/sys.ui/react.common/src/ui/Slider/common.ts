@@ -1,4 +1,4 @@
-import { Color, COLORS, type t } from './common';
+import { COLORS, Color, Pkg, type t } from './common';
 
 export { useRedraw } from '../../ui.use';
 export * from '../common';
@@ -9,6 +9,7 @@ type Mutate<T> = (draft: T) => void;
  * Constants
  */
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Slider`,
   enabled: true,
   percent: 0,
 

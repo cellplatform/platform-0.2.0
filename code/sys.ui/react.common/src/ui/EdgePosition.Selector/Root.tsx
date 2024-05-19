@@ -15,5 +15,5 @@ type Fields = {
 export const EdgePositionSelector = FC.decorate<t.EdgePositionSelectorProps, Fields>(
   View,
   { DEFAULTS, toPos, toPosition },
-  { displayName: 'EdgePositionSelector' },
+  { displayName: DEFAULTS.displayName },
 );

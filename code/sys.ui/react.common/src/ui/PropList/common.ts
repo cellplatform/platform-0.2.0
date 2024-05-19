@@ -1,8 +1,7 @@
-import type { t } from '../../common';
+import { Pkg, type t } from '../common';
 
 export { Button } from '../Button';
 export { Chip } from '../Chip';
-
 export * from '../common';
 
 /**
@@ -10,6 +9,7 @@ export * from '../common';
  */
 const theme: t.CommonTheme = 'Light';
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.PropList`,
   theme,
   fontSize: { sans: 12, mono: 11 },
   messageDelay: 1500,

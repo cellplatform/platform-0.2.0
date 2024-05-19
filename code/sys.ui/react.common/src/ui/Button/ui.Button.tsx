@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Spinner } from '../Spinner';
-import { Wrangle } from './Wrangle';
 import { DEFAULTS, Style, css, type t } from './common';
+import { Wrangle } from './u';
 
 export const View: React.FC<t.ButtonProps> = (props) => {
   const {

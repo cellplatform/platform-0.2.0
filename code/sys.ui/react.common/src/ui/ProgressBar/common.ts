@@ -1,10 +1,11 @@
+import { COLORS, Color, Pkg } from '../common';
 export * from '../common';
-import { Color, COLORS } from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.ProgressBar`,
   enabled: true,
   percent: 0,
   buffered: 0,

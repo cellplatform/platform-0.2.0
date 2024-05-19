@@ -1,13 +1,11 @@
 import { Pkg } from './common';
-
-export { Keyboard } from 'sys.ui.dom';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: {
-    EventProps: `${Pkg.name}.EventProps`,
-  },
+  displayName: `${Pkg.name}.DevTools.Button`,
+  enabled: true,
+  label: 'Unnamed',
 } as const;

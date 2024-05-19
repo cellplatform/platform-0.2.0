@@ -1,5 +1,4 @@
-import { css, FC, Style, type t } from '../common';
-import { DEFAULT } from './ui.Title.DEFAULT.mjs';
+import { DEFAULTS, FC, Style, css, type t } from './common';
 
 export type TitleProps = {
   text?: string | [string, string];
@@ -13,7 +12,7 @@ const View: React.FC<TitleProps> = (props) => {
   /**
    * [Render]
    */
-  const style = { ...DEFAULT.style, ...props.style };
+  const style = { ...DEFAULTS.style, ...props.style };
   const styles = {
     base: css({
       ...Style.toMargins(style.margin),
@@ -32,8 +31,8 @@ const View: React.FC<TitleProps> = (props) => {
       }),
     text: css({
       color: style.color,
-      opacity: style.opacity ?? DEFAULT.style.opacity,
-      fontSize: style.size ?? DEFAULT.style.size,
+      opacity: style.opacity ?? DEFAULTS.style.opacity,
+      fontSize: style.size ?? DEFAULTS.style.size,
       fontWeight: style.bold ? 'bold' : undefined,
       fontStyle: style.italic ? 'italic' : undefined,
     }),
@@ -54,7 +53,7 @@ const View: React.FC<TitleProps> = (props) => {
 const Wrangle = {
   text(props: TitleProps): [string, string] {
     const text = Array.isArray(props.text) ? props.text : [props.text];
-    const left = text[0] ?? DEFAULT.title;
+    const left = text[0] ?? DEFAULTS.title;
     const right = text[1] ?? '';
     return [left, right];
   },
@@ -64,6 +63,10 @@ const Wrangle = {
  * Export
  */
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULTS: typeof DEFAULTS;
 };
-export const Title = FC.decorate<TitleProps, Fields>(View, { DEFAULT }, { displayName: 'Title' });
+export const Title = FC.decorate<TitleProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);

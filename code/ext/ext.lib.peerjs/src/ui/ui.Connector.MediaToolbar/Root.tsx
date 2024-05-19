@@ -8,5 +8,5 @@ type Fields = { DEFAULTS: typeof DEFAULTS };
 export const MediaToolbar = FC.decorate<t.MediaToolbarProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Connector.MediaToolbar' },
+  { displayName: DEFAULTS.displayName },
 );

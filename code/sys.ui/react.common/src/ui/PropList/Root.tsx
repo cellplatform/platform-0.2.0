@@ -43,5 +43,5 @@ export const PropList = FC.decorate<t.PropListProps, Fields>(
     Chip,
     Empty,
   },
-  { displayName: 'PropList' },
+  { displayName: DEFAULTS.displayName },
 );

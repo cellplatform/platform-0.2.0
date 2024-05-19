@@ -14,4 +14,4 @@ export const Util = {
   isPredicateValue(tokens: t.TextSyntaxToken[], index: number) {
     return tokens[index - 2]?.kind === 'Predicate' && tokens[index - 1]?.kind === 'Colon';
   },
-};
+} as const;

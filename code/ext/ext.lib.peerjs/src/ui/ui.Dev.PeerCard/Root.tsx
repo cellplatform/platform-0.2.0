@@ -10,5 +10,5 @@ type Fields = {
 export const PeerCard = FC.decorate<t.DevPeerCardProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Dev.PeerCard' },
+  { displayName: DEFAULTS.displayName },
 );

@@ -1,4 +1,4 @@
-import { Color, COLORS, type t } from '../common';
+import { Color, COLORS, type t } from './common';
 import { Flip } from '../Flip';
 
 export const Wrangle = {
@@ -44,7 +44,7 @@ export const Wrangle = {
 
   showBackside(props: t.CardProps): t.CardBackside {
     let flipped = false;
-    let speed = Flip.DEFAULTS.speed;
+    let speed: number = Flip.DEFAULTS.speed;
     if (!props.showBackside) return { flipped, speed };
     if (props.backside) {
       if (props.showBackside === true) flipped = true;

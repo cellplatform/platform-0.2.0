@@ -92,5 +92,5 @@ type Fields = {
 export const ProgressBar = FC.decorate<t.ProgressBarProps, Fields>(
   View,
   { DEFAULTS, Wrangle },
-  { displayName: 'ProgressBar' },
+  { displayName: DEFAULTS.displayName },
 );

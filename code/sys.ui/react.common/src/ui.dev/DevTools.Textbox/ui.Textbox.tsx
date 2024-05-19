@@ -1,10 +1,5 @@
 import { useRef, useState } from 'react';
-import { COLORS, Color, DevIcons, FC, Style, TextInput, css, type t } from '../common';
-
-const DEFAULT = {
-  isEnabled: true,
-  placeholder: 'enter text here...',
-};
+import { COLORS, Color, DEFAULTS, DevIcons, FC, Style, TextInput, css, type t } from './common';
 
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
@@ -137,7 +132,7 @@ const View: React.FC<TextboxProps> = (props) => {
 
 const Wrangle = {
   isActive(props: TextboxProps): boolean {
-    const { isEnabled = DEFAULT.isEnabled } = props;
+    const { isEnabled = DEFAULTS.isEnabled } = props;
     if (!isEnabled) return false;
     return true;
   },
@@ -148,7 +143,7 @@ const Wrangle = {
 
   placeholder(props: TextboxProps) {
     if (props.placeholder === null) return '';
-    return props.placeholder ?? DEFAULT.placeholder;
+    return props.placeholder ?? DEFAULTS.placeholder;
   },
 
   error(props: TextboxProps) {
@@ -201,11 +196,11 @@ const Wrangle = {
  * Export
  */
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULT: typeof DEFAULTS;
   isActive: typeof Wrangle.isActive;
 };
 export const Textbox = FC.decorate<TextboxProps, Fields>(
   View,
-  { DEFAULT, isActive: Wrangle.isActive },
-  { displayName: 'Textbox' },
+  { DEFAULT: DEFAULTS, isActive: Wrangle.isActive },
+  { displayName: DEFAULTS.displayName },
 );

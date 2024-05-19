@@ -1,9 +1,10 @@
-import { Pkg, type t } from '../common';
+import { Pkg } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Unnamed`,
+  displayName: `${Pkg.name}.QRCode`,
+  size: 128,
 } as const;

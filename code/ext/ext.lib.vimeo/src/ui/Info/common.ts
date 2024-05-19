@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 export * from '../common';
 
 /**
@@ -14,7 +14,7 @@ const fields = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Vimeo.Info',
+  displayName: `${Pkg.name}.Info`,
   fields,
   query: { dev: 'dev' },
 } as const;

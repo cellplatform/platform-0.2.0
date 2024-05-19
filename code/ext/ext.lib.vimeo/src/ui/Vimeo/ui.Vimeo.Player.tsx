@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { rx, FC, css, type t } from './common';
+import { DEFAULTS, FC, css, rx, type t } from './common';
 
 import { VimeoEvents as Events } from './Events.mjs';
 import { useIconController, usePlayerController } from './hooks';
@@ -108,5 +108,5 @@ type Fields = {
 export const VimeoPlayer = FC.decorate<t.VimeoPlayerProps, Fields>(
   View,
   { Events, useIconController },
-  { displayName: 'Vimeo.Player' },
+  { displayName: DEFAULTS.displayName.player },
 );

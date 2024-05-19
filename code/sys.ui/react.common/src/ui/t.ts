@@ -22,6 +22,7 @@ export type * from './ProgressBar/t';
 export type * from './PropList.FieldSelector/t';
 export type * from './PropList.InfoPanel/t';
 export type * from './PropList/t';
+export type * from './QRCode/t';
 export type * from './RenderCount/t';
 export type * from './Slider/t';
 export type * from './Spinner/t';

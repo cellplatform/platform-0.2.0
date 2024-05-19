@@ -1,6 +1,5 @@
+import { Wrangle as PlayButtonWrangle } from '../ui.PlayButton/u';
 import { DEFAULTS, type t } from './common';
-
-import { Wrangle as PlayButtonWrangle } from '../ui.PlayButton/Wrangle';
 
 export const Wrangle = {
   toPlayStatus(props: t.PlayBarProps): t.PlayButtonStatus {

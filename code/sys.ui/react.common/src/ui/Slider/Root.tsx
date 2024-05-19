@@ -10,5 +10,5 @@ type Fields = {
 export const Slider = FC.decorate<t.SliderProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Slider' },
+  { displayName: DEFAULTS.displayName },
 );

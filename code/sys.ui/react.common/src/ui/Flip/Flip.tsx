@@ -1,6 +1,4 @@
-import { css, FC, type t } from '../common';
-
-const DEFAULTS = { speed: 300 };
+import { DEFAULTS, FC, css, type t } from './common';
 
 const View: React.FC<t.FlipProps> = (props) => {
   const { flipped = false, speed = DEFAULTS.speed } = props;
@@ -37,4 +35,8 @@ const View: React.FC<t.FlipProps> = (props) => {
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const Flip = FC.decorate<t.FlipProps, Fields>(View, { DEFAULTS }, { displayName: 'Flip' });
+export const Flip = FC.decorate<t.FlipProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);

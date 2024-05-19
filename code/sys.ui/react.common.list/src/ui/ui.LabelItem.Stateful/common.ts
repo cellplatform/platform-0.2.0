@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 export * from '../common';
 
 import { DEFAULTS as MODEL_DEFAULTS } from '../ui.LabelItem.Model';
@@ -10,6 +10,7 @@ export { ListContext } from '../ui.LabelItem/Context.List';
  * Constants
  */
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.LabelItem.Stateful`,
   index: -1,
   total: -1,
   enabled: true,

@@ -1,5 +1,5 @@
 import { PropList } from '../PropList';
-import { css, FC, type t } from './common';
+import { css, FC, type t, DEFAULTS } from './common';
 
 export type EventPropsProps = {
   event?: t.KeyboardKeypress;
@@ -51,7 +51,7 @@ type Fields = { minWidth: number };
 export const EventProps = FC.decorate<EventPropsProps, Fields>(
   View,
   { minWidth: 150 },
-  { displayName: 'EventProps' },
+  { displayName: DEFAULTS.displayName.EventProps },
 );
 
 export default EventProps;

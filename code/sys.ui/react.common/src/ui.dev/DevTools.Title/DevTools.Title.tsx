@@ -1,5 +1,4 @@
-import { t, ValueHandler } from '../common';
-
+import { t, ValueHandler, DEFAULTS } from './common';
 import { Title } from './ui.Title';
 
 type O = Record<string, unknown>;
@@ -28,7 +27,7 @@ export function title<S extends O = O>(
       return args;
     },
     style(input) {
-      const value = input === null ? Title.DEFAULT.style : input;
+      const value = input === null ? DEFAULTS.style : input;
       values.style.handler(value);
       return args;
     },

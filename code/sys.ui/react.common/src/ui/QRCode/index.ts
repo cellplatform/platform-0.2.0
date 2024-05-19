@@ -1,2 +1,2 @@
-export type { QRCodeProps } from './QRCode';
 export * from './QRCode';
+export { DEFAULTS } from './common';

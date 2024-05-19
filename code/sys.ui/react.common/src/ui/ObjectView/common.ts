@@ -1,5 +1,5 @@
+import { Filesize, Pkg, R, Value, type t } from '../common';
 export * from '../common';
-import { Filesize, R, Value, type t } from '../common';
 
 const formatter: t.ObjectViewFormatter = (data) => {
   data = R.clone(data);
@@ -22,6 +22,7 @@ const formatter: t.ObjectViewFormatter = (data) => {
 const theme: t.CommonTheme = 'Light';
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.ObjectView`,
   theme,
   formatter,
   font: { size: 12 },

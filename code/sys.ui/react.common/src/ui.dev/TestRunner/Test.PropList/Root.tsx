@@ -30,5 +30,5 @@ export const TestPropList = FC.decorate<TestPropListProps, Fields>(
     useController,
     runner: Item.runner,
   },
-  { displayName: 'TestPropList' },
+  { displayName: DEFAULTS.displayName.TestPropList },
 );

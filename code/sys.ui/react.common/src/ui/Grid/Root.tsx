@@ -45,4 +45,8 @@ export const View: React.FC<t.GridProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Grid = FC.decorate<t.GridProps, Fields>(View, { DEFAULTS }, { displayName: 'Grid' });
+export const Grid = FC.decorate<t.GridProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);

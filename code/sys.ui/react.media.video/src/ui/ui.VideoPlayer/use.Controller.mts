@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 import { DEFAULTS, Time, type t } from './common';
 
 import { type PlayerProps } from '@vime/react';

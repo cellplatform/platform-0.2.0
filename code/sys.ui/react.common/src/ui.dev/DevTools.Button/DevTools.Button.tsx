@@ -1,4 +1,4 @@
-import { COLORS, Spinner, t, ValueHandler } from '../common';
+import { COLORS, Spinner, ValueHandler, type t } from './common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;

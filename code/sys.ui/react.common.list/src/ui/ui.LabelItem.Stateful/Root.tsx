@@ -29,5 +29,5 @@ export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
     useListController,
     dataid: Wrangle.dataid,
   },
-  { displayName: 'LabelItem.Stateful' },
+  { displayName: DEFAULTS.displayName },
 );

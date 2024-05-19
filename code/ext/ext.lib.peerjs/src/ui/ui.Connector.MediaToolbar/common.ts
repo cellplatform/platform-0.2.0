@@ -1,11 +1,11 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 export * from '../common';
-// import { Icons } from '../Icons';
 
 /**
  * Constants
  */
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Connector.MediaToolbar`,
   selected: false,
   focused: false,
 } as const;
