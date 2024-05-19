@@ -1,4 +1,4 @@
-import { Info } from '.';
+import { DEFAULTS, Info } from '.';
 import { Color, Dev, DevReload, Doc, Pkg, TestDb, Value, css, rx, type t } from '../../test.ui';
 import { RepoList } from '../../ui/ui.RepoList';
 import { sampleCrdt } from './-SPEC.crdt';
@@ -18,7 +18,6 @@ type T = {
   debug: D;
 };
 const initial: T = { props: {}, debug: {} };
-const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
@@ -151,7 +150,6 @@ export default Dev.describe(name, async (e) => {
             resetState$={resetState$}
             onStateChange={(e) => {
               console.info('⚡️ onStateChange', e);
-              setFields(dev, e.fields);
             }}
           />
         );
