@@ -6,6 +6,8 @@ type State = t.Immutable<t.InfoData>;
 /**
  * Override various functions on the {data} object.
  */
+export const Rebuild = {} as const;
+
 export function rebuild(state: State, fireChanged: (action: t.InfoStatefulChangeAction) => void) {
   /**
    * Override: {data.document}
