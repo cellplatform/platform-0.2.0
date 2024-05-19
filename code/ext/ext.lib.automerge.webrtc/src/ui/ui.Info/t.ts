@@ -14,6 +14,8 @@ export type InfoField =
   | 'Network.Shared'
   | 'Network.Transfer';
 
+export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; stateful: boolean };
+
 export type InfoData = {
   visible?: t.InfoDataVisible;
   url?: { href: string; title?: string };
@@ -25,7 +27,6 @@ export type InfoData = {
 };
 
 export type InfoDataShared = t.InfoDataDoc;
-
 export type InfoDataObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };
@@ -41,6 +42,7 @@ export type InfoProps = {
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
+  stateful?: boolean;
   margin?: t.CssEdgesInput;
   theme?: t.CommonTheme;
   style?: t.CssValue;

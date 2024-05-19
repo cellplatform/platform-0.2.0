@@ -4,15 +4,16 @@ type TBytes = { in: number; out: number };
 /**
  * Network data transfer.
  */
-export function transfer(bytes: TBytes, isTransmitting?: boolean, theme?: t.CommonTheme) {
+export function transfer(ctx: t.InfoFieldCtx, bytes: TBytes, isTransmitting?: boolean) {
   const total = bytes.in + bytes.out;
   const label = total === 0 ? '' : wrangle.label(bytes);
 
+  const theme = Color.theme(ctx.theme);
   const styles = {
     center: css({ Flex: 'x-center-center' }),
     iconRight: css({
       marginLeft: 5,
-      color: isTransmitting ? COLORS.BLUE : Color.theme(theme).fg,
+      color: isTransmitting ? COLORS.BLUE : theme.fg,
       opacity: total > 0 || isTransmitting ? 1 : 0.3,
       transition: 'opacity 0.2s, color 0.2s',
     }),
@@ -24,14 +25,12 @@ export function transfer(bytes: TBytes, isTransmitting?: boolean, theme?: t.Comm
 
   return {
     label: 'Network Data',
-    value: {
-      data: (
-        <div {...styles.center}>
-          <div {...styles.label}>{label}</div>
-          <Icons.Antenna size={14} style={styles.iconRight} />
-        </div>
-      ),
-    },
+    value: (
+      <div {...styles.center}>
+        <div {...styles.label}>{label}</div>
+        <Icons.Antenna size={14} style={styles.iconRight} />
+      </div>
+    ),
   };
 }
 

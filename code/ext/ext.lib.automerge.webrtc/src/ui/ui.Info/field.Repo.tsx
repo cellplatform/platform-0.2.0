@@ -3,7 +3,7 @@ import { AutomergeInfo, type t } from './common';
 /**
  * Delegate to the base Automerge library.
  */
-export function repo(data: t.InfoData, fields: t.InfoField[], theme?: t.CommonTheme) {
+export function repo(ctx: t.InfoFieldCtx, data: t.InfoData) {
   if (data.repo) return AutomergeInfo.Field.repo(data.repo);
   if (data.network) return wrangle.fromNetwork(data.network);
   return undefined;

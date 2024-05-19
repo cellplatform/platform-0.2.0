@@ -4,9 +4,9 @@ import { AutomergeInfo, type t, DEFAULTS } from './common';
  * Shared network state (transient document).
  */
 export function shared(
+  ctx: t.InfoFieldCtx,
   data: t.InfoData,
   ref?: t.DocRef<t.CrdtShared>,
-  theme?: t.CommonTheme,
 ): t.PropListItem[] {
   const network = data.network;
   const res: t.PropListItem[] = [];
