@@ -30,7 +30,7 @@ const fields = {
     ];
   },
   get default(): t.InfoField[] {
-    return ['Module', 'Module.Verify'];
+    return ['Module', 'Module.Verify', 'Repo'];
   },
 };
 
@@ -48,6 +48,7 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}.Info`,
   stateful: false,
   visibleFilter,
+  fields,
   repo: { label: 'Store' },
   doc: { head: { label: 'Head', hashLength: 6 }, uri },
   history: {
@@ -55,6 +56,5 @@ export const DEFAULTS = {
     list: { page: 0, limit: 5, sort: 'desc' },
     item: { hashLength: 6 },
   },
-  fields,
   query: { dev: 'dev' },
 } as const;
