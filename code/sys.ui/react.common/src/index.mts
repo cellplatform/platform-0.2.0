@@ -51,7 +51,7 @@ export {
 } from './ui.use';
 
 /**
- * Common up-stream modules
+ * Common helpers.
  */
 export {
   BADGES,
@@ -59,6 +59,7 @@ export {
   Color,
   FC,
   File,
+  ReactEvent,
   Style,
   UserAgent,
   css,

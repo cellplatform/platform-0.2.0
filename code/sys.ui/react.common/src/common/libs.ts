@@ -34,4 +34,4 @@ export {
 export { File, KeyboardMonitor, LocalStorage, UserAgent } from 'sys.ui.dom';
 export { Color, Style, css } from 'sys.ui.react.css';
 export { BADGES, useRubberband } from 'sys.ui.react.dev';
-export { FC, useClickInside, useClickOutside, useMouse } from 'sys.ui.react.util';
+export { FC, ReactEvent, useClickInside, useClickOutside, useMouse } from 'sys.ui.react.util';
