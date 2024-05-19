@@ -99,11 +99,10 @@ export type InfoDataHistoryItemHandlerArgs = {
   readonly is: { first: boolean; last: boolean };
 };
 
+export type InfoStatefulChangeAction = 'Toggle:Visible' | 'Toggle:ObjectVisible';
 export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
 export type InfoStatefulChangeHandlerArgs = {
   readonly action: InfoStatefulChangeAction;
   readonly fields: InfoField[];
   readonly data: InfoData;
 };
-
-export type InfoStatefulChangeAction = 'Toggle:Visible' | 'Toggle:ObjectVisible';

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, PropList, useObservableReset, useProxy, type t } from './common';
+import { DEFAULTS, PropList, useObservableReset, useProxy, useRedraw, type t } from './common';
 import { Diff } from './u';
 import { useData } from './use.Data';
-import { rebuild } from './use.Stateful.rebuild';
+import { Rebuild, type FireChanged } from './use.Stateful.Rebuild';
 
 /**
  * Hook that when {stateful:true} manages
@@ -12,14 +12,16 @@ export function useStateful(props: t.InfoProps) {
   const { stateful = DEFAULTS.stateful } = props;
   const fields = PropList.fields(props.fields);
 
+  const redraw = useRedraw();
   const data = useData(props.data);
   const reset = useObservableReset(props.resetState$);
   const proxy = useProxy(data, Diff.document.isEqual, reset.count);
   const [ready, setReady] = useState(false);
 
-  const fireChanged = (action: t.InfoStatefulChangeAction) => {
+  const fireChanged: FireChanged = (action) => {
     if (!stateful) return;
     props.onStateChange?.({ action, fields, data: api.data });
+    redraw();
   };
 
   /**
@@ -27,7 +29,7 @@ export function useStateful(props: t.InfoProps) {
    */
   useEffect(() => {
     if (!stateful || !api.ready) return;
-    rebuild(proxy.state, fireChanged);
+    Rebuild.state(proxy.state, fireChanged);
   }, [proxy.version, ready]);
 
   /**
