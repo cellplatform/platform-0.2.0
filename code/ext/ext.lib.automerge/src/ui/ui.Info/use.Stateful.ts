@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, PropList, useObservableReset, useProxy, useRedraw, type t } from './common';
 import { Diff } from './u';
 import { useData } from './use.Data';
-import { Rebuild, type FireChanged } from './use.Stateful.Rebuild';
+import { rebuild, type FireChanged } from './use.Stateful.Rebuild';
 
 /**
  * Hook that when {stateful:true} manages
@@ -29,7 +29,7 @@ export function useStateful(props: t.InfoProps) {
    */
   useEffect(() => {
     if (!stateful || !api.ready) return;
-    Rebuild.state(proxy.state, fireChanged);
+    rebuild(proxy.state, fireChanged);
   }, [proxy.version, ready]);
 
   /**

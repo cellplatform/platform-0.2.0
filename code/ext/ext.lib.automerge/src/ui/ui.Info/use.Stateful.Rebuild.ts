@@ -1,22 +1,56 @@
-import { useRedraw, Value, type t } from './common';
+import { Value, type t } from './common';
 import { Data } from './u';
 
-type State = t.Immutable<t.InfoData>;
 export type FireChanged = (action: t.InfoStatefulChangeAction) => void;
+type State = t.Immutable<t.InfoData>;
 
 /**
  * Override various functions on the {data} object.
  */
-export const Rebuild = {
-  state(state: State, fireChanged: FireChanged) {
+
+export function rebuild(state: State, fire: FireChanged) {
+  const overload = overloader(state, fire);
+  state.change((draft) => {
+    overload.visible(draft);
+    overload.documents(draft);
+  });
+}
+
+/**
+ * Helpers
+ */
+function overloader(state: State, fire: FireChanged) {
+  const api = {
+    /**
+     * Override: root {data.visible}
+     */
+    visible(draft: t.InfoData) {
+      const bubble = draft.visible?.onToggle;
+      const visible = draft.visible || (draft.visible = { value: true });
+      if (visible.value === undefined) visible.value = true;
+      visible.onToggle = (e) => {
+        state.change((d) => {
+          const visible = d.visible || (d.visible = { value: true });
+          Value.toggle(visible, 'value');
+        });
+        fire('Toggle:Visible');
+        bubble?.(e);
+      };
+    },
+
     /**
      * Override: {data.document}
      */
-    const overloadDocument = (draft: t.InfoDataDoc, index: number): t.InfoDataDoc => {
+    documents(draft: t.InfoData) {
+      if (!draft.document) return;
+      draft.document = Array.isArray(draft.document)
+        ? draft.document.map((item, i) => api.document(item, i))
+        : api.document(draft.document, 0);
+    },
+
+    document(draft: t.InfoDataDoc, index: number) {
       if (draft.icon) {
-        /**
-         * Toggle open/close icon clicks for the document.
-         */
+        // Toggle open/close when document icon clicked.
         const bubble = draft.icon.onClick;
         draft.icon.onClick = (e) => {
           state.change((d) => {
@@ -27,40 +61,11 @@ export const Rebuild = {
             }
           });
           bubble?.(e);
-          fireChanged('Toggle:ObjectVisible');
+          fire('Toggle:ObjectVisible');
         };
       }
-
       return draft;
-    };
-
-    /**
-     * Override: {data.visible}
-     */
-    const overloadVisible = (draft: t.InfoData) => {
-      const bubble = draft.visible?.onToggle;
-      const visible = draft.visible || (draft.visible = { value: true });
-      if (visible.value === undefined) visible.value = true;
-      visible.onToggle = (e) => {
-        state.change((d) => {
-          const visible = d.visible || (d.visible = { value: true });
-          Value.toggle(visible, 'value');
-        });
-        fireChanged('Toggle:Visible');
-        bubble?.(e);
-      };
-    };
-
-    /**
-     * Update
-     */
-    state.change((draft) => {
-      overloadVisible(draft);
-      if (draft.document) {
-        draft.document = Array.isArray(draft.document)
-          ? draft.document.map((item, i) => overloadDocument(item, i))
-          : overloadDocument(draft.document, 0);
-      }
-    });
-  },
-} as const;
+    },
+  } as const;
+  return api;
+}
