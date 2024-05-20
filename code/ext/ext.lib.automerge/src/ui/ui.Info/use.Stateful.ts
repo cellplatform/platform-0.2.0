@@ -29,7 +29,7 @@ export function useStateful(props: t.InfoProps) {
    */
   useEffect(() => {
     if (!stateful || !api.ready) return;
-    rebuild(proxy.state, fireChanged);
+    if (stateful) rebuild(proxy.state, fireChanged);
     redraw();
   }, [proxy.version, ready]);
 

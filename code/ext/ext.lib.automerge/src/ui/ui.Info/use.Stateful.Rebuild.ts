@@ -40,9 +40,9 @@ function overloader(state: State, fire: FireChanged) {
    * Override: {data.document}
    */
   function documents(draft: t.InfoData) {
-    if (!draft.document) return;
+    if (!draft.document) return [];
     const docs = Data.document.list(draft.document);
-    docs.map((_, i) => document(docs, i));
+    return docs.map((_, i) => document(docs, i));
   }
 
   function document(docs: t.InfoDataDoc[], index: number) {
