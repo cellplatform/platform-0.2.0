@@ -1,5 +1,14 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Time, Color, Dev, Doc, Pkg, TestDb, WebStore, css } from '../../test.ui';
+import {
+  Color,
+  Dev,
+  Doc,
+  Pkg,
+  TestDb,
+  WebStore,
+  css,
+  BroadcastChannelNetworkAdapter,
+} from '../../test.ui';
 import { Info } from '../ui.Info';
 import { RepoList } from '../ui.RepoList';
 import { type t } from './common';
@@ -11,9 +20,10 @@ const initial: T = { props: {}, debug: {} };
 /**
  * Sample CRDT Store and Document Setup
  */
-async function createStore(local: { docuri?: t.UriString }) {
+async function createStore() {
   const db = TestDb.Spec;
-  const store = WebStore.init({ storage: db.name });
+  const network = [new BroadcastChannelNetworkAdapter()];
+  const store = WebStore.init({ storage: db.name, network });
   const index = await WebStore.index(store);
   return { store, index } as const;
 }
@@ -30,7 +40,7 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
-  const db = await createStore(local);
+  const db = await createStore();
   const store = db.store;
   const index = db.index;
   let model: t.RepoListModel;
@@ -60,7 +70,7 @@ export default Dev.describe(name, async (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { props } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
         return <CmdBar {...props} />;
       });
@@ -71,14 +81,16 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.header.border(-0.1).render((e) => {
-      const ref = state.current.debug.docuri;
       return (
         <Info
           stateful={true}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: { store, index },
-            document: { ref, object: { visible: true } },
+            document: {
+              ref: state.current.debug.docuri,
+              object: { visible: true },
+            },
           }}
         />
       );

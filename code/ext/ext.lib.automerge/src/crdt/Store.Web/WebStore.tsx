@@ -1,6 +1,8 @@
-import { Repo } from '@automerge/automerge-repo';
-import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
-import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
+import {
+  Repo,
+  BroadcastChannelNetworkAdapter,
+  IndexedDBStorageAdapter,
+} from '../../common/libs.Automerge';
 
 import { Doc } from '../Doc';
 import { Store } from '../Store';

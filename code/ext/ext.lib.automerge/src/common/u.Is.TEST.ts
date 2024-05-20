@@ -1,12 +1,14 @@
-import { Repo } from '@automerge/automerge-repo';
-import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
-import { IndexedDBStorageAdapter } from '@automerge/automerge-repo-storage-indexeddb';
-
 import { Is } from '.';
 import { WebStore } from '../crdt/Store.Web';
-import { Test, TestDb, expect } from '../test.ui';
+import {
+  BroadcastChannelNetworkAdapter,
+  IndexedDBStorageAdapter,
+  Repo,
+  Test,
+  TestDb,
+  expect,
+} from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
-
 export default Test.describe('Is (flags)', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
   const storage = TestDb.Unit.name;

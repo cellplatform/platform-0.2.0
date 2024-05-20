@@ -6,6 +6,12 @@ export { Dev } from 'sys.ui.react.common';
 export * from '../ui/common';
 export * from './TestDb';
 
+export {
+  BroadcastChannelNetworkAdapter,
+  IndexedDBStorageAdapter,
+  Repo,
+} from '../common/libs.Automerge';
+
 export { Doc } from '../crdt/Doc';
 export { StoreIndex } from '../crdt/Store.Index';
 export { WebStore } from '../crdt/Store.Web';
