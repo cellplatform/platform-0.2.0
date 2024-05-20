@@ -62,7 +62,6 @@ export default Dev.describe(name, async (e) => {
         Dev.Theme.background(ctx, props.theme, 1);
 
         const isDataVisible = dataVisible ?? true;
-
         const shared: t.InfoDataShared = {
           object: {
             lens: dataSharedLens ? ['sys', 'peers'] : undefined,
@@ -72,9 +71,7 @@ export default Dev.describe(name, async (e) => {
             },
           },
           icon: {
-            onClick(e) {
-              console.info('⚡️ shared.icon.onClick', e);
-            },
+            onClick: (e) => console.info('⚡️ shared.icon.onClick', e),
           },
         };
 

@@ -22,6 +22,7 @@ export function shared(
       ref,
       label,
       object: { ...shared.object, dotMeta },
+      icon: {},
     };
   };
 
