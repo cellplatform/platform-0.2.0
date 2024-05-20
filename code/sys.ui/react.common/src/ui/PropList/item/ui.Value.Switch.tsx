@@ -11,7 +11,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
   const item = props.value as t.PropListValueSwitch;
   if (item.kind !== 'Switch') return null;
 
-  const value = item.data;
+  const value = item.body;
   const enabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
   const isDark = props.theme === 'Dark';
   const theme = isDark ? Switch.Theme.dark.blue : Switch.Theme.light.blue;

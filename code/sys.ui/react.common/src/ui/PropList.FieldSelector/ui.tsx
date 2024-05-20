@@ -74,7 +74,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     );
     const value: t.PropListValueSwitch = {
       kind: 'Switch',
-      data: isSelected(field),
+      body: isSelected(field),
       indent,
       onClick,
       color: props.switchColor ?? DEFAULTS.switchColor,

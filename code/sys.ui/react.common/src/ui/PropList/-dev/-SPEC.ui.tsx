@@ -29,20 +29,20 @@ const styles = {
 
 const sampleItems: t.PropListItem[] = [
   { label: 'string 👋', value: 'hello 🌳' },
-  { label: 'number', value: { data: 123456, clipboard: 'Value: 123456', monospace: true } },
+  { label: 'number', value: { body: 123456, clipboard: 'Value: 123456', monospace: true } },
   { label: 'boolean', value: true, selected: true },
-  { label: 'boolean (switch)', value: { data: true, kind: 'Switch' } },
-  { label: 'boolean (switch) - disabled', value: { data: undefined, kind: 'Switch' } },
-  { label: 'clipboard function', value: { data: 'hello', clipboard: () => String(Math.random()) } },
-  { label: '<Text.Syntax>', value: { data: '{object}, [1,2,3]', monospace: true } },
+  { label: 'boolean (switch)', value: { body: true, kind: 'Switch' } },
+  { label: 'boolean (switch) - disabled', value: { body: undefined, kind: 'Switch' } },
+  { label: 'clipboard function', value: { body: 'hello', clipboard: () => String(Math.random()) } },
+  { label: '<Text.Syntax>', value: { body: '{object}, [1,2,3]', monospace: true } },
   {
     label: 'monospace (fontSize: 9)',
-    value: { data: 'thing', clipboard: true, monospace: true, color: COLORS.CYAN, fontSize: 9 },
+    value: { body: 'thing', clipboard: true, monospace: true, color: COLORS.CYAN, fontSize: 9 },
   },
-  { label: 'color', value: { data: 'My Color', color: COLORS.MAGENTA } },
+  { label: 'color', value: { body: 'My Color', color: COLORS.MAGENTA } },
   { label: 'long (ellipsis)', value: Lorem.toString() },
-  { label: 'bold', value: { data: 'value', bold: true } },
-  { label: 'value opacity', value: { data: 'foobar', opacity: 0.3 } },
+  { label: 'bold', value: { body: 'value', bold: true } },
+  { label: 'value opacity', value: { body: 'foobar', opacity: 0.3 } },
   {
     label: {
       body: 'click handler (label)',
@@ -56,7 +56,7 @@ const sampleItems: t.PropListItem[] = [
   {
     label: 'click handler (value)',
     value: {
-      data: 'click value',
+      body: 'click value',
       onClick(e) {
         console.info('⚡️ item.value.onClick', e);
         const el = <div style={{ color: COLORS.MAGENTA }}>{'clicked element!'}</div>;
@@ -67,7 +67,7 @@ const sampleItems: t.PropListItem[] = [
   {
     label: 'click handler (whole)',
     value: {
-      data: 'click whole item',
+      body: 'click whole item',
       onClick: (e) => console.info('⚡️ item.value.onClick', e),
     },
     onClick(e) {
@@ -85,7 +85,7 @@ const sampleItems: t.PropListItem[] = [
   {
     label: 'component (clipboard)',
     value: {
-      data: <div {...styles.value}>value</div>,
+      body: <div {...styles.value}>value</div>,
       clipboard: () => `random: ${Math.random()}`,
       onClick(e) {
         const el = <div style={{ color: COLORS.MAGENTA }}>clicked!</div>;
@@ -107,7 +107,7 @@ const sampleItems: t.PropListItem[] = [
   },
   { label: 'indent foo', value: 1234, indent: 15 },
   { label: 'indent bar', value: 5678, indent: 15 },
-  { label: 'hash', value: { data: <PropList.Hash text={HASH} />, clipboard: HASH } },
+  { label: 'hash', value: { body: <PropList.Hash text={HASH} />, clipboard: HASH } },
   { value: <div {...css(styles.bgRed, { flex: 1, height: 30 })}>value only</div> },
 ];
 export default sampleItems;

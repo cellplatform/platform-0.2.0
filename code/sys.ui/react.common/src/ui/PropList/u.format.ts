@@ -21,27 +21,27 @@ export function format(item: t.PropListItem) {
 
     get value(): t.PropListValue {
       if (_value === undefined) {
-        if (typeof item.value !== 'object') _value = { data: item.value };
-        else if (isValidElement(item.value)) _value = { data: item.value };
+        if (typeof item.value !== 'object') _value = { body: item.value };
+        else if (isValidElement(item.value)) _value = { body: item.value };
         else _value = item.value as t.PropListValue;
       }
       return _value;
     },
 
     get isString() {
-      return typeof res.value.data === 'string';
+      return typeof res.value.body === 'string';
     },
 
     get isNumber() {
-      return typeof res.value.data === 'number';
+      return typeof res.value.body === 'number';
     },
 
     get isBoolean() {
-      return typeof res.value.data === 'boolean';
+      return typeof res.value.body === 'boolean';
     },
 
     get isComponent() {
-      return isValidElement(res.value.data);
+      return isValidElement(res.value.body);
     },
 
     get isSimple() {
@@ -50,7 +50,7 @@ export function format(item: t.PropListItem) {
 
     get clipboard() {
       const value = res.value;
-      const data = value.data;
+      const data = value.body;
       if (value.clipboard) {
         return typeof value.clipboard === 'boolean' ? data?.toString() || '' : value.clipboard;
       }

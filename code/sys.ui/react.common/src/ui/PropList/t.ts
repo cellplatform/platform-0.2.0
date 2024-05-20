@@ -83,13 +83,13 @@ type ValueBase = {
 };
 
 export type PropListValueGeneric = ValueBase & {
-  readonly data?: string | number | boolean | JSX.Element;
+  readonly body?: string | number | boolean | JSX.Element;
 };
 
 export type PropListValueKinds = PropListValueSwitch;
 export type PropListValueSwitch = ValueBase & {
   readonly kind: 'Switch';
-  readonly data?: boolean;
+  readonly body?: boolean;
   readonly enabled?: boolean;
 };
 

@@ -63,9 +63,9 @@ const wrangle = {
     const value = wrangle.valueObject(props);
     const { isOver, isCopyable, defaults } = props;
     let monospace = value.monospace ?? defaults.monospace;
-    if (typeof value.data === 'boolean') monospace = true;
+    if (typeof value.body === 'boolean') monospace = true;
     return {
-      boolean: typeof value.data === 'boolean',
+      boolean: typeof value.body === 'boolean',
       copyActive: isOver && isCopyable,
       monospace,
     };
@@ -87,11 +87,11 @@ const wrangle = {
 
   renderValue(props: SimpleValueProps) {
     const value = wrangle.valueObject(props);
-    return isValidElement(value.data) ? value.data : value.data?.toString();
+    return isValidElement(value.body) ? value.body : value.body?.toString();
   },
 
   valueObject(props: SimpleValueProps) {
-    if (isValidElement(props.value)) return { data: props.value };
+    if (isValidElement(props.value)) return { body: props.value };
     return props.value as t.PropListValue;
   },
 

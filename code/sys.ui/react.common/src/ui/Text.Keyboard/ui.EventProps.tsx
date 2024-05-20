@@ -26,7 +26,7 @@ const View: React.FC<EventPropsProps> = (props) => {
   type K = keyof t.KeyboardKeypressProps;
   const addFromKey = (field: K) => {
     const data = keypress[field] as string | number | boolean;
-    items.push({ label: field, value: { data } });
+    items.push({ label: field, value: { body: data } });
   };
 
   const add = (label: string, value: t.PropListItem['value']) => {
