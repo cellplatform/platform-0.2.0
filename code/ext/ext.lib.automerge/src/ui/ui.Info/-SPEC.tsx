@@ -1,6 +1,6 @@
 import { DEFAULTS, Info } from '.';
 import { Color, Dev, DevReload, Doc, Pkg, TestDb, Value, css, rx, type t } from '../../test.ui';
-import { RepoList } from '../../ui/ui.RepoList';
+import { RepoList } from '../ui.RepoList';
 import { sampleCrdt } from './-SPEC.crdt';
 
 type P = t.InfoProps;
