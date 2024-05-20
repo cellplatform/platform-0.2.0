@@ -54,6 +54,8 @@ export default Dev.describe(name, async (e) => {
         <Auth.Info
           fields={[
             'Login',
+            'Login.Farcaster',
+            'Login.SMS',
             'Id.User',
             'Id.User.Phone',
             'Link.Wallet',
@@ -73,14 +75,19 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
+      const obj = { expand: { level: 1 } };
       return (
         <PeerRepoList.Info
+          stateful={true}
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           data={{
             network,
             repo: model,
-            shared: { object: { expand: { level: 1 } } },
+            shared: [
+              { label: 'State: sys', object: { name: 'system', lens: ['sys'], ...obj } },
+              { label: 'State: ns', object: { name: 'namespace', lens: ['ns'], ...obj } },
+            ],
           }}
         />
       );
