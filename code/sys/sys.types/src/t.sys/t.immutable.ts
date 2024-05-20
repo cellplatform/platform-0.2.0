@@ -14,9 +14,9 @@ export type Immutable<T> = {
  * an observable event factory.
  */
 export type ImmutableRef<T, E> = Immutable<T> & {
+  events(dispose$?: t.UntilObservable): E;
   readonly instance: string;
   readonly typename?: string; // Optional typename (for reflection).
-  events(dispose$?: t.UntilObservable): E;
 };
 
 /**
