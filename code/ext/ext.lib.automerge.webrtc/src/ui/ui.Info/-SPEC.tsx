@@ -73,7 +73,7 @@ export default Dev.describe(name, async (e) => {
           },
           icon: {
             onClick(e) {
-              console.info('⚡️ shared.onIconClick', e);
+              console.info('⚡️ shared.icon.onClick', e);
             },
           },
         };
