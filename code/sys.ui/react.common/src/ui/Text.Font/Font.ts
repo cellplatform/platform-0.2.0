@@ -1,5 +1,5 @@
 import { FontContainer as Container } from './ui.FontContainer';
-import { load } from './Font.load.mjs';
+import { load } from './Font.load';
 import { useFont } from './Font.useFont';
 
 /**

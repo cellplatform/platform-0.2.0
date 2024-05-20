@@ -1,5 +1,5 @@
-import { Wrangle } from './Wrangle';
 import { Percent, css, type t } from './common';
+import { Wrangle } from './u';
 import { Tick } from './ui.Tick';
 
 export type TicksProps = {

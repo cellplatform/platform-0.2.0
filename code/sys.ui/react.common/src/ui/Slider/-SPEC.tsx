@@ -1,7 +1,6 @@
 import { COLORS, Color, Dev, css, type t } from '../../test.ui';
-
 import { Slider } from '.';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 const DEFAULTS = Slider.DEFAULTS;
 

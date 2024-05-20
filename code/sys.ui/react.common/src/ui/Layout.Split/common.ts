@@ -1,7 +1,7 @@
 import { Pkg, type t } from './common';
 
 export { Button } from '../Button';
-export { Icons } from '../Icons.mjs';
+export { Icons } from '../Icons';
 export { Slider } from '../Slider';
 export * from '../common';
 

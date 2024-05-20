@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 import { DEFAULTS, FC, css, useMouse, type t } from './common';
 
 const View: React.FC<t.ProgressBarProps> = (props) => {

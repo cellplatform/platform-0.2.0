@@ -1,5 +1,5 @@
 import { COLORS, PropList, css, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 export const List: React.FC<t.ModuleNamespaceListProps> = (props) => {
   const is = Wrangle.is(props);

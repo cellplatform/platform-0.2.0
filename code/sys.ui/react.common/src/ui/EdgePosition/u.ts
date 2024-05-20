@@ -1,5 +1,5 @@
 import { DEFAULTS, type t } from './common';
-import { Wrangle as SelectorWrangle } from '../EdgePosition.Selector/Wrangle.mjs';
+import { Wrangle as SelectorWrangle } from '../EdgePosition.Selector/u';
 
 const { toPos, toPosition } = SelectorWrangle;
 

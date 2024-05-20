@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { Wrangle } from './Wrangle';
 import { DEFAULTS, useMouse, type t } from './common';
+import { Wrangle } from './u';
 
 type Args = {
   enabled?: boolean;

@@ -1,5 +1,5 @@
-import { Wrangle } from './Wrangle.mjs';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
+import { Wrangle } from './u';
 
 export type CellProps = {
   enabled?: boolean;

@@ -1,7 +1,6 @@
 import { DEFAULTS, Grid, css, type t } from './common';
-
-import { Wrangle } from './Wrangle.mjs';
-import { Cell } from './view.Cell';
+import { Wrangle } from './u';
+import { Cell } from './ui.Cell';
 
 export const View: React.FC<t.EdgePositionSelectorProps> = (props) => {
   const { enabled = DEFAULTS.enabled, size = DEFAULTS.size, selected = DEFAULTS.selected } = props;

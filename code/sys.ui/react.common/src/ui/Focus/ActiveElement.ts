@@ -1,5 +1,5 @@
 import { type t } from '../common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 const handlers = new Set<t.ActiveElementChangedHandler>();
 let initialized = false;

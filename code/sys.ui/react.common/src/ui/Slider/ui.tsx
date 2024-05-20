@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { DEFAULTS, css, useRedraw, type t } from './common';
 
-import { Wrangle } from './Wrangle';
-import { useEventMonitor } from './use.EventMonitor.mjs';
+import { Wrangle } from './u';
 import { Thumb } from './ui.Thumb';
-import { Track } from './ui.Track';
 import { Ticks } from './ui.Ticks';
+import { Track } from './ui.Track';
+import { useEventMonitor } from './use.EventMonitor.mjs';
 
 export const View: React.FC<t.SliderProps> = (props) => {
   const { enabled = DEFAULTS.enabled, onChange } = props;

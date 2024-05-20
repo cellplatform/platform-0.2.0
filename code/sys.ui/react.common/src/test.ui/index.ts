@@ -11,7 +11,7 @@ export * from '../common';
 export { Dev } from '../ui.dev';
 export { DevIcons } from '../ui.dev/common';
 export { Lorem } from '../ui.tools';
-export { Icons } from '../ui/Icons.mjs';
+export { Icons } from '../ui/Icons';
 export { ObjectView } from '../ui/ObjectView';
 export { RenderCount } from '../ui/RenderCount';
 export { Keyboard } from '../ui/Text.Keyboard';

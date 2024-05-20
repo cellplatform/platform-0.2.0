@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { css, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 
 export const IFrame: React.FC<t.IFrameProps> = (props) => {
   const { width, height, loading = 'eager' } = props;

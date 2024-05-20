@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { Util } from './util.mjs';
+import { Util } from './u';
 
 export async function load(font: t.FontDefinition | t.FontDefinition[]) {
   // Create fonts.

@@ -1,5 +1,5 @@
 import { COLORS, css, Dev, type t } from '../../test.ui';
-import { Icons } from '../Icons.mjs';
+import { Icons } from '../Icons';
 
 type T = {
   props: t.IconProps;

@@ -1,4 +1,4 @@
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 import { DEFAULTS, FC, css, type t } from './common';
 
 export const View: React.FC<t.GridProps> = (props) => {
