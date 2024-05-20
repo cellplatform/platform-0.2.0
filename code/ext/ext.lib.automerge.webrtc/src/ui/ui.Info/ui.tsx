@@ -16,7 +16,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
   const ctx = wrangle.ctx(props);
 
-  useRedraw(data);
+  useRedraw(props);
   const shared = useShared(data.network);
   const { bytes } = usePeerMonitor(data.network);
   const { isTransmitting } = useTransmitMonitor(bytes.total);
