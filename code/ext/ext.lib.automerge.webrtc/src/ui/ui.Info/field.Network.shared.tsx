@@ -21,7 +21,7 @@ export function shared(
       ...shared,
       ref,
       label,
-      object: { ...shared.object, dotMeta },
+      object: { ...shared.object, dotMeta, visible: false },
       icon: {},
     };
   };
