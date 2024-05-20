@@ -1,4 +1,5 @@
 import { StoreIndex, WebStore } from '../../crdt';
+import { RepoListRef } from '../ui.RepoList/Ref';
 import { eventsFactory } from './Model.Events';
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';
@@ -11,6 +12,7 @@ type Options = {
   dispose$?: t.UntilObservable;
   filter?: t.StoreIndexFilter;
   behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
+  onReady?: (e: { ref: t.RepoListRef }) => void;
 } & t.RepoListHandlers;
 
 export const List = {
@@ -67,6 +69,7 @@ export const List = {
     listRedrawBehavior({ ctx, array });
 
     // Finish up.
+    options.onReady?.({ ref: RepoListRef(model) });
     return model;
   },
 } as const;

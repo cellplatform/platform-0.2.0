@@ -35,6 +35,7 @@ export default Dev.describe(name, async (e) => {
     const store = WebStore.init({ storage });
     model = await RepoList.model(store, {
       behaviors: () => local.behaviors || [],
+      onReady: (e) => console.info(`⚡️ onReady`, e),
       onDatabaseClick: (e) => console.info(`⚡️ onDatabaseClick`, e),
       onShareClick: (e) => console.info(`⚡️ onShareClick`, e),
       onActiveChanged: (e) => {
@@ -42,7 +43,8 @@ export default Dev.describe(name, async (e) => {
         active = e;
       },
     });
-    ref = RepoList.Ref(model);
+
+    ref = RepoList.Ref(model); // NB: or store reference from the [⚡️:onReady] event.
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
