@@ -1,24 +1,35 @@
 import { DEFAULTS, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
+type Options = { reload?: boolean };
+
 export const Url = {
-  push(url: URL, options: { reload?: boolean } = {}) {
+  push(url: URL, options: Options = {}) {
     const path = url.href;
     window.history.pushState({ path }, '', url.href);
     if (options.reload) window.location.reload();
   },
 
-  mutateFilter(filter: string, options: { reload?: boolean } = {}) {
+  mutateFilter(filter: string, options: Options = {}) {
     const { url, params } = Wrangle.url();
-    if (filter) params.set(DEFAULTS.qs.filter, filter);
-    if (!filter) params.delete(DEFAULTS.qs.filter);
+    const key = DEFAULTS.qs.filter;
+    if (filter) params.set(key, filter);
+    if (!filter) params.delete(key);
+    Url.push(url, options);
+  },
+
+  mutateSelected(uri?: string, options: Options = {}) {
+    const { url, params } = Wrangle.url();
+    const key = DEFAULTS.qs.selected;
+    if (uri) params.set(key, uri);
+    if (!uri) params.delete(key);
     Url.push(url, options);
   },
 
   mutateLoadedNamespace(
     index: number,
     imports: t.ModuleImports | undefined,
-    options: { reload?: boolean } = {},
+    options: Options = {},
   ) {
     if (!imports) return;
     if (index < 0) return;
