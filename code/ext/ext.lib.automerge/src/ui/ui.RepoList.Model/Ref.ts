@@ -3,7 +3,7 @@ import { LabelItem, type t } from './common';
 /**
  * API: Imperative handle reference.
  */
-export function RepoListRef(model: t.RepoListModel) {
+export function Ref(model: t.RepoListModel) {
   const { store, list } = model;
   const dispatch = LabelItem.Model.List.commands(list.state);
   const api: t.RepoListRef = {

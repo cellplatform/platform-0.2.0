@@ -3,6 +3,7 @@ import { DEFAULTS as MODEL_DEFAULTS } from '../ui.RepoList.Model/common';
 
 export * from '../common';
 export { Data, Model } from '../ui.RepoList.Model';
+export { Ref } from '../ui.RepoList.Model/Ref';
 
 /**
  * Constants

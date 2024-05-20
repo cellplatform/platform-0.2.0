@@ -1,32 +1,13 @@
 import { CmdBar, DEFAULTS } from '.';
-import {
-  Color,
-  Dev,
-  Doc,
-  Pkg,
-  TestDb,
-  WebStore,
-  css,
-  BroadcastChannelNetworkAdapter,
-} from '../../test.ui';
+import { Color, Dev, Doc, Pkg, css, sampleCrdt } from '../../test.ui';
 import { Info } from '../ui.Info';
+
 import { RepoList } from '../ui.RepoList';
 import { type t } from './common';
 
 type P = t.CmdBarProps;
 type T = { props: P; debug: { docuri?: t.UriString } };
 const initial: T = { props: {}, debug: {} };
-
-/**
- * Sample CRDT Store and Document Setup
- */
-async function createStore() {
-  const db = TestDb.Spec;
-  const network = [new BroadcastChannelNetworkAdapter()];
-  const store = WebStore.init({ storage: db.name, network });
-  const index = await WebStore.index(store);
-  return { store, index } as const;
-}
 
 /**
  * Spec
@@ -40,7 +21,7 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
-  const db = await createStore();
+  const db = await sampleCrdt({ broadcastAdapter: true });
   const store = db.store;
   const index = db.index;
   let model: t.RepoListModel;

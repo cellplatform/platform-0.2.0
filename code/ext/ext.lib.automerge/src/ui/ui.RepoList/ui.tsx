@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { RepoListRef } from './Ref';
-
 import { Renderers } from './Renderers';
-import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
+import { DEFAULTS, LabelItem, RenderCount, Ref, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 export const View: React.FC<t.RepoListProps> = (props) => {
@@ -20,7 +18,7 @@ export const View: React.FC<t.RepoListProps> = (props) => {
   useEffect(() => {
     if (props.model && !readyRef.current) {
       readyRef.current = true;
-      const ref = RepoListRef(props.model);
+      const ref = Ref(props.model);
       props.onReady?.({ ref });
     }
   }, [!!props.model]);

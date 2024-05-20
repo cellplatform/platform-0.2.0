@@ -1,5 +1,4 @@
-import { COLORS, Dev, DevReload, Pkg, TestDb, css, type t } from '../../test.ui';
-import { sampleCrdt } from '../ui.Info/-SPEC.crdt';
+import { COLORS, Dev, DevReload, Pkg, TestDb, css, sampleCrdt, type t } from '../../test.ui';
 import { RepoList } from '../ui.RepoList';
 import { SampleUseDoc, SampleUseDocs } from './-SPEC.useDocs.views';
 
