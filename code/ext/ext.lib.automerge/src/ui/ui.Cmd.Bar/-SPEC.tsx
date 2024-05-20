@@ -85,6 +85,12 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+      dev.button(['doc: increment', 'count + 1'], async (e) => {
+        type T = { count?: number };
+        const doc = await db.docAtIndex<T>(0);
+        doc?.change((d) => (d.count = (d.count ?? 0) + 1));
+      });
     });
   });
 
