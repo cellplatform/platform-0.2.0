@@ -8,5 +8,5 @@ type Fields = { DEFAULTS: typeof DEFAULTS };
 export const Image = FC.decorate<t.ImageProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Image' },
+  { displayName: DEFAULTS.displayName },
 );

@@ -1,5 +1,5 @@
 import { Color, css, useRenderer, type t } from '../common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 export type HostComponentProps = {
   instance: t.DevInstance;
@@ -10,38 +10,36 @@ export type HostComponentProps = {
 };
 
 export const HostComponent: React.FC<HostComponentProps> = (props) => {
-  const { instance } = props;
+  const { instance, border } = props;
   const component = props.renderProps?.subject;
   const renderer = component?.renderer;
   const { element } = useRenderer(instance, renderer);
 
-  if (!component || !element) return <div />;
-
   /**
    * [Render]
    */
-  const size = Wrangle.componentSize(component?.size);
+  const { width, height } = Wrangle.componentSize(component?.size);
   const styles = {
     base: css({
       position: 'relative',
-      border: props.border,
-      display: 'flex',
+      display: 'grid',
+      border,
     }),
-    container: css({
-      flex: 1,
+    body: css({
       position: 'relative',
-      display: component.display,
-      width: size.width,
-      height: size.height,
-      backgroundColor: Color.format(component.backgroundColor),
+      display: component?.display,
+      color: Color.format(component?.color),
+      backgroundColor: Color.format(component?.backgroundColor),
+      width,
+      height,
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div ref={props.subjectRef} {...styles.container} className={'ComponentHost'}>
-        {element}
-      </div>
+  const elBody = element && (
+    <div ref={props.subjectRef} {...styles.body} className={'ComponentHost'}>
+      {element}
     </div>
   );
+
+  return <div {...css(styles.base, props.style)}>{elBody}</div>;
 };

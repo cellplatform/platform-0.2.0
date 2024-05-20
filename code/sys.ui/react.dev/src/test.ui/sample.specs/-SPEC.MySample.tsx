@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { Keyboard } from 'sys.ui.dom';
 
-import { DevBus } from '../../logic.Bus';
+import { DevBus } from '../../fn.Bus';
 import { COLORS, Color, Spec, css, Time } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
@@ -25,7 +25,6 @@ export default Spec.describe('MySample', (e) => {
       // NB: Test helpful to ensure errors don't occur on headless run (aka. server/CI).
       console.log('keyboard', e.pattern);
     });
-
     ctx.host.header.render<T>((e) => {
       return <div>Header</div>;
       // return null;
@@ -153,15 +152,17 @@ export default Spec.describe('MySample', (e) => {
     debug.row(<div>Host</div>);
     dev
       .button((btn) =>
-        btn
-          .label('theme: light')
-          .onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
+        btn.label('theme: light').onClick((e) => {
+          ctx.host.color(null).backgroundColor(null).tracelineColor(null);
+          // ctx.subject.color(COLORS.DARK);
+        }),
       )
 
       .button((btn) =>
-        btn
-          .label('theme: dark')
-          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1)),
+        btn.label('theme: dark').onClick((e) => {
+          ctx.host.color(COLORS.WHITE).backgroundColor(COLORS.DARK).tracelineColor(0.1);
+          // ctx.subject.color(COLORS.WHITE);
+        }),
       )
       .button((btn) =>
         btn.label('background image: "url"').onClick((e) => {

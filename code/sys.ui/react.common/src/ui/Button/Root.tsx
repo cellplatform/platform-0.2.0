@@ -11,5 +11,5 @@ type Fields = {
 export const Button = FC.decorate<t.ButtonProps, Fields>(
   View,
   { DEFAULTS, Copy, Blue },
-  { displayName: 'Button' },
+  { displayName: DEFAULTS.displayName },
 );

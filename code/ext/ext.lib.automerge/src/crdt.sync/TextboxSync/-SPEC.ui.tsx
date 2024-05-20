@@ -20,12 +20,12 @@ export type LayoutProps = {
 };
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { theme, repo, path } = props;
-  const { doc } = useDoc<TDoc>(repo?.store, props.docuri);
+  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
 
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({ color, display: 'grid', rowGap: '30px', userSelect: 'none' }),
     textbox: css({ width: 260 }),
@@ -78,7 +78,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({
       position: 'relative',

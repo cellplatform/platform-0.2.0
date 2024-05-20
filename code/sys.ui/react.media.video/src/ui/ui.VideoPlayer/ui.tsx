@@ -3,7 +3,7 @@ import { Player, Vimeo, Youtube, Video } from '@vime/react';
 import { DEFAULTS, css, type t } from './common';
 import { useController } from './use.Controller.mjs';
 import { useHasInteracted } from './use.HasInteracted.mjs';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 
 /**
  * Vime Docs:

@@ -1,5 +1,5 @@
 import { DEFAULTS as HTTP_DEFAULTS } from '../../DenoHttp';
-import type { t } from '../common';
+import { Pkg, type t } from '../common';
 
 export { DenoHttp } from '../../DenoHttp';
 export * from '../common';
@@ -13,7 +13,7 @@ const endpoint: t.DenoHttpOptions = {
 };
 
 export const DEFAULTS = {
-  displayName: 'Info',
+  displayName: `${Pkg.name}.Info`,
   stateful: false,
   endpoint,
   fields: {

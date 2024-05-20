@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 export * from '../common';
 
 /**
@@ -25,6 +25,7 @@ const supportedMimetypes: t.ImageSupportedMimetypes[] = ['image/png', 'image/jpe
 const sizing: t.ImageSizeStrategy = 'cover';
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Image`,
   supportedMimetypes,
   sizing,
   drop,

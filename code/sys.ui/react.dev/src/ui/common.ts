@@ -1,5 +1,5 @@
 export * from '../common';
-export * from '../logic.Bus';
-export * from '../use';
+export * from '../fn.Bus';
+export * from '../ui.use';
 
-export { Spec } from '../logic.Spec';
+export { Spec } from '../fn.Spec';

@@ -6,8 +6,8 @@ type T = { count: number; props: TitleProps };
 const initial: T = {
   count: 0,
   props: {
-    text: '👋 Hello, Doug',
-    style: { ...Title.DEFAULT.style, margin: 0 },
+    text: '👋 Hello Friend',
+    style: { ...Title.DEFAULTS.style, margin: 0 },
   },
 };
 

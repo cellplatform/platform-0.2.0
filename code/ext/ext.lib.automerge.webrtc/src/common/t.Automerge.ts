@@ -2,6 +2,7 @@
  * @ext
  */
 export type { next as A } from '@automerge/automerge';
+
 export type {
   Message as AutomergeMessage,
   PeerId as AutomergePeerId,
@@ -30,6 +31,7 @@ export type {
   DocRefHandle,
   DocUri,
   DocWithMeta,
+  InfoDataDocUri,
   Lens,
   LensEvents,
   NamespaceManager,

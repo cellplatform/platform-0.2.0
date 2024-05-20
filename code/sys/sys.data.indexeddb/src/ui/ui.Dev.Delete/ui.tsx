@@ -46,7 +46,7 @@ export const View: React.FC<t.DevDeleteProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({
       position: 'relative',

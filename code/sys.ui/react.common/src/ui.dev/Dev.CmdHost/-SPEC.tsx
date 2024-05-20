@@ -16,8 +16,9 @@ addSamples('foo.baz');
 addSamples('boo.cat');
 add('zoo');
 
+type P = t.CmdHostStatefulProps;
 type T = {
-  props: t.CmdHostStatefulProps;
+  props: P;
   debug: { stateful?: boolean; useOnItemClick?: boolean };
 };
 
@@ -27,7 +28,7 @@ const initial: T = { props: { pkg: Pkg }, debug: {} };
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<
-    t.CmdHostStatefulProps,
+    P,
     | 'theme'
     | 'hrDepth'
     | 'mutateUrl'
@@ -229,6 +230,17 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => {
             e.change((d) => (local.useOnItemClick = Dev.toggle(d.debug, 'useOnItemClick')));
           });
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('clear query-string', (e) => {
+        const url = new URL(window.location.href);
+        const params = url.searchParams;
+        const qs = DEFAULTS.qs;
+        params.delete(qs.filter);
+        params.delete(qs.selected);
+        window.history.pushState({ path: url.href }, '', url.href);
       });
     });
   });

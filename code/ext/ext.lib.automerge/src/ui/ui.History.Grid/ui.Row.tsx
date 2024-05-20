@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { DEFAULTS, Icons, css, type t } from './common';
+import { DEFAULTS, FONTS, Icons, css, type t } from './common';
 import { MonoHash } from './ui.MonoHash';
 
 /**
@@ -18,7 +18,7 @@ export function rowElements(props: {
   const styles = {
     base: css({ display: 'grid', placeItems: 'center', userSelect: 'none' }),
     vspace: css({ PaddingY: 5 }),
-    mono: css(DEFAULTS.mono),
+    mono: css(FONTS.mono),
     hash: css({ Flex: 'x-center-center' }),
     icon: css({ marginLeft: 0, width: 35 }),
     index: css({ opacity: 0.2, justifySelf: 'end' }),

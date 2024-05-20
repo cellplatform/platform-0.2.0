@@ -12,6 +12,7 @@ export type {
   DevCtxState,
   DevTools,
   InfoDataVisible,
+  KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
   PropListItem,
   PropListProps,

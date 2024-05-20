@@ -2,6 +2,7 @@ import type * as t from './-SPEC.t';
 
 import { PropList } from '../PropList';
 import { Field } from './-SPEC.field';
+import { Pkg } from './common';
 
 const fields = {
   get all(): t.InfoField[] {
@@ -12,7 +13,7 @@ const fields = {
   },
 };
 export const DEFAULTS = {
-  displayName: 'Info',
+  displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
 } as const;
@@ -22,7 +23,8 @@ export const DEFAULTS = {
  */
 export const Info: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+  const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
+  const title = PropList.Info.title(props);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module(theme))
@@ -35,27 +37,13 @@ export const Info: React.FC<t.InfoProps> = (props) => {
    */
   return (
     <PropList
-      title={Wrangle.title(props)}
+      title={title}
       items={items}
-      width={props.width ?? { min: 230 }}
+      width={PropList.Info.width(props)}
       defaults={{ clipboard: false }}
       theme={theme}
-      card={props.card}
-      flipped={props.flipped}
-      padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       style={props.style}
     />
   );
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  title(props: t.InfoProps) {
-    const title = PropList.Wrangle.title(props.title);
-    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
-    return title;
-  },
 };

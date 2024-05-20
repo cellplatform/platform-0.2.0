@@ -1,5 +1,5 @@
-import { type t } from './common';
 import { DEFAULTS as BASE } from '../ui.RepoList';
+import { Pkg } from './common';
 
 export * from '../common';
 export { RepoList } from '../ui.RepoList';
@@ -9,5 +9,5 @@ export { RepoList } from '../ui.RepoList';
  */
 export const DEFAULTS = {
   ...BASE,
-  displayName: 'RepoList.Virtual',
+  displayName: `${Pkg.name}.RepoList.Virtual`,
 } as const;

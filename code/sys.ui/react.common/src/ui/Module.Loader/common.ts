@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 export * from '../common';
 
 export { Button } from '../Button';
@@ -11,7 +11,7 @@ const theme: t.CommonTheme = 'Light';
 const spinner: t.ModuleLoaderSpinner = { bodyOpacity: 0.2, bodyBlur: 0 };
 
 export const DEFAULTS = {
-  displayName: 'ModuleLoader',
+  displayName: `${Pkg.name}.ModuleLoader`,
   theme,
   spinner,
   spinning: false,

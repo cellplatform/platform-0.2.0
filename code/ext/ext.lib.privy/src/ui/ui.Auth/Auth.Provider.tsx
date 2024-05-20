@@ -41,5 +41,5 @@ type Fields = { DEFAULTS: typeof DEFAULTS };
 export const AuthProvider = FC.decorate<t.AuthProviderProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'AuthProvider' },
+  { displayName: DEFAULTS.displayName },
 );

@@ -15,10 +15,24 @@ export function useRedrawOnChange(
   const redraw = () => setCount((n) => n + 1);
 
   useEffect(() => {
-    const events = Is.docRef(doc) ? doc.events() : undefined;
-    events?.changed$
-      .pipe(rx.debounceTime(debounce), rx.observeOn(rx.animationFrameScheduler))
-      .subscribe(redraw);
-    return events?.dispose;
+    const ref = Is.docRef(doc) ? doc : undefined;
+    Redraw.onChange(ref, redraw, { debounce });
   }, [uri, debounce]);
 }
+
+/**
+ * Non hook version of the redraw monitor.
+ */
+export const Redraw = {
+  onChange(doc?: t.DocRef, redraw?: () => void, options: t.UseRedrawOnChangeOptions = {}) {
+    const { debounce = 100 } = options;
+    const life = rx.lifecycle();
+    if (Is.docRef(doc)) {
+      const events = doc.events(life.dispose$);
+      events?.changed$
+        .pipe(rx.debounceTime(debounce), rx.observeOn(rx.animationFrameScheduler))
+        .subscribe(redraw);
+    }
+    return life;
+  },
+} as const;

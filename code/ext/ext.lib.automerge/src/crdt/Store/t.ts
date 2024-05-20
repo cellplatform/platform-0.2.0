@@ -9,3 +9,8 @@ export type Store = t.Lifecycle & {
   readonly repo: t.Repo;
   readonly doc: t.DocStore;
 };
+
+/**
+ * Testing options used to debug a store.
+ */
+export type StoreDebug = { loadDelay?: t.Msecs | (() => t.Msecs) };

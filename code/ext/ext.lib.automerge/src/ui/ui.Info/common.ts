@@ -1,6 +1,10 @@
-import { type t } from '../common';
+import { Doc } from '../../crdt';
+import { Pkg, type t } from '../common';
+
 export * from '../common';
+export { MonospaceButton } from '../ui.Buttons';
 export { MonoHash } from '../ui.History.Grid';
+export { Doc };
 
 /**
  * Constants
@@ -18,32 +22,39 @@ const fields = {
       'Doc.URI',
       'Doc.Object',
       'Doc.Head',
-      'History',
-      'History.Genesis',
-      'History.List',
-      'History.List.Detail',
-      'History.List.NavPaging',
+      'Doc.History',
+      'Doc.History.Genesis',
+      'Doc.History.List',
+      'Doc.History.List.Detail',
+      'Doc.History.List.NavPaging',
     ];
   },
   get default(): t.InfoField[] {
-    return ['Module', 'Module.Verify'];
+    return ['Module', 'Module.Verify', 'Repo'];
   },
-} as const;
+};
 
 const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 
+const uri: Required<t.InfoDataDocUri> = {
+  shorten: [4, 4],
+  prefix: 'crdt:automerge',
+  clipboard: (uri) => Doc.Uri.id(uri),
+};
+
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Info`,
   stateful: false,
   visibleFilter,
+  fields,
   repo: { label: 'Store' },
-  doc: { head: { label: 'Head', hashLength: 6 } },
+  doc: { head: { label: 'Head', hashLength: 6 }, uri },
   history: {
     label: 'History',
     list: { page: 0, limit: 5, sort: 'desc' },
     item: { hashLength: 6 },
   },
-  fields,
   query: { dev: 'dev' },
 } as const;

@@ -218,20 +218,8 @@ export default Dev.describe(name, async (e) => {
           <PeerRepoList.Info
             title={`${edge.kind} Column`}
             fields={layout?.fields ?? defaultFields}
-            data={{
-              network,
-              shared: {
-                onIconClick(e) {
-                  shared?.change((d) => {
-                    const edge = getLayout(d)!;
-                    const fields = edge.fields ?? [];
-                    edge.fields = fields.includes('Network.Shared.Json')
-                      ? fields.filter((f) => f !== 'Network.Shared.Json')
-                      : [...fields, 'Network.Shared.Json'];
-                  });
-                },
-              },
-            }}
+            stateful={true}
+            data={{ network }}
           />
         );
       });

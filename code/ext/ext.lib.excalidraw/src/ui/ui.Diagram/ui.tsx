@@ -12,7 +12,7 @@ export const View: React.FC<t.DiagramProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      color: Color.theme(theme).color,
+      color: Color.theme(theme).fg,
       display: 'grid',
       placeItems: loading ? 'center' : undefined,
     }),

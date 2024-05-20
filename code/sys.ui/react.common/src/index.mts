@@ -40,13 +40,18 @@ export { TextSyntax } from './ui/Text.Syntax';
  * Hooks
  */
 export { useClickInside, useClickOutside, useMouse } from './common';
-export { useReady, useRedraw } from './ui/use';
-export { useDragTarget } from './ui/useDragTarget';
-export { useFocus } from './ui/useFocus';
-export { useSizeObserver } from './ui/useSizeObserver';
+export {
+  useDragTarget,
+  useFocus,
+  useObservableReset,
+  useProxy,
+  useReady,
+  useRedraw,
+  useSizeObserver,
+} from './ui.use';
 
 /**
- * Common up-stream modules
+ * Common helpers.
  */
 export {
   BADGES,
@@ -54,6 +59,7 @@ export {
   Color,
   FC,
   File,
+  ReactEvent,
   Style,
   UserAgent,
   css,

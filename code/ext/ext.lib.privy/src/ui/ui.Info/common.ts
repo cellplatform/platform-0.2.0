@@ -1,4 +1,4 @@
-import { Chain, type t } from '../common';
+import { Chain, Pkg, type t } from '../common';
 import { DEFAULTS as PROVIDER_DEFAULTS } from '../ui.Auth/common';
 
 export * from '../common';
@@ -43,6 +43,7 @@ const data: t.InfoData = {
 };
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
   enabled: true,

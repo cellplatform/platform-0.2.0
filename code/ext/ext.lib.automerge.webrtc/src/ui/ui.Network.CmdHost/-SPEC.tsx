@@ -245,14 +245,14 @@ export default Dev.describe(name, async (e) => {
         avatars: css({ display: 'grid', placeItems: 'center' }),
       };
 
-      const onIconClick = () => {
+      const handleIconClick = () => {
         harness.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
       };
       const cmdState: t.InfoDataShared = {
         label: 'CmdHost State',
-        lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
-        onIconClick,
+        icon: { onClick: handleIconClick },
         object: {
+          lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
           visible: harness.current.debugShowJson,
           dotMeta: false,
           expand: { level: 5 },
@@ -267,9 +267,11 @@ export default Dev.describe(name, async (e) => {
 
       const harnessState: t.InfoDataShared = {
         label: 'Harness State',
-        lens: ['ns', 'harness'],
-        onIconClick,
-        object: { visible: harness.current.debugShowJson },
+        icon: { onClick: handleIconClick },
+        object: {
+          lens: ['ns', 'harness'],
+          visible: harness.current.debugShowJson,
+        },
       };
 
       const elInfoPanel = (

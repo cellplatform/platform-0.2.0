@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 export * from '../common';
 
 /**
@@ -7,6 +7,7 @@ export * from '../common';
 const sampleVideo: t.VideoSrcVimeo = { kind: 'Vimeo', ref: '499921561' }; // Tubes.
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.VideoPlayer`,
   sampleVideo,
   enabled: true,
   playing: false,

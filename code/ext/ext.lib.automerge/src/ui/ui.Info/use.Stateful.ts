@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, PropList, R, rx, type t } from './common';
+import { DEFAULTS, PropList, useObservableReset, useProxy, useRedraw, type t } from './common';
+import { Diff } from './u';
 import { useData } from './use.Data';
+import { rebuild, type FireChanged } from './use.Stateful.Rebuild';
 
 /**
  * Hook that when {stateful:true} manages
@@ -8,85 +10,66 @@ import { useData } from './use.Data';
  */
 export function useStateful(props: t.InfoProps) {
   const { stateful = DEFAULTS.stateful } = props;
-  let data = useData(props.data);
-  const rawFields = PropList.Wrangle.fields(props.fields);
-  const rawVisible = data.visible?.value ?? true;
+  const fields = PropList.fields(props.fields);
 
-  const [fields, setFields] = useState(rawFields);
-  const [isVisible, setVisible] = useState(rawVisible);
-  const [resetCount, setReset] = useState(0);
-  const reset = () => setReset((n) => n + 1);
+  const redraw = useRedraw();
+  const data = useData(props.data);
+  const reset = useObservableReset(props.resetState$);
+  const proxy = useProxy(data, Diff.document.isEqual, reset.count);
+  const [ready, setReady] = useState(false);
 
-  const fire = (fields: t.InfoField[]) => {
-    if (stateful) props.onStateChange?.({ fields, data });
+  const fireChanged: FireChanged = (action) => {
+    if (!stateful) return;
+    props.onStateChange?.({ action, fields, data: api.data });
+    redraw();
   };
 
   /**
-   * Lifecycle.
+   * Set overrides on immutable proxy.
    */
   useEffect(() => {
-    if (!stateful) reset();
-  }, [stateful]);
-
-  useEffect(() => {
-    if (!R.equals(rawFields, fields)) setFields(rawFields);
-    if (!R.equals(rawVisible, isVisible)) setVisible(rawVisible);
-  }, [resetCount]);
-
-  useEffect(() => {
-    const life = rx.disposable();
-    const $ = props.resetState$?.pipe(rx.takeUntil(life.dispose$), rx.debounceTime(10));
-    $?.subscribe(reset);
-    return life.dispose;
-  }, [props.resetState$]);
+    if (!stateful || !api.ready) return;
+    if (stateful) rebuild(proxy.state, fireChanged);
+    redraw();
+  }, [proxy.version, ready]);
 
   /**
-   * Rebuild data object with stateful properties.
+   * Ensure overrides are configured when not stateful.
    */
-  if (stateful && data.document) {
-    const onIconClick = data.document.icon?.onClick;
-    const document: t.InfoDataDocument = {
-      ...data.document,
-      icon: {
-        ...data.document.icon,
-        onClick(e) {
-          const next = PropList.Wrangle.toggleField(fields, 'Doc.Object');
-          setFields(next);
-          fire(next);
-          onIconClick?.(e); // Bubble to root handler.
-        },
-      },
-    };
-    data = { ...data, document };
-  }
+  useEffect(() => reset.inc(), [stateful]);
 
-  if (stateful && data.visible) {
-    const onToggle = data.visible?.onToggle;
-    const visible: t.InfoData['visible'] = {
-      ...data.visible,
-      value: isVisible,
-      onToggle(e) {
-        const isVisible = e.next;
-        setVisible(isVisible);
-        fire(fields);
-        onToggle?.(e); // Bubble to root handler.
-      },
-    };
-    data = { ...data, visible };
-  }
+  /**
+   * Ready.
+   */
+  useEffect(() => setReady(true), []);
 
   /**
    * API
    */
   const api = {
-    data,
+    ready: ready && proxy.ready,
+
+    /**
+     * Current data configuration.
+     */
+    get data() {
+      return stateful ? proxy.state.current : data;
+    },
+
+    /**
+     * Current fields (or filterd if stateful).
+     */
     get fields() {
-      if (stateful && data.visible?.value === false) {
-        const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
-        return filter({ visible: false, fields });
-      } else {
-        return fields;
-      }
+      if (!stateful) return fields;
+
+      const data = api.data;
+      if (!data.visible) return fields;
+
+      const isVisible = data.visible.value ?? true;
+      if (isVisible) return fields;
+
+      const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
+      return filter({ visible: false, fields });
     },
   } as const;
   return api;

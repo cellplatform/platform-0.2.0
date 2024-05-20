@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button, COLORS, Color, DEFAULTS, Hash, Time, css, type t } from './common';
+import { MonospaceButton } from '../ui.Buttons';
+import { DEFAULTS, Hash, type t } from './common';
 
 export type MonoHashProps = {
   hash?: string;
@@ -10,39 +10,14 @@ export type MonoHashProps = {
 
 export const MonoHash: React.FC<MonoHashProps> = (props) => {
   const { hash = '', theme, length = DEFAULTS.hash.length } = props;
-  const short = Hash.shorten(hash, [0, length]);
-  const [message, setMessage] = useState<JSX.Element | undefined>();
-
-  /**
-   * Handlers
-   */
-  const handleClick = () => {
-    navigator.clipboard.writeText(hash);
-    setMessage(<div {...styles.copied}>{'Copied'}</div>);
-    Time.delay(2000, () => setMessage(undefined));
-  };
-
-  /**
-   * Render
-   */
-  const color = Color.theme(theme).color;
-  const styles = {
-    base: css({ color, Flex: 'x-center-center' }),
-    mono: css(DEFAULTS.mono),
-    pound: css({ color, opacity: 0.4, marginRight: 3 }),
-    copied: css({
-      color: COLORS.GREEN,
-    }),
-  };
-
   return (
-    <div {...css(styles.base, styles.mono, props.style)}>
-      <Button theme={theme} onClick={handleClick} overlay={message}>
-        <>
-          <span {...styles.pound}>{`#`}</span>
-          <span>{short}</span>
-        </>
-      </Button>
-    </div>
+    <MonospaceButton
+      style={props.style}
+      prefix={'#'}
+      prefixMargin={3}
+      text={Hash.shorten(hash, [0, length])}
+      theme={theme}
+      onClipboard={(e) => e.write(hash)}
+    />
   );
 };

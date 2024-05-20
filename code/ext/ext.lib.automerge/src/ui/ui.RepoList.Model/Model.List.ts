@@ -5,15 +5,19 @@ import { GetItem } from './Model.List.GetItem';
 import { listBehavior } from './Model.List.b';
 import { listRedrawBehavior } from './Model.List.b.redraw';
 import { listSelectionBehavior } from './Model.List.b.selection';
+import { Ref } from './Ref';
 import { DEFAULTS, Model, rx, type t } from './common';
 
 type Options = {
   dispose$?: t.UntilObservable;
   filter?: t.StoreIndexFilter;
   behaviors?: t.RepoListBehavior[] | (() => t.RepoListBehavior[]);
+  onReady?: (e: { ref: t.RepoListRef }) => void;
 } & t.RepoListHandlers;
 
 export const List = {
+  Ref,
+
   /**
    * Initialise a new state model for a Repo.
    */
@@ -31,10 +35,8 @@ export const List = {
     const ctx: t.GetRepoListModel = () => model;
     const array = Model.List.array(() => ItemModel.state(ctx, 'Doc', { dispose$ }));
     const getItem = GetItem(ctx, array);
-    const state: t.RepoListState = Model.List.state(
-      { total, getItem },
-      { typename: DEFAULTS.typename.List, dispose$ },
-    );
+    const typename = DEFAULTS.typename.List;
+    const state: t.RepoListState = Model.List.state({ total, getItem }, { typename, dispose$ });
 
     /**
      * API.
@@ -67,6 +69,7 @@ export const List = {
     listRedrawBehavior({ ctx, array });
 
     // Finish up.
+    options.onReady?.({ ref: Ref(model) });
     return model;
   },
 } as const;

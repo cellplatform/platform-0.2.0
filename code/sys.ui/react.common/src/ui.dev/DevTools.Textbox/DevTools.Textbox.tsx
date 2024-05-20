@@ -1,4 +1,4 @@
-import { t, ValueHandler } from '../common';
+import { t, ValueHandler } from './common';
 import { Textbox } from './ui.Textbox';
 
 type O = Record<string, unknown>;

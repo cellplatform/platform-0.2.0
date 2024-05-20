@@ -67,11 +67,9 @@ const View: React.FC<DevSplashProps> = (props) => {
   );
 };
 
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
+type Fields = { DEFAULTS: typeof DEFAULTS };
 export const DevSplash = FC.decorate<DevSplashProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'DevSplash' },
+  { displayName: DEFAULTS.displayName },
 );

@@ -10,5 +10,5 @@ type Fields = {
 export const ObjectView = FC.decorate<t.ObjectViewProps, Fields>(
   View,
   { DEFAULTS, formatter },
-  { displayName: 'ObjectView' },
+  { displayName: DEFAULTS.displayName },
 );

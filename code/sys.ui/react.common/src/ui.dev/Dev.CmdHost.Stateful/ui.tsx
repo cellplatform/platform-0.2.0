@@ -9,12 +9,13 @@ type T = t.Subject<t.ModuleListScrollTarget>;
  * A version of <CmdHost> that manages state interanally.
  */
 export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
-  const { mutateUrl = true, enabled = true, listEnabled = true } = props;
+  const { enabled = true, mutateUrl = true, listEnabled = true } = props;
 
   const readyRef = useRef(false);
-  const [command, setCommand] = useState(mutateUrl ? Wrangle.url().filter : '');
+  const url = Wrangle.url();
+  const [command, setCommand] = useState(mutateUrl ? url.filter : '');
+  const [selected, setSelected] = useState<string | undefined>(url.selected);
   const [focused, setFocused] = useState(false);
-  const [selected, setSelected] = useState<string>();
 
   const imports = Wrangle.filteredImports({ ...props, command });
   const total = Object.keys(imports).length;
@@ -72,6 +73,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
   const handleItemSelected: t.ModuleListItemHandler = (e) => {
     if (!listEnabled) return;
     setSelected(e.index > -1 ? e.uri : undefined);
+    if (mutateUrl && e.uri) Url.mutateSelected(e.uri);
     props.onItemSelect?.(e);
   };
 

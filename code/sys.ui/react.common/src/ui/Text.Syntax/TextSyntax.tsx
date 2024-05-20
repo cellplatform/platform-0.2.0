@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { DefaultTokenizer } from './Tokenizer';
-import { Util } from './Util';
-import { Color, DEFAULT, FC, Style, THEMES, css, type t } from './common';
+import { Util } from './u';
+import { Color, DEFAULTS, FC, Style, css, type t } from './common';
 
 /**
  * Label that provides common syntax highlighting.
@@ -11,14 +11,14 @@ const View: React.FC<t.TextSyntaxProps> = (props) => {
     inlineBlock = true,
     ellipsis = true,
     tokenizer = DefaultTokenizer,
-    theme = DEFAULT.THEME,
+    theme = DEFAULTS.theme.default,
     fontSize,
     fontWeight,
     monospace = false,
   } = props;
 
   const colors = {
-    ...(theme === 'Light' ? DEFAULT.LIGHT : DEFAULT.DARK),
+    ...(theme === 'Light' ? DEFAULTS.theme.light : DEFAULTS.theme.dark),
     ...props.colors,
   };
 
@@ -66,12 +66,9 @@ const View: React.FC<t.TextSyntaxProps> = (props) => {
 /**
  * Export
  */
-type Fields = {
-  THEMES: typeof THEMES;
-  DEFAULT: typeof DEFAULT;
-};
+type Fields = { DEFAULTS: typeof DEFAULTS };
 export const TextSyntax = FC.decorate<t.TextSyntaxProps, Fields>(
   View,
-  { THEMES, DEFAULT },
-  { displayName: 'TextSyntax' },
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
 );

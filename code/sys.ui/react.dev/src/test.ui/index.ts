@@ -1,4 +1,4 @@
-export { Spec } from '../logic.Spec';
+export { Spec } from '../fn.Spec';
 export { Dev } from '../Dev';
 
 export * from './common';

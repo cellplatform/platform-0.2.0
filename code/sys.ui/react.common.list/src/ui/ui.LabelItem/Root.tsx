@@ -28,5 +28,5 @@ export const LabelItem = FC.decorate<t.LabelItemProps, Fields>(
     ListContext,
     dataid: Wrangle.dataid,
   },
-  { displayName: 'LabelItem' },
+  { displayName: DEFAULTS.displayName },
 );

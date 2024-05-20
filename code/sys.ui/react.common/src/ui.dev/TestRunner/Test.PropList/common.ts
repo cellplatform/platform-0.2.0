@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Pkg, type t } from '../common';
 
 export * from '../common';
 export { PropList } from '../../../ui/PropList';
@@ -9,16 +9,6 @@ export { Theme } from '../../DevTools/Helpers.Theme';
  * Constants
  */
 
-export const FIELDS: t.TestRunnerField[] = [
-  'Module',
-  'Module.Version',
-  'Tests.Run',
-  'Tests.Selector',
-  'Tests.Selector.Reset',
-];
-
-const fields = ['Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'] as t.TestRunnerField[];
-
 const keyboard: t.TestPropListKeyboard = {
   run: 'Enter',
   runAll: 'ALT + Enter',
@@ -26,8 +16,18 @@ const keyboard: t.TestPropListKeyboard = {
 };
 
 export const DEFAULTS = {
-  fields,
+  displayName: {
+    TestPropList: `${Pkg.name}.TestPropList`,
+  },
   ellipsis: true,
   colorDelay: 1000 * 8,
   keyboard,
+  fields: {
+    get all(): t.TestRunnerField[] {
+      return ['Module', 'Module.Version', 'Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'];
+    },
+    get default(): t.TestRunnerField[] {
+      return ['Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'];
+    },
+  },
 } as const;

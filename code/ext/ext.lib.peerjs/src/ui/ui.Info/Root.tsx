@@ -14,5 +14,5 @@ type Fields = {
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
   { DEFAULTS, Field, useRedraw },
-  { displayName: 'Info' },
+  { displayName: DEFAULTS.displayName },
 );

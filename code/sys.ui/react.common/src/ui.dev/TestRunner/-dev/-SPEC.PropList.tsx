@@ -1,5 +1,5 @@
 import { type TestPropListProps } from '../Test.PropList';
-import { Dev, Pkg, t, type TestCtx } from './-common';
+import { Dev, Pkg, type TestCtx } from './-common';
 
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;
@@ -22,14 +22,13 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields' | 'enabled' | 'theme'> &
+  type LocalStore = Pick<P, 'fields' | 'enabled' | 'theme'> &
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
-    fields: DEFAULTS.fields,
+    fields: DEFAULTS.fields.default,
     infoUrl: true,
     ellipsis: false,
-    card: true,
     enabled: true,
     theme: undefined,
     selected: [],
@@ -50,7 +49,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.selectable = local.selectable;
 
       d.props.fields = local.fields;
-      d.props.card = local.card;
       d.props.enabled = local.enabled;
       d.props.theme = local.theme;
 
@@ -102,17 +100,15 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       local.selected = e.selected;
     });
 
-    const getSize = (): [number, null] => [state.current.props.card ? 330 : 330, null];
     ctx.host.tracelineColor(-0.05);
     ctx.debug.width(300);
     ctx.subject
-      .size(getSize())
+      .size([330, null])
       .display('grid')
       .render<T>((e) => {
         const { props } = e.state;
-        Dev.Theme.background(ctx, props.theme, props.card ? 0 : 1);
-        const margin = props.card ? 0 : 20;
-        return <Dev.TestRunner.PropList {...props} style={{ margin }} />;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Dev.TestRunner.PropList {...props} />;
       });
   });
 
@@ -124,12 +120,9 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       dev.row((e) => {
         return (
           <Dev.TestRunner.PropList.FieldSelector
-            style={{ Margin: [10, 30, 10, 25] }}
             selected={e.state.props.fields}
             onClick={(ev) => {
-              const fields = ev.next as t.TestRunnerField[];
-              dev.change((d) => (d.props.fields = fields));
-              local.fields = fields?.length === 0 ? undefined : fields;
+              dev.change((d) => (local.fields = d.props.fields = ev.next()));
             }}
           />
         );
@@ -184,22 +177,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `enabled`)
           .value((e) => e.state.props.enabled)
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `card`)
-          .value((e) => e.state.props.card)
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `card.flipped`)
-          .value((e) => e.state.props.flipped)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
     });
 

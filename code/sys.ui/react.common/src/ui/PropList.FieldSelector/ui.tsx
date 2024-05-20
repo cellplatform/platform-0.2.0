@@ -3,7 +3,7 @@ import { Button, css, DEFAULTS, KeyboardMonitor, rx, useMouse, type t, COLORS } 
 
 import { View as PropList } from '../PropList/ui';
 import { Label } from './ui.Label';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
@@ -39,22 +39,17 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
    */
   const handleClick = (field: string) => {
     const modifiers = KeyboardMonitor.state.current.modifiers;
-    const previous = [...selected];
+    const prev = [...selected];
     const { action, next } = Wrangle.next(all, selected, field, modifiers);
-    const args = Wrangle.clickArgs({ field, action, previous, next });
+    const args = Wrangle.clickArgs({ field, action, prev, next });
     props.onClick?.(args);
   };
 
   const handleReset = (e: React.MouseEvent) => {
     const action = e.metaKey ? 'Reset:Clear' : 'Reset:Default';
     const next = e.metaKey ? [] : props.defaults; // NB: force empty if meta-key, otherwise use defaults.
-    props.onClick?.(
-      Wrangle.clickArgs({
-        action,
-        previous: [...selected],
-        next,
-      }),
-    );
+    const payload = Wrangle.clickArgs({ action, prev: selected, next });
+    props.onClick?.(payload);
   };
 
   /**

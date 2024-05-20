@@ -2,7 +2,7 @@ import { DEFAULTS, PropList, type t } from './common';
 
 export type RepoListConfigHandler = (e: RepoListConfigHandlerArgs) => void;
 export type RepoListConfigHandlerArgs = {
-  previous?: t.RepoListBehavior[];
+  prev?: t.RepoListBehavior[];
   next?: t.RepoListBehavior[];
 };
 
@@ -27,8 +27,8 @@ export const RepoListConfig: React.FC<RepoListConfigProps> = (props) => {
       indexes={false}
       resettable={true}
       onClick={(e) => {
-        const { previous, next } = e.as<t.RepoListBehavior>();
-        props.onChange?.({ previous, next });
+        const { value } = e.as<t.RepoListBehavior>();
+        props.onChange?.(value);
         props.onClick?.(e);
       }}
     />

@@ -43,7 +43,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
    * Render
    */
   const theme = Color.theme(props.theme);
-  const color = theme.color;
+  const color = theme.fg;
   const borderTop = theme.is.dark ? `solid 1px ${Color.format(0.15)}` : undefined;
   const styles = {
     base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto', color }),

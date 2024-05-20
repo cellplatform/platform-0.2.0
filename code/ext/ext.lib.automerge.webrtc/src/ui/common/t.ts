@@ -2,10 +2,12 @@
  * @external
  */
 export type {
+  InfoDataDoc,
   RepoListBehavior,
   RepoListHandlers,
   RepoListModel,
 } from 'ext.lib.automerge/src/types';
+
 export type { ConnectorBehavior, PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 
 /**

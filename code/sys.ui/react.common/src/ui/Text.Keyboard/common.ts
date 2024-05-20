@@ -1,5 +1,13 @@
-export * from '../common';
+import { Pkg } from './common';
 
 export { Keyboard } from 'sys.ui.dom';
+export * from '../common';
 
-import { Keyboard, KeyboardMonitor } from 'sys.ui.dom';
+/**
+ * Constants
+ */
+export const DEFAULTS = {
+  displayName: {
+    EventProps: `${Pkg.name}.EventProps`,
+  },
+} as const;

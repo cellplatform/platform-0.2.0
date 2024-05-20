@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Color, COLORS, css, type t } from './common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 export type LabelProps = {
   all: string[];

@@ -1,6 +1,6 @@
 import '../../css.mjs';
 
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 import { DEFAULTS, FC, type t } from './common';
 import { useHasInteracted } from './use.HasInteracted.mjs';
 import { useController } from './use.Controller.mjs';
@@ -15,5 +15,5 @@ type Fields = {
 export const VideoPlayer = FC.decorate<t.VideoPlayerProps, Fields>(
   View,
   { DEFAULTS, Wrangle, useHasInteracted, useController },
-  { displayName: 'VideoPlayer' },
+  { displayName: DEFAULTS.displayName },
 );

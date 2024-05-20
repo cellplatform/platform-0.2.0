@@ -1,4 +1,4 @@
-import { COLORS, Color, DevIcons, css, type t } from '../common';
+import { COLORS, Color, DevIcons, css, type t } from './common';
 
 export type ButtonIconProps = {
   isActive?: boolean;

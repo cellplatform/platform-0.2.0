@@ -12,8 +12,9 @@ export type InfoField =
   | 'Peer.Remotes'
   | 'Repo'
   | 'Network.Shared'
-  | 'Network.Shared.Json'
   | 'Network.Transfer';
+
+export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; stateful: boolean };
 
 export type InfoData = {
   visible?: t.InfoDataVisible;
@@ -25,14 +26,7 @@ export type InfoData = {
   shared?: InfoDataShared | InfoDataShared[];
 };
 
-export type InfoDataShared = {
-  label?: string;
-  name?: string;
-  lens?: t.ObjectPath;
-  object?: InfoDataObject;
-  onIconClick?: (e: {}) => void;
-};
-
+export type InfoDataShared = t.InfoDataDoc;
 export type InfoDataObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };
@@ -48,9 +42,8 @@ export type InfoProps = {
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
+  stateful?: boolean;
   margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

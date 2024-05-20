@@ -6,7 +6,7 @@ const initial: T = {
   props: {
     size: 220,
     font: { family: 'Merriweather' },
-    char: FontCard.DEFAULT.char,
+    char: FontCard.DEFAULTS.char,
   },
 };
 

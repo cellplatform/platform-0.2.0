@@ -3,8 +3,8 @@ import { Color, DEFAULTS, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
-import { useScrollController } from './useScrollController.mjs';
-import { useScrollObserver } from './useScrollObserver.mjs';
+import { useScrollController } from './use.ScrollController';
+import { useScrollObserver } from './use.ScrollObserver';
 
 type LiMap = Map<number, HTMLLIElement>;
 
@@ -42,7 +42,7 @@ export const View: React.FC<t.ModuleListProps> = (props) => {
   /**
    * Render
    */
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const styles = {
     base: css({
       position: 'relative',

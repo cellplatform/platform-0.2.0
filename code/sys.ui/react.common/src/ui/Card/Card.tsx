@@ -2,8 +2,8 @@ import { forwardRef } from 'react';
 
 import { Flip } from '../Flip';
 import { CardBody } from './Card.Body';
-import { Color, css, Style, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
+import { Color, DEFAULTS, Style, css, type t } from './common';
+import { Wrangle } from './u';
 
 /**
  * Component
@@ -90,4 +90,4 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
   );
 });
 
-Card.displayName = 'Card';
+Card.displayName = DEFAULTS.displayName;

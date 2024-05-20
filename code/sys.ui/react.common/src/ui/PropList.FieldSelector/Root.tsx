@@ -12,5 +12,5 @@ type Fields = {
 export const FieldSelector = FC.decorate<t.PropListFieldSelectorProps, Fields>(
   View,
   { DEFAULTS, FieldBuilder },
-  { displayName: 'PropList.FieldSelector' },
+  { displayName: DEFAULTS.displayName },
 );

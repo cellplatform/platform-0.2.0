@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 
 export * from '../common';
 export { Data, Model } from '../ui.Connector.Model';
@@ -8,7 +8,7 @@ export { Data, Model } from '../ui.Connector.Model';
  */
 
 export const DEFAULTS = {
-  displayName: 'Webrtc.Connector',
+  displayName: `${Pkg.name}.Connector`,
   tabIndex: 0,
   behaviors: {
     get all(): t.ConnectorBehavior[] {

@@ -1,4 +1,4 @@
-import { FC, Color, COLORS, css, t, rx } from './common';
+import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
 export type FontCardFontProp = { size?: number; family?: string };
 export type FontCardProps = {
@@ -9,20 +9,14 @@ export type FontCardProps = {
   style?: t.CssValue;
 };
 
-const DEFAULT = {
-  char: 'à',
-  fontSize: 120,
-  fontFamily: 'sans-serif',
-};
-
 /**
  * Component
  */
 const View: React.FC<FontCardProps> = (props) => {
   const { font = {}, color = COLORS.DARK, size = 200 } = props;
-  const fontSize = font.size ?? DEFAULT.fontSize;
-  const fontFamily = font.family ?? DEFAULT.fontFamily;
-  const char = props.char ?? DEFAULT.char;
+  const fontSize = font.size ?? DEFAULTS.fontSize;
+  const fontFamily = font.family ?? DEFAULTS.fontFamily;
+  const char = props.char ?? DEFAULTS.char;
 
   /**
    * [Render]
@@ -64,11 +58,9 @@ const View: React.FC<FontCardProps> = (props) => {
   );
 };
 
-type Fields = {
-  DEFAULT: typeof DEFAULT;
-};
+type Fields = { DEFAULTS: typeof DEFAULTS };
 export const FontCard = FC.decorate<FontCardProps, Fields>(
   View,
-  { DEFAULT },
-  { displayName: 'Font.Card' },
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName.FontCard },
 );

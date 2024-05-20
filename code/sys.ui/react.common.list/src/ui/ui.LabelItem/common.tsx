@@ -1,11 +1,4 @@
-import { COLORS, Icons, type t } from '../common';
-
-// export { Button } from '../Button';
-// export { Focus } from '../Focus';
-// export { RenderCount } from '../RenderCount';
-// export { Spinner } from '../Spinner';
-// export { TextInput } from '../Text.Input';
-// export { Keyboard } from '../Text.Keyboard';
+import { Pkg, COLORS, Icons, type t } from '../common';
 export * from '../common';
 
 /**
@@ -26,6 +19,7 @@ const renderers: t.LabelItemRenderers = {
 };
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.LabelItem`,
   RUBY: 'rgba(255, 0, 0, 0.1)',
   debug: false,
 

@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 export * from '../common';
 
 /**
@@ -11,6 +11,7 @@ const size: t.PlayButtonSize = 'Medium';
 const sizes: t.PlayButtonSize[] = ['Small', 'Medium', 'Large'];
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.PlayButton`,
   status,
   statuses,
   enabled: true,

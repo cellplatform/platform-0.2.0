@@ -1,5 +1,5 @@
 import { isValidElement } from 'react';
-import { COLORS, Color, DEFAULTS, WrangleCard, type t } from './common';
+import { COLORS, Color, type t } from './common';
 import { fields, toggleField } from './u.fields';
 import { format } from './u.format';
 
@@ -19,21 +19,6 @@ export const Wrangle = {
     if (isDark) return { color: 0.05 };
     if (!isDark) return { color: Color.alpha(COLORS.DARK, 0.03) };
     return;
-  },
-
-  cardProps(input: t.PropListProps): t.PropListCard | undefined {
-    if (!input.card) return undefined;
-    if (typeof input.card === 'object') return input.card;
-
-    const { theme = DEFAULTS.theme } = input;
-    const isDark = theme === 'Dark';
-
-    const flipSpeed = 300;
-    const shadow = true;
-    const background = isDark ? WrangleCard.bg({ background: { color: 0.05 } }) : undefined;
-    const border = isDark ? WrangleCard.border({ border: { color: 0.3 } }) : undefined;
-
-    return { flipSpeed, shadow, background, border };
   },
 
   items(input: t.PropListProps['items']) {

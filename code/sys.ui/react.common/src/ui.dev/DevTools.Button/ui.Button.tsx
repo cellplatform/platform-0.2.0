@@ -1,10 +1,5 @@
-import { COLORS, css, FC, t, useMouse } from '../common';
+import { COLORS, DEFAULTS, FC, css, t, useMouse } from './common';
 import { ButtonIcon } from './ui.Button.Icon';
-
-const DEFAULT = {
-  enabled: true,
-  label: 'Unnamed',
-};
 
 export type ButtonProps = {
   enabled?: boolean;
@@ -17,7 +12,7 @@ export type ButtonProps = {
 };
 
 const View: React.FC<ButtonProps> = (props) => {
-  const { label = DEFAULT.label } = props;
+  const { label = DEFAULTS.label } = props;
 
   const mouse = useMouse();
   const isActive = Wrangle.isActive(props);
@@ -93,7 +88,7 @@ const Wrangle = {
     return labelOpacity === undefined ? 1 : labelOpacity;
   },
   isActive(props: ButtonProps): boolean {
-    return (props.enabled ?? DEFAULT.enabled) && Boolean(props.onClick);
+    return (props.enabled ?? DEFAULTS.enabled) && Boolean(props.onClick);
   },
 };
 
@@ -101,11 +96,11 @@ const Wrangle = {
  * Export
  */
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULT: typeof DEFAULTS;
   isActive: typeof Wrangle.isActive;
 };
 export const Button = FC.decorate<ButtonProps, Fields>(
   View,
-  { DEFAULT, isActive: Wrangle.isActive },
-  { displayName: 'Button' },
+  { DEFAULT: DEFAULTS, isActive: Wrangle.isActive },
+  { displayName: DEFAULTS.displayName },
 );

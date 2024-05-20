@@ -1,14 +1,17 @@
 import { Info } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, Pkg, type t } from '../../test.ui';
+import { DEFAULTS } from './common';
 
-type T = { props: t.InfoProps };
+type P = t.InfoProps;
+type T = { props: P };
 const initial: T = { props: {} };
 
 export default Dev.describe('Info', (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE');
+  type LocalStore = Pick<P, 'theme' | 'fields'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    selectedFields: Info.DEFAULTS.fields,
+    fields: Info.DEFAULTS.fields.default,
+    theme: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -16,7 +19,8 @@ export default Dev.describe('Info', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
+      d.props.fields = local.fields;
+      d.props.theme = local.theme;
       d.props.margin = 10;
     });
 
@@ -25,7 +29,9 @@ export default Dev.describe('Info', (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Info {...props} />;
       });
   });
 
@@ -38,16 +44,22 @@ export default Dev.describe('Info', (e) => {
         const props = e.state.props;
         return (
           <Dev.FieldSelector
-            all={Info.FIELDS}
+            all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(ev) => {
-              const fields = ev.next as t.InfoField[];
-              dev.change((d) => (d.props.fields = fields));
-              local.selectedFields = fields?.length === 0 ? undefined : fields;
+            onClick={(e) => {
+              const next = e.next<t.InfoField>(DEFAULTS.fields.default);
+              dev.change((d) => (local.fields = d.props.fields = next));
             }}
           />
         );
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
   });
 

@@ -4,11 +4,6 @@ import { View } from './ui';
 import { PropEditor } from './ui.PropEditor';
 
 /**
- * TODO 🐷
- * Move to [sys.common] → Layout
- */
-
-/**
  * Export
  */
 type Fields = {
@@ -19,5 +14,5 @@ type Fields = {
 export const SplitLayout = FC.decorate<t.SplitLayoutProps, Fields>(
   View,
   { DEFAULTS, PropEditor, percent: Wrangle.percent },
-  { displayName: 'SplitLayout' },
+  { displayName: DEFAULTS.displayName },
 );

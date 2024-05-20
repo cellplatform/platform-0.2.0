@@ -1,7 +1,7 @@
 # Experimental "Spikes"
 
 - Short lived, "throw-away" code.
-- Concepts derived from within `/spikes` are harvested and refactored into `/system` 
+- Concepts derived from within `/spikes` are harvested and refactored into `/sys` 
   (or other "production quality code" locations).
 
 ---

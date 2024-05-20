@@ -22,6 +22,7 @@ export type * from './ProgressBar/t';
 export type * from './PropList.FieldSelector/t';
 export type * from './PropList.InfoPanel/t';
 export type * from './PropList/t';
+export type * from './QRCode/t';
 export type * from './RenderCount/t';
 export type * from './Slider/t';
 export type * from './Spinner/t';
@@ -31,8 +32,3 @@ export type * from './Text.Keyboard/t';
 export type * from './Text.Secret/t';
 export type * from './Text.Syntax/t';
 export type * from './Text/t';
-
-export type * from './use/t';
-export type * from './useDragTarget/t';
-export type * from './useFocus/t';
-export type * from './useSizeObserver/t';

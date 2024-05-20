@@ -10,19 +10,18 @@ export type InfoField =
   | 'Doc.URI'
   | 'Doc.Object'
   | 'Doc.Head'
-  | 'History'
-  | 'History.Genesis'
-  | 'History.List'
-  | 'History.List.Detail'
-  | 'History.List.NavPaging';
+  | 'Doc.History'
+  | 'Doc.History.Genesis'
+  | 'Doc.History.List'
+  | 'Doc.History.List.Detail'
+  | 'Doc.History.List.NavPaging';
 
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   repo?: InfoDataRepo;
-  document?: InfoDataDocument;
-  history?: InfoDataHistory;
+  document?: InfoDataDoc | InfoDataDoc[];
 };
 
 export type InfoDataRepo = {
@@ -32,18 +31,33 @@ export type InfoDataRepo = {
   index?: t.StoreIndexState;
 };
 
-export type InfoDataDocument = {
+export type InfoDataDoc = {
   label?: string;
-  doc?: t.DocRef | t.UriString;
-  uri?: { shorten?: number | [number, number] };
-  object?: { name?: string; expand?: { level?: number; paths?: string[] } };
+  ref?: t.DocRef | t.UriString;
+  uri?: InfoDataDocUri;
+  object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
-  icon?: { onClick?(e: {}): void };
+  icon?: { onClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void };
+  history?: InfoDataDocHistory;
 };
 
-export type InfoDataHistory = {
+export type InfoDataDocObject = {
+  visible?: boolean;
+  lens?: t.ObjectPath;
+  name?: string;
+  expand?: { level?: number; paths?: string[] };
+  dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
+  beforeRender?: (mutate: unknown) => void;
+};
+
+export type InfoDataDocUri = {
+  shorten?: number | [number, number];
+  prefix?: string | null;
+  clipboard?: (uri: t.UriString) => string;
+};
+
+export type InfoDataDocHistory = {
   label?: string;
-  doc?: t.DocRef | t.UriString;
   list?: {
     page?: t.Index;
     limit?: t.Index;
@@ -66,8 +80,6 @@ export type InfoProps = {
   data?: t.InfoData;
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
-  card?: boolean;
-  flipped?: boolean;
 
   stateful?: boolean;
   resetState$?: t.Observable<any>;
@@ -81,14 +93,16 @@ export type InfoProps = {
  */
 export type InfoDataHistoryItemHandler = (e: InfoDataHistoryItemHandlerArgs) => void;
 export type InfoDataHistoryItemHandlerArgs = {
-  index: t.Index;
-  hash: t.HashString;
-  commit: t.DocHistoryCommit;
-  is: { first: boolean; last: boolean };
+  readonly index: t.Index;
+  readonly hash: t.HashString;
+  readonly commit: t.DocHistoryCommit;
+  readonly is: { first: boolean; last: boolean };
 };
 
+export type InfoStatefulChangeAction = 'Toggle:Visible' | 'Toggle:ObjectVisible';
 export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
 export type InfoStatefulChangeHandlerArgs = {
+  readonly action: InfoStatefulChangeAction;
   readonly fields: InfoField[];
   readonly data: InfoData;
 };

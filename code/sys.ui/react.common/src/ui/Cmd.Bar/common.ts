@@ -1,3 +1,5 @@
+import { Pkg } from './common';
+
 export { TextInput } from '../Text.Input';
 export * from '../common';
 
@@ -5,7 +7,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: 'Cmd.Bar',
+  displayName: `${Pkg.name}.Cmd.Bar`,
   enabled: true,
   focusOnReady: true,
   commandPlaceholder: 'command',

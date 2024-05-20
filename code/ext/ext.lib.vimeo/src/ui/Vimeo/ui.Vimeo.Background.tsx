@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FC, IFrame, css, type t } from './common';
+import { DEFAULTS, FC, IFrame, css, type t } from './common';
 
 import { usePlayerController } from './hooks';
 import { VimeoLib } from './libs.mjs';
@@ -94,5 +94,5 @@ type Fields = {
 export const VimeoBackground = FC.decorate<t.VimeoBackgroundProps, Fields>(
   View,
   { Events },
-  { displayName: 'Vimeo.Background' },
+  { displayName: DEFAULTS.displayName.background },
 );

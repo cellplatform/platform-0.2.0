@@ -34,7 +34,7 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
     edge: css({
       fontWeight: 'bold',
       fontSize: DEFAULTS.fontSize.sans + 1,
-      color: theme.color,
+      color: theme.fg,
     }),
     ellipsis: css({
       whiteSpace: 'nowrap',

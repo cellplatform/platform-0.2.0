@@ -115,7 +115,8 @@ const infoPanel = (dev: t.DevTools, network: N, options: InfoPanelOptions = {}) 
     <PeerRepoList.Info
       title={options.title}
       margin={options.margin}
-      fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
+      stateful={true}
+      fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
       data={data}
     />
   );

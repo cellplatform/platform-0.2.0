@@ -1,6 +1,6 @@
-import { COLORS, css, t, DEFAULTS, Lorem } from './-common';
-import { TextSecret } from '../../Text.Secret';
 import { PropList } from '..';
+import { TextSecret } from '../../Text.Secret';
+import { COLORS, DEFAULTS, Lorem, css, t } from './-common';
 
 const HASH = 'sha256-af88c30942b2c38662619c5258ea27299fb9987c2a40fa86f58db409a58fd2b2';
 
@@ -22,10 +22,12 @@ const styles = {
     height: 30,
     borderRadius: 4,
   }),
-  bgRed: css({ backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ }),
+  bgRed: css({
+    backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+  }),
 };
 
-export const sampleItems: t.PropListItem[] = [
+const sampleItems: t.PropListItem[] = [
   { label: 'string 👋', value: 'hello 🌳' },
   { label: 'number', value: { data: 123456, clipboard: 'Value: 123456', monospace: true } },
   { label: 'boolean', value: true, selected: true },
@@ -98,3 +100,4 @@ export const sampleItems: t.PropListItem[] = [
   { label: 'hash', value: { data: <PropList.Hash text={HASH} />, clipboard: HASH } },
   { value: <div {...css(styles.bgRed, { flex: 1, height: 30 })}>value only</div> },
 ];
+export default sampleItems;

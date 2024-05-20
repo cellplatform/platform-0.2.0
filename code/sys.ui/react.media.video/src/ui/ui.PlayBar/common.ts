@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { Pkg, type t } from './common';
 export * from '../common';
 
 import { DEFAULTS as PlayButtonDefaults } from '../ui.PlayButton/common';
@@ -15,6 +15,7 @@ const progress: t.PlayBarPropsProgress = {};
 const { size, sizes } = PlayButtonDefaults;
 
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.PlayBar`,
   enabled: true,
   replay: true,
   useKeyboard: false,

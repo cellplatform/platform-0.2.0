@@ -56,8 +56,8 @@ export default Dev.describe(name, (e) => {
             {...props}
             style={{ margin }}
             onClick={async (event) => {
-              const { next } = event.as<MyField>();
-              await state.change((d) => (local.selected = d.props.selected = next));
+              const { value } = event.as<MyField>();
+              await state.change((d) => (local.selected = d.props.selected = value.next));
               console.log('⚡️ onClick:', event);
             }}
           />

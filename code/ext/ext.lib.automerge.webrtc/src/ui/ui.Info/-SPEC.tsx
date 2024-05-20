@@ -7,7 +7,6 @@ type D = {
   dataSharedArray?: boolean;
   dataSharedDotMeta?: boolean;
   dataVisible?: boolean;
-  dataJsonVisible?: boolean;
 };
 type T = D & { props: P };
 const initial: T = { props: {} };
@@ -29,15 +28,15 @@ export default Dev.describe(name, async (e) => {
   const store = WebStore.init({ network: [] });
   const index = await WebStore.index(store);
 
-  type LocalStore = D & Pick<P, 'fields' | 'theme'>;
+  type LocalStore = D & Pick<P, 'fields' | 'theme' | 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     fields: DEFAULTS.fields.default,
-    theme: undefined,
+    theme: DEFAULTS.theme,
+    stateful: DEFAULTS.stateful,
     dataSharedLens: false,
     dataSharedArray: false,
     dataSharedDotMeta: true,
-    dataJsonVisible: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -46,12 +45,12 @@ export default Dev.describe(name, async (e) => {
 
     await state.change((d) => {
       d.props.theme = local.theme;
+      d.props.stateful = local.stateful;
       d.props.fields = local.fields;
       d.props.margin = 10;
       d.dataSharedLens = local.dataSharedLens;
       d.dataSharedArray = local.dataSharedArray;
       d.dataSharedDotMeta = local.dataSharedDotMeta;
-      d.dataJsonVisible = local.dataJsonVisible;
     });
 
     ctx.debug.width(330);
@@ -59,30 +58,20 @@ export default Dev.describe(name, async (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        const {
-          props,
-          dataVisible,
-          dataJsonVisible,
-          dataSharedArray,
-          dataSharedDotMeta,
-          dataSharedLens,
-        } = e.state;
+        const { props, dataVisible, dataSharedArray, dataSharedDotMeta, dataSharedLens } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
         const isDataVisible = dataVisible ?? true;
-
         const shared: t.InfoDataShared = {
-          lens: dataSharedLens ? ['sys', 'peers'] : undefined,
           object: {
-            visible: dataJsonVisible,
+            lens: dataSharedLens ? ['sys', 'peers'] : undefined,
             dotMeta: dataSharedDotMeta,
             beforeRender(mutate: any) {
               mutate['foo'] = 123; // Sample render mutation 🐷.
             },
           },
-          onIconClick(e) {
-            console.info('⚡️ shared.onIconClick', e);
-            state.change((d) => (local.dataJsonVisible = Dev.toggle(d, 'dataJsonVisible')));
+          icon: {
+            onClick: (e) => console.info('⚡️ shared.icon.onClick', e),
           },
         };
 
@@ -96,8 +85,8 @@ export default Dev.describe(name, async (e) => {
           shared: !dataSharedArray
             ? shared
             : [
-                { ...shared, name: 'Foo', label: 'Shared One' },
-                { ...shared, name: 'Bar', label: 'Shared Two' },
+                { ...shared, label: 'Shared One', object: { ...shared.object, name: 'Foo' } },
+                { ...shared, label: 'Shared Two', object: { ...shared.object, name: 'Bar' } },
               ],
         };
 
@@ -135,13 +124,7 @@ export default Dev.describe(name, async (e) => {
           <Dev.FieldSelector
             all={DEFAULTS.fields.all}
             selected={props.fields}
-            onClick={(ev) => {
-              const fields =
-                ev.action === 'Reset:Default'
-                  ? DEFAULTS.fields.default
-                  : (ev.next as t.InfoField[]);
-              setFields(fields);
-            }}
+            onClick={(e) => setFields(e.next<t.InfoField>(DEFAULTS.fields.default))}
           />
         );
       });
@@ -152,13 +135,7 @@ export default Dev.describe(name, async (e) => {
       };
 
       config('all', DEFAULTS.fields.all);
-      config('info → PeerRepoList', [
-        'Repo',
-        'Peer',
-        'Network.Transfer',
-        'Network.Shared',
-        'Network.Shared.Json',
-      ]);
+      config('info → PeerRepoList', ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']);
       dev.hr(-1, 5);
       dev.button(['visible', '(prepend)'], (e) => {
         const fields = e.state.current.props.fields ?? [];
@@ -169,6 +146,16 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Data', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.stateful;
+        btn
+          .label((e) => `stateful`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
+      });
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => !!state.dataSharedLens;
         btn
@@ -190,7 +177,7 @@ export default Dev.describe(name, async (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => !!state.dataSharedArray;
         btn
-          .label((e) => `data.[shared] ← array`)
+          .label((e) => `data.shared ← [array]`)
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => (local.dataSharedArray = Dev.toggle(d, 'dataSharedArray'))),

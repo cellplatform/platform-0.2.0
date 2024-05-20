@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-
-import { Color, COLORS, css, DEFAULTS, FC, Style, t, TextProcessor } from '../common';
-import { DEFAULT } from './ui.Todo.DEFAULT.mjs';
 import { useGlobalStyles } from '../DevTools.GlobalStyles';
+import { COLORS, Color, DEFAULTS, FC, Style, TextProcessor, css, t } from './common';
 
 export type TodoProps = {
   text?: string;
@@ -10,7 +8,7 @@ export type TodoProps = {
 };
 
 const View: React.FC<TodoProps> = (props) => {
-  const style = { ...DEFAULT.style, ...props.style };
+  const style = { ...DEFAULTS.style, ...props.style };
   const text = Wrangle.text(props);
   const isEmpty = Wrangle.isEmpty(props);
   const isSingleline = isEmpty || !text.includes('\n');
@@ -94,7 +92,9 @@ const Wrangle = {
 /**
  * Export
  */
-type Fields = {
-  DEFAULT: typeof DEFAULT;
-};
-export const Todo = FC.decorate<TodoProps, Fields>(View, { DEFAULT }, { displayName: 'Todo' });
+type Fields = { DEFAULTS: typeof DEFAULTS };
+export const Todo = FC.decorate<TodoProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: DEFAULTS.displayName },
+);

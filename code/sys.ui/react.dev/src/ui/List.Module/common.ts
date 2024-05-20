@@ -1,4 +1,4 @@
-import { DEFAULTS as BASE } from '../common';
+import { Pkg, DEFAULTS as BASE } from '../common';
 
 export * from '../common';
 export * from './common.Calc';
@@ -7,6 +7,7 @@ export * from './common.Calc';
  * Constants
  */
 export const DEFAULTS = {
+  displayName: `${Pkg.name}.ModuleList`,
   qs: BASE.qs,
   list: { minWidth: 360 },
 } as const;

@@ -11,13 +11,13 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.115',
+  version: '0.6.116',
   dependencies: {
     '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.12',
     '@automerge/automerge-repo-network-messagechannel': '1.1.12',
     '@automerge/automerge-repo-storage-indexeddb': '1.1.12',
-    'automerge-repo-network-peerjs': '1.1.9',
+    'automerge-repo-network-peerjs': '1.1.13',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',
@@ -33,8 +33,8 @@ export const Pkg: ModuleDef = {
     'sys.data.indexeddb': '0.0.0',
     'sys.data.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.dev': '0.0.0',
     'sys.ui.react.common.list': '0.0.0',
+    'sys.ui.react.dev': '0.0.0',
     'sys.ui.react.media': '0.0.0',
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',

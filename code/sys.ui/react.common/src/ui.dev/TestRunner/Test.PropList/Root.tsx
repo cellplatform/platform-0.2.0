@@ -1,6 +1,6 @@
 import { TestPropListControlled } from './Root.Controlled';
 import { Item } from './Root.Item';
-import { DEFAULTS, FC, FIELDS } from './common';
+import { DEFAULTS, FC } from './common';
 import { useController } from './hooks/useController';
 import { TestPropListController as controller } from './logic/Controller';
 import { PropList as View, type TestPropListProps } from './ui/PropList';
@@ -12,7 +12,6 @@ export type { TestPropListProps };
  * Export
  */
 type Fields = {
-  FIELDS: typeof FIELDS;
   DEFAULTS: typeof DEFAULTS;
   FieldSelector: typeof FieldSelector;
   Controlled: typeof TestPropListControlled;
@@ -24,7 +23,6 @@ type Fields = {
 export const TestPropList = FC.decorate<TestPropListProps, Fields>(
   View,
   {
-    FIELDS,
     DEFAULTS,
     FieldSelector,
     Controlled: TestPropListControlled,
@@ -32,5 +30,5 @@ export const TestPropList = FC.decorate<TestPropListProps, Fields>(
     useController,
     runner: Item.runner,
   },
-  { displayName: 'TestPropList' },
+  { displayName: DEFAULTS.displayName.TestPropList },
 );

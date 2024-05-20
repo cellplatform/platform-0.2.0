@@ -12,15 +12,15 @@ export type TestPropListProps = {
   data?: t.TestPropListData;
   margin?: t.CssEdgesInput;
   theme?: t.CommonTheme;
-  card?: boolean;
-  flipped?: boolean;
   enabled?: boolean;
   style?: t.CssValue;
 };
 
 export const PropList: React.FC<TestPropListProps> = (props) => {
-  const { theme, data = {}, enabled = true, fields = DEFAULTS.fields } = props;
+  const { theme, data = {}, enabled = true, fields = DEFAULTS.fields.default } = props;
   const { pkg } = data;
+  const title = Base.Wrangle.title(props.title);
+
   const { groups } = useSuites({ data });
   useKeyboard({ data, groups, enabled });
 
@@ -36,28 +36,13 @@ export const PropList: React.FC<TestPropListProps> = (props) => {
 
   return (
     <Base
-      title={Wrangle.title(props)}
+      title={title}
       items={items}
-      width={props.width ?? { min: 230 }}
+      width={Base.Info.width(props)}
       defaults={{ clipboard: false }}
-      card={props.card}
-      flipped={props.flipped}
       theme={theme}
-      padding={props.card ? [20, 25, 20, 25] : undefined}
       margin={props.margin}
       style={props.style}
     />
   );
-};
-
-/**
- * Helpers
- */
-
-const Wrangle = {
-  title(props: TestPropListProps) {
-    const title = Base.Wrangle.title(props.title);
-    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
-    return title;
-  },
 };

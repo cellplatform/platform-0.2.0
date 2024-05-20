@@ -20,7 +20,7 @@ export function projectItem(
     projects.onOpenDeployment?.({ index, project, deployment });
   };
 
-  const color = Color.theme(theme).color;
+  const color = Color.theme(theme).fg;
   const cursor = canSelect && !selected ? 'pointer' : 'default';
   const styles = {
     label: css({

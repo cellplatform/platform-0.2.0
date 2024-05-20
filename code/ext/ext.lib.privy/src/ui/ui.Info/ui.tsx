@@ -5,7 +5,7 @@ import { Wrangle } from './Wrangle';
 
 export const View: React.FC<t.InfoProps> = (props) => {
   const { data = DEFAULTS.data } = props;
-  const fields = PropList.Wrangle.fields(props.fields);
+  const fields = PropList.fields(props.fields);
 
   return (
     <AuthProvider

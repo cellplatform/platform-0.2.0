@@ -1,10 +1,9 @@
 import type { t } from './common';
 
-type ElementInput = JSX.Element | null | false;
-
 /**
  * Component: <PropList>
  */
+export type PropListSize = { fixed?: number; min?: number; max?: number };
 export type PropListTitleInput = PropListTitle['value'] | PropListTitle;
 export type PropListTitleContent = t.RenderInput;
 export type PropListTitle = {
@@ -17,15 +16,6 @@ export type PropListProps = {
   title?: t.PropListTitleInput;
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
-  card?: boolean | PropListCard;
-  flipped?: boolean;
-
-  header?: ElementInput;
-  footer?: ElementInput;
-
-  backside?: ElementInput;
-  backsideHeader?: ElementInput;
-  backsideFooter?: ElementInput;
 
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
@@ -36,14 +26,6 @@ export type PropListProps = {
 
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
-};
-
-export type PropListSize = { fixed?: number; min?: number; max?: number };
-export type PropListCard = {
-  flipSpeed?: t.Milliseconds;
-  shadow?: boolean | t.CssShadow;
-  background?: t.CardBackground;
-  border?: t.CardBorder;
 };
 
 /**

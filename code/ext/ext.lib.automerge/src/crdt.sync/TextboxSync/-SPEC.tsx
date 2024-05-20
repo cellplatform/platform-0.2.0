@@ -75,7 +75,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             component: { name },
             repo: { store, index },
-            document: { doc: e.state.docuri },
+            document: { ref: e.state.docuri },
           }}
           onStateChange={(e) => {
             dev.change((d) => (local.fields = d.fields = e.fields));

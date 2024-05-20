@@ -25,7 +25,7 @@ export type PropListFieldSelectorClickHandler = (e: PropListFieldSelectorClickHa
 export type PropListFieldSelectorClickHandlerArgs<F extends string = string> = {
   action: PropListFieldSelectorAction;
   field?: F;
-  previous?: F[];
-  next?: F[];
+  value: { prev?: F[]; next?: F[] };
+  next<T extends string>(defaults?: T[]): T[] | undefined;
   as<T extends string>(): PropListFieldSelectorClickHandlerArgs<T>;
 };

@@ -14,33 +14,30 @@ import { useRedraw } from './use.Redraw';
  */
 export const View: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+  const ctx = wrangle.ctx(props);
 
-  useRedraw(data);
+  useRedraw(props);
   const shared = useShared(data.network);
   const { bytes } = usePeerMonitor(data.network);
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
     .field('Visible', () => Field.visible(data.visible, theme))
-    .field('Module', () => Field.module(theme))
-    .field('Module.Verify', () => Field.moduleVerify(theme))
-    .field('Component', () => Field.component(data.component, theme))
-    .field('Peer', () => Field.peer(data, fields, theme))
-    .field('Repo', () => Field.repo(data, fields, theme))
-    .field('Network.Shared', () => Field.network.shared(data, fields, shared?.doc, theme))
-    .field('Network.Transfer', () => Field.network.transfer(bytes, isTransmitting, theme))
-    .items(fields);
+    .field('Module', () => Field.module(ctx))
+    .field('Module.Verify', () => Field.moduleVerify(ctx))
+    .field('Component', () => Field.component(ctx, data.component))
+    .field('Peer', () => Field.peer(ctx, data))
+    .field('Repo', () => Field.repo(ctx, data))
+    .field('Network.Shared', () => Field.network.shared(ctx, data, shared?.doc))
+    .field('Network.Transfer', () => Field.network.transfer(ctx, bytes, isTransmitting))
+    .items(ctx.fields);
 
   return (
     <PropList
-      title={Wrangle.title(props)}
+      title={PropList.Info.title(props)}
       items={items}
-      width={props.width ?? { min: 230 }}
+      width={PropList.Info.width(props)}
       defaults={{ clipboard: false }}
-      card={props.card}
-      flipped={props.flipped}
-      padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       theme={theme}
       style={props.style}
@@ -51,10 +48,10 @@ export const View: React.FC<t.InfoProps> = (props) => {
 /**
  * Helpers
  */
-const Wrangle = {
-  title(props: t.InfoProps) {
-    const title = PropList.Wrangle.title(props.title);
-    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
-    return title;
+const wrangle = {
+  ctx(props: t.InfoProps): t.InfoFieldCtx {
+    const { theme = DEFAULTS.theme, stateful = DEFAULTS.stateful } = props;
+    const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
+    return { theme, fields, stateful };
   },
 } as const;

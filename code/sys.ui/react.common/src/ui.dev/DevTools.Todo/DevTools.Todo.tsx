@@ -1,4 +1,4 @@
-import { t, ValueHandler } from '../common';
+import { DEFAULTS, ValueHandler, type t } from './common';
 import { Todo } from './ui.Todo';
 
 type O = Record<string, unknown>;
@@ -26,7 +26,7 @@ export function todo<S extends O = O>(
       return args;
     },
     style(input) {
-      const value = input === null ? Todo.DEFAULT.style : input;
+      const value = input === null ? DEFAULTS.style : input;
       values.style.handler(value);
       return args;
     },

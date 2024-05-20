@@ -2,7 +2,7 @@ import { DEFAULTS, PropList, type t } from './common';
 
 export type BehaviorSelectorHandler = (e: BehaviorSelectorHandlerArgs) => void;
 export type BehaviorSelectorHandlerArgs = {
-  previous?: t.LabelItemBehaviorKind[];
+  prev?: t.LabelItemBehaviorKind[];
   next?: t.LabelItemBehaviorKind[];
 };
 
@@ -27,8 +27,8 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
       indexes={false}
       resettable={true}
       onClick={(e) => {
-        const { previous, next } = e.as<t.LabelItemBehaviorKind>();
-        props.onChange?.({ previous, next });
+        const { value } = e.as<t.LabelItemBehaviorKind>();
+        props.onChange?.(value);
         props.onClick?.(e);
       }}
     />

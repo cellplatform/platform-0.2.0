@@ -1,7 +1,5 @@
 import { PropList } from './common';
-import { doc } from './field.Document';
-import { head } from './field.Head';
-import { history } from './field.History';
+import { document } from './field.Doc';
 import { component, module, moduleVerify } from './field.Module';
 import { repo } from './field.Repo';
 
@@ -12,8 +10,6 @@ export const Field = {
   moduleVerify,
   component,
   repo,
-  doc,
-  history,
-  head,
+  document,
   visible,
 } as const;
