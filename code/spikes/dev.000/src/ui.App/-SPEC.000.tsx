@@ -85,8 +85,8 @@ export default Dev.describe(name, async (e) => {
             network,
             repo: model,
             shared: [
-              { label: 'State: sys', object: { name: 'system', lens: ['sys'], ...obj } },
-              { label: 'State: ns', object: { name: 'namespace', lens: ['ns'], ...obj } },
+              { label: 'State: system', object: { lens: ['sys'], ...obj } },
+              { label: 'State: namespace', object: { lens: ['ns'], ...obj } },
             ],
           }}
         />

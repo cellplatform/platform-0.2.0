@@ -40,7 +40,7 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
 
 const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
-  prefix: 'crdt:automerge',
+  prefix: 'crdt',
   clipboard: (uri) => Doc.Uri.id(uri),
 };
 
