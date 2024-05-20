@@ -11,6 +11,7 @@ type D = {
   dataHistoryDetail?: t.HashString;
   dataDocLens?: boolean;
   dataDocArray?: boolean;
+  dataDocIconClickHandler?: boolean;
 };
 type T = {
   props: t.InfoProps;
@@ -37,6 +38,7 @@ export default Dev.describe(name, async (e) => {
     dataUris: true,
     dataDocLens: false,
     dataDocArray: false,
+    dataDocIconClickHandler: true,
   });
 
   const resetState$ = rx.subject();
@@ -60,6 +62,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.dataUris = local.dataUris;
       d.debug.dataDocLens = local.dataDocLens;
       d.debug.dataDocArray = local.dataDocArray;
+      d.debug.dataDocIconClickHandler = local.dataDocIconClickHandler;
     });
 
     /**
@@ -102,7 +105,9 @@ export default Dev.describe(name, async (e) => {
             },
           },
           icon: {
-            onClick: (e) => console.info('⚡️ document.icon.onClick', e),
+            onClick: debug.dataDocIconClickHandler
+              ? (e) => console.info('⚡️ document.icon.onClick', e)
+              : undefined,
           },
           uri: {
             // prefix: 'foo:::',
@@ -258,6 +263,17 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) =>
             e.change((d) => (local.dataDocArray = Dev.toggle(d.debug, 'dataDocArray'))),
+          );
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.dataDocIconClickHandler;
+        btn
+          .label((e) => `data.document.icon.onClick`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => {
+              local.dataDocIconClickHandler = Dev.toggle(d.debug, 'dataDocIconClickHandler');
+            }),
           );
       });
       dev.hr(-1, 5);

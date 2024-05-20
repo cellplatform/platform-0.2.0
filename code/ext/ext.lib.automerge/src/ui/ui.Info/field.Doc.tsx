@@ -1,4 +1,5 @@
 import {
+  toObject,
   ReactEvent,
   Button,
   COLORS,
@@ -53,11 +54,12 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
 
     const pushIcon = () => {
       // NB: "blue" when showing current-state <Object>.
-      const color = isObjectVisible ? COLORS.BLUE : undefined;
+      const hasClickHandler = !!data.icon?.onClick;
+      const color = isObjectVisible && hasClickHandler ? COLORS.BLUE : undefined;
       const height = 14;
       const elIcon = <Icons.Object size={height} color={color} />;
 
-      if (!data.icon?.onClick) {
+      if (!hasClickHandler) {
         parts.push(elIcon);
       } else {
         const uri = doc.uri;
