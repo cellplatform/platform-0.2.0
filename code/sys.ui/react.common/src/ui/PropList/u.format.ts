@@ -2,19 +2,28 @@ import { isValidElement } from 'react';
 import { type t } from './common';
 
 export function format(item: t.PropListItem) {
-  const { label, tooltip, visible } = item;
+  const { tooltip, visible } = item;
+  let _label: t.PropListLabel | undefined;
   let _value: t.PropListValue | undefined;
 
   const res = {
-    label,
     tooltip,
     visible,
 
+    get label(): t.PropListLabel {
+      if (_label === undefined) {
+        if (typeof item.label !== 'object') _label = { body: item.label };
+        else if (isValidElement(item.label)) _label = { body: item.label };
+        else _label = item.label as t.PropListLabel;
+      }
+      return _label;
+    },
+
     get value(): t.PropListValue {
       if (_value === undefined) {
-        if (typeof item.value !== 'object') return { data: item.value };
-        if (isValidElement(item.value)) return { data: item.value };
-        _value = item.value as t.PropListValue;
+        if (typeof item.value !== 'object') _value = { data: item.value };
+        else if (isValidElement(item.value)) _value = { data: item.value };
+        else _value = item.value as t.PropListValue;
       }
       return _value;
     },

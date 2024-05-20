@@ -49,13 +49,18 @@ export type PropListDefaults = {
  * A single row within a [PropList].
  */
 export type PropListItem = {
-  readonly label?: string | number | JSX.Element;
+  readonly label?: string | number | JSX.Element | PropListLabel;
   readonly value?: string | number | boolean | JSX.Element | PropListValue;
   readonly tooltip?: string;
   readonly visible?: boolean;
   readonly indent?: number;
   readonly selected?: boolean | PropListItemSelected;
   readonly divider?: boolean;
+  readonly onClick?: t.PropListItemHandler;
+};
+
+export type PropListLabel = {
+  readonly body?: string | number | JSX.Element;
   readonly onClick?: t.PropListItemHandler;
 };
 
@@ -78,7 +83,7 @@ type ValueBase = {
 };
 
 export type PropListValueGeneric = ValueBase & {
-  data?: string | number | boolean | JSX.Element;
+  readonly data?: string | number | boolean | JSX.Element;
 };
 
 export type PropListValueKinds = PropListValueSwitch;

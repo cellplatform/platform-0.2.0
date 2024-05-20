@@ -44,7 +44,17 @@ const sampleItems: t.PropListItem[] = [
   { label: 'bold', value: { data: 'value', bold: true } },
   { label: 'value opacity', value: { data: 'foobar', opacity: 0.3 } },
   {
-    label: 'click handler',
+    label: {
+      body: 'click handler (label)',
+      onClick(e) {
+        console.info('⚡️ item.label.onClick', e);
+        e.message('Label Clicked 🦄', 1200);
+      },
+    },
+    value: 'click label',
+  },
+  {
+    label: 'click handler (value)',
     value: {
       data: 'click value',
       onClick(e) {
@@ -55,14 +65,14 @@ const sampleItems: t.PropListItem[] = [
     },
   },
   {
-    label: 'click handler',
+    label: 'click handler (whole)',
     value: {
       data: 'click whole item',
       onClick: (e) => console.info('⚡️ item.value.onClick', e),
     },
     onClick(e) {
       console.info('⚡️ item.onClick', e);
-      e.message('My Clicked Text', 1200);
+      e.message('My Click Message', 1200);
     },
   },
   { label: 'descender gyp', value: 'descender gyp' },
