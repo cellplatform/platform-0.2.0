@@ -15,7 +15,6 @@ import { useRedraw } from './use.Redraw';
 export const View: React.FC<t.InfoProps> = (props) => {
   const { theme, data = {} } = props;
   const ctx = wrangle.ctx(props);
-  const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
 
   useRedraw(data);
   const shared = useShared(data.network);
@@ -31,7 +30,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Repo', () => Field.repo(ctx, data))
     .field('Network.Shared', () => Field.network.shared(ctx, data, shared?.doc))
     .field('Network.Transfer', () => Field.network.transfer(ctx, bytes, isTransmitting))
-    .items(fields);
+    .items(ctx.fields);
 
   return (
     <PropList
