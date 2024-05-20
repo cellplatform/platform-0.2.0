@@ -63,8 +63,9 @@ export default Dev.describe(name, async (e) => {
     dev.row((e) => {
       return (
         <PeerRepoList.Info
+          stateful={true}
           title={'Network'}
-          fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared', 'Network.Shared.Json']}
+          fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           data={{ network }}
         />
       );
@@ -87,9 +88,8 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('connect network', (e) => peer.self.connect.data(peer.remote.id));
       dev.button('redraw', (e) => dev.redraw());
-
+      dev.button(['connect network', '⚡️'], (e) => peer.self.connect.data(peer.remote.id));
       dev.hr(-1, 5);
 
       const deleteButton = (label: string, fn: () => Promise<any>) => {
