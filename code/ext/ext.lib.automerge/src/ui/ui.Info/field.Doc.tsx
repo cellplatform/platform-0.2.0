@@ -150,14 +150,15 @@ const wrangle = {
     const lens = data.object?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 
-    const mutate = data.object?.beforeRender;
-    if (typeof mutate === 'function') {
-      output = { ...output };
-      mutate(output);
-    }
+    if (output) {
+      output = toObject(output);
 
-    const dotMeta = data.object?.dotMeta ?? true;
-    if (!dotMeta && output) delete output['.meta'];
+      const mutate = data.object?.beforeRender;
+      if (typeof mutate === 'function') mutate(output);
+
+      const dotMeta = data.object?.dotMeta ?? true;
+      if (!dotMeta && output) delete output['.meta'];
+    }
 
     let name = data.object?.name ?? '';
     if (!name && lens) name = lens.join('.');
