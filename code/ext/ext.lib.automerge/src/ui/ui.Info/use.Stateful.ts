@@ -30,14 +30,13 @@ export function useStateful(props: t.InfoProps) {
   useEffect(() => {
     if (!stateful || !api.ready) return;
     rebuild(proxy.state, fireChanged);
+    redraw();
   }, [proxy.version, ready]);
 
   /**
    * Ensure overrides are configured when not stateful.
    */
-  useEffect(() => {
-    if (!stateful) reset.inc();
-  }, [stateful]);
+  useEffect(() => reset.inc(), [stateful]);
 
   /**
    * Ready.
