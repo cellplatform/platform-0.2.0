@@ -47,35 +47,36 @@ function overloader(state: State, fire: FireChanged) {
 
   function document(docs: t.InfoDataDoc[], index: number) {
     const doc = docs[index];
-    if (doc.icon) {
-      /**
-       * Toggle open/close when document icon clicked.
-       */
-      const bubble = doc.icon.onClick;
-      const toggle = (index: number, isVisible?: boolean) => {
-        let res = false;
-        state.change((d) => {
-          const item = Data.document.item(d.document, index);
-          if (item) {
-            const object = item.object || (item.object = {});
-            object.visible = isVisible ?? !Boolean(object.visible ?? true);
-            res = object.visible;
-          }
-        });
-        return res;
-      };
+    if (!doc.icon) doc.icon = {};
 
-      doc.icon.onClick = (e) => {
-        const isVisible = toggle(index);
-        if (e.modifiers.meta) {
-          docs.forEach((_, i) => {
-            if (i !== index) toggle(i, isVisible);
-          });
+    /**
+     * Toggle open/close when document icon clicked.
+     */
+    const bubble = doc.icon.onClick;
+    const toggle = (index: number, isVisible?: boolean) => {
+      let res = false;
+      state.change((d) => {
+        const item = Data.document.item(d.document, index);
+        if (item) {
+          const object = item.object || (item.object = {});
+          object.visible = isVisible ?? !Boolean(object.visible ?? true);
+          res = object.visible;
         }
-        bubble?.(e);
-        fire('Toggle:ObjectVisible');
-      };
-    }
+      });
+      return res;
+    };
+
+    doc.icon.onClick = (e) => {
+      const isVisible = toggle(index);
+      if (e.modifiers.meta) {
+        docs.forEach((_, i) => {
+          if (i !== index) toggle(i, isVisible);
+        });
+      }
+      bubble?.(e);
+      fire('Toggle:ObjectVisible');
+    };
+
     return doc;
   }
 
