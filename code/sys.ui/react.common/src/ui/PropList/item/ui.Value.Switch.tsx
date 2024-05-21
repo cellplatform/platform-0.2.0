@@ -4,7 +4,7 @@ import { Color, css, type t } from './common';
 export type SwitchValueProps = {
   value: t.PropListValue;
   theme?: t.CommonTheme;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const SwitchValue: React.FC<SwitchValueProps> = (props) => {

@@ -100,5 +100,6 @@ export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {
   readonly item: PropListItem;
   readonly value: PropListValue;
+  readonly modifiers: t.KeyboardModifierFlags;
   readonly message: (value: JSX.Element | string, delay?: number) => void;
 };

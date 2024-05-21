@@ -10,7 +10,7 @@ export type SimpleValueProps = {
   isOver?: boolean;
   isCopyable?: boolean;
   theme?: t.CommonTheme;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
