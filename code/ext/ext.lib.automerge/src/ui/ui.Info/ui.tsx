@@ -14,9 +14,9 @@ export const View: React.FC<t.InfoProps> = (props) => {
     .field('Visible', () => Field.visible(data.visible, theme))
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
-    .field('Repo', () => Field.repo(data.repo, ctx))
-    .field('Component', () => Field.component(data.component, ctx))
-    .field('Doc', () => Field.document(data.document, ctx))
+    .field('Repo', () => Field.repo(ctx, data.repo))
+    .field('Component', () => Field.component(ctx, data.component))
+    .field('Doc', () => Field.document(ctx, data.document))
     .items(fields);
 
   return (

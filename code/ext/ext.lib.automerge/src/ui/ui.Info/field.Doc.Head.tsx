@@ -3,7 +3,7 @@ import { DEFAULTS, Is, MonoHash, type t } from './common';
 
 type D = t.InfoDataDoc;
 
-export function head(data: D | undefined, ctx: t.InfoFieldCtx) {
+export function head(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   if (!data || !Is.docRef(data.ref)) return res;
 

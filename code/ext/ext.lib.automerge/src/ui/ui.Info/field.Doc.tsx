@@ -5,13 +5,13 @@ import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
-export function document(data: D | D[] | undefined, ctx: t.InfoFieldCtx) {
+export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined) {
   if (!data) return [];
   const docs = Array.isArray(data) ? data : [data];
-  return docs.map((data) => render(data, ctx)).flat();
+  return docs.map((data) => render(ctx, data)).flat();
 }
 
-function render(data: D | undefined, ctx: t.InfoFieldCtx) {
+function render(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   if (!data) return res;
   if (!Is.docRef(data.ref)) return res;
@@ -96,12 +96,12 @@ function render(data: D | undefined, ctx: t.InfoFieldCtx) {
   /**
    * The <Head> component.
    */
-  if (fields.includes('Doc.Head')) res.push(...head(data, ctx));
+  if (fields.includes('Doc.Head')) res.push(...head(ctx, data));
 
   /**
    * The <History> component.
    */
-  if (fields.includes('Doc.History')) res.push(...history(data, ctx));
+  if (fields.includes('Doc.History')) res.push(...history(ctx, data));
 
   // Finish up.
   return res;

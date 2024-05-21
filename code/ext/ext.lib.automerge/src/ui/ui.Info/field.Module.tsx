@@ -31,7 +31,7 @@ export function moduleVerify(ctx: t.InfoFieldCtx) {
 /**
  * Component display
  */
-export function component(data: t.InfoData['component'], ctx: t.InfoFieldCtx): t.PropListItem {
+export function component(ctx: t.InfoFieldCtx, data: t.InfoData['component']): t.PropListItem {
   return {
     label: data?.label || 'Component',
     value: data?.name || '(Unnamed)',
