@@ -153,7 +153,7 @@ const wrangle = {
             data={output}
             fontSize={11}
             theme={theme}
-            style={{ marginLeft: 10, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
+            style={{ marginLeft: 16, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
               paths: wrangle.expandPaths(data),
