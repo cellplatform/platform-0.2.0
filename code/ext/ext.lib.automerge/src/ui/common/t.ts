@@ -16,6 +16,7 @@ export type {
   PropListFieldSelectorClickHandler,
   PropListItem,
   PropListItemHandler,
+  PropListLabel,
   PropListProps,
   RenderCountProps,
   TextInputChangeArgs,

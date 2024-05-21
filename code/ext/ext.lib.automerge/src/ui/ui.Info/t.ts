@@ -37,7 +37,6 @@ export type InfoDataDoc = {
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
-  toggle?: { onClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void };
   history?: InfoDataDocHistory;
 };
 
@@ -48,6 +47,7 @@ export type InfoDataDocObject = {
   expand?: { level?: number; paths?: string[] };
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
   beforeRender?: (mutate: unknown) => void;
+  onToggleClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void;
 };
 
 export type InfoDataDocUri = {

@@ -1,15 +1,4 @@
-import {
-  toObject,
-  ReactEvent,
-  Button,
-  COLORS,
-  Icons,
-  Is,
-  ObjectPath,
-  ObjectView,
-  css,
-  type t,
-} from './common';
+import { Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { head } from './field.Doc.Head';
 import { history } from './field.Doc.History';
 import { DocUriButton } from './ui.Doc.UriButton';
@@ -27,15 +16,26 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
   if (!data) return res;
   if (!Is.docRef(data.ref)) return res;
 
-  const label = data.label ?? 'Document';
-  const hasLabel = !!label.trim();
-  const isObjectVisible = fields.includes('Doc.Object') && (data.object?.visible ?? true);
+  const doc = data.ref;
+  const hasObject = fields.includes('Doc.Object');
+  const isObjectVisible = hasObject && (data.object?.visible ?? true);
+  const hasToggleHandler = !!data.object?.onToggleClick;
+
+  const label: t.PropListLabel = {
+    body: (data.label ?? 'Document').trim(),
+    toggle: hasToggleHandler ? { open: isObjectVisible } : undefined,
+    onClick(e) {
+      const uri = doc.uri;
+      const modifiers = e.modifiers;
+      data.object?.onToggleClick?.({ uri, modifiers });
+    },
+  };
+  const hasLabel = !!label.body;
 
   /**
-   * Title
+   * Title Row
    */
   if (hasLabel) {
-    const doc = data.ref;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
     const parts: JSX.Element[] = [];
 
@@ -52,35 +52,8 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
       );
     }
 
-    const toggleClick = (modifiers: t.KeyboardModifierFlags) => {
-      const uri = doc.uri;
-      data.toggle?.onClick?.({ uri, modifiers });
-    };
-
-    const pushIcon = () => {
-      // NB: "blue" when showing current-state <Object>.
-      const hasClickHandler = !!data.toggle?.onClick;
-      const color = isObjectVisible && hasClickHandler ? COLORS.BLUE : undefined;
-      const height = 14;
-      const elIcon = <Icons.Object size={height} color={color} />;
-
-      if (!hasClickHandler) {
-        parts.push(elIcon);
-      } else {
-        parts.push(
-          <Button
-            theme={theme}
-            style={{ height }}
-            onClick={(e) => toggleClick(ReactEvent.modifiers(e))}
-          >
-            {elIcon}
-          </Button>,
-        );
-      }
-    };
-
     if (doc) {
-      if (fields.includes('Doc.Object')) pushIcon();
+      parts.push(<Icons.Object size={14} />);
     } else {
       parts.push(<>{'-'}</>);
     }
@@ -91,7 +64,10 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
         gridTemplateColumns: `repeat(${parts.length}, auto)`,
         columnGap: '5px',
       }),
-      part: css({ display: 'grid', alignContent: 'center' }),
+      part: css({
+        display: 'grid',
+        alignContent: 'center',
+      }),
     };
 
     const elParts = parts.map((el, i) => (
@@ -102,7 +78,7 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     const value = <div {...styles.base}>{elParts}</div>;
 
     res.push({
-      label: { body: label, onClick: (e) => toggleClick(e.modifiers) },
+      label,
       value,
       divider: fields.includes('Doc.Object') ? !isObjectVisible : undefined,
     });
