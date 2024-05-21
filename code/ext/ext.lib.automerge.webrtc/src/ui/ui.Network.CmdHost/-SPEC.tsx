@@ -245,12 +245,11 @@ export default Dev.describe(name, async (e) => {
         avatars: css({ display: 'grid', placeItems: 'center' }),
       };
 
-      const handleIconClick = () => {
+      const onToggleClick = () => {
         harness.change((d) => (local.debugShowJson = Dev.toggle(d, 'debugShowJson')));
       };
       const cmdState: t.InfoDataShared = {
         label: 'CmdHost State',
-        icon: { onClick: handleIconClick },
         object: {
           lens: e.state.debugRootJson ? undefined : ['ns', 'cmd.host'],
           visible: harness.current.debugShowJson,
@@ -262,15 +261,16 @@ export default Dev.describe(name, async (e) => {
               if (e.value instanceof A.Counter) e.mutate(e.value.value);
             });
           },
+          onToggleClick,
         },
       };
 
       const harnessState: t.InfoDataShared = {
         label: 'Harness State',
-        icon: { onClick: handleIconClick },
         object: {
           lens: ['ns', 'harness'],
           visible: harness.current.debugShowJson,
+          onToggleClick,
         },
       };
 

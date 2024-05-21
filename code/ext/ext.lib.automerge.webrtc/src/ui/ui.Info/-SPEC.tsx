@@ -69,9 +69,7 @@ export default Dev.describe(name, async (e) => {
             beforeRender(mutate: any) {
               mutate['foo'] = 123; // Sample render mutation 🐷.
             },
-          },
-          icon: {
-            onClick: (e) => console.info('⚡️ shared.icon.onClick', e),
+            onToggleClick: (e) => console.info('⚡️ shared.icon.onClick', e),
           },
         };
 
