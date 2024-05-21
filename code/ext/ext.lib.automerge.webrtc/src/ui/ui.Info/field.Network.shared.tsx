@@ -21,12 +21,7 @@ export function shared(
       ...shared,
       ref,
       label,
-      object: {
-        ...shared.object,
-        dotMeta,
-        visible: false,
-        beforeRender(mutate) {},
-      },
+      object: { ...shared.object, dotMeta, visible: false },
     };
   };
 
