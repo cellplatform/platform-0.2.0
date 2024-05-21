@@ -5,17 +5,18 @@ import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
-export function document(data: D | D[] | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+export function document(data: D | D[] | undefined, ctx: t.InfoFieldCtx) {
   if (!data) return [];
   const docs = Array.isArray(data) ? data : [data];
-  return docs.map((data) => render(data, fields, theme)).flat();
+  return docs.map((data) => render(data, ctx)).flat();
 }
 
-function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+function render(data: D | undefined, ctx: t.InfoFieldCtx) {
   const res: t.PropListItem[] = [];
   if (!data) return res;
   if (!Is.docRef(data.ref)) return res;
 
+  const { fields, theme } = ctx;
   const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
@@ -95,12 +96,12 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
   /**
    * The <Head> component.
    */
-  if (fields.includes('Doc.Head')) res.push(...head(data, fields, theme));
+  if (fields.includes('Doc.Head')) res.push(...head(data, ctx));
 
   /**
    * The <History> component.
    */
-  if (fields.includes('Doc.History')) res.push(...history(data, fields, theme));
+  if (fields.includes('Doc.History')) res.push(...history(data, ctx));
 
   // Finish up.
   return res;

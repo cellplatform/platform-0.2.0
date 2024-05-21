@@ -49,6 +49,7 @@ export const DEFAULTS = {
   stateful: false,
   visibleFilter,
   fields,
+  theme: 'Light',
   repo: { label: 'Store' },
   doc: { head: { label: 'Head', hashLength: 6 }, uri },
   history: {

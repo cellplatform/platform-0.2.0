@@ -3,18 +3,17 @@ import { DEFAULTS, Pkg, TestRunner, type t } from './common';
 /**
  * Module package.
  */
-export function module(): t.PropListItem {
+export function module(ctx: t.InfoFieldCtx): t.PropListItem {
   return { label: 'Module', value: `${Pkg.name}@${Pkg.version}` };
 }
 
 /**
  * Test runner.
  */
-export function moduleVerify(theme?: t.CommonTheme) {
-  const ctx = {};
+export function moduleVerify(ctx: t.InfoFieldCtx) {
   return TestRunner.PropList.runner({
-    ctx,
-    theme,
+    ctx: {},
+    theme: ctx.theme,
 
     infoUrl() {
       const url = new URL(location.origin);
@@ -32,7 +31,7 @@ export function moduleVerify(theme?: t.CommonTheme) {
 /**
  * Component display
  */
-export function component(data: t.InfoData['component']): t.PropListItem {
+export function component(data: t.InfoData['component'], ctx: t.InfoFieldCtx): t.PropListItem {
   return {
     label: data?.label || 'Component',
     value: data?.name || '(Unnamed)',
