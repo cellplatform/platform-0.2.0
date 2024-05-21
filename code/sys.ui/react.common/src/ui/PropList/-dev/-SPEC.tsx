@@ -1,8 +1,8 @@
 import { PropList } from '..';
 import { Dev, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
-import sampleItems from './-SPEC.ui';
 import { BuilderSample } from './-SPEC.ui.Builder';
+import { sampleItems } from './-SPEC.ui.sample';
 import { SampleFields, type MyField } from './-common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';

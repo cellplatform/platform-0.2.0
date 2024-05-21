@@ -1,6 +1,7 @@
 import { Icon } from './Icon';
 
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
+import { GoTriangleRight } from 'react-icons/go';
 import {
   MdClose,
   MdFace,
@@ -27,4 +28,5 @@ export const Icons = {
   Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
   Align: { Center: icon(MdOutlineVerticalAlignCenter) },
   NewTab: icon(RxOpenInNewWindow),
+  Triangle: { Right: icon(GoTriangleRight) },
 } as const;

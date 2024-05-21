@@ -46,7 +46,7 @@ export type PropListDefaults = {
 };
 
 /**
- * A single row within a [PropList].
+ * A single row within a <PropList>.
  */
 export type PropListItem = {
   readonly label?: string | number | JSX.Element | PropListLabel;
@@ -59,15 +59,19 @@ export type PropListItem = {
   readonly onClick?: t.PropListItemHandler;
 };
 
+/**
+ * The label portion of a <PropList> item.
+ */
 export type PropListLabel = {
   readonly body?: string | number | JSX.Element;
   readonly onClick?: t.PropListItemHandler;
+  readonly toggle?: { open?: boolean };
 };
 
 export type PropListItemSelected = { readonly color: string | number };
 
 /**
- * The value portion of a [PropList] item.
+ * The value portion of a <PropList> item.
  */
 export type PropListValue = PropListValueGeneric | PropListValueKinds;
 

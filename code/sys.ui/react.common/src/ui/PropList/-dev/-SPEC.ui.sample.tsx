@@ -27,7 +27,7 @@ const styles = {
   }),
 };
 
-const sampleItems: t.PropListItem[] = [
+export const sampleItems: t.PropListItem[] = [
   { label: 'string 👋', value: 'hello 🌳' },
   { label: 'number', value: { body: 123456, clipboard: 'Value: 123456', monospace: true } },
   { label: 'boolean', value: true, selected: true },
@@ -76,7 +76,10 @@ const sampleItems: t.PropListItem[] = [
     },
   },
   { label: 'descender gyp', value: 'descender gyp' },
-  { label: 'no divider', divider: false },
+  {
+    label: { body: 'no divider (toggle)', toggle: { open: true } },
+    divider: false,
+  },
   { label: 'one', value: '🙈', indent: 15 },
   { label: 'two', value: '🙊', indent: 15 },
   { label: 'three', value: '🙉', indent: 15 },
@@ -110,4 +113,3 @@ const sampleItems: t.PropListItem[] = [
   { label: 'hash', value: { body: <PropList.Hash text={HASH} />, clipboard: HASH } },
   { value: <div {...css(styles.bgRed, { flex: 1, height: 30 })}>value only</div> },
 ];
-export default sampleItems;
