@@ -8,7 +8,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
-    .field('Component', () => Field.component(data.component, ctx))
+    .field('Component', () => Field.component(ctx, data.component))
     .items(ctx.fields);
 
   return (
