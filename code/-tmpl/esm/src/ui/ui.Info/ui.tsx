@@ -2,14 +2,14 @@ import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
 
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme, data = {} } = props;
-  const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
+  const { data = {} } = props;
+  const ctx = wrangle.ctx(props);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module(theme))
-    .field('Module.Verify', () => Field.moduleVerify(theme))
-    .field('Component', () => Field.component(data.component, theme))
-    .items(fields);
+    .field('Module', () => Field.module(ctx))
+    .field('Module.Verify', () => Field.moduleVerify(ctx))
+    .field('Component', () => Field.component(data.component, ctx))
+    .items(ctx.fields);
 
   return (
     <PropList
@@ -17,9 +17,20 @@ export const View: React.FC<t.InfoProps> = (props) => {
       items={items}
       defaults={{ clipboard: false }}
       width={PropList.Info.width(props)}
-      theme={theme}
+      theme={ctx.theme}
       margin={props.margin}
       style={props.style}
     />
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  ctx(props: t.InfoProps): t.InfoFieldCtx {
+    const { theme = DEFAULTS.theme } = props;
+    const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
+    return { fields, theme };
+  },
+} as const;

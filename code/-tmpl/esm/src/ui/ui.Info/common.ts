@@ -17,4 +17,5 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
+  theme: 'Light',
 } as const;
