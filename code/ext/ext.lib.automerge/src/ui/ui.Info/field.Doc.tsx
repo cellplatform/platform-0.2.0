@@ -52,9 +52,14 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
       );
     }
 
+    const toggleClick = (modifiers: t.KeyboardModifierFlags) => {
+      const uri = doc.uri;
+      data.toggle?.onClick?.({ uri, modifiers });
+    };
+
     const pushIcon = () => {
       // NB: "blue" when showing current-state <Object>.
-      const hasClickHandler = !!data.icon?.onClick;
+      const hasClickHandler = !!data.toggle?.onClick;
       const color = isObjectVisible && hasClickHandler ? COLORS.BLUE : undefined;
       const height = 14;
       const elIcon = <Icons.Object size={height} color={color} />;
@@ -62,13 +67,12 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
       if (!hasClickHandler) {
         parts.push(elIcon);
       } else {
-        const uri = doc.uri;
-        const handleClick: React.MouseEventHandler = (e) => {
-          const modifiers = ReactEvent.modifiers(e);
-          data.icon?.onClick?.({ uri, modifiers });
-        };
         parts.push(
-          <Button theme={theme} onClick={handleClick} style={{ height }}>
+          <Button
+            theme={theme}
+            style={{ height }}
+            onClick={(e) => toggleClick(ReactEvent.modifiers(e))}
+          >
             {elIcon}
           </Button>,
         );
@@ -87,10 +91,7 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
         gridTemplateColumns: `repeat(${parts.length}, auto)`,
         columnGap: '5px',
       }),
-      part: css({
-        display: 'grid',
-        alignContent: 'center',
-      }),
+      part: css({ display: 'grid', alignContent: 'center' }),
     };
 
     const elParts = parts.map((el, i) => (
@@ -100,8 +101,11 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     ));
     const value = <div {...styles.base}>{elParts}</div>;
 
-    const divider = fields.includes('Doc.Object') ? !isObjectVisible : undefined;
-    res.push({ label, value, divider });
+    res.push({
+      label: { body: label, onClick: (e) => toggleClick(e.modifiers) },
+      value,
+      divider: fields.includes('Doc.Object') ? !isObjectVisible : undefined,
+    });
   }
 
   /**
