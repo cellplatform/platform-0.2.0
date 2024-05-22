@@ -17,7 +17,7 @@ export const View: React.FC<t.RootProps> = (props) => {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       color: theme.fg,
-      borderRight: `solid 1px ${theme.alpha.fg(0.1)}`,
+      borderRight: `solid 1px ${theme.alpha(0.1).fg}`,
     }),
     grid: css({ display: 'grid', placeItems: 'center' }),
     size: {

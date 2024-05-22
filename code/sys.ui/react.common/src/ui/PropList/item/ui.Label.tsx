@@ -19,7 +19,7 @@ export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
    * Render
    */
   const theme = Color.theme(props.theme);
-  const color = theme.alpha.fg(0.4);
+  const color = theme.alpha(0.4).fg;
   const styles = {
     base: css({
       userSelect: 'none',

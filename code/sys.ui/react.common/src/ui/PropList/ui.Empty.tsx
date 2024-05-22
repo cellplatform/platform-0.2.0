@@ -17,7 +17,7 @@ export const Empty: React.FC<EmptyProps> = (props) => {
     base: css({
       fontSize: 14,
       fontStyle: 'italic',
-      color: theme.is.light ? theme.alpha.fg(0.4) : theme.alpha.fg(0.6),
+      color: theme.is.light ? theme.alpha(0.4).fg : theme.alpha(0.6).fg,
       paddingTop: 8,
       display: 'grid',
       placeItems: 'center',

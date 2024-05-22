@@ -34,7 +34,7 @@ export function peer(
           <Icons.Person
             size={14}
             style={styles.iconRight}
-            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha.fg(0.4)}
+            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha(0.4).fg}
           />
         </div>
       ),
