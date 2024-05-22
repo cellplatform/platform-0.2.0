@@ -1,5 +1,5 @@
 import { Dev, Pkg, css, type t } from '../test.ui';
-import { View } from './-SPEC.000.View';
+import { View } from './-SPEC.000.ui';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = { stream?: MediaStream };
@@ -30,7 +30,7 @@ export default Dev.describe(name, async (e) => {
     ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
-      .size('fill')
+      .size('fill', 36)
       .display('grid')
       .render<T>((e) => {
         return (
