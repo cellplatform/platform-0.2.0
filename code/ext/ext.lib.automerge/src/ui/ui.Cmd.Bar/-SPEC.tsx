@@ -14,18 +14,18 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'theme' | 'focusOnReady'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
+    focusOnReady: true,
     docuri: undefined,
   });
 
   const db = await sampleCrdt({ broadcastAdapter: true });
-  const store = db.store;
-  const index = db.index;
   let model: t.RepoListModel;
-  let ref: t.RepoListRef;
+  let listRef: t.RepoListRef;
+  let doc: t.DocRef | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -34,15 +34,18 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.theme = local.theme;
+      d.props.focusOnReady = local.focusOnReady;
       d.debug.docuri = local.docuri;
     });
 
     model = await RepoList.model(db.store, {
       behaviors: ['Copyable', 'Deletable'],
-      onReady: (e) => (ref = e.ref),
-      onActiveChanged(e) {
+      onReady: (e) => (listRef = e.ref),
+      async onActiveChanged(e) {
         console.info(`⚡️ onActiveChanged`, e);
-        state.change((d) => (local.docuri = d.debug.docuri = e.item.uri));
+        const uri = e.item.uri;
+        doc = uri ? await db.store.doc.get(uri) : undefined;
+        state.change((d) => (local.docuri = d.debug.docuri = uri));
       },
     });
 
@@ -53,7 +56,7 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         const { props } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
-        return <CmdBar {...props} />;
+        return <CmdBar {...props} doc={doc} />;
       });
   });
 
@@ -62,23 +65,36 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.header.border(-0.1).render((e) => {
+      const ref = state.current.debug.docuri;
+      const { store, index } = db;
       return (
         <Info
           stateful={true}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: { store, index },
-            document: {
-              ref: state.current.debug.docuri,
-              object: { visible: true },
-            },
+            document: { ref, object: { visible: true } },
           }}
         />
       );
     });
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusOnReady;
+        btn
+          .label((e) => `focusOnReady`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
+          );
+      });
     });
 
     dev.hr(5, 20);
@@ -86,7 +102,7 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-      dev.button(['doc: increment', 'count + 1'], async (e) => {
+      dev.button(['increment: {doc.foo}', 'count + 1'], async (e) => {
         type T = { count?: number };
         const doc = await db.docAtIndex<T>(0);
         doc?.change((d) => (d.count = (d.count ?? 0) + 1));
