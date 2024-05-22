@@ -69,8 +69,8 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
   const enabled = !!doc;
 
-  const [value, setValue] = useState('');
-  const [input, setInput] = useState<t.TextInputRef>();
+  const [text, setText] = useState('');
+  const [textbox, setTextbox] = useState<t.TextInputRef>();
 
   /**
    * Lifecycle
@@ -78,19 +78,19 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   useEffect(() => {
     const life = rx.disposable();
     const { dispose$ } = life;
-    if (doc && input) {
+    if (doc && textbox) {
       const initial = ObjectPath.resolve<string>(doc.current, path);
-      setValue(initial ?? '');
+      setText(initial ?? '');
 
-      const listener = TextboxSync.listen(input, doc, path, { debug, dispose$ });
-      listener.onChange((e) => setValue(e.text));
+      const listener = TextboxSync.listen(textbox, doc, path, { debug, dispose$ });
+      listener.onChange((e) => setText(e.text));
     }
     return life.dispose;
-  }, [doc?.uri, !!input, path?.join('.')]);
+  }, [doc?.uri, !!textbox, path?.join('.')]);
 
   useEffect(() => {
-    if (focus && input && doc) input.focus();
-  }, [focus, !!input, !!doc]);
+    if (focus && textbox && doc) textbox.focus();
+  }, [focus, !!textbox, !!doc]);
 
   /**
    * Render
@@ -115,13 +115,13 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.debug}>{debug}</div>
       <TextInput
-        value={value}
+        value={text}
         theme={theme}
         isEnabled={enabled}
         placeholder={'string (crdt)'}
         spellCheck={false}
-        onReady={(e) => setInput(e.ref)}
-        onChange={(e) => setValue(e.to)}
+        onReady={(e) => setTextbox(e.ref)}
+        onChange={(e) => setText(e.to)}
       />
     </div>
   );
