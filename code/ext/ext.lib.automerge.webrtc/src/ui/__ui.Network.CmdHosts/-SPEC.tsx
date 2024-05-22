@@ -17,7 +17,7 @@ const createStores = async (state: t.DevCtxState<T>) => {
   const left = await createNetwork('Left', '🐷');
   const right = await createNetwork('Right', '🌼');
 
-  const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', {});
+  const toLens = (shared: t.NetworkStoreShared) => shared.ns.lens('foo', {});
   const lenses = {
     left: toLens(left.shared),
     right: toLens(right.shared),

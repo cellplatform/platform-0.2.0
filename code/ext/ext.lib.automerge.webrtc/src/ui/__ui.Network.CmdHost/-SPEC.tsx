@@ -34,7 +34,7 @@ const initial: T = { props: {} };
 const createStore = async (state: t.DevCtxState<T>, local: LocalStore) => {
   const logLevel = (): t.LogLevel | undefined => (state.current.debugLogging ? 'Debug' : undefined);
   const network = await TestEdge.createNetwork('Left', { logLevel, debugLabel: '🐷' });
-  const namespace = network.shared.namespace;
+  const namespace = network.shared.ns;
   const lens = namespace.lens('cmd.host', {});
 
   const s = state.current;
