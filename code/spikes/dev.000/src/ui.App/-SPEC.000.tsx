@@ -1,6 +1,7 @@
 import { Dev, Pkg, css, type t } from '../test.ui';
 import { View } from './-SPEC.000.ui';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
+import { Footer } from './-SPEC.000.ui.footer';
 
 type T = { stream?: MediaStream };
 const initial: T = {};
@@ -8,7 +9,8 @@ const initial: T = {};
 /**
  * Spec
  */
-const name = 'App.01';
+const name = 'Main.000';
+
 export default Dev.describe(name, async (e) => {
   const self = Peer.init();
   const store = WebStore.init({
@@ -42,6 +44,10 @@ export default Dev.describe(name, async (e) => {
           />
         );
       });
+
+    ctx.host.footer.padding(0).render((e) => {
+      return <Footer network={network} />;
+    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -98,7 +104,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer
-      .padding(8)
+      .padding(7.5)
       .border(-0.1)
       .render<T>((e) => {
         const styles = {
