@@ -56,12 +56,15 @@ export type TextboxProps = {
   style?: t.CssValue;
 };
 export const Textbox: React.FC<TextboxProps> = (props) => {
-  const { doc, theme, debug, path = [] } = props;
+  const { focus, doc, theme, debug, path = [] } = props;
   const enabled = !!doc;
 
   const [value, setValue] = useState('');
   const [input, setInput] = useState<t.TextInputRef>();
 
+  /**
+   * Lifecycle
+   */
   useEffect(() => {
     const life = rx.disposable();
     const { dispose$ } = life;
@@ -74,6 +77,10 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     }
     return life.dispose;
   }, [doc?.uri, !!input, path?.join('.')]);
+
+  useEffect(() => {
+    if (focus && input && doc) input.focus();
+  }, [focus, !!input, !!doc]);
 
   /**
    * Render
@@ -102,7 +109,6 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         theme={theme}
         isEnabled={enabled}
         placeholder={'string (crdt)'}
-        focusOnReady={props.focus}
         spellCheck={false}
         onReady={(e) => setInput(e.ref)}
         onChange={(e) => setValue(e.to)}
