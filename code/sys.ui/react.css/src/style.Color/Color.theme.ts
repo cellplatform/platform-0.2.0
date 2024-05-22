@@ -2,13 +2,17 @@ import type { t } from '../common';
 import { DARK, WHITE } from './Color.const';
 import { alpha } from './Color.format';
 
-type Color = string | null;
+type ColorInput = string | null;
 const DEFAULT: t.CommonTheme = 'Light';
 
 /**
  * A theme helper object.
  */
-export function theme(name: t.CommonTheme = DEFAULT, defaultLight?: Color, defaultDark?: Color) {
+export function theme(
+  name: t.CommonTheme = DEFAULT,
+  defaultLight?: ColorInput,
+  defaultDark?: ColorInput,
+): t.ColorTheme {
   const fg = wrangle.color(name, defaultLight, defaultDark);
   const bg = wrangle.color(wrangle.opposite(name), defaultLight, defaultDark);
   return {
@@ -27,7 +31,7 @@ export function theme(name: t.CommonTheme = DEFAULT, defaultLight?: Color, defau
  * Helpers
  */
 const wrangle = {
-  color(theme: t.CommonTheme = DEFAULT, defaultLight?: Color, defaultDark?: Color) {
+  color(theme: t.CommonTheme = DEFAULT, defaultLight?: ColorInput, defaultDark?: ColorInput) {
     const light = defaultLight ?? DARK;
     const dark = defaultDark ?? WHITE;
     return theme === 'Dark' ? dark : light;
