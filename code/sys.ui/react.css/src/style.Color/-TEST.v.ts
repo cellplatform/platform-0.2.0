@@ -110,6 +110,15 @@ describe('color', () => {
       expect(res2.bg).to.eql(Color.DARK);
     });
 
+    it('input: {theme} object', () => {
+      const theme = Color.theme();
+      expect(Color.theme(undefined).name).to.eql('Light');
+      expect(Color.theme(null).name).to.eql('Light');
+      expect(Color.theme(theme)).to.equal(theme);
+      expect(Color.theme('Light').name).to.eql('Light');
+      expect(Color.theme('Dark').name).to.eql('Dark');
+    });
+
     it('alpha.fg (foreground)', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
@@ -155,15 +164,6 @@ describe('color', () => {
 
       expect(inverted.fg).to.eql('salmon');
       expect(inverted.bg).to.eql('red');
-    });
-
-    it('Color.asTheme', () => {
-      const theme = Color.theme();
-      expect(Color.asTheme(undefined).name).to.eql('Light');
-      expect(Color.asTheme(null).name).to.eql('Light');
-      expect(Color.asTheme('Light').name).to.eql('Light');
-      expect(Color.asTheme('Dark').name).to.eql('Dark');
-      expect(Color.asTheme(theme)).to.equal(theme);
     });
   });
 });

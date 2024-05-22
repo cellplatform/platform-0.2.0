@@ -7,20 +7,23 @@ type ColorInput = string | null;
 const DEFAULT: t.CommonTheme = 'Light';
 
 /**
- * Convert a loose theme input (string or resolved object)
- * into the theme object.
+ * A color theme helper object.
  */
-export function asTheme(input: t.CommonTheme | t.ColorTheme | undefined | null) {
-  if (input === null || input === undefined) return theme(DEFAULT);
-  if (typeof input === 'object') return input;
-  return theme(input);
+export function theme(
+  input?: t.CommonTheme | t.ColorTheme | null, // NB: loose input.
+  defaultLight?: ColorInput,
+  defaultDark?: ColorInput,
+): t.ColorTheme {
+  const create = () => factory(DEFAULT, defaultLight, defaultDark);
+  if (input === null || input === undefined) return create();
+  return typeof input === 'object' ? input : create();
 }
 
 /**
- * A theme helper object.
+ * Factory
  */
-export function theme(
-  name: t.CommonTheme = DEFAULT,
+function factory(
+  name: t.CommonTheme,
   defaultLight?: ColorInput,
   defaultDark?: ColorInput,
 ): t.ColorTheme {
