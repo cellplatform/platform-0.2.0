@@ -7,6 +7,16 @@ type ColorInput = string | null;
 const DEFAULT: t.CommonTheme = 'Light';
 
 /**
+ * Convert a loose theme input (string or resolved object)
+ * into the theme object.
+ */
+export function asTheme(input: t.CommonTheme | t.ColorTheme | undefined | null) {
+  if (input === null || input === undefined) return theme(DEFAULT);
+  if (typeof input === 'object') return input;
+  return theme(input);
+}
+
+/**
  * A theme helper object.
  */
 export function theme(

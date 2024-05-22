@@ -156,5 +156,14 @@ describe('color', () => {
       expect(inverted.fg).to.eql('salmon');
       expect(inverted.bg).to.eql('red');
     });
+
+    it('Color.asTheme', () => {
+      const theme = Color.theme();
+      expect(Color.asTheme(undefined).name).to.eql('Light');
+      expect(Color.asTheme(null).name).to.eql('Light');
+      expect(Color.asTheme('Light').name).to.eql('Light');
+      expect(Color.asTheme('Dark').name).to.eql('Dark');
+      expect(Color.asTheme(theme)).to.equal(theme);
+    });
   });
 });
