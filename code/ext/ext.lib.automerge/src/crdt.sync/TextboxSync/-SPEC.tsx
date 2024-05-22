@@ -92,7 +92,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
 
       const path = (path: t.ObjectPath) => {
-        dev.button(`path: ${path?.join('.')}`, (e) => {
+        dev.button(`path: [ ${path?.join('.')} ]`, (e) => {
           e.change((d) => (local.path = d.path = path));
         });
       };
@@ -104,17 +104,16 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-
+      dev.hr(-1, 5);
       dev.button('clear text', async (e) => {
         const doc = await getDoc();
         doc?.change((d) => (d.text = ''));
       });
-
-      dev.hr(-1, 5);
-
-      dev.button('tmp', async (e) => {
+      dev.button('reset doc', async (e) => {
         const doc = await getDoc();
-        doc?.change((d) => (d.text = { foo: 123 } as any));
+        doc?.change((d) => {
+          Object.keys(d).forEach((key) => delete (d as any)[key]);
+        });
       });
     });
   });

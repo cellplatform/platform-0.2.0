@@ -19,8 +19,7 @@ export type LayoutProps = {
   style?: t.CssValue;
 };
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { theme, repo, path } = props;
-  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
+  const { theme, repo, docuri, path } = props;
 
   /**
    * Render
@@ -31,15 +30,23 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     textbox: css({ width: 260 }),
   };
 
+  const textbox = (debug: string, focus?: boolean) => (
+    <Textbox
+      //
+      debug={debug}
+      focus={focus}
+      repo={repo}
+      docuri={docuri}
+      path={path}
+      theme={theme}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>
-        <Textbox debug={'🐷'} theme={theme} doc={doc} path={path} focus={true} />
-      </div>
+      <div {...styles.textbox}>{textbox('🐷', true)}</div>
       <div></div>
-      <div {...styles.textbox}>
-        <Textbox debug={'🌼'} theme={theme} doc={doc} path={path} />
-      </div>
+      <div {...styles.textbox}>{textbox('🌼')}</div>
     </div>
   );
 };
@@ -48,7 +55,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
  * <Textbox>
  */
 export type TextboxProps = {
-  doc?: t.DocRef<TDoc>;
+  repo?: { store: t.Store; index: t.StoreIndexState };
+  docuri?: string;
   path?: t.ObjectPath;
   focus?: boolean;
   debug?: string;
@@ -56,7 +64,9 @@ export type TextboxProps = {
   style?: t.CssValue;
 };
 export const Textbox: React.FC<TextboxProps> = (props) => {
-  const { focus, doc, theme, debug, path = [] } = props;
+  const { repo, focus, theme, debug, path = [] } = props;
+
+  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
   const enabled = !!doc;
 
   const [value, setValue] = useState('');
