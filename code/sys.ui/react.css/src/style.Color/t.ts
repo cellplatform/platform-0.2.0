@@ -5,15 +5,13 @@ type HexColor = string;
 /**
  * Represents a theme that produces basic color sets.
  */
-export type ColorTheme = {
+export type ColorTheme = ColorThemeColors & {
   readonly name: t.CommonTheme;
-  readonly fg: HexColor;
-  readonly bg: HexColor;
   readonly is: { readonly light: boolean; readonly dark: boolean };
-  readonly alpha: ColorThemeAlpha;
+  alpha(percent?: t.Percent): ColorThemeColors;
 };
 
-export type ColorThemeAlpha = {
-  fg(percent?: t.Percent): HexColor;
-  bg(percent?: t.Percent): HexColor;
+export type ColorThemeColors = {
+  readonly bg: HexColor;
+  readonly fg: HexColor;
 };

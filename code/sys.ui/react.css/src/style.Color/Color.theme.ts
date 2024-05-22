@@ -2,6 +2,7 @@ import type { t } from '../common';
 import { DARK, WHITE } from './Color.const';
 import { alpha } from './Color.format';
 
+type HexColor = string;
 type ColorInput = string | null;
 const DEFAULT: t.CommonTheme = 'Light';
 
@@ -20,9 +21,17 @@ export function theme(
     fg,
     bg,
     is: { light: name === 'Light', dark: name === 'Dark' },
-    alpha: {
-      fg: (percent: t.Percent = 1) => alpha(fg, percent),
-      bg: (percent: t.Percent = 1) => alpha(bg, percent),
+    alpha(percent: t.Percent = 1) {
+      let _fg: HexColor;
+      let _bg: HexColor;
+      return {
+        get fg() {
+          return _fg || (_fg = alpha(fg, percent));
+        },
+        get bg() {
+          return _bg || (_bg = alpha(bg, percent));
+        },
+      };
     },
   } as const;
 }

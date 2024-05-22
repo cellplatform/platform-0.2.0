@@ -114,9 +114,9 @@ describe('color', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
 
-      const res1 = light.alpha.fg();
-      const res2 = light.alpha.fg(0.5);
-      const res3 = dark.alpha.fg(0.3);
+      const res1 = light.alpha().fg;
+      const res2 = light.alpha(0.5).fg;
+      const res3 = dark.alpha(0.3).fg;
 
       expect(res1).to.eql('rgb(41, 48, 66)');
       expect(res2).to.eql('rgba(41, 48, 66, 0.5)');
@@ -127,12 +127,13 @@ describe('color', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
 
-      const res1 = light.alpha.bg();
-      const res2 = light.alpha.bg(0.5);
-      const res3 = dark.alpha.bg(0.3);
+      const res1 = light.alpha().bg;
+      const res2 = light.alpha(0.5).bg;
+      const res3 = dark.alpha(0.3).bg;
 
       expect(res1).to.eql('rgb(255, 255, 255)');
       expect(res2).to.eql('rgba(255, 255, 255, 0.5)');
+      expect(res3).to.eql('rgba(41, 48, 66, 0.3)');
     });
   });
 });
