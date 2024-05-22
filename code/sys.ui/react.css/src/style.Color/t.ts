@@ -9,6 +9,7 @@ export type ColorTheme = ColorThemeColors & {
   readonly name: t.CommonTheme;
   readonly is: { readonly light: boolean; readonly dark: boolean };
   alpha(percent?: t.Percent): ColorThemeColors;
+  invert(): ColorTheme;
 };
 
 export type ColorThemeColors = {

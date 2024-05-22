@@ -135,5 +135,26 @@ describe('color', () => {
       expect(res2).to.eql('rgba(255, 255, 255, 0.5)');
       expect(res3).to.eql('rgba(41, 48, 66, 0.3)');
     });
+
+    it('invert', () => {
+      const light = Color.theme();
+      const dark = Color.theme('Dark');
+
+      expect(light.invert().name).to.eql('Dark');
+      expect(dark.invert().name).to.eql('Light');
+
+      expect(light.invert()).to.not.equal(light); // NB: monad.
+    });
+
+    it('invert: custom colors', () => {
+      const theme = Color.theme('Light', 'red', 'salmon');
+      const inverted = theme.invert();
+
+      expect(theme.fg).to.eql('red');
+      expect(theme.bg).to.eql('salmon');
+
+      expect(inverted.fg).to.eql('salmon');
+      expect(inverted.bg).to.eql('red');
+    });
   });
 });

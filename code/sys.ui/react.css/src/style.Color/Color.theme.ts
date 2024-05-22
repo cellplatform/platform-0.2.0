@@ -15,7 +15,7 @@ export function theme(
   defaultDark?: ColorInput,
 ): t.ColorTheme {
   const fg = wrangle.color(name, defaultLight, defaultDark);
-  const bg = wrangle.color(wrangle.opposite(name), defaultLight, defaultDark);
+  const bg = wrangle.color(wrangle.invert(name), defaultLight, defaultDark);
   return {
     name,
     fg,
@@ -33,6 +33,7 @@ export function theme(
         },
       };
     },
+    invert: () => theme(wrangle.invert(name), defaultLight, defaultDark),
   } as const;
 }
 
@@ -46,7 +47,7 @@ const wrangle = {
     return theme === 'Dark' ? dark : light;
   },
 
-  opposite(theme: t.CommonTheme = DEFAULT): t.CommonTheme {
+  invert(theme: t.CommonTheme = DEFAULT): t.CommonTheme {
     return theme === 'Dark' ? 'Light' : 'Dark';
   },
 } as const;
