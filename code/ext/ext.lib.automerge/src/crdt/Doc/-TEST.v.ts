@@ -10,8 +10,8 @@ describe('Doc API (index)', () => {
     expect(Doc.Lens.Registry).to.equal(Registry);
   });
 
-  it('namespace', () => {
+  it('ns ("namespace")', () => {
     expect(Doc.Namespace).to.equal(Namespace);
-    expect(Doc.namespace).to.equal(Namespace.init);
+    expect(Doc.ns).to.equal(Namespace.init);
   });
 });

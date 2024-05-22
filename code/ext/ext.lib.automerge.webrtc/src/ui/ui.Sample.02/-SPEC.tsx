@@ -87,7 +87,7 @@ export default Dev.describe(name, async (e) => {
      */
     (() => {
       const shared = left.network.shared;
-      ns = shared.namespace.typed<SampleNamespace>();
+      ns = shared.ns.typed<SampleNamespace>();
       Shared.main = ns.lens<t.SampleSharedMain>('foo.main', {});
       Shared.harness = ns.lens<t.HarnessShared>('foo.harness', {
         debugPanel: true,

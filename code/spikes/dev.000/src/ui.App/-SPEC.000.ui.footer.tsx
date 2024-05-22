@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
    */
   useEffect(() => {
     const doc = network.shared.doc;
-    if (doc) setLens(network.shared.namespace.lens('cmdbar', {}));
+    if (doc) setLens(network.shared.ns.lens('harness.cmdbar', {}));
   }, [network.shared.doc.instance]);
 
   /**

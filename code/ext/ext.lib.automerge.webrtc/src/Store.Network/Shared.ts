@@ -139,6 +139,6 @@ export const Shared = {
    */
   ns<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
     type T = t.NamespaceManager<N>;
-    return Doc.namespace<t.CrdtShared, N>(shared, ['ns'], (d) => (d.ns = {})) as T;
+    return Doc.ns<t.CrdtShared, N>(shared, ['ns'], (d) => (d.ns = {})) as T;
   },
 } as const;

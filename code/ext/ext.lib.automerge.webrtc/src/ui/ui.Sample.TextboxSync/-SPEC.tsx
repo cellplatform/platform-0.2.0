@@ -24,7 +24,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    const toLens = (shared: t.NetworkStoreShared) => shared.namespace.lens('foo', { text: '' });
+    const toLens = (shared: t.NetworkStoreShared) => shared.ns.lens('foo', { text: '' });
     monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
     monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
 
