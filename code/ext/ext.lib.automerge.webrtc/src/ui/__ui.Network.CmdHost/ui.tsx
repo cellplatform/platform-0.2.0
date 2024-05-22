@@ -1,4 +1,4 @@
-import { Prefix } from '../ui.Network.CmdHost.Prefix';
+import { Prefix } from '../__ui.Network.CmdHost.Prefix';
 import { CmdHost, DEFAULTS, type t } from './common';
 import { useController } from './use.Controller';
 
