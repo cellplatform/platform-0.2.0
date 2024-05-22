@@ -56,8 +56,8 @@ describe('Webrtc: Shared', () => {
     it('retrieves {ns} with loosley and strongly typed key', async () => {
       const store = Store.init();
       const doc = await Shared.Doc.getOrCreate(store);
-      const ns1 = Shared.namespace(doc);
-      const ns2 = Shared.namespace<N>(doc);
+      const ns1 = Shared.ns(doc);
+      const ns2 = Shared.ns<N>(doc);
 
       expect(Is.namespace(ns1)).to.eql(true);
       expect(Is.namespace(ns2)).to.eql(true);
@@ -75,7 +75,7 @@ describe('Webrtc: Shared', () => {
     it('retrieves shared instances of namespace lens', async () => {
       const store = Store.init();
       const doc = await Shared.Doc.getOrCreate(store);
-      const ns = Shared.namespace<N>(doc);
+      const ns = Shared.ns<N>(doc);
 
       const lens1 = ns.lens('foo', {});
       const lens2 = ns.lens('foo', {});

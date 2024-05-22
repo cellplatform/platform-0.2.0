@@ -86,15 +86,15 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
     // NB: property returns same instance.
     type N = 'tmp' | 'foo';
     type T = { count: number };
-    expect(shared.self.namespace).to.equal(shared.self.namespace);
-    expect(shared.self.namespace.typed<N>()).to.equal(shared.self.namespace);
+    expect(shared.self.ns).to.equal(shared.self.ns);
+    expect(shared.self.ns.typed<N>()).to.equal(shared.self.ns);
 
-    const namespace = shared.self.namespace.typed<N>();
+    const namespace = shared.self.ns.typed<N>();
     const foo = namespace?.lens<T>('foo', { count: 0 });
 
     const ns = {
-      self: shared.self.namespace.typed<N>(),
-      remote: shared.self.namespace.typed<N>(),
+      self: shared.self.ns.typed<N>(),
+      remote: shared.self.ns.typed<N>(),
     } as const;
 
     const tmp = {
