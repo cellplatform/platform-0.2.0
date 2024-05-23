@@ -1,4 +1,4 @@
-import { COLORS, DEFAULTS, css, type t } from './common';
+import { Color, COLORS, DEFAULTS, css, type t } from './common';
 import { HintKeys } from './ui.HintKeys';
 import { Textbox } from './ui.Textbox';
 
@@ -8,11 +8,12 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
   /**
    * Render
    */
+  const theme = Color.theme(props.theme ?? 'Dark');
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: COLORS.DARK,
-      color: COLORS.WHITE,
+      backgroundColor: theme.bg,
+      color: theme.fg,
       userSelect: 'none',
     }),
     grid: css({ display: 'grid', gridTemplateColumns: wrangle.columns(props) }),
@@ -21,11 +22,11 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} enabled={enabled} />
+      <Textbox {...props} enabled={enabled} theme={theme} />
     </div>
   );
 
-  const elHintKeys = <HintKeys {...props} enabled={enabled} />;
+  const elHintKeys = <HintKeys {...props} enabled={enabled} theme={theme} />;
 
   return (
     <div {...css(styles.base, styles.grid, props.style)}>

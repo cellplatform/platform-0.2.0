@@ -1,28 +1,35 @@
-import { COLORS, Color, DEFAULTS, TextInput, type t } from './common';
+import { DEFAULTS, TextInput, type t } from './common';
 
-export const Textbox: React.FC<t.CmdBarProps> = (props) => {
+export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
+  theme: t.ColorTheme;
+};
+
+export const Textbox: React.FC<TextboxProps> = (props) => {
   const {
+    theme,
     enabled = DEFAULTS.enabled,
     focusOnReady = DEFAULTS.focusOnReady,
     placeholder = DEFAULTS.commandPlaceholder,
   } = props;
 
+  const color = theme.fg;
   return (
     <TextInput
       value={props.text}
+      theme={theme.name}
       placeholder={placeholder}
       placeholderStyle={{
         opacity: 0.4,
-        color: COLORS.WHITE,
+        color,
         fontFamily: 'sans-serif',
-        disabledColor: Color.alpha(COLORS.WHITE, 0.5),
+        disabledColor: theme.alpha(0.5).fg,
       }}
       valueStyle={{
-        color: COLORS.WHITE,
+        color,
         fontFamily: 'monospace',
         fontWeight: 'normal',
         fontSize: 16,
-        disabledColor: COLORS.WHITE,
+        disabledColor: color,
       }}
       isEnabled={enabled}
       spellCheck={false}
