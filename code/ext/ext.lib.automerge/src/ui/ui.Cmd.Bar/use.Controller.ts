@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { DEFAULTS, Sync, rx, type t } from './common';
+import { useEffect, useRef, useState } from 'react';
+import { DEFAULTS, Sync, Time, rx, type t } from './common';
 import { Path } from './u';
 
 type Args = {
@@ -32,14 +32,10 @@ export function useController(args: Args) {
   useEffect(() => {
     const life = rx.disposable();
     if (enabled && doc && textbox) {
-      setText(resolve.text(doc.current)); // initial.
-
       const { dispose$ } = life;
       const listener = Sync.Textbox.listen(textbox, doc, path.text, { debug, dispose$ });
-      listener.onChange((e) => {
-        console.log('onChange', e);
-        setText(e.text);
-      });
+      listener.onChange((e) => api.onChange(e.text, e.pos));
+      api.onChange(resolve.text(doc.current)); // initial.
     }
     return life.dispose;
   }, [enabled, doc?.instance, !!textbox, path.text.join('.')]);
@@ -58,12 +54,16 @@ export function useController(args: Args) {
   /**
    * API
    */
-  return {
+  const api = {
     is: { enabled },
     text: text || undefined,
     onReady: (ref: t.TextInputRef) => setTextbox(ref),
-    onChange: (text: string) => setText(text),
+    onChange(text: string, pos?: t.Index) {
+      setText(text);
+      if (textbox && typeof pos === 'number') Time.delay(0, () => textbox.select(pos));
+    },
   } as const;
+  return api;
 }
 
 /**

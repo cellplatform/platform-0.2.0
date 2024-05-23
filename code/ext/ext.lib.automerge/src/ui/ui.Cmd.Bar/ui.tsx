@@ -1,5 +1,6 @@
+import type { t } from './common';
+
 import { CmdBar } from 'sys.ui.react.common';
-import { type t } from './common';
 import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
