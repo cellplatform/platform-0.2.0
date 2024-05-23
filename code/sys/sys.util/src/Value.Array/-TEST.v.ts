@@ -79,9 +79,9 @@ describe('Array.compare', () => {
   const compare = Value.Array.compare;
 
   it('init', () => {
-    const input = [1, 2];
-    const a = compare(input);
-    expect(a.source).to.equal(input);
+    const subject = [1, 2];
+    const a = compare(subject);
+    expect(a.subject).to.equal(subject);
   });
 
   describe('startWith', () => {

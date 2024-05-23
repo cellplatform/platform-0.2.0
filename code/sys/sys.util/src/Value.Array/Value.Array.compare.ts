@@ -1,14 +1,11 @@
-import { type t } from '../common';
-
 /**
  * Helper for perfoming array comparisons.
+ * @param subject - The array whose elements are being examined.
  */
-export function compare<T>(source: T[]) {
+export function compare<T>(subject: T[]) {
   return {
-    source,
-    startsWith(target: T[]) {
-      return startsWith(source, target);
-    },
+    subject,
+    startsWith: (match: T[]) => startsWith(subject, match),
   } as const;
 }
 
@@ -16,12 +13,6 @@ export function compare<T>(source: T[]) {
  * Helpers
  */
 
-/**
- * Checks if elements in [array-a] match the start of [array-b].
- * @param a - The array whose elements need to match the start of arrayB.
- * @param b - The array to check against.
- * @returns true if the elements of arrayA match the start of arrayB, otherwise false.
- */
 function startsWith<T>(a: T[] | undefined, b?: T[] | undefined): boolean {
   if (a === undefined || b === undefined) return false;
   if (a.length > b.length) return false;
