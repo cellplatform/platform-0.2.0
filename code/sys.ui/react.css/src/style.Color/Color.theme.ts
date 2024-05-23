@@ -4,7 +4,7 @@ import { alpha } from './Color.format';
 
 type HexColor = string;
 type ColorInput = string | null;
-const DEFAULT: t.CommonTheme = 'Light';
+const defaultTheme: t.CommonTheme = 'Light';
 
 /**
  * A color theme helper object.
@@ -14,9 +14,9 @@ export function theme(
   defaultLight?: ColorInput,
   defaultDark?: ColorInput,
 ): t.ColorTheme {
-  const create = () => factory(DEFAULT, defaultLight, defaultDark);
-  if (input === null || input === undefined) return create();
-  return typeof input === 'object' ? input : create();
+  const create = (name: t.CommonTheme) => factory(name, defaultLight, defaultDark);
+  if (!input || input === null) return create(defaultTheme);
+  return typeof input === 'object' ? input : create(input);
 }
 
 /**
@@ -54,13 +54,13 @@ function factory(
  * Helpers
  */
 const wrangle = {
-  color(theme: t.CommonTheme = DEFAULT, defaultLight?: ColorInput, defaultDark?: ColorInput) {
+  color(theme: t.CommonTheme = defaultTheme, defaultLight?: ColorInput, defaultDark?: ColorInput) {
     const light = defaultLight ?? DARK;
     const dark = defaultDark ?? WHITE;
     return theme === 'Dark' ? dark : light;
   },
 
-  invert(theme: t.CommonTheme = DEFAULT): t.CommonTheme {
+  invert(theme: t.CommonTheme = defaultTheme): t.CommonTheme {
     return theme === 'Dark' ? 'Light' : 'Dark';
   },
 } as const;
