@@ -2,7 +2,7 @@ import { expect, describe, it } from '../test';
 import { Value } from '../Value';
 import { Time } from '../Time';
 
-describe('flatten', () => {
+describe('Array.flatten', () => {
   it('makes no change', () => {
     expect(Value.Array.flatten([1, 2, 3])).to.eql([1, 2, 3]);
   });
@@ -20,7 +20,7 @@ describe('flatten', () => {
   });
 });
 
-describe('asArray', () => {
+describe('Array.asArray', () => {
   it('already array', () => {
     const input = [{ count: 1 }, { count: 2 }, { count: 3 }];
     const res = Value.Array.asArray(input);
@@ -38,7 +38,7 @@ describe('asArray', () => {
   });
 });
 
-describe('asyncFilter', () => {
+describe('Array.asyncFilter', () => {
   it('filters (async)', async () => {
     const list = ['cat', 'hello cat', 'foobar'];
     const res = await Value.Array.asyncFilter(list, async (value) => {
@@ -49,7 +49,7 @@ describe('asyncFilter', () => {
   });
 });
 
-describe('page', () => {
+describe('Array.page', () => {
   it('(undefined)', () => {
     const res = Value.Array.page(undefined, 1, 10);
     expect(res).to.eql([]);
@@ -75,23 +75,31 @@ describe('page', () => {
   });
 });
 
-describe('matchesStart', () => {
-  const test = (a?: number[], b?: number[], expected?: boolean) => {
-    expect(Value.Array.matchesStart(a, b)).to.eql(expected);
-  };
+describe('Array.compare', () => {
+  const compare = Value.Array.compare;
 
-  it('true', () => {
-    test([1, 2], [1, 2, 3], true);
+  it('init', () => {
+    const input = [1, 2];
+    const a = compare(input);
+    expect(a.source).to.equal(input);
   });
 
-  it('false', () => {
-    test([1, 2], [1, 3, 2], false);
-  });
+  describe('startWith', () => {
+    const test = (a: number[], b: number[], expected?: boolean) => {
+      expect(compare(a).startsWith(b)).to.eql(expected);
+    };
 
-  it('empty', () => {
-    test([], [], true);
-    test(undefined, undefined, false);
-    test([], undefined, false);
-    test(undefined, [], false);
+    it('true', () => {
+      test([1, 2], [1, 2, 3], true);
+    });
+
+    it('false', () => {
+      test([1, 2], [1, 3, 2], false);
+      test([1, 2, 3], [1, 2], false);
+    });
+
+    it('empty', () => {
+      test([], [], true);
+    });
   });
 });
