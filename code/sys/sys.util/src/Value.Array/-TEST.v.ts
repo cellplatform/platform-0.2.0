@@ -85,17 +85,18 @@ describe('Array.compare', () => {
   });
 
   describe('startWith', () => {
-    const test = (a: number[], b: number[], expected?: boolean) => {
-      expect(compare(a).startsWith(b)).to.eql(expected);
+    const test = (subject: number[], startsWith: number[], expected?: boolean) => {
+      expect(compare(subject).startsWith(startsWith)).to.eql(expected);
     };
 
     it('true', () => {
-      test([1, 2], [1, 2, 3], true);
+      test([1, 2, 3], [1, 2], true);
+      test([1, 2, 3], [1, 2, 3], true);
     });
 
     it('false', () => {
-      test([1, 2], [1, 3, 2], false);
-      test([1, 2, 3], [1, 2], false);
+      test([1, 3, 2], [1, 2], false);
+      test([1, 2], [1, 2, 3], false);
     });
 
     it('empty', () => {

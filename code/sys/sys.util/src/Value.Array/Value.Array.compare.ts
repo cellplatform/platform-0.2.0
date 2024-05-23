@@ -5,19 +5,17 @@
 export function compare<T>(subject: T[]) {
   return {
     subject,
-    startsWith: (match: T[]) => startsWith(subject, match),
+    startsWith: (compare: T[]) => startsWith(subject, compare),
   } as const;
 }
 
 /**
  * Helpers
  */
-
-function startsWith<T>(a: T[] | undefined, b?: T[] | undefined): boolean {
-  if (a === undefined || b === undefined) return false;
-  if (a.length > b.length) return false;
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false;
+function startsWith<T>(subject: T[], compare: T[]): boolean {
+  if (compare.length > subject.length) return false;
+  for (let i = 0; i < compare.length; i++) {
+    if (compare[i] !== subject[i]) return false;
   }
   return true;
 }
