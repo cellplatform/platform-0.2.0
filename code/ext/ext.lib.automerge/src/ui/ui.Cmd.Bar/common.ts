@@ -8,10 +8,13 @@ export * from '../common';
  */
 const paths: t.CmdBarPaths = {
   text: ['text'],
-  invoked: ['invoked'],
+  tx: ['tx'],
 };
+
+const actions: t.CmdBarAction[] = ['Invoke'];
 
 export const DEFAULTS = {
   displayName: `${Pkg.name}.CmdBar`,
   paths,
+  actions,
 } as const;

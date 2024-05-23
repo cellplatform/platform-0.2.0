@@ -1,4 +1,4 @@
-import { A, DEFAULTS, ObjectPath, type t } from './common';
+import { DEFAULTS, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -14,15 +14,11 @@ export const Path = {
     const resolve = ObjectPath.resolve;
     const api = {
       text: (d?: O) => resolve<string>(d, path.text) || '',
-      invoked: (d: O) => {
-        const get = () => resolve<t.A.Counter>(d, path.invoked);
-        if (!get()) ObjectPath.mutate(d, path.invoked, new A.Counter(0));
-        return get()!;
-      },
-      doc(d: O): t.CmdBarDocObject {
+      tx: (d: O) => resolve<string>(d, path.tx) || '',
+      doc(d: O): t.CmdBarLensObject {
         return {
           text: api.text(d),
-          invoked: api.invoked(d).value ?? 0,
+          tx: api.tx(d),
         };
       },
     } as const;
