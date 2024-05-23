@@ -60,7 +60,7 @@ export function useController(args: Args) {
     onReady: (ref: t.TextInputRef) => setTextbox(ref),
     onChange(text: string, pos?: t.Index) {
       setText(text);
-      if (textbox && typeof pos === 'number') Time.delay(0, () => textbox.select(pos));
+      if (textbox && typeof pos === 'number') Time.delay(0, () => textbox?.select(pos));
     },
   } as const;
   return api;
