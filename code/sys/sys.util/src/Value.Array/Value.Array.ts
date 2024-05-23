@@ -43,3 +43,19 @@ export function page<T>(list: T[] = [], index: t.Index, limit: number): T[] {
   const endIndex = startIndex + limit;
   return list.slice(startIndex, endIndex);
 }
+
+/**
+ * Checks if elements in [array-a] match the start of [array-b].
+ *
+ * @param a - The array whose elements need to match the start of arrayB.
+ * @param b - The array to check against.
+ * @returns true if the elements of arrayA match the start of arrayB, otherwise false.
+ */
+export function matchesStart<T>(a: T[] | undefined, b?: T[] | undefined): boolean {
+  if (a === undefined || b === undefined) return false;
+  if (a.length > b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
