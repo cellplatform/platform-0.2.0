@@ -149,7 +149,7 @@ export default Dev.describe(name, async (e) => {
         doc?.change((d) => (d.count = (d.count ?? 0) + 1));
       });
 
-      dev.button(['reset {doc}', '(reloads)'], (e) => {
+      dev.button(['reset {doc}', '(reloads) 💥'], (e) => {
         doc?.change((d) => Object.keys(d).forEach((key) => delete d[key]));
         location.reload();
       });
