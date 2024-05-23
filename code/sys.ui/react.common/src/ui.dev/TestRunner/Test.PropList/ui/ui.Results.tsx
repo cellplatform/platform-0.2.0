@@ -1,19 +1,20 @@
-import { COLORS, DevIcons, Test, Theme, Time, Value, css, type t } from '../common';
-import { RunIcon } from './Specs.Row.RunIcon';
+import { COLORS, DevIcons, Test, Time, Value, css, type t } from '../common';
+import { RunIcon } from './ui.Row.RunIcon';
 
 export type ResultsProps = {
+  theme: t.ColorTheme;
   isColored?: boolean;
   isOver?: boolean;
   isRunnable?: boolean;
   results?: t.TestSuiteRunResponse[];
-  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const Results: React.FC<ResultsProps> = (props) => {
-  const { results = [], isOver = false, isColored = true, isRunnable = true, theme } = props;
+  const { theme, results = [], isOver = false, isColored = true, isRunnable = true } = props;
   const stats = Test.Stats.merge(results);
-  const color = Theme.color(theme);
+
+  const color = theme.fg;
   const asColor = (value: string) => (isColored ? value : color);
 
   /**

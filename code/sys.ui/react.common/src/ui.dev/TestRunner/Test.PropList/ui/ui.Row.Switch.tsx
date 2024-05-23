@@ -1,6 +1,7 @@
 import { Switch as BaseSwitch, css, type t } from '../common';
 
 export type RowSwitchProps = {
+  theme: t.ColorTheme;
   isSelected?: boolean;
   indent?: number;
   enabled?: boolean;
@@ -9,7 +10,7 @@ export type RowSwitchProps = {
 };
 
 export const Switch: React.FC<RowSwitchProps> = (props) => {
-  const { isSelected, enabled = true } = props;
+  const { isSelected, enabled = true, theme } = props;
 
   /**
    * [Render]
@@ -26,7 +27,13 @@ export const Switch: React.FC<RowSwitchProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <BaseSwitch height={12} value={isSelected} onClick={props.onClick} enabled={enabled} />
+      <BaseSwitch
+        height={12}
+        value={isSelected}
+        onClick={props.onClick}
+        enabled={enabled}
+        theme={theme.name}
+      />
     </div>
   );
 };

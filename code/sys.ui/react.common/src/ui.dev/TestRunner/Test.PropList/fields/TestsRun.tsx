@@ -1,6 +1,6 @@
 import type { t } from '../common';
 import { TestRunner } from '../ui/TestRunner';
-import { TestRunnerLabel } from '../ui/TestRunner.Label';
+import { TestRunnerLabel } from '../ui/Label';
 
 export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];

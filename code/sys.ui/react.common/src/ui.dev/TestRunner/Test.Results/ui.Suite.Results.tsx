@@ -5,7 +5,7 @@ import { TestResult } from './ui.Test';
 
 export type SuiteResultsProps = {
   data: t.TestSuiteRunResponse;
-  theme?: t.CommonTheme;
+  theme: t.ColorTheme;
   style?: t.CssValue;
 };
 

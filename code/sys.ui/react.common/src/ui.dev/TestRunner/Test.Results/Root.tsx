@@ -1,4 +1,4 @@
-import { COLORS, css, Spinner, type t, Theme } from './common';
+import { COLORS, css, Spinner, type t, Color } from './common';
 import { Suite } from './ui.Suite';
 
 type R = t.TestSuiteRunResponse;
@@ -12,7 +12,7 @@ export type TestResultsProps = {
 };
 
 export const TestResults: React.FC<TestResultsProps> = (props) => {
-  const { data, spinning = false, scroll = true, theme } = props;
+  const { data, spinning = false, scroll = true } = props;
 
   const list = (Array.isArray(data) ? data : [data]).filter(Boolean) as R[];
   const isEmpty = list.length === 0;
@@ -21,7 +21,8 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
   /**
    * [Render]
    */
-  const color = Theme.color(theme);
+  const theme = Color.theme(props.theme);
+  const color = theme.fg;
   const styles = {
     base: css({
       position: 'relative',

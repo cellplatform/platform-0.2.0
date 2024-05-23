@@ -3,14 +3,14 @@ import { COLORS, Color, css, type t } from './common';
 export type DescriptionProps = {
   text: string;
   isSkipped?: boolean;
-  theme?: t.CommonTheme;
+  theme: t.ColorTheme;
   style?: t.CssValue;
 };
 
 export const Description: React.FC<DescriptionProps> = (props) => {
   const { isSkipped = false, theme } = props;
   const desc = parseDescription(props.text);
-  const isDark = theme === 'Dark';
+  const isDark = theme.is.dark;
 
   /**
    * [Render]

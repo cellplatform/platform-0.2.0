@@ -1,4 +1,4 @@
-import { Color, DevIcons, Theme, css, type t } from '../common';
+import { Color, DevIcons, css, type t } from '../common';
 
 type R = t.TestPropListRunData;
 
@@ -10,14 +10,13 @@ export type TestRunnerLabelProps = {
 };
 
 export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
-  const { theme } = props;
   const label = Wrangle.label(props);
   const infoUrl = Wrangle.infoUrl(props);
 
   /**
    * [Render]
    */
-  const color = Theme.color(theme);
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({ position: 'relative' }),
     link: css({ Absolute: [0, -16, 0, null] }),
@@ -32,7 +31,7 @@ export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
       rel={'noopener noreferrer'}
       title={tooltip}
     >
-      <DevIcons.Info size={14} color={Color.alpha(color, 0.3)} offset={[0, 0]} />
+      <DevIcons.Info size={14} color={theme.alpha(0.3).fg} offset={[0, 0]} />
     </a>
   );
 

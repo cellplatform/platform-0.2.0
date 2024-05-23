@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Button, COLORS, DEFAULTS, DevIcons, Time, css, rx, type t } from '../common';
-import { RunIcon } from './Specs.Row.RunIcon';
+import { RunIcon } from './ui.Row.RunIcon';
 
 export type BodyProps = {
+  theme: t.ColorTheme;
   data: t.TestPropListData;
   suite?: t.TestSuiteModel | undefined;
   isSelected?: boolean;
   enabled?: boolean;
-  theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
 };
@@ -88,7 +88,7 @@ export const Body: React.FC<BodyProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      theme={theme}
+      theme={theme.name}
       enabled={enabled}
       onClick={props.onClick}
       onMouse={(e) => setOver(e.isOver)}

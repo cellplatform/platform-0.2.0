@@ -1,5 +1,5 @@
-import { type t } from '../common';
-import { SpecsRow } from '../ui/Specs.Row';
+import { Color, type t } from '../common';
+import { SpecsRow } from '../ui/ui.Row';
 
 /**
  * Spec selector rows.
@@ -11,7 +11,8 @@ export function FieldTestsSelector(args: {
   enabled: boolean;
   theme?: t.CommonTheme;
 }): t.PropListItem[] {
-  const { data, groups, theme } = args;
+  const { data, groups } = args;
+  const theme = Color.theme(args.theme);
   const run = data?.run ?? {};
   const specs = data?.specs ?? {};
   const res: t.PropListItem[] = [];

@@ -1,6 +1,6 @@
 import { type t } from './common';
+import { TestRunnerLabel } from './ui/Label';
 import { TestRunnerControlled } from './ui/TestRunner.Controlled';
-import { TestRunnerLabel } from './ui/TestRunner.Label';
 
 type D = t.TestPropListData;
 type R = t.TestPropListRunData;

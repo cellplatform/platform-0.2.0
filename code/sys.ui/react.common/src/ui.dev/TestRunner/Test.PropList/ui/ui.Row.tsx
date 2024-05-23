@@ -1,17 +1,16 @@
 import { Theme, css, type t } from '../common';
 import { Util } from '../u';
-
-import { Body } from './Specs.Row.Body';
-import { Switch } from './Specs.Row.Switch';
-import { Title } from './Specs.Row.Title';
+import { Body } from './ui.Row.Body';
+import { Switch } from './ui.Row.Switch';
+import { Title } from './ui.Row.Title';
 
 export type SpecsRowProps = {
+  theme: t.ColorTheme;
   data: t.TestPropListData;
   suite: t.TestSuiteModel;
   title: string;
   indent?: number;
   enabled?: boolean;
-  theme?: t.CommonTheme;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
@@ -46,12 +45,11 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   /**
    * [Render]
    */
-  const color = Theme.color(theme);
   const styles = {
     base: css({
-      position: 'relative',
       flex: 1,
-      color,
+      position: 'relative',
+      color: theme.fg,
     }),
     body: css({
       display: 'grid',
@@ -62,7 +60,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   };
 
   const elSwitch = isSelectable && (
-    <Switch isSelected={isSelected} onClick={handleSwitchClick} enabled={enabled} />
+    <Switch isSelected={isSelected} onClick={handleSwitchClick} enabled={enabled} theme={theme} />
   );
 
   const elTitle = title && <Title text={title} theme={theme} />;
