@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextboxSync } from '.';
 import { COLORS, Color, ObjectPath, TextInput, css, rx, type t } from '../../test.ui';
-import { useDoc } from '../../ui/use';
+import { useDoc } from '../../ui.use';
 
 export type TDoc = {
   text?: string;

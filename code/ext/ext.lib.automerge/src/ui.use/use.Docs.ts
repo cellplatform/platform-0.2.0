@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Redraw } from '../use';
 import { Is, R, rx, type t } from './common';
+import { Redraw } from './use.Redraw';
 
 type O = Record<string, unknown>;
 type Ref<T extends O> = t.UriString | t.DocRef<T>;

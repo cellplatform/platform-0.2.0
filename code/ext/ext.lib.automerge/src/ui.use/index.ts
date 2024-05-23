@@ -1,4 +1,4 @@
 export * from './use.Doc';
 export * from './use.Docs';
 export * from './use.History';
-export * from './use.RedrawOnChange';
+export * from './use.Redraw';

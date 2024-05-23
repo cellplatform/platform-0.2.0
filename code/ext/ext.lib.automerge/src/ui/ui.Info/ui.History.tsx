@@ -1,4 +1,4 @@
-import { useHistory } from '../use';
+import { useHistory } from '../../ui.use';
 import { Value, css, type t } from './common';
 
 export type HistoryProps = {

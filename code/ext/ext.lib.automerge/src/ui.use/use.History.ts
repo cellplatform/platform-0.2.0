@@ -1,7 +1,5 @@
-import type { t } from './common';
-
 import { useEffect, useState } from 'react';
-import { Doc } from '../../crdt';
+import { Doc, type t } from './common';
 
 /**
  * Efficiently retrieves history from a doc.
