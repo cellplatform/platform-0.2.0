@@ -4,8 +4,10 @@ export * from '../common';
 /**
  * Constants
  */
-const paths: t.CmdPaths = { tx: ['tx'], params: ['params'] };
+const paths: t.CmdPaths = {
+  tx: ['tx'],
+  cmd: ['cmd'],
+  params: ['params'],
+};
 
-export const DEFAULTS = {
-  paths,
-} as const;
+export const DEFAULTS = { paths } as const;

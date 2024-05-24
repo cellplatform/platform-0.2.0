@@ -12,12 +12,15 @@ export const Path = {
    */
   resolver(paths: t.CmdPaths = DEFAULTS.paths) {
     const resolve = ObjectPath.resolve;
-
     const api = {
       paths,
 
       tx(d: O) {
         return resolve<string>(d, paths.tx) || '';
+      },
+
+      cmd(d: O) {
+        return resolve<string>(d, paths.cmd) || '';
       },
 
       params<P extends O = O>(d: O, defaultParams: P) {
@@ -29,6 +32,7 @@ export const Path = {
       toDoc<P extends O = O>(d: O, options: { defaultParams?: P } = {}): t.CmdLensObject<P> {
         return {
           tx: api.tx(d),
+          cmd: api.cmd(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
         };
       },
