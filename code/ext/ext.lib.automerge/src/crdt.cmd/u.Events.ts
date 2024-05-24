@@ -39,7 +39,7 @@ export const Events = {
 
       // Tx (Command) ⚡️.
       $.pipe(
-        filter((e) => Is.txChangePath(paths, e.patches)),
+        filter((e) => Is.txChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.tx === n.doc.tx),
       ).subscribe((e) => {
         const { tx, cmd, params } = e.doc;
