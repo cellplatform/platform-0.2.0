@@ -1007,10 +1007,10 @@
     superstruct "^1.0.3"
     uuid "^9.0.1"
 
-"@million/install@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@million/install/-/install-0.0.3.tgz#ccccebe09823c0d52d4e672bbb69d2fef64e33ef"
-  integrity sha512-yK8NgP+73+Tby/bmQ12B96bJ7RjsLazLtFgBed1Fg1WfTCCpHTILq79yQMSD/OWgm1tt1NYV4ELaTRM6wZOeAg==
+"@million/install@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@million/install/-/install-0.0.5.tgz#4a12e81330aa27382b52ca85951c316c55c3ac17"
+  integrity sha512-9KYVwMT6yEX0k/DMo8cOQNxeFdZme/yTqncPwXgvoQ0qUAUkulvm0ivRHTYrsuPNrCA6lqsJD005D1hhuI2fGQ==
   dependencies:
     "@antfu/ni" "^0.21.12"
     "@axiomhq/js" "1.0.0-rc.3"
@@ -1019,6 +1019,7 @@
     "@clack/prompts" "^0.7.0"
     cli-high "^0.4.1"
     diff "^5.1.0"
+    nanoid "^5.0.7"
     posthog-node "^3.6.3"
     xycolors "^0.1.1"
 
@@ -1294,10 +1295,10 @@
     "@preact/signals-core" "^1.6.0"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/react-auth@1.65.0":
-  version "1.65.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.65.0.tgz#559b55aea897d46a836997257da52989ec1529d2"
-  integrity sha512-6XD+v9sJRiaZP6PtDyihKwE7i8ctX/VyTi56+SYs8S9Q17xr+JnFPYR73KcTDn2P+n0E1gwOPCCTa64fp7aiwA==
+"@privy-io/react-auth@1.65.1":
+  version "1.65.1"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.65.1.tgz#ed788f45ef08a6e5af2dcde4bfe2bfe3fea1b5cf"
+  integrity sha512-mdls0uYSCptZRNcobgZc06pHlRIG2ZFY8rPxVNQBSuxz8/db3ZQH/tjtUPfVaLWaW8Zomnldv+KlMrVb6mC7zA==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.3"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -1339,10 +1340,10 @@
     web3-core "^1.8.0"
     web3-core-helpers "^1.8.0"
 
-"@privy-io/react-auth@1.65.1":
-  version "1.65.1"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.65.1.tgz#ed788f45ef08a6e5af2dcde4bfe2bfe3fea1b5cf"
-  integrity sha512-mdls0uYSCptZRNcobgZc06pHlRIG2ZFY8rPxVNQBSuxz8/db3ZQH/tjtUPfVaLWaW8Zomnldv+KlMrVb6mC7zA==
+"@privy-io/react-auth@1.66.0":
+  version "1.66.0"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.66.0.tgz#d944f52d270ba8109b2d2501e8fca01978ff9546"
+  integrity sha512-Ar1UIKmiZ0EUHzttGHmpgwb11/NiqixDdzwlAW/iH6tNMe6HkiCeOD4UhDVMqD8U5ffH47vcpyEYvOkntHigOw==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.3"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -2049,10 +2050,10 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/react@18.3.2":
-  version "18.3.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.2.tgz#462ae4904973bc212fa910424d901e3d137dbfcd"
-  integrity sha512-Btgg89dAnqD4vV7R3hlwOxgqobUQKgx3MmrQRi0yYbs/P0ym8XozIAlkqVilPqHQwXs4e9Tf63rrCgl58BcO4w==
+"@types/react@18.3.3":
+  version "18.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.3.tgz#9679020895318b0915d7a3ab004d92d33375c45f"
+  integrity sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -4177,13 +4178,6 @@ formdata-node@^4.3.2:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
 
-framer-motion@11.2.4:
-  version "11.2.4"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.2.4.tgz#d4e37071f12c1f2ac77673a179f9d24d0faad820"
-  integrity sha512-D+EXd0lspaZijv3BJhAcSsyGz+gnvoEdnf+QWkPZdhoFzbeX/2skrH9XSVFb0osgUnCajW8x1frjhLuKwa/Reg==
-  dependencies:
-    tslib "^2.4.0"
-
 framer-motion@11.2.6:
   version "11.2.6"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.2.6.tgz#ab693b24d1f6cf34ef83494ab2df59fd39b7c87e"
@@ -5802,14 +5796,14 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-million@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/million/-/million-3.1.1.tgz#0a9f65202b6a47c3e788fe2c7bc05826fd0c7110"
-  integrity sha512-vmI3lyA3IN4QKiB0/M3uDef3lZZvgVUokWtLkc5NvxEnykY+TdSR6xatMMNDJmzMHTneayIOpc/eQu4d9Z/r2w==
+million@3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/million/-/million-3.1.4.tgz#51938de3f672f4ef296ca707c2c3ab6f27c4f94e"
+  integrity sha512-ZEg5EX8leO9TQK1S6Sxas7BTzo7CcNMZD9E/9VdqI3vJpgPxSMS7IEq6VO4i/hgZWC2m2b2mBTAx/Ms98hdjXg==
   dependencies:
     "@babel/core" "^7.23.7"
     "@babel/types" "^7.23.6"
-    "@million/install" "^0.0.3"
+    "@million/install" "^0.0.5"
     "@rollup/pluginutils" "^5.1.0"
     kleur "^4.1.5"
     undici "^6.3.0"
@@ -5954,6 +5948,11 @@ nanoid@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
+
+nanoid@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.7.tgz#6452e8c5a816861fd9d2b898399f7e5fd6944cc6"
+  integrity sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==
 
 napi-wasm@^1.1.0:
   version "1.1.0"
@@ -7635,10 +7634,10 @@ tslib@2.6.2, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
-tsx@4.10.5:
-  version "4.10.5"
-  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.10.5.tgz#157139bd2472dd64ff4118385f3eccd27868bb36"
-  integrity sha512-twDSbf7Gtea4I2copqovUiNTEDrT8XNFXsuHpfGbdpW/z9ZW4fTghzzhAG0WfrCuJmJiOEY1nLIjq4u3oujRWQ==
+tsx@4.11.0:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.11.0.tgz#fdd8ce7ccaa0a84aed64c11e2fc5da314e1d8d14"
+  integrity sha512-vzGGELOgAupsNVssAmZjbUDfdm/pWP4R+Kg8TVdsonxbXk0bEpE1qh0yV6/QxUVXaVlNemgcPajGdJJ82n3stg==
   dependencies:
     esbuild "~0.20.2"
     get-tsconfig "^4.7.5"
@@ -7968,10 +7967,10 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.10.11:
-  version "2.10.11"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.10.11.tgz#ee8181f0756cf0f062412ba6fd1bb9f0cd5a60a7"
-  integrity sha512-V+y+INWpprABSAf35b2SwqCA97WUyhgtmoPPae6jN1yo+V7tNXg3rUvRukT1/9CD9f8QnhfpiZXkVSgtXbINRg==
+viem@2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.12.0.tgz#699ba326a1ce0df81042dc8b6f22fa751f9cefce"
+  integrity sha512-XBvORspE4x2/gfy7idH6IVFwkJiXirygFCU3lxUH6fttsj8zufLtgiokfvZF/LAZUEDvdxSgL08whSYgffM2fw==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
@@ -7982,10 +7981,10 @@ viem@2.10.11:
     isows "1.0.4"
     ws "8.13.0"
 
-viem@2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.12.0.tgz#699ba326a1ce0df81042dc8b6f22fa751f9cefce"
-  integrity sha512-XBvORspE4x2/gfy7idH6IVFwkJiXirygFCU3lxUH6fttsj8zufLtgiokfvZF/LAZUEDvdxSgL08whSYgffM2fw==
+viem@2.12.1:
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.12.1.tgz#895b73501582376b955f00e5ecafcf51d9d89ffb"
+  integrity sha512-71gxcGCXdNXQuBhpqXblVRH1F3hP/wONCptVOCW4r6VrCEXL/9vfNyCdQKtK/0WGyXm04Zs9Jf/AOAxKqf6FmQ==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
