@@ -5,7 +5,7 @@ import { CmdBar } from 'sys.ui.react.common';
 import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled, doc, paths, debug, focusOnReady, onCommand, onTextChanged } = props;
+  const { enabled, doc, paths, debug, focusOnReady } = props;
   const instance = useRef(props.instance ?? slug()).current;
   const handlers = wrangle.handlers(props);
   const controller = useController({

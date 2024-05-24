@@ -13,6 +13,7 @@ import { Sync } from './crdt.sync';
 import { Doc } from './crdt/Doc';
 import { Store } from './crdt/Store';
 import { WebStore } from './crdt/Store.Web';
+export { Cmd } from './crdt.cmd';
 
 export { Doc } from './crdt/Doc';
 export { Store } from './crdt/Store';
@@ -33,12 +34,12 @@ export const Crdt = {
 /**
  * Library: UI
  */
+export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui.use';
+export { CmdBar } from './ui/ui.Cmd.Bar';
 export { HistoryCommit } from './ui/ui.History.Commit';
 export { HistoryGrid } from './ui/ui.History.Grid';
 export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
-export { CmdBar } from './ui/ui.Cmd.Bar';
-export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui.use';
 
 /**
  * Dev

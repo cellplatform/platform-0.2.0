@@ -1,6 +1,6 @@
 import { DEFAULTS, rx, type t } from './common';
 import { Path, Tx } from './u';
-import { EventsIs } from './u.Events.Is';
+import { EventsIs as Is } from './u.Events.Is';
 
 type Args = {
   instance: string;
@@ -13,7 +13,7 @@ type Args = {
  * paths within it representing a <CmdBar>.
  */
 export const Events = {
-  Is: EventsIs,
+  Is,
 
   /**
    * Events factory.
