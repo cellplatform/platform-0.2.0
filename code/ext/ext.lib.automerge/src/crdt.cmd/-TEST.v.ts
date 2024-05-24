@@ -69,21 +69,21 @@ describe('crdt.cmd (Command)', () => {
       const cmd2 = Cmd.create<C2>(doc);
       const events = cmd1.events(dispose$);
 
-      const fired: t.CmdEvent[] = [];
-      events.$.subscribe((e) => fired.push(e));
+      const fired: t.CmdTx[] = [];
+      events.tx$.subscribe((e) => fired.push(e));
 
       cmd1.fire('Foo', { count: 0 });
       cmd1.fire('Bar', {});
       cmd2.fire('Bar', { msg: 'hello' }); // NB: narrow type scoped at creation (no "Foo" command).
 
-      const txs = fired.map((e) => e.payload.tx);
+      const txs = fired.map((e) => e.tx);
       expect(R.uniq(txs).length).to.eql(txs.length);
       expect(fired.length).to.eql(3);
-      expect(fired.map((e) => e.payload.cmd)).to.eql(['Foo', 'Bar', 'Bar']);
+      expect(fired.map((e) => e.cmd)).to.eql(['Foo', 'Bar', 'Bar']);
 
-      expect(fired[0].payload.params).to.eql({ count: 0 });
-      expect(fired[1].payload.params).to.eql({});
-      expect(fired[2].payload.params).to.eql({ msg: 'hello' });
+      expect(fired[0].params).to.eql({ count: 0 });
+      expect(fired[1].params).to.eql({});
+      expect(fired[2].params).to.eql({ msg: 'hello' });
 
       expect(doc.current).to.eql({ tx: txs[2], cmd: 'Bar', params: { msg: 'hello' } });
       dispose();
@@ -95,12 +95,12 @@ describe('crdt.cmd (Command)', () => {
       expect(doc.current).to.eql({ foo: {} });
 
       const cmd = Cmd.create<C>(lens);
-      const fired: t.CmdEvent[] = [];
-      cmd.events(dispose$).$.subscribe((e) => fired.push(e));
+      const fired: t.CmdTx[] = [];
+      cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
       cmd.fire('Bar', { msg: 'hello' });
       expect(fired.length).to.eql(1);
 
-      const tx = fired[0].payload.tx;
+      const tx = fired[0].tx;
       expect(doc.current).to.eql({ foo: { tx, cmd: 'Bar', params: { msg: 'hello' } } });
       dispose();
     });
@@ -114,14 +114,14 @@ describe('crdt.cmd (Command)', () => {
         params: ['x', 'y', 'p'],
       };
 
-      const cmd = Cmd.create<C>(doc, { paths });
-      const fired: t.CmdEvent[] = [];
       const p = { msg: 'hello' };
-      cmd.events(dispose$).$.subscribe((e) => fired.push(e));
+      const cmd = Cmd.create<C>(doc, { paths });
+      const fired: t.CmdTx[] = [];
+      cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
       cmd.fire('Bar', p);
       expect(fired.length).to.eql(1);
 
-      const tx = fired[0].payload.tx;
+      const tx = fired[0].tx;
       expect(doc.current).to.eql({ z: { tx }, a: 'Bar', x: { y: { p } } });
       dispose();
     });

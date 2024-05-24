@@ -35,10 +35,12 @@ export type CmdLensObject<P extends O = O> = Required<CmdLens<P>>;
 /**
  * EVENTS
  */
-export type CmdEvent = CmdTxEvent;
 export type CmdEvents<C extends CmdTx = CmdTx> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
+  readonly tx$: t.Observable<CmdTx<C['cmd'], C['params']>>;
 };
+
+export type CmdEvent = CmdTxEvent;
 
 /**
  * Fires when a command is invoked via a new transaction (eg "fire").

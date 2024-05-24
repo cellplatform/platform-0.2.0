@@ -17,7 +17,7 @@ export const Events = {
   /**
    * Events factory.
    */
-  create<T extends t.CmdTx>(doc?: t.Lens | t.DocRef, options: Options = {}): t.CmdEvents<T> {
+  create<C extends t.CmdTx>(doc?: t.Lens | t.DocRef, options: Options = {}): t.CmdEvents<C> {
     const resolve = Path.resolver(options.paths);
     const paths = resolve.paths;
     const life = rx.lifecycle(options.dispose$);
@@ -50,8 +50,10 @@ export const Events = {
     /**
      * API
      */
+    type TxEvent = t.CmdTxEvent<C['cmd'], C['params']>;
     return {
       $,
+      tx$: rx.payload<TxEvent>($, 'crdt:cmd/tx'),
 
       // Lifecycle.
       dispose,
@@ -62,4 +64,3 @@ export const Events = {
     };
   },
 } as const;
-
