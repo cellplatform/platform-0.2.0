@@ -4,7 +4,7 @@ type O = Record<string, unknown>;
 type S = string;
 
 export type Cmd<C extends t.CmdTx> = {
-  fire<T extends C['cmd']>(cmd: T, params: Extract<C, { cmd: T }>['params']): void;
+  invoke<T extends C['cmd']>(cmd: T, params: Extract<C, { cmd: T }>['params']): void;
   events(dispose$?: t.UntilObservable): CmdEvents<C>;
 };
 

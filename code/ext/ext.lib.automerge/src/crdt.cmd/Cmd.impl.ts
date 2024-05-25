@@ -16,7 +16,7 @@ export function create<C extends t.CmdTx>(
    * API
    */
   const api: t.Cmd<C> = {
-    fire(cmd, params) {
+    invoke(cmd, params) {
       const tx = options.tx?.() || slug();
       doc.change((d) => {
         mutate(d, paths.tx, tx);
