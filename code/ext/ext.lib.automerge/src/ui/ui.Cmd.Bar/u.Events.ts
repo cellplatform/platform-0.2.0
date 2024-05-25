@@ -33,7 +33,7 @@ export const Events = {
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const fire = (e: t.CmdBarEvent) => $$.next(e);
 
-    const text$ = rx.payload<t.CmdBarTextChangedEvent>($, 'crdt:cmdbar/Text:Changed');
+    const text$ = rx.payload<t.CmdBarTextChangedEvent>($, 'crdt:cmdbar/TextChanged');
     const cmd$ = rx.payload<t.CmdBarTxEvent>($, 'crdt:cmdbar/Tx');
 
     if (args.doc) {
@@ -48,7 +48,7 @@ export const Events = {
         distinctWhile((p, n) => p.doc.text === n.doc.text),
       ).subscribe((e) => {
         const text = e.doc.text;
-        fire({ type: 'crdt:cmdbar/Text:Changed', payload: { text } });
+        fire({ type: 'crdt:cmdbar/TextChanged', payload: { text } });
       });
 
       // Tx:(Command)

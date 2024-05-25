@@ -76,7 +76,7 @@ export type CmdBarTx = { tx: string; text: string; cmd: t.CmdBarAction; is: { se
  */
 export type CmdBarTextChangedHandler = (e: CmdBarTextChanged) => void;
 export type CmdBarTextChangedEvent = {
-  type: 'crdt:cmdbar/Text:Changed';
+  type: 'crdt:cmdbar/TextChanged';
   payload: CmdBarTextChanged;
 };
 export type CmdBarTextChanged = { text: string };
