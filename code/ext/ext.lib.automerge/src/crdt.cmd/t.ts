@@ -4,7 +4,7 @@ type O = Record<string, unknown>;
 type S = string;
 
 export type Cmd<C extends t.CmdTx> = {
-  invoke<T extends C['cmd']>(cmd: T, params: Extract<C, { cmd: T }>['params']): void;
+  invoke<T extends C['name']>(name: T, params: Extract<C, { name: T }>['params']): void;
   events(dispose$?: t.UntilObservable): CmdEvents<C>;
 };
 
@@ -14,7 +14,7 @@ export type Cmd<C extends t.CmdTx> = {
  */
 export type CmdPaths = {
   tx: t.ObjectPath;
-  cmd: t.ObjectPath;
+  name: t.ObjectPath;
   params: t.ObjectPath;
 };
 
@@ -23,7 +23,7 @@ export type CmdPaths = {
  */
 export type CmdLens<P extends O = O> = {
   tx?: string;
-  cmd?: string;
+  name?: string;
   params?: P;
 };
 
@@ -37,7 +37,7 @@ export type CmdLensObject<P extends O = O> = Required<CmdLens<P>>;
  */
 export type CmdEvents<C extends CmdTx = CmdTx> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
-  readonly tx$: t.Observable<CmdTx<C['cmd'], C['params']>>;
+  readonly tx$: t.Observable<CmdTx<C['name'], C['params']>>;
 };
 
 export type CmdEvent = CmdTxEvent;
@@ -52,6 +52,6 @@ export type CmdTxEvent<C extends S = S, P extends O = O> = {
 };
 export type CmdTx<C extends S = S, P extends O = O> = {
   tx: string;
-  cmd: C;
+  name: C;
   params: P;
 };

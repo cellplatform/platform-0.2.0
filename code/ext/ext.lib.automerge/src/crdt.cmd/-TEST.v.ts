@@ -17,33 +17,33 @@ describe('crdt.cmd (Command)', () => {
         expect(resolve.paths).to.eql(DEFAULTS.paths);
 
         const tx = 'tx.123';
-        const cmd = 'foo.bar';
+        const name = 'foo.bar';
         const params: P = { count: 0 };
-        const obj: t.CmdLens = { tx, cmd: cmd, params };
+        const obj: t.CmdLens = { tx, name, params };
         expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.cmd(obj)).to.eql(cmd);
+        expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.toDoc(obj)).to.eql({ tx, cmd, params });
+        expect(resolve.toDoc(obj)).to.eql({ tx, name, params });
       });
 
       it('custom paths', () => {
         const resolve = resolver({
           tx: ['z', 'tx'],
-          cmd: ['a'],
+          name: ['a'],
           params: ['x', 'y', 'p'],
         });
         const tx = 'tx.123';
         const params: P = { count: 123 };
-        const cmd = 'foo.bar';
+        const name = 'foo.bar';
         const obj = {
-          a: cmd,
+          a: name,
           x: { y: { p: params } },
           z: { tx },
         };
         expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.cmd(obj)).to.eql(cmd);
+        expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params<P>(obj, { count: 0 })).to.eql(params);
-        expect(resolve.toDoc(obj)).to.eql({ tx, cmd, params });
+        expect(resolve.toDoc(obj)).to.eql({ tx, name, params });
       });
 
       it('.params: generates new object', () => {
@@ -122,13 +122,13 @@ describe('crdt.cmd (Command)', () => {
 
         const txs = firedTx.map((e) => e.tx);
         expect(R.uniq(txs).length).to.eql(txs.length);
-        expect(firedTx.map((e) => e.cmd)).to.eql(['Foo', 'Bar', 'Bar']);
+        expect(firedTx.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
 
         expect(firedTx[0].params).to.eql({ count: 0 });
         expect(firedTx[1].params).to.eql({});
         expect(firedTx[2].params).to.eql({ msg: 'hello' });
 
-        expect(doc.current).to.eql({ tx: txs[2], cmd: 'Bar', params: { msg: 'hello' } });
+        expect(doc.current).to.eql({ tx: txs[2], name: 'Bar', params: { msg: 'hello' } });
         dispose();
       });
 
@@ -144,7 +144,7 @@ describe('crdt.cmd (Command)', () => {
         expect(fired.length).to.eql(1);
 
         const tx = fired[0].tx;
-        expect(doc.current).to.eql({ foo: { tx, cmd: 'Bar', params: { msg: 'hello' } } });
+        expect(doc.current).to.eql({ foo: { tx, name: 'Bar', params: { msg: 'hello' } } });
         dispose();
       });
 
@@ -153,7 +153,7 @@ describe('crdt.cmd (Command)', () => {
 
         const paths: t.CmdPaths = {
           tx: ['z', 'tx'],
-          cmd: ['a'],
+          name: ['a'],
           params: ['x', 'y', 'p'],
         };
 

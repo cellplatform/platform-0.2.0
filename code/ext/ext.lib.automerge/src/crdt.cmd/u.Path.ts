@@ -19,8 +19,8 @@ export const Path = {
         return resolve<string>(d, paths.tx) || '';
       },
 
-      cmd(d: O) {
-        return resolve<string>(d, paths.cmd) || '';
+      name(d: O) {
+        return resolve<string>(d, paths.name) || '';
       },
 
       params<P extends O = O>(d: O, defaultParams: P) {
@@ -32,7 +32,7 @@ export const Path = {
       toDoc<P extends O = O>(d: O, options: { defaultParams?: P } = {}): t.CmdLensObject<P> {
         return {
           tx: api.tx(d),
-          cmd: api.cmd(d),
+          name: api.name(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
         };
       },

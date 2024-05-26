@@ -6,7 +6,7 @@ export * from '../common';
  */
 const paths: t.CmdPaths = {
   tx: ['tx'],
-  cmd: ['cmd'],
+  name: ['name'],
   params: ['params'],
 };
 

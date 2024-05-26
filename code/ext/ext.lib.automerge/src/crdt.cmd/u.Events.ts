@@ -42,15 +42,15 @@ export const Events = {
         filter((e) => Is.txChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.tx === n.doc.tx),
       ).subscribe((e) => {
-        const { tx, cmd, params } = e.doc;
-        fire({ type: 'crdt:cmd/tx', payload: { tx, cmd, params } });
+        const { tx, name, params } = e.doc;
+        fire({ type: 'crdt:cmd/tx', payload: { tx, name, params } });
       });
     }
 
     /**
      * API
      */
-    type TxEvent = t.CmdTxEvent<C['cmd'], C['params']>;
+    type TxEvent = t.CmdTxEvent<C['name'], C['params']>;
     return {
       $,
       tx$: rx.payload<TxEvent>($, 'crdt:cmd/tx'),

@@ -20,7 +20,7 @@ export function create<C extends t.CmdTx>(
       const tx = options.tx?.() || slug();
       doc.change((d) => {
         mutate(d, paths.tx, tx);
-        mutate(d, paths.cmd, cmd);
+        mutate(d, paths.name, cmd);
         mutate(d, paths.params, params);
       });
     },
