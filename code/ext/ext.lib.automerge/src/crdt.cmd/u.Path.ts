@@ -15,10 +15,6 @@ export const Path = {
     const api = {
       paths,
 
-      tx(d: O) {
-        return resolve<string>(d, paths.tx) || '';
-      },
-
       name(d: O) {
         return resolve<string>(d, paths.name) || '';
       },
@@ -29,11 +25,17 @@ export const Path = {
         return get()!;
       },
 
-      toDoc<P extends O = O>(d: O, options: { defaultParams?: P } = {}): t.CmdLensObject<P> {
+      count(d: O) {
+        const get = () => resolve<t.CmdTxCount>(d, paths.count);
+        if (!get()) ObjectPath.mutate(d, paths.count, DEFAULTS.counter());
+        return get()!;
+      },
+
+      toObject<P extends O = O>(d: O, options: { defaultParams?: P } = {}): t.CmdLensObject<P> {
         return {
-          tx: api.tx(d),
           name: api.name(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
+          count: api.count(d),
         };
       },
     } as const;

@@ -1,13 +1,18 @@
-import { type t } from './common';
+import { A, type t } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
 const paths: t.CmdPaths = {
-  tx: ['tx'],
+  count: ['count'],
   name: ['name'],
   params: ['params'],
 };
 
-export const DEFAULTS = { paths } as const;
+export const DEFAULTS = {
+  paths,
+  counter(initial = 0): t.CmdTxCount {
+    return new A.Counter(initial);
+  },
+} as const;

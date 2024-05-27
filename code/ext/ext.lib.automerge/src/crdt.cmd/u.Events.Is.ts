@@ -4,8 +4,8 @@ import { Value, type t } from './common';
  * Flags: Event pattern inference.
  */
 export const EventsIs = {
-  txChange(paths: t.CmdPaths, patches: t.Patch[]) {
-    return patches.some((patch) => startsWith(patch, paths.tx));
+  countChange(paths: t.CmdPaths, patches: t.Patch[]) {
+    return patches.some((patch) => startsWith(patch, paths.count));
   },
 } as const;
 

@@ -9,22 +9,27 @@ export type Cmd<C extends t.CmdTx> = {
 };
 
 /**
+ * Named definition of a command.
+ */
+export type CmdType<N extends S = S, P extends O = O> = { name: N; params: P };
+
+/**
  * Abstract resolver paths to the location of
  * the command structure within the CRDT.
  */
 export type CmdPaths = {
-  tx: t.ObjectPath;
   name: t.ObjectPath;
   params: t.ObjectPath;
+  count: t.ObjectPath;
 };
 
 /**
  * The shape of the default <CmdPaths> as an object.
  */
 export type CmdLens<P extends O = O> = {
-  tx?: string;
   name?: string;
   params?: P;
+  count?: CmdTxCount;
 };
 
 /**
@@ -45,13 +50,10 @@ export type CmdEvent = CmdTxEvent;
 /**
  * Fires when a command is invoked via a new transaction (eg "fire").
  */
-export type CmdTxHandler<C extends S = S, P extends O = O> = (e: CmdTx<C, P>) => void;
-export type CmdTxEvent<C extends S = S, P extends O = O> = {
+export type CmdTxHandler<N extends S = S, P extends O = O> = (e: CmdTx<N, P>) => void;
+export type CmdTxEvent<N extends S = S, P extends O = O> = {
   type: 'crdt:cmd/tx';
-  payload: CmdTx<C, P>;
+  payload: CmdTx<N, P>;
 };
-export type CmdTx<C extends S = S, P extends O = O> = {
-  tx: string;
-  name: C;
-  params: P;
-};
+export type CmdTx<C extends S = S, P extends O = O> = CmdType<C, P> & { count: CmdTxCount };
+export type CmdTxCount = { value: number };

@@ -1,4 +1,4 @@
-import { ObjectPath, slug, type t } from './common';
+import { ObjectPath, type t } from './common';
 import { Events, Path } from './u';
 
 /**
@@ -6,7 +6,7 @@ import { Events, Path } from './u';
  */
 export function create<C extends t.CmdTx>(
   doc: t.DocRef | t.Lens,
-  options: { paths?: t.CmdPaths; tx?: () => string } = {},
+  options: { paths?: t.CmdPaths } = {},
 ): t.Cmd<C> {
   const mutate = ObjectPath.mutate;
   const resolve = Path.resolver(options.paths);
@@ -17,11 +17,10 @@ export function create<C extends t.CmdTx>(
    */
   const api: t.Cmd<C> = {
     invoke(cmd, params) {
-      const tx = options.tx?.() || slug();
       doc.change((d) => {
-        mutate(d, paths.tx, tx);
         mutate(d, paths.name, cmd);
         mutate(d, paths.params, params);
+        (resolve.count(d) as t.A.Counter).increment(1);
       });
     },
 

@@ -34,16 +34,16 @@ export const Events = {
     if (doc) {
       const events = doc.events(dispose$);
       const $ = events.changed$.pipe(
-        map((e) => ({ patches: e.patches, doc: resolve.toDoc(e.after) })),
+        map((e) => ({ patches: e.patches, doc: resolve.toObject(e.after) })),
       );
 
       // Tx (Command) ⚡️.
       $.pipe(
-        filter((e) => Is.txChange(paths, e.patches)),
-        distinctWhile((p, n) => p.doc.tx === n.doc.tx),
+        filter((e) => Is.countChange(paths, e.patches)),
+        distinctWhile((p, n) => p.doc.count.value === n.doc.count.value),
       ).subscribe((e) => {
-        const { tx, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/tx', payload: { tx, name, params } });
+        const { count, name, params } = e.doc;
+        fire({ type: 'crdt:cmd/tx', payload: { count, name, params } });
       });
     }
 
