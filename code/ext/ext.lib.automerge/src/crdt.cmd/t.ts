@@ -12,6 +12,7 @@ export type Cmd<C extends t.CmdTx> = {
  * Named definition of a command.
  */
 export type CmdType<N extends S = S, P extends O = O> = { name: N; params: P };
+export type CmdCounter = { value: number };
 
 /**
  * Abstract resolver paths to the location of
@@ -20,7 +21,7 @@ export type CmdType<N extends S = S, P extends O = O> = { name: N; params: P };
 export type CmdPaths = {
   name: t.ObjectPath;
   params: t.ObjectPath;
-  count: t.ObjectPath;
+  counter: t.ObjectPath;
 };
 
 /**
@@ -29,14 +30,15 @@ export type CmdPaths = {
 export type CmdLens<P extends O = O> = {
   name?: string;
   params?: P;
-  count?: CmdCounter;
+  counter?: CmdCounter;
 };
-export type CmdCounter = { value: number };
 
 /**
  * A fully resolved document object for a <CmdLens>.
  */
-export type CmdLensObject<P extends O = O> = Required<Omit<CmdLens<P>, 'count'>> & {
+export type CmdLensObject<P extends O = O> = {
+  name: string;
+  params: P;
   count: number;
 };
 

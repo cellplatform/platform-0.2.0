@@ -5,7 +5,7 @@ import { Value, type t } from './common';
  */
 export const EventsIs = {
   countChange(paths: t.CmdPaths, patches: t.Patch[]) {
-    return patches.some((patch) => startsWith(patch, paths.count));
+    return patches.some((patch) => startsWith(patch, paths.counter));
   },
 } as const;
 

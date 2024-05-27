@@ -26,8 +26,8 @@ export const Path = {
       },
 
       counter(d: O) {
-        const get = () => resolve<t.CmdCounter>(d, paths.count);
-        if (!get()) ObjectPath.mutate(d, paths.count, DEFAULTS.counter());
+        const get = () => resolve<t.CmdCounter>(d, paths.counter);
+        if (!get()) ObjectPath.mutate(d, paths.counter, DEFAULTS.counter());
         return get()!;
       },
 

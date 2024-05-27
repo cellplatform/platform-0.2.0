@@ -10,31 +10,31 @@ describe('crdt.cmd (Command)', () => {
 
   describe('Cmd.Path', () => {
     describe('Path.resolver', () => {
-      type P = { count: number };
+      type P = { foo: number };
       const resolver = Cmd.Path.resolver;
 
       it('default paths', () => {
         const resolve = resolver();
         expect(resolve.paths).to.eql(DEFAULTS.paths);
 
-        const count = DEFAULTS.counter();
+        const counter = DEFAULTS.counter();
         const name = 'foo.bar';
-        const params: P = { count: 0 };
-        const obj: t.CmdLens = { count, name, params };
-        expect(resolve.counter(obj)).to.eql(count);
+        const params: P = { foo: 0 };
+        const obj: t.CmdLens = { counter, name, params };
+        expect(resolve.counter(obj)).to.eql(counter);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.toObject(obj)).to.eql({ count: count.value, name, params });
+        expect(resolve.toObject(obj)).to.eql({ count: counter.value, name, params });
       });
 
       it('custom paths', () => {
         const resolve = resolver({
-          count: ['z', 'tx'],
+          counter: ['z', 'tx'],
           name: ['a'],
           params: ['x', 'y', 'p'],
         });
         const tx = DEFAULTS.counter();
-        const params: P = { count: 123 };
+        const params: P = { foo: 123 };
         const name = 'foo.bar';
         const obj = {
           a: name,
@@ -43,24 +43,24 @@ describe('crdt.cmd (Command)', () => {
         };
         expect(resolve.counter(obj)).to.eql(tx);
         expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params<P>(obj, { count: 0 })).to.eql(params);
+        expect(resolve.params<P>(obj, { foo: 0 })).to.eql(params);
         expect(resolve.toObject(obj)).to.eql({ count: tx.value, name, params });
       });
 
       it('.params: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
-        const params: P = { count: 0 };
+        const params: P = { foo: 0 };
         const obj1: t.CmdLens<P> = {};
-        const obj2: t.CmdLens<P> = { params: { count: 123 } };
-        expect(resolve.params(obj1, params).count).to.eql(0);
-        expect(resolve.params(obj2, params).count).to.eql(123);
+        const obj2: t.CmdLens<P> = { params: { foo: 123 } };
+        expect(resolve.params(obj1, params).foo).to.eql(0);
+        expect(resolve.params(obj2, params).foo).to.eql(123);
       });
 
       it('.count: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
-        const count = DEFAULTS.counter(10);
+        const counter = DEFAULTS.counter(10);
         const obj1: t.CmdLens<P> = {};
-        const obj2: t.CmdLens<P> = { count };
+        const obj2: t.CmdLens<P> = { counter };
         expect(resolve.counter(obj1).value).to.eql(0);
         expect(resolve.counter(obj2).value).to.eql(10);
       });
@@ -141,7 +141,7 @@ describe('crdt.cmd (Command)', () => {
         expect(doc.current).to.eql({
           name: 'Bar',
           params: { msg: 'hello' },
-          count: { value: counts[2] },
+          counter: { value: counts[2] },
         });
         dispose();
       });
@@ -158,7 +158,11 @@ describe('crdt.cmd (Command)', () => {
         expect(fired.length).to.eql(1);
 
         expect(doc.current).to.eql({
-          foo: { count: { value: fired[0].count }, name: 'Bar', params: { msg: 'hello' } },
+          foo: {
+            name: 'Bar',
+            params: { msg: 'hello' },
+            counter: { value: fired[0].count },
+          },
         });
         dispose();
       });
@@ -167,9 +171,9 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
 
         const paths: t.CmdPaths = {
-          count: ['z', 'tx'],
           name: ['a'],
           params: ['x', 'y', 'p'],
+          counter: ['z', 'tx'],
         };
 
         const p = { msg: 'hello' };

@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 const paths: t.CmdPaths = {
-  count: ['count'],
+  counter: ['counter'],
   name: ['name'],
   params: ['params'],
 };
