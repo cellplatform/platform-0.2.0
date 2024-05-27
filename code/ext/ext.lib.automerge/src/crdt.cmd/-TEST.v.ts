@@ -18,13 +18,14 @@ describe('crdt.cmd (Command)', () => {
         expect(resolve.paths).to.eql(DEFAULTS.paths);
 
         const counter = DEFAULTS.counter();
+        const count = counter.value;
         const name = 'foo.bar';
         const params: P = { foo: 0 };
         const obj: t.CmdLens = { counter, name, params };
         expect(resolve.counter(obj)).to.eql(counter);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.toObject(obj)).to.eql({ count: counter.value, name, params });
+        expect(resolve.toObject(obj)).to.eql({ count, name, params });
       });
 
       it('custom paths', () => {
