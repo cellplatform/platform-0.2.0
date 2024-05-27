@@ -21,11 +21,10 @@ describe('crdt.cmd (Command)', () => {
         const name = 'foo.bar';
         const params: P = { count: 0 };
         const obj: t.CmdLens = { count, name, params };
-        expect(resolve.count(obj)).to.eql(count);
+        expect(resolve.counter(obj)).to.eql(count);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.toObject(obj)).to.eql({ count, name, params });
-        expect(resolve.toObject(obj).count).to.not.instanceOf(A.Counter); // NB: converted to POJO.
+        expect(resolve.toObject(obj)).to.eql({ count: count.value, name, params });
       });
 
       it('custom paths', () => {
@@ -42,10 +41,10 @@ describe('crdt.cmd (Command)', () => {
           x: { y: { p: params } },
           z: { tx },
         };
-        expect(resolve.count(obj)).to.eql(tx);
+        expect(resolve.counter(obj)).to.eql(tx);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params<P>(obj, { count: 0 })).to.eql(params);
-        expect(resolve.toObject(obj)).to.eql({ count: tx, name, params });
+        expect(resolve.toObject(obj)).to.eql({ count: tx.value, name, params });
       });
 
       it('.params: generates new object', () => {
@@ -62,8 +61,8 @@ describe('crdt.cmd (Command)', () => {
         const count = DEFAULTS.counter(10);
         const obj1: t.CmdLens<P> = {};
         const obj2: t.CmdLens<P> = { count };
-        expect(resolve.count(obj1).value).to.eql(0);
-        expect(resolve.count(obj2).value).to.eql(10);
+        expect(resolve.counter(obj1).value).to.eql(0);
+        expect(resolve.counter(obj2).value).to.eql(10);
       });
     });
   });
@@ -131,7 +130,7 @@ describe('crdt.cmd (Command)', () => {
         expect(firedTx.length).to.eql(3);
         expect(fired.map((e) => e.payload)).to.eql(firedTx);
 
-        const counts = firedTx.map((e) => e.count.value);
+        const counts = firedTx.map((e) => e.count);
         expect(counts).to.eql([1, 2, 3]);
         expect(firedTx.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
 
@@ -158,8 +157,9 @@ describe('crdt.cmd (Command)', () => {
         cmd.invoke('Bar', { msg: 'hello' });
         expect(fired.length).to.eql(1);
 
-        const count = fired[0].count;
-        expect(doc.current).to.eql({ foo: { count, name: 'Bar', params: { msg: 'hello' } } });
+        expect(doc.current).to.eql({
+          foo: { count: { value: fired[0].count }, name: 'Bar', params: { msg: 'hello' } },
+        });
         dispose();
       });
 
@@ -179,8 +179,8 @@ describe('crdt.cmd (Command)', () => {
         cmd.invoke('Bar', p);
         expect(fired.length).to.eql(1);
 
-        const tx = fired[0].count;
-        expect(doc.current).to.eql({ z: { tx }, a: 'Bar', x: { y: { p } } });
+        const count = fired[0].count;
+        expect(doc.current).to.eql({ z: { tx: { value: count } }, a: 'Bar', x: { y: { p } } });
         dispose();
       });
     });

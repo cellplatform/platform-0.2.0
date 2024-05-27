@@ -12,7 +12,7 @@ const paths: t.CmdPaths = {
 
 export const DEFAULTS = {
   paths,
-  counter(initial = 0): t.CmdCount {
+  counter(initial = 0): t.CmdCounter {
     return new A.Counter(initial);
   },
 } as const;

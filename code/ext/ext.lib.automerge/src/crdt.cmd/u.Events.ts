@@ -40,10 +40,10 @@ export const Events = {
       // Tx (Command) ⚡️.
       $.pipe(
         filter((e) => Is.countChange(paths, e.patches)),
-        distinctWhile((p, n) => p.doc.count.value === n.doc.count.value),
+        distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
         const { count, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/tx', payload: { count, name, params } });
+        fire({ type: 'crdt:cmd/tx', payload: { name, params, count } });
       });
     }
 

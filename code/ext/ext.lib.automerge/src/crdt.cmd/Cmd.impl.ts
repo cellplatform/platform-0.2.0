@@ -20,7 +20,7 @@ export function create<C extends t.CmdTx>(
       doc.change((d) => {
         mutate(d, paths.name, cmd);
         mutate(d, paths.params, params);
-        (resolve.count(d) as t.A.Counter).increment(1);
+        (resolve.counter(d) as t.A.Counter).increment(1);
       });
     },
 
