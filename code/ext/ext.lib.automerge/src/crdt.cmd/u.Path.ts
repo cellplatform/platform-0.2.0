@@ -26,7 +26,7 @@ export const Path = {
       },
 
       count(d: O) {
-        const get = () => resolve<t.CmdTxCount>(d, paths.count);
+        const get = () => resolve<t.CmdCount>(d, paths.count);
         if (!get()) ObjectPath.mutate(d, paths.count, DEFAULTS.counter());
         return get()!;
       },
@@ -35,7 +35,7 @@ export const Path = {
         return {
           name: api.name(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
-          count: api.count(d),
+          count: { value: api.count(d).value },
         };
       },
     } as const;

@@ -25,6 +25,7 @@ describe('crdt.cmd (Command)', () => {
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
         expect(resolve.toObject(obj)).to.eql({ count, name, params });
+        expect(resolve.toObject(obj).count).to.not.instanceOf(A.Counter); // NB: converted to POJO.
       });
 
       it('custom paths', () => {

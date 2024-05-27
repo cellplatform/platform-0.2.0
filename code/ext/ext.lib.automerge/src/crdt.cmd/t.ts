@@ -29,7 +29,7 @@ export type CmdPaths = {
 export type CmdLens<P extends O = O> = {
   name?: string;
   params?: P;
-  count?: CmdTxCount;
+  count?: CmdCount;
 };
 
 /**
@@ -55,5 +55,5 @@ export type CmdTxEvent<N extends S = S, P extends O = O> = {
   type: 'crdt:cmd/tx';
   payload: CmdTx<N, P>;
 };
-export type CmdTx<C extends S = S, P extends O = O> = CmdType<C, P> & { count: CmdTxCount };
-export type CmdTxCount = { value: number };
+export type CmdTx<C extends S = S, P extends O = O> = CmdType<C, P> & { count: CmdCount };
+export type CmdCount = { value: number };
