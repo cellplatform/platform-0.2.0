@@ -19,7 +19,7 @@ describe('Doc.Lens', () => {
       const root = await setup();
       expect(root.current).to.eql({ child: { count: 0 } });
 
-      const lens = Doc.Lens.init<TRoot, TChild>(root, path);
+      const lens = Doc.Lens.create<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
       expect(lens.typename).to.eql(undefined);
 
@@ -37,34 +37,36 @@ describe('Doc.Lens', () => {
     it('{ typename } option ← optional typename', async () => {
       const root = await setup();
       const typename = 'foo.bar';
-      const lens = Lens.init<TRoot, TChild>(root, path, { typename });
+      const lens = Lens.create<TRoot, TChild>(root, path, { typename });
       expect(lens.typename).to.eql(typename);
     });
 
     it('options: {init} param', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
-      const lens = Lens.init<TRoot, TChild>(root, path, { init: (d) => (d.child = { count: 1 }) });
+      const lens = Lens.create<TRoot, TChild>(root, path, {
+        init: (d) => (d.child = { count: 1 }),
+      });
       expect(lens.current).to.eql({ count: 1 });
     });
 
     it('options: as init function()', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
-      const lens = Lens.init<TRoot, TChild>(root, path, (d) => (d.child = { count: 123 }));
+      const lens = Lens.create<TRoot, TChild>(root, path, (d) => (d.child = { count: 123 }));
       expect(lens.current).to.eql({ count: 123 });
     });
 
     it('does not run init function() when target already present', async () => {
       const root1 = await store.doc.getOrCreate<TRoot>((d) => (d.child = { count: 0 }));
       const root2 = await store.doc.getOrCreate<TRoot>((d) => null);
-      const lens1 = Lens.init<TRoot, TChild>(root1, path, (d) => (d.child = { count: 123 }));
-      const lens2 = Lens.init<TRoot, TChild>(root2, path, (d) => (d.child = { count: 123 }));
+      const lens1 = Lens.create<TRoot, TChild>(root1, path, (d) => (d.child = { count: 123 }));
+      const lens2 = Lens.create<TRoot, TChild>(root2, path, (d) => (d.child = { count: 123 }));
       expect(lens1.current).to.eql({ count: 0 });
       expect(lens2.current).to.eql({ count: 123 });
     });
 
     it('lens.toObject', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
       expect(lens.current).to.equal(lens.current);
       expect(lens.toObject()).to.eql(lens.current);
       expect(lens.toObject()).to.not.equal(lens.current);
@@ -72,7 +74,7 @@ describe('Doc.Lens', () => {
 
     it('throw: path does not yield an {object}', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
-      const fn = () => Lens.init<TRoot, TChild>(root, path);
+      const fn = () => Lens.create<TRoot, TChild>(root, path);
       expect(fn).to.throw(/Target path of \[Lens\] is not an object/);
     });
   });
@@ -82,7 +84,7 @@ describe('Doc.Lens', () => {
       const store = Store.init();
       const root = await setup({ store });
 
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
       expect(Registry.exists(root)).to.eql(true);
 
       expect(lens.disposed).to.eql(false);
@@ -98,7 +100,7 @@ describe('Doc.Lens', () => {
     it('disposes when deleted from store', async () => {
       const root = await setup();
       const timeout = 10;
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
 
       expect(lens.disposed).to.eql(false);
       expect(await store.doc.exists(root.uri, { timeout })).to.eql(true);
@@ -111,7 +113,7 @@ describe('Doc.Lens', () => {
     it('disposes lens without effecting root', async () => {
       const root = await setup();
       const timeout = 10;
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
 
       expect(lens.disposed).to.eql(false);
       expect(store.disposed).to.eql(false);
@@ -127,26 +129,26 @@ describe('Doc.Lens', () => {
   describe('path', () => {
     it('path undefined', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root);
+      const lens = Lens.create<TRoot, TChild>(root);
       expect(lens.current).to.eql(root.current);
     });
 
     it('path as array', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
     });
 
     it('path as function → {object}', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, () => path);
+      const lens = Lens.create<TRoot, TChild>(root, () => path);
       expect(lens.current).to.eql({ count: 0 });
     });
 
     it('path as function → [index] → {object}', async () => {
       const root = await setup();
       let index = 0;
-      const lens = Lens.init<TRoot, TChild>(
+      const lens = Lens.create<TRoot, TChild>(
         root,
         () => ['child', 'list', index],
         (d) => (d.child!.list = [{ count: 0 }, { count: 1 }]),
@@ -160,7 +162,7 @@ describe('Doc.Lens', () => {
       const root = await setup();
 
       const fn = () =>
-        Lens.init<TRoot, TChild>(
+        Lens.create<TRoot, TChild>(
           root,
           () => ['child', 'list', 2],
           (d) => (d.child!.list = []),
@@ -170,8 +172,8 @@ describe('Doc.Lens', () => {
 
     it('path → root', async () => {
       const root = await setup();
-      const lens1 = Lens.init<TRoot, TChild>(root, []);
-      const lens2 = Lens.init<TRoot, TChild>(root, () => []);
+      const lens1 = Lens.create<TRoot, TChild>(root, []);
+      const lens2 = Lens.create<TRoot, TChild>(root, () => []);
       expect(lens1.current).to.eql(root.current);
       expect(lens2.current).to.eql(root.current);
     });
@@ -180,7 +182,7 @@ describe('Doc.Lens', () => {
   describe('change', () => {
     it('lens descendent object does initially exist', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
 
       lens.change((child) => (child.count = 123));
       expect(lens.current.count).to.eql(123);
@@ -193,7 +195,7 @@ describe('Doc.Lens', () => {
 
     it('lens descendent object does not initially exist (factory generated)', async (e) => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
 
       lens.change((child) => (child.count = 123));
 
@@ -205,7 +207,7 @@ describe('Doc.Lens', () => {
   describe('events ($)', () => {
     it('change events → descendent', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
       const events = lens.events();
 
       const fired: t.LensChanged<TChild>[] = [];
@@ -222,7 +224,7 @@ describe('Doc.Lens', () => {
 
     it('change on root ← fires through lens', async () => {
       const root = await setup();
-      const lens = Lens.init<TRoot, TChild>(root, path);
+      const lens = Lens.create<TRoot, TChild>(root, path);
       const events = lens.events();
 
       const fired: t.LensChanged<TChild>[] = [];
@@ -252,8 +254,8 @@ describe('Doc.Lens', () => {
 
     it('change on same descendent → different lens', async () => {
       const root = await setup();
-      const lens1 = Lens.init<TRoot, TChild>(root, path);
-      const lens2 = Lens.init<TRoot, TChild>(root, path);
+      const lens1 = Lens.create<TRoot, TChild>(root, path);
+      const lens2 = Lens.create<TRoot, TChild>(root, path);
       const events1 = lens1.events();
       const events2 = lens2.events();
 
@@ -289,8 +291,8 @@ describe('Doc.Lens', () => {
         d.B = { child: { count: 0 } };
       });
 
-      const lens1 = Lens.init<T, T['A']>(root, ['A']);
-      const lens2 = Lens.init<T, T['B']>(root, ['B']);
+      const lens1 = Lens.create<T, T['A']>(root, ['A']);
+      const lens2 = Lens.create<T, T['B']>(root, ['B']);
       const events1 = lens1.events();
       const events2 = lens2.events();
 
@@ -316,11 +318,11 @@ describe('Doc.Lens', () => {
     it('lens nested within lens (same root) ← events', async () => {
       const root = await setup();
 
-      const lens1 = Lens.init<TRoot, TChild>(root, ['child'], (doc) => {
+      const lens1 = Lens.create<TRoot, TChild>(root, ['child'], (doc) => {
         const d1 = doc.child || (doc.child = { count: 0 });
         return d1;
       });
-      const lens2 = Lens.init<TRoot, TChild>(root, ['child', 'child'], (doc) => {
+      const lens2 = Lens.create<TRoot, TChild>(root, ['child', 'child'], (doc) => {
         const d1 = doc.child || (doc.child = { count: 0 });
         const d2 = d1.child || (d1.child = { count: 0 });
         return d2;
@@ -351,7 +353,7 @@ describe('Doc.Lens', () => {
       const store = Store.init();
       const root1 = await setup({ store });
       const root2 = await setup({ store });
-      const lens = Lens.init<TRoot, TChild>(root1, path);
+      const lens = Lens.create<TRoot, TChild>(root1, path);
       const events = lens.events();
 
       expect(lens.disposed).to.eql(false);
@@ -378,7 +380,7 @@ describe('Doc.Lens', () => {
     describe('dispose', () => {
       it('on events.dispose() method', async () => {
         const root = await setup();
-        const lens = Lens.init<TRoot, TChild>(root, path);
+        const lens = Lens.create<TRoot, TChild>(root, path);
         const events = lens.events();
 
         expect(events.disposed).to.eql(false);
@@ -388,7 +390,7 @@ describe('Doc.Lens', () => {
 
       it('on events({ dispose$ }) param', async () => {
         const root = await setup();
-        const lens = Lens.init<TRoot, TChild>(root, path);
+        const lens = Lens.create<TRoot, TChild>(root, path);
 
         const life = rx.lifecycle();
         const { dispose$ } = life;
@@ -401,7 +403,7 @@ describe('Doc.Lens', () => {
 
       it('on parent lens dispose', async () => {
         const root = await setup();
-        const lens = Lens.init<TRoot, TChild>(root, path);
+        const lens = Lens.create<TRoot, TChild>(root, path);
         const events = lens.events();
 
         expect(events.disposed).to.eql(false);
@@ -412,7 +414,7 @@ describe('Doc.Lens', () => {
       it('on root store dispose', async () => {
         const store = Store.init();
         const root = await setup({ store });
-        const lens = Lens.init<TRoot, TChild>(root, path);
+        const lens = Lens.create<TRoot, TChild>(root, path);
         const events = lens.events();
 
         expect(events.disposed).to.eql(false);
@@ -426,7 +428,7 @@ describe('Doc.Lens', () => {
     it('init', async (e) => {
       const root = await setup();
 
-      const lens1 = Lens.init<TRoot, TChild>(root, path);
+      const lens1 = Lens.create<TRoot, TChild>(root, path);
       expect(root.current).to.eql({ child: { count: 0 } });
       expect(lens1.current).to.eql({ count: 0 });
 
@@ -438,7 +440,7 @@ describe('Doc.Lens', () => {
     it('change', async () => {
       const root = await setup();
 
-      const lens1 = Lens.init<TRoot, TChild>(root, path);
+      const lens1 = Lens.create<TRoot, TChild>(root, path);
       const lens2 = lens1.lens<TChild>(path, (d) => (d.child = { count: 0 }));
 
       const lens3 = lens2.lens<TChild>(path, (d) => (d.child = { count: 0 }));
@@ -463,8 +465,8 @@ describe('Doc.Lens', () => {
       const root = await setup({ store });
       const events = root.events();
 
-      const lens1 = Lens.init<TRoot, TChild>(root, path);
-      const lens2 = Lens.init<TRoot, TChild>(root, path);
+      const lens1 = Lens.create<TRoot, TChild>(root, path);
+      const lens2 = Lens.create<TRoot, TChild>(root, path);
       const lens3 = lens2.lens(path, (d) => (d.child = { count: 0 }));
 
       lens2.dispose();

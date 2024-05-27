@@ -26,8 +26,8 @@ export const Doc = {
 
   Lens,
   Namespace,
-  lens: Lens.init,
-  ns: Namespace.init,
+  lens: Lens.create,
+  ns: Namespace.create,
 
   get,
   getOrCreate,

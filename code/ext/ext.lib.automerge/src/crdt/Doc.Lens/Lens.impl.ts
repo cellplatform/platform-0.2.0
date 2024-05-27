@@ -135,7 +135,7 @@ export function init<R extends O, L extends O>(
     lens<T extends O>(subpath: t.ObjectPath, fn?: t.InitializeLens<L>) {
       const composite = [...wrangle.path(path), ...subpath];
       if (fn && typeof ObjectPath.resolve(root, composite) !== 'object') api.change((d) => fn(d));
-      return init<R, T>(root, composite, { dispose$ });
+      return create<R, T>(root, composite, { dispose$ });
     },
 
     /**

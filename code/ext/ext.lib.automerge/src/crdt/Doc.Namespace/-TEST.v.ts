@@ -16,7 +16,7 @@ describe('Namespace (Lens)', () => {
 
   it('init', async () => {
     const doc = await setup();
-    const ns1 = Namespace.init<TRoot>(doc);
+    const ns1 = Namespace.create<TRoot>(doc);
     const ns2 = Doc.ns<TRoot>(doc);
     expect(Doc.Is.namespace(ns1)).to.eql(true);
     expect(Doc.Is.namespace(ns2)).to.eql(true);
@@ -25,7 +25,7 @@ describe('Namespace (Lens)', () => {
   it('toType<T>() conversion', async () => {
     const doc = await setup();
     type N = 'foo' | 'bar';
-    const ns1 = Namespace.init<TRoot>(doc);
+    const ns1 = Namespace.create<TRoot>(doc);
     const ns2 = ns1.typed<N>();
     ns1.lens('baz', {});
     ns2.lens('foo', {});
@@ -36,7 +36,7 @@ describe('Namespace (Lens)', () => {
   describe('container', () => {
     it('namespace.container: { document } root ← no path)', async () => {
       const doc = await setup();
-      const namespace = Namespace.init<TRoot>(doc);
+      const namespace = Namespace.create<TRoot>(doc);
 
       const res1 = namespace.container;
       const res2 = namespace.container;
@@ -59,7 +59,7 @@ describe('Namespace (Lens)', () => {
     it('namespace.container: from sub-tree (get container → ƒ)', async () => {
       type N = 'foo' | 'bar';
       const doc = await setup();
-      const ns = Namespace.init<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+      const ns = Namespace.create<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
       expect(ns.container).to.eql({});
       expect(ns.container).to.not.equal(ns.container);
       expect(A.isAutomerge(ns.container)).to.eql(false);
@@ -81,7 +81,7 @@ describe('Namespace (Lens)', () => {
       type N = 'foo' | 'bar';
       const doc = await setup();
       let index = 0;
-      const ns = Namespace.init<TRoot, N>(
+      const ns = Namespace.create<TRoot, N>(
         doc,
         () => ['list', index],
         (d) => (d.list = [{}, {}]),
@@ -102,7 +102,7 @@ describe('Namespace (Lens)', () => {
 
     it('change events', async () => {
       const doc = await setup();
-      const ns = Namespace.init<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
+      const ns = Namespace.create<TRoot, N>(doc, ['ns'], (d) => (d.ns = {}));
       const events = ns.events();
 
       const fired: t.LensChanged<t.NamespaceMap<N>>[] = [];

@@ -1,2 +1,2 @@
+export { create as createLens } from '../Doc.Lens/Lens.impl';
 export * from '../common';
-export { init as Lens } from '../Doc.Lens/Lens.impl';

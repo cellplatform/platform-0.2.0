@@ -60,10 +60,10 @@ describe('Doc.Lens', () => {
 
     expect(Registry.total(root1)).to.eql(0);
 
-    const lens1 = Lens.init<TRoot, TChild>(root1, path);
-    const lens2 = Lens.init<TRoot, TChild>(root1, path);
+    const lens1 = Lens.create<TRoot, TChild>(root1, path);
+    const lens2 = Lens.create<TRoot, TChild>(root1, path);
     const lens3 = lens2.lens(path, (d) => (d.child = { count: 0 }));
-    const lens4 = Lens.init<TRoot, TChild>(root2, path); // NB: not the same root doc.
+    const lens4 = Lens.create<TRoot, TChild>(root2, path); // NB: not the same root doc.
 
     expect(Registry.total(root1)).to.eql(3);
 
