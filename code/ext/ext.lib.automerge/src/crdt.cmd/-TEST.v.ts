@@ -10,6 +10,7 @@ describe('crdt.cmd (Command)', () => {
 
   describe('Cmd.Path', () => {
     describe('Path.resolver', () => {
+      type N = 'Foo';
       type P = { foo: number };
       const resolver = Cmd.Path.resolver;
 
@@ -51,8 +52,8 @@ describe('crdt.cmd (Command)', () => {
       it('.params: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
         const params: P = { foo: 0 };
-        const obj1: t.CmdLens<P> = {};
-        const obj2: t.CmdLens<P> = { params: { foo: 123 } };
+        const obj1: t.CmdLens<N, P> = {};
+        const obj2: t.CmdLens<N, P> = { params: { foo: 123 } };
         expect(resolve.params(obj1, params).foo).to.eql(0);
         expect(resolve.params(obj2, params).foo).to.eql(123);
       });
@@ -60,8 +61,8 @@ describe('crdt.cmd (Command)', () => {
       it('.count: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
         const counter = DEFAULTS.counter(10);
-        const obj1: t.CmdLens<P> = {};
-        const obj2: t.CmdLens<P> = { counter };
+        const obj1: t.CmdLens<N, P> = {};
+        const obj2: t.CmdLens<N, P> = { counter };
         expect(resolve.counter(obj1).value).to.eql(0);
         expect(resolve.counter(obj2).value).to.eql(10);
       });

@@ -1,5 +1,6 @@
 import { DEFAULTS, ObjectPath, type t } from './common';
 
+type S = string;
 type O = Record<string, unknown>;
 
 /**
@@ -15,8 +16,8 @@ export const Path = {
     const api = {
       paths,
 
-      name(d: O) {
-        return resolve<string>(d, paths.name) || '';
+      name<N extends S = S>(d: O) {
+        return (resolve<N>(d, paths.name) || '') as N;
       },
 
       params<P extends O = O>(d: O, defaultParams: P) {
@@ -31,9 +32,12 @@ export const Path = {
         return get()!;
       },
 
-      toObject<P extends O = O>(d: O, options: { defaultParams?: P } = {}): t.CmdLensObject<P> {
+      toObject<N extends S = S, P extends O = O>(
+        d: O,
+        options: { defaultParams?: P } = {},
+      ): t.CmdLensObject<N, P> {
         return {
-          name: api.name(d),
+          name: api.name<N>(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
           count: api.counter(d).value,
         };

@@ -3,7 +3,7 @@ import type { t } from './common';
 type O = Record<string, unknown>;
 type S = string;
 
-export type Cmd<C extends t.CmdTx> = {
+export type Cmd<C extends t.CmdType> = {
   invoke<T extends C['name']>(name: T, params: Extract<C, { name: T }>['params']): void;
   events(dispose$?: t.UntilObservable): CmdEvents<C>;
 };
@@ -27,8 +27,8 @@ export type CmdPaths = {
 /**
  * The shape of the default <CmdPaths> as an object.
  */
-export type CmdLens<P extends O = O> = {
-  name?: string;
+export type CmdLens<N extends S = S, P extends O = O> = {
+  name?: N;
   params?: P;
   counter?: CmdCounter;
 };
@@ -36,8 +36,8 @@ export type CmdLens<P extends O = O> = {
 /**
  * A fully resolved document object for a <CmdLens>.
  */
-export type CmdLensObject<P extends O = O> = {
-  name: string;
+export type CmdLensObject<N extends S = S, P extends O = O> = {
+  name: N;
   params: P;
   count: number;
 };
@@ -45,7 +45,7 @@ export type CmdLensObject<P extends O = O> = {
 /**
  * EVENTS
  */
-export type CmdEvents<C extends CmdTx = CmdTx> = t.Lifecycle & {
+export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly tx$: t.Observable<CmdTx<C['name'], C['params']>>;
 };
