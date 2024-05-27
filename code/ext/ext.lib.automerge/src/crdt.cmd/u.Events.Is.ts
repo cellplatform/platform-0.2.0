@@ -1,18 +1,11 @@
-import { Value, type t } from './common';
+import { type t } from './common';
+import { Patch } from './u.Patch';
 
 /**
  * Flags: Event pattern inference.
  */
 export const EventsIs = {
   countChange(paths: t.CmdPaths, patches: t.Patch[]) {
-    return patches.some((patch) => startsWith(patch, paths.counter));
+    return patches.some((patch) => Patch.startsWith(patch, paths.counter));
   },
 } as const;
-
-/**
- * Helpers
- */
-function startsWith(patch: t.Patch, def: t.ObjectPath) {
-  const path = patch?.path;
-  return !path ? false : Value.Array.compare(path).startsWith(def);
-}

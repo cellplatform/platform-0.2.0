@@ -1,5 +1,5 @@
 import { rx, type t } from './common';
-import { EventsIs as Is } from './u.Events.Is';
+import { EventsIs } from './u.Events.Is';
 import { Path } from './u.Path';
 
 type Options = {
@@ -12,14 +12,15 @@ type Options = {
  * paths within it representing a <Cmd> (Command).
  */
 export const Events = {
-  Is,
+  Is: EventsIs,
 
   /**
    * Events factory.
    */
-  create<C extends t.CmdTx>(doc?: t.Lens | t.DocRef, options: Options = {}): t.CmdEvents<C> {
+  create<C extends t.CmdType>(doc?: t.Lens | t.DocRef, options: Options = {}): t.CmdEvents<C> {
     const resolve = Path.resolver(options.paths);
     const paths = resolve.paths;
+
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;
     const { distinctWhile, filter, map } = rx;
@@ -39,21 +40,20 @@ export const Events = {
 
       // Tx (Command) ⚡️.
       $.pipe(
-        filter((e) => Is.countChange(paths, e.patches)),
+        filter((e) => EventsIs.countChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
         const { count, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/tx', payload: { name, params, count } });
+        fire({ type: 'crdt:cmd/Tx', payload: { name, params, count } });
       });
     }
 
     /**
      * API
      */
-    type TxEvent = t.CmdTxEvent<C['name'], C['params']>;
     return {
       $,
-      tx$: rx.payload<TxEvent>($, 'crdt:cmd/tx'),
+      tx$: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
 
       // Lifecycle.
       dispose,

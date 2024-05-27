@@ -1,6 +1,6 @@
-import { DEFAULTS } from './common';
-import { Events, Path } from './u';
 import { create } from './Cmd.impl';
+import { DEFAULTS } from './common';
+import { Events, Patch, Path } from './u';
 
 /**
  * Command event structure on an observable/syncing CRDT.
@@ -9,6 +9,7 @@ import { create } from './Cmd.impl';
 export const Cmd = {
   DEFAULTS,
   Path,
+  Patch,
   Events,
   create,
 } as const;

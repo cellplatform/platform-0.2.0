@@ -1,15 +1,19 @@
 import { ObjectPath, type t } from './common';
 import { Events, Path } from './u';
 
+type Options = { paths?: t.CmdPaths };
+type OptionsInput = Options | t.CmdPaths;
+
 /**
  * Command factory.
  */
-export function create<C extends t.CmdTx>(
+export function create<C extends t.CmdType>(
   doc: t.DocRef | t.Lens,
-  options: { paths?: t.CmdPaths } = {},
+  options?: OptionsInput,
 ): t.Cmd<C> {
+  const args = wrangle.options(options);
   const mutate = ObjectPath.mutate;
-  const resolve = Path.resolver(options.paths);
+  const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
 
   /**
@@ -30,3 +34,14 @@ export function create<C extends t.CmdTx>(
   } as const;
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  options(input?: OptionsInput): Options {
+    if (!input) return {};
+    if (Path.isCmdPaths(input)) return { paths: input };
+    return input;
+  },
+} as const;

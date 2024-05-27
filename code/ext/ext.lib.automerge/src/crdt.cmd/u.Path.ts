@@ -7,6 +7,12 @@ type O = Record<string, unknown>;
  * Helpers for resolving and mutating paths.
  */
 export const Path = {
+  isCmdPaths(input: any): input is t.CmdPaths {
+    if (input === null || typeof input !== 'object') return false;
+    const obj = input as t.CmdPaths;
+    return isStringArray(obj.counter) && isStringArray(obj.name) && isStringArray(obj.params);
+  },
+
   /**
    * Factory for a resolver that reads path locations from the given abstract document.
    * This might be the root document OR a lens within a document.
@@ -32,10 +38,12 @@ export const Path = {
         return get()!;
       },
 
-      toObject<N extends S = S, P extends O = O>(
+      toObject<C extends t.CmdType>(
         d: O,
-        options: { defaultParams?: P } = {},
-      ): t.CmdLensObject<N, P> {
+        options: { defaultParams?: C['params'] } = {},
+      ): t.CmdObject<C> {
+        type N = C['name'];
+        type P = C['params'];
         return {
           name: api.name<N>(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
@@ -46,3 +54,10 @@ export const Path = {
     return api;
   },
 } as const;
+
+/**
+ * Helpers
+ */
+function isStringArray(input: any): input is string[] {
+  return Array.isArray(input) && input.every((value) => typeof value === 'string');
+}
