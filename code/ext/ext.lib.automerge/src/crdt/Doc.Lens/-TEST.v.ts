@@ -34,6 +34,18 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 0 });
     });
 
+    it('Doc.lens ← created from root AND/OR lens', async () => {
+      const root = await setup();
+      const lens1 = Doc.lens<TRoot, TChild>(root, path);
+      const lens2 = Doc.lens<TChild, TChild>(lens1, path, (d) => (d.child = { count: -1 }));
+      expect(root.current).to.eql({ child: { count: 0, child: { count: -1 } } });
+
+      lens2.change((d) => (d.count = 123));
+      expect(lens2.current).to.eql({ count: 123 });
+      expect(lens1.current).to.eql({ count: 0, child: { count: 123 } });
+      expect(root.current).to.eql({ child: { count: 0, child: { count: 123 } } });
+    });
+
     it('{ typename } option ← optional typename', async () => {
       const root = await setup();
       const typename = 'foo.bar';
