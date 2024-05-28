@@ -157,10 +157,35 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    it('invoke → response', async () => {
-      const { doc, dispose, dispose$ } = await testSetup();
+    describe('call → response', () => {
+      type P = { a: number; b: number };
+      type R = { sum: number };
+      type C = C1 | C2;
+      type C1 = t.CmdType<'add', P>;
+      type C2 = t.CmdType<'add:res', R>;
 
-      dispose();
+      it('manual example (primitive)', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
+
+        const sum = (params: P): R => ({ sum: params.a + params.b });
+        const responses: t.CmdTx<C2>[] = [];
+        events.tx.name('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
+        events.tx.name('add:res').subscribe((e) => responses.push(e));
+
+        cmd.invoke('add', { a: 2, b: 3 });
+        expect(responses[0].params.sum).to.eql(5);
+
+        dispose();
+      });
+
+      it.skip('handler → cmd.invoke.response<R>', async () => {
+        /**
+         * TODO 🐷
+         */
+      });
     });
   });
 
