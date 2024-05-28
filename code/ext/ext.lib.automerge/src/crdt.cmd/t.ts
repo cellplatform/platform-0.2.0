@@ -4,15 +4,19 @@ type O = Record<string, unknown>;
 type S = string;
 
 export type Cmd<C extends CmdType> = {
-  invoke<T extends C['name']>(name: T, params: Extract<C, { name: T }>['params']): void;
-  events(dispose$?: t.UntilObservable): CmdEvents<C>;
+  readonly invoke: CmdInvoke<C>;
+  readonly events: CmdEventsFactory<C>;
 };
+
+export type CmdInvoke<C extends CmdType> = <T extends C['name']>(
+  name: T,
+  params: Extract<C, { name: T }>['params'],
+) => void;
 
 /**
  * Named definition of a command.
  */
 export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
-export type CmdCounter = { readonly value: number };
 
 /**
  * Abstract resolver paths to the location of
@@ -32,6 +36,7 @@ export type CmdLens<C extends CmdType = CmdType> = {
   params?: C['params'];
   counter?: CmdCounter;
 };
+export type CmdCounter = { readonly value: number };
 
 /**
  * A fully resolved document object for a <CmdLens>.
@@ -45,13 +50,14 @@ export type CmdObject<C extends CmdType> = {
 /**
  * EVENTS
  */
+export type CmdEventsFactory<C extends CmdType> = (dispose$?: t.UntilObservable) => CmdEvents<C>;
 export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly tx$: t.Observable<CmdTx<C>>;
 };
 
 /**
- * EventType union rollup.
+ * Event types union rollup.
  */
 export type CmdEvent = CmdTxEvent;
 

@@ -41,7 +41,7 @@ export function create<C extends t.CmdType>(
 const wrangle = {
   options(input?: OptionsInput): Options {
     if (!input) return {};
-    if (Path.isCmdPaths(input)) return { paths: input };
+    if (Path.is.commandPaths(input)) return { paths: input };
     return input;
   },
 } as const;
