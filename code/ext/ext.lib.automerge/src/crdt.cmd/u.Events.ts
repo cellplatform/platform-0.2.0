@@ -1,5 +1,5 @@
 import { rx, type t } from './common';
-import { EventsIs } from './u.Events.Is';
+import { Is } from './u.Is';
 import { Path } from './u.Path';
 
 type Options = {
@@ -12,8 +12,6 @@ type Options = {
  * paths within it representing a <Cmd> (Command).
  */
 export const Events = {
-  Is: EventsIs,
-
   /**
    * Events factory.
    */
@@ -40,7 +38,7 @@ export const Events = {
 
       // Tx (Command) ⚡️.
       $.pipe(
-        filter((e) => EventsIs.countChange(paths, e.patches)),
+        filter((e) => Is.event.countChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
         const { count, name, params } = e.doc;

@@ -1,5 +1,5 @@
-import { ObjectPath, type t } from './common';
-import { Events, Path } from './u';
+import { A, ObjectPath, type t } from './common';
+import { Is, Events, Path } from './u';
 
 type Options = { paths?: t.CmdPaths };
 type OptionsInput = Options | t.CmdPaths;
@@ -11,10 +11,19 @@ export function create<C extends t.CmdType>(
   doc: t.DocRef | t.Lens,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  const args = wrangle.options(options);
   const mutate = ObjectPath.mutate;
+  const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
+
+  // Ensure document is initialized with the {cmd} structure.
+  if (!Is.initialized(doc.current)) {
+    doc.change((d) => {
+      mutate(d, paths.name, '');
+      mutate(d, paths.params, {});
+      resolve.counter(d) as t.A.Counter;
+    });
+  }
 
   /**
    * API
