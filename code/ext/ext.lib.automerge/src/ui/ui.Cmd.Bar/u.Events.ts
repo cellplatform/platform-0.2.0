@@ -63,7 +63,7 @@ export const Events = {
       ).subscribe((e) => fire({ type: 'crdt:cmdbar/Text', payload: { text: e.text } }));
 
       // Tx:(Command)
-      events.cmd.tx$.subscribe((payload) => fire({ type: 'crdt:cmdbar/Tx', payload }));
+      events.cmd.tx.$.subscribe((payload) => fire({ type: 'crdt:cmdbar/Tx', payload }));
     }
 
     /**

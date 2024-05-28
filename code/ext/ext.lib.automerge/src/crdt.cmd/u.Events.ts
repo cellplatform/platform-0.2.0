@@ -53,7 +53,9 @@ export const Events = {
      */
     return {
       $,
-      tx$: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
+      tx: {
+        $: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
+      },
 
       // Lifecycle.
       dispose,

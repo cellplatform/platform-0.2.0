@@ -3,6 +3,10 @@ import { Doc, Store } from '../crdt';
 import { A, describe, expect, it, rx, type t } from '../test';
 
 describe('crdt.cmd (Command)', () => {
+  type C = C1 | C2;
+  type C1 = t.CmdType<'Foo', { foo: number }>;
+  type C2 = t.CmdType<'Bar', { msg?: string }>;
+
   it('Cmd.DEFAULTS', () => {
     expect(Cmd.DEFAULTS).to.eql(DEFAULTS);
     expect(DEFAULTS.counter()).to.instanceOf(A.Counter);
@@ -111,10 +115,6 @@ describe('crdt.cmd (Command)', () => {
   });
 
   describe('Cmd', () => {
-    type C = C1 | C2;
-    type C1 = t.CmdType<'Foo', { foo: number }>;
-    type C2 = t.CmdType<'Bar', { msg?: string }>;
-
     it('create ← {paths} param variants', async () => {
       const { factory, dispose } = await testSetup();
       const paths: t.CmdPaths = { name: ['a'], params: ['x', 'p'], counter: ['x', 'tx'] };
@@ -138,134 +138,15 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    describe('Cmd.Events', () => {
-      describe('lifecycle', () => {
-        it('Cmd.Events.create → dispose', () => {
-          const life = rx.disposable();
-          const { dispose$ } = life;
-          const events1 = Cmd.Events.create(undefined, {});
-          const events2 = Cmd.Events.create(undefined, { dispose$ });
-          expect(events1.disposed).to.eql(false);
-          expect(events2.disposed).to.eql(false);
-
-          events1.dispose();
-          life.dispose();
-          expect(events1.disposed).to.eql(true);
-          expect(events2.disposed).to.eql(true);
-        });
-
-        it('cmd.events() → dispose', async () => {
-          const { doc, dispose } = await testSetup();
-          const life = rx.disposable();
-
-          const cmd = Cmd.create<C>(doc);
-          const events1 = cmd.events();
-          const events2 = cmd.events(life.dispose$);
-          expect(events1.disposed).to.eql(false);
-          expect(events2.disposed).to.eql(false);
-
-          events1.dispose();
-          expect(events1.disposed).to.eql(true);
-          expect(events2.disposed).to.eql(false);
-
-          life.dispose();
-          expect(events1.disposed).to.eql(true);
-          expect(events2.disposed).to.eql(true);
-
-          dispose();
-        });
-      });
-
-      const tx: t.CmdBarTxEvent['type'] = 'crdt:cmdbar/Tx';
-      describe(`event: "${tx}"`, () => {
-        it('⚡️tx ← on root {doc}', async () => {
-          const { doc, dispose, dispose$ } = await testSetup();
-          const cmd1 = Cmd.create<C>(doc);
-          const cmd2 = Cmd.create<C2>(doc);
-          const events = cmd1.events(dispose$);
-
-          const fired: t.CmdEvent[] = [];
-          const firedTx: t.CmdTx[] = [];
-          events.$.subscribe((e) => fired.push(e));
-          events.tx$.subscribe((e) => firedTx.push(e));
-
-          cmd1.invoke('Foo', { foo: 0 });
-          cmd1.invoke('Bar', {});
-          cmd2.invoke('Bar', { msg: 'hello' }); // NB: narrow type scoped at creation (no "Foo" command).
-
-          expect(fired.length).to.eql(3);
-          expect(firedTx.length).to.eql(3);
-          expect(fired.map((e) => e.payload)).to.eql(firedTx);
-
-          const counts = firedTx.map((e) => e.count);
-          expect(counts).to.eql([1, 2, 3]);
-          expect(firedTx.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
-
-          expect(firedTx[0].params).to.eql({ foo: 0 });
-          expect(firedTx[1].params).to.eql({});
-          expect(firedTx[2].params).to.eql({ msg: 'hello' });
-
-          expect(doc.current).to.eql({
-            name: 'Bar',
-            params: { msg: 'hello' },
-            counter: { value: counts[2] },
-          });
-          dispose();
-        });
-
-        it('⚡️tx ← on lens', async () => {
-          const { doc, dispose, dispose$ } = await testSetup();
-          const lens = Doc.lens(doc, ['foo'], (d) => (d.foo = {}));
-          expect(doc.current).to.eql({ foo: {} });
-
-          const cmd = Cmd.create<C>(lens);
-          const fired: t.CmdTx[] = [];
-          cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
-          cmd.invoke('Bar', { msg: 'hello' });
-          expect(fired.length).to.eql(1);
-
-          expect(doc.current).to.eql({
-            foo: {
-              name: 'Bar',
-              params: { msg: 'hello' },
-              counter: { value: fired[0].count },
-            },
-          });
-          dispose();
-        });
-
-        it('⚡️tx ← custom paths', async () => {
-          const { doc, dispose, dispose$ } = await testSetup();
-
-          const paths: t.CmdPaths = {
-            name: ['a'],
-            params: ['x', 'y', 'p'],
-            counter: ['z', 'tx'],
-          };
-
-          const p = { msg: 'hello' };
-          const cmd = Cmd.create<C>(doc, { paths });
-          const fired: t.CmdTx[] = [];
-          cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
-          cmd.invoke('Bar', p);
-          expect(fired.length).to.eql(1);
-
-          const count = fired[0].count;
-          expect(doc.current).to.eql({ z: { tx: { value: count } }, a: 'Bar', x: { y: { p } } });
-          dispose();
-        });
-      });
-    });
-
     const length = 1000;
-    it(`rapid number of invocations (${length}x)`, async () => {
+    it(`${length}x invocations - order retained`, async () => {
       const { doc, dispose, dispose$ } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
       const fired: t.CmdTx<C1>[] = [];
       cmd
         .events(dispose$)
-        .tx$.pipe(rx.map((e) => e as t.CmdTx<C1>))
+        .tx.$.pipe(rx.map((e) => e as t.CmdTx<C1>))
         .subscribe((e) => fired.push(e));
 
       Array.from({ length }).forEach((_, i) => cmd.invoke('Foo', { foo: i + 1 }));
@@ -274,6 +155,131 @@ describe('crdt.cmd (Command)', () => {
       expect(fired.map((e) => e.count)).to.eql(Array.from({ length }, (_, i) => i + 1));
 
       dispose();
+    });
+
+    it('invoke → response', async () => {
+      const { doc, dispose, dispose$ } = await testSetup();
+
+      dispose();
+    });
+  });
+
+  describe('Cmd.Events', () => {
+    describe('lifecycle', () => {
+      it('Cmd.Events.create → dispose', () => {
+        const life = rx.disposable();
+        const { dispose$ } = life;
+        const events1 = Cmd.Events.create(undefined, {});
+        const events2 = Cmd.Events.create(undefined, { dispose$ });
+        expect(events1.disposed).to.eql(false);
+        expect(events2.disposed).to.eql(false);
+
+        events1.dispose();
+        life.dispose();
+        expect(events1.disposed).to.eql(true);
+        expect(events2.disposed).to.eql(true);
+      });
+
+      it('cmd.events() → dispose', async () => {
+        const { doc, dispose } = await testSetup();
+        const life = rx.disposable();
+
+        const cmd = Cmd.create<C>(doc);
+        const events1 = cmd.events();
+        const events2 = cmd.events(life.dispose$);
+        expect(events1.disposed).to.eql(false);
+        expect(events2.disposed).to.eql(false);
+
+        events1.dispose();
+        expect(events1.disposed).to.eql(true);
+        expect(events2.disposed).to.eql(false);
+
+        life.dispose();
+        expect(events1.disposed).to.eql(true);
+        expect(events2.disposed).to.eql(true);
+
+        dispose();
+      });
+    });
+
+    const tx: t.CmdBarTxEvent['type'] = 'crdt:cmdbar/Tx';
+    describe(`event: "${tx}"`, () => {
+      it('⚡️tx ← on root {doc}', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd1 = Cmd.create<C>(doc);
+        const cmd2 = Cmd.create<C2>(doc);
+        const events = cmd1.events(dispose$);
+
+        const fired: t.CmdEvent[] = [];
+        const firedTx: t.CmdTx[] = [];
+        events.$.subscribe((e) => fired.push(e));
+        events.tx.$.subscribe((e) => firedTx.push(e));
+
+        cmd1.invoke('Foo', { foo: 0 });
+        cmd1.invoke('Bar', {});
+        cmd2.invoke('Bar', { msg: 'hello' }); // NB: narrow type scoped at creation (no "Foo" command).
+
+        expect(fired.length).to.eql(3);
+        expect(firedTx.length).to.eql(3);
+        expect(fired.map((e) => e.payload)).to.eql(firedTx);
+
+        const counts = firedTx.map((e) => e.count);
+        expect(counts).to.eql([1, 2, 3]);
+        expect(firedTx.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
+
+        expect(firedTx[0].params).to.eql({ foo: 0 });
+        expect(firedTx[1].params).to.eql({});
+        expect(firedTx[2].params).to.eql({ msg: 'hello' });
+
+        expect(doc.current).to.eql({
+          name: 'Bar',
+          params: { msg: 'hello' },
+          counter: { value: counts[2] },
+        });
+        dispose();
+      });
+
+      it('⚡️tx ← on lens', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const lens = Doc.lens(doc, ['foo'], (d) => (d.foo = {}));
+        expect(doc.current).to.eql({ foo: {} });
+
+        const cmd = Cmd.create<C>(lens);
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
+        cmd.invoke('Bar', { msg: 'hello' });
+        expect(fired.length).to.eql(1);
+
+        expect(doc.current).to.eql({
+          foo: {
+            name: 'Bar',
+            params: { msg: 'hello' },
+            counter: { value: fired[0].count },
+          },
+        });
+        dispose();
+      });
+
+      it('⚡️tx ← custom paths', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+
+        const paths: t.CmdPaths = {
+          name: ['a'],
+          params: ['x', 'y', 'p'],
+          counter: ['z', 'tx'],
+        };
+
+        const p = { msg: 'hello' };
+        const cmd = Cmd.create<C>(doc, { paths });
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
+        cmd.invoke('Bar', p);
+        expect(fired.length).to.eql(1);
+
+        const count = fired[0].count;
+        expect(doc.current).to.eql({ z: { tx: { value: count } }, a: 'Bar', x: { y: { p } } });
+        dispose();
+      });
     });
   });
 });
