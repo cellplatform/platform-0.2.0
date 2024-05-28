@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
 export const Path = {
   /**
    * Factory for a resolver that reads path locations from the given abstract document.
-   * This might be the root of a lens within a document.
+   * This might be the [root] of a document, or a [lens] into it.
    */
   resolver(paths: t.CmdBarPaths = DEFAULTS.paths) {
     const resolve = ObjectPath.resolve;
