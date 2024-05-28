@@ -76,7 +76,7 @@ export default Dev.describe(name, async (e) => {
             <CmdBar
               {...props}
               doc={debug.useLens ? lens : doc}
-              onTextChanged={(e) => console.info(`⚡️ onTextChanged:`, e)}
+              onText={(e) => console.info(`⚡️ onText:`, e)}
               onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
               onInvoked={(e) => console.info(`⚡️ onInvoked:`, e)}
             />

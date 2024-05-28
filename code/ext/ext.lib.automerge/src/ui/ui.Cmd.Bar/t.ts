@@ -15,7 +15,7 @@ export type CmdBarProps = {
 } & CmdBarHandlers;
 
 export type CmdBarHandlers = {
-  onTextChanged?: CmdBarTextHandler;
+  onText?: CmdBarTextHandler;
   onCommand?: CmdBarTxHandler;
   onInvoked?: CmdBarTxHandler;
 };
