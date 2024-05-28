@@ -11,20 +11,6 @@ describe('crdt.cmd (Command)', () => {
   describe('Cmd.Path', () => {
     const Path = Cmd.Path;
 
-    it('Path.isPaths', () => {
-      const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
-      NOT.forEach((value) => expect(Path.isCmdPaths(value)).to.eql(false));
-      expect(Path.isCmdPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
-      expect(Path.isCmdPaths(DEFAULTS.paths)).to.eql(true);
-      expect(
-        Path.isCmdPaths({
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          counter: ['z', 'tx'],
-        }),
-      ).to.eql(true);
-    });
-
     describe('Path.resolver', () => {
       type P = { foo: number };
       type C = t.CmdType<'Foo', P>;
@@ -81,6 +67,45 @@ describe('crdt.cmd (Command)', () => {
         const obj2: t.CmdLens<C> = { counter };
         expect(resolve.counter(obj1).value).to.eql(0);
         expect(resolve.counter(obj2).value).to.eql(10);
+      });
+    });
+
+    describe('Path.prepend', () => {
+      it('defaults', () => {
+        const res = Path.prepend(DEFAULTS.paths, ['foo', 'bar']);
+        expect(res).to.eql({
+          name: ['foo', 'bar', 'name'],
+          params: ['foo', 'bar', 'params'],
+          counter: ['foo', 'bar', 'counter'],
+        });
+      });
+
+      it('custom', () => {
+        const input: t.CmdPaths = { name: ['a'], params: ['x', 'y', 'p'], counter: ['z', 'tx'] };
+        const res = Path.prepend(input, ['foo']);
+        expect(res).to.eql({
+          name: ['foo', 'a'],
+          params: ['foo', 'x', 'y', 'p'],
+          counter: ['foo', 'z', 'tx'],
+        });
+      });
+    });
+
+    describe('Path.is', () => {
+      it('is.stringArray', () => {});
+
+      it('is.commandPaths', () => {
+        const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
+        NOT.forEach((value) => expect(Path.is.commandPaths(value)).to.eql(false));
+        expect(Path.is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
+        expect(Path.is.commandPaths(DEFAULTS.paths)).to.eql(true);
+        expect(
+          Path.is.commandPaths({
+            name: ['a'],
+            params: ['x', 'y', 'p'],
+            counter: ['z', 'tx'],
+          }),
+        ).to.eql(true);
       });
     });
   });
@@ -151,8 +176,8 @@ describe('crdt.cmd (Command)', () => {
         });
       });
 
-      const typenameTx: t.CmdBarTxEvent__['type'] = 'crdt:cmdbar/Tx';
-      describe(`event: "${typenameTx}"`, () => {
+      const tx: t.CmdBarTxEvent['type'] = 'crdt:cmdbar/Tx';
+      describe(`event: "${tx}"`, () => {
         it('⚡️tx ← on root {doc}', async () => {
           const { doc, dispose, dispose$ } = await testSetup();
           const cmd1 = Cmd.create<C>(doc);

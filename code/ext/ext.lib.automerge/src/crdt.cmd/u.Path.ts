@@ -7,12 +7,6 @@ type O = Record<string, unknown>;
  * Helpers for resolving and mutating paths.
  */
 export const Path = {
-  isCmdPaths(input: any): input is t.CmdPaths {
-    if (input === null || typeof input !== 'object') return false;
-    const obj = input as t.CmdPaths;
-    return isStringArray(obj.counter) && isStringArray(obj.name) && isStringArray(obj.params);
-  },
-
   /**
    * Factory for a resolver that reads path locations from the given abstract document.
    * This might be the root document OR a lens within a document.
@@ -53,11 +47,31 @@ export const Path = {
     } as const;
     return api;
   },
-} as const;
 
-/**
- * Helpers
- */
-function isStringArray(input: any): input is string[] {
-  return Array.isArray(input) && input.every((value) => typeof value === 'string');
-}
+  /**
+   * Prepend a path to each item within a <CmdPaths> set.
+   */
+  prepend(input: t.CmdPaths, prefix: t.ObjectPath): t.CmdPaths {
+    return {
+      name: [...prefix, ...input.name],
+      params: [...prefix, ...input.params],
+      counter: [...prefix, ...input.counter],
+    };
+  },
+
+  /**
+   * Flags
+   */
+  is: {
+    commandPaths(input: any): input is t.CmdPaths {
+      if (input === null || typeof input !== 'object') return false;
+      const obj = input as t.CmdPaths;
+      const is = Path.is.stringArray;
+      return is(obj.counter) && is(obj.name) && is(obj.params);
+    },
+
+    stringArray(input: any): input is string[] {
+      return Array.isArray(input) && input.every((value) => typeof value === 'string');
+    },
+  },
+} as const;
