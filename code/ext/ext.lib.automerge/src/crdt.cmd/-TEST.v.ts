@@ -146,7 +146,7 @@ describe('crdt.cmd (Command)', () => {
       const fired: t.CmdTx<C1>[] = [];
       cmd
         .events(dispose$)
-        .tx.$.pipe(rx.map((e) => e as t.CmdTx<C1>))
+        .tx.name('Foo')
         .subscribe((e) => fired.push(e));
 
       Array.from({ length }).forEach((_, i) => cmd.invoke('Foo', { foo: i + 1 }));
@@ -278,6 +278,24 @@ describe('crdt.cmd (Command)', () => {
 
         const count = fired[0].count;
         expect(doc.current).to.eql({ z: { tx: { value: count } }, a: 'Bar', x: { y: { p } } });
+        dispose();
+      });
+
+      it('⚡️tx.filter<T>( ... ) ', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
+
+        const fired: t.CmdTx[] = [];
+        events.tx.name('Foo').subscribe((e) => fired.push(e));
+
+        cmd.invoke('Foo', { foo: 0 });
+        cmd.invoke('Bar', {}); // NB: filtered out.
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0].name).to.eql('Foo');
+        expect(fired[0].params).to.eql({ foo: 0 });
+
         dispose();
       });
     });

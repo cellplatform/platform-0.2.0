@@ -17,6 +17,9 @@ export type CmdInvoke<C extends CmdType> = <T extends C['name']>(
  * Named definition of a command.
  */
 export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
+export type CmdTypeMap<C extends CmdType> = {
+  [K in C['name']]: C extends CmdType<K, infer P> ? CmdType<K, P> : never;
+};
 
 /**
  * Abstract resolver paths to the location of
@@ -55,6 +58,7 @@ export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly tx: {
     readonly $: t.Observable<CmdTx<C>>;
+    name<N extends C['name']>(name: N): t.Observable<CmdTx<CmdTypeMap<C>[N]>>;
   };
 };
 

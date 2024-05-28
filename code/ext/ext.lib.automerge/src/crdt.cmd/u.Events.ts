@@ -51,11 +51,17 @@ export const Events = {
     /**
      * API
      */
-    return {
-      $,
-      tx: {
-        $: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
+    const tx: t.CmdEvents<C>['tx'] = {
+      $: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
+      name<N extends C['name']>(name: N) {
+        type T = t.CmdTx<t.CmdTypeMap<C>[N]>;
+        return tx.$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
       },
+    };
+
+    const api: t.CmdEvents<C> = {
+      $,
+      tx,
 
       // Lifecycle.
       dispose,
@@ -64,5 +70,6 @@ export const Events = {
         return life.disposed;
       },
     };
+    return api;
   },
 } as const;
