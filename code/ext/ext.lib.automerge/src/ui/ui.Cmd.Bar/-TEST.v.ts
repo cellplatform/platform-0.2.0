@@ -1,6 +1,7 @@
 import { CmdBar, DEFAULTS } from '.';
+import { Store } from '../../crdt';
 import { A, describe, expect, it, type t } from '../../test';
-import { Tx } from './u';
+import { Cmd } from './common';
 
 describe('Cmd.Bar', () => {
   describe('Path (resolver)', () => {
@@ -8,82 +9,106 @@ describe('Cmd.Bar', () => {
 
     it('default paths', () => {
       const resolve = resolver(DEFAULTS.paths);
-      const tx = 'tx.123';
-      const obj: t.CmdBarLens = { text: 'hello', tx };
+      const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foobar' };
+      const obj: t.CmdBarLens = {
+        text: 'hello',
+        cmd: { counter: new A.Counter(3), name: 'Invoke', params },
+      };
       expect(resolve.text(obj)).to.eql('hello');
-      expect(resolve.tx(obj)).to.eql(tx);
-      expect(resolve.doc(obj)).to.eql({ text: 'hello', tx });
+      expect(resolve.toObject(obj)).to.eql({
+        text: 'hello',
+        cmd: { name: 'Invoke', params, count: 3 },
+      });
     });
 
     it('custom paths', () => {
-      const resolve = resolver({
+      const paths: t.CmdBarPaths = {
         text: ['x', 'y', 'text'],
-        tx: ['x', 'tx'],
-      });
-      const tx = 'tx.123';
-      const obj = {
-        foo: { selected: 'abc', uri: 'def' },
-        x: { y: { text: 'hello' }, tx },
-        z: { foobar: new A.Counter() },
+        cmd: { counter: ['z', 'foobar'], name: ['x', 'n'], params: ['z', 'p'] },
       };
-      expect(resolve.text(obj)).to.eql('hello');
-      expect(resolve.tx(obj)).to.eql(tx);
-      expect(resolve.doc(obj)).to.eql({ text: 'hello', tx });
+      const resolve = resolver(paths);
+      const params = { msg: 'hello' };
+      const doc = {
+        x: { y: { text: 'hello' }, n: 'invoke' },
+        z: { foobar: new A.Counter(123), p: params },
+      };
+      expect(resolve.text(doc)).to.eql('hello');
+
+      const obj = resolve.toObject(doc);
+      expect(obj.text).to.eql('hello');
+      expect(obj.cmd).to.eql({ name: 'invoke', params, count: 123 });
     });
   });
 
-  describe('Tx', () => {
-    it('next (generate)', () => {
-      const instance = 'foo';
-      const res1 = Tx.next(instance, 'Invoke');
-      const res2 = Tx.next(`  ${instance}  `, 'Invoke');
-      const res3 = Tx.next('', 'Invoke');
-      expect(res1.includes(`:inst.${instance}`)).to.eql(true);
-      expect(res1.includes('tx.')).to.eql(true);
-      expect(res1.includes('cmd.Invoke')).to.eql(true);
+  describe('CmdBar.Events', () => {
+    describe('lifecycle', () => {
+      it('create', async () => {
+        const { doc, dispose } = await testSetup();
+        const events1 = CmdBar.events({ doc });
+        const events2 = CmdBar.events({ instance: 'foo', doc });
+        expect(events1.instance).to.eql('');
+        expect(events2.instance).to.eql('foo');
+        dispose();
+      });
 
-      expect(res2.includes(`:inst.${instance}`)).to.eql(true);
-      expect(res3.includes(`:inst.unknown`)).to.eql(true);
+      it('dispose', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const events1 = CmdBar.events({ doc });
+        const events2 = CmdBar.events({ doc, dispose$ });
+
+        expect(events1.disposed).to.eql(false);
+        expect(events2.disposed).to.eql(false);
+
+        events1.dispose();
+        dispose();
+        expect(events1.disposed).to.eql(true);
+        expect(events2.disposed).to.eql(true);
+      });
     });
 
-    it('next: throw invalid "instance"', () => {
-      const fn = () => Tx.next('foo:bar', 'Invoke');
-      expect(fn).to.throw(/instance cannot contain colon/);
-    });
+    describe('fires', () => {
+      it('⚡️TextChanged', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const events = CmdBar.events({ doc, dispose$ });
 
-    it('next: throw invalid action type', () => {
-      const fn = () => Tx.next('foo', 'WRONG' as any);
-      expect(fn).to.throw(/invalid action type/);
-    });
+        const fired: t.CmdBarText[] = [];
+        events.text$.subscribe((e) => fired.push(e));
 
-    it('parse', () => {
-      const tx = '  tx.123:inst.foo:cmd.Invoke  ';
-      const res = Tx.parse(tx);
-      expect(res.ok).to.eql(true);
-      expect(res.tx).to.eql('123');
-      expect(res.instance).to.eql('foo');
-      expect(res.cmd).to.eql('Invoke');
-      expect(res.raw).to.eql(tx);
-    });
+        doc.change((d) => (d.text = 'hello'));
+        expect(fired.length).to.eql(1);
+        expect(fired[0].text).to.eql('hello');
 
-    it('parse: invalid', () => {
-      const test = (tx: string, error: string) => {
-        const res = Tx.parse(tx);
-        expect(res.ok).to.eql(false);
-        expect(res.tx).to.eql('');
-        expect(res.instance).to.eql('');
-        expect(res.cmd).to.eql(undefined);
-        expect(res.raw).to.eql(tx);
-        expect(res.error?.includes(error)).to.eql(true, error);
-      };
-      test('', 'No input');
-      test('  ', 'No input');
-      test('foobar', 'No "tx:"');
-      test(' tx.123:inst.:cmd.Invoke ', 'No "inst:"');
-      test(' tx.:inst.foo:cmd.Invoke ', 'No "tx:"');
-      test(' tx.123:inst.foo: ', 'No "cmd:"');
-      test(' tx.123:inst.foo:cmd. ', 'No "cmd:"');
-      test(' tx.123:inst.foo:cmd.FAIL ', 'Invalid cmd action: "FAIL"');
+        dispose();
+      });
+
+      it('⚡️Invoked', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const events = CmdBar.events({ doc, dispose$ });
+        const cmd = CmdBar.cmd(doc);
+
+        const fired: t.CmdBarTx[] = [];
+        events.cmd.$.subscribe((e) => fired.push(e));
+
+        const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foo' };
+        cmd.invoke('Invoke', params);
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0].name).to.eql('Invoke');
+        expect(fired[0].params).to.eql(params);
+
+        dispose();
+      });
     });
   });
 });
+
+/**
+ * Helpers
+ */
+async function testSetup() {
+  const store = Store.init();
+  const { dispose$ } = store;
+  const doc = await store.doc.getOrCreate<t.CmdBarLens>((d) => d);
+  const dispose = () => store.dispose();
+  return { store, doc, dispose, dispose$ } as const;
+}

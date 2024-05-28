@@ -1,11 +1,12 @@
-import { DEFAULTS, rx, type t } from './common';
-import { Path, Tx } from './u';
-import { EventsIs as Is } from './u.Events.Is';
+import { Cmd, DEFAULTS, rx, type t } from './common';
+import { Path } from './u';
+import { EventsIs } from './u.Events.Is';
 
 type Args = {
-  instance: string;
+  instance?: string;
   doc?: t.Lens | t.DocRef;
   paths?: t.CmdBarPaths;
+  dispose$?: t.UntilObservable;
 };
 
 /**
@@ -13,17 +14,24 @@ type Args = {
  * paths within it representing a <CmdBar>.
  */
 export const Events = {
-  Is,
+  Is: EventsIs,
+
+  /**
+   * <Cmd> object factory for the given document.
+   */
+  cmd(doc: t.Lens | t.DocRef, paths: t.CmdBarPaths = DEFAULTS.paths) {
+    return Cmd.create<t.CmdBarType>(doc, paths.cmd);
+  },
 
   /**
    * Events factory.
    */
   create(args: Args): t.CmdBarEvents {
     const { distinctWhile, filter, map } = rx;
-    const { instance, paths = DEFAULTS.paths } = args;
+    const { instance = '', paths = DEFAULTS.paths } = args;
     const resolve = Path.resolver(paths);
 
-    const life = rx.lifecycle();
+    const life = rx.lifecycle(args.dispose$);
     const { dispose, dispose$ } = life;
 
     /**
@@ -33,49 +41,44 @@ export const Events = {
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const fire = (e: t.CmdBarEvent) => $$.next(e);
 
-    const text$ = rx.payload<t.CmdBarTextChangedEvent>($, 'crdt:cmdbar/TextChanged');
+    const text$ = rx.payload<t.CmdBarTextEvent>($, 'crdt:cmdbar/Text');
     const cmd$ = rx.payload<t.CmdBarTxEvent>($, 'crdt:cmdbar/Tx');
 
+    let cmd: t.CmdBarCmd | undefined;
     if (args.doc) {
-      const events = args.doc.events(dispose$);
-      const $ = events.changed$.pipe(
-        map((e) => ({ patches: e.patches, doc: resolve.doc(e.after) })),
+      cmd = Events.cmd(args.doc, paths);
+      const events = {
+        doc: args.doc.events(dispose$),
+        cmd: cmd.events(dispose$),
+      } as const;
+
+      const $ = events.doc.changed$.pipe(
+        map((e) => ({ patches: e.patches, text: resolve.text(e.after) })),
       );
 
       // Text:Changed
       $.pipe(
         filter((e) => Events.Is.textChange(paths, e.patches)),
-        distinctWhile((p, n) => p.doc.text === n.doc.text),
-      ).subscribe((e) => {
-        const text = e.doc.text;
-        fire({ type: 'crdt:cmdbar/TextChanged', payload: { text } });
-      });
+        distinctWhile((p, n) => p.text === n.text),
+      ).subscribe((e) => fire({ type: 'crdt:cmdbar/Text', payload: { text: e.text } }));
 
       // Tx:(Command)
-      $.pipe(
-        filter((e) => Events.Is.txChange(paths, e.patches)),
-        distinctWhile((p, n) => p.doc.tx === n.doc.tx),
-      ).subscribe((e) => {
-        const text = e.doc.text;
-        const tx = e.doc.tx;
-        const parsed = Tx.parse(tx);
-        if (parsed.ok) {
-          const cmd = parsed.cmd as t.CmdBarAction;
-          const is = { self: parsed.instance === instance };
-          fire({ type: 'crdt:cmdbar/Tx', payload: { tx, text, cmd, is } });
-        }
-      });
+      events.cmd.tx$.subscribe((payload) => fire({ type: 'crdt:cmdbar/Tx', payload }));
     }
 
     /**
      * API
      */
+
     const api: t.CmdBarEvents = {
-      $,
+      instance,
       text$,
       cmd: {
         $: cmd$,
-        invoked$: cmd$.pipe(rx.filter((e) => e.cmd === 'Invoke')),
+        invoked$: cmd$.pipe(
+          rx.filter((e) => e.name === 'Invoke'),
+          rx.map((e) => e as t.CmdBarInvokeTx),
+        ),
       },
 
       // Lifecycle.

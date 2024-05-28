@@ -1,6 +1,10 @@
+import { Cmd } from '../../crdt.cmd';
 import { Pkg, type t } from './common';
 
+export { Doc } from '../../crdt';
 export { Sync } from '../../crdt.sync';
+export { Cmd };
+
 export * from '../common';
 
 /**
@@ -8,13 +12,10 @@ export * from '../common';
  */
 const paths: t.CmdBarPaths = {
   text: ['text'],
-  tx: ['tx'],
+  cmd: Cmd.Path.prepend(Cmd.DEFAULTS.paths, ['cmd']),
 };
-
-const actions: t.CmdBarAction[] = ['Invoke'];
 
 export const DEFAULTS = {
   displayName: `${Pkg.name}.CmdBar`,
   paths,
-  actions,
 } as const;
