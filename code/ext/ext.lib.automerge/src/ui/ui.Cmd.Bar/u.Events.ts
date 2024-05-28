@@ -69,16 +69,12 @@ export const Events = {
     /**
      * API
      */
-
     const api: t.CmdBarEvents = {
       instance,
       text$,
       cmd: {
         $: cmd$,
-        invoked$: cmd$.pipe(
-          rx.filter((e) => e.name === 'Invoke'),
-          rx.map((e) => e as t.CmdBarInvokeTx),
-        ),
+        invoked$: cmd$.pipe(rx.filter((e): e is t.CmdBarInvokeTx => e.name === 'Invoke')),
       },
 
       // Lifecycle.
