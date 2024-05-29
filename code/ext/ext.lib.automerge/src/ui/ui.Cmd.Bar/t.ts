@@ -33,7 +33,7 @@ export type CmdBarPaths = {
  */
 export type CmdBarLens = {
   text?: string;
-  cmd?: t.CmdLens<CmdBarType>;
+  cmd?: t.CmdPathsObject<CmdBarType>;
 };
 
 /**

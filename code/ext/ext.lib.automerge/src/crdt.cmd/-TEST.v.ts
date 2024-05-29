@@ -302,7 +302,7 @@ describe('crdt.cmd (Command)', () => {
         const name = 'foo.bar';
         const params: P = { foo: 0 };
         const tx = 'tx.foo';
-        const obj: t.CmdLens = { name, params, counter, tx };
+        const obj: t.CmdPathsObject = { name, params, counter, tx };
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
         expect(resolve.counter(obj)).to.eql(counter);
@@ -336,8 +336,8 @@ describe('crdt.cmd (Command)', () => {
       it('.params: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
         const params: P = { foo: 0 };
-        const obj1: t.CmdLens<C> = {};
-        const obj2: t.CmdLens<C> = { params: { foo: 123 } };
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { params: { foo: 123 } };
         expect(resolve.params(obj1, params).foo).to.eql(0);
         expect(resolve.params(obj2, params).foo).to.eql(123);
       });
@@ -345,8 +345,8 @@ describe('crdt.cmd (Command)', () => {
       it('.count: generates new object', () => {
         const resolve = resolver(DEFAULTS.paths);
         const counter = DEFAULTS.counter(10);
-        const obj1: t.CmdLens<C> = {};
-        const obj2: t.CmdLens<C> = { counter };
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { counter };
         expect(resolve.counter(obj1).value).to.eql(0);
         expect(resolve.counter(obj2).value).to.eql(10);
       });
@@ -409,7 +409,7 @@ describe('crdt.cmd (Command)', () => {
     });
   });
 
-  describe('Cmd: call → response', () => {
+  describe('Cmd → Response', () => {
     type P = { a: number; b: number };
     type R = { sum: number };
     type C = C1 | C2;
@@ -431,9 +431,20 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    it.skip('handler → cmd.invoke.response<R>', async () => {
-      // cmd.invoke.response<R>
-      // cmd.invoke.listen<R> ← ??
+    it('Response {object}', async () => {
+      const { doc, dispose } = await testSetup();
+      const cmd = Cmd.create<C>(doc);
+
+      const tx = 'tx.foo';
+      const params: P = { a: 1, b: 2 };
+      const res = cmd.invoke('add', params, { tx });
+
+      expect(typeof res === 'object').to.eql(true);
+      expect(res.tx).to.eql(tx);
+      expect(res.cmd.name === 'add').to.be.true;
+      expect(res.cmd.params).to.eql(params);
+
+      dispose();
     });
   });
 });

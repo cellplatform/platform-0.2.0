@@ -3,6 +3,17 @@ import type { t } from './common';
 type O = Record<string, unknown>;
 type S = string;
 
+/**
+ * Named definition of a command.
+ */
+export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
+export type CmdTypeMap<C extends CmdType> = {
+  [K in C['name']]: C extends CmdType<K, infer P> ? CmdType<K, P> : never;
+};
+
+/**
+ * Command API.
+ */
 export type Cmd<C extends CmdType> = {
   readonly invoke: CmdInvokeMethod<C>;
   readonly events: CmdEventsFactory<C>;
@@ -12,14 +23,14 @@ export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
   name: T,
   params: Extract<C, { name: T }>['params'],
   options?: { tx?: string },
-) => void;
+) => CmdResponse<C>;
 
 /**
- * Named definition of a command.
+ * Command Response.
  */
-export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
-export type CmdTypeMap<C extends CmdType> = {
-  [K in C['name']]: C extends CmdType<K, infer P> ? CmdType<K, P> : never;
+export type CmdResponse<C extends CmdType> = {
+  tx: string;
+  cmd: { name: C['name']; params: C['params'] };
 };
 
 /**
@@ -36,7 +47,7 @@ export type CmdPaths = {
 /**
  * The shape of the default <CmdPaths> as an object.
  */
-export type CmdLens<C extends CmdType = CmdType> = {
+export type CmdPathsObject<C extends CmdType = CmdType> = {
   name?: C['name'];
   params?: C['params'];
   counter?: CmdCounter;

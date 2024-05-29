@@ -31,14 +31,16 @@ export function create<C extends t.CmdType>(
    * API
    */
   const api: t.Cmd<C> = {
-    invoke(cmd, params, options = {}) {
+    invoke(name, params, options = {}) {
       const tx = options.tx || txFactory();
       doc.change((d) => {
         (resolve.counter(d) as t.A.Counter).increment(1);
         mutate(d, paths.tx, tx);
-        mutate(d, paths.name, cmd);
+        mutate(d, paths.name, name);
         mutate(d, paths.params, params);
       });
+      const res: t.CmdResponse<C> = { tx, cmd: { name, params } };
+      return res;
     },
 
     events(dispose$?: t.UntilObservable) {
