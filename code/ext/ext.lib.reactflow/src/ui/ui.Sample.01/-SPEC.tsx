@@ -37,7 +37,12 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
-    dev.TODO();
+
+    dev.section('Reference', (dev) => {
+      link.button('reactflow.dev: docs', 'https://reactflow.dev/learn');
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
