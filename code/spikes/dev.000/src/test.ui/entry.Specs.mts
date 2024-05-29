@@ -1,14 +1,7 @@
-/**
- * Vime.js
- * https://vimejs.com/4.x/getting-started/installation#react
- */
 import '@vime/core/themes/default.css';
 import '@vime/core/themes/light.css';
+import 'reactflow/dist/style.css';
 
-/**
- * Tldraw (Whiteboard)
- * https://tldraw.dev
- */
 import type { t } from '../common';
 
 const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
@@ -28,12 +21,14 @@ const { Specs: MediaVideo } = await import('sys.ui.react.media.video/specs');
 
 const { Specs: ExtMonaco } = await import('ext.lib.monaco/specs');
 const { Specs: ExtMonacoCrdt } = await import('ext.lib.monaco.crdt/specs');
+const { Specs: ExtReactflow } = await import('ext.lib.reactflow/specs');
+const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
+
 const { Specs: ExtAutomerge } = await import('ext.lib.automerge/specs');
 const { Specs: ExtAutomergeWebrtc } = await import('ext.lib.automerge.webrtc/specs');
-const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
-const { Specs: ExtVimeo } = await import('ext.lib.vimeo/specs');
-const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
 const { Specs: ExtPeerJs } = await import('ext.lib.peerjs/specs');
+const { Specs: ExtAuthPrivy } = await import('ext.lib.privy/specs');
+const { Specs: ExtStripe } = await import('ext.lib.stripe/specs');
 const { Specs: ExtDeno } = await import('ext.lib.deno/specs');
 
 export const Specs = {
@@ -51,13 +46,13 @@ export const Specs = {
 
   ...ExtMonaco,
   ...ExtMonacoCrdt,
-
-  ...ExtStripe,
+  ...ExtReactflow,
   ...ExtVimeo,
 
-  ...ExtAuthPrivy,
-  ...ExtPeerJs,
   ...ExtAutomerge,
   ...ExtAutomergeWebrtc,
+  ...ExtAuthPrivy,
+  ...ExtPeerJs,
+  ...ExtStripe,
   ...ExtDeno,
 } as t.SpecImports;
