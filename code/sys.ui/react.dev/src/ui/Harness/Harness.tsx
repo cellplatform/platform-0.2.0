@@ -71,7 +71,11 @@ export const Harness: React.FC<t.HarnessProps> = (props) => {
   };
 
   return (
-    <div ref={baseRef} {...css(styles.reset, styles.base, props.style)}>
+    <div
+      data-component={'dev.harness'}
+      ref={baseRef}
+      {...css(styles.reset, styles.base, props.style)}
+    >
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HarnessHost instance={instance} baseRef={hostRef} subjectRef={subjectRef} />
         <DebugPanel instance={instance} baseRef={debugRef} />
