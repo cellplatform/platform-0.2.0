@@ -392,7 +392,7 @@ describe('crdt.cmd (Command)', () => {
           Path.is.commandPaths({
             name: ['a'],
             params: ['x', 'y', 'p'],
-            counter: ['z', 'tx'],
+            counter: ['z', 'n'],
             tx: ['abc', 'tx'],
           }),
         ).to.eql(true);
