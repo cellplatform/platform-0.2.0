@@ -1,4 +1,4 @@
-import { DEFAULTS, ObjectPath, type t, Cmd } from './common';
+import { Cmd, DEFAULTS, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
 

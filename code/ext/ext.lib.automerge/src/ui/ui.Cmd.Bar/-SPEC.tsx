@@ -25,7 +25,12 @@ export default Dev.describe(name, async (e) => {
   let model: t.RepoListModel;
   let listRef: t.RepoListRef;
   let doc: t.DocRef | undefined;
-  let lens: t.Lens | undefined;
+
+  let _lens: t.Lens | undefined;
+  const getLens = () => {
+    if (!_lens) _lens = doc ? Doc.lens(doc, ['mylens'], (d) => (d.mylens = {})) : undefined;
+    return _lens;
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -36,6 +41,7 @@ export default Dev.describe(name, async (e) => {
       d.props.instance = slug();
       d.props.theme = local.theme;
       d.props.focusOnReady = local.focusOnReady;
+      d.props.paths = DEFAULTS.paths;
       d.debug.useLens = local.useLens;
       d.debug.docuri = local.docuri;
     });
@@ -47,7 +53,6 @@ export default Dev.describe(name, async (e) => {
         console.info(`⚡️ onActiveChanged`, e);
         const uri = e.item.uri;
         doc = uri ? await db.store.doc.get(uri) : undefined;
-        lens = doc ? Doc.lens(doc, ['mylens'], (d) => (d.mylens = {})) : undefined;
         state.change((d) => (local.docuri = d.debug.docuri = uri));
       },
     });
@@ -75,7 +80,7 @@ export default Dev.describe(name, async (e) => {
             <div {...styles.instance}>{`instance: ${props.instance || 'unknown'}`}</div>
             <CmdBar
               {...props}
-              doc={debug.useLens ? lens : doc}
+              doc={debug.useLens ? getLens() : doc}
               onText={(e) => console.info(`⚡️ onText:`, e)}
               onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
               onInvoked={(e) => console.info(`⚡️ onInvoked:`, e)}
@@ -89,15 +94,26 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.header.border(-0.1).render((e) => {
-      const ref = state.current.debug.docuri;
+      const { debug, props } = state.current;
       const { store, index } = db;
+      const ref = debug.docuri;
       return (
         <Info
           stateful={true}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: { store, index },
-            document: { ref, object: { visible: true, expand: { level: 3 } } },
+            document: {
+              ref,
+              object: {
+                visible: true,
+                expand: { level: 2 },
+                beforeRender(mutate) {
+                  const resolve = CmdBar.Path.resolver(props.paths);
+                  return resolve.toObject(mutate);
+                },
+              },
+            },
           }}
         />
       );
@@ -143,15 +159,15 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Data', (dev) => {
-      dev.button(['increment: {doc.foo}', 'count + 1'], async (e) => {
-        type T = { count?: number };
-        const doc = await db.docAtIndex<T>(0);
-        doc?.change((d) => (d.count = (d.count ?? 0) + 1));
-      });
-
       dev.button(['reset {doc}', '(reloads) 💥'], (e) => {
         doc?.change((d) => Object.keys(d).forEach((key) => delete d[key]));
         location.reload();
+      });
+      dev.hr(-1, 5);
+      dev.button(['increment: {doc.tmp}', 'tmp + 1'], async (e) => {
+        type T = { tmp?: number };
+        const doc = await db.docAtIndex<T>(0);
+        doc?.change((d) => (d.tmp = (d.tmp ?? 0) + 1));
       });
     });
   });

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, Is, Sync, Time, rx, type t, ObjectPath } from './common';
-import { Events, Path, Tx } from './u';
+import { DEFAULTS, Is, Sync, Time, rx, type t, Cmd } from './common';
+import { Events, Path } from './u';
 
 type Args = {
   instance: string;
@@ -19,11 +19,17 @@ type ReadyRef = 'focus';
  */
 export function useController(args: Args) {
   const { instance, doc, handlers = {}, paths = DEFAULTS.paths } = args;
-  Tx.ensure.validInstance(instance);
 
   const enabled = wrangle.enabled(args);
   const debug = wrangle.debug(args);
   const resolve = Path.resolver(paths);
+
+  const cmdRef = useRef<t.CmdBarCmd>();
+  const getCmd = () => {
+    type C = t.CmdBarType;
+    if (!cmdRef.current) cmdRef.current = doc ? Cmd.create<C>(doc, paths.cmd) : undefined;
+    return cmdRef.current;
+  };
 
   const readyRef = useRef<ReadyRef[]>([]);
   const ready = readyRef.current;
@@ -50,7 +56,7 @@ export function useController(args: Args) {
    */
   useEffect(() => {
     const events = Events.create({ instance, doc, paths });
-    events.text$.subscribe((e) => handlers.onTextChanged?.(e));
+    events.text$.subscribe((e) => handlers.onText?.(e));
     events.cmd.$.subscribe((e) => handlers.onCommand?.(e));
     events.cmd.invoked$.subscribe((e) => handlers.onInvoked?.(e));
     return events.dispose;
@@ -83,11 +89,8 @@ export function useController(args: Args) {
       setText(text);
       if (textbox && typeof pos === 'number') Time.delay(0, () => textbox?.select(pos));
     },
-    onInvoke() {
-      doc?.change((d) => {
-        const tx = Tx.next(instance, 'Invoke');
-        ObjectPath.mutate(d, paths.tx, tx);
-      });
+    onEnter() {
+      getCmd()?.invoke('Invoke', { text, action: 'Enter' });
     },
   } as const;
   return api;

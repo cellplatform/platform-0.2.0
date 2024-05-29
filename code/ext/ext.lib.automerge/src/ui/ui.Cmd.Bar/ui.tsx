@@ -26,7 +26,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       onReady={(e) => controller.onReady(e.ref)}
       onChange={(e) => controller.onChange(e.to)}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') controller.onInvoke();
+        if (e.key === 'Enter') controller.onEnter();
       }}
     />
   );
