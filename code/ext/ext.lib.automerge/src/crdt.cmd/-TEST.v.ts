@@ -62,7 +62,7 @@ describe('crdt.cmd (Command)', () => {
       const fired: t.CmdInvoked<C1>[] = [];
       cmd
         .events(dispose$)
-        .tx.name('Foo')
+        .name('Foo')
         .subscribe((e) => fired.push(e));
 
       Array.from({ length }).forEach((_, i) => cmd.invoke('Foo', { foo: i + 1 }));
@@ -197,7 +197,7 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd.events(dispose$);
 
         const fired: t.CmdInvoked[] = [];
-        events.tx.name('Foo').subscribe((e) => fired.push(e));
+        events.name('Foo').subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
         cmd.invoke('Bar', {}); // NB: filtered out.
@@ -336,8 +336,8 @@ describe('crdt.cmd (Command)', () => {
 
       const sum = (params: P): R => ({ sum: params.a + params.b });
       const responses: t.CmdInvoked<C2>[] = [];
-      events.tx.name('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
-      events.tx.name('add:res').subscribe((e) => responses.push(e));
+      events.name('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
+      events.name('add:res').subscribe((e) => responses.push(e));
 
       cmd.invoke('add', { a: 2, b: 3 });
       expect(responses[0].params.sum).to.eql(5);
