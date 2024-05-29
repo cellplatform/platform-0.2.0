@@ -44,8 +44,8 @@ export type CmdBarType = CmdBarInvoke; // ← NB: extension point (union in othe
 
 export type CmdBarInvoke = t.CmdType<'Invoke', CmdBarInvokeParams>;
 export type CmdBarInvokeTx = CmdBarTx<CmdBarInvoke>;
-export type CmdBarInvokeAction = 'Enter';
 export type CmdBarInvokeParams = { text: string; action: CmdBarInvokeAction };
+export type CmdBarInvokeAction = 'Enter';
 
 /**
  * EVENTS

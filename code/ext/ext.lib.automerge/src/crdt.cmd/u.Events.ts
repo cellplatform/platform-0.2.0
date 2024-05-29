@@ -50,15 +50,16 @@ export const Events = {
      * API
      */
     const tx: t.CmdEvents<C>['tx'] = {
-      $: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
+      // $: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
       name<N extends C['name']>(name: N) {
         type T = t.CmdInvoked<t.CmdTypeMap<C>[N]>;
-        return tx.$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
+        return api.invoked$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
       },
     };
 
     const api: t.CmdEvents<C> = {
       $,
+      invoked$: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
       tx,
 
       // Lifecycle.

@@ -112,8 +112,8 @@ describe('crdt.cmd (Command)', () => {
       });
     });
 
-    const tx: t.CmdBarTxEvent['type'] = 'crdt:cmdbar/Tx';
-    describe(`event: "${tx}"`, () => {
+    const invoked: t.CmdInvokedEvent['type'] = 'crdt:cmd/Invoked';
+    describe(`event: "${invoked}"`, () => {
       it('⚡️tx ← on root {doc}', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd1 = Cmd.create<C>(doc);
@@ -123,7 +123,7 @@ describe('crdt.cmd (Command)', () => {
         const fired: t.CmdEvent[] = [];
         const firedTx: t.CmdInvoked[] = [];
         events.$.subscribe((e) => fired.push(e));
-        events.tx.$.subscribe((e) => firedTx.push(e));
+        events.invoked$.subscribe((e) => firedTx.push(e));
 
         cmd1.invoke('Foo', { foo: 0 });
         cmd1.invoke('Bar', {});
@@ -156,7 +156,7 @@ describe('crdt.cmd (Command)', () => {
 
         const cmd = Cmd.create<C>(lens);
         const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
+        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', { msg: 'hello' });
         expect(fired.length).to.eql(1);
 
@@ -182,7 +182,7 @@ describe('crdt.cmd (Command)', () => {
         const p = { msg: 'hello' };
         const cmd = Cmd.create<C>(doc, { paths });
         const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
+        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', p);
         expect(fired.length).to.eql(1);
 
