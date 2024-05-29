@@ -1,6 +1,6 @@
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './view';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
+import { View } from './ui';
 
 const { toPos, toPosition } = Wrangle;
 

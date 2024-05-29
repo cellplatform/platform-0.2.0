@@ -38,7 +38,7 @@ export default Dev.describe(name, (e) => {
           fn, // NB: writing the function each time causes test-case to ignore functions in comparison.
         };
 
-        return <Sample object={object} theme={theme} />;
+        return <Sample object={object} theme={theme.name} />;
       });
   });
 

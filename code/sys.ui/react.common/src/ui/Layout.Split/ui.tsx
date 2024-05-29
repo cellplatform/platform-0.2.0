@@ -1,5 +1,5 @@
-import { Wrangle } from './Wrangle.mjs';
 import { Color, DEFAULTS, css, type t } from './common';
+import { Wrangle } from './u';
 
 export const View: React.FC<t.SplitLayoutProps> = (props) => {
   const { debug = false, axis = DEFAULTS.axis } = props;

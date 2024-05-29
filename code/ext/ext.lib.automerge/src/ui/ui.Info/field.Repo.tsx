@@ -1,6 +1,6 @@
 import { Icons, Is, Value, css, type t, DEFAULTS } from './common';
 
-export function repo(repo: t.InfoData['repo'], theme?: t.CommonTheme) {
+export function repo(ctx: t.InfoFieldCtx, repo: t.InfoData['repo']) {
   if (!repo) return;
 
   const index = repo.index;

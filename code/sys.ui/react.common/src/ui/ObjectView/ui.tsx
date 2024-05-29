@@ -1,7 +1,7 @@
 import { ObjectInspector } from 'react-inspector';
 
 import { DEFAULTS, Style, css, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 import { renderer } from './ui.Renderer';
 
 export const View: React.FC<t.ObjectViewProps> = (props) => {

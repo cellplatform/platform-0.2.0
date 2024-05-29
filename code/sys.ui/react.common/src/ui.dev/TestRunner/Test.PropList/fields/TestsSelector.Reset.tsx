@@ -1,6 +1,6 @@
-import { type t } from '../common';
+import { Color, type t } from '../common';
 import { Util } from '../u';
-import { SpecsReset } from '../ui/Specs.Reset';
+import { SpecsReset } from '../ui/ui.Reset';
 
 /**
  * Reset row.
@@ -15,7 +15,12 @@ export function FieldTestsSelectorReset(args: {
   if (!Util.isSelectable(args.data)) return;
 
   const el = (
-    <SpecsReset data={args.data} groups={args.groups} enabled={args.enabled} theme={args.theme} />
+    <SpecsReset
+      data={args.data}
+      groups={args.groups}
+      enabled={args.enabled}
+      theme={Color.theme(args.theme)}
+    />
   );
 
   return { value: el };

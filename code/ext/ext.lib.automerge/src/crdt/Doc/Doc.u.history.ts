@@ -41,7 +41,7 @@ export function history<T extends O>(doc?: t.DocRef<T>): t.DocHistory<T> {
     page(index, limit, sort = DEFAULTS.page.sort) {
       const list = index < 0 ? [] : commits.map((commit, index) => ({ index, commit }));
       if (sort === 'desc') list.reverse();
-      const items = Value.page(list, index, limit);
+      const items = Value.Array.page(list, index, limit);
       const length = items.length;
       const total = commits.length;
       let _commits: t.DocHistoryCommit<T>[] | undefined;

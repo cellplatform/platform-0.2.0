@@ -2,37 +2,46 @@ import { isValidElement } from 'react';
 import { type t } from './common';
 
 export function format(item: t.PropListItem) {
-  const { label, tooltip, visible } = item;
+  const { tooltip, visible } = item;
+  let _label: t.PropListLabel | undefined;
   let _value: t.PropListValue | undefined;
 
   const res = {
-    label,
     tooltip,
     visible,
 
+    get label(): t.PropListLabel {
+      if (_label === undefined) {
+        if (typeof item.label !== 'object') _label = { body: item.label };
+        else if (isValidElement(item.label)) _label = { body: item.label };
+        else _label = item.label as t.PropListLabel;
+      }
+      return _label;
+    },
+
     get value(): t.PropListValue {
       if (_value === undefined) {
-        if (typeof item.value !== 'object') return { data: item.value };
-        if (isValidElement(item.value)) return { data: item.value };
-        _value = item.value as t.PropListValue;
+        if (typeof item.value !== 'object') _value = { body: item.value };
+        else if (isValidElement(item.value)) _value = { body: item.value };
+        else _value = item.value as t.PropListValue;
       }
       return _value;
     },
 
     get isString() {
-      return typeof res.value.data === 'string';
+      return typeof res.value.body === 'string';
     },
 
     get isNumber() {
-      return typeof res.value.data === 'number';
+      return typeof res.value.body === 'number';
     },
 
     get isBoolean() {
-      return typeof res.value.data === 'boolean';
+      return typeof res.value.body === 'boolean';
     },
 
     get isComponent() {
-      return isValidElement(res.value.data);
+      return isValidElement(res.value.body);
     },
 
     get isSimple() {
@@ -41,7 +50,7 @@ export function format(item: t.PropListItem) {
 
     get clipboard() {
       const value = res.value;
-      const data = value.data;
+      const data = value.body;
       if (value.clipboard) {
         return typeof value.clipboard === 'boolean' ? data?.toString() || '' : value.clipboard;
       }

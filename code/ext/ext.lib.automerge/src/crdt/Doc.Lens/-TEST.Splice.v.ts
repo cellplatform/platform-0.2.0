@@ -19,8 +19,8 @@ describe('Doc.Lens: splice', () => {
       /**
        * Prepare the CRDT lenses.
        */
-      const lens1 = Doc.Lens.init<TRoot, TChild>(doc1, ['child']);
-      const lens2 = Doc.Lens.init<TRoot, TChild>(doc2, ['child']);
+      const lens1 = Doc.Lens.create<TRoot, TChild>(doc1, ['child']);
+      const lens2 = Doc.Lens.create<TRoot, TChild>(doc2, ['child']);
       const events1 = lens1.events();
 
       /**

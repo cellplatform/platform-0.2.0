@@ -1,6 +1,6 @@
 import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { ObjectPath, Symbols, rx, slug, toObject, type t } from './common';
+import { Is, ObjectPath, Symbols, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = {
@@ -12,13 +12,13 @@ type Options<R extends O> = {
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export function init<R extends O, L extends O>(
-  root: t.DocRef<R>,
+export function create<R extends O, L extends O>(
+  root: t.DocRef<R> | t.Lens<R>,
   path?: t.ObjectPath | (() => t.ObjectPath),
   options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {
   const args = wrangle.options<R>(options);
-  const uri = root.uri;
+  if (Is.lens(root)) return root.lens<L>(wrangle.path(path), args.init);
 
   Registry.add(root);
   let _count = 0;
@@ -35,6 +35,7 @@ export function init<R extends O, L extends O>(
   const subject$ = rx.subject<t.LensEvent<L>>();
   const { dispose, dispose$ } = events;
 
+  const uri = root.uri;
   const fire = {
     changed(e: t.DocChanged<R>) {
       const before = resolve(e.before);
@@ -135,7 +136,7 @@ export function init<R extends O, L extends O>(
     lens<T extends O>(subpath: t.ObjectPath, fn?: t.InitializeLens<L>) {
       const composite = [...wrangle.path(path), ...subpath];
       if (fn && typeof ObjectPath.resolve(root, composite) !== 'object') api.change((d) => fn(d));
-      return init<R, T>(root, composite, { dispose$ });
+      return create<R, T>(root, composite, { dispose$ });
     },
 
     /**

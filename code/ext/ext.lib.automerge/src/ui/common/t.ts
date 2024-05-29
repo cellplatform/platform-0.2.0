@@ -15,6 +15,8 @@ export type {
   KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
   PropListItem,
+  PropListItemHandler,
+  PropListLabel,
   PropListProps,
   RenderCountProps,
   TextInputChangeArgs,

@@ -3,7 +3,7 @@ import { DEFAULTS, Is, MonoHash, type t } from './common';
 
 type D = t.InfoDataDoc;
 
-export function head(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+export function head(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   if (!data || !Is.docRef(data.ref)) return res;
 
@@ -18,7 +18,7 @@ export function head(data: D | undefined, fields: t.InfoField[], theme?: t.Commo
 
   const hashLength = data.head?.hashLength ?? DEFAULTS.doc.head.hashLength;
   const hashElement = (hash: string) => {
-    return <MonoHash hash={hash} theme={theme} length={hashLength} />;
+    return <MonoHash hash={hash} theme={ctx.theme} length={hashLength} />;
   };
 
   res.push({ label: title, value: hashElement(heads[0]) });

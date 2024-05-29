@@ -7,7 +7,7 @@ import { WebStore } from '../crdt/Store.Web';
 import { describe, expect, it, type t } from '../test';
 
 describe('Is (flags)', (e) => {
-  const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
+  const NON_OBJECTS = [true, 123, '', [], {}, null, undefined, BigInt(123), Symbol('foo')];
 
   it('Is.automergeUrl', () => {
     const store = Store.init();
@@ -74,7 +74,7 @@ describe('Is (flags)', (e) => {
     type TRoot = { count: number };
     const store = Store.init();
     const doc = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
-    const ns = Doc.namespace(doc);
+    const ns = Doc.ns(doc);
     expect(Is.namespace(ns)).to.eql(true);
     NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
     store.dispose();

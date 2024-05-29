@@ -1,6 +1,6 @@
 import { EdgePositionSelector as Selector } from '../EdgePosition.Selector';
 import { css, DEFAULTS, FC, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './u';
 
 const { gridCss: toGridCss, toPos, toPosition } = Wrangle;
 

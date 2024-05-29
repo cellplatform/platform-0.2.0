@@ -1,5 +1,5 @@
-import { Wrangle } from './Wrangle.mjs';
 import { Button, DEFAULTS, Icons, Slider, css, type t } from './common';
+import { Wrangle } from './u';
 
 export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const {

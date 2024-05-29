@@ -27,17 +27,17 @@ export function peer(
   const root: P = {
     label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
-      data: (
+      opacity: current?.open || totalConnections > 0 ? 1 : 0.3,
+      body: (
         <div {...styles.center}>
           <div>{Wrangle.rootLabel(current)}</div>
           <Icons.Person
             size={14}
             style={styles.iconRight}
-            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha.fg(0.4)}
+            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha(0.4).fg}
           />
         </div>
       ),
-      opacity: current?.open || totalConnections > 0 ? 1 : 0.3,
     },
   };
   if (!peer) return root;

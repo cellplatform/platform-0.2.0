@@ -46,10 +46,10 @@ export type PropListDefaults = {
 };
 
 /**
- * A single row within a [PropList].
+ * A single row within a <PropList>.
  */
 export type PropListItem = {
-  readonly label?: string | number | JSX.Element;
+  readonly label?: string | number | JSX.Element | PropListLabel;
   readonly value?: string | number | boolean | JSX.Element | PropListValue;
   readonly tooltip?: string;
   readonly visible?: boolean;
@@ -59,10 +59,19 @@ export type PropListItem = {
   readonly onClick?: t.PropListItemHandler;
 };
 
+/**
+ * The label portion of a <PropList> item.
+ */
+export type PropListLabel = {
+  readonly body?: string | number | JSX.Element;
+  readonly onClick?: t.PropListItemHandler;
+  readonly toggle?: { open?: boolean };
+};
+
 export type PropListItemSelected = { readonly color: string | number };
 
 /**
- * The value portion of a [PropList] item.
+ * The value portion of a <PropList> item.
  */
 export type PropListValue = PropListValueGeneric | PropListValueKinds;
 
@@ -78,13 +87,13 @@ type ValueBase = {
 };
 
 export type PropListValueGeneric = ValueBase & {
-  data?: string | number | boolean | JSX.Element;
+  readonly body?: string | number | boolean | JSX.Element;
 };
 
 export type PropListValueKinds = PropListValueSwitch;
 export type PropListValueSwitch = ValueBase & {
   readonly kind: 'Switch';
-  readonly data?: boolean;
+  readonly body?: boolean;
   readonly enabled?: boolean;
 };
 
@@ -95,5 +104,6 @@ export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {
   readonly item: PropListItem;
   readonly value: PropListValue;
+  readonly modifiers: t.KeyboardModifierFlags;
   readonly message: (value: JSX.Element | string, delay?: number) => void;
 };

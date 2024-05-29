@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+type O = Record<string, unknown>;
+
 export type InfoField =
   | 'Visible'
   | 'Module'
@@ -15,6 +17,7 @@ export type InfoField =
   | 'Doc.History.List'
   | 'Doc.History.List.Detail'
   | 'Doc.History.List.NavPaging';
+export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme };
 
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
@@ -37,7 +40,6 @@ export type InfoDataDoc = {
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
-  icon?: { onClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void };
   history?: InfoDataDocHistory;
 };
 
@@ -47,7 +49,8 @@ export type InfoDataDocObject = {
   name?: string;
   expand?: { level?: number; paths?: string[] };
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
-  beforeRender?: (mutate: unknown) => void;
+  beforeRender?: (mutate: O) => void | O;
+  onToggleClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void;
 };
 
 export type InfoDataDocUri = {

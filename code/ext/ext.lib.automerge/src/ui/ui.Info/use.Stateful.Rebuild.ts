@@ -47,12 +47,12 @@ function overloader(state: State, fire: FireChanged) {
 
   function document(docs: t.InfoDataDoc[], index: number) {
     const doc = docs[index];
-    if (!doc.icon) doc.icon = {};
+    if (!doc.object) doc.object = {};
 
     /**
      * Toggle open/close when document icon clicked.
      */
-    const bubble = doc.icon.onClick;
+    const bubble = doc.object.onToggleClick;
     const toggle = (index: number, isVisible?: boolean) => {
       let res = false;
       state.change((d) => {
@@ -66,7 +66,7 @@ function overloader(state: State, fire: FireChanged) {
       return res;
     };
 
-    doc.icon.onClick = (e) => {
+    doc.object.onToggleClick = (e) => {
       const isVisible = toggle(index);
       if (e.modifiers.meta) {
         docs.forEach((_, i) => {

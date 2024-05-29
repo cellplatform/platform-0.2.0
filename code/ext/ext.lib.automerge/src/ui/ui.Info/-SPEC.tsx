@@ -114,10 +114,8 @@ export default Dev.describe(name, async (e) => {
             beforeRender(mutate: any) {
               // mutate['foo'] = 123;
             },
-          },
-          icon: {
-            onClick: debug.dataDocIconClickHandler
-              ? (e) => console.info('⚡️ document.icon.onClick', e)
+            onToggleClick: debug.dataDocIconClickHandler
+              ? (e) => console.info('⚡️ document.object.onToggleClick', e)
               : undefined,
           },
           uri: {

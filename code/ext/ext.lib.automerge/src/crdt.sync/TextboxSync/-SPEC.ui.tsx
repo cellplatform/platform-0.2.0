@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextboxSync } from '.';
 import { COLORS, Color, ObjectPath, TextInput, css, rx, type t } from '../../test.ui';
-import { useDoc } from '../../ui/use';
+import { useDoc } from '../../ui.use';
 
 export type TDoc = {
   text?: string;
@@ -19,8 +19,7 @@ export type LayoutProps = {
   style?: t.CssValue;
 };
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { theme, repo, path } = props;
-  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
+  const { theme, repo, docuri, path } = props;
 
   /**
    * Render
@@ -31,15 +30,23 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     textbox: css({ width: 260 }),
   };
 
+  const textbox = (debug: string, focus?: boolean) => (
+    <Textbox
+      //
+      debug={debug}
+      focus={focus}
+      repo={repo}
+      docuri={docuri}
+      path={path}
+      theme={theme}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>
-        <Textbox debug={'🐷'} theme={theme} doc={doc} path={path} focus={true} />
-      </div>
+      <div {...styles.textbox}>{textbox('🐷', true)}</div>
       <div></div>
-      <div {...styles.textbox}>
-        <Textbox debug={'🌼'} theme={theme} doc={doc} path={path} />
-      </div>
+      <div {...styles.textbox}>{textbox('🌼')}</div>
     </div>
   );
 };
@@ -48,7 +55,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
  * <Textbox>
  */
 export type TextboxProps = {
-  doc?: t.DocRef<TDoc>;
+  repo?: { store: t.Store; index: t.StoreIndexState };
+  docuri?: string;
   path?: t.ObjectPath;
   focus?: boolean;
   debug?: string;
@@ -56,24 +64,33 @@ export type TextboxProps = {
   style?: t.CssValue;
 };
 export const Textbox: React.FC<TextboxProps> = (props) => {
-  const { doc, theme, debug, path = [] } = props;
+  const { repo, focus, theme, debug, path = [] } = props;
+
+  const doc = useDoc<TDoc>(repo?.store, props.docuri).ref;
   const enabled = !!doc;
 
-  const [value, setValue] = useState('');
-  const [input, setInput] = useState<t.TextInputRef>();
+  const [text, setText] = useState('');
+  const [textbox, setTextbox] = useState<t.TextInputRef>();
 
+  /**
+   * Lifecycle
+   */
   useEffect(() => {
     const life = rx.disposable();
     const { dispose$ } = life;
-    if (doc && input) {
+    if (doc && textbox) {
       const initial = ObjectPath.resolve<string>(doc.current, path);
-      setValue(initial ?? '');
+      setText(initial ?? '');
 
-      const listener = TextboxSync.listen(input, doc, path, { debug, dispose$ });
-      listener.onChange((e) => setValue(e.text));
+      const listener = TextboxSync.listen(textbox, doc, path, { debug, dispose$ });
+      listener.onChange((e) => setText(e.text));
     }
     return life.dispose;
-  }, [doc?.uri, !!input, path?.join('.')]);
+  }, [doc?.uri, !!textbox, path?.join('.')]);
+
+  useEffect(() => {
+    if (focus && textbox && doc) textbox.focus();
+  }, [focus, !!textbox, !!doc]);
 
   /**
    * Render
@@ -98,14 +115,13 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.debug}>{debug}</div>
       <TextInput
-        value={value}
+        value={text}
         theme={theme}
         isEnabled={enabled}
         placeholder={'string (crdt)'}
-        focusOnReady={props.focus}
         spellCheck={false}
-        onReady={(e) => setInput(e.ref)}
-        onChange={(e) => setValue(e.to)}
+        onReady={(e) => setTextbox(e.ref)}
+        onChange={(e) => setText(e.to)}
       />
     </div>
   );

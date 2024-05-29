@@ -7,10 +7,10 @@ export type PropListValueProps = {
   item: t.PropListItem;
   hasLabel?: boolean;
   message?: string | JSX.Element;
-  cursor?: string;
   defaults: t.PropListDefaults;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  cursor?: t.CSSProperties['cursor'];
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {

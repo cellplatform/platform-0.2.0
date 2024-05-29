@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Button, COLORS, Color, DevIcons, Theme, Time, css, type t } from './common';
+import { Button, COLORS, DevIcons, Time, css, type t } from './common';
 import { Description } from './ui.Test.Description';
 import { TestError } from './ui.Test.Error';
 
 export type TestResultProps = {
   data: t.TestRunResponse;
-  theme?: t.CommonTheme;
+  theme: t.ColorTheme;
   style?: t.CssValue;
 };
 
@@ -62,11 +62,11 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <DevIcons.Close size={16} color={COLORS.RED} offset={[0, 2]} />
   );
   const elSkippedIcon = isSkipped && (
-    <DevIcons.Skip size={16} color={Color.alpha(Theme.color(theme), 0.3)} offset={[0, 2]} />
+    <DevIcons.Skip size={16} color={theme.alpha(0.3).fg} offset={[0, 2]} />
   );
 
   const elCopy = isOver && (
-    <Button onClick={handleCopy} theme={theme}>
+    <Button onClick={handleCopy} theme={theme.name}>
       <DevIcons.Copy size={16} />
     </Button>
   );
@@ -80,10 +80,10 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   );
 
   const elNoopIcon = isNoop && (
-    <DevIcons.Wait size={16} color={Color.alpha(Theme.color(theme), 0.5)} offset={[0, 2]} />
+    <DevIcons.Wait size={16} color={theme.alpha(0.5).fg} offset={[0, 2]} />
   );
 
-  const elError = data.error && <TestError data={data} style={styles.error} theme={theme} />;
+  const elError = data.error && <TestError data={data} style={styles.error} theme={theme.name} />;
 
   const elapsed = Time.duration(data.time.elapsed).toString();
 

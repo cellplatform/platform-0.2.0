@@ -42,7 +42,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     return {
       label,
       value: {
-        data: value ?? '-',
+        body: value ?? '-',
         clipboard: clipboard && enabled ? value && value : false,
       },
     };

@@ -95,8 +95,8 @@ export const Shared = {
       kind: 'crdt.network.shared',
       doc,
 
-      get namespace() {
-        return _ns || (_ns = Shared.namespace(doc));
+      get ns() {
+        return _ns || (_ns = Shared.ns(doc));
       },
 
       events(dispose$) {
@@ -137,8 +137,8 @@ export const Shared = {
    * Construct a namespace-manager to operate on the {ns}
    * field of the [Shared] state document.
    */
-  namespace<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
+  ns<N extends string = string>(shared: t.DocRef<t.CrdtShared>) {
     type T = t.NamespaceManager<N>;
-    return Doc.namespace<t.CrdtShared, N>(shared, ['ns'], (d) => (d.ns = {})) as T;
+    return Doc.ns<t.CrdtShared, N>(shared, ['ns'], (d) => (d.ns = {})) as T;
   },
 } as const;

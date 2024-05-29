@@ -3,37 +3,27 @@ import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
 type Color = string | number;
+type ThemeInput = t.ColorTheme | t.CommonTheme | null;
+const defaultTheme: t.CommonTheme = 'Light';
 
 /**
  * Helpers for working with common themes within the harness.
  */
 export const Theme = {
-  is(theme: t.CommonTheme = 'Light') {
-    return {
-      dark: theme === 'Dark',
-      light: theme === 'Light',
-    } as const;
-  },
-
-  color(theme: t.CommonTheme = 'Light') {
-    const is = Theme.is(theme);
-    return is.dark ? COLORS.WHITE : COLORS.DARK;
-  },
-
   /**
    * Adjust the theme of the DevHarness.
    */
   background(
     input: t.DevCtx | t.DevTools,
-    theme: t.CommonTheme = 'Light',
+    theme?: ThemeInput,
     subjectLight?: Color | null,
     subjectDark?: Color | null,
   ) {
-    const is = Theme.is(theme);
     const ctx = Wrangle.ctx(input);
     if (!ctx) throw new Error(`Dev {ctx} not retrieved`);
 
     const { host, subject } = ctx;
+    const is = Color.theme(theme ?? defaultTheme).is;
     if (is.light) host.color(null).backgroundColor(null).tracelineColor(null);
     if (is.dark) host.color(COLORS.WHITE).backgroundColor(COLORS.DARK).tracelineColor(0.08);
 
@@ -42,7 +32,7 @@ export const Theme = {
       if (!!subjectDark) subject.backgroundColor(is.dark ? subjectDark : 0);
     }
 
-    return theme;
+    return Color.theme(theme);
   },
 
   /**
@@ -68,13 +58,13 @@ export const Theme = {
     current: (d: T) => t.CommonTheme | undefined,
     mutate: (d: T, value: t.CommonTheme) => void,
   ) {
-    const defaultTheme: t.CommonTheme = 'Light';
     return dev.button((btn) => {
       btn
         .label((e) => `theme: "${current(e.state) ?? defaultTheme}"`)
         .right((e) => {
-          const is = Theme.is(current(e.state) ?? defaultTheme);
-          const Icon = is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
+          const name = current(e.state) ?? defaultTheme;
+          const theme = Color.theme(name);
+          const Icon = theme.is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
           return <Icon size={16} />;
         })
         .onClick((e) => {

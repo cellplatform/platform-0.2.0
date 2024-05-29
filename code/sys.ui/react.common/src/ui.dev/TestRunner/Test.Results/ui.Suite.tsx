@@ -3,14 +3,13 @@ import { SuiteResults } from './ui.Suite.Results';
 
 export type SuiteProps = {
   data: t.TestSuiteRunResponse;
-  spinning?: boolean;
-  theme?: t.CommonTheme;
+  spinning: boolean;
+  theme: t.ColorTheme;
   style?: t.CssValue;
 };
 
 export const Suite: React.FC<SuiteProps> = (props) => {
   const { data, spinning, theme } = props;
-  const isDark = theme === 'Dark';
 
   /**
    * [Render]
@@ -20,12 +19,10 @@ export const Suite: React.FC<SuiteProps> = (props) => {
       position: 'relative',
       filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
       opacity: spinning ? 0.15 : 1,
-      backgroundColor: !data.ok ? Color.alpha(COLORS.RED, isDark ? 0.1 : 0.02) : undefined,
-      borderBottom: `dashed 2px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      backgroundColor: !data.ok ? Color.alpha(COLORS.RED, theme.is.dark ? 0.1 : 0.02) : undefined,
+      borderBottom: `dashed 2px ${theme.alpha(0.1).bg}`,
       Padding: [20, 20, 15, 20],
-      ':last-child': {
-        borderBottom: 'none',
-      },
+      ':last-child': { borderBottom: 'none' },
     }),
   };
 

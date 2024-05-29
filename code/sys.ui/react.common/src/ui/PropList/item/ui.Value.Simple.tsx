@@ -10,7 +10,7 @@ export type SimpleValueProps = {
   isOver?: boolean;
   isCopyable?: boolean;
   theme?: t.CommonTheme;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
@@ -63,9 +63,9 @@ const wrangle = {
     const value = wrangle.valueObject(props);
     const { isOver, isCopyable, defaults } = props;
     let monospace = value.monospace ?? defaults.monospace;
-    if (typeof value.data === 'boolean') monospace = true;
+    if (typeof value.body === 'boolean') monospace = true;
     return {
-      boolean: typeof value.data === 'boolean',
+      boolean: typeof value.body === 'boolean',
       copyActive: isOver && isCopyable,
       monospace,
     };
@@ -76,7 +76,7 @@ const wrangle = {
     if (value.color !== undefined) return Color.format(value.color);
 
     const theme = Color.theme(props.theme);
-    if (typeof props.message === 'string') return theme.alpha.fg(0.3);
+    if (typeof props.message === 'string') return theme.alpha(0.3).fg;
 
     const is = wrangle.flags(props);
     if (is.copyActive) return COLORS.BLUE;
@@ -87,11 +87,11 @@ const wrangle = {
 
   renderValue(props: SimpleValueProps) {
     const value = wrangle.valueObject(props);
-    return isValidElement(value.data) ? value.data : value.data?.toString();
+    return isValidElement(value.body) ? value.body : value.body?.toString();
   },
 
   valueObject(props: SimpleValueProps) {
-    if (isValidElement(props.value)) return { data: props.value };
+    if (isValidElement(props.value)) return { body: props.value };
     return props.value as t.PropListValue;
   },
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { format } from '../u.format';
-import { DEFAULTS, Time, type t } from './common';
+import { DEFAULTS, ReactEvent, Time, type t } from './common';
 
 export function useHandler(
   input: t.PropListItem,
@@ -24,7 +24,7 @@ export function useHandler(
     timer.current = Time.delay(msecs, () => setMessage(undefined));
   };
 
-  const onClick = async () => {
+  const onClick: React.MouseEventHandler = async (e) => {
     if (!handler) return;
 
     const { clipboard, value } = item;
@@ -34,6 +34,7 @@ export function useHandler(
     handler({
       item: input,
       value,
+      modifiers: ReactEvent.modifiers(e),
       message(text, msecs) {
         _message = text;
         _delay = msecs;

@@ -110,13 +110,22 @@ describe('color', () => {
       expect(res2.bg).to.eql(Color.DARK);
     });
 
+    it('input: {theme} object', () => {
+      const theme = Color.theme();
+      expect(Color.theme(undefined).name).to.eql('Light');
+      expect(Color.theme(null).name).to.eql('Light');
+      expect(Color.theme(theme)).to.equal(theme);
+      expect(Color.theme('Light').name).to.eql('Light');
+      expect(Color.theme('Dark').name).to.eql('Dark');
+    });
+
     it('alpha.fg (foreground)', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
 
-      const res1 = light.alpha.fg();
-      const res2 = light.alpha.fg(0.5);
-      const res3 = dark.alpha.fg(0.3);
+      const res1 = light.alpha().fg;
+      const res2 = light.alpha(0.5).fg;
+      const res3 = dark.alpha(0.3).fg;
 
       expect(res1).to.eql('rgb(41, 48, 66)');
       expect(res2).to.eql('rgba(41, 48, 66, 0.5)');
@@ -127,12 +136,34 @@ describe('color', () => {
       const light = Color.theme();
       const dark = Color.theme('Dark');
 
-      const res1 = light.alpha.bg();
-      const res2 = light.alpha.bg(0.5);
-      const res3 = dark.alpha.bg(0.3);
+      const res1 = light.alpha().bg;
+      const res2 = light.alpha(0.5).bg;
+      const res3 = dark.alpha(0.3).bg;
 
       expect(res1).to.eql('rgb(255, 255, 255)');
       expect(res2).to.eql('rgba(255, 255, 255, 0.5)');
+      expect(res3).to.eql('rgba(41, 48, 66, 0.3)');
+    });
+
+    it('invert', () => {
+      const light = Color.theme();
+      const dark = Color.theme('Dark');
+
+      expect(light.invert().name).to.eql('Dark');
+      expect(dark.invert().name).to.eql('Light');
+
+      expect(light.invert()).to.not.equal(light); // NB: monad.
+    });
+
+    it('invert: custom colors', () => {
+      const theme = Color.theme('Light', 'red', 'salmon');
+      const inverted = theme.invert();
+
+      expect(theme.fg).to.eql('red');
+      expect(theme.bg).to.eql('salmon');
+
+      expect(inverted.fg).to.eql('salmon');
+      expect(inverted.bg).to.eql('red');
     });
   });
 });

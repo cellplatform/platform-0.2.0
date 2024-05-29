@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Util } from '../u';
-import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, useMouse, type t } from '../common';
-import { Results } from './TestRunner.Results';
+import {
+  Button,
+  COLORS,
+  Color,
+  DEFAULTS,
+  Spinner,
+  Time,
+  css,
+  rx,
+  useMouse,
+  type t,
+} from '../common';
+import { Results } from './ui.Results';
 
 export type TestRunnerProps = {
   data?: t.TestPropListData;
@@ -11,7 +22,7 @@ export type TestRunnerProps = {
 };
 
 export const TestRunner: React.FC<TestRunnerProps> = (props) => {
-  const { data, theme } = props;
+  const { data } = props;
   const results = Wrangle.results(props);
   const isRunning = Wrangle.isRunning(props);
   const isEnabled = Wrangle.isEnabled(props);
@@ -43,6 +54,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   /**
    * [Render]
    */
+  const theme = Color.theme(props.theme);
   const height = 15;
   const styles = {
     base: css({
@@ -65,7 +77,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   );
 
   const elButton = !isRunning && isButtonVisible && (
-    <Button onClick={runTestsClick} enabled={isEnabled} theme={theme}>
+    <Button onClick={runTestsClick} enabled={isEnabled} theme={theme.name}>
       <Results results={results} isColored={isColored} isOver={mouse.is.over} theme={theme} />
     </Button>
   );

@@ -1,41 +1,42 @@
-import {
-  toObject,
-  ReactEvent,
-  Button,
-  COLORS,
-  Icons,
-  Is,
-  ObjectPath,
-  ObjectView,
-  css,
-  type t,
-} from './common';
+import { Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { head } from './field.Doc.Head';
 import { history } from './field.Doc.History';
 import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
-export function document(data: D | D[] | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined) {
   if (!data) return [];
   const docs = Array.isArray(data) ? data : [data];
-  return docs.map((data) => render(data, fields, theme)).flat();
+  return docs.map((data) => render(ctx, data)).flat();
 }
 
-function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonTheme) {
+function render(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   if (!data) return res;
   if (!Is.docRef(data.ref)) return res;
 
-  const label = data.label ?? 'Document';
-  const hasLabel = !!label.trim();
-  const isObjectVisible = fields.includes('Doc.Object') && (data.object?.visible ?? true);
+  const { fields, theme } = ctx;
+  const doc = data.ref;
+  const hasObject = fields.includes('Doc.Object');
+  const isObjectVisible = hasObject && (data.object?.visible ?? true);
+  const hasToggleHandler = !!data.object?.onToggleClick;
+
+  const label: t.PropListLabel = {
+    body: (data.label ?? 'Document').trim(),
+    toggle: hasToggleHandler ? { open: isObjectVisible } : undefined,
+    onClick(e) {
+      const uri = doc.uri;
+      const modifiers = e.modifiers;
+      data.object?.onToggleClick?.({ uri, modifiers });
+    },
+  };
+  const hasLabel = !!label.body;
 
   /**
-   * Title
+   * Title Row
    */
   if (hasLabel) {
-    const doc = data.ref;
     const uri = fields.includes('Doc.URI') ? doc?.uri : undefined;
     const parts: JSX.Element[] = [];
 
@@ -52,31 +53,8 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
       );
     }
 
-    const pushIcon = () => {
-      // NB: "blue" when showing current-state <Object>.
-      const hasClickHandler = !!data.icon?.onClick;
-      const color = isObjectVisible && hasClickHandler ? COLORS.BLUE : undefined;
-      const height = 14;
-      const elIcon = <Icons.Object size={height} color={color} />;
-
-      if (!hasClickHandler) {
-        parts.push(elIcon);
-      } else {
-        const uri = doc.uri;
-        const handleClick: React.MouseEventHandler = (e) => {
-          const modifiers = ReactEvent.modifiers(e);
-          data.icon?.onClick?.({ uri, modifiers });
-        };
-        parts.push(
-          <Button theme={theme} onClick={handleClick} style={{ height }}>
-            {elIcon}
-          </Button>,
-        );
-      }
-    };
-
     if (doc) {
-      if (fields.includes('Doc.Object')) pushIcon();
+      parts.push(<Icons.Object size={14} />);
     } else {
       parts.push(<>{'-'}</>);
     }
@@ -100,8 +78,11 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
     ));
     const value = <div {...styles.base}>{elParts}</div>;
 
-    const divider = fields.includes('Doc.Object') ? !isObjectVisible : undefined;
-    res.push({ label, value, divider });
+    res.push({
+      label,
+      value,
+      divider: fields.includes('Doc.Object') ? !isObjectVisible : undefined,
+    });
   }
 
   /**
@@ -115,12 +96,12 @@ function render(data: D | undefined, fields: t.InfoField[], theme?: t.CommonThem
   /**
    * The <Head> component.
    */
-  if (fields.includes('Doc.Head')) res.push(...head(data, fields, theme));
+  if (fields.includes('Doc.Head')) res.push(...head(ctx, data));
 
   /**
    * The <History> component.
    */
-  if (fields.includes('Doc.History')) res.push(...history(data, fields, theme));
+  if (fields.includes('Doc.History')) res.push(...history(ctx, data));
 
   // Finish up.
   return res;
@@ -154,7 +135,10 @@ const wrangle = {
       output = toObject(output);
 
       const mutate = data.object?.beforeRender;
-      if (typeof mutate === 'function') mutate(output);
+      if (typeof mutate === 'function') {
+        const res = mutate(output);
+        if (res !== undefined) output = res;
+      }
 
       const dotMeta = data.object?.dotMeta ?? true;
       if (!dotMeta && output) delete output['.meta'];
@@ -172,7 +156,7 @@ const wrangle = {
             data={output}
             fontSize={11}
             theme={theme}
-            style={{ marginLeft: 10, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
+            style={{ marginLeft: 16, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
               paths: wrangle.expandPaths(data),

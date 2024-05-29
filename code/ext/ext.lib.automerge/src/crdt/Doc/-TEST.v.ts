@@ -6,12 +6,12 @@ import { Namespace } from '../Doc.Namespace';
 describe('Doc API (index)', () => {
   it('lens', () => {
     expect(Doc.Lens).to.equal(Lens);
-    expect(Doc.lens).to.eql(Lens.init);
+    expect(Doc.lens).to.eql(Lens.create);
     expect(Doc.Lens.Registry).to.equal(Registry);
   });
 
-  it('namespace', () => {
+  it('ns ("namespace")', () => {
     expect(Doc.Namespace).to.equal(Namespace);
-    expect(Doc.namespace).to.equal(Namespace.init);
+    expect(Doc.ns).to.equal(Namespace.create);
   });
 });

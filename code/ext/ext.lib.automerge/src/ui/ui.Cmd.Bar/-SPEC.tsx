@@ -1,12 +1,10 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, Doc, Pkg, css, sampleCrdt } from '../../test.ui';
+import { Color, Dev, Doc, Pkg, css, sampleCrdt, slug, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
-
 import { RepoList } from '../ui.RepoList';
-import { type t } from './common';
 
 type P = t.CmdBarProps;
-type T = { props: P; debug: { docuri?: t.UriString } };
+type T = { props: P; debug: { docuri?: t.UriString; useLens?: boolean } };
 const initial: T = { props: {}, debug: {} };
 
 /**
@@ -14,18 +12,25 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'theme' | 'focusOnReady'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
+    focusOnReady: true,
+    useLens: true,
   });
 
   const db = await sampleCrdt({ broadcastAdapter: true });
-  const store = db.store;
-  const index = db.index;
   let model: t.RepoListModel;
-  let ref: t.RepoListRef;
+  let listRef: t.RepoListRef;
+  let doc: t.DocRef | undefined;
+
+  let _lens: t.Lens | undefined;
+  const getLens = () => {
+    if (!_lens) _lens = doc ? Doc.lens(doc, ['mylens'], (d) => (d.mylens = {})) : undefined;
+    return _lens;
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -33,35 +38,65 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.instance = slug();
       d.props.theme = local.theme;
+      d.props.focusOnReady = local.focusOnReady;
+      d.props.paths = DEFAULTS.paths;
+      d.debug.useLens = local.useLens;
       d.debug.docuri = local.docuri;
     });
 
     model = await RepoList.model(db.store, {
       behaviors: ['Copyable', 'Deletable'],
-      onReady: (e) => (ref = e.ref),
-      onActiveChanged(e) {
+      onReady: (e) => (listRef = e.ref),
+      async onActiveChanged(e) {
         console.info(`⚡️ onActiveChanged`, e);
-        state.change((d) => (local.docuri = d.debug.docuri = e.item.uri));
+        const uri = e.item.uri;
+        doc = uri ? await db.store.doc.get(uri) : undefined;
+        state.change((d) => (local.docuri = d.debug.docuri = uri));
       },
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(350);
     ctx.subject
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
+        const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
-        return <CmdBar {...props} />;
+
+        const styles = {
+          base: css({ position: 'relative' }),
+          instance: css({
+            Absolute: [null, 8, -20, null],
+            userSelect: 'none',
+            fontFamily: 'monospace',
+            fontSize: 10,
+            opacity: 0.2,
+          }),
+        };
+        return (
+          <div {...styles.base}>
+            <div {...styles.instance}>{`instance: ${props.instance || 'unknown'}`}</div>
+            <CmdBar
+              {...props}
+              doc={debug.useLens ? getLens() : doc}
+              onText={(e) => console.info(`⚡️ onText:`, e)}
+              onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
+              onInvoked={(e) => console.info(`⚡️ onInvoked:`, e)}
+            />
+          </div>
+        );
       });
   });
 
-  e.it('ui:debug', async (e) => {
+  e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
     dev.header.border(-0.1).render((e) => {
+      const { debug, props } = state.current;
+      const { store, index } = db;
+      const ref = debug.docuri;
       return (
         <Info
           stateful={true}
@@ -69,16 +104,42 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store, index },
             document: {
-              ref: state.current.debug.docuri,
-              object: { visible: true },
+              ref,
+              object: {
+                visible: true,
+                expand: { level: 2 },
+                beforeRender(mutate) {
+                  const resolve = CmdBar.Path.resolver(props.paths);
+                  return resolve.toObject(mutate);
+                },
+              },
             },
           }}
         />
       );
     });
+  });
+
+  e.it('ui:debug', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusOnReady;
+        btn
+          .label((e) => `focusOnReady`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
+          );
+      });
     });
 
     dev.hr(5, 20);
@@ -86,10 +147,27 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-      dev.button(['doc: increment', 'count + 1'], async (e) => {
-        type T = { count?: number };
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.debug.useLens;
+        btn
+          .label((e) => `use lens`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.useLens = Dev.toggle(d.debug, 'useLens'))));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Data', (dev) => {
+      dev.button(['reset {doc}', '(reloads) 💥'], (e) => {
+        doc?.change((d) => Object.keys(d).forEach((key) => delete d[key]));
+        location.reload();
+      });
+      dev.hr(-1, 5);
+      dev.button(['increment: {doc.tmp}', 'tmp + 1'], async (e) => {
+        type T = { tmp?: number };
         const doc = await db.docAtIndex<T>(0);
-        doc?.change((d) => (d.count = (d.count ?? 0) + 1));
+        doc?.change((d) => (d.tmp = (d.tmp ?? 0) + 1));
       });
     });
   });

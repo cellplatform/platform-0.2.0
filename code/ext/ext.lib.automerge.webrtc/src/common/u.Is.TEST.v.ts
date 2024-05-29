@@ -2,7 +2,7 @@ import { Is } from '.';
 import { Doc, Store, describe, expect, it } from '../test';
 
 describe('Is (flags)', () => {
-  const NON_OBJECTS = [true, 123, '', [], {}, null, undefined];
+  const NON_OBJECTS = [true, 123, '', [], {}, null, undefined, BigInt(123), Symbol('foo')];
 
   describe('inherited from [ext.lib.automerge]', () => {
     it('Is.store', () => {
@@ -16,7 +16,7 @@ describe('Is (flags)', () => {
       type TRoot = { count: number };
       const store = Store.init();
       const doc = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
-      const ns = Doc.namespace(doc);
+      const ns = Doc.ns(doc);
       expect(Is.namespace(ns)).to.eql(true);
       NON_OBJECTS.forEach((value) => expect(Is.namespace(value)).to.eql(false));
       store.dispose();

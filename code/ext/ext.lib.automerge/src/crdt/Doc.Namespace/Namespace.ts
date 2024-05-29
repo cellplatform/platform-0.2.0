@@ -1,4 +1,4 @@
-import { Lens, Symbols, rx, toObject, type t } from './common';
+import { createLens, Symbols, rx, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
 type Options<R extends O> = { dispose$?: t.UntilObservable; init?: t.InitializeLens<R> };
@@ -11,7 +11,7 @@ export const Namespace = {
    *      This allows multiple lens to be created on a {map}
    *      object within the single document.
    */
-  init<R extends O, N extends string = string>(
+  create<R extends O, N extends string = string>(
     root: t.DocRef<R>,
     path?: t.ObjectPath | (() => t.ObjectPath),
     options?: Options<R> | t.InitializeLens<R>,
@@ -20,7 +20,7 @@ export const Namespace = {
     const events = root.events(args.dispose$);
     const { dispose, dispose$ } = events;
 
-    const container = Lens<R, t.NamespaceMap<N>>(root, path, { init: args.init, dispose$ });
+    const container = createLens<R, t.NamespaceMap<N>>(root, path, { init: args.init, dispose$ });
     const cache = new Map<N, t.Lens<{}>>();
     dispose$.subscribe(() => cache.clear());
 
@@ -55,7 +55,7 @@ export const Namespace = {
         // Construct the lens.
         const { typename } = options;
         const subpath = () => [...wrangle.path(path), namespace];
-        const lens = Lens<R, L>(root, subpath, { dispose$, typename });
+        const lens = createLens<R, L>(root, subpath, { dispose$, typename });
         lens.dispose$.pipe(rx.take(1)).subscribe(() => cache.delete(namespace));
 
         // Finish up.

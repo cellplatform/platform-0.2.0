@@ -18,5 +18,6 @@ export { Sheet } from './Sheet';
 export { Sort } from './Sort';
 export { Stream } from './Stream';
 export { Time } from './Time';
-export { Value, asArray } from './Value';
+export { Value } from './Value';
+export { asArray } from './Value.Array';
 export { WorkerMemoryStub } from './WorkerMemoryStub';

@@ -1,8 +1,12 @@
 import { DEFAULTS, css, type t } from './common';
 import { HintKey } from './ui.HintKey';
 
-export const HintKeys: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled = DEFAULTS.enabled } = props;
+export type HintKeyProps = Omit<t.CmdBarProps, 'theme'> & {
+  theme: t.ColorTheme;
+};
+
+export const HintKeys: React.FC<HintKeyProps> = (props) => {
+  const { theme, enabled = DEFAULTS.enabled } = props;
   const hintKeys = wrangle.hintKeys(props);
   const hasHintKeys = enabled && hintKeys.length > 0;
   if (!hasHintKeys) return null;
@@ -20,7 +24,7 @@ export const HintKeys: React.FC<t.CmdBarProps> = (props) => {
     inner: css({ Flex: 'x-center-center' }),
   };
 
-  const elKeys = hintKeys.map((key, i) => <HintKey key={i} text={key} />);
+  const elKeys = hintKeys.map((key, i) => <HintKey key={i} text={key} theme={theme} />);
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -33,7 +37,7 @@ export const HintKeys: React.FC<t.CmdBarProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  hintKeys(props: t.CmdBarProps) {
+  hintKeys(props: HintKeyProps) {
     if (!props.hintKey) return [];
     return Array.isArray(props.hintKey) ? props.hintKey : [props.hintKey];
   },

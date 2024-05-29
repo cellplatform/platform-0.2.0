@@ -1,4 +1,4 @@
-import { useDocs } from '../use';
+import { useDocs } from '../../ui.use';
 import { Is, type t } from './common';
 import { Data } from './u';
 

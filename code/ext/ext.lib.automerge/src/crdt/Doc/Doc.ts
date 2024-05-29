@@ -3,8 +3,8 @@ import { Namespace } from '../Doc.Namespace';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
 import { toBinary } from './Doc.u.binary';
-import { ephemeral } from './Doc.u.ephemeral';
 import { del } from './Doc.u.delete';
+import { ephemeral } from './Doc.u.ephemeral';
 import { get } from './Doc.u.get';
 import { getOrCreate } from './Doc.u.getOrCreate';
 import { heads, history } from './Doc.u.history';
@@ -26,8 +26,8 @@ export const Doc = {
 
   Lens,
   Namespace,
-  lens: Lens.init,
-  namespace: Namespace.init,
+  lens: Lens.create,
+  ns: Namespace.create,
 
   get,
   getOrCreate,

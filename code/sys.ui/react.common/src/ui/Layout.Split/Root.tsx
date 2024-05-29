@@ -1,5 +1,5 @@
-import { Wrangle } from './Wrangle.mjs';
 import { DEFAULTS, FC, type t } from './common';
+import { Wrangle } from './u';
 import { View } from './ui';
 import { PropEditor } from './ui.PropEditor';
 

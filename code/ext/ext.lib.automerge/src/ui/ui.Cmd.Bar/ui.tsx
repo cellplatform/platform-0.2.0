@@ -1,25 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { useRef } from 'react';
+import { slug, type t } from './common';
+
+import { CmdBar } from 'sys.ui.react.common';
+import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  console.log(DEFAULTS.displayName, props); // TEMP 🐷
-
-  /**
-   * Render
-   */
-  const theme = Color.theme(props.theme);
-  const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      color: theme.fg,
-      display: 'grid',
-      placeItems: 'center',
-    }),
-  };
-
+  const { enabled, doc, paths, debug, focusOnReady } = props;
+  const instance = useRef(props.instance ?? slug()).current;
+  const handlers = wrangle.handlers(props);
+  const controller = useController({
+    instance,
+    enabled,
+    doc,
+    paths,
+    debug,
+    focusOnReady,
+    handlers,
+  });
   return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${DEFAULTS.displayName}`}</div>
-    </div>
+    <CmdBar
+      text={controller.text}
+      enabled={controller.is.enabled}
+      theme={props.theme}
+      style={props.style}
+      onReady={(e) => controller.onReady(e.ref)}
+      onChange={(e) => controller.onChange(e.to)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') controller.onEnter();
+      }}
+    />
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  handlers(props: t.CmdBarProps): t.CmdBarHandlers {
+    const { onText, onCommand, onInvoked } = props;
+    return { onText, onCommand, onInvoked };
+  },
+} as const;

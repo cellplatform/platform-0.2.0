@@ -1,19 +1,23 @@
-import { Color, css, type t } from '../common';
+import { css, type t } from '../common';
 
 export type HintKeyProps = {
   text: string;
+  theme: t.ColorTheme;
   style?: t.CssValue;
 };
 
 export const HintKey: React.FC<HintKeyProps> = (props) => {
+  const { theme } = props;
+
   const styles = {
     base: css({
       position: 'relative',
       fontFamily: 'sans-serif',
       fontSize: 11,
       userSelect: 'none',
-      border: `solid 1px ${Color.format(0.15)}`,
-      backgroundColor: Color.format(0.06),
+      color: theme.fg,
+      backgroundColor: theme.alpha(0.06).fg,
+      border: `solid 1px ${theme.alpha(0.15).fg}`,
       borderRadius: 4,
       fontStyle: 'normal',
       fontWeight: 600,

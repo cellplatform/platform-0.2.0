@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { load } from './Font.load.mjs';
+import { load } from './Font.load';
 
 import { type t } from './common';
-import { Util } from './util.mjs';
+import { Util } from './u';
 
 /**
  * Hook for ensuring fonts are loaded within the document.

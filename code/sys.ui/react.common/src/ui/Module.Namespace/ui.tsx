@@ -1,5 +1,5 @@
 import { COLORS, Color, CmdBar, DEFAULTS, Flip, css, type t } from './common';
-import { Wrangle } from './u.Wrangle';
+import { Wrangle } from './u';
 
 export const View: React.FC<t.ModuleNamespaceProps> = (props) => {
   const { flipped = false } = props;

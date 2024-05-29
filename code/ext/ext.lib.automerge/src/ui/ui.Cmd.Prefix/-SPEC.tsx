@@ -40,11 +40,14 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
     dev.TODO();
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);
