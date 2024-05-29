@@ -101,7 +101,7 @@
     "automerge-tldraw": "0.2.0"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "3.1.0",
+    "@sveltejs/vite-plugin-svelte": "3.1.1",
     "@testing-library/react": "15.0.7",
     "@tsconfig/svelte": "5.0.4",
     "@types/diff": "5.2.1",
