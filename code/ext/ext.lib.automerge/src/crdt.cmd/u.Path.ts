@@ -32,6 +32,10 @@ export const Path = {
         return get()!;
       },
 
+      tx(d: O) {
+        return resolve<string>(d, paths.tx) || '';
+      },
+
       toObject<C extends t.CmdType>(
         d: O,
         options: { defaultParams?: C['params'] } = {},
@@ -42,6 +46,7 @@ export const Path = {
           name: api.name<N>(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
           count: api.counter(d).value,
+          tx: api.tx(d),
         };
       },
     } as const;
@@ -56,6 +61,7 @@ export const Path = {
       name: [...prefix, ...input.name],
       params: [...prefix, ...input.params],
       counter: [...prefix, ...input.counter],
+      tx: [...prefix, ...input.tx],
     };
   },
 
@@ -67,7 +73,7 @@ export const Path = {
       if (input === null || typeof input !== 'object') return false;
       const obj = input as t.CmdPaths;
       const is = Path.is.stringArray;
-      return is(obj.counter) && is(obj.name) && is(obj.params);
+      return is(obj.counter) && is(obj.name) && is(obj.params) && is(obj.tx);
     },
 
     stringArray(input: any): input is string[] {

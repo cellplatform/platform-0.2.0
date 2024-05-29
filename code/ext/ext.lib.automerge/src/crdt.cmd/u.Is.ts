@@ -11,9 +11,9 @@ export const Is = {
     return (
       typeof obj.name === 'string' &&
       typeof obj.params === 'object' &&
-      typeof obj.counter?.value === 'number'
+      typeof obj.counter?.value === 'number' &&
+      typeof obj.tx === 'string'
     );
-    return false;
   },
 
   event: {

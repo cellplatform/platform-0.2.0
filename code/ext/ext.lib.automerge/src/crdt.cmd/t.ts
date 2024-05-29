@@ -11,6 +11,7 @@ export type Cmd<C extends CmdType> = {
 export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
   name: T,
   params: Extract<C, { name: T }>['params'],
+  options?: { tx?: string },
 ) => void;
 
 /**
@@ -29,6 +30,7 @@ export type CmdPaths = {
   name: t.ObjectPath;
   params: t.ObjectPath;
   counter: t.ObjectPath;
+  tx: t.ObjectPath;
 };
 
 /**
@@ -38,6 +40,7 @@ export type CmdLens<C extends CmdType = CmdType> = {
   name?: C['name'];
   params?: C['params'];
   counter?: CmdCounter;
+  tx?: string;
 };
 export type CmdCounter = { readonly value: number };
 
@@ -48,6 +51,7 @@ export type CmdObject<C extends CmdType> = {
   name: C['name'];
   params: C['params'];
   count: number;
+  tx: string;
 };
 
 /**

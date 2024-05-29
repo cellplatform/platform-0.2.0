@@ -1,7 +1,6 @@
 import { CmdBar, DEFAULTS } from '.';
 import { Store } from '../../crdt';
 import { A, describe, expect, it, type t } from '../../test';
-import { Cmd } from './common';
 
 describe('Cmd.Bar', () => {
   describe('Path (resolver)', () => {
@@ -10,33 +9,40 @@ describe('Cmd.Bar', () => {
     it('default paths', () => {
       const resolve = resolver(DEFAULTS.paths);
       const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foobar' };
+      const tx = 'tx.foo';
       const obj: t.CmdBarLens = {
         text: 'hello',
-        cmd: { counter: new A.Counter(3), name: 'Invoke', params },
+        cmd: { counter: new A.Counter(3), name: 'Invoke', params, tx },
       };
       expect(resolve.text(obj)).to.eql('hello');
       expect(resolve.toObject(obj)).to.eql({
         text: 'hello',
-        cmd: { name: 'Invoke', params, count: 3 },
+        cmd: { name: 'Invoke', params, count: 3, tx },
       });
     });
 
     it('custom paths', () => {
       const paths: t.CmdBarPaths = {
         text: ['x', 'y', 'text'],
-        cmd: { counter: ['z', 'foobar'], name: ['x', 'n'], params: ['z', 'p'] },
+        cmd: {
+          counter: ['z', 'foobar'],
+          name: ['x', 'n'],
+          params: ['z', 'p'],
+          tx: ['z', 'tx'],
+        },
       };
       const resolve = resolver(paths);
+      const tx = 'tx.foo';
       const params = { msg: 'hello' };
       const doc = {
         x: { y: { text: 'hello' }, n: 'invoke' },
-        z: { foobar: new A.Counter(123), p: params },
+        z: { foobar: new A.Counter(123), p: params, tx },
       };
       expect(resolve.text(doc)).to.eql('hello');
 
       const obj = resolve.toObject(doc);
       expect(obj.text).to.eql('hello');
-      expect(obj.cmd).to.eql({ name: 'invoke', params, count: 123 });
+      expect(obj.cmd).to.eql({ name: 'invoke', params, count: 123, tx });
     });
   });
 

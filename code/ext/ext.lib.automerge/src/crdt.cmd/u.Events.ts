@@ -41,8 +41,11 @@ export const Events = {
         filter((e) => Is.event.countChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
-        const { count, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/Invoked', payload: { name, params, count } });
+        const { count, name, params, tx } = e.doc;
+        fire({
+          type: 'crdt:cmd/Invoked',
+          payload: { name, params, count, tx },
+        });
       });
     }
 

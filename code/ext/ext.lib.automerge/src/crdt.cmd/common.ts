@@ -1,4 +1,4 @@
-import { A, type t } from './common';
+import { A, slug, type t } from './common';
 export * from '../common';
 
 /**
@@ -8,11 +8,11 @@ const paths: t.CmdPaths = {
   counter: ['counter'],
   name: ['name'],
   params: ['params'],
+  tx: ['tx'],
 };
 
 export const DEFAULTS = {
   paths,
-  counter(initial = 0): t.CmdCounter {
-    return new A.Counter(initial);
-  },
+  tx: () => slug(),
+  counter: (initial = 0): t.CmdCounter => new A.Counter(initial),
 } as const;
