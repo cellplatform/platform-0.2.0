@@ -1,4 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
+import { Sample } from './-SPEC.ui';
 
 type T = { theme?: t.CommonTheme };
 const initial: T = {};
@@ -24,11 +25,11 @@ export default Dev.describe(name, (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
         Dev.Theme.background(ctx, e.state.theme, 1);
-        return <div>{`🐷 ${name}`}</div>;
+        return <Sample theme={e.state.theme} />;
       });
   });
 
@@ -40,6 +41,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
     });
   });
