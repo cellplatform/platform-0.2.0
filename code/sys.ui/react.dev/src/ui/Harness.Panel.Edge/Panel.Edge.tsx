@@ -15,20 +15,24 @@ export const PanelEdge: React.FC<PanelBarProps> = (props) => {
 
   if (!renderer || !element) return <div />;
 
+  /**
+   * Render
+   */
+  const border = (hasBorder: boolean) => (hasBorder ? Wrangle.borderStyle(current) : undefined);
   const styles = {
     base: css({
       position: 'relative',
       boxSizing: 'border-box',
       Padding: current?.padding,
-      borderTop: edge === 'Footer' ? Wrangle.borderStyle(current) : undefined,
-      borderBottom: edge === 'Header' ? Wrangle.borderStyle(current) : undefined,
-      overflowX: 'hidden',
+      borderTop: border(edge === 'Footer'),
+      borderBottom: border(edge === 'Header'),
+      display: 'grid',
     }),
-    body: css({ position: 'relative' }),
+    body: css({ position: 'relative', overflowX: 'hidden' }),
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} data-component={`dev.harness:${edge}`}>
       <div {...styles.body}>{element}</div>
     </div>
   );

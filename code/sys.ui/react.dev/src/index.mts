@@ -1,9 +1,9 @@
 export { Pkg } from './index.pkg.mjs';
 
 export { BADGES, DevWrangle, Is } from './common';
-export { DevKeyboard } from './fn.Keyboard';
-export { Spec } from './fn.Spec';
-export { ValueHandler } from './fn.Tools';
+export { DevKeyboard } from './f.Keyboard';
+export { Spec } from './f.Spec';
+export { ValueHandler } from './f.Tools';
 
 export { ModuleList } from './ui/List.Module';
 export { useRubberband } from './ui.use/useRubberband';

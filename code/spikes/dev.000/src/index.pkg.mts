@@ -26,6 +26,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.monaco.crdt': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
     'ext.lib.privy': '0.0.0',
+    'ext.lib.reactflow': '0.0.0',
     'ext.lib.stripe': '0.0.0',
     'ext.lib.vimeo': '0.0.0',
     'react': '18.3.1',

@@ -40,6 +40,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
     });
   });

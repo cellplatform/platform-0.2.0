@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.privy',
   version: '0.0.0',
   dependencies: {
-    '@privy-io/react-auth': '1.66.1',
+    '@privy-io/react-auth': '1.66.2',
     'react': '18.3.1',
     'react-dom': '18.3.1',
     'sys.util': '0.0.0',

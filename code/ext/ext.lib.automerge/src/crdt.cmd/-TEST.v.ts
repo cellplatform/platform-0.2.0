@@ -97,9 +97,6 @@ describe('crdt.cmd (Command)', () => {
       });
 
       it.skip('handler → cmd.invoke.response<R>', async () => {
-        /**
-         * TODO 🐷
-         */
         // cmd.invoke.response<R>
         // cmd.invoke.listen<R> ← ??
       });
