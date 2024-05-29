@@ -36,8 +36,8 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    it('initial {cmd} structure upon creation', async () => {
-      const { doc, dispose, dispose$ } = await testSetup();
+    it('has initial {cmd} structure upon creation', async () => {
+      const { doc, dispose } = await testSetup();
       const lens = Doc.lens(doc, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));
 
       expect(Cmd.Is.initialized(doc.current)).to.eql(false);
@@ -49,6 +49,7 @@ describe('crdt.cmd (Command)', () => {
 
       Cmd.create(lens);
       expect(Cmd.Is.initialized(lens.current)).to.eql(true);
+      expect(Cmd.Is.initialized((doc.current as any).foo.bar)).to.eql(true);
 
       dispose();
     });
