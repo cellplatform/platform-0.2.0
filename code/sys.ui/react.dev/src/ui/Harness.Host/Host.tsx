@@ -1,4 +1,4 @@
-import { Color, COLORS, css, DEFAULTS, R, useCurrentState, type t } from '../common';
+import { Color, css, DEFAULTS, R, useCurrentState, type t } from '../common';
 import { PanelFooter, PanelHeader } from '../Harness.Panel.Edge';
 import { BarLoader } from '../Spinners';
 import { HostBackground } from './Host.Background';

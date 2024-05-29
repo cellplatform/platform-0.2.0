@@ -24,9 +24,14 @@ export const PanelEdge: React.FC<PanelBarProps> = (props) => {
       borderBottom: edge === 'Header' ? Wrangle.borderStyle(current) : undefined,
       overflowX: 'hidden',
     }),
+    body: css({ position: 'relative' }),
   };
 
-  return <div {...css(styles.base, props.style)}>{element}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.body}>{element}</div>
+    </div>
+  );
 };
 
 /**
