@@ -59,7 +59,7 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose, dispose$ } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
-      const fired: t.CmdTx<C1>[] = [];
+      const fired: t.CmdInvoked<C1>[] = [];
       cmd
         .events(dispose$)
         .tx.name('Foo')
@@ -121,7 +121,7 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd1.events(dispose$);
 
         const fired: t.CmdEvent[] = [];
-        const firedTx: t.CmdTx[] = [];
+        const firedTx: t.CmdInvoked[] = [];
         events.$.subscribe((e) => fired.push(e));
         events.tx.$.subscribe((e) => firedTx.push(e));
 
@@ -155,7 +155,7 @@ describe('crdt.cmd (Command)', () => {
         expect(doc.current).to.eql({ foo: {} });
 
         const cmd = Cmd.create<C>(lens);
-        const fired: t.CmdTx[] = [];
+        const fired: t.CmdInvoked[] = [];
         cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', { msg: 'hello' });
         expect(fired.length).to.eql(1);
@@ -181,7 +181,7 @@ describe('crdt.cmd (Command)', () => {
 
         const p = { msg: 'hello' };
         const cmd = Cmd.create<C>(doc, { paths });
-        const fired: t.CmdTx[] = [];
+        const fired: t.CmdInvoked[] = [];
         cmd.events(dispose$).tx.$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', p);
         expect(fired.length).to.eql(1);
@@ -196,7 +196,7 @@ describe('crdt.cmd (Command)', () => {
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
 
-        const fired: t.CmdTx[] = [];
+        const fired: t.CmdInvoked[] = [];
         events.tx.name('Foo').subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
@@ -331,22 +331,20 @@ describe('crdt.cmd (Command)', () => {
 
     it('manual example (primitive)', async () => {
       const { doc, dispose, dispose$ } = await testSetup();
-
       const cmd = Cmd.create<C>(doc);
       const events = cmd.events(dispose$);
 
       const sum = (params: P): R => ({ sum: params.a + params.b });
-      const responses: t.CmdTx<C2>[] = [];
+      const responses: t.CmdInvoked<C2>[] = [];
       events.tx.name('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
       events.tx.name('add:res').subscribe((e) => responses.push(e));
 
       cmd.invoke('add', { a: 2, b: 3 });
       expect(responses[0].params.sum).to.eql(5);
-
       dispose();
     });
 
-    it.skip('handler → cmd.invoke.response<R>', async () => {
+    it('handler → cmd.invoke.response<R>', async () => {
       // cmd.invoke.response<R>
       // cmd.invoke.listen<R> ← ??
     });

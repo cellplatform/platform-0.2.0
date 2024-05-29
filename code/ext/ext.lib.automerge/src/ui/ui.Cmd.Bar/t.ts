@@ -68,7 +68,7 @@ export type CmdBarEvent = CmdBarTxEvent | CmdBarTextEvent;
 type C = CmdBarType;
 export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>) => void;
 export type CmdBarTxEvent<T extends C = C> = { type: 'crdt:cmdbar/Tx'; payload: CmdBarTx<T> };
-export type CmdBarTx<T extends C = C> = t.CmdTx<T>;
+export type CmdBarTx<T extends C = C> = t.CmdInvoked<T>;
 
 /**
  * Fires when the command bar's text changes.

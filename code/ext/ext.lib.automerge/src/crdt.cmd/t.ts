@@ -4,11 +4,11 @@ type O = Record<string, unknown>;
 type S = string;
 
 export type Cmd<C extends CmdType> = {
-  readonly invoke: CmdInvoke<C>;
+  readonly invoke: CmdInvokeMethod<C>;
   readonly events: CmdEventsFactory<C>;
 };
 
-export type CmdInvoke<C extends CmdType> = <T extends C['name']>(
+export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
   name: T,
   params: Extract<C, { name: T }>['params'],
 ) => void;
@@ -57,24 +57,23 @@ export type CmdEventsFactory<C extends CmdType> = (dispose$?: t.UntilObservable)
 export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly tx: {
-    readonly $: t.Observable<CmdTx<C>>;
-    name<N extends C['name']>(name: N): t.Observable<CmdTx<CmdTypeMap<C>[N]>>;
+    readonly $: t.Observable<CmdInvoked<C>>;
+    name<N extends C['name']>(name: N): t.Observable<CmdInvoked<CmdTypeMap<C>[N]>>;
   };
 };
 
 /**
  * Event types union rollup.
  */
-export type CmdEvent = CmdTxEvent;
+export type CmdEvent = CmdInvokedEvent;
 
 /**
  * Fires when a command is invoked via a new transaction (eg "fire").
  */
-export type CmdTxHandler<C extends CmdType = CmdType> = (e: CmdTx<C>) => void;
-export type CmdTxEvent<C extends CmdType = CmdType> = {
-  type: 'crdt:cmd/Tx';
-  payload: CmdTx<C>;
+export type CmdInvokedEvent<C extends CmdType = CmdType> = {
+  type: 'crdt:cmd/Invoked';
+  payload: CmdInvoked<C>;
 };
-export type CmdTx<C extends CmdType = CmdType> = CmdType<C['name'], C['params']> & {
+export type CmdInvoked<C extends CmdType = CmdType> = CmdType<C['name'], C['params']> & {
   count: number;
 };

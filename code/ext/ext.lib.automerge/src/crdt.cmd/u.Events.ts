@@ -42,7 +42,7 @@ export const Events = {
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
         const { count, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/Tx', payload: { name, params, count } });
+        fire({ type: 'crdt:cmd/Invoked', payload: { name, params, count } });
       });
     }
 
@@ -50,9 +50,9 @@ export const Events = {
      * API
      */
     const tx: t.CmdEvents<C>['tx'] = {
-      $: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
+      $: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
       name<N extends C['name']>(name: N) {
-        type T = t.CmdTx<t.CmdTypeMap<C>[N]>;
+        type T = t.CmdInvoked<t.CmdTypeMap<C>[N]>;
         return tx.$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
       },
     };
