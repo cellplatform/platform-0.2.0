@@ -45,5 +45,6 @@ export const paths = {
     'src/ui/ui.Info/t.ts',
     'src/ui/ui.Info/ui.tsx',
     'src/ui/ui.Sample.01/-SPEC.tsx',
+    'src/ui/ui.Sample.01/common.ts',
   ],
 } as const;
