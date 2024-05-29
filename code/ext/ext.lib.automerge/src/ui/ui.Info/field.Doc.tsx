@@ -135,7 +135,10 @@ const wrangle = {
       output = toObject(output);
 
       const mutate = data.object?.beforeRender;
-      if (typeof mutate === 'function') mutate(output);
+      if (typeof mutate === 'function') {
+        const res = mutate(output);
+        if (res !== undefined) output = res;
+      }
 
       const dotMeta = data.object?.dotMeta ?? true;
       if (!dotMeta && output) delete output['.meta'];

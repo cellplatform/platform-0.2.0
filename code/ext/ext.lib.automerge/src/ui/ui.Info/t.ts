@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+type O = Record<string, unknown>;
+
 export type InfoField =
   | 'Visible'
   | 'Module'
@@ -47,7 +49,7 @@ export type InfoDataDocObject = {
   name?: string;
   expand?: { level?: number; paths?: string[] };
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
-  beforeRender?: (mutate: unknown) => void;
+  beforeRender?: (mutate: O) => void | O;
   onToggleClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void;
 };
 
