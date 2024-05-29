@@ -12,7 +12,7 @@
   },
   "tauri": {
     "allowlist": { "all": false, "shell": { "all": false, "open": true } },
-    "windows": [{ "title": "sys", "width": 800, "height": 600 }],
+    "windows": [{ "title": "system", "width": 1200, "height": 800 }],
     "security": { "csp": null },
     "bundle": {
       "active": true,
