@@ -114,7 +114,7 @@ describe('crdt.cmd (Command)', () => {
 
     const invoked: t.CmdInvokedEvent['type'] = 'crdt:cmd/Invoked';
     describe(`event: "${invoked}"`, () => {
-      it('⚡️tx ← on root {doc}', async () => {
+      it('⚡️← on root {doc}', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd1 = Cmd.create<C>(doc);
         const cmd2 = Cmd.create<C2>(doc);
@@ -149,7 +149,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('⚡️tx ← on lens', async () => {
+      it('⚡️← on lens', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const lens = Doc.lens(doc, ['foo'], (d) => (d.foo = {}));
         expect(doc.current).to.eql({ foo: {} });
@@ -170,7 +170,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('⚡️tx ← custom paths', async () => {
+      it('⚡️← custom paths', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
 
         const paths: t.CmdPaths = {
@@ -190,8 +190,10 @@ describe('crdt.cmd (Command)', () => {
         expect(doc.current).to.eql({ z: { tx: { value: count } }, a: 'Bar', x: { y: { p } } });
         dispose();
       });
+    });
 
-      it('⚡️tx.filter<T>( ... ) ', async () => {
+    describe('filter', () => {
+      it('.name<T>( ⚡️) ', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);

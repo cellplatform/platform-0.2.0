@@ -73,5 +73,6 @@ export type CmdInvokedEvent<C extends CmdType = CmdType> = {
   payload: CmdInvoked<C>;
 };
 export type CmdInvoked<C extends CmdType = CmdType> = CmdType<C['name'], C['params']> & {
+  tx: string;
   count: number;
 };
