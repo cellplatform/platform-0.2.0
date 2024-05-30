@@ -2,9 +2,9 @@ import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<C extends t.CmdType> = {
   tx: string;
-  name: u.ExtractResName<C>;
+  cmd: { req: C['name']; res: u.ExtractRes<C>['name'] };
   timeout?: t.Msecs;
-  onComplete?: t.CmdListenerHandler<C>;
+  onComplete?: t.CmdListenHandler<C>;
   dispose$?: t.UntilObservable;
 };
 
@@ -25,7 +25,7 @@ export function listenerFactory<C extends t.CmdType>(
   let _result: ResParams | undefined;
   let _status: Status = 'Pending';
 
-  const handlers = { onComplete: new Set<t.CmdListenerHandler<C>>() } as const;
+  const handlers = { onComplete: new Set<t.CmdListenHandler<C>>() } as const;
   if (args.onComplete) handlers.onComplete.add(args.onComplete);
 
   /**
@@ -52,7 +52,7 @@ export function listenerFactory<C extends t.CmdType>(
    * Listeners.
    */
   events
-    .on(args.name)
+    .on(args.cmd.res)
     .pipe(
       rx.filter((e) => e.tx === tx),
       rx.map((e) => e.params as ResParams),
@@ -82,8 +82,9 @@ export function listenerFactory<C extends t.CmdType>(
     },
 
     promise() {
+      type R = t.CmdListener<C>;
       const first$ = $.pipe(rx.take(1));
-      return new Promise<t.CmdListener<C>>((resolve) => first$.subscribe((e) => resolve(api)));
+      return new Promise<R>((resolve) => first$.subscribe(() => resolve(api)));
     },
 
     onComplete(fn) {

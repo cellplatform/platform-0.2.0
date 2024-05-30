@@ -18,14 +18,14 @@ export type CmdInvoker<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   params: Extract<C, { name: N }>['params'],
   options?: CmdInvokeOptionsInput,
-) => Omit<t.CmdInvoked<C>, 'listen'>;
+) => t.CmdInvoked<C>;
 
 export type CmdResponseInvoker<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   responder: u.ExtractResName<C>,
   params: Extract<C, { name: N }>['params'],
   options?: CmdInvokeOptionsInput,
-) => t.CmdInvoked<C>;
+) => t.CmdResponseInvoked<C>;
 
 /**
  * Response.
@@ -34,21 +34,23 @@ export type CmdInvoked<C extends t.CmdType> = {
   readonly tx: string;
   readonly name: C['name'];
   readonly params: C['params'];
-  readonly listen: CmdListenMethod<C>;
+};
+
+export type CmdResponseInvoked<C extends t.CmdType> = CmdInvoked<C> & {
+  readonly listen: CmdListen<C>;
 };
 
 /**
  * Command listener factory.
  */
-export type CmdListenMethod<C extends t.CmdType> = (
-  name: u.ExtractResName<C>,
-  options?: CmdListenOptions<C> | CmdListenerHandler<C>,
+export type CmdListen<C extends t.CmdType> = (
+  options?: CmdListenOptions<C> | CmdListenHandler<C>,
 ) => CmdListener<C>;
 
 export type CmdListenOptions<C extends t.CmdType> = {
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
-  onComplete?: CmdListenerHandler<C>;
+  onComplete?: CmdListenHandler<C>;
 };
 
 /**
@@ -62,10 +64,10 @@ export type CmdListener<C extends t.CmdType> = t.Lifecycle & {
   readonly timedout: boolean;
   readonly result?: u.ExtractResParams<C>;
   promise(): Promise<CmdListener<C>>;
-  onComplete(fn: CmdListenerHandler<C>): CmdListener<C>;
+  onComplete(fn: CmdListenHandler<C>): CmdListener<C>;
 
   // TODO 🐷
   // onError(fn: CmdListenerHandler<C>): CmdListener<C>;
 };
 
-export type CmdListenerHandler<C extends t.CmdType> = (e: CmdListener<C>) => void;
+export type CmdListenHandler<C extends t.CmdType> = (e: CmdListener<C>) => void;

@@ -1,5 +1,5 @@
 import { listenerFactory } from './u.Listener';
-import { DEFAULTS, ObjectPath, Time, type t } from './common';
+import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 
 type O = Record<string, unknown>;
@@ -53,13 +53,13 @@ export function create<C extends t.CmdType>(
 
   const invokeWithResponse: t.CmdResponseInvoker<C> = (name, responder, params, options) => {
     const { tx, obj, start } = invokeSetup(name, params, options);
-    const listen: t.CmdListenMethod<C> = (name, options) => {
+    const listen: t.CmdListen<C> = (options) => {
       const { timeout, dispose$, onComplete } = wrangle.listen.options(options);
-      return listenerFactory<C>(api, { tx, name, timeout, dispose$, onComplete });
+      const cmd = { req: name, res: responder };
+      return listenerFactory<C>(api, { tx, cmd, timeout, dispose$, onComplete });
     };
-    const res = { ...obj, listen };
     start();
-    return res;
+    return { ...obj, listen };
   };
 
   /**
@@ -92,7 +92,7 @@ const wrangle = {
 
   listen: {
     options<C extends t.CmdType>(
-      input?: t.CmdListenOptions<C> | t.CmdListenerHandler<C>,
+      input?: t.CmdListenOptions<C> | t.CmdListenHandler<C>,
     ): t.CmdListenOptions<C> {
       if (!input) return {};
       if (typeof input === 'function') return { onComplete: input };
