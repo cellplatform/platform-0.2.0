@@ -514,10 +514,12 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen → events.on("name", <callback>)', async () => {
+      it('.listen → events.on("name", fn:<callback>)', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
-        cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
+        cmd.events(dispose$).on('add', function (e) {
+          cmd.invoke('add:res', sum(e.params), e.tx);
+        });
 
         const res = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
         await Time.wait(10);
