@@ -1,37 +1,20 @@
-import type { t } from './common';
-
+export type * from './t.cmd';
+export type * from './t.cmd.res';
 export type * from './t.doc';
-export type * from './t.events';
-export type * from './t.response';
+export type * from './t.event';
 
 type O = Record<string, unknown>;
 type S = string;
+type U = undefined;
 
 /**
- * Named definition of a command.
+ * Definition of a command, eg:
+ *
+ *    type Add = CmdType<'add', { a: number; b: number }, AddR>;
+ *    type AddR = CmdType<'add:res', { sum: number }>;
+ *
  */
-export type CmdType<N extends S = S, P extends O = O, R extends CmdType | undefined = undefined> = {
+export type CmdType<N extends S = S, P extends O = O, R extends CmdType | U = U> = {
   name: N;
   params: P;
 };
-
-/**
- * Command API.
- */
-export type Cmd<C extends CmdType> = {
-  readonly events: t.CmdEventsFactory<C>;
-  readonly invoke: CmdInvokeMethod<C>;
-
-  /**
-   * TODO 🐷 override [invoke]
-   * - ():void
-   * - ('name:res'):response ← thereby removing the need to pass .listen("name") param on response.
-   */
-};
-
-export type CmdInvokeMethod<C extends CmdType> = <N extends C['name']>(
-  name: N,
-  params: Extract<C, { name: N }>['params'],
-  options?: CmdInvokeOptions | string,
-) => t.CmdResponse<C>;
-export type CmdInvokeOptions = { tx?: string };
