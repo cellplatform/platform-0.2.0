@@ -68,7 +68,8 @@ export function listenerFactory<C extends t.CmdType>(
     tx,
 
     get ok() {
-      if (_status === 'Error' || _status === 'Error:Timeout') return false;
+      if (_status === 'Error') return false;
+      if (_status === 'Error:Timeout') return false;
       return true;
     },
     get status() {
@@ -77,7 +78,6 @@ export function listenerFactory<C extends t.CmdType>(
     get timedout() {
       return _status === 'Error:Timeout';
     },
-
     get result() {
       return _result;
     },
