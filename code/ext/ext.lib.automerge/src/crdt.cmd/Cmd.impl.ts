@@ -36,25 +36,41 @@ export function create<C extends t.CmdType>(
   if (!Is.initialized(doc.current)) update('', '', {}); // ← (default empty structure).
 
   /**
+   * Invoke method (overloads)
+   */
+  const invokeSetup = (name: C['name'], params: C['params'], options?: t.CmdInvokeOptionsInput) => {
+    const tx = wrangle.invoke.tx(options, args.tx);
+    const obj = { tx, name, params };
+    const start = () => Time.delay(0, () => update(tx, name, params, true));
+    return { tx, obj, start } as const;
+  };
+
+  const invoke: t.CmdInvoker<C> = (name, params, options = {}) => {
+    const { obj, start } = invokeSetup(name, params, options);
+    start();
+    return obj;
+  };
+
+  const invokeWithResponse: t.CmdResponseInvoker<C> = (name, responder, params, options) => {
+    const { tx, obj, start } = invokeSetup(name, params, options);
+    const listen: t.CmdListenMethod<C> = (name, options) => {
+      const { timeout, dispose$, onComplete } = wrangle.listen.options(options);
+      return listenerFactory<C>(api, { tx, name, timeout, dispose$, onComplete });
+    };
+    const res = { ...obj, listen };
+    start();
+    return res;
+  };
+
+  /**
    * API
    */
   const api: t.Cmd<C> = {
-    invoke(name, params, options = {}) {
-      const tx = wrangle.invoke.tx(options, args.tx);
-      const res: t.CmdResponse<C> = {
-        tx,
-        name,
-        params,
-        listen(name, options) {
-          const { timeout, dispose$, onComplete } = wrangle.listen.options(options);
-          return listenerFactory<C>(api, { tx, name, timeout, dispose$, onComplete });
-        },
-      };
-
-      // NB: delay document update for a tick to enable response
-      //     listener to be setup at call-site.
-      Time.delay(0, () => update(tx, name, params, true));
-      return res;
+    invoke(...args: any[]) {
+      const [p1, p2, p3, p4] = args;
+      if (typeof p2 === 'object') return invoke(p1, p2, p3) as any;
+      if (typeof p2 === 'string') return invokeWithResponse(p1, p2 as any, p3, p4);
+      throw new Error('overlaoded invoke arguments could not be wrangled');
     },
 
     events(dispose$?: t.UntilObservable) {

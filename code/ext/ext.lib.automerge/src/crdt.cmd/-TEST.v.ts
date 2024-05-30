@@ -433,9 +433,10 @@ describe('crdt.cmd (Command)', () => {
   describe('Cmd → Response', () => {
     type P = { a: number; b: number };
     type R = { sum: number };
-    type C = C1 | C2;
+    type C = C1 | C2 | C3;
     type C1 = t.CmdType<'add', P, C2>;
     type C2 = t.CmdType<'add:res', R>;
+    type C3 = t.CmdType<'foo', { msg?: string }>;
     const sum = (params: P): R => ({ sum: params.a + params.b });
 
     /**
@@ -466,14 +467,23 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
-      const tx = 'tx.foo';
-      const params: P = { a: 1, b: 2 };
-      const res = cmd.invoke('add', params, { tx });
+      const tx = 'tx.abc';
+      const res1 = cmd.invoke('foo', {}, { tx });
+      const res2 = cmd.invoke('add', 'add:res', { a: 1, b: 2 }, { tx });
 
-      expect(typeof res === 'object').to.eql(true);
-      expect(res.tx).to.eql(tx);
-      expect(res.name === 'add').to.be.true;
-      expect(res.params).to.eql(params);
+      expect(typeof res1 === 'object').to.be.true;
+      expect((res1 as any).listen).to.be.undefined;
+      expect(typeof res2 === 'object').to.be.true;
+      expect(typeof res2.listen === 'function').to.be.true;
+
+      expect(res1.tx).to.eql(tx);
+      expect(res2.tx).to.eql(tx);
+
+      expect(res1.name === 'foo').to.be.true;
+      expect(res1.params).to.eql({});
+
+      expect(res2.name === 'add').to.be.true;
+      expect(res2.params).to.eql({ a: 1, b: 2 });
 
       dispose();
     });
@@ -493,7 +503,7 @@ describe('crdt.cmd (Command)', () => {
         events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
         const params: P = { a: 1, b: 2 };
-        const res = cmd.invoke('add', params);
+        const res = cmd.invoke('add', 'add:res', params);
         const listener = res.listen('add:res');
 
         expect(listener.tx).to.eql(res.tx);
@@ -520,7 +530,7 @@ describe('crdt.cmd (Command)', () => {
           cmd.invoke('add:res', sum(e.params), e.tx);
         });
 
-        const res = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+        const res = cmd.invoke('add', 'add:res', { a: 2, b: 3 }).listen('add:res');
         await Time.wait(10);
 
         expect(res.result).to.eql({ sum: 5 });
@@ -532,7 +542,7 @@ describe('crdt.cmd (Command)', () => {
         const cmd = Cmd.create<C>(doc);
         cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-        const listener = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+        const listener = cmd.invoke('add', 'add:res', { a: 2, b: 3 }).listen('add:res');
         expect(listener.result).to.eql(undefined);
 
         const res = await listener.promise();
@@ -551,7 +561,7 @@ describe('crdt.cmd (Command)', () => {
         });
 
         const timeout = 10;
-        const res = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', { timeout });
+        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }).listen('add:res', { timeout });
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql('Pending');
         expect(res.timedout).to.eql(false);
@@ -578,12 +588,14 @@ describe('crdt.cmd (Command)', () => {
         const fired: t.CmdListener<C1>[] = [];
 
         // Handler passed to listener constructor.
-        tx = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', (e) => fired.push(e)).tx;
+        tx = cmd
+          .invoke('add', 'add:res', { a: 1, b: 2 })
+          .listen('add:res', (e) => fired.push(e)).tx;
         await Time.wait(10);
         expect(fired[0].result?.sum).to.eql(3);
 
         // Handler added to {listener} object.
-        const listener = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+        const listener = cmd.invoke('add', 'add:res', { a: 2, b: 3 }).listen('add:res');
         tx = listener.onComplete((e) => fired.push(e)).tx;
         await Time.wait(10);
         expect(fired[1].result?.sum).to.eql(5);
@@ -603,8 +615,8 @@ describe('crdt.cmd (Command)', () => {
         });
 
         const params: P = { a: 1, b: 2 };
-        const res1 = cmd.invoke('add', params).listen('add:res');
-        const res2 = cmd.invoke('add', params).listen('add:res', { dispose$ });
+        const res1 = cmd.invoke('add', 'add:res', params).listen('add:res');
+        const res2 = cmd.invoke('add', 'add:res', params).listen('add:res', { dispose$ });
         expect(res1.disposed).to.eql(false);
         expect(res2.disposed).to.eql(false);
 

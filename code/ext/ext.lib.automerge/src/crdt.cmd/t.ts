@@ -1,5 +1,4 @@
 export type * from './t.Cmd';
-export type * from './t.Cmd.Res';
 export type * from './t.Doc';
 export type * from './t.Events';
 
