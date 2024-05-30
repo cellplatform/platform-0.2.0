@@ -53,7 +53,7 @@ export function listenerFactory<C extends t.CmdType>(
    * Listeners.
    */
   events
-    .cmd(args.name)
+    .on(args.name)
     .pipe(
       rx.filter((e) => e.tx === tx),
       rx.map((e) => e.params as ResParams),

@@ -69,7 +69,7 @@ describe('crdt.cmd (Command)', () => {
       const fired: t.CmdInvoked<C1>[] = [];
       cmd
         .events(dispose$)
-        .cmd('Foo')
+        .on('Foo')
         .subscribe((e) => fired.push(e));
 
       Array.from({ length }).forEach((_, i) => cmd.invoke('Foo', { foo: i + 1 }));
@@ -280,7 +280,7 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd.events(dispose$);
 
         const fired: t.CmdInvoked[] = [];
-        events.cmd('Foo').subscribe((e) => fired.push(e));
+        events.on('Foo').subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
         cmd.invoke('Bar', {}); // NB: filtered out.
@@ -452,8 +452,8 @@ describe('crdt.cmd (Command)', () => {
       const events = cmd.events(dispose$);
 
       const responses: t.CmdInvoked<C2>[] = [];
-      events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
-      events.cmd('add:res').subscribe((e) => responses.push(e));
+      events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
+      events.on('add:res').subscribe((e) => responses.push(e));
 
       cmd.invoke('add', { a: 2, b: 3 });
       await Time.wait(10);
@@ -491,7 +491,7 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
-        events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
+        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
 
         const params: P = { a: 1, b: 2 };
         const res = cmd.invoke('add', params);
@@ -521,7 +521,7 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
-        events.cmd('add').subscribe(async (e) => {
+        events.on('add').subscribe(async (e) => {
           await Time.wait(20); // NB: response is issued after invokation has timed-out.
           cmd.invoke('add:res', sum(e.params), res.tx);
         });
@@ -548,7 +548,7 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
-        events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), tx));
+        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), tx));
 
         let tx = '';
         const fired: t.CmdListener<C1>[] = [];
@@ -572,7 +572,7 @@ describe('crdt.cmd (Command)', () => {
         const cmd = Cmd.create<C>(doc);
 
         const events = cmd.events(dispose$);
-        events.cmd('add').subscribe(async (e) => {
+        events.on('add').subscribe(async (e) => {
           await Time.wait(10); // NB: response is issued after listener has disposed.
           cmd.invoke('add:res', sum(e.params), res1.tx);
           cmd.invoke('add:res', sum(e.params), res2.tx);

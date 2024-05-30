@@ -11,7 +11,7 @@ export type CmdEventsFactory<C extends t.CmdType> = (dispose$?: t.UntilObservabl
 export type CmdEvents<C extends t.CmdType = t.CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly invoked$: t.Observable<CmdInvoked<C>>;
-  cmd<N extends C['name']>(name: N): t.Observable<CmdInvoked<u.CmdTypeMap<C>[N]>>;
+  on<N extends C['name']>(name: N): t.Observable<CmdInvoked<u.CmdTypeMap<C>[N]>>;
 };
 
 /**

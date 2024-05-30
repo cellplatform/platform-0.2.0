@@ -24,7 +24,7 @@ export type Cmd<C extends CmdType> = {
   /**
    * TODO 🐷 override [invoke]
    * - ():void
-   * - ('name:res'):response
+   * - ('name:res'):response ← thereby removing the need to pass .listen("name") param on response.
    */
 };
 
