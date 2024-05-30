@@ -1,6 +1,6 @@
-import { listenerFactory } from './u.Listener';
-import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
+import { DEFAULTS, ObjectPath, Time, type t } from './common';
 import { Events, Is, Path } from './u';
+import { Listener } from './u.Listener';
 
 type O = Record<string, unknown>;
 type TxFactory = () => string;
@@ -56,7 +56,7 @@ export function create<C extends t.CmdType>(
     const listen: t.CmdListen<C> = (options) => {
       const { timeout, dispose$, onComplete } = wrangle.listen.options(options);
       const cmd = { req: name, res: responder };
-      return listenerFactory<C>(api, { tx, cmd, timeout, dispose$, onComplete });
+      return Listener.create<C>(api, { tx, cmd, timeout, dispose$, onComplete });
     };
     start();
     return { ...obj, listen };

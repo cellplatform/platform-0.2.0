@@ -11,10 +11,7 @@ type Args<C extends t.CmdType> = {
 /**
  * Factory for producing callback listeners.
  */
-export function listenerFactory<C extends t.CmdType>(
-  cmd: t.Cmd<C>,
-  args: Args<C>,
-): t.CmdListener<C> {
+function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListener<C> {
   const { tx, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
@@ -101,3 +98,8 @@ export function listenerFactory<C extends t.CmdType>(
   };
   return api;
 }
+
+/**
+ * Export
+ */
+export const Listener = { create } as const;
