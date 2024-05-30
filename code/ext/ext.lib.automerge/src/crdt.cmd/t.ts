@@ -48,10 +48,11 @@ export type CmdListenOptions<C extends CmdType> = {
 export type CmdListenerCallback<C extends CmdType> = (e: CmdListener<C>) => void;
 
 export type CmdListener<C extends CmdType> = t.Lifecycle & {
-  readonly ok: boolean;
-  readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
-  readonly tx: string;
   readonly $: t.Observable<u.ExtractResParams<C>>;
+  readonly ok: boolean;
+  readonly tx: string;
+  readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
+  readonly timedout: boolean;
   readonly result?: u.ExtractResParams<C>;
   onComplete(fn: CmdListenerCallback<C>): CmdListener<C>;
 };

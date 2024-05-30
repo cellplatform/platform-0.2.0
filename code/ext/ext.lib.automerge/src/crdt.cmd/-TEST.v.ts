@@ -483,18 +483,19 @@ describe('crdt.cmd (Command)', () => {
       expect(listener.tx).to.eql(res.tx);
       expect(listener.status).to.eql('Pending');
       expect(listener.result).to.eql(undefined);
+      expect(listener.timedout).to.eql(false);
       expect(listener.disposed).to.eql(false);
 
       const fired: P[] = [];
       listener.$.subscribe((e) => fired.push(e));
 
       await Time.wait(10);
-      console.log('res', res);
 
       expect(listener.ok).to.eql(true);
-      expect(listener.disposed).to.eql(true);
       expect(listener.status).to.eql('Complete');
       expect(listener.result).to.eql({ sum: 3 });
+      expect(listener.timedout).to.eql(false);
+      expect(listener.disposed).to.eql(true);
 
       dispose();
     });
@@ -518,6 +519,7 @@ describe('crdt.cmd (Command)', () => {
       const res = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', { timeout });
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql('Pending');
+      expect(res.timedout).to.eql(false);
       expect(res.disposed).to.eql(false);
 
       await Time.wait(50);
@@ -525,6 +527,7 @@ describe('crdt.cmd (Command)', () => {
       expect(res.ok).to.eql(false);
       expect(res.status === 'Error:Timeout').to.eql(true);
       expect(res.result).to.eql(undefined);
+      expect(res.timedout).to.eql(true);
       expect(res.disposed).to.eql(true);
 
       dispose();

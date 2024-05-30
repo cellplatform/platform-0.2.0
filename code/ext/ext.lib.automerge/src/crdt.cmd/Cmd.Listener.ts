@@ -74,6 +74,9 @@ export function listenerFactory<C extends t.CmdType>(
     get status() {
       return _status;
     },
+    get timedout() {
+      return _status === 'Error:Timeout';
+    },
 
     get result() {
       return _result;
