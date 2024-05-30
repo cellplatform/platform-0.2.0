@@ -66,7 +66,7 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose, dispose$ } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
-      const fired: t.CmdInvoked<C1>[] = [];
+      const fired: t.CmdTx<C1>[] = [];
       cmd
         .events(dispose$)
         .on('Foo')
@@ -121,8 +121,8 @@ describe('crdt.cmd (Command)', () => {
       });
     });
 
-    const invoked: t.CmdInvokedEvent['type'] = 'crdt:cmd/Invoked';
-    describe(`event: "${invoked}"`, () => {
+    const eventType: t.CmdTxEvent['type'] = 'crdt:cmd/tx';
+    describe(`event: "${eventType}"`, () => {
       it('⚡️← on root {doc}', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd1 = Cmd.create<C>(doc);
@@ -130,9 +130,9 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd1.events(dispose$);
 
         const fired: t.CmdEvent[] = [];
-        const firedInvoked: t.CmdInvoked[] = [];
+        const firedInvoked: t.CmdTx[] = [];
         events.$.subscribe((e) => fired.push(e));
-        events.invoked$.subscribe((e) => firedInvoked.push(e));
+        events.tx$.subscribe((e) => firedInvoked.push(e));
 
         const tx = 'tx.foo';
         cmd1.invoke('Foo', { foo: 0 }, { tx });
@@ -167,8 +167,8 @@ describe('crdt.cmd (Command)', () => {
         expect(doc.current).to.eql({ foo: {} });
 
         const cmd = Cmd.create<C>(lens);
-        const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
 
         const tx = 'tx.foo';
         cmd.invoke('Bar', { msg: 'hello' }, { tx });
@@ -199,8 +199,8 @@ describe('crdt.cmd (Command)', () => {
         const tx = 'tx.foo';
         const p = { msg: 'hello' };
         const cmd = Cmd.create<C>(doc, { paths });
-        const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', p, { tx });
 
         await Time.wait(0);
@@ -214,8 +214,8 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
 
-        const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
         cmd.invoke('Bar', {});
@@ -235,8 +235,8 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
 
-        const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
 
         const tx = 'tx.foo';
         cmd.invoke('Foo', { foo: 0 }, { tx });
@@ -260,8 +260,8 @@ describe('crdt.cmd (Command)', () => {
         };
         const cmd = Cmd.create<C>(doc, { tx });
 
-        const fired: t.CmdInvoked[] = [];
-        cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
+        const fired: t.CmdTx[] = [];
+        cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
 
         cmd.invoke('Bar', {});
         cmd.invoke('Bar', {});
@@ -279,7 +279,7 @@ describe('crdt.cmd (Command)', () => {
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
 
-        const fired: t.CmdInvoked[] = [];
+        const fired: t.CmdTx[] = [];
         events.on('Foo').subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
@@ -451,7 +451,7 @@ describe('crdt.cmd (Command)', () => {
       const cmd = Cmd.create<C>(doc);
       const events = cmd.events(dispose$);
 
-      const responses: t.CmdInvoked<C2>[] = [];
+      const responses: t.CmdTx<C2>[] = [];
       events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
       events.on('add:res').subscribe((e) => responses.push(e));
 

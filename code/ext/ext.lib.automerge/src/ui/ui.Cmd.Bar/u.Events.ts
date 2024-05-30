@@ -41,8 +41,8 @@ export const Events = {
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const fire = (e: t.CmdBarEvent) => $$.next(e);
 
-    const text$ = rx.payload<t.CmdBarTextEvent>($, 'crdt:cmdbar/Text');
-    const cmd$ = rx.payload<t.CmdBarTxEvent>($, 'crdt:cmdbar/Tx');
+    const text$ = rx.payload<t.CmdBarTextEvent>($, 'crdt:cmdbar/text');
+    const cmd$ = rx.payload<t.CmdBarTxEvent>($, 'crdt:cmdbar/tx');
 
     let cmd: t.CmdBarCmd | undefined;
     if (args.doc) {
@@ -60,10 +60,10 @@ export const Events = {
       $.pipe(
         filter((e) => Events.Is.textChange(paths, e.patches)),
         distinctWhile((p, n) => p.text === n.text),
-      ).subscribe((e) => fire({ type: 'crdt:cmdbar/Text', payload: { text: e.text } }));
+      ).subscribe((e) => fire({ type: 'crdt:cmdbar/text', payload: { text: e.text } }));
 
       // Tx:(Command)
-      events.cmd.invoked$.subscribe((payload) => fire({ type: 'crdt:cmdbar/Tx', payload }));
+      events.cmd.tx$.subscribe((payload) => fire({ type: 'crdt:cmdbar/tx', payload }));
     }
 
     /**
@@ -74,7 +74,7 @@ export const Events = {
       text$,
       cmd: {
         $: cmd$,
-        invoked$: cmd$.pipe(rx.filter((e): e is t.CmdBarInvokeTx => e.name === 'Invoke')),
+        tx$: cmd$.pipe(rx.filter((e): e is t.CmdBarInvokeTx => e.name === 'Invoke')),
       },
 
       // Lifecycle.

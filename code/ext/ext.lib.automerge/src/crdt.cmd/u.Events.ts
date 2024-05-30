@@ -26,9 +26,10 @@ export const Events = {
     /**
      * Observables.
      */
+    const fire = (e: t.CmdEvent) => $$.next(e);
     const $$ = rx.subject<t.CmdEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
-    const fire = (e: t.CmdEvent) => $$.next(e);
+    const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/tx');
 
     if (doc) {
       const events = doc.events(dispose$);
@@ -43,7 +44,7 @@ export const Events = {
       ).subscribe((e) => {
         const { count, name, params, tx } = e.doc;
         fire({
-          type: 'crdt:cmd/Invoked',
+          type: 'crdt:cmd/tx',
           payload: { name, params, count, tx },
         });
       });
@@ -54,10 +55,11 @@ export const Events = {
      */
     const api: t.CmdEvents<C> = {
       $,
-      invoked$: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
+      tx$: tx$,
+
       on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<Extract<C, { name: N }>>) {
-        type T = t.CmdInvoked<u.CmdTypeMap<C>[N]>;
-        const res$ = api.invoked$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
+        type T = t.CmdTx<u.CmdTypeMap<C>[N]>;
+        const res$ = tx$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
         if (handler) res$.subscribe((e) => handler(e));
         return res$;
       },

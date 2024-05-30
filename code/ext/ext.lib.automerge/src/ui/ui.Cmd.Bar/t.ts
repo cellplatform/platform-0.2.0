@@ -55,7 +55,7 @@ export type CmdBarEvents = t.Lifecycle & {
   readonly text$: t.Observable<CmdBarText>;
   readonly cmd: {
     readonly $: t.Observable<CmdBarTx>;
-    readonly invoked$: t.Observable<CmdBarInvokeTx>;
+    readonly tx$: t.Observable<CmdBarInvokeTx>;
   };
 };
 
@@ -67,12 +67,12 @@ export type CmdBarEvent = CmdBarTxEvent | CmdBarTextEvent;
  */
 type C = CmdBarType;
 export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>) => void;
-export type CmdBarTxEvent<T extends C = C> = { type: 'crdt:cmdbar/Tx'; payload: CmdBarTx<T> };
-export type CmdBarTx<T extends C = C> = t.CmdInvoked<T>;
+export type CmdBarTxEvent<T extends C = C> = { type: 'crdt:cmdbar/tx'; payload: CmdBarTx<T> };
+export type CmdBarTx<T extends C = C> = t.CmdTx<T>;
 
 /**
  * Fires when the command bar's text changes.
  */
 export type CmdBarTextHandler = (e: CmdBarText) => void;
-export type CmdBarTextEvent = { type: 'crdt:cmdbar/Text'; payload: CmdBarText };
+export type CmdBarTextEvent = { type: 'crdt:cmdbar/text'; payload: CmdBarText };
 export type CmdBarText = { text: string };
