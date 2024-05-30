@@ -15,8 +15,14 @@ export type CmdType<N extends S = S, P extends O = O, R extends CmdType | undefi
  * Command API.
  */
 export type Cmd<C extends CmdType> = {
-  readonly invoke: CmdInvokeMethod<C>;
   readonly events: CmdEventsFactory<C>;
+  readonly invoke: CmdInvokeMethod<C>;
+
+  /**
+   * TODO 🐷 override [invoke]
+   * - ():void
+   * - ('name:res'):response
+   */
 };
 
 export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
@@ -55,6 +61,9 @@ export type CmdListener<C extends CmdType> = t.Lifecycle & {
   readonly timedout: boolean;
   readonly result?: u.ExtractResParams<C>;
   onComplete(fn: CmdListenerCallback<C>): CmdListener<C>;
+
+  // TODO 🐷
+  // onError(fn: CmdListenerCallback<C>): CmdListener<C>;
 };
 
 /**
