@@ -439,12 +439,12 @@ describe('crdt.cmd (Command)', () => {
     const sum = (params: P): R => ({ sum: params.a + params.b });
 
     /**
-     * This manual example shows the basics of call and response using
-     * nothing but the {Cmd} primitives.
+     * This manual example shows the basics of call and response
+     * using nothing but the {Cmd} primitives.
      *
-     * The {Response} and {Listener} helpers are simply wrappers around
-     * the observable pattern below to provide some strongly typed
-     * developer ergonomics.
+     * The {Response} and {Listener} helpers are simply wrappers
+     * around the observable pattern below to provide some strongly
+     * typed developer ergonomics.
      */
     it('manual example (primitive)', async () => {
       const { doc, dispose, dispose$ } = await testSetup();
