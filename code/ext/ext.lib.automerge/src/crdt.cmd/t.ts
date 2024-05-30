@@ -28,9 +28,9 @@ export type Cmd<C extends CmdType> = {
    */
 };
 
-export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
-  name: T,
-  params: Extract<C, { name: T }>['params'],
+export type CmdInvokeMethod<C extends CmdType> = <N extends C['name']>(
+  name: N,
+  params: Extract<C, { name: N }>['params'],
   options?: CmdInvokeOptions | string,
 ) => t.CmdResponse<C>;
 export type CmdInvokeOptions = { tx?: string };

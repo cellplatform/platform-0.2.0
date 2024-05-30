@@ -491,7 +491,7 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
-        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
+        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
         const params: P = { a: 1, b: 2 };
         const res = cmd.invoke('add', params);
@@ -502,9 +502,6 @@ describe('crdt.cmd (Command)', () => {
         expect(listener.result).to.eql(undefined);
         expect(listener.timedout).to.eql(false);
         expect(listener.disposed).to.eql(false);
-
-        const fired: P[] = [];
-        listener.$.subscribe((e) => fired.push(e));
 
         await Time.wait(10);
 
@@ -517,13 +514,24 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
+      it('.listen → events.on("name", <callback>)', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
+
+        const res = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+        await Time.wait(10);
+
+        expect(res.result).to.eql({ sum: 5 });
+        dispose();
+      });
+
       it('.listen ← timeout', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
-        const events = cmd.events(dispose$);
-        events.on('add').subscribe(async (e) => {
+        cmd.events(dispose$).on('add', async (e) => {
           await Time.wait(20); // NB: response is issued after invokation has timed-out.
-          cmd.invoke('add:res', sum(e.params), res.tx);
+          cmd.invoke('add:res', sum(e.params), e.tx);
         });
 
         const timeout = 10;

@@ -14,8 +14,10 @@ export type CmdEvents<C extends t.CmdType> = t.Lifecycle & {
   readonly on: CmdEventsOnMethod<C>;
 };
 
+export type CmdEventsOnHandler<C extends t.CmdType> = (e: CmdInvoked<C>) => void;
 export type CmdEventsOnMethod<C extends t.CmdType> = <N extends C['name']>(
   name: N,
+  handler?: CmdEventsOnHandler<Extract<C, { name: N }>>,
 ) => t.Observable<CmdInvoked<u.CmdTypeMap<C>[N]>>;
 
 /**
