@@ -464,8 +464,8 @@ describe('crdt.cmd (Command)', () => {
 
       expect(typeof res === 'object').to.eql(true);
       expect(res.tx).to.eql(tx);
-      expect(res.req.name === 'add').to.be.true;
-      expect(res.req.params).to.eql(params);
+      expect(res.name === 'add').to.be.true;
+      expect(res.params).to.eql(params);
 
       dispose();
     });
@@ -476,13 +476,14 @@ describe('crdt.cmd (Command)', () => {
       const events = cmd.events(dispose$);
       events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
 
-      const res = cmd.invoke('add', { a: 1, b: 2 });
+      const params: P = { a: 1, b: 2 };
+      const res = cmd.invoke('add', params);
       const listener = res.listen('add:res');
 
-      expect(listener.disposed).to.eql(false);
       expect(listener.tx).to.eql(res.tx);
       expect(listener.status).to.eql('Pending');
       expect(listener.result).to.eql(undefined);
+      expect(listener.disposed).to.eql(false);
 
       const fired: P[] = [];
       listener.$.subscribe((e) => fired.push(e));
@@ -490,17 +491,41 @@ describe('crdt.cmd (Command)', () => {
       await Time.wait(10);
       console.log('res', res);
 
+      expect(listener.ok).to.eql(true);
       expect(listener.disposed).to.eql(true);
       expect(listener.status).to.eql('Complete');
       expect(listener.result).to.eql({ sum: 3 });
 
-      console.log('listener.result', listener.result);
+      dispose();
+    });
+
     /**
      * TODO 🐷
      * - error ← timeout AND result-error
      * - callback handlers (FN)
      * - cmd.listen ← server handler
      */
+    it('Response.listen ← timeout', async () => {
+      const { doc, dispose, dispose$ } = await testSetup();
+      const cmd = Cmd.create<C>(doc);
+      const events = cmd.events(dispose$);
+      events.cmd('add').subscribe(async (e) => {
+        await Time.wait(20); // NB: response is issued after invokation has timed-out.
+        cmd.invoke('add:res', sum(e.params), res.tx);
+      });
+
+      const timeout = 10;
+      const res = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', { timeout });
+      expect(res.ok).to.eql(true);
+      expect(res.status).to.eql('Pending');
+      expect(res.disposed).to.eql(false);
+
+      await Time.wait(50);
+
+      expect(res.ok).to.eql(false);
+      expect(res.status === 'Error:Timeout').to.eql(true);
+      expect(res.result).to.eql(undefined);
+      expect(res.disposed).to.eql(true);
 
       dispose();
     });
@@ -510,9 +535,16 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose, dispose$ } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
-      const res1 = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res');
-      const res2 = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', { dispose$ });
+      const events = cmd.events(dispose$);
+      events.cmd('add').subscribe(async (e) => {
+        await Time.wait(10); // NB: response is issued after listener has disposed.
+        cmd.invoke('add:res', sum(e.params), res1.tx);
+        cmd.invoke('add:res', sum(e.params), res2.tx);
+      });
 
+      const params: P = { a: 1, b: 2 };
+      const res1 = cmd.invoke('add', params).listen('add:res');
+      const res2 = cmd.invoke('add', params).listen('add:res', { dispose$ });
       expect(res1.disposed).to.eql(false);
       expect(res2.disposed).to.eql(false);
 
@@ -520,6 +552,12 @@ describe('crdt.cmd (Command)', () => {
       dispose();
       expect(res1.disposed).to.eql(true);
       expect(res2.disposed).to.eql(true);
+
+      expect(res1.ok).to.eql(true);
+      expect(res2.ok).to.eql(true);
+
+      expect(res1.result).to.eql(undefined);
+      expect(res2.result).to.eql(undefined);
     });
   });
 });

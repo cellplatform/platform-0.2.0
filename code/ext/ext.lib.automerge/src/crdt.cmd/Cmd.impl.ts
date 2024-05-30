@@ -43,7 +43,8 @@ export function create<C extends t.CmdType>(
       const tx = wrangle.invoke.tx(options, args.tx);
       const res: t.CmdResponse<C> = {
         tx,
-        req: { name, params },
+        name,
+        params,
         listen(name, { timeout, dispose$ } = {}) {
           return listenerFactory<C>(api, { tx, name, timeout, dispose$ });
         },

@@ -1,4 +1,4 @@
-import { DEFAULTS, rx, type t, type u, Time } from './common';
+import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<C extends t.CmdType> = {
   tx: string;
@@ -19,8 +19,6 @@ export function listenerFactory<C extends t.CmdType>(
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
 
-  console.log('timeout', timeout);
-
   type Status = t.CmdListener<C>['status'];
   type ResParams = u.ExtractResParams<C>;
   let _result: ResParams | undefined;
@@ -32,8 +30,8 @@ export function listenerFactory<C extends t.CmdType>(
   const timer = Time.delay(timeout, () => done('Error:Timeout'));
   const done = (status: Status, result?: ResParams | undefined) => {
     timer.cancel();
-    _status = status;
     _result = result;
+    _status = status;
     if (result) $$.next(result);
     $$.complete();
     api.dispose();
@@ -70,6 +68,7 @@ export function listenerFactory<C extends t.CmdType>(
     get status() {
       return _status;
     },
+
     get result() {
       return _result;
     },

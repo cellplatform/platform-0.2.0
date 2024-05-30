@@ -31,7 +31,8 @@ export type CmdInvokeOptions = { tx?: string };
  */
 export type CmdResponse<C extends CmdType> = {
   readonly tx: string;
-  readonly req: { name: C['name']; params: C['params'] };
+  readonly name: C['name'];
+  readonly params: C['params'];
   readonly listen: CmdListen<C>;
 };
 
