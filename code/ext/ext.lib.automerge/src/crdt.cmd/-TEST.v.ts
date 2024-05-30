@@ -121,8 +121,8 @@ describe('crdt.cmd (Command)', () => {
       });
     });
 
-    const eventType: t.CmdTxEvent['type'] = 'crdt:cmd/tx';
-    describe(`event: "${eventType}"`, () => {
+    const txType: t.CmdTxEvent['type'] = 'crdt:cmd/tx';
+    describe(`event: "${txType}"`, () => {
       it('⚡️← on root {doc}', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd1 = Cmd.create<C>(doc);

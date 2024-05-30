@@ -1,7 +1,7 @@
-export type * from './t.cmd';
-export type * from './t.cmd.res';
-export type * from './t.doc';
-export type * from './t.event';
+export type * from './t.Cmd';
+export type * from './t.Cmd.Res';
+export type * from './t.Doc';
+export type * from './t.Events';
 
 type O = Record<string, unknown>;
 type S = string;
