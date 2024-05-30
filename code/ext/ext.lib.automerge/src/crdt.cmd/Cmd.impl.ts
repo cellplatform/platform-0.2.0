@@ -44,8 +44,8 @@ export function create<C extends t.CmdType>(
       const res: t.CmdResponse<C> = {
         tx,
         req: { name, params },
-        listen(name, { dispose$ } = {}) {
-          return listenerFactory<C>(api, { tx, name, dispose$ });
+        listen(name, { timeout, dispose$ } = {}) {
+          return listenerFactory<C>(api, { tx, name, timeout, dispose$ });
         },
       };
 

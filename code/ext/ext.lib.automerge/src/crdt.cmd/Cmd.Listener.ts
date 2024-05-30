@@ -1,4 +1,4 @@
-import { DEFAULTS, rx, type t, type u } from './common';
+import { DEFAULTS, rx, type t, type u, Time } from './common';
 
 type Args<C extends t.CmdType> = {
   tx: string;
@@ -19,9 +19,25 @@ export function listenerFactory<C extends t.CmdType>(
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
 
+  console.log('timeout', timeout);
+
+  type Status = t.CmdListener<C>['status'];
   type ResParams = u.ExtractResParams<C>;
   let _result: ResParams | undefined;
-  let _status: t.CmdListener<C>['status'] = 'Pending';
+  let _status: Status = 'Pending';
+
+  /**
+   * Finalization
+   */
+  const timer = Time.delay(timeout, () => done('Error:Timeout'));
+  const done = (status: Status, result?: ResParams | undefined) => {
+    timer.cancel();
+    _status = status;
+    _result = result;
+    if (result) $$.next(result);
+    $$.complete();
+    api.dispose();
+  };
 
   /**
    * Observables.
@@ -38,21 +54,19 @@ export function listenerFactory<C extends t.CmdType>(
       rx.filter((e) => e.tx === tx),
       rx.map((e) => e.params as ResParams),
     )
-    .subscribe((params) => {
-      _status = 'Complete';
-      _result = params;
-      $$.next(params);
-      $$.complete();
-      api.dispose();
-    });
+    .subscribe((result) => done('Complete', result));
 
   /**
    * API
    */
   const api: t.CmdListener<C> = {
     $,
-
     tx,
+
+    get ok() {
+      if (_status === 'Error' || _status === 'Error:Timeout') return false;
+      return true;
+    },
     get status() {
       return _status;
     },

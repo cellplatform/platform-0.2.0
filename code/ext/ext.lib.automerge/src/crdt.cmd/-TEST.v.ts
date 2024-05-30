@@ -495,6 +495,12 @@ describe('crdt.cmd (Command)', () => {
       expect(listener.result).to.eql({ sum: 3 });
 
       console.log('listener.result', listener.result);
+    /**
+     * TODO 🐷
+     * - error ← timeout AND result-error
+     * - callback handlers (FN)
+     * - cmd.listen ← server handler
+     */
 
       dispose();
     });

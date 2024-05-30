@@ -30,12 +30,19 @@ export type CmdInvokeOptions = { tx?: string };
  * Command Response.
  */
 export type CmdResponse<C extends CmdType> = {
-  tx: string;
-  req: { name: C['name']; params: C['params'] };
-  listen(name: u.ExtractResName<C>, options?: { dispose$?: t.UntilObservable }): CmdListener<C>;
+  readonly tx: string;
+  readonly req: { name: C['name']; params: C['params'] };
+  readonly listen: CmdListen<C>;
 };
 
+export type CmdListen<C extends CmdType> = (
+  name: u.ExtractResName<C>,
+  options?: CmdListenOptions,
+) => CmdListener<C>;
+export type CmdListenOptions = { dispose$?: t.UntilObservable; timeout?: t.Msecs };
+
 export type CmdListener<C extends CmdType> = t.Lifecycle & {
+  readonly ok: boolean;
   readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
   readonly tx: string;
   readonly $: t.Observable<u.ExtractResParams<C>>;

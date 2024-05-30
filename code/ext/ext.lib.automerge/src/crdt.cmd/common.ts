@@ -14,6 +14,7 @@ const paths: t.CmdPaths = {
 };
 
 export const DEFAULTS = {
+  timeout: 3000,
   paths,
   tx: () => slug(),
   counter: (initial = 0): t.CmdCounter => new A.Counter(initial),
