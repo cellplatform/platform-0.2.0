@@ -55,7 +55,7 @@ export const Events = {
      */
     const api: t.CmdEvents<C> = {
       $,
-      tx$: tx$,
+      tx$,
 
       on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<Extract<C, { name: N }>>) {
         type T = t.CmdTx<u.CmdTypeMap<C>[N]>;

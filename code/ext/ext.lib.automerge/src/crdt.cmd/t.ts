@@ -10,7 +10,7 @@ type U = undefined;
 /**
  * Definition of a command, eg:
  *
- *    type Add = CmdType<'add', { a: number; b: number }, AddR>;
+ *    type Add  = CmdType<'add', { a: number; b: number }, AddR>;
  *    type AddR = CmdType<'add:res', { sum: number }>;
  *
  */

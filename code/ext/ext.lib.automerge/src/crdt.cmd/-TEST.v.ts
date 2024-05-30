@@ -480,12 +480,10 @@ describe('crdt.cmd (Command)', () => {
 
     /**
      * TODO 🐷
+     * - invoke ← overloads (response cmd type)
      * - error ← {result:error} || {timeout:error}
-     * - await listener.promise(<result>)
      * - callback handlers
-     *    - onComplete DONE
      *    - onError
-     * - cmd.listen ← server handler
      */
     describe('Response.listen', () => {
       it('.listen', async () => {
