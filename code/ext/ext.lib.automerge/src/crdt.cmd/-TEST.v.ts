@@ -476,8 +476,7 @@ describe('crdt.cmd (Command)', () => {
       const events = cmd.events(dispose$);
       events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
 
-      const params: P = { a: 1, b: 2 };
-      const res = cmd.invoke('add', params);
+      const res = cmd.invoke('add', { a: 1, b: 2 });
       const listener = res.listen('add:res');
 
       expect(listener.disposed).to.eql(false);
@@ -500,6 +499,21 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
+
+    it('Response.listen ← dispose', async () => {
+      const { doc, dispose, dispose$ } = await testSetup();
+      const cmd = Cmd.create<C>(doc);
+
+      const res1 = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res');
+      const res2 = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', { dispose$ });
+
+      expect(res1.disposed).to.eql(false);
+      expect(res2.disposed).to.eql(false);
+
+      res1.dispose();
+      dispose();
+      expect(res1.disposed).to.eql(true);
+      expect(res2.disposed).to.eql(true);
     });
   });
 });
