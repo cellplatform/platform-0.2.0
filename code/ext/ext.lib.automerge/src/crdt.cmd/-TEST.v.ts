@@ -530,6 +530,28 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
+    it('Response.listen( ƒ ) ← callback', async () => {
+      const { doc, dispose, dispose$ } = await testSetup();
+      const cmd = Cmd.create<C>(doc);
+      const events = cmd.events(dispose$);
+      events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), tx));
+
+      let tx = '';
+      const fired: t.CmdListener<C1>[] = [];
+
+      // Handler passed to listener constructor.
+      tx = cmd.invoke('add', { a: 1, b: 2 }).listen('add:res', (e) => fired.push(e)).tx;
+      await Time.wait(10);
+      expect(fired[0].result?.sum).to.eql(3);
+
+      // Handler added to {listener} object.
+      const listener = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+      tx = listener.onComplete((e) => fired.push(e)).tx;
+      await Time.wait(10);
+      expect(fired[1].result?.sum).to.eql(5);
+
+      dispose();
+    });
 
     it('Response.listen ← dispose', async () => {
       const { doc, dispose, dispose$ } = await testSetup();

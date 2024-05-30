@@ -4,6 +4,7 @@ type Args<C extends t.CmdType> = {
   tx: string;
   name: u.ExtractResName<C>;
   timeout?: t.Msecs;
+  onComplete?: t.CmdListenerCallback<C>;
   dispose$?: t.UntilObservable;
 };
 
@@ -24,6 +25,9 @@ export function listenerFactory<C extends t.CmdType>(
   let _result: ResParams | undefined;
   let _status: Status = 'Pending';
 
+  const handlers = { onComplete: new Set<t.CmdListenerCallback<C>>() } as const;
+  if (args.onComplete) handlers.onComplete.add(args.onComplete);
+
   /**
    * Finalization
    */
@@ -33,8 +37,10 @@ export function listenerFactory<C extends t.CmdType>(
     _result = result;
     _status = status;
     if (result) $$.next(result);
+
     $$.complete();
     api.dispose();
+    if (status === 'Complete') handlers.onComplete.forEach((fn) => fn(api));
   };
 
   /**
@@ -71,6 +77,11 @@ export function listenerFactory<C extends t.CmdType>(
 
     get result() {
       return _result;
+    },
+
+    onComplete(fn) {
+      handlers.onComplete.add(fn);
+      return api;
     },
 
     // Lifecycle.

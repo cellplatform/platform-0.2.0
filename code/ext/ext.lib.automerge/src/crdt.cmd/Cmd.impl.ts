@@ -45,8 +45,9 @@ export function create<C extends t.CmdType>(
         tx,
         name,
         params,
-        listen(name, { timeout, dispose$ } = {}) {
-          return listenerFactory<C>(api, { tx, name, timeout, dispose$ });
+        listen(name, options) {
+          const { timeout, dispose$, onComplete } = wrangle.listen.options(options);
+          return listenerFactory<C>(api, { tx, name, timeout, dispose$, onComplete });
         },
       };
 
@@ -71,6 +72,16 @@ const wrangle = {
     if (!input) return {};
     if (Path.is.commandPaths(input)) return { paths: input };
     return input;
+  },
+
+  listen: {
+    options<C extends t.CmdType>(
+      input?: t.CmdListenOptions<C> | t.CmdListenerCallback<C>,
+    ): t.CmdListenOptions<C> {
+      if (!input) return {};
+      if (typeof input === 'function') return { onComplete: input };
+      return input;
+    },
   },
 
   invoke: {

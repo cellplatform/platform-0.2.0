@@ -38,9 +38,14 @@ export type CmdResponse<C extends CmdType> = {
 
 export type CmdListen<C extends CmdType> = (
   name: u.ExtractResName<C>,
-  options?: CmdListenOptions,
+  options?: CmdListenOptions<C> | CmdListenerCallback<C>,
 ) => CmdListener<C>;
-export type CmdListenOptions = { dispose$?: t.UntilObservable; timeout?: t.Msecs };
+export type CmdListenOptions<C extends CmdType> = {
+  dispose$?: t.UntilObservable;
+  timeout?: t.Msecs;
+  onComplete?: CmdListenerCallback<C>;
+};
+export type CmdListenerCallback<C extends CmdType> = (e: CmdListener<C>) => void;
 
 export type CmdListener<C extends CmdType> = t.Lifecycle & {
   readonly ok: boolean;
@@ -48,6 +53,7 @@ export type CmdListener<C extends CmdType> = t.Lifecycle & {
   readonly tx: string;
   readonly $: t.Observable<u.ExtractResParams<C>>;
   readonly result?: u.ExtractResParams<C>;
+  onComplete(fn: CmdListenerCallback<C>): CmdListener<C>;
 };
 
 /**
