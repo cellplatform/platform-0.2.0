@@ -481,6 +481,7 @@ describe('crdt.cmd (Command)', () => {
     /**
      * TODO 🐷
      * - error ← {result:error} || {timeout:error}
+     * - await listener.promise(<result>)
      * - callback handlers
      *    - onComplete DONE
      *    - onError
@@ -528,6 +529,21 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
+      it('.list → {promise}', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
+
+        const listener = cmd.invoke('add', { a: 2, b: 3 }).listen('add:res');
+        expect(listener.result).to.eql(undefined);
+
+        const res = await listener.promise();
+        expect(listener.result).to.eql({ sum: 5 });
+        expect(res.result).to.eql({ sum: 5 });
+
+        dispose();
+      });
+
       it('.listen ← timeout', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
@@ -554,7 +570,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen( ƒ ) ← callback', async () => {
+      it('.listen(ƒ) ← register callback functions', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);

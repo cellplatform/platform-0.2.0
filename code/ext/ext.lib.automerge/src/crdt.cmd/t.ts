@@ -1,7 +1,8 @@
 import type { t } from './common';
+
 export type * from './t.doc';
 export type * from './t.events';
-export type * from './t.res';
+export type * from './t.response';
 
 type O = Record<string, unknown>;
 type S = string;

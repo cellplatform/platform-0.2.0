@@ -76,7 +76,7 @@ const wrangle = {
 
   listen: {
     options<C extends t.CmdType>(
-      input?: t.CmdListenOptions<C> | t.CmdListenerCallback<C>,
+      input?: t.CmdListenOptions<C> | t.CmdListenerHandler<C>,
     ): t.CmdListenOptions<C> {
       if (!input) return {};
       if (typeof input === 'function') return { onComplete: input };
