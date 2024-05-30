@@ -1,5 +1,7 @@
 import { A, slug, type t } from './common';
+
 export * from '../common';
+export type * as u from './u.t';
 
 /**
  * Constants

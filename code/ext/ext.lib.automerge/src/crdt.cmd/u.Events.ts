@@ -1,4 +1,4 @@
-import { rx, type t } from './common';
+import { rx, type t, type u } from './common';
 import { Is } from './u.Is';
 import { Path } from './u.Path';
 
@@ -55,8 +55,8 @@ export const Events = {
     const api: t.CmdEvents<C> = {
       $,
       invoked$: rx.payload<t.CmdInvokedEvent<C>>($, 'crdt:cmd/Invoked'),
-      name<N extends C['name']>(name: N) {
-        type T = t.CmdInvoked<t.CmdTypeMap<C>[N]>;
+      cmd<N extends C['name']>(name: N) {
+        type T = t.CmdInvoked<u.CmdTypeMap<C>[N]>;
         return api.invoked$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
       },
 

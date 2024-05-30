@@ -1,6 +1,6 @@
 import { CmdBar, DEFAULTS } from '.';
 import { Store } from '../../crdt';
-import { A, describe, expect, it, type t } from '../../test';
+import { A, Time, describe, expect, it, type t } from '../../test';
 
 describe('Cmd.Bar', () => {
   describe('Path (resolver)', () => {
@@ -98,6 +98,7 @@ describe('Cmd.Bar', () => {
         const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foo' };
         cmd.invoke('Invoke', params);
 
+        await Time.wait(0);
         expect(fired.length).to.eql(1);
         expect(fired[0].name).to.eql('Invoke');
         expect(fired[0].params).to.eql(params);

@@ -1,6 +1,6 @@
 import { Cmd, DEFAULTS } from '.';
 import { Doc, Store } from '../crdt';
-import { A, R, describe, expect, it, rx, type t } from '../test';
+import { A, R, Time, describe, expect, it, rx, type t } from '../test';
 
 describe('crdt.cmd (Command)', () => {
   type C = C1 | C2;
@@ -31,10 +31,11 @@ describe('crdt.cmd (Command)', () => {
       const cmd3 = Cmd.create<C>(doc3, paths);
 
       const tx = 'tx.foo';
-      cmd1.invoke('Foo', { foo: 888 }, { tx });
-      cmd2.invoke('Bar', {}, { tx });
-      cmd3.invoke('Bar', { msg: '👋' }, { tx });
+      cmd1.invoke('Foo', { foo: 888 }, tx);
+      cmd2.invoke('Bar', {}, { tx }); // NB: as full {options} object.
+      cmd3.invoke('Bar', { msg: '👋' }, tx);
 
+      await Time.wait(0);
       expect(doc1.current).to.eql({ name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx });
       expect(doc2.current).to.eql({ a: 'Bar', x: { p: {}, n: { value: 1 }, tx } });
       expect(doc3.current).to.eql({ a: 'Bar', x: { p: { msg: '👋' }, n: { value: 1 }, tx } });
@@ -68,10 +69,12 @@ describe('crdt.cmd (Command)', () => {
       const fired: t.CmdInvoked<C1>[] = [];
       cmd
         .events(dispose$)
-        .name('Foo')
+        .cmd('Foo')
         .subscribe((e) => fired.push(e));
 
       Array.from({ length }).forEach((_, i) => cmd.invoke('Foo', { foo: i + 1 }));
+
+      await Time.wait(0);
       expect(fired.length).to.eql(length);
       expect(fired[length - 1].params.foo).to.eql(length);
       expect(fired.map((e) => e.count)).to.eql(Array.from({ length }, (_, i) => i + 1));
@@ -136,6 +139,7 @@ describe('crdt.cmd (Command)', () => {
         cmd1.invoke('Bar', {}, { tx });
         cmd2.invoke('Bar', { msg: 'hello' }, { tx }); // NB: narrow type scoped at creation (no "Foo" command).
 
+        await Time.wait(0);
         expect(fired.length).to.eql(3);
         expect(firedInvoked.length).to.eql(3);
         expect(fired.map((e) => e.payload)).to.eql(firedInvoked);
@@ -168,8 +172,9 @@ describe('crdt.cmd (Command)', () => {
 
         const tx = 'tx.foo';
         cmd.invoke('Bar', { msg: 'hello' }, { tx });
-        expect(fired.length).to.eql(1);
 
+        await Time.wait(0);
+        expect(fired.length).to.eql(1);
         expect(doc.current).to.eql({
           foo: {
             name: 'Bar',
@@ -197,9 +202,10 @@ describe('crdt.cmd (Command)', () => {
         const fired: t.CmdInvoked[] = [];
         cmd.events(dispose$).invoked$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', p, { tx });
-        expect(fired.length).to.eql(1);
 
+        await Time.wait(0);
         const count = fired[0].count;
+        expect(fired.length).to.eql(1);
         expect(doc.current).to.eql({ z: { n: { value: count }, tx }, a: 'Bar', x: { y: { p } } });
         dispose();
       });
@@ -215,6 +221,7 @@ describe('crdt.cmd (Command)', () => {
         cmd.invoke('Bar', {});
         cmd.invoke('Bar', {}, { tx: '' }); // NB: empty string → tx IS generated.
 
+        await Time.wait(0);
         const txs = fired.map((e) => e.tx);
 
         expect(txs.length).to.eql(3);
@@ -235,6 +242,7 @@ describe('crdt.cmd (Command)', () => {
         cmd.invoke('Foo', { foo: 0 }, { tx });
         cmd.invoke('Foo', { foo: 1 }, { tx });
 
+        await Time.wait(0);
         expect(fired.length).to.eql(2);
         expect(fired.every((e) => e.tx === tx)).to.eql(true);
         expect(fired[0].params).to.eql({ foo: 0 });
@@ -258,6 +266,7 @@ describe('crdt.cmd (Command)', () => {
         cmd.invoke('Bar', {});
         cmd.invoke('Bar', {});
 
+        await Time.wait(0);
         expect(fired[0].tx).to.eql('👋.1');
         expect(fired[1].tx).to.eql('👋.2');
         dispose();
@@ -271,11 +280,12 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd.events(dispose$);
 
         const fired: t.CmdInvoked[] = [];
-        events.name('Foo').subscribe((e) => fired.push(e));
+        events.cmd('Foo').subscribe((e) => fired.push(e));
 
         cmd.invoke('Foo', { foo: 0 });
         cmd.invoke('Bar', {}); // NB: filtered out.
 
+        await Time.wait(0);
         expect(fired.length).to.eql(1);
         expect(fired[0].name).to.eql('Foo');
         expect(fired[0].params).to.eql({ foo: 0 });
@@ -303,6 +313,7 @@ describe('crdt.cmd (Command)', () => {
         const params: P = { foo: 0 };
         const tx = 'tx.foo';
         const obj: t.CmdPathsObject = { name, params, counter, tx };
+
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
         expect(resolve.counter(obj)).to.eql(counter);
@@ -319,11 +330,12 @@ describe('crdt.cmd (Command)', () => {
         });
         const tx = 'tx.foo';
         const n = DEFAULTS.counter();
+        const r = { sum: 5 };
         const params: P = { foo: 123 };
         const name = 'foo.bar';
         const obj = {
           a: name,
-          x: { y: { p: params } },
+          x: { y: { p: params }, r },
           z: { n, tx },
         };
         expect(resolve.name(obj)).to.eql(name);
@@ -387,7 +399,16 @@ describe('crdt.cmd (Command)', () => {
         const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
         NOT.forEach((value) => expect(Path.is.commandPaths(value)).to.eql(false));
         expect(Path.is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
+
         expect(Path.is.commandPaths(DEFAULTS.paths)).to.eql(true);
+        expect(
+          Path.is.commandPaths({
+            name: ['a'],
+            params: ['x', 'y', 'p'],
+            counter: ['z', 'n'],
+            tx: ['abc', 'tx'],
+          }),
+        ).to.eql(true);
         expect(
           Path.is.commandPaths({
             name: ['a'],
@@ -413,20 +434,22 @@ describe('crdt.cmd (Command)', () => {
     type P = { a: number; b: number };
     type R = { sum: number };
     type C = C1 | C2;
-    type C1 = t.CmdType<'add', P>;
+    type C1 = t.CmdType<'add', P, C2>;
     type C2 = t.CmdType<'add:res', R>;
+    const sum = (params: P): R => ({ sum: params.a + params.b });
 
     it('manual example (primitive)', async () => {
       const { doc, dispose, dispose$ } = await testSetup();
       const cmd = Cmd.create<C>(doc);
       const events = cmd.events(dispose$);
 
-      const sum = (params: P): R => ({ sum: params.a + params.b });
       const responses: t.CmdInvoked<C2>[] = [];
-      events.name('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
-      events.name('add:res').subscribe((e) => responses.push(e));
+      events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
+      events.cmd('add:res').subscribe((e) => responses.push(e));
 
       cmd.invoke('add', { a: 2, b: 3 });
+      await Time.wait(10);
+
       expect(responses[0].params.sum).to.eql(5);
       dispose();
     });
@@ -441,10 +464,42 @@ describe('crdt.cmd (Command)', () => {
 
       expect(typeof res === 'object').to.eql(true);
       expect(res.tx).to.eql(tx);
-      expect(res.cmd.name === 'add').to.be.true;
-      expect(res.cmd.params).to.eql(params);
+      expect(res.req.name === 'add').to.be.true;
+      expect(res.req.params).to.eql(params);
 
       dispose();
+    });
+
+    it('Response.listen', async () => {
+      const { doc, dispose, dispose$ } = await testSetup();
+      const cmd = Cmd.create<C>(doc);
+      const events = cmd.events(dispose$);
+      events.cmd('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), res.tx));
+
+      const params: P = { a: 1, b: 2 };
+      const res = cmd.invoke('add', params);
+      const listener = res.listen('add:res');
+
+      expect(listener.disposed).to.eql(false);
+      expect(listener.tx).to.eql(res.tx);
+      expect(listener.status).to.eql('Pending');
+      expect(listener.result).to.eql(undefined);
+
+      const fired: P[] = [];
+      listener.$.subscribe((e) => fired.push(e));
+
+      await Time.wait(10);
+      console.log('res', res);
+
+      expect(listener.disposed).to.eql(true);
+      expect(listener.status).to.eql('Complete');
+      expect(listener.result).to.eql({ sum: 3 });
+
+      console.log('listener.result', listener.result);
+
+      dispose();
+    });
+
     });
   });
 });

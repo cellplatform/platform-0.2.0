@@ -1,4 +1,4 @@
-import type { t } from './common';
+import type { t, u } from './common';
 
 type O = Record<string, unknown>;
 type S = string;
@@ -6,9 +6,9 @@ type S = string;
 /**
  * Named definition of a command.
  */
-export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
-export type CmdTypeMap<C extends CmdType> = {
-  [K in C['name']]: C extends CmdType<K, infer P> ? CmdType<K, P> : never;
+export type CmdType<N extends S = S, P extends O = O, R extends CmdType | undefined = undefined> = {
+  name: N;
+  params: P;
 };
 
 /**
@@ -22,15 +22,24 @@ export type Cmd<C extends CmdType> = {
 export type CmdInvokeMethod<C extends CmdType> = <T extends C['name']>(
   name: T,
   params: Extract<C, { name: T }>['params'],
-  options?: { tx?: string },
+  options?: CmdInvokeOptions | string,
 ) => CmdResponse<C>;
+export type CmdInvokeOptions = { tx?: string };
 
 /**
  * Command Response.
  */
 export type CmdResponse<C extends CmdType> = {
   tx: string;
-  cmd: { name: C['name']; params: C['params'] };
+  req: { name: C['name']; params: C['params'] };
+  listen(name: u.ExtractResName<C>, options?: { dispose$?: t.UntilObservable }): CmdListener<C>;
+};
+
+export type CmdListener<C extends CmdType> = t.Lifecycle & {
+  readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
+  readonly tx: string;
+  readonly $: t.Observable<u.ExtractResParams<C>>;
+  readonly result?: u.ExtractResParams<C>;
 };
 
 /**
@@ -72,7 +81,7 @@ export type CmdEventsFactory<C extends CmdType> = (dispose$?: t.UntilObservable)
 export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
   readonly $: t.Observable<CmdEvent>;
   readonly invoked$: t.Observable<CmdInvoked<C>>;
-  name<N extends C['name']>(name: N): t.Observable<CmdInvoked<CmdTypeMap<C>[N]>>;
+  cmd<N extends C['name']>(name: N): t.Observable<CmdInvoked<u.CmdTypeMap<C>[N]>>;
 };
 
 /**
