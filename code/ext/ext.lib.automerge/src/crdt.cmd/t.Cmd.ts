@@ -1,5 +1,7 @@
 import type { t, u } from './common';
 
+type Tx = string;
+
 /**
  * Command API.
  */
@@ -11,8 +13,8 @@ export type Cmd<C extends t.CmdType> = {
 /**
  * Invoke methods:
  */
-export type CmdInvokeOptions = { tx?: string };
-export type CmdInvokeOptionsInput = CmdInvokeOptions | string;
+export type CmdInvokeOptions = { tx?: Tx };
+export type CmdInvokeOptionsInput = CmdInvokeOptions | Tx;
 
 export type CmdInvoker<C extends t.CmdType> = <N extends C['name']>(
   name: N,
@@ -31,7 +33,7 @@ export type CmdResponseInvoker<C extends t.CmdType> = <N extends C['name']>(
  * Response.
  */
 export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: string;
+  readonly tx: Tx;
   readonly name: C['name'];
   readonly params: C['params'];
 };
@@ -59,7 +61,7 @@ export type CmdListenOptions<C extends t.CmdType> = {
 export type CmdListener<C extends t.CmdType> = t.Lifecycle & {
   readonly $: t.Observable<u.ExtractResParams<C>>;
   readonly ok: boolean;
-  readonly tx: string;
+  readonly tx: Tx;
   readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
   readonly timedout: boolean;
   readonly result?: u.ExtractResParams<C>;
