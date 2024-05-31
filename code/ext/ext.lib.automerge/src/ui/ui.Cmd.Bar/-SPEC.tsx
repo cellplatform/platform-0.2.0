@@ -83,7 +83,7 @@ export default Dev.describe(name, async (e) => {
               doc={debug.useLens ? getLens() : doc}
               onText={(e) => console.info(`⚡️ onText:`, e)}
               onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
-              onInvoked={(e) => console.info(`⚡️ onInvoked:`, e)}
+              onInvoke={(e) => console.info(`⚡️ onInvoke:`, e)}
             />
           </div>
         );

@@ -58,7 +58,7 @@ export function useController(args: Args) {
     const events = Events.create({ instance, doc, paths });
     events.text$.subscribe((e) => handlers.onText?.(e));
     events.cmd.$.subscribe((e) => handlers.onCommand?.(e));
-    events.cmd.tx$.subscribe((e) => handlers.onInvoked?.(e));
+    events.cmd.tx$.subscribe((e) => handlers.onInvoke?.(e));
     return events.dispose;
   }, [enabled, doc?.instance]);
 
