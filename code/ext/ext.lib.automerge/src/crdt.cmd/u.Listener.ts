@@ -69,7 +69,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   events
     .on(args.cmd.res)
     .pipe(rx.filter((e) => e.tx === tx))
-    .subscribe(({ params, error }) => done(error ? 'Error' : 'Complete', params, error));
+    .subscribe((e) => done(e.error ? 'Error' : 'Complete', e.params, e.error));
 
   /**
    * API

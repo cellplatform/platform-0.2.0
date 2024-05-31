@@ -46,7 +46,7 @@ export const Events = {
         const { tx, count, name, params, error } = e.doc;
         fire({
           type: 'crdt:cmd/tx',
-          payload: { name, params, count, tx, error },
+          payload: { name, params, tx, count, error },
         });
       });
     }
