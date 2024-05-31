@@ -37,7 +37,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     },
     args(): t.CmdListenHandlerArgs<C> {
       const { ok, tx, result, error } = api;
-      return { ok, tx, result, error };
+      return { ok, tx, result, error, cmd };
     },
   } as const;
 

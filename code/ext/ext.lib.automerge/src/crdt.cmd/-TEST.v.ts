@@ -627,7 +627,9 @@ describe('crdt.cmd (Command)', () => {
           .invoke('add', 'add:res', { a: 1, b: 2 })
           .listen((e) => fired.push(e))
           .promise();
+
         expect(fired[0].result?.sum).to.eql(3);
+        expect(fired[0].cmd).to.equal(cmd);
 
         // Handler added to {listener} object.
         await cmd
@@ -663,6 +665,7 @@ describe('crdt.cmd (Command)', () => {
 
         expect(fired.length).to.eql(1);
         expect(fired[0].error).to.eql(error);
+        expect(fired[0].cmd).to.equal(cmd);
 
         await cmd
           .invoke('add', 'add:res', { a: 1, b: 2 })

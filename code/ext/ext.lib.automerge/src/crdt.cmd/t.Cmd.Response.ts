@@ -48,4 +48,4 @@ export type CmdListenHandler<C extends t.CmdType> = (e: CmdListenHandlerArgs<C>)
 export type CmdListenHandlerArgs<C extends t.CmdType> = Pick<
   CmdListener<C>,
   'ok' | 'tx' | 'result' | 'error'
->;
+> & { readonly cmd: t.Cmd<C> };
