@@ -18,9 +18,11 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   const events = cmd.events(dispose$);
 
   type Status = t.CmdListener<C>['status'];
-  type ResParams = u.ExtractResParams<C>;
-  let _result: ResParams | undefined;
+  type R = u.ExtractResParams<C>;
+  type E = u.ExtractError<C>;
   let _status: Status = 'Pending';
+  let _result: R | undefined;
+  let _error: E | undefined;
 
   const handlers = { onComplete: new Set<t.CmdListenHandler<C>>() } as const;
   if (args.onComplete) handlers.onComplete.add(args.onComplete);
@@ -29,10 +31,11 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
    * Finalization
    */
   const timer = Time.delay(timeout, () => done('Error:Timeout'));
-  const done = (status: Status, result?: ResParams | undefined) => {
+  const done = (status: Status, result?: R, error?: E) => {
     timer.cancel();
-    _result = result;
     _status = status;
+    _result = result;
+    _error = error;
     if (result) $$.next(result);
     $$.complete();
     api.dispose();
@@ -42,7 +45,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   /**
    * Observables.
    */
-  const $$ = rx.subject<ResParams>();
+  const $$ = rx.subject<R>();
   const $ = $$.pipe(rx.takeUntil(life.dispose$));
 
   /**
@@ -50,11 +53,8 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
    */
   events
     .on(args.cmd.res)
-    .pipe(
-      rx.filter((e) => e.tx === tx),
-      rx.map((e) => e.params as ResParams),
-    )
-    .subscribe((result) => done('Complete', result));
+    .pipe(rx.filter((e) => e.tx === tx))
+    .subscribe(({ params, error }) => done(error ? 'Error' : 'Complete', params, error));
 
   /**
    * API
@@ -64,18 +64,18 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     tx,
 
     get ok() {
-      if (_status === 'Error') return false;
-      if (_status === 'Error:Timeout') return false;
+      if (_status === 'Error' || _status === 'Error:Timeout') return false;
+      if (_error) return false;
       return true;
     },
     get status() {
       return _status;
     },
-    get timedout() {
-      return _status === 'Error:Timeout';
-    },
     get result() {
       return _result;
+    },
+    get error() {
+      return _error;
     },
 
     promise() {

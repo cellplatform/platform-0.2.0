@@ -1,4 +1,4 @@
-import type { t } from './common';
+import type { t, u } from './common';
 
 /**
  * Abstract resolver paths to the location of
@@ -7,6 +7,7 @@ import type { t } from './common';
 export type CmdPaths = {
   name: t.ObjectPath;
   params: t.ObjectPath;
+  error: t.ObjectPath;
   counter: t.ObjectPath;
   tx: t.ObjectPath;
 };
@@ -17,6 +18,7 @@ export type CmdPaths = {
 export type CmdPathsObject<C extends t.CmdType = t.CmdType> = {
   name?: C['name'];
   params?: C['params'];
+  error?: u.ExtractError<C>;
   counter?: CmdCounter;
   tx?: string;
 };
@@ -28,6 +30,7 @@ export type CmdCounter = { readonly value: number };
 export type CmdObject<C extends t.CmdType> = {
   name: C['name'];
   params: C['params'];
+  error?: u.ExtractError<C>;
   count: number;
   tx: string;
 };

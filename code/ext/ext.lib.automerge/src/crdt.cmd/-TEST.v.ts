@@ -11,6 +11,9 @@ describe('crdt.cmd (Command)', () => {
     it('Cmd.DEFAULTS', () => {
       expect(Cmd.DEFAULTS).to.eql(DEFAULTS);
       expect(DEFAULTS.counter()).to.instanceOf(A.Counter);
+
+      const error: t.CmdError = { message: '🍌' };
+      expect(DEFAULTS.error('🍌')).to.eql(error);
     });
 
     it('create ← {paths} param variants', async () => {
@@ -19,6 +22,7 @@ describe('crdt.cmd (Command)', () => {
         name: ['a'],
         params: ['x', 'p'],
         counter: ['x', 'n'],
+        error: ['x', 'e'],
         tx: ['x', 'tx'],
       };
 
@@ -31,13 +35,14 @@ describe('crdt.cmd (Command)', () => {
       const cmd3 = Cmd.create<C>(doc3, paths);
 
       const tx = 'tx.foo';
+      const e = DEFAULTS.error('404');
       cmd1.invoke('Foo', { foo: 888 }, tx);
-      cmd2.invoke('Bar', {}, { tx }); // NB: as full {options} object.
+      cmd2.invoke('Bar', {}, { tx, error: e }); // NB: as full {options} object.
       cmd3.invoke('Bar', { msg: '👋' }, tx);
 
       await Time.wait(0);
       expect(doc1.current).to.eql({ name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx });
-      expect(doc2.current).to.eql({ a: 'Bar', x: { p: {}, n: { value: 1 }, tx } });
+      expect(doc2.current).to.eql({ a: 'Bar', x: { p: {}, n: { value: 1 }, tx, e } });
       expect(doc3.current).to.eql({ a: 'Bar', x: { p: { msg: '👋' }, n: { value: 1 }, tx } });
 
       dispose();
@@ -80,6 +85,162 @@ describe('crdt.cmd (Command)', () => {
       expect(fired.map((e) => e.count)).to.eql(Array.from({ length }, (_, i) => i + 1));
 
       dispose();
+    });
+  });
+
+  describe('Cmd.Path', () => {
+    const Path = Cmd.Path;
+
+    describe('Path.resolver', () => {
+      type P = { foo: number };
+      type C = t.CmdType<'Foo', P>;
+      const resolver = Path.resolver;
+
+      it('default paths', () => {
+        const resolve = resolver();
+        expect(resolve.paths).to.eql(DEFAULTS.paths);
+
+        const counter = DEFAULTS.counter();
+        const count = counter.value;
+        const name = 'foo.bar';
+        const params: P = { foo: 0 };
+        const tx = 'tx.foo';
+        const obj: t.CmdPathsObject = { name, params, counter, tx };
+
+        expect(resolve.name(obj)).to.eql(name);
+        expect(resolve.params(obj, {})).to.eql(params);
+        expect(resolve.counter(obj)).to.eql(counter);
+        expect(resolve.tx(obj)).to.eql(tx);
+        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
+      });
+
+      it('custom paths', () => {
+        const resolve = resolver({
+          name: ['a'],
+          params: ['x', 'y', 'p'],
+          counter: ['z', 'n'],
+          error: ['z', 'e'],
+          tx: ['z', 'tx'],
+        });
+        const tx = 'tx.foo';
+        const e = DEFAULTS.error('404');
+        const n = DEFAULTS.counter();
+        const r = { sum: 5 };
+        const params: P = { foo: 123 };
+        const name = 'foo.bar';
+        const obj = {
+          a: name,
+          x: { y: { p: params }, r },
+          z: { n, tx, e },
+        };
+        expect(resolve.name(obj)).to.eql(name);
+        expect(resolve.params<P>(obj, { foo: 0 })).to.eql(params);
+        expect(resolve.error(obj)).to.eql(e);
+        expect(resolve.counter(obj)).to.eql(n);
+        expect(resolve.tx(obj)).to.eql(tx);
+        expect(resolve.toObject(obj)).to.eql({
+          tx,
+          count: n.value,
+          name,
+          params,
+          error: e,
+        });
+      });
+
+      it('.params ← generates new object', () => {
+        const resolve = resolver(DEFAULTS.paths);
+        const params: P = { foo: 0 };
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { params: { foo: 123 } };
+        expect(resolve.params(obj1, params).foo).to.eql(0);
+        expect(resolve.params(obj2, params).foo).to.eql(123);
+      });
+
+      it('.error', () => {
+        const resolve = resolver(DEFAULTS.paths);
+
+        type CustomError = t.CmdError & { type: 'BadDay' };
+        const err1 = DEFAULTS.error('lulz');
+        const err2: CustomError = { message: '😞', type: 'BadDay' };
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { error: err1 };
+
+        expect(resolve.error({ ...obj1 })).to.eql(undefined);
+        expect(resolve.error({ ...obj1 }, err2).type === 'BadDay').to.eql(true);
+        expect(resolve.error({ ...obj2 }, err2).message).to.eql('lulz');
+
+        const doc: t.CmdPathsObject = { name: 'foo', params: {}, error: err1 };
+        expect(resolve.toObject(obj1).error).to.eql(undefined);
+        expect(resolve.toObject(doc).error).to.eql(err1);
+      });
+
+      it('.count ← generates new object', () => {
+        const resolve = resolver(DEFAULTS.paths);
+        const counter = DEFAULTS.counter(10);
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { counter };
+        expect(resolve.counter(obj1).value).to.eql(0);
+        expect(resolve.counter(obj2).value).to.eql(10);
+      });
+    });
+
+    describe('Path.prepend', () => {
+      it('defaults', () => {
+        const res = Path.prepend(DEFAULTS.paths, ['foo', 'bar']);
+        expect(res).to.eql({
+          name: ['foo', 'bar', 'name'],
+          params: ['foo', 'bar', 'params'],
+          error: ['foo', 'bar', 'error'],
+          counter: ['foo', 'bar', 'counter'],
+          tx: ['foo', 'bar', 'tx'],
+        });
+      });
+
+      it('custom', () => {
+        const input: t.CmdPaths = {
+          name: ['a'],
+          params: ['x', 'y', 'p'],
+          error: ['x', 'e'],
+          counter: ['z', 'n'],
+          tx: ['z', 'tx'],
+        };
+        const res = Path.prepend(input, ['foo']);
+        expect(res).to.eql({
+          name: ['foo', 'a'],
+          params: ['foo', 'x', 'y', 'p'],
+          error: ['foo', 'x', 'e'],
+          counter: ['foo', 'z', 'n'],
+          tx: ['foo', 'z', 'tx'],
+        });
+      });
+    });
+
+    describe('Path.is', () => {
+      it('is.stringArray', () => {});
+
+      it('is.commandPaths', () => {
+        const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
+        NOT.forEach((value) => expect(Path.is.commandPaths(value)).to.eql(false));
+        expect(Path.is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
+
+        expect(Path.is.commandPaths(DEFAULTS.paths)).to.eql(true);
+        expect(
+          Path.is.commandPaths({
+            name: ['a'],
+            params: ['x', 'y', 'p'],
+            counter: ['z', 'n'],
+            tx: ['abc', 'tx'],
+          }),
+        ).to.eql(true);
+        expect(
+          Path.is.commandPaths({
+            name: ['a'],
+            params: ['x', 'y', 'p'],
+            counter: ['z', 'n'],
+            tx: ['abc', 'tx'],
+          }),
+        ).to.eql(true);
+      });
     });
   });
 
@@ -153,10 +314,10 @@ describe('crdt.cmd (Command)', () => {
         expect(firedInvoked[2].params).to.eql({ msg: 'hello' });
 
         expect(doc.current).to.eql({
+          tx,
           name: 'Bar',
           params: { msg: 'hello' },
           counter: { value: counts[2] },
-          tx,
         });
         dispose();
       });
@@ -192,12 +353,14 @@ describe('crdt.cmd (Command)', () => {
         const paths: t.CmdPaths = {
           name: ['a'],
           params: ['x', 'y', 'p'],
+          error: ['z', 'e'],
           counter: ['z', 'n'],
           tx: ['z', 'tx'],
         };
 
         const tx = 'tx.foo';
         const p = { msg: 'hello' };
+        const e = undefined;
         const cmd = Cmd.create<C>(doc, { paths });
         const fired: t.CmdTx[] = [];
         cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
@@ -206,7 +369,11 @@ describe('crdt.cmd (Command)', () => {
         await Time.wait(0);
         const count = fired[0].count;
         expect(fired.length).to.eql(1);
-        expect(doc.current).to.eql({ z: { n: { value: count }, tx }, a: 'Bar', x: { y: { p } } });
+        expect(doc.current).to.eql({
+          a: 'Bar',
+          z: { n: { value: count }, tx },
+          x: { y: { p } },
+        });
         dispose();
       });
 
@@ -295,132 +462,6 @@ describe('crdt.cmd (Command)', () => {
     });
   });
 
-  describe('Cmd.Path', () => {
-    const Path = Cmd.Path;
-
-    describe('Path.resolver', () => {
-      type P = { foo: number };
-      type C = t.CmdType<'Foo', P>;
-      const resolver = Path.resolver;
-
-      it('default paths', () => {
-        const resolve = resolver();
-        expect(resolve.paths).to.eql(DEFAULTS.paths);
-
-        const counter = DEFAULTS.counter();
-        const count = counter.value;
-        const name = 'foo.bar';
-        const params: P = { foo: 0 };
-        const tx = 'tx.foo';
-        const obj: t.CmdPathsObject = { name, params, counter, tx };
-
-        expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.counter(obj)).to.eql(counter);
-        expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
-      });
-
-      it('custom paths', () => {
-        const resolve = resolver({
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          counter: ['z', 'n'],
-          tx: ['z', 'tx'],
-        });
-        const tx = 'tx.foo';
-        const n = DEFAULTS.counter();
-        const r = { sum: 5 };
-        const params: P = { foo: 123 };
-        const name = 'foo.bar';
-        const obj = {
-          a: name,
-          x: { y: { p: params }, r },
-          z: { n, tx },
-        };
-        expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params<P>(obj, { foo: 0 })).to.eql(params);
-        expect(resolve.counter(obj)).to.eql(n);
-        expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ count: n.value, name, params, tx });
-      });
-
-      it('.params: generates new object', () => {
-        const resolve = resolver(DEFAULTS.paths);
-        const params: P = { foo: 0 };
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { params: { foo: 123 } };
-        expect(resolve.params(obj1, params).foo).to.eql(0);
-        expect(resolve.params(obj2, params).foo).to.eql(123);
-      });
-
-      it('.count: generates new object', () => {
-        const resolve = resolver(DEFAULTS.paths);
-        const counter = DEFAULTS.counter(10);
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { counter };
-        expect(resolve.counter(obj1).value).to.eql(0);
-        expect(resolve.counter(obj2).value).to.eql(10);
-      });
-    });
-
-    describe('Path.prepend', () => {
-      it('defaults', () => {
-        const res = Path.prepend(DEFAULTS.paths, ['foo', 'bar']);
-        expect(res).to.eql({
-          name: ['foo', 'bar', 'name'],
-          params: ['foo', 'bar', 'params'],
-          counter: ['foo', 'bar', 'counter'],
-          tx: ['foo', 'bar', 'tx'],
-        });
-      });
-
-      it('custom', () => {
-        const input: t.CmdPaths = {
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          counter: ['z', 'n'],
-          tx: ['z', 'tx'],
-        };
-        const res = Path.prepend(input, ['foo']);
-        expect(res).to.eql({
-          name: ['foo', 'a'],
-          params: ['foo', 'x', 'y', 'p'],
-          counter: ['foo', 'z', 'n'],
-          tx: ['foo', 'z', 'tx'],
-        });
-      });
-    });
-
-    describe('Path.is', () => {
-      it('is.stringArray', () => {});
-
-      it('is.commandPaths', () => {
-        const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
-        NOT.forEach((value) => expect(Path.is.commandPaths(value)).to.eql(false));
-        expect(Path.is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
-
-        expect(Path.is.commandPaths(DEFAULTS.paths)).to.eql(true);
-        expect(
-          Path.is.commandPaths({
-            name: ['a'],
-            params: ['x', 'y', 'p'],
-            counter: ['z', 'n'],
-            tx: ['abc', 'tx'],
-          }),
-        ).to.eql(true);
-        expect(
-          Path.is.commandPaths({
-            name: ['a'],
-            params: ['x', 'y', 'p'],
-            counter: ['z', 'n'],
-            tx: ['abc', 'tx'],
-          }),
-        ).to.eql(true);
-      });
-    });
-  });
-
   describe('Cmd.Is', () => {
     const Is = Cmd.Is;
     it('Is.initialized', () => {
@@ -433,11 +474,12 @@ describe('crdt.cmd (Command)', () => {
   describe('Cmd → Response', () => {
     type P = { a: number; b: number };
     type R = { sum: number };
+    type E = t.CmdError & { code: number; type: 'bounds' };
     type C = C1 | C2 | C3;
-    type C1 = t.CmdType<'add', P, C2>;
+    type C1 = t.CmdType<'add', P, C2, E>;
     type C2 = t.CmdType<'add:res', R>;
     type C3 = t.CmdType<'foo', { msg?: string }>;
-    const sum = (params: P): R => ({ sum: params.a + params.b });
+    const sum = ({ a, b }: P): R => ({ sum: a + b });
 
     /**
      * This manual example shows the basics of call and response
@@ -457,7 +499,7 @@ describe('crdt.cmd (Command)', () => {
       events.on('add:res').subscribe((e) => responses.push(e));
 
       cmd.invoke('add', { a: 2, b: 3 });
-      await Time.wait(10);
+      await Time.wait(20);
 
       expect(responses[0].params.sum).to.eql(5);
       dispose();
@@ -490,7 +532,6 @@ describe('crdt.cmd (Command)', () => {
 
     /**
      * TODO 🐷
-     * - invoke ← overloads (response cmd type)
      * - error ← {result:error} || {timeout:error}
      * - callback handlers
      *    - onError
@@ -502,14 +543,12 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd.events(dispose$);
         events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-        const params: P = { a: 1, b: 2 };
-        const res = cmd.invoke('add', 'add:res', params);
+        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
         const listener = res.listen();
 
         expect(listener.tx).to.eql(res.tx);
         expect(listener.status).to.eql('Pending');
         expect(listener.result).to.eql(undefined);
-        expect(listener.timedout).to.eql(false);
         expect(listener.disposed).to.eql(false);
 
         await Time.wait(10);
@@ -517,7 +556,6 @@ describe('crdt.cmd (Command)', () => {
         expect(listener.ok).to.eql(true);
         expect(listener.status).to.eql('Complete');
         expect(listener.result?.sum).to.eql(3);
-        expect(listener.timedout).to.eql(false);
         expect(listener.disposed).to.eql(true);
 
         dispose();
@@ -564,7 +602,6 @@ describe('crdt.cmd (Command)', () => {
         const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }).listen({ timeout });
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql('Pending');
-        expect(res.timedout).to.eql(false);
         expect(res.disposed).to.eql(false);
 
         await Time.wait(50);
@@ -572,22 +609,12 @@ describe('crdt.cmd (Command)', () => {
         expect(res.ok).to.eql(false);
         expect(res.status === 'Error:Timeout').to.eql(true);
         expect(res.result).to.eql(undefined);
-        expect(res.timedout).to.eql(true);
         expect(res.disposed).to.eql(true);
 
         dispose();
       });
 
       it('.listen(ƒ) ← register callback functions', async () => {
-        // TEMP 🐷
-        type P = { a: number; b: number };
-        type R = { sum: number };
-        type C = C1 | C2 | C3;
-        type C1 = t.CmdType<'add', P, C2>;
-        type C2 = t.CmdType<'add:res', R>;
-        type C3 = t.CmdType<'foo', { msg?: string }>;
-        const sum = (params: P): R => ({ sum: params.a + params.b });
-
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
@@ -640,6 +667,51 @@ describe('crdt.cmd (Command)', () => {
 
         expect(res1.result).to.eql(undefined);
         expect(res2.result).to.eql(undefined);
+      });
+    });
+
+    describe('Response → Error', () => {
+      it('with error (default)', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
+
+        const error = Cmd.DEFAULTS.error('lulz');
+        events.on('add').subscribe(({ tx, params }) => {
+          cmd.invoke('add:res', sum(params), { tx, error });
+        });
+
+        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }).listen();
+        await res.promise();
+
+        expect(doc.current.error).to.eql(error);
+        expect(res.error).to.eql(error);
+        expect(res.ok).to.eql(false);
+        expect(res.status === 'Error').to.eql(true);
+
+        dispose();
+      });
+
+      it('with custom error', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
+
+        // const error: E = { code: 123, type: 'bounds', message: 'boo' };
+        const error = { code: 123, type: 'bounds', message: 'boo' };
+        events.on('add').subscribe(({ tx, params }) => {
+          cmd.invoke('add:res', sum(params), { tx, error });
+        });
+
+        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }).listen();
+        await res.promise();
+
+        expect(res.error?.code).to.eql(123);
+        expect(res.error?.type).to.eql('bounds');
+        expect(res.error?.message).to.eql('boo');
+        expect(res.status === 'Error').to.eql(true);
+
+        dispose();
       });
     });
   });

@@ -28,21 +28,23 @@ describe('Cmd.Bar', () => {
           counter: ['z', 'foobar'],
           name: ['x', 'n'],
           params: ['z', 'p'],
+          error: ['z', 'e'],
           tx: ['z', 'tx'],
         },
       };
       const resolve = resolver(paths);
       const tx = 'tx.foo';
       const params = { msg: 'hello' };
+      const error = DEFAULTS.error('404');
       const doc = {
         x: { y: { text: 'hello' }, n: 'invoke' },
-        z: { foobar: new A.Counter(123), p: params, tx },
+        z: { foobar: new A.Counter(123), p: params, tx, e: error },
       };
       expect(resolve.text(doc)).to.eql('hello');
 
       const obj = resolve.toObject(doc);
       expect(obj.text).to.eql('hello');
-      expect(obj.cmd).to.eql({ name: 'invoke', params, count: 123, tx });
+      expect(obj.cmd).to.eql({ name: 'invoke', params, error, count: 123, tx });
     });
   });
 

@@ -1,14 +1,11 @@
-import { DEFAULTS, ObjectPath, Time, type t } from './common';
+import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
 type O = Record<string, unknown>;
 type TxFactory = () => string;
 type OptionsInput = Options | t.CmdPaths;
-type Options = {
-  paths?: t.CmdPaths;
-  tx?: TxFactory;
-};
+type Options = { paths?: t.CmdPaths; tx?: TxFactory };
 
 /**
  * Command factory.
@@ -17,17 +14,20 @@ export function create<C extends t.CmdType>(
   doc: t.DocRef | t.Lens,
   options?: OptionsInput,
 ): t.Cmd<C> {
+  type E = u.ExtractError<C>;
+
   const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
 
-  const update = (tx: string, name: string, params: O, increment = false) => {
+  const update = (tx: string, name: string, params: O, error?: E, increment = false) => {
     doc.change((d) => {
       const counter = resolve.counter(d) as t.A.Counter;
       mutate(d, paths.tx, tx);
       mutate(d, paths.name, name);
       mutate(d, paths.params, params);
+      mutate(d, paths.error, error);
       if (increment) counter.increment(1);
     });
   };
@@ -38,10 +38,15 @@ export function create<C extends t.CmdType>(
   /**
    * Invoke method (overloads)
    */
-  const invokeSetup = (name: C['name'], params: C['params'], options?: t.CmdInvokeOptionsInput) => {
+  const invokeSetup = (
+    name: C['name'],
+    params: C['params'],
+    options?: t.CmdInvokeOptionsInput<C>,
+  ) => {
+    const { error } = wrangle.invoke.options(options);
     const tx = wrangle.invoke.tx(options, args.tx);
-    const obj = { tx, name, params };
-    const start = () => Time.delay(0, () => update(tx, name, params, true));
+    const obj: t.CmdInvoked<any> = { tx, name, params };
+    const start = () => Time.delay(0, () => update(tx, name, params, error, true));
     return { tx, obj, start } as const;
   };
 
@@ -101,14 +106,14 @@ const wrangle = {
   },
 
   invoke: {
-    options(input?: t.CmdInvokeOptions | string): t.CmdInvokeOptions {
+    options<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | string): t.CmdInvokeOptions<C> {
       if (!input) return {};
       if (typeof input === 'string') return { tx: input };
       return input;
     },
 
-    tx(options?: t.CmdInvokeOptions | string, factory?: TxFactory) {
-      return wrangle.invoke.options(options).tx || (factory ?? DEFAULTS.tx)();
+    tx<C extends t.CmdType>(options?: t.CmdInvokeOptions<C> | string, txFactory?: TxFactory) {
+      return wrangle.invoke.options(options).tx || (txFactory ?? DEFAULTS.tx)();
     },
   },
 } as const;

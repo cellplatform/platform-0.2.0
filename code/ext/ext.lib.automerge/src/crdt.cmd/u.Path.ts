@@ -1,4 +1,4 @@
-import { DEFAULTS, ObjectPath, type t } from './common';
+import { DEFAULTS, Delete, ObjectPath, type t, type u } from './common';
 
 type S = string;
 type O = Record<string, unknown>;
@@ -26,6 +26,12 @@ export const Path = {
         return get()!;
       },
 
+      error<E extends O = O>(d: O, defaultError?: E) {
+        const get = () => resolve<E>(d, paths.error);
+        if (!get()) ObjectPath.mutate(d, paths.error, defaultError);
+        return get()!;
+      },
+
       counter(d: O) {
         const get = () => resolve<t.CmdCounter>(d, paths.counter);
         if (!get()) ObjectPath.mutate(d, paths.counter, DEFAULTS.counter());
@@ -38,16 +44,18 @@ export const Path = {
 
       toObject<C extends t.CmdType>(
         d: O,
-        options: { defaultParams?: C['params'] } = {},
+        options: { defaultParams?: C['params']; defaultError?: u.ExtractError<C> } = {},
       ): t.CmdObject<C> {
         type N = C['name'];
         type P = C['params'];
-        return {
+        type E = u.ExtractError<C>;
+        return Delete.undefined({
           name: api.name<N>(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
+          error: api.error(d, options.defaultError as E),
           count: api.counter(d).value,
           tx: api.tx(d),
-        };
+        });
       },
     } as const;
     return api;
@@ -60,6 +68,7 @@ export const Path = {
     return {
       name: [...prefix, ...input.name],
       params: [...prefix, ...input.params],
+      error: [...prefix, ...input.error],
       counter: [...prefix, ...input.counter],
       tx: [...prefix, ...input.tx],
     };

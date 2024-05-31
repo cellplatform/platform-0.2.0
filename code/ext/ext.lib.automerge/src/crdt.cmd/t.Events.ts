@@ -9,6 +9,11 @@ export type CmdEventsFactory<C extends t.CmdType> = (dispose$?: t.UntilObservabl
  * Events API
  */
 export type CmdEvents<C extends t.CmdType> = t.Lifecycle & {
+  /**
+   * TODO 🐷
+   * - error Event
+   */
+
   readonly $: t.Observable<CmdEvent>;
   readonly tx$: t.Observable<CmdTx<C>>;
   readonly on: CmdEventsOnMethod<C>;
@@ -17,7 +22,7 @@ export type CmdEvents<C extends t.CmdType> = t.Lifecycle & {
 export type CmdEventsOnHandler<C extends t.CmdType> = (e: CmdTx<C>) => void;
 export type CmdEventsOnMethod<C extends t.CmdType> = <N extends C['name']>(
   name: N,
-  handler?: CmdEventsOnHandler<Extract<C, { name: N }>>,
+  handler?: CmdEventsOnHandler<u.CmdTypeMap<C>[N]>,
 ) => t.Observable<CmdTx<u.CmdTypeMap<C>[N]>>;
 
 /**
@@ -32,7 +37,10 @@ export type CmdTxEvent<C extends t.CmdType = t.CmdType> = {
   type: 'crdt:cmd/tx';
   payload: CmdTx<C>;
 };
-export type CmdTx<C extends t.CmdType = t.CmdType> = t.CmdType<C['name'], C['params']> & {
-  tx: string;
-  count: number;
+export type CmdTx<C extends t.CmdType = t.CmdType> = {
+  readonly tx: string;
+  readonly count: number;
+  readonly name: C['name'];
+  readonly params: C['params'];
+  readonly error?: u.ExtractError<C>;
 };

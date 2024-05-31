@@ -42,10 +42,10 @@ export const Events = {
         filter((e) => Is.event.countChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
-        const { count, name, params, tx } = e.doc;
+        const { tx, count, name, params, error } = e.doc;
         fire({
           type: 'crdt:cmd/tx',
-          payload: { name, params, count, tx },
+          payload: { name, params, count, tx, error },
         });
       });
     }
@@ -57,9 +57,10 @@ export const Events = {
       $,
       tx$,
 
-      on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<Extract<C, { name: N }>>) {
-        type T = t.CmdTx<u.CmdTypeMap<C>[N]>;
-        const res$ = tx$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
+      on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<u.CmdTypeMap<C>[N]>) {
+        type M = u.CmdTypeMap<C>[N];
+        type T = t.CmdTx<M>;
+        const res$ = api.tx$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
         if (handler) res$.subscribe((e) => handler(e));
         return res$;
       },
