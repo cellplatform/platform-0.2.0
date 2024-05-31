@@ -530,12 +530,6 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    /**
-     * TODO 🐷
-     * - error ← {result:error} || {timeout:error}
-     * - callback handlers
-     *    - onError
-     */
     describe('Response.listen', () => {
       it('.listen', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
@@ -620,7 +614,7 @@ describe('crdt.cmd (Command)', () => {
 
         const fired: t.CmdListenHandlerArgs<C1>[] = [];
         const events = cmd.events(dispose$);
-        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
+        events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
         // Handler passed to listener constructor.
         await cmd
