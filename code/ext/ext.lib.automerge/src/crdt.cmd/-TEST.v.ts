@@ -618,7 +618,7 @@ describe('crdt.cmd (Command)', () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
 
-        const fired: t.CmdListener<C1>[] = [];
+        const fired: t.CmdListenHandlerArgs<C1>[] = [];
         const events = cmd.events(dispose$);
         events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
@@ -649,7 +649,7 @@ describe('crdt.cmd (Command)', () => {
         const events = cmd.events(dispose$);
 
         const error: E = { message: 'boo', code: 123, type: 'bounds' };
-        const fired: t.CmdListener<C1>[] = [];
+        const fired: t.CmdListenHandlerArgs<C1>[] = [];
         events
           .on('add')
           .subscribe(({ tx, params }) => cmd.invoke('add:res', sum(params), { tx, error }));

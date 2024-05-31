@@ -27,9 +27,19 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
 
   type H = t.CmdListenHandler<C>;
   const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
-  const runHandlers = (handlers: Set<H>) => handlers.forEach((fn) => fn(api));
   if (args.onComplete) handlers.complete.add(args.onComplete);
   if (args.onError) handlers.error.add(args.onError);
+
+  const Handlers = {
+    run(handlers: Set<H>) {
+      const e = Handlers.args();
+      handlers.forEach((fn) => fn(e));
+    },
+    args(): t.CmdListenHandlerArgs<C> {
+      const { ok, tx, result, error } = api;
+      return { ok, tx, result, error };
+    },
+  } as const;
 
   /**
    * Finalization
@@ -43,8 +53,8 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     if (result) $$.next(result);
     $$.complete();
     api.dispose();
-    if (status === 'Complete') runHandlers(handlers.complete);
-    if (status === 'Error') runHandlers(handlers.error);
+    if (status === 'Complete') Handlers.run(handlers.complete);
+    if (status === 'Error') Handlers.run(handlers.error);
   };
 
   /**

@@ -44,4 +44,8 @@ export type CmdListener<C extends t.CmdType> = t.Lifecycle & {
   onError(fn: CmdListenHandler<C>): CmdListener<C>;
 };
 
-export type CmdListenHandler<C extends t.CmdType> = (e: CmdListener<C>) => void;
+export type CmdListenHandler<C extends t.CmdType> = (e: CmdListenHandlerArgs<C>) => void;
+export type CmdListenHandlerArgs<C extends t.CmdType> = Pick<
+  CmdListener<C>,
+  'ok' | 'tx' | 'result' | 'error'
+>;
