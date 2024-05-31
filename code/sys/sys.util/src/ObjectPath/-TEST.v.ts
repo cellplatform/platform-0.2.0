@@ -95,6 +95,24 @@ describe('ObjectPath', () => {
       expect(root.child?.foo).to.eql(refFoo);
     });
 
+    it('deletes field when [undefined] passed', () => {
+      const assertKey = (obj: R, key: string, exists: boolean) => {
+        expect(Object.keys(obj).includes(key)).to.eql(exists, key);
+      };
+
+      const root: R = {};
+      assertKey(root, 'msg', false);
+
+      ObjectPath.mutate(root, ['msg'], 'hello');
+      assertKey(root, 'msg', true);
+
+      ObjectPath.mutate(root, ['msg'], undefined);
+      assertKey(root, 'msg', false);
+
+      ObjectPath.mutate(root, ['msg'], null);
+      assertKey(root, 'msg', true);
+    });
+
     it('throws if path is empty', () => {
       [[], undefined, null].forEach((path: any) => {
         const root: R = {};
