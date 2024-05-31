@@ -362,6 +362,18 @@
     preact "^10.16.0"
     sha.js "^2.4.11"
 
+"@coinbase/wallet-sdk@4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-4.0.2.tgz#403b2194ecc9bcf8b8fd217ec5cd6529013b58f4"
+  integrity sha512-WMUeFbtS0rn8zavjAmNhFWq1r3TV7E5KuSij1Sar0/XuOC+nhj96uqSlIApAHdhuScoKZBq39VYsAQCHzOC6/w==
+  dependencies:
+    buffer "^6.0.3"
+    clsx "^1.2.1"
+    eventemitter3 "^5.0.1"
+    keccak "^3.0.3"
+    preact "^10.16.0"
+    sha.js "^2.4.11"
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
@@ -1007,10 +1019,10 @@
     superstruct "^1.0.3"
     uuid "^9.0.1"
 
-"@million/install@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@million/install/-/install-0.0.7.tgz#381b20725215272b3d4253201e0706ab85717483"
-  integrity sha512-knhZwT8mi6jWfdPPzVuk9HfNWyhfOJsUmLmR1A7pQYxERiya8YKXdm3XZZXQF9An/5n1CjeLeyXPwk7Pc0utRQ==
+"@million/install@latest":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@million/install/-/install-0.0.8.tgz#4d8c48ff72a5edef691bdd93269359603fdf0bf3"
+  integrity sha512-eISzjTfghxSgasyPUyLVEJaRbJz3vMi1EFvFbtGa9R/NyRfBStwb9ESYsprsb4J5xYjrTbjrAmR34QE/11sigw==
   dependencies:
     "@antfu/ni" "^0.21.12"
     "@axiomhq/js" "1.0.0-rc.3"
@@ -1301,6 +1313,51 @@
   integrity sha512-7gfAtwT4JOf0kKq7MkGmeD7xNDd3+En+nXAVXA+dUMhInNQvYlaKhdy6uX6asd+IVuAnj66IKNGVk41Y3C/I5Q==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.3"
+    "@ethersproject/abstract-signer" "^5.7.0"
+    "@ethersproject/address" "^5.7.0"
+    "@ethersproject/bignumber" "^5.7.0"
+    "@ethersproject/bytes" "^5.7.0"
+    "@ethersproject/contracts" "^5.7.0"
+    "@ethersproject/logger" "^5.7.0"
+    "@ethersproject/providers" "^5.7.1"
+    "@ethersproject/strings" "^5.7.0"
+    "@ethersproject/transactions" "^5.7.0"
+    "@ethersproject/units" "^5.7.0"
+    "@headlessui/react" "^1.7.18"
+    "@heroicons/react" "^2.1.1"
+    "@marsidev/react-turnstile" "^0.4.1"
+    "@metamask/eth-sig-util" "^6.0.0"
+    "@simplewebauthn/browser" "^9.0.1"
+    "@walletconnect/ethereum-provider" "^2.11.1"
+    "@walletconnect/modal" "^2.6.2"
+    base64-js "^1.5.1"
+    dotenv "^16.0.3"
+    encoding "^0.1.13"
+    eventemitter3 "^5.0.1"
+    fast-password-entropy "^1.1.1"
+    jose "^4.15.5"
+    js-cookie "^3.0.5"
+    libphonenumber-js "^1.10.14"
+    lokijs "^1.5.12"
+    md5 "^2.3.0"
+    mipd "^0.0.7"
+    ofetch "^1.3.4"
+    pino-pretty "^10.0.0"
+    qrcode "^1.5.1"
+    react-device-detect "^2.2.2"
+    secure-password-utilities "^0.2.1"
+    styled-components "^5.3.6"
+    tinycolor2 "^1.6.0"
+    uuid ">=8 <10"
+    web3-core "^1.8.0"
+    web3-core-helpers "^1.8.0"
+
+"@privy-io/react-auth@1.67.0":
+  version "1.67.0"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.67.0.tgz#1fce1eea41561b9d83d5482b9e57bf04c252057c"
+  integrity sha512-L4o2KadP51pEEBgIZ2vLJy5m8cBCHGdEFSWrHUE53HSvjqo3WxuRj0cxjxUJFJkTIJBFZ4qtz7wY6lkBZduQuQ==
+  dependencies:
+    "@coinbase/wallet-sdk" "4.0.2"
     "@ethersproject/abstract-signer" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
@@ -4741,10 +4798,10 @@ h3@^1.10.2, h3@^1.11.1:
     uncrypto "^0.1.3"
     unenv "^1.9.0"
 
-happy-dom@14.11.4:
-  version "14.11.4"
-  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-14.11.4.tgz#cfe683b1b2842b498f0eb540c575c1be169cfa90"
-  integrity sha512-n7p9GYkl9j5wfGtJSw3Xl0rpM2NRMIC+/WVLPi+uThI9Fe+viGnxpL4ce256LRCruvHnBWckEOm2YAyUD0hjxA==
+happy-dom@14.12.0:
+  version "14.12.0"
+  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-14.12.0.tgz#40c748578c6ebfb707e6ae69179d6c541d8f63b3"
+  integrity sha512-dHcnlGFY2o2CdxfuYpqwSrBrpj/Kuzv4u4f3TU5yHW1GL24dKij4pv1BRjXnXc3uWo8qsCbToF9weaDsm/He8A==
   dependencies:
     entities "^4.5.0"
     webidl-conversions "^7.0.0"
@@ -6165,14 +6222,14 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-million@3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/million/-/million-3.1.6.tgz#3b4c334d5080ad7711a5e430ae7edfa9339ec247"
-  integrity sha512-GbI6S88EEwJKJ8wsFyqAG/Fuy9lrWjWJGDENONfGcGe1Pv0Cunk1oRliPY65ZpJ2AovViZEBjsAWIBXY6dA9sg==
+million@3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/million/-/million-3.1.7.tgz#b6efe92cfd3f1150958a2d8b8cdeeaad653d28f4"
+  integrity sha512-Ez2UiZ4+7iYNcq58kMEAYbU6puFaqbrLswzupvYbhFE/hcrwujpeuQxT14XQzAzGYt0eNpd/iczLbgJ+6LP3EA==
   dependencies:
     "@babel/core" "^7.23.7"
     "@babel/types" "^7.23.6"
-    "@million/install" "^0.0.7"
+    "@million/install" latest
     "@rollup/pluginutils" "^5.1.0"
     kleur "^4.1.5"
     undici "^6.3.0"
@@ -8370,6 +8427,20 @@ viem@2.13.1:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.13.1.tgz#a2e5b4f9396f80e6d812af49db23eda40d2a6e72"
   integrity sha512-QaSCtPXb9uVaba+vOsyCFX21BDWNbjBOuXIWWlQXLmECtr/mbJ64XUHyFz6KLvUwAsQ+vxUQVwgmXc3jVMxwYw==
+  dependencies:
+    "@adraffy/ens-normalize" "1.10.0"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    abitype "1.0.0"
+    isows "1.0.4"
+    ws "8.13.0"
+
+viem@2.13.2:
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.13.2.tgz#e6e4a657b6c1e8dfc549b8d2911dbc299913f2ee"
+  integrity sha512-9n64fjWL34Q8MQ0EksI77/okE8tiS9bQlGb11/JMGoaEE+MYJgG8yDAWX2srqp7MsBK7/ahoAWJZdMwgcFD65g==
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
