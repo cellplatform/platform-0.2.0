@@ -1,7 +1,7 @@
-import { Color, Dev, Pkg, css, type t } from '../test.ui';
-import { View } from './-SPEC.000.ui';
+import { Color, Dev, Pkg, css, type t } from '../../test.ui';
+import { View } from './-SPEC.ui';
+import { Footer } from './-SPEC.ui.footer';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
-import { Footer } from './-SPEC.000.ui.footer';
 
 import 'reactflow/dist/style.css';
 

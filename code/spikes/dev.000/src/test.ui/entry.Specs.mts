@@ -4,7 +4,7 @@ import 'reactflow/dist/style.css';
 
 import type { t } from '../common';
 
-const { Specs: App } = await import('./entry.Specs.Localhost.mjs');
+const { Specs: App } = await import('./entry.Specs.Localhost');
 const { Specs: IndexedDb } = await import('sys.data.indexeddb/specs');
 
 const {
