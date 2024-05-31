@@ -25,9 +25,9 @@ export function useController(args: Args) {
   const resolve = Path.resolver(paths);
 
   const cmdRef = useRef<t.CmdBarCmd>();
-  const getCmd = () => {
+  const getCmd = (doc: t.Lens | t.DocRef) => {
     type C = t.CmdBarType;
-    if (!cmdRef.current) cmdRef.current = doc ? Cmd.create<C>(doc, paths.cmd) : undefined;
+    if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd);
     return cmdRef.current;
   };
 
@@ -56,9 +56,12 @@ export function useController(args: Args) {
    */
   useEffect(() => {
     const events = Events.create({ instance, doc, paths });
-    events.text$.subscribe((e) => handlers.onText?.(e));
-    events.cmd.$.subscribe((e) => handlers.onCommand?.(e));
-    events.cmd.tx$.subscribe((e) => handlers.onInvoke?.(e));
+    if (doc) {
+      const cmd = () => getCmd(doc);
+      events.text$.subscribe((e) => handlers.onText?.(e, cmd()));
+      events.cmd.$.subscribe((e) => handlers.onCommand?.(e, cmd()));
+      events.cmd.tx$.subscribe((e) => handlers.onInvoke?.(e, cmd()));
+    }
     return events.dispose;
   }, [enabled, doc?.instance]);
 
@@ -90,7 +93,7 @@ export function useController(args: Args) {
       if (textbox && typeof pos === 'number') Time.delay(0, () => textbox?.select(pos));
     },
     onEnter() {
-      getCmd()?.invoke('Invoke', { text, action: 'Enter' });
+      if (doc) getCmd(doc).invoke('Invoke', { text, action: 'Enter' });
     },
   } as const;
   return api;

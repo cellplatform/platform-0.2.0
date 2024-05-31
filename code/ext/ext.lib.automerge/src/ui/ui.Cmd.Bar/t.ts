@@ -66,13 +66,13 @@ export type CmdBarEvent = CmdBarTxEvent | CmdBarTextEvent;
  * (typically via the ENTER key press).
  */
 type C = CmdBarType;
-export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>) => void;
+export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>, cmd: CmdBarCmd) => void;
 export type CmdBarTxEvent<T extends C = C> = { type: 'crdt:cmdbar/tx'; payload: CmdBarTx<T> };
 export type CmdBarTx<T extends C = C> = t.CmdTx<T>;
 
 /**
  * Fires when the command bar's text changes.
  */
-export type CmdBarTextHandler = (e: CmdBarText) => void;
+export type CmdBarTextHandler = (e: CmdBarText, cmd: CmdBarCmd) => void;
 export type CmdBarTextEvent = { type: 'crdt:cmdbar/text'; payload: CmdBarText };
 export type CmdBarText = { text: string };

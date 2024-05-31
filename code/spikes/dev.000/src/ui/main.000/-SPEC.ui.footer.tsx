@@ -27,12 +27,13 @@ export const Footer: React.FC<FooterProps> = (props) => {
     <CmdBar
       doc={lens}
       style={props.style}
-      onInvoke={(e) => {
+      onInvoke={(e, cmd) => {
         /**
          * TODO 🐷
          * Extract at principled DSL.
          */
-        console.log('onInvoke', e);
+
+        console.log('onInvoke', e, cmd);
         const text = e.params.text;
         const parts = text.split(' ').map((part) => part.trim());
         if (parts[0] === 'load' && parts[1]) props.onLoad?.({ name: parts[1] });
