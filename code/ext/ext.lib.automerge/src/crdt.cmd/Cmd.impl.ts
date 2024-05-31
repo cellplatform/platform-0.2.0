@@ -50,17 +50,17 @@ export function create<C extends t.CmdType>(
     return { tx, obj, start } as const;
   };
 
-  const invoke: t.CmdInvoker<C> = (name, params, options = {}) => {
+  const invoke: t.CmdInvoker<any> = (name, params, options = {}) => {
     const { obj, start } = invokeSetup(name, params, options);
     start();
     return obj;
   };
 
-  const invokeWithResponse: t.CmdResponseInvoker<C> = (name, responder, params, options) => {
+  const invokeWithResponse: t.CmdResponseInvoker<any> = (name, responder, params, options) => {
     const { tx, obj, start } = invokeSetup(name, params, options);
     const listen: t.CmdListen<C> = (options) => {
-      const cmd = { req: name, res: responder };
       const { timeout, dispose$, onComplete, onError } = wrangle.listen.options(options);
+      const cmd = { req: name, res: responder };
       return Listener.create<C>(api, { tx, cmd, timeout, dispose$, onComplete, onError });
     };
     start();
