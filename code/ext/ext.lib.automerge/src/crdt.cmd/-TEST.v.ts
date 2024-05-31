@@ -614,28 +614,63 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen(ƒ) ← register callback functions', async () => {
+      it('.listen(ƒ) ← register callback: onComplete', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
-        const events = cmd.events(dispose$);
-        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), tx));
 
-        let tx = '';
         const fired: t.CmdListener<C1>[] = [];
+        const events = cmd.events(dispose$);
+        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
         // Handler passed to listener constructor.
-        tx = cmd.invoke('add', 'add:res', { a: 1, b: 2 }).listen((e) => fired.push(e)).tx;
-        await Time.wait(10);
+        await cmd
+          .invoke('add', 'add:res', { a: 1, b: 2 })
+          .listen((e) => fired.push(e))
+          .promise();
         expect(fired[0].result?.sum).to.eql(3);
 
         // Handler added to {listener} object.
-        const listener = cmd.invoke('add', 'add:res', { a: 2, b: 3 }).listen();
-        tx = listener.onComplete((e) => {
-          fired.push(e);
-          expect(e.result?.sum).to.eql(5); // NB: result strongly typed.
-        }).tx;
-        await Time.wait(10);
+        await cmd
+          .invoke('add', 'add:res', { a: 2, b: 3 })
+          .listen()
+          .onComplete((e) => {
+            fired.push(e);
+            expect(e.result?.sum).to.eql(5); // NB: result strongly typed.
+          })
+          .promise();
+
         expect(fired[1].result?.sum).to.eql(5);
+        dispose();
+      });
+
+      it('.listen(ƒ) ← register callback: onError', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
+
+        const error: E = { message: 'boo', code: 123, type: 'bounds' };
+        const fired: t.CmdListener<C1>[] = [];
+        events
+          .on('add')
+          .subscribe(({ tx, params }) => cmd.invoke('add:res', sum(params), { tx, error }));
+
+        // Handler passed to listener constructor.
+        await cmd
+          .invoke('add', 'add:res', { a: 1, b: 2 })
+          .listen()
+          .onError((e) => fired.push(e))
+          .promise();
+
+        expect(fired.length).to.eql(1);
+        expect(fired[0].error).to.eql(error);
+
+        await cmd
+          .invoke('add', 'add:res', { a: 1, b: 2 })
+          .listen({ onError: (e) => fired.push(e) })
+          .promise();
+
+        expect(fired.length).to.eql(2);
+        expect(fired[1].error).to.eql(error);
 
         dispose();
       });

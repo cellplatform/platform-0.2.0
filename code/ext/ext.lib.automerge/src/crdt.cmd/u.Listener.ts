@@ -4,8 +4,9 @@ type Args<C extends t.CmdType> = {
   tx: string;
   cmd: { req: C['name']; res: u.ExtractRes<C>['name'] };
   timeout?: t.Msecs;
-  onComplete?: t.CmdListenHandler<C>;
   dispose$?: t.UntilObservable;
+  onComplete?: t.CmdListenHandler<C>;
+  onError?: t.CmdListenHandler<C>;
 };
 
 /**
@@ -24,8 +25,11 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   let _result: R | undefined;
   let _error: E | undefined;
 
-  const handlers = { onComplete: new Set<t.CmdListenHandler<C>>() } as const;
-  if (args.onComplete) handlers.onComplete.add(args.onComplete);
+  type H = t.CmdListenHandler<C>;
+  const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
+  const runHandlers = (handlers: Set<H>) => handlers.forEach((fn) => fn(api));
+  if (args.onComplete) handlers.complete.add(args.onComplete);
+  if (args.onError) handlers.error.add(args.onError);
 
   /**
    * Finalization
@@ -39,7 +43,8 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     if (result) $$.next(result);
     $$.complete();
     api.dispose();
-    if (status === 'Complete') handlers.onComplete.forEach((fn) => fn(api));
+    if (status === 'Complete') runHandlers(handlers.complete);
+    if (status === 'Error') runHandlers(handlers.error);
   };
 
   /**
@@ -85,7 +90,12 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     },
 
     onComplete(fn) {
-      handlers.onComplete.add(fn);
+      handlers.complete.add(fn);
+      return api;
+    },
+
+    onError(fn) {
+      handlers.error.add(fn);
       return api;
     },
 

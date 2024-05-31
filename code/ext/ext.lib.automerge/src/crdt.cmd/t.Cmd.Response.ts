@@ -26,6 +26,7 @@ export type CmdListenOptions<C extends t.CmdType> = {
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
   onComplete?: CmdListenHandler<C>;
+  onError?: CmdListenHandler<C>;
 };
 
 /**
@@ -40,7 +41,7 @@ export type CmdListener<C extends t.CmdType> = t.Lifecycle & {
   readonly error?: u.ExtractError<C>;
   promise(): Promise<CmdListener<C>>;
   onComplete(fn: CmdListenHandler<C>): CmdListener<C>;
-
+  onError(fn: CmdListenHandler<C>): CmdListener<C>;
 };
 
 export type CmdListenHandler<C extends t.CmdType> = (e: CmdListener<C>) => void;
