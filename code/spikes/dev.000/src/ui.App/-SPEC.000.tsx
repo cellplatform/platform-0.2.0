@@ -1,9 +1,11 @@
-import { Dev, Pkg, css, type t } from '../test.ui';
+import { Color, Dev, Pkg, css, type t } from '../test.ui';
 import { View } from './-SPEC.000.ui';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 import { Footer } from './-SPEC.000.ui.footer';
 
-type T = { stream?: MediaStream };
+import 'reactflow/dist/style.css';
+
+type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
 
 /**
@@ -35,18 +37,44 @@ export default Dev.describe(name, async (e) => {
       .size('fill', 36)
       .display('grid')
       .render<T>((e) => {
+        const styles = {
+          base: css({ Absolute: 0, display: 'grid' }),
+          overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
+        };
         return (
-          <View
-            stream={e.state.stream}
-            model={model}
-            network={network}
-            onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
-          />
+          <div {...styles.base}>
+            <View
+              stream={e.state.stream}
+              model={model}
+              network={network}
+              onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
+            />
+            {e.state.overlay && <div {...styles.overlay}>{e.state.overlay}</div>}
+          </div>
         );
       });
 
     ctx.host.footer.padding(0).render((e) => {
-      return <Footer network={network} />;
+      return (
+        <Footer
+          network={network}
+          onLoad={async (e) => {
+            /**
+             * TODO 🐷
+             * Extract at principled DSL.
+             */
+            const name = e.name.toLowerCase();
+            if (name === 'diagram') {
+              const { Specs } = await import('ext.lib.reactflow');
+              const keys = Object.keys(Specs);
+              const ns = keys.find((key) => key.includes('Sample.01'));
+              const el = ns ? <Dev.Harness spec={Specs[ns]} /> : undefined;
+              state.change((d) => (d.overlay = el));
+            }
+          }}
+          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
+        />
+      );
     });
   });
 
