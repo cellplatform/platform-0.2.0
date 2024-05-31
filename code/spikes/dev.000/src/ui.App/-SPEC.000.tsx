@@ -66,8 +66,7 @@ export default Dev.describe(name, async (e) => {
             const name = e.name.toLowerCase();
             if (name === 'diagram') {
               const { Specs } = await import('ext.lib.reactflow');
-              const keys = Object.keys(Specs);
-              const ns = keys.find((key) => key.includes('Sample.01'));
+              const ns = Object.keys(Specs).find((key) => key.includes('Sample.01'));
               const el = ns ? <Dev.Harness spec={Specs[ns]} /> : undefined;
               state.change((d) => (d.overlay = el));
             }
