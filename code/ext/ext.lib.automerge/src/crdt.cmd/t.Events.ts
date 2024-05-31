@@ -9,13 +9,9 @@ export type CmdEventsFactory<C extends t.CmdType> = (dispose$?: t.UntilObservabl
  * Events API
  */
 export type CmdEvents<C extends t.CmdType> = t.Lifecycle & {
-  /**
-   * TODO 🐷
-   * - error Event
-   */
-
   readonly $: t.Observable<CmdEvent>;
   readonly tx$: t.Observable<CmdTx<C>>;
+  readonly error$: t.Observable<CmdTx<C>>;
   readonly on: CmdEventsOnMethod<C>;
 };
 

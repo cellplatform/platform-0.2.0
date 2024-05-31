@@ -30,6 +30,7 @@ export const Events = {
     const $$ = rx.subject<t.CmdEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
     const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/tx');
+    const error$ = tx$.pipe(rx.filter((e) => !!e.error));
 
     if (doc) {
       const events = doc.events(dispose$);
@@ -56,6 +57,7 @@ export const Events = {
     const api: t.CmdEvents<C> = {
       $,
       tx$,
+      error$,
 
       on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<u.CmdTypeMap<C>[N]>) {
         type M = u.CmdTypeMap<C>[N];
