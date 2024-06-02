@@ -2,8 +2,7 @@ import { Color, Dev, Pkg, css, type t } from '../../test.ui';
 import { View } from './-SPEC.ui';
 import { Footer } from './-SPEC.ui.footer';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
-
-import 'reactflow/dist/style.css';
+import { Loader } from './-SPEC.loader';
 
 type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
@@ -59,17 +58,8 @@ export default Dev.describe(name, async (e) => {
         <Footer
           network={network}
           onLoad={async (e) => {
-            /**
-             * TODO 🐷
-             * Extract at principled DSL.
-             */
-            const name = e.name.toLowerCase();
-            if (name === 'diagram') {
-              const { Specs } = await import('ext.lib.reactflow');
-              const ns = Object.keys(Specs).find((key) => key.includes('Sample.01'));
-              const el = ns ? <Dev.Harness spec={Specs[ns]} /> : undefined;
-              state.change((d) => (d.overlay = el));
-            }
+            const el = await Loader.load(e.name);
+            state.change((d) => (d.overlay = el));
           }}
           onUnload={(e) => state.change((d) => (d.overlay = undefined))}
         />
