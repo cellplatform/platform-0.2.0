@@ -11,6 +11,7 @@ import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
 
 import { render } from './Dev.render';
+import { find } from './u';
 
 const { describe, ctx } = DevBase.Spec;
 const { trimStringsDeep } = Value.Object;
@@ -19,7 +20,6 @@ const qs = DEFAULTS.qs;
 export const Dev = {
   ...DevBase,
   ...Helpers,
-  render,
 
   bundle: Test.bundle,
   FieldSelector: PropList.FieldSelector,
@@ -39,4 +39,6 @@ export const Dev = {
   ctx,
   describe,
   trimStringsDeep,
+  render,
+  find,
 };

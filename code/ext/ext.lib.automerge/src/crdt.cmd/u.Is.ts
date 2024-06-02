@@ -5,15 +5,15 @@ import { Patch } from './u.Patch';
  * Flags: Event pattern inference.
  */
 export const Is = {
-  initialized(input: any): input is t.CmdLens {
+  initialized(input: any): input is t.CmdPathsObject {
     if (input === null || typeof input !== 'object') return false;
-    const obj = input as t.CmdLens;
+    const obj = input as t.CmdPathsObject;
     return (
       typeof obj.name === 'string' &&
       typeof obj.params === 'object' &&
-      typeof obj.counter?.value === 'number'
+      typeof obj.counter?.value === 'number' &&
+      typeof obj.tx === 'string'
     );
-    return false;
   },
 
   event: {

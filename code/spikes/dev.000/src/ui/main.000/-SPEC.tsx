@@ -1,9 +1,10 @@
-import { Dev, Pkg, css, type t } from '../test.ui';
-import { View } from './-SPEC.000.ui';
+import { Color, Dev, Pkg, css, type t } from '../../test.ui';
+import { View } from './-SPEC.ui';
+import { Footer } from './-SPEC.ui.footer';
 import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
-import { Footer } from './-SPEC.000.ui.footer';
+import { Loader } from './-SPEC.loader';
 
-type T = { stream?: MediaStream };
+type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
 
 /**
@@ -35,18 +36,34 @@ export default Dev.describe(name, async (e) => {
       .size('fill', 36)
       .display('grid')
       .render<T>((e) => {
+        const styles = {
+          base: css({ Absolute: 0, display: 'grid' }),
+          overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
+        };
         return (
-          <View
-            stream={e.state.stream}
-            model={model}
-            network={network}
-            onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
-          />
+          <div {...styles.base}>
+            <View
+              stream={e.state.stream}
+              model={model}
+              network={network}
+              onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
+            />
+            {e.state.overlay && <div {...styles.overlay}>{e.state.overlay}</div>}
+          </div>
         );
       });
 
     ctx.host.footer.padding(0).render((e) => {
-      return <Footer network={network} />;
+      return (
+        <Footer
+          network={network}
+          onLoad={async (e) => {
+            const el = await Loader.load(e.name);
+            state.change((d) => (d.overlay = el));
+          }}
+          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
+        />
+      );
     });
   });
 

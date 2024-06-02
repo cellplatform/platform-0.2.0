@@ -1,4 +1,4 @@
-import { rx, type t } from './common';
+import { rx, type t, type u } from './common';
 import { Is } from './u.Is';
 import { Path } from './u.Path';
 
@@ -26,9 +26,11 @@ export const Events = {
     /**
      * Observables.
      */
+    const fire = (e: t.CmdEvent) => $$.next(e);
     const $$ = rx.subject<t.CmdEvent>();
     const $ = $$.pipe(rx.takeUntil(dispose$));
-    const fire = (e: t.CmdEvent) => $$.next(e);
+    const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/tx');
+    const error$ = tx$.pipe(rx.filter((e) => !!e.error));
 
     if (doc) {
       const events = doc.events(dispose$);
@@ -41,25 +43,29 @@ export const Events = {
         filter((e) => Is.event.countChange(paths, e.patches)),
         distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
-        const { count, name, params } = e.doc;
-        fire({ type: 'crdt:cmd/Tx', payload: { name, params, count } });
+        const { tx, count, name, params, error } = e.doc;
+        fire({
+          type: 'crdt:cmd/tx',
+          payload: { name, params, tx, count, error },
+        });
       });
     }
 
     /**
      * API
      */
-    const tx: t.CmdEvents<C>['tx'] = {
-      $: rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/Tx'),
-      name<N extends C['name']>(name: N) {
-        type T = t.CmdTx<t.CmdTypeMap<C>[N]>;
-        return tx.$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
-      },
-    };
-
     const api: t.CmdEvents<C> = {
       $,
-      tx,
+      tx$,
+      error$,
+
+      on<N extends C['name']>(name: N, handler?: t.CmdEventsOnHandler<u.CmdTypeMap<C>[N]>) {
+        type M = u.CmdTypeMap<C>[N];
+        type T = t.CmdTx<M>;
+        const res$ = api.tx$.pipe(rx.filter((e) => e.name === name)) as t.Observable<T>;
+        if (handler) res$.subscribe((e) => handler(e));
+        return res$;
+      },
 
       // Lifecycle.
       dispose,

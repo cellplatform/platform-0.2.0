@@ -1,80 +1,29 @@
-import type { t } from './common';
+export type * from './t.Cmd';
+export type * from './t.Cmd.listen';
+export type * from './t.Doc';
+export type * from './t.Events';
 
 type O = Record<string, unknown>;
 type S = string;
-
-export type Cmd<C extends CmdType> = {
-  readonly invoke: CmdInvoke<C>;
-  readonly events: CmdEventsFactory<C>;
-};
-
-export type CmdInvoke<C extends CmdType> = <T extends C['name']>(
-  name: T,
-  params: Extract<C, { name: T }>['params'],
-) => void;
+type U = undefined;
 
 /**
- * Named definition of a command.
+ * Definition of a command, eg:
+ *
+ *    type Add  = CmdType<'add', { a: number; b: number }, AddR>;
+ *    type AddR = CmdType<'add:res', { sum: number }>;
  */
-export type CmdType<N extends S = S, P extends O = O> = { readonly name: N; readonly params: P };
-export type CmdTypeMap<C extends CmdType> = {
-  [K in C['name']]: C extends CmdType<K, infer P> ? CmdType<K, P> : never;
-};
-
-/**
- * Abstract resolver paths to the location of
- * the command structure within the CRDT.
- */
-export type CmdPaths = {
-  name: t.ObjectPath;
-  params: t.ObjectPath;
-  counter: t.ObjectPath;
+export type CmdType<
+  N extends S = S,
+  P extends O = O,
+  R extends CmdType | U = U,
+  E extends CmdError = CmdError,
+> = {
+  readonly name: N;
+  readonly params: P;
 };
 
 /**
- * The shape of the default <CmdPaths> as an object.
+ * Error
  */
-export type CmdLens<C extends CmdType = CmdType> = {
-  name?: C['name'];
-  params?: C['params'];
-  counter?: CmdCounter;
-};
-export type CmdCounter = { readonly value: number };
-
-/**
- * A fully resolved document object for a <CmdLens>.
- */
-export type CmdObject<C extends CmdType> = {
-  name: C['name'];
-  params: C['params'];
-  count: number;
-};
-
-/**
- * EVENTS
- */
-export type CmdEventsFactory<C extends CmdType> = (dispose$?: t.UntilObservable) => CmdEvents<C>;
-export type CmdEvents<C extends CmdType = CmdType> = t.Lifecycle & {
-  readonly $: t.Observable<CmdEvent>;
-  readonly tx: {
-    readonly $: t.Observable<CmdTx<C>>;
-    name<N extends C['name']>(name: N): t.Observable<CmdTx<CmdTypeMap<C>[N]>>;
-  };
-};
-
-/**
- * Event types union rollup.
- */
-export type CmdEvent = CmdTxEvent;
-
-/**
- * Fires when a command is invoked via a new transaction (eg "fire").
- */
-export type CmdTxHandler<C extends CmdType = CmdType> = (e: CmdTx<C>) => void;
-export type CmdTxEvent<C extends CmdType = CmdType> = {
-  type: 'crdt:cmd/Tx';
-  payload: CmdTx<C>;
-};
-export type CmdTx<C extends CmdType = CmdType> = CmdType<C['name'], C['params']> & {
-  count: number;
-};
+export type CmdError = { readonly message: string };

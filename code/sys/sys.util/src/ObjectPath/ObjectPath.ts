@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Helpers for working with arrays that represent object paths.
  */
@@ -38,10 +40,12 @@ export const ObjectPath = {
     if (!path || path.length === 0) throw new Error('path cannot be empty');
 
     let current: any = root;
+
     path.forEach((key, index) => {
       if (index === path.length - 1) {
-        // Last key in path, assign the value.
-        current[key] = value;
+        // Last key in path → update the value.
+        if (value === undefined) delete current[key];
+        else current[key] = value;
       } else {
         // If the next part of the path doesn't exist, create it as an object.
         if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
