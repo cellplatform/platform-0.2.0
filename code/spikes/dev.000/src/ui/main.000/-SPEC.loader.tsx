@@ -7,9 +7,7 @@ import { Dev, type t } from '../../test.ui';
 
 export const Loader = {
   find(specs: t.SpecImports, includes: string) {
-    const ns = Object.keys(specs).find((key) => key.includes(includes));
-    const spec = ns ? specs[ns] : undefined;
-    return { ns, spec } as const;
+    return Dev.find(specs, (k) => k.includes(includes));
   },
 
   findAndRender(specs: t.SpecImports, includes: string) {

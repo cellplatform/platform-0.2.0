@@ -1,5 +1,5 @@
+import { Specs } from 'ext.lib.deno';
 import { Dev, type t } from '../../test.ui';
-import { Sample } from 'ext.lib.deno';
 
 export type DenoDeployProps = {
   store: t.Store;
@@ -10,5 +10,6 @@ export type DenoDeployProps = {
 
 export const DenoDeploy: React.FC<DenoDeployProps> = (props) => {
   const { store, docuri, accessToken } = props;
-  return <Dev.Harness spec={Sample.spec} env={{ store, docuri, accessToken }} />;
+  const spec = Dev.find(Specs, (key) => key.includes('.Sample.01')).spec;
+  return <Dev.Harness spec={spec} env={{ store, docuri, accessToken }} />;
 };
