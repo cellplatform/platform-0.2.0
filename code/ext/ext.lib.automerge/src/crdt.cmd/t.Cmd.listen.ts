@@ -3,19 +3,6 @@ import type { t, u } from './common';
 type Tx = string;
 
 /**
- * Response.
- */
-export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: Tx;
-  readonly name: C['name'];
-  readonly params: C['params'];
-};
-
-export type CmdResponseInvoked<C extends t.CmdType> = CmdInvoked<C> & {
-  readonly listen: CmdListen<C>;
-};
-
-/**
  * Command listener factory.
  */
 export type CmdListen<C extends t.CmdType> = (

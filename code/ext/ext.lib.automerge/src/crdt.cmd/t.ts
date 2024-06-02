@@ -1,5 +1,5 @@
 export type * from './t.Cmd';
-export type * from './t.Cmd.Response';
+export type * from './t.Cmd.listen';
 export type * from './t.Doc';
 export type * from './t.Events';
 

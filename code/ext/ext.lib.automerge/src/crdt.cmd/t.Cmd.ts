@@ -36,4 +36,17 @@ export type CmdResponseInvoker<C extends t.CmdType> = <N extends C['name']>(
   responder: u.ExtractResName<C>,
   params: u.CmdTypeMap<C>[N]['params'],
   options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
-) => t.CmdResponseInvoked<u.CmdTypeMap<C>[N]>;
+) => t.CmdRequest<u.CmdTypeMap<C>[N]>;
+
+/**
+ * Response.
+ */
+export type CmdInvoked<C extends t.CmdType> = {
+  readonly tx: Tx;
+  readonly name: C['name'];
+  readonly params: C['params'];
+};
+
+export type CmdRequest<C extends t.CmdType> = CmdInvoked<C> & {
+  readonly listen: t.CmdListen<C>;
+};
