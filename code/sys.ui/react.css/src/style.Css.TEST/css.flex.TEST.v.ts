@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Style } from '../index.mjs';
+import { Style } from '..';
 
 describe('Flex', () => {
   it('does not fail when undefined is passed', () => {

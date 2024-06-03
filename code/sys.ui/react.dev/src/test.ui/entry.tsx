@@ -20,7 +20,7 @@ if (isDev) {
    *    module entry to by code-split in such a way that the [Dev Harness]
    *    never gets sent in the normal useage payload.
    */
-  const { render } = await import('../index.mjs');
+  const { render } = await import('..');
   const { ModuleSpecs, SampleSpecs } = await import('./entry.Specs.mjs');
 
   const Specs = {

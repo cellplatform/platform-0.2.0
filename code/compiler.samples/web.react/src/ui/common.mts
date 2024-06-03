@@ -1,1 +1,1 @@
-export * from '../common/index.mjs';
+export * from '../common';

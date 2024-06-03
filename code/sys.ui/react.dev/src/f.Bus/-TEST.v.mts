@@ -1,5 +1,5 @@
 import { DevBus } from '.';
-import { Spec } from '../index.mjs';
+import { Spec } from '..';
 import { Test, TestSample, Time, describe, expect, it, type t } from '../test';
 import { SAMPLES } from '../test.ui/sample.specs.unit-test';
 

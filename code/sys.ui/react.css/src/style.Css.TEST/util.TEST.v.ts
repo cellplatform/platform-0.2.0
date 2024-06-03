@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Style } from '../index.mjs';
+import { Style } from '..';
 
 describe('css.toEdges', () => {
   it('undefined => undefined', () => {

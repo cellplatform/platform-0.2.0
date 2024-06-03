@@ -1,5 +1,5 @@
 import { describe, it, expect, t } from '../test';
-import { Test } from '../index.mjs';
+import { Test } from '..';
 import { ResultTree } from '.';
 
 describe('ResultTree', () => {

@@ -1,5 +1,5 @@
 import { Constraints, TestTree } from '.';
-import { Test } from '../index.mjs';
+import { Test } from '..';
 import { describe, expect, it, t } from '../test';
 
 type T = t.TestSuiteModel | t.TestModel;

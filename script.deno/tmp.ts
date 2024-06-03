@@ -8,7 +8,7 @@ const exclude = [
   '**/*.d.mts',
 ];
 
-const pattern = 'code/**/src/index.mts';
+const pattern = 'code/**/index.mts';
 const dir = fs.resolve(import.meta.dirname || '', '..');
 const paths = await fs.glob(dir).find(pattern, { exclude });
 
@@ -21,8 +21,8 @@ for (const file of paths) {
   console.log('-------------------------------------------');
   console.log('from', from);
   console.log('to  ', to);
-  // console.log('file', file);
-  await Deno.rename(from, to);
+
+  // await Deno.rename(from, to);
 }
 
 console.log(`↑ dir: ${c.green(dir)}`);

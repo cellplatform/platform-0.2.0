@@ -7,7 +7,7 @@ export const tsconfig = Config.ts((e) => {
 export default Config.vite(import.meta.url, (e) => {
   e.lib({
     entry: {
-      index: 'src/index.mts',
+      index: 'src/index.ts',
       specs: 'src/test.ui/entry.Specs.mts',
     },
   });

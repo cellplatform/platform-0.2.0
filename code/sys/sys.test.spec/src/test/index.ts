@@ -1,4 +1,4 @@
 export { expect, expectError } from 'sys.test';
 export { describe, it } from 'vitest';
-export { Test } from '../index.mjs';
+export { Test } from '..';
 export * from '../common';
