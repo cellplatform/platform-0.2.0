@@ -43,7 +43,7 @@ export const Util = {
       dependencies: { [name: string]: string };
       toString(): string;
     };
-    const path = fs.join(dir, 'src/index.pkg.mts');
+    const path = fs.join(dir, 'src/index.pkg.ts');
     const exists = await fs.pathExists(path);
     return exists ? ((await import(path)).Pkg as T) : undefined;
   },

@@ -159,7 +159,7 @@ export const Typescript = {
   },
 
   /**
-   * Generate the [index.pkg.mts] file that contains static
+   * Generate the [index.pkg.ts] file that contains static
    * meta-data about the module.
    *
    * DESIGN

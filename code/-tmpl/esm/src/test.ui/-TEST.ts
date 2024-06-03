@@ -1,4 +1,4 @@
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 import { expect, Test } from '../test.ui';
 
 export default Test.describe(`Module: ${Pkg.toString()}`, (e) => {

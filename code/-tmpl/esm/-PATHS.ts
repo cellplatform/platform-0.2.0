@@ -4,13 +4,13 @@
 export const paths = {
   config: 'vite.config.mts',
   indexHtml: 'index.html',
-  pkg: 'src/index.pkg.mts',
+  pkg: 'src/index.pkg.ts',
   src: [
     'script.ts/tmp.ts',
     'src/global.d.ts',
 
     'src/index.mts',
-    'src/index.pkg.mts',
+    'src/index.pkg.ts',
 
     'src/types.ts',
     'src/global.d.ts',
