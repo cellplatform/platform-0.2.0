@@ -27,4 +27,9 @@ function glob(...dir: (string | undefined)[]) {
  * Export
  */
 export const path = { join, dirname, fromFileUrl, resolve, ensureDir } as const;
-export const fs = { ...path, path, glob } as const;
+export const fs = {
+  ...path,
+  path,
+  glob,
+  remove: Deno.remove,
+} as const;

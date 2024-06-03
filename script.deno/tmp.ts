@@ -8,14 +8,15 @@ const exclude = [
   '**/*.d.mts',
 ];
 
+const pattern = 'code/**/index.pkg.mts';
 const dir = fs.resolve(import.meta.dirname || '', '..');
-const pattern = 'code/**/*.mts';
 const paths = await fs.glob(dir).find(pattern, { exclude });
 
-paths.forEach((file) => {
+for (const file of paths) {
   const path = file.path.substring(dir.length + 1);
   console.log(c.green('•'), path);
-});
+}
+
 console.log(`↑ dir: ${c.green(dir)}`);
 
 console.log();
