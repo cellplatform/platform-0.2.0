@@ -9,7 +9,7 @@ export const paths = {
     'script.ts/tmp.ts',
     'src/global.d.ts',
 
-    'src/index.mts',
+    'src/index.ts',
     'src/index.pkg.ts',
 
     'src/types.ts',
