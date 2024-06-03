@@ -2,7 +2,7 @@ import 'symbol-observable';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 import { Dev } from 'sys.ui.react.common';
 
 (async () => {

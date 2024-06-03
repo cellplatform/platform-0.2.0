@@ -1,5 +1,5 @@
 import type { t } from '../common';
-export { Pkg } from '../index.pkg.mjs';
+export { Pkg } from '../index.pkg';
 
 export const Specs = {
   'sys.ui.media.Audio.Player': () => import('../ui/Audio.Player/-dev/-SPEC'),

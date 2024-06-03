@@ -1,7 +1,7 @@
 /**
  * Module (Meta)
  */
-import { Pkg } from './index.pkg.mjs';
+import { Pkg } from './index.pkg';
 export { Pkg };
 
 export { PrivyProvider, usePrivy } from '@privy-io/react-auth';

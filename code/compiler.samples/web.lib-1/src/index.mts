@@ -1,4 +1,4 @@
-import { Pkg } from './index.pkg.mjs';
+import { Pkg } from './index.pkg';
 
 import('./logic/Bar.mjs');
 

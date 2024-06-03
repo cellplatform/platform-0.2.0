@@ -2,7 +2,7 @@ import 'symbol-observable';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 
 const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');

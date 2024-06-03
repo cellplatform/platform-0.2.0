@@ -1,5 +1,5 @@
 import 'symbol-observable';
 
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 
 console.log('Pkg', Pkg);

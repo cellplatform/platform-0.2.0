@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { Pkg } from './index.pkg.mjs';
+import { Pkg } from './index.pkg';
 
 /**
  * Sample log output.

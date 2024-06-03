@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 
 const url = new URL(location.href);
 const params = url.searchParams;

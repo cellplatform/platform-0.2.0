@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 export { Pkg };
 const ns = Pkg.name;
 

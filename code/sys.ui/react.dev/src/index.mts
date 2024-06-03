@@ -1,4 +1,4 @@
-export { Pkg } from './index.pkg.mjs';
+export { Pkg } from './index.pkg';
 
 export { BADGES, DevWrangle, Is } from './common';
 export { DevKeyboard } from './f.Keyboard';

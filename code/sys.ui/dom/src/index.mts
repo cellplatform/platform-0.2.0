@@ -1,4 +1,4 @@
-export { Pkg } from './index.pkg.mjs';
+export { Pkg } from './index.pkg';
 
 export { File } from './dom.File';
 export { KeyListener, Keyboard, KeyboardMonitor } from './dom.Keyboard';
