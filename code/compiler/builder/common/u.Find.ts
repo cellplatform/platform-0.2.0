@@ -30,7 +30,7 @@ export const FindUtil = {
     let dirs = await asyncFilter(paths, async (path) => {
       if (path.includes('/code/compiler/')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
-      if (hasViteConfig && !(await fs.pathExists(fs.join(path, 'vite.config.mts')))) return false;
+      if (hasViteConfig && !(await fs.pathExists(fs.join(path, 'vite.config.ts')))) return false;
       return options.filter ? options.filter(path.substring(Paths.rootDir.length)) : true;
     });
 

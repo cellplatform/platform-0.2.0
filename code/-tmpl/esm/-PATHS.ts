@@ -2,7 +2,7 @@
  * Path index of the teamplte.
  */
 export const paths = {
-  config: 'vite.config.mts',
+  config: 'vite.config.ts',
   indexHtml: 'index.html',
   pkg: 'src/index.pkg.ts',
   src: [
