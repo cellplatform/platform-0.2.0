@@ -1,2 +1,2 @@
-export { Pkg } from './index.pkg.mjs';
+export { Pkg } from './index.pkg';
 export { Specs } from './test.ui/entry.Specs.mjs';

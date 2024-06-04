@@ -1,6 +1,6 @@
 import type { t } from './common';
 export { Dev } from '../Dev';
-export { Pkg } from '../index.pkg.mjs';
+export { Pkg } from '../index.pkg';
 
 export const ModuleSpecs = {
   'sys.ui.dev.Harness': () => import('../ui/Harness/-SPEC'),

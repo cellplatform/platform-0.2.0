@@ -1,4 +1,4 @@
-import { Video } from '../index.mjs';
+import { Video } from '..';
 
 export const SAMPLE = {
   VIMEO: {

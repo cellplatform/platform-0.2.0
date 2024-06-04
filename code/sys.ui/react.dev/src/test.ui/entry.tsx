@@ -2,7 +2,7 @@ import 'symbol-observable';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../index.pkg.mjs';
+import { Pkg } from '../index.pkg';
 
 const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
@@ -20,7 +20,7 @@ if (isDev) {
    *    module entry to by code-split in such a way that the [Dev Harness]
    *    never gets sent in the normal useage payload.
    */
-  const { render } = await import('../index.mjs');
+  const { render } = await import('..');
   const { ModuleSpecs, SampleSpecs } = await import('./entry.Specs.mjs');
 
   const Specs = {

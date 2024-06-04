@@ -1,4 +1,4 @@
-export * from '../index.pkg.mjs';
+export * from '../index.pkg';
 
 export * from './Id';
 export * from './Is';

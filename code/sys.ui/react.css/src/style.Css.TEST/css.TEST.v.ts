@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { css, Css } from '../index.mjs';
+import { css, Css } from '..';
 
 describe('css', () => {
   it('is a function', () => {

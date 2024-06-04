@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 import { fs, type t } from './common';
-import { paths as tmpl } from '../../-tmpl/esm/.PATHS';
+import { paths as tmpl } from '../../-tmpl/esm/-PATHS';
 
 /**
  * Paths.

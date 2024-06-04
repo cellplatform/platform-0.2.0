@@ -1,5 +1,5 @@
 import { Dev, type t } from '.';
-import { IndexedDb } from '../index.mjs';
+import { IndexedDb } from '..';
 
 type T = { spinning?: boolean; results?: t.TestSuiteRunResponse[] };
 const initial: T = {};

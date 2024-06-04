@@ -1,4 +1,4 @@
-import { Test } from '../index.mjs';
+import { Test } from '..';
 import { describe, expect, it, t } from '../test';
 import { TestModel } from '../TestSuite/TestModel.mjs';
 import { Is } from './Is.mjs';

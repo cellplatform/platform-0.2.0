@@ -316,6 +316,6 @@ const Wrangle = {
   libEntry(entry?: string | t.ViteLibEntry): t.ViteLibEntry {
     if (typeof entry === 'string') return { index: entry };
     if (typeof entry === 'object') return entry;
-    return { index: '/src/index.mts' };
+    return { index: '/src/index.ts' };
   },
 };

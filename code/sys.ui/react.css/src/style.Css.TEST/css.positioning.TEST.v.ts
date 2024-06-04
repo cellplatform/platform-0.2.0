@@ -1,6 +1,6 @@
 import { expect, describe, it } from '../test';
 import { toPositionEdges } from '../style.Css';
-import { Style } from '../index.mjs';
+import { Style } from '..';
 
 describe('React: transformStyle - positioning', () => {
   describe('converting from transformStyle - function', () => {

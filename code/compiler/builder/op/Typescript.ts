@@ -151,7 +151,7 @@ export const Typescript = {
   }) {
     const { kind } = args;
     const root = fs.resolve(args.root);
-    const modulePath = fs.join(root, 'vite.config.mts');
+    const modulePath = fs.join(root, 'vite.config.ts');
     if (!(await fs.pathExists(modulePath))) return args.config;
 
     const m = (await import(modulePath)) as { tsconfig: t.TsConfigExport };
@@ -159,7 +159,7 @@ export const Typescript = {
   },
 
   /**
-   * Generate the [index.pkg.mts] file that contains static
+   * Generate the [index.pkg.ts] file that contains static
    * meta-data about the module.
    *
    * DESIGN

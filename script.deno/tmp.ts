@@ -4,18 +4,31 @@ const exclude = [
   '**/node_modules/**',
   '**/spikes/**',
   '**/compiler/**',
-  '**/compiler.samnples/**',
+  '**/compiler.samples/**',
   '**/*.d.mts',
 ];
 
+const pattern = 'code/**/vite.config.mts';
 const dir = fs.resolve(import.meta.dirname || '', '..');
-const pattern = 'code/**/*.mts';
 const paths = await fs.glob(dir).find(pattern, { exclude });
 
-paths.forEach((file) => {
+for (const file of paths) {
   const path = file.path.substring(dir.length + 1);
   console.log(c.green('•'), path);
-});
+
+  // const changeExtensions = () =>
+
+  const from = file.path;
+  const to = fs.join(fs.dirname(file.path), file.name.replace(/\.mts$/, '.ts'));
+
+  console.log('-------------------------------------------');
+  console.log('from', from);
+  console.log('to  ', to);
+
+  // await Deno.rename(from, to);
+}
+
+console.log(c.green('-'));
 console.log(`↑ dir: ${c.green(dir)}`);
 
 console.log();

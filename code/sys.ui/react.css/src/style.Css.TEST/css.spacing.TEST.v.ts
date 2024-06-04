@@ -1,5 +1,5 @@
 import { t, expect, describe, it } from '../test';
-import { Style } from '../index.mjs';
+import { Style } from '..';
 
 describe('padding', function () {
   it('PaddingX', () => {

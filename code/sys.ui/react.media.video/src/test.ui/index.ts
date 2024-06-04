@@ -4,4 +4,4 @@ export { Dev } from 'sys.ui.react.common';
 
 export * from './common';
 export * from './-SAMPLES.mjs';
-export { Video } from '../index.mjs';
+export { Video } from '..';
