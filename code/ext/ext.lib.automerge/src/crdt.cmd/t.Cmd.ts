@@ -1,52 +1,9 @@
-import type { t, u } from './common';
-
-type Tx = string;
+import type { t } from './common';
 
 /**
  * Command API.
  */
 export type Cmd<C extends t.CmdType> = {
+  readonly invoke: t.CmdInvoke<C> & t.CmdInvokeResponse<C>;
   readonly events: t.CmdEventsFactory<C>;
-  readonly invoke: CmdInvoker<C> & CmdResponseInvoker<C>;
-};
-
-/**
- * INVOKE methods:
- */
-export type CmdInvokeOptionsInput<C extends t.CmdType> = CmdInvokeOptions<C> | Tx;
-export type CmdInvokeOptions<C extends t.CmdType> = {
-  tx?: Tx;
-  error?: u.ExtractError<C>;
-};
-
-/**
- * Invoke with no response.
- */
-export type CmdInvoker<C extends t.CmdType> = <N extends C['name']>(
-  name: N,
-  params: u.CmdTypeMap<C>[N]['params'],
-  options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
-) => t.CmdInvoked<u.CmdTypeMap<C>[N]>;
-
-/**
- * Invoke with expected response.
- */
-export type CmdResponseInvoker<C extends t.CmdType> = <N extends C['name']>(
-  name: N,
-  responder: u.ExtractResName<C>,
-  params: u.CmdTypeMap<C>[N]['params'],
-  options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
-) => t.CmdRequest<u.CmdTypeMap<C>[N]>;
-
-/**
- * Response.
- */
-export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: Tx;
-  readonly name: C['name'];
-  readonly params: C['params'];
-};
-
-export type CmdRequest<C extends t.CmdType> = CmdInvoked<C> & {
-  readonly listen: t.CmdListen<C>;
 };
