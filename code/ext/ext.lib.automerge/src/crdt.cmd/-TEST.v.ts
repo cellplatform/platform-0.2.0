@@ -748,6 +748,8 @@ describe('crdt.cmd (Command)', () => {
       });
     });
   });
+
+  describe('Cmd → Curry', () => {});
 });
 
 /**
