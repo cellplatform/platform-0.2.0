@@ -1,12 +1,22 @@
 import type { t, u } from './common';
 
+type Tx = string;
+
+/**
+ * Response.
+ */
+export type CmdInvoked<C extends t.CmdType> = {
+  readonly tx: Tx;
+  readonly req: t.CmdRequest<C>;
+};
+
 /**
  * Response Listener API.
  */
 export type CmdResponseListener<C extends t.CmdType> = {
   readonly $: t.Observable<u.ExtractResParams<C>>;
   readonly ok: boolean;
-  readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
+  readonly status: 'Pending' | 'Complete' | 'Error' | 'Timeout';
   readonly result?: u.ExtractResParams<C>;
   readonly error?: u.ExtractError<C>;
   promise(): Promise<CmdResponseListener<C>>;

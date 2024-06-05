@@ -45,7 +45,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdRespons
   /**
    * Finalization
    */
-  const timer = Time.delay(timeout, () => done('Error:Timeout'));
+  const timer = Time.delay(timeout, () => done('Timeout'));
   const done = (status: Status, result?: R, error?: E) => {
     timer.cancel();
     _status = status;
@@ -81,7 +81,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdRespons
     req: args.req,
 
     get ok() {
-      if (_status === 'Error' || _status === 'Error:Timeout') return false;
+      if (_status === 'Error' || _status === 'Timeout') return false;
       if (_error) return false;
       return true;
     },

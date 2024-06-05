@@ -41,11 +41,3 @@ export type CmdRequest<C extends t.CmdType> = {
   readonly name: C['name'];
   readonly params: C['params'];
 };
-
-/**
- * Response.
- */
-export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: Tx;
-  readonly req: t.CmdRequest<C>;
-};
