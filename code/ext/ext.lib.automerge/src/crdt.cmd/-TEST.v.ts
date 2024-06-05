@@ -603,7 +603,7 @@ describe('crdt.cmd (Command)', () => {
         await Time.wait(50);
 
         expect(res.ok).to.eql(false);
-        expect(res.status === 'Error:Timeout').to.eql(true);
+        expect(res.status === 'Timeout').to.eql(true);
         expect(res.result).to.eql(undefined);
         expect(res.disposed).to.eql(true);
 
@@ -748,8 +748,6 @@ describe('crdt.cmd (Command)', () => {
       });
     });
   });
-
-  describe('Cmd → Curry', () => {});
 });
 
 /**
