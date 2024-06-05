@@ -511,7 +511,7 @@ describe('crdt.cmd (Command)', () => {
 
       const tx = 'tx.abc';
       const res1 = cmd.invoke('foo', {}, { tx });
-      const res2 = cmd.invoke('add', 'add:res', { a: 1, b: 2 }, { tx });
+      const res2 = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, { tx });
 
       expect(typeof res1 === 'object').to.be.true;
       expect((res1 as any).listen).to.be.undefined;
@@ -529,54 +529,54 @@ describe('crdt.cmd (Command)', () => {
       dispose();
     });
 
-    describe('Response.listen', () => {
-      it('.listen', async () => {
+    describe('Response (listen)', () => {
+      it('listen', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
         events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-        const listener = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
+        const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
 
-        expect(listener.tx).to.be.a.string;
-        expect(listener.req.name).to.eql('add');
-        expect(listener.req.params.a).to.eql(1);
-        expect(listener.req.params.b).to.eql(2);
+        expect(res.tx).to.be.a.string;
+        expect(res.req.name).to.eql('add');
+        expect(res.req.params.a).to.eql(1);
+        expect(res.req.params.b).to.eql(2);
 
-        expect(listener.status).to.eql('Pending');
-        expect(listener.result).to.eql(undefined);
-        expect(listener.disposed).to.eql(false);
+        expect(res.status).to.eql('Pending');
+        expect(res.result).to.eql(undefined);
+        expect(res.disposed).to.eql(false);
 
         await Time.wait(10);
 
-        expect(listener.ok).to.eql(true);
-        expect(listener.status).to.eql('Complete');
-        expect(listener.result?.sum).to.eql(3);
-        expect(listener.disposed).to.eql(true);
+        expect(res.ok).to.eql(true);
+        expect(res.status).to.eql('Complete');
+        expect(res.result?.sum).to.eql(3);
+        expect(res.disposed).to.eql(true);
 
         dispose();
       });
 
-      it('.listen → events.on("name", fn:<callback>)', async () => {
+      it('listen → events.on("name", fn:<callback>)', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         cmd.events(dispose$).on('add', function (e) {
           cmd.invoke('add:res', sum(e.params), e.tx);
         });
 
-        const res = cmd.invoke('add', 'add:res', { a: 2, b: 3 });
+        const res = cmd.invoke(['add', 'add:res'], { a: 2, b: 3 });
         await Time.wait(10);
 
         expect(res.result?.sum).to.eql(5);
         dispose();
       });
 
-      it('.list → {promise}', async () => {
+      it('listen → {promise}', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-        const res = cmd.invoke('add', 'add:res', { a: 2, b: 3 });
+        const res = cmd.invoke(['add', 'add:res'], { a: 2, b: 3 });
         expect(res.result).to.eql(undefined);
 
         const promise = await res.promise();
@@ -586,7 +586,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen ← timeout', async () => {
+      it('listen ← timeout', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         cmd.events(dispose$).on('add', async (e) => {
@@ -595,7 +595,7 @@ describe('crdt.cmd (Command)', () => {
         });
 
         const timeout = 10;
-        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }, { timeout });
+        const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, { timeout });
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql('Pending');
         expect(res.disposed).to.eql(false);
@@ -610,7 +610,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen(ƒ) ← register callback: onComplete', async () => {
+      it('listen(ƒ) ← register callback: onComplete', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
 
@@ -619,14 +619,14 @@ describe('crdt.cmd (Command)', () => {
         events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
         // Handler passed to listener constructor.
-        await cmd.invoke('add', 'add:res', { a: 1, b: 2 }, (e) => fired.push(e)).promise();
+        await cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, (e) => fired.push(e)).promise();
 
         expect(fired[0].result?.sum).to.eql(3);
         expect(fired[0].cmd).to.equal(cmd);
 
         // Handler added to {listener} object.
         await cmd
-          .invoke('add', 'add:res', { a: 2, b: 3 })
+          .invoke(['add', 'add:res'], { a: 2, b: 3 })
           .onComplete((e) => {
             fired.push(e);
             expect(e.result?.sum).to.eql(5); // NB: result strongly typed.
@@ -637,7 +637,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen(ƒ) ← register callback: onError', async () => {
+      it('listen(ƒ) ← register callback: onError', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
@@ -650,7 +650,7 @@ describe('crdt.cmd (Command)', () => {
 
         // Handler passed to listener constructor.
         await cmd
-          .invoke('add', 'add:res', { a: 1, b: 2 })
+          .invoke(['add', 'add:res'], { a: 1, b: 2 })
           .onError((e) => fired.push(e))
           .promise();
 
@@ -659,7 +659,7 @@ describe('crdt.cmd (Command)', () => {
         expect(fired[0].cmd).to.equal(cmd);
 
         await cmd
-          .invoke('add', 'add:res', { a: 1, b: 2 }, { onError: (e) => fired.push(e) })
+          .invoke(['add', 'add:res'], { a: 1, b: 2 }, { onError: (e) => fired.push(e) })
           .promise();
 
         expect(fired.length).to.eql(2);
@@ -668,7 +668,7 @@ describe('crdt.cmd (Command)', () => {
         dispose();
       });
 
-      it('.listen ← dispose', async () => {
+      it('listen ← dispose', async () => {
         const { doc, dispose, dispose$ } = await testSetup();
         const cmd = Cmd.create<C>(doc);
 
@@ -680,8 +680,8 @@ describe('crdt.cmd (Command)', () => {
         });
 
         const params: P = { a: 1, b: 2 };
-        const res1 = cmd.invoke('add', 'add:res', params);
-        const res2 = cmd.invoke('add', 'add:res', params, { dispose$ });
+        const res1 = cmd.invoke(['add', 'add:res'], params);
+        const res2 = cmd.invoke(['add', 'add:res'], params, { dispose$ });
         expect(res1.disposed).to.eql(false);
         expect(res2.disposed).to.eql(false);
 
@@ -709,7 +709,7 @@ describe('crdt.cmd (Command)', () => {
           cmd.invoke('add:res', sum(params), { tx, error });
         });
 
-        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
+        const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
         await res.promise();
 
         expect(doc.current.error).to.eql(error);
@@ -730,7 +730,7 @@ describe('crdt.cmd (Command)', () => {
           cmd.invoke('add:res', sum(params), { tx, error });
         });
 
-        const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
+        const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
         await res.promise();
 
         expect(res.error?.code).to.eql(123);

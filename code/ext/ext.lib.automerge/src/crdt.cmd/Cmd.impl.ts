@@ -51,16 +51,16 @@ export function create<C extends t.CmdType>(
     return res;
   };
 
-  const invokeWithResponse: t.CmdInvokeResponse<any> = (name, responder, params, opt) => {
+  const invokeWithResponse: t.CmdInvokeResponse<any> = (name, params, opt) => {
     const options = wrangle.invoke.responseOptions(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
     const error = wrangle.invoke.error(options);
     const { timeout, dispose$, onComplete, onError } = options;
-    const { start } = invokeSetup(tx, name, params, error);
+    const { start } = invokeSetup(tx, name[0], params, error);
     const res = Listener.create<C>(api, {
       tx,
-      req: { name, params },
-      res: { name: responder },
+      req: { name: name[0], params },
+      res: { name: name[1] },
       timeout,
       dispose$,
       onComplete,
@@ -75,9 +75,9 @@ export function create<C extends t.CmdType>(
    */
   const api: t.Cmd<C> = {
     invoke(...args: any[]) {
-      const [p1, p2, p3, p4] = args;
+      const [p1, p2, p3] = args;
+      if (Array.isArray(p1)) return invokeWithResponse(p1 as any, p2 as any, p3);
       if (typeof p2 === 'object') return invoke(p1, p2, p3) as any;
-      if (typeof p2 === 'string') return invokeWithResponse(p1, p2 as any, p3, p4);
       throw new Error('overlaoded invoke arguments could not be wrangled');
     },
 
