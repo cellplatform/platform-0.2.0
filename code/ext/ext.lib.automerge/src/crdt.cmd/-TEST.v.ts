@@ -665,6 +665,12 @@ describe('crdt.cmd (Command)', () => {
         expect(fired.length).to.eql(2);
         expect(fired[1].error).to.eql(error);
 
+        // Example.
+        cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, (e) => {
+          e.error; /*  handle error */
+          e.result; /* do something with result */
+        });
+
         dispose();
       });
 
