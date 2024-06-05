@@ -6,27 +6,27 @@ type Args<C extends t.CmdType> = {
   res: { name: u.ExtractResName<C> };
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;
-  onComplete?: t.CmdListenHandler<C>;
-  onError?: t.CmdListenHandler<C>;
+  onComplete?: t.CmdResponseHandler<C>;
+  onError?: t.CmdResponseHandler<C>;
 };
 
 /**
  * Factory for producing callback listeners.
  */
-function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListener<C> {
+function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdResponseListener<C> {
   const { tx, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
 
-  type Status = t.CmdListener<C>['status'];
+  type Status = t.CmdResponseListener<C>['status'];
   type R = u.ExtractResParams<C>;
   type E = u.ExtractError<C>;
   let _status: Status = 'Pending';
   let _result: R | undefined;
   let _error: E | undefined;
 
-  type H = t.CmdListenHandler<C>;
+  type H = t.CmdResponseHandler<C>;
   const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
   if (args.onComplete) handlers.complete.add(args.onComplete);
   if (args.onError) handlers.error.add(args.onError);
@@ -36,7 +36,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
       const e = Handlers.args();
       handlers.forEach((fn) => fn(e));
     },
-    args(): t.CmdListenHandlerArgs<C> {
+    args(): t.CmdResponseHandlerArgs<C> {
       const { ok, tx, result, error } = api;
       return { ok, tx, result, error, cmd };
     },
@@ -75,7 +75,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   /**
    * API
    */
-  const api: t.CmdListener<C> = {
+  const api: t.CmdResponseListener<C> = {
     $,
     tx,
     req: args.req,
@@ -96,7 +96,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
     },
 
     promise() {
-      type R = t.CmdListener<C>;
+      type R = t.CmdResponseListener<C>;
       const first$ = $.pipe(rx.take(1));
       return new Promise<R>((resolve) => first$.subscribe(() => resolve(api)));
     },

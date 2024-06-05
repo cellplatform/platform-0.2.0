@@ -38,38 +38,36 @@ export function create<C extends t.CmdType>(
    * Invoke method (overloads)
    */
   const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.CmdError) => {
-    const obj: t.CmdInvoked<any> = { tx, req: { name, params } };
+    const res: t.CmdInvoked<any> = { tx, req: { name, params } };
     const start = () => Time.delay(0, () => update(tx, name, params, error, true));
-    return { obj, start } as const;
+    return { res, start } as const;
   };
 
-  const invoke: t.CmdInvoke<C> = (name, params, options = {}) => {
-    const tx = wrangle.invoke.tx(options, args.tx);
-    const error = wrangle.invoke.error(options);
-    const { obj, start } = invokeSetup(tx, name, params, error);
+  const invoke: t.CmdInvoke<C> = (name, params, opt) => {
+    const tx = wrangle.invoke.tx(opt, args.tx);
+    const error = wrangle.invoke.error(opt);
+    const { res, start } = invokeSetup(tx, name, params, error);
     start();
-    return obj;
+    return res;
   };
 
-  const invokeWithResponse: t.CmdInvokeResponse<any> = (name, responder, params, options) => {
+  const invokeWithResponse: t.CmdInvokeResponse<any> = (name, responder, params, opt) => {
+    const options = wrangle.invoke.responseOptions(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
     const error = wrangle.invoke.error(options);
-
-    const { obj, start } = invokeSetup(tx, name, params, error);
-    const listen: t.CmdListen<C> = (options) => {
-      const { timeout, dispose$, onComplete, onError } = wrangle.listen.options(options);
-      return Listener.create<C>(api, {
-        tx,
-        req: { name, params },
-        res: { name: responder },
-        timeout,
-        dispose$,
-        onComplete,
-        onError,
-      });
-    };
+    const { timeout, dispose$, onComplete, onError } = options;
+    const { start } = invokeSetup(tx, name, params, error);
+    const res = Listener.create<C>(api, {
+      tx,
+      req: { name, params },
+      res: { name: responder },
+      timeout,
+      dispose$,
+      onComplete,
+      onError,
+    });
     start();
-    return { ...obj, listen };
+    return res;
   };
 
   /**
@@ -100,16 +98,6 @@ const wrangle = {
     return input;
   },
 
-  listen: {
-    options<C extends t.CmdType>(
-      input?: t.CmdListenOptions<C> | t.CmdListenHandler<C>,
-    ): t.CmdListenOptions<C> {
-      if (!input) return {};
-      if (typeof input === 'function') return { onComplete: input };
-      return input;
-    },
-  },
-
   invoke: {
     tx<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx, txFactory?: TxFactory) {
       const defaultTx = () => (txFactory ?? DEFAULTS.tx)();
@@ -121,6 +109,15 @@ const wrangle = {
 
     error<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx): u.ExtractError<C> | undefined {
       return typeof input === 'object' ? input.error : undefined;
+    },
+
+    responseOptions<C extends t.CmdType>(
+      input?: Tx | t.CmdResponseHandler<C> | t.CmdInvokeResponseOptions<C>,
+    ): t.CmdInvokeResponseOptions<C> {
+      if (!input) return {};
+      if (typeof input === 'string') return {};
+      if (typeof input === 'function') return { onComplete: input };
+      return input;
     },
   },
 } as const;
