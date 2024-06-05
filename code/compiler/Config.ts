@@ -168,7 +168,7 @@ export const Config = {
          *              no problems and there is an apparent speed advantage.
          */
         const million = (await import('million/compiler')).default;
-        const react = (await import('@vitejs/plugin-react')).default;
+        const react = (await import('@vitejs/plugin-react-swc')).default;
         const hmr = e.mode === 'development';
         config.plugins?.push(million.vite({ mode: 'react', hmr }));
         config.plugins?.push(react());
