@@ -521,11 +521,11 @@ describe('crdt.cmd (Command)', () => {
       expect(res1.tx).to.eql(tx);
       expect(res2.tx).to.eql(tx);
 
-      expect(res1.name === 'foo').to.be.true;
-      expect(res1.params).to.eql({});
+      expect(res1.req.name === 'foo').to.be.true;
+      expect(res1.req.params).to.eql({});
 
-      expect(res2.name === 'add').to.be.true;
-      expect(res2.params).to.eql({ a: 1, b: 2 });
+      expect(res2.req.name === 'add').to.be.true;
+      expect(res2.req.params).to.eql({ a: 1, b: 2 });
 
       dispose();
     });
@@ -541,6 +541,10 @@ describe('crdt.cmd (Command)', () => {
         const listener = res.listen();
 
         expect(listener.tx).to.eql(res.tx);
+        expect(listener.req.name).to.eql('add');
+        expect(listener.req.params.a).to.eql(1);
+        expect(listener.req.params.b).to.eql(2);
+
         expect(listener.status).to.eql('Pending');
         expect(listener.result).to.eql(undefined);
         expect(listener.disposed).to.eql(false);

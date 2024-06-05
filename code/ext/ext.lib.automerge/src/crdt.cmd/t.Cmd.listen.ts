@@ -19,17 +19,17 @@ export type CmdListenOptions<C extends t.CmdType> = {
 /**
  * Response Listener API.
  */
-export type CmdListener<C extends t.CmdType> = t.Lifecycle & {
+export type CmdListener<C extends t.CmdType> = {
   readonly $: t.Observable<u.ExtractResParams<C>>;
   readonly ok: boolean;
-  readonly tx: Tx;
   readonly status: 'Pending' | 'Complete' | 'Error' | 'Error:Timeout';
   readonly result?: u.ExtractResParams<C>;
   readonly error?: u.ExtractError<C>;
   promise(): Promise<CmdListener<C>>;
   onComplete(fn: CmdListenHandler<C>): CmdListener<C>;
   onError(fn: CmdListenHandler<C>): CmdListener<C>;
-};
+} & t.CmdInvoked<C> &
+  t.Lifecycle;
 
 export type CmdListenHandler<C extends t.CmdType> = (e: CmdListenHandlerArgs<C>) => void;
 export type CmdListenHandlerArgs<C extends t.CmdType> = Pick<

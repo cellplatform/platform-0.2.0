@@ -2,7 +2,8 @@ import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<C extends t.CmdType> = {
   tx: string;
-  cmd: { req: C['name']; res: u.ExtractRes<C>['name'] };
+  req: { name: C['name']; params: C['params'] };
+  res: { name: u.ExtractResName<C> };
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;
   onComplete?: t.CmdListenHandler<C>;
@@ -67,7 +68,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
    * Listeners.
    */
   events
-    .on(args.cmd.res)
+    .on(args.res.name)
     .pipe(rx.filter((e) => e.tx === tx))
     .subscribe((e) => done(e.error ? 'Error' : 'Complete', e.params, e.error));
 
@@ -77,6 +78,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdListene
   const api: t.CmdListener<C> = {
     $,
     tx,
+    req: args.req,
 
     get ok() {
       if (_status === 'Error' || _status === 'Error:Timeout') return false;

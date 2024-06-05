@@ -6,23 +6,20 @@ type Tx = string;
  * Command API.
  */
 export type Cmd<C extends t.CmdType> = {
+  readonly invoke: CmdInvoke<C> & CmdInvokeResponse<C>;
   readonly events: t.CmdEventsFactory<C>;
-  readonly invoke: CmdInvoker<C> & CmdResponseInvoker<C>;
 };
 
 /**
  * INVOKE methods:
  */
 export type CmdInvokeOptionsInput<C extends t.CmdType> = CmdInvokeOptions<C> | Tx;
-export type CmdInvokeOptions<C extends t.CmdType> = {
-  tx?: Tx;
-  error?: u.ExtractError<C>;
-};
+export type CmdInvokeOptions<C extends t.CmdType> = { tx?: Tx; error?: u.ExtractError<C> };
 
 /**
  * Invoke with no response.
  */
-export type CmdInvoker<C extends t.CmdType> = <N extends C['name']>(
+export type CmdInvoke<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   params: u.CmdTypeMap<C>[N]['params'],
   options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
@@ -31,22 +28,30 @@ export type CmdInvoker<C extends t.CmdType> = <N extends C['name']>(
 /**
  * Invoke with expected response.
  */
-export type CmdResponseInvoker<C extends t.CmdType> = <N extends C['name']>(
+export type CmdInvokeResponse<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   responder: u.ExtractResName<C>,
   params: u.CmdTypeMap<C>[N]['params'],
   options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
-) => t.CmdRequest<u.CmdTypeMap<C>[N]>;
+) => t.CmdResponseInvoked<u.CmdTypeMap<C>[N]>;
+
+/**
+ * Request.
+ */
+export type CmdRequest<C extends t.CmdType> = {
+  readonly name: C['name'];
+  readonly params: C['params'];
+};
 
 /**
  * Response.
  */
 export type CmdInvoked<C extends t.CmdType> = {
   readonly tx: Tx;
-  readonly name: C['name'];
-  readonly params: C['params'];
+  readonly req: t.CmdRequest<C>;
 };
 
-export type CmdRequest<C extends t.CmdType> = CmdInvoked<C> & {
+// TEMP 🐷 change to <CmdListener>
+export type CmdResponseInvoked<C extends t.CmdType> = CmdInvoked<C> & {
   readonly listen: t.CmdListen<C>;
 };
