@@ -481,31 +481,33 @@ describe('crdt.cmd (Command)', () => {
     type C3 = t.CmdType<'foo', { msg?: string }>;
     const sum = ({ a, b }: P): R => ({ sum: a + b });
 
-    /**
-     * This manual example shows the basics of call and response
-     * using nothing but the {Cmd} primitives.
-     *
-     * The {Response} and {Listener} helpers are simply wrappers
-     * around the observable pattern below to provide some strongly
-     * typed developer ergonomics.
-     */
-    it('manual example (primitive)', async () => {
-      const { doc, dispose, dispose$ } = await testSetup();
-      const cmd = Cmd.create<C>(doc);
-      const events = cmd.events(dispose$);
+    describe('examples', () => {
+      /**
+       * This manual example shows the basics of call and response
+       * using nothing but the {Cmd} primitives.
+       *
+       * The {Response} and {Listener} helpers are simply wrappers
+       * around the observable pattern below to provide some strongly
+       * typed developer ergonomics.
+       */
+      it('via manual event hookup', async () => {
+        const { doc, dispose, dispose$ } = await testSetup();
+        const cmd = Cmd.create<C>(doc);
+        const events = cmd.events(dispose$);
 
-      const responses: t.CmdTx<C2>[] = [];
-      events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
-      events.on('add:res').subscribe((e) => responses.push(e));
+        const responses: t.CmdTx<C2>[] = [];
+        events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params)));
+        events.on('add:res').subscribe((e) => responses.push(e));
 
-      cmd.invoke('add', { a: 2, b: 3 });
-      await Time.wait(20);
+        cmd.invoke('add', { a: 2, b: 3 });
+        await Time.wait(20);
 
-      expect(responses[0].params.sum).to.eql(5);
-      dispose();
+        expect(responses[0].params.sum).to.eql(5);
+        dispose();
+      });
     });
 
-    it('Response {object}', async () => {
+    it('Response {object} → "tx" passing', async () => {
       const { doc, dispose } = await testSetup();
       const cmd = Cmd.create<C>(doc);
 
