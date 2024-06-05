@@ -5,10 +5,7 @@ type Tx = string;
 /**
  * INVOKE methods:
  */
-export type CmdInvokeOptions<C extends t.CmdType> = {
-  tx?: Tx;
-  error?: u.ExtractError<C>;
-};
+export type CmdInvokeOptions<C extends t.CmdType> = { tx?: Tx; error?: u.ExtractError<C> };
 export type CmdInvokeResponseOptions<C extends t.CmdType> = CmdInvokeOptions<C> & {
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
