@@ -1,4 +1,4 @@
-![banner](https://user-images.githubusercontent.com/185555/208599983-cfb3aba5-b8c2-44bd-b0b0-4115bfc0bd0f.png)
+![banner-A1-slender](https://github.com/cellplatform/platform-0.2.0/assets/185555/2b0a110d-0c73-4583-bbfa-94f77d38bc17)
 
 [![ci.node](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.node.yml)
 [![ci.deno](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.deno.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/ci.deno.yml)
@@ -20,10 +20,9 @@ Monorepo comprising the core set of shared `/sys` system modules that flexibly c
 
 <p>&nbsp;</p>
 
-# ⚚
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
-Sustained long range R&D.  
+**Sustained long range R&D**  
 Architecture, API's, and other conceptual primmitives will change (almost certainly radically 🐷) prior to any `1.x`.  
 
 Whilst the author(s) have been in diverse, exploratory dialogue with [LLM](https://en.wikipedia.org/wiki/Large_language_model)'s since November of 2022, this repo contains no "[copypasta](https://en.wikipedia.org/wiki/Copypasta)" of direct output from an LLM (or any related so called "AI" technology).  
