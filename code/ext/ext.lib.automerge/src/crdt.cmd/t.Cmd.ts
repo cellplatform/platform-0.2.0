@@ -13,8 +13,16 @@ export type Cmd<C extends t.CmdType> = {
 /**
  * INVOKE methods:
  */
-export type CmdInvokeOptionsInput<C extends t.CmdType> = CmdInvokeOptions<C> | Tx;
-export type CmdInvokeOptions<C extends t.CmdType> = { tx?: Tx; error?: u.ExtractError<C> };
+export type CmdInvokeOptions<C extends t.CmdType> = {
+  tx?: Tx;
+  error?: u.ExtractError<C>;
+};
+export type CmdInvokeResponseOptions<C extends t.CmdType> = CmdInvokeOptions<C> & {
+  dispose$?: t.UntilObservable;
+  timeout?: t.Msecs;
+  onComplete?: t.CmdListenHandler<C>;
+  onError?: t.CmdListenHandler<C>;
+};
 
 /**
  * Invoke with no response.
@@ -22,7 +30,7 @@ export type CmdInvokeOptions<C extends t.CmdType> = { tx?: Tx; error?: u.Extract
 export type CmdInvoke<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   params: u.CmdTypeMap<C>[N]['params'],
-  options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
+  options?: Tx | CmdInvokeOptions<u.CmdTypeMap<C>[N]>,
 ) => t.CmdInvoked<u.CmdTypeMap<C>[N]>;
 
 /**
@@ -32,7 +40,7 @@ export type CmdInvokeResponse<C extends t.CmdType> = <N extends C['name']>(
   name: N,
   responder: u.ExtractResName<C>,
   params: u.CmdTypeMap<C>[N]['params'],
-  options?: CmdInvokeOptionsInput<u.CmdTypeMap<C>[N]>,
+  options?: Tx | CmdInvokeResponseOptions<u.CmdTypeMap<C>[N]>,
 ) => t.CmdResponseInvoked<u.CmdTypeMap<C>[N]>;
 
 /**

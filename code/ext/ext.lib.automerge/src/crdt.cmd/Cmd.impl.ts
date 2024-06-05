@@ -3,7 +3,8 @@ import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
 type O = Record<string, unknown>;
-type TxFactory = () => string;
+type Tx = string;
+type TxFactory = () => Tx;
 type OptionsInput = Options | t.CmdPaths;
 type Options = { paths?: t.CmdPaths; tx?: TxFactory };
 
@@ -14,14 +15,12 @@ export function create<C extends t.CmdType>(
   doc: t.DocRef | t.Lens,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  type E = u.ExtractError<C>;
-
   const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
 
-  const update = (tx: string, name: string, params: O, error?: E, increment = false) => {
+  const update = (tx: string, name: string, params: O, error?: t.CmdError, increment = false) => {
     doc.change((d) => {
       const counter = resolve.counter(d) as t.A.Counter;
       mutate(d, paths.tx, tx);
@@ -38,26 +37,25 @@ export function create<C extends t.CmdType>(
   /**
    * Invoke method (overloads)
    */
-  const invokeSetup = (
-    name: C['name'],
-    params: C['params'],
-    options?: t.CmdInvokeOptionsInput<C>,
-  ) => {
-    const { error } = wrangle.invoke.options(options);
-    const tx = wrangle.invoke.tx(options, args.tx);
+  const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.CmdError) => {
     const obj: t.CmdInvoked<any> = { tx, req: { name, params } };
     const start = () => Time.delay(0, () => update(tx, name, params, error, true));
-    return { tx, obj, start } as const;
+    return { obj, start } as const;
   };
 
-  const invoke: t.CmdInvoke<any> = (name, params, options = {}) => {
-    const { obj, start } = invokeSetup(name, params, options);
+  const invoke: t.CmdInvoke<C> = (name, params, options = {}) => {
+    const tx = wrangle.invoke.tx(options, args.tx);
+    const error = wrangle.invoke.error(options);
+    const { obj, start } = invokeSetup(tx, name, params, error);
     start();
     return obj;
   };
 
   const invokeWithResponse: t.CmdInvokeResponse<any> = (name, responder, params, options) => {
-    const { tx, obj, start } = invokeSetup(name, params, options);
+    const tx = wrangle.invoke.tx(options, args.tx);
+    const error = wrangle.invoke.error(options);
+
+    const { obj, start } = invokeSetup(tx, name, params, error);
     const listen: t.CmdListen<C> = (options) => {
       const { timeout, dispose$, onComplete, onError } = wrangle.listen.options(options);
       return Listener.create<C>(api, {
@@ -113,14 +111,16 @@ const wrangle = {
   },
 
   invoke: {
-    options<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | string): t.CmdInvokeOptions<C> {
-      if (!input) return {};
-      if (typeof input === 'string') return { tx: input };
-      return input;
+    tx<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx, txFactory?: TxFactory) {
+      const defaultTx = () => (txFactory ?? DEFAULTS.tx)();
+      if (!input) return defaultTx();
+      if (typeof input === 'string') return input;
+      if (typeof input === 'object' && input.tx) return input.tx;
+      return defaultTx();
     },
 
-    tx<C extends t.CmdType>(options?: t.CmdInvokeOptions<C> | string, txFactory?: TxFactory) {
-      return wrangle.invoke.options(options).tx || (txFactory ?? DEFAULTS.tx)();
+    error<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx): u.ExtractError<C> | undefined {
+      return typeof input === 'object' ? input.error : undefined;
     },
   },
 } as const;
