@@ -40,6 +40,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
         size={64}
         muted={false}
         onTotalChanged={redraw}
+        selected={props.selectedStream}
         onSelection={(e) => props.onStreamSelected?.(e.selected)}
       />
     </div>
