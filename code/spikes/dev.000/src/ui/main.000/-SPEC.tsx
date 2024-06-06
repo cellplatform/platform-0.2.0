@@ -1,8 +1,9 @@
-import { Color, Dev, Pkg, css, type t } from '../../test.ui';
-import { View } from './-SPEC.ui';
-import { Footer } from './-SPEC.ui.footer';
-import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
+import { Color, Dev, css, type t } from '../../test.ui';
 import { Loader } from './-SPEC.loader';
+import { View } from './-SPEC.ui';
+import { DebugFooter } from './-SPEC.ui.debug.footer';
+import { Footer } from './-SPEC.ui.footer';
+import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
@@ -118,35 +119,10 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer
-      .padding(7.5)
+      .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        const styles = {
-          base: css({ display: 'grid', gridTemplateColumns: '1fr 1fr' }),
-          block: css({ display: 'block' }),
-          version: css({
-            fontFamily: 'monospace',
-            fontSize: 11,
-            alignSelf: 'center',
-            justifySelf: 'end',
-          }),
-        };
-
-        const badge = BADGES.ci.node;
-        const elBadge = (
-          <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
-            <img {...styles.block} src={badge?.image} />
-          </a>
-        );
-
-        const elVersion = <div {...styles.version}>{`v${Pkg.version}`}</div>;
-
-        return (
-          <div {...styles.base}>
-            {elBadge}
-            {elVersion}
-          </div>
-        );
+        return <DebugFooter />;
       });
   });
 });
