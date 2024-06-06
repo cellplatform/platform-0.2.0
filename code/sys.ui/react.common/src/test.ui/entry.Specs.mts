@@ -20,6 +20,7 @@ export const ModuleSpecs = {
   [`${ns}.Grid`]: () => import('../ui/Grid/-dev/-SPEC'),
   [`${ns}.Icon`]: () => import('../ui/Icon/-SPEC'),
   [`${ns}.IFrame`]: () => import('../ui/IFrame/-SPEC'),
+  [`${ns}.KeyHint`]: () => import('../ui/KeyHint/-SPEC'),
   [`${ns}.Layout.Split`]: () => import('../ui/Layout.Split/-SPEC'),
   [`${ns}.Measure`]: () => import('../ui.tools/Measure/-SPEC'),
   [`${ns}.Module.Loader`]: () => import('../ui/Module.Loader/-SPEC'),
