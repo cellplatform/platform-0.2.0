@@ -16,8 +16,6 @@ for (const file of paths) {
   const path = file.path.substring(dir.length + 1);
   console.log(c.green('•'), path);
 
-  // const changeExtensions = () =>
-
   const from = file.path;
   const to = fs.join(fs.dirname(file.path), file.name.replace(/\.mts$/, '.ts'));
 
