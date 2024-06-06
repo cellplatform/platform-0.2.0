@@ -57,11 +57,11 @@ export default Dev.describe(name, async (e) => {
       return (
         <Footer
           network={network}
+          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
           onLoad={async (e) => {
             const el = await Loader.load(e.name);
             state.change((d) => (d.overlay = el));
           }}
-          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
         />
       );
     });
@@ -86,10 +86,7 @@ export default Dev.describe(name, async (e) => {
             'Wallet.List.Title',
             'Refresh',
           ]}
-          data={{
-            provider: Auth.Env.provider,
-            wallet: { list: { title: 'Public Key' } },
-          }}
+          data={{ provider: Auth.Env.provider, wallet: { list: { title: 'Public Key' } } }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
         />
       );
