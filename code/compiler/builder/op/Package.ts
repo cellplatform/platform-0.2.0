@@ -191,7 +191,7 @@ const Wrangle = {
   defaultTarget(targets: t.ViteTarget[]) {
     /**
      * NB: The targets array order is determined within the
-     *     [vite.config.mts] file.
+     *     [vite.config.ts] file.
      *
      *    Order matters in the [vite.config] configuration.
      *    The first specified target is assumed to be the
