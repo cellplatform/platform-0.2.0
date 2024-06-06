@@ -1,5 +1,5 @@
 import { Color, Dev, css, type t } from '../../test.ui';
-import { Loader } from './-SPEC.loader';
+import { Loader } from './-SPEC.cmd';
 import { View } from './-SPEC.ui';
 import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Footer } from './-SPEC.ui.footer';
