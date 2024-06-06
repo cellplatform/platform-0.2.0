@@ -1,15 +1,18 @@
-import { DEFAULTS, HintKeys } from '.';
+import { DEFAULTS, KeyHint } from '.';
 import { css, Color, Dev, Pkg } from '../../test.ui';
 import { type t } from './common';
 
-type P = t.HintKeysProps;
-type T = { props: P; debug: {} };
+type P = t.KeyHintProps;
+type T = {
+  props: P;
+  debug: {};
+};
 const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec
  */
-const name = DEFAULTS.displayName;
+const name = DEFAULTS.displayName.KeyHint;
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -27,14 +30,12 @@ export default Dev.describe(name, (e) => {
     });
 
     ctx.debug.width(330);
-    ctx.subject
-      .size('fill')
-      .display('grid')
-      .render<T>((e) => {
-        const { props, debug } = e.state;
-        Dev.Theme.background(dev, props.theme, 1);
-        return <HintKeys {...props} />;
-      });
+    ctx.subject.display('grid').render<T>((e) => {
+      const { props, debug } = e.state;
+      Dev.Theme.background(dev, props.theme, 1);
+
+      return <KeyHint {...props} />;
+    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -42,6 +43,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
     dev.TODO();
+
+    link.button('KeyHint.Combo', `?KeyHint.Combo`);
+
+    dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
@@ -59,7 +64,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });

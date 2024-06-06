@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-export const View: React.FC<t.HintKeysProps> = (props) => {
-  console.log(DEFAULTS.displayName, props); // TEMP 🐷
+export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
+  const {} = props;
 
   /**
    * Render
@@ -12,14 +12,12 @@ export const View: React.FC<t.HintKeysProps> = (props) => {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       color: theme.fg,
-      display: 'grid',
-      placeItems: 'center',
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${DEFAULTS.displayName}`}</div>
+      <div>{`🐷 Combo`}</div>
     </div>
   );
 };

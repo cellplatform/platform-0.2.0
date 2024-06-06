@@ -6,7 +6,7 @@ export * from '../common';
  */
 export const DEFAULTS = {
   displayName: {
-    HintKey: `${Pkg.name}.HintKey`,
-    HintKeys: `${Pkg.name}.HintKeys`,
+    KeyHint: `${Pkg.name}.KeyHint`,
+    KeyHintCombo: `${Pkg.name}.KeyHint.Combo`,
   },
 } as const;
