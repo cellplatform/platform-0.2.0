@@ -5,5 +5,8 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.KeyHint`,
+  displayName: {
+    HintKey: `${Pkg.name}.HintKey`,
+    HintKeys: `${Pkg.name}.HintKeys`,
+  },
 } as const;

@@ -1,8 +1,8 @@
-import { DEFAULTS, KeyHint } from '.';
+import { DEFAULTS, HintKeys } from '.';
 import { css, Color, Dev, Pkg } from '../../test.ui';
 import { type t } from './common';
 
-type P = t.KeyHintProps;
+type P = t.HintKeysProps;
 type T = { props: P; debug: {} };
 const initial: T = { props: {}, debug: {} };
 
@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
-        return <KeyHint {...props} />;
+        return <HintKeys {...props} />;
       });
   });
 

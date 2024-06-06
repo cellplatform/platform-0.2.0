@@ -5,8 +5,8 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const KeyHint = FC.decorate<t.KeyHintProps, Fields>(
+export const HintKeys = FC.decorate<t.HintKeysProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: DEFAULTS.displayName },
+  { displayName: DEFAULTS.displayName.HintKeys },
 );

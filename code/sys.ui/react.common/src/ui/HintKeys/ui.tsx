@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-export const View: React.FC<t.KeyHintProps> = (props) => {
+export const View: React.FC<t.HintKeysProps> = (props) => {
   console.log(DEFAULTS.displayName, props); // TEMP 🐷
 
   /**

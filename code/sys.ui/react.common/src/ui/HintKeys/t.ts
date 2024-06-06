@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type KeyHintProps = {
+export type HintKeysProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
