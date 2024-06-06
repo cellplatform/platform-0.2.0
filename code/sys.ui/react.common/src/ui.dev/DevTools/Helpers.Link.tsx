@@ -17,8 +17,10 @@ export const Link = {
         .right((e) => elIconRight)
         .onClick((e) => {
           const open = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
-          if (targetIsUrl) open(target);
-          else {
+          if (targetIsUrl) {
+            open(target);
+          } else {
+            target = target.replace(/^\?/, '');
             const url = new URL(location.href);
             url.searchParams.set('dev', `${pkg.name}.${target}`);
             open(url.href);
