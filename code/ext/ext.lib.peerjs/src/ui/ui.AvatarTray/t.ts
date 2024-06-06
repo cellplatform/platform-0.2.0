@@ -4,13 +4,15 @@ import type { t } from './common';
  * <Component>
  */
 export type AvatarTrayProps = {
-  size?: number;
   peer?: t.PeerModel;
+  selected?: MediaStream;
   muted?: boolean;
+  size?: number;
   gap?: t.Pixels;
   borderRadius?: t.Pixels;
   emptyMessage?: string | JSX.Element;
   margin?: t.MarginInput;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onSelection?: t.PeerStreamSelectionHandler;
   onTotalChanged?: AvatarTrayTotalChangedHandler;
