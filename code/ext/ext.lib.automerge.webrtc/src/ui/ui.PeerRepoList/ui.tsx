@@ -1,8 +1,8 @@
-import { COLORS, Color, PeerUI, RepoList, css, type t } from './common';
+import { COLORS, Color, PeerUI, RepoList, css, type t, DEFAULTS } from './common';
 import { EdgeLabel } from './ui.EdgeLabel';
 
 export const View: React.FC<t.PeerRepoListProps> = (props) => {
-  const { model, network, debug = {} } = props;
+  const { model, network, debug = {}, avatarTray = DEFAULTS.avatarTray } = props;
   if (!(model && network)) return null;
 
   /**
@@ -22,20 +22,24 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
 
   const elDebugLabel = debug.label && <EdgeLabel {...debug.label} />;
 
+  const elAvatarTray = avatarTray && (
+    <PeerUI.AvatarTray
+      peer={network.peer}
+      style={styles.avatars}
+      muted={false}
+      onSelection={(e) => {
+        console.info(`⚡️ AvatarTray.onSelection`, e);
+        props.onStreamSelection?.(e);
+      }}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       {elDebugLabel}
       <RepoList model={model} />
       <div {...styles.footer}>
-        <PeerUI.AvatarTray
-          peer={network.peer}
-          style={styles.avatars}
-          muted={false}
-          onSelection={(e) => {
-            console.info(`⚡️ AvatarTray.onSelection`, e);
-            props.onStreamSelection?.(e);
-          }}
-        />
+        {elAvatarTray}
         <PeerUI.Connector
           peer={network.peer}
           behaviors={props.focusOnLoad ? ['Focus.OnLoad'] : undefined}

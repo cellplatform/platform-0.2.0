@@ -7,6 +7,7 @@ export type PeerRepoListProps = {
   model?: t.RepoListModel;
   network?: t.NetworkStore;
   focusOnLoad?: boolean;
+  avatarTray?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;
