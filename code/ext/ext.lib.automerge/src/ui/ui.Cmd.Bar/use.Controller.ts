@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, Is, Sync, Time, rx, type t, Cmd } from './common';
+import { Cmd, DEFAULTS, Is, Sync, Time, rx, type t } from './common';
 import { Events, Path } from './u';
 
 type Args = {
@@ -12,7 +12,7 @@ type Args = {
   handlers?: t.CmdBarHandlers;
 };
 
-type ReadyRef = 'focus';
+type ReadyRef = 'focus' | 'onReady';
 
 /**
  * State sync/interaction controller.
@@ -75,6 +75,18 @@ export function useController(args: Args) {
       ready.push('focus');
     }
   }, [enabled, !!textbox, args.focusOnReady]);
+
+  /**
+   * Ready
+   */
+  useEffect(() => {
+    if (ready.includes('onReady')) return;
+    if (doc) {
+      const cmd = getCmd(doc);
+      handlers.onReady?.({ cmd });
+      ready.push('onReady');
+    }
+  }, [!!cmdRef.current, doc?.instance]);
 
   /**
    * API

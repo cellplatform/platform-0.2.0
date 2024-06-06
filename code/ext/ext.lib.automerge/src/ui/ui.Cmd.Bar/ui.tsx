@@ -6,6 +6,7 @@ import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled, doc, paths, debug, focusOnReady } = props;
+
   const instance = useRef(props.instance ?? slug()).current;
   const handlers = wrangle.handlers(props);
   const controller = useController({
@@ -17,6 +18,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
     focusOnReady,
     handlers,
   });
+
   return (
     <CmdBar
       text={controller.text}
@@ -37,7 +39,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
  */
 const wrangle = {
   handlers(props: t.CmdBarProps): t.CmdBarHandlers {
-    const { onText, onCommand, onInvoke } = props;
-    return { onText, onCommand, onInvoke };
+    const { onText, onCommand, onInvoke, onReady } = props;
+    return { onText, onCommand, onInvoke, onReady };
   },
 } as const;

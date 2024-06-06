@@ -15,6 +15,7 @@ export type CmdBarProps = {
 } & CmdBarHandlers;
 
 export type CmdBarHandlers = {
+  onReady?: CmdBarReadyHandler;
   onText?: CmdBarTextHandler;
   onCommand?: CmdBarTxHandler;
   onInvoke?: CmdBarTxHandler;
@@ -60,6 +61,12 @@ export type CmdBarEvents = t.Lifecycle & {
 };
 
 export type CmdBarEvent = CmdBarTxEvent | CmdBarTextEvent;
+
+/**
+ * Ready
+ */
+export type CmdBarReadyHandler<T extends C = C> = (e: CmdBarReady<T>) => void;
+export type CmdBarReady<T extends C = C> = { readonly cmd: t.Cmd<T> };
 
 /**
  * Fires when a command is invoked
