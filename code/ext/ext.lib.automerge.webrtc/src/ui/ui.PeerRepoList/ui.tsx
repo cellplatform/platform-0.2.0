@@ -27,6 +27,7 @@ export const View: React.FC<t.PeerRepoListProps> = (props) => {
       peer={network.peer}
       style={styles.avatars}
       muted={false}
+      selected={props.selected}
       onSelection={(e) => {
         console.info(`⚡️ AvatarTray.onSelection`, e);
         props.onStreamSelection?.(e);
