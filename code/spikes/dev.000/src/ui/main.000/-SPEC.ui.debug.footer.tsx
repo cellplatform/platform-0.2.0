@@ -11,7 +11,24 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
   /**
    * Render
    */
-  const theme = Color.theme(props.theme);
+  const styles = {
+    base: css({ display: 'grid' }),
+  };
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <VersionBadge theme={props.theme} />
+    </div>
+  );
+};
+
+/**
+ * Version Badge Row.
+ */
+export type VersionBadgeProps = { style?: t.CssValue; theme?: t.CommonTheme };
+export const VersionBadge: React.FC<VersionBadgeProps> = (props) => {
+  const badge = BADGES.ci.node;
+
   const styles = {
     base: css({
       display: 'grid',
@@ -27,7 +44,6 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
     }),
   };
 
-  const badge = BADGES.ci.node;
   const elBadge = (
     <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
       <img {...styles.block} src={badge?.image} />

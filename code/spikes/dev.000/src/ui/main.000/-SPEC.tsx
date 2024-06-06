@@ -23,6 +23,7 @@ export default Dev.describe(name, async (e) => {
     behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
   });
   const network: t.NetworkStore = await WebrtcStore.init(self, store, model.index, {});
+  const theme: t.CommonTheme = 'Light';
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -122,7 +123,7 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        return <DebugFooter />;
+        return <DebugFooter theme={theme} />;
       });
   });
 });
