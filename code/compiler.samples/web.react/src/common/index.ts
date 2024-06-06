@@ -1,6 +1,5 @@
-import type * as t from './types.mjs';
+export type * as t from './t';
 
-export type { t };
 export * from '../index.pkg';
-export * from './libs.mjs';
-export * from './colors.mjs';
+export * from './libs';
+export * from './colors';
