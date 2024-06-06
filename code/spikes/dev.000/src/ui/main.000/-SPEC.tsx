@@ -42,15 +42,14 @@ export default Dev.describe(name, async (e) => {
           base: css({ Absolute: 0, display: 'grid' }),
           overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
         };
+
+        const overlay = e.state.overlay;
+        const elOverlay = overlay && <div {...styles.overlay}>{overlay}</div>;
+
         return (
           <div {...styles.base}>
-            <View
-              stream={e.state.stream}
-              model={model}
-              network={network}
-              onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
-            />
-            {e.state.overlay && <div {...styles.overlay}>{e.state.overlay}</div>}
+            <View model={model} network={network} selectedStream={e.state.stream} />
+            {elOverlay}
           </div>
         );
       });
@@ -74,6 +73,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row(async (e) => {
+      return null;
       const { Auth } = await import('ext.lib.privy');
       return (
         <Auth.Info
@@ -114,6 +114,11 @@ export default Dev.describe(name, async (e) => {
         />
       );
     });
+
+    dev.hr(5, 20);
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -123,7 +128,14 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        return <DebugFooter theme={theme} />;
+        return (
+          <DebugFooter
+            theme={theme}
+            network={network}
+            selectedStream={e.state.stream}
+            onStreamSelected={(stream) => state.change((d) => (d.stream = stream))}
+          />
+        );
       });
   });
 });
