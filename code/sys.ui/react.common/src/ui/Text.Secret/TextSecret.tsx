@@ -1,4 +1,4 @@
-import { Icons, Style, Color, COLORS, css, type t } from '../common';
+import { COLORS, Color, Icons, Style, css, type t } from './common';
 
 type Pixels = number;
 type CharLength = number;

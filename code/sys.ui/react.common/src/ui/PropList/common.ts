@@ -2,6 +2,7 @@ import { Pkg, type t } from '../common';
 
 export { Button } from '../Button';
 export { Chip } from '../Chip';
+export { Icons } from '../Icons';
 export * from '../common';
 
 /**
