@@ -7,7 +7,7 @@ import { Dev } from '../ui.dev';
 (async () => {
   console.info(`Pkg:`, Pkg);
   const badge = BADGES.ci.node;
-  const { Specs } = await import('./entry.Specs.mjs');
+  const { Specs } = await import('./entry.Specs');
 
   const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
   const root = createRoot(document.getElementById('root')!);

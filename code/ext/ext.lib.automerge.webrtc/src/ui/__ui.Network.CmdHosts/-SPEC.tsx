@@ -71,7 +71,7 @@ export default Dev.describe(name, async (e) => {
          * TODO 🐷
          * - optionally load from env-var.
          */
-        const { Specs } = await import('../../test.ui/entry.Specs.mjs');
+        const { Specs } = await import('../../test.ui/entry.Specs');
 
         return (
           <SampleLayout

@@ -21,7 +21,7 @@ if (isDev) {
    *    never gets sent in the normal useage payload.
    */
   const { render } = await import('..');
-  const { ModuleSpecs, SampleSpecs } = await import('./entry.Specs.mjs');
+  const { ModuleSpecs, SampleSpecs } = await import('./entry.Specs');
 
   const Specs = {
     ...SampleSpecs,

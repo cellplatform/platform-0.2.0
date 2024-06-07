@@ -20,4 +20,4 @@ export { PeerRepoList } from './ui/ui.PeerRepoList';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

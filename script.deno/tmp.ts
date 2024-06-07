@@ -23,7 +23,7 @@ for (const file of paths) {
   console.log('from', from);
   console.log('to  ', to);
 
-  await Deno.rename(from, to);
+  // await Deno.rename(from, to);
 }
 
 console.log(c.green('-'));

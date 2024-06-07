@@ -9,7 +9,7 @@ export default Config.vite(import.meta.url, (e) => {
     entry: {
       index: '/src/index.ts',
       dev: '/src/ui.dev/index.ts',
-      specs: '/src/test.ui/entry.Specs.mts',
+      specs: '/src/test.ui/entry.Specs.ts',
     },
   });
   e.target('web');

@@ -12,4 +12,4 @@ export { Http } from './http';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

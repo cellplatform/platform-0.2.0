@@ -45,4 +45,4 @@ export { RepoList } from './ui/ui.RepoList';
  * Dev
  */
 export { TestDb } from './test.ui/TestDb';
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

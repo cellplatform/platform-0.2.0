@@ -12,4 +12,4 @@ export { Vimeo, VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/Vimeo';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

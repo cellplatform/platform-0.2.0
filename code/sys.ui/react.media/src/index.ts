@@ -15,4 +15,4 @@ export { Video } from './ui/MediaStream.Video';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

@@ -70,5 +70,5 @@ export {
 /**
  * Dev
  */
-export { DevSpecs, ModuleSpecs, SampleSpecs, Specs } from './test.ui/entry.Specs.mjs';
+export { DevSpecs, ModuleSpecs, SampleSpecs, Specs } from './test.ui/entry.Specs';
 export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';

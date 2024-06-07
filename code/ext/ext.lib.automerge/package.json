@@ -41,7 +41,7 @@
   "typesVersions": {
     "*": {
       "specs": [
-        "./dist/types.d/test.ui/entry.Specs.d.mts"
+        "./dist/types.d/test.ui/entry.Specs.d.ts"
       ]
     }
   }
