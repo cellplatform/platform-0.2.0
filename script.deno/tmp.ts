@@ -8,7 +8,7 @@ const exclude = [
   '**/*.d.mts',
 ];
 
-const pattern = 'code/**/vite.config.mts';
+const pattern = 'code/**/entry.Specs.mts';
 const dir = fs.resolve(import.meta.dirname || '', '..');
 const paths = await fs.glob(dir).find(pattern, { exclude });
 
@@ -23,7 +23,7 @@ for (const file of paths) {
   console.log('from', from);
   console.log('to  ', to);
 
-  // await Deno.rename(from, to);
+  await Deno.rename(from, to);
 }
 
 console.log(c.green('-'));
