@@ -4,9 +4,9 @@ export { Pkg } from './index.pkg';
  * Library
  */
 export { BADGES, DevWrangle, Is } from './common';
-export { DevKeyboard } from './f.Keyboard';
-export { Spec } from './f.Spec';
-export { ValueHandler } from './f.Tools';
+export { DevKeyboard } from './fn.Keyboard';
+export { Spec } from './fn.Spec';
+export { ValueHandler } from './fn.Tools';
 
 export { ModuleList } from './ui/List.Module';
 export { useRubberband } from './ui.use/useRubberband';
