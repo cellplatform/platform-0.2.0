@@ -2,7 +2,7 @@ import { fs, c } from './u.ts';
 
 const exclude = [
   '**/node_modules/**',
-  '**/spikes/**',
+  // '**/spikes/**',
   '**/compiler/**',
   '**/compiler.samples/**',
   '**/*.d.mts',

@@ -1,8 +1,4 @@
-/**
- * Module (Meta)
- */
-import { Pkg } from './index.pkg';
-export { Pkg };
+export { Pkg } from './index.pkg';
 
 /**
  * Library

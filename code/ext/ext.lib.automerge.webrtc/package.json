@@ -40,14 +40,6 @@
   "sideEffects": false,
   "types": "./dist/types.d/index.d.ts",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./specs": "./dist/web/specs.js"
-  },
-  "typesVersions": {
-    "*": {
-      "specs": [
-        "./dist/types.d/test.ui/entry.Specs.d.ts"
-      ]
-    }
+    ".": "./dist/web/index.js"
   }
 }
