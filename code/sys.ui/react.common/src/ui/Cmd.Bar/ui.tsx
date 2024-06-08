@@ -1,5 +1,4 @@
-import { Color, COLORS, DEFAULTS, css, type t } from './common';
-import { HintKeys } from './ui.HintKeys';
+import { Color, DEFAULTS, KeyHint, css, type t } from './common';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
@@ -18,6 +17,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
     }),
     grid: css({ display: 'grid', gridTemplateColumns: wrangle.columns(props) }),
     textbox: css({ boxSizing: 'border-box', Padding: [7, 7], display: 'grid' }),
+    hintKey: css({ marginRight: 7 }),
   };
 
   const elTextbox = (
@@ -26,7 +26,14 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
     </div>
   );
 
-  const elHintKeys = <HintKeys {...props} enabled={enabled} theme={theme} />;
+  const elHintKeys = (
+    <KeyHint.Combo
+      keys={props.hintKey}
+      enabled={enabled}
+      theme={theme.name}
+      style={styles.hintKey}
+    />
+  );
 
   return (
     <div {...css(styles.base, styles.grid, props.style)}>
