@@ -2,7 +2,7 @@ import { Color, DEFAULTS, css, type t } from './common';
 import { Wrangle } from './u';
 
 export const View: React.FC<t.KeyHintProps> = (props) => {
-  const { enabled = true } = props;
+  const { enabled = DEFAULTS.enabled } = props;
   const text = Wrangle.text(props);
   const chars = text.split(' ');
 

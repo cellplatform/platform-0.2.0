@@ -17,8 +17,9 @@ export const DEFAULTS = {
     KeyHint: `${Pkg.name}.KeyHint`,
     KeyHintCombo: `${Pkg.name}.KeyHint.Combo`,
   },
+  modifiers,
   os,
   text: '⍰',
   parse: true,
-  modifiers,
+  enabled: true,
 } as const;

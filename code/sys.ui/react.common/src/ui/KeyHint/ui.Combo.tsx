@@ -1,8 +1,8 @@
-import { css, type t } from './common';
+import { css, type t, DEFAULTS } from './common';
 import { View as Key } from './ui';
 
 export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
-  const { parse, os, theme, enabled = true } = props;
+  const { parse, os, theme, enabled = DEFAULTS.enabled } = props;
   const keys = wrangle.keys(props);
 
   /**

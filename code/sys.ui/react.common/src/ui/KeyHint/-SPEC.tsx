@@ -17,11 +17,11 @@ export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<P, 'text' | 'enabled' | 'theme' | 'parse' | 'os'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    enabled: true,
     text: undefined,
     theme: undefined,
     os: undefined,
     parse: DEFAULTS.parse,
+    enabled: DEFAULTS.enabled,
   });
 
   e.it('ui:init', async (e) => {

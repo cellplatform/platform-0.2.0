@@ -14,11 +14,11 @@ export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'theme' | 'enabled' | 'parse' | 'os' | 'keys'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    enabled: true,
     keys: undefined,
     theme: undefined,
     os: undefined,
     parse: DEFAULTS.parse,
+    enabled: DEFAULTS.enabled,
   });
 
   e.it('ui:init', async (e) => {
