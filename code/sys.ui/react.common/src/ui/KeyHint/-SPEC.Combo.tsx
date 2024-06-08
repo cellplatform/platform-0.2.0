@@ -48,6 +48,7 @@ export default Dev.describe(name, (e) => {
     const link = Dev.Link.pkg(Pkg, dev);
 
     link.button('KeyHint', `?KeyHint`);
+    link.button('Cmd.Bar', '?Cmd.Bar');
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {

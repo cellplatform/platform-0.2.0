@@ -2,7 +2,8 @@ import { css, type t } from './common';
 import { View as Key } from './ui';
 
 export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
-  const { keys = [], parse, os, theme, enabled = true } = props;
+  const { parse, os, theme, enabled = true } = props;
+  const keys = wrangle.keys(props);
 
   /**
    * Render
@@ -23,3 +24,13 @@ export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
 
   return <div {...css(styles.base, props.style)}>{elKeys}</div>;
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  keys(props: t.KeyHintComboProps): string[] {
+    if (!props.keys) return [];
+    return Array.isArray(props.keys) ? props.keys : [props.keys];
+  },
+} as const;

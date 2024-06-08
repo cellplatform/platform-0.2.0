@@ -15,5 +15,5 @@ export type KeyHintProps = {
 /**
  * <Component>:Combo  ← Plural
  */
-export type KeyHintComboProps = Common & { keys?: string[] };
+export type KeyHintComboProps = Common & { keys?: string | string[] };
 type Common = Pick<KeyHintProps, 'parse' | 'os' | 'enabled' | 'theme' | 'style'>;
