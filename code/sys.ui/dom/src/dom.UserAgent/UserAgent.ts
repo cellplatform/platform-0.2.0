@@ -1,8 +1,11 @@
 import UAParser from 'ua-parser-js';
 import { type t } from '../common';
 
-type Flag = keyof t.UserAgentIs;
-const flags: Flag[] = [
+type P = UAParser.IResult;
+
+let _current: t.UserAgent | undefined; // NB: singleton reference.
+const kinds: t.UserAgentOSKind[] = ['macOS', 'iOS', 'windows', 'posix'];
+const flags: t.UserAgentFlag[] = [
   'android',
   'iOS',
   'iPad',
@@ -13,7 +16,6 @@ const flags: Flag[] = [
   'mobile',
   'tablet',
 ];
-let _current: t.UserAgent | undefined; // NB: singleton.
 
 /**
  * Ref:
@@ -25,6 +27,7 @@ let _current: t.UserAgent | undefined; // NB: singleton.
  *     vendor, and/or version of the requesting user agent.""
  */
 export const UserAgent = {
+  os: { kinds },
   flags,
 
   /**
@@ -48,52 +51,29 @@ export const UserAgent = {
     const parser = UAParser((input || '').trim());
     const { browser, engine, os, device } = parser;
 
-    const flags = (): t.UserAgentIs => {
-      const name = asString(os.name);
-      let macOS = name === 'Mac OS';
-      let iOS = name === 'iOS';
-      let iPad = device.model === 'iPad';
-      let iPhone = device.model === 'iPhone';
-      const mobile = device.type === 'mobile';
-      const tablet = device.type === 'tablet';
-
-      if (macOS) {
-        if (iPad || iPhone) iOS = true;
-        if (iOS) macOS = false;
-      }
-
-      return {
-        posix: ['Linux', 'Ubuntu'].includes(name),
-        windows: name === 'Windows',
-        android: name === 'Android',
-        macOS,
-        iOS,
-        iPad,
-        iPhone,
-        mobile,
-        tablet,
-      };
-    };
+    const str = wrangle.string;
+    const is = wrangle.flags(parser);
 
     return {
-      is: flags(),
+      is,
       browser: {
-        name: asString(browser.name),
-        version: asString(browser.version),
-        major: asString(browser.major),
+        name: str(browser.name),
+        version: str(browser.version),
+        major: str(browser.major),
       },
       engine: {
-        name: asString(engine.name),
-        version: asString(engine.version),
+        name: str(engine.name),
+        version: str(engine.version),
       },
       os: {
-        name: asString(os.name),
-        version: asString(os.version),
+        kind: wrangle.os(parser),
+        name: str(os.name),
+        version: str(os.version),
       },
       device: {
-        vendor: asString(device.vendor),
-        model: asString(device.model),
-        type: asString(device.type),
+        vendor: str(device.vendor),
+        model: str(device.model),
+        type: str(device.type),
       },
     };
   },
@@ -102,6 +82,47 @@ export const UserAgent = {
 /**
  * Helpers
  */
-function asString(input?: string) {
-  return (input || '').trim();
-}
+const wrangle = {
+  string(input?: string): string {
+    return (input || '').trim();
+  },
+
+  os(parser: P, flags?: t.UserAgentFlags): t.UserAgentOSKind {
+    const is = flags ?? wrangle.flags(parser);
+    if (is.iOS || is.iPad || is.iPhone) return 'iOS';
+    if (is.macOS) return 'macOS';
+    if (is.windows) return 'windows';
+    if (is.posix) return 'posix';
+    if (is.android) return 'android';
+    return 'UNKNOWN';
+  },
+
+  flags(parser: P): t.UserAgentFlags {
+    const { os, device } = parser;
+    const name = wrangle.string(os.name);
+
+    let macOS = name === 'Mac OS';
+    let iOS = name === 'iOS';
+    let iPad = device.model === 'iPad';
+    let iPhone = device.model === 'iPhone';
+    const mobile = device.type === 'mobile';
+    const tablet = device.type === 'tablet';
+
+    if (macOS) {
+      if (iPad || iPhone) iOS = true;
+      if (iOS) macOS = false;
+    }
+
+    return {
+      posix: ['Linux', 'Ubuntu'].includes(name),
+      windows: name === 'Windows',
+      android: name === 'Android',
+      macOS,
+      iOS,
+      iPad,
+      iPhone,
+      mobile,
+      tablet,
+    };
+  },
+} as const;

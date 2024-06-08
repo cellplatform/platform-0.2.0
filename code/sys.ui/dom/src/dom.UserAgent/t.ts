@@ -14,10 +14,12 @@ export type UserAgent = {
   readonly engine: UserAgentEngine;
   readonly os: UserAgentOS;
   readonly device: UserAgentDevice;
-  readonly is: UserAgentIs;
+  readonly is: UserAgentFlags;
 };
 
-export type UserAgentIs = {
+export type UserAgentOSKind = 'macOS' | 'iOS' | 'windows' | 'posix' | 'android' | 'UNKNOWN';
+export type UserAgentFlag = keyof UserAgentFlags;
+export type UserAgentFlags = {
   macOS: boolean;
   iOS: boolean;
   iPad: boolean;
@@ -39,6 +41,7 @@ export type UserAgentEngine = {
   readonly version: string;
 };
 export type UserAgentOS = {
+  readonly kind: UserAgentOSKind;
   readonly name: string;
   readonly version: string;
 };

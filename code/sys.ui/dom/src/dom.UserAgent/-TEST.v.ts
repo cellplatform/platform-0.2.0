@@ -51,7 +51,7 @@ describe('UserAgent', () => {
   });
 
   describe('flags', () => {
-    const assertIs = (res: t.UserAgent, expectedIs: Partial<t.UserAgentIs>) => {
+    const assertIs = (res: t.UserAgent, expectedIs: Partial<t.UserAgentFlags>) => {
       UserAgent.flags.forEach((key) => {
         const expected = (expectedIs as any)[key] ?? false;
         const actual = (res.is as any)[key];
@@ -61,12 +61,14 @@ describe('UserAgent', () => {
 
     it('apple/macos', () => {
       const res = UserAgent.parse(EXAMPLE.apple.macos);
+      expect(res.os.kind === 'macOS').to.be.true;
       assertIs(res, { macOS: true });
     });
 
     it('apple/iphone', () => {
       const test = (ua: string) => {
         const res = UserAgent.parse(ua);
+        expect(res.os.kind === 'iOS').to.be.true;
         assertIs(res, { macOS: false, iOS: true, iPhone: true, mobile: true });
       };
       test(EXAMPLE.apple.iphone);
@@ -75,6 +77,7 @@ describe('UserAgent', () => {
     it('apple/ipad', () => {
       const test = (ua: string) => {
         const res = UserAgent.parse(ua);
+        expect(res.os.kind === 'iOS').to.be.true;
         assertIs(res, { macOS: false, iOS: true, iPad: true, tablet: true });
       };
       test(EXAMPLE.apple.ipadFirefox);
@@ -83,17 +86,21 @@ describe('UserAgent', () => {
 
     it('posix/linux', () => {
       const res = UserAgent.parse(EXAMPLE.posix.linux);
+      expect(res.os.kind === 'posix').to.be.true;
       assertIs(res, { posix: true });
     });
 
     it('posix/ubuntu', () => {
       const res = UserAgent.parse(EXAMPLE.posix.ubuntu);
+      expect(res.os.kind === 'posix').to.be.true;
       assertIs(res, { posix: true });
     });
 
     it('android/mobile', () => {
       const test = (ua: string) => {
-        assertIs(UserAgent.parse(ua), { android: true, mobile: true });
+        const res = UserAgent.parse(ua);
+        expect(res.os.kind === 'android').to.be.true;
+        assertIs(res, { android: true, mobile: true });
       };
       test(EXAMPLE.android.chrome);
       test(EXAMPLE.android.firefox);
@@ -101,13 +108,16 @@ describe('UserAgent', () => {
 
     it('android/tablet', () => {
       const test = (ua: string) => {
-        assertIs(UserAgent.parse(ua), { android: true, tablet: true });
+        const res = UserAgent.parse(ua);
+        expect(res.os.kind === 'android').to.be.true;
+        assertIs(res, { android: true, tablet: true });
       };
       test(EXAMPLE.android.tablet);
     });
 
     it('windows', () => {
       const res = UserAgent.parse(EXAMPLE.windows.windows10);
+      expect(res.os.kind === 'windows').to.be.true;
       assertIs(res, { windows: true });
     });
   });
