@@ -14,11 +14,11 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = DEFAULTS.displayName.KeyHint;
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme' | 'text' | 'parse' | 'os'>;
+  type LocalStore = T['debug'] & Pick<P, 'text' | 'theme' | 'parse' | 'os'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
     text: undefined,
+    theme: undefined,
     os: undefined,
     parse: DEFAULTS.parse,
   });
@@ -29,15 +29,15 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.theme = local.theme;
       d.props.text = local.text;
+      d.props.theme = local.theme;
       d.props.os = local.os;
       d.props.parse = local.parse;
     });
 
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>((e) => {
-      const { props, debug } = e.state;
+      const { props } = e.state;
       Dev.Theme.background(dev, props.theme, 1);
       return <KeyHint {...props} />;
     });
@@ -79,20 +79,20 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Common States', (dev) => {
-      const text = (label: string, value?: string | null) => {
-        if (value === undefined) value = label;
-        if (value === null) value = undefined;
-        dev.button(label, (e) => e.change((d) => (local.text = d.props.text = value)));
+      const btn = (value: string | undefined, label?: string) => {
+        dev.button(value || label || 'err', (e) => {
+          e.change((d) => (local.text = d.props.text = value));
+        });
       };
 
-      text('<undefined>', null);
+      btn(undefined, '<undefined>');
       dev.hr(-1, 5);
-      text('META + K');
-      text('META K');
-      text('CMD K');
-      text('META +   ?');
+      btn('META + K');
+      btn('Meta K');
+      btn('CMD K');
+      btn('META +   ?');
       dev.hr(-1, 5);
-      text('CMD + ALT + SHIFT + CTRL + P');
+      btn('CMD + ALT + SHIFT + CTRL + P');
     });
 
     dev.hr(5, 20);

@@ -28,7 +28,7 @@ export const View: React.FC<t.KeyHintProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
       gridTemplateColumns: `repeat(${chars.length}, auto)`,
-      columnGap: '5px',
+      columnGap: '4px',
     }),
     windowsMeta: css({
       position: 'relative',

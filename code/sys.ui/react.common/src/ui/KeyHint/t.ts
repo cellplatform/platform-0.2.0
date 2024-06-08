@@ -11,7 +11,6 @@ export type KeyHintProps = {
   style?: t.CssValue;
 };
 
-export type KeyHintComboProps = {
-  theme?: t.CommonTheme;
-  style?: t.CssValue;
+export type KeyHintComboProps = Pick<KeyHintProps, 'parse' | 'os' | 'theme' | 'style'> & {
+  keys?: string[];
 };
