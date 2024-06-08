@@ -1,7 +1,19 @@
 import UAParser from 'ua-parser-js';
 import { type t } from '../common';
 
-let _current: t.UserAgent | undefined;
+type Flag = keyof t.UserAgentIs;
+const flags: Flag[] = [
+  'android',
+  'iOS',
+  'iPad',
+  'iPhone',
+  'macOS',
+  'posix',
+  'windows',
+  'mobile',
+  'tablet',
+];
+let _current: t.UserAgent | undefined; // NB: singleton.
 
 /**
  * Ref:
@@ -13,6 +25,8 @@ let _current: t.UserAgent | undefined;
  *     vendor, and/or version of the requesting user agent.""
  */
 export const UserAgent = {
+  flags,
+
   /**
    * Parse the browser user-agent string.
    */
@@ -32,8 +46,37 @@ export const UserAgent = {
    */
   parse(input: t.UserAgentString): t.UserAgent {
     const parser = UAParser((input || '').trim());
-    const { browser, engine, os } = parser;
+    const { browser, engine, os, device } = parser;
+
+    const flags = (): t.UserAgentIs => {
+      const name = asString(os.name);
+      let macOS = name === 'Mac OS';
+      let iOS = name === 'iOS';
+      let iPad = device.model === 'iPad';
+      let iPhone = device.model === 'iPhone';
+      const mobile = device.type === 'mobile';
+      const tablet = device.type === 'tablet';
+
+      if (macOS) {
+        if (iPad || iPhone) iOS = true;
+        if (iOS) macOS = false;
+      }
+
+      return {
+        posix: ['Linux', 'Ubuntu'].includes(name),
+        windows: name === 'Windows',
+        android: name === 'Android',
+        macOS,
+        iOS,
+        iPad,
+        iPhone,
+        mobile,
+        tablet,
+      };
+    };
+
     return {
+      is: flags(),
       browser: {
         name: asString(browser.name),
         version: asString(browser.version),
@@ -47,9 +90,14 @@ export const UserAgent = {
         name: asString(os.name),
         version: asString(os.version),
       },
+      device: {
+        vendor: asString(device.vendor),
+        model: asString(device.model),
+        type: asString(device.type),
+      },
     };
   },
-};
+} as const;
 
 /**
  * Helpers
