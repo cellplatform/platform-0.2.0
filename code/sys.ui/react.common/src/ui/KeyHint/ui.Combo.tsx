@@ -2,7 +2,7 @@ import { css, type t } from './common';
 import { View as Key } from './ui';
 
 export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
-  const { keys = [], parse, os, theme } = props;
+  const { keys = [], parse, os, theme, enabled = true } = props;
 
   /**
    * Render
@@ -17,16 +17,8 @@ export const Combo: React.FC<t.KeyHintComboProps> = (props) => {
   };
 
   const elKeys = keys.map((text, i) => {
-    return (
-      <Key
-        //
-        key={`${text}.${i}`}
-        text={text}
-        os={os}
-        parse={parse}
-        theme={theme}
-      />
-    );
+    const key = `${text}.${i}`;
+    return <Key enabled={enabled} key={key} text={text} os={os} parse={parse} theme={theme} />;
   });
 
   return <div {...css(styles.base, props.style)}>{elKeys}</div>;

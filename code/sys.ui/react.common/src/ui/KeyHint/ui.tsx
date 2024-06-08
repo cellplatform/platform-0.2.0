@@ -2,6 +2,7 @@ import { Color, DEFAULTS, css, type t } from './common';
 import { Wrangle } from './u';
 
 export const View: React.FC<t.KeyHintProps> = (props) => {
+  const { enabled = true } = props;
   const text = Wrangle.text(props);
   const chars = text.split(' ');
 
@@ -24,6 +25,7 @@ export const View: React.FC<t.KeyHintProps> = (props) => {
       PaddingX: 8,
       height: 22,
       boxSizing: 'border-box',
+      opacity: enabled ? 1 : 0.3,
 
       display: 'grid',
       placeItems: 'center',

@@ -7,10 +7,13 @@ export type KeyHintProps = {
   text?: string;
   parse?: boolean;
   os?: t.UserAgentOSKind;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
-export type KeyHintComboProps = Pick<KeyHintProps, 'parse' | 'os' | 'theme' | 'style'> & {
-  keys?: string[];
-};
+/**
+ * <Component>:Combo  ← Plural
+ */
+export type KeyHintComboProps = Common & { keys?: string[] };
+type Common = Pick<KeyHintProps, 'parse' | 'os' | 'enabled' | 'theme' | 'style'>;

@@ -11,9 +11,10 @@ const initial: T = { props: {} };
 const name = DEFAULTS.displayName.KeyHintCombo;
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'theme' | 'parse' | 'os' | 'keys'>;
+  type LocalStore = Pick<P, 'theme' | 'enabled' | 'parse' | 'os' | 'keys'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    enabled: true,
     keys: undefined,
     theme: undefined,
     os: undefined,
@@ -26,6 +27,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.enabled = local.enabled;
       d.props.keys = local.keys;
       d.props.theme = local.theme;
       d.props.os = local.os;
@@ -44,12 +46,21 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
-    link.button('KeyHint', `?KeyHint`);
 
+    link.button('KeyHint', `?KeyHint`);
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled')));
+      });
 
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.parse;
