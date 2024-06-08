@@ -47,6 +47,7 @@ export type {
 } from 'sys.types/src/types';
 
 export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
+export type { TextCharDiff } from 'sys.data.text/src/types';
 export type {
   BundleImport,
   SpecImport,
@@ -58,7 +59,6 @@ export type {
   TestSuiteRunResponse,
   TestSuiteRunStats,
 } from 'sys.test.spec/src/types';
-export type { TextCharDiff } from 'sys.data.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 
 /**
@@ -77,6 +77,7 @@ export type {
   LocalStorage,
   UIEventBase,
   UIModifierKeys,
+  UserAgentOSKind,
 } from 'sys.ui.dom/src/types';
 
 export type {

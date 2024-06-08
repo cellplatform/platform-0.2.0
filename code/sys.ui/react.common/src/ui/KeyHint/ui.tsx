@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { Color, DEFAULTS, css, type t } from './common';
+import { Wrangle } from './u';
 
 export const View: React.FC<t.KeyHintProps> = (props) => {
-  console.log(DEFAULTS.displayName, props); // TEMP 🐷
+  const text = Wrangle.text(props);
+  const chars = text.split(' ');
 
   /**
    * Render
@@ -10,16 +11,40 @@ export const View: React.FC<t.KeyHintProps> = (props) => {
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      position: 'relative',
+      fontFamily: 'sans-serif',
+      fontSize: 11,
+      userSelect: 'none',
       color: theme.fg,
+      backgroundColor: theme.alpha(0.06).fg,
+      border: `solid 1px ${theme.alpha(0.15).fg}`,
+      borderRadius: 4,
+      fontStyle: 'normal',
+      fontWeight: 600,
+      PaddingX: 8,
+      height: 22,
+      boxSizing: 'border-box',
+
       display: 'grid',
       placeItems: 'center',
+      gridTemplateColumns: `repeat(${chars.length}, auto)`,
+      columnGap: '5px',
+    }),
+    windowsMeta: css({
+      position: 'relative',
+      top: -0.5,
+      fontSize: 14, // NB: the "⊞" char renders visibly smaller than "⌘".
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${''}`}</div>
-    </div>
-  );
+  const elParts = chars.map((char, i) => {
+    const style = char === DEFAULTS.modifiers.windows.meta ? styles.windowsMeta : undefined;
+    return (
+      <span key={`${char}.${i}`} {...style}>
+        {char}
+      </span>
+    );
+  });
+
+  return <div {...css(styles.base, props.style)}>{elParts}</div>;
 };
