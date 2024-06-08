@@ -5,7 +5,7 @@ import { BADGES, Dev, Pkg, css } from '../../test.ui';
 type T = { props: ModuleListProps };
 const initial: T = { props: {} };
 
-import { Specs } from '../../test.ui/entry.Specs.mjs';
+import { Specs } from '../../test.ui/entry.Specs';
 
 /**
  * Spec

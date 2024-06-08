@@ -1,8 +1,4 @@
-/**
- * Module (Meta)
- */
-import { Pkg } from './index.pkg';
-export { Pkg };
+export { Pkg } from './index.pkg';
 
 /**
  * Library
@@ -12,4 +8,4 @@ export { LabelItem } from './ui/ui.LabelItem';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

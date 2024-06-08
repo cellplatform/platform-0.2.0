@@ -27,10 +27,13 @@ export const Footer: React.FC<FooterProps> = (props) => {
     <CmdBar
       doc={lens}
       style={props.style}
+      onReady={(e) => {
+        console.info(`⚡️ cmdbar.onReady:`, e);
+      }}
       onInvoke={(e, cmd) => {
         /**
          * TODO 🐷
-         * Extract at principled DSL.
+         * Extract a principled DSL.
          */
 
         console.log('onInvoke', e, cmd);

@@ -21,10 +21,11 @@ export default Dev.describe(name, async (e) => {
   let model: t.RepoListModel;
   let network: t.NetworkStore;
 
-  type LocalStore = Pick<t.PeerRepoListProps, 'focusOnLoad'>;
+  type LocalStore = Pick<t.PeerRepoListProps, 'focusOnLoad' | 'avatarTray'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     focusOnLoad: DEFAULTS.focusPeerOnLoad,
+    avatarTray: DEFAULTS.avatarTray,
   });
 
   e.it('ui:init', async (e) => {
@@ -37,6 +38,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.focusOnLoad = local.focusOnLoad;
+      d.props.avatarTray = local.avatarTray;
     });
     const resetReloadClose = () => state.change((d) => (d.debug.reload = false));
 
@@ -82,6 +84,14 @@ export default Dev.describe(name, async (e) => {
           .onClick((e) => {
             e.change((d) => (local.focusOnLoad = Dev.toggle(d.props, 'focusOnLoad')));
           });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.avatarTray;
+        btn
+          .label((e) => `avatarTray`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'avatarTray')));
       });
     });
 

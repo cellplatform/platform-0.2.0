@@ -1,6 +1,6 @@
 {
   "name": "dev.000",
-  "version": "0.6.130",
+  "version": "0.6.133",
   "type": "module",
   "sideEffects": false,
   "scripts": {
@@ -48,15 +48,15 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/index.html.d.html",
+  "types": "./dist/types.d/index.d.ts",
   "exports": {
-    ".": "./dist/web/lib/index-9713faf2.js",
-    "./web": "./dist/web/lib/index-9713faf2.js"
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "web": [
-        "./dist/types.d/index.html.d.html"
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
     }
   }

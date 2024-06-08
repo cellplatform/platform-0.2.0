@@ -26,7 +26,7 @@ export const paths = {
     'src/test.ui/-TestRunner.TESTS.ts',
     'src/test.ui/-TestRunner.tsx',
     'src/test.ui/common.ts',
-    'src/test.ui/entry.Specs.mts',
+    'src/test.ui/entry.Specs.ts',
     'src/test.ui/entry.tsx',
     'src/test.ui/index.ts',
     'src/test.ui/t.ts',

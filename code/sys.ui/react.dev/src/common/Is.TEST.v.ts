@@ -1,6 +1,6 @@
-import { DevBus } from '../f.Bus';
-import { Context } from '../f.Ctx';
-import { Spec } from '../f.Spec';
+import { DevBus } from '../fn.Bus';
+import { Context } from '../fn.Ctx';
+import { Spec } from '../fn.Spec';
 import { describe, expect, it, rx, type t } from '../test';
 import { Is } from './Is';
 

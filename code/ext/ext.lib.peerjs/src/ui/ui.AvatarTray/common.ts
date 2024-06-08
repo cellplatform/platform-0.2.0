@@ -9,5 +9,5 @@ export const DEFAULTS = {
   size: 48,
   muted: true,
   gap: 10,
-  borderRadius: 4,
+  borderRadius: 6,
 } as const;

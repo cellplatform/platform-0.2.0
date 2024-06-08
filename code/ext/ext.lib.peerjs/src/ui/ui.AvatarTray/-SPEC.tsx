@@ -1,10 +1,11 @@
-import { AvatarTray } from '.';
-import { Dev, Slider, Webrtc, type t } from '../../test.ui';
+import { AvatarTray, DEFAULTS } from '.';
+import { Dev, Pkg, Slider, Webrtc, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
+type P = t.AvatarTrayProps;
 type T = {
-  props: t.AvatarTrayProps;
+  props: P;
   debug: { sizePercent?: number };
 };
 const initial: T = { props: {}, debug: {} };
@@ -14,9 +15,12 @@ export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
-  type LocalStore = Pick<T['debug'], 'sizePercent'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.AvatarTray');
-  const local = localstore.object({ sizePercent: 0.5 });
+  type LocalStore = T['debug'] & Pick<P, 'theme'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    sizePercent: 0.5,
+    theme: undefined,
+  });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -24,6 +28,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.theme = local.theme;
       d.debug.sizePercent = local.sizePercent;
     });
 
@@ -32,13 +37,18 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
+        const { props, debug } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
+        const size = Number(debug.sizePercent) * (DEFAULTS.size * 2);
         return (
           <AvatarTray
-            {...e.state.props}
+            {...props}
             peer={self}
-            size={Number(e.state.debug.sizePercent) * (AvatarTray.DEFAULTS.size * 2)}
+            size={size}
             onSelection={(e) => {
               console.log('⚡️ onChange:', e);
+              state.change((d) => (d.props.selected = e.selected));
             }}
           />
         );
@@ -64,7 +74,7 @@ export default Dev.describe(name, (e) => {
       dev.row((e) => {
         return (
           <Slider
-            style={{ MarginX: 15 }}
+            style={{ MarginX: 15, marginTop: 10, marginBottom: 15 }}
             percent={e.state.debug.sizePercent}
             track={{ height: 5 }}
             thumb={{ size: 12 }}
@@ -74,6 +84,13 @@ export default Dev.describe(name, (e) => {
           />
         );
       });
+
+      dev.hr(-1, 5);
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);
@@ -95,7 +112,7 @@ export default Dev.describe(name, (e) => {
         props: e.state.props,
         peer: self.current,
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} fontSize={12} />;
     });
   });
 });

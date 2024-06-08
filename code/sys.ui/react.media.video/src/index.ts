@@ -16,4 +16,4 @@ export { VideoPlayer } from './ui/ui.VideoPlayer';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

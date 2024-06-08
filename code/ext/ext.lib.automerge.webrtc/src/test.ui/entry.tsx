@@ -5,7 +5,7 @@ import { Pkg } from '../index.pkg';
 
 (async () => {
   console.info(`Pkg:`, Pkg);
-  const { Specs } = await import('./entry.Specs.mjs');
+  const { Specs } = await import('./entry.Specs');
 
   const env = { Specs };
   const el = await Dev.render(Pkg, Specs, { hrDepth: 3, env });

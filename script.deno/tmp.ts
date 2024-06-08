@@ -2,21 +2,19 @@ import { fs, c } from './u.ts';
 
 const exclude = [
   '**/node_modules/**',
-  '**/spikes/**',
+  // '**/spikes/**',
   '**/compiler/**',
   '**/compiler.samples/**',
   '**/*.d.mts',
 ];
 
-const pattern = 'code/**/vite.config.mts';
+const pattern = 'code/**/entry.Specs.mts';
 const dir = fs.resolve(import.meta.dirname || '', '..');
 const paths = await fs.glob(dir).find(pattern, { exclude });
 
 for (const file of paths) {
   const path = file.path.substring(dir.length + 1);
   console.log(c.green('•'), path);
-
-  // const changeExtensions = () =>
 
   const from = file.path;
   const to = fs.join(fs.dirname(file.path), file.name.replace(/\.mts$/, '.ts'));

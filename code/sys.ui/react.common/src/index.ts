@@ -20,6 +20,7 @@ export { ActiveElement, Focus } from './ui/Focus';
 export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
+export { KeyHint } from './ui/KeyHint';
 export { Layout } from './ui/Layout';
 export { ModuleLoader } from './ui/Module.Loader';
 export { ModuleNamespace } from './ui/Module.Namespace';
@@ -70,5 +71,5 @@ export {
 /**
  * Dev
  */
-export { DevSpecs, ModuleSpecs, SampleSpecs, Specs } from './test.ui/entry.Specs.mjs';
+export { DevSpecs, ModuleSpecs, SampleSpecs, Specs } from './test.ui/entry.Specs';
 export { CmdHost, Dev, DevTools, Spec, TestRunner } from './ui.dev';

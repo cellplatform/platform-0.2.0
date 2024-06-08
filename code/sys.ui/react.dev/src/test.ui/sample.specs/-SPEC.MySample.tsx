@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { Keyboard } from 'sys.ui.dom';
 
-import { DevBus } from '../../f.Bus';
+import { DevBus } from '../../fn.Bus';
 import { COLORS, Color, Spec, css, Time } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';

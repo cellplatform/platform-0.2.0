@@ -14,7 +14,7 @@ export default Spec.describe('ModuleList', (e) => {
       .size('fill', 100)
       .backgroundColor(isDark ? COLORS.DARK : 1)
       .render(async (e) => {
-        const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs.mjs');
+        const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs');
 
         const fn = () => import('../../test.ui/sample.specs/-SPEC.MySample');
         const specs = {

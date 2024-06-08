@@ -5,7 +5,7 @@ import { Dev } from 'sys.ui.react.common';
 
 (async () => {
   console.info(`Pkg:`, Pkg);
-  const { Specs } = await import('./entry.Specs.mjs');
+  const { Specs } = await import('./entry.Specs');
 
   const env = { accessToken: 'sample.6sd54fs6d5fsd32f1s3d2f1s354es2d1f3se21' }; // sample 🐷
 

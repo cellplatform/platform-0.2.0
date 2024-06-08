@@ -19,4 +19,4 @@ export { DevDelete } from './ui/ui.Dev.Delete';
 /**
  * Dev
  */
-export { Specs } from './test.ui/entry.Specs.mjs';
+export { Specs } from './test.ui/entry.Specs';

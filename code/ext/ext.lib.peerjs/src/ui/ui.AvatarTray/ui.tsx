@@ -61,8 +61,10 @@ export const View: React.FC<t.AvatarTrayProps> = (props) => {
       <Avatar
         key={stream.id}
         size={props.size}
+        isSelected={stream === props.selected}
         muted={muted}
         stream={stream}
+        theme={props.theme}
         onClick={() => handleClick(stream)}
       />
     );

@@ -1,5 +1,6 @@
 import { Pkg } from './common';
 
+export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
 export * from '../common';
 

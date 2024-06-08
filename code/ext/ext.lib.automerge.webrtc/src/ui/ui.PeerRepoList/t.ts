@@ -6,7 +6,9 @@ import type { t } from './common';
 export type PeerRepoListProps = {
   model?: t.RepoListModel;
   network?: t.NetworkStore;
+  selected?: MediaStream;
   focusOnLoad?: boolean;
+  avatarTray?: boolean;
   debug?: PeerRepoListPropsDebug;
   style?: t.CssValue;
   onStreamSelection?: t.PeerStreamSelectionHandler;

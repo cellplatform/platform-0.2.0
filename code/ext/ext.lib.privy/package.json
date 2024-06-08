@@ -17,7 +17,7 @@
     "react-dom": "18.3.1",
     "sys.util": "0.0.0",
     "sys.ui.react.common": "0.0.0",
-    "viem": "2.13.6"
+    "viem": "2.13.7"
   },
   "devDependencies": {
     "sys.test": "0.0.0",
@@ -28,14 +28,6 @@
   "private": true,
   "types": "./dist/types.d/index.d.ts",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./specs": "./dist/web/specs.js"
-  },
-  "typesVersions": {
-    "*": {
-      "specs": [
-        "./dist/types.d/test.ui/entry.Specs.d.mts"
-      ]
-    }
+    ".": "./dist/web/index.js"
   }
 }

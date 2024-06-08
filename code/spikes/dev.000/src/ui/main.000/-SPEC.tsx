@@ -1,8 +1,9 @@
-import { Color, Dev, Pkg, css, type t } from '../../test.ui';
+import { Color, Dev, css, type t } from '../../test.ui';
+import { Loader } from './-SPEC.cmd';
 import { View } from './-SPEC.ui';
+import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Footer } from './-SPEC.ui.footer';
-import { BADGES, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
-import { Loader } from './-SPEC.loader';
+import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
@@ -22,6 +23,7 @@ export default Dev.describe(name, async (e) => {
     behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
   });
   const network: t.NetworkStore = await WebrtcStore.init(self, store, model.index, {});
+  const theme: t.CommonTheme = 'Light';
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -40,15 +42,14 @@ export default Dev.describe(name, async (e) => {
           base: css({ Absolute: 0, display: 'grid' }),
           overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
         };
+
+        const overlay = e.state.overlay;
+        const elOverlay = overlay && <div {...styles.overlay}>{overlay}</div>;
+
         return (
           <div {...styles.base}>
-            <View
-              stream={e.state.stream}
-              model={model}
-              network={network}
-              onStreamSelection={(e) => state.change((d) => (d.stream = e.selected))}
-            />
-            {e.state.overlay && <div {...styles.overlay}>{e.state.overlay}</div>}
+            <View model={model} network={network} selectedStream={e.state.stream} />
+            {elOverlay}
           </div>
         );
       });
@@ -57,11 +58,11 @@ export default Dev.describe(name, async (e) => {
       return (
         <Footer
           network={network}
+          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
           onLoad={async (e) => {
             const el = await Loader.load(e.name);
             state.change((d) => (d.overlay = el));
           }}
-          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
         />
       );
     });
@@ -86,10 +87,7 @@ export default Dev.describe(name, async (e) => {
             'Wallet.List.Title',
             'Refresh',
           ]}
-          data={{
-            provider: Auth.Env.provider,
-            wallet: { list: { title: 'Public Key' } },
-          }}
+          data={{ provider: Auth.Env.provider, wallet: { list: { title: 'Public Key' } } }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
         />
       );
@@ -115,40 +113,27 @@ export default Dev.describe(name, async (e) => {
         />
       );
     });
+
+    dev.hr(5, 20);
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer
-      .padding(7.5)
+      .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        const styles = {
-          base: css({ display: 'grid', gridTemplateColumns: '1fr 1fr' }),
-          block: css({ display: 'block' }),
-          version: css({
-            fontFamily: 'monospace',
-            fontSize: 11,
-            alignSelf: 'center',
-            justifySelf: 'end',
-          }),
-        };
-
-        const badge = BADGES.ci.node;
-        const elBadge = (
-          <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
-            <img {...styles.block} src={badge?.image} />
-          </a>
-        );
-
-        const elVersion = <div {...styles.version}>{`v${Pkg.version}`}</div>;
-
         return (
-          <div {...styles.base}>
-            {elBadge}
-            {elVersion}
-          </div>
+          <DebugFooter
+            theme={theme}
+            network={network}
+            selectedStream={e.state.stream}
+            onStreamSelected={(stream) => state.change((d) => (d.stream = stream))}
+          />
         );
       });
   });

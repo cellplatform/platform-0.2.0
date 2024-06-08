@@ -12,7 +12,7 @@ describe('visual specs', () => {
   //     'run',
   //     async () => {
   //       const { Dev, expect } = await import('../test.ui');
-  //       const { Specs } = await import('../test.ui/entry.Specs.mjs');
+  //       const { Specs } = await import('../test.ui/entry.Specs');
   //       const res = await Dev.headless(Specs);
   //
   //       const failed = res.specs.filter((e) => !e.ok).map((e) => e.name);

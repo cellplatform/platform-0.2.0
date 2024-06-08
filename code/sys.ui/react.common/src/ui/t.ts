@@ -11,6 +11,7 @@ export type * from './Event/t';
 export type * from './Flip/t';
 export type * from './Focus/t';
 export type * from './Grid/t';
+export type * from './KeyHint/t';
 export type * from './IFrame/t';
 export type * from './Icon/t';
 export type * from './Layout.Split/t';

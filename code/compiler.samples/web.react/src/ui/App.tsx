@@ -1,5 +1,5 @@
 import React from 'react';
-import { FC, css, type t } from './common.mjs';
+import { FC, css, type t } from './common';
 
 export type AppProps = { style?: t.CssValue };
 

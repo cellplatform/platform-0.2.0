@@ -142,7 +142,7 @@ export const Typescript = {
 
   /**
    * Runs the module specific modifications over the tsconfig if declared
-   * within the [vite.config.mts] file.
+   * within the [vite.config.ts] file.
    */
   async modifyTsConfigFromModule(args: {
     root: t.DirString;

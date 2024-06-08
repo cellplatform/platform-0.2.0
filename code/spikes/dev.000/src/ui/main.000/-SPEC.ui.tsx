@@ -1,11 +1,10 @@
 import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
 
 export type ViewProps = {
-  stream?: MediaStream;
   model: t.RepoListModel;
   network: t.NetworkStore;
+  selectedStream?: MediaStream;
   style?: t.CssValue;
-  onStreamSelection?: t.PeerStreamSelectionHandler;
 };
 
 export const View: React.FC<ViewProps> = (props) => {
@@ -31,16 +30,13 @@ export const View: React.FC<ViewProps> = (props) => {
 
   const elLeft = (
     <div {...styles.left}>
-      <PeerRepoList
-        model={props.model}
-        network={network}
-        onStreamSelection={props.onStreamSelection}
-        focusOnLoad={true}
-      />
+      <PeerRepoList model={props.model} network={network} focusOnLoad={true} avatarTray={false} />
     </div>
   );
 
-  const elMain = <PeerUI.Video stream={props.stream} muted={true} style={styles.main} empty={''} />;
+  const elMain = (
+    <PeerUI.Video stream={props.selectedStream} muted={true} style={styles.main} empty={''} />
+  );
 
   return (
     <div {...css(styles.base, props.style)}>

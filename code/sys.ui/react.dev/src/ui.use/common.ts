@@ -1,2 +1,2 @@
 export * from '../common';
-export { DevBus } from '../f.Bus';
+export { DevBus } from '../fn.Bus';
