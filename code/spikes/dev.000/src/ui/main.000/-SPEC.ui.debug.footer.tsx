@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { BADGES, Color, Peer, PeerUI, Pkg, css, rx, type t } from './common';
+import { useState } from 'react';
+import { BADGES, Color, Peer, PeerUI, Pkg, css, type t } from './common';
 
 export type DebugFooterProps = {
   network: t.NetworkStore;
@@ -25,7 +25,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({ display: 'grid' }),
+    base: css({ display: 'grid', userSelect: 'none' }),
     avatars: css({
       display: hasMedia ? 'grid' : 'none',
       borderBottom: `solid 1px ${Color.alpha(Color.DARK, 0.15)}`,
@@ -73,6 +73,7 @@ export const VersionBadge: React.FC<VersionBadgeProps> = (props) => {
       fontSize: 11,
       alignSelf: 'center',
       justifySelf: 'end',
+      userSelect: 'auto',
     }),
   };
 

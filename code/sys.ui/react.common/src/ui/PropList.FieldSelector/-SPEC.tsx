@@ -1,6 +1,6 @@
 import { FieldSelector } from '.';
-import { Dev, type t, Pkg } from '../../test.ui';
-import { SampleFields, type MyField } from '../PropList/-dev/-common';
+import { Dev, Pkg, type t } from '../../test.ui';
+import { SampleFields, type MyField } from '../PropList/-dev/common';
 
 const DEFAULTS = FieldSelector.DEFAULTS;
 
@@ -43,7 +43,7 @@ export default Dev.describe(name, (e) => {
       d.props.defaults = SampleFields.defaults;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(350);
     ctx.subject
       .size([250, null])
       .display('grid')

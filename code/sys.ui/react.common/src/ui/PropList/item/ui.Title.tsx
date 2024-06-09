@@ -25,6 +25,7 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
       flex: 1,
       boxSizing: 'border-box',
       position: 'relative',
+      userSelect: 'none',
       ...Style.toPadding(margin),
 
       display: 'grid',
