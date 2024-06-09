@@ -25,7 +25,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
    * Render
    */
   const styles = {
-    base: css({ display: 'grid' }),
+    base: css({ display: 'grid', userSelect: 'none' }),
     avatars: css({
       display: hasMedia ? 'grid' : 'none',
       borderBottom: `solid 1px ${Color.alpha(Color.DARK, 0.15)}`,
@@ -73,6 +73,7 @@ export const VersionBadge: React.FC<VersionBadgeProps> = (props) => {
       fontSize: 11,
       alignSelf: 'center',
       justifySelf: 'end',
+      userSelect: 'auto',
     }),
   };
 
