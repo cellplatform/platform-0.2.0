@@ -1,5 +1,5 @@
-export * from '../common';
 export { Icons } from '../../Icons';
+export * from '../common';
 
 export type MyField =
   | 'Module'

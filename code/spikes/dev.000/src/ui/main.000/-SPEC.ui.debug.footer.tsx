@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { BADGES, Color, Peer, PeerUI, Pkg, css, rx, type t } from './common';
+import { useState } from 'react';
+import { BADGES, Color, Peer, PeerUI, Pkg, css, type t } from './common';
 
 export type DebugFooterProps = {
   network: t.NetworkStore;
