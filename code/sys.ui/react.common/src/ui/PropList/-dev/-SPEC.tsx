@@ -3,7 +3,7 @@ import { Dev, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
 import { BuilderSample } from './-SPEC.ui.Builder';
 import { sampleItems } from './-SPEC.ui.sample';
-import { SampleFields, type MyField } from './-common';
+import { SampleFields, type MyField } from './common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type P = t.PropListProps;

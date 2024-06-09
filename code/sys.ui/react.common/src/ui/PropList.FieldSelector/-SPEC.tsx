@@ -1,6 +1,6 @@
 import { FieldSelector } from '.';
 import { Dev, type t, Pkg } from '../../test.ui';
-import { SampleFields, type MyField } from '../PropList/-dev/-common';
+import { SampleFields, type MyField } from '../PropList/-dev/common';
 
 const DEFAULTS = FieldSelector.DEFAULTS;
 
