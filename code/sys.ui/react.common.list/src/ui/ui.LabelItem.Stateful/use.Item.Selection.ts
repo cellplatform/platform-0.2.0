@@ -23,13 +23,14 @@ export function useItemSelectionController(args: Args) {
    */
   useEffect(() => {
     type T = t.PatchChange<t.LabelList>;
-    const focusChanged = (prev: T, next: T) => prev.to.focused === next.to.focused;
-    const selectionChanged = (prev: T, next: T) => isSelected(prev.to) === isSelected(next.to);
+    const focusChanged = (prev: T, next: T) => prev.after.focused === next.after.focused;
+    const selectionChanged = (prev: T, next: T) =>
+      isSelected(prev.after) === isSelected(next.after);
     const isSelected = (list: t.LabelList) => list.selected === item?.instance;
     const events = list?.events();
     events?.$.pipe(rx.distinctWhile(focusChanged)).subscribe(redraw);
     events?.$.pipe(rx.distinctWhile(selectionChanged)).subscribe((e) => {
-      const isSelected = e.to.selected === item?.instance;
+      const isSelected = e.after.selected === item?.instance;
       fire(isSelected ? 'selected' : 'unselected');
       redraw();
     });

@@ -55,8 +55,8 @@ describe('PatchState', () => {
 
       expect(fired.length).to.eql(1);
       expect(fired[0].op).to.eql('update');
-      expect(fired[0].from).to.eql({ label: 'foo' });
-      expect(fired[0].to).to.eql({ label: 'hello' });
+      expect(fired[0].before).to.eql({ label: 'foo' });
+      expect(fired[0].after).to.eql({ label: 'hello' });
       expect(fired[0].patches.next.length).to.eql(1);
     });
   });
@@ -78,8 +78,8 @@ describe('PatchState', () => {
       state.change((draft) => (draft.label = 'hello'));
       expect(fired.length).to.eql(1);
       expect(fired[0].op).to.eql('update');
-      expect(fired[0].from).to.eql({ label: 'foo' });
-      expect(fired[0].to).to.eql({ label: 'hello' });
+      expect(fired[0].before).to.eql({ label: 'foo' });
+      expect(fired[0].after).to.eql({ label: 'hello' });
       expect(fired[0].patches.next.length).to.eql(1);
     });
 
@@ -115,7 +115,7 @@ describe('PatchState', () => {
     const exampleFactory: TFactory = ($, dispose$) => {
       const life = rx.lifecycle(dispose$);
       return {
-        change$: $.pipe(rx.map((e) => e.to)),
+        change$: $.pipe(rx.map((e) => e.after)),
         get disposed() {
           return life.disposed; // NB: typically you'd implement a complete [t.Lifecycle] interface.
         },

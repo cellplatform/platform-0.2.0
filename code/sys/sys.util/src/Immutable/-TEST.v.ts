@@ -50,8 +50,8 @@ describe('Immutable', () => {
 
       obj.change((d) => (d.count = 123));
       expect(fired.length).to.eql(1);
-      expect(fired[0].from).to.eql({ count: 0 });
-      expect(fired[0].to).to.eql({ count: 123 });
+      expect(fired[0].before).to.eql({ count: 0 });
+      expect(fired[0].after).to.eql({ count: 123 });
     });
 
     describe('dispose', () => {

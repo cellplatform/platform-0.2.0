@@ -147,9 +147,9 @@ describe('Patch', () => {
         draft.child.foo.push(456);
       });
 
-      expect(res.from).to.eql(obj);
-      expect(res.to.msg).to.eql('foobar');
-      expect(res.to.child.foo).to.eql([123, 456]);
+      expect(res.before).to.eql(obj);
+      expect(res.after.msg).to.eql('foobar');
+      expect(res.after.child.foo).to.eql([123, 456]);
 
       expect(res.op).to.eql('update');
       expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
@@ -163,8 +163,8 @@ describe('Patch', () => {
       const res = Patch.change(obj1, obj2);
 
       expect(res.op).to.eql('replace');
-      expect(res.from).to.eql(obj1);
-      expect(res.to).to.eql(obj2);
+      expect(res.before).to.eql(obj1);
+      expect(res.after).to.eql(obj2);
 
       expect(res.patches.prev).to.eql([{ op: 'replace', path: '', value: obj1 }]);
       expect(res.patches.next).to.eql([{ op: 'replace', path: '', value: obj2 }]);
@@ -179,9 +179,9 @@ describe('Patch', () => {
         draft.child.foo.push(456);
       });
 
-      expect(res.from).to.eql(obj);
-      expect(res.to.msg).to.eql('foobar');
-      expect(res.to.child.foo).to.eql([123, 456]);
+      expect(res.before).to.eql(obj);
+      expect(res.after.msg).to.eql('foobar');
+      expect(res.after.child.foo).to.eql([123, 456]);
 
       expect(res.op).to.eql('update');
       expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
@@ -208,8 +208,8 @@ describe('Patch', () => {
 
       expect(obj.child.foo).to.eql([123]); // NB: No change.
       expect(res.op).to.eql('update');
-      expect(res.from).to.eql(obj);
-      expect(res.to.child.foo).to.eql([123, 456]);
+      expect(res.before).to.eql(obj);
+      expect(res.after.child.foo).to.eql([123, 456]);
 
       // NB: PatchSet passed, [next] set of patches assumed.
       expect(Patch.apply(obj, res.patches).child.foo).to.eql([123, 456]);

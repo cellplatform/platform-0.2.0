@@ -20,10 +20,11 @@ describe('Immutable.events', () => {
     obj.change((d) => (d.count = 123));
     expect(fired1.length).to.eql(1);
     expect(fired2.length).to.eql(1);
-    expect(fired1[0].from).to.eql({ count: 0 });
-    expect(fired1[0].to).to.eql({ count: 123 });
-    expect(fired2[0].from).to.eql({ count: 0 });
-    expect(fired2[0].to).to.eql({ count: 123 });
+    expect(fired1[0].before).to.eql({ count: 0 });
+    expect(fired1[0].after).to.eql({ count: 123 });
+
+    expect(fired2[0].before).to.eql({ count: 0 });
+    expect(fired2[0].after).to.eql({ count: 123 });
 
     events2.dispose();
     expect(obj.change).to.equal(change);
@@ -31,8 +32,8 @@ describe('Immutable.events', () => {
     obj.change((d) => (d.count = 456));
     expect(fired1.length).to.eql(2);
     expect(fired2.length).to.eql(1); // NB: no change.
-    expect(fired1[1].from).to.eql({ count: 123 });
-    expect(fired1[1].to).to.eql({ count: 456 });
+    expect(fired1[1].before).to.eql({ count: 123 });
+    expect(fired1[1].after).to.eql({ count: 456 });
 
     events1.dispose();
   });

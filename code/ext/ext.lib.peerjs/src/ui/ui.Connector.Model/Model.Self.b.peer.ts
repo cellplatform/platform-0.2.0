@@ -15,7 +15,7 @@ export function peerBehavior(args: {
    * Redraw on open stat change (peer "ready").
    */
   peerEvents.$.pipe(
-    rx.map((e) => e.to.open),
+    rx.map((e) => e.after.open),
     rx.distinctWhile((prev, next) => prev === next),
   ).subscribe(redraw);
 }

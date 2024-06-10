@@ -24,4 +24,4 @@ export type ImmutableRef<T, E> = Immutable<T> & {
  * See: sys.util → Immutable.events()
  */
 export type ImmutableEvents<T> = t.Lifecycle & { readonly $: t.Observable<ImmutableChange<T>> };
-export type ImmutableChange<T> = { readonly from: T; readonly to: T };
+export type ImmutableChange<T> = { readonly before: T; readonly after: T };

@@ -16,10 +16,10 @@ export function events<T>(
    */
   const change = source.change;
   source.change = (fn) => {
-    const from = source.current;
+    const before = source.current;
     change.call(source, fn);
-    const to = source.current;
-    $.next({ from, to });
+    const after = source.current;
+    $.next({ before, after });
   };
 
   /**

@@ -37,7 +37,7 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
      */
     change(fn) {
       const e = Patch.change<T>(_current, fn);
-      _current = e.to;
+      _current = e.after;
       options.onChange?.(e);
       $.next(e);
     },

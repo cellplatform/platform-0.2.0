@@ -63,7 +63,8 @@ export function useItemController(args: Args) {
     const events = item?.events();
     if (events) {
       // Handle redraws.
-      const redrawCount$ = events.$.pipe(rx.distinctWhile((p, n) => p.to.redraw === n.to.redraw));
+      const distinct = rx.distinctWhile;
+      const redrawCount$ = events.$.pipe(distinct((p, n) => p.after.redraw === n.after.redraw));
       const redrawCmd$ = events.cmd.redraw$;
       const redraw$ = rx.merge(redrawCount$, redrawCmd$);
       redraw$.pipe(rx.throttleAnimationFrame()).subscribe(redraw);

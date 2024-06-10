@@ -32,8 +32,8 @@ export type Patch = {
 
 export type PatchChangeHandler<T extends O> = (e: t.PatchChange<T>) => void;
 export type PatchChange<T extends O> = {
-  from: T;
-  to: T;
+  before: T;
+  after: T;
   op: PatchOperationKind;
   patches: t.PatchSet;
 };

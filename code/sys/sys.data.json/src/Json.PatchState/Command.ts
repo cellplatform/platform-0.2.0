@@ -46,9 +46,9 @@ export const Command = {
    */
   filter<T extends Cmd>($: t.Observable<t.PatchChange<{ cmd?: T }>>, dispose$?: t.UntilObservable) {
     const res$ = $.pipe(
-      rx.distinctWhile((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-      rx.filter((e) => Boolean(e.to.cmd)),
-      rx.map((e) => e.to.cmd!),
+      rx.distinctWhile((prev, next) => R.equals(prev.after.cmd, next.after.cmd)),
+      rx.filter((e) => Boolean(e.after.cmd)),
+      rx.map((e) => e.after.cmd!),
     );
     return dispose$ ? res$.pipe(rx.takeUntil(dispose$)) : res$;
   },

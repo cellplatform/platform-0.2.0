@@ -37,8 +37,8 @@ describe('LabelItem.Model', () => {
 
         state.change((d) => (d.label = 'hello'));
         expect(fired.length).to.eql(1);
-        expect(fired[0].from.label).to.eql('foo');
-        expect(fired[0].to.label).to.eql('hello');
+        expect(fired[0].before.label).to.eql('foo');
+        expect(fired[0].after.label).to.eql('hello');
 
         events.dispose();
         state.change((d) => (d.label = 'foobar'));
@@ -440,8 +440,8 @@ describe('LabelItem.Model', () => {
 
         state.change((d) => (d.selected = 'abc'));
         expect(fired.length).to.eql(1);
-        expect(fired[0].from.selected).to.eql(undefined);
-        expect(fired[0].to.selected).to.eql('abc');
+        expect(fired[0].before.selected).to.eql(undefined);
+        expect(fired[0].after.selected).to.eql('abc');
 
         events.dispose();
         state.change((d) => (d.selected = '...def'));

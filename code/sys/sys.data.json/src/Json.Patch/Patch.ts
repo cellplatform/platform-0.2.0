@@ -53,34 +53,35 @@ export const Patch: t.Patch = {
     return isDraft(input);
   },
 
-  change<T extends O>(from: T, fn: t.PatchMutation<T> | T) {
+  change<T extends O>(before: T, fn: t.PatchMutation<T> | T) {
     if (typeof fn === 'function') {
-      const [to, forward, backward] = produceWithPatches<T>(from, (draft) => {
+      const [to, forward, backward] = produceWithPatches<T>(before, (draft) => {
         const ctx: t.PatchMutationCtx = { toObject };
         fn(draft as T, ctx);
         return undefined; // NB: No return value (to prevent replacement).
       });
+      const after = to as T;
       const patches = Patch.toPatchSet(forward, backward);
       const op: t.PatchOperationKind = 'update';
-      return { op, from, to: to as T, patches };
+      return { op, before, after, patches };
     } else {
-      const [to, forward, backward] = produceWithPatches<T>(from, () => fn as any);
+      const [to, forward, backward] = produceWithPatches<T>(before, () => fn as any);
+      const after = to as T;
       const patches = Patch.toPatchSet(forward, backward);
       const op: t.PatchOperationKind = 'replace';
-      return { op, from, to: to as T, patches };
+      return { op, before, after, patches };
     }
   },
 
-  async changeAsync<T extends O>(from: T, fn: t.PatchMutationAsync<T>) {
-    const draft = createDraft(from) as T;
+  async changeAsync<T extends O>(before: T, fn: t.PatchMutationAsync<T>) {
+    const draft = createDraft(before) as T;
     const ctx: t.PatchMutationCtx = { toObject };
     await fn(draft, ctx);
 
     let patches: t.PatchSet = { prev: [], next: [] };
-    const to = finishDraft(draft, (next, prev) => (patches = Patch.toPatchSet(next, prev))) as T;
-
+    const after = finishDraft(draft, (next, prev) => (patches = Patch.toPatchSet(next, prev))) as T;
     const op: t.PatchOperationKind = 'update';
-    return { op, from, to, patches };
+    return { op, before, after, patches };
   },
 
   apply<T extends O>(from: T, patches: t.PatchOperation[] | t.PatchSet) {

@@ -24,8 +24,8 @@ describe('Doc.Events: Immutable', () => {
 
     expect(fired1[0].before).to.eql({ count: 0 });
     expect(fired1[0].after).to.eql({ count: 123 });
-    expect(fired2[0].from).to.eql({ count: 0 });
-    expect(fired2[0].to).to.eql({ count: 123 });
+    expect(fired2[0].before).to.eql({ count: 0 });
+    expect(fired2[0].after).to.eql({ count: 123 });
 
     events2.dispose();
     expect(doc.change).to.equal(change);
