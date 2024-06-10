@@ -1,6 +1,5 @@
 import { Dev, Pkg, type t } from '../../test.ui';
 import { Sample } from './-SPEC.ui.Sample';
-import { Farcaster } from '.';
 
 type T = { theme?: t.CommonTheme };
 const initial: T = {};
@@ -28,12 +27,6 @@ export default Dev.describe(name, async (e) => {
   let signer: t.FarcasterSignerMethods | undefined;
   let fc: t.Farcaster | undefined;
 
-  const ensureFarcaster = () => {
-    if (fc) return;
-    if (!privy || !signer) return;
-    fc = Farcaster.create({ privy, signer });
-  };
-
   // const fc = createFarcaster()
 
   e.it('ui:init', async (e) => {
@@ -57,7 +50,6 @@ export default Dev.describe(name, async (e) => {
             theme={theme}
             onSigner={(e) => {
               signer = e.signer;
-              ensureFarcaster();
               dev.redraw();
             }}
           />
@@ -78,7 +70,7 @@ export default Dev.describe(name, async (e) => {
             'Login',
             'Login.Farcaster',
             'Id.User',
-            'Link.Farcaster',
+            'Farcaster.Identity',
             'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',
@@ -88,7 +80,6 @@ export default Dev.describe(name, async (e) => {
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
           onReady={(e) => {
             privy = e.privy;
-            ensureFarcaster();
             dev.redraw();
           }}
         />

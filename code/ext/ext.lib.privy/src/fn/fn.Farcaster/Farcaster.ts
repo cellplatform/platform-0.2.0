@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t } from '../common';
 
 type A = t.FarcasterWithMetadata;
 type Args = {
@@ -7,8 +7,11 @@ type Args = {
 };
 
 export const Farcaster = {
+  /**
+   * Factory
+   */
   create(args: Args): t.Farcaster {
-    const { privy } = args;
+    const { privy, signer } = args;
     const user = privy.user;
 
     let _account: A | undefined;
@@ -17,11 +20,13 @@ export const Farcaster = {
     /**
      * API
      */
-    return {
+    const api: t.Farcaster = {
+      signer,
       get account() {
         _account = _account || (_account = findAccount());
         return _account;
       },
-    } as const;
+    };
+    return api;
   },
 } as const;
