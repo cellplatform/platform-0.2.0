@@ -16,7 +16,7 @@ describe('Doc.Events: Immutable', () => {
     const fired1: t.DocChanged<D>[] = [];
     const fired2: t.ImmutableChange<D>[] = [];
     events1.changed$.subscribe((e) => fired1.push(e));
-    events2.$.subscribe((e) => fired2.push(e));
+    events2.changed$.subscribe((e) => fired2.push(e));
 
     doc.change((d) => (d.count = 123));
     expect(fired1.length).to.eql(1);

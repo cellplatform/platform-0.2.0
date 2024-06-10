@@ -46,7 +46,7 @@ describe('Immutable', () => {
       const events = Immutable.events(obj);
 
       const fired: t.ImmutableChange<D>[] = [];
-      events.$.subscribe((e) => fired.push(e));
+      events.changed$.subscribe((e) => fired.push(e));
 
       obj.change((d) => (d.count = 123));
       expect(fired.length).to.eql(1);
@@ -59,7 +59,7 @@ describe('Immutable', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj);
         const fired: t.ImmutableChange<D>[] = [];
-        events.$.subscribe((e) => fired.push(e));
+        events.changed$.subscribe((e) => fired.push(e));
         events.dispose();
         expect(events.disposed).to.eql(true);
 
@@ -73,7 +73,7 @@ describe('Immutable', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj, life.dispose$);
         const fired: t.ImmutableChange<D>[] = [];
-        events.$.subscribe((e) => fired.push(e));
+        events.changed$.subscribe((e) => fired.push(e));
         life.dispose();
         expect(events.disposed).to.eql(true);
 

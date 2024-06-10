@@ -31,7 +31,7 @@ export function useStateController(args: Args) {
     if (!enabled || !state.current.endpoint?.accessToken) return () => null;
     const client = Wrangle.client(state.current);
     const events = Immutable.events(state);
-    events.$.pipe(rx.debounceTime(100)).subscribe(() => {
+    events.changed$.pipe(rx.debounceTime(100)).subscribe(() => {
       redraw();
       args.onStateChange?.(state.current);
     });

@@ -26,7 +26,7 @@ export function events<T>(
    * API
    */
   return {
-    $: $.pipe(rx.takeUntil(life.dispose$)),
+    changed$: $.pipe(rx.takeUntil(life.dispose$)),
     dispose: life.dispose,
     dispose$: life.dispose$,
     get disposed() {
