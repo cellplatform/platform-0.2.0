@@ -9,12 +9,7 @@ import { useFarcaster } from './use.Farcaster';
 const short = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
-  const {
-    theme,
-    enabled = DEFAULTS.enabled,
-    clipboard = DEFAULTS.clipboard,
-    data = DEFAULTS.data,
-  } = props;
+  const { enabled = true, clipboard = DEFAULTS.clipboard, data = DEFAULTS.data, theme } = props;
   const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
 
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
@@ -23,7 +18,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const keyboard = Keyboard.useKeyboardState();
   const mouse = useMouse();
   const privy = usePrivy();
-  const { fc } = useFarcaster({ privy });
+  const fc = useFarcaster({ privy, data });
   const { wallets } = useWallets();
   const [ready, setReady] = useState(false);
 
@@ -47,11 +42,14 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     return { label, value: { body: value ?? '-', clipboard: copy } };
   };
 
+  /**
+   * Lifecycle.
+   */
   useEffect(() => {
     const run = async () => {
       const status = Wrangle.toStatus(privy);
       const accessToken = (await privy.getAccessToken()) || undefined;
-      const args: t.InfoStatusHandlerArgs = { status, privy, wallets, accessToken };
+      const args: t.InfoStatusHandlerArgs = { status, privy, fc, wallets, accessToken };
       props.onChange?.(args);
       if (!ready && privy.ready) {
         props.onReady?.(args);
@@ -76,8 +74,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Wallet.Link', () => user && Field.walletLink({ ...ctx, wallets }))
     .field('Wallet.List', () => Field.walletsList({ ...ctx, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
-    .field('Farcaster.Identity', () => user && Field.farcasterIdentity(ctx))
-    .field('Farcaster.Signer', () => user && Field.farcasterSigner({ ...ctx, fc }))
+    .field('Farcaster', () => user && Field.farcaster({ ...ctx, fc }))
     .field('Refresh', () => Field.refresh({ ...ctx, wallets, refresh }))
     .items(fields);
 

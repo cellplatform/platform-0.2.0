@@ -25,8 +25,7 @@ const fields = {
       'Chain.List',
       'Chain.List.Title',
       'Chain.List.Testnets',
-      'Farcaster.Identity',
-      'Farcaster.Signer',
+      'Farcaster',
       'Refresh',
       'Refresh.Label',
     ];
@@ -47,8 +46,7 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}.Info`,
   query: { dev: 'dev' },
   fields,
-  enabled: true,
-  clipboard: true,
   data,
+  clipboard: true,
   loginMethods: PROVIDER_DEFAULTS.loginMethods,
 } as const;

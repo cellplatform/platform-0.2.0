@@ -1,4 +1,4 @@
-import type { Farcaster } from '@privy-io/react-auth';
+// import type { Farcaster } from '@privy-io/react-auth';
 import type { t } from './common';
 
 export type InfoField =
@@ -18,8 +18,7 @@ export type InfoField =
   | 'Chain.List'
   | 'Chain.List.Title'
   | 'Chain.List.Testnets'
-  | 'Farcaster.Identity'
-  | 'Farcaster.Signer'
+  | 'Farcaster'
   | 'Refresh'
   | 'Refresh.Label';
 
@@ -56,7 +55,7 @@ export type InfoDataWallet = {
 
 export type InfoDataFarcaster = {
   identity?: { label?: string; onClick?: InfoFarcasterClickHandler };
-  signer?: { label?: string };
+  signer?: { label?: string; hubUrl?: string; forceVisible?: boolean };
 };
 
 /**
@@ -83,6 +82,7 @@ export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
 export type InfoStatusHandlerArgs = {
   readonly status: t.AuthStatus;
   readonly privy: t.PrivyInterface;
+  readonly fc: t.Farcaster;
   readonly wallets: t.ConnectedWallet[];
   readonly accessToken?: string;
 };
@@ -93,4 +93,7 @@ export type InfoChainSelectedHandlerArgs = {
 };
 
 export type InfoFarcasterClickHandler = (e: InfoFarcasterClickHandlerArgs) => void;
-export type InfoFarcasterClickHandlerArgs = { user: Farcaster };
+export type InfoFarcasterClickHandlerArgs = {
+  user: t.FarcasterUser;
+  fc: t.Farcaster;
+};

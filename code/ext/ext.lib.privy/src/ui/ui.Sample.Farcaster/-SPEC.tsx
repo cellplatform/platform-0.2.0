@@ -70,7 +70,7 @@ export default Dev.describe(name, async (e) => {
             'Login',
             'Login.Farcaster',
             'Id.User',
-            'Farcaster.Identity',
+            'Farcaster',
             'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',

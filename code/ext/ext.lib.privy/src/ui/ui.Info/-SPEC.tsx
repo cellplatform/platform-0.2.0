@@ -16,6 +16,7 @@ const DEFAULTS = Info.DEFAULTS;
  * https://docs.privy.io/
  */
 const name = Info.displayName ?? 'Unknown';
+
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'fields' | 'enabled' | 'clipboard' | 'theme'> & {
     selectedChain?: t.EvmChainName;
@@ -23,11 +24,13 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     theme: undefined,
-    enabled: DEFAULTS.enabled,
+    enabled: true,
     fields: DEFAULTS.fields.default,
     selectedChain: DEFAULTS.data.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
+
+  let fc: t.Farcaster | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -56,7 +59,7 @@ export default Dev.describe(name, (e) => {
             onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
           },
           signer: {
-            // label: 'foobar',
+            forceVisible: true,
           },
         },
       };
@@ -74,7 +77,10 @@ export default Dev.describe(name, (e) => {
           <Info
             {...props}
             margin={24}
-            onReady={(e) => console.info(`⚡️ onReady`, e)}
+            onReady={(e) => {
+              console.info(`⚡️ onReady`, e);
+              fc = e.fc;
+            }}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
               state.change((d) => {
@@ -135,7 +141,7 @@ export default Dev.describe(name, (e) => {
         'Login.Farcaster',
         'Id.User',
         'Id.User.Phone',
-        'Farcaster.Identity',
+        'Farcaster',
         'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
@@ -158,13 +164,7 @@ export default Dev.describe(name, (e) => {
         'Refresh',
       ]);
       dev.hr(-1, 5);
-      button('farcaster', () => [
-        'Login',
-        'Login.SMS',
-        'Login.Farcaster',
-        'Farcaster.Identity',
-        'Farcaster.Signer',
-      ]);
+      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Farcaster']);
     });
 
     dev.hr(5, 20);
@@ -222,6 +222,20 @@ export default Dev.describe(name, (e) => {
               console.log('error', error);
             }
           });
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug: Farcaster', (dev) => {
+      dev.button('send cast', async (e) => {
+        if (!fc) return;
+
+        const fid = fc.fid;
+        const signer = fc.signer;
+        const payload = { text: 'Hello World 👋' };
+        const res = await fc.hub.submitCast(payload, fid, signer);
+        console.log('res', res);
       });
     });
   });

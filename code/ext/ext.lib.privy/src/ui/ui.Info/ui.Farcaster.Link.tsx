@@ -4,6 +4,7 @@ import { FarcasterUsername } from './ui.Farcaster.Username';
 
 export type FarcasterLinkProps = {
   privy: t.PrivyInterface;
+  fc: t.Farcaster;
   enabled?: boolean;
   showClose?: boolean;
   style?: t.CssValue;
@@ -12,10 +13,10 @@ export type FarcasterLinkProps = {
 };
 
 export const FarcasterLink: React.FC<FarcasterLinkProps> = (props) => {
-  const { privy, enabled = true, theme } = props;
+  const { fc, privy, enabled = true, theme } = props;
   const showClose = (props.showClose ?? false) && enabled;
-  const fc = privy.user?.farcaster;
-  const fid = fc?.fid;
+  const user = privy.user?.farcaster;
+  const fid = user?.fid;
   const isAuthenticated = !!fid;
 
   const [spinning, setSpinning] = useState(false);
@@ -73,7 +74,7 @@ export const FarcasterLink: React.FC<FarcasterLinkProps> = (props) => {
   const elLink = !isAuthenticated && button('Connect', linkFarcaster);
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
   const elUsername = isAuthenticated && !elUnlink && (
-    <FarcasterUsername user={fc} theme={theme} onClick={props.onClick} />
+    <FarcasterUsername user={user} fc={fc} theme={theme} onClick={props.onClick} />
   );
 
   return (

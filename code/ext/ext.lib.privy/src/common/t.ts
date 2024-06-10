@@ -1,13 +1,16 @@
 /**
  * @external
  */
+export type { Observable } from 'rxjs';
+
 export type {
   ConnectedWallet,
+  Farcaster as FarcasterUser,
   FarcasterWithMetadata,
   PrivyInterface,
-  Farcaster as FarcasterUser,
 } from '@privy-io/react-auth';
-export type { Observable } from 'rxjs';
+
+export type { ExternalEd25519Signer, HubRestAPIClient } from '@standard-crypto/farcaster-js';
 
 /**
  * @system

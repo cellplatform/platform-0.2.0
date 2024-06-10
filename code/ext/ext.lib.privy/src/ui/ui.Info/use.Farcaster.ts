@@ -2,15 +2,16 @@ import { useExperimentalFarcasterSigner } from '@privy-io/react-auth';
 import { Farcaster } from '../../fn/fn.Farcaster';
 import { type t } from './common';
 
-export function useFarcaster(args: { privy: t.PrivyInterface }) {
-  const { privy } = args;
+export function useFarcaster(args: { privy: t.PrivyInterface; data: t.InfoData }) {
+  const { privy, data } = args;
+  const hubUrl = data.farcaster?.signer?.hubUrl;
 
   /**
    * Destructure the signer methods.
    */
-  const fcSigner = useExperimentalFarcasterSigner();
-  const { signFarcasterMessage, requestFarcasterSignerFromWarpcast } = fcSigner;
-  const { getFarcasterSignerPublicKey } = fcSigner;
+  const useSigner = useExperimentalFarcasterSigner();
+  const { signFarcasterMessage, requestFarcasterSignerFromWarpcast } = useSigner;
+  const { getFarcasterSignerPublicKey } = useSigner;
   const signer: t.FarcasterSignerMethods = {
     getFarcasterSignerPublicKey,
     signFarcasterMessage,
@@ -20,6 +21,5 @@ export function useFarcaster(args: { privy: t.PrivyInterface }) {
   /**
    * API
    */
-  const fc = Farcaster.create({ privy, signer });
-  return { fc } as const;
+  return Farcaster.create({ privy, signer, hubUrl });
 }

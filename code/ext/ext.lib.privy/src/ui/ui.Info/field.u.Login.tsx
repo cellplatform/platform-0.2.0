@@ -30,7 +30,7 @@ export function login(args: Args): t.PropListItem | undefined {
   const elButton = (
     <Button style={{ color }} enabled={enabled} onClick={handleClick} theme={theme}>
       <div {...styles.logoutBody}>
-        <div>{privy.authenticated ? 'logout' : 'login'}</div>
+        <div>{privy.authenticated ? 'Logout' : 'Login'}</div>
         {privy.authenticated && <Icons.Logout size={14} />}
       </div>
     </Button>

@@ -1,4 +1,4 @@
-import type { t } from '../common';
+import type { t } from './common';
 
 /**
  * Privy
@@ -18,7 +18,10 @@ export type FarcasterSignerMethods = {
  */
 export type Farcaster = {
   readonly account?: t.FarcasterWithMetadata;
-  readonly signer: FarcasterSignerMethods;
+  readonly fid: number;
+  readonly signer: t.ExternalEd25519Signer;
+  readonly hub: t.HubRestAPIClient;
+  requestSignerFromWarpcast(): Promise<void>;
 };
 
 /**
