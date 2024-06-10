@@ -6,7 +6,7 @@ type Args = t.InfoFieldArgs;
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
  */
-export function linkFarcaster(args: Args): t.PropListItem | undefined {
+export function farcasterIdentity(args: Args): t.PropListItem | undefined {
   const { privy, modifiers, theme } = args;
   const data = args.data.farcaster;
   const showClose = modifiers.is.over && modifiers.keys.alt;

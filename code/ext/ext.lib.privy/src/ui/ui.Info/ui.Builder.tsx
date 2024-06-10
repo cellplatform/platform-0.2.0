@@ -73,7 +73,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     )
     .field('Login', () => Field.login(ctx))
     .field('Wallet.Link', () => user && Field.walletLink({ ...ctx, wallets }))
-    .field('Link.Farcaster', () => user && Field.linkFarcaster(ctx))
+    .field('Link.Farcaster', () => user && Field.farcasterIdentity(ctx))
     .field('Wallet.List', () => Field.walletsList({ ...ctx, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
     .field('Refresh', () => Field.refresh({ ...ctx, wallets, refresh }))

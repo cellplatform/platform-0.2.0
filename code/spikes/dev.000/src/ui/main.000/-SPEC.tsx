@@ -82,7 +82,7 @@ export default Dev.describe(name, async (e) => {
             'Login.SMS',
             'Id.User',
             'Id.User.Phone',
-            'Link.Wallet',
+            'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',
             'Refresh',
