@@ -24,6 +24,7 @@ export default Dev.describe(name, async (e) => {
   });
   const network: t.NetworkStore = await WebrtcStore.init(self, store, model.index, {});
   const theme: t.CommonTheme = 'Light';
+  let fc: t.Farcaster | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -82,13 +83,24 @@ export default Dev.describe(name, async (e) => {
             'Login.SMS',
             'Id.User',
             'Id.User.Phone',
+            'Farcaster',
             'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',
             'Refresh',
           ]}
-          data={{ provider: Auth.Env.provider, wallet: { list: { title: 'Public Key' } } }}
+          data={{
+            provider: Auth.Env.provider,
+            wallet: { list: { title: 'Public Key' } },
+            farcaster: {
+              signer: {},
+            },
+          }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+          onReady={(e) => {
+            console.log('e', e);
+            fc = e.fc;
+          }}
         />
       );
     });
@@ -117,6 +129,18 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
+      dev.button('send cast', async (e) => {
+        if (!fc) return;
+
+        const fid = fc.fid;
+        const signer = fc.signer;
+        const payload = { text: 'Hello World 👋' };
+        const res = await fc.hub.submitCast(payload, fid, signer);
+        console.log('res', res);
+      });
     });
   });
 
