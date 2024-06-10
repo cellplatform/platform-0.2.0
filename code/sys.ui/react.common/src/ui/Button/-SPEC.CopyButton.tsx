@@ -11,11 +11,12 @@ const initial: T = { props: {} };
 const name = Button.Copy.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.CopyButtonProps, 'enabled' | 'spinning'>;
+  type LocalStore = Pick<t.CopyButtonProps, 'enabled' | 'spinning' | 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Button.Copy');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     spinning: DEFAULTS.spinning,
+    theme: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -26,6 +27,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.enabled = local.enabled;
       d.props.spinning = local.spinning;
+      d.props.theme = local.theme;
     });
 
     ctx.debug.width(330);
@@ -33,9 +35,12 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
         return (
           <Button.Copy
-            {...e.state.props}
+            {...props}
             onClick={(e) => console.info('⚡️ onClick')}
             onCopy={(e) => {
               console.info('⚡️ onCopy', e);
@@ -55,6 +60,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn

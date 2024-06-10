@@ -16,6 +16,7 @@ const DEFAULTS = Info.DEFAULTS;
  * https://docs.privy.io/
  */
 const name = Info.displayName ?? 'Unknown';
+
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'fields' | 'enabled' | 'clipboard' | 'theme'> & {
     selectedChain?: t.EvmChainName;
@@ -23,11 +24,13 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     theme: undefined,
-    enabled: DEFAULTS.enabled,
+    enabled: true,
     fields: DEFAULTS.fields.default,
-    selectedChain: DEFAULTS.data.chain!.selected,
+    selectedChain: DEFAULTS.data!.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
+
+  let fc: t.Farcaster | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -42,7 +45,7 @@ export default Dev.describe(name, (e) => {
       d.props.data = {
         provider: AuthEnv.provider,
         accessToken: {},
-        wallet: { list: { title: 'Public Key' } },
+        wallet: { list: { label: 'Public Key' } },
         chain: {
           selected: local.selectedChain,
           onSelected(e) {
@@ -52,7 +55,25 @@ export default Dev.describe(name, (e) => {
           },
         },
         farcaster: {
-          onClick: (e) => console.info(`⚡️ farcaster.onClick`, e),
+          identity: {
+            // fid: true,
+            onClick: async (e) => {
+              console.info(`⚡️ farcaster.identity.onClick`, e);
+
+              const spin = (value: boolean) =>
+                state.change((d) => (d.props.data!.farcaster!.identity!.spinning = value));
+
+              // TEMP - send sample cast 🐷
+              await spin(true);
+              const fc = e.fc;
+              const payload = { text: 'Hello World 👋' };
+              await fc.hub.submitCast(payload, fc.fid, fc.signer);
+              await spin(false);
+            },
+          },
+          signer: {
+            // forceVisible: true,
+          },
         },
       };
     });
@@ -69,9 +90,13 @@ export default Dev.describe(name, (e) => {
           <Info
             {...props}
             margin={24}
-            onReady={(e) => console.info(`⚡️ onReady`, e)}
+            onReady={(e) => {
+              console.info(`⚡️ onReady`, e);
+              fc = e.fc;
+            }}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
+              fc = e.fc;
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
@@ -130,8 +155,8 @@ export default Dev.describe(name, (e) => {
         'Login.Farcaster',
         'Id.User',
         'Id.User.Phone',
-        'Link.Farcaster',
-        'Link.Wallet',
+        'Farcaster',
+        'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
         'Refresh',
@@ -139,27 +164,31 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       button('wallet view', () => [
         'Login',
-        'Link.Wallet',
+        'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
         'Refresh',
       ]);
       button('wallet view (chain selector)', () => [
         'Login',
-        'Link.Wallet',
+        'Wallet.Link',
         'Wallet.List',
         'Chain.List',
         'Chain.List.Title',
         'Refresh',
       ]);
       dev.hr(-1, 5);
-      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Link.Farcaster']);
+      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Farcaster']);
     });
 
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
@@ -183,6 +212,10 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
       dev.button((btn) => {
         const enabled = (state: T) => state.status?.user?.wallet?.walletClientType === 'privy';
         btn
@@ -207,6 +240,15 @@ export default Dev.describe(name, (e) => {
               console.log('error', error);
             }
           });
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button(['send cast (ERR 🐷)', 'farcaster'], async (e) => {
+        if (!fc) return;
+
+        const payload = { text: 'Hello World 👋' };
+        const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
       });
     });
   });

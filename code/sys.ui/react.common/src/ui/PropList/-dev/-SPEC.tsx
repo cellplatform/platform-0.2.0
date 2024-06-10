@@ -23,11 +23,13 @@ const initial: T = {
 };
 
 const name = PropList.displayName ?? 'Unknown';
+
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'theme'>;
+  type LocalStore = Pick<P, 'theme' | 'loading'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
+    loading: false,
   });
 
   e.it('init', async (e) => {
@@ -37,6 +39,7 @@ export default Dev.describe(name, (e) => {
 
     state.change((d) => {
       d.props.theme = local.theme;
+      d.props.loading = local.loading;
     });
 
     ctx.debug.width(330);
@@ -55,6 +58,16 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.loading;
+        btn
+          .label((e) => `loading`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.loading = Dev.toggle(d.props, 'loading'))));
+      });
+
+      dev.hr(-1, 5);
 
       dev.boolean((btn) =>
         btn

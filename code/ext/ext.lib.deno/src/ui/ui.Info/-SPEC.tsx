@@ -98,7 +98,7 @@ export default Dev.describe(name, async (e) => {
       return (
         <Auth.Info
           title={'Identity'}
-          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
+          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Farcaster']}
           data={{ provider: Auth.Env.provider }}
           onChange={(e) => state.change((d) => (d.accessToken = e.accessToken))}
         />

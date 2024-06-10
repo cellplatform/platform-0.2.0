@@ -1,4 +1,3 @@
-import type { Farcaster } from '@privy-io/react-auth';
 import type { t } from './common';
 
 export type InfoField =
@@ -12,29 +11,60 @@ export type InfoField =
   | 'Login'
   | 'Login.SMS'
   | 'Login.Farcaster'
-  | 'Link.Wallet'
-  | 'Link.Farcaster'
+  | 'Wallet.Link'
   | 'Wallet.List'
   | 'Wallet.List.Title'
   | 'Chain.List'
   | 'Chain.List.Title'
   | 'Chain.List.Testnets'
+  | 'Farcaster'
   | 'Refresh'
   | 'Refresh.Label';
 
+export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
+export type InfoFieldArgs = {
+  privy: t.PrivyInterface;
+  data: t.InfoData;
+  fields: t.InfoField[];
+  enabled: boolean;
+  modifiers: t.InfoFieldModifiers;
+  theme?: t.CommonTheme;
+};
+
+/**
+ * Data
+ */
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
   accessToken?: { label?: string; jwt?: string };
-  chain?: {
-    names?: t.EvmChainName[];
-    selected?: t.EvmChainName;
-    onSelected?: InfoChainSelectedHandler;
-  };
-  wallet?: { list?: { title?: string } };
-  farcaster?: { onClick?: InfoFarcasterClickHandler };
+  chain?: InfoDataChain;
+  wallet?: InfoDataWallet;
+  farcaster?: InfoDataFarcaster;
 };
 
-export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
+export type InfoDataChain = {
+  names?: t.EvmChainName[];
+  selected?: t.EvmChainName;
+  onSelected?: InfoChainSelectedHandler;
+};
+
+export type InfoDataWallet = {
+  list?: { label?: string };
+};
+
+export type InfoDataFarcaster = {
+  identity?: {
+    label?: string;
+    fid?: boolean;
+    spinning?: boolean;
+    onClick?: InfoFarcasterClickHandler;
+  };
+  signer?: {
+    label?: string;
+    hubUrl?: string;
+    forceVisible?: boolean;
+  };
+};
 
 /**
  * Component
@@ -60,6 +90,7 @@ export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
 export type InfoStatusHandlerArgs = {
   readonly status: t.AuthStatus;
   readonly privy: t.PrivyInterface;
+  readonly fc: t.Farcaster;
   readonly wallets: t.ConnectedWallet[];
   readonly accessToken?: string;
 };
@@ -70,4 +101,7 @@ export type InfoChainSelectedHandlerArgs = {
 };
 
 export type InfoFarcasterClickHandler = (e: InfoFarcasterClickHandlerArgs) => void;
-export type InfoFarcasterClickHandlerArgs = { user: Farcaster };
+export type InfoFarcasterClickHandlerArgs = {
+  user: t.FarcasterUser;
+  fc: t.Farcaster;
+};

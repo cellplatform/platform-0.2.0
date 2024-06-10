@@ -1,15 +1,12 @@
-import { Icons, css, Button, type t } from './common';
+import { Button, Icons, css, type t } from './common';
 
-export function refresh(args: {
-  privy: t.PrivyInterface;
+type Args = t.InfoFieldArgs & {
   wallets: t.ConnectedWallet[];
-  data: t.InfoData;
-  fields: t.InfoField[];
-  enabled: boolean;
-  theme?: t.CommonTheme;
   refresh?: () => void;
-}): t.PropListItem | undefined {
-  const { privy, data, fields, theme } = args;
+};
+
+export function refresh(args: Args): t.PropListItem | undefined {
+  const { privy, fields, theme } = args;
   let enabled = args.enabled;
   if (!privy.ready) enabled = false;
   if (!privy.authenticated) return undefined;

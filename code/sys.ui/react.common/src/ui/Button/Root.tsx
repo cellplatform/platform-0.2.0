@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
 import { Blue } from './Root.Blue';
 import { View } from './ui.Button';
-import { CopyButton as Copy } from './ui.Button.Copy';
+import { CopyButton as Copy } from './ui.CopyButton';
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;

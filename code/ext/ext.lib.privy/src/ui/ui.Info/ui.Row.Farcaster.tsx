@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Button, COLORS, Icons, Spinner, Time, css, type t, Color } from './common';
-import { FCUsername } from './ui.FC.Username';
+import { Button, COLORS, Color, Icons, Spinner, Time, css, type t } from './common';
+import { FarcasterUsername } from './ui.Row.Farcaster.Username';
 
-export type FCLinkProps = {
+export type FarcasterProps = {
+  fc: t.Farcaster;
   privy: t.PrivyInterface;
   enabled?: boolean;
+  spinning?: boolean;
   showClose?: boolean;
+  showFid?: boolean;
   style?: t.CssValue;
   theme?: t.CommonTheme;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
-export const FCLink: React.FC<FCLinkProps> = (props) => {
-  const { privy, enabled = true, theme } = props;
+export const Farcaster: React.FC<FarcasterProps> = (props) => {
+  const { fc, privy, enabled = true, theme } = props;
   const showClose = (props.showClose ?? false) && enabled;
-  const fc = privy.user?.farcaster;
-  const fid = fc?.fid;
+  const user = privy.user?.farcaster;
+  const fid = user?.fid;
   const isAuthenticated = !!fid;
 
   const [spinning, setSpinning] = useState(false);
@@ -73,7 +76,14 @@ export const FCLink: React.FC<FCLinkProps> = (props) => {
   const elLink = !isAuthenticated && button('Connect', linkFarcaster);
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
   const elUsername = isAuthenticated && !elUnlink && (
-    <FCUsername user={fc} theme={theme} onClick={props.onClick} />
+    <FarcasterUsername
+      user={user}
+      fc={fc}
+      theme={theme}
+      showFid={props.showFid}
+      spinning={props.spinning}
+      onClick={props.onClick}
+    />
   );
 
   return (

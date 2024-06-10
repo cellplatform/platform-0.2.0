@@ -1,18 +1,14 @@
 import { Value, type t } from './common';
 
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 import { WalletRow } from './ui.Row.Wallet';
 
-export function walletsList(args: {
-  privy: t.PrivyInterface;
+type Args = t.InfoFieldArgs & {
   wallets: t.ConnectedWallet[];
-  data: t.InfoData;
-  enabled: boolean;
-  modifiers: t.InfoFieldModifiers;
-  fields: t.InfoField[];
   refresh$?: t.Observable<void>;
-  theme?: t.CommonTheme;
-}): t.PropListItem[] {
+};
+
+export function walletsList(args: Args): t.PropListItem[] {
   const { privy, wallets, modifiers, fields, data, refresh$, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   const showClose = modifiers.is.over && modifiers.keys.alt;
@@ -22,7 +18,7 @@ export function walletsList(args: {
   if (!privy.authenticated) return res;
 
   if (fields.includes('Wallet.List.Title')) {
-    const label = data.wallet?.list?.title ?? Value.plural(wallets.length, 'Wallet', 'Wallets');
+    const label = data.wallet?.list?.label ?? Value.plural(wallets.length, 'Wallet', 'Wallets');
     res.push({ label, divider: false });
   }
 

@@ -1,13 +1,13 @@
 {
   "name": "dev.000",
-  "version": "0.6.133",
+  "version": "0.6.135",
   "type": "module",
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",
     "test": "tsx ../../../script.node/cmd.test.ts",
-    "build": "tsx ../../../script.node/cmd.build.ts",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' tsx ../../../script.node/cmd.build.ts",
     "clean": "tsx ../../../script.node/cmd.clean.ts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare-vercel": "sh script.sh/vercel-file.sh",

@@ -1,11 +1,11 @@
-import { accessToken } from './field.AccessToken';
-import { chainList } from './field.Chain.List';
-import { linkFarcaster } from './field.Link.Farcaster';
-import { linkWallet } from './field.Link.Wallet';
-import { login } from './field.Login';
-import { moduleVerify } from './field.Module.Verify';
-import { refresh } from './field.Refresh';
-import { walletsList } from './field.Wallets.List';
+import { accessToken } from './field.u.AccessToken';
+import { chainList } from './field.u.Chain.List';
+import { farcaster } from './field.u.Farcaster';
+import { walletLink } from './field.u.Wallet.Link';
+import { login } from './field.u.Login';
+import { moduleVerify } from './field.u.Module.Verify';
+import { refresh } from './field.u.Refresh';
+import { walletsList } from './field.u.Wallets.List';
 
 export const Field = {
   login,
@@ -14,6 +14,6 @@ export const Field = {
   moduleVerify,
   refresh,
   walletsList,
-  linkWallet,
-  linkFarcaster,
+  walletLink,
+  farcaster,
 } as const;

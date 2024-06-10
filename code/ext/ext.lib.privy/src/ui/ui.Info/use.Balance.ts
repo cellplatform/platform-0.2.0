@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Wrangle } from './Wrangle';
-import { rx, Balance, type t } from './common';
+import { Balance, rx, type t } from './common';
+import { Wrangle } from './u';
 
 export function useBalance(args: {
   wallet: t.ConnectedWallet;
