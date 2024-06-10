@@ -1,4 +1,3 @@
-// import type { Farcaster } from '@privy-io/react-auth';
 import type { t } from './common';
 
 export type InfoField =

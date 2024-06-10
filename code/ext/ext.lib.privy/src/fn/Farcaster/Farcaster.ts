@@ -12,7 +12,7 @@ export const Farcaster = {
    * Factory
    */
   create(args: Args): t.Farcaster {
-    const { privy, hubUrl = DEFAULTS.hubUrl } = args;
+    const { privy } = args;
     const user = privy.user;
 
     let _hub: t.HubRestAPIClient;
@@ -34,16 +34,11 @@ export const Farcaster = {
       },
 
       get signer() {
-        if (!_signer) {
-          const signMessage = args.signer.signFarcasterMessage;
-          const getPublicKey = args.signer.getFarcasterSignerPublicKey;
-          _signer = new ExternalEd25519Signer(signMessage, getPublicKey);
-        }
-        return _signer;
+        return _signer || (_signer = create.signer(args));
       },
 
       get hub() {
-        return _hub || (_hub = new HubRestAPIClient({ hubUrl }));
+        return _hub || (_hub = create.hub(args));
       },
 
       async requestSignerFromWarpcast() {
@@ -51,5 +46,20 @@ export const Farcaster = {
       },
     };
     return api;
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const create = {
+  signer(args: Args) {
+    const { signFarcasterMessage, getFarcasterSignerPublicKey } = args.signer;
+    return new ExternalEd25519Signer(signFarcasterMessage, getFarcasterSignerPublicKey);
+  },
+
+  hub(args: Args) {
+    const { hubUrl = DEFAULTS.hubUrl } = args;
+    return new HubRestAPIClient({ hubUrl });
   },
 } as const;

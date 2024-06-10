@@ -56,10 +56,18 @@ export default Dev.describe(name, (e) => {
         },
         farcaster: {
           identity: {
-            onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
+            onClick: async (e) => {
+              console.info(`⚡️ farcaster.identity.onClick`, e);
+
+              // TEMP 🐷
+              const fc = e.fc;
+              const payload = { text: 'Hello World 👋' };
+              const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
+              console.log('res', res);
+            },
           },
           signer: {
-            forceVisible: true,
+            // forceVisible: true,
           },
         },
       };
@@ -83,6 +91,7 @@ export default Dev.describe(name, (e) => {
             }}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
+              fc = e.fc;
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
@@ -170,7 +179,11 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
@@ -223,19 +236,14 @@ export default Dev.describe(name, (e) => {
             }
           });
       });
-    });
 
-    dev.hr(5, 20);
+      dev.hr(-1, 5);
 
-    dev.section('Debug: Farcaster', (dev) => {
-      dev.button('send cast', async (e) => {
+      dev.button(['send cast (ERR 🐷)', 'farcaster'], async (e) => {
         if (!fc) return;
 
-        const fid = fc.fid;
-        const signer = fc.signer;
         const payload = { text: 'Hello World 👋' };
-        const res = await fc.hub.submitCast(payload, fid, signer);
-        console.log('res', res);
+        const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
       });
     });
   });

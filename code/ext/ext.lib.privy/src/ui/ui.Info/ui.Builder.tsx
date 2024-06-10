@@ -49,7 +49,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     const run = async () => {
       const status = Wrangle.toStatus(privy);
       const accessToken = (await privy.getAccessToken()) || undefined;
-      const args: t.InfoStatusHandlerArgs = { status, privy, fc, wallets, accessToken };
+      const args: t.InfoStatusHandlerArgs = { status, privy, wallets, accessToken, fc };
       props.onChange?.(args);
       if (!ready && privy.ready) {
         props.onReady?.(args);
