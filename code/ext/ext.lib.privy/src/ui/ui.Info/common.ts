@@ -35,7 +35,7 @@ const fields = {
   },
 } as const;
 
-const data = {
+const data: t.InfoData = {
   chain: {
     names: Chain.names,
     selected: 'Op:Main',

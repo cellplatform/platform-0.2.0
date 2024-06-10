@@ -26,7 +26,7 @@ export default Dev.describe(name, (e) => {
     theme: undefined,
     enabled: true,
     fields: DEFAULTS.fields.default,
-    selectedChain: DEFAULTS.data.chain.selected,
+    selectedChain: DEFAULTS.data!.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
 

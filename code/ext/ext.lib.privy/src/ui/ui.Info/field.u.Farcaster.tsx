@@ -3,7 +3,7 @@ import { Farcaster } from './ui.Row.Farcaster';
 import { FarcasterSigner } from './ui.Row.Farcaster.Signer';
 
 type Args = t.InfoFieldArgs & { fc: t.Farcaster };
-const DEFAULT = DEFAULTS.data.farcaster;
+const DEFAULT = DEFAULTS.data.farcaster as t.InfoDataFarcaster;
 
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
@@ -23,7 +23,7 @@ export function farcaster(args: Args): t.PropListItem[] {
    * Identity.
    */
   res.push({
-    label: data?.identity?.label || DEFAULT.identity.label,
+    label: data?.identity?.label || DEFAULT.identity?.label,
     value: (
       <Farcaster
         fc={fc}
@@ -43,7 +43,7 @@ export function farcaster(args: Args): t.PropListItem[] {
    */
   if (data?.signer && (!hasSigner || data.signer.forceVisible)) {
     res.push({
-      label: data?.signer.label || DEFAULT.signer.label,
+      label: data?.signer.label || DEFAULT.signer!.label,
       value: <FarcasterSigner enabled={enabled} fc={fc} theme={theme} modifiers={modifiers} />,
     });
   }
