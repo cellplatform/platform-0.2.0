@@ -1,14 +1,9 @@
 import { Chain, DEFAULTS, Value, type t } from './common';
 import { ChainRow } from './ui.Row.Chain';
 
-export function chainList(args: {
-  privy: t.PrivyInterface;
-  data: t.InfoData;
-  enabled: boolean;
-  modifiers: t.InfoFieldModifiers;
-  fields: t.InfoField[];
-  theme?: t.CommonTheme;
-}): t.PropListItem[] {
+type Args = t.InfoFieldArgs;
+
+export function chainList(args: Args): t.PropListItem[] {
   const { privy, modifiers, fields, data, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   if (!privy.authenticated) return [];

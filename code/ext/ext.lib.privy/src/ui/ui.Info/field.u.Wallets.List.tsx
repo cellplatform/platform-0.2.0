@@ -3,16 +3,12 @@ import { Value, type t } from './common';
 import { Wrangle } from './Wrangle';
 import { WalletRow } from './ui.Row.Wallet';
 
-export function walletsList(args: {
-  privy: t.PrivyInterface;
+type Args = t.InfoFieldArgs & {
   wallets: t.ConnectedWallet[];
-  data: t.InfoData;
-  enabled: boolean;
-  modifiers: t.InfoFieldModifiers;
-  fields: t.InfoField[];
   refresh$?: t.Observable<void>;
-  theme?: t.CommonTheme;
-}): t.PropListItem[] {
+};
+
+export function walletsList(args: Args): t.PropListItem[] {
   const { privy, wallets, modifiers, fields, data, refresh$, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   const showClose = modifiers.is.over && modifiers.keys.alt;

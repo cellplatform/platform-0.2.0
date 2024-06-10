@@ -36,6 +36,15 @@ export type InfoData = {
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 
+export type InfoFieldArgs = {
+  privy: t.PrivyInterface;
+  data: t.InfoData;
+  fields: t.InfoField[];
+  enabled: boolean;
+  modifiers: t.InfoFieldModifiers;
+  theme?: t.CommonTheme;
+};
+
 /**
  * Component
  */

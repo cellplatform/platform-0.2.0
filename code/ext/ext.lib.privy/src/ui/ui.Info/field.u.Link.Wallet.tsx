@@ -1,14 +1,9 @@
 import { Button, Chain, COLORS, Icons, Value, type t } from './common';
 import { Wrangle } from './Wrangle';
 
-export function linkWallet(args: {
-  privy: t.PrivyInterface;
-  data: t.InfoData;
-  wallets: t.ConnectedWallet[];
-  fields: t.InfoField[];
-  enabled: boolean;
-  theme?: t.CommonTheme;
-}): t.PropListItem | undefined {
+type Args = t.InfoFieldArgs & { wallets: t.ConnectedWallet[] };
+
+export function linkWallet(args: Args): t.PropListItem | undefined {
   const { privy, data, wallets, fields, theme } = args;
   let enabled = args.enabled;
   if (!privy.ready || !privy.authenticated) enabled = false;

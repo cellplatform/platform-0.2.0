@@ -1,10 +1,10 @@
 import { Button, COLORS, Icons, Spinner, css, type t } from './common';
 
-export function login(
-  privy: t.PrivyInterface,
-  enabled: boolean,
-  theme?: t.CommonTheme,
-): t.PropListItem | undefined {
+type Args = t.InfoFieldArgs;
+
+export function login(args: Args): t.PropListItem | undefined {
+  const { privy, theme } = args;
+  let enabled = args.enabled;
   if (!privy.ready) enabled = false;
 
   /**

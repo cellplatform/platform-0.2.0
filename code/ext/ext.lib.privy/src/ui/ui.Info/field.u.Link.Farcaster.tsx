@@ -1,16 +1,12 @@
 import { type t } from './common';
 import { FarcasterLink } from './ui.Farcaster.Link';
 
+type Args = t.InfoFieldArgs;
+
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
  */
-export function linkFarcaster(args: {
-  privy: t.PrivyInterface;
-  data: t.InfoData;
-  enabled: boolean;
-  modifiers: t.InfoFieldModifiers;
-  theme?: t.CommonTheme;
-}): t.PropListItem | undefined {
+export function linkFarcaster(args: Args): t.PropListItem | undefined {
   const { privy, modifiers, theme } = args;
   const data = args.data.farcaster;
   const showClose = modifiers.is.over && modifiers.keys.alt;

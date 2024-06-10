@@ -48,14 +48,13 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     };
   };
 
-  const c = { privy, data, enabled, theme, fields };
-
+  const c: t.InfoFieldArgs = { privy, data, enabled, theme, fields, modifiers };
   const shorten = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
 
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => Field.moduleVerify(data, theme))
-    .field('AccessToken', () => Field.accessToken(data, theme))
+    .field('Module.Verify', () => Field.moduleVerify(c))
+    .field('AccessToken', () => Field.accessToken(c))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', `id:${shorten(provider?.appId, 4)}`))
@@ -63,10 +62,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       'Id.App.WalletConnect',
       copyable('WalletConnect Project', `id:${shorten(provider?.walletConnectId, 4)}`),
     )
-    .field('Login', () => Field.login(privy, enabled, theme))
+    .field('Login', () => Field.login(c))
     .field('Link.Wallet', () => user && Field.linkWallet({ ...c, wallets }))
-    .field('Link.Farcaster', () => user && Field.linkFarcaster({ ...c, modifiers }))
-    .field('Wallet.List', () => Field.walletsList({ ...c, wallets, modifiers, refresh$ }))
+    .field('Link.Farcaster', () => user && Field.linkFarcaster(c))
+    .field('Wallet.List', () => Field.walletsList({ ...c, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
     .field('Refresh', () => Field.refresh({ ...c, wallets, refresh }))
     .items(fields);
