@@ -6,8 +6,9 @@ export type FarcasterProps = {
   fc: t.Farcaster;
   privy: t.PrivyInterface;
   enabled?: boolean;
-  showClose?: boolean;
   spinning?: boolean;
+  showClose?: boolean;
+  showFid?: boolean;
   style?: t.CssValue;
   theme?: t.CommonTheme;
   onClick?: t.InfoFarcasterClickHandler;
@@ -79,6 +80,7 @@ export const Farcaster: React.FC<FarcasterProps> = (props) => {
       user={user}
       fc={fc}
       theme={theme}
+      showFid={props.showFid}
       spinning={props.spinning}
       onClick={props.onClick}
     />

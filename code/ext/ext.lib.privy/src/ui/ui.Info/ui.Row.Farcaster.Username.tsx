@@ -5,12 +5,13 @@ export type FarcasterUsernameProps = {
   user: t.FarcasterUser;
   theme?: t.CommonTheme;
   spinning?: boolean;
+  showFid?: boolean;
   style?: t.CssValue;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
 export const FarcasterUsername: React.FC<FarcasterUsernameProps> = (props) => {
-  const { user, fc, onClick, spinning = false } = props;
+  const { user, fc, onClick, spinning = false, showFid = false } = props;
   const hasSigner = !!fc.account?.signerPublicKey;
 
   /**
@@ -46,9 +47,10 @@ export const FarcasterUsername: React.FC<FarcasterUsernameProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <div title={`fid:${user.fid}`}>
+      <div title={!showFid ? `fid:${user.fid}` : undefined}>
         <span {...css({ opacity: 0.4 })}>{'@'}</span>
         <span>{`${user.username}`}</span>
+        {showFid && <span>{` ( fid:${user.fid} )`}</span>}
       </div>
       {user.pfp && <img src={user.pfp} {...styles.pfp} />}
       {hasSigner && elIcon}

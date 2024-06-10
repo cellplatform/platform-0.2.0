@@ -35,10 +35,14 @@ const fields = {
   },
 } as const;
 
-const data: t.InfoData = {
+const data = {
   chain: {
     names: Chain.names,
     selected: 'Op:Main',
+  },
+  farcaster: {
+    identity: { label: 'Farcaster' },
+    signer: { label: 'Farcaster Signer' },
   },
 };
 

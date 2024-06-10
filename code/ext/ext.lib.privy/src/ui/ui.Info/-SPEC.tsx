@@ -26,7 +26,7 @@ export default Dev.describe(name, (e) => {
     theme: undefined,
     enabled: true,
     fields: DEFAULTS.fields.default,
-    selectedChain: DEFAULTS.data.chain!.selected,
+    selectedChain: DEFAULTS.data.chain.selected,
     clipboard: DEFAULTS.clipboard,
   });
 
@@ -56,19 +56,18 @@ export default Dev.describe(name, (e) => {
         },
         farcaster: {
           identity: {
+            // fid: true,
             onClick: async (e) => {
               console.info(`⚡️ farcaster.identity.onClick`, e);
 
               const spin = (value: boolean) =>
                 state.change((d) => (d.props.data!.farcaster!.identity!.spinning = value));
 
-              // TEMP 🐷
+              // TEMP - send sample cast 🐷
               await spin(true);
-
               const fc = e.fc;
               const payload = { text: 'Hello World 👋' };
               await fc.hub.submitCast(payload, fc.fid, fc.signer);
-
               await spin(false);
             },
           },
