@@ -67,7 +67,7 @@ export default Dev.describe(name, (e) => {
       return (
         <Auth.Info
           title={'Identity'}
-          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Link.Farcaster']}
+          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Farcaster']}
           data={{ provider: Auth.Env.provider }}
           onChange={(e) => {
             console.info('⚡️ Auth.onChange:', e);

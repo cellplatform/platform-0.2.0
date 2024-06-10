@@ -19,7 +19,7 @@ export const AuthIdentity: React.FC<AuthIdentityProps> = (props) => {
           'AccessToken',
           'Login.SMS',
           'Login.Farcaster',
-          'Link.Farcaster',
+          'Farcaster',
           'Wallet.List',
           'Wallet.List.Title',
           'Refresh',
