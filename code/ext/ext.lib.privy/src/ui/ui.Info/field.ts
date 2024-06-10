@@ -2,6 +2,7 @@ import { accessToken } from './field.u.AccessToken';
 import { chainList } from './field.u.Chain.List';
 import { farcasterIdentity } from './field.u.Farcaster.Identity';
 import { walletLink } from './field.u.Wallet.Link';
+import { farcasterSigner } from './field.u.Farcaster.Signer';
 import { login } from './field.u.Login';
 import { moduleVerify } from './field.u.Module.Verify';
 import { refresh } from './field.u.Refresh';
@@ -16,4 +17,5 @@ export const Field = {
   walletsList,
   walletLink,
   farcasterIdentity,
+  farcasterSigner,
 } as const;

@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t, DEFAULTS } from './common';
 import { FarcasterLink } from './ui.Farcaster.Link';
 
 type Args = t.InfoFieldArgs;
@@ -8,14 +8,14 @@ type Args = t.InfoFieldArgs;
  */
 export function farcasterIdentity(args: Args): t.PropListItem | undefined {
   const { privy, modifiers, theme } = args;
-  const data = args.data.farcaster;
+  const data = args.data.farcaster?.identity;
   const showClose = modifiers.is.over && modifiers.keys.alt;
 
   let enabled = args.enabled;
   if (!privy.ready || !privy.authenticated) enabled = false;
 
   return {
-    label: 'Farcaster',
+    label: data?.label || 'Farcaster',
     value: (
       <FarcasterLink
         theme={theme}

@@ -1,11 +1,12 @@
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect, useRef, useState } from 'react';
 
-import { Wrangle } from './Wrangle';
 import { DEFAULTS, Hash, Keyboard, Pkg, PropList, rx, useMouse, type t } from './common';
 import { Field } from './field';
+import { Wrangle } from './u';
+import { useFarcaster } from './use.Farcaster';
 
-const shorten = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
+const short = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
@@ -22,23 +23,23 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const keyboard = Keyboard.useKeyboardState();
   const mouse = useMouse();
   const privy = usePrivy();
+  const { fc } = useFarcaster({ privy });
   const { wallets } = useWallets();
   const [ready, setReady] = useState(false);
 
   const [, setRedraw] = useState(0);
   const refresh = () => {
-    setRedraw((prev) => prev + 1);
+    setRedraw((n) => n + 1);
     refreshRef$.current.next();
   };
-
-  const modifiers = {
-    is: { over: mouse.is.over },
-    keys: keyboard.current.modifiers,
-  } as const;
 
   const user = privy.user;
   const phone = user?.phone?.number;
   const provider = data.provider;
+  const modifiers: t.InfoFieldModifiers = {
+    is: { over: mouse.is.over },
+    keys: keyboard.current.modifiers,
+  };
   const ctx: t.InfoFieldArgs = { privy, data, enabled, theme, fields, modifiers };
 
   const copyable = (label: string, value?: string): t.PropListItem => {
@@ -66,21 +67,23 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('AccessToken', () => Field.accessToken(ctx))
     .field('Id.User', () => copyable('User', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
-    .field('Id.App.Privy', copyable('Privy App', `id:${shorten(provider?.appId, 4)}`))
+    .field('Id.App.Privy', copyable('Privy App', `id:${short(provider?.appId, 4)}`))
     .field(
       'Id.App.WalletConnect',
-      copyable('WalletConnect Project', `id:${shorten(provider?.walletConnectId, 4)}`),
+      copyable('WalletConnect Project', `id:${short(provider?.walletConnectId, 4)}`),
     )
     .field('Login', () => Field.login(ctx))
     .field('Wallet.Link', () => user && Field.walletLink({ ...ctx, wallets }))
-    .field('Link.Farcaster', () => user && Field.farcasterIdentity(ctx))
     .field('Wallet.List', () => Field.walletsList({ ...ctx, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
+    .field('Farcaster.Identity', () => user && Field.farcasterIdentity(ctx))
+    .field('Farcaster.Signer', () => user && Field.farcasterSigner({ ...ctx, fc }))
     .field('Refresh', () => Field.refresh({ ...ctx, wallets, refresh }))
     .items(fields);
 
   return (
     <PropList
+      loading={!ready}
       title={PropList.Info.title(props)}
       items={items}
       width={PropList.Info.width(props)}

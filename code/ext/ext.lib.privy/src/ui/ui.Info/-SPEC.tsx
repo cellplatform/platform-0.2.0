@@ -52,7 +52,12 @@ export default Dev.describe(name, (e) => {
           },
         },
         farcaster: {
-          onClick: (e) => console.info(`⚡️ farcaster.onClick`, e),
+          identity: {
+            onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
+          },
+          signer: {
+            // label: 'foobar',
+          },
         },
       };
     });
@@ -130,7 +135,7 @@ export default Dev.describe(name, (e) => {
         'Login.Farcaster',
         'Id.User',
         'Id.User.Phone',
-        'Link.Farcaster',
+        'Farcaster.Identity',
         'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
@@ -153,7 +158,13 @@ export default Dev.describe(name, (e) => {
         'Refresh',
       ]);
       dev.hr(-1, 5);
-      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Link.Farcaster']);
+      button('farcaster', () => [
+        'Login',
+        'Login.SMS',
+        'Login.Farcaster',
+        'Farcaster.Identity',
+        'Farcaster.Signer',
+      ]);
     });
 
     dev.hr(5, 20);
@@ -183,6 +194,10 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
       dev.button((btn) => {
         const enabled = (state: T) => state.status?.user?.wallet?.walletClientType === 'privy';
         btn

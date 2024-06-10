@@ -12,30 +12,18 @@ export type InfoField =
   | 'Login'
   | 'Login.SMS'
   | 'Login.Farcaster'
-  | 'Link.Farcaster'
   | 'Wallet.Link'
   | 'Wallet.List'
   | 'Wallet.List.Title'
   | 'Chain.List'
   | 'Chain.List.Title'
   | 'Chain.List.Testnets'
+  | 'Farcaster.Identity'
+  | 'Farcaster.Signer'
   | 'Refresh'
   | 'Refresh.Label';
 
-export type InfoData = {
-  provider?: { appId?: string; walletConnectId?: string };
-  accessToken?: { label?: string; jwt?: string };
-  chain?: {
-    names?: t.EvmChainName[];
-    selected?: t.EvmChainName;
-    onSelected?: InfoChainSelectedHandler;
-  };
-  wallet?: { list?: { title?: string } };
-  farcaster?: { onClick?: InfoFarcasterClickHandler };
-};
-
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
-
 export type InfoFieldArgs = {
   privy: t.PrivyInterface;
   data: t.InfoData;
@@ -43,6 +31,32 @@ export type InfoFieldArgs = {
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
   theme?: t.CommonTheme;
+};
+
+/**
+ * Data
+ */
+export type InfoData = {
+  provider?: { appId?: string; walletConnectId?: string };
+  accessToken?: { label?: string; jwt?: string };
+  chain?: InfoDataChain;
+  wallet?: InfoDataWallet;
+  farcaster?: InfoDataFarcaster;
+};
+
+export type InfoDataChain = {
+  names?: t.EvmChainName[];
+  selected?: t.EvmChainName;
+  onSelected?: InfoChainSelectedHandler;
+};
+
+export type InfoDataWallet = {
+  list?: { title?: string };
+};
+
+export type InfoDataFarcaster = {
+  identity?: { label?: string; onClick?: InfoFarcasterClickHandler };
+  signer?: { label?: string };
 };
 
 /**

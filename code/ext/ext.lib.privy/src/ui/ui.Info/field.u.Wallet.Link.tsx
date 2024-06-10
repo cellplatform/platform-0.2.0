@@ -1,5 +1,5 @@
 import { Button, Chain, COLORS, Icons, Value, type t } from './common';
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 
 type Args = t.InfoFieldArgs & { wallets: t.ConnectedWallet[] };
 

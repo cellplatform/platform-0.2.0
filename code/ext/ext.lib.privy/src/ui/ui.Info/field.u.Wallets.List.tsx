@@ -1,6 +1,6 @@
 import { Value, type t } from './common';
 
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './u';
 import { WalletRow } from './ui.Row.Wallet';
 
 type Args = t.InfoFieldArgs & {
