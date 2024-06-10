@@ -39,12 +39,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const provider = data.provider;
 
   const copyable = (label: string, value?: string): t.PropListItem => {
+    const output = clipboard && enabled && value ? value : false;
     return {
       label,
-      value: {
-        body: value ?? '-',
-        clipboard: clipboard && enabled ? value && value : false,
-      },
+      value: { body: value ?? '-', clipboard: output },
     };
   };
 
