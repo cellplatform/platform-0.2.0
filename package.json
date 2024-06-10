@@ -38,12 +38,14 @@
     "@paralleldrive/cuid2": "2.2.2",
     "@preact/signals-react": "2.0.1",
     "@privy-io/react-auth": "1.68.0",
+    "@standard-crypto/farcaster-js": "7.4.0",
     "@tauri-apps/api": "1.5.6",
     "@tauri-apps/cli": "1.5.14",
     "@vercel/edge": "1.1.1",
     "@vime/core": "5.4.1",
     "@vime/react": "5.4.1",
     "@vimeo/player": "2.23.0",
+    "automerge-tldraw": "0.2.0",
     "approx-string-match": "2.0.0",
     "akahu": "1.15.3",
     "cli-table3": "0.6.5",
@@ -97,8 +99,7 @@
     "viem": "2.13.7",
     "yaml": "2.4.3",
     "zod": "3.23.8",
-    "chai": "5.1.1",
-    "automerge-tldraw": "0.2.0"
+    "chai": "5.1.1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "3.1.1",
