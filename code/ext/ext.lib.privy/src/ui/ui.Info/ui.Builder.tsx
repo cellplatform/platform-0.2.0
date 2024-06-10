@@ -72,7 +72,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       copyable('WalletConnect Project', `id:${shorten(provider?.walletConnectId, 4)}`),
     )
     .field('Login', () => Field.login(ctx))
-    .field('Link.Wallet', () => user && Field.linkWallet({ ...ctx, wallets }))
+    .field('Wallet.Link', () => user && Field.walletLink({ ...ctx, wallets }))
     .field('Link.Farcaster', () => user && Field.linkFarcaster(ctx))
     .field('Wallet.List', () => Field.walletsList({ ...ctx, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))

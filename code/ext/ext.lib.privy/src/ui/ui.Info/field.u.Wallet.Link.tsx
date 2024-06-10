@@ -3,7 +3,7 @@ import { Wrangle } from './Wrangle';
 
 type Args = t.InfoFieldArgs & { wallets: t.ConnectedWallet[] };
 
-export function linkWallet(args: Args): t.PropListItem | undefined {
+export function walletLink(args: Args): t.PropListItem | undefined {
   const { privy, data, wallets, fields, theme } = args;
   let enabled = args.enabled;
   if (!privy.ready || !privy.authenticated) enabled = false;

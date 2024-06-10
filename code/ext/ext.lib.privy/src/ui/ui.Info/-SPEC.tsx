@@ -131,7 +131,7 @@ export default Dev.describe(name, (e) => {
         'Id.User',
         'Id.User.Phone',
         'Link.Farcaster',
-        'Link.Wallet',
+        'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
         'Refresh',
@@ -139,14 +139,14 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       button('wallet view', () => [
         'Login',
-        'Link.Wallet',
+        'Wallet.Link',
         'Wallet.List',
         'Wallet.List.Title',
         'Refresh',
       ]);
       button('wallet view (chain selector)', () => [
         'Login',
-        'Link.Wallet',
+        'Wallet.Link',
         'Wallet.List',
         'Chain.List',
         'Chain.List.Title',

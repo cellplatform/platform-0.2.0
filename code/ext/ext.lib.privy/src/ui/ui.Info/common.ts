@@ -20,7 +20,7 @@ const fields = {
       'Login.Farcaster',
       'AccessToken',
       'Link.Farcaster',
-      'Link.Wallet',
+      'Wallet.Link',
       'Wallet.List',
       'Wallet.List.Title',
       'Chain.List',
@@ -31,7 +31,7 @@ const fields = {
     ];
   },
   get default(): t.InfoField[] {
-    return ['Module', 'Id.User', 'Login', 'Link.Wallet'];
+    return ['Module', 'Id.User', 'Login', 'Wallet.Link'];
   },
 } as const;
 
