@@ -33,7 +33,7 @@ export const FCUsername: React.FC<FCUsernameProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <div>
+      <div title={`fid:${user.fid}`}>
         <span {...css({ opacity: 0.4 })}>{'@'}</span>
         <span>{`${user.username}`}</span>
       </div>
