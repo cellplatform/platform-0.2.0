@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@privy-io/react-auth': '1.68.0',
+    '@standard-crypto/farcaster-js': '7.4.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
     'sys.util': '0.0.0',
