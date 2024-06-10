@@ -1,5 +1,5 @@
 import { type t } from './common';
-import { FCLink } from './ui.FC.Link';
+import { FarcasterLink } from './ui.Farcaster.Link';
 
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
@@ -21,7 +21,7 @@ export function linkFarcaster(args: {
   return {
     label: 'Farcaster',
     value: (
-      <FCLink
+      <FarcasterLink
         theme={theme}
         privy={privy}
         enabled={enabled}

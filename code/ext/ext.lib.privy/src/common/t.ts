@@ -1,7 +1,12 @@
 /**
  * @external
  */
-export type { ConnectedWallet, FarcasterWithMetadata, PrivyInterface } from '@privy-io/react-auth';
+export type {
+  ConnectedWallet,
+  FarcasterWithMetadata,
+  PrivyInterface,
+  Farcaster as FarcasterUser,
+} from '@privy-io/react-auth';
 export type { Observable } from 'rxjs';
 
 /**

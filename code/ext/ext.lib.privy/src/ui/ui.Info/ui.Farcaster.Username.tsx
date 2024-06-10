@@ -1,14 +1,13 @@
-import type { Farcaster } from '@privy-io/react-auth';
 import { Button, Color, css, type t } from './common';
 
-export type FCUsernameProps = {
-  user: Farcaster;
+export type FarcasterUsernameProps = {
+  user: t.FarcasterUser;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
-export const FCUsername: React.FC<FCUsernameProps> = (props) => {
+export const FarcasterUsername: React.FC<FarcasterUsernameProps> = (props) => {
   const { user, theme, onClick } = props;
 
   /**
