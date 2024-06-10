@@ -27,7 +27,7 @@ export const AuthIdentity: React.FC<AuthIdentityProps> = (props) => {
         data={{
           provider: Auth.Env.provider,
           accessToken: { jwt },
-          wallet: { list: { title: 'Public Key' } },
+          wallet: { list: { label: 'Public Key' } },
         }}
         onChange={(e) => {
           if (e.accessToken) props.onAccessToken?.(e.accessToken);

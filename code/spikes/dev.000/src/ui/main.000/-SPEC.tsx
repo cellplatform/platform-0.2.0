@@ -91,7 +91,7 @@ export default Dev.describe(name, async (e) => {
           ]}
           data={{
             provider: Auth.Env.provider,
-            wallet: { list: { title: 'Public Key' } },
+            wallet: { list: { label: 'Public Key' } },
             farcaster: {
               signer: {},
             },

@@ -49,12 +49,21 @@ export type InfoDataChain = {
 };
 
 export type InfoDataWallet = {
-  list?: { title?: string };
+  list?: { label?: string };
 };
 
 export type InfoDataFarcaster = {
-  identity?: { label?: string; onClick?: InfoFarcasterClickHandler; spinning?: boolean };
-  signer?: { label?: string; hubUrl?: string; forceVisible?: boolean };
+  identity?: {
+    label?: string;
+    fid?: boolean;
+    spinning?: boolean;
+    onClick?: InfoFarcasterClickHandler;
+  };
+  signer?: {
+    label?: string;
+    hubUrl?: string;
+    forceVisible?: boolean;
+  };
 };
 
 /**

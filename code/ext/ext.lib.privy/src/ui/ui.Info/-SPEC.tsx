@@ -45,7 +45,7 @@ export default Dev.describe(name, (e) => {
       d.props.data = {
         provider: AuthEnv.provider,
         accessToken: {},
-        wallet: { list: { title: 'Public Key' } },
+        wallet: { list: { label: 'Public Key' } },
         chain: {
           selected: local.selectedChain,
           onSelected(e) {
