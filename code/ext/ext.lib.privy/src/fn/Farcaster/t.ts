@@ -17,6 +17,7 @@ export type FarcasterSignerMethods = {
  * Farcaster helper object.
  */
 export type Farcaster = {
+  readonly ready: boolean;
   readonly account?: t.FarcasterWithMetadata;
   readonly fid: number;
   readonly signer: t.ExternalEd25519Signer;

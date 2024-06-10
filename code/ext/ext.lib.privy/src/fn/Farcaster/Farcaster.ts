@@ -24,6 +24,10 @@ export const Farcaster = {
      * API
      */
     const api: t.Farcaster = {
+      get ready() {
+        return privy.ready;
+      },
+
       get account() {
         _account = _account || (_account = findAccount());
         return _account;
