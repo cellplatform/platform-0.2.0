@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, Style, css, type t } from './common';
+import { Spinner, COLORS, Color, DEFAULTS, Style, css, type t } from './common';
 import { PropListItem, PropListTitle } from './item';
 import { Wrangle } from './u';
 
@@ -6,7 +6,7 @@ import { Wrangle } from './u';
  * Component
  */
 export const View: React.FC<t.PropListProps> = (props) => {
-  const { title } = props;
+  const { title, loading = false } = props;
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
@@ -30,6 +30,11 @@ export const View: React.FC<t.PropListProps> = (props) => {
       boxSizing: 'border-box',
       ...Style.toPadding(props.padding),
       ...Style.toMargins(props.margin),
+    }),
+    spinner: css({
+      Absolute: 0,
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
@@ -62,14 +67,27 @@ export const View: React.FC<t.PropListProps> = (props) => {
   // Exit if empty.
   if (items.length === 0 && !hasTitle) return null;
 
+  const elLoading = loading && (
+    <div {...styles.spinner}>
+      <Spinner.Bar color={theme.fg} width={60} />
+    </div>
+  );
+
+  const elBody = !elLoading && (
+    <>
+      {elTitle}
+      {items.length > 0 && <div>{elItems}</div>}
+    </>
+  );
+
   return (
     <div
       {...css(styles.base, props.style)}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
-      {elTitle}
-      {items.length > 0 && <div>{elItems}</div>}
+      {elLoading}
+      {elBody}
     </div>
   );
 };

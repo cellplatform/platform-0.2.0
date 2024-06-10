@@ -17,6 +17,7 @@ export type PropListProps = {
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
 
+  loading?: boolean;
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
   width?: number | t.PropListSize;
