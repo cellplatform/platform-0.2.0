@@ -26,9 +26,9 @@ export const Events = {
     /**
      * Observables.
      */
-    const fire = (e: t.CmdEvent) => $$.next(e);
-    const $$ = rx.subject<t.CmdEvent>();
-    const $ = $$.pipe(rx.takeUntil(dispose$));
+    const fire = (e: t.CmdEvent) => fire$.next(e);
+    const fire$ = rx.subject<t.CmdEvent>();
+    const $ = fire$.pipe(rx.takeUntil(dispose$));
     const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/tx');
     const error$ = tx$.pipe(rx.filter((e) => !!e.error));
 

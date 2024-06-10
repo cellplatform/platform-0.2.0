@@ -47,12 +47,12 @@ export type DocChangedEvent<T extends O> = {
   payload: DocChanged<T>;
 };
 
-export type DocChanged<L extends O = O> = {
+export type DocChanged<T extends O = O> = {
   uri: t.UriString;
-  before: L;
-  after: L;
-  patches: t.Patch[];
+  before: T;
+  after: T;
   source: t.PatchSource;
+  patches: t.Patch[];
 };
 
 /**
