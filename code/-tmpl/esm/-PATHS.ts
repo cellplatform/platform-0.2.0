@@ -37,7 +37,7 @@ export const paths = {
     'src/ui/common/t.ts',
 
     'src/ui/ui.Info/-SPEC.tsx',
-    'src/ui/ui.Info/field.Module.tsx',
+    'src/ui/ui.Info/field.u.Module.tsx',
     'src/ui/ui.Info/field.ts',
     'src/ui/ui.Info/common.ts',
     'src/ui/ui.Info/index.ts',
