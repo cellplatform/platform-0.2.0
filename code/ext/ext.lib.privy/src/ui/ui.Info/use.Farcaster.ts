@@ -1,5 +1,5 @@
 import { useExperimentalFarcasterSigner } from '@privy-io/react-auth';
-import { Farcaster } from '../../fn/fn.Farcaster';
+import { Farcaster } from '../../fn/Farcaster';
 import { type t } from './common';
 
 export function useFarcaster(args: { privy: t.PrivyInterface; data: t.InfoData }) {
