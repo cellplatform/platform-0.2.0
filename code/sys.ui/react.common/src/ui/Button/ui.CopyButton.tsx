@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { COLORS, DEFAULTS, css, type t } from './common';
+import { DEFAULTS, css, type t, Color } from './common';
 import { View as Button } from './ui.Button';
 
 type Content = JSX.Element | string | number | false;
@@ -73,9 +73,10 @@ export const CopyButton: React.FC<t.CopyButtonProps> = (props) => {
   /**
    * [Render]
    */
+  const theme = Color.theme(props.theme);
   const styles = {
     copied: css({
-      color: COLORS.DARK,
+      color: theme.fg,
       fontSize: copiedFontSize,
       opacity: copiedOpacity,
     }),
