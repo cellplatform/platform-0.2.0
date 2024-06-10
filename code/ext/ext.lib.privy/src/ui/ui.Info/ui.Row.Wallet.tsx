@@ -1,4 +1,4 @@
-import { Button, COLORS, DEFAULTS, Hash, Icons, Wallet, css, type t } from './common';
+import { Button, COLORS, Hash, Icons, Wallet, css, type t } from './common';
 import { useBalance } from './use.Balance';
 
 export type WalletRowProps = {

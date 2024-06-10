@@ -1,6 +1,6 @@
 import { type t } from './common';
-import { Farcaster } from './ui.Farcaster';
-import { FarcasterSigner } from './ui.Farcaster.Signer';
+import { Farcaster } from './ui.Row.Farcaster';
+import { FarcasterSigner } from './ui.Row.Farcaster.Signer';
 
 type Args = t.InfoFieldArgs & { fc: t.Farcaster };
 

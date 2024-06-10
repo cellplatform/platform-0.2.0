@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, COLORS, Color, Icons, Spinner, Time, css, type t } from './common';
-import { FarcasterUsername } from './ui.Farcaster.Username';
+import { FarcasterUsername } from './ui.Row.Farcaster.Username';
 
 export type FarcasterProps = {
   fc: t.Farcaster;
