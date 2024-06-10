@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { PrivyInterface } from 'ext.lib.privy/src/types';
 
 /**
  * @system

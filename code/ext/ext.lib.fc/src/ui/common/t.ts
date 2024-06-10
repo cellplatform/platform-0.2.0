@@ -2,6 +2,7 @@
  * @external
  */
 export type { CSSProperties } from 'react';
+export type { Hex } from 'viem';
 
 /**
  * @system
