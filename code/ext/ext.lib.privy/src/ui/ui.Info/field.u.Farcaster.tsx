@@ -1,6 +1,6 @@
 import { type t } from './common';
-import { FarcasterLink } from './ui.Farcaster.Link';
-import { FarcasterCreateSigner } from './ui.Farcaster.CreateSigner';
+import { Farcaster } from './ui.Farcaster';
+import { FarcasterSigner } from './ui.Farcaster.Signer';
 
 type Args = t.InfoFieldArgs & { fc: t.Farcaster };
 
@@ -24,12 +24,13 @@ export function farcaster(args: Args): t.PropListItem[] {
   res.push({
     label: data?.identity?.label || 'Farcaster',
     value: (
-      <FarcasterLink
-        privy={privy}
+      <Farcaster
         fc={fc}
+        privy={privy}
         theme={theme}
         enabled={enabled}
         showClose={showClose}
+        spinning={data?.identity?.spinning}
         onClick={data?.identity?.onClick}
       />
     ),
@@ -41,9 +42,7 @@ export function farcaster(args: Args): t.PropListItem[] {
   if (data?.signer && (!hasSigner || data.signer.forceVisible)) {
     res.push({
       label: data?.signer.label || 'Farcaster Signer',
-      value: (
-        <FarcasterCreateSigner enabled={enabled} fc={fc} theme={theme} modifiers={modifiers} />
-      ),
+      value: <FarcasterSigner enabled={enabled} fc={fc} theme={theme} modifiers={modifiers} />,
     });
   }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Color, Icons, css, type t } from './common';
 
-export type FarcasterCreateSignerProps = {
+export type FarcasterSignerProps = {
   fc: t.Farcaster;
   enabled?: boolean;
   modifiers?: t.InfoFieldModifiers;
@@ -9,7 +9,7 @@ export type FarcasterCreateSignerProps = {
   style?: t.CssValue;
 };
 
-export const FarcasterCreateSigner: React.FC<FarcasterCreateSignerProps> = (props) => {
+export const FarcasterSigner: React.FC<FarcasterSignerProps> = (props) => {
   const { fc, enabled = true } = props;
   const [requestingSigner, setRequestingSigner] = useState(false);
 

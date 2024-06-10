@@ -59,11 +59,17 @@ export default Dev.describe(name, (e) => {
             onClick: async (e) => {
               console.info(`⚡️ farcaster.identity.onClick`, e);
 
+              const spin = (value: boolean) =>
+                state.change((d) => (d.props.data!.farcaster!.identity!.spinning = value));
+
               // TEMP 🐷
+              await spin(true);
+
               const fc = e.fc;
               const payload = { text: 'Hello World 👋' };
-              const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
-              console.log('res', res);
+              await fc.hub.submitCast(payload, fc.fid, fc.signer);
+
+              await spin(false);
             },
           },
           signer: {

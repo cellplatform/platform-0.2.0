@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 import { Button, COLORS, Color, Icons, Spinner, Time, css, type t } from './common';
 import { FarcasterUsername } from './ui.Farcaster.Username';
 
-export type FarcasterLinkProps = {
-  privy: t.PrivyInterface;
+export type FarcasterProps = {
   fc: t.Farcaster;
+  privy: t.PrivyInterface;
   enabled?: boolean;
   showClose?: boolean;
+  spinning?: boolean;
   style?: t.CssValue;
   theme?: t.CommonTheme;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
-export const FarcasterLink: React.FC<FarcasterLinkProps> = (props) => {
+export const Farcaster: React.FC<FarcasterProps> = (props) => {
   const { fc, privy, enabled = true, theme } = props;
   const showClose = (props.showClose ?? false) && enabled;
   const user = privy.user?.farcaster;
@@ -74,7 +75,13 @@ export const FarcasterLink: React.FC<FarcasterLinkProps> = (props) => {
   const elLink = !isAuthenticated && button('Connect', linkFarcaster);
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
   const elUsername = isAuthenticated && !elUnlink && (
-    <FarcasterUsername user={user} fc={fc} theme={theme} onClick={props.onClick} />
+    <FarcasterUsername
+      user={user}
+      fc={fc}
+      theme={theme}
+      spinning={props.spinning}
+      onClick={props.onClick}
+    />
   );
 
   return (

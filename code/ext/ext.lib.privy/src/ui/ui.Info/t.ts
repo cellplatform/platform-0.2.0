@@ -53,7 +53,7 @@ export type InfoDataWallet = {
 };
 
 export type InfoDataFarcaster = {
-  identity?: { label?: string; onClick?: InfoFarcasterClickHandler };
+  identity?: { label?: string; onClick?: InfoFarcasterClickHandler; spinning?: boolean };
   signer?: { label?: string; hubUrl?: string; forceVisible?: boolean };
 };
 
