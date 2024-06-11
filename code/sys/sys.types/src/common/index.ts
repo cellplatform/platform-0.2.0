@@ -1,2 +1,1 @@
-import type * as t from './types';
-export type { t };
+export type * as t from './t';
