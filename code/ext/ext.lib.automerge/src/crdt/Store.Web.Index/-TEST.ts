@@ -6,7 +6,7 @@ type D = { count?: t.A.Counter };
 
 export default Test.describe('Store.Web: Index', (e) => {
   const name = TestDb.Unit.name;
-  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+  const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
   const contains = (docs: t.StoreIndexDoc[], uri: string) => docs.some((e) => e.uri === uri);
 
   e.describe('lifecycle', (e) => {

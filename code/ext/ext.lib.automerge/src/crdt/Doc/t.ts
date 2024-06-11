@@ -3,7 +3,7 @@ export type * from './t.Events';
 
 type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
-type Init<T> = t.ImmutableNext<T>;
+type Init<T> = t.ImmutableMutator<T>;
 
 /**
  * The address of a document within the repo/store.
@@ -50,7 +50,7 @@ export type DocStore = {
   ): Promise<t.DocRef<T>>;
   delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
   factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
-  toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>): Uint8Array;
+  toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.DocRef<T>): Uint8Array;
   fromBinary<T extends O>(
     binary: Uint8Array,
     options?: FromBinaryOptions | t.UriString,

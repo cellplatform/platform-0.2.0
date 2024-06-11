@@ -30,7 +30,7 @@ export const Store = {
       /**
        * Create an "initial constructor" factory for typed docs.
        */
-      factory<T extends O>(initial: t.ImmutableNext<T>) {
+      factory<T extends O>(initial: t.ImmutableMutator<T>) {
         return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
       },
 
@@ -46,7 +46,7 @@ export const Store = {
        * Find or create a new CRDT document from the repo.
        */
       async getOrCreate<T extends O>(
-        initial: t.ImmutableNext<T> | Uint8Array,
+        initial: t.ImmutableMutator<T> | Uint8Array,
         uri?: Uri,
         options: GetOptions = {},
       ) {
@@ -83,7 +83,7 @@ export const Store = {
        * See the "hard-coded byte array hack"
        * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
        */
-      toBinary<T extends O>(initOrDoc: t.ImmutableNext<T> | t.DocRef<T>) {
+      toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.DocRef<T>) {
         return toBinary<T>(initOrDoc);
       },
 

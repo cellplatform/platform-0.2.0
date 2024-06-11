@@ -172,7 +172,6 @@ describe('Doc.Lens', () => {
 
     it('throw: path index does not yield {object}', async () => {
       const root = await setup();
-
       const fn = () =>
         Lens.create<TRoot, TChild>(
           root,
@@ -214,6 +213,22 @@ describe('Doc.Lens', () => {
       expect(lens.current.count).to.eql(123);
       expect(root.current.child?.count).to.eql(123);
     });
+
+    it('patches callback', async () => {
+      const root = await setup();
+      const lens = Lens.create<TRoot, TChild>(root, path);
+      const patches: t.Patch[] = [];
+
+      lens.change((child) => (child.count = 123), { patches: (e) => patches.push(...e) });
+      lens.change(
+        (child) => (child.count = 456),
+        (e) => patches.push(...e),
+      );
+
+      expect(patches.length).to.eql(2);
+      expect(patches[0]).to.eql({ action: 'put', path: ['count'], value: 123 });
+      expect(patches[1]).to.eql({ action: 'put', path: ['count'], value: 456 });
+    });
   });
 
   describe('events ($)', () => {
@@ -222,14 +237,19 @@ describe('Doc.Lens', () => {
       const lens = Lens.create<TRoot, TChild>(root, path);
       const events = lens.events();
 
+      const patches: t.Patch[] = [];
       const fired: t.LensChanged<TChild>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
-      lens.change((d) => (d.count = 123));
+      lens.change(
+        (d) => (d.count = 123),
+        (e) => patches.push(...e),
+      );
       expect(fired.length).to.eql(1);
       expect(fired[0].after.count).to.eql(123);
       expect(fired[0].patches[0].action).to.eql('put');
       expect(fired[0].patches[0].path).to.eql(['count']);
+      expect(patches).to.eql(fired[0].patches); // Callback patches match fired event.
 
       events.dispose();
     });

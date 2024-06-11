@@ -11,7 +11,7 @@ type Uri = t.DocUri | t.UriString;
  */
 export async function getOrCreate<T extends O>(args: {
   repo: t.Repo;
-  initial: t.ImmutableNext<T> | Uint8Array;
+  initial: t.ImmutableMutator<T> | Uint8Array;
   uri?: Uri;
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;

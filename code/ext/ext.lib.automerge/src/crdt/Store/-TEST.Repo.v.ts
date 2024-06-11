@@ -5,7 +5,7 @@ type D = { count?: t.A.Counter };
 
 describe('Store.repo', () => {
   const store = Store.init();
-  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+  const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
   const generator = store.doc.factory<D>(initial);
 
   it('repo.handles', async () => {

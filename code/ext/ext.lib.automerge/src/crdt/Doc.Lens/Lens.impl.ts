@@ -1,8 +1,9 @@
 import { eventsFactory } from './Lens.Events';
 import { Registry } from './Lens.Registry';
-import { Is, ObjectPath, Symbols, rx, slug, toObject, type t } from './common';
+import { Is, ObjectPath, Symbols, Wrangle, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
+type PathInput = t.ObjectPath | (() => t.ObjectPath);
 type Options<R extends O> = {
   init?: t.InitializeLens<R>;
   typename?: string;
@@ -14,7 +15,7 @@ type Options<R extends O> = {
  */
 export function create<R extends O, L extends O>(
   root: t.DocRef<R> | t.Lens<R>,
-  path?: t.ObjectPath | (() => t.ObjectPath),
+  path?: PathInput,
   options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {
   const args = wrangle.options<R>(options);
@@ -29,20 +30,20 @@ export function create<R extends O, L extends O>(
   const events = root.events(args.dispose$);
 
   events.dispose$.subscribe(() => {
-    subject$.complete();
+    fire.$.complete();
     Registry.remove(root);
   });
-  const subject$ = rx.subject<t.LensEvent<L>>();
   const { dispose, dispose$ } = events;
 
   const uri = root.uri;
   const fire = {
+    $: rx.subject<t.LensEvent<L>>(),
     changed(e: t.DocChanged<R>) {
       const before = resolve(e.before);
       const after = resolve(e.after);
       const patches = wrangle.patches(e.patches, path);
       const source = e.source;
-      subject$.next({
+      fire.$.next({
         type: 'crdt:lens/Changed',
         payload: { uri, source, before, after, patches },
       });
@@ -50,7 +51,7 @@ export function create<R extends O, L extends O>(
     deleted(e: t.DocDeleted<R>) {
       const before = resolve(e.doc);
       const after = undefined;
-      subject$.next({
+      fire.$.next({
         type: 'crdt:lens/Deleted',
         payload: { uri, before, after },
       });
@@ -91,7 +92,7 @@ export function create<R extends O, L extends O>(
     /**
      * Immutable change mutation on the descendent.
      */
-    change(fn) {
+    change(fn, options) {
       if (api.disposed) return;
       _changing = true;
 
@@ -112,7 +113,8 @@ export function create<R extends O, L extends O>(
       events.changed$.pipe(rx.take(1)).subscribe((e) => (_fired = e as t.DocChanged<R>));
 
       // Perform change.
-      root.change((d) => fn(resolve(d)));
+      const opt = wrangle.changeOptions(path, options);
+      root.change((d) => fn(resolve(d)), opt);
 
       // Alert listeners.
       if (_fired) fire.changed(_fired);
@@ -127,7 +129,7 @@ export function create<R extends O, L extends O>(
      * Create new events observer.
      */
     events(dispose$?: t.UntilObservable) {
-      return eventsFactory(subject$, { dispose$: [dispose$, events.dispose$] });
+      return eventsFactory(fire.$, { dispose$: [dispose$, events.dispose$] });
     },
 
     /**
@@ -178,18 +180,31 @@ export function create<R extends O, L extends O>(
 /**
  * Helpers
  */
+
 const wrangle = {
-  options<R extends O>(input?: Options<R> | t.InitializeLens<R>): Options<R> {
-    if (typeof input === 'function') return { init: input };
-    return input ?? {};
+  options<R extends O>(options?: Options<R> | t.InitializeLens<R>): Options<R> {
+    if (typeof options === 'function') return { init: options };
+    return options ?? {};
   },
 
-  path(path?: t.ObjectPath | (() => t.ObjectPath)) {
+  path(path?: PathInput) {
     return typeof path === 'function' ? path() : path ?? [];
   },
 
-  patches(patches: t.Patch[], path?: t.ObjectPath | (() => t.ObjectPath)) {
+  patches(patches: t.Patch[], path?: PathInput) {
     const length = wrangle.path(path).length;
     return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
+  },
+
+  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptions) {
+    const fn = Wrangle.patchCallback(options);
+    if (!fn) return;
+
+    const res: t.ImmutableChangeOptions = {
+      patches(e) {
+        fn(wrangle.patches(e, wrangle.path(path)));
+      },
+    };
+    return res;
   },
 } as const;

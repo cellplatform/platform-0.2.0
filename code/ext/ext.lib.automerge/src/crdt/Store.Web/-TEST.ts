@@ -8,7 +8,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
   const name = TestDb.Unit.name;
   const store = WebStore.init({ storage: false });
 
-  const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+  const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
   const assertCount = (doc: t.DocRef<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };

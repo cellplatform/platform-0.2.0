@@ -1,5 +1,6 @@
 import { eventsFactory } from './Doc.Events';
 import { Symbols, slug, toObject, type t } from './common';
+import { Wrangle } from './u.Wrangle';
 
 type O = Record<string, unknown>;
 
@@ -35,8 +36,8 @@ export const Handle = {
           return handle.isDeleted();
         },
       },
-      change(fn) {
-        handle.change((d: any) => fn(d));
+      change(fn, options) {
+        handle.change((d: any) => fn(d), Wrangle.changeOptions(options));
       },
       events(dispose$) {
         return eventsFactory<T>(api, { dispose$: [options.dispose$, dispose$] });

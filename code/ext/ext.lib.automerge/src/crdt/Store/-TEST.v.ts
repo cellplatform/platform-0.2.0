@@ -7,7 +7,7 @@ type D = { count?: t.A.Counter };
 describe('Store (base)', async () => {
   const testSetup = () => {
     const store = Store.init();
-    const initial: t.ImmutableNext<D> = (d) => (d.count = new A.Counter(0));
+    const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
     const generator = store.doc.factory<D>(initial);
     return { store, initial, generator } as const;
   };

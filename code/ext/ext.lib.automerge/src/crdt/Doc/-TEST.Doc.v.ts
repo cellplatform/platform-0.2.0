@@ -36,6 +36,21 @@ describe('Doc', async () => {
       expect(doc2.current.count).to.eql(5);
     });
 
+    it('patches callback', async () => {
+      const doc = await factory();
+      const patches: t.Patch[] = [];
+
+      doc.change((d) => d.count++, { patches: (e) => patches.push(...e) });
+      doc.change(
+        (d) => (d.count += 5),
+        (e) => patches.push(...e),
+      );
+
+      expect(patches.length).to.eql(2);
+      expect(patches[0]).to.eql({ action: 'put', path: ['count'], value: 1 });
+      expect(patches[1]).to.eql({ action: 'put', path: ['count'], value: 6 });
+    });
+
     it('toObject ← POJO', async () => {
       const doc = await factory();
       expect(A.isAutomerge(doc.current)).to.eql(true);

@@ -10,7 +10,7 @@ const D = 'automerge:d';
 
 const setup = () => {
   const store = Store.init();
-  const initial: t.ImmutableNext<D> = (d) => (d.count = 0);
+  const initial: t.ImmutableMutator<D> = (d) => (d.count = 0);
   const generator = store.doc.factory<D>(initial);
   return { store, initial, generator } as const;
 };
