@@ -5,7 +5,11 @@ import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Footer } from './-SPEC.ui.footer';
 import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
-type T = { stream?: MediaStream; overlay?: JSX.Element };
+type T = {
+  stream?: MediaStream;
+  overlay?: JSX.Element;
+  spinning?: boolean;
+};
 const initial: T = {};
 
 /**
@@ -94,6 +98,20 @@ export default Dev.describe(name, async (e) => {
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
               signer: {},
+              identity: {
+                spinning: e.state.spinning,
+                onClick: async (e) => {
+                  const fc = e.fc;
+                  console.info(`⚡️ farcaster.identity.onClick`, e);
+
+                  // TEMP - send sample cast 🐷
+                  const spin = (value: boolean) => state.change((d) => (d.spinning = value));
+                  await spin(true);
+                  const payload = { text: 'Hello World 👋' };
+                  await fc.hub.submitCast(payload, fc.fid, fc.signer);
+                  await spin(false);
+                },
+              },
             },
           }}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
