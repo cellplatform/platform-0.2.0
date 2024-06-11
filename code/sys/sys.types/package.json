@@ -10,6 +10,10 @@
     "clean": "tsx ../../../script.node/cmd.clean.ts",
     "tmp": "vitest"
   },
+  "devDependencies": {
+    "@automerge/automerge": "2.2.2",
+    "rxjs": "7.8.1"
+  },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.d.ts",
