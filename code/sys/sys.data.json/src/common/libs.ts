@@ -7,4 +7,4 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { Is, Json, ObjectPath, Time, rx, slug } from 'sys.util';
+export { Delete, Is, Json, ObjectPath, Time, Value, rx, slug } from 'sys.util';

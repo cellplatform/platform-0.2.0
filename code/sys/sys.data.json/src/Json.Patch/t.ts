@@ -18,9 +18,9 @@ export type ArrayPatch = {
   value?: any;
 };
 
-type A = t.ArrayPatch;
+type A = ArrayPatch;
 
-export type Patch = {
+export type PatchTool = {
   toObject<T extends O>(input: any): T;
   toPatchSet(forward?: A | A[], backward?: A | A[]): t.PatchSet;
   isEmpty(patches: t.PatchSet): boolean;

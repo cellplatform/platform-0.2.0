@@ -31,9 +31,8 @@ export function toObject<T extends O>(input: any): T {
  *
  *    This subset of `op` values is what the [immer] state library uses.
  *    https://github.com/immerjs/immer
- *
  */
-export const Patch: t.Patch = {
+export const Patch: t.PatchTool = {
   toObject,
 
   toPatchSet(forward, backward) {

@@ -1,4 +1,4 @@
-import { Patch, rx, slug, type t } from './common';
+import { Delete, Patch, rx, slug, Value, type t } from './common';
 import { defaultEvents } from './PatchState.events';
 
 type O = Record<string, unknown>;
@@ -35,10 +35,15 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
     /**
      * Immutable mutator.
      */
-    change(fn) {
+    change(fn, opt) {
       const e = Patch.change<T>(_current, fn);
       _current = e.after;
       options.onChange?.(e);
+      const callback = wrangle.callback(opt);
+      if (callback) {
+        const patches = e.patches.next.map((op) => wrangle.asPatch(op));
+        callback(patches);
+      }
       $.next(e);
     },
 
@@ -54,3 +59,32 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
   if (options.typename) (state as any).typename = options.typename;
   return state;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  asAction(op: t.PatchOperation['op']): t.Patch['action'] {
+    if (op === 'add') return 'insert';
+    if (op === 'remove') return 'del';
+    if (op === 'replace') return 'put';
+    throw new Error(`op '${op}' not supported`);
+  },
+
+  asPatch(op: t.PatchOperation): t.Patch {
+    const action = wrangle.asAction(op.op);
+    const path = op.path
+      .split('/')
+      .filter(Boolean)
+      .map((v) => Value.toType(v));
+    const value = (op as any).value;
+    return Delete.undefined({ action, path, value }) as t.Patch;
+  },
+
+  callback(options?: t.ImmutableChangeOptions) {
+    if (!options) return;
+    if (typeof options === 'function') return options;
+    if (typeof options.patches === 'function') return options.patches;
+    return;
+  },
+} as const;

@@ -12,11 +12,13 @@ export type {
   EventBus,
   Immutable,
   ImmutableChange,
+  ImmutableChangeOptions,
   ImmutableMutator,
   ImmutableRef,
   Lifecycle,
   Milliseconds,
   NpmPackageJson,
+  Patch,
   UntilObservable,
 } from 'sys.types/src/types';
 

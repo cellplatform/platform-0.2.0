@@ -3,8 +3,8 @@ import { Patch } from '../Json.Patch';
 import { Is, Time, describe, expect, it, rx, slug, type t } from '../test';
 
 describe('PatchState', () => {
-  type T = { label: string };
-  const initial: T = { label: 'foo' };
+  type T = { label: string; list: number[] };
+  const initial: T = { label: 'foo', list: [] };
 
   describe('init', () => {
     it('init: (default)', (e) => {
@@ -58,6 +58,25 @@ describe('PatchState', () => {
       expect(fired[0].before).to.eql({ label: 'foo' });
       expect(fired[0].after).to.eql({ label: 'hello' });
       expect(fired[0].patches.next.length).to.eql(1);
+    });
+
+    it.only('patches (callback option)', () => {
+      const state = PatchState.create(initial);
+      const patches: t.Patch[] = [];
+
+      state.change((draft) => (draft.label = 'hello'), { patches: (e) => patches.push(...e) });
+      state.change(
+        (draft) => {
+          draft.list[0] = 123;
+          draft.list[1] = 456;
+        },
+        (e) => patches.push(...e),
+      );
+
+      expect(patches.length).to.eql(3);
+      expect(patches[0]).to.eql({ action: 'put', path: ['label'], value: 'hello' });
+      expect(patches[1]).to.eql({ action: 'insert', path: ['list', 0], value: 123 });
+      expect(patches[2]).to.eql({ action: 'insert', path: ['list', 1], value: 456 });
     });
   });
 
