@@ -3,11 +3,17 @@ import type { t } from '../common';
 /**
  * Immutable object with mutator change function.
  */
-export type ImmutableNext<T> = (draft: T) => void;
 export type Immutable<T> = {
   readonly current: T;
-  change(fn: ImmutableNext<T>): void;
+  change(fn: ImmutableMutator<T>, options?: ImmutableChangeOptions): void;
 };
+
+/**
+ * Immutable change/mutator functions.
+ */
+export type ImmutableMutator<T> = (draft: T) => void;
+export type ImmutableChangeOptions = ImmutablePatchCallback | { patches?: ImmutablePatchCallback };
+export type ImmutablePatchCallback = (patches: t.Patch[]) => void;
 
 /**
  * A reference handle to an Immutable<T> with
@@ -23,7 +29,11 @@ export type ImmutableRef<T, E> = Immutable<T> & {
  * Generic immutable events observer.
  * See: sys.util → Immutable.events()
  */
-export type ImmutableChange<T> = { readonly before: T; readonly after: T };
 export type ImmutableEvents<T, C extends ImmutableChange<T> = ImmutableChange<T>> = t.Lifecycle & {
   readonly changed$: t.Observable<C>;
+};
+
+export type ImmutableChange<T> = {
+  readonly before: T;
+  readonly after: T;
 };
