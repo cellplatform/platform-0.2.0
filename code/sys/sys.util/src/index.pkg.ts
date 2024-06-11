@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     '@noble/hashes': '1.4.0',
     '@paralleldrive/cuid2': '2.2.2',
+    'fast-json-patch': '3.1.1',
     'pretty-bytes': '6.1.1',
   },
   toString() {

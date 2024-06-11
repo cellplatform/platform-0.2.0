@@ -53,6 +53,7 @@
     "dayjs": "1.11.11",
     "diff": "5.2.0",
     "execa": "9.2.0",
+    "fast-json-patch": "3.1.1",
     "fake-indexeddb": "6.0.0",
     "framer-motion": "11.2.10",
     "fs-extra": "11.2.0",
@@ -140,7 +141,8 @@
     "vite-plugin-wasm": "3.3.0",
     "vitest": "1.6.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "rxjs": "7.8.1"
   },
   "resolutions": {
     "axios": ">=1.7.2",
