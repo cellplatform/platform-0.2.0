@@ -15,9 +15,9 @@ export function events<T>(
    * Override: change handler
    */
   const change = source.change;
-  source.change = (fn) => {
+  source.change = (fn, options) => {
     const before = source.current;
-    change.call(source, fn);
+    change.call(source, fn, options);
     const after = source.current;
     $.next({ before, after });
   };

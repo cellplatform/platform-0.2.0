@@ -11,8 +11,12 @@ describe('Immutable', () => {
       const obj = Immutable.cloner<D>(initial);
       expect(obj.current).to.not.equal(initial);
       expect(obj.current).to.eql({ count: 0 });
-      obj.change((d) => (d.count = 123));
+
+      const patches: t.Patch[] = [];
+      obj.change((d) => (d.count = 123), { patches: (e) => patches.push(...e) });
+
       expect(obj.current).to.eql({ count: 123 });
+      expect(patches).to.eql([{ op: 'replace', path: ['count'], value: 123 }]);
     });
 
     it('custom cloner', () => {
@@ -27,9 +31,15 @@ describe('Immutable', () => {
       expect(count).to.eql(1); // NB: initial clone
       expect(obj.current).to.eql({ count: 0 });
 
-      obj.change((d) => (d.count = 123));
+      const patches: t.Patch[] = [];
+      obj.change(
+        (d) => (d.count = 123),
+        (e) => patches.push(...e),
+      );
+
       expect(obj.current).to.eql({ count: 123 });
       expect(count).to.eql(2);
+      expect(patches).to.eql([{ op: 'replace', path: ['count'], value: 123 }]);
     });
   });
 
@@ -52,6 +62,24 @@ describe('Immutable', () => {
       expect(fired.length).to.eql(1);
       expect(fired[0].before).to.eql({ count: 0 });
       expect(fired[0].after).to.eql({ count: 123 });
+    });
+
+    it('patches (callback)', () => {
+      const obj = Immutable.cloner<D>({ count: 0 });
+      const events = Immutable.events(obj);
+
+      const patches: t.Patch[] = [];
+      const fired: t.ImmutableChange<D>[] = [];
+      events.changed$.subscribe((e) => fired.push(e));
+
+      obj.change(
+        (d) => (d.count = 123),
+        (e) => patches.push(...e),
+      );
+
+      expect(fired.length).to.eql(1);
+      expect(patches.length).to.eql(1);
+      expect(patches[0]).to.eql({ op: 'replace', path: ['count'], value: 123 });
     });
 
     describe('dispose', () => {
