@@ -1,5 +1,7 @@
 import { R, type t } from './common';
 import { compare, type Operation } from 'fast-json-patch';
+import { Value } from '../Value';
+import { Delete } from '../Delete';
 
 /**
  * A simple Immutable<T> implementation using brute-force cloning.
@@ -31,9 +33,21 @@ export function cloner<T>(
  * Helpers
  */
 const wrangle = {
+  asAction(op: Operation['op']): t.Patch['action'] {
+    if (op === 'add') return 'insert';
+    if (op === 'remove') return 'del';
+    if (op === 'replace') return 'put';
+    throw new Error(`op '${op}' not supported`);
+  },
+
   asPatch(op: Operation): t.Patch {
-    const path = op.path.split('/').filter(Boolean);
-    return { ...op, path } as unknown as t.Patch;
+    const path = op.path
+      .split('/')
+      .filter(Boolean)
+      .map((v) => Value.toType(v));
+    const action = wrangle.asAction(op.op);
+    const value = (op as any).value;
+    return Delete.undefined({ action, path, value }) as t.Patch;
   },
 
   patches<T>(prev: T, next: T) {
