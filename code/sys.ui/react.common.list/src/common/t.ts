@@ -10,7 +10,7 @@ export type {
   Disposable,
   Event,
   EventBus,
-  ImmutableNext,
+  ImmutableMutator,
   ImmutableRef,
   Lifecycle,
   UntilObservable,

@@ -12,7 +12,7 @@ export type {
   EventBus,
   Immutable,
   ImmutableChange,
-  ImmutableNext,
+  ImmutableMutator,
   ImmutableRef,
   Lifecycle,
   Milliseconds,

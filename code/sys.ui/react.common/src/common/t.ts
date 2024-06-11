@@ -22,7 +22,7 @@ export type {
   IgnoredResponse,
   ImageBadge,
   Immutable,
-  ImmutableNext,
+  ImmutableMutator,
   ImmutableRef,
   Index,
   JsonMapU,

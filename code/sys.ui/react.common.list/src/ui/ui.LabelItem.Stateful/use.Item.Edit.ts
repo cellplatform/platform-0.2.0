@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, Model, Time, rx, type t } from './common';
 
 type RevertibleItem = t.LabelItem & { _revert?: { label?: string } };
-type ChangeItem = t.ImmutableNext<RevertibleItem>;
-type ChangeList = t.ImmutableNext<t.LabelList>;
+type ChangeItem = t.ImmutableMutator<RevertibleItem>;
+type ChangeList = t.ImmutableMutator<t.LabelList>;
 
 type Args = {
   position: t.LabelItemPosition;
