@@ -15,7 +15,7 @@ export type Namespace<L extends O, N extends string = string> = {
 export type NamespaceManager<N extends string = string> = t.Lifecycle & {
   readonly container: Readonly<NamespaceMap<N>>;
   list<L extends O>(): Namespace<L, N>[];
-  lens<L extends O>(namespace: N, initial: L, options?: { typename?: string }): t.Lens<L>;
+  lens<L extends O>(namespace: N, initial: L): t.Lens<L>;
   events(dispose$?: t.UntilObservable): t.LensEvents<t.NamespaceMap<N>>;
   typed<T extends string>(): NamespaceManager<T>;
 };

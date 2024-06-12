@@ -20,9 +20,8 @@ export type ImmutablePatchCallback = (patches: t.Patch[]) => void;
  * an observable event factory.
  */
 export type ImmutableRef<T, E> = Immutable<T> & {
+  readonly instance: string; // Unique ID of the reference handle.
   events(dispose$?: t.UntilObservable): E;
-  readonly instance: string;
-  readonly typename?: string; // Optional typename (for reflection).
 };
 
 /**

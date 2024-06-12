@@ -6,7 +6,6 @@ type O = Record<string, unknown>;
 type PathInput = t.ObjectPath | (() => t.ObjectPath);
 type Options<R extends O> = {
   init?: t.InitializeLens<R>;
-  typename?: string;
   dispose$?: t.UntilObservable;
 };
 
@@ -80,7 +79,6 @@ export function create<R extends O, L extends O>(
    */
   const api: t.Lens<L> = {
     instance: `crdt:${root.uri}:lens.${slug()}`,
-    typename: args.typename,
 
     /**
      * Current value of the descendent.

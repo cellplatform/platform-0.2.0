@@ -21,7 +21,6 @@ describe('Doc.Lens', () => {
 
       const lens = Doc.Lens.create<TRoot, TChild>(root, path);
       expect(lens.current).to.eql({ count: 0 });
-      expect(lens.typename).to.eql(undefined);
 
       const instance = lens.instance;
       expect(instance.startsWith(`crdt:${root.uri}`)).to.eql(true);
@@ -44,13 +43,6 @@ describe('Doc.Lens', () => {
       expect(lens2.current).to.eql({ count: 123 });
       expect(lens1.current).to.eql({ count: 0, child: { count: 123 } });
       expect(root.current).to.eql({ child: { count: 0, child: { count: 123 } } });
-    });
-
-    it('{ typename } option ← optional typename', async () => {
-      const root = await setup();
-      const typename = 'foo.bar';
-      const lens = Lens.create<TRoot, TChild>(root, path, { typename });
-      expect(lens.typename).to.eql(typename);
     });
 
     it('options: {init} param', async () => {

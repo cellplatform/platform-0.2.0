@@ -192,18 +192,6 @@ describe('Namespace (Lens)', () => {
       expect((doc.current as any).bar).to.eql({ count: 999 });
     });
 
-    it('namespace.lens: type (display typename)', async () => {
-      const doc = await setup();
-      const namespace = Doc.ns<TRoot>(doc, ['ns'], (d) => (d.ns = {}));
-
-      const typename = 'foo.bar';
-      const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
-      const ns2 = namespace.lens<TDoc>('bar', { count: 456 }, { typename });
-
-      expect(ns1.typename).to.eql(undefined);
-      expect(ns2.typename).to.eql(typename);
-    });
-
     it('namespace.lens: from sub-tree (get container → ƒ)', async () => {
       const doc = await setup();
       const namespace = Doc.ns<TRoot>(doc, ['ns'], (d) => (d.ns = {}));

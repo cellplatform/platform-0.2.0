@@ -44,7 +44,7 @@ export const Namespace = {
         });
       },
 
-      lens<L extends O>(namespace: N, initial: L, options: { typename?: string } = {}) {
+      lens<L extends O>(namespace: N, initial: L) {
         if (cache.has(namespace)) return cache.get(namespace) as t.Lens<L>;
 
         // Ensure the namespace {object} exists.
@@ -53,9 +53,8 @@ export const Namespace = {
         }
 
         // Construct the lens.
-        const { typename } = options;
         const subpath = () => [...wrangle.path(path), namespace];
-        const lens = createLens<R, L>(root, subpath, { dispose$, typename });
+        const lens = createLens<R, L>(root, subpath, { dispose$ });
         lens.dispose$.pipe(rx.take(1)).subscribe(() => cache.delete(namespace));
 
         // Finish up.
