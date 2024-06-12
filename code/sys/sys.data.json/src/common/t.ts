@@ -22,6 +22,8 @@ export type {
   ImmutableChangeOptions,
   ImmutableMutator,
   ImmutableRef,
+  Json,
+  JsonMap,
   Lifecycle,
   Milliseconds,
   NpmPackageJson,
