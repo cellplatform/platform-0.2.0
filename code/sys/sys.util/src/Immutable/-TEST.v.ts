@@ -33,11 +33,11 @@ describe('Immutable', () => {
       expect(count).to.eql(2);
     });
 
-    it.only('patches (callback)', () => {
+    it('patches (callback)', () => {
       const initial = { count: 0, list: [] };
       const obj = Immutable.cloner<D>(initial);
 
-      const patches: t.Patch[] = [];
+      const patches: t.Operation[] = [];
       obj.change((d) => (d.count = 123), { patches: (e) => patches.push(...e) });
       obj.change(
         (d) => {
@@ -48,9 +48,9 @@ describe('Immutable', () => {
       );
 
       expect(patches.length).to.eql(3);
-      expect(patches[0]).to.eql({ action: 'put', path: ['count'], value: 123 });
-      expect(patches[1]).to.eql({ action: 'insert', path: ['list', 0], value: 555 });
-      expect(patches[2]).to.eql({ action: 'insert', path: ['list', 9], value: 888 });
+      expect(patches[0]).to.eql({ op: 'replace', path: '/count', value: 123 });
+      expect(patches[1]).to.eql({ op: 'add', path: '/list/0', value: 555 });
+      expect(patches[2]).to.eql({ op: 'add', path: '/list/9', value: 888 });
     });
   });
 
@@ -79,7 +79,7 @@ describe('Immutable', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const events = Immutable.events(obj);
 
-      const patches: t.Patch[] = [];
+      const patches: t.Operation[] = [];
       const fired: t.ImmutableChange<D>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
@@ -90,7 +90,7 @@ describe('Immutable', () => {
 
       expect(fired.length).to.eql(1);
       expect(patches.length).to.eql(1);
-      expect(patches[0]).to.eql({ action: 'replace', path: ['count'], value: 123 });
+      expect(patches[0]).to.eql({ op: 'replace', path: '/count', value: 123 });
     });
 
     describe('dispose', () => {

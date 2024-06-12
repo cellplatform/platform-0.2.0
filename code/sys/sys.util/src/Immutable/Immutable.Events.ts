@@ -1,10 +1,12 @@
 import { rx, type t } from './common';
 
+type P = t.Operation;
+
 /**
  * Generic events for an Immutable<T> object.
  */
 export function events<T>(
-  source: t.Immutable<T>,
+  source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T> {
   const life = rx.lifecycle(dispose$);
