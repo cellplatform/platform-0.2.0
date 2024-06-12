@@ -5,6 +5,11 @@ export type { Observable, Subject } from 'rxjs';
 export type * from './t.Automerge';
 
 /**
+ * @ext
+ */
+export type { PatchState } from 'ext.lib.immer/src/types';
+
+/**
  * @system
  */
 export type {
@@ -32,7 +37,6 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { PatchState } from 'sys.data.json/src/types';
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { TimeDuration } from 'sys.util/src/types';
 

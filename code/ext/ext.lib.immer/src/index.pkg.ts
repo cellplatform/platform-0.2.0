@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.json',
+  name: 'ext.lib.immer',
   version: '0.0.0',
   dependencies: {
     'fast-json-patch': '3.1.1',

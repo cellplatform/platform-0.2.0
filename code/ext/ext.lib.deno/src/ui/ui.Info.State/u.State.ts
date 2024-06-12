@@ -2,7 +2,7 @@ import { type t } from './common';
 import { Wrangle } from './u.Wrangle';
 
 type C = t.DenoHttpClient;
-type S = t.Immutable<t.InfoData>;
+type S = t.Immutable<t.InfoData, t.PatchOperation>;
 
 /**
  * Helpers for calling the HTTP client and updating an immutable state object.

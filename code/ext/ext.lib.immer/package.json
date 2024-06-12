@@ -1,5 +1,5 @@
 {
-  "name": "sys.data.json",
+  "name": "ext.lib.immer",
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,

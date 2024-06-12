@@ -1,4 +1,9 @@
 /**
+ * @ext
+ */
+export type { PatchOperation } from 'ext.lib.immer/src/types';
+
+/**
  * @system
  */
 export type {

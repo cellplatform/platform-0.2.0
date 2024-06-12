@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { PatchState, R, type t, Time } from '../common';
+import { PatchState, R, type t } from '../common';
 
 type O = Record<string, unknown>;
 type State<T extends O> = { data: T };
@@ -75,7 +75,7 @@ const wrangle = {
     return PatchState.create<State<T>>({ data });
   },
 
-  state<T extends O>(proxy: t.PatchState<State<T>>): t.Immutable<T> {
+  state<T extends O>(proxy: t.PatchState<State<T>>): t.Immutable<T, t.PatchOperation> {
     return {
       change: (fn) => proxy.change((d) => fn(d.data)),
       get current() {

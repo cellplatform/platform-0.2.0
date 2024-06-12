@@ -4,7 +4,7 @@ import { DEFAULTS, DenoHttp, PatchState, R, type t } from './common';
  * Helpers
  */
 export const Wrangle = {
-  state(initial: t.InfoData = {}): t.Immutable<t.InfoData> {
+  state(initial: t.InfoData = {}): t.Immutable<t.InfoData, t.PatchOperation> {
     return PatchState.create(initial);
   },
 

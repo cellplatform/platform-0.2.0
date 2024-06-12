@@ -4,6 +4,16 @@
 export type { Observable } from 'rxjs';
 
 /**
+ * @ext
+ */
+export type {
+  PatchChange,
+  PatchChangeHandler,
+  PatchOperation,
+  PatchState,
+} from 'ext.lib.immer/src/types';
+
+/**
  * @system
  */
 export type {
@@ -15,13 +25,6 @@ export type {
   Lifecycle,
   UntilObservable,
 } from 'sys.types/src/types';
-
-export type {
-  PatchChange,
-  PatchChangeHandler,
-  PatchOperation,
-  PatchState,
-} from 'sys.data.json/src/types';
 
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 

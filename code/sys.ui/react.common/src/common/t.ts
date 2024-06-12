@@ -5,6 +5,16 @@ export type { CSSProperties } from 'react';
 export type { Observable, Subject } from 'rxjs';
 
 /**
+ * @ext
+ */
+export type {
+  PatchChange,
+  PatchChangeHandler,
+  PatchOperation,
+  PatchState,
+} from 'ext.lib.immer/src/types';
+
+/**
  * @system
  */
 export type {
@@ -46,8 +56,9 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { PatchChange, PatchChangeHandler, PatchState } from 'sys.data.json/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';
+export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
+
 export type {
   BundleImport,
   SpecImport,
@@ -59,7 +70,6 @@ export type {
   TestSuiteRunResponse,
   TestSuiteRunStats,
 } from 'sys.test.spec/src/types';
-export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 
 /**
  * @system → UI
@@ -100,6 +110,7 @@ export type {
   ModuleListItemVisibilityHandler,
   ModuleListScrollTarget,
 } from 'sys.ui.react.dev/src/types';
+
 export type {
   UseMouseDragHandler,
   UseMouseMovement,

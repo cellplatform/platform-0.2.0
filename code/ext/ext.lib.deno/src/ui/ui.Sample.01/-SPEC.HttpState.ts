@@ -9,19 +9,21 @@ export type TState = {
   };
 };
 
+export type TImmutableState = t.Immutable<TState, t.PatchOperation>;
+
 export const HttpState = {
-  client(state: t.Immutable<TState>) {
+  client(state: TImmutableState) {
     const forcePublic = state.current.forcePublicUrl;
     return DenoHttp.client({ forcePublic });
   },
 
-  async updateProjects(state: t.Immutable<TState>) {
+  async updateProjects(state: TImmutableState) {
     const client = HttpState.client(state);
     const res = await client.projects.list({ sort: 'name' });
     state.change((d) => (d.deno.projects = res.projects));
   },
 
-  async updateDeployments(state: t.Immutable<TState>) {
+  async updateDeployments(state: TImmutableState) {
     const client = HttpState.client(state);
     const projectId = state.current.deno.selectedProject;
     if (projectId) {
