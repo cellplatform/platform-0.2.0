@@ -9,6 +9,7 @@ export type InitializeLens<T> = (doc: T) => void;
  * Lens for operating on a sub-tree within a CRDT.
  */
 export type Lens<L extends O = O> = t.ImmutableRef<L, LensEvents<L>> & {
+  readonly typename?: string;
   lens<T extends O>(path: t.ObjectPath, init?: InitializeLens<L>): Lens<NonUndefined<T>>; // NB: type hack to ensure T is not undefined.
   toObject(): L;
 } & t.Lifecycle;
