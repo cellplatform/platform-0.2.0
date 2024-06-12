@@ -628,7 +628,7 @@ describe('LabelItem.Model', () => {
   });
 
   describe('Model.data', () => {
-    type StateRef = t.ImmutableRef<any, any>;
+    type StateRef = t.ImmutableRef<any, any, any>;
 
     it('field undefined (by default)', () => {
       const item = Model.Item.state();

@@ -25,7 +25,8 @@ export type LabelItem<A extends K = string, D extends O = O> = {
  */
 export type LabelItemState<A extends K = string, D extends O = O> = t.ImmutableRef<
   t.LabelItem<A, D>,
-  t.LabelItemEvents<A, D>
+  t.LabelItemEvents<A, D>,
+  t.PatchOperation
 > & { typename?: string };
 
 /**
