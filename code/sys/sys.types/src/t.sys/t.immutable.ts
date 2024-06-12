@@ -1,25 +1,30 @@
 import type { t } from '../common';
 
+type O = Record<string, unknown>;
+
 /**
  * Immutable object with mutator change function.
  */
-export type Immutable<T> = {
+export type Immutable<T, P = O> = {
   readonly current: T;
-  change(fn: ImmutableMutator<T>, options?: ImmutableChangeOptions): void;
+  change(fn: ImmutableMutator<T>, options?: ImmutableChangeOptions<P>): void;
 };
 
 /**
  * Immutable change/mutator functions.
  */
 export type ImmutableMutator<T> = (draft: T) => void;
-export type ImmutableChangeOptions = ImmutablePatchCallback | { patches?: ImmutablePatchCallback };
-export type ImmutablePatchCallback = (patches: t.Patch[]) => void;
+
+export type ImmutablePatchCallback<P> = (patches: P[]) => void;
+export type ImmutableChangeOptions<P> =
+  | ImmutablePatchCallback<P>
+  | { patches?: ImmutablePatchCallback<P> };
 
 /**
  * A reference handle to an Immutable<T> with
  * an observable event factory.
  */
-export type ImmutableRef<T, E> = Immutable<T> & {
+export type ImmutableRef<T, E, P = O> = Immutable<T, P> & {
   readonly instance: string; // Unique ID of the reference handle.
   events(dispose$?: t.UntilObservable): E;
 };

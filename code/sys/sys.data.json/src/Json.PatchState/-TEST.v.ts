@@ -3,31 +3,26 @@ import { Patch } from '../Json.Patch';
 import { Is, Time, describe, expect, it, rx, slug, type t } from '../test';
 
 describe('PatchState', () => {
-  type T = { label: string; list: number[] };
-  const initial: T = { label: 'foo', list: [] };
+  type T = { label: string; list?: number[] };
 
   describe('init', () => {
     it('init: (default)', (e) => {
+      const initial: T = { label: 'foo', list: [] };
       const state = PatchState.create<T>(initial);
       const value = state.current;
       expect(value).to.eql(initial);
       expect(state.current).to.equal(value); // NB: no change, same instance.
     });
 
-    it('init: specified {initial}', (e) => {
-      const state = PatchState.create(initial);
-      const value = state.current;
-      expect(value).to.eql({ label: 'foo' });
-      expect(state.current).to.equal(value); // NB: no change, same instance.
-    });
-
     it('init: instance { id }', (e) => {
+      const initial: T = { label: 'foo' };
       const state1 = PatchState.create(initial);
       const state2 = PatchState.create(initial);
       expect(state1.instance).to.not.eql(state2.instance);
     });
 
     it('init: <typename>', () => {
+      const initial: T = { label: 'foo' };
       const typename = 'foo.bar';
       const state1 = PatchState.create(initial);
       const state2 = PatchState.create(initial, { typename });
@@ -38,6 +33,7 @@ describe('PatchState', () => {
 
   describe('change', () => {
     it('change', (e) => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create(initial);
       const before = state.current;
       state.change((draft) => (draft.label = 'hello'));
@@ -49,6 +45,7 @@ describe('PatchState', () => {
     });
 
     it('onChange (callback → patches)', (e) => {
+      const initial: T = { label: 'foo' };
       const fired: t.PatchChange<T>[] = [];
       const state = PatchState.create(initial, { onChange: (e) => fired.push(e) });
       state.change((draft) => (draft.label = 'hello'));
@@ -60,28 +57,30 @@ describe('PatchState', () => {
       expect(fired[0].patches.next.length).to.eql(1);
     });
 
-    it.only('patches (callback option)', () => {
+    it('patches (callback option)', () => {
+      const initial: T = { label: 'foo', list: [] };
       const state = PatchState.create(initial);
-      const patches: t.Patch[] = [];
+      const patches: t.PatchOperation[] = [];
 
       state.change((draft) => (draft.label = 'hello'), { patches: (e) => patches.push(...e) });
       state.change(
         (draft) => {
-          draft.list[0] = 123;
-          draft.list[1] = 456;
+          draft.list![0] = 123;
+          draft.list![1] = 456;
         },
         (e) => patches.push(...e),
       );
 
       expect(patches.length).to.eql(3);
-      expect(patches[0]).to.eql({ action: 'put', path: ['label'], value: 'hello' });
-      expect(patches[1]).to.eql({ action: 'insert', path: ['list', 0], value: 123 });
-      expect(patches[2]).to.eql({ action: 'insert', path: ['list', 1], value: 456 });
+      expect(patches[0]).to.eql({ op: 'replace', path: '/label', value: 'hello' });
+      expect(patches[1]).to.eql({ op: 'add', path: '/list/0', value: 123 });
+      expect(patches[2]).to.eql({ op: 'add', path: '/list/1', value: 456 });
     });
   });
 
   describe('events → default', () => {
     it('distinct instances', () => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create(initial);
       const events1 = state.events();
       const events2 = state.events();
@@ -89,6 +88,7 @@ describe('PatchState', () => {
     });
 
     it('fires patch/change event', () => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const events = state.events();
@@ -103,6 +103,7 @@ describe('PatchState', () => {
     });
 
     it('dispose() ← via method', () => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const events = state.events();
@@ -113,6 +114,7 @@ describe('PatchState', () => {
     });
 
     it('dispose$ ← via observable', () => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create(initial);
       const fired: t.PatchChange<T>[] = [];
       const dispose$ = rx.subject();
@@ -148,6 +150,7 @@ describe('PatchState', () => {
         return exampleFactory($, dispose$);
       };
 
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T, E>(initial, { events });
       const res = state.events();
 
@@ -162,6 +165,7 @@ describe('PatchState', () => {
 
     it('dispose', () => {
       const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T, E>(initial, { events });
 
       const dispose$ = rx.subject();
@@ -174,6 +178,7 @@ describe('PatchState', () => {
 
     it('change$', () => {
       const events: TFactory = ($, dispose$) => exampleFactory($, dispose$);
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T, E>(initial, { events });
       const res = state.events();
 
@@ -199,6 +204,7 @@ describe('PatchState', () => {
     });
 
     it('Is.state ← true', () => {
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T>(initial);
       expect(PatchState.Is.state(state)).to.eql(true);
     });
@@ -211,12 +217,14 @@ describe('PatchState', () => {
 
     it('Is.type ← true', () => {
       const typename = 'foo.bar';
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T>(initial, { typename });
       expect(PatchState.Is.type(state, typename)).to.eql(true);
     });
 
     it('Is.type ← false', () => {
       const type = 'foo.bar';
+      const initial: T = { label: 'foo' };
       const state = PatchState.create<T>(initial);
       expect(PatchState.Is.type(state, type)).to.eql(false); // NB: no "type" field.
       [undefined, null, {}, [], '', 123, true].forEach((value) => {

@@ -85,14 +85,13 @@ export const Patch: t.PatchTool = {
 
   apply<T extends O>(from: T, patches: t.PatchOperation[] | t.PatchSet) {
     const changes = (Array.isArray(patches) ? patches : patches.next).map(toArrayPatch);
-    return applyPatches(from, changes);
+    return applyPatches(from, changes as any); // NB: type hack.
   },
 };
 
 /**
  * [Helpers]
  */
-
 const isEmptyArray = (input: any) => (Array.isArray(input) ? input.length === 0 : true);
 
 const toArrayPatch = (input: t.PatchOperation): t.ArrayPatch => {
@@ -106,11 +105,11 @@ const toArrayPatch = (input: t.PatchOperation): t.ArrayPatch => {
 };
 
 const toPatch = (input: t.ArrayPatch): t.PatchOperation => {
-  const hasForwardSlash = input.path.some((part) => {
+  const hasSlash = input.path.some((part) => {
     return typeof part === 'string' ? part.includes('/') : false;
   });
 
-  if (hasForwardSlash) {
+  if (hasSlash) {
     const path = input.path
       .map((part) => (typeof part === 'string' ? `'${part}'` : part))
       .join(',');
@@ -118,7 +117,8 @@ const toPatch = (input: t.ArrayPatch): t.PatchOperation => {
     throw new Error(err);
   }
 
-  return { ...input, path: input.path.join('/') };
+  const path = `${input.path.join('/')}`;
+  return { ...input, path } as t.PatchOperation;
 };
 
 const toPatches = (input: t.ArrayPatch | t.ArrayPatch[]): t.PatchOperation[] => {

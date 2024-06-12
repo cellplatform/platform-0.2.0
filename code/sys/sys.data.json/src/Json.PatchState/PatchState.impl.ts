@@ -1,7 +1,8 @@
-import { Delete, Patch, rx, slug, Value, type t } from './common';
+import { Patch, rx, slug, type t } from './common';
 import { defaultEvents } from './PatchState.events';
 
 type O = Record<string, unknown>;
+type P = t.PatchOperation;
 
 /**
  * Initialize a new [PatchState] object.
@@ -40,10 +41,7 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
       _current = e.after;
       options.onChange?.(e);
       const callback = wrangle.callback(opt);
-      if (callback) {
-        const patches = e.patches.next.map((op) => wrangle.asPatch(op));
-        callback(patches);
-      }
+      callback?.(wrangle.formatPatches(e.patches.next));
       $.next(e);
     },
 
@@ -64,27 +62,18 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
  * Helpers
  */
 const wrangle = {
-  asAction(op: t.PatchOperation['op']): t.Patch['action'] {
-    if (op === 'add') return 'insert';
-    if (op === 'remove') return 'del';
-    if (op === 'replace') return 'put';
-    throw new Error(`op '${op}' not supported`);
-  },
-
-  asPatch(op: t.PatchOperation): t.Patch {
-    const action = wrangle.asAction(op.op);
-    const path = op.path
-      .split('/')
-      .filter(Boolean)
-      .map((v) => Value.toType(v));
-    const value = (op as any).value;
-    return Delete.undefined({ action, path, value }) as t.Patch;
-  },
-
-  callback(options?: t.ImmutableChangeOptions) {
+  callback(options?: t.ImmutableChangeOptions<P>) {
     if (!options) return;
     if (typeof options === 'function') return options;
     if (typeof options.patches === 'function') return options.patches;
     return;
+  },
+
+  formatPatches(patches: t.PatchOperation[]) {
+    // NB: the leading "/" is a part of the RFC-6902 JSON patch standard.
+    //     but not present on the immer patches.
+    //     Fire the patch standards based paths out of the callback.
+    const formatPath = (path: string) => `/${path.replace(/^\/+/, '')}`;
+    return patches.map((patch) => ({ ...patch, path: formatPath(patch.path) }));
   },
 } as const;

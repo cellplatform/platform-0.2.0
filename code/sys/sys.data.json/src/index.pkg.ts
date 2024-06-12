@@ -13,6 +13,8 @@ export const Pkg: ModuleDef = {
   name: 'sys.data.json',
   version: '0.0.0',
   dependencies: {
+    'fast-json-patch': '3.1.1',
+    'immer': '10.1.1',
     'sys.util': '0.0.0',
   },
   toString() {

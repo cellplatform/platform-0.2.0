@@ -4,6 +4,13 @@
 export type { Observable } from 'rxjs';
 
 /**
+ * Standard:
+ *    RFC-6902 JSON patch standard
+ *    https://tools.ietf.org/html/rfc6902
+ */
+export type { Operation as PatchOperation } from 'fast-json-patch';
+
+/**
  * @system
  */
 export type {
@@ -18,7 +25,7 @@ export type {
   Lifecycle,
   Milliseconds,
   NpmPackageJson,
-  Patch,
+  ObjectPath,
   UntilObservable,
 } from 'sys.types/src/types';
 
