@@ -3,6 +3,7 @@ import { Registry } from './Lens.Registry';
 import { Is, ObjectPath, Symbols, Wrangle, rx, slug, toObject, type t } from './common';
 
 type O = Record<string, unknown>;
+type P = t.Patch;
 type PathInput = t.ObjectPath | (() => t.ObjectPath);
 type Options<R extends O> = {
   init?: t.InitializeLens<R>;
@@ -194,11 +195,11 @@ const wrangle = {
     return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
   },
 
-  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptions) {
+  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptions<P>) {
     const fn = Wrangle.patchCallback(options);
     if (!fn) return;
 
-    const res: t.ImmutableChangeOptions = {
+    const res: t.ImmutableChangeOptions<P> = {
       patches(e) {
         fn(wrangle.patches(e, wrangle.path(path)));
       },

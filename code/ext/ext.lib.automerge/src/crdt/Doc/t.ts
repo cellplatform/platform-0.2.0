@@ -2,6 +2,7 @@ import type { t } from './common';
 export type * from './t.Events';
 
 type O = Record<string, unknown>;
+type P = t.Patch;
 type Uri = t.DocUri | t.UriString;
 type Init<T> = t.ImmutableMutator<T>;
 
@@ -13,7 +14,7 @@ export type DocUri = t.AutomergeUrl;
 /**
  * An immutable/observable CRDT document reference.
  */
-export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>> & {
+export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
   readonly uri: t.DocUri;
   readonly is: { ready: boolean; deleted: boolean };
   toObject(): T;

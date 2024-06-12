@@ -1,6 +1,7 @@
 import type { t } from '../common';
 
 type O = Record<string, unknown>;
+type P = t.Patch;
 type NonUndefined<T> = T extends undefined ? never : T;
 
 export type InitializeLens<T> = (doc: T) => void;
@@ -8,7 +9,7 @@ export type InitializeLens<T> = (doc: T) => void;
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export type Lens<L extends O = O> = t.ImmutableRef<L, LensEvents<L>> & {
+export type Lens<L extends O = O> = t.ImmutableRef<L, LensEvents<L>, P> & {
   lens<T extends O>(path: t.ObjectPath, init?: InitializeLens<L>): Lens<NonUndefined<T>>; // NB: type hack to ensure T is not undefined.
   toObject(): L;
 } & t.Lifecycle;
