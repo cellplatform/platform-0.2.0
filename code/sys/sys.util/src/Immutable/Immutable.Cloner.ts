@@ -1,7 +1,7 @@
 import { compare } from 'fast-json-patch';
 import { R, type t } from './common';
 
-type P = t.Operation;
+type P = t.PatchOperation;
 
 /**
  * A simple Immutable<T> implementation using brute-force cloning.

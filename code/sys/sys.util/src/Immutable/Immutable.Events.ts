@@ -1,6 +1,6 @@
 import { rx, type t } from './common';
 
-type P = t.Operation;
+type P = t.PatchOperation;
 
 /**
  * Generic events for an Immutable<T> object.
