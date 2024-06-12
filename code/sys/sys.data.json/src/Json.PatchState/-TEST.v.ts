@@ -2,6 +2,8 @@ import { PatchState } from '.';
 import { Patch } from '../Json.Patch';
 import { Is, Time, describe, expect, it, rx, slug, type t } from '../test';
 
+import jsonpatch from 'fast-json-patch';
+
 describe('PatchState', () => {
   type T = { label: string; list?: number[] };
 
@@ -75,6 +77,24 @@ describe('PatchState', () => {
       expect(patches[0]).to.eql({ op: 'replace', path: '/label', value: 'hello' });
       expect(patches[1]).to.eql({ op: 'add', path: '/list/0', value: 123 });
       expect(patches[2]).to.eql({ op: 'add', path: '/list/1', value: 456 });
+    });
+
+    it('replay patches (RFC-6902 JSON patch)', async () => {
+      const initial: T = { label: 'foo', list: [] };
+      const state = PatchState.create(initial);
+      const patches: t.PatchOperation[] = [];
+
+      state.change(
+        (draft) => {
+          draft.label = 'hello';
+          draft.list![0] = 123;
+          draft.list![1] = 456;
+        },
+        (e) => patches.push(...e),
+      );
+
+      const res = jsonpatch.applyPatch({ list: [] }, patches).newDocument;
+      expect(res).to.eql({ label: 'hello', list: [123, 456] });
     });
   });
 
