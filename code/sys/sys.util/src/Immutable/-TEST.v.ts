@@ -37,7 +37,7 @@ describe('Immutable', () => {
       const initial = { count: 0, list: [] };
       const obj = Immutable.cloner<D>(initial);
 
-      const patches: t.Operation[] = [];
+      const patches: t.PatchOperation[] = [];
       obj.change((d) => (d.count = 123), { patches: (e) => patches.push(...e) });
       obj.change(
         (d) => {
@@ -79,7 +79,7 @@ describe('Immutable', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const events = Immutable.events(obj);
 
-      const patches: t.Operation[] = [];
+      const patches: t.PatchOperation[] = [];
       const fired: t.ImmutableChange<D>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
