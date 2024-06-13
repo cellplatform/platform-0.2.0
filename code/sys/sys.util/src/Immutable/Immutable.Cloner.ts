@@ -1,5 +1,5 @@
-import { compare } from 'fast-json-patch';
 import { R, type t } from './common';
+import { Wrangle } from './u';
 
 type P = t.PatchOperation;
 
@@ -24,23 +24,7 @@ export function cloner<T>(
       const next = clone(_current);
       fn(next);
       _current = next;
-      wrangle.callback(options)?.(wrangle.patches(prev, next));
+      Wrangle.callback(options)?.(Wrangle.patches(prev, next));
     },
   };
 }
-
-/**
- * Helpers
- */
-const wrangle = {
-  patches<T>(prev: T, next: T) {
-    return compare(prev as Object, next as Object);
-  },
-
-  callback(options?: t.ImmutableChangeOptions<P>) {
-    if (!options) return;
-    if (typeof options === 'function') return options;
-    if (typeof options.patches === 'function') return options.patches;
-    return;
-  },
-} as const;

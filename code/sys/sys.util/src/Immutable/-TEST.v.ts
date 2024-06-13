@@ -3,6 +3,7 @@ import { describe, expect, it, type t } from '../test';
 import { rx } from './common';
 
 describe('Immutable', () => {
+  type P = t.PatchOperation;
   type D = { count: number; list?: number[] };
 
   describe('Immutable.cloner', () => {
@@ -25,7 +26,7 @@ describe('Immutable', () => {
       const initial = { count: 0 };
       const obj = Immutable.cloner<D>({ count: 0 }, { clone });
       expect(obj.current).to.not.equal(initial);
-      expect(count).to.eql(1); // NB: initial clone
+      expect(count).to.eql(1); // NB: initial clone.
       expect(obj.current).to.eql({ count: 0 });
 
       obj.change((d) => (d.count = 123));
@@ -66,7 +67,7 @@ describe('Immutable', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const events = Immutable.events(obj);
 
-      const fired: t.ImmutableChange<D>[] = [];
+      const fired: t.ImmutableChange<D, P>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       obj.change((d) => (d.count = 123));
@@ -75,12 +76,12 @@ describe('Immutable', () => {
       expect(fired[0].after).to.eql({ count: 123 });
     });
 
-    it('patches (callback) matches fired event', () => {
+    it('patches: matches fired event', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const events = Immutable.events(obj);
 
       const patches: t.PatchOperation[] = [];
-      const fired: t.ImmutableChange<D>[] = [];
+      const fired: t.ImmutableChange<D, P>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
 
       obj.change(
@@ -90,14 +91,16 @@ describe('Immutable', () => {
 
       expect(fired.length).to.eql(1);
       expect(patches.length).to.eql(1);
+      expect(patches.length).to.eql(1);
       expect(patches[0]).to.eql({ op: 'replace', path: '/count', value: 123 });
+      expect(fired[0].patches[0]).to.eql(patches[0]);
     });
 
     describe('dispose', () => {
       it('via method', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj);
-        const fired: t.ImmutableChange<D>[] = [];
+        const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         events.dispose();
         expect(events.disposed).to.eql(true);
@@ -111,7 +114,7 @@ describe('Immutable', () => {
         const life = rx.lifecycle();
         const obj = Immutable.cloner<D>({ count: 0 });
         const events = Immutable.events(obj, life.dispose$);
-        const fired: t.ImmutableChange<D>[] = [];
+        const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         life.dispose();
         expect(events.disposed).to.eql(true);

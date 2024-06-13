@@ -1,4 +1,5 @@
 import { rx, type t } from './common';
+import { Wrangle } from './u';
 
 type P = t.PatchOperation;
 
@@ -8,9 +9,9 @@ type P = t.PatchOperation;
 export function events<T>(
   source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
-): t.ImmutableEvents<T> {
+): t.ImmutableEvents<T, P> {
   const life = rx.lifecycle(dispose$);
-  const $ = rx.subject<t.ImmutableChange<T>>();
+  const $ = rx.subject<t.ImmutableChange<T, P>>();
   life.dispose$.subscribe(() => (source.change = change));
 
   /**
@@ -19,9 +20,19 @@ export function events<T>(
   const change = source.change;
   source.change = (fn, options) => {
     const before = source.current;
-    change.call(source, fn, options);
+
+    const callback = Wrangle.callback(options);
+    let patches: P[] = [];
+    change.call(source, fn, {
+      ...options,
+      patches(e) {
+        patches = e;
+        callback?.(e);
+      },
+    });
+
     const after = source.current;
-    $.next({ before, after });
+    $.next({ before, after, patches });
   };
 
   /**
