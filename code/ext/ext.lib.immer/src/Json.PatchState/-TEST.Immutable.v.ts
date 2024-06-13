@@ -4,6 +4,7 @@ import { describe, expect, it, type t } from '../test';
 
 describe('Immutable.events', () => {
   type D = { count: number };
+  type P = t.PatchOperation;
 
   it('fires events by overriding change handler', () => {
     const obj = PatchState.create<D>({ count: 0 });
@@ -13,7 +14,7 @@ describe('Immutable.events', () => {
     expect(obj.change).to.not.equal(change);
 
     const fired1: t.PatchChange<D>[] = [];
-    const fired2: t.ImmutableChange<D>[] = [];
+    const fired2: t.ImmutableChange<D, P>[] = [];
     events1.$.subscribe((e) => fired1.push(e));
     events2.changed$.subscribe((e) => fired2.push(e));
 

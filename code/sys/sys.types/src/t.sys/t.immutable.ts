@@ -31,11 +31,14 @@ export type ImmutableRef<T, E = unknown, P = unknown> = Immutable<T, P> & {
  * Generic immutable events observer.
  * See: sys.util → Immutable.events()
  */
-export type ImmutableEvents<T, C extends ImmutableChange<T> = ImmutableChange<T>> = t.Lifecycle & {
-  readonly changed$: t.Observable<C>;
-};
+export type ImmutableEvents<
+  T,
+  P,
+  C extends ImmutableChange<T, P> = ImmutableChange<T, P>,
+> = t.Lifecycle & { readonly changed$: t.Observable<C> };
 
-export type ImmutableChange<T> = {
+export type ImmutableChange<T, P> = {
   readonly before: T;
   readonly after: T;
+  readonly patches: P[];
 };

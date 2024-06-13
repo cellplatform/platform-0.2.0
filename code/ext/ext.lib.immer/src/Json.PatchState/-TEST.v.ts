@@ -253,6 +253,10 @@ describe('PatchState', () => {
     });
   });
 
+  /**
+   * TODO 🐷
+   * Note (Obsolete): This should be replaced with the [sys.cmd] library.
+   */
   describe('Command (Dispatcher)', () => {
     type Cmd = OneCmd | TwoCmd;
 
