@@ -1,13 +1,13 @@
 import type { t } from './common';
 
 type O = Record<string, unknown>;
+type P = t.Patch;
 
 /**
  * Event API
  */
-export type DocEvents<T extends O = O> = t.Lifecycle & {
+export type DocEvents<T extends O = O> = t.ImmutableEvents<T, P, DocChanged<T>> & {
   readonly $: t.Observable<t.DocEvent<T>>;
-  readonly changed$: t.Observable<t.DocChanged<T>>;
   readonly deleted$: t.Observable<t.DocDeleted<T>>;
   readonly ephemeral: DocEventsEphemeral<T>;
 };
