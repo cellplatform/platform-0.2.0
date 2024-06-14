@@ -1,4 +1,9 @@
+/**
+ * @external
+ */
 export type { Observable } from 'rxjs';
-export type { Patch } from '@automerge/automerge';
 
+/**
+ * @internal
+ */
 export type * from '../types';

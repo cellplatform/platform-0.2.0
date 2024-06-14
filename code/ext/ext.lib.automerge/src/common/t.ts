@@ -29,7 +29,6 @@ export type {
   Lifecycle,
   Msecs,
   ObjectPath,
-  Patch,
   SortOrder,
   TypedObjectPath,
   UnixTimestamp,
