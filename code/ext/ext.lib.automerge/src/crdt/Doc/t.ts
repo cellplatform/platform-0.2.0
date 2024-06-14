@@ -16,7 +16,7 @@ export type DocUri = t.AutomergeUrl;
  */
 export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
   readonly uri: t.DocUri;
-  readonly is: { ready: boolean; deleted: boolean };
+  readonly is: { readonly ready: boolean; readonly deleted: boolean };
   toObject(): T;
 };
 
