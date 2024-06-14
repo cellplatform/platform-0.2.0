@@ -46,13 +46,9 @@ export type DocChangedEvent<T extends O> = {
   type: 'crdt:doc/Changed';
   payload: DocChanged<T>;
 };
-
-export type DocChanged<T extends O = O> = {
+export type DocChanged<T extends O = O> = t.ImmutableChange<T, P> & {
   uri: t.UriString;
-  before: T;
-  after: T;
   source: t.PatchSource;
-  patches: t.Patch[];
 };
 
 /**
