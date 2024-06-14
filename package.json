@@ -37,7 +37,7 @@
     "@onsetsoftware/automerge-patcher": "0.13.0",
     "@paralleldrive/cuid2": "2.2.2",
     "@preact/signals-react": "2.0.2",
-    "@privy-io/react-auth": "1.71.0",
+    "@privy-io/react-auth": "1.69.0",
     "@standard-crypto/farcaster-js": "7.4.0",
     "@tauri-apps/api": "1.5.6",
     "@tauri-apps/cli": "1.5.14",
