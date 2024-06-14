@@ -1,6 +1,11 @@
 import { rx, type t } from './common';
 import { Wrangle } from './u';
 
+/**
+ * Change Patch Standard:
+ *    RFC-6902 JSON patch standard
+ *    https://tools.ietf.org/html/rfc6902
+ */
 type P = t.PatchOperation;
 
 /**

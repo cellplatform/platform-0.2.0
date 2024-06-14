@@ -29,7 +29,10 @@ export type ImmutableRef<T, E = unknown, P = unknown> = Immutable<T, P> & {
 
 /**
  * Generic immutable events observer.
- * See: sys.util → Immutable.events()
+ *
+ * See example reference implementation in:
+ *   sys.util → Immutable.events(💥):💦
+ *
  */
 export type ImmutableEvents<
   T,
