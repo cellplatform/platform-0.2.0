@@ -40,6 +40,9 @@ export type ImmutableEvents<
   C extends ImmutableChange<T, P> = ImmutableChange<T, P>,
 > = t.Lifecycle & { readonly changed$: t.Observable<C> };
 
+/**
+ * Represents a before/after patched change to the immutable state.
+ */
 export type ImmutableChange<T, P> = {
   readonly before: T;
   readonly after: T;
