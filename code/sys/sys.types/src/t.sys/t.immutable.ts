@@ -3,15 +3,15 @@ import type { t } from '../common';
 /**
  * Immutable object with mutator change function.
  */
-export type Immutable<T, P = unknown> = {
-  readonly current: T;
-  change(fn: ImmutableMutator<T>, options?: ImmutableChangeOptions<P>): void;
+export type Immutable<D, P = unknown> = {
+  readonly current: D;
+  change(fn: ImmutableMutator<D>, options?: ImmutableChangeOptions<P>): void;
 };
 
 /**
  * Immutable change/mutator functions.
  */
-export type ImmutableMutator<T> = (draft: T) => void;
+export type ImmutableMutator<D> = (draft: D) => void;
 
 export type ImmutablePatchCallback<P> = (patches: P[]) => void;
 export type ImmutableChangeOptions<P> =
@@ -22,7 +22,7 @@ export type ImmutableChangeOptions<P> =
  * A reference handle to an Immutable<T> with
  * an observable event factory.
  */
-export type ImmutableRef<T, E = unknown, P = unknown> = Immutable<T, P> & {
+export type ImmutableRef<D, E = unknown, P = unknown> = Immutable<D, P> & {
   readonly instance: string; // Unique ID of the reference handle.
   events(dispose$?: t.UntilObservable): E;
 };
@@ -35,16 +35,16 @@ export type ImmutableRef<T, E = unknown, P = unknown> = Immutable<T, P> & {
  *
  */
 export type ImmutableEvents<
-  T,
+  D,
   P,
-  C extends ImmutableChange<T, P> = ImmutableChange<T, P>,
+  C extends ImmutableChange<D, P> = ImmutableChange<D, P>,
 > = t.Lifecycle & { readonly changed$: t.Observable<C> };
 
 /**
  * Represents a before/after patched change to the immutable state.
  */
-export type ImmutableChange<T, P> = {
-  readonly before: T;
-  readonly after: T;
+export type ImmutableChange<D, P> = {
+  readonly before: D;
+  readonly after: D;
   readonly patches: P[];
 };
