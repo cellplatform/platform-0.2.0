@@ -17,7 +17,7 @@ export const Is = {
   },
 
   event: {
-    countChange(paths: t.CmdPaths, patches: t.Patch[]) {
+    countChange(paths: t.CmdPaths, patches: t.CmdPatch[]) {
       return patches.some((patch) => Patch.startsWith(patch, paths.counter));
     },
   },

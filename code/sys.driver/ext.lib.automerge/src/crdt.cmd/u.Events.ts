@@ -7,8 +7,10 @@ type Options = {
   dispose$?: t.UntilObservable;
 };
 
+// type AbstractPatch = { path: t.ObjectPath };
+
 type O = Record<string, unknown>;
-type P = t.Patch;
+type P = t.CmdPatch;
 type E = t.ImmutableEvents<O, P>;
 export type ImmutableRef = t.ImmutableRef<O, E, P>;
 

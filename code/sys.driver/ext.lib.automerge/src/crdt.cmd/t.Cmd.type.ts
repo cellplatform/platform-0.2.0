@@ -9,13 +9,16 @@ type U = undefined;
  *
  *    type Add  = CmdType<'add', { a: number; b: number }, AddR>;
  *    type AddR = CmdType<'add:res', { sum: number }>;
+ *
  */
 export type CmdType<
-  N extends S = S,
-  P extends O = O,
-  R extends CmdType | U = U,
-  E extends t.Error = t.Error,
+  N extends S = S, //               ← Name
+  P extends O = O, //               ← Params
+  R extends CmdType | U = U, //     ← Response
+  E extends t.Error = t.Error, //   ← Error
 > = {
   readonly name: N;
   readonly params: P;
 };
+
+export type CmdPatch = { path: t.ObjectPath };
