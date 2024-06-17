@@ -18,7 +18,7 @@ Sample command type definitions:
 ```ts
 type P = { a: number; b: number };
 type R = { sum: number };
-type E = t.CmdError & { code: number; type: 'bounds' };
+type E = { message: string; code: number; type: 'out-of-bounds' };
 
 type C = C1 | C2 | C3;
 type C1 = t.CmdType<'add', P, C2, E>;

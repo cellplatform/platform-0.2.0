@@ -16,6 +16,7 @@ export type {
   CBOR,
   CommonTheme,
   Disposable,
+  Error,
   EventBus,
   HashString,
   IODirection,
