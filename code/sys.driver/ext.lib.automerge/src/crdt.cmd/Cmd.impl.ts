@@ -13,6 +13,7 @@ type Options = { paths?: t.CmdPaths; tx?: TxFactory };
  */
 export function create<C extends t.CmdType>(
   doc: t.DocRef | t.Lens,
+  // doc: t.ImmutableRef<any>,
   options?: OptionsInput,
 ): t.Cmd<C> {
   const mutate = ObjectPath.mutate;
