@@ -20,5 +20,3 @@ export type CmdType<
   readonly name: N;
   readonly params: P;
 };
-
-export type CmdPatch = { path: t.ObjectPath };

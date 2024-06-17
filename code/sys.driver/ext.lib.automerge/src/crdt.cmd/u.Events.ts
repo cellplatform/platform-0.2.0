@@ -7,13 +7,6 @@ type Options = {
   dispose$?: t.UntilObservable;
 };
 
-// type AbstractPatch = { path: t.ObjectPath };
-
-type O = Record<string, unknown>;
-type P = t.CmdPatch;
-type E = t.ImmutableEvents<O, P>;
-export type ImmutableRef = t.ImmutableRef<O, E, P>;
-
 /**
  * Strongly typed events for an abstract CRDT document that has
  * paths within it representing a <Cmd> (Command).
@@ -22,7 +15,7 @@ export const Events = {
   /**
    * Events factory.
    */
-  create<C extends t.CmdType>(doc?: ImmutableRef, options: Options = {}): t.CmdEvents<C> {
+  create<C extends t.CmdType>(doc?: t.CmdImmutableRef, options: Options = {}): t.CmdEvents<C> {
     const resolve = Path.resolver(options.paths);
     const paths = resolve.paths;
 
