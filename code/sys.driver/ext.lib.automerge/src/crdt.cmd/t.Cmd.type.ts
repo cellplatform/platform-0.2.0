@@ -14,7 +14,7 @@ export type CmdType<
   N extends S = S,
   P extends O = O,
   R extends CmdType | U = U,
-  E extends t.CmdError = t.CmdError,
+  E extends t.Error = t.Error,
 > = {
   readonly name: N;
   readonly params: P;

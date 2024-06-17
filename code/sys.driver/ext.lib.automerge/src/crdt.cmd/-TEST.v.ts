@@ -12,7 +12,7 @@ describe('crdt.cmd (Command)', () => {
       expect(Cmd.DEFAULTS).to.eql(DEFAULTS);
       expect(DEFAULTS.counter()).to.instanceOf(A.Counter);
 
-      const error: t.CmdError = { message: '🍌' };
+      const error: t.Error = { message: '🍌' };
       expect(DEFAULTS.error('🍌')).to.eql(error);
     });
 
@@ -159,7 +159,7 @@ describe('crdt.cmd (Command)', () => {
       it('.error', () => {
         const resolve = resolver(DEFAULTS.paths);
 
-        type CustomError = t.CmdError & { type: 'BadDay' };
+        type CustomError = t.Error & { type: 'BadDay' };
         const err1 = DEFAULTS.error('lulz');
         const err2: CustomError = { message: '😞', type: 'BadDay' };
         const obj1: t.CmdPathsObject<C> = {};
@@ -474,7 +474,7 @@ describe('crdt.cmd (Command)', () => {
   describe('Cmd → Response', () => {
     type P = { a: number; b: number };
     type R = { sum: number };
-    type E = t.CmdError & { code: number; type: 'bounds' };
+    type E = t.Error & { code: number; type: 'bounds' };
     type C = C1 | C2 | C3;
     type C1 = t.CmdType<'add', P, C2, E>;
     type C2 = t.CmdType<'add:res', R>;

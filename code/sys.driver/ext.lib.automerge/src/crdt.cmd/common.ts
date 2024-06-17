@@ -19,5 +19,5 @@ export const DEFAULTS = {
   paths,
   tx: () => slug(),
   counter: (initial = 0): t.CmdCounter => new A.Counter(initial),
-  error: (message: string): t.CmdError => ({ message }),
+  error: (message: string): t.Error => ({ message }),
 } as const;

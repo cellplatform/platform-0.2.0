@@ -21,7 +21,7 @@ export function create<C extends t.CmdType>(
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
 
-  const update = (tx: string, name: string, params: O, error?: t.CmdError, increment = false) => {
+  const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
     doc.change((d) => {
       const counter = resolve.counter(d) as t.A.Counter;
       mutate(d, paths.tx, tx);
@@ -38,7 +38,7 @@ export function create<C extends t.CmdType>(
   /**
    * Invoke method (overloads)
    */
-  const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.CmdError) => {
+  const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.Error) => {
     const res: t.CmdInvoked<any> = { tx, req: { name, params } };
     const start = () => Time.delay(0, () => update(tx, name, params, error, true));
     return { res, start } as const;
