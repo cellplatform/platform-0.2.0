@@ -2,6 +2,8 @@ import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
+import type { ImmutableRef } from './u.Events';
+
 type O = Record<string, unknown>;
 type Tx = string;
 type TxFactory = () => Tx;
@@ -11,11 +13,7 @@ type Options = { paths?: t.CmdPaths; tx?: TxFactory };
 /**
  * Command factory.
  */
-export function create<C extends t.CmdType>(
-  doc: t.DocRef | t.Lens,
-  // doc: t.ImmutableRef<any>,
-  options?: OptionsInput,
-): t.Cmd<C> {
+export function create<C extends t.CmdType>(doc: ImmutableRef, options?: OptionsInput): t.Cmd<C> {
   const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
