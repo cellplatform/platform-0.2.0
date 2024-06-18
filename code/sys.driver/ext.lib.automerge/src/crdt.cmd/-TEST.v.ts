@@ -3,7 +3,7 @@ import { Doc, Store } from '../crdt';
 import { Time, describe, expect, it, type t } from '../test';
 import { commandTests, type C } from './Cmd.tests';
 
-const setup = async () => {
+const setup: t.CmdTestSetup = async () => {
   const store = Store.init();
   const { dispose$ } = store;
   const dispose = () => store.dispose();

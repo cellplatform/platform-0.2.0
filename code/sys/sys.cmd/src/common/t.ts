@@ -20,6 +20,7 @@ export type {
 
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type { Describe, Expect, It } from 'sys.test/src/types';
+export type { PatchOperation } from 'sys.util/src/types';
 
 /**
  * @local
