@@ -36,8 +36,11 @@ export function cloner<T>(
 
 /**
  * A simple ImmutableRef<T> implementation using brute-force cloning.
- * NOTE:
+ * NB:
  *    This is simple, BUT NOT performant on large objects.
+ * NB:
+ *    This is used as the default Immutable structure for the [sys.cmd]
+ *    <Cmd> system unit tests.
  */
 export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T } = {}) {
   const immutable = cloner<T>(initial, options);
