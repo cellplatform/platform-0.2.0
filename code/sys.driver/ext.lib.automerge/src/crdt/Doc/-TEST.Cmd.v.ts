@@ -2,7 +2,7 @@ import { Doc, Store } from '..';
 import { Cmd, Time, describe, expect, it, type t } from '../../test';
 
 import { commandTests } from 'sys.cmd';
-import { type C } from 'sys.cmd/src/fn.Cmd/Cmd.tests';
+import type { C } from 'sys.cmd/src/test/Cmd.tests';
 
 const setup: t.CmdTestSetup = async () => {
   const store = Store.init();
