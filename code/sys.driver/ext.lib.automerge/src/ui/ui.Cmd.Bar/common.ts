@@ -1,5 +1,4 @@
-import { Cmd } from '../../crdt.cmd';
-import { Pkg, type t } from './common';
+import { Cmd, Pkg, type t } from '../common';
 
 export { Doc } from '../../crdt';
 export { Sync } from '../../crdt.sync';

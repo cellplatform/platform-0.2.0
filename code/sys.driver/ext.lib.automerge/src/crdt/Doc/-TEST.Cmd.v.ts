@@ -1,7 +1,8 @@
-import { Cmd } from '.';
-import { Doc, Store } from '../crdt';
-import { Time, describe, expect, it, type t } from '../test';
-import { commandTests, type C } from './Cmd.tests';
+import { Doc, Store } from '..';
+import { Cmd, Time, describe, expect, it, type t } from '../../test';
+
+import { commandTests } from 'sys.cmd';
+import { type C } from 'sys.cmd/src/fn.Cmd/Cmd.tests';
 
 const setup: t.CmdTestSetup = async () => {
   const store = Store.init();
@@ -21,7 +22,7 @@ describe('crdt.cmd (Command)', () => {
   /**
    * CRDT/Lens specific tests.
    */
-  describe('Lens', () => {
+  describe('Lens (Command)', () => {
     it('has initial {cmd} structure upon creation', async () => {
       const { doc, dispose } = await setup();
       const lens = Doc.lens(doc as t.DocRef, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));

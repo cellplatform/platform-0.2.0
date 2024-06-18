@@ -7,13 +7,12 @@ export { Pkg };
 /**
  * Library
  */
-export { A, Data, Is, toObject } from './common';
+export { A, Cmd, Data, Is, toObject } from './common';
 
 import { Sync } from './crdt.sync';
 import { Doc } from './crdt/Doc';
 import { Store } from './crdt/Store';
 import { WebStore } from './crdt/Store.Web';
-export { Cmd } from './crdt.cmd';
 
 export { Doc } from './crdt/Doc';
 export { Store } from './crdt/Store';

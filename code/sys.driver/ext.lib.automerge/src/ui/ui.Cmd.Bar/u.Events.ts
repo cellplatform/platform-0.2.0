@@ -20,7 +20,7 @@ export const Events = {
    * <Cmd> object factory for the given document.
    */
   cmd(doc: t.Lens | t.DocRef, paths: t.CmdBarPaths = DEFAULTS.paths) {
-    return Cmd.create<t.CmdBarType>(doc, paths.cmd);
+    return Cmd.create<t.CmdBarType>(doc, paths.cmd) as t.CmdBarCmd;
   },
 
   /**

@@ -27,7 +27,7 @@ export function useController(args: Args) {
   const cmdRef = useRef<t.CmdBarCmd>();
   const getCmd = (doc: t.Lens | t.DocRef) => {
     type C = t.CmdBarType;
-    if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd);
+    if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd) as t.CmdBarCmd;
     return cmdRef.current;
   };
 

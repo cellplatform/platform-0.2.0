@@ -7,7 +7,6 @@ export type * from './crdt/Store.Web.IndexDb/t';
 export type * from './crdt/Store.Web/t';
 export type * from './crdt/Store/t';
 
-export type * from './crdt.cmd/t';
 export type * from './crdt.sync/TextboxSync/t';
 
 export type * from './ui/ui.Buttons/t';
