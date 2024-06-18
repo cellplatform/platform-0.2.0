@@ -36,7 +36,7 @@ export type DocRefHandle<T extends O = O> = DocRef<T> & { readonly handle: t.Doc
  * Generator function that produces a stongly-typed document
  * with a curried initial state.
  */
-export type DocFactory<T extends O> = (uri?: Uri) => Promise<t.DocRef<T>>;
+export type DocFactory<T extends O = O> = (uri?: Uri) => Promise<t.DocRef<T>>;
 
 /**
  * Document access exposed from a store/repo.

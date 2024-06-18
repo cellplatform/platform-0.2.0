@@ -1,22 +1,24 @@
 import { Cmd, DEFAULTS } from '.';
 import { R, Time, rx, type t } from './common';
 
+export type C = C1 | C2;
+export type C1 = t.CmdType<'Foo', { foo: number }>;
+export type C2 = t.CmdType<'Bar', { msg?: string }>;
+
 /**
  * Unit test factory for the <Cmd> system allowing different
  * kinds of source <ImmutableRef> and <Patch> types to be tested
  * against the same standard test suite.
  */
-export async function commandTests(args: {
-  setup: t.CmdTestSetup;
-  describe: t.Describe;
-  it: t.It;
-  expect: t.Expect;
-}) {
-  const { describe, it, expect, setup } = args;
-
-  type C = C1 | C2;
-  type C1 = t.CmdType<'Foo', { foo: number }>;
-  type C2 = t.CmdType<'Bar', { msg?: string }>;
+export async function commandTests(
+  setup: t.CmdTestSetup,
+  args: {
+    describe: t.Describe;
+    it: t.It;
+    expect: t.Expect;
+  },
+) {
+  const { describe, it, expect } = args;
 
   describe('Cmd', () => {
     it('Cmd.DEFAULTS', () => {
@@ -62,6 +64,15 @@ export async function commandTests(args: {
       dispose();
     });
 
+    it('has initial {cmd} structure upon creation', async () => {
+      const { doc, dispose } = await setup();
+      expect(Cmd.Is.initialized(doc.current)).to.eql(false);
+
+      Cmd.create(doc);
+      expect(Cmd.Is.initialized(doc.current)).to.eql(true);
+
+      dispose();
+    });
 
     const length = 1000;
     it(`${length}x invocations - order retained`, async () => {
@@ -318,7 +329,6 @@ export async function commandTests(args: {
         });
         dispose();
       });
-
 
       it('⚡️← custom paths', async () => {
         const { doc, dispose, dispose$ } = await setup();
