@@ -1,5 +1,5 @@
 import { cloner, clonerRef } from './Immutable.clone';
-import { events } from './Immutable.Events';
+import { events } from './Immutable.event';
 
 /**
  * Helpers for working with raw Immutable<T> objects.

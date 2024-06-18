@@ -1,4 +1,4 @@
-import { events } from './Immutable.Events';
+import { events } from './Immutable.event';
 import { R, slug, type t } from './common';
 import { Wrangle } from './u';
 
