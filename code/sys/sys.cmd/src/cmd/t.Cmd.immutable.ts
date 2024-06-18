@@ -8,7 +8,7 @@ type E = t.ImmutableEvents<O, P>;
  * An immutable/observable object used to drive the
  * command system.
  */
-export type CmdImmutableRef = t.ImmutableRef<O, E, P>;
+export type CmdImmutable = t.ImmutableRef<O, E, P>;
 
 /**
  * A sparce/generic interface to a Patch used for changes.

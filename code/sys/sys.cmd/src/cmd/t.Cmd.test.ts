@@ -7,8 +7,8 @@ import type { t } from './common';
 export type CmdTestSetup = () => Promise<CmdTestState>;
 
 export type CmdTestState = t.Disposable & {
-  readonly doc: t.CmdImmutableRef;
+  readonly doc: t.CmdImmutable;
   readonly factory: CmdTestDocFactory;
 };
 
-export type CmdTestDocFactory = () => Promise<t.CmdImmutableRef>;
+export type CmdTestDocFactory = () => Promise<t.CmdImmutable>;
