@@ -134,4 +134,68 @@ describe('Immutable', () => {
       });
     });
   });
+
+  describe('Immutable.clonerRef', () => {
+    it('defaults', async () => {
+      const initial = { count: 0 };
+      const obj = Immutable.clonerRef<D>(initial);
+      expect(obj.current).to.not.equal(initial);
+      expect(obj.current).to.eql({ count: 0 });
+
+      obj.change((d) => (d.count = 123));
+      expect(obj.current).to.eql({ count: 123 });
+      expect(obj.instance).to.be.a.string;
+    });
+
+    it('change (patches)', async () => {
+      const initial = { count: 0 };
+      const obj = Immutable.clonerRef<D>(initial);
+      expect(obj.current).to.not.equal(initial);
+      expect(obj.current).to.eql({ count: 0 });
+
+      const patches: t.PatchOperation[] = [];
+      obj.change((d) => (d.count = 123), { patches: (e) => patches.push(...e) });
+      obj.change(
+        (d) => (d.count = 456),
+        (e) => patches.push(...e),
+      );
+
+      expect(patches).to.eql([
+        { op: 'replace', path: '/count', value: 123 },
+        { op: 'replace', path: '/count', value: 456 },
+      ]);
+    });
+
+    it('events', async () => {
+      const life = rx.disposable();
+      const initial = { count: 0 };
+      const obj = Immutable.clonerRef<D>(initial);
+      const events1 = obj.events(life.dispose$);
+      const events2 = obj.events();
+
+      const fired1: t.ImmutableChange<D, P>[] = [];
+      const fired2: t.ImmutableChange<D, P>[] = [];
+      events1.changed$.subscribe((e) => fired1.push(e));
+      events2.changed$.subscribe((e) => fired2.push(e));
+
+      obj.change((d) => (d.count = 123));
+
+      expect(fired1.length).to.eql(1);
+      expect(fired1).to.eql(fired2);
+
+      const e = fired1[0];
+      expect(e.before).to.eql({ count: 0 });
+      expect(e.after).to.eql({ count: 123 });
+      expect(e.patches).to.eql([{ op: 'replace', path: '/count', value: 123 }]);
+
+      expect(events1.disposed).to.eql(false);
+      expect(events2.disposed).to.eql(false);
+
+      life.dispose();
+      expect(events1.disposed).to.eql(true);
+      expect(events2.disposed).to.eql(false);
+      events2.dispose();
+      expect(events2.disposed).to.eql(true);
+    });
+  });
 });
