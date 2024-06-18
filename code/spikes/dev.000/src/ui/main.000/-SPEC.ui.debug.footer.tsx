@@ -37,7 +37,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
     <div {...styles.avatars}>
       <PeerUI.AvatarTray
         peer={peer}
-        size={64}
+        size={100}
         muted={false}
         onTotalChanged={redraw}
         selected={props.selectedStream}
