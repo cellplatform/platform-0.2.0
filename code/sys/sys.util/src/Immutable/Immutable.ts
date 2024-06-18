@@ -1,4 +1,4 @@
-import { cloner, clonerRef } from './Immutable.Cloner';
+import { cloner, clonerRef } from './Immutable.clone';
 import { events } from './Immutable.Events';
 
 /**
