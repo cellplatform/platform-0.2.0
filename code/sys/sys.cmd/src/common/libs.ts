@@ -1,10 +1,10 @@
 /**
  * @external
  */
-import { equals } from 'ramda';
-export const R = { equals } as const;
+import { equals, uniq } from 'ramda';
+export const R = { equals, uniq } as const;
 
 /**
  * @system
  */
-export { rx } from 'sys.util';
+export { Delete, Immutable, ObjectPath, Time, Value, rx, slug } from 'sys.util';

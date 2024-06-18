@@ -6,8 +6,20 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
+export type {
+  Disposable,
+  Error,
+  EventBus,
+  ImmutableEvents,
+  ImmutableRef,
+  Lifecycle,
+  Msecs,
+  ObjectPath,
+  UntilObservable,
+} from 'sys.types/src/types';
+
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
-export type { Disposable, EventBus, Lifecycle, UntilObservable } from 'sys.types/src/types';
+export type { Describe, Expect, It } from 'sys.test/src/types';
 
 /**
  * @local
