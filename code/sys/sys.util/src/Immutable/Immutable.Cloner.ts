@@ -51,6 +51,5 @@ export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T }
       return events<T>(api, dispose$);
     },
   };
-
   return api;
 }
