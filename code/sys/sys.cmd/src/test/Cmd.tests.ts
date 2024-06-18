@@ -1,5 +1,7 @@
-import { Cmd, DEFAULTS } from '.';
-import { R, Time, rx, type t } from './common';
+import { Cmd } from '..';
+import { R, Time, rx, type t } from '../common';
+
+const DEFAULTS = Cmd.DEFAULTS;
 
 export type C = C1 | C2;
 export type C1 = t.CmdType<'Foo', { foo: number }>;

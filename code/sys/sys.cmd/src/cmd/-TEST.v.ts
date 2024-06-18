@@ -1,10 +1,12 @@
 import { Cmd } from '.';
 // import { Doc, Store } from '../crdt';
-import { Time, describe, expect, it, type t, Immutable, rx } from '../test';
-import { commandTests, type C } from './Cmd.tests';
+import { commandTests, type C, Time, describe, expect, it, type t, Immutable, rx } from '../test';
 
 type P = t.PatchOperation;
 
+/**
+ * TODO 🐷
+ */
 const setup: t.CmdTestSetup = async () => {
   // const store = Store.init();
   const { dispose, dispose$ } = rx.disposable();
