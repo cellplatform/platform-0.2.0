@@ -42,7 +42,7 @@ export type {
   Cmd,
   CmdPaths,
   CmdPathsObject,
-  CmdTestDocFactory,
+  CmdTestFactory,
   CmdTestSetup,
   CmdTestState,
   CmdTx,

@@ -8,7 +8,7 @@ const setup: t.CmdTestSetup = async () => {
   const store = Store.init();
   const { dispose$ } = store;
   const dispose = () => store.dispose();
-  const factory: t.CmdTestDocFactory = () => store.doc.getOrCreate((d) => d);
+  const factory: t.CmdTestFactory = () => store.doc.getOrCreate((d) => d);
   const res: t.CmdTestState = { doc: await factory(), factory, dispose, dispose$ };
   return res;
 };
