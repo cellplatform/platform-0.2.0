@@ -20,6 +20,7 @@ export type {
   Immutable,
   ImmutableChange,
   ImmutableChangeOptions,
+  ImmutableEvents,
   ImmutableMutator,
   ImmutableRef,
   Json,
@@ -30,6 +31,8 @@ export type {
   ObjectPath,
   UntilObservable,
 } from 'sys.types/src/types';
+
+export type { CmdTestFactory, CmdTestSetup, CmdTestState } from 'sys.cmd/src/types';
 
 /**
  * @local

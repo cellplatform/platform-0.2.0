@@ -15,6 +15,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
+    "sys.cmd": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0"
   },

@@ -16,7 +16,7 @@ export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T,
  *    the core stream of JSON-Patches emitted when the
  *    change(fn) method updates the current immutable state.
  */
-export type PatchStateEvents<T extends O> = t.Lifecycle & {
+export type PatchStateEvents<T extends O> = t.ImmutableEvents<T, P> & {
   readonly $: t.Observable<t.PatchChange<T>>;
 };
 
