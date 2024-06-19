@@ -40,10 +40,10 @@ export const Item = {
     input: t.LabelItem<A> | t.LabelItemState<A>,
     kind: A,
   ): t.LabelItemAction<A>[] {
-    const current = PatchState.Is.state(input) ? input.current : input;
-    const onKind = (action: t.LabelItemAction<A>) => action.kind === kind;
-    const left = Wrangle.actionArray(current.left).filter(onKind);
-    const right = Wrangle.actionArray(current.right).filter(onKind);
+    type M = t.LabelItemAction<A>;
+    const current: t.LabelItem<A> = PatchState.Is.state(input) ? input.current : input;
+    const left = Wrangle.actionArray(current.left).filter((a) => a.kind === kind) as M[];
+    const right = Wrangle.actionArray(current.right).filter((a) => a.kind === kind) as M[];
     return [...left, ...right].filter(Boolean);
   },
 
