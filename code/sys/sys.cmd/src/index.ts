@@ -13,4 +13,4 @@ export { Cmd } from './cmd';
  * Dev
  */
 export { Specs } from './test.ui/entry.Specs';
-export { commandTests } from './test/Cmd.tests';
+export { Tests } from './test';
