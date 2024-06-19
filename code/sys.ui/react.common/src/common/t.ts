@@ -12,6 +12,7 @@ export type {
   PatchChangeHandler,
   PatchOperation,
   PatchState,
+  PatchStateEvents,
 } from 'ext.lib.immer/src/types';
 
 /**

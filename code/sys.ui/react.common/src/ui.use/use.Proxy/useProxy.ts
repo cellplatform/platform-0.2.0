@@ -71,11 +71,13 @@ export function useProxy<T extends O>(
  * Helpers
  */
 const wrangle = {
-  proxy<T extends O>(data: T) {
-    return PatchState.create<State<T>>({ data });
+  proxy<T extends O>(data: T): t.PatchState<State<T>, t.PatchStateEvents<T>> {
+    return PatchState.create<State<T>, t.PatchStateEvents<T>>({ data });
   },
 
-  state<T extends O>(proxy: t.PatchState<State<T>>): t.Immutable<T, t.PatchOperation> {
+  state<T extends O>(
+    proxy: t.PatchState<State<T>, t.PatchStateEvents<T>>,
+  ): t.Immutable<T, t.PatchOperation> {
     return {
       change: (fn) => proxy.change((d) => fn(d.data)),
       get current() {
