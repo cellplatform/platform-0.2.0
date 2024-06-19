@@ -1,8 +1,8 @@
 import { Doc, Store } from '..';
 import { Cmd, Time, describe, expect, it, type t } from '../../test';
 
-import { commandTests } from 'sys.cmd';
-import type { C } from 'sys.cmd/src/test/Cmd.tests';
+import { Tests } from 'sys.cmd';
+import type { C } from 'sys.cmd/src/test';
 
 const setup: t.CmdTestSetup = async () => {
   const store = Store.init();
@@ -17,7 +17,7 @@ describe('crdt.cmd (Command)', () => {
   /**
    * Standardised test suite for the <Cmd> system.
    */
-  commandTests(setup, { describe, it, expect });
+  Tests.all(setup, { describe, it, expect });
 
   /**
    * CRDT/Lens specific tests.
