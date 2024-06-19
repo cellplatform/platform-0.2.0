@@ -5,4 +5,4 @@ export { describe, it } from 'vitest';
 export * from '../cmd.test';
 export * from '../common';
 
-export type * as t from '../cmd.test/t';
+export type * as t from './t';
