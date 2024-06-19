@@ -18,10 +18,10 @@ export const Tests = {
   },
   index: {
     cmdTests,
-    pathTests,
     eventTests,
-    flagTests,
+    pathTests,
     patchTests,
+    flagTests,
     responseTests,
   },
 } as const;

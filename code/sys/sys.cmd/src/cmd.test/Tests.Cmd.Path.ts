@@ -11,10 +11,9 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
     describe('Path.resolver', () => {
       type P = { foo: number };
       type C = t.CmdType<'Foo', P>;
-      const resolver = Path.resolver;
 
       it('default paths', () => {
-        const resolve = resolver();
+        const resolve = Path.resolver();
         expect(resolve.paths).to.eql(DEFAULTS.paths);
 
         const counter = DEFAULTS.counter.create();
@@ -32,7 +31,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('custom paths', () => {
-        const resolve = resolver({
+        const resolve = Path.resolver({
           name: ['a'],
           params: ['x', 'y', 'p'],
           counter: ['z', 'n'],
@@ -65,7 +64,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('.params ← generates new object', () => {
-        const resolve = resolver(DEFAULTS.paths);
+        const resolve = Path.resolver(DEFAULTS.paths);
         const params: P = { foo: 0 };
         const obj1: t.CmdPathsObject<C> = {};
         const obj2: t.CmdPathsObject<C> = { params: { foo: 123 } };
@@ -74,7 +73,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('.error', () => {
-        const resolve = resolver(DEFAULTS.paths);
+        const resolve = Path.resolver(DEFAULTS.paths);
 
         type CustomError = t.Error & { type: 'BadDay' };
         const err1 = DEFAULTS.error('lulz');
@@ -92,7 +91,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('.count ← generates new object', () => {
-        const resolve = resolver(DEFAULTS.paths);
+        const resolve = Path.resolver(DEFAULTS.paths);
         const counter = DEFAULTS.counter.create(10);
         const obj1: t.CmdPathsObject<C> = {};
         const obj2: t.CmdPathsObject<C> = { counter };

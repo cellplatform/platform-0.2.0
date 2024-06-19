@@ -1,28 +1,20 @@
-import { Cmd } from '.';
-// import { Doc, Store } from '../crdt';
-import { commandTests, type C, Time, describe, expect, it, type t, Immutable, rx } from '../test';
-
-type P = t.PatchOperation;
+import { Immutable, Tests, describe, expect, it, rx, type t } from '../test';
 
 /**
- * TODO 🐷
+ * Standardised test suite for the <Cmd> system.
+ */
+describe('Cmd (Command)', () => {
+  Tests.all(setup, { describe, it, expect });
+});
+
+/**
+ * NB: this is the "immutable system" setup that is unique
+ *     to each module using a different transport/approach
+ *     underlying the common <Cmd> system.
  */
 const setup: t.CmdTestSetup = async () => {
-  // const store = Store.init();
   const { dispose, dispose$ } = rx.disposable();
-  // const { dispose$ } = store;
-  // const dispose = () => store.dispose();
-  // const factory: t.CmdTestDocFactory = () => Immutable.clonerRef({});
-  // const res: t.CmdTestState = { doc: await factory(), factory, dispose, dispose$ };
-  // const m = Immutable.clonerRef({});
-
-  return null as any; // TEMP 🐷
-  // return res;
+  const factory: t.CmdTestDocFactory = async () => Immutable.clonerRef({});
+  const res: t.CmdTestState = { doc: await factory(), factory, dispose, dispose$ };
+  return res;
 };
-
-describe('crdt.cmd (Command)', () => {
-  /**
-   * Standardised test suite for the <Cmd> system.
-   */
-  // commandTests(setup, { describe, it, expect });
-});

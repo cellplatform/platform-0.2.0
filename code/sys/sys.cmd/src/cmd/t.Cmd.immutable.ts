@@ -15,4 +15,4 @@ export type CmdImmutable = t.ImmutableRef<O, E, P>;
  * This allows any kind of patch system to be compatible with
  * the <Cmd> system, it just needs to contain an address [path].
  */
-export type CmdPatch = { path: t.ObjectPath };
+export type CmdPatch = { path: t.ObjectPath | string };
