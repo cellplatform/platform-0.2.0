@@ -3,6 +3,7 @@ import { type t } from './common';
 import { cmdTests } from './Tests.Cmd';
 import { eventTests } from './Tests.Cmd.Events';
 import { flagTests } from './Tests.Cmd.Is';
+import { patchTests } from './Tests.Cmd.Patch';
 import { pathTests } from './Tests.Cmd.Path';
 import { responseTests } from './Tests.Cmd.Response';
 
@@ -13,18 +14,14 @@ import { responseTests } from './Tests.Cmd.Response';
  */
 export const Tests = {
   all(setup: t.CmdTestSetup, args: t.TestArgs) {
-    const index = Tests.index;
-    index.cmdTests(setup, args);
-    index.pathTests(setup, args);
-    index.eventTests(setup, args);
-    index.flagTests(setup, args);
-    index.responseTests(setup, args);
+    Object.entries(Tests.index).forEach(([, test]) => test(setup, args));
   },
   index: {
     cmdTests,
     pathTests,
     eventTests,
     flagTests,
+    patchTests,
     responseTests,
   },
 } as const;

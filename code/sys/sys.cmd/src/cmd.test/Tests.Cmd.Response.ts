@@ -1,7 +1,5 @@
 import { Cmd } from '..';
-import { R, Time, rx, type t } from './common';
-
-const DEFAULTS = Cmd.DEFAULTS;
+import { Time, type t } from './common';
 
 export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
