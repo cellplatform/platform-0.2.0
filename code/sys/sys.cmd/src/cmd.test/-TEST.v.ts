@@ -14,7 +14,7 @@ describe('Cmd (Command)', () => {
  */
 const setup: t.CmdTestSetup = async () => {
   const { dispose, dispose$ } = rx.disposable();
-  const factory: t.CmdTestDocFactory = async () => Immutable.clonerRef({});
+  const factory: t.CmdTestFactory = async () => Immutable.clonerRef({});
   const res: t.CmdTestState = { doc: await factory(), factory, dispose, dispose$ };
   return res;
 };
