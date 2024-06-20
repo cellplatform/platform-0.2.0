@@ -1,6 +1,6 @@
 import { Color, Dev, css, type t } from '../../test.ui';
-import { Loader } from './-SPEC.cmd';
-import { View } from './-SPEC.ui';
+import { Dsl } from './-SPEC.cmd.dsl';
+import { SampleLayout } from './-SPEC.ui';
 import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Footer } from './-SPEC.ui.footer';
 import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
@@ -45,7 +45,12 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
+          overlay: css({
+            Absolute: 0,
+            display: 'grid',
+            backgroundColor: Color.WHITE,
+            overflow: 'hidden',
+          }),
         };
 
         const overlay = e.state.overlay;
@@ -53,8 +58,9 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <View model={model} network={network} selectedStream={e.state.stream} />
+            <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
             {elOverlay}
+            {/* <div {...styles.overlay}></div> */}
           </div>
         );
       });
@@ -65,7 +71,7 @@ export default Dev.describe(name, async (e) => {
           network={network}
           onUnload={(e) => state.change((d) => (d.overlay = undefined))}
           onLoad={async (e) => {
-            const el = await Loader.load(e.name);
+            const el = await Dsl.load(e.name);
             state.change((d) => (d.overlay = el));
           }}
         />
@@ -146,6 +152,8 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
+      dev.hr(0, 5);
+
       dev.button('redraw', (e) => dev.redraw());
 
       dev.hr(-1, 5);
