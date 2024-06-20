@@ -20,7 +20,7 @@ export function farcaster(args: Args): t.PropListItem[] {
   const res: t.PropListItem[] = [];
 
   /**
-   * Identity.
+   * FC: Identity.
    */
   res.push({
     label: data?.identity?.label || DEFAULT.identity?.label,
@@ -39,7 +39,7 @@ export function farcaster(args: Args): t.PropListItem[] {
   });
 
   /**
-   * Signer
+   * FC: Signer.
    */
   if (data?.signer && (!hasSigner || data.signer.forceVisible)) {
     res.push({
