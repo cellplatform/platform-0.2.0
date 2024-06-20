@@ -17,6 +17,7 @@ export const Pkg: ModuleDef = {
     '@standard-crypto/farcaster-js': '7.4.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
+    'sys.cmd': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'viem': '2.15.1',
