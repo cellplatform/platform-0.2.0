@@ -15,8 +15,17 @@ export type { ExternalEd25519Signer, HubRestAPIClient } from '@standard-crypto/f
 /**
  * @system
  */
+export type {
+  Disposable,
+  Error,
+  EventBus,
+  ImmutableRef,
+  Lifecycle,
+  UntilObservable,
+} from 'sys.types/src/types';
+
+export type { Cmd, CmdImmutable, CmdType } from 'sys.cmd/src/types';
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
-export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types';
 
 /**
  * @local
