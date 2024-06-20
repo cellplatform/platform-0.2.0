@@ -11,7 +11,7 @@ export type * from './evm/Wallet/t';
 export type * from './ui/ui.Auth/t';
 export type * from './ui/ui.Info/t';
 
-export type * from './fn/Farcaster/t';
+export type * from './fn/fn.farcaster/t';
 
 /**
  * Authentication
