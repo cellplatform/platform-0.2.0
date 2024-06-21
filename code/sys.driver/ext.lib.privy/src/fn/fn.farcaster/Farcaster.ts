@@ -1,4 +1,5 @@
 import { DEFAULTS, ExternalEd25519Signer, HubRestAPIClient, type t } from './common';
+import { FarcasterCommand as Cmd } from './Farcaster.Command';
 
 type A = t.FarcasterWithMetadata;
 type Args = {
@@ -8,6 +9,8 @@ type Args = {
 };
 
 export const Farcaster = {
+  Cmd,
+
   /**
    * Factory
    */
@@ -23,7 +26,7 @@ export const Farcaster = {
     /**
      * API
      */
-    const api: t.Farcaster = {
+    const fc: t.Farcaster = {
       get ready() {
         return privy.ready;
       },
@@ -34,7 +37,7 @@ export const Farcaster = {
       },
 
       get fid() {
-        return api.account?.fid ?? -1;
+        return fc.account?.fid ?? -1;
       },
 
       get signer() {
@@ -49,7 +52,7 @@ export const Farcaster = {
         await args.signer.requestFarcasterSignerFromWarpcast();
       },
     };
-    return api;
+    return fc;
   },
 } as const;
 
