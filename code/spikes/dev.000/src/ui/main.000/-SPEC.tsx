@@ -1,3 +1,12 @@
+/**
+ * Polyfill: Required for [@standard-crypto/farcaster-js] in production builds.
+ *           Upstream dependency of [@privy-io/react-auth]
+ *
+ * https://github.com/standard-crypto/farcaster-js
+ */
+import { Buffer } from 'buffer';
+if (!window.Buffer) window.Buffer = Buffer;
+
 import { Color, Dev, css, type t } from '../../test.ui';
 import { Dsl } from './-SPEC.cmd.dsl';
 import { SampleLayout } from './-SPEC.ui';

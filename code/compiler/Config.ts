@@ -109,8 +109,6 @@ export const Config = {
        */
       const addPolyfill = () => {
         if (mode === 'production') return false;
-        // const modules = ['ext.lib.privy', 'ext.lib.deno', 'dev.000'];
-        // return modules.some((item) => modulePath.includes(item));
         return true;
       };
 
@@ -118,7 +116,11 @@ export const Config = {
         const dirname = fs.basename(fs.dirname(modulePath));
         const moduleName = `← ${pc.yellow('vite-plugin-node-polyfills')}`;
         console.log(`${pc.yellow('[TMP]')} polyfills added to ${pc.cyan(dirname)} ${moduleName}`);
-        config.plugins?.push(nodePolyfills({ include: ['process'] }));
+        config.plugins?.push(
+          nodePolyfills({
+            include: ['process', 'buffer', 'util'],
+          }),
+        );
       }
 
       /**
