@@ -87,11 +87,8 @@ export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: Optio
       return Events.create<C>(doc, { paths, dispose$ });
     },
 
-    invoke(...args: any[]) {
-      const [p1, p2, p3, p4] = args;
-      if (typeof p2 === 'string') return invokeResponder(p1, p2, p3, p4) as any;
-      if (typeof p2 === 'object') return invokeVoid(p1, p2, p3) as any;
-      throw new Error('overloaded invoke arguments could not be wrangled');
+    invoke(name, params, options) {
+      return invokeVoid(name, params, options);
     },
 
     method(...args: any[]) {

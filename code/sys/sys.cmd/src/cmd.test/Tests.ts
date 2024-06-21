@@ -5,7 +5,6 @@ import { eventTests } from './Tests.Cmd.Events';
 import { flagTests } from './Tests.Cmd.Is';
 import { patchTests } from './Tests.Cmd.Patch';
 import { pathTests } from './Tests.Cmd.Path';
-import { responseTests } from './Tests.Cmd.Response';
 import { methodTests } from './Tests.Cmd.Method';
 
 /**
@@ -23,7 +22,6 @@ export const Tests = {
     pathTests,
     patchTests,
     flagTests,
-    responseTests,
     methodTests,
   },
 } as const;
