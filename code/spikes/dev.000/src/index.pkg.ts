@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.141',
+  version: '0.6.143',
   dependencies: {
     '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.12',
@@ -20,6 +20,7 @@ export const Pkg: ModuleDef = {
     '@privy-io/react-auth': '1.71.0',
     '@standard-crypto/farcaster-js': '7.4.0',
     'automerge-repo-network-peerjs': '1.1.13',
+    'buffer': '6.0.3',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.automerge.webrtc': '0.0.0',
@@ -33,6 +34,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.vimeo': '0.0.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
+    'sys.cmd': '0.0.0',
     'sys.data.indexeddb': '0.0.0',
     'sys.data.text': '0.0.0',
     'sys.ui.react.common': '0.0.0',
