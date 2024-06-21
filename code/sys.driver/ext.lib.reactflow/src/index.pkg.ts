@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'react': '18.3.1',
     'react-dom': '18.3.1',
-    'reactflow': '11.11.3',
+    'reactflow': '11.11.4',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },
