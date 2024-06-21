@@ -258,7 +258,7 @@ export default Dev.describe(name, (e) => {
         const method = fc.method('send:cast', 'send:cast:res');
         const text = 'hello world 👋';
         console.log('send cast:', text);
-        const res = await method.invoke({ text }).promise();
+        const res = await method({ text }).promise();
         console.log('res', res);
       });
     });

@@ -21,7 +21,7 @@ export const FarcasterSigner: React.FC<FarcasterSignerProps> = (props) => {
     setRequestingSigner(true);
 
     const method = cmd.method('req:signer', 'req:signer:res');
-    await method.invoke({}).promise();
+    await method({}).promise();
 
     setRequestingSigner(false);
   };
