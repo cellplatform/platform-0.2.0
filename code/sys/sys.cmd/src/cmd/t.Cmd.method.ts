@@ -4,9 +4,13 @@ type Tx = string;
 
 /**
  * Generates a typed method function.
+ * Overloads:
+ *    - (req):      ← void
+ *    - (req, res): ← responder
  */
 export type CmdMethodFactory<C extends t.CmdType> = {
   <K extends C['name']>(req: K): CmdMethodVoid<u.CmdTypeMap<C>[K]>;
+
   <K extends C['name'], R extends C['name']>(req: K, res: R): CmdMethodResponder<
     u.CmdTypeMap<C>[K],
     u.CmdTypeMap<C>[R]
@@ -14,26 +18,22 @@ export type CmdMethodFactory<C extends t.CmdType> = {
 };
 
 /**
- * Void response.
+ * Void Response.
  */
-export type CmdMethodVoid<Req extends t.CmdType> = {
-  readonly name: Req['name'];
-  readonly invoke: <N extends Req['name']>(
-    params: u.CmdTypeMap<Req>[N]['params'],
-    options?: Tx | t.CmdInvokeOptions<u.CmdTypeMap<Req>[N]>,
-  ) => t.CmdInvoked<u.CmdTypeMap<Req>[N]>;
-};
+export type CmdMethodVoid<Req extends t.CmdType> = <N extends Req['name']>(
+  params: u.CmdTypeMap<Req>[N]['params'],
+  options?: Tx | t.CmdInvokeOptions<u.CmdTypeMap<Req>[N]>,
+) => t.CmdInvoked<u.CmdTypeMap<Req>[N]>;
 
 /**
- * Listener response.
+ * Listener Response.
  */
-export type CmdMethodResponder<Req extends t.CmdType, Res extends t.CmdType> = {
-  readonly name: { readonly req: Req['name']; readonly res: Res['name'] };
-  readonly invoke: <N extends Req['name']>(
-    params: u.CmdTypeMap<Req>[N]['params'],
-    options?:
-      | Tx
-      | t.CmdResponseHandler<u.CmdTypeMap<Req>[N]>
-      | t.CmdInvokeResponseOptions<u.CmdTypeMap<Req>[N]>,
-  ) => t.CmdResponseListener<u.CmdTypeMap<Req>[N]>;
-};
+export type CmdMethodResponder<Req extends t.CmdType, Res extends t.CmdType> = <
+  N extends Req['name'],
+>(
+  params: u.CmdTypeMap<Req>[N]['params'],
+  options?:
+    | Tx
+    | t.CmdResponseHandler<u.CmdTypeMap<Req>[N]>
+    | t.CmdInvokeResponseOptions<u.CmdTypeMap<Req>[N]>,
+) => t.CmdResponseListener<u.CmdTypeMap<Req>[N]>;

@@ -72,17 +72,11 @@ export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: Optio
   };
 
   const toVoidMethod = (req: C['name']): t.CmdMethodVoid<C> => {
-    return {
-      name: req,
-      invoke: (params, options) => invokeVoid<any>(req, params, options),
-    };
+    return (params, options) => invokeVoid<any>(req, params, options);
   };
 
   const toResponderMethod = (req: C['name'], res: C['name']): t.CmdMethodResponder<C, C> => {
-    return {
-      name: { req, res },
-      invoke: (params, options) => invokeResponder(req, res, params, options) as any,
-    };
+    return (params, options) => invokeResponder(req, res, params, options) as any;
   };
 
   /**

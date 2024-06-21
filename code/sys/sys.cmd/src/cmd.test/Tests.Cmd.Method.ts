@@ -40,21 +40,13 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   });
 
   describe('Method', () => {
-    it('factory: (void)', async () => {
+    it('factory overloads (void | responder)', async () => {
       const { doc, dispose } = await setup();
       const cmd = Cmd.create<C>(doc);
-      const res = cmd.method('foo');
-      expect(res.name).to.eql('foo');
-      expect((res as any).res).to.eql(undefined);
-      dispose();
-    });
-
-    it('factory: (responder)', async () => {
-      const { doc, dispose } = await setup();
-      const cmd = Cmd.create<C>(doc);
-      const res = cmd.method('add', 'add:res');
-      expect(res.name.req).to.eql('add');
-      expect(res.name.res).to.eql('add:res');
+      const res1 = cmd.method('foo');
+      const res2 = cmd.method('add', 'add:res');
+      expect(typeof res1 === 'function').to.eql(true);
+      expect(typeof res2 === 'function').to.eql(true);
       dispose();
     });
 
@@ -69,7 +61,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         .on('foo')
         .subscribe((e) => fired.push(e));
 
-      const res = method.invoke({ msg: 'hello' });
+      const res = method({ msg: 'hello' });
       await Time.wait(0);
 
       expect(res.req.name).to.eql('foo');
@@ -90,7 +82,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const events = cmd.events(dispose$);
       events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-      const res = await method.invoke({ a: 1, b: 2 }).promise();
+      const res = await method({ a: 1, b: 2 }).promise();
       expect(res.result?.sum).to.eql(3);
       dispose();
     });
