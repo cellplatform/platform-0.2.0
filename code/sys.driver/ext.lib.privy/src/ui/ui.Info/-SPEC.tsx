@@ -1,5 +1,16 @@
 import { Info } from '.';
-import { AuthEnv, Delete, Dev, Hash, Pkg, PropList, Time, type t } from '../../test.ui';
+import {
+  AuthEnv,
+  Cmd,
+  Delete,
+  Dev,
+  Hash,
+  Immutable,
+  Pkg,
+  PropList,
+  Time,
+  type t,
+} from '../../test.ui';
 
 type P = t.InfoProps;
 type T = {
@@ -30,7 +41,11 @@ export default Dev.describe(name, (e) => {
     clipboard: DEFAULTS.clipboard,
   });
 
-  let fc: t.Farcaster | undefined;
+  /**
+   * Commands for Farcaster.
+   */
+  const doc = Immutable.clonerRef({}); // NB: Default simple "cloner" immutable.
+  const fc = Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>; // TODO: should not need the "as" cast.
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -55,21 +70,10 @@ export default Dev.describe(name, (e) => {
           },
         },
         farcaster: {
+          cmd: fc,
           identity: {
             // fid: true,
-            onClick: async (e) => {
-              console.info(`⚡️ farcaster.identity.onClick`, e);
-
-              const spin = (value: boolean) =>
-                state.change((d) => (d.props.data!.farcaster!.identity!.spinning = value));
-
-              // TEMP - send sample cast 🐷
-              await spin(true);
-              const fc = e.fc;
-              const payload = { text: 'Hello World 👋' };
-              await fc.hub.submitCast(payload, fc.fid, fc.signer);
-              await spin(false);
-            },
+            onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
           },
           signer: {
             // forceVisible: true,
@@ -92,11 +96,9 @@ export default Dev.describe(name, (e) => {
             margin={24}
             onReady={(e) => {
               console.info(`⚡️ onReady`, e);
-              fc = e.fc;
             }}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
-              fc = e.fc;
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
@@ -178,7 +180,15 @@ export default Dev.describe(name, (e) => {
         'Refresh',
       ]);
       dev.hr(-1, 5);
-      button('farcaster', () => ['Login', 'Login.SMS', 'Login.Farcaster', 'Farcaster']);
+      button('farcaster', () => [
+        'Login',
+        'Login.SMS',
+        'Login.Farcaster',
+        'Farcaster',
+        'Wallet.List',
+        'Wallet.List.Title',
+        'Refresh',
+      ]);
     });
 
     dev.hr(5, 20);
@@ -244,11 +254,12 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button(['send cast (ERR 🐷)', 'farcaster'], async (e) => {
-        if (!fc) return;
-
-        const payload = { text: 'Hello World 👋' };
-        const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
+      dev.button('tmp: send cast', async (e) => {
+        const method = fc.method('send:cast', 'send:cast:res');
+        const text = 'hello world 👋';
+        console.log('send cast:', text);
+        const res = await method.invoke({ text }).promise();
+        console.log('res', res);
       });
     });
   });
