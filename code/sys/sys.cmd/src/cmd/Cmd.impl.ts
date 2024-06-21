@@ -52,13 +52,13 @@ export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: Optio
     return res;
   };
 
-  const invokeResponder: t.CmdInvokeResponse<any> = (req, res, params, opt) => {
-    const options = wrangle.invoke.responseOptions(opt);
+  const invokeResponder: t.CmdInvokeResponse<any, any> = (req, res, params, opt) => {
+    const options = wrangle.invoke.responseOptions<any, any>(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
     const error = wrangle.invoke.error(options);
     const { timeout, dispose$, onComplete, onError } = options;
     const { start } = invokeSetup(tx, req, params, error);
-    const listener = Listener.create<C>(api, {
+    const listener = Listener.create<any, any>(api, {
       tx,
       req: { name: req, params },
       res: { name: res },
@@ -122,9 +122,9 @@ const wrangle = {
       return typeof input === 'object' ? input.error : undefined;
     },
 
-    responseOptions<C extends t.CmdType>(
-      input?: Tx | t.CmdResponseHandler<C> | t.CmdInvokeResponseOptions<C>,
-    ): t.CmdInvokeResponseOptions<C> {
+    responseOptions<Req extends t.CmdType, Res extends t.CmdType>(
+      input?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+    ): t.CmdInvokeResponseOptions<Req, Res> {
       if (!input) return {};
       if (typeof input === 'string') return {};
       if (typeof input === 'function') return { onComplete: input };

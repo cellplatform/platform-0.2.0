@@ -6,10 +6,10 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
   type P = { a: number; b: number };
   type R = { sum: number };
-  type E = t.Error & { code: number; type: 'bounds' };
+  type E = t.Error & { code: number; type: 'myType-1' | 'myType-2' };
   type C = C1 | C2 | C3;
-  type C1 = t.CmdType<'add', P, C2, E>;
-  type C2 = t.CmdType<'add:res', R>;
+  type C1 = t.CmdType<'add', P, C2>;
+  type C2 = t.CmdType<'add:res', R, void, E>;
   type C3 = t.CmdType<'foo', { msg?: string }>;
   const sum = ({ a, b }: P): R => ({ sum: a + b });
 
@@ -204,7 +204,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const { doc, dispose, dispose$ } = await setup();
           const cmd = Cmd.create<C>(doc);
 
-          const fired: t.CmdResponseHandlerArgs<C1>[] = [];
+          const fired: t.CmdResponseHandlerArgs<C1, C2>[] = [];
           const events = cmd.events(dispose$);
           events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
@@ -213,7 +213,6 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           await method({ a: 1, b: 2 }, (e) => fired.push(e)).promise();
 
           expect(fired[0].result?.sum).to.eql(3);
-          expect(fired[0].cmd).to.equal(cmd);
 
           // Handler added to {listener} object.
           await method({ a: 2, b: 3 })
@@ -232,8 +231,8 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const cmd = Cmd.create<C>(doc);
           const events = cmd.events(dispose$);
 
-          const error: E = { message: 'boo', code: 123, type: 'bounds' };
-          const fired: t.CmdResponseHandlerArgs<C1>[] = [];
+          const error: E = { message: 'boo', code: 123, type: 'myType-1' };
+          const fired: t.CmdResponseHandlerArgs<C1, C2>[] = [];
           events
             .on('add')
             .subscribe(({ tx, params }) => cmd.invoke('add:res', sum(params), { tx, error }));
@@ -246,7 +245,6 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
           expect(fired.length).to.eql(1);
           expect(fired[0].error).to.eql(error);
-          expect(fired[0].cmd).to.equal(cmd);
 
           await method({ a: 1, b: 2 }, { onError: (e) => fired.push(e) }).promise();
 
@@ -299,7 +297,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const cmd = Cmd.create<C>(doc);
           const events = cmd.events(dispose$);
 
-          const error = Cmd.DEFAULTS.error('lulz');
+          const error: E = { code: 123, type: 'myType-2', message: 'stink' };
           events.on('add').subscribe(({ tx, params }) => {
             cmd.invoke('add:res', sum(params), { tx, error });
           });
@@ -321,7 +319,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const cmd = Cmd.create<C>(doc);
           const events = cmd.events(dispose$);
 
-          const error = { code: 123, type: 'bounds', message: 'boo' };
+          const error: E = { code: 123, type: 'myType-1', message: 'boo' };
           events.on('add').subscribe(({ tx, params }) => {
             cmd.invoke('add:res', sum(params), { tx, error });
           });
@@ -331,7 +329,7 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           await res.promise();
 
           expect(res.error?.code).to.eql(123);
-          expect(res.error?.type).to.eql('bounds');
+          expect(res.error?.type).to.eql('myType-1');
           expect(res.error?.message).to.eql('boo');
           expect(res.status === 'Error').to.eql(true);
 

@@ -1,32 +1,36 @@
 import { DEFAULTS, Time, rx, type t, type u } from './common';
 
-type Args<C extends t.CmdType> = {
+type Args<Req extends t.CmdType, Res extends t.CmdType> = {
   tx: string;
-  req: { name: C['name']; params: C['params'] };
-  res: { name: u.ExtractResName<C> };
+  req: { name: Req['name']; params: Req['params'] };
+  res: { name: Res['name'] };
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;
-  onComplete?: t.CmdResponseHandler<C>;
-  onError?: t.CmdResponseHandler<C>;
+  onComplete?: t.CmdResponseHandler<Req, Res>;
+  onError?: t.CmdResponseHandler<Req, Res>;
 };
 
 /**
  * Factory for producing callback listeners.
  */
-function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdResponseListener<C> {
+function create<Req extends t.CmdType, Res extends t.CmdType>(
+  cmd: t.Cmd<Res>,
+  args: Args<Req, Res>,
+): t.CmdResponseListener<Req, Res> {
   const { tx, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
 
-  type Status = t.CmdResponseListener<C>['status'];
-  type R = u.ExtractResParams<C>;
-  type E = u.ExtractError<C>;
+  type L = t.CmdResponseListener<Req, Res>;
+  type Status = L['status'];
+  type R = Res['params'];
+  type E = u.ExtractError<Res>;
   let _status: Status = 'Pending';
   let _result: R | undefined;
   let _error: E | undefined;
 
-  type H = t.CmdResponseHandler<C>;
+  type H = t.CmdResponseHandler<Req, Res>;
   const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
   if (args.onComplete) handlers.complete.add(args.onComplete);
   if (args.onError) handlers.error.add(args.onError);
@@ -36,9 +40,9 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdRespons
       const e = Handlers.args();
       handlers.forEach((fn) => fn(e));
     },
-    args(): t.CmdResponseHandlerArgs<C> {
+    args(): t.CmdResponseHandlerArgs<Req, Res> {
       const { ok, tx, result, error } = api;
-      return { ok, tx, result, error, cmd };
+      return { ok, tx, result, error };
     },
   } as const;
 
@@ -75,7 +79,7 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdRespons
   /**
    * API
    */
-  const api: t.CmdResponseListener<C> = {
+  const api: L = {
     $,
     tx,
     req: args.req,
@@ -96,9 +100,8 @@ function create<C extends t.CmdType>(cmd: t.Cmd<C>, args: Args<C>): t.CmdRespons
     },
 
     promise() {
-      type R = t.CmdResponseListener<C>;
       const first$ = $.pipe(rx.take(1));
-      return new Promise<R>((resolve) => first$.subscribe(() => resolve(api)));
+      return new Promise<L>((resolve) => first$.subscribe(() => resolve(api)));
     },
 
     onComplete(fn) {

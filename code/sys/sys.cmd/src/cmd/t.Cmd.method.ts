@@ -20,20 +20,15 @@ export type CmdMethodFactory<C extends t.CmdType> = {
 /**
  * Void Response.
  */
-export type CmdMethodVoid<Req extends t.CmdType> = <N extends Req['name']>(
-  params: u.CmdTypeMap<Req>[N]['params'],
-  options?: Tx | t.CmdInvokeOptions<u.CmdTypeMap<Req>[N]>,
-) => t.CmdInvoked<u.CmdTypeMap<Req>[N]>;
+export type CmdMethodVoid<Req extends t.CmdType> = (
+  params: Req['params'],
+  options?: Tx | t.CmdInvokeOptions<Req>,
+) => t.CmdInvoked<Req>;
 
 /**
  * Listener Response.
  */
-export type CmdMethodResponder<Req extends t.CmdType, Res extends t.CmdType> = <
-  N extends Req['name'],
->(
-  params: u.CmdTypeMap<Req>[N]['params'],
-  options?:
-    | Tx
-    | t.CmdResponseHandler<u.CmdTypeMap<Req>[N]>
-    | t.CmdInvokeResponseOptions<u.CmdTypeMap<Req>[N]>,
-) => t.CmdResponseListener<u.CmdTypeMap<Req>[N]>;
+export type CmdMethodResponder<Req extends t.CmdType, Res extends t.CmdType> = (
+  params: Req['params'],
+  options?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+) => t.CmdResponseListener<Req, Res>;

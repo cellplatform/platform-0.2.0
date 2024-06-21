@@ -13,23 +13,27 @@ export type CmdInvoked<C extends t.CmdType> = {
 /**
  * Response Listener API.
  */
-export type CmdResponseListener<C extends t.CmdType> = {
-  readonly $: t.Observable<u.ExtractResParams<C>>;
+export type CmdResponseListener<Req extends t.CmdType, Res extends t.CmdType> = {
+  readonly tx: Tx;
+  readonly req: t.CmdRequest<Req>;
+  readonly $: t.Observable<Res['params']>;
   readonly ok: boolean;
   readonly status: 'Pending' | 'Complete' | 'Error' | 'Timeout';
-  readonly result?: u.ExtractResParams<C>;
-  readonly error?: u.ExtractError<C>;
-  promise(): Promise<CmdResponseListener<C>>;
-  onComplete(fn: CmdResponseHandler<C>): CmdResponseListener<C>;
-  onError(fn: CmdResponseHandler<C>): CmdResponseListener<C>;
-} & t.CmdInvoked<C> &
-  t.Lifecycle;
+  readonly result?: Res['params'];
+  readonly error?: u.ExtractError<Res>;
+  promise(): Promise<CmdResponseListener<Req, Res>>;
+  onComplete(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
+  onError(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
+} & t.Lifecycle;
 
 /**
  * Callbacks from the response listener.
  */
-export type CmdResponseHandler<C extends t.CmdType> = (e: CmdResponseHandlerArgs<C>) => void;
-export type CmdResponseHandlerArgs<C extends t.CmdType> = Pick<
-  CmdResponseListener<C>,
+export type CmdResponseHandler<Req extends t.CmdType, Res extends t.CmdType> = (
+  e: CmdResponseHandlerArgs<Req, Res>,
+) => void;
+
+export type CmdResponseHandlerArgs<Req extends t.CmdType, Res extends t.CmdType> = Pick<
+  CmdResponseListener<Req, Res>,
   'ok' | 'tx' | 'result' | 'error'
-> & { readonly cmd: t.Cmd<C> };
+>;

@@ -6,11 +6,13 @@ type Tx = string;
  * INVOKE methods:
  */
 export type CmdInvokeOptions<C extends t.CmdType> = { tx?: Tx; error?: u.ExtractError<C> };
-export type CmdInvokeResponseOptions<C extends t.CmdType> = CmdInvokeOptions<C> & {
+export type CmdInvokeResponseOptions<Req extends t.CmdType, Res extends t.CmdType> = {
+  tx?: Tx;
+  error?: u.ExtractError<Res>;
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
-  onComplete?: t.CmdResponseHandler<C>;
-  onError?: t.CmdResponseHandler<C>;
+  onComplete?: t.CmdResponseHandler<Req, Res>;
+  onError?: t.CmdResponseHandler<Req, Res>;
 };
 
 /**
@@ -25,18 +27,12 @@ export type CmdInvoke<C extends t.CmdType> = <N extends C['name']>(
 /**
  * Invoke with expected response.
  */
-export type CmdInvokeResponse<C extends t.CmdType> = <
-  N extends C['name'],
-  R extends u.ExtractRes<u.CmdTypeMap<C>[N]>,
->(
-  req: N,
-  res: R['name'],
-  params: u.CmdTypeMap<C>[N]['params'],
-  options?:
-    | Tx
-    | t.CmdResponseHandler<u.CmdTypeMap<C>[N]>
-    | CmdInvokeResponseOptions<u.CmdTypeMap<C>[N]>,
-) => t.CmdResponseListener<u.CmdTypeMap<C>[N]>;
+export type CmdInvokeResponse<Req extends t.CmdType, Res extends t.CmdType> = (
+  req: Req['name'],
+  res: Res['name'],
+  params: Req['params'],
+  options?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+) => t.CmdResponseListener<Req, Res>;
 
 /**
  * Request.
