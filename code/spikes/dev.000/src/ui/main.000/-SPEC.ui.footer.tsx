@@ -11,9 +11,9 @@ export type FooterProps = {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   const { network, cmd } = props;
-  const [lens, setLens] = useState<t.Lens>();
-
   const sendCast = cmd.method('send:cast', 'send:cast:res');
+
+  const [lens, setLens] = useState<t.Lens>();
 
   /**
    * Lifecycle
@@ -50,7 +50,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
         if (first === 'cast') {
           const text = parts[1];
           console.log('cast:', text);
-          const res = await sendCast.invoke({ text }).promise();
+          const res = await sendCast({ text }).promise();
           console.log('cast:response:', res);
         }
       }}
