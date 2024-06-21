@@ -6,12 +6,11 @@ import { Builder } from './ui.Builder';
 export const View: React.FC<t.InfoProps> = (props) => {
   const { data = DEFAULTS.data } = props;
   const fields = PropList.fields(props.fields);
+  const loginMethods = Wrangle.loginMethods(fields);
+  const { appId, walletConnectId } = data.provider ?? {};
+
   return (
-    <AuthProvider
-      appId={data.provider?.appId}
-      walletConnectId={data.provider?.walletConnectId}
-      loginMethods={Wrangle.loginMethods(fields)}
-    >
+    <AuthProvider appId={appId} walletConnectId={walletConnectId} loginMethods={loginMethods}>
       <Builder {...props} />
     </AuthProvider>
   );
