@@ -1,8 +1,8 @@
 import { Button, Color, Icons, Spinner, css, type t } from './common';
 
 export type FarcasterUsernameProps = {
-  fc: t.Farcaster;
   user: t.FarcasterUser;
+  hasSigner?: boolean;
   theme?: t.CommonTheme;
   spinning?: boolean;
   showFid?: boolean;
@@ -11,13 +11,12 @@ export type FarcasterUsernameProps = {
 };
 
 export const FarcasterUsername: React.FC<FarcasterUsernameProps> = (props) => {
-  const { user, fc, onClick, spinning = false, showFid = false } = props;
-  const hasSigner = !!fc.account?.signerPublicKey;
+  const { user, onClick, spinning = false, showFid = false, hasSigner } = props;
 
   /**
    * Handlers
    */
-  const handleClick = () => props.onClick?.({ user, fc });
+  const handleClick = () => props.onClick?.({ user });
 
   /**
    * Render

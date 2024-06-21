@@ -3,19 +3,19 @@ import { Button, COLORS, Color, Icons, Spinner, Time, css, type t } from './comm
 import { FarcasterUsername } from './ui.Row.Farcaster.Username';
 
 export type FarcasterProps = {
-  fc: t.Farcaster;
   privy: t.PrivyInterface;
   enabled?: boolean;
   spinning?: boolean;
   showClose?: boolean;
   showFid?: boolean;
+  hasSigner?: boolean;
   style?: t.CssValue;
   theme?: t.CommonTheme;
   onClick?: t.InfoFarcasterClickHandler;
 };
 
 export const Farcaster: React.FC<FarcasterProps> = (props) => {
-  const { fc, privy, enabled = true, theme } = props;
+  const { privy, enabled = true, theme } = props;
   const showClose = (props.showClose ?? false) && enabled;
   const user = privy.user?.farcaster;
   const fid = user?.fid;
@@ -77,9 +77,9 @@ export const Farcaster: React.FC<FarcasterProps> = (props) => {
   const elUnlink = showClose && buttonIcon(unlinkFarcaster);
   const elUsername = isAuthenticated && !elUnlink && (
     <FarcasterUsername
-      user={user}
-      fc={fc}
       theme={theme}
+      user={user}
+      hasSigner={props.hasSigner}
       showFid={props.showFid}
       spinning={props.spinning}
       onClick={props.onClick}
