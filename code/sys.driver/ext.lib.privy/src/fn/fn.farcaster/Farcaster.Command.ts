@@ -11,14 +11,20 @@ export const FarcasterCommand = {
   ) {
     const life = rx.lifecycle(options.dispose$);
     const events = cmd.events(life.dispose$);
+    const on = events.on;
 
-    events.on('get:fc').subscribe((e) => cmd.invoke('get:fc:res', { fc }, e.tx));
+    on('get:fc', (e) => cmd.invoke('get:fc:res', { fc }, e.tx));
 
-    events.on('send:cast').subscribe(async (e) => {
+    on('send:cast', async (e) => {
       const text = e.params.text;
       const payload = { text };
       const submitted = await fc.hub.submitCast(payload, fc.fid, fc.signer);
       cmd.invoke('send:cast:res', { submitted }, e.tx);
+    });
+
+    on('req:signer', async (e) => {
+      await fc.requestSignerFromWarpcast();
+      cmd.invoke('req:signer:res', {}, e.tx);
     });
 
     return life;

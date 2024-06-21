@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Color, Icons, css, type t } from './common';
 
 export type FarcasterSignerProps = {
-  fc: t.Farcaster;
+  cmd?: t.Cmd<t.FarcasterCmd>;
   enabled?: boolean;
   modifiers?: t.InfoFieldModifiers;
   theme?: t.CommonTheme;
@@ -10,15 +10,19 @@ export type FarcasterSignerProps = {
 };
 
 export const FarcasterSigner: React.FC<FarcasterSignerProps> = (props) => {
-  const { fc, enabled = true } = props;
+  const { enabled = true, cmd } = props;
   const [requestingSigner, setRequestingSigner] = useState(false);
 
   /**
    * Handlers
    */
   const handleSignerClick = async () => {
+    if (!cmd) return;
     setRequestingSigner(true);
-    await fc.requestSignerFromWarpcast();
+
+    const method = cmd.method('req:signer', 'req:signer:res');
+    await method.invoke({}).promise();
+
     setRequestingSigner(false);
   };
 

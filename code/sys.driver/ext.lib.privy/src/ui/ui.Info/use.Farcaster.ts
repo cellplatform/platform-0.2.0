@@ -1,10 +1,16 @@
-import { useExperimentalFarcasterSigner } from '@privy-io/react-auth';
-import { Farcaster } from '../../fn/fn.farcaster';
-import { type t } from './common';
+import { useExperimentalFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
+import { useEffect } from 'react';
 
-export function useFarcaster(args: { privy: t.PrivyInterface; data: t.InfoData }): t.Farcaster {
-  const { privy, data } = args;
+import { Farcaster } from '../../fn/fn.farcaster';
+import { rx, type t } from './common';
+
+export function useFarcaster(args: { data: t.InfoData }) {
+  const { data } = args;
+  const cmd = data.farcaster?.cmd;
   const hubUrl = data.farcaster?.signer?.hubUrl;
+
+  const privy = usePrivy();
+  const wallets = useWallets();
 
   /**
    * Destructure the signer methods.
@@ -19,7 +25,24 @@ export function useFarcaster(args: { privy: t.PrivyInterface; data: t.InfoData }
   };
 
   /**
+   * Start Cmd listener (behavior).
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    if (cmd && privy.ready && wallets.ready) {
+      const fc = Farcaster.create({ privy, signer, hubUrl });
+      Farcaster.Cmd.listen(fc, cmd, { dispose$ });
+    }
+    return dispose;
+  }, [privy.ready, wallets.ready, hubUrl]);
+
+  /**
    * API
    */
-  return Farcaster.create({ privy, signer, hubUrl });
+  const fc = Farcaster.create({ privy, signer, hubUrl });
+  return {
+    cmd,
+    hasAccount: !!fc.account,
+    hasSigner: !!fc.account?.signerPublicKey,
+  } as const;
 }

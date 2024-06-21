@@ -2,17 +2,20 @@ import { DEFAULTS, type t } from './common';
 import { Farcaster } from './ui.Row.Farcaster';
 import { FarcasterSigner } from './ui.Row.Farcaster.Signer';
 
-type Args = t.InfoFieldArgs & { fc: t.Farcaster };
+type Args = t.InfoFieldArgs & {
+  cmd?: t.Cmd<t.FarcasterCmd>;
+  hasAccount?: boolean;
+  hasSigner?: boolean;
+};
 const DEFAULT = DEFAULTS.data.farcaster as t.InfoDataFarcaster;
 
 /**
  * https://docs.privy.io/guide/guides/farcaster-login
  */
 export function farcaster(args: Args): t.PropListItem[] {
-  const { privy, modifiers, theme, fc } = args;
+  const { privy, modifiers, theme, cmd, hasAccount, hasSigner } = args;
   const data = args.data.farcaster;
   const showClose = modifiers.is.over && modifiers.keys.alt;
-  const hasSigner = !!fc.account?.signerPublicKey;
 
   let enabled = args.enabled;
   if (!privy.ready || !privy.authenticated) enabled = false;
@@ -26,10 +29,10 @@ export function farcaster(args: Args): t.PropListItem[] {
     label: data?.identity?.label || DEFAULT.identity?.label,
     value: (
       <Farcaster
-        fc={fc}
         privy={privy}
         theme={theme}
         enabled={enabled}
+        hasSigner={hasSigner}
         showClose={showClose}
         showFid={data?.identity?.fid}
         spinning={data?.identity?.spinning}
@@ -41,10 +44,10 @@ export function farcaster(args: Args): t.PropListItem[] {
   /**
    * FC: Signer.
    */
-  if (data?.signer && (!hasSigner || data.signer.forceVisible)) {
+  if (data?.signer?.forceVisible || (data?.signer && hasAccount && !hasSigner)) {
     res.push({
       label: data?.signer.label || DEFAULT.signer!.label,
-      value: <FarcasterSigner enabled={enabled} fc={fc} theme={theme} modifiers={modifiers} />,
+      value: <FarcasterSigner enabled={enabled} cmd={cmd} theme={theme} modifiers={modifiers} />,
     });
   }
 

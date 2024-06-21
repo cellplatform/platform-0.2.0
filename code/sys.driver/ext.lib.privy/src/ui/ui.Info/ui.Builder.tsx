@@ -15,12 +15,12 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());
   const refresh$ = refreshRef$.current;
 
+  const [ready, setReady] = useState(false);
   const keyboard = Keyboard.useKeyboardState();
+  const fc = useFarcaster({ data });
   const mouse = useMouse();
   const privy = usePrivy();
-  const fc = useFarcaster({ privy, data });
   const { wallets } = useWallets();
-  const [ready, setReady] = useState(false);
 
   const [, setRedraw] = useState(0);
   const refresh = () => {
@@ -49,7 +49,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     const run = async () => {
       const status = Wrangle.toStatus(privy);
       const accessToken = (await privy.getAccessToken()) || undefined;
-      const args: t.InfoStatusHandlerArgs = { status, privy, wallets, accessToken, fc };
+      const args: t.InfoStatusHandlerArgs = { status, privy, wallets, accessToken };
       props.onChange?.(args);
       if (!ready && privy.ready) {
         props.onReady?.(args);
@@ -74,7 +74,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Wallet.Link', () => user && Field.walletLink({ ...ctx, wallets }))
     .field('Wallet.List', () => Field.walletsList({ ...ctx, wallets, refresh$ }))
     .field('Chain.List', () => Field.chainList({ privy, data, enabled, modifiers, fields, theme }))
-    .field('Farcaster', () => user && Field.farcaster({ ...ctx, fc }))
+    .field('Farcaster', () => user && Field.farcaster({ ...ctx, ...fc }))
     .field('Refresh', () => Field.refresh({ ...ctx, wallets, refresh }))
     .items(fields);
 

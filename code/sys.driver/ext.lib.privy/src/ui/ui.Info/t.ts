@@ -53,6 +53,7 @@ export type InfoDataWallet = {
 };
 
 export type InfoDataFarcaster = {
+  cmd?: t.Cmd<t.FarcasterCmd>;
   identity?: {
     label?: string;
     fid?: boolean;
@@ -90,7 +91,6 @@ export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
 export type InfoStatusHandlerArgs = {
   readonly status: t.AuthStatus;
   readonly privy: t.PrivyInterface;
-  readonly fc: t.Farcaster;
   readonly wallets: t.ConnectedWallet[];
   readonly accessToken?: string;
 };
@@ -103,5 +103,4 @@ export type InfoChainSelectedHandlerArgs = {
 export type InfoFarcasterClickHandler = (e: InfoFarcasterClickHandlerArgs) => void;
 export type InfoFarcasterClickHandlerArgs = {
   user: t.FarcasterUser;
-  fc: t.Farcaster;
 };
