@@ -10,11 +10,6 @@ export type CmdTypeMap<C extends t.CmdType> = {
 /**
  * Extract
  */
-export type ExtractError<T extends t.CmdType> = T extends t.CmdType<
-  infer N,
-  infer P,
-  infer R,
-  infer E
->
+export type ExtractError<T extends t.CmdType> = T extends t.CmdType<infer N, infer P, infer E>
   ? E
   : never;

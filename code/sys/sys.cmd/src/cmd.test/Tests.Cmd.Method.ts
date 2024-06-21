@@ -8,8 +8,8 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   type R = { sum: number };
   type E = t.Error & { code: number; type: 'myType-1' | 'myType-2' };
   type C = C1 | C2 | C3;
-  type C1 = t.CmdType<'add', P, C2>;
-  type C2 = t.CmdType<'add:res', R, void, E>;
+  type C1 = t.CmdType<'add', P>;
+  type C2 = t.CmdType<'add:res', R, E>;
   type C3 = t.CmdType<'foo', { msg?: string }>;
   const sum = ({ a, b }: P): R => ({ sum: a + b });
 
