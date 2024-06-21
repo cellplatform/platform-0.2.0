@@ -25,8 +25,12 @@ export type CmdInvoke<C extends t.CmdType> = <N extends C['name']>(
 /**
  * Invoke with expected response.
  */
-export type CmdInvokeResponse<C extends t.CmdType> = <N extends C['name']>(
-  name: [req: N, res: u.ExtractResName<C>],
+export type CmdInvokeResponse<C extends t.CmdType> = <
+  N extends C['name'],
+  R extends u.ExtractRes<u.CmdTypeMap<C>[N]>,
+>(
+  req: N,
+  res: R['name'],
   params: u.CmdTypeMap<C>[N]['params'],
   options?:
     | Tx

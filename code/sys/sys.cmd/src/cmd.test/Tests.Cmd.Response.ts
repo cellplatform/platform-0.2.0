@@ -45,7 +45,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     const tx = 'tx.abc';
     const res1 = cmd.invoke('foo', {}, { tx });
-    const res2 = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, { tx });
+    const res2 = cmd.invoke('add', 'add:res', { a: 1, b: 2 }, { tx });
 
     expect(typeof res1 === 'object').to.be.true;
     expect((res1 as any).listen).to.be.undefined;
@@ -70,7 +70,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const events = cmd.events(dispose$);
       events.on('add').subscribe((e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-      const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
+      const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
 
       expect(res.tx).to.be.a.string;
       expect(res.req.name).to.eql('add');
@@ -98,7 +98,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         cmd.invoke('add:res', sum(e.params), e.tx);
       });
 
-      const res = cmd.invoke(['add', 'add:res'], { a: 2, b: 3 });
+      const res = cmd.invoke('add', 'add:res', { a: 2, b: 3 });
       await Time.wait(10);
 
       expect(res.result?.sum).to.eql(5);
@@ -110,7 +110,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const cmd = Cmd.create<C>(doc);
       cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-      const res = cmd.invoke(['add', 'add:res'], { a: 2, b: 3 });
+      const res = cmd.invoke('add', 'add:res', { a: 2, b: 3 });
       expect(res.result).to.eql(undefined);
 
       const promise = await res.promise();
@@ -129,7 +129,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       const timeout = 10;
-      const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, { timeout });
+      const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 }, { timeout });
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql('Pending');
       expect(res.disposed).to.eql(false);
@@ -153,14 +153,14 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
       // Handler passed to listener constructor.
-      await cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, (e) => fired.push(e)).promise();
+      await cmd.invoke('add', 'add:res', { a: 1, b: 2 }, (e) => fired.push(e)).promise();
 
       expect(fired[0].result?.sum).to.eql(3);
       expect(fired[0].cmd).to.equal(cmd);
 
       // Handler added to {listener} object.
       await cmd
-        .invoke(['add', 'add:res'], { a: 2, b: 3 })
+        .invoke('add', 'add:res', { a: 2, b: 3 })
         .onComplete((e) => {
           fired.push(e);
           expect(e.result?.sum).to.eql(5); // NB: result strongly typed.
@@ -184,7 +184,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       // Handler passed to listener constructor.
       await cmd
-        .invoke(['add', 'add:res'], { a: 1, b: 2 })
+        .invoke('add', 'add:res', { a: 1, b: 2 })
         .onError((e) => fired.push(e))
         .promise();
 
@@ -193,14 +193,14 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       expect(fired[0].cmd).to.equal(cmd);
 
       await cmd
-        .invoke(['add', 'add:res'], { a: 1, b: 2 }, { onError: (e) => fired.push(e) })
+        .invoke('add', 'add:res', { a: 1, b: 2 }, { onError: (e) => fired.push(e) })
         .promise();
 
       expect(fired.length).to.eql(2);
       expect(fired[1].error).to.eql(error);
 
       // Example.
-      cmd.invoke(['add', 'add:res'], { a: 1, b: 2 }, (e) => {
+      cmd.invoke('add', 'add:res', { a: 1, b: 2 }, (e) => {
         e.error; /*  handle error */
         e.result; /* do something with result */
       });
@@ -220,8 +220,8 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       const params: P = { a: 1, b: 2 };
-      const res1 = cmd.invoke(['add', 'add:res'], params);
-      const res2 = cmd.invoke(['add', 'add:res'], params, { dispose$ });
+      const res1 = cmd.invoke('add', 'add:res', params);
+      const res2 = cmd.invoke('add', 'add:res', params, { dispose$ });
       expect(res1.disposed).to.eql(false);
       expect(res2.disposed).to.eql(false);
 
@@ -249,7 +249,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         cmd.invoke('add:res', sum(params), { tx, error });
       });
 
-      const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
+      const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
       await res.promise();
 
       expect(doc.current.error).to.eql(error);
@@ -270,7 +270,7 @@ export function responseTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         cmd.invoke('add:res', sum(params), { tx, error });
       });
 
-      const res = cmd.invoke(['add', 'add:res'], { a: 1, b: 2 });
+      const res = cmd.invoke('add', 'add:res', { a: 1, b: 2 });
       await res.promise();
 
       expect(res.error?.code).to.eql(123);

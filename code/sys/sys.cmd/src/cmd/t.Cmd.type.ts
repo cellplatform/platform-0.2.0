@@ -12,10 +12,10 @@ type U = undefined;
  *
  */
 export type CmdType<
-  N extends S = S, //               ← Name
-  P extends O = O, //               ← Params
-  R extends CmdType | U = U, //     ← Response
-  E extends t.Error = t.Error, //   ← Error
+  N extends S = S, //                 ← Name
+  P extends O = O, //                 ← Params
+  R extends CmdType | void = void, // ← Response
+  E extends t.Error = t.Error, //     ← Error
 > = {
   readonly name: N;
   readonly params: P;

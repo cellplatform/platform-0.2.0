@@ -44,7 +44,7 @@ export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: Optio
     return { res, start } as const;
   };
 
-  const invoke: t.CmdInvoke<C> = (name, params, opt) => {
+  const invokeVoid: t.CmdInvoke<any> = (name, params, opt) => {
     const tx = wrangle.invoke.tx(opt, args.tx);
     const error = wrangle.invoke.error(opt);
     const { res, start } = invokeSetup(tx, name, params, error);
@@ -52,38 +52,57 @@ export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: Optio
     return res;
   };
 
-  const invokeWithResponse: t.CmdInvokeResponse<any> = (name, params, opt) => {
+  const invokeResponder: t.CmdInvokeResponse<any> = (req, res, params, opt) => {
     const options = wrangle.invoke.responseOptions(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
     const error = wrangle.invoke.error(options);
     const { timeout, dispose$, onComplete, onError } = options;
-    const { start } = invokeSetup(tx, name[0], params, error);
-    const res = Listener.create<C>(api, {
+    const { start } = invokeSetup(tx, req, params, error);
+    const listener = Listener.create<C>(api, {
       tx,
-      req: { name: name[0], params },
-      res: { name: name[1] },
+      req: { name: req, params },
+      res: { name: res },
       timeout,
       dispose$,
       onComplete,
       onError,
     });
     start();
-    return res;
+    return listener;
+  };
+
+  const toVoidMethod = (req: C['name']): t.CmdMethodVoid<C> => {
+    return {
+      name: req,
+      invoke: (params, options) => invokeVoid<any>(req, params, options),
+    };
+  };
+
+  const toResponderMethod = (req: C['name'], res: C['name']): t.CmdMethodResponder<C, C> => {
+    return {
+      name: { req, res },
+      invoke: (params, options) => invokeResponder(req, res, params, options) as any,
+    };
   };
 
   /**
    * API
    */
   const api: t.Cmd<C> = {
-    invoke(...args: any[]) {
-      const [p1, p2, p3] = args;
-      if (Array.isArray(p1)) return invokeWithResponse(p1 as any, p2 as any, p3);
-      if (typeof p2 === 'object') return invoke(p1, p2, p3) as any;
-      throw new Error('overlaoded invoke arguments could not be wrangled');
-    },
-
     events(dispose$?: t.UntilObservable) {
       return Events.create<C>(doc, { paths, dispose$ });
+    },
+
+    invoke(...args: any[]) {
+      const [p1, p2, p3, p4] = args;
+      if (typeof p2 === 'string') return invokeResponder(p1, p2, p3, p4) as any;
+      if (typeof p2 === 'object') return invokeVoid(p1, p2, p3) as any;
+      throw new Error('overloaded invoke arguments could not be wrangled');
+    },
+
+    method(...args: any[]) {
+      const [p1, p2] = args;
+      return (typeof p2 !== 'string' ? toVoidMethod(p1) : toResponderMethod(p1, p2)) as any;
     },
   } as const;
   return api;
