@@ -16,7 +16,7 @@ export default Dev.describe(name, (e) => {
   };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
     language: DEFAULTS.language,
     text: '',
     selection: null,
