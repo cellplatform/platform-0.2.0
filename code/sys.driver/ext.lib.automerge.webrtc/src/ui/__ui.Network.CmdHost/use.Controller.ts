@@ -36,7 +36,7 @@ export function useController(args: {
     clearCommand() {
       doc?.change((d) => {
         const cmd = resolve.cmd.text(d);
-        if (cmd) Doc.splice(d, path.cmd.text, 0, cmd.length);
+        if (cmd) Doc.Text.splice(d, path.cmd.text, 0, cmd.length);
       });
     },
     unload() {
