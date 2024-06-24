@@ -38,6 +38,7 @@ export default Dev.describe(name, (e) => {
     | 'focusOnClick'
     | 'enabled'
     | 'listEnabled'
+    | 'commandbarVisible'
   > &
     Pick<T['debug'], 'stateful' | 'useOnItemClick'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -53,6 +54,7 @@ export default Dev.describe(name, (e) => {
     autoGrabFocus: DEFAULTS.autoGrabFocus,
     focusOnReady: DEFAULTS.focusOnReady,
     focusOnClick: DEFAULTS.focusOnClick,
+    commandbarVisible: DEFAULTS.commandbarVisible,
   });
 
   e.it('init', async (e) => {
@@ -71,6 +73,7 @@ export default Dev.describe(name, (e) => {
       d.props.autoGrabFocus = local.autoGrabFocus;
       d.props.focusOnReady = local.focusOnReady;
       d.props.focusOnClick = local.focusOnClick;
+      d.props.commandbarVisible = local.commandbarVisible;
 
       d.debug.stateful = local.stateful;
       d.debug.useOnItemClick = local.useOnItemClick;
@@ -169,6 +172,16 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.focusOnClick = Dev.toggle(d.props, 'focusOnClick')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.commandbarVisible;
+        btn
+          .label((e) => `commandbarVisible`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.commandbarVisible = Dev.toggle(d.props, 'commandbarVisible')));
           });
       });
 

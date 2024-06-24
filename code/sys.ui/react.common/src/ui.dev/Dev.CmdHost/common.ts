@@ -21,5 +21,6 @@ export const DEFAULTS = {
   focusOnReady: true,
   focusOnClick: false,
   autoGrabFocus: true,
+  commandbarVisible: true,
   qs: BASE.qs,
 } as const;

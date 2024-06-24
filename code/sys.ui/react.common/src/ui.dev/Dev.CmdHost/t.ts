@@ -10,6 +10,7 @@ export type CmdHostProps = {
   commandPlaceholder?: string;
   commandPrefix?: t.CmdBarProps['prefix'];
   commandSuffix?: t.CmdBarProps['suffix'];
+  commandbarVisible?: boolean;
   filter?: t.CmdHostFilter | null;
   selected?: string;
   hintKey?: string | string[];
