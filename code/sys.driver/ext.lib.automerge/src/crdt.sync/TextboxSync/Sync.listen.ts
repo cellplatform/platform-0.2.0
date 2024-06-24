@@ -1,4 +1,3 @@
-import { Calc } from './Sync.Calc';
 import { Doc, ObjectPath, rx, type t } from './common';
 
 type O = Record<string, unknown>;
@@ -38,7 +37,7 @@ export function listen<T extends O>(
    */
   const input$ = event.textbox.change$.pipe(
     rx.filter((e) => e.to !== resolve(doc.current, path)),
-    rx.map((e) => Calc.diff(e.from, e.to, e.selection.start)),
+    rx.map((e) => Doc.Text.diff(e.from, e.to, e.selection.start)),
     rx.filter((diff) => diff.index >= 0),
   );
 

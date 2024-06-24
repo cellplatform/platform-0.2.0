@@ -3,7 +3,7 @@ import { type t } from './common';
 /**
  * Syncer for a text <input> element.
  */
-export const Calc = {
+export const Text = {
   /**
    * Calculate a diff between two string providing parameters to pass
    * into a `.splice(..)` function.

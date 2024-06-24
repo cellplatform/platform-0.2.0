@@ -1,9 +1,9 @@
-import { TextboxSync } from '.';
+import { Doc } from '.';
 import { describe, expect, it, type t } from '../../test';
 
-describe('TextboxSync', () => {
-  describe('Calc.diff', () => {
-    const Calc = TextboxSync.Calc;
+describe('Doc.Text', () => {
+  describe('Text.diff', () => {
+    const Calc = Doc.Text;
 
     const assertDiff = (diff: t.TextDiff, index: number, delCount: number, newText?: string) => {
       expect(diff.index).to.eql(index);
