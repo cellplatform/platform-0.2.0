@@ -1,4 +1,3 @@
-import 'symbol-observable';
 export * from './RxJs.lib';
 
 export * from './Rx.BusConnect';
