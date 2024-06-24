@@ -1,7 +1,5 @@
 import { useRef } from 'react';
-import { slug, type t } from './common';
-
-import { CmdBar } from 'sys.ui.react.common';
+import { BaseComponent, slug, type t } from './common';
 import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
@@ -20,7 +18,8 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
   });
 
   return (
-    <CmdBar
+    <BaseComponent
+      control={props.control}
       text={controller.text}
       enabled={controller.is.enabled}
       theme={props.theme}

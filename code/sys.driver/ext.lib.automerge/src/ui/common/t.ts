@@ -7,6 +7,7 @@ export type { CSSProperties } from 'react';
  * @system
  */
 export type {
+  CmdBarControl,
   CssEdgesInput,
   CssValue,
   DevCtxState,
@@ -21,8 +22,8 @@ export type {
   RenderCountProps,
   TextInputChangeArgs,
   TextInputRef,
-  TextInputSelection,
   TextInputSelectHandler,
+  TextInputSelection,
 } from 'sys.ui.react.common/src/types';
 
 export type {

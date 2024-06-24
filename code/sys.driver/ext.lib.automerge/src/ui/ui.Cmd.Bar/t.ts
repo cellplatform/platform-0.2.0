@@ -5,9 +5,10 @@ import type { t } from './common';
  */
 export type CmdBarProps = {
   instance?: string;
-  enabled?: boolean;
+  control?: t.CmdBarControl;
   doc?: t.Lens | t.DocRef;
   paths?: t.CmdBarPaths;
+  enabled?: boolean;
   debug?: string;
   focusOnReady?: boolean;
   theme?: t.CommonTheme;

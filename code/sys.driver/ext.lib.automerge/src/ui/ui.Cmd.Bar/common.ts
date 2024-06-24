@@ -1,5 +1,6 @@
 import { Cmd, Pkg, type t } from '../common';
 
+export { CmdBar as BaseComponent } from 'sys.ui.react.common';
 export { Doc } from '../../crdt';
 export { Sync } from '../../crdt.sync';
 export { Cmd };

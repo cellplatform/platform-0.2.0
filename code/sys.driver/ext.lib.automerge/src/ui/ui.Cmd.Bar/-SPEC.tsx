@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, Doc, Pkg, css, sampleCrdt, slug, type t } from '../../test.ui';
+import { Color, Dev, Doc, Pkg, css, sampleCrdt, slug, type t, Time } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { RepoList } from '../ui.RepoList';
 
@@ -25,6 +25,8 @@ export default Dev.describe(name, async (e) => {
   let model: t.RepoListModel;
   let listRef: t.RepoListRef;
   let doc: t.DocRef | undefined;
+
+  const control = CmdBar.control();
 
   let _lens: t.Lens | undefined;
   const getLens = () => {
@@ -80,6 +82,7 @@ export default Dev.describe(name, async (e) => {
             <div {...styles.instance}>{`instance: ${props.instance || 'unknown'}`}</div>
             <CmdBar
               {...props}
+              control={control.cmd}
               doc={debug.useLens ? getLens() : doc}
               onReady={(e) => console.info(`⚡️ onReady:`, e)}
               onText={(e) => console.info(`⚡️ onText:`, e)}
@@ -141,6 +144,12 @@ export default Dev.describe(name, async (e) => {
             e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
           );
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(['Controls', 'Cmd'], (dev) => {
+      dev.button('focus', (e) => Time.delay(0, () => control.focus({})));
     });
 
     dev.hr(5, 20);
