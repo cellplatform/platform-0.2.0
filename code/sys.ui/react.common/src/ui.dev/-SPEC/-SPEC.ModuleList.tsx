@@ -13,9 +13,10 @@ import { Specs } from '../../test.ui/entry.Specs';
 const name = 'ModuleList';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<ModuleListProps, 'title' | 'version' | 'showParamDev'>;
+  type LocalStore = Pick<ModuleListProps, 'theme' | 'title' | 'version' | 'showParamDev'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
+    theme: undefined,
     title: 'MyTitle',
     version: '0.0.0',
     showParamDev: true,
@@ -31,27 +32,32 @@ export default Dev.describe(name, (e) => {
       p.title = local.title;
       p.version = local.version;
       p.showParamDev = local.showParamDev;
+      p.theme = local.theme;
 
       p.imports = Specs;
       p.badge = BADGES.ci.node;
       p.hrDepth = 3;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(360);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+
         const styles = {
-          base: css({ Absolute: 0, display: 'grid', Scroll: true }),
+          base: css({
+            Absolute: 0,
+            display: 'grid',
+            Scroll: true,
+          }),
         };
         return (
           <div {...styles.base}>
-            <ModuleList
-              {...e.state.props}
-              onItemClick={(e) => console.info('⚡️ onItemClick', e)}
-            />
+            <ModuleList {...props} onItemClick={(e) => console.info('⚡️ onItemClick', e)} />
           </div>
         );
       });
@@ -91,6 +97,12 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
+
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.showParamDev;
         btn
