@@ -42,7 +42,7 @@ export function listen<T extends O>(
   );
 
   input$.subscribe((diff) => {
-    doc.change((d) => Doc.splice(d, path, diff.index, diff.delCount, diff.newText));
+    doc.change((d) => Doc.Text.splice(d, path, diff.index, diff.delCount, diff.newText));
   });
 
   /**

@@ -1,9 +1,12 @@
 import { type t } from './common';
+import { splice } from './Doc.Text.splice';
 
 /**
  * Syncer for a text <input> element.
  */
 export const Text = {
+  splice,
+
   /**
    * Calculate a diff between two string providing parameters to pass
    * into a `.splice(..)` function.

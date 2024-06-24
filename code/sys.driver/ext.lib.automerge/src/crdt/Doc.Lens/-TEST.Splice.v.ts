@@ -32,7 +32,7 @@ describe('Doc.Lens: splice', () => {
       /**
        * Lens-1: Make a change (using the CRDT splicer)
        */
-      lens1.change((d) => Doc.splice(d, ['text'], 0, 0, 'hello'));
+      lens1.change((d) => Doc.Text.splice(d, ['text'], 0, 0, 'hello'));
       expect(lens1.current).to.eql({ text: 'hello' });
       expect(lens2.current).to.eql({ text: '' });
 
@@ -46,7 +46,7 @@ describe('Doc.Lens: splice', () => {
           .forEach((patch) => {
             const index = patch.path[patch.path.length - 1];
             const path = patch.path.slice(0, -1);
-            Doc.splice(d, path, index, 0, patch.value);
+            Doc.Text.splice(d, path, index, 0, patch.value);
           });
       });
 
