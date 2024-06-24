@@ -11,8 +11,12 @@ export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
  */
 export type { Cmd } from 'sys.cmd/src/types';
 export type { SpecImporter, SpecImports } from 'sys.test.spec/src/types';
-export type { CommonTheme, DomRect } from 'sys.types/src/types';
-export type { CssValue } from 'sys.ui.react.css/src/types';
+export type {
+  CommonTheme,
+  CssValue,
+  DomRect,
+  TextInputSelection,
+} from 'sys.ui.react.common/src/types';
 
 /**
  * @local

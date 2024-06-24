@@ -8,10 +8,10 @@ import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
 import { Color, Dev, css, type t } from '../../test.ui';
-import { Dsl } from './-SPEC.cmd.dsl';
+import { DSL } from './-SPEC.dsl';
 import { SampleLayout } from './-SPEC.ui';
 import { DebugFooter } from './-SPEC.ui.debug.footer';
-import { Footer } from './-SPEC.ui.footer';
+import { Footer } from './-SPEC.ui.CmdBar';
 import { Cmd, Immutable, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = {
@@ -41,21 +41,7 @@ export default Dev.describe(name, async (e) => {
    * Commands for Farcaster.
    */
   const doc = Immutable.clonerRef({}); // NB: Default simple "cloner" immutable.
-  const fcCommand = Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>;
-  //   const sendSampleCast = async () => {
-  //     const method = fcCommand.method('get:fc', 'get:fc:res');
-  //     const res = await method.invoke({}).promise();
-  //     const fc = res.result?.fc as t.Farcaster; // TEMP 🐷 no "as" cast
-  //
-  //     if (fc) {
-  //       const payload = { text: 'Hello 👋' };
-  //       console.log('payload', payload);
-  //       console.log('fc.fid', fc.fid);
-  //       console.log('fc.signer', fc.signer);
-  //       const res = await fc.hub.submitCast(payload, fc.fid, fc.signer);
-  //       console.log('res', res);
-  //     }
-  //   };
+  const fc = Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -87,7 +73,6 @@ export default Dev.describe(name, async (e) => {
           <div {...styles.base}>
             <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
             {elOverlay}
-            {/* <div {...styles.overlay}></div> */}
           </div>
         );
       });
@@ -95,13 +80,9 @@ export default Dev.describe(name, async (e) => {
     ctx.host.footer.padding(0).render((e) => {
       return (
         <Footer
-          cmd={fcCommand}
+          cmd={{ fc }}
           network={network}
-          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
-          onLoad={async (e) => {
-            const el = await Dsl.load(e.name);
-            state.change((d) => (d.overlay = el));
-          }}
+          onOverlay={(e) => state.change((d) => (d.overlay = e.el))}
         />
       );
     });
@@ -131,12 +112,10 @@ export default Dev.describe(name, async (e) => {
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
-              cmd: fcCommand,
+              cmd: fc,
               signer: {},
               identity: {
-                onClick: (e) => {
-                  console.info(`⚡️ farcaster.identity.onClick`, e);
-                },
+                onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
               },
             },
           }}
