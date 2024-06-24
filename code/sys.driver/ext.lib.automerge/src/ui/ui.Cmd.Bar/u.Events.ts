@@ -20,7 +20,7 @@ export const Events = {
    * <Cmd> object factory for the given document.
    */
   cmd(doc: t.Lens | t.DocRef, paths: t.CmdBarPaths = DEFAULTS.paths) {
-    return Cmd.create<t.CmdBarType>(doc, paths.cmd) as t.CmdBarCmd;
+    return Cmd.create<t.CmdBarType>(doc, paths.cmd) as t.CmdBarCommand;
   },
 
   /**
@@ -44,7 +44,7 @@ export const Events = {
     const text$ = rx.payload<t.CmdBarTextEvent>($, 'crdt:cmdbar/text');
     const cmd$ = rx.payload<t.CmdBarTxEvent>($, 'crdt:cmdbar/tx');
 
-    let cmd: t.CmdBarCmd | undefined;
+    let cmd: t.CmdBarCommand | undefined;
     if (args.doc) {
       cmd = Events.cmd(args.doc, paths);
       const events = {

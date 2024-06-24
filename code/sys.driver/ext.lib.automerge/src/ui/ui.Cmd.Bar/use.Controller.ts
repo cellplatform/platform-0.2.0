@@ -24,10 +24,10 @@ export function useController(args: Args) {
   const debug = wrangle.debug(args);
   const resolve = Path.resolver(paths);
 
-  const cmdRef = useRef<t.CmdBarCmd>();
+  const cmdRef = useRef<t.CmdBarCommand>();
   const getCmd = (doc: t.Lens | t.DocRef) => {
     type C = t.CmdBarType;
-    if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd) as t.CmdBarCmd;
+    if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd) as t.CmdBarCommand;
     return cmdRef.current;
   };
 
@@ -57,10 +57,10 @@ export function useController(args: Args) {
   useEffect(() => {
     const events = Events.create({ instance, doc, paths });
     if (doc) {
-      const cmd = () => getCmd(doc);
-      events.text$.subscribe((e) => handlers.onText?.(e, cmd()));
-      events.cmd.$.subscribe((e) => handlers.onCommand?.(e, cmd()));
-      events.cmd.tx$.subscribe((e) => handlers.onInvoke?.(e, cmd()));
+      const ctx = () => ({ ctx: getCmd(doc) });
+      events.text$.subscribe((e) => handlers.onText?.(e, ctx()));
+      events.cmd.$.subscribe((e) => handlers.onCommand?.(e, ctx()));
+      events.cmd.tx$.subscribe((e) => handlers.onInvoke?.(e, ctx()));
     }
     return events.dispose;
   }, [enabled, doc?.instance]);
@@ -96,7 +96,6 @@ export function useController(args: Args) {
     get is() {
       return { enabled, lens: Is.lens(doc), doc: Is.docRef(doc) };
     },
-
     onReady(ref: t.TextInputRef) {
       setTextbox(ref);
     },

@@ -21,6 +21,8 @@ export type {
   RenderCountProps,
   TextInputChangeArgs,
   TextInputRef,
+  TextInputSelection,
+  TextInputSelectHandler,
 } from 'sys.ui.react.common/src/types';
 
 export type {

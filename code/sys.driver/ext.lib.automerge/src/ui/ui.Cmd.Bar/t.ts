@@ -19,6 +19,7 @@ export type CmdBarHandlers = {
   onText?: CmdBarTextHandler;
   onCommand?: CmdBarTxHandler;
   onInvoke?: CmdBarTxHandler;
+  onSelect?: t.TextInputSelectHandler;
 };
 
 /**
@@ -40,7 +41,7 @@ export type CmdBarLens = {
 /**
  * <CmdBar>:Commands
  */
-export type CmdBarCmd = t.Cmd<CmdBarType>;
+export type CmdBarCommand = t.Cmd<CmdBarType>;
 export type CmdBarType = CmdBarInvoke; // ← NB: extension point (union in other command-types over time).
 
 export type CmdBarInvoke = t.CmdType<'Invoke', CmdBarInvokeParams>;
@@ -73,13 +74,14 @@ export type CmdBarReady<T extends C = C> = { readonly cmd: t.Cmd<T> };
  * (typically via the ENTER key press).
  */
 type C = CmdBarType;
-export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>, cmd: CmdBarCmd) => void;
+type Ctx = { ctx: CmdBarCommand };
+export type CmdBarTxHandler<T extends C = C> = (e: CmdBarTx<T>, ctx: Ctx) => void;
 export type CmdBarTxEvent<T extends C = C> = { type: 'crdt:cmdbar/tx'; payload: CmdBarTx<T> };
 export type CmdBarTx<T extends C = C> = t.CmdTx<T>;
 
 /**
  * Fires when the command bar's text changes.
  */
-export type CmdBarTextHandler = (e: CmdBarText, cmd: CmdBarCmd) => void;
+export type CmdBarTextHandler = (e: CmdBarText, ctx: Ctx) => void;
 export type CmdBarTextEvent = { type: 'crdt:cmdbar/text'; payload: CmdBarText };
 export type CmdBarText = { text: string };

@@ -6,6 +6,12 @@ type O = Record<string, unknown>;
  * Helpers for resolving and mutating paths.
  */
 export const Path = {
+  mutate(paths: t.CmdBarPaths = DEFAULTS.paths) {
+    return {
+      text: (d: O, value: string) => ObjectPath.mutate(d, paths.text, value),
+    };
+  },
+
   /**
    * Factory for a resolver that reads path locations from the given abstract document.
    * This might be the [root] of a document, or a [lens] into it.
