@@ -12,6 +12,7 @@ export type {
   JsonMapU,
   JsonU,
   Lifecycle,
+  Msecs,
   UntilObservable,
 } from 'sys.types/src/types';
 
