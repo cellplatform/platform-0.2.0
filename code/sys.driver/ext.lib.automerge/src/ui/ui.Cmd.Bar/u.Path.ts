@@ -6,6 +6,8 @@ type O = Record<string, unknown>;
  * Helpers for resolving and mutating paths.
  */
 export const Path = {
+  default: DEFAULTS.paths,
+
   mutate(paths: t.CmdBarPaths = DEFAULTS.paths) {
     return {
       text: (d: O, value: string) => ObjectPath.mutate(d, paths.text, value),
