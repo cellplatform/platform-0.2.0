@@ -32,7 +32,7 @@ export function listen<T extends O>(
       return Path.Object.resolve<string>(doc, target);
     },
     splice(doc: T, index: number, del: number, text?: string) {
-      Doc.splice(doc, [...target], index, del, text);
+      Doc.Text.splice(doc, [...target], index, del, text);
     },
   } as const;
 
