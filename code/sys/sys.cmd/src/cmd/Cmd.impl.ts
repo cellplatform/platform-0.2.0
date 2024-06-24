@@ -14,7 +14,11 @@ type Options = {
 /**
  * Command factory.
  */
-export function create<C extends t.CmdType>(doc: t.CmdImmutable, options?: OptionsInput): t.Cmd<C> {
+export function create<C extends t.CmdType>(
+  transport: t.CmdImmutable,
+  options?: OptionsInput,
+): t.Cmd<C> {
+  const doc = transport;
   const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
