@@ -26,6 +26,7 @@ export default Dev.describe(name, (e) => {
       d.debug.content = local.content;
     });
 
+    ctx.debug.width(300);
     ctx.subject
       .size([250, null])
       .display('grid')
