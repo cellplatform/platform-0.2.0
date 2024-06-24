@@ -8,7 +8,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     enabled = true,
     listEnabled = true,
     focusOnClick = DEFAULTS.focusOnClick,
-    commandbarVisible = DEFAULTS.commandbarVisible,
+    showCommandbar: commandbarVisible = DEFAULTS.showCommandbar,
   } = props;
   const imports = wrangle.filteredImports(props);
   const selectedIndex = wrangle.selectedIndex(imports, props.selected);
