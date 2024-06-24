@@ -12,11 +12,13 @@ export { Patch, PatchState } from 'ext.lib.immer';
 /**
  * @system
  */
+export { Cmd } from 'sys.cmd';
 export { Diff, Fuzzy, Text } from 'sys.data.text';
 export {
   Delete,
   Filesize,
   Hash,
+  Immutable,
   Is,
   ObjectPath,
   Percent,

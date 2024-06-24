@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, DevIcons, Pkg, css, type t } from '../../test.ui';
+import { Color, Dev, DevIcons, Pkg, css, type t, Time } from '../../test.ui';
 
 type TEnv = {};
 type P = t.CmdBarProps;
@@ -25,6 +25,8 @@ export default Dev.describe(name, (e) => {
     text: undefined,
   });
 
+  const control = CmdBar.control();
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -49,9 +51,8 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            onChange={(e) => {
-              state.change((d) => (local.text = d.props.text = e.to));
-            }}
+            control={control.cmd}
+            onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
           />
         );
       });
@@ -130,6 +131,18 @@ export default Dev.describe(name, (e) => {
           local.placeholder = p.placeholder = DEFAULTS.commandPlaceholder;
         });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(['Controls', 'Cmd'], (dev) => {
+      const focus = (select?: boolean) => {
+        dev.button(['focus', select ? 'select' : ''], (e) => {
+          Time.delay(0, () => control.focus({ select }));
+        });
+      };
+      focus(true);
+      focus(false);
     });
   });
 
