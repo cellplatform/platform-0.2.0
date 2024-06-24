@@ -17,6 +17,7 @@ export type TextInputEventHandlers = {
   onFocus?: t.TextInputFocusHandler;
   onBlur?: t.TextInputFocusHandler;
   onFocusChange?: t.TextInputFocusHandler;
+  onSelect?: t.TextInputSelectHandler;
 };
 
 /**
@@ -28,7 +29,6 @@ export type TextInputEvents = t.Lifecycle & {
   readonly focus$: t.Observable<t.TextInputFocusArgs>;
   readonly key$: t.Observable<t.TextInputKeyEventPayload>;
   readonly tab$: t.Observable<t.TextInputTabArgs>;
-
   onChange(fn: t.TextInputChangeHandler): void;
   onKeyDown(fn: t.TextInputKeyHandler): void;
   onKeyUp(fn: t.TextInputKeyHandler): void;

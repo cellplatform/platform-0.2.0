@@ -42,6 +42,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       onChange={props.onChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
+      onSelect={props.onSelect}
     />
   );
 };

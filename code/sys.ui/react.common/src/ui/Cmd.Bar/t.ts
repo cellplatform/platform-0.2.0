@@ -15,6 +15,7 @@ export type CmdBarProps = {
   style?: t.CssValue;
   onReady?: t.TextInputReadyHandler;
   onChange?: t.TextInputChangeHandler;
+  onSelect?: t.TextInputSelectHandler;
   onFocusChange?: t.TextInputFocusHandler;
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
