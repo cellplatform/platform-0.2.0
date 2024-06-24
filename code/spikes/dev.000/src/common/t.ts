@@ -9,9 +9,15 @@ export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
 /**
  * @system
  */
-export type { Cmd } from 'sys.cmd/src/types';
+export type { Cmd, CmdType } from 'sys.cmd/src/types';
 export type { SpecImporter, SpecImports } from 'sys.test.spec/src/types';
+export type { ModuleImports } from 'sys.types/src/types';
+
+/**
+ * @UI
+ */
 export type {
+  CmdBarControl,
   CommonTheme,
   CssValue,
   DomRect,

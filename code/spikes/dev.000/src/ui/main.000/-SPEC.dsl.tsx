@@ -1,4 +1,6 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev } from '../../test.ui';
+import { LoadList } from './-SPEC.ui.CmdBar.List';
+import { CmdBar, Doc, type t } from './common';
 
 /**
  * TODO 🐷
@@ -15,9 +17,40 @@ export const DSL = {
     const { spec } = DSL.find(specs, includes);
     const el = spec ? <Dev.Harness spec={spec} style={{ Absolute: 0 }} /> : undefined;
     if (!silent) {
-      console.log('specs', specs);
+      console.info('specs', specs);
       console.info(`render: "${includes}":el:`, el);
     }
     return el;
+  },
+
+  /**
+   * Match a given command.
+   */
+  async matchView(command: string, doc: t.Lens) {
+    const text = (command || '').trim();
+    const parts = text.split(' ').map((part) => part.trim());
+    const lname = (parts[0] || '').toLowerCase();
+
+    if (lname === 'load') {
+      const { Specs } = await import('../../test.ui/entry.Specs');
+      const filter = parts.slice(1).join(' ');
+      return (
+        <LoadList
+          modules={Specs}
+          filter={filter}
+          onSelect={(e) => {
+            doc.change((d) => {
+              const resolver = CmdBar.Path.resolver();
+              const path = CmdBar.Path.default.text;
+              const from = resolver.text(d);
+              const to = `load ${e.uri}`;
+              Doc.Text.splice(d, path, 0, from.length, to);
+            });
+          }}
+        />
+      );
+    }
+
+    return;
   },
 } as const;

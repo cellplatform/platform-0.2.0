@@ -8,10 +8,9 @@ import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
 import { Color, Dev, css, type t } from '../../test.ui';
-import { DSL } from './-SPEC.dsl';
 import { SampleLayout } from './-SPEC.ui';
-import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Footer } from './-SPEC.ui.CmdBar';
+import { DebugFooter } from './-SPEC.ui.debug.footer';
 import { Cmd, Immutable, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = {
