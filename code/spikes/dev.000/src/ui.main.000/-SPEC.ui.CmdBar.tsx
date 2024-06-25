@@ -39,6 +39,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
       const path = CmdBar.Path.default.text;
       lens?.change((d) => Doc.Text.replace(d, path, ''));
     });
+    keys.on('Tab', (e) => e.handled());
 
     return life.dispose;
   }, [lens]);
