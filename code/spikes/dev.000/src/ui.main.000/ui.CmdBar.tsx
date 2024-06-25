@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { DSL } from './-SPEC.dsl';
-import { CmdBar, Keyboard, rx, type t, Doc } from './common';
+import { CmdBar, Doc, Keyboard, rx, type t } from './common';
+import { DSL } from './dsl';
 
 export type FooterProps = {
   cmd: { fc: t.Cmd<t.FarcasterCmd> };
