@@ -9,6 +9,9 @@ export { Observable, Subject } from 'rxjs';
 
 export { Patch, PatchState } from 'ext.lib.immer';
 
+import minimist from 'minimist';
+export { minimist };
+
 /**
  * @system
  */
