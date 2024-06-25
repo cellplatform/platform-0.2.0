@@ -3,6 +3,7 @@ export type * from './t.coord';
 export type * from './t.deep';
 export type * from './t.dispose';
 export type * from './t.dom';
+export type * from './t.error';
 export type * from './t.hash';
 export type * from './t.immutable';
 export type * from './t.io';

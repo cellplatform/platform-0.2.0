@@ -18,6 +18,7 @@ export type CmdHostProps = {
   enabled?: boolean;
   focused?: boolean;
   showParamDev?: boolean;
+  showCommandbar?: boolean;
   autoGrabFocus?: boolean;
   listMinWidth?: number;
   listEnabled?: boolean;

@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef, useCallback } from 'react';
+
 import { Color, DEFAULTS, KeyHint, css, type t } from './common';
 import { Textbox } from './ui.Textbox';
 

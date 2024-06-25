@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDragTarget } from '../../ui.use';
 import { COLORS, Color, Filesize, Hash, css, type t } from '../common';
 
+const RED = `#FF0000`;
+
 export type DropProps = {
   style?: t.CssValue;
   onDrop?: (e: { hash: string; data: Uint8Array }) => void;
@@ -43,7 +45,7 @@ export const Drop: React.FC<DropProps> = (props) => {
     }),
   };
 
-  const message = drag.is.over ? '(drop file now)' : hash ? hash : 'drag and drop file';
+  const message = wrangle.message(hash, drag.is.over);
 
   return (
     <div ref={drag.ref} {...css(styles.base, props.style)}>
@@ -54,3 +56,28 @@ export const Drop: React.FC<DropProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  message(input: string, isDragOver: boolean) {
+    if (isDragOver) return '(drop file now)';
+    if (!input) return 'drag and drop file';
+
+    const HIGHLIGHT = 4;
+    const [prefix, hash] = input.split('-');
+    const start = hash.slice(0, -HIGHLIGHT);
+    const end = hash.slice(-HIGHLIGHT);
+
+    const styles = { highlight: css({ color: RED }) };
+    return (
+      <>
+        <span {...styles.highlight}>{prefix}</span>
+        <span>{'-'}</span>
+        <span>{start}</span>
+        <span {...styles.highlight}>{end}</span>
+      </>
+    );
+  },
+} as const;

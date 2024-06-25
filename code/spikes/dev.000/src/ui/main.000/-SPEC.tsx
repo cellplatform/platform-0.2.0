@@ -1,14 +1,21 @@
+/**
+ * Polyfill: Required for [@standard-crypto/farcaster-js] in production builds.
+ *           Upstream dependency of [@privy-io/react-auth]
+ *
+ * https://github.com/standard-crypto/farcaster-js
+ */
+import { Buffer } from 'buffer';
+if (!window.Buffer) window.Buffer = Buffer;
+
 import { Color, Dev, css, type t } from '../../test.ui';
-import { Loader } from './-SPEC.cmd';
-import { View } from './-SPEC.ui';
+import { SampleLayout } from './-SPEC.ui';
+import { Footer } from './-SPEC.ui.CmdBar';
 import { DebugFooter } from './-SPEC.ui.debug.footer';
-import { Footer } from './-SPEC.ui.footer';
-import { Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
+import { Cmd, Immutable, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
-  spinning?: boolean;
 };
 const initial: T = {};
 
@@ -28,7 +35,12 @@ export default Dev.describe(name, async (e) => {
   });
   const network: t.NetworkStore = await WebrtcStore.init(self, store, model.index, {});
   const theme: t.CommonTheme = 'Light';
-  let fc: t.Farcaster | undefined;
+
+  /**
+   * Commands for Farcaster.
+   */
+  const doc = Immutable.clonerRef({}); // NB: Default simple "cloner" immutable.
+  const fc = Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -45,7 +57,12 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({ Absolute: 0, display: 'grid', backgroundColor: Color.WHITE }),
+          overlay: css({
+            Absolute: 0,
+            display: 'grid',
+            backgroundColor: Color.WHITE,
+            overflow: 'hidden',
+          }),
         };
 
         const overlay = e.state.overlay;
@@ -53,7 +70,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <View model={model} network={network} selectedStream={e.state.stream} />
+            <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
             {elOverlay}
           </div>
         );
@@ -62,12 +79,9 @@ export default Dev.describe(name, async (e) => {
     ctx.host.footer.padding(0).render((e) => {
       return (
         <Footer
+          cmd={{ fc }}
           network={network}
-          onUnload={(e) => state.change((d) => (d.overlay = undefined))}
-          onLoad={async (e) => {
-            const el = await Loader.load(e.name);
-            state.change((d) => (d.overlay = el));
-          }}
+          onOverlay={(e) => state.change((d) => (d.overlay = e.el))}
         />
       );
     });
@@ -97,28 +111,15 @@ export default Dev.describe(name, async (e) => {
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
+              cmd: fc,
               signer: {},
               identity: {
-                spinning: e.state.spinning,
-                onClick: async (e) => {
-                  const fc = e.fc;
-                  console.info(`⚡️ farcaster.identity.onClick`, e);
-
-                  // TEMP - send sample cast 🐷
-                  const spin = (value: boolean) => state.change((d) => (d.spinning = value));
-                  await spin(true);
-                  const payload = { text: 'Hello World 👋' };
-                  await fc.hub.submitCast(payload, fc.fid, fc.signer);
-                  await spin(false);
-                },
+                onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
               },
             },
           }}
+          onReady={(e) => console.info('⚡️ Auth.onReady:', e)}
           onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
-          onReady={(e) => {
-            console.log('e', e);
-            fc = e.fc;
-          }}
         />
       );
     });
@@ -146,19 +147,9 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
+      dev.hr(0, 3);
       dev.button('redraw', (e) => dev.redraw());
-
       dev.hr(-1, 5);
-
-      dev.button('send cast', async (e) => {
-        if (!fc) return;
-
-        const fid = fc.fid;
-        const signer = fc.signer;
-        const payload = { text: 'Hello World 👋' };
-        const res = await fc.hub.submitCast(payload, fid, signer);
-        console.log('res', res);
-      });
     });
   });
 

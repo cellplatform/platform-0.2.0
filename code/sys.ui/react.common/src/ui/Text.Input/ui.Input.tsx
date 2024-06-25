@@ -228,6 +228,7 @@ export const Input: React.FC<InputProps> = (props) => {
       onKeyDown={handleKeydown}
       onKeyUp={handleKeyup}
       onDoubleClick={props.onDoubleClick}
+      onSelect={() => props.onSelect?.(Wrangle.selection(inputRef.current))}
     />
   );
 };

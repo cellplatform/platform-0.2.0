@@ -37,7 +37,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
     <div {...styles.avatars}>
       <PeerUI.AvatarTray
         peer={peer}
-        size={64}
+        size={100}
         muted={false}
         onTotalChanged={redraw}
         selected={props.selectedStream}
@@ -78,7 +78,7 @@ export const VersionBadge: React.FC<VersionBadgeProps> = (props) => {
   };
 
   const elBadge = (
-    <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
+    <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'} tabIndex={-1}>
       <img {...styles.block} src={badge?.image} />
     </a>
   );

@@ -13,14 +13,14 @@ export function events<D extends O = O>(
   $ = $.pipe(rx.takeUntil(lifecycle.dispose$));
 
   const cmd$ = $.pipe(
-    rx.distinctWhile((prev, next) => R.equals(prev.to.cmd, next.to.cmd)),
-    rx.filter((e) => !!e.to.cmd),
-    rx.map((e) => e.to.cmd!),
+    rx.distinctWhile((prev, next) => R.equals(prev.after.cmd, next.after.cmd)),
+    rx.filter((e) => !!e.after.cmd),
+    rx.map((e) => e.after.cmd!),
   );
 
   const focus$ = rx.payload<t.LabelListFocusCmd>(cmd$, 'List:Focus');
   const active$ = $.pipe(
-    rx.map((e) => e.to),
+    rx.map((e) => e.after),
     rx.map(({ focused, selected }) => ({ focused: !!focused, selected })),
     rx.distinctUntilChanged((prev, next) => R.equals(prev, next)),
   );
@@ -28,11 +28,11 @@ export function events<D extends O = O>(
   const api: t.LabelListEvents<D> = {
     $,
     total$: $.pipe(
-      rx.map((e) => e.to.total),
+      rx.map((e) => e.after.total),
       rx.distinctWhile((prev, next) => prev === next),
     ),
     editing$: $.pipe(
-      rx.map((e) => e.to.editing || ''),
+      rx.map((e) => e.after.editing || ''),
       rx.distinctWhile((prev, next) => prev === next),
     ),
     active: {

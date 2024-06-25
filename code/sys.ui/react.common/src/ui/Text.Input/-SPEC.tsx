@@ -116,6 +116,9 @@ export default Dev.describe(name, (e) => {
           onLabelDoubleClick(e) {
             console.info('⚡️ onLabelDoubleClick', e);
           },
+          onSelect(e) {
+            console.info('⚡️ onSelect', e);
+          },
         };
 
         return <Sample props={p} debug={debug} />;

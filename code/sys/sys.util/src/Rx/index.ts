@@ -1,2 +1,1 @@
-import * as rx from './Rx';
-export { rx };
+export * as rx from './Rx';

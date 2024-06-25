@@ -33,7 +33,10 @@ const View: React.FC<ButtonProps> = (props) => {
       position: 'relative',
       userSelect: 'none',
       color: COLORS.DARK,
-      fontSize: 14,
+      fontSize: 12,
+      fontFamily: 'monospace',
+      fontWeight: 600,
+      letterSpacing: 0.2,
       cursor: isActive ? 'pointer' : 'default',
       pointerEvents: isActive ? 'auto' : 'none',
 

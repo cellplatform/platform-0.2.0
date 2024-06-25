@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { createRoot } from 'react-dom/client';
 import { DEFAULTS, TextInput, type t } from './common';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
@@ -5,6 +7,25 @@ export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
 };
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
+  const [textbox, setTextbox] = useState<t.TextInputRef>();
+
+  /**
+   * Listeners
+   */
+  useEffect(() => {
+    const events = props.control?.events();
+
+    if (events) {
+      events.on('Focus', (e) => textbox?.focus(e.params.select));
+      events.on('Blur', (e) => textbox?.blur());
+      events.on('SelectAll', (e) => textbox?.selectAll());
+      events.on('CaretToStart', (e) => textbox?.caretToStart());
+      events.on('CaretToEnd', (e) => textbox?.caretToEnd());
+    }
+
+    return events?.dispose;
+  }, [props.control, textbox]);
+
   const {
     theme,
     enabled = DEFAULTS.enabled,
@@ -38,10 +59,14 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       focusOnReady={focusOnReady}
       selectOnReady={focusOnReady}
       onFocusChange={props.onFocusChange}
-      onReady={props.onReady}
       onChange={props.onChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
+      onSelect={props.onSelect}
+      onReady={(e) => {
+        props.onReady?.(e);
+        setTextbox(e.ref);
+      }}
     />
   );
 };

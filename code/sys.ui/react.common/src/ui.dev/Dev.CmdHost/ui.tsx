@@ -8,6 +8,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     enabled = true,
     listEnabled = true,
     focusOnClick = DEFAULTS.focusOnClick,
+    showCommandbar: commandbarVisible = DEFAULTS.showCommandbar,
   } = props;
   const imports = wrangle.filteredImports(props);
   const selectedIndex = wrangle.selectedIndex(imports, props.selected);
@@ -51,6 +52,25 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
     bar: css({ display: 'grid', borderTop }),
   };
 
+  const elCmdBar = commandbarVisible && (
+    <div {...styles.bar}>
+      <CmdBar
+        enabled={enabled}
+        text={props.command}
+        placeholder={props.commandPlaceholder}
+        hintKey={props.hintKey}
+        prefix={props.commandPrefix}
+        suffix={props.commandSuffix}
+        focusOnReady={props.focusOnReady ?? true}
+        onReady={(e) => setTextbox(e.ref)}
+        onChange={(e) => handleFilterChanged(e.to)}
+        onFocusChange={props.onCmdFocusChange}
+        onKeyDown={props.onKeyDown}
+        onKeyUp={props.onKeyUp}
+      />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} onClick={handleClick}>
       <div {...styles.body}>
@@ -73,22 +93,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           onItemSelect={props.onItemSelect}
         />
       </div>
-      <div {...styles.bar}>
-        <CmdBar
-          enabled={enabled}
-          text={props.command}
-          placeholder={props.commandPlaceholder}
-          hintKey={props.hintKey}
-          prefix={props.commandPrefix}
-          suffix={props.commandSuffix}
-          focusOnReady={props.focusOnReady ?? true}
-          onReady={(e) => setTextbox(e.ref)}
-          onChange={(e) => handleFilterChanged(e.to)}
-          onFocusChange={props.onCmdFocusChange}
-          onKeyDown={props.onKeyDown}
-          onKeyUp={props.onKeyUp}
-        />
-      </div>
+      {elCmdBar}
     </div>
   );
 };

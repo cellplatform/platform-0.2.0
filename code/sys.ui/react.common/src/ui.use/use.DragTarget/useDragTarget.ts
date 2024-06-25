@@ -96,8 +96,8 @@ export function useDragTarget<T extends H = Div>(input?: Input<T>): t.DragTarget
     ref,
     is: {
       enabled,
-      over: isDragOver,
-      dropped: Boolean(dropped),
+      over: !!isDragOver,
+      dropped: !!dropped,
     },
     dropped,
     reset,

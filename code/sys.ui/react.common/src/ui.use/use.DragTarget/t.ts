@@ -31,9 +31,9 @@ export type DragTargetHook<T extends HTMLElement> = {
 };
 
 export type DragTargetFlags = {
-  enabled?: boolean;
-  over?: boolean;
-  dropped?: boolean;
+  readonly enabled: boolean;
+  readonly over: boolean;
+  readonly dropped: boolean;
 };
 
 /**

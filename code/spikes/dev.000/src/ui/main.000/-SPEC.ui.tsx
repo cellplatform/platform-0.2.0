@@ -1,13 +1,13 @@
 import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
 
-export type ViewProps = {
+export type SampleLayoutProps = {
   model: t.RepoListModel;
   network: t.NetworkStore;
   selectedStream?: MediaStream;
   style?: t.CssValue;
 };
 
-export const View: React.FC<ViewProps> = (props) => {
+export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const { network } = props;
 
   /**

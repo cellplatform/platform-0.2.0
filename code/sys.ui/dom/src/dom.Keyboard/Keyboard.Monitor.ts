@@ -209,10 +209,11 @@ export function handlerOnOverloaded(
   args: any[],
   options: { filter?: () => boolean; dispose$?: t.UntilObservable } = {},
 ): t.Lifecycle {
+  const { filter } = options;
+  const life = rx.lifecycle(options.dispose$);
+  const { dispose$ } = life;
+
   if (typeof args[0] === 'object') {
-    const life = rx.lifecycle(options.dispose$);
-    const { dispose$ } = life;
-    const { filter } = options;
     const patterns = args[0] as t.KeyMatchPatterns;
     Object.entries(patterns).forEach(([pattern, fn]) => {
       handlerOn(pattern, fn, { dispose$, filter });
@@ -221,13 +222,13 @@ export function handlerOnOverloaded(
   }
 
   if (typeof args[0] === 'string' && typeof args[1] === 'function') {
-    return handlerOn(args[0], args[1]);
+    return handlerOn(args[0], args[1], { dispose$, filter });
   }
 
   throw new Error('Input paramters for [Keyboard.on] not matched.');
 }
 
-function handlerOn(
+export function handlerOn(
   pattern: t.KeyPattern,
   fn: t.KeyMatchSubscriberHandler,
   options: { dispose$?: t.UntilObservable; filter?: () => boolean } = {},

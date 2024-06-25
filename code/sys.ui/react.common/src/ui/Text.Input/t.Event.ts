@@ -26,6 +26,12 @@ export type TextInputChangeArgs = {
 };
 
 /**
+ * Selection change
+ */
+export type TextInputSelectHandler = (e: TextInputSelectHandlerArgs) => void;
+export type TextInputSelectHandlerArgs = t.TextInputSelection;
+
+/**
  * Keyboard: Keypress
  */
 type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;

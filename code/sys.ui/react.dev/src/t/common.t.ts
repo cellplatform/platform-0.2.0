@@ -12,7 +12,7 @@ export type {
   EventBus,
   IgnoredResponse,
   Immutable,
-  ImmutableNext,
+  ImmutableMutator,
   ImmutableRef,
   Json,
   JsonMap,

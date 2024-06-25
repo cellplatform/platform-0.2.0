@@ -14,6 +14,7 @@ export {
   lastValueFrom,
   observeOn,
   of,
+  scan,
   timer,
 } from 'rxjs';
 

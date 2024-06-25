@@ -10,6 +10,9 @@
     "clean": "tsx ../../../script.node/cmd.clean.ts",
     "tmp": "vitest"
   },
+  "devDependencies": {
+    "rxjs": "7.8.1"
+  },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.d.ts",

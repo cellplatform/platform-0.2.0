@@ -142,6 +142,7 @@ export const View: React.FC<Props> = (props) => {
       onEscape={props.onEscape}
       onTab={props.onTab}
       onDoubleClick={handleDoubleClick}
+      onSelect={props.onSelect}
     />
   );
 
