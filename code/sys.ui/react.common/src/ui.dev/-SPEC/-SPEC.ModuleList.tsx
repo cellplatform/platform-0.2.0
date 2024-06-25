@@ -5,6 +5,13 @@ import { BADGES, Dev, Pkg, css } from '../../test.ui';
 type T = { props: ModuleListProps };
 const initial: T = { props: {} };
 
+const Imports = {
+  async Specs() {
+    const { Specs } = await import('../../test.ui/entry.Specs');
+    return Specs;
+  },
+} as const;
+
 /**
  * Spec
  */
@@ -21,7 +28,7 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:init', async (e) => {
-    const { Specs } = await import('../../test.ui/entry.Specs');
+    const Specs = await Imports.Specs();
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
@@ -65,6 +72,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const Specs = await Imports.Specs();
 
     dev.section('Common States', (dev) => {
       dev.button('(empty)', (e) => {
