@@ -1,6 +1,5 @@
 import { control } from './Root.cmd';
-import { DEFAULTS, FC, type t } from './common';
-import { Args } from './u';
+import { Args, DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 
 /**

@@ -1,4 +1,4 @@
-import { minimist } from './common';
+import minimist from 'minimist';
 
 /**
  * Standard posix style command line argument parsing.

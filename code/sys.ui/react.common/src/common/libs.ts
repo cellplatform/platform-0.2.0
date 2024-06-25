@@ -9,15 +9,13 @@ export { Observable, Subject } from 'rxjs';
 
 export { Patch, PatchState } from 'ext.lib.immer';
 
-import minimist from 'minimist';
-export { minimist };
-
 /**
  * @system
  */
 export { Cmd } from 'sys.cmd';
 export { Diff, Fuzzy, Text } from 'sys.data.text';
 export {
+  Args,
   Delete,
   Filesize,
   Hash,

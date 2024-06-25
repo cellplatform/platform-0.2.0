@@ -1,5 +1,5 @@
 import { Args } from '.';
-import { describe, expect, it } from '../../test';
+import { describe, expect, it } from '../test';
 
 describe('parseArgs (minimist)', () => {
   /**
