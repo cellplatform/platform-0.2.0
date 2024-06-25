@@ -246,9 +246,8 @@ describe('rx', () => {
   });
 
   describe('rx.withinTimeThreshold (eg. "double-click")', () => {
-    const $ = new rx.Subject<void>();
-
     it('fires within time-threshold', { repeats: 3 }, async (e) => {
+      const $ = rx.subject();
       const threshold = rx.withinTimeThreshold($, 30);
       let fired = 0;
       threshold.$.subscribe(() => fired++);
@@ -262,6 +261,7 @@ describe('rx', () => {
     });
 
     it('does not fire (outside time-threshold)', { repeats: 3 }, async (e) => {
+      const $ = rx.subject();
       const threshold = rx.withinTimeThreshold($, 5);
       let fired = 0;
       threshold.$.subscribe(() => fired++);
@@ -274,7 +274,46 @@ describe('rx', () => {
       threshold.dispose();
     });
 
+    it('fires value through threshold<T>', { repeats: 3 }, async () => {
+      type T = { foo: number };
+      const $ = rx.subject<T>();
+      const threshold = rx.withinTimeThreshold($, 10);
+
+      const fired: T[] = [];
+      threshold.$.subscribe((e) => fired.push(e));
+
+      $.next({ foo: 1 });
+      await Time.wait(5);
+      $.next({ foo: 2 });
+
+      expect(fired.length).to.eql(1);
+      expect(fired[0]).to.eql({ foo: 2 }); // NB: last fired value returned.
+
+      threshold.dispose();
+    });
+
+    it('timeout$', { repeats: 3 }, async () => {
+      const $ = rx.subject();
+      const threshold = rx.withinTimeThreshold($, 10);
+
+      let fired = 0;
+      let timedout = 0;
+      threshold.$.subscribe((e) => fired++);
+      threshold.timeout$.subscribe((e) => timedout++);
+
+      $.next();
+      await Time.wait(20);
+      $.next();
+
+      console.log('fired', fired);
+      console.log('timedout', timedout);
+
+      expect(fired).to.eql(0);
+      expect(timedout).to.eql(1);
+    });
+
     it('dispose', async (e) => {
+      const $ = rx.subject();
       const threshold = rx.withinTimeThreshold($, 10);
       expect(threshold.disposed).to.eql(false);
 
@@ -293,8 +332,8 @@ describe('rx', () => {
     });
 
     it('dispose$', async (e) => {
+      const $ = rx.subject();
       const { dispose, dispose$ } = disposable();
-
       const threshold = rx.withinTimeThreshold($, 10, { dispose$ });
       expect(threshold.disposed).to.eql(false);
 

@@ -29,3 +29,11 @@ export type BusConnectOptions = {
   async?: boolean;
   dispose$?: t.Observable<any>;
 };
+
+/**
+ * Repeat time threhold.
+ */
+export type TimeThreshold<T> = t.Lifecycle & {
+  readonly $: t.Observable<T>;
+  readonly timeout$: t.Observable<void>;
+};

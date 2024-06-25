@@ -1,59 +1,62 @@
+import { Time } from '../Time';
 import { type t } from '../common';
 import { disposable } from './Rx.lifecycle';
-import { Subject, take, takeUntil, filter } from './RxJs.lib';
-import { Time } from '../Time';
-
-type Milliseconds = number;
+import { Subject, filter, take, takeUntil } from './RxJs.lib';
 
 /**
  * Listen for an event within a given time threshold.
  */
-export function withinTimeThreshold(
-  $: t.Observable<any>,
-  timeout: Milliseconds,
-  options: { dispose$?: t.Observable<any> } = {},
-) {
-  /**
-   * Start listening for next event.
-   */
-  const startListening = (timeout: number) => {
+export function withinTimeThreshold<T>(
+  $: t.Observable<T>,
+  timeout: t.Msecs,
+  options: { dispose$?: t.UntilObservable } = {},
+): t.TimeThreshold<T> {
+  const listen = (timeout: number) => {
+    type R = { result: boolean; value?: T };
     const startedAt = Date.now();
-    const res$ = new Subject<boolean>();
-
+    const $$ = new Subject<R>();
     const { dispose, dispose$ } = disposable(options.dispose$);
-    const done = (result: boolean) => {
-      res$.next(result);
-      res$.complete();
+    const done = (result: boolean, value?: T) => {
+      $$.next({ result, value });
+      $$.complete();
       dispose();
     };
 
     $.pipe(takeUntil(dispose$), take(1)).subscribe((e) => {
       const elapsed = Date.now() - startedAt;
-      if (elapsed < timeout) done(true);
+      if (elapsed < timeout) done(true, e);
     });
 
-    Time.delay(timeout, () => done(false));
-    return res$.asObservable();
+    Time.delay(timeout, () => {
+      done(false);
+      timeout$.next();
+    });
+    return $$;
   };
 
   /**
    * Response listener.
    */
-  const res$ = new Subject<void>();
+  const timeout$ = new Subject<void>();
+  const $$ = new Subject<T>();
   $.subscribe((e) => {
-    startListening(timeout)
-      .pipe(takeUntil(dispose$), filter(Boolean))
-      .subscribe(() => res$.next());
+    const listen$ = listen(timeout).pipe(
+      takeUntil(dispose$),
+      filter((e) => !!e.result),
+    );
+    listen$.subscribe((e) => $$.next(e.value!));
   });
 
   let _disposed = false;
   const { dispose, dispose$ } = disposable(options.dispose$);
   dispose$.subscribe(() => {
-    res$.complete();
+    $$.complete();
     _disposed = true;
   });
+
   return {
-    $: res$.asObservable(),
+    $: $$.pipe(takeUntil(dispose$)),
+    timeout$: timeout$.pipe(takeUntil(dispose$)),
     dispose,
     dispose$,
     get disposed() {
