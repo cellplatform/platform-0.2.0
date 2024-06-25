@@ -1,6 +1,6 @@
-import { Doc } from '.';
+import { Doc } from '..';
 import { describe, expect, it, type t } from '../../test';
-import { testSetup } from './-TEST.u';
+import { testSetup } from '../Doc/-TEST.u';
 
 describe('Doc.Text', () => {
   describe('Text.diff', () => {

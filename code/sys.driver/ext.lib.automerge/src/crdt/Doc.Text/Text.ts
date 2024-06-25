@@ -1,6 +1,6 @@
-import { A, type t, ObjectPath } from './common';
-import { diff } from './Doc.Text.diff';
-import { splice } from './Doc.Text.splice';
+import { ObjectPath, type t } from './common';
+import { diff } from './Text.diff';
+import { splice } from './Text.splice';
 
 type O = Record<string, unknown>;
 
