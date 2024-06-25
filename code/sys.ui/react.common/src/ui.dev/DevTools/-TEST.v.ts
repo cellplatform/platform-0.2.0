@@ -35,7 +35,8 @@ describe('DevTools', () => {
       test('undefined', true, true); // NB: toggles [undefined => false] to [true].
 
       (['number', 'text', 'child', 'list', 'null', 'number'] as K[]).forEach((key) => {
-        test(key, false, false);
+        const fn = () => test(key, false, false);
+        expect(fn).to.throw(/not a boolean/);
       });
     });
   });
