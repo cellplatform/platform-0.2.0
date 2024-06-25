@@ -3,7 +3,8 @@ import { describe, expect, it } from '../test';
 
 describe('parseArgs (minimist)', () => {
   /**
-   * NOTE: example on the [minimist] README.
+   * NOTE: Example on the [minimist] README.
+   *       https://github.com/minimistjs/minimist
    */
   const sample1 = {
     text: '-a beep -b boop',
