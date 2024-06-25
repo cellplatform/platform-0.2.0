@@ -9,11 +9,12 @@
     "test": "tsx ../../../script.node/cmd.test.ts",
     "build": "tsx ../../../script.node/cmd.build.ts",
     "clean": "tsx ../../../script.node/cmd.clean.ts",
-    "tmp": "tsx   ./script.node/tmp.mts"
+    "tmp": "tsx   ./script.ts/tmp.ts"
   },
   "dependencies": {
     "@preact/signals-react": "2.0.2",
     "ext.lib.immer": "0.0.0",
+    "minimist": "1.2.8",
     "qrcode": "1.5.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -27,6 +28,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
+    "@types/minimist": "1.2.5",
     "@types/qrcode": "1.5.5",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
