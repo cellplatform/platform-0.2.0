@@ -38,6 +38,7 @@ export const LoadList: React.FC<LoadListProps> = (props) => {
           style={styles.base}
           showParamDev={false}
           showCommandbar={false}
+          useAnchorLinks={false}
           onItemInvoke={(e) => {
             const uri = e.uri;
             if (uri) props.onSelect?.({ uri });
