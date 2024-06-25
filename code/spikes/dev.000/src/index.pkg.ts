@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.146',
+  version: '0.6.147',
   dependencies: {
     '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.12',
@@ -34,6 +34,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.vimeo': '0.0.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
+    'slc.000': '0.0.0',
     'sys.cmd': '0.0.0',
     'sys.data.indexeddb': '0.0.0',
     'sys.data.text': '0.0.0',
