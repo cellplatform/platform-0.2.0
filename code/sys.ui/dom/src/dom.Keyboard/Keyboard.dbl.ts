@@ -1,12 +1,13 @@
 import { handlerOn } from './Keyboard.Monitor';
 import { rx, type t } from './common';
 
-type Options = { threshold?: t.Msecs; dispose$?: t.UntilObservable };
-
 /**
  * A "multi event" monitor scoped to 2-keypresses.
  */
-export function dbl(threshold: t.Msecs = 500, options: Options = {}): t.KeyboardMonitorMulti {
+export function dbl(
+  threshold: t.Msecs = 500,
+  options: { dispose$?: t.UntilObservable } = {},
+): t.KeyboardMonitorMulti {
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
 
@@ -24,10 +25,7 @@ export function dbl(threshold: t.Msecs = 500, options: Options = {}): t.Keyboard
       const next = (e: E) => {
         if (!monitor) {
           monitor = rx.withinTimeThreshold($, threshold, { dispose$ });
-          monitor.timeout$.subscribe(() => {
-            console.log('timeout');
-            killMonitor();
-          });
+          monitor.timeout$.subscribe(killMonitor);
           monitor.$.subscribe((e) => {
             fn(e);
             killMonitor();

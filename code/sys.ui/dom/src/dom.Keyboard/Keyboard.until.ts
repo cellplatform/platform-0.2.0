@@ -1,4 +1,5 @@
 import { KeyboardMonitor, handlerFiltered, handlerOnOverloaded } from './Keyboard.Monitor';
+import { dbl } from './Keyboard.dbl';
 import { rx, type t } from './common';
 
 /**
@@ -22,6 +23,10 @@ export function until(until$?: t.UntilObservable) {
     down$,
     filter,
     on,
+
+    dbl(threshold?: t.Msecs) {
+      return dbl(threshold, { dispose$ });
+    },
 
     dispose,
     dispose$,
