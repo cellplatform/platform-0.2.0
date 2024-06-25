@@ -1,6 +1,6 @@
 import { Dev } from '../test.ui';
-import { LoadList } from './-SPEC.ui.CmdBar.List';
 import { CmdBar, Doc, type t } from './common';
+import { LoadList } from './ui.CmdBar.List';
 
 /**
  * TODO 🐷
@@ -24,11 +24,11 @@ export const DSL = {
   },
 
   /**
-   * Match a given command.
+   * Match a given command to produce a renderable UI <View>.
    */
-  async matchView(command: string, doc: t.Lens) {
-    const text = (command || '').trim();
-    const parts = text.split(' ').map((part) => part.trim());
+  async matchView(argv: string, doc: t.Lens) {
+    const parsed = CmdBar.Args.parse(argv);
+    const parts = parsed._.map((part) => part.trim()).filter((e) => !!e);
     const lname = (parts[0] || '').toLowerCase();
 
     if (lname === 'load') {
