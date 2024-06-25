@@ -40,11 +40,8 @@ export const DSL = {
           filter={filter}
           onSelect={(e) => {
             doc.change((d) => {
-              const resolver = CmdBar.Path.resolver();
               const path = CmdBar.Path.default.text;
-              const from = resolver.text(d);
-              const to = `load ${e.uri}`;
-              Doc.Text.splice(d, path, 0, from.length, to);
+              Doc.Text.replace(d, path, `load ${e.uri}`);
             });
           }}
         />

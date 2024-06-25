@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { DSL } from './-SPEC.dsl';
-import { CmdBar, Keyboard, type t } from './common';
+import { CmdBar, Keyboard, rx, type t, Doc } from './common';
 
 export type FooterProps = {
   cmd: { fc: t.Cmd<t.FarcasterCmd> };
@@ -26,14 +26,22 @@ export const Footer: React.FC<FooterProps> = (props) => {
    * Keyboard
    */
   useEffect(() => {
+    const life = rx.disposable();
     const cmdbar = cmdbarRef.current;
-    const keys = Keyboard.until();
-    keys.on('META + KeyK', (e) => {
+    const keys = Keyboard.until(life.dispose$);
+
+    const patternFocus = 'META + KeyK';
+    keys.on(patternFocus, () => {
       cmdbar.focus({});
       cmdbar.caretToEnd({});
     });
-    return keys.dispose;
-  }, []);
+    keys.dbl().on(patternFocus, () => {
+      const path = CmdBar.Path.default.text;
+      lens?.change((d) => Doc.Text.replace(d, path, ''));
+    });
+
+    return life.dispose;
+  }, [lens]);
 
   /**
    * Render
