@@ -1,1 +1,1 @@
-export {};
+export type { ParsedArgs } from 'minimist';

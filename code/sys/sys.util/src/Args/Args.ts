@@ -1,4 +1,5 @@
 import minimist from 'minimist';
+import { type t } from '../common';
 
 /**
  * Standard posix style command line argument parsing.
@@ -11,8 +12,9 @@ export const Args = {
   /**
    * Parse arguments into strongly typed object.
    */
-  parse(input: string | string[] = []) {
-    return minimist(Args.asArray(input));
+  parse(input: string | string[] = []): t.ParsedArgs {
+    const res = minimist(Args.asArray(input));
+    return res;
   },
 
   /**
