@@ -15,6 +15,7 @@ export type ModuleListProps<T = unknown> = {
   badge?: t.ImageBadge;
   showParamDev?: boolean;
   allowRubberband?: boolean;
+  useAnchorLinks?: boolean;
   enabled?: boolean;
   focused?: boolean;
   listMinWidth?: number;

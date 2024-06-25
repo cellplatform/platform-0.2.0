@@ -11,6 +11,7 @@ export type ListProps = {
   selectedIndex?: number;
   showParamDev?: boolean;
   hrDepth?: number;
+  useAnchorLinks?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onItemReadyChange?: t.ModuleListItemReadyHandler;
@@ -19,7 +20,9 @@ export type ListProps = {
 };
 
 export const List: React.FC<ListProps> = (props) => {
-  const { imports, url, showParamDev = true, enabled = true, focused, theme } = props;
+  const { imports, url, enabled = true, focused, theme } = props;
+  const { showParamDev = DEFAULTS.showParamDev } = props;
+
   const importsKeys = Object.keys(props.imports);
   const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
@@ -70,6 +73,7 @@ export const List: React.FC<ListProps> = (props) => {
         ns={options.ns}
         Icon={options.Icon}
         hrDepth={props.hrDepth}
+        useAnchorLinks={props.useAnchorLinks}
         theme={theme}
         onReadyChange={props.onItemReadyChange}
         onClick={props.onItemClick}

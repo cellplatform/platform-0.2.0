@@ -14,6 +14,7 @@ export type ListItemProps = {
   Icon?: t.IconType;
   ns?: boolean;
   hrDepth?: number;
+  useAnchorLinks?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onReadyChange?: t.ModuleListItemReadyHandler;
@@ -22,9 +23,9 @@ export type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { index, Icon, hrDepth = -1, ns, title, imports } = props;
   const { uri, url, selected, focused, enabled = true } = props;
-
+  const { index, Icon, hrDepth = -1, ns } = props;
+  const { title, imports, useAnchorLinks = DEFAULTS.useAnchorLinks } = props;
   const importsKeys = Object.keys(imports);
 
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
@@ -58,7 +59,6 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
    * Handlers
    */
   const getArgs = (): t.ModuleListItemHandlerArgs => ({ index, uri });
-
   const handleClick = (e: React.MouseEvent) => {
     if (props.onClick) {
       e.preventDefault(); // NB: suppress default <a> click when handler provided.
@@ -83,6 +83,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     link: css({
       color: selected && focused && enabled ? WHITE : enabled ? BLUE : Color.alpha(color, 0.15),
       textDecoration: 'none',
+      cursor: enabled ? 'pointer' : undefined,
     }),
     linkDimmed: css({
       userSelect: 'none',
@@ -120,7 +121,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
 
   const linkStyle = css(styles.link, !ns ? styles.linkDimmed : undefined);
   const elLink = (
-    <a href={url.href} onClick={handleClick} {...linkStyle}>
+    <a href={useAnchorLinks ? url.href : undefined} onClick={handleClick} {...linkStyle}>
       <div {...styles.row.label}>{title ?? uri}</div>
     </a>
   );
