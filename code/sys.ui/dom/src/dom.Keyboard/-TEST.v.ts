@@ -89,7 +89,7 @@ describe('Keyboard', () => {
 
   describe('Keyboard.dbl', () => {
     it('no match', async () => {
-      const dbl = Keyboard.dbl(2, { threshold: 10 });
+      const dbl = Keyboard.dbl(10);
       const fired: t.KeyboardKeypress[] = [];
       dbl.on('KeyM', (e) => fired.push(e.event));
 
@@ -159,7 +159,7 @@ describe('Keyboard', () => {
     });
 
     it('does not fire when disposed', async () => {
-      const dbl = Keyboard.dbl(2, { threshold: 30 });
+      const dbl = Keyboard.dbl(30);
       const fired: t.KeyboardKeypress[] = [];
       dbl.on('KeyM', (e) => fired.push(e.event));
 
