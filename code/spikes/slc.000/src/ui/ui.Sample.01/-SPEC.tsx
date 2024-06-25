@@ -1,14 +1,16 @@
 import { Dev, Pkg, type t } from '../../test.ui';
+import { Sample, type SampleProps } from './-SPEC.ui';
 
-type T = { theme?: t.CommonTheme };
-const initial: T = {};
+type P = SampleProps;
+type T = { props: P };
+const initial: T = { props: {} };
 
 /**
  * Spec
  */
 const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<T, 'theme'>;
+  type LocalStore = Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({ theme: undefined });
 
@@ -18,17 +20,20 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.theme = local.theme;
+      d.props.theme = local.theme;
     });
 
-    ctx.debug.width(330);
+    // ctx.debug.width(330);
+    ctx.debug.width(0);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      // .size([250, null])
+      .size('fill', 0)
       .display('grid')
       .render<T>((e) => {
-        Dev.Theme.background(ctx, e.state.theme, 1);
-        return <div>{`🐷 ${name}`}</div>;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <Sample {...props} />;
       });
   });
 
@@ -41,7 +46,7 @@ export default Dev.describe(name, (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
     });
   });
 
