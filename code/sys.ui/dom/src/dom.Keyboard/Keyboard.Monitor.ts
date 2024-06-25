@@ -228,7 +228,7 @@ export function handlerOnOverloaded(
   throw new Error('Input paramters for [Keyboard.on] not matched.');
 }
 
-function handlerOn(
+export function handlerOn(
   pattern: t.KeyPattern,
   fn: t.KeyMatchSubscriberHandler,
   options: { dispose$?: t.UntilObservable; filter?: () => boolean } = {},

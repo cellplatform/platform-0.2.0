@@ -23,11 +23,8 @@ export function until(until$?: t.UntilObservable) {
     filter,
     on,
 
-    /**
-     * Lifecycle
-     */
-    dispose$,
     dispose,
+    dispose$,
     get disposed() {
       return life.disposed;
     },

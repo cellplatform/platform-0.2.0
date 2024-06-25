@@ -16,6 +16,8 @@ export type {
   UntilObservable,
 } from 'sys.types/src/types';
 
+export type { TimeThreshold } from 'sys.util/src/types';
+
 /**
  * @local
  */

@@ -48,6 +48,10 @@ export type KeyboardMonitorOn = {
   on(patterns: KeyMatchPatterns): KeyListenerHandle;
 };
 
+export type KeyboardMonitorMulti = t.Lifecycle & {
+  on(pattern: t.KeyPattern, fn: t.KeyMatchSubscriberHandler): t.KeyListenerHandle;
+};
+
 /**
  * Key pattern matching.
  */

@@ -68,4 +68,91 @@ describe('Keyboard', () => {
     });
   });
 
+  describe('Keyboard.dbl', () => {
+    it('no match', async () => {
+      const res = Keyboard.dbl(2, { threshold: 10 });
+      const fired: t.KeyboardKeypress[] = [];
+      res.on('KeyM', (e) => fired.push(e.event));
+
+      const ev = Mock.keydownEvent('z');
+      Mock.fire(ev);
+      await Time.wait(10);
+      Mock.fire(ev);
+
+      await Time.wait(50);
+      expect(fired.length).to.eql(0);
+
+      res.dispose();
+    });
+
+    it('fires (x2)', async () => {
+      const res = Keyboard.dbl();
+      const fired: t.KeyboardKeypress[] = [];
+      res.on('KeyM', (e) => fired.push(e.event));
+
+      const ev = Mock.keydownEvent('m');
+      Mock.fire(ev); // First keypress.
+      await Time.wait(10);
+      expect(fired.length).to.eql(0);
+      Mock.fire(ev); // Second keypress.
+
+      await Time.wait(20);
+      expect(fired.length).to.eql(1);
+      expect(fired[0].code).to.eql('KeyM');
+
+      Mock.fire(ev);
+      expect(fired.length).to.eql(1); // NB: not increment yet.
+      Mock.fire(ev);
+      expect(fired.length).to.eql(2);
+    });
+
+    it('does not fire (outside time threshold)', async () => {
+      const res = Keyboard.dbl(10);
+      const fired: t.KeyboardKeypress[] = [];
+      res.on('KeyA', (e) => fired.push(e.event));
+
+      const ev = Mock.keydownEvent('a');
+      Mock.fire(ev);
+      Mock.fire(ev);
+      expect(fired.length).to.eql(1);
+
+      Mock.fire(ev);
+      expect(fired.length).to.eql(1);
+      await Time.wait(30);
+      Mock.fire(ev); // NB: second event comes in after timeout.
+      expect(fired.length).to.eql(1); // No change.
+    });
+
+    it('disposes', () => {
+      const life = rx.disposable();
+      const { dispose$ } = life;
+      const res1 = Keyboard.dbl(2);
+      const res2 = Keyboard.dbl(2, { dispose$ });
+
+      expect(res1.disposed).to.eql(false);
+      expect(res2.disposed).to.eql(false);
+      life.dispose();
+      expect(res1.disposed).to.eql(false);
+      expect(res2.disposed).to.eql(true);
+      res1.dispose();
+      expect(res1.disposed).to.eql(true);
+      expect(res2.disposed).to.eql(true);
+    });
+
+    it('does not fire when disposed', async () => {
+      const res = Keyboard.dbl(2, { threshold: 30 });
+      const fired: t.KeyboardKeypress[] = [];
+      res.on('KeyM', (e) => fired.push(e.event));
+
+      const ev = Mock.keydownEvent('m');
+      Mock.fire(ev);
+      Mock.fire(ev);
+      expect(fired.length).to.eql(1);
+
+      res.dispose();
+      Mock.fire(ev);
+      Mock.fire(ev);
+      expect(fired.length).to.eql(1);
+    });
+  });
 });
