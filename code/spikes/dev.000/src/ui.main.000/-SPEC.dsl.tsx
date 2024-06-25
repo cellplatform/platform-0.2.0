@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { Dev } from '../test.ui';
 import { LoadList } from './-SPEC.ui.CmdBar.List';
 import { CmdBar, Doc, type t } from './common';
 
@@ -32,7 +32,7 @@ export const DSL = {
     const lname = (parts[0] || '').toLowerCase();
 
     if (lname === 'load') {
-      const { Specs } = await import('../../test.ui/entry.Specs');
+      const { Specs } = await import('../test.ui/entry.Specs');
       const filter = parts.slice(1).join(' ');
       return (
         <LoadList

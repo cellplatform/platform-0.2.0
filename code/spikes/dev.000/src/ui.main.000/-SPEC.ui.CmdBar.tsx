@@ -75,7 +75,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
         }
 
         if (first === 'load') {
-          const { Specs } = await import('../../test.ui/entry.Specs');
+          const { Specs } = await import('../test.ui/entry.Specs');
           const ns = parts.slice(1).join(' ').trim();
           const el = DSL.findAndRender(Specs, ns, { silent: false });
           props.onOverlay?.({ el });

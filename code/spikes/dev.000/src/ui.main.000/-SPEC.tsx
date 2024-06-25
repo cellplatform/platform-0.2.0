@@ -7,7 +7,7 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { Color, Dev, css, type t } from '../../test.ui';
+import { Color, Dev, css, type t } from '../test.ui';
 import { SampleLayout } from './-SPEC.ui';
 import { Footer } from './-SPEC.ui.CmdBar';
 import { DebugFooter } from './-SPEC.ui.debug.footer';
