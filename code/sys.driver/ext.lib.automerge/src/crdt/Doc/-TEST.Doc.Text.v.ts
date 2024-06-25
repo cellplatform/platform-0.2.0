@@ -1,5 +1,6 @@
 import { Doc } from '.';
 import { describe, expect, it, type t } from '../../test';
+import { testSetup } from './-TEST.u';
 
 describe('Doc.Text', () => {
   describe('Text.diff', () => {
@@ -40,5 +41,21 @@ describe('Doc.Text', () => {
       assertDiff(diff1, 0, 1, 'z');
       assertDiff(diff2, 0, 4, 'z');
     });
+  });
+
+  it('Text.replace', async () => {
+    const { store, factory } = testSetup();
+
+    const doc = await factory();
+    doc.change((d) => (d.msg = 'hello'));
+    expect(doc.current.msg).to.eql('hello');
+
+    doc.change((d) => Doc.Text.replace(d, ['msg'], 'foobar'));
+    expect(doc.current.msg).to.eql('foobar');
+
+    doc.change((d) => Doc.Text.replace(d, ['msg'], ''));
+    expect(doc.current.msg).to.eql('');
+
+    store.dispose();
   });
 });
