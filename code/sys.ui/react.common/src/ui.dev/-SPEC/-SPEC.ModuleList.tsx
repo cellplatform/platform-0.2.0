@@ -5,8 +5,6 @@ import { BADGES, Dev, Pkg, css } from '../../test.ui';
 type T = { props: ModuleListProps };
 const initial: T = { props: {} };
 
-import { Specs } from '../../test.ui/entry.Specs';
-
 /**
  * Spec
  */
@@ -23,6 +21,7 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:init', async (e) => {
+    const { Specs } = await import('../../test.ui/entry.Specs');
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
