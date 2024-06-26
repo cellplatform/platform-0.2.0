@@ -21,8 +21,7 @@ export type * from './ui/ui.Nav.Paging/t';
 export type * from './ui/ui.RepoList.Model/t';
 export type * from './ui/ui.RepoList.Virtual/t';
 export type * from './ui/ui.RepoList/t';
-
-export type * from './ui.use/t';
+export type * from './ui/ui.use/t';
 
 /**
  * Automerge JS object extensions.

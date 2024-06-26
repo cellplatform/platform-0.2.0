@@ -16,7 +16,7 @@ export const Specs = {
   [`${ns}.ui.Cmd.Prefix`]: () => import('../ui/ui.Cmd.Prefix/-SPEC'),
   [`${ns}.ui.Cmd.Bar`]: () => import('../ui/ui.Cmd.Bar/-SPEC'),
   [`${ns}.ui.Cmd.Host`]: () => import('../ui/ui.Cmd.Host/-SPEC'),
-  [`${ns}.ui.useDocs`]: () => import('../ui.use/-SPEC.useDocs'),
+  [`${ns}.ui.useDocs`]: () => import('../ui/ui.use/-SPEC.useDocs'),
 } as t.SpecImports;
 
 export default Specs;

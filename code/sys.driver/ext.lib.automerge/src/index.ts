@@ -26,7 +26,7 @@ export const Crdt = {
 /**
  * Library: UI
  */
-export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui.use';
+export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui/ui.use';
 export { CmdBar } from './ui/ui.Cmd.Bar';
 export { HistoryCommit } from './ui/ui.History.Commit';
 export { HistoryGrid } from './ui/ui.History.Grid';

@@ -1,5 +1,5 @@
-import { COLORS, Dev, DevReload, Pkg, TestDb, css, sampleCrdt, type t } from '../test.ui';
-import { RepoList } from '../ui/ui.RepoList';
+import { COLORS, Dev, DevReload, Pkg, TestDb, css, sampleCrdt, type t } from '../../test.ui';
+import { RepoList } from '../ui.RepoList';
 import { SampleUseDoc, SampleUseDocs } from './-SPEC.useDocs.views';
 
 type Hook = 'useDocs' | 'useDoc';

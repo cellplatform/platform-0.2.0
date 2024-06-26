@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextboxSync } from '.';
 import { COLORS, Color, ObjectPath, TextInput, css, rx, type t } from '../../test.ui';
-import { useDoc } from '../../ui.use';
+import { useDoc } from '../../ui/ui.use';
 
 export type TDoc = {
   text?: string;
@@ -31,15 +31,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   };
 
   const textbox = (debug: string, focus?: boolean) => (
-    <Textbox
-      //
-      debug={debug}
-      focus={focus}
-      repo={repo}
-      docuri={docuri}
-      path={path}
-      theme={theme}
-    />
+    <Textbox debug={debug} focus={focus} repo={repo} docuri={docuri} path={path} theme={theme} />
   );
 
   return (
