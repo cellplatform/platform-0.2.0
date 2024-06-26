@@ -13,7 +13,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    * Listeners
    */
   useEffect(() => {
-    const events = props.control?.events();
+    const events = props.ctrl?.events();
 
     if (events) {
       events.on('Focus', (e) => textbox?.focus(e.params.select));
@@ -24,7 +24,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     }
 
     return events?.dispose;
-  }, [props.control, textbox]);
+  }, [props.ctrl, textbox]);
 
   const {
     theme,

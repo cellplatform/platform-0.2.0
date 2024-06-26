@@ -5,7 +5,7 @@ import type { t } from './common';
  */
 export type CmdBarProps = {
   instance?: string;
-  control?: t.CmdBarControl;
+  ctrl?: t.CmdBarCtrl;
   doc?: t.Lens | t.DocRef;
   paths?: t.CmdBarPaths;
   enabled?: boolean;

@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
     text: undefined,
   });
 
-  const control = CmdBar.control();
+  const control = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            control={control.cmd}
+            ctrl={control.cmd}
             onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
           />
         );

@@ -4,7 +4,7 @@ import { View } from './ui';
 
 const events = Events.create;
 const cmd = Events.cmd;
-const control = BaseComponent.control;
+const Ctrl = BaseComponent.Ctrl;
 
 /**
  * Export
@@ -12,14 +12,14 @@ const control = BaseComponent.control;
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Args: typeof Args;
+  Ctrl: typeof Ctrl;
   Path: typeof Path;
   Events: typeof Events;
   events: typeof events;
   cmd: typeof cmd;
-  control: typeof control;
 };
 export const CmdBar = FC.decorate<t.CmdBarProps, Fields>(
   View,
-  { DEFAULTS, Args, Path, Events, events, cmd, control },
+  { DEFAULTS, Args, Ctrl, Path, Events, events, cmd },
   { displayName: DEFAULTS.displayName },
 );

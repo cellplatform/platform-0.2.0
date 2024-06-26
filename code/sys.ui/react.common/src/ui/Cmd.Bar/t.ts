@@ -4,7 +4,7 @@ import type { t } from './common';
  * <Component>
  */
 export type CmdBarProps = {
-  control?: t.CmdBarControl;
+  ctrl?: t.CmdBarCtrl;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -25,8 +25,8 @@ export type CmdBarProps = {
 /**
  * Commands
  */
-export type CmdBarControl = t.Cmd<CmdBarControlCmdType>;
-export type CmdBarControlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd;
+export type CmdBarCtrl = t.Cmd<CmdBarCtrlCmdType>;
+export type CmdBarCtrlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd;
 type Focus = t.CmdType<'Focus', { select?: boolean }>;
 type Blur = t.CmdType<'Blur', {}>;
 type SelectAll = t.CmdType<'SelectAll', {}>;
