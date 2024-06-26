@@ -34,7 +34,7 @@ export default Dev.describe(name, (e) => {
   };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
     enabled: true,
     fields: DEFAULTS.fields.default,
     selectedChain: DEFAULTS.data!.chain!.selected,
