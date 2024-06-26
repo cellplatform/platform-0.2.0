@@ -4,7 +4,7 @@ export type { Observable } from 'rxjs';
  * @ext
  */
 export type { NetworkStore } from 'ext.lib.automerge.webrtc/src/types';
-export type { Lens, RepoListModel, WebStore } from 'ext.lib.automerge/src/types';
+export type { DocRef, Lens, RepoListModel, WebStore } from 'ext.lib.automerge/src/types';
 export type { PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
 

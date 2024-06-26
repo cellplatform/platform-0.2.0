@@ -7,6 +7,7 @@ export type MainCmd = {
 };
 
 export type Main = {
+  readonly me: t.DocRef;
   readonly cmd: MainCmd;
   readonly lens: { readonly cmdbar: t.Lens };
 };

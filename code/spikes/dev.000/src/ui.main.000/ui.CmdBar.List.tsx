@@ -1,7 +1,6 @@
-import { Color, Pkg, css, type t } from './common';
-
 import { CmdHost } from 'sys.ui.react.common';
 import { Specs } from '../test.ui/entry.Specs';
+import { Color, Pkg, css, type t } from './common';
 
 export type LoadListProps = {
   modules?: t.ModuleImports;

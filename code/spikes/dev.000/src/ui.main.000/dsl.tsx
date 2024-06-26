@@ -20,6 +20,11 @@ export const DSL = {
       return loaderView(args, main);
     }
 
+    if (first === 'me') {
+      const { Me } = await import('./ui.Me');
+      return <Me main={main} />;
+    }
+
     return;
   },
 
@@ -38,8 +43,8 @@ export const DSL = {
     }
 
     if (first === 'load') {
-      const { loadModule } = await import('./dsl.load');
-      return loadModule(args, main);
+      const { loadSpec } = await import('./dsl.load');
+      return loadSpec(args, main);
     }
 
     return;

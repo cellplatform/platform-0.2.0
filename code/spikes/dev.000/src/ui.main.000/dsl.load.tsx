@@ -2,6 +2,15 @@ import { Dev } from '../test.ui';
 import { Args, CmdBar, Doc, Time, type t } from './common';
 import { LoadList } from './ui.CmdBar.List';
 
+export async function loadSpec(args: t.ParsedArgs, main: t.Main) {
+  const { Specs } = await import('../test.ui/entry.Specs');
+  const pos = Args.positional(args);
+  const spec = Specs[pos[1]];
+
+  if (!spec) return;
+  return <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
+}
+
 export async function loaderView(args: t.ParsedArgs, main: t.Main) {
   const { Specs } = await import('../test.ui/entry.Specs');
   const pos = Args.positional(args);
@@ -25,13 +34,4 @@ export async function loaderView(args: t.ParsedArgs, main: t.Main) {
       }}
     />
   );
-}
-
-export async function loadModule(args: t.ParsedArgs, main: t.Main) {
-  const { Specs } = await import('../test.ui/entry.Specs');
-  const pos = Args.positional(args);
-  const spec = Specs[pos[1]];
-
-  if (!spec) return;
-  return <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
 }

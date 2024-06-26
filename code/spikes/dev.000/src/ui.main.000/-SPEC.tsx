@@ -7,7 +7,7 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { Color, Dev, css } from '../test.ui';
+import { Color, Dev, Pkg, css } from '../test.ui';
 import {
   Cmd,
   CmdBar,
@@ -33,6 +33,10 @@ const initial: T = {};
 const name = 'Main.000';
 
 export default Dev.describe(name, async (e) => {
+  type LocalStore = { meUri?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({ meUri: undefined });
+
   const self = Peer.init();
 
   const Store = {
@@ -50,15 +54,15 @@ export default Dev.describe(name, async (e) => {
   const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
   const theme: t.CommonTheme = 'Light';
 
-  /**
-   * Commands for Farcaster.
-   */
-  const doc = Immutable.clonerRef({}); // NB: Default simple "cloner" immutable.
+  const me = await Store.fs.doc.getOrCreate(() => null, local.meUri);
+  local.meUri = me.uri;
+
   const cmd: t.MainCmd = {
-    fc: Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>,
+    fc: Cmd.create<t.FarcasterCmd>(Immutable.clonerRef({})) as t.Cmd<t.FarcasterCmd>,
     cmdbar: CmdBar.Ctrl.create().cmd,
   };
   const main: t.Main = {
+    me,
     cmd,
     lens: { cmdbar: network.shared.ns.lens('dev.cmdbar', {}) },
   };
@@ -166,8 +170,14 @@ export default Dev.describe(name, async (e) => {
         <CrdtInfo
           stateful={true}
           title={'Local'}
-          fields={['Repo']}
-          data={{ repo: { store: Store.fs, index: Index.fs } }}
+          fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          data={{
+            repo: { store: Store.fs, index: Index.fs },
+            document: [
+              { label: 'Me', ref: main.me, object: { visible: false } },
+              { label: 'Me.root', ref: main.me, object: { visible: false, lens: ['root'] } },
+            ],
+          }}
         />
       );
     });
