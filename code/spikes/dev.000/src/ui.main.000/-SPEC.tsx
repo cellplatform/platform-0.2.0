@@ -192,7 +192,7 @@ export default Dev.describe(name, async (e) => {
                   name: 'me',
                   visible: false,
                   beforeRender(e) {
-                    (e.root as any).code = shorten((e.root as any)?.code, 25);
+                    (e.root as any).config = shorten((e.root as any)?.config, 25);
                   },
                 },
               },
@@ -204,7 +204,7 @@ export default Dev.describe(name, async (e) => {
                   visible: false,
                   lens: ['root'],
                   beforeRender(e) {
-                    e.code = shorten(e.code, 29);
+                    e.config = shorten(e.config, 29);
                   },
                 },
               },

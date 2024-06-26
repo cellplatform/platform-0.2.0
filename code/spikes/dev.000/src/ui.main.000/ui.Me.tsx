@@ -35,9 +35,10 @@ export const Me: React.FC<MeProps> = (props) => {
           const { monaco, editor } = e;
 
           // Document (State)
-          type T = { code?: string };
+          type T = { config?: string };
           const lens = Doc.lens(main.me, ['root'], { init: (d) => (d.root = {}) });
-          Syncer.listen<T>(monaco, editor, lens, ['code'], {});
+          lens.change((d) => delete d['code']);
+          Syncer.listen<T>(monaco, editor, lens, ['config'], {});
 
           // Editor
           const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
