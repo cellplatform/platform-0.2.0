@@ -26,7 +26,7 @@ const document = {
    * to allow simple isEqual checks.
    */
   simplify(input: t.InfoData = {}) {
-    const docRefs: t.DocRef[] = [];
+    const docRefs: t.Doc[] = [];
     const document = Data.document.list(input.document).map((item) => {
       item = { ...item };
       if (Is.docRef(item.ref)) {

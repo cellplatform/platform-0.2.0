@@ -4,7 +4,7 @@ import { EventsIs } from './u.Events.Is';
 
 type Args = {
   instance?: string;
-  doc?: t.Lens | t.DocRef;
+  doc?: t.Lens | t.Doc;
   paths?: t.CmdBarPaths;
   dispose$?: t.UntilObservable;
 };
@@ -19,7 +19,7 @@ export const Events = {
   /**
    * <Cmd> object factory for the given document.
    */
-  cmd(doc: t.Lens | t.DocRef, paths: t.CmdBarPaths = DEFAULTS.paths) {
+  cmd(doc: t.Lens | t.Doc, paths: t.CmdBarPaths = DEFAULTS.paths) {
     return Cmd.create<t.CmdBarType>(doc, paths.cmd) as t.CmdBarCommand;
   },
 

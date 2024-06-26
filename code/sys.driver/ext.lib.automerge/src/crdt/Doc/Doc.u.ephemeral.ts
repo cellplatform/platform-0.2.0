@@ -5,7 +5,7 @@ import { toHandle } from './u.Handle';
  * Generates a strongly typed "ephemeral event" emitter
  * for the given document.
  */
-export function broadcaster<T extends t.CBOR>(doc: t.DocRef) {
+export function broadcaster<T extends t.CBOR>(doc: t.Doc) {
   const handle = toHandle(doc);
   return (message: T) => handle.broadcast(message);
 }
@@ -13,7 +13,7 @@ export function broadcaster<T extends t.CBOR>(doc: t.DocRef) {
 /**
  * Broadcasts an ephemeral event for the given document.
  */
-export function broadcast<T extends t.CBOR>(doc: t.DocRef, message: T) {
+export function broadcast<T extends t.CBOR>(doc: t.Doc, message: T) {
   toHandle(doc).broadcast(message);
 }
 

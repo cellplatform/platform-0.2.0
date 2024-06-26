@@ -7,7 +7,7 @@ type O = Record<string, unknown>;
  */
 export function listen<T extends O>(
   textbox: t.TextInputRef,
-  doc: t.DocRef<T> | t.Lens<T>,
+  doc: t.Doc<T> | t.Lens<T>,
   path: t.ObjectPath,
   options: { dispose$?: t.UntilObservable; debug?: string } = {},
 ) {

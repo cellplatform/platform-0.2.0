@@ -36,7 +36,7 @@ export type InfoDataRepo = {
 
 export type InfoDataDoc = {
   label?: string;
-  ref?: t.DocRef | t.UriString;
+  ref?: t.Doc | t.UriString;
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };

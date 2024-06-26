@@ -14,7 +14,7 @@ export function get<T extends O>(args: {
   dispose$?: t.UntilObservable;
   throw?: boolean;
 }) {
-  type R = t.DocRefHandle<T> | undefined;
+  type R = t.DocWithHandle<T> | undefined;
   return new Promise<R>((resolve, reject) => {
     const { repo, uri, dispose$, timeout = DEFAULTS.timeout.get } = args;
 

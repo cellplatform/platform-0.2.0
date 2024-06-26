@@ -14,7 +14,7 @@ type Options<R extends O> = {
  * Lens for operating on a sub-tree within a CRDT.
  */
 export function create<R extends O, L extends O>(
-  root: t.DocRef<R> | t.Lens<R>,
+  root: t.Doc<R> | t.Lens<R>,
   path?: PathInput,
   options?: Options<R> | t.InitializeLens<R>,
 ): t.Lens<L> {

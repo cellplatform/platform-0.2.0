@@ -13,7 +13,7 @@ export const Is = {
     return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
   },
 
-  docRef<T extends O>(input: any): input is t.DocRef<T> {
+  docRef<T extends O>(input: any): input is t.Doc<T> {
     return isObjectType(input, Symbols.DocRef);
   },
 

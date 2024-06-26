@@ -86,4 +86,4 @@ export type DocEphemeralOut<T extends O = O> = EphemeralCommon<T> & {
   direction: 'outgoing';
   data: Uint8Array;
 };
-type EphemeralCommon<T extends O = O> = { doc: t.DocRefHandle<T> };
+type EphemeralCommon<T extends O = O> = { doc: t.DocWithHandle<T> };

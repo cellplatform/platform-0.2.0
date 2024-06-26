@@ -20,7 +20,7 @@ describe('Doc', async () => {
     it('create', async () => {
       const doc = await factory();
       expect(Id.Is.slug(doc.instance)).to.eql(true);
-      expect(doc.uri).to.eql((doc as t.DocRefHandle<D>).handle.url);
+      expect(doc.uri).to.eql((doc as t.DocWithHandle<D>).handle.url);
       expect(doc.toObject()).to.eql(doc.current);
       expect(doc.is.ready).to.eql(true);
       expect(doc.is.deleted).to.eql(false);

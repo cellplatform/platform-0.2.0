@@ -3,7 +3,7 @@ import { Is, R, rx, type t } from './common';
 import { Redraw } from './use.Redraw';
 
 type O = Record<string, unknown>;
-type Ref<T extends O> = t.UriString | t.DocRef<T>;
+type Ref<T extends O> = t.UriString | t.Doc<T>;
 type RefsInput<T extends O> = Ref<T> | (Ref<T> | undefined)[];
 
 /**
@@ -20,7 +20,7 @@ export function useDocs<T extends O>(
   const redrawListeners = useRef(new Map<t.UriString, t.Lifecycle>());
   const [fetching, setFetching] = useState<t.UriString[]>([]);
   const [errors, setErrors] = useState<t.UseDocsError[]>([]);
-  const [docs, setDocs] = useState<t.DocRef<T>[]>([]);
+  const [docs, setDocs] = useState<t.Doc<T>[]>([]);
   const [, setCount] = useState(0); // Redraw.
 
   const is = {
@@ -61,7 +61,7 @@ export function useDocs<T extends O>(
       Docs.listeners.get(uri)?.dispose();
       Docs.listeners.delete(uri);
     },
-    add(doc: t.DocRef<T>) {
+    add(doc: t.Doc<T>) {
       Docs.remove(doc.uri);
       setDocs((prev) => [...prev, doc]);
 
@@ -147,7 +147,7 @@ const wrangle = {
 
   docs<T extends O>(refs?: RefsInput<T>) {
     const list = wrangle.list(refs);
-    return list.filter((item) => Is.docRef(item)) as t.DocRef<T>[];
+    return list.filter((item) => Is.docRef(item)) as t.Doc<T>[];
   },
 
   redraw(args: t.UseDocsOptions = {}) {

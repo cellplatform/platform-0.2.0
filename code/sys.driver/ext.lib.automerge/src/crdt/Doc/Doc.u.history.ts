@@ -5,7 +5,7 @@ type O = Record<string, unknown>;
 /**
  * Retrieve the history of the given document.
  */
-export function history<T extends O>(doc?: t.DocRef<T>): t.DocHistory<T> {
+export function history<T extends O>(doc?: t.Doc<T>): t.DocHistory<T> {
   const commits = doc ? A.getHistory<T>(doc.current) : [];
   let _genesis: t.DocHistoryGenesis<T> | false | undefined;
 
@@ -63,7 +63,7 @@ export function history<T extends O>(doc?: t.DocRef<T>): t.DocHistory<T> {
 /**
  * Retrieve the list of hashes for the current HEAD.
  */
-export function heads<T extends O>(doc: t.DocRef<T> | undefined): t.HashString[] {
+export function heads<T extends O>(doc: t.Doc<T> | undefined): t.HashString[] {
   return doc?.current ? A.getHeads(doc.current as A.Doc<T>) : [];
 }
 

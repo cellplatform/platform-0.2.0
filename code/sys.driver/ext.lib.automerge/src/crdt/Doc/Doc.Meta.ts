@@ -43,7 +43,7 @@ export const DocMeta = {
   /**
    * Determine if the given document has {.meta} data.
    */
-  exists(input: O | t.DocRef<O>) {
+  exists(input: O | t.Doc<O>) {
     if (typeof input !== 'object' || input === null) return false;
     const doc = PatchState.Is.state(input) ? input.current : input;
     return Boolean(doc[DocMeta.key]);

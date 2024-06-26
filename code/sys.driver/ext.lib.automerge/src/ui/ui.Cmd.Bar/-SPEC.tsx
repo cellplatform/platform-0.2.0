@@ -24,7 +24,7 @@ export default Dev.describe(name, async (e) => {
   const db = await sampleCrdt({ broadcastAdapter: true });
   let model: t.RepoListModel;
   let listRef: t.RepoListRef;
-  let doc: t.DocRef | undefined;
+  let doc: t.Doc | undefined;
 
   const control = CmdBar.Ctrl.create();
 

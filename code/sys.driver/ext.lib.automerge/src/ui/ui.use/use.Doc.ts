@@ -2,7 +2,7 @@ import { type t } from './common';
 import { useDocs } from './use.Docs';
 
 type O = Record<string, unknown>;
-type D<T extends O> = t.UriString | t.DocRef<T>;
+type D<T extends O> = t.UriString | t.Doc<T>;
 
 /**
  * Retrieves a doc (by URI) from a store.

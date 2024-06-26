@@ -12,7 +12,7 @@ export const Namespace = {
    *      object within the single document.
    */
   create<R extends O, N extends string = string>(
-    root: t.DocRef<R>,
+    root: t.Doc<R>,
     path?: t.ObjectPath | (() => t.ObjectPath),
     options?: Options<R> | t.InitializeLens<R>,
   ): t.NamespaceManager<N> {

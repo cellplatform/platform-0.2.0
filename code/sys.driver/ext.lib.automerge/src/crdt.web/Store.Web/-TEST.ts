@@ -9,7 +9,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
   const store = WebStore.init({ storage: false });
 
   const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
-  const assertCount = (doc: t.DocRef<D>, expected: number) => {
+  const assertCount = (doc: t.Doc<D>, expected: number) => {
     expect(doc.current.count?.value).to.eql(expected);
   };
 
@@ -85,7 +85,7 @@ export default Test.describe('Store.Web (Repo)', (e) => {
       const doc1 = await store.doc.getOrCreate<D>(initial);
       const doc2 = await store.doc.getOrCreate<D>(initial);
 
-      type H = t.DocRefHandle<D>;
+      type H = t.DocWithHandle<D>;
       expect((doc1 as H).handle.state).to.eql('ready');
       expect(doc1.uri).to.eql((doc1 as H).handle.url);
       expect(doc1.is.ready).to.eql(true);

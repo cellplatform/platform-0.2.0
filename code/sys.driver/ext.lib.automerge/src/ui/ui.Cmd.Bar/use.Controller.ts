@@ -5,7 +5,7 @@ import { Events, Path } from './u';
 type Args = {
   instance: string;
   enabled?: boolean;
-  doc?: t.Lens | t.DocRef;
+  doc?: t.Lens | t.Doc;
   paths?: t.CmdBarPaths;
   debug?: string;
   focusOnReady?: boolean;
@@ -25,7 +25,7 @@ export function useController(args: Args) {
   const resolve = Path.resolver(paths);
 
   const cmdRef = useRef<t.CmdBarCommand>();
-  const getCmd = (doc: t.Lens | t.DocRef) => {
+  const getCmd = (doc: t.Lens | t.Doc) => {
     type C = t.CmdBarType;
     if (!cmdRef.current) cmdRef.current = Cmd.create<C>(doc, paths.cmd) as t.CmdBarCommand;
     return cmdRef.current;

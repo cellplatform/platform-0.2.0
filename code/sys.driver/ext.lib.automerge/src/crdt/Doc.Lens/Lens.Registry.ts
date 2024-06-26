@@ -1,7 +1,7 @@
 import type { t } from './common';
 
 type Id = string;
-type Doc = t.DocRef<any>;
+type Doc = t.Doc<any>;
 type RegistryEntry = { total: number };
 
 const store = new Map<Id, RegistryEntry>();

@@ -80,7 +80,7 @@ describe('Is (flags)', (e) => {
     type TRoot = { count: number };
     const store = Store.init();
     const docRef = await store.doc.getOrCreate<TRoot>((d) => (d.count = 0));
-    const docRefHandle = docRef as t.DocRefHandle<TRoot>;
+    const docRefHandle = docRef as t.DocWithHandle<TRoot>;
     expect(Is.handle(docRefHandle.handle)).to.eql(true);
     expect(Is.handle(docRef)).to.eql(false);
     NON_OBJECTS.forEach((value) => expect(Is.handle(value)).to.eql(false));

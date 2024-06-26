@@ -65,7 +65,7 @@ describe('Store (base)', async () => {
       const { store, generator } = testSetup();
 
       const docRef = await generator();
-      const docRefHandle = docRef as t.DocRefHandle<D>;
+      const docRefHandle = docRef as t.DocWithHandle<D>;
       const handle1 = Store.handle(docRef);
       const handle2 = Store.handle(docRefHandle);
 

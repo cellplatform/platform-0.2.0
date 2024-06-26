@@ -35,7 +35,7 @@ describe('Store.repo', () => {
       store.repo.on('delete-document', handleDelete);
 
       const doc = await generator();
-      (doc as t.DocRefHandle<D>).handle.delete(); // NB: This will  not fire the document event.
+      (doc as t.DocWithHandle<D>).handle.delete(); // NB: This will  not fire the document event.
 
       expect(fired).to.eql(0);
       store.repo.off('delete-document', handleDelete);

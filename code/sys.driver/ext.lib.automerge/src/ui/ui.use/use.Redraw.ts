@@ -4,10 +4,7 @@ import { Is, rx, type t } from './common';
 /**
  * Causes a redraw on document updates.
  */
-export function useRedrawOnChange(
-  doc?: t.DocRef | t.UriString,
-  options: { debounce?: t.Msecs } = {},
-) {
+export function useRedrawOnChange(doc?: t.Doc | t.UriString, options: { debounce?: t.Msecs } = {}) {
   const { debounce = 100 } = options;
   const uri = Is.docRef(doc) ? doc.uri : undefined;
 
@@ -24,7 +21,7 @@ export function useRedrawOnChange(
  * Non hook version of the redraw monitor.
  */
 export const Redraw = {
-  onChange(doc?: t.DocRef, redraw?: () => void, options: t.UseRedrawOnChangeOptions = {}) {
+  onChange(doc?: t.Doc, redraw?: () => void, options: t.UseRedrawOnChangeOptions = {}) {
     const { debounce = 100 } = options;
     const life = rx.lifecycle();
     if (Is.docRef(doc)) {

@@ -139,7 +139,7 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
 
       doc2.change((d) => (d.count = 888));
 
-      function cloneAndMerge<T extends O>(source: t.DocRef<T>, target: t.DocRef<T>) {
+      function cloneAndMerge<T extends O>(source: t.Doc<T>, target: t.Doc<T>) {
         const doc = store.doc.fromBinary(Doc.toBinary(source), target.uri);
         Doc.merge(target, doc);
         return doc;
