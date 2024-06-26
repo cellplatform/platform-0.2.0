@@ -22,12 +22,13 @@ export async function loaderView(args: t.ParsedArgs, main: t.Main) {
       onSelect={(e) => {
         // Update the command "argv".
         const path = CmdBar.Path.default.text;
-        const next = `load ${e.uri}`;
+        const cmd: t.CommandAction = 'dev';
+        const next = `${cmd} ${e.uri}`;
         main.lens.cmdbar.change((d) => Doc.Text.replace(d, path, next));
 
         // Move state back to the command bar.
+        const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
         Time.delay(0, () => {
-          const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
           cmdbar.caretToEnd({});
           cmdbar.focus({});
         });

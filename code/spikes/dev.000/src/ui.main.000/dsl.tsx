@@ -13,14 +13,14 @@ export const DSL = {
    * Match a given command to produce a renderable UI <View>.
    */
   async matchView(argv: string, main: t.Main) {
-    const { args, first } = wrangle.args(argv);
+    const { args, action } = wrangle.args<t.CommandAction>(argv);
 
-    if (first === 'load') {
+    if (action === 'dev') {
       const { loaderView } = await import('./dsl.load');
       return loaderView(args, main);
     }
 
-    if (first === 'me') {
+    if (action === 'me') {
       const { Me } = await import('./ui.Me');
       return <Me main={main} />;
     }
@@ -32,9 +32,9 @@ export const DSL = {
    * Run the command when the [Invoke] action is triggered (eg ENTER key).
    */
   async invoke(argv: string, main: t.Main) {
-    const { args, first, pos } = wrangle.args(argv);
+    const { args, action, pos } = wrangle.args<t.CommandAction>(argv);
 
-    if (first === 'cast') {
+    if (action === 'cast') {
       const text = pos[1];
       console.log('cast:', text);
       const send = main.cmd.fc.method('send:cast', 'send:cast:res');
@@ -42,7 +42,7 @@ export const DSL = {
       console.log('cast:response:', res);
     }
 
-    if (first === 'load') {
+    if (action === 'dev') {
       const { loadSpec } = await import('./dsl.load');
       return loadSpec(args, main);
     }
@@ -55,10 +55,10 @@ export const DSL = {
  * Helpers
  */
 const wrangle = {
-  args(argv: string) {
+  args<A>(argv: string) {
     const args = Args.parse(argv);
     const pos = Args.positional(args);
-    const first = (pos[0] || '').toLowerCase();
-    return { argv, pos, first, args };
+    const action = (pos[0] || '') as A;
+    return { argv, pos, action, args };
   },
 } as const;
