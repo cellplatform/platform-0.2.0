@@ -4,7 +4,7 @@ import { Image } from 'sys.ui.react.media.image';
 import { COLORS, Color, WebStore, css, rx, type t } from './common';
 
 import type { ImageBinary } from 'sys.ui.react.media.image/src/types';
-type TDoc = { image?: ImageBinary };
+type D = { image?: ImageBinary };
 
 export type ImageCrdtProps = {
   store: t.Store;
@@ -18,7 +18,7 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
   const [showDocJson, setShowDocJson] = useState(false);
   const [isOver, setOver] = useState(false);
   const [index, setIndex] = useState<t.WebStoreIndex>();
-  const [doc, setDoc] = useState<t.DocRef<TDoc>>();
+  const [doc, setDoc] = useState<t.Doc<D>>();
   const [_, setRedraw] = useState(0);
 
   const redraw = () => setRedraw((n) => n + 1);
@@ -33,7 +33,7 @@ export const ImageCrdt: React.FC<ImageCrdtProps> = (props) => {
       if (life.disposed) setIndex(index);
     });
 
-    store.doc.get<TDoc>(docuri).then((doc) => {
+    store.doc.get<D>(docuri).then((doc) => {
       if (life.disposed || !doc) return;
       const events = doc.events(life.dispose$);
       events.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);

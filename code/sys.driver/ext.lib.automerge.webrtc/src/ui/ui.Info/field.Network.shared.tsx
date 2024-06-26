@@ -6,7 +6,7 @@ import { AutomergeInfo, DEFAULTS, type t } from './common';
 export function shared(
   ctx: t.InfoFieldCtx,
   data: t.InfoData,
-  ref?: t.DocRef<t.CrdtShared>,
+  ref?: t.Doc<t.CrdtShared>,
 ): t.PropListItem[] {
   const network = data.network;
   const res: t.PropListItem[] = [];

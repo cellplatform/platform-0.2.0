@@ -33,7 +33,7 @@ export default Dev.describe(name, async (e) => {
   const index = await WebStore.index(store);
   const generator = store.doc.factory<t.SampleDoc>((d) => (d.count = new A.Counter()));
 
-  let _doc: t.DocRef<t.SampleDoc> | undefined;
+  let _doc: t.Doc<t.SampleDoc> | undefined;
   const initDoc = async (state: t.DevCtxState<T>) => {
     try {
       const doc = await generator(local.docuri);
