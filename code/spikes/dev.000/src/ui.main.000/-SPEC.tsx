@@ -192,7 +192,8 @@ export default Dev.describe(name, async (e) => {
                   name: 'me',
                   visible: false,
                   beforeRender(e) {
-                    (e.root as any).config = shorten((e.root as any)?.config, 25);
+                    const root = e.root as any;
+                    root.config = shorten(root?.config, 25);
                   },
                 },
               },
@@ -201,8 +202,8 @@ export default Dev.describe(name, async (e) => {
                 ref: main.me,
                 object: {
                   name: 'me.root',
-                  visible: false,
                   lens: ['root'],
+                  visible: false,
                   beforeRender(e) {
                     e.config = shorten(e.config, 29);
                   },
