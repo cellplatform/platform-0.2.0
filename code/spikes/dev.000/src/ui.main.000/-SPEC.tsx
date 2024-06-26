@@ -8,10 +8,19 @@ import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
 import { Color, Dev, css, type t } from '../test.ui';
+import {
+  Cmd,
+  CrdtInfo,
+  Immutable,
+  Peer,
+  PeerRepoList,
+  RepoList,
+  WebStore,
+  WebrtcStore,
+} from './common';
 import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.debug';
-import { Cmd, Immutable, Peer, PeerRepoList, RepoList, WebStore, WebrtcStore } from './common';
 
 type T = {
   stream?: MediaStream;
@@ -26,14 +35,20 @@ const name = 'Main.000';
 
 export default Dev.describe(name, async (e) => {
   const self = Peer.init();
-  const store = WebStore.init({
-    storage: 'fs',
-    network: [],
-  });
-  const model = await RepoList.model(store, {
+
+  const Store = {
+    fs: WebStore.init({ storage: 'fs', network: [] }),
+    tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
+  } as const;
+
+  const Index = {
+    fs: await WebStore.index(Store.fs),
+  } as const;
+
+  const model = await RepoList.model(Store.tmp, {
     behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
   });
-  const network: t.NetworkStore = await WebrtcStore.init(self, store, model.index, {});
+  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
   const theme: t.CommonTheme = 'Light';
 
   /**
@@ -100,7 +115,6 @@ export default Dev.describe(name, async (e) => {
             'Login.Farcaster',
             'Login.SMS',
             'Id.User',
-            'Id.User.Phone',
             'Farcaster',
             'Wallet.Link',
             'Wallet.List',
@@ -146,10 +160,16 @@ export default Dev.describe(name, async (e) => {
     });
 
     dev.hr(5, 20);
-    dev.section('Debug', (dev) => {
-      dev.hr(0, 3);
-      dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
+
+    dev.row((e) => {
+      return (
+        <CrdtInfo
+          stateful={true}
+          title={'Local'}
+          fields={['Repo']}
+          data={{ repo: { store: Store.fs, index: Index.fs } }}
+        />
+      );
     });
   });
 
