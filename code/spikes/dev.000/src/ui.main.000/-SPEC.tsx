@@ -171,6 +171,12 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
+      const shorten = (text: string | unknown = '', max: number) => {
+        let res = typeof text === 'string' ? text : '';
+        if (res.length > max) res = `${res.slice(0, max - 3)}...`;
+        return res;
+      };
+
       return (
         <CrdtInfo
           stateful={true}
@@ -179,8 +185,34 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store: Store.fs, index: Index.fs },
             document: [
-              { label: 'Me', ref: main.me, object: { visible: false } },
-              { label: 'Me.root', ref: main.me, object: { visible: false, lens: ['root'] } },
+              {
+                label: 'Me',
+                ref: main.me,
+                object: {
+                  name: 'me',
+                  visible: false,
+                  beforeRender(e) {
+                    (e.root as any).code = shorten((e.root as any)?.code, 25);
+                  },
+                },
+              },
+              {
+                label: 'Me: root',
+                ref: main.me,
+                object: {
+                  name: 'me.root',
+                  visible: false,
+                  lens: ['root'],
+                  beforeRender(e) {
+                    e.code = shorten(e.code, 29);
+                  },
+                },
+              },
+              {
+                label: 'Me: identity',
+                ref: main.me,
+                object: { name: 'me.identity', visible: false, lens: ['identity'] },
+              },
             ],
           }}
         />
