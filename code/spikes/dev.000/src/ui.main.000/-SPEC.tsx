@@ -7,7 +7,7 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { Color, Dev, css, type t } from '../test.ui';
+import { Color, Dev, css } from '../test.ui';
 import {
   Cmd,
   CrdtInfo,
@@ -17,15 +17,14 @@ import {
   RepoList,
   WebStore,
   WebrtcStore,
+  CmdBar,
+  type t,
 } from './common';
 import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.debug';
 
-type T = {
-  stream?: MediaStream;
-  overlay?: JSX.Element;
-};
+type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
 
 /**
@@ -55,7 +54,14 @@ export default Dev.describe(name, async (e) => {
    * Commands for Farcaster.
    */
   const doc = Immutable.clonerRef({}); // NB: Default simple "cloner" immutable.
-  const fc = Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>;
+  const cmd: t.MainCmd = {
+    fc: Cmd.create<t.FarcasterCmd>(doc) as t.Cmd<t.FarcasterCmd>,
+    cmdbar: CmdBar.Ctrl.create().cmd,
+  };
+  const main: t.Main = {
+    cmd,
+    lens: { cmdbar: network.shared.ns.lens('dev.cmdbar', {}) },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -92,13 +98,7 @@ export default Dev.describe(name, async (e) => {
       });
 
     ctx.host.footer.padding(0).render((e) => {
-      return (
-        <Footer
-          cmd={{ fc }}
-          network={network}
-          onOverlay={(e) => state.change((d) => (d.overlay = e.el))}
-        />
-      );
+      return <Footer main={main} onOverlay={(e) => state.change((d) => (d.overlay = e.el))} />;
     });
   });
 
@@ -125,7 +125,7 @@ export default Dev.describe(name, async (e) => {
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
-              cmd: fc,
+              cmd: main.cmd.fc,
               signer: {},
               identity: {
                 onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),

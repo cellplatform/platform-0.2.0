@@ -5,3 +5,4 @@ export { Cmd } from 'sys.cmd';
 export { Immutable } from 'sys.util';
 
 export * from '../common';
+export type * as t from './common.t';

@@ -20,7 +20,7 @@ export type { ParsedArgs } from 'sys.util/src/types';
  * @UI
  */
 export type {
-  CmdBarControl,
+  CmdBarCtrl,
   CommonTheme,
   CssValue,
   DomRect,

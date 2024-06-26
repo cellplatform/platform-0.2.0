@@ -1,86 +1,54 @@
-import { useEffect, useRef, useState } from 'react';
+import { isValidElement, useEffect } from 'react';
 import { CmdBar, Doc, Keyboard, rx, type t } from './common';
 import { DSL } from './dsl';
 
 export type FooterProps = {
-  cmd: { fc: t.Cmd<t.FarcasterCmd> };
-  network: t.NetworkStore;
+  main: t.Main;
   style?: t.CssValue;
   onOverlay?: (e: { el?: JSX.Element }) => void;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
-  const { network, cmd } = props;
-  const [lens, setLens] = useState<t.Lens>();
-  const cmdbarRef = useRef(CmdBar.control());
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    const doc = network.shared.doc;
-    if (doc) setLens(network.shared.ns.lens('dev.cmdbar', {}));
-  }, [network.shared.doc.instance]);
+  const { main } = props;
 
   /**
    * Keyboard
    */
   useEffect(() => {
     const life = rx.disposable();
-    const cmdbar = cmdbarRef.current;
     const keys = Keyboard.until(life.dispose$);
+    const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
 
-    const patternFocus = 'META + KeyK';
-    keys.on(patternFocus, () => {
+    keys.on('Tab', (e) => e.handled());
+    keys.on('META + KeyK', () => {
       cmdbar.focus({});
       cmdbar.caretToEnd({});
     });
-    keys.dbl().on(patternFocus, () => {
+    keys.dbl().on('META + KeyK', () => {
       const path = CmdBar.Path.default.text;
-      lens?.change((d) => Doc.Text.replace(d, path, ''));
+      main.lens.cmdbar.change((d) => Doc.Text.replace(d, path, ''));
     });
-    keys.on('Tab', (e) => e.handled());
 
     return life.dispose;
-  }, [lens]);
+  }, []);
 
   /**
    * Render
    */
   return (
     <CmdBar
-      control={cmdbarRef.current.cmd}
-      doc={lens}
+      ctrl={main.cmd.cmdbar}
+      doc={main.lens.cmdbar}
       style={props.style}
       onReady={(e) => console.info(`⚡️ cmdbar.onReady:`, e)}
       onText={async (e, ctx) => {
-        if (!lens) return;
-        const el = await DSL.matchView(e.text, lens);
+        const el = await DSL.matchView(e.text, main);
         props.onOverlay?.({ el });
       }}
       onInvoke={async (e) => {
-        /**
-         * TODO 🐷
-         * Extract a principled DSL.
-         */
-        const text = e.params.text;
-        const parts = text.split(' ').map((part) => part.trim());
-        const first = (parts[0] || '').trim();
-
-        if (first === 'cast') {
-          const text = parts[1];
-          console.log('cast:', text);
-          const send = cmd.fc.method('send:cast', 'send:cast:res');
-          const res = await send({ text }).promise();
-          console.log('cast:response:', res);
-        }
-
-        if (first === 'load') {
-          const { Specs } = await import('../test.ui/entry.Specs');
-          const ns = parts.slice(1).join(' ').trim();
-          const el = DSL.findAndRender(Specs, ns, { silent: false });
-          props.onOverlay?.({ el });
-        }
+        const argv = e.params.text;
+        const res = await DSL.invoke(argv, main);
+        if (isValidElement(res)) props.onOverlay?.({ el: res });
       }}
     />
   );
