@@ -1,5 +1,5 @@
 import { Monaco } from 'ext.lib.monaco.crdt';
-import { Color, Doc, css, type t } from './common';
+import { CmdBar, Color, Doc, css, type t } from './common';
 
 const Syncer = Monaco.Crdt.Syncer;
 
@@ -33,9 +33,15 @@ export const Me: React.FC<MeProps> = (props) => {
         onReady={(e) => {
           console.info(`⚡️ MonacoEditor.onReady`);
           const { monaco, editor } = e;
+
+          // Document (State)
           type T = { code?: string };
           const lens = Doc.lens(main.me, ['root'], { init: (d) => (d.root = {}) });
           Syncer.listen<T>(monaco, editor, lens, ['code'], {});
+
+          // Editor
+          const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
+          editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, () => cmdbar.focus({}));
         }}
       />
     </div>

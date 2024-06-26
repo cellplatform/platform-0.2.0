@@ -33,15 +33,21 @@ const initial: T = {};
 const name = 'Main.000';
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { meUri?: string };
+  type LocalStore = { me?: t.UriString };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({ meUri: undefined });
-
+  const local = localstore.object({ me: undefined });
   const self = Peer.init();
 
   const Store = {
     fs: WebStore.init({ storage: 'fs', network: [] }),
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
+    async getMeDoc() {
+      const fs = Store.fs.doc;
+      if (!(await fs.exists(local.me))) local.me = undefined;
+      const me = await fs.getOrCreate((d) => null, local.me);
+      local.me = me.uri;
+      return me;
+    },
   } as const;
 
   const Index = {
@@ -54,8 +60,7 @@ export default Dev.describe(name, async (e) => {
   const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
   const theme: t.CommonTheme = 'Light';
 
-  const me = await Store.fs.doc.getOrCreate(() => null, local.meUri);
-  local.meUri = me.uri;
+  const me = await Store.getMeDoc();
 
   const cmd: t.MainCmd = {
     fc: Cmd.create<t.FarcasterCmd>(Immutable.clonerRef({})) as t.Cmd<t.FarcasterCmd>,
