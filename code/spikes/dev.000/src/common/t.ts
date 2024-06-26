@@ -13,7 +13,7 @@ export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
  */
 export type { Cmd, CmdType } from 'sys.cmd/src/types';
 export type { SpecImporter, SpecImports } from 'sys.test.spec/src/types';
-export type { ModuleImports, Msecs } from 'sys.types/src/types';
+export type { ModuleImports, Msecs, UriString } from 'sys.types/src/types';
 export type { ParsedArgs } from 'sys.util/src/types';
 
 /**
