@@ -1,27 +1,20 @@
 /**
  * Module (Meta)
  */
-import { Pkg } from './index.pkg';
-export { Pkg };
+export { Pkg } from './index.pkg';
 
 /**
  * Library
  */
 export { A, Cmd, Data, Is, toObject } from './common';
+export { Store, StoreIndex };
 
+import { Doc, Store, StoreIndex } from './crdt';
 import { Sync } from './crdt.sync';
-import { Doc } from './crdt/Doc';
-import { Store } from './crdt/Store';
-import { WebStore } from './crdt/Store.Web';
+export { Doc, Sync };
 
-export { Doc } from './crdt/Doc';
-export { Store } from './crdt/Store';
-export { StoreIndex } from './crdt/Store.Index';
-export { WebStore } from './crdt/Store.Web';
-export { WebStoreIndex } from './crdt/Store.Web.Index';
-export { StoreIndexDb } from './crdt/Store.Web.IndexDb';
-
-export { Sync } from './crdt.sync';
+import { StoreIndexDb, WebStore, WebStoreIndex } from './crdt.web';
+export { StoreIndexDb, WebStore, WebStoreIndex };
 
 export const Crdt = {
   Doc,

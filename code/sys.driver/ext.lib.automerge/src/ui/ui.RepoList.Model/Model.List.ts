@@ -1,4 +1,6 @@
-import { StoreIndex, WebStore } from '../../crdt';
+import { StoreIndex } from '../../crdt';
+import { WebStore } from '../../crdt.web';
+
 import { eventsFactory } from './Model.Events';
 import { ItemModel } from './Model.Item';
 import { GetItem } from './Model.List.GetItem';

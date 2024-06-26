@@ -1,4 +1,4 @@
-import { Store } from '../Store';
+import { Store } from '../common';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { Is, type t } from './common';
 

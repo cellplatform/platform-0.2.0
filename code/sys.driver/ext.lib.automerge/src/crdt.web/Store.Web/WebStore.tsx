@@ -1,11 +1,10 @@
 import {
-  Repo,
   BroadcastChannelNetworkAdapter,
   IndexedDBStorageAdapter,
+  Repo,
 } from '../../common/libs.Automerge';
 
-import { Doc } from '../Doc';
-import { Store } from '../Store';
+import { Doc, Store } from '../common';
 import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, Symbols, type t } from './common';

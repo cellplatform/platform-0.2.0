@@ -1,9 +1,5 @@
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
-
-import { Is } from '.';
-import { Doc } from '../crdt/Doc';
-import { Store } from '../crdt/Store';
-import { WebStore } from '../crdt/Store.Web';
+import { Doc, Is, Store, WebStore } from '..';
 import { describe, expect, it, type t } from '../test';
 
 describe('Is (flags)', (e) => {

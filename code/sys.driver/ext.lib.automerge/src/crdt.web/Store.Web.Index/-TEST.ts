@@ -1,6 +1,6 @@
 import { A, Test, TestDb, Time, Value, expect, expectError, toObject, type t } from '../../test.ui';
-import { Store } from '../Store';
 import { WebStore } from '../Store.Web';
+import { Store } from '../common';
 
 type D = { count?: t.A.Counter };
 
