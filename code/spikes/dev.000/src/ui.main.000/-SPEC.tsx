@@ -10,6 +10,7 @@ if (!window.Buffer) window.Buffer = Buffer;
 import { Color, Dev, css } from '../test.ui';
 import {
   Cmd,
+  CmdBar,
   CrdtInfo,
   Immutable,
   Peer,
@@ -17,7 +18,6 @@ import {
   RepoList,
   WebStore,
   WebrtcStore,
-  CmdBar,
   type t,
 } from './common';
 import { SampleLayout } from './ui';
