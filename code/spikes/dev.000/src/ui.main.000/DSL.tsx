@@ -16,7 +16,7 @@ export const DSL = {
     const { args, action } = wrangle.args<t.CommandAction>(argv);
 
     if (action === 'dev') {
-      const { loaderView } = await import('./dsl.load');
+      const { loaderView } = await import('./DSL.load');
       return loaderView(args, main);
     }
 
@@ -43,7 +43,7 @@ export const DSL = {
     }
 
     if (action === 'dev') {
-      const { loadSpec } = await import('./dsl.load');
+      const { loadSpec } = await import('./DSL.load');
       return loadSpec(args, main);
     }
 
