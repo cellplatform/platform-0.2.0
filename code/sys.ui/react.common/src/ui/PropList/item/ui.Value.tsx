@@ -1,4 +1,4 @@
-import { css, format, useMouse, type t } from './common';
+import { DEFAULTS, css, format, useMouse, type t } from './common';
 import { SimpleValue } from './ui.Value.Simple';
 import { SwitchValue } from './ui.Value.Switch';
 import { useHandler } from './use.Handler';
@@ -14,13 +14,12 @@ export type PropListValueProps = {
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const { hasLabel = true, theme } = props;
+  const { hasLabel = true, theme = DEFAULTS.theme } = props;
   const item = format(props.item);
   const value = item.value;
-  const isCopyable = item.isCopyable(props.defaults);
 
   const mouse = useMouse();
-  const handler = useHandler(props.item, props.defaults, item.value.onClick);
+  const handler = useHandler(props.item, item.value.onClick, theme);
   const cursor = props.cursor ?? handler.cursor;
 
   /**
@@ -51,7 +50,6 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
           value={value}
           message={message}
           isOver={mouse.is.over}
-          isCopyable={isCopyable}
           cursor={cursor}
           defaults={props.defaults}
           theme={theme}

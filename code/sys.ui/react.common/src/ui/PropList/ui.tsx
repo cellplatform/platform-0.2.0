@@ -10,11 +10,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
-
-  const defaults: t.PropListDefaults = {
-    clipboard: false,
-    ...props.defaults,
-  };
+  const defaults: t.PropListDefaults = { ...props.defaults };
 
   const theme = Color.theme(props.theme ?? DEFAULTS.theme);
   const styles = {

@@ -1,6 +1,5 @@
 import { isValidElement } from 'react';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
-import { CopyIcon } from './ui.CopyIcon';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
@@ -8,7 +7,6 @@ export type SimpleValueProps = {
   message?: string | JSX.Element;
   cursor?: t.CSSProperties['cursor'];
   isOver?: boolean;
-  isCopyable?: boolean;
   theme?: t.CommonTheme;
   onClick?: React.MouseEventHandler;
 };
@@ -19,8 +17,11 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 
   const is = wrangle.flags(props);
   const textColor = wrangle.textColor(props);
-  const cursor = props.cursor ?? is.copyActive ? 'pointer' : 'default';
+  const cursor = props.cursor ? 'pointer' : 'default';
 
+  /**
+   * Render
+   */
   const styles = {
     base: css({
       position: 'relative',
@@ -40,18 +41,15 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
   };
 
   const content = message ? message : wrangle.renderValue(props);
-
-  return (
-    <div {...css(styles.base)}>
-      <div
-        {...css(styles.content, !isValidElement(content) ? styles.text : styles.component)}
-        onMouseDown={props.onClick}
-      >
-        {content}
-      </div>
-      {is.copyActive && !message && <CopyIcon />}
+  const style = css(styles.content, !isValidElement(content) ? styles.text : styles.component);
+  const elContent = (
+    <div {...style} onMouseDown={props.onClick}>
+      {content}
     </div>
   );
+
+  const elMessage = message && <div>{message}</div>;
+  return <div {...css(styles.base)}>{elMessage || elContent}</div>;
 };
 
 /**
@@ -61,13 +59,14 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 const wrangle = {
   flags(props: SimpleValueProps) {
     const value = wrangle.valueObject(props);
-    const { isOver, isCopyable, defaults } = props;
+    const { isOver, defaults } = props;
     let monospace = value.monospace ?? defaults.monospace;
     if (typeof value.body === 'boolean') monospace = true;
     return {
+      over: isOver,
       boolean: typeof value.body === 'boolean',
-      copyActive: isOver && isCopyable,
       monospace,
+      clickable: !!props.onClick,
     };
   },
 
@@ -79,7 +78,7 @@ const wrangle = {
     if (typeof props.message === 'string') return theme.alpha(0.3).fg;
 
     const is = wrangle.flags(props);
-    if (is.copyActive) return COLORS.BLUE;
+    if (is.over && is.clickable) return COLORS.BLUE;
     if (is.boolean) return COLORS.PURPLE;
 
     return theme.fg;

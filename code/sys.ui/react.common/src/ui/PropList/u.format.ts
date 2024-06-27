@@ -47,28 +47,6 @@ export function format(item: t.PropListItem) {
     get isSimple() {
       return res.isString || res.isNumber || res.isBoolean;
     },
-
-    get clipboard() {
-      const value = res.value;
-      const data = value.body;
-      if (value.clipboard) {
-        return typeof value.clipboard === 'boolean' ? data?.toString() || '' : value.clipboard;
-      }
-
-      if (data === null) return 'null';
-      if (data === undefined) return 'undefined';
-
-      if (typeof data === 'object' && !isValidElement(data)) {
-        return JSON.stringify(data, null, '  ');
-      }
-
-      return data.toString();
-    },
-
-    isCopyable(defaults?: t.PropListDefaults) {
-      if (res.value.clipboard || defaults?.clipboard) return true;
-      return false;
-    },
   } as const;
 
   return res;

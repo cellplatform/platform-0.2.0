@@ -40,7 +40,6 @@ export const Info: React.FC<t.InfoProps> = (props) => {
       title={title}
       items={items}
       width={PropList.Info.width(props)}
-      defaults={{ clipboard: false }}
       theme={theme}
       margin={props.margin}
       style={props.style}

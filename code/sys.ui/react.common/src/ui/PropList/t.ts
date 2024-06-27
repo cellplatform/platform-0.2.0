@@ -42,7 +42,6 @@ export type PropListItemFactory = () => (PropListItem | t.Falsy) | (PropListItem
  * Default values used when optional properties are ommitted.
  */
 export type PropListDefaults = {
-  readonly clipboard?: boolean;
   readonly monospace?: boolean;
 };
 
@@ -78,7 +77,6 @@ export type PropListValue = PropListValueGeneric | PropListValueKinds;
 
 type ValueBase = {
   readonly monospace?: boolean;
-  readonly clipboard?: string | boolean | (() => string | undefined);
   readonly color?: string | number;
   readonly fontSize?: number;
   readonly bold?: boolean;
@@ -103,6 +101,7 @@ export type PropListValueSwitch = ValueBase & {
  */
 export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {
+  readonly theme: t.CommonTheme;
   readonly item: PropListItem;
   readonly value: PropListValue;
   readonly modifiers: t.KeyboardModifierFlags;

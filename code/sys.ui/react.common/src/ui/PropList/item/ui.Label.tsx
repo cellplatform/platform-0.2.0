@@ -10,15 +10,15 @@ export type PropListLabelProps = {
 };
 
 export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
+  const theme = Color.theme(props.theme);
   const item = format(props.data);
   const label = item.label;
-  const handler = useHandler(props.data, props.defaults, label.onClick);
+  const handler = useHandler(props.data, label.onClick, theme.name);
   const hasToggle = !!label.toggle;
 
   /**
    * Render
    */
-  const theme = Color.theme(props.theme);
   const color = theme.alpha(0.4).fg;
   const styles = {
     base: css({

@@ -18,7 +18,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const selected = Wrangle.selected(item, theme.is.dark);
   const divider = item.divider ?? true;
 
-  const handler = useHandler(props.item, props.defaults, item.onClick);
+  const handler = useHandler(props.item, item.onClick, theme.name);
 
   /**
    * Render
