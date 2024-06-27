@@ -154,7 +154,7 @@ export default Dev.describe(name, async (e) => {
       return (
         <PeerRepoList.Info
           stateful={true}
-          title={'Network'}
+          title={['Network', 'Shared']}
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           data={{
             network,
@@ -180,7 +180,7 @@ export default Dev.describe(name, async (e) => {
       return (
         <CrdtInfo
           stateful={true}
-          title={'Local'}
+          title={['Local', 'Private']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: { store: Store.fs, index: Index.fs },
@@ -193,7 +193,7 @@ export default Dev.describe(name, async (e) => {
                   visible: false,
                   beforeRender(e) {
                     const root = e.root as any;
-                    root.config = shorten(root?.config, 25);
+                    root.config = shorten(root?.config, 20);
                   },
                 },
               },
@@ -205,7 +205,7 @@ export default Dev.describe(name, async (e) => {
                   lens: ['root'],
                   visible: false,
                   beforeRender(e) {
-                    e.config = shorten(e.config, 29);
+                    e.config = shorten(e.config, 22);
                   },
                 },
               },
