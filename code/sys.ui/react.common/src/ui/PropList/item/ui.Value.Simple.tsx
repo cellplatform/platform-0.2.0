@@ -25,11 +25,13 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
   /**
    * Render
    */
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({
       position: 'relative',
       opacity: value.opacity ?? 1,
       transition: 'opacty 100ms ease-out',
+      color: theme.fg,
       display: 'grid',
     }),
     content: css({
@@ -39,12 +41,9 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
       fontWeight: is.monospace ? 'bolder' : undefined,
       fontSize: wrangle.fontSize(props),
     }),
-    text: css({
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    }),
+    text: css({ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
     component: css({ Flex: 'center-end' }),
+    message: css({}),
   };
 
   const content = message ? message : wrangle.renderValue(props);
@@ -55,7 +54,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
     </div>
   );
 
-  const elMessage = message && <div>{message}</div>;
+  const elMessage = message && <div {...styles.message}>{message}</div>;
   return <div {...css(styles.base)}>{elMessage || elContent}</div>;
 };
 

@@ -4,7 +4,7 @@ import { DEFAULTS, ReactEvent, Time, type t } from './common';
 
 export function useHandler(
   input: t.PropListItem,
-  handler?: t.PropListItemHandler | undefined,
+  handler?: t.PropListItemHandler | false,
   theme?: t.CommonTheme,
 ) {
   const item = format(input);
@@ -25,8 +25,6 @@ export function useHandler(
 
   const onClick: React.MouseEventHandler = async (e) => {
     if (!handler) return;
-
-    console.log('useHandler on Click', e);
 
     const { value } = item;
     let _message: JSX.Element | string | undefined;

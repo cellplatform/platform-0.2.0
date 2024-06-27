@@ -56,7 +56,7 @@ export type PropListItem = {
   readonly indent?: number;
   readonly selected?: boolean | PropListItemSelected;
   readonly divider?: boolean;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
 };
 
 /**
@@ -64,7 +64,7 @@ export type PropListItem = {
  */
 export type PropListLabel = {
   readonly body?: string | number | JSX.Element;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
   readonly toggle?: { open?: boolean };
 };
 
@@ -82,7 +82,7 @@ type ValueBase = {
   readonly bold?: boolean;
   readonly opacity?: number;
   readonly indent?: number;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
 };
 
 export type PropListValueGeneric = ValueBase & {

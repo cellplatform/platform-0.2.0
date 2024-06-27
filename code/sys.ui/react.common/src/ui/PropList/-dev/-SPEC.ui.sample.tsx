@@ -52,7 +52,7 @@ export const sampleItems: t.PropListItem[] = [
     },
     onClick(e) {
       console.info('⚡️ item.onClick', e);
-      e.message('My Click Message', 1200);
+      e.message('My Click Message 💥', 1200);
     },
   },
   {
