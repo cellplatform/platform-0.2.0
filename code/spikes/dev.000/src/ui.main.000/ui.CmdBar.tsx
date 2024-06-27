@@ -1,6 +1,6 @@
 import { isValidElement, useEffect } from 'react';
 import { CmdBar, Doc, Keyboard, rx, type t } from './common';
-import { DSL } from './dsl';
+import { DSL } from './DSL';
 
 export type FooterProps = {
   main: t.Main;
