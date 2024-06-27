@@ -19,7 +19,6 @@ const View: React.FC<t.InfoProps> = (props) => {
       title={PropList.Info.title(props)}
       items={items}
       width={PropList.Info.width(props)}
-      defaults={{ clipboard: false }}
       margin={props.margin}
       style={props.style}
     />
