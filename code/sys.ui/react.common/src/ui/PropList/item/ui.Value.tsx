@@ -8,6 +8,7 @@ export type PropListValueProps = {
   hasLabel?: boolean;
   message?: string | JSX.Element;
   defaults: t.PropListDefaults;
+  isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   cursor?: t.CSSProperties['cursor'];
@@ -41,18 +42,31 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
     const message = props.message ?? handler.message;
 
     if (kind === 'Switch') {
-      return <SwitchValue value={value} theme={theme} onClick={handler.onClick} />;
+      return (
+        <SwitchValue
+          theme={theme}
+          value={value}
+          isMouseOverItem={props.isMouseOverItem}
+          isMouseOverValue={mouse.is.over}
+          isItemClickable={item.isItemClickable}
+          isValueClickable={item.isValueClickable}
+          onClick={handler.onClick}
+        />
+      );
     }
 
     if (message || item.isSimple || item.isComponent) {
       return (
         <SimpleValue
+          theme={theme}
           value={value}
           message={message}
-          isOver={mouse.is.over}
+          isMouseOverItem={props.isMouseOverItem}
+          isMouseOverValue={mouse.is.over}
+          isItemClickable={item.isItemClickable}
+          isValueClickable={item.isValueClickable}
           cursor={cursor}
           defaults={props.defaults}
-          theme={theme}
           onClick={handler.onClick}
         />
       );

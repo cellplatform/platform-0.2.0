@@ -4,6 +4,7 @@ import { useHandler } from './use.Handler';
 export type PropListLabelProps = {
   data: t.PropListItem;
   defaults: t.PropListDefaults;
+  isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   cursor?: t.CSSProperties['cursor'];

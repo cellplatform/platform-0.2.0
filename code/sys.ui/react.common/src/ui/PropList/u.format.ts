@@ -47,6 +47,18 @@ export function format(item: t.PropListItem) {
     get isSimple() {
       return res.isString || res.isNumber || res.isBoolean;
     },
+
+    get isItemClickable() {
+      return !!item.onClick;
+    },
+
+    get isValueClickable() {
+      return !!(item.onClick || res.value.onClick);
+    },
+
+    get isLabelClickable() {
+      return !!(item.onClick || res.label.onClick);
+    },
   } as const;
 
   return res;

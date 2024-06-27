@@ -6,7 +6,10 @@ export type SimpleValueProps = {
   value: t.PropListValue | JSX.Element;
   message?: string | JSX.Element;
   cursor?: t.CSSProperties['cursor'];
-  isOver?: boolean;
+  isItemClickable?: boolean;
+  isValueClickable?: boolean;
+  isMouseOverValue?: boolean;
+  isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   onClick?: React.MouseEventHandler;
 };
@@ -36,7 +39,11 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
       fontWeight: is.monospace ? 'bolder' : undefined,
       fontSize: wrangle.fontSize(props),
     }),
-    text: css({ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
+    text: css({
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }),
     component: css({ Flex: 'center-end' }),
   };
 
@@ -59,14 +66,15 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 const wrangle = {
   flags(props: SimpleValueProps) {
     const value = wrangle.valueObject(props);
-    const { isOver, defaults } = props;
+    const { defaults } = props;
     let monospace = value.monospace ?? defaults.monospace;
     if (typeof value.body === 'boolean') monospace = true;
     return {
-      over: isOver,
+      // overValue: !!props.isMouseOverValue,
+      // overItem: !!props.isMouseOverParentItem,
+      clickable: props.isValueClickable || props.isItemClickable,
       boolean: typeof value.body === 'boolean',
       monospace,
-      clickable: !!props.onClick,
     };
   },
 
@@ -78,7 +86,12 @@ const wrangle = {
     if (typeof props.message === 'string') return theme.alpha(0.3).fg;
 
     const is = wrangle.flags(props);
-    if (is.over && is.clickable) return COLORS.BLUE;
+    if (is.clickable) {
+      const color = COLORS.BLUE;
+      if (props.isMouseOverValue && props.isValueClickable) return color;
+      if (props.isMouseOverItem && props.isItemClickable) return color;
+    }
+
     if (is.boolean) return COLORS.PURPLE;
 
     return theme.fg;
