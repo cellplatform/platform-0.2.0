@@ -11,7 +11,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   const history = data?.history;
   if (!data || !history) return res;
-  if (!Is.docRef(data.ref)) return res;
+  if (!Is.doc(data.ref)) return res;
 
   const doc = data.ref;
   const showGenesis = fields.includes('Doc.History.Genesis');

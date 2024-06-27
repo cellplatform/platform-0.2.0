@@ -46,7 +46,7 @@ export const Handle = {
         return toObject<T>(api.current);
       },
     };
-    (api as any)[Symbols.kind] = Symbols.DocRef;
+    (api as any)[Symbols.kind] = Symbols.Doc;
     return api;
   },
 } as const;

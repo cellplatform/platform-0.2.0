@@ -94,7 +94,7 @@ export function useController(args: Args) {
   const api = {
     text: text || undefined,
     get is() {
-      return { enabled, lens: Is.lens(doc), doc: Is.docRef(doc) };
+      return { enabled, lens: Is.lens(doc), doc: Is.doc(doc) };
     },
     onReady(ref: t.TextInputRef) {
       setTextbox(ref);

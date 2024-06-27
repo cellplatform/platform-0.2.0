@@ -5,7 +5,7 @@ type D = t.InfoDataDoc;
 
 export function head(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
-  if (!data || !Is.docRef(data.ref)) return res;
+  if (!data || !Is.doc(data.ref)) return res;
 
   const doc = data.ref;
   const heads = Doc.heads(doc);

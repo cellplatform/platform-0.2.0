@@ -12,7 +12,7 @@ export const Symbols = {
   kind: Symbol(`${ns}.kind`),
   Lens: Symbol(`${ns}.Lens`),
   Namespace: Symbol(`${ns}.Namespace`),
-  DocRef: Symbol(`${ns}.DocRef`),
+  Doc: Symbol(`${ns}.Doc`),
   Store: Symbol(`${ns}.Store`),
   StoreIndex: Symbol(`${ns}.StoreIndex`),
   WebStore: Symbol(`${ns}.WebStore`),

@@ -14,10 +14,10 @@ describe('Is (flags)', (e) => {
 
   it('Is.docRef', async () => {
     type T = { count: number };
-    NON_OBJECTS.forEach((v) => expect(Is.docRef(v)).to.eql(false));
+    NON_OBJECTS.forEach((v) => expect(Is.doc(v)).to.eql(false));
     const store = Store.init();
     const doc = await store.doc.getOrCreate<T>((d) => (d.count = 0));
-    expect(Is.docRef(doc)).to.eql(true);
+    expect(Is.doc(doc)).to.eql(true);
     store.dispose();
   });
 

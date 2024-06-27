@@ -73,7 +73,7 @@ function tryLoadBinary(data: Uint8Array) {
  */
 const wrangle = {
   doc<T extends O>(input: t.ImmutableMutator<T> | t.Doc<T>) {
-    return Is.docRef(input)
+    return Is.doc(input)
       ? input.current
       : A.change(A.init<T>(), DEFAULTS.genesis.options(), (d) => input(d));
   },

@@ -147,7 +147,7 @@ const wrangle = {
 
   docs<T extends O>(refs?: RefsInput<T>) {
     const list = wrangle.list(refs);
-    return list.filter((item) => Is.docRef(item)) as t.Doc<T>[];
+    return list.filter((item) => Is.doc(item)) as t.Doc<T>[];
   },
 
   redraw(args: t.UseDocsOptions = {}) {

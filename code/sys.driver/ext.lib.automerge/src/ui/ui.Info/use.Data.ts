@@ -34,7 +34,7 @@ function useDocuments(data?: t.InfoData): t.InfoDataDoc[] {
 const wrangle = {
   ref(data: t.InfoDataDoc, docs: t.Doc[]) {
     if (!data.ref) return undefined;
-    if (Is.docRef(data.ref)) return data.ref;
+    if (Is.doc(data.ref)) return data.ref;
     return docs.find((item) => item.uri === data.ref);
   },
 } as const;
