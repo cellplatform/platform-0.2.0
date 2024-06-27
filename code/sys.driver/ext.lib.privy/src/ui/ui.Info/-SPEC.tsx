@@ -200,6 +200,8 @@ export default Dev.describe(name, (e) => {
         (d, value) => (local.theme = d.props.theme = value),
       );
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn
@@ -207,8 +209,6 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
       });
-
-      dev.hr(-1, 5);
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.clipboard);
