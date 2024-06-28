@@ -26,10 +26,9 @@ export const View: React.FC<t.HashViewProps> = (props) => {
       boxSizing: 'border-box',
       display: 'grid',
       gridTemplateColumns: `auto 1fr auto`,
+      userSelect: 'none',
     }),
-    body: css({
-      display: 'grid',
-    }),
+    body: css({ display: 'grid' }),
   };
 
   const elTitle = (
@@ -42,7 +41,7 @@ export const View: React.FC<t.HashViewProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <Drop onDrop={(e) => setDropped(e)} />
+      <Drop onDrop={(e) => setDropped(e)} theme={theme.name} />
     </div>
   );
 

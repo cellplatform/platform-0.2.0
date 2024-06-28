@@ -1,5 +1,8 @@
 import { Pkg, type t } from '../common';
+
 export * from '../common';
+export { Button } from '../Button';
+export { Icons } from '../Icons';
 
 /**
  * Constants

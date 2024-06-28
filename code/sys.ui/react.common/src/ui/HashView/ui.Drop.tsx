@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDragTarget } from '../../ui.use';
-import { COLORS, Color, Filesize, Hash, css, type t } from '../common';
+import { COLORS, Color, Filesize, Hash, css, type t, Button, Icons } from './common';
 
 const RED = `#FF0000`;
 
@@ -26,9 +26,15 @@ export const Drop: React.FC<DropProps> = (props) => {
     },
   });
 
+  const handleClipboardCopy = () => {
+    if (!hash) return;
+    navigator.clipboard.writeText(hash);
+  };
+
   /**
    * Render
    */
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({
       position: 'relative',
@@ -37,6 +43,7 @@ export const Drop: React.FC<DropProps> = (props) => {
       boxSizing: 'border-box',
       fontSize: 60,
       padding: '1em',
+      color: theme.fg,
     }),
     message: css({
       Padding: [20, 50],
@@ -46,14 +53,32 @@ export const Drop: React.FC<DropProps> = (props) => {
       backgroundColor: Color.alpha(COLORS.DARK, 0.03),
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
     }),
+    copyButton: css({
+      position: 'relative',
+      Size: 48,
+      display: 'grid',
+      placeItems: 'center',
+      color: theme.fg,
+      ':hover': { color: COLORS.BLUE },
+    }),
   };
 
   const message = wrangle.message(hash, drag.is.over);
 
+  const elCopyButton = hash && (
+    <Button onClick={handleClipboardCopy}>
+      <div {...styles.copyButton}>
+        <Icons.Copy size={50} />
+      </div>
+    </Button>
+  );
+
   return (
     <div ref={drag.ref} {...css(styles.base, props.style)}>
       <div>
-        <div {...styles.message}>{message}</div>
+        <div {...styles.message}>
+          {message} {elCopyButton}
+        </div>
       </div>
     </div>
   );
