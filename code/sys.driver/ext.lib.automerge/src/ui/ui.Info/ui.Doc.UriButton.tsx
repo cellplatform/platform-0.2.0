@@ -1,4 +1,4 @@
-import { DEFAULTS, Doc, Hash, MonospaceButton, type t } from './common';
+import { DEFAULTS, Doc, MonospaceButton, type t } from './common';
 
 type D = t.InfoDataDocUri;
 
@@ -30,13 +30,19 @@ export const DocUriButton: React.FC<UriButtonProps> = (props) => {
  */
 const wrangle = {
   text(props: UriButtonProps) {
-    const { uri = '', prefix = DEFAULTS.doc.uri.prefix } = props;
+    const { uri = '' } = props;
     const id = Doc.Uri.id(uri);
+    const prefix = `${wrangle.prefix(props)}${id.slice(0, 4)}..`;
     return {
       id,
-      short: Hash.shorten(id, props.shorten ?? [4, 4]),
-      prefix: prefix ? `${prefix.trim().replace(/\:+$/, '')}:` : '',
+      prefix,
+      short: id.slice(-4),
     } as const;
+  },
+
+  prefix(props: UriButtonProps) {
+    const { prefix = DEFAULTS.doc.uri.prefix } = props;
+    return prefix ? `${prefix.trim().replace(/\:+$/, '')}:` : '';
   },
 
   clipboardText(props: UriButtonProps) {
