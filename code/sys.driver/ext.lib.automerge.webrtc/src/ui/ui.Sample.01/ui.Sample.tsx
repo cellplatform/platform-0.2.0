@@ -3,7 +3,7 @@ import { Button, css, type t } from './common';
 
 export type SampleProps = {
   user?: string;
-  doc?: t.DocRef<t.SampleDoc>;
+  doc?: t.Doc<t.SampleDoc>;
   style?: t.CssValue;
 };
 

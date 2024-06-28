@@ -6,6 +6,7 @@ export type { Operation as PatchOperation } from 'fast-json-patch';
 /**
  * Library
  */
+export type * from './Args/t';
 export type * from './Dispose/t';
 export type * from './Filesize/t';
 export type * from './Immutable/t';

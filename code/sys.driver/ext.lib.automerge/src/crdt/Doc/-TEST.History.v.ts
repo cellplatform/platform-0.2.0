@@ -52,7 +52,7 @@ describe('Doc.History', { retry: 3 }, async () => {
   });
 
   it('genesis meta-data (timestamp)', async () => {
-    const assert = (doc: t.DocRef<D>, commitIndex: number) => {
+    const assert = (doc: t.Doc<D>, commitIndex: number) => {
       const history = Doc.history(doc);
       const genesis = history.genesis;
       const commits = history.commits;
@@ -76,7 +76,7 @@ describe('Doc.History', { retry: 3 }, async () => {
   });
 
   describe('page', () => {
-    const repeatChange = (doc: t.DocRef<D>, length: number) => {
+    const repeatChange = (doc: t.Doc<D>, length: number) => {
       Array.from({ length }).forEach(() => doc.change((d) => (d.count += 1)));
     };
 

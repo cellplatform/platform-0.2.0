@@ -3,6 +3,11 @@ import { Doc, Path, rx, type t } from './common';
 import { MonacoPatcher } from './u.MonacoPatch';
 
 type O = Record<string, unknown>;
+type Options = {
+  debugLabel?: string;
+  strategy?: t.UpdateTextStrategy | (() => t.UpdateTextStrategy | undefined);
+  dispose$?: t.UntilObservable;
+};
 
 /**
  * An adapter for managing 2-way binding between a code-editor UI
@@ -13,8 +18,8 @@ export function listen<T extends O>(
   editor: t.MonacoCodeEditor,
   lens: t.Lens<T>,
   target: t.TypedObjectPath<T>,
-  options: { dispose$?: t.UntilObservable; debugLabel?: string } = {},
-) {
+  options: Options = {},
+): t.SyncListener {
   const { debugLabel } = options;
   const life = rx.lifecycle(options.dispose$);
   life.dispose$.subscribe(() => handlerDidChangeModelContent.dispose());
@@ -32,7 +37,10 @@ export function listen<T extends O>(
       return Path.Object.resolve<string>(doc, target);
     },
     splice(doc: T, index: number, del: number, text?: string) {
-      Doc.Text.splice(doc, [...target], index, del, text);
+      Doc.Text.splice(doc, target, index, del, text);
+    },
+    replace(doc: T, text: string) {
+      Path.Object.mutate(doc, target, text);
     },
   } as const;
 
@@ -88,7 +96,15 @@ export function listen<T extends O>(
       const isReplace = startLineNumber !== endLineNumber || startColumn !== endColumn;
       const index = change.rangeOffset;
       const deleteCount = isReplace ? change.rangeLength : 0;
-      lens.change((d) => Lens.splice(d, index, deleteCount, change.text));
+
+      const strategy = api.strategy;
+      if (strategy === 'Splice') {
+        lens.change((d) => Lens.splice(d, index, deleteCount, change.text));
+      }
+
+      if (strategy === 'Overwrite') {
+        lens.change((d) => Lens.replace(d, editor.getValue()));
+      }
     });
   });
 
@@ -99,7 +115,26 @@ export function listen<T extends O>(
   if (initial === undefined) lens.change((d) => Path.Object.mutate(d, target, ''));
   if (typeof initial === 'string') changeEditorText(initial);
 
-  return life;
+  /**
+   * API
+   */
+  const api: t.SyncListener = {
+    get strategy() {
+      const defaultValue: t.UpdateTextStrategy = 'Splice';
+      const { strategy } = options;
+      if (typeof strategy === 'string') return strategy;
+      if (typeof strategy === 'function') strategy() ?? defaultValue;
+      return defaultValue;
+    },
+
+    // Lifecycle.
+    dispose: life.dispose,
+    dispose$: life.dispose$,
+    get disposed() {
+      return life.disposed;
+    },
+  };
+  return api;
 }
 
 /**

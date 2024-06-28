@@ -1,7 +1,7 @@
 import { COLORS, DevWrangle, type t } from './common';
 import { DevKeyboard } from './fn.Keyboard';
 import { Harness } from './ui/Harness';
-import { ModuleList } from './ui/List.Module';
+import { ModuleList } from './ui/ModuleList';
 
 type Options = {
   location?: t.UrlInput;

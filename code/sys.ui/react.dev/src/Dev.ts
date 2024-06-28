@@ -4,7 +4,7 @@ import { Spec } from './fn.Spec';
 import { ValueHandler } from './fn.Tools';
 import { headless } from './test.ui/headless';
 import { Harness } from './ui/Harness';
-import { ModuleList } from './ui/List.Module';
+import { ModuleList } from './ui/ModuleList';
 
 export const Dev = {
   Context,

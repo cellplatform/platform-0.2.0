@@ -11,6 +11,7 @@ export { usePeerMonitor, useShared, useTransmitMonitor } from '../use';
 const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
+  head: true,
   clipboard: (uri) => Doc.Uri.id(uri),
 };
 

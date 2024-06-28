@@ -3,17 +3,21 @@ import { Cmd, Immutable, type t } from './common';
 /**
  * Command API for the component.
  */
-export function control(transport?: t.CmdImmutable) {
-  type C = t.CmdBarControlCmdType;
-  const doc = transport ?? Immutable.clonerRef({});
-  const cmd = Cmd.create<C>(doc) as t.CmdBarControl;
+export const Ctrl = {
+  create(transport?: t.CmdImmutable) {
+    type C = t.CmdBarCtrlCmdType;
+    const doc = transport ?? Immutable.clonerRef({});
+    const cmd = Cmd.create<C>(doc) as t.CmdBarCtrl;
+    return { cmd, ...Ctrl.methods(cmd) } as const;
+  },
 
-  return {
-    cmd,
-    focus: cmd.method('Focus'),
-    blur: cmd.method('Blur'),
-    selectAll: cmd.method('SelectAll'),
-    caretToStart: cmd.method('CaretToStart'),
-    caretToEnd: cmd.method('CaretToEnd'),
-  } as const;
-}
+  methods(cmd: t.CmdBarCtrl) {
+    return {
+      focus: cmd.method('Focus'),
+      blur: cmd.method('Blur'),
+      selectAll: cmd.method('SelectAll'),
+      caretToStart: cmd.method('CaretToStart'),
+      caretToEnd: cmd.method('CaretToEnd'),
+    } as const;
+  },
+} as const;

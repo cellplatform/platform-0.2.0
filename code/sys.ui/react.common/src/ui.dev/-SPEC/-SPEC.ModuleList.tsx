@@ -2,10 +2,10 @@ import { ModuleList } from 'sys.ui.react.dev';
 import { type ModuleListProps } from 'sys.ui.react.dev/src/types';
 import { BADGES, Dev, Pkg, css } from '../../test.ui';
 
-type T = { props: ModuleListProps };
+type P = ModuleListProps;
+type T = { props: P };
 const initial: T = { props: {} };
-
-import { Specs } from '../../test.ui/entry.Specs';
+const DEFAULTS = ModuleList.DEFAULTS;
 
 /**
  * Spec
@@ -13,26 +13,29 @@ import { Specs } from '../../test.ui/entry.Specs';
 const name = 'ModuleList';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<ModuleListProps, 'theme' | 'title' | 'version' | 'showParamDev'>;
+  type LocalStore = Pick<P, 'theme' | 'title' | 'version' | 'showParamDev' | 'useAnchorLinks'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
     title: 'MyTitle',
     version: '0.0.0',
-    showParamDev: true,
+    showParamDev: DEFAULTS.showParamDev,
+    useAnchorLinks: DEFAULTS.useAnchorLinks,
   });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+    const { Specs } = await import('../../test.ui/entry.Specs');
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       const p = d.props;
+      p.theme = local.theme;
       p.title = local.title;
       p.version = local.version;
       p.showParamDev = local.showParamDev;
-      p.theme = local.theme;
+      p.useAnchorLinks = local.useAnchorLinks;
 
       p.imports = Specs;
       p.badge = BADGES.ci.node;
@@ -66,6 +69,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const { Specs } = await import('../../test.ui/entry.Specs');
 
     dev.section('Common States', (dev) => {
       dev.button('(empty)', (e) => {
@@ -103,6 +107,8 @@ export default Dev.describe(name, (e) => {
         (d, value) => (local.theme = d.props.theme = value),
       );
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.showParamDev;
         btn
@@ -111,6 +117,14 @@ export default Dev.describe(name, (e) => {
           .onClick((e) =>
             e.change((d) => (local.showParamDev = Dev.toggle(d.props, 'showParamDev'))),
           );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.useAnchorLinks;
+        btn
+          .label((e) => `useAnchorLinks`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'useAnchorLinks')));
       });
     });
   });

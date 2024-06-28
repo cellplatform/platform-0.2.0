@@ -4,6 +4,10 @@ import { Color, css, type t } from './common';
 export type SwitchValueProps = {
   value: t.PropListValue;
   theme?: t.CommonTheme;
+  isMouseOverItem?: boolean;
+  isMouseOverValue?: boolean;
+  isItemClickable?: boolean;
+  isValueClickable?: boolean;
   onClick?: React.MouseEventHandler;
 };
 

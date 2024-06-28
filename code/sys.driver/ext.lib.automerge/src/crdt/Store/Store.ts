@@ -83,7 +83,7 @@ export const Store = {
        * See the "hard-coded byte array hack"
        * https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
        */
-      toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.DocRef<T>) {
+      toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.Doc<T>) {
         return toBinary<T>(initOrDoc);
       },
 
@@ -121,8 +121,8 @@ export const Store = {
   /**
    * Retrieve handle
    */
-  handle<T extends O>(input: t.DocRef<T>) {
-    const handle = (input as t.DocRefHandle<T>)?.handle;
+  handle<T extends O>(input: t.Doc<T>) {
+    const handle = (input as t.DocWithHandle<T>)?.handle;
     if (!Is.handle(handle)) throw new Error('input does not have a handle');
     return handle;
   },

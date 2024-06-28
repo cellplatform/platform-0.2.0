@@ -15,6 +15,7 @@ export { Patch, PatchState } from 'ext.lib.immer';
 export { Cmd } from 'sys.cmd';
 export { Diff, Fuzzy, Text } from 'sys.data.text';
 export {
+  Args,
   Delete,
   Filesize,
   Hash,

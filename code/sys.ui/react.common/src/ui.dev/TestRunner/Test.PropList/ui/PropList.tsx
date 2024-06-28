@@ -39,7 +39,6 @@ export const PropList: React.FC<TestPropListProps> = (props) => {
       title={title}
       items={items}
       width={Base.Info.width(props)}
-      defaults={{ clipboard: false }}
       theme={theme}
       margin={props.margin}
       style={props.style}

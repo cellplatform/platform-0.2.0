@@ -21,15 +21,15 @@ export type {
  * @lib
  */
 export type {
+  Doc,
   DocChanged,
   DocEphemeralIn,
   DocEphemeralOut,
   DocEvents,
   DocMeta,
   DocMetaType,
-  DocRef,
-  DocRefHandle,
   DocUri,
+  DocWithHandle,
   DocWithMeta,
   InfoDataDocUri,
   Lens,

@@ -2,6 +2,7 @@
  * @system
  */
 export type {
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,

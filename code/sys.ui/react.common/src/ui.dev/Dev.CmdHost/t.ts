@@ -20,6 +20,7 @@ export type CmdHostProps = {
   showParamDev?: boolean;
   showCommandbar?: boolean;
   autoGrabFocus?: boolean;
+  useAnchorLinks?: boolean;
   listMinWidth?: number;
   listEnabled?: boolean;
   theme?: t.CommonTheme;

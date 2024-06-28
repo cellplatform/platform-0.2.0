@@ -1,5 +1,5 @@
 import { DEFAULTS as BASE, Pkg, type t } from '../common';
-import { Filter } from '../Dev.CmdHost/common.Filter';
+import { Filter } from '../Dev.CmdHost/u.Filter';
 
 export * from '../common';
 export { Filter };

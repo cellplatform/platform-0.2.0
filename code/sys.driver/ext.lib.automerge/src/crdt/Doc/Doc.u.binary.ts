@@ -52,7 +52,7 @@ export function fromBinary<T extends O>(args: {
  *    See the "hard-coded byte array hack"
  *    https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
  */
-export function toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.DocRef<T>): Uint8Array {
+export function toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.Doc<T>): Uint8Array {
   const doc = wrangle.doc<T>(initOrDoc);
   return A.save(doc);
 }
@@ -72,8 +72,8 @@ function tryLoadBinary(data: Uint8Array) {
  * Helpers
  */
 const wrangle = {
-  doc<T extends O>(input: t.ImmutableMutator<T> | t.DocRef<T>) {
-    return Is.docRef(input)
+  doc<T extends O>(input: t.ImmutableMutator<T> | t.Doc<T>) {
+    return Is.doc(input)
       ? input.current
       : A.change(A.init<T>(), DEFAULTS.genesis.options(), (d) => input(d));
   },

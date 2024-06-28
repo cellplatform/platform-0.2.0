@@ -1,14 +1,15 @@
 import { isValidElement } from 'react';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
-import { CopyIcon } from './ui.CopyIcon';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
   value: t.PropListValue | JSX.Element;
   message?: string | JSX.Element;
   cursor?: t.CSSProperties['cursor'];
-  isOver?: boolean;
-  isCopyable?: boolean;
+  isItemClickable?: boolean;
+  isValueClickable?: boolean;
+  isMouseOverValue?: boolean;
+  isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   onClick?: React.MouseEventHandler;
 };
@@ -19,13 +20,18 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 
   const is = wrangle.flags(props);
   const textColor = wrangle.textColor(props);
-  const cursor = props.cursor ?? is.copyActive ? 'pointer' : 'default';
+  const cursor = props.cursor ? 'pointer' : 'default';
 
+  /**
+   * Render
+   */
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({
       position: 'relative',
       opacity: value.opacity ?? 1,
       transition: 'opacty 100ms ease-out',
+      color: theme.fg,
       display: 'grid',
     }),
     content: css({
@@ -37,21 +43,19 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
     }),
     text: css({ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
     component: css({ Flex: 'center-end' }),
+    message: css({}),
   };
 
   const content = message ? message : wrangle.renderValue(props);
-
-  return (
-    <div {...css(styles.base)}>
-      <div
-        {...css(styles.content, !isValidElement(content) ? styles.text : styles.component)}
-        onMouseDown={props.onClick}
-      >
-        {content}
-      </div>
-      {is.copyActive && !message && <CopyIcon />}
+  const style = css(styles.content, !isValidElement(content) ? styles.text : styles.component);
+  const elContent = (
+    <div {...style} onMouseDown={props.onClick}>
+      {content}
     </div>
   );
+
+  const elMessage = message && <div {...styles.message}>{message}</div>;
+  return <div {...css(styles.base)}>{elMessage || elContent}</div>;
 };
 
 /**
@@ -61,12 +65,14 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 const wrangle = {
   flags(props: SimpleValueProps) {
     const value = wrangle.valueObject(props);
-    const { isOver, isCopyable, defaults } = props;
+    const { defaults } = props;
     let monospace = value.monospace ?? defaults.monospace;
     if (typeof value.body === 'boolean') monospace = true;
     return {
+      // overValue: !!props.isMouseOverValue,
+      // overItem: !!props.isMouseOverParentItem,
+      clickable: props.isValueClickable || props.isItemClickable,
       boolean: typeof value.body === 'boolean',
-      copyActive: isOver && isCopyable,
       monospace,
     };
   },
@@ -79,7 +85,12 @@ const wrangle = {
     if (typeof props.message === 'string') return theme.alpha(0.3).fg;
 
     const is = wrangle.flags(props);
-    if (is.copyActive) return COLORS.BLUE;
+    if (is.clickable) {
+      const color = COLORS.BLUE;
+      if (props.isMouseOverValue && props.isValueClickable) return color;
+      if (props.isMouseOverItem && props.isItemClickable) return color;
+    }
+
     if (is.boolean) return COLORS.PURPLE;
 
     return theme.fg;

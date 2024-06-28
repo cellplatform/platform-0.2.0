@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, DevIcons, Pkg, css, type t, Time } from '../../test.ui';
+import { Color, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
 
 type TEnv = {};
 type P = t.CmdBarProps;
@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
     text: undefined,
   });
 
-  const control = CmdBar.control();
+  const control = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            control={control.cmd}
+            ctrl={control.cmd}
             onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
           />
         );
@@ -143,6 +143,44 @@ export default Dev.describe(name, (e) => {
       };
       focus(true);
       focus(false);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('Args.parse', (e) => {
+        /**
+         * NOTE: Example on the [minimist] README.
+         *       https://github.com/minimistjs/minimist
+         */
+        const sample1 = {
+          text: '-a beep -b boop',
+          result: { _: [], a: 'beep', b: 'boop' },
+        };
+        const sample2 = {
+          text: '-x 3 -y 4 -n5 -abc --beep=boop --no-ding foo bar baz',
+          result: {
+            _: ['foo', 'bar', 'baz'],
+            x: 3,
+            y: 4,
+            n: 5,
+            a: true,
+            b: true,
+            c: true,
+            beep: 'boop',
+            ding: false,
+          },
+        };
+
+        const parsed1 = CmdBar.Args.parse(sample1.text);
+        const parsed2 = CmdBar.Args.parse(sample2.text);
+
+        expect(parsed1).to.eql(sample1.result);
+        expect(parsed2).to.eql(sample2.result);
+
+        console.info('parsed-1: ', parsed1);
+        console.info('parsed-2: ', parsed2);
+      });
     });
   });
 

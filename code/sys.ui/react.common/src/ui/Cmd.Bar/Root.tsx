@@ -1,5 +1,5 @@
-import { control } from './Root.cmd';
-import { DEFAULTS, FC, type t } from './common';
+import { Ctrl } from './Root.cmd';
+import { Args, DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -7,10 +7,11 @@ import { View } from './ui';
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  control: typeof control;
+  Args: typeof Args;
+  Ctrl: typeof Ctrl;
 };
 export const CmdBar = FC.decorate<t.CmdBarProps, Fields>(
   View,
-  { DEFAULTS, control },
+  { DEFAULTS, Args, Ctrl },
   { displayName: DEFAULTS.displayName },
 );

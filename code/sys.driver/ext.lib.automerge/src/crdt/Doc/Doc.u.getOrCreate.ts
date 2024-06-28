@@ -15,7 +15,7 @@ export async function getOrCreate<T extends O>(args: {
   uri?: Uri;
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
-}): Promise<t.DocRefHandle<T>> {
+}): Promise<t.DocWithHandle<T>> {
   const { initial, repo, uri, timeout, dispose$ } = args;
 
   /**
@@ -23,7 +23,7 @@ export async function getOrCreate<T extends O>(args: {
    */
   if (uri) {
     const res = await get({ repo, uri, timeout, dispose$, throw: true });
-    return res as t.DocRefHandle<T>;
+    return res as t.DocWithHandle<T>;
   }
 
   /**

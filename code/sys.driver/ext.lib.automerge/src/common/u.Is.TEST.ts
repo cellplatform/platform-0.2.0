@@ -1,5 +1,5 @@
 import { Is } from '.';
-import { WebStore } from '../crdt/Store.Web';
+import { WebStore } from '../crdt.web';
 import {
   BroadcastChannelNetworkAdapter,
   IndexedDBStorageAdapter,
@@ -9,6 +9,7 @@ import {
   expect,
 } from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
+
 export default Test.describe('Is (flags)', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined, BigInt(123), Symbol('foo')];
   const storage = TestDb.Unit.name;

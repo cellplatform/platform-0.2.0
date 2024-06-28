@@ -14,5 +14,5 @@ export {
 
 export { Doc } from '../crdt/Doc';
 export { StoreIndex } from '../crdt/Store.Index';
-export { WebStore } from '../crdt/Store.Web';
-export { StoreIndexDb } from '../crdt/Store.Web.IndexDb';
+export { WebStore } from '../crdt.web/Store.Web';
+export { StoreIndexDb } from '../crdt.web/Store.Web.IndexDb';

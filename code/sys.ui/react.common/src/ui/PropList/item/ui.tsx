@@ -1,4 +1,4 @@
-import { Color, DEFAULTS, Wrangle, css, type t } from './common';
+import { Color, DEFAULTS, Wrangle, css, useMouse, type t } from './common';
 import { PropListLabel } from './ui.Label';
 import { PropListValue } from './ui.Value';
 import { useHandler } from './use.Handler';
@@ -18,7 +18,8 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const selected = Wrangle.selected(item, theme.is.dark);
   const divider = item.divider ?? true;
 
-  const handler = useHandler(props.item, props.defaults, item.onClick);
+  const mouse = useMouse();
+  const handler = useHandler(props.item, item.onClick, theme.name);
 
   /**
    * Render
@@ -46,8 +47,23 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   };
 
   return (
-    <div {...styles.base} title={item.tooltip} onMouseDown={handler.onClick}>
-      {hasLabel && <PropListLabel data={item} defaults={defaults} theme={props.theme} />}
+    <div
+      {...styles.base}
+      title={item.tooltip}
+      {...mouse.handlers}
+      onMouseDown={(e) => {
+        mouse.handlers.onMouseDown(e);
+        handler.onClick?.(e);
+      }}
+    >
+      {hasLabel && (
+        <PropListLabel
+          data={item}
+          defaults={defaults}
+          theme={props.theme}
+          isMouseOverItem={mouse.is.over}
+        />
+      )}
       <PropListValue
         item={item}
         hasLabel={hasLabel}
@@ -55,6 +71,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
         theme={props.theme}
         cursor={handler.cursor}
         message={handler.message}
+        isMouseOverItem={mouse.is.over}
       />
     </div>
   );

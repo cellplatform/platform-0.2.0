@@ -78,7 +78,7 @@ describe('Doc', async () => {
   describe('store.doc.getOrCreate', () => {
     it('"ready" by default', async () => {
       const doc = await store.doc.getOrCreate(initial);
-      expect((doc as t.DocRefHandle<D>).handle.state).to.eql('ready');
+      expect((doc as t.DocWithHandle<D>).handle.state).to.eql('ready');
       expect(doc.is.ready).to.eql(true);
       expect(doc.is.deleted).to.eql(false);
       store.dispose();

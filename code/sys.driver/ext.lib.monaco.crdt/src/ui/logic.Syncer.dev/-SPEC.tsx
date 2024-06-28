@@ -2,7 +2,11 @@ import { COLORS, Color, CrdtInfo, Dev, Monaco, Pkg, TestDb, css } from '../../te
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
 
-type T = { reload?: boolean };
+type T = {
+  reload?: boolean;
+  theme?: t.CommonTheme;
+  strategy?: t.UpdateTextStrategy;
+};
 const initial: T = {};
 
 /**
@@ -10,6 +14,13 @@ const initial: T = {};
  */
 const name = `${Pkg.name}.syncer`;
 export default Dev.describe(name, async (e) => {
+  type LocalStore = Pick<T, 'strategy' | 'theme'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({
+    theme: 'Dark',
+    strategy: 'Splice',
+  });
+
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
   const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
 
@@ -24,14 +35,20 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.theme = local.theme;
+      d.strategy = local.strategy;
+    });
 
     doc.events().changed$.subscribe(() => dev.redraw('debug'));
 
     const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
       const Syncer = Monaco.Crdt.Syncer;
-      Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], { debugLabel });
+      Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], {
+        debugLabel,
+        strategy: () => state.current.strategy,
+      });
     };
 
     ctx.debug.width(330);
@@ -39,10 +56,14 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const theme = Color.theme(e.state.theme);
+
+        Dev.Theme.background(ctx, theme, 1);
+
         if (e.state.reload) {
           return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
         } else {
-          const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+          const border = `solid 1px ${Color.alpha(theme.fg, 0.1)}`;
           const styles = {
             base: css({ display: 'grid', gridTemplateRows: '1fr 1fr', rowGap: '30px' }),
             top: css({ borderBottom: border }),
@@ -52,10 +73,12 @@ export default Dev.describe(name, async (e) => {
             <div {...styles.base}>
               <Monaco.Editor
                 focusOnLoad={true}
+                theme={theme.name}
                 style={styles.top}
                 onReady={(e) => handleReady('top', e.monaco, e.editor)}
               />
               <Monaco.Editor
+                theme={theme.name}
                 style={styles.bottom}
                 onReady={(e) => handleReady('bottom', e.monaco, e.editor)}
               />
@@ -76,11 +99,34 @@ export default Dev.describe(name, async (e) => {
           data={{
             component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
-            document: { ref: doc, object: { expand: { level: 3 } } },
+            document: {
+              ref: doc,
+              uri: { head: true },
+              object: { expand: { level: 3 } },
+            },
           }}
         />
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section((dev) => {
+      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+      dev.hr(-1, 5);
+      const strategy = (strategy: t.UpdateTextStrategy) => {
+        dev.button((btn) => {
+          btn
+            .label(`strategy: "${strategy}"`)
+            .right((e) => (e.state.strategy === strategy ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.strategy = d.strategy = strategy)));
+        });
+      };
+      strategy('Splice');
+      strategy('Overwrite');
+    });
+
+    dev.TODO('"Splice" replacement not stable');
 
     dev.hr(5, 20);
 

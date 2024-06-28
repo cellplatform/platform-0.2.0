@@ -12,8 +12,8 @@ export const DocPatch = {
   /**
    * Apply one or more patches to a document.
    */
-  apply<T extends O>(doc: T | t.DocRef<T>, changeset: t.Patch | t.Patch[]): T {
-    if (Is.docRef(doc)) {
+  apply<T extends O>(doc: T | t.Doc<T>, changeset: t.Patch | t.Patch[]): T {
+    if (Is.doc(doc)) {
       doc.change((d) => DocPatch.apply(d, changeset));
       return doc.current;
     } else {

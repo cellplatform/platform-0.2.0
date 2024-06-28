@@ -4,11 +4,10 @@ import { DEFAULTS, ReactEvent, Time, type t } from './common';
 
 export function useHandler(
   input: t.PropListItem,
-  defaults: t.PropListDefaults,
-  handler?: t.PropListItemHandler | undefined,
+  handler?: t.PropListItemHandler | false,
+  theme?: t.CommonTheme,
 ) {
   const item = format(input);
-  const isCopyable = item.isCopyable(defaults);
   const cursor = handler ? 'pointer' : undefined;
 
   const [message, setMessage] = useState<JSX.Element | string>();
@@ -27,11 +26,12 @@ export function useHandler(
   const onClick: React.MouseEventHandler = async (e) => {
     if (!handler) return;
 
-    const { clipboard, value } = item;
+    const { value } = item;
     let _message: JSX.Element | string | undefined;
     let _delay: number | undefined;
 
     handler({
+      theme: theme ?? DEFAULTS.theme,
       item: input,
       value,
       modifiers: ReactEvent.modifiers(e),
@@ -40,16 +40,6 @@ export function useHandler(
         _delay = msecs;
       },
     });
-
-    if (clipboard && isCopyable) {
-      const value = typeof clipboard === 'function' ? clipboard() : clipboard;
-      await navigator.clipboard.writeText(value ?? '');
-      if (!_message) {
-        const text = String(value || '').trim();
-        const isHttp = text.startsWith('http://') || text.startsWith('https://');
-        _message = isHttp ? 'copied url' : 'copied';
-      }
-    }
 
     if (_message) showMessage(_message, _delay);
   };
