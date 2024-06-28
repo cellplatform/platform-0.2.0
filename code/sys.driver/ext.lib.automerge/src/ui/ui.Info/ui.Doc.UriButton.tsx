@@ -1,4 +1,4 @@
-import { DEFAULTS, Doc, MonospaceButton, type t } from './common';
+import { DEFAULTS, Doc, Hash, MonospaceButton, type t } from './common';
 
 type D = t.InfoDataDocUri;
 
@@ -39,13 +39,9 @@ const wrangle = {
     const id = Doc.Uri.id(uri);
     const shorten = wrangle.shorten(props);
     const head = wrangle.head(props, id);
-    const prefix = `${wrangle.prefix(props)}${id.slice(0, shorten[0])}..`;
-    return {
-      id,
-      prefix,
-      short: id.slice(0 - shorten[1]),
-      head,
-    } as const;
+    const prefix = wrangle.prefix(props);
+    const short = Hash.shorten(id, shorten);
+    return { id, prefix, short, head } as const;
   },
 
   prefix(props: UriButtonProps) {
