@@ -45,7 +45,8 @@
     "sys.ui.react.media": "0.0.0",
     "sys.ui.react.media.image": "0.0.0",
     "sys.ui.react.media.video": "0.0.0",
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "yaml": "2.4.5"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

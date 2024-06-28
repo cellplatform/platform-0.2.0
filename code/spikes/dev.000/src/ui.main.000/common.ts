@@ -1,5 +1,8 @@
 export { Monaco } from 'ext.lib.monaco.crdt';
 
+import Yaml from 'yaml';
+export { Yaml };
+
 /**
  * @ext
  */

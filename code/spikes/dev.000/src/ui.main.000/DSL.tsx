@@ -1,4 +1,4 @@
-import { Args, type t, CmdBar } from './common';
+import { Args, type t, CmdBar, Yaml } from './common';
 
 /**
  * Sketch of what an implementation for the command-line parser
@@ -48,10 +48,12 @@ export const DSL = {
     }
 
     if (action === 'me' && pos[1] === 'tmp') {
-      // const methods = CmdBar.Ctrl.methods(main.cmd.cmdbar);
-      // console.log('pos', pos);
-      // // main.cmd.cmdbar.invoke('Blur', {});
-      // methods.blur({});
+      const current = main.state.me.current as any;
+      const text = (current?.root?.config ?? '') as string;
+
+      const yaml = Yaml.parse(text);
+      console.log('text', text);
+      console.log('yaml', yaml);
     }
 
     return;
