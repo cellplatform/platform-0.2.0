@@ -206,7 +206,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
-      config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI', 'Doc.Head']);
+      config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / History ( + List )', [
         'Repo',
         'Doc',

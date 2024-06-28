@@ -25,7 +25,7 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({
     path: ['text'],
     theme: 'Dark',
-    fields: ['Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Head'],
+    fields: ['Component', 'Repo', 'Doc', 'Doc.URI'],
   });
 
   e.it('ui:init', async (e) => {
@@ -75,7 +75,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             component: { name },
             repo: { store, index },
-            document: { ref: e.state.docuri },
+            document: { ref: e.state.docuri, uri: { head: true } },
           }}
           onStateChange={(e) => {
             dev.change((d) => (local.fields = d.fields = e.fields));

@@ -22,11 +22,9 @@ export const DocUriButton: React.FC<UriButtonProps> = (props) => {
     <MonospaceButton
       style={props.style}
       theme={props.theme}
-      prefix={text.prefix}
-      prefixMargin={2}
+      prefix={{ text: text.prefix, margin: 2, opacity: 0.4 }}
       text={text.short}
-      suffix={text.head}
-      suffixMargin={2}
+      suffix={{ text: text.head, margin: 2, opacity: 0.4 }}
       onClipboard={(e) => e.write(wrangle.clipboardText(props))}
     />
   );
@@ -66,7 +64,7 @@ const wrangle = {
     const heads = Doc.heads(props.doc)
       .map((h) => h.slice(0 - length))
       .join(',');
-    return `:${heads}`;
+    return `#${heads}`;
   },
 
   clipboardText(props: UriButtonProps) {

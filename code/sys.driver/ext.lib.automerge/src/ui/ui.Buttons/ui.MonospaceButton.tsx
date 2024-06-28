@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import { Button, COLORS, Color, FONTS, Time, css, type t } from './common';
 
+type P = t.MonospaceButtonProps;
+/**
+ * Constants
+ */
+const edge: t.MonospaceButtonEdge = { text: '', opacity: 0.4, margin: 2 };
+const DEFAULTS = { edge } as const;
+
 /**
  * A button with monospace font.
  */
-export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
-  const { text = '', prefix, suffix, prefixMargin, suffixMargin } = props;
+export const MonospaceButton: React.FC<P> = (props) => {
+  const { text = '' } = props;
+  const prefix = wrangle.edge(props.prefix);
+  const suffix = wrangle.edge(props.suffix);
 
   const [message, setMessage] = useState<JSX.Element | undefined>();
   const [isOver, setOver] = useState(false);
@@ -37,18 +46,22 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(FONTS.mono),
     copied: css({ color: COLORS.GREEN }),
-    edge: css({
+    prefix: css({
       color: isOver ? COLORS.BLUE : color,
-      opacity: isOver ? 1 : 0.4,
+      opacity: isOver ? 1 : prefix.opacity,
+    }),
+    suffix: css({
+      color: isOver ? COLORS.BLUE : color,
+      opacity: isOver ? 1 : suffix.opacity,
     }),
   };
 
   const elPrefix = prefix && (
-    <span {...css(styles.edge, { marginRight: prefixMargin })}>{prefix}</span>
+    <span {...css(styles.prefix, { marginRight: prefix.margin })}>{prefix.text}</span>
   );
 
   const elSuffix = suffix && (
-    <span {...css(styles.edge, { marginLeft: suffixMargin })}>{suffix}</span>
+    <span {...css(styles.suffix, { marginLeft: suffix.margin })}>{suffix.text}</span>
   );
 
   return (
@@ -68,3 +81,14 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  edge(input?: string | t.MonospaceButtonEdge): t.MonospaceButtonEdge {
+    if (!input) return DEFAULTS.edge;
+    if (typeof input === 'string') return { ...DEFAULTS.edge, text: input };
+    return input;
+  },
+} as const;
