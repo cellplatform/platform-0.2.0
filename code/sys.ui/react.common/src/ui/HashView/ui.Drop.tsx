@@ -50,8 +50,6 @@ export const Drop: React.FC<DropProps> = (props) => {
       letterSpacing: -0.6,
       wordBreak: 'break-all',
       marginBottom: '0.25em',
-      backgroundColor: Color.alpha(COLORS.DARK, 0.03),
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
     }),
     copyButton: css({
       position: 'relative',
