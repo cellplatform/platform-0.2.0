@@ -14,7 +14,7 @@ export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
   });
 
   e.it('ui:init', async (e) => {
