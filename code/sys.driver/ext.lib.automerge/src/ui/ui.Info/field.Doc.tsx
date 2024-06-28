@@ -1,5 +1,4 @@
 import { Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
-import { head } from './field.Doc.Head';
 import { history } from './field.Doc.History';
 import { DocUriButton } from './ui.Doc.UriButton';
 
@@ -41,13 +40,14 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     const parts: JSX.Element[] = [];
 
     if (uri) {
-      const { shorten, prefix, clipboard } = data.uri ?? {};
+      const { shorten, prefix, head, clipboard } = data.uri ?? {};
       parts.push(
         <DocUriButton
           theme={theme}
-          uri={uri}
-          shorten={shorten}
+          doc={doc}
           prefix={prefix}
+          shorten={shorten}
+          head={head}
           clipboard={clipboard}
         />,
       );
@@ -92,11 +92,6 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     const value = wrangle.objectElement(data, hasLabel, theme);
     res.push({ value });
   }
-
-  /**
-   * The <Head> component.
-   */
-  if (fields.includes('Doc.Head')) res.push(...head(ctx, data));
 
   /**
    * The <History> component.

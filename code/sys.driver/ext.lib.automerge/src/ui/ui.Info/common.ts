@@ -21,7 +21,6 @@ const fields = {
       'Doc',
       'Doc.URI',
       'Doc.Object',
-      'Doc.Head',
       'Doc.History',
       'Doc.History.Genesis',
       'Doc.History.List',
@@ -41,6 +40,7 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
 const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt',
+  head: 3,
   clipboard: (uri) => Doc.Uri.id(uri),
 };
 

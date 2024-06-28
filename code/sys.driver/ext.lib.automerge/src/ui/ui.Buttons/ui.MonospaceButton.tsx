@@ -5,7 +5,7 @@ import { Button, COLORS, Color, FONTS, Time, css, type t } from './common';
  * A button with monospace font.
  */
 export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
-  const { text = '', prefix } = props;
+  const { text = '', prefix, suffix, prefixMargin, suffixMargin } = props;
   const [message, setMessage] = useState<JSX.Element | undefined>();
 
   /**
@@ -34,16 +34,25 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(FONTS.mono),
-    prefix: css({ color, opacity: 0.4, marginRight: props.prefixMargin }),
     copied: css({ color: COLORS.GREEN }),
+    edge: css({ color, opacity: 0.4 }),
   };
+
+  const elPrefix = prefix && (
+    <span {...css(styles.edge, { marginRight: prefixMargin })}>{prefix}</span>
+  );
+
+  const elSuffix = suffix && (
+    <span {...css(styles.edge, { marginLeft: suffixMargin })}>{suffix}</span>
+  );
 
   return (
     <div {...css(styles.base, styles.mono, props.style)}>
       <Button theme={theme.name} onClick={handleClick} overlay={message}>
         <>
-          {prefix && <span {...styles.prefix}>{prefix}</span>}
+          {elPrefix}
           <span>{text}</span>
+          {elSuffix}
         </>
       </Button>
     </div>

@@ -121,6 +121,7 @@ export default Dev.describe(name, async (e) => {
           uri: {
             // prefix: 'foo:::',
             // prefix: null,
+            head: true,
           },
           history: {
             // label: 'Foo',

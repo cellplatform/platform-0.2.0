@@ -7,6 +7,8 @@ export type MonospaceButtonProps = {
   text?: string;
   prefix?: string;
   prefixMargin?: number;
+  suffix?: string;
+  suffixMargin?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
