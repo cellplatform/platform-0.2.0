@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.155',
+  version: '0.6.157',
   dependencies: {
     '@automerge/automerge': '2.2.2',
     '@automerge/automerge-repo': '1.1.12',
@@ -45,6 +45,7 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
     'sys.util': '0.0.0',
+    'yaml': '2.4.5',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
