@@ -73,7 +73,6 @@ export const DevSpecs = {
 } as t.SpecImports;
 
 export const SampleSpecs = {
-  [`sys.ui.sample.Hash`]: () => import('../ui.sample/Hash/-SPEC'),
   [`sys.ui.sample.Signals`]: () => import('../ui.sample/Signals/-SPEC'),
 } as t.SpecImports;
 
