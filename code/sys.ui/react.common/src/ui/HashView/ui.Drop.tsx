@@ -5,8 +5,9 @@ import { COLORS, Color, Filesize, Hash, css, type t } from '../common';
 const RED = `#FF0000`;
 
 export type DropProps = {
+  theme?: t.CommonTheme;
   style?: t.CssValue;
-  onDrop?: (e: { hash: string; data: Uint8Array }) => void;
+  onDrop?: t.HashDropHandler;
 };
 
 export const Drop: React.FC<DropProps> = (props) => {
@@ -17,7 +18,9 @@ export const Drop: React.FC<DropProps> = (props) => {
     onDrop(e) {
       const data = e.files[0].data;
       const hash = Hash.sha256(data);
-      props.onDrop?.({ hash, data });
+      const bytes = data.byteLength;
+      const size = { bytes, display: Filesize(data.byteLength) };
+      props.onDrop?.({ hash, data, size });
       setHash(hash);
       setData(data);
     },
@@ -51,7 +54,6 @@ export const Drop: React.FC<DropProps> = (props) => {
     <div ref={drag.ref} {...css(styles.base, props.style)}>
       <div>
         <div {...styles.message}>{message}</div>
-        {data && <div {...styles.message}>{Filesize(data.byteLength)}</div>}
       </div>
     </div>
   );

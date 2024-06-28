@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { useState } from 'react';
+
+import { Color, DEFAULTS, css, type t } from './common';
+import { Drop } from './ui.Drop';
 
 export const View: React.FC<t.HashViewProps> = (props) => {
-  console.log(DEFAULTS.displayName, props); // TEMP 🐷
+  const { bg = true } = props;
+  const [dropped, setDropped] = useState<t.HashDropHandlerArgs>();
 
   /**
    * Render
@@ -11,25 +14,37 @@ export const View: React.FC<t.HashViewProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      backgroundColor: bg ? theme.bg : undefined,
       color: theme.fg,
       display: 'grid',
       gridTemplateRows: `auto 1fr`,
     }),
     titlbar: css({
-      borderBottom: `solid 1px ${Color.alpha(theme.fg, 0.1)}`,
-      padding: 10,
+      backgroundColor: Color.alpha(theme.fg, 0.02),
+      borderBottom: `solid 1px ${Color.alpha(theme.fg, 0.15)}`,
+      Padding: [10, 12],
       boxSizing: 'border-box',
+      display: 'grid',
+      gridTemplateColumns: `auto 1fr auto`,
     }),
     body: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       display: 'grid',
-      placeItems: 'center',
     }),
   };
 
-  const elTitle = <div {...styles.titlbar}>{`🐷 ${DEFAULTS.displayName}`}</div>;
+  const elTitle = (
+    <div {...styles.titlbar}>
+      <div>{`${DEFAULTS.title}`}</div>
+      <div />
+      <div>{dropped?.size && <div>{dropped.size.display}</div>}</div>
+    </div>
+  );
 
-  const elBody = <div {...styles.body}>{'Hello'}</div>;
+  const elBody = (
+    <div {...styles.body}>
+      <Drop onDrop={(e) => setDropped(e)} />
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>

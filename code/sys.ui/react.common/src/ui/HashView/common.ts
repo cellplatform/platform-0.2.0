@@ -4,6 +4,9 @@ export * from '../common';
 /**
  * Constants
  */
+const name = 'HashView';
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.HashView`,
+  name,
+  displayName: `${Pkg.name}.${name}`,
+  title: 'Hash',
 } as const;
