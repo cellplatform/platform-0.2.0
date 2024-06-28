@@ -22,7 +22,7 @@ export function editorController(args: {
     // delete d['config'];
   });
 
-  Syncer.listen<T>(monaco, editor, lens, ['config'], {});
+  Syncer.listen<T>(monaco, editor, lens, ['config'], { strategy: 'Overwrite' });
 
   // Editor
   const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);

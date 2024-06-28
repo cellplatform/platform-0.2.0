@@ -1,5 +1,5 @@
 import { Color, Monaco, css, type t } from './common';
-import { editorController } from './ui.Me.codeEditor';
+import { editorController } from './Me.codeEditor';
 
 export type MeProps = {
   main: t.Main;
@@ -31,16 +31,6 @@ export const Me: React.FC<MeProps> = (props) => {
         onReady={(e) => {
           const { monaco, editor } = e;
           editorController({ monaco, editor, main });
-
-          //           // Document (State)
-          //           type T = { config?: string };
-          //           const lens = Doc.lens(main.me, ['root'], { init: (d) => (d.root = {}) });
-          //           lens.change((d) => delete d['code']);
-          //           Syncer.listen<T>(monaco, editor, lens, ['config'], {});
-          //
-          //           // Editor
-          //           const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
-          //           editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, () => cmdbar.focus({}));
         }}
       />
     </div>
