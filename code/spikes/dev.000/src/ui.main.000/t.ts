@@ -1,6 +1,6 @@
 import type { t } from '../common';
 
-export type CommandAction = 'me' | 'dev' | 'cast';
+export type CommandAction = 'me' | 'dev' | 'cast' | 'hash';
 
 /**
  * Shell
@@ -11,6 +11,7 @@ export type Shell = {
   readonly state: {
     readonly me: t.Doc;
     readonly cmdbar: t.Lens;
+    readonly tmp: t.Lens;
   };
 };
 
@@ -18,11 +19,15 @@ export type Shell = {
  * Shell Commands
  */
 export type ShellCommands = {
-  readonly fc: t.Cmd<t.FarcasterCmd>;
   readonly cmdbar: t.CmdBarCtrl;
+  readonly fc: t.Cmd<t.FarcasterCmd>;
+  readonly tmp: t.Cmd<TmpCmds>;
 };
 
 /**
  * Editor
  */
 export type ShellEditorController = t.Lifecycle;
+
+export type TmpCmds = EditorShare;
+type EditorShare = t.CmdType<'editor:share', { text: string }>;
