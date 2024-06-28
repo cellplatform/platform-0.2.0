@@ -1,4 +1,5 @@
-import { COLORS, Color, PeerRepoList, PeerUI, css, type t } from './common';
+import { useEffect } from 'react';
+import { COLORS, Color, Keyboard, PeerRepoList, PeerUI, css, rx, type t } from './common';
 
 export type SampleLayoutProps = {
   model: t.RepoListModel;
@@ -9,6 +10,16 @@ export type SampleLayoutProps = {
 
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const { network } = props;
+
+  useEffect(() => {
+    const life = rx.disposable();
+    const keys = Keyboard.until(life.dispose$);
+
+    // Suppress focus being removed from the document with [CMD + L].
+    keys.on('META + KeyL', (e) => e.handled());
+
+    return life.dispose;
+  }, []);
 
   /**
    * Render
