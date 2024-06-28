@@ -2,13 +2,27 @@ import type { t } from '../common';
 
 export type CommandAction = 'me' | 'dev' | 'cast';
 
-export type MainCmd = {
+/**
+ * Shell
+ */
+
+export type Shell = {
+  readonly cmd: ShellCommands;
+  readonly state: {
+    readonly me: t.Doc;
+    readonly cmdbar: t.Lens;
+  };
+};
+
+/**
+ * Shell Commands
+ */
+export type ShellCommands = {
   readonly fc: t.Cmd<t.FarcasterCmd>;
   readonly cmdbar: t.CmdBarCtrl;
 };
 
-export type Main = {
-  readonly me: t.Doc;
-  readonly cmd: MainCmd;
-  readonly lens: { readonly cmdbar: t.Lens };
-};
+/**
+ * Editor
+ */
+export type ShellEditorController = t.Lifecycle;

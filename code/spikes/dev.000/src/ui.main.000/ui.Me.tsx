@@ -1,14 +1,17 @@
+import { useEffect, useState, useRef, useCallback } from 'react';
+
 import { Color, Monaco, css, type t } from './common';
-import { editorController } from './Me.codeEditor';
+import { editorController } from './Me.editor';
 
 export type MeProps = {
-  main: t.Main;
+  main: t.Shell;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const Me: React.FC<MeProps> = (props) => {
   const { main } = props;
+  const controllerRef = useRef<t.ShellEditorController>();
 
   /**
    * Render
@@ -26,11 +29,11 @@ export const Me: React.FC<MeProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Monaco.Editor
         theme={theme.name}
-        focusOnLoad={true}
         language={'yaml'}
+        onDispose={(e) => controllerRef.current?.dispose()}
         onReady={(e) => {
           const { monaco, editor } = e;
-          editorController({ monaco, editor, main });
+          controllerRef.current = editorController({ monaco, editor, main });
         }}
       />
     </div>

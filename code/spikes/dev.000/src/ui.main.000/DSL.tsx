@@ -1,4 +1,4 @@
-import { Args, type t } from './common';
+import { Args, type t, CmdBar } from './common';
 
 /**
  * Sketch of what an implementation for the command-line parser
@@ -12,7 +12,7 @@ export const DSL = {
   /**
    * Match a given command to produce a renderable UI <View>.
    */
-  async matchView(argv: string, main: t.Main) {
+  async matchView(argv: string, main: t.Shell) {
     const { args, action } = wrangle.args<t.CommandAction>(argv);
 
     if (action === 'dev') {
@@ -31,7 +31,7 @@ export const DSL = {
   /**
    * Run the command when the [Invoke] action is triggered (eg ENTER key).
    */
-  async invoke(argv: string, main: t.Main) {
+  async invoke(argv: string, main: t.Shell) {
     const { args, action, pos } = wrangle.args<t.CommandAction>(argv);
 
     if (action === 'cast') {
@@ -45,6 +45,13 @@ export const DSL = {
     if (action === 'dev') {
       const { loadSpec } = await import('./DSL.load');
       return loadSpec(args, main);
+    }
+
+    if (action === 'me' && pos[1] === 'tmp') {
+      // const methods = CmdBar.Ctrl.methods(main.cmd.cmdbar);
+      // console.log('pos', pos);
+      // // main.cmd.cmdbar.invoke('Blur', {});
+      // methods.blur({});
     }
 
     return;

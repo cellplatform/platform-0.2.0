@@ -2,7 +2,7 @@ import { Dev } from '../test.ui';
 import { Args, CmdBar, Doc, Time, type t } from './common';
 import { LoadList } from './ui.CmdBar.List';
 
-export async function loadSpec(args: t.ParsedArgs, main: t.Main) {
+export async function loadSpec(args: t.ParsedArgs, main: t.Shell) {
   const { Specs } = await import('../test.ui/entry.Specs');
   const pos = Args.positional(args);
   const spec = Specs[pos[1]];
@@ -11,7 +11,7 @@ export async function loadSpec(args: t.ParsedArgs, main: t.Main) {
   return <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
 }
 
-export async function loaderView(args: t.ParsedArgs, main: t.Main) {
+export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
   const { Specs } = await import('../test.ui/entry.Specs');
   const pos = Args.positional(args);
   const filter = pos.slice(1).join(' ');
@@ -24,7 +24,7 @@ export async function loaderView(args: t.ParsedArgs, main: t.Main) {
         const path = CmdBar.Path.default.text;
         const cmd: t.CommandAction = 'dev';
         const next = `${cmd} ${e.uri}`;
-        main.lens.cmdbar.change((d) => Doc.Text.replace(d, path, next));
+        main.state.cmdbar.change((d) => Doc.Text.replace(d, path, next));
 
         // Move state back to the command bar.
         const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);

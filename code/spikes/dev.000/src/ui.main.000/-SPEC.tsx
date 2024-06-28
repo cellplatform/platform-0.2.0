@@ -11,6 +11,7 @@ import { Color, Dev, Pkg, css } from '../test.ui';
 import {
   Cmd,
   CmdBar,
+  Doc,
   CrdtInfo,
   Immutable,
   Peer,
@@ -44,9 +45,9 @@ export default Dev.describe(name, async (e) => {
     async getMeDoc() {
       const fs = Store.fs.doc;
       if (!(await fs.exists(local.me))) local.me = undefined;
-      const me = await fs.getOrCreate((d) => null, local.me);
-      local.me = me.uri;
-      return me;
+      const doc = await fs.getOrCreate((d) => null, local.me);
+      local.me = doc.uri;
+      return doc;
     },
   } as const;
 
@@ -61,15 +62,16 @@ export default Dev.describe(name, async (e) => {
   const theme: t.CommonTheme = 'Light';
 
   const me = await Store.getMeDoc();
-
-  const cmd: t.MainCmd = {
+  const cmd: t.ShellCommands = {
     fc: Cmd.create<t.FarcasterCmd>(Immutable.clonerRef({})) as t.Cmd<t.FarcasterCmd>,
     cmdbar: CmdBar.Ctrl.create().cmd,
   };
-  const main: t.Main = {
-    me,
+  const main: t.Shell = {
     cmd,
-    lens: { cmdbar: network.shared.ns.lens('dev.cmdbar', {}) },
+    state: {
+      me,
+      cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -136,9 +138,7 @@ export default Dev.describe(name, async (e) => {
             farcaster: {
               cmd: main.cmd.fc,
               signer: {},
-              identity: {
-                onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e),
-              },
+              identity: { onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e) },
             },
           }}
           onReady={(e) => console.info('⚡️ Auth.onReady:', e)}
@@ -151,6 +151,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row((e) => {
       const obj = { expand: { level: 1 } };
+      const uri = { head: true };
       return (
         <PeerRepoList.Info
           stateful={true}
@@ -160,8 +161,8 @@ export default Dev.describe(name, async (e) => {
             network,
             repo: model,
             shared: [
-              { label: 'State: system', object: { lens: ['sys'], ...obj } },
-              { label: 'State: namespace', object: { lens: ['ns'], ...obj } },
+              { label: 'State: system', object: { lens: ['sys'], ...obj }, uri },
+              { label: 'State: namespace', object: { lens: ['ns'], ...obj }, uri },
             ],
           }}
         />
@@ -187,7 +188,8 @@ export default Dev.describe(name, async (e) => {
             document: [
               {
                 label: 'Me',
-                ref: main.me,
+                ref: main.state.me,
+                uri: { head: true },
                 object: {
                   name: 'me',
                   visible: false,
@@ -199,7 +201,8 @@ export default Dev.describe(name, async (e) => {
               },
               {
                 label: 'Me: root',
-                ref: main.me,
+                ref: main.state.me,
+                uri: { head: true },
                 object: {
                   name: 'me.root',
                   lens: ['root'],
@@ -211,7 +214,8 @@ export default Dev.describe(name, async (e) => {
               },
               {
                 label: 'Me: identity',
-                ref: main.me,
+                ref: main.state.me,
+                uri: { head: true },
                 object: { name: 'me.identity', visible: false, lens: ['identity'] },
               },
             ],

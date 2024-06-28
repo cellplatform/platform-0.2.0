@@ -3,7 +3,7 @@ import { CmdBar, Doc, Keyboard, rx, type t } from './common';
 import { DSL } from './DSL';
 
 export type FooterProps = {
-  main: t.Main;
+  main: t.Shell;
   style?: t.CssValue;
   onOverlay?: (e: { el?: JSX.Element }) => void;
 };
@@ -16,17 +16,20 @@ export const Footer: React.FC<FooterProps> = (props) => {
    */
   useEffect(() => {
     const life = rx.disposable();
-    const keys = Keyboard.until(life.dispose$);
     const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
+    const keys = Keyboard.until(life.dispose$);
 
     keys.on('Tab', (e) => e.handled());
     keys.on('META + KeyK', () => {
       cmdbar.focus({});
       cmdbar.caretToEnd({});
     });
+    keys.on('META + KeyJ', () => {
+      cmdbar.blur({});
+    });
     keys.dbl().on('META + KeyK', () => {
       const path = CmdBar.Path.default.text;
-      main.lens.cmdbar.change((d) => Doc.Text.replace(d, path, ''));
+      main.state.cmdbar.change((d) => Doc.Text.replace(d, path, ''));
     });
 
     return life.dispose;
@@ -38,7 +41,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
   return (
     <CmdBar
       ctrl={main.cmd.cmdbar}
-      doc={main.lens.cmdbar}
+      doc={main.state.cmdbar}
       style={props.style}
       onReady={(e) => console.info(`⚡️ cmdbar.onReady:`, e)}
       onText={async (e, ctx) => {
