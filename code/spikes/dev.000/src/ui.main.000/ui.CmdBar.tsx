@@ -20,12 +20,10 @@ export const Footer: React.FC<FooterProps> = (props) => {
     const keys = Keyboard.until(life.dispose$);
 
     keys.on('Tab', (e) => e.handled());
+    keys.on('META + KeyJ', () => cmdbar.blur({}));
     keys.on('META + KeyK', () => {
       cmdbar.focus({});
       cmdbar.caretToEnd({});
-    });
-    keys.on('META + KeyJ', () => {
-      cmdbar.blur({});
     });
     keys.dbl().on('META + KeyK', () => {
       const path = CmdBar.Path.default.text;
