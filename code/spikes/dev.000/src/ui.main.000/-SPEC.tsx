@@ -23,7 +23,7 @@ import {
 } from './common';
 import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
-import { DebugFooter } from './ui.debug';
+import { DebugFooter } from './ui.DebugFooter';
 
 type T = { stream?: MediaStream; overlay?: JSX.Element };
 const initial: T = {};
