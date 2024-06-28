@@ -25,6 +25,11 @@ export const DSL = {
       return <Me main={main} />;
     }
 
+    if (action === 'hash') {
+      const { HashView } = await import('sys.ui.react.common');
+      return <HashView theme={'Dark'} bg={true} />;
+    }
+
     return;
   },
 
