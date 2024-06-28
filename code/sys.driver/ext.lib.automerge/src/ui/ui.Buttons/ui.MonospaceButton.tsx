@@ -6,7 +6,9 @@ import { Button, COLORS, Color, FONTS, Time, css, type t } from './common';
  */
 export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
   const { text = '', prefix, suffix, prefixMargin, suffixMargin } = props;
+
   const [message, setMessage] = useState<JSX.Element | undefined>();
+  const [isOver, setOver] = useState(false);
 
   /**
    * Handlers
@@ -35,7 +37,10 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
     base: css({ color, Flex: 'x-center-center' }),
     mono: css(FONTS.mono),
     copied: css({ color: COLORS.GREEN }),
-    edge: css({ color, opacity: 0.4 }),
+    edge: css({
+      color: isOver ? COLORS.BLUE : color,
+      opacity: isOver ? 1 : 0.4,
+    }),
   };
 
   const elPrefix = prefix && (
@@ -48,7 +53,12 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
 
   return (
     <div {...css(styles.base, styles.mono, props.style)}>
-      <Button theme={theme.name} onClick={handleClick} overlay={message}>
+      <Button
+        theme={theme.name}
+        onClick={handleClick}
+        overlay={message}
+        onMouse={(e) => setOver(e.isOver)}
+      >
         <>
           {elPrefix}
           <span>{text}</span>
