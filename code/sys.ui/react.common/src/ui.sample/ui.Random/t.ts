@@ -4,7 +4,7 @@ import type { t } from './common';
  * <Component>
  */
 export type RandomProps = {
-  number?: number;
+  value?: number | string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

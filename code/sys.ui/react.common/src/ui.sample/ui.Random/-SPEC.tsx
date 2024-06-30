@@ -1,5 +1,5 @@
 import { DEFAULTS, Random } from '.';
-import { css, Color, Dev, Pkg } from '../../test.ui';
+import { css, Color, Dev, Pkg, slug, cuid } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.RandomProps;
@@ -51,6 +51,23 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+
+      function getRandomNumber(): number {
+        const array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        return array[0];
+      }
+
+      const button = (label: string, fn: () => string | number) => {
+        dev.button(label, (e) => {
+          state.change((d) => (d.props.value = fn()));
+        });
+      };
+
+      button('cuid', () => cuid());
+      button('slug', () => slug());
+      button('crypto.getRandomNumber', () => getRandomNumber());
     });
   });
 
