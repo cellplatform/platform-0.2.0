@@ -73,7 +73,8 @@ export const DevSpecs = {
 } as t.SpecImports;
 
 export const SampleSpecs = {
-  [`sys.ui.sample.Signals`]: () => import('../ui.sample/Signals/-SPEC'),
+  [`sys.ui.sample.Random`]: () => import('../ui.sample/ui.Random/-SPEC'),
+  [`sys.ui.sample.Signals`]: () => import('../ui.sample/ui.Signal/-SPEC'),
 } as t.SpecImports;
 
 export const Specs = {
