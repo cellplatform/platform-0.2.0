@@ -11,12 +11,12 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.158',
+  version: '0.6.159',
   dependencies: {
-    '@automerge/automerge': '2.2.2',
-    '@automerge/automerge-repo': '1.1.12',
-    '@automerge/automerge-repo-network-messagechannel': '1.1.12',
-    '@automerge/automerge-repo-storage-indexeddb': '1.1.12',
+    '@automerge/automerge': '2.2.4',
+    '@automerge/automerge-repo': '1.2.0',
+    '@automerge/automerge-repo-network-messagechannel': '1.2.0',
+    '@automerge/automerge-repo-storage-indexeddb': '1.2.0',
     '@privy-io/react-auth': '1.73.0',
     '@standard-crypto/farcaster-js': '7.4.0',
     'automerge-repo-network-peerjs': '1.1.13',
