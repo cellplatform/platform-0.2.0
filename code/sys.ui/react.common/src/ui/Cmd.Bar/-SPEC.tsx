@@ -1,9 +1,9 @@
+import { parseArgs } from 'util';
 import { CmdBar, DEFAULTS } from '.';
 import { Color, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
 
-type TEnv = {};
 type P = t.CmdBarProps;
-type T = { props: P };
+type T = { props: P; parsedArgs?: t.ParsedArgs };
 const initial: T = { props: {} };
 
 /**
@@ -52,7 +52,13 @@ export default Dev.describe(name, (e) => {
           <CmdBar
             {...props}
             ctrl={control.cmd}
-            onChange={(e) => state.change((d) => (local.text = d.props.text = e.to))}
+            onChange={(e) => {
+              console.info(`⚡️ CmdBar.onChange:`, e);
+              state.change((d) => {
+                local.text = d.props.text = e.to;
+                d.parsedArgs = e.parsed;
+              });
+            }}
           />
         );
       });
@@ -187,7 +193,11 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { props, parsedArgs } = e.state;
+      const data = {
+        props,
+        parsedArgs,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

@@ -7,6 +7,9 @@ export const R = { clamp, clone, equals, flatten, mergeDeepRight, prop, sortBy, 
 export { ErrorBoundary } from 'react-error-boundary';
 export { Observable, Subject } from 'rxjs';
 
+/**
+ * @ext.lib
+ */
 export { Patch, PatchState } from 'ext.lib.immer';
 
 /**

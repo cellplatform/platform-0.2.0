@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { createRoot } from 'react-dom/client';
-import { DEFAULTS, TextInput, type t } from './common';
+import { useEffect, useState } from 'react';
+import { DEFAULTS, TextInput, type t, Args } from './common';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
   theme: t.ColorTheme;
@@ -8,6 +7,19 @@ export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
+
+  /**
+   * Handlers
+   */
+  const handleChange: t.TextInputChangeHandler = (e) => {
+    let _parsed: t.ParsedArgs;
+    props.onChange?.({
+      ...e,
+      get parsed() {
+        return _parsed || (_parsed = Args.parse(e.to));
+      },
+    });
+  };
 
   /**
    * Listeners
@@ -59,7 +71,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       focusOnReady={focusOnReady}
       selectOnReady={focusOnReady}
       onFocusChange={props.onFocusChange}
-      onChange={props.onChange}
+      onChange={handleChange}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
       onSelect={props.onSelect}

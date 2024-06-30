@@ -3,6 +3,7 @@
  */
 export type { CSSProperties } from 'react';
 export type { Observable, Subject } from 'rxjs';
+export type { ParsedArgs } from 'minimist';
 
 /**
  * @ext

@@ -15,11 +15,16 @@ export type CmdBarProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onReady?: t.TextInputReadyHandler;
-  onChange?: t.TextInputChangeHandler;
+  onChange?: t.CmdBarChangeHandler;
   onSelect?: t.TextInputSelectHandler;
   onFocusChange?: t.TextInputFocusHandler;
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
+};
+
+export type CmdBarChangeHandler = (e: CmdBarChangeHandlerArgs) => void;
+export type CmdBarChangeHandlerArgs = t.TextInputChangeArgs & {
+  readonly parsed: t.ParsedArgs;
 };
 
 /**
