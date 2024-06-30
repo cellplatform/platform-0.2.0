@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDragTarget } from '../../ui.use';
-import { COLORS, Color, Filesize, Hash, css, type t, Button, Icons } from './common';
+import { Button, COLORS, Color, Filesize, Hash, Icons, Time, css, type t } from './common';
 
 const RED = `#FF0000`;
 
@@ -13,6 +13,7 @@ export type DropProps = {
 export const Drop: React.FC<DropProps> = (props) => {
   const [hash, setHash] = useState('');
   const [data, setData] = useState<Uint8Array | undefined>();
+  const [copied, setCopied] = useState(false);
 
   const drag = useDragTarget({
     onDrop(e) {
@@ -29,6 +30,8 @@ export const Drop: React.FC<DropProps> = (props) => {
   const handleClipboardCopy = () => {
     if (!hash) return;
     navigator.clipboard.writeText(hash);
+    setCopied(true);
+    Time.delay(1200, () => setCopied(false));
   };
 
   /**
@@ -46,11 +49,15 @@ export const Drop: React.FC<DropProps> = (props) => {
       color: theme.fg,
       userSelect: 'none',
     }),
+    body: css({ position: 'relative' }),
     message: css({
+      position: 'relative',
       Padding: [20, 50],
       letterSpacing: -0.6,
       wordBreak: 'break-all',
       marginBottom: '0.25em',
+      opacity: copied ? 0.2 : 1,
+      filter: `blur(${copied ? 25 : 0}px)`,
     }),
     copyButton: css({
       position: 'relative',
@@ -59,6 +66,11 @@ export const Drop: React.FC<DropProps> = (props) => {
       placeItems: 'center',
       color: theme.fg,
       ':hover': { color: COLORS.BLUE },
+    }),
+    copied: css({
+      Absolute: 0,
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
@@ -72,12 +84,19 @@ export const Drop: React.FC<DropProps> = (props) => {
     </Button>
   );
 
+  const elCopied = copied && (
+    <div {...styles.copied}>
+      <div>{'copied'}</div>
+    </div>
+  );
+
   return (
     <div ref={drag.ref} {...css(styles.base, props.style)}>
-      <div>
+      <div {...styles.body}>
         <div {...styles.message}>
           {message} {elCopyButton}
         </div>
+        {elCopied}
       </div>
     </div>
   );
