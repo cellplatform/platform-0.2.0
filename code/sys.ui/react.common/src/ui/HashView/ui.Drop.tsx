@@ -44,6 +44,7 @@ export const Drop: React.FC<DropProps> = (props) => {
       fontSize: 60,
       padding: '1em',
       color: theme.fg,
+      userSelect: 'none',
     }),
     message: css({
       Padding: [20, 50],
@@ -95,7 +96,9 @@ const wrangle = {
     const start = hash.slice(0, -HIGHLIGHT);
     const end = hash.slice(-HIGHLIGHT);
 
-    const styles = { highlight: css({ color: RED }) };
+    const styles = {
+      highlight: css({ color: RED }),
+    };
     return (
       <>
         <span {...styles.highlight}>{prefix}</span>
