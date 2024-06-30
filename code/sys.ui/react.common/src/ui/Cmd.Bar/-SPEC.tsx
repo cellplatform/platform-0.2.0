@@ -198,7 +198,9 @@ export default Dev.describe(name, (e) => {
         props,
         parsedArgs,
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return (
+        <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.parsedArgs'] }} />
+      );
     });
   });
 });
