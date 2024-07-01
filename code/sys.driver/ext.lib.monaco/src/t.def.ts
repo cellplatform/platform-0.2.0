@@ -42,4 +42,5 @@ export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRange
  */
 export type EditorState = {
   readonly text: string;
+  readonly selections: t.Selection[];
 };

@@ -1,8 +1,8 @@
 import type { OnChange, OnMount } from '@monaco-editor/react';
-
 import EditorReact from '@monaco-editor/react';
+
 import { useEffect, useRef } from 'react';
-import { DEFAULTS, Wrangle, css, t } from './common';
+import { DEFAULTS, Wrangle, css, type t } from './common';
 import { Theme } from './u.Theme';
 
 export const View: React.FC<t.MonacoEditorProps> = (props) => {
@@ -14,7 +14,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const editor = editorRef.current;
 
   /**
-   * [Lifecycle]
+   * Lifecycle
    */
   useEffect(() => {
     if (!editor) return;
@@ -34,7 +34,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   }, []);
 
   /**
-   * [Handlers]
+   * Handlers
    */
   const handleEditorDidMount: OnMount = (ed, monaco) => {
     Theme.init(monaco);
@@ -47,11 +47,18 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   };
 
   const handleChange: OnChange = (text = '', event) => {
-    props.onChange?.({ text, event });
+    const editor = editorRef.current;
+    if (!props.onChange || !editor) return;
+
+    const selections = editor.getSelections() || [];
+    props.onChange({
+      event,
+      state: { text, selections },
+    });
   };
 
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({ position: 'relative' }),
