@@ -1,4 +1,4 @@
-import { Color, Style, css, t } from '../../common';
+import { Color, Style, css, type t } from '../../common';
 
 export type IconProps = { size: number; color?: string };
 export type IconComponent = React.FC<IconProps>;

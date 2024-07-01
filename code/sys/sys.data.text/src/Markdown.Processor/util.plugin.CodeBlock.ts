@@ -1,5 +1,5 @@
 import { SKIP, visit } from 'unist-util-visit';
-import { slug, t } from './common';
+import { slug, type t } from './common';
 
 /**
  * Tools for working with tripple-tick (```) code blocks within markdown.

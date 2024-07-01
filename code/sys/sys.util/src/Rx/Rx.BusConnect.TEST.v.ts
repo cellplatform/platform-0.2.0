@@ -1,4 +1,4 @@
-import { describe, it, expect, t } from '../test';
+import { describe, it, expect, type t } from '../test';
 import { Time } from '../Time';
 import { BusConnect } from './Rx.BusConnect';
 import { rx } from '.';

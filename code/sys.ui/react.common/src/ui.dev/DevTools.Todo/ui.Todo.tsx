@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGlobalStyles } from '../DevTools.GlobalStyles';
-import { COLORS, Color, DEFAULTS, FC, Style, TextProcessor, css, t } from './common';
+import { COLORS, Color, DEFAULTS, FC, Style, TextProcessor, css, type t } from './common';
 
 export type TodoProps = {
   text?: string;

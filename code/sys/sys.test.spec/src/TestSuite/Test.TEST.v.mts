@@ -1,5 +1,5 @@
 import { Test } from '.';
-import { describe, expect, it, t } from '../test';
+import { describe, expect, it, type t } from '../test';
 import { TestTree, Is } from '../TestSuite.helpers';
 
 describe('Test (Root/Entry)', () => {

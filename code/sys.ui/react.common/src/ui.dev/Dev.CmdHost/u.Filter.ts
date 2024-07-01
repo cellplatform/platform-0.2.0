@@ -1,4 +1,4 @@
-import { Fuzzy, t } from '../common';
+import { Fuzzy, type t } from '../common';
 
 type Options = { maxErrors?: number };
 

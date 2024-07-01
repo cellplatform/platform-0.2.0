@@ -1,6 +1,6 @@
 import { Constraints, TestTree } from '.';
 import { Test } from '..';
-import { describe, expect, it, t } from '../test';
+import { describe, expect, it, type t } from '../test';
 
 type T = t.TestSuiteModel | t.TestModel;
 

@@ -1,4 +1,4 @@
-import { rx, slug, t } from '../common';
+import { rx, slug, type t } from '../common';
 import { describe, expect, it, WorkerMemoryStub } from '../test';
 import { WorkerPump } from '.';
 

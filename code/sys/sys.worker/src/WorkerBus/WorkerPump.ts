@@ -1,4 +1,4 @@
-import { rx, slug, t } from '../common';
+import { rx, slug, type t } from '../common';
 import { Is } from './Is';
 
 const DEFAULTS = {
