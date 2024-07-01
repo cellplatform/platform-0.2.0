@@ -1,6 +1,6 @@
 import { MonacoEditor } from '.';
 import { Dev, EditorCarets, Pkg, Wrangle, type t } from '../../test.ui';
-import { CODE_SAMPLES } from './-SPEC.-sample.code';
+import { CODE_SAMPLES } from './-SPEC.sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -66,7 +66,8 @@ export default Dev.describe(name, (e) => {
               });
             }}
             onChange={(e) => {
-              local.text = e.text;
+              local.text = e.state.text;
+              console.info(`⚡️ onChange:`, e);
               // ctx.redraw();
             }}
           />
