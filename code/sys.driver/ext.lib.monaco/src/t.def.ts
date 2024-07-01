@@ -36,3 +36,10 @@ export type EditorRangesInput =
   | null;
 
 export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRangeTuple | null;
+
+/**
+ * State of the editor.
+ */
+export type EditorState = {
+  readonly text: string;
+};
