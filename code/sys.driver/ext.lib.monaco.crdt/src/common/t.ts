@@ -23,6 +23,7 @@ export type {
   EventBus,
   Lifecycle,
   Msecs,
+  ObjectPath,
   TypedObjectPath,
   UntilObservable,
 } from 'sys.types/src/types';
