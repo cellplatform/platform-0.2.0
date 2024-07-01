@@ -127,7 +127,7 @@ export default Dev.describe(name, async (e) => {
             'Login.SMS',
             'Id.User',
             'Farcaster',
-            'Wallet.Link',
+            // 'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',
             'Refresh',
@@ -162,7 +162,7 @@ export default Dev.describe(name, async (e) => {
             repo: model,
             shared: [
               { label: 'State: system', object: { lens: ['sys'], ...obj }, uri },
-              { label: 'State: namespace', object: { lens: ['ns'], ...obj }, uri },
+              { label: 'State: namespaces', object: { lens: ['ns'], ...obj }, uri },
             ],
           }}
         />
