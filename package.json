@@ -45,6 +45,7 @@
     "@vime/core": "5.4.1",
     "@vime/react": "5.4.1",
     "@vimeo/player": "2.23.0",
+    "@vitejs/plugin-basic-ssl": "1.1.0",
     "@wasmer/sdk": "0.6.0",
     "automerge-tldraw": "0.2.0",
     "approx-string-match": "2.0.0",
