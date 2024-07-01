@@ -3,7 +3,7 @@ import { semver } from './libs';
 /**
  * Helpers for working with "semantic-version" values.
  */
-export const VersionUtil = {
+export const Version = {
   clean(version?: string) {
     return clean(version);
   },
@@ -13,12 +13,12 @@ export const VersionUtil = {
     let adornment = '';
     if (version.startsWith('^')) adornment = '^';
     if (version.startsWith('~')) adornment = '~';
-    version = VersionUtil.clean(version);
+    version = Version.clean(version);
     return { version, adornment };
   },
 
   eq(a?: string, b?: string) {
-    return VersionUtil.clean(a) === VersionUtil.clean(b);
+    return Version.clean(a) === Version.clean(b);
   },
 
   max(a?: string, b?: string) {
@@ -27,7 +27,7 @@ export const VersionUtil = {
     if (b === undefined) return a ?? '0.0.0';
     return semver.gte(clean(a) || '0.0.0', clean(b) || '0.0.0') ? a : b;
   },
-};
+} as const;
 
 /**
  * Helpers

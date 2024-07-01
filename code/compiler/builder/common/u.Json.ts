@@ -2,19 +2,19 @@ import type * as t from '../t';
 
 import { fs } from './fs';
 import { R } from './libs';
-import { VersionUtil } from './u.Version';
+import { Version } from './u.Version';
 
 /**
  * [package.json] file specific operations.
  */
-export const PackageJsonUtil = {
+export const PackageJson = {
   async load(dir: t.PathString) {
-    return JsonUtil.load<t.PkgJson>(PackageJsonUtil.path(dir));
+    return Json.load<t.PkgJson>(PackageJson.path(dir));
   },
 
   async save(dir: t.PathString, pkg: t.PkgJson, options: { filename?: string } = {}) {
     await fs.ensureDir(dir);
-    await fs.writeFile(PackageJsonUtil.path(dir, options), JsonUtil.stringify(pkg));
+    await fs.writeFile(PackageJson.path(dir, options), Json.stringify(pkg));
   },
 
   path(dir: t.PathString, options: { filename?: string } = {}) {
@@ -35,7 +35,7 @@ export const PackageJsonUtil = {
         dependencies,
         devDependencies,
         exists: (name: string) => Boolean(all[name]),
-        eq: (name: string, version: string) => VersionUtil.eq(all[name], version),
+        eq: (name: string, version: string) => Version.eq(all[name], version),
       };
     },
 
@@ -60,8 +60,8 @@ export const PackageJsonUtil = {
 /**
  * General JSON helpers.
  */
-export const JsonUtil = {
-  Pkg: PackageJsonUtil,
+export const Json = {
+  Pkg: PackageJson,
 
   async load<T>(file: t.PathString) {
     return (await fs.readJson(fs.resolve(file))) as T;

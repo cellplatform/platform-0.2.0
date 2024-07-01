@@ -3,8 +3,8 @@ import { fs } from './fs';
 export type * as t from '../t';
 export * from './libs';
 
-export { FindUtil } from './u.Find';
-export { JsonUtil, PackageJsonUtil } from './u.Json';
+export { Time, Util, asArray } from './u';
+export { Find as FindUtil } from './u.Find';
+export { Json as JsonUtil, PackageJson as PackageJsonUtil } from './u.Json';
 export { LogTable } from './u.LogTable';
-export { Util, asArray } from './u';
 export { fs };
