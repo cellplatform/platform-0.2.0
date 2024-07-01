@@ -98,8 +98,8 @@ export const Config = {
             '@syntect/wasm',
           ],
         },
-        server: { port: 1234 },
         base: './',
+        server: { port: 1234 },
       };
 
       /**
@@ -116,11 +116,7 @@ export const Config = {
         const dirname = fs.basename(fs.dirname(modulePath));
         const moduleName = `← ${pc.yellow('vite-plugin-node-polyfills')}`;
         console.log(`${pc.yellow('[TMP]')} polyfills added to ${pc.cyan(dirname)} ${moduleName}`);
-        config.plugins?.push(
-          nodePolyfills({
-            include: ['process', 'buffer', 'util'],
-          }),
-        );
+        config.plugins?.push(nodePolyfills({ include: ['process', 'buffer', 'util'] }));
       }
 
       /**
@@ -133,25 +129,36 @@ export const Config = {
           R.uniq(target)
             .filter((name) => !targets.includes(name))
             .forEach((name) => targets.push(name));
+          return args;
         },
         plugin(...kind) {
           R.uniq(kind)
             .filter((name) => !plugins.includes(name))
             .forEach((name) => plugins.push(name));
+          return args;
         },
         externalDependency(moduleName) {
           R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
+          return args;
         },
         chunk(alias, moduleName) {
           manualChunks[alias] = R.uniq(asArray(moduleName ?? alias));
+          return args;
         },
         lib(options = {}) {
           const entry = Wrangle.libEntry(options.entry);
           Object.keys(entry).forEach((key) => (entry[key] = fs.join(dir, entry[key])));
           const lib: LibraryOptions = { entry, formats: ['es'] };
           build.lib = lib;
+          return args;
+        },
+        headers(obj) {
+          const server = config.server!;
+          const headers = server.headers || (server.headers = {});
+          server.headers = { ...headers, ...obj };
+          return args;
         },
       };
 
@@ -193,12 +200,15 @@ export const Config = {
         );
       }
 
+      if (hasPlugin('ssl')) {
+        const { devServerSsl } = await import('./plugins/ssl');
+        await devServerSsl(config);
+      }
+
       /**
-       * Configure for target environment.
+       * Complete
        */
       config = Config.target.apply(config, ...targets);
-
-      // Finish up.
       return config;
     });
   },
