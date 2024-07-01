@@ -1,14 +1,7 @@
 {
   "version": 2,
   "routes": [
-    {
-      "src": "/lib/(.*)",
-      "dest": "/lib/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "continue": true
-    }
+    { "src": "/lib/(.*)", "dest": "/lib/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
