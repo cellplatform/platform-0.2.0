@@ -1,5 +1,5 @@
 import { Wasmer, init as initWasm } from '@wasmer/sdk';
-import { Dev, Pkg, type t } from '../../test.ui';
+import { Color, Dev, Pkg, css, type t } from '../../test.ui';
 
 type T = {
   theme?: t.CommonTheme;
@@ -34,8 +34,30 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        Dev.Theme.background(ctx, e.state.theme, 1);
-        return <div>{`🐷 ${name}`}</div>;
+        const output = e.state.output;
+        const theme = Color.theme(e.state.theme);
+        Dev.Theme.background(ctx, theme, 1);
+
+        const styles = {
+          base: css({ display: 'grid', gridTemplateRows: `1fr 1fr` }),
+          top: css({ borderBottom: `solid 1px ${Color.alpha(theme.fg, 0.1)}` }),
+          center: css({ display: 'grid', placeContent: 'center' }),
+          bottom: css({}),
+          output: css({ Padding: [0, 15] }),
+        };
+
+        if (!output) return <div {...styles.center}>{`🐷 ${'Wasmer Sample'}`}</div>;
+
+        return (
+          <div {...styles.base}>
+            <div {...css(styles.top, styles.output)}>
+              <pre>{`stdout:\n${output.stdout}`}</pre>
+            </div>
+            <div {...css(styles.bottom, styles.output)}>
+              <pre>{`stderr:\n${output.stderr}`}</pre>
+            </div>
+          </div>
+        );
       });
   });
 
@@ -60,8 +82,9 @@ export default Dev.describe(name, (e) => {
           .onClick(async (e) => {
             await running(true);
             try {
-              const python = await Wasmer.fromRegistry('python/python');
               const code = `print(1+1)`;
+              console.info(`args: "${code}"`);
+              const python = await Wasmer.fromRegistry('python/python');
               const instance = await python.entrypoint?.run({ args: [`-c`, code] });
               const res = await instance?.wait();
               const stderr = res?.stderr;
