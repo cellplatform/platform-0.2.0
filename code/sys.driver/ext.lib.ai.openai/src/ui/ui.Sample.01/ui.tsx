@@ -28,7 +28,7 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           Monaco.Crdt.Syncer.listen<TDoc>(monaco, editor, lens, ['text']);
         }
       }}
-      onChange={(e) => props.onChange?.({ text: e.text })}
+      onChange={(e) => props.onChange?.(e.state)}
     />
   );
 

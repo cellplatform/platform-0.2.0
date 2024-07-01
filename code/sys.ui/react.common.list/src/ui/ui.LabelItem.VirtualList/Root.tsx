@@ -1,4 +1,4 @@
-import type { VirtuosoHandle, type t } from './common';
+import type { VirtuosoHandle, t } from './common';
 
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { VirtualListRef } from './Ref';

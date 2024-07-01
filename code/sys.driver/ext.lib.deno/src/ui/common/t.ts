@@ -2,6 +2,7 @@
  * @ext
  */
 export type { PatchOperation } from 'ext.lib.immer/src/types';
+export type { EditorState } from 'ext.lib.monaco/src/types';
 
 /**
  * @system
