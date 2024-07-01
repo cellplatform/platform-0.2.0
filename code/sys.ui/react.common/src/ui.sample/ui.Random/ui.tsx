@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { Color, DEFAULTS, css, type t } from './common';
 
 export const View: React.FC<t.RandomProps> = (props) => {
   const { value } = props;
@@ -28,7 +27,6 @@ export const View: React.FC<t.RandomProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {/* <div>{`🐷 ${props.value ?? DEFAULTS.name}`}</div> */}
       {elTitle}
       {elValue}
     </div>
