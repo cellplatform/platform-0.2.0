@@ -1,6 +1,6 @@
 import { Cmd } from '..';
 import { type t } from './common';
-import type { C, C1 } from './t';
+import type { C } from './t';
 
 const Is = Cmd.Is;
 
