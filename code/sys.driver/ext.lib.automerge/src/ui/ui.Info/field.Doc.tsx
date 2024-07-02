@@ -1,4 +1,4 @@
-import { Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
+import { Doc, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
 import { DocUriButton } from './ui.Doc.UriButton';
 
@@ -54,7 +54,9 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     }
 
     if (doc) {
-      parts.push(<Icons.Object size={14} />);
+      const isLens = !!data.object?.lens || Doc.Is.lens(doc);
+      const Icon = isLens ? Icons.Object : Icons.Repo;
+      parts.push(<Icon size={14} />);
     } else {
       parts.push(<>{'-'}</>);
     }
