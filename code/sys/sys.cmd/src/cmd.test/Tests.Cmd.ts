@@ -58,10 +58,10 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('has initial {cmd} structure upon creation', async () => {
       const { doc, dispose } = await setup();
-      expect(Cmd.Is.initialized(doc.current)).to.eql(false);
+      expect(Cmd.Is.pathsObject(doc.current)).to.eql(false);
 
       Cmd.create(doc);
-      expect(Cmd.Is.initialized(doc.current)).to.eql(true);
+      expect(Cmd.Is.pathsObject(doc.current)).to.eql(true);
 
       dispose();
     });
