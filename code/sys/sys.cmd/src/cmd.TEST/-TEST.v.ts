@@ -11,10 +11,14 @@ describe('Cmd (Command)', () => {
  * NB: this is the "immutable system" setup that is unique
  *     to each module using a different transport/approach
  *     underlying the common <Cmd> system.
+ *
+ * This core implementation uses the simple ("simplistic")
+ * blunt cloner ImmutableRef<T> tool from [sys.util].
  */
 const setup: t.CmdTestSetup = async () => {
   const { dispose, dispose$ } = rx.disposable();
   const factory: t.CmdTestFactory = async () => Immutable.clonerRef({});
-  const res: t.CmdTestState = { doc: await factory(), factory, dispose, dispose$ };
+  const doc = await factory();
+  const res: t.CmdTestState = { doc, factory, dispose, dispose$ };
   return res;
 };
