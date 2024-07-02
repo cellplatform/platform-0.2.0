@@ -58,7 +58,7 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { Cmd, CmdType, CmdImmutable } from 'sys.cmd/src/types';
+export type { Cmd, CmdType, CmdImmutable, CmdMethodVoid } from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 
