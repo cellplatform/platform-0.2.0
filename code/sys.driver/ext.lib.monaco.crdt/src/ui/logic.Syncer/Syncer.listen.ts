@@ -13,10 +13,10 @@ type Options = {
  * An adapter for managing 2-way binding between a code-editor UI
  * component and a CRDT (Automerge.Text) data-structure.
  */
-export function listen<T extends O>(
+export function listen(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
-  lens: t.Lens<T>,
+  lens: t.Lens,
   target: t.ObjectPath, // NB: target path to write the editor string to.
   options: Options = {},
 ): t.SyncListener {
@@ -33,15 +33,15 @@ export function listen<T extends O>(
     get current() {
       return Lens.resolve(lens.current);
     },
-    resolve(doc: T) {
+    resolve(doc: O) {
       return Path.Object.resolve<string>(doc, target);
     },
     text: {
-      splice(d: T, index: number, del: number, value?: string) {
-        Doc.Text.splice(d, target, index, del, value);
+      splice(doc: O, index: number, del: number, value?: string) {
+        Doc.Text.splice(doc, target, index, del, value);
       },
-      replace(d: T, value: string) {
-        Path.Object.mutate(d, target, value);
+      replace(doc: O, value: string) {
+        Path.Object.mutate(doc, target, value);
       },
     },
   } as const;

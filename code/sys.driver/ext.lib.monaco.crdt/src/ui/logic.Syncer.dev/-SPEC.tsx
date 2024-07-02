@@ -45,7 +45,7 @@ export default Dev.describe(name, async (e) => {
     const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
       const Syncer = Monaco.Crdt.Syncer;
-      Syncer.listen<t.SampleDoc>(monaco, editor, lens, ['code'], {
+      Syncer.listen(monaco, editor, lens, ['code'], {
         debugLabel,
         strategy: () => state.current.strategy,
       });
@@ -57,7 +57,6 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const theme = Color.theme(e.state.theme);
-
         Dev.Theme.background(ctx, theme, 1);
 
         if (e.state.reload) {
