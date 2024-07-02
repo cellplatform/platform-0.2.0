@@ -17,7 +17,7 @@ export function listen<T extends O>(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
   lens: t.Lens<T>,
-  target: t.TypedObjectPath<T>,
+  target: t.ObjectPath, // NB: target path to write the editor string to.
   options: Options = {},
 ): t.SyncListener {
   const { debugLabel } = options;
@@ -30,17 +30,19 @@ export function listen<T extends O>(
   const patchMonaco = MonacoPatcher.init(monaco, editor);
   const Events = { lens: lens.events(life.dispose$) } as const;
   const Lens = {
-    get code() {
-      return Lens.resolve(lens.current) ?? '';
+    get current() {
+      return Lens.resolve(lens.current);
     },
     resolve(doc: T) {
       return Path.Object.resolve<string>(doc, target);
     },
-    splice(doc: T, index: number, del: number, text?: string) {
-      Doc.Text.splice(doc, target, index, del, text);
-    },
-    replace(doc: T, text: string) {
-      Path.Object.mutate(doc, target, text);
+    text: {
+      splice(d: T, index: number, del: number, value?: string) {
+        Doc.Text.splice(d, target, index, del, value);
+      },
+      replace(d: T, value: string) {
+        Path.Object.mutate(d, target, value);
+      },
     },
   } as const;
 
@@ -60,17 +62,17 @@ export function listen<T extends O>(
    * CRDT changed.
    */
   Events.lens.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
-    const prev = editor.getValue();
-    const next = Lens.resolve(e.after);
-    if (next === prev) return;
+    const before = editor.getValue();
+    const after = Lens.resolve(e.after) ?? '';
+    if (after === before) return;
 
     /**
      * TODO 🐷
      */
-    const diff = calculateDiff(Lens.resolve(e.before) ?? '', Lens.resolve(e.after) ?? '');
+    const diff = calculateDiff(Lens.resolve(e.before) || '', Lens.resolve(e.after) || '');
     console.log('TODO 🐷 diff:', diff);
 
-    const source = 'crdt-sync';
+    const source = 'crdt.sync';
     const patches = e.patches.filter((patch) => startsWith(patch.path, target));
     patches.forEach((patch) => {
       _ignoreChange = true;
@@ -99,11 +101,11 @@ export function listen<T extends O>(
 
       const strategy = api.strategy;
       if (strategy === 'Splice') {
-        lens.change((d) => Lens.splice(d, index, deleteCount, change.text));
+        lens.change((d) => Lens.text.splice(d, index, deleteCount, change.text));
       }
 
       if (strategy === 'Overwrite') {
-        lens.change((d) => Lens.replace(d, editor.getValue()));
+        lens.change((d) => Lens.text.replace(d, editor.getValue()));
       }
     });
   });
@@ -111,9 +113,12 @@ export function listen<T extends O>(
   /**
    * Initialize.
    */
-  const initial = Lens.resolve(lens.current);
-  if (initial === undefined) lens.change((d) => Path.Object.mutate(d, target, ''));
-  if (typeof initial === 'string') changeEditorText(initial);
+  const initial = Lens.current;
+  if (initial === undefined) {
+    lens.change((d) => Path.Object.mutate(d, target, ''));
+  } else if (typeof initial === 'string') {
+    changeEditorText(initial);
+  }
 
   /**
    * API

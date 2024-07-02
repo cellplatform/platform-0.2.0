@@ -65,19 +65,22 @@ export default Dev.describe(name, async (e) => {
         } else {
           const border = `solid 1px ${Color.alpha(theme.fg, 0.1)}`;
           const styles = {
-            base: css({ display: 'grid', gridTemplateRows: '1fr 1fr', rowGap: '30px' }),
+            base: css({ display: 'grid', gridTemplateRows: '1fr 1fr', rowGap: '50px' }),
             top: css({ borderBottom: border }),
             bottom: css({ borderTop: border }),
           };
+
           return (
             <div {...styles.base}>
               <Monaco.Editor
                 focusOnLoad={true}
+                language={'markdown'}
                 theme={theme.name}
                 style={styles.top}
                 onReady={(e) => handleReady('top', e.monaco, e.editor)}
               />
               <Monaco.Editor
+                language={'markdown'}
                 theme={theme.name}
                 style={styles.bottom}
                 onReady={(e) => handleReady('bottom', e.monaco, e.editor)}
@@ -171,8 +174,9 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         ['crdt.doc']: doc.toObject(),
+        ['code']: doc.toObject().sample?.code,
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.code'] }} />;
     });
   });
 });
