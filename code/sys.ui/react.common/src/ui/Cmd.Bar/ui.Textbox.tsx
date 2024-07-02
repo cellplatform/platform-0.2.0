@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, TextInput, type t, Args } from './common';
+import { Args, DEFAULTS, TextInput, type t } from './common';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
   theme: t.ColorTheme;
 };
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
+  const { ctrl } = props;
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
   /**
@@ -21,11 +22,16 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     });
   };
 
+  const handleKeydown: t.TextInputKeyHandler = (e) => {
+    props.onKeyDown?.(e);
+    if (e.key === 'Enter') ctrl?.invoke('Invoke', {});
+  };
+
   /**
    * Listeners
    */
   useEffect(() => {
-    const events = props.ctrl?.events();
+    const events = ctrl?.events();
 
     if (events) {
       events.on('Focus', (e) => textbox?.focus(e.params.select));
@@ -36,7 +42,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     }
 
     return events?.dispose;
-  }, [props.ctrl, textbox]);
+  }, [ctrl, textbox]);
 
   const {
     theme,
@@ -72,7 +78,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       selectOnReady={focusOnReady}
       onFocusChange={props.onFocusChange}
       onChange={handleChange}
-      onKeyDown={props.onKeyDown}
+      onKeyDown={handleKeydown}
       onKeyUp={props.onKeyUp}
       onSelect={props.onSelect}
       onReady={(e) => {

@@ -3,13 +3,14 @@ import { BaseComponent, slug, type t } from './common';
 import { useController } from './use.Controller';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled, doc, paths, debug, focusOnReady } = props;
+  const { enabled, ctrl, doc, paths, debug, focusOnReady } = props;
 
   const instance = useRef(props.instance ?? slug()).current;
   const handlers = wrangle.handlers(props);
   const controller = useController({
     instance,
     enabled,
+    ctrl,
     doc,
     paths,
     debug,
@@ -19,7 +20,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   return (
     <BaseComponent
-      ctrl={props.ctrl}
+      ctrl={ctrl}
       text={controller.text}
       enabled={controller.is.enabled}
       theme={props.theme}
@@ -28,7 +29,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       onChange={(e) => controller.onChange(e.to)}
       onSelect={(e) => props.onSelect?.(e)}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') controller.onEnter();
+        // if (e.key === 'Enter') controller.onEnter();
       }}
     />
   );

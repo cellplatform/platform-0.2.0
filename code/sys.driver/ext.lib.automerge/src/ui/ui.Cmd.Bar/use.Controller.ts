@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Cmd, DEFAULTS, Is, Sync, Time, rx, type t } from './common';
+import { Args, Cmd, DEFAULTS, Is, Sync, Time, rx, type t } from './common';
 import { Events, Path } from './u';
 
 type Args = {
   instance: string;
   enabled?: boolean;
+  ctrl?: t.CmdBarCtrl;
   doc?: t.Lens | t.Doc;
   paths?: t.CmdBarPaths;
   debug?: string;
@@ -18,7 +19,7 @@ type ReadyRef = 'focus' | 'onReady';
  * State sync/interaction controller.
  */
 export function useController(args: Args) {
-  const { instance, doc, handlers = {}, paths = DEFAULTS.paths } = args;
+  const { instance, ctrl, doc, handlers = {}, paths = DEFAULTS.paths } = args;
 
   const enabled = wrangle.enabled(args);
   const debug = wrangle.debug(args);
@@ -66,6 +67,18 @@ export function useController(args: Args) {
   }, [enabled, doc?.instance]);
 
   /**
+   * <CmdBar> ctrl-command listener.
+   */
+  useEffect(() => {
+    const events = ctrl?.events();
+    events?.on('Invoke', (e) => {
+      if (!doc) return;
+      getCmd(doc).invoke('Invoke', { text, parsed: Args.parse(text) });
+    });
+    return events?.dispose;
+  }, [enabled, ctrl, text]);
+
+  /**
    * Ready: focus.
    */
   useEffect(() => {
@@ -103,9 +116,9 @@ export function useController(args: Args) {
       setText(text);
       if (textbox && typeof pos === 'number') Time.delay(0, () => textbox?.select(pos));
     },
-    onEnter() {
-      if (doc) getCmd(doc).invoke('Invoke', { text, action: 'Enter' });
-    },
+    // onEnter() {
+    // if (doc) getCmd(doc).invoke('Invoke', { text });
+    // },
   } as const;
   return api;
 }

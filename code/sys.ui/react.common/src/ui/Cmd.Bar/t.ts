@@ -23,17 +23,16 @@ export type CmdBarProps = {
 };
 
 export type CmdBarChangeHandler = (e: CmdBarChangeHandlerArgs) => void;
-export type CmdBarChangeHandlerArgs = t.TextInputChangeArgs & {
-  readonly parsed: t.ParsedArgs;
-};
+export type CmdBarChangeHandlerArgs = t.TextInputChangeArgs & { readonly parsed: t.ParsedArgs };
 
 /**
  * Commands
  */
 export type CmdBarCtrl = t.Cmd<CmdBarCtrlCmdType>;
-export type CmdBarCtrlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd;
+export type CmdBarCtrlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd | Invoke;
 type Focus = t.CmdType<'Focus', { select?: boolean }>;
 type Blur = t.CmdType<'Blur', {}>;
 type SelectAll = t.CmdType<'SelectAll', {}>;
 type CaretToStart = t.CmdType<'CaretToStart', {}>;
 type CaretToEnd = t.CmdType<'CaretToEnd', {}>;
+type Invoke = t.CmdType<'Invoke', {}>;

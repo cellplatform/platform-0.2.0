@@ -26,7 +26,7 @@ export default Dev.describe(name, async (e) => {
   let listRef: t.RepoListRef;
   let doc: t.Doc | undefined;
 
-  const control = CmdBar.Ctrl.create();
+  const ctrl = CmdBar.Ctrl.create();
 
   let _lens: t.Lens | undefined;
   const getLens = () => {
@@ -82,7 +82,7 @@ export default Dev.describe(name, async (e) => {
             <div {...styles.instance}>{`instance: ${props.instance || 'unknown'}`}</div>
             <CmdBar
               {...props}
-              ctrl={control.cmd}
+              ctrl={ctrl.cmd}
               doc={debug.useLens ? getLens() : doc}
               onReady={(e) => console.info(`⚡️ onReady:`, e)}
               onText={(e) => console.info(`⚡️ onText:`, e)}
@@ -149,7 +149,8 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section(['Controls', 'Cmd'], (dev) => {
-      dev.button('focus', (e) => Time.delay(0, () => control.focus({})));
+      dev.button('focus', (e) => Time.delay(0, () => ctrl.focus({})));
+      dev.button('invoke', (e) => ctrl.invoke({}));
     });
 
     dev.hr(5, 20);

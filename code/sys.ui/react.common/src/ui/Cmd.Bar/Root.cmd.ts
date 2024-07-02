@@ -18,6 +18,7 @@ export const Ctrl = {
       selectAll: cmd.method('SelectAll'),
       caretToStart: cmd.method('CaretToStart'),
       caretToEnd: cmd.method('CaretToEnd'),
+      invoke: cmd.method('Invoke'),
     } as const;
   },
 } as const;

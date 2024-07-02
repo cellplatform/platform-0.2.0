@@ -1,6 +1,6 @@
 import { CmdBar, DEFAULTS } from '.';
 import { Store } from '../../crdt';
-import { A, Time, describe, expect, it, type t } from '../../test';
+import { A, Args, Time, describe, expect, it, type t } from '../../test';
 
 describe('Cmd.Bar', () => {
   describe('Path (resolver)', () => {
@@ -8,7 +8,8 @@ describe('Cmd.Bar', () => {
 
     it('default paths', () => {
       const resolve = resolver(DEFAULTS.paths);
-      const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foobar' };
+      const text = 'foobar';
+      const params: t.CmdBarInvokeParams = { text, parsed: Args.parse(text) };
       const tx = 'tx.foo';
       const obj: t.CmdBarLens = {
         text: 'hello',
@@ -97,7 +98,8 @@ describe('Cmd.Bar', () => {
         const fired: t.CmdBarTx[] = [];
         events.cmd.$.subscribe((e) => fired.push(e));
 
-        const params: t.CmdBarInvokeParams = { action: 'Enter', text: 'foo' };
+        const text = 'foo';
+        const params: t.CmdBarInvokeParams = { text, parsed: Args.parse(text) };
         cmd.invoke('Invoke', params);
 
         await Time.wait(0);
