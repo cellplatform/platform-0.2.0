@@ -127,6 +127,7 @@ describe('Immutable', () => {
       it('reverts handler upon dispose', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const change = obj.change;
+        const events = Immutable.events.overrideChange(obj);
         expect(obj.change).to.not.equal(change);
         events.dispose();
         expect(obj.change).to.equal(change);
@@ -195,6 +196,26 @@ describe('Immutable', () => {
       expect(events2.disposed).to.eql(false);
       events2.dispose();
       expect(events2.disposed).to.eql(true);
+    });
+
+    it('events continue firing on non-related <events> instances', () => {
+      const obj = Immutable.clonerRef<D>({ count: 0 });
+      const events1 = obj.events();
+      const events2 = obj.events();
+
+      let fired1 = 0;
+      let fired2 = 0;
+      events1.changed$.subscribe(() => fired1++);
+      events2.changed$.subscribe(() => fired2++);
+
+      obj.change((d) => (d.count = 123));
+      expect(fired1).to.eql(1);
+      expect(fired2).to.eql(1);
+
+      events1.dispose();
+      obj.change((d) => (d.count = 456));
+      expect(fired1).to.eql(1);
+      expect(fired2).to.eql(2);
     });
   });
 });

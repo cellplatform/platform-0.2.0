@@ -1,5 +1,5 @@
-import { overrideChange } from './Immutable.event';
-import { R, slug, type t } from './common';
+import { fromObservable, overrideChangeFn } from './Immutable.event';
+import { R, rx, slug, type t } from './common';
 import { Wrangle } from './u';
 
 /**
@@ -43,16 +43,15 @@ export function cloner<T>(
  *    <Cmd> system unit tests.
  */
 export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T } = {}) {
-  const immutable = cloner<T>(initial, options);
+  const $ = rx.subject<t.ImmutableChange<T, P>>();
+  const inner = cloner<T>(initial, options);
   const api: t.ImmutableRef<T, t.ImmutableEvents<T, P>, P> = {
     instance: slug(),
-    change: immutable.change,
     get current() {
-      return immutable.current;
+      return inner.current;
     },
-    events(dispose$?: t.UntilObservable) {
-      return overrideChange<T>(api, dispose$);
-    },
+    change: overrideChangeFn($, inner.change, () => inner.current),
+    events: (dispose$?: t.UntilObservable) => fromObservable<T>($, dispose$),
   };
   return api;
 }

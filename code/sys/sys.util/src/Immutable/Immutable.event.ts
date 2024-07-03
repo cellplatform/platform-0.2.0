@@ -9,40 +9,56 @@ import { Wrangle } from './u';
 type P = t.PatchOperation;
 
 /**
- * Generic events for an Immutable<T> object.
+ * Generic events for an Immutable<T> object
+ * achieved by overriding the [change] method.
  */
 export function overrideChange<T>(
   source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T, P> {
-  const life = rx.lifecycle(dispose$);
   const $ = rx.subject<t.ImmutableChange<T, P>>();
-  life.dispose$.subscribe(() => (source.change = change));
+  const api = fromObservable<T>($, dispose$);
+  const base = source.change;
+  api.dispose$.subscribe(() => (source.change = base));
+  source.change = overrideChangeFn<T>($, base, () => source.current);
+  return api;
+}
 
-  /**
-   * Override: change handler
-   */
-  const change = source.change;
-  source.change = (fn, options) => {
-    const before = source.current;
+/**
+ * Implementation for a override function for [Immutable.change].
+ */
+export function overrideChangeFn<T>(
+  $: t.Subject<t.ImmutableChange<T, P>>,
+  change: t.Immutable<T, P>['change'],
+  current: () => T,
+): t.Immutable<T, P>['change'] {
+  return (fn, options) => {
+    const before = current();
     const callback = Wrangle.callback(options);
     let patches: P[] = [];
-    change.call(source, fn, {
+    change(fn, {
       ...options,
       patches(e) {
         patches = e;
         callback?.(e);
       },
     });
-    const after = source.current;
+    const after = current();
     $.next({ before, after, patches });
   };
+}
 
-  /**
-   * API
-   */
+/**
+ * ImmutableEvents<T> structure.
+ */
+export function fromObservable<T>(
+  $: t.Observable<t.ImmutableChange<T, t.PatchOperation>>,
+  dispose$?: t.UntilObservable,
+): t.ImmutableEvents<T, P> {
+  const life = rx.lifecycle(dispose$);
+  const changed$ = $.pipe(rx.takeUntil(life.dispose$));
   return {
-    changed$: $.pipe(rx.takeUntil(life.dispose$)),
+    changed$,
     dispose: life.dispose,
     dispose$: life.dispose$,
     get disposed() {
