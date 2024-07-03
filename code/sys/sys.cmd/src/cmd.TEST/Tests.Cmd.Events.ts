@@ -1,6 +1,5 @@
 import { Cmd } from '..';
 import { R, Time, rx, type t } from './common';
-
 import type { C, C2 } from './t';
 
 export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
@@ -40,6 +39,36 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           life.dispose();
           expect(events1.disposed).to.eql(true);
           expect(events2.disposed).to.eql(true);
+
+          dispose();
+        });
+
+        it('continues to fire after non-related events dispose', async () => {
+          const { doc, dispose } = await setup();
+
+          const cmd = Cmd.create<C>(doc);
+          const method = cmd.method('Foo');
+          const events1 = cmd.events(undefined);
+          const events2 = cmd.events(undefined);
+
+          let fired1 = 0;
+          let fired2 = 0;
+          events1.on('Foo', () => fired1++);
+          events2.on('Foo', () => fired2++);
+
+          method({ foo: 123 });
+          await Time.wait(0);
+          expect(fired1).to.eql(1);
+          expect(fired2).to.eql(1);
+
+          events1.dispose();
+          expect(events1.disposed).to.eql(true);
+          expect(events2.disposed).to.eql(false); // NB: not disposed, and still continues to fire.
+
+          method({ foo: 456 });
+          await Time.wait(0);
+          expect(fired1).to.eql(1);
+          expect(fired2).to.eql(2);
 
           dispose();
         });
