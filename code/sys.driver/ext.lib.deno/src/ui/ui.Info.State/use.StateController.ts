@@ -30,7 +30,7 @@ export function useStateController(args: Args) {
   useEffect(() => {
     if (!enabled || !state.current.endpoint?.accessToken) return () => null;
     const client = Wrangle.client(state.current);
-    const events = Immutable.events.overrideChange(state);
+    const events = Immutable.events.changeOverriden(state);
     events.changed$.pipe(rx.debounceTime(100)).subscribe(() => {
       redraw();
       args.onStateChange?.(state.current);

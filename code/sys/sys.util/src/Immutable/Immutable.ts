@@ -1,5 +1,5 @@
 import { cloner, clonerRef } from './Immutable.cloner';
-import { overrideChange } from './Immutable.event';
+import { changeOverriden } from './Immutable.event';
 
 /**
  * Helpers for working with raw Immutable<T> objects.
@@ -7,5 +7,5 @@ import { overrideChange } from './Immutable.event';
 export const Immutable = {
   cloner,
   clonerRef,
-  events: { overrideChange },
+  events: { changeOverriden },
 } as const;

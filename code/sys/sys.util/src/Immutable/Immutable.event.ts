@@ -12,7 +12,7 @@ type P = t.PatchOperation;
  * Generic events for an Immutable<T> object
  * achieved by overriding the [change] method.
  */
-export function overrideChange<T>(
+export function changeOverriden<T>(
   source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T, P> {
@@ -20,14 +20,14 @@ export function overrideChange<T>(
   const api = fromObservable<T>($, dispose$);
   const base = source.change;
   api.dispose$.subscribe(() => (source.change = base));
-  source.change = overrideChangeFn<T>($, base, () => source.current);
+  source.change = curryChange<T>($, base, () => source.current);
   return api;
 }
 
 /**
  * Implementation for a override function for [Immutable.change].
  */
-export function overrideChangeFn<T>(
+export function curryChange<T>(
   $: t.Subject<t.ImmutableChange<T, P>>,
   change: t.Immutable<T, P>['change'],
   current: () => T,
