@@ -55,17 +55,17 @@ describe('Immutable', () => {
     });
   });
 
-  describe('Immutable.events', () => {
+  describe('Immutable.events.overrideChange', () => {
     it('overrides change handler', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const change = obj.change;
-      Immutable.events(obj);
+      Immutable.events.overrideChange(obj);
       expect(obj.change).to.not.equal(change);
     });
 
     it('fires events by overriding change handler', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
-      const events = Immutable.events(obj);
+      const events = Immutable.events.overrideChange(obj);
 
       const fired: t.ImmutableChange<D, P>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
@@ -78,7 +78,7 @@ describe('Immutable', () => {
 
     it('patches: matches fired event', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
-      const events = Immutable.events(obj);
+      const events = Immutable.events.overrideChange(obj);
 
       const patches: t.PatchOperation[] = [];
       const fired: t.ImmutableChange<D, P>[] = [];
@@ -99,7 +99,7 @@ describe('Immutable', () => {
     describe('dispose', () => {
       it('via method', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
-        const events = Immutable.events(obj);
+        const events = Immutable.events.overrideChange(obj);
         const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         events.dispose();
@@ -113,7 +113,7 @@ describe('Immutable', () => {
       it('via {dispose$} observable', () => {
         const life = rx.lifecycle();
         const obj = Immutable.cloner<D>({ count: 0 });
-        const events = Immutable.events(obj, life.dispose$);
+        const events = Immutable.events.overrideChange(obj, life.dispose$);
         const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         life.dispose();
@@ -127,7 +127,6 @@ describe('Immutable', () => {
       it('reverts handler upon dispose', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const change = obj.change;
-        const events = Immutable.events(obj);
         expect(obj.change).to.not.equal(change);
         events.dispose();
         expect(obj.change).to.equal(change);

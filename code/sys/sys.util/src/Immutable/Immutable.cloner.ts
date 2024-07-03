@@ -1,4 +1,4 @@
-import { events } from './Immutable.event';
+import { overrideChange } from './Immutable.event';
 import { R, slug, type t } from './common';
 import { Wrangle } from './u';
 
@@ -51,7 +51,7 @@ export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T }
       return immutable.current;
     },
     events(dispose$?: t.UntilObservable) {
-      return events<T>(api, dispose$);
+      return overrideChange<T>(api, dispose$);
     },
   };
   return api;

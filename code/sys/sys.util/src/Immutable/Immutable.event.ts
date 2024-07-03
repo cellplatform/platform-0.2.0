@@ -11,7 +11,7 @@ type P = t.PatchOperation;
 /**
  * Generic events for an Immutable<T> object.
  */
-export function events<T>(
+export function overrideChange<T>(
   source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T, P> {
@@ -25,7 +25,6 @@ export function events<T>(
   const change = source.change;
   source.change = (fn, options) => {
     const before = source.current;
-
     const callback = Wrangle.callback(options);
     let patches: P[] = [];
     change.call(source, fn, {
@@ -35,7 +34,6 @@ export function events<T>(
         callback?.(e);
       },
     });
-
     const after = source.current;
     $.next({ before, after, patches });
   };
