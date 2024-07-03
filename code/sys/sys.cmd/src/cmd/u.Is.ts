@@ -5,7 +5,7 @@ import { Patch } from './u.Patch';
  * Flags: Event pattern inference.
  */
 export const Is = {
-  pathsObject(input: any): input is t.CmdPathsObject {
+  validState(input: any): input is t.CmdPathsObject {
     if (input === null || typeof input !== 'object') return false;
     const o = input as t.CmdPathsObject;
     return (

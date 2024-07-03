@@ -27,16 +27,17 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose } = await setup();
       const lens = Doc.lens(doc as t.Doc, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));
 
-      expect(Cmd.Is.initialized(doc.current)).to.eql(false);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(false);
+      expect(Cmd.Is.validState(doc.current)).to.eql(false);
+      expect(Cmd.Is.validState(lens.current)).to.eql(false);
 
       Cmd.create(doc);
-      expect(Cmd.Is.initialized(doc.current)).to.eql(true);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(false);
+      expect(Cmd.Is.validState(doc.current)).to.eql(true);
+      expect(Cmd.Is.validState(lens.current)).to.eql(false);
 
       Cmd.create(lens);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(true);
-      expect(Cmd.Is.initialized((doc.current as any).foo.bar)).to.eql(true);
+
+      expect(Cmd.Is.validState(lens.current)).to.eql(true);
+      expect(Cmd.Is.validState((doc.current as any).foo.bar)).to.eql(true);
 
       dispose();
     });
