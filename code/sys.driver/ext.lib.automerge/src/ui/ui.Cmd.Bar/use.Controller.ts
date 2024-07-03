@@ -71,10 +71,10 @@ export function useController(args: Args) {
    */
   useEffect(() => {
     const events = ctrl?.events();
-    events?.on('Invoke', (e) => {
-      if (!doc) return;
-      getCmd(doc).invoke('Invoke', { text, parsed: Args.parse(text) });
-    });
+    if (doc && events) {
+      const cmd = getCmd(doc);
+      events.on('Invoke', () => cmd.invoke('Invoke', { text, parsed: Args.parse(text) }));
+    }
     return events?.dispose;
   }, [enabled, ctrl, text]);
 
@@ -116,9 +116,6 @@ export function useController(args: Args) {
       setText(text);
       if (textbox && typeof pos === 'number') Time.delay(0, () => textbox?.select(pos));
     },
-    // onEnter() {
-    // if (doc) getCmd(doc).invoke('Invoke', { text });
-    // },
   } as const;
   return api;
 }
