@@ -16,7 +16,11 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       language={'typescript'}
       onReady={async (e) => {
         const { editor, monaco } = e;
-        const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
+        const onCmdEnter = () => {
+          const text = editor.getValue();
+          const selections = editor.getSelections() || [];
+          props.onCmdEnterKey?.({ text, selections });
+        };
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
         if (env) {
@@ -24,7 +28,7 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           const { store, docuri } = env;
           const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
           const lens = Crdt.Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
-          Monaco.Crdt.Syncer.listen<TDoc>(monaco, editor, lens, ['code']);
+          Monaco.Crdt.Syncer.listen(monaco, editor, lens, ['code']);
         }
       }}
       onChange={(e) => props.onChange?.(e.state)}
