@@ -22,25 +22,53 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(events2.disposed).to.eql(true);
       });
 
-      it('cmd.events() → dispose', async () => {
-        const { doc, dispose } = await setup();
-        const life = rx.disposable();
+      describe('dispose', () => {
+        it('cmd.events() → dispose', async () => {
+          const { doc, dispose } = await setup();
+          const life = rx.disposable();
 
-        const cmd = Cmd.create<C>(doc);
-        const events1 = cmd.events();
-        const events2 = cmd.events(life.dispose$);
-        expect(events1.disposed).to.eql(false);
-        expect(events2.disposed).to.eql(false);
+          const cmd = Cmd.create<C>(doc);
+          const events1 = cmd.events();
+          const events2 = cmd.events(life.dispose$);
+          expect(events1.disposed).to.eql(false);
+          expect(events2.disposed).to.eql(false);
 
-        events1.dispose();
-        expect(events1.disposed).to.eql(true);
-        expect(events2.disposed).to.eql(false);
+          events1.dispose();
+          expect(events1.disposed).to.eql(true);
+          expect(events2.disposed).to.eql(false);
 
-        life.dispose();
-        expect(events1.disposed).to.eql(true);
-        expect(events2.disposed).to.eql(true);
+          life.dispose();
+          expect(events1.disposed).to.eql(true);
+          expect(events2.disposed).to.eql(true);
 
-        dispose();
+          dispose();
+        });
+
+        it('does not dispose of injected subject$', async () => {
+          const { doc, dispose } = await setup();
+          const life = rx.lifecycle();
+          const subject$ = rx.subject();
+
+          const cmd = Cmd.create<C>(doc);
+          const events1 = cmd.events(life.dispose$);
+          const events2 = cmd.events(subject$);
+
+          expect(life.disposed).to.eql(false);
+          expect(events1.disposed).to.eql(false);
+          expect(events2.disposed).to.eql(false);
+          expect(subject$.closed).to.eql(false);
+
+          events1.dispose();
+          events2.dispose();
+          expect(events1.disposed).to.eql(true);
+          expect(events2.disposed).to.eql(true);
+
+          // NB: the injected dispose$ observables were not triggered.
+          expect(life.disposed).to.eql(false);
+          expect(subject$.closed).to.eql(false);
+
+          dispose();
+        });
       });
     });
 
