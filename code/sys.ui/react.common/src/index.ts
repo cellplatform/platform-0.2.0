@@ -18,12 +18,12 @@ export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';
 export { ActiveElement, Focus } from './ui/Focus';
 export { Grid } from './ui/Grid';
+export { HashView } from './ui/HashView';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { KeyHint } from './ui/KeyHint';
 export { Layout } from './ui/Layout';
 export { ModuleLoader } from './ui/Module.Loader';
-export { ModuleNamespace } from './ui/Module.Namespace';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
@@ -36,7 +36,6 @@ export { TextInput } from './ui/Text.Input';
 export { Keyboard } from './ui/Text.Keyboard';
 export { TextSecret } from './ui/Text.Secret';
 export { TextSyntax } from './ui/Text.Syntax';
-export { HashView } from './ui/HashView';
 
 /**
  * Hooks
