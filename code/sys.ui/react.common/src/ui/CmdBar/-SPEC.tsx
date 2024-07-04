@@ -150,7 +150,10 @@ export default Dev.describe(name, (e) => {
       focus(true);
       focus(false);
       dev.hr(-1, 5);
-      dev.button('cmd: Invoke', (e) => ctrl.invoke({}));
+      dev.button('cmd: Invoke', (e) => {
+        const text = state.current.props.text ?? '';
+        ctrl.invoke({ text });
+      });
     });
 
     dev.hr(5, 20);

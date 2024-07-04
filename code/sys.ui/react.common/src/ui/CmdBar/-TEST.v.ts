@@ -7,7 +7,7 @@ describe('CmdBar', () => {
 
     const createCmdBarCtrl = () => {
       const transport = Immutable.clonerRef({});
-      return Cmd.create<t.CmdBarCtrlCmdType>(transport) as t.CmdBarCtrl;
+      return Cmd.create<t.CmdBarCtrlType>(transport) as t.CmdBarCtrl;
     };
 
     it('creation (from simple Immutable<T>)', async () => {
@@ -22,8 +22,8 @@ describe('CmdBar', () => {
       ctrl2.cmd.events().on('Invoke', () => fired++);
 
       expectCounter(0);
-      ctrl1.invoke({});
-      ctrl2.invoke({});
+      ctrl1.invoke({ text: 'foo' });
+      ctrl2.invoke({ text: 'bar' });
       await Time.wait(0);
       expectCounter(1);
       expect(fired).to.eql(2);

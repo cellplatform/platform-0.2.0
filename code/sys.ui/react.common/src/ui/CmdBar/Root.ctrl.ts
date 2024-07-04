@@ -1,7 +1,7 @@
 import { Cmd, Immutable, type t } from './common';
 import { Is } from './u.Is';
 
-type C = t.CmdBarCtrlCmdType;
+type C = t.CmdBarCtrlType;
 
 /**
  * Command API for controlling the <CmdBar> component.

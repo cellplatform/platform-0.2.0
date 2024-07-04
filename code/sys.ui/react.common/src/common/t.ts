@@ -1,9 +1,9 @@
 /**
  * @external
  */
+export type { ParsedArgs } from 'minimist';
 export type { CSSProperties } from 'react';
 export type { Observable, Subject } from 'rxjs';
-export type { ParsedArgs } from 'minimist';
 
 /**
  * @ext
@@ -46,6 +46,7 @@ export type {
   ModuleImporter,
   ModuleImports,
   Msecs,
+  ObjectPath,
   PartialDeep,
   Percent,
   Pixels,
@@ -58,7 +59,7 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { Cmd, CmdType, CmdImmutable, CmdMethodVoid } from 'sys.cmd/src/types';
+export type { Cmd, CmdImmutable, CmdMethodVoid, CmdType } from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 

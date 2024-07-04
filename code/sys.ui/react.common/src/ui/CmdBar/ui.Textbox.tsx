@@ -10,6 +10,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   const {
     ctrl,
     theme,
+    text = '',
     enabled = DEFAULTS.enabled,
     focusOnReady = DEFAULTS.focusOnReady,
     placeholder = DEFAULTS.commandPlaceholder,
@@ -33,7 +34,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
 
   const handleKeydown: t.TextInputKeyHandler = (e) => {
     props.onKeyDown?.(e);
-    if (e.key === 'Enter') ctrl?.invoke('Invoke', {});
+    if (e.key === 'Enter') ctrl?.invoke({ text });
   };
 
   /**
@@ -63,7 +64,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   const color = theme.fg;
   return (
     <TextInput
-      value={props.text}
+      value={text}
       theme={theme.name}
       placeholder={placeholder}
       placeholderStyle={{

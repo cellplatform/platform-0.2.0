@@ -1,17 +1,17 @@
 import type { t } from './common';
 
 /**
- * Commands
+ * Commands for controlling the <CmdBar> UI component.
  */
-export type CmdBarCtrl = t.Cmd<CmdBarCtrlCmdType>;
-export type CmdBarCtrlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd | Invoke;
+export type CmdBarCtrl = t.Cmd<CmdBarCtrlType>;
+export type CmdBarCtrlType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd | Invoke;
 
 type Focus = t.CmdType<'Focus', { select?: boolean }>;
 type Blur = t.CmdType<'Blur', {}>;
 type SelectAll = t.CmdType<'SelectAll', {}>;
 type CaretToStart = t.CmdType<'CaretToStart', {}>;
 type CaretToEnd = t.CmdType<'CaretToEnd', {}>;
-type Invoke = t.CmdType<'Invoke', {}>;
+type Invoke = t.CmdType<'Invoke', { text: string }>;
 
 /**
  * Command Methods.
