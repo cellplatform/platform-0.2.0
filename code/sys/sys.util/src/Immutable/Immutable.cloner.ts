@@ -1,4 +1,4 @@
-import { fromObservable, curryChange } from './Immutable.event';
+import { viaObservable, curryChangeFunction } from './Immutable.event';
 import { R, rx, slug, type t } from './common';
 import { Wrangle } from './u';
 
@@ -50,8 +50,8 @@ export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T }
     get current() {
       return inner.current;
     },
-    change: curryChange($, inner.change, () => inner.current),
-    events: (dispose$?: t.UntilObservable) => fromObservable<T>($, dispose$),
+    change: curryChangeFunction($, inner.change, () => inner.current),
+    events: (dispose$?: t.UntilObservable) => viaObservable<T>($, dispose$),
   };
   return api;
 }

@@ -1,5 +1,5 @@
 import { cloner, clonerRef } from './Immutable.cloner';
-import { changeOverriden } from './Immutable.event';
+import { viaOverride, viaObservable } from './Immutable.event';
 
 /**
  * Helpers for working with raw Immutable<T> objects.
@@ -7,5 +7,5 @@ import { changeOverriden } from './Immutable.event';
 export const Immutable = {
   cloner,
   clonerRef,
-  events: { changeOverriden },
+  events: { viaOverride, viaObservable },
 } as const;

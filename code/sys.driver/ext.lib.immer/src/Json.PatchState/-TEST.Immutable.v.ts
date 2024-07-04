@@ -10,7 +10,7 @@ describe('Immutable.events', () => {
     const obj = PatchState.create<D>({ count: 0 });
     const change = obj.change;
     const events1 = obj.events();
-    const events2 = Immutable.events(obj);
+    const events2 = Immutable.events.viaOverride(obj);
     expect(obj.change).to.not.equal(change);
 
     const fired1: t.PatchChange<D>[] = [];
