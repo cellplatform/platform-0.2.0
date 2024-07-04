@@ -10,7 +10,7 @@ export * from '../common';
 const name = 'CmdBar';
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}.${name}`,
+  displayName: `${Pkg.name}:${name}`,
   enabled: true,
   focusOnReady: true,
   commandPlaceholder: 'command',

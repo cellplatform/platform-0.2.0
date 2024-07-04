@@ -7,5 +7,5 @@ export * from '../common';
 const name = 'Random';
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}.${name}`,
+  displayName: `${Pkg.name}:${name}`,
 } as const;

@@ -10,6 +10,6 @@ export { Icons } from '../Icons';
 const name = 'HashView';
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}.${name}`,
+  displayName: `${Pkg.name}:${name}`,
   title: 'Hash',
 } as const;
