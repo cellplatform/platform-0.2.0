@@ -158,7 +158,7 @@ export default Dev.describe(name, (e) => {
       const doc = debug.useState ? doc : undefined;
       const data = {
         ...e.state,
-        'state(immutable)': doc,
+        'state(immutable)': debug.useState ? doc : undefined,
       };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
