@@ -1,6 +1,6 @@
-import { parseArgs } from 'util';
 import { CmdBar, DEFAULTS } from '.';
 import { Color, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
+import { SampleMain } from './-SPEC.ui.Main';
 
 type P = t.CmdBarProps;
 type T = { props: P; parsedArgs?: t.ParsedArgs };
@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
     text: undefined,
   });
 
-  const ctrl = CmdBar.Ctrl.create();
+  const cmdbar = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -47,11 +47,19 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props } = e.state;
-        Dev.Theme.background(dev, props.theme);
-        return (
+        const theme = props.theme;
+        Dev.Theme.background(dev, theme);
+
+        const mainSize = [180, 100] as [number, number];
+        const styles = {
+          base: css({ position: 'relative' }),
+          main: css({ Absolute: [0 - mainSize[1] - 50, 0, null, 0] }),
+        };
+
+        const elCmdBar = (
           <CmdBar
             {...props}
-            cmd={ctrl}
+            cmd={cmdbar}
             onReady={(e) => console.info('⚡️ CmdBar.Stateful.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
@@ -61,6 +69,13 @@ export default Dev.describe(name, (e) => {
               });
             }}
           />
+        );
+
+        return (
+          <div {...styles.base}>
+            <SampleMain theme={theme} style={styles.main} size={mainSize} cmdbar={cmdbar} />
+            {elCmdBar}
+          </div>
         );
       });
   });
@@ -144,7 +159,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Controls', (dev) => {
       const focus = (select?: boolean) => {
-        const invoke = () => Time.delay(0, () => ctrl.focus({ select }));
+        const invoke = () => Time.delay(0, () => cmdbar.focus({ select }));
         dev.button(['cmd: Focus', select ? 'select' : ''], () => invoke());
       };
       focus(true);
@@ -152,7 +167,7 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       dev.button('cmd: Invoke', (e) => {
         const text = state.current.props.text ?? '';
-        ctrl.invoke({ text });
+        cmdbar.invoke({ text });
       });
     });
 

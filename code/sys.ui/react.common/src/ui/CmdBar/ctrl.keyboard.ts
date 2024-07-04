@@ -15,7 +15,7 @@ export const CtrlKeyboard = {
       if (isFocused()) e.handled(); // NB: prevent unintended blur.
     });
     keys.on('META + KeyJ', () => {
-      fire({ name: 'FocusMain' });
+      if (isFocused()) fire({ name: 'FocusMain' });
     });
     keys.on('META + KeyK', () => {
       if (!isFocused()) fire({ name: 'FocusAndSelect' });
