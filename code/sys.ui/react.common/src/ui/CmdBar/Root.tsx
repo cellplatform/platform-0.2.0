@@ -1,5 +1,5 @@
 import { View as Stateful } from '../CmdBar.Stateful/ui';
-import { Ctrl } from './Root.ctrl';
+import { Ctrl } from './ctrl';
 import { Args, DEFAULTS, FC, type t } from './common';
 import { Is } from './u';
 import { View } from './ui';
