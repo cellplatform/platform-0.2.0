@@ -7,5 +7,5 @@ export * from '../common';
 const name = 'UNNAMED'; // TODO 🐷
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}.${name}`,
+  displayName: `${Pkg.name}:${name}`,
 } as const;
