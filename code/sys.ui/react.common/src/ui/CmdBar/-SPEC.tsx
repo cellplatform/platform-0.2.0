@@ -52,6 +52,7 @@ export default Dev.describe(name, (e) => {
           <CmdBar
             {...props}
             ctrl={ctrl.cmd}
+            onReady={(e) => console.info('⚡️ CmdBar.Stateful.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
               state.change((d) => {

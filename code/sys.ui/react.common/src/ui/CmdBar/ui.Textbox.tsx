@@ -2,12 +2,20 @@ import { useEffect, useState } from 'react';
 import { Args, DEFAULTS, TextInput, type t } from './common';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
-  ctrl: t.CmdBarCtrl;
+  ctrl: t.CmdBarCtrlMethods;
   theme: t.ColorTheme;
 };
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
-  const { ctrl } = props;
+  const {
+    ctrl,
+    theme,
+    enabled = DEFAULTS.enabled,
+    focusOnReady = DEFAULTS.focusOnReady,
+    placeholder = DEFAULTS.commandPlaceholder,
+  } = props;
+
+  const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
 
   /**
@@ -32,8 +40,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    * Listeners
    */
   useEffect(() => {
-    const events = ctrl?.events();
-
+    const events = ctrl.cmd.events();
     if (events) {
       events.on('Focus', (e) => textbox?.focus(e.params.select));
       events.on('Blur', (e) => textbox?.blur());
@@ -41,17 +48,18 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       events.on('CaretToStart', (e) => textbox?.caretToStart());
       events.on('CaretToEnd', (e) => textbox?.caretToEnd());
     }
-
     return events?.dispose;
   }, [ctrl, textbox]);
 
-  const {
-    theme,
-    enabled = DEFAULTS.enabled,
-    focusOnReady = DEFAULTS.focusOnReady,
-    placeholder = DEFAULTS.commandPlaceholder,
-  } = props;
+  useEffect(() => {
+    if (ready || !textbox) return;
+    setReady(true);
+    props.onReady?.({ ctrl, textbox });
+  }, [textbox, ctrl, ready]);
 
+  /**
+   * Render
+   */
   const color = theme.fg;
   return (
     <TextInput
@@ -82,11 +90,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       onKeyDown={handleKeydown}
       onKeyUp={props.onKeyUp}
       onSelect={props.onSelect}
-      onReady={(e) => {
-        const textbox = e.ref;
-        setTextbox(textbox);
-        props.onReady?.({ ctrl, textbox });
-      }}
+      onReady={(e) => setTextbox(e.ref)}
     />
   );
 };

@@ -1,9 +1,14 @@
 import { CmdBar } from '.';
-import { Immutable, Time, describe, expect, it } from '../../test';
+import { Immutable, Time, describe, expect, it, Cmd, type t } from '../../test';
 
 describe('CmdBar', () => {
   describe('CmdBar.Ctrl', () => {
     const Ctrl = CmdBar.Ctrl;
+
+    const createCmdBarCtrl = () => {
+      const transport = Immutable.clonerRef({});
+      return Cmd.create<t.CmdBarCtrlCmdType>(transport) as t.CmdBarCtrl;
+    };
 
     it('creation (from simple Immutable<T>)', async () => {
       const transport = Immutable.clonerRef({});
@@ -24,14 +29,14 @@ describe('CmdBar', () => {
       expect(fired).to.eql(2);
     });
 
-    it('CmdBar.Ctrl.methods', () => {
+    it('CmdBar.Ctrl.withMethods', () => {
       const ctrl = Ctrl.create();
-      const cmd = Ctrl.cmd();
+      const cmd = createCmdBarCtrl();
 
-      const methods1 = Ctrl.methods(cmd); // From raw command.
-      const methods2 = Ctrl.methods(cmd); // From raw command (new instance)
-      const methods3 = Ctrl.methods(methods1);
-      const methods4 = Ctrl.methods(ctrl);
+      const methods1 = Ctrl.withMethods(cmd); // From raw command.
+      const methods2 = Ctrl.withMethods(cmd); // From raw command (new instance)
+      const methods3 = Ctrl.withMethods(methods1);
+      const methods4 = Ctrl.withMethods(ctrl);
 
       expect(CmdBar.Is.methods(methods1)).to.eql(true);
       expect(methods1).to.not.equal(methods2);
@@ -51,9 +56,9 @@ describe('CmdBar', () => {
 
     it('Is.ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
-      NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
-      expect(CmdBar.Is.ctrl({ cmd: ctrl.cmd })).to.eql(false);
-      expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
+      NON.forEach((v) => expect(CmdBar.Is.ctrlMethods(v)).to.eql(false));
+      expect(CmdBar.Is.ctrlMethods({ cmd: ctrl.cmd })).to.eql(false);
+      expect(CmdBar.Is.ctrlMethods(ctrl)).to.eql(true);
     });
   });
 });

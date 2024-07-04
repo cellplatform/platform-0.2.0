@@ -31,7 +31,7 @@ export type CmdBarHandlerProps = {
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
-  readonly ctrl: t.CmdBarCtrl;
+  readonly ctrl: t.CmdBarCtrlMethods;
   readonly textbox: t.TextInputRef;
 };
 

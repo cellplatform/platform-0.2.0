@@ -8,25 +8,32 @@ type C = t.CmdBarCtrlCmdType;
  */
 export const Ctrl = {
   create(transport?: t.CmdImmutable): t.CmdBarCtrlMethods {
-    const cmd = Ctrl.cmd(transport);
-    return { cmd, ...Ctrl.methods(cmd) };
+    const cmd = create(transport);
+    return { cmd, ...methods(cmd) };
   },
 
-  methods(input: t.CmdBarCtrl | t.CmdBarMethods): t.CmdBarMethods {
-    if (Is.methods(input)) return input;
-    const method = input.method;
-    return {
-      focus: method('Focus'),
-      blur: method('Blur'),
-      selectAll: method('SelectAll'),
-      caretToStart: method('CaretToStart'),
-      caretToEnd: method('CaretToEnd'),
-      invoke: method('Invoke'),
-    };
-  },
-
-  cmd(transport?: t.CmdImmutable) {
-    const doc = transport ?? Immutable.clonerRef({});
-    return Cmd.create<C>(doc) as t.CmdBarCtrl;
+  withMethods(input: t.CmdBarCtrl | t.CmdBarCtrlMethods): t.CmdBarCtrlMethods {
+    if (Is.ctrlMethods(input)) return input;
+    return { cmd: input, ...methods(input) };
   },
 } as const;
+
+/**
+ * Helpers
+ */
+function create(transport?: t.CmdImmutable) {
+  const doc = transport ?? Immutable.clonerRef({});
+  return Cmd.create<C>(doc) as t.CmdBarCtrl;
+}
+
+function methods(ctrl: t.CmdBarCtrl): t.CmdBarMethods {
+  const method = ctrl.method;
+  return {
+    focus: method('Focus'),
+    blur: method('Blur'),
+    selectAll: method('SelectAll'),
+    caretToStart: method('CaretToStart'),
+    caretToEnd: method('CaretToEnd'),
+    invoke: method('Invoke'),
+  };
+}
