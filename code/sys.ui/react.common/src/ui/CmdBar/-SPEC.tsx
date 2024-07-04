@@ -1,6 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
 import { Color, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
-import { SampleMain } from './-SPEC.ui.Main';
 
 type P = t.CmdBarProps;
 type T = { props: P; parsedArgs?: t.ParsedArgs };
@@ -47,19 +46,12 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props } = e.state;
-        const theme = props.theme;
-        Dev.Theme.background(dev, theme);
+        Dev.Theme.background(dev, props.theme, 1);
 
-        const mainSize = [180, 100] as [number, number];
-        const styles = {
-          base: css({ position: 'relative' }),
-          main: css({ Absolute: [0 - mainSize[1] - 50, 0, null, 0] }),
-        };
-
-        const elCmdBar = (
+        return (
           <CmdBar
             {...props}
-            cmd={cmdbar}
+            cmd={cmdbar.cmd}
             onReady={(e) => console.info('⚡️ CmdBar.Stateful.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
@@ -69,13 +61,6 @@ export default Dev.describe(name, (e) => {
               });
             }}
           />
-        );
-
-        return (
-          <div {...styles.base}>
-            <SampleMain theme={theme} style={styles.main} size={mainSize} cmdbar={cmdbar} />
-            {elCmdBar}
-          </div>
         );
       });
   });
@@ -164,11 +149,6 @@ export default Dev.describe(name, (e) => {
       };
       focus(true);
       focus(false);
-      dev.hr(-1, 5);
-      dev.button('cmd: Invoke', (e) => {
-        const text = state.current.props.text ?? '';
-        cmdbar.invoke({ text });
-      });
     });
 
     dev.hr(5, 20);

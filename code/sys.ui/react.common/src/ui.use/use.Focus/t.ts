@@ -8,4 +8,5 @@ export type FocusHook<T extends HTMLElement> = {
   readonly containsFocus: boolean;
   readonly withinFocus: boolean;
   readonly directlyFocused: boolean;
+  focus(): void;
 };

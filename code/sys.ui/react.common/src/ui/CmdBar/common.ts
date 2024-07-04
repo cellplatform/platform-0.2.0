@@ -5,7 +5,6 @@ export { Keyboard } from 'sys.ui.dom';
 export * from '../common';
 export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
-export { useFocus } from '../../ui.use';
 
 /**
  * Constants
