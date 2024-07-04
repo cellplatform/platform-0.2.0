@@ -28,7 +28,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} />
+      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} opacity={enabled ? 1 : 0.3} />
     </div>
   );
 

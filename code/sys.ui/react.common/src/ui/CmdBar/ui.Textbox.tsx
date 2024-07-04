@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Args, DEFAULTS, TextInput, type t } from './common';
+import { css, Args, DEFAULTS, TextInput, type t } from './common';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
   ctrl: t.CmdBarCtrlMethods;
   theme: t.ColorTheme;
+  opacity?: number;
 };
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
@@ -62,8 +63,13 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    * Render
    */
   const color = theme.fg;
+  const styles = {
+    base: css({ opacity: props.opacity ?? 1 }),
+  };
+
   return (
     <TextInput
+      style={styles.base}
       value={text}
       theme={theme.name}
       placeholder={placeholder}
