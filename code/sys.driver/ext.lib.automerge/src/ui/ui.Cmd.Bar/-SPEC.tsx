@@ -150,7 +150,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section(['Controls', 'Cmd'], (dev) => {
       dev.button('focus', (e) => Time.delay(0, () => ctrl.focus({})));
-      dev.button('invoke', (e) => ctrl.invoke({}));
+      // dev.button('invoke', (e) => ctrl.invoke({}));
     });
 
     dev.hr(5, 20);

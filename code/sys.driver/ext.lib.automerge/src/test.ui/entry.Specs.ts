@@ -15,6 +15,7 @@ export const Specs = {
   [`${ns}.ui.Nav.Paging`]: () => import('../ui/ui.Nav.Paging/-SPEC'),
   [`${ns}.ui.Cmd.Prefix`]: () => import('../ui/ui.Cmd.Prefix/-SPEC'),
   [`${ns}.ui.Cmd.Bar`]: () => import('../ui/ui.Cmd.Bar/-SPEC'),
+  [`${ns}.ui.Cmd.Bar-2`]: () => import('../ui/ui.Cmd.Bar-2/-SPEC'),
   [`${ns}.ui.useDocs`]: () => import('../ui/ui.use/-SPEC.useDocs'),
 } as t.SpecImports;
 

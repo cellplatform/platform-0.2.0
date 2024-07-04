@@ -25,7 +25,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       enabled={controller.is.enabled}
       theme={props.theme}
       style={props.style}
-      onReady={(e) => controller.onReady(e.ref)}
+      onReady={(e) => controller.onReady(e.textbox)}
       onChange={(e) => controller.onChange(e.to)}
       onSelect={(e) => props.onSelect?.(e)}
     />
