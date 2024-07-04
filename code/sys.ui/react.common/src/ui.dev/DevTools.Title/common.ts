@@ -15,7 +15,7 @@ const style: Required<t.DevTitleStyle> = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.DevTools.Title`,
+  displayName: `${Pkg.name}:DevTools.Title`,
   title: 'Untitled',
   style,
 } as const;

@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.ProgressBar`,
+  displayName: `${Pkg.name}:ProgressBar`,
   enabled: true,
   percent: 0,
   buffered: 0,

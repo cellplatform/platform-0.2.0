@@ -12,7 +12,7 @@ const filter: t.CmdHostFilter = (imports, command) => {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.CmdHost.Stateful`,
+  displayName: `${Pkg.name}:CmdHost.Stateful`,
   filter,
   qs: BASE.qs,
 } as const;

@@ -16,7 +16,7 @@ const paths: t.CmdBarPaths = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.CmdBar`,
+  displayName: `${Pkg.name}:CmdBar`,
   paths,
   error: Cmd.DEFAULTS.error,
 } as const;

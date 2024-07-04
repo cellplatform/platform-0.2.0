@@ -13,7 +13,7 @@ const pkg: t.CmdHostProps['pkg'] = { name: 'unknown', version: '0.0.0' };
 const filter: t.CmdHostFilter = (imports, command) => Filter.imports(imports, command);
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.CmdHost`,
+  displayName: `${Pkg.name}:CmdHost`,
   pkg,
   filter,
   commandPlaceholder: 'command',

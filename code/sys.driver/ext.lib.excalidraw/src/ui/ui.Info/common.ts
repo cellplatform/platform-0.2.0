@@ -14,7 +14,7 @@ const fields = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   query: { dev: 'dev' },
   fields,
 } as const;

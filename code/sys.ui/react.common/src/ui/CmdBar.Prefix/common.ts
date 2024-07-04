@@ -7,5 +7,5 @@ export { Icons } from '../Icons';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.CmdHost.Prefix`,
+  displayName: `${Pkg.name}:CmdHost.Prefix`,
 } as const;

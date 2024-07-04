@@ -10,7 +10,7 @@ const style: Required<t.DevTodoStyle> = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.DevTools.Todo`,
+  displayName: `${Pkg.name}:DevTools.Todo`,
   style,
   md: BASE.md,
 } as const;

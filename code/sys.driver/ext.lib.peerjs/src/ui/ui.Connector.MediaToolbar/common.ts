@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Connector.MediaToolbar`,
+  displayName: `${Pkg.name}:Connector.MediaToolbar`,
   selected: false,
   focused: false,
 } as const;

@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Video`,
+  displayName: `${Pkg.name}:Video`,
   muted: true,
   empty: 'Nothing to display.',
 } as const;

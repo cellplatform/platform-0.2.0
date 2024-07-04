@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Diagram`,
+  displayName: `${Pkg.name}:Diagram`,
 } as const;

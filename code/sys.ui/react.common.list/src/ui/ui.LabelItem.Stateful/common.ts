@@ -10,7 +10,7 @@ export { ListContext } from '../ui.LabelItem/Context.List';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.LabelItem.Stateful`,
+  displayName: `${Pkg.name}:LabelItem.Stateful`,
   index: -1,
   total: -1,
   enabled: true,

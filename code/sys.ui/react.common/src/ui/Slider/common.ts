@@ -9,7 +9,7 @@ type Mutate<T> = (draft: T) => void;
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Slider`,
+  displayName: `${Pkg.name}:Slider`,
   enabled: true,
   percent: 0,
 

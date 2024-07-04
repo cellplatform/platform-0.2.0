@@ -7,5 +7,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Card`,
+  displayName: `${Pkg.name}:Card`,
 } as const;

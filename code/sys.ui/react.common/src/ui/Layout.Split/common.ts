@@ -11,7 +11,7 @@ export * from '../common';
 const axis: t.Axis = 'x';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.SplitLayout`,
+  displayName: `${Pkg.name}:SplitLayout`,
   split: 0.6,
   axis,
 } as const;

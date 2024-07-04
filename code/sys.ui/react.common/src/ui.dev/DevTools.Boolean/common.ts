@@ -8,6 +8,6 @@ export * from '../common';
  */
 export const DEFAULTS = {
   ...Button.DEFAULT,
-  displayName: `${Pkg.name}.DevTools.Button.Boolean`,
+  displayName: `${Pkg.name}:DevTools.Button.Boolean`,
   value: false,
 } as const;

@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.NavPaging`,
+  displayName: `${Pkg.name}:NavPaging`,
 } as const;

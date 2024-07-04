@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.History.Commit`,
+  displayName: `${Pkg.name}:History.Commit`,
 } as const;

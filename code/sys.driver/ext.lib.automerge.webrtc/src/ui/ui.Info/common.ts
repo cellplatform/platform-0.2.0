@@ -37,7 +37,7 @@ const fields = {
 const theme: t.CommonTheme = 'Light';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   fields,
   doc: { uri },
   stateful: false,

@@ -45,7 +45,7 @@ const uri: Required<t.InfoDataDocUri> = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   stateful: false,
   visibleFilter,
   fields,

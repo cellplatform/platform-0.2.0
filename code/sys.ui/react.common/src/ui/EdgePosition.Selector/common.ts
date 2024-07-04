@@ -9,7 +9,7 @@ export { Grid } from '../Grid';
 const selected: t.EdgePos = ['left', 'top'];
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.EdgePositionSelector`,
+  displayName: `${Pkg.name}:EdgePositionSelector`,
   enabled: true,
   size: 150,
   selected,

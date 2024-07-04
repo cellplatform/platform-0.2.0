@@ -6,5 +6,5 @@ export * from '../common';
  */
 export const DEFAULTS = {
   ...BASE,
-  displayName: `${Pkg.name}.MonacoEditor`,
+  displayName: `${Pkg.name}:MonacoEditor`,
 } as const;

@@ -13,7 +13,7 @@ const fields = {
   },
 };
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   fields,
   query: { dev: 'dev' },
 } as const;
