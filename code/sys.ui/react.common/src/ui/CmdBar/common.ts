@@ -1,8 +1,10 @@
 import { Pkg } from './common';
 
+export { Keyboard } from 'sys.ui.dom';
+
+export * from '../common';
 export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
-export * from '../common';
 
 /**
  * Constants
@@ -11,7 +13,8 @@ const name = 'CmdBar';
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
+  commandPlaceholder: 'command',
   enabled: true,
   focusOnReady: true,
-  commandPlaceholder: 'command',
+  useKeyboard: true,
 } as const;

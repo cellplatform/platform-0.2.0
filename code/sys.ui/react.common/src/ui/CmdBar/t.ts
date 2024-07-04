@@ -1,5 +1,5 @@
 import type { t } from './common';
-export type * from './t.Ctrl';
+export type * from './t.ctrl';
 
 /**
  * <Component>
@@ -13,6 +13,7 @@ export type CmdBarProps = {
   suffix?: JSX.Element | null | false;
   enabled?: boolean;
   focusOnReady?: boolean;
+  useKeyboard?: boolean;
 
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -30,7 +31,7 @@ export type CmdBarProps = {
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
-  readonly ctrl: t.CmdBarCtrl;
+  readonly cmdbar: t.CmdBarCtrl;
   readonly textbox: t.TextInputRef;
 };
 

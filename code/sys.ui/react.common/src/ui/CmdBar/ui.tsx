@@ -7,8 +7,8 @@ import { Textbox } from './ui.Textbox';
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
 
-  const ctrlRef = useRef(wrangle.ctrlCmd(props));
-  const ctrl = ctrlRef.current;
+  const cmdbarRef = useRef(wrangle.cmdbar(props));
+  const cmdbar = cmdbarRef.current;
 
   /**
    * Render
@@ -28,7 +28,13 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} opacity={enabled ? 1 : 0.3} />
+      <Textbox
+        {...props}
+        cmdbar={cmdbar}
+        enabled={enabled}
+        theme={theme}
+        opacity={enabled ? 1 : 0.3}
+      />
     </div>
   );
 
@@ -62,7 +68,7 @@ const wrangle = {
     return res;
   },
 
-  ctrlCmd(props: t.CmdBarProps): t.CmdBarCtrl {
+  cmdbar(props: t.CmdBarProps): t.CmdBarCtrl {
     if (!props.cmd) return Ctrl.create(Immutable.clonerRef({}));
     return Ctrl.cmdbar(props.cmd);
   },

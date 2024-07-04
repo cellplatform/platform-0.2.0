@@ -18,10 +18,7 @@ type SelectAll = t.CmdType<'Select:All', {}>;
 type CaretToStart = t.CmdType<'Caret:ToStart', {}>;
 type CaretToEnd = t.CmdType<'Caret:ToEnd', {}>;
 type Invoke = t.CmdType<'Invoke', { text: string }>;
-
-type KeyAction = t.CmdType<'Key:Action', KeyActionParams>;
-type KeyActionParams = KeyFocusAndSelect;
-type KeyFocusAndSelect = { name: 'FocusAndSelect' };
+type KeyAction = t.CmdType<'Key:Action', CmdBarKeyAction>;
 
 /**
  * Command Methods.
@@ -36,3 +33,11 @@ export type CmdBarCtrl = {
   readonly invoke: t.CmdMethodVoid<Invoke>;
   readonly keyAction: t.CmdMethodVoid<KeyAction>;
 };
+
+/**
+ * Keyboard Actions
+ */
+export type CmdBarKeyAction = KeyFocusAndSelect | KeyFocusMain | KeyClear;
+type KeyFocusAndSelect = { name: 'FocusAndSelect' };
+type KeyFocusMain = { name: 'FocusMain' };
+type KeyClear = { name: 'Clear' };
