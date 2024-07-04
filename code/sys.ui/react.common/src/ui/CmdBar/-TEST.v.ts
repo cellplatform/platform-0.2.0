@@ -29,14 +29,14 @@ describe('CmdBar', () => {
       expect(fired).to.eql(2);
     });
 
-    it('CmdBar.Ctrl.withMethods', () => {
+    it('CmdBar.Ctrl.cmdbar', () => {
       const ctrl = Ctrl.create();
       const cmd = createCmdBarCtrl();
 
-      const methods1 = Ctrl.withMethods(cmd); // From raw command.
-      const methods2 = Ctrl.withMethods(cmd); // From raw command (new instance)
-      const methods3 = Ctrl.withMethods(methods1);
-      const methods4 = Ctrl.withMethods(ctrl);
+      const methods1 = Ctrl.cmdbar(cmd); // From raw command.
+      const methods2 = Ctrl.cmdbar(cmd); // From raw command (new instance)
+      const methods3 = Ctrl.cmdbar(methods1);
+      const methods4 = Ctrl.cmdbar(ctrl);
 
       expect(CmdBar.Is.methods(methods1)).to.eql(true);
       expect(methods1).to.not.equal(methods2);

@@ -64,6 +64,6 @@ const wrangle = {
 
   ctrlCmd(props: t.CmdBarProps): t.CmdBarCtrlMethods {
     if (!props.ctrl) return Ctrl.create(Immutable.clonerRef({}));
-    return Ctrl.withMethods(props.ctrl);
+    return Ctrl.cmdbar(props.ctrl);
   },
 } as const;

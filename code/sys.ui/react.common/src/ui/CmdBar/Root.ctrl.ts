@@ -12,7 +12,7 @@ export const Ctrl = {
     return { cmd, ...methods(cmd) };
   },
 
-  withMethods(input: t.CmdBarCtrl | t.CmdBarCtrlMethods): t.CmdBarCtrlMethods {
+  cmdbar(input: t.CmdBarCtrl | t.CmdBarCtrlMethods): t.CmdBarCtrlMethods {
     if (Is.ctrlMethods(input)) return input;
     return { cmd: input, ...methods(input) };
   },
