@@ -5,7 +5,7 @@ export type * from './t.Ctrl';
  * <Component>
  */
 export type CmdBarProps = {
-  ctrl?: t.CmdBarCtrl | t.CmdBarCtrlMethods;
+  ctrl?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -30,7 +30,7 @@ export type CmdBarProps = {
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
-  readonly ctrl: t.CmdBarCtrlMethods;
+  readonly ctrl: t.CmdBarCtrl;
   readonly textbox: t.TextInputRef;
 };
 

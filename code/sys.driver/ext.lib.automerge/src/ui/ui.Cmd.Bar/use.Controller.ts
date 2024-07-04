@@ -5,7 +5,7 @@ import { Events, Path } from './u';
 type Args = {
   instance: string;
   enabled?: boolean;
-  ctrl?: t.CmdBarCtrl;
+  ctrl?: t.Cmd<t.CmdBarCtrlType>;
   doc?: t.Lens | t.Doc;
   paths?: t.CmdBarPaths;
   debug?: string;

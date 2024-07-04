@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { css, Args, DEFAULTS, TextInput, type t } from './common';
+import { rx, css, Args, DEFAULTS, TextInput, type t } from './common';
+import { Ctrl } from './ctrl';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
-  ctrl: t.CmdBarCtrlMethods;
+  ctrl: t.CmdBarCtrl;
   theme: t.ColorTheme;
   opacity?: number;
 };
@@ -42,15 +43,9 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    * Listeners
    */
   useEffect(() => {
-    const events = ctrl.cmd.events();
-    if (events) {
-      events.on('Focus', (e) => textbox?.focus(e.params.select));
-      events.on('Blur', (e) => textbox?.blur());
-      events.on('SelectAll', (e) => textbox?.selectAll());
-      events.on('CaretToStart', (e) => textbox?.caretToStart());
-      events.on('CaretToEnd', (e) => textbox?.caretToEnd());
-    }
-    return events?.dispose;
+    const { dispose, dispose$ } = rx.disposable();
+    if (textbox) Ctrl.listen(ctrl.cmd, textbox, dispose$);
+    return dispose;
   }, [ctrl, textbox]);
 
   useEffect(() => {

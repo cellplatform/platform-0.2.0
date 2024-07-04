@@ -7,7 +7,7 @@ export type { CSSProperties } from 'react';
  * @system
  */
 export type {
-  CmdBarCtrl,
+  CmdBarCtrlType,
   CssEdgesInput,
   CssValue,
   DevCtxState,

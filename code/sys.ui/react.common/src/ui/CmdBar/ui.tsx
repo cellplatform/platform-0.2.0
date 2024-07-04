@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Ctrl } from './Root.ctrl';
+import { Ctrl } from './ctrl';
 import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
 import { Is } from './u.Is';
 import { Textbox } from './ui.Textbox';
@@ -62,7 +62,7 @@ const wrangle = {
     return res;
   },
 
-  ctrlCmd(props: t.CmdBarProps): t.CmdBarCtrlMethods {
+  ctrlCmd(props: t.CmdBarProps): t.CmdBarCtrl {
     if (!props.ctrl) return Ctrl.create(Immutable.clonerRef({}));
     return Ctrl.cmdbar(props.ctrl);
   },

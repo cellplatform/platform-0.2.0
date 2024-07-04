@@ -7,7 +7,7 @@ describe('CmdBar', () => {
 
     const createCmdBarCtrl = () => {
       const transport = Immutable.clonerRef({});
-      return Cmd.create<t.CmdBarCtrlType>(transport) as t.CmdBarCtrl;
+      return Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
     };
 
     it('creation (from simple Immutable<T>)', async () => {
@@ -38,7 +38,7 @@ describe('CmdBar', () => {
       const methods3 = Ctrl.cmdbar(methods1);
       const methods4 = Ctrl.cmdbar(ctrl);
 
-      expect(CmdBar.Is.methods(methods1)).to.eql(true);
+      expect(CmdBar.Is.ctrl(methods1)).to.eql(true);
       expect(methods1).to.not.equal(methods2);
       expect(methods3).to.equal(methods1); // NB: same instance reused.
       expect(methods4).to.equal(ctrl);
@@ -48,17 +48,12 @@ describe('CmdBar', () => {
   describe('CmdBar.Is', () => {
     const NON = [123, 'abc', [], {}, null, true, Symbol('foo'), BigInt(0)];
 
-    it('Is.methods', () => {
-      const ctrl = CmdBar.Ctrl.create();
-      NON.forEach((v) => expect(CmdBar.Is.methods(v)).to.eql(false));
-      expect(CmdBar.Is.methods(ctrl)).to.eql(true);
-    });
-
     it('Is.ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
-      NON.forEach((v) => expect(CmdBar.Is.ctrlMethods(v)).to.eql(false));
-      expect(CmdBar.Is.ctrlMethods({ cmd: ctrl.cmd })).to.eql(false);
-      expect(CmdBar.Is.ctrlMethods(ctrl)).to.eql(true);
+      NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
+      expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
+      expect(CmdBar.Is.ctrl({ cmd: ctrl.cmd })).to.eql(false);
+      expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
     });
   });
 });
