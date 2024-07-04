@@ -1,5 +1,6 @@
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 import { Button, COLORS, Color, Dev, Doc, Pkg, css, sampleCrdt, type t } from '../../test.ui';
+import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
 type T = { props: P; debug: { docuri?: t.UriString; useLens?: boolean } };
@@ -53,6 +54,33 @@ export default Dev.describe(name, async (e) => {
       });
   });
 
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    dev.header.border(-0.1).render((e) => {
+      const { debug, props } = state.current;
+      const { store, index } = db;
+      const ref = debug.docuri;
+      return (
+        <Info
+          stateful={true}
+          fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          data={{
+            repo: { store, index },
+            document: {
+              ref,
+              object: {
+                visible: false,
+                expand: { level: 2 },
+                beforeRender(mutate) {},
+              },
+            },
+          }}
+        />
+      );
+    });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
@@ -71,10 +99,7 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Sample CRDT', (dev) => {
-      dev.button('ensure exists', async (e) => {
-        await ensureSample(state);
-      });
-
+      dev.button('ensure exists', (e) => ensureSample(state));
       dev.button('delete', async (e) => {
         const uri = state.current.debug.docuri;
         if (uri) await db.store.doc.delete(uri);
