@@ -20,7 +20,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   return (
     <BaseComponent
-      ctrl={ctrl}
+      cmd={ctrl}
       text={controller.text}
       enabled={controller.is.enabled}
       theme={props.theme}
