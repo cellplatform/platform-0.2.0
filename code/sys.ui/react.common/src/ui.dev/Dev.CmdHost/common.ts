@@ -1,7 +1,7 @@
 import { DEFAULTS as BASE, DevBase, Pkg, type t } from '../common';
 import { Filter } from './u.Filter';
 
-export { CmdBar } from '../../ui/Cmd.Bar';
+export { CmdBar } from '../../ui/CmdBar';
 export * from '../common';
 
 export const ModuleList = DevBase.ModuleList;

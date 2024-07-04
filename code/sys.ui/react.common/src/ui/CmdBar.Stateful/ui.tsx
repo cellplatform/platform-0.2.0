@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
-import { View as CmdBar } from '../Cmd.Bar/ui';
+import { View as CmdBar } from '../CmdBar/ui';
+import { Color, DEFAULTS, css, type t } from './common';
 
 export const View: React.FC<t.CmdBarStatefulProps> = (props) => {
   console.log(DEFAULTS.displayName, props); // TEMP 🐷

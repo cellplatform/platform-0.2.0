@@ -1,6 +1,6 @@
 import { Pkg, type t } from './common';
 
-export { CmdBar } from '../Cmd.Bar';
+export { CmdBar } from '../CmdBar';
 export { Flip } from '../Flip';
 export { PropList } from '../PropList';
 

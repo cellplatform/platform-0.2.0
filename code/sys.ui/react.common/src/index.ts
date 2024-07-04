@@ -12,7 +12,7 @@ export { Switch } from './ui/Button.Switch';
 export { Card } from './ui/Card';
 export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
-export { CmdBar } from './ui/Cmd.Bar';
+export { CmdBar } from './ui/CmdBar';
 export { EdgePosition } from './ui/EdgePosition';
 export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';
