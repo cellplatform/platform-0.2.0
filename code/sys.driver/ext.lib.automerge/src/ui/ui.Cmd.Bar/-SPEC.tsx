@@ -16,8 +16,8 @@ export default Dev.describe(name, async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
-    docuri: undefined,
     focusOnReady: true,
+    docuri: undefined,
     useLens: true,
   });
 
