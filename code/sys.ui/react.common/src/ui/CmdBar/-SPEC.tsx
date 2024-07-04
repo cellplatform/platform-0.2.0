@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
     text: undefined,
   });
 
-  const control = CmdBar.Ctrl.create();
+  const ctrl = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            ctrl={control.cmd}
+            ctrl={ctrl.cmd}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
               state.change((d) => {
@@ -144,7 +144,7 @@ export default Dev.describe(name, (e) => {
     dev.section(['Controls', 'Cmd'], (dev) => {
       const focus = (select?: boolean) => {
         dev.button(['focus', select ? 'select' : ''], (e) => {
-          Time.delay(0, () => control.focus({ select }));
+          Time.delay(0, () => ctrl.focus({ select }));
         });
       };
       focus(true);
