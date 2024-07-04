@@ -19,10 +19,14 @@ export default Dev.describe(name, async (e) => {
     useLens: true,
   });
 
-  const db = await sampleCrdt({ broadcastAdapter: true });
-  let model: t.RepoListModel;
-  let listRef: t.RepoListRef;
   let doc: t.Doc | undefined;
+  const db = await sampleCrdt({ broadcastAdapter: true });
+  const ensureSample = async (state: t.DevCtxState<T>) => {
+    const uri = state.current.debug.docuri;
+    const exists = uri ? await db.store.doc.exists(uri) : false;
+    doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
+    state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -34,6 +38,8 @@ export default Dev.describe(name, async (e) => {
       d.debug.useLens = local.useLens;
       d.debug.docuri = local.docuri;
     });
+
+    await ensureSample(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -58,55 +64,33 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Repo', (dev) => {
-      dev.row(async (e) => {
-        const docs = db.index.doc.current.docs;
-        const styles = {
-          base: css({}),
-          item: css({
-            Padding: [2, 5],
-            fontSize: 12,
-            fontFamily: 'monospace',
-            fontWeight: 600,
-            lineHeight: 1.6,
-            borderRadius: 3,
-          }),
-        };
-
-        const select = (uri: string) => {
-          state.change((d) => (local.docuri = d.debug.docuri = uri));
-        };
-
-        return (
-          <div {...styles.base}>
-            {docs.map((doc, i) => {
-              const label = `crdt:${Doc.Uri.shorten(doc.uri)}`;
-              const isSelected = doc.uri === state.current.debug.docuri;
-              const backgroundColor = isSelected ? Color.alpha(COLORS.BLUE, 0.1) : undefined;
-              return (
-                <div key={i} {...css(styles.item, { backgroundColor })}>
-                  <Button onClick={() => select(doc.uri)}>{label}</Button>
-                </div>
-              );
-            })}
-          </div>
-        );
-      });
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
 
     dev.hr(5, 20);
 
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
+    dev.section('Sample CRDT', (dev) => {
+      dev.button('ensure exists', async (e) => {
+        await ensureSample(state);
+      });
+
+      dev.button('delete', async (e) => {
+        const uri = state.current.debug.docuri;
+        if (uri) await db.store.doc.delete(uri);
+        doc = undefined;
+        state.change((d) => (local.docuri = d.debug.docuri = undefined));
+      });
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
+    dev.footer.border(-0.1).render<T>(async (e) => {
       const { props, debug } = e.state;
       const data = {
         docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
+        doc: doc?.current,
         props,
       };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
