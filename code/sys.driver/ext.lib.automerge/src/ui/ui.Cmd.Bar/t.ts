@@ -13,9 +13,9 @@ export type CmdBarProps = {
   focusOnReady?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
-} & CmdBarHandlers;
+} & CmdBarHandlerProps;
 
-export type CmdBarHandlers = {
+export type CmdBarHandlerProps = {
   onReady?: CmdBarReadyHandler;
   onText?: CmdBarTextHandler;
   onCommand?: CmdBarTxHandler;

@@ -1,8 +1,14 @@
-import { Color, DEFAULTS, KeyHint, css, type t } from './common';
+import { useRef } from 'react';
+import { Ctrl } from './Root.ctrl';
+import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
+import { Is } from './u.Is';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
+
+  const ctrlRef = useRef(wrangle.ctrlCmd(props));
+  const ctrl = ctrlRef.current;
 
   /**
    * Render
@@ -22,7 +28,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} enabled={enabled} theme={theme} />
+      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} />
     </div>
   );
 
@@ -54,5 +60,10 @@ const wrangle = {
     if (props.prefix) res = `auto ${res}`;
     if (props.suffix) res = `${res} auto`;
     return res;
+  },
+
+  ctrlCmd(props: t.CmdBarProps): t.CmdBarCtrl {
+    if (!props.ctrl) return Ctrl.create(Immutable.clonerRef({})).cmd;
+    return Is.ctrl(props.ctrl) ? props.ctrl.cmd : props.ctrl;
   },
 } as const;

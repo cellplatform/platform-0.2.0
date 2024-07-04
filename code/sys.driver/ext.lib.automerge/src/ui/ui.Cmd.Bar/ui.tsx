@@ -36,7 +36,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  handlers(props: t.CmdBarProps): t.CmdBarHandlers {
+  handlers(props: t.CmdBarProps): t.CmdBarHandlerProps {
     const { onText, onCommand, onInvoke, onReady } = props;
     return { onText, onCommand, onInvoke, onReady };
   },

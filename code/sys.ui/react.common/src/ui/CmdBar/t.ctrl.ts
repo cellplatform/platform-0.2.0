@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type CmdBarCtrl = t.Cmd<CmdBarCtrlCmdType>;
 export type CmdBarCtrlCmdType = Focus | Blur | SelectAll | CaretToStart | CaretToEnd | Invoke;
+
 type Focus = t.CmdType<'Focus', { select?: boolean }>;
 type Blur = t.CmdType<'Blur', {}>;
 type SelectAll = t.CmdType<'SelectAll', {}>;

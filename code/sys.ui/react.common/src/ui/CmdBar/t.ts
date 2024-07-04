@@ -5,7 +5,7 @@ export type * from './t.ctrl';
  * <Component>
  */
 export type CmdBarProps = {
-  ctrl?: t.CmdBarCtrl;
+  ctrl?: t.CmdBarCtrl | t.CmdBarCtrlMethods;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -15,7 +15,10 @@ export type CmdBarProps = {
   focusOnReady?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
-  onReady?: t.TextInputReadyHandler;
+} & CmdBarHandlerProps;
+
+export type CmdBarHandlerProps = {
+  onReady?: t.CmdBarReadyHandler;
   onChange?: t.CmdBarChangeHandler;
   onSelect?: t.TextInputSelectHandler;
   onFocusChange?: t.TextInputFocusHandler;
@@ -26,5 +29,11 @@ export type CmdBarProps = {
 /**
  * Events
  */
+export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
+export type CmdBarReadyHandlerArgs = {
+  readonly ctrl: t.CmdBarCtrl;
+  readonly textbox: t.TextInputRef;
+};
+
 export type CmdBarChangeHandler = (e: CmdBarChangeHandlerArgs) => void;
 export type CmdBarChangeHandlerArgs = t.TextInputChangeArgs & { readonly parsed: t.ParsedArgs };

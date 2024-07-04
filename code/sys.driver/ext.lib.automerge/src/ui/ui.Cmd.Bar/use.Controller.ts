@@ -10,7 +10,7 @@ type Args = {
   paths?: t.CmdBarPaths;
   debug?: string;
   focusOnReady?: boolean;
-  handlers?: t.CmdBarHandlers;
+  handlers?: t.CmdBarHandlerProps;
 };
 
 type ReadyRef = 'focus' | 'onReady';

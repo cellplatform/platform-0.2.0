@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Args, DEFAULTS, TextInput, type t } from './common';
 
-export type TextboxProps = Omit<t.CmdBarProps, 'theme'> & {
+export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
+  ctrl: t.CmdBarCtrl;
   theme: t.ColorTheme;
 };
 
@@ -82,8 +83,9 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
       onKeyUp={props.onKeyUp}
       onSelect={props.onSelect}
       onReady={(e) => {
-        props.onReady?.(e);
-        setTextbox(e.ref);
+        const textbox = e.ref;
+        setTextbox(textbox);
+        props.onReady?.({ ctrl, textbox });
       }}
     />
   );

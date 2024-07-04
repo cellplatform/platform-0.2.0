@@ -141,14 +141,15 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Controls', 'Cmd'], (dev) => {
+    dev.section('Controls', (dev) => {
       const focus = (select?: boolean) => {
-        dev.button(['focus', select ? 'select' : ''], (e) => {
-          Time.delay(0, () => ctrl.focus({ select }));
-        });
+        const invoke = () => Time.delay(0, () => ctrl.focus({ select }));
+        dev.button(['cmd: Focus', select ? 'select' : ''], () => invoke());
       };
       focus(true);
       focus(false);
+      dev.hr(-1, 5);
+      dev.button('cmd: Invoke', (e) => ctrl.invoke({}));
     });
 
     dev.hr(5, 20);
