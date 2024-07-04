@@ -5,10 +5,10 @@ export const CtrlKeyboard = {
    * Listen to the keyboard for events.
    */
   listen(cmdbar: t.CmdBarCtrl, textbox: t.TextInputRef, dispose$?: t.UntilObservable) {
+    const fire = cmdbar.keyAction;
     const life = rx.lifecycle(dispose$);
     const keys = Keyboard.until(life.dispose$);
     const dbl = keys.dbl();
-    const fire = cmdbar.keyAction;
     const isFocused = () => textbox.current.focused;
 
     keys.on('Tab', (e) => {
@@ -28,7 +28,7 @@ export const CtrlKeyboard = {
   },
 
   /**
-   * Invoke a keyboard action.
+   * Invoke the given keyboard action against the component.
    */
   action(cmdbar: t.CmdBarCtrl, textbox: t.TextInputRef, action: t.CmdBarKeyAction) {
     const name = action.name;
@@ -38,31 +38,21 @@ export const CtrlKeyboard = {
        * TODO 🐷 selectively ← back select (split on positional args)
        *
        */
+      console.log('TODO key action: progressive focus and select');
 
       cmdbar.focus({});
       cmdbar.caretToEnd({});
     }
 
     if (name === 'FocusMain') {
-      /**
-       * TODO 🐷 - publish blur so the "<Main>" component can be focused.
-       */
-
-      cmdbar.blur({}); // TEMP 🐷
-      console.log('TODO', 'pass focus to main');
-      // cmdbar.keyAction({ name: 'FocusAndSelect' });
+      // NB: picked up by corresponding <Main> component.
     }
 
     if (name === 'Clear') {
-      console.log('key clear');
-
       /**
        * TODO 🐷 clear text
-       *
        */
-
-      // const path = CmdBar.Path.default.text;
-      // main.state.cmdbar.change((d) => Doc.Text.replace(d, path, ''));
+      console.log('TODO key action: clear');
     }
   },
 } as const;
