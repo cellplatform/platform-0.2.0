@@ -4,6 +4,7 @@ export type * from './Card/t';
 export type * from './Center/t';
 export type * from './Chip/t';
 export type * from './Cmd.Bar/t';
+export type * from './CmdBar.Stateful/t';
 export type * from './ContainerQuery/t';
 export type * from './EdgePosition.Selector/t';
 export type * from './EdgePosition/t';
