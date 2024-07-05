@@ -1,7 +1,8 @@
 import { diff } from './Text.diff';
-import { splice } from './Text.splice';
+import { replace, splice } from './Text.splice';
 
 export const Text = {
   diff,
   splice,
+  replace,
 } as const;

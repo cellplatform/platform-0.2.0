@@ -1,4 +1,4 @@
-import { A, type t } from './common';
+import { A, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
 type Cursor = string;
@@ -14,4 +14,12 @@ export function splice<T extends O>(
   newText?: string,
 ) {
   A.splice(doc, [...path], index, del, newText);
+}
+
+/**
+ * Replace part of a string using splice
+ */
+export function replace<T extends O>(doc: T, path: t.ObjectPath, next: string) {
+  const current = ObjectPath.resolve(doc, path);
+  if (typeof current === 'string') splice(doc, path, 0, current.length, next);
 }

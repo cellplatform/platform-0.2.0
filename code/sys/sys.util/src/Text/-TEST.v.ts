@@ -91,4 +91,18 @@ describe('Doc.Text', () => {
       INVALID.forEach((text) => test({ text }));
     });
   });
+
+  describe('Text.replace', () => {
+    it('replace: "hello" → "foobar"', () => {
+      const doc = { text: 'hello' };
+      Text.replace(doc, ['text'], 'foobar');
+      expect(doc).to.eql({ text: 'foobar' });
+    });
+
+    it('replace: "hello" → "" (clear)', () => {
+      const doc = { text: 'hello' };
+      Text.replace(doc, ['text'], '');
+      expect(doc).to.eql({ text: '' });
+    });
+  });
 });
