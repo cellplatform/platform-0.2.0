@@ -30,11 +30,19 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await sampleCrdt({ broadcastAdapter: true });
-  const ensureSample = async (state: t.DevCtxState<T>) => {
-    const uri = state.current.debug.docuri;
-    const exists = uri ? await db.store.doc.exists(uri) : false;
-    doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
-    state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
+  const Sample = {
+    async ensure(state: t.DevCtxState<T>) {
+      const uri = state.current.debug.docuri;
+      const exists = uri ? await db.store.doc.exists(uri) : false;
+      doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
+      state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
+    },
+    async delete(state: t.DevCtxState<T>) {
+      const uri = state.current.debug.docuri;
+      if (uri) await db.store.doc.delete(uri);
+      doc = undefined;
+      state.change((d) => (local.docuri = d.debug.docuri = undefined));
+    },
   };
 
   const cmdbar = CmdBar.Ctrl.create();
@@ -51,7 +59,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.docuri = local.docuri;
     });
 
-    await ensureSample(state);
+    await Sample.ensure(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -155,13 +163,19 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Sample CRDT', (dev) => {
-      dev.button('ensure exists', (e) => ensureSample(state));
-      dev.button('delete', async (e) => {
-        const uri = state.current.debug.docuri;
-        if (uri) await db.store.doc.delete(uri);
-        doc = undefined;
-        state.change((d) => (local.docuri = d.debug.docuri = undefined));
+    dev.section(['Sample State', 'CRDT'], (dev) => {
+      dev.button((btn) => {
+        btn
+          .label(`create`)
+          .enabled((e) => !doc)
+          .onClick((e) => Sample.ensure(state));
+      });
+
+      dev.button((btn) => {
+        btn
+          .label(`delete`)
+          .enabled((e) => !!doc)
+          .onClick((e) => Sample.delete(state));
       });
     });
   });
