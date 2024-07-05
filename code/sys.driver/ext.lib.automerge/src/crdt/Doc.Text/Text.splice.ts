@@ -17,7 +17,7 @@ export function splice<T extends O>(
 }
 
 /**
- * Replace part of a string using splice
+ * Replace part of a string using splice.
  */
 export function replace<T extends O>(doc: T, path: t.ObjectPath, next: string) {
   const current = ObjectPath.resolve(doc, path);
