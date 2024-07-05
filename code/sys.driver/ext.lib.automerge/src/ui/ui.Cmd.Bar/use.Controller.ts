@@ -42,14 +42,13 @@ export function useController(args: Args) {
    * Textbox CRDT syncer (splice).
    */
   useEffect(() => {
-    const life = rx.disposable();
+    const { dispose$, dispose } = rx.disposable();
     if (enabled && doc && textbox) {
-      const { dispose$ } = life;
       const listener = Sync.Textbox.listen(textbox, doc, paths.text, { debug, dispose$ });
       listener.onChange((e) => api.onChange(e.text, e.pos));
       api.onChange(resolve.text(doc.current)); // initial.
     }
-    return life.dispose;
+    return dispose;
   }, [enabled, doc?.instance, !!textbox, paths.text.join('.')]);
 
   /**
