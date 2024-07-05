@@ -19,8 +19,8 @@ export { Flip } from './ui/Flip';
 export { ActiveElement, Focus } from './ui/Focus';
 export { Grid } from './ui/Grid';
 export { HashView } from './ui/HashView';
-export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
+export { IFrame } from './ui/IFrame';
 export { KeyHint } from './ui/KeyHint';
 export { Layout } from './ui/Layout';
 export { ModuleLoader } from './ui/Module.Loader';
@@ -36,6 +36,7 @@ export { TextInput } from './ui/Text.Input';
 export { Keyboard } from './ui/Text.Keyboard';
 export { TextSecret } from './ui/Text.Secret';
 export { TextSyntax } from './ui/Text.Syntax';
+export { TextboxSync } from './ui/Text.TextboxSync';
 
 /**
  * Hooks
@@ -56,15 +57,15 @@ export {
  */
 export {
   BADGES,
-  COLORS,
   Color,
+  COLORS,
+  css,
   FC,
   File,
   ReactEvent,
+  rx,
   Style,
   UserAgent,
-  css,
-  rx,
   useRubberband,
 } from './common';
 

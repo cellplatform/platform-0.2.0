@@ -34,6 +34,7 @@ export type {
   IgnoredResponse,
   ImageBadge,
   Immutable,
+  ImmutableEvents,
   ImmutableMutator,
   ImmutableRef,
   Index,
