@@ -1,5 +1,6 @@
 import { Text } from '.';
 import { describe, expect, it, type t } from '../test';
+import { Immutable } from '../Immutable';
 
 describe('Doc.Text', () => {
   describe('Text.diff', () => {
@@ -61,6 +62,17 @@ describe('Doc.Text', () => {
 
       Text.splice(doc, path, 1, 2);
       expect(doc.foo).to.eql({ text: 'eo' });
+    });
+
+    it('splice: ImmutableRef<T>', () => {
+      const doc = Immutable.clonerRef({ text: '' });
+
+      const path = ['text'];
+      doc.change((d) => Text.splice(d, path, 0, 0, 'hello'));
+      expect(doc.current.text).to.eql('hello');
+
+      doc.change((d) => Text.replace(d, path, ''));
+      expect(doc.current.text).to.eql('');
     });
 
     it('diff then splice', () => {
