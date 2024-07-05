@@ -7,6 +7,7 @@ import * as Math from './Value.Math';
 import * as Random from './Value.Random';
 import * as To from './Value.To';
 import * as u from './Value.u';
+import { Text } from '../Text';
 
 const { asArray } = Array;
 
@@ -17,6 +18,7 @@ export const Value = {
   Is,
   Object,
   Array,
+  Text,
   ...To,
   ...Math,
   ...Random,

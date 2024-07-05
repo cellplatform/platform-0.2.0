@@ -18,6 +18,7 @@ export { rx } from './Rx';
 export { Sheet } from './Sheet';
 export { Sort } from './Sort';
 export { Stream } from './Stream';
+export { Text } from './Text';
 export { Time } from './Time';
 export { Value } from './Value';
 export { asArray } from './Value.Array';
