@@ -49,8 +49,10 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
     border: css({
       pointerEvents: 'none',
       Absolute: 8,
-      border: `dashed 1px ${Color.alpha(theme.fg, isFocused ? 0.8 : 0.2)}`,
       borderRadius: 10,
+      border: `dashed 1px ${theme.fg}`,
+      opacity: isFocused ? 0.8 : 0.2,
+      transition: 'opacity 100ms ease',
     }),
     label: css({
       Absolute: [-15, 5, null, null],
@@ -60,7 +62,7 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
     }),
     piggy: css({
       fontSize: isFocused ? 24 : 16,
-      transition: 'font-size 100ms',
+      transition: 'font-size 100ms ease',
     }),
   };
 
