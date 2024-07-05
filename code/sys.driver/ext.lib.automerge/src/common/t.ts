@@ -52,6 +52,8 @@ export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spe
 export type { Describe, Expect, It } from 'sys.test/src/types';
 export type { ParsedArgs, TimeDuration } from 'sys.util/src/types';
 
+export type { TextboxSyncChangeHandler, TextboxSyncListener } from 'sys.ui.react.common/src/types';
+
 /**
  * @local
  */
