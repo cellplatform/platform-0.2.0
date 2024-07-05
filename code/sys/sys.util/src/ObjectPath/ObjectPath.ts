@@ -1,11 +1,21 @@
 import { type t } from './common';
 
-type O = Record<string, unknown>;
+/**
+ * Flag helpers.
+ */
+const Is = {
+  path(input: any): input is t.ObjectPath {
+    if (!Array.isArray(input)) return false;
+    return input.every((item) => typeof item === 'string' || typeof item === 'number');
+  },
+} as const;
 
 /**
  * Helpers for working with arrays that represent object paths.
  */
 export const ObjectPath = {
+  Is,
+
   /**
    * Prepend a path.
    */

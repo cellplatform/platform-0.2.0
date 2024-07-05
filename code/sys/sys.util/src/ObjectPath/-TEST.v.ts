@@ -140,4 +140,18 @@ describe('ObjectPath', () => {
       expect(res).to.eql(['root', 'foo', 'bar']);
     });
   });
+
+  describe('Is', () => {
+    const Is = ObjectPath.Is;
+    it('is not an [ObjectPath]', () => {
+      const NON = [123, {}, false, '', Symbol('foo'), BigInt(0), undefined, null, [[]], [{}]];
+      NON.forEach((v) => expect(Is.path(v)).to.eql(false));
+    });
+
+    it('is an [ObjectPath]', () => {
+      expect(Is.path([])).to.eql(true);
+      expect(Is.path([''])).to.eql(true);
+      expect(Is.path(['foo', 1, 'bar'])).to.eql(true);
+    });
+  });
 });
