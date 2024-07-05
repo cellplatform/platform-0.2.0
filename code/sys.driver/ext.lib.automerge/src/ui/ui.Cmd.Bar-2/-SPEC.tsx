@@ -1,6 +1,9 @@
+import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
-import { Button, COLORS, Color, Dev, Doc, Pkg, css, sampleCrdt, type t } from '../../test.ui';
+
+import { Dev, Doc, Pkg, sampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
+import { Sync } from '../../crdt.sync';
 
 type P = CmdBarStatefulProps;
 type T = { props: P; debug: { docuri?: t.UriString; useLens?: boolean } };
@@ -9,15 +12,16 @@ const initial: T = { props: {}, debug: {} };
 /**
  * Spec
  */
-const name = 'Crdt.CmdBar';
+const name = `${Pkg.name}:Crdt.CmdBar`;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme'>;
+  type LocalStore = T['debug'] & Pick<P, 'theme' | 'useKeyboard'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
     useLens: true,
+    useKeyboard: true,
   });
 
   let doc: t.Doc | undefined;
@@ -36,6 +40,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.theme = local.theme;
+      d.props.useKeyboard = local.useKeyboard;
       d.debug.useLens = local.useLens;
       d.debug.docuri = local.docuri;
     });
@@ -50,7 +55,16 @@ export default Dev.describe(name, async (e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
-        return <div>{`🐷 ${name}`}</div>;
+        return (
+          <CmdBar.Stateful
+            {...props}
+            state={doc}
+            onReady={(e) => {
+              console.info('⚡️ CmdBar.Stateful.onReady:', e);
+              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text);
+            }}
+          />
+        );
       });
   });
 
@@ -88,6 +102,14 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
+      dev.hr(-1, 5);
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.useKeyboard;
+        btn
+          .label((e) => `useKeyboard`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'useKeyboard')));
+      });
     });
 
     dev.hr(5, 20);
@@ -114,11 +136,11 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<T>(async (e) => {
       const { props, debug } = e.state;
       const data = {
+        props,
         docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
         doc: doc?.current,
-        props,
       };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return <Dev.Object name={name} data={data} expand={{ paths: ['$'] }} fontSize={11} />;
     });
   });
 });
