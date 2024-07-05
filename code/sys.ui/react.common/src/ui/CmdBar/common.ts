@@ -1,8 +1,9 @@
 import { Pkg } from './common';
 
 export { Keyboard } from 'sys.ui.dom';
-
 export * from '../common';
+
+export { useFocus } from '../../ui.use';
 export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
 

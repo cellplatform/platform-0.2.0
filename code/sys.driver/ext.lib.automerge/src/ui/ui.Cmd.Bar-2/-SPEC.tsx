@@ -1,13 +1,17 @@
 import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
-import { Dev, Doc, Pkg, sampleCrdt, type t } from '../../test.ui';
-import { Info } from '../ui.Info';
 import { Sync } from '../../crdt.sync';
+import { css, Dev, Doc, Pkg, sampleCrdt, type t } from '../../test.ui';
+import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
-type T = { props: P; debug: { docuri?: t.UriString; useLens?: boolean } };
-const initial: T = { props: {}, debug: {} };
+type T = {
+  props: P;
+  debug: { docuri?: t.UriString; useLens?: boolean };
+  current: { isFocused?: boolean };
+};
+const initial: T = { props: {}, debug: {}, current: {} };
 
 /**
  * Spec
@@ -33,6 +37,8 @@ export default Dev.describe(name, async (e) => {
     state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
   };
 
+  const cmdbar = CmdBar.Ctrl.create();
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -52,18 +58,47 @@ export default Dev.describe(name, async (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
-        Dev.Theme.background(ctx, props.theme, 1);
+        const { props, current } = e.state;
+        const theme = props.theme;
+        Dev.Theme.background(ctx, theme, 1);
 
-        return (
+        const isFocused = current.isFocused;
+        const mainSize = [280, 150] as [number, number];
+        const styles = {
+          base: css({ position: 'relative' }),
+          main: css({ Absolute: [0 - mainSize[1] - 50, 0, null, 0] }),
+          label: css({
+            Absolute: [-17, 5, null, null],
+            fontFamily: 'monospace',
+            fontSize: 10,
+            opacity: isFocused ? 1 : 0.3,
+            transition: `opacity 100ms ease`,
+          }),
+        };
+
+        const elCmdBar = (
           <CmdBar.Stateful
             {...props}
             state={doc}
+            cmd={cmdbar}
             onReady={(e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text);
             }}
+            onFocusChange={(e) => {
+              state.change((d) => (d.current.isFocused = e.is.focused));
+            }}
           />
+        );
+
+        console.log('props.cmd', props.cmd);
+
+        return (
+          <div {...styles.base}>
+            <CmdBar.Sample.Main theme={theme} style={styles.main} size={mainSize} cmd={cmdbar} />
+            <div {...styles.label}>{'cmdbar'}</div>
+            {elCmdBar}
+          </div>
         );
       });
   });
