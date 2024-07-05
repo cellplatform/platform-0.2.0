@@ -31,11 +31,12 @@ export default Dev.describe(name, async (e) => {
   let doc: t.Doc | undefined;
   const db = await sampleCrdt({ broadcastAdapter: true });
   const Sample = {
-    async ensure(state: t.DevCtxState<T>) {
+    async get(state: t.DevCtxState<T>) {
       const uri = state.current.debug.docuri;
       const exists = uri ? await db.store.doc.exists(uri) : false;
       doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
       state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
+      return doc;
     },
     async delete(state: t.DevCtxState<T>) {
       const uri = state.current.debug.docuri;
@@ -59,7 +60,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.docuri = local.docuri;
     });
 
-    await Sample.ensure(state);
+    await Sample.get(state);
 
     ctx.debug.width(330);
     ctx.subject
@@ -126,11 +127,7 @@ export default Dev.describe(name, async (e) => {
             repo: { store, index },
             document: {
               ref,
-              object: {
-                visible: false,
-                expand: { level: 2 },
-                beforeRender(mutate) {},
-              },
+              object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
             },
           }}
         />
@@ -168,9 +165,8 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(`create`)
           .enabled((e) => !doc)
-          .onClick((e) => Sample.ensure(state));
+          .onClick((e) => Sample.get(state));
       });
-
       dev.button((btn) => {
         btn
           .label(`delete`)
