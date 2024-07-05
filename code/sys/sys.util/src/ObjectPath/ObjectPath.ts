@@ -7,6 +7,13 @@ type O = Record<string, unknown>;
  */
 export const ObjectPath = {
   /**
+   * Prepend a path.
+   */
+  prepend(target: t.ObjectPath, prefix: t.ObjectPath) {
+    return [...prefix, ...target];
+  },
+
+  /**
    * Read into an object and return the resulting value at the given path.
    */
   resolve<T>(root: unknown | unknown[], path: t.ObjectPath): T | undefined {

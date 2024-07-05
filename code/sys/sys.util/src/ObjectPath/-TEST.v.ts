@@ -128,4 +128,16 @@ describe('ObjectPath', () => {
       });
     });
   });
+
+  describe('prepend', () => {
+    it('no change', () => {
+      expect(ObjectPath.prepend([], [])).to.eql([]);
+      expect(ObjectPath.prepend(['foo'], [])).to.eql(['foo']);
+    });
+
+    it('inserts prefix', () => {
+      const res = ObjectPath.prepend(['foo', 'bar'], ['root']);
+      expect(res).to.eql(['root', 'foo', 'bar']);
+    });
+  });
 });
