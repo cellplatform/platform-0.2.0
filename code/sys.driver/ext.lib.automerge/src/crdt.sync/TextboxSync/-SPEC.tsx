@@ -1,5 +1,5 @@
 import { DEFAULTS } from '.';
-import { Dev, Pkg, sampleCrdt, type t } from '../../test.ui';
+import { Dev, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../../ui/ui.Info';
 import { Layout } from './-ui';
 
@@ -24,7 +24,7 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
-  const db = await sampleCrdt({ broadcastAdapter: true });
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
   let doc: t.Doc | undefined;
   const Sample = {
     async get(state: t.DevCtxState<T>) {

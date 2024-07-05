@@ -1,4 +1,4 @@
-import { COLORS, Dev, DevReload, Pkg, TestDb, css, sampleCrdt, type t } from '../../test.ui';
+import { COLORS, css, Dev, DevReload, Pkg, SampleCrdt, TestDb, type t } from '../../test.ui';
 import { RepoList } from '../ui.RepoList';
 import { SampleUseDoc, SampleUseDocs } from './-SPEC.useDocs.views';
 
@@ -21,7 +21,7 @@ const ERROR_URI = 'automerge:fail';
 const name = 'useDocs';
 export default Dev.describe(name, async (e) => {
   let _loadDelay = 0;
-  const db = await sampleCrdt({ debug: { loadDelay: () => _loadDelay } });
+  const db = await SampleCrdt.init({ debug: { loadDelay: () => _loadDelay } });
   const index = db.index;
   let model: t.RepoListModel;
 

@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, Doc, Pkg, Time, css, sampleCrdt, slug, type t } from '../../test.ui';
+import { Color, Dev, Doc, Pkg, Time, css, SampleCrdt, slug, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { RepoList } from '../ui.RepoList';
 
@@ -21,7 +21,7 @@ export default Dev.describe(name, async (e) => {
     useLens: true,
   });
 
-  const db = await sampleCrdt({ broadcastAdapter: true });
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
   let model: t.RepoListModel;
   let listRef: t.RepoListRef;
   let doc: t.Doc | undefined;

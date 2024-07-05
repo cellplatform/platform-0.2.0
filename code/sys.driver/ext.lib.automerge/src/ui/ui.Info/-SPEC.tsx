@@ -1,15 +1,15 @@
 import { DEFAULTS, Info } from '.';
 import {
   Color,
+  css,
   Dev,
   DevReload,
   Doc,
   Pkg,
+  rx,
+  SampleCrdt,
   TestDb,
   Value,
-  css,
-  rx,
-  sampleCrdt,
   type t,
 } from '../../test.ui';
 import { RepoList } from '../ui.RepoList';
@@ -36,7 +36,7 @@ const initial: T = { props: {}, debug: {} };
  */
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
-  const db = await sampleCrdt();
+  const db = await SampleCrdt.init();
   let model: t.RepoListModel;
 
   type LocalStore = D & Pick<P, 'fields' | 'theme' | 'stateful'>;

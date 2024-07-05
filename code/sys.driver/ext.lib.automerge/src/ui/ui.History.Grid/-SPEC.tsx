@@ -1,5 +1,5 @@
 import { DEFAULTS, HistoryGrid } from '.';
-import { Dev, Doc, Pkg, sampleCrdt, type t } from '../../test.ui';
+import { Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
 
 type P = t.HistoryGridProps;
 type T = { props: P };
@@ -10,7 +10,7 @@ const initial: T = { props: {} };
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  const db = await sampleCrdt();
+  const db = await SampleCrdt.init();
 
   type LocalStore = Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);

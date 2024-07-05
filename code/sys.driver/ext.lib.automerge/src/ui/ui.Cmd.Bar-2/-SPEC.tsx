@@ -2,7 +2,7 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import { css, Dev, Doc, Pkg, sampleCrdt, type t } from '../../test.ui';
+import { css, Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
@@ -29,7 +29,7 @@ export default Dev.describe(name, async (e) => {
   });
 
   let doc: t.Doc | undefined;
-  const db = await sampleCrdt({ broadcastAdapter: true });
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
   const Sample = {
     async get(state: t.DevCtxState<T>) {
       const uri = state.current.debug.docuri;
