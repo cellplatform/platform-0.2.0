@@ -66,6 +66,7 @@ export default Dev.describe(name, async (e) => {
             document: {
               ref,
               object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
+              uri: { head: true },
             },
           }}
         />
