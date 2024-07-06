@@ -18,7 +18,6 @@ export {
   FC,
   Keyboard,
   ModuleLoader,
-  ModuleNamespace,
   ObjectView,
   PropList,
   Spinner,
