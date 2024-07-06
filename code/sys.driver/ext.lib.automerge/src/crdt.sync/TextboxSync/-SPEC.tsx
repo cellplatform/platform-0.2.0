@@ -24,34 +24,20 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
-  const db = await SampleCrdt.init({ broadcastAdapter: true });
   let doc: t.Doc | undefined;
-  const Sample = {
-    async get(state: t.DevCtxState<T>) {
-      const uri = state.current.docuri;
-      const exists = uri ? await db.store.doc.exists(uri) : false;
-      doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
-      state.change((d) => (local.docuri = d.docuri = doc?.uri));
-      return doc;
-    },
-    async delete(state: t.DevCtxState<T>) {
-      const uri = state.current.docuri;
-      if (uri) await db.store.doc.delete(uri);
-      doc = undefined;
-      state.change((d) => (local.docuri = d.docuri = undefined));
-    },
-  };
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+    const sample = SampleCrdt.dev(state, local, db.store);
 
     await state.change((d) => {
       d.theme = local.theme;
       d.path = local.path;
       d.docuri = local.docuri;
     });
-    await Sample.get(state);
+    doc = await sample.get();
 
     ctx.debug.width(330);
     ctx.subject
@@ -90,6 +76,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const sample = SampleCrdt.dev(state, local, db.store);
     const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
@@ -112,11 +99,11 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
       dev.button('clear text', async (e) => {
-        const doc = await Sample.get(state);
+        const doc = await sample.get();
         doc?.change((d) => (d.text = ''));
       });
       dev.button(['reset doc', '(delete fields)'], async (e) => {
-        const doc = await Sample.get(state);
+        const doc = await sample.get();
         doc?.change((d) => {
           Object.keys(d).forEach((key) => delete (d as any)[key]);
         });
@@ -130,13 +117,13 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(`create`)
           .enabled((e) => !doc)
-          .onClick((e) => Sample.get(state));
+          .onClick(async (e) => (doc = await sample.get()));
       });
       dev.button((btn) => {
         btn
           .label(`delete`)
           .enabled((e) => !!doc)
-          .onClick((e) => Sample.delete(state));
+          .onClick(async (e) => (doc = await sample.delete()));
       });
     });
   });

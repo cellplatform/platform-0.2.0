@@ -7,8 +7,9 @@ import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
 type T = {
+  docuri?: t.UriString;
   props: P;
-  debug: { docuri?: t.UriString; useLens?: boolean };
+  debug: { useLens?: boolean };
   current: { isFocused?: boolean };
 };
 const initial: T = { props: {}, debug: {}, current: {} };
@@ -19,7 +20,7 @@ const initial: T = { props: {}, debug: {}, current: {} };
 const name = `${Pkg.name}:Crdt.CmdBar`;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme' | 'useKeyboard'>;
+  type LocalStore = Pick<T, 'docuri'> & T['debug'] & Pick<P, 'theme' | 'useKeyboard'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -30,37 +31,20 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  const Sample = {
-    async get(state: t.DevCtxState<T>) {
-      const uri = state.current.debug.docuri;
-      const exists = uri ? await db.store.doc.exists(uri) : false;
-      doc = exists ? await db.store.doc.get(uri) : await db.store.doc.getOrCreate((d) => null);
-      state.change((d) => (local.docuri = d.debug.docuri = doc?.uri));
-      return doc;
-    },
-    async delete(state: t.DevCtxState<T>) {
-      const uri = state.current.debug.docuri;
-      if (uri) await db.store.doc.delete(uri);
-      doc = undefined;
-      state.change((d) => (local.docuri = d.debug.docuri = undefined));
-    },
-  };
-
   const cmdbar = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
+    const sample = SampleCrdt.dev(state, local, db.store);
+
     await state.change((d) => {
       d.props.theme = local.theme;
       d.props.useKeyboard = local.useKeyboard;
       d.debug.useLens = local.useLens;
-      d.debug.docuri = local.docuri;
+      d.docuri = local.docuri;
     });
-
-    await Sample.get(state);
+    doc = await sample.get();
 
     ctx.debug.width(330);
     ctx.subject
@@ -115,10 +99,10 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.header.border(-0.1).render((e) => {
-      const { debug, props } = state.current;
+      const { debug, docuri } = state.current;
       const { store, index } = db;
-      const ref = debug.docuri;
       return (
         <Info
           stateful={true}
@@ -126,7 +110,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store, index },
             document: {
-              ref,
+              ref: docuri,
               object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
             },
           }}
@@ -139,6 +123,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const link = Dev.Link.pkg(Pkg, dev);
+    const sample = SampleCrdt.dev(state, local, db.store);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
@@ -165,13 +150,13 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(`create`)
           .enabled((e) => !doc)
-          .onClick((e) => Sample.get(state));
+          .onClick(async (e) => (doc = await sample.get()));
       });
       dev.button((btn) => {
         btn
           .label(`delete`)
           .enabled((e) => !!doc)
-          .onClick((e) => Sample.delete(state));
+          .onClick(async (e) => (doc = await sample.delete()));
       });
     });
   });
@@ -179,10 +164,10 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>(async (e) => {
-      const { props, debug } = e.state;
+      const { props, docuri } = e.state;
       const data = {
         props,
-        docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
+        docuri: Doc.Uri.id(docuri, { shorten: 5 }),
         doc: doc?.current,
       };
       return <Dev.Object name={name} data={data} expand={{ paths: ['$'] }} fontSize={11} />;
