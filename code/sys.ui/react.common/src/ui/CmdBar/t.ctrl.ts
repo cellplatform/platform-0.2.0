@@ -39,5 +39,5 @@ export type CmdBarCtrl = {
  */
 export type CmdBarKeyAction = KeyFocusAndSelect | KeyFocusMain | KeyClear;
 type KeyFocusAndSelect = { name: 'FocusAndSelect' };
-type KeyFocusMain = { name: 'FocusMain' };
+type KeyFocusMain = { name: 'Focus:Main' };
 type KeyClear = { name: 'Clear' };

@@ -15,7 +15,7 @@ export const CtrlKeyboard = {
       if (isFocused()) e.handled(); // NB: prevent unintended blur.
     });
     keys.on('META + KeyJ', () => {
-      fire({ name: 'FocusMain' });
+      fire({ name: 'Focus:Main' });
     });
     keys.on('META + KeyK', () => {
       if (!isFocused()) fire({ name: 'FocusAndSelect' });
@@ -44,7 +44,7 @@ export const CtrlKeyboard = {
       cmdbar.caretToEnd({});
     }
 
-    if (name === 'FocusMain') {
+    if (name === 'Focus:Main') {
       // NB: picked up by corresponding <Main> component.
     }
 
