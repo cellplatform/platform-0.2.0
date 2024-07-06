@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Color, css, useFocus, type t, Args } from './common';
-import { Ctrl } from './ctrl';
 import { MainArgs } from './-ui.Sample.Main.Args';
+import { Args, COLORS, Color, css, useFocus, type t } from './common';
+import { Ctrl } from './ctrl';
 
 export type SampleMainProps = {
   cmd?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
@@ -24,7 +24,7 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
     const events = cmdbar?.cmd.events();
     events?.on('Key:Action', (e) => {
       const name = e.params.name;
-      if (name === 'FocusMain') focus.focus();
+      if (name === 'Focus:Main') focus.focus();
     });
     return events?.dispose;
   }, [cmd]);
@@ -32,8 +32,8 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
   /**
    * Render
    */
-  const t = (prop: string, time: t.Milliseconds = 100) => `${prop} ${time}ms ease-in-out`;
-  const transition = [t('opacity'), t('font-size')].join(', ');
+  const t = (prop: string, time: t.Msecs = 100) => `${prop} ${time}ms`;
+  const transition = [t('opacity'), t('font-size'), t('background-color')].join(', ');
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
@@ -41,15 +41,17 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
       userSelect: 'none',
       display: 'grid',
       placeItems: 'center',
+      outline: 'none',
+      filter: `grayscale(${isFocused ? 0 : 100}%)`,
+      transition,
     }),
     body: css({
       position: 'relative',
       width: size[0],
       height: size[1],
-      outline: 'none',
       display: 'grid',
       cursor: isFocused ? 'default' : 'pointer',
-      transform: !isFocused ? `perspective(800px) rotateX(50deg) translateZ(-10px)` : undefined,
+      transform: !isFocused ? `perspective(300px) rotateX(40deg) translateZ(-10px)` : undefined,
       transition: t('transform', 300),
     }),
     content: css({
@@ -61,23 +63,23 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
       pointerEvents: 'none',
       Absolute: 8,
       borderRadius: 10,
-      border: `dashed 1px ${theme.fg}`,
-      opacity: isFocused ? 0.8 : 0.2,
-      transition: transition,
+      border: `dashed 1px ${COLORS.MAGENTA}`,
+      opacity: isFocused ? 0.8 : 0.3,
+      backgroundColor: Color.alpha(theme.fg, 0.03),
+      transition,
     }),
     label: css({
       Absolute: [-10, 15, null, null],
       fontFamily: 'monospace',
       fontSize: 10,
       opacity: isFocused ? 1 : 0.3,
-      transition: transition,
+      transition,
     }),
     piggy: css({
-      fontSize: 36,
-      filter: `grayscale(${isFocused ? 0 : 100}%)`,
-      transition,
+      fontSize: 48,
       textShadow: `0px 4px 18px ${Color.format(theme.is.light ? 0 : isFocused ? -0.3 : -0.1)}`,
-      opacity: isFocused ? 1 : 0.5,
+      opacity: isFocused ? 1 : theme.is.dark ? 0.2 : 0.4,
+      transition,
     }),
   };
 
@@ -86,8 +88,8 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.body} ref={focus.ref} tabIndex={0}>
+    <div {...css(styles.base, props.style)} ref={focus.ref} tabIndex={0}>
+      <div {...styles.body}>
         <div {...styles.label}>{'main'}</div>
         <div {...styles.content}>
           {elArgs}
