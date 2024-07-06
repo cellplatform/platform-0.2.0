@@ -52,7 +52,7 @@ export default Dev.describe(name, (e) => {
           <CmdBar
             {...props}
             cmd={cmdbar.cmd}
-            onReady={(e) => console.info('⚡️ CmdBar.Stateful.onReady:', e)}
+            onReady={(e) => console.info('⚡️ CmdBar.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
               state.change((d) => {
