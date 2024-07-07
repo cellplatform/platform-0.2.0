@@ -6,15 +6,16 @@ type Cursor = string;
 /**
  * Safely modify a string stored on a CRDT.
  */
-export function splice<T extends O>(
+
+export const splice: t.TextSplice = <T extends O>(
   doc: T,
   path: t.ObjectPath,
-  index: t.Index | Cursor,
+  index: t.Index,
   del: number,
   newText?: string,
-) {
+) => {
   A.splice(doc, [...path], index, del, newText);
-}
+};
 
 /**
  * Replace part of a string using splice.

@@ -44,7 +44,7 @@ describe('Doc.Lens: splice', () => {
           .filter((patch) => patch.action === 'splice')
           .map((patch) => patch as t.A.SpliceTextPatch)
           .forEach((patch) => {
-            const index = patch.path[patch.path.length - 1];
+            const index = patch.path[patch.path.length - 1] as number;
             const path = patch.path.slice(0, -1);
             Doc.Text.splice(d, path, index, 0, patch.value);
           });
