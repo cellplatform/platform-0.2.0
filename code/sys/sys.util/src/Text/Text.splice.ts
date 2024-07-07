@@ -3,18 +3,21 @@ import { ObjectPath, type t } from './common';
 type O = Record<string, unknown>;
 
 /**
- * Safely modify a string stored on a CRDT.
+ * Safely modify a string stored on an immutable object <T>
+ * (NB: this mutates the given state.)
  */
-export function splice<T extends O>(
+export const splice: t.Splice = <T extends O = O>(
   state: T,
   path: t.ObjectPath,
   index: t.Index,
-  del: number,
+  delCount: number,
   newText?: string,
-) {
+) => {
   if (path.length === 0) throw new Error('Target path is empty');
   const target = ObjectPath.resolve<O>(state, path.slice(0, -1));
   const prop = path[path.length - 1];
+
+  // Guard inputs.
   if (!target || typeof target !== 'object') {
     throw new Error(`Target path "${path.join('.')}" is not within an object`);
   }
@@ -24,11 +27,11 @@ export function splice<T extends O>(
 
   // Perform the splice operation.
   const str = target[prop] ?? '';
-  target[prop] = `${str.slice(0, index)}${newText || ''}${str.slice(index + del)}`;
-}
+  target[prop] = `${str.slice(0, index)}${newText || ''}${str.slice(index + delCount)}`;
+};
 
 /**
- * Replace part of a string using splice.
+ * Replace all of a string using splice.
  */
 export function replace<T extends O>(doc: T, path: t.ObjectPath, next: string) {
   const current = ObjectPath.resolve(doc, path);
