@@ -7,13 +7,13 @@ import { type t } from './common';
  * Ref:
  *    https://automerge.org/automerge/api-docs/js/functions/next.splice.html
  */
-export function diff(from: string, to: string, caret: number): t.TextDiff {
+export const diff: t.TextDiffCalc = (from, to, caret) => {
   const index = wrangle.firstDiff(from, to);
   const commonSuffixLength = wrangle.commonSuffixLength(from, to, index);
   const delCount = from.length - index - commonSuffixLength;
   const newText = to.slice(index, caret);
-  return { index, delCount, newText } as const;
-}
+  return { index, delCount, newText };
+};
 
 /**
  * Helpers

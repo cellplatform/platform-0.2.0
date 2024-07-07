@@ -36,12 +36,7 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { theme, path } = e.state;
         Dev.Theme.background(ctx, theme, 1);
-
-        console.log('path', path);
-
         return <TextboxSync.Dev.Layout state={doc} theme={theme} path={path} />;
-
-        return <div>{`🐷 ${name}`}</div>;
       });
   });
 

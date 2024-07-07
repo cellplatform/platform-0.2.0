@@ -12,7 +12,7 @@ export const splice: t.TextSplice = <T extends O = O>(
   index: t.Index,
   delCount: number,
   newText?: string,
-) => {
+): void => {
   if (path.length === 0) throw new Error('Target path is empty');
   const target = ObjectPath.resolve<O>(state, path.slice(0, -1));
   const prop = path[path.length - 1];

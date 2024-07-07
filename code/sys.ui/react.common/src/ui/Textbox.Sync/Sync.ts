@@ -1,5 +1,5 @@
-import { ObjectPath, rx, Text, type t } from './common';
 import { Dev } from './-ui';
+import { DEFAULTS, ObjectPath, rx, type t } from './common';
 
 /**
  * Default sync logic for Textbox ←|→ ImmutableRef<T> state.
@@ -15,9 +15,14 @@ export const TextboxSync = {
     textbox: t.TextInputRef,
     state: t.TextboxSyncState,
     path: t.ObjectPath,
-    options: { dispose$?: t.UntilObservable; debug?: string } = {},
+    options: {
+      dispose$?: t.UntilObservable;
+      debug?: string;
+      splice?: t.TextSplice;
+      diff?: t.TextDiffCalc;
+    } = {},
   ) {
-    const { debug = 'Unknown' } = options;
+    const { debug = 'Unknown', splice = DEFAULTS.splice, diff = DEFAULTS.diff } = options;
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;
 
@@ -43,11 +48,11 @@ export const TextboxSync = {
      */
     const input$ = event.textbox.change$.pipe(
       rx.filter((e) => e.to !== resolve(state.current, path)),
-      rx.map((e) => Text.diff(e.from, e.to, e.selection.start)),
-      rx.filter((diff) => diff.index >= 0),
+      rx.map((e) => diff(e.from, e.to, e.selection.start)),
+      rx.filter((e) => e.index >= 0),
     );
-    input$.subscribe((diff) => {
-      state.change((d) => Text.splice(d, path, diff.index, diff.delCount, diff.newText));
+    input$.subscribe((e) => {
+      state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
     });
 
     /**

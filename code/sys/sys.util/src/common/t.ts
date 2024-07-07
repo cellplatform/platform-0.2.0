@@ -25,6 +25,7 @@ export type {
   Percent,
   PixelOrPercent,
   TextDiff,
+  TextDiffCalc,
   TextSplice,
   TypedObjectPath,
   UnixEpoch,

@@ -15,6 +15,15 @@ export type TextSplice = <T extends O>(
 ) => void;
 
 /**
+ * Calculate a diff between two string providing parameters to pass
+ * into a `.splice(..)` function.
+ *
+ * Ref:
+ *    https://automerge.org/automerge/api-docs/js/functions/next.splice.html
+ */
+export type TextDiffCalc = (from: string, to: string, caret: number) => t.TextDiff;
+
+/**
  * A unit of difference within a string of text.
  */
 export type TextDiff = {

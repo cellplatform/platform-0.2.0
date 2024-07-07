@@ -1,7 +1,6 @@
 import { A, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
-type Cursor = string;
 
 /**
  * Safely modify a string stored on a CRDT.
@@ -11,10 +10,10 @@ export const splice: t.TextSplice = <T extends O>(
   doc: T,
   path: t.ObjectPath,
   index: t.Index,
-  del: number,
+  delCount: number,
   newText?: string,
 ) => {
-  A.splice(doc, [...path], index, del, newText);
+  A.splice(doc, [...path], index, delCount, newText);
 };
 
 /**
