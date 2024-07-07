@@ -33,6 +33,12 @@ export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init({ broadcastAdapter: true });
   const cmdbar = CmdBar.Ctrl.create();
 
+  const getText = (state: T) => {
+    const paths = CmdBar.Stateful.DEFAULTS.paths;
+    const text = doc ? ObjectPath.resolve<string>(doc.current, paths.text) ?? '' : '';
+    return text;
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -94,6 +100,21 @@ export default Dev.describe(name, async (e) => {
           </div>
         );
       });
+
+    /**
+     * <Main> sample.
+     */
+    ctx.host.layer(1).render<T>((e) => {
+      const { props } = e.state;
+      return CmdBar.Dev.Main.render({
+        cmdbar,
+        argv: getText(e.state),
+        theme: props.theme,
+        size: [400, 200],
+        topHalf: true,
+        style: { marginBottom: 40 },
+      });
+    });
   });
 
   e.it('ui:header', async (e) => {

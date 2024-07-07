@@ -26,6 +26,20 @@ export default Dev.describe(name, (e) => {
   const cmdbar = CmdBar.Ctrl.create();
   const doc = Immutable.clonerRef({});
 
+  const getPaths = (state: T, defaults?: boolean) => {
+    const defaultPaths = defaults ? DEFAULTS.paths : undefined; // NB: default.
+    const paths = state.debug.prependPaths
+      ? CmdBar.Stateful.prepend(DEFAULTS.paths, ['foo'])
+      : defaultPaths;
+    return paths;
+  };
+
+  const getText = (state: T) => {
+    const paths = getPaths(state, true)!;
+    const text = doc ? ObjectPath.resolve<string>(doc.current, paths.text) ?? '' : '';
+    return text;
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -79,6 +93,21 @@ export default Dev.describe(name, (e) => {
           </div>
         );
       });
+
+    /**
+     * <Main> sample.
+     */
+    ctx.host.layer(1).render<T>((e) => {
+      const { props, current } = e.state;
+      return CmdBar.Dev.Main.render({
+        cmdbar,
+        argv: current.argv,
+        theme: props.theme,
+        size: [400, 200],
+        topHalf: true,
+        style: { marginBottom: 40 },
+      });
+    });
   });
 
   e.it('ui:debug', async (e) => {
