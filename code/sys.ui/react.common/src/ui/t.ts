@@ -34,5 +34,5 @@ export type * from './Text.Input/t';
 export type * from './Text.Keyboard/t';
 export type * from './Text.Secret/t';
 export type * from './Text.Syntax/t';
-export type * from './Text.TextboxSync/t';
 export type * from './Text/t';
+export type * from './Textbox.Sync/t';

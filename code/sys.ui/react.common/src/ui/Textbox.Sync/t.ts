@@ -1,5 +1,8 @@
 import type { t } from './common';
 
+type O = Record<string, unknown>;
+export type TextboxSyncState = t.ImmutableRef<O, t.ImmutableEvents<O, unknown>, unknown>;
+
 /**
  * A live listener that is syncing an <input> textbox
  * with a CRDT document.
