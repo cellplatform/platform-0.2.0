@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
-import { MainArgs } from './-ui.Sample.Main.Args';
-import { Args, COLORS, Color, css, useFocus, type t } from './common';
+import { MainArgs } from './-ui.dev.Main.Args';
+import { Args, COLORS, Color, css, useFocus, type t, KeyHint } from './common';
 import { Ctrl } from './ctrl';
 
 export type SampleMainProps = {
   cmd?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
-  size: [number, number];
+  size?: t.SizeTuple;
+  argv?: string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const SampleMain: React.FC<SampleMainProps> = (props) => {
-  const { cmd, size } = props;
+  const { cmd, size = [] } = props;
   const focus = useFocus();
   const isFocused = focus.containsFocus;
-
+  const args = Args.parse(props.argv);
 
   /**
    * Lifecycle
@@ -39,11 +40,11 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
     base: css({
       color: theme.fg,
       userSelect: 'none',
-      display: 'grid',
-      placeItems: 'center',
       outline: 'none',
       filter: `grayscale(${isFocused ? 0 : 100}%)`,
       transition,
+      display: 'grid',
+      placeItems: 'center',
     }),
     body: css({
       position: 'relative',
@@ -51,11 +52,12 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
       height: size[1],
       display: 'grid',
       cursor: isFocused ? 'default' : 'pointer',
-      transform: !isFocused ? `perspective(300px) rotateX(40deg) translateZ(-10px)` : undefined,
+      transform: !isFocused ? `perspective(600px) rotateX(30deg) translateZ(-10px)` : undefined,
       transition: t('transform', 300),
+      pointerEvents: 'auto',
     }),
     content: css({
-      opacity: isFocused ? 1 : 0.5,
+      opacity: isFocused ? 1 : 0.8,
       display: 'grid',
       placeItems: 'center',
     }),
@@ -63,16 +65,22 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
       pointerEvents: 'none',
       Absolute: 8,
       borderRadius: 10,
-      border: `dashed 1px ${COLORS.MAGENTA}`,
-      opacity: isFocused ? 0.8 : 0.3,
+      border: `dashed 1px ${COLORS.WHITE}`,
+      opacity: isFocused ? 0.8 : 0.5,
       backgroundColor: Color.alpha(theme.fg, 0.03),
       transition,
     }),
     label: css({
-      Absolute: [-10, 15, null, null],
+      Absolute: [-15, 15, null, null],
       fontFamily: 'monospace',
       fontSize: 10,
       opacity: isFocused ? 1 : 0.3,
+      transition,
+    }),
+    keyHint: css({
+      Absolute: [null, 0, -25, 0],
+      display: 'grid',
+      placeItems: 'center',
       transition,
     }),
     piggy: css({
@@ -87,9 +95,16 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
     <MainArgs args={args} isFocused={isFocused} style={{ Absolute: 15 }} theme={theme.name} />
   );
 
+  const elKeyHint = (
+    <div {...styles.keyHint}>
+      <KeyHint text={'META + J'} theme={theme.name} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} ref={focus.ref} tabIndex={0}>
       <div {...styles.body}>
+        {elKeyHint}
         <div {...styles.label}>{'main'}</div>
         <div {...styles.content}>
           {elArgs}
