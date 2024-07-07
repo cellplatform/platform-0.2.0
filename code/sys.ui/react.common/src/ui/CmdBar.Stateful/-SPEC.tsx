@@ -109,8 +109,6 @@ export default Dev.describe(name, (e) => {
             cmd={cmdbar.cmd}
             state={debug.useState ? doc : undefined}
             paths={paths}
-            onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
-            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onReady={(e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
               e.dispose$.subscribe(() => console.info('CmdBar.Stateful.onReady:dispose$ → ⚡️'));
@@ -120,6 +118,9 @@ export default Dev.describe(name, (e) => {
               state.change((d) => (d.current.argv = e.text));
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
             }}
+            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+            onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
+            onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
           />
         );
 

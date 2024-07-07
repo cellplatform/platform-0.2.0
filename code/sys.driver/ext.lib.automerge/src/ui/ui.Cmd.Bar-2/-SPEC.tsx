@@ -77,14 +77,15 @@ export default Dev.describe(name, async (e) => {
             style={styles.cmdbar}
             state={doc}
             cmd={cmdbar}
-            onChange={(e) => state.change((d) => (d.current.argv = e.to))}
-            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onReady={(e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
               const { dispose$ } = e;
               state.change((d) => (d.current.argv = e.text));
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
             }}
+            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+            onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+            onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
           />
         );
 

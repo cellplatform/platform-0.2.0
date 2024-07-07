@@ -39,11 +39,6 @@ export function useController(props: P) {
   }, [ready, state?.instance, !!textbox, paths.text.join('.')]);
 
   /**
-   * <State> document change listener.
-   */
-  useEffect(() => {
-
-  /**
    * API: Event Handlers
    */
   const onReady: t.CmdBarReadyHandler = (e) => {
