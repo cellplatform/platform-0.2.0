@@ -1,5 +1,5 @@
 import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
+import { Color, COLORS, Dev, DevIcons, Pkg, Time, css, expect, type t } from '../../test.ui';
 
 type P = t.CmdBarProps;
 type T = { props: P; parsedArgs?: t.ParsedArgs };

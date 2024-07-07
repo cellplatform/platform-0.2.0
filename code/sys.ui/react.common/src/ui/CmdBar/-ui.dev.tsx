@@ -1,6 +1,5 @@
-import { Pkg, type t } from './common';
 import { SampleMain } from './-ui.dev.Main';
-import { render } from './-ui.dev.Main.render';
+import { render } from './-ui.dev.Main.u.render';
 
 export const Dev = {
   Main: {

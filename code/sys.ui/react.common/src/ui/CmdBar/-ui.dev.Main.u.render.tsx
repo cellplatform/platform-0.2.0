@@ -11,12 +11,9 @@ export function render(props: {
   style?: t.CssValue;
 }) {
   const { cmdbar, size = [350, 200] } = props;
+  const gridTemplateRows = props.topHalf ? `1fr 1fr` : '1fr auto';
   const styles = {
-    base: css({
-      Absolute: 0,
-      display: 'grid',
-      gridTemplateRows: props.topHalf ? `1fr 1fr` : '1fr auto',
-    }),
+    base: css({ Absolute: 0, display: 'grid', gridTemplateRows }),
     main: css({ display: 'grid' }),
   };
   return (
@@ -24,7 +21,7 @@ export function render(props: {
       <div {...styles.main}>
         <SampleMain theme={props.theme} size={size} cmd={cmdbar} argv={props.argv} />
       </div>
-      <div>{/* Grid Spacer */}</div>
+      <div>{/* Spacer */}</div>
     </div>
   );
 }

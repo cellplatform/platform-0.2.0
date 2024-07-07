@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { MainArgs } from './-ui.dev.Main.Args';
-import { Args, COLORS, Color, css, useFocus, type t, KeyHint } from './common';
+import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 import { Ctrl } from './ctrl';
 
-export type SampleMainProps = {
+export type SampleProps = {
   cmd?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
   argv?: string;
@@ -11,7 +11,7 @@ export type SampleMainProps = {
   style?: t.CssValue;
 };
 
-export const SampleMain: React.FC<SampleMainProps> = (props) => {
+export const SampleMain: React.FC<SampleProps> = (props) => {
   const { cmd, size = [] } = props;
   const focus = useFocus();
   const isFocused = focus.containsFocus;
@@ -62,13 +62,15 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
       placeItems: 'center',
     }),
     border: css({
+      position: 'relative',
       pointerEvents: 'none',
       Absolute: 8,
       borderRadius: 10,
-      border: `dashed 1px ${COLORS.WHITE}`,
+      border: `dashed 1px ${Color.alpha(theme.fg, 0.9)}`,
       opacity: isFocused ? 0.8 : 0.5,
       backgroundColor: Color.alpha(theme.fg, 0.03),
       transition,
+      display: 'grid',
     }),
     label: css({
       Absolute: [-15, 15, null, null],
@@ -108,8 +110,10 @@ export const SampleMain: React.FC<SampleMainProps> = (props) => {
         <div {...styles.label}>{'main'}</div>
         <div {...styles.content}>
           {elArgs}
+          <div {...styles.border}>
+            <div />
+          </div>
           <div {...styles.piggy}>{'🐷'}</div>
-          <div {...styles.border} />
         </div>
       </div>
     </div>
