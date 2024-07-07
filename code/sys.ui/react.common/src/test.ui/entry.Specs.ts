@@ -44,6 +44,7 @@ export const ModuleSpecs = {
   [`${ns}.Text.Keyboard`]: () => import('../ui/Text.Keyboard/-dev/-SPEC'),
   [`${ns}.Text.Secret`]: () => import('../ui/Text.Secret/-SPEC'),
   [`${ns}.Text.Syntax`]: () => import('../ui/Text.Syntax/-SPEC'),
+  [`${ns}.Textbox.Sync`]: () => import('../ui/Textbox.Sync/-SPEC'),
 } as t.SpecImports;
 
 export const HookSpecs = {

@@ -66,7 +66,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         value={text}
         theme={theme}
         isEnabled={enabled}
-        placeholder={'string (crdt)'}
+        placeholder={'text'}
         spellCheck={false}
         onReady={(e) => setTextbox(e.ref)}
         onChange={(e) => setText(e.to)}

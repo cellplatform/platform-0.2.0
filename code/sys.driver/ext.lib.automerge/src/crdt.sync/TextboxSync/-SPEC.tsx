@@ -19,8 +19,8 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<T, 'theme' | 'path' | 'docuri'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
-    path: ['text'],
     theme: 'Dark',
+    path: ['text'],
     docuri: undefined,
   });
 
@@ -82,9 +82,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
-
       dev.hr(-1, 5);
-
       const path = (path: t.ObjectPath) => {
         dev.button(`path: [ ${path?.join('.')} ]`, (e) => {
           e.change((d) => (local.path = d.path = path));

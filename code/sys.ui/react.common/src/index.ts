@@ -36,7 +36,7 @@ export { TextInput } from './ui/Text.Input';
 export { Keyboard } from './ui/Text.Keyboard';
 export { TextSecret } from './ui/Text.Secret';
 export { TextSyntax } from './ui/Text.Syntax';
-export { TextboxSync } from './ui/Text.TextboxSync';
+export { TextboxSync } from './ui/Textbox.Sync';
 
 /**
  * Hooks
