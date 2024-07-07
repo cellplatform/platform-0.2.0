@@ -64,8 +64,6 @@ export default Dev.describe(name, (e) => {
       d.current.argv = local.argv;
     });
 
-    console.log('local.argv', local.argv);
-
     doc.change((d) => {
       const paths = getPaths(state.current);
       ObjectPath.mutate(d, paths.text, local.argv);
@@ -243,9 +241,8 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const { debug, props } = e.state;
-
-
+      const { debug } = e.state;
+      const text = getText(state.current);
       const data = {
         props: e.state.props,
         'state( ImmutableRef<D> )': debug.useState ? doc?.current : undefined,
