@@ -30,10 +30,20 @@ export function useController(props: P) {
    *     activate within the onReady callback.
    */
   useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
+    const life = rx.disposable();
+    const { dispose, dispose$ } = life;
     if (ready && textbox && cmdbar) {
       const text = api.text;
-      props.onReady?.({ text, textbox, cmdbar, paths, dispose$ });
+      props.onReady?.({
+        text,
+        textbox,
+        cmdbar,
+        paths,
+        dispose$,
+        events(dispose$) {
+          return cmdbar.cmd.events([life.dispose$, dispose$]);
+        },
+      });
     }
     return dispose;
   }, [ready, state?.instance, !!textbox, paths.text.join('.')]);

@@ -23,4 +23,5 @@ export type CmdBarStatefulReadyHandler = (e: CmdBarStatefulReadyHandlerArgs) => 
 export type CmdBarStatefulReadyHandlerArgs = t.CmdBarReadyHandlerArgs & {
   readonly paths: t.CmdBarStatefulPaths;
   readonly dispose$: t.Observable<void>;
+  events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };

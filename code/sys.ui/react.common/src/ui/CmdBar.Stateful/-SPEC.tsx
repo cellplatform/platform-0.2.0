@@ -117,6 +117,9 @@ export default Dev.describe(name, (e) => {
               const syncer = CmdBar.Stateful.Sync.listen(textbox, doc, paths.text, { dispose$ });
               state.change((d) => (d.current.argv = e.text));
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
+
+              const events = e.events();
+              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
             }}
             onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
