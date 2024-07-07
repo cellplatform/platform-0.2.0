@@ -2,7 +2,7 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import { css, Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
+import { Color, COLORS, css, Dev, Doc, ObjectPath, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
@@ -10,7 +10,7 @@ type T = {
   docuri?: t.UriString;
   props: P;
   debug: { useLens?: boolean };
-  current: { isFocused?: boolean };
+  current: { isFocused?: boolean; argv?: string };
 };
 const initial: T = { props: {}, debug: {}, current: {} };
 
@@ -20,7 +20,7 @@ const initial: T = { props: {}, debug: {}, current: {} };
 const name = `${Pkg.name}:Crdt.CmdBar`;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = Pick<T, 'docuri'> & T['debug'] & Pick<P, 'theme' | 'useKeyboard'>;
+  type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'useKeyboard'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -32,12 +32,6 @@ export default Dev.describe(name, async (e) => {
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
   const cmdbar = CmdBar.Ctrl.create();
-
-  const getText = (state: T) => {
-    const paths = CmdBar.Stateful.DEFAULTS.paths;
-    const text = doc ? ObjectPath.resolve<string>(doc.current, paths.text) ?? '' : '';
-    return text;
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -58,43 +52,44 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, current } = e.state;
-        const theme = props.theme;
+        const theme = Color.theme(props.theme);
         Dev.Theme.background(ctx, theme, 1);
 
+        const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+        const transition = [t('opacity'), t('border')].join(', ');
         const isFocused = current.isFocused;
-        const mainSize = [280, 150] as [number, number];
+        const borderColor = Color.alpha(theme.is.dark ? theme.fg : COLORS.BLUE, isFocused ? 1 : 0);
         const styles = {
           base: css({ position: 'relative' }),
-          main: css({ Absolute: [0 - mainSize[1] - 50, 0, null, 0] }),
+          cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
           label: css({
             Absolute: [-17, 5, null, null],
             fontFamily: 'monospace',
             fontSize: 10,
             opacity: isFocused ? 1 : 0.3,
-            transition: `opacity 100ms ease`,
+            transition,
           }),
         };
 
         const elCmdBar = (
           <CmdBar.Stateful
             {...props}
+            style={styles.cmdbar}
             state={doc}
             cmd={cmdbar}
+            onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onReady={(e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
-              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text);
-            }}
-            onFocusChange={(e) => {
-              state.change((d) => (d.current.isFocused = e.is.focused));
+              const { dispose$ } = e;
+              state.change((d) => (d.current.argv = e.text));
+              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
             }}
           />
         );
 
-        console.log('props.cmd', props.cmd);
-
         return (
           <div {...styles.base}>
-            <CmdBar.Sample.Main theme={theme} style={styles.main} size={mainSize} cmd={cmdbar} />
             <div {...styles.label}>{'cmdbar'}</div>
             {elCmdBar}
           </div>
@@ -105,10 +100,10 @@ export default Dev.describe(name, async (e) => {
      * <Main> sample.
      */
     ctx.host.layer(1).render<T>((e) => {
-      const { props } = e.state;
+      const { props, current } = e.state;
       return CmdBar.Dev.Main.render({
         cmdbar,
-        argv: getText(e.state),
+        argv: current.argv,
         theme: props.theme,
         size: [400, 200],
         topHalf: true,
@@ -144,8 +139,8 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
     const sample = SampleCrdt.dev(state, local, db.store);
+    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
