@@ -97,11 +97,13 @@ export default Dev.describe('Test.syntax', (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'textAsChildren'))),
       );
 
-    dev
-      .hr()
-      .title('Theme')
-      .button('light', (e) => e.change(({ props }) => (props.theme = 'Light')))
-      .button('dark', (e) => e.change(({ props }) => (props.theme = 'Dark')));
+    dev.hr(-1, 5);
+
+    Dev.Theme.switcher(
+      dev,
+      (d) => d.props.theme,
+      (d, value) => (d.props.theme = value),
+    );
 
     dev
       .hr()
