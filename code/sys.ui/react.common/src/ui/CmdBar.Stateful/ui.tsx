@@ -11,6 +11,7 @@ export const View: React.FC<t.CmdBarStatefulProps> = (props) => {
       {...props}
       {...controller.handlers}
       text={controller.text}
+      hintKey={controller.hintKey}
       enabled={controller.enabled}
     />
   );

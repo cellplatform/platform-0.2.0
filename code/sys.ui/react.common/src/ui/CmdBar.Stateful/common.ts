@@ -2,6 +2,7 @@ import { Pkg, type t } from '../common';
 
 export { useFocus } from '../../ui.use';
 export { Ctrl } from '../CmdBar/ctrl';
+export { TextboxSync } from '../Textbox.Sync';
 export * from '../common';
 
 import { DEFAULTS as BASE } from '../CmdBar/common';

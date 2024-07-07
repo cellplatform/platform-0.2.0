@@ -1,12 +1,17 @@
-import { DEFAULTS, FC, type t } from './common';
+import { DEFAULTS, FC, TextboxSync as Sync, type t } from './common';
+import { prepend } from './u';
 import { View } from './ui';
 
 /**
  * Export
  */
-type Fields = { DEFAULTS: typeof DEFAULTS };
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  Sync: typeof Sync;
+  prepend: typeof prepend;
+};
 export const CmdBarStateful = FC.decorate<t.CmdBarStatefulProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, Sync, prepend },
   { displayName: DEFAULTS.displayName },
 );

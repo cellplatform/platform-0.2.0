@@ -1,6 +1,5 @@
-import { css } from '../../test.ui';
 import { SampleMain } from './-ui.dev.Main';
-import { type t } from './common';
+import { css, type t } from './common';
 
 export function render(props: {
   cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
