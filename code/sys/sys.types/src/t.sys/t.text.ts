@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
  * A generic splicer function to apply a
  * detailed "unit of change" to a string.
  */
-export type Splice = <T extends O>(
+export type TextSplice = <T extends O>(
   doc: T,
   path: t.ObjectPath,
   index: t.Index,

@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
  * Safely modify a string stored on an immutable object <T>
  * (NB: this mutates the given state.)
  */
-export const splice: t.Splice = <T extends O = O>(
+export const splice: t.TextSplice = <T extends O = O>(
   state: T,
   path: t.ObjectPath,
   index: t.Index,
