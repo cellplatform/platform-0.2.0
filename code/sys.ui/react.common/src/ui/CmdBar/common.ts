@@ -11,6 +11,10 @@ export { TextInput } from '../Text.Input';
  * Constants
  */
 const name = 'CmdBar';
+const paths: t.CmdBarPaths = {
+  text: ['text'],
+};
+
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
@@ -18,4 +22,5 @@ export const DEFAULTS = {
   enabled: true,
   focusOnReady: true,
   useKeyboard: true,
+  paths,
 } as const;

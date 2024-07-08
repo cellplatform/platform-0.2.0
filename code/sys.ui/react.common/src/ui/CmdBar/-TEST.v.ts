@@ -1,5 +1,5 @@
 import { CmdBar } from '.';
-import { Immutable, Time, describe, expect, it, Cmd, type t } from '../../test';
+import { Cmd, Immutable, Time, describe, expect, it, type t } from '../../test';
 
 describe('CmdBar', () => {
   describe('CmdBar.Ctrl', () => {
@@ -7,7 +7,8 @@ describe('CmdBar', () => {
 
     const createCmdBarCtrl = () => {
       const transport = Immutable.clonerRef({});
-      return Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
+      const cmd = Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
+      return { cmd, transport } as const;
     };
 
     it('creation (from simple Immutable<T>)', async () => {
@@ -29,9 +30,9 @@ describe('CmdBar', () => {
       expect(fired).to.eql(2);
     });
 
-    it('CmdBar.Ctrl.cmdbar', () => {
+    it('Ctrl.cmdbar', () => {
       const ctrl = Ctrl.create();
-      const cmd = createCmdBarCtrl();
+      const { cmd } = createCmdBarCtrl();
 
       const methods1 = Ctrl.cmdbar(cmd); // From raw command.
       const methods2 = Ctrl.cmdbar(cmd); // From raw command (new instance)

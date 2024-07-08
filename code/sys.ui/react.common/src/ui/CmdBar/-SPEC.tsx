@@ -142,13 +142,19 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Controls', (dev) => {
+    dev.section(['Command', 'Ctrl'], (dev) => {
       const focus = (select?: boolean) => {
         const invoke = () => Time.delay(0, () => cmdbar.focus({ select }));
         dev.button(['cmd: Focus', select ? 'select' : ''], () => invoke());
       };
       focus(true);
       focus(false);
+
+      dev.hr(-1, 5);
+      dev.button('cmd: Current', async (e) => {
+        const res = await cmdbar.current({}).promise();
+        console.log('res', res.result);
+      });
     });
 
     dev.hr(5, 20);

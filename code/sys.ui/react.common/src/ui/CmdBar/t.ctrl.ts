@@ -4,6 +4,8 @@ import type { t } from './common';
  * Commands for controlling the <CmdBar> UI component.
  */
 export type CmdBarCtrlType =
+  | Current
+  | CurrentR
   | Focus
   | Blur
   | SelectAll
@@ -12,6 +14,8 @@ export type CmdBarCtrlType =
   | Invoke
   | KeyAction;
 
+type Current = t.CmdType<'Current', {}>;
+type CurrentR = t.CmdType<'Current:res', { text: string }>;
 type Focus = t.CmdType<'Focus', { select?: boolean }>;
 type Blur = t.CmdType<'Blur', {}>;
 type SelectAll = t.CmdType<'Select:All', {}>;
@@ -25,6 +29,7 @@ type KeyAction = t.CmdType<'Key:Action', CmdBarKeyAction>;
  */
 export type CmdBarCtrl = {
   readonly cmd: t.Cmd<t.CmdBarCtrlType>;
+  readonly current: t.CmdMethodResponder<Current, CurrentR>;
   readonly focus: t.CmdMethodVoid<Focus>;
   readonly blur: t.CmdMethodVoid<Blur>;
   readonly selectAll: t.CmdMethodVoid<SelectAll>;

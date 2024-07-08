@@ -33,6 +33,7 @@ function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
   const method = cmd.method;
   return {
     cmd,
+    current: method('Current', 'Current:res'),
     focus: method('Focus'),
     blur: method('Blur'),
     selectAll: method('Select:All'),
