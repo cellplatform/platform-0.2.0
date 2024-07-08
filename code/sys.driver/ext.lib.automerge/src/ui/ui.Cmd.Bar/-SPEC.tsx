@@ -1,99 +1,127 @@
-import { CmdBar, DEFAULTS } from '.';
-import { css, Dev, Doc, Pkg, SampleCrdt, slug, Time, type t } from '../../test.ui';
+import { CmdBar } from 'sys.ui.react.common';
+import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
+
+import { Sync } from '../../crdt.sync';
+import { Color, COLORS, css, Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
-type P = t.CmdBarProps;
+type P = CmdBarStatefulProps;
 type T = {
   docuri?: t.UriString;
   props: P;
   debug: { useLens?: boolean };
+  current: { isFocused?: boolean; argv?: string };
 };
-const initial: T = { props: {}, debug: {} };
+const initial: T = { props: {}, debug: {}, current: {} };
 
 /**
  * Spec
  */
-const name = DEFAULTS.displayName;
+const name = `${Pkg.name}:Crdt.CmdBar`;
+
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'focusOnReady'>;
+  type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'useKeyboard'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
-    focusOnReady: true,
     docuri: undefined,
     useLens: true,
+    useKeyboard: true,
   });
 
-  const cmdbar = CmdBar.Ctrl.create();
-  const db = await SampleCrdt.init({ broadcastAdapter: true });
-
-  const lensPath: t.ObjectPath = ['foobar'];
   let doc: t.Doc | undefined;
-
-  const SampleLens = {
-    path: ['foobar'] as t.ObjectPath,
-    get() {
-      if (!doc) return undefined;
-      return Doc.lens(doc, lensPath, (d) => (d[lensPath[0]] = {}));
-    },
-  } as const;
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
+  const cmdbar = CmdBar.Ctrl.create();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
     const sample = SampleCrdt.dev(state, local, db.store);
 
     await state.change((d) => {
-      d.props.instance = slug();
       d.props.theme = local.theme;
-      d.props.focusOnReady = local.focusOnReady;
-      d.props.paths = DEFAULTS.paths;
+      d.props.useKeyboard = local.useKeyboard;
       d.debug.useLens = local.useLens;
       d.docuri = local.docuri;
     });
     doc = await sample.get();
 
-    ctx.debug.width(350);
+    ctx.debug.width(330);
     ctx.subject
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-        Dev.Theme.background(dev, props.theme, 1);
+        const { props, current } = e.state;
+        const theme = Color.theme(props.theme);
+        Dev.Theme.background(ctx, theme, 1);
 
+        const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+        const transition = [t('opacity'), t('border')].join(', ');
+        const isFocused = current.isFocused;
+        const borderColor = Color.alpha(theme.is.dark ? theme.fg : COLORS.BLUE, isFocused ? 1 : 0);
         const styles = {
           base: css({ position: 'relative' }),
-          instance: css({
-            Absolute: [null, 8, -20, null],
-            userSelect: 'none',
-            fontFamily: 'monospace',
+          cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
+          label: css({
+            Absolute: [-17, 5, null, null],
             fontSize: 10,
-            opacity: 0.2,
+            fontFamily: 'monospace',
+            opacity: isFocused ? 1 : 0.3,
+            transition,
           }),
         };
+
+        const elCmdBar = (
+          <CmdBar.Stateful
+            {...props}
+            style={styles.cmdbar}
+            state={doc}
+            cmd={cmdbar}
+            onReady={(e) => {
+              const { dispose$ } = e;
+              const events = e.events();
+              console.info('⚡️ CmdBar.Stateful.onReady:', e);
+
+              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+              state.change((d) => (d.current.argv = e.text));
+            }}
+            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+            onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+            onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
+          />
+        );
+
         return (
           <div {...styles.base}>
-            <div {...styles.instance}>{`component:instance:${props.instance || 'unknown'}`}</div>
-            <CmdBar
-              {...props}
-              ctrl={cmdbar.cmd}
-              doc={debug.useLens ? SampleLens.get() : doc}
-              onReady={(e) => console.info(`⚡️ onReady:`, e)}
-              onText={(e) => console.info(`⚡️ onText:`, e)}
-              onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
-              onInvoke={(e) => console.info(`⚡️ onInvoke:`, e)}
-            />
+            <div {...styles.label}>{'cmdbar'}</div>
+            {elCmdBar}
           </div>
         );
       });
+
+    /**
+     * <Main> sample.
+     */
+    ctx.host.layer(1).render<T>((e) => {
+      const { props, current } = e.state;
+      return CmdBar.Dev.Main.render({
+        cmdbar,
+        argv: current.argv,
+        theme: props.theme,
+        size: [400, 200],
+        topHalf: true,
+        style: { marginBottom: 40 },
+      });
+    });
   });
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.header.border(-0.1).render((e) => {
-      const { debug, props, docuri } = state.current;
+      const { debug, docuri } = state.current;
       const { store, index } = db;
       return (
         <Info
@@ -103,15 +131,8 @@ export default Dev.describe(name, async (e) => {
             repo: { store, index },
             document: {
               ref: docuri,
-              object: {
-                visible: true,
-                expand: { level: 2 },
-                lens: debug.useLens ? SampleLens.path : undefined,
-                beforeRender(mutate) {
-                  // const resolve = CmdBar.Path.resolver(props.paths);
-                  // return resolve.toObject(mutate);
-                },
-              },
+              object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
+              uri: { head: true },
             },
           }}
         />
@@ -123,43 +144,24 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const sample = SampleCrdt.dev(state, local, db.store);
+    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switcher(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
-
+      Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.focusOnReady;
+        const value = (state: T) => !!state.props.useKeyboard;
         btn
-          .label((e) => `focusOnReady`)
+          .label((e) => `useKeyboard`)
           .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
-          );
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'useKeyboard')));
       });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section(['Ctrl', 'Command'], (dev) => {
-      dev.button('focus', (e) => Time.delay(0, () => cmdbar.focus({})));
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.useLens;
-        btn
-          .label((e) => `use lens`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.useLens = Dev.toggle(d.debug, 'useLens'))));
-      });
     });
 
     dev.hr(5, 20);
