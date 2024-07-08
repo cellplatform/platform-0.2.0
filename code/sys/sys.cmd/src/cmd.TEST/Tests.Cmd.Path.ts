@@ -102,14 +102,19 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     describe('Path.prepend', () => {
       it('defaults', () => {
-        const res = Path.prepend(DEFAULTS.paths, ['foo', 'bar']);
-        expect(res).to.eql({
-          name: ['foo', 'bar', 'name'],
-          params: ['foo', 'bar', 'params'],
-          error: ['foo', 'bar', 'error'],
-          counter: ['foo', 'bar', 'counter'],
-          tx: ['foo', 'bar', 'tx'],
-        });
+        const test = (paths?: t.CmdPaths) => {
+          const res = Path.prepend(['foo', 'bar'], paths);
+          expect(res).to.eql({
+            name: ['foo', 'bar', 'name'],
+            params: ['foo', 'bar', 'params'],
+            error: ['foo', 'bar', 'error'],
+            counter: ['foo', 'bar', 'counter'],
+            tx: ['foo', 'bar', 'tx'],
+          });
+        };
+
+        test();
+        test(DEFAULTS.paths);
       });
 
       it('custom', () => {
@@ -120,7 +125,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           counter: ['z', 'n'],
           tx: ['z', 'tx'],
         };
-        const res = Path.prepend(input, ['foo']);
+        const res = Path.prepend(['foo'], input);
         expect(res).to.eql({
           name: ['foo', 'a'],
           params: ['foo', 'x', 'y', 'p'],

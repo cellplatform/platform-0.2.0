@@ -64,13 +64,13 @@ export const Path = {
   /**
    * Prepend a path to each item within a <CmdPaths> set.
    */
-  prepend(input: t.CmdPaths, prefix: t.ObjectPath): t.CmdPaths {
+  prepend(prefix: t.ObjectPath, paths: t.CmdPaths = DEFAULTS.paths): t.CmdPaths {
     return {
-      name: [...prefix, ...input.name],
-      params: [...prefix, ...input.params],
-      error: [...prefix, ...input.error],
-      counter: [...prefix, ...input.counter],
-      tx: [...prefix, ...input.tx],
+      name: [...prefix, ...paths.name],
+      params: [...prefix, ...paths.params],
+      error: [...prefix, ...paths.error],
+      counter: [...prefix, ...paths.counter],
+      tx: [...prefix, ...paths.tx],
     };
   },
 
