@@ -2,7 +2,7 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import { Color, COLORS, css, Dev, Doc, ObjectPath, Pkg, SampleCrdt, type t } from '../../test.ui';
+import { Color, COLORS, css, Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
@@ -64,8 +64,8 @@ export default Dev.describe(name, async (e) => {
           cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
           label: css({
             Absolute: [-17, 5, null, null],
-            fontFamily: 'monospace',
             fontSize: 10,
+            fontFamily: 'monospace',
             opacity: isFocused ? 1 : 0.3,
             transition,
           }),
@@ -78,10 +78,13 @@ export default Dev.describe(name, async (e) => {
             state={doc}
             cmd={cmdbar}
             onReady={(e) => {
-              console.info('⚡️ CmdBar.Stateful.onReady:', e);
               const { dispose$ } = e;
-              state.change((d) => (d.current.argv = e.text));
+              const events = e.events();
+              console.info('⚡️ CmdBar.Stateful.onReady:', e);
+
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+              state.change((d) => (d.current.argv = e.text));
             }}
             onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onChange={(e) => state.change((d) => (d.current.argv = e.to))}
