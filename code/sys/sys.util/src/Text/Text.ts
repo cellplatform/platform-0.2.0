@@ -6,6 +6,9 @@ export const Text = {
   splice,
   replace,
 
+  /**
+   * Limit the length of a string inserting ellipsis when needed.
+   */
   shorten(input: string = '', maxLength: number = 10, options: { ellipsis?: string } = {}) {
     const { ellipsis = '…' } = options;
     const text = String(input);
