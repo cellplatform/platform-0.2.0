@@ -2,7 +2,7 @@ import { Text } from '.';
 import { describe, expect, it, type t } from '../test';
 import { Immutable } from '../Immutable';
 
-describe('Doc.Text', () => {
+describe('Text', () => {
   describe('Text.diff', () => {
     const assertDiff = (diff: t.TextDiff, index: number, delCount: number, newText?: string) => {
       expect(diff.index).to.eql(index);
@@ -115,6 +115,32 @@ describe('Doc.Text', () => {
       const doc = { text: 'hello' };
       Text.replace(doc, ['text'], '');
       expect(doc).to.eql({ text: '' });
+    });
+  });
+
+  describe('Text.shorten', () => {
+    it('empty', () => {
+      expect(Text.shorten(undefined)).to.eql('');
+      expect(Text.shorten('')).to.eql('');
+      expect(Text.shorten('  ')).to.eql('  ');
+    });
+
+    it('invalid input (to string)', () => {
+      const test = (input: any, expected: string) => {
+        expect(Text.shorten(input)).to.eql(expected);
+      };
+      test(123, '123');
+      test(null, 'null');
+      test(undefined, '');
+    });
+
+    it('does not add ellipsis', () => {
+      expect(Text.shorten('hello', 5)).to.eql('hello');
+    });
+
+    it('adds ellipsis', () => {
+      expect(Text.shorten('hello', 4)).to.eql('hel…');
+      expect(Text.shorten('hello', 4, { ellipsis: '...' })).to.eql('h...');
     });
   });
 });
