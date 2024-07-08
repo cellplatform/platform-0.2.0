@@ -1,4 +1,5 @@
 import { Color, css, type t } from './common';
+import { Text } from 'sys.util';
 
 export type MainArgsProps = {
   args?: t.ParsedArgs;
@@ -56,7 +57,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
     return (
       <div key={`${cmd}.${i}`} {...style}>
         <span>{`${isLast ? '→' : '↓'} `}</span>
-        <span>{cmd}</span>
+        <span>{Text.shorten(cmd, 11)}</span>
       </div>
     );
   });
@@ -67,7 +68,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
       const text = `${key}${!!value ? ': ' : ''}${value}`;
       return (
         <div key={key} {...styles.param}>
-          <span>{text}</span>
+          <span>{Text.shorten(text, 11)}</span>
         </div>
       );
     });
