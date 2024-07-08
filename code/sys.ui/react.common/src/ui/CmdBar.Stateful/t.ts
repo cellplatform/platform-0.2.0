@@ -8,12 +8,8 @@ type S = t.ImmutableRef<O, t.ImmutableEvents<O, unknown>, unknown>;
  */
 export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'onReady' | 'text'> & {
   state?: S;
-  paths?: t.CmdBarStatefulPaths;
+  paths?: t.CmdBarPaths;
   onReady?: t.CmdBarStatefulReadyHandler;
-};
-
-export type CmdBarStatefulPaths = {
-  text: t.ObjectPath;
 };
 
 /**
@@ -21,7 +17,7 @@ export type CmdBarStatefulPaths = {
  */
 export type CmdBarStatefulReadyHandler = (e: CmdBarStatefulReadyHandlerArgs) => void;
 export type CmdBarStatefulReadyHandlerArgs = t.CmdBarReadyHandlerArgs & {
-  readonly paths: t.CmdBarStatefulPaths;
+  readonly paths: t.CmdBarPaths;
   readonly dispose$: t.Observable<void>;
   events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };

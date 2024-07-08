@@ -34,7 +34,7 @@ export default Dev.describe(name, (e) => {
   const cmdbar = CmdBar.Ctrl.create();
   const doc = Immutable.clonerRef({});
 
-  const getPaths = (state: T, defaults?: boolean): t.CmdBarStatefulPaths => {
+  const getPaths = (state: T, defaults?: boolean): t.CmdBarPaths => {
     const defaultPaths = defaults ? DEFAULTS.paths : undefined; // NB: default.
     const paths = state.debug.prependPaths
       ? CmdBar.Stateful.prepend(DEFAULTS.paths, ['foo'])

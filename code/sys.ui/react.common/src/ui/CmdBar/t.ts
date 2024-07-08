@@ -27,6 +27,13 @@ export type CmdBarProps = {
 };
 
 /**
+ * Object structure.
+ */
+export type CmdBarPaths = {
+  text: t.ObjectPath;
+};
+
+/**
  * Events
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;

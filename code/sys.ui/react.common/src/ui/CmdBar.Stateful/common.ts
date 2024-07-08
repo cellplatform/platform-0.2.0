@@ -10,7 +10,7 @@ import { DEFAULTS as BASE } from '../CmdBar/common';
 /**
  * Constants
  */
-const paths: t.CmdBarStatefulPaths = {
+const paths: t.CmdBarPaths = {
   text: ['text'],
 };
 
