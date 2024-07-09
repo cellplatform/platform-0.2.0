@@ -9,12 +9,12 @@ type C = t.CmdBarCtrlType;
 export const Ctrl = {
   listen,
 
-  create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarRef {
+  create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
     const cmd = create(transport, options.paths);
     return methods(cmd);
   },
 
-  cmdbar(input: t.CmdBarRef | t.Cmd<t.CmdBarCtrlType>): t.CmdBarRef {
+  cmdbar(input: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
     if (Is.cmdbar(input)) return input;
     return methods(input);
   },
@@ -29,7 +29,7 @@ function create(transport?: t.CmdImmutable, cmdpaths: t.CmdBarPaths = DEFAULTS.p
   return Cmd.create<C>(doc, { paths }) as t.Cmd<t.CmdBarCtrlType>;
 }
 
-function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarRef {
+function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
   const method = cmd.method;
   return {
     _: cmd,

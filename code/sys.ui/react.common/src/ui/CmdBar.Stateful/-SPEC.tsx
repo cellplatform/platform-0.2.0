@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const doc = Immutable.clonerRef({});
-  let cmdbar: t.CmdBarRef | undefined;
+  let cmdbar: t.CmdBarCtrl | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
     return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;

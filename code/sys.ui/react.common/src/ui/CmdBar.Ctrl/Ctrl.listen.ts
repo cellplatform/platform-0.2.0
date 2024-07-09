@@ -5,7 +5,7 @@ import { CtrlKeyboard } from './Ctrl.keyboard';
  * Behavior logic for command signals.
  */
 export function listen(args: {
-  cmdbar: t.CmdBarRef;
+  cmdbar: t.CmdBarCtrl;
   textbox: t.TextInputRef;
   useKeyboard?: boolean;
   dispose$?: t.UntilObservable;

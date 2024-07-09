@@ -9,7 +9,7 @@ export function useController(props: P) {
 
   const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
-  const [cmdbar, setCmdbar] = useState<t.CmdBarRef>();
+  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
 
   const [_, setRedraw] = useState(0);

@@ -5,7 +5,7 @@ describe('CmdBar', () => {
   describe('CmdBar.Ctrl', () => {
     const Ctrl = CmdBar.Ctrl;
 
-    const createCmdBarCtrl = () => {
+    const testCreate = () => {
       const transport = Immutable.clonerRef({});
       const cmd = Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
       return { cmd, transport } as const;
@@ -32,7 +32,7 @@ describe('CmdBar', () => {
 
     it('Ctrl.cmdbar', () => {
       const ctrl = Ctrl.create();
-      const { cmd } = createCmdBarCtrl();
+      const { cmd } = testCreate();
 
       const methods1 = Ctrl.cmdbar(cmd); // From raw command.
       const methods2 = Ctrl.cmdbar(cmd); // From raw command (new instance)

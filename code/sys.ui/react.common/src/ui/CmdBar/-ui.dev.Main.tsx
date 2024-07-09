@@ -4,7 +4,7 @@ import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 import { Ctrl } from '../CmdBar.Ctrl';
 
 export type SampleProps = {
-  cmdbar?: t.CmdBarRef | t.Cmd<t.CmdBarCtrlType>;
+  cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
   argv?: string;
   theme?: t.CommonTheme;

@@ -27,9 +27,9 @@ type Select = t.CmdType<'Select', SelectParam>;
 type SelectParam = { scope?: 'All' | 'Expand' };
 
 /**
- * Command Methods.
+ * Command Methods (ctrl).
  */
-export type CmdBarRef = {
+export type CmdBarCtrl = {
   readonly _: t.Cmd<t.CmdBarCtrlType>;
   readonly current: t.CmdMethodResponder<Current, CurrentR>;
   readonly focus: t.CmdMethodVoid<Focus>;

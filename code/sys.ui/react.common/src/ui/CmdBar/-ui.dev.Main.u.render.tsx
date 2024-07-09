@@ -2,7 +2,7 @@ import { SampleMain } from './-ui.dev.Main';
 import { css, type t } from './common';
 
 export function render(props: {
-  cmdbar?: t.CmdBarRef | t.Cmd<t.CmdBarCtrlType>;
+  cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   argv?: string;
   theme?: t.CommonTheme;
   size?: t.SizeTuple;

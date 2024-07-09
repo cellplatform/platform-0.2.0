@@ -42,7 +42,7 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  let cmdbar: t.CmdBarRef | undefined;
+  let cmdbar: t.CmdBarCtrl | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -95,7 +95,7 @@ export default Dev.describe(name, async (e) => {
 
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
               events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
-              state.change((d) => (d.current.argv = e.text));
+              state.change((d) => (d.current.argv = e.initial.text));
             }}
             onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onChange={(e) => state.change((d) => (d.current.argv = e.to))}

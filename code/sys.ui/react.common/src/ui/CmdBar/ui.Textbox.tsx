@@ -3,7 +3,7 @@ import { rx, css, Args, DEFAULTS, TextInput, type t } from './common';
 import { Ctrl } from '../CmdBar.Ctrl';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
-  cmdbar?: t.CmdBarRef;
+  cmdbar?: t.CmdBarCtrl;
   theme: t.ColorTheme;
   opacity?: number;
 };
