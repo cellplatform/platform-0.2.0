@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
+import { Ctrl } from '../CmdBar.Ctrl';
 import { MainArgs } from './Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
-import { Ctrl } from '../CmdBar.Ctrl';
 
 export type SampleProps = {
-  ctrl?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
+  ctrl?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
   argv?: string;
   theme?: t.CommonTheme;

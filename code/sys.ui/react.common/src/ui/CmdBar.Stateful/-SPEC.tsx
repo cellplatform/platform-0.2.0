@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const doc = Immutable.clonerRef({});
-  let cmdbar: t.CmdBarCtrl | undefined;
+  let cmdbar: t.CmdBarRef | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
     return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;
@@ -106,7 +106,7 @@ export default Dev.describe(name, (e) => {
             state={debug.useState ? doc : undefined}
             paths={paths}
             onReady={(e) => {
-              const { textbox, paths, dispose$ } = e;
+              const { textbox, dispose$ } = e;
               cmdbar = e.cmdbar;
 
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
@@ -191,7 +191,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Command', (dev) => {
       const focus = (target: 'CmdBar' | 'Main') => {
-        const invoke = () => Time.delay(0, () => cmdbar?.focus({ target }));
+        const invoke = () => Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
         dev.button(['Focus', `"${target}"`], () => invoke());
       };
       focus('CmdBar');
@@ -199,14 +199,16 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       dev.button('Invoke', (e) => {
         const text = getText(state.current);
-        cmdbar?.invoke({ text });
+        cmdbar?.ctrl.invoke({ text });
       });
       dev.hr(-1, 5);
-      dev.button('Select: All', (e) => cmdbar?.select({ scope: 'All' }));
-      dev.button('Select: Expand', (e) => cmdbar?.select({ scope: 'Expand' }));
+      dev.button('Select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
+      dev.button('Select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.keyboard({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'focus:cmdbar'], (e) => cmdbar?.keyboard({ name: 'Focus:CmdBar' }));
+      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.ctrl.keyboard({ name: 'Focus:Main' }));
+      dev.button(['CMD + K', 'focus:cmdbar'], (e) =>
+        cmdbar?.ctrl.keyboard({ name: 'Focus:CmdBar' }),
+      );
     });
 
     dev.hr(5, 20);

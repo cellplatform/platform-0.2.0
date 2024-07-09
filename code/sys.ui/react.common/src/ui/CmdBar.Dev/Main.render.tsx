@@ -1,8 +1,8 @@
 import { SampleMain } from './Main';
-import { css, type t } from './common';
+import { Is, css, type t } from './common';
 
 export function render(props: {
-  cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
+  cmdbar?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   argv?: string;
   theme?: t.CommonTheme;
   size?: t.SizeTuple;

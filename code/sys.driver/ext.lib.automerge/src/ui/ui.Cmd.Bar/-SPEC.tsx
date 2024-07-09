@@ -42,7 +42,7 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  let cmdbar: t.CmdBarCtrl | undefined;
+  let cmdbar: t.CmdBarRef | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -88,12 +88,13 @@ export default Dev.describe(name, async (e) => {
             style={styles.cmdbar}
             state={doc}
             onReady={(e) => {
+              console.info('⚡️ CmdBar.Stateful.onReady:', e);
+
               const { dispose$ } = e;
               const events = e.events();
               cmdbar = e.cmdbar;
-              console.info('⚡️ CmdBar.Stateful.onReady:', e);
 
-              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+              if (doc) Sync.Textbox.listen(e.textbox, doc, cmdbar.paths.text, { dispose$ });
               events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
               state.change((d) => (d.current.argv = e.initial.text));
             }}

@@ -1,16 +1,26 @@
+import { Ctrl, DEFAULTS } from '.';
+import { Cmd, Immutable, ObjectPath, Time, describe, expect, it, type t } from '../../test';
 import { CmdBar } from '../CmdBar';
-import { Ctrl } from '.';
-import { Cmd, Immutable, Time, describe, expect, it, type t, ObjectPath } from '../../test';
 
 describe('CmdBar.Ctrl', () => {
-  const testCreate = () => {
+  const testSetup = () => {
     const transport = Immutable.clonerRef({});
     const cmd = Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
-    return { cmd, transport } as const;
+
+    const ctrl = CmdBar.Ctrl.create();
+    const ref: t.CmdBarRef = {
+      ctrl,
+      state: transport,
+      paths: DEFAULTS.paths,
+    };
+
+    return { cmd, transport, ref } as const;
   };
 
   it('exposed from <CmdBar>', () => {
     expect(CmdBar.Ctrl).to.equal(Ctrl);
+    expect(CmdBar.Is).to.equal(Ctrl.Is);
+    expect(CmdBar.Path).to.equal(Ctrl.Path);
   });
 
   it('create (from simple Immutable<T>)', async () => {
@@ -37,28 +47,44 @@ describe('CmdBar.Ctrl', () => {
 
   it('Ctrl.toCtrl', () => {
     const ctrl = Ctrl.create();
-    const { cmd } = testCreate();
+    const { cmd, ref } = testSetup();
 
-    const methods1 = Ctrl.toCtrl(cmd); // From raw command.
-    const methods2 = Ctrl.toCtrl(cmd); // From raw command (new instance)
-    const methods3 = Ctrl.toCtrl(methods1);
-    const methods4 = Ctrl.toCtrl(ctrl);
+    const ctrl1 = Ctrl.toCtrl(cmd); // From raw command.
+    const ctrl2 = Ctrl.toCtrl(cmd); // From raw command (new instance)
+    const ctrl3 = Ctrl.toCtrl(ctrl1);
+    const ctrl4 = Ctrl.toCtrl(ctrl);
+    const ctrl5 = Ctrl.toCtrl(ref);
 
-    expect(CmdBar.Is.ctrl(methods1)).to.eql(true);
-    expect(methods1).to.not.equal(methods2);
-    expect(methods3).to.equal(methods1); // NB: same instance reused.
-    expect(methods4).to.equal(ctrl);
+    expect(CmdBar.Is.ctrl(ctrl1)).to.eql(true);
+    expect(ctrl1).to.not.equal(ctrl2);
+    expect(ctrl3).to.equal(ctrl1); // NB: same instance reused.
+    expect(ctrl4).to.equal(ctrl);
+    expect(ctrl5).to.equal(ref.ctrl);
   });
-});
 
-describe('CmdBar.Is', () => {
-  const NON = [123, 'abc', [], {}, null, true, Symbol('foo'), BigInt(0)];
+  describe('Ctrl.Is', () => {
+    const Is = CmdBar.Is;
+    const NON = [123, 'abc', [], {}, undefined, null, true, Symbol('foo'), BigInt(0)];
 
-  it('Is.ctrl', () => {
-    const ctrl = CmdBar.Ctrl.create();
-    NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
-    expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
-    expect(CmdBar.Is.ctrl({ cmd: ctrl._ })).to.eql(false);
-    expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
+    it('Is.ctrl', () => {
+      const ctrl = CmdBar.Ctrl.create();
+      NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
+      expect(Is.ctrl(ctrl)).to.eql(true);
+      expect(Is.ctrl({ cmd: ctrl._ })).to.eql(false);
+      expect(Is.ctrl(ctrl)).to.eql(true);
+    });
+
+    it('Is.ref', () => {
+      NON.forEach((v) => expect(Is.ref(v)).to.eql(false));
+      const { ref } = testSetup();
+      expect(Is.ref(ref)).to.eql(true);
+    });
+
+    it('Is.paths', () => {
+      NON.forEach((v) => expect(Is.paths(v)).to.eql(false));
+      expect(Is.paths({ foo: ['one'] })).to.eql(false);
+      expect(Is.paths({ cmd: 123, text: 'hello' })).to.eql(false);
+      expect(Is.paths(DEFAULTS.paths)).to.eql(true);
+    });
   });
 });

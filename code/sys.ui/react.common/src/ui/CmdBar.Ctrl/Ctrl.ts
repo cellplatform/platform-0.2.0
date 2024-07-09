@@ -17,8 +17,9 @@ export const Ctrl = {
     return methods(cmd);
   },
 
-  toCtrl(input: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
+  toCtrl(input: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
     if (Is.ctrl(input)) return input;
+    if (Is.ref(input)) return input.ctrl;
     return methods(input);
   },
 } as const;
