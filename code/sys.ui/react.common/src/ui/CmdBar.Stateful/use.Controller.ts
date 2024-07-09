@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, ObjectPath, rx, type t, Cmd, Ctrl } from './common';
+import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
 
 type P = t.CmdBarStatefulProps;
 
@@ -57,11 +57,6 @@ export function useController(props: P) {
     return dispose;
   }, [ready, !!cmdbar, pathDeps, state?.instance, !!textbox]);
 
-
-  /**
-   *
-   */
-
   /**
    * API: Event Handlers
    */
@@ -111,7 +106,6 @@ export function useController(props: P) {
  */
 const wrangle = {
   pathDeps(paths: t.CmdBarPaths) {
-    // paths.
     return `${paths.text.join('.')}`;
   },
 } as const;
