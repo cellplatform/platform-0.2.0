@@ -9,7 +9,7 @@ export function render(props: {
   topHalf?: boolean;
   style?: t.CssValue;
 }) {
-  const { cmdbar, size = [350, 200] } = props;
+  const { cmdbar, size } = props;
   const gridTemplateRows = props.topHalf ? `1fr 1fr` : '1fr auto';
   const styles = {
     base: css({ Absolute: 0, display: 'grid', gridTemplateRows }),

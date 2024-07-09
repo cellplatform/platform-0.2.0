@@ -12,7 +12,7 @@ export type SampleProps = {
 };
 
 export const SampleMain: React.FC<SampleProps> = (props) => {
-  const { size = [] } = props;
+  const { size = [350, 200] } = props;
   const focus = useFocus();
   const isFocused = focus.containsFocus;
   const args = Args.parse(props.argv);
