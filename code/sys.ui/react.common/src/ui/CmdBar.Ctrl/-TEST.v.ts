@@ -1,9 +1,10 @@
 import { Ctrl, DEFAULTS } from '.';
-import { Cmd, Immutable, ObjectPath, Time, describe, expect, it, type t } from '../../test';
+import { Cmd, Immutable, ObjectPath, Time, describe, expect, it, type t, rx } from '../../test';
 import { CmdBar } from '../CmdBar';
 
 describe('CmdBar.Ctrl', () => {
   const testSetup = () => {
+    const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
     const cmd = Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
 
@@ -12,9 +13,10 @@ describe('CmdBar.Ctrl', () => {
       ctrl,
       state: transport,
       paths: DEFAULTS.paths,
+      dispose$: life.dispose$,
     };
 
-    return { cmd, transport, ref } as const;
+    return { cmd, transport, ref, life } as const;
   };
 
   it('exposed from <CmdBar>', () => {

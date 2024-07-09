@@ -91,12 +91,12 @@ export default Dev.describe(name, async (e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
 
               const { dispose$ } = e;
-              const events = e.events();
               cmdbar = e.cmdbar;
-
               if (doc) Sync.Textbox.listen(e.textbox, doc, cmdbar.paths.text, { dispose$ });
-              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
               state.change((d) => (d.current.argv = e.initial.text));
+
+              const events = cmdbar.ctrl.events(dispose$);
+              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
             }}
             onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
             onChange={(e) => state.change((d) => (d.current.argv = e.to))}

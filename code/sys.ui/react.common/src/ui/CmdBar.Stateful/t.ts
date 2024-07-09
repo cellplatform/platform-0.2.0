@@ -24,6 +24,7 @@ export type CmdBarRef = {
   readonly ctrl: t.CmdBarCtrl;
   readonly state: t.CmdImmutable;
   readonly paths: t.CmdBarPaths;
+  readonly dispose$: t.Observable<void>;
 };
 
 /**
@@ -35,5 +36,4 @@ export type CmdBarStatefulReadyHandlerArgs = {
   readonly cmdbar: t.CmdBarRef;
   readonly textbox: t.TextInputRef;
   readonly dispose$: t.Observable<void>;
-  events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };

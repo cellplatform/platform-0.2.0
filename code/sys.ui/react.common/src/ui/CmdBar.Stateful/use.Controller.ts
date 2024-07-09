@@ -42,21 +42,12 @@ export function useController(props: P) {
     const { dispose, dispose$ } = life;
     if (ready && state && textbox && ctrl) {
       const text = api.text;
-
-      const ref: t.CmdBarRef = {
-        ctrl,
-        state,
-        paths,
-      };
-
+      const cmdbar: t.CmdBarRef = { ctrl, state, paths, dispose$ };
       props.onReady?.({
         initial: { text },
-        cmdbar: ref,
+        cmdbar,
         textbox,
         dispose$,
-        events(dispose$) {
-          return ctrl._.events([life.dispose$, dispose$]);
-        },
       });
     }
     return dispose;

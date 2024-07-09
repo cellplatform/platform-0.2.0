@@ -110,7 +110,7 @@ export default Dev.describe(name, (e) => {
               cmdbar = e.cmdbar;
 
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
-              dispose$.subscribe(() => console.info('CmdBar.Stateful.onReady:dispose$ → ⚡️'));
+              dispose$.subscribe(() => console.info('⚡️ CmdBar.Stateful.onReady:dispose$ → 💥'));
 
               // Start data-binding syncer.
               const syncer = CmdBar.Sync.listen(textbox, doc, paths.text, { dispose$ });
@@ -118,7 +118,7 @@ export default Dev.describe(name, (e) => {
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
 
               // Listen for events.
-              const events = e.events();
+              const events = e.cmdbar.ctrl.events(e.dispose$);
               events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
             }}
             onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
