@@ -1,12 +1,24 @@
-import { DEFAULTS, FC, type t } from './common';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { type t } from './common';
 import { View } from './ui';
 
 /**
- * Export
+ * Stateful <CmdBar>
  */
-type Fields = {};
-export const CmdBarStateful = FC.decorate<t.CmdBarStatefulProps, Fields>(
-  View,
-  {},
-  { displayName: DEFAULTS.displayName },
-);
+export const CmdBarStateful = forwardRef<t.CmdBarRef, t.CmdBarStatefulProps>((props, ref) => {
+  const [count, setCount] = useState(0);
+  const innerRef = useRef<t.CmdBarRef | undefined>(undefined);
+
+  useImperativeHandle(ref, () => innerRef.current as t.CmdBarRef, [count]);
+
+  return (
+    <View
+      {...props}
+      onReady={(e) => {
+        innerRef.current = e.cmdbar;
+        setCount((n) => n + 1);
+        props.onReady?.(e);
+      }}
+    />
+  );
+});

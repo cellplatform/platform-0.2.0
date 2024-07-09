@@ -38,7 +38,7 @@ export type CmdBarPaths = {
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
-  readonly cmdbar: t.CmdBarCtrl;
+  readonly cmdbar: t.CmdBarRef;
   readonly textbox: t.TextInputRef;
   readonly text: string;
 };

@@ -2,6 +2,7 @@ import { DEFAULTS } from '.';
 import { Args, COLORS, Color, Dev, Immutable, ObjectPath, Pkg, Time, css, rx } from '../../test.ui';
 import { CmdBar } from '../CmdBar';
 import { type t } from './common';
+import { Sample } from './-ui';
 
 type P = t.CmdBarStatefulProps;
 type T = {
@@ -32,7 +33,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const doc = Immutable.clonerRef({});
-  let cmdbar: t.CmdBarCtrl | undefined;
+  let cmdbar: t.CmdBarRef | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
     return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;
@@ -99,7 +100,7 @@ export default Dev.describe(name, (e) => {
         };
 
         const elCmdBar = (
-          <CmdBar.Stateful
+          <Sample
             {...props}
             style={styles.cmdbar}
             state={debug.useState ? doc : undefined}

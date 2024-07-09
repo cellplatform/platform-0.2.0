@@ -28,7 +28,7 @@ export type { ParsedArgs } from 'sys.util/src/types';
  * @UI
  */
 export type {
-  CmdBarCtrl,
+  CmdBarRef,
   CommonTheme,
   CssValue,
   DomRect,

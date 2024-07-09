@@ -4,7 +4,7 @@ export const CtrlKeyboard = {
   /**
    * Listen to the keyboard for events.
    */
-  listen(cmdbar: t.CmdBarCtrl, textbox: t.TextInputRef, dispose$?: t.UntilObservable) {
+  listen(cmdbar: t.CmdBarRef, textbox: t.TextInputRef, dispose$?: t.UntilObservable) {
     const fire = cmdbar.keyAction;
     const life = rx.lifecycle(dispose$);
     const keys = Keyboard.until(life.dispose$);
@@ -30,7 +30,7 @@ export const CtrlKeyboard = {
   /**
    * Invoke the given keyboard action against the component.
    */
-  action(cmdbar: t.CmdBarCtrl, action: t.CmdBarKeyAction, isFocused?: boolean) {
+  action(cmdbar: t.CmdBarRef, action: t.CmdBarKeyAction, isFocused?: boolean) {
     const name = action.name;
 
     if (name === 'Focus:CmdBar') {

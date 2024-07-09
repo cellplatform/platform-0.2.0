@@ -42,7 +42,7 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  let cmdbar: t.CmdBarCtrl | undefined;
+  let cmdbar: t.CmdBarRef | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

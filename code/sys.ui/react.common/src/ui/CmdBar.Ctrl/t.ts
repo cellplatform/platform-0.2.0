@@ -29,7 +29,7 @@ type SelectParam = { scope?: 'All' | 'Expand' };
 /**
  * Command Methods.
  */
-export type CmdBarCtrl = {
+export type CmdBarRef = {
   readonly _: t.Cmd<t.CmdBarCtrlType>;
   readonly current: t.CmdMethodResponder<Current, CurrentR>;
   readonly focus: t.CmdMethodVoid<Focus>;

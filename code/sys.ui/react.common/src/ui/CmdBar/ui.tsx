@@ -5,7 +5,7 @@ import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
-  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
+  const [cmdbar, setCmdbar] = useState<t.CmdBarRef>();
 
   useEffect(() => {
     if (props.ctrl) setCmdbar(Ctrl.cmdbar(props.ctrl));

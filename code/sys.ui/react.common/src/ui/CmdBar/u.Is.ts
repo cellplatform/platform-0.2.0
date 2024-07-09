@@ -4,7 +4,7 @@ import { Cmd, type t } from './common';
  * Flags for the <CmdBar>
  */
 export const Is = {
-  cmdbar(input: any): input is t.CmdBarCtrl {
+  cmdbar(input: any): input is t.CmdBarRef {
     if (input === null || typeof input !== 'object') return false;
     return Cmd.Is.cmd(input._) && hasMethods(input);
   },
@@ -19,7 +19,7 @@ function areFuncs(...input: any[]) {
 
 function hasMethods(input: any) {
   if (input === null || typeof input !== 'object') return false;
-  const o = input as t.CmdBarCtrl;
+  const o = input as t.CmdBarRef;
   return areFuncs(
     o.current,
     o.focus,
