@@ -1,4 +1,4 @@
-import { SampleMain } from './-ui.dev.Main';
+import { SampleMain } from './Main';
 import { css, type t } from './common';
 
 export function render(props: {

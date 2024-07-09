@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MainArgs } from './-ui.dev.Main.Args';
+import { MainArgs } from './Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 import { Ctrl } from '../CmdBar.Ctrl';
 

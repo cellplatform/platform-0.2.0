@@ -1,6 +1,6 @@
 import { Ctrl } from '../CmdBar.Ctrl';
 import { CmdBarStateful as Stateful } from '../CmdBar.Stateful';
-import { Dev } from './-ui.dev';
+import { Dev } from '../CmdBar.Dev';
 import { Args, DEFAULTS, FC, TextboxSync as Sync, type t } from './common';
 import { Is, Path } from './u';
 import { View } from './ui';
@@ -16,7 +16,6 @@ type Fields = {
   Path: typeof Path;
   Sync: typeof Sync;
   Stateful: typeof Stateful;
-
   Dev: typeof Dev;
 };
 export const CmdBar = FC.decorate<t.CmdBarProps, Fields>(
