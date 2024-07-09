@@ -9,7 +9,7 @@ export function useController(props: P) {
 
   const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
-  const [cmdbar, setCmdBar] = useState<t.CmdBarCtrl>();
+  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
 
   const [_, setRedraw] = useState(0);
@@ -26,7 +26,7 @@ export function useController(props: P) {
    * Create the [cmdbar] command.
    */
   useEffect(() => {
-    if (state) setCmdBar(Ctrl.create(state, { paths }));
+    if (state) setCmdbar(Ctrl.create(state, { paths }));
   }, [state?.instance, pathDeps]);
 
   /**
@@ -68,7 +68,7 @@ export function useController(props: P) {
   const onReady: t.CmdBarReadyHandler = (e) => {
     if (ready) return;
     setTextbox(e.textbox);
-    setCmdBar(e.cmdbar);
+    setCmdbar(e.cmdbar);
     setReady(true);
   };
 
