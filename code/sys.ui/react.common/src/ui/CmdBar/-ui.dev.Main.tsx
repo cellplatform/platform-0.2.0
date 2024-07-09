@@ -22,10 +22,9 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
    */
   useEffect(() => {
     const cmdbar = cmd ? Ctrl.cmdbar(cmd) : undefined;
-    const events = cmdbar?.cmd.events();
-    events?.on('Key:Action', (e) => {
-      const name = e.params.name;
-      if (name === 'Focus:Main') focus.focus();
+    const events = cmdbar?.events();
+    events?.on('Focus', (e) => {
+      if (e.params.target === 'Main') focus.focus();
     });
     return events?.dispose;
   }, [cmd]);

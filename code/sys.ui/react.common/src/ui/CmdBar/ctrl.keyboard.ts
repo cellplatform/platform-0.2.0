@@ -8,7 +8,7 @@ export const CtrlKeyboard = {
     const fire = cmdbar.keyAction;
     const life = rx.lifecycle(dispose$);
     const keys = Keyboard.until(life.dispose$);
-    const dbl = keys.dbl();
+    const dbl = keys.dbl(150);
     const isFocused = () => textbox.current.focused;
 
     keys.on('Tab', (e) => {
@@ -18,10 +18,10 @@ export const CtrlKeyboard = {
       fire({ name: 'Focus:Main' });
     });
     keys.on('META + KeyK', () => {
-      if (!isFocused()) fire({ name: 'FocusAndSelect' });
+      fire({ name: 'Focus:CmdBar' });
     });
     dbl.on('META + KeyK', () => {
-      if (isFocused()) fire({ name: 'Clear' });
+      if (isFocused()) textbox.selectAll();
     });
 
     return life;
@@ -30,29 +30,16 @@ export const CtrlKeyboard = {
   /**
    * Invoke the given keyboard action against the component.
    */
-  action(cmdbar: t.CmdBarCtrl, textbox: t.TextInputRef, action: t.CmdBarKeyAction) {
+  action(cmdbar: t.CmdBarCtrl, action: t.CmdBarKeyAction, isFocused?: boolean) {
     const name = action.name;
 
-    if (name === 'FocusAndSelect') {
-      /**
-       * TODO 🐷 selectively ← back select (split on positional args)
-       *
-       */
-      console.log('TODO key action: progressive focus and select');
-
-      cmdbar.focus({});
-      cmdbar.caretToEnd({});
+    if (name === 'Focus:CmdBar') {
+      if (!isFocused) cmdbar.focus({ target: 'CmdBar' });
+      if (isFocused) cmdbar.select({ scope: 'Expand' });
     }
 
     if (name === 'Focus:Main') {
-      // NB: picked up by corresponding <Main> component.
-    }
-
-    if (name === 'Clear') {
-      /**
-       * TODO 🐷 clear text
-       */
-      console.log('TODO key action: clear');
+      cmdbar.focus({ target: 'Main' });
     }
   },
 } as const;

@@ -1,4 +1,4 @@
-import { Cmd, Immutable, type t } from './common';
+import { Cmd, DEFAULTS, Immutable, type t } from './common';
 import { listen } from './ctrl.listen';
 import { Is } from './u.Is';
 
@@ -10,8 +10,8 @@ type C = t.CmdBarCtrlType;
 export const Ctrl = {
   listen,
 
-  create(transport?: t.CmdImmutable): t.CmdBarCtrl {
-    const cmd = create(transport);
+  create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
+    const cmd = create(transport, options.paths);
     return methods(cmd);
   },
 
@@ -24,22 +24,25 @@ export const Ctrl = {
 /**
  * Helpers
  */
-function create(transport?: t.CmdImmutable) {
+function create(transport?: t.CmdImmutable, cmdpaths: t.CmdBarPaths = DEFAULTS.paths) {
+  const paths = Cmd.Path.prepend(cmdpaths.cmd);
   const doc = transport ?? Immutable.clonerRef({});
-  return Cmd.create<C>(doc) as t.Cmd<t.CmdBarCtrlType>;
+  return Cmd.create<C>(doc, { paths }) as t.Cmd<t.CmdBarCtrlType>;
 }
 
 function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
   const method = cmd.method;
   return {
-    cmd,
+    _: cmd,
     current: method('Current', 'Current:res'),
     focus: method('Focus'),
-    blur: method('Blur'),
-    selectAll: method('Select:All'),
+    select: method('Select'),
     caretToStart: method('Caret:ToStart'),
     caretToEnd: method('Caret:ToEnd'),
     invoke: method('Invoke'),
     keyAction: method('Key:Action'),
+    events(dispose$?: t.UntilObservable) {
+      return cmd.events(dispose$);
+    },
   };
 }

@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            cmd={cmdbar.cmd}
+            ctrl={cmdbar._}
             onReady={(e) => console.info('⚡️ CmdBar.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
@@ -142,16 +142,15 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Command', 'Ctrl'], (dev) => {
-      const focus = (select?: boolean) => {
-        const invoke = () => Time.delay(0, () => cmdbar.focus({ select }));
-        dev.button(['cmd: Focus', select ? 'select' : ''], () => invoke());
+    dev.section('Command', (dev) => {
+      const focus = (target: 'CmdBar' | 'Main') => {
+        const invoke = () => Time.delay(0, () => cmdbar.focus({ target }));
+        dev.button(['Focus', `"${target}"`], () => invoke());
       };
-      focus(true);
-      focus(false);
-
+      focus('CmdBar');
+      focus('Main');
       dev.hr(-1, 5);
-      dev.button('cmd: Current', async (e) => {
+      dev.button('Current', async (e) => {
         const res = await cmdbar.current({}).promise();
         console.log('res', res.result);
       });
@@ -160,39 +159,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('Args.parse', (e) => {
-        /**
-         * NOTE: Example on the [minimist] README.
-         *       https://github.com/minimistjs/minimist
-         */
-        const sample1 = {
-          text: '-a beep -b boop',
-          result: { _: [], a: 'beep', b: 'boop' },
-        };
-        const sample2 = {
-          text: '-x 3 -y 4 -n5 -abc --beep=boop --no-ding foo bar baz',
-          result: {
-            _: ['foo', 'bar', 'baz'],
-            x: 3,
-            y: 4,
-            n: 5,
-            a: true,
-            b: true,
-            c: true,
-            beep: 'boop',
-            ding: false,
-          },
-        };
-
-        const parsed1 = CmdBar.Args.parse(sample1.text);
-        const parsed2 = CmdBar.Args.parse(sample2.text);
-
-        expect(parsed1).to.eql(sample1.result);
-        expect(parsed2).to.eql(sample2.result);
-
-        console.info('parsed-1: ', parsed1);
-        console.info('parsed-2: ', parsed2);
-      });
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 

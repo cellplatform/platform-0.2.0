@@ -1,14 +1,15 @@
-import { useRef } from 'react';
-import { Ctrl } from './ctrl';
+import { useEffect, useState } from 'react';
 import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
-import { Is } from './u.Is';
+import { Ctrl } from './ctrl';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
+  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
 
-  const cmdbarRef = useRef(wrangle.cmdbar(props));
-  const cmdbar = cmdbarRef.current;
+  useEffect(() => {
+    if (props.ctrl) setCmdbar(Ctrl.cmdbar(props.ctrl));
+  }, [props.ctrl]);
 
   /**
    * Render
@@ -21,8 +22,15 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       color: theme.fg,
       userSelect: 'none',
     }),
-    grid: css({ display: 'grid', gridTemplateColumns: wrangle.columns(props) }),
-    textbox: css({ boxSizing: 'border-box', Padding: [7, 7], display: 'grid' }),
+    grid: css({
+      display: 'grid',
+      gridTemplateColumns: wrangle.columns(props),
+    }),
+    textbox: css({
+      boxSizing: 'border-box',
+      Padding: [7, 7],
+      display: 'grid',
+    }),
     hintKey: css({ marginRight: 7 }),
   };
 
@@ -68,8 +76,8 @@ const wrangle = {
     return res;
   },
 
-  cmdbar(props: t.CmdBarProps): t.CmdBarCtrl {
-    if (!props.cmd) return Ctrl.create(Immutable.clonerRef({}));
-    return Ctrl.cmdbar(props.cmd);
+  ctrl(props: t.CmdBarProps) {
+    if (!props.ctrl) return Ctrl.create(Immutable.clonerRef({}))._;
+    return props.ctrl;
   },
 } as const;

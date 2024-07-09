@@ -21,9 +21,9 @@ function hasMethods(input: any) {
   if (input === null || typeof input !== 'object') return false;
   const o = input as t.CmdBarCtrl;
   return areFuncs(
+    o.current,
     o.focus,
-    o.blur,
-    o.selectAll,
+    o.select,
     o.caretToStart,
     o.caretToEnd,
     o.invoke,

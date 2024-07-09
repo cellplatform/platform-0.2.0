@@ -3,7 +3,7 @@ import { rx, css, Args, DEFAULTS, TextInput, type t } from './common';
 import { Ctrl } from './ctrl';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
-  cmdbar: t.CmdBarCtrl;
+  cmdbar?: t.CmdBarCtrl;
   theme: t.ColorTheme;
   opacity?: number;
 };
@@ -45,12 +45,12 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (textbox) Ctrl.listen({ cmdbar, textbox, useKeyboard, dispose$ });
+    if (cmdbar && textbox) Ctrl.listen({ cmdbar, textbox, useKeyboard, dispose$ });
     return dispose;
   }, [cmdbar, textbox, useKeyboard]);
 
   useEffect(() => {
-    if (ready || !textbox) return;
+    if (ready || !textbox || !cmdbar) return;
     setReady(true);
     props.onReady?.({ cmdbar, textbox, text });
   }, [textbox, cmdbar, ready]);
@@ -59,9 +59,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    * Render
    */
   const color = theme.fg;
-  const styles = {
-    base: css({ opacity: props.opacity ?? 1 }),
-  };
+  const styles = { base: css({ opacity: props.opacity ?? 1 }) };
 
   return (
     <TextInput

@@ -5,7 +5,7 @@ export type * from './t.ctrl';
  * <Component>
  */
 export type CmdBarProps = {
-  cmd?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
+  ctrl?: t.Cmd<t.CmdBarCtrlType>;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -31,6 +31,7 @@ export type CmdBarProps = {
  */
 export type CmdBarPaths = {
   text: t.ObjectPath;
+  cmd: t.ObjectPath;
 };
 
 /**

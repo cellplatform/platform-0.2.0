@@ -19,8 +19,8 @@ describe('CmdBar', () => {
         expect((transport.current as any).counter.value).to.eql(value);
 
       let fired = 0;
-      ctrl1.cmd.events().on('Invoke', () => fired++);
-      ctrl2.cmd.events().on('Invoke', () => fired++);
+      ctrl1._.events().on('Invoke', () => fired++);
+      ctrl2._.events().on('Invoke', () => fired++);
 
       expectCounter(0);
       ctrl1.invoke({ text: 'foo' });
@@ -53,7 +53,7 @@ describe('CmdBar', () => {
       const ctrl = CmdBar.Ctrl.create();
       NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
       expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
-      expect(CmdBar.Is.ctrl({ cmd: ctrl.cmd })).to.eql(false);
+      expect(CmdBar.Is.ctrl({ cmd: ctrl._ })).to.eql(false);
       expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
     });
   });

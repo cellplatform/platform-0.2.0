@@ -1,4 +1,4 @@
-import { Pkg } from './common';
+import { Pkg, type t } from './common';
 
 export { Keyboard } from 'sys.ui.dom';
 export * from '../common';
@@ -11,9 +11,7 @@ export { TextInput } from '../Text.Input';
  * Constants
  */
 const name = 'CmdBar';
-const paths: t.CmdBarPaths = {
-  text: ['text'],
-};
+const paths: t.CmdBarPaths = { text: ['text'], cmd: ['cmd'] };
 
 export const DEFAULTS = {
   name,
