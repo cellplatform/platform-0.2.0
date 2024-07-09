@@ -58,6 +58,15 @@ export function useController(props: P) {
   }, [ready, !!cmdbar, pathDeps, state?.instance, !!textbox]);
 
   /**
+   * Listen to state document.
+   */
+  useEffect(() => {
+    const events = state?.events();
+    events?.changed$.pipe(rx.observeOn(rx.animationFrameScheduler)).subscribe(redraw);
+    return events?.dispose;
+  }, []);
+
+  /**
    * API: Event Handlers
    */
   const onReady: t.CmdBarReadyHandler = (e) => {
