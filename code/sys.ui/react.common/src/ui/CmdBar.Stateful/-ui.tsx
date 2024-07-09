@@ -6,6 +6,6 @@ export const Sample: React.FC<t.CmdBarStatefulProps> = (props) => {
   /**
    * Example [useRef].
    */
-  const ref = useRef<t.CmdBarCtrl>(null);
+  const ref = useRef<t.CmdBarRef>(null);
   return <CmdBar.Stateful ref={ref} {...props} />;
 };

@@ -8,6 +8,11 @@ export const Is = {
     if (input === null || typeof input !== 'object') return false;
     return Cmd.Is.cmd(input._) && hasCtrlMethods(input);
   },
+
+  /**
+   * TODO 🐷
+   */
+  // cmdbarRef(){}
 } as const;
 
 /**

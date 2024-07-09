@@ -1,5 +1,6 @@
-import { Cmd, DEFAULTS, Immutable, Is, type t } from './common';
+import { Cmd, DEFAULTS, Immutable, type t } from './common';
 import { listen } from './Ctrl.listen';
+import { Is, Path } from './u';
 
 type C = t.CmdBarCtrlType;
 
@@ -7,6 +8,8 @@ type C = t.CmdBarCtrlType;
  * API for controlling the <CmdBar> component via logical commands.
  */
 export const Ctrl = {
+  Is,
+  Path,
   listen,
 
   create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {

@@ -5,11 +5,11 @@ import { View } from './ui';
 /**
  * Stateful <CmdBar>
  */
-export const CmdBarStateful = forwardRef<t.CmdBarCtrl, t.CmdBarStatefulProps>((props, ref) => {
+export const CmdBarStateful = forwardRef<t.CmdBarRef, t.CmdBarStatefulProps>((props, ref) => {
   const [count, setCount] = useState(0);
-  const innerRef = useRef<t.CmdBarCtrl | undefined>(undefined);
+  const innerRef = useRef<t.CmdBarRef | undefined>(undefined);
 
-  useImperativeHandle(ref, () => innerRef.current as t.CmdBarCtrl, [count]);
+  useImperativeHandle(ref, () => innerRef.current as t.CmdBarRef, [count]);
 
   return (
     <View
