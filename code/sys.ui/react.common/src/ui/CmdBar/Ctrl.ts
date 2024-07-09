@@ -16,7 +16,7 @@ export const Ctrl = {
   },
 
   cmdbar(input: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
-    if (Is.ctrl(input)) return input;
+    if (Is.cmdbar(input)) return input;
     return methods(input);
   },
 } as const;

@@ -39,7 +39,7 @@ describe('CmdBar', () => {
       const methods3 = Ctrl.cmdbar(methods1);
       const methods4 = Ctrl.cmdbar(ctrl);
 
-      expect(CmdBar.Is.ctrl(methods1)).to.eql(true);
+      expect(CmdBar.Is.cmdbar(methods1)).to.eql(true);
       expect(methods1).to.not.equal(methods2);
       expect(methods3).to.equal(methods1); // NB: same instance reused.
       expect(methods4).to.equal(ctrl);
@@ -51,10 +51,10 @@ describe('CmdBar', () => {
 
     it('Is.ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
-      NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
-      expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
-      expect(CmdBar.Is.ctrl({ cmd: ctrl._ })).to.eql(false);
-      expect(CmdBar.Is.ctrl(ctrl)).to.eql(true);
+      NON.forEach((v) => expect(CmdBar.Is.cmdbar(v)).to.eql(false));
+      expect(CmdBar.Is.cmdbar(ctrl)).to.eql(true);
+      expect(CmdBar.Is.cmdbar({ cmd: ctrl._ })).to.eql(false);
+      expect(CmdBar.Is.cmdbar(ctrl)).to.eql(true);
     });
   });
 });

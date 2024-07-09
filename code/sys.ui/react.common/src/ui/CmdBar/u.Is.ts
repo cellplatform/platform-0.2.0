@@ -4,9 +4,9 @@ import { Cmd, type t } from './common';
  * Flags for the <CmdBar>
  */
 export const Is = {
-  ctrl(input: any): input is t.CmdBarCtrl {
+  cmdbar(input: any): input is t.CmdBarCtrl {
     if (input === null || typeof input !== 'object') return false;
-    return Cmd.Is.cmd(input.cmd) && hasMethods(input);
+    return Cmd.Is.cmd(input._) && hasMethods(input);
   },
 } as const;
 

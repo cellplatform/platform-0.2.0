@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, ObjectPath, rx, type t } from './common';
+import { DEFAULTS, ObjectPath, rx, type t, Cmd, Ctrl } from './common';
 
 type P = t.CmdBarStatefulProps;
 
 export function useController(props: P) {
   const { state, paths = DEFAULTS.paths } = props;
+  const pathDeps = wrangle.pathDeps(paths);
 
   const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
-  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
+  const [cmdbar, setCmdBar] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
 
   const [_, setRedraw] = useState(0);
@@ -22,6 +23,13 @@ export function useController(props: P) {
   if (!textbox) enabled = false;
 
   /**
+   * Create the [cmdbar] command.
+   */
+  useEffect(() => {
+    if (state) setCmdBar(Ctrl.create(state, { paths }));
+  }, [state?.instance, pathDeps]);
+
+  /**
    * Ready (→ Dispose)
    * NB:
    *     Textbox ←|→ State (Immutable<T>) syncer
@@ -32,21 +40,27 @@ export function useController(props: P) {
   useEffect(() => {
     const life = rx.disposable();
     const { dispose, dispose$ } = life;
-    if (ready && textbox && cmdbar) {
+    if (ready && state && textbox && cmdbar) {
       const text = api.text;
       props.onReady?.({
         text,
         textbox,
         cmdbar,
+        state,
         paths,
         dispose$,
         events(dispose$) {
-          return cmdbar.cmd.events([life.dispose$, dispose$]);
+          return cmdbar._.events([life.dispose$, dispose$]);
         },
       });
     }
     return dispose;
-  }, [ready, state?.instance, !!textbox, paths.text.join('.')]);
+  }, [ready, !!cmdbar, pathDeps, state?.instance, !!textbox]);
+
+
+  /**
+   *
+   */
 
   /**
    * API: Event Handlers
@@ -54,7 +68,7 @@ export function useController(props: P) {
   const onReady: t.CmdBarReadyHandler = (e) => {
     if (ready) return;
     setTextbox(e.textbox);
-    setCmdbar(e.cmdbar);
+    setCmdBar(e.cmdbar);
     setReady(true);
   };
 
@@ -78,6 +92,7 @@ export function useController(props: P) {
   const api = {
     ready,
     enabled,
+    cmdbar,
     handlers: { onReady, onChange, onSelect, onFocusChange },
     get text() {
       if (!state) return '';
@@ -90,3 +105,13 @@ export function useController(props: P) {
   } as const;
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  pathDeps(paths: t.CmdBarPaths) {
+    // paths.
+    return `${paths.text.join('.')}`;
+  },
+} as const;

@@ -1,11 +1,12 @@
+import { DEFAULTS as BASE } from '../CmdBar/common';
 import { Pkg } from '../common';
 
-export { useFocus } from '../../ui.use';
-export { Ctrl } from '../CmdBar/ctrl';
-export * from '../common';
+export { Ctrl } from '../CmdBar/Ctrl';
+export { Path } from '../CmdBar/u';
 export { TextboxSync } from '../Textbox.Sync';
 
-import { DEFAULTS as BASE } from '../CmdBar/common';
+export { useFocus } from '../../ui.use';
+export * from '../common';
 
 /**
  * Constants

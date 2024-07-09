@@ -4,7 +4,7 @@ import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 import { Ctrl } from './Ctrl';
 
 export type SampleProps = {
-  ctrl?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
+  cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
   argv?: string;
   theme?: t.CommonTheme;
@@ -12,7 +12,7 @@ export type SampleProps = {
 };
 
 export const SampleMain: React.FC<SampleProps> = (props) => {
-  const { ctrl, size = [] } = props;
+  const { size = [] } = props;
   const focus = useFocus();
   const isFocused = focus.containsFocus;
   const args = Args.parse(props.argv);
@@ -21,13 +21,13 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const cmdbar = ctrl ? Ctrl.cmdbar(ctrl) : undefined;
+    const cmdbar = wrangle.cmdbar(props);
     const events = cmdbar?.events();
     events?.on('Focus', (e) => {
       if (e.params.target === 'Main') focus.focus();
     });
     return events?.dispose;
-  }, [ctrl]);
+  }, [props.cmdbar]);
 
   /**
    * Render
@@ -118,3 +118,12 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  cmdbar(props: SampleProps) {
+    return props.cmdbar ? Ctrl.cmdbar(props.cmdbar) : undefined;
+  },
+} as const;

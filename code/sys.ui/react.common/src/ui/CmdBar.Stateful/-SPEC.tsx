@@ -31,19 +31,15 @@ export default Dev.describe(name, (e) => {
     argv: undefined,
   });
 
-  const cmdbar = CmdBar.Ctrl.create();
   const doc = Immutable.clonerRef({});
+  let cmdbar: t.CmdBarCtrl | undefined;
 
-  const getPaths = (state: T, defaults?: boolean): t.CmdBarPaths => {
-    const defaultPaths = defaults ? DEFAULTS.paths : undefined; // NB: default.
-    const paths = state.debug.prependPaths
-      ? CmdBar.Stateful.prepend(DEFAULTS.paths, ['foo'])
-      : defaultPaths;
-    return paths!;
+  const getPaths = (state: T): t.CmdBarPaths => {
+    return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;
   };
 
   const getText = (state: T) => {
-    const paths = getPaths(state, true)!;
+    const paths = getPaths(state)!;
     const text = doc ? ObjectPath.resolve<string>(doc.current, paths.text) ?? '' : '';
     return text;
   };
@@ -106,18 +102,21 @@ export default Dev.describe(name, (e) => {
           <CmdBar.Stateful
             {...props}
             style={styles.cmdbar}
-            cmd={cmdbar.cmd}
             state={debug.useState ? doc : undefined}
             paths={paths}
             onReady={(e) => {
-              console.info('⚡️ CmdBar.Stateful.onReady:', e);
-              e.dispose$.subscribe(() => console.info('CmdBar.Stateful.onReady:dispose$ → ⚡️'));
-
               const { textbox, paths, dispose$ } = e;
+              cmdbar = e.cmdbar;
+
+              console.info('⚡️ CmdBar.Stateful.onReady:', e);
+              dispose$.subscribe(() => console.info('CmdBar.Stateful.onReady:dispose$ → ⚡️'));
+
+              // Start data-binding syncer.
               const syncer = CmdBar.Stateful.Sync.listen(textbox, doc, paths.text, { dispose$ });
               state.change((d) => (d.current.argv = e.text));
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
 
+              // Listen for events.
               const events = e.events();
               events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
             }}
@@ -141,7 +140,7 @@ export default Dev.describe(name, (e) => {
     ctx.host.layer(1).render<T>((e) => {
       const { props, current } = e.state;
       return CmdBar.Dev.Main.render({
-        cmdbar,
+        cmdbar: cmdbar,
         argv: current.argv,
         theme: props.theme,
         size: [400, 200],
@@ -189,23 +188,24 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Ctrl', 'Command'], (dev) => {
-      const focus = (select?: boolean) => {
-        const invoke = () => Time.delay(0, () => cmdbar.focus({ select }));
-        dev.button(['cmd: Focus', select ? 'select' : ''], () => invoke());
+    dev.section('Command', (dev) => {
+      const focus = (target: 'CmdBar' | 'Main') => {
+        const invoke = () => Time.delay(0, () => cmdbar?.focus({ target }));
+        dev.button(['Focus', `"${target}"`], () => invoke());
       };
-      focus(true);
-      focus(false);
+      focus('CmdBar');
+      focus('Main');
       dev.hr(-1, 5);
-      dev.button('cmd: Invoke', (e) => {
+      dev.button('Invoke', (e) => {
         const text = getText(state.current);
-        cmdbar.invoke({ text });
+        cmdbar?.invoke({ text });
       });
       dev.hr(-1, 5);
-
-      const keyAction = cmdbar.keyAction;
-      dev.button(['CMD + J', 'focus:main'], (e) => keyAction({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'focus:cmdbar'], (e) => keyAction({ name: 'FocusAndSelect' }));
+      dev.button('Select: All', (e) => cmdbar?.select({ scope: 'All' }));
+      dev.button('Select: Expand', (e) => cmdbar?.select({ scope: 'Expand' }));
+      dev.hr(-1, 5);
+      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.keyAction({ name: 'Focus:Main' }));
+      dev.button(['CMD + K', 'focus:cmdbar'], (e) => cmdbar?.keyAction({ name: 'Focus:CmdBar' }));
     });
 
     dev.hr(5, 20);
@@ -246,14 +246,19 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug } = e.state;
-      const text = getText(state.current);
+      const field = 'state( ImmutableRef<D> )';
       const data = {
         props: e.state.props,
-        'state( ImmutableRef<D> )': debug.useState ? doc?.current : undefined,
-        text: `${text.slice(0, 20)}${text.length >= 20 ? '...' : ''}`,
-        args: Args.parse(text),
+        [field]: debug.useState ? doc?.current : undefined,
       };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return (
+        <Dev.Object
+          name={name}
+          data={data}
+          expand={{ level: 1, paths: ['$', `$.${field}`] }}
+          fontSize={11}
+        />
+      );
     });
   });
 });

@@ -1,13 +1,10 @@
 import type { t } from './common';
 
-type O = Record<string, unknown>;
-type S = t.ImmutableRef<O, t.ImmutableEvents<O, unknown>, unknown>;
-
 /**
  * <Component>
  */
-export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'onReady' | 'text'> & {
-  state?: S;
+export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady'> & {
+  state?: t.CmdImmutable;
   paths?: t.CmdBarPaths;
   onReady?: t.CmdBarStatefulReadyHandler;
 };
@@ -17,6 +14,7 @@ export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'onReady' | 'text'> & {
  */
 export type CmdBarStatefulReadyHandler = (e: CmdBarStatefulReadyHandlerArgs) => void;
 export type CmdBarStatefulReadyHandlerArgs = t.CmdBarReadyHandlerArgs & {
+  readonly state: t.CmdImmutable;
   readonly paths: t.CmdBarPaths;
   readonly dispose$: t.Observable<void>;
   events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
