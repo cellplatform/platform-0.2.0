@@ -24,7 +24,7 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
     const cmdbar = wrangle.cmdbar(props);
     const events = cmdbar?.events();
     events?.on('Focus', (e) => {
-      if (e.params.target === 'Main') focus.focus();
+      if (e.params.target === 'Main') focus.invoke();
     });
     return events?.dispose;
   }, [props.cmdbar]);

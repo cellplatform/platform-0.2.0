@@ -69,7 +69,7 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
     get directlyFocused() {
       return Focus.containsFocus(ref) && Focus.withinFocus(ref);
     },
-    focus() {
+    invoke() {
       ref.current?.focus();
     },
   } as const;
