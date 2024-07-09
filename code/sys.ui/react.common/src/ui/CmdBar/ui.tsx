@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
-import { Ctrl } from './Ctrl';
+import { Ctrl } from '../CmdBar.Ctrl';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {

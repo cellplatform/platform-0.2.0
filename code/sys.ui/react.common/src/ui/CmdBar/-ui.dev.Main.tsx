@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { MainArgs } from './-ui.dev.Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
-import { Ctrl } from './Ctrl';
+import { Ctrl } from '../CmdBar.Ctrl';
 
 export type SampleProps = {
   cmdbar?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;

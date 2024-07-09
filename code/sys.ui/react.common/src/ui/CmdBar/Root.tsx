@@ -1,7 +1,7 @@
 import { CmdBarStateful as Stateful } from '../CmdBar.Stateful';
 import { Dev } from './-ui.dev';
 import { Args, DEFAULTS, FC, type t } from './common';
-import { Ctrl } from './Ctrl';
+import { Ctrl } from '../CmdBar.Ctrl';
 import { Is, Path } from './u';
 import { View } from './ui';
 

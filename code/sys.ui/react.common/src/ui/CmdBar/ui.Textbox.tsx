@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { rx, css, Args, DEFAULTS, TextInput, type t } from './common';
-import { Ctrl } from './Ctrl';
+import { Ctrl } from '../CmdBar.Ctrl';
 
 export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
   cmdbar?: t.CmdBarCtrl;

@@ -3,6 +3,7 @@ export type * from './Button/t';
 export type * from './Card/t';
 export type * from './Center/t';
 export type * from './Chip/t';
+export type * from './CmdBar.Ctrl/t';
 export type * from './CmdBar.Prefix/t';
 export type * from './CmdBar.Stateful/t';
 export type * from './CmdBar/t';
