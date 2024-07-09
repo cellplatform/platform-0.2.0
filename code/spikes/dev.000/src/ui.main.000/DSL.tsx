@@ -1,4 +1,4 @@
-import { Args, type t, CmdBar, Yaml } from './common';
+import { Args, Yaml, type t } from './common';
 
 /**
  * Sketch of what an implementation for the command-line parser
@@ -52,13 +52,31 @@ export const DSL = {
       return loadSpec(args, main);
     }
 
-    if (action === 'me' && pos[1] === 'tmp') {
+    if (action === 'me') {
       const current = main.state.me.current as any;
-      const text = (current?.root?.config ?? '') as string;
+      const text = (current?.root?.config?.text ?? '') as string;
 
-      const yaml = Yaml.parse(text);
-      console.log('text', text);
-      console.log('yaml', yaml);
+      try {
+        const yaml = Yaml.parse(text);
+
+        if (pos[1] === 'video' || !pos[1]) {
+          if (typeof yaml.video === 'object') {
+            const params = yaml.video as t.TmpVideoParams;
+            const method = main.cmd.tmp.method('tmp:video');
+            method(params);
+          }
+        }
+
+        if (pos[1] === 'props' || !pos[1]) {
+          if (typeof yaml.props === 'object') {
+            const params = { items: yaml.props } as t.TmpPropsParams;
+            const method = main.cmd.tmp.method('tmp:props');
+            method(params);
+          }
+        }
+      } catch (error) {
+        console.error(`Failed while parsing YAML`, error);
+      }
     }
 
     return;

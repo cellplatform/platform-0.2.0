@@ -21,17 +21,19 @@ export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
       filter={filter}
       onSelect={(e) => {
         // Update the command "argv".
-        const path = CmdBar.Path.default.text;
+        const path = CmdBar.DEFAULTS.paths.text;
         const cmd: t.CommandAction = 'dev';
         const next = `${cmd} ${e.uri}`;
         main.state.cmdbar.change((d) => Doc.Text.replace(d, path, next));
 
         // Move state back to the command bar.
-        const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
-        Time.delay(0, () => {
-          cmdbar.caretToEnd({});
-          cmdbar.focus({});
-        });
+        const cmdbar = main.cmd.cmdbar;
+        if (cmdbar) {
+          Time.delay(0, () => {
+            cmdbar.caretToEnd({});
+            cmdbar.focus({});
+          });
+        }
       }}
     />
   );

@@ -1,4 +1,4 @@
-import { CmdBar, Doc, Monaco, rx, type t } from './common';
+import { Doc, Monaco, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -13,6 +13,7 @@ export function editorController(args: {
 }): t.ShellEditorController {
   const { monaco, editor, main } = args;
   const life = rx.lifecycle(args.dispose$);
+  const cmdbar = main.cmd.cmdbar;
 
   // Document (State).
   type T = { config?: t.EditorState };
@@ -41,16 +42,32 @@ export function editorController(args: {
   /**
    * Editor keyboard.
    */
-  const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, () => cmdbar.focus({}));
+  const { KeyMod, KeyCode } = monaco;
+  editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyK, () => cmdbar?.focus({}));
+  editor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, async (e) => {
+    const res = await cmdbar?.current({}).promise();
+    const text = res?.result?.text || '';
+    cmdbar?.invoke({ text });
+  });
 
   // Focus editor when <CmdBar> is blurred (via CMD+J).
-  main.cmd.cmdbar.events(life.dispose$).on('Blur', () => editor.focus());
+  const events = cmdbar?.events(life.dispose$);
+  events?.on('Focus', (e) => {
+    if (e.params.target === 'Main') editor.focus();
+  });
 
   /**
    * Initial editor state.
    */
-  if (lens.current.config?.selections) editor.setSelections(lens.current.config.selections);
+  if (lens.current.config?.selections) {
+    const list = lens.current.config.selections;
+    console.log('set selections', list);
+    try {
+      if (list.length > 0) editor.setSelections(list);
+    } catch (error) {
+      console.error(`Failed while setting code-editor {selections}.`, error);
+    }
+  }
 
   // Finish up.
   return life;

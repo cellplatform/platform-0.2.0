@@ -7,11 +7,12 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
+import { useEffect, useState, useRef, useCallback } from 'react';
+
 import { Color, Dev, Pkg, css } from '../test.ui';
 import {
   Cmd,
   CmdBar,
-  Doc,
   CrdtInfo,
   Immutable,
   Peer,
@@ -25,7 +26,13 @@ import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.DebugFooter';
 
-type T = { stream?: MediaStream; overlay?: JSX.Element };
+type O = Record<string, unknown>;
+type T = {
+  stream?: MediaStream;
+  overlay?: JSX.Element;
+  video?: t.TmpVideoParams;
+  props?: t.TmpPropsParams;
+};
 const initial: T = {};
 
 /**
@@ -62,16 +69,16 @@ export default Dev.describe(name, async (e) => {
   const theme: t.CommonTheme = 'Light';
 
   const me = await Store.getMeDoc();
+  const cloner = () => Immutable.clonerRef({});
   const cmd: t.ShellCommands = {
-    fc: Cmd.create<t.FarcasterCmd>(Immutable.clonerRef({})) as t.Cmd<t.FarcasterCmd>,
-    cmdbar: CmdBar.Ctrl.create().cmd,
+    cmdbar: undefined,
+    fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    tmp: Cmd.create<t.TmpCmds>(network.shared.ns.lens('dev.tmp', {})) as t.Cmd<t.TmpCmds>,
   };
+
   const main: t.Shell = {
     cmd,
-    state: {
-      me,
-      cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
-    },
+    state: { me, cmdbar: network.shared.ns.lens('dev.cmdbar', {}) },
   };
 
   e.it('ui:init', async (e) => {
@@ -80,6 +87,15 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+
+    const tmp = cmd.tmp.events();
+    tmp.on('tmp:video', (e) => {
+      state.change((d) => (d.video = e.params));
+    });
+    tmp.on('tmp:props', (e) => {
+      console.log('props', e.params);
+      state.change((d) => (d.props = e.params));
+    });
 
     ctx.debug.width(300);
     ctx.subject
@@ -113,9 +129,38 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    dev.header
+      .padding(0)
+      .border(-0.06)
+      .render(async (e) => {
+        const params = state.current.video;
+        if (!params) return null;
+
+        // vimeo:group-scape: 727951677
+        const { Video } = await import('sys.ui.react.media.video');
+        const src = Video.src(params.id);
+        return <Video.Player video={src} playing={params.playing} width={300} innerScale={1.1} />;
+      });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.row(async (e) => {
+      const props = state.current.props;
+      if (!props) return null;
+
+      const { PropList } = await import('sys.ui.react.common');
+      const items = Object.entries(props.items).map(([key, value]) => {
+        return { label: key, value: value as any };
+      });
+
+      return <PropList items={items} style={{ marginBottom: 250 }} />;
+    });
 
     dev.row(async (e) => {
       const { Auth } = await import('ext.lib.privy');
@@ -181,7 +226,7 @@ export default Dev.describe(name, async (e) => {
       return (
         <CrdtInfo
           stateful={true}
-          title={['Local', 'Private']}
+          title={['Local State', 'Private']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: { store: Store.fs, index: Index.fs },
@@ -193,9 +238,9 @@ export default Dev.describe(name, async (e) => {
                 object: {
                   name: 'me',
                   visible: false,
-                  beforeRender(e) {
-                    const root = e.root as any;
-                    root.config = shorten(root?.config, 20);
+                  beforeRender(e: any) {
+                    const text = e.root?.config?.text;
+                    if (typeof text === 'string') e.root.config.text = shorten(text, 20);
                   },
                 },
               },
@@ -207,8 +252,10 @@ export default Dev.describe(name, async (e) => {
                   name: 'me.root',
                   lens: ['root'],
                   visible: false,
-                  beforeRender(e) {
-                    e.config = shorten(e.config, 22);
+                  expand: { level: 2 },
+                  beforeRender(e: any) {
+                    const text = e.config?.text;
+                    if (typeof text === 'string') e.config.text = shorten(text, 22);
                   },
                 },
               },
@@ -222,6 +269,11 @@ export default Dev.describe(name, async (e) => {
           }}
         />
       );
+    });
+
+    dev.hr(5, 20);
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 

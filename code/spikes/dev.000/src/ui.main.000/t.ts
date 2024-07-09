@@ -1,5 +1,6 @@
 import type { t } from '../common';
 
+type O = Record<string, unknown>;
 export type CommandAction = 'me' | 'dev' | 'cast' | 'hash';
 
 /**
@@ -11,7 +12,6 @@ export type Shell = {
   readonly state: {
     readonly me: t.Doc;
     readonly cmdbar: t.Lens;
-    readonly tmp: t.Lens;
   };
 };
 
@@ -19,7 +19,7 @@ export type Shell = {
  * Shell Commands
  */
 export type ShellCommands = {
-  readonly cmdbar: t.CmdBarCtrl;
+  cmdbar?: t.CmdBarRef;
   readonly fc: t.Cmd<t.FarcasterCmd>;
   readonly tmp: t.Cmd<TmpCmds>;
 };
@@ -29,5 +29,13 @@ export type ShellCommands = {
  */
 export type ShellEditorController = t.Lifecycle;
 
-export type TmpCmds = EditorShare;
-type EditorShare = t.CmdType<'editor:share', { text: string }>;
+/**
+ * TODO 🐷
+ */
+export type TmpCmds = TmpMeShare | TmpVideo | TmpProps;
+type TmpMeShare = t.CmdType<'tmp:share', { text: string }>;
+type TmpVideo = t.CmdType<'tmp:video', TmpVideoParams>;
+type TmpProps = t.CmdType<'tmp:props', TmpPropsParams>;
+
+export type TmpVideoParams = { id: string; playing: boolean };
+export type TmpPropsParams = { items: O };

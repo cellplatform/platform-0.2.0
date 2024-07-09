@@ -1,5 +1,5 @@
-import { isValidElement, useEffect } from 'react';
-import { CmdBar, Doc, Keyboard, rx, type t } from './common';
+import { isValidElement } from 'react';
+import { CmdBar, Crdt, type t } from './common';
 import { DSL } from './DSL';
 
 export type FooterProps = {
@@ -10,46 +10,33 @@ export type FooterProps = {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   const { main } = props;
-
-  /**
-   * Keyboard
-   */
-  useEffect(() => {
-    const life = rx.disposable();
-    const cmdbar = CmdBar.Ctrl.methods(main.cmd.cmdbar);
-    const keys = Keyboard.until(life.dispose$);
-
-    keys.on('Tab', (e) => e.handled());
-    keys.on('META + KeyJ', () => cmdbar.blur({}));
-    keys.on('META + KeyK', () => {
-      cmdbar.focus({});
-      cmdbar.caretToEnd({});
-    });
-    keys.dbl().on('META + KeyK', () => {
-      const path = CmdBar.Path.default.text;
-      main.state.cmdbar.change((d) => Doc.Text.replace(d, path, ''));
-    });
-
-    return life.dispose;
-  }, []);
+  const state = main.state.cmdbar;
 
   /**
    * Render
    */
   return (
-    <CmdBar
-      ctrl={main.cmd.cmdbar}
-      doc={main.state.cmdbar}
-      style={props.style}
-      onReady={(e) => console.info(`⚡️ cmdbar.onReady:`, e)}
-      onText={async (e, ctx) => {
-        const el = await DSL.matchView(e.text, main);
-        props.onOverlay?.({ el });
+    <CmdBar.Stateful
+      state={state}
+      useKeyboard={true}
+      theme={'Dark'}
+      onReady={(e) => {
+        const { dispose$ } = e;
+        const events = e.events();
+        main.cmd.cmdbar = e.cmdbar;
+        Crdt.Sync.Textbox.listen(e.textbox, state, e.paths.text, { dispose$ });
+
+        events.on('Invoke', async (e) => {
+          console.log('invoke', e);
+          const el = await DSL.invoke(e.params.text, main);
+          if (isValidElement(el)) props.onOverlay?.({ el });
+        });
+
+        // const events = ctrl.cmd.events();
       }}
-      onInvoke={async (e) => {
-        const argv = e.params.text;
-        const res = await DSL.invoke(argv, main);
-        if (isValidElement(res)) props.onOverlay?.({ el: res });
+      onChange={async (e) => {
+        const el = await DSL.matchView(e.to, main);
+        props.onOverlay?.({ el });
       }}
     />
   );
