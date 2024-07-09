@@ -14,14 +14,19 @@ export const CtrlKeyboard = {
     keys.on('Tab', (e) => {
       if (isFocused()) e.handled(); // NB: prevent unintended blur.
     });
-    keys.on('META + KeyJ', () => {
+    keys.on('META + KeyJ', (e) => {
+      e.handled();
       fire({ name: 'Focus:Main' });
     });
-    keys.on('META + KeyK', () => {
+    keys.on('META + KeyK', (e) => {
+      e.handled();
       fire({ name: 'Focus:CmdBar' });
     });
-    dbl.on('META + KeyK', () => {
-      if (isFocused()) textbox.selectAll();
+    dbl.on('META + KeyK', (e) => {
+      if (isFocused()) {
+        e.handled();
+        textbox.selectAll();
+      }
     });
 
     return life;
