@@ -1,5 +1,6 @@
 import { compare } from 'fast-json-patch';
 import { type t } from './common';
+export * from './u.Is';
 
 type P = t.PatchOperation;
 
