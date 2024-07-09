@@ -6,6 +6,7 @@ export * from '../common';
 export { useFocus } from '../../ui.use';
 export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
+export { TextboxSync } from '../Textbox.Sync';
 
 /**
  * Constants
