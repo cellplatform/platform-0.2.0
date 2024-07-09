@@ -32,8 +32,8 @@ export type {
   Msecs,
   ObjectPath,
   SortOrder,
-  TextSplice,
   TextDiff,
+  TextSplice,
   TypedObjectPath,
   UnixTimestamp,
   UntilObservable,
@@ -42,13 +42,14 @@ export type {
 
 export type {
   Cmd,
+  CmdObject,
   CmdPaths,
   CmdPathsObject,
   CmdTestFactory,
   CmdTestSetup,
-  CmdTestState,
-  CmdTx,
-  CmdType,
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
+export type { Describe, Expect, It } from 'sys.test/src/types';
+export type { ParsedArgs, TimeDuration } from 'sys.util/src/types';
 } from 'sys.cmd/src/types';
 
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';

@@ -2,7 +2,18 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import { Color, COLORS, css, Dev, Doc, Pkg, SampleCrdt, type t } from '../../test.ui';
+import {
+  Cmd,
+  Color,
+  COLORS,
+  css,
+  Dev,
+  Doc,
+  ObjectPath,
+  Pkg,
+  SampleCrdt,
+  type t,
+} from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
@@ -17,7 +28,7 @@ const initial: T = { props: {}, debug: {}, current: {} };
 /**
  * Spec
  */
-const name = `${Pkg.name}:Crdt.CmdBar`;
+const name = `${Pkg.name}:Crdt:CmdBar.Sample`;
 
 export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'useKeyboard'>;
@@ -31,7 +42,7 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  const cmdbar = CmdBar.Ctrl.create();
+  let cmdbar: t.CmdBarCtrl | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -63,7 +74,7 @@ export default Dev.describe(name, async (e) => {
           base: css({ position: 'relative' }),
           cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
           label: css({
-            Absolute: [-17, 5, null, null],
+            Absolute: [-22, 10, null, null],
             fontSize: 10,
             fontFamily: 'monospace',
             opacity: isFocused ? 1 : 0.3,
@@ -76,10 +87,10 @@ export default Dev.describe(name, async (e) => {
             {...props}
             style={styles.cmdbar}
             state={doc}
-            cmd={cmdbar}
             onReady={(e) => {
               const { dispose$ } = e;
               const events = e.events();
+              cmdbar = e.cmdbar;
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
 
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
@@ -131,8 +142,21 @@ export default Dev.describe(name, async (e) => {
             repo: { store, index },
             document: {
               ref: docuri,
-              object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
               uri: { head: true },
+              object: {
+                visible: false,
+                expand: { level: 1 },
+                beforeRender(mutate) {
+                  const paths = CmdBar.DEFAULTS.paths;
+                  const resolve = Cmd.Path.resolver();
+                  const cmd = ObjectPath.resolve<t.CmdObject<t.CmdBarCtrlType>>(mutate, paths.cmd);
+                  const tx = resolve.tx(cmd);
+                  if (tx) {
+                    ObjectPath.delete(mutate, paths.cmd);
+                    ObjectPath.mutate(mutate, [`cmd(tx.${tx})`], cmd);
+                  }
+                },
+              },
             },
           }}
         />
