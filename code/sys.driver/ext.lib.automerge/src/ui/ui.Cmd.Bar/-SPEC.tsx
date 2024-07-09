@@ -150,10 +150,12 @@ export default Dev.describe(name, async (e) => {
                   const paths = CmdBar.DEFAULTS.paths;
                   const resolve = Cmd.Path.resolver();
                   const cmd = ObjectPath.resolve<t.CmdObject<t.CmdBarCtrlType>>(mutate, paths.cmd);
-                  const tx = resolve.tx(cmd);
-                  if (tx) {
-                    ObjectPath.delete(mutate, paths.cmd);
-                    ObjectPath.mutate(mutate, [`cmd(tx.${tx})`], cmd);
+                  if (cmd) {
+                    const tx = resolve.tx(cmd);
+                    if (tx) {
+                      ObjectPath.delete(mutate, paths.cmd);
+                      ObjectPath.mutate(mutate, [`cmd(tx.${tx})`], cmd);
+                    }
                   }
                 },
               },
