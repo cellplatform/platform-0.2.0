@@ -20,13 +20,5 @@ function areFuncs(...input: any[]) {
 function hasMethods(input: any) {
   if (input === null || typeof input !== 'object') return false;
   const o = input as t.CmdBarRef;
-  return areFuncs(
-    o.current,
-    o.focus,
-    o.select,
-    o.caretToStart,
-    o.caretToEnd,
-    o.invoke,
-    o.keyAction,
-  );
+  return areFuncs(o.current, o.focus, o.select, o.caretToStart, o.caretToEnd, o.invoke, o.keyboard);
 }

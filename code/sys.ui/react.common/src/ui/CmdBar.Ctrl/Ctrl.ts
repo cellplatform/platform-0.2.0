@@ -39,7 +39,7 @@ function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarRef {
     caretToStart: method('Caret:ToStart'),
     caretToEnd: method('Caret:ToEnd'),
     invoke: method('Invoke'),
-    keyAction: method('Key:Action'),
+    keyboard: method('Keyboard'),
     events(dispose$?: t.UntilObservable) {
       return cmd.events(dispose$);
     },

@@ -44,7 +44,7 @@ export function listen(args: {
 
   events.on('Caret:ToStart', (e) => textbox.caretToStart());
   events.on('Caret:ToEnd', (e) => textbox.caretToEnd());
-  events.on('Key:Action', (e) => CtrlKeyboard.action(cmdbar, e.params, textbox.current.focused));
+  events.on('Keyboard', (e) => CtrlKeyboard.action(cmdbar, e.params, textbox.current.focused));
 
   return events;
 }

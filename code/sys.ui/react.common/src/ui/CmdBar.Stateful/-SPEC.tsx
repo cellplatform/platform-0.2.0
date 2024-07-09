@@ -205,8 +205,8 @@ export default Dev.describe(name, (e) => {
       dev.button('Select: All', (e) => cmdbar?.select({ scope: 'All' }));
       dev.button('Select: Expand', (e) => cmdbar?.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.keyAction({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'focus:cmdbar'], (e) => cmdbar?.keyAction({ name: 'Focus:CmdBar' }));
+      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.keyboard({ name: 'Focus:Main' }));
+      dev.button(['CMD + K', 'focus:cmdbar'], (e) => cmdbar?.keyboard({ name: 'Focus:CmdBar' }));
     });
 
     dev.hr(5, 20);
