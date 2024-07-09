@@ -27,7 +27,7 @@ export const ObjectPath = {
    * Read into an object and return the resulting value at the given path.
    */
   resolve<T>(root: unknown | unknown[], path: t.ObjectPath): T | undefined {
-    if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
+    Validate.rootParam(root);
     if (!path || path.length === 0) return root as T;
 
     let current: any = root;
@@ -53,9 +53,8 @@ export const ObjectPath = {
    * If parts of the path do not exist, they are created as objects.
    */
   mutate<T>(root: unknown, path: t.ObjectPath, value: T): void {
-    if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
-    if (!path || path.length === 0) throw new Error('path cannot be empty');
-
+    Validate.rootParam(root);
+    Validate.pathParam(path);
     let current: any = root;
 
     path.forEach((key, index) => {
@@ -69,5 +68,28 @@ export const ObjectPath = {
         current = current[key];
       }
     });
+  },
+
+  /**
+   * Performs a field deletion at the given path.
+   */
+  delete(root: unknown, path: t.ObjectPath) {
+    ObjectPath.mutate(root, path, undefined);
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+
+/**
+ * Helpers
+ */
+const Validate = {
+  rootParam(root: unknown) {
+    if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
+  },
+  pathParam(path: t.ObjectPath) {
+    if (!path || path.length === 0) throw new Error('path cannot be empty');
   },
 } as const;
