@@ -47,9 +47,9 @@ export type {
   CmdPathsObject,
   CmdTestFactory,
   CmdTestSetup,
-export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
-export type { Describe, Expect, It } from 'sys.test/src/types';
-export type { ParsedArgs, TimeDuration } from 'sys.util/src/types';
+  CmdTestState,
+  CmdTx,
+  CmdType,
 } from 'sys.cmd/src/types';
 
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
