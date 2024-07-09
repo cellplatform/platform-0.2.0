@@ -67,8 +67,9 @@ export type {
   Cmd,
   CmdEvents,
   CmdImmutable,
-  CmdMethodVoid,
   CmdMethodResponder,
+  CmdMethodVoid,
+  CmdPathsObject,
   CmdType,
 } from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';

@@ -4,7 +4,7 @@ import type { t } from './common';
  * <Component>
  */
 export type CmdBarProps = {
-  ctrl?: t.Cmd<t.CmdBarCtrlType>;
+  cmd?: t.Cmd<t.CmdBarCtrlType>;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -26,19 +26,11 @@ export type CmdBarProps = {
 };
 
 /**
- * Object structure.
- */
-export type CmdBarPaths = {
-  text: t.ObjectPath;
-  cmd: t.ObjectPath;
-};
-
-/**
  * Events
  */
 export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
-  readonly cmdbar: t.CmdBarCtrl;
+  readonly ctrl: t.CmdBarCtrl;
   readonly textbox: t.TextInputRef;
 };
 

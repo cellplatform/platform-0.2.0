@@ -5,16 +5,16 @@ import { CtrlKeyboard } from './Ctrl.keyboard';
  * Behavior logic for command signals.
  */
 export function listen(args: {
-  cmdbar: t.CmdBarCtrl;
+  ctrl: t.CmdBarCtrl;
   textbox: t.TextInputRef;
   useKeyboard?: boolean;
   dispose$?: t.UntilObservable;
 }): t.Lifecycle {
-  const { cmdbar, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
-  const cmd = args.cmdbar._;
+  const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
+  const cmd = ctrl._;
   const events = cmd.events(args.dispose$);
 
-  if (useKeyboard) CtrlKeyboard.listen(cmdbar, textbox, events.dispose$);
+  if (useKeyboard) CtrlKeyboard.listen(ctrl, textbox, events.dispose$);
 
   events.on('Current', (e) => {
     const text = textbox.current.value;
@@ -44,7 +44,7 @@ export function listen(args: {
 
   events.on('Caret:ToStart', (e) => textbox.caretToStart());
   events.on('Caret:ToEnd', (e) => textbox.caretToEnd());
-  events.on('Keyboard', (e) => CtrlKeyboard.action(cmdbar, e.params, textbox.current.focused));
+  events.on('Keyboard', (e) => CtrlKeyboard.action(ctrl, e.params, textbox.current.focused));
 
   return events;
 }

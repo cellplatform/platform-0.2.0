@@ -10,6 +10,17 @@ export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady
 };
 
 /**
+ * Object structure.
+ */
+export type CmdBarPaths = {
+  text: t.ObjectPath;
+  cmd: t.ObjectPath;
+};
+
+/**
+ * Forwarded reference
+ */
+/**
  * Events
  */
 export type CmdBarStatefulReadyHandler = (e: CmdBarStatefulReadyHandlerArgs) => void;

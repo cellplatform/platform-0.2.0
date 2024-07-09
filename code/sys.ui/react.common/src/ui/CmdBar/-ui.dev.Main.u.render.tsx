@@ -18,7 +18,7 @@ export function render(props: {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.main}>
-        <SampleMain theme={props.theme} size={size} cmdbar={cmdbar} argv={props.argv} />
+        <SampleMain theme={props.theme} size={size} ctrl={cmdbar} argv={props.argv} />
       </div>
       <div>{/* Spacer */}</div>
     </div>

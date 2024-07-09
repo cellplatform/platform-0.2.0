@@ -9,7 +9,7 @@ export function useController(props: P) {
 
   const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
-  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
+  const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
 
   const [_, setRedraw] = useState(0);
@@ -26,7 +26,7 @@ export function useController(props: P) {
    * Create the [cmdbar] command.
    */
   useEffect(() => {
-    if (state) setCmdbar(Ctrl.create(state, { paths }));
+    if (state) setCtrl(Ctrl.create(state, { paths }));
   }, [state?.instance, pathDeps]);
 
   /**
@@ -40,7 +40,7 @@ export function useController(props: P) {
   useEffect(() => {
     const life = rx.disposable();
     const { dispose, dispose$ } = life;
-    if (ready && state && textbox && cmdbar) {
+    if (ready && state && textbox && ctrl) {
       const text = api.text;
       props.onReady?.({
         initial: { text },
@@ -50,12 +50,12 @@ export function useController(props: P) {
         paths,
         dispose$,
         events(dispose$) {
-          return cmdbar._.events([life.dispose$, dispose$]);
+          return ctrl._.events([life.dispose$, dispose$]);
         },
       });
     }
     return dispose;
-  }, [ready, !!cmdbar, pathDeps, state?.instance, !!textbox]);
+  }, [ready, !!ctrl, pathDeps, state?.instance, !!textbox]);
 
   /**
    * Listen to state document.
@@ -72,7 +72,7 @@ export function useController(props: P) {
   const onReady: t.CmdBarReadyHandler = (e) => {
     if (ready) return;
     setTextbox(e.textbox);
-    setCmdbar(e.cmdbar);
+    setCtrl(e.ctrl);
     setReady(true);
   };
 
@@ -96,7 +96,7 @@ export function useController(props: P) {
   const api = {
     ready,
     enabled,
-    cmdbar,
+    ctrl,
     handlers: { onReady, onChange, onSelect, onFocusChange },
     get text() {
       if (!state) return '';

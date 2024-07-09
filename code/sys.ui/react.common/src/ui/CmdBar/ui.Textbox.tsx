@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { rx, css, Args, DEFAULTS, TextInput, type t } from './common';
 import { Ctrl } from '../CmdBar.Ctrl';
 
-export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'ctrl'> & {
-  cmdbar?: t.CmdBarCtrl;
+export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'cmd'> & {
+  ctrl?: t.CmdBarCtrl;
   theme: t.ColorTheme;
   opacity?: number;
 };
 
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const {
-    cmdbar,
+    ctrl,
     theme,
     text = '',
     enabled = DEFAULTS.enabled,
@@ -37,7 +37,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
 
   const handleKeydown: t.TextInputKeyHandler = (e) => {
     props.onKeyDown?.(e);
-    if (e.key === 'Enter') cmdbar?.invoke({ text });
+    if (e.key === 'Enter') ctrl?.invoke({ text });
   };
 
   /**
@@ -45,15 +45,15 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (cmdbar && textbox) Ctrl.listen({ cmdbar, textbox, useKeyboard, dispose$ });
+    if (ctrl && textbox) Ctrl.listen({ ctrl: ctrl, textbox, useKeyboard, dispose$ });
     return dispose;
-  }, [cmdbar, textbox, useKeyboard]);
+  }, [ctrl, textbox, useKeyboard]);
 
   useEffect(() => {
-    if (ready || !textbox || !cmdbar) return;
+    if (ready || !textbox || !ctrl) return;
     setReady(true);
-    props.onReady?.({ cmdbar, textbox });
-  }, [textbox, cmdbar, ready]);
+    props.onReady?.({ ctrl: ctrl, textbox });
+  }, [textbox, ctrl, ready]);
 
   /**
    * Render

@@ -51,7 +51,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            ctrl={cmdbar._}
+            cmd={cmdbar._}
             onReady={(e) => console.info('⚡️ CmdBar.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);

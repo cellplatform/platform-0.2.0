@@ -5,11 +5,11 @@ import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
-  const [cmdbar, setCmdbar] = useState<t.CmdBarCtrl>();
+  const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
 
   useEffect(() => {
-    if (props.ctrl) setCmdbar(Ctrl.cmdbar(props.ctrl));
-  }, [props.ctrl]);
+    if (props.cmd) setCtrl(Ctrl.toCtrl(props.cmd));
+  }, [props.cmd]);
 
   /**
    * Render
@@ -36,13 +36,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox
-        {...props}
-        cmdbar={cmdbar}
-        enabled={enabled}
-        theme={theme}
-        opacity={enabled ? 1 : 0.3}
-      />
+      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} opacity={enabled ? 1 : 0.3} />
     </div>
   );
 
@@ -77,7 +71,7 @@ const wrangle = {
   },
 
   ctrl(props: t.CmdBarProps) {
-    if (!props.ctrl) return Ctrl.create(Immutable.clonerRef({}))._;
-    return props.ctrl;
+    if (!props.cmd) return Ctrl.create(Immutable.clonerRef({}))._;
+    return props.cmd;
   },
 } as const;

@@ -141,7 +141,7 @@ export default Dev.describe(name, (e) => {
     ctx.host.layer(1).render<T>((e) => {
       const { props, current } = e.state;
       return CmdBar.Dev.Main.render({
-        cmdbar: cmdbar,
+        cmdbar,
         argv: current.argv,
         theme: props.theme,
         size: [400, 200],

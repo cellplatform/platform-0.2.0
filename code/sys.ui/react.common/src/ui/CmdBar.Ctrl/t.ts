@@ -42,7 +42,7 @@ export type CmdBarCtrl = {
 };
 
 /**
- * Keyboard Actions
+ * Keyboard Actions.
  */
 export type KeyboardAction = KeyFocus | KeyFocusMain;
 type KeyFocus = { name: 'Focus:CmdBar' };
