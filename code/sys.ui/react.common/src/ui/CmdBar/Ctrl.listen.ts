@@ -1,5 +1,5 @@
 import { DEFAULTS, type t } from './common';
-import { CtrlKeyboard } from './ctrl.keyboard';
+import { CtrlKeyboard } from './Ctrl.keyboard';
 
 /**
  * Behavior logic for command signals.

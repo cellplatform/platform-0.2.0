@@ -1,5 +1,5 @@
 import { Cmd, DEFAULTS, Immutable, type t } from './common';
-import { listen } from './ctrl.listen';
+import { listen } from './Ctrl.listen';
 import { Is } from './u.Is';
 
 type C = t.CmdBarCtrlType;

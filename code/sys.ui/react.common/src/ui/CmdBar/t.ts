@@ -1,5 +1,5 @@
 import type { t } from './common';
-export type * from './t.ctrl';
+export type * from './t.Ctrl';
 
 /**
  * <Component>

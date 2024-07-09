@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { MainArgs } from './-ui.dev.Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
-import { Ctrl } from './ctrl';
+import { Ctrl } from './Ctrl';
 
 export type SampleProps = {
-  cmd?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
+  ctrl?: t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
   argv?: string;
   theme?: t.CommonTheme;
@@ -12,7 +12,7 @@ export type SampleProps = {
 };
 
 export const SampleMain: React.FC<SampleProps> = (props) => {
-  const { cmd, size = [] } = props;
+  const { ctrl, size = [] } = props;
   const focus = useFocus();
   const isFocused = focus.containsFocus;
   const args = Args.parse(props.argv);
@@ -21,13 +21,13 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const cmdbar = cmd ? Ctrl.cmdbar(cmd) : undefined;
+    const cmdbar = ctrl ? Ctrl.cmdbar(ctrl) : undefined;
     const events = cmdbar?.events();
     events?.on('Focus', (e) => {
       if (e.params.target === 'Main') focus.focus();
     });
     return events?.dispose;
-  }, [cmd]);
+  }, [ctrl]);
 
   /**
    * Render
