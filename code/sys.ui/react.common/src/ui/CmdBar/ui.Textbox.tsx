@@ -52,7 +52,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   useEffect(() => {
     if (ready || !textbox || !cmdbar) return;
     setReady(true);
-    props.onReady?.({ cmdbar, textbox, text });
+    props.onReady?.({ cmdbar, textbox });
   }, [textbox, cmdbar, ready]);
 
   /**

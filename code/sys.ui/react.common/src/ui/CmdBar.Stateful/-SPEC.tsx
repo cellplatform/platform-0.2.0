@@ -114,7 +114,7 @@ export default Dev.describe(name, (e) => {
 
               // Start data-binding syncer.
               const syncer = CmdBar.Sync.listen(textbox, doc, paths.text, { dispose$ });
-              state.change((d) => (d.current.argv = e.text));
+              state.change((d) => (d.current.argv = e.initial.text));
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
 
               // Listen for events.

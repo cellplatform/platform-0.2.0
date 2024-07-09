@@ -13,9 +13,12 @@ export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady
  * Events
  */
 export type CmdBarStatefulReadyHandler = (e: CmdBarStatefulReadyHandlerArgs) => void;
-export type CmdBarStatefulReadyHandlerArgs = t.CmdBarReadyHandlerArgs & {
+export type CmdBarStatefulReadyHandlerArgs = {
+  readonly initial: { readonly text: string };
   readonly state: t.CmdImmutable;
   readonly paths: t.CmdBarPaths;
+  readonly cmdbar: t.CmdBarRef;
+  readonly textbox: t.TextInputRef;
   readonly dispose$: t.Observable<void>;
   events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };

@@ -40,7 +40,6 @@ export type CmdBarReadyHandler = (e: CmdBarReadyHandlerArgs) => void;
 export type CmdBarReadyHandlerArgs = {
   readonly cmdbar: t.CmdBarRef;
   readonly textbox: t.TextInputRef;
-  readonly text: string;
 };
 
 export type CmdBarChangeHandler = (e: CmdBarChangeHandlerArgs) => void;

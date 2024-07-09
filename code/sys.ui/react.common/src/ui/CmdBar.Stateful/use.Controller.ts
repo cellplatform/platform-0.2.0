@@ -43,7 +43,7 @@ export function useController(props: P) {
     if (ready && state && textbox && cmdbar) {
       const text = api.text;
       props.onReady?.({
-        text,
+        initial: { text },
         textbox,
         cmdbar,
         state,
