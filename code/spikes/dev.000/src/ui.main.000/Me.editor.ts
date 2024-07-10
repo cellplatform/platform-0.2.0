@@ -53,8 +53,8 @@ export function editorController(args: {
   });
 
   // Focus editor when <CmdBar> is blurred (via CMD+J).
-  const events = cmdbar?.ctrl.events(life.dispose$);
-  events?.on('Focus', (e) => {
+  const ctrlEvents = cmdbar?.ctrl.events(life.dispose$);
+  ctrlEvents?.on('Focus', (e) => {
     if (e.params.target === 'Main') editor.focus();
   });
 

@@ -43,6 +43,7 @@ export const DSL = {
    */
   async invoke(argv: string, main: t.Shell) {
     const { args, action, pos } = wrangle.args<t.CommandAction>(argv);
+    const tmp = main.state.tmp;
 
     if (action === 'cast') {
       const text = pos[1];
@@ -64,20 +65,17 @@ export const DSL = {
       try {
         const yaml = Yaml.parse(text);
 
-        if (pos[1] === 'video' || !pos[1]) {
-          if (typeof yaml.video === 'object') {
-            const params = yaml.video as t.TmpVideoParams;
-            const method = main.cmd.tmp.method('tmp:video');
-            method(params);
-          }
+        if (typeof yaml.video === 'object') {
+          const video = yaml.video as t.TmpVideoParams;
+          tmp.change((d) => (d.video = video));
+        } else {
+          tmp.change((d) => delete d.video);
         }
 
-        if (pos[1] === 'props' || !pos[1]) {
-          if (typeof yaml.props === 'object') {
-            const params = { items: yaml.props } as t.TmpPropsParams;
-            const method = main.cmd.tmp.method('tmp:props');
-            method(params);
-          }
+        if (typeof yaml.props === 'object') {
+          tmp.change((d) => (d.props = yaml.props));
+        } else {
+          tmp.change((d) => delete d.props);
         }
       } catch (error) {
         console.error(`Failed while parsing YAML`, error);

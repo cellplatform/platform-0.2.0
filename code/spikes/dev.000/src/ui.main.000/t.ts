@@ -15,7 +15,11 @@ export type Shell = {
   };
 };
 
-export type Tmp = { cmd?: t.CmdObject<TmpCmds> };
+export type Tmp = {
+  cmd?: t.CmdObject<TmpCmds>;
+  props?: Record<string, unknown>;
+  video?: TmpVideoParams;
+};
 
 /**
  * Shell Commands
@@ -39,5 +43,5 @@ type TmpMeShare = t.CmdType<'tmp:share', { text: string }>;
 type TmpVideo = t.CmdType<'tmp:video', TmpVideoParams>;
 type TmpProps = t.CmdType<'tmp:props', TmpPropsParams>;
 
-export type TmpVideoParams = { id: string; playing: boolean };
+export type TmpVideoParams = { id: string; playing?: boolean; muted?: boolean };
 export type TmpPropsParams = { items: O };

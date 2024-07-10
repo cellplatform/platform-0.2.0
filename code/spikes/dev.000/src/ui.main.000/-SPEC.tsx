@@ -7,12 +7,9 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { useEffect, useState, useRef, useCallback } from 'react';
-
-import { Color, Dev, Pkg, css } from '../test.ui';
+import { Color, Dev, Pkg, css, rx } from '../test.ui';
 import {
   Cmd,
-  CmdBar,
   CrdtInfo,
   Immutable,
   Peer,
@@ -95,13 +92,18 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    const tmp = cmd.tmp.events();
-    tmp.on('tmp:video', (e) => {
-      state.change((d) => (d.video = e.params));
+    main.state.tmp
+      .events()
+      .changed$.pipe(rx.debounceTime(100))
+      .subscribe(() => dev.redraw('debug'));
+
+    const tmpEvents = cmd.tmp.events();
+    tmpEvents.on('tmp:video', (e) => {
+      // state.change((d) => (d.video = e.params));
     });
-    tmp.on('tmp:props', (e) => {
+    tmpEvents.on('tmp:props', (e) => {
       console.log('props', e.params);
-      state.change((d) => (d.props = e.params));
+      // state.change((d) => (d.props = e.params));
     });
 
     ctx.debug.width(300);
@@ -143,13 +145,21 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.06)
       .render(async (e) => {
-        const params = state.current.video;
-        if (!params) return null;
+        const video = tmp.current.video;
+        if (!video) return null;
 
         // vimeo:group-scape: 727951677
         const { Video } = await import('sys.ui.react.media.video');
-        const src = Video.src(params.id);
-        return <Video.Player video={src} playing={params.playing} width={300} innerScale={1.1} />;
+        const src = Video.src(video.id);
+        return (
+          <Video.Player
+            video={src}
+            playing={video.playing}
+            width={300}
+            innerScale={1.1}
+            muted={video.muted}
+          />
+        );
       });
   });
 
@@ -158,15 +168,15 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row(async (e) => {
-      const props = state.current.props;
+      const props = tmp.current.props;
       if (!props) return null;
 
       const { PropList } = await import('sys.ui.react.common');
-      const items = Object.entries(props.items).map(([key, value]) => {
+      const items = Object.entries(props).map(([key, value]) => {
         return { label: key, value: value as any };
       });
 
-      return <PropList items={items} style={{ marginBottom: 250 }} />;
+      return <PropList items={items} style={{ marginBottom: 150 }} />;
     });
 
     dev.row(async (e) => {
