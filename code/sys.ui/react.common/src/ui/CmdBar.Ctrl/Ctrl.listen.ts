@@ -37,7 +37,7 @@ export function listen(args: {
     if (scope === 'All') textbox.selectAll();
     if (scope === 'Expand') {
       const { value, selection } = textbox.current;
-      const next = wrangle.expandedSeletion(value, selection);
+      const next = CtrlKeyboard.expandedSeletion(value, selection);
       textbox.select(next.start, next.end);
     }
   });
@@ -48,23 +48,3 @@ export function listen(args: {
 
   return events;
 }
-
-/**
- * Helpers
- */
-const wrangle = {
-  expandedSeletion(text: string, selection: t.TextInputSelection): t.TextInputSelection {
-    const index = wrangle.firstSpaceBeforeIndex(text, selection.start - 1);
-    const start = index < 1 ? 0 : index;
-    const end = text.length;
-    return { start, end };
-  },
-
-  firstSpaceBeforeIndex(text: string, index: number): number {
-    text = text.slice(0, index);
-    for (let i = index - 1; i >= 0; i--) {
-      if (text[i] === ' ') return i;
-    }
-    return -1;
-  },
-} as const;

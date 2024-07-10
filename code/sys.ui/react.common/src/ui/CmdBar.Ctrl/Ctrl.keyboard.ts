@@ -47,4 +47,27 @@ export const CtrlKeyboard = {
       cmdbar.focus({ target: 'Main' });
     }
   },
+
+  /**
+   * Retrieve a new selection by moving back through spaces.
+   */
+  expandedSeletion(text: string, selection: t.TextInputSelection): t.TextInputSelection {
+    const index = wrangle.firstSpaceBeforeIndex(text, selection.start - 1);
+    const start = index < 1 ? 0 : index;
+    const end = text.length;
+    return { start, end };
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  firstSpaceBeforeIndex(text: string, index: number): number {
+    text = text.slice(0, index);
+    for (let i = index - 1; i >= 0; i--) {
+      if (text[i] === ' ') return i;
+    }
+    return -1;
+  },
 } as const;
