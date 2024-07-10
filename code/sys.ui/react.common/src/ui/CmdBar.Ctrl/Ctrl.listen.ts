@@ -21,10 +21,6 @@ export function listen(args: {
     cmd.invoke('Current:res', { text }, e.tx);
   });
 
-  events.on('Invoke', (e) => {
-    console.log('invoke', e); // TEMP 🐷
-  });
-
   events.on('Focus', (e) => {
     const { target = 'CmdBar' } = e.params;
     if (target === 'CmdBar') {
