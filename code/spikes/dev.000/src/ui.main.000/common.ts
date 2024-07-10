@@ -23,3 +23,8 @@ export { CmdBar } from 'sys.ui.react.common';
  */
 export * from '../common';
 export type * as t from './common.t';
+
+/**
+ * Constants.
+ */
+export const DEFAULTS = {} as const;

@@ -22,17 +22,15 @@ export const Footer: React.FC<FooterProps> = (props) => {
       theme={'Dark'}
       onReady={(e) => {
         const { dispose$ } = e;
-        const events = e.events();
-        main.cmd.cmdbar = e.cmdbar;
+        const cmdbar = e.cmdbar;
+        main.cmd.cmdbar = cmdbar;
+        const events = cmdbar.ctrl.events(e.dispose$);
         Crdt.Sync.Textbox.listen(e.textbox, state, e.paths.text, { dispose$ });
 
         events.on('Invoke', async (e) => {
-          console.log('invoke', e);
           const el = await DSL.invoke(e.params.text, main);
           if (isValidElement(el)) props.onOverlay?.({ el });
         });
-
-        // const events = ctrl.cmd.events();
       }}
       onChange={async (e) => {
         const el = await DSL.matchView(e.to, main);

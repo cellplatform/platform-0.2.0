@@ -70,15 +70,22 @@ export default Dev.describe(name, async (e) => {
 
   const me = await Store.getMeDoc();
   const cloner = () => Immutable.clonerRef({});
+
+  const tmp = network.shared.ns.lens<t.Tmp>('dev.tmp', { cmd: {} as any });
+
   const cmd: t.ShellCommands = {
     cmdbar: undefined,
     fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
-    tmp: Cmd.create<t.TmpCmds>(network.shared.ns.lens('dev.tmp', {})) as t.Cmd<t.TmpCmds>,
+    tmp: Cmd.create<t.TmpCmds>(tmp.lens(['cmd'])) as t.Cmd<t.TmpCmds>,
   };
 
   const main: t.Shell = {
     cmd,
-    state: { me, cmdbar: network.shared.ns.lens('dev.cmdbar', {}) },
+    state: {
+      me,
+      tmp,
+      cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -206,8 +213,8 @@ export default Dev.describe(name, async (e) => {
             network,
             repo: model,
             shared: [
-              { label: 'State: system', object: { lens: ['sys'], ...obj }, uri },
-              { label: 'State: namespaces', object: { lens: ['ns'], ...obj }, uri },
+              { label: 'System', object: { lens: ['sys'], ...obj }, uri },
+              { label: 'Namespaces', object: { lens: ['ns'], ...obj }, uri },
             ],
           }}
         />

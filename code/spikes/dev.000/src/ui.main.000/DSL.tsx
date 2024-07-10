@@ -30,6 +30,11 @@ export const DSL = {
       return <HashView theme={'Dark'} bg={true} />;
     }
 
+    if (action === 'cmd') {
+      const { CmdMain } = await import('./ui.Cmd.Main');
+      return <CmdMain main={main} />;
+    }
+
     return;
   },
 

@@ -1,6 +1,6 @@
 import { Dev } from '../test.ui';
 import { Args, CmdBar, Doc, Time, type t } from './common';
-import { LoadList } from './ui.CmdBar.List';
+import { DevList } from './ui.CmdBar.DevList';
 
 export async function loadSpec(args: t.ParsedArgs, main: t.Shell) {
   const { Specs } = await import('../test.ui/entry.Specs');
@@ -16,12 +16,12 @@ export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
   const pos = Args.positional(args);
   const filter = pos.slice(1).join(' ');
   return (
-    <LoadList
+    <DevList
       modules={Specs}
       filter={filter}
       onSelect={(e) => {
         // Update the command "argv".
-        const path = CmdBar.DEFAULTS.paths.text;
+        const path = CmdBar.Path.defaults.text;
         const cmd: t.CommandAction = 'dev';
         const next = `${cmd} ${e.uri}`;
         main.state.cmdbar.change((d) => Doc.Text.replace(d, path, next));
@@ -30,8 +30,8 @@ export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
         const cmdbar = main.cmd.cmdbar;
         if (cmdbar) {
           Time.delay(0, () => {
-            cmdbar.caretToEnd({});
-            cmdbar.focus({});
+            cmdbar.ctrl.caretToEnd({});
+            cmdbar.ctrl.focus({});
           });
         }
       }}

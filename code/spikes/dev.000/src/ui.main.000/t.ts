@@ -1,19 +1,21 @@
 import type { t } from '../common';
 
 type O = Record<string, unknown>;
-export type CommandAction = 'me' | 'dev' | 'cast' | 'hash';
+export type CommandAction = 'me' | 'dev' | 'cast' | 'hash' | 'cmd';
 
 /**
  * Shell
  */
-
 export type Shell = {
   readonly cmd: ShellCommands;
   readonly state: {
     readonly me: t.Doc;
     readonly cmdbar: t.Lens;
+    readonly tmp: t.Lens<Tmp>;
   };
 };
+
+export type Tmp = { cmd?: t.CmdObject<TmpCmds> };
 
 /**
  * Shell Commands

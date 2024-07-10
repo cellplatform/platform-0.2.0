@@ -20,7 +20,7 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { Cmd, CmdType } from 'sys.cmd/src/types';
+export type { Cmd, CmdType, CmdObject } from 'sys.cmd/src/types';
 export type { SpecImporter, SpecImports } from 'sys.test.spec/src/types';
 export type { ParsedArgs } from 'sys.util/src/types';
 

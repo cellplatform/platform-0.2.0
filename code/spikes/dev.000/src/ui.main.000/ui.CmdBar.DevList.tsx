@@ -2,7 +2,7 @@ import { CmdHost } from 'sys.ui.react.common';
 import { Specs } from '../test.ui/entry.Specs';
 import { Color, Pkg, css, type t } from './common';
 
-export type LoadListProps = {
+export type DevListProps = {
   modules?: t.ModuleImports;
   filter?: string;
   theme?: t.CommonTheme;
@@ -10,7 +10,7 @@ export type LoadListProps = {
   onSelect?: (e: { uri: string }) => void;
 };
 
-export const LoadList: React.FC<LoadListProps> = (props) => {
+export const DevList: React.FC<DevListProps> = (props) => {
   const {} = props;
 
   /**

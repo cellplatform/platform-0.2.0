@@ -15,6 +15,8 @@ export function editorController(args: {
   const life = rx.lifecycle(args.dispose$);
   const cmdbar = main.cmd.cmdbar;
 
+  // main.state.
+
   // Document (State).
   type T = { config?: t.EditorState };
   const lens = Doc.lens<O, T>(main.state.me, ['root'], { init: (d) => (d.root = {}) });
@@ -43,15 +45,15 @@ export function editorController(args: {
    * Editor keyboard.
    */
   const { KeyMod, KeyCode } = monaco;
-  editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyK, () => cmdbar?.focus({}));
+  editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyK, () => cmdbar?.ctrl.focus({}));
   editor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, async (e) => {
-    const res = await cmdbar?.current({}).promise();
+    const res = await cmdbar?.ctrl.current({}).promise();
     const text = res?.result?.text || '';
-    cmdbar?.invoke({ text });
+    cmdbar?.ctrl.invoke({ text });
   });
 
   // Focus editor when <CmdBar> is blurred (via CMD+J).
-  const events = cmdbar?.events(life.dispose$);
+  const events = cmdbar?.ctrl.events(life.dispose$);
   events?.on('Focus', (e) => {
     if (e.params.target === 'Main') editor.focus();
   });
