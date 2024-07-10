@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+type O = Record<string, unknown>;
+
 /**
  * Flag helpers.
  */
@@ -76,6 +78,24 @@ export const ObjectPath = {
   delete(root: unknown, path: t.ObjectPath) {
     ObjectPath.mutate(root, path, undefined);
   },
+
+  /**
+   * Determine if the given path exists on the object.
+   */
+  exists(root: unknown, path: t.ObjectPath) {
+    Validate.rootParam(root);
+    Validate.pathParam(path);
+
+    const pathToParent = path.length === 0 ? [] : path.slice(0, -1);
+    const parent = ObjectPath.resolve(root, pathToParent);
+    const field = path[path.length - 1];
+
+    if (!(isObject(parent) || Array.isArray(parent))) return false;
+    if (Array.isArray(parent) && typeof field === 'number') return true;
+    if (isObject(parent)) return Object.keys(parent).includes(String(field));
+
+    return false;
+  },
 } as const;
 
 /**
@@ -85,6 +105,10 @@ export const ObjectPath = {
 /**
  * Helpers
  */
+function isObject(input: any): input is object {
+  return input !== null && typeof input === 'object';
+}
+
 const Validate = {
   rootParam(root: unknown) {
     if (typeof root !== 'object' || root === null) throw new Error('root is not an object');

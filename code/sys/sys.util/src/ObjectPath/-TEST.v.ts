@@ -179,7 +179,47 @@ describe('ObjectPath', () => {
     });
   });
 
-  describe('Is', () => {
+  describe('ObjectPath.exists', () => {
+    type R = { msg?: string; child?: { foo?: { count?: number } }; list?: number[] };
+
+    it('does not exist', () => {
+      expect(ObjectPath.exists({}, ['msg'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['child', 'foo'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['child', 'foo', 'count'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['list'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['list', 5])).to.eql(false);
+    });
+
+    it('does exist', () => {
+      const root1: R = { msg: 'hello' };
+      const root2: R = { child: {} };
+      const root3: R = { child: { foo: {} } };
+      const root4: R = { list: [] };
+
+      expect(ObjectPath.exists(root1, ['msg'])).to.eql(true);
+      expect(ObjectPath.exists(root2, ['child'])).to.eql(true);
+      expect(ObjectPath.exists(root3, ['child', 'foo'])).to.eql(true);
+      expect(ObjectPath.exists(root4, ['list'])).to.eql(true);
+      expect(ObjectPath.exists(root4, ['list', 5])).to.eql(true);
+    });
+
+    it('throws if path is empty', () => {
+      [[], undefined, null].forEach((path: any) => {
+        const root: R = {};
+        const fn = () => ObjectPath.exists(root, path);
+        expect(fn).to.throw(/path cannot be empty/);
+      });
+    });
+
+    it('throws if root not an object', () => {
+      [null, undefined, 123, true, ''].forEach((root) => {
+        const fn = () => ObjectPath.exists(root, ['msg']);
+        expect(fn).to.throw(/root is not an object/);
+      });
+    });
+  });
+
+  describe('ObjectPath.Is', () => {
     const Is = ObjectPath.Is;
     it('is not an [ObjectPath]', () => {
       const NON = [123, {}, false, '', Symbol('foo'), BigInt(0), undefined, null, [[]], [{}]];
