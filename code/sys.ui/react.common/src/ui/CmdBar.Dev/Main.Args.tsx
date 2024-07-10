@@ -59,7 +59,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
     return (
       <div key={`${cmd}.${i}`} {...style}>
         <span>{`${isLast ? '→' : '↓'} `}</span>
-        <span>{Text.shorten(cmd, 11)}</span>
+        <span>{Text.shorten(cmd, 15)}</span>
       </div>
     );
   });
@@ -70,7 +70,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
       const text = `${key}${!!value ? ': ' : ''}${value}`;
       return (
         <div key={key} {...styles.param}>
-          <span>{Text.shorten(text, 11)}</span>
+          <span>{Text.shorten(text, 17)}</span>
         </div>
       );
     });
