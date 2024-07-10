@@ -68,8 +68,8 @@ export default Dev.describe(name, async (e) => {
 
         const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
         const transition = [t('opacity'), t('border')].join(', ');
-        const isFocused = current.isFocused;
-        const borderColor = Color.alpha(theme.is.dark ? theme.fg : COLORS.BLUE, isFocused ? 1 : 0);
+        const isFocused = cmdbar?.current.focused;
+        const borderColor = isFocused ? COLORS.BLUE : undefined;
         const styles = {
           base: css({ position: 'relative' }),
           cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
@@ -117,12 +117,15 @@ export default Dev.describe(name, async (e) => {
      */
     ctx.host.layer(1).render<T>((e) => {
       const { props, current } = e.state;
+      const docuri = doc?.uri;
+      const address = docuri ? `crdt:${Doc.Uri.id(docuri, { shorten: 5 })}` : '';
       return CmdBar.Dev.Main.render({
         cmdbar,
         argv: current.argv,
-        theme: props.theme,
-        size: [400, 200],
         topHalf: true,
+        title: { left: address, right: 'main' },
+        theme: props.theme,
+        focused: { cmdbar: cmdbar?.current.focused },
         style: { marginBottom: 40 },
       });
     });
