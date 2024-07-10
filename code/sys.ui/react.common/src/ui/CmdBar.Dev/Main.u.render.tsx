@@ -1,13 +1,14 @@
-import { SampleMain } from './Main';
+import { SampleMain, type SampleProps } from './Main';
 import { css, type t } from './common';
 
 export function render(props: {
   cmdbar?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
-  argv?: string;
-  theme?: t.CommonTheme;
-  size?: t.SizeTuple;
-  focused?: { cmdbar?: boolean };
   topHalf?: boolean;
+  argv?: SampleProps['argv'];
+  size?: SampleProps['size'];
+  title?: SampleProps['title'];
+  focused?: SampleProps['focused'];
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 }) {
   const { cmdbar, size } = props;
@@ -24,6 +25,7 @@ export function render(props: {
           size={size}
           ctrl={cmdbar}
           focused={props.focused}
+          title={props.title}
           argv={props.argv}
         />
       </div>

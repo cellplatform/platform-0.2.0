@@ -20,7 +20,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
     base: css({
       Absolute: 0,
       display: 'grid',
-      gridTemplateColumns: `1fr 1fr 1fr`,
+      gridTemplateColumns: `1.2fr 1fr 1.2fr`,
       columnGap: '10px',
     }),
     edge: css({
@@ -50,7 +50,9 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
     },
   };
 
-  const pos = args._.filter((cmd) => !!cmd);
+  const pos = args._.map((cmd) => cmd.trim())
+    .filter((cmd) => !!cmd)
+    .filter((cmd) => (/^-+$/.test(cmd) ? false : true)); // NB: prevent --param text input showing up as "command".
   const elCmdList = pos.map((cmd, i) => {
     const isLast = i === pos.length - 1;
     const style = css(styles.cmd, isLast ? styles.cmdLast : undefined);

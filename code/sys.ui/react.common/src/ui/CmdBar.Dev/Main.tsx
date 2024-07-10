@@ -6,6 +6,7 @@ import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 export type SampleProps = {
   ctrl?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   size?: t.SizeTuple;
+  title?: boolean | { left?: string; right?: string };
   argv?: string;
   focused?: { cmdbar?: boolean };
   theme?: t.CommonTheme;
@@ -13,7 +14,7 @@ export type SampleProps = {
 };
 
 export const SampleMain: React.FC<SampleProps> = (props) => {
-  const { size = [350, 200], focused = {} } = props;
+  const { size = [450, 200], focused = {} } = props;
   const args = Args.parse(props.argv);
 
   const focus = useFocus();
@@ -75,31 +76,49 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
       pointerEvents: 'none',
       Absolute: 8,
       borderRadius: 10,
-      border: `dashed 1px ${Color.alpha(theme.fg, 0.9)}`,
-      boxShadow: isMainFocused ? `0 2px 30px 0 ${Color.format(-0.5)}` : undefined,
+      border: `${isMainFocused ? 'solid' : 'dashed'} 1.5px`,
+      borderColor: isMainFocused ? Color.BLUE : Color.alpha(theme.fg, 0.9),
+      boxShadow: isMainFocused
+        ? `0 2px 30px 0 ${Color.format(theme.is.dark ? -0.5 : -0.15)}`
+        : undefined,
       opacity: isFocused ? 0.8 : 0.5,
-      backgroundColor: Color.alpha(theme.fg, 0.03),
+      backgroundColor: theme.is.light
+        ? Color.alpha(theme.bg, isMainFocused ? 0.5 : 0)
+        : Color.alpha(theme.fg, isMainFocused ? 0.02 : 0),
       transition,
       display: 'grid',
     }),
-    label: css({
-      Absolute: [-15, 15, null, null],
-      fontFamily: 'monospace',
-      fontSize: 10,
-      opacity: isFocused ? 1 : 0.3,
-      transition,
-    }),
+    labelTitle: {
+      base: css({
+        Absolute: [-15, 15, null, 15],
+        fontFamily: 'monospace',
+        fontSize: 10,
+        opacity: isFocused ? 1 : 0.3,
+        transition,
+
+        display: 'grid',
+        gridTemplateColumns: `auto 1fr auto`,
+      }),
+      text: css({ transition }),
+      left: css({}),
+      right: css({}),
+    },
     keyHint: css({
       Absolute: [null, 0, -25, 0],
+      transition,
       display: 'grid',
       placeItems: 'center',
-      transition,
     }),
     piggy: css({
+      Absolute: 0,
+      pointerEvents: 'none',
       fontSize: 48,
       textShadow: `0px 4px 18px ${Color.format(theme.is.light ? 0 : isFocused ? -0.3 : -0.1)}`,
       opacity: isFocused ? 1 : theme.is.dark ? 0.2 : 0.4,
       transition,
+
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
@@ -113,16 +132,25 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
     </div>
   );
 
+  const title = wrangle.title(props);
+  const elLabelTitle = (
+    <div {...styles.labelTitle.base}>
+      <div {...css(styles.labelTitle.text, styles.labelTitle.left)}>{title.left}</div>
+      <div />
+      <div {...css(styles.labelTitle.text, styles.labelTitle.right)}>{title.right}</div>
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} ref={focus.ref} tabIndex={0}>
       <div {...styles.body}>
         {elKeyHint}
-        <div {...styles.label}>{'main'}</div>
+        {elLabelTitle}
         <div {...styles.content}>
-          {elArgs}
           <div {...styles.border}>
             <div />
           </div>
+          {elArgs}
           <div {...styles.piggy}>{'🐷'}</div>
         </div>
       </div>
@@ -136,5 +164,13 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
 const wrangle = {
   ctrl(props: SampleProps) {
     return props.ctrl ? Ctrl.toCtrl(props.ctrl) : undefined;
+  },
+
+  title(props: SampleProps) {
+    const { title = true } = props;
+    if (title === false) return { left: '', right: '' };
+    const left = typeof title === 'object' ? title.left || '' : '';
+    const right = typeof title === 'object' ? title.right || '' : 'main';
+    return { left, right } as const;
   },
 } as const;
