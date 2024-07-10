@@ -32,7 +32,7 @@ export function useController(props: P) {
   /**
    * Ready (→ Dispose)
    * NB:
-   *     Textbox ←|→ State (Immutable<T>) syncer
+   *     Textbox ←|→ State (Immutable<T>) syncer.
    *
    *     The instance specific syncer controller should
    *     activate within the onReady callback.
@@ -44,12 +44,7 @@ export function useController(props: P) {
       const text = api.text;
       const resolve = Ctrl.Path.resolver(paths);
       const cmdbar: t.CmdBarRef = { ctrl, state, paths, resolve, dispose$ };
-      props.onReady?.({
-        initial: { text },
-        cmdbar,
-        textbox,
-        dispose$,
-      });
+      props.onReady?.({ initial: { text }, cmdbar, textbox, paths, dispose$ });
     }
     return dispose;
   }, [ready, !!ctrl, pathDeps, state?.instance, !!textbox]);

@@ -113,7 +113,7 @@ export default Dev.describe(name, (e) => {
               dispose$.subscribe(() => console.info('⚡️ CmdBar.Stateful.onReady:dispose$ → 💥'));
 
               // Start data-binding syncer.
-              const syncer = CmdBar.Sync.listen(textbox, doc, paths.text, { dispose$ });
+              const syncer = CmdBar.Sync.listen(textbox, doc, e.paths.text, { dispose$ });
               state.change((d) => (d.current.argv = e.initial.text));
               syncer.onChange((e) => console.info(`syncer.onChange`, e));
 

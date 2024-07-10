@@ -92,7 +92,7 @@ export default Dev.describe(name, async (e) => {
 
               const { dispose$ } = e;
               cmdbar = e.cmdbar;
-              if (doc) Sync.Textbox.listen(e.textbox, doc, cmdbar.paths.text, { dispose$ });
+              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
               state.change((d) => (d.current.argv = e.initial.text));
 
               const events = cmdbar.ctrl.events(dispose$);

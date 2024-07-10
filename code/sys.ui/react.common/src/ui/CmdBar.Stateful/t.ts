@@ -28,5 +28,6 @@ export type CmdBarStatefulReadyHandlerArgs = {
   readonly initial: { readonly text: string };
   readonly cmdbar: t.CmdBarRef;
   readonly textbox: t.TextInputRef;
+  readonly paths: t.CmdBarPaths;
   readonly dispose$: t.Observable<void>;
 };
