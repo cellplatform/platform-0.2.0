@@ -1,10 +1,5 @@
-import {
-  BroadcastChannelNetworkAdapter,
-  IndexedDBStorageAdapter,
-  Repo,
-} from '../../common/libs.Automerge';
-
-import { Doc, Store } from '../common';
+import { IndexedDBStorageAdapter, Repo } from '../../common/libs.Automerge';
+import { Doc, Store, BroadcastChannel } from '../common';
 import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';
 import { DEFAULTS, Delete, Is, Symbols, type t } from './common';
@@ -67,9 +62,8 @@ export const WebStore = {
 const Wrangle = {
   network(options: Init): t.NetworkAdapterInterface[] {
     const { network } = options;
-    if (network === undefined || network === true) return [new BroadcastChannelNetworkAdapter()];
-    if (Array.isArray(network)) return network;
-    return [];
+    if (network === undefined || network === true) return [BroadcastChannel.create()];
+    return Array.isArray(network) ? network : [];
   },
 
   networkKinds(options: Init) {

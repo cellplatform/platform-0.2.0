@@ -1,9 +1,10 @@
-import { BroadcastChannelNetworkAdapter, WebStore, type t } from './common';
+import { BroadcastChannel, WebStore, type t } from './common';
 import { TestDb } from './TestDb';
 
 type O = Record<string, unknown>;
 type Options = { storage?: string; debug?: t.StoreDebug; broadcastAdapter?: boolean };
 type T = { docuri?: t.UriString };
+type N = t.NetworkAdapterInterface;
 
 /**
  * Sample spec CRDT state.
@@ -17,7 +18,7 @@ export const SampleCrdt = {
     const storage = wrangle.storage(options.storage);
 
     const network: t.NetworkAdapterInterface[] = [];
-    if (options.broadcastAdapter) network.push(new BroadcastChannelNetworkAdapter());
+    if (options.broadcastAdapter) network.push(BroadcastChannel.create());
 
     const store = WebStore.init({ storage, debug, network });
     const index = await WebStore.index(store);
