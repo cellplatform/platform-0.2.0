@@ -1,4 +1,4 @@
-import { Cmd, Immutable, ObjectPath, rx, type t } from './common';
+import { Cmd, ObjectPath, rx, type t } from './common';
 
 /**
  * Flags for the <CmdBar>
@@ -21,8 +21,9 @@ export const Is = {
     return (
       Is.ctrl(o.ctrl) &&
       Is.paths(o.paths) &&
-      Immutable.Is.immutableRef(o.state) &&
-      rx.isObservable(o.dispose$)
+      rx.isObservable(o.dispose$) &&
+      isObject(o.current) &&
+      areFuncs(o.resolve)
     );
   },
 } as const;

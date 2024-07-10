@@ -9,12 +9,16 @@ describe('CmdBar.Ctrl', () => {
     const ctrl = CmdBar.Ctrl.create(transport);
     const cmd = ctrl._;
     const paths = DEFAULTS.paths;
+
     const ref: t.CmdBarRef = {
       ctrl,
-      state: transport,
       paths,
       resolve: CmdBar.Path.resolver(paths),
       dispose$: life.dispose$,
+      current: { text: '', selection: { start: 0, end: 0 }, focused: false },
+      onChange(fn, dispose$) {
+        return null as any;
+      },
     };
     return { ref, cmd, transport, life } as const;
   };

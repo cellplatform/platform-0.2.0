@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
+import { Ref } from './Ref';
 
 type P = t.CmdBarStatefulProps;
 
@@ -42,8 +43,7 @@ export function useController(props: P) {
     const { dispose, dispose$ } = life;
     if (ready && state && textbox && ctrl) {
       const text = api.text;
-      const resolve = Ctrl.Path.resolver(paths);
-      const cmdbar: t.CmdBarRef = { ctrl, state, paths, resolve, dispose$ };
+      const cmdbar = Ref.create({ ctrl, paths, textbox, dispose$ });
       props.onReady?.({ initial: { text }, cmdbar, textbox, paths, dispose$ });
     }
     return dispose;

@@ -6,8 +6,8 @@ type O = Record<string, unknown>;
  * Paths
  */
 export type CmdBarPaths = {
-  text: t.ObjectPath;
-  cmd: t.ObjectPath;
+  readonly text: t.ObjectPath;
+  readonly cmd: t.ObjectPath;
 };
 export type CmdBarPathResolver = (data: O) => {
   readonly text: string;
