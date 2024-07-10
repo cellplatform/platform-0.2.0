@@ -53,7 +53,7 @@ export const CtrlKeyboard = {
    */
   expandedSeletion(text: string, selection: t.TextInputSelection): t.TextInputSelection {
     const index = wrangle.firstSpaceBeforeIndex(text, selection.start - 1);
-    const start = index < 1 ? 0 : index;
+    const start = index < 0 ? 0 : index + 1;
     const end = text.length;
     return { start, end };
   },
