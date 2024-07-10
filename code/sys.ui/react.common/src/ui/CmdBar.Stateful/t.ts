@@ -10,20 +10,13 @@ export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady
 };
 
 /**
- * Object structure.
- */
-export type CmdBarPaths = {
-  text: t.ObjectPath;
-  cmd: t.ObjectPath;
-};
-
-/**
  * Forwarded reference
  */
 export type CmdBarRef = {
   readonly ctrl: t.CmdBarCtrl;
   readonly state: t.CmdImmutable;
   readonly paths: t.CmdBarPaths;
+  readonly resolve: t.CmdBarPathResolver;
   readonly dispose$: t.Observable<void>;
 };
 

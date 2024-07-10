@@ -1,22 +1,22 @@
 import { Ctrl, DEFAULTS } from '.';
-import { Cmd, Immutable, ObjectPath, Time, describe, expect, it, type t, rx } from '../../test';
+import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t } from '../../test';
 import { CmdBar } from '../CmdBar';
 
 describe('CmdBar.Ctrl', () => {
   const testSetup = () => {
     const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
-    const cmd = Cmd.create<t.CmdBarCtrlType>(transport) as t.Cmd<t.CmdBarCtrlType>;
-
-    const ctrl = CmdBar.Ctrl.create();
+    const ctrl = CmdBar.Ctrl.create(transport);
+    const cmd = ctrl._;
+    const paths = DEFAULTS.paths;
     const ref: t.CmdBarRef = {
       ctrl,
       state: transport,
-      paths: DEFAULTS.paths,
+      paths,
+      resolve: CmdBar.Path.resolver(paths),
       dispose$: life.dispose$,
     };
-
-    return { cmd, transport, ref, life } as const;
+    return { ref, cmd, transport, life } as const;
   };
 
   it('exposed from <CmdBar>', () => {
@@ -87,6 +87,40 @@ describe('CmdBar.Ctrl', () => {
       expect(Is.paths({ foo: ['one'] })).to.eql(false);
       expect(Is.paths({ cmd: 123, text: 'hello' })).to.eql(false);
       expect(Is.paths(DEFAULTS.paths)).to.eql(true);
+    });
+  });
+
+  describe('Ctrl.Path', () => {
+    const Path = CmdBar.Path;
+
+    it('defaults', () => {
+      expect(Path.defaults).to.eql(DEFAULTS.paths);
+    });
+
+    it('prepend', () => {
+      const res = Path.prepend(['foo']);
+      expect(res.text).to.eql(['foo', 'text']);
+      expect(res.cmd).to.eql(['foo', 'cmd']);
+    });
+
+    it('resolver', async () => {
+      const { transport, ref } = testSetup();
+      const paths = Path.defaults;
+      const resolve = Path.resolver();
+
+      expect(resolve(transport.current).text).to.eql('');
+      expect(resolve(transport.current).cmd.name).to.eql('');
+      expect(resolve(transport.current).cmd.counter?.value).to.eql(0);
+
+      transport.change((d) => ObjectPath.mutate(d, paths.text, 'hello'));
+      ref.ctrl.invoke({ text: 'foobar' });
+      await Time.wait(0);
+
+      expect(resolve(transport.current).text).to.eql('hello');
+      expect(resolve(transport.current).cmd.name).to.eql('Invoke');
+      expect(resolve(transport.current).cmd.counter?.value).to.eql(1);
+
+      expect(ref.resolve(transport.current).text).to.eql('hello');
     });
   });
 });

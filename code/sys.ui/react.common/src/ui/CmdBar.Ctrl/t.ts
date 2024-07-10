@@ -3,6 +3,18 @@ import type { t } from './common';
 type O = Record<string, unknown>;
 
 /**
+ * Paths
+ */
+export type CmdBarPaths = {
+  text: t.ObjectPath;
+  cmd: t.ObjectPath;
+};
+export type CmdBarPathResolver = (data: O) => {
+  readonly text: string;
+  readonly cmd: t.CmdPathsObject<t.CmdBarCtrlType>;
+};
+
+/**
  * Commands for controlling the <CmdBar> UI component.
  */
 export type CmdBarCtrlType =
