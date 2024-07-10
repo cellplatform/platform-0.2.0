@@ -24,6 +24,11 @@ export const CtrlKeyboard = {
     keys.on('Tab', (e) => {
       if (isFocused()) e.handled(); // NB: prevent unintended blur.
     });
+    keys.on('META + SHIFT + KeyJ', (e) => {
+      e.handled(); // Prevent default browser action.
+      fire({ name: 'Focus:Main' });
+    });
+
     keys.on('META + KeyJ', (e) => {
       e.handled();
       fire({ name: 'Focus:Main' });
