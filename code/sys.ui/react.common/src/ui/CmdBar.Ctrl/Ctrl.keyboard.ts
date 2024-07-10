@@ -9,6 +9,7 @@ export const CtrlKeyboard = {
     const life = rx.lifecycle(dispose$);
     const keys = Keyboard.until(life.dispose$);
     const dbl = keys.dbl(150);
+
     const isFocused = () => textbox.current.focused;
 
     keys.on('Tab', (e) => {
@@ -22,11 +23,9 @@ export const CtrlKeyboard = {
       e.handled();
       fire({ name: 'Focus:CmdBar' });
     });
-    dbl.on('META + KeyK', (e) => {
-      if (isFocused()) {
-        e.handled();
-        textbox.selectAll();
-      }
+    keys.on('META + SHIFT + KeyK', (e) => {
+      e.handled();
+      textbox.selectAll();
     });
 
     return life;
