@@ -105,6 +105,7 @@ describe('CmdBar.Ctrl', () => {
       const res = Path.prepend(['foo']);
       expect(res.text).to.eql(['foo', 'text']);
       expect(res.cmd).to.eql(['foo', 'cmd']);
+      expect(res.history).to.eql(['foo', 'history']);
     });
 
     it('resolver', async () => {
@@ -115,14 +116,21 @@ describe('CmdBar.Ctrl', () => {
       expect(resolve(transport.current).text).to.eql('');
       expect(resolve(transport.current).cmd.name).to.eql('');
       expect(resolve(transport.current).cmd.counter?.value).to.eql(0);
+      expect(resolve(transport.current).history).to.eql([]);
 
-      transport.change((d) => ObjectPath.mutate(d, paths.text, 'hello'));
+      transport.change((d) => {
+        const history = resolve(transport.current).history;
+        history.push('foo --bar');
+        ObjectPath.mutate(d, paths.history, history);
+        ObjectPath.mutate(d, paths.text, 'hello');
+      });
       ref.ctrl.invoke({ text: 'foobar' });
       await Time.wait(0);
 
       expect(resolve(transport.current).text).to.eql('hello');
       expect(resolve(transport.current).cmd.name).to.eql('Invoke');
       expect(resolve(transport.current).cmd.counter?.value).to.eql(1);
+      expect(resolve(transport.current).history).to.eql(['foo --bar']);
 
       expect(ref.resolve(transport.current).text).to.eql('hello');
     });

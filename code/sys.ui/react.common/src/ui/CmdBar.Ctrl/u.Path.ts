@@ -17,6 +17,7 @@ export const Path = {
     return {
       text: prepend(paths.text, prefix),
       cmd: prepend(paths.cmd, prefix),
+      history: prepend(paths.history, prefix),
     };
   },
 
@@ -28,6 +29,7 @@ export const Path = {
       return {
         text: ObjectPath.resolve<string>(data, paths.text) || '',
         cmd: ObjectPath.resolve<C>(data, paths.cmd) ?? wrangle.emptyCmd(),
+        history: ObjectPath.resolve<string[]>(data, paths.history) ?? [],
       };
     };
   },

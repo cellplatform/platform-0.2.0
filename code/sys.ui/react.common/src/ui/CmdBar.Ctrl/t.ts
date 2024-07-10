@@ -8,10 +8,12 @@ type O = Record<string, unknown>;
 export type CmdBarPaths = {
   readonly text: t.ObjectPath;
   readonly cmd: t.ObjectPath;
+  readonly history: t.ObjectPath;
 };
 export type CmdBarPathResolver = (data: O) => {
   readonly text: string;
   readonly cmd: t.CmdPathsObject<t.CmdBarCtrlType>;
+  readonly history: string[];
 };
 
 /**

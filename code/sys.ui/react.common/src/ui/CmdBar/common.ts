@@ -12,7 +12,11 @@ export { TextboxSync } from '../Textbox.Sync';
  * Constants
  */
 const name = 'CmdBar';
-const paths: t.CmdBarPaths = { text: ['text'], cmd: ['cmd'] };
+const paths: t.CmdBarPaths = {
+  text: ['text'],
+  cmd: ['cmd'],
+  history: ['history'],
+};
 
 export const DEFAULTS = {
   name,
