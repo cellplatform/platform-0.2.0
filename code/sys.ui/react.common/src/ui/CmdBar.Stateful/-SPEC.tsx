@@ -25,7 +25,7 @@ export default Dev.describe(name, (e) => {
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
-    focusOnReady: true,
+    focusOnReady: false,
     useState: true,
     useKeyboard: DEFAULTS.useKeyboard,
     prependPaths: true,
@@ -143,6 +143,7 @@ export default Dev.describe(name, (e) => {
       return CmdBar.Dev.Main.render({
         cmdbar,
         argv: current.argv,
+        focused: { cmdbar: current.isFocused },
         theme: props.theme,
         size: [400, 200],
         topHalf: true,

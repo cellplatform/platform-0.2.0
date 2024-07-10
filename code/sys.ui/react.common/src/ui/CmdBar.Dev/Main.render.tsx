@@ -1,11 +1,12 @@
 import { SampleMain } from './Main';
-import { Is, css, type t } from './common';
+import { css, type t } from './common';
 
 export function render(props: {
   cmdbar?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
   argv?: string;
   theme?: t.CommonTheme;
   size?: t.SizeTuple;
+  focused?: { cmdbar?: boolean };
   topHalf?: boolean;
   style?: t.CssValue;
 }) {
@@ -18,7 +19,13 @@ export function render(props: {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.main}>
-        <SampleMain theme={props.theme} size={size} ctrl={cmdbar} argv={props.argv} />
+        <SampleMain
+          theme={props.theme}
+          size={size}
+          ctrl={cmdbar}
+          focused={props.focused}
+          argv={props.argv}
+        />
       </div>
       <div>{/* Spacer */}</div>
     </div>
