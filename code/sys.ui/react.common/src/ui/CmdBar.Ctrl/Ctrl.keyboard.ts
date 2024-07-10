@@ -11,6 +11,15 @@ export const CtrlKeyboard = {
     const dbl = keys.dbl(150);
 
     const isFocused = () => textbox.current.focused;
+    const toggleFullSelection = () => {
+      const { value, selection } = textbox.current;
+      if (wrangle.isFullySelected(value, selection)) {
+        const end = value.length;
+        textbox.select(end, end);
+      } else {
+        textbox.selectAll();
+      }
+    };
 
     keys.on('Tab', (e) => {
       if (isFocused()) e.handled(); // NB: prevent unintended blur.
@@ -25,7 +34,7 @@ export const CtrlKeyboard = {
     });
     keys.on('META + SHIFT + KeyK', (e) => {
       e.handled();
-      textbox.selectAll();
+      toggleFullSelection();
     });
 
     return life;
@@ -68,5 +77,9 @@ const wrangle = {
       if (text[i] === ' ') return i;
     }
     return -1;
+  },
+
+  isFullySelected(text: string, selection: t.TextInputSelection) {
+    return selection.start === 0 && selection.end === text.length;
   },
 } as const;
