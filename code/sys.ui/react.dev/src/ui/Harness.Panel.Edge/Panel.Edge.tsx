@@ -28,7 +28,7 @@ export const PanelEdge: React.FC<PanelBarProps> = (props) => {
       borderBottom: border(edge === 'Header'),
       display: 'grid',
     }),
-    body: css({ position: 'relative', overflowX: 'hidden' }),
+    body: css({ position: 'relative' }),
   };
 
   return (
