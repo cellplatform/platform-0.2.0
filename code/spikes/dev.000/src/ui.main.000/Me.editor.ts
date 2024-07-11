@@ -13,7 +13,7 @@ export function editorController(args: {
 }): t.ShellEditorController {
   const { monaco, editor, main } = args;
   const life = rx.lifecycle(args.dispose$);
-  const cmdbar = main.cmd.cmdbar;
+  const cmdbar = main.cmdbar;
 
   // main.state.
 

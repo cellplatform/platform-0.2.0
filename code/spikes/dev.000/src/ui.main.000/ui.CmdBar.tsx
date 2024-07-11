@@ -11,11 +11,21 @@ export type FooterProps = {
 export const Footer: React.FC<FooterProps> = (props) => {
   const { main } = props;
   const state = main.state.cmdbar;
-  const cmdbar = main.cmd.cmdbar;
+  const cmdbar = main.cmdbar;
 
   const [, setRedraw] = useState(0);
   const redraw = () => setRedraw((n) => n + 1);
 
+  //   useEffect(() => {
+  //     //
+  //     const life = cmdbar?.onChange((e) => {
+  //       console.log('-------------------------------------------');
+  //       console.log('cmdbar?.onChange', e);
+  //       redraw();
+  //     });
+  //
+  //     return life?.dispose;
+  //   }, [cmdbar]);
 
   /**
    * Render
@@ -29,7 +39,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
       onReady={(e) => {
         const { dispose$ } = e;
         const cmdbar = e.cmdbar;
-        main.cmd.cmdbar = cmdbar as t.CmdBarRef;
+        main.cmdbar = cmdbar;
         const events = cmdbar.ctrl.events(e.dispose$);
         Crdt.Sync.Textbox.listen(e.textbox, state, e.paths.text, { dispose$ });
 

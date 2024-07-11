@@ -10,7 +10,7 @@ export type CmdMainProps = {
 
 export const CmdMain: React.FC<CmdMainProps> = (props) => {
   const { main } = props;
-  const cmdbar = main.cmd.cmdbar;
+  const cmdbar = main.cmdbar;
 
   const [isCmdbarFocused, setCmdBarFocused] = useState(false);
   const [argv, setArgv] = useState('');

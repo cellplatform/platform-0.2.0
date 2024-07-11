@@ -7,6 +7,7 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
+import { DevKeyboard } from './-SPEC.Keyboard';
 import { Color, Dev, Pkg, css, rx } from '../test.ui';
 import {
   Cmd,
@@ -27,8 +28,9 @@ type O = Record<string, unknown>;
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
+  debug: {};
 };
-const initial: T = {};
+const initial: T = { debug: {} };
 
 /**
  * Spec
@@ -36,9 +38,11 @@ const initial: T = {};
 const name = 'Main.000';
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { me?: t.UriString };
+  type LocalStore = T['debug'] & { me?: t.UriString };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({ me: undefined });
+  const local = localstore.object({
+    me: undefined,
+  });
   const self = Peer.init();
 
   const Store = {
@@ -53,31 +57,29 @@ export default Dev.describe(name, async (e) => {
     },
   } as const;
 
-  const Index = {
-    fs: await WebStore.index(Store.fs),
-  } as const;
-
   const model = await RepoList.model(Store.tmp, {
     behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
   });
   const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
   const theme: t.CommonTheme = 'Light';
 
+  const Index = {
+    fs: await WebStore.index(Store.fs),
+    fsTmp: network.index,
+  } as const;
   const me = await Store.getMeDoc();
   const cloner = () => Immutable.clonerRef({});
 
-  const cmd: t.ShellCommands = {
-    cmdbar: undefined,
-    fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
-  };
-
   const main: t.Shell = {
-    cmd,
+    cmdbar: undefined,
+    cmd: {
+      fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    },
     state: {
       me,
-      tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
-      harness: network.shared.ns.lens('dev.harness', {}),
+      tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
     },
   };
 
@@ -87,13 +89,23 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+    DevKeyboard.listen(main.state.harness);
 
-    main.state.tmp
-      .events()
-      .changed$.pipe(rx.debounceTime(100))
-      .subscribe(() => dev.redraw('debug'));
+    const tmp$ = main.state.tmp.events().changed$;
+    const harness$ = main.state.harness.events().changed$;
+    rx.merge(tmp$, harness$)
+      .pipe(rx.debounceTime(50))
+      .subscribe(() => dev.redraw());
 
-    ctx.debug.width(300);
+    const updateDebugPanelWidth = () => {
+      const visible = main.state.harness.current.debugVisible ?? true;
+      ctx.debug.width(visible ? 300 : 0);
+    };
+    harness$
+      .pipe(rx.distinctWhile((e) => e.before.debugVisible === e.after.debugVisible))
+      .subscribe(updateDebugPanelWidth);
+
+    updateDebugPanelWidth();
     ctx.subject
       .backgroundColor(1)
       .size('fill', 36)
@@ -165,7 +177,7 @@ export default Dev.describe(name, async (e) => {
         return { label: key, value: value as any };
       });
 
-      return <PropList items={items} style={{ marginBottom: 150 }} />;
+      return <PropList items={items} style={{ marginBottom: 80 }} />;
     });
 
     dev.row(async (e) => {
@@ -178,7 +190,6 @@ export default Dev.describe(name, async (e) => {
             'Login.SMS',
             'Id.User',
             'Farcaster',
-            // 'Wallet.Link',
             'Wallet.List',
             'Wallet.List.Title',
             'Refresh',
@@ -201,6 +212,7 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
+      const { debug } = e.state;
       const obj = { expand: { level: 1 } };
       const uri = { head: true };
       return (
@@ -212,8 +224,8 @@ export default Dev.describe(name, async (e) => {
             network,
             repo: model,
             shared: [
-              { label: 'System', object: { lens: ['sys'], ...obj }, uri },
-              { label: 'Namespaces', object: { lens: ['ns'], ...obj }, uri },
+              { label: 'System', uri, object: { lens: ['sys'], ...obj } },
+              { label: 'Namespaces', uri, object: { lens: ['ns'], ...obj } },
             ],
           }}
         />

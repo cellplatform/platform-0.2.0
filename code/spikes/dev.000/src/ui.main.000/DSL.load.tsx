@@ -27,7 +27,7 @@ export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
         main.state.cmdbar.change((d) => Doc.Text.replace(d, path, next));
 
         // Move state back to the command bar.
-        const cmdbar = main.cmd.cmdbar;
+        const cmdbar = main.cmdbar;
         if (cmdbar) {
           Time.delay(0, () => {
             cmdbar.ctrl.caretToEnd({});
