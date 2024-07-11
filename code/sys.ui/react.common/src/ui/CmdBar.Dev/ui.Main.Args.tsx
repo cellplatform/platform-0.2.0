@@ -50,7 +50,7 @@ export const MainArgs: React.FC<MainArgsProps> = (props) => {
     },
   };
 
-  const pos = args._.map((cmd) => cmd.trim())
+  const pos = args._.map((cmd) => (cmd || '').trim())
     .filter((cmd) => !!cmd)
     .filter((cmd) => (/^-+$/.test(cmd) ? false : true)); // NB: prevent --param text input showing up as "command".
   const elCmdList = pos.map((cmd, i) => {

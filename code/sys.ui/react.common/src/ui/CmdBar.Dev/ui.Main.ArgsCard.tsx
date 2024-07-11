@@ -1,19 +1,9 @@
 import { useEffect } from 'react';
 import { Ctrl } from '../CmdBar.Ctrl';
-import { MainArgs } from './Main.Args';
+import { MainArgs } from './ui.Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
 
-export type SampleProps = {
-  ctrl?: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
-  size?: t.SizeTuple;
-  title?: boolean | { left?: string; right?: string };
-  argv?: string;
-  focused?: { cmdbar?: boolean };
-  theme?: t.CommonTheme;
-  style?: t.CssValue;
-};
-
-export const SampleMain: React.FC<SampleProps> = (props) => {
+export const ArgsCard: React.FC<t.MainArgsCardProps> = (props) => {
   const { size = [450, 200], focused = {} } = props;
   const args = Args.parse(props.argv);
 
@@ -162,11 +152,11 @@ export const SampleMain: React.FC<SampleProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  ctrl(props: SampleProps) {
+  ctrl(props: t.MainArgsCardProps) {
     return props.ctrl ? Ctrl.toCtrl(props.ctrl) : undefined;
   },
 
-  title(props: SampleProps) {
+  title(props: t.MainArgsCardProps) {
     const { title = true } = props;
     if (title === false) return { left: '', right: '' };
     const left = typeof title === 'object' ? title.left || '' : '';
