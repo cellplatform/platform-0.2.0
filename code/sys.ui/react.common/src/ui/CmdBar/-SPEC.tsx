@@ -12,13 +12,14 @@ const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<
     P,
-    'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text' | 'theme'
+    'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text' | 'theme' | 'focusBorder'
   >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
-    focusOnReady: true,
+    focusOnReady: DEFAULTS.focusOnReady,
+    focusBorder: DEFAULTS.focusBorder,
     placeholder: DEFAULTS.commandPlaceholder,
     hintKey: undefined,
     text: undefined,
@@ -31,12 +32,13 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.text = local.text;
       d.props.theme = local.theme;
       d.props.focusOnReady = local.focusOnReady;
+      d.props.focusBorder = local.focusBorder;
       d.props.enabled = local.enabled;
       d.props.placeholder = local.placeholder;
       d.props.hintKey = local.hintKey;
-      d.props.text = local.text;
     });
 
     ctx.debug.width(330);
@@ -88,6 +90,15 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady')));
+          });
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusBorder;
+        btn
+          .label((e) => `focusBorder`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.focusBorder = Dev.toggle(d.props, 'focusBorder')));
           });
       });
     });

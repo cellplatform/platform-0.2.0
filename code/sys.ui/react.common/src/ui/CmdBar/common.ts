@@ -23,7 +23,8 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}:${name}`,
   commandPlaceholder: 'command',
   enabled: true,
-  focusOnReady: true,
   useKeyboard: true,
+  focusOnReady: true,
+  focusBorder: true,
   paths,
 } as const;

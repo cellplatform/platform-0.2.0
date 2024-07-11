@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
 import { Ctrl } from '../CmdBar.Ctrl';
+import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled = DEFAULTS.enabled } = props;
+  const { enabled = DEFAULTS.enabled, focusBorder = DEFAULTS.focusBorder } = props;
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
+  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
     if (props.cmd) setCtrl(Ctrl.toCtrl(props.cmd));
@@ -32,11 +33,29 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       display: 'grid',
     }),
     hintKey: css({ marginRight: 7 }),
+    focused: css({
+      Absolute: [0, 0, null, 0],
+      height: 1.5,
+      pointerEvents: 'none',
+      backgroundColor: Color.BLUE,
+      opacity: focused && focusBorder ? 1 : 0,
+      transition: `opacity 50ms`,
+    }),
   };
 
   const elTextbox = (
     <div {...styles.textbox}>
-      <Textbox {...props} ctrl={ctrl} enabled={enabled} theme={theme} opacity={enabled ? 1 : 0.3} />
+      <Textbox
+        {...props}
+        ctrl={ctrl}
+        enabled={enabled}
+        theme={theme}
+        opacity={enabled ? 1 : 0.3}
+        onFocusChange={(e) => {
+          setFocused(e.is.focused);
+          props.onFocusChange?.(e);
+        }}
+      />
     </div>
   );
 
@@ -55,6 +74,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       {elTextbox}
       {elHintKeys}
       {props.suffix}
+      <div {...styles.focused} />
     </div>
   );
 };
