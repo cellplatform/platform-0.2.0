@@ -4,7 +4,9 @@ import { Color, DEFAULTS, Immutable, KeyHint, css, type t } from './common';
 import { Textbox } from './ui.Textbox';
 
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, focusBorder = DEFAULTS.focusBorder } = props;
+  const { enabled = DEFAULTS.enabled } = props;
+  const focusBorder = wrangle.focusBorder(props);
+
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
   const [focused, setFocused] = useState(false);
 
@@ -33,13 +35,12 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       display: 'grid',
     }),
     hintKey: css({ marginRight: 7 }),
-    focused: css({
-      Absolute: [0, 0, null, 0],
+    focusBorder: css({
+      Absolute: [focusBorder?.offset ?? 0, 0, null, 0],
       height: 1.5,
       pointerEvents: 'none',
-      backgroundColor: Color.BLUE,
-      opacity: focused && focusBorder ? 1 : 0,
-      transition: `opacity 50ms`,
+      backgroundColor: wrangle.focusBorderColor(props, theme, focused),
+      transition: `background-color 50ms`,
     }),
   };
 
@@ -74,7 +75,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
       {elTextbox}
       {elHintKeys}
       {props.suffix}
-      <div {...styles.focused} />
+      <div {...styles.focusBorder} />
     </div>
   );
 };
@@ -93,5 +94,23 @@ const wrangle = {
   ctrl(props: t.CmdBarProps) {
     if (!props.cmd) return Ctrl.create(Immutable.clonerRef({}))._;
     return props.cmd;
+  },
+
+  focusBorder(props: t.CmdBarProps): t.CmdBarFocusBorder {
+    if (props.focusBorder === true) return DEFAULTS.focusBorder;
+    if (typeof props.focusBorder === 'object') return props.focusBorder;
+    return DEFAULTS.focusBorder;
+  },
+
+  focusBorderColor(props: t.CmdBarProps, theme: t.ColorTheme, isFocused: boolean) {
+    if (props.focusBorder === false) return undefined;
+    const config = wrangle.focusBorder(props);
+    const focused = config?.color?.focused;
+    const unfocused = config?.color?.unfocused;
+    return wrangle.colorToString(theme, isFocused ? focused : unfocused);
+  },
+
+  colorToString(theme: t.ColorTheme, value?: string | t.GetColor) {
+    return typeof value === 'function' ? value(theme) : value;
   },
 } as const;

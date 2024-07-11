@@ -2,24 +2,27 @@ import { CmdBar, DEFAULTS } from '.';
 import { Color, css, Dev, DevIcons, Pkg, Time, type t } from '../../test.ui';
 
 type P = t.CmdBarProps;
-type T = { props: P; parsedArgs?: t.ParsedArgs };
-const initial: T = { props: {} };
+type T = {
+  props: P;
+  parsedArgs?: t.ParsedArgs;
+  debug: { focusBorder?: boolean };
+};
+const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<
-    P,
-    'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text' | 'theme' | 'focusBorder'
-  >;
+  type LocalStore = Pick<T['debug'], 'focusBorder'> &
+    Pick<P, 'enabled' | 'focusOnReady' | 'placeholder' | 'hintKey' | 'text' | 'theme'>;
+
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
     focusOnReady: DEFAULTS.focusOnReady,
-    focusBorder: DEFAULTS.focusBorder,
+    focusBorder: true,
     placeholder: DEFAULTS.commandPlaceholder,
     hintKey: undefined,
     text: undefined,
@@ -35,10 +38,11 @@ export default Dev.describe(name, (e) => {
       d.props.text = local.text;
       d.props.theme = local.theme;
       d.props.focusOnReady = local.focusOnReady;
-      d.props.focusBorder = local.focusBorder;
       d.props.enabled = local.enabled;
       d.props.placeholder = local.placeholder;
       d.props.hintKey = local.hintKey;
+
+      d.debug.focusBorder = local.focusBorder;
     });
 
     ctx.debug.width(330);
@@ -47,13 +51,14 @@ export default Dev.describe(name, (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
+        const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
 
         return (
           <CmdBar
             {...props}
             cmd={cmdbar._}
+            focusBorder={debug.focusBorder}
             onReady={(e) => console.info('⚡️ CmdBar.onReady:', e)}
             onChange={(e) => {
               console.info(`⚡️ CmdBar.onChange:`, e);
@@ -93,12 +98,12 @@ export default Dev.describe(name, (e) => {
           });
       });
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.focusBorder;
+        const value = (state: T) => !!state.debug.focusBorder;
         btn
           .label((e) => `focusBorder`)
           .value((e) => value(e.state))
           .onClick((e) => {
-            e.change((d) => (local.focusBorder = Dev.toggle(d.props, 'focusBorder')));
+            e.change((d) => (local.focusBorder = Dev.toggle(d.debug, 'focusBorder')));
           });
       });
     });

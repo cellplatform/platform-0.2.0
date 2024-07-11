@@ -13,7 +13,7 @@ export type CmdBarProps = {
   enabled?: boolean;
   focusOnReady?: boolean;
   useKeyboard?: boolean;
-  focusBorder?: boolean;
+  focusBorder?: boolean | t.CmdBarFocusBorder;
 
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -25,6 +25,12 @@ export type CmdBarProps = {
   onKeyDown?: t.TextInputKeyHandler;
   onKeyUp?: t.TextInputKeyHandler;
 };
+
+export type CmdBarFocusBorder = {
+  color?: { focused?: string | GetColor; unfocused?: string | GetColor };
+  offset?: t.Pixels;
+};
+export type GetColor = (theme: t.ColorTheme) => string;
 
 /**
  * Events

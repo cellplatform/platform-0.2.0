@@ -1,4 +1,4 @@
-import { Pkg, type t } from './common';
+import { Color, Pkg, type t } from './common';
 
 export { Keyboard } from 'sys.ui.dom';
 export * from '../common';
@@ -18,6 +18,14 @@ const paths: t.CmdBarPaths = {
   history: ['history'],
 };
 
+const focusBorder: t.CmdBarFocusBorder = {
+  offset: -2,
+  color: {
+    focused: Color.BLUE,
+    unfocused: (theme) => theme.alpha(theme.is.light ? 0.4 : 1).fg,
+  },
+};
+
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
@@ -25,6 +33,6 @@ export const DEFAULTS = {
   enabled: true,
   useKeyboard: true,
   focusOnReady: true,
-  focusBorder: true,
+  focusBorder,
   paths,
 } as const;

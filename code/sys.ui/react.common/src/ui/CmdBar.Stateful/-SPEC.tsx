@@ -19,14 +19,13 @@ const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<P, 'theme' | 'enabled' | 'focusOnReady' | 'focusBorder' | 'useKeyboard' | 'useHistory'> &
+    Pick<P, 'theme' | 'enabled' | 'focusOnReady' | 'useKeyboard' | 'useHistory'> &
     Pick<T['current'], 'argv'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
     focusOnReady: DEFAULTS.focusOnReady,
-    focusBorder: DEFAULTS.focusBorder,
     useKeyboard: DEFAULTS.useKeyboard,
     useHistory: DEFAULTS.useHistory,
     prependPaths: true,
@@ -56,7 +55,6 @@ export default Dev.describe(name, (e) => {
       d.props.theme = local.theme;
       d.props.enabled = local.enabled;
       d.props.focusOnReady = local.focusOnReady;
-      d.props.focusBorder = local.focusBorder;
       d.props.useKeyboard = local.useKeyboard;
       d.props.useHistory = local.useHistory;
       d.debug.useState = local.useState;
@@ -75,82 +73,82 @@ export default Dev.describe(name, (e) => {
       .changed$.pipe(rx.debounceTime(100))
       .subscribe(() => dev.redraw('debug'));
 
+    const renderCommandBar = () => {
+      const { props, debug } = state.current;
+      const paths = getPaths(state.current);
+
+      if (!debug.render) return null;
+
+      const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+      const transition = [t('opacity'), t('border')].join(', ');
+      const isFocused = cmdbar?.current.focused;
+      const styles = {
+        base: css({ position: 'relative' }),
+        label: css({
+          Absolute: [-22, 8, null, null],
+          fontFamily: 'monospace',
+          fontSize: 10,
+          opacity: isFocused ? 1 : 0.25,
+          transition,
+        }),
+      };
+
+      const elCmdBar = (
+        <Sample
+          {...props}
+          state={debug.useState ? doc : undefined}
+          paths={paths}
+          onReady={(e) => {
+            const { textbox, dispose$ } = e;
+            cmdbar = e.cmdbar;
+
+            console.info('⚡️ CmdBar.Stateful.onReady:', e);
+            dispose$.subscribe(() => console.info('⚡️ CmdBar.Stateful.onReady:dispose$ → 💥'));
+
+            // Start data-binding syncer.
+            const syncer = CmdBar.Sync.listen(textbox, doc, e.paths.text, { dispose$ });
+            state.change((d) => (d.current.argv = e.initial.text));
+            syncer.onChange((e) => console.info(`syncer.onChange`, e));
+
+            // Listen for events.
+            const events = e.cmdbar.ctrl.events(e.dispose$);
+            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+          }}
+          onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+          onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
+          onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
+        />
+      );
+
+      return (
+        <div {...styles.base}>
+          <div {...styles.label}>{'cmdbar'}</div>
+          {elCmdBar}
+        </div>
+      );
+    };
+
     ctx.debug.width(330);
     ctx.subject
-      .size('fill-x')
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-        const paths = getPaths(state.current);
+        const { props, current } = e.state;
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
 
-        if (!debug.render) return null;
-
-        const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
-        const transition = [t('opacity'), t('border')].join(', ');
-        const isFocused = cmdbar?.current.focused;
-        const styles = {
-          base: css({ position: 'relative' }),
-          label: css({
-            Absolute: [-17, 5, null, null],
-            fontFamily: 'monospace',
-            fontSize: 10,
-            opacity: isFocused ? 1 : 0.3,
-            transition,
-          }),
-        };
-
-        const elCmdBar = (
-          <Sample
-            {...props}
-            state={debug.useState ? doc : undefined}
-            paths={paths}
-            onReady={(e) => {
-              const { textbox, dispose$ } = e;
-              cmdbar = e.cmdbar;
-
-              console.info('⚡️ CmdBar.Stateful.onReady:', e);
-              dispose$.subscribe(() => console.info('⚡️ CmdBar.Stateful.onReady:dispose$ → 💥'));
-
-              // Start data-binding syncer.
-              const syncer = CmdBar.Sync.listen(textbox, doc, e.paths.text, { dispose$ });
-              state.change((d) => (d.current.argv = e.initial.text));
-              syncer.onChange((e) => console.info(`syncer.onChange`, e));
-
-              // Listen for events.
-              const events = e.cmdbar.ctrl.events(e.dispose$);
-              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
-            }}
-            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
-            onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
-            onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
-          />
-        );
-
-        return (
-          <div {...styles.base}>
-            <div {...styles.label}>{'cmdbar'}</div>
-            {elCmdBar}
-          </div>
-        );
+        return CmdBar.Dev.Main.render({
+          cmdbar,
+          argv: current.argv,
+          focused: { cmdbar: cmdbar?.current.focused },
+          theme: props.theme,
+        });
       });
 
     /**
-     * <Main> sample.
+     * Footer: <CmdBar>
      */
-    ctx.host.layer(1).render<T>((e) => {
-      const { props, current } = e.state;
-
-      return CmdBar.Dev.Main.render({
-        cmdbar,
-        argv: current.argv,
-        topHalf: true,
-        focused: { cmdbar: cmdbar?.current.focused },
-        theme: props.theme,
-        style: { marginBottom: 40 },
-      });
-    });
+    ctx.host.footer.padding(0).render((e) => renderCommandBar());
   });
 
   e.it('ui:debug', async (e) => {
@@ -177,15 +175,6 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady')));
-          });
-      });
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.focusBorder;
-        btn
-          .label((e) => `focusBorder`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.focusBorder = Dev.toggle(d.props, 'focusBorder')));
           });
       });
       dev.hr(-1, 5);
