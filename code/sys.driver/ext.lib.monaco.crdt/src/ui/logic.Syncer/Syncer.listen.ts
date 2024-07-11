@@ -1,5 +1,5 @@
 import { calculateDiff } from './-tmp.diff';
-import { Doc, Path, rx, type t } from './common';
+import { Doc, Path, Pkg, rx, type t } from './common';
 import { MonacoPatcher } from './u.MonacoPatch';
 
 type O = Record<string, unknown>;
@@ -70,7 +70,7 @@ export function listen(
      * TODO 🐷
      */
     const diff = calculateDiff(Lens.resolve(e.before) || '', Lens.resolve(e.after) || '');
-    console.log('TODO 🐷 diff:', diff);
+    console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
 
     const source = 'crdt.sync';
     const patches = e.patches.filter((patch) => startsWith(patch.path, target));
