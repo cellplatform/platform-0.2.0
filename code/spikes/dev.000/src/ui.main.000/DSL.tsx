@@ -13,7 +13,7 @@ export const DSL = {
    * Match a given command to produce a renderable UI <View>.
    */
   async matchView(argv: string, main: t.Shell) {
-    const { args, action } = wrangle.args<t.CommandAction>(argv);
+    const { args, action } = wrangle.args<t.RootCommands>(argv);
 
     if (action === 'dev') {
       const { loaderView } = await import('./DSL.load');
@@ -42,7 +42,7 @@ export const DSL = {
    * Run the command when the [Invoke] action is triggered (eg ENTER key).
    */
   async invoke(argv: string, main: t.Shell) {
-    const { args, action, pos } = wrangle.args<t.CommandAction>(argv);
+    const { args, action, pos } = wrangle.args<t.RootCommands>(argv);
     const tmp = main.state.tmp;
 
     if (action === 'cast') {
@@ -66,7 +66,7 @@ export const DSL = {
         const yaml = Yaml.parse(text);
 
         if (typeof yaml.video === 'object') {
-          const video = yaml.video as t.TmpVideoParams;
+          const video = yaml.video as t.TmpVideo;
           tmp.change((d) => (d.video = video));
         } else {
           tmp.change((d) => delete d.video);

@@ -51,11 +51,14 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <CmdBar.Dev.Main.Sample
+      <CmdBar.Dev.Main
         theme={theme.name}
-        ctrl={main.cmd.cmdbar}
-        argv={argv}
-        focused={{ cmdbar: isCmdbarFocused }}
+        fields={['Module.Args', 'Module.Run']}
+        argsCard={{
+          argv,
+          ctrl: cmdbar,
+          focused: { cmdbar: cmdbar?.current.focused },
+        }}
       />
     </div>
   );

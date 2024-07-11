@@ -22,7 +22,7 @@ export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
       onSelect={(e) => {
         // Update the command "argv".
         const path = CmdBar.Path.defaults.text;
-        const cmd: t.CommandAction = 'dev';
+        const cmd: t.RootCommands = 'dev';
         const next = `${cmd} ${e.uri}`;
         main.state.cmdbar.change((d) => Doc.Text.replace(d, path, next));
 

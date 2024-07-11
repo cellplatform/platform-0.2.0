@@ -27,8 +27,6 @@ type O = Record<string, unknown>;
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
-  video?: t.TmpVideoParams;
-  props?: t.TmpPropsParams;
 };
 const initial: T = {};
 
@@ -68,20 +66,18 @@ export default Dev.describe(name, async (e) => {
   const me = await Store.getMeDoc();
   const cloner = () => Immutable.clonerRef({});
 
-  const tmp = network.shared.ns.lens<t.Tmp>('dev.tmp', { cmd: {} as any });
-
   const cmd: t.ShellCommands = {
     cmdbar: undefined,
     fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
-    tmp: Cmd.create<t.TmpCmds>(tmp.lens(['cmd'])) as t.Cmd<t.TmpCmds>,
   };
 
   const main: t.Shell = {
     cmd,
     state: {
       me,
-      tmp,
+      tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
+      harness: network.shared.ns.lens('dev.harness', {}),
     },
   };
 
@@ -96,15 +92,6 @@ export default Dev.describe(name, async (e) => {
       .events()
       .changed$.pipe(rx.debounceTime(100))
       .subscribe(() => dev.redraw('debug'));
-
-    const tmpEvents = cmd.tmp.events();
-    tmpEvents.on('tmp:video', (e) => {
-      // state.change((d) => (d.video = e.params));
-    });
-    tmpEvents.on('tmp:props', (e) => {
-      console.log('props', e.params);
-      // state.change((d) => (d.props = e.params));
-    });
 
     ctx.debug.width(300);
     ctx.subject
@@ -145,6 +132,7 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.06)
       .render(async (e) => {
+        const tmp = main.state.tmp;
         const video = tmp.current.video;
         if (!video) return null;
 
@@ -168,6 +156,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.row(async (e) => {
+      const tmp = main.state.tmp;
       const props = tmp.current.props;
       if (!props) return null;
 
