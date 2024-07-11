@@ -38,7 +38,7 @@ type Invoke = t.CmdType<'Invoke', { text: string }>;
 type Keyboard = t.CmdType<'Keyboard', KeyboardAction>;
 
 type Select = t.CmdType<'Select', SelectParam>;
-type SelectParam = { scope?: 'All' | 'Expand' };
+type SelectParam = { scope?: 'All' | 'Expand' | 'Toggle:Full' };
 
 /**
  * Command Methods (ctrl).

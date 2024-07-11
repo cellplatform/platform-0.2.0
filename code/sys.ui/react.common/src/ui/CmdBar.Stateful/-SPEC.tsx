@@ -19,16 +19,18 @@ const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<P, 'theme' | 'enabled' | 'focusOnReady' | 'useKeyboard'> &
+    Pick<P, 'theme' | 'enabled' | 'focusOnReady' | 'focusBorder' | 'useKeyboard' | 'useHistory'> &
     Pick<T['current'], 'argv'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     enabled: true,
-    focusOnReady: false,
-    useState: true,
+    focusOnReady: DEFAULTS.focusOnReady,
+    focusBorder: DEFAULTS.focusBorder,
     useKeyboard: DEFAULTS.useKeyboard,
+    useHistory: DEFAULTS.useHistory,
     prependPaths: true,
+    useState: true,
     argv: undefined,
   });
 
@@ -54,7 +56,9 @@ export default Dev.describe(name, (e) => {
       d.props.theme = local.theme;
       d.props.enabled = local.enabled;
       d.props.focusOnReady = local.focusOnReady;
+      d.props.focusBorder = local.focusBorder;
       d.props.useKeyboard = local.useKeyboard;
+      d.props.useHistory = local.useHistory;
       d.debug.useState = local.useState;
       d.debug.render = true;
       d.debug.prependPaths = local.prependPaths;
@@ -76,7 +80,7 @@ export default Dev.describe(name, (e) => {
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug, current } = e.state;
+        const { props, debug } = e.state;
         const paths = getPaths(state.current);
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
@@ -86,10 +90,8 @@ export default Dev.describe(name, (e) => {
         const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
         const transition = [t('opacity'), t('border')].join(', ');
         const isFocused = cmdbar?.current.focused;
-        const borderColor = isFocused ? COLORS.BLUE : undefined;
         const styles = {
           base: css({ position: 'relative' }),
-          cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
           label: css({
             Absolute: [-17, 5, null, null],
             fontFamily: 'monospace',
@@ -102,7 +104,6 @@ export default Dev.describe(name, (e) => {
         const elCmdBar = (
           <Sample
             {...props}
-            style={styles.cmdbar}
             state={debug.useState ? doc : undefined}
             paths={paths}
             onReady={(e) => {
@@ -178,13 +179,34 @@ export default Dev.describe(name, (e) => {
             e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady')));
           });
       });
-
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.focusBorder;
+        btn
+          .label((e) => `focusBorder`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.focusBorder = Dev.toggle(d.props, 'focusBorder')));
+          });
+      });
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.useKeyboard;
         btn
           .label((e) => `useKeyboard`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'useKeyboard')));
+          .onClick((e) => {
+            e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.useHistory;
+        btn
+          .label((e) => `useHistory`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useHistory = Dev.toggle(d.props, 'useHistory')));
+          });
       });
     });
 

@@ -2,25 +2,14 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import {
-  Cmd,
-  Color,
-  COLORS,
-  css,
-  Dev,
-  Doc,
-  ObjectPath,
-  Pkg,
-  SampleCrdt,
-  type t,
-} from '../../test.ui';
+import { Cmd, Color, css, Dev, Doc, ObjectPath, Pkg, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
 type T = {
   docuri?: t.UriString;
   props: P;
-  debug: { useLens?: boolean };
+  debug: { useLens?: boolean; docVisible?: boolean };
   current: { isFocused?: boolean; argv?: string };
 };
 const initial: T = { props: {}, debug: {}, current: {} };
@@ -31,13 +20,17 @@ const initial: T = { props: {}, debug: {}, current: {} };
 const name = `${Pkg.name}:Crdt:CmdBar.Sample`;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'useKeyboard'>;
+  type LocalStore = T['debug'] &
+    Pick<T, 'docuri'> &
+    Pick<P, 'theme' | 'useKeyboard' | 'useHistory'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
     useLens: true,
     useKeyboard: true,
+    useHistory: true,
+    docVisible: false,
   });
 
   let doc: t.Doc | undefined;
@@ -50,10 +43,12 @@ export default Dev.describe(name, async (e) => {
     const sample = SampleCrdt.dev(state, local, db.store);
 
     await state.change((d) => {
+      d.docuri = local.docuri;
       d.props.theme = local.theme;
       d.props.useKeyboard = local.useKeyboard;
+      d.props.useHistory = local.useHistory;
       d.debug.useLens = local.useLens;
-      d.docuri = local.docuri;
+      d.debug.docVisible = local.docVisible;
     });
     doc = await sample.get();
 
@@ -69,10 +64,8 @@ export default Dev.describe(name, async (e) => {
         const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
         const transition = [t('opacity'), t('border')].join(', ');
         const isFocused = cmdbar?.current.focused;
-        const borderColor = isFocused ? COLORS.BLUE : undefined;
         const styles = {
           base: css({ position: 'relative' }),
-          cmdbar: css({ borderTop: `solid 1px ${borderColor}`, transition }),
           label: css({
             Absolute: [-22, 10, null, null],
             fontSize: 10,
@@ -85,13 +78,12 @@ export default Dev.describe(name, async (e) => {
         const elCmdBar = (
           <CmdBar.Stateful
             {...props}
-            style={styles.cmdbar}
             state={doc}
             onReady={(e) => {
               console.info('⚡️ CmdBar.Stateful.onReady:', e);
 
               const { dispose$ } = e;
-              cmdbar = e.cmdbar;
+              cmdbar = e.cmdbar as t.CmdBarRef;
               if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
               state.change((d) => (d.current.argv = e.initial.text));
 
@@ -148,13 +140,17 @@ export default Dev.describe(name, async (e) => {
               ref: docuri,
               uri: { head: true },
               object: {
-                visible: false,
+                visible: debug.docVisible,
                 expand: { level: 1 },
+                onToggleClick(e) {
+                  state.change((d) => (local.docVisible = Dev.toggle(d.debug, 'docVisible')));
+                },
                 beforeRender(mutate) {
-                  const paths = CmdBar.DEFAULTS.paths;
-                  const resolve = Cmd.Path.resolver();
-                  const cmd = ObjectPath.resolve<t.CmdObject<t.CmdBarCtrlType>>(mutate, paths.cmd);
+                  const paths = CmdBar.Path.defaults;
+                  const resolve = CmdBar.Path.resolver(paths);
+                  const cmd = resolve(mutate).cmd;
                   if (cmd) {
+                    const resolve = Cmd.Path.resolver();
                     const tx = resolve.tx(cmd);
                     if (tx) {
                       ObjectPath.delete(mutate, paths.cmd);
@@ -184,7 +180,18 @@ export default Dev.describe(name, async (e) => {
         btn
           .label((e) => `useKeyboard`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'useKeyboard')));
+          .onClick((e) => {
+            e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
+          });
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.useHistory;
+        btn
+          .label((e) => `useHistory`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useHistory = Dev.toggle(d.props, 'useHistory')));
+          });
       });
     });
 
@@ -219,7 +226,6 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props,
         docuri: Doc.Uri.id(docuri, { shorten: 5 }),
-        doc: doc?.current,
       };
       return <Dev.Object name={name} data={data} expand={{ paths: ['$'] }} fontSize={11} />;
     });

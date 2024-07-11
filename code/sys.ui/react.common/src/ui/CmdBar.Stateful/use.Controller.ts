@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react';
-import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
+import { Ctrl, DEFAULTS, rx, type t } from './common';
 import { Ref } from './Ref';
+import { useHistory } from './use.History';
 
 type P = t.CmdBarStatefulProps;
 
 export function useController(props: P) {
   const { state, paths = DEFAULTS.paths } = props;
-  const pathDeps = wrangle.pathDeps(paths);
+  const pathDeps = `${paths.text.join('.')}`;
+  const resolve = Ctrl.Path.resolver(paths);
 
   const [ready, setReady] = useState(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
+  useHistory({
+    enabled: props.useHistory ?? DEFAULTS.useHistory,
+    state,
+    ctrl,
+    paths,
+  });
 
   const [_, setRedraw] = useState(0);
   const redraw = () => setRedraw((n) => n + 1);
@@ -50,7 +58,7 @@ export function useController(props: P) {
   }, [ready, !!ctrl, pathDeps, state?.instance, !!textbox]);
 
   /**
-   * Listen to state document.
+   * Listen for changes in the state document.
    */
   useEffect(() => {
     const events = state?.events();
@@ -91,8 +99,7 @@ export function useController(props: P) {
     ctrl,
     handlers: { onReady, onChange, onSelect, onFocusChange },
     get text() {
-      if (!state) return '';
-      return ObjectPath.resolve<string>(state.current, paths.text) || '';
+      return state ? resolve(state.current).text : '';
     },
     get hintKey(): string | string[] | undefined {
       if (!isFocused) return 'META + K';
@@ -101,12 +108,3 @@ export function useController(props: P) {
   } as const;
   return api;
 }
-
-/**
- * Helpers
- */
-const wrangle = {
-  pathDeps(paths: t.CmdBarPaths) {
-    return `${paths.text.join('.')}`;
-  },
-} as const;

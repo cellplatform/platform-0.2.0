@@ -13,6 +13,7 @@ export function listen(args: {
   const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
   const cmd = ctrl._;
   const events = cmd.events(args.dispose$);
+  const isFocused = () => textbox.current.focused;
 
   if (useKeyboard) CtrlKeyboard.listen(ctrl, textbox, events.dispose$);
 
@@ -31,16 +32,13 @@ export function listen(args: {
   events.on('Select', (e) => {
     const scope = e.params.scope ?? 'All';
     if (scope === 'All') textbox.selectAll();
-    if (scope === 'Expand') {
-      const { value, selection } = textbox.current;
-      const next = CtrlKeyboard.expandedSeletion(value, selection);
-      textbox.select(next.start, next.end);
-    }
+    if (scope === 'Expand') CtrlKeyboard.expandedSeletion(textbox);
+    if (scope === 'Toggle:Full') CtrlKeyboard.toggleFullSelection(textbox);
   });
 
   events.on('Caret:ToStart', (e) => textbox.caretToStart());
   events.on('Caret:ToEnd', (e) => textbox.caretToEnd());
-  events.on('Keyboard', (e) => CtrlKeyboard.action(ctrl, e.params, textbox.current.focused));
+  events.on('Keyboard', (e) => CtrlKeyboard.handleKeyAction(ctrl, e.params, isFocused()));
 
   return events;
 }

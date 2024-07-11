@@ -6,6 +6,7 @@ import type { t } from './common';
 export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady'> & {
   state?: t.CmdImmutable;
   paths?: t.CmdBarPaths;
+  useHistory?: boolean;
   onReady?: t.CmdBarStatefulReadyHandler;
 };
 
