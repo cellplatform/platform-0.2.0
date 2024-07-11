@@ -1,5 +1,6 @@
 import { DEFAULTS, type t } from './common';
-import { CtrlKeyboard } from './Ctrl.keyboard';
+import { Keyboard } from './Ctrl.keyboard';
+import { Selection } from './u';
 
 /**
  * Behavior logic for command signals.
@@ -15,7 +16,7 @@ export function listen(args: {
   const events = cmd.events(args.dispose$);
   const isFocused = () => textbox.current.focused;
 
-  if (useKeyboard) CtrlKeyboard.listen(ctrl, textbox, events.dispose$);
+  if (useKeyboard) Keyboard.listen(ctrl, textbox, events.dispose$);
 
   events.on('Current', (e) => {
     const text = textbox.current.value;
@@ -32,13 +33,13 @@ export function listen(args: {
   events.on('Select', (e) => {
     const scope = e.params.scope ?? 'All';
     if (scope === 'All') textbox.selectAll();
-    if (scope === 'Expand') CtrlKeyboard.expandedSeletion(textbox);
-    if (scope === 'Toggle:Full') CtrlKeyboard.toggleFullSelection(textbox);
+    if (scope === 'Expand') Selection.expandBack(textbox);
+    if (scope === 'Toggle:Full') Selection.toggleFull(textbox);
   });
 
   events.on('Caret:ToStart', (e) => textbox.caretToStart());
   events.on('Caret:ToEnd', (e) => textbox.caretToEnd());
-  events.on('Keyboard', (e) => CtrlKeyboard.handleKeyAction(ctrl, e.params, isFocused()));
+  events.on('Keyboard', (e) => Keyboard.handleKeyAction(ctrl, e.params, isFocused()));
 
   return events;
 }
