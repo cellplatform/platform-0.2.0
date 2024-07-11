@@ -52,75 +52,86 @@ export default Dev.describe(name, async (e) => {
     });
     doc = await sample.get();
 
+    /**
+     * Render: <CmdBar>
+     */
+    const renderCommandBar = () => {
+      const { props } = state.current;
+
+      const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+      const transition = [t('opacity'), t('border')].join(', ');
+      const isFocused = cmdbar?.current.focused;
+      const styles = {
+        base: css({ position: 'relative' }),
+        label: css({
+          Absolute: [-22, 10, null, null],
+          fontSize: 10,
+          fontFamily: 'monospace',
+          opacity: isFocused ? 1 : 0.3,
+          transition,
+        }),
+      };
+
+      const elCmdBar = (
+        <CmdBar.Stateful
+          {...props}
+          state={doc}
+          onReady={(e) => {
+            console.info('⚡️ CmdBar.Stateful.onReady:', e);
+
+            const { dispose$ } = e;
+            cmdbar = e.cmdbar as t.CmdBarRef;
+            if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+            state.change((d) => (d.current.argv = e.initial.text));
+
+            const events = cmdbar.ctrl.events(dispose$);
+            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+          }}
+          onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+          onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+          onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
+        />
+      );
+
+      return (
+        <div {...styles.base}>
+          <div {...styles.label}>{'cmdbar'}</div>
+          {elCmdBar}
+        </div>
+      );
+    };
+
     ctx.debug.width(330);
     ctx.subject
-      .size('fill-x')
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
         const { props, current } = e.state;
         const theme = Color.theme(props.theme);
         Dev.Theme.background(ctx, theme, 1);
 
-        const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
-        const transition = [t('opacity'), t('border')].join(', ');
-        const isFocused = cmdbar?.current.focused;
-        const styles = {
-          base: css({ position: 'relative' }),
-          label: css({
-            Absolute: [-22, 10, null, null],
-            fontSize: 10,
-            fontFamily: 'monospace',
-            opacity: isFocused ? 1 : 0.3,
-            transition,
-          }),
-        };
-
-        const elCmdBar = (
-          <CmdBar.Stateful
-            {...props}
-            state={doc}
-            onReady={(e) => {
-              console.info('⚡️ CmdBar.Stateful.onReady:', e);
-
-              const { dispose$ } = e;
-              cmdbar = e.cmdbar as t.CmdBarRef;
-              if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
-              state.change((d) => (d.current.argv = e.initial.text));
-
-              const events = cmdbar.ctrl.events(dispose$);
-              events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
-            }}
-            onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
-            onChange={(e) => state.change((d) => (d.current.argv = e.to))}
-            onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
-          />
-        );
+        const docuri = doc?.uri;
+        const address = docuri ? `crdt:${Doc.Uri.id(docuri, { shorten: 5 })}` : '';
 
         return (
-          <div {...styles.base}>
-            <div {...styles.label}>{'cmdbar'}</div>
-            {elCmdBar}
-          </div>
+          <CmdBar.Dev.Main
+            theme={theme.name}
+            fields={['Module.Run', 'Module.Args']}
+            argsCard={{
+              ctrl: cmdbar,
+              argv: current.argv,
+              focused: { cmdbar: cmdbar?.current.focused },
+              title: { left: address, right: 'main' },
+              style: { marginBottom: 40 },
+            }}
+          />
         );
       });
 
     /**
-     * <Main> sample.
+     * Footer: <CmdBar>
      */
-    ctx.host.layer(1).render<T>((e) => {
-      const { props, current } = e.state;
-      const docuri = doc?.uri;
-      const address = docuri ? `crdt:${Doc.Uri.id(docuri, { shorten: 5 })}` : '';
-      return CmdBar.Dev.Main.render({
-        cmdbar,
-        argv: current.argv,
-        topHalf: true,
-        title: { left: address, right: 'main' },
-        theme: props.theme,
-        focused: { cmdbar: cmdbar?.current.focused },
-        style: { marginBottom: 40 },
-      });
-    });
+    ctx.host.footer.padding(0).render((e) => renderCommandBar());
   });
 
   e.it('ui:header', async (e) => {
