@@ -11,7 +11,6 @@ export { TextboxSync } from '../Textbox.Sync';
 /**
  * Constants
  */
-const name = 'CmdBar';
 const paths: t.CmdBarPaths = {
   text: ['text'],
   cmd: ['cmd'],
@@ -26,6 +25,7 @@ const focusBorder: t.CmdBarFocusBorder = {
   },
 };
 
+const name = 'CmdBar';
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
