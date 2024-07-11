@@ -1,4 +1,4 @@
-import { Pkg, type t } from './common';
+import { type t } from './common';
 
 export const Selection = {
   /**
@@ -6,10 +6,13 @@ export const Selection = {
    */
   expandBack(textbox: t.TextInputRef) {
     const { value, selection } = textbox.current;
+
     const index = wrangle.firstSpaceBeforeIndex(value, selection.start - 1);
     const start = index < 0 ? 0 : index + 1;
     const end = value.length;
-    textbox.select(start, end);
+
+    if (Selection.isFullySelected(value, selection)) textbox.caretToEnd();
+    else textbox.select(start, end);
   },
 
   /**
@@ -17,12 +20,18 @@ export const Selection = {
    */
   toggleFull(textbox: t.TextInputRef) {
     const { value, selection } = textbox.current;
-    if (wrangle.isFullySelected(value, selection)) {
-      const end = value.length;
-      textbox.select(end, end);
+    if (Selection.isFullySelected(value, selection)) {
+      textbox.caretToEnd();
     } else {
       textbox.selectAll();
     }
+  },
+
+  /**
+   * Determine if the entire set of text is selected.
+   */
+  isFullySelected(text: string, selection: t.TextInputSelection) {
+    return selection.start === 0 && selection.end === text.length;
   },
 } as const;
 
@@ -36,9 +45,5 @@ const wrangle = {
       if (text[i] === ' ') return i;
     }
     return -1;
-  },
-
-  isFullySelected(text: string, selection: t.TextInputSelection) {
-    return selection.start === 0 && selection.end === text.length;
   },
 } as const;
