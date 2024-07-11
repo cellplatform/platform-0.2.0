@@ -14,6 +14,7 @@ export const ModuleSpecs = {
   [`${ns}.Chip`]: () => import('../ui/Chip/-SPEC'),
   [`${ns}.CmdBar`]: () => import('../ui/CmdBar/-SPEC'),
   [`${ns}.CmdBar.Stateful`]: () => import('../ui/CmdBar.Stateful/-SPEC'),
+  [`${ns}.CmdBar.Dev`]: () => import('../ui/CmdBar.Dev/-SPEC'),
   [`${ns}.CmdBar.Prefix`]: () => import('../ui/CmdBar.Prefix/-SPEC'),
   [`${ns}.ContainerQuery`]: () => import('../ui/ContainerQuery/-SPEC'),
   [`${ns}.EdgePosition`]: () => import('../ui/EdgePosition/-SPEC'),
