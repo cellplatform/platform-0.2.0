@@ -44,6 +44,7 @@ function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
     caretToEnd: method('Caret:ToEnd'),
     invoke: method('Invoke'),
     keyboard: method('Keyboard'),
+    history: method('History'),
     events(dispose$?: t.UntilObservable) {
       return cmd.events(dispose$);
     },

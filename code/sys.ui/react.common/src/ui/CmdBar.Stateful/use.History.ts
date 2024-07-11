@@ -14,28 +14,36 @@ export function useHistory(args: {
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
 
+  const append = (state: t.CmdImmutable) => {
+    const text = api.text.trim();
+    const history = api.history;
+    const latest = history[history.length - 1];
+    if (text && latest !== text) {
+      state.change((d) => {
+        const list = resolve(d).history;
+        list.push(text);
+        if (!ObjectPath.exists(d, paths.history)) ObjectPath.mutate(d, paths.history, list);
+      });
+    }
+  };
+
   useEffect(() => {
     const life = rx.disposable();
 
     if (enabled && ctrl && state) {
       const events = ctrl.events(life.dispose$);
-      const append = () => {
-        const text = api.text.trim();
-        const history = api.history;
-        const latest = history[history.length - 1];
-        if (text && latest !== text) {
-          state.change((d) => {
-            const list = resolve(d).history;
-            list.push(text);
-            if (!ObjectPath.exists(d, paths.history)) ObjectPath.mutate(d, paths.history, list);
-          });
-        }
-      };
 
       /**
        * Save new items to history on "ENTER" (Invoke).
        */
-      events.on('Invoke', (e) => append());
+      events.on('Invoke', (e) => append(state));
+
+      /**
+       * History
+       */
+      events.on('History', (e) => {
+        console.log('🐷TODO: history', e.params);
+      });
     }
 
     if (!enabled) life.dispose();

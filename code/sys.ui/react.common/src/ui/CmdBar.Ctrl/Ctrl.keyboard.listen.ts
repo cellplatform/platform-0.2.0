@@ -7,10 +7,14 @@ export function listen(ctrl: t.CmdBarCtrl, textbox: t.TextInputRef, dispose$?: t
   const life = rx.lifecycle(dispose$);
   const keys = Keyboard.until(life.dispose$);
 
-  const isFocused = () => textbox.current.focused;
+  const is = {
+    get focused() {
+      return textbox.current.focused;
+    },
+  } as const;
 
   keys.on('Tab', (e) => {
-    if (isFocused()) e.handled(); // NB: prevent unintended blur.
+    if (is.focused) e.handled(); // NB: prevent unintended blur.
   });
 
   keys.on('META + KeyJ', (e) => {
@@ -24,13 +28,25 @@ export function listen(ctrl: t.CmdBarCtrl, textbox: t.TextInputRef, dispose$?: t
 
   keys.on('META + KeyK', (e) => {
     e.handled();
-    if (!isFocused()) ctrl.keyboard({ name: 'Focus:CmdBar' });
+    if (!is.focused) ctrl.keyboard({ name: 'Focus:CmdBar' });
     ctrl.select({ scope: 'Expand' });
   });
   keys.on('META + SHIFT + KeyK', (e) => {
     e.handled();
-    if (!isFocused()) ctrl.keyboard({ name: 'Focus:CmdBar' });
+    if (!is.focused) ctrl.keyboard({ name: 'Focus:CmdBar' });
     ctrl.select({ scope: 'Toggle:Full' });
+  });
+
+  keys.on('ArrowUp', (e) => {
+    if (!is.focused) return;
+    e.handled();
+    ctrl.history({ action: 'ArrowUp' });
+  });
+
+  keys.on('ArrowDown', (e) => {
+    if (!is.focused) return;
+    e.handled();
+    ctrl.history({ action: 'ArrowDown' });
   });
 
   return life;

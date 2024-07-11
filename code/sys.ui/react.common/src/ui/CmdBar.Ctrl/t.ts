@@ -27,7 +27,8 @@ export type CmdBarCtrlType =
   | CaretToStart
   | CaretToEnd
   | Invoke
-  | Keyboard;
+  | Keyboard
+  | History;
 
 type Current = t.CmdType<'Current', O>;
 type CurrentR = t.CmdType<'Current:res', { text: string }>;
@@ -37,8 +38,11 @@ type CaretToEnd = t.CmdType<'Caret:ToEnd', O>;
 type Invoke = t.CmdType<'Invoke', { text: string }>;
 type Keyboard = t.CmdType<'Keyboard', KeyboardAction>;
 
-type Select = t.CmdType<'Select', SelectParam>;
-type SelectParam = { scope?: 'All' | 'Expand' | 'Toggle:Full' };
+type Select = t.CmdType<'Select', SelectP>;
+type SelectP = { scope?: 'All' | 'Expand' | 'Toggle:Full' };
+
+type History = t.CmdType<'History', HistoryP>;
+type HistoryP = { action: 'ArrowUp' | 'ArrowDown' };
 
 /**
  * Command Methods (ctrl).
@@ -52,6 +56,7 @@ export type CmdBarCtrl = {
   readonly caretToEnd: t.CmdMethodVoid<CaretToEnd>;
   readonly invoke: t.CmdMethodVoid<Invoke>;
   readonly keyboard: t.CmdMethodVoid<Keyboard>;
+  readonly history: t.CmdMethodVoid<History>;
   events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };
 
