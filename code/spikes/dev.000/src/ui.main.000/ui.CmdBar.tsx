@@ -16,17 +16,6 @@ export const Footer: React.FC<FooterProps> = (props) => {
   const [, setRedraw] = useState(0);
   const redraw = () => setRedraw((n) => n + 1);
 
-  //   useEffect(() => {
-  //     //
-  //     const life = cmdbar?.onChange((e) => {
-  //       console.log('-------------------------------------------');
-  //       console.log('cmdbar?.onChange', e);
-  //       redraw();
-  //     });
-  //
-  //     return life?.dispose;
-  //   }, [cmdbar]);
-
   /**
    * Render
    */

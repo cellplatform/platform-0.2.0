@@ -1,6 +1,6 @@
 import { Dev } from '../test.ui';
 import { Args, CmdBar, Doc, Time, type t } from './common';
-import { DevList } from './ui.CmdBar.DevList';
+import { DevList } from './ui.CmdBar.List';
 
 export async function loadSpec(args: t.ParsedArgs, main: t.Shell) {
   const { Specs } = await import('../test.ui/entry.Specs');
