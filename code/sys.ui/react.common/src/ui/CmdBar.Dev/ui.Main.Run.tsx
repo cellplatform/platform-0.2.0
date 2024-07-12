@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState } from 'react';
 import { Ctrl } from '../CmdBar.Ctrl';
-import { Args, Color, css, type t } from './common';
+import { Args, Color, css, Is, type t } from './common';
 
 export const Run: React.FC<t.MainRunProps> = (props) => {
-  const [rendered, setRendered] = useState<t.RenderOutput>();
+  const [rendered, setRendered] = useState<JSX.Element>();
 
   /**
    * Lifecycle
@@ -15,17 +15,19 @@ export const Run: React.FC<t.MainRunProps> = (props) => {
     /**
      * Delegate to invoke handle.
      */
-    events?.on('Invoke', (e) => {
+    events?.on('Invoke', async (e) => {
       const argv = e.params.text.trim();
       const args = Args.parse(argv);
-      let _el: t.RenderOutput;
-      props.onRun?.({
+      let _el: JSX.Element | undefined;
+
+      const res = props.onRun?.({
         theme: theme.name,
         argv,
         args,
-        render: (el) => (_el = el),
+        render: (el) => (_el = isValidElement(el) ? el : undefined),
       });
-      setRendered(Boolean(_el) ? _el : undefined);
+      if (Is.promise(res)) await res;
+      setRendered(_el);
     });
     return events?.dispose;
   }, [props.ctrl]);

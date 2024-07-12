@@ -49,7 +49,7 @@ export type MainRunProps = {
   onRun?: MainRunHandler;
 };
 
-export type MainRunHandler = (e: MainRunHandlerArgs) => void;
+export type MainRunHandler = (e: MainRunHandlerArgs) => void | Promise<void>;
 export type MainRunHandlerArgs = {
   theme: t.CommonTheme;
   argv: string;
