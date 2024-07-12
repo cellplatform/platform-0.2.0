@@ -9,6 +9,7 @@ export type MonospaceButtonProps = {
   text?: string;
   prefix?: string | MonospaceButtonEdge;
   suffix?: string | MonospaceButtonEdge;
+  fontSize?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;

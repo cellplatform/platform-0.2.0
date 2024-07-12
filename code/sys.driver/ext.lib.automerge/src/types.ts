@@ -12,6 +12,7 @@ export type * from './crdt.sync/TextboxSync/t';
 
 export type * from './ui/ui.Buttons/t';
 export type * from './ui/ui.Cmd.Bar/t';
+export type * from './ui/ui.DocUri/t';
 export type * from './ui/ui.History.Commit/t';
 export type * from './ui/ui.History.Grid/t';
 export type * from './ui/ui.Info/t';

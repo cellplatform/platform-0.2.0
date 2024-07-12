@@ -12,7 +12,7 @@ const DEFAULTS = { edge } as const;
  * A button with monospace font.
  */
 export const MonospaceButton: React.FC<P> = (props) => {
-  const { text = '' } = props;
+  const { text = '', fontSize } = props;
   const prefix = wrangle.edge(props.prefix);
   const suffix = wrangle.edge(props.suffix);
 
@@ -44,7 +44,10 @@ export const MonospaceButton: React.FC<P> = (props) => {
   const color = theme.fg;
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
-    mono: css(FONTS.mono),
+    mono: css({
+      ...FONTS.mono,
+      fontSize: fontSize ?? FONTS.mono.fontSize,
+    }),
     copied: css({ color: COLORS.GREEN }),
     prefix: css({
       color: isOver ? COLORS.BLUE : color,

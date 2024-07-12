@@ -12,6 +12,7 @@ export const Specs = {
   [`${ns}.ui.RepoList.Virtual`]: () => import('../ui/ui.RepoList.Virtual/-SPEC'),
   [`${ns}.ui.Doc.History.Grid`]: () => import('../ui/ui.History.Grid/-SPEC'),
   [`${ns}.ui.Doc.History.Commit`]: () => import('../ui/ui.History.Commit/-SPEC'),
+  [`${ns}.ui.DocUri`]: () => import('../ui/ui.DocUri/-SPEC'),
   [`${ns}.ui.Nav.Paging`]: () => import('../ui/ui.Nav.Paging/-SPEC'),
   [`${ns}.ui.Cmd.Bar`]: () => import('../ui/ui.Cmd.Bar/-SPEC'),
   [`${ns}.ui.useDocs`]: () => import('../ui/ui.use/-SPEC.useDocs'),
