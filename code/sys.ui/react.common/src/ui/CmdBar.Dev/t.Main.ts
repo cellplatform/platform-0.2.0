@@ -46,7 +46,7 @@ export type MainRunProps = {
   ctrl?: C;
   theme?: t.CommonTheme;
   style?: t.CssValue;
-  onInvoke?: MainRunHandler;
+  onRun?: MainRunHandler;
 };
 
 export type MainRunHandler = (e: MainRunHandlerArgs) => void;

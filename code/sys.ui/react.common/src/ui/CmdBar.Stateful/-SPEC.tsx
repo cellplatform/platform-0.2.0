@@ -156,7 +156,7 @@ export default Dev.describe(name, (e) => {
             }}
             run={{
               ctrl,
-              onInvoke(e) {
+              onRun(e) {
                 const styles = {
                   base: css({
                     backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,

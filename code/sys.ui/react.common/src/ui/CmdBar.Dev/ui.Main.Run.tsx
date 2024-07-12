@@ -19,7 +19,7 @@ export const Run: React.FC<t.MainRunProps> = (props) => {
       const argv = e.params.text.trim();
       const args = Args.parse(argv);
       let _el: t.RenderOutput;
-      props.onInvoke?.({
+      props.onRun?.({
         theme: theme.name,
         argv,
         args,
