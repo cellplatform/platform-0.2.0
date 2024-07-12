@@ -1,6 +1,5 @@
-import { Doc, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
+import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
-import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
@@ -42,12 +41,13 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     if (uri) {
       const { shorten, prefix, head, clipboard } = data.uri ?? {};
       parts.push(
-        <DocUriButton
+        <DocUri
           theme={theme}
-          doc={doc}
+          uri={doc.uri}
           prefix={prefix}
           shorten={shorten}
           head={head}
+          heads={Doc.heads(doc)}
           clipboard={clipboard}
         />,
       );

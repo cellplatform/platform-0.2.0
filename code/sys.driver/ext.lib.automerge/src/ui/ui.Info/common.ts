@@ -1,10 +1,11 @@
 import { Doc } from '../../crdt';
 import { Pkg, type t } from '../common';
+import { DocUri } from '../ui.DocUri';
 
 export * from '../common';
 export { MonospaceButton } from '../ui.Buttons';
 export { MonoHash } from '../ui.History.Grid';
-export { Doc };
+export { Doc, DocUri };
 
 /**
  * Constants
@@ -37,13 +38,6 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 
-const uri: Required<t.InfoDataDocUri> = {
-  shorten: [4, 4],
-  prefix: 'crdt',
-  head: 2,
-  clipboard: (uri) => `crdt:${Doc.Uri.id(uri)}`,
-};
-
 export const DEFAULTS = {
   displayName: `${Pkg.name}:Info`,
   stateful: false,
@@ -51,7 +45,10 @@ export const DEFAULTS = {
   fields,
   theme: 'Light',
   repo: { label: 'Store' },
-  doc: { head: { label: 'Head', hashLength: 6 }, uri },
+  doc: {
+    head: { label: 'Head', hashLength: 6 },
+    uri: DocUri.DEFAULTS.uri,
+  },
   history: {
     label: 'History',
     list: { page: 0, limit: 5, sort: 'desc' },
