@@ -3,7 +3,6 @@ import { Pkg, type t } from '../common';
 export * from '../common';
 export { KeyHint } from '../KeyHint';
 export { useFocus } from '../../ui.use';
-export { ObjectView } from '../ObjectView';
 
 /**
  * Constants

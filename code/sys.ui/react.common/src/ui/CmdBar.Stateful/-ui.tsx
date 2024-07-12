@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { CmdBar } from '../CmdBar';
 import { type t } from './common';
 
-export const Sample: React.FC<t.CmdBarStatefulProps> = (props) => {
+export const SampleCmdBarStateful: React.FC<t.CmdBarStatefulProps> = (props) => {
   /**
    * Example [useRef].
    */

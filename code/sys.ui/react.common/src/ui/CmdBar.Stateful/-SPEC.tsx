@@ -1,8 +1,8 @@
 import { DEFAULTS } from '.';
-import { Args, COLORS, Color, Dev, Immutable, ObjectPath, Pkg, Time, css, rx } from '../../test.ui';
+import { Color, Dev, Immutable, ObjectPath, Pkg, Time, css, rx } from '../../test.ui';
 import { CmdBar } from '../CmdBar';
-import { type t } from './common';
-import { Sample } from './-ui';
+import { SampleCmdBarStateful } from './-ui';
+import { type t, ObjectView } from './common';
 
 type P = t.CmdBarStatefulProps;
 type T = {
@@ -18,12 +18,13 @@ const initial: T = { props: {}, debug: {}, current: {} };
 const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = T['debug'] &
+  type LocalStore = { main?: string } & T['debug'] &
     Pick<P, 'theme' | 'enabled' | 'focusOnReady' | 'useKeyboard' | 'useHistory'> &
     Pick<T['current'], 'argv'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
+    main: undefined,
     enabled: true,
     focusOnReady: DEFAULTS.focusOnReady,
     useKeyboard: DEFAULTS.useKeyboard,
@@ -33,6 +34,7 @@ export default Dev.describe(name, (e) => {
     argv: undefined,
   });
 
+  const main = Immutable.clonerRef<t.MainProps>(local.main ? JSON.parse(local.main) : {});
   const doc = Immutable.clonerRef({});
   let cmdbar: t.CmdBarRef | undefined;
 
@@ -68,11 +70,17 @@ export default Dev.describe(name, (e) => {
       ObjectPath.mutate(d, paths.text, local.argv);
     });
 
-    doc
-      .events()
-      .changed$.pipe(rx.debounceTime(100))
-      .subscribe(() => dev.redraw('debug'));
+    const doc$ = doc.events().changed$;
+    const main$ = main.events().changed$;
+    rx.merge(doc$, main$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => dev.redraw());
 
+    main$.pipe(rx.debounceTime(100)).subscribe(() => (local.main = JSON.stringify(main.current)));
+
+    /**
+     * Render: <CmdBar>
+     */
     const renderCommandBar = () => {
       const { props, debug } = state.current;
       const paths = getPaths(state.current);
@@ -94,7 +102,7 @@ export default Dev.describe(name, (e) => {
       };
 
       const elCmdBar = (
-        <Sample
+        <SampleCmdBarStateful
           {...props}
           state={debug.useState ? doc : undefined}
           paths={paths}
@@ -116,7 +124,6 @@ export default Dev.describe(name, (e) => {
           }}
           onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
           onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
-          onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
         />
       );
 
@@ -137,12 +144,35 @@ export default Dev.describe(name, (e) => {
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
 
-        return CmdBar.Dev.Main.render({
-          cmdbar,
-          argv: current.argv,
-          focused: { cmdbar: cmdbar?.current.focused },
-          theme: props.theme,
-        });
+        const ctrl = cmdbar;
+        return (
+          <CmdBar.Dev.Main
+            theme={theme.name}
+            fields={main.current.fields}
+            argsCard={{
+              ctrl,
+              argv: current.argv,
+              focused: { cmdbar: cmdbar?.current.focused },
+            }}
+            run={{
+              ctrl,
+              onInvoke(e) {
+                const styles = {
+                  base: css({
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+                    padding: 15,
+                  }),
+                };
+                const el = (
+                  <div {...styles.base}>
+                    <ObjectView name={'run'} data={e.args} theme={e.theme} />
+                  </div>
+                );
+                e.render(e.argv ? el : null);
+              },
+            }}
+          />
+        );
       });
 
     /**
@@ -154,7 +184,6 @@ export default Dev.describe(name, (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
@@ -204,10 +233,10 @@ export default Dev.describe(name, (e) => {
     dev.section('Command', (dev) => {
       const focus = (target: 'CmdBar' | 'Main') => {
         const invoke = () => Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
-        dev.button(['Focus', `"${target}"`], () => invoke());
+        dev.button(`Focus:${target}`, () => invoke());
       };
-      focus('CmdBar');
       focus('Main');
+      focus('CmdBar');
       dev.hr(-1, 5);
       dev.button('Invoke', (e) => {
         const text = getText(state.current);
@@ -217,8 +246,8 @@ export default Dev.describe(name, (e) => {
       dev.button('Select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
       dev.button('Select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button(['CMD + J', 'focus:main'], (e) => cmdbar?.ctrl.keyboard({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'focus:cmdbar'], (e) =>
+      dev.button(['CMD + J', 'Focus:Main'], (e) => cmdbar?.ctrl.keyboard({ name: 'Focus:Main' }));
+      dev.button(['CMD + K', 'Focus:CmdBar'], (e) =>
         cmdbar?.ctrl.keyboard({ name: 'Focus:CmdBar' }),
       );
     });
@@ -254,6 +283,12 @@ export default Dev.describe(name, (e) => {
           });
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return <CmdBar.Dev.Main.Config title={'Config'} state={main} useStateController={true} />;
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -270,7 +305,10 @@ export default Dev.describe(name, (e) => {
         <Dev.Object
           name={name}
           data={data}
-          expand={{ level: 1, paths: ['$', `$.${field}`] }}
+          expand={{
+            level: 1,
+            // paths: ['$', `$.${field}`],
+          }}
           fontSize={11}
         />
       );
