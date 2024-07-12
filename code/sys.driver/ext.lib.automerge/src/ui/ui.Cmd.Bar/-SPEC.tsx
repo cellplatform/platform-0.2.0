@@ -113,16 +113,24 @@ export default Dev.describe(name, async (e) => {
         const docuri = doc?.uri;
         const address = docuri ? `crdt:${Doc.Uri.id(docuri, { shorten: 5 })}` : '';
 
+        const ctrl = cmdbar;
         return (
           <CmdBar.Dev.Main
             theme={theme.name}
             fields={['Module.Run', 'Module.Args']}
             argsCard={{
-              ctrl: cmdbar,
+              ctrl,
               argv: current.argv,
               focused: { cmdbar: cmdbar?.current.focused },
               title: { left: address, right: 'main' },
               style: { marginBottom: 40 },
+            }}
+            run={{
+              ctrl,
+              onRun(e) {
+                '⚡️💦🐷🌳🦄 🍌🧨🌼✨🧫 🐚👋🧠⚠️ 💥👁️ ↑↓←→';
+                console.log('⚡️ CmdBar.Dev.Main:Run:onRun', e);
+              },
             }}
           />
         );
