@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Ctrl } from '../CmdBar.Ctrl';
-import { MainArgs } from './ui.Main.Args';
 import { Args, Color, KeyHint, css, useFocus, type t } from './common';
+import { ArgsCardArgs } from './ui.Main.ArgsCard.Args';
 
 export const ArgsCard: React.FC<t.MainArgsCardProps> = (props) => {
   const { size = [450, 200], focused = {} } = props;
@@ -113,7 +113,7 @@ export const ArgsCard: React.FC<t.MainArgsCardProps> = (props) => {
   };
 
   const elArgs = args && (
-    <MainArgs args={args} isFocused={isFocused} style={{ Absolute: 15 }} theme={theme.name} />
+    <ArgsCardArgs args={args} isFocused={isFocused} style={{ Absolute: 15 }} theme={theme.name} />
   );
 
   const elKeyHint = (

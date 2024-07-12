@@ -5,17 +5,18 @@ type C = t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>;
 export type MainField = 'Module.Args' | 'Module.Run';
 
 /**
- * Component
+ * Component: <Main>
  */
 export type MainProps = {
   fields?: (t.MainField | undefined | null)[];
-  argsCard?: MainArgsCardProps;
+  argsCard?: t.MainArgsCardProps;
+  run?: t.MainRunProps;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 /**
- * Component
+ * Component: <Config>
  */
 export type MainConfigProps = {
   title?: string | [string, string];
@@ -26,7 +27,7 @@ export type MainConfigProps = {
 };
 
 /**
- * Component
+ * Component: <ArgsCard>
  */
 export type MainArgsCardProps = {
   ctrl?: C;
@@ -36,6 +37,24 @@ export type MainArgsCardProps = {
   focused?: { cmdbar?: boolean };
   theme?: t.CommonTheme;
   style?: t.CssValue;
+};
+
+/**
+ * Component: <Run>
+ */
+export type MainRunProps = {
+  ctrl?: C;
+  theme?: t.CommonTheme;
+  style?: t.CssValue;
+  onInvoke?: MainRunHandler;
+};
+
+export type MainRunHandler = (e: MainRunHandlerArgs) => void;
+export type MainRunHandlerArgs = {
+  theme: t.CommonTheme;
+  argv: string;
+  args: t.ParsedArgs;
+  render(el: t.RenderOutput): void;
 };
 
 /**

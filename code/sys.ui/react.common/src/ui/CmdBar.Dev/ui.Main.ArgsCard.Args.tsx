@@ -1,14 +1,14 @@
 import { Color, css, type t } from './common';
 import { Text } from 'sys.util';
 
-export type MainArgsProps = {
+export type ArgsCardArgsProps = {
   args?: t.ParsedArgs;
   isFocused?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
-export const MainArgs: React.FC<MainArgsProps> = (props) => {
+export const ArgsCardArgs: React.FC<ArgsCardArgsProps> = (props) => {
   const { args, isFocused } = props;
   if (!args) return null;
 
