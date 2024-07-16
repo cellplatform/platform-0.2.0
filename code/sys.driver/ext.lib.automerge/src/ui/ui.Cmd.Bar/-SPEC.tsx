@@ -33,8 +33,8 @@ export default Dev.describe(name, async (e) => {
     docVisible: false,
   });
 
-  let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
+  let doc: t.Doc | undefined;
   let cmdbar: t.CmdBarRef | undefined;
 
   e.it('ui:init', async (e) => {
@@ -221,7 +221,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Sample State', 'CRDT'], (dev) => {
+    dev.section('Sample State', (dev) => {
       dev.button((btn) => {
         btn
           .label(`create`)
@@ -231,6 +231,7 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`delete`)
+          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri, 2)}` : ''))
           .enabled((e) => !!doc)
           .onClick(async (e) => (doc = await sample.delete()));
       });
