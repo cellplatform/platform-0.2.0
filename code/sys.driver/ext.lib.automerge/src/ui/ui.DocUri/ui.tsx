@@ -11,9 +11,9 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       style={props.style}
       theme={props.theme}
       fontSize={props.fontSize}
-      prefix={{ text: text.prefix, margin: 2, opacity: 0.4 }}
+      prefix={{ text: text.prefix, opacity: 0.4 }}
       text={text.short}
-      suffix={{ text: text.head, margin: 2, opacity: 0.4 }}
+      suffix={{ text: text.head, margin: '0.2em', opacity: 0.4 }}
       onClipboard={(e) => e.write(wrangle.clipboardText(props))}
     />
   );
@@ -57,10 +57,10 @@ const wrangle = {
   },
 
   heads(props: t.DocUriProps): t.HashString[] {
-    const { heads } = props;
-    if (!heads) return [];
-    if (Doc.Is.doc(heads)) return Doc.heads(heads);
+    const { heads, doc } = props;
     if (Array.isArray(heads)) return heads;
+    if (Doc.Is.doc(heads)) return Doc.heads(heads);
+    if (Doc.Is.doc(doc)) return Doc.heads(doc);
     return [];
   },
 

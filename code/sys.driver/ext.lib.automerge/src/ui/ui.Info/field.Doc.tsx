@@ -43,7 +43,7 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
       parts.push(
         <DocUri
           theme={theme}
-          uri={doc.uri}
+          doc={doc.uri}
           prefix={prefix}
           shorten={shorten}
           head={head}

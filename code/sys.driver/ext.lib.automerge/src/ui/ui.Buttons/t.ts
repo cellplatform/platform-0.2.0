@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-export type MonospaceButtonEdge = { text: string; margin?: number; opacity?: number };
+export type MonospaceButtonEdge = { text: string; margin?: number | string; opacity?: number };
 
 /**
  * Component: <MonospaceButton>
