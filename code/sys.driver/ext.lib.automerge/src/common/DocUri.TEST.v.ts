@@ -1,11 +1,16 @@
 import { DocUri } from '.';
+import { testSetup } from '../crdt/Doc/-TEST.u';
 import { describe, expect, it } from '../test';
 import { Is } from './u';
 
-describe('Store.DocUri', () => {
+describe('Store.DocUri', async () => {
+  const { store, factory } = testSetup();
+
+  const NON = [true, 123, '', [], {}, null, undefined, Symbol('foo'), BigInt(0)];
+
   describe('DocUri.id', () => {
     it('nothing', () => {
-      [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      NON.forEach((value) => {
         expect(DocUri.id(value)).to.eql('');
       });
     });
@@ -41,7 +46,7 @@ describe('Store.DocUri', () => {
 
   describe('DocUri.automerge', () => {
     it('nothing', () => {
-      [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      NON.forEach((value) => {
         expect(DocUri.automerge(value)).to.eql('');
       });
     });
@@ -89,6 +94,24 @@ describe('Store.DocUri', () => {
     it('generate.uri: is an automerge URL', () => {
       const uri = DocUri.generate.uri();
       expect(Is.automergeUrl(uri)).to.eql(true);
+    });
+  });
+
+  describe('DocUri.toString', () => {
+    it('invalid', () => {
+      NON.forEach((value) => {
+        expect(DocUri.toString(value as any)).to.eql('');
+      });
+    });
+
+    it('from string (no change)', () => {
+      expect(DocUri.toString('crdt:foobar')).to.eql('crdt:foobar');
+    });
+
+    it('from document', async () => {
+      const doc = await factory();
+      expect(DocUri.toString(doc)).to.eql(doc.uri);
+      expect(DocUri.toString(doc.uri)).to.eql(doc.uri);
     });
   });
 });

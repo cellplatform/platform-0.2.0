@@ -1,6 +1,7 @@
 import { stringifyAutomergeUrl, parseAutomergeUrl } from '@automerge/automerge-repo';
 import { v4 } from 'uuid';
 import { Hash } from './libs';
+import { Is } from './u.Is';
 
 import type * as t from './t';
 
@@ -61,6 +62,16 @@ export const DocUri = {
         return documentId;
       },
     },
+  },
+
+  /**
+   * Convert input to URI string.
+   */
+  toString(input?: t.Doc | string): string {
+    if (!input) return '';
+    if (typeof input === 'string') return input;
+    if (Is.doc(input)) return input.uri;
+    return '';
   },
 } as const;
 
