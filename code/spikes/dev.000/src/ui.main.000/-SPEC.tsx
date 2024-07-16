@@ -40,14 +40,12 @@ const name = 'Main.000';
 export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & { me?: t.UriString };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    me: undefined,
-  });
+  const local = localstore.object({ me: undefined });
   const self = Peer.init();
 
   const Store = {
-    fs: WebStore.init({ storage: 'fs', network: [] }),
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
+    fs: WebStore.init({ storage: 'fs', network: [] }),
     async getMeDoc() {
       const fs = Store.fs.doc;
       if (!(await fs.exists(local.me))) local.me = undefined;
@@ -65,7 +63,7 @@ export default Dev.describe(name, async (e) => {
 
   const Index = {
     fs: await WebStore.index(Store.fs),
-    fsTmp: network.index,
+    tmp: network.index,
   } as const;
   const me = await Store.getMeDoc();
   const cloner = () => Immutable.clonerRef({});
@@ -81,6 +79,10 @@ export default Dev.describe(name, async (e) => {
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
       harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
     },
+    store: {
+      fs: Store.fs,
+      tmp: Store.tmp,
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -95,17 +97,17 @@ export default Dev.describe(name, async (e) => {
     const harness$ = main.state.harness.events().changed$;
     rx.merge(tmp$, harness$)
       .pipe(rx.debounceTime(50))
-      .subscribe(() => dev.redraw());
+      .subscribe(() => ctx.redraw());
 
     const updateDebugPanelWidth = () => {
-      const visible = main.state.harness.current.debugVisible ?? true;
+      const harness = main.state.harness.current;
+      const visible = harness.debugVisible ?? true;
       ctx.debug.width(visible ? 300 : 0);
+      ctx.redraw();
     };
-    harness$
-      .pipe(rx.distinctWhile((e) => e.before.debugVisible === e.after.debugVisible))
-      .subscribe(updateDebugPanelWidth);
-
+    harness$.pipe(rx.debounceTime(50)).subscribe(updateDebugPanelWidth);
     updateDebugPanelWidth();
+
     ctx.subject
       .backgroundColor(1)
       .size('fill', 36)
@@ -291,7 +293,8 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
+      dev.button('Redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
     });
   });
 

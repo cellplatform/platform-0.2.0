@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export { Args, Delete, Hash, ObjectPath, Time, rx, slug } from 'sys.util';
+export { Args, Delete, Hash, ObjectPath, Time, Value, rx, slug } from 'sys.util';
 
 /**
  * @system : UI
