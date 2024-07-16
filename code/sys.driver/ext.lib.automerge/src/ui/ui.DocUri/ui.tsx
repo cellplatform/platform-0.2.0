@@ -1,16 +1,16 @@
 import { DEFAULTS, Doc, Hash, MonospaceButton, type t } from './common';
 
 export const View: React.FC<t.DocUriProps> = (props) => {
-  const { uri, fontSize } = props;
-
+  const uri = wrangle.uri(props);
   if (!uri) return;
+
   const text = wrangle.text(props);
 
   return (
     <MonospaceButton
       style={props.style}
       theme={props.theme}
-      fontSize={fontSize}
+      fontSize={props.fontSize}
       prefix={{ text: text.prefix, margin: 2, opacity: 0.4 }}
       text={text.short}
       suffix={{ text: text.head, margin: 2, opacity: 0.4 }}
@@ -23,8 +23,13 @@ export const View: React.FC<t.DocUriProps> = (props) => {
  * Helpers
  */
 const wrangle = {
+  uri(props: t.DocUriProps): t.UriString {
+    const { doc } = props;
+    return (Doc.Is.doc(doc) ? doc.uri : doc) ?? '';
+  },
+
   text(props: t.DocUriProps) {
-    const uri = props.uri ?? '';
+    const uri = wrangle.uri(props);
     const id = Doc.Uri.id(uri);
     const shorten = wrangle.shorten(props);
     const head = wrangle.head(props, id);
@@ -61,7 +66,7 @@ const wrangle = {
 
   clipboardText(props: t.DocUriProps) {
     const { clipboard = DEFAULTS.uri.clipboard } = props;
-    const uri = props.uri ?? '';
+    const uri = wrangle.uri(props);
     return clipboard(uri);
   },
 } as const;
