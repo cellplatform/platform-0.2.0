@@ -1,13 +1,33 @@
 import { isValidElement, useEffect, useState } from 'react';
 import { Ctrl } from '../CmdBar.Ctrl';
-import { Args, Color, css, Is, type t } from './common';
+import { Args, Color, css, Is, rx, type t } from './common';
 
 export const Run: React.FC<t.MainRunProps> = (props) => {
   const [rendered, setRendered] = useState<JSX.Element>();
+  const [args, setArgs] = useState<t.ParsedArgs | undefined>();
 
   /**
    * Lifecycle
    */
+  useEffect(() => {
+    const life = rx.lifecycle();
+    const argv = props.argv;
+    const args = argv ? Args.parse(argv) : undefined;
+    setArgs(args);
+
+    if (argv && props.onArgsChanged) {
+      runHandler(argv, theme.name, props.onArgsChanged).then((res) => {
+        if (life.disposed) return;
+        if (res.el === null) setRendered(undefined);
+        if (res.el) setRendered(res.el);
+      });
+    } else {
+      setRendered(undefined);
+    }
+
+    return life.dispose;
+  }, [props.argv]);
+
   useEffect(() => {
     const ctrl = wrangle.ctrl(props);
     const events = ctrl?.events();
@@ -16,18 +36,11 @@ export const Run: React.FC<t.MainRunProps> = (props) => {
      * Delegate to invoke handle.
      */
     events?.on('Invoke', async (e) => {
-      const argv = e.params.text.trim();
-      const args = Args.parse(argv);
-      let _el: JSX.Element | undefined;
-
-      const res = props.onRun?.({
-        theme: theme.name,
-        argv,
-        args,
-        render: (el) => (_el = isValidElement(el) ? el : undefined),
-      });
-      if (Is.promise(res)) await res;
-      setRendered(_el);
+      if (!props.onInvoke) return;
+      const argv = e.params.text;
+      const res = await runHandler(argv, theme.name, props.onInvoke);
+      if (res.el === null) setRendered(undefined);
+      if (res.el) setRendered(res.el);
     });
     return events?.dispose;
   }, [props.ctrl]);
@@ -48,9 +61,9 @@ export const Run: React.FC<t.MainRunProps> = (props) => {
     }),
   };
 
-  ('⚡️💦🐷🌳🦄 🍌🧨🌼✨🧫 🐚👋🧠⚠️ 💥👁️ ↑↓←→');
-
-  const elEmpty = !rendered && <div {...styles.empty}>{`Module.Run → ƒ(n)`}</div>;
+  const elEmpty = !rendered && (
+    <div {...styles.empty}>{/* <div>{`Module.Run → ƒ(n)`}</div> */}</div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -68,3 +81,22 @@ const wrangle = {
     return props.ctrl ? Ctrl.toCtrl(props.ctrl) : undefined;
   },
 } as const;
+
+async function runHandler(argv: string, theme: t.CommonTheme, fn: t.MainRunHandler) {
+  argv = argv.trim();
+  const args = Args.parse(argv);
+  let el: JSX.Element | undefined | null;
+
+  const res = fn?.({
+    theme,
+    argv,
+    args,
+    render(e) {
+      if (e === null) el = null;
+      if (isValidElement(e)) el = e;
+    },
+  });
+  if (Is.promise(res)) await res;
+
+  return { el } as const;
+}

@@ -144,6 +144,13 @@ export default Dev.describe(name, (e) => {
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
 
+        const styles = {
+          base: css({
+            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+            padding: 15,
+          }),
+        };
+
         const ctrl = cmdbar;
         return (
           <CmdBar.Dev.Main
@@ -156,19 +163,20 @@ export default Dev.describe(name, (e) => {
             }}
             run={{
               ctrl,
-              async onRun(e) {
-                const styles = {
-                  base: css({
-                    backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-                    padding: 15,
-                  }),
-                };
-                const el = (
+              argv: current.argv,
+
+              onArgsChanged(e) {
+                if (!e.argv) return;
+                e.render(
                   <div {...styles.base}>
-                    <ObjectView name={'run'} data={e.args} theme={e.theme} />
-                  </div>
+                    <ObjectView name={'run'} data={e.args} theme={e.theme} expand={3} />
+                  </div>,
                 );
-                e.render(e.argv ? el : null);
+              },
+
+              async onInvoke(e) {
+                if (e.argv === 'null') return e.render(null);
+                e.render(<div {...styles.base}>{`Invoked ⚡️`}</div>);
               },
             }}
           />

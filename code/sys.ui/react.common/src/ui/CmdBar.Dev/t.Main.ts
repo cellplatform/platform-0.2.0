@@ -44,9 +44,11 @@ export type MainArgsCardProps = {
  */
 export type MainRunProps = {
   ctrl?: C;
+  argv?: string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
-  onRun?: MainRunHandler;
+  onArgsChanged?: t.MainRunHandler;
+  onInvoke?: t.MainRunHandler;
 };
 
 export type MainRunHandler = (e: MainRunHandlerArgs) => void | Promise<void>;

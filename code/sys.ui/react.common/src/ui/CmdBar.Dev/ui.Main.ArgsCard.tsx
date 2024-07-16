@@ -52,7 +52,7 @@ export const ArgsCard: React.FC<t.MainArgsCardProps> = (props) => {
       height: size[1],
       display: 'grid',
       cursor: isFocused ? 'default' : 'pointer',
-      transform: !isFocused ? `perspective(600px) rotateX(30deg) translateZ(-10px)` : undefined,
+      transform: !isFocused ? `perspective(600px) rotateX(30deg) translateZ(-5px)` : undefined,
       transition: t('transform', 300),
       pointerEvents: 'auto',
     }),

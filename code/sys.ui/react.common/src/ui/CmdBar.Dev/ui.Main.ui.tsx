@@ -20,7 +20,7 @@ export const View: React.FC<t.MainProps> = (props) => {
       position: 'relative',
       display: 'grid',
     }),
-    argsCard: css({ MarginY: 50 }),
+    argsCard: css({ marginTop: 50, marginBottom: 60 }),
   };
 
   const elements = fields.map((field, i) => {

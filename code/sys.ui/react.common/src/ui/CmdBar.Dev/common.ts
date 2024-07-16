@@ -14,7 +14,7 @@ export const DEFAULTS = {
   Main: {
     fields: {
       get all(): t.MainField[] {
-        return ['Module.Run', 'Module.Args'];
+        return ['Module.Args', 'Module.Run'];
       },
       get default(): t.MainField[] {
         return DEFAULTS.Main.fields.all;
