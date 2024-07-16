@@ -145,7 +145,7 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`delete`)
-          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri, 2)}` : ''))
+          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
           .enabled((e) => !!doc)
           .onClick(async (e) => (doc = await sample.delete()));
       });
