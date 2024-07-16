@@ -7,6 +7,8 @@ export const View: React.FC<t.RootProps> = (props) => {
   /**
    * Render
    */
+  const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+  const transition = [t('opacity')].join(', ');
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({

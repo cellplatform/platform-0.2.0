@@ -10,6 +10,7 @@ const initial: T = { props: {}, debug: {} };
  * Spec
  */
 const name = DEFAULTS.displayName;
+
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
