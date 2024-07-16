@@ -17,6 +17,7 @@ export const DocUri = {
    * eg: "automerge:<abc>" → "<abc>"
    */
   id(input: any, options: { shorten?: ShortenInput } = {}): string {
+    if (Is.doc(input)) input = input.uri;
     if (typeof input !== 'string') return '';
 
     const done = (id: string) => {

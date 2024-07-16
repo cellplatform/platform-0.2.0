@@ -42,6 +42,12 @@ describe('Store.DocUri', async () => {
       expect(res3).to.eql(res1);
       expect(res4).to.eql(res2);
     });
+
+    it('from document', async () => {
+      const doc = await factory();
+      const uri = doc.uri.slice(doc.uri.indexOf(':') + 1);
+      expect(DocUri.id(doc)).to.eql(uri);
+    });
   });
 
   describe('DocUri.automerge', () => {
