@@ -10,6 +10,8 @@ export type MonacoEditorProps = {
   placeholder?: string;
   focusOnLoad?: boolean;
   tabSize?: number;
+  minimap?: boolean;
+  readOnly?: boolean;
   style?: t.CssValue;
   onChange?: t.MonacoEditorChangeHandler;
   onReady?: t.MonacoEditorReadyHandler;

@@ -24,8 +24,10 @@ const NULL_RANGE: t.EditorRange = {
 };
 
 export const DEFAULTS = {
+  NULL_RANGE,
   tabSize: 2,
   language: LANGUAGES[0],
   className: CSS.CLASS.EDITOR,
-  NULL_RANGE,
+  readOnly: false,
+  minimap: true,
 } as const;
