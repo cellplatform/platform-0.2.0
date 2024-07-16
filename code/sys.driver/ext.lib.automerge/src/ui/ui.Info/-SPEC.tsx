@@ -1,19 +1,7 @@
 import { DEFAULTS, Info } from '.';
-import {
-  Color,
-  css,
-  Dev,
-  DevReload,
-  Doc,
-  Pkg,
-  rx,
-  SampleCrdt,
-  TestDb,
-  Value,
-  type t,
-} from '../../test.ui';
-import { RepoList } from '../ui.RepoList';
+import { Dev, DevReload, Doc, Pkg, rx, SampleCrdt, Value, type t } from '../../test.ui';
 
+type O = Record<string, unknown>;
 type P = t.InfoProps;
 type D = {
   reload?: boolean;
@@ -25,8 +13,8 @@ type D = {
   dataDocIconClickHandler?: boolean;
 };
 type T = {
-  props: t.InfoProps;
   docuri?: t.UriString;
+  props: t.InfoProps;
   debug: D;
 };
 const initial: T = { props: {}, debug: {} };
@@ -37,22 +25,24 @@ const initial: T = { props: {}, debug: {} };
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
-  let model: t.RepoListModel;
 
-  type LocalStore = D & Pick<P, 'fields' | 'theme' | 'stateful'>;
+  type LocalStore = D & Pick<T, 'docuri'> & Pick<P, 'fields' | 'theme' | 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     stateful: DEFAULTS.stateful,
     fields: DEFAULTS.fields.default,
     dataHistoryDesc: DEFAULTS.history.list.sort === 'desc',
+    docuri: undefined,
     dataUris: true,
     dataDocLens: false,
     dataDocArray: false,
     dataDocIconClickHandler: true,
   });
 
-  const resetState$ = rx.subject();
+  let doc: t.Doc | undefined;
+
+  const resetInfoState$ = rx.subject();
   const setFields = async (dev: t.DevTools<T>, fields?: (t.InfoField | undefined)[]) => {
     local.fields = fields?.length === 0 ? undefined : fields;
     await dev.change((d) => (d.props.fields = fields));
@@ -62,8 +52,10 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
+    const sample = SampleCrdt.dev(state, local, db.store);
 
     await state.change((d) => {
+      d.docuri = local.docuri;
       d.props.theme = local.theme;
       d.props.fields = local.fields;
       d.props.margin = 10;
@@ -75,19 +67,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.dataDocArray = local.dataDocArray;
       d.debug.dataDocIconClickHandler = local.dataDocIconClickHandler;
     });
-
-    /**
-     * TODO 🐷
-     * - BUG FIX: focus state on <RepoList>
-     * - Have <Info> load from the selected "doc:uri"
-     */
-    model = await RepoList.model(db.store, {
-      behaviors: ['Copyable', 'Deletable'],
-      onActiveChanged: (e) => {
-        console.info(`⚡️ onActiveChanged`, e);
-        state.change((d) => (d.docuri = e.item.uri));
-      },
-    });
+    doc = await sample.get();
 
     ctx.debug.width(330);
     ctx.subject
@@ -162,7 +142,7 @@ export default Dev.describe(name, async (e) => {
             style={{ minHeight: 300 }}
             data={data}
             fields={props.fields}
-            resetState$={resetState$}
+            resetState$={resetInfoState$}
             onStateChange={(e) => {
               console.info('⚡️ onStateChange', e);
             }}
@@ -173,6 +153,8 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    const sample = SampleCrdt.dev(state, local, db.store);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -183,7 +165,7 @@ export default Dev.describe(name, async (e) => {
             selected={props.fields}
             onClick={(e) => {
               setFields(dev, e.next<t.InfoField>(DEFAULTS.fields.default));
-              resetState$.next();
+              resetInfoState$.next();
             }}
           />
         );
@@ -194,14 +176,14 @@ export default Dev.describe(name, async (e) => {
       const config = (label: string, fields: t.InfoField[]) => {
         dev.button(label, async (e) => {
           await setFields(dev, fields);
-          resetState$.next();
+          resetInfoState$.next();
         });
       };
 
       dev.button('(prepend): Visible', (e) => {
         const fields = e.state.current.props.fields ?? [];
         if (!fields.includes('Visible')) setFields(dev, ['Visible', ...fields]);
-        resetState$.next();
+        resetInfoState$.next();
       });
       dev.hr(-1, 5);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
@@ -235,6 +217,24 @@ export default Dev.describe(name, async (e) => {
         (d) => d.props.theme,
         (d, value) => (local.theme = d.props.theme = value),
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(['Sample State', 'CRDT'], (dev) => {
+      dev.button((btn) => {
+        btn
+          .label(`create`)
+          .enabled((e) => !doc)
+          .onClick(async (e) => (doc = await sample.get()));
+      });
+      dev.button((btn) => {
+        btn
+          .label(`delete`)
+          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
+          .enabled((e) => !!doc)
+          .onClick(async (e) => (doc = await sample.delete()));
+      });
     });
 
     dev.hr(5, 20);
@@ -286,24 +286,44 @@ export default Dev.describe(name, async (e) => {
             }),
           );
       });
-      dev.hr(-1, 5);
-      dev.button(['write sample BLOB', '[Uint8Array]'], async (e) => {
+    });
+
+    dev.hr(1, 20);
+
+    dev.section('Data: Mutate', (dev) => {
+      const mutate = (
+        label: string | [string, string],
+        fn: (e: { doc: t.Doc | t.Lens }) => any | Promise<any>,
+      ) => {
+        const labels = Array.isArray(label) ? label : [label, ''];
+        dev.button((btn) => {
+          btn
+            .label(labels[0])
+            .right(labels[1])
+            .enabled((e) => !!doc)
+            .onClick((e) => {
+              if (doc) fn({ doc });
+              dev.redraw();
+            });
+        });
+      };
+
+      mutate(['Write sample BLOB', '[Uint8Array]'], (e) => {
         type T = { binary?: Uint8Array };
-        const doc = await db.docAtIndex<T>(0);
+        const doc = e.doc as t.Doc<T>;
         const length = Value.random(5000, 15000);
         const binary = new Uint8Array(new Array(length).fill(0));
-        doc?.change((d) => (d.binary = binary));
-        dev.redraw();
+        doc.change((d) => (d.binary = binary));
       });
-      dev.button(['increment', 'count + 1'], async (e) => {
+      mutate(['Increment', 'count + 1'], async (e) => {
         type T = { count?: number };
-        const doc = await db.docAtIndex<T>(0);
-        doc?.change((d) => (d.count = (d.count ?? 0) + 1));
+        const doc = e.doc as t.Doc<T>;
+        doc.change((d) => (d.count = (d.count ?? 0) + 1));
       });
-      dev.button(['increment child', 'count + 1'], async (e) => {
+      mutate(['Increment child', 'count + 1'], async (e) => {
         type T = { child?: { count?: number } };
-        const doc = await db.docAtIndex<T>(0);
-        doc?.change((d) => {
+        const doc = e.doc as t.Doc<T>;
+        doc.change((d) => {
           const child = d.child || (d.child = { count: 0 });
           child.count = (child.count ?? 0) + 1;
         });
@@ -313,66 +333,22 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
-      dev.button('reset state', (e) => resetState$.next());
-      dev.hr(-1, 5);
-      dev.button('create doc', async (e) => {
-        await db.store.doc.getOrCreate((d) => null);
-        dev.redraw();
-      });
-      dev.button(['delete doc', '💥'], async (e) => {
-        const doc = await db.docAtIndex(0);
-        if (doc) await db.store.doc.delete(doc.uri);
-        dev.redraw();
-      });
-      dev.hr(-1, 5);
-      dev.button([`delete database: "${db.storage.name}"`, '💥'], async (e) => {
-        await e.state.change((d) => (d.debug.reload = true));
-        await TestDb.Spec.deleteDatabase();
-      });
+      dev.button('Redraw', (e) => dev.redraw());
+      dev.button('Reset: Info State', (e) => resetInfoState$.next());
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .padding(0)
-      .render<T>(async (e) => {
-        const { props, debug } = e.state;
-        const crdt = (await db.docAtIndex(0))?.current;
-        const data = {
-          docuri: Doc.Uri.id(e.state.docuri, { shorten: 5 }),
-          props,
-          debug,
-          'crdt:storage:db': db.storage.name,
-          'crdt:doc': crdt,
-        };
-
-        const styles = {
-          base: css({ position: 'relative' }),
-          object: css({ padding: 10 }),
-          list: css({ border: `solid 1px ${Color.alpha(Color.DARK, 0.15)}` }),
-        };
-
-        const elObject = (
-          <div {...styles.object}>
-            <Dev.Object name={name} data={data} expand={1} fontSize={11} />
-          </div>
-        );
-
-        const elList = (
-          <div {...styles.list}>
-            <RepoList model={model} onReady={(e) => e.ref.select(0)} />
-          </div>
-        );
-
-        return (
-          <div {...styles.base}>
-            {elObject}
-            {elList}
-          </div>
-        );
-      });
+    dev.footer.border(-0.1).render<T>(async (e) => {
+      const { props } = e.state;
+      const data = {
+        docuri: Doc.Uri.id(e.state.docuri, { shorten: 5 }),
+        props,
+        'crdt:store:db': db.storage.name,
+        'crdt:doc': doc,
+      };
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+    });
   });
 });

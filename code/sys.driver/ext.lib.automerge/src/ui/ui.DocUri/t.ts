@@ -12,6 +12,7 @@ export type DocUriProps = {
   head?: D['head'];
   heads?: t.HashString[];
   clipboard?: D['clipboard'];
+  fontSize?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

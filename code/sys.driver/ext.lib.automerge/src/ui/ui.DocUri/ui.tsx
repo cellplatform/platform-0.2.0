@@ -1,7 +1,7 @@
 import { DEFAULTS, Doc, Hash, MonospaceButton, type t } from './common';
 
 export const View: React.FC<t.DocUriProps> = (props) => {
-  const { uri } = props;
+  const { uri, fontSize } = props;
 
   if (!uri) return;
   const text = wrangle.text(props);
@@ -10,6 +10,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
     <MonospaceButton
       style={props.style}
       theme={props.theme}
+      fontSize={fontSize}
       prefix={{ text: text.prefix, margin: 2, opacity: 0.4 }}
       text={text.short}
       suffix={{ text: text.head, margin: 2, opacity: 0.4 }}
