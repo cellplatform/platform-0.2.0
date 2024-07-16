@@ -52,7 +52,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
   useEffect(() => {
     if (ready || !textbox || !ctrl) return;
     setReady(true);
-    props.onReady?.({ ctrl: ctrl, textbox });
+    props.onReady?.({ ctrl, textbox });
   }, [textbox, ctrl, ready]);
 
   /**
