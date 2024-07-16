@@ -22,6 +22,13 @@
   dependencies:
     "@automerge/automerge-repo" "1.1.12"
 
+"@automerge/automerge-repo-network-broadcastchannel@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-broadcastchannel/-/automerge-repo-network-broadcastchannel-1.2.0.tgz#163e96fdc4ca6ce063aa02bba9d885b1217f2ad2"
+  integrity sha512-r4uvFUSgmK/CpGm5DJ8d8B70IyUyVDm9kR4hjPWYboIm7Dx/mgBTXImy8hoekx/eiiM97yb/yd3nXJDRpU2mWA==
+  dependencies:
+    "@automerge/automerge-repo" "1.2.0"
+
 "@automerge/automerge-repo-network-messagechannel@1.1.12":
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.1.12.tgz#f6ae0c881298212a39259a87e4c5aeb44fb70c88"
@@ -31,12 +38,28 @@
     debug "^4.3.4"
     eventemitter3 "^5.0.1"
 
+"@automerge/automerge-repo-network-messagechannel@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-network-messagechannel/-/automerge-repo-network-messagechannel-1.2.0.tgz#a7023e295c3782e68c1c545d292d481d1cf64a94"
+  integrity sha512-MHBCzj0nobz6K3CHGvKbzj8R/9gCcLmUvSQiX29klJbpDX4yowJFANyjMkDbBZfym/D5VsQ2YVOBGTOW11cx5g==
+  dependencies:
+    "@automerge/automerge-repo" "1.2.0"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
+
 "@automerge/automerge-repo-storage-indexeddb@1.1.12":
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.1.12.tgz#0cbe62c07f023724bd31c867aa996482255ef899"
   integrity sha512-kXnLg0PSNWUAyknW7LvZTt2wXIhufuQHpbCWJCOSS6AaIabRxfhzT31hwYLihA2J1A3fRe3vLbUAQ/C9vGoOfg==
   dependencies:
     "@automerge/automerge-repo" "1.1.12"
+
+"@automerge/automerge-repo-storage-indexeddb@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo-storage-indexeddb/-/automerge-repo-storage-indexeddb-1.2.0.tgz#987c6ea173f062fe506e07ad9d71f7cbadb9c297"
+  integrity sha512-PYuteT89HRXDVgLEmpXBmx9dpaRDbaeLP+Tyvd+HErHZ6yfEH+uhREDfEgeXrWWADExF491K2LWF/PT+lLYdSw==
+  dependencies:
+    "@automerge/automerge-repo" "1.2.0"
 
 "@automerge/automerge-repo@1.1.12":
   version "1.1.12"
@@ -53,6 +76,29 @@
     ts-node "^10.9.1"
     uuid "^9.0.0"
     xstate "^5.9.1"
+
+"@automerge/automerge-repo@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-repo/-/automerge-repo-1.2.0.tgz#968e99ea09261f5fd8166cdb66ae8d4bcedcc2cb"
+  integrity sha512-43MTly+CB1lh+Q/iASRLICkPta2INlvTCk9RssNJ9ECNlxL15xq6HVWPPkMKhgfN0yIT8mQXQFuhcBntaYpJ7w==
+  dependencies:
+    "@automerge/automerge" "2.2.3"
+    bs58check "^3.0.1"
+    cbor-x "^1.3.0"
+    debug "^4.3.4"
+    eventemitter3 "^5.0.1"
+    fast-sha256 "^1.3.0"
+    tiny-typed-emitter "^2.1.0"
+    ts-node "^10.9.1"
+    uuid "^9.0.0"
+    xstate "^5.9.1"
+
+"@automerge/automerge@2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.2.3.tgz#830a0846af5affc609b501c01e985e65c24dad75"
+  integrity sha512-CAyTKNpqhscqaylFxJJLq2RgrHyep6BYY8szQNt3EsWDfwkxaaz5kjsb2iiMjo/dS5tswbMxP3Omdk//9He13Q==
+  dependencies:
+    uuid "^9.0.0"
 
 "@automerge/automerge@2.2.4", "@automerge/automerge@^2.1.13":
   version "2.2.4"
@@ -1290,26 +1336,6 @@
   dependencies:
     zod "^3.21.4"
 
-"@privy-io/js-sdk-core@0.23.5":
-  version "0.23.5"
-  resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.23.5.tgz#c97120f0446e69eea66e805a9d12f31b3833629b"
-  integrity sha512-/vwGVeaWL85RTThK+16tE251h0G3usttX/UHlYBZ5i/fT7GaDIPmOUUt4Sv0eXLjgZ/UHJgf/ThSNblOpkCREg==
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/providers" "^5.7.2"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@privy-io/api-base" "^1.2.2"
-    "@privy-io/public-api" "2.6.3"
-    eventemitter3 "^5.0.1"
-    fetch-retry "^5.0.6"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    set-cookie-parser "^2.6.0"
-    uuid ">=8 <10"
-
 "@privy-io/js-sdk-core@0.23.6":
   version "0.23.6"
   resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.23.6.tgz#a4607f9f45fec26028d7036c488a3d459353b9af"
@@ -1339,52 +1365,6 @@
     ethers "^5.7.2"
     libphonenumber-js "^1.10.31"
     zod "^3.22.4"
-
-"@privy-io/react-auth@1.74.0":
-  version "1.74.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.74.0.tgz#b4d3654884168df0a26d74aa5a05351af1da100b"
-  integrity sha512-1wq7V1sAQt3bqAr6wKuPOcdCoYrZtefuW7og7Ur7IzV7VC5CmFTjKqYn2laH6Wcnsk01F4Au54ImvotL0qFYLQ==
-  dependencies:
-    "@coinbase/wallet-sdk" "4.0.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.1.1"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@privy-io/js-sdk-core" "0.23.5"
-    "@simplewebauthn/browser" "^9.0.1"
-    "@walletconnect/ethereum-provider" "^2.13.3"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.7"
-    ofetch "^1.3.4"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
 
 "@privy-io/react-auth@1.74.1":
   version "1.74.1"
@@ -3090,6 +3070,11 @@ automerge-repo-network-peerjs@1.1.13:
   resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.1.13.tgz#17eaa583d21899dc10c73c042ad00d0fea7e4dae"
   integrity sha512-gcq+HsOeMsDzSpy3BEdxf5ptefCyznj4wLsOE0oMd/ywZnf+JNCP7DCZHZuzhEM4X5UnTFmhLiAs5kHkbNG8Hw==
 
+automerge-repo-network-peerjs@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.2.0.tgz#5f74f422f76923abaa2ca06c4a021e268c9446ba"
+  integrity sha512-ERxSzOSUm79+opFpzBXmt0OFI85NrT3aALBvs+L0AFXo4FbBP54VLEFSAUgQVQLuvDArA+8TY3UOyK5HMv0UmA==
+
 automerge-tldraw@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/automerge-tldraw/-/automerge-tldraw-0.2.0.tgz#75004c429ac6245249a62313840d21d94ae02b55"
@@ -4645,13 +4630,6 @@ formdata-node@^4.3.2:
   dependencies:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
-
-framer-motion@11.2.14:
-  version "11.2.14"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.2.14.tgz#739aa2eb7bcd4fe49f4cd9b88d352eb85d6cda8b"
-  integrity sha512-0Nwg++Jymj4Yn7LFKH/nKuGrgVZTEIgIbLjl+LBBFBEzNd4rX+n3z/doqjEbvjk1xcmsim9h7du2+LTYdQTULw==
-  dependencies:
-    tslib "^2.4.0"
 
 framer-motion@11.3.2:
   version "11.3.2"
@@ -7221,11 +7199,6 @@ react-spinners@0.14.1:
   resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.14.1.tgz#de7d7d6b3e6d4f29d9620c65495b502c7dd90812"
   integrity sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==
 
-react-virtuoso@4.7.11:
-  version "4.7.11"
-  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.7.11.tgz#1bf97885aae6f140f53487b48ebe87c37c57def3"
-  integrity sha512-Kdn9qEtQI2ulEuBMzW2BTkDsfijB05QUd6lpZ1K36oyA3k65Cz4lG4EKrh2pCfUafX4C2uMSZOwzMOhbrMOTFA==
-
 react-virtuoso@4.7.12:
   version "4.7.12"
   resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.7.12.tgz#06121211975bab0e8417dd88ac9a8aa78e3461fc"
@@ -8480,20 +8453,6 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
-
-viem@2.17.3:
-  version "2.17.3"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.17.3.tgz#f15616049d8154b83e499eb5446e6d7fe6312626"
-  integrity sha512-FY/1uBQWfko4Esy8mU1RamvL64TLy91LZwFyQJ20E6AI3vTTEOctWfSn0pkMKa3okq4Gxs5dJE7q1hmWOQ7xcw==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.4.0"
-    "@noble/hashes" "1.4.0"
-    "@scure/bip32" "1.4.0"
-    "@scure/bip39" "1.3.0"
-    abitype "1.0.5"
-    isows "1.0.4"
-    ws "8.17.1"
 
 viem@2.17.4:
   version "2.17.4"
