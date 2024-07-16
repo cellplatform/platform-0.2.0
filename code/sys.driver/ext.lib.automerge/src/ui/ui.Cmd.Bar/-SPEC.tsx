@@ -40,7 +40,6 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.store);
 
     await state.change((d) => {
       d.docuri = local.docuri;
@@ -50,6 +49,8 @@ export default Dev.describe(name, async (e) => {
       d.debug.useLens = local.useLens;
       d.debug.docVisible = local.docVisible;
     });
+
+    const sample = SampleCrdt.dev(state, local, db.store);
     doc = await sample.get();
 
     /**
@@ -188,7 +189,6 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const sample = SampleCrdt.dev(state, local, db.store);
-    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
