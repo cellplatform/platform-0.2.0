@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
  * Retrieve the history of the given document.
  */
 export function history<T extends O>(doc?: t.Doc<T>): t.DocHistory<T> {
-  const commits = doc ? A.getHistory<T>(doc.current) : [];
+  const commits = wrangle.commits(doc);
   let _genesis: t.DocHistoryGenesis<T> | false | undefined;
 
   /**
@@ -75,3 +75,13 @@ function isInitial(item: t.DocHistoryCommit) {
   const message = DEFAULTS.genesis.message;
   return change.time > 0 && change.message === message;
 }
+
+const wrangle = {
+  commits<T extends O>(doc?: t.Doc<T>): t.State<T>[] {
+    try {
+      return doc?.current ? A.getHistory<T>(doc.current) : [];
+    } catch (error: any) {
+      return [];
+    }
+  },
+} as const;

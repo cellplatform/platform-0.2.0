@@ -127,9 +127,8 @@ export default Dev.describe(name, async (e) => {
             }}
             run={{
               ctrl,
-              onRun(e) {
-                '⚡️💦🐷🌳🦄 🍌🧨🌼✨🧫 🐚👋🧠⚠️ 💥👁️ ↑↓←→';
-                console.log('⚡️ CmdBar.Dev.Main:Run:onRun', e);
+              onInvoke(e) {
+                console.log('⚡️ CmdBar.Dev.Main:Run: onRun', e);
               },
             }}
           />
