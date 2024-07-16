@@ -15,8 +15,6 @@ export function editorController(args: {
   const life = rx.lifecycle(args.dispose$);
   const cmdbar = main.cmdbar;
 
-  // main.state.
-
   // Document (State).
   type T = { config?: t.EditorState };
   const lens = Doc.lens<O, T>(main.state.me, ['root'], { init: (d) => (d.root = {}) });
@@ -63,7 +61,6 @@ export function editorController(args: {
    */
   if (lens.current.config?.selections) {
     const list = lens.current.config.selections;
-    console.log('set selections', list);
     try {
       if (list.length > 0) editor.setSelections(list);
     } catch (error) {

@@ -15,6 +15,10 @@ export type Shell = {
     readonly harness: t.Lens<Harness>;
     readonly tmp: t.Lens<Tmp>;
   };
+  readonly store: {
+    readonly fs: t.Store;
+    readonly tmp: t.Store;
+  };
 };
 
 /**

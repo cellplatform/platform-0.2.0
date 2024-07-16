@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CmdBar } from 'sys.ui.react.common';
-import { Color, css, type t } from './common';
+import { Monaco, Color, css, type t, Value, Yaml, DocUri } from './common';
 
 export type CmdMainProps = {
   main: t.Shell;
@@ -22,7 +22,7 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
     const events = cmdbar?.ctrl.events();
 
     events?.$.subscribe((e) => {
-      console.log('ctrl.event', e);
+      // console.log('ctrl.event', e);
     });
 
     return events?.dispose;
@@ -49,15 +49,51 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
     }),
   };
 
+  const ctrl = cmdbar;
   return (
     <div {...css(styles.base, props.style)}>
       <CmdBar.Dev.Main
         theme={theme.name}
         fields={['Module.Args', 'Module.Run']}
-        argsCard={{
+        argsCard={{ argv, ctrl, focused: { cmdbar: cmdbar?.current.focused } }}
+        run={{
+          ctrl,
           argv,
-          ctrl: cmdbar,
-          focused: { cmdbar: cmdbar?.current.focused },
+
+          async onArgsChanged(e) {
+            const { args } = e;
+            const pos = args._;
+            const clear = () => e.render(null);
+
+            if (pos[0] === 'cmd') {
+              if (pos[1] === 'me') {
+                const { Me } = await import('./ui.Me');
+                return e.render(<Me main={main} theme={e.theme} />);
+              }
+              if (pos[1]?.startsWith('crdt:')) {
+                const { Crdt } = await import('./ui.Crdt');
+                const uri = pos[1];
+                return e.render(<Crdt main={main} theme={e.theme} docuri={uri} />);
+              }
+            }
+
+            clear();
+          },
+
+          async onInvoke(e) {
+            const { args } = e;
+            const pos = args._;
+
+            if (pos[0] === 'cmd') {
+              if (pos[1] === 'crdt' && pos[2] === 'create') {
+                const { Crdt } = await import('./ui.Crdt');
+
+                const doc = await main.store.tmp.doc.getOrCreate(() => null);
+                const uri = doc.uri;
+                return e.render(<Crdt main={main} theme={e.theme} docuri={uri} />);
+              }
+            }
+          },
         }}
       />
     </div>

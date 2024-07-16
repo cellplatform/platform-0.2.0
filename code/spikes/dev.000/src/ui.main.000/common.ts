@@ -6,7 +6,15 @@ import Yaml from 'yaml';
 /**
  * @ext
  */
-export { Crdt, Info as CrdtInfo, Doc, RepoList, WebStore, toObject } from 'ext.lib.automerge';
+export {
+  Crdt,
+  Info as CrdtInfo,
+  Doc,
+  RepoList,
+  WebStore,
+  toObject,
+  DocUri,
+} from 'ext.lib.automerge';
 export { PeerRepoList, WebrtcStore } from 'ext.lib.automerge.webrtc';
 export { Peer, PeerUI } from 'ext.lib.peerjs';
 
