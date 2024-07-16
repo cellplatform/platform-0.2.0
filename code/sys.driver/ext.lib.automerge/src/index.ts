@@ -38,3 +38,4 @@ export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui/ui.use';
  */
 export { Specs } from './test.ui/entry.Specs';
 export { TestDb } from './test.ui/TestDb';
+export { SampleCrdt } from './test.ui/SampleCrdt';
