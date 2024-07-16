@@ -9,6 +9,7 @@ export { Pkg };
  */
 import { Monaco as MonacoBase } from './common';
 import { Syncer } from './ui/logic.Syncer';
+import { CmdView } from './ui/ui.CmdView';
 
 export { Syncer };
 export const Monaco = {
