@@ -25,14 +25,13 @@ export default Dev.describe(name, async (e) => {
     await state.change((d) => {});
 
     const toLens = (shared: t.NetworkStoreShared) => shared.ns.lens('foo', { text: '' });
-    monitorPeer(dev, left, (shared) => (lenses.left = toLens(shared)));
-    monitorPeer(dev, right, (shared) => (lenses.right = toLens(shared)));
+    lenses.left = toLens(left.network.shared);
+    lenses.right = toLens(right.network.shared);
 
     const theme: t.CommonTheme = 'Dark';
     Dev.Theme.background(ctx, theme);
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>(async (e) => {
-      if (!(lenses.left && lenses.right)) return null;
       return <Layout left={lenses.left} right={lenses.right} path={['text']} theme={theme} />;
     });
   });
@@ -48,18 +47,3 @@ export default Dev.describe(name, async (e) => {
     TestEdge.dev.infoPanels(dev, left.network, right.network);
   });
 });
-
-/**
- * Helpers
- */
-const monitorPeer = (
-  dev: t.DevTools,
-  edge: t.NetworkConnectionEdge,
-  toLens?: (shared: t.NetworkStoreShared) => t.Lens,
-) => {
-  const handleConnection = () => {
-    toLens?.(edge.network.shared);
-    dev.redraw();
-  };
-  edge.network.peer.events().cmd.conn$.subscribe(handleConnection);
-};

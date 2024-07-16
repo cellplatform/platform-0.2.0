@@ -36,8 +36,20 @@ export const Shared = {
      * Get or create a [Shared] document type from the given store.
      */
     async getOrCreate(store: t.Store, uri?: string) {
-      const { binary } = await import('./Shared.binary');
-      return store.doc.getOrCreate<t.CrdtShared>(binary, uri);
+      /**
+       * NOTE: as over verion 1.2.0 of [automerge-repo] this "binary hack" started
+       *       causing sync errors, and was able to be removed and continued
+       *       to work.  Discord discussion on the matter here:
+       *
+       *          https://discord.com/channels/1200006940210757672/1202325266937159690/1262593958467469355
+       *
+       * When we are sure this works, this can be deleted.
+       */
+
+      // const { binary } = await import('./Shared.binary');
+      // return store.doc.getOrCreate<t.CrdtShared>(binary, uri);
+
+      return store.doc.getOrCreate<t.CrdtShared>((d) => Shared.Doc.init(d), uri);
     },
   },
 
