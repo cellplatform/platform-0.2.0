@@ -26,7 +26,7 @@ export const Pkg: ModuleDef = {
     'retext-english': '5.0.0',
     'retext-stringify': '4.0.0',
     'sys.util': '0.0.0',
-    'unified': '11.0.4',
+    'unified': '11.0.5',
     'unist-util-select': '5.1.0',
     'yaml': '2.4.5',
   },
