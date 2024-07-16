@@ -47,6 +47,16 @@ export const DocUri = {
   },
 
   /**
+   * Convert input to URI string.
+   */
+  toString(input?: t.Doc | string): string {
+    if (!input) return '';
+    if (typeof input === 'string') return input;
+    if (Is.doc(input)) return input.uri;
+    return '';
+  },
+
+  /**
    * Generate a new URI with a randomly generated document-id.
    */
   Generate: {
@@ -63,16 +73,6 @@ export const DocUri = {
         return documentId;
       },
     },
-  },
-
-  /**
-   * Convert input to URI string.
-   */
-  toString(input?: t.Doc | string): string {
-    if (!input) return '';
-    if (typeof input === 'string') return input;
-    if (Is.doc(input)) return input.uri;
-    return '';
   },
 } as const;
 
