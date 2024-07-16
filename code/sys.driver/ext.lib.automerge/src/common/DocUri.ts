@@ -1,4 +1,4 @@
-import { stringifyAutomergeUrl, parseAutomergeUrl } from '@automerge/automerge-repo';
+import { parseAutomergeUrl, stringifyAutomergeUrl } from '@automerge/automerge-repo';
 import { v4 } from 'uuid';
 import { Hash } from './libs';
 import { Is } from './u.Is';
@@ -49,9 +49,9 @@ export const DocUri = {
   /**
    * Generate a new URI with a randomly generated document-id.
    */
-  generate: {
+  Generate: {
     uri() {
-      const documentId = DocUri.generate.docid.binary();
+      const documentId = DocUri.Generate.docid.binary();
       return stringifyAutomergeUrl({ documentId });
     },
     docid: {
@@ -59,7 +59,7 @@ export const DocUri = {
         return v4(null, new Uint8Array(16)) as t.BinaryDocumentId;
       },
       string() {
-        const { documentId } = parseAutomergeUrl(DocUri.generate.uri());
+        const { documentId } = parseAutomergeUrl(DocUri.Generate.uri());
         return documentId;
       },
     },

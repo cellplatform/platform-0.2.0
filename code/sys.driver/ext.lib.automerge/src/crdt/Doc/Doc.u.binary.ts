@@ -27,7 +27,7 @@ export function fromBinary<T extends O>(args: {
   dispose$?: t.UntilObservable;
 }) {
   const { repo, binary, dispose$ } = args;
-  const uri = args.uri ?? DocUri.generate.uri();
+  const uri = args.uri ?? DocUri.Generate.uri();
   const id = DocUri.id(uri) as t.DocumentId;
   if (!Is.automergeUrl(uri)) throw new Error(`Invalid document URI: ${uri}`);
 

@@ -78,27 +78,27 @@ describe('Store.DocUri', async () => {
     });
   });
 
-  describe('DocUri.generate', () => {
+  describe('DocUri.Generate', () => {
     it('generate.docid.binary', () => {
-      const res1 = DocUri.generate.docid.binary();
-      const res2 = DocUri.generate.docid.binary();
+      const res1 = DocUri.Generate.docid.binary();
+      const res2 = DocUri.Generate.docid.binary();
       expect(res1).to.not.eql(res2); // NB: random on each call.
       expect(res1 instanceof Uint8Array).to.be.true;
     });
 
     it('generate.docid.string', () => {
-      const res = DocUri.generate.docid.string();
+      const res = DocUri.Generate.docid.string();
       expect(res).to.be.string;
     });
 
     it('generate.uri: random/unique', () => {
-      const res1 = DocUri.generate.uri();
-      const res2 = DocUri.generate.uri();
+      const res1 = DocUri.Generate.uri();
+      const res2 = DocUri.Generate.uri();
       expect(res1).to.not.eql(res2); // NB: random on each call.
     });
 
     it('generate.uri: is an automerge URL', () => {
-      const uri = DocUri.generate.uri();
+      const uri = DocUri.Generate.uri();
       expect(Is.automergeUrl(uri)).to.eql(true);
     });
   });
