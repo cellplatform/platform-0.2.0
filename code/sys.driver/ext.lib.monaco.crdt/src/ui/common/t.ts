@@ -9,6 +9,7 @@ export type {
   PropListItem,
   PropListProps,
   RenderCountProps,
+  CmdBarRef,
 } from 'sys.ui.react.common/src/types';
 
 /**

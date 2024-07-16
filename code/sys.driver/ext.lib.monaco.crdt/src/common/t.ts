@@ -7,14 +7,14 @@ export type { Observable } from 'rxjs';
 /**
  * @ext
  */
-export type { Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
+export type { Doc, Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
 export type {
   EditorRange,
   EditorState,
   Monaco,
   MonacoCodeEditor,
-  SelectionOffset,
   Selection,
+  SelectionOffset,
 } from 'ext.lib.monaco/src/types';
 
 /**
@@ -23,6 +23,7 @@ export type {
 export type {
   Disposable,
   EventBus,
+  Json,
   Lifecycle,
   Msecs,
   ObjectPath,

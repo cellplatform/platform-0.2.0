@@ -10,6 +10,7 @@ export { MonacoEditor } from 'ext.lib.monaco';
 export {
   Button,
   COLORS,
+  CmdBar,
   Color,
   FC,
   Keyboard,

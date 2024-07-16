@@ -7,10 +7,10 @@ export const R = { equals } as const;
 /**
  * @ext.lib
  */
-export { A, Doc, Store, WebStore } from 'ext.lib.automerge';
+export { A, Crdt, Doc, Store, WebStore } from 'ext.lib.automerge';
 export { Monaco } from 'ext.lib.monaco';
 
 /**
  * @system
  */
-export { ObjectPath, Path, Time, rx } from 'sys.util';
+export { Immutable, ObjectPath, Path, rx, Time } from 'sys.util';
