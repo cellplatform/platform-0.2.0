@@ -1,7 +1,5 @@
-import { Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
-import { head } from './field.Doc.Head';
+import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
-import { DocUriButton } from './ui.Doc.UriButton';
 
 type D = t.InfoDataDoc;
 
@@ -14,7 +12,7 @@ export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined) {
 function render(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   if (!data) return res;
-  if (!Is.docRef(data.ref)) return res;
+  if (!Is.doc(data.ref)) return res;
 
   const { fields, theme } = ctx;
   const doc = data.ref;
@@ -41,20 +39,24 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     const parts: JSX.Element[] = [];
 
     if (uri) {
-      const { shorten, prefix, clipboard } = data.uri ?? {};
+      const { shorten, prefix, head, clipboard } = data.uri ?? {};
       parts.push(
-        <DocUriButton
+        <DocUri
           theme={theme}
-          uri={uri}
-          shorten={shorten}
+          uri={doc.uri}
           prefix={prefix}
+          shorten={shorten}
+          head={head}
+          heads={Doc.heads(doc)}
           clipboard={clipboard}
         />,
       );
     }
 
     if (doc) {
-      parts.push(<Icons.Object size={14} />);
+      const isLens = !!data.object?.lens || Doc.Is.lens(doc);
+      const Icon = isLens ? Icons.Object : Icons.Repo;
+      parts.push(<Icon size={14} />);
     } else {
       parts.push(<>{'-'}</>);
     }
@@ -94,11 +96,6 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
   }
 
   /**
-   * The <Head> component.
-   */
-  if (fields.includes('Doc.Head')) res.push(...head(ctx, data));
-
-  /**
    * The <History> component.
    */
   if (fields.includes('Doc.History')) res.push(...history(ctx, data));
@@ -127,7 +124,7 @@ const wrangle = {
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
-    let output = Is.docRef(data.ref) ? data.ref.current : undefined;
+    let output = Is.doc(data.ref) ? data.ref.current : undefined;
     const lens = data.object?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 

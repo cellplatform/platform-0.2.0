@@ -13,4 +13,4 @@ export { Monaco } from 'ext.lib.monaco';
 /**
  * @system
  */
-export { Time, rx, Path } from 'sys.util';
+export { ObjectPath, Path, Time, rx } from 'sys.util';

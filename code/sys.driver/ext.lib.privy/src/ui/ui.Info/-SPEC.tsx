@@ -34,7 +34,7 @@ export default Dev.describe(name, (e) => {
   };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
-    theme: undefined,
+    theme: 'Dark',
     enabled: true,
     fields: DEFAULTS.fields.default,
     selectedChain: DEFAULTS.data!.chain!.selected,
@@ -200,6 +200,8 @@ export default Dev.describe(name, (e) => {
         (d, value) => (local.theme = d.props.theme = value),
       );
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn
@@ -207,8 +209,6 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
       });
-
-      dev.hr(-1, 5);
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.clipboard);

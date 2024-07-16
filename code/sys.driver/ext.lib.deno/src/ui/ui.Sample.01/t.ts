@@ -20,4 +20,4 @@ export type SampleProps = {
 };
 
 export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
-export type EditorEventHandlerArgs = { text: string };
+export type EditorEventHandlerArgs = t.EditorState;

@@ -38,8 +38,19 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const ctx: t.InfoFieldArgs = { privy, data, enabled, theme, fields, modifiers };
 
   const copyable = (label: string, value?: string): t.PropListItem => {
-    const copy = clipboard && enabled && value ? value : false;
-    return { label, value: { body: value ?? '-', clipboard: copy } };
+    const canCopy = !!(clipboard && enabled && value ? value : false);
+    return {
+      label,
+      value: {
+        body: value ?? '-',
+        onClick:
+          canCopy &&
+          ((e) => {
+            navigator.clipboard.writeText(String(value));
+            e.message('copied');
+          }),
+      },
+    };
   };
 
   /**
@@ -84,7 +95,6 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       title={PropList.Info.title(props)}
       items={items}
       width={PropList.Info.width(props)}
-      defaults={{ clipboard: false }}
       margin={props.margin}
       theme={theme}
       style={props.style}

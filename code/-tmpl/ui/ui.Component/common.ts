@@ -4,6 +4,8 @@ export * from '../common';
 /**
  * Constants
  */
+const name = 'UNNAMED'; // TODO 🐷
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Unnamed`,
+  name,
+  displayName: `${Pkg.name}:${name}`,
 } as const;

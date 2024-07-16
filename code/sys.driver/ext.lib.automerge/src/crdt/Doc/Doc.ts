@@ -1,8 +1,8 @@
 import { Lens } from '../Doc.Lens';
 import { Namespace } from '../Doc.Namespace';
+import { Text } from '../Doc.Text';
 import { DocMeta as Meta } from './Doc.Meta';
 import { DocPatch as Patch } from './Doc.Patch';
-import { Text } from '../Doc.Text';
 import { toBinary } from './Doc.u.binary';
 import { del } from './Doc.u.delete';
 import { ephemeral } from './Doc.u.ephemeral';
@@ -26,8 +26,8 @@ export const Doc = {
   Text,
 
   Lens,
-  Namespace,
   lens: Lens.create,
+  Namespace,
   ns: Namespace.create,
 
   get,

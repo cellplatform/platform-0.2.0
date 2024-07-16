@@ -42,7 +42,6 @@ export type PropListItemFactory = () => (PropListItem | t.Falsy) | (PropListItem
  * Default values used when optional properties are ommitted.
  */
 export type PropListDefaults = {
-  readonly clipboard?: boolean;
   readonly monospace?: boolean;
 };
 
@@ -57,7 +56,7 @@ export type PropListItem = {
   readonly indent?: number;
   readonly selected?: boolean | PropListItemSelected;
   readonly divider?: boolean;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
 };
 
 /**
@@ -65,7 +64,7 @@ export type PropListItem = {
  */
 export type PropListLabel = {
   readonly body?: string | number | JSX.Element;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
   readonly toggle?: { open?: boolean };
 };
 
@@ -78,13 +77,12 @@ export type PropListValue = PropListValueGeneric | PropListValueKinds;
 
 type ValueBase = {
   readonly monospace?: boolean;
-  readonly clipboard?: string | boolean | (() => string | undefined);
   readonly color?: string | number;
   readonly fontSize?: number;
   readonly bold?: boolean;
   readonly opacity?: number;
   readonly indent?: number;
-  readonly onClick?: t.PropListItemHandler;
+  readonly onClick?: t.PropListItemHandler | false;
 };
 
 export type PropListValueGeneric = ValueBase & {
@@ -103,6 +101,7 @@ export type PropListValueSwitch = ValueBase & {
  */
 export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {
+  readonly theme: t.CommonTheme;
   readonly item: PropListItem;
   readonly value: PropListValue;
   readonly modifiers: t.KeyboardModifierFlags;

@@ -96,13 +96,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <PropList
-        //
-        title={props.title}
-        items={items}
-        defaults={{ clipboard: false }}
-        theme={theme}
-      />
+      <PropList title={props.title} items={items} theme={theme} />
     </div>
   );
 };

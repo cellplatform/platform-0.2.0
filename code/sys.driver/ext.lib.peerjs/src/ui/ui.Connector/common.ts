@@ -8,7 +8,7 @@ export { Data, Model } from '../ui.Connector.Model';
  */
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Connector`,
+  displayName: `${Pkg.name}:Connector`,
   tabIndex: 0,
   behaviors: {
     get all(): t.ConnectorBehavior[] {

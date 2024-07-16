@@ -12,4 +12,4 @@ export const R = { clone, equals, uniq, uniqBy } as const;
  */
 export { Cmd } from 'sys.cmd';
 export { IndexedDb } from 'sys.data.indexeddb';
-export { Delete, Hash, Id, ObjectPath, Time, Value, cuid, rx, slug } from 'sys.util';
+export { Args, Delete, Hash, Id, ObjectPath, Time, Value, cuid, rx, slug } from 'sys.util';

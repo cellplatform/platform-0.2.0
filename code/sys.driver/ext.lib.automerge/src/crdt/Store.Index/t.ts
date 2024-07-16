@@ -12,7 +12,7 @@ type AddInput = t.StoreIndexAddParam | Uri;
  */
 export type StoreIndexState = {
   readonly store: t.Store;
-  readonly doc: t.DocRef<t.StoreIndex>;
+  readonly doc: t.Doc<t.StoreIndex>;
   readonly toggleShared: t.StoreIndexToggleShared;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
   exists(uri: UriInput): boolean;

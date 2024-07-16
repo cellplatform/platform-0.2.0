@@ -21,11 +21,6 @@ export const factory = ModuleLoader.factory<t.SampleName, t.SampleFactoryCtx>(as
     return <DenoDeploy store={store} docuri={docuri} accessToken={accessToken} />;
   }
 
-  if (e.name === 'ModuleNamespace') {
-    const { ModuleNamespace } = await import('sys.ui.react.common');
-    return <ModuleNamespace />;
-  }
-
   if (e.name === 'ImageCrdt') {
     const { ImageCrdt } = await import('./ui.ImageCrdt');
     return <ImageCrdt store={store} docuri={docuri} />;

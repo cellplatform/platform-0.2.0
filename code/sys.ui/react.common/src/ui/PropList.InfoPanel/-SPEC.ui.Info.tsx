@@ -13,7 +13,7 @@ const fields = {
   },
 };
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   query: { dev: 'dev' },
   fields,
 } as const;
@@ -40,7 +40,6 @@ export const Info: React.FC<t.InfoProps> = (props) => {
       title={title}
       items={items}
       width={PropList.Info.width(props)}
-      defaults={{ clipboard: false }}
       theme={theme}
       margin={props.margin}
       style={props.style}

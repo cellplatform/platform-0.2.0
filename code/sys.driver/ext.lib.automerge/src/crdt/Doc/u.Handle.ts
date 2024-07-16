@@ -5,23 +5,23 @@ import { Wrangle } from './u.Wrangle';
 type O = Record<string, unknown>;
 
 /**
- * Convert a DocRef → DocRefHandle.
+ * Convert a Doc<T> → DocWithHandle<T>.
  */
-export function toHandle<T extends O>(doc: t.DocRef<T>) {
-  return (doc as t.DocRefHandle<T>).handle;
+export function toHandle<T extends O>(doc: t.Doc<T>) {
+  return (doc as t.DocWithHandle<T>).handle;
 }
 
 export const Handle = {
   toHandle,
 
   /**
-   * Wrap a raw automerge document-handle as a [DocRefHandle].
+   * Wrap a raw automerge document-handle as a [DocWithHandle].
    */
   wrap<T extends O>(
     handle: t.DocHandle<T>,
     options: { dispose$?: t.UntilObservable } = {},
-  ): t.DocRefHandle<T> {
-    const api: t.DocRefHandle<T> = {
+  ): t.DocWithHandle<T> {
+    const api: t.DocWithHandle<T> = {
       instance: slug(),
       uri: handle.url,
       handle,
@@ -46,7 +46,7 @@ export const Handle = {
         return toObject<T>(api.current);
       },
     };
-    (api as any)[Symbols.kind] = Symbols.DocRef;
+    (api as any)[Symbols.kind] = Symbols.Doc;
     return api;
   },
 } as const;

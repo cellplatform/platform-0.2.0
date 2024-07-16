@@ -5,7 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   fields: {
     get all(): t.InfoField[] {
       return ['Module', 'Module.Verify', 'Component'];

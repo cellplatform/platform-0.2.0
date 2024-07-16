@@ -6,5 +6,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Dev.PeerCard`,
+  displayName: `${Pkg.name}:Dev.PeerCard`,
 } as const;

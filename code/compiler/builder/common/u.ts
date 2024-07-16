@@ -1,19 +1,19 @@
 import type * as t from '../t';
 
 import { fs } from './fs';
-import { FindUtil } from './u.Find';
+import { Find } from './u.Find';
 import { folderSize } from './u.FolderSize';
-import { JsonUtil, PackageJsonUtil } from './u.Json';
-import { VersionUtil } from './u.Version';
+import { Json, PackageJson } from './u.Json';
+import { Version } from './u.Version';
 
 /**
  * Common helpers.
  */
 export const Util = {
-  Json: JsonUtil,
-  PackageJson: PackageJsonUtil,
-  Version: VersionUtil,
-  Find: FindUtil,
+  Json,
+  PackageJson,
+  Version,
+  Find,
 
   asArray,
   folderSize,
@@ -47,7 +47,7 @@ export const Util = {
     const exists = await fs.pathExists(path);
     return exists ? ((await import(path)).Pkg as T) : undefined;
   },
-};
+} as const;
 
 /**
  * Helpers

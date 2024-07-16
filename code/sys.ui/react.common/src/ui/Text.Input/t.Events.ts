@@ -29,6 +29,7 @@ export type TextInputEvents = t.Lifecycle & {
   readonly focus$: t.Observable<t.TextInputFocusArgs>;
   readonly key$: t.Observable<t.TextInputKeyEventPayload>;
   readonly tab$: t.Observable<t.TextInputTabArgs>;
+  readonly selection$: t.Observable<t.TextInputSelection>;
   onChange(fn: t.TextInputChangeHandler): void;
   onKeyDown(fn: t.TextInputKeyHandler): void;
   onKeyUp(fn: t.TextInputKeyHandler): void;
@@ -38,6 +39,7 @@ export type TextInputEvents = t.Lifecycle & {
   onFocus(fn: t.TextInputFocusHandler): void;
   onBlur(fn: t.TextInputFocusHandler): void;
   onFocusChange(fn: t.TextInputFocusHandler): void;
+  onSelection(fn: t.TextInputSelectHandler): void;
 };
 
 /**
@@ -47,7 +49,8 @@ export type TextInputEvent =
   | TextInputChangeEvent
   | TextInputFocusEvent
   | TextInputTabEvent
-  | TextInputKeyEvent;
+  | TextInputKeyEvent
+  | TextInputSelectionEvent;
 
 export type TextInputChangeEvent = { type: 'sys.TextInput:Change'; payload: t.TextInputChangeArgs };
 export type TextInputFocusEvent = { type: 'sys.TextInput:Focus'; payload: t.TextInputFocusArgs };
@@ -56,4 +59,8 @@ export type TextInputKeyEvent = { type: 'sys.TextInput:Key'; payload: TextInputK
 export type TextInputKeyEventPayload = {
   action: 'KeyDown' | 'KeyUp' | 'Enter' | 'Escape';
   event: t.TextInputKeyArgs;
+};
+export type TextInputSelectionEvent = {
+  type: 'sys.TextInput:Selection';
+  payload: t.TextInputSelection;
 };

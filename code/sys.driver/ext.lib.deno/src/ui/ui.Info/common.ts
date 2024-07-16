@@ -13,7 +13,7 @@ const endpoint: t.DenoHttpOptions = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Info`,
+  displayName: `${Pkg.name}:Info`,
   stateful: false,
   endpoint,
   fields: {

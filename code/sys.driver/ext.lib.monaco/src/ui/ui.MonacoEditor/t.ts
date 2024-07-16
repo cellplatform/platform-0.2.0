@@ -10,6 +10,8 @@ export type MonacoEditorProps = {
   placeholder?: string;
   focusOnLoad?: boolean;
   tabSize?: number;
+  minimap?: boolean;
+  readOnly?: boolean;
   style?: t.CssValue;
   onChange?: t.MonacoEditorChangeHandler;
   onReady?: t.MonacoEditorReadyHandler;
@@ -31,8 +33,8 @@ export type MonacoCodeEditor = monaco.editor.IStandaloneCodeEditor;
  */
 export type MonacoEditorReadyHandler = (e: MonacoEditorReadyHandlerArgs) => void;
 export type MonacoEditorReadyHandlerArgs = {
-  editor: MonacoCodeEditor;
-  monaco: Monaco;
+  readonly editor: MonacoCodeEditor;
+  readonly monaco: Monaco;
 };
 
 /**
@@ -40,8 +42,8 @@ export type MonacoEditorReadyHandlerArgs = {
  */
 export type MonacoEditorDisposedHandler = (e: MonacoEditorDisposedHandlerArgs) => void;
 export type MonacoEditorDisposedHandlerArgs = {
-  editor: MonacoCodeEditor;
-  monaco: Monaco;
+  readonly editor: MonacoCodeEditor;
+  readonly monaco: Monaco;
 };
 
 /**
@@ -49,6 +51,6 @@ export type MonacoEditorDisposedHandlerArgs = {
  */
 export type MonacoEditorChangeHandler = (e: MonacoEditorChangeHandlerArgs) => void;
 export type MonacoEditorChangeHandlerArgs = {
-  text: string;
-  event: monaco.editor.IModelContentChangedEvent;
+  readonly event: monaco.editor.IModelContentChangedEvent;
+  readonly state: t.EditorState;
 };

@@ -17,5 +17,7 @@ export type * from './t.number.time';
 export type * from './t.path';
 export type * from './t.react';
 export type * from './t.readonly';
+export type * from './t.size';
 export type * from './t.style';
+export type * from './t.text';
 export type * from './t.theme';

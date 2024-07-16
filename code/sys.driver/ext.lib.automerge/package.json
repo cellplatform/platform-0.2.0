@@ -11,7 +11,7 @@
     "tmp": "tsx   ./script.node/tmp.mts"
   },
   "dependencies": {
-    "@automerge/automerge": "2.2.2",
+    "@automerge/automerge": "2.2.4",
     "@automerge/automerge-repo": "1.1.12",
     "@automerge/automerge-repo-network-broadcastchannel": "1.1.12",
     "@automerge/automerge-repo-storage-indexeddb": "1.1.12",

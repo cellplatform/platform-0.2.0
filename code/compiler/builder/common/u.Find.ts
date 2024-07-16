@@ -1,6 +1,6 @@
 import { Paths } from '../Paths';
 import { fs } from './fs';
-import { PackageJsonUtil } from './u.Json';
+import { PackageJson } from './u.Json';
 import { TopologicalSort } from './u.TopologicalSort';
 
 import type * as t from '../t';
@@ -9,7 +9,7 @@ import type * as t from '../t';
  * Find helpers for looking up directory paths and other
  * queries on the project structure.
  */
-export const FindUtil = {
+export const Find = {
   /**
    * Find all project dirs within the project.
    */
@@ -21,7 +21,7 @@ export const FindUtil = {
     } = {},
   ) {
     const { hasViteConfig } = options;
-    const pkg = await PackageJsonUtil.load(Paths.rootDir);
+    const pkg = await PackageJson.load(Paths.rootDir);
 
     const findPattern = async (pattern: string) => fs.glob(fs.join(Paths.rootDir, pattern));
     const workspaces = pkg.workspaces ?? { packages: [] };
@@ -35,8 +35,8 @@ export const FindUtil = {
     });
 
     const { sortBy = 'Alpha' } = options;
-    if (sortBy === 'Alpha') dirs = await FindUtil.sortAlpha(dirs);
-    if (sortBy === 'Topological') dirs = await FindUtil.sortTopological(dirs);
+    if (sortBy === 'Alpha') dirs = await Find.sortAlpha(dirs);
+    if (sortBy === 'Topological') dirs = await Find.sortTopological(dirs);
 
     return dirs;
   },
@@ -77,7 +77,7 @@ export const FindUtil = {
       .filter(Boolean)
       .reverse();
   },
-};
+} as const;
 
 /**
  * Helpers

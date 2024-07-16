@@ -9,7 +9,7 @@ export * from '../common';
 const total: t.GridPoint = { x: 3, y: 3 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Grid`,
+  displayName: `${Pkg.name}:Grid`,
   config,
   total,
   gap: 0,

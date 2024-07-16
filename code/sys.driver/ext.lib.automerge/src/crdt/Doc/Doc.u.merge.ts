@@ -6,6 +6,6 @@ type O = Record<string, unknown>;
 /**
  * Helper for merging one document into another.
  */
-export function merge<T extends O>(source: t.DocRef<T>, target: t.DocRef<T>) {
+export function merge<T extends O>(source: t.Doc<T>, target: t.Doc<T>) {
   toHandle(target).merge(toHandle(source));
 }

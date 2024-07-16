@@ -11,9 +11,6 @@ export const Specs = {
   [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
   [`${ns}.ui.Network.Connection`]: () => import('../ui/ui.Network.Connection/-SPEC'),
   [`${ns}.ui.Sample.TextboxSync`]: () => import('../ui/ui.Sample.TextboxSync/-SPEC'),
-  [`${ns}.ui.__Network.CmdHost`]: () => import('../ui/__ui.Network.CmdHost/-SPEC'),
-  [`${ns}.ui.__Network.CmdHosts`]: () => import('../ui/__ui.Network.CmdHosts/-SPEC'),
-  [`${ns}.ui.__Network.CmdHost.Prefix`]: () => import('../ui/__ui.Network.CmdHost.Prefix/-SPEC'),
   [`${ns}.ui.Sample.01`]: () => import('../ui/ui.Sample.01/-SPEC'),
   [`${ns}.ui.Sample.02`]: () => import('../ui/ui.Sample.02/-SPEC'),
 } as t.SpecImports;

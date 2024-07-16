@@ -9,5 +9,5 @@ export { RepoList } from '../ui.RepoList';
  */
 export const DEFAULTS = {
   ...BASE,
-  displayName: `${Pkg.name}.RepoList.Virtual`,
+  displayName: `${Pkg.name}:RepoList.Virtual`,
 } as const;

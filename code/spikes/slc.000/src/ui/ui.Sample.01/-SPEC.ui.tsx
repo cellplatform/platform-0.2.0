@@ -24,19 +24,23 @@ export const Sample: React.FC<SampleProps> = (props) => {
       placeItems: 'center',
       fontSize: 120,
     }),
-    right: css({
+    editor: css({
       display: 'grid',
     }),
   };
 
   const code = '# Social Lean Canvas\n';
 
+  const elEditor = (
+    <div {...styles.editor}>
+      <MonacoEditor theme={'Dark'} language={'yaml'} text={code} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
+      {elEditor}
       <div {...styles.left}>{`🐷`}</div>
-      <div {...styles.right}>
-        <MonacoEditor theme={'Dark'} language={'yaml'} text={code} />
-      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { type PluginOption } from 'vite';
+import type { PluginOption } from 'vite';
 
 /**
  * Display a console output during startup

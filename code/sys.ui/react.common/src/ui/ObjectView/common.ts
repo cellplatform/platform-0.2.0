@@ -22,7 +22,7 @@ const formatter: t.ObjectViewFormatter = (data) => {
 const theme: t.CommonTheme = 'Light';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.ObjectView`,
+  displayName: `${Pkg.name}:ObjectView`,
   theme,
   formatter,
   font: { size: 12 },

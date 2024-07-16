@@ -11,7 +11,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   const history = data?.history;
   if (!data || !history) return res;
-  if (!Is.docRef(data.ref)) return res;
+  if (!Is.doc(data.ref)) return res;
 
   const doc = data.ref;
   const showGenesis = fields.includes('Doc.History.Genesis');
@@ -52,7 +52,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
  * Helpers
  */
 const wrangle = {
-  page(doc: t.DocRef, list: t.InfoDataDocHistory['list'] = {}) {
+  page(doc: t.Doc, list: t.InfoDataDocHistory['list'] = {}) {
     const defaults = DEFAULTS.history.list;
     const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = list;
     return Doc.history(doc).page(page, limit, sort);

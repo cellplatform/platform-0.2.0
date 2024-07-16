@@ -13,6 +13,7 @@ import {
 } from 'react-icons/md';
 import { RxOpenInNewWindow } from 'react-icons/rx';
 import { TbCopy } from 'react-icons/tb';
+import { VscSymbolClass } from 'react-icons/vsc';
 
 const icon = Icon.renderer;
 
@@ -28,5 +29,6 @@ export const Icons = {
   Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
   Align: { Center: icon(MdOutlineVerticalAlignCenter) },
   NewTab: icon(RxOpenInNewWindow),
+  Object: icon(VscSymbolClass),
   Triangle: { Right: icon(GoTriangleRight) },
 } as const;

@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import { Button, COLORS, Color, FONTS, Time, css, type t } from './common';
 
+type P = t.MonospaceButtonProps;
+/**
+ * Constants
+ */
+const edge: t.MonospaceButtonEdge = { text: '', opacity: 0.4, margin: 2 };
+const DEFAULTS = { edge } as const;
+
 /**
  * A button with monospace font.
  */
-export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
-  const { text = '', prefix } = props;
+export const MonospaceButton: React.FC<P> = (props) => {
+  const { text = '', fontSize } = props;
+  const prefix = wrangle.edge(props.prefix);
+  const suffix = wrangle.edge(props.suffix);
+
   const [message, setMessage] = useState<JSX.Element | undefined>();
+  const [isOver, setOver] = useState(false);
 
   /**
    * Handlers
@@ -33,19 +44,54 @@ export const MonospaceButton: React.FC<t.MonospaceButtonProps> = (props) => {
   const color = theme.fg;
   const styles = {
     base: css({ color, Flex: 'x-center-center' }),
-    mono: css(FONTS.mono),
-    prefix: css({ color, opacity: 0.4, marginRight: props.prefixMargin }),
+    mono: css({
+      ...FONTS.mono,
+      fontSize: fontSize ?? FONTS.mono.fontSize,
+    }),
     copied: css({ color: COLORS.GREEN }),
+    prefix: css({
+      color: isOver ? COLORS.BLUE : color,
+      opacity: isOver ? 1 : prefix.opacity,
+    }),
+    suffix: css({
+      color: isOver ? COLORS.BLUE : color,
+      opacity: isOver ? 1 : suffix.opacity,
+    }),
   };
+
+  const elPrefix = prefix && (
+    <span {...css(styles.prefix, { marginRight: prefix.margin })}>{prefix.text}</span>
+  );
+
+  const elSuffix = suffix && (
+    <span {...css(styles.suffix, { marginLeft: suffix.margin })}>{suffix.text}</span>
+  );
 
   return (
     <div {...css(styles.base, styles.mono, props.style)}>
-      <Button theme={theme.name} onClick={handleClick} overlay={message}>
+      <Button
+        theme={theme.name}
+        onClick={handleClick}
+        overlay={message}
+        onMouse={(e) => setOver(e.isOver)}
+      >
         <>
-          {prefix && <span {...styles.prefix}>{prefix}</span>}
+          {elPrefix}
           <span>{text}</span>
+          {elSuffix}
         </>
       </Button>
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  edge(input?: string | t.MonospaceButtonEdge): t.MonospaceButtonEdge {
+    if (!input) return DEFAULTS.edge;
+    if (typeof input === 'string') return { ...DEFAULTS.edge, text: input };
+    return input;
+  },
+} as const;

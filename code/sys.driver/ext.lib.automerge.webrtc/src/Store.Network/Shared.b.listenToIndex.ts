@@ -6,7 +6,7 @@ import { type t } from './common';
  */
 export function listenToIndex(
   index: t.StoreIndexState,
-  shared: t.DocRef<t.CrdtShared>,
+  shared: t.Doc<t.CrdtShared>,
   options: { debugLabel?: string; dispose$?: t.UntilObservable } = {},
 ) {
   const { debugLabel, dispose$ } = options;

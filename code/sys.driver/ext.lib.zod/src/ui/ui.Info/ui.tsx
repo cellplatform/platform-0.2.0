@@ -15,7 +15,6 @@ export const View: React.FC<t.InfoProps> = (props) => {
     <PropList
       title={PropList.Info.title(props)}
       items={items}
-      defaults={{ clipboard: false }}
       width={PropList.Info.width(props)}
       theme={ctx.theme}
       margin={props.margin}

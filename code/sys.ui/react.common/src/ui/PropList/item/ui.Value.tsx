@@ -1,4 +1,4 @@
-import { css, format, useMouse, type t } from './common';
+import { DEFAULTS, css, format, useMouse, type t } from './common';
 import { SimpleValue } from './ui.Value.Simple';
 import { SwitchValue } from './ui.Value.Switch';
 import { useHandler } from './use.Handler';
@@ -8,19 +8,19 @@ export type PropListValueProps = {
   hasLabel?: boolean;
   message?: string | JSX.Element;
   defaults: t.PropListDefaults;
+  isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   cursor?: t.CSSProperties['cursor'];
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const { hasLabel = true, theme } = props;
+  const { hasLabel = true, theme = DEFAULTS.theme } = props;
   const item = format(props.item);
   const value = item.value;
-  const isCopyable = item.isCopyable(props.defaults);
 
   const mouse = useMouse();
-  const handler = useHandler(props.item, props.defaults, item.value.onClick);
+  const handler = useHandler(props.item, item.value.onClick, theme);
   const cursor = props.cursor ?? handler.cursor;
 
   /**
@@ -42,19 +42,31 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
     const message = props.message ?? handler.message;
 
     if (kind === 'Switch') {
-      return <SwitchValue value={value} theme={theme} onClick={handler.onClick} />;
+      return (
+        <SwitchValue
+          theme={theme}
+          value={value}
+          isMouseOverItem={props.isMouseOverItem}
+          isMouseOverValue={mouse.is.over}
+          isItemClickable={item.isItemClickable}
+          isValueClickable={item.isValueClickable}
+          onClick={handler.onClick}
+        />
+      );
     }
 
     if (message || item.isSimple || item.isComponent) {
       return (
         <SimpleValue
+          theme={theme}
           value={value}
           message={message}
-          isOver={mouse.is.over}
-          isCopyable={isCopyable}
+          isMouseOverItem={props.isMouseOverItem}
+          isMouseOverValue={mouse.is.over}
+          isItemClickable={item.isItemClickable}
+          isValueClickable={item.isValueClickable}
           cursor={cursor}
           defaults={props.defaults}
-          theme={theme}
           onClick={handler.onClick}
         />
       );

@@ -25,25 +25,26 @@ describe('crdt.cmd (Command)', () => {
   describe('Lens (Command)', () => {
     it('has initial {cmd} structure upon creation', async () => {
       const { doc, dispose } = await setup();
-      const lens = Doc.lens(doc as t.DocRef, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));
+      const lens = Doc.lens(doc as t.Doc, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));
 
-      expect(Cmd.Is.initialized(doc.current)).to.eql(false);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(false);
+      expect(Cmd.Is.validState(doc.current)).to.eql(false);
+      expect(Cmd.Is.validState(lens.current)).to.eql(false);
 
       Cmd.create(doc);
-      expect(Cmd.Is.initialized(doc.current)).to.eql(true);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(false);
+      expect(Cmd.Is.validState(doc.current)).to.eql(true);
+      expect(Cmd.Is.validState(lens.current)).to.eql(false);
 
       Cmd.create(lens);
-      expect(Cmd.Is.initialized(lens.current)).to.eql(true);
-      expect(Cmd.Is.initialized((doc.current as any).foo.bar)).to.eql(true);
+
+      expect(Cmd.Is.validState(lens.current)).to.eql(true);
+      expect(Cmd.Is.validState((doc.current as any).foo.bar)).to.eql(true);
 
       dispose();
     });
 
     it('⚡️← on lens', async () => {
       const { doc, dispose, dispose$ } = await setup();
-      const lens = Doc.lens(doc as t.DocRef, ['foo'], (d) => (d.foo = {}));
+      const lens = Doc.lens(doc as t.Doc, ['foo'], (d) => (d.foo = {}));
       expect(doc.current).to.eql({ foo: {} });
 
       const cmd = Cmd.create<C>(lens);

@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, t } from './common';
+import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 
 /**

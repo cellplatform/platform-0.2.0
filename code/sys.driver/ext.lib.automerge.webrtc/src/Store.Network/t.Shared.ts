@@ -4,7 +4,7 @@ export type CrdtSharedMutateAction = 'unshare';
 
 export type CrdtSharedState = t.Lifecycle & {
   readonly kind: 'crdt.network.shared';
-  readonly doc: t.DocRef<t.CrdtShared>;
+  readonly doc: t.Doc<t.CrdtShared>;
   readonly ns: t.NamespaceManager<string>;
   events(dispose$?: t.UntilObservable): t.CrdtSharedEvents;
 };

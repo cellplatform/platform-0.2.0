@@ -1,20 +1,25 @@
 import { calculateDiff } from './-tmp.diff';
-import { Doc, Path, rx, type t } from './common';
+import { Doc, Path, Pkg, rx, type t } from './common';
 import { MonacoPatcher } from './u.MonacoPatch';
 
 type O = Record<string, unknown>;
+type Options = {
+  debugLabel?: string;
+  strategy?: t.UpdateTextStrategy | (() => t.UpdateTextStrategy | undefined);
+  dispose$?: t.UntilObservable;
+};
 
 /**
  * An adapter for managing 2-way binding between a code-editor UI
  * component and a CRDT (Automerge.Text) data-structure.
  */
-export function listen<T extends O>(
+export function listen(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
-  lens: t.Lens<T>,
-  target: t.TypedObjectPath<T>,
-  options: { dispose$?: t.UntilObservable; debugLabel?: string } = {},
-) {
+  lens: t.Lens,
+  target: t.ObjectPath, // NB: target path to write the editor string to.
+  options: Options = {},
+): t.SyncListener {
   const { debugLabel } = options;
   const life = rx.lifecycle(options.dispose$);
   life.dispose$.subscribe(() => handlerDidChangeModelContent.dispose());
@@ -25,14 +30,19 @@ export function listen<T extends O>(
   const patchMonaco = MonacoPatcher.init(monaco, editor);
   const Events = { lens: lens.events(life.dispose$) } as const;
   const Lens = {
-    get code() {
-      return Lens.resolve(lens.current) ?? '';
+    get current() {
+      return Lens.resolve(lens.current);
     },
-    resolve(doc: T) {
+    resolve(doc: O) {
       return Path.Object.resolve<string>(doc, target);
     },
-    splice(doc: T, index: number, del: number, text?: string) {
-      Doc.Text.splice(doc, [...target], index, del, text);
+    text: {
+      splice(doc: O, index: number, del: number, value?: string) {
+        Doc.Text.splice(doc, target, index, del, value);
+      },
+      replace(doc: O, value: string) {
+        Path.Object.mutate(doc, target, value);
+      },
     },
   } as const;
 
@@ -52,17 +62,17 @@ export function listen<T extends O>(
    * CRDT changed.
    */
   Events.lens.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
-    const prev = editor.getValue();
-    const next = Lens.resolve(e.after);
-    if (next === prev) return;
+    const before = editor.getValue();
+    const after = Lens.resolve(e.after) ?? '';
+    if (after === before) return;
 
     /**
      * TODO 🐷
      */
-    const diff = calculateDiff(Lens.resolve(e.before) ?? '', Lens.resolve(e.after) ?? '');
-    console.log('TODO 🐷 diff:', diff);
+    const diff = calculateDiff(Lens.resolve(e.before) || '', Lens.resolve(e.after) || '');
+    console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
 
-    const source = 'crdt-sync';
+    const source = 'crdt.sync';
     const patches = e.patches.filter((patch) => startsWith(patch.path, target));
     patches.forEach((patch) => {
       _ignoreChange = true;
@@ -88,18 +98,48 @@ export function listen<T extends O>(
       const isReplace = startLineNumber !== endLineNumber || startColumn !== endColumn;
       const index = change.rangeOffset;
       const deleteCount = isReplace ? change.rangeLength : 0;
-      lens.change((d) => Lens.splice(d, index, deleteCount, change.text));
+
+      const strategy = api.strategy;
+      if (strategy === 'Splice') {
+        lens.change((d) => Lens.text.splice(d, index, deleteCount, change.text));
+      }
+
+      if (strategy === 'Overwrite') {
+        lens.change((d) => Lens.text.replace(d, editor.getValue()));
+      }
     });
   });
 
   /**
    * Initialize.
    */
-  const initial = Lens.resolve(lens.current);
-  if (initial === undefined) lens.change((d) => Path.Object.mutate(d, target, ''));
-  if (typeof initial === 'string') changeEditorText(initial);
+  const initial = Lens.current;
+  if (initial === undefined) {
+    lens.change((d) => Path.Object.mutate(d, target, ''));
+  } else if (typeof initial === 'string') {
+    changeEditorText(initial);
+  }
 
-  return life;
+  /**
+   * API
+   */
+  const api: t.SyncListener = {
+    get strategy() {
+      const defaultValue: t.UpdateTextStrategy = 'Splice';
+      const { strategy } = options;
+      if (typeof strategy === 'string') return strategy;
+      if (typeof strategy === 'function') strategy() ?? defaultValue;
+      return defaultValue;
+    },
+
+    // Lifecycle.
+    dispose: life.dispose,
+    dispose$: life.dispose$,
+    get disposed() {
+      return life.disposed;
+    },
+  };
+  return api;
 }
 
 /**

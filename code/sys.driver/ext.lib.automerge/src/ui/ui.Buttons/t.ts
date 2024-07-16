@@ -1,12 +1,15 @@
 import type { t } from './common';
 
+export type MonospaceButtonEdge = { text: string; margin?: number; opacity?: number };
+
 /**
  * Component: <MonospaceButton>
  */
 export type MonospaceButtonProps = {
   text?: string;
-  prefix?: string;
-  prefixMargin?: number;
+  prefix?: string | MonospaceButtonEdge;
+  suffix?: string | MonospaceButtonEdge;
+  fontSize?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;

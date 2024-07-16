@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
  * Generate a new events wrapper for the given handle.
  */
 export function eventsFactory<T extends O>(
-  doc: t.DocRefHandle<T>,
+  doc: t.DocWithHandle<T>,
   options: { dispose$?: t.UntilObservable } = {},
 ) {
   type E = t.DocEvents<T>;

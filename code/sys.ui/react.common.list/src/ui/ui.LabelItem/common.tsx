@@ -19,7 +19,7 @@ const renderers: t.LabelItemRenderers = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.LabelItem`,
+  displayName: `${Pkg.name}:LabelItem`,
   RUBY: 'rgba(255, 0, 0, 0.1)',
   debug: false,
 

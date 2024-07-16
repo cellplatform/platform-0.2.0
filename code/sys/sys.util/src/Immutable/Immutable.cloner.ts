@@ -1,5 +1,5 @@
-import { events } from './Immutable.event';
-import { R, slug, type t } from './common';
+import { viaObservable, curryChangeFunction } from './Immutable.event';
+import { R, rx, slug, type t } from './common';
 import { Wrangle } from './u';
 
 /**
@@ -43,16 +43,15 @@ export function cloner<T>(
  *    <Cmd> system unit tests.
  */
 export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T } = {}) {
-  const immutable = cloner<T>(initial, options);
+  const $ = rx.subject<t.ImmutableChange<T, P>>();
+  const inner = cloner<T>(initial, options);
   const api: t.ImmutableRef<T, t.ImmutableEvents<T, P>, P> = {
     instance: slug(),
-    change: immutable.change,
     get current() {
-      return immutable.current;
+      return inner.current;
     },
-    events(dispose$?: t.UntilObservable) {
-      return events<T>(api, dispose$);
-    },
+    change: curryChangeFunction($, inner.change, () => inner.current),
+    events: (dispose$?: t.UntilObservable) => viaObservable<T>($, dispose$),
   };
   return api;
 }

@@ -7,7 +7,7 @@ export const Data = {
   document: {
     uri(data?: t.InfoDataDoc) {
       if (!data) return '';
-      if (Is.docRef(data.ref)) return data.ref.uri;
+      if (Is.doc(data.ref)) return data.ref.uri;
       return data.ref || '';
     },
 

@@ -114,7 +114,7 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
     await wait();
 
     type TData = { count: number; msg?: string };
-    const listenToEphemeral = (doc: t.DocRef<D>) => {
+    const listenToEphemeral = (doc: t.Doc<D>) => {
       const events = doc.events();
       const fired = {
         out$: [] as t.DocEphemeralOut<D>[],
@@ -136,7 +136,7 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
     } as const;
 
     // Broadcast (self → remote).
-    type H = t.DocRefHandle<D>;
+    type H = t.DocWithHandle<D>;
     (selfDoc as H).handle.broadcast({ count: 0 });
     (selfDoc as H).handle.broadcast({ count: 10 });
     (selfDoc as H).handle.broadcast({ count: 999 });

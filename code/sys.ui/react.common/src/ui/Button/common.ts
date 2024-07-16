@@ -13,7 +13,7 @@ const spinner: t.ButtonSpinner = {
 spinner.color;
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Button`,
+  displayName: `${Pkg.name}:Button`,
   enabled: true,
   block: false,
   spinning: false,

@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
  */
 export const Tag = {
   commit<T extends O>(
-    doc: t.DocRef<T> | t.DocHandle<T>,
+    doc: t.Doc<T> | t.DocHandle<T>,
     message: string,
     options: { time?: t.UnixTimestamp | boolean } = {},
   ) {
@@ -29,8 +29,8 @@ const wrangle = {
     return input;
   },
 
-  handle<T extends O>(input: t.DocRef<T> | t.DocHandle<T>): t.DocHandle<T> {
+  handle<T extends O>(input: t.Doc<T> | t.DocHandle<T>): t.DocHandle<T> {
     if (Is.handle(input)) return input as t.DocHandle<T>;
-    return toHandle(input as t.DocRef<T>);
+    return toHandle(input as t.Doc<T>);
   },
 } as const;

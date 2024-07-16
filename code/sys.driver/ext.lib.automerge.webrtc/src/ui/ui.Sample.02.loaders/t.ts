@@ -10,7 +10,6 @@ export type SampleName =
   | 'CodeEditor'
   | 'CodeEditor.AI'
   | 'Deno.Deploy'
-  | 'ModuleNamespace'
   | 'ImageCrdt'
   | 'AutomergeInfo'
   | 'CmdBar';

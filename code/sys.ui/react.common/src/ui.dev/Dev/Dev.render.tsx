@@ -1,4 +1,4 @@
-import { COLORS, DevBase, DevKeyboard, DevWrangle, t } from '../common';
+import { COLORS, DevBase, DevKeyboard, DevWrangle, type t } from '../common';
 import { CmdHostStateful } from '../Dev.CmdHost.Stateful';
 import { KeyboardActions } from './Keyboard';
 

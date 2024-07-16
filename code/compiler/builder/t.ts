@@ -1,4 +1,5 @@
 import type { UserConfig as ViteUserConfig } from 'vite';
+import type { OutgoingHttpHeaders } from 'node:http';
 
 export { ViteUserConfig };
 
@@ -13,7 +14,7 @@ export type PathFilter = (path: PathString) => boolean;
 export type TsEnv = 'web' | 'web:react' | 'web:svelte';
 
 export type ViteTarget = 'web' | 'node';
-export type VitePlugin = 'web:react' | 'web:svelte' | 'rollup:visualizer';
+export type VitePlugin = 'web:react' | 'web:svelte' | 'rollup:visualizer' | 'ssl';
 
 /**
  * [tsconfig.json] file.
@@ -54,11 +55,12 @@ export type ViteLibEntry = { index: PathString; [name: string]: PathString };
 export type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> | unknown;
 export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
-  target(...target: ViteTarget[]): void;
-  plugin(...kind: VitePlugin[]): void;
-  externalDependency(moduleName: string | string[]): void;
-  chunk(alias: string, moduleName?: string | string[]): void;
-  lib(options?: { entry?: string | ViteLibEntry }): void;
+  target(...target: ViteTarget[]): ModifyViteConfigArgs;
+  plugin(...kind: VitePlugin[]): ModifyViteConfigArgs;
+  externalDependency(moduleName: string | string[]): ModifyViteConfigArgs;
+  chunk(alias: string, moduleName?: string | string[]): ModifyViteConfigArgs;
+  lib(options?: { entry?: string | ViteLibEntry }): ModifyViteConfigArgs;
+  headers(obj: OutgoingHttpHeaders): ModifyViteConfigArgs;
 };
 export type ModifyViteConfigCtx = {
   readonly name: PkgJson['name'];

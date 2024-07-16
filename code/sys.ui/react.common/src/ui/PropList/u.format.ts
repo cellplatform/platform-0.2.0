@@ -48,26 +48,16 @@ export function format(item: t.PropListItem) {
       return res.isString || res.isNumber || res.isBoolean;
     },
 
-    get clipboard() {
-      const value = res.value;
-      const data = value.body;
-      if (value.clipboard) {
-        return typeof value.clipboard === 'boolean' ? data?.toString() || '' : value.clipboard;
-      }
-
-      if (data === null) return 'null';
-      if (data === undefined) return 'undefined';
-
-      if (typeof data === 'object' && !isValidElement(data)) {
-        return JSON.stringify(data, null, '  ');
-      }
-
-      return data.toString();
+    get isItemClickable() {
+      return !!item.onClick;
     },
 
-    isCopyable(defaults?: t.PropListDefaults) {
-      if (res.value.clipboard || defaults?.clipboard) return true;
-      return false;
+    get isValueClickable() {
+      return !!(item.onClick || res.value.onClick);
+    },
+
+    get isLabelClickable() {
+      return !!(item.onClick || res.label.onClick);
     },
   } as const;
 

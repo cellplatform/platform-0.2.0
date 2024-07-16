@@ -4,6 +4,7 @@ tmp
 .env
 .vercel
 *.local
+.dev
 
 
 # Logs

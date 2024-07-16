@@ -1,5 +1,5 @@
 import { DEFAULTS as BASE, Pkg, type t } from '../common';
-import { Filter } from '../Dev.CmdHost/common.Filter';
+import { Filter } from '../Dev.CmdHost/u.Filter';
 
 export * from '../common';
 export { Filter };
@@ -12,7 +12,7 @@ const filter: t.CmdHostFilter = (imports, command) => {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.CmdHost.Stateful`,
+  displayName: `${Pkg.name}:CmdHost.Stateful`,
   filter,
   qs: BASE.qs,
 } as const;

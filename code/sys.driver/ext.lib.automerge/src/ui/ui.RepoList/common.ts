@@ -10,7 +10,7 @@ export { Ref } from '../ui.RepoList.Model/Ref';
  */
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.RepoList`,
+  displayName: `${Pkg.name}:RepoList`,
   newlabel: 'new database',
   tabIndex: 0,
   behaviors: MODEL_DEFAULTS.behaviors,

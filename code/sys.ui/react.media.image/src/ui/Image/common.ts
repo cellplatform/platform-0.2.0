@@ -25,7 +25,7 @@ const supportedMimetypes: t.ImageSupportedMimetypes[] = ['image/png', 'image/jpe
 const sizing: t.ImageSizeStrategy = 'cover';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.Image`,
+  displayName: `${Pkg.name}:Image`,
   supportedMimetypes,
   sizing,
   drop,

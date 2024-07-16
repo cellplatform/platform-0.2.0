@@ -11,7 +11,7 @@ export * from '../common';
  */
 const theme: t.CommonTheme = 'Light';
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.PropList`,
+  displayName: `${Pkg.name}:PropList`,
   theme,
   fontSize: { sans: 12, mono: 11 },
   messageDelay: 1500,

@@ -1,5 +1,5 @@
 import { Is } from '.';
-import { WebStore } from '../crdt/Store.Web';
+import { WebStore } from '../crdt.web';
 import {
   BroadcastChannelNetworkAdapter,
   IndexedDBStorageAdapter,
@@ -7,17 +7,22 @@ import {
   Test,
   TestDb,
   expect,
+  type t,
 } from '../test.ui';
 import { RepoList } from '../ui/ui.RepoList';
+
 export default Test.describe('Is (flags)', (e) => {
   const NON_OBJECTS = [true, 123, '', [], {}, null, undefined, BigInt(123), Symbol('foo')];
   const storage = TestDb.Unit.name;
   const store = WebStore.init({ network: false, storage });
 
+  type N = t.NetworkAdapterInterface;
+  const createBroadcast = () => new BroadcastChannelNetworkAdapter() as unknown as N;
+
   const repo1 = new Repo({ network: [] });
-  const repo2 = new Repo({ network: [new BroadcastChannelNetworkAdapter()] });
+  const repo2 = new Repo({ network: [createBroadcast()] });
   const repo3 = new Repo({
-    network: [new BroadcastChannelNetworkAdapter()],
+    network: [createBroadcast()],
     storage: new IndexedDBStorageAdapter(TestDb.Unit.name),
   });
 

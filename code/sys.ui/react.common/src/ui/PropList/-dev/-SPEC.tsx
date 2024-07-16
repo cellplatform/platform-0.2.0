@@ -18,7 +18,7 @@ type T = {
 };
 
 const initial: T = {
-  props: { title: 'MyTitle', defaults: { clipboard: false }, theme: 'Light' },
+  props: { title: 'MyTitle', defaults: {}, theme: 'Light' },
   debug: { source: 'Samples', header: true, footer: true },
 };
 
@@ -68,13 +68,6 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label('defaults.clipboard')
-          .value((e) => e.state.props.defaults?.clipboard)
-          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
-      );
 
       dev.boolean((btn) =>
         btn

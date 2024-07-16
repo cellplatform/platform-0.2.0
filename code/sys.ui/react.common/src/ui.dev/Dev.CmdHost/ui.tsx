@@ -62,7 +62,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
         prefix={props.commandPrefix}
         suffix={props.commandSuffix}
         focusOnReady={props.focusOnReady ?? true}
-        onReady={(e) => setTextbox(e.ref)}
+        onReady={(e) => setTextbox(e.textbox)}
         onChange={(e) => handleFilterChanged(e.to)}
         onFocusChange={props.onCmdFocusChange}
         onKeyDown={props.onKeyDown}
@@ -84,6 +84,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
           focused={props.focused}
           enabled={enabled && listEnabled}
           theme={props.theme}
+          useAnchorLinks={props.useAnchorLinks}
           listMinWidth={props.listMinWidth}
           scroll={true}
           scrollTo$={props.scrollTo$}

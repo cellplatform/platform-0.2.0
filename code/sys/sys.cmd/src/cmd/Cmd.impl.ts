@@ -37,7 +37,7 @@ export function create<C extends t.CmdType>(
   };
 
   // Ensure document is initialized with the {cmd} structure.
-  if (!Is.initialized(doc.current)) update('', '', {}); // ← (default empty structure).
+  if (!Is.validState(doc.current)) update('', '', {}); // ← (default empty structure).
 
   /**
    * Invoke method (overloads)

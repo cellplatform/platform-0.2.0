@@ -1,4 +1,4 @@
-import { useDocs } from '../../ui.use';
+import { useDocs } from '../../ui/ui.use';
 import { Is, type t } from './common';
 import { Data } from './u';
 
@@ -12,8 +12,8 @@ export function useData(data?: t.InfoData): t.InfoData {
 }
 
 /**
- * CRDT DocRef loader that swaps loads and swaps out any
- * URI references with the actual retrieved documents.
+ * CRDT Doc<T> loader that swaps loads and swaps out any
+ * uri references with the actual retrieved documents.
  */
 function useDocuments(data?: t.InfoData): t.InfoDataDoc[] {
   const list = Data.document.list(data?.document);
@@ -32,9 +32,9 @@ function useDocuments(data?: t.InfoData): t.InfoDataDoc[] {
  * Helpers
  */
 const wrangle = {
-  ref(data: t.InfoDataDoc, docs: t.DocRef[]) {
+  ref(data: t.InfoDataDoc, docs: t.Doc[]) {
     if (!data.ref) return undefined;
-    if (Is.docRef(data.ref)) return data.ref;
+    if (Is.doc(data.ref)) return data.ref;
     return docs.find((item) => item.uri === data.ref);
   },
 } as const;

@@ -6,6 +6,6 @@ export * from '../common';
  */
 const position: t.EdgePos = ['center', 'center'];
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.EdgePosition`,
+  displayName: `${Pkg.name}:EdgePosition`,
   position,
 } as const;

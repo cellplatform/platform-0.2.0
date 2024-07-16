@@ -1,6 +1,7 @@
 /**
  * @external
  */
+export type { ParsedArgs } from 'minimist';
 export type { CSSProperties } from 'react';
 export type { Observable, Subject } from 'rxjs';
 
@@ -33,6 +34,7 @@ export type {
   IgnoredResponse,
   ImageBadge,
   Immutable,
+  ImmutableEvents,
   ImmutableMutator,
   ImmutableRef,
   Index,
@@ -45,6 +47,7 @@ export type {
   ModuleImporter,
   ModuleImports,
   Msecs,
+  ObjectPath,
   PartialDeep,
   Percent,
   Pixels,
@@ -52,12 +55,23 @@ export type {
   RenderOutput,
   Seconds,
   Size,
+  SizeTuple,
+  TextDiffCalc,
+  TextSplice,
   TypedObjectPath,
   UntilObservable,
   UriString,
 } from 'sys.types/src/types';
 
-export type { Cmd, CmdType, CmdImmutable } from 'sys.cmd/src/types';
+export type {
+  Cmd,
+  CmdEvents,
+  CmdImmutable,
+  CmdMethodResponder,
+  CmdMethodVoid,
+  CmdPathsObject,
+  CmdType,
+} from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types';
 

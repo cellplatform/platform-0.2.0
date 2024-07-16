@@ -1,5 +1,5 @@
 import { Test } from '..';
-import { describe, expect, it, t } from '../test';
+import { describe, expect, it, type t } from '../test';
 import { TestModel } from '../TestSuite/TestModel.mjs';
 import { Is } from './Is.mjs';
 

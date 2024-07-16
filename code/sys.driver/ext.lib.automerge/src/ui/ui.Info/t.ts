@@ -11,7 +11,6 @@ export type InfoField =
   | 'Doc'
   | 'Doc.URI'
   | 'Doc.Object'
-  | 'Doc.Head'
   | 'Doc.History'
   | 'Doc.History.Genesis'
   | 'Doc.History.List'
@@ -36,7 +35,7 @@ export type InfoDataRepo = {
 
 export type InfoDataDoc = {
   label?: string;
-  ref?: t.DocRef | t.UriString;
+  ref?: t.Doc | t.UriString;
   uri?: InfoDataDocUri;
   object?: InfoDataDocObject;
   head?: { label?: string; hashLength?: number };
@@ -56,6 +55,7 @@ export type InfoDataDocObject = {
 export type InfoDataDocUri = {
   shorten?: number | [number, number];
   prefix?: string | null;
+  head?: boolean | number;
   clipboard?: (uri: t.UriString) => string;
 };
 

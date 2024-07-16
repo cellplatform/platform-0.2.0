@@ -1,7 +1,7 @@
 import { Constraints, Stats, TestTree } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
 import { Progress } from './TestSuiteModel.Progress.mjs';
-import { DEFAULT, Delete, Hash, Time, slug, t } from './common';
+import { DEFAULT, Delete, Hash, Time, slug, type t } from './common';
 
 type LazyParent = () => t.TestSuiteModel;
 

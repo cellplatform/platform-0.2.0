@@ -19,7 +19,7 @@ export const View: React.FC<t.RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${DEFAULTS.displayName}`}</div>
+      <div>{`🐷 ${DEFAULTS.name}`}</div>
     </div>
   );
 };

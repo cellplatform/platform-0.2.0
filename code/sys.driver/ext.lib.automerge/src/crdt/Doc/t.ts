@@ -14,7 +14,7 @@ export type DocUri = t.AutomergeUrl;
 /**
  * An immutable/observable CRDT document reference.
  */
-export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
+export type Doc<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
   readonly uri: t.DocUri;
   readonly is: { readonly ready: boolean; readonly deleted: boolean };
   toObject(): T;
@@ -27,35 +27,33 @@ export type DocRef<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
  * NOTE:
  *    This is not returned directly by the getter functions
  *    so as to provide a consistent API without inconsistencies
- *    being exposed. A DocRefHandle<T> can be cast from a DocRef<T>
- *    when and IF you know what you're doing.
+ *    being exposed. A DocWithHandle<T> can be cast from a Doc<T>
+ *    when (and only IF) you know what you're doing. Typically
+ *    you shouldn't need to use this.
  */
-export type DocRefHandle<T extends O = O> = DocRef<T> & { readonly handle: t.DocHandle<T> };
+export type DocWithHandle<T extends O = O> = Doc<T> & { readonly handle: t.DocHandle<T> };
 
 /**
  * Generator function that produces a stongly-typed document
  * with a curried initial state.
  */
-export type DocFactory<T extends O = O> = (uri?: Uri) => Promise<t.DocRef<T>>;
+export type DocFactory<T extends O = O> = (uri?: Uri) => Promise<t.Doc<T>>;
 
 /**
  * Document access exposed from a store/repo.
  */
 export type DocStore = {
   exists(uri?: Uri, options?: GetOptions): Promise<boolean>;
-  get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.DocRef<T> | undefined>;
+  get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.Doc<T> | undefined>;
   getOrCreate<T extends O>(
     initial: Init<T> | Uint8Array,
     uri?: Uri,
     options?: GetOptions,
-  ): Promise<t.DocRef<T>>;
+  ): Promise<t.Doc<T>>;
   delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
   factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
-  toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.DocRef<T>): Uint8Array;
-  fromBinary<T extends O>(
-    binary: Uint8Array,
-    options?: FromBinaryOptions | t.UriString,
-  ): t.DocRef<T>;
+  toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.Doc<T>): Uint8Array;
+  fromBinary<T extends O>(binary: Uint8Array, options?: FromBinaryOptions | t.UriString): t.Doc<T>;
 };
 
 type GetOptions = { timeout?: t.Msecs };

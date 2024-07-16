@@ -12,6 +12,7 @@ export function eventsFactory(
   const $ = source$.pipe(rx.takeUntil(dispose$));
   const key$ = rx.payload<t.TextInputKeyEvent>($, 'sys.TextInput:Key');
   const focus$ = rx.payload<t.TextInputFocusEvent>($, 'sys.TextInput:Focus');
+  const selection$ = rx.payload<t.TextInputSelectionEvent>($, 'sys.TextInput:Selection');
 
   type A = t.TextInputKeyEventPayload['action'];
   const keyHandler = (action: A) => {
@@ -31,6 +32,7 @@ export function eventsFactory(
     focus$,
     key$,
     tab$: rx.payload<t.TextInputTabEvent>($, 'sys.TextInput:Tab'),
+    selection$,
 
     onChange: (fn) => api.change$.subscribe(fn),
     onKeyDown: keyHandler('KeyDown'),
@@ -38,6 +40,7 @@ export function eventsFactory(
     onEnter: keyHandler('Enter'),
     onEscape: keyHandler('Escape'),
     onTab: (fn) => api.tab$.subscribe(fn),
+    onSelection: (fn) => api.selection$.subscribe(fn),
 
     onFocus: (fn) => focusHandler(true),
     onBlur: (fn) => focusHandler(false),

@@ -11,7 +11,7 @@ const size: t.PlayButtonSize = 'Medium';
 const sizes: t.PlayButtonSize[] = ['Small', 'Medium', 'Large'];
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.PlayButton`,
+  displayName: `${Pkg.name}:PlayButton`,
   status,
   statuses,
   enabled: true,

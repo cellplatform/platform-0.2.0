@@ -16,7 +16,11 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       language={'markdown'}
       onReady={async (e) => {
         const { editor, monaco } = e;
-        const onCmdEnter = () => props.onCmdEnterKey?.({ text: editor.getValue() });
+        const onCmdEnter = () => {
+          const text = editor.getValue();
+          const selections = editor.getSelections() || [];
+          props.onCmdEnterKey?.({ text, selections });
+        };
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
         console.log('env', env);
@@ -25,10 +29,10 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           const { store, docuri } = env;
           const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
           const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
-          Monaco.Crdt.Syncer.listen<TDoc>(monaco, editor, lens, ['text']);
+          Monaco.Crdt.Syncer.listen(monaco, editor, lens, ['text']);
         }
       }}
-      onChange={(e) => props.onChange?.({ text: e.text })}
+      onChange={(e) => props.onChange?.(e.state)}
     />
   );
 

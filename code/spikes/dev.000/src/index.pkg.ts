@@ -11,13 +11,13 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.147',
+  version: '0.6.179',
   dependencies: {
-    '@automerge/automerge': '2.2.2',
+    '@automerge/automerge': '2.2.4',
     '@automerge/automerge-repo': '1.1.12',
     '@automerge/automerge-repo-network-messagechannel': '1.1.12',
     '@automerge/automerge-repo-storage-indexeddb': '1.1.12',
-    '@privy-io/react-auth': '1.72.0',
+    '@privy-io/react-auth': '1.74.0',
     '@standard-crypto/farcaster-js': '7.4.0',
     'automerge-repo-network-peerjs': '1.1.13',
     'buffer': '6.0.3',
@@ -32,6 +32,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.reactflow': '0.0.0',
     'ext.lib.stripe': '0.0.0',
     'ext.lib.vimeo': '0.0.0',
+    'ext.lib.wasmer': '0.0.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
     'slc.000': '0.0.0',
@@ -45,6 +46,7 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
     'sys.util': '0.0.0',
+    'yaml': '2.4.5',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

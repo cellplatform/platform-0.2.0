@@ -1,6 +1,6 @@
 import { MonacoEditor } from '.';
 import { Dev, EditorCarets, Pkg, Wrangle, type t } from '../../test.ui';
-import { CODE_SAMPLES } from './-SPEC.-sample.code';
+import { CODE_SAMPLES } from './-sample.code';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -11,15 +11,21 @@ const initial: T = { props: { focusOnLoad: true } };
 const name = 'MonacoEditor';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'text' | 'language' | 'theme'> & {
+  type LocalStore = Pick<
+    P,
+    'text' | 'language' | 'theme' | 'readOnly' | 'placeholder' | 'minimap'
+  > & {
     selection: t.EditorRange | null;
   };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
-    language: DEFAULTS.language,
     text: '',
+    placeholder: undefined,
     selection: null,
+    language: DEFAULTS.language,
+    readOnly: DEFAULTS.readOnly,
+    minimap: DEFAULTS.minimap,
   });
 
   let editor: t.MonacoCodeEditor;
@@ -34,6 +40,9 @@ export default Dev.describe(name, (e) => {
       d.props.theme = local.theme;
       d.props.text = local.text;
       d.props.language = local.language;
+      d.props.readOnly = local.readOnly;
+      d.props.placeholder = local.placeholder;
+      d.props.minimap = local.minimap;
     });
 
     ctx.subject
@@ -66,7 +75,8 @@ export default Dev.describe(name, (e) => {
               });
             }}
             onChange={(e) => {
-              local.text = e.text;
+              local.text = e.state.text;
+              console.info(`⚡️ onChange:`, e);
               // ctx.redraw();
             }}
           />
@@ -122,6 +132,20 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.readOnly;
+        btn
+          .label((e) => `readOnly`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.readOnly = Dev.toggle(d.props, 'readOnly'))));
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.minimap;
+        btn
+          .label((e) => `minimap`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.minimap = Dev.toggle(d.props, 'minimap'))));
+      });
 
       dev.hr(-1, 5);
 
@@ -133,7 +157,7 @@ export default Dev.describe(name, (e) => {
       tabSize(4);
     });
 
-    dev.hr(-1, 5);
+    dev.hr(-1, 10);
 
     dev.textbox((txt) =>
       txt
@@ -141,7 +165,7 @@ export default Dev.describe(name, (e) => {
         .label((e) => 'placeholder')
         .placeholder('enter placeholder text')
         .value((e) => e.state.props.placeholder)
-        .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
+        .onChange((e) => e.change((d) => (local.placeholder = d.props.placeholder = e.to.value)))
         .onEnter((e) => {}),
     );
 

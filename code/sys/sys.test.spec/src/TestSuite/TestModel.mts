@@ -1,4 +1,4 @@
-import { DEFAULT, Delete, R, Time, maybeWait, slug, t } from './common';
+import { DEFAULT, Delete, R, Time, maybeWait, slug, type t } from './common';
 
 /**
  * A single test.

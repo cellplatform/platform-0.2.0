@@ -1,5 +1,6 @@
 import { CmdHostStateful as Stateful } from '../Dev.CmdHost.Stateful';
-import { DEFAULTS, FC, Filter, type t } from './common';
+import { DEFAULTS, FC, type t } from './common';
+import { Filter } from './u';
 import { View } from './ui';
 
 /**

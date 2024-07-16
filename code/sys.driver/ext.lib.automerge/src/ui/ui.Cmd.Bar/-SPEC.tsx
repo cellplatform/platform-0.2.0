@@ -1,106 +1,153 @@
-import { CmdBar, DEFAULTS } from '.';
-import { Color, Dev, Doc, Pkg, css, sampleCrdt, slug, type t, Time } from '../../test.ui';
-import { Info } from '../ui.Info';
-import { RepoList } from '../ui.RepoList';
+import { CmdBar } from 'sys.ui.react.common';
+import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
-type P = t.CmdBarProps;
-type T = { props: P; debug: { docuri?: t.UriString; useLens?: boolean } };
-const initial: T = { props: {}, debug: {} };
+import { Sync } from '../../crdt.sync';
+import { Cmd, Color, css, Dev, Doc, ObjectPath, Pkg, SampleCrdt, type t } from '../../test.ui';
+import { Info } from '../ui.Info';
+
+type P = CmdBarStatefulProps;
+type T = {
+  docuri?: t.UriString;
+  props: P;
+  debug: { useLens?: boolean; docVisible?: boolean };
+  current: { isFocused?: boolean; argv?: string };
+};
+const initial: T = { props: {}, debug: {}, current: {} };
 
 /**
  * Spec
  */
-const name = DEFAULTS.displayName;
+const name = `${Pkg.name}:Crdt:CmdBar.Sample`;
+
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<P, 'theme' | 'focusOnReady'>;
+  type LocalStore = T['debug'] &
+    Pick<T, 'docuri'> &
+    Pick<P, 'theme' | 'useKeyboard' | 'useHistory'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
-    focusOnReady: true,
     useLens: true,
+    useKeyboard: true,
+    useHistory: true,
+    docVisible: false,
   });
 
-  const db = await sampleCrdt({ broadcastAdapter: true });
-  let model: t.RepoListModel;
-  let listRef: t.RepoListRef;
-  let doc: t.DocRef | undefined;
-
-  const control = CmdBar.control();
-
-  let _lens: t.Lens | undefined;
-  const getLens = () => {
-    if (!_lens) _lens = doc ? Doc.lens(doc, ['mylens'], (d) => (d.mylens = {})) : undefined;
-    return _lens;
-  };
+  let doc: t.Doc | undefined;
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
+  let cmdbar: t.CmdBarRef | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
-
     const state = await ctx.state<T>(initial);
+    const sample = SampleCrdt.dev(state, local, db.store);
+
     await state.change((d) => {
-      d.props.instance = slug();
+      d.docuri = local.docuri;
       d.props.theme = local.theme;
-      d.props.focusOnReady = local.focusOnReady;
-      d.props.paths = DEFAULTS.paths;
+      d.props.useKeyboard = local.useKeyboard;
+      d.props.useHistory = local.useHistory;
       d.debug.useLens = local.useLens;
-      d.debug.docuri = local.docuri;
+      d.debug.docVisible = local.docVisible;
     });
+    doc = await sample.get();
 
-    model = await RepoList.model(db.store, {
-      behaviors: ['Copyable', 'Deletable'],
-      onReady: (e) => (listRef = e.ref),
-      async onActiveChanged(e) {
-        console.info(`⚡️ onActiveChanged`, e);
-        const uri = e.item.uri;
-        doc = uri ? await db.store.doc.get(uri) : undefined;
-        state.change((d) => (local.docuri = d.debug.docuri = uri));
-      },
-    });
+    /**
+     * Render: <CmdBar>
+     */
+    const renderCommandBar = () => {
+      const { props } = state.current;
 
-    ctx.debug.width(350);
+      const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
+      const transition = [t('opacity'), t('border')].join(', ');
+      const isFocused = cmdbar?.current.focused;
+      const styles = {
+        base: css({ position: 'relative' }),
+        label: css({
+          Absolute: [-22, 10, null, null],
+          fontSize: 10,
+          fontFamily: 'monospace',
+          opacity: isFocused ? 1 : 0.3,
+          transition,
+        }),
+      };
+
+      const elCmdBar = (
+        <CmdBar.Stateful
+          {...props}
+          state={doc}
+          onReady={(e) => {
+            console.info('⚡️ CmdBar.Stateful.onReady:', e);
+
+            const { dispose$ } = e;
+            cmdbar = e.cmdbar as t.CmdBarRef;
+            if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+            state.change((d) => (d.current.argv = e.initial.text));
+
+            const events = cmdbar.ctrl.events(dispose$);
+            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+          }}
+          onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
+          onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+          onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
+        />
+      );
+
+      return (
+        <div {...styles.base}>
+          <div {...styles.label}>{'cmdbar'}</div>
+          {elCmdBar}
+        </div>
+      );
+    };
+
+    ctx.debug.width(330);
     ctx.subject
-      .size('fill-x')
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-        Dev.Theme.background(dev, props.theme, 1);
+        const { props, current } = e.state;
+        const theme = Color.theme(props.theme);
+        Dev.Theme.background(ctx, theme, 1);
 
-        const styles = {
-          base: css({ position: 'relative' }),
-          instance: css({
-            Absolute: [null, 8, -20, null],
-            userSelect: 'none',
-            fontFamily: 'monospace',
-            fontSize: 10,
-            opacity: 0.2,
-          }),
-        };
+        const docuri = doc?.uri;
+        const address = docuri ? `crdt:${Doc.Uri.id(docuri, { shorten: 5 })}` : '';
+
+        const ctrl = cmdbar;
         return (
-          <div {...styles.base}>
-            <div {...styles.instance}>{`instance: ${props.instance || 'unknown'}`}</div>
-            <CmdBar
-              {...props}
-              control={control.cmd}
-              doc={debug.useLens ? getLens() : doc}
-              onReady={(e) => console.info(`⚡️ onReady:`, e)}
-              onText={(e) => console.info(`⚡️ onText:`, e)}
-              onCommand={(e) => console.info(`⚡️ onCommand:`, e)}
-              onInvoke={(e) => console.info(`⚡️ onInvoke:`, e)}
-            />
-          </div>
+          <CmdBar.Dev.Main
+            theme={theme.name}
+            fields={['Module.Run', 'Module.Args']}
+            argsCard={{
+              ctrl,
+              argv: current.argv,
+              focused: { cmdbar: cmdbar?.current.focused },
+              title: { left: address, right: 'main' },
+              style: { marginBottom: 40 },
+            }}
+            run={{
+              ctrl,
+              onInvoke(e) {
+                console.log('⚡️ CmdBar.Dev.Main:Run: onRun', e);
+              },
+            }}
+          />
         );
       });
+
+    /**
+     * Footer: <CmdBar>
+     */
+    ctx.host.footer.padding(0).render((e) => renderCommandBar());
   });
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.header.border(-0.1).render((e) => {
-      const { debug, props } = state.current;
+      const { debug, docuri } = state.current;
       const { store, index } = db;
-      const ref = debug.docuri;
       return (
         <Info
           stateful={true}
@@ -108,13 +155,26 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store, index },
             document: {
-              ref,
+              ref: docuri,
+              uri: { head: true },
               object: {
-                visible: true,
-                expand: { level: 2 },
+                visible: debug.docVisible,
+                expand: { level: 1 },
+                onToggleClick(e) {
+                  state.change((d) => (local.docVisible = Dev.toggle(d.debug, 'docVisible')));
+                },
                 beforeRender(mutate) {
-                  const resolve = CmdBar.Path.resolver(props.paths);
-                  return resolve.toObject(mutate);
+                  const paths = CmdBar.Path.defaults;
+                  const resolve = CmdBar.Path.resolver(paths);
+                  const cmd = resolve(mutate).cmd;
+                  if (cmd) {
+                    const resolve = Cmd.Path.resolver();
+                    const tx = resolve.tx(cmd);
+                    if (tx) {
+                      ObjectPath.delete(mutate, paths.cmd);
+                      ObjectPath.mutate(mutate, [`cmd(tx.${tx})`], cmd);
+                    }
+                  }
                 },
               },
             },
@@ -127,98 +187,65 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const sample = SampleCrdt.dev(state, local, db.store);
+    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switcher(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
-
+      Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.focusOnReady;
+        const value = (state: T) => !!state.props.useKeyboard;
         btn
-          .label((e) => `focusOnReady`)
+          .label((e) => `useKeyboard`)
           .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.focusOnReady = Dev.toggle(d.props, 'focusOnReady'))),
-          );
+          .onClick((e) => {
+            e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
+          });
       });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section(['Controls', 'Cmd'], (dev) => {
-      dev.button('focus', (e) => Time.delay(0, () => control.focus({})));
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.useHistory;
+        btn
+          .label((e) => `useHistory`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useHistory = Dev.toggle(d.props, 'useHistory')));
+          });
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.useLens;
-        btn
-          .label((e) => `use lens`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.useLens = Dev.toggle(d.debug, 'useLens'))));
-      });
     });
 
     dev.hr(5, 20);
 
-    dev.section('Data', (dev) => {
-      dev.button(['reset {doc}', '(reloads) 💥'], (e) => {
-        doc?.change((d) => Object.keys(d).forEach((key) => delete d[key]));
-        location.reload();
+    dev.section(['Sample State', 'CRDT'], (dev) => {
+      dev.button((btn) => {
+        btn
+          .label(`create`)
+          .enabled((e) => !doc)
+          .onClick(async (e) => (doc = await sample.get()));
       });
-      dev.hr(-1, 5);
-      dev.button(['increment: {doc.tmp}', 'tmp + 1'], async (e) => {
-        type T = { tmp?: number };
-        const doc = await db.docAtIndex<T>(0);
-        doc?.change((d) => (d.tmp = (d.tmp ?? 0) + 1));
+      dev.button((btn) => {
+        btn
+          .label(`delete`)
+          .enabled((e) => !!doc)
+          .onClick(async (e) => (doc = await sample.delete()));
       });
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    dev.footer
-      .border(-0.1)
-      .padding(0)
-      .render<T>((e) => {
-        const { props, debug } = e.state;
-        const data = {
-          docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
-          props,
-        };
-
-        const styles = {
-          base: css({ position: 'relative' }),
-          object: css({ padding: 10 }),
-          list: css({ border: `solid 1px ${Color.alpha(Color.DARK, 0.15)}` }),
-        };
-
-        const elObject = (
-          <div {...styles.object}>
-            <Dev.Object name={name} data={data} expand={1} fontSize={11} />
-          </div>
-        );
-
-        const elList = (
-          <div {...styles.list}>
-            <RepoList model={model} onReady={(e) => e.ref.select(0)} style={{}} />
-          </div>
-        );
-
-        return (
-          <div {...styles.base}>
-            {elObject}
-            {elList}
-          </div>
-        );
-      });
+    dev.footer.border(-0.1).render<T>(async (e) => {
+      const { props, docuri } = e.state;
+      const data = {
+        props,
+        docuri: Doc.Uri.id(docuri, { shorten: 5 }),
+      };
+      return <Dev.Object name={name} data={data} expand={{ paths: ['$'] }} fontSize={11} />;
+    });
   });
 });

@@ -6,7 +6,7 @@ export * from '../common';
 const theme: t.CommonTheme = 'Light';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.TextSyntax`,
+  displayName: `${Pkg.name}:TextSyntax`,
   theme: {
     default: 'Light',
     get light(): t.TextSyntaxColors {

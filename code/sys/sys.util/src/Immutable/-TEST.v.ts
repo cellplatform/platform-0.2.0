@@ -55,17 +55,17 @@ describe('Immutable', () => {
     });
   });
 
-  describe('Immutable.events', () => {
+  describe('Immutable.events.viaOverride', () => {
     it('overrides change handler', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
       const change = obj.change;
-      Immutable.events(obj);
+      Immutable.events.viaOverride(obj);
       expect(obj.change).to.not.equal(change);
     });
 
     it('fires events by overriding change handler', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
-      const events = Immutable.events(obj);
+      const events = Immutable.events.viaOverride(obj);
 
       const fired: t.ImmutableChange<D, P>[] = [];
       events.changed$.subscribe((e) => fired.push(e));
@@ -78,7 +78,7 @@ describe('Immutable', () => {
 
     it('patches: matches fired event', () => {
       const obj = Immutable.cloner<D>({ count: 0 });
-      const events = Immutable.events(obj);
+      const events = Immutable.events.viaOverride(obj);
 
       const patches: t.PatchOperation[] = [];
       const fired: t.ImmutableChange<D, P>[] = [];
@@ -99,7 +99,7 @@ describe('Immutable', () => {
     describe('dispose', () => {
       it('via method', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
-        const events = Immutable.events(obj);
+        const events = Immutable.events.viaOverride(obj);
         const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         events.dispose();
@@ -113,7 +113,7 @@ describe('Immutable', () => {
       it('via {dispose$} observable', () => {
         const life = rx.lifecycle();
         const obj = Immutable.cloner<D>({ count: 0 });
-        const events = Immutable.events(obj, life.dispose$);
+        const events = Immutable.events.viaOverride(obj, life.dispose$);
         const fired: t.ImmutableChange<D, P>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
         life.dispose();
@@ -127,7 +127,7 @@ describe('Immutable', () => {
       it('reverts handler upon dispose', () => {
         const obj = Immutable.cloner<D>({ count: 0 });
         const change = obj.change;
-        const events = Immutable.events(obj);
+        const events = Immutable.events.viaOverride(obj);
         expect(obj.change).to.not.equal(change);
         events.dispose();
         expect(obj.change).to.equal(change);
@@ -196,6 +196,45 @@ describe('Immutable', () => {
       expect(events2.disposed).to.eql(false);
       events2.dispose();
       expect(events2.disposed).to.eql(true);
+    });
+
+    it('events continue firing on non-related <events> instances', () => {
+      const obj = Immutable.clonerRef<D>({ count: 0 });
+      const events1 = obj.events();
+      const events2 = obj.events();
+
+      let fired1 = 0;
+      let fired2 = 0;
+      events1.changed$.subscribe(() => fired1++);
+      events2.changed$.subscribe(() => fired2++);
+
+      obj.change((d) => (d.count = 123));
+      expect(fired1).to.eql(1);
+      expect(fired2).to.eql(1);
+
+      events1.dispose();
+      obj.change((d) => (d.count = 456));
+      expect(fired1).to.eql(1);
+      expect(fired2).to.eql(2);
+    });
+  });
+
+  describe('Immutable.Is', () => {
+    const Is = Immutable.Is;
+    const NON = [123, 'abc', [], {}, undefined, null, true, Symbol('foo'), BigInt(0)];
+
+    it('Is.immutable', () => {
+      NON.forEach((v) => expect(Is.immutable(v)).to.eql(false));
+      const obj = Immutable.cloner<D>({ count: 0 });
+      expect(Is.immutable(obj)).to.eql(true);
+    });
+
+    it('Is.immutableRef', () => {
+      NON.forEach((v) => expect(Is.immutable(v)).to.eql(false));
+      const obj = Immutable.cloner<D>({ count: 0 });
+      const objRef = Immutable.clonerRef<D>({ count: 0 });
+      expect(Is.immutableRef(obj)).to.eql(false);
+      expect(Is.immutableRef(objRef)).to.eql(true);
     });
   });
 });

@@ -7,7 +7,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  displayName: `${Pkg.name}.PropList.FieldSelector`,
+  displayName: `${Pkg.name}:PropList.FieldSelector`,
   indexes: true,
   indent: 0,
   resettable: true,
