@@ -44,10 +44,19 @@ const wrangle = {
   },
 
   head(props: t.DocUriProps, id: string) {
-    if (!props.head || !props.heads) return '';
+    const heads = wrangle.heads(props);
+    if (!props.head || heads.length === 0) return '';
     const length = props.head === true ? (DEFAULTS.uri.head as number) : props.head;
-    const heads = props.heads.map((h) => h.slice(0 - length)).join(',');
-    return `#${heads}`;
+    const res = heads.map((h) => h.slice(0 - length)).join(',');
+    return `#${res}`;
+  },
+
+  heads(props: t.DocUriProps): t.HashString[] {
+    const { heads } = props;
+    if (!heads) return [];
+    if (Doc.Is.doc(heads)) return Doc.heads(heads);
+    if (Array.isArray(heads)) return heads;
+    return [];
   },
 
   clipboardText(props: t.DocUriProps) {

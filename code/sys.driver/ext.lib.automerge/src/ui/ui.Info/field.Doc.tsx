@@ -47,7 +47,7 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
           prefix={prefix}
           shorten={shorten}
           head={head}
-          heads={Doc.heads(doc)}
+          heads={doc}
           clipboard={clipboard}
         />,
       );

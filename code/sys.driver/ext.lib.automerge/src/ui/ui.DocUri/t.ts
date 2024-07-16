@@ -10,7 +10,7 @@ export type DocUriProps = {
   shorten?: D['shorten'];
   prefix?: D['prefix'];
   head?: D['head'];
-  heads?: t.HashString[];
+  heads?: t.HashString[] | t.Doc<any>;
   clipboard?: D['clipboard'];
   fontSize?: number;
   theme?: t.CommonTheme;
