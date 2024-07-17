@@ -17,6 +17,12 @@ export const View: React.FC<t.CmdViewProps> = (props) => {
     }),
   };
 
+      // placeholder={displayUri}
+      // onDispose={(e) => controllerRef.current?.dispose()}
+        // const { monaco, editor } = e;
+        // controllerRef.current = editorController({ monaco, editor, main });
+            // visible: viewstate.current.docVisible,
+            // onToggleClick: (e) => viewstate.change((d) => Dev.toggle(d, 'docVisible')),
   return (
     <div {...css(styles.base, props.style)}>
       <div>{`🐷 ${DEFAULTS.name}`}</div>

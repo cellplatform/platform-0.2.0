@@ -1,7 +1,7 @@
 /**
  * @ext
  */
-export { Info as CrdtInfo, DocUri } from 'ext.lib.automerge';
+export { Info as CrdtInfo, DocUri, useRedrawOnChange } from 'ext.lib.automerge';
 export { MonacoEditor } from 'ext.lib.monaco';
 
 /**

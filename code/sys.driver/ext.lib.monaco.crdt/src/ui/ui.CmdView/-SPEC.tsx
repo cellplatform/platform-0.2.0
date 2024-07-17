@@ -1,5 +1,5 @@
-import { DEFAULTS, CmdView } from '.';
-import { Doc, css, Color, Dev, Pkg, Immutable, rx, SampleCrdt, Crdt } from '../../test.ui';
+import { CmdView, DEFAULTS } from '.';
+import { Color, Crdt, Dev, Doc, Immutable, Pkg, rx, SampleCrdt } from '../../test.ui';
 import { type t, CmdBar } from './common';
 
 import { Info as CrdtInfo } from 'ext.lib.automerge';
@@ -22,6 +22,7 @@ type Current = {
  * Spec
  */
 const name = DEFAULTS.displayName;
+
 export default Dev.describe(name, async (e) => {
   type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme'> & { viewstateJson?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -87,8 +88,17 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-        Dev.Theme.background(dev, props.theme, 1);
-        return <CmdView {...props} />;
+        const theme = Color.theme(props.theme);
+        Dev.Theme.background(dev, theme, 1);
+        return (
+          <CmdView
+            {...props}
+            doc={doc}
+            store={db.store}
+            index={db.index}
+            style={{ height: 250, border: `solid 1px ${Color.alpha(theme.fg, 1)}` }}
+          />
+        );
       });
 
     /**
@@ -131,7 +141,11 @@ export default Dev.describe(name, async (e) => {
     const sample = SampleCrdt.dev(state, local, db.store);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(5, 20);
@@ -152,9 +166,24 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`delete`)
-          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri, 2)}` : ''))
+          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
           .enabled((e) => !!doc)
           .onClick(async (e) => (doc = await sample.delete()));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) => {
+        type T = { count: number };
+        const getCount = () => doc?.current?.count ?? 0;
+        btn
+          .label(`increment`)
+          .right((e) => `count: ${getCount()} + 1`)
+          .enabled((e) => !!doc)
+          .onClick((e) => {
+            doc?.change((d) => (d.count = ((d as T).count || 0) + 1));
+            dev.redraw('debug');
+          });
       });
     });
   });
