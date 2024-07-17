@@ -522,7 +522,7 @@ describe('StoreIndex', () => {
 
       it('changed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.DocChanged<t.StoreIndex>[] = [];
+        const fired: t.DocChanged<t.StoreIndexDoc>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foobar' });

@@ -34,7 +34,7 @@ export const StoreIndex = {
   async init(store: t.Store, options: { uri?: string } = {}) {
     const { uri } = options;
     const repo = store.repo;
-    const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => {
+    const doc = await store.doc.getOrCreate<t.StoreIndexDoc>((d) => {
       Doc.Meta.ensure(d, StoreIndex.meta);
       d.docs = [];
     }, uri);

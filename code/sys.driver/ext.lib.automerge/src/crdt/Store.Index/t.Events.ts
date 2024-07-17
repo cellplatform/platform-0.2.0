@@ -2,7 +2,7 @@ import type { t } from './common';
 
 export type StoreIndexEvents = t.Lifecycle & {
   readonly $: t.Observable<t.StoreIndexEvent>;
-  readonly changed$: t.Observable<t.DocChanged<t.StoreIndex>>;
+  readonly changed$: t.Observable<t.DocChanged<t.StoreIndexDoc>>;
   readonly added$: t.Observable<t.StoreIndexEventItem>;
   readonly removed$: t.Observable<t.StoreIndexEventItem>;
   readonly shared$: t.Observable<t.StoreIndexEventItem>;
@@ -12,7 +12,7 @@ export type StoreIndexEvents = t.Lifecycle & {
 /**
  * Events
  */
-export type StoreIndexEvent = t.DocEvent<t.StoreIndex> | StoreIndexChangeEvent;
+export type StoreIndexEvent = t.DocEvent<t.StoreIndexDoc> | StoreIndexChangeEvent;
 export type StoreIndexChangeEvent =
   | StoreIndexAddedEvent
   | StoreIndexRemovedEvent
