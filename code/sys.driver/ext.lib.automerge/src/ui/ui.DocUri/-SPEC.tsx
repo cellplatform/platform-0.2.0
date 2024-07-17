@@ -15,11 +15,14 @@ const HEAD = 2;
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] & Pick<T, 'docuri'> & Pick<P, 'theme' | 'fontSize' | 'head'>;
+  type LocalStore = T['debug'] &
+    Pick<T, 'docuri'> &
+    Pick<P, 'theme' | 'fontSize' | 'head' | 'clipboard'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
+    clipboard: DEFAULTS.clipboard,
     head: undefined,
     useDoc: false,
     fontSize: LARGE_FONT,
@@ -49,20 +52,18 @@ export default Dev.describe(name, async (e) => {
       d.props.theme = local.theme;
       d.props.fontSize = local.fontSize;
       d.props.head = local.head;
+      d.props.clipboard = local.clipboard;
       d.debug.useDoc = local.useDoc;
     });
 
     doc = await sample.get();
 
     ctx.debug.width(330);
-    ctx.subject
-      .size('fill-x')
-      .display('grid')
-      .render<T>((e) => {
-        const props = Props.get(e.state);
-        Dev.Theme.background(dev, props.theme, 1);
-        return <DocUri {...props} />;
-      });
+    ctx.subject.display('grid').render<T>((e) => {
+      const props = Props.get(e.state);
+      Dev.Theme.background(dev, props.theme, 1);
+      return <DocUri {...props} />;
+    });
   });
 
   e.it('ui:header', async (e) => {
@@ -116,6 +117,14 @@ export default Dev.describe(name, async (e) => {
             const next = value(e.state.current) ? undefined : HEAD;
             e.change((d) => (local.head = d.props.head = next));
           });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.clipboard;
+        btn
+          .label((e) => `clipboard`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.clipboard = Dev.toggle(d.props, 'clipboard'))));
       });
     });
 

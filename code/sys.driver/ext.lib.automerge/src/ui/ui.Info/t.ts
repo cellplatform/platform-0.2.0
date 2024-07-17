@@ -56,7 +56,7 @@ export type InfoDataDocUri = {
   shorten?: number | [number, number];
   prefix?: string | null;
   head?: boolean | number;
-  clipboard?: (uri: t.UriString) => string;
+  clipboard?: boolean;
 };
 
 export type InfoDataDocHistory = {

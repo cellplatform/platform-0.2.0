@@ -15,4 +15,5 @@ export type DocUriProps = {
   fontSize?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onClick?: React.MouseEventHandler;
 };

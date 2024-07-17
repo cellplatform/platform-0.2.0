@@ -13,7 +13,7 @@ const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt',
   head: 2,
-  clipboard: (uri) => `crdt:${Doc.Uri.id(uri)}`,
+  clipboard: true,
 };
 
 const name = 'DocUri';
