@@ -75,4 +75,24 @@ export const Theme = {
         });
     });
   },
+
+  immutable<T extends { theme?: t.CommonTheme }>(dev: t.DevTools, state: t.Immutable<T>) {
+    const current = () => state.current.theme;
+    return dev.button((btn) => {
+      btn
+        .label((e) => `theme: "${current() ?? defaultTheme}"`)
+        .right((e) => {
+          const name = current() ?? defaultTheme;
+          const theme = Color.theme(name);
+          const Icon = theme.is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
+          return <Icon size={16} />;
+        })
+        .onClick((e) => {
+          const prev = current() ?? defaultTheme;
+          const next = prev === 'Light' ? 'Dark' : 'Light';
+          state.change((d) => (d.theme = next));
+          Theme.background(dev.ctx, next);
+        });
+    });
+  },
 } as const;
