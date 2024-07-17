@@ -22,7 +22,7 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({
     theme: 'Dark',
     docuri: undefined,
-    clipboard: DEFAULTS.clipboard,
+    clipboard: DEFAULTS.uri.clipboard,
     head: undefined,
     useDoc: false,
     fontSize: LARGE_FONT,

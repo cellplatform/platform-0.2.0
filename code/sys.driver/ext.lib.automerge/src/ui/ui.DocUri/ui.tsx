@@ -127,7 +127,7 @@ const wrangle = {
     const uri = wrangle.uri(props);
     const id = Doc.Uri.id(uri);
     const shorten = wrangle.shorten(props);
-    const head = wrangle.head(props, id);
+    const head = wrangle.head(props);
     const prefix = wrangle.prefix(props);
     const short = Hash.shorten(id, shorten);
     return { id, prefix, short, head } as const;
