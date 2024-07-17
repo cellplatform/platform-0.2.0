@@ -333,8 +333,8 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('Redraw', (e) => dev.redraw());
-      dev.button('Reset: Info State', (e) => resetInfoState$.next());
+      dev.button('redraw', (e) => dev.redraw());
+      dev.button('reset: Info State', (e) => resetInfoState$.next());
     });
   });
 
