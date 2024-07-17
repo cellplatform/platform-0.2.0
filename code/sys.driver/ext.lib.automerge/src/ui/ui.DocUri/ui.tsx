@@ -46,6 +46,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
+      position: 'relative',
       display: 'inline-block',
       userSelect: 'none',
       pointerEvents: clipboard ? 'auto' : 'none',
