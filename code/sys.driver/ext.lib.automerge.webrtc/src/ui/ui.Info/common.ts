@@ -1,4 +1,4 @@
-import { Doc, Pkg, type t } from '../common';
+import { Pkg, type t } from '../common';
 export { Info as AutomergeInfo } from 'ext.lib.automerge';
 export { Info as PeerInfo } from 'ext.lib.peerjs';
 
@@ -12,7 +12,7 @@ const uri: Required<t.InfoDataDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
   head: true,
-  clipboard: (uri) => Doc.Uri.id(uri),
+  clipboard: true,
 };
 
 const fields = {
