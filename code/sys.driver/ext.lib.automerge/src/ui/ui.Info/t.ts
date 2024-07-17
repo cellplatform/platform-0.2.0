@@ -30,7 +30,7 @@ export type InfoDataRepo = {
   label?: string;
   name?: string;
   store?: t.Store;
-  index?: t.StoreIndexState;
+  index?: t.StoreIndex;
 };
 
 export type InfoDataDoc = {

@@ -5,7 +5,7 @@ import { type t } from './common';
  * Setup event listener for an [Index] to keep it synced into the [Shared] document.
  */
 export function listenToIndex(
-  index: t.StoreIndexState,
+  index: t.StoreIndex,
   shared: t.Doc<t.CrdtShared>,
   options: { debugLabel?: string; dispose$?: t.UntilObservable } = {},
 ) {

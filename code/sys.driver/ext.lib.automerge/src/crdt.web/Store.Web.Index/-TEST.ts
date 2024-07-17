@@ -34,7 +34,7 @@ export default Test.describe('Store.Web: Index', (e) => {
     e.it('multiple instances from store yield same index URI', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
 
-      const indexes: t.StoreIndexState[] = [];
+      const indexes: t.StoreIndex[] = [];
       await Promise.all(
         Array.from({ length: 10 }).map(async (item) => {
           await Time.wait(Value.random(0, 250));

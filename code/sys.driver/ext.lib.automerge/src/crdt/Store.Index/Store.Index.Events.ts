@@ -5,7 +5,7 @@ type ChangeType = t.StoreIndexChangeEvent['type'];
 /**
  * Factory for the Index events object.
  */
-export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilObservable } = {}) {
+export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObservable } = {}) {
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
 

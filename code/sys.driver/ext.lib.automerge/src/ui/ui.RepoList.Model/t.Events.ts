@@ -18,7 +18,7 @@ export type RepoListActiveChangedEvent = {
 };
 export type RepoListActiveChangedEventArgs = {
   store: t.Store;
-  index: t.StoreIndexState;
+  index: t.StoreIndex;
   position: { index: number; total: number };
   kind: t.RepoItemData['kind'];
   item: t.StoreIndexItem;
@@ -47,6 +47,6 @@ export type RepoListDeletedEvent = {
 export type RepoListDeletedEventArgs = {
   readonly uri: string;
   readonly store: t.Store;
-  readonly index: t.StoreIndexState;
+  readonly index: t.StoreIndex;
   readonly position: { index: number; total: number };
 };

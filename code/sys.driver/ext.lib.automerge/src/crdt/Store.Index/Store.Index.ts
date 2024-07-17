@@ -71,7 +71,7 @@ export const StoreIndex = {
     });
 
     // Finish up.
-    const api: t.StoreIndexState = {
+    const api: t.StoreIndex = {
       store,
       doc,
 
@@ -152,7 +152,7 @@ export const StoreIndex = {
        * Toggles the shared state of the given URI(s).
        */
       toggleShared(input, options = {}) {
-        type T = ReturnType<t.StoreIndexState['toggleShared']>[number];
+        type T = ReturnType<t.StoreIndex['toggleShared']>[number];
         const res: T[] = [];
 
         let uris = wrangle.uris(input);

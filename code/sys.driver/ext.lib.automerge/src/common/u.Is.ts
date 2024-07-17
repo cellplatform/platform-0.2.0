@@ -25,7 +25,7 @@ export const Is = {
     return isObjectType(input, Symbols.Store);
   },
 
-  storeIndex(input: any): input is t.StoreIndexState {
+  storeIndex(input: any): input is t.StoreIndex {
     return isObjectType(input, Symbols.StoreIndex);
   },
 

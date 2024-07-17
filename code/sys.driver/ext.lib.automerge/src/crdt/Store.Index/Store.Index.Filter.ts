@@ -1,6 +1,6 @@
 import { type t, Is } from './common';
 
-type DocsInput = t.StoreIndexState | t.StoreIndexDoc | t.StoreIndexItem[];
+type DocsInput = t.StoreIndex | t.StoreIndexDoc | t.StoreIndexItem[];
 
 /**
  * Filters on a store's [Index].
