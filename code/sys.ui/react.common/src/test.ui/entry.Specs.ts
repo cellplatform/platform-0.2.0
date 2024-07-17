@@ -17,6 +17,7 @@ export const ModuleSpecs = {
   [`${ns}.CmdBar.Dev`]: () => import('../ui/CmdBar.Dev/-SPEC'),
   [`${ns}.CmdBar.Prefix`]: () => import('../ui/CmdBar.Prefix/-SPEC'),
   [`${ns}.ContainerQuery`]: () => import('../ui/ContainerQuery/-SPEC'),
+  [`${ns}.Doc.Stack`]: () => import('../ui/Doc.Stack/-SPEC'),
   [`${ns}.EdgePosition`]: () => import('../ui/EdgePosition/-SPEC'),
   [`${ns}.EdgePosition.Selector`]: () => import('../ui/EdgePosition.Selector/-SPEC'),
   [`${ns}.Flip`]: () => import('../ui/Flip/-SPEC'),

@@ -9,6 +9,7 @@ export type * from './CmdBar.Prefix/t';
 export type * from './CmdBar.Stateful/t';
 export type * from './CmdBar/t';
 export type * from './ContainerQuery/t';
+export type * from './Doc.Stack/t';
 export type * from './EdgePosition.Selector/t';
 export type * from './EdgePosition/t';
 export type * from './Event/t';
