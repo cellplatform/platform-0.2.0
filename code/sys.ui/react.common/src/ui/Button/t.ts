@@ -14,7 +14,9 @@ export type ButtonProps = {
   block?: boolean;
   tooltip?: string;
   overlay?: Content; // eg. a "copied" message.
-  isOver?: boolean; // force the button into an "is over" state.
+
+  isOver?: boolean; // force the button into an "is-over" state.
+  isDown?: boolean; // force the button into an "is-down" state.
 
   spinning?: boolean;
   spinner?: t.PartialDeep<ButtonSpinner>;
