@@ -44,4 +44,28 @@ describe('Json', () => {
       });
     });
   });
+
+  describe('Json.parse', () => {
+    it('parses simple values', () => {
+      const test = (input: any) => {
+        const text = Json.stringify(input);
+        const res = Json.parse(text, input);
+        expect(res).to.eql(input);
+      };
+      test(true);
+      test('hello');
+      test(123);
+      test([123]);
+      test({ msg: 123 });
+      test(null);
+    });
+
+    it('undefined: returns default value', () => {
+      const obj = { foo: 123 };
+      const res1 = Json.parse(undefined, obj);
+      const res2 = Json.parse(undefined, () => obj);
+      expect(res1).to.equal(obj);
+      expect(res2).to.equal(obj);
+    });
+  });
 });
