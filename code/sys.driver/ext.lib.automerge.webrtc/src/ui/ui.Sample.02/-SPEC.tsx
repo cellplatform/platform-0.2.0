@@ -41,7 +41,7 @@ const name = 'Sample.02';
 export default Dev.describe(name, async (e) => {
   let left: t.SampleEdge;
   let right: t.SampleEdge;
-  let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexDoc } | undefined;
+  let selected: { edge: t.NetworkConnectionEdge; item: t.StoreIndexItem } | undefined;
 
   let ns: t.NamespaceManager<SampleNamespace> | undefined;
   const Shared: TShared = {};
@@ -390,7 +390,7 @@ export default Dev.describe(name, async (e) => {
         };
       };
 
-      const selectedDoc = async (edge: t.NetworkConnectionEdge, item: t.StoreIndexDoc) => {
+      const selectedDoc = async (edge: t.NetworkConnectionEdge, item: t.StoreIndexItem) => {
         if (!item || !edge) return;
         const doc = await edge.network.store.doc.get(item.uri);
         return doc?.toObject();

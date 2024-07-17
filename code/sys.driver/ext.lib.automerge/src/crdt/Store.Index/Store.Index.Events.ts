@@ -15,9 +15,9 @@ export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilOb
   const doc = index.doc.events(dispose$);
   doc.$.subscribe((e) => $$.next(e));
 
-  const notEphemeral = (doc: t.StoreIndexDoc) => !doc.meta?.ephemeral;
+  const notEphemeral = (doc: t.StoreIndexItem) => !doc.meta?.ephemeral;
   const getTotal = (index: t.StoreIndex) => index.docs.filter(notEphemeral).length;
-  const fire = (type: ChangeType, index: number, total: number, item: t.StoreIndexDoc) => {
+  const fire = (type: ChangeType, index: number, total: number, item: t.StoreIndexItem) => {
     if (!item) return;
     $$.next({ type, payload: { index, total, item } });
   };

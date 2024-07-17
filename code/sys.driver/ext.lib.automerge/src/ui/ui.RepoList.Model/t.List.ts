@@ -37,7 +37,7 @@ export type RepoListClickHandlerArgs = {
   store: t.Store;
   index: t.StoreIndexState;
   position: { index: number; total: number };
-  item: t.StoreIndexDoc;
+  item: t.StoreIndexItem;
 };
 
 export type RepoListActiveHandler = (e: t.RepoListActiveChangedEventArgs) => void;

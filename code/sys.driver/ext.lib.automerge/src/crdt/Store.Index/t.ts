@@ -23,13 +23,13 @@ export type StoreIndexState = {
 export type StoreIndexAddParam = { uri: Uri; name?: string; shared?: boolean };
 
 export type StoreIndexFilter = (e: StoreIndexFilterArgs, index: number) => boolean;
-export type StoreIndexFilterArgs = { doc: t.StoreIndexDoc; index: number };
+export type StoreIndexFilterArgs = { doc: t.StoreIndexItem; index: number };
 
 /**
  * Index of documents within a store/repository.
  */
-export type StoreIndex = t.DocWithMeta & { docs: t.StoreIndexDoc[] };
-export type StoreIndexDoc = {
+export type StoreIndex = t.DocWithMeta & { docs: t.StoreIndexItem[] };
+export type StoreIndexItem = {
   uri: Uri;
   name?: string;
   meta?: Pick<t.DocMeta, 'ephemeral'>;

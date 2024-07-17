@@ -37,7 +37,7 @@ export type {
   NamespaceManager,
   NamespaceMap,
   Store,
-  StoreIndexDoc,
+  StoreIndexItem as StoreIndexDoc,
   StoreIndexState,
   StoreNetworkKind,
   WebStore,

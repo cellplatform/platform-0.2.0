@@ -117,7 +117,7 @@ export const StoreIndex = {
             .map(({ shared, uri, name, meta }) => ({
               uri,
               shared,
-              doc: Delete.undefined<t.StoreIndexDoc>({ uri, name, meta }),
+              doc: Delete.undefined<t.StoreIndexItem>({ uri, name, meta }),
             }));
 
           const unique = R.uniqBy((e) => e.uri, inserts);
@@ -217,7 +217,7 @@ const wrangle = {
     const meta = Doc.Meta.get(ref.current);
     if (!meta) return undefined;
 
-    const res: t.StoreIndexDoc['meta'] = {};
+    const res: t.StoreIndexItem['meta'] = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
   },
