@@ -6,7 +6,7 @@ import type { t } from './common';
 export type CmdViewProps = {
   doc?: t.Doc;
   store?: t.Store;
-  index?: t.WebStoreIndex;
+  index?: t.StoreIndex;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

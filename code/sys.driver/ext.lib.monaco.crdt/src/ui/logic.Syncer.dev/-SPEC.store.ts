@@ -11,7 +11,7 @@ export async function setupStore(docname: string) {
   return { db, store, index, doc } as const;
 }
 
-export async function getOrCreateDoc(store: t.Store, index: t.WebStoreIndex, docname: string) {
+export async function getOrCreateDoc(store: t.Store, index: t.StoreIndex, docname: string) {
   const findUri = () => index.doc.current.docs.find((d) => d.name === docname)?.uri;
 
   if (!findUri()) {
