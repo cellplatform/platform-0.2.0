@@ -76,7 +76,12 @@ export const Theme = {
     });
   },
 
-  immutable<T extends { theme?: t.CommonTheme }>(dev: t.DevTools, state: t.Immutable<T>) {
+  immutable<T extends { theme?: t.CommonTheme }>(
+    dev: t.DevTools,
+    state: t.Immutable<T>,
+    subjectLight?: Color | null,
+    subjectDark?: Color | null,
+  ) {
     const current = () => state.current.theme;
     return dev.button((btn) => {
       btn
@@ -91,7 +96,7 @@ export const Theme = {
           const prev = current() ?? defaultTheme;
           const next = prev === 'Light' ? 'Dark' : 'Light';
           state.change((d) => (d.theme = next));
-          Theme.background(dev.ctx, next);
+          Theme.background(dev.ctx, next, subjectLight, subjectDark);
         });
     });
   },

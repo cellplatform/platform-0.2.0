@@ -55,7 +55,7 @@ export default Dev.describe(name, (e) => {
     dev.TODO();
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.immutable(dev, state.props);
+      Dev.Theme.immutable(dev, state.props, 1);
     });
 
     dev.hr(5, 20);
