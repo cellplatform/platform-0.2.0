@@ -3,8 +3,7 @@ import { css, Color, rx, Dev, Immutable, Pkg } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.RootProps;
-type T = {};
-const initial: T = {};
+type D = {};
 
 /**
  * Spec
@@ -17,12 +16,12 @@ export default Dev.describe(name, (e) => {
   const local = localstore.object({ props: undefined, debug: undefined });
   const state = {
     props: Immutable.clonerRef<P>(local.props ? JSON.parse(local.props) : {}),
-    debug: Immutable.clonerRef<T>(local.debug ? JSON.parse(local.debug) : {}),
+    debug: Immutable.clonerRef<D>(local.debug ? JSON.parse(local.debug) : {}),
   } as const;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
 
     const props$ = state.props.events().changed$;
     const debug$ = state.debug.events().changed$;
@@ -42,7 +41,7 @@ export default Dev.describe(name, (e) => {
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
+      .render<D>((e) => {
         const props = state.props.current;
         Dev.Theme.background(dev, props.theme, 1);
         return <Root {...props} />;
@@ -50,7 +49,7 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
     const link = Dev.Link.pkg(Pkg, dev);
     dev.TODO();
 
@@ -66,8 +65,8 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>((e) => {
       const data = { props: state.props.current };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
