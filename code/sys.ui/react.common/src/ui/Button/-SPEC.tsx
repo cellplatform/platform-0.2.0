@@ -15,12 +15,16 @@ const initial: T = {
 const name = Button.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.ButtonProps, 'theme' | 'enabled' | 'block' | 'spinning' | 'tooltip' | 'label'>;
+    Pick<
+      t.ButtonProps,
+      'theme' | 'enabled' | 'block' | 'spinning' | 'tooltip' | 'label' | 'isOver'
+    >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
     useLabel: true,
     padding: false,
+    isOver: undefined,
     enabled: DEFAULTS.enabled,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
@@ -39,6 +43,7 @@ export default Dev.describe(name, (e) => {
       d.props.spinning = local.spinning;
       d.props.tooltip = local.tooltip;
       d.props.label = local.label;
+      d.props.isOver = local.isOver;
       d.debug.useLabel = local.useLabel;
       d.debug.padding = local.padding;
     });
@@ -92,6 +97,14 @@ export default Dev.describe(name, (e) => {
           .value((e) => e.state.props.spinning)
           .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning')))),
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.isOver;
+        btn
+          .label((e) => `isOver`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.isOver = Dev.toggle(d.props, 'isOver'))));
+      });
 
       dev.hr(-1, 5);
 

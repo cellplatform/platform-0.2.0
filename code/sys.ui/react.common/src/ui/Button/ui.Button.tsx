@@ -20,6 +20,10 @@ export const View: React.FC<t.ButtonProps> = (props) => {
 
   const [isOver, setOver] = useState(false);
   const [isDown, setDown] = useState(false);
+  const is = {
+    over: !!(isOver || props.isOver),
+    down: isDown,
+  } as const;
 
   /**
    * Handlers
@@ -76,8 +80,13 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       userSelect: userSelect ? 'auto' : 'none',
     }),
     body: css({
-      color: Wrangle.color({ isEnabled, isOver, theme }),
-      transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
+      color: Wrangle.color({ isEnabled, isOver: is.over, theme }),
+      transform: Wrangle.pressedOffset({
+        isEnabled,
+        isOver: is.over,
+        isDown: is.down,
+        pressedOffset,
+      }),
       opacity: isBlurred ? 0.15 : 1,
       filter: `blur(${isBlurred ? 3 : 0}px) grayscale(${isBlurred ? 100 : 0}%)`,
       transition: 'opacity 0.1s ease',
