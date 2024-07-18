@@ -32,7 +32,7 @@ export default Dev.describe(name, (e) => {
     const debug$ = State.debug.events().changed$;
 
     rx.merge(props$, debug$)
-      .pipe(rx.debounceTime(5000))
+      .pipe(rx.debounceTime(1000))
       .subscribe(() => {
         local.props = Json.stringify(State.props.current);
         local.debug = Json.stringify(State.debug.current);
@@ -88,49 +88,6 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<D>(e);
     const ctx = dev.ctx;
 
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => ctx.redraw());
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('Language', (dev) => {
-      const hr = () => dev.hr(-1, 5);
-
-      const language = (input: t.EditorLanguage, codeSample?: string) => {
-        const language = input as t.EditorLanguage;
-        const format = (code: string) => {
-          code = code.replace(/^\s*\n|\n\s*$/g, '');
-          return `${code}\n`;
-        };
-        return dev.button((btn) => {
-          const current = () => State.props.current.language;
-          btn
-            .label(language)
-            .right(() => (current() === language ? '← current' : ''))
-            .onClick((e) => {
-              State.props.change((d) => {
-                d.language = language;
-                if (codeSample) d.text = format(codeSample);
-              });
-            });
-        });
-      };
-      language('typescript', CODE_SAMPLES.typescript);
-      language('javascript', CODE_SAMPLES.javascript);
-      hr();
-      language('rust', CODE_SAMPLES.rust);
-      language('go', CODE_SAMPLES.go);
-      language('python', CODE_SAMPLES.python);
-      hr();
-      language('json', CODE_SAMPLES.json);
-      language('yaml', CODE_SAMPLES.yaml);
-      hr();
-      language('markdown', CODE_SAMPLES.markdown);
-    });
-
-    dev.hr(5, 20);
-
     dev.section('Properties', (dev) => {
       Dev.Theme.immutable(dev, State.props, 1);
 
@@ -157,19 +114,55 @@ export default Dev.describe(name, (e) => {
       };
       tabSize(2);
       tabSize(4);
+
+      dev.hr(-1, 10);
+      dev.textbox((txt) =>
+        txt
+          .margin([0, 0, 10, 0])
+          .label((e) => 'placeholder')
+          .placeholder('enter placeholder text')
+          .value((e) => State.props.current.placeholder)
+          .onChange((e) => State.props.change((d) => (d.placeholder = e.to.value)))
+          .onEnter((e) => {}),
+      );
     });
 
-    dev.hr(-1, 10);
+    dev.hr(5, 20);
 
-    dev.textbox((txt) =>
-      txt
-        .margin([0, 0, 10, 0])
-        .label((e) => 'placeholder')
-        .placeholder('enter placeholder text')
-        .value((e) => State.props.current.placeholder)
-        .onChange((e) => State.props.change((d) => (d.placeholder = e.to.value)))
-        .onEnter((e) => {}),
-    );
+    dev.section('Language', (dev) => {
+      const hr = () => dev.hr(-1, 5);
+
+      const language = (input: t.EditorLanguage, codeSample?: string) => {
+        const language = input as t.EditorLanguage;
+        const format = (code: string) => {
+          code = code.replace(/^\s*\n|\n\s*$/g, '');
+          return `${code}\n`;
+        };
+        return dev.button((btn) => {
+          const current = () => State.props.current.language;
+          btn
+            .label(language)
+            .right(() => (current() === language ? '🌳' : ''))
+            .onClick((e) => {
+              State.props.change((d) => {
+                d.language = language;
+                if (codeSample) d.text = format(codeSample);
+              });
+            });
+        });
+      };
+      language('typescript', CODE_SAMPLES.typescript);
+      language('javascript', CODE_SAMPLES.javascript);
+      hr();
+      language('rust', CODE_SAMPLES.rust);
+      language('go', CODE_SAMPLES.go);
+      language('python', CODE_SAMPLES.python);
+      hr();
+      language('json', CODE_SAMPLES.json);
+      language('yaml', CODE_SAMPLES.yaml);
+      hr();
+      language('markdown', CODE_SAMPLES.markdown);
+    });
 
     dev.hr(5, 20);
 
@@ -234,6 +227,12 @@ export default Dev.describe(name, (e) => {
           .right('(dispose all)')
           .onClick(() => carets.current.forEach((c) => c.dispose())),
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => ctx.redraw());
     });
   });
 
