@@ -1,5 +1,5 @@
 import { DEFAULTS, Root } from '.';
-import { css, Color, rx, Dev, Immutable, Pkg } from '../../test.ui';
+import { css, Color, rx, Dev, Immutable, Json, Pkg } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.RootProps;
@@ -15,8 +15,8 @@ export default Dev.describe(name, (e) => {
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
   const state = {
-    props: Immutable.clonerRef<P>(local.props ? JSON.parse(local.props) : {}),
-    debug: Immutable.clonerRef<D>(local.debug ? JSON.parse(local.debug) : {}),
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
   } as const;
 
   e.it('ui:init', async (e) => {
