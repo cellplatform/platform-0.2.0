@@ -5,7 +5,7 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const DocStack = FC.decorate<t.DocStackProps, Fields>(
+export const PageStack = FC.decorate<t.PageStackProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

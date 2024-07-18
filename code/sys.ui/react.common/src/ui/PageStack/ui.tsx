@@ -1,7 +1,7 @@
 import { Color, css, DEFAULTS, type t } from './common';
 import { Page } from './ui.Page';
 
-export const View: React.FC<t.DocStackProps> = (props) => {
+export const View: React.FC<t.PageStackProps> = (props) => {
   const { pages = [] } = props;
 
   /**

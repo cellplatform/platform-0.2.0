@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type DocStackProps = {
+export type PageStackProps = {
   pages?: string[]; // inique-identifiers
   theme?: t.CommonTheme;
   style?: t.CssValue;

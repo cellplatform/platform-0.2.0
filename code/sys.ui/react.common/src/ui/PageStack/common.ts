@@ -4,8 +4,8 @@ export * from '../common';
 /**
  * Constants
  */
-const name = 'DocStack';
-const props: t.PickRequired<t.DocStackProps, 'theme'> = {
+const name = 'PageStack';
+const props: t.PickRequired<t.PageStackProps, 'theme'> = {
   theme: 'Dark',
 };
 export const DEFAULTS = {

@@ -1,8 +1,8 @@
-import { DEFAULTS, DocStack } from '.';
+import { DEFAULTS, PageStack } from '.';
 import { COLORS, css, Dev, Immutable, Json, Pkg, rx, slug } from '../../test.ui';
 import { type t } from './common';
 
-type P = t.DocStackProps;
+type P = t.PageStackProps;
 type D = { ids: string[]; start: t.Index };
 
 const defaultDebug = (): D => {
@@ -82,7 +82,7 @@ export default Dev.describe(name, (e) => {
         const debug = state.debug.current;
         const props = Props.current;
         Dev.Theme.background(dev, props.theme, 1);
-        return <DocStack {...props} />;
+        return <PageStack {...props} />;
       });
   });
 
