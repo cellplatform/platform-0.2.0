@@ -5,8 +5,9 @@ export * from '../common';
  * Constants
  */
 const name = 'DocStack';
-const props: t.PickRequired<t.DocStackProps, 'total' | 'theme'> = {
+const props: t.PickRequired<t.DocStackProps, 'total' | 'theme' | 'height'> = {
   total: 5,
+  height: 20,
   theme: 'Dark',
 };
 export const DEFAULTS = {

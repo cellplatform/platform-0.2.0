@@ -4,8 +4,9 @@ import type { t } from './common';
  * <Component>
  */
 export type DocStackProps = {
-  ids?: string[];
+  pages?: string[]; // inique-identifiers
   total?: number;
+  height?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };

@@ -28,13 +28,13 @@ export default Dev.describe(name, (e) => {
   } as const;
 
   const Props = {
-    get current() {
+    get current(): P {
       return {
         ...state.props.current,
-        ids: Props.ids.current,
+        pages: Props.pages.current,
       };
     },
-    ids: {
+    pages: {
       get all() {
         return state.debug.current.ids;
       },
@@ -50,7 +50,7 @@ export default Dev.describe(name, (e) => {
         return { start, end, total } as const;
       },
       withinRange(index: t.Index) {
-        const { start, end } = Props.ids.range;
+        const { start, end } = Props.pages.range;
         return !(index < start || index > end);
       },
     },
@@ -95,9 +95,9 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Ids', (dev) => {
+    dev.section(['Pages', 'IDs'], (dev) => {
       dev.row((e) => {
-        const ids = Props.ids.all;
+        const ids = Props.pages.all;
         const styles = {
           base: css({
             lineHeight: 1.5,
@@ -110,30 +110,28 @@ export default Dev.describe(name, (e) => {
           current: css({ opacity: 1 }),
           first: css({ color: COLORS.MAGENTA }),
         };
-
-        const elList = ids.map((id, i) => {
-          const style = Props.ids.withinRange(i) ? styles.current : undefined;
-          const isFirst = Props.ids.range.start === i;
-          return (
-            <div key={id} {...css(styles.id, style, isFirst && styles.first)}>
-              {id}
-            </div>
-          );
-        });
-
-        return <div {...styles.base}>{elList}</div>;
+        return (
+          <div {...styles.base}>
+            {ids.map((id, i) => {
+              const style = Props.pages.withinRange(i) ? styles.current : undefined;
+              const isFirst = Props.pages.range.start === i;
+              return (
+                <div key={id} {...css(styles.id, style, isFirst && styles.first)}>
+                  {id}
+                </div>
+              );
+            })}
+          </div>
+        );
       });
 
       const increment = (by: number) => {
         const { ids } = state.debug.current;
-        state.debug.change((d) => {
-          const next = d.start + by;
-          d.start = Math.max(0, Math.min(ids.length - 1, next));
-        });
+        const clamp = (value: t.Index) => Math.max(0, Math.min(ids.length - 1, value));
+        state.debug.change((d) => (d.start = clamp(d.start + by)));
       };
-
-      dev.button('start:(next)', (e) => increment(1));
-      dev.button('start:(prev)', (e) => increment(-1));
+      dev.button('next', (e) => increment(1));
+      dev.button('prev', (e) => increment(-1));
 
       dev.hr(-1, 5);
       dev.button('reset', (e) => {
