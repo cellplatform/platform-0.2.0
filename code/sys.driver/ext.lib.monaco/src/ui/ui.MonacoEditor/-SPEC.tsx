@@ -1,32 +1,24 @@
-import { MonacoEditor } from '.';
-import { Dev, EditorCarets, Pkg, Wrangle, type t } from '../../test.ui';
+import { MonacoEditor, DEFAULTS } from '.';
+import { Dev, EditorCarets, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
 import { CODE_SAMPLES } from './-sample.code';
 
-const DEFAULTS = MonacoEditor.DEFAULTS;
-
 type P = t.MonacoEditorProps;
-type T = { props: P };
-const initial: T = { props: { focusOnLoad: true } };
+type D = { selection: t.EditorRange | null };
 
+/**
+ * Spec
+ */
 const name = 'MonacoEditor';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<
-    P,
-    'text' | 'language' | 'theme' | 'readOnly' | 'placeholder' | 'minimap'
-  > & {
-    selection: t.EditorRange | null;
-  };
+  type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    text: '',
-    placeholder: undefined,
-    selection: null,
-    language: DEFAULTS.language,
-    readOnly: DEFAULTS.readOnly,
-    minimap: DEFAULTS.minimap,
-  });
+  const local = localstore.object({ props: undefined, debug: undefined });
+
+  const State = {
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { selection: null })),
+  } as const;
 
   let editor: t.MonacoCodeEditor;
   let monaco: t.Monaco;
@@ -34,27 +26,33 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(ctx, initial);
-    const state = await ctx.state<T>(initial);
-    state.change((d) => {
-      d.props.theme = local.theme;
-      d.props.text = local.text;
-      d.props.language = local.language;
-      d.props.readOnly = local.readOnly;
-      d.props.placeholder = local.placeholder;
-      d.props.minimap = local.minimap;
-    });
+    const dev = Dev.tools<D>(ctx);
 
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(5000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => dev.redraw('debug'));
+
+    ctx.debug.width(330);
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        const { props } = e.state;
+      .render<D>((e) => {
+        const props = State.props.current;
         Dev.Theme.background(dev, props.theme, 1);
 
         return (
           <MonacoEditor
-            {...e.state.props}
+            {...props}
             onReady={(e) => {
               console.info(`⚡️ onReady:`, e);
 
@@ -64,8 +62,11 @@ export default Dev.describe(name, (e) => {
               carets.$.subscribe((e) => ctx.redraw());
 
               const asRange = Wrangle.asRange;
-              if (local.selection) editor.setSelection(local.selection);
-              editor.onDidChangeCursorSelection((e) => (local.selection = asRange(e.selection)));
+              const debug = State.debug.current;
+              if (debug.selection) editor.setSelection(debug.selection);
+              editor.onDidChangeCursorSelection((e) => {
+                State.debug.change((d) => (d.selection = asRange(e.selection)));
+              });
 
               ctx.redraw();
 
@@ -75,9 +76,8 @@ export default Dev.describe(name, (e) => {
               });
             }}
             onChange={(e) => {
-              local.text = e.state.text;
               console.info(`⚡️ onChange:`, e);
-              // ctx.redraw();
+              State.props.change((d) => (d.text = e.state.text));
             }}
           />
         );
@@ -85,7 +85,7 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
     const ctx = dev.ctx;
 
     dev.section('Debug', (dev) => {
@@ -103,17 +103,18 @@ export default Dev.describe(name, (e) => {
           code = code.replace(/^\s*\n|\n\s*$/g, '');
           return `${code}\n`;
         };
-        return dev.button((btn) =>
+        return dev.button((btn) => {
+          const current = () => State.props.current.language;
           btn
             .label(language)
-            .right((e) => (e.state.props.language === language ? '← current' : ''))
+            .right(() => (current() === language ? '← current' : ''))
             .onClick((e) => {
-              e.change((d) => {
-                local.language = d.props.language = language;
-                if (codeSample) local.text = d.props.text = format(codeSample);
+              State.props.change((d) => {
+                d.language = language;
+                if (codeSample) d.text = format(codeSample);
               });
-            }),
-        );
+            });
+        });
       };
       language('typescript', CODE_SAMPLES.typescript);
       language('javascript', CODE_SAMPLES.javascript);
@@ -131,27 +132,28 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.immutable(dev, State.props, 1);
+
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.readOnly;
+        const value = () => !!State.props.current.readOnly;
         btn
           .label((e) => `readOnly`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.readOnly = Dev.toggle(d.props, 'readOnly'))));
+          .value((e) => value())
+          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'readOnly')));
       });
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.minimap;
+        const value = () => !!State.props.current.minimap;
         btn
           .label((e) => `minimap`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.minimap = Dev.toggle(d.props, 'minimap'))));
+          .value((e) => value())
+          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'minimap')));
       });
 
       dev.hr(-1, 5);
 
       const tabSize = (size: number) => {
         const label = `tabSize: ${size}`;
-        dev.button(label, (e) => e.change((d) => (d.props.tabSize = size)));
+        dev.button(label, (e) => State.props.change((d) => (d.tabSize = size)));
       };
       tabSize(2);
       tabSize(4);
@@ -164,8 +166,8 @@ export default Dev.describe(name, (e) => {
         .margin([0, 0, 10, 0])
         .label((e) => 'placeholder')
         .placeholder('enter placeholder text')
-        .value((e) => e.state.props.placeholder)
-        .onChange((e) => e.change((d) => (local.placeholder = d.props.placeholder = e.to.value)))
+        .value((e) => State.props.current.placeholder)
+        .onChange((e) => State.props.change((d) => (d.placeholder = e.to.value)))
         .onEnter((e) => {}),
     );
 
@@ -235,14 +237,14 @@ export default Dev.describe(name, (e) => {
     });
   });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>((e) => {
       const textModel = editor?.getModel();
       const text = textModel?.getValue() ?? '';
 
       const data = {
-        props: e.state.props,
+        props: State.props.current,
         editor: !editor
           ? undefined
           : {
