@@ -23,7 +23,7 @@ export const Page: React.FC<PageProps> = (props) => {
     base: css({
       height,
       Absolute: [null, edgeOffset, 0, edgeOffset],
-      backgroundColor: theme.alpha(0.5).bg,
+      backgroundColor: theme.alpha(0.8).bg,
       backdropFilter: `blur(2px)`,
       opacity,
       transition,
