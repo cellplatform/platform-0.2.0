@@ -145,15 +145,13 @@ export default Dev.describe(name, (e) => {
         Dev.Theme.background(dev, theme, 1);
 
         const styles = {
-          base: css({
-            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-            padding: 15,
-          }),
+          base: css({ backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ }),
         };
 
         const ctrl = cmdbar;
         return (
           <CmdBar.Dev.Main
+            style={styles.base}
             theme={theme.name}
             fields={main.current.fields}
             argsCard={{
@@ -167,6 +165,14 @@ export default Dev.describe(name, (e) => {
 
               onArgsChanged(e) {
                 if (!e.argv) return;
+
+                const styles = {
+                  base: css({
+                    backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */,
+                    padding: 15,
+                  }),
+                };
+
                 e.render(
                   <div {...styles.base}>
                     <ObjectView name={'run'} data={e.args} theme={e.theme} expand={3} />
