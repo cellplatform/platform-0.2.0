@@ -97,6 +97,7 @@ export const Theme = {
           const next = prev === 'Light' ? 'Dark' : 'Light';
           state.change((d) => (d.theme = next));
           Theme.background(dev.ctx, next, subjectLight, subjectDark);
+          dev.redraw();
         });
     });
   },
