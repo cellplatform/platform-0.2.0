@@ -13,6 +13,7 @@ export { Card } from './ui/Card';
 export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
 export { CmdBar } from './ui/CmdBar';
+export { DocStack } from './ui/Doc.Stack';
 export { EdgePosition } from './ui/EdgePosition';
 export { EdgePositionSelector } from './ui/EdgePosition.Selector';
 export { Flip } from './ui/Flip';

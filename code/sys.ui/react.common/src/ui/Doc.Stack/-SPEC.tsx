@@ -40,12 +40,12 @@ export default Dev.describe(name, (e) => {
       },
       get current() {
         const { ids, start } = state.debug.current;
-        const { total = DEFAULTS.props.total } = state.props.current;
+        const total = DEFAULTS.total;
         return ids.slice(start, start + total);
       },
       get range() {
         const { start } = state.debug.current;
-        const { total = DEFAULTS.props.total } = state.props.current;
+        const total = DEFAULTS.total;
         const end = start + total - 1;
         return { start, end, total } as const;
       },
