@@ -18,11 +18,11 @@ const defaultDebug = (): D => {
 const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = { props?: t.JsonString; debug?: t.JsonString };
+  type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
 
-  const state = {
+  const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, defaultDebug)),
   } as const;
@@ -30,21 +30,21 @@ export default Dev.describe(name, (e) => {
   const Props = {
     get current(): P {
       return {
-        ...state.props.current,
+        ...State.props.current,
         pages: Props.pages.current,
       };
     },
     pages: {
       get all() {
-        return state.debug.current.ids;
+        return State.debug.current.ids;
       },
       get current() {
-        const { ids, start } = state.debug.current;
+        const { ids, start } = State.debug.current;
         const total = DEFAULTS.total;
         return ids.slice(start, start + total);
       },
       get range() {
-        const { start } = state.debug.current;
+        const { start } = State.debug.current;
         const total = DEFAULTS.total;
         const end = start + total - 1;
         return { start, end, total } as const;
@@ -60,14 +60,14 @@ export default Dev.describe(name, (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<D>(e);
 
-    const props$ = state.props.events().changed$;
-    const debug$ = state.debug.events().changed$;
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
 
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
-        local.props = Json.stringify(state.props.current);
-        local.debug = Json.stringify(state.debug.current);
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
       });
 
     rx.merge(props$, debug$)
@@ -79,7 +79,7 @@ export default Dev.describe(name, (e) => {
       .size('fill-x', 100)
       .display('grid')
       .render<D>((e) => {
-        const debug = state.debug.current;
+        const debug = State.debug.current;
         const props = Props.current;
         Dev.Theme.background(dev, props.theme, 1);
         return <PageStack {...props} />;
@@ -90,7 +90,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<D>(e);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.immutable(dev, state.props, 1);
+      Dev.Theme.immutable(dev, State.props, 1);
     });
 
     dev.hr(5, 20);
@@ -126,16 +126,16 @@ export default Dev.describe(name, (e) => {
       });
 
       const increment = (by: number) => {
-        const { ids } = state.debug.current;
+        const { ids } = State.debug.current;
         const clamp = (value: t.Index) => Math.max(0, Math.min(ids.length - 1, value));
-        state.debug.change((d) => (d.start = clamp(d.start + by)));
+        State.debug.change((d) => (d.start = clamp(d.start + by)));
       };
       dev.button('next', (e) => increment(1));
       dev.button('prev', (e) => increment(-1));
 
       dev.hr(-1, 5);
       dev.button('reset', (e) => {
-        state.debug.change((d) => {
+        State.debug.change((d) => {
           const next = defaultDebug();
           d.start = next.start;
           d.ids = next.ids;
@@ -155,7 +155,7 @@ export default Dev.describe(name, (e) => {
     dev.footer.border(-0.1).render<D>((e) => {
       const data = {
         props: Props.current,
-        debug: state.debug.current,
+        debug: State.debug.current,
       };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
