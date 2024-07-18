@@ -62,7 +62,8 @@ export default Dev.describe(name, async (e) => {
     ctx.subject.display('grid').render<T>((e) => {
       const props = Props.get(e.state);
       Dev.Theme.background(dev, props.theme, 1);
-      return <DocUri {...props} />;
+
+      return <DocUri {...props} onMouse={(e) => console.info(`⚡️ DocUri.onMouse:`, e)} />;
     });
   });
 

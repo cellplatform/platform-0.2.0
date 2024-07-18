@@ -32,4 +32,5 @@ export type CopiedProps = {
   fontSize?: number | string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onClick?: React.MouseEventHandler;
 };

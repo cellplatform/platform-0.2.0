@@ -15,5 +15,9 @@ export const Copied: React.FC<t.CopiedProps> = (props) => {
     }),
   };
 
-  return <div {...css(styles.base, props.style)}>{text}</div>;
+  return (
+    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+      {text}
+    </div>
+  );
 };

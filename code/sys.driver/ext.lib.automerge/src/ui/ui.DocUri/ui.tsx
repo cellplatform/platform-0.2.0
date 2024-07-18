@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { Copied } from '../ui.Buttons';
 import { Color, css, DEFAULTS, Doc, Hash, MonospaceButton, Time, type t } from './common';
 
-type UriPart = 'prefix' | 'id' | 'head';
-
 export const View: React.FC<t.DocUriProps> = (props) => {
   const { clipboard = DEFAULTS.uri.clipboard } = props;
   const uri = wrangle.uri(props);
 
-  const [overPart, setOverpart] = useState<UriPart | undefined>();
+  const [overPart, setOverpart] = useState<t.DocUriPart | undefined>();
   const [forceDown, setForceDown] = useState(false);
   const [message, setMessage] = useState<JSX.Element | undefined>();
 
@@ -19,23 +17,29 @@ export const View: React.FC<t.DocUriProps> = (props) => {
   /**
    * Handlers
    */
-  const copyHandler = (part: UriPart) => {
+  const copyHandler = (part: t.DocUriPart) => {
     if (!clipboard) return;
     return () => {
-      const text = wrangle.clipboardText(props, overPart);
+      const text = wrangle.clipboardText(props, part);
       if (!text) return;
 
       navigator.clipboard.writeText(text);
       setMessage(<Copied theme={props.theme} fontSize={fontSize} style={styles.message} />);
-      Time.delay(2000, () => setMessage(undefined));
+      Time.delay(1500, () => setMessage(undefined));
     };
   };
 
-  const mouseHandler = (part: UriPart): t.ButtonMouseHandler => {
+  const mouseHandler = (part: t.DocUriPart): t.ButtonMouseHandler => {
     return (e) => {
-      setOverpart(e.isOver ? part : undefined);
-      setForceDown(e.isDown);
+      const is = { over: e.isOver, down: e.isDown };
+      setOverpart(is.over ? part : undefined);
+      setForceDown(is.down);
+      props.onMouse?.({ uri, part, is });
     };
+  };
+
+  const handleClick: React.MouseEventHandler = (e) => {
+    props.onClick?.(e);
   };
 
   /**
@@ -70,32 +74,33 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       theme={theme.name}
       fontSize={fontSize}
       prefix={{ text: text.prefix, opacity: 0.4 }}
-      onMouse={mouseHandler('prefix')}
-      onClick={copyHandler('prefix')}
+      onMouse={mouseHandler('Prefix')}
+      onClick={copyHandler('Prefix')}
+      style={{ pointerEvents: 'none' }}
     />
   );
 
   const elId = (
     <MonospaceButton
-      isOver={wrangle.isOver(overPart, ['prefix', 'id'])}
+      isOver={wrangle.isOver(overPart, ['Prefix', 'Id'])}
       isDown={forceDown}
       theme={theme.name}
       fontSize={fontSize}
       text={text.short}
-      onMouse={mouseHandler('id')}
-      onClick={copyHandler('id')}
+      onMouse={mouseHandler('Id')}
+      onClick={copyHandler('Id')}
     />
   );
 
   const elHead = text.head && (
     <MonospaceButton
-      isOver={wrangle.isOver(overPart, ['prefix', 'head'])}
+      isOver={wrangle.isOver(overPart, ['Prefix', 'Head'])}
       isDown={forceDown}
       theme={theme.name}
       fontSize={fontSize}
       suffix={{ text: text.head, margin: '0.1em', opacity: 0.4 }}
-      onMouse={mouseHandler('head')}
-      onClick={copyHandler('head')}
+      onMouse={mouseHandler('Head')}
+      onClick={copyHandler('Head')}
     />
   );
 
@@ -108,7 +113,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+    <div {...css(styles.base, props.style)} onClick={handleClick}>
       {elBody}
       {message}
     </div>
@@ -160,7 +165,7 @@ const wrangle = {
     return [];
   },
 
-  clipboardText(props: t.DocUriProps, part?: UriPart) {
+  clipboardText(props: t.DocUriProps, part?: t.DocUriPart) {
     const { clipboard = DEFAULTS.uri.clipboard } = props;
     if (!clipboard) return '';
 
@@ -170,18 +175,13 @@ const wrangle = {
     const heads = wrangle.heads(props);
     const hasHead = !!wrangle.head(props) && heads.length > 0;
 
-    if (part === 'head') {
-      if (!hasHead) return '';
-      return `head:${heads.join(',')}`;
-    }
-
     const uri = `crdt:${id}`;
-    if (part === 'id') return uri;
+    if (part === 'Id') return uri;
 
-    return hasHead ? `${uri}#${heads.join(',')}` : uri;
+    return hasHead ? `${uri}#HEAD.${heads.join(',')}` : uri;
   },
 
-  isOver(current: UriPart | undefined, parts: UriPart[]) {
+  isOver(current: t.DocUriPart | undefined, parts: t.DocUriPart[]) {
     if (!current) return false;
     return parts.includes(current);
   },

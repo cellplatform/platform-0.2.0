@@ -2,6 +2,8 @@ import type { t } from './common';
 
 type D = t.InfoDataDocUri;
 
+export type DocUriPart = 'Prefix' | 'Id' | 'Head';
+
 /**
  * <Component>
  */
@@ -16,4 +18,15 @@ export type DocUriProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
+  onMouse?: t.OnDocUriMouseHandler;
+};
+
+/**
+ * Events
+ */
+export type OnDocUriMouseHandler = (e: OnDocUriMouseHandlerArgs) => void;
+export type OnDocUriMouseHandlerArgs = {
+  uri: t.UriString;
+  part: t.DocUriPart;
+  is: { over: boolean; down: Boolean };
 };
