@@ -76,7 +76,7 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
-      mutate(['Increment', 'count + 1'], async (e) => {
+      mutate(['increment', 'count + 1'], async (e) => {
         type T = { count?: number };
         const doc = e.doc as t.Doc<T>;
         doc.change((d) => (d.count = (d.count ?? 0) + 1));

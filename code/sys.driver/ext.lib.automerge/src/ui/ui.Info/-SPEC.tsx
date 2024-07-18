@@ -315,12 +315,12 @@ export default Dev.describe(name, async (e) => {
         const binary = new Uint8Array(new Array(length).fill(0));
         doc.change((d) => (d.binary = binary));
       });
-      mutate(['Increment', 'count + 1'], async (e) => {
+      mutate(['increment', 'count + 1'], async (e) => {
         type T = { count?: number };
         const doc = e.doc as t.Doc<T>;
         doc.change((d) => (d.count = (d.count ?? 0) + 1));
       });
-      mutate(['Increment child', 'count + 1'], async (e) => {
+      mutate(['increment child', 'count + 1'], async (e) => {
         type T = { child?: { count?: number } };
         const doc = e.doc as t.Doc<T>;
         doc.change((d) => {
