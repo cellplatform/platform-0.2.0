@@ -8,10 +8,10 @@ import { Theme } from './u.Theme';
 export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const {
     text,
-    language = DEFAULTS.language,
-    tabSize = DEFAULTS.tabSize,
-    readOnly = DEFAULTS.readOnly,
-    minimap = DEFAULTS.minimap,
+    language = DEFAULTS.props.language,
+    tabSize = DEFAULTS.props.tabSize,
+    readOnly = DEFAULTS.props.readOnly,
+    minimap = DEFAULTS.props.minimap,
     placeholder,
   } = props;
   const theme = Theme.toName(props.theme);

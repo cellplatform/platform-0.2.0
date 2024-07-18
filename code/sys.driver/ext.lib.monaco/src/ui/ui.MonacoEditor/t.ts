@@ -8,6 +8,7 @@ export type MonacoEditorProps = {
   language?: t.EditorLanguage;
   theme?: t.CommonTheme;
   placeholder?: string;
+  enabled?: boolean;
   focusOnLoad?: boolean;
   tabSize?: number;
   minimap?: boolean;
