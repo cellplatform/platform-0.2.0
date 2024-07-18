@@ -9,18 +9,6 @@ export type SampleLayoutProps = {
 };
 
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
-  const { network } = props;
-
-  useEffect(() => {
-    const life = rx.disposable();
-    const keys = Keyboard.until(life.dispose$);
-
-    // Suppress focus being removed from the document with [CMD + L].
-    keys.on('META + KeyL', (e) => e.handled());
-
-    return life.dispose;
-  }, []);
-
   /**
    * Render
    */
