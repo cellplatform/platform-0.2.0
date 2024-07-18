@@ -36,6 +36,7 @@ export type MonacoEditorReadyHandler = (e: MonacoEditorReadyHandlerArgs) => void
 export type MonacoEditorReadyHandlerArgs = {
   readonly editor: MonacoCodeEditor;
   readonly monaco: Monaco;
+  readonly dispose$: t.Observable<void>;
 };
 
 /**

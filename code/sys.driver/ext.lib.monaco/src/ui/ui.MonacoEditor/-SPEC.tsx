@@ -3,7 +3,10 @@ import { Dev, EditorCarets, Immutable, Json, Pkg, rx, Wrangle, type t } from '..
 import { CODE_SAMPLES } from './-sample.code';
 
 type P = t.MonacoEditorProps;
-type D = { selection: t.EditorRange | null };
+type D = {
+  render: boolean;
+  selection: t.EditorRange | null;
+};
 
 /**
  * Spec
@@ -17,7 +20,7 @@ export default Dev.describe(name, (e) => {
 
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { selection: null })),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { selection: null, render: true })),
   } as const;
 
   let editor: t.MonacoCodeEditor;
@@ -47,14 +50,18 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<D>((e) => {
+        const debug = State.debug.current;
         const props = State.props.current;
         Dev.Theme.background(dev, props.theme, 1);
+
+        if (!debug.render) return null;
 
         return (
           <MonacoEditor
             {...props}
             onReady={(e) => {
               console.info(`⚡️ onReady:`, e);
+              e.dispose$.subscribe(() => console.info(`⚡️ onReady.dispose$`));
 
               editor = e.editor;
               monaco = e.monaco;
@@ -253,6 +260,16 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => ctx.redraw());
+      dev.boolean((btn) => {
+        const value = () => !!State.debug.current.render;
+        btn
+          .label(() => `render`)
+          .value(() => value())
+          .onClick(() => {
+            State.debug.change((d) => Dev.toggle(d, 'render'));
+            dev.redraw();
+          });
+      });
     });
   });
 

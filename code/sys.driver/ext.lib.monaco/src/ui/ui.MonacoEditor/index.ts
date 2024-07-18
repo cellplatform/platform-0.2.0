@@ -1,2 +1,2 @@
 export { DEFAULTS } from './common';
-export * from './MonacoEditor';
+export * from './Root';
