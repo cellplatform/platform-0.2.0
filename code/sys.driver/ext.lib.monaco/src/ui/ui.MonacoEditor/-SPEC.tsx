@@ -1,4 +1,4 @@
-import { MonacoEditor, DEFAULTS } from '.';
+import { DEFAULTS, MonacoEditor } from '.';
 import { Dev, EditorCarets, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
 import { CODE_SAMPLES } from './-sample.code';
 
@@ -42,7 +42,7 @@ export default Dev.describe(name, (e) => {
       .pipe(rx.debounceTime(100))
       .subscribe(() => dev.redraw('debug'));
 
-    ctx.debug.width(330);
+    ctx.debug.width(360);
     ctx.subject
       .size('fill')
       .display('grid')
@@ -89,28 +89,48 @@ export default Dev.describe(name, (e) => {
     const ctx = dev.ctx;
 
     dev.section('Properties', (dev) => {
+      const current = () => State.props.current;
+      const change = (fn: (d: P) => void) => {
+        State.props.change((d) => fn(d));
+        dev.redraw();
+      };
+
       Dev.Theme.immutable(dev, State.props, 1);
+      dev.hr(-1, 5);
 
       dev.boolean((btn) => {
-        const value = () => !!State.props.current.readOnly;
+        const value = () => !!current().enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value())
+          .onClick((e) => change((d) => Dev.toggle(d, 'enabled')));
+      });
+
+      dev.boolean((btn) => {
+        const value = () => !!current().readOnly;
         btn
           .label((e) => `readOnly`)
           .value((e) => value())
-          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'readOnly')));
+          .onClick((e) => change((d) => Dev.toggle(d, 'readOnly')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.props.current.minimap;
+        const value = () => !!current().minimap;
         btn
           .label((e) => `minimap`)
           .value((e) => value())
-          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'minimap')));
+          .onClick((e) => change((d) => Dev.toggle(d, 'minimap')));
       });
 
       dev.hr(-1, 5);
 
       const tabSize = (size: number) => {
-        const label = `tabSize: ${size}`;
-        dev.button(label, (e) => State.props.change((d) => (d.tabSize = size)));
+        dev.button((btn) => {
+          btn
+            .label(`tabSize: ${size}`)
+            .right((e) => (current().tabSize === size ? '←' : ''))
+            .enabled((e) => true)
+            .onClick((e) => change((d) => (d.tabSize = size)));
+        });
       };
       tabSize(2);
       tabSize(4);
@@ -121,8 +141,8 @@ export default Dev.describe(name, (e) => {
           .margin([0, 0, 10, 0])
           .label((e) => 'placeholder')
           .placeholder('enter placeholder text')
-          .value((e) => State.props.current.placeholder)
-          .onChange((e) => State.props.change((d) => (d.placeholder = e.to.value)))
+          .value((e) => current().placeholder)
+          .onChange((e) => change((d) => (d.placeholder = e.to.value)))
           .onEnter((e) => {}),
       );
     });
@@ -142,7 +162,7 @@ export default Dev.describe(name, (e) => {
           const current = () => State.props.current.language;
           btn
             .label(language)
-            .right(() => (current() === language ? '🌳' : ''))
+            .right(() => (current() === language ? '←' : ''))
             .onClick((e) => {
               State.props.change((d) => {
                 d.language = language;
@@ -253,7 +273,7 @@ export default Dev.describe(name, (e) => {
             },
         // carets: carets?.current ?? [],
       };
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$.editor'] }} />;
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$'] }} />;
     });
   });
 });

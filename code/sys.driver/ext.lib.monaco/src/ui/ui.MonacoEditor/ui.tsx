@@ -12,14 +12,14 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     tabSize = DEFAULTS.props.tabSize,
     readOnly = DEFAULTS.props.readOnly,
     minimap = DEFAULTS.props.minimap,
+    enabled = DEFAULTS.props.enabled,
     placeholder,
   } = props;
-  const theme = Theme.toName(props.theme);
+  const editorTheme = Theme.toName(props.theme);
   const isPlaceholderText = typeof placeholder === 'string';
 
   const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
-
   const [isEmpty, setIsEmpty] = useState(false);
 
   /**
@@ -57,7 +57,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const updateOptions = (editor?: t.MonacoCodeEditor) => {
     if (!editor) return;
     editor.updateOptions({
-      theme,
+      theme: editorTheme,
       readOnly,
       minimap: { enabled: minimap },
     });
@@ -83,8 +83,6 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     updateTextState(editor);
     if (props.focusOnLoad) editor.focus();
     props.onReady?.({ editor, monaco });
-
-    editor.onDidChangeModel(() => {});
   };
 
   const handleChange: OnChange = (text = '', event) => {
@@ -102,10 +100,15 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   /**
    * Render
    */
-  const t = Color.theme(props.theme);
+  const theme = Color.theme(props.theme);
   const className = Wrangle.editorClassName(editorRef.current);
   const styles = {
-    base: css({ position: 'relative', color: t.fg }),
+    base: css({
+      position: 'relative',
+      color: theme.fg,
+      pointerEvents: enabled ? 'auto' : 'none',
+      opacity: enabled ? 1 : 0.2,
+    }),
     inner: css({ Absolute: 0 }),
     empty: {
       base: css({
@@ -130,7 +133,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     <div {...styles.empty.base}>{elPlaceholderText ?? placeholder}</div>
   );
 
-  const elLoading = <Spinner.Bar color={t.fg} />;
+  const elLoading = <Spinner.Bar color={theme.fg} />;
 
   return (
     <div {...css(styles.base, props.style)} className={className}>
@@ -139,7 +142,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
           defaultLanguage={language}
           language={language}
           defaultValue={text}
-          theme={theme}
+          theme={editorTheme}
           loading={elLoading}
           onMount={handleMount}
           onChange={handleChange}
