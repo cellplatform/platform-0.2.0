@@ -1,14 +1,25 @@
 import { Dev } from '../test.ui';
-import { Args, CmdBar, Doc, Time, type t } from './common';
+import { Args, CmdBar, Color, Doc, Time, type t } from './common';
 import { DevList } from './ui.CmdBar.List';
 
 export async function loadSpec(args: t.ParsedArgs, main: t.Shell) {
   const { Specs } = await import('../test.ui/entry.Specs');
   const pos = Args.positional(args);
   const spec = Specs[pos[1]];
-
   if (!spec) return;
-  return <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
+
+  const theme = Color.theme('Light');
+
+  return (
+    <Dev.Harness
+      spec={spec}
+      style={{
+        Absolute: 0,
+        backgroundColor: Color.alpha(theme.bg, 0.7),
+        backdropFilter: `blur(5px)`,
+      }}
+    />
+  );
 }
 
 export async function loaderView(args: t.ParsedArgs, main: t.Shell) {
