@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { ConnectorRef } from './Ref';
-import { Model, type t, DEFAULTS } from './common';
+import { DEFAULTS, Model, type t } from './common';
 import { View } from './ui';
 
 /**
@@ -18,7 +18,10 @@ export const Connector = forwardRef<t.ConnectorRef, t.ConnectorProps>((props, re
   const getOrCreateHandle = () => handleRef.current || createHandle();
 
   useImperativeHandle(ref, getOrCreateHandle);
-  useEffect(() => props.onReady?.({ ref: getOrCreateHandle() }), []);
+  useEffect(() => {
+    const ref = getOrCreateHandle();
+    props.onReady?.({ ref });
+  }, []);
 
   return <View {...props} list={list} />;
 });
