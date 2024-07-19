@@ -104,19 +104,23 @@ export default Dev.describe(name, (e) => {
             marginLeft: 30,
             marginBottom: 20,
             display: 'grid',
-            gridTemplateColumns: `repeat(4, 1fr)`,
+            gridTemplateRows: 'repeat(5, 1fr)',
+            gridAutoFlow: 'column',
           }),
-          id: css({ fontFamily: 'monospace', fontSize: 11, fontWeight: 600, opacity: 0.1 }),
-          current: css({ opacity: 1 }),
-          first: css({ color: COLORS.MAGENTA }),
+          item: css({
+            fontFamily: 'monospace',
+            fontSize: 11,
+            fontWeight: 600,
+            opacity: 0.1,
+          }),
+          current: css({ opacity: 1, color: COLORS.MAGENTA }),
         };
         return (
           <div {...styles.base}>
             {ids.map((id, i) => {
               const style = Props.pages.withinRange(i) ? styles.current : undefined;
-              const isFirst = Props.pages.range.start === i;
               return (
-                <div key={id} {...css(styles.id, style, isFirst && styles.first)}>
+                <div key={id} {...css(styles.item, style)}>
                   {id}
                 </div>
               );
@@ -130,8 +134,8 @@ export default Dev.describe(name, (e) => {
         const clamp = (value: t.Index) => Math.max(0, Math.min(ids.length - 1, value));
         State.debug.change((d) => (d.start = clamp(d.start + by)));
       };
-      dev.button('next', (e) => increment(1));
-      dev.button('prev', (e) => increment(-1));
+      dev.button(['prev', '↑'], (e) => increment(-1));
+      dev.button(['next', '↓'], (e) => increment(1));
 
       dev.hr(-1, 5);
       dev.button('reset', (e) => {
