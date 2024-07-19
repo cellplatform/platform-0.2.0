@@ -17,7 +17,16 @@ export const View: React.FC<t.PageStackProps> = (props) => {
 
   const elPages = [...pages.reverse()].map((id, i) => {
     const index = pages.length - i;
-    return <Page key={id} id={id} index={index} theme={theme} />;
+    return (
+      <Page
+        //
+        key={id}
+        id={id}
+        index={index}
+        theme={theme}
+        transitionTime={props.transitionTime}
+      />
+    );
   });
 
   return <div {...css(styles.base, props.style)}>{elPages}</div>;

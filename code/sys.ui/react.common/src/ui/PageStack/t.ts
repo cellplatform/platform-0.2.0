@@ -4,7 +4,8 @@ import type { t } from './common';
  * <Component>
  */
 export type PageStackProps = {
-  pages?: string[]; // inique-identifiers
+  pages?: string[]; // Unique page identifiers.
+  transitionTime?: t.Msecs;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
