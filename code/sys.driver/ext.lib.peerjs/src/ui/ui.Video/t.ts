@@ -8,5 +8,6 @@ export type VideoProps = {
   stream?: MediaStream;
   muted?: boolean;
   empty?: string | JSX.Element | null;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
