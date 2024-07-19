@@ -19,6 +19,7 @@ export type DocUriProps = {
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
   onMouse?: t.OnDocUriMouseHandler;
+  onCopy?: t.OnDocUriMouseHandler;
 };
 
 /**

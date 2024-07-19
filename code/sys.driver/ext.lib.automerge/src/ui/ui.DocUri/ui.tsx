@@ -6,6 +6,8 @@ export const View: React.FC<t.DocUriProps> = (props) => {
   const { clipboard = DEFAULTS.uri.clipboard } = props;
   const uri = wrangle.uri(props);
 
+  type S = { is: { over: boolean; down: boolean } };
+  const [mouse, setMouse] = useState<S>({ is: { over: false, down: false } });
   const [overPart, setOverpart] = useState<t.DocUriPart | undefined>();
   const [forceDown, setForceDown] = useState(false);
   const [message, setMessage] = useState<JSX.Element | undefined>();
@@ -26,12 +28,17 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       navigator.clipboard.writeText(text);
       setMessage(<Copied theme={props.theme} fontSize={fontSize} style={styles.message} />);
       Time.delay(1500, () => setMessage(undefined));
+
+      const is = mouse.is;
+      props.onCopy?.({ is, uri, part });
     };
   };
 
   const mouseHandler = (part: t.DocUriPart): t.ButtonMouseHandler => {
     return (e) => {
       const is = { over: e.isOver, down: e.isDown };
+      setMouse({ is });
+
       setOverpart(is.over ? part : undefined);
       setForceDown(is.down);
       props.onMouse?.({ uri, part, is });
@@ -171,14 +178,13 @@ const wrangle = {
 
     const docuri = wrangle.uri(props);
     const id = Doc.Uri.id(docuri);
+    const uri = `crdt:a.${id}`;
 
     const heads = wrangle.heads(props);
     const hasHead = !!wrangle.head(props) && heads.length > 0;
 
-    const uri = `crdt:${id}`;
     if (part === 'Id') return uri;
-
-    return hasHead ? `${uri}#HEAD.${heads.join(',')}` : uri;
+    return hasHead ? `${uri}@head=${heads.join(',')}` : uri;
   },
 
   isOver(current: t.DocUriPart | undefined, parts: t.DocUriPart[]) {

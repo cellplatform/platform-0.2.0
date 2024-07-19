@@ -63,7 +63,14 @@ export default Dev.describe(name, async (e) => {
       const props = Props.get(e.state);
       Dev.Theme.background(dev, props.theme, 1);
 
-      return <DocUri {...props} onMouse={(e) => console.info(`⚡️ DocUri.onMouse:`, e)} />;
+      return (
+        <DocUri
+          //
+          {...props}
+          onMouse={(e) => console.info(`⚡️ DocUri.onMouse:`, e)}
+          onCopy={(e) => console.info(`⚡️ DocUri.onCopy:💦`, e)}
+        />
+      );
     });
   });
 
