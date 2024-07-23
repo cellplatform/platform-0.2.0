@@ -3,7 +3,7 @@ import { Copied } from '../ui.Buttons';
 import { Color, css, DEFAULTS, Doc, Hash, MonospaceButton, Time, type t } from './common';
 
 export const View: React.FC<t.DocUriProps> = (props) => {
-  const { clipboard = DEFAULTS.uri.clipboard } = props;
+  const { clipboard = DEFAULTS.props.clipboard } = props;
   const uri = wrangle.uri(props);
 
   type S = { is: { over: boolean; down: boolean } };
@@ -155,19 +155,19 @@ const wrangle = {
   },
 
   prefix(props: t.DocUriProps) {
-    const { prefix = DEFAULTS.uri.prefix } = props;
+    const { prefix = DEFAULTS.props.prefix } = props;
     return prefix ? `${prefix.trim().replace(/\:+$/, '')}:` : '';
   },
 
   shorten(props: t.DocUriProps): [number, number] {
-    const { shorten = DEFAULTS.uri.shorten } = props;
+    const { shorten = DEFAULTS.props.shorten } = props;
     return Array.isArray(shorten) ? shorten : [shorten, shorten];
   },
 
   head(props: t.DocUriProps) {
     const heads = wrangle.heads(props);
     if (!props.head || heads.length === 0) return '';
-    const length = props.head === true ? (DEFAULTS.uri.head as number) : props.head;
+    const length = props.head === true ? (DEFAULTS.props.head as number) : props.head;
     const res = heads.map((h) => h.slice(0 - length)).join(',');
     return `#${res}`;
   },
@@ -181,7 +181,7 @@ const wrangle = {
   },
 
   clipboardText(props: t.DocUriProps, part?: t.DocUriPart) {
-    const { clipboard = DEFAULTS.uri.clipboard } = props;
+    const { clipboard = DEFAULTS.props.clipboard } = props;
     if (!clipboard) return '';
 
     const docuri = wrangle.uri(props);

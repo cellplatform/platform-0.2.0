@@ -48,6 +48,8 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 
+const docUri = DocUri.DEFAULTS.props;
+
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
@@ -59,7 +61,12 @@ export const DEFAULTS = {
   repo: { label: 'Store' },
   doc: {
     head: { label: 'Head', hashLength: 6 },
-    uri: DocUri.DEFAULTS.uri,
+    uri: {
+      shorten: docUri.shorten,
+      prefix: docUri.prefix,
+      head: docUri.head,
+      clipboard: docUri.clipboard,
+    },
   },
   history: {
     label: 'History',

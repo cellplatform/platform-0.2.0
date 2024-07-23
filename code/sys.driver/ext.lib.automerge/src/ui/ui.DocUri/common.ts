@@ -9,16 +9,18 @@ export { Doc };
 /**
  * Constants
  */
-const uri: Required<t.InfoDataDocUri> = {
-  shorten: [4, 4],
-  prefix: 'crdt',
-  head: 2,
-  clipboard: true,
-};
-
 const name = 'DocUri';
+const props: t.PickRequired<t.DocUriProps, 'theme' | 'shorten' | 'prefix' | 'head' | 'clipboard'> =
+  {
+    theme: 'Dark',
+    shorten: [4, 4],
+    prefix: 'crdt',
+    head: 2,
+    clipboard: true,
+  };
+
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
-  uri,
+  props,
 } as const;
