@@ -25,17 +25,15 @@ export default Dev.describe(name, (e) => {
 
     const props$ = State.props.events().changed$;
     const debug$ = State.debug.events().changed$;
-
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
         local.props = Json.stringify(State.props.current);
         local.debug = Json.stringify(State.debug.current);
       });
-
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(100))
-      .subscribe(() => dev.redraw());
+      .subscribe(() => ctx.redraw());
 
     ctx.debug.width(330);
     ctx.subject
