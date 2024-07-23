@@ -15,8 +15,8 @@ export async function loadSpec(args: t.ParsedArgs, main: t.Shell) {
       spec={spec}
       style={{
         Absolute: 0,
-        backgroundColor: Color.alpha(theme.bg, 0.7),
-        backdropFilter: `blur(5px)`,
+        backgroundColor: Color.alpha(theme.bg, 0.85),
+        backdropFilter: `blur(8px)`,
       }}
     />
   );

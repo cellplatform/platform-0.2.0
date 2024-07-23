@@ -8,6 +8,7 @@ export type RootCommands = 'me' | 'dev' | 'cast' | 'hash' | 'cmd';
  */
 export type Shell = {
   cmdbar?: t.CmdBarRef;
+  readonly self: t.PeerModel;
   readonly cmd: ShellCommands;
   readonly state: {
     readonly me: t.Doc;
@@ -18,6 +19,10 @@ export type Shell = {
   readonly store: {
     readonly fs: t.Store;
     readonly tmp: t.Store;
+  };
+  readonly index: {
+    readonly fs: t.StoreIndex;
+    readonly tmp: t.StoreIndex;
   };
 };
 
