@@ -9,7 +9,7 @@ import { rebuild, type FireChanged } from './use.Stateful.Rebuild';
  * state internally to the <Info> component.
  */
 export function useStateful(props: t.InfoProps) {
-  const { stateful = DEFAULTS.stateful } = props;
+  const { stateful = DEFAULTS.props.stateful } = props;
   const fields = PropList.fields(props.fields);
 
   const redraw = useRedraw();

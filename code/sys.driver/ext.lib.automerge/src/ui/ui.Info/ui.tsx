@@ -6,7 +6,7 @@ import { useStateful } from './use.Stateful';
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme = DEFAULTS.theme } = props;
+  const { theme = DEFAULTS.props.theme } = props;
   const { fields, data } = useStateful(props);
   const ctx: t.InfoFieldCtx = { fields, theme };
 
