@@ -39,7 +39,7 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
   /**
    * Render
    */
-  const theme = Color.theme(props.theme ?? 'Dark');
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({
       backgroundColor: theme.bg,
@@ -90,7 +90,7 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
 
                 const doc = await main.store.tmp.doc.getOrCreate(() => null);
                 const uri = doc.uri;
-                return e.render(<Crdt main={main} theme={e.theme} docuri={uri} />);
+                return e.render(<Crdt main={main} docuri={uri} theme={e.theme} />);
               }
             }
           },
