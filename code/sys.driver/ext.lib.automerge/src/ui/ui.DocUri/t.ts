@@ -14,6 +14,7 @@ export type DocUriProps = {
   head?: D['head'];
   heads?: t.HashString[] | t.Doc;
   clipboard?: D['clipboard'];
+  copiedText?: string;
   fontSize?: number;
   theme?: t.CommonTheme;
   style?: t.CssValue;

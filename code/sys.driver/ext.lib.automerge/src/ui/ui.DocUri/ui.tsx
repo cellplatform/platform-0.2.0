@@ -10,7 +10,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
   const [mouse, setMouse] = useState<S>({ is: { over: false, down: false } });
   const [overPart, setOverpart] = useState<t.DocUriPart | undefined>();
   const [forceDown, setForceDown] = useState(false);
-  const [message, setMessage] = useState<JSX.Element | undefined>();
+  const [isCopied, setCopied] = useState(false);
 
   if (!uri) return;
   const { fontSize } = props;
@@ -26,8 +26,8 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       if (!text) return;
 
       navigator.clipboard.writeText(text);
-      setMessage(<Copied theme={props.theme} fontSize={fontSize} style={styles.message} />);
-      Time.delay(1500, () => setMessage(undefined));
+      setCopied(true);
+      Time.delay(1500, () => setCopied(false));
 
       const is = mouse.is;
       props.onCopy?.({ is, uri, part });
@@ -38,7 +38,6 @@ export const View: React.FC<t.DocUriProps> = (props) => {
     return (e) => {
       const is = { over: e.isOver, down: e.isDown };
       setMouse({ is });
-
       setOverpart(is.over ? part : undefined);
       setForceDown(is.down);
       props.onMouse?.({ uri, part, is });
@@ -64,8 +63,8 @@ export const View: React.FC<t.DocUriProps> = (props) => {
     }),
     body: css({
       Flex: 'x-center-center',
-      opacity: message ? 0.2 : 1,
-      filter: `blur(${message ? 5 : 0}px)`,
+      opacity: isCopied ? 0.2 : 1,
+      filter: `blur(${isCopied ? 5 : 0}px)`,
       transition,
     }),
     message: css({
@@ -119,10 +118,19 @@ export const View: React.FC<t.DocUriProps> = (props) => {
     </div>
   );
 
+  const elCopied = isCopied && (
+    <Copied
+      text={props.copiedText || 'copied'}
+      fontSize={fontSize}
+      theme={props.theme}
+      style={styles.message}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)} onClick={handleClick}>
       {elBody}
-      {message}
+      {elCopied}
     </div>
   );
 };
