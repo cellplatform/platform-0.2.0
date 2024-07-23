@@ -25,6 +25,7 @@ const initial: T = { props: {}, debug: {} };
 const name = Info.displayName ?? 'Unknown';
 export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
+  const store = db.repo.store;
 
   type LocalStore = D & Pick<T, 'docuri'> & Pick<P, 'fields' | 'theme' | 'stateful'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
@@ -52,7 +53,7 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, store);
 
     await state.change((d) => {
       d.docuri = local.docuri;
@@ -80,7 +81,7 @@ export default Dev.describe(name, async (e) => {
 
         const fields = props.fields ?? [];
         const docuri = e.state.docuri;
-        const { store, index } = db;
+        const { store, index } = db.repo;
         const doc = fields.includes('Doc') ? await store.doc.get(docuri) : undefined;
 
         const document: t.InfoDataDoc = {
@@ -154,7 +155,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {

@@ -50,7 +50,7 @@ export default Dev.describe(name, async (e) => {
       d.debug.docVisible = local.docVisible;
     });
 
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
     doc = await sample.get();
 
     /**
@@ -148,7 +148,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.header.border(-0.1).render((e) => {
       const { debug, docuri } = state.current;
-      const { store, index } = db;
+      const { store, index } = db.repo;
       return (
         <Info
           stateful={true}
@@ -188,7 +188,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));

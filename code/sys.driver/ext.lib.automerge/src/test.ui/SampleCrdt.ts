@@ -4,7 +4,6 @@ import { TestDb } from './TestDb';
 type O = Record<string, unknown>;
 type Options = { storage?: string; debug?: t.StoreDebug; broadcastAdapter?: boolean };
 type T = { docuri?: t.UriString };
-type N = t.NetworkAdapterInterface;
 
 /**
  * Sample spec CRDT state.
@@ -29,7 +28,11 @@ export const SampleCrdt = {
       return exists ? await index.store.doc.get<T>(doc.uri) : undefined;
     }
 
-    return { storage, store, index, docAtIndex } as const;
+    return {
+      repo: { store, index },
+      storage,
+      docAtIndex,
+    } as const;
   },
 
   /**

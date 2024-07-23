@@ -45,7 +45,7 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
 
     await state.change((d) => {
       d.docuri = local.docuri;
@@ -79,7 +79,7 @@ export default Dev.describe(name, async (e) => {
     const state = await dev.state();
 
     dev.header.border(-0.1).render((e) => {
-      const { store, index } = db;
+      const { store, index } = db.repo;
       return (
         <Info
           stateful={true}
@@ -100,7 +100,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));

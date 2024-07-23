@@ -30,7 +30,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
 
     await state.change((d) => {
       d.theme = local.theme;
@@ -46,7 +46,7 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         const { path, theme, docuri } = e.state;
         Dev.Theme.background(ctx, theme);
-        return <Layout theme={theme} repo={db} docuri={docuri} path={path} />;
+        return <Layout theme={theme} repo={db.repo} docuri={docuri} path={path} />;
       });
   });
 
@@ -54,7 +54,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.header.border(-0.1).render((e) => {
-      const { store, index } = db;
+      const { store, index } = db.repo;
       const ref = state.current.docuri;
       return (
         <Info
@@ -77,7 +77,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(state, local, db.repo.store);
     const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Properties', (dev) => {
