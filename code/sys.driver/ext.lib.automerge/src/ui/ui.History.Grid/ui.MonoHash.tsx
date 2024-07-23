@@ -9,7 +9,7 @@ export type MonoHashProps = {
 };
 
 export const MonoHash: React.FC<MonoHashProps> = (props) => {
-  const { hash = '', theme, length = DEFAULTS.hash.length } = props;
+  const { hash = '', theme, length = DEFAULTS.props.hashLength } = props;
   return (
     <MonospaceButton
       style={props.style}

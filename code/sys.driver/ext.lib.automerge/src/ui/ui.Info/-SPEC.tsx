@@ -83,9 +83,7 @@ export default Dev.describe(name, async (e) => {
     ctx.subject
       .size([320, null])
       .display('grid')
-      .render<T>(async () => {
-        // const { props, debug } = e.state;
-
+      .render<D>(async () => {
         const props = State.props.current;
         const debug = State.debug.current;
 
