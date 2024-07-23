@@ -7,15 +7,14 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { DevKeyboard } from './-SPEC.Keyboard';
 import { Color, Dev, Pkg, css, rx } from '../test.ui';
+import { DevKeyboard } from './-SPEC.Keyboard';
 import {
   Cmd,
   CrdtInfo,
   Immutable,
   Peer,
   PeerRepoList,
-  RepoList,
   WebStore,
   WebrtcStore,
   type t,
@@ -46,33 +45,32 @@ export default Dev.describe(name, async (e) => {
   const Store = {
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
     fs: WebStore.init({ storage: 'fs', network: [] }),
-    async getMeDoc() {
-      const fs = Store.fs.doc;
-      if (!(await fs.exists(local.me))) local.me = undefined;
-      const doc = await fs.getOrCreate((d) => null, local.me);
-      local.me = doc.uri;
-      return doc;
-    },
   } as const;
-
-  const model = await RepoList.model(Store.tmp, {
-    behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
-  });
-  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
-  const theme: t.CommonTheme = 'Light';
 
   const Index = {
+    tmp: await WebStore.index(Store.tmp),
     fs: await WebStore.index(Store.fs),
-    tmp: network.index,
   } as const;
-  const me = await Store.getMeDoc();
+
+  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, Index.tmp, {});
+  const theme: t.CommonTheme = 'Light';
+
+  async function getMe() {
+    const fs = Store.fs.doc;
+    const exists = await fs.exists(local.me);
+    if (!exists) local.me = undefined;
+    const doc = await fs.getOrCreate((d) => null, local.me);
+    local.me = doc.uri;
+    return doc;
+  }
+
+  const me = await getMe();
   const cloner = () => Immutable.clonerRef({});
 
   const main: t.Shell = {
     cmdbar: undefined,
-    cmd: {
-      fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
-    },
+    self,
+    cmd: { fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd> },
     state: {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
@@ -82,6 +80,10 @@ export default Dev.describe(name, async (e) => {
     store: {
       fs: Store.fs,
       tmp: Store.tmp,
+    },
+    index: {
+      fs: await WebStore.index(Store.fs),
+      tmp: network.index,
     },
   };
 
@@ -109,18 +111,15 @@ export default Dev.describe(name, async (e) => {
     updateDebugPanelWidth();
 
     ctx.subject
-      .backgroundColor(1)
       .size('fill', 36)
       .display('grid')
       .render<T>((e) => {
+        const theme = Color.theme('Dark');
+        Dev.Theme.background(ctx, theme);
+
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({
-            Absolute: 0,
-            display: 'grid',
-            backgroundColor: Color.WHITE,
-            overflow: 'hidden',
-          }),
+          overlay: css({ Absolute: 0, overflow: 'hidden', display: 'grid' }),
         };
 
         const overlay = e.state.overlay;
@@ -128,7 +127,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
+            <SampleLayout stream={e.state.stream} theme={theme.name} />
             {elOverlay}
           </div>
         );
@@ -224,7 +223,7 @@ export default Dev.describe(name, async (e) => {
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           data={{
             network,
-            repo: model,
+            repo: { store: Store.tmp, index: Index.tmp },
             shared: [
               { label: 'System', uri, object: { lens: ['sys'], ...obj } },
               { label: 'Namespaces', uri, object: { lens: ['ns'], ...obj } },
@@ -249,7 +248,7 @@ export default Dev.describe(name, async (e) => {
           title={['Local State', 'Private']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
-            repo: { store: Store.fs, index: Index.fs },
+            repo: { store: main.store.fs, index: main.index.fs },
             document: [
               {
                 label: 'Me',
@@ -293,8 +292,11 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
-      dev.button('Redraw', (e) => dev.redraw());
+      dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
+      dev.button('tmp', (e) => {
+        console.log('self.', self.current.connections);
+      });
     });
   });
 
