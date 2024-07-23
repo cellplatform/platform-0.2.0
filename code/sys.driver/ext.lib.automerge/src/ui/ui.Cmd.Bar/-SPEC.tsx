@@ -2,17 +2,30 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import { Cmd, Color, css, Dev, Doc, ObjectPath, Pkg, SampleCrdt, type t } from '../../test.ui';
+import {
+  Cmd,
+  Color,
+  css,
+  Dev,
+  Doc,
+  Immutable,
+  Json,
+  ObjectPath,
+  Pkg,
+  rx,
+  SampleCrdt,
+  type t,
+} from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
-type T = {
+type D = {
   docuri?: t.UriString;
-  props: P;
-  debug: { useLens?: boolean; docVisible?: boolean };
-  current: { isFocused?: boolean; argv?: string };
+  useLens?: boolean;
+  docVisible?: boolean;
+  isFocused?: boolean;
+  argv?: string;
 };
-const initial: T = { props: {}, debug: {}, current: {} };
 
 /**
  * Spec
@@ -20,18 +33,24 @@ const initial: T = { props: {}, debug: {}, current: {} };
 const name = `${Pkg.name}:Crdt:CmdBar.Sample`;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] &
-    Pick<T, 'docuri'> &
-    Pick<P, 'theme' | 'useKeyboard' | 'useHistory'>;
+  type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    docuri: undefined,
-    useLens: true,
-    useKeyboard: true,
-    useHistory: true,
-    docVisible: false,
-  });
+  const local = localstore.object({ props: undefined, debug: undefined });
+  const State = {
+    props: Immutable.clonerRef<P>(
+      Json.parse<P>(local.props, {
+        theme: 'Dark',
+        useKeyboard: true,
+        useHistory: true,
+      }),
+    ),
+    debug: Immutable.clonerRef<D>(
+      Json.parse<D>(local.debug, {
+        useLens: true,
+        docVisible: false,
+      }),
+    ),
+  } as const;
 
   const db = await SampleCrdt.init({ broadcastAdapter: true });
   let doc: t.Doc | undefined;
@@ -39,25 +58,26 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-
-    await state.change((d) => {
-      d.docuri = local.docuri;
-      d.props.theme = local.theme;
-      d.props.useKeyboard = local.useKeyboard;
-      d.props.useHistory = local.useHistory;
-      d.debug.useLens = local.useLens;
-      d.debug.docVisible = local.docVisible;
-    });
-
-    const sample = SampleCrdt.dev(state, local, db.repo.store);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
     doc = await sample.get();
+
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
 
     /**
      * Render: <CmdBar>
      */
     const renderCommandBar = () => {
-      const { props } = state.current;
+      const props = State.props.current;
 
       const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
       const transition = [t('opacity'), t('border')].join(', ');
@@ -83,13 +103,13 @@ export default Dev.describe(name, async (e) => {
             const { dispose$ } = e;
             cmdbar = e.cmdbar as t.CmdBarRef;
             if (doc) Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
-            state.change((d) => (d.current.argv = e.initial.text));
+            State.debug.change((d) => (d.argv = e.initial.text));
 
             const events = cmdbar.ctrl.events(dispose$);
             events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
           }}
-          onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
-          onChange={(e) => state.change((d) => (d.current.argv = e.to))}
+          onFocusChange={(e) => State.debug.change((d) => (d.isFocused = e.is.focused))}
+          onChange={(e) => State.debug.change((d) => (d.argv = e.to))}
           onSelect={(e) => console.info(`⚡️ CmdBar.Stateful.onSelect`, e)}
         />
       );
@@ -106,8 +126,10 @@ export default Dev.describe(name, async (e) => {
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        const { props, current } = e.state;
+      .render<D>(() => {
+        const props = State.props.current;
+        const debug = State.debug.current;
+
         const theme = Color.theme(props.theme);
         Dev.Theme.background(ctx, theme, 1);
 
@@ -121,7 +143,7 @@ export default Dev.describe(name, async (e) => {
             fields={['Module.Run', 'Module.Args']}
             argsCard={{
               ctrl,
-              argv: current.argv,
+              argv: debug.argv,
               focused: { cmdbar: cmdbar?.current.focused },
               title: { left: address, right: 'main' },
               style: { marginBottom: 40 },
@@ -143,11 +165,10 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:header', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
+    const dev = Dev.tools<D>(e);
 
     dev.header.border(-0.1).render((e) => {
-      const { debug, docuri } = state.current;
+      const debug = State.debug.current;
       const { store, index } = db.repo;
       return (
         <Info
@@ -156,13 +177,13 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store, index },
             document: {
-              ref: docuri,
+              ref: debug.docuri,
               uri: { head: true },
               object: {
                 visible: debug.docVisible,
                 expand: { level: 1 },
                 onToggleClick(e) {
-                  state.change((d) => (local.docVisible = Dev.toggle(d.debug, 'docVisible')));
+                  State.debug.change((d) => Dev.toggle(d, 'docVisible'));
                 },
                 beforeRender(mutate) {
                   const paths = CmdBar.Path.defaults;
@@ -186,30 +207,25 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.repo.store);
+    const dev = Dev.tools<D>(e);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (e) => (local.theme = e));
+      Dev.Theme.immutable(dev, State.props);
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.useKeyboard;
+        const value = () => !!State.props.current.useKeyboard;
         btn
-          .label((e) => `useKeyboard`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
-          });
+          .label(() => `useKeyboard`)
+          .value(() => value())
+          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'useKeyboard')));
       });
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.useHistory;
+        const value = () => !!State.props.current.useHistory;
         btn
           .label((e) => `useHistory`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.useHistory = Dev.toggle(d.props, 'useHistory')));
-          });
+          .value((e) => value())
+          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'useHistory')));
       });
     });
 
@@ -239,12 +255,13 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>(async (e) => {
-      const { props, docuri } = e.state;
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>((e) => {
+      const props = State.props.current;
+      const debug = State.debug.current;
       const data = {
         props,
-        docuri: Doc.Uri.id(docuri, { shorten: 5 }),
+        docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
       };
       return <Dev.Object name={name} data={data} expand={{ paths: ['$'] }} fontSize={11} />;
     });

@@ -1,11 +1,10 @@
 import { DEFAULTS, DocUri } from '.';
-import { Dev, Doc, Pkg, SampleCrdt } from '../../test.ui';
+import { Dev, Doc, Immutable, Json, Pkg, SampleCrdt, rx } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { type t } from './common';
 
 type P = t.DocUriProps;
-type T = { docuri?: string; props: P; debug: { useDoc?: boolean } };
-const initial: T = { props: {}, debug: {} };
+type D = { docuri?: string; useDoc?: boolean };
 
 const LARGE_FONT = 40;
 const HEAD = 2;
@@ -15,25 +14,23 @@ const HEAD = 2;
  */
 const name = DEFAULTS.displayName;
 export default Dev.describe(name, async (e) => {
-  type LocalStore = T['debug'] &
-    Pick<T, 'docuri'> &
-    Pick<P, 'theme' | 'fontSize' | 'head' | 'clipboard'>;
+  type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    docuri: undefined,
-    clipboard: DEFAULTS.uri.clipboard,
-    head: undefined,
-    useDoc: false,
-    fontSize: LARGE_FONT,
-  });
+  const local = localstore.object({ props: undefined, debug: undefined });
+  const State = {
+    props: Immutable.clonerRef<P>(
+      Json.parse<P>(local.props, () => ({ ...DEFAULTS.props, fontSize: LARGE_FONT })),
+    ),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { useDoc: false })),
+  } as const;
 
   const db = await SampleCrdt.init({});
   let doc: t.Doc | undefined;
 
   const Props = {
-    get(state: T): P {
-      const { props, debug } = state;
+    get(): P {
+      const props = State.props.current;
+      const debug = State.debug.current;
       return {
         ...props,
         doc: debug.useDoc ? doc : doc?.uri,
@@ -43,29 +40,29 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
-    const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.repo.store);
-
-    await state.change((d) => {
-      d.docuri = local.docuri;
-      d.props.theme = local.theme;
-      d.props.fontSize = local.fontSize;
-      d.props.head = local.head;
-      d.props.clipboard = local.clipboard;
-      d.debug.useDoc = local.useDoc;
-    });
-
+    const dev = Dev.tools<D>(e);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
     doc = await sample.get();
 
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
+
     ctx.debug.width(330);
-    ctx.subject.display('grid').render<T>((e) => {
-      const props = Props.get(e.state);
+    ctx.subject.display('grid').render<D>(() => {
+      const props = Props.get();
       Dev.Theme.background(dev, props.theme, 1);
 
       return (
         <DocUri
-          //
           {...props}
           onMouse={(e) => console.info(`⚡️ DocUri.onMouse:`, e)}
           onCopy={(e) => console.info(`⚡️ DocUri.onCopy:💦`, e)}
@@ -75,10 +72,9 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:header', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
+    const dev = Dev.tools<D>(e);
 
-    dev.header.border(-0.1).render((e) => {
+    dev.header.border(-0.1).render<D>(() => {
       const { store, index } = db.repo;
       return (
         <Info
@@ -98,41 +94,40 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.repo.store);
+    const dev = Dev.tools<D>(e);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.immutable(dev, State.props);
 
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.fontSize;
+        const value = () => !!State.props.current.fontSize;
         btn
-          .label((e) => `fontSize: ${value(e.state) ? `${LARGE_FONT}px` : '<undefined>'}`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            const next = value(e.state.current) ? undefined : LARGE_FONT;
-            e.change((d) => (local.fontSize = d.props.fontSize = next));
+          .label(() => `fontSize: ${value() ? `${LARGE_FONT}px` : '<undefined>'}`)
+          .value(() => value())
+          .onClick(() => {
+            const next = value() ? undefined : LARGE_FONT;
+            State.props.change((d) => (d.fontSize = next));
           });
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.head;
+        const value = () => !!State.props.current.head;
         btn
-          .label((e) => `head: ${value(e.state) ? HEAD : '<undefined>'}`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            const next = value(e.state.current) ? undefined : HEAD;
-            e.change((d) => (local.head = d.props.head = next));
+          .label(() => `head: ${value() ? HEAD : '<undefined>'}`)
+          .value(() => value())
+          .onClick(() => {
+            const next = value() ? undefined : HEAD;
+            State.props.change((d) => (d.head = next));
           });
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.clipboard;
+        const value = () => !!State.props.current.clipboard;
         btn
-          .label((e) => `clipboard`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.clipboard = Dev.toggle(d.props, 'clipboard'))));
+          .label(() => `clipboard`)
+          .value(() => value())
+          .onClick(() => State.props.change((d) => Dev.toggle(d, 'clipboard')));
       });
     });
 
@@ -142,11 +137,11 @@ export default Dev.describe(name, async (e) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.useDoc;
+        const value = () => !!State.debug.current.useDoc;
         btn
-          .label((e) => (value(e.state) ? `using Doc<T> URI` : `using string URI`))
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.useDoc = Dev.toggle(d.debug, 'useDoc'))));
+          .label(() => (value() ? `using Doc<T> URI` : `using string URI`))
+          .value(() => value())
+          .onClick(() => State.debug.change((d) => Dev.toggle(d, 'useDoc')));
       });
     });
 
@@ -156,15 +151,15 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`create`)
-          .enabled((e) => !doc)
-          .onClick(async (e) => (doc = await sample.get()));
+          .enabled(() => !doc)
+          .onClick(async () => (doc = await sample.get()));
       });
       dev.button((btn) => {
         btn
           .label(`delete`)
-          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
-          .enabled((e) => !!doc)
-          .onClick(async (e) => (doc = await sample.delete()));
+          .right(() => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
+          .enabled(() => !!doc)
+          .onClick(async () => (doc = await sample.delete()));
       });
 
       dev.hr(-1, 5);
@@ -174,9 +169,9 @@ export default Dev.describe(name, async (e) => {
         const getCount = () => doc?.current?.count ?? 0;
         btn
           .label(`increment`)
-          .right((e) => `count: ${getCount()} + 1`)
-          .enabled((e) => !!doc)
-          .onClick((e) => {
+          .right(() => `count: ${getCount()} + 1`)
+          .enabled(() => !!doc)
+          .onClick(() => {
             doc?.change((d) => (d.count = ((d as T).count || 0) + 1));
             dev.redraw('debug');
           });
@@ -184,10 +179,10 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const props = Props.get(e.state);
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>(() => {
+      const props = Props.get();
       const data = {
         props: {
           ...props,
