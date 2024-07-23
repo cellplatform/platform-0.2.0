@@ -346,7 +346,7 @@ export default Dev.describe(name, async (e) => {
       const data = {
         docuri: Doc.Uri.id(e.state.docuri, { shorten: 5 }),
         props,
-        'crdt:store:db': db.storage.name,
+        'crdt:store:db': db.name,
         'crdt:doc': doc,
       };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;

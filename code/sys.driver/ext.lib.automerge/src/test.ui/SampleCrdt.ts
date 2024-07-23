@@ -30,7 +30,7 @@ export const SampleCrdt = {
 
     return {
       repo: { store, index },
-      storage,
+      name: storage.name,
       docAtIndex,
     } as const;
   },

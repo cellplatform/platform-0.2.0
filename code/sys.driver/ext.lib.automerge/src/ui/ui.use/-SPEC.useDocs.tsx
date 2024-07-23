@@ -162,7 +162,7 @@ export default Dev.describe(name, async (e) => {
           });
       });
       dev.hr(-1, 5);
-      dev.button([`delete database: "${db.storage.name}"`, '💥'], async (e) => {
+      dev.button([`delete database: "${db.name}"`, '💥'], async (e) => {
         await e.state.change((d) => (d.reload = true));
         await TestDb.Spec.deleteDatabase();
       });
