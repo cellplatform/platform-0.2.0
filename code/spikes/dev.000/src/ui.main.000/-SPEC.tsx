@@ -106,15 +106,16 @@ export default Dev.describe(name, async (e) => {
     updateDebugPanelWidth();
 
     ctx.subject
-      .size('fill', 36)
+      .size('fill', 80)
       .display('grid')
       .render<T>((e) => {
         const theme = Color.theme('Dark');
         Dev.Theme.background(ctx, theme);
+        ctx.host.tracelineColor(Color.alpha(theme.fg, 0.03));
 
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({ Absolute: 0, overflow: 'hidden', display: 'grid' }),
+          overlay: css({ Absolute: 0, display: 'grid' }),
         };
 
         const overlay = e.state.overlay;
@@ -240,7 +241,7 @@ export default Dev.describe(name, async (e) => {
       return (
         <CrdtInfo
           stateful={true}
-          title={['Local State', 'Private']}
+          title={['Private State', 'Local']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
             repo: main.repo.fs,
@@ -285,14 +286,10 @@ export default Dev.describe(name, async (e) => {
       );
     });
 
-    dev.hr(5, 20);
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.button('tmp', (e) => {
-        console.log('self.', self.current.connections);
-      });
-    });
+    // dev.hr(5, 20);
+    // dev.section('Debug', (dev) => {
+    //   dev.button('redraw', (e) => dev.redraw());
+    // });
   });
 
   e.it('ui:footer', async (e) => {
