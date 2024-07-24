@@ -12,7 +12,7 @@ export { Doc };
 const name = 'DocUri';
 const props: t.PickRequired<t.DocUriProps, 'theme' | 'shorten' | 'prefix' | 'head' | 'clipboard'> =
   {
-    theme: 'Dark',
+    theme: 'Light',
     shorten: [4, 4],
     prefix: 'crdt',
     head: 2,

@@ -14,7 +14,7 @@ type P = t.InfoProps;
  */
 const name = 'Info';
 const props: t.PickRequired<P, 'theme' | 'stateful' | 'fields'> = {
-  theme: 'Dark',
+  theme: 'Light',
   stateful: false,
   get fields() {
     return fields.default;
