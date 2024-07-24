@@ -58,7 +58,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   const elCmdBar = commandbarVisible && (
     <div {...styles.bar}>
       <CmdBar
-        cmd={cmdbar._}
+        cmd={CmdBar.Ctrl.toCmd(cmdbar)}
         enabled={enabled}
         text={props.command}
         placeholder={props.commandPlaceholder}

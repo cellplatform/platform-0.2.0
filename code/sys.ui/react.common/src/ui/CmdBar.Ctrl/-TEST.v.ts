@@ -7,7 +7,7 @@ describe('CmdBar.Ctrl', () => {
     const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
     const ctrl = CmdBar.Ctrl.create(transport);
-    const cmd = ctrl._;
+    const cmd = Ctrl.toCmd(ctrl);
     const paths = DEFAULTS.paths;
 
     const ref: t.CmdBarRef = {
@@ -41,7 +41,9 @@ describe('CmdBar.Ctrl', () => {
 
     let fired = 0;
     ctrl1.events().on('Invoke', () => fired++);
-    ctrl2._.events().on('Invoke', () => fired++);
+    Ctrl.toCmd(ctrl2)
+      .events()
+      .on('Invoke', () => fired++);
 
     expectCounter(0);
     ctrl1.invoke({ text: 'foo' });
@@ -68,6 +70,13 @@ describe('CmdBar.Ctrl', () => {
     expect(ctrl5).to.equal(ref.ctrl);
   });
 
+  it('Ctrl.toCmd', () => {
+    const { cmd, ref } = testSetup();
+    expect(Ctrl.toCmd(cmd)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref.ctrl)).to.eql(cmd);
+  });
+
   describe('Ctrl.Is', () => {
     const Is = CmdBar.Is;
     const NON = [123, 'abc', [], {}, undefined, null, true, Symbol('foo'), BigInt(0)];
@@ -76,7 +85,8 @@ describe('CmdBar.Ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
       NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
       expect(Is.ctrl(ctrl)).to.eql(true);
-      expect(Is.ctrl({ cmd: ctrl._ })).to.eql(false);
+
+      expect(Is.ctrl({ cmd: CmdBar.Ctrl.toCtrl(ctrl) })).to.eql(false);
       expect(Is.ctrl(ctrl)).to.eql(true);
     });
 

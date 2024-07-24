@@ -1,5 +1,6 @@
 import { CmdBar, DEFAULTS } from '.';
 import { Color, css, Dev, DevIcons, Pkg, Time, type t } from '../../test.ui';
+import { Ctrl } from '../CmdBar.Ctrl';
 
 type P = t.CmdBarProps;
 type T = {
@@ -57,7 +58,7 @@ export default Dev.describe(name, (e) => {
         return (
           <CmdBar
             {...props}
-            cmd={cmdbar._}
+            cmd={Ctrl.toCmd(cmdbar)}
             focusBorder={debug.focusBorder}
             onReady={(e) => console.info('⚡️ CmdBar.onReady:', e)}
             onChange={(e) => {
@@ -159,17 +160,18 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Command', (dev) => {
-      const focus = (target: 'CmdBar' | 'Main') => {
-        const invoke = () => Time.delay(0, () => cmdbar.focus({ target }));
-        dev.button(['Focus', `"${target}"`], () => invoke());
+      const focus = (target: t.CmdBarFocusTarget) => Time.delay(0, () => cmdbar.focus({ target }));
+      const focusButton = (target: t.CmdBarFocusTarget) => {
+        dev.button(['focus', `"${target}"`], () => focus(target));
       };
-      focus('CmdBar');
-      focus('Main');
+      focusButton('CmdBar');
+      focusButton('Main');
       dev.hr(-1, 5);
-      dev.button('Current', async (e) => {
+      dev.button('current', async (e) => {
         const res = await cmdbar.current({}).promise();
-        console.log('res', res.result);
+        console.info('result:', res.result);
       });
+      dev.button('clear', () => cmdbar.clear({}));
     });
 
     dev.hr(5, 20);

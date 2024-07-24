@@ -92,7 +92,7 @@ const wrangle = {
   },
 
   ctrl(props: t.CmdBarProps) {
-    if (!props.cmd) return Ctrl.create(Immutable.clonerRef({}))._;
+    if (!props.cmd) return Ctrl.toCmd(Ctrl.create(Immutable.clonerRef({})));
     return props.cmd;
   },
 

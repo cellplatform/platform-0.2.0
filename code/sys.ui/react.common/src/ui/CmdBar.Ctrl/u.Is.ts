@@ -1,4 +1,4 @@
-import { Cmd, ObjectPath, rx, type t } from './common';
+import { Cmd, DEFAULTS, ObjectPath, rx, type t } from './common';
 
 /**
  * Flags for the <CmdBar>
@@ -6,7 +6,7 @@ import { Cmd, ObjectPath, rx, type t } from './common';
 export const Is = {
   ctrl(input: any): input is t.CmdBarCtrl {
     if (!isObject(input)) return false;
-    return Cmd.Is.cmd(input._) && hasCtrlMethods(input);
+    return Cmd.Is.cmd(input[DEFAULTS.symbol.cmd]) && hasCtrlMethods(input);
   },
 
   paths(input: any): input is t.CmdBarPaths {

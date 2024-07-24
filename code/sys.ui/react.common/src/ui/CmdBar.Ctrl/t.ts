@@ -48,7 +48,6 @@ type HistoryP = { action: 'ArrowUp' | 'ArrowDown' };
  * Command Methods (ctrl).
  */
 export type CmdBarCtrl = {
-  readonly _: t.Cmd<t.CmdBarCtrlType>;
   readonly current: t.CmdMethodResponder<Current, CurrentR>;
   readonly focus: t.CmdMethodVoid<Focus>;
   readonly select: t.CmdMethodVoid<Select>;

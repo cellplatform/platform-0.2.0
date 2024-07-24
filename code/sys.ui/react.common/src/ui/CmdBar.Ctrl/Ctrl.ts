@@ -1,6 +1,6 @@
 import { Cmd, DEFAULTS, Immutable, type t } from './common';
 import { listen } from './Ctrl.listen';
-import { Is, Path } from './u';
+import { Is, methods, Path, toCmd, toCtrl } from './u';
 
 type C = t.CmdBarCtrlType;
 
@@ -11,42 +11,21 @@ export const Ctrl = {
   Is,
   Path,
   listen,
+  toCtrl,
+  toCmd,
 
-  create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
-    const cmd = create(transport, options.paths);
+  create(transport?: t.CmdTransport, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
+    const cmd = factory(transport, options.paths);
     return methods(cmd);
-  },
-
-  toCtrl(input: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
-    if (Is.ctrl(input)) return input;
-    if (Is.ref(input)) return input.ctrl;
-    return methods(input);
   },
 } as const;
 
 /**
  * Helpers
  */
-function create(transport?: t.CmdImmutable, cmdpaths: t.CmdBarPaths = DEFAULTS.paths) {
+function factory(transport?: t.CmdTransport, cmdpaths: t.CmdBarPaths = DEFAULTS.paths) {
   const paths = Cmd.Path.prepend(cmdpaths.cmd);
   const doc = transport ?? Immutable.clonerRef({});
-  return Cmd.create<C>(doc, { paths }) as t.Cmd<t.CmdBarCtrlType>;
-}
-
-function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
-  const method = cmd.method;
-  return {
-    _: cmd,
-    current: method('Current', 'Current:res'),
-    focus: method('Focus'),
-    select: method('Select'),
-    caretToStart: method('Caret:ToStart'),
-    caretToEnd: method('Caret:ToEnd'),
-    invoke: method('Invoke'),
-    keyboard: method('Keyboard'),
-    history: method('History'),
-    events(dispose$?: t.UntilObservable) {
-      return cmd.events(dispose$);
-    },
-  };
+  const cmd = Cmd.create<C>(doc, { paths });
+  return cmd as t.Cmd<t.CmdBarCtrlType>;
 }
