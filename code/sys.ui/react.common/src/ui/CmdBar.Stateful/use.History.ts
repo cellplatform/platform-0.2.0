@@ -6,7 +6,7 @@ import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
  */
 export function useHistory(args: {
   enabled?: boolean;
-  state?: t.CmdImmutable;
+  state?: t.CmdTransport;
   ctrl?: t.CmdBarCtrl;
   paths?: t.CmdBarPaths;
 }) {
@@ -14,7 +14,7 @@ export function useHistory(args: {
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
 
-  const append = (state: t.CmdImmutable) => {
+  const append = (state: t.CmdTransport) => {
     const text = api.text.trim();
     const history = api.history;
     const latest = history[history.length - 1];

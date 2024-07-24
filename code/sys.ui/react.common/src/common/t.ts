@@ -68,7 +68,7 @@ export type {
 export type {
   Cmd,
   CmdEvents,
-  CmdImmutable,
+  CmdTransport,
   CmdMethodResponder,
   CmdMethodVoid,
   CmdPathsObject,

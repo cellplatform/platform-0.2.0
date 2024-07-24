@@ -15,10 +15,9 @@ type Options = {
  * Command factory.
  */
 export function create<C extends t.CmdType>(
-  transport: t.CmdImmutable,
+  transport: t.CmdTransport,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  const doc = transport;
   const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
@@ -26,7 +25,7 @@ export function create<C extends t.CmdType>(
   const counter = args.counter ?? DEFAULTS.counter;
 
   const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
-    doc.change((d) => {
+    transport.change((d) => {
       const count = resolve.counter(d, DEFAULTS.counter) as t.CmdCounter;
       mutate(d, paths.tx, tx);
       mutate(d, paths.name, name);
@@ -37,7 +36,7 @@ export function create<C extends t.CmdType>(
   };
 
   // Ensure document is initialized with the {cmd} structure.
-  if (!Is.validState(doc.current)) update('', '', {}); // ← (default empty structure).
+  if (!Is.validState(transport.current)) update('', '', {}); // ← (default empty structure).
 
   /**
    * Invoke method (overloads)
@@ -88,7 +87,7 @@ export function create<C extends t.CmdType>(
    */
   const api: t.Cmd<C> = {
     events(dispose$?: t.UntilObservable) {
-      return Events.create<C>(doc, { paths, dispose$ });
+      return Events.create<C>(transport, { paths, dispose$ });
     },
 
     invoke(name, params, options) {
