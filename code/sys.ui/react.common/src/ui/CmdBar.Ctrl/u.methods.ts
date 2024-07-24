@@ -25,6 +25,14 @@ export function toCmd(input: CInput): Cmd {
 }
 
 /**
+ * Derive the paths from the given Command input.
+ */
+export function toPaths(input: CInput): t.CmdBarPaths {
+  const cmd = toCmd(input) as any;
+  return cmd[DEFAULTS.symbol.paths];
+}
+
+/**
  * Wrap the command with methods.
  */
 export function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
@@ -41,8 +49,6 @@ export function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
     clear: method('Clear'),
     events: (dispose$?: t.UntilObservable) => cmd.events(dispose$),
   };
-
   (api as any)[DEFAULTS.symbol.cmd] = cmd;
-
   return api;
 }

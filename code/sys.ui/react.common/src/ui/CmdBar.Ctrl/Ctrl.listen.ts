@@ -1,6 +1,6 @@
-import { DEFAULTS, type t } from './common';
+import { Cmd, DEFAULTS, ObjectPath, type t } from './common';
 import { Keyboard } from './Ctrl.keyboard';
-import { Selection } from './u';
+import { Selection, toCmd, toPaths } from './u';
 
 /**
  * Behavior logic for command signals.
@@ -12,7 +12,9 @@ export function listen(args: {
   dispose$?: t.UntilObservable;
 }): t.Lifecycle {
   const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
-  const cmd = ctrl._;
+  const cmd = toCmd(ctrl);
+  const transport = Cmd.transport(cmd);
+  const paths = toPaths(cmd);
   const events = cmd.events(args.dispose$);
   const isFocused = () => textbox.current.focused;
 
@@ -37,9 +39,10 @@ export function listen(args: {
     if (scope === 'Toggle:Full') Selection.toggleFull(textbox);
   });
 
-  events.on('Caret:ToStart', (e) => textbox.caretToStart());
-  events.on('Caret:ToEnd', (e) => textbox.caretToEnd());
+  events.on('Caret:ToStart', () => textbox.caretToStart());
+  events.on('Caret:ToEnd', () => textbox.caretToEnd());
   events.on('Keyboard', (e) => Keyboard.handleKeyAction(ctrl, e.params, isFocused()));
+  events.on('Clear', () => transport.change((d) => ObjectPath.mutate(d, paths.text, '')));
 
   return events;
 }

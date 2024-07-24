@@ -8,5 +8,6 @@ export const DEFAULTS = {
   ...BASE,
   symbol: {
     cmd: Symbol('cmd'),
+    paths: Symbol('paths'),
   },
 } as const;

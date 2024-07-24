@@ -145,7 +145,9 @@ export default Dev.describe(name, (e) => {
         Dev.Theme.background(dev, theme, 1);
 
         const styles = {
-          base: css({ backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */ }),
+          base: css({
+            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+          }),
         };
 
         const ctrl = cmdbar;
@@ -245,25 +247,28 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Command', (dev) => {
-      const focus = (target: 'CmdBar' | 'Main') => {
-        const invoke = () => Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
-        dev.button(`Focus:${target}`, () => invoke());
+      const focus = (target: t.CmdBarFocusTarget) =>
+        Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
+      const focusButton = (target: t.CmdBarFocusTarget) => {
+        dev.button(['focus', `"${target}"`], () => focus(target));
       };
-      focus('Main');
-      focus('CmdBar');
+      focusButton('Main');
+      focusButton('CmdBar');
       dev.hr(-1, 5);
-      dev.button('Invoke', (e) => {
+      dev.button('invoke', (e) => {
         const text = getText(state.current);
         cmdbar?.ctrl.invoke({ text });
       });
       dev.hr(-1, 5);
-      dev.button('Select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
-      dev.button('Select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
+      dev.button('select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
+      dev.button('select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button(['CMD + J', 'Focus:Main'], (e) => cmdbar?.ctrl.keyboard({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'Focus:CmdBar'], (e) =>
-        cmdbar?.ctrl.keyboard({ name: 'Focus:CmdBar' }),
-      );
+      dev.button('clear', (e) => cmdbar?.ctrl.clear({}));
+      dev.hr(-1, 5);
+
+      const keyboardAction = (name: t.KeyboardAction['name']) => cmdbar?.ctrl.keyboard({ name });
+      dev.button(['CMD + J', 'focus: Main'], (e) => keyboardAction('Focus:Main'));
+      dev.button(['CMD + K', 'focus: CmdBar'], (e) => keyboardAction('Focus:CmdBar'));
     });
 
     dev.hr(5, 20);

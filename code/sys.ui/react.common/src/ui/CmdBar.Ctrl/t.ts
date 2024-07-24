@@ -2,6 +2,8 @@ import type { t } from './common';
 
 type O = Record<string, unknown>;
 
+export type CmdBarFocusTarget = 'CmdBar' | 'Main';
+
 /**
  * Paths
  */
@@ -28,15 +30,18 @@ export type CmdBarCtrlType =
   | CaretToEnd
   | Invoke
   | Keyboard
+  | Clear
   | History;
 
 type Current = t.CmdType<'Current', O>;
 type CurrentR = t.CmdType<'Current:res', { text: string }>;
-type Focus = t.CmdType<'Focus', { target?: 'CmdBar' | 'Main' }>;
 type CaretToStart = t.CmdType<'Caret:ToStart', O>;
 type CaretToEnd = t.CmdType<'Caret:ToEnd', O>;
 type Invoke = t.CmdType<'Invoke', { text: string }>;
 type Keyboard = t.CmdType<'Keyboard', KeyboardAction>;
+type Clear = t.CmdType<'Clear', O>;
+
+type Focus = t.CmdType<'Focus', { target?: CmdBarFocusTarget }>;
 
 type Select = t.CmdType<'Select', SelectP>;
 type SelectP = { scope?: 'All' | 'Expand' | 'Toggle:Full' };
@@ -56,6 +61,7 @@ export type CmdBarCtrl = {
   readonly invoke: t.CmdMethodVoid<Invoke>;
   readonly keyboard: t.CmdMethodVoid<Keyboard>;
   readonly history: t.CmdMethodVoid<History>;
+  readonly clear: t.CmdMethodVoid<Clear>;
   events(dispose$?: t.UntilObservable): t.CmdEvents<t.CmdBarCtrlType>;
 };
 

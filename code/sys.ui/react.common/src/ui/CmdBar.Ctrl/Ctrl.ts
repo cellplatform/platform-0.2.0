@@ -1,6 +1,6 @@
 import { Cmd, DEFAULTS, Immutable, type t } from './common';
 import { listen } from './Ctrl.listen';
-import { Is, methods, Path, toCmd, toCtrl } from './u';
+import { Is, methods, Path, toCmd, toCtrl, toPaths } from './u';
 
 type C = t.CmdBarCtrlType;
 
@@ -13,9 +13,12 @@ export const Ctrl = {
   listen,
   toCtrl,
   toCmd,
+  toPaths,
 
   create(transport?: t.CmdTransport, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
-    const cmd = factory(transport, options.paths);
+    const paths = options.paths ?? DEFAULTS.paths;
+    const cmd = factory(transport, paths);
+    (cmd as any)[DEFAULTS.symbol.paths] = paths;
     return methods(cmd);
   },
 } as const;

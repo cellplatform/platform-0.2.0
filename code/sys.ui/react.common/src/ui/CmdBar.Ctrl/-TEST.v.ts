@@ -1,5 +1,5 @@
 import { Ctrl, DEFAULTS } from '.';
-import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t } from '../../test';
+import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t, Cmd } from '../../test';
 import { CmdBar } from '../CmdBar';
 
 describe('CmdBar.Ctrl', () => {
@@ -75,6 +75,21 @@ describe('CmdBar.Ctrl', () => {
     expect(Ctrl.toCmd(cmd)).to.eql(cmd);
     expect(Ctrl.toCmd(ref)).to.eql(cmd);
     expect(Ctrl.toCmd(ref.ctrl)).to.eql(cmd);
+  });
+
+  it('Ctrl.toCmd (default)', () => {
+    const { cmd, ref, transport } = testSetup();
+    expect(Ctrl.toPaths(cmd)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref.ctrl)).to.eql(DEFAULTS.paths);
+  });
+
+  it('Ctrl.toCmd (custom)', () => {
+    const paths = CmdBar.Ctrl.Path.prepend(['foo', 'bar']);
+    const ctrl = Ctrl.create(undefined, { paths });
+    const cmd = Ctrl.toCmd(ctrl);
+    expect(Ctrl.toPaths(ctrl)).to.eql(paths);
+    expect(Ctrl.toPaths(cmd)).to.eql(paths);
   });
 
   describe('Ctrl.Is', () => {

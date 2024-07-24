@@ -171,7 +171,6 @@ export default Dev.describe(name, (e) => {
         const res = await cmdbar.current({}).promise();
         console.info('result:', res.result);
       });
-      dev.button('clear', () => cmdbar.clear({}));
     });
 
     dev.hr(5, 20);
