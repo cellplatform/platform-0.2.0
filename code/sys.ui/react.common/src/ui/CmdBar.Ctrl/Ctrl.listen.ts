@@ -13,7 +13,7 @@ export function listen(args: {
 }): t.Lifecycle {
   const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
   const cmd = toCmd(ctrl);
-  const transport = Cmd.transport(cmd);
+  const doc = Cmd.transport(cmd);
   const paths = toPaths(cmd);
   const events = cmd.events(args.dispose$);
   const isFocused = () => textbox.current.focused;
@@ -31,6 +31,9 @@ export function listen(args: {
       textbox.focus();
       textbox.caretToEnd();
     }
+    if (target === 'Main') {
+      textbox.blur();
+    }
   });
   events.on('Select', (e) => {
     const scope = e.params.scope ?? 'All';
@@ -42,7 +45,14 @@ export function listen(args: {
   events.on('Caret:ToStart', () => textbox.caretToStart());
   events.on('Caret:ToEnd', () => textbox.caretToEnd());
   events.on('Keyboard', (e) => Keyboard.handleKeyAction(ctrl, e.params, isFocused()));
-  events.on('Clear', () => transport.change((d) => ObjectPath.mutate(d, paths.text, '')));
+
+  events.on('Clear', () => doc.change((d) => ObjectPath.mutate(d, paths.text, '')));
+  events.on('Update', (e) => {
+    doc.change((d) => {
+      const { text } = e.params;
+      if (typeof text === 'string') ObjectPath.mutate(d, paths.text, text);
+    });
+  });
 
   return events;
 }

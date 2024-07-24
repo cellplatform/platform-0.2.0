@@ -264,6 +264,7 @@ export default Dev.describe(name, (e) => {
       dev.button('select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
       dev.button('clear', (e) => cmdbar?.ctrl.clear({}));
+      dev.button('update: "foo"', (e) => cmdbar?.ctrl.update({ text: 'foo' }));
       dev.hr(-1, 5);
 
       const keyboardAction = (name: t.KeyboardAction['name']) => cmdbar?.ctrl.keyboard({ name });

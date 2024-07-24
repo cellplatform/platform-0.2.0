@@ -46,6 +46,7 @@ export function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
     invoke: method('Invoke'),
     keyboard: method('Keyboard'),
     history: method('History'),
+    update: method('Update'),
     clear: method('Clear'),
     events: (dispose$?: t.UntilObservable) => cmd.events(dispose$),
   };
