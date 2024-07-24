@@ -1,6 +1,5 @@
 import type { t } from '../common';
 
-type O = Record<string, unknown>;
 export type RootCommands = 'me' | 'dev' | 'cast' | 'hash' | 'cmd';
 
 /**
@@ -9,20 +8,16 @@ export type RootCommands = 'me' | 'dev' | 'cast' | 'hash' | 'cmd';
 export type Shell = {
   cmdbar?: t.CmdBarRef;
   readonly self: t.PeerModel;
-  readonly cmd: ShellCommands;
+  readonly fc: t.Cmd<t.FarcasterCmd>;
   readonly state: {
     readonly me: t.Doc;
     readonly cmdbar: t.Lens;
     readonly harness: t.Lens<Harness>;
     readonly tmp: t.Lens<Tmp>;
   };
-  readonly store: {
-    readonly fs: t.Store;
-    readonly tmp: t.Store;
-  };
-  readonly index: {
-    readonly fs: t.StoreIndex;
-    readonly tmp: t.StoreIndex;
+  readonly repo: {
+    fs: { store: t.Store; index: t.StoreIndex };
+    tmp: { store: t.Store; index: t.StoreIndex };
   };
 };
 
@@ -41,13 +36,6 @@ export type Tmp = {
   video?: TmpVideo;
 };
 export type TmpVideo = { id: string; playing?: boolean; muted?: boolean };
-
-/**
- * Shell Commands
- */
-export type ShellCommands = {
-  readonly fc: t.Cmd<t.FarcasterCmd>;
-};
 
 /**
  * Editor

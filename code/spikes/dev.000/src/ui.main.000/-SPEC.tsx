@@ -46,7 +46,6 @@ export default Dev.describe(name, async (e) => {
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
     fs: WebStore.init({ storage: 'fs', network: [] }),
   } as const;
-
   const Index = {
     tmp: await WebStore.index(Store.tmp),
     fs: await WebStore.index(Store.fs),
@@ -70,20 +69,16 @@ export default Dev.describe(name, async (e) => {
   const main: t.Shell = {
     cmdbar: undefined,
     self,
-    cmd: { fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd> },
+    fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    repo: {
+      fs: { store: Store.fs, index: Index.fs },
+      tmp: { store: Store.tmp, index: Index.tmp },
+    },
     state: {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
       harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
-    },
-    store: {
-      fs: Store.fs,
-      tmp: Store.tmp,
-    },
-    index: {
-      fs: await WebStore.index(Store.fs),
-      tmp: network.index,
     },
   };
 
@@ -199,7 +194,7 @@ export default Dev.describe(name, async (e) => {
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
-              cmd: main.cmd.fc,
+              cmd: main.fc,
               signer: {},
               identity: { onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e) },
             },
@@ -248,7 +243,7 @@ export default Dev.describe(name, async (e) => {
           title={['Local State', 'Private']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
-            repo: { store: main.store.fs, index: main.index.fs },
+            repo: main.repo.fs,
             document: [
               {
                 label: 'Me',

@@ -88,7 +88,8 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
               if (pos[1] === 'crdt' && pos[2] === 'create') {
                 const { Crdt } = await import('./ui.Crdt');
 
-                const doc = await main.store.tmp.doc.getOrCreate(() => null);
+                const store = main.repo.tmp.store;
+                const doc = await store.doc.getOrCreate(() => null);
                 const uri = doc.uri;
                 return e.render(<Crdt main={main} docuri={uri} theme={e.theme} />);
               }

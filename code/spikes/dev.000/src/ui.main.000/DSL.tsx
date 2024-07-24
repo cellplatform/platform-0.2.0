@@ -45,10 +45,16 @@ export const DSL = {
     const { args, action, pos } = wrangle.args<t.RootCommands>(argv);
     const tmp = main.state.tmp;
 
+    if (action.startsWith('peer:')) {
+      main.self.connect.data(action.split(':')[1]);
+      main.cmdbar?.ctrl.clear({});
+      return;
+    }
+
     if (action === 'cast') {
       const text = pos[1];
       console.log('cast:', text);
-      const send = main.cmd.fc.method('send:cast', 'send:cast:res');
+      const send = main.fc.method('send:cast', 'send:cast:res');
       const res = await send({ text }).promise();
       console.log('cast:response:', res);
     }
