@@ -98,7 +98,9 @@ export function create<C extends t.CmdType>(
       const [p1, p2] = args;
       return (typeof p2 !== 'string' ? toVoidMethod(p1) : toResponderMethod(p1, p2)) as any;
     },
-  } as const;
+  };
+
+  (api as any)[DEFAULTS.symbol.transport] = transport; // See: Cmd.transport(...) to retrieve.
   return api;
 }
 

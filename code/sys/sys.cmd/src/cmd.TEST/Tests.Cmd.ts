@@ -86,5 +86,12 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       dispose();
     });
+
+    it('Cmd.transport (hidden field)', async () => {
+      const { doc, dispose } = await setup();
+      const cmd = Cmd.create<C>(doc);
+      expect(Cmd.transport(cmd)).to.eql(doc);
+      dispose();
+    });
   });
 }
