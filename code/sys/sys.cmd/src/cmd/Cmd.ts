@@ -1,6 +1,6 @@
 import { create } from './Cmd.impl';
 import { DEFAULTS, type t } from './common';
-import { Events, Patch, Path, Is } from './u';
+import { Events, Is, Patch, Path } from './u';
 
 /**
  * Command event structure on an observable/syncing CRDT.
@@ -23,8 +23,8 @@ export const Cmd = {
    * NB: This is done as a hidden symbol so as to make the document
    *     available, but not as part of the main API to direct usage.
    */
-  transport<C extends t.CmdType>(input: t.Cmd<C>): t.CmdTransport {
-    const key = DEFAULTS.symbol.transport;
-    return (input as any)[key] as t.CmdTransport;
+  transport(cmd: any): t.CmdTransport {
+    if (!Is.cmd(cmd)) throw new Error('Input not a <Cmd>');
+    return (cmd as any)[DEFAULTS.symbol.transport] as t.CmdTransport;
   },
 } as const;

@@ -87,11 +87,21 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       dispose();
     });
 
-    it('Cmd.transport (hidden field)', async () => {
-      const { doc, dispose } = await setup();
-      const cmd = Cmd.create<C>(doc);
-      expect(Cmd.transport(cmd)).to.eql(doc);
-      dispose();
+    describe('Cmd.transport (hidden field)', () => {
+      it('retrieves doc', async () => {
+        const { doc, dispose } = await setup();
+        const cmd = Cmd.create<C>(doc);
+        expect(Cmd.transport(cmd)).to.eql(doc);
+        dispose();
+      });
+
+      it('throws', () => {
+        const NON = [null, undefined, {}, [], true, 123, Symbol('foo'), BigInt(0)];
+        NON.forEach((input) => {
+          const fn = () => Cmd.transport(input);
+          expect(fn).to.throw(/Input not a <Cmd>/);
+        });
+      });
     });
   });
 }
