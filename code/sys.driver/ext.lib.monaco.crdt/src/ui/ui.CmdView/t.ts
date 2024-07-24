@@ -5,8 +5,11 @@ import type { t } from './common';
  */
 export type CmdViewProps = {
   doc?: t.Doc;
-  store?: t.Store;
-  index?: t.StoreIndex;
+  repo?: { store?: t.Store; index?: t.StoreIndex };
+  readOnly?: boolean;
+  historyStack?: boolean;
+  border?: number | [number, number, number, number];
+  borderColor?: string;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
