@@ -1,15 +1,28 @@
 import { useState } from 'react';
-import { Button, Color, css, DEFAULTS, Icons, type t } from './common';
+import { Button, Color, COLORS, css, DEFAULTS, Icons, Time, type t } from './common';
 
 type P = t.PeerUriButtonProps;
 
 export const View: React.FC<P> = (props) => {
-  const { fontSize, monospace, clipboard } = wrangle.props(props);
+  const { fontSize, monospace, clipboard, enabled } = wrangle.props(props);
 
   const text = wrangle.text(props);
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
-  const canCopy = isOver && clipboard;
+  const [copied, setCopied] = useState(false);
+  const canCopy = isOver && enabled && clipboard;
+
+  /**
+   * Handlers
+   */
+  const copy = () => {
+    navigator.clipboard.writeText(text.uri);
+    setCopied(true);
+    Time.delay(1500, () => {
+      setCopied(false);
+      setOver(false);
+    });
+  };
 
   /**
    * Render
@@ -21,11 +34,12 @@ export const View: React.FC<P> = (props) => {
     body: css({
       display: 'grid',
       alignItems: 'center',
-      gridTemplateColumns: canCopy ? `auto 1fr auto` : `auto 1fr`,
+      gridTemplateColumns: canCopy || copied ? `auto 1fr auto` : `auto 1fr`,
       columnGap: `${wrangle.rootColumnGap(props)}em`,
     }),
     uri: {
       base: css({
+        position: 'relative',
         display: 'grid',
         alignContent: 'center',
         justifyContent: 'start',
@@ -34,12 +48,20 @@ export const View: React.FC<P> = (props) => {
         fontWeight: wrangle.fontWeight(props),
       }),
       inner: css({
+        position: 'relative',
         display: 'grid',
         gridTemplateColumns: `auto auto`,
         columnGap: `${wrangle.uriColumnGap(props)}em`,
       }),
-      prefix: css({ color: Color.BLUE }),
-      id: css({ color: theme.fg }),
+      prefix: css({ color: enabled ? Color.BLUE : color }),
+      id: css({ color }),
+      label: css({ opacity: copied ? 0.2 : 1, filter: `blur(${copied ? 5 : 0}px)` }),
+      copied: css({
+        Absolute: 0,
+        display: 'grid',
+        alignItems: 'center',
+        color: Color.GREEN,
+      }),
     },
     copyIcon: css({
       marginLeft: '0.6em',
@@ -49,25 +71,31 @@ export const View: React.FC<P> = (props) => {
   const elUri = (
     <div {...styles.uri.base}>
       <div {...styles.uri.inner}>
-        <span {...styles.uri.prefix}>{`${text.prefix}:`}</span>
-        <span {...styles.uri.id}>{text.id}</span>
+        <span {...css(styles.uri.label, styles.uri.prefix)}>{`${text.prefix}:`}</span>
+        <span {...css(styles.uri.label, styles.uri.id)}>{text.id}</span>
+        {copied && <div {...styles.uri.copied}>{'copied'}</div>}
       </div>
     </div>
   );
 
+  const CopyIcon = copied ? Icons.Done : Icons.Copy;
+  const iconColor = !enabled ? color : copied ? Color.GREEN : Color.BLUE;
+  const elCopyIcon = (
+    <CopyIcon color={iconColor} size={wrangle.copyIconSize(props)} style={styles.copyIcon} />
+  );
   const elBody = (
     <div {...styles.body}>
-      <Icons.Person color={Color.BLUE} size={fontSize * 1.5} />
+      <Icons.Person color={iconColor} size={fontSize * 1.5} />
       {elUri}
-      {canCopy && (
-        <Icons.Copy color={Color.BLUE} size={wrangle.copyIconSize(props)} style={styles.copyIcon} />
-      )}
+      {(canCopy || copied) && elCopyIcon}
     </div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
       <Button
+        enabled={enabled}
+        active={!copied}
         children={elBody}
         theme={theme.name}
         onMouse={(e) => {
@@ -76,7 +104,7 @@ export const View: React.FC<P> = (props) => {
         }}
         onClick={(e) => {
           const { uri, prefix, id } = text;
-          if (clipboard) navigator.clipboard.writeText(uri);
+          if (clipboard) copy();
           props.onClick?.({ uri, prefix, id });
         }}
       />
@@ -96,8 +124,9 @@ const wrangle = {
       monospace = p.monospace,
       fontSize = p.fontSize,
       clipboard = p.clipboard,
+      enabled = p.enabled,
     } = props;
-    return { id, bold, monospace, fontSize, clipboard } as const;
+    return { id, bold, monospace, fontSize, clipboard, enabled } as const;
   },
 
   text(props: P) {

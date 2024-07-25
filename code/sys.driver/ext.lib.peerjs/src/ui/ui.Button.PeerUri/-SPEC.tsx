@@ -48,9 +48,6 @@ export default Dev.describe(name, (e) => {
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
-    const props = State.props;
-    if (!props.current.id) props.change((d) => (d.id = slug()));
-
     ctx.debug.width(330);
     ctx.subject.display('grid').render<D>((e) => {
       const props = Props.current;
@@ -72,6 +69,15 @@ export default Dev.describe(name, (e) => {
     dev.section('Properties', (dev) => {
       Dev.Theme.immutable(dev, State.props, 1);
       dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.enabled;
+        btn
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
+      });
 
       dev.boolean((btn) => {
         const state = State.props;
@@ -122,6 +128,8 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      const props = State.props;
+
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
       dev.boolean((btn) => {
@@ -141,6 +149,10 @@ export default Dev.describe(name, (e) => {
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'prefixSelf')));
       });
+
+      dev.hr(-1, 5);
+      dev.button('id:<slug>', () => props.change((d) => (d.id = slug())));
+      dev.button('id:<undefined>', () => props.change((d) => delete d.id));
     });
   });
 

@@ -10,6 +10,7 @@ export type PeerUriButtonProps = {
   bold?: boolean;
   monospace?: boolean;
   clipboard?: boolean;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: t.PeerUriHandler;

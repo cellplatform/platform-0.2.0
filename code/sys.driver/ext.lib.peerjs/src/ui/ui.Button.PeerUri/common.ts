@@ -7,7 +7,7 @@ export * from '../common';
 const name = 'Button.PeerUri';
 const props: t.PickRequired<
   t.PeerUriButtonProps,
-  'theme' | 'fontSize' | 'monospace' | 'id' | 'prefix' | 'bold' | 'clipboard'
+  'theme' | 'fontSize' | 'monospace' | 'id' | 'prefix' | 'bold' | 'clipboard' | 'enabled'
 > = {
   prefix: 'peer',
   id: 'unknown',
@@ -15,6 +15,7 @@ const props: t.PickRequired<
   monospace: false,
   bold: false,
   clipboard: true,
+  enabled: true,
   theme: 'Dark',
 };
 
