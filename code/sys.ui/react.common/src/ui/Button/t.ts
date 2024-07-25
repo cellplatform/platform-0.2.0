@@ -11,6 +11,7 @@ export type ButtonProps = {
   children?: Content;
   label?: string;
   enabled?: boolean;
+  active?: boolean;
   block?: boolean;
   tooltip?: string;
   overlay?: Content; // eg. a "copied" message.

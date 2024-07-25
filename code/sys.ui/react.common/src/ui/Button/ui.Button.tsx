@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Spinner } from '../Spinner';
 import { DEFAULTS, Style, css, type t } from './common';
 import { Wrangle } from './u';
@@ -6,6 +6,7 @@ import { Wrangle } from './u';
 export const View: React.FC<t.ButtonProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
+    active = DEFAULTS.active,
     block = DEFAULTS.block,
     disabledOpacity = DEFAULTS.disabledOpacity,
     userSelect = DEFAULTS.userSelect,
@@ -22,10 +23,21 @@ export const View: React.FC<t.ButtonProps> = (props) => {
   const [isDown, setDown] = useState(false);
 
   /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    if (!active) {
+      setDown(false);
+      setOver(false);
+    }
+  }, [active]);
+
+  /**
    * Handlers
    */
   const over = (isOver: boolean): React.MouseEventHandler => {
     return (e) => {
+      if (!active) return;
       setOver(isOver);
       if (!isOver && isDown) setDown(false);
       if (enabled) {
@@ -44,6 +56,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
 
   const down = (isDown: boolean): React.MouseEventHandler => {
     return (e) => {
+      if (!active) return;
       setDown(isDown);
       if (enabled) {
         if (isDown && props.onMouseDown) props.onMouseDown(e);
@@ -72,7 +85,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       minWidth: props.minWidth,
       maxWidth: props.maxWidth,
       opacity: enabled ? 1 : disabledOpacity,
-      cursor: enabled && !isBlurred ? 'pointer' : 'default',
+      cursor: enabled && active && !isBlurred ? 'pointer' : 'default',
       userSelect: userSelect ? 'auto' : 'none',
     }),
     body: css({

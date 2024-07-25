@@ -17,7 +17,15 @@ export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
     Pick<
       t.ButtonProps,
-      'theme' | 'enabled' | 'block' | 'spinning' | 'tooltip' | 'label' | 'isOver' | 'isDown'
+      | 'theme'
+      | 'enabled'
+      | 'active'
+      | 'block'
+      | 'spinning'
+      | 'tooltip'
+      | 'label'
+      | 'isOver'
+      | 'isDown'
     >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
@@ -25,6 +33,7 @@ export default Dev.describe(name, (e) => {
     useLabel: true,
     padding: false,
     enabled: DEFAULTS.enabled,
+    active: DEFAULTS.active,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
     tooltip: 'My Button',
@@ -40,6 +49,7 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.theme = local.theme;
       d.props.enabled = local.enabled;
+      d.props.active = local.active;
       d.props.block = local.block;
       d.props.spinning = local.spinning;
       d.props.tooltip = local.tooltip;
@@ -91,6 +101,13 @@ export default Dev.describe(name, (e) => {
           .label('enabled')
           .value((e) => e.state.props.enabled)
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('active')
+          .value((e) => e.state.props.active)
+          .onClick((e) => e.change((d) => (local.active = Dev.toggle(d.props, 'active')))),
       );
 
       dev.boolean((btn) =>
