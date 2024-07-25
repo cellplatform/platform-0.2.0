@@ -73,8 +73,8 @@ export default Dev.describe(name, (e) => {
             peer={self}
             debug={{ renderCount, name: 'Main' }}
             onReady={(e) => {
-              console.info('⚡️ onReady', e);
               ref = e.ref;
+              console.info('⚡️ onReady', e);
             }}
             onSelectionChange={(e) => {
               console.info('⚡️ onSelectionChange', e);
