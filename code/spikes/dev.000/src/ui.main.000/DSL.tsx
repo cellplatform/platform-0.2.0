@@ -81,9 +81,12 @@ export const DSL = {
     }
 
     if (action.startsWith('peer:')) {
+      const peer = main.self;
       const peerId = action.split(':')[1];
-      main.self.connect.data(peerId);
-      return clear();
+      if (peerId !== peer.id) {
+        peer.connect.data(peerId);
+        return clear();
+      }
     }
 
     if (action === 'crdt') {
