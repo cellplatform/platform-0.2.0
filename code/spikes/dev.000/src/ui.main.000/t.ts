@@ -1,6 +1,8 @@
 import type { t } from '../common';
 
-export type RootCommands = 'me' | 'dev' | 'cast' | 'hash' | 'cmd';
+type Copy = 'copy' | 'cp';
+type Video = 'video' | 'v';
+export type RootCommands = 'me' | 'dev' | 'fc' | 'hash' | 'cmd' | 'crdt' | Video | Copy;
 
 /**
  * Shell
