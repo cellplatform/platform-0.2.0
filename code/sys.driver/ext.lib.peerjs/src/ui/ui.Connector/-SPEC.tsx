@@ -6,7 +6,7 @@ import { Connector, ConnectorConfig, DEFAULTS } from '.';
 import { Info } from '../ui.Info';
 
 type T = { props: t.ConnectorProps };
-const name = Connector.displayName ?? '';
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
@@ -42,7 +42,7 @@ export default Dev.describe(name, (e) => {
           prefix: 'list.render-',
         };
         return (
-          <PeerUI.Connector
+          <Connector
             {...e.state.props}
             peer={self}
             debug={{ renderCount, name: 'Main' }}

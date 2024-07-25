@@ -5,7 +5,7 @@ import { useSelection } from './use.Selection';
 type Props = t.ConnectorProps & { list: t.LabelListState };
 
 export const List: React.FC<Props> = (props) => {
-  const { list, peer, onSelectionChange, debug = {}, tabIndex = DEFAULTS.tabIndex } = props;
+  const { list, peer, onSelectionChange, debug = {}, tabIndex = DEFAULTS.props.tabIndex } = props;
   const behaviors = Wrangle.listBehaviors(props);
 
   useSelection({ peer, list, onSelectionChange });

@@ -22,6 +22,7 @@ export type {
   IODirection,
   Lifecycle,
   Msecs,
+  PickRequired,
   UntilObservable,
 } from 'sys.types/src/types';
 
