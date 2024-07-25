@@ -23,7 +23,6 @@ import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.DebugFooter';
 
-type O = Record<string, unknown>;
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
@@ -78,13 +77,12 @@ export default Dev.describe(name, async (e) => {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
     },
   };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -123,7 +121,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <SampleLayout stream={e.state.stream} theme={theme.name} />
+            <SampleLayout network={network} stream={e.state.stream} theme={theme.name} />
             {elOverlay}
           </div>
         );
