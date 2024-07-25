@@ -37,17 +37,7 @@ const render = async (content: Subject) => {
   const renderSplash = async () => {
     const { Dev } = await import('sys.ui.react.common');
     const version = Pkg.toString();
-    const width = 200;
-    const style = { width, borderRadius: 200, useSelect: 'none' };
-    const url = '';
-
-    const el = (
-      <Dev.Splash footer={version}>
-        {/* */}
-        {/* <img src={url} style={style} /> */}
-      </Dev.Splash>
-    );
-
+    const el = <Dev.Splash footer={version} />;
     root.render(el);
     return;
   };
