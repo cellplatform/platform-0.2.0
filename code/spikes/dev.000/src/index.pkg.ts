@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.188',
+  version: '0.6.190',
   dependencies: {
     '@automerge/automerge': '2.2.4',
     '@automerge/automerge-repo': '1.2.0',
