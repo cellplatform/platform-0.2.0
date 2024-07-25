@@ -65,9 +65,8 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<D>(e);
     dev.footer.border(-0.1).render<D>((e) => {
-      const data = {
-        props: State.props.current,
-      };
+      const props = State.props.current;
+      const data = { props };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
