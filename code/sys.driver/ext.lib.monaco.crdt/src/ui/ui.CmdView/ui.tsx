@@ -26,7 +26,6 @@ export const View: React.FC<P> = (props) => {
     historyStack = DEFAULTS.props.historyStack,
   } = props;
   const history = wrangle.history(props);
-  const border = wrangle.border(props);
 
   /**
    * Hooks
@@ -47,6 +46,7 @@ export const View: React.FC<P> = (props) => {
   const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
   const transition = [t('opacity')].join(', ');
   const theme = Color.theme(props.theme);
+  const border = wrangle.border(props);
   const borderColor = props.borderColor ?? Color.alpha(theme.fg, 0.8);
   const b = (width: number) => (width ? `solid ${width}px ${borderColor}` : undefined);
 
