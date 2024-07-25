@@ -62,7 +62,7 @@ export default Dev.describe(name, (e) => {
       const width = fontSize * 12;
       ctx.subject.size([debug.fixedWidth ? width : null, null]);
 
-      return <PeerUriButton {...props} />;
+      return <PeerUriButton {...props} onClick={(e) => console.info(`⚡️ onClick:`, e)} />;
     });
   });
 
@@ -89,6 +89,15 @@ export default Dev.describe(name, (e) => {
           .label(() => `bold`)
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'bold')));
+      });
+
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.clipboard;
+        btn
+          .label(() => `clipboard`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'clipboard')));
       });
 
       dev.hr(-1, 5);

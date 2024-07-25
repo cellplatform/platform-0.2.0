@@ -9,6 +9,18 @@ export type PeerUriButtonProps = {
   fontSize?: number;
   bold?: boolean;
   monospace?: boolean;
+  clipboard?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onClick?: t.PeerUriHandler;
+};
+
+/**
+ * Events
+ */
+export type PeerUriHandler = (e: PeerUriHandlerArgs) => void;
+export type PeerUriHandlerArgs = {
+  readonly id: string;
+  readonly prefix: string;
+  readonly uri: string;
 };

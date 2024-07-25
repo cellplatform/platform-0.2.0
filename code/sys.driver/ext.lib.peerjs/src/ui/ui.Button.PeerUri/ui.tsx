@@ -4,11 +4,12 @@ import { Button, Color, css, DEFAULTS, Icons, type t } from './common';
 type P = t.PeerUriButtonProps;
 
 export const View: React.FC<P> = (props) => {
-  const { fontSize = DEFAULTS.props.fontSize, monospace = DEFAULTS.props.monospace } = props;
+  const { fontSize, monospace, clipboard } = wrangle.props(props);
 
   const text = wrangle.text(props);
-  const [isOver, setOver] = useState(false);
   const [isDown, setDown] = useState(false);
+  const [isOver, setOver] = useState(false);
+  const canCopy = isOver && clipboard;
 
   /**
    * Render
@@ -20,7 +21,7 @@ export const View: React.FC<P> = (props) => {
     body: css({
       display: 'grid',
       alignItems: 'center',
-      gridTemplateColumns: isOver ? `auto 1fr auto` : `auto 1fr`,
+      gridTemplateColumns: canCopy ? `auto 1fr auto` : `auto 1fr`,
       columnGap: `${wrangle.rootColumnGap(props)}em`,
     }),
     uri: {
@@ -48,7 +49,7 @@ export const View: React.FC<P> = (props) => {
   const elUri = (
     <div {...styles.uri.base}>
       <div {...styles.uri.inner}>
-        <span {...styles.uri.prefix}>{text.prefix}</span>
+        <span {...styles.uri.prefix}>{`${text.prefix}:`}</span>
         <span {...styles.uri.id}>{text.id}</span>
       </div>
     </div>
@@ -58,7 +59,7 @@ export const View: React.FC<P> = (props) => {
     <div {...styles.body}>
       <Icons.Person color={Color.BLUE} size={fontSize * 1.5} />
       {elUri}
-      {isOver && (
+      {canCopy && (
         <Icons.Copy color={Color.BLUE} size={wrangle.copyIconSize(props)} style={styles.copyIcon} />
       )}
     </div>
@@ -69,12 +70,14 @@ export const View: React.FC<P> = (props) => {
       <Button
         children={elBody}
         theme={theme.name}
-        onClick={(e) => {
-          navigator.clipboard.writeText(text.uri);
-        }}
         onMouse={(e) => {
           setOver(e.isOver);
           setDown(e.isDown);
+        }}
+        onClick={(e) => {
+          const { uri, prefix, id } = text;
+          if (clipboard) navigator.clipboard.writeText(uri);
+          props.onClick?.({ uri, prefix, id });
         }}
       />
     </div>
@@ -86,23 +89,25 @@ export const View: React.FC<P> = (props) => {
  */
 const wrangle = {
   props(props: P) {
+    const p = DEFAULTS.props;
     const {
-      id = DEFAULTS.props.id,
-      bold = DEFAULTS.props.bold,
-      monospace = DEFAULTS.props.monospace,
-      fontSize = DEFAULTS.props.fontSize,
+      id = p.id,
+      bold = p.bold,
+      monospace = p.monospace,
+      fontSize = p.fontSize,
+      clipboard = p.clipboard,
     } = props;
-    return { id, bold, monospace, fontSize } as const;
+    return { id, bold, monospace, fontSize, clipboard } as const;
   },
 
   text(props: P) {
     const { id } = wrangle.props(props);
     const stripColons = (text: string) => text.replace(/:+$/g, '');
-    const prefix = `${stripColons(props.prefix ?? DEFAULTS.props.prefix)}:`;
+    const prefix = stripColons(props.prefix ?? DEFAULTS.props.prefix);
     return {
       prefix,
       id,
-      uri: `${prefix}${id}`,
+      uri: `peer:${id}`,
     };
   },
 
