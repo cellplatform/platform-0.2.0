@@ -140,13 +140,13 @@ export const View: React.FC<P> = (props) => {
         {doc && (
           <DocUri
             doc={doc}
-            head={2}
+            head={0}
             fontSize={20}
             theme={theme.name}
             copiedText={copiedText}
             onMouse={(e) => setIsCopy(e.is.over)}
             onCopy={(e) => {
-              setCopiedText(e.part === 'Head' ? 'Copied Head' : 'Copied Address');
+              setCopiedText(e.part === 'Head' ? 'copied head' : 'copied address');
               Time.delay(1500, () => setCopiedText(undefined));
             }}
           />

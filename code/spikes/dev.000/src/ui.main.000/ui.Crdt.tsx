@@ -1,58 +1,42 @@
-import { Color, css, DocUri, Monaco, type t } from './common';
+import { Color, css, Monaco, useDoc, type t } from './common';
 
-export type CrdtProps = {
+export type CrdtViewProps = {
   docuri?: string;
   main: t.Shell;
+  border?: number | [number, number, number, number];
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
-export const Crdt: React.FC<CrdtProps> = (props) => {
-  const { docuri } = props;
+export const CrdtView: React.FC<CrdtViewProps> = (props) => {
+  const { docuri, main } = props;
+
+  const docRef = useDoc(main.repo.tmp.store, docuri);
+  const doc = docRef.ref;
 
   /**
    * Render
    */
   const theme = Color.theme(props.theme);
-  const dividerBorder = `solid 1px ${Color.alpha(theme.fg, 0.8)}`;
   const styles = {
     base: css({
+      backgroundColor: Color.alpha(theme.bg, 0.95),
+      backdropFilter: `blur(15px)`,
       color: theme.fg,
-      borderTop: dividerBorder,
       display: 'grid',
-      gridTemplateRows: `1fr auto`,
-      rowGap: '5px',
     }),
-    codeEditor: css({ display: 'grid' }),
-    docuri: css({ padding: 50, borderTop: dividerBorder }),
   };
-
-  const elEditor = (
-    <div {...styles.codeEditor}>
-      <Monaco.Editor
-        theme={theme.name}
-        language={'yaml'}
-        // placeholder={displayUri}
-        readOnly={true}
-        // onDispose={(e) => controllerRef.current?.dispose()}
-        onReady={(e) => {
-          // const { monaco, editor } = e;
-          // controllerRef.current = editorController({ monaco, editor, main });
-        }}
-      />
-    </div>
-  );
-
-  const elDocUri = (
-    <div {...styles.docuri}>
-      <DocUri uri={docuri} theme={theme.name} fontSize={60} />
-    </div>
-  );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elEditor}
-      {elDocUri}
+      <Monaco.Crdt.CmdView
+        doc={doc}
+        repo={main.repo.tmp}
+        theme={theme.name}
+        historyStack={true}
+        border={props.border ?? 1}
+        style={{ height: 250 }}
+      />
     </div>
   );
 };
