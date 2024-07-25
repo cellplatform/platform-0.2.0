@@ -5,13 +5,14 @@ export * from '../common';
  * Constants
  */
 const name = 'PageStack';
-const props: t.PickRequired<t.PageStackProps, 'theme' | 'transitionTime'> = {
+const props: t.PickRequired<t.PageStackProps, 'theme' | 'transition' | 'total' | 'current'> = {
   theme: 'Dark',
-  transitionTime: 300,
+  total: 5,
+  current: 0,
+  transition: 300,
 };
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
   props,
-  total: 5,
 } as const;

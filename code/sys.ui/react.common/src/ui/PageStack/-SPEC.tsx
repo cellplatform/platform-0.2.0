@@ -1,16 +1,9 @@
 import { DEFAULTS, PageStack } from '.';
-import { COLORS, css, Dev, Immutable, Json, Pkg, rx, slug } from '../../test.ui';
+import { Dev, Immutable, Json, Pkg, rx } from '../../test.ui';
 import { type t } from './common';
 
 type P = t.PageStackProps;
-type D = { ids: string[]; start: t.Index };
-
-const defaultDebug = (): D => {
-  return {
-    ids: Array.from({ length: 20 }).map(() => slug()),
-    start: 0,
-  };
-};
+type D = {};
 
 /**
  * Spec
@@ -24,37 +17,15 @@ export default Dev.describe(name, (e) => {
 
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, defaultDebug)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
   } as const;
 
   const Props = {
     get current(): P {
-      return {
-        ...State.props.current,
-        pages: Props.pages.current,
-      };
+      const props = State.props.current;
+      return props;
     },
-    pages: {
-      get all() {
-        return State.debug.current.ids;
-      },
-      get current() {
-        const { ids, start } = State.debug.current;
-        const total = DEFAULTS.total;
-        return ids.slice(start, start + total);
-      },
-      get range() {
-        const { start } = State.debug.current;
-        const total = DEFAULTS.total;
-        const end = start + total - 1;
-        return { start, end, total } as const;
-      },
-      withinRange(index: t.Index) {
-        const { start, end } = Props.pages.range;
-        return !(index < start || index > end);
-      },
-    },
-  } as const;
+  };
 
   e.it('ui:init', (e) => {
     const ctx = Dev.ctx(e);
@@ -79,7 +50,6 @@ export default Dev.describe(name, (e) => {
       .size('fill-x', 100)
       .display('grid')
       .render<D>((e) => {
-        const debug = State.debug.current;
         const props = Props.current;
         Dev.Theme.background(dev, props.theme, 1);
         return <PageStack {...props} />;
@@ -91,59 +61,39 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.immutable(dev, State.props, 1);
+      dev.hr(-1, 5);
+
+      const total = (total: number) => {
+        let label = `total: ${total}`;
+        if (total === DEFAULTS.props.total) label = `${label} (default)`;
+
+        dev.button((btn) => {
+          const current = () => State.props.current.total;
+          btn
+            .label(label)
+            .right(() => (current() === total ? '←' : ''))
+            .onClick(() => State.props.change((d) => (d.total = total)));
+        });
+      };
+
+      total(0);
+      total(3);
+      total(DEFAULTS.props.total);
+      total(10);
     });
 
     dev.hr(5, 20);
 
-    dev.section(['Pages', 'IDs'], (dev) => {
-      dev.row((e) => {
-        const ids = Props.pages.all;
-        const styles = {
-          base: css({
-            lineHeight: 1.5,
-            marginLeft: 30,
-            marginBottom: 20,
-            display: 'grid',
-            gridTemplateRows: 'repeat(5, 1fr)',
-            gridAutoFlow: 'column',
-          }),
-          item: css({
-            fontFamily: 'monospace',
-            fontSize: 11,
-            fontWeight: 600,
-            opacity: 0.1,
-          }),
-          current: css({ opacity: 1, color: COLORS.MAGENTA }),
-        };
-        return (
-          <div {...styles.base}>
-            {ids.map((id, i) => {
-              const style = Props.pages.withinRange(i) ? styles.current : undefined;
-              return (
-                <div key={id} {...css(styles.item, style)}>
-                  {id}
-                </div>
-              );
-            })}
-          </div>
-        );
-      });
-
+    dev.section('Current', (dev) => {
       const increment = (by: number) => {
-        const { ids } = State.debug.current;
-        const clamp = (value: t.Index) => Math.max(0, Math.min(ids.length - 1, value));
-        State.debug.change((d) => (d.start = clamp(d.start + by)));
+        State.props.change((d) => (d.current = (d.current ?? 0) + by));
       };
-      dev.button(['prev', '↑'], (e) => increment(-1));
-      dev.button(['next', '↓'], (e) => increment(1));
+      dev.button(['increment', '↑'], (e) => increment(+1));
+      dev.button(['decrement', '↓'], (e) => increment(-1));
 
       dev.hr(-1, 5);
       dev.button('reset', (e) => {
-        State.debug.change((d) => {
-          const next = defaultDebug();
-          d.start = next.start;
-          d.ids = next.ids;
-        });
+        State.props.change((d) => (d.current = DEFAULTS.props.current));
       });
     });
 
@@ -157,11 +107,8 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<D>(e);
     dev.footer.border(-0.1).render<D>((e) => {
-      const data = {
-        props: Props.current,
-        debug: State.debug.current,
-      };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      const data = { props: Props.current };
+      return <Dev.Object name={name} data={data} expand={2} fontSize={11} />;
     });
   });
 });

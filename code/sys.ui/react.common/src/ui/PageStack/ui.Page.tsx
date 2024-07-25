@@ -1,32 +1,35 @@
-import { Color, css, DEFAULTS, type t } from './common';
+import { Color, css, type t } from './common';
 
 export type PageProps = {
-  id: string;
   index: t.Index;
   theme: t.ColorTheme;
-  transitionTime?: t.Msecs;
+  transition: t.Msecs;
+  opacity?: t.Percent;
   style?: t.CssValue;
 };
 
 export const Page: React.FC<PageProps> = (props) => {
-  const { theme, transitionTime = DEFAULTS.props.transitionTime } = props;
+  const { theme } = props;
   const height = wrangle.height(props);
   const edgeOffset = wrangle.edgeOffset(props);
   const radius = wrangle.radius(props);
-  const opacity = wrangle.opacity(props);
 
   /**
    * Render
    */
-  const t = (prop: string, time: t.Msecs = transitionTime) => `${prop} ${time}ms`;
+  const t = (prop: string, time: t.Msecs = props.transition) => `${prop} ${time}ms`;
   const transition = [t('opacity'), t('height'), t('left'), t('right')].join(', ');
   const styles = {
     base: css({
       height,
       Absolute: [null, edgeOffset, 0, edgeOffset],
-      backgroundColor: theme.alpha(0.8).bg,
-      backdropFilter: `blur(2px)`,
-      opacity,
+      transition,
+      opacity: props.opacity ?? 1,
+      display: 'grid',
+    }),
+    inner: css({
+      backgroundColor: Color.alpha(theme.bg, 0.9),
+      opacity: wrangle.opacity(props),
       transition,
       border: `solid 1px ${Color.alpha(theme.fg, 0.7)}`,
       borderBottom: 'none',
@@ -37,7 +40,7 @@ export const Page: React.FC<PageProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div />
+      <div {...styles.inner} />
     </div>
   );
 };
