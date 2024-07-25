@@ -23,7 +23,12 @@ export const View: React.FC<t.VideoProps> = (props) => {
    */
   const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ position: 'relative', color: theme.fg }),
+    base: css({
+      position: 'relative',
+      color: theme.fg,
+      borderRadius: props.radius,
+      overflow: 'hidden',
+    }),
     video: css({ Absolute: 0 }),
   };
 
