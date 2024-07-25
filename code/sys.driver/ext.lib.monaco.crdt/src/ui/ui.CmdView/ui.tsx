@@ -1,9 +1,9 @@
-import { useState } from 'react';
-
 import { Info as CrdtInfo } from 'ext.lib.automerge';
+import { useEffect, useState } from 'react';
+
 import {
-  Time,
   Color,
+  COLORS,
   css,
   DEFAULTS,
   Doc,
@@ -11,7 +11,7 @@ import {
   Icons,
   Monaco,
   PageStack,
-  COLORS,
+  Time,
   useRedrawOnChange,
   type t,
 } from './common';
@@ -23,7 +23,7 @@ export const View: React.FC<P> = (props) => {
     repo,
     doc,
     readOnly = DEFAULTS.props.readOnly,
-    historyStack: pageStack = DEFAULTS.props.historyStack,
+    historyStack = DEFAULTS.props.historyStack,
   } = props;
   const history = wrangle.history(props);
   const border = wrangle.border(props);
@@ -34,6 +34,12 @@ export const View: React.FC<P> = (props) => {
   useRedrawOnChange(doc);
   const [isCopy, setIsCopy] = useState(false);
   const [copiedText, setCopiedText] = useState<string>();
+  const [page, setPage] = useState(0);
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => setPage((n) => n + 1), [history.join()]);
 
   /**
    * Render
@@ -91,8 +97,8 @@ export const View: React.FC<P> = (props) => {
     }),
   };
 
-  const elPageStack = pageStack && (
-    <PageStack pages={history} style={styles.pageStack} theme={theme.name} />
+  const elPageStack = historyStack && (
+    <PageStack current={page} style={styles.pageStack} theme={theme.name} />
   );
 
   const elEditor = (
