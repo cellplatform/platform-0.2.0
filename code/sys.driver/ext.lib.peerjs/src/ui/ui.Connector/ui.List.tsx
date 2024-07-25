@@ -1,4 +1,4 @@
-import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
+import { Color, DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 import { useSelection } from './use.Selection';
 
@@ -14,8 +14,12 @@ export const List: React.FC<Props> = (props) => {
   /**
    * [Render]
    */
+  const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      color: theme.fg,
+    }),
   };
 
   const elements = LabelItem.Model.List.map(list, (item, index) => {
@@ -34,7 +38,7 @@ export const List: React.FC<Props> = (props) => {
   return (
     <List.Provider>
       <div ref={List.ref} {...css(styles.base, props.style)} tabIndex={tabIndex}>
-        {debug.renderCount && <RenderCount {...debug.renderCount} />}
+        {debug.renderCount && <RenderCount {...debug.renderCount} theme={theme.name} />}
         <div>{elements}</div>
       </div>
     </List.Provider>

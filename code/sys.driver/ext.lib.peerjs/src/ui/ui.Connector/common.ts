@@ -8,7 +8,7 @@ export { Data, Model } from '../ui.Connector.Model';
  */
 const name = 'Connector';
 const props: t.PickRequired<t.ConnectorProps, 'theme' | 'tabIndex' | 'behaviors'> = {
-  theme: 'Dark',
+  theme: 'Light',
   tabIndex: 0,
   get behaviors() {
     return behaviors.default;

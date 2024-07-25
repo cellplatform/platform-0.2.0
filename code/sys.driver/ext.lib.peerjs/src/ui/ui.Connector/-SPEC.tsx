@@ -104,15 +104,12 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(2, 15);
 
-    dev.row((e) => {
+    dev.row(() => {
       const props = State.props.current;
       return (
         <ConnectorConfig
           selected={props.behaviors}
-          onChange={(e) => {
-            State.props.change((d) => (d.behaviors = e.next));
-            // local.behaviors = e.next;
-          }}
+          onChange={(e) => State.props.change((d) => (d.behaviors = e.next))}
         />
       );
     });
