@@ -2,7 +2,7 @@ import { DEFAULTS, LabelItem, RenderCount, css, type t } from './common';
 import { Wrangle } from './u.Wrangle';
 import { useSelection } from './use.Selection';
 
-type Props = t.ConnectorProps & { list: t.LabelListState };
+type Props = t.ConnectorProps & { list: t.LabelListState; peer: t.PeerModel };
 
 export const List: React.FC<Props> = (props) => {
   const { list, peer, onSelectionChange, debug = {}, tabIndex = DEFAULTS.props.tabIndex } = props;

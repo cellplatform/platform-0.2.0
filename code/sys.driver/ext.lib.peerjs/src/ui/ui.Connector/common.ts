@@ -6,11 +6,13 @@ export { Data, Model } from '../ui.Connector.Model';
 /**
  * Constants
  */
-
 const name = 'Connector';
-const props: t.PickRequired<t.ConnectorProps, 'theme' | 'tabIndex'> = {
+const props: t.PickRequired<t.ConnectorProps, 'theme' | 'tabIndex' | 'behaviors'> = {
   theme: 'Dark',
   tabIndex: 0,
+  get behaviors() {
+    return behaviors.default;
+  },
 };
 
 const behaviors = {
