@@ -1,4 +1,4 @@
-import { Color, PeerUI, css, type t, Button } from './common';
+import { Color, PeerUI, css, type t } from './common';
 
 export type SampleLayoutProps = {
   network: t.NetworkStore;
@@ -11,38 +11,26 @@ export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const { network } = props;
 
   /**
-   * Handlers
-   */
-  const copyPeer = () => {
-    const id = `peer:${network.peer.id}`;
-    navigator.clipboard.writeText(id);
-  };
-
-  /**
    * Render
    */
   const theme = Color.theme(props.theme);
+  const color = theme.fg;
   const styles = {
-    base: css({
-      position: 'relative',
-      color: theme.fg,
-      display: 'grid',
-    }),
-    peerId: {
-      base: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
-      inner: css({ fontSize: 50, fontFamily: 'monospace', fontWeight: 600 }),
-    },
-    video: css({
-      Absolute: 0,
-      pointerEvents: 'none',
-    }),
+    base: css({ position: 'relative', color, display: 'grid' }),
+    peerId: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
+    video: css({ Absolute: 0, pointerEvents: 'none' }),
   };
 
-  const elPeerId = (
-    <div {...styles.peerId.base}>
-      <div {...styles.peerId.inner}>
-        <Button theme={theme.name} onClick={copyPeer}>{`self:${network.peer.id}`}</Button>
-      </div>
+  const elPeerId = !props.stream && (
+    <div {...styles.peerId}>
+      <PeerUI.Button.PeerUri
+        theme={theme.name}
+        clipboard={true}
+        fontSize={26}
+        prefix={'self'}
+        id={network.peer.id}
+        style={{ width: 200 }}
+      />
     </div>
   );
 
