@@ -152,7 +152,7 @@ export const View: React.FC<P> = (props) => {
             copiedText={copiedText}
             onMouse={(e) => setIsCopy(e.is.over)}
             onCopy={(e) => {
-              setCopiedText(e.part === 'Head' ? 'copied head' : 'copied address');
+              setCopiedText('copied');
               Time.delay(1500, () => setCopiedText(undefined));
             }}
           />
