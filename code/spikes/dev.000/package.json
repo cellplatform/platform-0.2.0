@@ -18,7 +18,7 @@
     "@automerge/automerge-repo": "1.2.0",
     "@automerge/automerge-repo-network-messagechannel": "1.2.0",
     "@automerge/automerge-repo-storage-indexeddb": "1.2.0",
-    "@privy-io/react-auth": "1.74.1",
+    "@privy-io/react-auth": "1.76.3",
     "@standard-crypto/farcaster-js": "7.4.0",
     "automerge-repo-network-peerjs": "1.2.0",
     "buffer": "6.0.3",
@@ -47,7 +47,7 @@
     "sys.ui.react.media.image": "0.0.0",
     "sys.ui.react.media.video": "0.0.0",
     "sys.util": "0.0.0",
-    "yaml": "2.4.5"
+    "yaml": "2.5.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",
