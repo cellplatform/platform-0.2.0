@@ -62,7 +62,6 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       display: 'inline-block',
       userSelect: 'none',
       pointerEvents: clipboard && enabled ? 'auto' : 'none',
-      opacity: enabled ? 1 : 0.3,
     }),
     body: css({
       Flex: 'x-center-center',
@@ -82,7 +81,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       isDown={forceDown}
       theme={theme.name}
       fontSize={fontSize}
-      prefix={{ text: text.prefix, opacity: 0.4 }}
+      prefix={{ text: text.prefix, opacity: enabled ? 0.4 : 0.2 }}
       onMouse={mouseHandler('Prefix')}
       onClick={copyHandler('Prefix')}
       style={{ pointerEvents: 'none' }}
@@ -96,6 +95,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       theme={theme.name}
       fontSize={fontSize}
       text={text.short}
+      style={{ opacity: enabled ? 1 : 0.2 }}
       onMouse={mouseHandler('Id')}
       onClick={copyHandler('Id')}
     />
@@ -107,7 +107,7 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       isDown={forceDown}
       theme={theme.name}
       fontSize={fontSize}
-      suffix={{ text: text.head, margin: '0.1em', opacity: 0.4 }}
+      suffix={{ text: text.head, margin: '0.1em', opacity: enabled ? 0.4 : 0.2 }}
       onMouse={mouseHandler('Head')}
       onClick={copyHandler('Head')}
     />
