@@ -7,6 +7,11 @@ export type Json = string | number | boolean | null | JsonMap | Json[];
 export type JsonMap = { [property: string]: Json };
 
 /**
+ * A stringified JSON value.
+ */
+export type JsonString = string;
+
+/**
  * An extended version of JSON that supports [undefined].
  */
 export type JsonU = string | number | boolean | null | JsonMapU | JsonU[] | undefined;

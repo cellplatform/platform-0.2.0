@@ -31,6 +31,7 @@ export const ModuleSpecs = {
   [`${ns}.Module.Loader`]: () => import('../ui/Module.Loader/-SPEC'),
   [`${ns}.Module.Loader.Stateful`]: () => import('../ui/Module.Loader/-SPEC.Stateful'),
   [`${ns}.RenderCount`]: () => import('../ui/RenderCount/-SPEC'),
+  [`${ns}.PageStack`]: () => import('../ui/PageStack/-SPEC'),
   [`${ns}.ProgressBar`]: () => import('../ui/ProgressBar/-SPEC'),
   [`${ns}.PropList`]: () => import('../ui/PropList/-dev/-SPEC'),
   [`${ns}.PropList.FieldSelector`]: () => import('../ui/PropList.FieldSelector/-SPEC'),

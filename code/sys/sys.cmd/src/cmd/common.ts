@@ -29,4 +29,5 @@ export const DEFAULTS = {
   counter,
   tx: () => slug(),
   error: (message: string): t.Error => ({ message }),
+  symbol: { transport: Symbol('transport') },
 } as const;

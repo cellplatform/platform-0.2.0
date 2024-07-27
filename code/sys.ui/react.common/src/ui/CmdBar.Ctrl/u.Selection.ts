@@ -4,15 +4,19 @@ export const Selection = {
   /**
    * Retrieve a new selection by moving back through spaces.
    */
-  expandBack(textbox: t.TextInputRef) {
+  expandBack(textbox: t.TextInputRef, options: { cycle?: boolean } = {}) {
     const { value, selection } = textbox.current;
+    const { cycle = false } = options;
 
     const index = wrangle.firstSpaceBeforeIndex(value, selection.start - 1);
     const start = index < 0 ? 0 : index + 1;
     const end = value.length;
 
-    if (Selection.isFullySelected(value, selection)) textbox.caretToEnd();
-    else textbox.select(start, end);
+    if (Selection.isFullySelected(value, selection)) {
+      if (cycle) textbox.caretToEnd();
+    } else {
+      textbox.select(start, end);
+    }
   },
 
   /**

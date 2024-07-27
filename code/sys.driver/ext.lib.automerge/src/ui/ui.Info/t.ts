@@ -16,7 +16,7 @@ export type InfoField =
   | 'Doc.History.List'
   | 'Doc.History.List.Detail'
   | 'Doc.History.List.NavPaging';
-export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme };
+export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; enabled: boolean };
 
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
@@ -30,7 +30,7 @@ export type InfoDataRepo = {
   label?: string;
   name?: string;
   store?: t.Store;
-  index?: t.StoreIndexState;
+  index?: t.StoreIndex;
 };
 
 export type InfoDataDoc = {
@@ -56,7 +56,7 @@ export type InfoDataDocUri = {
   shorten?: number | [number, number];
   prefix?: string | null;
   head?: boolean | number;
-  clipboard?: (uri: t.UriString) => string;
+  clipboard?: boolean;
 };
 
 export type InfoDataDocHistory = {
@@ -87,6 +87,7 @@ export type InfoProps = {
   stateful?: boolean;
   resetState$?: t.Observable<any>;
 
+  enabled?: boolean;
   style?: t.CssValue;
   onStateChange?: InfoStatefulChangeHandler;
 };

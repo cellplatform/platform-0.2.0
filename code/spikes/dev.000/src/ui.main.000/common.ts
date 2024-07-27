@@ -14,6 +14,7 @@ export {
   WebStore,
   toObject,
   DocUri,
+  useDoc,
 } from 'ext.lib.automerge';
 export { PeerRepoList, WebrtcStore } from 'ext.lib.automerge.webrtc';
 export { Peer, PeerUI } from 'ext.lib.peerjs';

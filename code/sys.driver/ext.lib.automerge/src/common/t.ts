@@ -31,6 +31,7 @@ export type {
   Lifecycle,
   Msecs,
   ObjectPath,
+  PickRequired,
   SortOrder,
   TextDiff,
   TextSplice,

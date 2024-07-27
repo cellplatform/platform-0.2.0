@@ -10,7 +10,7 @@ export function rowElements(props: {
   theme?: t.CommonTheme;
   hashLength?: number;
 }) {
-  const { item, theme, hashLength = DEFAULTS.hash.length } = props;
+  const { item, theme, hashLength = DEFAULTS.props.hashLength } = props;
   const { index, commit } = item;
   const hash = commit.change.hash;
   const message = commit.change.message;

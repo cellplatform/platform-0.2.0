@@ -74,7 +74,7 @@ export const StoreIndexDb = {
             const existing = await api.get(store);
             if (existing) return existing;
 
-            const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => (d.docs = []));
+            const doc = await store.doc.getOrCreate<t.StoreIndexDoc>((d) => (d.docs = []));
             const tx = db.transaction([NAME.STORE.repos], 'readwrite');
             const table = tx.objectStore(NAME.STORE.repos);
             const record: t.StoreMetaRecord = { dbname, index: doc.uri };

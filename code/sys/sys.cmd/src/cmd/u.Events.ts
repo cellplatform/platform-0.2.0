@@ -15,7 +15,7 @@ export const Events = {
   /**
    * Events factory.
    */
-  create<C extends t.CmdType>(doc?: t.CmdImmutable, options: Options = {}): t.CmdEvents<C> {
+  create<C extends t.CmdType>(doc?: t.CmdTransport, options: Options = {}): t.CmdEvents<C> {
     const resolve = Path.resolver(options.paths);
     const paths = resolve.paths;
 

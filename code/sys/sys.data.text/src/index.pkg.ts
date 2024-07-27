@@ -28,7 +28,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'unified': '11.0.5',
     'unist-util-select': '5.1.0',
-    'yaml': '2.4.5',
+    'yaml': '2.5.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

@@ -135,6 +135,7 @@ export const View: React.FC<t.CmdHostStatefulProps> = (props) => {
       focused={focused}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}
+      autoGrabFocus={props.autoGrabFocus}
       onChanged={handleCommandChanged}
       onCmdFocusChange={(e) => setFocused(e.is.focused)}
       onItemVisibility={(e) => setItems(e.children)}

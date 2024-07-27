@@ -1,9 +1,10 @@
 import { COLORS, Color, Dev, PeerUI, Webrtc, css, type t } from '../../test.ui';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
+type P = t.VideoProps;
 type T = {
   muted?: boolean;
-  props: t.VideoProps;
+  props: P;
 };
 const initial: T = { props: {} };
 
@@ -16,9 +17,9 @@ export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
-  type LocalStore = Pick<T, 'muted'>;
+  type LocalStore = Pick<T, 'muted'> & Pick<P, 'theme'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Video');
-  const local = localstore.object({ muted: false });
+  const local = localstore.object({ muted: false, theme: undefined });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -27,6 +28,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.muted = local.muted;
+      d.props.theme = local.theme;
     });
 
     ctx.debug.width(330);
@@ -35,7 +37,9 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <PeerUI.Video {...e.state.props} peer={self} />;
+        const { props } = e.state;
+        Dev.Theme.background(ctx, props.theme, 1);
+        return <PeerUI.Video {...props} peer={self} />;
       });
   });
 
@@ -86,6 +90,12 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.muted = Dev.toggle(d, 'muted'))));
       });
+
+      Dev.Theme.switcher(
+        dev,
+        (d) => d.props.theme,
+        (d, value) => (local.theme = d.props.theme = value),
+      );
     });
 
     dev.hr(-1, 5);

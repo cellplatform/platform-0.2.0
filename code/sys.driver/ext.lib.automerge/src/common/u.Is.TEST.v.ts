@@ -55,7 +55,7 @@ describe('Is (flags)', (e) => {
   });
 
   it('Is.repoIndex', () => {
-    const index: t.StoreIndex = { ['.meta']: Store.Index.meta, docs: [] };
+    const index: t.StoreIndexDoc = { ['.meta']: Store.Index.meta, docs: [] };
     expect(Is.repoIndex(index)).to.eql(true);
     NON_OBJECTS.forEach((v) => expect(Is.repoIndex(v)).to.eql(false));
   });

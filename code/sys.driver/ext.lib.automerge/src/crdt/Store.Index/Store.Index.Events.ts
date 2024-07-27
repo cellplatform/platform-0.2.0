@@ -5,19 +5,19 @@ type ChangeType = t.StoreIndexChangeEvent['type'];
 /**
  * Factory for the Index events object.
  */
-export function events(index: t.StoreIndexState, options: { dispose$?: t.UntilObservable } = {}) {
+export function events(index: t.StoreIndex, options: { dispose$?: t.UntilObservable } = {}) {
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
 
   const $$ = rx.subject<t.StoreIndexEvent>();
   const $ = $$.pipe(rx.takeUntil(dispose$));
-  const changed$ = rx.payload<t.DocChangedEvent<t.StoreIndex>>($, 'crdt:doc/Changed');
+  const changed$ = rx.payload<t.DocChangedEvent<t.StoreIndexDoc>>($, 'crdt:doc/Changed');
   const doc = index.doc.events(dispose$);
   doc.$.subscribe((e) => $$.next(e));
 
-  const notEphemeral = (doc: t.StoreIndexDoc) => !doc.meta?.ephemeral;
-  const getTotal = (index: t.StoreIndex) => index.docs.filter(notEphemeral).length;
-  const fire = (type: ChangeType, index: number, total: number, item: t.StoreIndexDoc) => {
+  const notEphemeral = (doc: t.StoreIndexItem) => !doc.meta?.ephemeral;
+  const getTotal = (index: t.StoreIndexDoc) => index.docs.filter(notEphemeral).length;
+  const fire = (type: ChangeType, index: number, total: number, item: t.StoreIndexItem) => {
     if (!item) return;
     $$.next({ type, payload: { index, total, item } });
   };

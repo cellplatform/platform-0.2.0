@@ -522,7 +522,7 @@ describe('StoreIndex', () => {
 
       it('changed$', async () => {
         const { store, events, index } = await eventsSetup();
-        const fired: t.DocChanged<t.StoreIndex>[] = [];
+        const fired: t.DocChanged<t.StoreIndexDoc>[] = [];
         events.changed$.subscribe((e) => fired.push(e));
 
         await index.add({ uri: 'automerge:foobar' });
@@ -619,7 +619,7 @@ describe('StoreIndex', () => {
 describe('StoreIndex.Filter', () => {
   const Filter = Store.Index.Filter;
 
-  const generateDocs = async (store: t.Store, options: { index?: t.StoreIndexState } = {}) => {
+  const generateDocs = async (store: t.Store, options: { index?: t.StoreIndex } = {}) => {
     const doc1 = await store.doc.getOrCreate<D>((d) => (d.count = 0));
     const doc2 = await store.doc.getOrCreate<D>((d) => (d.count = 0));
     const doc3 = await store.doc.getOrCreate<D>((d) => (d.count = 0));

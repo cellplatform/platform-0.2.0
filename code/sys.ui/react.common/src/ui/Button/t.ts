@@ -11,9 +11,13 @@ export type ButtonProps = {
   children?: Content;
   label?: string;
   enabled?: boolean;
+  active?: boolean;
   block?: boolean;
   tooltip?: string;
   overlay?: Content; // eg. a "copied" message.
+
+  isOver?: boolean; // force the button into an "is-over" state.
+  isDown?: boolean; // force the button into an "is-down" state.
 
   spinning?: boolean;
   spinner?: t.PartialDeep<ButtonSpinner>;

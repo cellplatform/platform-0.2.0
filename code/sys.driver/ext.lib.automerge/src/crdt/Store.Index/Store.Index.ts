@@ -34,7 +34,7 @@ export const StoreIndex = {
   async init(store: t.Store, options: { uri?: string } = {}) {
     const { uri } = options;
     const repo = store.repo;
-    const doc = await store.doc.getOrCreate<t.StoreIndex>((d) => {
+    const doc = await store.doc.getOrCreate<t.StoreIndexDoc>((d) => {
       Doc.Meta.ensure(d, StoreIndex.meta);
       d.docs = [];
     }, uri);
@@ -71,7 +71,7 @@ export const StoreIndex = {
     });
 
     // Finish up.
-    const api: t.StoreIndexState = {
+    const api: t.StoreIndex = {
       store,
       doc,
 
@@ -117,7 +117,7 @@ export const StoreIndex = {
             .map(({ shared, uri, name, meta }) => ({
               uri,
               shared,
-              doc: Delete.undefined<t.StoreIndexDoc>({ uri, name, meta }),
+              doc: Delete.undefined<t.StoreIndexItem>({ uri, name, meta }),
             }));
 
           const unique = R.uniqBy((e) => e.uri, inserts);
@@ -152,7 +152,7 @@ export const StoreIndex = {
        * Toggles the shared state of the given URI(s).
        */
       toggleShared(input, options = {}) {
-        type T = ReturnType<t.StoreIndexState['toggleShared']>[number];
+        type T = ReturnType<t.StoreIndex['toggleShared']>[number];
         const res: T[] = [];
 
         let uris = wrangle.uris(input);
@@ -217,7 +217,7 @@ const wrangle = {
     const meta = Doc.Meta.get(ref.current);
     if (!meta) return undefined;
 
-    const res: t.StoreIndexDoc['meta'] = {};
+    const res: t.StoreIndexItem['meta'] = {};
     res.ephemeral = meta.ephemeral;
     return Delete.undefined(res);
   },

@@ -4,7 +4,6 @@ import { TestDb } from './TestDb';
 type O = Record<string, unknown>;
 type Options = { storage?: string; debug?: t.StoreDebug; broadcastAdapter?: boolean };
 type T = { docuri?: t.UriString };
-type N = t.NetworkAdapterInterface;
 
 /**
  * Sample spec CRDT state.
@@ -29,30 +28,34 @@ export const SampleCrdt = {
       return exists ? await index.store.doc.get<T>(doc.uri) : undefined;
     }
 
-    return { storage, store, index, docAtIndex } as const;
+    return {
+      repo: { store, index },
+      name: storage.name,
+      docAtIndex,
+    } as const;
   },
 
   /**
    * Stateful dev-harness helpers.
    */
-  dev(state: t.DevCtxState<T>, local: T, store: t.Store) {
+  dev(store: t.Store, debug: t.Immutable<T>) {
     return {
       get docuri() {
-        return local.docuri;
+        return debug.current.docuri;
       },
 
       async get() {
-        const uri = state.current.docuri;
+        const uri = debug.current.docuri;
         const exists = uri ? await store.doc.exists(uri) : false;
         const doc = exists ? await store.doc.get(uri) : await store.doc.getOrCreate((d) => null);
-        state.change((d) => (local.docuri = d.docuri = doc?.uri));
+        debug.change((d) => (d.docuri = doc?.uri));
         return doc;
       },
 
       async delete() {
-        const uri = state.current.docuri;
+        const uri = debug.current.docuri;
         if (uri) await store.doc.delete(uri);
-        state.change((d) => (local.docuri = d.docuri = undefined));
+        debug.change((d) => (d.docuri = undefined));
         return undefined;
       },
     } as const;

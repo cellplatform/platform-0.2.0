@@ -24,14 +24,23 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
   /**
    * Render
    */
+  const border = `solid 1px ${Color.alpha(Color.DARK, 0.15)}`;
   const styles = {
-    base: css({ display: 'grid', userSelect: 'none' }),
+    base: css({
+      display: 'grid',
+      userSelect: 'none',
+    }),
     avatars: css({
       display: hasMedia ? 'grid' : 'none',
-      borderBottom: `solid 1px ${Color.alpha(Color.DARK, 0.15)}`,
+      borderBottom: border,
       padding: 10,
     }),
+    connector: css({
+      borderBottom: border,
+    }),
   };
+
+  const elPeerConnector = <PeerUI.Connector peer={peer} style={styles.connector} />;
 
   const elAvatars = (
     <div {...styles.avatars}>
@@ -49,6 +58,7 @@ export const DebugFooter: React.FC<DebugFooterProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elAvatars}
+      {elPeerConnector}
       <VersionBadge theme={props.theme} />
     </div>
   );

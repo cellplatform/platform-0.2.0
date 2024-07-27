@@ -11,6 +11,7 @@ export type {
   Disposable,
   EventBus,
   Lifecycle,
+  PickRequired,
   UntilObservable,
 } from 'sys.types/src/types';
 

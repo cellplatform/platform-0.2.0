@@ -7,9 +7,20 @@ export { MonospaceButton } from '../ui.Buttons';
 export { MonoHash } from '../ui.History.Grid';
 export { Doc, DocUri };
 
+type P = t.InfoProps;
+
 /**
  * Constants
  */
+const name = 'Info';
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'stateful' | 'fields'> = {
+  theme: 'Light',
+  enabled: true,
+  stateful: false,
+  get fields() {
+    return fields.default;
+  },
+};
 
 const fields = {
   get all(): t.InfoField[] {
@@ -38,21 +49,29 @@ const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 
+const docUri = DocUri.DEFAULTS.props;
+
 export const DEFAULTS = {
-  displayName: `${Pkg.name}:Info`,
-  stateful: false,
+  name,
+  displayName: `${Pkg.name}:${name}`,
+  query: { dev: 'dev' },
+  props,
+
   visibleFilter,
   fields,
-  theme: 'Light',
   repo: { label: 'Store' },
   doc: {
     head: { label: 'Head', hashLength: 6 },
-    uri: DocUri.DEFAULTS.uri,
+    uri: {
+      shorten: docUri.shorten,
+      prefix: docUri.prefix,
+      head: docUri.head,
+      clipboard: docUri.clipboard,
+    },
   },
   history: {
     label: 'History',
     list: { page: 0, limit: 5, sort: 'desc' },
     item: { hashLength: 6 },
   },
-  query: { dev: 'dev' },
 } as const;

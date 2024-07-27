@@ -43,7 +43,7 @@ export const Body: React.FC<BodyProps> = (props) => {
     body: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateColumns: '1fr auto auto ',
+      gridTemplateColumns: '1fr auto auto',
     }),
     runIcon: css({}),
     resultIcons: css({ marginLeft: 5, marginRight: 3, paddingTop: 1 }),

@@ -19,6 +19,7 @@ export type * from './Webrtc.PeerJs/t';
 export type * from './Webrtc/t';
 
 export type * from './ui/ui.AvatarTray/t';
+export type * from './ui/ui.Button.PeerUri/t';
 export type * from './ui/ui.Connector.MediaToolbar/t';
 export type * from './ui/ui.Connector.Model/t';
 export type * from './ui/ui.Connector/t';

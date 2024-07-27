@@ -7,15 +7,14 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { DevKeyboard } from './-SPEC.Keyboard';
 import { Color, Dev, Pkg, css, rx } from '../test.ui';
+import { DevKeyboard } from './-SPEC.Keyboard';
 import {
   Cmd,
   CrdtInfo,
   Immutable,
   Peer,
   PeerRepoList,
-  RepoList,
   WebStore,
   WebrtcStore,
   type t,
@@ -24,7 +23,6 @@ import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.DebugFooter';
 
-type O = Record<string, unknown>;
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
@@ -46,48 +44,45 @@ export default Dev.describe(name, async (e) => {
   const Store = {
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
     fs: WebStore.init({ storage: 'fs', network: [] }),
-    async getMeDoc() {
-      const fs = Store.fs.doc;
-      if (!(await fs.exists(local.me))) local.me = undefined;
-      const doc = await fs.getOrCreate((d) => null, local.me);
-      local.me = doc.uri;
-      return doc;
-    },
+  } as const;
+  const Index = {
+    tmp: await WebStore.index(Store.tmp),
+    fs: await WebStore.index(Store.fs),
   } as const;
 
-  const model = await RepoList.model(Store.tmp, {
-    behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
-  });
-  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
+  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, Index.tmp, {});
   const theme: t.CommonTheme = 'Light';
 
-  const Index = {
-    fs: await WebStore.index(Store.fs),
-    tmp: network.index,
-  } as const;
-  const me = await Store.getMeDoc();
+  async function getMe() {
+    const fs = Store.fs.doc;
+    const exists = await fs.exists(local.me);
+    if (!exists) local.me = undefined;
+    const doc = await fs.getOrCreate((d) => null, local.me);
+    local.me = doc.uri;
+    return doc;
+  }
+
+  const me = await getMe();
   const cloner = () => Immutable.clonerRef({});
 
   const main: t.Shell = {
     cmdbar: undefined,
-    cmd: {
-      fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    self,
+    fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    repo: {
+      fs: { store: Store.fs, index: Index.fs },
+      tmp: { store: Store.tmp, index: Index.tmp },
     },
     state: {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
-    },
-    store: {
-      fs: Store.fs,
-      tmp: Store.tmp,
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
     },
   };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -109,18 +104,16 @@ export default Dev.describe(name, async (e) => {
     updateDebugPanelWidth();
 
     ctx.subject
-      .backgroundColor(1)
-      .size('fill', 36)
+      .size('fill', 80)
       .display('grid')
       .render<T>((e) => {
+        const theme = Color.theme('Dark');
+        Dev.Theme.background(ctx, theme);
+        ctx.host.tracelineColor(Color.alpha(theme.fg, 0.03));
+
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({
-            Absolute: 0,
-            display: 'grid',
-            backgroundColor: Color.WHITE,
-            overflow: 'hidden',
-          }),
+          overlay: css({ Absolute: 0, display: 'grid' }),
         };
 
         const overlay = e.state.overlay;
@@ -128,7 +121,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
+            <SampleLayout network={network} stream={e.state.stream} theme={theme.name} />
             {elOverlay}
           </div>
         );
@@ -200,7 +193,7 @@ export default Dev.describe(name, async (e) => {
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
             farcaster: {
-              cmd: main.cmd.fc,
+              cmd: main.fc,
               signer: {},
               identity: { onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e) },
             },
@@ -224,7 +217,7 @@ export default Dev.describe(name, async (e) => {
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           data={{
             network,
-            repo: model,
+            repo: { store: Store.tmp, index: Index.tmp },
             shared: [
               { label: 'System', uri, object: { lens: ['sys'], ...obj } },
               { label: 'Namespaces', uri, object: { lens: ['ns'], ...obj } },
@@ -246,10 +239,10 @@ export default Dev.describe(name, async (e) => {
       return (
         <CrdtInfo
           stateful={true}
-          title={['Local State', 'Private']}
+          title={['Private State', 'Local']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
-            repo: { store: Store.fs, index: Index.fs },
+            repo: main.repo.fs,
             document: [
               {
                 label: 'Me',
@@ -291,11 +284,10 @@ export default Dev.describe(name, async (e) => {
       );
     });
 
-    dev.hr(5, 20);
-    dev.section('Debug', (dev) => {
-      dev.button('Redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-    });
+    // dev.hr(5, 20);
+    // dev.section('Debug', (dev) => {
+    //   dev.button('redraw', (e) => dev.redraw());
+    // });
   });
 
   e.it('ui:footer', async (e) => {

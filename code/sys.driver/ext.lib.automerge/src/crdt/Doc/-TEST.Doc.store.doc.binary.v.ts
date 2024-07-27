@@ -32,7 +32,7 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
     it('from given URI', async () => {
       const store = Store.init();
       const binary = getBinary();
-      const uri = Uri.generate.uri();
+      const uri = Uri.Generate.uri();
 
       const exists = () => store.doc.exists(uri, { timeout: 30 });
       expect(await exists()).to.eql(false);

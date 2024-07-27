@@ -8,4 +8,4 @@ export const R = { equals } as const;
  * @system
  */
 export { PatchState } from 'ext.lib.immer';
-export { Hash, Id, Is, Path, Time, Value, cuid, rx, slug } from 'sys.util';
+export { cuid, Hash, Id, Immutable, Is, Json, Path, rx, slug, Time, Value } from 'sys.util';

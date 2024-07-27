@@ -12,6 +12,7 @@ type Options = {
   keyboard?: boolean;
   doubleEscapeKeyAction?: null | EscapeAction;
   defaultNamespace?: string;
+  autoGrabFocus?: boolean;
   forceDev?: boolean;
   style?: t.CssValue;
 };
@@ -25,7 +26,11 @@ export async function render(
   specs: t.SpecImports,
   options: Options = {},
 ) {
-  const { keyboard = true, doubleEscapeKeyAction = 'ReloadRootUrl' } = options;
+  const {
+    keyboard = true,
+    autoGrabFocus = true,
+    doubleEscapeKeyAction = 'ReloadRootUrl',
+  } = options;
   const url = DevWrangle.Url.navigate.formatDevFlag(options);
   const spec = await DevWrangle.Url.module(url, specs);
   const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
@@ -48,6 +53,7 @@ export async function render(
       imports={specs}
       badge={options.badge}
       hrDepth={options.hrDepth}
+      autoGrabFocus={autoGrabFocus}
       style={style}
     />
   );

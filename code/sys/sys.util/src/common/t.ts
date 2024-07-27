@@ -17,6 +17,7 @@ export type {
   ImmutableRef,
   Index,
   Json,
+  JsonString,
   Lifecycle,
   LogLevel,
   LogLevelInput,

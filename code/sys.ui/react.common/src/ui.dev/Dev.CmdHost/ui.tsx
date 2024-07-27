@@ -15,6 +15,9 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
 
   const readyRef = useRef(false);
   const [textbox, setTextbox] = useState<t.TextInputRef>();
+  const cmdbarRef = useRef(CmdBar.Ctrl.create());
+  const cmdbar = cmdbarRef.current;
+
   useKeyboard(textbox, {
     enabled,
     autoGrabFocus: props.autoGrabFocus,
@@ -55,6 +58,7 @@ export const View: React.FC<t.CmdHostProps> = (props) => {
   const elCmdBar = commandbarVisible && (
     <div {...styles.bar}>
       <CmdBar
+        cmd={CmdBar.Ctrl.toCmd(cmdbar)}
         enabled={enabled}
         text={props.command}
         placeholder={props.commandPlaceholder}

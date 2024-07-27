@@ -6,7 +6,7 @@ import { type t } from './common';
  * <Layout>
  */
 export type LayoutProps = {
-  repo?: { store: t.Store; index: t.StoreIndexState };
+  repo?: { store: t.Store; index: t.StoreIndex };
   docuri?: string;
   path?: t.ObjectPath;
   theme?: t.CommonTheme;

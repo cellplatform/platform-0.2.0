@@ -15,17 +15,31 @@ const initial: T = {
 const name = Button.displayName ?? 'Unknown';
 export default Dev.describe(name, (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.ButtonProps, 'theme' | 'enabled' | 'block' | 'spinning' | 'tooltip' | 'label'>;
+    Pick<
+      t.ButtonProps,
+      | 'theme'
+      | 'enabled'
+      | 'active'
+      | 'block'
+      | 'spinning'
+      | 'tooltip'
+      | 'label'
+      | 'isOver'
+      | 'isDown'
+    >;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     theme: undefined,
     useLabel: true,
     padding: false,
     enabled: DEFAULTS.enabled,
+    active: DEFAULTS.active,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
     tooltip: 'My Button',
     label: 'Hello-🐷',
+    isOver: undefined,
+    isDown: undefined,
   });
 
   e.it('init', async (e) => {
@@ -35,10 +49,13 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.theme = local.theme;
       d.props.enabled = local.enabled;
+      d.props.active = local.active;
       d.props.block = local.block;
       d.props.spinning = local.spinning;
       d.props.tooltip = local.tooltip;
       d.props.label = local.label;
+      d.props.isOver = local.isOver;
+      d.props.isDown = local.isDown;
       d.debug.useLabel = local.useLabel;
       d.debug.padding = local.padding;
     });
@@ -88,10 +105,34 @@ export default Dev.describe(name, (e) => {
 
       dev.boolean((btn) =>
         btn
+          .label('active')
+          .value((e) => e.state.props.active)
+          .onClick((e) => e.change((d) => (local.active = Dev.toggle(d.props, 'active')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
           .label((e) => 'spinning')
           .value((e) => e.state.props.spinning)
           .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning')))),
       );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.isOver;
+        btn
+          .label((e) => `isOver (force)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.isOver = Dev.toggle(d.props, 'isOver'))));
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.isDown;
+        btn
+          .label((e) => `isDown (force)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.isDown = Dev.toggle(d.props, 'isDown'))));
+      });
 
       dev.hr(-1, 5);
 

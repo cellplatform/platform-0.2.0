@@ -25,7 +25,7 @@ export const Is = {
     return isObjectType(input, Symbols.Store);
   },
 
-  storeIndex(input: any): input is t.StoreIndexState {
+  storeIndex(input: any): input is t.StoreIndex {
     return isObjectType(input, Symbols.StoreIndex);
   },
 
@@ -41,9 +41,9 @@ export const Is = {
     return true;
   },
 
-  repoIndex(input: any): input is t.StoreIndex {
+  repoIndex(input: any): input is t.StoreIndexDoc {
     if (!isObject(input)) return false;
-    const subject = input as t.StoreIndex;
+    const subject = input as t.StoreIndexDoc;
     return Array.isArray(subject.docs);
   },
 

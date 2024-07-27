@@ -21,9 +21,10 @@ export function useKeyboard(
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
+    const isFocused = () => !!textbox?.current.focused;
 
     const arrowKey = (e: t.KeyMatchSubscriberHandlerArgs, key: ArrowKey) => {
-      if (!autoGrabFocus && !textbox?.current.focused) return;
+      if (!autoGrabFocus && !isFocused()) return;
       e.handled();
       const meta = e.state.modifiers.meta;
       options.onArrowKey?.({ key, meta });
@@ -52,10 +53,10 @@ export function useKeyboard(
     const keypress = Keyboard.until(dispose$);
     keypress.down$
       .pipe(
-        rx.filter((e) => enabled && autoGrabFocus),
+        rx.filter(() => enabled && autoGrabFocus),
         rx.filter((e) => !!(e.last?.is.letter || e.last?.is.number)),
       )
-      .subscribe((e) => textbox?.focus());
+      .subscribe(() => textbox?.focus());
 
     if (!enabled) handlers.dispose();
     return dispose;

@@ -4,17 +4,18 @@ export * from '../common';
 /**
  * Constants
  */
+const name = 'Button';
 
 const spinner: t.ButtonSpinner = {
   width: 30,
   color: { enabled: COLORS.BLUE, disabled: COLORS.DARK },
 };
 
-spinner.color;
-
 export const DEFAULTS = {
-  displayName: `${Pkg.name}:Button`,
+  name,
+  displayName: `${Pkg.name}:${name}`,
   enabled: true,
+  active: true,
   block: false,
   spinning: false,
   disabledOpacity: 0.3,

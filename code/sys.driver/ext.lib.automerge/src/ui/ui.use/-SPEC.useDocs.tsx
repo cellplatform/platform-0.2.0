@@ -22,7 +22,7 @@ const name = 'useDocs';
 export default Dev.describe(name, async (e) => {
   let _loadDelay = 0;
   const db = await SampleCrdt.init({ debug: { loadDelay: () => _loadDelay } });
-  const index = db.index;
+  const { store, index } = db.repo;
   let model: t.RepoListModel;
 
   type LocalStore = Pick<T, 'scope' | 'loadDelay' | 'hook'> &
@@ -54,7 +54,7 @@ export default Dev.describe(name, async (e) => {
       d.options.redrawOnChange = local.redrawOnChange;
     });
 
-    model = await RepoList.model(db.store, {
+    model = await RepoList.model(store, {
       behaviors: ['Copyable', 'Deletable'],
       onActiveChanged: () => dev.redraw(),
     });
@@ -72,12 +72,12 @@ export default Dev.describe(name, async (e) => {
         if (reload) return <DevReload theme={theme} />;
 
         if (hook === 'useDocs') {
-          return <SampleUseDocs theme={theme} store={db.store} refs={refs} options={options} />;
+          return <SampleUseDocs theme={theme} store={store} refs={refs} options={options} />;
         }
 
         if (hook === 'useDoc') {
           const ref = scope === 'error' ? ERROR_URI : getUris(e.state.scope)[0];
-          return <SampleUseDoc theme={theme} refs={ref} store={db.store} options={options} />;
+          return <SampleUseDoc theme={theme} refs={ref} store={store} options={options} />;
         }
 
         return null;
@@ -162,7 +162,7 @@ export default Dev.describe(name, async (e) => {
           });
       });
       dev.hr(-1, 5);
-      dev.button([`delete database: "${db.storage.name}"`, '💥'], async (e) => {
+      dev.button([`delete database: "${db.name}"`, '💥'], async (e) => {
         await e.state.change((d) => (d.reload = true));
         await TestDb.Spec.deleteDatabase();
       });

@@ -5,7 +5,7 @@ import { Wrangle } from './u.Wrangle';
  * Manages an index of documents within a repository.
  */
 export const Mutate = {
-  toggleShared(doc: t.StoreIndexDoc, options: { shared?: boolean; version?: number } = {}) {
+  toggleShared(doc: t.StoreIndexItem, options: { shared?: boolean; version?: number } = {}) {
     const shared = Wrangle.shared(doc);
 
     if (typeof options.version === 'number') {

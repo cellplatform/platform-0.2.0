@@ -8,7 +8,7 @@ export type { Observable } from 'rxjs';
  */
 export type { Cmd, CmdType } from 'sys.cmd/src/types';
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
-export type { Disposable, EventBus, Lifecycle, UntilObservable } from 'sys.types/src/types';
+export type { Disposable, Lifecycle, PickRequired, UntilObservable } from 'sys.types/src/types';
 
 /**
  * @local

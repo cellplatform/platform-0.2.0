@@ -1,7 +1,7 @@
 /**
  * @ext
  */
-export { Info as CrdtInfo } from 'ext.lib.automerge';
+export { Info as CrdtInfo, DocUri, useRedrawOnChange } from 'ext.lib.automerge';
 export { MonacoEditor } from 'ext.lib.monaco';
 
 /**
@@ -10,9 +10,10 @@ export { MonacoEditor } from 'ext.lib.monaco';
 export {
   Button,
   COLORS,
+  CmdBar,
   Color,
   FC,
-  Keyboard,
+  PageStack,
   PropList,
   TestRunner,
   css,

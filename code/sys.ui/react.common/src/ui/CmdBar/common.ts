@@ -12,8 +12,8 @@ export { TextboxSync } from '../Textbox.Sync';
  * Constants
  */
 const paths: t.CmdBarPaths = {
-  text: ['text'],
   cmd: ['cmd'],
+  text: ['text'],
   history: ['history'],
 };
 

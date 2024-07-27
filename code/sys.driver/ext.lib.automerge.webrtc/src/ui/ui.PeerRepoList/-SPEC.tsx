@@ -120,11 +120,11 @@ export default Dev.describe(name, async (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        const total = (index: t.StoreIndexState) => {
+        const total = (index: t.StoreIndex) => {
           return index.doc.current.docs.length;
         };
 
-        const format = (index: t.StoreIndexState) => {
+        const format = (index: t.StoreIndex) => {
           const uri = index.doc.uri;
           return {
             total: total(index),

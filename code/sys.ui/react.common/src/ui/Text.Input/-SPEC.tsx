@@ -127,7 +127,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
@@ -172,11 +171,11 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
+    dev.TODO(`focusActions (prop): ${DEFAULTS.focusActions.join()}`);
 
     dev.hr(5, 20);
 
-    dev.section('Actions', (dev) => {
+    dev.section('Ref (Actions)', (dev) => {
       type F = (ref: t.TextInputRef) => void;
       const focusThen = (msecs: number, ref: t.TextInputRef, fn: F) => {
         ref.focus();

@@ -1,5 +1,5 @@
 import { Ctrl, DEFAULTS } from '.';
-import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t } from '../../test';
+import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t, Cmd } from '../../test';
 import { CmdBar } from '../CmdBar';
 
 describe('CmdBar.Ctrl', () => {
@@ -7,7 +7,7 @@ describe('CmdBar.Ctrl', () => {
     const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
     const ctrl = CmdBar.Ctrl.create(transport);
-    const cmd = ctrl._;
+    const cmd = Ctrl.toCmd(ctrl);
     const paths = DEFAULTS.paths;
 
     const ref: t.CmdBarRef = {
@@ -41,7 +41,9 @@ describe('CmdBar.Ctrl', () => {
 
     let fired = 0;
     ctrl1.events().on('Invoke', () => fired++);
-    ctrl2._.events().on('Invoke', () => fired++);
+    Ctrl.toCmd(ctrl2)
+      .events()
+      .on('Invoke', () => fired++);
 
     expectCounter(0);
     ctrl1.invoke({ text: 'foo' });
@@ -68,6 +70,28 @@ describe('CmdBar.Ctrl', () => {
     expect(ctrl5).to.equal(ref.ctrl);
   });
 
+  it('Ctrl.toCmd', () => {
+    const { cmd, ref } = testSetup();
+    expect(Ctrl.toCmd(cmd)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref.ctrl)).to.eql(cmd);
+  });
+
+  it('Ctrl.toCmd (default)', () => {
+    const { cmd, ref, transport } = testSetup();
+    expect(Ctrl.toPaths(cmd)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref.ctrl)).to.eql(DEFAULTS.paths);
+  });
+
+  it('Ctrl.toCmd (custom)', () => {
+    const paths = CmdBar.Ctrl.Path.prepend(['foo', 'bar']);
+    const ctrl = Ctrl.create(undefined, { paths });
+    const cmd = Ctrl.toCmd(ctrl);
+    expect(Ctrl.toPaths(ctrl)).to.eql(paths);
+    expect(Ctrl.toPaths(cmd)).to.eql(paths);
+  });
+
   describe('Ctrl.Is', () => {
     const Is = CmdBar.Is;
     const NON = [123, 'abc', [], {}, undefined, null, true, Symbol('foo'), BigInt(0)];
@@ -76,7 +100,8 @@ describe('CmdBar.Ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
       NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
       expect(Is.ctrl(ctrl)).to.eql(true);
-      expect(Is.ctrl({ cmd: ctrl._ })).to.eql(false);
+
+      expect(Is.ctrl({ cmd: CmdBar.Ctrl.toCtrl(ctrl) })).to.eql(false);
       expect(Is.ctrl(ctrl)).to.eql(true);
     });
 

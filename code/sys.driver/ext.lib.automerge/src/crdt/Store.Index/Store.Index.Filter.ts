@@ -1,6 +1,6 @@
 import { type t, Is } from './common';
 
-type DocsInput = t.StoreIndexState | t.StoreIndex | t.StoreIndexDoc[];
+type DocsInput = t.StoreIndex | t.StoreIndexDoc | t.StoreIndexItem[];
 
 /**
  * Filters on a store's [Index].
@@ -19,7 +19,7 @@ export const Filter = {
  * Helpers
  */
 const wrangle = {
-  docs(docs: DocsInput): t.StoreIndexDoc[] {
+  docs(docs: DocsInput): t.StoreIndexItem[] {
     if (Array.isArray(docs)) return docs;
     if (Is.storeIndex(docs)) return docs.doc.current.docs;
     if (Array.isArray(docs.docs)) return docs.docs;

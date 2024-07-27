@@ -45,14 +45,14 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (ctrl && textbox) Ctrl.listen({ ctrl: ctrl, textbox, useKeyboard, dispose$ });
+    if (ctrl && textbox) Ctrl.listen({ ctrl, textbox, useKeyboard, dispose$ });
     return dispose;
   }, [ctrl, textbox, useKeyboard]);
 
   useEffect(() => {
     if (ready || !textbox || !ctrl) return;
     setReady(true);
-    props.onReady?.({ ctrl: ctrl, textbox });
+    props.onReady?.({ ctrl, textbox });
   }, [textbox, ctrl, ready]);
 
   /**

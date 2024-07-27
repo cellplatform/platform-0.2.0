@@ -8,6 +8,7 @@ export type MonacoEditorProps = {
   language?: t.EditorLanguage;
   theme?: t.CommonTheme;
   placeholder?: string;
+  enabled?: boolean;
   focusOnLoad?: boolean;
   tabSize?: number;
   minimap?: boolean;
@@ -35,6 +36,7 @@ export type MonacoEditorReadyHandler = (e: MonacoEditorReadyHandlerArgs) => void
 export type MonacoEditorReadyHandlerArgs = {
   readonly editor: MonacoCodeEditor;
   readonly monaco: Monaco;
+  readonly dispose$: t.Observable<void>;
 };
 
 /**

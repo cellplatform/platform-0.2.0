@@ -6,19 +6,24 @@ export * from '../common';
 export { MonospaceButton } from '../ui.Buttons';
 export { Doc };
 
+type P = t.DocUriProps;
+
 /**
  * Constants
  */
-const uri: Required<t.InfoDataDocUri> = {
-  shorten: [4, 4],
-  prefix: 'crdt',
-  head: 2,
-  clipboard: (uri) => `crdt:${Doc.Uri.id(uri)}`,
-};
-
 const name = 'DocUri';
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'shorten' | 'prefix' | 'head' | 'clipboard'> =
+  {
+    enabled: true,
+    theme: 'Light',
+    shorten: [4, 4],
+    prefix: 'crdt',
+    head: 2,
+    clipboard: true,
+  };
+
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
-  uri,
+  props,
 } as const;
