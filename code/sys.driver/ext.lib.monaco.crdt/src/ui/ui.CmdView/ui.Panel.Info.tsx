@@ -1,6 +1,7 @@
 import { CrdtInfo, DEFAULTS, type t } from './common';
 
 type P = t.CmdViewProps;
+
 export type PanelInfoProps = {
   repo?: P['repo'];
   doc?: P['doc'];

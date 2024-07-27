@@ -1,19 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import {
-  Color,
-  COLORS,
-  css,
-  DEFAULTS,
-  Doc,
-  DocUri,
-  Icons,
-  Monaco,
-  PageStack,
-  Time,
-  useRedrawOnChange,
-  type t,
-} from './common';
+import { Color, css, DEFAULTS, Doc, Monaco, PageStack, useRedrawOnChange, type t } from './common';
+import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 
 type P = t.CmdViewProps;
@@ -27,8 +15,6 @@ export const View: React.FC<P> = (props) => {
    * Hooks
    */
   useRedrawOnChange(crdt.doc);
-  const [isCopy, setIsCopy] = useState(false);
-  const [copiedText, setCopiedText] = useState<string>();
   const [page, setPage] = useState(0);
 
   /**
@@ -39,8 +25,6 @@ export const View: React.FC<P> = (props) => {
   /**
    * Render
    */
-  const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
-  const transition = [t('opacity')].join(', ');
   const theme = Color.theme(props.theme);
   const border = wrangle.border(props);
   const borderColor = props.borderColor ?? Color.alpha(theme.fg, 0.8);
@@ -67,23 +51,10 @@ export const View: React.FC<P> = (props) => {
       gridTemplateRows: `1fr auto`,
     }),
 
-    docuri: {
-      base: css({
-        borderTop: dividerBorder,
-        padding: 15,
-        display: 'grid',
-        placeItems: 'center',
-      }),
-      inner: css({
-        display: 'grid',
-        gridTemplateColumns: crdt.doc ? `auto 1fr` : '1fr',
-        columnGap: '15px',
-      }),
-      icon: css({
-        opacity: crdt.doc ? 1 : 0.25,
-        transition,
-      }),
-    },
+    docuri: css({
+      borderTop: dividerBorder,
+      padding: 15,
+    }),
 
     pageStack: css({
       Absolute: [-1, 0, null, 0],
@@ -120,28 +91,9 @@ export const View: React.FC<P> = (props) => {
     />
   );
 
-  let Icon = isCopy ? Icons.Copy : Icons.Repo;
-  if (!!copiedText) Icon = Icons.Done;
-
   const elDocUri = (
-    <div {...styles.docuri.base}>
-      <div {...styles.docuri.inner}>
-        {crdt.doc && (
-          <DocUri
-            doc={crdt.doc}
-            head={0}
-            fontSize={20}
-            theme={theme.name}
-            copiedText={copiedText}
-            onMouse={(e) => setIsCopy(e.is.over)}
-            onCopy={(e) => {
-              setCopiedText('copied');
-              Time.delay(1500, () => setCopiedText(undefined));
-            }}
-          />
-        )}
-        <Icon style={styles.docuri.icon} color={!!copiedText ? COLORS.GREEN : undefined} />
-      </div>
+    <div {...styles.docuri}>
+      <PanelDocUri doc={crdt.doc} theme={theme.name} />
     </div>
   );
 
