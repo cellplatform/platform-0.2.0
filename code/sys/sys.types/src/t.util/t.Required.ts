@@ -1,3 +1,5 @@
+export type { DeepRequired } from 'ts-essentials';
+
 /**
  * Pick optional fields from a type converting them to required.
  * Example:

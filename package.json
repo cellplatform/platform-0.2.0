@@ -97,6 +97,7 @@
     "semver": "7.6.3",
     "symbol-observable": "4.0.0",
     "tinycolor2": "1.6.0",
+    "ts-essentials": "10.0.1",
     "ua-parser-js": "1.0.38",
     "unified": "11.0.5",
     "unist-util-select": "5.1.0",
