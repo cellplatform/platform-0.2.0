@@ -17,10 +17,10 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
+
+  const initial = { props: { ...DEFAULTS.props, fontSize: LARGE_FONT } };
   const State = {
-    props: Immutable.clonerRef<P>(
-      Json.parse<P>(local.props, () => ({ ...DEFAULTS.props, fontSize: LARGE_FONT })),
-    ),
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, () => initial.props)),
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { useDoc: false })),
   } as const;
 
@@ -99,6 +99,16 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.immutable(dev, State.props);
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.enabled;
+        btn
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
+      });
 
       dev.boolean((btn) => {
         const value = () => !!State.props.current.fontSize;

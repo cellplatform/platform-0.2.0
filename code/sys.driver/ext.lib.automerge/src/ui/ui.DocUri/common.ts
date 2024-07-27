@@ -6,12 +6,15 @@ export * from '../common';
 export { MonospaceButton } from '../ui.Buttons';
 export { Doc };
 
+type P = t.DocUriProps;
+
 /**
  * Constants
  */
 const name = 'DocUri';
-const props: t.PickRequired<t.DocUriProps, 'theme' | 'shorten' | 'prefix' | 'head' | 'clipboard'> =
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'shorten' | 'prefix' | 'head' | 'clipboard'> =
   {
+    enabled: true,
     theme: 'Light',
     shorten: [4, 4],
     prefix: 'crdt',

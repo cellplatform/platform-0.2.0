@@ -16,6 +16,7 @@ export type DocUriProps = {
   clipboard?: D['clipboard'];
   copiedText?: string;
   fontSize?: number;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;

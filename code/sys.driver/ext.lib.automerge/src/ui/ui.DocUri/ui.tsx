@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Copied } from '../ui.Buttons';
 import { Color, css, DEFAULTS, Doc, Hash, MonospaceButton, Time, type t } from './common';
 
+const def = DEFAULTS.props;
+
 export const View: React.FC<t.DocUriProps> = (props) => {
-  const { clipboard = DEFAULTS.props.clipboard } = props;
+  const { clipboard = def.clipboard, enabled = def.enabled } = props;
   const uri = wrangle.uri(props);
 
   type S = { is: { over: boolean; down: boolean } };
@@ -59,7 +61,8 @@ export const View: React.FC<t.DocUriProps> = (props) => {
       position: 'relative',
       display: 'inline-block',
       userSelect: 'none',
-      pointerEvents: clipboard ? 'auto' : 'none',
+      pointerEvents: clipboard && enabled ? 'auto' : 'none',
+      opacity: enabled ? 1 : 0.3,
     }),
     body: css({
       Flex: 'x-center-center',
