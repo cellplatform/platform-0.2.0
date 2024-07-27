@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import {
   Color,
   COLORS,
-  CrdtInfo,
   css,
   DEFAULTS,
   Doc,
@@ -15,6 +14,7 @@ import {
   useRedrawOnChange,
   type t,
 } from './common';
+import { PanelInfo } from './ui.Panel.Info';
 
 type P = t.CmdViewProps;
 
@@ -67,8 +67,6 @@ export const View: React.FC<P> = (props) => {
       gridTemplateRows: `1fr auto`,
     }),
 
-    crdtInfo: css({ margin: 15 }),
-
     docuri: {
       base: css({
         borderTop: dividerBorder,
@@ -112,24 +110,13 @@ export const View: React.FC<P> = (props) => {
     />
   );
 
-  const elCrdtInfo = (
-    <CrdtInfo
-      style={styles.crdtInfo}
-      theme={theme.name}
-      stateful={true}
+  const elPanelInfo = (
+    <PanelInfo
+      repo={crdt.repo}
+      doc={crdt.doc}
       fields={crdt.info.fields}
-      data={{
-        repo: crdt.repo,
-        document: {
-          ref: crdt.doc,
-          uri: { head: true },
-          object: {
-            visible: false,
-            // visible: viewstate.current.docVisible,
-            // onToggleClick: (e) => viewstate.change((d) => Dev.toggle(d, 'docVisible')),
-          },
-        },
-      }}
+      theme={theme.name}
+      style={{ margin: 15 }}
     />
   );
 
@@ -163,7 +150,7 @@ export const View: React.FC<P> = (props) => {
       {elPageStack}
       <div {...styles.left}>{elEditor}</div>
       <div {...styles.right}>
-        {elCrdtInfo}
+        {elPanelInfo}
         {elDocUri}
       </div>
     </div>
