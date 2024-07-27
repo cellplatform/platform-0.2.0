@@ -18,6 +18,7 @@ export type {
   InfoDataVisible,
   KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
+  PropListFieldSelectorProps,
   PropListItem,
   PropListItemHandler,
   PropListLabel,

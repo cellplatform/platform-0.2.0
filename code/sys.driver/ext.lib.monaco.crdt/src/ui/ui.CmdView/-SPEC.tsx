@@ -161,12 +161,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
-    });
-
-    dev.hr(5, 20);
-
     dev.section('Sample State', (dev) => {
       dev.button((btn) => {
         btn
@@ -196,6 +190,26 @@ export default Dev.describe(name, async (e) => {
             dev.redraw('debug');
           });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('CRDT Fields', (dev) => {
+      dev.row((e) => {
+        const props = State.props.current;
+        return (
+          <CmdView.CrdtInfo.FieldSelector
+            onClick={(e) => {
+            }}
+          />
+        );
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 

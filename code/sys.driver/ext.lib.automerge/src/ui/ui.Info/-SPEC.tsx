@@ -9,6 +9,7 @@ import {
   rx,
   SampleCrdt,
   Value,
+  PropList,
   type t,
 } from '../../test.ui';
 
@@ -171,8 +172,7 @@ export default Dev.describe(name, async (e) => {
       dev.row((e) => {
         const props = State.props.current;
         return (
-          <Dev.FieldSelector
-            all={DEFAULTS.fields.all}
+          <Info.FieldSelector
             selected={props.fields}
             onClick={(e) => {
               setFields(dev, e.next<t.InfoField>(DEFAULTS.fields.default));
