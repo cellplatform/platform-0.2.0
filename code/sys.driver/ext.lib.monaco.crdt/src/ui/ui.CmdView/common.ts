@@ -10,15 +10,13 @@ export * from '../common';
  * Constants
  */
 const name = 'CmdView';
-const props: t.PickRequired<
-  t.CmdViewProps,
-  'theme' | 'readOnly' | 'historyStack' | 'crdtInfoFields'
-> = {
-  theme: 'Dark',
-  readOnly: false,
-  historyStack: true,
-  crdtInfoFields: ['Repo', 'Doc', 'Doc.URI', 'Doc.Object'],
-};
+const props: t.PickRequired<t.CmdViewProps, 'theme' | 'readOnly' | 'historyStack' | 'infoFields'> =
+  {
+    theme: 'Dark',
+    readOnly: false,
+    historyStack: true,
+    infoFields: ['Repo', 'Doc', 'Doc.URI', 'Doc.Object'],
+  };
 
 export const DEFAULTS = {
   name,

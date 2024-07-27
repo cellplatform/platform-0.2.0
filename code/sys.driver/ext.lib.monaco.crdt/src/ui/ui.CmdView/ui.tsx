@@ -102,8 +102,8 @@ export const View: React.FC<P> = (props) => {
  */
 const wrangle = {
   crdt(props: P) {
-    const { repo, doc, crdtInfoFields = DEFAULTS.props.crdtInfoFields } = props;
-    const info = { fields: crdtInfoFields };
+    const { repo, doc, infoFields = DEFAULTS.props.infoFields } = props;
+    const info = { fields: infoFields };
     return { repo, doc, info } as const;
   },
 

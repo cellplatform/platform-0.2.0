@@ -5,13 +5,13 @@ type P = t.CmdViewProps;
 export type PanelInfoProps = {
   repo?: P['repo'];
   doc?: P['doc'];
-  fields?: P['crdtInfoFields'];
+  fields?: P['infoFields'];
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
-  const { repo, doc, fields = DEFAULTS.props.crdtInfoFields } = props;
+  const { repo, doc, fields = DEFAULTS.props.infoFields } = props;
 
   /**
    * Render

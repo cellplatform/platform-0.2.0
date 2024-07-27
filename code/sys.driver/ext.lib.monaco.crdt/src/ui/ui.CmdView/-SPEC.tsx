@@ -199,10 +199,10 @@ export default Dev.describe(name, async (e) => {
         const props = State.props.current;
         return (
           <CmdView.CrdtInfo.FieldSelector
-            selected={props.crdtInfoFields}
+            selected={props.infoFields}
             onClick={(e) => {
-              const next = e.next(DEFAULTS.props.crdtInfoFields);
-              State.props.change((d) => (d.crdtInfoFields = next));
+              const next = e.next(DEFAULTS.props.infoFields);
+              State.props.change((d) => (d.infoFields = next));
             }}
           />
         );
