@@ -1,9 +1,9 @@
-import { Info as CrdtInfo } from 'ext.lib.automerge';
 import { useEffect, useState } from 'react';
 
 import {
   Color,
   COLORS,
+  CrdtInfo,
   css,
   DEFAULTS,
   Doc,
@@ -19,18 +19,14 @@ import {
 type P = t.CmdViewProps;
 
 export const View: React.FC<P> = (props) => {
-  const {
-    repo,
-    doc,
-    readOnly = DEFAULTS.props.readOnly,
-    historyStack = DEFAULTS.props.historyStack,
-  } = props;
+  const { readOnly = DEFAULTS.props.readOnly, historyStack = DEFAULTS.props.historyStack } = props;
+  const crdt = wrangle.crdt(props);
   const history = wrangle.history(props);
 
   /**
    * Hooks
    */
-  useRedrawOnChange(doc);
+  useRedrawOnChange(crdt.doc);
   const [isCopy, setIsCopy] = useState(false);
   const [copiedText, setCopiedText] = useState<string>();
   const [page, setPage] = useState(0);
@@ -82,11 +78,11 @@ export const View: React.FC<P> = (props) => {
       }),
       inner: css({
         display: 'grid',
-        gridTemplateColumns: doc ? `auto 1fr` : '1fr',
+        gridTemplateColumns: crdt.doc ? `auto 1fr` : '1fr',
         columnGap: '15px',
       }),
       icon: css({
-        opacity: doc ? 1 : 0.25,
+        opacity: crdt.doc ? 1 : 0.25,
         transition,
       }),
     },
@@ -105,7 +101,7 @@ export const View: React.FC<P> = (props) => {
     <Monaco.Editor
       theme={theme.name}
       language={'yaml'}
-      enabled={!!doc}
+      enabled={!!crdt.doc}
       readOnly={readOnly}
       minimap={false}
       // onDispose={(e) => controllerRef.current?.dispose()}
@@ -121,11 +117,11 @@ export const View: React.FC<P> = (props) => {
       style={styles.crdtInfo}
       theme={theme.name}
       stateful={true}
-      fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+      fields={crdt.info.fields}
       data={{
-        repo,
+        repo: crdt.repo,
         document: {
-          ref: doc,
+          ref: crdt.doc,
           uri: { head: true },
           object: {
             visible: false,
@@ -143,9 +139,9 @@ export const View: React.FC<P> = (props) => {
   const elDocUri = (
     <div {...styles.docuri.base}>
       <div {...styles.docuri.inner}>
-        {doc && (
+        {crdt.doc && (
           <DocUri
-            doc={doc}
+            doc={crdt.doc}
             head={0}
             fontSize={20}
             theme={theme.name}
@@ -178,8 +174,14 @@ export const View: React.FC<P> = (props) => {
  * Helpers
  */
 const wrangle = {
+  crdt(props: P) {
+    const { repo, doc, crdtInfoFields = DEFAULTS.props.crdtInfoFields } = props;
+    const info = { fields: crdtInfoFields };
+    return { repo, doc, info } as const;
+  },
+
   history(props: P) {
-    const { doc } = props;
+    const { doc } = wrangle.crdt(props);
     if (!doc) return [];
     const history = Doc.history(doc).commits.map((d) => d.change.hash);
     return history.slice(-5);
