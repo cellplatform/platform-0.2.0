@@ -16,7 +16,7 @@ export type InfoField =
   | 'Doc.History.List'
   | 'Doc.History.List.Detail'
   | 'Doc.History.List.NavPaging';
-export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme };
+export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; enabled: boolean };
 
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
@@ -87,6 +87,7 @@ export type InfoProps = {
   stateful?: boolean;
   resetState$?: t.Observable<any>;
 
+  enabled?: boolean;
   style?: t.CssValue;
   onStateChange?: InfoStatefulChangeHandler;
 };

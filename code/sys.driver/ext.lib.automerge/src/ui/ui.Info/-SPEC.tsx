@@ -215,6 +215,16 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.immutable(dev, State.props);
+      dev.hr(-1, 5);
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.enabled;
+        btn
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
+      });
       dev.boolean((btn) => {
         const value = () => !!State.props.current.stateful;
         btn
@@ -222,8 +232,6 @@ export default Dev.describe(name, async (e) => {
           .value(() => value())
           .onClick(() => State.props.change((d) => Dev.toggle(d, 'stateful')));
       });
-
-      Dev.Theme.immutable(dev, State.props);
     });
 
     dev.hr(5, 20);

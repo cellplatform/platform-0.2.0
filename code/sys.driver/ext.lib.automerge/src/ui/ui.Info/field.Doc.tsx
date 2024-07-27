@@ -14,7 +14,7 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
   if (!data) return res;
   if (!Is.doc(data.ref)) return res;
 
-  const { fields, theme } = ctx;
+  const { fields, theme, enabled } = ctx;
   const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
@@ -42,13 +42,14 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
       const { shorten, prefix, head, clipboard } = data.uri ?? {};
       parts.push(
         <DocUri
-          theme={theme}
           doc={doc.uri}
           prefix={prefix}
           shorten={shorten}
           head={head}
           heads={doc}
           clipboard={clipboard}
+          enabled={enabled}
+          theme={theme}
         />,
       );
     }

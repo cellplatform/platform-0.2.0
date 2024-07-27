@@ -13,8 +13,9 @@ type P = t.InfoProps;
  * Constants
  */
 const name = 'Info';
-const props: t.PickRequired<P, 'theme' | 'stateful' | 'fields'> = {
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'stateful' | 'fields'> = {
   theme: 'Light',
+  enabled: true,
   stateful: false,
   get fields() {
     return fields.default;
