@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { Color, css, DEFAULTS, Doc, Monaco, PageStack, useRedrawOnChange, type t } from './common';
+import { Color, css, DEFAULTS, Doc, PageStack, useRedrawOnChange, type t } from './common';
+import { Editor } from './ui.Editor';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 
 type P = t.CmdViewProps;
 
 export const View: React.FC<P> = (props) => {
-  const { readOnly = DEFAULTS.props.readOnly, historyStack = DEFAULTS.props.historyStack } = props;
+  const { historyStack = DEFAULTS.props.historyStack } = props;
   const crdt = wrangle.crdt(props);
   const history = wrangle.history(props);
 
@@ -66,20 +67,7 @@ export const View: React.FC<P> = (props) => {
     <PageStack current={page} style={styles.pageStack} theme={theme.name} />
   );
 
-  const elEditor = (
-    <Monaco.Editor
-      theme={theme.name}
-      language={'yaml'}
-      enabled={!!crdt.doc}
-      readOnly={readOnly}
-      minimap={false}
-      // onDispose={(e) => controllerRef.current?.dispose()}
-      onReady={(e) => {
-        // const { monaco, editor } = e;
-        // controllerRef.current = editorController({ monaco, editor, main });
-      }}
-    />
-  );
+  const elEditor = <Editor theme={props.theme} doc={crdt.doc} readOnly={props.readOnly} />;
 
   const elPanelInfo = (
     <PanelInfo
