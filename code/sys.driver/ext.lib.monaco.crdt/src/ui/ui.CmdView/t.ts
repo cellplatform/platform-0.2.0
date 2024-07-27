@@ -9,6 +9,7 @@ export type CmdViewProps = {
   doc?: t.Doc;
   repo?: { store?: t.Store; index?: t.StoreIndex };
   infoFields?: CrdtInfoField[];
+  enabled?: boolean;
   readOnly?: boolean;
   historyStack?: boolean;
   border?: number | [number, number, number, number];

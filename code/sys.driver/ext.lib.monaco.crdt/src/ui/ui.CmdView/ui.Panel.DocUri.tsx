@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { Color, COLORS, css, DocUri, Icons, Time, type t } from './common';
+import { Color, COLORS, css, DEFAULTS, DocUri, Icons, Time, type t } from './common';
 
 type P = t.CmdViewProps;
+const def = DEFAULTS.props;
 
 export type PanelDocUriProps = {
   doc?: P['doc'];
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const PanelDocUri: React.FC<PanelDocUriProps> = (props) => {
-  const { doc } = props;
+  const { doc, enabled = def.enabled } = props;
 
   const [isCopy, setIsCopy] = useState(false);
   const [copiedText, setCopiedText] = useState<string>();
@@ -22,14 +24,17 @@ export const PanelDocUri: React.FC<PanelDocUriProps> = (props) => {
   const transition = [t('opacity')].join(', ');
   const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ display: 'grid', placeItems: 'center' }),
+    base: css({
+      display: 'grid',
+      placeItems: 'center',
+    }),
     inner: css({
       display: 'grid',
       gridTemplateColumns: doc ? `auto 1fr` : '1fr',
       columnGap: '15px',
     }),
     icon: css({
-      opacity: doc ? 1 : 0.25,
+      opacity: doc && enabled ? 1 : 0.2,
       transition,
     }),
   };
@@ -46,6 +51,7 @@ export const PanelDocUri: React.FC<PanelDocUriProps> = (props) => {
             head={0}
             fontSize={20}
             theme={theme.name}
+            enabled={enabled}
             copiedText={copiedText}
             onMouse={(e) => setIsCopy(e.is.over)}
             onCopy={(e) => {

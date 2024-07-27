@@ -1,16 +1,19 @@
 import { css, DEFAULTS, Monaco, type t } from './common';
 
 type P = t.CmdViewProps;
+const def = DEFAULTS.props;
 
 export type EditorProps = {
   doc?: P['doc'];
   readOnly?: P['readOnly'];
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const Editor: React.FC<EditorProps> = (props) => {
-  const { doc, readOnly = DEFAULTS.props.readOnly } = props;
+  const { doc, readOnly = def.readOnly } = props;
+  const enabled = wrangle.enabled(props);
 
   /**
    * Render
@@ -24,7 +27,7 @@ export const Editor: React.FC<EditorProps> = (props) => {
       <Monaco.Editor
         theme={props.theme}
         language={'yaml'}
-        enabled={!!doc}
+        enabled={enabled}
         readOnly={readOnly}
         minimap={false}
         // onDispose={(e) => controllerRef.current?.dispose()}
@@ -39,3 +42,13 @@ export const Editor: React.FC<EditorProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  enabled(props: P) {
+    const { doc, enabled = def.enabled } = props;
+    return !!doc && enabled;
+  },
+} as const;

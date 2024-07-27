@@ -144,6 +144,14 @@ export default Dev.describe(name, async (e) => {
       Dev.Theme.immutable(dev, State.props);
       dev.hr(-1, 5);
       dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.enabled;
+        btn
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
+      });
+      dev.boolean((btn) => {
         const value = () => !!State.props.current.readOnly;
         btn
           .label((e) => `readOnly`)

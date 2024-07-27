@@ -6,9 +6,10 @@ import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 
 type P = t.CmdViewProps;
+const def = DEFAULTS.props;
 
 export const View: React.FC<P> = (props) => {
-  const { historyStack = DEFAULTS.props.historyStack } = props;
+  const { historyStack = def.historyStack, enabled = def.enabled } = props;
   const crdt = wrangle.crdt(props);
   const history = wrangle.history(props);
 
@@ -67,13 +68,16 @@ export const View: React.FC<P> = (props) => {
     <PageStack current={page} style={styles.pageStack} theme={theme.name} />
   );
 
-  const elEditor = <Editor theme={props.theme} doc={crdt.doc} readOnly={props.readOnly} />;
+  const elEditor = (
+    <Editor theme={props.theme} doc={crdt.doc} enabled={enabled} readOnly={props.readOnly} />
+  );
 
   const elPanelInfo = (
     <PanelInfo
       repo={crdt.repo}
       doc={crdt.doc}
       fields={crdt.info.fields}
+      enabled={enabled}
       theme={theme.name}
       style={{ margin: 15 }}
     />
@@ -81,7 +85,7 @@ export const View: React.FC<P> = (props) => {
 
   const elDocUri = (
     <div {...styles.docuri}>
-      <PanelDocUri doc={crdt.doc} theme={theme.name} />
+      <PanelDocUri doc={crdt.doc} theme={theme.name} enabled={enabled} />
     </div>
   );
 
