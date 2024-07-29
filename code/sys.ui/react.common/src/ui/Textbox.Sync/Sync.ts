@@ -55,8 +55,8 @@ export const TextboxSync = {
       try {
         state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
       } catch (error: any) {
-        const err = `Failed while splicing change from textbox into CRDT (wait for CRDT sync update).`;
-        console.error(err, error);
+        const msg = `Failed while splicing change from textbox into CRDT (wait for CRDT sync update).`;
+        console.error(msg, error);
       }
     });
 
