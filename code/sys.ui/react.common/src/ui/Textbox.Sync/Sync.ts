@@ -16,10 +16,10 @@ export const TextboxSync = {
     state: t.TextboxSyncState,
     path: t.ObjectPath,
     options: {
-      dispose$?: t.UntilObservable;
       debug?: string;
       splice?: t.TextSplice;
       diff?: t.TextDiffCalc;
+      dispose$?: t.UntilObservable;
     } = {},
   ) {
     const { debug = 'Unknown', splice = DEFAULTS.splice, diff = DEFAULTS.diff } = options;
