@@ -52,7 +52,12 @@ export const TextboxSync = {
       rx.filter((e) => e.index >= 0),
     );
     input$.subscribe((e) => {
-      state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
+      try {
+        state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
+      } catch (error: any) {
+        const err = `Failed while splicing change from textbox into CRDT (wait for CRDT sync update).`;
+        console.error(err, error);
+      }
     });
 
     /**
