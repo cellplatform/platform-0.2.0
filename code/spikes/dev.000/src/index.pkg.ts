@@ -11,15 +11,15 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.191',
+  version: '0.6.192',
   dependencies: {
-    '@automerge/automerge': '2.2.4',
-    '@automerge/automerge-repo': '1.2.0',
-    '@automerge/automerge-repo-network-messagechannel': '1.2.0',
-    '@automerge/automerge-repo-storage-indexeddb': '1.2.0',
-    '@privy-io/react-auth': '1.74.1',
+    '@automerge/automerge': '2.2.7',
+    '@automerge/automerge-repo': '1.2.1',
+    '@automerge/automerge-repo-network-messagechannel': '1.2.1',
+    '@automerge/automerge-repo-storage-indexeddb': '1.2.1',
+    '@privy-io/react-auth': '1.76.3',
     '@standard-crypto/farcaster-js': '7.4.0',
-    'automerge-repo-network-peerjs': '1.2.0',
+    'automerge-repo-network-peerjs': '1.2.1',
     'buffer': '6.0.3',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
@@ -46,7 +46,7 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
     'sys.util': '0.0.0',
-    'yaml': '2.4.5',
+    'yaml': '2.5.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
