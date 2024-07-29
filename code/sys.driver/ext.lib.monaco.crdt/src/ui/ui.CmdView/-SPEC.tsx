@@ -1,6 +1,6 @@
 import { CmdView, DEFAULTS } from '.';
 import { Color, Crdt, Dev, Doc, Immutable, Json, Pkg, rx, SampleCrdt } from '../../test.ui';
-import { type t, CmdBar } from './common';
+import { CmdBar, type t } from './common';
 
 import { Info as CrdtInfo } from 'ext.lib.automerge';
 
@@ -152,18 +152,24 @@ export default Dev.describe(name, async (e) => {
           .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.props.current.readOnly;
-        btn
-          .label((e) => `readOnly`)
-          .value((e) => value())
-          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'readOnly')));
-      });
-      dev.boolean((btn) => {
         const value = () => !!State.props.current.historyStack;
         btn
-          .label((e) => `historyStack`)
-          .value((e) => value())
-          .onClick((e) => State.props.change((d) => Dev.toggle(d, 'historyStack')));
+          .label(() => `historyStack`)
+          .value(() => value())
+          .onClick(() => State.props.change((d) => Dev.toggle(d, 'historyStack')));
+      });
+      dev.hr(-1, 5);
+      dev.boolean((btn) => {
+        const value = () => !!State.props.current.editor?.readOnly;
+        btn
+          .label(() => `editor.readOnly`)
+          .value(() => value())
+          .onClick(() =>
+            State.props.change((d) => {
+              const editor = d.editor || (d.editor = {});
+              Dev.toggle(editor, 'readOnly');
+            }),
+          );
       });
     });
 
@@ -173,15 +179,15 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`create`)
-          .enabled((e) => !doc)
-          .onClick(async (e) => (doc = await sample.get()));
+          .enabled(() => !doc)
+          .onClick(async () => (doc = await sample.get()));
       });
       dev.button((btn) => {
         btn
           .label(`delete`)
-          .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
-          .enabled((e) => !!doc)
-          .onClick(async (e) => (doc = await sample.delete()));
+          .right(() => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
+          .enabled(() => !!doc)
+          .onClick(async () => (doc = await sample.delete()));
       });
 
       dev.hr(-1, 5);
@@ -191,29 +197,12 @@ export default Dev.describe(name, async (e) => {
         const getCount = () => doc?.current?.count ?? 0;
         btn
           .label(`increment`)
-          .right((e) => `count: ${getCount()} + 1`)
-          .enabled((e) => !!doc)
-          .onClick((e) => {
+          .right(() => `count: ${getCount()} + 1`)
+          .enabled(() => !!doc)
+          .onClick(() => {
             doc?.change((d) => (d.count = ((d as T).count || 0) + 1));
             dev.redraw('debug');
           });
-      });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('CRDT Fields', (dev) => {
-      dev.row((e) => {
-        const props = State.props.current;
-        return (
-          <CmdView.CrdtInfo.FieldSelector
-            selected={props.infoFields}
-            onClick={(e) => {
-              const next = e.next(DEFAULTS.props.infoFields);
-              State.props.change((d) => (d.infoFields = next));
-            }}
-          />
-        );
       });
     });
 
@@ -226,7 +215,7 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<D>(e);
-    dev.footer.border(-0.1).render<D>((e) => {
+    dev.footer.border(-0.1).render<D>(() => {
       const data = {
         props: State.props.current,
         debug: State.debug.current,

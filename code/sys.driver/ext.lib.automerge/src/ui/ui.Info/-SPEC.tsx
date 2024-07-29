@@ -9,7 +9,6 @@ import {
   rx,
   SampleCrdt,
   Value,
-  PropList,
   type t,
 } from '../../test.ui';
 
