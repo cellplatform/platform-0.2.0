@@ -1,7 +1,8 @@
-import { type t } from '../../test';
+import type { t } from '../../test';
 import { Store } from '../Store';
 
 export type D = { count: number; msg?: string; list?: number[] };
+
 export function testSetup() {
   const store = Store.init();
   const initial: t.ImmutableMutator<D> = (d) => (d.count = 0);
