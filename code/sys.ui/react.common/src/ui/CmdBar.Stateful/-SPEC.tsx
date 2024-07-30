@@ -67,7 +67,7 @@ export default Dev.describe(name, (e) => {
 
     doc.change((d) => {
       const paths = getPaths(state.current);
-      ObjectPath.mutate(d, paths.text, local.argv);
+      ObjectPath.Mutate.value(d, paths.text, local.argv);
     });
 
     const doc$ = doc.events().changed$;

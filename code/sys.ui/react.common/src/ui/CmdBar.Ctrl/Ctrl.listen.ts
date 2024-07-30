@@ -46,11 +46,11 @@ export function listen(args: {
   events.on('Caret:ToEnd', () => textbox.caretToEnd());
   events.on('Keyboard', (e) => Keyboard.handleKeyAction(ctrl, e.params, isFocused()));
 
-  events.on('Clear', () => doc.change((d) => ObjectPath.mutate(d, paths.text, '')));
+  events.on('Clear', () => doc.change((d) => ObjectPath.Mutate.value(d, paths.text, '')));
   events.on('Update', (e) => {
     doc.change((d) => {
       const { text } = e.params;
-      if (typeof text === 'string') ObjectPath.mutate(d, paths.text, text);
+      if (typeof text === 'string') ObjectPath.Mutate.value(d, paths.text, text);
     });
   });
 

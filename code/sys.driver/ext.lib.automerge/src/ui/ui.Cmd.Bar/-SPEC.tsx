@@ -193,8 +193,8 @@ export default Dev.describe(name, async (e) => {
                     const resolve = Cmd.Path.resolver();
                     const tx = resolve.tx(cmd);
                     if (tx) {
-                      ObjectPath.delete(mutate, paths.cmd);
-                      ObjectPath.mutate(mutate, [`cmd(tx.${tx})`], cmd);
+                      ObjectPath.Mutate.delete(mutate, paths.cmd);
+                      ObjectPath.Mutate.value(mutate, [`cmd(tx.${tx})`], cmd);
                     }
                   }
                 },

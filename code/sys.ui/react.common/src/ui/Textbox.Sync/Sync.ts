@@ -40,7 +40,7 @@ export const TextboxSync = {
     const initial = resolve(state.current, path);
     if (typeof initial !== 'string') {
       if (initial !== undefined) throw new Error(`The sync path [${path}] is not of type string.`);
-      state.change((d) => ObjectPath.mutate(d, path, ''));
+      state.change((d) => ObjectPath.Mutate.value(d, path, ''));
     }
 
     /**

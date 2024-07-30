@@ -41,7 +41,7 @@ export function listen(
         Doc.Text.splice(doc, target, index, del, value);
       },
       replace(doc: O, value: string) {
-        Path.Object.mutate(doc, target, value);
+        Path.Object.Mutate.value(doc, target, value);
       },
     },
   } as const;
@@ -115,7 +115,7 @@ export function listen(
    */
   const initial = Lens.current;
   if (initial === undefined) {
-    lens.change((d) => Path.Object.mutate(d, target, ''));
+    lens.change((d) => Path.Object.Mutate.value(d, target, ''));
   } else if (typeof initial === 'string') {
     changeEditorText(initial);
   }

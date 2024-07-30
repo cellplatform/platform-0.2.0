@@ -146,8 +146,8 @@ describe('CmdBar.Ctrl', () => {
       transport.change((d) => {
         const history = resolve(transport.current).history;
         history.push('foo --bar');
-        ObjectPath.mutate(d, paths.history, history);
-        ObjectPath.mutate(d, paths.text, 'hello');
+        ObjectPath.Mutate.value(d, paths.history, history);
+        ObjectPath.Mutate.value(d, paths.text, 'hello');
       });
       ref.ctrl.invoke({ text: 'foobar' });
       await Time.wait(0);

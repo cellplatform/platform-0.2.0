@@ -18,7 +18,7 @@ export function create<C extends t.CmdType>(
   transport: t.CmdTransport,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  const mutate = ObjectPath.mutate;
+  const mutate = ObjectPath.Mutate.value;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;

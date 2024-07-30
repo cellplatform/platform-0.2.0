@@ -22,7 +22,7 @@ export function useHistory(args: {
       state.change((d) => {
         const list = resolve(d).history;
         list.push(text);
-        if (!ObjectPath.exists(d, paths.history)) ObjectPath.mutate(d, paths.history, list);
+        if (!ObjectPath.exists(d, paths.history)) ObjectPath.Mutate.value(d, paths.history, list);
       });
     }
   };

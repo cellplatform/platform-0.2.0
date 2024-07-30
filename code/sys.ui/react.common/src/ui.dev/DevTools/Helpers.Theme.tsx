@@ -47,7 +47,7 @@ export const Theme = {
       dev,
       (d) => ObjectPath.resolve(d, path) as t.CommonTheme | undefined,
       (d, value) => {
-        ObjectPath.mutate(d, path, value);
+        ObjectPath.Mutate.value(d, path, value);
         onChange?.(value);
       },
     );
