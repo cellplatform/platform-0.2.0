@@ -1,4 +1,4 @@
-import { COLORS, Color, CrdtInfo, Dev, Monaco, Pkg, TestDb, css } from '../test.ui';
+import { Color, CrdtInfo, css, Dev, Immutable, Json, Monaco, Pkg, rx, TestDb } from '../test.ui';
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
 
@@ -7,19 +7,19 @@ type T = {
   theme?: t.CommonTheme;
   strategy?: t.UpdateTextStrategy;
 };
-const initial: T = {};
+const initial: T = { theme: 'Dark', strategy: 'Splice' };
 
 /**
  * Spec
  */
 const name = `${Pkg.name}.syncer`;
 export default Dev.describe(name, async (e) => {
-  type LocalStore = Pick<T, 'strategy' | 'theme'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    strategy: 'Splice',
-  });
+  type LocalStore = { debug?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
+  const local = localstore.object({ debug: undefined });
+  const State = {
+    debug: Immutable.clonerRef<T>(Json.parse<T>(local.debug, initial)),
+  } as const;
 
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
   const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
@@ -32,22 +32,24 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
 
-    const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.theme = local.theme;
-      d.strategy = local.strategy;
-    });
-
-    doc.events().changed$.subscribe(() => dev.redraw('debug'));
+    const doc$ = doc.events().changed$;
+    const debug$ = State.debug.events().changed$;
+    rx.merge(doc$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.debug = Json.stringify(State.debug.current);
+      });
+    rx.merge(doc$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
 
     const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
       const Syncer = Monaco.Crdt.Syncer;
       Syncer.listen(monaco, editor, lens, ['code'], {
         debugLabel,
-        strategy: () => state.current.strategy,
+        strategy: () => State.debug.current.strategy,
       });
     };
 
@@ -60,7 +62,9 @@ export default Dev.describe(name, async (e) => {
         Dev.Theme.background(ctx, theme, 1);
 
         if (e.state.reload) {
-          return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
+          return (
+            <TestDb.DevReload onCloseClick={() => State.debug.change((d) => (d.reload = false))} />
+          );
         } else {
           const border = `solid 1px ${Color.alpha(theme.fg, 0.1)}`;
           const styles = {
@@ -90,9 +94,8 @@ export default Dev.describe(name, async (e) => {
       });
   });
 
-  e.it('ui:debug', async (e) => {
+  e.it('ui:debug', (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
 
     dev.row((e) => {
       return (
@@ -114,14 +117,15 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section((dev) => {
-      Dev.Theme.switch(dev, ['theme'], (next) => (local.theme = next));
+      Dev.Theme.immutable(dev, State.debug);
       dev.hr(-1, 5);
       const strategy = (strategy: t.UpdateTextStrategy) => {
+        const current = () => State.debug.current.strategy;
         dev.button((btn) => {
           btn
             .label(`strategy: "${strategy}"`)
-            .right((e) => (e.state.strategy === strategy ? '←' : ''))
-            .onClick((e) => e.change((d) => (local.strategy = d.strategy = strategy)));
+            .right(() => (current() === strategy ? '←' : ''))
+            .onClick(() => State.debug.change((d) => (d.strategy = strategy)));
         });
       };
       strategy('Splice');
@@ -129,7 +133,6 @@ export default Dev.describe(name, async (e) => {
     });
 
     dev.TODO('"Splice" replacement not stable');
-
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
@@ -167,9 +170,8 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
-  e.it('ui:footer', async (e) => {
+  e.it('ui:footer', (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         ['crdt.doc']: doc.toObject(),
