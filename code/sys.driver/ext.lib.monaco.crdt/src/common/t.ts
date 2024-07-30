@@ -13,6 +13,7 @@ export type {
   EditorState,
   Monaco,
   MonacoCodeEditor,
+  MonacoEditorReadyHandlerArgs,
   Selection,
   SelectionOffset,
 } from 'ext.lib.monaco/src/types';
