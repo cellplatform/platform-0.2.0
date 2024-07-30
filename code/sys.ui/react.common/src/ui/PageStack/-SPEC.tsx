@@ -52,7 +52,7 @@ export default Dev.describe(name, (e) => {
       .render<D>((e) => {
         const props = Props.current;
         Dev.Theme.background(dev, props.theme, 1);
-        return <PageStack {...props} />;
+        return <PageStack {...props} onClick={(e) => console.info(`⚡️ onClick:`, e)} />;
       });
   });
 

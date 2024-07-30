@@ -37,5 +37,9 @@ export const View: React.FC<t.PageStackProps> = (props) => {
     );
   });
 
-  return <div {...css(styles.base, props.style)}>{elPages}</div>;
+  return (
+    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+      {elPages}
+    </div>
+  );
 };

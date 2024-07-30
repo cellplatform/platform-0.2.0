@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { t } from './common';
 
 /**
@@ -9,4 +10,5 @@ export type PageStackProps = {
   transition?: t.Msecs;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onClick?: React.MouseEventHandler;
 };
