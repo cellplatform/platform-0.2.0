@@ -8,10 +8,10 @@ export { Pkg };
  * Library
  */
 import { Monaco as MonacoBase } from './common';
-import { Syncer } from './ui/logic.Syncer';
+import { Syncer } from './ui/u.Syncer';
 import { CmdView } from './ui/ui.CmdView';
 
-export { Syncer, CmdView };
+export { CmdView, Syncer };
 
 export const Monaco = {
   ...MonacoBase,
