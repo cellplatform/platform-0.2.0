@@ -113,10 +113,6 @@ export const ObjectPath = {
 /**
  * Helpers
  */
-
-/**
- * Helpers
- */
 function isObject(input: any): input is object {
   return input !== null && typeof input === 'object';
 }
