@@ -5,14 +5,16 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
 import { Theme } from './u.Theme';
 
+const def = DEFAULTS.props;
+
 export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const {
     text,
-    language = DEFAULTS.props.language,
-    tabSize = DEFAULTS.props.tabSize,
-    readOnly = DEFAULTS.props.readOnly,
-    minimap = DEFAULTS.props.minimap,
-    enabled = DEFAULTS.props.enabled,
+    language = def.language,
+    tabSize = def.tabSize,
+    readOnly = def.readOnly,
+    minimap = def.minimap,
+    enabled = def.enabled,
     placeholder,
   } = props;
   const editorTheme = Theme.toName(props.theme);
