@@ -39,7 +39,7 @@ export default Dev.describe(name, (e) => {
   let cmdbar: t.CmdBarRef | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
-    return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;
+    return state.debug.prependPaths ? CmdBar.Path.prepend(['prepended-foo']) : DEFAULTS.paths;
   };
 
   const getText = (state: T) => {
@@ -106,6 +106,7 @@ export default Dev.describe(name, (e) => {
           {...props}
           state={debug.useState ? doc : undefined}
           paths={paths}
+          // paths={['sample-foo']}
           onReady={(e) => {
             const { textbox, dispose$ } = e;
             cmdbar = e.cmdbar;

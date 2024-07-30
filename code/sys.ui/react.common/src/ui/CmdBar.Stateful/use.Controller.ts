@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Ctrl, DEFAULTS, rx, type t } from './common';
+import { Ctrl, DEFAULTS, ObjectPath, Path, rx, type t } from './common';
 import { Ref } from './Ref';
 import { useHistory } from './use.History';
 
 type P = t.CmdBarStatefulProps;
 
 export function useController(props: P) {
-  const { state, paths = DEFAULTS.paths } = props;
+  const { state } = props;
+  const paths = wrangle.paths(props);
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
 
@@ -108,3 +109,13 @@ export function useController(props: P) {
   } as const;
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  paths(props: P) {
+    const { paths = DEFAULTS.paths } = props;
+    return ObjectPath.Is.path(paths) ? Path.prepend(paths) : paths;
+  },
+} as const;
