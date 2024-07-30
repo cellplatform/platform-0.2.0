@@ -45,9 +45,8 @@ export default Dev.describe(name, async (e) => {
 
     const handleReady = (debugLabel: string, e: t.MonacoEditorReadyHandlerArgs) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
-      const Syncer = Monaco.Crdt.Syncer;
 
-      Syncer.listen(e.monaco, e.editor, lens, ['code'], {
+      Monaco.Crdt.Syncer.listen(e.monaco, e.editor, lens, ['code'], {
         debugLabel,
         strategy: () => State.current.strategy,
       });
