@@ -1,4 +1,4 @@
-import { TestDb } from '../../test.ui';
+import { TestDb } from '../test.ui';
 import { Time, WebStore, type t } from './common';
 
 export type D = { count: number; sample?: t.SampleDoc };

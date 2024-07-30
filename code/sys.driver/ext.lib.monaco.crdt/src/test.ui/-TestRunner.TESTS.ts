@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../ui/u.Syncer/-TEST'),
+      import('../u.Syncer/-TEST'),
     ];
   },
 };

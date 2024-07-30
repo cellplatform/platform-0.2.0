@@ -8,7 +8,7 @@ export { Pkg };
  * Library
  */
 import { Monaco as MonacoBase } from './common';
-import { Syncer } from './ui/u.Syncer';
+import { Syncer } from './u.Syncer';
 import { CmdView } from './ui/ui.CmdView';
 
 export { CmdView, Syncer };

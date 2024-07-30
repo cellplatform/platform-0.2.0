@@ -19,7 +19,7 @@ type D = {
 const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { props?: t.JsonString; debug?: t.JsonString; docuri?: string };
+  type LocalStore = { props?: t.JsonString; debug?: t.JsonString };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({
     props: undefined,
@@ -101,12 +101,10 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<D>((e) => {
         const props = State.props.current;
-        const debug = State.debug.current;
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
         return (
           <CmdView
-            //
             {...props}
             doc={Props.doc}
             repo={db.repo}
@@ -127,7 +125,7 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<D>(e);
 
     dev.header.border(-0.1).render((e) => {
-      const docuri = Props.doc?.uri;
+      const ref = Props.doc?.uri;
       const debug = State.debug.current;
       const { store, index } = db.repo;
 
@@ -138,7 +136,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             repo: { store, index },
             document: {
-              ref: docuri,
+              ref,
               uri: { head: true },
               object: {
                 visible: debug.docObjectOpen,
@@ -151,9 +149,8 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
-  e.it('ui:debug', async (e) => {
+  e.it('ui:debug', (e) => {
     const dev = Dev.tools<D>(e);
-    const state = await dev.state();
     const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Properties', (dev) => {

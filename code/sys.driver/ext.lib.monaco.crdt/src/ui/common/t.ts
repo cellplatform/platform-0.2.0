@@ -2,14 +2,13 @@
  * @system
  */
 export type {
-  CommonTheme,
+  CmdBarRef,
   CssEdgesInput,
   CssValue,
   DevCtxState,
   PropListItem,
   PropListProps,
   RenderCountProps,
-  CmdBarRef,
 } from 'sys.ui.react.common/src/types';
 
 /**

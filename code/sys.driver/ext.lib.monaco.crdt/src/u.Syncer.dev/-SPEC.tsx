@@ -1,4 +1,4 @@
-import { COLORS, Color, CrdtInfo, Dev, Monaco, Pkg, TestDb, css } from '../../test.ui';
+import { COLORS, Color, CrdtInfo, Dev, Monaco, Pkg, TestDb, css } from '../test.ui';
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
 
