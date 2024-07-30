@@ -62,6 +62,12 @@ export const View: React.FC<P> = (props) => {
       Absolute: [-1, 0, null, 0],
       opacity: 0.3,
     }),
+
+    panelInfo: {
+      base: css({ position: 'relative', display: 'grid', Scroll: true }),
+      inner: css({ Absolute: 0, boxSizing: 'border-box', padding: 15 }),
+      footer: css({ height: 30 }),
+    },
   };
 
   const elPageStack = historyStack && (
@@ -73,13 +79,12 @@ export const View: React.FC<P> = (props) => {
   );
 
   const elPanelInfo = (
-    <PanelInfo
-      repo={crdt.repo}
-      doc={crdt.doc}
-      enabled={enabled}
-      theme={theme.name}
-      style={{ margin: 15 }}
-    />
+    <div {...styles.panelInfo.base}>
+      <div {...styles.panelInfo.inner}>
+        <PanelInfo repo={crdt.repo} doc={crdt.doc} enabled={enabled} theme={theme.name} />
+        <div {...styles.panelInfo.footer} />
+      </div>
+    </div>
   );
 
   const elDocUri = (
