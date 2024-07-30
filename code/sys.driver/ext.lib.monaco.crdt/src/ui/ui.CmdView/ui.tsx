@@ -53,7 +53,7 @@ export const View: React.FC<P> = (props) => {
       gridTemplateRows: `1fr auto`,
     }),
 
-    docuri: css({
+    docUri: css({
       borderTop: dividerBorder,
       padding: 15,
     }),
@@ -71,7 +71,12 @@ export const View: React.FC<P> = (props) => {
   };
 
   const elPageStack = historyStack && (
-    <PageStack current={page} style={styles.pageStack} theme={theme.name} />
+    <PageStack
+      current={page}
+      style={styles.pageStack}
+      theme={theme.name}
+      onClick={props.onHistoryStackClick}
+    />
   );
 
   const elEditor = (
@@ -88,7 +93,7 @@ export const View: React.FC<P> = (props) => {
   );
 
   const elDocUri = (
-    <div {...styles.docuri}>
+    <div {...styles.docUri}>
       <PanelDocUri doc={crdt.doc} theme={theme.name} enabled={enabled} />
     </div>
   );

@@ -9,7 +9,8 @@ type D = {
   docuri?: string;
   argv?: string;
   isFocused?: boolean;
-  docVisible?: boolean;
+  docObjectOpen?: boolean;
+  passDocProp?: boolean;
 };
 
 /**
@@ -26,14 +27,28 @@ export default Dev.describe(name, async (e) => {
     docuri: undefined,
   });
 
+  local.props = undefined;
+
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { docObjectOpen: true })),
+  } as const;
+
+  const Props = {
+    get doc() {
+      const debug = State.debug.current;
+      return debug.passDocProp ? doc : undefined;
+    },
   } as const;
 
   let doc: t.Doc | undefined;
   let cmdbar: t.CmdBarRef | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
+
+  State.props.change((d) => {
+    const editor = Doc.ensure(d, 'editor', {});
+    editor.lensPath = ['sample.CmdView'];
+  });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -63,6 +78,7 @@ export default Dev.describe(name, async (e) => {
         <CmdBar.Stateful
           {...State.props.current}
           state={doc}
+          paths={['sample.CmdBar']}
           onReady={(e) => {
             const { dispose$ } = e;
             cmdbar = e.cmdbar;
@@ -86,16 +102,18 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<D>((e) => {
         const props = State.props.current;
+        const debug = State.debug.current;
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
         return (
           <CmdView
             //
             {...props}
-            doc={doc}
+            doc={Props.doc}
             repo={db.repo}
             border={1}
             style={{ height: 250 }}
+            onHistoryStackClick={(e) => console.info(`⚡️ onHistoryStackClick:`, e)}
           />
         );
       });
@@ -108,10 +126,9 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<D>(e);
-    const state = await dev.state();
 
     dev.header.border(-0.1).render((e) => {
-      const docuri = state.current.docuri;
+      const docuri = Props.doc?.uri;
       const debug = State.debug.current;
       const { store, index } = db.repo;
 
@@ -125,7 +142,7 @@ export default Dev.describe(name, async (e) => {
               ref: docuri,
               uri: { head: true },
               object: {
-                visible: debug.docVisible,
+                visible: debug.docObjectOpen,
                 onToggleClick: (e) => State.debug.change((d) => Dev.toggle(d, 'docVisible')),
               },
             },
@@ -164,12 +181,9 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(() => `editor.readOnly`)
           .value(() => value())
-          .onClick(() =>
-            State.props.change((d) => {
-              const editor = d.editor || (d.editor = {});
-              Dev.toggle(editor, 'readOnly');
-            }),
-          );
+          .onClick(() => {
+            State.props.change((d) => Dev.toggle(Doc.ensure(d, 'editor', {}), 'readOnly'));
+          });
       });
     });
 
@@ -210,6 +224,15 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+      dev.boolean((btn) => {
+        const state = State.debug;
+        const current = () => !!state.current.passDocProp;
+        btn
+          .label(() => (current() ? `props.doc` : 'props.doc: <undefined>'))
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'passDocProp')));
+      });
     });
   });
 

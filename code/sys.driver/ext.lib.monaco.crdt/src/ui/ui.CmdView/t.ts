@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { t } from './common';
 
 /**
@@ -13,9 +14,13 @@ export type CmdViewProps = {
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onHistoryStackClick?: React.MouseEventHandler;
 };
 
 export type CmdViewEditorProps = {
   readOnly?: boolean;
-  lens?: t.ObjectPath;
+  lensPath?: t.ObjectPath;
+  editorPath?: t.ObjectPath;
 };
+
+export type CmdViewEditorController = t.Lifecycle;
