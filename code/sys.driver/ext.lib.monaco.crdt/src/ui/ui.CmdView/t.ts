@@ -1,7 +1,5 @@
 import type { t } from './common';
 
-import type { InfoField as CrdtInfoField } from 'ext.lib.automerge/src/types';
-
 /**
  * <Component>
  */
@@ -19,4 +17,5 @@ export type CmdViewProps = {
 
 export type CmdViewEditorProps = {
   readOnly?: boolean;
+  lens?: t.ObjectPath;
 };

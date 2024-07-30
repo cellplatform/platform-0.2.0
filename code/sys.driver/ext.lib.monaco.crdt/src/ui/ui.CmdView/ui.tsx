@@ -69,14 +69,13 @@ export const View: React.FC<P> = (props) => {
   );
 
   const elEditor = (
-    <Editor theme={props.theme} doc={crdt.doc} enabled={enabled} readOnly={props.readOnly} />
+    <Editor theme={props.theme} doc={crdt.doc} enabled={enabled} editor={props.editor} />
   );
 
   const elPanelInfo = (
     <PanelInfo
       repo={crdt.repo}
       doc={crdt.doc}
-      fields={crdt.info.fields}
       enabled={enabled}
       theme={theme.name}
       style={{ margin: 15 }}
@@ -106,9 +105,8 @@ export const View: React.FC<P> = (props) => {
  */
 const wrangle = {
   crdt(props: P) {
-    const { repo, doc, infoFields = DEFAULTS.props.infoFields } = props;
-    const info = { fields: infoFields };
-    return { repo, doc, info } as const;
+    const { repo, doc } = props;
+    return { repo, doc } as const;
   },
 
   history(props: P) {
