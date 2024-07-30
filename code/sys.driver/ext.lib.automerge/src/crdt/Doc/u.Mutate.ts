@@ -20,9 +20,9 @@ export const Mutate = {
   /**
    * Ensure a child object with the given key exists.
    */
-  ensure<T extends O, K extends keyof T>(d: T, field: K, defaultValue: T[K]): T[K] {
+  ensure<T extends O, K extends keyof T>(d: T, field: K, defaultValue: T[K]): NonNullable<T[K]> {
     if (!!d[field]) return d[field];
     d[field] = defaultValue;
-    return d[field];
+    return d[field]!;
   },
 } as const;
