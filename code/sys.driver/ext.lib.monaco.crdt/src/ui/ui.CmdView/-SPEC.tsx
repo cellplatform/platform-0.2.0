@@ -24,7 +24,6 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({
     props: undefined,
     debug: undefined,
-    docuri: undefined,
   });
 
   local.props = undefined;
@@ -143,7 +142,7 @@ export default Dev.describe(name, async (e) => {
               uri: { head: true },
               object: {
                 visible: debug.docObjectOpen,
-                onToggleClick: (e) => State.debug.change((d) => Dev.toggle(d, 'docVisible')),
+                onToggleClick: (e) => State.debug.change((d) => Dev.toggle(d, 'docObjectOpen')),
               },
             },
           }}
