@@ -1,6 +1,7 @@
-import { Color, CrdtInfo, css, Dev, Immutable, Json, Monaco, Pkg, rx, TestDb } from '../test.ui';
+import { Color, CrdtInfo, Dev, Immutable, Json, Monaco, Pkg, rx, TestDb } from '../test.ui';
 import { setupStore, type D } from './-SPEC.store';
 import { Doc, type t } from './common';
+import { Layout } from './ui.Layout';
 
 type T = {
   reload?: boolean;
@@ -17,9 +18,7 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = { debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({ debug: undefined });
-  const State = {
-    debug: Immutable.clonerRef<T>(Json.parse<T>(local.debug, initial)),
-  } as const;
+  const State = Immutable.clonerRef<T>(Json.parse<T>(local.debug, initial));
 
   const { db, store, index, doc } = await setupStore(`spec:${name}`);
   const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
@@ -34,22 +33,23 @@ export default Dev.describe(name, async (e) => {
     const ctx = Dev.ctx(e);
 
     const doc$ = doc.events().changed$;
-    const debug$ = State.debug.events().changed$;
+    const debug$ = State.events().changed$;
     rx.merge(doc$, debug$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
-        local.debug = Json.stringify(State.debug.current);
+        local.debug = Json.stringify(State.current);
       });
     rx.merge(doc$, debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
-    const handleReady = (debugLabel: string, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
+    const handleReady = (debugLabel: string, e: t.MonacoEditorReadyHandlerArgs) => {
       console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
       const Syncer = Monaco.Crdt.Syncer;
-      Syncer.listen(monaco, editor, lens, ['code'], {
+
+      Syncer.listen(e.monaco, e.editor, lens, ['code'], {
         debugLabel,
-        strategy: () => State.debug.current.strategy,
+        strategy: () => State.current.strategy,
       });
     };
 
@@ -57,39 +57,33 @@ export default Dev.describe(name, async (e) => {
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        const theme = Color.theme(e.state.theme);
+      .render<T>(() => {
+        const state = State.current;
+        const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
 
-        if (e.state.reload) {
-          return (
-            <TestDb.DevReload onCloseClick={() => State.debug.change((d) => (d.reload = false))} />
-          );
+        if (state.reload) {
+          const onClose = () => State.change((d) => (d.reload = false));
+          return <TestDb.DevReload onCloseClick={onClose} />;
         } else {
-          const border = `solid 1px ${Color.alpha(theme.fg, 0.1)}`;
-          const styles = {
-            base: css({ display: 'grid', gridTemplateRows: '1fr 1fr', rowGap: '50px' }),
-            top: css({ borderBottom: border }),
-            bottom: css({ borderTop: border }),
-          };
-
-          return (
-            <div {...styles.base}>
-              <Monaco.Editor
-                focusOnLoad={true}
-                language={'markdown'}
-                theme={theme.name}
-                style={styles.top}
-                onReady={(e) => handleReady('top', e.monaco, e.editor)}
-              />
-              <Monaco.Editor
-                language={'markdown'}
-                theme={theme.name}
-                style={styles.bottom}
-                onReady={(e) => handleReady('bottom', e.monaco, e.editor)}
-              />
-            </div>
+          const elTop = (
+            <Monaco.Editor
+              language={'markdown'}
+              theme={theme.name}
+              onReady={(e) => handleReady('top', e)}
+              focusOnLoad={true}
+            />
           );
+
+          const elBottom = (
+            <Monaco.Editor
+              language={'markdown'}
+              theme={theme.name}
+              onReady={(e) => handleReady('bottom', e)}
+            />
+          );
+
+          return <Layout top={elTop} bottom={elBottom} theme={theme.name} />;
         }
       });
   });
@@ -100,9 +94,8 @@ export default Dev.describe(name, async (e) => {
     dev.row((e) => {
       return (
         <CrdtInfo
-          fields={['Module', 'Component', 'Repo', 'Doc', 'Doc.URI']}
+          fields={['Repo', 'Doc', 'Doc.URI']}
           data={{
-            component: { name, label: 'Syncer: UI ↔︎ CRDT' },
             repo: { store, index },
             document: {
               ref: doc,
@@ -117,21 +110,22 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section((dev) => {
-      Dev.Theme.immutable(dev, State.debug);
+      Dev.Theme.immutable(dev, State);
       dev.hr(-1, 5);
       const strategy = (strategy: t.UpdateTextStrategy) => {
-        const current = () => State.debug.current.strategy;
+        const current = () => State.current.strategy;
         dev.button((btn) => {
           btn
             .label(`strategy: "${strategy}"`)
             .right(() => (current() === strategy ? '←' : ''))
-            .onClick(() => State.debug.change((d) => (d.strategy = strategy)));
+            .onClick(() => State.change((d) => (d.strategy = strategy)));
         });
       };
       strategy('Splice');
       strategy('Overwrite');
     });
 
+    dev.hr(5, 20);
     dev.TODO('"Splice" replacement not stable');
     dev.hr(5, 20);
 

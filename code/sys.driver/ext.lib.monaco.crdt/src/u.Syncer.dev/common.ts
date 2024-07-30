@@ -1,4 +1,4 @@
 export type * as t from './t';
 
-export * from '../common';
+export * from '../ui/common';
 export { Syncer } from '../u.Syncer';
