@@ -69,18 +69,18 @@ describe('ObjectPath', () => {
     });
   });
 
-  describe('ObjectPath.mutate', () => {
+  describe('ObjectPath.Mutate.value', () => {
     type R = { msg?: string; child?: { foo?: { count: number } } };
 
     it('set value shallow', () => {
       const root: R = {};
-      ObjectPath.mutate(root, ['msg'], 'hello');
+      ObjectPath.Mutate.value(root, ['msg'], 'hello');
       expect(root.msg).to.eql('hello');
     });
 
     it('set value deep', () => {
       const root: R = {};
-      ObjectPath.mutate(root, ['child', 'foo', 'count'], 123);
+      ObjectPath.Mutate.value(root, ['child', 'foo', 'count'], 123);
       expect(root.child?.foo?.count).to.eql(123);
     });
 
@@ -89,7 +89,7 @@ describe('ObjectPath', () => {
       const refChild = root.child;
       const refFoo = root.child?.foo;
 
-      ObjectPath.mutate(root, ['child', 'foo', 'count'], 123);
+      ObjectPath.Mutate.value(root, ['child', 'foo', 'count'], 123);
       expect(root.child?.foo?.count).to.eql(123);
       expect(root.child).to.equal(refChild); // NB: same instance.
       expect(root.child?.foo).to.eql(refFoo);
@@ -97,7 +97,7 @@ describe('ObjectPath', () => {
 
     it('deletes field when [undefined] passed', () => {
       /**
-       * See also: ObjectPath.delete(...)
+       * See also: ObjectPath.Mutate.delete(...)
        */
       const assertKey = (obj: R, key: string, exists: boolean) => {
         expect(Object.keys(obj).includes(key)).to.eql(exists, key);
@@ -106,39 +106,65 @@ describe('ObjectPath', () => {
       const root: R = {};
       assertKey(root, 'msg', false);
 
-      ObjectPath.mutate(root, ['msg'], 'hello');
+      ObjectPath.Mutate.value(root, ['msg'], 'hello');
       assertKey(root, 'msg', true);
 
-      ObjectPath.mutate(root, ['msg'], undefined);
+      ObjectPath.Mutate.value(root, ['msg'], undefined);
       assertKey(root, 'msg', false);
 
-      ObjectPath.mutate(root, ['msg'], null);
+      ObjectPath.Mutate.value(root, ['msg'], null);
       assertKey(root, 'msg', true);
     });
 
     it('throws if path is empty', () => {
       [[], undefined, null].forEach((path: any) => {
         const root: R = {};
-        const fn = () => ObjectPath.mutate(root, path, 'foo');
+        const fn = () => ObjectPath.Mutate.value(root, path, 'foo');
         expect(fn).to.throw(/path cannot be empty/);
       });
     });
 
     it('throws if root not an object', () => {
       [null, undefined, 123, true, ''].forEach((root) => {
-        const fn = () => ObjectPath.mutate(root, ['msg'], 'foo');
+        const fn = () => ObjectPath.Mutate.value(root, ['msg'], 'foo');
         expect(fn).to.throw(/root is not an object/);
       });
     });
   });
 
-  describe('ObjectPath.delete', () => {
+  describe('ObjectPath.Mutate.ensure', () => {
+    type R = { child?: { foo?: { count: number } } };
+
+    it('already exists', () => {
+      const obj: R = { child: { foo: { count: 123 } } };
+      const res1 = ObjectPath.Mutate.ensure(obj, ['child', 'foo'], { count: 0 });
+      const res2 = ObjectPath.Mutate.ensure(['hello', obj], [1, 'child', 'foo'], { count: 0 });
+      expect(res1).to.equal(obj.child?.foo);
+      expect(res2).to.equal(obj.child?.foo);
+    });
+
+    it('adds to object', () => {
+      const obj: R = {};
+      const res = ObjectPath.Mutate.ensure(obj, ['child', 'foo'], { count: 0 });
+      expect(res).to.eql({ count: 0 });
+      expect(obj.child?.foo).to.equal(res);
+    });
+
+    it('adds to array', () => {
+      const obj: R = {};
+      const res = ObjectPath.Mutate.ensure(['acc', obj], [1, 'child', 'foo'], { count: 0 });
+      expect(res).to.eql({ count: 0 });
+      expect(obj.child?.foo).to.equal(res);
+    });
+  });
+
+  describe('ObjectPath.Mutate.delete', () => {
     type R = { msg?: string; child?: { foo?: { count: number } } };
 
     it('set value shallow', () => {
       const root: R = { msg: 'hello' };
       expect(root.msg).to.eql('hello');
-      ObjectPath.delete(root, ['msg']);
+      ObjectPath.Mutate.delete(root, ['msg']);
       expect(root.msg).to.eql(undefined);
       expect(Object.keys(root)).to.not.include('msg');
     });
@@ -146,7 +172,7 @@ describe('ObjectPath', () => {
     it('set value deep', () => {
       const root: R = { child: { foo: { count: 123 } } };
       expect(root.child?.foo?.count).to.eql(123);
-      ObjectPath.delete(root, ['child', 'foo', 'count']);
+      ObjectPath.Mutate.delete(root, ['child', 'foo', 'count']);
       expect(root.child?.foo?.count).to.eql(undefined);
       expect(Object.keys(root)).to.not.include('count');
     });
@@ -154,14 +180,14 @@ describe('ObjectPath', () => {
     it('throws if path is empty', () => {
       [[], undefined, null].forEach((path: any) => {
         const root: R = {};
-        const fn = () => ObjectPath.delete(root, path);
+        const fn = () => ObjectPath.Mutate.delete(root, path);
         expect(fn).to.throw(/path cannot be empty/);
       });
     });
 
     it('throws if root not an object', () => {
       [null, undefined, 123, true, ''].forEach((root) => {
-        const fn = () => ObjectPath.delete(root, ['msg']);
+        const fn = () => ObjectPath.Mutate.delete(root, ['msg']);
         expect(fn).to.throw(/root is not an object/);
       });
     });

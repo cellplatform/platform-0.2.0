@@ -51,35 +51,6 @@ export const ObjectPath = {
   },
 
   /**
-   * Write a value to the given path on the root object.
-   * If parts of the path do not exist, they are created as objects.
-   */
-  mutate<T>(root: unknown, path: t.ObjectPath, value: T): void {
-    Validate.rootParam(root);
-    Validate.pathParam(path);
-    let current: any = root;
-
-    path.forEach((key, index) => {
-      if (index === path.length - 1) {
-        // Last key in path → update the value.
-        if (value === undefined) delete current[key];
-        else current[key] = value;
-      } else {
-        // If the next part of the path doesn't exist, create it as an object.
-        if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
-        current = current[key];
-      }
-    });
-  },
-
-  /**
-   * Performs a field deletion at the given path.
-   */
-  delete(root: unknown, path: t.ObjectPath) {
-    ObjectPath.mutate(root, path, undefined);
-  },
-
-  /**
    * Determine if the given path exists on the object.
    */
   exists(root: unknown, path: t.ObjectPath) {
@@ -95,6 +66,47 @@ export const ObjectPath = {
     if (isObject(parent)) return Object.keys(parent).includes(String(field));
 
     return false;
+  },
+
+  Mutate: {
+    /**
+     * Write a value to the given path on the root object.
+     * If parts of the path do not exist, they are created as objects.
+     */
+    value<T>(root: unknown, path: t.ObjectPath, value: T): void {
+      Validate.rootParam(root);
+      Validate.pathParam(path);
+      let current: any = root;
+
+      path.forEach((key, index) => {
+        if (index === path.length - 1) {
+          // Last key in path → update the value.
+          if (value === undefined) delete current[key];
+          else current[key] = value;
+        } else {
+          // If the next part of the path doesn't exist, create it as an object.
+          if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
+          current = current[key];
+        }
+      });
+    },
+
+    /**
+     * Ensures there is an object at the given path.
+     */
+    ensure<T>(root: unknown | unknown[], path: t.ObjectPath, defaultValue: T): T {
+      const existing = ObjectPath.resolve<T>(root, path);
+      if (existing) return existing;
+      ObjectPath.Mutate.value(root, path, defaultValue);
+      return ObjectPath.resolve<T>(root, path)!;
+    },
+
+    /**
+     * Performs a field deletion at the given path.
+     */
+    delete(root: unknown, path: t.ObjectPath) {
+      ObjectPath.Mutate.value(root, path, undefined);
+    },
   },
 } as const;
 

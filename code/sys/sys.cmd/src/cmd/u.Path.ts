@@ -22,19 +22,19 @@ export const Path = {
 
       params<P extends O = O>(d: O, defaultParams: P) {
         const get = () => resolve<P>(d, paths.params);
-        if (!get()) ObjectPath.mutate(d, paths.params, defaultParams);
+        if (!get()) ObjectPath.Mutate.value(d, paths.params, defaultParams);
         return get()!;
       },
 
       error<E extends O = O>(d: O, defaultError?: E) {
         const get = () => resolve<E>(d, paths.error);
-        if (!get()) ObjectPath.mutate(d, paths.error, defaultError);
+        if (!get()) ObjectPath.Mutate.value(d, paths.error, defaultError);
         return get()!;
       },
 
       counter(d: O, factory: t.CmdCounterFactory = DEFAULTS.counter) {
         const get = () => resolve<t.CmdCounter>(d, paths.counter);
-        if (!get()) ObjectPath.mutate(d, paths.counter, factory.create());
+        if (!get()) ObjectPath.Mutate.value(d, paths.counter, factory.create());
         return get()!;
       },
 
