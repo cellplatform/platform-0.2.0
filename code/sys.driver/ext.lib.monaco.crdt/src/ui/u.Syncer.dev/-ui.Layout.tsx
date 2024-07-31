@@ -1,4 +1,4 @@
-import { Color, css, type t } from './common';
+import { Color, css, Icons, type t } from './common';
 
 export type LayoutProps = {
   top: JSX.Element;
@@ -12,17 +12,32 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   const styles = {
     base: css({
       display: 'grid',
-      gridTemplateRows: '1fr 1fr',
-      rowGap: '50px',
+      gridTemplateRows: '1fr auto 1fr',
+      userSelect: 'none',
     }),
     edge: css({
       display: 'grid',
       backgroundColor: theme.bg,
     }),
+    gap: css({
+      height: 50,
+      transform: 'rotate(90deg)',
+      opacity: 0.1,
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
+
+  const elGap = (
+    <div {...styles.gap}>
+      <Icons.Sync.Arrows size={32} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.edge}>{props.top}</div>
+      {elGap}
       <div {...styles.edge}>{props.bottom}</div>
     </div>
   );

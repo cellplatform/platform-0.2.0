@@ -1,4 +1,4 @@
-import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt } from '../../test.ui';
+import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt, slug } from '../../test.ui';
 import { SampleEditor, type SampleEditorProps } from './-ui.Editor';
 import { Layout } from './-ui.Layout';
 import { Doc, ObjectPath, rx, type t } from './common';
@@ -15,6 +15,10 @@ const initial: D = {
   strategy: 'Splice',
 };
 
+type ObjectWithAllKeys<T extends string> = { [K in T]: any };
+type DebugLabel = 'top' | 'bottom';
+type Identities = ObjectWithAllKeys<DebugLabel>;
+
 /**
  * Spec
  */
@@ -29,6 +33,10 @@ export default Dev.describe(name, async (e) => {
   let doc: t.Doc | undefined;
   let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
+  const identity: Identities = {
+    top: `${slug()}.top`,
+    bottom: `${slug()}.bottom`,
+  } as const;
 
   const getLens = () => {
     if (!doc) return;
@@ -67,9 +75,10 @@ export default Dev.describe(name, async (e) => {
         Dev.Theme.background(ctx, theme, 1);
         ctx.host.backgroundColor(backgroundColor);
 
-        const editor = (debugLabel: string, props?: SampleEditorProps) => {
+        const editor = (debugLabel: DebugLabel, props?: SampleEditorProps) => {
           return (
             <SampleEditor
+              identity={identity[debugLabel]}
               debugLabel={debugLabel}
               lens={state.useLens ? getLens() : doc}
               enabled={!!doc}
