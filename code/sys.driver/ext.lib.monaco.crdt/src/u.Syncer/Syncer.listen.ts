@@ -1,9 +1,8 @@
 import { calculateDiff } from './-tmp.diff';
 
-import { ObjectPath, DEFAULTS, Doc, Path, Pkg, rx, type t } from './common';
-import { MonacoPatcher } from './u.MonacoPatch';
+import { DEFAULTS, ObjectPath, Path, Pkg, rx, type t } from './common';
+import { LensUtil, MonacoPatcher } from './u';
 
-type O = Record<string, unknown>;
 type Options = {
   debugLabel?: string;
   strategy?: t.EditorUpdateStrategy | (() => t.EditorUpdateStrategy | undefined);
@@ -27,32 +26,22 @@ export function listen(
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
   dispose$.subscribe(() => {
-    editor.setValue('');
     handlerContentChanged.dispose();
     handlerSelectionChanged.dispose();
+    editor.setValue('');
   });
+
+  /**
+   * Observables.
+   */
+  const events = lens.events(dispose$);
+  const changed$ = events.changed$.pipe(rx.filter(() => !_ignoreChange));
 
   /**
    * Helpers.
    */
   const patchMonaco = MonacoPatcher.init(monaco, editor);
-  const events = lens.events(dispose$);
-  const Lens = {
-    get current() {
-      return Lens.resolve(lens.current);
-    },
-    resolve(d: O) {
-      return Path.Object.resolve<string>(d, paths.text);
-    },
-    text: {
-      splice(d: O, index: number, del: number, value?: string) {
-        Doc.Text.splice(d, paths.text, index, del, value);
-      },
-      replace(d: O, value: string) {
-        Path.Object.Mutate.value(d, paths.text, value);
-      },
-    },
-  } as const;
+  const Text = LensUtil.text(lens, paths);
 
   /**
    * Editor change.
@@ -67,28 +56,30 @@ export function listen(
   };
 
   /**
-   * CRDT changed.
+   * CRDT: text changed.
    */
-  events.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
-    const before = editor.getValue();
-    const after = Lens.resolve(e.after) ?? '';
-    if (after === before) return;
+  changed$
+    .pipe(rx.distinctWhile((p, n) => Text.resolve(p.after) === Text.resolve(n.after)))
+    .subscribe((e) => {
+      const before = editor.getValue();
+      const after = Text.resolve(e.after) ?? '';
+      if (after === before) return;
 
-    /**
-     * TODO 🐷
-     */
-    const diff = calculateDiff(Lens.resolve(e.before) || '', Lens.resolve(e.after) || '');
-    console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
+      /**
+       * TODO 🐷
+       */
+      const diff = calculateDiff(Text.resolve(e.before) || '', Text.resolve(e.after) || '');
+      console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
 
-    const source = 'crdt.sync';
-    const patches = e.patches.filter((patch) => startsWith(patch.path, paths.text));
-    patches.forEach((patch) => {
-      _ignoreChange = true;
-      if (patch.action === 'del') patchMonaco.delete(patch, `${source}:delete`);
-      if (patch.action === 'splice') patchMonaco.splice(patch, `${source}:update`);
-      _ignoreChange = false;
+      const source = 'crdt.sync';
+      const patches = e.patches.filter((patch) => startsWith(patch.path, paths.text));
+      patches.forEach((patch) => {
+        _ignoreChange = true;
+        if (patch.action === 'del') patchMonaco.delete(patch, `${source}:delete`);
+        if (patch.action === 'splice') patchMonaco.splice(patch, `${source}:update`);
+        _ignoreChange = false;
+      });
     });
-  });
 
   /**
    * Editor: text changed.
@@ -109,11 +100,11 @@ export function listen(
 
       const strategy = api.strategy;
       if (strategy === 'Splice') {
-        lens.change((d) => Lens.text.splice(d, index, deleteCount, change.text));
+        lens.change((d) => Text.splice(d, index, deleteCount, change.text));
       }
 
       if (strategy === 'Overwrite') {
-        lens.change((d) => Lens.text.replace(d, editor.getValue()));
+        lens.change((d) => Text.replace(d, editor.getValue()));
       }
     });
   });
@@ -129,11 +120,11 @@ export function listen(
   /**
    * Initial state.
    */
-  const initial = Lens.current;
-  if (initial === undefined) {
+  const initialText = Text.current;
+  if (initialText === undefined) {
     lens.change((d) => Path.Object.Mutate.value(d, paths.text, ''));
-  } else if (typeof initial === 'string') {
-    changeEditorText(initial);
+  } else if (typeof initialText === 'string') {
+    changeEditorText(initialText);
   }
 
   /**
