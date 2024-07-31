@@ -1,4 +1,4 @@
-import { Path, Doc, type t } from './common';
+import { Doc, Path, type t } from './common';
 
 type O = Record<string, unknown>;
 
