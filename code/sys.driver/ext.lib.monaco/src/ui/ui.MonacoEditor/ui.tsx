@@ -86,7 +86,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     updateOptions(editor);
     updateTextState(editor);
-    if (props.focusOnLoad) editor.focus();
+    if (enabled && props.focusOnLoad) editor.focus();
     const dispose$ = disposeRef.current;
     props.onReady?.({ editor, monaco, dispose$ });
   };
