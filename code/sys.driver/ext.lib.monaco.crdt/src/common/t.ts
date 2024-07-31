@@ -25,6 +25,7 @@ export type {
 export type {
   Disposable,
   EventBus,
+  Immutable,
   Json,
   JsonString,
   Lifecycle,

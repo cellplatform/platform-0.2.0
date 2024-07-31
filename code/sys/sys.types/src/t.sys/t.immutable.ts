@@ -1,9 +1,11 @@
 import type { t } from '../common';
 
+type O = Record<string, unknown>;
+
 /**
  * Immutable object with mutator change function.
  */
-export type Immutable<D, P = unknown> = {
+export type Immutable<D = O, P = unknown> = {
   readonly current: D;
   change(fn: ImmutableMutator<D>, options?: ImmutableChangeOptions<P>): void;
 };
@@ -11,7 +13,7 @@ export type Immutable<D, P = unknown> = {
 /**
  * Immutable change/mutator functions.
  */
-export type ImmutableMutator<D> = (draft: D) => void;
+export type ImmutableMutator<D = O> = (draft: D) => void;
 
 export type ImmutablePatchCallback<P> = (patches: P[]) => void;
 export type ImmutableChangeOptions<P> =
@@ -22,7 +24,7 @@ export type ImmutableChangeOptions<P> =
  * A reference handle to an Immutable<T> with
  * an observable event factory.
  */
-export type ImmutableRef<D, E = unknown, P = unknown> = Immutable<D, P> & {
+export type ImmutableRef<D = O, E = unknown, P = unknown> = Immutable<D, P> & {
   readonly instance: string; // Unique ID of the reference handle.
   events(dispose$?: t.UntilObservable): E;
 };
