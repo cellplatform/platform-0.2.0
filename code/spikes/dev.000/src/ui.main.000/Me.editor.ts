@@ -13,11 +13,13 @@ export function editorController(args: {
 }): t.ShellEditorController {
   const { monaco, editor, main } = args;
   const life = rx.lifecycle(args.dispose$);
+  const { dispose$ } = life;
   const cmdbar = main.cmdbar;
 
   // Document (State).
-  type T = { config?: t.EditorState };
+  type T = { config?: t.EditorState; code?: unknown };
   const lens = Doc.lens<O, T>(main.state.me, ['root'], { init: (d) => (d.root = {}) });
+  const codeLens = Doc.lens(lens, ['code'], (d) => (d.code = {}));
 
   /**
    * Ensure there is a {config} object.
@@ -31,7 +33,7 @@ export function editorController(args: {
    * Editor state.
    */
   const Syncer = Monaco.Crdt.Syncer;
-  Syncer.listen(monaco, editor, lens, ['config', 'text'], { strategy: 'Overwrite' });
+  Syncer.listen(monaco, editor, codeLens, { strategy: 'Overwrite', dispose$ });
 
   const selection$ = rx.subject();
   editor.onDidChangeCursorSelection(() => selection$.next());
