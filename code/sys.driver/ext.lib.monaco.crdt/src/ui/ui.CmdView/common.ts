@@ -7,7 +7,7 @@ type E = t.CmdViewEditorProps;
  * Exports
  */
 export { Info as CrdtInfo } from 'ext.lib.automerge';
-export { Syncer } from '../../u.Syncer';
+export { Syncer } from '../u.Syncer';
 export * from '../common';
 
 /**

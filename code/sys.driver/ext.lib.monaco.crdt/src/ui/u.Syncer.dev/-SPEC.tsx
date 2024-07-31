@@ -1,4 +1,4 @@
-import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt } from '../test.ui';
+import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt } from '../../test.ui';
 import { Doc, ObjectPath, rx, type t } from './common';
 import { SampleEditor, type SampleEditorProps } from './ui.Editor';
 import { Layout } from './ui.Layout';

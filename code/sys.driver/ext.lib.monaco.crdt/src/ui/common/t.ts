@@ -3,6 +3,7 @@
  */
 export type {
   CmdBarRef,
+  CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,

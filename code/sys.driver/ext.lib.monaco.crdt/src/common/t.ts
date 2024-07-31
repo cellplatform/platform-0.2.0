@@ -23,7 +23,6 @@ export type {
  * @system
  */
 export type {
-  CommonTheme,
   Disposable,
   EventBus,
   Json,
