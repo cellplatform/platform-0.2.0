@@ -1,25 +1,14 @@
-import {
-  Color,
-  CrdtInfo,
-  Dev,
-  Doc,
-  Immutable,
-  Json,
-  Pkg,
-  rx,
-  SampleCrdt,
-  TestDb,
-} from '../test.ui';
-import { type t } from './common';
+import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt } from '../test.ui';
+import { Doc, ObjectPath, rx, type t } from './common';
 import { SampleEditor, type SampleEditorProps } from './ui.Editor';
 import { Layout } from './ui.Layout';
 
 type D = {
-  reload?: boolean;
   docuri?: string;
+  strategy?: t.EditorUpdateStrategy;
+  objectOpen?: boolean;
+  useLens?: boolean;
   theme?: t.CommonTheme;
-  strategy?: t.UpdateTextStrategy;
-  docObjectOpen?: boolean;
 };
 const initial: D = {
   theme: 'Dark',
@@ -38,12 +27,19 @@ export default Dev.describe(name, async (e) => {
   const State = Immutable.clonerRef<D>(Json.parse<D>(local.state, initial));
 
   let doc: t.Doc | undefined;
+  let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
+
+  const getLens = () => {
+    if (!doc) return;
+    if (lens) return lens;
+    const path = ['mylens'];
+    return (lens = Doc.lens(doc, path, (d) => ObjectPath.Mutate.ensure(d, path, {})));
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const sample = SampleCrdt.dev(db.repo.store, State);
-
     doc = await sample.get();
 
     const debug$ = State.events().changed$;
@@ -63,26 +59,21 @@ export default Dev.describe(name, async (e) => {
         const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
 
-        if (state.reload) {
-          const onClose = () => State.change((d) => (d.reload = false));
-          return <TestDb.DevReload onCloseClick={onClose} />;
-        } else {
-          const editor = (debugLabel: string, props?: SampleEditorProps) => {
-            return (
-              <SampleEditor
-                debugLabel={debugLabel}
-                lens={doc}
-                enabled={!!doc}
-                theme={theme.name}
-                {...props}
-              />
-            );
-          };
+        const editor = (debugLabel: string, props?: SampleEditorProps) => {
+          return (
+            <SampleEditor
+              debugLabel={debugLabel}
+              lens={state.useLens ? getLens() : doc}
+              enabled={!!doc}
+              theme={theme.name}
+              {...props}
+            />
+          );
+        };
 
-          const top = editor('top', { focusOnLoad: true });
-          const bottom = editor('bottom');
-          return <Layout top={top} bottom={bottom} theme={theme.name} />;
-        }
+        const top = editor('top', { focusOnLoad: true });
+        const bottom = editor('bottom');
+        return <Layout top={top} bottom={bottom} theme={theme.name} />;
       });
   });
 
@@ -102,9 +93,9 @@ export default Dev.describe(name, async (e) => {
               ref: doc,
               uri: { head: true },
               object: {
-                expand: { level: 3 },
-                visible: state.docObjectOpen,
-                onToggleClick: (e) => State.change((d) => Dev.toggle(d, 'docObjectOpen')),
+                expand: { level: 1 },
+                visible: state.objectOpen,
+                onToggleClick: (e) => State.change((d) => Dev.toggle(d, 'objectOpen')),
               },
             },
           }}
@@ -117,7 +108,7 @@ export default Dev.describe(name, async (e) => {
     dev.section((dev) => {
       Dev.Theme.immutable(dev, State);
       dev.hr(-1, 5);
-      const strategy = (strategy: t.UpdateTextStrategy) => {
+      const strategy = (strategy: t.EditorUpdateStrategy) => {
         const current = () => State.current.strategy;
         dev.button((btn) => {
           btn
@@ -146,7 +137,11 @@ export default Dev.describe(name, async (e) => {
           .label(`delete`)
           .right(() => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
           .enabled(() => !!doc)
-          .onClick(async () => (doc = await sample.delete()));
+          .onClick(async () => {
+            await sample.delete();
+            doc = undefined;
+            lens = undefined;
+          });
       });
 
       dev.hr(-1, 5);
@@ -170,6 +165,15 @@ export default Dev.describe(name, async (e) => {
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const state = State;
+        const current = () => !!state.current.useLens;
+        btn
+          .label(() => `useLens`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'useLens')));
+      });
     });
   });
 

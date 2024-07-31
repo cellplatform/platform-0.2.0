@@ -4,14 +4,13 @@ import { Color, css, Monaco, rx, Syncer, type t } from './common';
 export type SampleEditorProps = {
   enabled?: boolean;
   lens?: t.Lens | t.Doc;
-  path?: t.ObjectPath;
   focusOnLoad?: boolean;
   debugLabel?: string;
   theme?: t.CommonTheme;
 };
 
 export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
-  const { lens, enabled = true, debugLabel, path = ['sample.code'] } = props;
+  const { lens, enabled = true, debugLabel } = props;
   const [ready, setReady] = useState<t.MonacoEditorReadyArgs>();
 
   /**
@@ -21,10 +20,10 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
     const { dispose$, dispose } = rx.disposable(ready?.dispose$);
     if (ready && lens) {
       const { monaco, editor } = ready;
-      Syncer.listen(monaco, editor, lens, path, { dispose$ });
+      Syncer.listen(monaco, editor, lens, { dispose$ });
     }
     return dispose;
-  }, [!!ready, lens?.instance, path.join()]);
+  }, [!!ready, lens?.instance]);
 
   /**
    * Render

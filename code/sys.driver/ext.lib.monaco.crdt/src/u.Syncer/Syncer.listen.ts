@@ -1,11 +1,13 @@
 import { calculateDiff } from './-tmp.diff';
-import { Doc, Path, Pkg, rx, type t } from './common';
+
+import { ObjectPath, DEFAULTS, Doc, Path, Pkg, rx, type t } from './common';
 import { MonacoPatcher } from './u.MonacoPatch';
 
 type O = Record<string, unknown>;
 type Options = {
   debugLabel?: string;
-  strategy?: t.UpdateTextStrategy | (() => t.UpdateTextStrategy | undefined);
+  strategy?: t.EditorUpdateStrategy | (() => t.EditorUpdateStrategy | undefined);
+  paths?: t.EditorPaths;
   dispose$?: t.UntilObservable;
 };
 
@@ -17,35 +19,37 @@ export function listen(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
   lens: t.Lens | t.Doc,
-  target: t.ObjectPath, // NB: target path to write the editor string to.
   options: Options = {},
 ): t.SyncListener {
   const { debugLabel } = options;
+  const paths = wrangle.paths(options);
 
   const life = rx.lifecycle(options.dispose$);
-  life.dispose$.subscribe(() => {
+  const { dispose, dispose$ } = life;
+  dispose$.subscribe(() => {
     editor.setValue('');
-    handlerDidChangeModelContent.dispose();
+    handlerContentChanged.dispose();
+    handlerSelectionChanged.dispose();
   });
 
   /**
    * Helpers.
    */
   const patchMonaco = MonacoPatcher.init(monaco, editor);
-  const Events = { lens: lens.events(life.dispose$) } as const;
+  const events = lens.events(dispose$);
   const Lens = {
     get current() {
       return Lens.resolve(lens.current);
     },
-    resolve(doc: O) {
-      return Path.Object.resolve<string>(doc, target);
+    resolve(d: O) {
+      return Path.Object.resolve<string>(d, paths.text);
     },
     text: {
-      splice(doc: O, index: number, del: number, value?: string) {
-        Doc.Text.splice(doc, target, index, del, value);
+      splice(d: O, index: number, del: number, value?: string) {
+        Doc.Text.splice(d, paths.text, index, del, value);
       },
-      replace(doc: O, value: string) {
-        Path.Object.Mutate.value(doc, target, value);
+      replace(d: O, value: string) {
+        Path.Object.Mutate.value(d, paths.text, value);
       },
     },
   } as const;
@@ -65,7 +69,7 @@ export function listen(
   /**
    * CRDT changed.
    */
-  Events.lens.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
+  events.changed$.pipe(rx.filter(() => !_ignoreChange)).subscribe((e) => {
     const before = editor.getValue();
     const after = Lens.resolve(e.after) ?? '';
     if (after === before) return;
@@ -77,7 +81,7 @@ export function listen(
     console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
 
     const source = 'crdt.sync';
-    const patches = e.patches.filter((patch) => startsWith(patch.path, target));
+    const patches = e.patches.filter((patch) => startsWith(patch.path, paths.text));
     patches.forEach((patch) => {
       _ignoreChange = true;
       if (patch.action === 'del') patchMonaco.delete(patch, `${source}:delete`);
@@ -87,9 +91,9 @@ export function listen(
   });
 
   /**
-   * Local editor changed.
+   * Editor: text changed.
    */
-  const handlerDidChangeModelContent = editor.onDidChangeModelContent((e) => {
+  const handlerContentChanged = editor.onDidChangeModelContent((e) => {
     if (life.disposed) return;
     if (_ignoreChange) return;
 
@@ -115,11 +119,19 @@ export function listen(
   });
 
   /**
-   * Initialize.
+   * Editor: selection changed.
+   */
+  const handlerSelectionChanged = editor.onDidChangeCursorSelection((e) => {
+    if (life.disposed) return;
+    lens.change((d) => ObjectPath.Mutate.value(d, paths.selection, e.selection));
+  });
+
+  /**
+   * Initial state.
    */
   const initial = Lens.current;
   if (initial === undefined) {
-    lens.change((d) => Path.Object.Mutate.value(d, target, ''));
+    lens.change((d) => Path.Object.Mutate.value(d, paths.text, ''));
   } else if (typeof initial === 'string') {
     changeEditorText(initial);
   }
@@ -129,16 +141,17 @@ export function listen(
    */
   const api: t.SyncListener = {
     get strategy() {
-      const defaultValue: t.UpdateTextStrategy = 'Splice';
       const { strategy } = options;
       if (typeof strategy === 'string') return strategy;
-      if (typeof strategy === 'function') strategy() ?? defaultValue;
-      return defaultValue;
+      if (typeof strategy === 'function') strategy() ?? DEFAULTS.strategy;
+      return DEFAULTS.strategy;
     },
 
-    // Lifecycle.
-    dispose: life.dispose,
-    dispose$: life.dispose$,
+    /**
+     * Lifecycle
+     */
+    dispose,
+    dispose$,
     get disposed() {
       return life.disposed;
     },
@@ -152,3 +165,9 @@ export function listen(
 function startsWith(list: any[], m: any[]): boolean {
   return list.length >= m.length && m.every((value, index) => value === list[index]);
 }
+
+const wrangle = {
+  paths(options: Options) {
+    return options.paths ?? DEFAULTS.paths;
+  },
+} as const;
