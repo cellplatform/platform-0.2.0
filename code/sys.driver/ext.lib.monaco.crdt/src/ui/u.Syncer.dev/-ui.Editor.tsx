@@ -30,7 +30,10 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
    */
   const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ backgroundColor: theme.bg, display: 'grid' }),
+    base: css({
+      backgroundColor: theme.bg,
+      display: 'grid',
+    }),
   };
 
   return (

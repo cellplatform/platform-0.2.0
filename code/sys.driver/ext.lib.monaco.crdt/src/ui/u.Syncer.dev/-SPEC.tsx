@@ -1,7 +1,7 @@
 import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt } from '../../test.ui';
-import { Doc, ObjectPath, rx, type t } from './common';
 import { SampleEditor, type SampleEditorProps } from './-ui.Editor';
 import { Layout } from './-ui.Layout';
+import { Doc, ObjectPath, rx, type t } from './common';
 
 type D = {
   docuri?: string;
@@ -50,14 +50,22 @@ export default Dev.describe(name, async (e) => {
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
+    const getBackgroundColor = () => {
+      const theme = Color.theme(State.current.theme);
+      return Color.darken(theme.bg, 3);
+    };
+
     ctx.debug.width(330);
     ctx.subject
+      .backgroundColor(getBackgroundColor())
       .size('fill')
       .display('grid')
       .render<D>(() => {
         const state = State.current;
+        const backgroundColor = getBackgroundColor();
         const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
+        ctx.host.backgroundColor(backgroundColor);
 
         const editor = (debugLabel: string, props?: SampleEditorProps) => {
           return (
@@ -73,7 +81,7 @@ export default Dev.describe(name, async (e) => {
 
         const top = editor('top', { focusOnLoad: true });
         const bottom = editor('bottom');
-        return <Layout top={top} bottom={bottom} theme={theme.name} />;
+        return <Layout top={top} bottom={bottom} theme={theme.name} style={{ backgroundColor }} />;
       });
   });
 
@@ -113,7 +121,7 @@ export default Dev.describe(name, async (e) => {
         dev.button((btn) => {
           btn
             .label(`strategy: "${strategy}"`)
-            .right(() => (current() === strategy ? '←' : ''))
+            .right(() => (current() === strategy ? '🌳' : ''))
             .onClick(() => State.change((d) => (d.strategy = strategy)));
         });
       };
