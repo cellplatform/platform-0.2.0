@@ -1,2 +1,2 @@
 export * from './u.Lens';
-export * from './u.MonacoPatch';
+export * from './u.Patch';
