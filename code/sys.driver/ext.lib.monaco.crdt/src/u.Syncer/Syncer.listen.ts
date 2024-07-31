@@ -16,7 +16,7 @@ type Options = {
 export function listen(
   monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
-  lens: t.Lens,
+  lens: t.Lens | t.Doc,
   target: t.ObjectPath, // NB: target path to write the editor string to.
   options: Options = {},
 ): t.SyncListener {

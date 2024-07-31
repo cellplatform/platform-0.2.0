@@ -8,7 +8,7 @@ export type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = (props) => {
   const theme = Color.theme(props.theme);
-  const border = `solid 1px ${Color.alpha(theme.fg, 0.1)}`;
+  const border = `solid 1px ${Color.alpha(theme.fg, 0.2)}`;
   const styles = {
     base: css({
       display: 'grid',

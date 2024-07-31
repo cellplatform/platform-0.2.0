@@ -1,62 +1,64 @@
-import { Color, CrdtInfo, Dev, Immutable, Json, Monaco, Pkg, rx, TestDb } from '../test.ui';
-import { setupStore, type D } from './-SPEC.store';
-import { Doc, type t } from './common';
+import {
+  Color,
+  CrdtInfo,
+  Dev,
+  Doc,
+  Immutable,
+  Json,
+  Pkg,
+  rx,
+  SampleCrdt,
+  TestDb,
+} from '../test.ui';
+import { type t } from './common';
+import { SampleEditor, type SampleEditorProps } from './ui.Editor';
 import { Layout } from './ui.Layout';
 
-type T = {
+type D = {
   reload?: boolean;
+  docuri?: string;
   theme?: t.CommonTheme;
   strategy?: t.UpdateTextStrategy;
+  docObjectOpen?: boolean;
 };
-const initial: T = { theme: 'Dark', strategy: 'Splice' };
+const initial: D = {
+  theme: 'Dark',
+  strategy: 'Splice',
+};
 
 /**
  * Spec
  */
 const name = `${Pkg.name}.syncer`;
+
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { debug?: string };
+  type LocalStore = { state?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
-  const local = localstore.object({ debug: undefined });
-  const State = Immutable.clonerRef<T>(Json.parse<T>(local.debug, initial));
+  const local = localstore.object({ state: undefined });
+  const State = Immutable.clonerRef<D>(Json.parse<D>(local.state, initial));
 
-  const { db, store, index, doc } = await setupStore(`spec:${name}`);
-  const lens = Doc.lens<D, t.SampleDoc>(doc, ['sample'], (d) => (d.sample = {}));
-
-  console.group('🌳 state (syncer sample)');
-  console.info(`db: "${db.name}"`);
-  console.info('store', store);
-  console.info('index', index);
-  console.groupEnd();
+  let doc: t.Doc | undefined;
+  const db = await SampleCrdt.init({ broadcastAdapter: true });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const sample = SampleCrdt.dev(db.repo.store, State);
 
-    const doc$ = doc.events().changed$;
+    doc = await sample.get();
+
     const debug$ = State.events().changed$;
-    rx.merge(doc$, debug$)
+    rx.merge(debug$)
       .pipe(rx.debounceTime(1000))
-      .subscribe(() => {
-        local.debug = Json.stringify(State.current);
-      });
-    rx.merge(doc$, debug$)
+      .subscribe(() => (local.state = Json.stringify(State.current)));
+    rx.merge(debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
-
-    const handleReady = (debugLabel: string, e: t.MonacoEditorReadyHandlerArgs) => {
-      console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
-
-      Monaco.Crdt.Syncer.listen(e.monaco, e.editor, lens, ['code'], {
-        debugLabel,
-        strategy: () => State.current.strategy,
-      });
-    };
 
     ctx.debug.width(330);
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>(() => {
+      .render<D>(() => {
         const state = State.current;
         const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
@@ -65,41 +67,45 @@ export default Dev.describe(name, async (e) => {
           const onClose = () => State.change((d) => (d.reload = false));
           return <TestDb.DevReload onCloseClick={onClose} />;
         } else {
-          const elTop = (
-            <Monaco.Editor
-              language={'markdown'}
-              theme={theme.name}
-              onReady={(e) => handleReady('top', e)}
-              focusOnLoad={true}
-            />
-          );
+          const editor = (debugLabel: string, props?: SampleEditorProps) => {
+            return (
+              <SampleEditor
+                debugLabel={debugLabel}
+                lens={doc}
+                enabled={!!doc}
+                theme={theme.name}
+                {...props}
+              />
+            );
+          };
 
-          const elBottom = (
-            <Monaco.Editor
-              language={'markdown'}
-              theme={theme.name}
-              onReady={(e) => handleReady('bottom', e)}
-            />
-          );
-
-          return <Layout top={elTop} bottom={elBottom} theme={theme.name} />;
+          const top = editor('top', { focusOnLoad: true });
+          const bottom = editor('bottom');
+          return <Layout top={top} bottom={bottom} theme={theme.name} />;
         }
       });
   });
 
   e.it('ui:debug', (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e, initial);
+    const sample = SampleCrdt.dev(db.repo.store, State);
 
     dev.row((e) => {
+      const state = State.current;
       return (
         <CrdtInfo
-          fields={['Repo', 'Doc', 'Doc.URI']}
+          stateful={true}
+          fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           data={{
-            repo: { store, index },
+            repo: db.repo,
             document: {
               ref: doc,
               uri: { head: true },
-              object: { expand: { level: 3 } },
+              object: {
+                expand: { level: 3 },
+                visible: state.docObjectOpen,
+                onToggleClick: (e) => State.change((d) => Dev.toggle(d, 'docObjectOpen')),
+              },
             },
           }}
         />
@@ -128,49 +134,51 @@ export default Dev.describe(name, async (e) => {
     dev.TODO('"Splice" replacement not stable');
     dev.hr(5, 20);
 
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
-      dev.button('reload', (e) => location.reload());
-      dev.hr(-1, 5);
-
-      dev.button('change: sample.code', (e) => {
-        const count = doc.current.count;
-        const text = `const msg = "hello world 👋";\nconst count = ${count};\n`;
-        lens.change((d) => (d.code = text));
+    dev.section('Sample State', (dev) => {
+      dev.button((btn) => {
+        btn
+          .label(`create`)
+          .enabled(() => !doc)
+          .onClick(async () => (doc = await sample.get()));
       });
-
-      dev.button('change: sample.name', (e) => {
-        doc.change((d) => d.count++);
-        const count = doc.current.count;
-        lens.change((d) => (d.name = `name.${count}`));
+      dev.button((btn) => {
+        btn
+          .label(`delete`)
+          .right(() => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
+          .enabled(() => !!doc)
+          .onClick(async () => (doc = await sample.delete()));
       });
 
       dev.hr(-1, 5);
 
       dev.button((btn) => {
+        type T = { count: number };
+        const getCount = () => doc?.current?.count ?? 0;
         btn
-          .label(`change: increment count`)
-          .right((e) => `${doc.current.count} + 1`)
-          .onClick((e) => doc.change((d) => d.count++));
+          .label(`increment`)
+          .right(() => `count: ${getCount()} + 1`)
+          .enabled(() => !!doc)
+          .onClick(() => {
+            doc?.change((d) => (d.count = ((d as T).count || 0) + 1));
+            dev.redraw('debug');
+          });
       });
+    });
 
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
       dev.hr(-1, 5);
-
-      dev.button([`delete db: "${db.name}"`, '💥'], async (e) => {
-        await e.change((d) => (d.reload = true));
-        await TestDb.Spec.deleteDatabase();
-      });
     });
   });
 
   e.it('ui:footer', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        ['crdt.doc']: doc.toObject(),
-        ['code']: doc.toObject().sample?.code,
-      };
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$', '$.code'] }} />;
+    const dev = Dev.tools<D>(e, initial);
+    dev.footer.border(-0.1).render<D>((e) => {
+      const debug = State.current;
+      const data = { debug };
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });
