@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-import { EditorCarets } from './ui/logic.Editor.Carets';
+import { EditorCarets } from './ui/u.Editor.Carets';
 import { MonacoEditor } from './ui/ui.MonacoEditor';
 import { Wrangle } from './common';
 
