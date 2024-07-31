@@ -21,8 +21,12 @@ export function listen(
   options: Options = {},
 ): t.SyncListener {
   const { debugLabel } = options;
+
   const life = rx.lifecycle(options.dispose$);
-  life.dispose$.subscribe(() => handlerDidChangeModelContent.dispose());
+  life.dispose$.subscribe(() => {
+    editor.setValue('');
+    handlerDidChangeModelContent.dispose();
+  });
 
   /**
    * Helpers.
