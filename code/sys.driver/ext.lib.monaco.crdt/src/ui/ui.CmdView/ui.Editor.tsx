@@ -18,7 +18,7 @@ export type EditorProps = {
 export const Editor: React.FC<EditorProps> = (props) => {
   const { doc, editor } = wrangle.props(props);
   const enabled = wrangle.enabled(props);
-  const [ready, setReady] = useState<t.MonacoEditorReadyHandlerArgs>();
+  const [ready, setReady] = useState<t.MonacoEditorReadyArgs>();
 
   /**
    * Lifecycle
