@@ -21,7 +21,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
     const { dispose$, dispose } = rx.disposable(ready?.dispose$);
     if (ready && lens) {
       const { monaco, editor } = ready;
-      Syncer.listen(monaco, editor, lens, identity, { dispose$ });
+      Syncer.listen(monaco, editor, lens, { identity, dispose$ });
     }
     return dispose;
   }, [!!ready, lens?.instance]);
