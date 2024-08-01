@@ -29,7 +29,7 @@ describe('CmdBar.Ctrl', () => {
     expect(CmdBar.Path).to.equal(Ctrl.Path);
   });
 
-  it('create (from simple Immutable<T>)', async () => {
+  it('create: from simple Immutable<T>', async () => {
     const transport = Immutable.clonerRef({});
     const ctrl1 = Ctrl.create(transport);
     const ctrl2 = Ctrl.create(); // NB: auto immutable "transport" construction.
@@ -51,6 +51,20 @@ describe('CmdBar.Ctrl', () => {
     await Time.wait(0);
     expectCounter(1);
     expect(fired).to.eql(2);
+  });
+
+  it('create: with path from prefix', async () => {
+    const transport = Immutable.clonerRef({});
+    const ctrl = Ctrl.create(transport, { paths: ['foo', 'bar'] });
+
+    let fired = 0;
+    ctrl.events().on('Invoke', (e) => fired++);
+
+    ctrl.invoke({ text: 'foo' });
+    await Time.wait(0);
+
+    const current = transport.current as any;
+    expect(current.foo.bar.cmd.params).to.eql({ text: 'foo' });
   });
 
   it('Ctrl.toCtrl', () => {
