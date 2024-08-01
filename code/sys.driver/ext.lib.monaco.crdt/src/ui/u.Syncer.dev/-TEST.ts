@@ -1,9 +1,9 @@
-import { describe, expect, it } from '../../test';
-import { Syncer } from './common';
 import { Monaco } from '../..';
+import { Test, expect } from '../../test.ui';
+import { Syncer } from './common';
 
-describe('Monaco.Crdt.syncer', () => {
-  it('api reference', () => {
+export default Test.describe('Monaco.Crdt.syncer', (e) => {
+  e.it('api reference', (e) => {
     expect(Syncer).to.equal(Monaco.Crdt.Syncer);
   });
 });
