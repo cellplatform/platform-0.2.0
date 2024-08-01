@@ -21,6 +21,7 @@ export const SyncerPath = {
     const prepend = (target: t.ObjectPath) => ObjectPath.prepend(target, prefix);
     return {
       text: prepend(paths.text),
+      cmd: prepend(paths.cmd),
       identity: prepend(paths.identity),
     };
   },

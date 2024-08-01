@@ -6,7 +6,7 @@ import { Util } from './u';
 type Options = {
   debugLabel?: string;
   strategy?: t.EditorUpdateStrategy | (() => t.EditorUpdateStrategy | undefined);
-  paths?: t.EditorPaths;
+  paths?: t.EditorPaths | t.ObjectPath;
   identity?: string;
   dispose$?: t.UntilObservable;
 };
@@ -29,10 +29,16 @@ export function listen(
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
   dispose$.subscribe(() => {
-    handlerContentChanged.dispose();
+    handlerTextChanged.dispose();
     handlerSelectionChanged.dispose();
     editor.setValue('');
   });
+
+  /**
+   * TODO 🐷 command
+   * - clear orphaned transient state object.
+   */
+  const cmd = Util.Cmd.create(lens, { paths });
 
   /**
    * Observables.
@@ -87,7 +93,7 @@ export function listen(
   /**
    * Editor: text changed.
    */
-  const handlerContentChanged = editor.onDidChangeModelContent((e) => {
+  const handlerTextChanged = editor.onDidChangeModelContent((e) => {
     if (life.disposed) return;
     if (_ignoreChange) return;
 

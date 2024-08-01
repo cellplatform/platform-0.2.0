@@ -7,7 +7,8 @@ export * from '../common';
 const strategy: t.EditorUpdateStrategy = 'Splice';
 const paths: t.EditorPaths = {
   text: ['text'],
-  identity: ['.identity'],
+  cmd: ['.tmp', 'cmd'],
+  identity: ['.tmp', 'identity'],
 };
 
 export const DEFAULTS = {
