@@ -1,12 +1,13 @@
 import { calculateDiff } from './-tmp.diff';
 
 import { DEFAULTS, ObjectPath, Path, Pkg, rx, type t } from './common';
-import { LensUtil, MonacoPatcher } from './u';
+import { Util } from './u';
 
 type Options = {
   debugLabel?: string;
   strategy?: t.EditorUpdateStrategy | (() => t.EditorUpdateStrategy | undefined);
   paths?: t.EditorPaths;
+  identity?: string;
   dispose$?: t.UntilObservable;
 };
 
@@ -21,7 +22,9 @@ export function listen(
   options: Options = {},
 ): t.SyncListener {
   const { debugLabel } = options;
-  const paths = wrangle.paths(options);
+  const paths = Util.Path.wrangle(options.paths);
+  const identity = Util.Identity.format(options.identity);
+  const Mutate = ObjectPath.Mutate;
 
   const life = rx.lifecycle(options.dispose$);
   const { dispose, dispose$ } = life;
@@ -40,8 +43,8 @@ export function listen(
   /**
    * Helpers.
    */
-  const patchMonaco = MonacoPatcher.init(monaco, editor);
-  const Text = LensUtil.text(lens, paths);
+  const patchMonaco = Util.Patch.init(monaco, editor);
+  const Text = Util.Lens.text(lens, paths);
 
   /**
    * Editor change.
@@ -114,7 +117,10 @@ export function listen(
    */
   const handlerSelectionChanged = editor.onDidChangeCursorSelection((e) => {
     if (life.disposed) return;
-    lens.change((d) => ObjectPath.Mutate.value(d, paths.selection, e.selection));
+    lens.change((d) => {
+      const path = Util.Path.identity(identity);
+      Mutate.value(d, path.selection, e.selection);
+    });
   });
 
   /**
@@ -131,6 +137,7 @@ export function listen(
    * API
    */
   const api: t.SyncListener = {
+    identity,
     get strategy() {
       const { strategy } = options;
       if (typeof strategy === 'string') return strategy;
@@ -156,9 +163,3 @@ export function listen(
 function startsWith(list: any[], m: any[]): boolean {
   return list.length >= m.length && m.every((value, index) => value === list[index]);
 }
-
-const wrangle = {
-  paths(options: Options) {
-    return options.paths ?? DEFAULTS.paths;
-  },
-} as const;

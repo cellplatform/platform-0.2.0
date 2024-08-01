@@ -1,4 +1,4 @@
-import { listen } from './Syncer.listen';
+import { listen } from './Syncer.impl';
 
 /**
  * Tools for syncing a MonacoEditor with a CRDT Lens<T>.
