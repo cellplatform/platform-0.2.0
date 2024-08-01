@@ -24,6 +24,7 @@ export type CmdResponseListener<Req extends t.CmdType, Res extends t.CmdType> = 
   promise(): Promise<CmdResponseListener<Req, Res>>;
   onComplete(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
   onError(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
+  onTimeout(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
 } & t.Lifecycle;
 
 /**

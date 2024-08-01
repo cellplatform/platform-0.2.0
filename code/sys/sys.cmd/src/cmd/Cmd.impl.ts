@@ -59,7 +59,7 @@ export function create<C extends t.CmdType>(
     const options = wrangle.invoke.responseOptions<any, any>(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
     const error = wrangle.invoke.error(options);
-    const { timeout, dispose$, onComplete, onError } = options;
+    const { timeout, dispose$, onComplete, onError, onTimeout } = options;
     const { start } = invokeSetup(tx, req, params, error);
     const listener = Listener.create<any, any>(api, {
       tx,
@@ -69,6 +69,7 @@ export function create<C extends t.CmdType>(
       dispose$,
       onComplete,
       onError,
+      onTimeout,
     });
     start();
     return listener;

@@ -8,6 +8,7 @@ type Args<Req extends t.CmdType, Res extends t.CmdType> = {
   dispose$?: t.UntilObservable;
   onComplete?: t.CmdResponseHandler<Req, Res>;
   onError?: t.CmdResponseHandler<Req, Res>;
+  onTimeout?: t.CmdResponseHandler<Req, Res>;
 };
 
 /**
@@ -31,9 +32,14 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   let _error: E | undefined;
 
   type H = t.CmdResponseHandler<Req, Res>;
-  const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
+  const handlers = {
+    complete: new Set<H>(),
+    error: new Set<H>(),
+    timeout: new Set<H>(),
+  } as const;
   if (args.onComplete) handlers.complete.add(args.onComplete);
   if (args.onError) handlers.error.add(args.onError);
+  if (args.onTimeout) handlers.timeout.add(args.onTimeout);
 
   const Handlers = {
     run(handlers: Set<H>) {
@@ -47,7 +53,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   } as const;
 
   /**
-   * Finalization
+   * Finalization.
    */
   const timer = Time.delay(timeout, () => done('Timeout'));
   const done = (status: Status, result?: R, error?: E) => {
@@ -60,6 +66,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
     api.dispose();
     if (status === 'Complete') Handlers.run(handlers.complete);
     if (status === 'Error') Handlers.run(handlers.error);
+    if (status === 'Timeout') Handlers.run(handlers.timeout);
   };
 
   /**
@@ -111,6 +118,11 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
 
     onError(fn) {
       handlers.error.add(fn);
+      return api;
+    },
+
+    onTimeout(fn) {
+      handlers.timeout.add(fn);
       return api;
     },
 

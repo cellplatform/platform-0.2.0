@@ -13,6 +13,7 @@ export type CmdInvokeResponseOptions<Req extends t.CmdType, Res extends t.CmdTyp
   timeout?: t.Msecs;
   onComplete?: t.CmdResponseHandler<Req, Res>;
   onError?: t.CmdResponseHandler<Req, Res>;
+  onTimeout?: t.CmdResponseHandler<Req, Res>;
 };
 
 /**

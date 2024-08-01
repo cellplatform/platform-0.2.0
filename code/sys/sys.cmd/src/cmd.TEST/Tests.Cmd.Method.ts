@@ -208,13 +208,13 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const events = cmd.events(dispose$);
           events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
 
-          // Handler passed to listener constructor.
+          // Handler added to {listener} invoke parameter.
           const method = cmd.method('add', 'add:res');
           await method({ a: 1, b: 2 }, (e) => fired.push(e)).promise();
 
           expect(fired[0].result?.sum).to.eql(3);
 
-          // Handler added to {listener} object.
+          // Handler added to {listener} via method.
           await method({ a: 2, b: 3 })
             .onComplete((e) => {
               fired.push(e);
@@ -256,6 +256,37 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
             e.error; /*  handle error */
             e.result; /* do something with result */
           });
+
+          dispose();
+        });
+
+        it('listen(ƒ) ← register callback: onTimeout', async () => {
+          const { doc, dispose, dispose$ } = await setup();
+          const cmd = Cmd.create<C>(doc);
+
+          // NB: no handler attached to "add" method.
+          const method = cmd.method('add', 'add:res');
+          let timedOut = 0;
+
+          // Handler added to {listener} via method.
+          method({ a: 2, b: 3 }, { timeout: 10 }).onTimeout((e) => timedOut++);
+          await Time.wait(20);
+          expect(timedOut).to.eql(1);
+
+          // Handler added to {listener} via invocation parameter.
+          method({ a: 1, b: 2 }, { timeout: 10, onTimeout: () => timedOut++ });
+          await Time.wait(20);
+          expect(timedOut).to.eql(2);
+
+          // Add listener now ← stops timing out.
+          const events = cmd.events(dispose$);
+          events.on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
+
+          // ↑
+          method({ a: 2, b: 3 }, { timeout: 10 }).onTimeout((e) => timedOut++);
+          method({ a: 1, b: 2 }, { timeout: 10, onTimeout: () => timedOut++ });
+          await Time.wait(20);
+          expect(timedOut).to.eql(2); // NB: no change.
 
           dispose();
         });
