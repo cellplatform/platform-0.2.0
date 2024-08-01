@@ -6,7 +6,7 @@ type O = Record<string, unknown>;
 type Tx = string;
 type OptionsInput = Options | t.CmdPaths;
 type Options = {
-  paths?: t.CmdPaths;
+  paths?: t.CmdPaths | t.ObjectPath;
   counter?: t.CmdCounterFactory;
   tx?: t.CmdTxFactory;
 };
@@ -110,7 +110,7 @@ export function create<C extends t.CmdType>(
 const wrangle = {
   options(input?: OptionsInput): Options {
     if (!input) return {};
-    if (Path.is.commandPaths(input)) return { paths: input };
+    if (Path.Is.commandPaths(input)) return { paths: input };
     return input;
   },
 

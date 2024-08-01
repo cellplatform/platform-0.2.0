@@ -19,7 +19,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       expect(DEFAULTS.error('🍌')).to.eql(error);
     });
 
-    it('create ← {paths} param variants', async () => {
+    it('create ← {paths} param {object} variant', async () => {
       const { factory, dispose } = await setup();
       const paths: t.CmdPaths = {
         name: ['a'],
@@ -52,6 +52,24 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
       expect(doc2.current).to.eql({ a: 'Bar', x: { p: {}, n: { value: 1 }, tx, e } });
       expect(doc3.current).to.eql({ a: 'Bar', x: { p: { msg: '👋' }, n: { value: 1 }, tx } });
+
+      dispose();
+    });
+
+    it('create ← {paths} as [path] prefix', async () => {
+      const { factory, dispose } = await setup();
+
+      const doc = await factory();
+      const paths = ['foo'];
+      const cmd = Cmd.create<C>(doc, { paths });
+      const tx = 'tx.foo';
+
+      cmd.invoke('Foo', { foo: 888 }, tx);
+
+      await Time.wait(0);
+      expect(doc.current).to.eql({
+        foo: { name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx },
+      });
 
       dispose();
     });

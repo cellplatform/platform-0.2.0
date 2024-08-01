@@ -8,6 +8,32 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
 
   describe('Cmd.Path', () => {
+    describe('wrangle', () => {
+      it('<undefined> (defaults)', () => {
+        expect(Path.wrangle()).to.equal(DEFAULTS.paths);
+        expect(Path.wrangle(undefined)).to.equal(DEFAULTS.paths);
+        expect(Path.wrangle(null as any)).to.equal(DEFAULTS.paths);
+      });
+
+      it('{paths} object', () => {
+        const custom: t.CmdPaths = {
+          name: ['a'],
+          params: ['x', 'y', 'p'],
+          counter: ['z', 'n'],
+          error: ['z', 'e'],
+          tx: ['z', 'tx'],
+        };
+        expect(Path.wrangle(DEFAULTS.paths)).to.eql(DEFAULTS.paths);
+        expect(Path.wrangle(custom)).to.eql(custom);
+      });
+
+      it('prefix [path]', () => {
+        const prefix = ['foo', 'bar'];
+        const res = Path.wrangle(prefix);
+        expect(res).to.eql(Path.prepend(prefix));
+      });
+    });
+
     describe('Path.resolver', () => {
       type P = { foo: number };
       type C = t.CmdType<'Foo', P>;
@@ -30,7 +56,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
       });
 
-      it('custom paths', () => {
+      it('custom paths: {object}', () => {
         const resolve = Path.resolver({
           name: ['a'],
           params: ['x', 'y', 'p'],
@@ -61,6 +87,24 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           params,
           error: e,
         });
+      });
+
+      it('custom paths: [prepended]', () => {
+        const resolve = Path.resolver(['foo', 'bar']);
+
+        const counter = DEFAULTS.counter.create();
+        const count = counter.value;
+        const name = 'foo.bar';
+        const params: P = { foo: 0 };
+        const tx = 'tx.foo';
+        const cmd: t.CmdPathsObject = { name, params, counter, tx };
+        const obj = { foo: { bar: cmd } };
+
+        expect(resolve.name(obj)).to.eql(name);
+        expect(resolve.params(obj, {})).to.eql(params);
+        expect(resolve.counter(obj)).to.eql(counter);
+        expect(resolve.tx(obj)).to.eql(tx);
+        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
       });
 
       it('.params ← generates new object', () => {
@@ -141,12 +185,12 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       it('is.commandPaths', () => {
         const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
-        NOT.forEach((value) => expect(Path.is.commandPaths(value)).to.eql(false));
-        expect(Path.is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
+        NOT.forEach((value) => expect(Path.Is.commandPaths(value)).to.eql(false));
+        expect(Path.Is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
 
-        expect(Path.is.commandPaths(DEFAULTS.paths)).to.eql(true);
+        expect(Path.Is.commandPaths(DEFAULTS.paths)).to.eql(true);
         expect(
-          Path.is.commandPaths({
+          Path.Is.commandPaths({
             name: ['a'],
             params: ['x', 'y', 'p'],
             counter: ['z', 'n'],
@@ -154,7 +198,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           }),
         ).to.eql(true);
         expect(
-          Path.is.commandPaths({
+          Path.Is.commandPaths({
             name: ['a'],
             params: ['x', 'y', 'p'],
             counter: ['z', 'n'],

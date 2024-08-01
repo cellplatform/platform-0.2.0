@@ -8,10 +8,21 @@ type O = Record<string, unknown>;
  */
 export const Path = {
   /**
+   * Wrangle the paths object from various input types.
+   */
+  wrangle(input?: t.CmdPaths | t.ObjectPath) {
+    const def = DEFAULTS.paths;
+    if (!input) return def;
+    if (Array.isArray(input)) return Path.prepend(input);
+    return typeof input === 'object' ? input : def;
+  },
+
+  /**
    * Factory for a resolver that reads path locations from the given abstract document.
    * This might be the root document OR a lens within a document.
    */
-  resolver(paths: t.CmdPaths = DEFAULTS.paths) {
+  resolver(input?: t.CmdPaths | t.ObjectPath) {
+    const paths = Path.wrangle(input);
     const resolve = ObjectPath.resolve;
     const api = {
       paths,
@@ -77,11 +88,11 @@ export const Path = {
   /**
    * Flags
    */
-  is: {
+  Is: {
     commandPaths(input: any): input is t.CmdPaths {
       if (input === null || typeof input !== 'object') return false;
       const obj = input as t.CmdPaths;
-      const is = Path.is.stringArray;
+      const is = Path.Is.stringArray;
       return is(obj.counter) && is(obj.name) && is(obj.params) && is(obj.tx);
     },
 
