@@ -1,7 +1,7 @@
 import { Monaco } from '../..';
 import { describe, expect, it } from '../../test';
-import { SyncerIdentity, SyncerPath } from '../u.Syncer/u';
-import { Syncer, DEFAULTS, type t } from './common';
+import { Util } from '../u.Syncer/u';
+import { Cmd, DEFAULTS, Immutable, ObjectPath, Syncer, type t } from './common';
 
 describe('Monaco.Crdt.syncer', () => {
   it('api reference', () => {
@@ -10,19 +10,19 @@ describe('Monaco.Crdt.syncer', () => {
 
   describe('Identity', () => {
     it('Identity.format', () => {
-      expect(SyncerIdentity.format('foo')).to.eql('foo');
+      expect(Util.Identity.format('foo')).to.eql('foo');
     });
 
     it('Identity.format: <undefined>', () => {
-      const res = SyncerIdentity.format();
+      const res = Util.Identity.format();
       expect(res.startsWith('UNKNOWN.')).to.eql(true);
-      expect(SyncerIdentity.Is.unknown(res)).to.eql(true);
+      expect(Util.Identity.Is.unknown(res)).to.eql(true);
     });
 
     describe('Identity.Is', () => {
       it('Is.unknown', () => {
         const test = (value: string, expected: boolean) => {
-          const res = SyncerIdentity.Is.unknown(value);
+          const res = Util.Identity.Is.unknown(value);
           expect(res).to.eql(expected);
         };
         test('UNKNOWN.foo', true);
@@ -34,23 +34,28 @@ describe('Monaco.Crdt.syncer', () => {
     });
   });
 
-  describe('SyncerPaths', () => {
+  describe('Path', () => {
     describe('wrangle', () => {
-      it('undefined (default)', () => {
-        expect(SyncerPath.wrangle()).to.eql(DEFAULTS.paths);
-        expect(SyncerPath.wrangle(undefined)).to.eql(DEFAULTS.paths);
+      it('<undefined> (default)', () => {
+        expect(Util.Path.wrangle()).to.eql(DEFAULTS.paths);
+        expect(Util.Path.wrangle(undefined)).to.eql(DEFAULTS.paths);
       });
 
       it('{paths}', () => {
-        const paths: t.EditorPaths = { text: ['foo'], identity: ['.bar'] };
-        expect(SyncerPath.wrangle(paths)).to.eql(paths);
+        const paths: t.EditorPaths = {
+          text: ['foo'],
+          identity: ['bar'],
+          cmd: ['baz'],
+        };
+        expect(Util.Path.wrangle(paths)).to.eql(paths);
       });
 
       it('array (prefix)', () => {
         const prefix = ['foo', 'bar'];
-        expect(SyncerPath.wrangle(prefix)).to.eql({
+        expect(Util.Path.wrangle(prefix)).to.eql({
           text: ['foo', 'bar', 'text'],
-          identity: ['foo', 'bar', '.identity'],
+          cmd: ['foo', 'bar', '.tmp', 'cmd'],
+          identity: ['foo', 'bar', '.tmp', 'identity'],
         });
       });
     });
@@ -58,9 +63,25 @@ describe('Monaco.Crdt.syncer', () => {
     describe('identity', () => {
       it('root', () => {
         const id = 'foobar';
-        const res = SyncerPath.identity(id);
-        expect(res.root).to.eql(['.identity', id]);
+        const res = Util.Path.identity(id);
+        expect(res.root).to.eql(['.tmp', 'identity', id]);
       });
+    });
+  });
+
+  describe('Cmd', () => {
+    it('create (defaults)', () => {
+      const transport = Immutable.clonerRef({});
+      Util.Cmd.create(transport);
+      const obj = ObjectPath.resolve(transport.current, DEFAULTS.paths.cmd);
+      expect(Cmd.Is.validState(obj)).to.eql(true);
+    });
+
+    it('create: with custom paths (prepended)', () => {
+      const transport = Immutable.clonerRef({});
+      Util.Cmd.create(transport, { paths: ['foo'] });
+      const obj = ObjectPath.resolve(transport.current, ['foo', ...DEFAULTS.paths.cmd]);
+      expect(Cmd.Is.validState(obj)).to.eql(true);
     });
   });
 });
