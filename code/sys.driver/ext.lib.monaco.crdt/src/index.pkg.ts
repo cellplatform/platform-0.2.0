@@ -18,6 +18,7 @@ export const Pkg: ModuleDef = {
     'ext.lib.automerge': '0.0.0',
     'ext.lib.immer': '0.0.0',
     'ext.lib.monaco': '0.0.0',
+    'sys.cmd': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.util': '0.0.0',
   },

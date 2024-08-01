@@ -13,4 +13,5 @@ export { Monaco } from 'ext.lib.monaco';
 /**
  * @system
  */
+export { Cmd } from 'sys.cmd';
 export { Immutable, Json, ObjectPath, Path, rx, slug, Time } from 'sys.util';

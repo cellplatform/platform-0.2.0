@@ -22,7 +22,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     gap: css({
       height: 50,
       transform: 'rotate(90deg)',
-      opacity: 0.1,
+      opacity: 0.2,
       display: 'grid',
       placeItems: 'center',
     }),
