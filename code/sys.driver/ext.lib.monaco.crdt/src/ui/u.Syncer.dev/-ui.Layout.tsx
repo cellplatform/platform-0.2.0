@@ -1,6 +1,8 @@
-import { Color, css, Icons, type t } from './common';
+import { useEffect, useState } from 'react';
+import { Color, css, Icons, rx, Time, type t } from './common';
 
 export type LayoutProps = {
+  lens?: t.Lens | t.Doc;
   top: JSX.Element;
   bottom: JSX.Element;
   theme?: t.CommonTheme;
@@ -8,6 +10,27 @@ export type LayoutProps = {
 };
 
 export const Layout: React.FC<LayoutProps> = (props) => {
+  const { lens } = props;
+  const [syncing, setSyncing] = useState(false);
+
+  /**
+   * Lifecycle.
+   */
+  useEffect(() => {
+    const events = lens?.events();
+    let timer: (() => void) | undefined;
+    events?.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
+      timer?.();
+      setSyncing(true);
+      timer = Time.delay(1000, () => setSyncing(false)).cancel;
+    });
+    return events?.dispose;
+  }, [lens?.instance]);
+
+  /**
+   * Render.
+   */
+  const t = (ms: t.Msecs, ...attr: string[]) => attr.map((prop) => `${prop} ${ms}ms ease-in-out`);
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
@@ -22,15 +45,18 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     gap: css({
       height: 50,
       transform: 'rotate(90deg)',
-      opacity: 0.2,
       display: 'grid',
       placeItems: 'center',
+    }),
+    syncIcon: css({
+      opacity: syncing ? 1 : 0.2,
+      transition: t(syncing ? 100 : 800, 'opacity').join(','),
     }),
   };
 
   const elGap = (
     <div {...styles.gap}>
-      <Icons.Sync.Arrows size={32} />
+      <Icons.Sync.Arrows size={32} style={styles.syncIcon} />
     </div>
   );
 

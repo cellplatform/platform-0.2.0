@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Color, css, Monaco, rx, Syncer, type t } from './common';
 
+type LensInput = t.Lens | t.Doc;
+
 export type SampleEditorProps = {
   identity?: string;
-  lens?: t.Lens | t.Doc;
+  lens?: LensInput;
   focusOnLoad?: boolean;
   debugLabel?: string;
   enabled?: boolean;
@@ -11,7 +13,7 @@ export type SampleEditorProps = {
 };
 
 export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
-  const { lens, enabled = true, debugLabel, identity = 'Unknown' } = props;
+  const { lens, enabled = true, debugLabel, identity = 'UNKNOWN' } = props;
   const [ready, setReady] = useState<t.MonacoEditorReadyArgs>();
 
   /**
@@ -21,7 +23,8 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
     const { dispose$, dispose } = rx.disposable(ready?.dispose$);
     if (ready && lens) {
       const { monaco, editor } = ready;
-      Syncer.listen(monaco, editor, lens, { identity, dispose$ });
+      const syncer = Syncer.listen(monaco, editor, lens, { identity, dispose$ });
+
     }
     return dispose;
   }, [!!ready, lens?.instance]);
@@ -41,7 +44,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
       Absolute: [-22, 6, null, null],
       fontFamily: 'monospace',
       fontSize: 10,
-      opacity: 0.2,
+      opacity: 0.3,
     }),
   };
 
