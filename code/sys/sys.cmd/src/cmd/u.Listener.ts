@@ -107,8 +107,13 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
     },
 
     promise() {
-      const first$ = $.pipe(rx.take(1));
-      return new Promise<L>((resolve) => first$.subscribe(() => resolve(api)));
+      return new Promise<L>((resolve) => {
+        if (_status === 'Pending') {
+          $.pipe(rx.takeUntil(dispose$), rx.take(1)).subscribe(() => resolve(api));
+        } else {
+          resolve(api);
+        }
+      });
     },
 
     onComplete(fn) {

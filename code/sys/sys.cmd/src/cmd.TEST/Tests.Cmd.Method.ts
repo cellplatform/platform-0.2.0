@@ -175,6 +175,24 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           dispose();
         });
 
+        it('list → (delay:complete) → {promise} returns', async () => {
+          const { doc, dispose, dispose$ } = await setup();
+          const cmd = Cmd.create<C>(doc);
+          cmd.events(dispose$).on('add', (e) => cmd.invoke('add:res', sum(e.params), e.tx));
+
+          const method = cmd.method('add', 'add:res');
+          const res1 = method({ a: 2, b: 3 }, { timeout: 10 });
+
+          await Time.wait(30); // NB: ensure the request has already resolved before creating the promise.
+          const promise = res1.promise();
+          const res2 = await promise;
+
+          expect(res2.status).to.eql('Complete');
+          expect(res2.result?.sum).to.eql(5);
+
+          dispose();
+        });
+
         it('listen ← timeout', async () => {
           const { doc, dispose, dispose$ } = await setup();
           const cmd = Cmd.create<C>(doc);
