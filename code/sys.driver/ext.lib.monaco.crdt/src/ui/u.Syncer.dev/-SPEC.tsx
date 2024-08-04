@@ -34,8 +34,8 @@ export default Dev.describe(name, async (e) => {
   let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
   const identity: Identities = {
-    top: `${slug()}.top`,
-    bottom: `${slug()}.bottom`,
+    top: `${slug()}`,
+    bottom: `${slug()}`,
   } as const;
 
   const getLens = () => {
@@ -80,7 +80,7 @@ export default Dev.describe(name, async (e) => {
             <SampleEditor
               identity={identity[debugLabel]}
               debugLabel={debugLabel}
-              lens={state.useLens ? getLens() : doc}
+              lens={lensProp}
               enabled={!!doc}
               theme={theme.name}
               {...props}
@@ -88,9 +88,18 @@ export default Dev.describe(name, async (e) => {
           );
         };
 
+        const lensProp = state.useLens ? getLens() : doc;
         const top = editor('top', { focusOnLoad: true });
         const bottom = editor('bottom');
-        return <Layout top={top} bottom={bottom} theme={theme.name} style={{ backgroundColor }} />;
+        return (
+          <Layout
+            lens={lensProp}
+            top={top}
+            bottom={bottom}
+            theme={theme.name}
+            style={{ backgroundColor }}
+          />
+        );
       });
   });
 
@@ -100,6 +109,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row((e) => {
       const state = State.current;
+
       return (
         <CrdtInfo
           stateful={true}
@@ -110,7 +120,7 @@ export default Dev.describe(name, async (e) => {
               ref: doc,
               uri: { head: true },
               object: {
-                expand: { level: 1 },
+                expand: { level: 2 },
                 visible: state.objectOpen,
                 onToggleClick: (e) => State.change((d) => Dev.toggle(d, 'objectOpen')),
               },
@@ -199,7 +209,7 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<D>((e) => {
       const debug = State.current;
       const data = { debug };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return <Dev.Object name={name} data={data} expand={{ level: 1 }} fontSize={11} />;
     });
   });
 });
