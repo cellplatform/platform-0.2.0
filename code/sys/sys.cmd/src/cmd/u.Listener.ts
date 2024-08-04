@@ -18,7 +18,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   cmd: t.Cmd<Res>,
   args: Args<Req, Res>,
 ): t.CmdResponseListener<Req, Res> {
-  const { tx, timeout = DEFAULTS.timeout } = args;
+  const { req, tx, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
@@ -89,7 +89,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   const api: L = {
     $,
     tx,
-    req: args.req,
+    req,
 
     get ok() {
       if (_status === 'Error' || _status === 'Timeout') return false;
