@@ -9,8 +9,8 @@ export const View: React.FC<P> = (props) => {
   /**
    * Render
    */
-  const t = (prop: string, time: t.Msecs = 50) => `${prop} ${time}ms`;
-  const transition = [t('opacity')].join(', ');
+  const t = (ms: t.Msecs, ...attr: string[]) => attr.map((prop) => `${prop} ${ms}ms ease-in-out`);
+  const transition = t(50, 'opacity');
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
