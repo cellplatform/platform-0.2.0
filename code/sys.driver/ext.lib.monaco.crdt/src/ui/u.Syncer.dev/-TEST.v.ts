@@ -1,6 +1,6 @@
 import { Monaco } from '../..';
 import { describe, expect, it } from '../../test';
-import { Util } from '../u.Syncer/u';
+import { CmdUtil, Util } from '../u.Syncer/u';
 import { Cmd, DEFAULTS, Immutable, ObjectPath, Syncer, type t } from './common';
 
 describe('Monaco.Crdt.syncer', () => {
@@ -82,6 +82,13 @@ describe('Monaco.Crdt.syncer', () => {
       Util.Cmd.create(transport, { paths: ['foo'] });
       const obj = ObjectPath.resolve(transport.current, ['foo', ...DEFAULTS.paths.cmd]);
       expect(Cmd.Is.validState(obj)).to.eql(true);
+    });
+
+    it('toCmd', () => {
+      const transport = Immutable.clonerRef({});
+      const methods = Util.Cmd.create(transport);
+      const cmd = CmdUtil.toCmd(methods);
+      expect(Cmd.Is.cmd(cmd)).to.eql(true);
     });
   });
 });
