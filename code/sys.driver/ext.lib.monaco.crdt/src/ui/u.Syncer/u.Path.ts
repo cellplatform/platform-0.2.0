@@ -1,16 +1,16 @@
-import { DEFAULTS, ObjectPath, type t } from './common';
+import { DEFAULTS, ObjectPath, Value, type t } from './common';
 
 /**
  * Helpers for working with paths.
  */
-export const SyncerPath = {
+export const PathUtil = {
   /**
    * Wrangle a valid set of paths for the editor from a variety of flexible inputs.
    */
   wrangle(input?: t.EditorPaths | t.ObjectPath): t.EditorPaths {
     const def = DEFAULTS.paths;
     if (!input) return def;
-    if (Array.isArray(input)) return SyncerPath.prepend(def, input);
+    if (Array.isArray(input)) return PathUtil.prepend(def, input);
     return typeof input === 'object' ? input : def;
   },
 
@@ -37,5 +37,15 @@ export const SyncerPath = {
       root,
       selection: path('selection'),
     } as const;
+  },
+
+  /**
+   * Matches
+   */
+  includesIdentity(patches: t.Patch[], options: { paths?: t.EditorPaths; identity?: string } = {}) {
+    const paths = PathUtil.wrangle(options.paths);
+    const identityPath = paths.identity;
+    if (options.identity) identityPath.push(options.identity);
+    return patches.some((p) => Value.Array.compare(p.path).startsWith(identityPath));
   },
 } as const;

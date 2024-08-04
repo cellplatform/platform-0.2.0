@@ -1,15 +1,15 @@
-import { SyncerCmd } from './u.Cmd';
-import { SyncerIdentity } from './u.Identity';
-import { SyncerLens } from './u.Lens';
-import { SyncerPatch } from './u.Patch';
-import { SyncerPath } from './u.Path';
+import { CmdUtil } from './u.Cmd';
+import { IdentityUtil } from './u.Identity';
+import { LensUtil } from './u.Lens';
+import { PatchUtil } from './u.Patch';
+import { PathUtil } from './u.Path';
 
-export { SyncerCmd, SyncerIdentity, SyncerLens, SyncerPatch, SyncerPath };
+export { CmdUtil, IdentityUtil, LensUtil, PatchUtil, PathUtil };
 
 export const Util = {
-  Identity: SyncerIdentity,
-  Lens: SyncerLens,
-  Patch: SyncerPatch,
-  Path: SyncerPath,
-  Cmd: SyncerCmd,
+  Identity: IdentityUtil,
+  Lens: LensUtil,
+  Patch: PatchUtil,
+  Path: PathUtil,
+  Cmd: CmdUtil,
 } as const;

@@ -3,7 +3,7 @@ import { type t } from './common';
 /**
  * Helpers for updating a Monaco editor from JSON patches.
  */
-export const SyncerPatch = {
+export const PatchUtil = {
   init(monaco: t.Monaco, editor: t.MonacoCodeEditor) {
     return {
       /**

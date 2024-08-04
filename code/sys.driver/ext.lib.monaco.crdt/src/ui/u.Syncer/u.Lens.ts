@@ -2,7 +2,7 @@ import { Doc, ObjectPath, type t } from './common';
 
 type O = Record<string, unknown>;
 
-export const SyncerLens = {
+export const LensUtil = {
   /**
    * Text helpers
    */

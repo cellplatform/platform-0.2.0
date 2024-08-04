@@ -5,7 +5,7 @@ const UNKNOWN = 'UNKNOWN.';
 /**
  * Helpers for working with identity.
  */
-export const SyncerIdentity = {
+export const IdentityUtil = {
   /**
    * Resolve identity value.
    */

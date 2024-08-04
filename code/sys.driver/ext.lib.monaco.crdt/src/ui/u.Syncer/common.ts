@@ -11,7 +11,12 @@ const paths: t.EditorPaths = {
   identity: ['.tmp', 'identity'],
 };
 
+const Symbols = {
+  cmd: Symbol('cmd'),
+};
+
 export const DEFAULTS = {
   strategy,
   paths,
+  Symbols,
 } as const;
