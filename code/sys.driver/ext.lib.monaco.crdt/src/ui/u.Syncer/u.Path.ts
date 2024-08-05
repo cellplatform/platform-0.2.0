@@ -30,10 +30,11 @@ export const PathUtil = {
    * Helpers for a specific identity.
    */
   identity(identity: string, paths: t.EditorPaths = DEFAULTS.paths) {
-    const root = [...paths.identity, identity];
-    const path = (suffix: keyof t.EditorIdentityState): t.ObjectPath => [...root, suffix];
+    const self = [...paths.identity, identity];
+    const path = (suffix: keyof t.EditorIdentityState): t.ObjectPath => [...self, suffix];
     return {
-      root,
+      identity,
+      self,
       selections: path('selections'),
     } as const;
   },
