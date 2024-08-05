@@ -65,7 +65,7 @@ export default Dev.describe(name, (e) => {
 
               editor = e.editor;
               monaco = e.monaco;
-              carets = EditorCarets(editor);
+              carets = EditorCarets.create(editor);
               carets.$.subscribe((e) => ctx.redraw());
 
               const asRange = Wrangle.asRange;
@@ -194,7 +194,7 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Carets', (dev) => {
-      const getCaret = () => carets.id('foo.bar');
+      const getCaret = () => carets.identity('foo.bar');
 
       const changeSelection = (
         label: string,

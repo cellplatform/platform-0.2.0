@@ -5,7 +5,7 @@ export type EditorCarets = t.Disposable & {
   readonly editor: t.MonacoCodeEditor;
   readonly current: EditorCaret[];
   readonly disposed: boolean;
-  id(id: string): EditorCaret;
+  identity(id: string): EditorCaret;
   clear(): EditorCarets;
 };
 
