@@ -84,7 +84,7 @@ export default Dev.describe(name, (e) => {
             }}
             onChange={(e) => {
               console.info(`⚡️ onChange:`, e);
-              State.props.change((d) => (d.text = e.state.text));
+              State.props.change((d) => (d.text = e.editor.getValue()));
             }}
           />
         );

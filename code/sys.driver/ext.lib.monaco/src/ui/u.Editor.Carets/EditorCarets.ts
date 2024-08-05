@@ -13,6 +13,7 @@ export const EditorCarets = {
   ): t.EditorCarets {
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;
+
     const handlerDidDispose = editor.onDidDispose(dispose);
     dispose$.subscribe(() => {
       handlerDidDispose.dispose();

@@ -104,14 +104,11 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
 
   const handleChange: OnChange = (text = '', event) => {
     const editor = editorRef.current;
-    if (!props.onChange || !editor) return;
+    const monaco = monacoRef.current;
+    if (!props.onChange || !editor || !monaco) return;
 
     updateTextState(editor);
-    const selections = editor.getSelections() || [];
-    props.onChange({
-      event,
-      state: { text, selections },
-    });
+    props.onChange({ event, monaco, editor });
   };
 
   /**

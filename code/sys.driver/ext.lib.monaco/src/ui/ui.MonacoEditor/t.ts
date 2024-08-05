@@ -55,5 +55,6 @@ export type MonacoEditorDisposedArgs = {
 export type MonacoEditorChangeHandler = (e: MonacoEditorChangeArgs) => void;
 export type MonacoEditorChangeArgs = {
   readonly event: monaco.editor.IModelContentChangedEvent;
-  readonly state: t.EditorState;
+  readonly editor: MonacoCodeEditor;
+  readonly monaco: Monaco;
 };
