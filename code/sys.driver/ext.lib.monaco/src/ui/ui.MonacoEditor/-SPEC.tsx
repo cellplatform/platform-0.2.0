@@ -1,4 +1,5 @@
 import { DEFAULTS, MonacoEditor } from '.';
+import { Monaco } from '../..';
 import { Dev, EditorCarets, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
 import { CODE_SAMPLES } from './-sample.code';
 
@@ -247,6 +248,10 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       color('red');
       color('blue');
+      dev.button('color: <next>', () => {
+        const color = Monaco.Carets.Color.next();
+        getCaret().change({ color });
+      });
       dev.hr(-1, 5);
       dev.button((btn) =>
         btn

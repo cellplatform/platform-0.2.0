@@ -1,12 +1,15 @@
 import { rx, type t } from '../common';
-import { decoration } from './Decoration';
+import { Color, decoration } from './u';
 
 /**
  * Manages a set of carets for an editor.
  */
 export const EditorCarets = {
-  decoration,
+  Color,
 
+  /**
+   * Factory.
+   */
   create(
     editor: t.MonacoCodeEditor,
     options: { dispose$?: t.Observable<any> } = {},

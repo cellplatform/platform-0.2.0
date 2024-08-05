@@ -1,10 +1,15 @@
 import { Is, R, rx, Wrangle, type t } from '../common';
-import { DecorationStyle } from './DecorationStyle';
+import { Color } from './u.Color';
+import { DecorationStyle } from './u.Decoration.Style';
 
 /**
  * Manages caret/selection(s) decoration within an editor.
  */
-export function decoration(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
+export function decoration(
+  editor: t.MonacoCodeEditor,
+  id: string,
+  options: { color?: string } = {},
+): t.EditorCaret {
   const life = rx.lifecycle();
   const { dispose, dispose$ } = life;
   dispose$.subscribe(() => {
@@ -15,7 +20,7 @@ export function decoration(editor: t.MonacoCodeEditor, id: string): t.EditorCare
     $.complete();
   });
 
-  let _color = 'red';
+  let _color = options.color ?? Color.next();
   let _opacity = 0.6;
   let _refs: string[] = [];
   let _selections: t.EditorRange[] = [];

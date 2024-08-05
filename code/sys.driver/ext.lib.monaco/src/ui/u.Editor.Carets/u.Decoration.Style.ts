@@ -21,7 +21,7 @@ export const DecorationStyle = {
           border-right: 2px solid ${caret.color};
         }
         ${`.${editorSelector} .${api.className.selection}`} {
-          opacity: ${0.05};
+          opacity: ${0.15};
           background-color: ${caret.color};
         }
       `;
