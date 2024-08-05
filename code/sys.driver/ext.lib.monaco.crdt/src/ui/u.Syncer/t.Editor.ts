@@ -1,5 +1,6 @@
 import type { t } from './common';
 
+export type EditorIdentityString = string;
 export type EditorUpdateStrategy = 'Splice' | 'Overwrite';
 
 /**
@@ -14,6 +15,13 @@ export type EditorPaths = {
 /**
  * The transient editor state of a single identity (aka. "user").
  */
+export type EditorIdentities = { [id: string]: EditorIdentityState };
 export type EditorIdentityState = {
-  selection?: t.Selection;
+  selections?: t.Selection[];
+};
+
+export type EditorIdentityStateChange = {
+  readonly identity: string;
+  readonly before: EditorIdentityState;
+  readonly after: EditorIdentityState;
 };

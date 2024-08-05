@@ -1,10 +1,13 @@
-import { type t } from './common';
+import { Value, type t } from './common';
+import { PathUtil } from './u.Path';
 
-/**
- * Helpers for updating a Monaco editor from JSON patches.
- */
+type PatchInput = t.Patch | t.Patch[];
+
 export const PatchUtil = {
-  init(monaco: t.Monaco, editor: t.MonacoCodeEditor) {
+  /**
+   * Helpers for updating a Monaco editor from JSON patches.
+   */
+  monaco(monaco: t.Monaco, editor: t.MonacoCodeEditor) {
     return {
       /**
        * Splice
@@ -58,5 +61,41 @@ export const PatchUtil = {
         editor.executeEdits(source, [operation]);
       },
     } as const;
+  },
+
+  /**
+   * Matches
+   */
+  Includes: {
+    identity(input: PatchInput, options: { paths?: t.EditorPaths; identity?: string } = {}) {
+      const patches = wrangle.patches(input);
+      const paths = PathUtil.wrangle(options.paths);
+      const path = [...paths.identity];
+      if (options.identity) path.push(options.identity);
+      return patches.some((p) => Value.Array.compare(p.path).startsWith(path));
+    },
+
+    selection(input: PatchInput) {
+      const patches = wrangle.patches(input);
+      return patches.some((p) => PathUtil.Is.selections(p.path));
+    },
+  },
+
+  /**
+   * Path extraction
+   */
+  extractIdentity(patches: t.Patch[], options: { paths?: t.EditorPaths } = {}) {
+    const paths = PathUtil.wrangle(options.paths);
+    const first = patches.find((p) => Value.Array.compare(p.path).startsWith(paths.identity));
+    return String(first ? first.path[paths.identity.length] : '');
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  patches(input: PatchInput): t.Patch[] {
+    return Array.isArray(input) ? input : [input];
   },
 } as const;

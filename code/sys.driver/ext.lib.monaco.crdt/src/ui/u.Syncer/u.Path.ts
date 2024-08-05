@@ -1,4 +1,4 @@
-import { DEFAULTS, ObjectPath, Value, type t } from './common';
+import { DEFAULTS, ObjectPath, type t } from './common';
 
 /**
  * Helpers for working with paths.
@@ -30,22 +30,21 @@ export const PathUtil = {
    * Helpers for a specific identity.
    */
   identity(identity: string, paths: t.EditorPaths = DEFAULTS.paths) {
-    type T = t.EditorIdentityState;
     const root = [...paths.identity, identity];
-    const path = (suffix: keyof T): t.ObjectPath => [...root, suffix];
+    const path = (suffix: keyof t.EditorIdentityState): t.ObjectPath => [...root, suffix];
     return {
       root,
-      selection: path('selection'),
+      selections: path('selections'),
     } as const;
   },
 
   /**
-   * Matches
+   * Flags
    */
-  includesIdentity(patches: t.Patch[], options: { paths?: t.EditorPaths; identity?: string } = {}) {
-    const paths = PathUtil.wrangle(options.paths);
-    const identityPath = paths.identity;
-    if (options.identity) identityPath.push(options.identity);
-    return patches.some((p) => Value.Array.compare(p.path).startsWith(identityPath));
+  Is: {
+    selections(path: t.ObjectPath) {
+      const name: keyof t.EditorIdentityState = 'selections';
+      return path[path.length - 2] === name;
+    },
   },
 } as const;

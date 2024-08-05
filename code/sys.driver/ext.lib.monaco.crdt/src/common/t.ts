@@ -10,7 +10,6 @@ export type { Observable } from 'rxjs';
 export type { Doc, Lens, Store, StoreIndex, StoreIndexDb } from 'ext.lib.automerge/src/types';
 export type {
   EditorRange,
-  EditorState,
   Monaco,
   MonacoCodeEditor,
   MonacoEditorProps,
