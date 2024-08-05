@@ -33,10 +33,7 @@ export default Dev.describe(name, async (e) => {
   let doc: t.Doc | undefined;
   let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  const identity: Identities = {
-    top: `${slug()}`,
-    bottom: `${slug()}`,
-  } as const;
+  const identity: Identities = { top: `${slug()}`, bottom: `${slug()}` } as const;
 
   const getLens = () => {
     if (!doc) return;
@@ -47,16 +44,23 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const sample = SampleCrdt.dev(db.repo.store, State);
-    doc = await sample.get();
 
     const debug$ = State.events().changed$;
     rx.merge(debug$)
       .pipe(rx.debounceTime(1000))
-      .subscribe(() => (local.state = Json.stringify(State.current)));
+      .subscribe(() => {
+        console.group('🌳 ');
+
+        console.log('store state', State.current);
+        console.groupEnd();
+        local.state = Json.stringify(State.current);
+      });
     rx.merge(debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
+
+    const sample = SampleCrdt.dev(db.repo.store, State);
+    doc = await sample.get();
 
     const getBackgroundColor = () => {
       const theme = Color.theme(State.current.theme);
@@ -109,7 +113,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.row((e) => {
       const state = State.current;
-
       return (
         <CrdtInfo
           stateful={true}

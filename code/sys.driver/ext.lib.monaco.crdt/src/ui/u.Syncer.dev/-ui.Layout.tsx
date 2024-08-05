@@ -18,11 +18,11 @@ export const Layout: React.FC<LayoutProps> = (props) => {
    */
   useEffect(() => {
     const events = lens?.events();
-    let timer: (() => void) | undefined;
+    let reset: (() => void) | undefined;
     events?.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
-      timer?.();
+      reset?.();
       setSyncing(true);
-      timer = Time.delay(1000, () => setSyncing(false)).cancel;
+      reset = Time.delay(1000, () => setSyncing(false)).cancel;
     });
     return events?.dispose;
   }, [lens?.instance]);
