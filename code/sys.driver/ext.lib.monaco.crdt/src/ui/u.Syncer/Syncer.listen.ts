@@ -1,6 +1,6 @@
 import { calculateDiff } from './-tmp.diff';
 
-import { Monaco, DEFAULTS, ObjectPath, Path, Pkg, rx, type t } from './common';
+import { DEFAULTS, Monaco, ObjectPath, Path, Pkg, rx, type t } from './common';
 import { SyncerCmd } from './Syncer.Cmd';
 import { Util } from './u';
 
@@ -38,6 +38,9 @@ export function listen(
     editor.setValue('');
   });
 
+  /**
+   * Editor <Cmd>'s
+   */
   const cmd = Util.Cmd.create(lens, { paths });
   SyncerCmd.listen(cmd, { identity, paths, dispose$ });
 
@@ -107,11 +110,15 @@ export function listen(
    * CRDT: Selection → Keep editor carets in sync.
    */
   const carets = Monaco.Carets.create(editor, { dispose$ });
-  identity$.pipe(rx.filter((e) => e.identity !== identity)).subscribe((e) => {
-    console.log(identity, e);
-    const selections = e.after.selections;
-    carets.identity(e.identity).change({ selections });
-  });
+  identity$
+    .pipe(
+      rx.filter((e) => e.identity !== identity),
+      rx.filter((e) => !!e.after?.selections),
+    )
+    .subscribe((e) => {
+      const selections = e.after.selections;
+      carets.identity(e.identity).change({ selections });
+    });
 
   /**
    * Editor: text changed.

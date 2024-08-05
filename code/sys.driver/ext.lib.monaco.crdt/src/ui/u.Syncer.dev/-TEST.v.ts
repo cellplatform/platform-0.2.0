@@ -61,10 +61,17 @@ describe('Monaco.Crdt.syncer', () => {
     });
 
     describe('identity', () => {
-      it('root', () => {
-        const id = 'foobar';
-        const res = Util.Path.identity(id);
-        expect(res.root).to.eql(['.tmp', 'identity', id]);
+      it('identity.self', () => {
+        const identity = 'bob';
+        const res = Util.Path.identity(identity);
+        expect(res.self).to.eql(['.tmp', 'identity', identity]);
+        expect(res.identity).to.eql(identity);
+      });
+
+      it('identity.selections', () => {
+        const identity = 'bob';
+        const res = Util.Path.identity(identity);
+        expect(res.selections).to.eql(['.tmp', 'identity', identity, 'selections']);
       });
     });
   });
