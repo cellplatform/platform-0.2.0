@@ -1,15 +1,14 @@
 import type { t } from '../common';
 
-export type EditorCarets = t.Disposable & {
+export type EditorCarets = t.Lifecycle & {
   readonly $: t.Observable<EditorCaretChanged>;
   readonly editor: t.MonacoCodeEditor;
   readonly current: EditorCaret[];
-  readonly disposed: boolean;
   identity(id: string): EditorCaret;
   clear(): EditorCarets;
 };
 
-export type EditorCaret = t.Disposable & {
+export type EditorCaret = t.Lifecycle & {
   readonly $: t.Observable<EditorCaretChanged>;
   readonly id: string;
   readonly color: string;

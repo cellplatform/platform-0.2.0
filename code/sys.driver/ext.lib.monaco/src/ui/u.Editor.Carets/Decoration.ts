@@ -1,13 +1,13 @@
-import { Is, R, rx, t, Wrangle } from '../common';
-import { DecorationStyle } from './Decoration.style';
+import { Is, R, rx, Wrangle, type t } from '../common';
+import { DecorationStyle } from './DecorationStyle';
 
 /**
  * Manages caret/selection(s) decoration within an editor.
  */
-export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
-  const { dispose, dispose$ } = rx.disposable();
+export function decoration(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
+  const life = rx.lifecycle();
+  const { dispose, dispose$ } = life;
   dispose$.subscribe(() => {
-    _isDisposed = true;
     handlerDidChangeContent.dispose();
     Decorations.clear();
     style.dispose();
@@ -15,7 +15,6 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     $.complete();
   });
 
-  let _isDisposed = false;
   let _color = 'red';
   let _opacity = 0.6;
   let _refs: string[] = [];
@@ -26,10 +25,10 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     $.next({
       id,
       current: [...api.selections],
-      disposed: _isDisposed,
+      disposed: life.disposed,
     });
 
-  const style = DecorationStyle(editor, id);
+  const style = DecorationStyle.create(editor, id);
   const model = editor.getModel()!;
   if (!model) throw new Error(`The editor did not return a text-model`);
 
@@ -155,7 +154,7 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     dispose,
     dispose$,
     get disposed() {
-      return _isDisposed;
+      return life.disposed;
     },
   };
 

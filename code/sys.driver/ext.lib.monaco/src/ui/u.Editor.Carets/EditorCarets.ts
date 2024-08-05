@@ -1,10 +1,12 @@
 import { rx, type t } from '../common';
-import { CaretDecoration } from './Decoration';
+import { decoration } from './Decoration';
 
 /**
  * Manages a set of carets for an editor.
  */
 export const EditorCarets = {
+  decoration,
+
   create(
     editor: t.MonacoCodeEditor,
     options: { dispose$?: t.Observable<any> } = {},
@@ -31,7 +33,7 @@ export const EditorCarets = {
 
       identity(id: string): t.EditorCaret {
         if (carets.has(id)) return carets.get(id)!;
-        const caret = CaretDecoration(editor, id);
+        const caret = decoration(editor, id);
         carets.set(id, caret);
         caret.$.subscribe((e) => $.next(e));
         caret.dispose$.subscribe(() => carets.delete(id));
