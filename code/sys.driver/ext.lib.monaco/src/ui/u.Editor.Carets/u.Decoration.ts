@@ -52,12 +52,12 @@ export function decoration(
     const decorations = selections.reduce((acc, next) => {
       acc.push({
         range: Wrangle.toRangeEnd(next),
-        options: { className: style.className.caret },
+        options: { className: style.class.caret },
       });
       if (!Is.singleCharRange(next)) {
         acc.push({
           range: next,
-          options: { className: style.className.selection },
+          options: { className: style.class.selection },
         });
       }
       return acc;

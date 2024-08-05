@@ -1,6 +1,9 @@
-import { DEFAULTS, t, Wrangle } from '../common';
+import { DEFAULTS, Wrangle, type t } from '../common';
 
 export const DecorationStyle = {
+  /**
+   * Factory.
+   */
   create(editor: t.MonacoCodeEditor, id: string) {
     const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
     const style = document.createElement('style');
@@ -9,18 +12,18 @@ export const DecorationStyle = {
     document.head.appendChild(style);
 
     const api = {
-      className: {
+      class: {
         caret: `caret-${id.replace(/\./g, '-')}`,
         selection: `selection-${id.replace(/\./g, '-')}`,
       },
 
       update(caret: t.EditorCaret) {
         style.innerHTML = `
-        ${`.${editorSelector} .${api.className.caret}`} {
+        ${`.${editorSelector} .${api.class.caret}`} {
           opacity: ${caret.opacity};
           border-right: 2px solid ${caret.color};
         }
-        ${`.${editorSelector} .${api.className.selection}`} {
+        ${`.${editorSelector} .${api.class.selection}`} {
           opacity: ${0.15};
           background-color: ${caret.color};
         }

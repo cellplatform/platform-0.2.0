@@ -1,4 +1,4 @@
-import { describe, it, expect, t, DEFAULTS } from '../test';
+import { DEFAULTS, describe, expect, it, type t } from '../test';
 import { Wrangle } from './Wrangle';
 
 const { NULL_RANGE } = DEFAULTS;
