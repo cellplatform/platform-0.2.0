@@ -65,7 +65,7 @@ export default Dev.describe(name, (e) => {
 
               editor = e.editor;
               monaco = e.monaco;
-              carets = EditorCarets.create(editor);
+              carets = e.carets;
               carets.$.subscribe((e) => ctx.redraw());
 
               const asRange = Wrangle.asRange;

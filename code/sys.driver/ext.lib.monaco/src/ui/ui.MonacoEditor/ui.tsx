@@ -4,6 +4,7 @@ import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
 import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
 import { Theme } from './u.Theme';
+import { EditorCarets } from '../u.Editor.Carets';
 
 const def = DEFAULTS.props;
 
@@ -83,12 +84,22 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const handleMount: OnMount = (ed, monaco) => {
     Theme.init(monaco);
     monacoRef.current = monaco;
+
     const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     updateOptions(editor);
     updateTextState(editor);
     if (enabled && props.focusOnLoad) editor.focus();
+
+    let _carets: t.EditorCarets;
     const dispose$ = disposeRef.current;
-    props.onReady?.({ editor, monaco, dispose$ });
+    props.onReady?.({
+      editor,
+      monaco,
+      dispose$,
+      get carets() {
+        return _carets || (_carets = EditorCarets.create(editor));
+      },
+    });
   };
 
   const handleChange: OnChange = (text = '', event) => {
