@@ -37,8 +37,7 @@ export const Events = {
       const $ = events.changed$.pipe(
         rx.map((e) => {
           const { patches, after } = e;
-          const doc = resolve.toObject(after);
-          return { patches, doc };
+          return { patches, doc: resolve.toObject(after) };
         }),
       );
 
