@@ -1,12 +1,11 @@
 import { calculateDiff } from './-tmp.diff';
 
-import { Time, DEFAULTS, Monaco, ObjectPath, Pkg, rx, type t } from './common';
+import { Monaco, ObjectPath, Pkg, rx, type t } from './common';
 import { SyncerCmd } from './Syncer.Cmd';
 import { Util } from './u';
 
 type Options = {
   debugLabel?: string;
-  strategy?: t.EditorUpdateStrategy | (() => t.EditorUpdateStrategy | undefined);
   paths?: t.EditorPaths | t.ObjectPath;
   identity?: string; // Unique identifier (URI) representing the user/editor.
   dispose$?: t.UntilObservable;
@@ -126,15 +125,7 @@ export function listen(
       const isReplace = startLineNumber !== endLineNumber || startColumn !== endColumn;
       const index = change.rangeOffset;
       const deleteCount = isReplace ? change.rangeLength : 0;
-
-      const strategy = api.strategy;
-      if (strategy === 'Splice') {
-        lens.change((d) => Text.splice(d, index, deleteCount, change.text));
-      }
-
-      if (strategy === 'Overwrite') {
-        lens.change((d) => Text.replace(d, editor.getValue()));
-      }
+      lens.change((d) => Text.splice(d, index, deleteCount, change.text));
     });
   });
 
@@ -157,13 +148,6 @@ export function listen(
     cmd,
     identity,
     changed: { identity$ },
-
-    get strategy() {
-      const { strategy } = options;
-      if (typeof strategy === 'string') return strategy;
-      if (typeof strategy === 'function') strategy() ?? DEFAULTS.strategy;
-      return DEFAULTS.strategy;
-    },
 
     /**
      * Lifecycle.

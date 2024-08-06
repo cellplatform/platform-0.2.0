@@ -6,14 +6,12 @@ import { Doc, ObjectPath, rx, type t } from './common';
 type D = {
   theme?: t.CommonTheme;
   docuri?: string;
-  strategy?: t.EditorUpdateStrategy;
   objectOpen?: boolean;
   useLens?: boolean;
   cmdTop?: boolean;
 };
 const initial: D = {
   theme: 'Dark',
-  strategy: 'Splice',
   cmdTop: false,
 };
 
@@ -88,7 +86,6 @@ export default Dev.describe(name, async (e) => {
               {...props}
               onReady={(e) => {
                 console.info(`⚡️ SampleEditor.onReady`, e);
-
                 syncers[debugLabel] = e.syncer;
               }}
             />
@@ -136,27 +133,10 @@ export default Dev.describe(name, async (e) => {
       );
     });
 
-    dev.hr(5, 20);
-
-    dev.section((dev) => {
-      Dev.Theme.immutable(dev, State);
-      dev.hr(-1, 5);
-      const strategy = (strategy: t.EditorUpdateStrategy) => {
-        const current = () => State.current.strategy;
-        dev.button((btn) => {
-          btn
-            .label(`strategy: "${strategy}"`)
-            .right(() => (current() === strategy ? '🌳' : ''))
-            .onClick(() => State.change((d) => (d.strategy = strategy)));
-        });
-      };
-      strategy('Splice');
-      strategy('Overwrite');
-    });
-
-    dev.hr(5, 20);
-    dev.TODO('"Splice" replacement not stable');
-    dev.hr(5, 20);
+    /**
+     * TODO 🐷
+     */
+    dev.hr(5, 20).TODO('"Splice" replacement not stable').hr(5, 20);
 
     dev.section('Sample State', (dev) => {
       dev.button((btn) => {

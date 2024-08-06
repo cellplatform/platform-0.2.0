@@ -9,7 +9,6 @@ export type * from './t.Editor';
 export type SyncListener = t.Lifecycle & {
   readonly cmd: t.SyncCmdMethods;
   readonly identity: t.IdString;
-  readonly strategy: t.EditorUpdateStrategy;
   readonly changed: t.SyncListenerChanged;
 };
 

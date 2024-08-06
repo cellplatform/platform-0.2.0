@@ -4,7 +4,6 @@ export * from '../common';
 /**
  * Constants
  */
-const strategy: t.EditorUpdateStrategy = 'Splice';
 const paths: t.EditorPaths = {
   text: ['text'],
   cmd: ['.tmp', 'cmd'],
@@ -16,7 +15,6 @@ const Symbols = {
 };
 
 export const DEFAULTS = {
-  strategy,
   paths,
   Symbols,
 } as const;

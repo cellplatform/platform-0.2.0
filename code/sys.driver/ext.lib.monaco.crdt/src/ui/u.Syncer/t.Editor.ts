@@ -1,7 +1,6 @@
 import type { t } from './common';
 
 export type EditorIdentityString = string;
-export type EditorUpdateStrategy = 'Splice' | 'Overwrite';
 
 /**
  * Definition of paths to the editor state object.
