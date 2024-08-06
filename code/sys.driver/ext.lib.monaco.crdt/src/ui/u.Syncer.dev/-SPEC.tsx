@@ -1,7 +1,7 @@
 import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt, slug } from '../../test.ui';
 import { SampleEditor, type SampleEditorProps } from './-ui.Editor';
 import { Layout } from './-ui.Layout';
-import { DEFAULTS, Doc, ObjectPath, rx, type t } from './common';
+import { Doc, ObjectPath, rx, type t } from './common';
 
 type D = {
   theme?: t.CommonTheme;
@@ -13,8 +13,8 @@ type D = {
 };
 const initial: D = {
   theme: 'Dark',
-  useTopCommand: false,
   render: true,
+  useTopCommand: false,
 };
 
 type ObjectWithAllKeys<T extends string, V = any> = { [K in T]: V };
