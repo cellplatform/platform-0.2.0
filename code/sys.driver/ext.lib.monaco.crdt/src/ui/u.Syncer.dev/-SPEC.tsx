@@ -4,15 +4,17 @@ import { Layout } from './-ui.Layout';
 import { Doc, ObjectPath, rx, type t } from './common';
 
 type D = {
+  theme?: t.CommonTheme;
   docuri?: string;
   strategy?: t.EditorUpdateStrategy;
   objectOpen?: boolean;
   useLens?: boolean;
-  theme?: t.CommonTheme;
+  cmdTop?: boolean;
 };
 const initial: D = {
   theme: 'Dark',
   strategy: 'Splice',
+  cmdTop: false,
 };
 
 type ObjectWithAllKeys<T extends string, V = any> = { [K in T]: V };
@@ -50,13 +52,7 @@ export default Dev.describe(name, async (e) => {
     const debug$ = State.events().changed$;
     rx.merge(debug$)
       .pipe(rx.debounceTime(1000))
-      .subscribe(() => {
-        console.group('🌳 ');
-
-        console.log('store state', State.current);
-        console.groupEnd();
-        local.state = Json.stringify(State.current);
-      });
+      .subscribe(() => (local.state = Json.stringify(State.current)));
     rx.merge(debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
@@ -92,6 +88,7 @@ export default Dev.describe(name, async (e) => {
               {...props}
               onReady={(e) => {
                 console.info(`⚡️ SampleEditor.onReady`, e);
+
                 syncers[debugLabel] = e.syncer;
               }}
             />
@@ -212,17 +209,46 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Commands', 'Top Editor'], (dev) => {
-      const identity = identities.top;
+    dev.section('Commands', (dev) => {
+      const Get = {
+        get syncer() {
+          return State.current.cmdTop ? syncers.top! : syncers.bottom!;
+        },
+        get cmd() {
+          return Get.syncer.cmd;
+        },
+        get identity() {
+          return Get.syncer.identity;
+        },
+      };
+
+      dev.boolean((btn) => {
+        const current = () => !!State.current.cmdTop;
+        btn
+          .label(() => `target ${current() ? 'top' : 'bottom'} editor`)
+          .value(() => current())
+          .onClick(() => State.change((d) => Dev.toggle(d, 'cmdTop')));
+      });
+
+      dev.hr(-1, 5);
 
       dev.button('ping', async () => {
-        const res = await syncers.top?.cmd.ping({ identity }).promise();
+        const { identity, cmd } = Get;
+        const res = await cmd.ping({ identity }).promise();
         console.info(`ping:`, res);
       });
 
       dev.button('purge', async () => {
-        const res = await syncers.top?.cmd.purge({ identity }).promise();
+        const { identity, cmd } = Get;
+        const res = await cmd.purge({ identity }).promise();
         console.info(`purge:`, Doc.toObject(res?.result));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('update: carets', () => {
+        const { identity, cmd } = Get;
+        cmd.update({ identity, carets: true });
       });
     });
   });

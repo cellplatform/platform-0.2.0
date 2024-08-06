@@ -1,6 +1,6 @@
 import { calculateDiff } from './-tmp.diff';
 
-import { DEFAULTS, Monaco, ObjectPath, Path, Pkg, rx, type t } from './common';
+import { Time, DEFAULTS, Monaco, ObjectPath, Pkg, rx, type t } from './common';
 import { SyncerCmd } from './Syncer.Cmd';
 import { Util } from './u';
 
@@ -51,13 +51,13 @@ export function listen(
    */
   const events = lens.events(dispose$);
   const changed$ = events.changed$.pipe(rx.filter(() => !_ignoreChange));
-  const identity$ = Util.Identity.observable.identity$(changed$, paths);
+  const identity$ = Util.Identity.Observable.identity$(changed$, paths);
 
   /**
    * Editor <Cmd>'s
    */
   const cmd = Util.Cmd.create(lens, { paths });
-  const syncer = SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, dispose$ });
+  SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, dispose$ });
 
   /**
    * Editor change.
@@ -178,10 +178,13 @@ export function listen(
   /**
    * Initial state.
    */
-  const initialText = Text.current;
-  if (initialText === undefined) lens.change((d) => Mutate.value(d, paths.text, ''));
-  else if (typeof initialText === 'string') changeEditorText(initialText);
-  cmd.purge({ identity });
+  (async () => {
+    const text = Text.current;
+    if (text === undefined) lens.change((d) => Mutate.value(d, paths.text, ''));
+    else if (typeof text === 'string') changeEditorText(text);
+    await cmd.purge({ identity }).promise();
+    cmd.update({ identity, carets: true });
+  })();
 
   // Finish up.
   return api;

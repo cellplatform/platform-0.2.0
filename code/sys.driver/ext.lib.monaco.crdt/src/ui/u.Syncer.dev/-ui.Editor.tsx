@@ -4,7 +4,7 @@ import { Color, css, Monaco, rx, Syncer, type t } from './common';
 type LensInput = t.Lens | t.Doc;
 
 export type SampleEditorProps = {
-  identity?: string;
+  identity?: t.IdString;
   lens?: LensInput;
   focusOnLoad?: boolean;
   debugLabel?: string;
@@ -15,9 +15,13 @@ export type SampleEditorProps = {
 
 export type SampleEditorReadyHandler = (e: SampleEditorReadyHandlerArgs) => void;
 export type SampleEditorReadyHandlerArgs = Pick<t.MonacoEditorReadyArgs, 'editor' | 'monaco'> & {
+  readonly identity: t.IdString;
   readonly syncer: t.SyncListener;
 };
 
+/**
+ * Component
+ */
 export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
   const { lens, enabled = true, debugLabel, identity = 'UNKNOWN' } = props;
   const [ready, setReady] = useState<t.MonacoEditorReadyArgs>();
@@ -30,7 +34,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
     if (ready && lens) {
       const { monaco, editor } = ready;
       const syncer = Syncer.listen(monaco, editor, lens, { identity, dispose$ });
-      props.onReady?.({ monaco, editor, syncer });
+      props.onReady?.({ identity, monaco, editor, syncer });
     }
     return dispose;
   }, [!!ready, lens?.instance]);
@@ -46,16 +50,23 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
       backgroundColor: theme.bg,
       display: 'grid',
     }),
-    identity: css({
-      Absolute: [-22, 6, null, null],
-      fontFamily: 'monospace',
-      fontSize: 10,
-      opacity: 0.3,
-    }),
+    identity: {
+      base: css({
+        Absolute: [-22, 6, null, null],
+        fontFamily: 'monospace',
+        fontSize: 10,
+        color: Color.alpha(theme.fg, 0.3),
+      }),
+      value: css({ color: Color.alpha(theme.fg, 1) }),
+    },
   };
 
   const elIdentity = props.identity && (
-    <div {...styles.identity}>{`identity: "${props.identity}"`}</div>
+    <div {...styles.identity.base}>
+      <span>{`identity: “`}</span>
+      <span {...styles.identity.value}>{props.identity}</span>
+      <span>{`”`}</span>
+    </div>
   );
 
   return (
@@ -66,10 +77,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
         enabled={enabled}
         language={'markdown'}
         focusOnLoad={props.focusOnLoad}
-        onReady={(e) => {
-          console.info(`⚡️ MonacoEditor.onReady (${debugLabel})`);
-          setReady(e);
-        }}
+        onReady={(e) => setReady(e)}
       />
     </div>
   );

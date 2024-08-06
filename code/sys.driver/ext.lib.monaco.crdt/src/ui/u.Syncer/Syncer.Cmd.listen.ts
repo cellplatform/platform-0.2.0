@@ -39,6 +39,20 @@ export function listen(
     cmd.invoke('Purge:R', res, e.tx);
   });
 
+  events.on('Update', async (e) => {
+    if (e.params.identity !== self) return;
+
+    if (e.params.carets) {
+      const identities = Util.Identity.resolveIdentities(lens, paths);
+      Object.keys(identities)
+        .filter((key) => key !== self)
+        .forEach((key) => {
+          const selections = identities[key]?.selections;
+          carets.identity(key).change({ selections });
+        });
+    }
+  });
+
   /**
    * API
    */

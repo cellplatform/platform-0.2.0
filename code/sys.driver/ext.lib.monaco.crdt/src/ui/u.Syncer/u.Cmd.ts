@@ -28,6 +28,7 @@ export const CmdUtil = {
     const methods: t.SyncCmdMethods = {
       ping: method('Ping', 'Ping:R'),
       purge: method('Purge', 'Purge:R'),
+      update: method('Update'),
     };
     (methods as any)[DEFAULTS.Symbols.cmd] = input;
     return methods;
