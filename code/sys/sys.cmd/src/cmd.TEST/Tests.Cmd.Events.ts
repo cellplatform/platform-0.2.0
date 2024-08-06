@@ -101,7 +101,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
     });
 
-    const txType: t.CmdTxEvent['type'] = 'crdt:cmd/tx';
+    const txType: t.CmdTxEvent['type'] = 'sys.cmd/tx';
     describe(`event: "${txType}"`, () => {
       it('⚡️← on root {doc}', async () => {
         const { doc, dispose, dispose$ } = await setup();

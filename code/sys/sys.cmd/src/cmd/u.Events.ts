@@ -1,6 +1,7 @@
 import { rx, type t, type u } from './common';
 import { Is } from './u.Is';
 import { Path } from './u.Path';
+import { Patch } from './u.Patch';
 
 type Options = {
   paths?: t.CmdPaths;
@@ -28,23 +29,27 @@ export const Events = {
     const fire = (e: t.CmdEvent) => fire$.next(e);
     const fire$ = rx.subject<t.CmdEvent>();
     const $ = fire$.pipe(rx.takeUntil(dispose$));
-    const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'crdt:cmd/tx');
+    const tx$ = rx.payload<t.CmdTxEvent<C>>($, 'sys.cmd/tx');
     const error$ = tx$.pipe(rx.filter((e) => !!e.error));
 
     if (doc) {
       const events = doc.events(dispose$);
       const $ = events.changed$.pipe(
-        rx.map((e) => ({ patches: e.patches, doc: resolve.toObject(e.after) })),
+        rx.map((e) => {
+          const { patches, after } = e;
+          const doc = resolve.toObject(after);
+          return { patches, doc };
+        }),
       );
 
       // Tx (Command) ⚡️.
       $.pipe(
-        rx.filter((e) => Is.event.countChange(paths, e.patches)),
+        rx.filter((e) => Patch.includesCountChange(e.patches, paths)),
         rx.distinctWhile((p, n) => p.doc.count === n.doc.count),
       ).subscribe((e) => {
         const { tx, count, name, params, error } = e.doc;
         fire({
-          type: 'crdt:cmd/tx',
+          type: 'sys.cmd/tx',
           payload: { name, params, tx, count, error },
         });
       });

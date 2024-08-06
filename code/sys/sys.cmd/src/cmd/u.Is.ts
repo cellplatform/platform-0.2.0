@@ -25,10 +25,4 @@ export const Is = {
       typeof o.method === 'function'
     );
   },
-
-  event: {
-    countChange(paths: t.CmdPaths, patches: t.CmdPatch[]) {
-      return patches.some((patch) => Patch.startsWith(patch, paths.counter));
-    },
-  },
 } as const;

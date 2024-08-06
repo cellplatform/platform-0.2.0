@@ -30,7 +30,7 @@ export type CmdEvent = CmdTxEvent;
  * Fires when a command is invoked via a new transaction (eg "fire").
  */
 export type CmdTxEvent<C extends t.CmdType = t.CmdType> = {
-  type: 'crdt:cmd/tx';
+  type: 'sys.cmd/tx';
   payload: CmdTx<C>;
 };
 export type CmdTx<C extends t.CmdType = t.CmdType> = {
