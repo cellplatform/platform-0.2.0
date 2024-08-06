@@ -8,6 +8,7 @@ export type * as u from './u.t';
  */
 const paths: t.CmdPaths = {
   queue: ['queue'],
+
   name: ['name'],
   params: ['params'],
   error: ['error'],

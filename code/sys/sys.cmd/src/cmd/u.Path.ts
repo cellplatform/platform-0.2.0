@@ -27,11 +27,13 @@ export const Path = {
     const api = {
       paths,
 
-      queue<C extends t.CmdType>(d: O) {
-        type Q = t.CmdQueueItem<C>[];
-        const get = () => resolve<Q>(d, paths.queue);
-        if (!get()) ObjectPath.Mutate.value(d, paths.queue, []);
-        return get()!;
+      queue: {
+        list<C extends t.CmdType>(d: O) {
+          type Q = t.CmdQueueItem<C>[];
+          const get = () => resolve<Q>(d, paths.queue);
+          if (!get()) ObjectPath.Mutate.value(d, paths.queue, []);
+          return get()!;
+        },
       },
 
       name<N extends S = S>(d: O) {
@@ -68,7 +70,7 @@ export const Path = {
         type P = C['params'];
         type E = u.ExtractError<C>;
         return Delete.undefined({
-          queue: api.queue<C>(d),
+          queue: api.queue.list<C>(d),
           name: api.name<N>(d),
           params: api.params<P>(d, (options.defaultParams ?? {}) as P),
           error: api.error(d, options.defaultError as E),
