@@ -22,6 +22,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           counter: ['z', 'n'],
           error: ['z', 'e'],
           tx: ['z', 'tx'],
+          queue: ['z', 'q'],
         };
         expect(Path.wrangle(DEFAULTS.paths)).to.eql(DEFAULTS.paths);
         expect(Path.wrangle(custom)).to.eql(custom);
@@ -47,13 +48,14 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const name = 'foo.bar';
         const params: P = { foo: 0 };
         const tx = 'tx.foo';
-        const obj: t.CmdPathsObject = { name, params, counter, tx };
+        const obj: t.CmdPathsObject = { queue: [], name, params, counter, tx };
 
+        expect(resolve.queue(obj)).to.eql([]);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
         expect(resolve.counter(obj)).to.eql(counter);
         expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
+        expect(resolve.toObject(obj)).to.eql({ queue: [], count, name, params, tx });
       });
 
       it('custom paths: {object}', () => {
@@ -63,6 +65,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           counter: ['z', 'n'],
           error: ['z', 'e'],
           tx: ['z', 'tx'],
+          queue: ['z', 'q'],
         });
         const tx = 'tx.foo';
         const e = DEFAULTS.error('404');
@@ -73,14 +76,16 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const obj = {
           a: name,
           x: { y: { p: params }, r },
-          z: { n, tx, e },
+          z: { n, tx, e, q: [] },
         };
+        expect(resolve.queue(obj)).to.eql([]);
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params<P>(obj, { foo: 0 })).to.eql(params);
         expect(resolve.error(obj)).to.eql(e);
         expect(resolve.counter(obj)).to.eql(n);
         expect(resolve.tx(obj)).to.eql(tx);
         expect(resolve.toObject(obj)).to.eql({
+          queue: [],
           tx,
           count: n.value,
           name,
@@ -97,14 +102,14 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const name = 'foo.bar';
         const params: P = { foo: 0 };
         const tx = 'tx.foo';
-        const cmd: t.CmdPathsObject = { name, params, counter, tx };
+        const cmd: t.CmdPathsObject = { name, params, counter, tx, queue: [] };
         const obj = { foo: { bar: cmd } };
 
         expect(resolve.name(obj)).to.eql(name);
         expect(resolve.params(obj, {})).to.eql(params);
         expect(resolve.counter(obj)).to.eql(counter);
         expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx });
+        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx, queue: [] });
       });
 
       it('.params ← generates new object', () => {
@@ -154,6 +159,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
             error: ['foo', 'bar', 'error'],
             counter: ['foo', 'bar', 'counter'],
             tx: ['foo', 'bar', 'tx'],
+            queue: ['foo', 'bar', 'queue'],
           });
         };
 
@@ -168,6 +174,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           error: ['x', 'e'],
           counter: ['z', 'n'],
           tx: ['z', 'tx'],
+          queue: ['z', 'q'],
         };
         const res = Path.prepend(['foo'], input);
         expect(res).to.eql({
@@ -176,6 +183,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           error: ['foo', 'x', 'e'],
           counter: ['foo', 'z', 'n'],
           tx: ['foo', 'z', 'tx'],
+          queue: ['foo', 'z', 'q'],
         });
       });
     });

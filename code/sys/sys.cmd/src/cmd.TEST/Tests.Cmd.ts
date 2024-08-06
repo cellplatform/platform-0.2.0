@@ -27,6 +27,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         counter: ['x', 'n'],
         error: ['x', 'e'],
         tx: ['x', 'tx'],
+        queue: ['x', 'q'],
       };
 
       const doc1 = await factory();

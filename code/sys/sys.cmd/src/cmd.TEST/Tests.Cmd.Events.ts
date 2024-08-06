@@ -137,6 +137,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           name: 'Bar',
           params: { msg: 'hello' },
           counter: { value: counts[2] },
+          queue: [],
         });
         dispose();
       });
@@ -150,6 +151,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           error: ['z', 'e'],
           counter: ['z', 'n'],
           tx: ['z', 'tx'],
+          queue: ['z', 'q'],
         };
 
         const tx = 'tx.foo';
@@ -165,7 +167,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(fired.length).to.eql(1);
         expect(doc.current).to.eql({
           a: 'Bar',
-          z: { n: { value: count }, tx },
+          z: { n: { value: count }, tx, q: [] },
           x: { y: { p } },
         });
         dispose();
