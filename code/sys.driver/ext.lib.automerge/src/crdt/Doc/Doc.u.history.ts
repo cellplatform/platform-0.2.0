@@ -79,7 +79,8 @@ function isInitial(item: t.DocHistoryCommit) {
 const wrangle = {
   commits<T extends O>(doc?: t.Doc<T>): t.State<T>[] {
     try {
-      return doc?.current ? A.getHistory<T>(doc.current) : [];
+      const current = doc?.current;
+      return current ? A.getHistory<T>(current) : [];
     } catch (error: any) {
       return [];
     }
