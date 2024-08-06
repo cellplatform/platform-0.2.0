@@ -10,7 +10,7 @@ export const PingUtil = {
   stillAlive(cmd: t.SyncCmdMethods, identities: string[], options: { timeout?: t.Msecs } = {}) {
     return new Promise<t.SyncPurgeResponse>((resolve) => {
       const { timeout = 500 } = options;
-      const ping = (identity: string) => cmd.ping({ identity }, { timeout });
+      const ping = (identity: t.IdString) => cmd.ping({ identity }, { timeout });
       const requests = identities.map((identity) => ping(identity));
 
       let _resolved = false;
@@ -30,7 +30,7 @@ export const PingUtil = {
         },
       };
 
-      const done = (identity: string, options: { timedOut?: boolean } = {}) => {
+      const done = (identity: t.IdString, options: { timedOut?: boolean } = {}) => {
         const { timedOut = false } = options;
         if (_resolved) return;
         if (timedOut) res.dead.push(identity);

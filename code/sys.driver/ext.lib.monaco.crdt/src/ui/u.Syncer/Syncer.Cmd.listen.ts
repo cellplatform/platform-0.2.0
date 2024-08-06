@@ -10,7 +10,7 @@ export function listen(
   ctrl: t.SyncCmdMethods,
   args: {
     editor: t.MonacoCodeEditor;
-    identity: string;
+    identity: t.IdString;
     carets: t.EditorCarets;
     paths?: PathsInput;
     dispose$?: t.UntilObservable;

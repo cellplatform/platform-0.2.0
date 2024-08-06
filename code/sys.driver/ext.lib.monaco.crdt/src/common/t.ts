@@ -25,6 +25,7 @@ export type {
 export type {
   Disposable,
   EventBus,
+  IdString,
   Immutable,
   ImmutableChange,
   Json,

@@ -29,7 +29,7 @@ export const PathUtil = {
   /**
    * Helpers for a specific identity.
    */
-  identity(identity: string, paths: t.EditorPaths = DEFAULTS.paths) {
+  identity(identity: t.IdString, paths: t.EditorPaths = DEFAULTS.paths) {
     const self = [...paths.identity, identity];
     const path = (suffix: keyof t.EditorIdentityState): t.ObjectPath => [...self, suffix];
     return {
