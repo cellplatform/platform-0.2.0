@@ -166,7 +166,7 @@ export function listen(
     },
 
     /**
-     * Lifecycle
+     * Lifecycle.
      */
     dispose,
     dispose$,
@@ -178,13 +178,10 @@ export function listen(
   /**
    * Initial state.
    */
-  cmd.purge({ identity });
   const initialText = Text.current;
-  if (initialText === undefined) {
-    lens.change((d) => Path.Object.Mutate.value(d, paths.text, ''));
-  } else if (typeof initialText === 'string') {
-    changeEditorText(initialText);
-  }
+  if (initialText === undefined) lens.change((d) => Mutate.value(d, paths.text, ''));
+  else if (typeof initialText === 'string') changeEditorText(initialText);
+  cmd.purge({ identity });
 
   // Finish up.
   return api;
