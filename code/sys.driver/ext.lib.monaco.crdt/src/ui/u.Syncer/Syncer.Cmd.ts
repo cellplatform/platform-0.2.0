@@ -5,6 +5,6 @@ import { Util } from './u';
  * <Cmd> controller for the code-editor.
  */
 export const SyncerCmd = {
-  Util,
   listen,
+  Util,
 } as const;

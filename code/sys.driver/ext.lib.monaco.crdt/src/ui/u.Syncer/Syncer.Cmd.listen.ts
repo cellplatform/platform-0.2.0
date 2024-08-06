@@ -8,9 +8,15 @@ type PathsInput = t.EditorPaths | t.ObjectPath;
  */
 export function listen(
   ctrl: t.SyncCmdMethods,
-  args: { identity: string; paths?: PathsInput; dispose$?: t.UntilObservable },
+  args: {
+    editor: t.MonacoCodeEditor;
+    identity: string;
+    carets: t.EditorCarets;
+    paths?: PathsInput;
+    dispose$?: t.UntilObservable;
+  },
 ) {
-  const { identity } = args;
+  const { identity, carets } = args;
   const cmd = Util.Cmd.toCmd(ctrl);
   const paths = Util.Path.wrangle(args.paths);
 

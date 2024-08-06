@@ -15,9 +15,10 @@ const initial: D = {
   strategy: 'Splice',
 };
 
-type ObjectWithAllKeys<T extends string> = { [K in T]: any };
+type ObjectWithAllKeys<T extends string, V = any> = { [K in T]: V };
 type DebugLabel = 'top' | 'bottom';
-type Identities = ObjectWithAllKeys<DebugLabel>;
+type Identities = ObjectWithAllKeys<DebugLabel, string>;
+type SyncListeners = ObjectWithAllKeys<DebugLabel, t.SyncListener | undefined>;
 
 /**
  * Spec
@@ -33,7 +34,8 @@ export default Dev.describe(name, async (e) => {
   let doc: t.Doc | undefined;
   let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  const identity: Identities = { top: `${slug()}`, bottom: `${slug()}` } as const;
+  const identities: Identities = { top: `${slug()}`, bottom: `${slug()}` };
+  const syncers: SyncListeners = { top: undefined, bottom: undefined };
 
   const getLens = () => {
     if (!doc) return;
@@ -82,12 +84,16 @@ export default Dev.describe(name, async (e) => {
         const editor = (debugLabel: DebugLabel, props?: SampleEditorProps) => {
           return (
             <SampleEditor
-              identity={identity[debugLabel]}
+              identity={identities[debugLabel]}
               debugLabel={debugLabel}
               lens={lensProp}
               enabled={!!doc}
               theme={theme.name}
               {...props}
+              onReady={(e) => {
+                console.info(`⚡️ SampleEditor.onReady`, e);
+                syncers[debugLabel] = e.syncer;
+              }}
             />
           );
         };
@@ -194,8 +200,6 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-
       dev.boolean((btn) => {
         const state = State;
         const current = () => !!state.current.useLens;
@@ -203,6 +207,17 @@ export default Dev.describe(name, async (e) => {
           .label(() => `useLens`)
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'useLens')));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(['Commands', 'Top Editor'], (dev) => {
+      const identity = identities.top;
+
+      dev.button('ping', async () => {
+        const res = await syncers.top?.cmd.ping({ identity }).promise();
+        console.info(`ping:`, res);
       });
     });
   });

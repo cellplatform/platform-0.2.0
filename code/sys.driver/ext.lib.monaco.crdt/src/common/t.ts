@@ -9,6 +9,7 @@ export type { Observable } from 'rxjs';
  */
 export type { Doc, Lens, Store, StoreIndex, StoreIndexDb } from 'ext.lib.automerge/src/types';
 export type {
+  EditorCarets,
   EditorRange,
   Monaco,
   MonacoCodeEditor,
@@ -25,6 +26,7 @@ export type {
   Disposable,
   EventBus,
   Immutable,
+  ImmutableChange,
   Json,
   JsonString,
   Lifecycle,
@@ -36,14 +38,14 @@ export type {
   UriString,
 } from 'sys.types/src/types';
 
-export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 export type {
   Cmd,
+  CmdMethodResponder,
+  CmdMethodVoid,
   CmdTransport,
   CmdType,
-  CmdMethodVoid,
-  CmdMethodResponder,
 } from 'sys.cmd/src/types';
+export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 
 /**
  * @local

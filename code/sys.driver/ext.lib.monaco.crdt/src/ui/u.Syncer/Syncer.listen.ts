@@ -24,8 +24,9 @@ export function listen(
 ): t.SyncListener {
   const { debugLabel } = options;
   const paths = Util.Path.wrangle(options.paths);
-  const identity = Util.Identity.format(options.identity);
   const Mutate = ObjectPath.Mutate;
+  const identity = Util.Identity.format(options.identity);
+  const self = identity;
 
   /**
    * Lifecycle.
@@ -39,34 +40,24 @@ export function listen(
   });
 
   /**
-   * Editor <Cmd>'s
+   * Helpers.
    */
-  const cmd = Util.Cmd.create(lens, { paths });
-  SyncerCmd.listen(cmd, { identity, paths, dispose$ });
+  const Text = Util.Lens.text(lens, paths);
+  const patchMonaco = Util.Patch.monaco(monaco, editor);
+  const carets = Monaco.Carets.create(editor, { dispose$ });
 
   /**
    * Observables.
    */
   const events = lens.events(dispose$);
   const changed$ = events.changed$.pipe(rx.filter(() => !_ignoreChange));
-  const identity$ = changed$.pipe(
-    rx.filter((e) => Util.Patch.Includes.identity(e.patches, { paths })),
-    rx.map((e) => {
-      type T = t.EditorIdentityState;
-      const identity = Util.Patch.extractIdentity(e.patches);
-      const path = [...paths.identity, identity];
-      const before = ObjectPath.resolve<T>(e.before, path)!;
-      const after = ObjectPath.resolve<T>(e.after, path)!;
-      const res: t.EditorIdentityStateChange = { identity, before, after };
-      return res;
-    }),
-  );
+  const identity$ = Util.Identity.observable.identity$(changed$, paths);
 
   /**
-   * Helpers.
+   * Editor <Cmd>'s
    */
-  const patchMonaco = Util.Patch.monaco(monaco, editor);
-  const Text = Util.Lens.text(lens, paths);
+  const cmd = Util.Cmd.create(lens, { paths });
+  SyncerCmd.listen(cmd, { editor, carets, identity, paths, dispose$ });
 
   /**
    * Editor change.
@@ -109,10 +100,9 @@ export function listen(
   /**
    * CRDT: Selection → Keep editor carets in sync.
    */
-  const carets = Monaco.Carets.create(editor, { dispose$ });
   identity$
     .pipe(
-      rx.filter((e) => e.identity !== identity),
+      rx.filter((e) => e.identity !== self),
       rx.filter((e) => !!e.after?.selections),
     )
     .subscribe((e) => {
