@@ -1,7 +1,6 @@
 import { rx, type t, type u } from './common';
-import { Is } from './u.Is';
-import { Path } from './u.Path';
 import { Patch } from './u.Patch';
+import { Path } from './u.Path';
 
 type Options = {
   paths?: t.CmdPaths;
@@ -19,7 +18,6 @@ export const Events = {
   create<C extends t.CmdType>(doc?: t.CmdTransport, options: Options = {}): t.CmdEvents<C> {
     const resolve = Path.resolver(options.paths);
     const paths = resolve.paths;
-
     const life = rx.lifecycle(options.dispose$);
     const { dispose, dispose$ } = life;
 
