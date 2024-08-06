@@ -1,18 +1,20 @@
 import { Color, CrdtInfo, Dev, Immutable, Json, Pkg, SampleCrdt, slug } from '../../test.ui';
 import { SampleEditor, type SampleEditorProps } from './-ui.Editor';
 import { Layout } from './-ui.Layout';
-import { Doc, ObjectPath, rx, type t } from './common';
+import { DEFAULTS, Doc, ObjectPath, rx, type t } from './common';
 
 type D = {
   theme?: t.CommonTheme;
   docuri?: string;
   objectOpen?: boolean;
   useLens?: boolean;
-  cmdTop?: boolean;
+  useTopCommand?: boolean;
+  render?: boolean;
 };
 const initial: D = {
   theme: 'Dark',
-  cmdTop: false,
+  useTopCommand: false,
+  render: true,
 };
 
 type ObjectWithAllKeys<T extends string, V = any> = { [K in T]: V };
@@ -63,13 +65,15 @@ export default Dev.describe(name, async (e) => {
       return Color.darken(theme.bg, 3);
     };
 
-    ctx.debug.width(330);
+    ctx.debug.width(340);
     ctx.subject
       .backgroundColor(getBackgroundColor())
       .size('fill')
       .display('grid')
       .render<D>(() => {
         const state = State.current;
+        if (!(state.render ?? true)) return null;
+
         const backgroundColor = getBackgroundColor();
         const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
@@ -177,6 +181,9 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const state = State;
         const current = () => !!state.current.useLens;
@@ -185,6 +192,15 @@ export default Dev.describe(name, async (e) => {
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'useLens')));
       });
+
+      dev.boolean((btn) => {
+        const state = State;
+        const current = () => !!(state.current.render ?? true);
+        btn
+          .label(() => `render`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'render')));
+      });
     });
 
     dev.hr(5, 20);
@@ -192,7 +208,7 @@ export default Dev.describe(name, async (e) => {
     dev.section('Commands', (dev) => {
       const Get = {
         get syncer() {
-          return State.current.cmdTop ? syncers.top! : syncers.bottom!;
+          return State.current.useTopCommand ? syncers.top! : syncers.bottom!;
         },
         get cmd() {
           return Get.syncer.cmd;
@@ -203,11 +219,11 @@ export default Dev.describe(name, async (e) => {
       };
 
       dev.boolean((btn) => {
-        const current = () => !!State.current.cmdTop;
+        const current = () => !!State.current.useTopCommand;
         btn
-          .label(() => `target ${current() ? 'top' : 'bottom'} editor`)
+          .label(() => `use <Cmd> from "${current() ? 'top' : 'bottom'}" editor`)
           .value(() => current())
-          .onClick(() => State.change((d) => Dev.toggle(d, 'cmdTop')));
+          .onClick(() => State.change((d) => Dev.toggle(d, 'useTopCommand')));
       });
 
       dev.hr(-1, 5);
@@ -226,10 +242,12 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('update: carets', () => {
+      const update = (params: t.SyncCmdUpdate) => {
         const { identity, cmd } = Get;
-        cmd.update({ identity, carets: true });
-      });
+        cmd.update({ identity, ...params });
+      };
+      dev.button('update: carets', () => update({ carets: true }));
+      dev.button('update: selections', () => update({ selections: true }));
     });
   });
 
