@@ -10,6 +10,12 @@ export type SampleEditorProps = {
   debugLabel?: string;
   enabled?: boolean;
   theme?: t.CommonTheme;
+  onReady?: SampleEditorReadyHandler;
+};
+
+export type SampleEditorReadyHandler = (e: SampleEditorReadyHandlerArgs) => void;
+export type SampleEditorReadyHandlerArgs = Pick<t.MonacoEditorReadyArgs, 'editor' | 'monaco'> & {
+  readonly syncer: t.SyncListener;
 };
 
 export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
@@ -24,7 +30,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
     if (ready && lens) {
       const { monaco, editor } = ready;
       const syncer = Syncer.listen(monaco, editor, lens, { identity, dispose$ });
-
+      props.onReady?.({ monaco, editor, syncer });
     }
     return dispose;
   }, [!!ready, lens?.instance]);

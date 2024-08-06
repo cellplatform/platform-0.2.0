@@ -57,7 +57,7 @@ export function listen(
    * Editor <Cmd>'s
    */
   const cmd = Util.Cmd.create(lens, { paths });
-  SyncerCmd.listen(cmd, { editor, carets, identity, paths, dispose$ });
+  const syncer = SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, dispose$ });
 
   /**
    * Editor change.
@@ -151,16 +151,6 @@ export function listen(
   });
 
   /**
-   * Initial state.
-   */
-  const initialText = Text.current;
-  if (initialText === undefined) {
-    lens.change((d) => Path.Object.Mutate.value(d, paths.text, ''));
-  } else if (typeof initialText === 'string') {
-    changeEditorText(initialText);
-  }
-
-  /**
    * API
    */
   const api: t.SyncListener = {
@@ -176,14 +166,6 @@ export function listen(
     },
 
     /**
-     * Query the status of all identities, and purge dead ones.
-     */
-    async purge() {
-      const self = identity;
-      return Util.Cmd.purge({ cmd, lens, self, paths });
-    },
-
-    /**
      * Lifecycle
      */
     dispose,
@@ -193,6 +175,18 @@ export function listen(
     },
   };
 
+  /**
+   * Initial state.
+   */
+  cmd.purge({ identity });
+  const initialText = Text.current;
+  if (initialText === undefined) {
+    lens.change((d) => Path.Object.Mutate.value(d, paths.text, ''));
+  } else if (typeof initialText === 'string') {
+    changeEditorText(initialText);
+  }
+
+  // Finish up.
   return api;
 }
 

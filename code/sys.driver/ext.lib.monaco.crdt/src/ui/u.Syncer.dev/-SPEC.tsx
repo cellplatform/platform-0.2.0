@@ -219,6 +219,11 @@ export default Dev.describe(name, async (e) => {
         const res = await syncers.top?.cmd.ping({ identity }).promise();
         console.info(`ping:`, res);
       });
+
+      dev.button('purge', async () => {
+        const res = await syncers.top?.cmd.purge({ identity }).promise();
+        console.info(`purge:`, Doc.toObject(res?.result));
+      });
     });
   });
 

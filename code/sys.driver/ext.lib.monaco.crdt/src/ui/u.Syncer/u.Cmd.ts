@@ -24,8 +24,10 @@ export const CmdUtil = {
    * Convert a raw <Cmd> object into strongly typed methods API.
    */
   toMethods(input: t.Cmd<t.SyncCmdType>) {
+    const method = input.method;
     const methods: t.SyncCmdMethods = {
-      ping: input.method('Ping', 'Ping:R'),
+      ping: method('Ping', 'Ping:R'),
+      purge: method('Purge', 'Purge:R'),
     };
     (methods as any)[DEFAULTS.Symbols.cmd] = input;
     return methods;

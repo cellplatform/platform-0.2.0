@@ -9,14 +9,15 @@ type PathsInput = t.EditorPaths | t.ObjectPath;
 export function listen(
   ctrl: t.SyncCmdMethods,
   args: {
+    lens: t.Immutable;
     editor: t.MonacoCodeEditor;
-    identity: t.IdString;
+    self: t.IdString;
     carets: t.EditorCarets;
     paths?: PathsInput;
     dispose$?: t.UntilObservable;
   },
 ) {
-  const { identity, carets } = args;
+  const { self, lens, carets } = args;
   const cmd = Util.Cmd.toCmd(ctrl);
   const paths = Util.Path.wrangle(args.paths);
 
@@ -28,10 +29,14 @@ export function listen(
    * Handlers
    */
   events.on('Ping', (e) => {
-    if (e.params.identity === identity) {
-      const ok = true;
-      cmd.invoke('Ping:R', { identity, ok }, e.tx);
-    }
+    if (e.params.identity !== self) return;
+    cmd.invoke('Ping:R', { identity: self, ok: true }, e.tx);
+  });
+
+  events.on('Purge', async (e) => {
+    if (e.params.identity !== self) return;
+    const res = await Util.Cmd.purge(ctrl, { lens, self, paths });
+    cmd.invoke('Purge:R', res, e.tx);
   });
 
   /**

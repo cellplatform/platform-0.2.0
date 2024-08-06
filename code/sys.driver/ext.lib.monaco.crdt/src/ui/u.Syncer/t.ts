@@ -11,7 +11,6 @@ export type SyncListener = t.Lifecycle & {
   readonly identity: t.IdString;
   readonly strategy: t.EditorUpdateStrategy;
   readonly changed: t.SyncListenerChanged;
-  purge(): Promise<t.SyncPurgeResponse>;
 };
 
 export type SyncListenerChanged = {
