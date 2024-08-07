@@ -6,6 +6,7 @@ import { flagsTests as flags } from './Tests.Cmd.Is';
 import { patchTests as patch } from './Tests.Cmd.Patch';
 import { pathTests as path } from './Tests.Cmd.Path';
 import { methodTests as method } from './Tests.Cmd.Method';
+import { queueTests as queue } from './Tests.Cmd.Queue';
 
 /**
  * Unit test factory for the <Cmd> system allowing different
@@ -23,5 +24,6 @@ export const Tests = {
     patch,
     flags,
     method,
+    queue,
   },
 } as const;
