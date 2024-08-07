@@ -23,7 +23,7 @@ export function create<C extends t.CmdType>(
 
   const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
     transport.change((d) => {
-      const index = resolve.queue.index(d);
+      const index = resolve.queue.item(d);
       index.name(name);
       index.params(params);
       index.tx(tx);

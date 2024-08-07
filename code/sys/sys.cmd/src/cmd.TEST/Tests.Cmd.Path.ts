@@ -75,8 +75,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
 
-          const res1 = resolve.queue.index(obj);
-          const res2 = resolve.queue.index(obj);
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
 
           expect(res1.index).to.eql(0);
           expect(res2.index).to.eql(1);
@@ -90,10 +90,10 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
 
-          resolve.queue.index(obj);
-          resolve.queue.index(obj);
+          resolve.queue.item(obj);
+          resolve.queue.item(obj);
           const item = obj.queue?.[1];
-          resolve.queue.index(obj, 1); // NB: retrieve existing.
+          resolve.queue.item(obj, 1); // NB: retrieve existing.
 
           expect(obj.queue).to.eql([{}, {}]); // NB: blank item upon first request.
           expect(obj.queue?.[1]).to.equal(item); // NB: same instance (not clobbered).
@@ -102,8 +102,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         it('index.name', () => {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
-          const res1 = resolve.queue.index(obj);
-          const res2 = resolve.queue.index(obj);
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
 
           expect(res1.name()).to.eql('');
           expect(res2.name('foo')).to.eql('foo');
@@ -114,8 +114,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         it('index.params', () => {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
-          const res1 = resolve.queue.index(obj);
-          const res2 = resolve.queue.index(obj);
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
           const params = { foo: 123 };
 
           expect(res1.params({})).to.eql({});
@@ -127,8 +127,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         it('index.error', () => {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
-          const res1 = resolve.queue.index(obj);
-          const res2 = resolve.queue.index(obj);
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
           const error = { msg: '🐷' };
 
           expect(res1.error({})).to.eql({});
@@ -140,8 +140,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         it('index.tx', () => {
           const resolve = Path.resolver();
           const obj: t.CmdPathsObject<C> = {};
-          const res1 = resolve.queue.index(obj);
-          const res2 = resolve.queue.index(obj);
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
 
           expect(res1.tx()).to.be.string;
           expect(res2.tx('my.tx')).to.eql('my.tx');

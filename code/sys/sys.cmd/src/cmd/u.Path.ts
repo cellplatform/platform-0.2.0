@@ -41,13 +41,13 @@ export const Path = {
         /**
          * Retrieves a helper for working with a single item within the queue.
          */
-        index<C extends t.CmdType>(d: O, index?: number) {
+        item<C extends t.CmdType>(d: O, index?: number) {
           const queue = api.queue.list<C>(d);
           const i = index ?? queue.length;
           const path = [...paths.queue, i];
           if (!queue[i]) Mutate.value(d, path, {});
 
-          const res = {
+          const item = {
             index: i,
             path,
 
@@ -80,7 +80,7 @@ export const Path = {
             },
           } as const;
 
-          return res;
+          return item;
         },
       },
 

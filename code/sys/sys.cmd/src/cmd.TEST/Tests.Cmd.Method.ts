@@ -44,10 +44,10 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       it('factory overloads (void | responder)', async () => {
         const { doc, dispose } = await setup();
         const cmd = Cmd.create<C>(doc);
-        const res1 = cmd.method('foo');
-        const res2 = cmd.method('add', 'add:res');
-        expect(typeof res1 === 'function').to.eql(true);
-        expect(typeof res2 === 'function').to.eql(true);
+        const method1 = cmd.method('foo');
+        const method2 = cmd.method('add', 'add:res');
+        expect(typeof method1 === 'function').to.eql(true);
+        expect(typeof method2 === 'function').to.eql(true);
         dispose();
       });
 
