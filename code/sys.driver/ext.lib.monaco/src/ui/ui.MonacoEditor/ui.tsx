@@ -3,7 +3,7 @@ import EditorReact from '@monaco-editor/react';
 
 import { useEffect, useRef, useState } from 'react';
 import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
-import { Theme } from './u.Theme';
+import { Util } from './u';
 import { EditorCarets } from '../u.Editor.Carets';
 
 const def = DEFAULTS.props;
@@ -18,7 +18,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     enabled = def.enabled,
     placeholder,
   } = props;
-  const editorTheme = Theme.toName(props.theme);
+  const editorTheme = Util.Theme.toName(props.theme);
   const isPlaceholderText = typeof placeholder === 'string';
 
   const disposeRef = useRef(rx.subject<void>());
@@ -82,7 +82,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
    * Handlers
    */
   const handleMount: OnMount = (ed, monaco) => {
-    Theme.init(monaco);
+    Util.Theme.init(monaco);
     monacoRef.current = monaco;
 
     const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
@@ -106,9 +106,8 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     const editor = editorRef.current;
     const monaco = monacoRef.current;
     if (!props.onChange || !editor || !monaco) return;
-
     updateTextState(editor);
-    props.onChange({ event, monaco, editor });
+    props.onChange({ event, monaco, editor, current: Util.toState(editor) });
   };
 
   /**

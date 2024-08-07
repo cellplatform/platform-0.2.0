@@ -81,14 +81,14 @@ describe('Monaco.Crdt.syncer', () => {
       const transport = Immutable.clonerRef({});
       Util.Cmd.create(transport);
       const obj = ObjectPath.resolve(transport.current, DEFAULTS.paths.cmd);
-      expect(Cmd.Is.validState(obj)).to.eql(true);
+      expect(Cmd.Is.state.cmd(obj)).to.eql(true);
     });
 
     it('create: with custom paths (prepended)', () => {
       const transport = Immutable.clonerRef({});
       Util.Cmd.create(transport, { paths: ['foo'] });
       const obj = ObjectPath.resolve(transport.current, ['foo', ...DEFAULTS.paths.cmd]);
-      expect(Cmd.Is.validState(obj)).to.eql(true);
+      expect(Cmd.Is.state.cmd(obj)).to.eql(true);
     });
 
     it('toCmd', () => {

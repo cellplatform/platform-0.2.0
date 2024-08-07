@@ -32,7 +32,7 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           Monaco.Crdt.Syncer.listen(monaco, editor, lens);
         }
       }}
-      onChange={(e) => props.onChange?.(e.state)}
+      onChange={(e) => props.onChange?.(e.current)}
     />
   );
 

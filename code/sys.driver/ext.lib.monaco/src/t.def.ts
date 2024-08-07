@@ -36,3 +36,8 @@ export type EditorRangesInput =
   | null;
 
 export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRangeTuple | null;
+
+export type EditorState = {
+  text: string;
+  selections: t.Selection[];
+};
