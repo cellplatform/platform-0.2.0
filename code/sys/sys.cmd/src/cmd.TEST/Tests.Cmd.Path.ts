@@ -113,14 +113,6 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(resolve.toObject(obj)).to.eql({ count, name, params, tx, queue: [] });
       });
 
-      it('.queue.list ← generates new [array]', () => {
-        const resolve = Path.resolver(DEFAULTS.paths);
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { queue: [] };
-        expect(resolve.queue.list(obj1)).to.eql([]);
-        expect(resolve.queue.list(obj2)).to.equal(obj2.queue); // NB: mutated (added).
-      });
-
       it('.params ← generates new object', () => {
         const resolve = Path.resolver(DEFAULTS.paths);
         const params: P = { foo: 0 };
@@ -155,6 +147,94 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const obj2: t.CmdPathsObject<C> = { counter };
         expect(resolve.counter(obj1).value).to.eql(0);
         expect(resolve.counter(obj2).value).to.eql(10);
+      });
+
+      it('.queue.list ← generates new [array]', () => {
+        const resolve = Path.resolver(DEFAULTS.paths);
+        const obj1: t.CmdPathsObject<C> = {};
+        const obj2: t.CmdPathsObject<C> = { queue: [] };
+        expect(resolve.queue.list(obj1)).to.eql([]);
+        expect(resolve.queue.list(obj2)).to.equal(obj2.queue); // NB: mutated (added).
+      });
+
+      describe('.queue.index(n)', () => {
+        it('index <undefined> ← adds to end of list', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+
+          const res1 = resolve.queue.index(obj);
+          const res2 = resolve.queue.index(obj);
+
+          expect(res1.index).to.eql(0);
+          expect(res2.index).to.eql(1);
+          expect(obj.queue?.length).to.equal(2);
+
+          expect(res1.path).to.eql(['queue', 0]);
+          expect(res2.path).to.eql(['queue', 1]);
+        });
+
+        it('index specified ← retrieves existing', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+
+          resolve.queue.index(obj);
+          resolve.queue.index(obj);
+          const item = obj.queue?.[1];
+          resolve.queue.index(obj, 1); // NB: retrieve existing.
+
+          expect(obj.queue).to.eql([{}, {}]); // NB: blank item upon first request.
+          expect(obj.queue?.[1]).to.equal(item); // NB: same instance (not clobbered).
+        });
+
+        it('index.name', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+          const res1 = resolve.queue.index(obj);
+          const res2 = resolve.queue.index(obj);
+
+          expect(res1.name(obj)).to.eql('');
+          expect(res2.name(obj, 'foo')).to.eql('foo');
+          expect(obj.queue?.[0].name).to.equal('');
+          expect(obj.queue?.[1].name).to.equal('foo');
+        });
+
+        it('index.params', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+          const res1 = resolve.queue.index(obj);
+          const res2 = resolve.queue.index(obj);
+          const params = { foo: 123 };
+
+          expect(res1.params(obj, {})).to.eql({});
+          expect(res2.params(obj, params)).to.eql(params);
+          expect(obj.queue?.[0].params).to.eql({});
+          expect(obj.queue?.[1].params).to.eql(params);
+        });
+
+        it('index.error', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+          const res1 = resolve.queue.index(obj);
+          const res2 = resolve.queue.index(obj);
+          const error = { msg: '🐷' };
+
+          expect(res1.error(obj, {})).to.eql({});
+          expect(res2.error(obj, error)).to.eql(error);
+          expect(obj.queue?.[0].error).to.eql({});
+          expect(obj.queue?.[1].error).to.eql(error);
+        });
+
+        it('index.tx', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+          const res1 = resolve.queue.index(obj);
+          const res2 = resolve.queue.index(obj);
+
+          expect(res1.tx(obj)).to.be.string;
+          expect(res2.tx(obj, 'my.tx')).to.eql('my.tx');
+          expect(obj.queue?.[0].tx).to.eql(res1.tx(obj));
+          expect(obj.queue?.[1].tx).to.eql('my.tx');
+        });
       });
     });
 

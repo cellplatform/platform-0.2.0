@@ -1,4 +1,4 @@
-import { DEFAULTS, Delete, ObjectPath, type t, type u } from './common';
+import { DEFAULTS, Delete, ObjectPath, slug, type t, type u } from './common';
 
 type S = string;
 type O = Record<string, unknown>;
@@ -24,15 +24,63 @@ export const Path = {
   resolver(input?: t.CmdPaths | t.ObjectPath) {
     const paths = Path.wrangle(input);
     const resolve = ObjectPath.resolve;
+    const Mutate = ObjectPath.Mutate;
     const api = {
       paths,
-
       queue: {
+        /**
+         * The array containing the list of invoked commands.
+         */
         list<C extends t.CmdType>(d: O) {
-          type Q = t.CmdQueueItem<C>[];
-          const get = () => resolve<Q>(d, paths.queue);
-          if (!get()) ObjectPath.Mutate.value(d, paths.queue, []);
+          type T = t.CmdQueueItem<C>[];
+          const get = () => resolve<T>(d, paths.queue);
+          if (!get()) Mutate.value(d, paths.queue, []);
           return get()!;
+        },
+
+        /**
+         * Retrieves a helper for working with a single item within the queue.
+         */
+        index<C extends t.CmdType>(d: O, index?: number) {
+          const queue = api.queue.list<C>(d);
+          const i = index ?? queue.length;
+          const path = [...paths.queue, i];
+          if (!queue[i]) Mutate.value(d, path, {});
+
+          const res = {
+            index: i,
+            path,
+
+            name<N extends S = S>(d: O, defaultValue = '') {
+              const name = [...path, 'name'];
+              const get = () => resolve<N>(d, name);
+              if (!get()) Mutate.value(d, name, defaultValue);
+              return get()!;
+            },
+
+            params<P extends O = O>(d: O, defaultValue: P) {
+              const params = [...path, 'params'];
+              const get = () => resolve<P>(d, params);
+              if (!get()) Mutate.value(d, params, defaultValue);
+              return get()!;
+            },
+
+            error<E extends O = O>(d: O, defaultValue?: E) {
+              const error = [...path, 'error'];
+              const get = () => resolve<E>(d, error);
+              if (!get()) Mutate.value(d, error, defaultValue);
+              return get()!;
+            },
+
+            tx(d: O, defaultValue?: string) {
+              const tx = [...path, 'tx'];
+              const get = () => resolve<string>(d, tx);
+              if (!get()) Mutate.value(d, tx, defaultValue ?? slug());
+              return get()!;
+            },
+          } as const;
+
+          return res;
         },
       },
 
@@ -42,19 +90,19 @@ export const Path = {
 
       params<P extends O = O>(d: O, defaultParams: P) {
         const get = () => resolve<P>(d, paths.params);
-        if (!get()) ObjectPath.Mutate.value(d, paths.params, defaultParams);
+        if (!get()) Mutate.value(d, paths.params, defaultParams);
         return get()!;
       },
 
       error<E extends O = O>(d: O, defaultError?: E) {
         const get = () => resolve<E>(d, paths.error);
-        if (!get()) ObjectPath.Mutate.value(d, paths.error, defaultError);
+        if (!get()) Mutate.value(d, paths.error, defaultError);
         return get()!;
       },
 
       counter(d: O, factory: t.CmdCounterFactory = DEFAULTS.counter) {
         const get = () => resolve<t.CmdCounter>(d, paths.counter);
-        if (!get()) ObjectPath.Mutate.value(d, paths.counter, factory.create());
+        if (!get()) Mutate.value(d, paths.counter, factory.create());
         return get()!;
       },
 
