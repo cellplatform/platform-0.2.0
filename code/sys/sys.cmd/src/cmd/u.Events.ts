@@ -41,13 +41,14 @@ export const Events = {
 
       // Tx (Command) ⚡️.
       $.pipe(
-        rx.filter((e) => Patch.includesCountChange(e.patches, paths)),
-        rx.distinctWhile((p, n) => p.doc.count === n.doc.count),
+        rx.filter((e) => Patch.includesQueueChange(e.patches, paths)),
+        rx.distinctWhile((p, n) => p.doc.queue.length === n.doc.queue.length),
       ).subscribe((e) => {
-        const { tx, count, name, params, error } = e.doc;
+        const queue = e.doc.queue ?? [];
+        const { tx, name, params, error } = queue[queue.length - 1];
         fire({
           type: 'sys.cmd/tx',
-          payload: { name, params, tx, count, error },
+          payload: { tx, name, params, error },
         });
       });
     }

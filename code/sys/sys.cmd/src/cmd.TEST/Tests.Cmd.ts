@@ -121,8 +121,6 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       await Time.wait(0);
       expect(fired.length).to.eql(length);
       expect(fired[length - 1].params.foo).to.eql(length);
-      expect(fired.map((e) => e.count)).to.eql(Array.from({ length }, (_, i) => i + 1));
-
       dispose();
     });
 

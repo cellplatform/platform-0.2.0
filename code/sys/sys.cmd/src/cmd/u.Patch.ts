@@ -16,11 +16,10 @@ export const Patch = {
     return patch.path.trim().split('/').filter(Boolean);
   },
 
-  includesCountChange(patches: t.CmdPatch[], paths: t.CmdPaths) {
-    return patches.some((patch) => Patch.isCountChange(patch, paths));
+  includesQueueChange(patches: t.CmdPatch[], paths: t.CmdPaths) {
+    return patches.some((patch) => Patch.isQueueChange(patch, paths));
   },
-
-  isCountChange(patch: t.CmdPatch, paths: t.CmdPaths) {
-    return Patch.startsWith(patch, paths.counter);
+  isQueueChange(patch: t.CmdPatch, paths: t.CmdPaths) {
+    return Patch.startsWith(patch, paths.queue);
   },
 } as const;

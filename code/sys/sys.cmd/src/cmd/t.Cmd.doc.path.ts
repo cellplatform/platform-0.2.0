@@ -5,12 +5,13 @@ import type { t, u } from './common';
  * the command structure within the CRDT.
  */
 export type CmdPaths = {
+  queue: t.ObjectPath;
+
   name: t.ObjectPath;
   params: t.ObjectPath;
   error: t.ObjectPath;
   counter: t.ObjectPath;
   tx: t.ObjectPath;
-  queue: t.ObjectPath;
 };
 
 /**

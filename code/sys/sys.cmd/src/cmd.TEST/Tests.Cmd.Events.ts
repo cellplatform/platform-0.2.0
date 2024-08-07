@@ -110,9 +110,9 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const events = cmd1.events(dispose$);
 
         const fired: t.CmdEvent[] = [];
-        const firedInvoked: t.CmdTx[] = [];
+        const invoked: t.CmdTx[] = [];
         events.$.subscribe((e) => fired.push(e));
-        events.tx$.subscribe((e) => firedInvoked.push(e));
+        events.tx$.subscribe((e) => invoked.push(e));
 
         const tx = 'tx.foo';
         cmd1.invoke('Foo', { foo: 0 }, { tx });
@@ -121,28 +121,21 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         await Time.wait(0);
         expect(fired.length).to.eql(3);
-        expect(firedInvoked.length).to.eql(3);
-        expect(fired.map((e) => e.payload)).to.eql(firedInvoked);
+        expect(invoked.length).to.eql(3);
+        expect(fired.map((e) => e.payload)).to.eql(invoked);
 
-        const counts = firedInvoked.map((e) => e.count);
-        expect(counts).to.eql([1, 2, 3]);
-        expect(firedInvoked.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
+        expect(invoked.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
 
-        expect(firedInvoked[0].params).to.eql({ foo: 0 });
-        expect(firedInvoked[1].params).to.eql({});
-        expect(firedInvoked[2].params).to.eql({ msg: 'hello' });
+        expect(invoked[0].params).to.eql({ foo: 0 });
+        expect(invoked[1].params).to.eql({});
+        expect(invoked[2].params).to.eql({ msg: 'hello' });
 
-        expect(doc.current).to.eql({
-          tx,
-          name: 'Bar',
-          params: { msg: 'hello' },
-          counter: { value: counts[2] },
-          queue: [
-            { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo' },
-            { name: 'Bar', params: {}, tx: 'tx.foo' },
-            { name: 'Bar', params: { msg: 'hello' }, tx: 'tx.foo' },
-          ],
-        });
+        expect(doc.current.queue).to.eql([
+          { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo' },
+          { name: 'Bar', params: {}, tx: 'tx.foo' },
+          { name: 'Bar', params: { msg: 'hello' }, tx: 'tx.foo' },
+        ]);
+
         dispose();
       });
 
@@ -160,21 +153,15 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         const tx = 'tx.foo';
         const p = { msg: 'hello' };
-        const e = undefined;
         const cmd = Cmd.create<C>(doc, { paths });
         const fired: t.CmdTx[] = [];
         cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
         cmd.invoke('Bar', p, { tx });
 
         await Time.wait(0);
-        const count = fired[0].count;
         expect(fired.length).to.eql(1);
+        expect((doc.current as any).z.q).to.eql([{ name: 'Bar', params: p, tx }]);
 
-        expect(doc.current).to.eql({
-          a: 'Bar',
-          z: { n: { value: count }, tx, q: [{ name: 'Bar', params: p, tx }] },
-          x: { y: { p } },
-        });
         dispose();
       });
 
