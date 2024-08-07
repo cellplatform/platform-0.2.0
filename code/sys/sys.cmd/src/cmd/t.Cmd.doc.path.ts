@@ -1,4 +1,4 @@
-import type { t, u } from './common';
+import type { t } from './common';
 
 /**
  * Abstract resolver paths to the location of
@@ -6,12 +6,6 @@ import type { t, u } from './common';
  */
 export type CmdPaths = {
   queue: t.ObjectPath;
-
-  name: t.ObjectPath;
-  params: t.ObjectPath;
-  error: t.ObjectPath;
-  counter: t.ObjectPath;
-  tx: t.ObjectPath;
 };
 
 /**
@@ -19,9 +13,4 @@ export type CmdPaths = {
  */
 export type CmdPathsObject<C extends t.CmdType = t.CmdType> = {
   queue?: t.CmdQueueItem<C>[];
-  name?: C['name'];
-  params?: C['params'];
-  error?: u.ExtractError<C>;
-  counter?: t.CmdCounter;
-  tx?: string;
 };

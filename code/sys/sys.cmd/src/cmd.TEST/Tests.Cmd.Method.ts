@@ -355,10 +355,13 @@ export function methodTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const res = method({ a: 1, b: 2 });
           await res.promise();
 
-          expect(doc.current.error).to.eql(error);
           expect(res.error).to.eql(error);
           expect(res.ok).to.eql(false);
           expect(res.status === 'Error').to.eql(true);
+
+          const queue = doc.current.queue as t.CmdQueue;
+          expect(queue[0].error).to.eql(undefined);
+          expect(queue[1].error).to.eql(error);
 
           dispose();
         });

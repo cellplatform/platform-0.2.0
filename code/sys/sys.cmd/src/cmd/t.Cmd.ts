@@ -1,5 +1,8 @@
 import type { t } from './common';
 
+type Tx = string;
+export type CmdTxFactory = () => Tx;
+
 /**
  * Command API.
  */

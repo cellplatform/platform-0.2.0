@@ -141,16 +141,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       it('⚡️← custom paths', async () => {
         const { doc, dispose, dispose$ } = await setup();
-
-        const paths: t.CmdPaths = {
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          error: ['z', 'e'],
-          counter: ['z', 'n'],
-          tx: ['z', 'tx'],
-          queue: ['z', 'q'],
-        };
-
+        const paths: t.CmdPaths = { queue: ['z', 'q'] };
         const tx = 'tx.foo';
         const p = { msg: 'hello' };
         const cmd = Cmd.create<C>(doc, { paths });

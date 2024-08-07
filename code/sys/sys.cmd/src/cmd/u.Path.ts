@@ -1,4 +1,4 @@
-import { DEFAULTS, Delete, ObjectPath, slug, type t, type u } from './common';
+import { DEFAULTS, isObject, ObjectPath, slug, type t } from './common';
 
 type S = string;
 type O = Record<string, unknown>;
@@ -84,47 +84,9 @@ export const Path = {
         },
       },
 
-      name<N extends S = S>(d: O) {
-        return (resolve<N>(d, paths.name) || '') as N;
-      },
-
-      params<P extends O = O>(d: O, defaultParams: P) {
-        const get = () => resolve<P>(d, paths.params);
-        if (!get()) Mutate.value(d, paths.params, defaultParams);
-        return get()!;
-      },
-
-      error<E extends O = O>(d: O, defaultError?: E) {
-        const get = () => resolve<E>(d, paths.error);
-        if (!get()) Mutate.value(d, paths.error, defaultError);
-        return get()!;
-      },
-
-      counter(d: O, factory: t.CmdCounterFactory = DEFAULTS.counter) {
-        const get = () => resolve<t.CmdCounter>(d, paths.counter);
-        if (!get()) Mutate.value(d, paths.counter, factory.create());
-        return get()!;
-      },
-
-      tx(d: O) {
-        return resolve<string>(d, paths.tx) || '';
-      },
-
-      toObject<C extends t.CmdType>(
-        d: O,
-        options: { defaultParams?: C['params']; defaultError?: u.ExtractError<C> } = {},
-      ): t.CmdObject<C> {
-        type N = C['name'];
-        type P = C['params'];
-        type E = u.ExtractError<C>;
-        return Delete.undefined({
-          queue: api.queue.list<C>(d),
-          name: api.name<N>(d),
-          params: api.params<P>(d, (options.defaultParams ?? {}) as P),
-          error: api.error(d, options.defaultError as E),
-          count: api.counter(d).value,
-          tx: api.tx(d),
-        });
+      toObject<C extends t.CmdType>(d: O): t.CmdObject<C> {
+        const queue = api.queue.list<C>(d);
+        return { queue };
       },
     } as const;
     return api;
@@ -135,11 +97,6 @@ export const Path = {
    */
   prepend(prefix: t.ObjectPath, paths: t.CmdPaths = DEFAULTS.paths): t.CmdPaths {
     return {
-      name: [...prefix, ...paths.name],
-      params: [...prefix, ...paths.params],
-      error: [...prefix, ...paths.error],
-      counter: [...prefix, ...paths.counter],
-      tx: [...prefix, ...paths.tx],
       queue: [...prefix, ...paths.queue],
     };
   },
@@ -149,10 +106,10 @@ export const Path = {
    */
   Is: {
     commandPaths(input: any): input is t.CmdPaths {
-      if (input === null || typeof input !== 'object') return false;
+      if (!isObject(input)) return false;
       const obj = input as t.CmdPaths;
       const is = Path.Is.stringArray;
-      return is(obj.counter) && is(obj.name) && is(obj.params) && is(obj.tx);
+      return is(obj.queue);
     },
 
     stringArray(input: any): input is string[] {

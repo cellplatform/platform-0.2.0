@@ -8,28 +8,19 @@ export type * as u from './u.t';
  */
 const paths: t.CmdPaths = {
   queue: ['queue'],
-
-  name: ['name'],
-  params: ['params'],
-  error: ['error'],
-  counter: ['counter'],
-  tx: ['tx'],
-};
-
-const counter: t.CmdCounterFactory = {
-  create(initial = 0) {
-    return { value: initial };
-  },
-  increment(mutate) {
-    mutate.value += 1;
-  },
 };
 
 export const DEFAULTS = {
   timeout: 3000,
   paths,
-  counter,
   tx: () => slug(),
   error: (message: string): t.Error => ({ message }),
   symbol: { transport: Symbol('transport') },
 } as const;
+
+/**
+ * Helpers
+ */
+export function isObject(input: any): input is object {
+  return typeof input === 'object' && input !== null;
+}

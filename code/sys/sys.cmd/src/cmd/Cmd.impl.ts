@@ -1,4 +1,4 @@
-import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
+import { DEFAULTS, Time, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
@@ -7,7 +7,6 @@ type Tx = string;
 type OptionsInput = Options | t.CmdPaths;
 type Options = {
   paths?: t.CmdPaths | t.ObjectPath;
-  counter?: t.CmdCounterFactory;
   tx?: t.CmdTxFactory;
 };
 
@@ -18,22 +17,11 @@ export function create<C extends t.CmdType>(
   transport: t.CmdTransport,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  const mutate = ObjectPath.Mutate.value;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
-  const counter = args.counter ?? DEFAULTS.counter;
 
   const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
-    transport.change((d) => {
-      const count = resolve.counter(d, DEFAULTS.counter) as t.CmdCounter;
-      mutate(d, paths.tx, tx);
-      mutate(d, paths.name, name);
-      mutate(d, paths.params, params);
-      mutate(d, paths.error, error);
-      if (increment) counter.increment(count);
-    });
-
     transport.change((d) => {
       const index = resolve.queue.index(d);
       index.name(name);

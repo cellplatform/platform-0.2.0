@@ -10,25 +10,16 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   describe('Cmd', () => {
     it('Cmd.DEFAULTS', () => {
       expect(Cmd.DEFAULTS).to.eql(DEFAULTS);
+    });
 
-      expect(DEFAULTS.counter.create()).to.eql({ value: 0 });
-      expect(DEFAULTS.counter.create(123)).to.eql({ value: 123 });
-      expect(DEFAULTS.counter.create()).to.not.equal(DEFAULTS.counter.create());
-
+    it('Cmd.DEFAULTS.error', () => {
       const error: t.Error = { message: '🍌' };
       expect(DEFAULTS.error('🍌')).to.eql(error);
     });
 
     it('create ← {paths} param {object} variant', async () => {
       const { factory, dispose } = await setup();
-      const paths: t.CmdPaths = {
-        name: ['a'],
-        params: ['x', 'p'],
-        counter: ['x', 'n'],
-        error: ['x', 'e'],
-        tx: ['x', 'tx'],
-        queue: ['x', 'q'],
-      };
+      const paths: t.CmdPaths = { queue: ['x', 'q'] };
 
       const doc1 = await factory();
       const doc2 = await factory();
@@ -47,25 +38,14 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       expect(doc1.current).to.eql({
         queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
-        name: 'Foo',
-        params: { foo: 888 },
-        counter: { value: 1 },
-        tx,
       });
 
       expect(doc2.current).to.eql({
-        a: 'Bar',
-        x: { q: [{ name: 'Bar', params: {}, tx, error: e }], p: {}, n: { value: 1 }, tx, e },
+        x: { q: [{ name: 'Bar', params: {}, tx, error: e }] },
       });
 
       expect(doc3.current).to.eql({
-        a: 'Bar',
-        x: {
-          q: [{ name: 'Bar', params: { msg: '👋' }, tx }],
-          p: { msg: '👋' },
-          n: { value: 1 },
-          tx,
-        },
+        x: { q: [{ name: 'Bar', params: { msg: '👋' }, tx }] },
       });
 
       dispose();
@@ -83,13 +63,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       await Time.wait(0);
 
       expect(doc.current).to.eql({
-        foo: {
-          queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
-          name: 'Foo',
-          params: { foo: 888 },
-          counter: { value: 1 },
-          tx,
-        },
+        foo: { queue: [{ name: 'Foo', params: { foo: 888 }, tx }] },
       });
 
       dispose();

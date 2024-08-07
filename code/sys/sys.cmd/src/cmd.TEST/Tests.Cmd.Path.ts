@@ -16,14 +16,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('{paths} object', () => {
-        const custom: t.CmdPaths = {
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          counter: ['z', 'n'],
-          error: ['z', 'e'],
-          tx: ['z', 'tx'],
-          queue: ['z', 'q'],
-        };
+        const custom: t.CmdPaths = { queue: ['z', 'q'] };
         expect(Path.wrangle(DEFAULTS.paths)).to.eql(DEFAULTS.paths);
         expect(Path.wrangle(custom)).to.eql(custom);
       });
@@ -43,92 +36,30 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const resolve = Path.resolver();
         expect(resolve.paths).to.eql(DEFAULTS.paths);
 
-        const counter = DEFAULTS.counter.create();
-        const count = counter.value;
-        const name = 'foo.bar';
-        const params: P = { foo: 0 };
-        const tx = 'tx.foo';
-        const obj: t.CmdPathsObject = { queue: [], name, params, counter, tx };
-
+        const obj: t.CmdPathsObject = { queue: [] };
         expect(resolve.queue.list(obj)).to.eql([]);
-        expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.counter(obj)).to.eql(counter);
-        expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ queue: [], count, name, params, tx });
+        expect(resolve.toObject(obj)).to.eql({ queue: [] });
       });
 
       it('custom paths: {object}', () => {
         const resolve = Path.resolver({
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          counter: ['z', 'n'],
-          error: ['z', 'e'],
-          tx: ['z', 'tx'],
           queue: ['z', 'q'],
         });
-        const tx = 'tx.foo';
-        const e = DEFAULTS.error('404');
-        const n = DEFAULTS.counter.create();
-        const r = { sum: 5 };
-        const params: P = { foo: 123 };
-        const name = 'foo.bar';
         const obj = {
-          a: name,
-          x: { y: { p: params }, r },
-          z: { n, tx, e, q: [] },
+          z: { q: [] },
         };
         expect(resolve.queue.list(obj)).to.eql([]);
-        expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params<P>(obj, { foo: 0 })).to.eql(params);
-        expect(resolve.error(obj)).to.eql(e);
-        expect(resolve.counter(obj)).to.eql(n);
-        expect(resolve.tx(obj)).to.eql(tx);
         expect(resolve.toObject(obj)).to.eql({
           queue: [],
-          tx,
-          count: n.value,
-          name,
-          params,
-          error: e,
         });
       });
 
       it('custom paths: [prepended]', () => {
         const resolve = Path.resolver(['foo', 'bar']);
-
-        const counter = DEFAULTS.counter.create();
-        const count = counter.value;
-        const name = 'foo.bar';
-        const params: P = { foo: 0 };
-        const tx = 'tx.foo';
-        const cmd: t.CmdPathsObject = { name, params, counter, tx, queue: [] };
+        const cmd: t.CmdPathsObject = { queue: [] };
         const obj = { foo: { bar: cmd } };
-
         expect(resolve.queue.list(obj)).to.eql(cmd.queue);
-        expect(resolve.name(obj)).to.eql(name);
-        expect(resolve.params(obj, {})).to.eql(params);
-        expect(resolve.counter(obj)).to.eql(counter);
-        expect(resolve.tx(obj)).to.eql(tx);
-        expect(resolve.toObject(obj)).to.eql({ count, name, params, tx, queue: [] });
-      });
-
-      it('.params ← generates new object', () => {
-        const resolve = Path.resolver(DEFAULTS.paths);
-        const params: P = { foo: 0 };
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { params: { foo: 123 } };
-        expect(resolve.params(obj1, params).foo).to.eql(0);
-        expect(resolve.params(obj2, params).foo).to.eql(123);
-      });
-
-      it('.count ← generates new object', () => {
-        const resolve = Path.resolver(DEFAULTS.paths);
-        const counter = DEFAULTS.counter.create(10);
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { counter };
-        expect(resolve.counter(obj1).value).to.eql(0);
-        expect(resolve.counter(obj2).value).to.eql(10);
+        expect(resolve.toObject(obj)).to.eql({ queue: [] });
       });
 
       it('.queue.list ← generates new [array]', () => {
@@ -224,14 +155,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       it('defaults', () => {
         const test = (paths?: t.CmdPaths) => {
           const res = Path.prepend(['foo', 'bar'], paths);
-          expect(res).to.eql({
-            name: ['foo', 'bar', 'name'],
-            params: ['foo', 'bar', 'params'],
-            error: ['foo', 'bar', 'error'],
-            counter: ['foo', 'bar', 'counter'],
-            tx: ['foo', 'bar', 'tx'],
-            queue: ['foo', 'bar', 'queue'],
-          });
+          expect(res).to.eql({ queue: ['foo', 'bar', 'queue'] });
         };
 
         test();
@@ -239,23 +163,9 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('custom', () => {
-        const input: t.CmdPaths = {
-          name: ['a'],
-          params: ['x', 'y', 'p'],
-          error: ['x', 'e'],
-          counter: ['z', 'n'],
-          tx: ['z', 'tx'],
-          queue: ['z', 'q'],
-        };
+        const input: t.CmdPaths = { queue: ['z', 'q'] };
         const res = Path.prepend(['foo'], input);
-        expect(res).to.eql({
-          name: ['foo', 'a'],
-          params: ['foo', 'x', 'y', 'p'],
-          error: ['foo', 'x', 'e'],
-          counter: ['foo', 'z', 'n'],
-          tx: ['foo', 'z', 'tx'],
-          queue: ['foo', 'z', 'q'],
-        });
+        expect(res).to.eql({ queue: ['foo', 'z', 'q'] });
       });
     });
 
@@ -266,24 +176,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const NOT = [undefined, null, 123, true, {}, [], Symbol('foo'), BigInt(123), ''];
         NOT.forEach((value) => expect(Path.Is.commandPaths(value)).to.eql(false));
         expect(Path.Is.commandPaths({ counter: [123], name: ['hello'], params: [] })).to.eql(false);
-
         expect(Path.Is.commandPaths(DEFAULTS.paths)).to.eql(true);
-        expect(
-          Path.Is.commandPaths({
-            name: ['a'],
-            params: ['x', 'y', 'p'],
-            counter: ['z', 'n'],
-            tx: ['abc', 'tx'],
-          }),
-        ).to.eql(true);
-        expect(
-          Path.Is.commandPaths({
-            name: ['a'],
-            params: ['x', 'y', 'p'],
-            counter: ['z', 'n'],
-            tx: ['abc', 'tx'],
-          }),
-        ).to.eql(true);
+        expect(Path.Is.commandPaths({ queue: ['a', 'b'] })).to.eql(true);
       });
     });
   });

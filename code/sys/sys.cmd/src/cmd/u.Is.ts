@@ -1,4 +1,4 @@
-import type { t } from './common';
+import { isObject, type t } from './common';
 
 /**
  * Flags: Event pattern inference.
@@ -31,10 +31,3 @@ export const Is = {
     );
   },
 } as const;
-
-/**
- * Helpers
- */
-function isObject(input: any): input is object {
-  return typeof input === 'object' && input !== null;
-}
