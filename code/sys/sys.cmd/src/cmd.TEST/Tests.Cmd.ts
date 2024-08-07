@@ -50,9 +50,13 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         params: { foo: 888 },
         counter: { value: 1 },
         tx,
+        queue: [],
       });
-      expect(doc2.current).to.eql({ a: 'Bar', x: { p: {}, n: { value: 1 }, tx, e } });
-      expect(doc3.current).to.eql({ a: 'Bar', x: { p: { msg: '👋' }, n: { value: 1 }, tx } });
+      expect(doc2.current).to.eql({ a: 'Bar', x: { q: [], p: {}, n: { value: 1 }, tx, e } });
+      expect(doc3.current).to.eql({
+        a: 'Bar',
+        x: { q: [], p: { msg: '👋' }, n: { value: 1 }, tx },
+      });
 
       dispose();
     });
@@ -69,7 +73,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       await Time.wait(0);
       expect(doc.current).to.eql({
-        foo: { name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx },
+        foo: { queue: [], name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx },
       });
 
       dispose();
@@ -80,6 +84,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       expect(Cmd.Is.validState(doc.current)).to.eql(false);
 
       Cmd.create(doc);
+      console.log('doc.current', doc.current);
       expect(Cmd.Is.validState(doc.current)).to.eql(true);
 
       dispose();

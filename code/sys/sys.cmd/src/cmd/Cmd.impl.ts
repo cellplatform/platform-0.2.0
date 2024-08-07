@@ -36,7 +36,10 @@ export function create<C extends t.CmdType>(
   };
 
   // Ensure document is initialized with the {cmd} structure.
-  if (!Is.validState(transport.current)) update('', '', {}); // ← (default empty structure).
+  if (!Is.validState(transport.current)) {
+    update('', '', {}); // ← (default empty structure).
+    transport.change((d) => resolve.queue.list(d));
+  }
 
   /**
    * Invoke method (overloads)

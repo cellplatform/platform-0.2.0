@@ -9,6 +9,7 @@ export const Is = {
     if (input === null || typeof input !== 'object') return false;
     const o = input as t.CmdPathsObject;
     return (
+      Array.isArray(o.queue) &&
       typeof o.name === 'string' &&
       typeof o.params === 'object' &&
       typeof o.counter?.value === 'number' &&
