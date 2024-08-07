@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     '@preact/signals-react': '2.1.0',
     'ext.lib.immer': '0.0.0',
     'minimist': '1.2.8',
-    'qrcode': '1.5.3',
+    'qrcode': '1.5.4',
     'react': '18.3.1',
     'react-dom': '18.3.1',
     'react-icons': '5.2.1',
