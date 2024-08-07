@@ -84,9 +84,19 @@ export const Path = {
         },
       },
 
+      total(d: O) {
+        type T = t.CmdTotals;
+        const path = paths.total;
+        const get = () => resolve<T>(d, path);
+        if (!get()) Mutate.value(d, path, DEFAULTS.total());
+        return get()!;
+      },
+
       toObject<C extends t.CmdType>(d: O): t.CmdObject<C> {
-        const queue = api.queue.list<C>(d);
-        return { queue };
+        return {
+          queue: api.queue.list<C>(d),
+          total: api.total(d),
+        };
       },
     } as const;
     return api;
@@ -98,6 +108,7 @@ export const Path = {
   prepend(prefix: t.ObjectPath, paths: t.CmdPaths = DEFAULTS.paths): t.CmdPaths {
     return {
       queue: [...prefix, ...paths.queue],
+      total: [...prefix, ...paths.total],
     };
   },
 

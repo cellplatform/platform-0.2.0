@@ -16,7 +16,10 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('{paths} object', () => {
-        const custom: t.CmdPaths = { queue: ['z', 'q'] };
+        const custom: t.CmdPaths = {
+          queue: ['z', 'q'],
+          total: ['t', 'a'],
+        };
         expect(Path.wrangle(DEFAULTS.paths)).to.eql(DEFAULTS.paths);
         expect(Path.wrangle(custom)).to.eql(custom);
       });
@@ -38,12 +41,16 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         const obj: t.CmdPathsObject = { queue: [] };
         expect(resolve.queue.list(obj)).to.eql([]);
-        expect(resolve.toObject(obj)).to.eql({ queue: [] });
+        expect(resolve.toObject(obj)).to.eql({
+          queue: [],
+          total: DEFAULTS.total(),
+        });
       });
 
       it('custom paths: {object}', () => {
         const resolve = Path.resolver({
           queue: ['z', 'q'],
+          total: ['t', 'a'],
         });
         const obj = {
           z: { q: [] },
@@ -51,6 +58,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(resolve.queue.list(obj)).to.eql([]);
         expect(resolve.toObject(obj)).to.eql({
           queue: [],
+          total: DEFAULTS.total(),
         });
       });
 
@@ -59,7 +67,10 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const cmd: t.CmdPathsObject = { queue: [] };
         const obj = { foo: { bar: cmd } };
         expect(resolve.queue.list(obj)).to.eql(cmd.queue);
-        expect(resolve.toObject(obj)).to.eql({ queue: [] });
+        expect(resolve.toObject(obj)).to.eql({
+          queue: [],
+          total: DEFAULTS.total(),
+        });
       });
 
       it('.queue.list ← generates new [array]', () => {
@@ -149,13 +160,25 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           expect(obj.queue?.[1].tx).to.eql('my.tx');
         });
       });
+
+      it('.total', () => {
+        const resolve = Path.resolver(DEFAULTS.paths);
+        const obj: t.CmdPathsObject = {};
+        const res = resolve.total(obj);
+        expect(obj.total).to.eql(res);
+        expect(res).to.eql(DEFAULTS.total());
+        expect(res.purged).to.eql(0);
+      });
     });
 
     describe('Path.prepend', () => {
       it('defaults', () => {
         const test = (paths?: t.CmdPaths) => {
           const res = Path.prepend(['foo', 'bar'], paths);
-          expect(res).to.eql({ queue: ['foo', 'bar', 'queue'] });
+          expect(res).to.eql({
+            queue: ['foo', 'bar', 'queue'],
+            total: ['foo', 'bar', 'total'],
+          });
         };
 
         test();
@@ -163,9 +186,15 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('custom', () => {
-        const input: t.CmdPaths = { queue: ['z', 'q'] };
+        const input: t.CmdPaths = {
+          queue: ['z', 'q'],
+          total: ['t', 'a'],
+        };
         const res = Path.prepend(['foo'], input);
-        expect(res).to.eql({ queue: ['foo', 'z', 'q'] });
+        expect(res).to.eql({
+          queue: ['foo', 'z', 'q'],
+          total: ['foo', 't', 'a'],
+        });
       });
     });
 

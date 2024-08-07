@@ -19,7 +19,10 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('create ← {paths} param {object} variant', async () => {
       const { factory, dispose } = await setup();
-      const paths: t.CmdPaths = { queue: ['x', 'q'] };
+      const paths: t.CmdPaths = {
+        queue: ['x', 'q'],
+        total: ['t', 'a'],
+      };
 
       const doc1 = await factory();
       const doc2 = await factory();

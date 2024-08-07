@@ -8,14 +8,18 @@ export type * as u from './u.t';
  */
 const paths: t.CmdPaths = {
   queue: ['queue'],
+  total: ['total'],
 };
 
 export const DEFAULTS = {
+  symbol: { transport: Symbol('transport') },
   timeout: 3000,
   paths,
   tx: () => slug(),
   error: (message: string): t.Error => ({ message }),
-  symbol: { transport: Symbol('transport') },
+  total(): t.CmdTotals {
+    return { purged: 0 };
+  },
 } as const;
 
 /**

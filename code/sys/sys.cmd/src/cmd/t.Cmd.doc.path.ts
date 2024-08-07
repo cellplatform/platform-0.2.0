@@ -6,6 +6,7 @@ import type { t } from './common';
  */
 export type CmdPaths = {
   queue: t.ObjectPath;
+  total: t.ObjectPath;
 };
 
 /**
@@ -13,4 +14,5 @@ export type CmdPaths = {
  */
 export type CmdPathsObject<C extends t.CmdType = t.CmdType> = {
   queue?: t.CmdQueueItem<C>[];
+  total?: t.CmdTotals;
 };
