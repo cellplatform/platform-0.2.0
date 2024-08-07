@@ -46,6 +46,7 @@ export type {
   CmdObject,
   CmdPaths,
   CmdPathsObject,
+  CmdQueue,
   CmdTestFactory,
   CmdTestSetup,
   CmdTestState,

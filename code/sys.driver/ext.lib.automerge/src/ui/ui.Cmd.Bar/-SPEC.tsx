@@ -185,19 +185,6 @@ export default Dev.describe(name, async (e) => {
                 onToggleClick(e) {
                   State.debug.change((d) => Dev.toggle(d, 'docVisible'));
                 },
-                beforeRender(mutate) {
-                  const paths = CmdBar.Path.defaults;
-                  const resolve = CmdBar.Path.resolver(paths);
-                  const cmd = resolve(mutate).cmd;
-                  if (cmd) {
-                    const resolve = Cmd.Path.resolver();
-                    const tx = resolve.tx(cmd);
-                    if (tx) {
-                      ObjectPath.Mutate.delete(mutate, paths.cmd);
-                      ObjectPath.Mutate.value(mutate, [`cmd(tx.${tx})`], cmd);
-                    }
-                  }
-                },
               },
             },
           }}
