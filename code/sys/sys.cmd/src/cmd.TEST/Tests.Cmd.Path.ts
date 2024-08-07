@@ -122,24 +122,6 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(resolve.params(obj2, params).foo).to.eql(123);
       });
 
-      it('.error', () => {
-        const resolve = Path.resolver(DEFAULTS.paths);
-
-        type CustomError = t.Error & { type: 'BadDay' };
-        const err1 = DEFAULTS.error('lulz');
-        const err2: CustomError = { message: '😞', type: 'BadDay' };
-        const obj1: t.CmdPathsObject<C> = {};
-        const obj2: t.CmdPathsObject<C> = { error: err1 };
-
-        expect(resolve.error({ ...obj1 })).to.eql(undefined);
-        expect(resolve.error({ ...obj1 }, err2).type === 'BadDay').to.eql(true);
-        expect(resolve.error({ ...obj2 }, err2).message).to.eql('lulz');
-
-        const doc: t.CmdPathsObject = { name: 'foo', params: {}, error: err1 };
-        expect(resolve.toObject(obj1).error).to.eql(undefined);
-        expect(resolve.toObject(doc).error).to.eql(err1);
-      });
-
       it('.count ← generates new object', () => {
         const resolve = Path.resolver(DEFAULTS.paths);
         const counter = DEFAULTS.counter.create(10);

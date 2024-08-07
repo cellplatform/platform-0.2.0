@@ -5,15 +5,6 @@ import type { t, u } from './common';
  */
 export type CmdObject<C extends t.CmdType> = {
   queue: t.CmdQueueItem<C>[];
-
-  /**
-   * TODO 🐷
-   */
-  name: C['name'];
-  params: C['params'];
-  count: number;
-  tx: string;
-  error?: u.ExtractError<C>;
 };
 
 export type CmdQueueItem<C extends t.CmdType> = {
