@@ -33,10 +33,10 @@ describe('CmdBar.Ctrl', () => {
     const transport = Immutable.clonerRef({});
     const ctrl1 = Ctrl.create(transport);
     const ctrl2 = Ctrl.create(); // NB: auto immutable "transport" construction.
-    const expectCounter = (value: number) => {
+    const expectCount = (length: number) => {
       const paths = CmdBar.DEFAULTS.paths;
       const cmd = ObjectPath.resolve<t.CmdPathsObject>(transport.current, paths.cmd);
-      expect(cmd?.counter?.value).to.eql(value);
+      expect(cmd?.queue?.length).to.eql(length);
     };
 
     let fired = 0;
@@ -45,11 +45,11 @@ describe('CmdBar.Ctrl', () => {
       .events()
       .on('Invoke', () => fired++);
 
-    expectCounter(0);
+    expectCount(0);
     ctrl1.invoke({ text: 'foo' });
     ctrl2.invoke({ text: 'bar' });
     await Time.wait(0);
-    expectCounter(1);
+    expectCount(1);
     expect(fired).to.eql(2);
   });
 
@@ -64,7 +64,7 @@ describe('CmdBar.Ctrl', () => {
     await Time.wait(0);
 
     const current = transport.current as any;
-    expect(current.foo.bar.cmd.params).to.eql({ text: 'foo' });
+    expect(current.foo.bar.cmd.queue[0].params).to.eql({ text: 'foo' });
   });
 
   it('Ctrl.toCtrl', () => {
@@ -153,8 +153,7 @@ describe('CmdBar.Ctrl', () => {
       const resolve = Path.resolver();
 
       expect(resolve(transport.current).text).to.eql('');
-      expect(resolve(transport.current).cmd.name).to.eql('');
-      expect(resolve(transport.current).cmd.counter?.value).to.eql(0);
+      expect(resolve(transport.current).cmd.queue).to.eql([]);
       expect(resolve(transport.current).history).to.eql([]);
 
       transport.change((d) => {
@@ -166,12 +165,14 @@ describe('CmdBar.Ctrl', () => {
       ref.ctrl.invoke({ text: 'foobar' });
       await Time.wait(0);
 
+      expect(ref.resolve(transport.current).text).to.eql('hello');
       expect(resolve(transport.current).text).to.eql('hello');
-      expect(resolve(transport.current).cmd.name).to.eql('Invoke');
-      expect(resolve(transport.current).cmd.counter?.value).to.eql(1);
       expect(resolve(transport.current).history).to.eql(['foo --bar']);
 
-      expect(ref.resolve(transport.current).text).to.eql('hello');
+      const queue = resolve(transport.current).cmd.queue!;
+      expect(queue.length).to.eql(1);
+      expect(queue[0].name).to.eql('Invoke');
+      expect(queue[0].params).to.eql({ text: 'foobar' });
     });
   });
 });

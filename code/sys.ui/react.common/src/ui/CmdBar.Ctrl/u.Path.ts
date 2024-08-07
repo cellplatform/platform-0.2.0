@@ -40,12 +40,7 @@ export const Path = {
  */
 const wrangle = {
   emptyCmd(): C {
-    const cmd: t.CmdPathsObject = {
-      name: '',
-      params: {},
-      counter: { value: 0 },
-      tx: '',
-    };
+    const cmd: t.CmdPathsObject = { queue: [] };
     return cmd as C;
   },
 } as const;
