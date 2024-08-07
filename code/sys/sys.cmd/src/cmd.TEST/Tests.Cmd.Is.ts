@@ -4,7 +4,7 @@ import type { C } from './t';
 
 const Is = Cmd.Is;
 
-export function flagTests(setup: t.CmdTestSetup, args: t.TestArgs) {
+export function flagsTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
 
   describe('Cmd.Is', () => {
