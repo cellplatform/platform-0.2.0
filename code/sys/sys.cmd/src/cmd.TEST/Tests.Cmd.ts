@@ -6,6 +6,7 @@ const DEFAULTS = Cmd.DEFAULTS;
 
 export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
+  const total = Cmd.DEFAULTS.total();
 
   describe('Cmd', () => {
     it('Cmd.DEFAULTS', () => {
@@ -40,15 +41,18 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       await Time.wait(0);
 
       expect(doc1.current).to.eql({
+        total,
         queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
       });
 
       expect(doc2.current).to.eql({
         x: { q: [{ name: 'Bar', params: {}, tx, error: e }] },
+        t: { a: total },
       });
 
       expect(doc3.current).to.eql({
         x: { q: [{ name: 'Bar', params: { msg: '👋' }, tx }] },
+        t: { a: total },
       });
 
       dispose();
@@ -66,7 +70,10 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       await Time.wait(0);
 
       expect(doc.current).to.eql({
-        foo: { queue: [{ name: 'Foo', params: { foo: 888 }, tx }] },
+        foo: {
+          total,
+          queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
+        },
       });
 
       dispose();

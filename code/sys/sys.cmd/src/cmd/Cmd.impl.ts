@@ -33,7 +33,10 @@ export function create<C extends t.CmdType>(
 
   // Ensure document is initialized with the {cmd} structure.
   if (!Is.state.cmd(transport.current)) {
-    transport.change((d) => resolve.queue.list(d)); // ← (default empty structure).
+    transport.change((d) => {
+      resolve.total(d);
+      resolve.queue.list(d);
+    });
   }
 
   /**

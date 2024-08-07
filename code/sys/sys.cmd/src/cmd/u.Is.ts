@@ -10,6 +10,7 @@ export const Is = {
       const o = input as t.CmdPathsObject;
       const q = o.queue;
       if (!Array.isArray(q)) return false;
+      if (!Is.state.total(o.total)) return false;
       if (q.length > 0 && !Is.state.item(q[q.length - 1])) return false;
       return true;
     },
@@ -18,6 +19,12 @@ export const Is = {
       if (!isObject(input)) return false;
       const o = input as t.CmdQueueItem<t.CmdType>;
       return typeof o.name === 'string' && typeof o.params === 'object' && typeof o.tx === 'string';
+    },
+
+    total(input: any): input is t.CmdTotals {
+      if (!isObject(input)) return false;
+      const o = input as t.CmdTotals;
+      return typeof o.purged === 'number';
     },
   },
 
