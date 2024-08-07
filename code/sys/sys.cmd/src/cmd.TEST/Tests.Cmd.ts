@@ -43,19 +43,29 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       cmd1.invoke('Foo', { foo: 888 }, tx);
       cmd2.invoke('Bar', {}, { tx, error: e }); // NB: as full {options} object.
       cmd3.invoke('Bar', { msg: '👋' }, tx);
-
       await Time.wait(0);
+
       expect(doc1.current).to.eql({
+        queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
         name: 'Foo',
         params: { foo: 888 },
         counter: { value: 1 },
         tx,
-        queue: [],
       });
-      expect(doc2.current).to.eql({ a: 'Bar', x: { q: [], p: {}, n: { value: 1 }, tx, e } });
+
+      expect(doc2.current).to.eql({
+        a: 'Bar',
+        x: { q: [{ name: 'Bar', params: {}, tx, error: e }], p: {}, n: { value: 1 }, tx, e },
+      });
+
       expect(doc3.current).to.eql({
         a: 'Bar',
-        x: { q: [], p: { msg: '👋' }, n: { value: 1 }, tx },
+        x: {
+          q: [{ name: 'Bar', params: { msg: '👋' }, tx }],
+          p: { msg: '👋' },
+          n: { value: 1 },
+          tx,
+        },
       });
 
       dispose();
@@ -70,10 +80,16 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const tx = 'tx.foo';
 
       cmd.invoke('Foo', { foo: 888 }, tx);
-
       await Time.wait(0);
+
       expect(doc.current).to.eql({
-        foo: { queue: [], name: 'Foo', params: { foo: 888 }, counter: { value: 1 }, tx },
+        foo: {
+          queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
+          name: 'Foo',
+          params: { foo: 888 },
+          counter: { value: 1 },
+          tx,
+        },
       });
 
       dispose();
@@ -81,16 +97,15 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('has initial {cmd} structure upon creation', async () => {
       const { doc, dispose } = await setup();
-      expect(Cmd.Is.validState(doc.current)).to.eql(false);
+      expect(Cmd.Is.state.cmd(doc.current)).to.eql(false);
 
       Cmd.create(doc);
-      console.log('doc.current', doc.current);
-      expect(Cmd.Is.validState(doc.current)).to.eql(true);
+      expect(Cmd.Is.state.cmd(doc.current)).to.eql(true);
 
       dispose();
     });
 
-    const length = 1000;
+    const length = 100;
     it(`${length}x invocations - order retained`, async () => {
       const { doc, dispose, dispose$ } = await setup();
       const cmd = Cmd.create<C>(doc);

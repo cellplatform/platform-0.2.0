@@ -192,8 +192,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const res1 = resolve.queue.index(obj);
           const res2 = resolve.queue.index(obj);
 
-          expect(res1.name(obj)).to.eql('');
-          expect(res2.name(obj, 'foo')).to.eql('foo');
+          expect(res1.name()).to.eql('');
+          expect(res2.name('foo')).to.eql('foo');
           expect(obj.queue?.[0].name).to.equal('');
           expect(obj.queue?.[1].name).to.equal('foo');
         });
@@ -205,8 +205,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const res2 = resolve.queue.index(obj);
           const params = { foo: 123 };
 
-          expect(res1.params(obj, {})).to.eql({});
-          expect(res2.params(obj, params)).to.eql(params);
+          expect(res1.params({})).to.eql({});
+          expect(res2.params(params)).to.eql(params);
           expect(obj.queue?.[0].params).to.eql({});
           expect(obj.queue?.[1].params).to.eql(params);
         });
@@ -218,8 +218,8 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const res2 = resolve.queue.index(obj);
           const error = { msg: '🐷' };
 
-          expect(res1.error(obj, {})).to.eql({});
-          expect(res2.error(obj, error)).to.eql(error);
+          expect(res1.error({})).to.eql({});
+          expect(res2.error(error)).to.eql(error);
           expect(obj.queue?.[0].error).to.eql({});
           expect(obj.queue?.[1].error).to.eql(error);
         });
@@ -230,9 +230,9 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           const res1 = resolve.queue.index(obj);
           const res2 = resolve.queue.index(obj);
 
-          expect(res1.tx(obj)).to.be.string;
-          expect(res2.tx(obj, 'my.tx')).to.eql('my.tx');
-          expect(obj.queue?.[0].tx).to.eql(res1.tx(obj));
+          expect(res1.tx()).to.be.string;
+          expect(res2.tx('my.tx')).to.eql('my.tx');
+          expect(obj.queue?.[0].tx).to.eql(res1.tx());
           expect(obj.queue?.[1].tx).to.eql('my.tx');
         });
       });

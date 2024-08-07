@@ -1,24 +1,28 @@
 import type { t } from './common';
-import { Patch } from './u.Patch';
 
 /**
  * Flags: Event pattern inference.
  */
 export const Is = {
-  validState(input: any): input is t.CmdPathsObject {
-    if (input === null || typeof input !== 'object') return false;
-    const o = input as t.CmdPathsObject;
-    return (
-      Array.isArray(o.queue) &&
-      typeof o.name === 'string' &&
-      typeof o.params === 'object' &&
-      typeof o.counter?.value === 'number' &&
-      typeof o.tx === 'string'
-    );
+  state: {
+    cmd(input: any): input is t.CmdPathsObject {
+      if (!isObject(input)) return false;
+      const o = input as t.CmdPathsObject;
+      const q = o.queue;
+      if (!Array.isArray(q)) return false;
+      if (q.length > 0 && !Is.state.item(q[q.length - 1])) return false;
+      return true;
+    },
+
+    item(input: any): input is t.CmdQueueItem<t.CmdType> {
+      if (!isObject(input)) return false;
+      const o = input as t.CmdQueueItem<t.CmdType>;
+      return typeof o.name === 'string' && typeof o.params === 'object' && typeof o.tx === 'string';
+    },
   },
 
   cmd<C extends t.CmdType>(input: t.Cmd<C> | any): input is t.Cmd<C> {
-    if (input === null || typeof input !== 'object') return false;
+    if (!isObject(input)) return false;
     const o = input as t.Cmd<C>;
     return (
       typeof o.events === 'function' &&
@@ -27,3 +31,10 @@ export const Is = {
     );
   },
 } as const;
+
+/**
+ * Helpers
+ */
+function isObject(input: any): input is object {
+  return typeof input === 'object' && input !== null;
+}

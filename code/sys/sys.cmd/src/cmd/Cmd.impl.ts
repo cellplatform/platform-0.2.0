@@ -33,12 +33,19 @@ export function create<C extends t.CmdType>(
       mutate(d, paths.error, error);
       if (increment) counter.increment(count);
     });
+
+    transport.change((d) => {
+      const index = resolve.queue.index(d);
+      index.name(name);
+      index.params(params);
+      index.tx(tx);
+      if (error) index.error(error);
+    });
   };
 
   // Ensure document is initialized with the {cmd} structure.
-  if (!Is.validState(transport.current)) {
-    update('', '', {}); // ← (default empty structure).
-    transport.change((d) => resolve.queue.list(d));
+  if (!Is.state.cmd(transport.current)) {
+    transport.change((d) => resolve.queue.list(d)); // ← (default empty structure).
   }
 
   /**

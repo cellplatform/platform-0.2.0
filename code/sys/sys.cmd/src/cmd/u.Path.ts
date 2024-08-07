@@ -51,28 +51,28 @@ export const Path = {
             index: i,
             path,
 
-            name<N extends S = S>(d: O, defaultValue = '') {
+            name<N extends S = S>(defaultValue = '') {
               const name = [...path, 'name'];
               const get = () => resolve<N>(d, name);
               if (!get()) Mutate.value(d, name, defaultValue);
               return get()!;
             },
 
-            params<P extends O = O>(d: O, defaultValue: P) {
+            params<P extends O = O>(defaultValue: P) {
               const params = [...path, 'params'];
               const get = () => resolve<P>(d, params);
               if (!get()) Mutate.value(d, params, defaultValue);
               return get()!;
             },
 
-            error<E extends O = O>(d: O, defaultValue?: E) {
+            error<E extends O = O>(defaultValue?: E) {
               const error = [...path, 'error'];
               const get = () => resolve<E>(d, error);
               if (!get()) Mutate.value(d, error, defaultValue);
               return get()!;
             },
 
-            tx(d: O, defaultValue?: string) {
+            tx(defaultValue?: string) {
               const tx = [...path, 'tx'];
               const get = () => resolve<string>(d, tx);
               if (!get()) Mutate.value(d, tx, defaultValue ?? slug());

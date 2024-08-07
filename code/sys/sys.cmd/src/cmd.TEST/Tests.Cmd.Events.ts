@@ -137,7 +137,11 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           name: 'Bar',
           params: { msg: 'hello' },
           counter: { value: counts[2] },
-          queue: [],
+          queue: [
+            { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo' },
+            { name: 'Bar', params: {}, tx: 'tx.foo' },
+            { name: 'Bar', params: { msg: 'hello' }, tx: 'tx.foo' },
+          ],
         });
         dispose();
       });
@@ -165,9 +169,10 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         await Time.wait(0);
         const count = fired[0].count;
         expect(fired.length).to.eql(1);
+
         expect(doc.current).to.eql({
           a: 'Bar',
-          z: { n: { value: count }, tx, q: [] },
+          z: { n: { value: count }, tx, q: [{ name: 'Bar', params: p, tx }] },
           x: { y: { p } },
         });
         dispose();
