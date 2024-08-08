@@ -30,8 +30,10 @@ export const Queue = {
   /**
    * Derive the queue totals from the given transport.
    */
-  totals(doc: t.CmdTransport, options: { paths?: PathsInput } = {}): t.CmdQueueTotals {
-    const resolve = Path.resolver(options.paths);
+  totals<C extends t.CmdType>(cmd: t.Cmd<C>): t.CmdQueueTotals {
+    const doc = toTransport(cmd);
+    const paths = toPaths(cmd);
+    const resolve = Path.resolver(paths);
     const list = resolve.queue.list(doc.current);
     const purged = resolve.total(doc.current).purged;
     const current = list.length;
@@ -80,7 +82,7 @@ export const Queue = {
     const api: t.CmdQueueMonitor = {
       bounds: { min, max },
       get total() {
-        return Queue.totals(doc);
+        return Queue.totals(cmd);
       },
 
       // Lifecycle.
