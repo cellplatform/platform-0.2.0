@@ -1,5 +1,5 @@
 import { Cmd } from '..';
-import { Time, type t } from './common';
+import { DEFAULTS, Time, type t } from './common';
 
 import type { C } from './t';
 
@@ -135,8 +135,10 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       it('monitor: default', async () => {
         const { dispose, cmd, dispose$ } = await setupQueue();
         const monitor = Cmd.Queue.monitor(cmd, { dispose$ });
-        expect(monitor.bounds.min).to.eql(0);
-        expect(monitor.bounds.max).to.eql(100);
+
+        const BOUNDS = DEFAULTS.queue.bounds;
+        expect(monitor.bounds.min).to.eql(BOUNDS.min);
+        expect(monitor.bounds.max).to.eql(BOUNDS.max);
         dispose();
       });
 

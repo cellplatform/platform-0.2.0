@@ -1,4 +1,4 @@
-import { rx, type t } from './common';
+import { DEFAULTS, rx, type t } from './common';
 import { Path } from './u.Path';
 import { toTransport } from './u.To';
 
@@ -47,7 +47,8 @@ export const Queue = {
       dispose$?: t.UntilObservable;
     } = {},
   ): t.CmdQueueMonitor {
-    const { min = 0, max = 100 } = options;
+    const BOUNDS = DEFAULTS.queue.bounds;
+    const { min = BOUNDS.min, max = BOUNDS.max } = options;
 
     let purged = 0;
     const events = cmd.events(options.dispose$);

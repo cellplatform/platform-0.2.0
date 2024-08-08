@@ -11,10 +11,14 @@ const paths: t.CmdPaths = {
   total: ['total'],
 };
 
+const bounds: t.CmdQueueBounds = { min: 0, max: 100 };
+const queue = { bounds };
+
 export const DEFAULTS = {
   symbol: { transport: Symbol('transport') },
   timeout: 3000,
   paths,
+  queue,
   tx: () => slug(),
   error: (message: string): t.Error => ({ message }),
   total(): t.CmdTotals {
