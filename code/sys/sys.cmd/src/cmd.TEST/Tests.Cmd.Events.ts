@@ -276,7 +276,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       };
 
       it('fires correct sequence before/after purge', async () => {
-        const { doc, dispose, current, dispose$, cmd, foo } = await setupPurge();
+        const { dispose, current, dispose$, cmd, foo } = await setupPurge();
 
         const fired: t.CmdTx<C1>[] = [];
         const events = cmd.events(dispose$);
@@ -288,7 +288,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(current.queue.length).to.eql(fired.length);
 
         // Purge.
-        const purged = Cmd.Queue.purge(doc);
+        const purged = Cmd.Queue.purge(cmd, { min: 0 });
         expect(purged).to.eql(5);
         expect(current.queue.length).to.eql(0);
 
@@ -304,7 +304,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('fast sequence, purged part-way through', async () => {
-        const { doc, dispose, current, dispose$, cmd } = await setupPurge();
+        const { dispose, current, dispose$, cmd } = await setupPurge();
 
         const fired: t.CmdTx<C1>[] = [];
         const events = cmd.events(dispose$);
@@ -318,7 +318,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           if (foo === 5) {
             // NB: simulate an auto-purge taking place mid-stream within the loop.
             await Time.wait(0); //    ↓ ensure the document is up to date.
-            Cmd.Queue.purge(doc); //  ↓ perform the purge.
+            Cmd.Queue.purge(cmd, { min: 0 }); //  ↓ perform the purge.
           }
         }
 

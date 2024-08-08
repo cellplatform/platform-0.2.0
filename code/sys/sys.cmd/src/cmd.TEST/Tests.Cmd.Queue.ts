@@ -82,10 +82,10 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
 
       it('purged', async () => {
-        const { dispose, doc, foo, cmd } = await setupQueue();
+        const { dispose, foo, cmd } = await setupQueue();
 
         await foo.invoke(10);
-        Cmd.Queue.purge(doc, { min: 3 });
+        Cmd.Queue.purge(cmd, { min: 3 });
 
         const total = Cmd.Queue.totals(cmd);
         expect(total.purged).to.eql(7);
@@ -97,14 +97,14 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
     });
 
     describe('Queue.purge', () => {
-      it('.purge ← default (empty)', async () => {
-        const { dispose, foo, expectQueue, current, doc, cmd } = await setupQueue();
+      it('.purge ← {min} empty', async () => {
+        const { dispose, foo, expectQueue, current, cmd } = await setupQueue();
 
         await foo.invoke(5);
         expectQueue(5);
         expect(current.total.purged).to.eql(0);
 
-        const purged = Cmd.Queue.purge(doc);
+        const purged = Cmd.Queue.purge(cmd, { min: 0 });
         const total = Cmd.Queue.totals(cmd);
         expectQueue(0);
         expect(purged).to.eql(5);
@@ -115,14 +115,14 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         dispose();
       });
 
-      it('.purge ← retrain items', async () => {
-        const { dispose, foo, expectQueue, current, doc } = await setupQueue();
+      it('.purge ← {min} retains items', async () => {
+        const { dispose, foo, expectQueue, current, cmd } = await setupQueue();
 
         await foo.invoke(5);
         expectQueue(5);
         expect(current.total.purged).to.eql(0);
 
-        const purged = Cmd.Queue.purge(doc, { min: 2 });
+        const purged = Cmd.Queue.purge(cmd, { min: 2 });
         expectQueue(2);
         expect(purged).to.eql(3);
         expect(current.queue.map((e) => e.params.foo)).to.eql([4, 5]);

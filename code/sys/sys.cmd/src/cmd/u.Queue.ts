@@ -13,9 +13,11 @@ export const Queue = {
   /**
    * Collapse the queue array.
    */
-  purge(doc: t.CmdTransport, options: { min?: number; paths?: PathsInput } = {}) {
-    const { min = 0 } = options;
-    const resolve = Path.resolver(options.paths);
+  purge<C extends t.CmdType>(cmd: t.Cmd<C>, options: { min?: number } = {}) {
+    const { min = DEFAULTS.queue.bounds.min } = options;
+    const doc = toTransport(cmd);
+    const paths = toPaths(cmd);
+    const resolve = Path.resolver(paths);
 
     doc.change((d) => {
       const queue = resolve.queue.list(d);
@@ -73,7 +75,7 @@ export const Queue = {
      * Purge when queue exceeds max bounds.
      */
     events.tx$.pipe(rx.filter((e) => queue.total >= max)).subscribe((e) => {
-      purged += Queue.purge(doc, { min, paths });
+      purged += Queue.purge(cmd, { min });
     });
 
     /**
