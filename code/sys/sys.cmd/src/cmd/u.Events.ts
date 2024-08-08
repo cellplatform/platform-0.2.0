@@ -43,6 +43,7 @@ export const Events = {
       $.pipe(
         rx.filter((e) => Patch.includesQueueChange(e.patches, paths)),
         rx.distinctWhile((p, n) => p.doc.queue.length === n.doc.queue.length),
+        rx.filter((e) => e.doc.queue.length > 0),
       ).subscribe((e) => {
         const queue = e.doc.queue ?? [];
         const { tx, name, params, error } = queue[queue.length - 1];

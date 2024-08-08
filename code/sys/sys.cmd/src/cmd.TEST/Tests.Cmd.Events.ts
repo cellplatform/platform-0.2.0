@@ -1,6 +1,6 @@
 import { Cmd } from '..';
 import { R, Time, rx, type t } from './common';
-import type { C, C2 } from './t';
+import type { C, C1, C2 } from './t';
 
 export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
@@ -240,6 +240,73 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(fired[0].params).to.eql({ foo: 0 });
 
         dispose();
+      });
+    });
+
+    describe('purging', () => {
+      const setupPurge = async () => {
+        const { doc, dispose, dispose$ } = await setup();
+        const cmd = Cmd.create<C>(doc);
+        const resolve = Cmd.Path.resolver();
+
+        let foo = 0;
+        const invoke = async (total: number) => {
+          for (let i = 0; i < total; i++) {
+            foo++;
+            cmd.invoke('Foo', { foo });
+          }
+          await Time.wait(0);
+        };
+
+        const current = {
+          get queue() {
+            return resolve.queue.list(doc.current);
+          },
+        } as const;
+
+        return {
+          cmd,
+          doc,
+          dispose,
+          dispose$,
+          foo: { invoke },
+          resolve,
+          current,
+        } as const;
+      };
+
+      it('fires correct sequence before/after purge', async () => {
+        const { doc, dispose, current, dispose$, cmd, foo } = await setupPurge();
+
+        const fired: t.CmdTx<C1>[] = [];
+        const events = cmd.events(dispose$);
+        events.on('Foo', (e) => fired.push(e));
+
+        // Initial work.
+        await foo.invoke(5);
+        expect(fired.length).to.eql(5);
+        expect(current.queue.length).to.eql(fired.length);
+
+        // Purge.
+        const totals = Cmd.Queue.purge(doc);
+        expect(totals.purged).to.eql(5);
+        expect(current.queue.length).to.eql(0);
+
+        // Keep working...
+        await foo.invoke(1);
+
+        expect(fired.length).to.eql(6);
+        expect(current.queue.length).to.eql(1);
+        expect(current.queue[0].params.foo).to.eql(6);
+        expect(fired.map((e) => e.params.foo)).to.eql([1, 2, 3, 4, 5, 6]);
+
+        dispose();
+      });
+
+      it.skip('fires correct sequence while auto-purging', () => {
+        /**
+         * TODO 🐷
+         */
       });
     });
   });
