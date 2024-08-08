@@ -6,8 +6,8 @@ type O = Record<string, unknown>;
 type Tx = string;
 type OptionsInput = Options | t.CmdPaths;
 type Options = {
-  paths?: t.CmdPaths | t.ObjectPath;
   tx?: t.CmdTxFactory;
+  paths?: t.CmdPaths | t.ObjectPath;
 };
 
 /**
@@ -102,7 +102,9 @@ export function create<C extends t.CmdType>(
     },
   };
 
+  // Store internal decorations.
   (api as any)[DEFAULTS.symbol.transport] = transport; // See: Cmd.transport(...) to retrieve.
+  (api as any)[DEFAULTS.symbol.paths] = paths; //         See: Cmd.paths(...) to retrieve.
   return api;
 }
 

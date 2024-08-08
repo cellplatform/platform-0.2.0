@@ -1,6 +1,6 @@
 import { create } from './Cmd.impl';
 import { DEFAULTS } from './common';
-import { Events, Is, Patch, Path, Queue, toTransport } from './u';
+import { Events, Is, Patch, Path, Queue, toPaths, toTransport } from './u';
 
 /**
  * Command event structure on an observable/syncing CRDT.
@@ -25,4 +25,5 @@ export const Cmd = {
    *     available, but not as part of the main API to direct usage.
    */
   transport: toTransport,
+  paths: toPaths,
 } as const;

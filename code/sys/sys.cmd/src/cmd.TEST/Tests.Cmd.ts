@@ -108,19 +108,49 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       dispose();
     });
 
-    describe('Cmd.transport (hidden field)', () => {
-      it('retrieves doc', async () => {
-        const { doc, dispose } = await setup();
-        const cmd = Cmd.create<C>(doc);
-        expect(Cmd.transport(cmd)).to.eql(doc);
-        dispose();
+    describe('Hidden fields', () => {
+      const NON = [null, undefined, {}, [], true, 123, Symbol('foo'), BigInt(0)];
+
+      describe('Cmd.transport', () => {
+        it('success', async () => {
+          const { doc, dispose } = await setup();
+          const cmd = Cmd.create<C>(doc);
+          expect(Cmd.transport(cmd)).to.eql(doc);
+          dispose();
+        });
+
+        it('throws', () => {
+          NON.forEach((input: any) => {
+            expect(() => Cmd.transport(input)).to.throw(/Input not a <Cmd>/);
+          });
+        });
       });
 
-      it('throws', () => {
-        const NON = [null, undefined, {}, [], true, 123, Symbol('foo'), BigInt(0)];
-        NON.forEach((input: any) => {
-          const fn = () => Cmd.transport(input);
-          expect(fn).to.throw(/Input not a <Cmd>/);
+      describe('Cmd.paths', () => {
+        it('success', async () => {
+          const { doc, dispose } = await setup();
+
+          const test = (paths: t.CmdPaths | undefined, expected: t.CmdPaths) => {
+            const cmd = Cmd.create<C>(doc, { paths });
+            const res = Cmd.paths(cmd);
+            expect(res).to.eql(expected);
+          };
+
+          const paths: t.CmdPaths = {
+            queue: ['x', 'q'],
+            total: ['t', 'a'],
+          };
+
+          test(paths, paths);
+          test(undefined, DEFAULTS.paths);
+
+          dispose();
+        });
+
+        it('throws', () => {
+          NON.forEach((input: any) => {
+            expect(() => Cmd.paths(input)).to.throw(/Input not a <Cmd>/);
+          });
         });
       });
     });

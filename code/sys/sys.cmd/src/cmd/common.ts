@@ -6,23 +6,21 @@ export type * as u from './u.t';
 /**
  * Constants
  */
-const paths: t.CmdPaths = {
-  queue: ['queue'],
-  total: ['total'],
-};
-
+const paths: t.CmdPaths = { queue: ['queue'], total: ['total'] };
 const bounds: t.CmdQueueBounds = { min: 0, max: 100 };
-const queue = { bounds };
 
 export const DEFAULTS = {
-  symbol: { transport: Symbol('transport') },
   timeout: 3000,
   paths,
-  queue,
   tx: () => slug(),
   error: (message: string): t.Error => ({ message }),
   total(): t.CmdTotals {
     return { purged: 0 };
+  },
+  queue: { bounds, autoPurge: true },
+  symbol: {
+    transport: Symbol('transport'),
+    paths: Symbol('paths'),
   },
 } as const;
 

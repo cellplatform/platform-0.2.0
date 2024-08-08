@@ -41,8 +41,8 @@ export const Queue = {
   monitor<C extends t.CmdType>(
     cmd: t.Cmd<C>,
     options: {
-      max?: number;
       min?: number;
+      max?: number;
       paths?: PathsInput;
       dispose$?: t.UntilObservable;
     } = {},
