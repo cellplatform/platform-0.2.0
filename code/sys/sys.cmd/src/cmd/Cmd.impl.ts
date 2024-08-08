@@ -21,13 +21,13 @@ export function create<C extends t.CmdType>(
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
 
-  const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
+  const update = (tx: string, name: string, params: O, error?: t.Error) => {
     transport.change((d) => {
-      const index = resolve.queue.item(d);
-      index.name(name);
-      index.params(params);
-      index.tx(tx);
-      if (error) index.error(error);
+      const next = resolve.queue.item(d);
+      next.name(name);
+      next.params(params);
+      next.tx(tx);
+      if (error) next.error(error);
     });
   };
 
@@ -44,7 +44,7 @@ export function create<C extends t.CmdType>(
    */
   const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.Error) => {
     const res: t.CmdInvoked<any> = { tx, req: { name, params } };
-    const start = () => Time.delay(0, () => update(tx, name, params, error, true));
+    const start = () => Time.delay(0, () => update(tx, name, params, error));
     return { res, start } as const;
   };
 
