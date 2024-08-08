@@ -22,7 +22,7 @@ export const Cmd = {
   /**
    * Helpers.
    */
-  transport: toTransport,
-  paths: toPaths,
   autopurge: Queue.autopurge,
+  toTransport,
+  toPaths,
 } as const;

@@ -115,13 +115,13 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         it('success', async () => {
           const { doc, dispose } = await setup();
           const cmd = Cmd.create<C>(doc);
-          expect(Cmd.transport(cmd)).to.eql(doc);
+          expect(Cmd.toTransport(cmd)).to.eql(doc);
           dispose();
         });
 
         it('throws', () => {
           NON.forEach((input: any) => {
-            expect(() => Cmd.transport(input)).to.throw(/Input not a <Cmd>/);
+            expect(() => Cmd.toTransport(input)).to.throw(/Input not a <Cmd>/);
           });
         });
       });
@@ -132,7 +132,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
           const test = (paths: t.CmdPaths | undefined, expected: t.CmdPaths) => {
             const cmd = Cmd.create<C>(doc, { paths });
-            const res = Cmd.paths(cmd);
+            const res = Cmd.toPaths(cmd);
             expect(res).to.eql(expected);
           };
 
@@ -149,7 +149,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         it('throws', () => {
           NON.forEach((input: any) => {
-            expect(() => Cmd.paths(input)).to.throw(/Input not a <Cmd>/);
+            expect(() => Cmd.toPaths(input)).to.throw(/Input not a <Cmd>/);
           });
         });
       });
