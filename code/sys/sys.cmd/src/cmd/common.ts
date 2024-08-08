@@ -7,7 +7,7 @@ export type * as u from './u.t';
  * Constants
  */
 const paths: t.CmdPaths = { queue: ['queue'], total: ['total'] };
-const bounds: t.CmdQueueBounds = { min: 0, max: 100 };
+const bounds: t.CmdQueueBounds = { min: 10, max: 100 };
 
 export const DEFAULTS = {
   timeout: 3000,

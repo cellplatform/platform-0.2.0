@@ -20,10 +20,9 @@ export const Cmd = {
   create,
 
   /**
-   * Retrieve the hidden "transport" (immutable document).
-   * NB: This is done as a hidden symbol so as to make the document
-   *     available, but not as part of the main API to direct usage.
+   * Helpers.
    */
   transport: toTransport,
   paths: toPaths,
+  autopurge: Queue.autopurge,
 } as const;

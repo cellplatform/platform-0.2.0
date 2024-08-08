@@ -144,15 +144,15 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       it('monitor: custom bounds', async () => {
         const { dispose, cmd, dispose$ } = await setupQueue();
-        const monitor = Cmd.Queue.monitor(cmd, { max: 10, min: 2, dispose$ });
-        expect(monitor.bounds.min).to.eql(2);
+        const monitor = Cmd.Queue.monitor(cmd, { max: 10, min: 3, dispose$ });
+        expect(monitor.bounds.min).to.eql(3);
         expect(monitor.bounds.max).to.eql(10);
         dispose();
       });
 
       it('monitor: auto purges', async () => {
-        const { dispose, foo, expectQueue, cmd, dispose$, current } = await setupQueue();
-        const monitor = Cmd.Queue.monitor(cmd, { max: 10, dispose$ });
+        const { dispose, foo, expectQueue, cmd, dispose$ } = await setupQueue();
+        const monitor = Cmd.Queue.monitor(cmd, { min: 0, max: 10, dispose$ });
 
         await foo.invoke(9);
         expectQueue(9);
@@ -169,9 +169,24 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         dispose();
       });
 
-      it('monitor: auto purges ← retained', async () => {
-        const { dispose, foo, expectQueue, cmd, dispose$, current } = await setupQueue();
+      it('monitor: auto purges ← {min} retained', async () => {
+        const { dispose, foo, expectQueue, cmd, dispose$ } = await setupQueue();
         const monitor = Cmd.Queue.monitor(cmd, { max: 10, min: 3, dispose$ });
+
+        await foo.invoke(9);
+        expectQueue(9);
+        expect(monitor.total.purged).to.eql(0);
+
+        await foo.invoke(); // NB: one more triggers purge
+        expectQueue(3);
+        expect(monitor.total.purged).to.eql(7);
+
+        dispose();
+      });
+
+      it('via Cmd.autopurge', async () => {
+        const { dispose, foo, expectQueue, cmd, dispose$ } = await setupQueue();
+        const monitor = Cmd.autopurge(cmd, { max: 10, min: 3, dispose$ });
 
         await foo.invoke(9);
         expectQueue(9);
