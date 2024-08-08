@@ -118,7 +118,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       it('throws', () => {
         const NON = [null, undefined, {}, [], true, 123, Symbol('foo'), BigInt(0)];
-        NON.forEach((input) => {
+        NON.forEach((input: any) => {
           const fn = () => Cmd.transport(input);
           expect(fn).to.throw(/Input not a <Cmd>/);
         });

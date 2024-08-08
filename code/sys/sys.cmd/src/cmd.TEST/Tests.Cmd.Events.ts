@@ -243,7 +243,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       });
     });
 
-    describe('purging', () => {
+    describe('purge', () => {
       const setupPurge = async () => {
         const { doc, dispose, dispose$ } = await setup();
         const cmd = Cmd.create<C>(doc);
@@ -288,8 +288,8 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(current.queue.length).to.eql(fired.length);
 
         // Purge.
-        const totals = Cmd.Queue.purge(doc);
-        expect(totals.purged).to.eql(5);
+        const purged = Cmd.Queue.purge(doc);
+        expect(purged).to.eql(5);
         expect(current.queue.length).to.eql(0);
 
         // Keep working...
@@ -303,10 +303,35 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         dispose();
       });
 
-      it.skip('fires correct sequence while auto-purging', () => {
-        /**
-         * TODO 🐷
-         */
+      it('fast sequence, purged part-way through', async () => {
+        const { doc, dispose, current, dispose$, cmd } = await setupPurge();
+
+        const fired: t.CmdTx<C1>[] = [];
+        const events = cmd.events(dispose$);
+        events.on('Foo', (e) => fired.push(e));
+
+        let foo = 0;
+        const total = 10;
+        for (let i = 0; i < total; i++) {
+          foo++;
+          cmd.invoke('Foo', { foo });
+          if (foo === 5) {
+            // NB: simulate an auto-purge taking place mid-stream within the loop.
+            await Time.wait(0); //    ↓ ensure the document is up to date.
+            Cmd.Queue.purge(doc); //  ↓ perform the purge.
+          }
+        }
+
+        await Time.wait(0);
+        const firedFoos = fired.map((e) => e.params.foo);
+        const currentFoos = current.queue
+          .map((item) => item.params as C1['params'])
+          .map((params) => params.foo);
+
+        expect(firedFoos).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(currentFoos).to.eql([6, 7, 8, 9, 10]);
+
+        dispose();
       });
     });
   });
