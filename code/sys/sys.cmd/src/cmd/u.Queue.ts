@@ -2,7 +2,6 @@ import { DEFAULTS, rx, type t } from './common';
 import { Path } from './u.Path';
 import { toTransport, toPaths } from './u.To';
 
-type PathsInput = t.CmdPaths | t.ObjectPath;
 type MonitorOptions = {
   min?: number;
   max?: number;
@@ -44,10 +43,9 @@ export const Queue = {
   },
 
   /**
-   * Start a queue monitor.
-   * (manages auto-purging)
+   * Start a queue/purge monitor for the given command.
    */
-  monitor<C extends t.CmdType>(cmd: t.Cmd<C>, options: MonitorOptions = {}): t.CmdQueueMonitor {
+  autopurge<C extends t.CmdType>(cmd: t.Cmd<C>, options: MonitorOptions = {}): t.CmdQueueMonitor {
     const BOUNDS = DEFAULTS.queue.bounds;
     const { min = BOUNDS.min, max = BOUNDS.max } = options;
 
@@ -95,12 +93,5 @@ export const Queue = {
       },
     };
     return api;
-  },
-
-  /**
-   * Method for setting up a queue/purge monitor for the given command.
-   */
-  autopurge<C extends t.CmdType>(cmd: t.Cmd<C>, options: MonitorOptions) {
-    return Queue.monitor(cmd, options);
   },
 } as const;
