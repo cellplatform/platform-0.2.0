@@ -2,6 +2,7 @@ import { rx, type t, type u } from './common';
 import { Patch } from './u.Patch';
 import { Path } from './u.Path';
 
+type TxString = string;
 type Options = {
   paths?: t.CmdPaths;
   dispose$?: t.UntilObservable;
@@ -40,16 +41,28 @@ export const Events = {
       );
 
       // Tx (Command) ⚡️.
+      let _lastProcessed = '';
       $.pipe(
         rx.filter((e) => Patch.includesQueueChange(e.patches, paths)),
         rx.distinctWhile((p, n) => p.doc.queue.length === n.doc.queue.length),
         rx.filter((e) => e.doc.queue.length > 0),
       ).subscribe((e) => {
+        /**
+         * NOTE: on each change a new batch of events is fired running
+         *       back to the last Tx that was processed.
+         *       This is required as the CRDT might update itself unevently
+         *       (for instance, when a batch of changes is synced over the network)
+         *       and so this looks to the [queue] array itself as the source of
+         *       truth (not this change event) and fires accordingly.
+         */
         const queue = e.doc.queue ?? [];
-        const { tx, name, params, error } = queue[queue.length - 1];
-        fire({
-          type: 'sys.cmd/tx',
-          payload: { tx, name, params, error },
+        const list = Events.unprocessed(queue, _lastProcessed);
+        _lastProcessed = queue[queue.length - 1].id || '';
+        list.forEach(({ tx, id, name, params, error }) => {
+          fire({
+            type: 'sys.cmd/tx',
+            payload: { tx, id, name, params, error },
+          });
         });
       });
     }
@@ -78,5 +91,16 @@ export const Events = {
       },
     };
     return api;
+  },
+
+  /**
+   * Scan back in a queue and find the given <last> item and
+   * return the set from that point on.
+   */
+  unprocessed(queue: t.CmdQueue, lastProcessed: string): t.CmdQueue {
+    if (queue.length === 0) return [];
+    if (!lastProcessed) return [queue[queue.length - 1]].filter(Boolean);
+    const index = queue.findLastIndex((m) => m.id === lastProcessed);
+    return index < 0 ? queue : queue.slice(index + 1);
   },
 } as const;

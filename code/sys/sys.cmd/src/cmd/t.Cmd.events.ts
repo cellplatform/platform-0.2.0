@@ -35,6 +35,7 @@ export type CmdTxEvent<C extends t.CmdType = t.CmdType> = {
 };
 export type CmdTx<C extends t.CmdType = t.CmdType> = {
   readonly tx: string;
+  readonly id: string;
   readonly name: C['name'];
   readonly params: C['params'];
   readonly error?: u.ExtractError<C>;

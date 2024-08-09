@@ -125,13 +125,13 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(invoked.length).to.eql(3);
         expect(fired.map((e) => e.payload)).to.eql(invoked);
 
+        const id = (index: number) => Find.queueId(doc, index);
         expect(invoked.map((e) => e.name)).to.eql(['Foo', 'Bar', 'Bar']);
-
+        expect(invoked.map((e) => e.id)).to.eql([id(0), id(1), id(2)]);
         expect(invoked[0].params).to.eql({ foo: 0 });
         expect(invoked[1].params).to.eql({});
         expect(invoked[2].params).to.eql({ msg: 'hello' });
 
-        const id = (index: number) => Find.queueId(doc, index);
         expect(doc.current.queue).to.eql([
           { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo', id: id(0) },
           { name: 'Bar', params: {}, tx: 'tx.foo', id: id(1) },
@@ -336,6 +336,48 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(currentFoos).to.eql([6, 7, 8, 9, 10]);
 
         dispose();
+      });
+    });
+
+    describe('helper: unprocessed', () => {
+      function generateQueue(total: number) {
+        const queue: t.CmdQueue = [];
+        for (let i = 0; i < total; i++) {
+          const n = i + 1;
+          queue.push({
+            name: `hello-${n}`,
+            params: {},
+            tx: `tx-${n}`,
+            id: `id-${n}`,
+          });
+        }
+        return queue;
+      }
+
+      it('empty queue', () => {
+        expect(Cmd.Events.unprocessed([], '')).to.eql([]);
+      });
+
+      it('latest only item if <last> tx-id not given', () => {
+        const queue = generateQueue(5);
+        const res1 = Cmd.Events.unprocessed(queue, '');
+        const res2 = Cmd.Events.unprocessed([], '');
+        expect(res1).to.eql([queue[4]]);
+        expect(res2).to.eql([]);
+      });
+
+      it('returns subset from <last> tx-id', () => {
+        const queue = generateQueue(10);
+        const lastProcessed = queue[7].id;
+        const res = Cmd.Events.unprocessed(queue, lastProcessed);
+        expect(res.map((m) => m.id)).to.eql(['id-9', 'id-10']);
+        console.log('queue', queue);
+      });
+
+      it('returns the entire queue if the <last> tx-id is not found.', () => {
+        const queue = generateQueue(10);
+        const res = Cmd.Events.unprocessed(queue, 'foobar');
+        expect(res).to.eql(queue);
       });
     });
   });
