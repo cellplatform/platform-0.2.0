@@ -13,7 +13,7 @@ export function listen(args: {
 }): t.Lifecycle {
   const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
   const cmd = toCmd(ctrl);
-  const doc = Cmd.transport(cmd);
+  const doc = Cmd.toTransport(cmd);
   const paths = toPaths(cmd);
   const events = cmd.events(args.dispose$);
   const isFocused = () => textbox.current.focused;

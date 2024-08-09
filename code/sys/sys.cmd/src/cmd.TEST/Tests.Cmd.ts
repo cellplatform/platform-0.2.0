@@ -112,7 +112,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
     describe('Hidden fields', () => {
       const NON = [null, undefined, {}, [], true, 123, Symbol('foo'), BigInt(0)];
 
-      describe('Cmd.transport', () => {
+      describe('Cmd.toTransport', () => {
         it('success', async () => {
           const { doc, dispose } = await setup();
           const cmd = Cmd.create<C>(doc);
@@ -127,7 +127,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         });
       });
 
-      describe('Cmd.paths', () => {
+      describe('Cmd.toPaths', () => {
         it('success', async () => {
           const { doc, dispose } = await setup();
 
