@@ -3,11 +3,11 @@ import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
 type O = Record<string, unknown>;
-type Tx = string;
 type OptionsInput = Options | t.CmdPaths;
 type Options = {
   tx?: t.CmdTxFactory;
   paths?: t.CmdPaths | t.ObjectPath;
+  issuer?: t.IdString; // The identity (URI) of the issuer of the command.
 };
 
 /**
@@ -20,15 +20,17 @@ export function create<C extends t.CmdType>(
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
+  const issuer = args.issuer;
 
-  const update = (tx: string, name: string, params: O, error?: t.Error) => {
+  const push = (tx: t.TxString, name: string, params: O, error?: t.Error) => {
     transport.change((d) => {
-      const next = resolve.queue.item(d);
-      next.name(name);
-      next.params(params);
-      next.tx(tx);
-      next.id(`${tx}.${slug()}`);
-      if (error) next.error(error);
+      const item = resolve.queue.item(d);
+      item.name(name);
+      item.params(params);
+      item.tx(tx);
+      item.id(`${slug()}`);
+      if (error) item.error(error);
+      if (issuer) item.issuer(issuer);
     });
   };
 
@@ -43,9 +45,9 @@ export function create<C extends t.CmdType>(
   /**
    * Invoke method (overloads).
    */
-  const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.Error) => {
+  const invokeSetup = (tx: t.TxString, name: C['name'], params: C['params'], error?: t.Error) => {
     const res: t.CmdInvoked<any> = { tx, req: { name, params } };
-    const start = () => Time.delay(0, () => update(tx, name, params, error));
+    const start = () => Time.delay(0, () => push(tx, name, params, error));
     return { res, start } as const;
   };
 
@@ -104,9 +106,10 @@ export function create<C extends t.CmdType>(
   };
 
   // Store internal decorations.
-  // See: toTransport(), toPaths() helpers.
+  // See helpers: Cmd.toTransport(), toPaths(), toIssuer()
   (api as any)[DEFAULTS.symbol.transport] = transport;
   (api as any)[DEFAULTS.symbol.paths] = paths;
+  (api as any)[DEFAULTS.symbol.issuer] = issuer;
   return api;
 }
 
@@ -121,7 +124,10 @@ const wrangle = {
   },
 
   invoke: {
-    tx<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx, txFactory?: t.CmdTxFactory) {
+    tx<C extends t.CmdType>(
+      input?: t.CmdInvokeOptions<C> | t.TxString,
+      txFactory?: t.CmdTxFactory,
+    ) {
       const defaultTx = () => (txFactory ?? DEFAULTS.tx)();
       if (!input) return defaultTx();
       if (typeof input === 'string') return input;
@@ -129,12 +135,14 @@ const wrangle = {
       return defaultTx();
     },
 
-    error<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx): u.ExtractError<C> | undefined {
+    error<C extends t.CmdType>(
+      input?: t.CmdInvokeOptions<C> | t.TxString,
+    ): u.ExtractError<C> | undefined {
       return typeof input === 'object' ? input.error : undefined;
     },
 
     responseOptions<Req extends t.CmdType, Res extends t.CmdType>(
-      input?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+      input?: t.TxString | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
     ): t.CmdInvokeResponseOptions<Req, Res> {
       if (!input) return {};
       if (typeof input === 'string') return {};

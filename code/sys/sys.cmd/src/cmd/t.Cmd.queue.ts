@@ -9,8 +9,9 @@ export type CmdQueueItem<C extends t.CmdType> = {
   name: C['name'];
   params: C['params'];
   error?: u.ExtractError<C>;
-  tx: string; // The transaction ID (used for response mapping).
-  id: string; // The unique ID of the command invokation.
+  tx: t.TxString; // The transaction ID (used for response mapping).
+  id: t.IdString; // The unique ID of the command invokation.
+  issuer?: t.IdString; // The identity (URI) of the issuer of the command.
 };
 
 /**

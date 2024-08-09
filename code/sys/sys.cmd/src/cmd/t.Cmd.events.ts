@@ -1,5 +1,7 @@
 import type { t, u } from './common';
 
+type TxString = string;
+
 /**
  * Factory.
  */
@@ -34,9 +36,10 @@ export type CmdTxEvent<C extends t.CmdType = t.CmdType> = {
   payload: CmdTx<C>;
 };
 export type CmdTx<C extends t.CmdType = t.CmdType> = {
-  readonly tx: string;
-  readonly id: string;
   readonly name: C['name'];
   readonly params: C['params'];
   readonly error?: u.ExtractError<C>;
+  readonly tx: TxString;
+  readonly id: t.IdString;
+  readonly issuer?: t.IdString;
 };

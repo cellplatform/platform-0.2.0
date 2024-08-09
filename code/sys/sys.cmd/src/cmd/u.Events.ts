@@ -35,7 +35,8 @@ export const Events = {
       const $ = events.changed$.pipe(
         rx.map((e) => {
           const { patches, after } = e;
-          return { patches, doc: resolve.toObject(after) };
+          const doc = resolve.toObject(after);
+          return { patches, doc };
         }),
       );
 
@@ -57,10 +58,10 @@ export const Events = {
         const queue = e.doc.queue ?? [];
         const list = Events.unprocessed(queue, _lastProcessed);
         _lastProcessed = queue[queue.length - 1].id || '';
-        list.forEach(({ tx, id, name, params, error }) => {
+        list.forEach(({ name, params, error, tx, id, issuer }) => {
           fire({
             type: 'sys.cmd/tx',
-            payload: { tx, id, name, params, error },
+            payload: { name, params, error, tx, id, issuer },
           });
         });
       });

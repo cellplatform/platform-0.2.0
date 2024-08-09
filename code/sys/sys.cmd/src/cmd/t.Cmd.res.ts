@@ -1,12 +1,10 @@
 import type { t, u } from './common';
 
-type Tx = string;
-
 /**
  * Response.
  */
 export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: Tx;
+  readonly tx: t.TxString;
   readonly req: t.CmdRequest<C>;
 };
 
@@ -14,7 +12,7 @@ export type CmdInvoked<C extends t.CmdType> = {
  * Response Listener API.
  */
 export type CmdResponseListener<Req extends t.CmdType, Res extends t.CmdType> = {
-  readonly tx: Tx;
+  readonly tx: t.TxString;
   readonly req: t.CmdRequest<Req>;
   readonly $: t.Observable<Res['params']>;
   readonly ok: boolean;

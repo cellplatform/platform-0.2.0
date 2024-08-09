@@ -21,6 +21,7 @@ export const DEFAULTS = {
   symbol: {
     transport: Symbol('transport'),
     paths: Symbol('paths'),
+    issuer: Symbol('issuer'),
   },
 } as const;
 

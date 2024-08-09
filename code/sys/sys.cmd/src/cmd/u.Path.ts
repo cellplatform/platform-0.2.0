@@ -85,6 +85,13 @@ export const Path = {
               if (!get()) Mutate.value(d, id, defaultValue ?? slug());
               return get()!;
             },
+
+            issuer(defaultValue?: string) {
+              const issuer = [...path, 'issuer'];
+              const get = () => resolve<string>(d, issuer);
+              if (!get()) Mutate.value(d, issuer, defaultValue);
+              return get()!;
+            },
           } as const;
 
           return item;

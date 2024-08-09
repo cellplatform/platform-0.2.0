@@ -1,6 +1,6 @@
 import { create } from './Cmd.impl';
 import { DEFAULTS } from './common';
-import { Events, Is, Patch, Path, Queue, toPaths, toTransport } from './u';
+import { Events, Is, Patch, Path, Queue, toPaths, toTransport, toIssuer } from './u';
 
 /**
  * Command event structure on an observable/syncing CRDT.
@@ -25,4 +25,5 @@ export const Cmd = {
   autopurge: Queue.autopurge,
   toTransport,
   toPaths,
+  toIssuer,
 } as const;

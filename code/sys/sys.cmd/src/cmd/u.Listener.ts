@@ -1,7 +1,7 @@
 import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<Req extends t.CmdType, Res extends t.CmdType> = {
-  tx: string;
+  tx: t.TxString;
   req: { name: Req['name']; params: Req['params'] };
   res: { name: Res['name'] };
   timeout?: t.Msecs;
