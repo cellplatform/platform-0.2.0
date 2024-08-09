@@ -2,7 +2,6 @@ import { rx, type t, type u } from './common';
 import { Patch } from './u.Patch';
 import { Path } from './u.Path';
 
-type TxString = string;
 type Options = {
   paths?: t.CmdPaths;
   dispose$?: t.UntilObservable;
