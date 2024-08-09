@@ -18,7 +18,12 @@ export const Is = {
     item(input: any): input is t.CmdQueueItem<t.CmdType> {
       if (!isObject(input)) return false;
       const o = input as t.CmdQueueItem<t.CmdType>;
-      return typeof o.name === 'string' && typeof o.params === 'object' && typeof o.tx === 'string';
+      return (
+        typeof o.name === 'string' &&
+        typeof o.params === 'object' &&
+        typeof o.tx === 'string' &&
+        typeof o.id === 'string'
+      );
     },
 
     total(input: any): input is t.CmdTotals {

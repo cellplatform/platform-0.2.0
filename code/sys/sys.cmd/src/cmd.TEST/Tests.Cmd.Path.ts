@@ -159,6 +159,18 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
           expect(obj.queue?.[0].tx).to.eql(res1.tx());
           expect(obj.queue?.[1].tx).to.eql('my.tx');
         });
+
+        it('index.id', () => {
+          const resolve = Path.resolver();
+          const obj: t.CmdPathsObject<C> = {};
+          const res1 = resolve.queue.item(obj);
+          const res2 = resolve.queue.item(obj);
+
+          expect(res1.id()).to.be.string;
+          expect(res2.id('my.id')).to.eql('my.id');
+          expect(obj.queue?.[0].id).to.eql(res1.id());
+          expect(obj.queue?.[1].id).to.eql('my.id');
+        });
       });
 
       it('.total', () => {

@@ -1,4 +1,4 @@
-import { DEFAULTS, Time, type t, type u } from './common';
+import { DEFAULTS, Time, slug, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
@@ -27,6 +27,7 @@ export function create<C extends t.CmdType>(
       next.name(name);
       next.params(params);
       next.tx(tx);
+      next.id(`${tx}.${slug()}`);
       if (error) next.error(error);
     });
   };
@@ -40,7 +41,7 @@ export function create<C extends t.CmdType>(
   }
 
   /**
-   * Invoke method (overloads)
+   * Invoke method (overloads).
    */
   const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.Error) => {
     const res: t.CmdInvoked<any> = { tx, req: { name, params } };

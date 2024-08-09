@@ -1,5 +1,6 @@
 import { Cmd } from '..';
 import { Time, type t } from './common';
+import { Find } from './u';
 
 import type { C, C1 } from './t';
 const DEFAULTS = Cmd.DEFAULTS;
@@ -33,7 +34,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const cmd2 = Cmd.create<C>(doc2, { paths });
       const cmd3 = Cmd.create<C>(doc3, paths);
 
-      const tx = 'tx.foo';
+      const tx = 'my-tx';
       const e = DEFAULTS.error('404');
       cmd1.invoke('Foo', { foo: 888 }, tx);
       cmd2.invoke('Bar', {}, { tx, error: e }); // NB: as full {options} object.
@@ -42,16 +43,16 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
       expect(doc1.current).to.eql({
         total,
-        queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
+        queue: [{ name: 'Foo', params: { foo: 888 }, tx, id: Find.queueId(doc1, 0) }],
       });
 
       expect(doc2.current).to.eql({
-        x: { q: [{ name: 'Bar', params: {}, tx, error: e }] },
+        x: { q: [{ name: 'Bar', params: {}, error: e, tx, id: Find.queueId(doc2, 0, paths) }] },
         t: { a: total },
       });
 
       expect(doc3.current).to.eql({
-        x: { q: [{ name: 'Bar', params: { msg: '👋' }, tx }] },
+        x: { q: [{ name: 'Bar', params: { msg: '👋' }, tx, id: Find.queueId(doc3, 0, paths) }] },
         t: { a: total },
       });
 
@@ -60,19 +61,19 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('create ← {paths} as [path] prefix', async () => {
       const { factory, dispose } = await setup();
-
       const doc = await factory();
-      const paths = ['foo'];
-      const cmd = Cmd.create<C>(doc, { paths });
-      const tx = 'tx.foo';
+      const cmd = Cmd.create<C>(doc, { paths: ['foo'] });
+      const paths = Cmd.toPaths(cmd);
+      const tx = 'my-tx';
 
       cmd.invoke('Foo', { foo: 888 }, tx);
       await Time.wait(0);
 
+      const id = Find.queueId(doc, 0, paths);
       expect(doc.current).to.eql({
         foo: {
           total,
-          queue: [{ name: 'Foo', params: { foo: 888 }, tx }],
+          queue: [{ name: 'Foo', params: { foo: 888 }, tx, id }],
         },
       });
 

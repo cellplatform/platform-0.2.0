@@ -15,7 +15,7 @@ export function flagsTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       NON.forEach((invalid) => expect(Is.state.cmd(invalid)).to.eql(false));
       expect(Is.state.cmd({ queue: [], total })).to.eql(true);
 
-      const item = { name: 'foo', params: { foo: 123 }, tx: '123' };
+      const item = { name: 'foo', params: { foo: 123 }, tx: '123', id: 'abc' };
       expect(Is.state.cmd({ queue: [item], total })).to.eql(true);
       NON.forEach((invalid) =>
         expect(Is.state.cmd({ queue: [item, invalid], total })).to.eql(false),
@@ -24,7 +24,7 @@ export function flagsTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('Is.state.item', () => {
       NON.forEach((invalid) => expect(Is.state.item(invalid)).to.eql(false));
-      expect(Is.state.item({ name: '', params: {}, tx: '' })).to.eql(true);
+      expect(Is.state.item({ name: '', params: {}, tx: '', id: '' })).to.eql(true);
     });
 
     it('Is.state.total', () => {

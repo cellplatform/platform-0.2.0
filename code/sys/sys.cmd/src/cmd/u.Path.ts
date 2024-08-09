@@ -78,6 +78,13 @@ export const Path = {
               if (!get()) Mutate.value(d, tx, defaultValue ?? slug());
               return get()!;
             },
+
+            id(defaultValue?: string) {
+              const id = [...path, 'id'];
+              const get = () => resolve<string>(d, id);
+              if (!get()) Mutate.value(d, id, defaultValue ?? slug());
+              return get()!;
+            },
           } as const;
 
           return item;

@@ -1,6 +1,7 @@
 import { Cmd } from '..';
 import { R, Time, rx, type t } from './common';
 import type { C, C1, C2 } from './t';
+import { Find } from './u';
 
 export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
@@ -130,10 +131,11 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(invoked[1].params).to.eql({});
         expect(invoked[2].params).to.eql({ msg: 'hello' });
 
+        const id = (index: number) => Find.queueId(doc, index);
         expect(doc.current.queue).to.eql([
-          { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo' },
-          { name: 'Bar', params: {}, tx: 'tx.foo' },
-          { name: 'Bar', params: { msg: 'hello' }, tx: 'tx.foo' },
+          { name: 'Foo', params: { foo: 0 }, tx: 'tx.foo', id: id(0) },
+          { name: 'Bar', params: {}, tx: 'tx.foo', id: id(1) },
+          { name: 'Bar', params: { msg: 'hello' }, tx: 'tx.foo', id: id(2) },
         ]);
 
         dispose();
@@ -154,7 +156,9 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         await Time.wait(0);
         expect(fired.length).to.eql(1);
-        expect((doc.current as any).z.q).to.eql([{ name: 'Bar', params: p, tx }]);
+
+        const id = Find.queueId(doc, 0, paths);
+        expect((doc.current as any).z.q).to.eql([{ name: 'Bar', params: p, tx, id }]);
 
         dispose();
       });

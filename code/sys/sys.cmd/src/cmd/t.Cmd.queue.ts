@@ -8,8 +8,9 @@ export type CmdQueue<C extends t.CmdType = t.CmdType> = CmdQueueItem<C>[];
 export type CmdQueueItem<C extends t.CmdType> = {
   name: C['name'];
   params: C['params'];
-  tx: string;
   error?: u.ExtractError<C>;
+  tx: string; // The transaction ID (used for response mapping).
+  id: string; // The unique ID of the command invokation.
 };
 
 /**
