@@ -104,8 +104,9 @@ export function create<C extends t.CmdType>(
   };
 
   // Store internal decorations.
-  (api as any)[DEFAULTS.symbol.transport] = transport; // See: Cmd.transport(...) to retrieve.
-  (api as any)[DEFAULTS.symbol.paths] = paths; //         See: Cmd.paths(...) to retrieve.
+  // See: toTransport(), toPaths() helpers.
+  (api as any)[DEFAULTS.symbol.transport] = transport;
+  (api as any)[DEFAULTS.symbol.paths] = paths;
   return api;
 }
 
