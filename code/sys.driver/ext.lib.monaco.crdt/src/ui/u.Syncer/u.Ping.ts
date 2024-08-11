@@ -1,4 +1,5 @@
-import { type t } from './common';
+import { type t, Time, rx } from './common';
+import { toCmd } from './u.Cmd.to';
 
 /**
  * Helpers for working with the ping <Cmd> method.
@@ -43,11 +44,11 @@ export const PingUtil = {
 
       requests.forEach((pending) =>
         pending
-          .onComplete((e) => {
+          .onComplete(() => {
             const identity = pending.req.params.identity;
             done(identity);
           })
-          .onTimeout((e) => {
+          .onTimeout(() => {
             const identity = pending.req.params.identity;
             done(identity, { timedOut: true });
           }),
