@@ -132,13 +132,13 @@ export const Path = {
   Is: {
     commandPaths(input: any): input is t.CmdPaths {
       if (!isObject(input)) return false;
-      const obj = input as t.CmdPaths;
+      const o = input as t.CmdPaths;
       const is = Path.Is.stringArray;
-      return is(obj.queue);
+      return is(o.queue);
     },
 
     stringArray(input: any): input is string[] {
-      return Array.isArray(input) && input.every((value) => typeof value === 'string');
+      return Array.isArray(input) && input.every((v) => typeof v === 'string');
     },
   },
 } as const;

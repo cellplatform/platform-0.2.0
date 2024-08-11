@@ -229,6 +229,7 @@ export function pathTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         NOT1.forEach((value) => expect(Path.Is.stringArray(value)).to.eql(false));
         NOT2.forEach((value) => expect(Path.Is.stringArray(value)).to.eql(false));
         expect(Path.Is.stringArray(['hello', '👋'])).to.eql(true);
+        expect(Path.Is.stringArray([])).to.eql(true);
       });
 
       it('is.commandPaths', () => {
