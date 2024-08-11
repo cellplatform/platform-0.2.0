@@ -12,7 +12,7 @@
     "tmp": "tsx   ./script.node/tmp.mts"
   },
   "dependencies": {
-    "@privy-io/react-auth": "1.77.0",
+    "@privy-io/react-auth": "1.78.0",
     "@standard-crypto/farcaster-js": "7.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
