@@ -33,7 +33,7 @@ export function editorController(args: {
    * Editor state.
    */
   const Syncer = Monaco.Crdt.Syncer;
-  Syncer.listen(monaco, editor, codeLens, { strategy: 'Overwrite', dispose$ });
+  Syncer.listen(monaco, editor, codeLens, { dispose$ });
 
   const selection$ = rx.subject();
   editor.onDidChangeCursorSelection(() => selection$.next());
