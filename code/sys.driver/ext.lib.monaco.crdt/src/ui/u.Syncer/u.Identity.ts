@@ -34,8 +34,8 @@ export const IdentityUtil = {
           type T = t.EditorIdentityState;
           const identity = PatchUtil.extractIdentity(e.patches);
           const path = [...paths.identity, identity];
-          const before = ObjectPath.resolve<T>(e.before, path)!;
-          const after = ObjectPath.resolve<T>(e.after, path)!;
+          const before = ObjectPath.resolve<T>(e.before, path);
+          const after = ObjectPath.resolve<T>(e.after, path);
           const res: t.EditorIdentityStateChange = { identity, before, after };
           return res;
         }),
