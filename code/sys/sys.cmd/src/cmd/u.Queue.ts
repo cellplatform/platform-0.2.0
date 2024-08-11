@@ -21,11 +21,11 @@ export const Queue = {
     doc.change((d) => {
       const queue = resolve.queue.list(d);
       const deleteCount = Math.max(queue.length - min, 0);
-      resolve.total(d).purged += deleteCount;
+      resolve.log(d).total.purged += deleteCount;
       queue.splice(0, deleteCount);
     });
 
-    return resolve.total(doc.current).purged;
+    return resolve.log(doc.current).total.purged;
   },
 
   /**
@@ -36,7 +36,7 @@ export const Queue = {
     const paths = toPaths(cmd);
     const resolve = Path.resolver(paths);
     const list = resolve.queue.list(doc.current);
-    const purged = resolve.total(doc.current).purged;
+    const purged = resolve.log(doc.current).total.purged;
     const current = list.length;
     const complete = current + purged;
     return { current, purged, complete };

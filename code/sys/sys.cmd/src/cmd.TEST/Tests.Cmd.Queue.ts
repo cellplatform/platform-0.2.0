@@ -30,8 +30,8 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         get queue() {
           return resolve.queue.list(doc.current);
         },
-        get total() {
-          return resolve.total(doc.current);
+        get log() {
+          return resolve.log(doc.current);
         },
         get object() {
           return resolve.toObject(doc.current);
@@ -102,7 +102,7 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         await foo.invoke(5);
         expectQueue(5);
-        expect(current.total.purged).to.eql(0);
+        expect(current.log.total.purged).to.eql(0);
 
         const purged = Cmd.Queue.purge(cmd, { min: 0 });
         const total = Cmd.Queue.totals(cmd);
@@ -120,7 +120,7 @@ export function queueTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         await foo.invoke(5);
         expectQueue(5);
-        expect(current.total.purged).to.eql(0);
+        expect(current.log.total.purged).to.eql(0);
 
         const purged = Cmd.Queue.purge(cmd, { min: 2 });
         expectQueue(2);

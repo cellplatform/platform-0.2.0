@@ -5,12 +5,12 @@ import type { t } from './common';
  */
 export type CmdObject<C extends t.CmdType> = {
   queue: t.CmdQueue<C>;
-  total: t.CmdTotals;
+  total: t.CmdLog;
 };
 
 /**
  * Total meta-data about a command.
  */
-export type CmdTotals = {
-  purged: number;
+export type CmdLog = {
+  total: { purged: number };
 };

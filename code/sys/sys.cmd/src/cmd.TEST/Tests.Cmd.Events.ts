@@ -145,7 +145,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const { doc, dispose, dispose$ } = await setup();
         const paths: t.CmdPaths = {
           queue: ['z', 'q'],
-          total: ['t', 'a'],
+          log: ['t', 'a'],
         };
         const tx = 'tx.foo';
         const p = { msg: 'hello' };

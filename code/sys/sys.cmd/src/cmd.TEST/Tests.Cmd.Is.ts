@@ -8,18 +8,16 @@ export function flagsTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
 
   describe('Cmd.Is', () => {
-    const total = Cmd.DEFAULTS.total();
+    const log = Cmd.DEFAULTS.log();
     const NON = [null, undefined, 123, 'abc', {}, [], Symbol('foo'), BigInt(0)];
 
     it('Is.state.cmd', () => {
       NON.forEach((invalid) => expect(Is.state.cmd(invalid)).to.eql(false));
-      expect(Is.state.cmd({ queue: [], total })).to.eql(true);
+      expect(Is.state.cmd({ queue: [], log })).to.eql(true);
 
       const item = { name: 'foo', params: { foo: 123 }, tx: '123', id: 'abc' };
-      expect(Is.state.cmd({ queue: [item], total })).to.eql(true);
-      NON.forEach((invalid) =>
-        expect(Is.state.cmd({ queue: [item, invalid], total })).to.eql(false),
-      );
+      expect(Is.state.cmd({ queue: [item], log })).to.eql(true);
+      NON.forEach((invalid) => expect(Is.state.cmd({ queue: [item, invalid], log })).to.eql(false));
     });
 
     it('Is.state.item', () => {
@@ -29,7 +27,7 @@ export function flagsTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
     it('Is.state.total', () => {
       NON.forEach((invalid) => expect(Is.state.item(invalid)).to.eql(false));
-      expect(Is.state.total(total)).to.eql(true);
+      expect(Is.state.log(log)).to.eql(true);
     });
 
     it('Is.cmd', async () => {

@@ -10,7 +10,7 @@ export const Is = {
       const o = input as t.CmdPathsObject;
       const q = o.queue;
       if (!Array.isArray(q)) return false;
-      if (!Is.state.total(o.total)) return false;
+      if (!Is.state.log(o.log)) return false;
       if (q.length > 0 && !Is.state.item(q[q.length - 1])) return false;
       return true;
     },
@@ -26,10 +26,10 @@ export const Is = {
       );
     },
 
-    total(input: any): input is t.CmdTotals {
+    log(input: any): input is t.CmdLog {
       if (!isObject(input)) return false;
-      const o = input as t.CmdTotals;
-      return typeof o.purged === 'number';
+      const o = input as t.CmdLog;
+      return typeof o.total?.purged === 'number';
     },
   },
 

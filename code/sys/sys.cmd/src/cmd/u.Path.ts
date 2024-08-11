@@ -1,4 +1,4 @@
-import { DEFAULTS, isObject, ObjectPath, slug, type t } from './common';
+import { DEFAULTS, isObject, ObjectPath, type t } from './common';
 
 type S = string;
 type O = Record<string, unknown>;
@@ -75,14 +75,14 @@ export const Path = {
             tx(defaultValue?: string) {
               const tx = [...path, 'tx'];
               const get = () => resolve<string>(d, tx);
-              if (!get()) Mutate.value(d, tx, defaultValue ?? slug());
+              if (!get()) Mutate.value(d, tx, defaultValue ?? DEFAULTS.tx());
               return get()!;
             },
 
             id(defaultValue?: string) {
               const id = [...path, 'id'];
               const get = () => resolve<string>(d, id);
-              if (!get()) Mutate.value(d, id, defaultValue ?? slug());
+              if (!get()) Mutate.value(d, id, defaultValue ?? DEFAULTS.id());
               return get()!;
             },
 
@@ -98,18 +98,18 @@ export const Path = {
         },
       },
 
-      total(d: O) {
-        type T = t.CmdTotals;
-        const path = paths.total;
+      log(d: O) {
+        type T = t.CmdLog;
+        const path = paths.log;
         const get = () => resolve<T>(d, path);
-        if (!get()) Mutate.value(d, path, DEFAULTS.total());
+        if (!get()) Mutate.value(d, path, DEFAULTS.log());
         return get()!;
       },
 
       toObject<C extends t.CmdType>(d: O): t.CmdObject<C> {
         return {
           queue: api.queue.list<C>(d),
-          total: api.total(d),
+          total: api.log(d),
         };
       },
     } as const;
@@ -122,7 +122,7 @@ export const Path = {
   prepend(prefix: t.ObjectPath, paths: t.CmdPaths = DEFAULTS.paths): t.CmdPaths {
     return {
       queue: [...prefix, ...paths.queue],
-      total: [...prefix, ...paths.total],
+      log: [...prefix, ...paths.log],
     };
   },
 

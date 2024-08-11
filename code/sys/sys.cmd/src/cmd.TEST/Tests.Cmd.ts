@@ -7,7 +7,7 @@ const DEFAULTS = Cmd.DEFAULTS;
 
 export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
   const { describe, it, expect } = args;
-  const total = Cmd.DEFAULTS.total();
+  const log = Cmd.DEFAULTS.log();
 
   describe('Cmd', () => {
     it('Cmd.DEFAULTS', () => {
@@ -23,7 +23,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const { factory, dispose } = await setup();
       const paths: t.CmdPaths = {
         queue: ['x', 'q'],
-        total: ['t', 'a'],
+        log: ['t', 'a'],
       };
 
       const doc1 = await factory();
@@ -42,18 +42,18 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       await Time.wait(0);
 
       expect(doc1.current).to.eql({
-        total,
+        log,
         queue: [{ name: 'Foo', params: { foo: 888 }, tx, id: Find.queueId(doc1, 0) }],
       });
 
       expect(doc2.current).to.eql({
         x: { q: [{ name: 'Bar', params: {}, error: e, tx, id: Find.queueId(doc2, 0, paths) }] },
-        t: { a: total },
+        t: { a: log },
       });
 
       expect(doc3.current).to.eql({
         x: { q: [{ name: 'Bar', params: { msg: '👋' }, tx, id: Find.queueId(doc3, 0, paths) }] },
-        t: { a: total },
+        t: { a: log },
       });
 
       dispose();
@@ -72,7 +72,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
       const id = Find.queueId(doc, 0, paths);
       expect(doc.current).to.eql({
         foo: {
-          total,
+          log,
           queue: [{ name: 'Foo', params: { foo: 888 }, tx, id }],
         },
       });
@@ -152,7 +152,7 @@ export function cmdTests(setup: t.CmdTestSetup, args: t.TestArgs) {
 
         const paths: t.CmdPaths = {
           queue: ['x', 'q'],
-          total: ['t', 'a'],
+          log: ['t', 'a'],
         };
 
         test(paths, paths);
