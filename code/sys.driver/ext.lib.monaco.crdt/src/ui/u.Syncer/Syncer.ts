@@ -7,4 +7,9 @@ import { SyncerCmd as Cmd } from './Syncer.Cmd';
 export const Syncer = {
   listen,
   Cmd,
+
+  /**
+   * Common Helpers
+   */
+  toCmd: Cmd.Util.Cmd.toCmd,
 } as const;

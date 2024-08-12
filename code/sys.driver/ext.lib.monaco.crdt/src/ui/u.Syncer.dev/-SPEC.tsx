@@ -72,12 +72,12 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<D>(() => {
         const state = State.current;
-        if (!(state.render ?? true)) return null;
-
         const backgroundColor = getBackgroundColor();
         const theme = Color.theme(state.theme);
         Dev.Theme.background(ctx, theme, 1);
         ctx.host.backgroundColor(backgroundColor);
+
+        if (!(state.render ?? true)) return null;
 
         const editor = (debugLabel: DebugLabel, props?: SampleEditorProps) => {
           return (
@@ -89,8 +89,11 @@ export default Dev.describe(name, async (e) => {
               theme={theme.name}
               {...props}
               onReady={(e) => {
-                console.info(`⚡️ SampleEditor.onReady`, e);
+                console.info(`⚡️ SampleEditor("${e.identity}").onReady`, e);
                 syncers[debugLabel] = e.syncer;
+                e.syncer.dispose$.subscribe(() => {
+                  console.info(`⚡️ Disposed: SampleEditor("${e.identity}")`, e);
+                });
               }}
             />
           );
@@ -244,10 +247,14 @@ export default Dev.describe(name, async (e) => {
 
       const update = (params: t.SyncCmdUpdate) => {
         const { identity, cmd } = Get;
-        cmd.update({ identity, ...params });
+        cmd.update.editor({ identity, ...params });
       };
-      dev.button('update: carets', () => update({ carets: true }));
-      dev.button('update: selections', () => update({ selections: true }));
+      dev.button('update.editor: selections', () => update({ selections: true }));
+      dev.button('update.editor: text', () => update({ text: true }));
+
+      dev.hr(-1, 5);
+
+      dev.button(['update: everything', 'all editors'], () => {
     });
   });
 

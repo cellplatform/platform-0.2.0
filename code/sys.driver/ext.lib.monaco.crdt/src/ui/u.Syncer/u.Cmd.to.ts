@@ -8,7 +8,10 @@ export function toMethods(input: t.Cmd<t.SyncCmdType>) {
   const methods: t.SyncCmdMethods = {
     ping: method('Ping', 'Ping:R'),
     purge: method('Purge', 'Purge:R'),
-    update: method('Update'),
+    update: {
+      editor: method('Update:Editor'),
+      state: method('Update:State'),
+    },
   };
   (methods as any)[DEFAULTS.Symbols.cmd] = input;
   return methods;

@@ -1,11 +1,9 @@
 import type { t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Commands for the syncer.
  */
-export type SyncCmdType = Ping | PingR | Purge | PurgeR | Update;
+export type SyncCmdType = Ping | PingR | Purge | PurgeR | UpdateEditor | UpdateState;
 
 /**
  * Ping: report that the status of the identity.
@@ -17,11 +15,20 @@ type PingR = t.CmdType<'Ping:R', { identity: t.IdString; ok: boolean }>;
 type Purge = t.CmdType<'Purge', { identity: t.IdString }>;
 type PurgeR = t.CmdType<'Purge:R', t.SyncPurgeResponse>;
 
-type Update = t.CmdType<'Update', UpdateParams>;
-type UpdateParams = { identity: t.IdString; carets?: boolean };
+type UpdateParams = { identity: t.IdString } & SyncCmdUpdate;
+type UpdateState = t.CmdType<'Update:State', UpdateParams>;
+type UpdateEditor = t.CmdType<'Update:Editor', UpdateParams>;
+
+export type SyncCmdUpdate = {
+  selections?: boolean;
+  text?: boolean;
+};
 
 export type SyncCmdMethods = {
-  ping: t.CmdMethodResponder<Ping, PingR>;
-  purge: t.CmdMethodResponder<Purge, PurgeR>;
-  update: t.CmdMethodVoid<Update>;
+  readonly ping: t.CmdMethodResponder<Ping, PingR>;
+  readonly purge: t.CmdMethodResponder<Purge, PurgeR>;
+  readonly update: {
+    readonly editor: t.CmdMethodVoid<UpdateEditor>;
+    readonly state: t.CmdMethodVoid<UpdateState>;
+  };
 };

@@ -77,23 +77,28 @@ describe('Monaco.Crdt.syncer', () => {
   });
 
   describe('Cmd', () => {
+    const issuer = 'id.foo'; // editor identifier
+
     it('create (defaults)', () => {
       const transport = Immutable.clonerRef({});
-      Util.Cmd.create(transport);
+      const methods = Util.Cmd.create(transport, issuer);
       const obj = ObjectPath.resolve(transport.current, DEFAULTS.paths.cmd);
       expect(Cmd.Is.state.cmd(obj)).to.eql(true);
+
+      const cmd = Syncer.toCmd(methods);
+      expect(Cmd.toIssuer(cmd)).to.eql(issuer);
     });
 
     it('create: with custom paths (prepended)', () => {
       const transport = Immutable.clonerRef({});
-      Util.Cmd.create(transport, { paths: ['foo'] });
+      Util.Cmd.create(transport, issuer, { paths: ['foo'] });
       const obj = ObjectPath.resolve(transport.current, ['foo', ...DEFAULTS.paths.cmd]);
       expect(Cmd.Is.state.cmd(obj)).to.eql(true);
     });
 
     it('toCmd', () => {
       const transport = Immutable.clonerRef({});
-      const methods = Util.Cmd.create(transport);
+      const methods = Util.Cmd.create(transport, issuer);
       const cmd = CmdUtil.toCmd(methods);
       expect(Cmd.Is.cmd(cmd)).to.eql(true);
     });

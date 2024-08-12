@@ -1,6 +1,6 @@
 import { calculateDiff } from './-tmp.diff';
 
-import { Monaco, ObjectPath, Pkg, rx, type t } from './common';
+import { Monaco, ObjectPath, rx, type t } from './common';
 import { SyncerCmd } from './Syncer.Cmd';
 import { Util } from './u';
 
@@ -36,6 +36,8 @@ export function listen(
     textChangedHandler.dispose();
     selectionChangedHandler.dispose();
     editor.setValue('');
+    carets.clear();
+    lens.change((d) => Mutate.delete(d, Util.Path.identity(identity, paths).self));
   });
 
   /**
@@ -53,9 +55,9 @@ export function listen(
   const identity$ = Util.Identity.Observable.identity$(changed$, paths);
 
   /**
-   * Editor <Cmd>'s
+   * Editor <Cmd>'s.
    */
-  const cmd = Util.Cmd.create(lens, { paths });
+  const cmd = Util.Cmd.create(lens, self, { paths, dispose$ });
   SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, dispose$ });
 
   /**
@@ -105,8 +107,23 @@ export function listen(
       rx.filter((e) => !!e.after?.selections),
     )
     .subscribe((e) => {
-      const selections = e.after.selections;
+      const selections = e.after!.selections;
       carets.identity(e.identity).change({ selections });
+    });
+
+  /**
+   * CRDT: if the identity is removed (via a purge) and the editor
+   *       it still alive ensure it's entry is replaced.
+   *
+   */
+  identity$
+    .pipe(
+      rx.filter((e) => e.identity === self),
+      rx.filter((e) => !e.after),
+      rx.filter(() => !life.disposed),
+    )
+    .subscribe((e) => {
+      cmd.update.state({ identity, selections: true });
     });
 
   /**
@@ -134,11 +151,9 @@ export function listen(
    */
   const selectionChangedHandler = editor.onDidChangeCursorSelection((e) => {
     if (life.disposed) return;
-    lens.change((d) => {
-      const path = Util.Path.identity(identity);
-      const selections = editor.getSelections();
-      Mutate.value(d, path.selections, selections);
-    });
+    const path = Util.Path.identity(identity, paths).selections;
+    const selections = editor.getSelections();
+    lens.change((d) => Mutate.value(d, path, selections));
   });
 
   /**
@@ -166,8 +181,9 @@ export function listen(
     const text = Text.current;
     if (text === undefined) lens.change((d) => Mutate.value(d, paths.text, ''));
     else if (typeof text === 'string') changeEditorText(text);
+
+    cmd.update.editor({ identity, selections: true });
     await cmd.purge({ identity }).promise();
-    cmd.update({ identity, carets: true });
   })();
 
   // Finish up.
