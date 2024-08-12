@@ -253,8 +253,6 @@ export default Dev.describe(name, async (e) => {
       dev.button('update.editor: text', () => update({ text: true }));
 
       dev.hr(-1, 5);
-
-      dev.button(['update: everything', 'all editors'], () => {
     });
   });
 
