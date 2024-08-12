@@ -1,7 +1,7 @@
 import { ObjectPath, type t } from './common';
+import { IdentityUtil } from './u.Identity';
 import { PathUtil } from './u.Path';
 import { PingUtil } from './u.Ping';
-import { IdentityUtil } from './u.Identity';
 
 /**
  * Query the status of all identities, and purge dead ones.
@@ -12,11 +12,12 @@ export async function purge(
     lens: t.Immutable;
     self: t.EditorIdentityString;
     paths: t.EditorPaths;
+    timeout?: t.Msecs | t.Msecs[];
   },
 ): Promise<t.SyncPurgeResponse> {
-  const { self, paths, lens } = args;
+  const { self, paths, lens, timeout } = args;
   const identities = IdentityUtil.resolveIdentities(lens, paths);
-  const res = await PingUtil.stillAlive(cmd, Object.keys(identities));
+  const res = await PingUtil.alive(cmd, Object.keys(identities), { timeout });
 
   if (res.total.dead > 0) {
     const dead = res.dead.filter((identity) => identity !== self);

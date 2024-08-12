@@ -21,6 +21,6 @@ export type EditorIdentityState = {
 
 export type EditorIdentityStateChange = {
   readonly identity: t.IdString;
-  readonly before: EditorIdentityState;
-  readonly after: EditorIdentityState;
+  readonly before?: EditorIdentityState;
+  readonly after?: EditorIdentityState;
 };

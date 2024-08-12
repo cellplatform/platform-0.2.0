@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { clone, equals } from 'ramda';
-export const R = { clone, equals } as const;
+import { clone, equals, uniq } from 'ramda';
+export const R = { clone, equals, uniq } as const;
 
 /**
  * @ext.lib

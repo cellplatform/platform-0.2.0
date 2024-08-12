@@ -1,4 +1,4 @@
-import { DEFAULTS, rx, type t } from './common';
+import { DEFAULTS, rx, type t, ObjectPath } from './common';
 import { Path } from './u.Path';
 import { toTransport, toPaths } from './u.To';
 
@@ -21,11 +21,12 @@ export const Queue = {
     doc.change((d) => {
       const queue = resolve.queue.list(d);
       const deleteCount = Math.max(queue.length - min, 0);
+      ObjectPath.Mutate.ensure(d, paths.log, DEFAULTS.log());
       resolve.log(d).total.purged += deleteCount;
       queue.splice(0, deleteCount);
     });
 
-    return resolve.log(doc.current).total.purged;
+    return resolve.log(doc.current).total?.purged;
   },
 
   /**

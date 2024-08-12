@@ -17,7 +17,7 @@ export type SyncListenerChanged = {
 };
 
 export type SyncPurgeResponse = {
-  total: { identities: number; alive: number; dead: number };
-  alive: string[];
-  dead: string[];
+  readonly total: { identities: number; alive: number; dead: number };
+  readonly alive: t.IdString[];
+  readonly dead: t.IdString[];
 };

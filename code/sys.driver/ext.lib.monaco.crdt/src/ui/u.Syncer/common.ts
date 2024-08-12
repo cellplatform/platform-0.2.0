@@ -17,4 +17,5 @@ const Symbols = {
 export const DEFAULTS = {
   paths,
   Symbols,
+  autopurge: { min: 50, max: 100 },
 } as const;

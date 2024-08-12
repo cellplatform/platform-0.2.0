@@ -28,6 +28,7 @@ export type {
   IdString,
   Immutable,
   ImmutableChange,
+  Index,
   Json,
   JsonString,
   Lifecycle,
