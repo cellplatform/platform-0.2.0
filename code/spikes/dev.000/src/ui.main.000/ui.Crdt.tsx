@@ -35,7 +35,7 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
         theme={theme.name}
         historyStack={true}
         border={props.border ?? 1}
-        style={{ height: 250 }}
+        style={{ height: 320 }}
       />
     </div>
   );
