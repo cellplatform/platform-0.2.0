@@ -10,50 +10,6 @@ import { Args, Yaml, type t, Doc } from './common';
  */
 export const DSL = {
   /**
-   * Match a given command to produce a renderable UI <View>.
-   */
-  async matchView(argv: string, main: t.Shell) {
-    const { args, action } = wrangle.args<t.RootCommands>(argv);
-    const pos = args._;
-    const theme: t.CommonTheme = 'Dark';
-
-    if (action === 'dev') {
-      const { loaderView } = await import('./DSL.load');
-      return loaderView(args, main);
-    }
-
-    if (action === 'me') {
-      const { Me } = await import('./ui.Me');
-      return <Me main={main} theme={theme} />;
-    }
-
-    if (action === 'hash') {
-      const { HashView } = await import('sys.ui.react.common');
-      return <HashView theme={theme} bg={true} />;
-    }
-
-    if (action === 'cmd') {
-      const { CmdMain } = await import('./ui.Cmd.Main');
-      return <CmdMain main={main} theme={theme} />;
-    }
-
-    if (action.startsWith('crdt:')) {
-      const { CrdtView } = await import('./ui.Crdt');
-
-      let id = Doc.Uri.id(action);
-      id = id.replace(/^crdt\:/, '');
-      id = id.replace(/^a\./, '');
-
-      if (id) {
-        const uri = `automerge:${id}`;
-        return <CrdtView main={main} theme={theme} docuri={uri} />;
-      }
-    }
-
-    return;
-  },
-
-  /**
    * Run the command when the [Invoke] action is triggered (eg ENTER key).
    */
   async invoke(argv: string, main: t.Shell) {
@@ -138,6 +94,57 @@ export const DSL = {
         }
       } catch (error) {
         console.error(`Failed while parsing YAML`, error);
+      }
+    }
+
+    if (action === 'new.tab') {
+      window.open(window.location.href, '_blank', 'noopener,noreferrer');
+    }
+    if (action === 'new.window') {
+      window.open(window.location.href, '_blank', 'noopener,noreferrer');
+    }
+
+    return;
+  },
+
+  /**
+   * Match a given command to produce a renderable UI <View>.
+   */
+  async matchView(argv: string, main: t.Shell) {
+    const { args, action } = wrangle.args<t.RootCommands>(argv);
+    const pos = args._;
+    const theme: t.CommonTheme = 'Dark';
+
+    if (action === 'dev') {
+      const { loaderView } = await import('./DSL.load');
+      return loaderView(args, main);
+    }
+
+    if (action === 'me') {
+      const { Me } = await import('./ui.Me');
+      return <Me main={main} theme={theme} />;
+    }
+
+    if (action === 'hash') {
+      const { HashView } = await import('sys.ui.react.common');
+      return <HashView theme={theme} bg={true} />;
+    }
+
+    if (action === 'cmd') {
+      const { CmdMain } = await import('./ui.Cmd.Main');
+      return <CmdMain main={main} theme={theme} />;
+    }
+
+    if (action.startsWith('crdt:')) {
+      const { CrdtView } = await import('./ui.Crdt');
+
+      let id = Doc.Uri.id(action);
+      id = id.replace(/^crdt\:/, '');
+      id = id.replace(/^a\./, '');
+
+      if (id) {
+        const uri = `automerge:${id}`;
+        return <CrdtView main={main} theme={theme} docuri={uri} />;
       }
     }
 

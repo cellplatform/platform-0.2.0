@@ -2,7 +2,17 @@ import type { t } from '../common';
 
 type Copy = 'copy' | 'cp';
 type Video = 'video' | 'v';
-export type RootCommands = 'me' | 'dev' | 'fc' | 'hash' | 'cmd' | 'crdt' | Video | Copy;
+export type RootCommands =
+  | 'me'
+  | 'dev'
+  | 'fc'
+  | 'hash'
+  | 'cmd'
+  | 'crdt'
+  | 'new.tab'
+  | 'new.window'
+  | Video
+  | Copy;
 
 /**
  * Shell
