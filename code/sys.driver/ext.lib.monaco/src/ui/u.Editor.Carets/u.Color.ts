@@ -1,5 +1,3 @@
-import { type t } from '../common';
-
 const colors = [
   '#0000FF', // blue
   '#00FF00', // green
