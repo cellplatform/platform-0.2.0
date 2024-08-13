@@ -111,9 +111,9 @@ export const DSL = {
    * Match a given command to produce a renderable UI <View>.
    */
   async matchView(argv: string, main: t.Shell) {
+    const theme: t.CommonTheme = 'Dark';
     const { args, action } = wrangle.args<t.RootCommands>(argv);
     const pos = args._;
-    const theme: t.CommonTheme = 'Dark';
 
     if (action === 'dev') {
       const { loaderView } = await import('./DSL.load');
