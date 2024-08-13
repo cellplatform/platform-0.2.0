@@ -1,5 +1,6 @@
+import { type t } from '../common';
+
 const colors = [
-  '#FF0000', // red
   '#0000FF', // blue
   '#00FF00', // green
   '#FFFF00', // yellow
@@ -13,6 +14,9 @@ const colors = [
 let index = 0;
 
 export const Color = {
+  /**
+   * Iterate through a set of colors.
+   */
   next() {
     const color = colors[index];
     index = (index + 1) % colors.length;

@@ -1,5 +1,5 @@
 import { rx, type t } from '../common';
-import { Color, decoration } from './u';
+import { Color, Decoration } from './u';
 
 /**
  * Manages a set of carets for an editor.
@@ -8,7 +8,7 @@ export const EditorCarets = {
   Color,
 
   /**
-   * Factory.
+   * Factory
    */
   create(
     editor: t.MonacoCodeEditor,
@@ -37,7 +37,7 @@ export const EditorCarets = {
 
       identity(id: string): t.EditorCaret {
         if (carets.has(id)) return carets.get(id)!;
-        const caret = decoration(editor, id);
+        const caret = Decoration.create(editor, id);
         carets.set(id, caret);
         caret.$.subscribe((e) => $.next(e));
         caret.dispose$.subscribe(() => carets.delete(id));
