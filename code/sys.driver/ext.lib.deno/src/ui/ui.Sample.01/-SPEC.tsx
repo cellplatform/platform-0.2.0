@@ -1,4 +1,4 @@
-import { Delete, Dev, Hash, Pkg, slug } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
@@ -20,7 +20,6 @@ const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'code'> & Pick<T, 'forcePublicUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({
     code: SAMPLE.code,
     forcePublicUrl: false,
