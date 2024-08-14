@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { IdentityLabel } from '../ui.CmdView/ui.IdentityLabel';
 import { Color, css, Monaco, rx, Syncer, type t } from './common';
 
 type LensInput = t.Lens | t.Doc;
@@ -23,7 +24,7 @@ export type SampleEditorReadyHandlerArgs = Pick<t.MonacoEditorReadyArgs, 'editor
  * Component
  */
 export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
-  const { lens, enabled = true, debugLabel, identity = 'UNKNOWN' } = props;
+  const { lens, enabled = true, identity = 'UNKNOWN', debugLabel } = props;
   const [ready, setReady] = useState<t.MonacoEditorReadyArgs>();
 
   /**
@@ -50,28 +51,12 @@ export const SampleEditor: React.FC<SampleEditorProps> = (props) => {
       backgroundColor: theme.bg,
       display: 'grid',
     }),
-    identity: {
-      base: css({
-        Absolute: [-22, 6, null, null],
-        fontFamily: 'monospace',
-        fontSize: 10,
-        color: Color.alpha(theme.fg, 0.3),
-      }),
-      value: css({ color: Color.alpha(theme.fg, 1) }),
-    },
+    identity: css({ Absolute: [-22, 6, null, null] }),
   };
-
-  const elIdentity = props.identity && (
-    <div {...styles.identity.base}>
-      <span>{`identity: “`}</span>
-      <span {...styles.identity.value}>{props.identity}</span>
-      <span>{`”`}</span>
-    </div>
-  );
 
   return (
     <div {...css(styles.base)}>
-      {elIdentity}
+      <IdentityLabel identity={props.identity} theme={theme.name} style={styles.identity} />
       <Monaco.Editor
         theme={theme.name}
         enabled={enabled}

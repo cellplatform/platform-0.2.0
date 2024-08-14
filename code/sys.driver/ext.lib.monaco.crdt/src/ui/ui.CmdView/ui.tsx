@@ -3,13 +3,22 @@ import { Editor } from './ui.Editor';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 import { HistoryStack } from './ui.Stack';
+import { IdentityLabel } from './ui.IdentityLabel';
 
 type P = t.CmdViewProps;
 const def = DEFAULTS.props;
 
 export const View: React.FC<P> = (props) => {
-  const { historyStack = def.historyStack, enabled = def.enabled } = props;
-  const crdt = wrangle.crdt(props);
+  const {
+    data = {},
+    identityLabel,
+    historyStack = def.historyStack,
+    enabled = def.enabled,
+  } = props;
+  const doc = data.doc;
+  const path = wrangle.dataPath(props);
+  const editor = wrangle.editor(props);
+  const identity = editor.identity;
 
   /**
    * Render
@@ -81,9 +90,18 @@ export const View: React.FC<P> = (props) => {
     </div>
   );
 
+  const elIdentityLabel = identityLabel && identity && (
+    <IdentityLabel
+      identity={identity}
+      theme={theme.name}
+      style={{ Absolute: identityLabel.position }}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       {elPageStack}
+      {elIdentityLabel}
       <div {...styles.left}>{elEditor}</div>
       <div {...styles.right}>
         {elPanelInfo}
