@@ -62,7 +62,7 @@ fn main() {
  * Index
  */
 type T = { [key in t.EditorLanguage]: string };
-export const CODE_SAMPLES: Partial<T> = {
+export const SAMPLE_CODE: Partial<T> = {
   go,
   python,
   typescript,

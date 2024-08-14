@@ -1,7 +1,7 @@
 import { DEFAULTS, MonacoEditor } from '.';
 import { Monaco } from '../..';
 import { Dev, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
-import { CODE_SAMPLES } from './-sample.code';
+import { SAMPLE_CODE } from './-sample.code';
 
 type P = t.MonacoEditorProps;
 type D = {
@@ -179,17 +179,17 @@ export default Dev.describe(name, (e) => {
             });
         });
       };
-      language('typescript', CODE_SAMPLES.typescript);
-      language('javascript', CODE_SAMPLES.javascript);
+      language('typescript', SAMPLE_CODE.typescript);
+      language('javascript', SAMPLE_CODE.javascript);
       hr();
-      language('rust', CODE_SAMPLES.rust);
-      language('go', CODE_SAMPLES.go);
-      language('python', CODE_SAMPLES.python);
+      language('rust', SAMPLE_CODE.rust);
+      language('go', SAMPLE_CODE.go);
+      language('python', SAMPLE_CODE.python);
       hr();
-      language('json', CODE_SAMPLES.json);
-      language('yaml', CODE_SAMPLES.yaml);
+      language('json', SAMPLE_CODE.json);
+      language('yaml', SAMPLE_CODE.yaml);
       hr();
-      language('markdown', CODE_SAMPLES.markdown);
+      language('markdown', SAMPLE_CODE.markdown);
     });
 
     dev.hr(5, 20);
