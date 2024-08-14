@@ -1,4 +1,4 @@
-import { Info } from '.';
+// import { Info } from '.';
 import {
   AuthEnv,
   Cmd,
@@ -11,6 +11,7 @@ import {
   Time,
   type t,
 } from '../../test.ui';
+import { DEFAULTS } from './common';
 
 type P = t.InfoProps;
 type T = {
@@ -20,18 +21,18 @@ type T = {
   signature?: string;
 };
 const initial: T = { props: {} };
-const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
  * https://docs.privy.io/
  */
-const name = Info.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'fields' | 'enabled' | 'clipboard' | 'theme'> & {
     selectedChain?: t.EvmChainName;
   };
+
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -86,10 +87,11 @@ export default Dev.describe(name, (e) => {
     ctx.subject
       .size([360, null])
       .display('grid')
-      .render<T>((e) => {
+      .render<T>(async (e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
 
+        const { Info } = await import('.');
         return (
           <Info
             {...props}

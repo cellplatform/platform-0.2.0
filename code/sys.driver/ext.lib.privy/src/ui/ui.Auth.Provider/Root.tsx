@@ -7,11 +7,12 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
   useStyleOverrides();
 
   if (!appId) return '⚠️ AuthProvider missing "appId"';
+  const defaultCountry = DEFAULTS.defaultCountry;
 
   const config: PrivyClientConfig = {
     loginMethods: props.loginMethods ?? DEFAULTS.loginMethods,
     walletConnectCloudProjectId: props.walletConnectId,
-    intl: { defaultCountry: DEFAULTS.defaultCountry },
+    intl: { defaultCountry },
     appearance: {
       theme: 'light',
       logo: props.logoUrl ?? DEFAULTS.logoUrl,

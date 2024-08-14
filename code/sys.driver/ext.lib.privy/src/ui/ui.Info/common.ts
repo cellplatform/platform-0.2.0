@@ -1,11 +1,11 @@
 import { Chain, Pkg, type t } from '../common';
-import { DEFAULTS as PROVIDER_DEFAULTS } from '../ui.Auth/common';
-
 export * from '../common';
 
 /**
  * Constants
  */
+const loginMethods: t.AuthProviderLoginMethods = ['sms'];
+
 const fields = {
   get all(): t.InfoField[] {
     return [
@@ -52,5 +52,5 @@ export const DEFAULTS = {
   fields,
   data,
   clipboard: true,
-  loginMethods: PROVIDER_DEFAULTS.loginMethods,
+  loginMethods,
 } as const;

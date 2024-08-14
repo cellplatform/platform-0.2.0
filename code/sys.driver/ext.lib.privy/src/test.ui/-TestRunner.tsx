@@ -1,4 +1,3 @@
-import { Info } from '../ui/ui.Info';
 import { AuthEnv, Dev, type t } from './common';
 
 type T = {
@@ -38,7 +37,8 @@ export default Dev.describe('TestRunner', (e) => {
     const state = await dev.state();
     const ctx = (): t.TestCtx => ({ privy, wallets });
 
-    dev.row((e) => {
+    dev.row(async (e) => {
+      const { Info } = await import('../ui/ui.Info');
       return (
         <Info
           data={{ provider: AuthEnv.provider }}

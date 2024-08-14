@@ -1,4 +1,4 @@
-import { type t, rx } from './common';
+import { rx, type t } from './common';
 
 export const FarcasterCommand = {
   /**
