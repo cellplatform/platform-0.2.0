@@ -19,7 +19,7 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
         const onCmdEnter = () => {
           const text = editor.getValue();
           const selections = editor.getSelections() || [];
-          props.onCmdEnterKey?.({ text, selections });
+          props.onCmdEnterKey?.({ content: { text }, selections });
         };
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
@@ -32,7 +32,10 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           Monaco.Crdt.Syncer.listen(monaco, editor, lens);
         }
       }}
-      onChange={(e) => props.onChange?.(e.current)}
+      onChange={(e) => {
+        const { content, selections } = e;
+        props.onChange?.({ content, selections });
+      }}
     />
   );
 

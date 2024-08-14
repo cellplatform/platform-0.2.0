@@ -52,4 +52,7 @@ export type SampleProps = {
 };
 
 export type EditorEventHandler = (e: EditorEventHandlerArgs) => void;
-export type EditorEventHandlerArgs = t.EditorState;
+export type EditorEventHandlerArgs = {
+  content: t.EditorContent;
+  selections: t.EditorSelection[];
+};

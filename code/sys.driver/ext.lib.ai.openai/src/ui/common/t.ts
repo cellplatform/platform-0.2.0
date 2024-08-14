@@ -1,7 +1,7 @@
 /**
  * @ext
  */
-export type { EditorState } from 'ext.lib.monaco/src/types';
+export type { EditorContent, EditorSelection } from 'ext.lib.monaco/src/types';
 
 /**
  * @system

@@ -45,10 +45,8 @@ export default Dev.describe(name, (e) => {
         return (
           <Sample
             {...e.state.props}
-            onChange={(e) => state.change((d) => (local.code = d.props.code = e.text))}
-            onCmdEnterKey={(e) => {
-              console.info('⚡️ onCmdEnterKey', e);
-            }}
+            onChange={(e) => state.change((d) => (local.code = d.props.code = e.content.text))}
+            onCmdEnterKey={(e) => console.info('⚡️ onCmdEnterKey', e)}
           />
         );
       });
