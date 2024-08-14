@@ -12,7 +12,12 @@ export type {
   StoreIndex,
   WebStore,
 } from 'ext.lib.automerge/src/types';
-export type { EditorState, Monaco, MonacoCodeEditor } from 'ext.lib.monaco/src/types';
+export type {
+  EditorContent,
+  EditorSelection,
+  Monaco,
+  MonacoCodeEditor,
+} from 'ext.lib.monaco/src/types';
 export type { PeerModel, PeerStreamSelectionHandler } from 'ext.lib.peerjs/src/types';
 export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
 

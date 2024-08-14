@@ -72,10 +72,10 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
             const clear = () => e.render(null);
 
             if (pos[0] === 'cmd') {
-              if (pos[1] === 'me') {
-                const { Me } = await import('./ui.Me');
-                return e.render(<Me main={main} theme={e.theme} />);
-              }
+              // if (pos[1] === 'me') {
+              //   const { Me } = await import('./ui.Me');
+              //   return e.render(<Me main={main} theme={e.theme} />);
+              // }
               if (pos[1]?.startsWith('crdt:')) {
                 const { CrdtView } = await import('./ui.Crdt');
                 const uri = pos[1];

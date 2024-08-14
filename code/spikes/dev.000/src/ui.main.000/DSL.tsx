@@ -72,30 +72,30 @@ export const DSL = {
       return loadSpec(args, main);
     }
 
-    if (action === 'me') {
-      const current = main.state.me.current as any;
-      const text = (current?.root?.config?.text ?? '') as string;
-      const tmp = main.state.tmp;
-
-      try {
-        const yaml = Yaml.parse(text);
-
-        if (typeof yaml.video === 'object') {
-          const video = yaml.video as t.TmpVideo;
-          tmp.change((d) => (d.video = video));
-        } else {
-          tmp.change((d) => delete d.video);
-        }
-
-        if (typeof yaml.props === 'object') {
-          tmp.change((d) => (d.props = yaml.props));
-        } else {
-          tmp.change((d) => delete d.props);
-        }
-      } catch (error) {
-        console.error(`Failed while parsing YAML`, error);
-      }
-    }
+    //     if (action === 'me') {
+    //       const current = main.state.me.current as any;
+    //       const text = (current?.root?.config?.text ?? '') as string;
+    //       const tmp = main.state.tmp;
+    //
+    //       try {
+    //         const yaml = Yaml.parse(text);
+    //
+    //         if (typeof yaml.video === 'object') {
+    //           const video = yaml.video as t.TmpVideo;
+    //           tmp.change((d) => (d.video = video));
+    //         } else {
+    //           tmp.change((d) => delete d.video);
+    //         }
+    //
+    //         if (typeof yaml.props === 'object') {
+    //           tmp.change((d) => (d.props = yaml.props));
+    //         } else {
+    //           tmp.change((d) => delete d.props);
+    //         }
+    //       } catch (error) {
+    //         console.error(`Failed while parsing YAML`, error);
+    //       }
+    //     }
 
     if (action === 'new.tab') {
       window.open(window.location.href, '_blank', 'noopener,noreferrer');
@@ -120,10 +120,10 @@ export const DSL = {
       return loaderView(args, main);
     }
 
-    if (action === 'me') {
-      const { Me } = await import('./ui.Me');
-      return <Me main={main} theme={theme} />;
-    }
+    // if (action === 'me') {
+    //   const { Me } = await import('./ui.Me');
+    //   return <Me main={main} theme={theme} />;
+    // }
 
     if (action === 'hash') {
       const { HashView } = await import('sys.ui.react.common');

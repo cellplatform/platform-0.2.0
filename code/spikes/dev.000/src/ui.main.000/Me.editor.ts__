@@ -17,16 +17,18 @@ export function editorController(args: {
   const cmdbar = main.cmdbar;
 
   // Document (State).
-  type T = { config?: t.EditorState; code?: unknown };
+  type T = { content?: t.EditorContent; selections?: t.EditorSelection[] };
   const lens = Doc.lens<O, T>(main.state.me, ['root'], { init: (d) => (d.root = {}) });
   const codeLens = Doc.lens(lens, ['code'], (d) => (d.code = {}));
 
   /**
    * Ensure there is a {config} object.
    */
-  if (typeof lens.current.config !== 'object') {
-    const text = (lens.current.config as any)?.text ?? '';
-    lens.change((d) => (d.config = { text, selections: [] }));
+  if (typeof lens.current.content !== 'object') {
+    const text = (lens.current.content as any)?.text ?? '';
+    lens.change((d) => {
+      d.config = { text, selections: [] };
+    });
   }
 
   /**

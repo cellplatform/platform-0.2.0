@@ -3,7 +3,6 @@ import type { t } from '../common';
 type Copy = 'copy' | 'cp';
 type Video = 'video' | 'v';
 export type RootCommands =
-  | 'me'
   | 'dev'
   | 'fc'
   | 'hash'

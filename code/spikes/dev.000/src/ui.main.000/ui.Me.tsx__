@@ -1,7 +1,6 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-
+import { useRef } from 'react';
 import { Color, Monaco, css, type t } from './common';
-import { editorController } from './Me.editor';
+// import { editorController } from './Me.editor';
 
 export type MeProps = {
   main: t.Shell;
