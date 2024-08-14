@@ -1,5 +1,5 @@
 import { CmdView, DEFAULTS } from '.';
-import { Color, Crdt, Dev, Doc, Immutable, Json, Pkg, rx, SampleCrdt } from '../../test.ui';
+import { Color, Crdt, Dev, Doc, Immutable, Json, rx, SampleCrdt, slug } from '../../test.ui';
 import { CmdBar, type t } from './common';
 
 import { Info as CrdtInfo } from 'ext.lib.automerge';
@@ -20,23 +20,30 @@ const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, async (e) => {
   type LocalStore = { props?: t.JsonString; debug?: t.JsonString };
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    props: undefined,
-    debug: undefined,
-  });
-
-  local.props = undefined;
-
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
+  const local = localstore.object({ props: undefined, debug: undefined });
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { docObjectOpen: true })),
   } as const;
 
+  const identity = slug();
+
   const Props = {
     get doc() {
       const debug = State.debug.current;
       return debug.passDocProp ? doc : undefined;
+    },
+
+    get current(): t.CmdViewProps {
+      const doc = Props.doc;
+      const repo = db.repo;
+      const current = State.props.current;
+      return {
+        ...current,
+        editor: { ...current.editor, identity },
+        data: { doc, repo },
+      };
     },
   } as const;
 
@@ -46,7 +53,7 @@ export default Dev.describe(name, async (e) => {
 
   State.props.change((d) => {
     const editor = Doc.ensure(d, 'editor', {});
-    editor.lensPath = ['sample.CmdView'];
+    editor.dataPath = ['sample.CmdView'];
   });
 
   e.it('ui:init', async (e) => {
@@ -69,48 +76,23 @@ export default Dev.describe(name, async (e) => {
       .pipe(rx.debounceTime(100))
       .subscribe(() => dev.redraw());
 
-    /**
-     * Render: <CmdBar>
-     */
-    const renderCommandBar = () => {
-      return (
-        <CmdBar.Stateful
-          {...State.props.current}
-          state={doc}
-          paths={['sample.CmdBar']}
-          onReady={(e) => {
-            const { dispose$ } = e;
-            cmdbar = e.cmdbar;
-            console.info('⚡️ CmdBar.Stateful.onReady:', e);
-
-            if (doc) Crdt.Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
-            State.debug.change((d) => (d.argv = e.initial.text));
-
-            const events = cmdbar.ctrl.events(dispose$);
-            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
-          }}
-          onFocusChange={(e) => State.debug.change((d) => (d.isFocused = e.is.focused))}
-          onChange={(e) => State.debug.change((d) => (d.argv = e.to))}
-        />
-      );
-    };
-
     ctx.debug.width(360);
     ctx.subject
-      .size('fill-x')
+      .size('fill-x', 150)
       .display('grid')
       .render<D>((e) => {
-        const props = State.props.current;
+        const props = Props.current;
         const theme = Color.theme(props.theme);
         Dev.Theme.background(dev, theme, 1);
+
         return (
           <CmdView
             {...props}
-            doc={Props.doc}
-            repo={db.repo}
             border={1}
             style={{ height: 250 }}
-            onHistoryStackClick={(e) => console.info(`⚡️ onHistoryStackClick:`, e)}
+            identityLabel={{ position: [null, null, -22, 6] }}
+            onHistoryStackClick={(e) => console.info(`⚡️ CmdView.onHistoryStackClick:`, e)}
+            onChange={(e) => console.info(`⚡️ CmdView.onChange:`, e)}
           />
         );
       });
@@ -118,7 +100,38 @@ export default Dev.describe(name, async (e) => {
     /**
      * Footer: <CmdBar>
      */
-    ctx.host.footer.padding(0).render((e) => renderCommandBar());
+    ctx.host.footer.padding(0).render((e) => {
+      return (
+        <CmdBar.Stateful
+          state={doc}
+          paths={['sample.CmdBar']}
+          onReady={(e) => {
+            console.info('⚡️ CmdBar.Stateful.onReady:', e);
+            cmdbar = e.cmdbar;
+            const { dispose$ } = e;
+
+            /**
+             * Sync with CRDT.
+             */
+            if (doc) Crdt.Sync.Textbox.listen(e.textbox, doc, e.paths.text, { dispose$ });
+
+            /**
+             * Text → [argv].
+             */
+            const changeArgv = (text: string) => State.debug.change((d) => (d.argv = text));
+            changeArgv(e.initial.text);
+            cmdbar.onChange((e) => changeArgv(e.text), { debounce: 100, dispose$ });
+
+            /**
+             * Commands.
+             */
+            const events = cmdbar.ctrl.events(dispose$);
+            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+          }}
+          onFocusChange={(e) => State.debug.change((d) => (d.isFocused = e.is.focused))}
+        />
+      );
+    });
   });
 
   e.it('ui:header', async (e) => {
