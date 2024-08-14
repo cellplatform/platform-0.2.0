@@ -62,7 +62,7 @@ export default Dev.describe(name, (e) => {
             {...props}
             onReady={(e) => {
               console.info(`⚡️ onReady:`, e);
-              e.dispose$.subscribe(() => console.info(`⚡️ onReady.dispose$`));
+              e.dispose$.subscribe(() => console.info(`⚡️ onReady.dispose$ → (💥)`));
 
               editor = e.editor;
               monaco = e.monaco;

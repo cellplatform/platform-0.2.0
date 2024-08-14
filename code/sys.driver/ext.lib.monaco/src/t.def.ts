@@ -40,6 +40,6 @@ export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRange
 export type EditorSelection = t.Selection;
 
 export type EditorContent = {
-  text: string;
-  language: t.EditorLanguage;
+  readonly text: string;
+  readonly language: t.EditorLanguage;
 };
