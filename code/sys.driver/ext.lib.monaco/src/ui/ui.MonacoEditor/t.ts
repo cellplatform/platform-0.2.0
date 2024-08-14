@@ -57,5 +57,6 @@ export type MonacoEditorChangeArgs = {
   readonly event: monaco.editor.IModelContentChangedEvent;
   readonly editor: MonacoCodeEditor;
   readonly monaco: Monaco;
-  readonly current: t.EditorState;
+  readonly content: t.EditorContent;
+  readonly selections: t.EditorSelection[];
 };

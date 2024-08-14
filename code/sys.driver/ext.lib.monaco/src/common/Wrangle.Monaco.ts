@@ -28,7 +28,6 @@ export function Monaco(monaco: t.Monaco) {
         end: new Position(positionLineNumber, positionColumn),
       };
     },
-  };
-
+  } as const;
   return api;
 }

@@ -1,6 +1,6 @@
 import { DEFAULTS, MonacoEditor } from '.';
 import { Monaco } from '../..';
-import { Dev, EditorCarets, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
+import { Dev, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
 import { CODE_SAMPLES } from './-sample.code';
 
 type P = t.MonacoEditorProps;
@@ -290,10 +290,9 @@ export default Dev.describe(name, (e) => {
           ? undefined
           : {
               'id.instance': editor?.getId(),
-              'css.class': MonacoEditor.className(editor),
+              'css.class': MonacoEditor.Wrangle.Editor.className(editor),
               text: `chars:(${text.length}), lines:(${text.split('\n').length})`,
             },
-        // carets: carets?.current ?? [],
       };
       return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$'] }} />;
     });

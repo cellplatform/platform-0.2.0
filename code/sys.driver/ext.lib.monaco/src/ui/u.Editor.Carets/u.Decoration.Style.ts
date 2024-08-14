@@ -5,7 +5,7 @@ export const DecorationStyle = {
    * Factory.
    */
   create(editor: t.MonacoCodeEditor, id: string) {
-    const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
+    const editorSelector = Wrangle.Editor.className(editor).split(' ').join('.');
     const style = document.createElement('style');
     style.setAttribute('type', 'text/css');
     style.setAttribute('data-meta', DEFAULTS.className);

@@ -1,10 +1,10 @@
 import type { OnChange, OnMount } from '@monaco-editor/react';
 import EditorReact from '@monaco-editor/react';
-
 import { useEffect, useRef, useState } from 'react';
+
+import { EditorCarets } from '../u.Editor.Carets';
 import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
 import { Util } from './u';
-import { EditorCarets } from '../u.Editor.Carets';
 
 const def = DEFAULTS.props;
 
@@ -107,14 +107,21 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     const monaco = monacoRef.current;
     if (!props.onChange || !editor || !monaco) return;
     updateTextState(editor);
-    props.onChange({ event, monaco, editor, current: Util.toState(editor) });
+
+    props.onChange({
+      event,
+      monaco,
+      editor,
+      selections: Wrangle.Editor.selections(editor),
+      content: Wrangle.Editor.content(editor),
+    });
   };
 
   /**
    * Render
    */
+  const className = Wrangle.Editor.className(editorRef.current);
   const theme = Color.theme(props.theme);
-  const className = Wrangle.editorClassName(editorRef.current);
   const styles = {
     base: css({
       position: 'relative',
