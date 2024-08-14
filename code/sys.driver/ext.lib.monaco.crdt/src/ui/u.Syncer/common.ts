@@ -10,12 +10,12 @@ const paths: t.EditorPaths = {
   identity: ['.tmp', 'identity'],
 };
 
-const Symbols = {
+const symbols = {
   cmd: Symbol('cmd'),
-};
+} as const;
 
 export const DEFAULTS = {
   paths,
-  Symbols,
+  symbols,
   autopurge: { min: 50, max: 100 },
 } as const;

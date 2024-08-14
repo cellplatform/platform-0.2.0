@@ -13,7 +13,7 @@ export function toMethods(input: t.Cmd<t.SyncCmdType>) {
       state: method('Update:State'),
     },
   };
-  (methods as any)[DEFAULTS.Symbols.cmd] = input;
+  (methods as any)[DEFAULTS.symbols.cmd] = input;
   return methods;
 }
 
@@ -22,5 +22,5 @@ export function toMethods(input: t.Cmd<t.SyncCmdType>) {
  */
 export function toCmd(ctrl: t.SyncCmdMethods) {
   const methods = ctrl as any;
-  return methods[DEFAULTS.Symbols.cmd] as t.Cmd<t.SyncCmdType>;
+  return methods[DEFAULTS.symbols.cmd] as t.Cmd<t.SyncCmdType>;
 }
