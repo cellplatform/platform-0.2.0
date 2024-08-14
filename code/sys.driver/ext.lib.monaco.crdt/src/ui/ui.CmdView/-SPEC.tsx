@@ -96,7 +96,7 @@ export default Dev.describe(name, async (e) => {
             onDataReady={(e) => {
               const uri = e.doc.uri;
               const id = uri.slice(-5);
-              console.info(`⚡️ CmdView.onDocReady("${id}"):`, e);
+              console.info(`⚡️ CmdView.onDataReady("${id}"):`, e);
               e.dispose$.subscribe(() => console.info(`💥 dispose("${id}")`));
             }}
           />

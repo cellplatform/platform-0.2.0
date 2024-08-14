@@ -8,9 +8,6 @@ type Pos = [Edge, Edge, Edge, Edge];
  * <Component>
  */
 export type CmdViewProps = {
-  doc?: t.Doc;
-  repo?: { store?: t.Store; index?: t.StoreIndex };
-  editor?: t.CmdViewEditorProps;
   data?: t.CmdViewData;
   editor?: t.CmdViewPropsEditor;
   historyStack?: boolean;
@@ -58,5 +55,6 @@ export type CmdViewDataHandler = (e: CmdViewDataHandlerArgs) => void;
 export type CmdViewDataHandlerArgs = {
   path: t.ObjectPath;
   doc: t.Doc;
+  lens: t.Lens<t.EditorContent>;
   dispose$: t.Observable<void>;
 };

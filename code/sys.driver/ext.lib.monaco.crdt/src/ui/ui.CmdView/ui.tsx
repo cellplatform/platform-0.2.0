@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { rx, Color, css, DEFAULTS, Doc, type t } from './common';
+import { Color, css, DEFAULTS, Doc, rx, type t } from './common';
 import { Editor } from './ui.Editor';
+import { IdentityLabel } from './ui.IdentityLabel';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 import { HistoryStack } from './ui.Stack';
-import { IdentityLabel } from './ui.IdentityLabel';
 
 type P = t.CmdViewProps;
 const def = DEFAULTS.props;
@@ -17,6 +17,7 @@ export const View: React.FC<P> = (props) => {
     historyStack = def.historyStack,
     enabled = def.enabled,
   } = props;
+
   const doc = data.doc;
   const path = wrangle.dataPath(props);
   const editor = wrangle.editor(props);
@@ -35,7 +36,15 @@ export const View: React.FC<P> = (props) => {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
     if (doc) {
-      props.onDataReady?.({ doc, path, dispose$ });
+      let _lens: undefined | t.Lens<t.EditorContent>;
+      props.onDataReady?.({
+        path,
+        doc,
+        dispose$,
+        get lens() {
+          return _lens || (_lens = Doc.lens(doc, path, { dispose$ }));
+        },
+      });
     }
     return dispose;
   }, [doc?.uri, path.join()]);

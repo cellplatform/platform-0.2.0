@@ -15,8 +15,10 @@ export type {
   StoreIndex,
   StoreIndexDb,
 } from 'ext.lib.automerge/src/types';
+
 export type {
   EditorCarets,
+  EditorContent,
   EditorLanguage,
   EditorRange,
   Monaco,
