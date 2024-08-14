@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-
-import { Color, css, DEFAULTS, Doc, PageStack, useRedrawOnChange, type t } from './common';
+import { Color, css, DEFAULTS, Doc, type t } from './common';
 import { Editor } from './ui.Editor';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
+import { HistoryStack } from './ui.Stack';
 
 type P = t.CmdViewProps;
 const def = DEFAULTS.props;
@@ -11,18 +10,6 @@ const def = DEFAULTS.props;
 export const View: React.FC<P> = (props) => {
   const { historyStack = def.historyStack, enabled = def.enabled } = props;
   const crdt = wrangle.crdt(props);
-  const history = wrangle.history(props);
-
-  /**
-   * Hooks
-   */
-  useRedrawOnChange(crdt.doc);
-  const [page, setPage] = useState(0);
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => setPage((n) => n + 1), [history.join()]);
 
   /**
    * Render
@@ -52,17 +39,13 @@ export const View: React.FC<P> = (props) => {
       display: 'grid',
       gridTemplateRows: `1fr auto`,
     }),
-
     docUri: css({
       borderTop: dividerBorder,
       padding: 15,
     }),
-
-    pageStack: css({
+    historyStack: css({
       Absolute: [-1, 0, null, 0],
-      opacity: 0.3,
     }),
-
     panelInfo: {
       base: css({ position: 'relative', display: 'grid', Scroll: true }),
       inner: css({ Absolute: 0, boxSizing: 'border-box', padding: 15 }),
@@ -71,9 +54,9 @@ export const View: React.FC<P> = (props) => {
   };
 
   const elPageStack = historyStack && (
-    <PageStack
-      current={page}
-      style={styles.pageStack}
+    <HistoryStack
+      doc={crdt.doc}
+      style={styles.historyStack}
       theme={theme.name}
       onClick={props.onHistoryStackClick}
     />
