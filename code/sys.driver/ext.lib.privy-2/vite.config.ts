@@ -7,3 +7,8 @@ export default Config.vite(import.meta.url, (e) => {
   e.target('web');
   e.externalDependency(e.ctx.deps.map((d) => d.name));
 });
+
+// export default Config.vite(import.meta.url, (e) => {
+//   e.target('web');
+//   e.plugin('web:react');
+// });

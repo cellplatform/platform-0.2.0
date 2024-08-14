@@ -14,4 +14,5 @@ export {
   useDragTarget,
   useFocus,
   useMouse,
+  Spinner,
 } from 'sys.ui.react.common';

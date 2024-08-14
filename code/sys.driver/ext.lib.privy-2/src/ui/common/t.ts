@@ -1,21 +1,14 @@
 /**
- * @external
- */
-export type { CSSProperties } from 'react';
-
-/**
  * @system
  */
 export type {
-  CommonInfoProps,
   CommonTheme,
   CssEdgesInput,
   CssValue,
   DevCtxState,
-  MarginInput,
+  KeyboardModifierFlags,
   PropListItem,
   PropListProps,
-  RenderCountProps,
 } from 'sys.ui.react.common/src/types';
 
 /**
