@@ -8,4 +8,6 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { rx } from 'sys.util';
+export { Cmd } from 'sys.cmd';
+export { Immutable } from 'sys.util';
+export { Delete, Hash, rx, Time, Value } from 'sys.util';
