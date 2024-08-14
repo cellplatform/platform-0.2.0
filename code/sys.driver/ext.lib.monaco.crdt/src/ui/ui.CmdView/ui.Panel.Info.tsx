@@ -11,7 +11,8 @@ export type PanelInfoProps = {
 };
 
 export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
-  const { repo, doc, enabled = def.enabled } = props;
+  const { data = {}, path, enabled = def.enabled } = props;
+  const { repo, doc } = data;
 
   /**
    * Render
