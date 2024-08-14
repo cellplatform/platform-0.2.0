@@ -28,7 +28,7 @@ export const Ref = {
         const life = rx.lifecycle(op.dispose$);
         const events = _textboxEvents || (_textboxEvents = textbox.events(life.dispose$));
         let $ = events.$.pipe(rx.takeUntil(life.dispose$));
-        if (op.debounce) $ = $.pipe(rx.debounceTime(op.debounce));
+        if (typeof op.debounce === 'number') $ = $.pipe(rx.debounceTime(op.debounce));
         $.pipe(rx.observeOn(rx.animationFrameScheduler)).subscribe(() => fn(cmdbar.current));
         return life;
       },
