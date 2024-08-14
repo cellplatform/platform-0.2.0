@@ -12,7 +12,7 @@ const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   type LocalStore = { props?: string; debug?: string };
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
