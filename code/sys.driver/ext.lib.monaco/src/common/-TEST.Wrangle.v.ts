@@ -5,12 +5,14 @@ const { NULL_RANGE } = DEFAULTS;
 
 describe('Wrangle', () => {
   describe('asRange', () => {
+    const asRange = Wrangle.Range.asRange;
+
     it('null', () => {
-      expect(Wrangle.asRange(null)).to.eql(NULL_RANGE);
+      expect(asRange(null)).to.eql(NULL_RANGE);
     });
 
     it('[1, 5] - single character', () => {
-      const res = Wrangle.asRange([1, 5]);
+      const res = asRange([1, 5]);
       expect(res).to.eql({
         startLineNumber: 1,
         startColumn: 5,
@@ -20,7 +22,7 @@ describe('Wrangle', () => {
     });
 
     it('[1, 5, 2, 3] - span', () => {
-      const res = Wrangle.asRange([1, 5, 2, 3]);
+      const res = asRange([1, 5, 2, 3]);
       expect(res).to.eql({
         startLineNumber: 1,
         startColumn: 5,
@@ -37,8 +39,8 @@ describe('Wrangle', () => {
         endColumn: -1,
       };
 
-      const res1 = Wrangle.asRange(NULL_RANGE);
-      const res2 = Wrangle.asRange(SAMPLE);
+      const res1 = asRange(NULL_RANGE);
+      const res2 = asRange(SAMPLE);
 
       expect(res1).to.eql(NULL_RANGE);
       expect(res2).to.eql(SAMPLE);

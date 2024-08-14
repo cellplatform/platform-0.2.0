@@ -5,6 +5,8 @@ import { Wrangle } from './Wrangle';
 const { NULL_RANGE } = DEFAULTS;
 
 describe('Is', () => {
+  const asRange = Wrangle.Range.asRange;
+
   it('Is.editorRange', () => {
     const test = (input: any, expected: boolean) => {
       const res = Is.editorRange(input);
@@ -33,13 +35,13 @@ describe('Is', () => {
   });
 
   it('Is.nullRange', () => {
-    expect(Is.nullRange(Wrangle.asRange([1, 5]))).to.eql(false);
+    expect(Is.nullRange(asRange([1, 5]))).to.eql(false);
     expect(Is.nullRange(NULL_RANGE)).to.eql(true);
   });
 
   it('Is.singleCharRange', () => {
-    const range1 = Wrangle.asRange([1, 5]);
-    const range2 = Wrangle.asRange([1, 5, 1, 6]);
+    const range1 = asRange([1, 5]);
+    const range2 = asRange([1, 5, 1, 6]);
 
     expect(Is.singleCharRange(range1)).to.eql(true);
     expect(Is.singleCharRange(range2)).to.eql(false);

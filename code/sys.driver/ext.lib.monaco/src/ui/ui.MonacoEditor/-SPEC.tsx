@@ -69,7 +69,7 @@ export default Dev.describe(name, (e) => {
               carets = e.carets;
               carets.$.subscribe((e) => ctx.redraw());
 
-              const asRange = Wrangle.asRange;
+              const asRange = Wrangle.Range.asRange;
               const debug = State.debug.current;
               if (debug.selection) editor.setSelection(debug.selection);
               editor.onDidChangeCursorSelection((e) => {

@@ -1,6 +1,6 @@
 import type * as t from './t';
 
-import { asRange } from './Wrangle.asRange';
+import { Range } from './Wrangle.Range';
 import { DEFAULTS } from './constants';
 import { R } from './libs';
 
@@ -31,12 +31,12 @@ export const Is = {
   },
 
   singleCharRange(input: t.EditorRangeInput) {
-    const range = asRange(input);
+    const range = Range.asRange(input);
     return range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn;
   },
 
   rangeWithinString(input: t.EditorRangeInput, text: string) {
-    const range = asRange(input);
+    const range = Range.asRange(input);
     const lines = text.split('\n');
     const startLine = lines[range.startLineNumber - 1];
     const endLine = lines[range.endLineNumber - 1];

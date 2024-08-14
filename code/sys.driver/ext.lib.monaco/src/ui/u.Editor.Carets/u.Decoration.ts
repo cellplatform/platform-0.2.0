@@ -48,7 +48,7 @@ export const Decoration = {
       type D = t.monaco.editor.IModelDeltaDecoration;
       const decorations = selections.reduce((acc, next) => {
         acc.push({
-          range: Wrangle.toRangeEnd(next),
+          range: Wrangle.Range.toRangeEnd(next),
           options: { className: style.class.caret },
         });
         if (!Is.singleCharRange(next)) {
@@ -112,7 +112,7 @@ export const Decoration = {
         }
 
         if (args.selections) {
-          const selections = Wrangle.asRanges(args.selections);
+          const selections = Wrangle.Range.asRanges(args.selections);
           updateSelections(selections);
           changed = true;
         }
@@ -135,7 +135,7 @@ export const Decoration = {
         }
 
         if (args.selections) {
-          const selections = Wrangle.asRanges(args.selections);
+          const selections = Wrangle.Range.asRanges(args.selections);
           if (!R.equals(selections, _selections)) return false;
         }
 
