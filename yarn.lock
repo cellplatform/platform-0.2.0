@@ -1447,53 +1447,6 @@
     libphonenumber-js "^1.10.31"
     zod "^3.22.4"
 
-"@privy-io/react-auth@1.78.0":
-  version "1.78.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.78.0.tgz#a3540cd8e566bb1990e7f318bc6cbb43942f5ce4"
-  integrity sha512-uUZhLAvKH0g9DnG6ObrFla6QQuasQXzdO0xgaRQUbgTkPFBsn/JNoIPx56HAsV85GNSYAarWl7JyAK0SIecPCQ==
-  dependencies:
-    "@coinbase/wallet-sdk" "4.0.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.1.1"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@privy-io/js-sdk-core" "0.26.1"
-    "@simplewebauthn/browser" "^9.0.1"
-    "@walletconnect/ethereum-provider" "^2.13.3"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.7"
-    ofetch "^1.3.4"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    viem "^2.17.0"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-
 "@privy-io/react-auth@1.78.1":
   version "1.78.1"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.78.1.tgz#341247007830870957e7226b3cf12ea2284d8bd2"
@@ -2773,14 +2726,6 @@
   integrity sha512-cwZDp6d+gGTfXiYhZlZ5QF7GvmJZfATcJG5Hdc1TulCnbxpw7zJsE5zH0p9d2YCkKKSE3/r64gG16a0kqZTaMg==
   dependencies:
     "@seznam/compose-react-refs" "^1.0.4"
-
-"@vimeo/player@2.23.0":
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/@vimeo/player/-/player-2.23.0.tgz#0ffcae773f8eec8bdd943b3c72aed30477797001"
-  integrity sha512-WiLSyoioHdf8TFcSp8ptt8aW1WWEkFJNtZCZgiCopDS11UecGtwRib/OAf0uF7uDlVueeV4ru0AL4QsPD1Y2GA==
-  dependencies:
-    native-promise-only "0.8.1"
-    weakmap-polyfill "2.0.4"
 
 "@vimeo/player@2.23.1":
   version "2.23.1"
@@ -8706,21 +8651,6 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
-
-viem@2.19.3:
-  version "2.19.3"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.19.3.tgz#537773f50d3a0e7436d2465898afc62c0c25c01c"
-  integrity sha512-djOw1X/jOvDOEMiol4g/T030MVncF2utC9G929ODNJ/00E7UXjSpwOeuyapmaqn831eSIHlELicZETYl2vI9oQ==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.4.0"
-    "@noble/hashes" "1.4.0"
-    "@scure/bip32" "1.4.0"
-    "@scure/bip39" "1.3.0"
-    abitype "1.0.5"
-    isows "1.0.4"
-    webauthn-p256 "0.0.5"
-    ws "8.17.1"
 
 viem@2.19.4:
   version "2.19.4"
