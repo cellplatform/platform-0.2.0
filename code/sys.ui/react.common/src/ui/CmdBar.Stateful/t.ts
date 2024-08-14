@@ -19,7 +19,16 @@ export type CmdBarRef = {
   readonly paths: t.CmdBarPaths;
   readonly resolve: t.CmdBarPathResolver;
   readonly dispose$: t.Observable<void>;
-  onChange(fn: (e: CmdBarCurrent) => void, dispose$?: t.UntilObservable): t.Lifecycle;
+  readonly onChange: t.CmdBarRefOnChange;
+};
+
+export type CmdBarRefOnChange = (
+  fn: (e: CmdBarCurrent) => void,
+  options?: t.CmdBarRefOnChangeOptions | t.UntilObservable,
+) => t.Lifecycle;
+export type CmdBarRefOnChangeOptions = {
+  dispose$?: t.UntilObservable;
+  debounce?: t.Msecs;
 };
 
 export type CmdBarCurrent = {
