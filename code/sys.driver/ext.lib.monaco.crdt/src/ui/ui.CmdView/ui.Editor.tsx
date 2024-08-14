@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-
 import { css, DEFAULTS, Monaco, rx, type t } from './common';
 import { editorController } from './ui.Editor.controller';
 
 type P = EditorProps;
-type C = t.CmdViewProps;
 const def = DEFAULTS.props;
 
 export type EditorProps = {
