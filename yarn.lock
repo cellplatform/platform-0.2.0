@@ -1288,6 +1288,13 @@
   dependencies:
     is-plain-object "^5.0.0"
 
+"@onsetsoftware/automerge-patcher@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@onsetsoftware/automerge-patcher/-/automerge-patcher-0.14.0.tgz#c43925a0ebb8d6754a0838429bb90e19f133dacb"
+  integrity sha512-WBH6GScVgmoqi12fC3SSkY13AKO+pQGMtbhKa83iiqH9HWbHVLRIV6Z2z0pwDr/2SJYv0ur5G7CGI1A30WhxIw==
+  dependencies:
+    is-plain-object "^5.0.0"
+
 "@paralleldrive/cuid2@2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@paralleldrive/cuid2/-/cuid2-2.2.2.tgz#7f91364d53b89e2c9cb9e02e8dd0f129e834455f"
@@ -3064,6 +3071,11 @@
   resolved "https://registry.yarnpkg.com/@wasmer/sdk/-/sdk-0.6.0.tgz#cc9fcc887ff6392c5d264ea67b20183994a46782"
   integrity sha512-aokQokTZaFtl/PvGcR9CD8crriJ+EU/mIFdrvqrCJCuNWGmS7Xle9vS5YrR2w/fZ8f01aPgA0mOW4iVCgXwAew==
 
+"@wasmer/sdk@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@wasmer/sdk/-/sdk-0.7.1.tgz#eb9617d935d1aa978aa6939da5a095261d215963"
+  integrity sha512-lUj4t1uf0vZc9D4Q1cIvh6G4qjsktXuH4NeqwvrxQDTLhbbtHDHLkY/kYNVesK1GlmtwSsVsEg267tBLRprkBA==
+
 abitype@0.9.8:
   version "0.9.8"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.9.8.tgz#1f120b6b717459deafd213dfbf3a3dd1bf10ae8c"
@@ -3244,10 +3256,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@>=1.7.3, axios@^0.21.1:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.3.tgz#a1125f2faf702bc8e8f2104ec3a76fab40257d85"
-  integrity sha512-Ar7ND9pU99eJ9GpoGQKhKf58GpUOgnzuaB7ueNQ5BMi0p+LZ5oaEnfF999fAArcTIBwXTCHAmGcHOZJaWPq9Nw==
+axios@>=1.7.4, axios@^0.21.1:
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.4.tgz#4c8ded1b43683c8dd362973c393f3ede24052aa2"
+  integrity sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -6822,10 +6834,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai@4.55.5:
-  version "4.55.5"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.55.5.tgz#dccd7fd42ee76a4135498494d5161dc9f9a44aa4"
-  integrity sha512-9OkMAMljFv1LxUFf5HLm/pw7zFd4yMgW+lKOYF80RBwuGWU+ZKF5BQGll+TEGAHu23YMeT8t6VSxI27c/DRAOA==
+openai@4.55.7:
+  version "4.55.7"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.55.7.tgz#2bba4ae9224ad205c0d087d1412fe95421397dff"
+  integrity sha512-I2dpHTINt0Zk+Wlns6KzkKu77MmNW3VfIIQf5qYziEUI6t7WciG1zTobfKqdPzBmZi3TTM+3DtjPumxQdcvzwA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -7367,6 +7379,11 @@ react-icons@5.2.1:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.2.1.tgz#28c2040917b2a2eda639b0f797bff1888e018e4a"
   integrity sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==
 
+react-icons@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.3.0.tgz#ccad07a30aebd40a89f8cfa7d82e466019203f1c"
+  integrity sha512-DnUk8aFbTyQPSkCfF8dbX6kQjXA9DktMeJqfjrg6cK9vwQVMxmcA3BfP4QoiztVmEHtwlTgLFsPuH2NskKT6eg==
+
 react-inspector@6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-6.0.2.tgz#aa3028803550cb6dbd7344816d5c80bf39d07e9d"
@@ -7381,6 +7398,11 @@ react-spinners@0.14.1:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.14.1.tgz#de7d7d6b3e6d4f29d9620c65495b502c7dd90812"
   integrity sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==
+
+react-virtuoso@4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.10.0.tgz#1b4bf38671b690661f2fde8c9d974174d80d4913"
+  integrity sha512-CyxU5TYMH4bw2cybH0bNqN/yIg2q2Vd0kbs92tQc5ResZALAIzIVJY4JL6BHgJFQjwrLhCYrFwKq0p+lvBgA0w==
 
 react-virtuoso@4.9.0:
   version "4.9.0"
@@ -8269,6 +8291,11 @@ ts-essentials@10.0.1:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-10.0.1.tgz#edee9a06e8a1a7e33ef21ae223d908a7c646e6c5"
   integrity sha512-HPH+H2bkkO8FkMDau+hFvv7KYozzned9Zr1Urn7rRPXMF4mZmCKOq+u4AI1AAW+2bofIOXTuSdKo9drQuni2dQ==
+
+ts-essentials@10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-10.0.2.tgz#8c7aa74ed79580ffe49df5ca28d06cc6bea0ff3c"
+  integrity sha512-Xwag0TULqriaugXqVdDiGZ5wuZpqABZlpwQ2Ho4GDyiu/R2Xjkp/9+zcFxL7uzeLl/QCPrflnvpVYyS3ouT7Zw==
 
 ts-node@^10.9.1:
   version "10.9.2"
