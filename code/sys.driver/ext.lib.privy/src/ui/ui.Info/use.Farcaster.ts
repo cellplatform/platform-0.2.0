@@ -1,8 +1,5 @@
-import { useFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect } from 'react';
-
-import { Farcaster } from '../../fn/fn.farcaster';
-import { rx, type t } from './common';
+import { Farcaster, rx, useFarcasterSigner, usePrivy, useWallets, type t } from './common';
 
 export function useFarcaster(args: { data: t.InfoData }) {
   const { data } = args;

@@ -12,7 +12,7 @@ export type * from './ui/ui.Auth.Provider/t';
 export type * from './ui/ui.Auth/t';
 export type * from './ui/ui.Info/t';
 
-export type * from './fn/fn.farcaster/t';
+export type * from './u.farcaster/t';
 
 /**
  * Authentication

@@ -1,4 +1,7 @@
 import { Chain, Pkg, type t } from '../common';
+
+export { useFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
+export { Farcaster } from '../../u.farcaster';
 export * from '../common';
 
 /**
