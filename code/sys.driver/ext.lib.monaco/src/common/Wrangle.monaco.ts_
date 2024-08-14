@@ -3,7 +3,7 @@ import type * as t from './t';
 /**
  * Helpers that require the full Monaco API.
  */
-export function monaco(monaco: t.Monaco) {
+export function Monaco(monaco: t.Monaco) {
   const api = {
     offsets(editor: t.MonacoCodeEditor, selection: t.ISelection) {
       const { Range } = monaco;
