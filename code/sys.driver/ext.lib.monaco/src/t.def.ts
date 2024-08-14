@@ -11,7 +11,8 @@ export type EditorLanguage =
   | 'yaml'
   | 'rust'
   | 'go'
-  | 'python';
+  | 'python'
+  | 'UNKNOWN';
 
 /**
  * Selection and position.
@@ -40,4 +41,5 @@ export type EditorSelection = t.Selection;
 
 export type EditorContent = {
   text: string;
+  language: t.EditorLanguage;
 };

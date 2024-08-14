@@ -1,4 +1,4 @@
-import { DEFAULTS as BASE, LANGUAGES, Pkg, type t } from '../common';
+import { DEFAULTS as BASE, Pkg, type t } from '../common';
 export * from '../common';
 
 /**
@@ -14,7 +14,7 @@ const props: t.PickRequired<
   readOnly: false,
   minimap: true,
   tabSize: 2,
-  language: LANGUAGES[0],
+  language: BASE.languages[0],
 };
 
 export const DEFAULTS = {

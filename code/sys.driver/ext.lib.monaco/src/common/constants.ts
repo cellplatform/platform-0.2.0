@@ -1,19 +1,17 @@
 import type * as t from './t';
 
 export { COLORS } from 'sys.ui.react.common';
+export const CSS = { CLASS: { EDITOR: `sys-monaco-editor` } } as const;
 
-export const CSS = {
-  CLASS: {
-    EDITOR: `sys-monaco-editor`,
-  },
-} as const;
-
-export const LANGUAGES: t.EditorLanguage[] = [
+const languages: t.EditorLanguage[] = [
+  'markdown',
   'typescript',
   'javascript',
-  'markdown',
   'json',
   'yaml',
+  'rust',
+  'go',
+  'python',
 ];
 
 const NULL_RANGE: t.EditorRange = {
@@ -26,4 +24,5 @@ const NULL_RANGE: t.EditorRange = {
 export const DEFAULTS = {
   NULL_RANGE,
   className: CSS.CLASS.EDITOR,
+  languages,
 } as const;
