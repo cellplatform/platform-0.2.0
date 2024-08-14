@@ -8,19 +8,23 @@ export type CmdViewProps = {
   doc?: t.Doc;
   repo?: { store?: t.Store; index?: t.StoreIndex };
   editor?: t.CmdViewEditorProps;
+  data?: t.CmdViewData;
+  editor?: t.CmdViewPropsEditor;
   historyStack?: boolean;
   border?: number | [number, number, number, number];
   borderColor?: string;
   enabled?: boolean;
+  identityLabel?: { position: Pos };
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onHistoryStackClick?: React.MouseEventHandler;
 };
 
-export type CmdViewEditorProps = {
+export type CmdViewPropsEditor = {
   readOnly?: boolean;
-  lensPath?: t.ObjectPath;
+  dataPath?: t.ObjectPath;
   editorPath?: t.ObjectPath;
+  identity?: t.IdString;
 };
 
 export type CmdViewEditorController = t.Lifecycle;

@@ -1,7 +1,7 @@
 import { Pkg, R, type t } from '../common';
 
 type P = t.CmdViewProps;
-type E = t.CmdViewEditorProps;
+type E = t.CmdViewPropsEditor;
 
 /**
  * Exports
@@ -15,9 +15,9 @@ export * from '../common';
  */
 const name = 'CmdView';
 
-const editor: t.PickRequired<E, 'readOnly' | 'lensPath' | 'editorPath'> = {
+const editor: t.PickRequired<E, 'readOnly' | 'dataPath' | 'editorPath'> = {
   readOnly: false,
-  lensPath: [],
+  dataPath: [],
   editorPath: ['editor'],
 };
 const props: t.PickRequired<P, 'theme' | 'enabled' | 'historyStack'> & {

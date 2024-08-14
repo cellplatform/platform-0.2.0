@@ -1,11 +1,10 @@
 import { CrdtInfo, css, DEFAULTS, type t } from './common';
 
-type P = t.CmdViewProps;
 const def = DEFAULTS.props;
 
 export type PanelInfoProps = {
-  repo?: P['repo'];
-  doc?: P['doc'];
+  path?: t.ObjectPath;
+  data?: t.CmdViewData;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -33,11 +32,19 @@ export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
         fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
         data={{
           repo,
-          document: {
-            ref: doc,
-            uri: { head: true },
-            object: { visible: false },
-          },
+          document: [
+            {
+              ref: doc,
+              uri: { head: true },
+              object: { visible: false },
+            },
+            {
+              ref: doc,
+              label: 'Lens',
+              uri: { head: true },
+              object: { lens: path, visible: false },
+            },
+          ],
         }}
       />
     </div>

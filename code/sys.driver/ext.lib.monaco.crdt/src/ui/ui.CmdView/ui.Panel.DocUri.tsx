@@ -5,7 +5,7 @@ type P = t.CmdViewProps;
 const def = DEFAULTS.props;
 
 export type PanelDocUriProps = {
-  doc?: P['doc'];
+  doc?: t.Doc;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;

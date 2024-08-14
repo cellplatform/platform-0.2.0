@@ -64,7 +64,7 @@ export const View: React.FC<P> = (props) => {
 
   const elPageStack = historyStack && (
     <HistoryStack
-      doc={crdt.doc}
+      doc={data.doc}
       style={styles.historyStack}
       theme={theme.name}
       onClick={props.onHistoryStackClick}
@@ -72,13 +72,13 @@ export const View: React.FC<P> = (props) => {
   );
 
   const elEditor = (
-    <Editor theme={props.theme} doc={crdt.doc} enabled={enabled} editor={props.editor} />
+    <Editor theme={props.theme} doc={data.doc} enabled={enabled} editor={props.editor} />
   );
 
   const elPanelInfo = (
     <div {...styles.panelInfo.base}>
       <div {...styles.panelInfo.inner}>
-        <PanelInfo repo={crdt.repo} doc={crdt.doc} enabled={enabled} theme={theme.name} />
+        <PanelInfo data={data} enabled={enabled} theme={theme.name} />
         <div {...styles.panelInfo.footer} />
       </div>
     </div>
@@ -86,7 +86,7 @@ export const View: React.FC<P> = (props) => {
 
   const elDocUri = (
     <div {...styles.docUri}>
-      <PanelDocUri doc={crdt.doc} theme={theme.name} enabled={enabled} />
+      <PanelDocUri doc={data.doc} theme={theme.name} enabled={enabled} />
     </div>
   );
 
@@ -115,13 +115,12 @@ export const View: React.FC<P> = (props) => {
  * Helpers
  */
 const wrangle = {
-  crdt(props: P) {
-    const { repo, doc } = props;
-    return { repo, doc } as const;
+  data(props: P): t.CmdViewData {
+    return props.data ?? {};
   },
 
   history(props: P) {
-    const { doc } = wrangle.crdt(props);
+    const { doc } = wrangle.data(props);
     if (!doc) return [];
     const history = Doc.history(doc).commits.map((d) => d.change.hash);
     return history.slice(-5);
@@ -133,5 +132,14 @@ const wrangle = {
     if (typeof border === 'number') return [border, border, border, border];
     if (Array.isArray(border)) return border;
     return [0, 0, 0, 0];
+  },
+
+  editor(props: P) {
+    const { editor = def.editor } = props;
+    return editor as t.CmdViewPropsEditor;
+  },
+
+  dataPath(props: P) {
+    return wrangle.editor(props).dataPath ?? [];
   },
 } as const;

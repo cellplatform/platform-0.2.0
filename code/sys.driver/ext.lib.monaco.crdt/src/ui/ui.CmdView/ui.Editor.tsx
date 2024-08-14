@@ -8,8 +8,8 @@ type C = t.CmdViewProps;
 const def = DEFAULTS.props;
 
 export type EditorProps = {
-  doc?: C['doc'];
-  editor?: t.CmdViewEditorProps;
+  doc?: t.Doc;
+  editor?: t.CmdViewPropsEditor;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -27,8 +27,17 @@ export const Editor: React.FC<EditorProps> = (props) => {
     const { dispose$, dispose } = rx.disposable(ready?.dispose$);
     if (ready && doc) {
       const { monaco, editor } = ready;
-      const { readOnly, lensPath, editorPath } = wrangle.props(props).editor;
-      editorController({ monaco, editor, doc, readOnly, lensPath, editorPath, dispose$ });
+      const { readOnly, dataPath, editorPath, identity } = wrangle.props(props).editor;
+      editorController({
+        monaco,
+        editor,
+        doc,
+        identity,
+        readOnly,
+        dataPath,
+        editorPath,
+        dispose$,
+      });
     }
     return dispose;
   }, [doc?.uri, !!ready]);
@@ -59,15 +68,21 @@ export const Editor: React.FC<EditorProps> = (props) => {
  */
 const wrangle = {
   props(props: P) {
-    const { doc, editor = def.editor } = props;
+    const { doc } = props;
+    const editor = wrangle.editor(props);
     const enabled = wrangle.enabled(props);
     return { doc, editor, enabled } as const;
+  },
+
+  editor(props: P): t.CmdViewPropsEditor {
+    const { editor = def.editor } = props;
+    return editor;
   },
 
   enabled(props: P) {
     const { enabled = def.enabled } = props;
     const { doc, editor = def.editor } = props;
-    if (!editor.lensPath || editor.lensPath.length === 0) return false;
+    if (!editor.dataPath || editor.dataPath.length === 0) return false;
     return !!doc && enabled;
   },
 } as const;
