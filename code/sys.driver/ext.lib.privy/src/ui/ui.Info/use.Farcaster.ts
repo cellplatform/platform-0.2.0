@@ -1,4 +1,4 @@
-import { useExperimentalFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
+import { useFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect } from 'react';
 
 import { Farcaster } from '../../fn/fn.farcaster';
@@ -15,7 +15,7 @@ export function useFarcaster(args: { data: t.InfoData }) {
   /**
    * Destructure the signer methods.
    */
-  const useSigner = useExperimentalFarcasterSigner();
+  const useSigner = useFarcasterSigner();
   const { signFarcasterMessage, requestFarcasterSignerFromWarpcast } = useSigner;
   const { getFarcasterSignerPublicKey } = useSigner;
   const signer: t.FarcasterSignerMethods = {

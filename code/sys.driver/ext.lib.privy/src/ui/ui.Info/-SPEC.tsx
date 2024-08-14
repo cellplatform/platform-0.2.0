@@ -1,4 +1,4 @@
-// import { Info } from '.';
+import { Info } from '.';
 import {
   AuthEnv,
   Cmd,
@@ -90,8 +90,6 @@ export default Dev.describe(name, (e) => {
       .render<T>(async (e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
-
-        const { Info } = await import('.');
         return (
           <Info
             {...props}
