@@ -1,6 +1,9 @@
 import type React from 'react';
 import type { t } from './common';
 
+type Edge = number | null;
+type Pos = [Edge, Edge, Edge, Edge];
+
 /**
  * <Component>
  */
@@ -18,6 +21,8 @@ export type CmdViewProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onHistoryStackClick?: React.MouseEventHandler;
+  onChange?: t.CmdViewChangeHandler;
+  onDataReady?: t.CmdViewDataHandler;
 };
 
 export type CmdViewPropsEditor = {
@@ -27,4 +32,31 @@ export type CmdViewPropsEditor = {
   identity?: t.IdString;
 };
 
+/**
+ * Data/State
+ */
+export type CmdViewData = {
+  doc?: t.Doc;
+  repo?: { store?: t.Store; index?: t.StoreIndex };
+};
+
+/**
+ * Controller
+ */
 export type CmdViewEditorController = t.Lifecycle;
+
+/**
+ * Events
+ */
+export type CmdViewChangeHandler = (e: CmdViewChangeHandlerArgs) => void;
+export type CmdViewChangeHandlerArgs = {
+  doc: t.Doc;
+  change: t.DocChanged;
+};
+
+export type CmdViewDataHandler = (e: CmdViewDataHandlerArgs) => void;
+export type CmdViewDataHandlerArgs = {
+  path: t.ObjectPath;
+  doc: t.Doc;
+  dispose$: t.Observable<void>;
+};

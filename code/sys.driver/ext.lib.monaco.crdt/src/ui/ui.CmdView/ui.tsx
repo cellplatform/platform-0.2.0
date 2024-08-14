@@ -1,4 +1,6 @@
-import { Color, css, DEFAULTS, Doc, type t } from './common';
+import { useEffect } from 'react';
+
+import { rx, Color, css, DEFAULTS, Doc, type t } from './common';
 import { Editor } from './ui.Editor';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
@@ -19,6 +21,24 @@ export const View: React.FC<P> = (props) => {
   const path = wrangle.dataPath(props);
   const editor = wrangle.editor(props);
   const identity = editor.identity;
+
+  /**
+   * Effects.
+   */
+  useEffect(() => {
+    const events = data.doc?.events();
+    const doc = data.doc;
+    if (events && doc) events.changed$.subscribe((change) => props.onChange?.({ doc, change }));
+    return events?.dispose;
+  }, [doc?.uri]);
+
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    if (doc) {
+      props.onDataReady?.({ doc, path, dispose$ });
+    }
+    return dispose;
+  }, [doc?.uri, path.join()]);
 
   /**
    * Render
