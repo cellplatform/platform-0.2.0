@@ -86,7 +86,7 @@ export function listen(
        * TODO 🐷
        */
       const diff = calculateDiff(Text.resolve(e.before) || '', Text.resolve(e.after) || '');
-      console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
+      // console.log(`TODO [${Pkg.name}] 🐷 diff:`, diff);
 
       const source = 'crdt.sync';
       const patches = e.patches.filter((patch) => startsWith(patch.path, paths.text));
