@@ -25,6 +25,7 @@ export type {
   MonacoCodeEditor,
   MonacoEditorProps,
   MonacoEditorReadyArgs,
+  MonacoEditorReadyHandler,
   Selection,
   SelectionOffset,
 } from 'ext.lib.monaco/src/types';
