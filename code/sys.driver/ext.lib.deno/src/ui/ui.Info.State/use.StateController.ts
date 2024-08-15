@@ -13,8 +13,8 @@ type Args = {
  */
 export function useStateController(args: Args) {
   const { enabled = true } = args;
-  const [_, setRedraw] = useState(0);
-  const redraw = () => setRedraw((prev) => prev + 1);
+  const [, setRedraw] = useState(0);
+  const redraw = () => setRedraw((n) => n + 1);
 
   const stateRef = useRef(Wrangle.state(args.data));
   const state = stateRef.current;
