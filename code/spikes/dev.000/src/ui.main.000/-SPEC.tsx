@@ -26,6 +26,7 @@ import { DebugFooter } from './ui.DebugFooter';
 type T = {
   stream?: MediaStream;
   overlay?: JSX.Element;
+  jwt?: string;
   debug: {};
 };
 const initial: T = { debug: {} };
@@ -177,6 +178,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row(async (e) => {
       const { Auth } = await import('ext.lib.privy');
+      const current = state.current;
       return (
         <Auth.Info
           fields={[
@@ -184,6 +186,7 @@ export default Dev.describe(name, async (e) => {
             'Login.Farcaster',
             'Login.SMS',
             'Id.User',
+            'AccessToken',
             'Id.User.Phone',
             'Farcaster',
             'Wallet.List',
@@ -193,6 +196,7 @@ export default Dev.describe(name, async (e) => {
           data={{
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
+            accessToken: { jwt: current.jwt },
             farcaster: {
               cmd: main.fc,
               signer: {},
@@ -200,7 +204,7 @@ export default Dev.describe(name, async (e) => {
             },
           }}
           onReady={(e) => console.info('⚡️ Auth.onReady:', e)}
-          onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+          onChange={(e) => state.change((d) => (d.jwt = e.accessToken))}
         />
       );
     });
@@ -285,10 +289,18 @@ export default Dev.describe(name, async (e) => {
       );
     });
 
-    // dev.hr(5, 20);
-    // dev.section('Debug', (dev) => {
-    //   dev.button('redraw', (e) => dev.redraw());
-    // });
+    dev.hr(5, 20);
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+      dev.hr(-1, 5);
+      dev.button((btn) => {
+        btn
+          .label(`deploy`)
+          .right('🐷')
+          .enabled(() => false)
+          .onClick(() => {});
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
