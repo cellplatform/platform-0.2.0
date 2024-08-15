@@ -98,6 +98,11 @@ export default Dev.describe(name, async (e) => {
               const id = uri.slice(-5);
               console.info(`⚡️ CmdView.onDataReady("${id}"):`, e);
               e.dispose$.subscribe(() => console.info(`💥 dispose("${id}")`));
+
+              // NB: the lens is already seeded with a [dispose$].
+              e.lens.events().changed$.subscribe((e) => {
+                console.info('⚡️ CmdView.lens.changed', e);
+              });
             }}
           />
         );
@@ -190,7 +195,7 @@ export default Dev.describe(name, async (e) => {
           .value(() => value())
           .onClick(() => State.props.change((d) => Dev.toggle(d, 'historyStack')));
       });
-      dev.hr(-1, 5);
+      dev.hr(1, 15);
       dev.boolean((btn) => {
         const value = () => !!State.props.current.editor?.readOnly;
         btn

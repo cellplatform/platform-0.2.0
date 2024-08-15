@@ -47,14 +47,14 @@ export type CmdViewEditorController = t.Lifecycle;
  */
 export type CmdViewChangeHandler = (e: CmdViewChangeHandlerArgs) => void;
 export type CmdViewChangeHandlerArgs = {
-  doc: t.Doc;
-  change: t.DocChanged;
+  readonly change: t.DocChanged;
+  readonly content: t.EditorContent;
 };
 
 export type CmdViewDataHandler = (e: CmdViewDataHandlerArgs) => void;
 export type CmdViewDataHandlerArgs = {
-  path: t.ObjectPath;
-  doc: t.Doc;
-  lens: t.Lens<t.EditorContent>;
-  dispose$: t.Observable<void>;
+  readonly path: t.ObjectPath;
+  readonly doc: t.Doc;
+  readonly lens: t.Lens<t.EditorContent>;
+  readonly dispose$: t.Observable<void>;
 };

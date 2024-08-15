@@ -11,6 +11,7 @@ export type EditorProps = {
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
+  onReady?: t.MonacoEditorReadyHandler;
 };
 
 export const Editor: React.FC<EditorProps> = (props) => {
@@ -55,7 +56,10 @@ export const Editor: React.FC<EditorProps> = (props) => {
         enabled={enabled}
         readOnly={editor.readOnly}
         minimap={false}
-        onReady={(e) => setReady(e)}
+        onReady={(e) => {
+          setReady(e);
+          props.onReady?.(e);
+        }}
       />
     </div>
   );

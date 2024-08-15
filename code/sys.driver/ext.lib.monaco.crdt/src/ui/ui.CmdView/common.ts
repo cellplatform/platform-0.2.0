@@ -1,4 +1,4 @@
-import { Pkg, R, type t } from '../common';
+import { Pkg, type t } from '../common';
 
 type P = t.CmdViewProps;
 type E = t.CmdViewPropsEditor;
@@ -7,8 +7,8 @@ type E = t.CmdViewPropsEditor;
  * Exports
  */
 export { Info as CrdtInfo } from 'ext.lib.automerge';
-export { Syncer } from '../u.Syncer';
 export * from '../common';
+export { Syncer } from '../u.Syncer';
 
 /**
  * Constants

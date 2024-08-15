@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
-import { Color, css, DEFAULTS, Doc, rx, type t } from './common';
+import { Color, css, DEFAULTS, Doc, type t } from './common';
 import { Editor } from './ui.Editor';
 import { IdentityLabel } from './ui.IdentityLabel';
-import { PanelDocUri } from './ui.Panel.DocUri';
-import { PanelInfo } from './ui.Panel.Info';
+import { Panel } from './ui.Panel';
 import { HistoryStack } from './ui.Stack';
+import { useChangeMonitor } from './use.ChangeMonitor';
 
 type P = t.CmdViewProps;
 const def = DEFAULTS.props;
@@ -16,38 +16,18 @@ export const View: React.FC<P> = (props) => {
     identityLabel,
     historyStack = def.historyStack,
     enabled = def.enabled,
+    onChange,
+    onDataReady,
   } = props;
 
   const doc = data.doc;
-  const path = wrangle.dataPath(props);
-  const editor = wrangle.editor(props);
-  const identity = editor.identity;
+  const dataPath = wrangle.dataPath(props);
+  const identity = wrangle.editor(props).identity;
 
-  /**
-   * Effects.
-   */
-  useEffect(() => {
-    const events = data.doc?.events();
-    const doc = data.doc;
-    if (events && doc) events.changed$.subscribe((change) => props.onChange?.({ doc, change }));
-    return events?.dispose;
-  }, [doc?.uri]);
+  const [editorReady, setEditorReady] = useState<t.MonacoEditorReadyArgs>();
+  const editor = editorReady?.editor;
 
-  useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-    if (doc) {
-      let _lens: undefined | t.Lens<t.EditorContent>;
-      props.onDataReady?.({
-        path,
-        doc,
-        dispose$,
-        get lens() {
-          return _lens || (_lens = Doc.lens(doc, path, { dispose$ }));
-        },
-      });
-    }
-    return dispose;
-  }, [doc?.uri, path.join()]);
+  useChangeMonitor({ doc, editor, dataPath, onChange, onDataReady });
 
   /**
    * Render
@@ -57,7 +37,6 @@ export const View: React.FC<P> = (props) => {
   const borderColor = props.borderColor ?? Color.alpha(theme.fg, 0.8);
   const b = (width: number) => (width ? `solid ${width}px ${borderColor}` : undefined);
 
-  const dividerBorder = `solid 1px ${Color.alpha(theme.fg, 0.8)}`;
   const styles = {
     base: css({
       position: 'relative',
@@ -72,23 +51,8 @@ export const View: React.FC<P> = (props) => {
       gridTemplateColumns: `1fr minmax(300px, auto)`,
     }),
     left: css({ display: 'grid' }),
-    right: css({
-      borderLeft: dividerBorder,
-      display: 'grid',
-      gridTemplateRows: `1fr auto`,
-    }),
-    docUri: css({
-      borderTop: dividerBorder,
-      padding: 15,
-    }),
-    historyStack: css({
-      Absolute: [-1, 0, null, 0],
-    }),
-    panelInfo: {
-      base: css({ position: 'relative', display: 'grid', Scroll: true }),
-      inner: css({ Absolute: 0, boxSizing: 'border-box', padding: 15 }),
-      footer: css({ height: 30 }),
-    },
+    right: css({ borderLeft: `solid 1px ${borderColor}`, display: 'grid' }),
+    historyStack: css({ Absolute: [-1, 0, null, 0] }),
   };
 
   const elPageStack = historyStack && (
@@ -101,22 +65,23 @@ export const View: React.FC<P> = (props) => {
   );
 
   const elEditor = (
-    <Editor theme={props.theme} doc={data.doc} enabled={enabled} editor={props.editor} />
+    <Editor
+      theme={props.theme}
+      doc={data.doc}
+      enabled={enabled}
+      editor={props.editor}
+      onReady={(e) => setEditorReady(e)}
+    />
   );
 
-  const elPanelInfo = (
-    <div {...styles.panelInfo.base}>
-      <div {...styles.panelInfo.inner}>
-        <PanelInfo data={data} enabled={enabled} theme={theme.name} />
-        <div {...styles.panelInfo.footer} />
-      </div>
-    </div>
-  );
-
-  const elDocUri = (
-    <div {...styles.docUri}>
-      <PanelDocUri doc={data.doc} theme={theme.name} enabled={enabled} />
-    </div>
+  const elPanel = (
+    <Panel
+      data={data}
+      dataPath={dataPath}
+      enabled={enabled}
+      borderColor={borderColor}
+      theme={theme.name}
+    />
   );
 
   const elIdentityLabel = identityLabel && identity && (
@@ -132,10 +97,7 @@ export const View: React.FC<P> = (props) => {
       {elPageStack}
       {elIdentityLabel}
       <div {...styles.left}>{elEditor}</div>
-      <div {...styles.right}>
-        {elPanelInfo}
-        {elDocUri}
-      </div>
+      <div {...styles.right}>{elPanel}</div>
     </div>
   );
 };
