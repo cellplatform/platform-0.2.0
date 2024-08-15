@@ -156,6 +156,7 @@ export default Dev.describe(name, (e) => {
         'Login.SMS',
         'Login.Farcaster',
         'Id.User',
+        'AccessToken',
         'Id.User.Phone',
         'Farcaster',
         'Wallet.Link',
