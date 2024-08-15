@@ -16,7 +16,13 @@ export type InfoField =
   | 'Doc.History.List'
   | 'Doc.History.List.Detail'
   | 'Doc.History.List.NavPaging';
-export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; enabled: boolean };
+
+export type InfoFieldCtx = {
+  fields: t.InfoField[];
+  theme: t.CommonTheme;
+  enabled: boolean;
+  debug?: string;
+};
 
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
@@ -83,6 +89,7 @@ export type InfoProps = {
   data?: t.InfoData;
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
+  debug?: string;
 
   stateful?: boolean;
   resetState$?: t.Observable<any>;

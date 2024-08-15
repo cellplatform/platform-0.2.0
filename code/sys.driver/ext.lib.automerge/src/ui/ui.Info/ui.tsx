@@ -8,9 +8,9 @@ const def = DEFAULTS.props;
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme = def.theme, enabled = def.enabled } = props;
+  const { theme = def.theme, enabled = def.enabled, debug } = props;
   const { fields, data } = useStateful(props);
-  const ctx: t.InfoFieldCtx = { fields, theme, enabled };
+  const ctx: t.InfoFieldCtx = { fields, theme, enabled, debug };
 
   const items = PropList.builder<t.InfoField>()
     .field('Visible', () => Field.visible(data.visible, theme))
