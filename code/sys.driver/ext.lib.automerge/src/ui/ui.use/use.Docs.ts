@@ -22,6 +22,7 @@ export function useDocs<T extends O>(
   const [errors, setErrors] = useState<t.UseDocsError[]>([]);
   const [docs, setDocs] = useState<t.Doc<T>[]>([]);
   const [, setCount] = useState(0); // Redraw.
+  const inc = () => setCount((n) => n + 1);
 
   const is = {
     ok: errors.length === 0,
@@ -61,13 +62,13 @@ export function useDocs<T extends O>(
       Docs.listeners.get(uri)?.dispose();
       Docs.listeners.delete(uri);
     },
+
     add(doc: t.Doc<T>) {
       Docs.remove(doc.uri);
       setDocs((prev) => [...prev, doc]);
 
       const redraw = wrangle.redraw(options);
       if (redraw.required) {
-        const inc = () => setCount((n) => n + 1);
         const listener = Redraw.onChange(doc, inc, redraw.options);
         Docs.listeners.set(doc.uri, listener);
       }
