@@ -18,14 +18,18 @@ export const IdentityLabel: React.FC<IdentityLabelProps> = (props) => {
       fontFamily: 'monospace',
       fontSize: 10,
       color: Color.alpha(theme.fg, 0.3),
+      userSelect: 'none',
     }),
-    identity: css({ color: Color.alpha(theme.fg, 1) }),
+    value: css({
+      color: Color.alpha(theme.fg, 1),
+      userSelect: 'auto',
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <span>{`identity: “`}</span>
-      <span {...styles.identity}>{identity}</span>
+      <span {...styles.value}>{identity}</span>
       <span>{`”`}</span>
     </div>
   );
