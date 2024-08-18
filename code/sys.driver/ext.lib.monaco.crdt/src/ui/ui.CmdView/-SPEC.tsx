@@ -95,7 +95,7 @@ export default Dev.describe(name, async (e) => {
             onChange={(e) => console.info(`⚡️ CmdView.onChange:`, e)}
             onDataReady={(e) => {
               const uri = e.doc.uri;
-              const id = uri.slice(-5);
+              const id = uri.slice(-4);
               console.info(`⚡️ CmdView.onDataReady("${id}"):`, e);
               e.dispose$.subscribe(() => console.info(`💥 dispose("${id}")`));
 
