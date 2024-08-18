@@ -20,12 +20,13 @@ const editor: t.PickRequired<E, 'readOnly' | 'dataPath' | 'editorPath'> = {
   dataPath: [],
   editorPath: ['editor'],
 };
-const props: t.PickRequired<P, 'theme' | 'enabled' | 'historyStack'> & {
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'historyStack' | 'editorOnly'> & {
   editor: typeof editor;
 } = {
   theme: 'Dark',
   enabled: true,
   historyStack: true,
+  editorOnly: false,
   editor,
 };
 

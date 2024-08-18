@@ -27,7 +27,7 @@ export default Dev.describe(name, async (e) => {
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { docObjectOpen: true })),
   } as const;
 
-  const identity = slug();
+  const identity = `foo:${slug()}`;
 
   const Props = {
     get doc() {

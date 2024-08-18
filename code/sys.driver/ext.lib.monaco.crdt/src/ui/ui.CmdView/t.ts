@@ -3,6 +3,7 @@ import type { t } from './common';
 
 type Edge = number | null;
 type Pos = [Edge, Edge, Edge, Edge];
+type Border = [number, number, number, number];
 
 /**
  * <Component>
@@ -11,10 +12,11 @@ export type CmdViewProps = {
   data?: t.CmdViewData;
   editor?: t.CmdViewPropsEditor;
   historyStack?: boolean;
-  border?: number | [number, number, number, number];
+  border?: number | Border;
   borderColor?: string;
   enabled?: boolean;
   identityLabel?: { position: Pos };
+  editorOnly?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onHistoryStackClick?: React.MouseEventHandler;

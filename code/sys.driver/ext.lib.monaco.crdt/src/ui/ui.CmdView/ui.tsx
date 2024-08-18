@@ -16,6 +16,7 @@ export const View: React.FC<P> = (props) => {
     identityLabel,
     historyStack = def.historyStack,
     enabled = def.enabled,
+    editorOnly = def.editorOnly,
     onChange,
     onDataReady,
   } = props;
@@ -46,9 +47,12 @@ export const View: React.FC<P> = (props) => {
       borderRight: b(border[1]),
       borderBottom: b(border[2]),
       borderLeft: b(border[3]),
-
       display: 'grid',
-      gridTemplateColumns: `1fr minmax(300px, auto)`,
+    }),
+    body: css({
+      position: 'relative',
+      display: 'grid',
+      gridTemplateColumns: editorOnly ? undefined : `1fr minmax(300px, auto)`,
     }),
     left: css({ display: 'grid' }),
     right: css({ borderLeft: `solid 1px ${borderColor}`, display: 'grid' }),
@@ -96,8 +100,10 @@ export const View: React.FC<P> = (props) => {
     <div {...css(styles.base, props.style)}>
       {elPageStack}
       {elIdentityLabel}
-      <div {...styles.left}>{elEditor}</div>
-      <div {...styles.right}>{elPanel}</div>
+      <div {...styles.body}>
+        <div {...styles.left}>{elEditor}</div>
+        {!editorOnly && <div {...styles.right}>{elPanel}</div>}
+      </div>
     </div>
   );
 };
