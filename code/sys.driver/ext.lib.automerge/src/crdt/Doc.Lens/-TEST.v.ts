@@ -236,6 +236,21 @@ describe('Doc.Lens', () => {
       expect(patches[0]).to.eql({ action: 'put', path: ['count'], value: 123 });
       expect(patches[1]).to.eql({ action: 'put', path: ['count'], value: 456 });
     });
+
+    it('no change when deleted', async () => {
+      const root = await setup();
+      const lens = Lens.create<TRoot, TChild>(root, path);
+
+      lens.change((d) => (d.count = 123));
+      expect(lens.current.count).to.eql(123);
+
+      await store.doc.delete(root.uri);
+      expect(root.is.deleted).to.eql(true);
+      expect(lens.disposed).to.eql(true);
+
+      lens.change((d) => (d.count = 456));
+      expect(lens.current.count).to.eql(123); // NB: no change on instance after deletion.
+    });
   });
 
   describe('events ($)', () => {

@@ -85,6 +85,7 @@ export function create<R extends O, L extends O>(
      * Current value of the descendent.
      */
     get current() {
+      if (api.disposed) return _lastValue as L;
       return resolve(root.current);
     },
 
