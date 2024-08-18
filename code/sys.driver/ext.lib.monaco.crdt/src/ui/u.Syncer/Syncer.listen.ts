@@ -35,8 +35,8 @@ export function listen(
   dispose$.subscribe(() => {
     textChangedHandler.dispose();
     selectionChangedHandler.dispose();
-    editor.setValue('');
     carets.clear();
+    editor.setValue('');
     lens.change((d) => Mutate.delete(d, Util.Path.identity(identity, paths).self));
   });
 
