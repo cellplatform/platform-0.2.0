@@ -160,14 +160,25 @@ export function create<R extends O, L extends O>(
   /**
    * Initialize.
    */
-  if (typeof resolve(root.current) !== 'object') {
+  (() => {
+    const current = () => resolve(root.current);
+    if (typeof current() === 'object') return;
+
+    // Generate lens root from constructor function.
     const fn = args.init;
     if (typeof fn === 'function') root.change((d) => fn(d));
-    if (typeof resolve(root.current) !== 'object') {
+
+    // Ensure simple {object} root if nothing is provided.
+    if (args.init === undefined && current() === undefined) {
+      root.change((d) => ObjectPath.Mutate.ensure(d, wrangle.path(path), {}));
+    }
+
+    // Catch error condition, there is no root for the lens.
+    if (typeof current() !== 'object') {
       const pathstring = wrangle.path(path).join('/');
       throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
     }
-  }
+  })();
 
   api.change(() => null); // NB: Ensure the lens is initialized.
   _lastValue = api.current;
