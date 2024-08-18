@@ -371,7 +371,6 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         const lastProcessed = queue[7].id;
         const res = Cmd.Events.unprocessed(queue, lastProcessed);
         expect(res.map((m) => m.id)).to.eql(['id-9', 'id-10']);
-        console.log('queue', queue);
       });
 
       it('returns the entire queue if the <last> tx-id is not found.', () => {
