@@ -10,8 +10,8 @@ export function caretStyleFactory(editor: t.MonacoCodeEditor, id: string) {
 
   const api = {
     class: {
-      caret: `caret-${safeClassname(id)}`,
-      selection: `selection-${safeClassname(id)}`,
+      caret: `caret-${sanitize(id)}`,
+      selection: `selection-${sanitize(id)}`,
     },
 
     update(caret: t.EditorCaret) {
@@ -37,6 +37,7 @@ export function caretStyleFactory(editor: t.MonacoCodeEditor, id: string) {
 /**
  * Helpers
  */
-function safeClassname(id: string) {
-  return id.replace(/\./g, '-').replace(/\:/g, '-');
+
+function sanitize(text: string) {
+  return text.replace(/[^a-zA-Z0-9-_]/g, '-');
 }
