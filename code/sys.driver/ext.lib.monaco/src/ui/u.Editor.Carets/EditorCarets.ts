@@ -1,5 +1,5 @@
 import { rx, type t } from '../common';
-import { Color, Decoration } from './u';
+import { Caret, Color } from './u';
 
 /**
  * Manages a set of carets for an editor.
@@ -37,7 +37,7 @@ export const EditorCarets = {
 
       identity(id: string): t.EditorCaret {
         if (carets.has(id)) return carets.get(id)!;
-        const caret = Decoration.create(editor, id);
+        const caret = Caret.create(editor, id);
         carets.set(id, caret);
         caret.$.subscribe((e) => $.next(e));
         caret.dispose$.subscribe(() => carets.delete(id));

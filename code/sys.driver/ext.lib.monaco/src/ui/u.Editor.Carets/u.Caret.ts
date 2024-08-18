@@ -1,11 +1,11 @@
 import { Is, R, rx, Wrangle, type t } from '../common';
+import { caretStyleFactory } from './u.Caret.Style';
 import { Color } from './u.Color';
-import { DecorationStyle } from './u.Decoration.Style';
 
 /**
  * Manages caret/selection(s) decoration within an editor.
  */
-export const Decoration = {
+export const Caret = {
   create(editor: t.MonacoCodeEditor, id: string, options: { color?: string } = {}): t.EditorCaret {
     const life = rx.lifecycle();
     const { dispose, dispose$ } = life;
@@ -30,7 +30,7 @@ export const Decoration = {
         disposed: life.disposed,
       });
 
-    const style = DecorationStyle.create(editor, id);
+    const style = caretStyleFactory(editor, id);
     const model = editor.getModel()!;
     if (!model) throw new Error(`The editor did not return a text-model`);
 
