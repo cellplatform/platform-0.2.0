@@ -249,7 +249,7 @@ describe('Doc.Lens', () => {
       expect(lens.disposed).to.eql(true);
 
       lens.change((d) => (d.count = 456));
-      expect(lens.current.count).to.eql(123); // NB: no change on instance after deletion.
+      expect(lens.current).to.eql(undefined);
     });
   });
 

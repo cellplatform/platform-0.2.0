@@ -331,7 +331,7 @@ describe('Namespace (Lens)', () => {
       expect(lens2a.disposed).to.eql(true);
 
       lens2a.change((d) => (d.count = 555));
-      expect(lens2a.current.count).to.eql(0);
+      expect(lens2a.current).to.eql(undefined);
       expect(Object.keys(namespace.container)).to.eql(['foo']); // NB: does not contain disposed lens
 
       const lens2c = namespace.lens('bar', initial);

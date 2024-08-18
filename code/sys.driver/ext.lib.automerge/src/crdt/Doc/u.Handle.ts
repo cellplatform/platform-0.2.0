@@ -25,9 +25,6 @@ export const Handle = {
       instance: slug(),
       uri: handle.url,
       handle,
-      get current() {
-        return handle.docSync();
-      },
       is: {
         get ready() {
           return handle.isReady();
@@ -36,7 +33,12 @@ export const Handle = {
           return handle.isDeleted();
         },
       },
+      get current() {
+        if (!api.is.ready) return undefined; // Edge-case (disposed).
+        return handle.docSync();
+      },
       change(fn, options) {
+        if (!api.is.ready) return; // Edge-case (disposed).
         handle.change((d: any) => fn(d), Wrangle.changeOptions(options));
       },
       events(dispose$) {
@@ -46,6 +48,7 @@ export const Handle = {
         return toObject<T>(api.current);
       },
     };
+
     (api as any)[Symbols.kind] = Symbols.Doc;
     return api;
   },
