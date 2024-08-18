@@ -35,7 +35,7 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
-  const identities: Identities = { top: slug(), bottom: slug() };
+  const identities: Identities = { top: `foo:${slug()}`, bottom: `bar:${slug()}` };
   const syncers: SyncListeners = { top: undefined, bottom: undefined };
 
   let lens: t.Lens | undefined;
