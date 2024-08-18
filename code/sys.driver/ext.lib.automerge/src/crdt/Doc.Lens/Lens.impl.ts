@@ -175,8 +175,8 @@ export function create<R extends O, L extends O>(
 
     // Catch error condition, there is no root for the lens.
     if (typeof current() !== 'object') {
-      const pathstring = wrangle.path(path).join('/');
-      throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
+      const target = wrangle.path(path).join('/');
+      throw new Error(`Target path of [Lens] is not an object: [${target}]`);
     }
   })();
 
