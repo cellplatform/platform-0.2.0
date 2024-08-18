@@ -29,15 +29,10 @@ export function editorController(args: {
   const { dispose$ } = life;
   dispose$.subscribe(() => {});
 
-  type T = {};
-  const lens = Doc.lens<O, T>(doc, dataPath, {
-    init: (d) => ObjectPath.Mutate.ensure(d, dataPath, {}),
-    dispose$,
-  });
-
   /**
    * Editor state.
    */
+  const lens = Doc.lens<O, {}>(doc, dataPath, { dispose$ });
   Syncer.listen(monaco, editor, lens, { identity, dispose$ });
 
   // Finish up.

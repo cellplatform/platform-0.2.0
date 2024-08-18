@@ -34,16 +34,14 @@ export default Dev.describe(name, async (e) => {
   const State = Immutable.clonerRef<D>(Json.parse<D>(local.state, initial));
 
   let doc: t.Doc | undefined;
-  let lens: t.Lens | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
   const identities: Identities = { top: slug(), bottom: slug() };
   const syncers: SyncListeners = { top: undefined, bottom: undefined };
 
+  let lens: t.Lens | undefined;
   const getLens = () => {
     if (!doc) return;
-    if (lens) return lens;
-    const path = ['mylens'];
-    return (lens = Doc.lens(doc, path, (d) => ObjectPath.Mutate.ensure(d, path, {})));
+    return lens || (lens = Doc.lens(doc, ['mylens']));
   };
 
   e.it('ui:init', async (e) => {

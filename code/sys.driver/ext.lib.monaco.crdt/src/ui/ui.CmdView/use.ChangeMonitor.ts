@@ -47,7 +47,6 @@ export function useChangeMonitor(args: {
  */
 const wrangle = {
   lens(doc: t.Doc, path: t.ObjectPath, dispose$?: t.UntilObservable) {
-    doc.change((d) => ObjectPath.Mutate.ensure(d, path, {}));
     return Doc.lens<O, t.EditorContent>(doc, path, { dispose$ });
   },
 
