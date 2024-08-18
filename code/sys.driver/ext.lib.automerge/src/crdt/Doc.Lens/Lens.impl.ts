@@ -27,13 +27,13 @@ export function create<R extends O, L extends O>(
   let _lastValue: L | undefined;
 
   const resolve = (root: R) => ObjectPath.resolve<L>(root, wrangle.path(path))!;
-  const events = root.events(args.dispose$);
 
-  events.dispose$.subscribe(() => {
+  const events = root.events(args.dispose$);
+  const { dispose, dispose$ } = events;
+  dispose$.subscribe(() => {
     fire.$.complete();
     Registry.remove(root);
   });
-  const { dispose, dispose$ } = events;
 
   const uri = root.uri;
   const fire = {
