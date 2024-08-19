@@ -89,7 +89,7 @@ export default Dev.describe(name, async (e) => {
           <CrdtEditor
             {...props}
             border={1}
-            style={{ height: 250 }}
+            style={{ height: 350 }}
             identityLabel={{ position: [null, null, -22, 6] }}
             onHistoryStackClick={(e) => console.info(`⚡️ CrdtEditor.onHistoryStackClick:`, e)}
             onChange={(e) => console.info(`⚡️ CrdtEditor.onChange:`, e)}

@@ -23,8 +23,10 @@ export const Panel: React.FC<PanelProps> = (props) => {
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
+      backgroundColor: Color.alpha(theme.bg, 0.2),
       color: theme.fg,
       display: 'grid',
+      backdropFilter: `blur(80px)`,
       gridTemplateRows: `1fr auto`,
     }),
     info: {

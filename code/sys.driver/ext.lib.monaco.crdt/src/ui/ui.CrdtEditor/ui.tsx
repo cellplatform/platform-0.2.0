@@ -61,7 +61,7 @@ export const View: React.FC<P> = (props) => {
     historyStack: css({ Absolute: [-1, 0, null, 0] }),
   };
 
-  const elPageStack = historyStack && (
+  const elPageStack = historyStack && !!doc && (
     <HistoryStack
       doc={data.doc}
       style={styles.historyStack}
