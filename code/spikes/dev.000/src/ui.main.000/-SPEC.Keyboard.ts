@@ -16,7 +16,8 @@ export const DevKeyboard = {
     });
 
     // Suppress focus being removed from the document with [CMD + L].
-    keys.on('META + KeyL', (e) => e.handled());
+    // keys.on('META + KeyL', (e) => e.handled());
+    keys.on('META + KeyS', (e) => e.handled());
 
     return life;
   },
