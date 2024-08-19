@@ -1,10 +1,10 @@
-import { CmdView, DEFAULTS } from '.';
+import { CrdtEditor, DEFAULTS } from '.';
 import { Color, Crdt, Dev, Doc, Immutable, Json, rx, SampleCrdt, slug } from '../../test.ui';
 import { CmdBar, type t } from './common';
 
 import { Info as CrdtInfo } from 'ext.lib.automerge';
 
-type P = t.CmdViewProps;
+type P = t.CrdtEditorProps;
 type D = {
   docuri?: string;
   argv?: string;
@@ -35,7 +35,7 @@ export default Dev.describe(name, async (e) => {
       return debug.passDocProp ? doc : undefined;
     },
 
-    get current(): t.CmdViewProps {
+    get current(): t.CrdtEditorProps {
       const doc = Props.doc;
       const repo = db.repo;
       const current = State.props.current;
@@ -53,7 +53,7 @@ export default Dev.describe(name, async (e) => {
 
   State.props.change((d) => {
     const editor = Doc.ensure(d, 'editor', {});
-    editor.dataPath = ['sample.CmdView'];
+    editor.dataPath = ['sample.CrdtEditor'];
   });
 
   e.it('ui:init', async (e) => {
@@ -86,22 +86,22 @@ export default Dev.describe(name, async (e) => {
         Dev.Theme.background(dev, theme, 1);
 
         return (
-          <CmdView
+          <CrdtEditor
             {...props}
             border={1}
             style={{ height: 250 }}
             identityLabel={{ position: [null, null, -22, 6] }}
-            onHistoryStackClick={(e) => console.info(`⚡️ CmdView.onHistoryStackClick:`, e)}
-            onChange={(e) => console.info(`⚡️ CmdView.onChange:`, e)}
+            onHistoryStackClick={(e) => console.info(`⚡️ CrdtEditor.onHistoryStackClick:`, e)}
+            onChange={(e) => console.info(`⚡️ CrdtEditor.onChange:`, e)}
             onDataReady={(e) => {
               const uri = e.doc.uri;
               const id = uri.slice(-4);
-              console.info(`⚡️ CmdView.onDataReady("${id}"):`, e);
+              console.info(`⚡️ CrdtEditor.onDataReady("${id}"):`, e);
               e.dispose$.subscribe(() => console.info(`💥 dispose("${id}")`));
 
               // NB: the lens is already seeded with a [dispose$].
               e.lens.events().changed$.subscribe((e) => {
-                console.info('⚡️ CmdView.lens.changed', e);
+                console.info('⚡️ CrdtEditor.lens.changed', e);
               });
             }}
           />

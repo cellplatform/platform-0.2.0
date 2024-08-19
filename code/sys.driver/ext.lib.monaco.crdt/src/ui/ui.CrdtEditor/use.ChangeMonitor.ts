@@ -10,8 +10,8 @@ export function useChangeMonitor(args: {
   doc?: t.Doc;
   editor?: t.MonacoCodeEditor;
   dataPath?: t.ObjectPath;
-  onChange?: t.CmdViewChangeHandler;
-  onDataReady?: t.CmdViewDataHandler;
+  onChange?: t.CrdtEditorChangeHandler;
+  onDataReady?: t.CrdtEditorDataHandler;
 }) {
   const { doc, editor, dataPath, onChange, onDataReady } = args;
 
@@ -54,7 +54,7 @@ const wrangle = {
     doc: t.Doc,
     path: t.ObjectPath,
     dispose$: t.Observable<void>,
-  ): t.CmdViewDataHandlerArgs {
+  ): t.CrdtEditorDataHandlerArgs {
     let _lens: undefined | t.Lens<t.EditorContent>;
     return {
       path,

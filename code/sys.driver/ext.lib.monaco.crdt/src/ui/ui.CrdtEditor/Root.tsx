@@ -10,7 +10,7 @@ type Fields = {
   CrdtInfo: typeof CrdtInfo;
   IdentityLabel: typeof IdentityLabel;
 };
-export const CmdView = FC.decorate<t.CmdViewProps, Fields>(
+export const CrdtEditor = FC.decorate<t.CrdtEditorProps, Fields>(
   View,
   { DEFAULTS, CrdtInfo, IdentityLabel },
   { displayName: DEFAULTS.displayName },

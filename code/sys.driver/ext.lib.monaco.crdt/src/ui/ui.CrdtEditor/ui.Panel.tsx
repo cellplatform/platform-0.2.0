@@ -6,7 +6,7 @@ const def = DEFAULTS.props;
 
 export type PanelProps = {
   dataPath?: t.ObjectPath;
-  data?: t.CmdViewData;
+  data?: t.CrdtEditorData;
   enabled?: boolean;
   borderColor?: string;
   theme?: t.CommonTheme;

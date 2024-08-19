@@ -4,7 +4,7 @@ const def = DEFAULTS.props;
 
 export type PanelInfoProps = {
   path?: t.ObjectPath;
-  data?: t.CmdViewData;
+  data?: t.CrdtEditorData;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;

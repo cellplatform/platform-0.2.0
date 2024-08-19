@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, DocUri, Icons, Time, type t } from './common';
 
-type P = t.CmdViewProps;
+type P = t.CrdtEditorProps;
 const def = DEFAULTS.props;
 
 export type PanelDocUriProps = {

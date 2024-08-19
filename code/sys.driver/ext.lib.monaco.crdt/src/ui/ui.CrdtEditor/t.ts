@@ -8,9 +8,9 @@ type Border = [number, number, number, number];
 /**
  * <Component>
  */
-export type CmdViewProps = {
-  data?: t.CmdViewData;
-  editor?: t.CmdViewPropsEditor;
+export type CrdtEditorProps = {
+  data?: t.CrdtEditorData;
+  editor?: t.CrdtEditorPropsEditor;
   historyStack?: boolean;
   border?: number | Border;
   borderColor?: string;
@@ -20,11 +20,11 @@ export type CmdViewProps = {
   theme?: t.CommonTheme;
   style?: t.CssValue;
   onHistoryStackClick?: React.MouseEventHandler;
-  onChange?: t.CmdViewChangeHandler;
-  onDataReady?: t.CmdViewDataHandler;
+  onChange?: t.CrdtEditorChangeHandler;
+  onDataReady?: t.CrdtEditorDataHandler;
 };
 
-export type CmdViewPropsEditor = {
+export type CrdtEditorPropsEditor = {
   readOnly?: boolean;
   dataPath?: t.ObjectPath;
   editorPath?: t.ObjectPath;
@@ -34,7 +34,7 @@ export type CmdViewPropsEditor = {
 /**
  * Data/State
  */
-export type CmdViewData = {
+export type CrdtEditorData = {
   doc?: t.Doc;
   repo?: { store?: t.Store; index?: t.StoreIndex };
 };
@@ -42,19 +42,19 @@ export type CmdViewData = {
 /**
  * Controller
  */
-export type CmdViewEditorController = t.Lifecycle;
+export type CrdtEditorController = t.Lifecycle;
 
 /**
  * Events
  */
-export type CmdViewChangeHandler = (e: CmdViewChangeHandlerArgs) => void;
-export type CmdViewChangeHandlerArgs = {
+export type CrdtEditorChangeHandler = (e: CrdtEditorChangeHandlerArgs) => void;
+export type CrdtEditorChangeHandlerArgs = {
   readonly change: t.DocChanged;
   readonly content: t.EditorContent;
 };
 
-export type CmdViewDataHandler = (e: CmdViewDataHandlerArgs) => void;
-export type CmdViewDataHandlerArgs = {
+export type CrdtEditorDataHandler = (e: CrdtEditorDataHandlerArgs) => void;
+export type CrdtEditorDataHandlerArgs = {
   readonly path: t.ObjectPath;
   readonly doc: t.Doc;
   readonly lens: t.Lens<t.EditorContent>;

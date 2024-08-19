@@ -1,7 +1,7 @@
 import { Pkg, type t } from '../common';
 
-type P = t.CmdViewProps;
-type E = t.CmdViewPropsEditor;
+type P = t.CrdtEditorProps;
+type E = t.CrdtEditorPropsEditor;
 
 /**
  * Exports
@@ -13,7 +13,7 @@ export { Syncer } from '../u.Syncer';
 /**
  * Constants
  */
-const name = 'CmdView';
+const name = 'CrdtEditor';
 
 const editor: t.PickRequired<E, 'readOnly' | 'dataPath' | 'editorPath'> = {
   readOnly: false,

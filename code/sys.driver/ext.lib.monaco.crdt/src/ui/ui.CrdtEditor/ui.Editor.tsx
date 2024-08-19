@@ -7,7 +7,7 @@ const def = DEFAULTS.props;
 
 export type EditorProps = {
   doc?: t.Doc;
-  editor?: t.CmdViewPropsEditor;
+  editor?: t.CrdtEditorPropsEditor;
   enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -76,7 +76,7 @@ const wrangle = {
     return { doc, editor, enabled } as const;
   },
 
-  editor(props: P): t.CmdViewPropsEditor {
+  editor(props: P): t.CrdtEditorPropsEditor {
     const { editor = def.editor } = props;
     return editor;
   },

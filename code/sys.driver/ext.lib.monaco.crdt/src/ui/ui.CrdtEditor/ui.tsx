@@ -7,7 +7,7 @@ import { Panel } from './ui.Panel';
 import { HistoryStack } from './ui.Stack';
 import { useChangeMonitor } from './use.ChangeMonitor';
 
-type P = t.CmdViewProps;
+type P = t.CrdtEditorProps;
 const def = DEFAULTS.props;
 
 export const View: React.FC<P> = (props) => {
@@ -114,7 +114,7 @@ export const View: React.FC<P> = (props) => {
  * Helpers
  */
 const wrangle = {
-  data(props: P): t.CmdViewData {
+  data(props: P): t.CrdtEditorData {
     return props.data ?? {};
   },
 
@@ -135,7 +135,7 @@ const wrangle = {
 
   editor(props: P) {
     const { editor = def.editor } = props;
-    return editor as t.CmdViewPropsEditor;
+    return editor as t.CrdtEditorPropsEditor;
   },
 
   dataPath(props: P) {

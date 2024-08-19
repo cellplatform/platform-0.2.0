@@ -9,13 +9,13 @@ export { Pkg };
  */
 import { Monaco as MonacoBase } from './common';
 import { Syncer } from './ui/u.Syncer';
-import { CmdView } from './ui/ui.CrdtEditor';
+import { CrdtEditor } from './ui/ui.CrdtEditor';
 
-export { CmdView, Syncer };
+export { CrdtEditor as CmdView, Syncer };
 
 export const Monaco = {
   ...MonacoBase,
-  Crdt: { Syncer, CmdView },
+  Crdt: { Syncer, CmdView: CrdtEditor },
 } as const;
 
 /**
