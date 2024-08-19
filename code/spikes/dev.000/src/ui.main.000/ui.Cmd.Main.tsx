@@ -72,12 +72,8 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
             const clear = () => e.render(null);
 
             if (pos[0] === 'cmd') {
-              // if (pos[1] === 'me') {
-              //   const { Me } = await import('./ui.Me');
-              //   return e.render(<Me main={main} theme={e.theme} />);
-              // }
               if (pos[1]?.startsWith('crdt:')) {
-                const { CrdtView } = await import('./ui.Crdt');
+                const { CrdtView } = await import('./ui.CrdtView');
                 const uri = pos[1];
                 return e.render(<CrdtView main={main} theme={e.theme} docuri={uri} />);
               }
@@ -95,7 +91,7 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
 
             if (pos[0] === 'cmd') {
               if (pos[1] === 'crdt' && pos[2] === 'create') {
-                const { CrdtView } = await import('./ui.Crdt');
+                const { CrdtView } = await import('./ui.CrdtView');
 
                 const store = main.repo.tmp.store;
                 const doc = await store.doc.getOrCreate(() => null);

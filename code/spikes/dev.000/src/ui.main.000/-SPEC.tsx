@@ -25,7 +25,7 @@ import { DebugFooter } from './ui.DebugFooter';
 
 type T = {
   stream?: MediaStream;
-  overlay?: JSX.Element;
+  overlay?: JSX.Element | null;
   jwt?: string;
   debug: {};
 };
@@ -44,7 +44,7 @@ export default Dev.describe(name, async (e) => {
 
   const Store = {
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
-    fs: WebStore.init({ storage: 'fs', network: [] }),
+    fs: WebStore.init({ storage: 'fs', network: true }),
   } as const;
   const Index = {
     tmp: await WebStore.index(Store.tmp),
@@ -78,7 +78,7 @@ export default Dev.describe(name, async (e) => {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: true }),
     },
   };
 

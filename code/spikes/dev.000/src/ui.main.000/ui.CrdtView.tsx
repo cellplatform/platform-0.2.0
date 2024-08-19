@@ -2,6 +2,7 @@ import { Color, css, Monaco, rx, useDoc, Yaml, type t } from './common';
 
 export type CrdtViewProps = {
   main: t.Shell;
+  repo?: t.ShellRepo;
   docuri?: string;
   border?: number | [number, number, number, number];
   theme?: t.CommonTheme;
@@ -12,7 +13,7 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
   const { docuri, main } = props;
   const identity = `peer:${main.self.id}`;
 
-  const repo = main.repo.tmp;
+  const repo = props.repo ?? main.repo.tmp;
   const docRef = useDoc(repo.store, docuri);
   const doc = docRef.ref;
 
@@ -25,8 +26,8 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
   const theme = Color.theme(props.theme);
   const styles = {
     base: css({
-      backgroundColor: Color.alpha(theme.bg, 0.95),
-      backdropFilter: `blur(15px)`,
+      backgroundColor: Color.alpha(theme.bg, 0.8),
+      backdropFilter: `blur(3px)`,
       color: theme.fg,
       display: 'grid',
     }),
@@ -46,25 +47,37 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
         onDataReady={(e) => {
           const lens = e.lens;
           const changed$ = lens.events().changed$;
-          changed$.pipe(rx.debounceTime(500)).subscribe((e) => {
+          const text$ = changed$.pipe(rx.distinctWhile((p, n) => p.after.text === n.after.text));
+          text$.pipe(rx.debounceTime(500)).subscribe((e) => {
+            /**
+             * Parse the YAML
+             */
             const yamlString = lens.current.text;
-            const yaml = Yaml.parse(yamlString);
+            // const yaml = Yaml.parse(yamlString);
 
             /**
              * TODO 🐷
              */
             console.group('🌳 parsed/source-maps');
             console.log('lens.current', lens.current);
-            console.log('yaml', yaml);
+            // console.log('yaml', yaml);
 
             // Parse the YAML string with source tokens
             const doc = Yaml.parseDocument(yamlString, { keepSourceTokens: true });
 
             // Convert to a JS object (you can still use { mapAsMap: true } if needed)
             const parsedObj = doc.toJS({ mapAsMap: true });
+            const json = doc.toJSON();
+            console.log('m', json);
+
             console.log('parsedObj', parsedObj);
             console.log("doc.get('foo')", doc.get('foo'));
             console.groupEnd();
+
+            lens.change((d) => {
+              const yaml = d as t.EditorContentYaml;
+              yaml.parsed = doc.toJSON();
+            });
           });
         }}
       />

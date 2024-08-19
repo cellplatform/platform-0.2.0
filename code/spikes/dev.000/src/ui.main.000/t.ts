@@ -2,17 +2,7 @@ import type { t } from '../common';
 
 type Copy = 'copy' | 'cp';
 type Video = 'video' | 'v';
-export type RootCommands =
-  | 'dev'
-  | 'me'
-  | 'crdt'
-  | 'cmd'
-  | 'fc'
-  | 'hash'
-  | 'new.tab'
-  | 'new.window'
-  | Video
-  | Copy;
+export type RootCommands = 'dev' | 'me' | 'crdt' | 'cmd' | 'fc' | 'hash' | 'new.tab' | Video | Copy;
 
 /**
  * Shell
@@ -22,7 +12,7 @@ export type Shell = {
   readonly self: t.PeerModel;
   readonly fc: t.Cmd<t.FarcasterCmd>;
   readonly state: ShellState;
-  readonly repo: ShellRepo;
+  readonly repo: ShellRepos;
 };
 
 export type ShellState = {
@@ -32,10 +22,10 @@ export type ShellState = {
   readonly tmp: t.Lens<Tmp>;
 };
 
-type R = { store: t.Store; index: t.StoreIndex };
-export type ShellRepo = {
-  readonly fs: R;
-  readonly tmp: R;
+export type ShellRepo = { store: t.Store; index: t.StoreIndex };
+export type ShellRepos = {
+  readonly fs: ShellRepo;
+  readonly tmp: ShellRepo;
 };
 
 /**

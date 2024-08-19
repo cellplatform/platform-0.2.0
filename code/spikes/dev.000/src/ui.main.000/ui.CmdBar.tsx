@@ -1,11 +1,11 @@
-import { isValidElement, useEffect, useState } from 'react';
+import { isValidElement, useState } from 'react';
 import { CmdBar, Crdt, type t } from './common';
 import { DSL } from './DSL';
 
 export type FooterProps = {
   main: t.Shell;
   style?: t.CssValue;
-  onOverlay?: (e: { el?: JSX.Element }) => void;
+  onOverlay?: (e: { el?: JSX.Element | null }) => void;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {

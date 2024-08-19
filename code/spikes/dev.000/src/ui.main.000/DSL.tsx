@@ -99,9 +99,6 @@ export const DSL = {
     if (action === 'new.tab') {
       window.open(window.location.href, '_blank', 'noopener,noreferrer');
     }
-    if (action === 'new.window') {
-      window.open(window.location.href, '_blank', 'noopener,noreferrer');
-    }
 
     return;
   },
@@ -129,11 +126,11 @@ export const DSL = {
       return <CmdMain main={main} theme={theme} />;
     }
 
-    const renderCrdt = async (id: string) => {
+    const renderCrdt = async (id: string, repo?: t.ShellRepo) => {
       if (!id) return null;
-      const { CrdtView } = await import('./ui.Crdt');
-      const uri = `automerge:${id}`;
-      return <CrdtView main={main} theme={theme} docuri={uri} />;
+      const { CrdtView } = await import('./ui.CrdtView');
+      const uri = id.startsWith('automerge:') ? id : `automerge:${id}`;
+      return <CrdtView main={main} theme={theme} docuri={uri} repo={repo} />;
     };
 
     if (action.startsWith('crdt:')) {
@@ -145,11 +142,8 @@ export const DSL = {
     }
 
     if (action === 'me') {
-      console.log('-------------------------------------------');
-      console.log('TODO', 'ME');
-
-      // const { Me } = await import('./ui.Me');
-      // return <Me main={main} theme={theme} />;
+      const me = main.state.me;
+      return renderCrdt(me.uri, main.repo.fs);
     }
 
     return;
