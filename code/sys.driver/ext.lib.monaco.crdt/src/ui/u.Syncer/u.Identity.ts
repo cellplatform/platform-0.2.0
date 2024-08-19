@@ -24,7 +24,7 @@ export const IdentityUtil = {
   },
 
   /**
-   * Prepare an observable
+   * Prepare observables.
    */
   Observable: {
     identity$(changed$: t.Observable<C>, paths: t.EditorPaths) {
@@ -41,6 +41,18 @@ export const IdentityUtil = {
         }),
       );
     },
+
+    identities$(changed$: t.Observable<C>, paths: t.EditorPaths) {
+      return changed$.pipe(
+        rx.filter((e) => PatchUtil.Includes.identity(e.patches, { paths })),
+        rx.distinctWhile(
+          (p, n) =>
+            wrangle.identityKeys(p.after, paths).join() ===
+            wrangle.identityKeys(n.after, paths).join(),
+        ),
+        rx.map((e) => wrangle.identityKeys(e.after, paths)),
+      );
+    },
   },
 
   Is: {
@@ -51,5 +63,15 @@ export const IdentityUtil = {
       if (!value.trim()) return true;
       return value.startsWith(UNKNOWN) && value.length > UNKNOWN.length;
     },
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  identityKeys(d: O, paths: t.EditorPaths) {
+    const obj = ObjectPath.resolve(d, paths.identity) ?? {};
+    return Object.keys(obj);
   },
 } as const;

@@ -53,12 +53,13 @@ export function listen(
   const events = lens.events(dispose$);
   const changed$ = events.changed$.pipe(rx.filter(() => !_ignoreChange));
   const identity$ = Util.Identity.Observable.identity$(changed$, paths);
+  const identities$ = Util.Identity.Observable.identities$(changed$, paths);
 
   /**
    * Editor <Cmd>'s.
    */
   const cmd = Util.Cmd.create(lens, self, { paths, dispose$ });
-  SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, dispose$ });
+  SyncerCmd.listen(cmd, { lens, editor, carets, self, paths, debugLabel, dispose$ });
 
   /**
    * Editor change.
@@ -114,7 +115,6 @@ export function listen(
   /**
    * CRDT: if the identity is removed (via a purge) and the editor
    *       it still alive ensure it's entry is replaced.
-   *
    */
   identity$
     .pipe(
@@ -124,7 +124,15 @@ export function listen(
     )
     .subscribe((e) => {
       cmd.update.state({ identity, selections: true });
+      cmd.update.editor({ identity, selections: true });
     });
+
+  /**
+   * CRDT: remove orphaned identity carets.
+   */
+  identities$.pipe(rx.debounceTime(100)).subscribe((e) => {
+    cmd.update.editor({ identity, selections: true });
+  });
 
   /**
    * Editor: text changed.

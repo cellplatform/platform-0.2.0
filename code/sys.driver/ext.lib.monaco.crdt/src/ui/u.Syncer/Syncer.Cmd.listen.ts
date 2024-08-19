@@ -15,9 +15,10 @@ export function listen(
     carets: t.EditorCarets;
     paths?: PathsInput;
     dispose$?: t.UntilObservable;
+    debugLabel?: string;
   },
 ) {
-  const { self, lens, carets, editor } = args;
+  const { self, lens, carets, editor, debugLabel } = args;
   const cmd = Util.Cmd.toCmd(ctrl);
   const paths = Util.Path.wrangle(args.paths);
   const Mutate = ObjectPath.Mutate;
@@ -31,7 +32,8 @@ export function listen(
    */
   events.on('Ping', (e) => {
     if (e.params.identity === self) {
-      cmd.invoke('Ping:R', { identity: self, ok: true }, e.tx);
+      const identity = self;
+      cmd.invoke('Ping:R', { identity, ok: true }, e.tx);
     }
   });
 
@@ -58,11 +60,14 @@ export function listen(
 
     if (e.params.selections) {
       const identities = Util.Identity.resolveIdentities(lens, paths);
+      const orphaned = carets.current.filter((caret) => !(caret.id in identities));
+      orphaned.forEach((caret) => caret.dispose());
+
       Object.keys(identities)
         .filter((key) => key !== self)
-        .forEach((key) => {
-          const selections = identities[key]?.selections;
-          carets.identity(key).change({ selections });
+        .forEach((id) => {
+          const selections = identities[id]?.selections;
+          carets.identity(id).change({ selections });
         });
     }
 
