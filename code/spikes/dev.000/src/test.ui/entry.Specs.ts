@@ -30,7 +30,6 @@ const { Specs: ExtPeerJs } = await import('ext.lib.peerjs');
 const { Specs: ExtAuthPrivy } = await import('ext.lib.privy');
 const { Specs: ExtStripe } = await import('ext.lib.stripe');
 const { Specs: ExtDeno } = await import('ext.lib.deno');
-const { Specs: ExtWasmer } = await import('ext.lib.wasmer');
 
 export const Specs = {
   ...App,
@@ -57,5 +56,4 @@ export const Specs = {
   ...ExtPeerJs,
   ...ExtStripe,
   ...ExtDeno,
-  ...ExtWasmer,
 } as t.SpecImports;
