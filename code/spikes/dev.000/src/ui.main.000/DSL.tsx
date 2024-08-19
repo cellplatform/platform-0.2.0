@@ -50,7 +50,6 @@ export const DSL = {
         const repo = main.repo.tmp;
         const doc = await repo.store.doc.getOrCreate((d) => null);
         const id = Doc.Uri.id(doc);
-
         const text = `crdt:a.${id}`;
         main.cmdbar?.ctrl.update({ text });
       }
@@ -120,11 +119,6 @@ export const DSL = {
       return loaderView(args, main);
     }
 
-    // if (action === 'me') {
-    //   const { Me } = await import('./ui.Me');
-    //   return <Me main={main} theme={theme} />;
-    // }
-
     if (action === 'hash') {
       const { HashView } = await import('sys.ui.react.common');
       return <HashView theme={theme} bg={true} />;
@@ -135,17 +129,27 @@ export const DSL = {
       return <CmdMain main={main} theme={theme} />;
     }
 
-    if (action.startsWith('crdt:')) {
+    const renderCrdt = async (id: string) => {
+      if (!id) return null;
       const { CrdtView } = await import('./ui.Crdt');
+      const uri = `automerge:${id}`;
+      return <CrdtView main={main} theme={theme} docuri={uri} />;
+    };
 
+    if (action.startsWith('crdt:')) {
       let id = Doc.Uri.id(action);
       id = id.replace(/^crdt\:/, '');
       id = id.replace(/^a\./, '');
+      id = id.split('@')[0];
+      return renderCrdt(id);
+    }
 
-      if (id) {
-        const uri = `automerge:${id}`;
-        return <CrdtView main={main} theme={theme} docuri={uri} />;
-      }
+    if (action === 'me') {
+      console.log('-------------------------------------------');
+      console.log('TODO', 'ME');
+
+      // const { Me } = await import('./ui.Me');
+      // return <Me main={main} theme={theme} />;
     }
 
     return;
