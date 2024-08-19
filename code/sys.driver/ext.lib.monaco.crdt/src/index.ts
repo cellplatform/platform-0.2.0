@@ -9,7 +9,7 @@ export { Pkg };
  */
 import { Monaco as MonacoBase } from './common';
 import { Syncer } from './ui/u.Syncer';
-import { CmdView } from './ui/ui.CmdView';
+import { CmdView } from './ui/ui.CrdtEditor';
 
 export { CmdView, Syncer };
 

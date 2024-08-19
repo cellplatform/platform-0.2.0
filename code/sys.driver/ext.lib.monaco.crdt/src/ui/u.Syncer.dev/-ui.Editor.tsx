@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IdentityLabel } from '../ui.CmdView/ui.IdentityLabel';
+import { IdentityLabel } from '../ui.CrdtEditor';
 import { Color, css, Monaco, rx, Syncer, type t } from './common';
 
 type LensInput = t.Lens | t.Doc;
