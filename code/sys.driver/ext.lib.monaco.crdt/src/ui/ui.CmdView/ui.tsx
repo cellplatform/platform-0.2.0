@@ -38,10 +38,12 @@ export const View: React.FC<P> = (props) => {
   const borderColor = props.borderColor ?? Color.alpha(theme.fg, 0.8);
   const b = (width: number) => (width ? `solid ${width}px ${borderColor}` : undefined);
 
+  const panelWidth = 300;
   const styles = {
     base: css({
       position: 'relative',
       color: theme.fg,
+      minWidth: panelWidth,
 
       borderTop: b(border[0]),
       borderRight: b(border[1]),
@@ -52,7 +54,7 @@ export const View: React.FC<P> = (props) => {
     body: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateColumns: editorOnly ? undefined : `1fr minmax(300px, auto)`,
+      gridTemplateColumns: editorOnly ? undefined : `1fr minmax(${panelWidth}px, auto)`,
     }),
     left: css({ display: 'grid' }),
     right: css({ borderLeft: `solid 1px ${borderColor}`, display: 'grid' }),
