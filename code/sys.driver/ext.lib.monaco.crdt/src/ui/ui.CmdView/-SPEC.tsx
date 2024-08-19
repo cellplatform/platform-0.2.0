@@ -195,6 +195,14 @@ export default Dev.describe(name, async (e) => {
           .value(() => value())
           .onClick(() => State.props.change((d) => Dev.toggle(d, 'historyStack')));
       });
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.editorOnly;
+        btn
+          .label(() => `editorOnly`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'editorOnly')));
+      });
       dev.hr(1, 15);
       dev.boolean((btn) => {
         const value = () => !!State.props.current.editor?.readOnly;
