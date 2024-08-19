@@ -44,6 +44,12 @@ export const EditorCarets = {
         return caret;
       },
 
+      delete(id: string) {
+        if (!carets.has(id)) return false;
+        carets.get(id)?.dispose();
+        return true;
+      },
+
       clear() {
         api.current.forEach((caret) => caret.dispose());
         return api;

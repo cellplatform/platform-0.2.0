@@ -5,6 +5,7 @@ export type EditorCarets = t.Lifecycle & {
   readonly editor: t.MonacoCodeEditor;
   readonly current: EditorCaret[];
   identity(id: string): EditorCaret;
+  delete(id: string): boolean;
   clear(): EditorCarets;
 };
 
