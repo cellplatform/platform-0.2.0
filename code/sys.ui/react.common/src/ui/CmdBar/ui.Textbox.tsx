@@ -8,14 +8,16 @@ export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'cmd'> & {
   opacity?: number;
 };
 
+const DEF = DEFAULTS.props;
+
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const {
     ctrl,
     theme,
     text = '',
-    enabled = DEFAULTS.enabled,
-    focusOnReady = DEFAULTS.focusOnReady,
-    placeholder = DEFAULTS.commandPlaceholder,
+    enabled = DEF.enabled,
+    focusOnReady = DEF.focusOnReady,
+    placeholder = DEF.placeholder,
     useKeyboard,
   } = props;
 
