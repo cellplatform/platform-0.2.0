@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST'),
-      import('../DenoHttp/-TEST'),
+      import('../u.DenoHttp/-TEST'),
     ];
   },
 };

@@ -131,6 +131,12 @@ export default Dev.describe(name, (e) => {
       // };
       const getSelectedProject = () => state.current.deno.selectedProject;
 
+      const getClient = () => {
+        const forcePublic = !!state.current.forcePublicUrl;
+        const client = DenoHttp.client({ forcePublic });
+        return client;
+      };
+
       dev.button('💦 create project', async (e) => {
         // const http = getHttp().http;
         // const body = {
@@ -151,15 +157,23 @@ export default Dev.describe(name, (e) => {
           .onClick((e) => HttpState.updateDeployments(state));
       });
 
+      dev.button('get deployments', async () => {
+        const projectId = 'sweet-gnu-41';
+        const client = getClient();
+
+        const res = await client.deployments(projectId).list();
+        console.log('res', res);
+      });
+
       dev.hr(-1, 5);
 
       dev.button((btn) => {
         btn
           .label(`deploy`)
-          .enabled((e) => !!getSelectedProject())
+          // .enabled((e) => !!getSelectedProject())
           .onClick(async (e) => {
-            const projectId = getSelectedProject();
-            // const http = getHttp().http;
+            const projectId = 'sweet-gnu-41';
+            const client = getClient();
 
             const content = state.current.props.code ?? '';
             const body: t.DenoDeployArgs = {
@@ -168,11 +182,16 @@ export default Dev.describe(name, (e) => {
               envVars: {},
             };
 
-            const path = `deno/projects/${projectId}/deployments`;
+            const res = await client.deploy(projectId, body);
+
+            // const path = `deno/projects/${projectId}/deployments`;
             // const res = await http.post(path, body);
 
             console.log('-------------------------------------------');
-            // console.log('res', res);
+            console.log('res', res);
+
+            const m = await res.whenReady();
+            console.log('m', m);
             // await HttpState.updateDeployments(state);
           });
       });

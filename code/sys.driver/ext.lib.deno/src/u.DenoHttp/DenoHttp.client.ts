@@ -1,6 +1,6 @@
 import { Http } from 'sys.net.http';
 import { origin } from './DenoHttp.origin';
-import { type t } from './common';
+import { Time, type t } from './common';
 
 /**
  * Client wrapping for the Deno sub-hosting API.
@@ -43,6 +43,33 @@ export function client(options: t.DenoHttpOptions) {
           return { ok, status, deployments };
         },
       } as const;
+    },
+
+    /**
+     * Create a new deployment.
+     */
+    async deploy(project: t.IdString, body: t.DenoDeployArgs) {
+      const path = `deno/projects/${project}/deployments`;
+      const res = await http.post(path, body);
+
+      const { ok, status } = res;
+      const data = res.data as any;
+      const id = String(typeof data === 'object' ? data?.id ?? '' : '');
+
+      const whenReady = async (options: { retry?: number } = {}) => {
+        const { retry = 3 } = options;
+        const list = await api.deployments(project).list();
+        const match = list.deployments.find((item) => item.id === id);
+
+        if ((!match || match.status !== 'success') && retry > 0) {
+          await Time.wait(1500);
+          return whenReady({ retry: retry - 1 });
+        }
+
+        return match;
+      };
+
+      return { ok, status, id, whenReady };
     },
   } as const;
 
