@@ -1,4 +1,4 @@
-import { Color, css, Monaco, rx, useDoc, Yaml, type t } from './common';
+import { Color, css, Monaco, rx, useDoc, Wrangle, Yaml, type t } from './common';
 
 export type CrdtViewProps = {
   main: t.Shell;
@@ -18,7 +18,7 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
   const doc = docRef.ref;
 
   const enabled = !!doc?.uri;
-  const dataPath = wrangle.dataPath(doc?.uri);
+  const dataPath = Wrangle.dataPath(doc?.uri);
 
   /**
    * Render
@@ -53,14 +53,12 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
              * Parse the YAML
              */
             const yamlString = lens.current.text;
-            // const yaml = Yaml.parse(yamlString);
 
             /**
              * TODO 🐷
              */
             console.group('🌳 parsed/source-maps');
             console.log('lens.current', lens.current);
-            // console.log('yaml', yaml);
 
             // Parse the YAML string with source tokens
             const doc = Yaml.parseDocument(yamlString, { keepSourceTokens: true });
@@ -88,10 +86,3 @@ export const CrdtView: React.FC<CrdtViewProps> = (props) => {
 /**
  * Helpers
  */
-const wrangle = {
-  dataPath(docuri?: string) {
-    const root = ['ns'];
-    if (!docuri) return root;
-    return [...root, `editor.${docuri.slice(-6)}`];
-  },
-} as const;

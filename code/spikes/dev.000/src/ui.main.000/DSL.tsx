@@ -1,4 +1,7 @@
-import { Args, Yaml, type t, Doc } from './common';
+import { Args, Yaml, type t, Doc, DenoHttp, Wrangle } from './common';
+import { sampleDeploy } from './DSL.deploy';
+
+type O = Record<string, unknown>;
 
 /**
  * Sketch of what an implementation for the command-line parser
@@ -26,16 +29,6 @@ export const DSL = {
       }
     }
 
-    if (action === 'video' || action === 'v') {
-      /**
-       * TODO 🐷
-       */
-      const conns = main.self.current.connections;
-      console.log('video:connections:', conns);
-
-      //
-    }
-
     if (action.startsWith('peer:')) {
       const peer = main.self;
       const peerId = action.split(':')[1];
@@ -50,8 +43,22 @@ export const DSL = {
         const repo = main.repo.tmp;
         const doc = await repo.store.doc.getOrCreate((d) => null);
         const id = Doc.Uri.id(doc);
-        const text = `crdt:a.${id}`;
+        const text = Wrangle.docUri.fromId(id);
         main.cmdbar?.ctrl.update({ text });
+      }
+    }
+
+    if (action.startsWith('crdt:')) {
+      const id = Wrangle.docUri.toId(action);
+      const uri = `automerge:${id}`;
+      const doc = await main.repo.tmp.store.doc.get(uri);
+
+      console.log('-------------------------------------------');
+      console.log('uri', uri);
+      console.log('doc', doc);
+
+      if (doc && pos[1] === 'deploy') {
+        sampleDeploy(main, doc);
       }
     }
 
@@ -70,31 +77,6 @@ export const DSL = {
       const { loadSpec } = await import('./DSL.load');
       return loadSpec(args, main);
     }
-
-    //     if (action === 'me') {
-    //       const current = main.state.me.current as any;
-    //       const text = (current?.root?.config?.text ?? '') as string;
-    //       const tmp = main.state.tmp;
-    //
-    //       try {
-    //         const yaml = Yaml.parse(text);
-    //
-    //         if (typeof yaml.video === 'object') {
-    //           const video = yaml.video as t.TmpVideo;
-    //           tmp.change((d) => (d.video = video));
-    //         } else {
-    //           tmp.change((d) => delete d.video);
-    //         }
-    //
-    //         if (typeof yaml.props === 'object') {
-    //           tmp.change((d) => (d.props = yaml.props));
-    //         } else {
-    //           tmp.change((d) => delete d.props);
-    //         }
-    //       } catch (error) {
-    //         console.error(`Failed while parsing YAML`, error);
-    //       }
-    //     }
 
     if (action === 'new.tab') {
       window.open(window.location.href, '_blank', 'noopener,noreferrer');
@@ -134,10 +116,7 @@ export const DSL = {
     };
 
     if (action.startsWith('crdt:')) {
-      let id = Doc.Uri.id(action);
-      id = id.replace(/^crdt\:/, '');
-      id = id.replace(/^a\./, '');
-      id = id.split('@')[0];
+      const id = Wrangle.docUri.toId(action);
       return renderCrdt(id);
     }
 

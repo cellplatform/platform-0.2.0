@@ -1,7 +1,6 @@
 import type { t } from '../common';
 
 type Copy = 'copy' | 'cp';
-type Video = 'video' | 'v';
 export type RootCommands = 'dev' | 'me' | 'crdt' | 'cmd' | 'fc' | 'hash' | 'new.tab' | Video | Copy;
 
 /**
