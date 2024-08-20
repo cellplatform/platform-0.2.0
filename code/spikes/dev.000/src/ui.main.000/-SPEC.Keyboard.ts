@@ -16,8 +16,10 @@ export const DevKeyboard = {
     });
 
     // Suppress focus being removed from the document with [CMD + L].
-    // keys.on('META + KeyL', (e) => e.handled());
-    keys.on('META + KeyS', (e) => e.handled());
+    keys.on('CMD + KeyS', (e) => e.handled()); // ← save
+    keys.on('CMD + KeyP', (e) => e.handled()); // ← print
+    keys.on('CMD + ArrowLeft', (e) => e.handled()); // ← browser back
+    keys.on('CMD + ArrowRight', (e) => e.handled()); // ← browser forward
 
     return life;
   },
