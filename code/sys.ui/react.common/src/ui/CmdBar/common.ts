@@ -7,6 +7,7 @@ export { useFocus } from '../../ui.use';
 export { KeyHint } from '../KeyHint';
 export { TextInput } from '../Text.Input';
 export { TextboxSync } from '../Textbox.Sync';
+export { Spinner } from '../Spinner';
 
 /**
  * Constants
@@ -25,14 +26,23 @@ const focusBorder: t.CmdBarFocusBorder = {
   },
 };
 
+const props: t.PickRequired<
+  t.CmdBarProps,
+  'theme' | 'enabled' | 'spinning' | 'useKeyboard' | 'focusOnReady' | 'placeholder'
+> = {
+  theme: 'Dark',
+  placeholder: 'command',
+  enabled: true,
+  spinning: false,
+  useKeyboard: true,
+  focusOnReady: true,
+};
+
 const name = 'CmdBar';
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
-  commandPlaceholder: 'command',
-  enabled: true,
-  useKeyboard: true,
-  focusOnReady: true,
-  focusBorder,
+  props,
   paths,
+  focusBorder,
 } as const;

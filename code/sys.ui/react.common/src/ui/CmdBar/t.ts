@@ -14,6 +14,7 @@ export type CmdBarProps = {
   focusOnReady?: boolean;
   useKeyboard?: boolean;
   focusBorder?: boolean | t.CmdBarFocusBorder;
+  spinning?: boolean;
 
   theme?: t.CommonTheme;
   style?: t.CssValue;
