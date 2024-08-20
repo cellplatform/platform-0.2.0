@@ -292,14 +292,6 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
-      dev.button((btn) => {
-        btn
-          .label(`deploy`)
-          .right('🐷')
-          .enabled(() => false)
-          .onClick(() => {});
-      });
     });
   });
 
