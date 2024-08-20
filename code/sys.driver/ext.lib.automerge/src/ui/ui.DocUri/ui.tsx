@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Copied } from '../ui.Buttons';
 import { Color, css, DEFAULTS, Doc, Hash, MonospaceButton, Time, type t } from './common';
 
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export const View: React.FC<t.DocUriProps> = (props) => {
-  const { clipboard = def.clipboard, enabled = def.enabled } = props;
+  const { clipboard = DEF.clipboard, enabled = DEF.enabled } = props;
   const uri = wrangle.uri(props);
 
   type S = { is: { over: boolean; down: boolean } };

@@ -2,7 +2,7 @@ import { Color, css, DEFAULTS, type t } from './common';
 import { PanelDocUri } from './ui.Panel.DocUri';
 import { PanelInfo } from './ui.Panel.Info';
 
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export type PanelProps = {
   dataPath?: t.ObjectPath;
@@ -14,7 +14,7 @@ export type PanelProps = {
 };
 
 export const Panel: React.FC<PanelProps> = (props) => {
-  const { data, enabled = def.enabled, dataPath } = props;
+  const { data, enabled = DEF.enabled, dataPath } = props;
   const doc = data?.doc;
 
   /**

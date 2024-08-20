@@ -8,15 +8,15 @@ import { HistoryStack } from './ui.Stack';
 import { useChangeMonitor } from './use.ChangeMonitor';
 
 type P = t.CrdtEditorProps;
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export const View: React.FC<P> = (props) => {
   const {
     data = {},
     identityLabel,
-    historyStack = def.historyStack,
-    enabled = def.enabled,
-    editorOnly = def.editorOnly,
+    historyStack = DEF.historyStack,
+    enabled = DEF.enabled,
+    editorOnly = DEF.editorOnly,
     onChange,
     onDataReady,
   } = props;
@@ -134,7 +134,7 @@ const wrangle = {
   },
 
   editor(props: P) {
-    const { editor = def.editor } = props;
+    const { editor = DEF.editor } = props;
     return editor as t.CrdtEditorPropsEditor;
   },
 

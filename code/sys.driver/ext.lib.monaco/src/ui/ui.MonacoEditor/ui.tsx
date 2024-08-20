@@ -6,16 +6,16 @@ import { EditorCarets } from '../u.Editor.Carets';
 import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
 import { Util } from './u';
 
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const {
     text,
-    language = def.language,
-    tabSize = def.tabSize,
-    readOnly = def.readOnly,
-    minimap = def.minimap,
-    enabled = def.enabled,
+    language = DEF.language,
+    tabSize = DEF.tabSize,
+    readOnly = DEF.readOnly,
+    minimap = DEF.minimap,
+    enabled = DEF.enabled,
     placeholder,
   } = props;
   const editorTheme = Util.Theme.toName(props.theme);

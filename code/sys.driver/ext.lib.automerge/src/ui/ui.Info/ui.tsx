@@ -2,13 +2,13 @@ import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
 import { useStateful } from './use.Stateful';
 
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 /**
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme = def.theme, enabled = def.enabled, debug } = props;
+  const { theme = DEF.theme, enabled = DEF.enabled, debug } = props;
   const { fields, data } = useStateful(props);
   const ctx: t.InfoFieldCtx = { fields, theme, enabled, debug };
 

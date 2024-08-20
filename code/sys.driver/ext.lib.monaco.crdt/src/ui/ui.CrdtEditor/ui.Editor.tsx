@@ -3,7 +3,7 @@ import { css, DEFAULTS, Monaco, rx, type t } from './common';
 import { editorController } from './ui.Editor.controller';
 
 type P = EditorProps;
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export type EditorProps = {
   doc?: t.Doc;
@@ -77,13 +77,13 @@ const wrangle = {
   },
 
   editor(props: P): t.CrdtEditorPropsEditor {
-    const { editor = def.editor } = props;
+    const { editor = DEF.editor } = props;
     return editor;
   },
 
   enabled(props: P) {
-    const { enabled = def.enabled } = props;
-    const { doc, editor = def.editor } = props;
+    const { enabled = DEF.enabled } = props;
+    const { doc, editor = DEF.editor } = props;
     if (!editor.dataPath || editor.dataPath.length === 0) return false;
     return !!doc && enabled;
   },

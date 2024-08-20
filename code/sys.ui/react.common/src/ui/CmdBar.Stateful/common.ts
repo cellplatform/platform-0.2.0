@@ -15,7 +15,7 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}:${name}`,
   paths: BASE.paths,
   useHistory: true,
-  useKeyboard: BASE.useKeyboard,
+  useKeyboard: BASE.props.useKeyboard,
+  focusOnReady: BASE.props.focusOnReady,
   focusBorder: BASE.focusBorder,
-  focusOnReady: BASE.focusOnReady,
 } as const;

@@ -1,6 +1,6 @@
 import { CrdtInfo, css, DEFAULTS, type t } from './common';
 
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export type PanelInfoProps = {
   path?: t.ObjectPath;
@@ -11,7 +11,7 @@ export type PanelInfoProps = {
 };
 
 export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
-  const { data = {}, path, enabled = def.enabled } = props;
+  const { data = {}, path, enabled = DEF.enabled } = props;
   const { repo, doc } = data;
 
   /**

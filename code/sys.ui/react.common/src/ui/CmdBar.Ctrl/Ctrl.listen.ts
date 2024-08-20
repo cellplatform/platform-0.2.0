@@ -2,6 +2,8 @@ import { Cmd, DEFAULTS, ObjectPath, type t } from './common';
 import { Keyboard } from './Ctrl.keyboard';
 import { Selection, toCmd, toPaths } from './u';
 
+const DEF = DEFAULTS.props;
+
 /**
  * Behavior logic for command signals.
  */
@@ -11,7 +13,7 @@ export function listen(args: {
   useKeyboard?: boolean;
   dispose$?: t.UntilObservable;
 }): t.Lifecycle {
-  const { ctrl, textbox, useKeyboard = DEFAULTS.useKeyboard } = args;
+  const { ctrl, textbox, useKeyboard = DEF.useKeyboard } = args;
   const cmd = toCmd(ctrl);
   const doc = Cmd.toTransport(cmd);
   const paths = toPaths(cmd);

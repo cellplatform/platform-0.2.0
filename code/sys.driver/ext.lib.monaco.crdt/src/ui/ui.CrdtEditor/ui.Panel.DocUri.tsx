@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, DocUri, Icons, Time, type t } from './common';
 
 type P = t.CrdtEditorProps;
-const def = DEFAULTS.props;
+const DEF = DEFAULTS.props;
 
 export type PanelDocUriProps = {
   doc?: t.Doc;
@@ -12,7 +12,7 @@ export type PanelDocUriProps = {
 };
 
 export const PanelDocUri: React.FC<PanelDocUriProps> = (props) => {
-  const { doc, enabled = def.enabled } = props;
+  const { doc, enabled = DEF.enabled } = props;
 
   const [isCopy, setIsCopy] = useState(false);
   const [copiedText, setCopiedText] = useState<string>();
