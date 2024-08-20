@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Doc, Monaco, ObjectPath, rx, type t } from './common';
+import { Doc, Monaco, rx, type t } from './common';
 
 type O = Record<string, unknown>;
 
