@@ -1,7 +1,7 @@
 import type { t } from '../common';
 
 type Copy = 'copy' | 'cp';
-export type RootCommands = 'dev' | 'me' | 'crdt' | 'cmd' | 'fc' | 'hash' | 'new.tab' | Video | Copy;
+export type RootCommands = 'dev' | 'me' | 'crdt' | 'cmd' | 'fc' | 'hash' | 'new.tab' | Copy;
 
 /**
  * Shell
