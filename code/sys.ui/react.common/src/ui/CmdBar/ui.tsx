@@ -96,8 +96,10 @@ const wrangle = {
   },
 
   ctrl(props: t.CmdBarProps) {
-    if (!props.cmd) return Ctrl.toCmd(Ctrl.create(Immutable.clonerRef({})));
-    return props.cmd;
+    if (props.cmd) return props.cmd;
+    const transport = Immutable.clonerRef({});
+    const issuer = props.issuer;
+    return Ctrl.toCmd(Ctrl.create({ transport, issuer }));
   },
 
   focusBorder(props: t.CmdBarProps): t.CmdBarFocusBorder {
