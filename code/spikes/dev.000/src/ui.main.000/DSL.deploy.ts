@@ -12,6 +12,7 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
   const path = Wrangle.dataPath(doc.uri);
   const lens = Doc.lens<O, t.EditorContentYaml>(doc, path);
   const parsed = lens.current.parsed;
+
   if (parsed) {
     const json = JSON.stringify(parsed);
     const options = `{ headers: { "Content-Type": "application/json" }}`;
@@ -19,6 +20,9 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
 
     console.log('json', json);
     console.log('content', content);
+
+    const update = main.cmdbar?.ctrl.update;
+    update?.({ spinning: true });
 
     const res1 = await client.deploy(projectId, {
       entryPointUrl: 'main.ts',
@@ -36,7 +40,9 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
       const uri = Wrangle.docUri.fromId(doc.uri);
 
       const text = `${uri} https://${domain}`;
-      main.cmdbar?.ctrl.update({ text });
+      update?.({ text });
     }
+
+    update?.({ spinning: false });
   }
 }
