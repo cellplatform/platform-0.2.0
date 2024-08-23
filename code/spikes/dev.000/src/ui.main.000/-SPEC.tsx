@@ -56,8 +56,8 @@ export default Dev.describe(name, async (e) => {
 
   async function getMe() {
     const fs = Store.fs.doc;
-    const exists = await fs.exists(local.me);
-    if (!exists) local.me = undefined;
+    if (!(await fs.exists(local.me))) local.me = undefined;
+
     const doc = await fs.getOrCreate((d) => null, local.me);
     local.me = doc.uri;
     return doc;
@@ -69,7 +69,7 @@ export default Dev.describe(name, async (e) => {
   const main: t.Shell = {
     cmdbar: undefined,
     self,
-    fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    fc: Cmd.create<t.FarcasterCmd>(cloner(), { issuer: self.id }) as t.Cmd<t.FarcasterCmd>,
     repo: {
       fs: { store: Store.fs, index: Index.fs },
       tmp: { store: Store.tmp, index: Index.tmp },

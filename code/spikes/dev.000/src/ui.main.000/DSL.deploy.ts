@@ -28,11 +28,11 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
 
     console.log('deploy:res1', res1);
 
-    const res2 = await res1.whenReady();
+    const res2 = await res1.whenReady({ silent: false });
     console.log('deploy:res2', res2);
 
-    if (res2 && (res2.domains.length ?? 0) > 0) {
-      const domain = res2.domains[0];
+    if (res2.deployment && (res2.deployment.domains.length ?? 0) > 0) {
+      const domain = res2.deployment.domains[0];
       const uri = Wrangle.docUri.fromId(doc.uri);
 
       const text = `${uri} https://${domain}`;

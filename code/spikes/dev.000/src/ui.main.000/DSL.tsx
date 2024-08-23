@@ -1,4 +1,4 @@
-import { Args, Yaml, type t, Doc, DenoHttp, Wrangle } from './common';
+import { Args, Doc, Wrangle, type t } from './common';
 import { sampleDeploy } from './DSL.deploy';
 
 type O = Record<string, unknown>;
@@ -15,8 +15,9 @@ export const DSL = {
   /**
    * Run the command when the [Invoke] action is triggered (eg ENTER key).
    */
-  async invoke(argv: string, main: t.Shell) {
+  async invoke(main: t.Shell, argv: string, issuer?: t.IdString) {
     const { args, action, pos } = wrangle.args<t.RootCommands>(argv);
+    const issuedBySelf = issuer === main.self.id;
     const clear = () => main.cmdbar?.ctrl.clear({});
 
     if (action === 'copy' || action === 'cp') {
@@ -52,14 +53,12 @@ export const DSL = {
       const id = Wrangle.docUri.toId(action);
       const uri = `automerge:${id}`;
       const doc = await main.repo.tmp.store.doc.get(uri);
+      if (doc && pos[1] === 'deploy' && issuedBySelf) sampleDeploy(main, doc);
+    }
 
-      console.log('-------------------------------------------');
-      console.log('uri', uri);
-      console.log('doc', doc);
-
-      if (doc && pos[1] === 'deploy') {
-        sampleDeploy(main, doc);
-      }
+    if (action === 'me' && pos[1] === 'deploy' && issuedBySelf) {
+      const doc = main.state.me;
+      sampleDeploy(main, doc);
     }
 
     if (action === 'fc') {
@@ -121,8 +120,8 @@ export const DSL = {
     }
 
     if (action === 'me') {
-      const me = main.state.me;
-      return renderCrdt(me.uri, main.repo.fs);
+      const doc = main.state.me;
+      return renderCrdt(doc.uri, main.repo.fs);
     }
 
     return;
