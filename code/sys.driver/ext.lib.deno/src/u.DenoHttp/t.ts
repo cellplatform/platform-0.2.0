@@ -48,9 +48,11 @@ type DeploymentsListResponse = {
 export type DeployResponse = {
   ok: boolean;
   status: number;
-  deploymentId: t.IdString;
+  id: DeployIndentifier;
   whenReady: WhenReadyMethod;
 };
+
+export type DeployIndentifier = { deployment: t.IdString; project: t.IdString };
 
 export type WhenReadyMethod = (options?: WhenReadyOptions) => Promise<WhenReadyResponse>;
 export type WhenReadyOptions = { retry?: number; silent?: boolean };
@@ -58,6 +60,7 @@ export type WhenReadyStatus = t.DenoDeployment['status'] | 'UNKNOWN';
 export type WhenReadyResponse = {
   ok: boolean;
   status: WhenReadyStatus;
-  id: { deployment: t.IdString; project: t.IdString };
+  id: DeployIndentifier;
   deployment?: t.DenoDeployment;
+  elapsed: t.Msecs;
 };

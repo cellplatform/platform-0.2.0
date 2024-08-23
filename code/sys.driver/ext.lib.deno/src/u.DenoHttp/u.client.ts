@@ -49,12 +49,16 @@ export function client(options: t.DenoHttpOptions) {
      * Create a new deployment.
      */
     async deploy(project: t.IdString, body: t.DenoDeployArgs) {
+      const timer = Time.timer();
       const path = `deno/projects/${project}/deployments`;
       const res = await http.post(path, body);
 
       const { ok, status } = res;
       const data = res.data as any;
-      const deploymentId = String(typeof data === 'object' ? data?.id ?? '' : '');
+      const id: t.DeployIndentifier = {
+        project,
+        deployment: String(typeof data === 'object' ? data?.id ?? '' : ''),
+      } as const;
 
       /**
        * Poll the deployment.
@@ -69,20 +73,20 @@ export function client(options: t.DenoHttpOptions) {
           console.info(...input);
         };
 
-        log(`(when ready): polling deployment "${deploymentId}" |→ ${api.url.endpoint}`);
+        log(`(when ready): polling deployment "${id.deployment}" |→ ${api.url.endpoint}`);
 
         const done = (ok: boolean, deployment?: t.DenoDeployment): t.WhenReadyResponse => {
           const status: t.WhenReadyStatus = !ok ? 'failed' : deployment?.status ?? 'UNKNOWN';
           log(`(when ready: done) deployment:`, deployment, `ok: ${ok}, status: ${status}`);
-          const id = { deployment: deploymentId, project };
-          return { ok, status, id, deployment };
+          const elapsed = timer.elapsed.msec;
+          return { ok, status, id, deployment, elapsed };
         };
 
         let i = 0;
         for (const msecs of delays) {
           i++;
           const list = await api.deployments(project).list({ sort: 'created_at', order: 'desc' });
-          const match = list.deployments.find((item) => item.id === deploymentId);
+          const match = list.deployments.find((item) => item.id === id.deployment);
           if (match?.status === 'success') {
             return done(true, match);
           } else {
@@ -98,7 +102,7 @@ export function client(options: t.DenoHttpOptions) {
       return {
         ok,
         status,
-        deploymentId,
+        id,
         whenReady,
       };
     },
