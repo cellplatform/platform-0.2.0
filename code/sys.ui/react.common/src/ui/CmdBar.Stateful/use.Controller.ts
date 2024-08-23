@@ -15,6 +15,7 @@ export function useController(props: P) {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
+
   useHistory({
     enabled: props.useHistory ?? DEFAULTS.useHistory,
     state,

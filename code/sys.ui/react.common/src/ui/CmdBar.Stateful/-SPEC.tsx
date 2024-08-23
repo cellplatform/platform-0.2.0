@@ -323,22 +323,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug } = e.state;
-      const field = 'state( ImmutableRef<D> )';
       const data = {
         props: e.state.props,
-        [field]: debug.useState ? doc?.current : undefined,
+        'state( Immutable<D> )': debug.useState ? doc?.current : undefined,
       };
-      return (
-        <Dev.Object
-          name={name}
-          data={data}
-          expand={{
-            level: 1,
-            // paths: ['$', `$.${field}`],
-          }}
-          fontSize={11}
-        />
-      );
+      return <Dev.Object name={name} data={data} expand={{ level: 1 }} fontSize={11} />;
     });
   });
 });

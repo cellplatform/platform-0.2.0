@@ -8,13 +8,17 @@ export type CmdBarFocusTarget = 'CmdBar' | 'Main';
  * Paths
  */
 export type CmdBarPaths = {
-  readonly text: t.ObjectPath;
   readonly cmd: t.ObjectPath;
-  readonly history: t.ObjectPath;
+  readonly text: t.ObjectPath;
+  readonly meta: t.ObjectPath;
 };
 export type CmdBarPathResolver = (data: O) => {
-  readonly text: string;
   readonly cmd: t.CmdPathsObject<t.CmdBarCtrlType>;
+  readonly text: string;
+  readonly meta: t.CmdBarMeta;
+};
+
+export type CmdBarMeta = {
   readonly history: string[];
 };
 
@@ -43,7 +47,7 @@ type Keyboard = t.CmdType<'Keyboard', KeyboardAction>;
 
 type Focus = t.CmdType<'Focus', { target?: CmdBarFocusTarget }>;
 type Clear = t.CmdType<'Clear', O>;
-type Update = t.CmdType<'Update', { text?: string }>;
+type Update = t.CmdType<'Update', { text?: string; spinning?: boolean }>;
 
 type Select = t.CmdType<'Select', SelectP>;
 type SelectP = { scope?: 'All' | 'Expand' | 'Toggle:Full' };

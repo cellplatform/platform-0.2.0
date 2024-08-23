@@ -1,4 +1,4 @@
-import { DEFAULTS as BASE } from '../CmdBar/common';
+import { DEFAULTS as BASE, type t } from '../CmdBar/common';
 export * from '../CmdBar/common';
 
 /**
@@ -9,5 +9,8 @@ export const DEFAULTS = {
   symbol: {
     cmd: Symbol('cmd'),
     paths: Symbol('paths'),
+  },
+  get meta(): t.CmdBarMeta {
+    return { history: [] };
   },
 } as const;

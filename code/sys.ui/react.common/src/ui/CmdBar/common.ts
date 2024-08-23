@@ -15,7 +15,7 @@ export { Spinner } from '../Spinner';
 const paths: t.CmdBarPaths = {
   cmd: ['cmd'],
   text: ['text'],
-  history: ['history'],
+  meta: ['meta'],
 };
 
 const focusBorder: t.CmdBarFocusBorder = {

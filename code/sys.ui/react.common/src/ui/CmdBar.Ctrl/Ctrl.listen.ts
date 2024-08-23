@@ -3,6 +3,7 @@ import { Keyboard } from './Ctrl.keyboard';
 import { Selection, toCmd, toPaths } from './u';
 
 const DEF = DEFAULTS.props;
+const Mutate = ObjectPath.Mutate;
 
 /**
  * Behavior logic for command signals.
@@ -48,12 +49,10 @@ export function listen(args: {
   events.on('Caret:ToEnd', () => textbox.caretToEnd());
   events.on('Keyboard', (e) => Keyboard.handleKeyAction(ctrl, e.params, isFocused()));
 
-  events.on('Clear', () => doc.change((d) => ObjectPath.Mutate.value(d, paths.text, '')));
+  events.on('Clear', () => doc.change((d) => Mutate.value(d, paths.text, '')));
   events.on('Update', (e) => {
-    doc.change((d) => {
-      const { text } = e.params;
-      if (typeof text === 'string') ObjectPath.Mutate.value(d, paths.text, text);
-    });
+    const { text } = e.params;
+    if (typeof text === 'string') doc.change((d) => Mutate.value(d, paths.text, text));
   });
 
   return events;

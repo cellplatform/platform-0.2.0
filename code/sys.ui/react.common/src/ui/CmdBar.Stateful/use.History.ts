@@ -20,9 +20,9 @@ export function useHistory(args: {
     const latest = history[history.length - 1];
     if (text && latest !== text) {
       state.change((d) => {
-        const list = resolve(d).history;
-        list.push(text);
-        if (!ObjectPath.exists(d, paths.history)) ObjectPath.Mutate.value(d, paths.history, list);
+        const meta = resolve(d).meta;
+        meta.history.push(text);
+        if (!ObjectPath.exists(d, paths.meta)) ObjectPath.Mutate.value(d, paths.meta, meta);
       });
     }
   };
@@ -59,7 +59,7 @@ export function useHistory(args: {
       return state ? resolve(state.current).text : '';
     },
     get history() {
-      return state ? resolve(state.current).history : [];
+      return state ? resolve(state.current).meta.history : [];
     },
   } as const;
   return api;
