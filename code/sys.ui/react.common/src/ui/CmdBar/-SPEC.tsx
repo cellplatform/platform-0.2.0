@@ -103,6 +103,15 @@ export default Dev.describe(name, (e) => {
 
       dev.boolean((btn) => {
         const state = State.props;
+        const current = () => !!state.current.readOnly;
+        btn
+          .label(() => `readOnly`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'readOnly')));
+      });
+
+      dev.boolean((btn) => {
+        const state = State.props;
         const current = () => !!state.current.focusOnReady;
         btn
           .label(() => `focusOnReady`)

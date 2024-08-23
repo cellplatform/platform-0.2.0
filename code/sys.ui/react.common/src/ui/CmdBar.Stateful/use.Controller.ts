@@ -113,6 +113,10 @@ export function useController(props: P) {
     get spinning(): boolean {
       return state ? !!resolve(state.current).meta.spinning : false;
     },
+
+    get readOnly(): boolean {
+      return state ? !!resolve(state.current).meta.readOnly : false;
+    },
   } as const;
   return api;
 }

@@ -259,6 +259,9 @@ export default Dev.describe(name, (e) => {
       const focusButton = (target: t.CmdBarFocusTarget) => {
         dev.button(['focus', `"${target}"`], () => focus(target));
       };
+
+      const getCurrent = async () => (await cmdbar?.ctrl.current({}).promise())?.result;
+
       focusButton('Main');
       focusButton('CmdBar');
       dev.hr(-1, 5);
@@ -270,10 +273,18 @@ export default Dev.describe(name, (e) => {
       dev.button('select: All', () => cmdbar?.ctrl.select({ scope: 'All' }));
       dev.button('select: Expand', () => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
+      dev.button('update: text → "foo"', () => cmdbar?.ctrl.update({ text: 'foo' }));
+      dev.button('update: toggle → spinning', async () => {
+        const spinning = !((await getCurrent())?.spinning ?? false);
+        cmdbar?.ctrl.update({ spinning });
+      });
+      dev.button('update: toggle → readOnly', async () => {
+        const readOnly = !((await getCurrent())?.readOnly ?? false);
+        cmdbar?.ctrl.update({ readOnly });
+      });
+      dev.hr(-1, 5);
       dev.button('clear', () => cmdbar?.ctrl.clear({}));
-      dev.button('update → text: "foo"', () => cmdbar?.ctrl.update({ text: 'foo' }));
-      dev.button('update → spinning: true', () => cmdbar?.ctrl.update({ spinning: true }));
-      dev.button('update → spinning: false', () => cmdbar?.ctrl.update({ spinning: false }));
+      dev.button('current', async () => console.info('current', await getCurrent()));
       dev.hr(-1, 5);
 
       const keyboardAction = (name: t.KeyboardAction['name']) => cmdbar?.ctrl.keyboard({ name });

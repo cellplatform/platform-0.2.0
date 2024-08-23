@@ -1,6 +1,6 @@
 import { Cmd, DEFAULTS, type t } from './common';
 import { Keyboard } from './Ctrl.keyboard';
-import { Mutate, Selection, toCmd, toPaths } from './u';
+import { Mutate, Path, Selection, toCmd, toPaths } from './u';
 
 const DEF = DEFAULTS.props;
 
@@ -17,14 +17,18 @@ export function listen(args: {
   const cmd = toCmd(ctrl);
   const doc = Cmd.toTransport(cmd);
   const paths = toPaths(cmd);
+  const resolve = Path.resolver(paths);
   const events = cmd.events(args.dispose$);
   const isFocused = () => textbox.current.focused;
 
   if (useKeyboard) Keyboard.listen(ctrl, textbox, events.dispose$);
 
   events.on('Current', (e) => {
-    const text = textbox.current.value;
-    cmd.invoke('Current:res', { text }, e.tx);
+    const current = resolve(doc.current);
+    const text = current.text;
+    const spinning = current.meta.spinning ?? DEF.spinning;
+    const readOnly = current.meta.readOnly ?? DEF.readOnly;
+    cmd.invoke('Current:res', { text, spinning, readOnly }, e.tx);
   });
 
   events.on('Focus', (e) => {
@@ -50,7 +54,7 @@ export function listen(args: {
 
   events.on('Clear', () => doc.change((d) => Mutate.value(d, paths.text, '')));
   events.on('Update', (e) => {
-    const { text, spinning } = e.params;
+    const { text, spinning, readOnly } = e.params;
 
     if (typeof text === 'string') {
       doc.change((d) => Mutate.value(d, paths.text, text));
@@ -58,6 +62,10 @@ export function listen(args: {
 
     if (typeof spinning === 'boolean') {
       doc.change((d) => Mutate.meta(d, paths, (meta) => (meta.spinning = spinning)));
+    }
+
+    if (typeof readOnly === 'boolean') {
+      doc.change((d) => Mutate.meta(d, paths, (meta) => (meta.readOnly = readOnly)));
     }
   });
 

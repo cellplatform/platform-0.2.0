@@ -3,8 +3,10 @@ import { Ctrl } from '../CmdBar.Ctrl';
 import { Color, DEFAULTS, Immutable, KeyHint, css, type t, Spinner } from './common';
 import { Textbox } from './ui.Textbox';
 
+const DEF = DEFAULTS.props;
+
 export const View: React.FC<t.CmdBarProps> = (props) => {
-  const { enabled = DEFAULTS.props.enabled, spinning = DEFAULTS.props.spinning } = props;
+  const { enabled = DEF.enabled, spinning = DEF.spinning, readOnly = DEF.readOnly } = props;
   const focusBorder = wrangle.focusBorder(props);
 
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
@@ -49,6 +51,7 @@ export const View: React.FC<t.CmdBarProps> = (props) => {
         ctrl={ctrl}
         enabled={enabled}
         theme={theme}
+        readOnly={readOnly}
         opacity={enabled ? 1 : 0.3}
         onFocusChange={(e) => {
           setFocused(e.is.focused);

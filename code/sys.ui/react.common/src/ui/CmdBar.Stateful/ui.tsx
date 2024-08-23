@@ -15,6 +15,7 @@ export const View: React.FC<t.CmdBarStatefulProps> = (props) => {
       hintKey={controller.hintKey}
       enabled={controller.enabled}
       spinning={controller.spinning}
+      readOnly={controller.readOnly}
     />
   );
 };

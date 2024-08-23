@@ -28,12 +28,13 @@ const focusBorder: t.CmdBarFocusBorder = {
 
 const props: t.PickRequired<
   t.CmdBarProps,
-  'theme' | 'enabled' | 'spinning' | 'useKeyboard' | 'focusOnReady' | 'placeholder'
+  'theme' | 'enabled' | 'spinning' | 'readOnly' | 'useKeyboard' | 'focusOnReady' | 'placeholder'
 > = {
   theme: 'Dark',
   placeholder: 'command',
   enabled: true,
   spinning: false,
+  readOnly: false,
   useKeyboard: true,
   focusOnReady: true,
 };

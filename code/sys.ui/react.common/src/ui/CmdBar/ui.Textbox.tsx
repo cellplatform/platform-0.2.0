@@ -18,6 +18,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
     enabled = DEF.enabled,
     focusOnReady = DEF.focusOnReady,
     placeholder = DEF.placeholder,
+    readOnly = DEF.readOnly,
     useKeyboard,
   } = props;
 
@@ -83,6 +84,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         disabledColor: color,
       }}
       isEnabled={enabled}
+      isReadOnly={readOnly}
       spellCheck={false}
       autoCorrect={false}
       autoCapitalize={false}

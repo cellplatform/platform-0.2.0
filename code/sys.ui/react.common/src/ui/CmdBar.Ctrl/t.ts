@@ -21,6 +21,7 @@ export type CmdBarPathResolver = (data: O) => {
 export type CmdBarMeta = {
   readonly history: string[];
   spinning?: boolean;
+  readOnly?: boolean;
 };
 
 /**
@@ -40,7 +41,7 @@ export type CmdBarCtrlType =
   | Update;
 
 type Current = t.CmdType<'Current', O>;
-type CurrentR = t.CmdType<'Current:res', { text: string }>;
+type CurrentR = t.CmdType<'Current:res', { text: string; spinning: boolean; readOnly: boolean }>;
 type CaretToStart = t.CmdType<'Caret:ToStart', O>;
 type CaretToEnd = t.CmdType<'Caret:ToEnd', O>;
 type Invoke = t.CmdType<'Invoke', { text: string }>;
@@ -48,7 +49,7 @@ type Keyboard = t.CmdType<'Keyboard', KeyboardAction>;
 
 type Focus = t.CmdType<'Focus', { target?: CmdBarFocusTarget }>;
 type Clear = t.CmdType<'Clear', O>;
-type Update = t.CmdType<'Update', { text?: string; spinning?: boolean }>;
+type Update = t.CmdType<'Update', { text?: string; spinning?: boolean; readOnly?: boolean }>;
 
 type Select = t.CmdType<'Select', SelectP>;
 type SelectP = { scope?: 'All' | 'Expand' | 'Toggle:Full' };
