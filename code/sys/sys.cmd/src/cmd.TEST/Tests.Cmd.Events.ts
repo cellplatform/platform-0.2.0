@@ -269,7 +269,7 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
     });
 
     describe('filters', () => {
-      it('.on<T>("name")', async () => {
+      it('.on("name")', async () => {
         const { doc, dispose, dispose$ } = await setup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);
@@ -286,6 +286,50 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(fired[0].params).to.eql({ foo: 0 });
 
         dispose();
+      });
+
+      it('.issuer("id")', async () => {
+        const { doc, dispose, dispose$ } = await setup();
+        const cmd = Cmd.create<C>(doc);
+        const events1 = cmd.events(dispose$);
+        const events2 = events1.issuer('me:one');
+        const events3 = events2.issuer(['me:two', 'me:three']);
+
+        expect((events2 as any).dispose).to.eql(undefined);
+        expect(events2.disposed).to.eql(false);
+
+        let disposeCount = 0;
+        events2.dispose$.subscribe(() => disposeCount++);
+
+        const fired1: t.CmdTx[] = [];
+        const fired2: t.CmdTx[] = [];
+        const fired3: t.CmdTx[] = [];
+        events1.on('Foo').subscribe((e) => fired1.push(e));
+        events2.on('Foo').subscribe((e) => fired2.push(e));
+
+        cmd.invoke('Foo', { foo: 123 }, { issuer: 'me:one' });
+        cmd.invoke('Foo', { foo: 456 });
+
+        await Time.wait(0);
+        expect(fired1.length).to.eql(2);
+        expect(fired2.length).to.eql(1);
+        expect(fired2[0].params).to.eql({ foo: 123 });
+
+        // Spawn a new monad that expands the {issuer} filter.
+        events3.on('Foo').subscribe((e) => fired3.push(e));
+        cmd.invoke('Foo', { foo: 1 }, { issuer: 'me:two' });
+        cmd.invoke('Foo', { foo: 2 }, { issuer: 'me:three' });
+        await Time.wait(0);
+        expect(fired3.length).to.eql(2);
+
+        cmd.invoke('Foo', { foo: 123 }, { issuer: 'me:one' });
+        await Time.wait(0);
+        expect(fired3.length).to.eql(3);
+
+        dispose();
+        expect(events1.disposed).to.eql(true);
+        expect(events2.disposed).to.eql(true);
+        expect(disposeCount).to.eql(1);
       });
     });
 

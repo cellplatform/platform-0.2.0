@@ -146,7 +146,9 @@ const wrangle = {
       return defaultTx();
     },
 
-    error(input?: t.CmdInvokeOptions<any> | t.TxString): u.ExtractError<C> | undefined {
+    error<C extends t.CmdType>(
+      input?: t.CmdInvokeOptions<C> | t.TxString,
+    ): u.ExtractError<C> | undefined {
       return typeof input === 'object' ? input.error : undefined;
     },
 
