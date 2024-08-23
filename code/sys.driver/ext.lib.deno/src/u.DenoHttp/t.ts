@@ -15,31 +15,49 @@ export type DenoHttpClient = {
   readonly url: { endpoint: string; host: string };
   readonly projects: DenoHttpClientProjects;
   deployments(project: t.IdString): DenoHttpClientDeployments;
-  deploy(project: t.IdString, body: t.DenoDeployArgs): Promise<DeployRes>;
+  deploy(project: t.IdString, body: t.DenoDeployArgs): Promise<DeployResponse>;
 };
 
 /**
  * Client: Projects.
  */
 export type DenoHttpClientProjects = {
-  list(params?: t.DenoListProjectsParams): Promise<ProjectsListRes>;
+  list(params?: t.DenoListProjectsParams): Promise<ProjectsListResponse>;
 };
-type ProjectsListRes = { ok: boolean; status: number; projects: t.DenoProject[] };
+type ProjectsListResponse = {
+  ok: boolean;
+  status: number;
+  projects: t.DenoProject[];
+};
 
 /**
  * Client: Deployments.
  */
 export type DenoHttpClientDeployments = {
-  list(params?: t.DenoListDeploymentsParams): Promise<DeploymentsListRes>;
+  list(params?: t.DenoListDeploymentsParams): Promise<DeploymentsListResponse>;
 };
-type DeploymentsListRes = { ok: boolean; status: number; deployments: t.DenoDeployment[] };
+type DeploymentsListResponse = {
+  ok: boolean;
+  status: number;
+  deployments: t.DenoDeployment[];
+};
 
 /**
  * Client: Deploy
  */
-export type DeployRes = {
+export type DeployResponse = {
   ok: boolean;
   status: number;
-  id: t.IdString;
-  whenReady(options?: { retry?: number }): Promise<t.DenoDeployment | undefined>;
+  deploymentId: t.IdString;
+  whenReady: WhenReadyMethod;
+};
+
+export type WhenReadyMethod = (options?: WhenReadyOptions) => Promise<WhenReadyResponse>;
+export type WhenReadyOptions = { retry?: number; silent?: boolean };
+export type WhenReadyStatus = t.DenoDeployment['status'] | 'UNKNOWN';
+export type WhenReadyResponse = {
+  ok: boolean;
+  status: WhenReadyStatus;
+  id: { deployment: t.IdString; project: t.IdString };
+  deployment?: t.DenoDeployment;
 };

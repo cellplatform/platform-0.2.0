@@ -1,5 +1,5 @@
-import { client } from './DenoHttp.client';
-import { origin } from './DenoHttp.origin';
+import { client } from './u.client';
+import { origin } from './u.origin';
 
 export const DenoHttp = {
   origin,
