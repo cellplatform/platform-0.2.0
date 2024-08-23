@@ -1,4 +1,4 @@
-import { DenoHttp, Doc, Wrangle, type t } from './common';
+import { DenoHttp, Doc, Time, Wrangle, type t } from './common';
 
 type O = Record<string, unknown>;
 
@@ -21,8 +21,9 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
     console.log('json', json);
     console.log('content', content);
 
-    const update = main.cmdbar?.ctrl.update;
-    update?.({ spinning: true });
+    const ctrl = main.cmdbar?.ctrl;
+    const update = ctrl?.update;
+    update?.({ spinning: true, readOnly: true });
 
     const res1 = await client.deploy(projectId, {
       entryPointUrl: 'main.ts',
@@ -43,6 +44,9 @@ export async function sampleDeploy(main: t.Shell, doc: t.Doc) {
       update?.({ text });
     }
 
-    update?.({ spinning: false });
+    update?.({ spinning: false, readOnly: false });
+    Time.delay(100, () => {
+      ctrl?.focus({ target: 'CmdBar' });
+    });
   }
 }
