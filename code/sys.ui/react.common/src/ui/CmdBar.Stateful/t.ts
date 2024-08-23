@@ -3,7 +3,7 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady'> & {
+export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'cmd' | 'text' | 'onReady'> & {
   state?: t.CmdTransport;
   paths?: t.CmdBarPaths | t.ObjectPath;
   useHistory?: boolean;

@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type CmdBarProps = {
   cmd?: t.Cmd<t.CmdBarCtrlType>;
+  issuer?: t.IdString;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];

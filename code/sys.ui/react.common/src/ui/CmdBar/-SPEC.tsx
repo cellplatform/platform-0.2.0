@@ -27,7 +27,8 @@ export default Dev.describe(name, (e) => {
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
   } as const;
 
-  const cmdbar = CmdBar.Ctrl.create();
+  const issuer = 'foo:me';
+  const cmdbar = CmdBar.Ctrl.create({ issuer });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -44,6 +45,8 @@ export default Dev.describe(name, (e) => {
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
+
+    cmdbar.events().on('Invoke', (e) => console.info('⚡️ cmdbar.events/Invoke', e));
 
     ctx.debug.width(330);
     ctx.subject

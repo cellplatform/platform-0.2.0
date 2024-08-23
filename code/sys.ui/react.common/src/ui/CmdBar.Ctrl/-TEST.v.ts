@@ -1,12 +1,12 @@
 import { Ctrl, DEFAULTS } from '.';
-import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t, Cmd } from '../../test';
+import { Immutable, ObjectPath, Time, describe, expect, it, rx, type t } from '../../test';
 import { CmdBar } from '../CmdBar';
 
 describe('CmdBar.Ctrl', () => {
   const testSetup = () => {
     const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
-    const ctrl = CmdBar.Ctrl.create(transport);
+    const ctrl = CmdBar.Ctrl.create({ transport });
     const cmd = Ctrl.toCmd(ctrl);
     const paths = DEFAULTS.paths;
 
@@ -31,7 +31,7 @@ describe('CmdBar.Ctrl', () => {
 
   it('create: from simple Immutable<T>', async () => {
     const transport = Immutable.clonerRef({});
-    const ctrl1 = Ctrl.create(transport);
+    const ctrl1 = Ctrl.create({ transport });
     const ctrl2 = Ctrl.create(); // NB: auto immutable "transport" construction.
     const expectCount = (length: number) => {
       const paths = CmdBar.DEFAULTS.paths;
@@ -53,9 +53,29 @@ describe('CmdBar.Ctrl', () => {
     expect(fired).to.eql(2);
   });
 
+  it('create: with issuer', async () => {
+    const transport = Immutable.clonerRef({});
+    const issuer = 'me:foo';
+    const ctrl1 = Ctrl.create({ transport });
+    const ctrl2 = Ctrl.create({ transport, issuer });
+
+    let fired: (string | undefined)[] = [];
+    ctrl1.events().on('Invoke', (e) => fired.push(e.issuer));
+    ctrl2.events().on('Invoke', (e) => fired.push(e.issuer));
+
+    ctrl1.invoke({ text: 'foo' }); // NB: no-issuer.
+    await Time.wait(0);
+    expect(fired).to.eql([undefined, undefined]);
+
+    fired = [];
+    ctrl2.invoke({ text: 'bar' });
+    await Time.wait(0);
+    expect(fired).to.eql([issuer, issuer]);
+  });
+
   it('create: with path from prefix', async () => {
     const transport = Immutable.clonerRef({});
-    const ctrl = Ctrl.create(transport, { paths: ['foo', 'bar'] });
+    const ctrl = Ctrl.create({ transport, paths: ['foo', 'bar'] });
 
     let fired = 0;
     ctrl.events().on('Invoke', (e) => fired++);
@@ -100,7 +120,7 @@ describe('CmdBar.Ctrl', () => {
 
   it('Ctrl.toCmd (custom)', () => {
     const paths = CmdBar.Ctrl.Path.prepend(['foo', 'bar']);
-    const ctrl = Ctrl.create(undefined, { paths });
+    const ctrl = Ctrl.create({ paths });
     const cmd = Ctrl.toCmd(ctrl);
     expect(Ctrl.toPaths(ctrl)).to.eql(paths);
     expect(Ctrl.toPaths(cmd)).to.eql(paths);

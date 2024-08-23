@@ -16,11 +16,15 @@ export const Ctrl = {
   toPaths,
 
   create(
-    transport?: t.CmdTransport,
-    options: { paths?: t.CmdBarPaths | t.ObjectPath } = {},
+    args: {
+      transport?: t.CmdTransport;
+      paths?: t.CmdBarPaths | t.ObjectPath;
+      issuer?: t.IdString;
+    } = {},
   ): t.CmdBarCtrl {
-    const paths = wrangle.paths(options.paths);
-    const cmd = factory(transport, paths);
+    const { transport, issuer } = args;
+    const paths = wrangle.paths(args.paths);
+    const cmd = factory(transport, paths, issuer);
     (cmd as any)[DEFAULTS.symbol.paths] = paths;
     return methods(cmd);
   },
@@ -29,10 +33,14 @@ export const Ctrl = {
 /**
  * Helpers
  */
-function factory(transport?: t.CmdTransport, cmdpaths: t.CmdBarPaths = DEFAULTS.paths) {
+function factory(
+  transport?: t.CmdTransport,
+  cmdpaths: t.CmdBarPaths = DEFAULTS.paths,
+  issuer?: t.IdString,
+) {
   const paths = Cmd.Path.prepend(cmdpaths.cmd);
   const doc = transport ?? Immutable.clonerRef({});
-  const cmd = Cmd.create<C>(doc, { paths });
+  const cmd = Cmd.create<C>(doc, { paths, issuer });
   return cmd as t.Cmd<C>;
 }
 

@@ -36,6 +36,8 @@ export default Dev.describe(name, (e) => {
 
   const main = Immutable.clonerRef<t.MainProps>(local.main ? JSON.parse(local.main) : {});
   const doc = Immutable.clonerRef({});
+
+  const issuer = 'foo:me';
   let cmdbar: t.CmdBarRef | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
@@ -104,6 +106,7 @@ export default Dev.describe(name, (e) => {
       const elCmdBar = (
         <SampleCmdBarStateful
           {...props}
+          issuer={issuer}
           state={debug.useState ? doc : undefined}
           paths={paths}
           // paths={['sample-foo']}
@@ -121,7 +124,10 @@ export default Dev.describe(name, (e) => {
 
             // Listen for events.
             const events = e.cmdbar.ctrl.events(e.dispose$);
-            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+            events.on('Invoke', (e) => {
+              const issuer = `issuer: "${e.issuer}"`;
+              console.info(`⚡️ Invoke`, e.params, issuer);
+            });
           }}
           onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
           onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}

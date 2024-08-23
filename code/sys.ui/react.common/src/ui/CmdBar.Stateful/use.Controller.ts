@@ -6,7 +6,7 @@ import { useHistory } from './use.History';
 type P = t.CmdBarStatefulProps;
 
 export function useController(props: P) {
-  const { state } = props;
+  const { state, issuer } = props;
   const paths = wrangle.paths(props);
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
@@ -36,8 +36,8 @@ export function useController(props: P) {
    * Create the [cmdbar] command.
    */
   useEffect(() => {
-    if (state) setCtrl(Ctrl.create(state, { paths }));
-  }, [state?.instance, pathDeps]);
+    if (state) setCtrl(Ctrl.create({ transport: state, paths, issuer }));
+  }, [state?.instance, issuer, pathDeps]);
 
   /**
    * Ready (→ Dispose)

@@ -31,6 +31,7 @@ export type {
   Event,
   EventBus,
   Falsy,
+  IdString,
   IgnoredResponse,
   ImageBadge,
   Immutable,
@@ -68,10 +69,10 @@ export type {
 export type {
   Cmd,
   CmdEvents,
-  CmdTransport,
   CmdMethodResponder,
   CmdMethodVoid,
   CmdPathsObject,
+  CmdTransport,
   CmdType,
 } from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';
