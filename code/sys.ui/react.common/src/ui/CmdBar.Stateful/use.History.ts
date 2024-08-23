@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
+import { Ctrl, DEFAULTS, Mutate, rx, type t } from './common';
 
 /**
  * Manage history
@@ -19,11 +19,7 @@ export function useHistory(args: {
     const history = api.history;
     const latest = history[history.length - 1];
     if (text && latest !== text) {
-      state.change((d) => {
-        const meta = resolve(d).meta;
-        meta.history.push(text);
-        if (!ObjectPath.exists(d, paths.meta)) ObjectPath.Mutate.value(d, paths.meta, meta);
-      });
+      state.change((d) => Mutate.meta(d, paths, (meta) => meta.history.push(text)));
     }
   };
 

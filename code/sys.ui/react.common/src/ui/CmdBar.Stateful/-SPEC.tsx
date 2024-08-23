@@ -262,21 +262,23 @@ export default Dev.describe(name, (e) => {
       focusButton('Main');
       focusButton('CmdBar');
       dev.hr(-1, 5);
-      dev.button('invoke', (e) => {
+      dev.button('invoke', () => {
         const text = getText(state.current);
         cmdbar?.ctrl.invoke({ text });
       });
       dev.hr(-1, 5);
-      dev.button('select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
-      dev.button('select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
+      dev.button('select: All', () => cmdbar?.ctrl.select({ scope: 'All' }));
+      dev.button('select: Expand', () => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button('clear', (e) => cmdbar?.ctrl.clear({}));
-      dev.button('update: "foo"', (e) => cmdbar?.ctrl.update({ text: 'foo' }));
+      dev.button('clear', () => cmdbar?.ctrl.clear({}));
+      dev.button('update → text: "foo"', () => cmdbar?.ctrl.update({ text: 'foo' }));
+      dev.button('update → spinning: true', () => cmdbar?.ctrl.update({ spinning: true }));
+      dev.button('update → spinning: false', () => cmdbar?.ctrl.update({ spinning: false }));
       dev.hr(-1, 5);
 
       const keyboardAction = (name: t.KeyboardAction['name']) => cmdbar?.ctrl.keyboard({ name });
-      dev.button(['CMD + J', 'focus: Main'], (e) => keyboardAction('Focus:Main'));
-      dev.button(['CMD + K', 'focus: CmdBar'], (e) => keyboardAction('Focus:CmdBar'));
+      dev.button(['CMD + J', 'focus: Main'], () => keyboardAction('Focus:Main'));
+      dev.button(['CMD + K', 'focus: CmdBar'], () => keyboardAction('Focus:CmdBar'));
     });
 
     dev.hr(5, 20);

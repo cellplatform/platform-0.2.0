@@ -1,9 +1,8 @@
-import { Cmd, DEFAULTS, ObjectPath, type t } from './common';
+import { Cmd, DEFAULTS, type t } from './common';
 import { Keyboard } from './Ctrl.keyboard';
-import { Selection, toCmd, toPaths } from './u';
+import { Mutate, Selection, toCmd, toPaths } from './u';
 
 const DEF = DEFAULTS.props;
-const Mutate = ObjectPath.Mutate;
 
 /**
  * Behavior logic for command signals.
@@ -51,8 +50,15 @@ export function listen(args: {
 
   events.on('Clear', () => doc.change((d) => Mutate.value(d, paths.text, '')));
   events.on('Update', (e) => {
-    const { text } = e.params;
-    if (typeof text === 'string') doc.change((d) => Mutate.value(d, paths.text, text));
+    const { text, spinning } = e.params;
+
+    if (typeof text === 'string') {
+      doc.change((d) => Mutate.value(d, paths.text, text));
+    }
+
+    if (typeof spinning === 'boolean') {
+      doc.change((d) => Mutate.meta(d, paths, (meta) => (meta.spinning = spinning)));
+    }
   });
 
   return events;

@@ -20,6 +20,7 @@ export type CmdBarPathResolver = (data: O) => {
 
 export type CmdBarMeta = {
   readonly history: string[];
+  spinning?: boolean;
 };
 
 /**

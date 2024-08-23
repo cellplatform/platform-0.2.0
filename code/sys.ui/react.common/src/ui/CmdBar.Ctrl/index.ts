@@ -1,3 +1,4 @@
-export * from './Ctrl';
-export { Is, Path } from './u';
 export { DEFAULTS } from './common';
+export { Is, Mutate, Path } from './u';
+
+export * from './Ctrl';

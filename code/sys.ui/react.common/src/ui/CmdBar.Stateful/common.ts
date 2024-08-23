@@ -1,7 +1,7 @@
 import { DEFAULTS as BASE } from '../CmdBar/common';
 import { Pkg } from '../common';
 
-export { Ctrl, Path } from '../CmdBar.Ctrl';
+export { Ctrl, Mutate, Path } from '../CmdBar.Ctrl';
 export { ObjectView } from '../ObjectView';
 
 export * from '../common';
