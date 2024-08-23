@@ -100,12 +100,18 @@ export function useController(props: P) {
     enabled,
     ctrl,
     handlers: { onReady, onChange, onSelect, onFocusChange },
+
     get text() {
       return state ? resolve(state.current).text : '';
     },
+
     get hintKey(): string | string[] | undefined {
       if (!isFocused) return 'META + K';
       return;
+    },
+
+    get spinning(): boolean {
+      return state ? !!resolve(state.current).meta.spinning : false;
     },
   } as const;
   return api;
