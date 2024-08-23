@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { DevBus } from '../fn.Bus';
+import { DevBus } from '../u.Bus';
 import { DEFAULTS, Time, rx, slug, type t } from './common';
 
 type Id = string;

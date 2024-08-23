@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-import { BusEvents } from '../fn.Bus/Bus.Events.mjs';
+import { BusEvents } from '../u.Bus/Bus.Events.mjs';
 import { ContextState } from './Context.State.mjs';
 import { CtxProps } from './Ctx.Props.mjs';
 

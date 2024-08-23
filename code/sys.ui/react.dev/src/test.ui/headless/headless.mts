@@ -1,6 +1,6 @@
 import 'symbol-observable';
 
-import { DevBus } from '../../fn.Bus';
+import { DevBus } from '../../u.Bus';
 import { Time, rx, slug, type t } from '../common';
 
 type Results = { ok: boolean; elapsed: t.Msecs; total: number; specs: ModuleResults[] };
