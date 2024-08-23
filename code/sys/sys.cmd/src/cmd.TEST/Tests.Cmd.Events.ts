@@ -224,10 +224,52 @@ export function eventTests(setup: t.CmdTestSetup, args: t.TestArgs) {
         expect(fired[1].tx).to.eql('👋.2');
         dispose();
       });
+
+      it('⚡️← issuer (on <Cmd> object)', async () => {
+        const { doc, dispose, dispose$ } = await setup();
+
+        const test = async (issuer?: string) => {
+          const cmd = Cmd.create<C>(doc, { issuer });
+          const fired: t.CmdTx[] = [];
+          cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
+          cmd.invoke('Foo', { foo: 0 });
+
+          await Time.wait(0);
+          expect(fired.length).to.eql(1);
+          expect(fired[0].issuer).to.eql(issuer);
+        };
+
+        await test('me:foo');
+        await test(undefined);
+        dispose();
+      });
+
+      it('⚡️← issuer (passed to invoke method options)', async () => {
+        const { doc, dispose, dispose$ } = await setup();
+
+        type T = string | undefined;
+        const test = async (issuerMethod: T, issuerCommand: T, expected: T) => {
+          const cmd = Cmd.create<C>(doc, { issuer: issuerCommand });
+          const fired: t.CmdTx[] = [];
+          cmd.events(dispose$).tx$.subscribe((e) => fired.push(e));
+          cmd.invoke('Foo', { foo: 0 }, { issuer: issuerMethod });
+
+          await Time.wait(0);
+          expect(fired.length).to.eql(1);
+          expect(fired[0].issuer).to.eql(expected);
+        };
+
+        await test('me:foo', undefined, 'me:foo');
+        await test('me:foo', 'me:default', 'me:foo');
+        await test(undefined, 'me:default', 'me:default');
+        await test(undefined, undefined, undefined);
+
+        dispose();
+      });
     });
 
-    describe('filter', () => {
-      it('.name<T>( ⚡️) ', async () => {
+    describe('filters', () => {
+      it('.on<T>("name")', async () => {
         const { doc, dispose, dispose$ } = await setup();
         const cmd = Cmd.create<C>(doc);
         const events = cmd.events(dispose$);

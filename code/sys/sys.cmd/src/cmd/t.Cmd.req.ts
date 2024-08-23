@@ -5,11 +5,13 @@ import type { t, u } from './common';
  */
 export type CmdInvokeOptions<C extends t.CmdType> = {
   tx?: t.TxString;
+  issuer?: t.IdString;
   error?: u.ExtractError<C>;
 };
-export type CmdInvokeResponseOptions<Req extends t.CmdType, Res extends t.CmdType> = {
-  tx?: t.TxString;
-  error?: u.ExtractError<Res>;
+export type CmdInvokeResponseOptions<
+  Req extends t.CmdType,
+  Res extends t.CmdType,
+> = CmdInvokeOptions<Req> & {
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
   onComplete?: t.CmdResponseHandler<Req, Res>;

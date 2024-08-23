@@ -58,7 +58,8 @@ export const Events = {
         const queue = e.doc.queue ?? [];
         const list = Events.unprocessed(queue, _lastProcessed);
         _lastProcessed = queue[queue.length - 1].id || '';
-        list.forEach(({ name, params, error, tx, id, issuer }) => {
+        list.forEach((e) => {
+          const { name, params, error, tx, id, issuer } = e;
           fire({
             type: 'sys.cmd/tx',
             payload: { name, params, error, tx, id, issuer },

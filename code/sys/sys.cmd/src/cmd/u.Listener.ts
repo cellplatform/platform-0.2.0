@@ -2,6 +2,7 @@ import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<Req extends t.CmdType, Res extends t.CmdType> = {
   tx: t.TxString;
+  issuer?: t.IdString;
   req: { name: Req['name']; params: Req['params'] };
   res: { name: Res['name'] };
   timeout?: t.Msecs;
@@ -18,7 +19,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   cmd: t.Cmd<Res>,
   args: Args<Req, Res>,
 ): t.CmdResponseListener<Req, Res> {
-  const { req, tx, timeout = DEFAULTS.timeout } = args;
+  const { req, tx, issuer, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
@@ -47,8 +48,8 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
       handlers.forEach((fn) => fn(e));
     },
     args(): t.CmdResponseHandlerArgs<Req, Res> {
-      const { ok, tx, result, error } = api;
-      return { ok, tx, result, error };
+      const { ok, tx, issuer, result, error } = api;
+      return { ok, tx, issuer, result, error };
     },
   } as const;
 
@@ -89,6 +90,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   const api: L = {
     $,
     tx,
+    issuer,
     req,
 
     get ok() {
@@ -138,6 +140,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
       return life.disposed;
     },
   };
+
   return api;
 }
 

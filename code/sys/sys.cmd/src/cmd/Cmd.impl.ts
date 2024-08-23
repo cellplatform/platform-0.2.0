@@ -20,9 +20,8 @@ export function create<C extends t.CmdType>(
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
-  const issuer = args.issuer;
 
-  const push = (tx: t.TxString, name: string, params: O, error?: t.Error) => {
+  const push = (tx: t.TxString, name: string, params: O, issuer?: t.IdString, error?: t.Error) => {
     transport.change((d) => {
       const item = resolve.queue.item(d);
       item.name(name);
@@ -45,16 +44,23 @@ export function create<C extends t.CmdType>(
   /**
    * Invoke method (overloads).
    */
-  const invokeSetup = (tx: t.TxString, name: C['name'], params: C['params'], error?: t.Error) => {
-    const res: t.CmdInvoked<any> = { tx, req: { name, params } };
-    const start = () => Time.delay(0, () => push(tx, name, params, error));
+  const invokeSetup = (
+    tx: t.TxString,
+    name: C['name'],
+    params: C['params'],
+    issuer?: t.IdString,
+    error?: t.Error,
+  ) => {
+    const res: t.CmdInvoked<any> = { tx, issuer, req: { name, params } };
+    const start = () => Time.delay(0, () => push(tx, name, params, issuer, error));
     return { res, start } as const;
   };
 
   const invokeVoid: t.CmdInvoke<any> = (name, params, opt) => {
     const tx = wrangle.invoke.tx(opt, args.tx);
+    const issuer = wrangle.invoke.issuer(opt, args.issuer);
     const error = wrangle.invoke.error(opt);
-    const { res, start } = invokeSetup(tx, name, params, error);
+    const { res, start } = invokeSetup(tx, name, params, issuer, error);
     start();
     return res;
   };
@@ -62,11 +68,14 @@ export function create<C extends t.CmdType>(
   const invokeResponder: t.CmdInvokeResponse<any, any> = (req, res, params, opt) => {
     const options = wrangle.invoke.responseOptions<any, any>(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
+    const issuer = wrangle.invoke.issuer(options, args.issuer);
     const error = wrangle.invoke.error(options);
+
     const { timeout, dispose$, onComplete, onError, onTimeout } = options;
-    const { start } = invokeSetup(tx, req, params, error);
+    const { start } = invokeSetup(tx, req, params, issuer, error);
     const listener = Listener.create<any, any>(api, {
       tx,
+      issuer,
       req: { name: req, params },
       res: { name: res },
       timeout,
@@ -105,11 +114,16 @@ export function create<C extends t.CmdType>(
     },
   };
 
-  // Store internal decorations.
-  // See helpers: Cmd.toTransport(), toPaths(), toIssuer()
+  /**
+   * Store internal decorations.
+   *    See related helpers:
+   *      - Cmd.toTransport()
+   *      - toPaths()
+   *      - toIssuer() etc.
+   */
   (api as any)[DEFAULTS.symbol.transport] = transport;
   (api as any)[DEFAULTS.symbol.paths] = paths;
-  (api as any)[DEFAULTS.symbol.issuer] = issuer;
+  (api as any)[DEFAULTS.symbol.issuer] = args.issuer;
   return api;
 }
 
@@ -124,10 +138,7 @@ const wrangle = {
   },
 
   invoke: {
-    tx<C extends t.CmdType>(
-      input?: t.CmdInvokeOptions<C> | t.TxString,
-      txFactory?: t.CmdTxFactory,
-    ) {
+    tx(input?: t.CmdInvokeOptions<any> | t.TxString, txFactory?: t.CmdTxFactory) {
       const defaultTx = () => (txFactory ?? DEFAULTS.tx)();
       if (!input) return defaultTx();
       if (typeof input === 'string') return input;
@@ -135,10 +146,15 @@ const wrangle = {
       return defaultTx();
     },
 
-    error<C extends t.CmdType>(
-      input?: t.CmdInvokeOptions<C> | t.TxString,
-    ): u.ExtractError<C> | undefined {
+    error(input?: t.CmdInvokeOptions<any> | t.TxString): u.ExtractError<C> | undefined {
       return typeof input === 'object' ? input.error : undefined;
+    },
+
+    issuer(
+      input?: t.CmdInvokeOptions<any> | t.TxString,
+      defaultIssuer?: t.IdString,
+    ): t.IdString | undefined {
+      return typeof input === 'object' ? input.issuer ?? defaultIssuer : defaultIssuer;
     },
 
     responseOptions<Req extends t.CmdType, Res extends t.CmdType>(
