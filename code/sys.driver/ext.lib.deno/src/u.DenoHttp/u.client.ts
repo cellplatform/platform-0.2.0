@@ -61,7 +61,7 @@ export function client(options: t.DenoHttpOptions) {
        */
       const whenReady = async (options: t.WhenReadyOptions = {}) => {
         const { silent = true } = options;
-        const total = options.retry ?? DEFAULTS.deploy.retries;
+        const length = options.retry ?? DEFAULTS.deploy.retries;
         const delays = Array.from({ length }).map(() => DEFAULTS.deploy.delay);
 
         const log = (...input: any[]) => {
@@ -73,7 +73,7 @@ export function client(options: t.DenoHttpOptions) {
 
         const done = (ok: boolean, deployment?: t.DenoDeployment): t.WhenReadyResponse => {
           const status: t.WhenReadyStatus = !ok ? 'failed' : deployment?.status ?? 'UNKNOWN';
-          log(`(when ready: done) deployment:${deployment}, ok: ${ok}, status: ${status}`);
+          log(`(when ready: done) deployment:`, deployment, `ok: ${ok}, status: ${status}`);
           const id = { deployment: deploymentId, project };
           return { ok, status, id, deployment };
         };
@@ -87,7 +87,7 @@ export function client(options: t.DenoHttpOptions) {
             return done(true, match);
           } else {
             const delay = Time.duration(msecs).toString();
-            log(`${i} of ${total} |→ deployment not ready, waiting for ${delay}...`);
+            log(`${i} of ${length} |→ deployment not ready, waiting for ${delay}...`);
             await Time.wait(msecs);
           }
         }
