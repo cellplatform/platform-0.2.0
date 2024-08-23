@@ -187,7 +187,7 @@ export default Dev.describe(name, async (e) => {
             'Login.SMS',
             'Id.User',
             'AccessToken',
-            'Id.User.Phone',
+            // 'Id.User.Phone',
             'Farcaster',
             'Wallet.List',
             'Wallet.List.Title',
