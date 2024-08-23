@@ -26,6 +26,7 @@ export type { Farcaster, FarcasterCmd } from 'ext.lib.privy/src/types';
  * @system
  */
 export type {
+  IdString,
   Lifecycle,
   ModuleImports,
   Msecs,
