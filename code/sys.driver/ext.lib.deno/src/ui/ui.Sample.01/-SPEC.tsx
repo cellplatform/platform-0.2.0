@@ -36,7 +36,7 @@ export default Dev.describe(name, (e) => {
       d.props.env = ctx.env;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(360);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
@@ -150,15 +150,16 @@ export default Dev.describe(name, (e) => {
 
       // dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
 
-      dev.button((btn) => {
-        btn
-          .label(`💦 get deployments`)
-          .enabled((e) => !!getSelectedProject())
-          .onClick((e) => HttpState.updateDeployments(state));
-      });
+      // dev.button((btn) => {
+      //   btn
+      //     .label(`💦 get deployments`)
+      //     .enabled((e) => !!getSelectedProject())
+      //     .onClick((e) => HttpState.updateDeployments(state));
+      // });
 
-      dev.button('get deployments', async () => {
-        const projectId = 'sweet-gnu-41';
+      const projectId = 'sweet-gnu-41';
+      const projectDisplay = `"${projectId}"`;
+      dev.button(['get deployments', projectDisplay], async () => {
         const client = getClient();
 
         const res = await client.deployments(projectId).list();
@@ -170,9 +171,10 @@ export default Dev.describe(name, (e) => {
       dev.button((btn) => {
         btn
           .label(`deploy`)
+          .right(projectDisplay)
           // .enabled((e) => !!getSelectedProject())
           .onClick(async (e) => {
-            const projectId = 'sweet-gnu-41';
+            // const projectId = 'sweet-gnu-41';
             const client = getClient();
 
             const content = state.current.props.code ?? '';
@@ -190,7 +192,7 @@ export default Dev.describe(name, (e) => {
             console.log('-------------------------------------------');
             console.log('res', res);
 
-            const m = await res.whenReady();
+            const m = await res.whenReady({ silent: false });
             console.log('m', m);
             // await HttpState.updateDeployments(state);
           });
