@@ -17,7 +17,7 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge-repo': '1.2.1',
     '@automerge/automerge-repo-network-broadcastchannel': '1.2.1',
     '@automerge/automerge-repo-storage-indexeddb': '1.2.1',
-    'automerge-repo-network-peerjs': '1.2.1',
+    'automerge-repo-network-peerjs': '1.2.2',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.peerjs': '0.0.0',
     'react': '18.3.1',
