@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from './common';
 import { View } from './ui';
 import { useStateful } from './use.Stateful';
 

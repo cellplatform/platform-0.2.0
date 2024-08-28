@@ -8,6 +8,9 @@ export type InfoStatefulProps = Omit<t.InfoProps, 'data'> & {
   onReady?: InfoStatefulReadyHandler;
 };
 
+/**
+ * Data
+ */
 export type InfoStatefulData = t.ImmutableRef<t.InfoData>;
 
 /**
