@@ -13,6 +13,7 @@ export type {
   CssValue,
   DevCtxState,
   MarginInput,
+  PropListFieldSelectorProps,
   PropListItem,
   PropListProps,
   RenderCountProps,

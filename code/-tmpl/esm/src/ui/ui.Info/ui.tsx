@@ -1,11 +1,15 @@
 import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
 
-export const View: React.FC<t.InfoProps> = (props) => {
-  const { data = {} } = props;
-  const ctx = wrangle.ctx(props);
+type F = t.InfoField;
+const DEF = DEFAULTS.props;
 
-  const items = PropList.builder<t.InfoField>()
+export const View: React.FC<t.InfoProps> = (props) => {
+  const { data = {}, theme = DEF.theme, enabled = DEF.enabled } = props;
+  const fields = PropList.fields<F>(props.fields, DEF.fields);
+  const ctx: t.InfoFieldCtx = { fields, theme, enabled };
+
+  const items = PropList.builder<F>()
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
     .field('Component', () => Field.component(ctx, data.component))
@@ -22,14 +26,3 @@ export const View: React.FC<t.InfoProps> = (props) => {
     />
   );
 };
-
-/**
- * Helpers
- */
-const wrangle = {
-  ctx(props: t.InfoProps): t.InfoFieldCtx {
-    const { theme = DEFAULTS.theme } = props;
-    const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
-    return { fields, theme };
-  },
-} as const;

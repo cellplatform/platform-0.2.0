@@ -1,7 +1,7 @@
 import { DEFAULTS, PropList, type t } from './common';
 
-type R = t.InfoProps;
-export type FieldSelectorProps = Omit<R, 'all'> & {};
+type P = t.PropListFieldSelectorProps;
+export type FieldSelectorProps = Omit<P, 'all'> & {};
 
 export const FieldSelector: React.FC<FieldSelectorProps> = (props) => {
   return <PropList.FieldSelector {...props} all={DEFAULTS.fields.all} />;
