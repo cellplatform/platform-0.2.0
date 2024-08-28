@@ -8,6 +8,7 @@ export const Specs = {
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
   [`${ns}.sync.Textbox`]: () => import('../crdt.sync/TextboxSync/-SPEC'),
   [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.Info.Stateful`]: () => import('../ui/ui.Info/-SPEC.Stateful'),
   [`${ns}.ui.RepoList`]: () => import('../ui/ui.RepoList/-SPEC'),
   [`${ns}.ui.RepoList.Virtual`]: () => import('../ui/ui.RepoList.Virtual/-SPEC'),
   [`${ns}.ui.Doc.History.Grid`]: () => import('../ui/ui.History.Grid/-SPEC'),
