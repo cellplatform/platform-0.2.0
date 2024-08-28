@@ -6,12 +6,16 @@ import { DEFAULTS } from '.';
 import { type t } from './common';
 
 type P = t.InfoStatefulProps;
-type D = { docuri?: t.UriString; flags: SpecDataFlags };
+type D = {
+  docuri?: t.UriString;
+  flags: SpecDataFlags;
+  render?: boolean;
+};
 
 /**
  * Spec
  */
-const name = DEFAULTS.displayName;
+const name = DEFAULTS.Stateful.displayName;
 
 export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
@@ -23,16 +27,21 @@ export default Dev.describe(name, async (e) => {
 
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { flags: SpecData.defaults.flags })),
+    debug: Immutable.clonerRef<D>(
+      Json.parse<D>(local.debug, {
+        render: true,
+        flags: SpecData.defaults.flags,
+      }),
+    ),
   } as const;
 
   let doc: t.Doc | undefined;
   let data: t.InfoStatefulData | undefined;
-  const create = (onComplete?: () => void) => {
+  const create = (onComplete?: (data: t.InfoStatefulData) => void) => {
     const initial = SpecData.asObject({ repo, flags: State.debug.current.flags });
     data = Immutable.clonerRef(initial);
     update();
-    onComplete?.();
+    onComplete?.(data);
   };
   const update = () => {
     const flags = State.debug.current.flags;
@@ -74,13 +83,23 @@ export default Dev.describe(name, async (e) => {
         const debug = State.debug.current;
         Dev.Theme.background(dev, props.theme, 1);
 
+        if (!debug.render) return null;
+
         return (
           <Info.Stateful
             {...props}
             repos={{ [db.name]: db.repo }}
             data={data}
             style={{ minHeight: 300 }}
-            onReady={(e) => console.info(`⚡️ Info.Stateful.onReady:`, e)}
+            onReady={(e) => {
+              console.info(`⚡️ Info.Stateful.onReady:`, e);
+              e.dispose$.subscribe(() => console.info(`⚡️ Info.Stateful.onReady → dispose 💥`));
+
+              data
+                ?.events(e.dispose$)
+                .changed$.pipe(rx.debounceTime(150))
+                .subscribe(() => dev.redraw());
+            }}
           />
         );
       });
@@ -206,6 +225,20 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
+
+      dev.boolean((btn) => {
+        const state = State.debug;
+        const current = () => !!state.current.render;
+        btn
+          .label(() => `render`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'render')));
+      });
+
+      dev.hr(-1, 5);
+      dev.button('tmp', () => {
+        data?.change((d) => (d.visible = { value: true }));
+      });
     });
   });
 
@@ -213,7 +246,9 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<D>(e);
     dev.footer.border(-0.1).render<D>((e) => {
       const props = State.props.current;
-      return <Dev.Object name={name} data={{ props, data }} expand={1} fontSize={11} />;
+      return (
+        <Dev.Object name={name} data={{ props, data: data?.current }} expand={1} fontSize={11} />
+      );
     });
   });
 });

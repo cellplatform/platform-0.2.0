@@ -11,10 +11,16 @@ export type InfoStatefulProps = Omit<t.InfoProps, 'data'> & {
 /**
  * Data
  */
-export type InfoStatefulData = t.ImmutableRef<t.InfoData>;
+type D = t.InfoData;
+type E = t.ImmutableEvents<D, unknown>;
+export type InfoStatefulData = t.ImmutableRef<D, E>;
 
 /**
  * Events
  */
 export type InfoStatefulReadyHandler = (e: InfoStatefulReadyHandlerArgs) => void;
-export type InfoStatefulReadyHandlerArgs = { repos: t.InfoRepos; data: InfoStatefulData };
+export type InfoStatefulReadyHandlerArgs = {
+  repos: t.InfoRepos;
+  data: InfoStatefulData;
+  dispose$: t.Observable<void>;
+};

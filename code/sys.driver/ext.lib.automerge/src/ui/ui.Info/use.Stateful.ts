@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Immutable, PropList, type t } from './common';
+import { DEFAULTS, Immutable, PropList, rx, type t } from './common';
 
 type P = t.InfoStatefulProps;
 
@@ -21,7 +21,9 @@ export function useStateful(props: P) {
   }, [data?.instance, wrangle.propsInstance(props)]);
 
   useEffect(() => {
-    if (data) props.onReady?.({ data, repos });
+    const { dispose, dispose$ } = rx.disposable();
+    if (data) props.onReady?.({ data, repos, dispose$ });
+    return dispose;
   }, [data?.instance]);
 
   /**

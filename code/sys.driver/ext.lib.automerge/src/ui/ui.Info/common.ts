@@ -13,6 +13,8 @@ type P = t.InfoProps;
  * Constants
  */
 const name = 'Info';
+const displayName = `${Pkg.name}:${name}`;
+
 const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
   theme: 'Light',
   enabled: true,
@@ -53,7 +55,7 @@ const docUri = DocUri.DEFAULTS.props;
 
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}:${name}`,
+  displayName,
   query: { dev: 'dev' },
   props,
   fields,
@@ -73,5 +75,10 @@ export const DEFAULTS = {
     label: 'History',
     list: { page: 0, limit: 5, sort: 'desc' },
     item: { hashLength: 6 },
+  },
+
+  Stateful: {
+    name: `${name}.Stateful`,
+    displayName: `${displayName}.Stateful`,
   },
 } as const;
