@@ -17,4 +17,4 @@ export type InfoStatefulData = t.ImmutableRef<t.InfoData>;
  * Events
  */
 export type InfoStatefulReadyHandler = (e: InfoStatefulReadyHandlerArgs) => void;
-export type InfoStatefulReadyHandlerArgs = { data: InfoStatefulData };
+export type InfoStatefulReadyHandlerArgs = { data: InfoStatefulData; dispose$: t.Observable<void> };
