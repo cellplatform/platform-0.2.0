@@ -45,7 +45,7 @@ function overloader(state: State, fire: FireChanged) {
     return docs.map((_, i) => document(docs, i));
   }
 
-  function document(docs: t.InfoDataDoc[], index: number) {
+  function document(docs: t.InfoDoc[], index: number) {
     const doc = docs[index];
     if (!doc.object) doc.object = {};
 

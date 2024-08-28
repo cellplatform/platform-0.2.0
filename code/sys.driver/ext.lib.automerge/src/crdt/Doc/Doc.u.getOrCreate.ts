@@ -10,7 +10,7 @@ type Uri = t.DocUri | t.UriString;
  * Find or initialize a new document from the repo.
  */
 export async function getOrCreate<T extends O>(args: {
-  repo: t.Repo;
+  repo: t.AutomergeRepo;
   initial: t.ImmutableMutator<T> | Uint8Array;
   uri?: Uri;
   dispose$?: t.UntilObservable;

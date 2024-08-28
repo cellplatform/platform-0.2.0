@@ -33,7 +33,7 @@ export const Is = {
     return isObjectType(input, Symbols.WebStore);
   },
 
-  repo(input: any): input is t.Repo {
+  repo(input: any): input is t.AutomergeRepo {
     if (!isObject(input)) return false;
     const { networkSubsystem, storageSubsystem } = input;
     if (!Is.networkSubsystem(networkSubsystem)) return false;
@@ -58,7 +58,7 @@ export const Is = {
     return Is.repoListState(list?.state) && Is.webStore(store) && Is.storeIndex(index);
   },
 
-  networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {
+  networkSubsystem(input: any): input is t.AutomergeRepo['networkSubsystem'] {
     if (!isObject(input)) return false;
     return (
       typeof input.peerId === 'string' &&
@@ -68,7 +68,7 @@ export const Is = {
     );
   },
 
-  storageSubsystem(input: any): input is Required<t.Repo['storageSubsystem']> {
+  storageSubsystem(input: any): input is Required<t.AutomergeRepo['storageSubsystem']> {
     if (!isObject(input)) return false;
     return (
       typeof input.loadDoc === 'function' &&

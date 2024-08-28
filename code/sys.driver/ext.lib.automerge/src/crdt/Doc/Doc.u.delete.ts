@@ -6,7 +6,7 @@ type Uri = t.DocUri | t.UriString;
 /**
  * Delete the specified document.
  */
-export async function del(args: { repo: t.Repo; uri?: Uri; timeout?: t.Msecs }) {
+export async function del(args: { repo: t.AutomergeRepo; uri?: Uri; timeout?: t.Msecs }) {
   const { repo, uri, timeout } = args;
   if (!uri) return false;
 

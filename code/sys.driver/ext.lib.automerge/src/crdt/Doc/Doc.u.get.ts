@@ -8,7 +8,7 @@ type Uri = t.DocUri | t.UriString;
  * Find the document document from the repo.
  */
 export function get<T extends O>(args: {
-  repo: t.Repo;
+  repo: t.AutomergeRepo;
   uri: Uri;
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;

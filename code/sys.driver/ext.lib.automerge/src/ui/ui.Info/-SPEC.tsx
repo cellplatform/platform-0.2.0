@@ -1,28 +1,14 @@
 import { DEFAULTS, Info } from '.';
-import {
-  Dev,
-  DevReload,
-  Doc,
-  Immutable,
-  Json,
-  Pkg,
-  rx,
-  SampleCrdt,
-  Value,
-  type t,
-} from '../../test.ui';
+import { Dev, DevReload, Doc, Immutable, Json, rx, SampleCrdt, Value, type t } from '../../test.ui';
+import { SpecData, type SpecDataFlags } from './-SPEC.data';
+
+export { SpecData };
 
 type P = t.InfoProps;
 type D = {
-  docuri?: t.UriString;
-
   reload?: boolean;
-  dataUris?: boolean;
-  dataHistoryDesc?: boolean;
-  dataHistoryDetail?: t.HashString;
-  dataDocLens?: boolean;
-  dataDocArray?: boolean;
-  dataDocIconClickHandler?: boolean;
+  docuri?: t.UriString;
+  flags: SpecDataFlags;
 };
 
 /**
@@ -35,25 +21,16 @@ export default Dev.describe(name, async (e) => {
   const { store } = db.repo;
 
   type LocalStore = { props?: string; debug?: string };
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
+
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(
-      Json.parse<D>(local.debug, {
-        dataHistoryDesc: DEFAULTS.history.list.sort === 'desc',
-        docuri: undefined,
-        dataUris: true,
-        dataDocLens: false,
-        dataDocArray: false,
-        dataDocIconClickHandler: true,
-      }),
-    ),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { flags: SpecData.defaults.flags })),
   } as const;
 
   let doc: t.Doc | undefined;
-
-  const resetInfoState$ = rx.subject();
+  const resetState$ = rx.subject();
   const setFields = async (dev: t.DevTools<D>, fields?: (t.InfoField | undefined)[]) => {
     State.props.change((d) => (d.fields = fields));
   };
@@ -92,69 +69,20 @@ export default Dev.describe(name, async (e) => {
 
         const fields = props.fields ?? [];
         const docuri = debug.docuri;
-        const { store, index } = db.repo;
+
         const doc = fields.includes('Doc') ? await store.doc.get(docuri) : undefined;
+        const repo = db.repo;
+        const flags = debug.flags;
+        const data = SpecData.asObject({ doc, repo, flags });
 
-        const document: t.InfoDataDoc = {
-          // label: 'Foo',
-          ref: debug.dataUris ? doc?.uri : doc,
-          object: {
-            // name: 'foobar',
-            // visible: false,
-            lens: debug.dataDocLens ? ['child'] : undefined,
-            expand: { level: 2 },
-            beforeRender(mutate: any) {
-              // mutate['foo'] = 123;
-            },
-            onToggleClick: debug.dataDocIconClickHandler
-              ? (e) => console.info('⚡️ document.object.onToggleClick', e)
-              : undefined,
-          },
-          uri: {
-            // prefix: 'foo:::',
-            // prefix: null,
-            head: true,
-          },
-          history: {
-            // label: 'Foo',
-            list: {
-              sort: debug.dataHistoryDesc ? 'desc' : 'asc',
-              showDetailFor: debug.dataHistoryDetail,
-            },
-            item: {
-              onClick(e) {
-                console.info('⚡️ history.item.onClick', e);
-                State.debug.change((d) => {
-                  const detail = d.dataHistoryDetail === e.hash ? undefined : e.hash;
-                  d.dataHistoryDetail = detail;
-                });
-              },
-            },
-          },
-        };
-
-        const data: t.InfoData = {
-          repo: { store, index },
-          document: !debug.dataDocArray
-            ? document
-            : [
-                { ...document, label: 'My One' },
-                { ...document, label: 'My Two' },
-              ],
-          visible: {
-            onToggle(e) {
-              console.info('⚡️ visible.onToggle', e);
-            },
-          },
-        };
 
         return (
           <Info
             {...props}
-            style={{ minHeight: 300 }}
             data={data}
-            fields={props.fields}
-            resetState$={resetInfoState$}
+            repos={{ [db.name]: repo }}
+            resetState$={resetState$}
+            style={{ minHeight: 300 }}
             onStateChange={(e) => {
               console.info('⚡️ onStateChange', e);
             }}
@@ -175,7 +103,7 @@ export default Dev.describe(name, async (e) => {
             selected={props.fields}
             onClick={(e) => {
               setFields(dev, e.next<t.InfoField>(DEFAULTS.fields.default));
-              resetInfoState$.next();
+              resetState$.next();
             }}
           />
         );
@@ -186,19 +114,18 @@ export default Dev.describe(name, async (e) => {
       const config = (label: string, fields: t.InfoField[]) => {
         dev.button(label, async (e) => {
           await setFields(dev, fields);
-          resetInfoState$.next();
+          resetState$.next();
         });
       };
 
       dev.button('(prepend): Visible', (e) => {
         const fields = State.props.current.fields ?? [];
         if (!fields.includes('Visible')) setFields(dev, ['Visible', ...fields]);
-        resetInfoState$.next();
+        resetState$.next();
       });
       dev.hr(-1, 5);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
-      config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / History ( + List )', [
         'Repo',
         'Doc',
@@ -255,40 +182,40 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Data', (dev) => {
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.dataHistoryDesc;
+        const value = () => !!State.debug.current.flags.dataHistoryDesc;
         btn
           .label((e) => `data.history.list.sort: "${value() ? 'desc' : 'asc'}"`)
           .value((e) => value())
-          .onClick((e) => State.debug.change((d) => Dev.toggle(d, 'dataHistoryDesc')));
+          .onClick((e) => State.debug.change((d) => Dev.toggle(d.flags, 'dataHistoryDesc')));
       });
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.dataUris;
+        const value = () => !!State.debug.current.flags.dataUris;
         btn
           .label(() => `data.document.doc ← URI string`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d, 'dataUris')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataUris')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.dataDocLens;
+        const value = () => !!State.debug.current.flags.dataDocLens;
         btn
           .label(() => `data.document.lens`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d, 'dataDocLens')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocLens')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.dataDocArray;
+        const value = () => !!State.debug.current.flags.dataDocArray;
         btn
           .label(() => `data.document ← [array]`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d, 'dataDocArray')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocArray')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.dataDocIconClickHandler;
+        const value = () => !!State.debug.current.flags.dataDocIconClickHandler;
         btn
           .label(() => `data.document.icon.onClick`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d, 'dataDocIconClickHandler')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocIconClickHandler')));
       });
     });
 
@@ -338,7 +265,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
-      dev.button('reset: Info State', (e) => resetInfoState$.next());
+      dev.button('reset: Info State', (e) => resetState$.next());
     });
   });
 

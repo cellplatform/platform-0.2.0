@@ -5,15 +5,15 @@ import { Is, type t } from './common';
  */
 export const Data = {
   document: {
-    uri(data?: t.InfoDataDoc) {
+    uri(data?: t.InfoDoc) {
       if (!data) return '';
       if (Is.doc(data.ref)) return data.ref.uri;
       return data.ref || '';
     },
 
-    list(input: t.InfoData['document']): t.InfoDataDoc[] {
+    list(input: t.InfoData['document']): t.InfoDoc[] {
       if (!input) return [];
-      return (Array.isArray(input) ? input : ([input] as t.InfoDataDoc[])).filter(Boolean);
+      return (Array.isArray(input) ? input : ([input] as t.InfoDoc[])).filter(Boolean);
     },
 
     item(input: t.InfoData['document'], index: number) {

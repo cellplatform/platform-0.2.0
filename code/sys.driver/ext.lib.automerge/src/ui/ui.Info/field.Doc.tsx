@@ -1,20 +1,49 @@
 import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
+import { repo } from './field.Repo';
 
-type D = t.InfoDataDoc;
+type D = t.InfoDoc;
 
-export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined) {
-  if (!data) return [];
+/**
+ * Field for a document {item}.
+ */
+export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined): t.PropListItem[] {
+  const res: t.PropListItem[] = [];
+  const { fields } = ctx;
+  if (!data) return res;
+
+  let lastRepo = '';
+  const renderRepo = (data: D) => {
+    const name = data.repo;
+    if (!fields.includes('Doc.Repo')) return;
+    if (!name || name === lastRepo) return;
+
+    const item = repo(ctx, data.repo);
+    if (item) {
+      res.push(item);
+      lastRepo = name;
+    }
+  };
+
   const docs = Array.isArray(data) ? data : [data];
-  return docs.map((data) => render(ctx, data)).flat();
+  docs.forEach((data) => {
+    renderRepo(data);
+    res.push(...renderDocument(ctx, data));
+  });
+
+  return res;
 }
 
-function render(ctx: t.InfoFieldCtx, data: D | undefined) {
+/**
+ * Render the document {item}.
+ */
+function renderDocument(ctx: t.InfoFieldCtx, data?: D): t.PropListItem[] {
   const res: t.PropListItem[] = [];
+  const { fields, theme, enabled } = ctx;
+
   if (!data) return res;
   if (!Is.doc(data.ref)) return res;
 
-  const { fields, theme, enabled } = ctx;
   const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);

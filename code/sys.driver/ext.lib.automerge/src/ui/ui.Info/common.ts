@@ -31,6 +31,7 @@ const fields = {
       'Component',
       'Repo',
       'Doc',
+      'Doc.Repo',
       'Doc.URI',
       'Doc.Object',
       'Doc.History',

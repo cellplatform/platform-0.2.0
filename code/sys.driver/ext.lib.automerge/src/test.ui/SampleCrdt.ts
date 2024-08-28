@@ -15,6 +15,7 @@ export const SampleCrdt = {
   async init(options: Options = {}) {
     const { debug } = options;
     const storage = wrangle.storage(options.storage);
+    const name = storage.name;
 
     const network: t.NetworkAdapterInterface[] = [];
     if (options.broadcastAdapter) network.push(BroadcastChannel.create());
@@ -29,8 +30,8 @@ export const SampleCrdt = {
     }
 
     return {
-      repo: { store, index },
-      name: storage.name,
+      name,
+      repo: { name, store, index },
       docAtIndex,
     } as const;
   },

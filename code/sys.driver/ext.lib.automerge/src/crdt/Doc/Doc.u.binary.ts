@@ -21,7 +21,7 @@ type Uri = t.DocUri | t.UriString;
  *      const binary = A.save(doc);
  */
 export function fromBinary<T extends O>(args: {
-  repo: t.Repo;
+  repo: t.AutomergeRepo;
   binary: Uint8Array;
   uri?: Uri;
   dispose$?: t.UntilObservable;

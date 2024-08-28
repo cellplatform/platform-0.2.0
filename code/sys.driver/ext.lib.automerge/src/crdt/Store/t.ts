@@ -6,7 +6,7 @@ export type StoreNetworkKind = 'BroadcastChannel' | 'WebRTC' | 'Unknown';
  * Store (a repository of documents).
  */
 export type Store = t.Lifecycle & {
-  readonly repo: t.Repo;
+  readonly repo: t.AutomergeRepo;
   readonly doc: t.DocStore;
 };
 

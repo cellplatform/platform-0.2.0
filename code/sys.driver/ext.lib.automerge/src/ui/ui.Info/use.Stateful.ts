@@ -13,14 +13,15 @@ export function useStateful(props: t.InfoProps) {
   const fields = PropList.fields(props.fields);
 
   const redraw = useRedraw();
-  const data = useData(props.data);
+  const data = useData(props.data, props.repos);
   const reset = useObservableReset(props.resetState$);
   const proxy = useProxy(data, Diff.document.isEqual, reset.count);
   const [ready, setReady] = useState(false);
 
   const fireChanged: FireChanged = (action) => {
     if (!stateful) return;
-    props.onStateChange?.({ action, fields, data: api.data });
+    const data = api.data;
+    props.onStateChange?.({ action, fields, data });
     redraw();
   };
 

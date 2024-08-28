@@ -9,6 +9,7 @@ export type InfoField =
   | 'Component'
   | 'Repo'
   | 'Doc'
+  | 'Doc.Repo'
   | 'Doc.URI'
   | 'Doc.Object'
   | 'Doc.History'
@@ -18,37 +19,51 @@ export type InfoField =
   | 'Doc.History.List.NavPaging';
 
 export type InfoFieldCtx = {
+  repos?: t.InfoRepos;
   fields: t.InfoField[];
   theme: t.CommonTheme;
   enabled: boolean;
   debug?: string;
 };
 
+/**
+ * Data (Root)
+ */
 export type InfoData = {
   visible?: t.InfoDataVisible<InfoField>;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
-  repo?: InfoDataRepo;
-  document?: InfoDataDoc | InfoDataDoc[];
+  document?: InfoDoc | InfoDoc[];
+  repo?: t.InfoRepoName; // default repo if not specified on {document}.
 };
 
-export type InfoDataRepo = {
+/**
+ * Repo
+ */
+export type InfoRepo = {
+  name?: t.InfoRepoName;
   label?: string;
-  name?: string;
   store?: t.Store;
   index?: t.StoreIndex;
 };
 
-export type InfoDataDoc = {
+export type InfoRepoName = string;
+export type InfoRepos = { [key: InfoRepoName]: t.InfoRepo };
+
+/**
+ * Document
+ */
+export type InfoDoc<R extends t.InfoRepoName = string> = {
   label?: string;
   ref?: t.Doc | t.UriString;
-  uri?: InfoDataDocUri;
-  object?: InfoDataDocObject;
+  repo?: R;
+  uri?: InfoDocUri;
+  object?: InfoDocObject;
   head?: { label?: string; hashLength?: number };
-  history?: InfoDataDocHistory;
+  history?: InfoDocHistory;
 };
 
-export type InfoDataDocObject = {
+export type InfoDocObject = {
   visible?: boolean;
   lens?: t.ObjectPath;
   name?: string;
@@ -58,14 +73,14 @@ export type InfoDataDocObject = {
   onToggleClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void;
 };
 
-export type InfoDataDocUri = {
+export type InfoDocUri = {
   shorten?: number | [number, number];
   prefix?: string | null;
   head?: boolean | number;
   clipboard?: boolean;
 };
 
-export type InfoDataDocHistory = {
+export type InfoDocHistory = {
   label?: string;
   list?: {
     page?: t.Index;
@@ -86,17 +101,19 @@ export type InfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: (t.InfoField | undefined)[];
-  data?: t.InfoData;
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
   debug?: string;
 
-  stateful?: boolean;
+  data?: t.InfoData;
+  repos?: t.InfoRepos;
+
+  stateful?: boolean; // TODO TEMP 🐷 TODO REMOVE
   resetState$?: t.Observable<any>;
 
   enabled?: boolean;
   style?: t.CssValue;
-  onStateChange?: InfoStatefulChangeHandler;
+  onStateChange?: t.InfoStatefulChangeHandler;
 };
 
 /**

@@ -59,18 +59,19 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<D>(e);
-    const state = await dev.state();
+
     dev.header.border(-0.1).render((e) => {
       const { store, index } = db.repo;
-      const ref = state.current.docuri;
+      const ref = State.debug.current.docuri;
       return (
         <Info
           stateful={true}
-          fields={['Component', 'Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          fields={['Component', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: { store, index } }}
           data={{
             component: { name },
-            repo: { store, index },
             document: {
+              repo: 'main',
               ref,
               uri: { head: true },
               object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },

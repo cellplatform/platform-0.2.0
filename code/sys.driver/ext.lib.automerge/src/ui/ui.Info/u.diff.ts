@@ -36,8 +36,7 @@ const document = {
       return item;
     });
 
-    const repo = { ...input.repo, store: undefined, index: undefined };
-    const data = PatchState.create({ ...input, document, repo });
+    const data = PatchState.create({ ...input, document });
     data.change((d) => {
       Value.Object.walk(d, (e) => {
         if (typeof e.value === 'function') e.mutate(undefined);

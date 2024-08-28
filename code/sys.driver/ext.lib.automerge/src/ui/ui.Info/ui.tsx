@@ -1,6 +1,7 @@
 import { DEFAULTS, PropList, type t } from './common';
 import { Field } from './field';
 import { useStateful } from './use.Stateful';
+import { useData } from './use.Data';
 
 const DEF = DEFAULTS.props;
 
@@ -8,9 +9,9 @@ const DEF = DEFAULTS.props;
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme = DEF.theme, enabled = DEF.enabled, debug } = props;
+  const { repos = {}, theme = DEF.theme, enabled = DEF.enabled, debug } = props;
   const { fields, data } = useStateful(props);
-  const ctx: t.InfoFieldCtx = { fields, theme, enabled, debug };
+  const ctx: t.InfoFieldCtx = { repos, fields, theme, enabled, debug };
 
   const items = PropList.builder<t.InfoField>()
     .field('Visible', () => Field.visible(data.visible, theme))

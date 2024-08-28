@@ -174,10 +174,11 @@ export default Dev.describe(name, async (e) => {
         <Info
           stateful={true}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: { store, index } }}
           data={{
-            repo: { store, index },
             document: {
               ref: debug.docuri,
+              repo: 'main',
               uri: { head: true },
               object: {
                 visible: debug.docVisible,

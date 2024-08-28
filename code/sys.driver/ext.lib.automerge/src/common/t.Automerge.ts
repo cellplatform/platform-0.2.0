@@ -12,6 +12,6 @@ export type {
   DocumentId,
   DocumentPayload,
   NetworkAdapterInterface,
-  Repo,
+  Repo as AutomergeRepo,
   StorageAdapter,
 } from '@automerge/automerge-repo';

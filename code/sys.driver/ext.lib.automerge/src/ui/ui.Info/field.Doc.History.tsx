@@ -4,7 +4,7 @@ import { NavPaging } from '../ui.Nav.Paging';
 import { DEFAULTS, Is, type t } from './common';
 import { History } from './ui.History';
 
-type D = t.InfoDataDoc;
+type D = t.InfoDoc;
 
 export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
   const { fields, theme } = ctx;
@@ -53,7 +53,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
  * Helpers
  */
 const wrangle = {
-  page(doc: t.Doc, list: t.InfoDataDocHistory['list'] = {}) {
+  page(doc: t.Doc, list: t.InfoDocHistory['list'] = {}) {
     const defaults = DEFAULTS.history.list;
     const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = list;
     return Doc.history(doc).page(page, limit, sort);

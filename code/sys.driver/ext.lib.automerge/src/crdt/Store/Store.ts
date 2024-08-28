@@ -8,6 +8,7 @@ type O = Record<string, unknown>;
 type Uri = t.DocUri | t.UriString;
 type GetOptions = { timeout?: t.Msecs };
 type FromBinaryOptions = { uri?: Uri; dispose$?: t.UntilObservable };
+type InitOptions = { repo?: t.AutomergeRepo; dispose$?: t.UntilObservable; debug?: t.StoreDebug };
 
 /**
  * Manage an Automerge repo.
@@ -20,7 +21,7 @@ export const Store = {
   /**
    * Initialize a new instance of a CRDT repo.
    */
-  init(options: { repo?: t.Repo; dispose$?: t.UntilObservable; debug?: t.StoreDebug } = {}) {
+  init(options: InitOptions = {}) {
     const { debug } = options;
     const life = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = life;

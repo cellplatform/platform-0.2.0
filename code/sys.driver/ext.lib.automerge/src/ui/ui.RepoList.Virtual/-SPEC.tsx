@@ -56,7 +56,8 @@ export default Dev.describe(name, (e) => {
       return (
         <Info
           fields={['Component', 'Repo']}
-          data={{ repo: { store, index }, component: { name } }}
+          repos={{ main: { store, index } }}
+          data={{ repo: 'main', component: { name } }}
         />
       );
     });
