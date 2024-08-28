@@ -1,11 +1,11 @@
 import { DEFAULTS, Icons, Is, Value, css, type t } from './common';
 
-export function repo(ctx: t.InfoFieldCtx, repoName?: t.InfoRepoName) {
-  const repo = (ctx.repos ?? {})[repoName ?? ''];
+export function repo(ctx: t.InfoFieldCtx, keyName?: t.InfoRepoName) {
+  const repo = (ctx.repos ?? {})[keyName ?? ''];
   if (!repo) return;
 
   const index = repo.index;
-  const name = repoName ?? wrangle.name(repo);
+  const name = wrangle.name(repo);
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total(), 'document', 'documents');

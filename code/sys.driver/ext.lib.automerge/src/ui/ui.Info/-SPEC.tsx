@@ -182,40 +182,40 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Data', (dev) => {
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.dataHistoryDesc;
+        const value = () => !!State.debug.current.flags.historyDesc;
         btn
           .label((e) => `data.history.list.sort: "${value() ? 'desc' : 'asc'}"`)
           .value((e) => value())
-          .onClick((e) => State.debug.change((d) => Dev.toggle(d.flags, 'dataHistoryDesc')));
+          .onClick((e) => State.debug.change((d) => Dev.toggle(d.flags, 'historyDesc')));
       });
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.dataUris;
+        const value = () => !!State.debug.current.flags.uris;
         btn
           .label(() => `data.document.doc ← URI string`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataUris')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'uris')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.dataDocLens;
+        const value = () => !!State.debug.current.flags.docLens;
         btn
           .label(() => `data.document.lens`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocLens')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docLens')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.dataDocArray;
+        const value = () => !!State.debug.current.flags.docArray;
         btn
           .label(() => `data.document ← [array]`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocArray')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docArray')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.dataDocIconClickHandler;
+        const value = () => !!State.debug.current.flags.docIconClickHandler;
         btn
           .label(() => `data.document.icon.onClick`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'dataDocIconClickHandler')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docIconClickHandler')));
       });
     });
 

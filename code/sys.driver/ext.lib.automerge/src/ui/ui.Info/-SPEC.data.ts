@@ -3,12 +3,12 @@ import { DEFAULTS, type t } from './common';
 type Repo = { name: t.InfoRepoName; store: t.Store; index: t.StoreIndex };
 
 export type SpecDataFlags = {
-  dataUris?: boolean;
-  dataHistoryDesc?: boolean;
-  dataHistoryDetail?: t.HashString;
-  dataDocLens?: boolean;
-  dataDocArray?: boolean;
-  dataDocIconClickHandler?: boolean;
+  uris?: boolean;
+  historyDesc?: boolean;
+  historyDetail?: t.HashString;
+  docLens?: boolean;
+  docArray?: boolean;
+  docIconClickHandler?: boolean;
 };
 
 type Args = {
@@ -26,11 +26,11 @@ export const SpecData = {
    */
   get defaults() {
     const flags: SpecDataFlags = {
-      dataHistoryDesc: DEFAULTS.history.list.sort === 'desc',
-      dataUris: true,
-      dataDocLens: false,
-      dataDocArray: false,
-      dataDocIconClickHandler: true,
+      historyDesc: DEFAULTS.history.list.sort === 'desc',
+      uris: true,
+      docLens: false,
+      docArray: false,
+      docIconClickHandler: true,
     };
     return { flags } as const;
   },
@@ -64,16 +64,16 @@ export const SpecData = {
     const document: t.InfoDoc = {
       repo: repo.name,
       // label: 'Foo',
-      ref: flags.dataUris ? doc?.uri : doc,
+      ref: flags.uris ? doc?.uri : doc,
       object: {
         // name: 'foobar',
         // visible: false,
-        lens: flags.dataDocLens ? ['child'] : undefined,
+        lens: flags.docLens ? ['child'] : undefined,
         expand: { level: 2 },
         beforeRender(mutate: any) {
           // mutate['foo'] = 123;
         },
-        onToggleClick: flags.dataDocIconClickHandler
+        onToggleClick: flags.docIconClickHandler
           ? (e) => console.info('⚡️ Info.document.object.onToggleClick', e)
           : undefined,
       },
@@ -85,8 +85,8 @@ export const SpecData = {
       history: {
         // label: 'Foo',
         list: {
-          sort: flags.dataHistoryDesc ? 'desc' : 'asc',
-          showDetailFor: flags.dataHistoryDetail,
+          sort: flags.historyDesc ? 'desc' : 'asc',
+          showDetailFor: flags.historyDetail,
         },
         item: {
           onClick(e) {
@@ -100,7 +100,7 @@ export const SpecData = {
       },
     };
 
-    return !flags.dataDocArray
+    return !flags.docArray
       ? document
       : [
           { ...document, label: 'My One' },
