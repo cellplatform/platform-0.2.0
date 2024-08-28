@@ -26,7 +26,7 @@ export type InfoData = {
   shared?: InfoDataShared | InfoDataShared[];
 };
 
-export type InfoDataShared = t.InfoDataDoc;
+export type InfoDataShared = t.InfoDoc;
 export type InfoDataObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };

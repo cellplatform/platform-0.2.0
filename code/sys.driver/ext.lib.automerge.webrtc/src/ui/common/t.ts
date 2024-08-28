@@ -2,7 +2,7 @@
  * @external
  */
 export type {
-  InfoDataDoc,
+  InfoDoc,
   RepoListBehavior,
   RepoListHandlers,
   RepoListModel,

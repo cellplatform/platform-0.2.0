@@ -14,7 +14,7 @@ export function shared(
   if (!network) return res;
   const { store, index } = network;
 
-  const toDocument = (shared: t.InfoDataDoc): t.InfoDataDoc => {
+  const toDocument = (shared: t.InfoDoc): t.InfoDoc => {
     const label = shared.label ?? DEFAULTS.shared.label;
     const dotMeta = shared.object?.dotMeta ?? DEFAULTS.shared.dotMeta;
     return {

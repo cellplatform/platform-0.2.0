@@ -8,7 +8,7 @@ export { usePeerMonitor, useShared, useTransmitMonitor } from '../use';
 /**
  * Constants
  */
-const uri: Required<t.InfoDataDocUri> = {
+const uri: Required<t.InfoDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
   head: true,
