@@ -41,13 +41,13 @@ export function useStateful(props: P) {
     },
 
     get fields(): t.InfoField[] {
-      const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
-
-      /**
-       * TODO 🐷 - see __use.Stateful.ts
-       */
-
-      return fields;
+      const fields = PropList.fields(props.fields, DEFAULTS.props.fields);
+      const data = api.data;
+      const isVisible = data?.visible?.value ?? true;
+      const filter = data?.visible?.filter ?? DEFAULTS.visibleFilter;
+      if (!data?.visible) return fields;
+      if (isVisible) return fields;
+      return filter({ visible: false, fields });
     },
   } as const;
 
