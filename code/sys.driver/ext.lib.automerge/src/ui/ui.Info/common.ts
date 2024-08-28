@@ -13,10 +13,9 @@ type P = t.InfoProps;
  * Constants
  */
 const name = 'Info';
-const props: t.PickRequired<P, 'theme' | 'enabled' | 'stateful' | 'fields'> = {
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
   theme: 'Light',
   enabled: true,
-  stateful: false,
   get fields() {
     return fields.default;
   },
@@ -57,9 +56,9 @@ export const DEFAULTS = {
   displayName: `${Pkg.name}:${name}`,
   query: { dev: 'dev' },
   props,
+  fields,
 
   visibleFilter,
-  fields,
   repo: { label: 'Store' },
   doc: {
     head: { label: 'Head', hashLength: 6 },

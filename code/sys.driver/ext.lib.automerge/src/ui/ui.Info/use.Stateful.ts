@@ -1,77 +1,69 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, PropList, useObservableReset, useProxy, useRedraw, type t } from './common';
-import { Diff } from './u';
-import { useData } from './use.Data';
-import { rebuild, type FireChanged } from './use.Stateful.Rebuild';
+import { DEFAULTS, Immutable, PropList, type t } from './common';
+
+type P = t.InfoStatefulProps;
 
 /**
- * Hook that when {stateful:true} manages
- * state internally to the <Info> component.
+ * <Info> Stateful Controller.
  */
-export function useStateful(props: t.InfoProps) {
-  const { stateful = DEFAULTS.props.stateful, debug } = props;
-  const fields = PropList.fields(props.fields);
-
-  const redraw = useRedraw();
-  const data = useData(props.data, props.repos);
-  const reset = useObservableReset(props.resetState$);
-  const proxy = useProxy(data, Diff.document.isEqual, reset.count);
-  const [ready, setReady] = useState(false);
-
-  const fireChanged: FireChanged = (action) => {
-    if (!stateful) return;
-    const data = api.data;
-    props.onStateChange?.({ action, fields, data });
-    redraw();
-  };
+export function useStateful(props: P) {
+  const { repos = {} } = props;
+  const [data, setData] = useState(wrangle.state(props));
 
   /**
-   * Set overrides on immutable proxy.
+   * Effects.
    */
   useEffect(() => {
-    if (!stateful || !api.ready) return;
-    if (stateful) rebuild(proxy.state, fireChanged);
-    redraw();
-  }, [proxy.version, ready]);
+    const propsInstance = wrangle.propsInstance(props);
+    if (propsInstance && data?.instance !== wrangle.propsInstance(props)) {
+      setData(wrangle.state(props));
+    }
+  }, [data?.instance, wrangle.propsInstance(props)]);
 
-  /**
-   * Ensure overrides are configured when not stateful.
-   */
-  useEffect(() => reset.inc(), [stateful]);
-
-  /**
-   * Ready.
-   */
-  useEffect(() => setReady(true), []);
+  useEffect(() => {
+    if (data) props.onReady?.({ data, repos });
+  }, [data?.instance]);
 
   /**
    * API
    */
   const api = {
-    ready: ready && proxy.ready,
-
-    /**
-     * Current data configuration.
-     */
-    get data() {
-      return stateful ? proxy.state.current : data;
+    get props(): t.InfoProps {
+      const data = api.data;
+      const fields = api.fields;
+      return { ...props, fields, data };
     },
 
-    /**
-     * Current fields (or filterd if stateful).
-     */
-    get fields() {
-      if (!stateful) return fields;
+    get data(): t.InfoData | undefined {
+      return data?.current;
+    },
 
-      const data = api.data;
-      if (!data.visible) return fields;
+    get fields(): t.InfoField[] {
+      const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
 
-      const isVisible = data.visible.value ?? true;
-      if (isVisible) return fields;
+      /**
+       * TODO 🐷 - see __use.Stateful.ts
+       */
 
-      const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
-      return filter({ visible: false, fields });
+      return fields;
     },
   } as const;
+
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  state(props: P): t.InfoStatefulData | undefined {
+    if (!props.data) return;
+    if (Immutable.Is.immutableRef(props.data)) return props.data;
+    return Immutable.clonerRef<t.InfoData>(props.data as t.InfoData);
+  },
+
+  propsInstance(props: P) {
+    if (!props.data) return '';
+    return Immutable.Is.immutableRef(props.data) ? props.data.instance : '';
+  },
+} as const;

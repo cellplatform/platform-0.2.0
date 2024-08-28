@@ -1,15 +1,12 @@
-import { DEFAULTS, Info } from '.';
-import { Dev, DevReload, Doc, Immutable, Json, rx, SampleCrdt, Value, type t } from '../../test.ui';
-import { SpecData, type SpecDataFlags } from './-SPEC.data';
+import { Dev, Doc, Immutable, Json, rx, SampleCrdt, Value } from '../../test.ui';
+import { Info } from '../ui.Info';
+import { SpecData, type SpecDataFlags } from '../ui.Info/-SPEC.data';
 
-export { SpecData };
+import { DEFAULTS } from '.';
+import { type t } from './common';
 
-type P = t.InfoProps;
-type D = {
-  reload?: boolean;
-  docuri?: t.UriString;
-  flags: SpecDataFlags;
-};
+type P = t.InfoStatefulProps;
+type D = { docuri?: t.UriString; flags: SpecDataFlags };
 
 /**
  * Spec
@@ -18,7 +15,7 @@ const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
-  const { store } = db.repo;
+  const repo = db.repo;
 
   type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
@@ -30,27 +27,40 @@ export default Dev.describe(name, async (e) => {
   } as const;
 
   let doc: t.Doc | undefined;
-  type F = t.InfoField | undefined;
-  const setFields = (fields?: F[]) => State.props.change((d) => (d.fields = fields));
+  let data: t.InfoStatefulData | undefined;
+  const create = (onComplete?: () => void) => {
+    const initial = SpecData.asObject({ repo, flags: State.debug.current.flags });
+    data = Immutable.clonerRef(initial);
+    update();
+    onComplete?.();
+  };
+  const update = () => {
+    const flags = State.debug.current.flags;
+    const documents = SpecData.document({ repo, doc, flags: { ...flags, uris: true } });
+    data?.change((d) => (d.document = documents));
+  };
+  create();
+
+  const setFields = async (fields?: (t.InfoField | undefined)[]) => {
+    State.props.change((d) => (d.fields = fields));
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<D>(e);
-    const sample = SampleCrdt.dev(store, State.debug);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     const props$ = State.props.events().changed$;
     const debug$ = State.debug.events().changed$;
-
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
         local.props = Json.stringify(State.props.current);
         local.debug = Json.stringify(State.debug.current);
       });
-
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(100))
-      .subscribe(() => dev.redraw());
+      .subscribe(() => ctx.redraw());
 
     doc = await sample.get();
 
@@ -58,30 +68,19 @@ export default Dev.describe(name, async (e) => {
     ctx.subject
       .size([320, null])
       .display('grid')
-      .render<D>(async () => {
+      .render<D>((e) => {
+        update();
         const props = State.props.current;
         const debug = State.debug.current;
-
-        Dev.Theme.background(ctx, props.theme);
-        if (debug.reload) return <DevReload theme={props.theme} />;
-
-        const fields = props.fields ?? [];
-        const docuri = debug.docuri;
-
-        const doc = fields.includes('Doc') ? await store.doc.get(docuri) : undefined;
-        const repo = db.repo;
-        const flags = debug.flags;
-        const data = SpecData.asObject({ doc, repo, flags });
+        Dev.Theme.background(dev, props.theme, 1);
 
         return (
-          <Info
+          <Info.Stateful
             {...props}
+            repos={{ [db.name]: db.repo }}
             data={data}
-            repos={{ [db.name]: repo }}
             style={{ minHeight: 300 }}
-            onStateChange={(e) => {
-              console.info('⚡️ onStateChange', e);
-            }}
+            onReady={(e) => console.info(`⚡️ Info.Stateful.onReady:`, e)}
           />
         );
       });
@@ -92,7 +91,7 @@ export default Dev.describe(name, async (e) => {
     const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Fields', (dev) => {
-      dev.row(() => {
+      dev.row((e) => {
         const props = State.props.current;
         return (
           <Info.FieldSelector
@@ -108,13 +107,7 @@ export default Dev.describe(name, async (e) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      dev.button('(prepend): Visible', (e) => {
-        const fields = State.props.current.fields ?? [];
-        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
-      });
-      dev.hr(-1, 5);
-      config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
-      config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      config(['Repo / Doc', '(simple)'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI']);
       config('Repo / Doc / History + List', [
         'Repo',
         'Doc',
@@ -130,7 +123,7 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.immutable(dev, State.props);
+      Dev.Theme.immutable(dev, State.props, 1);
       dev.hr(-1, 5);
       dev.boolean((btn) => {
         const state = State.props;
@@ -149,55 +142,21 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(`create`)
           .enabled(() => !doc)
-          .onClick(async (e) => (doc = await sample.get()));
+          .onClick(async (e) => {
+            doc = await sample.get();
+            create(() => dev.redraw());
+          });
       });
       dev.button((btn) => {
         btn
           .label(`delete`)
           .right((e) => (doc ? `crdt:${Doc.Uri.shorten(doc.uri)}` : ''))
           .enabled((e) => !!doc)
-          .onClick(async (e) => (doc = await sample.delete()));
-      });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('Data', (dev) => {
-      dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.historyDesc;
-        btn
-          .label((e) => `data.history.list.sort: "${value() ? 'desc' : 'asc'}"`)
-          .value((e) => value())
-          .onClick((e) => State.debug.change((d) => Dev.toggle(d.flags, 'historyDesc')));
-      });
-      dev.hr(-1, 5);
-      dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.uris;
-        btn
-          .label(() => `data.document.doc ← URI string`)
-          .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'uris')));
-      });
-      dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.docLens;
-        btn
-          .label(() => `data.document.lens`)
-          .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docLens')));
-      });
-      dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.docArray;
-        btn
-          .label(() => `data.document ← [array]`)
-          .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docArray')));
-      });
-      dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.docIconClickHandler;
-        btn
-          .label(() => `data.document.icon.onClick`)
-          .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docIconClickHandler')));
+          .onClick(async (e) => {
+            await sample.delete();
+            doc = undefined;
+            data = undefined;
+          });
       });
     });
 
@@ -252,16 +211,9 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<D>(e);
-    dev.footer.border(-0.1).render<D>(() => {
+    dev.footer.border(-0.1).render<D>((e) => {
       const props = State.props.current;
-      const debug = State.debug.current;
-      const data = {
-        docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
-        props,
-        'crdt:store:db': db.name,
-        'crdt:doc': doc,
-      };
-      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
+      return <Dev.Object name={name} data={{ props, data }} expand={1} fontSize={11} />;
     });
   });
 });

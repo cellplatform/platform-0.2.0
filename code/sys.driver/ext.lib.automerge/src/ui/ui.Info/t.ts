@@ -1,5 +1,5 @@
 import type { t } from './common';
-
+export type * from './t.Stateful';
 type O = Record<string, unknown>;
 
 export type InfoField =
@@ -107,9 +107,6 @@ export type InfoProps = {
 
   data?: t.InfoData;
   repos?: t.InfoRepos;
-
-  stateful?: boolean; // TODO TEMP 🐷 TODO REMOVE
-  resetState$?: t.Observable<any>;
 
   enabled?: boolean;
   style?: t.CssValue;
