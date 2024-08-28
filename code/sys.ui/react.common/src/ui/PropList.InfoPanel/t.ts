@@ -8,7 +8,7 @@ type O = Record<string, unknown>;
 export type CommonInfoProps<F extends string = string, D extends O = {}> = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: (F | undefined)[];
+  fields?: (F | undefined | null)[];
   data?: D;
   margin?: t.CssEdgesInput;
   stateful?: boolean;
