@@ -64,8 +64,7 @@ export default Dev.describe(name, async (e) => {
       const { store, index } = db.repo;
       const ref = State.debug.current.docuri;
       return (
-        <Info
-          stateful={true}
+        <Info.Stateful
           fields={['Component', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']}
           repos={{ main: { store, index } }}
           data={{

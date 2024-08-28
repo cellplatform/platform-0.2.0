@@ -77,8 +77,7 @@ export default Dev.describe(name, async (e) => {
     dev.header.border(-0.1).render<D>(() => {
       const { store, index } = db.repo;
       return (
-        <Info
-          stateful={true}
+        <Info.Stateful
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
           repos={{ main: { store, index } }}
           data={{
@@ -94,7 +93,7 @@ export default Dev.describe(name, async (e) => {
     });
   });
 
-  e.it('ui:debug', async (e) => {
+  e.it('ui:debug', (e) => {
     const dev = Dev.tools<D>(e);
     const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
