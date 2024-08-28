@@ -6,14 +6,15 @@ import { Color, ObjectView, Spinner, css, type t } from './common';
  */
 export type SampleUseDocsProps = {
   store?: t.Store;
-  refs?: t.UriString[];
+  uris?: t.UriString[];
   options?: t.UseDocsOptions;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 export const SampleUseDocs: React.FC<SampleUseDocsProps> = (props) => {
-  const { store, refs, options } = props;
-  const docs = useDocs(store, refs, options);
+  const { store, uris = [], options } = props;
+  const refs = uris.map((uri) => ({ uri, store }));
+  const docs = useDocs(refs, options);
 
   const theme = Color.theme(props.theme);
   const styles = {
@@ -48,14 +49,14 @@ export const SampleUseDocs: React.FC<SampleUseDocsProps> = (props) => {
  */
 export type SampleUseDocProps = {
   store?: t.Store;
-  refs?: t.UriString;
+  uri?: t.UriString;
   options?: t.UseDocsOptions;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 export const SampleUseDoc: React.FC<SampleUseDocProps> = (props) => {
-  const { store, refs, options } = props;
-  const doc = useDoc(store, refs, options);
+  const { store, uri, options } = props;
+  const doc = useDoc(store, uri, options);
 
   /**
    * Render

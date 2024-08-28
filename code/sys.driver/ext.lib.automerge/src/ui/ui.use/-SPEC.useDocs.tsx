@@ -68,16 +68,16 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { reload, hook, scope, options } = e.state;
-        const refs = getUris(scope);
+        const uris = getUris(scope);
         if (reload) return <DevReload theme={theme} />;
 
         if (hook === 'useDocs') {
-          return <SampleUseDocs theme={theme} store={store} refs={refs} options={options} />;
+          return <SampleUseDocs theme={theme} store={store} uris={uris} options={options} />;
         }
 
         if (hook === 'useDoc') {
-          const ref = scope === 'error' ? ERROR_URI : getUris(e.state.scope)[0];
-          return <SampleUseDoc theme={theme} refs={ref} store={store} options={options} />;
+          const uri = scope === 'error' ? ERROR_URI : getUris(e.state.scope)[0];
+          return <SampleUseDoc theme={theme} uri={uri} store={store} options={options} />;
         }
 
         return null;
