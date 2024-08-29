@@ -21,7 +21,7 @@ export type InfoProps = {
  * Data
  */
 export type InfoField = 'Module' | 'Module.Verify' | 'Component';
-export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; enabled: boolean };
+export type InfoCtx = { fields: t.InfoField[]; theme: t.CommonTheme; enabled: boolean };
 export type InfoData = {
   component?: { label?: string; name?: string };
 };

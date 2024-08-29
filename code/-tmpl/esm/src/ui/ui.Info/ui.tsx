@@ -7,7 +7,7 @@ const DEF = DEFAULTS.props;
 export const View: React.FC<t.InfoProps> = (props) => {
   const { data = {}, theme = DEF.theme, enabled = DEF.enabled } = props;
   const fields = PropList.fields<F>(props.fields, DEF.fields);
-  const ctx: t.InfoFieldCtx = { fields, theme, enabled };
+  const ctx: t.InfoCtx = { fields, theme, enabled };
 
   const items = PropList.builder<F>()
     .field('Module', () => Field.module(ctx))
