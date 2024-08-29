@@ -7,6 +7,8 @@ type P = t.InfoStatefulProps;
  * <Info> Stateful Controller.
  */
 export function useStateful(props: P) {
+  const ctx = Wrangle.ctx(props);
+  const enabled = ctx.enabled;
   const [data, setData] = useState(wrangle.state(props));
 
   /**
