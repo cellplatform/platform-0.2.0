@@ -37,16 +37,26 @@ export function useStateful(props: P) {
     onDocToggleClick(e) {
       if (!ctx.enabled) return;
       data?.change((d) => {
-        const list = Wrangle.Data.document.list(d.document);
-        const item = list[e.index];
-        if (item) {
-          if (!item.object) item.object = {};
-          item.object.visible = e.visible.next;
+        const document = Wrangle.Data.document.list(d.document)[e.index];
+        if (document) {
+          const object = document.object || (document.object = {});
+          object.visible = e.visible.next;
         }
       });
-
-      redraw();
       props.onDocToggleClick?.(e);
+      redraw();
+    },
+
+    onVisibleToggle(e) {
+      if (!ctx.enabled) return;
+
+      data?.change((d) => {
+        const visible = d.visible || (d.visible = {});
+        visible.value = e.next;
+      });
+
+      props.onVisibleToggle?.(e);
+      redraw();
     },
   };
 

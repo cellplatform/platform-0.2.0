@@ -79,9 +79,8 @@ export default Dev.describe(name, async (e) => {
             data={data}
             repos={{ [db.name]: repo }}
             style={{ minHeight: 300 }}
-            onDocToggleClick={(e) => {
-              console.info('⚡️ onDocToggleClick', e);
-            }}
+            onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
+            onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
               mutate['foo'] = 123;
             }}

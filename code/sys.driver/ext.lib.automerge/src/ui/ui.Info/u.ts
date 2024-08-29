@@ -18,7 +18,7 @@ export const Wrangle = {
   },
 
   handlers(props: t.InfoProps | t.InfoStatefulProps): t.InfoHandlers {
-    const { onDocToggleClick, onBeforeObjectRender } = props;
-    return { onDocToggleClick, onBeforeObjectRender };
+    const { onVisibleToggle, onDocToggleClick, onBeforeObjectRender } = props;
+    return { onVisibleToggle, onDocToggleClick, onBeforeObjectRender };
   },
 } as const;

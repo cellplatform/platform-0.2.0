@@ -37,18 +37,20 @@ export default Dev.describe(name, async (e) => {
 
   let doc: t.Doc | undefined;
   let data: t.InfoStatefulData | undefined;
-  const create = (onComplete?: (data: t.InfoStatefulData) => void) => {
-    const initial = SpecData.asObject({ repo, flags: State.debug.current.flags });
-    data = Immutable.clonerRef(initial);
-    update();
-    onComplete?.(data);
-  };
-  const update = () => {
-    const flags = State.debug.current.flags;
-    const documents = SpecData.document({ repo, doc, flags: { ...flags, uris: true } });
-    data?.change((d) => (d.document = documents));
-  };
-  create();
+
+  const Data = {
+    create(onComplete?: (data: t.InfoStatefulData) => void) {
+      const initial = SpecData.asObject({ repo, flags: State.debug.current.flags });
+      data = Immutable.clonerRef(initial);
+      Data.update();
+      onComplete?.(data);
+    },
+    update() {
+      const flags = State.debug.current.flags;
+      const documents = SpecData.document({ repo, doc, flags: { ...flags, uris: true } });
+      data?.change((d) => (d.document = documents));
+    },
+  } as const;
 
   const setFields = async (fields?: (t.InfoField | undefined)[]) => {
     State.props.change((d) => (d.fields = fields));
@@ -72,13 +74,13 @@ export default Dev.describe(name, async (e) => {
       .subscribe(() => ctx.redraw());
 
     doc = await sample.get();
+    Data.create();
 
     ctx.debug.width(330);
     ctx.subject
       .size([320, null])
       .display('grid')
       .render<D>((e) => {
-        update();
         const props = State.props.current;
         const debug = State.debug.current;
         Dev.Theme.background(dev, props.theme, 1);
@@ -95,10 +97,8 @@ export default Dev.describe(name, async (e) => {
               console.info(`⚡️ Info.Stateful.onReady:`, e);
               e.dispose$.subscribe(() => console.info(`⚡️ Info.Stateful.onReady → dispose 💥`));
 
-              data
-                ?.events(e.dispose$)
-                .changed$.pipe(rx.debounceTime(150))
-                .subscribe(() => dev.redraw());
+              const changed$ = data?.events(e.dispose$).changed$;
+              changed$?.pipe(rx.debounceTime(150)).subscribe((e) => dev.redraw());
             }}
           />
         );
@@ -126,7 +126,7 @@ export default Dev.describe(name, async (e) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      config(['Repo / Doc', '(simple)'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI']);
+      config(['Repo / Doc', '(simple)'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']);
       config('Repo / Doc / History + List', [
         'Repo',
         'Doc',
@@ -163,7 +163,7 @@ export default Dev.describe(name, async (e) => {
           .enabled(() => !doc)
           .onClick(async (e) => {
             doc = await sample.get();
-            create(() => dev.redraw());
+            Data.create(() => dev.redraw());
           });
       });
       dev.button((btn) => {
@@ -247,7 +247,16 @@ export default Dev.describe(name, async (e) => {
     dev.footer.border(-0.1).render<D>((e) => {
       const props = State.props.current;
       return (
-        <Dev.Object name={name} data={{ props, data: data?.current }} expand={1} fontSize={11} />
+        <Dev.Object
+          name={name}
+          data={{
+            props,
+            data: data?.current,
+            'data.instance': data?.instance,
+          }}
+          expand={1}
+          fontSize={11}
+        />
       );
     });
   });

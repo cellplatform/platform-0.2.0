@@ -38,20 +38,12 @@ export const SpecData = {
   /**
    * Data as {Object}
    */
-  asObject(args: Args) {
-    const { repo, doc } = args;
-
-    const data: t.InfoData = {
+  asObject(args: Args): t.InfoData {
+    const { repo } = args;
+    return {
       repo: repo.name,
       document: SpecData.document(args),
-      visible: {
-        onToggle(e) {
-          console.info('⚡️ Info.visible.onToggle', e);
-        },
-      },
     };
-
-    return data;
   },
 
   /**

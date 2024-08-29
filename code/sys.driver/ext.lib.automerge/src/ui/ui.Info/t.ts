@@ -49,6 +49,7 @@ export type InfoProps = InfoHandlers & {
 export type InfoHandlers = {
   onDocToggleClick?: t.InfoDocToggleHandler;
   onBeforeObjectRender?: t.InfoBeforeObjectRenderHandler;
+  onVisibleToggle?: t.InfoVisibleToggleHandler;
 };
 
 /**

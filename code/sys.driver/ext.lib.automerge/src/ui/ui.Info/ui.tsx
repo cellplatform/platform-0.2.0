@@ -1,10 +1,9 @@
-import { DEFAULTS, PropList, type t } from './common';
+import { PropList, type t } from './common';
 import { Field } from './field';
 import { Wrangle } from './u';
 import { useData } from './use.Data';
 
 type P = t.InfoProps;
-const DEF = DEFAULTS.props;
 
 /**
  * Component
@@ -14,7 +13,7 @@ export const View: React.FC<P> = (props) => {
   const data = useData(props.data, props.repos);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Visible', () => Field.visible(data.visible, ctx.theme))
+    .field('Visible', () => Field.visible(data.visible, props.onVisibleToggle))
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
     .field('Repo', () => Field.repo(ctx, data.repo))

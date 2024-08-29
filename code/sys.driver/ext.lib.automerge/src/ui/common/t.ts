@@ -16,6 +16,7 @@ export type {
   DevCtxState,
   DevTools,
   InfoVisible,
+  InfoVisibleToggleHandler,
   KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
   PropListFieldSelectorProps,
