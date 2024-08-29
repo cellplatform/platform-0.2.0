@@ -97,7 +97,7 @@ export type PropListValueSwitch = ValueBase & {
 };
 
 /**
- * CLICK event arguments.
+ * Events
  */
 export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {
