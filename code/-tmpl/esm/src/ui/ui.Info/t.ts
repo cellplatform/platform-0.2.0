@@ -1,12 +1,14 @@
 import type { t } from './common';
 export type * from './t.Stateful';
 
+type P = t.PropListProps;
+
 /**
  * <Component>
  */
 export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
+  title?: P['title'];
+  width?: P['width'];
   fields?: (t.InfoField | undefined | null)[];
   data?: t.InfoData;
   enabled?: boolean;
