@@ -1,18 +1,23 @@
 import { type t } from './common';
 
 export const CommonInfoFields = {
-  visible(data?: t.InfoVisible, theme?: t.CommonTheme) {
+  /**
+   * Helper for toggling the root visibility switch.
+   */
+  visible<T extends string = string>(
+    data?: t.InfoVisible<T>,
+    onToggle?: t.InfoVisibleToggleHandler,
+  ): t.PropListItem {
     const enabled = data?.enabled ?? true;
-    const selected = data?.value ?? false;
+    const selected = data?.value ?? true;
     return {
       label: data?.label ?? 'Visible',
       value: {
         kind: 'Switch',
         enabled,
-        data: selected,
+        body: selected,
         onClick() {
-          const args = { prev: selected, next: !selected };
-          data?.onToggle?.(args);
+          onToggle?.({ prev: selected, next: !selected });
         },
       },
     };
