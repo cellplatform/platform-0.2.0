@@ -9,26 +9,28 @@ import {
 import { Field } from './field';
 import { useRedraw } from './use.Redraw';
 
+type P = t.InfoProps;
+
 /**
  * Component
  */
-export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme, data = {} } = props;
+export const View: React.FC<P> = (props) => {
+  const { theme, network, data = {} } = props;
   const ctx = wrangle.ctx(props);
 
   useRedraw(props);
-  const shared = useShared(data.network);
-  const { bytes } = usePeerMonitor(data.network);
+  const shared = useShared(network);
+  const { bytes } = usePeerMonitor(network);
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Visible', () => Field.visible(data.visible, theme))
+    .field('Visible', () => Field.visible(data.visible, props.onVisibleToggle))
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
     .field('Component', () => Field.component(ctx, data.component))
-    .field('Peer', () => Field.peer(ctx, data))
-    .field('Repo', () => Field.repo(ctx, data))
-    .field('Network.Shared', () => Field.network.shared(ctx, data, shared?.doc))
+    .field('Peer', () => Field.peer(ctx, network))
+    .field('Repo', () => Field.repo(ctx, network))
+    .field('Network.Shared', () => Field.network.shared(ctx, data, network, shared?.doc))
     .field('Network.Transfer', () => Field.network.transfer(ctx, bytes, isTransmitting))
     .items(ctx.fields);
 
@@ -48,9 +50,9 @@ export const View: React.FC<t.InfoProps> = (props) => {
  * Helpers
  */
 const wrangle = {
-  ctx(props: t.InfoProps): t.InfoFieldCtx {
-    const { theme = DEFAULTS.theme, stateful = DEFAULTS.stateful } = props;
+  ctx(props: P): t.InfoCtx {
+    const { theme = DEFAULTS.theme } = props;
     const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
-    return { theme, fields, stateful };
+    return { theme, fields };
   },
 } as const;

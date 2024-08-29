@@ -1,5 +1,5 @@
-import { Peer, PeerUI } from 'ext.lib.peerjs';
-import { Dev, Pkg, TestDb } from '../../test.ui';
+import { PeerUI } from 'ext.lib.peerjs';
+import { Dev, Pkg, TestDb, TestEdge } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { A, Doc, WebStore, WebrtcStore, type t } from './common';
 import { Sample } from './ui.Sample';
@@ -23,7 +23,8 @@ export default Dev.describe(name, async (e) => {
   /**
    * Network Peers
    */
-  const self = Peer.init();
+  const network = (await TestEdge.create('Left')).network;
+  const self = network.peer;
 
   /**
    * CRDT (Automerge)
@@ -91,14 +92,12 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
+    dev.row(() => {
       return (
         <Info
           fields={['Module', 'Repo', 'Peer', 'Peer.Remotes']}
-          data={{
-            peer: { self },
-            repo: { store, index },
-          }}
+          network={network}
+          //
         />
       );
     });

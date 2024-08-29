@@ -3,6 +3,7 @@
  */
 export type {
   InfoDoc,
+  InfoHandlers,
   RepoListBehavior,
   RepoListHandlers,
   RepoListModel,
@@ -25,7 +26,7 @@ export type {
   DevCtx,
   DevCtxState,
   DevTools,
-  InfoDataVisible,
+  InfoVisible,
   MarginInput,
   PropListItem,
   PropListProps,

@@ -5,13 +5,10 @@ import { PeerInfo, rx, useRedraw as useBase, type t } from './common';
  * Manage redraw of the component.
  */
 export function useRedraw(props: t.InfoProps) {
-  const { data = {} } = props;
-  const { network } = data;
+  const { network } = props;
 
-  PeerInfo.useRedraw(data);
+  PeerInfo.useRedraw(network?.peer);
   const redraw = useBase();
-
-  useEffect(redraw, [props.stateful]);
 
   useEffect(() => {
     const events = network?.events();

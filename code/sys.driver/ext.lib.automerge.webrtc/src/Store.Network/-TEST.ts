@@ -28,6 +28,7 @@ export const setup = async (debugLabel?: string) => {
     peer,
     events,
     store,
+    index,
     generator,
     network,
     fired: { added, messages },
@@ -39,9 +40,10 @@ export default Test.describe('WebrtcStore', (e) => {
   e.timeout(5000);
 
   e.it('init', async (e) => {
-    const { dispose, network, store, peer } = await setup();
+    const { dispose, network, store, index, peer } = await setup();
     expect(network.total.added).to.eql(0);
-    expect(network.store).to.equal(store);
+    expect(network.repo.store).to.equal(store);
+    expect(network.repo.index).to.equal(index);
     expect(network.peer).to.equal(peer);
     dispose();
   });

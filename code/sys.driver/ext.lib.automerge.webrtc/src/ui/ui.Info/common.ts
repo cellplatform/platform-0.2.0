@@ -34,13 +34,14 @@ const fields = {
   },
 };
 
+const name = 'Info';
 const theme: t.CommonTheme = 'Light';
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}:Info`,
+  name,
+  displayName: `${Pkg.name}:${name}`,
   fields,
   doc: { uri },
-  stateful: false,
   shared: { label: 'Shared State', dotMeta: false },
   query: { dev: 'dev' },
   theme,

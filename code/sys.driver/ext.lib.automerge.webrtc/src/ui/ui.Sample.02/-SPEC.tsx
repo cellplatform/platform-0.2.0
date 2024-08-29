@@ -157,9 +157,7 @@ export default Dev.describe(name, async (e) => {
         if (e.state.reload)
           return <TestDb.DevReload onCloseClick={() => state.change((d) => (d.reload = false))} />;
 
-        const shared = Shared.harness!;
-        const edge = shared?.current.edge;
-        const store = left.network.store;
+        const store = left.network.repo.store;
 
         let elOverlay: JSX.Element | undefined;
         const def = Shared.main?.current.module;
@@ -219,7 +217,8 @@ export default Dev.describe(name, async (e) => {
             title={`${edge.kind} Column`}
             fields={layout?.fields ?? defaultFields}
             stateful={true}
-            data={{ network }}
+            data={{}}
+            network={network}
           />
         );
       });
@@ -392,7 +391,8 @@ export default Dev.describe(name, async (e) => {
 
       const selectedDoc = async (edge: t.NetworkConnectionEdge, item: t.StoreIndexItem) => {
         if (!item || !edge) return;
-        const doc = await edge.network.store.doc.get(item.uri);
+        const repo = edge.network.repo;
+        const doc = await repo.store.doc.get(item.uri);
         return doc?.toObject();
       };
 

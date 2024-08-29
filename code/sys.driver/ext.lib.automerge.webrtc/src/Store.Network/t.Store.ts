@@ -2,8 +2,7 @@ import type { t } from './common';
 
 export type NetworkStore = t.Lifecycle & {
   readonly peer: t.PeerModel;
-  readonly store: t.Store;
-  readonly index: t.StoreIndex;
+  readonly repo: { readonly store: t.Store; readonly index: t.StoreIndex };
   readonly total: t.NetworkStoreTotals;
   readonly shared: NetworkStoreShared;
   events(dispose$?: t.UntilObservable): t.WebrtcStoreEvents;

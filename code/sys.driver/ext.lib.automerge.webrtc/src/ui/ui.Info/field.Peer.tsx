@@ -1,8 +1,8 @@
 import type { InfoField as PeerField } from 'ext.lib.peerjs/src/types';
 import { PeerInfo, type t } from './common';
 
-export function peer(ctx: t.InfoFieldCtx, data: t.InfoData) {
-  const self = data.peer?.self || data.network?.peer;
+export function peer(ctx: t.InfoCtx, network?: t.NetworkStore) {
+  const self = network?.peer;
   if (!self) return;
 
   const fields: PeerField[] = [];
@@ -10,5 +10,5 @@ export function peer(ctx: t.InfoFieldCtx, data: t.InfoData) {
   if (ctx.fields.includes('Peer.Remotes')) fields.push('Peer.Remotes');
   if (fields.length === 0) return;
 
-  return PeerInfo.Field.peer({ self }, fields, ctx.theme);
+  return PeerInfo.Field.peer({ ...ctx, fields }, self);
 }

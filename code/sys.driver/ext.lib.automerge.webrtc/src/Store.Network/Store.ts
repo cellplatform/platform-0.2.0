@@ -124,8 +124,7 @@ export const WebrtcStore = {
      */
     const api: t.NetworkStore = {
       peer,
-      store,
-      index,
+      repo: { store, index },
       shared,
 
       get total() {

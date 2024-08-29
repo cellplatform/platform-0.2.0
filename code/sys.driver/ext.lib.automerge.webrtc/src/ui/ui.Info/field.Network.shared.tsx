@@ -4,15 +4,13 @@ import { AutomergeInfo, DEFAULTS, type t } from './common';
  * Shared network state (transient document).
  */
 export function shared(
-  ctx: t.InfoFieldCtx,
+  ctx: t.InfoCtx,
   data: t.InfoData,
+  network?: t.NetworkStore,
   ref?: t.Doc<t.CrdtShared>,
 ): t.PropListItem[] {
-  const network = data.network;
   const res: t.PropListItem[] = [];
-
   if (!network) return res;
-  const { store, index } = network;
 
   const toDocument = (shared: t.InfoDoc): t.InfoDoc => {
     const label = shared.label ?? DEFAULTS.shared.label;
@@ -31,9 +29,9 @@ export function shared(
   if (document.length > 0) {
     const value = (
       <AutomergeInfo
-        stateful={ctx.stateful}
         fields={['Doc', 'Doc.URI', 'Doc.Object']}
-        data={{ repo: { store, index }, document }}
+        data={{ repo: 'main', document }}
+        repos={{ main: network.repo }}
         theme={ctx.theme}
         style={{ flex: 1 }}
       />

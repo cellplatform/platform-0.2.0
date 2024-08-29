@@ -68,7 +68,7 @@ export default Dev.describe(name, async (e) => {
           stateful={true}
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
-          data={{ network }}
+          network={network}
         />
       );
     });
@@ -133,7 +133,8 @@ export default Dev.describe(name, async (e) => {
           };
         };
 
-        const data = { [`index[${total(network.index)}]`]: format(network.index) };
+        const index = network.repo.index;
+        const data = { [`index[${total(index)}]`]: format(index) };
         const styles = {
           base: css({}),
           obj: css({ margin: 8 }),
