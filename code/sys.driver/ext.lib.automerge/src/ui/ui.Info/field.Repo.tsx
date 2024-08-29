@@ -1,6 +1,6 @@
 import { DEFAULTS, Icons, Is, Value, css, type t } from './common';
 
-export function repo(ctx: t.InfoFieldCtx, keyName?: t.InfoRepoName) {
+export function repo(ctx: t.InfoCtx, keyName?: t.InfoRepoName) {
   const repo = (ctx.repos ?? {})[keyName ?? ''];
   if (!repo) return;
 

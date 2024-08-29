@@ -20,13 +20,12 @@ export type InfoField =
   | 'Doc.History.List.Detail'
   | 'Doc.History.List.NavPaging';
 
-export type InfoFieldCtx = {
+export type InfoCtx = {
   repos: t.InfoRepos;
   fields: t.InfoField[];
   theme: t.CommonTheme;
   enabled: boolean;
   handlers: t.InfoHandlers;
-  debug?: string;
 };
 
 /**
@@ -36,11 +35,6 @@ export type InfoProps = InfoHandlers & {
   title?: P['title'];
   width?: P['width'];
   fields?: (t.InfoField | undefined)[];
-  theme?: t.CommonTheme;
-  margin?: t.CssEdgesInput;
-  debug?: string;
-  enabled?: boolean;
-
   repos?: t.InfoRepos;
   data?: t.InfoData;
 

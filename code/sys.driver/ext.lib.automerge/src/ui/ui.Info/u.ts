@@ -10,7 +10,7 @@ export const Wrangle = {
   Data,
   Diff,
 
-  ctx(props: t.InfoProps | t.InfoStatefulProps): t.InfoFieldCtx {
+  ctx(props: t.InfoProps | t.InfoStatefulProps): t.InfoCtx {
     const { repos = {}, theme = DEF.theme, enabled = DEF.enabled } = props;
     const fields = PropList.fields(props.fields);
     const handlers = Wrangle.handlers(props);
