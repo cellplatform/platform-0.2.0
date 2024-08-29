@@ -459,5 +459,14 @@ describe('Value.Object', () => {
       expect(res).to.eql(obj);
       expect(res).to.not.equal(obj);
     });
+
+    it('takes a wider scoped object as input', () => {
+      type W = T & { msg: string };
+      const obj: W = { a: 1, b: 2, c: 3, msg: 'hello' };
+
+      type P = Pick<T, 'b' | 'c'>;
+      const res = Value.Object.pick<P>(obj, 'b', 'c');
+      expect(res).to.eql({ b: 2, c: 3 });
+    });
   });
 });
