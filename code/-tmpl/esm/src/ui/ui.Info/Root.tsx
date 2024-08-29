@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 import { FieldSelector } from './ui.FieldSelector';
-import { Stateful } from './ui.Stateful';
+import { Stateful } from './Root.Stateful';
 import { useStateful } from './use.Stateful';
 
 /**
