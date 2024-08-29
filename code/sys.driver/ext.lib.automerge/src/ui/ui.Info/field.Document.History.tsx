@@ -6,7 +6,7 @@ import { History } from './ui.History';
 
 type D = t.InfoDoc;
 
-export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
+export function history(ctx: t.InfoCtx, data: D | undefined) {
   const { fields, theme } = ctx;
   const res: t.PropListItem[] = [];
   const history = data?.history;

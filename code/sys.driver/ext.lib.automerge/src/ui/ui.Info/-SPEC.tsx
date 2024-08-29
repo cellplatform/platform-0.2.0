@@ -50,7 +50,7 @@ export default Dev.describe(name, async (e) => {
 
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(100))
-      .subscribe(() => dev.redraw());
+      .subscribe(() => ctx.redraw());
 
     doc = await sample.get();
 
@@ -62,7 +62,7 @@ export default Dev.describe(name, async (e) => {
         const props = State.props.current;
         const debug = State.debug.current;
 
-        Dev.Theme.background(ctx, props.theme);
+        Dev.Theme.background(ctx, props.theme, 1);
         if (debug.reload) return <DevReload theme={props.theme} />;
 
         const fields = props.fields ?? [];
@@ -78,11 +78,11 @@ export default Dev.describe(name, async (e) => {
             {...props}
             data={data}
             repos={{ [db.name]: repo }}
-            style={{ minHeight: 300 }}
+            style={{ minHeight: 300, margin: 10 }}
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
             onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
-              mutate['foo'] = 123; // Sample render mutation (safe) 🐷.
+              mutate['foo'] = 123; // Sample render mutation (safe 🐷).
             }}
           />
         );

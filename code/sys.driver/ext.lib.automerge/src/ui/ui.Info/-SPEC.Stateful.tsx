@@ -92,7 +92,7 @@ export default Dev.describe(name, async (e) => {
             {...props}
             repos={{ [db.name]: db.repo }}
             data={data}
-            style={{ minHeight: 300 }}
+            style={{ minHeight: 300, margin: 10 }}
             onReady={(e) => {
               console.info(`⚡️ Info.Stateful.onReady:`, e);
               e.dispose$.subscribe(() => console.info(`⚡️ Info.Stateful.onReady → dispose 💥`));
