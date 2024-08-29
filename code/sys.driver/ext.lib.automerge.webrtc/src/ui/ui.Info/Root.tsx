@@ -1,6 +1,6 @@
 import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { Stateful } from './Root.Stateful';
+import { Stateful } from './ui.Stateful';
 import { useRedraw } from './use.Redraw';
 import { useStateful } from './use.Stateful';
 import { FieldSelector } from './ui.FieldSelector';

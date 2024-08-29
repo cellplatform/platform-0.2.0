@@ -41,12 +41,12 @@ export const paths = {
     'src/ui/ui.Info/field.ts',
     'src/ui/ui.Info/common.ts',
     'src/ui/ui.Info/index.ts',
-    'src/ui/ui.Info/Root.Stateful.tsx',
     'src/ui/ui.Info/Root.tsx',
     'src/ui/ui.Info/t.Stateful.ts',
     'src/ui/ui.Info/t.ts',
     'src/ui/ui.Info/u.ts',
     'src/ui/ui.Info/ui.FieldSelector.tsx',
+    'src/ui/ui.Info/ui.Stateful.tsx',
     'src/ui/ui.Info/ui.tsx',
     'src/ui/ui.Info/use.Stateful.ts',
 

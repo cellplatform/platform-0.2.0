@@ -1,6 +1,6 @@
 import { DEFAULTS, FC, type t } from './common';
 import { Field } from './field';
-import { Stateful } from './Root.Stateful';
+import { Stateful } from './ui.Stateful';
 import { Data, Diff } from './u';
 import { View } from './ui';
 import { FieldSelector } from './ui.FieldSelector';
