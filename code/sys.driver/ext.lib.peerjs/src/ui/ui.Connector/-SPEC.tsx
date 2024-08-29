@@ -88,11 +88,9 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<D>(e);
     dev.row((e) => (
       <Info
+        self={self}
         fields={['Module', 'Component', 'Peer', 'Peer.Remotes']}
-        data={{
-          component: { name },
-          peer: { self },
-        }}
+        data={{ component: { name } }}
       />
     ));
 

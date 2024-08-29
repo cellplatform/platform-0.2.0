@@ -6,16 +6,18 @@ import { useRedraw } from './use.Redraw';
  * Component
  */
 export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme, data = {} } = props;
+  const { theme = DEFAULTS.theme, self, data = {} } = props;
   const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
 
-  useRedraw(data);
+  const ctx: t.InfoCtx = { fields, theme };
+
+  useRedraw(self);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module(theme))
-    .field('Module.Verify', () => Field.moduleVerify(theme))
-    .field('Component', () => Field.component(data.component, theme))
-    .field('Peer', () => Field.peer(data.peer, fields, theme))
+    .field('Module', () => Field.module(ctx))
+    .field('Module.Verify', () => Field.moduleVerify(ctx))
+    .field('Component', () => Field.component(ctx, data.component))
+    .field('Peer', () => Field.peer(ctx, self))
     .items(fields);
 
   return (

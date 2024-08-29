@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { rx, type t } from './common';
 
-export function useRedraw(data: t.InfoData = {}) {
-  const peer = data.peer?.self;
-
+export function useRedraw(peer?: t.PeerModel) {
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 

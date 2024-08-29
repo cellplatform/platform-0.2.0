@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, Pkg, Webrtc, css, type t } from '../../test.ui';
+import { COLORS, Color, Dev, Webrtc, css, type t } from '../../test.ui';
 import { Connector } from '../ui.Connector';
 
 type P = t.InfoProps;
@@ -10,13 +10,14 @@ const DEFAULTS = Info.DEFAULTS;
 /**
  * Spec
  */
-const name = Info.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
+
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
   type LocalStore = Pick<P, 'fields' | 'theme'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({
     theme: undefined,
     fields: DEFAULTS.fields.default,
@@ -39,7 +40,7 @@ export default Dev.describe(name, (e) => {
       .render<T>((e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
-        return <Info {...props} data={{ peer: { self } }} />;
+        return <Info {...props} self={self} />;
       });
   });
 
