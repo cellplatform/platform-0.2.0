@@ -9,17 +9,19 @@ type P = t.InfoStatefulProps;
  */
 export function useStateful(props: P) {
   const { repos = {} } = props;
+  const ctx = Wrangle.ctx(props);
+  const enabled = ctx.enabled;
+
   const [data, setData] = useState(wrangle.state(props));
   const [, setCount] = useState(0);
   const redraw = () => setCount((n) => n + 1);
-  const ctx = Wrangle.ctx(props);
 
   /**
    * Effects.
    */
   useEffect(() => {
-    const propsInstance = wrangle.propsInstance(props);
-    if (propsInstance && data?.instance !== wrangle.propsInstance(props)) {
+    const instance = wrangle.propsInstance(props);
+    if (instance && data?.instance !== instance) {
       setData(wrangle.state(props));
     }
   }, [data?.instance, wrangle.propsInstance(props)]);
@@ -35,7 +37,7 @@ export function useStateful(props: P) {
    */
   const handlers: t.InfoHandlers = {
     onDocToggleClick(e) {
-      if (!ctx.enabled) return;
+      if (!enabled) return;
       data?.change((d) => {
         const document = Wrangle.Data.document.list(d.document)[e.index];
         if (document) {
@@ -48,7 +50,7 @@ export function useStateful(props: P) {
     },
 
     onVisibleToggle(e) {
-      if (!ctx.enabled) return;
+      if (!enabled) return;
 
       data?.change((d) => {
         const visible = d.visible || (d.visible = {});
