@@ -1,12 +1,6 @@
-import {
-  DEFAULTS,
-  PropList,
-  usePeerMonitor,
-  useShared,
-  useTransmitMonitor,
-  type t,
-} from './common';
+import { PropList, usePeerMonitor, useShared, useTransmitMonitor, type t } from './common';
 import { Field } from './field';
+import { Wrangle } from './u';
 import { useRedraw } from './use.Redraw';
 
 type P = t.InfoProps;
@@ -16,7 +10,7 @@ type P = t.InfoProps;
  */
 export const View: React.FC<P> = (props) => {
   const { theme, network, data = {} } = props;
-  const ctx = wrangle.ctx(props);
+  const ctx = Wrangle.ctx(props);
 
   useRedraw(props);
   const shared = useShared(network);
@@ -45,14 +39,3 @@ export const View: React.FC<P> = (props) => {
     />
   );
 };
-
-/**
- * Helpers
- */
-const wrangle = {
-  ctx(props: P): t.InfoCtx {
-    const { theme = DEFAULTS.theme } = props;
-    const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
-    return { theme, fields };
-  },
-} as const;

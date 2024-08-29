@@ -5,9 +5,21 @@ export { Info as PeerInfo } from 'ext.lib.peerjs';
 export * from '../common';
 export { usePeerMonitor, useShared, useTransmitMonitor } from '../use';
 
+type P = t.InfoProps;
+
 /**
  * Constants
  */
+const name = 'Info';
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields' | 'childrenStateful'> = {
+  theme: 'Light',
+  enabled: true,
+  childrenStateful: false,
+  get fields() {
+    return fields.default;
+  },
+};
+
 const uri: Required<t.InfoDocUri> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
@@ -34,15 +46,12 @@ const fields = {
   },
 };
 
-const name = 'Info';
-const theme: t.CommonTheme = 'Light';
-
 export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
   fields,
+  props,
   doc: { uri },
   shared: { label: 'Shared State', dotMeta: false },
   query: { dev: 'dev' },
-  theme,
 } as const;

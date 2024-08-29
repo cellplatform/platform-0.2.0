@@ -1,7 +1,7 @@
 import type { t } from './common';
+export type * from './t.Stateful';
 
-import type { InfoData as AutomergeInfoData } from 'ext.lib.automerge/src/types';
-import type { InfoData as PeerInfoData } from 'ext.lib.peerjs/src/types';
+import type { InfoHandlers as InfoHandlersBase } from 'ext.lib.automerge/src/types';
 
 type P = t.PropListProps;
 
@@ -17,8 +17,10 @@ export type InfoField =
   | 'Network.Transfer';
 
 export type InfoCtx = {
+  enabled: boolean;
   fields: t.InfoField[];
   theme: t.CommonTheme;
+  handlers: t.InfoHandlers;
 };
 
 /**
@@ -31,9 +33,12 @@ export type InfoProps = t.InfoHandlers & {
   data?: t.InfoData;
   network?: t.NetworkStore;
   margin?: t.CssEdgesInput;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
+
+export type InfoHandlers = InfoHandlersBase;
 
 /**
  * Data
@@ -49,6 +54,5 @@ export type InfoShared = t.InfoDoc;
 export type InfoObject = {
   visible?: boolean;
   expand?: { level?: number; paths?: string[] };
-  beforeRender?: (mutate: unknown) => void;
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
 };
