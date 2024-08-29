@@ -213,11 +213,9 @@ export default Dev.describe(name, async (e) => {
         }
 
         return (
-          <PeerRepoList.Info
+          <PeerRepoList.Info.Stateful
             title={`${edge.kind} Column`}
             fields={layout?.fields ?? defaultFields}
-            stateful={true}
-            data={{}}
             network={network}
           />
         );

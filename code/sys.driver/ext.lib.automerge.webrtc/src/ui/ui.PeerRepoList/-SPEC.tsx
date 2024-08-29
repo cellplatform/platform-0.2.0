@@ -64,8 +64,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row((e) => {
       return (
-        <PeerRepoList.Info
-          stateful={true}
+        <PeerRepoList.Info.Stateful
           title={'Network'}
           fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
           network={network}
