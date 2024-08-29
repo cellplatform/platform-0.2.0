@@ -23,6 +23,7 @@ export type {
   Disposable,
   EventBus,
   IODirection,
+  ImmutableEvents,
   Index,
   Lifecycle,
   LogLevel,
@@ -34,6 +35,7 @@ export type {
   ObjectPath,
   OmitLifecycle,
   Percent,
+  PickRequired,
   UntilObservable,
   UriString,
 } from 'sys.types/src/types';
