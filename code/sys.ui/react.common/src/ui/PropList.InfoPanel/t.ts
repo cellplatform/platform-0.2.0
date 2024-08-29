@@ -19,16 +19,16 @@ export type CommonInfoProps<F extends string = string, D extends O = {}> = {
 /**
  * Prop: Data
  */
-export type InfoDataVisible<InfoField extends string = any> = {
+export type InfoVisible<InfoField extends string = any> = {
   value?: boolean;
   enabled?: boolean;
   label?: string;
   filter?: (e: { visible: boolean; fields: InfoField[] }) => InfoField[];
-  onToggle?: InfoDataVisibleToggle;
+  onToggle?: InfoVisibleToggle;
 };
 
 /**
  * Events
  */
-export type InfoDataVisibleToggle = (e: InfoDataVisibleToggleArgs) => void;
-export type InfoDataVisibleToggleArgs = { prev: boolean; next: boolean };
+export type InfoVisibleToggle = (e: InfoVisibleToggleArgs) => void;
+export type InfoVisibleToggleArgs = { prev: boolean; next: boolean };
