@@ -82,7 +82,7 @@ export default Dev.describe(name, async (e) => {
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
             onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
-              mutate['foo'] = 123;
+              mutate['foo'] = 123; // Sample render mutation (safe) 🐷.
             }}
           />
         );
