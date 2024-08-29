@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DEFAULTS, Immutable, PropList, rx, type t } from './common';
+import { Wrangle } from './u';
 
 type P = t.InfoStatefulProps;
 
@@ -9,6 +10,9 @@ type P = t.InfoStatefulProps;
 export function useStateful(props: P) {
   const { repos = {} } = props;
   const [data, setData] = useState(wrangle.state(props));
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((n) => n + 1);
+  const ctx = Wrangle.ctx(props);
 
   /**
    * Effects.
@@ -27,9 +31,31 @@ export function useStateful(props: P) {
   }, [data?.instance]);
 
   /**
+   * Overriden event handlers.
+   */
+  const handlers: t.InfoHandlers = {
+    onDocToggleClick(e) {
+      if (!ctx.enabled) return;
+      data?.change((d) => {
+        const list = Wrangle.Data.document.list(d.document);
+        const item = list[e.index];
+        if (item) {
+          if (!item.object) item.object = {};
+          item.object.visible = e.visible.next;
+        }
+      });
+
+      redraw();
+      props.onDocToggleClick?.(e);
+    },
+  };
+
+  /**
    * API
    */
   const api = {
+    handlers,
+
     get props(): t.InfoProps {
       const data = api.data;
       const fields = api.fields;

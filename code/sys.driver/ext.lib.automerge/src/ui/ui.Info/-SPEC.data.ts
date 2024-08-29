@@ -70,12 +70,6 @@ export const SpecData = {
         // visible: false,
         lens: flags.docLens ? ['child'] : undefined,
         expand: { level: 2 },
-        beforeRender(mutate: any) {
-          // mutate['foo'] = 123;
-        },
-        onToggleClick: flags.docIconClickHandler
-          ? (e) => console.info('⚡️ Info.document.object.onToggleClick', e)
-          : undefined,
       },
       uri: {
         // prefix: 'foo:::',

@@ -47,7 +47,7 @@ const fields = {
   },
 };
 
-const visibleFilter: t.InfoDataVisible<t.InfoField>['filter'] = (e) => {
+const visibleFilter: t.InfoVisible<t.InfoField>['filter'] = (e) => {
   return e.visible ? e.fields : ['Visible'];
 };
 

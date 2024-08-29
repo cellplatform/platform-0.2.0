@@ -1,5 +1,6 @@
 import type { t } from './common';
 export type * from './t.Stateful';
+
 type O = Record<string, unknown>;
 
 export type InfoField =
@@ -19,18 +20,42 @@ export type InfoField =
   | 'Doc.History.List.NavPaging';
 
 export type InfoFieldCtx = {
-  repos?: t.InfoRepos;
+  repos: t.InfoRepos;
   fields: t.InfoField[];
   theme: t.CommonTheme;
   enabled: boolean;
+  handlers: t.InfoHandlers;
   debug?: string;
+};
+
+/**
+ * <Component>
+ */
+export type InfoProps = InfoHandlers & {
+  title?: t.PropListProps['title'];
+  width?: t.PropListProps['width'];
+  fields?: (t.InfoField | undefined)[];
+  theme?: t.CommonTheme;
+  margin?: t.CssEdgesInput;
+  debug?: string;
+  enabled?: boolean;
+
+  repos?: t.InfoRepos;
+  data?: t.InfoData;
+
+  style?: t.CssValue;
+};
+
+export type InfoHandlers = {
+  onDocToggleClick?: t.InfoDocToggleHandler;
+  onBeforeObjectRender?: t.InfoBeforeObjectRenderHandler;
 };
 
 /**
  * Data (Root)
  */
 export type InfoData = {
-  visible?: t.InfoDataVisible<InfoField>;
+  visible?: t.InfoVisible<InfoField>;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
   document?: InfoDoc | InfoDoc[];
@@ -46,7 +71,6 @@ export type InfoRepo = {
   store?: t.Store;
   index?: t.StoreIndex;
 };
-
 export type InfoRepoName = string;
 export type InfoRepos = { [key: InfoRepoName]: t.InfoRepo };
 
@@ -69,8 +93,6 @@ export type InfoDocObject = {
   name?: string;
   expand?: { level?: number; paths?: string[] };
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
-  beforeRender?: (mutate: O) => void | O;
-  onToggleClick?(e: { uri: t.UriString; modifiers: t.KeyboardModifierFlags }): void;
 };
 
 export type InfoDocUri = {
@@ -95,39 +117,25 @@ export type InfoDocHistory = {
 };
 
 /**
- * <Component>
- */
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
-  fields?: (t.InfoField | undefined)[];
-  theme?: t.CommonTheme;
-  margin?: t.CssEdgesInput;
-  debug?: string;
-
-  data?: t.InfoData;
-  repos?: t.InfoRepos;
-
-  enabled?: boolean;
-  style?: t.CssValue;
-  onStateChange?: t.InfoStatefulChangeHandler;
-};
-
-/**
  * Events
  */
-export type InfoDataHistoryItemHandler = (e: InfoDataHistoryItemHandlerArgs) => void;
-export type InfoDataHistoryItemHandlerArgs = {
+export type InfoHistoryItemHandler = (e: InfoHistoryItemHandlerArgs) => void;
+export type InfoHistoryItemHandlerArgs = {
   readonly index: t.Index;
   readonly hash: t.HashString;
   readonly commit: t.DocHistoryCommit;
   readonly is: { first: boolean; last: boolean };
 };
 
-export type InfoStatefulChangeAction = 'Toggle:Visible' | 'Toggle:ObjectVisible';
-export type InfoStatefulChangeHandler = (e: InfoStatefulChangeHandlerArgs) => void;
-export type InfoStatefulChangeHandlerArgs = {
-  readonly action: InfoStatefulChangeAction;
-  readonly fields: InfoField[];
-  readonly data: InfoData;
+export type InfoDocToggleHandler = (e: InfoDocToggleHandlerArgs) => void;
+export type InfoDocToggleHandlerArgs = {
+  readonly index: t.Index;
+  readonly data: InfoDoc;
+  readonly modifiers: t.KeyboardModifierFlags;
+  readonly visible: { prev: boolean; next: boolean };
 };
+
+export type InfoBeforeObjectRenderHandler = (
+  mutate: O,
+  ctx: { index: t.Index; data: InfoDoc },
+) => void | O;

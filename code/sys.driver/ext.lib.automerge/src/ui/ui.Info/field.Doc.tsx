@@ -26,9 +26,9 @@ export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined): t.Prop
   };
 
   const docs = Array.isArray(data) ? data : [data];
-  docs.forEach((data) => {
+  docs.forEach((data, i) => {
     renderRepo(data);
-    res.push(...renderDocument(ctx, data));
+    res.push(...renderDocument(ctx, i, data));
   });
 
   return res;
@@ -37,7 +37,7 @@ export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined): t.Prop
 /**
  * Render the document {item}.
  */
-function renderDocument(ctx: t.InfoFieldCtx, data?: D): t.PropListItem[] {
+function renderDocument(ctx: t.InfoFieldCtx, index: t.Index, data?: D): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const { fields, theme, enabled } = ctx;
 
@@ -47,15 +47,16 @@ function renderDocument(ctx: t.InfoFieldCtx, data?: D): t.PropListItem[] {
   const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
-  const hasToggleHandler = !!data.object?.onToggleClick;
+  const hasToggleHandler = !!ctx.handlers.onDocToggleClick;
 
   const label: t.PropListLabel = {
     body: (data.label ?? 'Document').trim(),
     toggle: hasToggleHandler ? { open: isObjectVisible } : undefined,
     onClick(e) {
-      const uri = doc.uri;
       const modifiers = e.modifiers;
-      data.object?.onToggleClick?.({ uri, modifiers });
+      const prev = isObjectVisible;
+      const visible = { prev, next: !prev };
+      ctx.handlers.onDocToggleClick?.({ index, data, modifiers, visible });
     },
   };
   const hasLabel = !!label.body;
@@ -121,7 +122,7 @@ function renderDocument(ctx: t.InfoFieldCtx, data?: D): t.PropListItem[] {
    * The <Object> component.
    */
   if (isObjectVisible) {
-    const value = wrangle.objectElement(data, hasLabel, theme);
+    const value = wrangle.objectElement(ctx, index, data, hasLabel);
     res.push({ value });
   }
 
@@ -148,7 +149,7 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(data: D, hasLabel: boolean, theme?: t.CommonTheme) {
+  objectElement(ctx: t.InfoFieldCtx, index: t.Index, data: D, hasLabel: boolean) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
@@ -161,10 +162,9 @@ const wrangle = {
     if (output) {
       output = toObject(output);
 
-      const mutate = data.object?.beforeRender;
-      if (typeof mutate === 'function') {
-        const res = mutate(output);
-        if (res !== undefined) output = res;
+      if (typeof ctx.handlers.onBeforeObjectRender === 'function') {
+        const res = ctx.handlers.onBeforeObjectRender(output, { index, data });
+        if (res !== undefined && res !== null && typeof res === 'object') output = res;
       }
 
       const dotMeta = data.object?.dotMeta ?? true;
@@ -182,7 +182,7 @@ const wrangle = {
             name={name || undefined}
             data={output}
             fontSize={11}
-            theme={theme}
+            theme={ctx.theme}
             style={{ marginLeft: 16, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),
