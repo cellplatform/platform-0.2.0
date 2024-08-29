@@ -2,6 +2,7 @@ import type { t } from './common';
 export type * from './t.Stateful';
 
 type O = Record<string, unknown>;
+type P = t.PropListProps;
 
 export type InfoField =
   | 'Visible'
@@ -32,8 +33,8 @@ export type InfoFieldCtx = {
  * <Component>
  */
 export type InfoProps = InfoHandlers & {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
+  title?: P['title'];
+  width?: P['width'];
   fields?: (t.InfoField | undefined)[];
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;
@@ -43,6 +44,9 @@ export type InfoProps = InfoHandlers & {
   repos?: t.InfoRepos;
   data?: t.InfoData;
 
+  enabled?: boolean;
+  theme?: t.CommonTheme;
+  margin?: t.CssEdgesInput;
   style?: t.CssValue;
 };
 
