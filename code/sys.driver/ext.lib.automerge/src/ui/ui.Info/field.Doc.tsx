@@ -7,7 +7,7 @@ type D = t.InfoDoc;
 /**
  * Field for a document {item}.
  */
-export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined): t.PropListItem[] {
+export function document(ctx: t.InfoCtx, data: D | D[] | undefined): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const { fields } = ctx;
   if (!data) return res;
@@ -37,7 +37,7 @@ export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined): t.Prop
 /**
  * Render the document {item}.
  */
-function renderDocument(ctx: t.InfoFieldCtx, index: t.Index, data?: D): t.PropListItem[] {
+function renderDocument(ctx: t.InfoCtx, index: t.Index, data?: D): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const { fields, theme, enabled } = ctx;
 
@@ -149,7 +149,7 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(ctx: t.InfoFieldCtx, index: t.Index, data: D, hasLabel: boolean) {
+  objectElement(ctx: t.InfoCtx, index: t.Index, data: D, hasLabel: boolean) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),

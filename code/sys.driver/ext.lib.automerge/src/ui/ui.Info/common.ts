@@ -14,7 +14,6 @@ type P = t.InfoProps;
  */
 const name = 'Info';
 const displayName = `${Pkg.name}:${name}`;
-
 const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
   theme: 'Light',
   enabled: true,
