@@ -15,9 +15,10 @@ type D = {
 const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, async (e) => {
-  type LocalStore = { props?: string; debug?: string };
+  type LocalStore = { info?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({ props: undefined, debug: undefined });
+  const local = localstore.object({ info: undefined, debug: undefined });
+
   const State = {
     debug: Immutable.clonerRef<D>(
       Json.parse<D>(local.debug, {
@@ -26,23 +27,49 @@ export default Dev.describe(name, async (e) => {
         docuri: undefined,
       }),
     ),
+    info: Immutable.clonerRef<t.InfoData>(
+      Json.parse(local.info, {
+        component: { name },
+        document: {
+          repo: 'main',
+          uri: { head: true },
+          object: { visible: false, expand: { level: 2 } },
+        },
+      }),
+    ),
   } as const;
 
   let doc: t.Doc | undefined;
   const db = await SampleCrdt.init({ broadcastAdapter: true });
 
+  const updateInfoRef = () => {
+    const ref = State.debug.current.docuri;
+    State.info.change((d) => (Info.Data.document.list(d.document)[0].ref = ref));
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const sample = SampleCrdt.dev(db.repo.store, State.debug);
     doc = await sample.get();
+    updateInfoRef();
 
     const debug$ = State.debug.events().changed$;
-    rx.merge(debug$)
+    const info$ = State.info.events().changed$;
+
+    debug$
+      .pipe(
+        rx.map((e) => e.after.docuri),
+        rx.distinctWhile((prev, next) => prev === next),
+      )
+      .subscribe(updateInfoRef);
+
+    rx.merge(debug$, info$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
         local.debug = Json.stringify(State.debug.current);
+        local.info = Json.stringify(State.info.current);
       });
-    rx.merge(debug$)
+    rx.merge(debug$, info$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
@@ -62,20 +89,11 @@ export default Dev.describe(name, async (e) => {
 
     dev.header.border(-0.1).render((e) => {
       const { store, index } = db.repo;
-      const ref = State.debug.current.docuri;
       return (
         <Info.Stateful
           fields={['Component', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']}
           repos={{ main: { store, index } }}
-          data={{
-            component: { name },
-            document: {
-              repo: 'main',
-              ref,
-              uri: { head: true },
-              object: { visible: false, expand: { level: 2 }, beforeRender(mutate) {} },
-            },
-          }}
+          data={State.info}
         />
       );
     });

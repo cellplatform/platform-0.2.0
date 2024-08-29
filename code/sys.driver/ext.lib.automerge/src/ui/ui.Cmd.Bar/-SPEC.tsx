@@ -2,27 +2,13 @@ import { CmdBar } from 'sys.ui.react.common';
 import type { CmdBarStatefulProps } from 'sys.ui.react.common/src/types';
 
 import { Sync } from '../../crdt.sync';
-import {
-  Cmd,
-  Color,
-  css,
-  Dev,
-  Doc,
-  Immutable,
-  Json,
-  ObjectPath,
-  Pkg,
-  rx,
-  SampleCrdt,
-  type t,
-} from '../../test.ui';
+import { Color, css, Dev, Doc, Immutable, Json, Pkg, rx, SampleCrdt, type t } from '../../test.ui';
 import { Info } from '../ui.Info';
 
 type P = CmdBarStatefulProps;
 type D = {
   docuri?: t.UriString;
   useLens?: boolean;
-  docVisible?: boolean;
   isFocused?: boolean;
   argv?: string;
 };
@@ -44,12 +30,7 @@ export default Dev.describe(name, async (e) => {
         useHistory: true,
       }),
     ),
-    debug: Immutable.clonerRef<D>(
-      Json.parse<D>(local.debug, {
-        useLens: true,
-        docVisible: false,
-      }),
-    ),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { useLens: true })),
   } as const;
 
   const db = await SampleCrdt.init({ broadcastAdapter: true });
@@ -179,13 +160,7 @@ export default Dev.describe(name, async (e) => {
               ref: debug.docuri,
               repo: 'main',
               uri: { head: true },
-              object: {
-                visible: debug.docVisible,
-                expand: { level: 1 },
-                onToggleClick(e) {
-                  State.debug.change((d) => Dev.toggle(d, 'docVisible'));
-                },
-              },
+              object: { expand: { level: 1 } },
             },
           }}
         />

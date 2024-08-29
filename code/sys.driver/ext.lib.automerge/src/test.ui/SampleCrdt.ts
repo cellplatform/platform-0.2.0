@@ -23,16 +23,9 @@ export const SampleCrdt = {
     const store = WebStore.init({ storage, debug, network });
     const index = await WebStore.index(store);
 
-    async function docAtIndex<T extends O>(i: t.Index) {
-      const doc = index.doc.current.docs[i];
-      const exists = await index.store.doc.exists(doc?.uri, { timeout: 500 });
-      return exists ? await index.store.doc.get<T>(doc.uri) : undefined;
-    }
-
     return {
       name,
       repo: { name, store, index },
-      docAtIndex,
     } as const;
   },
 

@@ -15,7 +15,7 @@ export type {
   CssValue,
   DevCtxState,
   DevTools,
-  InfoDataVisible,
+  InfoVisible,
   KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
   PropListFieldSelectorProps,
