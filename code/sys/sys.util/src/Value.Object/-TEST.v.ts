@@ -431,4 +431,33 @@ describe('Value.Object', () => {
       expect(res2.name).to.eql(name.substring(0, 10));
     });
   });
+
+  describe('Value.Object.pick', () => {
+    type T = { a: number; b: number; c: number };
+    const Sample = {
+      create(): T {
+        return { a: 1, b: 2, c: 3 };
+      },
+    } as const;
+
+    it('no fields', () => {
+      const obj = Sample.create();
+      const res = Value.Object.pick(obj);
+      expect(res).to.eql({});
+    });
+
+    it('subset of fields', () => {
+      type P = Pick<T, 'a' | 'c'>;
+      const obj = Sample.create();
+      const res = Value.Object.pick<P>(obj, 'a', 'c');
+      expect(res).to.eql({ a: 1, c: 3 });
+    });
+
+    it('all fields (difference instance)', () => {
+      const obj = Sample.create();
+      const res = Value.Object.pick<T>(obj, 'a', 'b', 'c');
+      expect(res).to.eql(obj);
+      expect(res).to.not.equal(obj);
+    });
+  });
 });

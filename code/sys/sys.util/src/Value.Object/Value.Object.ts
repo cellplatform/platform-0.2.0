@@ -1,5 +1,6 @@
 import { R } from '../common';
 
+type O = Record<string, unknown>;
 type PathArray = (string | number)[];
 type WalkCallback = (e: WalkCallbackArgs) => void;
 type WalkCallbackArgs = {
@@ -88,4 +89,14 @@ export function trimStringsDeep<T extends Record<string, any>>(
   });
 
   return clone;
+}
+
+/**
+ * Retrieve a new object containing only the given set of keys.
+ */
+export function pick<T extends O>(subject: T, ...fields: (keyof T)[]): T {
+  return fields.reduce((acc, next) => {
+    acc[next] = subject[next];
+    return acc;
+  }, {} as T);
 }
