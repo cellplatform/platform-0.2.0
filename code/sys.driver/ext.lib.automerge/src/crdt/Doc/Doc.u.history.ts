@@ -15,7 +15,7 @@ export function history<T extends O>(doc?: t.Doc<T>): t.DocHistory<T> {
   return {
     commits,
 
-    get length() {
+    get total() {
       return commits.length;
     },
 
@@ -38,24 +38,23 @@ export function history<T extends O>(doc?: t.Doc<T>): t.DocHistory<T> {
       return (_genesis = { initial, elapsed });
     },
 
-    page(index, limit, sort = DEFAULTS.page.sort) {
+    page(index, limit, order = DEFAULTS.page.sort) {
       const list = index < 0 ? [] : commits.map((commit, index) => ({ index, commit }));
-      if (sort === 'desc') list.reverse();
+      if (order === 'desc') list.reverse();
+
       const items = Value.Array.page(list, index, limit);
       const length = items.length;
-      const total = commits.length;
       let _commits: t.DocHistoryCommit<T>[] | undefined;
-      return {
-        order: sort,
-        index,
-        limit,
-        length,
-        total,
+
+      const res: t.DocHistoryPage<T> = {
+        scope: { index, length, limit, order },
+        total: commits.length,
         items,
         get commits() {
           return _commits ?? (_commits = items.map((m) => m.commit));
         },
       };
+      return res;
     },
   };
 }
@@ -77,7 +76,7 @@ function isInitial(item: t.DocHistoryCommit) {
 }
 
 const wrangle = {
-  commits<T extends O>(doc?: t.Doc<T>): t.State<T>[] {
+  commits<T extends O>(doc?: t.Doc<T>): t.DocHistoryCommit<T>[] {
     try {
       const current = doc?.current;
       return current ? A.getHistory<T>(current) : [];

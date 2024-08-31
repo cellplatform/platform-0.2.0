@@ -71,7 +71,7 @@ export type DocMeta = { type?: t.DocMetaType; ephemeral?: boolean };
  * History
  */
 export type DocHistory<T extends O = O> = {
-  readonly length: number;
+  readonly total: number;
   readonly commits: DocHistoryCommit<T>[];
   readonly latest: DocHistoryCommit<T>;
   readonly genesis?: DocHistoryGenesis<T>;
@@ -81,19 +81,26 @@ export type DocHistoryGenesis<T extends O = O> = {
   readonly initial: DocHistoryCommit<T>;
   readonly elapsed: t.TimeDuration;
 };
-export type DocHistoryCommit<T extends O = O> = t.State<T>;
+
+export type DocHistoryCommit<T extends O = O> = t.AutomergeState<T>;
 
 export type DocHistoryListItem<T extends O = O> = {
   readonly index: t.Index;
   readonly commit: t.DocHistoryCommit<T>;
 };
 
+/**
+ * A single page within the history.
+ */
 export type DocHistoryPage<T extends O = O> = {
-  readonly length: number;
-  readonly index: number;
-  readonly limit: number;
+  readonly scope: t.DocHistoryPageScope;
   readonly total: number;
-  readonly order: t.SortOrder;
   readonly items: DocHistoryListItem<T>[];
   readonly commits: DocHistoryCommit<T>[];
+};
+export type DocHistoryPageScope = {
+  readonly index: t.Index;
+  readonly length: number;
+  readonly limit: number;
+  readonly order: t.SortOrder;
 };

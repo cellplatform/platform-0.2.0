@@ -100,14 +100,14 @@ describe('Doc', async () => {
   describe('Doc.Tag', () => {
     it('commit: message + time (default)', async () => {
       const doc = await factory();
-      expect(Doc.history(doc).length).to.eql(2);
+      expect(Doc.history(doc).total).to.eql(2);
 
       const res = Doc.Tag.commit(doc, 'foo');
       expect(res.message).to.eql('foo');
       expectRoughlySame(res.time, Time.now.timestamp, 0.1);
 
       const history = Doc.history(doc);
-      expect(history.length).to.eql(3);
+      expect(history.total).to.eql(3);
       expect(history.latest.change.time).to.eql(res.time);
       expect(history.latest.change.message).to.eql(res.message);
     });
@@ -118,7 +118,7 @@ describe('Doc', async () => {
       Doc.Tag.commit(handle, 'foo');
 
       const history = Doc.history(doc);
-      expect(history.length).to.eql(3);
+      expect(history.total).to.eql(3);
       expect(history.latest.change.message).to.eql('foo');
     });
 
