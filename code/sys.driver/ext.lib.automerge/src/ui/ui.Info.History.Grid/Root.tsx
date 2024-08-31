@@ -5,7 +5,7 @@ import { View } from './ui';
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const HistoryGrid = FC.decorate<t.HistoryGridProps, Fields>(
+export const HistoryGrid = FC.decorate<t.InfoHistoryGridProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: DEFAULTS.displayName },

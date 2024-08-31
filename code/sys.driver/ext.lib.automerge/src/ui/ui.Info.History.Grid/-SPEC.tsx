@@ -1,7 +1,7 @@
 import { DEFAULTS, HistoryGrid } from '.';
 import { Dev, Doc, Immutable, Json, Pkg, rx, SampleCrdt, type t } from '../../test.ui';
 
-type P = t.HistoryGridProps;
+type P = t.InfoHistoryGridProps;
 type D = { docuri?: t.UriString };
 
 /**
@@ -12,6 +12,7 @@ export default Dev.describe(name, async (e) => {
   type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
   const local = localstore.object({ props: undefined, debug: undefined });
+
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
@@ -47,7 +48,13 @@ export default Dev.describe(name, async (e) => {
 
         const history = Doc.history(doc);
         const page = history.page(0, 5, 'desc');
-        return <HistoryGrid {...props} page={page} />;
+        return (
+          <HistoryGrid
+            {...props}
+            page={page}
+            onItemClick={(e) => console.info(`⚡️ onItemClick:`, e)}
+          />
+        );
       });
   });
 

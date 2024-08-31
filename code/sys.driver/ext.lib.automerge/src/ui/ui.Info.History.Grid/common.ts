@@ -6,7 +6,7 @@ export * from '../common';
  * Constants
  */
 const name = 'History.Grid';
-const props: t.PickRequired<t.HistoryGridProps, 'theme' | 'hashLength'> = {
+const props: t.PickRequired<t.InfoHistoryGridProps, 'theme' | 'hashLength'> = {
   theme: 'Dark',
   hashLength: 6,
 };

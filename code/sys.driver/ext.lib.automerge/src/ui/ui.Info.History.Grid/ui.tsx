@@ -1,10 +1,9 @@
-import React from 'react';
 import { Color, DEFAULTS, css, type t } from './common';
-import { rowElements } from './ui.Row';
+import { toRowElements } from './ui.Row';
 
-export const View: React.FC<t.HistoryGridProps> = (props) => {
-  const { page, theme, hashLength } = props;
-  const total = page?.length ?? 0;
+export const View: React.FC<t.InfoHistoryGridProps> = (props) => {
+  const { page, theme, hashLength, onItemClick } = props;
+  const total = page?.scope.length ?? 0;
   const empty = total === 0;
 
   /**
@@ -23,14 +22,18 @@ export const View: React.FC<t.HistoryGridProps> = (props) => {
     body: css({
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto auto',
-      columnGap: '10px',
     }),
   };
 
   const rows = page?.items ?? [];
   const elEmpty = empty && <div {...styles.empty}>{DEFAULTS.empty.message}</div>;
   const elBody = !empty && page && (
-    <div {...styles.body}>{rows.map((item) => rowElements({ item, theme, hashLength }))}</div>
+    <div {...styles.body}>
+      {rows.map((item, index) => {
+        const page = { index, total };
+        return toRowElements({ page, item, theme, hashLength, onItemClick });
+      })}
+    </div>
   );
 
   return (
