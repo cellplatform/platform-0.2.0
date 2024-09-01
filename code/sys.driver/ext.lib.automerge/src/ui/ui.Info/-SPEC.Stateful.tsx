@@ -137,6 +137,7 @@ export default Dev.describe(name, async (e) => {
         'Repo',
         'Doc',
         'Doc.URI',
+        'Doc.Object',
         'Doc.History',
         'Doc.History.Genesis',
         'Doc.History.List',
