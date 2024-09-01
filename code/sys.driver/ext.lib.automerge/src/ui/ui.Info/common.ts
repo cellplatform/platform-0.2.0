@@ -4,7 +4,8 @@ import { DocUri } from '../ui.DocUri';
 
 export * from '../common';
 export { MonospaceButton } from '../ui.Buttons';
-export { MonoHash } from '../ui.History.Grid';
+export { HistoryGrid, MonoHash } from '../ui.Info.History.Grid';
+export { NavPaging } from '../ui.Nav.Paging';
 export { Doc, DocUri };
 
 type P = t.InfoProps;
@@ -76,8 +77,5 @@ export const DEFAULTS = {
     item: { hashLength: 6 },
   },
 
-  Stateful: {
-    name: `${name}.Stateful`,
-    displayName: `${displayName}.Stateful`,
-  },
+  Stateful: { name: `${name}.Stateful`, displayName: `${displayName}.Stateful` },
 } as const;

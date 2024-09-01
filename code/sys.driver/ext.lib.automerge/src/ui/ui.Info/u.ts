@@ -24,6 +24,7 @@ export const Wrangle = {
       'onVisibleToggle',
       'onDocToggleClick',
       'onBeforeObjectRender',
+      'onHistoryItemClick',
     );
   },
 } as const;

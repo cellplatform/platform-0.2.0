@@ -81,6 +81,7 @@ export default Dev.describe(name, async (e) => {
             style={{ minHeight: 300, margin: 10 }}
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
             onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
+            onHistoryItemClick={(e) => console.info('⚡️ onHistoryItemClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
               mutate['foo'] = 123; // Sample render mutation (safe 🐷).
             }}

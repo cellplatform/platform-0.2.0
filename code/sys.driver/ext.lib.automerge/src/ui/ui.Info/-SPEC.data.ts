@@ -75,13 +75,7 @@ export const SpecData = {
           showDetailFor: flags.historyDetail,
         },
         item: {
-          onClick(e) {
-            console.info('⚡️ Info.history.item.onClick', e);
-            // State.debug.change((d) => {
-            //   const detail = d.dataHistoryDetail === e.hash ? undefined : e.hash;
-            //   d.dataHistoryDetail = detail;
-            // });
-          },
+          // hashLength: 3,
         },
       },
     };

@@ -35,6 +35,7 @@ function useDocuments(data?: t.InfoData, repos: t.InfoRepos = {}): t.InfoDoc[] {
 
   const refs = list.map((item) => toRef(item)).filter(Boolean);
   const docs = useDocs(refs, { redrawOnChange: true });
+
   return list
     .map((item) => ({ ...item, ref: fromRefs(item, docs.refs) }))
     .filter((item) => !!item.ref);

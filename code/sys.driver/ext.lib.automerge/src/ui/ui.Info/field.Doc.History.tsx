@@ -1,7 +1,4 @@
-import { Doc } from '../../crdt';
-import { HistoryGrid } from '../ui.History.Grid';
-import { NavPaging } from '../ui.Nav.Paging';
-import { DEFAULTS, Is, type t } from './common';
+import { DEFAULTS, Doc, HistoryGrid, Is, NavPaging, type t } from './common';
 import { History } from './ui.History';
 
 type D = t.InfoDoc;
@@ -34,7 +31,15 @@ export function history(ctx: t.InfoCtx, data: D | undefined) {
     const hashLength = history.item?.hashLength ?? DEFAULTS.history.item.hashLength;
     const showNav = fields.includes('Doc.History.List.NavPaging');
     res.push({
-      value: <HistoryGrid page={page} hashLength={hashLength} theme={theme} style={{ flex: 1 }} />,
+      value: (
+        <HistoryGrid
+          page={page}
+          hashLength={hashLength}
+          theme={theme}
+          style={{ flex: 1 }}
+          onItemClick={ctx.handlers.onHistoryItemClick}
+        />
+      ),
       divider: !showNav,
     });
 

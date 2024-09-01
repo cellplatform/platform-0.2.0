@@ -45,9 +45,10 @@ export type InfoProps = InfoHandlers & {
 };
 
 export type InfoHandlers = {
-  onDocToggleClick?: t.InfoDocToggleHandler;
-  onBeforeObjectRender?: t.InfoBeforeObjectRenderHandler;
   onVisibleToggle?: t.InfoVisibleToggleHandler;
+  onBeforeObjectRender?: t.InfoBeforeObjectRenderHandler;
+  onDocToggleClick?: t.InfoDocToggleHandler;
+  onHistoryItemClick?: t.InfoHistoryItemHandler;
 };
 
 /**
@@ -109,23 +110,12 @@ export type InfoDocHistory = {
     sort?: t.SortOrder;
     showDetailFor?: t.HashString | t.HashString[];
   };
-  item?: {
-    hashLength?: number;
-    onClick?: InfoDataHistoryItemHandler;
-  };
+  item?: { hashLength?: number };
 };
 
 /**
  * Events
  */
-export type InfoHistoryItemHandler = (e: InfoHistoryItemHandlerArgs) => void;
-export type InfoHistoryItemHandlerArgs = {
-  readonly index: t.Index;
-  readonly hash: t.HashString;
-  readonly commit: t.DocHistoryCommit;
-  readonly is: { first: boolean; last: boolean };
-};
-
 export type InfoDocToggleHandler = (e: InfoDocToggleHandlerArgs) => void;
 export type InfoDocToggleHandlerArgs = {
   readonly index: t.Index;

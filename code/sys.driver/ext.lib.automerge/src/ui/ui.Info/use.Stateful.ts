@@ -5,7 +5,7 @@ import { Wrangle } from './u';
 type P = t.InfoStatefulProps;
 
 /**
- * <Info> Stateful Controller.
+ * Automerge <Info> Stateful Controller.
  */
 export function useStateful(props: P) {
   const { repos = {} } = props;
@@ -20,11 +20,11 @@ export function useStateful(props: P) {
    * Effects.
    */
   useEffect(() => {
-    const instance = wrangle.propsInstance(props);
+    const instance = wrangle.propInstance(props);
     if (instance && data?.instance !== instance) {
       setData(wrangle.state(props));
     }
-  }, [data?.instance, wrangle.propsInstance(props)]);
+  }, [data?.instance, wrangle.propInstance(props)]);
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -58,6 +58,12 @@ export function useStateful(props: P) {
       });
 
       props.onVisibleToggle?.(e);
+      redraw();
+    },
+
+    onHistoryItemClick(e) {
+      if (!enabled) return;
+      props.onHistoryItemClick?.(e);
       redraw();
     },
   };
@@ -102,7 +108,7 @@ const wrangle = {
     return Immutable.clonerRef<t.InfoData>(props.data as t.InfoData);
   },
 
-  propsInstance(props: P) {
+  propInstance(props: P) {
     if (!props.data) return '';
     return Immutable.Is.immutableRef(props.data) ? props.data.instance : '';
   },

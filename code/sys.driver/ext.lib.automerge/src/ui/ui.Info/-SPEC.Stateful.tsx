@@ -100,6 +100,12 @@ export default Dev.describe(name, async (e) => {
               const changed$ = data?.events(e.dispose$).changed$;
               changed$?.pipe(rx.debounceTime(150)).subscribe((e) => dev.redraw());
             }}
+            onHistoryItemClick={(e) => console.info('⚡️ onHistoryItemClick', e)}
+            onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
+            onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
+            onBeforeObjectRender={(mutate, ctx) => {
+              mutate['foo'] = 123; // Sample render mutation (safe 🐷).
+            }}
           />
         );
       });
