@@ -42,13 +42,15 @@ export function history<T extends O>(doc?: t.Doc<T>): t.DocHistory<T> {
       const list = index < 0 ? [] : commits.map((commit, index) => ({ index, commit }));
       if (order === 'desc') list.reverse();
 
+      const total = commits.length;
+      const totalPages = limit > 0 ? Math.ceil(total / limit) : 0;
       const items = Value.Array.page(list, index, limit);
-      const length = items.length;
       let _commits: t.DocHistoryCommit<T>[] | undefined;
 
+      type S = t.DocHistoryPageScope;
+      const is: S['is'] = { first: index === 0, last: index + 1 === totalPages };
       const res: t.DocHistoryPage<T> = {
-        scope: { index, length, limit, order },
-        total: commits.length,
+        scope: { index, total, limit, order, is },
         items,
         get commits() {
           return _commits ?? (_commits = items.map((m) => m.commit));

@@ -94,13 +94,13 @@ export type DocHistoryListItem<T extends O = O> = {
  */
 export type DocHistoryPage<T extends O = O> = {
   readonly scope: t.DocHistoryPageScope;
-  readonly total: number;
   readonly items: DocHistoryListItem<T>[];
   readonly commits: DocHistoryCommit<T>[];
 };
 export type DocHistoryPageScope = {
   readonly index: t.Index;
-  readonly length: number;
+  readonly total: number;
   readonly limit: number;
   readonly order: t.SortOrder;
+  readonly is: { readonly first: boolean; readonly last: boolean };
 };
