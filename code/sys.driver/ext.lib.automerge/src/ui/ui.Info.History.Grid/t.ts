@@ -19,9 +19,5 @@ export type InfoHistoryItemHandlerArgs = {
   hash: t.HashString;
   index: t.Index;
   commit: t.DocHistoryCommit;
-  page: {
-    index: t.Index;
-    total: number;
-    is: { first: boolean; last: boolean };
-  };
+  page: t.DocHistoryPage;
 };

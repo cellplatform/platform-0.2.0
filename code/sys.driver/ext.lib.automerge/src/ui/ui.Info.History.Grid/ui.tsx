@@ -3,7 +3,7 @@ import { toRowElements } from './ui.Row';
 
 export const View: React.FC<t.InfoHistoryGridProps> = (props) => {
   const { page, theme, hashLength, onItemClick } = props;
-  const total = page?.scope.length ?? 0;
+  const total = page?.scope.total ?? 0;
   const empty = total === 0;
 
   /**
@@ -30,8 +30,7 @@ export const View: React.FC<t.InfoHistoryGridProps> = (props) => {
   const elBody = !empty && page && (
     <div {...styles.body}>
       {rows.map((item, index) => {
-        const page = { index, total };
-        return toRowElements({ page, item, theme, hashLength, onItemClick });
+        return toRowElements({ index, page, item, theme, hashLength, onItemClick });
       })}
     </div>
   );

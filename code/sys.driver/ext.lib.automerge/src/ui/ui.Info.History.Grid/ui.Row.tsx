@@ -5,7 +5,8 @@ import { MonoHash } from './ui.MonoHash';
 const DEF = DEFAULTS.props;
 
 type Args = {
-  page: { index: t.Index; total: number };
+  index: t.Index;
+  page: t.DocHistoryPage;
   item: t.DocHistoryListItem;
   theme?: t.CommonTheme;
   hashLength?: number;
@@ -58,12 +59,10 @@ export function toRowElements(args: Args) {
  */
 const wrangle = {
   clickArgs(args: Args) {
-    type T = t.InfoHistoryItemHandlerArgs;
-    const { item, page } = args;
+    const { page, item } = args;
     const { index, commit } = item;
     const hash = commit.change.hash;
-    const is: T['page']['is'] = { first: page.index === 0, last: page.index === page.total - 1 };
-    const res: T = { hash, index, commit, page: { ...page, is } };
+    const res: t.InfoHistoryItemHandlerArgs = { hash, index, commit, page };
     return res;
   },
 } as const;
