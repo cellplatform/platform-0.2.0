@@ -8,6 +8,7 @@ export const Specs = {
   [`${ns}.tests`]: () => import('./-TestRunner'),
   [`${ns}.test.db`]: () => import('./TestDb.SPEC'),
   [`${ns}.ui.Info`]: () => import('../ui/ui.Info/-SPEC'),
+  [`${ns}.ui.Info.Stateful`]: () => import('../ui/ui.Info/-SPEC.Stateful'),
   [`${ns}.ui.PeerRepoList`]: () => import('../ui/ui.PeerRepoList/-SPEC'),
   [`${ns}.ui.Network.Connection`]: () => import('../ui/ui.Network.Connection/-SPEC'),
   [`${ns}.ui.Sample.TextboxSync`]: () => import('../ui/ui.Sample.TextboxSync/-SPEC'),
