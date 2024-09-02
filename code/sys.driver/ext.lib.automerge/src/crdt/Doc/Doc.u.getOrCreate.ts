@@ -4,7 +4,6 @@ import { get } from './Doc.u.get';
 import { Handle, Mutate } from './u';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | t.UriString;
 
 /**
  * Find or initialize a new document from the repo.
@@ -12,7 +11,7 @@ type Uri = t.DocUri | t.UriString;
 export async function getOrCreate<T extends O>(args: {
   repo: t.AutomergeRepo;
   initial: t.ImmutableMutator<T> | Uint8Array;
-  uri?: Uri;
+  uri?: t.UriString;
   dispose$?: t.UntilObservable;
   timeout?: t.Msecs;
 }): Promise<t.DocWithHandle<T>> {

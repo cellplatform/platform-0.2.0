@@ -3,19 +3,13 @@ export type * from './t.Events';
 
 type O = Record<string, unknown>;
 type P = t.Patch;
-type Uri = t.DocUri | t.UriString;
 type Init<T> = t.ImmutableMutator<T>;
-
-/**
- * The address of a document within the repo/store.
- */
-export type DocUri = t.AutomergeUrl;
 
 /**
  * An immutable/observable CRDT document reference.
  */
 export type Doc<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
-  readonly uri: t.DocUri;
+  readonly uri: t.UriString;
   readonly is: { readonly ready: boolean; readonly deleted: boolean };
   toObject(): T;
 };
@@ -37,27 +31,27 @@ export type DocWithHandle<T extends O = O> = Doc<T> & { readonly handle: t.DocHa
  * Generator function that produces a stongly-typed document
  * with a curried initial state.
  */
-export type DocFactory<T extends O = O> = (uri?: Uri) => Promise<t.Doc<T>>;
+export type DocFactory<T extends O = O> = (uri?: t.UriString) => Promise<t.Doc<T>>;
 
 /**
  * Document access exposed from a store/repo.
  */
 export type DocStore = {
-  exists(uri?: Uri, options?: GetOptions): Promise<boolean>;
-  get<T extends O>(uri?: Uri, options?: GetOptions): Promise<t.Doc<T> | undefined>;
+  exists(uri?: t.UriString, options?: GetOptions): Promise<boolean>;
+  get<T extends O>(uri?: t.UriString, options?: GetOptions): Promise<t.Doc<T> | undefined>;
   getOrCreate<T extends O>(
     initial: Init<T> | Uint8Array,
-    uri?: Uri,
+    uri?: t.UriString,
     options?: GetOptions,
   ): Promise<t.Doc<T>>;
-  delete(uri?: Uri, options?: GetOptions): Promise<boolean>;
+  delete(uri?: t.UriString, options?: GetOptions): Promise<boolean>;
   factory<T extends O>(initial: Init<T>): t.DocFactory<T>;
   toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.Doc<T>): Uint8Array;
   fromBinary<T extends O>(binary: Uint8Array, options?: FromBinaryOptions | t.UriString): t.Doc<T>;
 };
 
 type GetOptions = { timeout?: t.Msecs };
-type FromBinaryOptions = { uri?: Uri; dispose$?: t.UntilObservable };
+type FromBinaryOptions = { uri?: t.UriString; dispose$?: t.UntilObservable };
 
 /**
  * Common meta-data object that can decorate CRDT documents

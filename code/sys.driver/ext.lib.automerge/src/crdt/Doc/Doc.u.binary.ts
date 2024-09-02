@@ -3,7 +3,6 @@ import { A, DEFAULTS, DocUri, Is, type t } from './common';
 import { Handle } from './u.Handle';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | t.UriString;
 
 /**
  * Generate a new document from a stored binary.
@@ -23,7 +22,7 @@ type Uri = t.DocUri | t.UriString;
 export function fromBinary<T extends O>(args: {
   repo: t.AutomergeRepo;
   binary: Uint8Array;
-  uri?: Uri;
+  uri?: t.UriString;
   dispose$?: t.UntilObservable;
 }) {
   const { repo, binary, dispose$ } = args;

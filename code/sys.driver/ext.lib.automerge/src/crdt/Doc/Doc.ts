@@ -11,10 +11,8 @@ import { getOrCreate } from './Doc.u.getOrCreate';
 import { heads, history } from './Doc.u.history';
 import { merge } from './Doc.u.merge';
 import { Tag } from './Doc.u.tag';
-import { Data, Is, DocUri as Uri, toObject, type t } from './common';
+import { Data, Is, DocUri as Uri, toObject } from './common';
 import { Mutate, toHandle } from './u';
-
-type Uri = t.DocUri | t.UriString;
 
 export const Doc = {
   Is,

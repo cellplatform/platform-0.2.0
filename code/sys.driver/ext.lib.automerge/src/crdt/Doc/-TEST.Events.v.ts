@@ -135,7 +135,7 @@ describe('Doc.Events', async () => {
       events.deleted$.subscribe((e) => fired.push(e));
 
       expect(await store.doc.exists(doc.uri)).to.eql(true);
-      store.repo.delete(doc.uri);
+      store.repo.delete(doc.uri as t.AutomergeUrl);
       expect(await store.doc.exists(doc.uri, { timeout: 10 })).to.eql(false);
 
       expect(fired.length).to.eql(1);

@@ -23,7 +23,7 @@ describe('Store.repo', () => {
       store.repo.on('delete-document', handleDelete);
 
       const doc = await generator();
-      store.repo.delete(doc.uri);
+      store.repo.delete(doc.uri as t.AutomergeUrl);
       expect(fired).to.eql(1);
 
       store.repo.off('delete-document', handleDelete);

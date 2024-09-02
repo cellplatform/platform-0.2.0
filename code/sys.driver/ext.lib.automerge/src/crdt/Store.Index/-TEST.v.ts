@@ -331,7 +331,7 @@ describe('StoreIndex', () => {
       };
 
       it('via [repo.delete]', async () => {
-        await test((doc) => store.repo.delete(doc.uri));
+        await test((doc) => store.repo.delete(doc.uri as t.AutomergeUrl));
       });
 
       it('via [store.doc.delete]', async () => {

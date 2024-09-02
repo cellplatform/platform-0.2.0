@@ -86,7 +86,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const docs = fired[0].docs;
       expect(docs[docs.length - 1].uri).to.eql(sample.uri); // NB: added to end.
 
-      store.repo.delete(sample.uri);
+      store.repo.delete(sample.uri as t.AutomergeUrl);
       expect(contains(index.doc.current.docs, sample.uri)).to.eql(false);
 
       expect(fired.length).to.eql(2);
