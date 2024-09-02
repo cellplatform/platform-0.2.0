@@ -32,6 +32,7 @@ export type {
   UnixEpoch,
   UnixTimestamp,
   UntilObservable,
+  UriString,
   WorkerInstance,
   WorkerSelf,
 } from 'sys.types/src/types';
