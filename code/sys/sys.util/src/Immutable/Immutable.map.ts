@@ -6,6 +6,9 @@ type K = string | symbol;
 type O = Record<string, unknown>;
 const Mutate = ObjectPath.Mutate;
 
+/**
+ * Tools for creating composite objects.
+ */
 export const Map = {
   toObject,
 
