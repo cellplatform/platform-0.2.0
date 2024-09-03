@@ -10,7 +10,10 @@ type RefsInput<T extends O> = Ref<T> | (Ref<T> | undefined)[];
 /**
  * Retrieves documents by URI.
  */
-export function useDocs<T extends O>(refs?: RefsInput<T>, options: t.UseDocsOptions = {}) {
+export function useDocs<T extends O>(
+  refs?: RefsInput<T>,
+  options: t.UseDocsOptions = {},
+): t.UseDocs<T> {
   const { timeout } = options;
   const uriRefs = wrangle.uriRefs(refs);
 
@@ -125,7 +128,7 @@ export function useDocs<T extends O>(refs?: RefsInput<T>, options: t.UseDocsOpti
     refs: docs,
     fetching,
     errors,
-  } as const;
+  };
 }
 
 /**
