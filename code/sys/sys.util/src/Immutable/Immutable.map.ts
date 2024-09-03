@@ -17,7 +17,6 @@ export const Map = {
    */
   create<T extends O, P = t.PatchOperation, E = t.ImmutableEvents<T, P>>(
     map: t.ImmutableMap<T>,
-    options: { eventsFactory?: (map: t.ImmutableMap<T>, dispose$?: t.UntilObservable) => E } = {},
   ): t.ImmutableRef<T, P, E> {
     const $ = rx.subject<t.ImmutableChange<T, P>>();
     let _callback: t.ImmutablePatchCallback<any> | undefined;
@@ -79,7 +78,6 @@ export const Map = {
       },
 
       events(dispose$?: t.UntilObservable) {
-        if (options.eventsFactory) return options.eventsFactory(map, dispose$);
         return viaObservable<T, P>($, dispose$) as E;
       },
     };
