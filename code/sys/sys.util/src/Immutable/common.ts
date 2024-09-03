@@ -5,6 +5,6 @@ export { ObjectPath } from '../ObjectPath';
 export { rx } from '../Rx';
 
 export const Symbols = {
-  Map: Symbol('type:map'),
-  MapProxy: Symbol('type:map:proxy'),
+  map: Symbol('type:map'),
+  proxy: Symbol('type:proxy'),
 } as const;

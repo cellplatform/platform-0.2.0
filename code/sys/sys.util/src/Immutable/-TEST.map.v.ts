@@ -142,12 +142,12 @@ describe('Immutable.map', () => {
       NON.forEach((value) => expect(Immutable.Is.map(value)).to.eql(false));
     });
 
-    it('Is.mapProxy', () => {
+    it('Is.proxy', () => {
       const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
       const map = Immutable.map<F>({ foo: [doc, 'count'], foos: [doc, 'child'] });
 
-      expect(Immutable.Is.mapProxy(map)).to.eql(false);
-      expect(Immutable.Is.mapProxy(map.current)).to.eql(true);
+      expect(Immutable.Is.proxy(map)).to.eql(false);
+      expect(Immutable.Is.proxy(map.current)).to.eql(true);
 
       const NON = [true, 123, {}, [], Symbol('foo'), BigInt(0)];
       NON.forEach((value) => expect(Immutable.Is.map(value)).to.eql(false));
@@ -159,8 +159,10 @@ describe('Immutable.map', () => {
 
       const obj1 = Immutable.toObject(map);
       const obj2 = Immutable.toObject(map.current);
+      const obj3 = Immutable.Map.toObject(map);
 
       expect(obj1).to.eql(obj2);
+      expect(obj1).to.eql(obj3);
       expect(obj1).to.eql({ foo: 0, foos: { msg: 'hello' } });
     });
   });

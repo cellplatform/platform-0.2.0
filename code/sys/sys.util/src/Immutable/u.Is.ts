@@ -19,12 +19,12 @@ export const Is = {
   },
 
   map<T extends O, P = unknown, E = unknown>(input: any): input is t.ImmutableRef<T, E, P> {
-    return isObject(input) && Symbols.Map in input;
+    return isObject(input) && Symbols.map in input;
   },
 
-  mapProxy<T extends O>(input: any): input is T {
+  proxy<T extends O>(input: any): input is T {
     if (!isObject(input)) return false;
-    return isObject(input) && Symbols.MapProxy in input;
+    return isObject(input) && Symbols.proxy in input;
   },
 } as const;
 

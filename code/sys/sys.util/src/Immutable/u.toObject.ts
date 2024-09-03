@@ -13,7 +13,7 @@ export function toObject<T extends O>(input?: any): T {
     return toObject(input.current);
   }
 
-  if (Is.mapProxy(input)) {
+  if (Is.proxy(input)) {
     return Object.keys(input).reduce((acc, key) => {
       (acc as any)[key] = input[key];
       return acc;
