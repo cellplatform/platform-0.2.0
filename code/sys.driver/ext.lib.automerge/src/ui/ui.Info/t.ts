@@ -37,7 +37,6 @@ export type InfoProps = InfoHandlers & {
   fields?: (t.InfoField | undefined)[];
   repos?: t.InfoRepos;
   data?: t.InfoData;
-
   enabled?: boolean;
   theme?: t.CommonTheme;
   margin?: t.CssEdgesInput;

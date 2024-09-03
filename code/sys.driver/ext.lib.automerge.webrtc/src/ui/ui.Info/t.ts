@@ -51,8 +51,3 @@ export type InfoData = {
 };
 
 export type InfoShared = t.InfoDoc;
-export type InfoObject = {
-  visible?: boolean;
-  expand?: { level?: number; paths?: string[] };
-  dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
-};

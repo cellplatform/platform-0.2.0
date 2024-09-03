@@ -1,6 +1,6 @@
 import { DEFAULTS, PropList, Value, type t } from './common';
-import { Data } from './u.data';
-import { Diff } from './u.diff';
+import { Data } from './u.Data';
+import { Diff } from './u.Diff';
 
 export { Data, Diff };
 
