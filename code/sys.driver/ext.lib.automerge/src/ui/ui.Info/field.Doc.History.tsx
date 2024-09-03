@@ -9,13 +9,12 @@ export function history(ctx: t.InfoCtx, data: D | undefined) {
   const res: t.PropListItem[] = [];
   const history = data?.history;
   if (!data || !history) return res;
-  if (!Is.doc(data.ref)) return res;
+  if (!Is.doc(data.uri)) return res;
 
-  const doc = data.ref;
   const showGenesis = fields.includes('Doc.History.Genesis');
   const main: t.PropListItem = {
     label: data.label || DEFAULTS.history.label,
-    value: <History doc={doc} showGenesis={showGenesis} theme={theme} />,
+    value: <History doc={data.uri} showGenesis={showGenesis} theme={theme} />,
   };
   res.push(main);
 
@@ -23,7 +22,7 @@ export function history(ctx: t.InfoCtx, data: D | undefined) {
    * History
    */
   if (fields.includes('Doc.History.List')) {
-    const page = wrangle.page(data.ref, history.list);
+    const page = wrangle.page(data.uri, history.list);
 
     /**
      * History List (Grid)

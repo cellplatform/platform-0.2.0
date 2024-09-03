@@ -54,7 +54,7 @@ export const SpecData = {
     const document: t.InfoDoc = {
       repo: repo.name,
       // label: 'Foo',
-      ref: doc?.uri,
+      uri: doc?.uri,
       object: {
         // name: 'foobar',
         // visible: false,

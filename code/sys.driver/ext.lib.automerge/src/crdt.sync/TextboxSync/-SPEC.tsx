@@ -32,7 +32,7 @@ export default Dev.describe(name, async (e) => {
         component: { name },
         document: {
           repo: 'main',
-          uri: { head: true },
+          address: { head: true },
           object: { visible: false, expand: { level: 2 } },
         },
       }),
@@ -43,8 +43,8 @@ export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init({ broadcastAdapter: true });
 
   const updateInfoRef = () => {
-    const ref = State.debug.current.docuri;
-    State.info.change((d) => (Info.Data.document.list(d.document)[0].ref = ref));
+    const uri = State.debug.current.docuri;
+    State.info.change((d) => (Info.Data.document.list(d.document)[0].uri = uri));
   };
 
   e.it('ui:init', async (e) => {

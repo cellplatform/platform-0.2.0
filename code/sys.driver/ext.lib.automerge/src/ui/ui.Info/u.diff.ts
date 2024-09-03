@@ -29,9 +29,9 @@ const document = {
     const docRefs: t.Doc[] = [];
     const document = Data.document.list(input.document).map((item) => {
       item = { ...item };
-      if (Is.doc(item.ref)) {
-        docRefs.push(item.ref);
-        item.ref = item.ref.uri;
+      if (Is.doc(item.uri)) {
+        docRefs.push(item.uri);
+        item.uri = item.uri.uri;
       }
       return item;
     });

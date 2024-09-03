@@ -10,6 +10,6 @@ export function useDocuments(data?: t.InfoData, repos?: t.InfoRepos): t.UseDocs 
   const defaultRepo = data?.repo ?? '';
   const list = Data.document.list(data?.document);
   const getStore = (name?: string) => repos?.[name ?? defaultRepo]?.store;
-  const toRef = (doc: t.InfoDoc): UriRef => ({ uri: doc.ref, store: getStore(doc.repo) });
+  const toRef = (doc: t.InfoDoc): UriRef => ({ uri: doc.uri, store: getStore(doc.repo) });
   return useDocs(list.map(toRef));
 }

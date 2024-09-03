@@ -157,7 +157,7 @@ export default Dev.describe(name, async (e) => {
           repos={{ main: { store, index } }}
           data={{
             document: {
-              ref: debug.docuri,
+              uri: debug.docuri,
               repo: 'main',
               address: { head: true },
               object: { expand: { level: 1 } },

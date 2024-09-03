@@ -82,7 +82,7 @@ export default Dev.describe(name, async (e) => {
           repos={{ main: { store, index } }}
           data={{
             document: {
-              ref: doc?.uri,
+              uri: doc?.uri,
               repo: 'main',
               address: { head: true },
               object: { visible: false },
