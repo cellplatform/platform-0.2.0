@@ -1,4 +1,6 @@
-import { type t } from './common';
+import { Symbols, type t } from './common';
+
+type O = Record<string, unknown>;
 
 /**
  * Flag helpers for Immutable objects.
@@ -14,6 +16,15 @@ export const Is = {
     if (!isObject(input)) return false;
     const o = input as t.ImmutableRef<D, E, P>;
     return Is.immutable(o) && typeof o.instance === 'string' && areFuncs(o.events);
+  },
+
+  map<T extends O, P = unknown, E = unknown>(input: any): input is t.ImmutableRef<T, E, P> {
+    return isObject(input) && Symbols.Map in input;
+  },
+
+  mapProxy<T extends O>(input: any): input is T {
+    if (!isObject(input)) return false;
+    return isObject(input) && Symbols.MapProxy in input;
   },
 } as const;
 

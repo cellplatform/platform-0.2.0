@@ -6,13 +6,12 @@ import { Wrangle } from './u';
  *    RFC-6902 JSON patch standard
  *    https://tools.ietf.org/html/rfc6902
  */
-type P = t.PatchOperation;
 
 /**
  * ImmutableEvents<T> structure.
  */
-export function viaObservable<T>(
-  $: t.Observable<t.ImmutableChange<T, t.PatchOperation>>,
+export function viaObservable<T, P = t.PatchOperation>(
+  $: t.Observable<t.ImmutableChange<T, P>>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T, P> {
   const life = rx.lifecycle(dispose$);
@@ -30,22 +29,22 @@ export function viaObservable<T>(
  * Generic events for an Immutable<T> object
  * achieved by overriding the [change] method.
  */
-export function viaOverride<T>(
+export function viaOverride<T, P = t.PatchOperation>(
   source: t.Immutable<T, P>,
   dispose$?: t.UntilObservable,
 ): t.ImmutableEvents<T, P> {
   const $ = rx.subject<t.ImmutableChange<T, P>>();
-  const api = viaObservable<T>($, dispose$);
+  const api = viaObservable<T, P>($, dispose$);
   const base = source.change;
   api.dispose$.subscribe(() => (source.change = base));
-  source.change = curryChangeFunction<T>($, base, () => source.current);
+  source.change = curryChangeFunction<T, P>($, base, () => source.current);
   return api;
 }
 
 /**
  * Implementation for a override function for [Immutable.change].
  */
-export function curryChangeFunction<T>(
+export function curryChangeFunction<T, P = t.PatchOperation>(
   $: t.Subject<t.ImmutableChange<T, P>>,
   change: t.Immutable<T, P>['change'],
   current: () => T,

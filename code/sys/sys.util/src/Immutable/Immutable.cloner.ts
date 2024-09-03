@@ -1,4 +1,4 @@
-import { viaObservable, curryChangeFunction } from './Immutable.event';
+import { viaObservable, curryChangeFunction } from './Immutable.events';
 import { R, rx, slug, type t } from './common';
 import { Wrangle } from './u';
 
