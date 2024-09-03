@@ -11,10 +11,10 @@ export const Path = {
    * Wrangle the paths object from various input types.
    */
   wrangle(input?: t.CmdPaths | t.ObjectPath) {
-    const def = DEFAULTS.paths;
-    if (!input) return def;
+    const DEF = DEFAULTS.paths;
+    if (!input) return DEF;
     if (Array.isArray(input)) return Path.prepend(input);
-    return typeof input === 'object' ? input : def;
+    return typeof input === 'object' ? input : DEF;
   },
 
   /**
