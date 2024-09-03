@@ -3,7 +3,6 @@ import { DEFAULTS, type t } from './common';
 type Repo = { name: t.InfoRepoName; store: t.Store; index: t.StoreIndex };
 
 export type SpecDataFlags = {
-  uris?: boolean;
   historyDesc?: boolean;
   historyDetail?: t.HashString;
   docLens?: boolean;
@@ -27,7 +26,6 @@ export const SpecData = {
   get defaults() {
     const flags: SpecDataFlags = {
       historyDesc: DEFAULTS.history.list.sort === 'desc',
-      uris: true,
       docLens: false,
       docArray: false,
       docIconClickHandler: true,
@@ -56,14 +54,14 @@ export const SpecData = {
     const document: t.InfoDoc = {
       repo: repo.name,
       // label: 'Foo',
-      ref: flags.uris ? doc?.uri : doc,
+      ref: doc?.uri,
       object: {
         // name: 'foobar',
         // visible: false,
         lens: flags.docLens ? ['child'] : undefined,
         expand: { level: 2 },
       },
-      uri: {
+      address: {
         // prefix: 'foo:::',
         // prefix: null,
         head: true,

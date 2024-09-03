@@ -47,7 +47,7 @@ export default Dev.describe(name, async (e) => {
     },
     update() {
       const flags = State.debug.current.flags;
-      const documents = SpecData.document({ repo, doc, flags: { ...flags, uris: true } });
+      const documents = SpecData.document({ repo, doc, flags });
       data?.change((d) => (d.document = documents));
     },
   } as const;
