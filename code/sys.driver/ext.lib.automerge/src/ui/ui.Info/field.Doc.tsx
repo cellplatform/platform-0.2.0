@@ -33,7 +33,7 @@ export function document(
   const list = (Array.isArray(data) ? data : [data]).filter(Boolean);
   list.forEach((data, i) => {
     const doc = docs.refs.find((doc) => doc.uri == data.uri);
-    if (Is.doc(doc)) {
+    if (doc) {
       renderRepo(data);
       res.push(...renderDocument(ctx, data, doc, i));
     }
