@@ -50,3 +50,12 @@ export type ImmutableChange<D, P> = {
   readonly after: D;
   readonly patches: P[];
 };
+
+/**
+ * A mapping used to create single composite data object
+ * out of paths pointing to sub-parts of other immutable references.
+ */
+export type ImmutableMapProp = [t.ImmutableRef, MapToPath];
+export type ImmutableMap<T extends O> = { [K in keyof T]: t.ImmutableMapProp };
+type MapPropName = string;
+type MapToPath = t.ObjectPath | MapPropName;
