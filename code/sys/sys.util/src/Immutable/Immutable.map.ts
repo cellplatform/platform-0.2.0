@@ -4,6 +4,8 @@ import { Is, Wrangle, toObject } from './u';
 
 type K = string | symbol;
 type O = Record<string, unknown>;
+// type DefaultPatch = t.ImmutableMapPatch<t.PatchOperation>;
+
 const Mutate = ObjectPath.Mutate;
 
 /**
@@ -15,7 +17,7 @@ export const Map = {
   /**
    * Create a new composite proxy that maps to an underlying document(s).
    */
-  create<T extends O, P = t.ImmutableMapPatch, E = t.ImmutableEvents<T, P>>(
+  create<T extends O, P = t.ImmutableMapPatchDefault, E = t.ImmutableEvents<T, P>>(
     map: t.ImmutableMap<T>,
     options: { formatPatch?: t.ImmutableMapFormatPatch<P> } = {},
   ): t.ImmutableRef<T, P, E> {
@@ -43,7 +45,7 @@ export const Map = {
         const doc = prop.doc;
         const callback: C = (patches) => {
           const format: t.ImmutableMapFormatPatch<P> = options.formatPatch ?? wrangle.patch;
-          patches = patches.map((patch) => format({ patch, key, doc }));
+          patches = patches.map((patch) => format({ patch, key: String(key), doc }));
           _callback?.(patches);
         };
 
@@ -130,10 +132,10 @@ const wrangle = {
     }, {} as T);
   },
 
-  patch<P = t.ImmutableMapPatch>(args: t.ImmutableMapFormatPatchArgs<P>): P {
+  patch<P>(args: t.ImmutableMapFormatPatchArgs<P>): P {
     const mapping: t.ImmutableMapPatchInfo = {
       doc: `instance:${args.doc.instance}`,
-      key: String(args.key),
+      key: args.key,
     };
     return { ...args.patch, mapping };
   },

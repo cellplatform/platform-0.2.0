@@ -71,18 +71,18 @@ describe('Immutable.map', () => {
     it('subset of two documents', () => {
       const doc1 = Immutable.clonerRef<D>({ count: 123 });
       const doc2 = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
-      const map = Immutable.map<F>({ foo: [doc1, ['count']], foos: [doc2, ['child']] });
+      const map = Immutable.map<F>({ foo: [doc1, ['count']], text: [doc2, ['child', 'msg']] });
 
       expect(map.current.foo).to.eql(123);
-      expect(map.current.foos.msg).to.eql('hello');
+      expect(map.current.text).to.eql('hello');
 
       map.change((d) => {
         d.foo = 456;
-        d.foos.msg = 'hazaar';
+        d.text = 'hazaar';
       });
 
       expect(map.current.foo).to.eql(456);
-      expect(map.current.foos.msg).to.eql('hazaar');
+      expect(map.current.text).to.eql('hazaar');
 
       expect(doc1.current.count).to.eql(456);
       expect(doc2.current.child!.msg).to.eql('hazaar');
@@ -170,6 +170,7 @@ describe('Immutable.map', () => {
 
   describe('events', () => {
     type E = t.ImmutableChange<F, t.PatchOperation>;
+    type P = t.ImmutableMapPatchDefault;
 
     it('change → events ⚡️before/after', () => {
       const { dispose, dispose$ } = rx.lifecycle();
@@ -197,5 +198,62 @@ describe('Immutable.map', () => {
 
       dispose();
     });
+
+    it('event patches include mapping info', () => {
+      const { dispose, dispose$ } = rx.lifecycle();
+      const doc1 = Immutable.clonerRef<D>({ count: 0 });
+      const doc2 = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
+      const map = Immutable.map<F>({ foo: [doc1, ['count']], text: [doc2, ['child', 'msg']] });
+
+      const fired: E[] = [];
+      const events = map.events(dispose$);
+      events.changed$.subscribe((e) => fired.push(e));
+
+      map.change((d) => {
+        d.foo = 123;
+        d.text = 'world!';
+      });
+
+      const patches = fired[0].patches as P[];
+      expect(fired.length).to.eql(1);
+      expect(patches.length).to.eql(2);
+
+      expect(patches[0].mapping.key).to.eql('foo');
+      expect(patches[1].mapping.key).to.eql('text');
+
+      expect(patches[0].mapping.doc).to.eql(`instance:${doc1.instance}`);
+      expect(patches[1].mapping.doc).to.eql(`instance:${doc2.instance}`); // NB: indicates where the change was actually written to.
+
+      dispose();
+    });
+
+    it('custom event patch formatter', () => {
+      const { dispose, dispose$ } = rx.lifecycle();
+      const doc = Immutable.clonerRef<D>({ count: 0 });
+
+      const formatPatch: t.ImmutableMapFormatPatch<P> = (e) => {
+        const key = `test-${e.key}`;
+        const doc = `uri:wowow`;
+        return { ...e.patch, mapping: { key, doc } };
+      };
+
+      const map = Immutable.map<F, P>(
+        { foo: [doc, ['count']], text: [doc, ['child', 'msg']] },
+        { formatPatch },
+      );
+
+      const fired: E[] = [];
+      const events = map.events(dispose$);
+      events.changed$.subscribe((e) => fired.push(e));
+
+      map.change((d) => (d.foo = 123));
+
+      const patches = fired[0].patches as P[];
+      expect(patches[0].mapping.key).to.eql('test-foo');
+      expect(patches[0].mapping.doc).to.eql('uri:wowow');
+
+      dispose();
+    });
+
   });
 });

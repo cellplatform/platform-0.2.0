@@ -59,3 +59,22 @@ export type ImmutableMapProp = [t.ImmutableRef, MapToPath];
 export type ImmutableMap<T extends O> = { [K in keyof T]: t.ImmutableMapProp };
 type MapPropName = string;
 type MapToPath = t.ObjectPath | MapPropName;
+
+/**
+ * A JSON change/patch operation (RFC-6902) extended
+ * with the address (URI) of the underlying mapped
+ * document the patch pertains to.
+ */
+export type ImmutableMapPatch<P> = P & { mapping: ImmutableMapPatchInfo };
+export type ImmutableMapPatchInfo = { key: string; doc: string };
+
+/**
+ * Takes a patch after a change operation and formats it
+ * with identifying meta-data.
+ */
+export type ImmutableMapFormatPatch<P> = (e: t.ImmutableMapFormatPatchArgs<P>) => P;
+export type ImmutableMapFormatPatchArgs<P> = {
+  patch: P;
+  key: string;
+  doc: t.ImmutableRef;
+};
