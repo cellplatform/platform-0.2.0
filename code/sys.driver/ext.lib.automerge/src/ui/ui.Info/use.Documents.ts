@@ -8,8 +8,8 @@ type UriRef = { uri?: t.UriString; store?: t.Store };
  */
 export function useDocuments(data?: t.InfoData, repos?: t.InfoRepos): t.UseDocs {
   const defaultRepo = data?.repo ?? '';
-  const list = Data.document.list(data?.document);
+  const documents = Data.documents(data);
   const getStore = (name?: string) => repos?.[name ?? defaultRepo]?.store;
   const toRef = (doc: t.InfoDoc): UriRef => ({ uri: doc.uri, store: getStore(doc.repo) });
-  return useDocs(list.map(toRef));
+  return useDocs(documents.map(toRef));
 }
