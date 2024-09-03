@@ -5,6 +5,8 @@ type O = Record<string, unknown>;
 type P = t.Patch;
 type Init<T> = t.ImmutableMutator<T>;
 
+export type DocMapPatch = t.ImmutableMapPatch<P>;
+
 /**
  * An immutable/observable CRDT document reference.
  */
