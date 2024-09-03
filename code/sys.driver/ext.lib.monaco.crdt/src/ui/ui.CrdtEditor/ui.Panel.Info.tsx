@@ -26,23 +26,23 @@ export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <CrdtInfo
+      <CrdtInfo.Stateful
         theme={props.theme}
         enabled={enabled}
-        stateful={true}
         fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+        repos={{ main: repo }}
         data={{
-          repo,
+          repo: 'main',
           document: [
             {
-              ref: doc,
-              uri: { head: true },
+              uri: doc?.uri,
+              address: { head: true },
               object: { visible: false },
             },
             {
-              ref: doc,
+              uri: doc?.uri,
               label: 'Lens',
-              uri: { head: true },
+              address: { head: true },
               object: { lens: path, visible: false },
             },
           ],

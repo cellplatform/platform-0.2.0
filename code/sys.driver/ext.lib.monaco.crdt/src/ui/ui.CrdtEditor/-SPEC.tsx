@@ -149,25 +149,22 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<D>(e);
 
     dev.header.border(-0.1).render((e) => {
-      const ref = Props.doc?.uri;
       const debug = State.debug.current;
       const { store, index } = db.repo;
 
       return (
-        <CrdtInfo
-          stateful={true}
+        <CrdtInfo.Stateful
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: { store, index } }}
           data={{
-            repo: { store, index },
+            repo: 'main',
             document: {
-              ref,
-              uri: { head: true },
-              object: {
-                visible: debug.docObjectOpen,
-                onToggleClick: (e) => State.debug.change((d) => Dev.toggle(d, 'docObjectOpen')),
-              },
+              uri: Props.doc?.uri,
+              address: { head: true },
+              object: { visible: debug.docObjectOpen },
             },
           }}
+          onDocToggleClick={(e) => State.debug.change((d) => Dev.toggle(d, 'docObjectOpen'))}
         />
       );
     });

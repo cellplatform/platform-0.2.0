@@ -90,7 +90,7 @@ export default Dev.describe(name, async (e) => {
                 console.info(`⚡️ SampleEditor("${e.identity}").onReady`, e);
                 syncers[debugLabel] = e.syncer;
                 e.syncer.dispose$.subscribe(() => {
-                  console.info(`⚡️ Disposed: SampleEditor("${e.identity}")`, e);
+                  console.info(`⚡️ e.syncer("${e.identity}") → (💥) disposed`, e);
                 });
               }}
             />
@@ -119,21 +119,18 @@ export default Dev.describe(name, async (e) => {
     dev.row((e) => {
       const state = State.current;
       return (
-        <CrdtInfo
-          stateful={true}
+        <CrdtInfo.Stateful
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: db.repo }}
           data={{
-            repo: db.repo,
+            repo: 'main',
             document: {
-              ref: doc,
-              uri: { head: true },
-              object: {
-                expand: { level: 2 },
-                visible: state.objectOpen,
-                onToggleClick: (e) => State.change((d) => Dev.toggle(d, 'objectOpen')),
-              },
+              uri: doc?.uri,
+              address: { head: true },
+              object: { visible: state.objectOpen, expand: { level: 2 } },
             },
           }}
+          onDocToggleClick={(e) => State.change((d) => Dev.toggle(d, 'objectOpen'))}
         />
       );
     });

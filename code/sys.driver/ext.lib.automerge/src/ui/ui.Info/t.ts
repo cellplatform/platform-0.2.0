@@ -71,7 +71,7 @@ export type InfoRepo = {
   index?: t.StoreIndex;
 };
 export type InfoRepoName = string;
-export type InfoRepos = { [key: InfoRepoName]: t.InfoRepo };
+export type InfoRepos = { [key: InfoRepoName]: t.InfoRepo | undefined };
 
 /**
  * Document
