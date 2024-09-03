@@ -30,10 +30,10 @@ export function document(
     }
   };
 
-  const defs = Array.isArray(data) ? data : [data];
-  defs.forEach((data, i) => {
+  const list = (Array.isArray(data) ? data : [data]).filter(Boolean);
+  list.forEach((data, i) => {
     const doc = docs.refs.find((doc) => doc.uri == data.uri);
-    if (data && Is.doc(doc)) {
+    if (Is.doc(doc)) {
       renderRepo(data);
       res.push(...renderDocument(ctx, data, doc, i));
     }
