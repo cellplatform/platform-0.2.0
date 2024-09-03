@@ -159,7 +159,7 @@ export default Dev.describe(name, async (e) => {
             document: {
               ref: debug.docuri,
               repo: 'main',
-              uri: { head: true },
+              address: { head: true },
               object: { expand: { level: 1 } },
             },
           }}

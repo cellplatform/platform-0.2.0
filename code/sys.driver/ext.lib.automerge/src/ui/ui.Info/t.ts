@@ -81,7 +81,7 @@ export type InfoDoc<R extends t.InfoRepoName = string> = {
   label?: string;
   ref?: t.UriString;
   repo?: R;
-  uri?: InfoDocUri;
+  address?: InfoDocUri;
   object?: InfoDocObject;
   head?: { label?: string; hashLength?: number };
   history?: InfoDocHistory;

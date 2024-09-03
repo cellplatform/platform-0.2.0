@@ -73,7 +73,7 @@ function renderDocument(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index): t.
     const parts: JSX.Element[] = [];
 
     if (uri) {
-      const { shorten, prefix, head, clipboard } = data.uri ?? {};
+      const { shorten, prefix, head, clipboard } = data.address ?? {};
       parts.push(
         <DocUri
           doc={doc.uri}
