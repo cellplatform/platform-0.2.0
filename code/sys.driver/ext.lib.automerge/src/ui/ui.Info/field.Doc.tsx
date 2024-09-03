@@ -2,33 +2,41 @@ import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t }
 import { history } from './field.Doc.History';
 import { repo } from './field.Repo';
 
+type O = Record<string, unknown>;
 type D = t.InfoDoc;
 
 /**
  * Field for a document {item}.
  */
-export function document(ctx: t.InfoCtx, data: D | D[] | undefined): t.PropListItem[] {
+export function document(
+  ctx: t.InfoCtx,
+  docs: t.UseDocs,
+  data: D | D[] | undefined,
+): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   const { fields } = ctx;
   if (!data) return res;
 
-  let lastRepo = '';
+  let _lastRepo = '';
   const renderRepo = (data: D) => {
     const name = data.repo;
     if (!fields.includes('Doc.Repo')) return;
-    if (!name || name === lastRepo) return;
+    if (!name || name === _lastRepo) return;
 
     const item = repo(ctx, data.repo);
     if (item) {
       res.push(item);
-      lastRepo = name;
+      _lastRepo = name;
     }
   };
 
-  const docs = Array.isArray(data) ? data : [data];
-  docs.forEach((data, i) => {
-    renderRepo(data);
-    res.push(...renderDocument(ctx, i, data));
+  const defs = Array.isArray(data) ? data : [data];
+  defs.forEach((data, i) => {
+    const doc = docs.refs.find((doc) => doc.uri == data.ref);
+    if (data && Is.doc(doc)) {
+      renderRepo(data);
+      res.push(...renderDocument(ctx, data, doc, i));
+    }
   });
 
   return res;
@@ -37,14 +45,10 @@ export function document(ctx: t.InfoCtx, data: D | D[] | undefined): t.PropListI
 /**
  * Render the document {item}.
  */
-function renderDocument(ctx: t.InfoCtx, index: t.Index, data?: D): t.PropListItem[] {
-  const res: t.PropListItem[] = [];
+function renderDocument(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index): t.PropListItem[] {
   const { fields, theme, enabled } = ctx;
+  const res: t.PropListItem[] = [];
 
-  if (!data) return res;
-  if (!Is.doc(data.ref)) return res;
-
-  const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
   const hasToggleHandler = !!ctx.handlers.onDocToggleClick;
@@ -122,7 +126,7 @@ function renderDocument(ctx: t.InfoCtx, index: t.Index, data?: D): t.PropListIte
    * The <Object> component.
    */
   if (isObjectVisible) {
-    const value = wrangle.objectElement(ctx, index, data, hasLabel);
+    const value = wrangle.objectElement(ctx, data, doc, index, hasLabel);
     res.push({ value });
   }
 
@@ -149,13 +153,13 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(ctx: t.InfoCtx, index: t.Index, data: D, hasLabel: boolean) {
+  objectElement(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index, hasLabel: boolean) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
-    let output = Is.doc(data.ref) ? data.ref.current : undefined;
+    let output: O | undefined = doc.current;
     const lens = data.object?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 

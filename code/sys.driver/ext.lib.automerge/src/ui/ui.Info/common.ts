@@ -2,10 +2,12 @@ import { Doc } from '../../crdt';
 import { Pkg, type t } from '../common';
 import { DocUri } from '../ui.DocUri';
 
-export * from '../common';
+export { useDocs } from '../../ui/ui.use';
 export { MonospaceButton } from '../ui.Buttons';
 export { HistoryGrid, MonoHash } from '../ui.Info.History.Grid';
 export { NavPaging } from '../ui.Nav.Paging';
+
+export * from '../common';
 export { Doc, DocUri };
 
 type P = t.InfoProps;

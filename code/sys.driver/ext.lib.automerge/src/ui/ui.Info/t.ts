@@ -79,7 +79,7 @@ export type InfoRepos = { [key: InfoRepoName]: t.InfoRepo };
  */
 export type InfoDoc<R extends t.InfoRepoName = string> = {
   label?: string;
-  ref?: t.Doc | t.UriString;
+  ref?: t.UriString;
   repo?: R;
   uri?: InfoDocUri;
   object?: InfoDocObject;
