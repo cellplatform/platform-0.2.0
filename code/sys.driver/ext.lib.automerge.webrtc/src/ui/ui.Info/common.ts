@@ -11,16 +11,16 @@ type P = t.InfoProps;
  * Constants
  */
 const name = 'Info';
-const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields' | 'childrenStateful'> = {
+const displayName = `${Pkg.name}:${name}`;
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
   theme: 'Light',
   enabled: true,
-  childrenStateful: false,
   get fields() {
     return fields.default;
   },
 };
 
-const uri: Required<t.InfoDocUri> = {
+const address: Required<t.InfoDocAddress> = {
   shorten: [4, 4],
   prefix: 'crdt:automerge',
   head: true,
@@ -48,10 +48,11 @@ const fields = {
 
 export const DEFAULTS = {
   name,
-  displayName: `${Pkg.name}:${name}`,
+  displayName,
   fields,
   props,
-  doc: { uri },
+  doc: { address },
   shared: { label: 'Shared State', dotMeta: false },
   query: { dev: 'dev' },
+  Stateful: { name: `${name}.Stateful`, displayName: `${displayName}.Stateful` },
 } as const;
