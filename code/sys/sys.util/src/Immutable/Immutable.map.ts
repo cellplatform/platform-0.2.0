@@ -12,7 +12,7 @@ const Mutate = ObjectPath.Mutate;
 export function map<T extends O, P = t.PatchOperation, E = t.ImmutableEvents<T, P>>(
   map: t.ImmutableMap<T>,
   options: { eventsFactory?: (map: t.ImmutableMap<T>, dispose$?: t.UntilObservable) => E } = {},
-): t.ImmutableRef<T, E, P> {
+): t.ImmutableRef<T, P, E> {
   const $ = rx.subject<t.ImmutableChange<T, P>>();
   let _callback: t.ImmutablePatchCallback<any> | undefined;
 

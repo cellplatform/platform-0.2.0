@@ -8,7 +8,7 @@ type Init<T> = t.ImmutableMutator<T>;
 /**
  * An immutable/observable CRDT document reference.
  */
-export type Doc<T extends O = O> = t.ImmutableRef<T, t.DocEvents<T>, P> & {
+export type Doc<T extends O = O> = t.ImmutableRef<T, P, t.DocEvents<T>> & {
   readonly uri: t.UriString;
   readonly is: { readonly ready: boolean; readonly deleted: boolean };
   toObject(): T;

@@ -24,7 +24,7 @@ export type ImmutableChangeOptions<P> =
  * A reference handle to an Immutable<T> with
  * an observable event factory.
  */
-export type ImmutableRef<D = O, E = unknown, P = unknown> = Immutable<D, P> & {
+export type ImmutableRef<D = O, P = unknown, E = unknown> = Immutable<D, P> & {
   readonly instance: string; // Unique ID of the reference handle.
   events(dispose$?: t.UntilObservable): E;
 };

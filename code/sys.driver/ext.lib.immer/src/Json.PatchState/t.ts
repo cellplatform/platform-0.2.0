@@ -6,7 +6,7 @@ type P = t.PatchOperation;
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T, E, P> & {
+export type PatchState<T extends O, E = PatchStateEvents<T>> = t.ImmutableRef<T, P, E> & {
   readonly typename?: string;
 };
 

@@ -45,7 +45,9 @@ export function cloner<T>(
 export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T } = {}) {
   const $ = rx.subject<t.ImmutableChange<T, P>>();
   const inner = cloner<T>(initial, options);
-  const api: t.ImmutableRef<T, t.ImmutableEvents<T, P>, P> = {
+
+  type E = t.ImmutableEvents<T, P>;
+  const api: t.ImmutableRef<T, P, E> = {
     instance: slug(),
     get current() {
       return inner.current;

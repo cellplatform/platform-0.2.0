@@ -1,7 +1,9 @@
 import type { t } from './common';
 
 type O = Record<string, unknown>;
-export type TextboxSyncState = t.ImmutableRef<O, t.ImmutableEvents<O, unknown>, unknown>;
+type P = unknown;
+type E = t.ImmutableEvents<O, P>;
+export type TextboxSyncState = t.ImmutableRef<O, P, E>;
 
 /**
  * A live listener that is syncing an <input> textbox
