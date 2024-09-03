@@ -175,13 +175,6 @@ export default Dev.describe(name, async (e) => {
       });
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.uris;
-        btn
-          .label(() => `data.document.doc ← URI string`)
-          .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'uris')));
-      });
-      dev.boolean((btn) => {
         const value = () => !!State.debug.current.flags.docLens;
         btn
           .label(() => `data.document.lens`)
