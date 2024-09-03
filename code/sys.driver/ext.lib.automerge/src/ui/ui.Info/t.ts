@@ -81,7 +81,7 @@ export type InfoDoc<R extends t.InfoRepoName = string> = {
   label?: string;
   uri?: t.UriString;
   repo?: R;
-  address?: InfoDocUri;
+  address?: InfoDocAddress;
   object?: InfoDocObject;
   head?: { label?: string; hashLength?: number };
   history?: InfoDocHistory;
@@ -95,7 +95,7 @@ export type InfoDocObject = {
   dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
 };
 
-export type InfoDocUri = {
+export type InfoDocAddress = {
   shorten?: number | [number, number];
   prefix?: string | null;
   head?: boolean | number;

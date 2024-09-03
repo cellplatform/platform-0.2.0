@@ -1,6 +1,6 @@
 import type { t } from './common';
 
-type D = t.InfoDocUri;
+type D = t.InfoDocAddress;
 
 export type DocUriPart = 'Prefix' | 'Id' | 'Head';
 
