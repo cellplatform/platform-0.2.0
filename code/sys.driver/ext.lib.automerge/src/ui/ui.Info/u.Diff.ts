@@ -1,5 +1,5 @@
 import { Is, PatchState, R, Value, type t } from './common';
-import { Data } from './u.data';
+import { Data } from './u.Data';
 
 /**
  * Helpers for performing object comparisons.
@@ -27,7 +27,7 @@ const document = {
    */
   simplify(input: t.InfoData = {}) {
     const docRefs: t.Doc[] = [];
-    const document = Data.document.list(input.document).map((item) => {
+    const document = Data.documents(input).map((item) => {
       item = { ...item };
       if (Is.doc(item.uri)) {
         docRefs.push(item.uri);
