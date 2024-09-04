@@ -38,22 +38,4 @@ describe('Immutable.events', () => {
 
     events1.dispose();
   });
-
-  it('fires with "tx" identifier', () => {
-    const obj = PatchState.create<D>({ count: 0 });
-    const events = obj.events();
-
-    const fired: t.PatchChange<D>[] = [];
-    events.$.subscribe((e) => fired.push(e));
-
-    const tx = `foo.${slug()}`;
-    obj.change((d) => (d.count = 123), { tx });
-    obj.change((d) => (d.count = 456));
-
-    expect(fired.length).to.eql(2);
-    expect(fired[0].tx).to.eql(tx);
-    expect(fired[1].tx).to.eql(undefined);
-
-    events.dispose();
-  });
 });

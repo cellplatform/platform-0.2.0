@@ -17,10 +17,7 @@ export type ImmutableMutator<D = O> = (draft: D) => void;
 
 export type ImmutableChangeOptionsInput<P> = ImmutablePatchCallback<P> | ImmutableChangeOptions<P>;
 export type ImmutablePatchCallback<P> = (patches: P[]) => void;
-export type ImmutableChangeOptions<P> = {
-  patches?: ImmutablePatchCallback<P>;
-  tx?: t.IdString; // NB: used for granular identification of change events.
-};
+export type ImmutableChangeOptions<P> = { patches?: ImmutablePatchCallback<P> };
 
 /**
  * A reference handle to an Immutable<T> with
@@ -51,7 +48,6 @@ export type ImmutableChange<D, P> = {
   readonly before: D;
   readonly after: D;
   readonly patches: P[];
-  readonly tx?: t.IdString;
 };
 
 /**

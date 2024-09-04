@@ -1,4 +1,4 @@
-import { Delete, rx, type t } from './common';
+import { rx, type t } from './common';
 import { Wrangle } from './u';
 
 /**
@@ -51,7 +51,7 @@ export function curryChangeFunction<T, P = t.PatchOperation>(
 ): t.Immutable<T, P>['change'] {
   return (fn, options) => {
     const before = current();
-    const { tx, patches: callback } = Wrangle.options(options);
+    const callback = Wrangle.options(options).patches;
     let patches: P[] = [];
     change(fn, {
       ...options,
@@ -61,6 +61,6 @@ export function curryChangeFunction<T, P = t.PatchOperation>(
       },
     });
     const after = current();
-    $.next(Delete.undefined({ before, after, patches, tx }));
+    $.next({ before, after, patches });
   };
 }

@@ -40,9 +40,9 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
       const e = Patch.change<T>(_current, fn);
       _current = e.after;
       options.onChange?.(e);
-      const { patches: callback, tx } = wrangle.options(opt);
+      const callback = wrangle.options(opt).patches;
       callback?.(wrangle.formatPatches(e.patches.next));
-      $.next(tx ? { ...e, tx } : e);
+      $.next(e);
     },
 
     /**
