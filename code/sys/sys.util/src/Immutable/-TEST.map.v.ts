@@ -255,5 +255,20 @@ describe('Immutable.map', () => {
       dispose();
     });
 
+    it('events fire when mapped targets change', () => {
+      const { dispose, dispose$ } = rx.lifecycle();
+      const doc1 = Immutable.clonerRef<D>({ count: 0 });
+      const doc2 = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
+      const map = Immutable.map<F>({ foo: [doc1, ['count']], text: [doc2, ['child', 'msg']] });
+
+      const fired: E[] = [];
+      const events = map.events(dispose$);
+      events.changed$.subscribe((e) => fired.push(e));
+
+      dispose();
+      /**
+       * TODO 🐷
+       */
+    });
   });
 });
