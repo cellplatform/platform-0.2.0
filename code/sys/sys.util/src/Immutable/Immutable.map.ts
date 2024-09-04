@@ -19,7 +19,7 @@ export const Map = {
   create<T extends O, P = t.ImmutableMapPatchDefault>(
     map: t.ImmutableMap<T, P>,
     options: { formatPatch?: t.ImmutableMapFormatPatch<P> } = {},
-  ): t.ImmutableRef<T, P, t.ImmutableEvents<T, P>> {
+  ) {
     const $ = rx.subject<t.ImmutableChange<T, P>>();
 
     type C = t.ImmutablePatchCallback<P>;
@@ -67,7 +67,7 @@ export const Map = {
     /**
      * API
      */
-    return {
+    const api: t.ImmutableRef<T, P, t.ImmutableEvents<T, P>> = {
       instance: slug(),
       [Symbols.map]: true,
 
@@ -90,9 +90,30 @@ export const Map = {
       },
 
       events(dispose$?: t.UntilObservable) {
-        return viaObservable<T, P>($, dispose$) as E;
+        const res = viaObservable<T, P>($, dispose$);
+
+        // Fire changes through map when underlying source document(s) change.
+        Object.keys(map)
+          .map((key) => wrangle.prop(map, key)!)
+          .filter((prop) => !!prop)
+          .forEach((prop) => {
+            const events = prop.doc.events(res.dispose$);
+            const changed$ = events.changed$.pipe(rx.filter((e) => !('mapping' in e))); // NB: ignore changes made by (this) the mapper itself.
+            changed$.subscribe((e) => {
+              const paths = e.patches.map((p) => ObjectPath.from(p));
+              if (paths.length > 0) {
+                const before = wrangle.pluckAndMap(map, proxy, e.before, paths);
+                const after = wrangle.pluckAndMap(map, proxy, e.after, paths);
+                const patches = formatPatches(e.patches, prop.key, prop.doc);
+                $.next({ before, after, patches });
+              }
+            });
+          });
+
+        return res as t.ImmutableEvents<T, P>;
       },
     };
+    return api;
   },
 } as const;
 
@@ -128,6 +149,32 @@ const wrangle = {
       (acc as any)[key] = proxy[key];
       return acc;
     }, {} as T);
+  },
+
+  pluckAndMap<T extends O, P>(
+    map: t.ImmutableMap<T, P>,
+    proxy: O,
+    data: O,
+    paths: t.ObjectPath[],
+  ): T {
+    const plucked = paths
+      .filter((path) => ObjectPath.exists(data, path))
+      .map((path) => ({ path, value: ObjectPath.resolve(data, path) }))
+      .reduce((acc, next) => {
+        Mutate.value(acc, next.path, next.value);
+        return acc;
+      }, {});
+
+    return Object.keys(map)
+      .map((key) => wrangle.prop(map, key))
+      .filter((prop) => !!prop)
+      .reduce((acc, prop) => {
+        const key = String(prop.key);
+        const exists = ObjectPath.exists(plucked, prop.path);
+        const value = exists ? ObjectPath.resolve(plucked, prop.path) : proxy[key];
+        Mutate.value(acc, [key], value);
+        return acc;
+      }, {} as T);
   },
 
   patch<P>(args: t.ImmutableMapFormatPatchArgs<P>): P {
