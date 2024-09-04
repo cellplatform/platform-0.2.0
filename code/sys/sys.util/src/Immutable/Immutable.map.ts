@@ -4,7 +4,6 @@ import { Is, Wrangle, toObject } from './u';
 
 type K = string | symbol;
 type O = Record<string, unknown>;
-// type DefaultPatch = t.ImmutableMapPatch<t.PatchOperation>;
 
 const Mutate = ObjectPath.Mutate;
 
@@ -17,14 +16,19 @@ export const Map = {
   /**
    * Create a new composite proxy that maps to an underlying document(s).
    */
-  create<T extends O, P = t.ImmutableMapPatchDefault, E = t.ImmutableEvents<T, P>>(
-    map: t.ImmutableMap<T>,
+  create<T extends O, P = t.ImmutableMapPatchDefault>(
+    map: t.ImmutableMap<T, P>,
     options: { formatPatch?: t.ImmutableMapFormatPatch<P> } = {},
-  ): t.ImmutableRef<T, P, E> {
+  ): t.ImmutableRef<T, P, t.ImmutableEvents<T, P>> {
     const $ = rx.subject<t.ImmutableChange<T, P>>();
 
     type C = t.ImmutablePatchCallback<P>;
     let _callback: C | undefined;
+
+    const formatPatches = (patches: P[], key: string | symbol, doc: t.ImmutableRef) => {
+      const format: t.ImmutableMapFormatPatch<P> = options.formatPatch ?? wrangle.patch;
+      return patches.map((patch) => format({ patch, key: String(key), doc }));
+    };
 
     /**
      * Proxy
@@ -40,16 +44,10 @@ export const Map = {
       },
       set(_, key, value) {
         const prop = wrangle.prop(map, key);
-        if (!prop) return false;
-
-        const doc = prop.doc;
-        const callback: C = (patches) => {
-          const format: t.ImmutableMapFormatPatch<P> = options.formatPatch ?? wrangle.patch;
-          patches = patches.map((patch) => format({ patch, key: String(key), doc }));
-          _callback?.(patches);
-        };
-
-        prop.doc.change((d) => Mutate.value(d, prop.path, value), callback as any);
+        if (prop) {
+          const callback: C = (patches) => _callback?.(formatPatches(patches, prop.key, prop.doc));
+          prop.doc.change((d) => Mutate.value(d, prop.path, value), callback as any);
+        }
         return true;
       },
 
@@ -78,13 +76,13 @@ export const Map = {
       },
 
       change(fn, options) {
-        const callback = Wrangle.callback(options);
+        const callback = Wrangle.options(options).patches;
         const patches: P[] = [];
         _callback = (e) => patches.push(...e);
 
-        const before = wrangle.current<T>(map, proxy);
+        const before = wrangle.current<T, P>(map, proxy);
         fn(proxy as any);
-        const after = wrangle.current<T>(map, proxy);
+        const after = wrangle.current<T, P>(map, proxy);
 
         _callback = undefined;
         callback?.(patches);
@@ -101,10 +99,8 @@ export const Map = {
 /**
  * Helpers
  */
-type Prop = {};
-
 const wrangle = {
-  initial(map: t.ImmutableMap<any>) {
+  initial(map: t.ImmutableMap<any, any>) {
     const initial = Object.keys(map).reduce((acc: any, key) => {
       const prop = wrangle.prop(map, key);
       acc[key] = Symbol(`map → ${prop?.path.join('/') ?? 'UNKNOWN'}`);
@@ -115,17 +111,19 @@ const wrangle = {
     return initial;
   },
 
-  prop<T extends O>(map: t.ImmutableMap<T>, key: string | symbol) {
+  prop<T extends O, P>(map: t.ImmutableMap<T, P>, key: string | symbol) {
     const item = map[key as any];
     if (!Array.isArray(item)) return;
 
+    type E = t.ImmutableEvents<T, P>;
     const [doc, field] = item;
     const path = typeof field === 'string' ? [field] : field;
-    if (!ObjectPath.Is.path(path) || !Is.immutableRef(doc)) return;
-    return { doc, path } as const;
+    if (!ObjectPath.Is.path(path) || !Is.immutableRef<T, P, E>(doc)) return;
+
+    return { doc, key, path } as const;
   },
 
-  current<T extends O>(map: t.ImmutableMap<T>, proxy: O): T {
+  current<T extends O, P>(map: t.ImmutableMap<T, P>, proxy: O): T {
     return Object.keys(map).reduce((acc, key) => {
       (acc as any)[key] = proxy[key];
       return acc;

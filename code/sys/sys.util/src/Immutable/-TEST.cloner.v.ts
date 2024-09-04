@@ -1,6 +1,6 @@
 import { Immutable } from '.';
 import { describe, expect, it, type t } from '../test';
-import { rx } from './common';
+import { rx, slug } from './common';
 
 describe('Immutable', () => {
   type P = t.PatchOperation;
@@ -136,6 +136,24 @@ describe('Immutable', () => {
       obj.change((d) => (d.count = 456));
       expect(fired1).to.eql(1);
       expect(fired2).to.eql(2);
+    });
+
+    it('events with "tx" idendifier', () => {
+      const obj = Immutable.clonerRef<D>({ count: 0 });
+      const events = obj.events();
+
+      const fired: t.ImmutableChange<D, P>[] = [];
+      events.changed$.subscribe((e) => fired.push(e));
+
+      const tx = `foo.${slug()}`;
+      obj.change((d) => (d.count = 123), { tx });
+      obj.change((d) => (d.count = 123));
+
+      expect(fired.length).to.eql(2);
+      expect(fired[0].tx).to.eql(tx);
+      expect(fired[1].tx).to.eql(undefined);
+
+      events.dispose();
     });
   });
 });

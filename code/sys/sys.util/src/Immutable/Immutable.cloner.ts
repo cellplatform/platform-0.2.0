@@ -29,7 +29,7 @@ export function cloner<T>(
       const next = clone(_current);
       fn(next);
       _current = next;
-      Wrangle.callback(options)?.(Wrangle.patches(prev, next));
+      Wrangle.options(options).patches?.(Wrangle.patches(prev, next));
     },
   };
 }

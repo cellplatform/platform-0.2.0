@@ -36,6 +36,7 @@ export type PatchChange<T extends O> = {
   after: T;
   op: PatchOperationKind;
   patches: t.PatchSet;
+  tx?: t.IdString;
 };
 
 /**

@@ -1,6 +1,6 @@
 import { Immutable } from '.';
 import { describe, expect, it, type t } from '../test';
-import { rx } from './common';
+import { rx, slug } from './common';
 
 describe('Immutable.map', () => {
   type P = t.PatchOperation;
@@ -177,24 +177,33 @@ describe('Immutable.map', () => {
       const doc = Immutable.clonerRef<D>({ count: 0 });
       const map = Immutable.map<F>({ foo: [doc, 'count'], text: [doc, ['child', 'msg']] });
 
-      const fired: E[] = [];
-      const events = map.events(dispose$);
-      events.changed$.subscribe((e) => fired.push(e));
+      const firedDoc: t.ImmutableChange<D, t.PatchOperation>[] = [];
+      const firedMap: E[] = [];
+      const events = {
+        doc: doc.events(dispose$),
+        map: map.events(dispose$),
+      } as const;
+      events.doc.changed$.subscribe((e) => firedDoc.push(e));
+      events.map.changed$.subscribe((e) => firedMap.push(e));
 
       map.change((d) => (d.foo = 888));
       map.change((d) => (d.text = 'hello'));
 
-      expect(fired.length).to.equal(2);
+      expect(firedMap.length).to.equal(2);
+      expect(firedDoc.length).to.equal(2);
+      expect(firedDoc).to.not.eql(firedMap); // NB: the map-patch events contain extra meta-data.
 
-      expect(fired[0].before.foo).to.eql(0);
-      expect(fired[0].before.text).to.eql(undefined);
-      expect(fired[0].after.foo).to.eql(888);
-      expect(fired[0].after.text).to.eql(undefined);
+      expect(firedMap[0].before.foo).to.eql(0);
+      expect(firedMap[0].before.text).to.eql(undefined);
+      expect(firedMap[0].after.foo).to.eql(888);
+      expect(firedMap[0].after.text).to.eql(undefined);
 
-      expect(fired[1].before.foo).to.eql(888);
-      expect(fired[1].before.text).to.eql(undefined);
-      expect(fired[1].after.foo).to.eql(888);
-      expect(fired[1].after.text).to.eql('hello');
+      expect(firedMap[1].before.foo).to.eql(888);
+      expect(firedMap[1].before.text).to.eql(undefined);
+      expect(firedMap[1].after.foo).to.eql(888);
+      expect(firedMap[1].after.text).to.eql('hello');
+
+      expect(firedDoc[1].after).to.eql({ count: 888, child: { msg: 'hello' } });
 
       dispose();
     });
@@ -233,7 +242,7 @@ describe('Immutable.map', () => {
 
       const formatPatch: t.ImmutableMapFormatPatch<P> = (e) => {
         const key = `test-${e.key}`;
-        const doc = `uri:wowow`;
+        const doc = `uri:wow`;
         return { ...e.patch, mapping: { key, doc } };
       };
 
@@ -250,7 +259,7 @@ describe('Immutable.map', () => {
 
       const patches = fired[0].patches as P[];
       expect(patches[0].mapping.key).to.eql('test-foo');
-      expect(patches[0].mapping.doc).to.eql('uri:wowow');
+      expect(patches[0].mapping.doc).to.eql('uri:wow');
 
       dispose();
     });

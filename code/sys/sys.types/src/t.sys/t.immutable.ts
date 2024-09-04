@@ -7,7 +7,7 @@ type O = Record<string, unknown>;
  */
 export type Immutable<D = O, P = unknown> = {
   readonly current: D;
-  change(fn: ImmutableMutator<D>, options?: ImmutableChangeOptions<P>): void;
+  change(fn: ImmutableMutator<D>, options?: ImmutableChangeOptionsInput<P>): void;
 };
 
 /**
@@ -15,10 +15,12 @@ export type Immutable<D = O, P = unknown> = {
  */
 export type ImmutableMutator<D = O> = (draft: D) => void;
 
+export type ImmutableChangeOptionsInput<P> = ImmutablePatchCallback<P> | ImmutableChangeOptions<P>;
 export type ImmutablePatchCallback<P> = (patches: P[]) => void;
-export type ImmutableChangeOptions<P> =
-  | ImmutablePatchCallback<P>
-  | { patches?: ImmutablePatchCallback<P> };
+export type ImmutableChangeOptions<P> = {
+  patches?: ImmutablePatchCallback<P>;
+  tx?: t.IdString; // NB: used for granular identification of change events.
+};
 
 /**
  * A reference handle to an Immutable<T> with
@@ -49,14 +51,15 @@ export type ImmutableChange<D, P> = {
   readonly before: D;
   readonly after: D;
   readonly patches: P[];
+  readonly tx?: t.IdString;
 };
 
 /**
  * A mapping used to create single composite data object
  * out of paths pointing to sub-parts of other immutable references.
  */
-export type ImmutableMapProp = [t.ImmutableRef, MapToPath];
-export type ImmutableMap<T extends O> = { [K in keyof T]: t.ImmutableMapProp };
+export type ImmutableMapProp<T extends O, P> = [t.ImmutableRef, MapToPath];
+export type ImmutableMap<T extends O, P> = { [K in keyof T]: t.ImmutableMapProp<T, P> };
 type MapPropName = string;
 type MapToPath = t.ObjectPath | MapPropName;
 
