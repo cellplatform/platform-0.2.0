@@ -121,6 +121,40 @@ describe('ObjectPath', () => {
     });
   });
 
+  describe('ObjectPath.from', () => {
+    const from = ObjectPath.from;
+
+    it('from: [ObjectPath] ← no change', () => {
+      const path = ['foo', 'bar'];
+      expect(from(path)).to.equal(path);
+      expect(from(['foo', 1, 'bar'])).to.eql(['foo', 1, 'bar']);
+    });
+
+    it('from: string', () => {
+      expect(from('')).to.eql([]);
+      expect(from('//')).to.eql([]);
+      expect(from(' /foo/bar ')).to.eql(['foo', 'bar']);
+    });
+
+    it('from: { path:"string" }', () => {
+      expect(from({ path: '//foo/bar ' })).to.eql(['foo', 'bar']);
+    });
+
+    it('from: { path:["foo", "bar"] }', () => {
+      expect(from({ path: '//foo/bar ' })).to.eql(['foo', 'bar']);
+    });
+
+    it('invalid input → []', () => {
+      const NON = [null, undefined, 123, {}, [], Symbol('foo'), BigInt(0)];
+      NON.forEach((v: any) => expect(from(v)).to.eql([]));
+    });
+
+    it('array, but not a path → []', () => {
+      expect(from(['foo', {}, 'bar'])).to.eql([]);
+      expect(from({ path: ['foo', {}, 'bar'] })).to.eql([]);
+    });
+  });
+
   describe('ObjectPath.fromString', () => {
     const fromString = ObjectPath.fromString;
 
@@ -136,7 +170,13 @@ describe('ObjectPath', () => {
       expect(fromString('  //  ')).to.eql([]);
     });
 
-    it('non-string input', () => {
+    it('no leading "/"', () => {
+      expect(fromString('foo')).to.eql(['foo']);
+      expect(fromString('foo/bar')).to.eql(['foo', 'bar']);
+      expect(fromString('  foo/bar  ')).to.eql(['foo', 'bar']);
+    });
+
+    it('non-string input → []', () => {
       const NON = [null, undefined, 123, {}, [], Symbol('foo'), BigInt(0)];
       NON.forEach((v: any) => expect(fromString(v)).to.eql([]));
     });

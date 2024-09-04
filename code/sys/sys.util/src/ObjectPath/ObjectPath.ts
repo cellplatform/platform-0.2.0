@@ -1,58 +1,7 @@
 import { type t } from './common';
-
-/**
- * Flag helpers.
- */
-const Is = {
-  path(input: any): input is t.ObjectPath {
-    if (!Array.isArray(input)) return false;
-    return input.every((item) => typeof item === 'string' || typeof item === 'number');
-  },
-} as const;
-
-/**
- * Helpers for mutating value via an [ObjectPath].
- */
-const Mutate = {
-  /**
-   * Write a value to the given path on the root object.
-   * If parts of the path do not exist, they are created as objects.
-   */
-  value<T>(root: unknown, path: t.ObjectPath, value: T): void {
-    Validate.rootParam(root);
-    Validate.pathParam(path);
-    let current: any = root;
-
-    path.forEach((key, index) => {
-      if (index === path.length - 1) {
-        // Last key in path → update the value.
-        if (value === undefined) delete current[key];
-        else current[key] = value;
-      } else {
-        // If the next part of the path doesn't exist, create it as an object.
-        if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
-        current = current[key];
-      }
-    });
-  },
-
-  /**
-   * Ensures there is an object at the given path.
-   */
-  ensure<T>(root: unknown | unknown[], path: t.ObjectPath, defaultValue: T): T {
-    const existing = ObjectPath.resolve<T>(root, path);
-    if (existing) return existing;
-    ObjectPath.Mutate.value(root, path, defaultValue);
-    return ObjectPath.resolve<T>(root, path)!;
-  },
-
-  /**
-   * Performs a field deletion at the given path.
-   */
-  delete(root: unknown, path: t.ObjectPath) {
-    ObjectPath.Mutate.value(root, path, undefined);
-  },
-} as const;
+import { Is } from './ObjectPath.Is';
+import { Mutate } from './ObjectPath.Mutate';
+import { isObject, Validate } from './u';
 
 /**
  * Helpers for working with arrays that represent object paths.
@@ -122,28 +71,23 @@ export const ObjectPath = {
     path = path.trim().replace(/^\/+/, '');
     if (path === '/') return [];
 
-    // Split and unescape:
-    //  • '~1' to '/'
-    //  • '~0' to '~'
+    // Split and unescape: '~1' → '/', '~0' → '~' (part of the RFC-6902 JSON patch standard)
     return path
       .split('/')
       .filter(Boolean)
       .map((part) => part.replace(/~1/g, '/').replace(/~0/g, '~'));
   },
-} as const;
 
-/**
- * Helpers
- */
-function isObject(input: any): input is object {
-  return input !== null && typeof input === 'object';
-}
+  /**
+   * Convert an arbitrary input value to a path.
+   * Useful for deriving safely from unknown patch {object} types.
+   */
+  from(input: any): t.ObjectPath {
+    if (Is.path(input)) return input;
 
-const Validate = {
-  rootParam(root: unknown) {
-    if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
-  },
-  pathParam(path: t.ObjectPath) {
-    if (!path || path.length === 0) throw new Error('path cannot be empty');
+    const value = isObject(input) ? (input as any).path : input;
+    if (Is.path(value)) return value;
+    if (typeof value === 'string') return ObjectPath.fromString(value);
+    return [];
   },
 } as const;
