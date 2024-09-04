@@ -207,7 +207,7 @@ const wrangle = {
     return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
   },
 
-  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptions<P>) {
+  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptionsInput<P>) {
     const fn = Wrangle.patchCallback(options);
     if (!fn) return;
 
