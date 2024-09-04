@@ -5,8 +5,6 @@ type O = Record<string, unknown>;
 type P = t.Patch;
 type Init<T> = t.ImmutableMutator<T>;
 
-export type DocMapPatch = t.ImmutableMapPatch<P>;
-
 /**
  * An immutable/observable CRDT document reference.
  */
@@ -34,6 +32,17 @@ export type DocWithHandle<T extends O = O> = Doc<T> & { readonly handle: t.DocHa
  * with a curried initial state.
  */
 export type DocFactory<T extends O = O> = (uri?: t.UriString) => Promise<t.Doc<T>>;
+
+/**
+ * Doc mapping (composite objects).
+ */
+export type DocMap<T extends O> = t.ImmutableRef<T, t.DocMapPatch, t.DocMapEvents<T>>;
+export type DocMapPatch = t.ImmutableMapPatch<P>;
+export type DocMapEvents<T extends O> = t.ImmutableEvents<
+  T,
+  DocMapPatch,
+  t.ImmutableChange<T, DocMapPatch>
+>;
 
 /**
  * Document access exposed from a store/repo.
