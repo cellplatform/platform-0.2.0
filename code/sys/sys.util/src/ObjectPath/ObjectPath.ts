@@ -1,7 +1,5 @@
 import { type t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Flag helpers.
  */
@@ -13,10 +11,55 @@ const Is = {
 } as const;
 
 /**
+ * Helpers for mutating value via an [ObjectPath].
+ */
+const Mutate = {
+  /**
+   * Write a value to the given path on the root object.
+   * If parts of the path do not exist, they are created as objects.
+   */
+  value<T>(root: unknown, path: t.ObjectPath, value: T): void {
+    Validate.rootParam(root);
+    Validate.pathParam(path);
+    let current: any = root;
+
+    path.forEach((key, index) => {
+      if (index === path.length - 1) {
+        // Last key in path → update the value.
+        if (value === undefined) delete current[key];
+        else current[key] = value;
+      } else {
+        // If the next part of the path doesn't exist, create it as an object.
+        if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
+        current = current[key];
+      }
+    });
+  },
+
+  /**
+   * Ensures there is an object at the given path.
+   */
+  ensure<T>(root: unknown | unknown[], path: t.ObjectPath, defaultValue: T): T {
+    const existing = ObjectPath.resolve<T>(root, path);
+    if (existing) return existing;
+    ObjectPath.Mutate.value(root, path, defaultValue);
+    return ObjectPath.resolve<T>(root, path)!;
+  },
+
+  /**
+   * Performs a field deletion at the given path.
+   */
+  delete(root: unknown, path: t.ObjectPath) {
+    ObjectPath.Mutate.value(root, path, undefined);
+  },
+} as const;
+
+/**
  * Helpers for working with arrays that represent object paths.
  */
 export const ObjectPath = {
   Is,
+  Mutate,
 
   /**
    * Prepend a path.
@@ -68,45 +111,24 @@ export const ObjectPath = {
     return false;
   },
 
-  Mutate: {
-    /**
-     * Write a value to the given path on the root object.
-     * If parts of the path do not exist, they are created as objects.
-     */
-    value<T>(root: unknown, path: t.ObjectPath, value: T): void {
-      Validate.rootParam(root);
-      Validate.pathParam(path);
-      let current: any = root;
+  /**
+   * Converts a JSON patch path to an array of strings representing each part.
+   * @param path The JSON patch path (e.g., "/foo/bar/0").
+   * @returns Array of strings representing each part of the path.
+   */
+  fromString(path: string): t.ObjectPath {
+    if (typeof path !== 'string') return [];
 
-      path.forEach((key, index) => {
-        if (index === path.length - 1) {
-          // Last key in path → update the value.
-          if (value === undefined) delete current[key];
-          else current[key] = value;
-        } else {
-          // If the next part of the path doesn't exist, create it as an object.
-          if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
-          current = current[key];
-        }
-      });
-    },
+    path = path.trim().replace(/^\/+/, '');
+    if (path === '/') return [];
 
-    /**
-     * Ensures there is an object at the given path.
-     */
-    ensure<T>(root: unknown | unknown[], path: t.ObjectPath, defaultValue: T): T {
-      const existing = ObjectPath.resolve<T>(root, path);
-      if (existing) return existing;
-      ObjectPath.Mutate.value(root, path, defaultValue);
-      return ObjectPath.resolve<T>(root, path)!;
-    },
-
-    /**
-     * Performs a field deletion at the given path.
-     */
-    delete(root: unknown, path: t.ObjectPath) {
-      ObjectPath.Mutate.value(root, path, undefined);
-    },
+    // Split and unescape:
+    //  • '~1' to '/'
+    //  • '~0' to '~'
+    return path
+      .split('/')
+      .filter(Boolean)
+      .map((part) => part.replace(/~1/g, '/').replace(/~0/g, '~'));
   },
 } as const;
 

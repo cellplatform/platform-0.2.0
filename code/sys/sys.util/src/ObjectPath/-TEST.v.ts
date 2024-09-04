@@ -69,6 +69,96 @@ describe('ObjectPath', () => {
     });
   });
 
+  describe('ObjectPath.prepend', () => {
+    it('no change', () => {
+      expect(ObjectPath.prepend([], [])).to.eql([]);
+      expect(ObjectPath.prepend(['foo'], [])).to.eql(['foo']);
+    });
+
+    it('inserts prefix', () => {
+      const res = ObjectPath.prepend(['foo', 'bar'], ['root']);
+      expect(res).to.eql(['root', 'foo', 'bar']);
+    });
+  });
+
+  describe('ObjectPath.exists', () => {
+    type R = { msg?: string; child?: { foo?: { count?: number } }; list?: number[] };
+
+    it('does not exist', () => {
+      expect(ObjectPath.exists({}, ['msg'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['child', 'foo'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['child', 'foo', 'count'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['list'])).to.eql(false);
+      expect(ObjectPath.exists({}, ['list', 5])).to.eql(false);
+    });
+
+    it('does exist', () => {
+      const root1: R = { msg: 'hello' };
+      const root2: R = { child: {} };
+      const root3: R = { child: { foo: {} } };
+      const root4: R = { list: [] };
+
+      expect(ObjectPath.exists(root1, ['msg'])).to.eql(true);
+      expect(ObjectPath.exists(root2, ['child'])).to.eql(true);
+      expect(ObjectPath.exists(root3, ['child', 'foo'])).to.eql(true);
+      expect(ObjectPath.exists(root4, ['list'])).to.eql(true);
+      expect(ObjectPath.exists(root4, ['list', 5])).to.eql(true);
+    });
+
+    it('throws if path is empty', () => {
+      [[], undefined, null].forEach((path: any) => {
+        const root: R = {};
+        const fn = () => ObjectPath.exists(root, path);
+        expect(fn).to.throw(/path cannot be empty/);
+      });
+    });
+
+    it('throws if root not an object', () => {
+      [null, undefined, 123, true, ''].forEach((root) => {
+        const fn = () => ObjectPath.exists(root, ['msg']);
+        expect(fn).to.throw(/root is not an object/);
+      });
+    });
+  });
+
+  describe('ObjectPath.fromString', () => {
+    const fromString = ObjectPath.fromString;
+
+    it('empty string', () => {
+      expect(fromString('')).to.eql([]);
+      expect(fromString('  ')).to.eql([]);
+    });
+
+    it('root ("/")', () => {
+      expect(fromString('/')).to.eql([]);
+      expect(fromString('///')).to.eql([]);
+      expect(fromString('  /  ')).to.eql([]);
+      expect(fromString('  //  ')).to.eql([]);
+    });
+
+    it('non-string input', () => {
+      const NON = [null, undefined, 123, {}, [], Symbol('foo'), BigInt(0)];
+      NON.forEach((v: any) => expect(fromString(v)).to.eql([]));
+    });
+
+    describe('escaping (~0, ~1)', () => {
+      it('handles paths with ~1 and ~0 ', () => {
+        const path = '/foo/~1bar/~0baz';
+        expect(fromString(path)).to.eql(['foo', '/bar', '~baz']);
+      });
+
+      it('handles paths with multiple escaped characters ~1 and ~0', () => {
+        const path = '/~0foo/~1bar/~0~1';
+        expect(fromString(path)).to.eql(['~foo', '/bar', '~/']);
+      });
+
+      it('handles paths with only escaped characters', () => {
+        const path = '/~1~0';
+        expect(fromString(path)).to.eql(['/~']);
+      });
+    });
+  });
+
   describe('ObjectPath.Mutate.value', () => {
     type R = { msg?: string; child?: { foo?: { count: number } } };
 
@@ -188,58 +278,6 @@ describe('ObjectPath', () => {
     it('throws if root not an object', () => {
       [null, undefined, 123, true, ''].forEach((root) => {
         const fn = () => ObjectPath.Mutate.delete(root, ['msg']);
-        expect(fn).to.throw(/root is not an object/);
-      });
-    });
-  });
-
-  describe('ObjectPath.prepend', () => {
-    it('no change', () => {
-      expect(ObjectPath.prepend([], [])).to.eql([]);
-      expect(ObjectPath.prepend(['foo'], [])).to.eql(['foo']);
-    });
-
-    it('inserts prefix', () => {
-      const res = ObjectPath.prepend(['foo', 'bar'], ['root']);
-      expect(res).to.eql(['root', 'foo', 'bar']);
-    });
-  });
-
-  describe('ObjectPath.exists', () => {
-    type R = { msg?: string; child?: { foo?: { count?: number } }; list?: number[] };
-
-    it('does not exist', () => {
-      expect(ObjectPath.exists({}, ['msg'])).to.eql(false);
-      expect(ObjectPath.exists({}, ['child', 'foo'])).to.eql(false);
-      expect(ObjectPath.exists({}, ['child', 'foo', 'count'])).to.eql(false);
-      expect(ObjectPath.exists({}, ['list'])).to.eql(false);
-      expect(ObjectPath.exists({}, ['list', 5])).to.eql(false);
-    });
-
-    it('does exist', () => {
-      const root1: R = { msg: 'hello' };
-      const root2: R = { child: {} };
-      const root3: R = { child: { foo: {} } };
-      const root4: R = { list: [] };
-
-      expect(ObjectPath.exists(root1, ['msg'])).to.eql(true);
-      expect(ObjectPath.exists(root2, ['child'])).to.eql(true);
-      expect(ObjectPath.exists(root3, ['child', 'foo'])).to.eql(true);
-      expect(ObjectPath.exists(root4, ['list'])).to.eql(true);
-      expect(ObjectPath.exists(root4, ['list', 5])).to.eql(true);
-    });
-
-    it('throws if path is empty', () => {
-      [[], undefined, null].forEach((path: any) => {
-        const root: R = {};
-        const fn = () => ObjectPath.exists(root, path);
-        expect(fn).to.throw(/path cannot be empty/);
-      });
-    });
-
-    it('throws if root not an object', () => {
-      [null, undefined, 123, true, ''].forEach((root) => {
-        const fn = () => ObjectPath.exists(root, ['msg']);
         expect(fn).to.throw(/root is not an object/);
       });
     });
