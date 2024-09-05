@@ -26,12 +26,15 @@ export function useStateful(props: P) {
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (data) {
-      const events = data.events(dispose$);
-      events.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);
-      props.onReady?.({ data, repos, dispose$ });
-    }
+    if (data) props.onReady?.({ data, repos, dispose$ });
     return dispose;
+  }, [data?.instance]);
+
+  useEffect(() => {
+    const events = data?.events();
+    events?.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);
+    events?.changed$.subscribe(({ before, after }) => props.onChange?.({ before, after }));
+    return events?.dispose;
   }, [data?.instance]);
 
   /**
@@ -107,7 +110,7 @@ const wrangle = {
   state(props: P): t.InfoStatefulData | undefined {
     if (!props.data) return;
     if (Immutable.Is.immutableRef(props.data)) return props.data;
-    return Immutable.clonerRef<t.InfoData>(props.data as t.InfoData);
+    return Immutable.clonerRef<t.InfoData>(props.data);
   },
 
   propInstance(props: P) {

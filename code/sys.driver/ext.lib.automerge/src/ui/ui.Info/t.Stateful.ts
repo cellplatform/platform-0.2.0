@@ -6,6 +6,7 @@ import type { t } from './common';
 export type InfoStatefulProps = Omit<t.InfoProps, 'data'> & {
   data?: InfoStatefulData | t.InfoData;
   onReady?: InfoStatefulReadyHandler;
+  onChange?: InfoStatefulOnChangedHandler;
 };
 
 /**
@@ -25,3 +26,6 @@ export type InfoStatefulReadyHandlerArgs = {
   data: InfoStatefulData;
   dispose$: t.Observable<void>;
 };
+
+export type InfoStatefulOnChangedHandler = (e: InfoStatefulOnChangedHandlerArgs) => void;
+export type InfoStatefulOnChangedHandlerArgs = { before: t.InfoData; after: t.InfoData };
