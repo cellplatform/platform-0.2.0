@@ -1,71 +1,121 @@
 import { Doc } from '..';
 import { describe, expect, it, rx, type t } from '../../test';
-import { testSetup } from './-TEST.u';
+import { testSetup, type D, type DChild } from './-TEST.u';
 
 describe('Doc.map (composite)', () => {
   const { store, factory } = testSetup();
   type F = { foo: number; text?: string };
 
-  it('read/write', async () => {
-    const doc = await factory();
-    const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
+  describe('IO', () => {
+    it('read/write', async () => {
+      const doc = await factory();
+      const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
 
-    expect(map.current.foo).to.eql(0);
-    expect(map.current.text).to.eql(undefined);
+      expect(map.current.foo).to.eql(0);
+      expect(map.current.text).to.eql(undefined);
 
-    map.change((d) => {
-      d.foo = 555;
-      d.text = 'hello';
+      map.change((d) => {
+        d.foo = 555;
+        d.text = 'hello';
+      });
+
+      expect(map.current.foo).to.eql(555);
+      expect(map.current.text).to.eql('hello');
+      expect(Doc.toObject(map)).to.eql({ foo: 555, text: 'hello' });
     });
 
-    expect(map.current.foo).to.eql(555);
-    expect(map.current.text).to.eql('hello');
-    expect(Doc.toObject(map)).to.eql({ foo: 555, text: 'hello' });
-  });
+    it('patches (callback)', async () => {
+      const doc = await factory();
+      const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
 
-  it('patches (callback)', async () => {
-    const doc = await factory();
-    const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
+      const patches: t.Patch[] = [];
+      map.change(
+        (d) => (d.foo = 123),
+        (e) => patches.push(...e),
+      );
 
-    const patches: t.Patch[] = [];
-    map.change(
-      (d) => (d.foo = 123),
-      (e) => patches.push(...e),
-    );
-
-    expect(patches.length).to.eql(1);
-    expect(patches[0].path).to.eql(['count']);
-    expect(patches[0].action).to.eql('put');
-  });
-
-  it('composite of multiple documents', async () => {
-    const doc1 = await factory();
-    const doc2 = await factory();
-    const map = Doc.map<F>({ foo: [doc1, 'count'], text: [doc2, 'msg'] });
-
-    expect(map.current.foo).to.eql(0);
-    expect(map.current.text).to.eql(undefined);
-
-    doc1.change((d) => (d.count = 123));
-    doc2.change((d) => (d.msg = 'hello'));
-
-    expect(map.current.foo).to.eql(123);
-    expect(map.current.text).to.eql('hello');
-  });
-
-  it('toObject', async () => {
-    const doc = await factory();
-    const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
-
-    map.change((d) => {
-      d.foo = 123;
-      d.text = 'hello';
+      expect(patches.length).to.eql(1);
+      expect(patches[0].path).to.eql(['count']);
+      expect(patches[0].action).to.eql('put');
     });
 
-    const obj1 = Doc.toObject(map);
-    const obj2 = Doc.toObject(map.current);
-    expect(obj1).to.eql({ foo: 123, text: 'hello' });
-    expect(obj2).to.eql({ foo: 123, text: 'hello' });
+    it('toObject', async () => {
+      const doc = await factory();
+      const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
+
+      map.change((d) => {
+        d.foo = 123;
+        d.text = 'hello';
+      });
+
+      const obj1 = Doc.toObject(map);
+      const obj2 = Doc.toObject(map.current);
+      expect(obj1).to.eql({ foo: 123, text: 'hello' });
+      expect(obj2).to.eql({ foo: 123, text: 'hello' });
+    });
+  });
+
+  describe('composition', () => {
+    it('composite of multiple CRDT documents', async () => {
+      const doc1 = await factory();
+      const doc2 = await factory();
+      const map = Doc.map<F>({ foo: [doc1, 'count'], text: [doc2, 'msg'] });
+
+      expect(map.current.foo).to.eql(0);
+      expect(map.current.text).to.eql(undefined);
+
+      doc1.change((d) => (d.count = 123));
+      doc2.change((d) => (d.msg = 'hello'));
+
+      expect(map.current.foo).to.eql(123);
+      expect(map.current.text).to.eql('hello');
+    });
+
+    it('composite of multiple CRDT documents and lens', async () => {
+      const doc1 = await factory();
+      const doc2 = await factory();
+      const lens = Doc.lens<D, DChild>(doc2, ['child']);
+
+      const map = Doc.map<F>({ foo: [doc1, 'count'], text: [lens, 'msg'] });
+
+      expect(map.current.foo).to.eql(0);
+      expect(map.current.text).to.eql(undefined);
+
+      doc1.change((d) => (d.count = 123));
+      lens.change((d) => (d.msg = 'hello'));
+
+      expect(map.current.foo).to.eql(123);
+      expect(map.current.text).to.eql('hello');
+      expect(Doc.toObject(map)).to.eql({ foo: 123, text: 'hello' });
+
+      map.change((d) => {
+        d.foo = 456;
+        d.text = 'banger';
+      });
+
+      expect(doc1.current.count).to.eql(456);
+      expect(lens.current.msg).to.eql('banger');
+    });
+
+    it('composite of maps of maps', async () => {
+      type F1 = F;
+      type F2 = { length: number; message: string };
+      const doc = await factory();
+      const lens = Doc.lens<D, DChild>(doc, ['child']);
+      const map1 = Doc.map<F1>({ foo: [doc, 'count'], text: [lens, 'msg'] });
+      const map2 = Doc.map<F2>({ length: [map1, 'foo'], message: [map1, 'text'] });
+
+      expect(Doc.toObject(map2)).to.eql({ length: 0, message: undefined });
+
+      map2.change((d) => {
+        d.length = 123;
+        d.message = 'hello';
+      });
+
+      expect(map1.current.foo).to.eql(123);
+      expect(map1.current.text).to.eql('hello');
+      expect(lens.current.msg).to.eql('hello');
+    });
   });
 
   describe('events', () => {

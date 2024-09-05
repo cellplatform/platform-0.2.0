@@ -1,7 +1,13 @@
 import type { t } from '../../test';
 import { Store } from '../Store';
 
-export type D = { count: number; msg?: string; list?: number[] };
+export type DChild = { msg?: string };
+export type D = {
+  count: number;
+  msg?: string;
+  list?: number[];
+  child?: DChild;
+};
 
 export function testSetup() {
   const store = Store.init();
