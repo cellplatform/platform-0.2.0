@@ -24,7 +24,7 @@ describe('Immutable.map', () => {
       expect(map.current.text).to.eql(undefined);
       expect((map.current as any).zoo).to.eql(undefined); // NB: does not exist.
 
-      // Change underlying doc
+      // Change underlying doc.
       doc.change((d) => {
         d.count = 123;
         d.child = { msg: 'hello' };
@@ -174,7 +174,7 @@ describe('Immutable.map', () => {
 
     it('change → events ⚡️before/after', () => {
       const { dispose, dispose$ } = rx.lifecycle();
-      const doc = Immutable.clonerRef<D>({ count: 0 });
+      const doc = Immutable.clonerRef<D>({ count: 0, child: {} });
       const map = Immutable.map<F>({ foo: [doc, 'count'], text: [doc, ['child', 'msg']] });
 
       const firedDoc: t.ImmutableChange<D, t.PatchOperation>[] = [];
@@ -191,7 +191,7 @@ describe('Immutable.map', () => {
 
       expect(firedMap.length).to.equal(2);
       expect(firedDoc.length).to.equal(2);
-      expect(firedDoc).to.not.eql(firedMap); // NB: the map-patch events contain extra meta-data.
+      expect(firedDoc).to.not.eql(firedMap); // NB: the map-patches contain extra meta-data no in the doc-patches.
 
       expect(firedMap[0].before.foo).to.eql(0);
       expect(firedMap[0].before.text).to.eql(undefined);
@@ -204,7 +204,6 @@ describe('Immutable.map', () => {
       expect(firedMap[1].after.text).to.eql('hello');
 
       expect(firedDoc[1].after).to.eql({ count: 888, child: { msg: 'hello' } });
-
       dispose();
     });
 
@@ -223,15 +222,17 @@ describe('Immutable.map', () => {
         d.text = 'world!';
       });
 
-      const patches = fired[0].patches as P[];
-      expect(fired.length).to.eql(1);
-      expect(patches.length).to.eql(2);
+      expect(fired.length).to.eql(2);
 
-      expect(patches[0].mapping.key).to.eql('foo');
-      expect(patches[1].mapping.key).to.eql('text');
+      const p1 = fired[0].patches[0] as P;
+      const p2 = fired[1].patches[0] as P;
+      expect(fired.length).to.eql(2);
 
-      expect(patches[0].mapping.doc).to.eql(`instance:${doc1.instance}`);
-      expect(patches[1].mapping.doc).to.eql(`instance:${doc2.instance}`); // NB: indicates where the change was actually written to.
+      expect(p1.mapping.key).to.eql('foo');
+      expect(p2.mapping.key).to.eql('text');
+
+      expect(p1.mapping.doc).to.eql(`instance:${doc1.instance}`);
+      expect(p2.mapping.doc).to.eql(`instance:${doc2.instance}`); // NB: indicates where the change was actually written to.
 
       dispose();
     });
@@ -264,7 +265,7 @@ describe('Immutable.map', () => {
       dispose();
     });
 
-    it.only('events fire when mapped targets change', () => {
+    it('events fire when mapped targets change', () => {
       const { dispose, dispose$ } = rx.lifecycle();
       const doc1 = Immutable.clonerRef<D>({ count: 0 });
       const doc2 = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
@@ -299,6 +300,8 @@ describe('Immutable.map', () => {
       expect(p2.mapping.doc).to.eql(`instance:${doc2.instance}`);
       expect(p2.mapping.key).to.eql(`text`);
 
+      map.change((d) => (d.foo = 456));
+      expect(fired.length).to.eql(3); // NB: de-duped, writing to map OR doc does not produce extra events.
 
       dispose();
     });
