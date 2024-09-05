@@ -1,7 +1,7 @@
 import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Symbols, Typenames } from './constants';
-import { PatchState } from './libs';
+import { Immutable, PatchState } from './libs';
 
 import type * as t from './t';
 
@@ -9,6 +9,9 @@ type O = Record<string, unknown>;
 type SymbolType = (typeof Symbols)[keyof typeof Symbols];
 
 export const Is = {
+  map: Immutable.Is.map,
+  proxy: Immutable.Is.proxy,
+
   automergeUrl(input: any): input is t.AutomergeUrl {
     return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
   },
