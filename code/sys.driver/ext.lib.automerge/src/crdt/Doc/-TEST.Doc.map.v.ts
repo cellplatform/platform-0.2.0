@@ -20,6 +20,7 @@ describe('Doc.map (composite)', () => {
 
     expect(map.current.foo).to.eql(555);
     expect(map.current.text).to.eql('hello');
+    expect(Doc.toObject(map)).to.eql({ foo: 555, text: 'hello' });
   });
 
   it('patches (callback)', async () => {
@@ -70,7 +71,7 @@ describe('Doc.map (composite)', () => {
   describe('events', () => {
     type E = t.ImmutableChange<F, t.DocMapPatch>;
 
-    it('change → events ⚡️before/after', async () => {
+    it('map.change → events ⚡️before/after', async () => {
       const { dispose, dispose$ } = rx.lifecycle();
       const doc = await factory();
       const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
@@ -83,7 +84,6 @@ describe('Doc.map (composite)', () => {
       map.change((d) => (d.text = 'hello'));
 
       expect(fired.length).to.equal(2);
-
       expect(fired[0].before.foo).to.eql(0);
       expect(fired[0].before.text).to.eql(undefined);
       expect(fired[0].after.foo).to.eql(888);
@@ -97,7 +97,41 @@ describe('Doc.map (composite)', () => {
       dispose();
     });
 
-    it('formatted patches (document URIs)', async () => {
+    it('doc.change: events fire when mapped source-documents change', async () => {
+      const { dispose, dispose$ } = rx.lifecycle();
+      const doc1 = await factory();
+      const doc2 = await factory();
+      const map = Doc.map<F>({ foo: [doc1, 'count'], text: [doc2, 'msg'] });
+
+      const fired: E[] = [];
+      const events = map.events(dispose$);
+      events.changed$.subscribe((e) => fired.push(e));
+      const mapping = (event: t.Index, patch: t.Index) => fired[event].patches[patch].mapping;
+
+      doc1.change((d) => (d.count = 123));
+
+      expect(fired.length).to.eql(1);
+      expect(fired[0].before).to.eql({ foo: 0 });
+      expect(fired[0].after).to.eql({ foo: 123 });
+      expect(mapping(0, 0).key).to.eql('foo');
+      expect(mapping(0, 0).doc).to.eql(doc1.uri);
+
+      doc2.change((d) => (d.count = 123));
+      expect(fired.length).to.eql(1); // NB: no change, doc2.count is not mapped.
+
+      doc2.change((d) => (d.msg = 'hello'));
+
+      expect(fired.length).to.eql(2);
+      expect(fired[1].before).to.eql({ foo: 123 });
+      expect(fired[1].after).to.eql({ foo: 123, text: 'hello' });
+      expect(mapping(1, 0).key).to.eql('text');
+      expect(mapping(1, 0).doc).to.eql(doc2.uri);
+      expect(mapping(1, 1).doc).to.eql(doc2.uri);
+
+      dispose();
+    });
+
+    it('patches formatted with document URIs', async () => {
       const { dispose, dispose$ } = rx.lifecycle();
       const doc1 = await factory();
       const doc2 = await factory();
@@ -112,23 +146,23 @@ describe('Doc.map (composite)', () => {
         d.text = 'hello';
       });
 
-      const patches = fired[0].patches;
-      expect(fired.length).to.eql(1);
-      expect(patches.length).to.eql(3);
+      expect(fired.length).to.eql(2);
 
-      expect(patches.map((p) => p.action)).to.eql(['put', 'put', 'splice']);
-      expect(patches[0].path).to.eql(['count']);
-      expect(patches[1].path).to.eql(['msg']);
-      expect(patches[2].path).to.eql(['msg', 0]);
+      expect(fired[0].patches[0].path).to.eql(['count']);
+      expect(fired[1].patches[0].path).to.eql(['msg']);
+      expect(fired[1].patches[0].path).to.eql(['msg']);
+      expect(fired[1].patches[1].path).to.eql(['msg', 0]);
 
-      expect(patches.map((p) => p.mapping.key)).to.eql(['foo', 'text', 'text']);
-      expect(patches[0].mapping.doc).to.eql(doc1.uri);
-      expect(patches[1].mapping.doc).to.eql(doc2.uri); // NB: composite from multiple documents.
-      expect(patches[2].mapping.doc).to.eql(doc2.uri);
+      expect(fired[0].patches[0].mapping.doc).to.eql(doc1.uri);
+      expect(fired[1].patches[0].mapping.doc).to.eql(doc2.uri); // NB: composite from multiple documents.
+      expect(fired[1].patches[1].mapping.doc).to.eql(doc2.uri);
+
+      expect(fired[0].patches[0].mapping.key).to.eql('foo');
+      expect(fired[1].patches[0].mapping.key).to.eql('text');
+      expect(fired[1].patches[1].mapping.key).to.eql('text');
 
       dispose();
     });
-
   });
 
   it('|test.dispose|', () => store.dispose());

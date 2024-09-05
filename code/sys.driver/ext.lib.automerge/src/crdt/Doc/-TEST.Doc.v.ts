@@ -36,7 +36,7 @@ describe('Doc', async () => {
       expect(doc2.current.count).to.eql(5);
     });
 
-    it('patches callback', async () => {
+    it('change: patches callback', async () => {
       const doc = await factory();
       const patches: t.Patch[] = [];
 
