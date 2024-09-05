@@ -21,14 +21,16 @@ export function useStateful(props: P) {
    */
   useEffect(() => {
     const instance = wrangle.propInstance(props);
-    if (instance && data?.instance !== instance) {
-      setData(wrangle.state(props));
-    }
+    if (instance && data?.instance !== instance) setData(wrangle.state(props));
   }, [data?.instance, wrangle.propInstance(props)]);
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (data) props.onReady?.({ data, repos, dispose$ });
+    if (data) {
+      const events = data.events(dispose$);
+      events.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);
+      props.onReady?.({ data, repos, dispose$ });
+    }
     return dispose;
   }, [data?.instance]);
 
@@ -39,7 +41,7 @@ export function useStateful(props: P) {
     onDocToggleClick(e) {
       if (!enabled) return;
       data?.change((d) => {
-        const document = Wrangle.Data.document.list(d.document)[e.index];
+        const document = Wrangle.Data.documents(d)[e.index];
         if (document) {
           const object = document.object || (document.object = {});
           object.visible = e.visible.next;
