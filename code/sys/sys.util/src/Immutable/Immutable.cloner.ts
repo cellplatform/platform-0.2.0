@@ -43,17 +43,17 @@ export function cloner<T>(
  *    <Cmd> system unit tests.
  */
 export function clonerRef<T>(initial: T, options: { clone?: <T>(input: T) => T } = {}) {
+  type E = t.ImmutableEvents<T, P>;
+  type R = t.ImmutableRef<T, P, E>;
   const $ = rx.subject<t.ImmutableChange<T, P>>();
   const inner = cloner<T>(initial, options);
-
-  type E = t.ImmutableEvents<T, P>;
-  const api: t.ImmutableRef<T, P, E> = {
+  const api: R = {
     instance: slug(),
     get current() {
       return inner.current;
     },
-    change: curryChangeFunction($, inner.change, () => inner.current),
-    events: (dispose$?: t.UntilObservable) => viaObservable<T>($, dispose$),
+    change: curryChangeFunction<T, P>($, inner.change, () => inner.current),
+    events: (dispose$?: t.UntilObservable) => viaObservable<T, P>($, dispose$),
   };
   return api;
 }
