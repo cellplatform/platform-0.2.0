@@ -1,4 +1,4 @@
-import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
+import { Doc, DocUri, Icons, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
 import { repo } from './field.Repo';
 
