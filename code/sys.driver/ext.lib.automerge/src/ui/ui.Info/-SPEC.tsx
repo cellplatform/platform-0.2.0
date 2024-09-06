@@ -35,7 +35,6 @@ export default Dev.describe(name, async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<D>(e);
     const sample = SampleCrdt.dev(store, State.debug);
 
     const props$ = State.props.events().changed$;
@@ -71,7 +70,7 @@ export default Dev.describe(name, async (e) => {
         const doc = fields.includes('Doc') ? await store.doc.get(docuri) : undefined;
         const repo = db.repo;
         const flags = debug.flags;
-        const data = SpecData.asObject({ doc, repo, flags });
+        const data = SpecData.asObject(repo.name, { doc, flags });
 
         return (
           <Info

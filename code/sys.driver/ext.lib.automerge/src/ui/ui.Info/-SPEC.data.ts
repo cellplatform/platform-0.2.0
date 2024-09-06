@@ -11,7 +11,6 @@ export type SpecDataFlags = {
 };
 
 type Args = {
-  repo: Repo;
   doc?: t.Doc;
   flags?: SpecDataFlags;
 };
@@ -36,23 +35,22 @@ export const SpecData = {
   /**
    * Data as {Object}
    */
-  asObject(args: Args): t.InfoData {
-    const { repo } = args;
+  asObject(repo: t.InfoRepoName, args: Args): t.InfoData {
     return {
-      repo: repo.name,
-      document: SpecData.document(args),
+      repo,
+      document: SpecData.document(repo, args),
     };
   },
 
   /**
    * Document property.
    */
-  document(args: Args) {
-    const { doc, repo } = args;
+  document(repo: t.InfoRepoName, args: Args) {
+    const { doc } = args;
     const flags = args.flags ?? SpecData.defaults.flags;
 
     const document: t.InfoDoc = {
-      repo: repo.name,
+      repo,
       // label: 'Foo',
       uri: doc?.uri,
       object: {
