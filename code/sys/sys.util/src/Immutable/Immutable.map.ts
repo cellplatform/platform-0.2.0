@@ -17,7 +17,7 @@ export const Map = {
    * Create a new composite proxy that maps to an underlying document(s).
    */
   create<T extends O, P = t.ImmutableMapPatchDefault>(
-    map: t.ImmutableMap<T, P>,
+    mapping: t.ImmutableMapping<T, P>,
     options: { formatPatch?: t.ImmutableMapFormatPatch<P> } = {},
   ) {
     const { formatPatch } = options;
@@ -31,9 +31,9 @@ export const Map = {
     /**
      * Proxy
      */
-    const initial = wrangle.initial(map);
+    const initial = wrangle.initial(mapping);
     const get = (key: K) => {
-      const prop = wrangle.prop(map, key);
+      const prop = wrangle.prop(mapping, key);
       return prop ? ObjectPath.resolve(prop.doc.current, prop.path) : undefined;
     };
     const proxy = new Proxy(initial, {
@@ -41,7 +41,7 @@ export const Map = {
         return get(key);
       },
       set(_, key, value) {
-        const prop = wrangle.prop(map, key);
+        const prop = wrangle.prop(mapping, key);
         if (prop) {
           const callback: C = (patches) => {
             const formatted = wrangle.patches(patches, prop.key, prop.doc, formatPatch);
@@ -66,11 +66,43 @@ export const Map = {
     });
 
     /**
+     * Internal API for the app.
+     */
+    const internal: t.ImmutableMapInternal<T, P> = {
+      mapping: mapping,
+      origin(key) {
+        const prop = wrangle.prop(mapping, key);
+        if (!prop) return undefined;
+        if (!Is.map(prop.doc)) return prop;
+
+        const mapped = Map.internal(prop.doc);
+        if (!mapped) return undefined;
+
+        const match = Object.keys(mapped.mapping)
+          .map((key) => wrangle.prop(mapped.mapping, key)!)
+          .filter(Boolean)
+          .find((p) => {
+            type P = t.ImmutableMappingArray<O, unknown>;
+            const path = ObjectPath.from(p.key);
+            const prop = wrangle.propFromArray(p.key, ObjectPath.resolve<P>(mapped.mapping, path));
+            return !!prop ? p?.doc === prop?.doc : false;
+          });
+
+        if (!match) return undefined;
+        return mapped.origin(match.key) as t.ImmutableMappingProp<T, P>; // ← RECURSION 🌳
+      },
+    };
+
+    /**
      * API
      */
-    const api: t.ImmutableRef<T, P, t.ImmutableEvents<T, P>> = {
+    const api: t.ImmutableMapRef<T, P> = {
       instance: slug(),
-      [Symbols.map]: true,
+
+      [Symbols.map.root]: true,
+      get [Symbols.map.internal]() {
+        return internal;
+      },
 
       get current() {
         return proxy as T;
@@ -90,11 +122,24 @@ export const Map = {
       events(until$?: t.UntilObservable) {
         const events = viaObservable<T, P>(deduped$, until$);
         const dispose$ = events.dispose$;
-        monitorSourceChanges<T, P>({ map, proxy, next, formatPatch, dispose$ });
+        monitorSourceChanges<T, P>(api, { next, formatPatch, dispose$ });
         return events as t.ImmutableEvents<T, P>;
+      },
+
+      toObject() {
+        return toObject(proxy);
       },
     };
     return api;
+  },
+
+  /**
+   * Retrieve the internal API
+   */
+  internal<T extends O, P>(
+    input: t.ImmutableRef<T, P> | t.ImmutableMapRef<T, P>,
+  ): t.ImmutableMapInternal<T, P> | undefined {
+    return Is.map(input) ? (input as any)[Symbols.map.internal] : undefined;
   },
 } as const;
 
@@ -102,65 +147,43 @@ export const Map = {
  * Helpers
  */
 const wrangle = {
-  initial(map: t.ImmutableMap<any, any>) {
+  initial(map: t.ImmutableMapping<any, any>) {
     const initial = Object.keys(map).reduce((acc: any, key) => {
       const prop = wrangle.prop(map, key);
       acc[key] = Symbol(`map → ${prop?.path.join('/') ?? 'UNKNOWN'}`);
       return acc;
     }, {});
-    initial[Symbols.proxy] = true;
+    initial[Symbols.map.proxy] = true;
     return initial;
   },
 
-  prop<T extends O, P>(map: t.ImmutableMap<T, P>, key: string | symbol) {
-    const item = map[key as any];
-    if (!Array.isArray(item)) return;
+  prop<T extends O, P>(map: t.ImmutableMapping<T, P>, key: string | symbol) {
+    return wrangle.propFromArray(key, map[key as any]);
+  },
+
+  propFromArray<T extends O, P>(
+    key: string | symbol,
+    item?: t.ImmutableMappingArray<T, P>,
+  ): t.ImmutableMappingProp<T, P> | undefined {
+    if (!Array.isArray(item)) return undefined;
 
     type E = t.ImmutableEvents<T, P>;
     const [doc, field] = item;
     const path = typeof field === 'string' ? [field] : field;
-    if (!ObjectPath.Is.path(path) || !Is.immutableRef<T, P, E>(doc)) return;
-
-    return { doc, key, path } as const;
+    if (!ObjectPath.Is.path(path) || !Is.immutableRef<T, P, E>(doc)) return undefined;
+    return { key, doc, path } as const;
   },
 
-  current<T extends O, P>(map: t.ImmutableMap<T, P>, proxy: O): T {
+  current<T extends O, P>(map: t.ImmutableMapping<T, P>, proxy: O): T {
     return Object.keys(map).reduce((acc, key) => {
       (acc as any)[key] = proxy[key];
       return acc;
     }, {} as T);
   },
 
-  pluckAndMap<T extends O, P>(
-    map: t.ImmutableMap<T, P>,
-    proxy: O,
-    source: O,
-    paths: t.ObjectPath[],
-  ): T {
-    const plucked = paths
-      .filter((path) => ObjectPath.exists(source, path))
-      .reduce((acc, path) => {
-        Mutate.value(acc, path, ObjectPath.resolve(source, path));
-        return acc;
-      }, {});
-
-    return Object.keys(map)
-      .map((key) => wrangle.prop(map, key))
-      .filter((prop) => !!prop)
-      .reduce((acc, prop) => {
-        const key = String(prop.key);
-        const pathExists = paths.some((p) => p.join() === prop.path.join());
-        const value = pathExists ? ObjectPath.resolve(plucked, prop.path) : proxy[key];
-        Mutate.value(acc, [key], value);
-        return acc;
-      }, {} as T);
-  },
-
   patch<P>(args: t.ImmutableMapFormatPatchArgs<P>): P {
-    const mapping: t.ImmutableMapPatchInfo = {
-      doc: `instance:${args.doc.instance}`,
-      key: args.key,
-    };
+    const doc = `instance:${args.doc.instance}`;
+    const mapping: t.ImmutableMapPatchInfo = { doc, key: args.key };
     return { ...args.patch, mapping };
   },
 
@@ -180,32 +203,64 @@ const wrangle = {
     const after = Delete.undefined(e.after);
     return { ...e, before, after };
   },
+
+  pluckAndMap<T extends O, P>(map: t.ImmutableMapRef<T, P>, subject: O, paths: t.ObjectPath[]): T {
+    const proxy = map.current;
+    const internal = Map.internal(map);
+    if (!internal) throw new Error('[map] should have produced an internal API');
+
+    const plucked = paths
+      .filter((path) => ObjectPath.exists(subject, path))
+      .reduce((acc, path) => {
+        Mutate.value(acc, path, ObjectPath.resolve(subject, path));
+        return acc;
+      }, {});
+
+    return Object.keys(internal.mapping)
+      .map((key) => wrangle.prop(internal.mapping, key))
+      .filter((prop) => !!prop)
+      .reduce((acc, prop) => {
+        const key = String(prop.key);
+        const origin = internal?.origin(key);
+        if (!origin) throw new Error(`[origin] mapping of key "${key}" not found.`);
+
+        const pathExists = paths.some((p) => p.join() === origin.path.join());
+        const value = pathExists ? ObjectPath.resolve(plucked, origin.path) : proxy[key];
+        Mutate.value(acc, [key], value);
+        return acc;
+      }, {} as T);
+  },
 } as const;
 
 /**
  * Sets up a monitor to listen for underlying changes in the source documents.
  */
-function monitorSourceChanges<T extends O, P>(args: {
-  map: t.ImmutableMap<T, P>;
-  proxy: O;
-  next: (payload: t.ImmutableChange<T, P>) => void;
-  dispose$?: t.UntilObservable;
-  formatPatch?: t.ImmutableMapFormatPatch<P>;
-}) {
-  const { map, proxy, next, dispose$, formatPatch } = args;
-  Object.keys(map)
-    .map((key) => wrangle.prop(map, key)!)
-    .filter((prop) => !!prop)
-    .forEach((prop) => {
-      const events = prop.doc.events(dispose$);
-      const changed$ = events.changed$.pipe(rx.filter((e) => !('mapping' in e))); // NB: ignore changes made by (this) the mapper itself.
-      changed$
+function monitorSourceChanges<T extends O, P>(
+  map: t.ImmutableMapRef<T, P>,
+  args: {
+    next: (payload: t.ImmutableChange<T, P>) => void;
+    dispose$?: t.UntilObservable;
+    formatPatch?: t.ImmutableMapFormatPatch<P>;
+  },
+) {
+  const { next, dispose$, formatPatch } = args;
+  const internal = Map.internal(map);
+  if (!internal) throw new Error('[map] should have produced an internal API');
+
+  const mapping = internal.mapping;
+  Object.keys(mapping)
+    .map((key) => wrangle.prop<T, P>(mapping, key)!)
+    .map((prop) => ({ prop, origin: internal.origin(prop?.key)! }))
+    .filter(({ prop, origin }) => !!prop && !!origin)
+    .forEach(({ prop, origin }) => {
+      const events = origin.doc.events(dispose$);
+      events.changed$
         .pipe(rx.distinctWhile((prev, next) => R.equals(prev.after, next.after)))
         .subscribe((e) => {
           const paths = e.patches.map((p) => ObjectPath.from(p));
           if (paths.length > 0) {
-            const before = wrangle.pluckAndMap(map, proxy, e.before, paths);
-            const after = wrangle.pluckAndMap(map, proxy, e.after, paths);
+            const before = wrangle.pluckAndMap(map, e.before, paths);
+            const after = wrangle.pluckAndMap(map, e.after, paths);
             const patches = wrangle.patches(e.patches, prop.key, prop.doc, formatPatch);
             next({ before, after, patches });
           }

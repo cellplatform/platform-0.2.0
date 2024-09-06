@@ -25,7 +25,7 @@ export type {
   ImmutableChangeOptions,
   ImmutableChangeOptionsInput,
   ImmutableEvents,
-  ImmutableMap,
+  ImmutableMapping,
   ImmutableMapPatch,
   ImmutableMutator,
   ImmutablePatchCallback,

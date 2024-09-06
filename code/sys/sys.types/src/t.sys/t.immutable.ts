@@ -54,10 +54,18 @@ export type ImmutableChange<D, P> = {
  * A mapping used to create single composite data object
  * out of paths pointing to sub-parts of other immutable references.
  */
-export type ImmutableMapProp<T extends O, P> = [t.ImmutableRef, MapToPath];
-export type ImmutableMap<T extends O, P> = { [K in keyof T]: t.ImmutableMapProp<T, P> };
 type MapPropName = string;
 type MapToPath = t.ObjectPath | MapPropName;
+export type ImmutableMapping<T extends O, P> = { [K in keyof T]: t.ImmutableMappingArray<T, P> };
+export type ImmutableMappingArray<T extends O, P> = [t.ImmutableRef, MapToPath];
+export type ImmutableMappingProp<T extends O, P> = {
+  key: string | symbol;
+  doc: t.ImmutableRef<T, P, ImmutableMapEvents<T, P>>;
+  path: t.ObjectPath;
+};
+
+export type ImmutableMapEvents<T extends O, P> = t.ImmutableEvents<T, P>;
+
 
 /**
  * A JSON change/patch operation (RFC-6902) extended

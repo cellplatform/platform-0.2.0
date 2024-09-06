@@ -97,13 +97,13 @@ describe('Doc.map (composite)', () => {
       expect(lens.current.msg).to.eql('banger');
     });
 
-    it('composite of maps of maps', async () => {
-      type F1 = F;
-      type F2 = { length: number; message: string };
+    it('composite maps of maps', async () => {
+      type A = F;
+      type B = { length: number; message: string };
       const doc = await factory();
       const lens = Doc.lens<D, DChild>(doc, ['child']);
-      const map1 = Doc.map<F1>({ foo: [doc, 'count'], text: [lens, 'msg'] });
-      const map2 = Doc.map<F2>({ length: [map1, 'foo'], message: [map1, 'text'] });
+      const map1 = Doc.map<A>({ foo: [doc, 'count'], text: [lens, 'msg'] });
+      const map2 = Doc.map<B>({ length: [map1, 'foo'], message: [map1, 'text'] });
 
       expect(Doc.toObject(map2)).to.eql({ length: 0, message: undefined });
 

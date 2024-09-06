@@ -107,15 +107,15 @@ describe('Immutable.map', () => {
       const map2 = Immutable.map<B>({ message: [map1, 'msg'] });
 
       expect(map2.current.message).to.eql('hello');
-      map1.change((d) => (d.msg = 'jane'));
-      expect(map2.current.message).to.eql('jane');
+      map1.change((d) => (d.msg = 'aaa'));
+      expect(map2.current.message).to.eql('aaa');
 
-      map2.change((d) => (d.message = 'lane'));
-      expect(map1.current.msg).to.eql('lane');
+      map2.change((d) => (d.message = 'bbb'));
+      expect(map1.current.msg).to.eql('bbb');
     });
   });
 
-  describe('Reflect', () => {
+  describe('reflection', () => {
     it('Object.keys ← Reflect.ownKeys', () => {
       const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
       const map = Immutable.map<F>({ foo: [doc, 'count'], text: [doc, ['child', 'msg']] });
@@ -165,6 +165,49 @@ describe('Immutable.map', () => {
       expect(obj1).to.eql(obj2);
       expect(obj1).to.eql(obj3);
       expect(obj1).to.eql({ foo: 123, text: 'hello' });
+      expect(map.toObject()).to.eql(Immutable.toObject(map));
+    });
+  });
+
+  describe('internal (private API)', () => {
+    it('retrieve API → {mapping}', () => {
+      const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'hello' } });
+      const mapping: t.ImmutableMapping<F, P> = {
+        foo: [doc, 'count'],
+        text: [doc, ['child', 'msg']],
+      };
+      const map = Immutable.map<F>(mapping);
+
+      const NON = [true, 123, {}, [], Symbol('foo'), BigInt(0)];
+      NON.forEach((v: any) => expect(Immutable.Map.internal(v)).to.eql(undefined));
+
+      const api = Immutable.Map.internal(map);
+      expect(api?.mapping).to.equal(mapping);
+    });
+
+    it('origin ← root mapped source', () => {
+      type A = { a?: string };
+      type B = { b?: string };
+
+      const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'before' } });
+      const map1 = Immutable.map<A>({ a: [doc, ['child', 'msg']] });
+      const map2 = Immutable.map<B>({ b: [map1, 'a'] });
+
+      const api1 = Immutable.Map.internal(map1)!;
+      const api2 = Immutable.Map.internal(map2)!;
+
+      expect(api1.origin('404')).to.eql(undefined);
+
+      const res1 = api1.origin('a');
+      const res2 = api2.origin('b');
+
+      expect(res1?.doc).to.equal(doc); // NB: direct link back to source.
+      expect(res1?.key).to.eql('a');
+      expect(res1?.path).to.eql(['child', 'msg']);
+
+      expect(res2?.doc).to.equal(doc); // NB: mapped through another item before source.
+      expect(res2?.key).to.eql('a');
+      expect(res2?.path).to.eql(['child', 'msg']);
     });
   });
 
@@ -302,6 +345,44 @@ describe('Immutable.map', () => {
 
       map.change((d) => (d.foo = 456));
       expect(fired.length).to.eql(3); // NB: de-duped, writing to map OR doc does not produce extra events.
+
+      dispose();
+    });
+
+    it('events fire through map of maps', () => {
+      type A = { a?: string };
+      type B = { b?: string };
+
+      const { dispose, dispose$ } = rx.lifecycle();
+      const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'before' } });
+      const mapA = Immutable.map<A>({ a: [doc, ['child', 'msg']] });
+      const mapB = Immutable.map<B>({ b: [mapA, 'a'] });
+
+      const firedA: t.ImmutableChange<A, t.PatchOperation>[] = [];
+      const firedB: t.ImmutableChange<B, t.PatchOperation>[] = [];
+      const eventsA = mapA.events(dispose$);
+      const eventsB = mapB.events(dispose$);
+      eventsA.changed$.subscribe((e) => firedA.push(e));
+      eventsB.changed$.subscribe((e) => firedB.push(e));
+
+      expect(mapA.current.a).to.eql('before');
+      expect(mapB.current.b).to.eql('before');
+
+      mapA.change((d) => (d.a = 'changed-A'));
+      expect(firedA.length).to.eql(1);
+      expect(firedB.length).to.eql(1);
+      expect(firedA[0].before.a).to.eql('before');
+      expect(firedA[0].after.a).to.eql('changed-A');
+      expect(firedB[0].before.b).to.eql('before');
+      expect(firedB[0].after.b).to.eql('changed-A');
+
+      mapB.change((d) => (d.b = 'changed-B'));
+      expect(firedA.length).to.eql(2);
+      expect(firedB.length).to.eql(2);
+      expect(firedA[1].before.a).to.eql('changed-A');
+      expect(firedA[1].after.a).to.eql('changed-B');
+      expect(firedB[1].before.b).to.eql('changed-A');
+      expect(firedB[1].after.b).to.eql('changed-B');
 
       dispose();
     });
