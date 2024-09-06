@@ -19,7 +19,7 @@ export type {
   ImmutableMapFormatPatchArgs,
   ImmutableMapPatch,
   ImmutableMapPatchInfo,
-  ImmutableMapRef,
+  ImmutableMap,
   ImmutableMapping,
   ImmutableMappingArray,
   ImmutableMappingProp,

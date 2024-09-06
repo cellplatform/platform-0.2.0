@@ -66,6 +66,9 @@ export type ImmutableMappingProp<T extends O, P> = {
 
 export type ImmutableMapEvents<T extends O, P> = t.ImmutableEvents<T, P>;
 
+export type ImmutableMap<T extends O, P> = t.ImmutableRef<T, P, t.ImmutableMapEvents<T, P>> & {
+  toObject(): T;
+};
 
 /**
  * A JSON change/patch operation (RFC-6902) extended

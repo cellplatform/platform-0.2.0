@@ -96,7 +96,7 @@ export const Map = {
     /**
      * API
      */
-    const api: t.ImmutableMapRef<T, P> = {
+    const api: t.ImmutableMap<T, P> = {
       instance: slug(),
 
       [Symbols.map.root]: true,
@@ -137,7 +137,7 @@ export const Map = {
    * Retrieve the internal API
    */
   internal<T extends O, P>(
-    input: t.ImmutableRef<T, P> | t.ImmutableMapRef<T, P>,
+    input: t.ImmutableRef<T, P> | t.ImmutableMap<T, P>,
   ): t.ImmutableMapInternal<T, P> | undefined {
     return Is.map(input) ? (input as any)[Symbols.map.internal] : undefined;
   },
@@ -204,7 +204,7 @@ const wrangle = {
     return { ...e, before, after };
   },
 
-  pluckAndMap<T extends O, P>(map: t.ImmutableMapRef<T, P>, subject: O, paths: t.ObjectPath[]): T {
+  pluckAndMap<T extends O, P>(map: t.ImmutableMap<T, P>, subject: O, paths: t.ObjectPath[]): T {
     const proxy = map.current;
     const internal = Map.internal(map);
     if (!internal) throw new Error('[map] should have produced an internal API');
@@ -236,7 +236,7 @@ const wrangle = {
  * Sets up a monitor to listen for underlying changes in the source documents.
  */
 function monitorSourceChanges<T extends O, P>(
-  map: t.ImmutableMapRef<T, P>,
+  map: t.ImmutableMap<T, P>,
   args: {
     next: (payload: t.ImmutableChange<T, P>) => void;
     dispose$?: t.UntilObservable;

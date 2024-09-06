@@ -18,7 +18,7 @@ export const Is = {
     return Is.immutable(o) && typeof o.instance === 'string' && areFuncs(o.events);
   },
 
-  map<T extends O, P = unknown>(input: any): input is t.ImmutableMapRef<T, P> {
+  map<T extends O, P = unknown>(input: any): input is t.ImmutableMap<T, P> {
     return isObject(input) && Symbols.map.root in input;
   },
 
