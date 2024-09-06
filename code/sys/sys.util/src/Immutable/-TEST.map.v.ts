@@ -352,37 +352,55 @@ describe('Immutable.map', () => {
     it('events fire through map of maps', () => {
       type A = { a?: string };
       type B = { b?: string };
+      type C = { c?: string };
 
       const { dispose, dispose$ } = rx.lifecycle();
       const doc = Immutable.clonerRef<D>({ count: 0, child: { msg: 'before' } });
       const mapA = Immutable.map<A>({ a: [doc, ['child', 'msg']] });
       const mapB = Immutable.map<B>({ b: [mapA, 'a'] });
+      const mapC = Immutable.map<C>({ c: [mapB, 'b'] });
 
       const firedA: t.ImmutableChange<A, t.PatchOperation>[] = [];
       const firedB: t.ImmutableChange<B, t.PatchOperation>[] = [];
+      const firedC: t.ImmutableChange<B, t.PatchOperation>[] = [];
       const eventsA = mapA.events(dispose$);
       const eventsB = mapB.events(dispose$);
+      const eventsC = mapB.events(dispose$);
       eventsA.changed$.subscribe((e) => firedA.push(e));
       eventsB.changed$.subscribe((e) => firedB.push(e));
+      eventsC.changed$.subscribe((e) => firedC.push(e));
 
       expect(mapA.current.a).to.eql('before');
       expect(mapB.current.b).to.eql('before');
+      expect(mapC.current.c).to.eql('before');
 
-      mapA.change((d) => (d.a = 'changed-A'));
-      expect(firedA.length).to.eql(1);
-      expect(firedB.length).to.eql(1);
+      const expectFired = (total: number) => {
+        expect(firedA.length).to.eql(total);
+        expect(firedB.length).to.eql(total);
+        expect(firedC.length).to.eql(total);
+      };
+
+      mapA.change((d) => (d.a = 'changed.A'));
+      expectFired(1);
       expect(firedA[0].before.a).to.eql('before');
-      expect(firedA[0].after.a).to.eql('changed-A');
+      expect(firedA[0].after.a).to.eql('changed.A');
       expect(firedB[0].before.b).to.eql('before');
-      expect(firedB[0].after.b).to.eql('changed-A');
+      expect(firedB[0].after.b).to.eql('changed.A');
+      expect(firedC[0].before.b).to.eql('before');
+      expect(firedC[0].after.b).to.eql('changed.A');
 
-      mapB.change((d) => (d.b = 'changed-B'));
-      expect(firedA.length).to.eql(2);
-      expect(firedB.length).to.eql(2);
-      expect(firedA[1].before.a).to.eql('changed-A');
-      expect(firedA[1].after.a).to.eql('changed-B');
-      expect(firedB[1].before.b).to.eql('changed-A');
-      expect(firedB[1].after.b).to.eql('changed-B');
+      mapB.change((d) => (d.b = 'changed.B'));
+      expectFired(2);
+      expect(firedA[1].before.a).to.eql('changed.A');
+      expect(firedA[1].after.a).to.eql('changed.B');
+      expect(firedB[1].before.b).to.eql('changed.A');
+      expect(firedB[1].after.b).to.eql('changed.B');
+      expect(firedC[1].before.b).to.eql('changed.A');
+      expect(firedC[1].after.b).to.eql('changed.B');
+
+      expect(mapA.current.a).to.eql('changed.B');
+      expect(mapB.current.b).to.eql('changed.B');
+      expect(mapC.current.c).to.eql('changed.B');
 
       dispose();
     });
