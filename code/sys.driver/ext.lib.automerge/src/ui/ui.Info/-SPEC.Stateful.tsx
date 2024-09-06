@@ -21,34 +21,26 @@ export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
   const repo = db.repo;
 
-  type LocalStore = { props?: string; debug?: string };
+  type LocalStore = { props?: string; debug?: string; data?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
-  const local = localstore.object({ props: undefined, debug: undefined });
+  const local = localstore.object({ props: undefined, debug: undefined, data: undefined });
 
+  const flags = SpecData.defaults.flags;
+  const clonerRef = Immutable.clonerRef;
   const State = {
-    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(
-      Json.parse<D>(local.debug, {
-        render: true,
-        flags: SpecData.defaults.flags,
-      }),
-    ),
+    props: clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: clonerRef<D>(Json.parse<D>(local.debug, { render: true, flags })),
+    data: clonerRef(Json.parse<t.InfoData>(local.data, SpecData.asObject(repo.name, { flags }))),
   } as const;
 
   let doc: t.Doc | undefined;
-  let data: t.InfoStatefulData | undefined;
 
   const Data = {
-    create(onComplete?: (data: t.InfoStatefulData) => void) {
-      const initial = SpecData.asObject({ repo, flags: State.debug.current.flags });
-      data = Immutable.clonerRef(initial);
-      Data.update();
-      onComplete?.(data);
-    },
     update() {
-      const flags = State.debug.current.flags;
-      const documents = SpecData.document({ repo, doc, flags });
-      data?.change((d) => (d.document = documents));
+      State.data.change((d) => {
+        const docs = Info.Data.documents(d);
+        if (docs[0]) docs[0].uri = doc?.uri;
+      });
     },
   } as const;
 
@@ -63,24 +55,27 @@ export default Dev.describe(name, async (e) => {
 
     const props$ = State.props.events().changed$;
     const debug$ = State.debug.events().changed$;
-    rx.merge(props$, debug$)
+    const data$ = State.data.events().changed$;
+
+    rx.merge(props$, debug$, data$)
       .pipe(rx.debounceTime(1000))
       .subscribe(() => {
         local.props = Json.stringify(State.props.current);
         local.debug = Json.stringify(State.debug.current);
+        local.data = Json.stringify(State.data.current);
       });
     rx.merge(props$, debug$)
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
     doc = await sample.get();
-    Data.create();
+    Data.update();
 
     ctx.debug.width(330);
     ctx.subject
       .size([320, null])
       .display('grid')
-      .render<D>((e) => {
+      .render<D>(() => {
         const props = State.props.current;
         const debug = State.debug.current;
         Dev.Theme.background(dev, props.theme, 1);
@@ -91,18 +86,19 @@ export default Dev.describe(name, async (e) => {
           <Info.Stateful
             {...props}
             repos={{ [db.name]: db.repo }}
-            data={data}
+            data={State.data}
             style={{ minHeight: 300, margin: 10 }}
             onReady={(e) => {
               console.info(`⚡️ Info.Stateful.onReady:`, e);
               e.dispose$.subscribe(() => console.info(`⚡️ Info.Stateful.onReady → dispose 💥`));
 
-              const changed$ = data?.events(e.dispose$).changed$;
+              const changed$ = State.data?.events(e.dispose$).changed$;
               changed$?.pipe(rx.debounceTime(150)).subscribe((e) => dev.redraw());
             }}
             onHistoryItemClick={(e) => console.info('⚡️ onHistoryItemClick', e)}
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
             onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
+            onChange={(e) => console.info('⚡️ onChange', e)}
             onBeforeObjectRender={(mutate, ctx) => {
               mutate['foo'] = 123; // Sample render mutation (safe 🐷).
             }}
@@ -116,7 +112,7 @@ export default Dev.describe(name, async (e) => {
     const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Fields', (dev) => {
-      dev.row((e) => {
+      dev.row(() => {
         const props = State.props.current;
         return (
           <Info.FieldSelector
@@ -129,7 +125,7 @@ export default Dev.describe(name, async (e) => {
       dev.title('Common States');
 
       const config = (label: string | [string, string], fields: t.InfoField[]) => {
-        dev.button(label, (e) => setFields(fields));
+        dev.button(label, () => setFields(fields));
       };
 
       config(['Repo / Doc', '(simple)'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']);
@@ -168,9 +164,9 @@ export default Dev.describe(name, async (e) => {
         btn
           .label(`create`)
           .enabled(() => !doc)
-          .onClick(async (e) => {
+          .onClick(async () => {
             doc = await sample.get();
-            Data.create(() => dev.redraw());
+            Data.update();
           });
       });
       dev.button((btn) => {
@@ -181,7 +177,8 @@ export default Dev.describe(name, async (e) => {
           .onClick(async (e) => {
             await sample.delete();
             doc = undefined;
-            data = undefined;
+            local.data = undefined;
+            Data.update();
           });
       });
     });
@@ -243,28 +240,29 @@ export default Dev.describe(name, async (e) => {
       });
 
       dev.hr(-1, 5);
-      dev.button('tmp', () => {
-        data?.change((d) => (d.visible = { value: true }));
+      dev.button(['reset: local', 'storage'], () => {
+        local.data = undefined;
+        local.props = undefined;
+        local.debug = undefined;
+        location.reload();
+      });
+      dev.button('reset: local.data', () => {
+        local.data = undefined;
+        location.reload();
       });
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<D>(e);
-    dev.footer.border(-0.1).render<D>((e) => {
+    dev.footer.border(-0.1).render<D>(() => {
       const props = State.props.current;
-      return (
-        <Dev.Object
-          name={name}
-          data={{
-            props,
-            data: data?.current,
-            'data.instance': data?.instance,
-          }}
-          expand={1}
-          fontSize={11}
-        />
-      );
+      const data = {
+        props,
+        data: State.data.current,
+        'data.instance': State.data.instance,
+      };
+      return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
 });
