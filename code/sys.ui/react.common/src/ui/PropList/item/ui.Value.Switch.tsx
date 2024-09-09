@@ -3,11 +3,12 @@ import { Color, css, type t } from './common';
 
 export type SwitchValueProps = {
   value: t.PropListValue;
-  theme?: t.CommonTheme;
   isMouseOverItem?: boolean;
   isMouseOverValue?: boolean;
   isItemClickable?: boolean;
   isValueClickable?: boolean;
+  enabled?: boolean;
+  theme?: t.CommonTheme;
   onClick?: React.MouseEventHandler;
 };
 
@@ -16,7 +17,9 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
   if (item.kind !== 'Switch') return null;
 
   const value = item.body;
-  const enabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
+  const itemEnabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
+  const enabled = props.enabled ?? true ? itemEnabled : false;
+
   const isDark = props.theme === 'Dark';
   const theme = isDark ? Switch.Theme.dark.blue : Switch.Theme.light.blue;
   const styles = { base: css({}) };
@@ -26,7 +29,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
       height={12}
       value={value}
       enabled={enabled}
-      track={Wrangle.track(item)}
+      track={wrangle.track(item)}
       style={styles.base}
       theme={theme}
       onMouseDown={props.onClick}
@@ -37,7 +40,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
 /**
  * Helpers
  */
-export const Wrangle = {
+const wrangle = {
   track(item: t.PropListValueSwitch): Partial<t.SwitchTrack> | undefined {
     if (!item.color) return undefined;
     const color = {

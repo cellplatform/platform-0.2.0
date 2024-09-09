@@ -8,6 +8,7 @@ export type PropListValueProps = {
   hasLabel?: boolean;
   message?: string | JSX.Element;
   defaults: t.PropListDefaults;
+  enabled?: boolean;
   isMouseOverItem?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
@@ -15,7 +16,7 @@ export type PropListValueProps = {
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const { hasLabel = true, theme = DEFAULTS.theme } = props;
+  const { hasLabel = true, enabled = true, theme = DEFAULTS.theme } = props;
   const item = format(props.item);
   const value = item.value;
 
@@ -50,6 +51,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
           isMouseOverValue={mouse.is.over}
           isItemClickable={item.isItemClickable}
           isValueClickable={item.isValueClickable}
+          enabled={enabled}
           onClick={handler.onClick}
         />
       );
@@ -67,6 +69,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
           isValueClickable={item.isValueClickable}
           cursor={cursor}
           defaults={props.defaults}
+          enabled={enabled}
           onClick={handler.onClick}
         />
       );
