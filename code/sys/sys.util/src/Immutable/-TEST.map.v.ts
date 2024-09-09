@@ -4,8 +4,8 @@ import { rx, slug } from './common';
 
 describe('Immutable.map', () => {
   type P = t.PatchOperation;
-  type Child = { msg?: string };
-  type D = { count: number; child?: Child };
+  type TChild = { msg?: string };
+  type D = { count: number; child?: TChild };
   type F = { foo: number; text: string };
 
   it('instance (id)', () => {
@@ -45,6 +45,15 @@ describe('Immutable.map', () => {
 
       expect(doc.current.count).to.eql(123);
       expect(map.current.foo).to.eql(123);
+    });
+
+    it('write: change sub-object within map', () => {
+      type F = { foo: TChild };
+      const doc = Immutable.clonerRef<D>({ count: 0, child: {} });
+      const map = Immutable.map<F>({ foo: [doc, 'child'] });
+
+      map.change((d) => (d.foo.msg = 'hello'));
+      expect(doc.current.child?.msg).to.eql('hello');
     });
 
     it('write: patches callback', () => {
