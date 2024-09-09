@@ -38,7 +38,7 @@ export default Dev.describe(name, async (e) => {
   const Data = {
     update() {
       State.data.change((d) => {
-        const docs = Info.Data.documents(d);
+        const docs = Info.Data.documents(d.document);
         if (docs[0]) docs[0].uri = doc?.uri;
       });
     },

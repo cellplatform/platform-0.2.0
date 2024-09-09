@@ -27,7 +27,7 @@ const document = {
    */
   simplify(input: t.InfoData = {}) {
     const docRefs: t.Doc[] = [];
-    const document = Data.documents(input).map((item) => {
+    const document = Data.documents(input.document).map((item) => {
       item = { ...item };
       if (Is.doc(item.uri)) {
         docRefs.push(item.uri);

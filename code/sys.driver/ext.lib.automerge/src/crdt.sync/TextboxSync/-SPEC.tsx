@@ -44,7 +44,7 @@ export default Dev.describe(name, async (e) => {
 
   const updateInfoRef = () => {
     const uri = State.debug.current.docuri;
-    State.info.change((d) => (Info.Data.documents(d)[0].uri = uri));
+    State.info.change((d) => (Info.Data.documents(d.document)[0].uri = uri));
   };
 
   e.it('ui:init', async (e) => {
