@@ -8,9 +8,16 @@ type P = t.DocMapPatch;
  */
 export function map<T extends O>(mapping: t.ImmutableMapping<T, P>): t.DocMap<T> {
   return Immutable.map<T, P>(mapping, {
+    /**
+     * Augment the [Automerge Patch] with the mapping meta-data.
+     */
     formatPatch(e) {
       const doc = (e.doc as t.Doc).uri ?? '';
-      return { ...e.patch, mapping: { key: e.key, doc } } as P;
+      const key = e.key;
+      return {
+        ...e.patch,
+        mapping: { key, doc },
+      } as P;
     },
   });
 }

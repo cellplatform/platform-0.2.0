@@ -115,6 +115,7 @@ export default Dev.describe(name, async (e) => {
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
       });
       dev.hr(-1, 5);
+      config('all', DEFAULTS.fields.all);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
       config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
       config('Repo / Doc / History + List', [
