@@ -7,7 +7,7 @@ type P = t.InfoStatefulProps;
 /**
  * Automerge <Info> Stateful Controller.
  */
-export function useStateful(props: P) {
+export function useStateful(props: P): t.InfoStatefulController {
   const { repos = {} } = props;
   const ctx = Wrangle.ctx(props);
   const enabled = ctx.enabled;
@@ -40,11 +40,11 @@ export function useStateful(props: P) {
   /**
    * Overriden event handlers.
    */
-  const handlers: t.InfoHandlers = {
+  const handlers: t.InfoPropsHandlers = {
     onDocToggleClick(e) {
       if (!enabled) return;
       data?.change((d) => {
-        const document = Wrangle.Data.documents(d)[e.index];
+        const document = Wrangle.Data.documents(d.document)[e.index];
         if (document) {
           const object = document.object || (document.object = {});
           object.visible = e.visible.next;
@@ -76,7 +76,7 @@ export function useStateful(props: P) {
   /**
    * API
    */
-  const api = {
+  const api: t.InfoStatefulController = {
     handlers,
 
     get props(): t.InfoProps {

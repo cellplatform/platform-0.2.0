@@ -10,6 +10,16 @@ export type InfoStatefulProps = Omit<t.InfoProps, 'data'> & {
 };
 
 /**
+ * State: (useStateful)
+ */
+export type InfoStatefulController = {
+  fields: t.InfoField[];
+  props: t.InfoProps;
+  handlers: t.InfoPropsHandlers;
+  data?: t.InfoData;
+};
+
+/**
  * Data
  */
 type D = t.InfoData;

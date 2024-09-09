@@ -36,13 +36,8 @@ export type DocFactory<T extends O = O> = (uri?: t.UriString) => Promise<t.Doc<T
 /**
  * Doc mapping (composite objects).
  */
-export type DocMap<T extends O> = t.ImmutableRef<T, t.DocMapPatch, t.DocMapEvents<T>>;
+export type DocMap<T extends O> = t.ImmutableMap<T, t.DocMapPatch>;
 export type DocMapPatch = t.ImmutableMapPatch<P>;
-export type DocMapEvents<T extends O> = t.ImmutableEvents<
-  T,
-  DocMapPatch,
-  t.ImmutableChange<T, DocMapPatch>
->;
 
 /**
  * Document access exposed from a store/repo.

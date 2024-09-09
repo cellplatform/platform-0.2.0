@@ -25,13 +25,13 @@ export type InfoCtx = {
   fields: t.InfoField[];
   theme: t.CommonTheme;
   enabled: boolean;
-  handlers: t.InfoHandlers;
+  handlers: t.InfoPropsHandlers;
 };
 
 /**
  * <Component>
  */
-export type InfoProps = InfoHandlers & {
+export type InfoProps = InfoPropsHandlers & {
   title?: P['title'];
   width?: P['width'];
   fields?: (t.InfoField | undefined)[];
@@ -43,7 +43,7 @@ export type InfoProps = InfoHandlers & {
   style?: t.CssValue;
 };
 
-export type InfoHandlers = {
+export type InfoPropsHandlers = {
   onVisibleToggle?: t.InfoVisibleToggleHandler;
   onBeforeObjectRender?: t.InfoBeforeObjectRenderHandler;
   onDocToggleClick?: t.InfoDocToggleHandler;

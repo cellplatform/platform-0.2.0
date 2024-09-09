@@ -18,8 +18,8 @@ export const Wrangle = {
     return { repos, handlers, fields, theme, enabled };
   },
 
-  handlers(props: P): t.InfoHandlers {
-    return Value.Object.pick<t.InfoHandlers>(
+  handlers(props: P): t.InfoPropsHandlers {
+    return Value.Object.pick<t.InfoPropsHandlers>(
       props,
       'onVisibleToggle',
       'onDocToggleClick',
