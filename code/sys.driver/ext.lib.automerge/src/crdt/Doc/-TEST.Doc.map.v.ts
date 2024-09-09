@@ -1,10 +1,27 @@
 import { Doc } from '..';
-import { describe, expect, it, rx, type t } from '../../test';
+import { describe, expect, Immutable, it, rx, type t } from '../../test';
 import { testSetup, type D, type DChild } from './-TEST.u';
 
 describe('Doc.map (composite)', () => {
   const { store, factory } = testSetup();
   type F = { foo: number; text?: string };
+
+  describe('Is (flags)', () => {
+    it('Is.immutableRef', async () => {
+      const doc = await factory();
+      const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
+      expect(Immutable.Is.immutableRef(map)).to.eql(true);
+      expect(Immutable.Is.map(map)).to.eql(true);
+      expect(Immutable.Is.proxy(map.current)).to.eql(true);
+    });
+
+    it('Doc.Is.map', async () => {
+      const doc = await factory();
+      const map = Doc.map<F>({ foo: [doc, 'count'], text: [doc, 'msg'] });
+      expect(Doc.Is.map(map)).to.eql(true);
+      expect(Doc.Is.proxy(map.current)).to.eql(true);
+    });
+  });
 
   describe('IO', () => {
     it('read/write', async () => {
