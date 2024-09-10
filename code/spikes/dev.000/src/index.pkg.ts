@@ -17,7 +17,7 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge-repo': '1.2.1',
     '@automerge/automerge-repo-network-messagechannel': '1.2.1',
     '@automerge/automerge-repo-storage-indexeddb': '1.2.1',
-    '@privy-io/react-auth': '1.81.1',
+    '@privy-io/react-auth': '1.82.0',
     '@standard-crypto/farcaster-js': '7.4.0',
     'automerge-repo-network-peerjs': '1.2.2',
     'buffer': '6.0.3',
@@ -44,7 +44,7 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
     'sys.util': '0.0.0',
-    'yaml': '2.5.0',
+    'yaml': '2.5.1',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
