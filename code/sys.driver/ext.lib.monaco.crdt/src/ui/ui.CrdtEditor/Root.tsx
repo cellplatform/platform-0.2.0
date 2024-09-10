@@ -1,6 +1,6 @@
 import { CrdtInfo, DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
-import { IdentityLabel } from './ui.IdentityLabel';
+import { IdentityLabel } from './ui.Identity.Label';
 
 /**
  * Export

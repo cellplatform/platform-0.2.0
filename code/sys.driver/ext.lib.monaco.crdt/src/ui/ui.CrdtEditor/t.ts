@@ -5,6 +5,8 @@ type Edge = number | null;
 type Pos = [Edge, Edge, Edge, Edge];
 type Border = [number, number, number, number];
 
+export type CrdtEditorInfoField = '';
+
 /**
  * <Component>
  */

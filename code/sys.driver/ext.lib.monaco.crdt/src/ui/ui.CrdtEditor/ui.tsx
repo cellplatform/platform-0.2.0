@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Color, css, DEFAULTS, Doc, type t } from './common';
 import { Editor } from './ui.Editor';
-import { IdentityLabel } from './ui.IdentityLabel';
+import { IdentityLabel } from './ui.Identity.Label';
 import { Panel } from './ui.Panel';
 import { HistoryStack } from './ui.Stack';
 import { useChangeMonitor } from './use.ChangeMonitor';

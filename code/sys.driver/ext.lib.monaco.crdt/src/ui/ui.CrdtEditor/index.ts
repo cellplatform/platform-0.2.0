@@ -1,3 +1,3 @@
 export * from './Root';
-export * from './ui.IdentityLabel';
+export * from './ui.Identity.Label';
 export { DEFAULTS } from './common';
