@@ -24,7 +24,9 @@ export default Dev.describe(name, async (e) => {
   const local = localstore.object({ props: undefined, debug: undefined });
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { docObjectOpen: true })),
+    debug: Immutable.clonerRef<D>(
+      Json.parse<D>(local.debug, { docObjectOpen: true, passDocProp: true }),
+    ),
   } as const;
 
   type F = t.CrdtEditorInfoField;
