@@ -41,7 +41,7 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<D>((e) => {
         const props = State.props.current;
-        Dev.Theme.background(dev, props.theme, 1);
+        Dev.Theme.background(ctx, props.theme, 1);
         return <Root {...props} />;
       });
   });
