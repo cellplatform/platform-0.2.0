@@ -34,8 +34,6 @@ export default Dev.describe(name, async (e) => {
       const info = data.info ?? (data.info = {});
       info.fields = fields;
     });
-
-    console.log('State.props.current', State.props.current.data?.info);
   };
   const identity = `foo:${slug()}`;
   const Props = {
