@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.privy',
   version: '0.0.0',
   dependencies: {
-    '@privy-io/react-auth': '1.82.0',
+    '@privy-io/react-auth': '1.83.0',
     '@standard-crypto/farcaster-js': '7.4.0',
     'react': '18.3.1',
     'react-dom': '18.3.1',
