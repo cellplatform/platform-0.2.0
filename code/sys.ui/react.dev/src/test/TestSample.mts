@@ -1,6 +1,6 @@
 import { rx, slug } from '../common';
-import { DevBus } from '../fn.Bus';
-import { Context } from '../fn.Ctx';
+import { DevBus } from '../u.Bus';
+import { Context } from '../u.Ctx';
 import { SAMPLES } from '../test.ui/sample.specs.unit-test';
 
 /**

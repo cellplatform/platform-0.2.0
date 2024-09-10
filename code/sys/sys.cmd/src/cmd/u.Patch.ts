@@ -15,4 +15,11 @@ export const Patch = {
     if (typeof patch.path !== 'string') return [];
     return patch.path.trim().split('/').filter(Boolean);
   },
+
+  includesQueueChange(patches: t.CmdPatch[], paths: t.CmdPaths) {
+    return patches.some((patch) => Patch.isQueueChange(patch, paths));
+  },
+  isQueueChange(patch: t.CmdPatch, paths: t.CmdPaths) {
+    return Patch.startsWith(patch, paths.queue);
+  },
 } as const;

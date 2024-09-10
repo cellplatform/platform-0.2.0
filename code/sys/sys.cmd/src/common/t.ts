@@ -10,11 +10,13 @@ export type {
   Disposable,
   Error,
   EventBus,
+  IdString,
   ImmutableEvents,
   ImmutableRef,
   Lifecycle,
   Msecs,
   ObjectPath,
+  TxString,
   UntilObservable,
 } from 'sys.types/src/types';
 

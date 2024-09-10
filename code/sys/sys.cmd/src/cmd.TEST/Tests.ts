@@ -1,11 +1,12 @@
 import { type t } from './common';
 
-import { cmdTests } from './Tests.Cmd';
-import { eventTests } from './Tests.Cmd.Events';
-import { flagTests } from './Tests.Cmd.Is';
-import { patchTests } from './Tests.Cmd.Patch';
-import { pathTests } from './Tests.Cmd.Path';
-import { methodTests } from './Tests.Cmd.Method';
+import { cmdTests as cmd } from './Tests.Cmd';
+import { eventTests as events } from './Tests.Cmd.Events';
+import { flagsTests as flags } from './Tests.Cmd.Is';
+import { patchTests as patch } from './Tests.Cmd.Patch';
+import { pathTests as path } from './Tests.Cmd.Path';
+import { methodTests as method } from './Tests.Cmd.Method';
+import { queueTests as queue } from './Tests.Cmd.Queue';
 
 /**
  * Unit test factory for the <Cmd> system allowing different
@@ -17,11 +18,12 @@ export const Tests = {
     Object.entries(Tests.index).forEach(([, test]) => test(setup, args));
   },
   index: {
-    cmdTests,
-    eventTests,
-    pathTests,
-    patchTests,
-    flagTests,
-    methodTests,
+    cmd,
+    events,
+    path,
+    patch,
+    flags,
+    method,
+    queue,
   },
 } as const;

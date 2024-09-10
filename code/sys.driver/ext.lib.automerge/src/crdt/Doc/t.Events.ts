@@ -59,7 +59,7 @@ export type DocDeletedEvent<T extends O = O> = {
   payload: DocDeleted<T>;
 };
 export type DocDeleted<T extends O = O> = {
-  uri: t.DocUri;
+  uri: t.UriString;
   doc: T;
 };
 

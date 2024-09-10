@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { DevBus } from '../fn.Bus';
+import { DevBus } from '../u.Bus';
 import { DEFAULTS, Time, rx, slug, type t } from './common';
 
 type Id = string;
@@ -30,13 +30,13 @@ export function useBusController(
   useEffect(() => {
     const env = args.env;
     const events = (eventsRef.current = DevBus.Controller({ instance, env }));
-    events.info.changed$.pipe(rx.filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
+    events.info.changed$.pipe(rx.filter((e) => !!e.info)).subscribe((e) => setInfo(e.info));
 
     /**
      * Initialize.
      */
-    Time.delay(0, async () => {
-      if (events.disposed) return;
+    const time = Time.until(events.dispose$);
+    time.delay(0, async () => {
       const bundle = typeof args.bundle === 'function' ? args.bundle() : args.bundle;
       await events.load.fire(bundle);
       if (args.runOnLoad) events.run.fire();

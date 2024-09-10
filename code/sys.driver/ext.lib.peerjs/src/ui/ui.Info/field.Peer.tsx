@@ -1,4 +1,4 @@
-import { COLORS, Color, Icons, Value, Webrtc, css, type t } from './common';
+import { Color, Icons, Value, Webrtc, css, type t } from './common';
 
 type P = t.PropListItem;
 
@@ -8,13 +8,10 @@ const styles = {
   iconLeft: css({ marginRight: 5 }),
 };
 
-export function peer(
-  data: t.InfoData['peer'],
-  fields: t.InfoField[],
-  themeName?: t.CommonTheme,
-): P | P[] | undefined {
-  if (!data) return;
-  const self = data?.self;
+export function peer(ctx: t.InfoCtx, self?: t.PeerModel): P | P[] | undefined {
+  if (!self) return;
+
+  const { fields } = ctx;
   const peer = self;
   const current = peer?.current;
   const showRemotes = fields.includes('Peer.Remotes');
@@ -23,7 +20,7 @@ export function peer(
   /**
    * Root Peer (Self)
    */
-  const theme = Color.theme(themeName);
+  const theme = Color.theme(ctx.theme);
   const root: P = {
     label: peer ? `Peer ( self:${peer.id} )` : 'Peer',
     value: {
@@ -34,7 +31,7 @@ export function peer(
           <Icons.Person
             size={14}
             style={styles.iconRight}
-            color={totalConnections > 0 ? COLORS.BLUE : theme.alpha(0.4).fg}
+            color={totalConnections > 0 ? Color.BLUE : theme.alpha(0.4).fg}
           />
         </div>
       ),

@@ -7,6 +7,7 @@ export type { CSSProperties } from 'react';
  * @system
  */
 export type {
+  ButtonMouseHandler,
   CmdBarCtrl,
   CmdBarCtrlType,
   CmdBarRef,
@@ -14,9 +15,11 @@ export type {
   CssValue,
   DevCtxState,
   DevTools,
-  InfoDataVisible,
+  InfoVisible,
+  InfoVisibleToggleHandler,
   KeyboardModifierFlags,
   PropListFieldSelectorClickHandler,
+  PropListFieldSelectorProps,
   PropListItem,
   PropListItemHandler,
   PropListLabel,

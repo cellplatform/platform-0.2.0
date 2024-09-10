@@ -64,6 +64,6 @@ export type MainRunHandlerArgs = {
  */
 export type MainImmutable = t.ImmutableRef<
   t.MainProps,
-  t.ImmutableEvents<t.MainProps, t.PatchOperation>,
-  t.PatchOperation
+  t.PatchOperation,
+  t.ImmutableEvents<t.MainProps, t.PatchOperation>
 >;

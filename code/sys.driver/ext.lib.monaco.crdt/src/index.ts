@@ -8,12 +8,14 @@ export { Pkg };
  * Library
  */
 import { Monaco as MonacoBase } from './common';
-import { Syncer } from './ui/logic.Syncer';
+import { Syncer } from './ui/u.Syncer';
+import { CrdtEditor } from './ui/ui.CrdtEditor';
 
-export { Syncer };
+export { CrdtEditor, Syncer };
+
 export const Monaco = {
   ...MonacoBase,
-  Crdt: { Syncer },
+  Crdt: { Syncer, Editor: CrdtEditor },
 } as const;
 
 /**

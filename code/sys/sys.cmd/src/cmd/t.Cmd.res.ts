@@ -1,29 +1,31 @@
 import type { t, u } from './common';
 
-type Tx = string;
-
 /**
  * Response.
  */
 export type CmdInvoked<C extends t.CmdType> = {
-  readonly tx: Tx;
+  readonly tx: t.TxString;
   readonly req: t.CmdRequest<C>;
+  readonly issuer?: t.IdString;
 };
 
 /**
  * Response Listener API.
  */
-export type CmdResponseListener<Req extends t.CmdType, Res extends t.CmdType> = {
-  readonly tx: Tx;
-  readonly req: t.CmdRequest<Req>;
+export type CmdResponseListener<
+  Req extends t.CmdType,
+  Res extends t.CmdType,
+> = t.CmdInvoked<Req> & {
   readonly $: t.Observable<Res['params']>;
   readonly ok: boolean;
   readonly status: 'Pending' | 'Complete' | 'Error' | 'Timeout';
   readonly result?: Res['params'];
   readonly error?: u.ExtractError<Res>;
+  readonly issuer?: t.IdString;
   promise(): Promise<CmdResponseListener<Req, Res>>;
   onComplete(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
   onError(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
+  onTimeout(fn: CmdResponseHandler<Req, Res>): CmdResponseListener<Req, Res>;
 } & t.Lifecycle;
 
 /**
@@ -35,5 +37,5 @@ export type CmdResponseHandler<Req extends t.CmdType, Res extends t.CmdType> = (
 
 export type CmdResponseHandlerArgs<Req extends t.CmdType, Res extends t.CmdType> = Pick<
   CmdResponseListener<Req, Res>,
-  'ok' | 'tx' | 'result' | 'error'
+  'ok' | 'tx' | 'issuer' | 'result' | 'error'
 >;

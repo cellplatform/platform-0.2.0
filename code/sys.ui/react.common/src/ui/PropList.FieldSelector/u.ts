@@ -56,9 +56,9 @@ export const Wrangle = {
       action,
       field,
       value,
-      next<T extends string>(defaults?: T[]) {
+      next<T extends string>(defaults?: (T | undefined | null)[]) {
         if (action === 'Reset:Clear') return [];
-        if (action === 'Reset:Default') return defaults;
+        if (action === 'Reset:Default') return fields(defaults);
         return value.next as unknown as T[];
       },
       as<T extends string>() {

@@ -1,5 +1,5 @@
 import { COLORS, DevWrangle, type t } from './common';
-import { DevKeyboard } from './fn.Keyboard';
+import { DevKeyboard } from './u.Keyboard';
 import { Harness } from './ui/Harness';
 import { ModuleList } from './ui/ModuleList';
 

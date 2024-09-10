@@ -1,16 +1,17 @@
 /**
  * @external
  */
-import { equals } from 'ramda';
-export const R = { equals } as const;
+import { clone, equals, uniq } from 'ramda';
+export const R = { clone, equals, uniq } as const;
 
 /**
  * @ext.lib
  */
-export { A, Doc, Store, WebStore } from 'ext.lib.automerge';
+export { A, Crdt, Doc, Store, WebStore } from 'ext.lib.automerge';
 export { Monaco } from 'ext.lib.monaco';
 
 /**
  * @system
  */
-export { ObjectPath, Path, Time, rx } from 'sys.util';
+export { Cmd } from 'sys.cmd';
+export { Immutable, Json, ObjectPath, Path, rx, slug, Time, Value } from 'sys.util';

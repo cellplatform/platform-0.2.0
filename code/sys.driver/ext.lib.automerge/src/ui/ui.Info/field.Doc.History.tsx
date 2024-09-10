@@ -1,24 +1,20 @@
-import { Doc } from '../../crdt';
-import { HistoryGrid } from '../ui.History.Grid';
-import { NavPaging } from '../ui.Nav.Paging';
-import { DEFAULTS, Is, type t } from './common';
+import { DEFAULTS, Doc, HistoryGrid, Is, NavPaging, type t } from './common';
 import { History } from './ui.History';
 
-type D = t.InfoDataDoc;
+type D = t.InfoDoc;
 
-export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
+export function history(ctx: t.InfoCtx, data: D | undefined) {
   const { fields, theme } = ctx;
 
   const res: t.PropListItem[] = [];
   const history = data?.history;
   if (!data || !history) return res;
-  if (!Is.doc(data.ref)) return res;
+  if (!Is.doc(data.uri)) return res;
 
-  const doc = data.ref;
   const showGenesis = fields.includes('Doc.History.Genesis');
   const main: t.PropListItem = {
     label: data.label || DEFAULTS.history.label,
-    value: <History doc={doc} showGenesis={showGenesis} theme={theme} />,
+    value: <History doc={data.uri} showGenesis={showGenesis} theme={theme} />,
   };
   res.push(main);
 
@@ -26,7 +22,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
    * History
    */
   if (fields.includes('Doc.History.List')) {
-    const page = wrangle.page(data.ref, history.list);
+    const page = wrangle.page(data.uri, history.list);
 
     /**
      * History List (Grid)
@@ -34,7 +30,15 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
     const hashLength = history.item?.hashLength ?? DEFAULTS.history.item.hashLength;
     const showNav = fields.includes('Doc.History.List.NavPaging');
     res.push({
-      value: <HistoryGrid page={page} hashLength={hashLength} theme={theme} style={{ flex: 1 }} />,
+      value: (
+        <HistoryGrid
+          page={page}
+          hashLength={hashLength}
+          theme={theme}
+          style={{ flex: 1 }}
+          onItemClick={ctx.handlers.onHistoryItemClick}
+        />
+      ),
       divider: !showNav,
     });
 
@@ -53,7 +57,7 @@ export function history(ctx: t.InfoFieldCtx, data: D | undefined) {
  * Helpers
  */
 const wrangle = {
-  page(doc: t.Doc, list: t.InfoDataDocHistory['list'] = {}) {
+  page(doc: t.Doc, list: t.InfoDocHistory['list'] = {}) {
     const defaults = DEFAULTS.history.list;
     const { sort = defaults.sort, page = defaults.page, limit = defaults.limit } = list;
     return Doc.history(doc).page(page, limit, sort);

@@ -1,86 +1,77 @@
 import { Info } from '.';
-import { COLORS, Color, Dev, PeerUI, Pkg, TestEdge, WebStore, css, type t } from '../../test.ui';
+import { Dev, Immutable, Json, TestEdge, rx, type t } from '../../test.ui';
+import { SpecData, SpecFooter, SpecHeader, type DataFlags } from './-SPEC.common';
 
 type P = t.InfoProps;
-type D = {
-  dataSharedLens?: boolean;
-  dataSharedArray?: boolean;
-  dataSharedDotMeta?: boolean;
-  dataVisible?: boolean;
-};
-type T = D & { props: P };
-const initial: T = { props: {} };
-const DEFAULTS = Info.DEFAULTS;
+type D = { data: DataFlags };
 
 /**
  * Spec
  */
-const name = Info.displayName ?? 'Unknown';
+const DEFAULTS = Info.DEFAULTS;
+const name = DEFAULTS.displayName;
+
 export default Dev.describe(name, async (e) => {
   const self = await TestEdge.create('Left');
   const remote = await TestEdge.create('Right');
-
   const peer = {
     self: self.network.peer,
     remote: remote.network.peer,
   } as const;
 
-  const store = WebStore.init({ network: [] });
-  const index = await WebStore.index(store);
+  type LocalStore = { props?: string; debug?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
+  const local = localstore.object({ props: undefined, debug: undefined });
 
-  type LocalStore = D & Pick<P, 'fields' | 'theme' | 'stateful'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    fields: DEFAULTS.fields.default,
-    theme: DEFAULTS.theme,
-    stateful: DEFAULTS.stateful,
-    dataSharedLens: false,
-    dataSharedArray: false,
-    dataSharedDotMeta: true,
-  });
+  const State = {
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: Immutable.clonerRef<D>(
+      Json.parse<D>(local.debug, {
+        data: { sharedLens: false, sharedArray: false, sharedDotMeta: true },
+      }),
+    ),
+  } as const;
+
+  type F = t.InfoField | undefined;
+  const setFields = (fields?: F[]) => State.props.change((d) => (d.fields = fields));
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
 
-    await state.change((d) => {
-      d.props.theme = local.theme;
-      d.props.stateful = local.stateful;
-      d.props.fields = local.fields;
-      d.props.margin = 10;
-      d.dataSharedLens = local.dataSharedLens;
-      d.dataSharedArray = local.dataSharedArray;
-      d.dataSharedDotMeta = local.dataSharedDotMeta;
-    });
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
 
     ctx.debug.width(330);
     ctx.subject
       .size([320, null])
       .display('grid')
-      .render<T>((e) => {
-        const { props, dataVisible, dataSharedArray, dataSharedDotMeta, dataSharedLens } = e.state;
+      .render<D>(() => {
+        const props = State.props.current;
+        const debug = State.debug.current;
+
         Dev.Theme.background(ctx, props.theme, 1);
 
-        const isDataVisible = dataVisible ?? true;
-        const shared: t.InfoDataShared = {
+        const shared: t.InfoDoc = {
           object: {
-            lens: dataSharedLens ? ['sys', 'peers'] : undefined,
-            dotMeta: dataSharedDotMeta,
-            beforeRender(mutate: any) {
-              mutate['foo'] = 123; // Sample render mutation 🐷.
-            },
-            // onToggleClick: (e) => console.info('⚡️ shared.icon.onClick', e),
+            visible: debug.data.sharedObjectVisible,
+            lens: debug.data.sharedLens ? ['sys', 'peers'] : undefined,
+            dotMeta: debug.data.sharedDotMeta,
           },
         };
 
         const data: t.InfoData = {
-          network: self.network,
-          repo: { store, index },
-          visible: {
-            value: isDataVisible,
-            onToggle: (e) => state.change((d) => (d.dataVisible = e.next)),
-          },
-          shared: !dataSharedArray
+          shared: !debug.data.sharedArray
             ? shared
             : [
                 { ...shared, label: 'Shared One', object: { ...shared.object, name: 'Foo' } },
@@ -90,131 +81,85 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <Info
-            //
             {...props}
+            style={{ margin: 10, minHeight: 300 }}
             data={data}
-            fields={isDataVisible ? props.fields : ['Visible']}
+            network={self.network}
+            fields={props.fields}
+            onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
+            onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
+            onBeforeObjectRender={(mutate, ctx) => {
+              mutate['foo'] = 123; // Sample render mutation (safe 🐷).
+            }}
           />
         );
       });
   });
 
-  e.it('ui:header', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.header
-      .padding(0)
-      .border(-0.1)
-      .render((e) => <PeerUI.Connector peer={peer.self} />);
+  e.it('ui:header', (e) => {
+    const dev = Dev.tools<D>(e);
+    SpecHeader.define(dev, peer.self);
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
 
     dev.section('Fields', (dev) => {
-      const setFields = (fields?: (t.InfoField | undefined)[]) => {
-        dev.change((d) => (d.props.fields = fields));
-        local.fields = fields?.length === 0 ? undefined : fields;
-      };
-
-      dev.row((e) => {
-        const props = e.state.props;
+      dev.row(() => {
+        const props = State.props.current;
         return (
-          <Dev.FieldSelector
-            all={DEFAULTS.fields.all}
+          <Info.FieldSelector
             selected={props.fields}
-            onClick={(e) => setFields(e.next<t.InfoField>(DEFAULTS.fields.default))}
+            onClick={(e) => setFields(e.next<t.InfoField>(DEFAULTS.props.fields))}
           />
         );
       });
 
       dev.title('Common States');
-      const config = (label: string, fields?: t.InfoField[]) => {
+
+      const config = (label: string | [string, string], fields: t.InfoField[]) => {
         dev.button(label, (e) => setFields(fields));
       };
 
-      config('all', DEFAULTS.fields.all);
-      config('info → PeerRepoList', ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']);
-      dev.hr(-1, 5);
-      dev.button(['visible', '(prepend)'], (e) => {
-        const fields = e.state.current.props.fields ?? [];
+      dev.button('(prepend): Visible', (e) => {
+        const fields = State.props.current.fields ?? [];
         if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
+      });
+      dev.hr(-1, 5);
+      config('all', DEFAULTS.fields.all);
+      config('default', DEFAULTS.fields.default);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      Dev.Theme.immutable(dev, State.props);
+
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.enabled;
+        btn
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
       });
     });
 
     dev.hr(5, 20);
 
-    dev.section('Data', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.stateful;
-        btn
-          .label((e) => `stateful`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
-      });
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.dataSharedLens;
-        btn
-          .label((e) => `data.shared.lens`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.dataSharedLens = Dev.toggle(d, 'dataSharedLens'))),
-          );
-      });
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.dataSharedDotMeta;
-        btn
-          .label((e) => `data.shared.dotMeta`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.dataSharedDotMeta = Dev.toggle(d, 'dataSharedDotMeta'))),
-          );
-      });
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.dataSharedArray;
-        btn
-          .label((e) => `data.shared ← [array]`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.dataSharedArray = Dev.toggle(d, 'dataSharedArray'))),
-          );
-      });
-    });
+    SpecData.section(dev, State.debug);
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => dev.redraw());
-      Dev.Theme.switcher(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
+      dev.button('redraw', () => dev.redraw());
       dev.hr(-1, 5);
       dev.button(['connect network', '⚡️'], (e) => peer.self.connect.data(peer.remote.id));
     });
   });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .padding(0)
-      .border(-0.1)
-      .render<T>((e) => {
-        const data = e.state;
-        const styles = {
-          base: css({}),
-          obj: css({ margin: 8 }),
-          conn: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
-        };
-        return (
-          <div {...styles.base}>
-            <Dev.Object name={name} data={data} expand={1} style={styles.obj} fontSize={11} />
-            <PeerUI.Connector peer={peer.remote} style={styles.conn} />
-          </div>
-        );
-      });
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<D>(e);
+    SpecFooter.define(dev, name, peer.remote, State.props);
   });
 });

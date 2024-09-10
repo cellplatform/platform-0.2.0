@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Ctrl, DEFAULTS, rx, type t } from './common';
+import { Ctrl, DEFAULTS, ObjectPath, Path, rx, type t } from './common';
 import { Ref } from './Ref';
 import { useHistory } from './use.History';
 
 type P = t.CmdBarStatefulProps;
 
 export function useController(props: P) {
-  const { state, paths = DEFAULTS.paths } = props;
+  const { state, issuer } = props;
+  const paths = wrangle.paths(props);
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
 
@@ -14,6 +15,7 @@ export function useController(props: P) {
   const [textbox, setTextbox] = useState<t.TextInputRef>();
   const [ctrl, setCtrl] = useState<t.CmdBarCtrl>();
   const [isFocused, setFocused] = useState(false);
+
   useHistory({
     enabled: props.useHistory ?? DEFAULTS.useHistory,
     state,
@@ -35,8 +37,8 @@ export function useController(props: P) {
    * Create the [cmdbar] command.
    */
   useEffect(() => {
-    if (state) setCtrl(Ctrl.create(state, { paths }));
-  }, [state?.instance, pathDeps]);
+    if (state) setCtrl(Ctrl.create({ transport: state, paths, issuer }));
+  }, [state?.instance, issuer, pathDeps]);
 
   /**
    * Ready (→ Dispose)
@@ -98,13 +100,33 @@ export function useController(props: P) {
     enabled,
     ctrl,
     handlers: { onReady, onChange, onSelect, onFocusChange },
+
     get text() {
       return state ? resolve(state.current).text : '';
     },
+
     get hintKey(): string | string[] | undefined {
       if (!isFocused) return 'META + K';
       return;
     },
+
+    get spinning(): boolean {
+      return state ? !!resolve(state.current).meta.spinning : false;
+    },
+
+    get readOnly(): boolean {
+      return state ? !!resolve(state.current).meta.readOnly : false;
+    },
   } as const;
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  paths(props: P) {
+    const { paths = DEFAULTS.paths } = props;
+    return ObjectPath.Is.path(paths) ? Path.prepend(paths) : paths;
+  },
+} as const;

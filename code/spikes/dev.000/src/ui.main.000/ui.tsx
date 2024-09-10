@@ -1,58 +1,53 @@
-import { useEffect } from 'react';
-import { COLORS, Color, Keyboard, PeerRepoList, PeerUI, css, rx, type t } from './common';
+import { Color, PeerUI, css, type t } from './common';
 
 export type SampleLayoutProps = {
-  model: t.RepoListModel;
   network: t.NetworkStore;
-  selectedStream?: MediaStream;
+  stream?: MediaStream;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const SampleLayout: React.FC<SampleLayoutProps> = (props) => {
   const { network } = props;
 
-  useEffect(() => {
-    const life = rx.disposable();
-    const keys = Keyboard.until(life.dispose$);
-
-    // Suppress focus being removed from the document with [CMD + L].
-    keys.on('META + KeyL', (e) => e.handled());
-
-    return life.dispose;
-  }, []);
-
   /**
    * Render
    */
+  const theme = Color.theme(props.theme);
+  const color = theme.fg;
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-      gridTemplateColumns: '230px 1fr',
-    }),
-    left: css({
-      backgroundColor: Color.alpha(COLORS.WHITE, 0.8),
-      backdropFilter: 'blur(20px)',
-      borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      display: 'grid',
-    }),
-    main: css({}),
+    base: css({ position: 'relative', color, display: 'grid' }),
+    peerId: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
+    video: css({ Absolute: 0, pointerEvents: 'none' }),
   };
 
-  const elLeft = (
-    <div {...styles.left}>
-      <PeerRepoList model={props.model} network={network} focusOnLoad={true} avatarTray={false} />
+  const elPeerId = !props.stream && (
+    <div {...styles.peerId}>
+      <PeerUI.Button.PeerUri
+        theme={theme.name}
+        clipboard={true}
+        fontSize={26}
+        prefix={'self'}
+        id={network.peer.id}
+        style={{ width: 200 }}
+      />
     </div>
   );
 
-  const elMain = (
-    <PeerUI.Video stream={props.selectedStream} muted={true} style={styles.main} empty={''} />
+  const elVideo = (
+    <PeerUI.Video
+      stream={props.stream}
+      muted={true}
+      empty={''}
+      theme={theme.name}
+      style={styles.video}
+    />
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elLeft}
-      {elMain}
+      {elPeerId}
+      {elVideo}
     </div>
   );
 };

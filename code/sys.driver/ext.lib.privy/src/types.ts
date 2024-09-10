@@ -4,14 +4,15 @@ export type { AuthUser, PrivyInterface };
 /**
  * Internal
  */
-export type * from './evm/Balance/t';
-export type * from './evm/Chain/t';
-export type * from './evm/Wallet/t';
+export type * from './u.evm/Balance/t';
+export type * from './u.evm/Chain/t';
+export type * from './u.evm/Wallet/t';
 
+export type * from './ui/ui.Auth.Provider/t';
 export type * from './ui/ui.Auth/t';
 export type * from './ui/ui.Info/t';
 
-export type * from './fn/fn.farcaster/t';
+export type * from './u.farcaster/t';
 
 /**
  * Authentication

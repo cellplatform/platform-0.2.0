@@ -3,14 +3,14 @@ import { DEFAULTS, Pkg, TestRunner, type t } from './common';
 /**
  * Module package.
  */
-export function module(ctx: t.InfoFieldCtx): t.PropListItem {
+export function module(ctx: t.InfoCtx): t.PropListItem {
   return { label: 'Module', value: `${Pkg.name}@${Pkg.version}` };
 }
 
 /**
  * Test runner.
  */
-export function moduleVerify(ctx: t.InfoFieldCtx) {
+export function moduleVerify(ctx: t.InfoCtx) {
   return TestRunner.PropList.runner({
     ctx: {},
     theme: ctx.theme,
@@ -31,7 +31,7 @@ export function moduleVerify(ctx: t.InfoFieldCtx) {
 /**
  * Component display
  */
-export function component(ctx: t.InfoFieldCtx, data: t.InfoData['component']): t.PropListItem {
+export function component(ctx: t.InfoCtx, data: t.InfoData['component']): t.PropListItem {
   return {
     label: data?.label || 'Component',
     value: data?.name || '(Unnamed)',

@@ -1,150 +1,92 @@
 import { DEFAULTS, Info } from '.';
-import { Dev, DevReload, Doc, Pkg, rx, SampleCrdt, Value, type t } from '../../test.ui';
+import { Dev, DevReload, Doc, Immutable, Json, rx, SampleCrdt, Value, type t } from '../../test.ui';
+import { SpecData, type SpecDataFlags } from './-SPEC.data';
 
-type O = Record<string, unknown>;
+export { SpecData };
+
 type P = t.InfoProps;
 type D = {
   reload?: boolean;
-  dataUris?: boolean;
-  dataHistoryDesc?: boolean;
-  dataHistoryDetail?: t.HashString;
-  dataDocLens?: boolean;
-  dataDocArray?: boolean;
-  dataDocIconClickHandler?: boolean;
-};
-type T = {
   docuri?: t.UriString;
-  props: t.InfoProps;
-  debug: D;
+  flags: SpecDataFlags;
 };
-const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec
  */
-const name = Info.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
+
 export default Dev.describe(name, async (e) => {
   const db = await SampleCrdt.init();
+  const { store } = db.repo;
 
-  type LocalStore = D & Pick<T, 'docuri'> & Pick<P, 'fields' | 'theme' | 'stateful'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    stateful: DEFAULTS.stateful,
-    fields: DEFAULTS.fields.default,
-    dataHistoryDesc: DEFAULTS.history.list.sort === 'desc',
-    docuri: undefined,
-    dataUris: true,
-    dataDocLens: false,
-    dataDocArray: false,
-    dataDocIconClickHandler: true,
-  });
+  type LocalStore = { props?: string; debug?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
+  const local = localstore.object({ props: undefined, debug: undefined });
+
+  const State = {
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { flags: SpecData.defaults.flags })),
+  } as const;
 
   let doc: t.Doc | undefined;
-
-  const resetInfoState$ = rx.subject();
-  const setFields = async (dev: t.DevTools<T>, fields?: (t.InfoField | undefined)[]) => {
-    local.fields = fields?.length === 0 ? undefined : fields;
-    await dev.change((d) => (d.props.fields = fields));
-  };
+  type F = t.InfoField | undefined;
+  const setFields = (fields?: F[]) => State.props.change((d) => (d.fields = fields));
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
-    const state = await ctx.state<T>(initial);
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const sample = SampleCrdt.dev(store, State.debug);
 
-    await state.change((d) => {
-      d.docuri = local.docuri;
-      d.props.theme = local.theme;
-      d.props.fields = local.fields;
-      d.props.margin = 10;
-      d.props.stateful = local.stateful;
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
 
-      d.debug.dataHistoryDesc = local.dataHistoryDesc;
-      d.debug.dataUris = local.dataUris;
-      d.debug.dataDocLens = local.dataDocLens;
-      d.debug.dataDocArray = local.dataDocArray;
-      d.debug.dataDocIconClickHandler = local.dataDocIconClickHandler;
-    });
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
+
     doc = await sample.get();
 
     ctx.debug.width(330);
     ctx.subject
       .size([320, null])
       .display('grid')
-      .render<T>(async (e) => {
-        const { props, debug } = e.state;
-        Dev.Theme.background(ctx, props.theme);
+      .render<D>(async () => {
+        const props = State.props.current;
+        const debug = State.debug.current;
+
+        Dev.Theme.background(ctx, props.theme, 1);
         if (debug.reload) return <DevReload theme={props.theme} />;
 
         const fields = props.fields ?? [];
-        const docuri = e.state.docuri;
-        const { store, index } = db;
+        const docuri = debug.docuri;
+
         const doc = fields.includes('Doc') ? await store.doc.get(docuri) : undefined;
+        const repo = db.repo;
+        const flags = debug.flags;
+        const data = SpecData.asObject(repo.name, { doc, flags });
 
-        const document: t.InfoDataDoc = {
-          // label: 'Foo',
-          ref: debug.dataUris ? doc?.uri : doc,
-          object: {
-            // name: 'foobar',
-            // visible: false,
-            lens: debug.dataDocLens ? ['child'] : undefined,
-            expand: { level: 2 },
-            beforeRender(mutate: any) {
-              // mutate['foo'] = 123;
-            },
-            onToggleClick: debug.dataDocIconClickHandler
-              ? (e) => console.info('⚡️ document.object.onToggleClick', e)
-              : undefined,
-          },
-          uri: {
-            // prefix: 'foo:::',
-            // prefix: null,
-            head: true,
-          },
-          history: {
-            // label: 'Foo',
-            list: {
-              sort: debug.dataHistoryDesc ? 'desc' : 'asc',
-              showDetailFor: debug.dataHistoryDetail,
-            },
-            item: {
-              onClick(e) {
-                console.info('⚡️ history.item.onClick', e);
-                state.change((d) => {
-                  const detail = d.debug.dataHistoryDetail === e.hash ? undefined : e.hash;
-                  d.debug.dataHistoryDetail = detail;
-                });
-              },
-            },
-          },
-        };
-
-        const data: t.InfoData = {
-          repo: { store, index },
-          document: !debug.dataDocArray
-            ? document
-            : [
-                { ...document, label: 'My One' },
-                { ...document, label: 'My Two' },
-              ],
-          visible: {
-            onToggle(e) {
-              console.info('⚡️ visible.onToggle', e);
-            },
-          },
+        const onDocToggleClick: t.InfoDocToggleHandler = (e) => {
+          console.info('⚡️ onDocToggleClick', e);
         };
 
         return (
           <Info
             {...props}
-            style={{ minHeight: 300 }}
             data={data}
-            fields={props.fields}
-            resetState$={resetInfoState$}
-            onStateChange={(e) => {
-              console.info('⚡️ onStateChange', e);
+            repos={{ [db.name]: repo }}
+            style={{ minHeight: 300, margin: 10 }}
+            onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
+            onDocToggleClick={debug.flags.docToggleClickHandler ? onDocToggleClick : undefined}
+            onHistoryItemClick={(e) => console.info('⚡️ onHistoryItemClick', e)}
+            onBeforeObjectRender={(mutate, ctx) => {
+              mutate['foo'] = 123; // Sample render mutation (safe 🐷).
             }}
           />
         );
@@ -152,44 +94,35 @@ export default Dev.describe(name, async (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    const sample = SampleCrdt.dev(state, local, db.store);
+    const dev = Dev.tools<D>(e);
+    const sample = SampleCrdt.dev(db.repo.store, State.debug);
 
     dev.section('Fields', (dev) => {
-      dev.row((e) => {
-        const props = e.state.props;
+      dev.row(() => {
+        const props = State.props.current;
         return (
-          <Dev.FieldSelector
-            all={DEFAULTS.fields.all}
+          <Info.FieldSelector
             selected={props.fields}
-            onClick={(e) => {
-              setFields(dev, e.next<t.InfoField>(DEFAULTS.fields.default));
-              resetInfoState$.next();
-            }}
+            onClick={(e) => setFields(e.next<t.InfoField>(DEFAULTS.fields.default))}
           />
         );
       });
 
       dev.title('Common States');
 
-      const config = (label: string, fields: t.InfoField[]) => {
-        dev.button(label, async (e) => {
-          await setFields(dev, fields);
-          resetInfoState$.next();
-        });
+      const config = (label: string | [string, string], fields: t.InfoField[]) => {
+        dev.button(label, (e) => setFields(fields));
       };
 
       dev.button('(prepend): Visible', (e) => {
-        const fields = e.state.current.props.fields ?? [];
-        if (!fields.includes('Visible')) setFields(dev, ['Visible', ...fields]);
-        resetInfoState$.next();
+        const fields = State.props.current.fields ?? [];
+        if (!fields.includes('Visible')) setFields(['Visible', ...fields]);
       });
       dev.hr(-1, 5);
+      config('all', DEFAULTS.fields.all);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
-      config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
-      config('Repo / Doc / Head', ['Repo', 'Doc', 'Doc.URI']);
-      config('Repo / Doc / History ( + List )', [
+      config(['Repo / Doc / Object', '(open)'], ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      config('Repo / Doc / History + List', [
         'Repo',
         'Doc',
         'Doc.URI',
@@ -204,19 +137,16 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      Dev.Theme.immutable(dev, State.props);
+      dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.stateful;
+        const state = State.props;
+        const current = () => !!state.current.enabled;
         btn
-          .label((e) => `stateful`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.stateful = Dev.toggle(d.props, 'stateful'))));
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
       });
-
-      Dev.Theme.switcher(
-        dev,
-        (d) => d.props.theme,
-        (d, value) => (local.theme = d.props.theme = value),
-      );
     });
 
     dev.hr(5, 20);
@@ -225,7 +155,7 @@ export default Dev.describe(name, async (e) => {
       dev.button((btn) => {
         btn
           .label(`create`)
-          .enabled((e) => !doc)
+          .enabled(() => !doc)
           .onClick(async (e) => (doc = await sample.get()));
       });
       dev.button((btn) => {
@@ -241,56 +171,39 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Data', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.dataHistoryDesc;
+        const value = () => !!State.debug.current.flags.historyDesc;
         btn
-          .label((e) => `data.history.list.sort: "${value(e.state) ? 'desc' : 'asc'}"`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.dataHistoryDesc = Dev.toggle(d.debug, 'dataHistoryDesc')));
-          });
+          .label((e) => `data.history.list.sort: "${value() ? 'desc' : 'asc'}"`)
+          .value((e) => value())
+          .onClick((e) => State.debug.change((d) => Dev.toggle(d.flags, 'historyDesc')));
       });
       dev.hr(-1, 5);
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.dataUris;
+        const value = () => !!State.debug.current.flags.docLens;
         btn
-          .label((e) => `data.document.doc ← URI string`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.dataUris = Dev.toggle(d.debug, 'dataUris'))));
+          .label(() => `data.document.lens`)
+          .value(() => value())
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docLens')));
       });
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.dataDocLens;
+        const value = () => !!State.debug.current.flags.docArray;
         btn
-          .label((e) => `data.document.lens`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.dataDocLens = Dev.toggle(d.debug, 'dataDocLens'))),
-          );
+          .label(() => `data.document ← [array]`)
+          .value(() => value())
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docArray')));
       });
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.dataDocArray;
+        const value = () => !!State.debug.current.flags.docToggleClickHandler;
         btn
-          .label((e) => `data.document ← [array]`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.dataDocArray = Dev.toggle(d.debug, 'dataDocArray'))),
-          );
-      });
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.debug.dataDocIconClickHandler;
-        btn
-          .label((e) => `data.document.icon.onClick`)
-          .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => {
-              local.dataDocIconClickHandler = Dev.toggle(d.debug, 'dataDocIconClickHandler');
-            }),
-          );
+          .label(() => `onDocToggleClick (handler)`)
+          .value(() => value())
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docToggleClickHandler')));
       });
     });
 
     dev.hr(1, 20);
 
-    dev.section('Data: Mutate', (dev) => {
+    dev.section('Mutate', (dev) => {
       const mutate = (
         label: string | [string, string],
         fn: (e: { doc: t.Doc | t.Lens }) => any | Promise<any>,
@@ -308,19 +221,19 @@ export default Dev.describe(name, async (e) => {
         });
       };
 
-      mutate(['Write sample BLOB', '[Uint8Array]'], (e) => {
+      mutate(['Write BLOB', '[Uint8Array]'], (e) => {
         type T = { binary?: Uint8Array };
         const doc = e.doc as t.Doc<T>;
         const length = Value.random(5000, 15000);
         const binary = new Uint8Array(new Array(length).fill(0));
         doc.change((d) => (d.binary = binary));
       });
-      mutate(['Increment', 'count + 1'], async (e) => {
+      mutate(['increment', 'count + 1'], async (e) => {
         type T = { count?: number };
         const doc = e.doc as t.Doc<T>;
         doc.change((d) => (d.count = (d.count ?? 0) + 1));
       });
-      mutate(['Increment child', 'count + 1'], async (e) => {
+      mutate(['increment child', 'count + 1'], async (e) => {
         type T = { child?: { count?: number } };
         const doc = e.doc as t.Doc<T>;
         doc.change((d) => {
@@ -333,19 +246,19 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('Redraw', (e) => dev.redraw());
-      dev.button('Reset: Info State', (e) => resetInfoState$.next());
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 
   e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>(async (e) => {
-      const { props } = e.state;
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>(() => {
+      const props = State.props.current;
+      const debug = State.debug.current;
       const data = {
-        docuri: Doc.Uri.id(e.state.docuri, { shorten: 5 }),
+        docuri: Doc.Uri.id(debug.docuri, { shorten: 5 }),
         props,
-        'crdt:store:db': db.storage.name,
+        'crdt:store:db': db.name,
         'crdt:doc': doc,
       };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;

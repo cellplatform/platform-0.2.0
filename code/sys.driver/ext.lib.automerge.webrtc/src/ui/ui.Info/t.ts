@@ -1,7 +1,9 @@
 import type { t } from './common';
+export type * from './t.Stateful';
 
-import type { InfoData as AutomergeInfoData } from 'ext.lib.automerge/src/types';
-import type { InfoData as PeerInfoData } from 'ext.lib.peerjs/src/types';
+import type { InfoPropsHandlers as InfoHandlersBase } from 'ext.lib.automerge/src/types';
+
+type P = t.PropListProps;
 
 export type InfoField =
   | 'Visible'
@@ -14,36 +16,42 @@ export type InfoField =
   | 'Network.Shared'
   | 'Network.Transfer';
 
-export type InfoFieldCtx = { fields: t.InfoField[]; theme: t.CommonTheme; stateful: boolean };
-
-export type InfoData = {
-  visible?: t.InfoDataVisible;
-  url?: { href: string; title?: string };
-  component?: { label?: string; name?: string };
-  peer?: PeerInfoData['peer'];
-  repo?: AutomergeInfoData['repo'];
-  network?: t.NetworkStore;
-  shared?: InfoDataShared | InfoDataShared[];
-};
-
-export type InfoDataShared = t.InfoDataDoc;
-export type InfoDataObject = {
-  visible?: boolean;
-  expand?: { level?: number; paths?: string[] };
-  beforeRender?: (mutate: unknown) => void;
-  dotMeta?: boolean; // Default true. Deletes a [.meta] field if present.
+export type InfoCtx = {
+  enabled: boolean;
+  fields: t.InfoField[];
+  theme: t.CommonTheme;
+  handlers: t.InfoPropsHandlers;
+  internal?: t.InfoPropsStateful;
 };
 
 /**
- * Component
+ * <Component>
  */
-export type InfoProps = {
-  title?: t.PropListProps['title'];
-  width?: t.PropListProps['width'];
+export type InfoProps = t.InfoPropsHandlers & {
+  title?: P['title'];
+  width?: P['width'];
   fields?: (t.InfoField | undefined)[];
   data?: t.InfoData;
-  stateful?: boolean;
+  network?: t.NetworkStore;
   margin?: t.CssEdgesInput;
+  enabled?: boolean;
   theme?: t.CommonTheme;
+  internal?: InfoPropsStateful;
   style?: t.CssValue;
+};
+
+export type InfoPropsStateful = {
+  shared?: t.CrdtInfoStatefulController;
+};
+
+export type InfoPropsHandlers = InfoHandlersBase;
+
+/**
+ * Data
+ */
+export type InfoData = {
+  visible?: t.InfoVisible<t.InfoField>;
+  url?: { href: string; title?: string };
+  component?: { label?: string; name?: string };
+  shared?: t.InfoDoc | t.InfoDoc[];
 };

@@ -11,6 +11,7 @@ import {
   Time,
   type t,
 } from '../../test.ui';
+import { DEFAULTS } from './common';
 
 type P = t.InfoProps;
 type T = {
@@ -20,18 +21,18 @@ type T = {
   signature?: string;
 };
 const initial: T = { props: {} };
-const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
  * https://docs.privy.io/
  */
-const name = Info.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'fields' | 'enabled' | 'clipboard' | 'theme'> & {
     selectedChain?: t.EvmChainName;
   };
+
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.ui.${name}`);
   const local = localstore.object({
     theme: 'Dark',
@@ -86,10 +87,9 @@ export default Dev.describe(name, (e) => {
     ctx.subject
       .size([360, null])
       .display('grid')
-      .render<T>((e) => {
+      .render<T>(async (e) => {
         const { props } = e.state;
         Dev.Theme.background(ctx, props.theme, 1);
-
         return (
           <Info
             {...props}
@@ -131,6 +131,10 @@ export default Dev.describe(name, (e) => {
     });
 
     dev.section('Common States', (dev) => {
+      const change = (fields: t.InfoField[]) => {
+        state.change((d) => (local.fields = d.props.fields = fields));
+      };
+
       const button = (label: string, fn?: () => t.InfoField[]) => {
         dev.button((btn) => {
           btn
@@ -145,7 +149,7 @@ export default Dev.describe(name, (e) => {
               } as const;
 
               const value = e.is.meta ? [...fields.prev, ...fields.next] : fields.next;
-              e.change((d) => (local.fields = d.props.fields = value));
+              change(value);
             });
         });
       };
@@ -156,6 +160,7 @@ export default Dev.describe(name, (e) => {
         'Login.SMS',
         'Login.Farcaster',
         'Id.User',
+        'AccessToken',
         'Id.User.Phone',
         'Farcaster',
         'Wallet.Link',
@@ -189,6 +194,13 @@ export default Dev.describe(name, (e) => {
         'Wallet.List.Title',
         'Refresh',
       ]);
+
+      dev.hr(-1, 5);
+
+      dev.button('filter: !phone', () => {
+        let fields = (state.current.props.fields ?? []).filter(Boolean) as t.InfoField[];
+        change(fields.filter((e) => e !== 'Id.User.Phone'));
+      });
     });
 
     dev.hr(5, 20);

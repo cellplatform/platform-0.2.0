@@ -4,7 +4,7 @@ import { Is, rx, type t } from './common';
 /**
  * Causes a redraw on document updates.
  */
-export function useRedrawOnChange(doc?: t.Doc | t.UriString, options: { debounce?: t.Msecs } = {}) {
+export function useRedrawOnChange(doc?: t.Doc, options: { debounce?: t.Msecs } = {}) {
   const { debounce = 100 } = options;
   const uri = Is.doc(doc) ? doc.uri : undefined;
 

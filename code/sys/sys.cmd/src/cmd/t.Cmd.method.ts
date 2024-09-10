@@ -1,7 +1,5 @@
 import type { t, u } from './common';
 
-type Tx = string;
-
 /**
  * Generates a typed method function.
  * Overloads:
@@ -22,7 +20,7 @@ export type CmdMethodFactory<C extends t.CmdType> = {
  */
 export type CmdMethodVoid<Req extends t.CmdType> = (
   params: Req['params'],
-  options?: Tx | t.CmdInvokeOptions<Req>,
+  options?: t.TxString | t.CmdInvokeOptions<Req>,
 ) => t.CmdInvoked<Req>;
 
 /**
@@ -30,5 +28,5 @@ export type CmdMethodVoid<Req extends t.CmdType> = (
  */
 export type CmdMethodResponder<Req extends t.CmdType, Res extends t.CmdType> = (
   params: Req['params'],
-  options?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+  options?: t.TxString | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
 ) => t.CmdResponseListener<Req, Res>;

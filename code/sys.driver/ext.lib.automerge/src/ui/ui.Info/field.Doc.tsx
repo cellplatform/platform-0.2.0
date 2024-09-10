@@ -1,33 +1,70 @@
-import { Doc, DocUri, Icons, Is, ObjectPath, ObjectView, css, toObject, type t } from './common';
+import { Doc, DocUri, Icons, ObjectPath, ObjectView, css, toObject, type t } from './common';
 import { history } from './field.Doc.History';
+import { repo } from './field.Repo';
 
-type D = t.InfoDataDoc;
+type O = Record<string, unknown>;
+type D = t.InfoDoc;
 
-export function document(ctx: t.InfoFieldCtx, data: D | D[] | undefined) {
-  if (!data) return [];
-  const docs = Array.isArray(data) ? data : [data];
-  return docs.map((data) => render(ctx, data)).flat();
+/**
+ * Field for a document {item}.
+ */
+export function document(
+  ctx: t.InfoCtx,
+  docs: t.UseDocs,
+  data: D | D[] | undefined,
+): t.PropListItem[] {
+  const res: t.PropListItem[] = [];
+  const { fields } = ctx;
+  if (!data) return res;
+
+  let _lastRepo = '';
+  const renderRepo = (data: D) => {
+    const name = data.repo;
+    if (!fields.includes('Doc.Repo')) return;
+    if (!name || name === _lastRepo) return;
+
+    const item = repo(ctx, data.repo);
+    if (item) {
+      res.push(item);
+      _lastRepo = name;
+    }
+  };
+
+  const list = (Array.isArray(data) ? data : [data]).filter(Boolean);
+  list.forEach((data, i) => {
+    const doc = docs.refs.find((doc) => doc.uri == data.uri);
+    if (doc) {
+      renderRepo(data);
+      res.push(...renderDocument(ctx, data, doc, i));
+    }
+  });
+
+  return res;
 }
 
-function render(ctx: t.InfoFieldCtx, data: D | undefined) {
+/**
+ * Render the document {item}.
+ */
+function renderDocument(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index): t.PropListItem[] {
+  const { fields, theme, enabled } = ctx;
   const res: t.PropListItem[] = [];
-  if (!data) return res;
-  if (!Is.doc(data.ref)) return res;
 
-  const { fields, theme } = ctx;
-  const doc = data.ref;
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
-  const hasToggleHandler = !!data.object?.onToggleClick;
+  const hasToggleHandler = !!ctx.handlers.onDocToggleClick;
+  const isTwisyVisible = hasToggleHandler && ctx.fields.includes('Doc.Object');
 
   const label: t.PropListLabel = {
     body: (data.label ?? 'Document').trim(),
-    toggle: hasToggleHandler ? { open: isObjectVisible } : undefined,
-    onClick(e) {
-      const uri = doc.uri;
-      const modifiers = e.modifiers;
-      data.object?.onToggleClick?.({ uri, modifiers });
-    },
+    toggle: isTwisyVisible ? { open: isObjectVisible } : undefined,
+    onClick: !(isTwisyVisible && enabled)
+      ? undefined
+      : (e) => {
+          const modifiers = e.modifiers;
+          const prev = isObjectVisible;
+          const visible = { prev, next: !prev };
+          ctx.handlers.onDocToggleClick?.({ index, data, modifiers, visible });
+        },
   };
   const hasLabel = !!label.body;
 
@@ -39,16 +76,17 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     const parts: JSX.Element[] = [];
 
     if (uri) {
-      const { shorten, prefix, head, clipboard } = data.uri ?? {};
+      const { shorten, prefix, head, clipboard } = data.address ?? {};
       parts.push(
         <DocUri
-          theme={theme}
-          uri={doc.uri}
+          doc={doc.uri}
           prefix={prefix}
           shorten={shorten}
           head={head}
-          heads={Doc.heads(doc)}
+          heads={doc}
           clipboard={clipboard}
+          enabled={enabled}
+          theme={theme}
         />,
       );
     }
@@ -83,6 +121,7 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
     res.push({
       label,
       value,
+      enabled,
       divider: fields.includes('Doc.Object') ? !isObjectVisible : undefined,
     });
   }
@@ -91,7 +130,7 @@ function render(ctx: t.InfoFieldCtx, data: D | undefined) {
    * The <Object> component.
    */
   if (isObjectVisible) {
-    const value = wrangle.objectElement(data, hasLabel, theme);
+    const value = wrangle.objectElement(ctx, data, doc, index, hasLabel);
     res.push({ value });
   }
 
@@ -118,23 +157,22 @@ const wrangle = {
     return typeof res === 'number' ? Math.max(0, res) : 1;
   },
 
-  objectElement(data: D, hasLabel: boolean, theme?: t.CommonTheme) {
+  objectElement(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index, hasLabel: boolean) {
     const styles = {
       base: css({ flex: 1, display: 'grid' }),
       inner: css({ overflowX: 'hidden', maxWidth: '100%' }),
     };
 
-    let output = Is.doc(data.ref) ? data.ref.current : undefined;
+    let output: O | undefined = doc.current;
     const lens = data.object?.lens;
     if (lens) output = ObjectPath.resolve(output, lens);
 
     if (output) {
       output = toObject(output);
 
-      const mutate = data.object?.beforeRender;
-      if (typeof mutate === 'function') {
-        const res = mutate(output);
-        if (res !== undefined) output = res;
+      if (typeof ctx.handlers.onBeforeObjectRender === 'function') {
+        const res = ctx.handlers.onBeforeObjectRender(output, { index, data });
+        if (res !== undefined && res !== null && typeof res === 'object') output = res;
       }
 
       const dotMeta = data.object?.dotMeta ?? true;
@@ -152,7 +190,7 @@ const wrangle = {
             name={name || undefined}
             data={output}
             fontSize={11}
-            theme={theme}
+            theme={ctx.theme}
             style={{ marginLeft: 16, marginTop: hasLabel ? 3 : 5, marginBottom: 4 }}
             expand={{
               level: wrangle.expandLevel(data),

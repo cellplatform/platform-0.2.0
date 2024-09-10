@@ -1,25 +1,29 @@
 import type { OnChange, OnMount } from '@monaco-editor/react';
 import EditorReact from '@monaco-editor/react';
-
 import { useEffect, useRef, useState } from 'react';
-import { Color, DEFAULTS, Wrangle, css, type t, Spinner } from './common';
-import { Theme } from './u.Theme';
+
+import { EditorCarets } from '../u.Editor.Carets';
+import { Color, DEFAULTS, Spinner, Wrangle, css, rx, type t } from './common';
+import { Util } from './u';
+
+const DEF = DEFAULTS.props;
 
 export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const {
     text,
-    language = DEFAULTS.language,
-    tabSize = DEFAULTS.tabSize,
-    readOnly = DEFAULTS.readOnly,
-    minimap = DEFAULTS.minimap,
+    language = DEF.language,
+    tabSize = DEF.tabSize,
+    readOnly = DEF.readOnly,
+    minimap = DEF.minimap,
+    enabled = DEF.enabled,
     placeholder,
   } = props;
-  const theme = Theme.toName(props.theme);
+  const editorTheme = Util.Theme.toName(props.theme);
   const isPlaceholderText = typeof placeholder === 'string';
 
+  const disposeRef = useRef(rx.subject<void>());
   const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
-
   const [isEmpty, setIsEmpty] = useState(false);
 
   /**
@@ -43,6 +47,8 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     return () => {
       const editor = editorRef.current!;
       const monaco = monacoRef.current!;
+      const dispose$ = disposeRef.current;
+      dispose$.next();
       props.onDispose?.({ editor, monaco });
     };
   }, []);
@@ -57,7 +63,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
   const updateOptions = (editor?: t.MonacoCodeEditor) => {
     if (!editor) return;
     editor.updateOptions({
-      theme,
+      theme: editorTheme,
       readOnly,
       minimap: { enabled: minimap },
     });
@@ -76,36 +82,53 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
    * Handlers
    */
   const handleMount: OnMount = (ed, monaco) => {
-    Theme.init(monaco);
+    Util.Theme.init(monaco);
     monacoRef.current = monaco;
+
     const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     updateOptions(editor);
     updateTextState(editor);
-    if (props.focusOnLoad) editor.focus();
-    props.onReady?.({ editor, monaco });
+    if (enabled && props.focusOnLoad) editor.focus();
 
-    editor.onDidChangeModel(() => {});
+    let _carets: t.EditorCarets;
+    const dispose$ = disposeRef.current;
+    props.onReady?.({
+      editor,
+      monaco,
+      dispose$,
+      get carets() {
+        return _carets || (_carets = EditorCarets.create(editor));
+      },
+    });
   };
 
   const handleChange: OnChange = (text = '', event) => {
     const editor = editorRef.current;
-    if (!props.onChange || !editor) return;
-
+    const monaco = monacoRef.current;
+    if (!props.onChange || !editor || !monaco) return;
     updateTextState(editor);
-    const selections = editor.getSelections() || [];
+
     props.onChange({
       event,
-      state: { text, selections },
+      monaco,
+      editor,
+      selections: Wrangle.Editor.selections(editor),
+      content: Wrangle.Editor.content(editor),
     });
   };
 
   /**
    * Render
    */
-  const t = Color.theme(props.theme);
-  const className = Wrangle.editorClassName(editorRef.current);
+  const className = Wrangle.Editor.className(editorRef.current);
+  const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ position: 'relative', color: t.fg }),
+    base: css({
+      position: 'relative',
+      color: theme.fg,
+      pointerEvents: enabled ? 'auto' : 'none',
+      opacity: enabled ? 1 : 0.2,
+    }),
     inner: css({ Absolute: 0 }),
     empty: {
       base: css({
@@ -130,7 +153,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
     <div {...styles.empty.base}>{elPlaceholderText ?? placeholder}</div>
   );
 
-  const elLoading = <Spinner.Bar color={t.fg} />;
+  const elLoading = <Spinner.Bar color={theme.fg} />;
 
   return (
     <div {...css(styles.base, props.style)} className={className}>
@@ -139,7 +162,7 @@ export const View: React.FC<t.MonacoEditorProps> = (props) => {
           defaultLanguage={language}
           language={language}
           defaultValue={text}
-          theme={theme}
+          theme={editorTheme}
           loading={elLoading}
           onMount={handleMount}
           onChange={handleChange}

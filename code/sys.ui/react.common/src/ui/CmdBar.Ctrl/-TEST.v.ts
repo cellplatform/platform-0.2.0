@@ -6,8 +6,8 @@ describe('CmdBar.Ctrl', () => {
   const testSetup = () => {
     const life = rx.lifecycle();
     const transport = Immutable.clonerRef({});
-    const ctrl = CmdBar.Ctrl.create(transport);
-    const cmd = ctrl._;
+    const ctrl = CmdBar.Ctrl.create({ transport });
+    const cmd = Ctrl.toCmd(ctrl);
     const paths = DEFAULTS.paths;
 
     const ref: t.CmdBarRef = {
@@ -29,26 +29,62 @@ describe('CmdBar.Ctrl', () => {
     expect(CmdBar.Path).to.equal(Ctrl.Path);
   });
 
-  it('create (from simple Immutable<T>)', async () => {
+  it('create: from simple Immutable<T>', async () => {
     const transport = Immutable.clonerRef({});
-    const ctrl1 = Ctrl.create(transport);
+    const ctrl1 = Ctrl.create({ transport });
     const ctrl2 = Ctrl.create(); // NB: auto immutable "transport" construction.
-    const expectCounter = (value: number) => {
+    const expectCount = (length: number) => {
       const paths = CmdBar.DEFAULTS.paths;
       const cmd = ObjectPath.resolve<t.CmdPathsObject>(transport.current, paths.cmd);
-      expect(cmd?.counter?.value).to.eql(value);
+      expect(cmd?.queue?.length).to.eql(length);
     };
 
     let fired = 0;
     ctrl1.events().on('Invoke', () => fired++);
-    ctrl2._.events().on('Invoke', () => fired++);
+    Ctrl.toCmd(ctrl2)
+      .events()
+      .on('Invoke', () => fired++);
 
-    expectCounter(0);
+    expectCount(0);
     ctrl1.invoke({ text: 'foo' });
     ctrl2.invoke({ text: 'bar' });
     await Time.wait(0);
-    expectCounter(1);
+    expectCount(1);
     expect(fired).to.eql(2);
+  });
+
+  it('create: with issuer', async () => {
+    const transport = Immutable.clonerRef({});
+    const issuer = 'me:foo';
+    const ctrl1 = Ctrl.create({ transport });
+    const ctrl2 = Ctrl.create({ transport, issuer });
+
+    let fired: (string | undefined)[] = [];
+    ctrl1.events().on('Invoke', (e) => fired.push(e.issuer));
+    ctrl2.events().on('Invoke', (e) => fired.push(e.issuer));
+
+    ctrl1.invoke({ text: 'foo' }); // NB: no-issuer.
+    await Time.wait(0);
+    expect(fired).to.eql([undefined, undefined]);
+
+    fired = [];
+    ctrl2.invoke({ text: 'bar' });
+    await Time.wait(0);
+    expect(fired).to.eql([issuer, issuer]);
+  });
+
+  it('create: with path from prefix', async () => {
+    const transport = Immutable.clonerRef({});
+    const ctrl = Ctrl.create({ transport, paths: ['foo', 'bar'] });
+
+    let fired = 0;
+    ctrl.events().on('Invoke', (e) => fired++);
+
+    ctrl.invoke({ text: 'foo' });
+    await Time.wait(0);
+
+    const current = transport.current as any;
+    expect(current.foo.bar.cmd.queue[0].params).to.eql({ text: 'foo' });
   });
 
   it('Ctrl.toCtrl', () => {
@@ -68,6 +104,28 @@ describe('CmdBar.Ctrl', () => {
     expect(ctrl5).to.equal(ref.ctrl);
   });
 
+  it('Ctrl.toCmd', () => {
+    const { cmd, ref } = testSetup();
+    expect(Ctrl.toCmd(cmd)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref)).to.eql(cmd);
+    expect(Ctrl.toCmd(ref.ctrl)).to.eql(cmd);
+  });
+
+  it('Ctrl.toCmd (default)', () => {
+    const { cmd, ref, transport } = testSetup();
+    expect(Ctrl.toPaths(cmd)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref)).to.eql(DEFAULTS.paths);
+    expect(Ctrl.toPaths(ref.ctrl)).to.eql(DEFAULTS.paths);
+  });
+
+  it('Ctrl.toCmd (custom)', () => {
+    const paths = CmdBar.Ctrl.Path.prepend(['foo', 'bar']);
+    const ctrl = Ctrl.create({ paths });
+    const cmd = Ctrl.toCmd(ctrl);
+    expect(Ctrl.toPaths(ctrl)).to.eql(paths);
+    expect(Ctrl.toPaths(cmd)).to.eql(paths);
+  });
+
   describe('Ctrl.Is', () => {
     const Is = CmdBar.Is;
     const NON = [123, 'abc', [], {}, undefined, null, true, Symbol('foo'), BigInt(0)];
@@ -76,7 +134,8 @@ describe('CmdBar.Ctrl', () => {
       const ctrl = CmdBar.Ctrl.create();
       NON.forEach((v) => expect(CmdBar.Is.ctrl(v)).to.eql(false));
       expect(Is.ctrl(ctrl)).to.eql(true);
-      expect(Is.ctrl({ cmd: ctrl._ })).to.eql(false);
+
+      expect(Is.ctrl({ cmd: CmdBar.Ctrl.toCtrl(ctrl) })).to.eql(false);
       expect(Is.ctrl(ctrl)).to.eql(true);
     });
 
@@ -105,7 +164,7 @@ describe('CmdBar.Ctrl', () => {
       const res = Path.prepend(['foo']);
       expect(res.text).to.eql(['foo', 'text']);
       expect(res.cmd).to.eql(['foo', 'cmd']);
-      expect(res.history).to.eql(['foo', 'history']);
+      expect(res.meta).to.eql(['foo', 'meta']);
     });
 
     it('resolver', async () => {
@@ -114,25 +173,26 @@ describe('CmdBar.Ctrl', () => {
       const resolve = Path.resolver();
 
       expect(resolve(transport.current).text).to.eql('');
-      expect(resolve(transport.current).cmd.name).to.eql('');
-      expect(resolve(transport.current).cmd.counter?.value).to.eql(0);
-      expect(resolve(transport.current).history).to.eql([]);
+      expect(resolve(transport.current).cmd.queue).to.eql([]);
+      expect(resolve(transport.current).meta).to.eql({ history: [] });
 
       transport.change((d) => {
-        const history = resolve(transport.current).history;
-        history.push('foo --bar');
-        ObjectPath.mutate(d, paths.history, history);
-        ObjectPath.mutate(d, paths.text, 'hello');
+        const meta = resolve(transport.current).meta;
+        meta.history.push('foo --bar');
+        ObjectPath.Mutate.value(d, paths.meta, meta);
+        ObjectPath.Mutate.value(d, paths.text, 'hello');
       });
       ref.ctrl.invoke({ text: 'foobar' });
       await Time.wait(0);
 
-      expect(resolve(transport.current).text).to.eql('hello');
-      expect(resolve(transport.current).cmd.name).to.eql('Invoke');
-      expect(resolve(transport.current).cmd.counter?.value).to.eql(1);
-      expect(resolve(transport.current).history).to.eql(['foo --bar']);
-
       expect(ref.resolve(transport.current).text).to.eql('hello');
+      expect(resolve(transport.current).text).to.eql('hello');
+      expect(resolve(transport.current).meta).to.eql({ history: ['foo --bar'] });
+
+      const queue = resolve(transport.current).cmd.queue!;
+      expect(queue.length).to.eql(1);
+      expect(queue[0].name).to.eql('Invoke');
+      expect(queue[0].params).to.eql({ text: 'foobar' });
     });
   });
 });

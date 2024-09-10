@@ -3,16 +3,20 @@ import { PropListLabel } from './ui.Label';
 import { PropListValue } from './ui.Value';
 import { useHandler } from './use.Handler';
 
+type P = PropListItemProps;
+
 export type PropListItemProps = {
   item: t.PropListItem;
   is: { first: boolean; last: boolean };
   defaults: t.PropListDefaults;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
-export const PropListItem: React.FC<PropListItemProps> = (props) => {
+export const PropListItem: React.FC<P> = (props) => {
   const { item, is, defaults } = props;
+  const enabled = wrangle.enabled(props);
   const theme = Color.theme(props.theme);
   const hasLabel = !!item.label;
   const selected = Wrangle.selected(item, theme.is.dark);
@@ -60,6 +64,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
         <PropListLabel
           data={item}
           defaults={defaults}
+          enabled={enabled}
           theme={props.theme}
           isMouseOverItem={mouse.is.over}
         />
@@ -68,6 +73,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
         item={item}
         hasLabel={hasLabel}
         defaults={defaults}
+        enabled={enabled}
         theme={props.theme}
         cursor={handler.cursor}
         message={handler.message}
@@ -76,3 +82,13 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  enabled(props: P) {
+    if (props.item?.enabled === false) return false;
+    return props.enabled ?? true;
+  },
+} as const;

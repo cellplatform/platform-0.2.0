@@ -14,6 +14,7 @@ export type ConnectorProps = {
   behaviors?: t.ConnectorBehavior[];
   debug?: { renderCount?: t.RenderCountProps; name?: string };
   tabIndex?: number;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
   onReady?: t.ConnectorReadyHandler;
   onSelectionChange?: t.ConnectorSelectionHandler;

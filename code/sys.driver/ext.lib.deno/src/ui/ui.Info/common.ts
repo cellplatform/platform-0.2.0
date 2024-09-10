@@ -1,7 +1,7 @@
-import { DEFAULTS as HTTP_DEFAULTS } from '../../DenoHttp';
+import { DEFAULTS as HTTP_DEFAULTS } from '../../u.DenoHttp';
 import { Pkg, type t } from '../common';
 
-export { DenoHttp } from '../../DenoHttp';
+export { DenoHttp } from '../../u.DenoHttp';
 export * from '../common';
 
 /**

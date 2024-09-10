@@ -11,7 +11,7 @@ export const DEFAULTS = {
   page: { sort: 'asc' },
   timeout: { get: 1500 },
   genesis: {
-    message: 'sys: initial commit',
+    message: 'system: initial commit',
     options<T>(): A.ChangeOptions<T> {
       const message = DEFAULTS.genesis.message;
       const time = Time.now.timestamp;

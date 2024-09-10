@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "approx-string-match": "2.0.0",
-    "diff": "5.2.0",
+    "diff": "7.0.0",
     "rehype-sanitize": "6.0.0",
     "rehype-stringify": "10.0.0",
     "rehype-format": "5.0.0",
@@ -26,10 +26,10 @@
     "sys.util": "0.0.0",
     "unified": "11.0.5",
     "unist-util-select": "5.1.0",
-    "yaml": "2.4.5"
+    "yaml": "2.5.1"
   },
   "devDependencies": {
-    "@types/sanitize-html": "2.11.0",
+    "@types/sanitize-html": "2.13.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0"
   },

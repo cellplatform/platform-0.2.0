@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { Ctrl, DEFAULTS, ObjectPath, rx, type t } from './common';
+import { Ctrl, DEFAULTS, Mutate, rx, type t } from './common';
 
 /**
  * Manage history
  */
 export function useHistory(args: {
   enabled?: boolean;
-  state?: t.CmdImmutable;
+  state?: t.CmdTransport;
   ctrl?: t.CmdBarCtrl;
   paths?: t.CmdBarPaths;
 }) {
@@ -14,16 +14,12 @@ export function useHistory(args: {
   const pathDeps = `${paths.text.join('.')}`;
   const resolve = Ctrl.Path.resolver(paths);
 
-  const append = (state: t.CmdImmutable) => {
+  const append = (state: t.CmdTransport) => {
     const text = api.text.trim();
     const history = api.history;
     const latest = history[history.length - 1];
     if (text && latest !== text) {
-      state.change((d) => {
-        const list = resolve(d).history;
-        list.push(text);
-        if (!ObjectPath.exists(d, paths.history)) ObjectPath.mutate(d, paths.history, list);
-      });
+      state.change((d) => Mutate.meta(d, paths, (meta) => meta.history.push(text)));
     }
   };
 
@@ -59,7 +55,7 @@ export function useHistory(args: {
       return state ? resolve(state.current).text : '';
     },
     get history() {
-      return state ? resolve(state.current).history : [];
+      return state ? resolve(state.current).meta.history : [];
     },
   } as const;
   return api;

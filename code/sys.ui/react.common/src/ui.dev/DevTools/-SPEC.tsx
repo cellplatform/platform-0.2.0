@@ -1,5 +1,5 @@
 import { DevTools } from '.';
-import { Dev, Pkg, Time, type t } from '../../test.ui';
+import { Dev, Immutable, Pkg, Time, type t } from '../../test.ui';
 import { Sample } from './-SPEC.-sample';
 
 export type T = { count: number; on: boolean; theme?: t.CommonTheme };
@@ -77,6 +77,9 @@ export default Dev.describe('DevTools', (e) => {
       dev.hr(5, 20);
 
       Dev.Theme.switch(dev, ['theme'], (v) => console.info('callback:', v)); // NB: same as above, but with path
+
+      const propState = Immutable.clonerRef<{ theme?: t.CommonTheme }>({});
+      Dev.Theme.immutable(dev, propState);
 
       dev.hr(5, 20);
 

@@ -40,7 +40,7 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
       const e = Patch.change<T>(_current, fn);
       _current = e.after;
       options.onChange?.(e);
-      const callback = wrangle.callback(opt);
+      const callback = wrangle.options(opt).patches;
       callback?.(wrangle.formatPatches(e.patches.next));
       $.next(e);
     },
@@ -62,11 +62,10 @@ export function create<T extends O, E = t.PatchStateEvents<T>>(
  * Helpers
  */
 const wrangle = {
-  callback(options?: t.ImmutableChangeOptions<P>) {
-    if (!options) return;
-    if (typeof options === 'function') return options;
-    if (typeof options.patches === 'function') return options.patches;
-    return;
+  options(input?: t.ImmutableChangeOptionsInput<P>): t.ImmutableChangeOptions<P> {
+    if (!input || input === null) return {};
+    if (typeof input === 'function') return { patches: input };
+    return input;
   },
 
   formatPatches(patches: t.PatchOperation[]) {

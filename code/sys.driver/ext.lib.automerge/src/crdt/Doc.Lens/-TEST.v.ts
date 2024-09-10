@@ -53,7 +53,7 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 1 });
     });
 
-    it('options: as init function()', async () => {
+    it('options: init as function()', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
       const lens = Lens.create<TRoot, TChild>(root, path, (d) => (d.child = { count: 123 }));
       expect(lens.current).to.eql({ count: 123 });
@@ -68,6 +68,14 @@ describe('Doc.Lens', () => {
       expect(lens2.current).to.eql({ count: 123 });
     });
 
+    it('ensures simple {object} at path when init not specified (default)', async () => {
+      const root = await store.doc.getOrCreate<TRoot>((d) => null);
+      expect(root.current).to.eql({});
+      const lens = Lens.create<TRoot, TChild>(root, path);
+      expect(root.current).to.eql({ child: {} });
+      expect(lens.current).to.eql({});
+    });
+
     it('lens.toObject', async () => {
       const root = await setup();
       const lens = Lens.create<TRoot, TChild>(root, path);
@@ -78,7 +86,7 @@ describe('Doc.Lens', () => {
 
     it('throw: path does not yield an {object}', async () => {
       const root = await store.doc.getOrCreate<TRoot>((d) => null);
-      const fn = () => Lens.create<TRoot, TChild>(root, path);
+      const fn = () => Lens.create<TRoot, TChild>(root, path, () => 'not-an-object');
       expect(fn).to.throw(/Target path of \[Lens\] is not an object/);
     });
   });
@@ -162,6 +170,13 @@ describe('Doc.Lens', () => {
       expect(lens.current).to.eql({ count: 1 });
     });
 
+    it('throw: path does not yield {object}', async () => {
+      const root = await setup();
+      const path = ['child', 'count']; // NB: number
+      const fn = () => Lens.create<TRoot, TChild>(root, path);
+      expect(fn).to.throw(/Target path of \[Lens\] is not an object/);
+    });
+
     it('throw: path index does not yield {object}', async () => {
       const root = await setup();
       const fn = () =>
@@ -220,6 +235,21 @@ describe('Doc.Lens', () => {
       expect(patches.length).to.eql(2);
       expect(patches[0]).to.eql({ action: 'put', path: ['count'], value: 123 });
       expect(patches[1]).to.eql({ action: 'put', path: ['count'], value: 456 });
+    });
+
+    it('no change when deleted', async () => {
+      const root = await setup();
+      const lens = Lens.create<TRoot, TChild>(root, path);
+
+      lens.change((d) => (d.count = 123));
+      expect(lens.current.count).to.eql(123);
+
+      await store.doc.delete(root.uri);
+      expect(root.is.deleted).to.eql(true);
+      expect(lens.disposed).to.eql(true);
+
+      lens.change((d) => (d.count = 456));
+      expect(lens.current).to.eql(undefined);
     });
   });
 

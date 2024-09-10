@@ -1,6 +1,6 @@
 import { Cmd, DEFAULTS, Immutable, type t } from './common';
 import { listen } from './Ctrl.listen';
-import { Is, Path } from './u';
+import { Is, methods, Path, toCmd, toCtrl, toPaths } from './u';
 
 type C = t.CmdBarCtrlType;
 
@@ -11,42 +11,44 @@ export const Ctrl = {
   Is,
   Path,
   listen,
+  toCtrl,
+  toCmd,
+  toPaths,
 
-  create(transport?: t.CmdImmutable, options: { paths?: t.CmdBarPaths } = {}): t.CmdBarCtrl {
-    const cmd = create(transport, options.paths);
+  create(
+    args: {
+      transport?: t.CmdTransport;
+      paths?: t.CmdBarPaths | t.ObjectPath;
+      issuer?: t.IdString;
+    } = {},
+  ): t.CmdBarCtrl {
+    const { transport, issuer } = args;
+    const paths = wrangle.paths(args.paths);
+    const cmd = factory(transport, paths, issuer);
+    (cmd as any)[DEFAULTS.symbol.paths] = paths;
     return methods(cmd);
-  },
-
-  toCtrl(input: t.CmdBarRef | t.CmdBarCtrl | t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
-    if (Is.ctrl(input)) return input;
-    if (Is.ref(input)) return input.ctrl;
-    return methods(input);
   },
 } as const;
 
 /**
  * Helpers
  */
-function create(transport?: t.CmdImmutable, cmdpaths: t.CmdBarPaths = DEFAULTS.paths) {
+function factory(
+  transport?: t.CmdTransport,
+  cmdpaths: t.CmdBarPaths = DEFAULTS.paths,
+  issuer?: t.IdString,
+) {
   const paths = Cmd.Path.prepend(cmdpaths.cmd);
   const doc = transport ?? Immutable.clonerRef({});
-  return Cmd.create<C>(doc, { paths }) as t.Cmd<t.CmdBarCtrlType>;
+  const cmd = Cmd.create<C>(doc, { paths, issuer });
+  return cmd as t.Cmd<C>;
 }
 
-function methods(cmd: t.Cmd<t.CmdBarCtrlType>): t.CmdBarCtrl {
-  const method = cmd.method;
-  return {
-    _: cmd,
-    current: method('Current', 'Current:res'),
-    focus: method('Focus'),
-    select: method('Select'),
-    caretToStart: method('Caret:ToStart'),
-    caretToEnd: method('Caret:ToEnd'),
-    invoke: method('Invoke'),
-    keyboard: method('Keyboard'),
-    history: method('History'),
-    events(dispose$?: t.UntilObservable) {
-      return cmd.events(dispose$);
-    },
-  };
-}
+const wrangle = {
+  paths(input?: t.CmdBarPaths | t.ObjectPath) {
+    const def = DEFAULTS.paths;
+    if (!input) return def;
+    if (Array.isArray(input)) return Path.prepend(input, def);
+    return typeof input === 'object' ? input : def;
+  },
+} as const;

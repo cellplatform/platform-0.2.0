@@ -16,10 +16,10 @@ export const TextboxSync = {
     state: t.TextboxSyncState,
     path: t.ObjectPath,
     options: {
-      dispose$?: t.UntilObservable;
       debug?: string;
       splice?: t.TextSplice;
       diff?: t.TextDiffCalc;
+      dispose$?: t.UntilObservable;
     } = {},
   ) {
     const { debug = 'Unknown', splice = DEFAULTS.splice, diff = DEFAULTS.diff } = options;
@@ -40,7 +40,7 @@ export const TextboxSync = {
     const initial = resolve(state.current, path);
     if (typeof initial !== 'string') {
       if (initial !== undefined) throw new Error(`The sync path [${path}] is not of type string.`);
-      state.change((d) => ObjectPath.mutate(d, path, ''));
+      state.change((d) => ObjectPath.Mutate.value(d, path, ''));
     }
 
     /**
@@ -52,7 +52,12 @@ export const TextboxSync = {
       rx.filter((e) => e.index >= 0),
     );
     input$.subscribe((e) => {
-      state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
+      try {
+        state.change((d) => splice(d, path, e.index, e.delCount, e.newText));
+      } catch (error: any) {
+        const msg = `Failed while splicing change from textbox into CRDT (wait for CRDT sync update).`;
+        console.error(msg, error);
+      }
     });
 
     /**

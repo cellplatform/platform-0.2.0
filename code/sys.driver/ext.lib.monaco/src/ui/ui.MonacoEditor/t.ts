@@ -8,6 +8,7 @@ export type MonacoEditorProps = {
   language?: t.EditorLanguage;
   theme?: t.CommonTheme;
   placeholder?: string;
+  enabled?: boolean;
   focusOnLoad?: boolean;
   tabSize?: number;
   minimap?: boolean;
@@ -31,17 +32,19 @@ export type MonacoCodeEditor = monaco.editor.IStandaloneCodeEditor;
 /**
  * Editor ready.
  */
-export type MonacoEditorReadyHandler = (e: MonacoEditorReadyHandlerArgs) => void;
-export type MonacoEditorReadyHandlerArgs = {
+export type MonacoEditorReadyHandler = (e: MonacoEditorReadyArgs) => void;
+export type MonacoEditorReadyArgs = {
   readonly editor: MonacoCodeEditor;
   readonly monaco: Monaco;
+  readonly carets: t.EditorCarets;
+  readonly dispose$: t.Observable<void>;
 };
 
 /**
  * Editor disposed.
  */
-export type MonacoEditorDisposedHandler = (e: MonacoEditorDisposedHandlerArgs) => void;
-export type MonacoEditorDisposedHandlerArgs = {
+export type MonacoEditorDisposedHandler = (e: MonacoEditorDisposedArgs) => void;
+export type MonacoEditorDisposedArgs = {
   readonly editor: MonacoCodeEditor;
   readonly monaco: Monaco;
 };
@@ -49,8 +52,11 @@ export type MonacoEditorDisposedHandlerArgs = {
 /**
  * Editor changed.
  */
-export type MonacoEditorChangeHandler = (e: MonacoEditorChangeHandlerArgs) => void;
-export type MonacoEditorChangeHandlerArgs = {
+export type MonacoEditorChangeHandler = (e: MonacoEditorChangeArgs) => void;
+export type MonacoEditorChangeArgs = {
   readonly event: monaco.editor.IModelContentChangedEvent;
-  readonly state: t.EditorState;
+  readonly editor: MonacoCodeEditor;
+  readonly monaco: Monaco;
+  readonly content: t.EditorContent;
+  readonly selections: t.EditorSelection[];
 };

@@ -23,6 +23,8 @@ export type {
   Disposable,
   EventBus,
   IODirection,
+  ImmutableEvents,
+  ImmutableRef,
   Index,
   Lifecycle,
   LogLevel,
@@ -34,6 +36,7 @@ export type {
   ObjectPath,
   OmitLifecycle,
   Percent,
+  PickRequired,
   UntilObservable,
   UriString,
 } from 'sys.types/src/types';
@@ -44,6 +47,7 @@ export type {
   TestHandlerArgs,
   TestSuiteRunResponse,
 } from 'sys.test.spec/src/types';
+
 export type { UserAgent } from 'sys.ui.dom/src/types';
 
 /**

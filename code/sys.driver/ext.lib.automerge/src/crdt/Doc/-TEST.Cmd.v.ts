@@ -27,17 +27,17 @@ describe('crdt.cmd (Command)', () => {
       const { doc, dispose } = await setup();
       const lens = Doc.lens(doc as t.Doc, ['foo', 'bar'], (d) => (d.foo = { bar: {} }));
 
-      expect(Cmd.Is.validState(doc.current)).to.eql(false);
-      expect(Cmd.Is.validState(lens.current)).to.eql(false);
+      expect(Cmd.Is.state.cmd(doc.current)).to.eql(false);
+      expect(Cmd.Is.state.cmd(lens.current)).to.eql(false);
 
       Cmd.create(doc);
-      expect(Cmd.Is.validState(doc.current)).to.eql(true);
-      expect(Cmd.Is.validState(lens.current)).to.eql(false);
+      expect(Cmd.Is.state.cmd(doc.current)).to.eql(true);
+      expect(Cmd.Is.state.cmd(lens.current)).to.eql(false);
 
       Cmd.create(lens);
 
-      expect(Cmd.Is.validState(lens.current)).to.eql(true);
-      expect(Cmd.Is.validState((doc.current as any).foo.bar)).to.eql(true);
+      expect(Cmd.Is.state.cmd(lens.current)).to.eql(true);
+      expect(Cmd.Is.state.cmd((doc.current as any).foo.bar)).to.eql(true);
 
       dispose();
     });
@@ -56,14 +56,13 @@ describe('crdt.cmd (Command)', () => {
 
       await Time.wait(0);
       expect(fired.length).to.eql(1);
-      expect(doc.current).to.eql({
-        foo: {
-          name: 'Bar',
-          params: { msg: 'hello' },
-          counter: { value: fired[0].count },
-          tx,
-        },
-      });
+
+      const queue = (doc.current as any).foo.queue as t.CmdQueue;
+      expect(queue.length).to.eql(1);
+      expect(queue[0].name).to.eql('Bar');
+      expect(queue[0].params).to.eql({ msg: 'hello' });
+      expect(queue[0].tx).to.eql(tx);
+
       dispose();
     });
   });

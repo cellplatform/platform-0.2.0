@@ -25,11 +25,11 @@ export const Harness: React.FC<t.HarnessProps> = (props) => {
   const resize = useSizeObserver([baseRef, hostRef, subjectRef]);
 
   const controller = useBusController({
+    runOnLoad: true,
     bus: props.instance?.bus,
     id: props.instance?.id,
     bundle: props.spec,
     env: props.env,
-    runOnLoad: true,
   });
   const { instance } = controller;
 

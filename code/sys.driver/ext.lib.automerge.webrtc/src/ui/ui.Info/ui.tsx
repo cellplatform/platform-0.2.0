@@ -1,34 +1,29 @@
-import {
-  DEFAULTS,
-  PropList,
-  usePeerMonitor,
-  useShared,
-  useTransmitMonitor,
-  type t,
-} from './common';
+import { PropList, usePeerMonitor, useTransmitMonitor, type t } from './common';
 import { Field } from './field';
+import { Wrangle } from './u';
 import { useRedraw } from './use.Redraw';
+
+type P = t.InfoProps;
 
 /**
  * Component
  */
-export const View: React.FC<t.InfoProps> = (props) => {
-  const { theme, data = {} } = props;
-  const ctx = wrangle.ctx(props);
+export const View: React.FC<P> = (props) => {
+  const { theme, network, enabled = true, data = {} } = props;
+  const ctx = Wrangle.ctx(props);
 
   useRedraw(props);
-  const shared = useShared(data.network);
-  const { bytes } = usePeerMonitor(data.network);
+  const { bytes } = usePeerMonitor(network);
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
   const items = PropList.builder<t.InfoField>()
-    .field('Visible', () => Field.visible(data.visible, theme))
+    .field('Visible', () => Field.visible(data.visible, props.onVisibleToggle))
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
     .field('Component', () => Field.component(ctx, data.component))
-    .field('Peer', () => Field.peer(ctx, data))
-    .field('Repo', () => Field.repo(ctx, data))
-    .field('Network.Shared', () => Field.network.shared(ctx, data, shared?.doc))
+    .field('Peer', () => Field.peer(ctx, network))
+    .field('Repo', () => Field.repo(ctx, network))
+    .field('Network.Shared', () => Field.network.shared(ctx, data, network))
     .field('Network.Transfer', () => Field.network.transfer(ctx, bytes, isTransmitting))
     .items(ctx.fields);
 
@@ -38,19 +33,9 @@ export const View: React.FC<t.InfoProps> = (props) => {
       items={items}
       width={PropList.Info.width(props)}
       margin={props.margin}
+      enabled={enabled}
       theme={theme}
       style={props.style}
     />
   );
 };
-
-/**
- * Helpers
- */
-const wrangle = {
-  ctx(props: t.InfoProps): t.InfoFieldCtx {
-    const { theme = DEFAULTS.theme, stateful = DEFAULTS.stateful } = props;
-    const fields = PropList.Wrangle.fields(props.fields, DEFAULTS.fields.default);
-    return { theme, fields, stateful };
-  },
-} as const;

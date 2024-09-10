@@ -1,5 +1,7 @@
 import {
   MdAdd,
+  MdShield,
+  MdOutlineShield,
   MdClose,
   MdLogout,
   MdRefresh,
@@ -7,8 +9,10 @@ import {
   MdVpnKeyOff,
   MdWallet,
 } from 'react-icons/md';
+
 import { PiSignatureBold } from 'react-icons/pi';
 import { SiFarcaster } from 'react-icons/si';
+import { FaShieldAlt } from 'react-icons/fa';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -25,4 +29,5 @@ export const Icons = {
   Key: { On: icon(MdVpnKey), Off: icon(MdVpnKeyOff) },
   Farcaster: icon(SiFarcaster),
   Signature: icon(PiSignatureBold),
+  Shield: icon(FaShieldAlt),
 } as const;

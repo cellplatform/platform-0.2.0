@@ -70,8 +70,8 @@ export default Dev.describe(name, (e) => {
           <Sample
             {...e.state.props}
             onChange={async (e) => {
-              local.text = e.text;
-              await state.change((d) => (d.props.text = e.text));
+              local.text = e.content.text;
+              await state.change((d) => (d.props.text = e.content.text));
               dev.redraw('debug');
             }}
             onCmdEnterKey={(e) => {

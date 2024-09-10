@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Library
  */
-export { DenoHttp } from './DenoHttp';
+export { DenoHttp } from './u.DenoHttp';
 
 /**
  * Dev

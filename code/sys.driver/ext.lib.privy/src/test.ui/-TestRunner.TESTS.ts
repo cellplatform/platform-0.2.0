@@ -2,9 +2,9 @@ export const TESTS = {
   get all() {
     return [
       import('./-TEST'),
-      import('../evm/Chain/Chain.TEST'),
-      import('../evm/Balance/Balance.TEST'),
-      import('../evm/Wallet/Wallet.TEST'),
+      import('../u.evm/Chain/Chain.TEST'),
+      import('../u.evm/Balance/Balance.TEST'),
+      import('../u.evm/Wallet/Wallet.TEST'),
     ];
   },
 };

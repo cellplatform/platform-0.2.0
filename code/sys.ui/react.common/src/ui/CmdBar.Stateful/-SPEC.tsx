@@ -36,10 +36,12 @@ export default Dev.describe(name, (e) => {
 
   const main = Immutable.clonerRef<t.MainProps>(local.main ? JSON.parse(local.main) : {});
   const doc = Immutable.clonerRef({});
+
+  const issuer = 'foo:me';
   let cmdbar: t.CmdBarRef | undefined;
 
   const getPaths = (state: T): t.CmdBarPaths => {
-    return state.debug.prependPaths ? CmdBar.Path.prepend(['foo']) : DEFAULTS.paths;
+    return state.debug.prependPaths ? CmdBar.Path.prepend(['prepended-foo']) : DEFAULTS.paths;
   };
 
   const getText = (state: T) => {
@@ -67,7 +69,7 @@ export default Dev.describe(name, (e) => {
 
     doc.change((d) => {
       const paths = getPaths(state.current);
-      ObjectPath.mutate(d, paths.text, local.argv);
+      ObjectPath.Mutate.value(d, paths.text, local.argv);
     });
 
     const doc$ = doc.events().changed$;
@@ -104,8 +106,10 @@ export default Dev.describe(name, (e) => {
       const elCmdBar = (
         <SampleCmdBarStateful
           {...props}
+          issuer={issuer}
           state={debug.useState ? doc : undefined}
           paths={paths}
+          // paths={['sample-foo']}
           onReady={(e) => {
             const { textbox, dispose$ } = e;
             cmdbar = e.cmdbar;
@@ -120,7 +124,10 @@ export default Dev.describe(name, (e) => {
 
             // Listen for events.
             const events = e.cmdbar.ctrl.events(e.dispose$);
-            events.on('Invoke', (e) => console.info(`⚡️ Invoke`, e.params));
+            events.on('Invoke', (e) => {
+              const issuer = `issuer: "${e.issuer}"`;
+              console.info(`⚡️ Invoke`, e.params, issuer);
+            });
           }}
           onFocusChange={(e) => state.change((d) => (d.current.isFocused = e.is.focused))}
           onChange={(e) => state.change((d) => (local.argv = d.current.argv = e.to))}
@@ -147,13 +154,13 @@ export default Dev.describe(name, (e) => {
         const styles = {
           base: css({
             backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-            padding: 15,
           }),
         };
 
         const ctrl = cmdbar;
         return (
           <CmdBar.Dev.Main
+            style={styles.base}
             theme={theme.name}
             fields={main.current.fields}
             argsCard={{
@@ -167,6 +174,14 @@ export default Dev.describe(name, (e) => {
 
               onArgsChanged(e) {
                 if (!e.argv) return;
+
+                const styles = {
+                  base: css({
+                    backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */,
+                    padding: 15,
+                  }),
+                };
+
                 e.render(
                   <div {...styles.base}>
                     <ObjectView name={'run'} data={e.args} theme={e.theme} expand={3} />
@@ -239,25 +254,42 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Command', (dev) => {
-      const focus = (target: 'CmdBar' | 'Main') => {
-        const invoke = () => Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
-        dev.button(`Focus:${target}`, () => invoke());
+      const focus = (target: t.CmdBarFocusTarget) =>
+        Time.delay(0, () => cmdbar?.ctrl.focus({ target }));
+      const focusButton = (target: t.CmdBarFocusTarget) => {
+        dev.button(['focus', `"${target}"`], () => focus(target));
       };
-      focus('Main');
-      focus('CmdBar');
+
+      const getCurrent = async () => (await cmdbar?.ctrl.current({}).promise())?.result;
+
+      focusButton('Main');
+      focusButton('CmdBar');
       dev.hr(-1, 5);
-      dev.button('Invoke', (e) => {
+      dev.button('invoke', () => {
         const text = getText(state.current);
         cmdbar?.ctrl.invoke({ text });
       });
       dev.hr(-1, 5);
-      dev.button('Select: All', (e) => cmdbar?.ctrl.select({ scope: 'All' }));
-      dev.button('Select: Expand', (e) => cmdbar?.ctrl.select({ scope: 'Expand' }));
+      dev.button('select: All', () => cmdbar?.ctrl.select({ scope: 'All' }));
+      dev.button('select: Expand', () => cmdbar?.ctrl.select({ scope: 'Expand' }));
       dev.hr(-1, 5);
-      dev.button(['CMD + J', 'Focus:Main'], (e) => cmdbar?.ctrl.keyboard({ name: 'Focus:Main' }));
-      dev.button(['CMD + K', 'Focus:CmdBar'], (e) =>
-        cmdbar?.ctrl.keyboard({ name: 'Focus:CmdBar' }),
-      );
+      dev.button('update: text → "foo"', () => cmdbar?.ctrl.update({ text: 'foo' }));
+      dev.button('update: toggle → spinning', async () => {
+        const spinning = !((await getCurrent())?.spinning ?? false);
+        cmdbar?.ctrl.update({ spinning });
+      });
+      dev.button('update: toggle → readOnly', async () => {
+        const readOnly = !((await getCurrent())?.readOnly ?? false);
+        cmdbar?.ctrl.update({ readOnly });
+      });
+      dev.hr(-1, 5);
+      dev.button('clear', () => cmdbar?.ctrl.clear({}));
+      dev.button('current', async () => console.info('current', await getCurrent()));
+      dev.hr(-1, 5);
+
+      const keyboardAction = (name: t.KeyboardAction['name']) => cmdbar?.ctrl.keyboard({ name });
+      dev.button(['CMD + J', 'focus: Main'], () => keyboardAction('Focus:Main'));
+      dev.button(['CMD + K', 'focus: CmdBar'], () => keyboardAction('Focus:CmdBar'));
     });
 
     dev.hr(5, 20);
@@ -304,22 +336,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { debug } = e.state;
-      const field = 'state( ImmutableRef<D> )';
       const data = {
         props: e.state.props,
-        [field]: debug.useState ? doc?.current : undefined,
+        'state( Immutable<D> )': debug.useState ? doc?.current : undefined,
       };
-      return (
-        <Dev.Object
-          name={name}
-          data={data}
-          expand={{
-            level: 1,
-            // paths: ['$', `$.${field}`],
-          }}
-          fontSize={11}
-        />
-      );
+      return <Dev.Object name={name} data={data} expand={{ level: 1 }} fontSize={11} />;
     });
   });
 });

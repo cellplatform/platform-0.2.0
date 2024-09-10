@@ -7,7 +7,7 @@ type D = { count?: t.A.Counter };
 export default Test.describe('Store.Web: Index', (e) => {
   const name = TestDb.Unit.name;
   const initial: t.ImmutableMutator<D> = (d) => (d.count = new A.Counter(0));
-  const contains = (docs: t.StoreIndexDoc[], uri: string) => docs.some((e) => e.uri === uri);
+  const contains = (docs: t.StoreIndexItem[], uri: string) => docs.some((e) => e.uri === uri);
 
   e.describe('lifecycle', (e) => {
     e.it('initialize', async (e) => {
@@ -34,7 +34,7 @@ export default Test.describe('Store.Web: Index', (e) => {
     e.it('multiple instances from store yield same index URI', async (e) => {
       const store = WebStore.init({ network: false, storage: { name } });
 
-      const indexes: t.StoreIndexState[] = [];
+      const indexes: t.StoreIndex[] = [];
       await Promise.all(
         Array.from({ length: 10 }).map(async (item) => {
           await Time.wait(Value.random(0, 250));
@@ -54,7 +54,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const index = await WebStore.index(store);
       const events = index.doc.events();
 
-      const fired: t.StoreIndex[] = [];
+      const fired: t.StoreIndexDoc[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.after)));
 
       const totalBefore = index.total();
@@ -76,7 +76,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const index = await WebStore.index(store);
       const events = index.doc.events();
 
-      const fired: t.StoreIndex[] = [];
+      const fired: t.StoreIndexDoc[] = [];
       events.changed$.subscribe((e) => fired.push(toObject(e.after)));
 
       const sample = await store.doc.getOrCreate(initial);
@@ -86,7 +86,7 @@ export default Test.describe('Store.Web: Index', (e) => {
       const docs = fired[0].docs;
       expect(docs[docs.length - 1].uri).to.eql(sample.uri); // NB: added to end.
 
-      store.repo.delete(sample.uri);
+      store.repo.delete(sample.uri as t.AutomergeUrl);
       expect(contains(index.doc.current.docs, sample.uri)).to.eql(false);
 
       expect(fired.length).to.eql(2);

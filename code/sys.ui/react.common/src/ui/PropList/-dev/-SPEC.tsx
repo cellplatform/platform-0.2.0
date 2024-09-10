@@ -1,100 +1,116 @@
 import { PropList } from '..';
-import { Dev, Pkg, css, type t } from '../../../test.ui';
+import { Dev, Immutable, Json, css, rx, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
 import { BuilderSample } from './-SPEC.ui.Builder';
 import { sampleItems } from './-SPEC.ui.sample';
-import { SampleFields, type MyField } from './common';
+import { DEFAULTS, SampleFields, type MyField } from './common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type P = t.PropListProps;
-type T = {
-  props: P;
-  debug: {
-    source: SampleKind;
-    fields?: MyField[];
-    header: boolean;
-    footer: boolean;
-  };
+type D = {
+  source: SampleKind;
+  fields?: MyField[];
+  header: boolean;
+  footer: boolean;
 };
 
-const initial: T = {
-  props: { title: 'MyTitle', defaults: {}, theme: 'Light' },
-  debug: { source: 'Samples', header: true, footer: true },
-};
-
-const name = PropList.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'theme' | 'loading'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: undefined,
-    loading: false,
-  });
+  type LocalStore = { props?: string; debug?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
+  const local = localstore.object({ props: undefined, debug: undefined });
+  const State = {
+    props: Immutable.clonerRef<P>(
+      Json.parse<P>(local.props, { title: 'MyTitle', defaults: {}, theme: 'Light', enabled: true }),
+    ),
+    debug: Immutable.clonerRef<D>(
+      Json.parse<D>(local.debug, { source: 'Samples', header: true, footer: true }),
+    ),
+  } as const;
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    await Util.setSample(ctx, state.current.debug.source);
 
-    state.change((d) => {
-      d.props.theme = local.theme;
-      d.props.loading = local.loading;
-    });
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
+
+    Util.setSample(State.debug.current.source);
 
     ctx.debug.width(330);
     ctx.subject
       .display('grid')
       .size([250, null])
-      .render<T>((e) => {
-        const { props } = e.state;
+      .render<D>(() => {
+        const props = State.props.current;
         Dev.Theme.background(ctx, props.theme, 1);
         return <PropList {...props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
 
     dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+      Dev.Theme.immutable(dev, State.props, 1);
 
       dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.loading;
+        const state = State.props;
+        const current = () => !!state.current.enabled;
         btn
-          .label((e) => `loading`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.loading = Dev.toggle(d.props, 'loading'))));
+          .label(() => `enabled`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
+      });
+
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.loading;
+        btn
+          .label(() => `loading`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(d, 'loading')));
       });
 
       dev.hr(-1, 5);
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const state = State.props;
+        const current = () => !!state.current.defaults?.monospace;
         btn
-          .label('defaults.monospace')
-          .value((e) => e.state.props.defaults?.monospace)
-          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
-      );
+          .label(() => `defaults.monospace`)
+          .value(() => current())
+          .onClick(() => state.change((d) => Dev.toggle(Util.defaults(d), 'monospace')));
+      });
 
       dev.hr(5, 20);
     });
 
     dev.section('Title', (dev) => {
       const Title = {
-        read(state: T) {
-          return Wrangle.title(state.props.title);
+        get current() {
+          return Wrangle.title(State.props.current.title);
         },
-        obj(state: T): t.PropListTitle {
-          const current = state.props.title;
+        obj(props: P): t.PropListTitle {
+          const current = props.title;
           if (typeof current === 'object' && current !== null) return current as t.PropListTitle;
-          return (state.props.title = {});
+          return (props.title = {});
         },
-      };
+      } as const;
 
       const lorem = Dev.Lorem.words(50);
       const titleButton = (label: string, value: t.PropListTitle['value']) => {
-        dev.button(`set: ${label}`, (e) => {
-          e.change((d) => (Title.obj(d).value = value));
+        dev.button(`set: ${label}`, () => {
+          State.props.change((d) => (Title.obj(d).value = value));
         });
       };
 
@@ -111,21 +127,21 @@ export default Dev.describe(name, (e) => {
       titleButton('[ "Left", (long) ]', ['Left', lorem]);
       titleButton('[ (long), (long) ]', [lorem, lorem]);
 
-      dev.hr(1, 5);
+      dev.hr(1, 12);
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `ellipsis: ${Boolean(Title.read(e.state).ellipsis)}`)
-          .value((e) => Title.read(e.state).ellipsis)
-          .onClick((e) => e.change((d) => Dev.toggle(Title.obj(d), 'ellipsis'))),
+          .label(() => `ellipsis: ${!!Title.current.ellipsis}`)
+          .value(() => Title.current.ellipsis)
+          .onClick(() => State.props.change((d) => Dev.toggle(Title.obj(d), 'ellipsis'))),
       );
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `margin: ${Title.read(e.state).margin || '(default)'}`)
-          .value((e) => Boolean(Title.read(e.state).margin))
-          .onClick((e) => {
-            e.change((d) => {
+          .label(() => `margin: ${Title.current.margin || '(default)'}`)
+          .value(() => !!Title.current.margin)
+          .onClick(() => {
+            State.props.change((d) => {
               const title = Title.obj(d);
               title.margin = title.margin ? undefined : [30, 50];
             });
@@ -137,7 +153,7 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Items', (dev) => {
       const button = (kind: SampleKind) => {
-        dev.button(kind, (e) => Util.setSample(e.ctx, kind));
+        dev.button(kind, () => Util.setSample(kind));
       };
       button('Empty');
       dev.hr(-1, 5);
@@ -149,15 +165,16 @@ export default Dev.describe(name, (e) => {
     });
 
     dev.section((dev) => {
-      dev.row((e) => {
-        const debug = e.state.debug;
+      dev.row(() => {
+        const debug = State.debug.current;
         const props: t.PropListFieldSelectorProps<MyField> = {
           title: 'Field Selector',
           all: SampleFields.all,
           selected: debug.fields,
-          async onClick(ev) {
-            await dev.change((d) => (d.debug.fields = ev.next(SampleFields.defaults)));
-            Util.setSample(dev.ctx, 'Builder');
+          onClick(e) {
+            const fields = e.next(SampleFields.defaults);
+            State.debug.change((d) => (d.fields = fields));
+            Util.setSample('Builder');
           },
         };
         return (
@@ -172,42 +189,37 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
 
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+    dev.footer.border(-0.1).render<D>((e) => {
+      const props = State.props.current;
+      const data = { props };
       return <Dev.Object name={name} data={data} expand={1} fontSize={11} />;
     });
   });
+
+  const Util = {
+    setSample(source: SampleKind) {
+      State.debug.change((d) => (d.source = source));
+      State.props.change((d) => (d.items = Util.toItems(State.debug.current)));
+    },
+
+    toItems(debug: D) {
+      const { source, fields } = debug;
+      if (source === 'Empty') return [];
+      if (source === 'Samples') return sampleItems;
+      if (source === 'One Item') return [{ label: 'hello', value: 'py.123' }];
+      if (source === 'Two Items')
+        return [
+          { label: 'one', value: '123' },
+          { label: 'two', value: '456' },
+        ];
+      if (source === 'Builder') return BuilderSample.toItems({ fields });
+      return [];
+    },
+
+    defaults(props: t.PropListProps) {
+      return props.defaults ?? (props.defaults = {});
+    },
+  } as const;
 });
-
-/**
- * [Helpers]
- */
-const Util = {
-  async setSample(ctx: t.DevCtx, source: SampleKind) {
-    const state = await ctx.state<T>(initial);
-    state.change((d) => {
-      d.debug.source = source;
-      d.props.items = Util.toItems(d);
-    });
-  },
-
-  toItems(state: T) {
-    const { source, fields } = state.debug;
-    if (source === 'Empty') return [];
-    if (source === 'Samples') return sampleItems;
-    if (source === 'One Item') return [{ label: 'hello', value: 'py.123' }];
-    if (source === 'Two Items')
-      return [
-        { label: 'one', value: '123' },
-        { label: 'two', value: '456' },
-      ];
-    if (source === 'Builder') return BuilderSample.toItems({ fields });
-    return [];
-  },
-
-  defaults(props: t.PropListProps) {
-    return props.defaults ?? (props.defaults = {});
-  },
-} as const;

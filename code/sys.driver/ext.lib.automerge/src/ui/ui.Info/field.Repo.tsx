@@ -1,6 +1,7 @@
-import { Icons, Is, Value, css, type t, DEFAULTS } from './common';
+import { DEFAULTS, Icons, Is, Value, css, type t } from './common';
 
-export function repo(ctx: t.InfoFieldCtx, repo: t.InfoData['repo']) {
+export function repo(ctx: t.InfoCtx, keyName?: t.InfoRepoName) {
+  const repo = (ctx.repos ?? {})[keyName ?? ''];
   if (!repo) return;
 
   const index = repo.index;
@@ -8,7 +9,7 @@ export function repo(ctx: t.InfoFieldCtx, repo: t.InfoData['repo']) {
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total(), 'document', 'documents');
-    text = `${text} ← ${index.total()} ${documents}`;
+    text = `${text} ← ${index.total().toLocaleString()} ${documents}`;
   }
 
   const styles = { base: css({ Flex: 'x-center-center' }) };
@@ -32,7 +33,7 @@ export function repo(ctx: t.InfoFieldCtx, repo: t.InfoData['repo']) {
  * Helpers
  */
 const wrangle = {
-  name(repo: t.InfoData['repo']) {
+  name(repo: t.InfoRepo) {
     const UNKNOWN = 'Unknown';
     if (!repo) return UNKNOWN;
     if (repo.name) return repo.name;

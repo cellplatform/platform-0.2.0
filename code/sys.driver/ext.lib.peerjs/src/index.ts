@@ -7,7 +7,6 @@ export { Pkg };
 /**
  * Library
  */
-import { Peer } from './Webrtc';
 export { Peer, Webrtc } from './Webrtc';
 
 /**
@@ -19,8 +18,9 @@ import { Connector, ConnectorConfig } from './ui/ui.Connector';
 import { PeerCard } from './ui/ui.Dev.PeerCard';
 import { Info } from './ui/ui.Info';
 import { Video } from './ui/ui.Video';
+import { PeerUriButton } from './ui/ui.Button.PeerUri';
 
-export { Info };
+export { Info, PeerUriButton };
 export const PeerUI = {
   Info,
   Connector,
@@ -28,6 +28,7 @@ export const PeerUI = {
   AvatarTray,
   Video,
   Icons,
+  Button: { PeerUri: PeerUriButton },
   Dev: { PeerCard },
 } as const;
 

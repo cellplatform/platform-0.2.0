@@ -1,19 +1,6 @@
 import type { t } from './common';
 
 /**
- * Supported languages.
- */
-export type EditorLanguage =
-  | 'markdown'
-  | 'typescript'
-  | 'javascript'
-  | 'json'
-  | 'yaml'
-  | 'rust'
-  | 'go'
-  | 'python';
-
-/**
  * Selection and position.
  */
 export type SelectionOffset = { start: number; end: number };
@@ -36,11 +23,4 @@ export type EditorRangesInput =
   | null;
 
 export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRangeTuple | null;
-
-/**
- * State of the editor.
- */
-export type EditorState = {
-  text: string;
-  selections: t.Selection[];
-};
+export type EditorSelection = t.Selection;

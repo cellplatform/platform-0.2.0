@@ -27,13 +27,13 @@ export function create<R extends O, L extends O>(
   let _lastValue: L | undefined;
 
   const resolve = (root: R) => ObjectPath.resolve<L>(root, wrangle.path(path))!;
-  const events = root.events(args.dispose$);
 
-  events.dispose$.subscribe(() => {
+  const events = root.events(args.dispose$);
+  const { dispose, dispose$ } = events;
+  dispose$.subscribe(() => {
     fire.$.complete();
     Registry.remove(root);
   });
-  const { dispose, dispose$ } = events;
 
   const uri = root.uri;
   const fire = {
@@ -85,6 +85,7 @@ export function create<R extends O, L extends O>(
      * Current value of the descendent.
      */
     get current() {
+      if (api.disposed) return undefined as any; // Edge-case (disposed).
       return resolve(root.current);
     },
 
@@ -160,14 +161,25 @@ export function create<R extends O, L extends O>(
   /**
    * Initialize.
    */
-  if (typeof resolve(root.current) !== 'object') {
+  (() => {
+    const current = () => resolve(root.current);
+    if (typeof current() === 'object') return;
+
+    // Generate lens root from constructor function.
     const fn = args.init;
     if (typeof fn === 'function') root.change((d) => fn(d));
-    if (typeof resolve(root.current) !== 'object') {
-      const pathstring = wrangle.path(path).join('/');
-      throw new Error(`Target path of [Lens] is not an object: [${pathstring}]`);
+
+    // Ensure simple {object} root if nothing is provided.
+    if (args.init === undefined && current() === undefined) {
+      root.change((d) => ObjectPath.Mutate.ensure(d, wrangle.path(path), {}));
     }
-  }
+
+    // Catch error condition, there is no root for the lens.
+    if (typeof current() !== 'object') {
+      const target = wrangle.path(path).join('/');
+      throw new Error(`Target path of [Lens] is not an object: [${target}]`);
+    }
+  })();
 
   api.change(() => null); // NB: Ensure the lens is initialized.
   _lastValue = api.current;
@@ -195,7 +207,7 @@ const wrangle = {
     return patches.map((patch) => ({ ...patch, path: patch.path.slice(length) }));
   },
 
-  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptions<P>) {
+  changeOptions(path?: PathInput, options?: t.ImmutableChangeOptionsInput<P>) {
     const fn = Wrangle.patchCallback(options);
     if (!fn) return;
 

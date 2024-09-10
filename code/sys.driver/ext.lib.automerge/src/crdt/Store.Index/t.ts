@@ -10,9 +10,9 @@ type AddInput = t.StoreIndexAddParam | Uri;
 /**
  * A CRDT that represents an index of a store/repo.
  */
-export type StoreIndexState = {
+export type StoreIndex = {
   readonly store: t.Store;
-  readonly doc: t.Doc<t.StoreIndex>;
+  readonly doc: t.Doc<t.StoreIndexDoc>;
   readonly toggleShared: t.StoreIndexToggleShared;
   events(dispose$?: t.UntilObservable): t.StoreIndexEvents;
   exists(uri: UriInput): boolean;
@@ -23,13 +23,13 @@ export type StoreIndexState = {
 export type StoreIndexAddParam = { uri: Uri; name?: string; shared?: boolean };
 
 export type StoreIndexFilter = (e: StoreIndexFilterArgs, index: number) => boolean;
-export type StoreIndexFilterArgs = { doc: t.StoreIndexDoc; index: number };
+export type StoreIndexFilterArgs = { doc: t.StoreIndexItem; index: number };
 
 /**
  * Index of documents within a store/repository.
  */
-export type StoreIndex = t.DocWithMeta & { docs: t.StoreIndexDoc[] };
-export type StoreIndexDoc = {
+export type StoreIndexDoc = t.DocWithMeta & { docs: t.StoreIndexItem[] };
+export type StoreIndexItem = {
   uri: Uri;
   name?: string;
   meta?: Pick<t.DocMeta, 'ephemeral'>;

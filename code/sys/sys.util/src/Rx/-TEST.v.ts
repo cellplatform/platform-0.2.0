@@ -305,9 +305,6 @@ describe('rx', () => {
       await Time.wait(20);
       $.next();
 
-      console.log('fired', fired);
-      console.log('timedout', timedout);
-
       expect(fired).to.eql(0);
       expect(timedout).to.eql(1);
     });

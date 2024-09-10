@@ -60,7 +60,7 @@ export const Shared = {
     $: t.Observable<t.WebrtcStoreEvent>;
     peer: t.PeerModel;
     store: t.Store;
-    index: t.StoreIndexState;
+    index: t.StoreIndex;
     debugLabel?: string;
     uri?: string;
     fire?: (e: t.WebrtcStoreEvent) => void;
@@ -130,7 +130,7 @@ export const Shared = {
   /**
    * Remove all ephemeral documents from the given repo-index.
    */
-  purge(index: t.StoreIndexState) {
+  purge(index: t.StoreIndex) {
     const purged: string[] = [];
     index.doc.change((d) => {
       const docs = Doc.Data.array(d.docs);

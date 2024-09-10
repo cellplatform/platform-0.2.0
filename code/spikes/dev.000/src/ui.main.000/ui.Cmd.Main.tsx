@@ -39,58 +39,64 @@ export const CmdMain: React.FC<CmdMainProps> = (props) => {
   /**
    * Render
    */
-  const theme = Color.theme(props.theme ?? 'Dark');
+  const theme = Color.theme(props.theme);
   const styles = {
     base: css({
-      backgroundColor: theme.bg,
       color: theme.fg,
       overflow: 'hidden',
       display: 'grid',
     }),
   };
 
-  const ctrl = cmdbar;
+  const ctrl = cmdbar ? CmdBar.Ctrl.toCtrl(cmdbar) : undefined;
   return (
     <div {...css(styles.base, props.style)}>
       <CmdBar.Dev.Main
         theme={theme.name}
         fields={['Module.Args', 'Module.Run']}
-        argsCard={{ argv, ctrl, focused: { cmdbar: cmdbar?.current.focused } }}
+        argsCard={{
+          argv,
+          ctrl,
+          focused: { cmdbar: cmdbar?.current.focused },
+        }}
         run={{
           ctrl,
           argv,
 
+          /**
+           * CmdBar.Args: changed
+           */
           async onArgsChanged(e) {
             const { args } = e;
             const pos = args._;
             const clear = () => e.render(null);
 
             if (pos[0] === 'cmd') {
-              if (pos[1] === 'me') {
-                const { Me } = await import('./ui.Me');
-                return e.render(<Me main={main} theme={e.theme} />);
-              }
               if (pos[1]?.startsWith('crdt:')) {
-                const { Crdt } = await import('./ui.Crdt');
+                const { CrdtView } = await import('./ui.CrdtView');
                 const uri = pos[1];
-                return e.render(<Crdt main={main} theme={e.theme} docuri={uri} />);
+                return e.render(<CrdtView main={main} theme={e.theme} docuri={uri} />);
               }
             }
 
             clear();
           },
 
+          /**
+           * CmdBar: Invoke
+           */
           async onInvoke(e) {
             const { args } = e;
             const pos = args._;
 
             if (pos[0] === 'cmd') {
               if (pos[1] === 'crdt' && pos[2] === 'create') {
-                const { Crdt } = await import('./ui.Crdt');
+                const { CrdtView } = await import('./ui.CrdtView');
 
-                const doc = await main.store.tmp.doc.getOrCreate(() => null);
+                const store = main.repo.tmp.store;
+                const doc = await store.doc.getOrCreate(() => null);
                 const uri = doc.uri;
-                return e.render(<Crdt main={main} theme={e.theme} docuri={uri} />);
+                return e.render(<CrdtView main={main} docuri={uri} theme={e.theme} />);
               }
             }
           },

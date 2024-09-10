@@ -17,6 +17,7 @@ export type PropListProps = {
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
 
+  enabled?: boolean;
   loading?: boolean;
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
@@ -53,6 +54,7 @@ export type PropListItem = {
   readonly value?: string | number | boolean | JSX.Element | PropListValue;
   readonly tooltip?: string;
   readonly visible?: boolean;
+  readonly enabled?: boolean;
   readonly indent?: number;
   readonly selected?: boolean | PropListItemSelected;
   readonly divider?: boolean;
@@ -97,7 +99,7 @@ export type PropListValueSwitch = ValueBase & {
 };
 
 /**
- * CLICK event arguments.
+ * Events
  */
 export type PropListItemHandler = (e: PropListItemHandlerArgs) => void;
 export type PropListItemHandlerArgs = {

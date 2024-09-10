@@ -11,10 +11,9 @@ import { getOrCreate } from './Doc.u.getOrCreate';
 import { heads, history } from './Doc.u.history';
 import { merge } from './Doc.u.merge';
 import { Tag } from './Doc.u.tag';
-import { Data, Is, DocUri as Uri, toObject, type t } from './common';
-import { toHandle } from './u';
-
-type Uri = t.DocUri | t.UriString;
+import { Data, Is, DocUri as Uri, toObject } from './common';
+import { Mutate, toHandle } from './u';
+import { map } from './Doc.u.map';
 
 export const Doc = {
   Is,
@@ -36,6 +35,8 @@ export const Doc = {
 
   toObject,
   merge,
+  map,
+  ensure: Mutate.ensure,
 
   ephemeral,
   history,

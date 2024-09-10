@@ -10,12 +10,13 @@ export type SimpleValueProps = {
   isValueClickable?: boolean;
   isMouseOverValue?: boolean;
   isMouseOverItem?: boolean;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   onClick?: React.MouseEventHandler;
 };
 
 export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
-  const { message } = props;
+  const { message, enabled = true } = props;
   const value = wrangle.valueObject(props);
 
   const is = wrangle.flags(props);

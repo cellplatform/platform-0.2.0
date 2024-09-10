@@ -1,4 +1,4 @@
-import { Delete, Dev, Hash, Pkg, slug } from '../../test.ui';
+import { Delete, Dev, Hash, Pkg } from '../../test.ui';
 import { Info } from '../ui.Info';
 import { HttpState, type TState } from './-SPEC.HttpState';
 import { SAMPLE } from './-SPEC.sample';
@@ -20,7 +20,6 @@ const name = 'Sample.01';
 export default Dev.describe(name, (e) => {
   type LocalStore = Pick<P, 'code'> & Pick<T, 'forcePublicUrl'>;
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  ('⚡️💦🐷🌳 🍌🧨🌼✨🧫 🐚👋🧠⚠️💥👁️ ↑↓←→');
   const local = localstore.object({
     code: SAMPLE.code,
     forcePublicUrl: false,
@@ -37,7 +36,7 @@ export default Dev.describe(name, (e) => {
       d.props.env = ctx.env;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(360);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
@@ -46,10 +45,8 @@ export default Dev.describe(name, (e) => {
         return (
           <Sample
             {...e.state.props}
-            onChange={(e) => state.change((d) => (local.code = d.props.code = e.text))}
-            onCmdEnterKey={(e) => {
-              console.info('⚡️ onCmdEnterKey', e);
-            }}
+            onChange={(e) => state.change((d) => (local.code = d.props.code = e.content.text))}
+            onCmdEnterKey={(e) => console.info('⚡️ onCmdEnterKey', e)}
           />
         );
       });
@@ -134,6 +131,12 @@ export default Dev.describe(name, (e) => {
       // };
       const getSelectedProject = () => state.current.deno.selectedProject;
 
+      const getClient = () => {
+        const forcePublic = !!state.current.forcePublicUrl;
+        const client = DenoHttp.client({ forcePublic });
+        return client;
+      };
+
       dev.button('💦 create project', async (e) => {
         // const http = getHttp().http;
         // const body = {
@@ -147,11 +150,20 @@ export default Dev.describe(name, (e) => {
 
       // dev.button('💦 get projects', (e) => HttpState.updateProjects(state));
 
-      dev.button((btn) => {
-        btn
-          .label(`💦 get deployments`)
-          .enabled((e) => !!getSelectedProject())
-          .onClick((e) => HttpState.updateDeployments(state));
+      // dev.button((btn) => {
+      //   btn
+      //     .label(`💦 get deployments`)
+      //     .enabled((e) => !!getSelectedProject())
+      //     .onClick((e) => HttpState.updateDeployments(state));
+      // });
+
+      const projectId = 'sweet-gnu-41';
+      const projectDisplay = `"${projectId}"`;
+      dev.button(['get deployments', projectDisplay], async () => {
+        const client = getClient();
+
+        const res = await client.deployments(projectId).list();
+        console.log('res', res);
       });
 
       dev.hr(-1, 5);
@@ -159,10 +171,11 @@ export default Dev.describe(name, (e) => {
       dev.button((btn) => {
         btn
           .label(`deploy`)
-          .enabled((e) => !!getSelectedProject())
+          .right(projectDisplay)
+          // .enabled((e) => !!getSelectedProject())
           .onClick(async (e) => {
-            const projectId = getSelectedProject();
-            // const http = getHttp().http;
+            // const projectId = 'sweet-gnu-41';
+            const client = getClient();
 
             const content = state.current.props.code ?? '';
             const body: t.DenoDeployArgs = {
@@ -171,11 +184,16 @@ export default Dev.describe(name, (e) => {
               envVars: {},
             };
 
-            const path = `deno/projects/${projectId}/deployments`;
+            const res = await client.deploy(projectId, body);
+
+            // const path = `deno/projects/${projectId}/deployments`;
             // const res = await http.post(path, body);
 
             console.log('-------------------------------------------');
-            // console.log('res', res);
+            console.log('res', res);
+
+            const m = await res.whenReady({ silent: false });
+            console.log('m', m);
             // await HttpState.updateDeployments(state);
           });
       });

@@ -5,12 +5,14 @@ export type PropListLabelProps = {
   data: t.PropListItem;
   defaults: t.PropListDefaults;
   isMouseOverItem?: boolean;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
   cursor?: t.CSSProperties['cursor'];
 };
 
 export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
+  const { enabled = true } = props;
   const theme = Color.theme(props.theme);
   const item = format(props.data);
   const label = item.label;
@@ -26,7 +28,7 @@ export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
       userSelect: 'none',
       position: 'relative',
       marginLeft: props.data.indent,
-      cursor: props.cursor ?? handler.cursor,
+      cursor: enabled ? props.cursor ?? handler.cursor : undefined,
       color,
       display: 'grid',
       alignContent: 'center',

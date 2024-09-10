@@ -23,6 +23,7 @@ export type * from './Layout.Split/t';
 export type * from './Layout/t';
 export type * from './Module.Loader/t';
 export type * from './ObjectView/t';
+export type * from './PageStack/t';
 export type * from './ProgressBar/t';
 export type * from './PropList.FieldSelector/t';
 export type * from './PropList.InfoPanel/t';

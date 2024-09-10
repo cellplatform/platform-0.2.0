@@ -70,12 +70,14 @@ export default Dev.describe(name, async (e) => {
       .render<T>(async (e) => {
         const { props, debug } = e.state;
         Dev.Theme.background(dev, props.theme, 1);
+
         const accessToken = getTokens(dev.ctx, e.state).accessToken;
         const forcePublic = debug.forcePublicUrl;
         const data: t.InfoData = {
           ...props.data,
           endpoint: { ...props.data?.endpoint, forcePublic, accessToken },
         };
+
         return (
           <Info
             {...props}
@@ -95,11 +97,15 @@ export default Dev.describe(name, async (e) => {
     dev.row(async (e) => {
       if (tokens.env) return;
       const { Auth } = await import('ext.lib.privy');
+      const jwt = state.current.accessToken;
       return (
         <Auth.Info
           title={'Identity'}
-          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Farcaster']}
-          data={{ provider: Auth.Env.provider }}
+          fields={['Login', 'Login.SMS', 'Login.Farcaster', 'Id.User', 'Farcaster', 'AccessToken']}
+          data={{
+            provider: Auth.Env.provider,
+            accessToken: { jwt },
+          }}
           onChange={(e) => state.change((d) => (d.accessToken = e.accessToken))}
         />
       );

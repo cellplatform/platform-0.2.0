@@ -1,6 +1,6 @@
-import { AuthProvider as Provider } from './Auth.Provider';
+import { AuthEnv as Env } from '../common';
+import { AuthProvider as Provider } from '../ui.Auth.Provider';
 import { Info } from '../ui.Info';
-import { AuthEnv as Env } from './common';
 
 /**
  * Library API.

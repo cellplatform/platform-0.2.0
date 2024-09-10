@@ -13,7 +13,7 @@ describe('Cmd (Command)', () => {
  *     underlying the common <Cmd> system.
  *
  * This core implementation uses the simple ("simplistic")
- * blunt cloner ImmutableRef<T> tool from [sys.util].
+ * cloner ImmutableRef<T> tool from [sys.util].
  */
 const setup: t.CmdTestSetup = async () => {
   const { dispose, dispose$ } = rx.disposable();

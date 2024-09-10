@@ -25,6 +25,7 @@ export { KeyHint } from './ui/KeyHint';
 export { Layout } from './ui/Layout';
 export { ModuleLoader } from './ui/Module.Loader';
 export { ObjectView } from './ui/ObjectView';
+export { PageStack } from './ui/PageStack';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
 export { QRCode } from './ui/QRCode';

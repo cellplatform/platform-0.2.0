@@ -1,57 +1,66 @@
-import { DEFAULTS, ObjectPath, Time, type t, type u } from './common';
+import { DEFAULTS, Time, slug, type t, type u } from './common';
 import { Events, Is, Path } from './u';
 import { Listener } from './u.Listener';
 
 type O = Record<string, unknown>;
-type Tx = string;
 type OptionsInput = Options | t.CmdPaths;
 type Options = {
-  paths?: t.CmdPaths;
-  counter?: t.CmdCounterFactory;
   tx?: t.CmdTxFactory;
+  paths?: t.CmdPaths | t.ObjectPath;
+  issuer?: t.IdString; // The identity (URI) of the issuer of the command.
 };
 
 /**
  * Command factory.
  */
 export function create<C extends t.CmdType>(
-  transport: t.CmdImmutable,
+  transport: t.CmdTransport,
   options?: OptionsInput,
 ): t.Cmd<C> {
-  const doc = transport;
-  const mutate = ObjectPath.mutate;
   const args = wrangle.options(options);
   const resolve = Path.resolver(args.paths);
   const paths = resolve.paths;
-  const counter = args.counter ?? DEFAULTS.counter;
 
-  const update = (tx: string, name: string, params: O, error?: t.Error, increment = false) => {
-    doc.change((d) => {
-      const count = resolve.counter(d, DEFAULTS.counter) as t.CmdCounter;
-      mutate(d, paths.tx, tx);
-      mutate(d, paths.name, name);
-      mutate(d, paths.params, params);
-      mutate(d, paths.error, error);
-      if (increment) counter.increment(count);
+  const push = (tx: t.TxString, name: string, params: O, issuer?: t.IdString, error?: t.Error) => {
+    transport.change((d) => {
+      const item = resolve.queue.item(d);
+      item.name(name);
+      item.params(params);
+      item.tx(tx);
+      item.id(`${slug()}`);
+      if (error) item.error(error);
+      if (issuer) item.issuer(issuer);
     });
   };
 
   // Ensure document is initialized with the {cmd} structure.
-  if (!Is.validState(doc.current)) update('', '', {}); // ← (default empty structure).
+  if (!Is.state.cmd(transport.current)) {
+    transport.change((d) => {
+      resolve.log(d);
+      resolve.queue.list(d);
+    });
+  }
 
   /**
-   * Invoke method (overloads)
+   * Invoke method (overloads).
    */
-  const invokeSetup = (tx: Tx, name: C['name'], params: C['params'], error?: t.Error) => {
-    const res: t.CmdInvoked<any> = { tx, req: { name, params } };
-    const start = () => Time.delay(0, () => update(tx, name, params, error, true));
+  const invokeSetup = (
+    tx: t.TxString,
+    name: C['name'],
+    params: C['params'],
+    issuer?: t.IdString,
+    error?: t.Error,
+  ) => {
+    const res: t.CmdInvoked<any> = { tx, issuer, req: { name, params } };
+    const start = () => Time.delay(0, () => push(tx, name, params, issuer, error));
     return { res, start } as const;
   };
 
   const invokeVoid: t.CmdInvoke<any> = (name, params, opt) => {
     const tx = wrangle.invoke.tx(opt, args.tx);
+    const issuer = wrangle.invoke.issuer(opt, args.issuer);
     const error = wrangle.invoke.error(opt);
-    const { res, start } = invokeSetup(tx, name, params, error);
+    const { res, start } = invokeSetup(tx, name, params, issuer, error);
     start();
     return res;
   };
@@ -59,17 +68,21 @@ export function create<C extends t.CmdType>(
   const invokeResponder: t.CmdInvokeResponse<any, any> = (req, res, params, opt) => {
     const options = wrangle.invoke.responseOptions<any, any>(opt);
     const tx = wrangle.invoke.tx(options, args.tx);
+    const issuer = wrangle.invoke.issuer(options, args.issuer);
     const error = wrangle.invoke.error(options);
-    const { timeout, dispose$, onComplete, onError } = options;
-    const { start } = invokeSetup(tx, req, params, error);
+
+    const { timeout, dispose$, onComplete, onError, onTimeout } = options;
+    const { start } = invokeSetup(tx, req, params, issuer, error);
     const listener = Listener.create<any, any>(api, {
       tx,
+      issuer,
       req: { name: req, params },
       res: { name: res },
       timeout,
       dispose$,
       onComplete,
       onError,
+      onTimeout,
     });
     start();
     return listener;
@@ -88,7 +101,7 @@ export function create<C extends t.CmdType>(
    */
   const api: t.Cmd<C> = {
     events(dispose$?: t.UntilObservable) {
-      return Events.create<C>(doc, { paths, dispose$ });
+      return Events.create<C>(transport, { paths, dispose$ });
     },
 
     invoke(name, params, options) {
@@ -99,7 +112,18 @@ export function create<C extends t.CmdType>(
       const [p1, p2] = args;
       return (typeof p2 !== 'string' ? toVoidMethod(p1) : toResponderMethod(p1, p2)) as any;
     },
-  } as const;
+  };
+
+  /**
+   * Store internal decorations.
+   *    See related helpers:
+   *      - Cmd.toTransport()
+   *      - toPaths()
+   *      - toIssuer() etc.
+   */
+  (api as any)[DEFAULTS.symbol.transport] = transport;
+  (api as any)[DEFAULTS.symbol.paths] = paths;
+  (api as any)[DEFAULTS.symbol.issuer] = args.issuer;
   return api;
 }
 
@@ -109,12 +133,12 @@ export function create<C extends t.CmdType>(
 const wrangle = {
   options(input?: OptionsInput): Options {
     if (!input) return {};
-    if (Path.is.commandPaths(input)) return { paths: input };
+    if (Path.Is.commandPaths(input)) return { paths: input };
     return input;
   },
 
   invoke: {
-    tx<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx, txFactory?: t.CmdTxFactory) {
+    tx(input?: t.CmdInvokeOptions<any> | t.TxString, txFactory?: t.CmdTxFactory) {
       const defaultTx = () => (txFactory ?? DEFAULTS.tx)();
       if (!input) return defaultTx();
       if (typeof input === 'string') return input;
@@ -122,12 +146,21 @@ const wrangle = {
       return defaultTx();
     },
 
-    error<C extends t.CmdType>(input?: t.CmdInvokeOptions<C> | Tx): u.ExtractError<C> | undefined {
+    error<C extends t.CmdType>(
+      input?: t.CmdInvokeOptions<C> | t.TxString,
+    ): u.ExtractError<C> | undefined {
       return typeof input === 'object' ? input.error : undefined;
     },
 
+    issuer(
+      input?: t.CmdInvokeOptions<any> | t.TxString,
+      defaultIssuer?: t.IdString,
+    ): t.IdString | undefined {
+      return typeof input === 'object' ? input.issuer ?? defaultIssuer : defaultIssuer;
+    },
+
     responseOptions<Req extends t.CmdType, Res extends t.CmdType>(
-      input?: Tx | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
+      input?: t.TxString | t.CmdResponseHandler<Req, Res> | t.CmdInvokeResponseOptions<Req, Res>,
     ): t.CmdInvokeResponseOptions<Req, Res> {
       if (!input) return {};
       if (typeof input === 'string') return {};

@@ -141,7 +141,7 @@ describe('Doc', async () => {
       expect(doc.is.ready).to.eql(false);
     });
 
-    it('delete ← false (404, does not exist)', async () => {
+    it('delete ← false (does not exist)', async () => {
       const doc = await factory();
       expect(doc.is.deleted).to.eql(false);
 
@@ -149,6 +149,20 @@ describe('Doc', async () => {
       const res = await store.doc.delete(uri, { timeout: 10 });
       expect(res).to.eql(false);
       expect(doc.is.deleted).to.eql(false); // Still not deleted (ie. the URI above had nothing to do with the document).
+    });
+
+    it('no effect when .change(..) called after deletion', async () => {
+      const doc = await factory();
+      expect(doc.is.deleted).to.eql(false);
+
+      doc.change((d) => (d.count = 123));
+      expect(doc.current.count).to.eql(123);
+
+      const deleted = await store.doc.delete(doc.uri);
+      expect(deleted).to.eql(true);
+
+      doc.change((d) => (d.count = 456));
+      expect(doc.current).to.eql(undefined);
     });
   });
 

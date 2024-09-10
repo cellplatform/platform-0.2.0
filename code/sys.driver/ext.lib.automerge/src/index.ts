@@ -27,8 +27,6 @@ export const Crdt = {
  * Library: UI
  */
 export { DocUri } from './ui/ui.DocUri';
-export { HistoryCommit } from './ui/ui.History.Commit';
-export { HistoryGrid } from './ui/ui.History.Grid';
 export { Info, InfoField } from './ui/ui.Info';
 export { RepoList } from './ui/ui.RepoList';
 export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui/ui.use';
@@ -38,3 +36,4 @@ export { Redraw, useDoc, useDocs, useRedrawOnChange } from './ui/ui.use';
  */
 export { Specs } from './test.ui/entry.Specs';
 export { TestDb } from './test.ui/TestDb';
+export { SampleCrdt } from './test.ui/SampleCrdt';

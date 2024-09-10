@@ -6,7 +6,7 @@ import { Wrangle } from './u';
  * Component
  */
 export const View: React.FC<t.PropListProps> = (props) => {
-  const { title, loading = false } = props;
+  const { title, loading = false, enabled = true } = props;
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
@@ -24,6 +24,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
       maxWidth: width?.max,
       maxHeight: height?.max,
       boxSizing: 'border-box',
+      pointerEvents: enabled ? 'auto' : 'none',
       ...Style.toPadding(props.padding),
       ...Style.toMargins(props.margin),
     }),
@@ -45,6 +46,7 @@ export const View: React.FC<t.PropListProps> = (props) => {
           is={{ first: i === 0, last: i === items.length - 1 }}
           defaults={defaults}
           theme={theme.name}
+          enabled={enabled}
         />
       );
     });
@@ -53,10 +55,11 @@ export const View: React.FC<t.PropListProps> = (props) => {
   const elTitle = hasTitle && (
     <PropListTitle
       //
+      data={title}
       total={items.length}
       theme={theme.name}
       defaults={defaults}
-      data={title}
+      enabled={enabled}
     />
   );
 

@@ -1,38 +1,16 @@
-import { DEFAULTS, FC, PropList, type t } from './common';
-import { Field } from './field';
-
-/**
- * Component
- */
-const View: React.FC<t.InfoProps> = (props) => {
-  const { data = {} } = props;
-  const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
-
-  const items = PropList.builder<t.InfoField>()
-    .field('Module', () => Field.module())
-    .field('Module.Verify', () => Field.moduleVerify())
-    .field('Component', () => Field.component(data.component))
-    .items(fields);
-
-  return (
-    <PropList
-      title={PropList.Info.title(props)}
-      items={items}
-      width={PropList.Info.width(props)}
-      margin={props.margin}
-      style={props.style}
-    />
-  );
-};
+import { DEFAULTS, FC, type t } from './common';
+import { View } from './ui';
+import { FieldSelector } from './ui.FieldSelector';
 
 /**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  FieldSelector: typeof FieldSelector;
 };
 export const Info = FC.decorate<t.InfoProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, FieldSelector },
   { displayName: DEFAULTS.displayName },
 );

@@ -4,12 +4,13 @@ export type PropListTitleProps = {
   total: number;
   data?: t.PropListTitleInput;
   defaults: t.PropListDefaults;
+  enabled?: boolean;
   theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
-  const { total } = props;
+  const { total, enabled = true } = props;
   const {
     value,
     ellipsis = true,

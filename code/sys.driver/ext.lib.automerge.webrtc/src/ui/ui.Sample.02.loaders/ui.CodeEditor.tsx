@@ -30,7 +30,7 @@ export const CodeEditorLoader: React.FC<CodeEditorLoaderProps> = (props) => {
       onReady={async (e) => {
         const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
         const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
-        Monaco.Crdt.Syncer.listen(e.monaco, e.editor, lens, ['text']);
+        Monaco.Crdt.Syncer.listen(e.monaco, e.editor, lens);
 
         const onCmdEnter = () => {
           // TODO

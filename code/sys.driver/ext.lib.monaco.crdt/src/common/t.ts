@@ -7,14 +7,27 @@ export type { Observable } from 'rxjs';
 /**
  * @ext
  */
-export type { Lens, Store, StoreIndexDb, WebStoreIndex } from 'ext.lib.automerge/src/types';
 export type {
+  Doc,
+  DocChanged,
+  Lens,
+  Store,
+  StoreIndex,
+  StoreIndexDb,
+} from 'ext.lib.automerge/src/types';
+
+export type {
+  EditorCarets,
+  EditorContent,
+  EditorLanguage,
   EditorRange,
-  EditorState,
   Monaco,
   MonacoCodeEditor,
-  SelectionOffset,
+  MonacoEditorProps,
+  MonacoEditorReadyArgs,
+  MonacoEditorReadyHandler,
   Selection,
+  SelectionOffset,
 } from 'ext.lib.monaco/src/types';
 
 /**
@@ -23,13 +36,28 @@ export type {
 export type {
   Disposable,
   EventBus,
+  IdString,
+  Immutable,
+  ImmutableChange,
+  Index,
+  Json,
+  JsonString,
   Lifecycle,
   Msecs,
   ObjectPath,
+  PickRequired,
   TypedObjectPath,
   UntilObservable,
+  UriString,
 } from 'sys.types/src/types';
 
+export type {
+  Cmd,
+  CmdMethodResponder,
+  CmdMethodVoid,
+  CmdTransport,
+  CmdType,
+} from 'sys.cmd/src/types';
 export type { SpecImport, SpecImports, TestSuiteRunResponse } from 'sys.test.spec/src/types';
 
 /**

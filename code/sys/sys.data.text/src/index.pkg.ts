@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'approx-string-match': '2.0.0',
-    'diff': '5.2.0',
+    'diff': '7.0.0',
     'rehype-sanitize': '6.0.0',
     'rehype-stringify': '10.0.0',
     'rehype-format': '5.0.0',
@@ -28,7 +28,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'unified': '11.0.5',
     'unist-util-select': '5.1.0',
-    'yaml': '2.4.5',
+    'yaml': '2.5.1',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

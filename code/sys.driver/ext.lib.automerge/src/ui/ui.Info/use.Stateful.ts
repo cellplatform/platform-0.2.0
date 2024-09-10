@@ -1,76 +1,137 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, PropList, useObservableReset, useProxy, useRedraw, type t } from './common';
-import { Diff } from './u';
-import { useData } from './use.Data';
-import { rebuild, type FireChanged } from './use.Stateful.Rebuild';
+import { DEFAULTS, Immutable, PropList, R, rx, type t } from './common';
+import { Wrangle } from './u';
+
+type P = t.InfoStatefulProps;
 
 /**
- * Hook that when {stateful:true} manages
- * state internally to the <Info> component.
+ * Automerge <Info> Stateful Controller.
  */
-export function useStateful(props: t.InfoProps) {
-  const { stateful = DEFAULTS.stateful } = props;
-  const fields = PropList.fields(props.fields);
+export function useStateful(props: P): t.InfoStatefulController {
+  const { repos = {} } = props;
+  const ctx = Wrangle.ctx(props);
+  const enabled = ctx.enabled;
 
-  const redraw = useRedraw();
-  const data = useData(props.data);
-  const reset = useObservableReset(props.resetState$);
-  const proxy = useProxy(data, Diff.document.isEqual, reset.count);
-  const [ready, setReady] = useState(false);
-
-  const fireChanged: FireChanged = (action) => {
-    if (!stateful) return;
-    props.onStateChange?.({ action, fields, data: api.data });
-    redraw();
-  };
+  const [data, setData] = useState<t.InfoStatefulData | undefined>(wrangle.state(props));
+  const [, setCount] = useState(0);
+  const redraw = () => setCount((n) => n + 1);
 
   /**
-   * Set overrides on immutable proxy.
+   * Effects.
    */
   useEffect(() => {
-    if (!stateful || !api.ready) return;
-    if (stateful) rebuild(proxy.state, fireChanged);
-    redraw();
-  }, [proxy.version, ready]);
+    /**
+     * Store data.
+     */
+    const instance = wrangle.propInstance(props);
+    if (instance && data?.instance !== instance) setData(wrangle.state(props));
+  }, [data?.instance, wrangle.propInstance(props)]);
+
+  useEffect(() => {
+    /**
+     * Ready.
+     */
+    const { dispose, dispose$ } = rx.disposable();
+    if (data) props.onReady?.({ data, repos, dispose$ });
+    return dispose;
+  }, [data?.instance]);
+
+  useEffect(() => {
+    /**
+     * Listen for data changes.
+     */
+    const events = data?.events();
+    events?.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);
+    events?.changed$.subscribe(({ before, after }) => props.onChange?.({ before, after }));
+    return events?.dispose;
+  }, [data?.instance]);
+
+  useEffect(() => {
+    /**
+     * Update controller state when {prop.data} changes.
+     */
+    const eq = R.equals(props.data, data);
+    if (!eq) setData(wrangle.state(props));
+  }, [props.data]);
 
   /**
-   * Ensure overrides are configured when not stateful.
+   * Overriden event handlers.
    */
-  useEffect(() => reset.inc(), [stateful]);
+  const handlers: t.InfoPropsHandlers = {
+    onDocToggleClick(e) {
+      if (!enabled) return;
+      data?.change((d) => {
+        const document = Wrangle.Data.documents(d.document)[e.index];
+        if (document) {
+          const object = document.object || (document.object = {});
+          object.visible = e.visible.next;
+        }
+      });
+      props.onDocToggleClick?.(e);
+      redraw();
+    },
 
-  /**
-   * Ready.
-   */
-  useEffect(() => setReady(true), []);
+    onVisibleToggle(e) {
+      if (!enabled) return;
+
+      data?.change((d) => {
+        const visible = d.visible || (d.visible = {});
+        visible.value = e.next;
+      });
+
+      props.onVisibleToggle?.(e);
+      redraw();
+    },
+
+    onHistoryItemClick(e) {
+      if (!enabled) return;
+      props.onHistoryItemClick?.(e);
+      redraw();
+    },
+  };
 
   /**
    * API
    */
-  const api = {
-    ready: ready && proxy.ready,
+  const api: t.InfoStatefulController = {
+    handlers,
 
-    /**
-     * Current data configuration.
-     */
-    get data() {
-      return stateful ? proxy.state.current : data;
+    get props(): t.InfoProps {
+      const data = api.data;
+      const fields = api.fields;
+      return { ...props, fields, data };
     },
 
-    /**
-     * Current fields (or filterd if stateful).
-     */
-    get fields() {
-      if (!stateful) return fields;
+    get data(): t.InfoData | undefined {
+      return data?.current;
+    },
 
+    get fields(): t.InfoField[] {
+      const fields = PropList.fields(props.fields, DEFAULTS.props.fields);
       const data = api.data;
-      if (!data.visible) return fields;
-
-      const isVisible = data.visible.value ?? true;
+      const isVisible = data?.visible?.value ?? true;
+      const filter = data?.visible?.filter ?? DEFAULTS.fields.visibleFilter;
+      if (!data?.visible) return fields;
       if (isVisible) return fields;
-
-      const filter = data.visible?.filter ?? DEFAULTS.visibleFilter;
       return filter({ visible: false, fields });
     },
   } as const;
+
   return api;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  state(props: P): t.InfoStatefulData | undefined {
+    if (!props.data) return;
+    if (Immutable.Is.immutableRef(props.data)) return props.data;
+    return Immutable.clonerRef<t.InfoData>(props.data);
+  },
+
+  propInstance(props: P) {
+    if (!props.data) return '';
+    return Immutable.Is.immutableRef(props.data) ? props.data.instance : '';
+  },
+} as const;

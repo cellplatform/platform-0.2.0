@@ -17,9 +17,9 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       onReady={async (e) => {
         const { editor, monaco } = e;
         const onCmdEnter = () => {
-          const text = editor.getValue();
           const selections = editor.getSelections() || [];
-          props.onCmdEnterKey?.({ text, selections });
+          const content = Monaco.Wrangle.Editor.content(editor);
+          props.onCmdEnterKey?.({ content, selections });
         };
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
@@ -28,10 +28,13 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
           const { store, docuri } = env;
           const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
           const lens = Crdt.Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
-          Monaco.Crdt.Syncer.listen(monaco, editor, lens, ['code']);
+          Monaco.Crdt.Syncer.listen(monaco, editor, lens);
         }
       }}
-      onChange={(e) => props.onChange?.(e.state)}
+      onChange={(e) => {
+        const { content, selections } = e;
+        props.onChange?.({ content, selections });
+      }}
     />
   );
 

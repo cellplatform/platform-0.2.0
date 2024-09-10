@@ -1,54 +1,80 @@
-import { COLORS, Color, Dev, Time, PeerUI, Webrtc, css, type t } from '../../test.ui';
+import {
+  COLORS,
+  Color,
+  Dev,
+  Immutable,
+  Json,
+  Pkg,
+  Time,
+  Webrtc,
+  css,
+  rx,
+  type t,
+} from '../../test.ui';
 import { AvatarTray } from '../ui.AvatarTray';
 import { PeerCard } from '../ui.Dev.PeerCard';
 
 import { Connector, ConnectorConfig, DEFAULTS } from '.';
 import { Info } from '../ui.Info';
 
-type T = { props: t.ConnectorProps };
-const name = Connector.displayName ?? '';
+type P = t.ConnectorProps;
+type D = {};
+
+/**
+ * Spec
+ */
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
   const self = Webrtc.peer();
   const remote = Webrtc.peer();
 
   let ref: t.ConnectorRef;
-  const initial: T = { props: { peer: self } };
 
-  type LocalStore = Pick<t.ConnectorProps, 'behaviors'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.lib.peerjs.ui.Connector');
-  const local = localstore.object({
-    behaviors: DEFAULTS.behaviors.default,
-  });
+  type LocalStore = { props?: string; debug?: string };
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  const local = localstore.object({ props: undefined, debug: undefined });
+  const State = {
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props as any)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
+  } as const;
 
-  e.it('ui:init', async (e) => {
+  e.it('ui:init', (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
 
-    const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.props.behaviors = local.behaviors;
-    });
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => ctx.redraw());
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([330, null])
       .display('grid')
-      .render<T>((e) => {
+      .render<D>((e) => {
+        const props = State.props.current;
+        Dev.Theme.background(ctx, props.theme, 1);
+
         const renderCount: t.RenderCountProps = {
           absolute: [-20, 2, null, null],
           opacity: 0.2,
           prefix: 'list.render-',
         };
         return (
-          <PeerUI.Connector
-            {...e.state.props}
+          <Connector
+            {...props}
             peer={self}
             debug={{ renderCount, name: 'Main' }}
             onReady={(e) => {
-              console.info('⚡️ onReady', e);
               ref = e.ref;
+              console.info('⚡️ onReady', e);
             }}
             onSelectionChange={(e) => {
               console.info('⚡️ onSelectionChange', e);
@@ -58,26 +84,30 @@ export default Dev.describe(name, (e) => {
       });
   });
 
-  e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
+  e.it('ui:debug', (e) => {
+    const dev = Dev.tools<D>(e);
     dev.row((e) => (
       <Info
+        self={self}
         fields={['Module', 'Component', 'Peer', 'Peer.Remotes']}
-        data={{ component: { name: `<${name}>` }, peer: { self } }}
+        data={{ component: { name } }}
       />
     ));
 
     dev.hr(5, 20);
 
-    dev.row((e) => {
+    dev.section('Properties', (dev) => {
+      Dev.Theme.immutable(dev, State.props);
+    });
+
+    dev.hr(2, 15);
+
+    dev.row(() => {
+      const props = State.props.current;
       return (
         <ConnectorConfig
-          selected={e.state.props.behaviors}
-          onChange={(e) => {
-            state.change((d) => (d.props.behaviors = e.next));
-            local.behaviors = e.next;
-          }}
+          selected={props.behaviors}
+          onChange={(e) => State.props.change((d) => (d.behaviors = e.next))}
         />
       );
     });
@@ -129,14 +159,12 @@ export default Dev.describe(name, (e) => {
     });
   });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<D>(e);
     dev.footer
       .padding(0)
       .border(-0.1)
-      .render<T>((e) => {
+      .render<D>(() => {
         const data = {
           peer: self.id,
           'peer.connections': self.current.connections,

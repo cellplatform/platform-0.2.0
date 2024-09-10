@@ -16,11 +16,13 @@ export function accessToken(args: Args): t.PropListItem | undefined {
   };
   const value = (
     <div {...styles.base}>
-      {jwt ? <Icons.Key.On size={14} /> : <Icons.Key.Off size={14} />}
-      {jwt ? `jwt:${Hash.shorten(jwt, 4)}` : undefined}
+      {jwt ? `jwt: ${Hash.shorten(jwt, 4)}` : undefined}
+      {jwt ? <Icons.Shield size={14} margin={[0, 0, 0, 6]} /> : '-'}
     </div>
   );
 
-  const label = accessToken?.label || 'Access Token';
-  return { label, value };
+  return {
+    label: accessToken?.label || 'Access Token',
+    value,
+  };
 }

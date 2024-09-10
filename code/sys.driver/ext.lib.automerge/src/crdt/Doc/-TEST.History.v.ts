@@ -8,7 +8,7 @@ describe('Doc.History', { retry: 3 }, async () => {
   it('initial: <undefined>', async () => {
     const history = Doc.history(undefined);
     const commits = history.commits;
-    expect(history.length).to.eql(0);
+    expect(history.total).to.eql(0);
     expect(commits.length).to.eql(0);
     expect(history.latest).to.eql(undefined);
   });
@@ -17,7 +17,7 @@ describe('Doc.History', { retry: 3 }, async () => {
     const doc = await store.doc.getOrCreate<D>((d) => null);
     const history = Doc.history(doc);
     const commits = history.commits;
-    expect(history.length).to.eql(2);
+    expect(history.total).to.eql(2);
     expect(commits.length).to.eql(2);
     expect(commits[0].snapshot).to.eql({});
     expect(commits[1].snapshot).to.eql({});
@@ -27,7 +27,7 @@ describe('Doc.History', { retry: 3 }, async () => {
   it('initial: change', async () => {
     const doc = await store.doc.getOrCreate<D>((d) => (d.msg = 'hello'));
     const history = Doc.history(doc);
-    expect(history.length).to.eql(2);
+    expect(history.total).to.eql(2);
 
     const commits = history.commits;
     expect(commits[0].snapshot).to.eql({});
@@ -42,7 +42,7 @@ describe('Doc.History', { retry: 3 }, async () => {
     doc.change((d) => (d.msg = 'hello'));
 
     const history = Doc.history(doc);
-    expect(history.length).to.eql(3);
+    expect(history.total).to.eql(3);
 
     const commits = history.commits;
     expect(commits[0].snapshot).to.eql({});
@@ -84,10 +84,10 @@ describe('Doc.History', { retry: 3 }, async () => {
       const history = Doc.history();
       const page = history.page(0, 5);
 
-      expect(page.index).to.eql(0);
-      expect(page.limit).to.eql(5);
-      expect(page.length).to.eql(0);
-      expect(page.order).to.eql(DEFAULTS.page.sort);
+      expect(page.scope.index).to.eql(0);
+      expect(page.scope.limit).to.eql(5);
+      expect(page.scope.total).to.eql(0);
+      expect(page.scope.order).to.eql(DEFAULTS.page.sort);
       expect(page.items).to.eql([]);
       expect(page.commits).to.eql([]);
     });
@@ -99,12 +99,11 @@ describe('Doc.History', { retry: 3 }, async () => {
       const history = Doc.history(doc);
       const page = history.page(0, 5);
 
-      expect(page.index).to.eql(0);
-      expect(page.limit).to.eql(5);
-      expect(page.length).to.eql(5);
-      expect(page.order).to.eql(DEFAULTS.page.sort);
-      expect(page.items.map(({ index }) => index)).to.eql([0, 1, 2, 3, 4]);
-      expect(page.items.map(({ commit }) => commit)).to.eql(page.commits);
+      expect(page.scope.index).to.eql(0);
+      expect(page.scope.limit).to.eql(5);
+      expect(page.scope.order).to.eql(DEFAULTS.page.sort);
+      expect(page.items.map((e) => e.index)).to.eql([0, 1, 2, 3, 4]);
+      expect(page.items.map((e) => e.commit)).to.eql(page.commits);
     });
 
     it('final page', async () => {
@@ -115,9 +114,17 @@ describe('Doc.History', { retry: 3 }, async () => {
       const page1 = history.page(0, 5);
       const page2 = history.page(1, 5);
 
-      expect(history.length).to.eql(7);
-      expect(page1.length).to.eql(5);
-      expect(page2.length).to.eql(2);
+      expect(history.total).to.eql(7);
+      expect(page1.scope.total).to.eql(history.total);
+
+      expect(page1.items.length).to.eql(5);
+      expect(page2.items.length).to.eql(2);
+
+      expect(page1.scope.is.first).to.eql(true);
+      expect(page1.scope.is.last).to.eql(false);
+
+      expect(page2.scope.is.first).to.eql(false);
+      expect(page2.scope.is.last).to.eql(true);
     });
 
     it('out of bounds', async () => {
@@ -125,10 +132,14 @@ describe('Doc.History', { retry: 3 }, async () => {
       const history = Doc.history(doc);
 
       const test = (index: number) => {
-        const page = history.page(index, 5);
-        expect(page.length).to.eql(0);
-        expect(page.items).to.eql([]);
-        expect(page.commits).to.eql([]);
+        const res = history.page(index, 5);
+        expect(res.items).to.eql([]);
+        expect(res.commits).to.eql([]);
+        expect(res.scope.index).to.eql(index);
+        expect(res.scope.limit).to.eql(5);
+        expect(res.scope.total).to.eql(2);
+        expect(res.scope.is.first).to.eql(false);
+        expect(res.scope.is.last).to.eql(false);
       };
 
       test(-1);
@@ -143,11 +154,11 @@ describe('Doc.History', { retry: 3 }, async () => {
       const history = Doc.history(doc);
       const asc = history.page(0, 3);
       const desc = history.page(0, 3, 'desc');
-      expect(asc.order).to.eql('asc');
-      expect(desc.order).to.eql('desc');
+      expect(asc.scope.order).to.eql('asc');
+      expect(desc.scope.order).to.eql('desc');
 
-      const ascIndexes = asc.items.map(({ index }) => index);
-      const descIndexes = desc.items.map(({ index }) => index);
+      const ascIndexes = asc.items.map((e) => e.index);
+      const descIndexes = desc.items.map((e) => e.index);
 
       expect(ascIndexes).to.eql([0, 1, 2]);
       expect(descIndexes).to.eql([5, 4, 3]);

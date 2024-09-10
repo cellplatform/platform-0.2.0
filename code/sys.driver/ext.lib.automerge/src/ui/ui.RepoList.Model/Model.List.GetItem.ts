@@ -41,7 +41,7 @@ export function GetItem(getCtx: t.GetRepoListModel, array: t.RepoArray): t.GetRe
 /**
  * Helpers
  */
-function updateItemFromDoc(item?: t.RepoItemState, doc?: t.StoreIndexDoc) {
+function updateItemFromDoc(item?: t.RepoItemState, doc?: t.StoreIndexItem) {
   if (!doc || item?.current.data?.kind !== 'Doc') return;
   if (!item.current.data?.uri) item.change((d) => (Data.item(d).uri = doc.uri));
   if (item.current.label !== doc.name) item.change((d) => (d.label = doc.name));

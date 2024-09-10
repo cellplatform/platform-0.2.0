@@ -1,32 +1,28 @@
-import { MonacoEditor } from '.';
-import { Dev, EditorCarets, Pkg, Wrangle, type t } from '../../test.ui';
-import { CODE_SAMPLES } from './-sample.code';
-
-const DEFAULTS = MonacoEditor.DEFAULTS;
+import { DEFAULTS, MonacoEditor } from '.';
+import { Monaco } from '../..';
+import { Dev, Immutable, Json, Pkg, rx, Wrangle, type t } from '../../test.ui';
+import { SAMPLE_CODE } from './-sample.code';
 
 type P = t.MonacoEditorProps;
-type T = { props: P };
-const initial: T = { props: { focusOnLoad: true } };
+type D = {
+  render: boolean;
+  selection: t.EditorRange | null;
+};
 
+/**
+ * Spec
+ */
 const name = 'MonacoEditor';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<
-    P,
-    'text' | 'language' | 'theme' | 'readOnly' | 'placeholder' | 'minimap'
-  > & {
-    selection: t.EditorRange | null;
-  };
+  type LocalStore = { props?: string; debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
-  const local = localstore.object({
-    theme: 'Dark',
-    text: '',
-    placeholder: undefined,
-    selection: null,
-    language: DEFAULTS.language,
-    readOnly: DEFAULTS.readOnly,
-    minimap: DEFAULTS.minimap,
-  });
+  const local = localstore.object({ props: undefined, debug: undefined });
+
+  const State = {
+    props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { selection: null, render: true })),
+  } as const;
 
   let editor: t.MonacoCodeEditor;
   let monaco: t.Monaco;
@@ -34,38 +30,51 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(ctx, initial);
-    const state = await ctx.state<T>(initial);
-    state.change((d) => {
-      d.props.theme = local.theme;
-      d.props.text = local.text;
-      d.props.language = local.language;
-      d.props.readOnly = local.readOnly;
-      d.props.placeholder = local.placeholder;
-      d.props.minimap = local.minimap;
-    });
+    const dev = Dev.tools<D>(ctx);
 
+    const props$ = State.props.events().changed$;
+    const debug$ = State.debug.events().changed$;
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(1000))
+      .subscribe(() => {
+        local.props = Json.stringify(State.props.current);
+        local.debug = Json.stringify(State.debug.current);
+      });
+
+    rx.merge(props$, debug$)
+      .pipe(rx.debounceTime(100))
+      .subscribe(() => dev.redraw('debug'));
+
+    ctx.debug.width(360);
     ctx.subject
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        const { props } = e.state;
+      .render<D>((e) => {
+        const debug = State.debug.current;
+        const props = State.props.current;
         Dev.Theme.background(dev, props.theme, 1);
+
+        if (!debug.render) return null;
 
         return (
           <MonacoEditor
-            {...e.state.props}
+            {...props}
             onReady={(e) => {
               console.info(`⚡️ onReady:`, e);
+              e.dispose$.subscribe(() => console.info(`⚡️ onReady.dispose$ → (💥)`));
 
               editor = e.editor;
               monaco = e.monaco;
-              carets = EditorCarets(editor);
+              carets = e.carets;
               carets.$.subscribe((e) => ctx.redraw());
 
-              const asRange = Wrangle.asRange;
-              if (local.selection) editor.setSelection(local.selection);
-              editor.onDidChangeCursorSelection((e) => (local.selection = asRange(e.selection)));
+              const asRange = Wrangle.Range.asRange;
+              const debug = State.debug.current;
+              if (debug.selection) editor.setSelection(debug.selection);
+              editor.onDidChangeCursorSelection((e) => {
+                State.debug.change((d) => (d.selection = asRange(e.selection)));
+              });
 
               ctx.redraw();
 
@@ -75,9 +84,8 @@ export default Dev.describe(name, (e) => {
               });
             }}
             onChange={(e) => {
-              local.text = e.state.text;
               console.info(`⚡️ onChange:`, e);
-              // ctx.redraw();
+              State.props.change((d) => (d.text = e.editor.getValue()));
             }}
           />
         );
@@ -85,11 +93,66 @@ export default Dev.describe(name, (e) => {
   });
 
   e.it('ui:debug', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
+    const dev = Dev.tools<D>(e);
     const ctx = dev.ctx;
 
-    dev.section('Debug', (dev) => {
-      dev.button('redraw', (e) => ctx.redraw());
+    dev.section('Properties', (dev) => {
+      const current = () => State.props.current;
+      const change = (fn: (d: P) => void) => {
+        State.props.change((d) => fn(d));
+        dev.redraw();
+      };
+
+      Dev.Theme.immutable(dev, State.props, 1);
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = () => !!current().enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value())
+          .onClick((e) => change((d) => Dev.toggle(d, 'enabled')));
+      });
+
+      dev.boolean((btn) => {
+        const value = () => !!current().readOnly;
+        btn
+          .label((e) => `readOnly`)
+          .value((e) => value())
+          .onClick((e) => change((d) => Dev.toggle(d, 'readOnly')));
+      });
+      dev.boolean((btn) => {
+        const value = () => !!current().minimap;
+        btn
+          .label((e) => `minimap`)
+          .value((e) => value())
+          .onClick((e) => change((d) => Dev.toggle(d, 'minimap')));
+      });
+
+      dev.hr(-1, 5);
+
+      const tabSize = (size: number) => {
+        dev.button((btn) => {
+          btn
+            .label(`tabSize: ${size}`)
+            .right((e) => (current().tabSize === size ? '←' : ''))
+            .enabled((e) => true)
+            .onClick((e) => change((d) => (d.tabSize = size)));
+        });
+      };
+      tabSize(2);
+      tabSize(4);
+
+      dev.hr(-1, 10);
+      dev.textbox((txt) =>
+        txt
+          .margin([0, 0, 10, 0])
+          .label((e) => 'placeholder')
+          .placeholder('enter placeholder text')
+          .value((e) => current().placeholder)
+          .onChange((e) => change((d) => (d.placeholder = e.to.value)))
+          .onEnter((e) => {}),
+      );
     });
 
     dev.hr(5, 20);
@@ -103,76 +166,36 @@ export default Dev.describe(name, (e) => {
           code = code.replace(/^\s*\n|\n\s*$/g, '');
           return `${code}\n`;
         };
-        return dev.button((btn) =>
+        return dev.button((btn) => {
+          const current = () => State.props.current.language;
           btn
             .label(language)
-            .right((e) => (e.state.props.language === language ? '← current' : ''))
+            .right(() => (current() === language ? '←' : ''))
             .onClick((e) => {
-              e.change((d) => {
-                local.language = d.props.language = language;
-                if (codeSample) local.text = d.props.text = format(codeSample);
+              State.props.change((d) => {
+                d.language = language;
+                if (codeSample) d.text = format(codeSample);
               });
-            }),
-        );
+            });
+        });
       };
-      language('typescript', CODE_SAMPLES.typescript);
-      language('javascript', CODE_SAMPLES.javascript);
+      language('typescript', SAMPLE_CODE.typescript);
+      language('javascript', SAMPLE_CODE.javascript);
       hr();
-      language('rust', CODE_SAMPLES.rust);
-      language('go', CODE_SAMPLES.go);
-      language('python', CODE_SAMPLES.python);
+      language('rust', SAMPLE_CODE.rust);
+      language('go', SAMPLE_CODE.go);
+      language('python', SAMPLE_CODE.python);
       hr();
-      language('json', CODE_SAMPLES.json);
-      language('yaml', CODE_SAMPLES.yaml);
+      language('json', SAMPLE_CODE.json);
+      language('yaml', SAMPLE_CODE.yaml);
       hr();
-      language('markdown', CODE_SAMPLES.markdown);
+      language('markdown', SAMPLE_CODE.markdown);
     });
-
-    dev.hr(5, 20);
-
-    dev.section('Properties', (dev) => {
-      Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.readOnly;
-        btn
-          .label((e) => `readOnly`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.readOnly = Dev.toggle(d.props, 'readOnly'))));
-      });
-      dev.boolean((btn) => {
-        const value = (state: T) => !!state.props.minimap;
-        btn
-          .label((e) => `minimap`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.minimap = Dev.toggle(d.props, 'minimap'))));
-      });
-
-      dev.hr(-1, 5);
-
-      const tabSize = (size: number) => {
-        const label = `tabSize: ${size}`;
-        dev.button(label, (e) => e.change((d) => (d.props.tabSize = size)));
-      };
-      tabSize(2);
-      tabSize(4);
-    });
-
-    dev.hr(-1, 10);
-
-    dev.textbox((txt) =>
-      txt
-        .margin([0, 0, 10, 0])
-        .label((e) => 'placeholder')
-        .placeholder('enter placeholder text')
-        .value((e) => e.state.props.placeholder)
-        .onChange((e) => e.change((d) => (local.placeholder = d.props.placeholder = e.to.value)))
-        .onEnter((e) => {}),
-    );
 
     dev.hr(5, 20);
 
     dev.section('Carets', (dev) => {
-      const getCaret = () => carets.id('foo.bar');
+      const getCaret = () => carets.identity('foo.bar');
 
       const changeSelection = (
         label: string,
@@ -225,6 +248,10 @@ export default Dev.describe(name, (e) => {
       dev.hr(-1, 5);
       color('red');
       color('blue');
+      dev.button('color: <next>', () => {
+        const color = Monaco.Carets.Color.next();
+        getCaret().change({ color });
+      });
       dev.hr(-1, 5);
       dev.button((btn) =>
         btn
@@ -233,26 +260,41 @@ export default Dev.describe(name, (e) => {
           .onClick(() => carets.current.forEach((c) => c.dispose())),
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => ctx.redraw());
+      dev.boolean((btn) => {
+        const value = () => !!State.debug.current.render;
+        btn
+          .label(() => `render`)
+          .value(() => value())
+          .onClick(() => {
+            State.debug.change((d) => Dev.toggle(d, 'render'));
+            dev.redraw();
+          });
+      });
+    });
   });
 
-  e.it('ui:footer', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<D>(e);
+    dev.footer.border(-0.1).render<D>((e) => {
       const textModel = editor?.getModel();
       const text = textModel?.getValue() ?? '';
 
       const data = {
-        props: e.state.props,
+        props: State.props.current,
         editor: !editor
           ? undefined
           : {
               'id.instance': editor?.getId(),
-              'css.class': MonacoEditor.className(editor),
+              'css.class': MonacoEditor.Wrangle.Editor.className(editor),
               text: `chars:(${text.length}), lines:(${text.split('\n').length})`,
             },
-        // carets: carets?.current ?? [],
       };
-      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$.editor'] }} />;
+      return <Dev.Object name={name} data={data} expand={{ level: 1, paths: ['$'] }} />;
     });
   });
 });

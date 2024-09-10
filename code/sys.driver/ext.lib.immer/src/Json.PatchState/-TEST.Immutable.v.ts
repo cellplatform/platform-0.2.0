@@ -1,6 +1,6 @@
 import { Immutable } from 'sys.util';
 import { PatchState } from '../Json.PatchState';
-import { describe, expect, it, type t } from '../test';
+import { describe, expect, it, slug, type t } from '../test';
 
 describe('Immutable.events', () => {
   type D = { count: number };

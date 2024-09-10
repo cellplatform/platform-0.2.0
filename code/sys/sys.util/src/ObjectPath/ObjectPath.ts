@@ -1,22 +1,14 @@
 import { type t } from './common';
-
-type O = Record<string, unknown>;
-
-/**
- * Flag helpers.
- */
-const Is = {
-  path(input: any): input is t.ObjectPath {
-    if (!Array.isArray(input)) return false;
-    return input.every((item) => typeof item === 'string' || typeof item === 'number');
-  },
-} as const;
+import { Is } from './ObjectPath.Is';
+import { Mutate } from './ObjectPath.Mutate';
+import { isObject, Validate } from './u';
 
 /**
  * Helpers for working with arrays that represent object paths.
  */
 export const ObjectPath = {
   Is,
+  Mutate,
 
   /**
    * Prepend a path.
@@ -51,35 +43,6 @@ export const ObjectPath = {
   },
 
   /**
-   * Write a value to the given path on the root object.
-   * If parts of the path do not exist, they are created as objects.
-   */
-  mutate<T>(root: unknown, path: t.ObjectPath, value: T): void {
-    Validate.rootParam(root);
-    Validate.pathParam(path);
-    let current: any = root;
-
-    path.forEach((key, index) => {
-      if (index === path.length - 1) {
-        // Last key in path → update the value.
-        if (value === undefined) delete current[key];
-        else current[key] = value;
-      } else {
-        // If the next part of the path doesn't exist, create it as an object.
-        if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
-        current = current[key];
-      }
-    });
-  },
-
-  /**
-   * Performs a field deletion at the given path.
-   */
-  delete(root: unknown, path: t.ObjectPath) {
-    ObjectPath.mutate(root, path, undefined);
-  },
-
-  /**
    * Determine if the given path exists on the object.
    */
   exists(root: unknown, path: t.ObjectPath) {
@@ -96,24 +59,35 @@ export const ObjectPath = {
 
     return false;
   },
-} as const;
 
-/**
- * Helpers
- */
+  /**
+   * Converts a JSON patch path to an array of strings representing each part.
+   * @param path The JSON patch path (e.g., "/foo/bar/0").
+   * @returns Array of strings representing each part of the path.
+   */
+  fromString(path: string): t.ObjectPath {
+    if (typeof path !== 'string') return [];
 
-/**
- * Helpers
- */
-function isObject(input: any): input is object {
-  return input !== null && typeof input === 'object';
-}
+    path = path.trim().replace(/^\/+/, '');
+    if (path === '/') return [];
 
-const Validate = {
-  rootParam(root: unknown) {
-    if (typeof root !== 'object' || root === null) throw new Error('root is not an object');
+    // Split and unescape: '~1' → '/', '~0' → '~' (part of the RFC-6902 JSON patch standard)
+    return path
+      .split('/')
+      .filter(Boolean)
+      .map((part) => part.replace(/~1/g, '/').replace(/~0/g, '~'));
   },
-  pathParam(path: t.ObjectPath) {
-    if (!path || path.length === 0) throw new Error('path cannot be empty');
+
+  /**
+   * Convert an arbitrary input value to a path.
+   * Useful for deriving safely from unknown patch {object} types.
+   */
+  from(input: any): t.ObjectPath {
+    if (Is.path(input)) return input;
+
+    const value = isObject(input) ? (input as any).path : input;
+    if (Is.path(value)) return value;
+    if (typeof value === 'string') return ObjectPath.fromString(value);
+    return [];
   },
 } as const;

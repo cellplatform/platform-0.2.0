@@ -17,7 +17,7 @@ export const Path = {
     return {
       text: prepend(paths.text, prefix),
       cmd: prepend(paths.cmd, prefix),
-      history: prepend(paths.history, prefix),
+      meta: prepend(paths.meta, prefix),
     };
   },
 
@@ -29,7 +29,7 @@ export const Path = {
       return {
         text: ObjectPath.resolve<string>(data, paths.text) || '',
         cmd: ObjectPath.resolve<C>(data, paths.cmd) ?? wrangle.emptyCmd(),
-        history: ObjectPath.resolve<string[]>(data, paths.history) ?? [],
+        meta: ObjectPath.resolve<t.CmdBarMeta>(data, paths.meta) ?? DEFAULTS.meta,
       };
     };
   },
@@ -40,12 +40,7 @@ export const Path = {
  */
 const wrangle = {
   emptyCmd(): C {
-    const cmd: t.CmdPathsObject = {
-      name: '',
-      params: {},
-      counter: { value: 0 },
-      tx: '',
-    };
+    const cmd: t.CmdPathsObject = { queue: [] };
     return cmd as C;
   },
 } as const;

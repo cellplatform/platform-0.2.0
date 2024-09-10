@@ -1,5 +1,5 @@
 import { PeerRepoList } from '../ui/ui.PeerRepoList';
-import { Peer, PeerUI, R, RepoList, TestDb, WebStore, WebrtcStore, rx, type t } from './common';
+import { Peer, PeerUI, RepoList, TestDb, WebStore, WebrtcStore, rx, type t } from './common';
 
 type K = t.NetworkConnectionEdgeKind;
 type N = t.NetworkStore;
@@ -24,8 +24,7 @@ const create = async (kind: K, options: CreateOptions = {}): Promise<t.SampleEdg
   });
   const { behaviors, logLevel, debugLabel } = options;
   const model = await RepoList.model(store, { behaviors });
-  const index = model.index;
-  const network = await WebrtcStore.init(peer, store, index, { logLevel, debugLabel });
+  const network = await WebrtcStore.init(peer, store, model.index, { logLevel, debugLabel });
   return { kind, model, network } as const;
 };
 
@@ -110,14 +109,13 @@ const infoPanels = (dev: t.DevTools, left: N, right: N, options: InfoPanelOption
 };
 
 const infoPanel = (dev: t.DevTools, network: N, options: InfoPanelOptions = {}) => {
-  const data = R.merge(options.data ?? {}, { network }) as t.InfoData;
   return (
-    <PeerRepoList.Info
+    <PeerRepoList.Info.Stateful
       title={options.title}
       margin={options.margin}
-      stateful={true}
       fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
-      data={data}
+      data={options.data}
+      network={network}
     />
   );
 };

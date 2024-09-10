@@ -1,13 +1,15 @@
 import { DEFAULTS, Time, rx, type t, type u } from './common';
 
 type Args<Req extends t.CmdType, Res extends t.CmdType> = {
-  tx: string;
+  tx: t.TxString;
+  issuer?: t.IdString;
   req: { name: Req['name']; params: Req['params'] };
   res: { name: Res['name'] };
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;
   onComplete?: t.CmdResponseHandler<Req, Res>;
   onError?: t.CmdResponseHandler<Req, Res>;
+  onTimeout?: t.CmdResponseHandler<Req, Res>;
 };
 
 /**
@@ -17,7 +19,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   cmd: t.Cmd<Res>,
   args: Args<Req, Res>,
 ): t.CmdResponseListener<Req, Res> {
-  const { tx, timeout = DEFAULTS.timeout } = args;
+  const { req, tx, issuer, timeout = DEFAULTS.timeout } = args;
   const life = rx.lifecycle(args.dispose$);
   const { dispose, dispose$ } = life;
   const events = cmd.events(dispose$);
@@ -31,9 +33,14 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   let _error: E | undefined;
 
   type H = t.CmdResponseHandler<Req, Res>;
-  const handlers = { complete: new Set<H>(), error: new Set<H>() } as const;
+  const handlers = {
+    complete: new Set<H>(),
+    error: new Set<H>(),
+    timeout: new Set<H>(),
+  } as const;
   if (args.onComplete) handlers.complete.add(args.onComplete);
   if (args.onError) handlers.error.add(args.onError);
+  if (args.onTimeout) handlers.timeout.add(args.onTimeout);
 
   const Handlers = {
     run(handlers: Set<H>) {
@@ -41,13 +48,13 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
       handlers.forEach((fn) => fn(e));
     },
     args(): t.CmdResponseHandlerArgs<Req, Res> {
-      const { ok, tx, result, error } = api;
-      return { ok, tx, result, error };
+      const { ok, tx, issuer, result, error } = api;
+      return { ok, tx, issuer, result, error };
     },
   } as const;
 
   /**
-   * Finalization
+   * Finalization.
    */
   const timer = Time.delay(timeout, () => done('Timeout'));
   const done = (status: Status, result?: R, error?: E) => {
@@ -60,6 +67,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
     api.dispose();
     if (status === 'Complete') Handlers.run(handlers.complete);
     if (status === 'Error') Handlers.run(handlers.error);
+    if (status === 'Timeout') Handlers.run(handlers.timeout);
   };
 
   /**
@@ -82,7 +90,8 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
   const api: L = {
     $,
     tx,
-    req: args.req,
+    issuer,
+    req,
 
     get ok() {
       if (_status === 'Error' || _status === 'Timeout') return false;
@@ -100,8 +109,13 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
     },
 
     promise() {
-      const first$ = $.pipe(rx.take(1));
-      return new Promise<L>((resolve) => first$.subscribe(() => resolve(api)));
+      return new Promise<L>((resolve) => {
+        if (_status === 'Pending') {
+          $.pipe(rx.takeUntil(dispose$), rx.take(1)).subscribe(() => resolve(api));
+        } else {
+          resolve(api);
+        }
+      });
     },
 
     onComplete(fn) {
@@ -114,6 +128,11 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
       return api;
     },
 
+    onTimeout(fn) {
+      handlers.timeout.add(fn);
+      return api;
+    },
+
     // Lifecycle.
     dispose,
     dispose$,
@@ -121,6 +140,7 @@ function create<Req extends t.CmdType, Res extends t.CmdType>(
       return life.disposed;
     },
   };
+
   return api;
 }
 

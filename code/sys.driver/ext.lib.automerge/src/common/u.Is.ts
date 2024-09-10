@@ -1,7 +1,7 @@
 import { DocHandle, isValidAutomergeUrl } from '@automerge/automerge-repo';
 import { BroadcastChannelNetworkAdapter } from '@automerge/automerge-repo-network-broadcastchannel';
 import { Symbols, Typenames } from './constants';
-import { PatchState } from './libs';
+import { Immutable, PatchState } from './libs';
 
 import type * as t from './t';
 
@@ -9,6 +9,9 @@ type O = Record<string, unknown>;
 type SymbolType = (typeof Symbols)[keyof typeof Symbols];
 
 export const Is = {
+  map: Immutable.Is.map,
+  proxy: Immutable.Is.proxy,
+
   automergeUrl(input: any): input is t.AutomergeUrl {
     return typeof input === 'string' ? isValidAutomergeUrl(input) : false;
   },
@@ -25,7 +28,7 @@ export const Is = {
     return isObjectType(input, Symbols.Store);
   },
 
-  storeIndex(input: any): input is t.StoreIndexState {
+  storeIndex(input: any): input is t.StoreIndex {
     return isObjectType(input, Symbols.StoreIndex);
   },
 
@@ -33,7 +36,7 @@ export const Is = {
     return isObjectType(input, Symbols.WebStore);
   },
 
-  repo(input: any): input is t.Repo {
+  repo(input: any): input is t.AutomergeRepo {
     if (!isObject(input)) return false;
     const { networkSubsystem, storageSubsystem } = input;
     if (!Is.networkSubsystem(networkSubsystem)) return false;
@@ -41,9 +44,9 @@ export const Is = {
     return true;
   },
 
-  repoIndex(input: any): input is t.StoreIndex {
+  repoIndex(input: any): input is t.StoreIndexDoc {
     if (!isObject(input)) return false;
-    const subject = input as t.StoreIndex;
+    const subject = input as t.StoreIndexDoc;
     return Array.isArray(subject.docs);
   },
 
@@ -58,7 +61,7 @@ export const Is = {
     return Is.repoListState(list?.state) && Is.webStore(store) && Is.storeIndex(index);
   },
 
-  networkSubsystem(input: any): input is t.Repo['networkSubsystem'] {
+  networkSubsystem(input: any): input is t.AutomergeRepo['networkSubsystem'] {
     if (!isObject(input)) return false;
     return (
       typeof input.peerId === 'string' &&
@@ -68,7 +71,7 @@ export const Is = {
     );
   },
 
-  storageSubsystem(input: any): input is Required<t.Repo['storageSubsystem']> {
+  storageSubsystem(input: any): input is Required<t.AutomergeRepo['storageSubsystem']> {
     if (!isObject(input)) return false;
     return (
       typeof input.loadDoc === 'function' &&

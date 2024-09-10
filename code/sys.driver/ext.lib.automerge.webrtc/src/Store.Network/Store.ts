@@ -15,7 +15,7 @@ export const WebrtcStore = {
   async init(
     peer: t.PeerModel,
     store: t.Store,
-    index: t.StoreIndexState,
+    index: t.StoreIndex,
     options: { debugLabel?: string; logLevel?: t.LogLevelInput } = {},
   ): Promise<t.NetworkStore> {
     const Uri = Doc.Uri;
@@ -124,8 +124,7 @@ export const WebrtcStore = {
      */
     const api: t.NetworkStore = {
       peer,
-      store,
-      index,
+      repo: { store, index },
       shared,
 
       get total() {

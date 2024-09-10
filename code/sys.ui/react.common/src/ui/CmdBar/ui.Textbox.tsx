@@ -8,14 +8,17 @@ export type TextboxProps = Omit<t.CmdBarProps, 'theme' | 'cmd'> & {
   opacity?: number;
 };
 
+const DEF = DEFAULTS.props;
+
 export const Textbox: React.FC<TextboxProps> = (props) => {
   const {
     ctrl,
     theme,
     text = '',
-    enabled = DEFAULTS.enabled,
-    focusOnReady = DEFAULTS.focusOnReady,
-    placeholder = DEFAULTS.commandPlaceholder,
+    enabled = DEF.enabled,
+    focusOnReady = DEF.focusOnReady,
+    placeholder = DEF.placeholder,
+    readOnly = DEF.readOnly,
     useKeyboard,
   } = props;
 
@@ -45,14 +48,14 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (ctrl && textbox) Ctrl.listen({ ctrl: ctrl, textbox, useKeyboard, dispose$ });
+    if (ctrl && textbox) Ctrl.listen({ ctrl, textbox, useKeyboard, dispose$ });
     return dispose;
   }, [ctrl, textbox, useKeyboard]);
 
   useEffect(() => {
     if (ready || !textbox || !ctrl) return;
     setReady(true);
-    props.onReady?.({ ctrl: ctrl, textbox });
+    props.onReady?.({ ctrl, textbox });
   }, [textbox, ctrl, ready]);
 
   /**
@@ -81,6 +84,7 @@ export const Textbox: React.FC<TextboxProps> = (props) => {
         disabledColor: color,
       }}
       isEnabled={enabled}
+      isReadOnly={readOnly}
       spellCheck={false}
       autoCorrect={false}
       autoCapitalize={false}

@@ -1,4 +1,10 @@
-export type { next as A, Patch, PatchInfo, PatchSource, State } from '@automerge/automerge';
+export type {
+  next as A,
+  Patch,
+  PatchInfo,
+  PatchSource,
+  State as AutomergeState,
+} from '@automerge/automerge';
 
 export type {
   AutomergeUrl,
@@ -12,6 +18,6 @@ export type {
   DocumentId,
   DocumentPayload,
   NetworkAdapterInterface,
-  Repo,
+  Repo as AutomergeRepo,
   StorageAdapter,
 } from '@automerge/automerge-repo';

@@ -47,7 +47,7 @@ export const Theme = {
       dev,
       (d) => ObjectPath.resolve(d, path) as t.CommonTheme | undefined,
       (d, value) => {
-        ObjectPath.mutate(d, path, value);
+        ObjectPath.Mutate.value(d, path, value);
         onChange?.(value);
       },
     );
@@ -72,6 +72,32 @@ export const Theme = {
           const next = prev === 'Light' ? 'Dark' : 'Light';
           dev.change((d) => mutate(d, next));
           Theme.background(dev.ctx, next);
+        });
+    });
+  },
+
+  immutable<T extends { theme?: t.CommonTheme }>(
+    dev: t.DevTools,
+    state: t.Immutable<T>,
+    subjectLight?: Color | null,
+    subjectDark?: Color | null,
+  ) {
+    const current = () => state.current.theme;
+    return dev.button((btn) => {
+      btn
+        .label((e) => `theme: "${current() ?? defaultTheme}"`)
+        .right((e) => {
+          const name = current() ?? defaultTheme;
+          const theme = Color.theme(name);
+          const Icon = theme.is.dark ? DevIcons.Theme.Dark : DevIcons.Theme.Light;
+          return <Icon size={16} />;
+        })
+        .onClick((e) => {
+          const prev = current() ?? defaultTheme;
+          const next = prev === 'Light' ? 'Dark' : 'Light';
+          state.change((d) => (d.theme = next));
+          Theme.background(dev.ctx, next, subjectLight, subjectDark);
+          dev.redraw();
         });
     });
   },

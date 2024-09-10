@@ -5,6 +5,7 @@ import type { t } from './common';
  */
 export type CmdBarProps = {
   cmd?: t.Cmd<t.CmdBarCtrlType>;
+  issuer?: t.IdString;
   text?: string;
   placeholder?: string;
   hintKey?: string | string[];
@@ -14,6 +15,8 @@ export type CmdBarProps = {
   focusOnReady?: boolean;
   useKeyboard?: boolean;
   focusBorder?: boolean | t.CmdBarFocusBorder;
+  spinning?: boolean;
+  readOnly?: boolean;
 
   theme?: t.CommonTheme;
   style?: t.CssValue;

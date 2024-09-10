@@ -17,9 +17,7 @@ export type TextInputRef = {
   caretToStart(): void;
   caretToEnd(): void;
   selectAll(): void;
-  select(
-    start: number | null,
-    end?: number | null,
-    direction?: 'none' | 'forward' | 'backward',
-  ): void;
+  select(start: number | null, end?: number | null, direction?: SelectDirection): void;
 };
+
+type SelectDirection = 'none' | 'forward' | 'backward';

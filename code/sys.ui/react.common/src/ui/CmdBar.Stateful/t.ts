@@ -3,9 +3,12 @@ import type { t } from './common';
 /**
  * <Component>
  */
-export type CmdBarStatefulProps = Omit<t.CmdBarProps, 'ctrl' | 'text' | 'onReady'> & {
-  state?: t.CmdImmutable;
-  paths?: t.CmdBarPaths;
+export type CmdBarStatefulProps = Omit<
+  t.CmdBarProps,
+  'cmd' | 'text' | 'spinning' | 'readOnly' | 'onReady'
+> & {
+  state?: t.CmdTransport;
+  paths?: t.CmdBarPaths | t.ObjectPath;
   useHistory?: boolean;
   onReady?: t.CmdBarStatefulReadyHandler;
 };
@@ -19,7 +22,16 @@ export type CmdBarRef = {
   readonly paths: t.CmdBarPaths;
   readonly resolve: t.CmdBarPathResolver;
   readonly dispose$: t.Observable<void>;
-  onChange(fn: (e: CmdBarCurrent) => void, dispose$?: t.UntilObservable): t.Lifecycle;
+  readonly onChange: t.CmdBarRefOnChange;
+};
+
+export type CmdBarRefOnChange = (
+  fn: (e: CmdBarCurrent) => void,
+  options?: t.CmdBarRefOnChangeOptions | t.UntilObservable,
+) => t.Lifecycle;
+export type CmdBarRefOnChangeOptions = {
+  dispose$?: t.UntilObservable;
+  debounce?: t.Msecs;
 };
 
 export type CmdBarCurrent = {

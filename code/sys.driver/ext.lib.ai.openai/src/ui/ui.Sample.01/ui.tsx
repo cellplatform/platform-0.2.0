@@ -17,22 +17,24 @@ export const Sample: React.FC<t.SampleProps> = (props) => {
       onReady={async (e) => {
         const { editor, monaco } = e;
         const onCmdEnter = () => {
-          const text = editor.getValue();
           const selections = editor.getSelections() || [];
-          props.onCmdEnterKey?.({ text, selections });
+          const content = Monaco.Wrangle.Editor.content(editor);
+          props.onCmdEnterKey?.({ content, selections });
         };
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, onCmdEnter);
 
-        console.log('env', env);
         if (env) {
           type TDoc = { text: string };
           const { store, docuri } = env;
           const doc = await store.doc.getOrCreate<TDoc>((d) => null, docuri);
           const lens = Doc.lens<TDoc, TDoc>(doc, [], (d) => null);
-          Monaco.Crdt.Syncer.listen(monaco, editor, lens, ['text']);
+          Monaco.Crdt.Syncer.listen(monaco, editor, lens);
         }
       }}
-      onChange={(e) => props.onChange?.(e.state)}
+      onChange={(e) => {
+        const { content, selections } = e;
+        props.onChange?.({ content, selections });
+      }}
     />
   );
 

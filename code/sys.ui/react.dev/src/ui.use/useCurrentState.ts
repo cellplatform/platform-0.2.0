@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DevBus } from '../fn.Bus';
+import { DevBus } from '../u.Bus';
 import { rx, type t } from './common';
 
 type C = t.DevInfoChanged;

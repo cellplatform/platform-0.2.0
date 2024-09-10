@@ -1,11 +1,14 @@
-import { DEFAULTS, PropList, type t } from './common';
+import { PropList, type t } from './common';
 import { Field } from './field';
+import { Wrangle } from './u';
+
+type F = t.InfoField;
 
 export const View: React.FC<t.InfoProps> = (props) => {
   const { data = {} } = props;
-  const ctx = wrangle.ctx(props);
+  const ctx = Wrangle.ctx(props);
 
-  const items = PropList.builder<t.InfoField>()
+  const items = PropList.builder<F>()
     .field('Module', () => Field.module(ctx))
     .field('Module.Verify', () => Field.moduleVerify(ctx))
     .field('Component', () => Field.component(ctx, data.component))
@@ -22,14 +25,3 @@ export const View: React.FC<t.InfoProps> = (props) => {
     />
   );
 };
-
-/**
- * Helpers
- */
-const wrangle = {
-  ctx(props: t.InfoProps): t.InfoFieldCtx {
-    const { theme = DEFAULTS.theme } = props;
-    const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
-    return { fields, theme };
-  },
-} as const;

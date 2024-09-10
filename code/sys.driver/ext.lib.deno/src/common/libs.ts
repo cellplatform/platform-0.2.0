@@ -18,4 +18,4 @@ export { Crdt } from 'ext.lib.automerge';
 /**
  * @system
  */
-export { Args, Delete, Hash, Immutable, Path, rx, slug } from 'sys.util';
+export { Args, Delete, Hash, Immutable, Path, rx, slug, Time } from 'sys.util';

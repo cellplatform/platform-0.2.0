@@ -7,15 +7,14 @@
 import { Buffer } from 'buffer';
 if (!window.Buffer) window.Buffer = Buffer;
 
-import { DevKeyboard } from './-SPEC.Keyboard';
 import { Color, Dev, Pkg, css, rx } from '../test.ui';
+import { DevKeyboard } from './-SPEC.Keyboard';
 import {
   Cmd,
   CrdtInfo,
   Immutable,
   Peer,
   PeerRepoList,
-  RepoList,
   WebStore,
   WebrtcStore,
   type t,
@@ -24,10 +23,10 @@ import { SampleLayout } from './ui';
 import { Footer } from './ui.CmdBar';
 import { DebugFooter } from './ui.DebugFooter';
 
-type O = Record<string, unknown>;
 type T = {
   stream?: MediaStream;
-  overlay?: JSX.Element;
+  overlay?: JSX.Element | null;
+  jwt?: string;
   debug: {};
 };
 const initial: T = { debug: {} };
@@ -45,49 +44,46 @@ export default Dev.describe(name, async (e) => {
 
   const Store = {
     tmp: WebStore.init({ storage: 'fs.tmp', network: [] }),
-    fs: WebStore.init({ storage: 'fs', network: [] }),
-    async getMeDoc() {
-      const fs = Store.fs.doc;
-      if (!(await fs.exists(local.me))) local.me = undefined;
-      const doc = await fs.getOrCreate((d) => null, local.me);
-      local.me = doc.uri;
-      return doc;
-    },
+    fs: WebStore.init({ storage: 'fs', network: true }),
+  } as const;
+  const Index = {
+    tmp: await WebStore.index(Store.tmp),
+    fs: await WebStore.index(Store.fs),
   } as const;
 
-  const model = await RepoList.model(Store.tmp, {
-    behaviors: ['Focus.OnArrowKey', 'Shareable', 'Deletable', 'Copyable'],
-  });
-  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, model.index, {});
+  const network: t.NetworkStore = await WebrtcStore.init(self, Store.tmp, Index.tmp, {});
   const theme: t.CommonTheme = 'Light';
 
-  const Index = {
-    fs: await WebStore.index(Store.fs),
-    tmp: network.index,
-  } as const;
-  const me = await Store.getMeDoc();
+  async function getMe() {
+    const fs = Store.fs.doc;
+    if (!(await fs.exists(local.me))) local.me = undefined;
+
+    const doc = await fs.getOrCreate((d) => null, local.me);
+    local.me = doc.uri;
+    return doc;
+  }
+
+  const me = await getMe();
   const cloner = () => Immutable.clonerRef({});
 
   const main: t.Shell = {
     cmdbar: undefined,
-    cmd: {
-      fc: Cmd.create<t.FarcasterCmd>(cloner()) as t.Cmd<t.FarcasterCmd>,
+    self,
+    fc: Cmd.create<t.FarcasterCmd>(cloner(), { issuer: self.id }) as t.Cmd<t.FarcasterCmd>,
+    repo: {
+      fs: { store: Store.fs, index: Index.fs },
+      tmp: { store: Store.tmp, index: Index.tmp },
     },
     state: {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', {}),
-    },
-    store: {
-      fs: Store.fs,
-      tmp: Store.tmp,
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
     },
   };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
@@ -109,18 +105,16 @@ export default Dev.describe(name, async (e) => {
     updateDebugPanelWidth();
 
     ctx.subject
-      .backgroundColor(1)
-      .size('fill', 36)
+      .size('fill', 80)
       .display('grid')
       .render<T>((e) => {
+        const theme = Color.theme('Dark');
+        Dev.Theme.background(ctx, theme);
+        ctx.host.tracelineColor(Color.alpha(theme.fg, 0.03));
+
         const styles = {
           base: css({ Absolute: 0, display: 'grid' }),
-          overlay: css({
-            Absolute: 0,
-            display: 'grid',
-            backgroundColor: Color.WHITE,
-            overflow: 'hidden',
-          }),
+          overlay: css({ Absolute: 0, display: 'grid' }),
         };
 
         const overlay = e.state.overlay;
@@ -128,7 +122,7 @@ export default Dev.describe(name, async (e) => {
 
         return (
           <div {...styles.base}>
-            <SampleLayout model={model} network={network} selectedStream={e.state.stream} />
+            <SampleLayout network={network} stream={e.state.stream} theme={theme.name} />
             {elOverlay}
           </div>
         );
@@ -184,6 +178,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.row(async (e) => {
       const { Auth } = await import('ext.lib.privy');
+      const current = state.current;
       return (
         <Auth.Info
           fields={[
@@ -191,6 +186,8 @@ export default Dev.describe(name, async (e) => {
             'Login.Farcaster',
             'Login.SMS',
             'Id.User',
+            'AccessToken',
+            // 'Id.User.Phone',
             'Farcaster',
             'Wallet.List',
             'Wallet.List.Title',
@@ -199,14 +196,15 @@ export default Dev.describe(name, async (e) => {
           data={{
             provider: Auth.Env.provider,
             wallet: { list: { label: 'Public Key' } },
+            accessToken: { jwt: current.jwt },
             farcaster: {
-              cmd: main.cmd.fc,
+              cmd: main.fc,
               signer: {},
               identity: { onClick: (e) => console.info(`⚡️ farcaster.identity.onClick`, e) },
             },
           }}
           onReady={(e) => console.info('⚡️ Auth.onReady:', e)}
-          onChange={(e) => console.info('⚡️ Auth.onChange:', e)}
+          onChange={(e) => state.change((d) => (d.jwt = e.accessToken))}
         />
       );
     });
@@ -214,23 +212,8 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
-      const { debug } = e.state;
-      const obj = { expand: { level: 1 } };
-      const uri = { head: true };
       return (
-        <PeerRepoList.Info
-          stateful={true}
-          title={['Network', 'Shared']}
-          fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
-          data={{
-            network,
-            repo: model,
-            shared: [
-              { label: 'System', uri, object: { lens: ['sys'], ...obj } },
-              { label: 'Namespaces', uri, object: { lens: ['ns'], ...obj } },
-            ],
-          }}
-        />
+        <PeerRepoList.Info.Stateful theme={theme} title={['Network', 'Shared']} network={network} />
       );
     });
 
@@ -242,50 +225,39 @@ export default Dev.describe(name, async (e) => {
         if (res.length > max) res = `${res.slice(0, max - 3)}...`;
         return res;
       };
-
+      const uri = main.state.me.uri;
       return (
-        <CrdtInfo
-          stateful={true}
-          title={['Local State', 'Private']}
+        <CrdtInfo.Stateful
+          theme={theme}
+          title={['Private State', 'Local']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: main.repo.fs }}
           data={{
-            repo: { store: Store.fs, index: Index.fs },
+            repo: 'main',
             document: [
               {
+                uri,
                 label: 'Me',
-                ref: main.state.me,
-                uri: { head: true },
-                object: {
-                  name: 'me',
-                  visible: false,
-                  beforeRender(e: any) {
-                    const text = e.root?.config?.text;
-                    if (typeof text === 'string') e.root.config.text = shorten(text, 20);
-                  },
-                },
+                address: { head: true },
+                object: { name: 'me', visible: false },
               },
               {
+                uri,
                 label: 'Me: root',
-                ref: main.state.me,
-                uri: { head: true },
-                object: {
-                  name: 'me.root',
-                  lens: ['root'],
-                  visible: false,
-                  expand: { level: 2 },
-                  beforeRender(e: any) {
-                    const text = e.config?.text;
-                    if (typeof text === 'string') e.config.text = shorten(text, 22);
-                  },
-                },
+                address: { head: true },
+                object: { name: 'me.root', lens: ['root'], visible: false, expand: { level: 2 } },
               },
               {
+                uri,
                 label: 'Me: identity',
-                ref: main.state.me,
-                uri: { head: true },
+                address: { head: true },
                 object: { name: 'me.identity', visible: false, lens: ['identity'] },
               },
             ],
+          }}
+          onBeforeObjectRender={(obj: any) => {
+            const text = obj.config?.text;
+            if (typeof text === 'string') obj.config.text = shorten(text, 22);
           }}
         />
       );
@@ -293,8 +265,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
     dev.section('Debug', (dev) => {
-      dev.button('Redraw', (e) => dev.redraw());
-      dev.hr(-1, 5);
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 

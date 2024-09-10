@@ -31,6 +31,7 @@ export type {
   Event,
   EventBus,
   Falsy,
+  IdString,
   IgnoredResponse,
   ImageBadge,
   Immutable,
@@ -39,6 +40,7 @@ export type {
   ImmutableRef,
   Index,
   JsonMapU,
+  JsonString,
   JsonU,
   Lifecycle,
   Milliseconds,
@@ -50,6 +52,7 @@ export type {
   ObjectPath,
   PartialDeep,
   Percent,
+  PickRequired,
   Pixels,
   Point,
   RenderOutput,
@@ -66,10 +69,10 @@ export type {
 export type {
   Cmd,
   CmdEvents,
-  CmdImmutable,
   CmdMethodResponder,
   CmdMethodVoid,
   CmdPathsObject,
+  CmdTransport,
   CmdType,
 } from 'sys.cmd/src/types';
 export type { TextCharDiff } from 'sys.data.text/src/types';

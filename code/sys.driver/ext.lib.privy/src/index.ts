@@ -11,7 +11,7 @@ export { PrivyProvider, usePrivy } from '@privy-io/react-auth';
  */
 export { Auth } from './ui/ui.Auth';
 export { Info } from './ui/ui.Info';
-export { Chain, Wallet, Balance } from './evm';
+export { Chain, Wallet, Balance } from './u.evm';
 export { AuthEnv } from './common';
 
 /**

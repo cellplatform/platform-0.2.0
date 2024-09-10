@@ -34,21 +34,19 @@ const render = async (content: Subject) => {
     return;
   }
 
+  const renderSplash = async () => {
+    const { Dev } = await import('sys.ui.react.common');
+    const version = Pkg.toString();
+    const el = <Dev.Splash footer={version} />;
+    root.render(el);
+    return;
+  };
+
   if (content === 'DefaultEntry') {
     const { Dev } = await import('sys.ui.react.common');
-
-    const version = Pkg.toString();
-    const width = 200;
-    const style = { width, borderRadius: 200, useSelect: 'none' };
-    const url = '';
-
-    const el = (
-      <Dev.Splash footer={version}>
-        {/* */}
-        {/* <img src={url} style={style} /> */}
-      </Dev.Splash>
-    );
-
+    const { Specs } = await import('./entry.Specs.Localhost');
+    const spec = Specs['main.000'];
+    const el = <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
     root.render(el);
     return;
   }

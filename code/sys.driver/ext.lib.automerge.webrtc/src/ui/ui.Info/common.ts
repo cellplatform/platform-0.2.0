@@ -1,21 +1,29 @@
-import { Doc, Pkg, type t } from '../common';
-export { Info as AutomergeInfo } from 'ext.lib.automerge';
+import { Pkg, type t } from '../common';
+export { Info as CrdtInfo } from 'ext.lib.automerge';
 export { Info as PeerInfo } from 'ext.lib.peerjs';
 
 export * from '../common';
-export { usePeerMonitor, useShared, useTransmitMonitor } from '../use';
+export { usePeerMonitor, useTransmitMonitor } from '../use';
+
+type P = t.InfoProps;
 
 /**
  * Constants
  */
-const uri: Required<t.InfoDataDocUri> = {
-  shorten: [4, 4],
-  prefix: 'crdt:automerge',
-  head: true,
-  clipboard: (uri) => Doc.Uri.id(uri),
+const name = 'Info';
+const displayName = `${Pkg.name}:${name}`;
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
+  theme: 'Light',
+  enabled: true,
+  get fields() {
+    return fields.default;
+  },
 };
 
+type F = t.InfoVisible<t.InfoField>['filter'];
+const visibleFilter: F = (e) => (e.visible ? e.fields : ['Visible']) as t.InfoField[];
 const fields = {
+  visibleFilter,
   get all(): t.InfoField[] {
     return [
       'Visible',
@@ -30,18 +38,19 @@ const fields = {
     ];
   },
   get default(): t.InfoField[] {
-    return ['Module', 'Module.Verify'];
+    return ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared'];
   },
-};
-
-const theme: t.CommonTheme = 'Light';
+} as const;
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}:Info`,
+  displayName,
+  name,
   fields,
-  doc: { uri },
-  stateful: false,
-  shared: { label: 'Shared State', dotMeta: false },
+  props,
+  repo: 'main',
   query: { dev: 'dev' },
-  theme,
+  Stateful: {
+    name: `${name}.Stateful`,
+    displayName: `${displayName}.Stateful`,
+  },
 } as const;

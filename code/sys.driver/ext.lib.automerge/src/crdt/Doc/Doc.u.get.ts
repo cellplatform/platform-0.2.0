@@ -2,14 +2,13 @@ import { DEFAULTS, Is, Time, rx, type t } from './common';
 import { Handle } from './u.Handle';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | t.UriString;
 
 /**
  * Find the document document from the repo.
  */
 export function get<T extends O>(args: {
-  repo: t.Repo;
-  uri: Uri;
+  repo: t.AutomergeRepo;
+  uri: t.UriString;
   timeout?: t.Msecs;
   dispose$?: t.UntilObservable;
   throw?: boolean;

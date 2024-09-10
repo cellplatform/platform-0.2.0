@@ -1,11 +1,16 @@
 import { DocUri } from '.';
+import { testSetup } from '../crdt/Doc/-TEST.u';
 import { describe, expect, it } from '../test';
 import { Is } from './u';
 
-describe('Store.DocUri', () => {
+describe('Store.DocUri', async () => {
+  const { store, factory } = testSetup();
+
+  const NON = [true, 123, '', [], {}, null, undefined, Symbol('foo'), BigInt(0)];
+
   describe('DocUri.id', () => {
     it('nothing', () => {
-      [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      NON.forEach((value) => {
         expect(DocUri.id(value)).to.eql('');
       });
     });
@@ -37,11 +42,17 @@ describe('Store.DocUri', () => {
       expect(res3).to.eql(res1);
       expect(res4).to.eql(res2);
     });
+
+    it('from document', async () => {
+      const doc = await factory();
+      const uri = doc.uri.slice(doc.uri.indexOf(':') + 1);
+      expect(DocUri.id(doc)).to.eql(uri);
+    });
   });
 
   describe('DocUri.automerge', () => {
     it('nothing', () => {
-      [true, 123, '', [], {}, null, undefined].forEach((value) => {
+      NON.forEach((value) => {
         expect(DocUri.automerge(value)).to.eql('');
       });
     });
@@ -67,28 +78,46 @@ describe('Store.DocUri', () => {
     });
   });
 
-  describe('DocUri.generate', () => {
+  describe('DocUri.Generate', () => {
     it('generate.docid.binary', () => {
-      const res1 = DocUri.generate.docid.binary();
-      const res2 = DocUri.generate.docid.binary();
+      const res1 = DocUri.Generate.docid.binary();
+      const res2 = DocUri.Generate.docid.binary();
       expect(res1).to.not.eql(res2); // NB: random on each call.
       expect(res1 instanceof Uint8Array).to.be.true;
     });
 
     it('generate.docid.string', () => {
-      const res = DocUri.generate.docid.string();
+      const res = DocUri.Generate.docid.string();
       expect(res).to.be.string;
     });
 
     it('generate.uri: random/unique', () => {
-      const res1 = DocUri.generate.uri();
-      const res2 = DocUri.generate.uri();
+      const res1 = DocUri.Generate.uri();
+      const res2 = DocUri.Generate.uri();
       expect(res1).to.not.eql(res2); // NB: random on each call.
     });
 
     it('generate.uri: is an automerge URL', () => {
-      const uri = DocUri.generate.uri();
+      const uri = DocUri.Generate.uri();
       expect(Is.automergeUrl(uri)).to.eql(true);
+    });
+  });
+
+  describe('DocUri.toString', () => {
+    it('invalid', () => {
+      NON.forEach((value) => {
+        expect(DocUri.toString(value as any)).to.eql('');
+      });
+    });
+
+    it('from string (no change)', () => {
+      expect(DocUri.toString('crdt:foobar')).to.eql('crdt:foobar');
+    });
+
+    it('from document', async () => {
+      const doc = await factory();
+      expect(DocUri.toString(doc)).to.eql(doc.uri);
+      expect(DocUri.toString(doc.uri)).to.eql(doc.uri);
     });
   });
 });

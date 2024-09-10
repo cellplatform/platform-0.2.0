@@ -40,7 +40,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       : Color.format(host.color);
 
   const styles = {
-    base: css({ position: 'relative', overflow: 'hidden', backgroundColor, color }),
+    base: css({ position: 'relative', backgroundColor, color }),
     body: css({ Absolute: 0, display: 'grid', gridTemplateRows: 'auto 1fr auto' }),
     main: css({ position: 'relative', display: 'grid' }),
     empty: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),

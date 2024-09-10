@@ -47,7 +47,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
 
   const handleReset = (e: React.MouseEvent) => {
     const action = e.metaKey ? 'Reset:Clear' : 'Reset:Default';
-    const next = e.metaKey ? [] : props.defaults; // NB: force empty if meta-key, otherwise use defaults.
+    const next = e.metaKey ? [] : Wrangle.fields(props.defaults); // NB: force empty if meta-key, otherwise use defaults.
     const payload = Wrangle.clickArgs({ action, prev: selected, next });
     props.onClick?.(payload);
   };

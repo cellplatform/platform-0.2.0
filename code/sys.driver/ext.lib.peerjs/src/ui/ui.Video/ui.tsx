@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Video, css, rx, type t } from './common';
+import { Color, DEFAULTS, Video, css, rx, type t } from './common';
 import { Empty } from './ui.Empty';
 
 export const View: React.FC<t.VideoProps> = (props) => {
@@ -21,15 +21,21 @@ export const View: React.FC<t.VideoProps> = (props) => {
   /**
    * Render
    */
+  const theme = Color.theme(props.theme);
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      color: theme.fg,
+      borderRadius: props.radius,
+      overflow: 'hidden',
+    }),
     video: css({ Absolute: 0 }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       {stream && <Video stream={stream} muted={muted} style={styles.video} />}
-      {isEmpty && empty && <Empty value={empty} />}
+      {isEmpty && empty && <Empty value={empty} theme={theme.name} />}
     </div>
   );
 };

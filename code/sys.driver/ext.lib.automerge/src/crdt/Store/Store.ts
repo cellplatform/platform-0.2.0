@@ -5,9 +5,9 @@ import { StoreIndex as Index } from '../Store.Index';
 import { Is, Symbols, Time, rx, type t } from './common';
 
 type O = Record<string, unknown>;
-type Uri = t.DocUri | t.UriString;
 type GetOptions = { timeout?: t.Msecs };
-type FromBinaryOptions = { uri?: Uri; dispose$?: t.UntilObservable };
+type FromBinaryOptions = { uri?: t.UriString; dispose$?: t.UntilObservable };
+type InitOptions = { repo?: t.AutomergeRepo; dispose$?: t.UntilObservable; debug?: t.StoreDebug };
 
 /**
  * Manage an Automerge repo.
@@ -20,7 +20,7 @@ export const Store = {
   /**
    * Initialize a new instance of a CRDT repo.
    */
-  init(options: { repo?: t.Repo; dispose$?: t.UntilObservable; debug?: t.StoreDebug } = {}) {
+  init(options: InitOptions = {}) {
     const { debug } = options;
     const life = rx.lifecycle(options.dispose$);
     const { dispose$, dispose } = life;
@@ -31,13 +31,13 @@ export const Store = {
        * Create an "initial constructor" factory for typed docs.
        */
       factory<T extends O>(initial: t.ImmutableMutator<T>) {
-        return (uri?: Uri) => api.doc.getOrCreate<T>(initial, uri);
+        return (uri?: t.UriString) => api.doc.getOrCreate<T>(initial, uri);
       },
 
       /**
        * Determine if the given document exists within the repo.
        */
-      async exists(uri?: Uri, options: GetOptions = {}) {
+      async exists(uri?: t.UriString, options: GetOptions = {}) {
         const res = await api.doc.get(uri, options);
         return !!res;
       },
@@ -47,7 +47,7 @@ export const Store = {
        */
       async getOrCreate<T extends O>(
         initial: t.ImmutableMutator<T> | Uint8Array,
-        uri?: Uri,
+        uri?: t.UriString,
         options: GetOptions = {},
       ) {
         const { timeout } = options;
@@ -58,7 +58,7 @@ export const Store = {
       /**
        * Find the existing CRDT document in the repo (or return nothing).
        */
-      async get<T extends O>(uri?: Uri, options: GetOptions = {}) {
+      async get<T extends O>(uri?: t.UriString, options: GetOptions = {}) {
         const { timeout } = options;
         await Debug.loadDelay(debug);
         return Is.automergeUrl(uri) ? Doc.get<T>({ repo, uri, timeout, dispose$ }) : undefined;
@@ -90,7 +90,7 @@ export const Store = {
       /**
        * Delete the specified document.
        */
-      async delete(uri?: Uri, options = {}) {
+      async delete(uri?: t.UriString, options = {}) {
         const { timeout } = options;
         return Doc.delete({ repo, uri, timeout });
       },

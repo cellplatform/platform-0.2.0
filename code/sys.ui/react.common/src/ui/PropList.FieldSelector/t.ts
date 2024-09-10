@@ -1,5 +1,7 @@
 import type { t } from './common';
 
+type FieldInput<T extends string = string> = T | undefined | null;
+
 export type PropListFieldSelectorAction = 'Select' | 'Deselect' | 'Reset:Default' | 'Reset:Clear';
 
 /**
@@ -7,9 +9,9 @@ export type PropListFieldSelectorAction = 'Select' | 'Deselect' | 'Reset:Default
  */
 export type PropListFieldSelectorProps<F extends string = string> = {
   title?: t.PropListTitleInput;
-  all?: (F | undefined | null)[];
-  selected?: (F | undefined | null)[];
-  defaults?: F[];
+  all?: FieldInput<F>[];
+  selected?: FieldInput<F>[];
+  defaults?: FieldInput<F>[];
 
   resettable?: boolean;
   indexes?: boolean;
@@ -26,6 +28,6 @@ export type PropListFieldSelectorClickHandlerArgs<F extends string = string> = {
   action: PropListFieldSelectorAction;
   field?: F;
   value: { prev?: F[]; next?: F[] };
-  next<T extends string>(defaults?: T[]): T[] | undefined;
+  next<T extends string>(defaults?: FieldInput<T>[]): T[] | undefined;
   as<T extends string>(): PropListFieldSelectorClickHandlerArgs<T>;
 };

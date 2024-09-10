@@ -3,25 +3,26 @@ import { Is, R, rx, type t } from './common';
 import { Redraw } from './use.Redraw';
 
 type O = Record<string, unknown>;
-type Ref<T extends O> = t.UriString | t.Doc<T>;
+type UriRef = { uri?: t.UriString; store?: t.Store };
+type Ref<T extends O> = UriRef | t.Doc<T>;
 type RefsInput<T extends O> = Ref<T> | (Ref<T> | undefined)[];
 
 /**
- * Retrieves documents by URI from a store.
+ * Retrieves documents by URI.
  */
 export function useDocs<T extends O>(
-  store?: t.Store,
   refs?: RefsInput<T>,
   options: t.UseDocsOptions = {},
-) {
+): t.UseDocs<T> {
   const { timeout } = options;
-  const uris = wrangle.uris(refs);
+  const uriRefs = wrangle.uriRefs(refs);
 
   const redrawListeners = useRef(new Map<t.UriString, t.Lifecycle>());
   const [fetching, setFetching] = useState<t.UriString[]>([]);
   const [errors, setErrors] = useState<t.UseDocsError[]>([]);
   const [docs, setDocs] = useState<t.Doc<T>[]>([]);
-  const [, setCount] = useState(0); // Redraw.
+  const [, setCount] = useState(0); // redraw.
+  const inc = () => setCount((n) => n + 1);
 
   const is = {
     ok: errors.length === 0,
@@ -61,13 +62,13 @@ export function useDocs<T extends O>(
       Docs.listeners.get(uri)?.dispose();
       Docs.listeners.delete(uri);
     },
+
     add(doc: t.Doc<T>) {
       Docs.remove(doc.uri);
       setDocs((prev) => [...prev, doc]);
 
       const redraw = wrangle.redraw(options);
       if (redraw.required) {
-        const inc = () => setCount((n) => n + 1);
         const listener = Redraw.onChange(doc, inc, redraw.options);
         Docs.listeners.set(doc.uri, listener);
       }
@@ -78,10 +79,11 @@ export function useDocs<T extends O>(
    * Lifecycle.
    */
   useEffect(() => wrangle.docs<T>(refs).forEach((doc) => Docs.add(doc)), []); // Initial store of existing loaded documents.
-  useEffect(() => setErrors([]), [uris.join()]);
+  useEffect(() => setErrors([]), [uriRefs.join()]);
 
   useEffect(() => {
     const life = rx.lifecycle();
+    const uris = uriRefs.map((ref) => ref.uri);
     setDocs((prev) => prev.filter((doc) => uris.includes(doc.uri)));
     setFetching((prev) => {
       const loaded = docs.map(({ uri }) => uri as string);
@@ -91,7 +93,8 @@ export function useDocs<T extends O>(
     /**
      * Retrieve the given document from the store.
      */
-    const fetch = async (store: t.Store, uri: t.UriString) => {
+    const fetch = async (store?: t.Store, uri?: t.UriString) => {
+      if (!store || !uri) return;
       Fetching.add(uri);
       try {
         const res = await store.doc.get<T>(uri, { timeout });
@@ -108,26 +111,24 @@ export function useDocs<T extends O>(
     /**
      * Run loader(s).
      */
-    if (store && uris.length > 0) {
-      uris
-        .filter((uri) => !docs.some((doc) => doc.uri === uri)) // ← NB: not already loaded.
-        .filter((uri) => !fetching.includes(uri)) //              ← NB: not currently fetching.
-        .forEach((uri) => fetch(store, uri));
+    if (uriRefs.length > 0) {
+      uriRefs
+        .filter((ref) => !docs.some((doc) => doc.uri === ref.uri)) // ← NB: not already loaded.
+        .filter((ref) => !fetching.includes(ref.uri ?? '')) //        ← NB: not currently fetching.
+        .forEach((ref) => fetch(ref.store, ref.uri));
     }
     return life.dispose;
-  }, [!!store, uris.join()]);
+  }, [uriRefs.map((ref) => ref.uri).join()]);
 
   /**
    * API
    */
   return {
-    count: uris.length,
     is,
-    uris,
     refs: docs,
     fetching,
     errors,
-  } as const;
+  };
 }
 
 /**
@@ -136,17 +137,18 @@ export function useDocs<T extends O>(
 const wrangle = {
   list<T extends O>(refs?: RefsInput<T>): Ref<T>[] {
     if (!refs) return [];
-    if (typeof refs === 'string') return [refs];
+    if (!Array.isArray(refs)) return wrangle.list<T>([refs]);
     if (Array.isArray(refs)) return refs.filter(Boolean).map((ref) => ref as Ref<T>);
     return [];
   },
 
-  uris<T extends O>(refs?: RefsInput<T>) {
-    return wrangle.list<T>(refs).map((ref) => (typeof ref === 'string' ? ref : ref.uri));
+  uriRefs<T extends O>(refs?: RefsInput<T>): UriRef[] {
+    const list = wrangle.list<T>(refs);
+    return list.filter((item) => !Is.doc(item)).map((item) => item);
   },
 
   docs<T extends O>(refs?: RefsInput<T>) {
-    const list = wrangle.list(refs);
+    const list = wrangle.list<T>(refs);
     return list.filter((item) => Is.doc(item)) as t.Doc<T>[];
   },
 
