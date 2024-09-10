@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, Immutable, PropList, rx, type t } from './common';
+import { DEFAULTS, Immutable, PropList, R, rx, type t } from './common';
 import { Wrangle } from './u';
 
 type P = t.InfoStatefulProps;
@@ -12,7 +12,7 @@ export function useStateful(props: P): t.InfoStatefulController {
   const ctx = Wrangle.ctx(props);
   const enabled = ctx.enabled;
 
-  const [data, setData] = useState(wrangle.state(props));
+  const [data, setData] = useState<t.InfoStatefulData | undefined>(wrangle.state(props));
   const [, setCount] = useState(0);
   const redraw = () => setCount((n) => n + 1);
 
@@ -20,22 +20,39 @@ export function useStateful(props: P): t.InfoStatefulController {
    * Effects.
    */
   useEffect(() => {
+    /**
+     * Store data.
+     */
     const instance = wrangle.propInstance(props);
     if (instance && data?.instance !== instance) setData(wrangle.state(props));
   }, [data?.instance, wrangle.propInstance(props)]);
 
   useEffect(() => {
+    /**
+     * Ready.
+     */
     const { dispose, dispose$ } = rx.disposable();
     if (data) props.onReady?.({ data, repos, dispose$ });
     return dispose;
   }, [data?.instance]);
 
   useEffect(() => {
+    /**
+     * Listen for data changes.
+     */
     const events = data?.events();
     events?.changed$.pipe(rx.debounceTime(100)).subscribe(redraw);
     events?.changed$.subscribe(({ before, after }) => props.onChange?.({ before, after }));
     return events?.dispose;
   }, [data?.instance]);
+
+  useEffect(() => {
+    /**
+     * Update controller state when {prop.data} changes.
+     */
+    const eq = R.equals(props.data, data);
+    if (!eq) setData(wrangle.state(props));
+  }, [props.data]);
 
   /**
    * Overriden event handlers.
