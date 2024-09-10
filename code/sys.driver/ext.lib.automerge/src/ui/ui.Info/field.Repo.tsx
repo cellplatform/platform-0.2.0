@@ -9,7 +9,7 @@ export function repo(ctx: t.InfoCtx, keyName?: t.InfoRepoName) {
   let text = `${name}`;
   if (index) {
     const documents = Value.plural(index.total(), 'document', 'documents');
-    text = `${text} ← ${index.total()} ${documents}`;
+    text = `${text} ← ${index.total().toLocaleString()} ${documents}`;
   }
 
   const styles = { base: css({ Flex: 'x-center-center' }) };

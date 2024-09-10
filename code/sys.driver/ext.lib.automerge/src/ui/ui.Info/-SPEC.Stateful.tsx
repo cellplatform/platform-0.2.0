@@ -128,7 +128,8 @@ export default Dev.describe(name, async (e) => {
         dev.button(label, () => setFields(fields));
       };
 
-      config(['Repo / Doc', '(simple)'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']);
+      config(['Repo / Doc', 'no {object}'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI']);
+      config(['Repo / Doc', '{object}'], ['Visible', 'Doc', 'Doc.Repo', 'Doc.URI', 'Doc.Object']);
       config('Repo / Doc / History + List', [
         'Repo',
         'Doc',

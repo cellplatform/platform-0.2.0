@@ -25,7 +25,10 @@ const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields'> = {
   },
 };
 
+type F = t.InfoVisible<t.InfoField>['filter'];
+const visibleFilter: F = (e) => (e.visible ? e.fields : ['Visible']);
 const fields = {
+  visibleFilter,
   get all(): t.InfoField[] {
     return [
       'Visible',
@@ -49,10 +52,6 @@ const fields = {
   },
 };
 
-const visibleFilter: t.InfoVisible<t.InfoField>['filter'] = (e) => {
-  return e.visible ? e.fields : ['Visible'];
-};
-
 const docUri = DocUri.DEFAULTS.props;
 
 export const DEFAULTS = {
@@ -61,8 +60,6 @@ export const DEFAULTS = {
   query: { dev: 'dev' },
   props,
   fields,
-
-  visibleFilter,
   repo: { label: 'Store' },
   doc: {
     head: { label: 'Head', hashLength: 6 },

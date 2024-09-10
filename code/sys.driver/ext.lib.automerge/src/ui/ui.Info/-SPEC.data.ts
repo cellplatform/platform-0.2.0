@@ -1,13 +1,11 @@
 import { DEFAULTS, type t } from './common';
 
-type Repo = { name: t.InfoRepoName; store: t.Store; index: t.StoreIndex };
-
 export type SpecDataFlags = {
   historyDesc?: boolean;
   historyDetail?: t.HashString;
   docLens?: boolean;
   docArray?: boolean;
-  docIconClickHandler?: boolean;
+  docToggleClickHandler?: boolean;
 };
 
 type Args = {
@@ -27,7 +25,7 @@ export const SpecData = {
       historyDesc: DEFAULTS.history.list.sort === 'desc',
       docLens: false,
       docArray: false,
-      docIconClickHandler: true,
+      docToggleClickHandler: true,
     };
     return { flags } as const;
   },

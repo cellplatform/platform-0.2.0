@@ -9,7 +9,7 @@ type P = t.InfoProps;
  * Component
  */
 export const View: React.FC<P> = (props) => {
-  const { data = {} } = props;
+  const { data = {}, enabled = true } = props;
   const ctx = Wrangle.ctx(props);
   const documents = useDocuments(props.data, props.repos);
 
@@ -27,6 +27,7 @@ export const View: React.FC<P> = (props) => {
       title={PropList.Info.title(props)}
       items={items}
       width={PropList.Info.width(props)}
+      enabled={enabled}
       theme={props.theme}
       margin={props.margin}
       style={props.style}

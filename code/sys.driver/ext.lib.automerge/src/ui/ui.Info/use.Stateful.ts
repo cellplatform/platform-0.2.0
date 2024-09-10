@@ -93,7 +93,7 @@ export function useStateful(props: P): t.InfoStatefulController {
       const fields = PropList.fields(props.fields, DEFAULTS.props.fields);
       const data = api.data;
       const isVisible = data?.visible?.value ?? true;
-      const filter = data?.visible?.filter ?? DEFAULTS.visibleFilter;
+      const filter = data?.visible?.filter ?? DEFAULTS.fields.visibleFilter;
       if (!data?.visible) return fields;
       if (isVisible) return fields;
       return filter({ visible: false, fields });

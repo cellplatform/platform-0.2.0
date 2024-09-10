@@ -52,16 +52,19 @@ function renderDocument(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index): t.
   const hasObject = fields.includes('Doc.Object');
   const isObjectVisible = hasObject && (data.object?.visible ?? true);
   const hasToggleHandler = !!ctx.handlers.onDocToggleClick;
+  const isTwisyVisible = hasToggleHandler && ctx.fields.includes('Doc.Object');
 
   const label: t.PropListLabel = {
     body: (data.label ?? 'Document').trim(),
-    toggle: hasToggleHandler ? { open: isObjectVisible } : undefined,
-    onClick(e) {
-      const modifiers = e.modifiers;
-      const prev = isObjectVisible;
-      const visible = { prev, next: !prev };
-      ctx.handlers.onDocToggleClick?.({ index, data, modifiers, visible });
-    },
+    toggle: isTwisyVisible ? { open: isObjectVisible } : undefined,
+    onClick: !(isTwisyVisible && enabled)
+      ? undefined
+      : (e) => {
+          const modifiers = e.modifiers;
+          const prev = isObjectVisible;
+          const visible = { prev, next: !prev };
+          ctx.handlers.onDocToggleClick?.({ index, data, modifiers, visible });
+        },
   };
   const hasLabel = !!label.body;
 
@@ -118,6 +121,7 @@ function renderDocument(ctx: t.InfoCtx, data: D, doc: t.Doc, index: t.Index): t.
     res.push({
       label,
       value,
+      enabled,
       divider: fields.includes('Doc.Object') ? !isObjectVisible : undefined,
     });
   }

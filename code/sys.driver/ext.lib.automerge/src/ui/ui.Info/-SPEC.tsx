@@ -72,6 +72,10 @@ export default Dev.describe(name, async (e) => {
         const flags = debug.flags;
         const data = SpecData.asObject(repo.name, { doc, flags });
 
+        const onDocToggleClick: t.InfoDocToggleHandler = (e) => {
+          console.info('⚡️ onDocToggleClick', e);
+        };
+
         return (
           <Info
             {...props}
@@ -79,7 +83,7 @@ export default Dev.describe(name, async (e) => {
             repos={{ [db.name]: repo }}
             style={{ minHeight: 300, margin: 10 }}
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
-            onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
+            onDocToggleClick={debug.flags.docToggleClickHandler ? onDocToggleClick : undefined}
             onHistoryItemClick={(e) => console.info('⚡️ onHistoryItemClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
               mutate['foo'] = 123; // Sample render mutation (safe 🐷).
@@ -117,7 +121,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(-1, 5);
       config('all', DEFAULTS.fields.all);
       config('Repo / Doc', ['Repo', 'Doc', 'Doc.URI']);
-      config('Repo / Doc / Object', ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
+      config(['Repo / Doc / Object', '(open)'], ['Repo', 'Doc', 'Doc.URI', 'Doc.Object']);
       config('Repo / Doc / History + List', [
         'Repo',
         'Doc',
@@ -189,11 +193,11 @@ export default Dev.describe(name, async (e) => {
           .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docArray')));
       });
       dev.boolean((btn) => {
-        const value = () => !!State.debug.current.flags.docIconClickHandler;
+        const value = () => !!State.debug.current.flags.docToggleClickHandler;
         btn
-          .label(() => `data.document.icon.onClick`)
+          .label(() => `onDocToggleClick (handler)`)
           .value(() => value())
-          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docIconClickHandler')));
+          .onClick(() => State.debug.change((d) => Dev.toggle(d.flags, 'docToggleClickHandler')));
       });
     });
 
