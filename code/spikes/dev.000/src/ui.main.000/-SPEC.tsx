@@ -78,7 +78,7 @@ export default Dev.describe(name, async (e) => {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: true }),
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
     },
   };
 
