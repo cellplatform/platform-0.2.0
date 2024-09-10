@@ -24,6 +24,7 @@ export type {
   EventBus,
   IODirection,
   ImmutableEvents,
+  ImmutableRef,
   Index,
   Lifecycle,
   LogLevel,

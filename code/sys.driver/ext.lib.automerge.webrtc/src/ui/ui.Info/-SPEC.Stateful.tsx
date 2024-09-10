@@ -1,15 +1,15 @@
 import { Info } from '.';
 import { Dev, Immutable, Json, TestEdge, rx, type t } from '../../test.ui';
-import { SpecData, SpecFooter, SpecHeader, type DataFlags } from './-SPEC.common';
+import { SpecFooter, SpecHeader } from './-SPEC.common';
 
-type P = t.InfoProps;
-type D = { data: DataFlags };
+type P = t.InfoStatefulProps;
+type D = { render?: boolean };
 
 /**
  * Spec
  */
 const DEFAULTS = Info.DEFAULTS;
-const name = DEFAULTS.displayName;
+const name = DEFAULTS.Stateful.displayName;
 
 export default Dev.describe(name, async (e) => {
   const self = await TestEdge.create('Left');
@@ -25,11 +25,7 @@ export default Dev.describe(name, async (e) => {
 
   const State = {
     props: Immutable.clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: Immutable.clonerRef<D>(
-      Json.parse<D>(local.debug, {
-        data: { sharedLens: false, sharedArray: false, sharedDotMeta: true },
-      }),
-    ),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { render: true })),
   } as const;
 
   type F = t.InfoField | undefined;
@@ -62,34 +58,20 @@ export default Dev.describe(name, async (e) => {
 
         Dev.Theme.background(ctx, props.theme, 1);
 
-        const shared: t.InfoDoc = {
-          object: {
-            visible: debug.data.sharedObjectVisible,
-            lens: debug.data.sharedLens ? ['sys', 'peers'] : undefined,
-            dotMeta: debug.data.sharedDotMeta,
-          },
-        };
-
-        const data: t.InfoData = {
-          shared: !debug.data.sharedArray
-            ? shared
-            : [
-                { ...shared, label: 'Shared One', object: { ...shared.object, name: 'Foo' } },
-                { ...shared, label: 'Shared Two', object: { ...shared.object, name: 'Bar' } },
-              ],
-        };
-
         return (
-          <Info
+          <Info.Stateful
             {...props}
             style={{ margin: 10, minHeight: 300 }}
-            data={data}
             network={self.network}
             fields={props.fields}
             onVisibleToggle={(e) => console.info('⚡️ onVisibleToggle', e)}
             onDocToggleClick={(e) => console.info('⚡️ onDocToggleClick', e)}
             onBeforeObjectRender={(mutate, ctx) => {
               mutate['foo'] = 123; // Sample render mutation (safe 🐷).
+            }}
+            onReady={(e) => {
+              console.info('⚡️ Info.Stateful.onReady', e);
+              e.dispose$.subscribe(() => console.info('⚡️ Info.Stateful.onReady → 💥(dispose)'));
             }}
           />
         );
@@ -127,7 +109,7 @@ export default Dev.describe(name, async (e) => {
       });
       dev.hr(-1, 5);
       config('all', DEFAULTS.fields.all);
-      config('default', DEFAULTS.fields.default);
+      config('info → PeerRepoList', ['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']);
     });
 
     dev.hr(5, 20);
@@ -144,10 +126,6 @@ export default Dev.describe(name, async (e) => {
           .onClick(() => state.change((d) => Dev.toggle(d, 'enabled')));
       });
     });
-
-    dev.hr(5, 20);
-
-    SpecData.section(dev, State.debug);
 
     dev.hr(5, 20);
 

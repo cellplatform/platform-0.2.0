@@ -1,4 +1,4 @@
-import { AutomergeInfo, DEFAULTS, type t } from './common';
+import { CrdtInfo, DEFAULTS, Doc, type t } from './common';
 
 /**
  * Shared network state (transient document).
@@ -7,37 +7,44 @@ export function shared(
   ctx: t.InfoCtx,
   data: t.InfoData,
   network?: t.NetworkStore,
-  ref?: t.Doc<t.CrdtShared>,
 ): t.PropListItem[] {
   const res: t.PropListItem[] = [];
   if (!network) return res;
 
-  const toDocument = (shared: t.InfoDoc): t.InfoDoc => {
-    const label = shared.label ?? DEFAULTS.shared.label;
-    const dotMeta = shared.object?.dotMeta ?? DEFAULTS.shared.dotMeta;
-    return {
-      ...shared,
-      ref,
-      label,
-      object: { ...shared.object, dotMeta, visible: false },
-    };
-  };
+  const controller = ctx.internal?.shared;
+  const config = wrangle.data(data, network, controller);
 
-  const shared = Array.isArray(data.shared) ? data.shared : [data.shared];
-  const document = shared.map((shared) => toDocument(shared ?? {}));
-
-  if (document.length > 0) {
-    const value = (
-      <AutomergeInfo
-        fields={['Doc', 'Doc.URI', 'Doc.Object']}
-        data={{ repo: 'main', document }}
-        repos={{ main: network.repo }}
-        theme={ctx.theme}
-        style={{ flex: 1 }}
-      />
-    );
-    res.push({ value });
-  }
+  const value = (
+    <CrdtInfo
+      theme={ctx.theme}
+      style={{ flex: 1 }}
+      repos={{ [DEFAULTS.repo]: network.repo }}
+      fields={['Doc', 'Doc.URI', 'Doc.Object']}
+      enabled={ctx.enabled}
+      data={config}
+      {...controller?.handlers}
+    />
+  );
+  res.push({ value });
 
   return res;
 }
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  data(
+    data: t.InfoData,
+    network: t.NetworkStore,
+    controller?: t.CrdtInfoStatefulController,
+  ): t.CrdtInfoData {
+    const uri = network.shared.doc.uri;
+    const d = controller ? controller.data?.document : data.shared;
+    const document = CrdtInfo.Data.documents(d).map((item) => ({ ...item, uri }));
+    return {
+      repo: DEFAULTS.repo,
+      document,
+    };
+  },
+} as const;

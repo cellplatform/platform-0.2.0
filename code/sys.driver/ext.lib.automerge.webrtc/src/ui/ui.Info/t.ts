@@ -1,7 +1,7 @@
 import type { t } from './common';
 export type * from './t.Stateful';
 
-import type { InfoHandlers as InfoHandlersBase } from 'ext.lib.automerge/src/types';
+import type { InfoPropsHandlers as InfoHandlersBase } from 'ext.lib.automerge/src/types';
 
 type P = t.PropListProps;
 
@@ -20,13 +20,14 @@ export type InfoCtx = {
   enabled: boolean;
   fields: t.InfoField[];
   theme: t.CommonTheme;
-  handlers: t.InfoHandlers;
+  handlers: t.InfoPropsHandlers;
+  internal?: t.InfoPropsStateful;
 };
 
 /**
  * <Component>
  */
-export type InfoProps = t.InfoHandlers & {
+export type InfoProps = t.InfoPropsHandlers & {
   title?: P['title'];
   width?: P['width'];
   fields?: (t.InfoField | undefined)[];
@@ -35,19 +36,22 @@ export type InfoProps = t.InfoHandlers & {
   margin?: t.CssEdgesInput;
   enabled?: boolean;
   theme?: t.CommonTheme;
+  internal?: InfoPropsStateful;
   style?: t.CssValue;
 };
 
-export type InfoHandlers = InfoHandlersBase;
+export type InfoPropsStateful = {
+  shared?: t.CrdtInfoStatefulController;
+};
+
+export type InfoPropsHandlers = InfoHandlersBase;
 
 /**
  * Data
  */
 export type InfoData = {
-  visible?: t.InfoVisible;
+  visible?: t.InfoVisible<t.InfoField>;
   url?: { href: string; title?: string };
   component?: { label?: string; name?: string };
-  shared?: InfoShared | InfoShared[];
+  shared?: t.InfoDoc | t.InfoDoc[];
 };
-
-export type InfoShared = t.InfoDoc;

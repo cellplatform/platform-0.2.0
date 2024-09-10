@@ -1,4 +1,4 @@
-import { PropList, usePeerMonitor, useShared, useTransmitMonitor, type t } from './common';
+import { PropList, usePeerMonitor, useTransmitMonitor, type t } from './common';
 import { Field } from './field';
 import { Wrangle } from './u';
 import { useRedraw } from './use.Redraw';
@@ -9,11 +9,10 @@ type P = t.InfoProps;
  * Component
  */
 export const View: React.FC<P> = (props) => {
-  const { theme, network, data = {} } = props;
+  const { theme, network, enabled = true, data = {} } = props;
   const ctx = Wrangle.ctx(props);
 
   useRedraw(props);
-  const shared = useShared(network);
   const { bytes } = usePeerMonitor(network);
   const { isTransmitting } = useTransmitMonitor(bytes.total);
 
@@ -24,7 +23,7 @@ export const View: React.FC<P> = (props) => {
     .field('Component', () => Field.component(ctx, data.component))
     .field('Peer', () => Field.peer(ctx, network))
     .field('Repo', () => Field.repo(ctx, network))
-    .field('Network.Shared', () => Field.network.shared(ctx, data, network, shared?.doc))
+    .field('Network.Shared', () => Field.network.shared(ctx, data, network))
     .field('Network.Transfer', () => Field.network.transfer(ctx, bytes, isTransmitting))
     .items(ctx.fields);
 
@@ -34,6 +33,7 @@ export const View: React.FC<P> = (props) => {
       items={items}
       width={PropList.Info.width(props)}
       margin={props.margin}
+      enabled={enabled}
       theme={theme}
       style={props.style}
     />
