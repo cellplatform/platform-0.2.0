@@ -212,23 +212,8 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.row((e) => {
-      const { debug } = e.state;
-      const obj = { expand: { level: 1 } };
-      const uri = { head: true };
       return (
-        <PeerRepoList.Info
-          stateful={true}
-          title={['Network', 'Shared']}
-          fields={['Repo', 'Peer', 'Network.Transfer', 'Network.Shared']}
-          data={{
-            network,
-            repo: { store: Store.tmp, index: Index.tmp },
-            shared: [
-              { label: 'System', uri, object: { lens: ['sys'], ...obj } },
-              { label: 'Namespaces', uri, object: { lens: ['ns'], ...obj } },
-            ],
-          }}
-        />
+        <PeerRepoList.Info.Stateful theme={theme} title={['Network', 'Shared']} network={network} />
       );
     });
 
@@ -240,50 +225,39 @@ export default Dev.describe(name, async (e) => {
         if (res.length > max) res = `${res.slice(0, max - 3)}...`;
         return res;
       };
-
+      const uri = main.state.me.uri;
       return (
-        <CrdtInfo
-          stateful={true}
+        <CrdtInfo.Stateful
+          theme={theme}
           title={['Private State', 'Local']}
           fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+          repos={{ main: main.repo.fs }}
           data={{
-            repo: main.repo.fs,
+            repo: 'main',
             document: [
               {
+                uri,
                 label: 'Me',
-                ref: main.state.me,
-                uri: { head: true },
-                object: {
-                  name: 'me',
-                  visible: false,
-                  beforeRender(e: any) {
-                    const text = e.root?.config?.text;
-                    if (typeof text === 'string') e.root.config.text = shorten(text, 20);
-                  },
-                },
+                address: { head: true },
+                object: { name: 'me', visible: false },
               },
               {
+                uri,
                 label: 'Me: root',
-                ref: main.state.me,
-                uri: { head: true },
-                object: {
-                  name: 'me.root',
-                  lens: ['root'],
-                  visible: false,
-                  expand: { level: 2 },
-                  beforeRender(e: any) {
-                    const text = e.config?.text;
-                    if (typeof text === 'string') e.config.text = shorten(text, 22);
-                  },
-                },
+                address: { head: true },
+                object: { name: 'me.root', lens: ['root'], visible: false, expand: { level: 2 } },
               },
               {
+                uri,
                 label: 'Me: identity',
-                ref: main.state.me,
-                uri: { head: true },
+                address: { head: true },
                 object: { name: 'me.identity', visible: false, lens: ['identity'] },
               },
             ],
+          }}
+          onBeforeObjectRender={(obj: any) => {
+            const text = obj.config?.text;
+            if (typeof text === 'string') obj.config.text = shorten(text, 22);
           }}
         />
       );
