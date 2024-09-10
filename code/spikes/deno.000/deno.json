@@ -1,7 +1,7 @@
 {
   "tasks": {
     "check": "deno check src/main.ts",
-    "dev": "deno run --check --watch --allow-net --allow-read --allow-env src/main.ts",
+    "dev": "deno run --check --watch -RNE src/main.ts",
     "reload": "deno cache --reload src/main.ts",
     "deploy": "deno task check && deployctl deploy --project=tdb --prod"
   },

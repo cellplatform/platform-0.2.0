@@ -1,0 +1,19 @@
+{
+  "name": "@tdb/foo",
+  "version": "1.0.0",
+  "description": "Sample",
+  "main": "./src/mod.ts",
+  "author": "Phil Cockfield",
+  "repository": "https://github.com/cellplatform/platform-0.2.0",
+  "tasks": {
+    "start": "deno run src/mod.ts",
+    "dev": "deno run --check --watch src/mod.ts",
+    "check": "deno check src/mod.ts",
+    "test": "deno test --watch"
+  },
+  "exports": {
+    ".": "./src/mod.ts",
+    "./mod.ts": "./src/mod.ts"
+  },
+  "license": "MIT"
+}
