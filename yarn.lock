@@ -1451,39 +1451,12 @@
     "@preact/signals-core" "^1.7.0"
     use-sync-external-store "^1.2.0"
 
-"@privy-io/api-base@1.2.2", "@privy-io/api-base@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.2.2.tgz#d59429d5ddfe782caf53ef2ccc03dc8d30cff245"
-  integrity sha512-z9G7Kd/Mz/t8Frl6DTIzGHcu0ITF+eG4BHw+XzExuxmTH/iljDJWQwGoiosbu2k2T1p4OEOqZhaxhgRTA6CeaA==
-  dependencies:
-    zod "^3.21.4"
-
 "@privy-io/api-base@1.2.3", "@privy-io/api-base@^1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.2.3.tgz#0fe5e96514b859e9ddf75d3dbba10b25aa04582d"
   integrity sha512-ycl6L+C/B5BRtJNaeD3nS12SpSh6dMDg95d76jKGT1SBZd5VjaOnZYaEMIiAndu0txqLgVszLwdfai+f028iew==
   dependencies:
     zod "^3.21.4"
-
-"@privy-io/js-sdk-core@0.26.4":
-  version "0.26.4"
-  resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.26.4.tgz#89d5d4f4c58b18ea266870040efd3a83c801469e"
-  integrity sha512-1Jaa3weP6UvQ/fzPs+ucyHuFqzIA8Ui+TgNHx0n8hcf+WoLzburi25NJ+aEc4WE380e1CclGdYLVK6JSbRvgBQ==
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/providers" "^5.7.2"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@privy-io/api-base" "^1.2.2"
-    "@privy-io/public-api" "2.9.0"
-    eventemitter3 "^5.0.1"
-    fetch-retry "^5.0.6"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    set-cookie-parser "^2.6.0"
-    uuid ">=8 <10"
 
 "@privy-io/js-sdk-core@0.26.7":
   version "0.26.7"
@@ -1505,16 +1478,6 @@
     set-cookie-parser "^2.6.0"
     uuid ">=8 <10"
 
-"@privy-io/public-api@2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/public-api/-/public-api-2.9.0.tgz#4150c9904e9159d54758c2d6da37aa8ca6781ec2"
-  integrity sha512-091oIwbyPhd5DXFLE6F7d0180nPTkGrNheE6GK09tuqsxxv44AFPhEVypsam01tgRkuq5nmKym0QmidTQp+JJA==
-  dependencies:
-    "@privy-io/api-base" "1.2.2"
-    ethers "^5.7.2"
-    libphonenumber-js "^1.10.31"
-    zod "^3.22.4"
-
 "@privy-io/public-api@2.9.3":
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/@privy-io/public-api/-/public-api-2.9.3.tgz#30971bc71ad8c315ddc1e690030f9b40b95dbce9"
@@ -1524,54 +1487,6 @@
     ethers "^5.7.2"
     libphonenumber-js "^1.10.31"
     zod "^3.22.4"
-
-"@privy-io/react-auth@1.81.1":
-  version "1.81.1"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.81.1.tgz#3bf3f7222969ad09d93b84d2e1a2dc9393068d66"
-  integrity sha512-xaBwPHK4jH2zY8upBGL0meDIHAnrSwa8Gkpc/kLBRgG4xJp42Z6kQXX1JyoS7cUUP8jqb7PP7mXeD70fqC+Cyg==
-  dependencies:
-    "@coinbase/wallet-sdk" "4.0.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/contracts" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@floating-ui/react" "^0.26.22"
-    "@headlessui/react" "^1.7.18"
-    "@heroicons/react" "^2.1.1"
-    "@marsidev/react-turnstile" "^0.4.1"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@privy-io/js-sdk-core" "0.26.4"
-    "@simplewebauthn/browser" "^9.0.1"
-    "@walletconnect/ethereum-provider" "^2.15.1"
-    "@walletconnect/modal" "^2.6.2"
-    base64-js "^1.5.1"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    fast-password-entropy "^1.1.1"
-    jose "^4.15.5"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    mipd "^0.0.7"
-    ofetch "^1.3.4"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    secure-password-utilities "^0.2.1"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    viem "^2.17.0"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
 
 "@privy-io/react-auth@1.82.0":
   version "1.82.0"
@@ -4375,6 +4290,11 @@ diff@5.2.0:
   resolved "https://registry.yarnpkg.com/diff/-/diff-5.2.0.tgz#26ded047cd1179b78b9537d5ef725503ce1ae531"
   integrity sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==
 
+diff@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-7.0.0.tgz#3fb34d387cd76d803f6eebea67b921dab0182a9a"
+  integrity sha512-PJWHUb1RFevKCwaFA9RlG5tCd+FO5iRh9A8HEtkmBH2Li03iJriB6m6JIN4rGz3K3JLawI7/veA1xzRKP6ISBw==
+
 diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
@@ -5007,13 +4927,6 @@ formdata-node@^4.3.2:
   dependencies:
     node-domexception "1.0.0"
     web-streams-polyfill "4.0.0-beta.3"
-
-framer-motion@11.3.30:
-  version "11.3.30"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.3.30.tgz#9c82ea5e0318592a7046d91d8ba29060d5c4a9cc"
-  integrity sha512-9VmqGe9OIjfMoCcs+ZsKXlv6JaG5QagKX2F1uSbkG3Z33wgjnz60Kw+CngC1M49rDYau+Y9aL+8jGagAwrbVyw==
-  dependencies:
-    tslib "^2.4.0"
 
 framer-motion@11.5.4:
   version "11.5.4"
@@ -7535,11 +7448,6 @@ react-spinners@0.14.1:
   resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.14.1.tgz#de7d7d6b3e6d4f29d9620c65495b502c7dd90812"
   integrity sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==
 
-react-virtuoso@4.10.1:
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.10.1.tgz#868a40073e497777f49c052eb24be55171ce8639"
-  integrity sha512-vDBt9AarmCjPNshw3VxPXW355ZQKSO0p9vrAJ0pi04TB6aXk+qHWTu8NuaQ3ppcd/Ub1r5ryRA4fJ2QGuH0H0g==
-
 react-virtuoso@4.10.3:
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.10.3.tgz#83c16add3c9f3d9bb505d57336fdd4e60be1f77f"
@@ -8797,21 +8705,6 @@ vfile@^6.0.0:
     unist-util-stringify-position "^4.0.0"
     vfile-message "^4.0.0"
 
-viem@2.20.0:
-  version "2.20.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.20.0.tgz#abff4c2cf733bcc20978e662ea17db117a2881ef"
-  integrity sha512-cM4vs81HnSNbfceI1MLkx4pCVzbVjl9xiNSv5SCutYjUyFFOVSPDlEyhpg2iHinxx1NM4Qne3END5eLT8rvUdg==
-  dependencies:
-    "@adraffy/ens-normalize" "1.10.0"
-    "@noble/curves" "1.4.0"
-    "@noble/hashes" "1.4.0"
-    "@scure/bip32" "1.4.0"
-    "@scure/bip39" "1.3.0"
-    abitype "1.0.5"
-    isows "1.0.4"
-    webauthn-p256 "0.0.5"
-    ws "8.17.1"
-
 viem@2.21.4:
   version "2.21.4"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.21.4.tgz#b413330f5e05d2ab9ed01bf6e6fe12bcb71788dd"
@@ -9270,11 +9163,6 @@ yallist@^3.0.2:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
-
-yaml@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.5.0.tgz#c6165a721cf8000e91c36490a41d7be25176cf5d"
-  integrity sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==
 
 yaml@2.5.1:
   version "2.5.1"

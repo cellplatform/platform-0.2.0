@@ -14,7 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'approx-string-match': '2.0.0',
-    'diff': '5.2.0',
+    'diff': '7.0.0',
     'rehype-sanitize': '6.0.0',
     'rehype-stringify': '10.0.0',
     'rehype-format': '5.0.0',
