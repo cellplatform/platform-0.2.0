@@ -54,7 +54,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<D>(e);
-    const link = Dev.Link.pkg(Pkg, dev);
 
     dev.section('Fields', (dev) => {
       dev.row(() => {

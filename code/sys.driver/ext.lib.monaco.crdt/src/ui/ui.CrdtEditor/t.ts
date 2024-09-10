@@ -5,7 +5,10 @@ type Edge = number | null;
 type Pos = [Edge, Edge, Edge, Edge];
 type Border = [number, number, number, number];
 
-export type CrdtEditorInfoField = '';
+export type CrdtEditorInfoField = Extract<
+  t.CrdtInfoField,
+  'Repo' | 'Doc' | 'Doc.URI' | 'Doc.Object'
+>;
 
 /**
  * <Component>
@@ -39,6 +42,7 @@ export type CrdtEditorPropsEditor = {
 export type CrdtEditorData = {
   doc?: t.Doc;
   repo?: { store?: t.Store; index?: t.StoreIndex };
+  info?: { fields?: t.CrdtEditorInfoField[] };
 };
 
 /**

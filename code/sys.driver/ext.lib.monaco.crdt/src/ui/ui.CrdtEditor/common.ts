@@ -34,4 +34,17 @@ export const DEFAULTS = {
   name,
   displayName: `${Pkg.name}:${name}`,
   props,
+
+  Panel: {
+    Info: {
+      fields: {
+        get all(): t.CrdtEditorInfoField[] {
+          return ['Repo', 'Doc', 'Doc.URI', 'Doc.Object'];
+        },
+        get default(): t.CrdtEditorInfoField[] {
+          return ['Repo', 'Doc', 'Doc.URI', 'Doc.Object'];
+        },
+      },
+    },
+  },
 } as const;

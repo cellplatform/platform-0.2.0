@@ -16,6 +16,10 @@ export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
   const main = repo;
   const uri = doc?.uri;
 
+  const fields = data.info?.fields ?? DEFAULTS.Panel.Info.fields.default;
+  const address = { head: true };
+  const lens = path;
+
   /**
    * Render
    */
@@ -31,13 +35,13 @@ export const PanelInfo: React.FC<PanelInfoProps> = (props) => {
       <CrdtInfo.Stateful
         enabled={enabled}
         theme={props.theme}
-        fields={['Repo', 'Doc', 'Doc.URI', 'Doc.Object']}
+        fields={fields}
         repos={{ main }}
         data={{
           repo: 'main',
           document: [
-            { uri, address: { head: true }, object: { visible: false } },
-            { uri, label: 'Lens', address: { head: true }, object: { lens: path, visible: false } },
+            { uri, address, object: { visible: false } },
+            { uri, label: 'Lens', address, object: { lens, visible: false } },
           ],
         }}
       />

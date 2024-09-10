@@ -27,8 +27,17 @@ export default Dev.describe(name, async (e) => {
     debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { docObjectOpen: true })),
   } as const;
 
-  const identity = `foo:${slug()}`;
+  type F = t.CrdtEditorInfoField;
+  const setFields = (fields?: F[]) => {
+    State.props.change((d) => {
+      const data = d.data ?? (d.data = {});
+      const info = data.info ?? (data.info = {});
+      info.fields = fields;
+    });
 
+    console.log('State.props.current', State.props.current.data?.info);
+  };
+  const identity = `foo:${slug()}`;
   const Props = {
     get doc() {
       const debug = State.debug.current;
@@ -42,7 +51,7 @@ export default Dev.describe(name, async (e) => {
       return {
         ...current,
         editor: { ...current.editor, identity },
-        data: { doc, repo },
+        data: { ...current.data, doc, repo },
       };
     },
   } as const;
@@ -257,6 +266,20 @@ export default Dev.describe(name, async (e) => {
           .label(() => (current() ? `props.doc` : 'props.doc: <undefined>'))
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'passDocProp')));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Fields', (dev) => {
+      dev.row(() => {
+        const defaultFields = DEFAULTS.Panel.Info.fields.default;
+        return (
+          <CrdtEditor.FieldSelector
+            selected={State.props.current.data?.info?.fields ?? defaultFields}
+            onClick={(e) => setFields(e.next<F>(defaultFields))}
+          />
+        );
       });
     });
   });
