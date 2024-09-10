@@ -10,6 +10,7 @@ type D = {
   docuri?: t.UriString;
   flags: SpecDataFlags;
   render?: boolean;
+  passDocUri?: boolean;
 };
 
 /**
@@ -29,7 +30,7 @@ export default Dev.describe(name, async (e) => {
   const clonerRef = Immutable.clonerRef;
   const State = {
     props: clonerRef<P>(Json.parse<P>(local.props, DEFAULTS.props)),
-    debug: clonerRef<D>(Json.parse<D>(local.debug, { render: true, flags })),
+    debug: clonerRef<D>(Json.parse<D>(local.debug, { flags, render: true, passDocUri: true })),
     data: clonerRef(Json.parse<t.InfoData>(local.data, SpecData.asObject(repo.name, { flags }))),
   } as const;
 
@@ -37,9 +38,10 @@ export default Dev.describe(name, async (e) => {
 
   const Data = {
     update() {
+      const debug = State.debug.current;
       State.data.change((d) => {
-        const docs = Info.Data.documents(d.document);
-        if (docs[0]) docs[0].uri = doc?.uri;
+        const uri = debug.passDocUri ? doc?.uri : undefined;
+        Info.Data.documents(d.document).forEach((d) => (d.uri = uri));
       });
     },
   } as const;
@@ -238,6 +240,20 @@ export default Dev.describe(name, async (e) => {
           .label(() => `render`)
           .value(() => current())
           .onClick(() => state.change((d) => Dev.toggle(d, 'render')));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const state = State.debug;
+        const current = () => !!state.current.passDocUri;
+        btn
+          .label(() => `data.document.uri: ${current() ? 'passed' : 'supressed'}`)
+          .value(() => current())
+          .onClick(() => {
+            state.change((d) => Dev.toggle(d, 'passDocUri'));
+            Data.update();
+          });
       });
 
       dev.hr(-1, 5);
