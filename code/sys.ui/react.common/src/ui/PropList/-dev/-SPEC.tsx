@@ -3,7 +3,7 @@ import { Dev, Pkg, css, type t } from '../../../test.ui';
 import { Wrangle } from '../u';
 import { BuilderSample } from './-SPEC.ui.Builder';
 import { sampleItems } from './-SPEC.ui.sample';
-import { SampleFields, type MyField } from './common';
+import { SampleFields, type MyField, DEFAULTS } from './common';
 
 type SampleKind = 'Empty' | 'One Item' | 'Two Items' | 'Samples' | 'Builder';
 type P = t.PropListProps;
@@ -22,11 +22,11 @@ const initial: T = {
   debug: { source: 'Samples', header: true, footer: true },
 };
 
-const name = PropList.displayName ?? 'Unknown';
+const name = DEFAULTS.displayName;
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<P, 'theme' | 'loading'>;
-  const localstore = Dev.LocalStorage<LocalStore>(`dev:${Pkg.name}.${name}`);
+  type LocalStore = Pick<P, 'theme' | 'loading' | 'enabled'>;
+  const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({
     theme: undefined,
     loading: false,
@@ -40,6 +40,7 @@ export default Dev.describe(name, (e) => {
     state.change((d) => {
       d.props.theme = local.theme;
       d.props.loading = local.loading;
+      d.props.enabled = local.enabled ?? true;
     });
 
     ctx.debug.width(330);
@@ -58,6 +59,14 @@ export default Dev.describe(name, (e) => {
 
     dev.section('Properties', (dev) => {
       Dev.Theme.switch(dev, ['props', 'theme'], (next) => (local.theme = next));
+
+      dev.boolean((btn) => {
+        const value = (state: T) => !!state.props.enabled;
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
 
       dev.boolean((btn) => {
         const value = (state: T) => !!state.props.loading;
