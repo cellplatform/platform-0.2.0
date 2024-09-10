@@ -11,15 +11,15 @@
 
 export const Pkg: ModuleDef = {
   name: 'dev.000',
-  version: '0.6.200',
+  version: '0.6.199',
   dependencies: {
     '@automerge/automerge': '2.2.8',
     '@automerge/automerge-repo': '1.2.1',
     '@automerge/automerge-repo-network-messagechannel': '1.2.1',
     '@automerge/automerge-repo-storage-indexeddb': '1.2.1',
-    '@privy-io/react-auth': '1.79.1',
+    '@privy-io/react-auth': '1.81.1',
     '@standard-crypto/farcaster-js': '7.4.0',
-    'automerge-repo-network-peerjs': '1.2.1',
+    'automerge-repo-network-peerjs': '1.2.2',
     'buffer': '6.0.3',
     'ext.lib.ai.openai': '0.0.0',
     'ext.lib.automerge': '0.0.0',
