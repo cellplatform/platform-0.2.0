@@ -106,7 +106,10 @@ export default Dev.describe(name, async (e) => {
               const uri = e.doc.uri;
               const id = uri.slice(-4);
               console.info(`⚡️ CrdtEditor.onDataReady("${id}"):`, e);
-              e.dispose$.subscribe(() => console.info(`💥 dispose("${id}")`));
+
+              e.dispose$.subscribe(() => {
+                console.info(`⚡️ CrdtEditor.onDataReady("${id}") → dispose( 💥 )`);
+              });
 
               // NB: the lens is already seeded with a [dispose$].
               e.lens.events().changed$.subscribe((e) => {
