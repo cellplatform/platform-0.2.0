@@ -60,5 +60,21 @@ export default Dev.describe(name, async (e) => {
     TestEdge.dev.peersSection(dev, left.network, right.network);
     dev.hr(5, 20);
     TestEdge.dev.infoPanels(dev, left.network, right.network);
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.row(() => {
+        const data = left.network.shared.doc.current;
+        return (
+          <Dev.Object
+            name={'left: system'}
+            data={data}
+            expand={{ paths: ['$', '$.sys', '$.sys.peers'] }}
+            fontSize={11}
+          />
+        );
+      });
+    });
   });
 });

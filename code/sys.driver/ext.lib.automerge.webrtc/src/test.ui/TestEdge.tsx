@@ -62,7 +62,7 @@ const peersSection = (dev: t.DevTools, left: N, right: N) => {
 
   dev.button((btn) => {
     btn
-      .label(() => (isConnected() ? 'connected (locally)' : 'connect network (locally)'))
+      .label(() => (isConnected() ? 'connected (top ↑↓ bottom)' : 'connect (top ↑↓ bottom)'))
       .right(() => (!isConnected() ? '⚡️' : ''))
       .enabled(() => !isConnected())
       .onClick(() => connect());
