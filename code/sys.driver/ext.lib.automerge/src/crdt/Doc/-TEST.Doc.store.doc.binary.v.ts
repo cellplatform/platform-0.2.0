@@ -5,13 +5,13 @@ import { Store } from '../Store';
 const Uri = Store.Doc.Uri;
 
 type O = Record<string, unknown>;
-type D = { count: number };
+type D = { count: number; msg?: string };
 
 describe('Doc: binary ← "hard-coded byte array hack"', async () => {
   const getBinary = () => Store.Doc.toBinary<D>((d) => (d.count = 0));
 
   describe('Store.Doc: toBinary', () => {
-    it('from init function', async () => {
+    it('from function', async () => {
       const store = Store.init();
       const binary = Store.Doc.toBinary<D>((d) => (d.count = 123));
       const doc = store.doc.fromBinary<D>(binary);
@@ -107,23 +107,52 @@ describe('Doc: binary ← "hard-coded byte array hack"', async () => {
   });
 
   describe('mering from same genesis', () => {
-    it('merge: uri-A → uri-B', () => {
+    it('merge: A → B', () => {
       const store = Store.init();
       const binary = getBinary();
 
       // Seperate lineages but from same genesis binary.
-      const doc1 = store.doc.fromBinary<D>(binary);
-      const doc2 = store.doc.fromBinary<D>(binary);
-      expect(doc1.uri).to.not.eql(doc2.uri);
+      const docA = store.doc.fromBinary<D>(binary);
+      const docB = store.doc.fromBinary<D>(binary);
+      expect(docA.uri).to.not.eql(docB.uri);
 
-      doc1.change((d) => (d.count = 123));
-      expect(doc1.current.count).to.eql(123);
-      expect(doc2.current.count).to.eql(0);
+      docA.change((d) => (d.count = 123));
+      expect(docA.current.count).to.eql(123);
+      expect(docB.current.count).to.eql(0);
 
-      Doc.merge(doc1, doc2);
+      Doc.merge(docA, docB);
 
-      expect(doc1.current.count).to.eql(123);
-      expect(doc2.current.count).to.eql(123);
+      expect(docA.current.count).to.eql(123);
+      expect(docB.current.count).to.eql(123);
+
+      store.dispose();
+    });
+
+    it('merge: A → B (not the same gensis, does not merge)', () => {
+      const store = Store.init();
+      const binaryA = Store.Doc.toBinary<D>((d) => (d.count = 0));
+      const binaryB = Store.Doc.toBinary<D>((d) => {
+        d.count = 0;
+        d.msg = 'hello';
+      });
+
+      // Seperate lineages but from same genesis binary.
+      const docA = store.doc.fromBinary<D>(binaryA);
+      const docB = store.doc.fromBinary<D>(binaryB);
+      expect(docA.uri).to.not.eql(docB.uri);
+
+      docA.change((d) => (d.count = 123));
+      expect(docA.current.count).to.eql(123);
+      expect(docB.current.count).to.eql(0);
+      expect(docA.current.msg).to.eql(undefined);
+      expect(docB.current.msg).to.eql('hello');
+
+      Doc.merge(docA, docB);
+
+      expect(docA.current.count).to.eql(123); // NB: changed value (A)
+      expect(docA.current.msg).to.eql(undefined);
+      expect(docB.current.count).to.eql(0); // NB: unchanged value (B) because different genesis binary.
+      expect(docB.current.msg).to.eql('hello');
 
       store.dispose();
     });
