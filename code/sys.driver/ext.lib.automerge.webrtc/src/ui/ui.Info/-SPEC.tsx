@@ -153,7 +153,9 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Debug', (dev) => {
       dev.button('redraw', () => dev.redraw());
+
       dev.hr(-1, 5);
+      dev.button('copy peer', () => navigator.clipboard.writeText(self.network.peer.id));
       dev.button(['connect network', '⚡️'], (e) => peer.self.connect.data(peer.remote.id));
     });
   });
