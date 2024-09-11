@@ -67,8 +67,8 @@ export default Dev.describe(name, async (e) => {
   const cloner = () => Immutable.clonerRef({});
 
   const main: t.Shell = {
-    cmdbar: undefined,
     self,
+    cmdbar: undefined,
     fc: Cmd.create<t.FarcasterCmd>(cloner(), { issuer: self.id }) as t.Cmd<t.FarcasterCmd>,
     repo: {
       fs: { store: Store.fs, index: Index.fs },
