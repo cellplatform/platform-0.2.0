@@ -53,10 +53,10 @@ export function useStateful(props: P) {
  * Helpers
  */
 const wrangle = {
-  state(props: P): t.InfoStatefulData | undefined {
+  state(props: P) {
     if (!props.data) return;
     if (Immutable.Is.immutableRef(props.data)) return props.data;
-    return Immutable.clonerRef<t.InfoData>(props.data as t.InfoData);
+    return Immutable.clonerRef<t.InfoData>(props.data) as t.InfoStatefulData;
   },
 
   propsInstance(props: P) {
