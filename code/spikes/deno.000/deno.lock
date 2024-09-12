@@ -2,10 +2,110 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@std/cli@^1.0.5": "jsr:@std/cli@1.0.5",
+      "jsr:@std/encoding@^1.0.4": "jsr:@std/encoding@1.0.4",
+      "jsr:@std/fmt@^1.0.2": "jsr:@std/fmt@1.0.2",
+      "jsr:@std/fs@1.0.3": "jsr:@std/fs@1.0.3",
+      "jsr:@std/http@1.0.5": "jsr:@std/http@1.0.5",
+      "jsr:@std/media-types@^1.0.3": "jsr:@std/media-types@1.0.3",
+      "jsr:@std/net@^1.0.2": "jsr:@std/net@1.0.2",
+      "jsr:@std/path@1.0.4": "jsr:@std/path@1.0.4",
+      "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.4",
+      "jsr:@std/streams@^1.0.4": "jsr:@std/streams@1.0.4",
+      "jsr:@tdb/foo": "jsr:@tdb/foo@0.0.4",
+      "jsr:@tdb/foo@0.0.11": "jsr:@tdb/foo@0.0.11",
+      "jsr:@tdb/foo@0.0.12": "jsr:@tdb/foo@0.0.12",
+      "jsr:@tdb/foo@0.0.13": "jsr:@tdb/foo@0.0.13",
+      "jsr:@tdb/foo@0.0.14": "jsr:@tdb/foo@0.0.14",
+      "jsr:@tdb/foo@0.0.16": "jsr:@tdb/foo@0.0.16",
       "npm:@privy-io/server-auth": "npm:@privy-io/server-auth@1.7.1",
       "npm:hono": "npm:hono@4.0.10",
       "npm:openai": "npm:openai@4.28.4",
       "npm:ramda": "npm:ramda@0.29.1"
+    },
+    "jsr": {
+      "@std/cli@1.0.5": {
+        "integrity": "c93cce26ffd26f617c15a12874e1bfeabc90b1eee86017c9639093734c2bf587"
+      },
+      "@std/encoding@1.0.4": {
+        "integrity": "2266cd516b32369e3dc5695717c96bf88343a1f761d6e6187a02a2bbe2af86ae"
+      },
+      "@std/fmt@1.0.2": {
+        "integrity": "87e9dfcdd3ca7c066e0c3c657c1f987c82888eb8103a3a3baa62684ffeb0f7a7"
+      },
+      "@std/fs@1.0.3": {
+        "integrity": "3cb839b1360b0a42d8b367c3093bfe4071798e6694fa44cf1963e04a8edba4fe",
+        "dependencies": [
+          "jsr:@std/path@^1.0.4"
+        ]
+      },
+      "@std/http@1.0.5": {
+        "integrity": "afa1cf4f0c19e224534df3288a84de4fdfffe8a26308dfe3794166e4fafe0f3d",
+        "dependencies": [
+          "jsr:@std/cli@^1.0.5",
+          "jsr:@std/encoding@^1.0.4",
+          "jsr:@std/fmt@^1.0.2",
+          "jsr:@std/media-types@^1.0.3",
+          "jsr:@std/net@^1.0.2",
+          "jsr:@std/path@^1.0.4",
+          "jsr:@std/streams@^1.0.4"
+        ]
+      },
+      "@std/media-types@1.0.3": {
+        "integrity": "b12d30a7852f7578f4d210622df713bbfd1cbdd9b4ec2eaf5c1845ab70bab159"
+      },
+      "@std/net@1.0.2": {
+        "integrity": "520c18ddb7f67d3830a1adfef03a155d496fe9683a9cb63bb823b5afb86484dc"
+      },
+      "@std/path@1.0.4": {
+        "integrity": "48dd5d8389bcfcd619338a01bdf862cb7799933390146a54ae59356a0acc7105"
+      },
+      "@std/streams@1.0.4": {
+        "integrity": "a1a5b01c74ca1d2dcaacfe1d4bbb91392e765946d82a3471bd95539adc6da83a"
+      },
+      "@tdb/foo@0.0.11": {
+        "integrity": "ec548f8f26ac532361b6acb53b27107cc1244750cbb75060ba92acfea7ec391b",
+        "dependencies": [
+          "jsr:@std/fs@1.0.3",
+          "jsr:@std/http@1.0.5",
+          "jsr:@std/path@1.0.4"
+        ]
+      },
+      "@tdb/foo@0.0.12": {
+        "integrity": "c19e0bfcacc2866ed9b8e0b946562153172a787eedee5b4aebea8c7fc6915a11",
+        "dependencies": [
+          "jsr:@std/fs@1.0.3",
+          "jsr:@std/http@1.0.5",
+          "jsr:@std/path@1.0.4"
+        ]
+      },
+      "@tdb/foo@0.0.13": {
+        "integrity": "77bdd5367d2649abfb4e4b1ed74bda6fb5e7d6aa975781cfe569efb8a66b1d1f",
+        "dependencies": [
+          "jsr:@std/fs@1.0.3",
+          "jsr:@std/http@1.0.5",
+          "jsr:@std/path@1.0.4"
+        ]
+      },
+      "@tdb/foo@0.0.14": {
+        "integrity": "0d0617d825e9a56e7ecdc4e57aed25d9f60fe97a1bb42d84fc6ad6c4d22bdb24",
+        "dependencies": [
+          "jsr:@std/fs@1.0.3",
+          "jsr:@std/http@1.0.5",
+          "jsr:@std/path@1.0.4"
+        ]
+      },
+      "@tdb/foo@0.0.16": {
+        "integrity": "7bb80581c01fc8b9d7f3488e8ba24b658970b2bb822789bf023206e627efbc73",
+        "dependencies": [
+          "jsr:@std/fs@1.0.3",
+          "jsr:@std/http@1.0.5",
+          "jsr:@std/path@1.0.4"
+        ]
+      },
+      "@tdb/foo@0.0.4": {
+        "integrity": "2c6c31dd73a1b0c3d022e8fbeb7855198ad556fcf7e05afac3c01b28a4781323"
+      }
     },
     "npm": {
       "@privy-io/server-auth@1.7.1": {

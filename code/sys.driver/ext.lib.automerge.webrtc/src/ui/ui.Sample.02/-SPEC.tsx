@@ -108,7 +108,7 @@ export default Dev.describe(name, async (e) => {
       });
       events.harness.changed$.pipe(rx.debounceTime(100)).subscribe((e) => {
         const shared = e.after;
-        ctx.debug.width(shared.debugPanel ?? true ? 300 : 0);
+        ctx.debug.width(shared.debugPanel ?? true ? 330 : 0);
         dev.redraw();
       });
 
@@ -120,7 +120,7 @@ export default Dev.describe(name, async (e) => {
       dev.redraw();
     };
 
-    ctx.debug.width(300);
+    ctx.debug.width(330);
     ctx.debug.header.border(-0.1).render((e) => {
       const conns = left.network.peer.current.connections;
       const media = conns.filter((c) => Peer.Is.Kind.media(c));

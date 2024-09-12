@@ -1,4 +1,4 @@
-import { Doc, Is, Store, Time, describe, expect, it, type t } from '../test';
+import { R, Doc, Is, Store, Time, describe, expect, it, type t, Value } from '../test';
 import { Shared } from './Shared';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';

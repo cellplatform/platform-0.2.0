@@ -43,7 +43,10 @@ export const WebrtcStore = {
         log.debug(`${io}/remote crdt could not be retrieved (error).`, Uri.shorten(uri));
       } else {
         log.debug(`${io}/remote shared state retrieved (crdt):`, toObject(remote.current));
-        fire({ type: 'crdt:net:shared/RemoteConnected', payload: { shared: { uri } } });
+        fire({
+          type: 'crdt:net:shared/RemoteConnected',
+          payload: { shared: { uri } },
+        });
 
         const merge = () => {
           const local = shared.doc;
@@ -51,7 +54,8 @@ export const WebrtcStore = {
           Doc.merge(remote, local);
           const after = local.current;
 
-          const payload: t.CrdtSharedChanged = { uri: local.uri, before, after };
+          const uri = local.uri;
+          const payload: t.CrdtSharedChanged = { uri, before, after };
           log.debug(`${io}:shared/changed`, payload);
           fire({ type: 'crdt:net:shared/Changed', payload });
         };

@@ -67,8 +67,8 @@ export default Dev.describe(name, async (e) => {
   const cloner = () => Immutable.clonerRef({});
 
   const main: t.Shell = {
-    cmdbar: undefined,
     self,
+    cmdbar: undefined,
     fc: Cmd.create<t.FarcasterCmd>(cloner(), { issuer: self.id }) as t.Cmd<t.FarcasterCmd>,
     repo: {
       fs: { store: Store.fs, index: Index.fs },
@@ -78,7 +78,7 @@ export default Dev.describe(name, async (e) => {
       me,
       cmdbar: network.shared.ns.lens('dev.cmdbar', {}),
       tmp: network.shared.ns.lens<t.Tmp>('dev.tmp', {}),
-      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: false }),
+      harness: network.shared.ns.lens<t.Harness>('dev.harness', { debugVisible: true }),
     },
   };
 

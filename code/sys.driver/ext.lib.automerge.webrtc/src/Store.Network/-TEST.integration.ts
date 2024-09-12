@@ -1,4 +1,4 @@
-import { Test, Time, expect, expectRoughlySame, type t } from '../test.ui';
+import { Test, Time, expect, expectRoughlySame, type t, Doc } from '../test.ui';
 import { setup, type TParts } from './-TEST';
 
 type D = { count: number };
@@ -16,15 +16,28 @@ export default Test.describe('🍌 WebrtcStore ← NetworkAdapter', (e) => {
     remote = await setup();
     await wait();
 
+    const shared = {
+      self: self.network.shared.doc,
+      remote: remote.network.shared.doc,
+    } as const;
+
     expect(self.network.total.added).to.eql(0);
     expect(remote.network.total.added).to.eql(0);
 
+    expect(shared.self.uri).to.not.eql(shared.remote.uri); // NB: the {shared} CRDT documents are have unique genesis'.
+    expect(Object.keys(shared.self.current.sys.peers).length).to.eql(1);
+    expect(Object.keys(shared.remote.current.sys.peers).length).to.eql(1);
+
+    /**
+     * →|← connect network
+     */
     const res = await self.peer.connect.data(remote.peer.id);
     expect(res.error).to.eql(undefined);
 
     expect(self.network.total.added).to.eql(1);
     expect(remote.network.total.added).to.eql(1);
 
+    // Events.
     expect(self.fired.added.length).to.eql(1);
     expect(remote.fired.added.length).to.eql(1);
     expect(self.fired.added[0].conn.id).to.eql(res.id);

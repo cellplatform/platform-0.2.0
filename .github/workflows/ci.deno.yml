@@ -5,7 +5,7 @@ on: [push]
 
 jobs:
   build:
-    name: deno.stats
+    name: deno
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +17,13 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Tests
+        run: deno task test
+
       - name: Info
         run: |
           deno --version
-          deno run --allow-env --allow-read --quiet script.deno/info.ts
+          deno run -RE --quiet script.deno/info.ts
 
       - name: Record end time
         run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
