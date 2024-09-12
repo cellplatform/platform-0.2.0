@@ -2,5 +2,6 @@
   "tasks": {
     "info": "deno run -R script.deno/info.ts",
     "test": "deno run -R --allow-run script.deno/test.ts"
-  }
+  },
+  "compilerOptions": { "strict": true }
 }

@@ -1,5 +1,6 @@
 {
   "tasks": {
     "test": "deno test -RW --watch"
-  }
+  },
+  "compilerOptions": { "strict": true }
 }
