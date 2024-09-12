@@ -48,8 +48,12 @@ export function fromBinary<T extends O>(args: {
 /**
  * Convert a document to a [Uint8Array] for storage.
  *
- *    See the "hard-coded byte array hack"
- *    https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
+ *    See the "hard-coded byte array hack", aka. "binary hack"
+ *
+ *    Refs:
+ *    - https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
+ *    - https://discord.com/channels/1200006940210757672/1230453235207110666/1231192657666248768 ← Martin Kleppmann
+ *
  */
 export function toBinary<T extends O>(initOrDoc: t.ImmutableMutator<T> | t.Doc<T>): Uint8Array {
   const doc = wrangle.doc<T>(initOrDoc);

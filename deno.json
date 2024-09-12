@@ -1,8 +1,6 @@
 {
   "tasks": {
-    "update": "deno run -A script.deno/yarn.update.ts"
-  },
-  "imports": {
-    "@std/fs": "jsr:@std/fs@^0.229.1"
+    "info": "deno run -R script.deno/info.ts",
+    "test": "deno run -R --allow-run script.deno/test.ts"
   }
 }
