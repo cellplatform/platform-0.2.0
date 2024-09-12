@@ -123,6 +123,10 @@ export const DSL = {
       const doc = main.state.me;
       return renderCrdt(doc.uri, main.repo.fs);
     }
+    if (action === 'shared') {
+      const uri = main.state.shared.doc.uri;
+      return renderCrdt(uri, main.repo.tmp);
+    }
 
     return;
   },

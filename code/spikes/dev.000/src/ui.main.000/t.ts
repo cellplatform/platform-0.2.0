@@ -1,7 +1,16 @@
 import type { t } from '../common';
 
 type Copy = 'copy' | 'cp';
-export type RootCommands = 'dev' | 'me' | 'crdt' | 'cmd' | 'fc' | 'hash' | 'new.tab' | Copy;
+export type RootCommands =
+  | 'dev'
+  | 'me'
+  | 'shared'
+  | 'crdt'
+  | 'cmd'
+  | 'fc'
+  | 'hash'
+  | 'new.tab'
+  | Copy;
 
 /**
  * Shell
@@ -19,6 +28,7 @@ export type ShellState = {
   readonly cmdbar: t.Lens;
   readonly harness: t.Lens<Harness>;
   readonly tmp: t.Lens<Tmp>;
+  readonly shared: t.NetworkStore['shared'];
 };
 
 export type ShellRepo = { store: t.Store; index: t.StoreIndex };
