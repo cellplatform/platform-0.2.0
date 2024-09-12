@@ -46,17 +46,22 @@ async function info(options: { lines?: boolean } = {}) {
   const pattern = 'code/**/*.{ts,tsx,mts}';
   const files = await Fs.glob(import.meta.dirname, '..').find(pattern, { exclude });
 
-  console.info('  pattern:  ', c.green(pattern));
-  console.info('  files:    ', c.yellow(files.length.toLocaleString()));
+  console.info('👋');
+  console.info('Deno.version:  ', c.green(Deno.version.deno));
+  console.info('  typescript:  ', c.green(Deno.version.typescript));
+  console.info('          v8:  ', c.green(Deno.version.v8));
+
+  console.info('↓');
+  console.info('Code.pattern:  ', c.green(pattern));
+  console.info('     files:    ', c.yellow(files.length.toLocaleString()));
   if (options.lines) {
     const lines = await countLines(files.map((file) => file.path));
-    console.info('  lines:    ', c.yellow(lines.total.toLocaleString()));
+    console.info('     lines:    ', c.yellow(lines.total.toLocaleString()));
   }
 }
 
 /**
  * System/Repo info.
  */
-console.info('↓ 👋');
 await info({ lines: true });
 console.info();
