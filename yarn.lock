@@ -3429,10 +3429,10 @@ atomic-sleep@^1.0.0:
   resolved "https://registry.yarnpkg.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
 
-automerge-repo-network-peerjs@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.2.2.tgz#84ff00bd0fd2017eb74f217955a3a7f4c5cd19f6"
-  integrity sha512-IVPp6J6ro6yRx1UTfkqFtFMRvkes0GobWVEMZHbrwT5yVM2Ixk/z3NbDPjrgDD8Yq7H3NzOvJ5w7EEn1YUhqAw==
+automerge-repo-network-peerjs@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/automerge-repo-network-peerjs/-/automerge-repo-network-peerjs-1.2.3.tgz#2b61eff3a787e9bf5760cb4bce8fca371e925de9"
+  integrity sha512-9bUzd9TJUMwDAEhqCClB6ljsf29wEhDSr2b3DWqwzazbZ5zMWp0FJ3vy43FheoKyDgdLdZt73F2D2lo9M/owkg==
 
 automerge-tldraw@0.2.0:
   version "0.2.0"

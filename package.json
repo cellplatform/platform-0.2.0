@@ -27,7 +27,7 @@
     "@automerge/automerge-repo-network-broadcastchannel": "1.2.1",
     "@automerge/automerge-repo-network-messagechannel": "1.2.1",
     "@automerge/automerge-repo-storage-indexeddb": "1.2.1",
-    "automerge-repo-network-peerjs": "1.2.2",
+    "automerge-repo-network-peerjs": "1.2.3",
     "@excalidraw/excalidraw": "0.17.6",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
