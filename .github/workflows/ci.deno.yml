@@ -18,7 +18,7 @@ jobs:
           deno-version: v1.x
 
       - name: Tests
-        run: deno task test --quiet
+        run: deno task test
 
       - name: Info
         run: |
