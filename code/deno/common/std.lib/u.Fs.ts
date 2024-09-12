@@ -1,7 +1,6 @@
 import { exists } from 'jsr:@std/fs@1.0.3';
-
-import { Path } from './u.Path.ts';
 import { copyDir, glob } from './u.Fs.u.ts';
+import { Path } from './u.Path.ts';
 
 export { Path };
 
