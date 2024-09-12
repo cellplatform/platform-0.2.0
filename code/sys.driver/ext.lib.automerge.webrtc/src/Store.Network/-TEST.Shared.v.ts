@@ -1,4 +1,4 @@
-import { Doc, Is, Store, Time, describe, expect, it, type t } from '../test';
+import { R, Doc, Is, Store, Time, describe, expect, it, type t, Value } from '../test';
 import { Shared } from './Shared';
 import { listenToIndex } from './Shared.b.listenToIndex';
 import { listenToShared } from './Shared.b.listenToShared';
@@ -47,6 +47,41 @@ describe('Webrtc: Shared', () => {
       expect(res).to.eql([doc.uri]);
 
       store.dispose();
+    });
+
+    it.skip('Doc.merge (from genesis)', async () => {
+      const store1 = Store.init();
+      const store2 = Store.init();
+
+      const runSequence = async () => {
+        const doc1 = await Shared.Doc.getOrCreate(store1);
+        const doc2 = await Shared.Doc.getOrCreate(store2);
+
+        const comparePeers = (expectEqual: boolean) => {
+          const a = Object.keys(doc1.current.sys.peers);
+          const b = Object.keys(doc2.current.sys.peers);
+          expect(R.equals(a, b)).to.eql(expectEqual);
+        };
+
+        expect(doc1.uri).to.not.eql(doc2.uri);
+        comparePeers(true);
+
+        const arbitrary = { tmp: 'sample' } as any;
+        doc1.change((d) => (d.sys.peers['foo'] = arbitrary)); // NB: sample change (not realistic value).
+
+        comparePeers(false);
+        Doc.merge(doc1, doc2);
+        comparePeers(true);
+      };
+
+      // NB: loop the test sequence, as this sometimes flukes it's way into consistency.
+      for (const _ of Array.from({ length: 10 })) {
+        await runSequence();
+        await Time.wait(Value.random(10, 50));
+      }
+
+      store1.dispose();
+      store2.dispose();
     });
   });
 
