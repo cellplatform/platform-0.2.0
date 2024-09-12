@@ -1,5 +1,5 @@
 import { expandGlob, type WalkEntry } from 'jsr:@std/fs@1.0.3';
-import { Path } from './lib.Fs.Path.ts';
+import { Path } from './u.Path.ts';
 
 /**
  * Run a glob pattern against the file-system.

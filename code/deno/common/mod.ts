@@ -1,1 +1,1 @@
-export * from './libs.ts';
+export * from './std.lib/mod.ts';
