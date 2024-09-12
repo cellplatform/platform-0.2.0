@@ -4,6 +4,9 @@ import { Path } from './u.Path.ts';
 
 export { Path };
 
+/**
+ * Filesystem helpers.
+ */
 export const Fs = {
   ...Path,
   exists,
