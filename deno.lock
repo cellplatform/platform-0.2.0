@@ -148,9 +148,6 @@
     "https://deno.land/std@0.224.0/path/windows/to_namespaced_path.ts": "4ffa4fb6fae321448d5fe810b3ca741d84df4d7897e61ee29be961a6aac89a4c"
   },
   "workspace": {
-    "dependencies": [
-      "jsr:@std/fs@^0.229.1"
-    ],
     "packageJson": {
       "dependencies": [
         "npm:@automerge/automerge-repo-network-broadcastchannel@1.2.1",
