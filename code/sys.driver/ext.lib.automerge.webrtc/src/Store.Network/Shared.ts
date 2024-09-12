@@ -42,8 +42,9 @@ export const Shared = {
        *       to work.  Discord discussion on the matter here:
        *
        *          https://discord.com/channels/1200006940210757672/1202325266937159690/1262593958467469355
+       *          https://discord.com/channels/1200006940210757672/1230453235207110666/1231192657666248768
        *
-       * When we are sure this works, this can be deleted.
+       * 💡 When we are sure this works, this can be deleted.
        */
 
       // const { binary } = await import('./Shared.binary');
@@ -78,7 +79,10 @@ export const Shared = {
      */
     const doc = await Shared.Doc.getOrCreate(store, args.uri);
     const fireChanged = (payload: t.DocChanged<t.CrdtShared>) => {
-      args.fire?.({ type: 'crdt:net:shared/Changed', payload });
+      args.fire?.({
+        type: 'crdt:net:shared/Changed',
+        payload,
+      });
     };
 
     /**
@@ -111,8 +115,9 @@ export const Shared = {
         return _ns || (_ns = Shared.ns(doc));
       },
 
-      events(dispose$) {
-        return eventsFactory({ $: args.$, dispose$: [dispose$, life.dispose$] });
+      events(until$) {
+        const dispose$ = [until$, life.dispose$];
+        return eventsFactory({ $: args.$, dispose$ });
       },
 
       /**

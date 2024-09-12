@@ -8,7 +8,6 @@ export { Pkg };
  * Library
  */
 export { WebrtcStore } from './Store.Network';
-export { PeerjsNetworkAdapter } from './common';
 
 /**
  * Library: UI

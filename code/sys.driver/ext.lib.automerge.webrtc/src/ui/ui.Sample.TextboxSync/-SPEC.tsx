@@ -10,24 +10,24 @@ type D = { theme?: t.CommonTheme };
 const name = `${Pkg.name}:${'Sample.TextboxSync'}`;
 
 export default Dev.describe(name, async (e) => {
-  const left = await TestEdge.createEdge('Left');
-  const right = await TestEdge.createEdge('Right');
-  const lenses: { left?: L | undefined; right?: L } = {};
+  const top = await TestEdge.createEdge('Left');
+  const bottom = await TestEdge.createEdge('Right');
+  const lenses: { top?: L | undefined; bottom?: L } = {};
 
   type LocalStore = { debug?: string };
   const localstore = Dev.LocalStorage<LocalStore>(`dev:${name}`);
   const local = localstore.object({ debug: undefined });
 
   const State = {
-    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, {})),
+    debug: Immutable.clonerRef<D>(Json.parse<D>(local.debug, { theme: 'Dark' })),
   } as const;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
 
     const toLens = (shared: t.NetworkStoreShared) => shared.ns.lens('foo', { text: '' });
-    lenses.left = toLens(left.network.shared);
-    lenses.right = toLens(right.network.shared);
+    lenses.top = toLens(top.network.shared);
+    lenses.bottom = toLens(bottom.network.shared);
 
     const debug$ = State.debug.events().changed$;
     rx.merge(debug$)
@@ -37,15 +37,17 @@ export default Dev.describe(name, async (e) => {
       .pipe(rx.debounceTime(100))
       .subscribe(() => ctx.redraw());
 
-    const theme: t.CommonTheme = 'Dark';
-    Dev.Theme.background(ctx, theme);
     ctx.debug.width(330);
     ctx.subject.display('grid').render<D>(() => {
+      const debug = State.debug.current;
+      const theme = debug.theme;
+      Dev.Theme.background(ctx, theme);
+
       return (
         <Layout
           //
-          left={lenses.left}
-          right={lenses.right}
+          left={lenses.top}
+          right={lenses.bottom}
           path={['text']}
           theme={theme}
         />
@@ -56,22 +58,24 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<D>(e);
 
-    TestEdge.dev.headerFooterConnectors(dev, left.network, right.network);
-    TestEdge.dev.peersSection(dev, left.network, right.network);
+    TestEdge.dev.headerFooterConnectors(dev, top.network, bottom.network);
+    TestEdge.dev.peersSection(dev, top.network, bottom.network);
     dev.hr(5, 20);
-    TestEdge.dev.infoPanels(dev, left.network, right.network);
+    TestEdge.dev.infoPanels(dev, top.network, bottom.network);
 
-    dev.hr(5, 20);
+    dev.hr(5, 30);
 
     dev.section('Debug', (dev) => {
+      Dev.Theme.immutable(dev, State.debug);
+      dev.hr(-1, 15);
       dev.row(() => {
-        const data = left.network.shared.doc.current;
+        const data = top.network.shared.doc.current;
         return (
           <Dev.Object
-            name={'left: system'}
+            name={'top.system'}
             data={data}
-            expand={{ paths: ['$', '$.sys', '$.sys.peers'] }}
             fontSize={11}
+            expand={{ paths: ['$', '$.sys', '$.sys.peers'] }}
           />
         );
       });
