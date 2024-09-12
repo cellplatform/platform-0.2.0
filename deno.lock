@@ -2,7 +2,32 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@std/assert@1.0.4": "jsr:@std/assert@1.0.4",
+      "jsr:@std/fs@1.0.3": "jsr:@std/fs@1.0.3",
+      "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
+      "jsr:@std/path@1.0.4": "jsr:@std/path@1.0.4",
+      "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.4",
       "npm:create-vite@latest": "npm:create-vite@5.5.2"
+    },
+    "jsr": {
+      "@std/assert@1.0.4": {
+        "integrity": "d4c767ea578e5bc09c15b6e503376003e5b2d1f4c0cdf08524a92101ff4d7b96",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.3"
+        ]
+      },
+      "@std/fs@1.0.3": {
+        "integrity": "3cb839b1360b0a42d8b367c3093bfe4071798e6694fa44cf1963e04a8edba4fe",
+        "dependencies": [
+          "jsr:@std/path@^1.0.4"
+        ]
+      },
+      "@std/internal@1.0.3": {
+        "integrity": "208e9b94a3d5649bd880e9ca38b885ab7651ab5b5303a56ed25de4755fb7b11e"
+      },
+      "@std/path@1.0.4": {
+        "integrity": "48dd5d8389bcfcd619338a01bdf862cb7799933390146a54ae59356a0acc7105"
+      }
     },
     "npm": {
       "create-vite@5.5.2": {
@@ -133,6 +158,7 @@
         "npm:@automerge/automerge-repo-storage-indexeddb@1.2.1",
         "npm:@automerge/automerge-repo@1.2.1",
         "npm:@automerge/automerge@2.2.8",
+        "npm:@eslint/js@^9.9.0",
         "npm:@excalidraw/excalidraw@0.17.6",
         "npm:@improbable-eng/grpc-web-node-http-transport@0.15.0",
         "npm:@improbable-eng/grpc-web@0.15.0",
@@ -142,7 +168,7 @@
         "npm:@onsetsoftware/automerge-patcher@0.14.0",
         "npm:@paralleldrive/cuid2@2.2.2",
         "npm:@preact/signals-react@2.2.0",
-        "npm:@privy-io/react-auth@1.83.0",
+        "npm:@privy-io/react-auth@1.83.1",
         "npm:@standard-crypto/farcaster-js@7.4.0",
         "npm:@sveltejs/vite-plugin-svelte@3.1.2",
         "npm:@tauri-apps/api@1.6.0",
@@ -173,7 +199,7 @@
         "npm:@vitejs/plugin-react-swc@3.7.0",
         "npm:akahu@1.15.3",
         "npm:approx-string-match@2.0.0",
-        "npm:automerge-repo-network-peerjs@1.2.2",
+        "npm:automerge-repo-network-peerjs@1.2.3",
         "npm:automerge-tldraw@0.2.0",
         "npm:buffer@6.0.3",
         "npm:chai@5.1.1",
@@ -184,6 +210,9 @@
         "npm:dotenv@16.4.5",
         "npm:eslint-config-prettier@9.1.0",
         "npm:eslint-plugin-prettier@5.2.1",
+        "npm:eslint-plugin-react-hooks@^5.1.0-rc.0",
+        "npm:eslint-plugin-react-refresh@^0.4.9",
+        "npm:eslint@^9.9.0",
         "npm:execa@9.3.1",
         "npm:fake-indexeddb@6.0.0",
         "npm:fast-json-patch@3.1.1",
@@ -191,13 +220,14 @@
         "npm:fs-extra@11.2.0",
         "npm:glamor-jss@1.4.1",
         "npm:glob@11.0.0",
-        "npm:happy-dom@15.7.3",
+        "npm:globals@^15.9.0",
+        "npm:happy-dom@15.7.4",
         "npm:immer@10.1.1",
         "npm:jss-plugin-global@10.10.0",
         "npm:million@3.1.11",
         "npm:minimist@1.2.8",
         "npm:monaco-editor@0.51.0",
-        "npm:openai@4.58.2",
+        "npm:openai@4.59.0",
         "npm:ora@8.1.0",
         "npm:peerjs@1.5.4",
         "npm:picocolors@1.1.0",
@@ -234,16 +264,17 @@
         "npm:ts-essentials@10.0.2",
         "npm:tslib@2.7.0",
         "npm:tsx@4.19.0",
+        "npm:typescript-eslint@^8.0.1",
         "npm:typescript@5.6.2",
         "npm:ua-parser-js@1.0.38",
         "npm:unified@11.0.5",
         "npm:unist-util-select@5.1.0",
         "npm:uuid@10.0.0",
-        "npm:viem@2.21.4",
+        "npm:viem@2.21.6",
         "npm:vite-plugin-node-polyfills@0.22.0",
         "npm:vite-plugin-top-level-await@1.4.4",
         "npm:vite-plugin-wasm@3.3.0",
-        "npm:vite@5.4.3",
+        "npm:vite@5.4.4",
         "npm:vitest@2.0.5",
         "npm:ws@8.18.0",
         "npm:yaml@2.5.1",
