@@ -1,27 +1,30 @@
-import { ensureDir, exists, expandGlob, type WalkEntry } from 'jsr:@std/fs@1.0.3';
-import { dirname, join, resolve, fromFileUrl } from 'jsr:@std/path@1.0.4';
+import { expandGlob, type WalkEntry } from 'jsr:@std/fs@1.0.3';
+import { Path } from './lib.Fs.Path.ts';
 
 /**
  * Run a glob pattern against the file-system.
  */
-function glob(...dir: (string | undefined)[]) {
+export function glob(...dir: (string | undefined)[]) {
   const asStrings = (dir: (string | undefined)[]) => dir.filter(Boolean) as string[];
   return {
     async find(pattern: string, options: { exclude?: string[] } = {}): Promise<WalkEntry[]> {
       const { exclude } = options;
       const res: WalkEntry[] = [];
-      for await (const file of expandGlob(join(...asStrings(dir), pattern), { exclude })) {
+      for await (const file of expandGlob(Path.join(...asStrings(dir), pattern), { exclude })) {
         res.push(file);
       }
       return res;
     },
     dir(...subdir: (string | undefined)[]) {
-      return glob(join(...asStrings(dir), ...asStrings(subdir)));
+      return glob(Path.join(...asStrings(dir), ...asStrings(subdir)));
     },
   } as const;
 }
 
-async function copyDir(sourceDir: string, targetDir: string) {
+/**
+ * Copy all files in a directory.
+ */
+export async function copyDir(sourceDir: string, targetDir: string) {
   await Deno.mkdir(targetDir, { recursive: true });
   for await (const entry of Deno.readDir(sourceDir)) {
     const srcPath = `${sourceDir}/${entry.name}`;
@@ -33,16 +36,3 @@ async function copyDir(sourceDir: string, targetDir: string) {
     }
   }
 }
-
-/**
- * Export
- */
-export const Path = { exists, join, dirname, fromFileUrl, resolve, ensureDir } as const;
-export const Fs = {
-  ...Path,
-  exists,
-  Path,
-  glob,
-  copyDir,
-  remove: Deno.remove,
-} as const;

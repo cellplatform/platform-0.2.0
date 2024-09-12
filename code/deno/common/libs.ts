@@ -1,4 +1,6 @@
-export * from './u.lib.fs.ts';
+export * from './lib.Fs.ts';
+export * from './lib.Testing.ts';
+
 export * as dotenv from 'https://deno.land/std@0.224.0/dotenv/mod.ts';
 export * as DateTime from 'https://deno.land/std@0.224.0/datetime/mod.ts';
 
