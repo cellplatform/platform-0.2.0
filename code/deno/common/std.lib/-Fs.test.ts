@@ -14,6 +14,6 @@ Deno.test('Fs (filesystem)', async (test) => {
   });
 
   await test.step('fail', () => {
-    // Expect.eql(1, 2);
+    Expect.eql(1, 2);
   });
 });
