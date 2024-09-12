@@ -18,7 +18,7 @@ jobs:
           deno-version: v1.x
 
       - name: Tests
-        run: cd code/deno && deno test -RW --quiet
+        run: deno task test --quiet
 
       - name: Info
         run: |
