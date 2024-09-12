@@ -1,4 +1,4 @@
-import { IndexedDBStorageAdapter, Repo } from '../../common/libs.Automerge';
+import { IndexedDBStorageAdapter, Repo } from '../../common/libs.automerge-repo';
 import { Doc, Store, BroadcastChannel } from '../common';
 import { WebStoreIndex as Index } from '../Store.Web.Index';
 import { StoreIndexDb } from '../Store.Web.IndexDb';

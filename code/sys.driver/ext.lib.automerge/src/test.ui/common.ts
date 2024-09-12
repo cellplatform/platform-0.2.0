@@ -10,7 +10,7 @@ export {
   BroadcastChannelNetworkAdapter,
   IndexedDBStorageAdapter,
   Repo,
-} from '../common/libs.Automerge';
+} from '../common/libs.automerge-repo';
 
 export { Doc } from '../crdt/Doc';
 export { StoreIndex } from '../crdt/Store.Index';
