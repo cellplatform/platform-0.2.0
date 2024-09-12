@@ -37,6 +37,7 @@ async function info(options: { lines?: boolean } = {}) {
   const exclude = [
     '**/node_modules/**',
     '**/_archive/**',
+    '**/-tmpl/**',
     '**/spikes/**',
     '**/compiler/**',
     '**/compiler.samples/**',
