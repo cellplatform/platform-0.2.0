@@ -24,9 +24,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
 
-      # - run: yarn install
-      # - run: yarn audit
-      # - run: yarn ls --topo
-      # - run: yarn build
-      # - run: yarn test
-      # - run: yarn count
+      - run: yarn install
+      - run: yarn audit
+      - run: yarn ls --topo
+      - run: yarn build
+      - run: yarn test
+      - run: yarn count

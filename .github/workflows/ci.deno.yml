@@ -21,14 +21,5 @@ jobs:
           deno --version
           deno run -RE --quiet script.deno/info.ts
 
-      - name: module → "@sys/std"
-        run: |
-          cd code/deno/std
-          deno test -RW
-          deno publish
-
-      - name: module → "@sys/std-server"
-        run: |
-          cd code/deno/std.server
-          deno test -RW
-          deno publish
+      - name: Tests
+        run: deno task test
