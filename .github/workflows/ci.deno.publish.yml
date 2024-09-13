@@ -1,0 +1,19 @@
+# .github/workflows/publish.yml
+#  https://jsr.io/docs/publishing-packages#publishing-from-github-actions
+
+name: ci.deno → publish
+
+on:
+  push:
+    branches:
+      - phil-work
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # The OIDC ID token is used for authentication with JSR.
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd code/deno/std && npx jsr publish --dry-run

@@ -1,7 +1,10 @@
 {
   "name": "@sys/std",
+  "version": "0.0.1",
   "exports": "./src/mod.ts",
   "tasks": {
-    "test": "deno test -RW --watch"
+    "test": "deno test -RW --watch",
+    "pub": "deno publish --allow-dirty",
+    "pub-dry": "deno publish --allow-dirty --dry-run"
   }
 }
