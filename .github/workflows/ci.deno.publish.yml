@@ -14,6 +14,12 @@ on:
       - completed
 
 jobs:
+  check_conclusion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Conclusion
+        run: echo "Conclusion is ${{ github.event.workflow_run.conclusion }}"
+
   publish:
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
