@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - phil-work
 
 jobs:
   deno:
@@ -21,13 +22,13 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: module → "@sys/std"
+      - name: publish module → "@sys/std"
         run: |
           cd code/deno/std
           deno test -RW
           deno publish
 
-      - name: module → "@sys/std-server"
+      - name: publish module → "@sys/std-server"
         run: |
           cd code/deno/std.server
           deno test -RW
