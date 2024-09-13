@@ -28,10 +28,10 @@ jobs:
 
       - run: |
           cd code/deno/std
-          deno task test
+          deno test -RW
           deno publish
 
       - run: |
           cd code/deno/std.server
-          deno task test
+          deno test -RW
           deno publish
