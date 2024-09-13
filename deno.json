@@ -5,7 +5,11 @@
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
-  "workspace": ["./code/deno/std", "./code/deno/std.server"],
+  "workspace": [
+    "./code/deno/std.lib/std",
+    "./code/deno/std.lib/std.server",
+    "./code/deno/drivers/driver.denocloud"
+  ],
   "imports": {
     "@std/assert": "jsr:@std/assert@1.0.4",
     "@std/datetime": "jsr:@std/datetime@0.225.2",
