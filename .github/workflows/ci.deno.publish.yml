@@ -26,5 +26,5 @@ jobs:
         with:
           deno-version: v1.x
 
-      - run: cd code/deno/std && deno publish
+      # - run: cd code/deno/std && deno publish
       - run: cd code/deno/std.server && deno publish --dry-run
