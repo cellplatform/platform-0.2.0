@@ -1,4 +1,4 @@
-import { Fs, c } from './u.ts';
+import { Fs, c } from '@sys/stdlib';
 
 /**
  * Count the lines of files at the given list of paths.
@@ -63,5 +63,6 @@ async function info(options: { lines?: boolean } = {}) {
 /**
  * System/Repo info.
  */
+console.log();
 await info({ lines: true });
 console.info();

@@ -1,4 +1,4 @@
-import { exists } from 'jsr:@std/fs@1.0.3';
+import { exists } from '@std/fs';
 import { copyDir, glob } from './u.Fs.u.ts';
 import { Path } from './u.Path.ts';
 

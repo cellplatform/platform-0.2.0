@@ -1,9 +1,9 @@
 import {
-  assertEquals,
   assertArrayIncludes,
+  assertEquals,
   assertGreater,
   assertGreaterOrEqual,
-} from 'jsr:@std/assert@1.0.4';
+} from '@std/assert';
 
 /**
  * Assertion helpers.

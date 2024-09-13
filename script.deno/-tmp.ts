@@ -1,27 +1,27 @@
-import { Fs, c } from './u.ts';
+import { Fs, c } from '@sys/stdlib';
 
 const exclude = [
   '**/node_modules/**',
-  // '**/spikes/**',
   '**/compiler/**',
   '**/compiler.samples/**',
   '**/*.d.mts',
+  // '**/spikes/**',
 ];
 
-const pattern = 'code/**/entry.Specs.mts';
+const pattern = 'code/**/*.mts';
 const dir = Fs.resolve(import.meta.dirname || '', '..');
 const paths = await Fs.glob(dir).find(pattern, { exclude });
 
 for (const file of paths) {
   const path = file.path.substring(dir.length + 1);
-  console.log(c.green('•'), path);
 
   const from = file.path;
   const to = Fs.join(Fs.dirname(file.path), file.name.replace(/\.mts$/, '.ts'));
 
-  console.log('-------------------------------------------');
-  console.log('from', from);
-  console.log('to  ', to);
+  console.log(c.yellow('-------------------------------------------'));
+  console.log(c.green('•'), path);
+  console.log('  from', c.gray(from));
+  console.log('  to  ', c.green(to));
 
   // await Deno.rename(from, to);
 }

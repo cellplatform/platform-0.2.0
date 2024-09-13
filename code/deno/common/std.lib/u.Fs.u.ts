@@ -1,4 +1,4 @@
-import { expandGlob, type WalkEntry } from 'jsr:@std/fs@1.0.3';
+import { expandGlob, type WalkEntry } from '@std/fs';
 import { Path } from './u.Path.ts';
 
 /**

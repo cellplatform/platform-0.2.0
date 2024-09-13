@@ -1,7 +1,17 @@
 {
   "tasks": {
     "info": "deno run -R script.deno/info.ts",
-    "test": "deno run -R --allow-run script.deno/test.ts"
+    "test": "deno run -R --allow-run script.deno/test.ts",
+    "tmp": "deno run -A script.deno/-tmp.ts"
   },
-  "compilerOptions": { "strict": true }
+  "workspace": ["./code/deno"],
+  "compilerOptions": { "strict": true },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@1.0.3",
+    "@std/path": "jsr:@std/path@1.0.4",
+    "@std/assert": "jsr:@std/assert@1.0.4",
+    "@std/datetime": "jsr:@std/datetime@0.225.2",
+    "@std/dotenv": "jsr:@std/dotenv@0.225.2",
+    "@std/fmt": "jsr:@std/fmt@1.0.2"
+  }
 }
