@@ -1,7 +1,7 @@
 import { basename, dirname, fromFileUrl, join, resolve, toFileUrl } from '@std/path';
 
 /**
- * Path helpers.
+ * Path manipulation helpers.
  */
 export const Path = {
   /* Joins a sequence of paths, then normalizes the resulting path. */
