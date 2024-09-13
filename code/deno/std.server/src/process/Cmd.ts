@@ -1,12 +1,14 @@
+import { type t } from '../common.ts';
+
 /**
  * Unix child process.
  * https://docs.deno.com/api/deno/~/Deno.Command
  */
-export const Cmd = {
+export const Cmd: t.Cmd = {
   /**
    * Run an <shell> command.
    */
-  sh(...line: string[]) {
+  sh(...line) {
     const command = line.join(' && ');
     return Cmd.run(['-c', command], { cmd: 'sh' });
   },
@@ -14,7 +16,7 @@ export const Cmd = {
   /**
    * Run a <unix> command (on spawned child process).
    */
-  async run(args: string[], options: { cmd?: string; silent?: boolean } = {}) {
+  async run(args, options = {}) {
     const cmd = options.cmd ?? Deno.execPath();
     const command = new Deno.Command(cmd, {
       args,

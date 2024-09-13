@@ -4,6 +4,7 @@
   "license": "MIT",
   "exports": "./src/mod.ts",
   "tasks": {
-    "test": "deno test -RW --watch"
+    "test": "deno test -RW --watch",
+    "dry": "deno publish --allow-dirty --dry-run"
   }
 }

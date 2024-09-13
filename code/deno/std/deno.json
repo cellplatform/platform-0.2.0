@@ -5,7 +5,6 @@
   "exports": "./src/mod.ts",
   "tasks": {
     "test": "deno test -RW --watch",
-    "pub": "deno publish --allow-dirty",
-    "pub-dry": "deno publish --allow-dirty --dry-run"
+    "dry": "deno publish --allow-dirty --dry-run"
   }
 }
