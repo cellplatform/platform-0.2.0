@@ -14,14 +14,7 @@ on:
       - completed
 
 jobs:
-  check_conclusion:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Conclusion
-        run: echo "Conclusion is ${{ github.event.workflow_run.conclusion }}"
-
   publish:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,5 +26,12 @@ jobs:
         with:
           deno-version: v1.x
 
-      - run: cd code/deno/std && deno publish
-      - run: cd code/deno/std.server && deno publish
+      - run: |
+          cd code/deno/std
+          deno task test
+          deno publish
+
+      - run: |
+          cd code/deno/std.server
+          deno task test
+          deno publish
