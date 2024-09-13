@@ -19,6 +19,11 @@ jobs:
     permissions:
       contents: read
       id-token: write # The OIDC ID token is used for authentication with JSR.
+
     steps:
-      - uses: actions/checkout@v4
-      - run: cd code/deno/std && npx jsr publish --dry-run
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - run: cd code/deno/std && deno publish
