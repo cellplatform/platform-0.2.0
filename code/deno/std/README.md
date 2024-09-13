@@ -1,5 +1,5 @@
 # @sys/std
-System standard library.
+Standard library.
 
 ```ts
 import { Path } from '@sys/std';
