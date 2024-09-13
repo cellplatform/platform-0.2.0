@@ -4,33 +4,22 @@ name: ci.deno
 on: [push]
 
 jobs:
-  build:
-    name: deno
+  deno:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # The OIDC ID token is used for authentication with JSR.
 
     steps:
-      - name: Record start time
-        run: echo "START_TIME=$(date +%s%N)" >> $GITHUB_ENV
-
-      - uses: actions/checkout@v2
-      - uses: denolib/setup-deno@v2
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-
-      - name: Tests
-        run: deno task test
 
       - name: Info
         run: |
           deno --version
           deno run -RE --quiet script.deno/info.ts
 
-      - name: Record end time
-        run: echo "END_TIME=$(date +%s%N)" >> $GITHUB_ENV
-
-      - name: Calculate elapsed time
-        run: |
-          ELAPSED_MSECS=$((($END_TIME - $START_TIME)/1000000))
-          ELAPSED_SECS=$(($ELAPSED_MSECS / 1000))
-          echo "Elapsed time: $ELAPSED_MSECS msecs"
-          echo "Elapsed time: $ELAPSED_SECS secs"
+      - name: Tests
+        run: deno task test

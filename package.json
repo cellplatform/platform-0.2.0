@@ -12,9 +12,7 @@
     "ls": "tsx script.node/cmd.all.list.ts",
     "count": "tsx script.node/cmd.count.ts",
     "nuke": "tsx script.node/cmd.nuke.ts",
-    "mit": "fossa analyze --debug",
-    "d.info": "deno run -R script.deno/info.ts",
-    "tmp": "deno run -A script.deno/tmp.ts"
+    "mit": "fossa analyze --debug"
   },
   "workspaces": {
     "packages": [
