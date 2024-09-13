@@ -1,7 +1,5 @@
 import * as Color from '@std/fmt/colors';
 
-export * from './u.Cmd.ts';
-export * from './u.Fs.ts';
 export * from './u.Path.ts';
 export * from './u.Testing.ts';
 

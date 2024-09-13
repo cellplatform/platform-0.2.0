@@ -1,4 +1,4 @@
-import { Expect, Fs } from './mod.ts';
+import { Expect, Fs } from '../mod.ts';
 
 Deno.test('Fs: filesystem', async (test) => {
   await test.step('glob', async () => {

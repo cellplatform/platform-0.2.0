@@ -1,6 +1,6 @@
 {
   "name": "@sys/stdlib",
-  "exports": "./mod.ts",
+  "exports": "./src/mod.ts",
   "tasks": {
     "test": "deno test -RW --watch"
   }

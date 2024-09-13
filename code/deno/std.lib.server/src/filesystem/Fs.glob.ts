@@ -1,5 +1,5 @@
 import { expandGlob, type WalkEntry } from '@std/fs';
-import { Path } from './u.Path.ts';
+import { Path } from './Path.ts';
 
 /**
  * Run a glob pattern against the file-system.
@@ -19,20 +19,4 @@ export function glob(...dir: (string | undefined)[]) {
       return glob(Path.join(...asStrings(dir), ...asStrings(subdir)));
     },
   } as const;
-}
-
-/**
- * Copy all files in a directory.
- */
-export async function copyDir(sourceDir: string, targetDir: string) {
-  await Deno.mkdir(targetDir, { recursive: true });
-  for await (const entry of Deno.readDir(sourceDir)) {
-    const srcPath = `${sourceDir}/${entry.name}`;
-    const destPath = `${targetDir}/${entry.name}`;
-    if (entry.isDirectory) {
-      await copyDir(srcPath, destPath);
-    } else if (entry.isFile) {
-      await Deno.copyFile(srcPath, destPath);
-    }
-  }
 }

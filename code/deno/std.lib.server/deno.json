@@ -1,0 +1,7 @@
+{
+  "name": "@sys/stdlib-server",
+  "exports": "./src/mod.ts",
+  "tasks": {
+    "test": "deno test -RW --watch"
+  }
+}

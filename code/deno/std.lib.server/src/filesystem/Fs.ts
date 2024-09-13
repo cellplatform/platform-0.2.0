@@ -1,6 +1,7 @@
 import { exists } from '@std/fs';
-import { copyDir, glob } from './u.Fs.u.ts';
-import { Path } from './u.Path.ts';
+import { copyDir } from './Fs.cp.ts';
+import { glob } from './Fs.glob.ts';
+import { Path } from './Path.ts';
 
 export { Path };
 

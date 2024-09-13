@@ -12,7 +12,6 @@ export const Expect = {
   eql: assertEquals,
   greater: assertGreater,
   greaterOrEqual: assertGreaterOrEqual,
-
   Array: {
     includes: assertArrayIncludes,
   },
