@@ -1,6 +1,6 @@
 {
   "name": "@sys/std",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "exports": "./src/mod.ts",
   "tasks": {
