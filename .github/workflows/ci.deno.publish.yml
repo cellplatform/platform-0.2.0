@@ -1,7 +1,7 @@
 # .github/workflows/publish.yml
 #  https://jsr.io/docs/publishing-packages#publishing-from-github-actions
 
-name: ci.deno → publish
+name: ci.deno.publish
 
 on:
   push:
