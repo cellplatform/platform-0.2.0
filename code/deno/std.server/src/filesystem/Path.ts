@@ -1,5 +1,5 @@
 import { ensureDir, exists } from '@std/fs';
-import { Path as Base } from '@sys/stdlib';
+import { Path as Base } from '@sys/std';
 
 /**
  * Path helpers.

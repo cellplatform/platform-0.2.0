@@ -5,7 +5,7 @@
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
-  "workspace": ["./code/deno/std.lib", "./code/deno/std.lib.server"],
+  "workspace": ["./code/deno/std", "./code/deno/std.server"],
   "imports": {
     "@std/fs": "jsr:@std/fs@1.0.3",
     "@std/path": "jsr:@std/path@1.0.4",
