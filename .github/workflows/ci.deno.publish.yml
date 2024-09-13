@@ -8,6 +8,11 @@ on:
     branches:
       - phil-work
 
+  workflow_run:
+    workflows: ['ci.deno']
+    types:
+      - completed
+
 jobs:
   publish:
     runs-on: ubuntu-latest
