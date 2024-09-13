@@ -9,7 +9,9 @@
       "jsr:@std/fs@1.0.3": "jsr:@std/fs@1.0.3",
       "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
       "jsr:@std/path@1.0.4": "jsr:@std/path@1.0.4",
-      "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.4"
+      "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.4",
+      "jsr:@std/semver": "jsr:@std/semver@1.0.3",
+      "jsr:@std/semver@1.0.3": "jsr:@std/semver@1.0.3"
     },
     "jsr": {
       "@std/assert@1.0.4": {
@@ -38,6 +40,9 @@
       },
       "@std/path@1.0.4": {
         "integrity": "48dd5d8389bcfcd619338a01bdf862cb7799933390146a54ae59356a0acc7105"
+      },
+      "@std/semver@1.0.3": {
+        "integrity": "7c139c6076a080eeaa4252c78b95ca5302818d7eafab0470d34cafd9930c13c8"
       }
     }
   },
@@ -49,7 +54,8 @@
       "jsr:@std/dotenv@0.225.2",
       "jsr:@std/fmt@1.0.2",
       "jsr:@std/fs@1.0.3",
-      "jsr:@std/path@1.0.4"
+      "jsr:@std/path@1.0.4",
+      "jsr:@std/semver@1.0.3"
     ],
     "packageJson": {
       "dependencies": [
