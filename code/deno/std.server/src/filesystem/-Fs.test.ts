@@ -12,4 +12,8 @@ Deno.test('Fs: filesystem', async (test) => {
     Expect.eql(self?.isFile, true);
     Expect.eql(self?.name, Fs.Path.basename(import.meta.filename ?? ''));
   });
+
+  await test.step('fail', () => {
+    Expect.eql(1, 2);
+  });
 });
