@@ -6,8 +6,8 @@
   },
   "compilerOptions": { "strict": true },
   "workspace": [
-    "./code/deno/std.lib/std",
-    "./code/deno/std.lib/std.server",
+    "./code/deno/std.libs/std",
+    "./code/deno/std.libs/std.server",
     "./code/deno/drivers/driver.denocloud"
   ],
   "imports": {

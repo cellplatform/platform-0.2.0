@@ -24,7 +24,7 @@ jobs:
 
       - name: publish module → "@sys/std"
         run: |
-          cd code/deno/std
+          cd code/deno/std.lib/std
           deno test -RW
           deno publish
 
