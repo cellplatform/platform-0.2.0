@@ -8,9 +8,9 @@
   "compilerOptions": { "strict": true },
   "nodeModules": false,
   "workspace": [
-    "./code/deno/std.libs/std",
-    "./code/deno/std.libs/std.server",
-    "./code/deno/drivers/driver.deno.cloud",
+    "./code/deno/std.lib/std",
+    "./code/deno/std.lib/std.server",
+    "./code/deno/driver/driver.deno.cloud",
     "./code/compiler.samples/deno.vite",
     "./code/spikes/deno.000"
   ],

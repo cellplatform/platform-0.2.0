@@ -24,12 +24,12 @@ jobs:
 
       - name: publish module → "@sys/std"
         run: |
-          cd code/deno/std.libs/std
+          cd code/deno/std.lib/std
           deno test -RW
           deno publish
 
       - name: publish module → "@sys/std-server"
         run: |
-          cd code/deno/std.libs/std.server
+          cd code/deno/std.lib/std.server
           deno test -RW
           deno publish
