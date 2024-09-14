@@ -1,4 +1,4 @@
-import { Expect, Path } from './mod.ts';
+import { Expect, Path } from '../mod.ts';
 
 Deno.test('Path', async (test) => {
   await test.step('join', () => {

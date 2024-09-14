@@ -1,4 +1,4 @@
-import { Expect, Semver } from './mod.ts';
+import { Expect, Semver } from '../mod.ts';
 
 Deno.test('Semver', async (test) => {
   await test.step('eql', () => {

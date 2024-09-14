@@ -1,11 +1,9 @@
 /* Color formatting helpers. */
 import * as Color from '@std/fmt/colors';
 
-/* Semenatic version helpers. */
-export * as Semver from '@std/semver';
-
-export * from './u.Path.ts';
-export * from './u.Testing.ts';
+export * from './SemVer/mod.ts';
+export * from './Path/mod.ts';
+export * from './Testing/mod.ts';
 
 /* Semenatic version helpers. */
 export * as DateTime from '@std/datetime';
