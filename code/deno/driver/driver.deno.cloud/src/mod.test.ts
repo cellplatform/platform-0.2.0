@@ -1,7 +1,7 @@
-import { Assert } from './common.ts';
+import { expect } from './common.ts';
 
 Deno.test('🐷', async (test) => {
   await test.step('sample', () => {
-    Assert.eql(123, 123);
+    expect(123).to.eql(123);
   });
 });

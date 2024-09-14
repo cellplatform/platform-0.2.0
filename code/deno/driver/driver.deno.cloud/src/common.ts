@@ -1,1 +1,1 @@
-export { Assert } from '@sys/std';
+export { expect } from '@sys/std';

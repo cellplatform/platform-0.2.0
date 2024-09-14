@@ -1,4 +1,4 @@
-import { Assert, Fs } from '../mod.ts';
+import { expect, Fs } from '../mod.ts';
 
 Deno.test('Fs: filesystem', async (test) => {
   await test.step('glob', async () => {
@@ -6,10 +6,10 @@ Deno.test('Fs: filesystem', async (test) => {
     const glob = Fs.glob(base);
 
     const matches = await glob.find('**');
-    Assert.greater(matches.length, 3);
+    expect(matches.length).to.be.greaterThan(3);
 
     const self = matches.find((item) => item.path === import.meta.filename);
-    Assert.eql(self?.isFile, true);
-    Assert.eql(self?.name, Fs.Path.basename(import.meta.filename ?? ''));
+    expect(self?.isFile).to.eql(true);
+    expect(self?.name).to.eql(Fs.Path.basename(import.meta.filename ?? ''));
   });
 });
