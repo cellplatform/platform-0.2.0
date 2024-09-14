@@ -1,7 +1,7 @@
-import { expect, Fs } from '../mod.ts';
+import { describe, expect, Fs, it } from '../mod.ts';
 
-Deno.test('Fs: filesystem', async (test) => {
-  await test.step('glob', async () => {
+describe('Fs: filesystem', () => {
+  it('glob', async () => {
     const base = Fs.resolve();
     const glob = Fs.glob(base);
 

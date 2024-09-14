@@ -1,1 +1,1 @@
-export { expect } from '@sys/std';
+export { describe, expect, it } from '@sys/std/testing';

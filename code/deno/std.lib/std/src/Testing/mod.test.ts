@@ -1,4 +1,4 @@
-import { expect, describe, it } from './mod.ts';
+import { describe, expect, it } from './mod.ts';
 
 describe('foo', () => {
   describe('bar', () => {

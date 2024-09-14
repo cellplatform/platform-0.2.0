@@ -1,7 +1,7 @@
-import { expect, Semver } from '../mod.ts';
+import { describe, expect, it, Semver } from '../mod.ts';
 
-Deno.test('Semver', async (test) => {
-  await test.step('eql', () => {
+describe('Sember', () => {
+  it('eq.', () => {
     const a = Semver.parse('1.2.0');
     const b = Semver.parse('1.2.1');
     expect(Semver.greaterThan(b, a)).to.eql(true);
