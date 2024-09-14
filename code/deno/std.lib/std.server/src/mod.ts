@@ -1,4 +1,4 @@
-export { Color, DateTime, Expect, c } from '@sys/std';
+export { Color, DateTime, Assert, c } from '@sys/std';
 export * as Dotenv from '@std/dotenv';
 
 export * from './process/Cmd.ts';

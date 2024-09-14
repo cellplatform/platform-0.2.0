@@ -1,7 +1,7 @@
-import { Expect, Path } from '../mod.ts';
+import { Assert, Path } from '../mod.ts';
 
 Deno.test('Path', async (test) => {
   await test.step('join', () => {
-    Expect.eql(Path.join('foo', 'bar'), 'foo/bar');
+    Assert.eql(Path.join('foo', 'bar'), 'foo/bar');
   });
 });

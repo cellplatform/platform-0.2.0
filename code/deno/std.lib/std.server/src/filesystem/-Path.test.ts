@@ -1,9 +1,9 @@
-import { Expect, Fs, Path } from '../mod.ts';
+import { Assert, Fs, Path } from '../mod.ts';
 
 Deno.test('Path', async (test) => {
   await test.step('filesystem extensions', () => {
-    Expect.eql(Fs.Path, Path);
-    Expect.eql(Path.exists, Fs.exists);
-    Expect.eql(Path.ensureDir, Fs.ensureDir);
+    Assert.eql(Fs.Path, Path);
+    Assert.eql(Path.exists, Fs.exists);
+    Assert.eql(Path.ensureDir, Fs.ensureDir);
   });
 });
