@@ -22,6 +22,7 @@
     "npm:chai": "npm:chai@5.1.1",
     "@std/fs": "jsr:@std/fs@1.0.3",
     "@std/path": "jsr:@std/path@1.0.4",
-    "@std/semver": "jsr:@std/semver@1.0.3"
+    "@std/semver": "jsr:@std/semver@1.0.3",
+    "@std/testing": "jsr:@std/testing@1.0.2"
   }
 }

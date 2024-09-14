@@ -2,9 +2,12 @@
   "name": "@sys/std",
   "version": "0.0.4",
   "license": "MIT",
-  "exports": "./src/mod.ts",
   "tasks": {
     "test": "deno test -RW --watch",
     "dry": "deno publish --allow-dirty --dry-run"
+  },
+  "exports": {
+    ".": "./src/mod.ts",
+    "./testing": "./src/Testing/mod.ts"
   }
 }

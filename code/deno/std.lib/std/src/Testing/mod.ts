@@ -1,1 +1,2 @@
-export * from './u.Expect.ts';
+export { expect } from 'npm:chai';
+export { describe, it } from '@std/testing/bdd';
