@@ -1,15 +1,15 @@
 {
   "tasks": {
-    "info": "deno run -R script.deno/info.ts",
-    "test": "deno run -R --allow-run script.deno/test.ts",
-    "ci": "deno task test && deno task info",
+    "info": "time deno run -R script.deno/info.ts",
+    "test": "time deno run -R --allow-run script.deno/test.ts",
+    "ci": "time deno task test && deno task info",
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
   "nodeModules": false,
   "workspace": [
     "./code/deno/std.lib/std",
-    "./code/deno/std.lib/std.server",
+    "./code/deno/std.lib/std.s",
     "./code/deno/driver/driver.deno.cloud",
     "./code/compiler.samples/deno.vite",
     "./code/spikes/deno.000"
@@ -19,10 +19,10 @@
     "@std/datetime": "jsr:@std/datetime@0.225.2",
     "@std/dotenv": "jsr:@std/dotenv@0.225.2",
     "@std/fmt": "jsr:@std/fmt@1.0.2",
-    "npm:chai": "npm:chai@5.1.1",
     "@std/fs": "jsr:@std/fs@1.0.3",
     "@std/path": "jsr:@std/path@1.0.4",
     "@std/semver": "jsr:@std/semver@1.0.3",
-    "@std/testing": "jsr:@std/testing@1.0.2"
+    "@std/testing": "jsr:@std/testing@1.0.2",
+    "npm:chai": "npm:chai@5.1.1"
   }
 }

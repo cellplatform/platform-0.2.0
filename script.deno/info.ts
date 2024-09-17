@@ -1,4 +1,4 @@
-import { Fs, c } from '@sys/std-server';
+import { Fs, c } from '@sys/std-s';
 
 /**
  * Count the lines of files at the given list of paths.

@@ -1,4 +1,4 @@
-import { Cmd } from '@sys/std-server';
+import { Cmd } from '@sys/std-s';
 
 const run = (path: string, args = '') => Cmd.sh(`cd ${path}`, `deno test ${args}`);
 

@@ -1,5 +1,5 @@
 {
-  "name": "@sys/std-server",
+  "name": "@sys/std-s",
   "version": "0.0.1",
   "license": "MIT",
   "exports": "./src/mod.ts",
