@@ -1,4 +1,4 @@
-import { Fs, c } from '../code/deno/std.lib/src/mod.ts';
+import { Fs, c } from '@sys/std-s';
 
 const exclude = [
   '**/node_modules/**',
