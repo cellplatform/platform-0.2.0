@@ -1,5 +1,5 @@
 import { describe, expect, it, Testing } from '../common/mod.ts';
-import { DEFAULTS } from './common';
+import { DEFAULTS } from './common.ts';
 import { Http } from './mod.ts';
 
 describe('Http', () => {
