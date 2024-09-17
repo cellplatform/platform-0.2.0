@@ -34,10 +34,15 @@ export const Cmd: t.Cmd = {
     const { code, stdout, stderr } = res;
 
     if (!options.silent) {
+      const log = (output: Uint8Array) => {
+        const text = new TextDecoder().decode(output);
+        if (text) console.log(text);
+      };
+
       if (code === 0) {
-        console.log(new TextDecoder().decode(stdout));
+        log(stdout);
       } else {
-        console.error(new TextDecoder().decode(stderr));
+        log(stderr);
       }
     }
 
