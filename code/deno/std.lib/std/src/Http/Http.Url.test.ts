@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../common.ts';
+import { describe, expect, it } from '../common/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http.Url', () => {
@@ -13,12 +13,12 @@ describe('Http.Url', () => {
     });
 
     it('trailing forward-slash', () => {
-      const url = Http.Url.create('https://foo.com');
+      const url = Http.url('https://foo.com');
       expect(url.base).to.eql('https://foo.com/');
     });
 
     it('localhost (http)', () => {
-      const url = Http.Url.create('http://localhost:8080');
+      const url = Http.url('http://localhost:8080');
       expect(url.base).to.eql('http://localhost:8080/');
     });
 
