@@ -6,7 +6,7 @@ describe('Http', () => {
   const ApplicationJson = DEFAULTS.contentType;
   const TestHttp = Testing.Http;
 
-  describe('HttpFetchClient', () => {
+  describe('Http.Client', () => {
     describe('client.headers', () => {
       it('headers: (default)', () => {
         const client = Http.client();
@@ -27,10 +27,35 @@ describe('Http', () => {
         expect(client1.contentType).to.eql('foo');
         expect(client2.contentType).to.eql('bar');
       });
+
+      it('headers: manipulate', () => {
+        let count = 0;
+        const client = Http.client({
+          headers(e) {
+            count++;
+            expect(e.get('Content-Type')).to.eql(ApplicationJson);
+
+            e.set('x-foo', 123).set('x-bar', 'hello');
+            expect(e.get('x-foo')).to.eql('123');
+            expect(e.get('x-bar')).to.eql('hello');
+
+            e.set('x-foo', null).set('x-bar', '  '); // NB: removed.
+            expect(e.get('x-foo')).to.eql('');
+            expect(e.get('x-bar')).to.eql('');
+
+            const keys = Object.keys(e.headers);
+            expect(keys.includes('x-foo')).to.eql(false);
+            expect(keys.includes('x-bar')).to.eql(false);
+          },
+        });
+
+        client.headers;
+        expect(count).to.eql(1);
+      });
     });
   });
 
-  describe('fetch (HTTP methods/verbs)', () => {
+  describe('client.fetch (HTTP methods/verbs)', () => {
     it('fetch: text', async () => {
       const server = TestHttp.server((req) => new Response('foo'));
       const client = Http.client();

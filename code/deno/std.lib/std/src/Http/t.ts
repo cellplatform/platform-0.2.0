@@ -12,8 +12,7 @@ type O = Record<string, unknown>;
  * map to: /sys.types
  */
 export type HttpMethod = 'HEAD' | 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
-export type HttpHeaders = { [key: HttpHeaderName]: StringHttpHeader };
-export type HttpHeaderName = string;
+export type HttpHeaders = { readonly [key: t.StringHttpHeaderName]: t.StringHttpHeader };
 
 // 🐷 NB: Duplicated from:
 // import type { HttpMethod } from '../../../../../sys/sys.net.http/src/types.ts';
@@ -24,6 +23,7 @@ export type HttpHeaderName = string;
 export type StringContentType = string;
 export type StringJwt = string;
 export type StringHttpHeader = string;
+export type StringHttpHeaderName = string;
 export type StringUrl = string;
 
 /**
@@ -48,18 +48,14 @@ export type HttpUrl = {
 export type HttpClientLib = {
   create(options?: t.HttpFetchClientOptions): t.HttpFetchClient;
 };
-export type HttpFetchClientOptions = {
-  accessToken?: t.StringJwt | (() => t.StringJwt);
-  contentType?: t.StringContentType | (() => t.StringContentType);
-};
 
 /**
  * An HTTP fetch client instance.
  */
 export type HttpFetchClient = {
   readonly contentType: t.StringContentType;
-  readonly headers: {};
-  header(name: t.HttpHeaderName): t.StringHttpHeader;
+  readonly headers: t.HttpHeaders;
+  header(name: t.StringHttpHeaderName): t.StringHttpHeader;
 
   fetch(url: t.StringUrl, options?: RequestInit): Promise<Response>;
   method(method: t.HttpMethod, url: t.StringUrl, options?: RequestInit): Promise<Response>;
@@ -73,4 +69,17 @@ export type HttpFetchClient = {
   patch(url: t.StringUrl, body: O, options?: RequestInit): Promise<Response>;
 
   delete(url: t.StringUrl, options?: RequestInit): Promise<Response>;
+};
+
+export type HttpFetchClientOptions = {
+  accessToken?: t.StringJwt | (() => t.StringJwt);
+  contentType?: t.StringContentType | (() => t.StringContentType);
+  headers?: t.HttpFetchClientMutateHeaders;
+};
+
+export type HttpFetchClientMutateHeaders = (e: HttpFetchClientMutateHeadersArgs) => void;
+export type HttpFetchClientMutateHeadersArgs = {
+  readonly headers: t.HttpHeaders;
+  get(name: string): t.StringHttpHeader;
+  set(name: string, value: string | number | null): HttpFetchClientMutateHeadersArgs;
 };

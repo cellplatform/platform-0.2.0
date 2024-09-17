@@ -26,11 +26,7 @@ export const Client: t.HttpClientLib = {
       },
 
       get headers() {
-        const accessToken = wrangle.accessToken(options);
-        const contentType = api.contentType;
-        const headers: t.HttpHeaders = { 'Content-Type': contentType };
-        if (accessToken) headers['Authorization'] = accessToken;
-        return headers;
+        return wrangle.headers(options);
       },
 
       header: (name) => (api.headers as any)[name] ?? '',
@@ -67,5 +63,33 @@ const wrangle = {
     const { contentType = DEFAULTS.contentType } = options;
     if (typeof contentType === 'function') return contentType();
     return contentType;
+  },
+
+  headers(options: Options): t.HttpHeaders {
+    const accessToken = wrangle.accessToken(options);
+    const contentType = wrangle.contentType(options);
+
+    const headers: any = { 'Content-Type': contentType };
+    if (accessToken) headers['Authorization'] = accessToken;
+
+    if (typeof options.headers === 'function') {
+      const payload: t.HttpFetchClientMutateHeadersArgs = {
+        get headers() {
+          return { ...headers };
+        },
+        get(name) {
+          return headers[name] ?? '';
+        },
+        set(name, value) {
+          if (typeof value === 'string') value = value.trim();
+          if (!value) delete headers[name];
+          else headers[name] = String(value);
+          return payload;
+        },
+      };
+      options.headers(payload);
+    }
+
+    return headers;
   },
 } as const;
