@@ -1,6 +1,8 @@
 import { DEFAULTS, type t } from './common.ts';
 
 type O = Record<string, unknown>;
+type R = RequestInit;
+type C = t.HttpFetchClient;
 type Options = t.HttpFetchClientOptions;
 
 /**
@@ -11,54 +13,42 @@ export const Client: t.HttpClientLib = {
   /**
    * HTTP client factory.
    */
-  create(options: Options = {}): t.HttpFetchClient {
-    const client: t.HttpFetchClient = {
+  create(options: Options = {}): C {
+    const method: C['method'] = (method, url, options) => api.fetch(url, { ...options, method });
+    const bodyMethod = (method: t.HttpMethod, url: string, data: O, options?: R) => {
+      const body = JSON.stringify(data);
+      return api.method(method, url, { ...options, body });
+    };
+
+    const api: t.HttpFetchClient = {
+      get contentType() {
+        return wrangle.contentType(options);
+      },
+
       get headers() {
         const accessToken = wrangle.accessToken(options);
-        const contentType = client.contentType;
+        const contentType = api.contentType;
         const headers: t.HttpHeaders = { 'Content-Type': contentType };
         if (accessToken) headers['Authorization'] = accessToken;
         return headers;
       },
 
-      get contentType() {
-        return wrangle.contentType(options);
-      },
+      header: (name) => (api.headers as any)[name] ?? '',
 
-      header(name) {
-        return (client.headers as any)[name] ?? '';
-      },
+      fetch: (url, options) => fetch(url, { ...options, headers: api.headers }),
+      method,
 
-      fetch(url, options) {
-        const headers = client.headers;
-        return fetch(url, { ...options, headers });
-      },
-      method(method, url, options) {
-        return client.fetch(url, { ...options, method });
-      },
+      get: (url, options) => method('GET', url, options),
+      head: (url, options) => method('HEAD', url, options),
+      options: (url, options) => method('OPTIONS', url, options),
 
-      get: (url: string, options) => client.method('GET', url, options),
-      head: (url: string, options) => client.method('HEAD', url, options),
-      options: (url: string, options) => client.method('OPTIONS', url, options),
+      put: (url, data, options) => bodyMethod('PUT', url, data, options),
+      post: (url, data, options) => bodyMethod('POST', url, data, options),
+      patch: (url, data, options) => bodyMethod('PATCH', url, data, options),
 
-      put(url: string, data, options) {
-        const body = wrangle.body(client.contentType, data, options);
-        return client.method('PUT', url, { ...options, body });
-      },
-      post(url: string, data, options) {
-        const body = wrangle.body(client.contentType, data, options);
-        return client.method('POST', url, { ...options, body });
-      },
-      patch(url: string, data, options) {
-        const body = wrangle.body(client.contentType, data, options);
-        return client.method('PATCH', url, { ...options, body });
-      },
-
-      delete(url: string, options) {
-        return client.method('DELETE', url, options);
-      },
+      delete: (url, options) => method('DELETE', url, options),
     };
-    return client;
+    return api;
   },
 } as const;
 
@@ -77,10 +67,5 @@ const wrangle = {
     const { contentType = DEFAULTS.contentType } = options;
     if (typeof contentType === 'function') return contentType();
     return contentType;
-  },
-
-  body(contentType: t.StringContentType, data: O, options?: RequestInit) {
-    const body = JSON.stringify(data);
-    return body;
   },
 } as const;
