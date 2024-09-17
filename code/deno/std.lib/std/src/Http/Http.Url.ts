@@ -4,15 +4,15 @@ import { Path } from '../Path/mod.ts';
 /**
  * Helpers for a URL used within an HTTP fetch client.
  */
-export const HttpUrl = {
+export const HttpUrl: t.HttpUrlLib = {
   /**
    * URL factory.
    */
-  create(base: string): t.HttpUrl {
+  create(base) {
     const { url, error } = wrangle.asUrl(base);
     if (error) throw error;
     base = url.href;
-    return {
+    const api: t.HttpUrl = {
       base,
       join(...parts: string[]) {
         const path = Path.join(url.pathname, ...parts);
@@ -22,6 +22,7 @@ export const HttpUrl = {
         return base;
       },
     };
+    return api;
   },
 } as const;
 

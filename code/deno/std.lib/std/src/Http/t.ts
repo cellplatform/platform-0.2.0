@@ -27,7 +27,14 @@ export type StringHttpHeader = string;
 export type StringUrl = string;
 
 /**
- * Represents a URL endpoing of an HTTP service.
+ * Library: URL
+ */
+export type HttpUrlLib = {
+  create(base: t.StringUrl): t.HttpUrl;
+};
+
+/**
+ * Represents a URL endpoint of an HTTP service.
  */
 export type HttpUrl = {
   readonly base: string;
@@ -36,7 +43,18 @@ export type HttpUrl = {
 };
 
 /**
- * An HTTP fetch client.
+ * Library: HttpClient
+ */
+export type HttpClientLib = {
+  create(options?: t.HttpFetchClientOptions): t.HttpFetchClient;
+};
+export type HttpFetchClientOptions = {
+  accessToken?: t.StringJwt | (() => t.StringJwt);
+  contentType?: t.StringContentType | (() => t.StringContentType);
+};
+
+/**
+ * An HTTP fetch client instance.
  */
 export type HttpFetchClient = {
   readonly contentType: t.StringContentType;
@@ -55,9 +73,4 @@ export type HttpFetchClient = {
   patch(url: t.StringUrl, body: O, options?: RequestInit): Promise<Response>;
 
   delete(url: t.StringUrl, options?: RequestInit): Promise<Response>;
-};
-
-export type HttpFetchClientOptions = {
-  accessToken?: t.StringJwt | (() => t.StringJwt);
-  contentType?: t.StringContentType | (() => t.StringContentType);
 };

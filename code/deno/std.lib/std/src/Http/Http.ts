@@ -1,4 +1,4 @@
-import { FetchClient } from './Http.Client.ts';
+import { Client } from './Http.Client.ts';
 import { HttpUrl as Url } from './Http.Url.ts';
 
 /**
@@ -7,5 +7,5 @@ import { HttpUrl as Url } from './Http.Url.ts';
 export const Http = {
   Url,
   url: Url.create,
-  client: FetchClient.create,
+  client: Client.create,
 } as const;

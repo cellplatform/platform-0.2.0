@@ -7,7 +7,7 @@ type Options = t.HttpFetchClientOptions;
  * An HTTP client
  * (utility shim over <fetch>).
  */
-export const FetchClient = {
+export const Client: t.HttpClientLib = {
   /**
    * HTTP client factory.
    */
