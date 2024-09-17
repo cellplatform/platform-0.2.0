@@ -1,23 +1,22 @@
 import { Cmd, c } from '@sys/std-s';
 
+/**
+ * Run all tests across the mono-repo.
+ */
 type R = { output: Deno.CommandOutput; path: string; args: string };
 const results: R[] = [];
 
-const run = async (path: string, args = '') => {
+const test = async (path: string, args = '') => {
   const output = await Cmd.sh(`cd ${path}`, `deno test ${args}`);
   results.push({ output, path, args });
 };
 
-/**
- * Run all tests across the mono-repo.
- */
-
-// Std Libs
-await run('code/deno/std.lib/std', '-RWN');
-await run('code/deno/std.lib/std.s', '-RW');
+// Std Libs.
+await test('code/deno/std.lib/std', '-RWN');
+await test('code/deno/std.lib/std.s', '-RW');
 
 // Drivers.
-await run('code/deno/driver/driver.deno.cloud', '-RW');
+await test('code/deno/driver/driver.deno.cloud', '-RW');
 
 /**
  * Output
