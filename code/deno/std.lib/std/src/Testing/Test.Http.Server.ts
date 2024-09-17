@@ -7,7 +7,7 @@ type H = { method: M; handler: Deno.ServeHandler };
 /**
  * HTTP test server
  */
-export const TestingHttpServer = {
+export const TestServer = {
   /**
    * Create and start a new HTTP test server.
    */

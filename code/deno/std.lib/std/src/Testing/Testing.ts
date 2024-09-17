@@ -2,7 +2,7 @@ import { describe, it } from '@std/testing/bdd';
 import { expect } from 'npm:chai';
 
 import type { t } from '../common/mod.ts';
-import { TestingHttpServer } from './Testing.Http.Server.ts';
+import { TestServer } from './Test.Http.Server.ts';
 
 export { describe, expect, it };
 
@@ -17,6 +17,6 @@ export const Testing: t.Testing = {
     /**
      * Factory: create and start an HTTP test server.
      */
-    server: TestingHttpServer.create,
+    server: TestServer.create,
   },
 };
