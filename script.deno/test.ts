@@ -32,4 +32,4 @@ results.forEach((item) => {
 });
 console.info();
 
-// if (!success) Deno.exit(1);
+if (!success) Deno.exit(1);
