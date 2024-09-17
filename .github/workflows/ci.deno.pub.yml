@@ -28,8 +28,8 @@ jobs:
           deno test -RW
           deno publish
 
-      - name: publish module → "@sys/std-server"
-        run: |
-          cd code/deno/std.lib/std.server
-          deno test -RW
-          deno publish
+      # - name: publish module → "@sys/std-s"
+      #   run: |
+      #     cd code/deno/std.lib/std.s
+      #     deno test -RW
+      #     deno publish

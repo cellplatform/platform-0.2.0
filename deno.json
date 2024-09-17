@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "info": "time deno run -R script.deno/info.ts",
-    "test": "time deno run -R --allow-run script.deno/test.ts",
-    "ci": "time deno task test && deno task info",
+    "info": "deno run -R script.deno/info.ts",
+    "test": "deno run -R --allow-run script.deno/test.ts",
+    "ci": "deno task test && deno task info",
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
