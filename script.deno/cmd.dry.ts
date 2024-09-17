@@ -1,5 +1,5 @@
 import { Cmd } from '@sys/std-s';
-import { logOutput, type CmdOutput } from './u.ts';
+import { Log, type CmdOutput } from './u.ts';
 
 const results: CmdOutput[] = [];
 const run = async (path: string) => {
@@ -20,5 +20,5 @@ await run('code/deno/driver/driver.deno.cloud');
 /**
  * Output.
  */
-const success = logOutput(results, { title: 'Publish (--dry-run)', pad: true }).success;
+const success = Log.output(results, { title: 'Publish (--dry-run)', pad: true });
 if (!success) Deno.exit(1);

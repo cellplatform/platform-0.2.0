@@ -6,22 +6,27 @@ export type CmdOutput = {
 };
 
 /**
- * Log a set of results to the console.
+ * Logging helpers.
  */
-export function logOutput(results: CmdOutput[], options: { title?: string; pad?: boolean } = {}) {
-  const success = results.every(({ output }) => output.success);
+export const Log = {
+  /**
+   * Log a set of results to the console.
+   */
+  output(results: CmdOutput[], options: { title?: string; pad?: boolean } = {}) {
+    const success = results.every(({ output }) => output.success);
 
-  if (options.pad) console.log();
-  const title = `${(options.title ?? 'Results').replace(/\:$/, '')}:`;
-  console.info(title, success ? c.green('success') : c.red('failed'));
+    if (options.pad) console.log();
+    const title = `${(options.title ?? 'Results').replace(/\:$/, '')}:`;
+    console.info(title, success ? c.green('success') : c.red('failed'));
 
-  results.forEach((item) => {
-    const status = item.output.success ? c.green('success') : c.red('failed');
-    const path = c.gray(item.path);
-    const bullet = item.output.success ? c.green('•') : c.red('•');
-    console.info('', bullet, path, status);
-  });
+    results.forEach((item) => {
+      const status = item.output.success ? c.green('success') : c.red('failed');
+      const path = c.gray(item.path);
+      const bullet = item.output.success ? c.green('•') : c.red('•');
+      console.info('', bullet, path, status);
+    });
 
-  if (options.pad) console.log();
-  return { success } as const;
-}
+    if (options.pad) console.log();
+    return success;
+  },
+} as const;

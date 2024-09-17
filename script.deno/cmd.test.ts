@@ -1,5 +1,5 @@
 import { Cmd } from '@sys/std-s';
-import { logOutput, type CmdOutput } from './u.ts';
+import { Log, type CmdOutput } from './u.ts';
 
 /**
  * Run all tests across the mono-repo.
@@ -20,5 +20,5 @@ await run('code/deno/driver/driver.deno.cloud', '-RW');
 /**
  * Output.
  */
-const success = logOutput(results, { title: 'Test Results', pad: true }).success;
+const success = Log.output(results, { title: 'Test Results', pad: true });
 if (!success) Deno.exit(1);
