@@ -4,7 +4,9 @@ import type { t } from '../common/mod.ts';
  * Testing helpers.
  */
 export type Testing = {
-  http(defaultHandler?: Deno.ServeHandler): t.TestingHttp;
+  readonly Http: {
+    server(defaultHandler?: Deno.ServeHandler): t.TestingHttp;
+  };
 };
 
 /**
@@ -15,8 +17,4 @@ export type TestingHttp = {
   readonly addr: Deno.NetAddr;
   readonly disposed: boolean;
   dispose(): Promise<void>;
-  get(handler: Deno.ServeHandler): t.TestingHttp;
-  put(handler: Deno.ServeHandler): t.TestingHttp;
-  post(handler: Deno.ServeHandler): t.TestingHttp;
-  delete(handler: Deno.ServeHandler): t.TestingHttp;
 };

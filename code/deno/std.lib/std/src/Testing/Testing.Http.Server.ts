@@ -7,7 +7,7 @@ type H = { method: M; handler: Deno.ServeHandler };
 /**
  * HTTP test server
  */
-export const TestingHttp = {
+export const TestingHttpServer = {
   /**
    * Create and start a new HTTP test server.
    */
@@ -34,22 +34,6 @@ export const TestingHttp = {
       async dispose() {
         _disposed = true;
         await server.shutdown();
-      },
-      get(handler) {
-        handlers.add({ method: 'GET', handler });
-        return api;
-      },
-      put(handler) {
-        handlers.add({ method: 'PUT', handler });
-        return api;
-      },
-      post(handler) {
-        handlers.add({ method: 'POST', handler });
-        return api;
-      },
-      delete(handler) {
-        handlers.add({ method: 'DELETE', handler });
-        return api;
       },
     };
 
