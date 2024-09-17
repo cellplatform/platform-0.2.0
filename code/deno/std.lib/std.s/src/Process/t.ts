@@ -1,3 +1,5 @@
+import type { t } from '../common.ts';
+
 /**
  * Unix child process.
  * https://docs.deno.com/api/deno/~/Deno.Command
@@ -11,5 +13,12 @@ export type Cmd = {
   /**
    * Run an <shell> command.
    */
-  sh(...line: string[]): Promise<Deno.CommandOutput>;
+  sh(options?: { args?: string[]; silent?: boolean }): t.ShellCmd;
+};
+
+/**
+ * A shell command ("sh").
+ */
+export type ShellCmd = {
+  run(...args: string[]): Promise<Deno.CommandOutput>;
 };

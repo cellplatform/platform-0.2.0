@@ -8,9 +8,14 @@ export const Cmd: t.Cmd = {
   /**
    * Run an <shell> command.
    */
-  sh(...line) {
-    const command = line.join(' && ');
-    return Cmd.run(['-c', command], { cmd: 'sh' });
+  sh(options = {}) {
+    const { silent } = options;
+    return {
+      run(...args) {
+        const command = [...(options.args ?? []), ...args].join(' && ');
+        return Cmd.run(['-c', command], { cmd: 'sh', silent });
+      },
+    };
   },
 
   /**
