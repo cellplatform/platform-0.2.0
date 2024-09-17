@@ -1,5 +1,9 @@
 import type { t } from '../common/mod.ts';
 
+type M = t.HttpMethod;
+type R = RequestInit;
+type O = Record<string, unknown>;
+
 /**
  * @external
  */
@@ -20,6 +24,7 @@ export type HttpHeaderName = string;
 export type StringContentType = string;
 export type StringJwt = string;
 export type StringHttpHeader = string;
+export type StringUrl = string;
 
 /**
  * Represents a URL endpoing of an HTTP service.
@@ -34,9 +39,22 @@ export type HttpUrl = {
  * An HTTP fetch client.
  */
 export type HttpFetchClient = {
-  readonly headers: {};
   readonly contentType: t.StringContentType;
+  readonly headers: {};
   header(name: t.HttpHeaderName): t.StringHttpHeader;
+
+  fetch(url: t.StringUrl, options?: RequestInit): Promise<Response>;
+  method(method: t.HttpMethod, url: t.StringUrl, options?: RequestInit): Promise<Response>;
+
+  get(url: t.StringUrl, options?: RequestInit): Promise<Response>;
+  head(url: t.StringUrl, options?: RequestInit): Promise<Response>;
+  options(url: t.StringUrl, options?: RequestInit): Promise<Response>;
+
+  put(url: t.StringUrl, body: O, options?: RequestInit): Promise<Response>;
+  post(url: t.StringUrl, body: O, options?: RequestInit): Promise<Response>;
+  patch(url: t.StringUrl, body: O, options?: RequestInit): Promise<Response>;
+
+  delete(url: t.StringUrl, options?: RequestInit): Promise<Response>;
 };
 
 export type HttpFetchClientOptions = {
