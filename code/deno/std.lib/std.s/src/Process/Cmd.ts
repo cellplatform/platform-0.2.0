@@ -39,11 +39,8 @@ export const Cmd: t.Cmd = {
         if (text) console.log(text);
       };
 
-      if (code === 0) {
-        log(stdout);
-      } else {
-        log(stderr);
-      }
+      if (code === 0) log(stdout);
+      else log(stderr);
     }
 
     return res;
