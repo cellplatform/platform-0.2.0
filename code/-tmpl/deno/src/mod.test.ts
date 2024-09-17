@@ -1,7 +1,7 @@
 import { describe, expect, it } from './common.ts';
 
 describe('🐷', () => {
-  it('sample', () => {
+  it('TEST', () => {
     expect(123).to.eql(123);
   });
 });
