@@ -8,9 +8,10 @@ export type CmdOutput = {
 /**
  * Log a set of results to the console.
  */
-export function logOutput(results: CmdOutput[], options: { title?: string } = {}) {
+export function logOutput(results: CmdOutput[], options: { title?: string; pad?: boolean } = {}) {
   const success = results.every(({ output }) => output.success);
 
+  if (options.pad) console.log();
   const title = `${(options.title ?? 'Results').replace(/\:$/, '')}:`;
   console.info(title, success ? c.green('success') : c.red('failed'));
 
@@ -20,7 +21,7 @@ export function logOutput(results: CmdOutput[], options: { title?: string } = {}
     const bullet = item.output.success ? c.green('•') : c.red('•');
     console.info('', bullet, path, status);
   });
-  console.info();
 
+  if (options.pad) console.log();
   return { success } as const;
 }
