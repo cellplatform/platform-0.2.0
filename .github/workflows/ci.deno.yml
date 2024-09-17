@@ -19,7 +19,7 @@ jobs:
       - name: Info
         run: |
           deno --version
-          deno run -RE --quiet script.deno/info.ts
+          deno run -RE --quiet script.deno/cmd.info.ts
 
       - name: Tests
         run: deno task test
