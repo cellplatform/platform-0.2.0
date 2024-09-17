@@ -55,7 +55,7 @@ export type HttpClientLib = {
 export type HttpFetchClient = {
   readonly contentType: t.StringContentType;
   readonly headers: t.HttpHeaders;
-  header(name: t.StringHttpHeaderName): t.StringHttpHeader;
+  header(name: t.StringHttpHeaderName): t.StringHttpHeader | undefined;
 
   fetch(url: t.StringUrl, options?: RequestInit): Promise<Response>;
   method(method: t.HttpMethod, url: t.StringUrl, options?: RequestInit): Promise<Response>;

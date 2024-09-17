@@ -28,6 +28,11 @@ describe('Http', () => {
         expect(client2.contentType).to.eql('bar');
       });
 
+      it('header: does not exist', () => {
+        const client = Http.client();
+        expect(client.header('x-foo')).to.eql(undefined);
+      });
+
       it('headers: manipulate', () => {
         let count = 0;
         const client = Http.client({
@@ -40,8 +45,8 @@ describe('Http', () => {
             expect(e.get('x-bar')).to.eql('hello');
 
             e.set('x-foo', null).set('x-bar', '  '); // NB: removed.
-            expect(e.get('x-foo')).to.eql('');
-            expect(e.get('x-bar')).to.eql('');
+            expect(e.get('x-foo')).to.eql(undefined);
+            expect(e.get('x-bar')).to.eql(undefined);
 
             const keys = Object.keys(e.headers);
             expect(keys.includes('x-foo')).to.eql(false);

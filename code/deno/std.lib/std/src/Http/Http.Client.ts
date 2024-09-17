@@ -29,7 +29,7 @@ export const Client: t.HttpClientLib = {
         return wrangle.headers(options);
       },
 
-      header: (name) => (api.headers as any)[name] ?? '',
+      header: (name) => (api.headers as any)[name],
 
       fetch: (url, options) => fetch(url, { ...options, headers: api.headers }),
       method,
@@ -78,7 +78,7 @@ const wrangle = {
           return { ...headers };
         },
         get(name) {
-          return headers[name] ?? '';
+          return headers[name];
         },
         set(name, value) {
           if (typeof value === 'string') value = value.trim();
