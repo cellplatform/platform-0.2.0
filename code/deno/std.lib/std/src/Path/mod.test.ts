@@ -1,4 +1,5 @@
-import { expect, Path, describe, it } from '../mod.ts';
+import { describe, expect, it } from '../common.ts';
+import { Path } from './mod.ts';
 
 describe('Path', () => {
   it('join', () => {

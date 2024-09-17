@@ -1,4 +1,5 @@
-import { describe, expect, it, Semver } from '../mod.ts';
+import { describe, expect, it } from '../common.ts';
+import { Semver } from './mod.ts';
 
 describe('Semver', () => {
   it('Semver.parse', () => {
