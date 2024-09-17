@@ -1,7 +1,0 @@
-{
-  "tasks": {
-    "check": "deno check src.deno/mod.ts",
-    "dev": "deno run --check --watch --allow-net --allow-read --allow-env src.deno/mod.ts",
-    "reload": "deno cache --reload src.deno/mod.ts"
-  }
-}
