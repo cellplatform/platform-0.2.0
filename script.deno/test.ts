@@ -13,7 +13,7 @@ const run = async (path: string, args = '') => {
  */
 
 // Std Libs
-await run('code/deno/std.lib/std', '-RW');
+await run('code/deno/std.lib/std', '-RWN');
 await run('code/deno/std.lib/std.s', '-RW');
 
 // Drivers.

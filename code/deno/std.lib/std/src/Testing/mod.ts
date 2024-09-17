@@ -1,2 +1,5 @@
-export { describe, it } from '@std/testing/bdd';
-export { expect } from 'npm:chai';
+import { describe, it } from '@std/testing/bdd';
+import { expect } from 'npm:chai';
+
+export { describe, expect, it };
+export { Testing } from './Testing.ts';
