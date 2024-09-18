@@ -1,4 +1,4 @@
-import { describe, expect, Http, it } from '../common.ts';
+import { describe, expect, Http, it } from '../common/mod.ts';
 import { Server } from './mod.ts';
 
 describe('Server', () => {

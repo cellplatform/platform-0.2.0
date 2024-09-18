@@ -1,4 +1,4 @@
-import { type t } from '../common.ts';
+import { type t } from '../common/mod.ts';
 
 import { Hono } from '@hono/hono';
 import { cors } from '@hono/hono/cors';

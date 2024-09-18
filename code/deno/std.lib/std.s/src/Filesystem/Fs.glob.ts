@@ -1,6 +1,6 @@
 import { expandGlob, type WalkEntry } from '@std/fs';
 
-import { type t } from '../common.ts';
+import { type t } from '../common/mod.ts';
 import { Path } from './Path.ts';
 
 /**
