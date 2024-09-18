@@ -1,0 +1,18 @@
+import type { t } from './common/mod.ts';
+
+/**
+ * Server for working with the Deno cloud.
+ */
+export type DenoCloudClientLib = {
+  /**
+   * Factory to create a new HTTP client.
+   */
+  client(base: t.StringUrl, options?: { accessToken?: t.StringJwt }): t.DenoCloudClient;
+};
+
+/**
+ * HTTP client for working with the Deno cloud.
+ */
+export type DenoCloudClient = {
+  url: t.HttpUrl;
+};

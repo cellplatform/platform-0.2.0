@@ -18,11 +18,6 @@ export type HttpHeaders = { readonly [key: t.StringHttpHeaderName]: t.StringHttp
 /**
  * @module
  */
-export type StringContentType = string;
-export type StringJwt = string;
-export type StringHttpHeader = string;
-export type StringHttpHeaderName = string;
-export type StringUrl = string;
 
 /**
  * Libs

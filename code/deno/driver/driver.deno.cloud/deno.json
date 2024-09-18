@@ -10,6 +10,8 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./server": "./src/Server/mod.ts"
+    "./client": "./src/u.Client/mod.ts",
+    "./server": "./src/u.Server/mod.ts",
+    "./types": "./src/t.ts"
   }
 }
