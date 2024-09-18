@@ -92,10 +92,21 @@ export type HttpFetchClientMutateHeadersArgs = {
 /**
  * Client Response
  */
-export type HttpClientResponse<T extends O> =
-  | { readonly ok: true; readonly data: T; readonly error?: undefined }
-  | { readonly ok: false; readonly data?: undefined; readonly error: HttpClientError };
+export type HttpClientResponse<T extends O> = HttpClientResponseOK<T> | HttpClientResponseErr;
+export type HttpClientResponseOK<T extends O> = {
+  readonly ok: true;
+  readonly data: T;
+  readonly error?: undefined;
+};
+export type HttpClientResponseErr = {
+  readonly ok: false;
+  readonly data?: undefined;
+  readonly error: t.HttpClientError;
+};
 
+/**
+ * HTTP Error
+ */
 export type HttpClientError = {
   readonly ok: boolean;
   readonly status: number;
