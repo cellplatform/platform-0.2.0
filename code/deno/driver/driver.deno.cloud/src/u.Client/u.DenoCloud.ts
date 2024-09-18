@@ -6,9 +6,20 @@ import { Http, type t } from './common/mod.ts';
 export const DenoCloud: t.DenoCloudClientLib = {
   client(base, options = {}) {
     const { accessToken } = options;
-
     const url = Http.url(base);
-    const api: t.DenoCloudClient = { url };
+    const client = Http.client({ accessToken });
+
+    /**
+     * API
+     */
+    const api: t.DenoCloudClient = {
+      url,
+      async root() {
+        const url = api.url.join();
+        const res = await client.get(url);
+        return Http.toResponse<t.RootResponse>(res);
+      },
+    };
     return api;
   },
 };

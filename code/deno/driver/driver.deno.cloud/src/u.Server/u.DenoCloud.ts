@@ -7,7 +7,6 @@ import { Subhosting } from './r.subhosting/mod.ts';
  */
 export const DenoCloud: t.DenoCloudServerLib = {
   client: DenoCloudClient.client,
-
   server() {
     const app = Server.create();
     const ctx: t.RouteContext = { app };
