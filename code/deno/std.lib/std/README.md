@@ -6,7 +6,7 @@ Surfaces, and lightly augments when helpful, the audited deno [@std](https://jsr
 ### System Namespace:
 
 - [`jsr: @sys/std`](https://jsr.io/@sys/std)
-- [`jsr: @sys/std-server`](https://jsr.io/@sys/std-server)
+- [`jsr: @sys/std-s`](https://jsr.io/@sys/std-s)
 
 
 #### Example

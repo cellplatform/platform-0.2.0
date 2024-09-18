@@ -1,10 +1,13 @@
 {
   "name": "@sys/std-s",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "license": "MIT",
-  "exports": "./src/mod.ts",
   "tasks": {
-    "test": "deno test -RW --watch",
+    "test": "deno test -RWN --watch",
     "dry": "deno publish --allow-dirty --dry-run"
+  },
+  "exports": {
+    ".": "./src/mod.ts",
+    "./types": "./src/t.ts"
   }
 }
