@@ -27,6 +27,8 @@ export type HttpLib = {
   readonly Url: t.HttpUrlLib;
   readonly url: t.HttpUrlLib['create'];
   readonly client: t.HttpClientLib['create'];
+  toError(res: Response): t.HttpClientError;
+  toResponse<T extends O>(res: Response): Promise<t.HttpClientResponse<T>>;
 };
 
 export type HttpUrlLib = {
@@ -85,4 +87,18 @@ export type HttpFetchClientMutateHeadersArgs = {
   readonly headers: t.HttpHeaders;
   get(name: string): t.StringHttpHeader;
   set(name: string, value: string | number | null): HttpFetchClientMutateHeadersArgs;
+};
+
+/**
+ * Client Response
+ */
+export type HttpClientResponse<T extends O> =
+  | { readonly ok: true; readonly data: T; readonly error?: undefined }
+  | { readonly ok: false; readonly data?: undefined; readonly error: HttpClientError };
+
+export type HttpClientError = {
+  readonly ok: boolean;
+  readonly status: number;
+  readonly statusText: string;
+  readonly headers: t.HttpHeaders;
 };
