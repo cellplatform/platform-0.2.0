@@ -1,4 +1,4 @@
-# @sys/std-server
+# @sys/std-s
 Standard library for running within a (non-browser) server environment.
 
 Surfaces and augments, with server specific modules, the "[@sys/std](https://jsr.io/@sys)" module which in turn surfaces the deno "[@std libs](https://jsr.io/@std)" module(s).
@@ -13,5 +13,5 @@ Surfaces and augments, with server specific modules, the "[@sys/std](https://jsr
 #### Example
 
 ```ts
-import { Fs } from '@sys/std-server';
+import { Fs } from '@sys/std-s';
 ```
