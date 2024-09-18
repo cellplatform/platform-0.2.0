@@ -2,6 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@hono/hono@4.6.2": "jsr:@hono/hono@4.6.2",
       "jsr:@std/assert@1.0.4": "jsr:@std/assert@1.0.4",
       "jsr:@std/datetime@0.225.2": "jsr:@std/datetime@0.225.2",
       "jsr:@std/dotenv@0.225.2": "jsr:@std/dotenv@0.225.2",
@@ -22,6 +23,9 @@
       "npm:ramda@0.30.1": "npm:ramda@0.30.1"
     },
     "jsr": {
+      "@hono/hono@4.6.2": {
+        "integrity": "35fcf3be4687825080b01bed7bbe2ac66f8d8b8939f0bad459661bf3b46d916f"
+      },
       "@std/assert@1.0.4": {
         "integrity": "d4c767ea578e5bc09c15b6e503376003e5b2d1f4c0cdf08524a92101ff4d7b96",
         "dependencies": [
@@ -595,6 +599,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@hono/hono@4.6.2",
       "jsr:@std/assert@1.0.4",
       "jsr:@std/datetime@0.225.2",
       "jsr:@std/dotenv@0.225.2",
