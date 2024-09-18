@@ -6,6 +6,7 @@ import { Http, type t } from './common/mod.ts';
  *
  * - https://deno.com/deploy
  * - https://docs.deno.com/subhosting/manual
+ *
  */
 export const client: t.DenoCloudClientLib['client'] = (base, options = {}) => {
   const { accessToken } = options;
