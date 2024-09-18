@@ -8,12 +8,16 @@ export const Cmd: t.Cmd = {
   /**
    * Run an <shell> command.
    */
-  sh(options = {}) {
-    const { silent } = options;
+  sh(...input: any[]) {
+    const options = wrangle.shellOptions(input);
+    const path = options.path ?? '';
     return {
+      path,
       run(...args) {
-        const command = [...(options.args ?? []), ...args].join(' && ');
-        return Cmd.run(['-c', command], { cmd: 'sh', silent });
+        const { silent } = options;
+        const command = [...(options.args ?? []), ...args];
+        if (path) command.unshift(`cd ${path}`);
+        return Cmd.run(['-c', command.join(' && ')], { cmd: 'sh', silent });
       },
     };
   },
@@ -30,19 +34,57 @@ export const Cmd: t.Cmd = {
     });
 
     // Execute the command and collect its output.
-    const res = await command.output();
-    const { code, stdout, stderr } = res;
+    const res = Cmd.decode(await command.output());
+    const { code } = res;
 
     if (!options.silent) {
-      const log = (output: Uint8Array) => {
-        const text = new TextDecoder().decode(output);
-        if (text) console.log(text);
+      const print = (text: string) => {
+        const hasNewline = text.endsWith('\n');
+        text = text.trim();
+        if (!text) return;
+        if (hasNewline) text = `${text}\n`;
+        console.info(text);
       };
-
-      if (code === 0) log(stdout);
-      else log(stderr);
+      if (code === 0) print(res.text.stdout);
+      else print(res.text.stderr);
     }
 
     return res;
+  },
+
+  /**
+   * Decode a command output to strings.
+   */
+  decode(input) {
+    const { code, success, signal, stdout, stderr } = input;
+    let _stdout: undefined | string;
+    let _stderr: undefined | string;
+    return {
+      code,
+      success,
+      signal,
+      stdout,
+      stderr,
+      text: {
+        get stdout() {
+          return _stdout ?? (_stdout = new TextDecoder().decode(stdout));
+        },
+        get stderr() {
+          return _stderr ?? (_stderr = new TextDecoder().decode(stderr));
+        },
+      },
+    };
+  },
+} as const;
+
+/**
+ * Helpers
+ */
+const wrangle = {
+  shellOptions(input: any[]): t.ShellCmdOptions {
+    if (input.length === 0) return {};
+    if (typeof input[0] === 'string') return { path: input[0] };
+    if (typeof input[0] === 'object') return input[0];
+    return {};
   },
 } as const;
