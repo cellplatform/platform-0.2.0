@@ -2,7 +2,7 @@ import { Cmd, Log, type CmdOutput } from './u.ts';
 
 const results: CmdOutput[] = [];
 const run = async (path: string) => {
-  const output = await Cmd.sh().run(`cd ${path}`, `deno publish --allow-dirty --dry-run`);
+  const output = await Cmd.sh(path).run(`deno publish --allow-dirty --dry-run`);
   results.push({ output, path });
 };
 
