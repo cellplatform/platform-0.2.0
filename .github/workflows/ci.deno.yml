@@ -16,7 +16,7 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Deno Version
+      - name: Version Info
         run: |
           deno --version
           deno run -RE script.deno/cmd.info.ts
