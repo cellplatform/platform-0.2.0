@@ -1,7 +1,7 @@
 import { Http, Is, type t } from '../common.ts';
 
 /**
- * Routes for the "Deno Subhosting" manaagement API.
+ * Routes for the "Deno Subhosting" management API.
  * https://docs.deno.com/subhosting/manual
  */
 export function routes(
