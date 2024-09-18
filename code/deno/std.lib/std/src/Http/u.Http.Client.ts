@@ -31,8 +31,11 @@ export const Client: t.HttpClientLib = {
 
       header: (name) => (api.headers as any)[name],
 
-      fetch: (url, options) => fetch(url, { ...options, headers: api.headers }),
       method,
+      fetch(url, options) {
+        const headers = { ...api.headers, ...(options?.headers ?? {}) };
+        return fetch(url, { ...options, headers });
+      },
 
       get: (url, options) => method('GET', url, options),
       head: (url, options) => method('HEAD', url, options),

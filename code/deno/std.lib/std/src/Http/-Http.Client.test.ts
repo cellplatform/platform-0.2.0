@@ -2,67 +2,86 @@ import { describe, expect, it, Testing } from '../common/mod.ts';
 import { DEFAULTS } from './common.ts';
 import { Http } from './mod.ts';
 
-describe('Http', () => {
+describe('Http.client', () => {
   const ApplicationJson = DEFAULTS.contentType;
   const TestHttp = Testing.Http;
 
-  describe('Http.Client', () => {
-    describe('client.headers', () => {
-      it('headers: (default)', () => {
-        const client = Http.client();
-        expect(client.headers).to.eql({ 'Content-Type': ApplicationJson });
-        expect(client.header('Content-Type')).to.eql(ApplicationJson);
+  describe('headers', () => {
+    it('headers: (default)', () => {
+      const client = Http.client();
+      expect(client.headers).to.eql({ 'Content-Type': ApplicationJson });
+      expect(client.header('Content-Type')).to.eql(ApplicationJson);
+    });
+
+    it('header: authToken → headers:{ Authorization } ← Bearer Token', () => {
+      const client1 = Http.client({ accessToken: 'my-jwt' });
+      const client2 = Http.client({ accessToken: () => 'my-dynamic' });
+      expect(client1.header('Authorization')).to.eql(`Bearer ${'my-jwt'}`);
+      expect(client2.header('Authorization')).to.eql('my-dynamic');
+    });
+
+    it('header: static/dynamic content-type', () => {
+      const client1 = Http.client({ contentType: 'foo' });
+      const client2 = Http.client({ contentType: () => 'bar' });
+      expect(client1.contentType).to.eql('foo');
+      expect(client2.contentType).to.eql('bar');
+    });
+
+    it('header: does not exist', () => {
+      const client = Http.client();
+      expect(client.header('x-foo')).to.eql(undefined);
+    });
+
+    it('headers: manipulate', () => {
+      let count = 0;
+      const client = Http.client({
+        headers(e) {
+          count++;
+          expect(e.get('Content-Type')).to.eql(ApplicationJson);
+
+          e.set('x-foo', 123).set('x-bar', 'hello');
+          expect(e.get('x-foo')).to.eql('123');
+          expect(e.get('x-bar')).to.eql('hello');
+
+          e.set('x-foo', null).set('x-bar', '  '); // NB: removed.
+          expect(e.get('x-foo')).to.eql(undefined);
+          expect(e.get('x-bar')).to.eql(undefined);
+
+          const keys = Object.keys(e.headers);
+          expect(keys.includes('x-foo')).to.eql(false);
+          expect(keys.includes('x-bar')).to.eql(false);
+        },
       });
 
-      it('header: authToken → headers:{ Authorization } ← Bearer Token', () => {
-        const client1 = Http.client({ accessToken: 'my-jwt' });
-        const client2 = Http.client({ accessToken: () => 'my-dynamic' });
-        expect(client1.header('Authorization')).to.eql(`Bearer ${'my-jwt'}`);
-        expect(client2.header('Authorization')).to.eql('my-dynamic');
+      client.headers;
+      expect(count).to.eql(1);
+    });
+
+    it('headers passed to server', async () => {
+      const server = TestHttp.server((req) => {
+        const headers = Http.toHeaders(req.headers);
+        return TestHttp.json({ headers });
       });
+      const client = Http.client({ headers: (e) => e.set('x-foo', '123') });
 
-      it('header: static/dynamic content-type', () => {
-        const client1 = Http.client({ contentType: 'foo' });
-        const client2 = Http.client({ contentType: () => 'bar' });
-        expect(client1.contentType).to.eql('foo');
-        expect(client2.contentType).to.eql('bar');
-      });
+      const url = server.url.base;
+      const res1 = await client.get(url);
+      const res2 = await client.get(url, { headers: { 'x-bar': '456' } });
 
-      it('header: does not exist', () => {
-        const client = Http.client();
-        expect(client.header('x-foo')).to.eql(undefined);
-      });
+      const json1 = await res1.json();
+      const json2 = await res2.json();
 
-      it('headers: manipulate', () => {
-        let count = 0;
-        const client = Http.client({
-          headers(e) {
-            count++;
-            expect(e.get('Content-Type')).to.eql(ApplicationJson);
+      expect(json1.headers['x-foo']).to.eql('123');
+      expect(json2.headers['x-foo']).to.eql('123');
+      expect(json2.headers['x-bar']).to.eql('456');
 
-            e.set('x-foo', 123).set('x-bar', 'hello');
-            expect(e.get('x-foo')).to.eql('123');
-            expect(e.get('x-bar')).to.eql('hello');
-
-            e.set('x-foo', null).set('x-bar', '  '); // NB: removed.
-            expect(e.get('x-foo')).to.eql(undefined);
-            expect(e.get('x-bar')).to.eql(undefined);
-
-            const keys = Object.keys(e.headers);
-            expect(keys.includes('x-foo')).to.eql(false);
-            expect(keys.includes('x-bar')).to.eql(false);
-          },
-        });
-
-        client.headers;
-        expect(count).to.eql(1);
-      });
+      await server.dispose();
     });
   });
 
-  describe('client.fetch (HTTP methods/verbs)', () => {
-    it('fetch: text', async () => {
-      const server = TestHttp.server((req) => new Response('foo'));
+  describe('fetch (HTTP methods/verbs)', () => {
+    it('fetch', async () => {
+      const server = TestHttp.server(() => new Response('foo'));
       const client = Http.client();
 
       const url = server.url.join('foo');

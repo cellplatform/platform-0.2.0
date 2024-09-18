@@ -27,6 +27,9 @@ export type HttpLib = {
   readonly Url: t.HttpUrlLib;
   readonly url: t.HttpUrlLib['create'];
   readonly client: t.HttpClientLib['create'];
+
+  toHeaders(input: Headers): t.HttpHeaders;
+
   toError(res: Response): t.HttpClientError;
   toResponse<T extends O>(res: Response): Promise<t.HttpClientResponse<T>>;
 };

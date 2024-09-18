@@ -2,6 +2,13 @@ import { describe, expect, it } from '../common/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http', () => {
+  it('Http.toHeaders', async () => {
+    const input = new Headers();
+    input.set('x-foo', 'foo');
+    expect(Http.toHeaders(input)).to.eql({ 'x-foo': 'foo' });
+    expect(Http.toHeaders(new Headers())).to.eql({});
+  });
+
   it('Http.toError', () => {
     const res = new Response('Not Found', { status: 404, statusText: 'foo' });
     const err = Http.toError(res);
