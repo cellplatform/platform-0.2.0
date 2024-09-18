@@ -1,5 +1,6 @@
 import { type t } from '../common/mod.ts';
 import { Path } from '../Path/mod.ts';
+import { Is } from './u.Is.ts';
 
 /**
  * Helpers for a URL used within an HTTP fetch client.
@@ -9,6 +10,13 @@ export const HttpUrl: t.HttpUrlLib = {
    * URL factory.
    */
   create(base) {
+    return Is.netaddr(base) ? HttpUrl.fromAddr(base) : HttpUrl.fromUrl(base);
+  },
+
+  /**
+   * Create from a URL.
+   */
+  fromUrl(base) {
     const { url, error } = wrangle.asUrl(base);
     if (error) throw error;
     base = url.href;
@@ -23,6 +31,13 @@ export const HttpUrl: t.HttpUrlLib = {
       },
     };
     return api;
+  },
+
+  /**
+   * Create from a [NetAddr]
+   */
+  fromAddr(base: Deno.NetAddr) {
+    return HttpUrl.fromUrl(`http://${base.hostname}:${base.port}`);
   },
 } as const;
 

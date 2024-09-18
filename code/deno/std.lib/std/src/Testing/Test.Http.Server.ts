@@ -1,5 +1,5 @@
 import { type t } from '../common/mod.ts';
-import { HttpUrl } from '../Http/Http.Url.ts';
+import { HttpUrl } from '../Http/u.Http.Url.ts';
 
 type M = 'GET' | 'PUT' | 'POST' | 'DELETE';
 type H = { method: M; handler: Deno.ServeHandler };
@@ -23,7 +23,7 @@ export const TestServer = {
     });
 
     const addr = server.addr;
-    const url = HttpUrl.create(`http://${addr.hostname}:${addr.port}`);
+    const url = HttpUrl.fromAddr(addr);
 
     const api: t.TestHttpServer = {
       addr,

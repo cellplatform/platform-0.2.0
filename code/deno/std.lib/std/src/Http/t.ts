@@ -1,7 +1,5 @@
 import type { t } from '../common/mod.ts';
 
-type M = t.HttpMethod;
-type R = RequestInit;
 type O = Record<string, unknown>;
 
 /**
@@ -27,10 +25,27 @@ export type StringHttpHeaderName = string;
 export type StringUrl = string;
 
 /**
- * Library: URL
+ * Libs
  */
+export type HttpLib = {
+  readonly Is: t.HttpIs;
+  readonly Url: t.HttpUrlLib;
+  readonly url: t.HttpUrlLib['create'];
+  readonly client: t.HttpClientLib['create'];
+};
+
 export type HttpUrlLib = {
-  create(base: t.StringUrl): t.HttpUrl;
+  create(base: t.StringUrl | Deno.NetAddr): t.HttpUrl;
+  fromAddr(base: Deno.NetAddr): t.HttpUrl;
+  fromUrl(base: t.StringUrl): t.HttpUrl;
+};
+
+export type HttpClientLib = {
+  create(options?: t.HttpFetchClientOptions): t.HttpFetchClient;
+};
+
+export type HttpIs = {
+  netaddr(input: any): input is Deno.NetAddr;
 };
 
 /**
@@ -40,13 +55,6 @@ export type HttpUrl = {
   readonly base: string;
   join(...parts: string[]): string;
   toString(): string;
-};
-
-/**
- * Library: HttpClient
- */
-export type HttpClientLib = {
-  create(options?: t.HttpFetchClientOptions): t.HttpFetchClient;
 };
 
 /**

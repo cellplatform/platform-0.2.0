@@ -1,9 +1,11 @@
-import { describe, expect, it } from '../common/mod.ts';
+import { describe, expect, it, Testing } from '../common/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http.Url', () => {
+  const TestHttp = Testing.Http;
+
   describe('create', () => {
-    it('factory methods', () => {
+    it('create: factory methods', () => {
       const base = 'https://foo.com/v1';
       const a = Http.Url.create(base);
       const b = Http.url(base);
@@ -12,18 +14,26 @@ describe('Http.Url', () => {
       expect(a.toString()).to.eql(base);
     });
 
-    it('trailing forward-slash', () => {
+    it('create: from net-addr', async () => {
+      const server = TestHttp.server((req) => new Response('foo'));
+      const addr = server.addr;
+      const url = Http.Url.fromAddr(addr);
+      expect(url.base).to.eql(`http://0.0.0.0:${addr.port}/`);
+      await server.dispose();
+    });
+
+    it('create: with trailing forward-slash', () => {
       const url = Http.url('https://foo.com');
       expect(url.base).to.eql('https://foo.com/');
     });
 
-    it('localhost (http)', () => {
+    it('create: localhost (http)', () => {
       const url = Http.url('http://localhost:8080');
       expect(url.base).to.eql('http://localhost:8080/');
     });
 
     it('throw: invalid URL', () => {
-      const NON = ['foo', 123, false, null, undefined, Symbol('foo'), BigInt(0)];
+      const NON = ['foo', 123, false, null, undefined, {}, [], Symbol('foo'), BigInt(0)];
       NON.forEach((input: any) => {
         const fn = () => Http.url(input);
         expect(fn).to.throw(/Invalid base URL/);
