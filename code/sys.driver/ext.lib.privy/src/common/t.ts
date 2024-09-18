@@ -21,6 +21,7 @@ export type {
   EventBus,
   ImmutableRef,
   Lifecycle,
+  PickRequired,
   UntilObservable,
 } from 'sys.types/src/types';
 
