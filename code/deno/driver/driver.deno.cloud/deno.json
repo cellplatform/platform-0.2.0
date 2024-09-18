@@ -2,9 +2,14 @@
   "name": "@sys/driver-deno-cloud",
   "version": "0.0.4",
   "license": "MIT",
-  "exports": "./src/mod.ts",
   "tasks": {
-    "test": "deno test -RW --watch",
+    "start": "deno run -RN ./src/start.ts",
+    "dev": "deno run -RN --watch ./src/start.ts",
+    "test": "deno test -RWN --watch",
     "dry": "deno publish --allow-dirty --dry-run"
+  },
+  "exports": {
+    ".": "./src/mod.ts",
+    "./server": "./src/Server/mod.ts"
   }
 }
