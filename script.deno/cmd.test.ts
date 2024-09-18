@@ -1,12 +1,11 @@
-import { Cmd } from '@sys/std-s';
-import { Log, type CmdOutput } from './u.ts';
+import { Cmd, Log, type CmdOutput } from './u.ts';
 
 /**
  * Run all tests across the mono-repo.
  */
 const results: CmdOutput[] = [];
 const run = async (path: string, args = '') => {
-  const output = await Cmd.sh({ silent: true }).run(`cd ${path}`, `deno test ${args}`);
+  const output = await Cmd.sh({ silent: true, path }).run(`deno test ${args}`);
   results.push({ output, path });
 };
 

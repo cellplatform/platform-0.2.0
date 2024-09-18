@@ -1,4 +1,5 @@
 import { c } from '@sys/std-s';
+export { Cmd } from '@sys/std-s';
 
 export type CmdOutput = {
   output: Deno.CommandOutput;

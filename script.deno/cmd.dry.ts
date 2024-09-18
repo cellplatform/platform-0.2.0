@@ -1,5 +1,4 @@
-import { Cmd } from '@sys/std-s';
-import { Log, type CmdOutput } from './u.ts';
+import { Cmd, Log, type CmdOutput } from './u.ts';
 
 const results: CmdOutput[] = [];
 const run = async (path: string) => {

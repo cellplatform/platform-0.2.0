@@ -16,10 +16,10 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Info
+      - name: Deno Version
         run: |
           deno --version
-          deno run -RE --quiet script.deno/cmd.info.ts
+          deno run -RE script.deno/cmd.info.ts
 
-      - name: Tests
-        run: deno task test
+      - name: Continuous Integration
+        run: deno task ci
