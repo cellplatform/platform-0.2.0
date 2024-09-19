@@ -1,8 +1,6 @@
-import { type t } from '../common/mod.ts';
-
-import { Hono } from '@hono/hono';
-import { cors } from '@hono/hono/cors';
-import { serveStatic } from '@hono/hono/deno';
+import { Hono, cors, serveStatic, type t } from './common.ts';
+import { create } from './u.Server.create.ts';
+import { print, options } from './u.ts';
 
 /**
  * Server Lib.
@@ -11,29 +9,7 @@ export const Server: t.Server = {
   Hono,
   cors,
   static: serveStatic,
-
-  /**
-   * Create a new Hono application instance with cors and /static file server.
-   */
-  create(options = {}) {
-    const app = new Server.Hono();
-
-    if (options.cors ?? true) {
-      app.use(
-        '*',
-        Server.cors({
-          origin: '*', // Allowed origin or use '*' to allow all origins.
-          allowMethods: ['GET', 'POST'],
-          allowHeaders: ['Content-Type', 'Authorization'],
-          maxAge: 86400, // Preflight cache age in seconds.
-        }),
-      );
-    }
-
-    if (options.static ?? true) {
-      app.use('/static/*', Server.static({ root: './' }));
-    }
-
-    return app;
-  },
+  create,
+  print,
+  options,
 } as const;

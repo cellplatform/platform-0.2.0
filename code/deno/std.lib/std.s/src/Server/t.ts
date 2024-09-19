@@ -3,6 +3,8 @@ import type { cors } from '@hono/hono/cors';
 import type { serveStatic } from '@hono/hono/deno';
 import type { BlankSchema, Env } from '@hono/hono/types';
 
+type Pkg = { name: string; version: string };
+
 /**
  * Webserver.
  */
@@ -10,7 +12,14 @@ export type Server = {
   readonly Hono: typeof Hono;
   readonly cors: typeof cors;
   readonly static: typeof serveStatic;
-  create(options?: { cors?: boolean; static?: boolean }): HonoApp;
+  create(options?: ServerCreateOptions): HonoApp;
+  options(port?: number, pkg?: Pkg): Deno.ServeOptions;
+  print(addr: Deno.NetAddr, pkg?: Pkg): void;
+};
+
+export type ServerCreateOptions = {
+  cors?: boolean;
+  static?: boolean;
 };
 
 /**
