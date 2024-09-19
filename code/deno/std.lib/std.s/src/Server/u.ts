@@ -9,10 +9,12 @@ export const print: t.Server['print'] = (addr, pkg) => {
   const host = c.green(`http://localhost:${port}/`);
   if (pkg) {
     console.info();
-    console.info(c.gray(`Module:      ${c.white(pkg.name)}`));
-    console.info(c.gray(`Version:     ${c.white(pkg.version)}`));
+    console.info(c.gray(`Module:    ${c.white(pkg.name)}`));
+    console.info(c.gray(`Version:   ${c.white(pkg.version)}`));
+    console.info(c.gray(`           ${host}`));
+  } else {
+    console.info(c.gray(`Listening on ${host}`));
   }
-  console.info(c.gray(`Listening on ${host}`));
 };
 
 /**
