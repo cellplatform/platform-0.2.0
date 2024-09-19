@@ -1,5 +1,5 @@
 # Driver: deno.cloud
-API tools for working with [Deno cloud](https://deno.com/deploy).
+Tools for working with [Deno cloud](https://deno.com/deploy).
 
 
 ### References

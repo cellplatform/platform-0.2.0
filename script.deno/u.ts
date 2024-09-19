@@ -24,7 +24,7 @@ export const Log = {
 
     const fmtBanner = (prefix: string, path: string) => {
       prefix = ` ${prefix.replace(/\:*$/, '')} `;
-      prefix = c.bgRed(c.white(prefix));
+      prefix = c.bgYellow(c.white(prefix));
       return c.bold(`${c.red(prefix)} ${c.yellow(path)}`);
     };
 
