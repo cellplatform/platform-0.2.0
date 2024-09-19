@@ -4,8 +4,6 @@ import { default as Pkg } from '../../deno.json' with { type: 'json' };
  * @ext
  */
 export * from '@sys/std';
-
-export * as DotEnv from '@std/dotenv';
 export { Testing, describe, expect, it } from '@sys/std/testing';
 
 
