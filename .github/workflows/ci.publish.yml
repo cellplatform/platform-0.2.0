@@ -37,5 +37,5 @@ jobs:
       - name: publish module → "@sys/driver-deno-cloud"
         run: |
           cd code/deno/driver/driver.deno.cloud
-          deno test -RWNE
+          deno test -RWNE --allow-run
           deno publish
