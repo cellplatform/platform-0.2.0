@@ -1,6 +1,6 @@
 import { Pkg, describe, expect, it } from './common/mod.ts';
 import { DenoCloud } from './mod.ts';
-import { testSetup } from '../u.Server/u.DenoCloud.test.ts';
+import { testSetup } from '../u.Server/u.DenoCloud.-unit.test.ts';
 
 describe('DenoCloud (client)', () => {
   it('has url', () => {
