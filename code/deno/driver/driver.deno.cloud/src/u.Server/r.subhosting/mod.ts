@@ -21,14 +21,6 @@ export const Subhosting = {
       const verified = auth.verified;
       const organization = await subhosting.organizations.get(EnvVars.deno.orgId);
 
-      /**
-       * TODO 🐷
-       * - put in middleware, enabled/disabled
-       * - handle {err} in client
-       */
-      console.log('auth', auth);
-      // if (!auth.verified) return c.json({ error: 'Unauthorized' }, 401);
-
       const { name, version } = Pkg;
       const module = { name, version };
       const description = `deno:subhosting™️ controller`;
