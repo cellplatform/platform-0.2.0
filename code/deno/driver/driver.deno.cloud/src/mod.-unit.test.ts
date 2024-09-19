@@ -7,7 +7,7 @@ describe('DenoCloud (client)', () => {
       const value = obj[key];
       expect(value).to.be.string;
       const text = String(value);
-      console.log(' > ', key, '*'.repeat(text.length));
+      console.log(`> ${String(key)}:`, '*'.repeat(text.length), `(${text.length})`);
       expect(text.length).to.be.greaterThan(5, `missing secret value for {${ns}.${String(key)}}`);
     };
 
