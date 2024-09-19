@@ -34,8 +34,10 @@ describe('DenoCloud (client)', () => {
         const data = res.data;
         expect(data.description).to.include('deno:subhosting™️');
         expect(data.module).to.eql({ name: Pkg.name, version: Pkg.version });
-        expect(data.auth.user).to.eql('');
+        expect(data.auth.identity).to.eql('');
         expect(data.auth.verified).to.eql(false);
+        expect(data.organization.id).to.be.string;
+        expect(data.organization.name).to.be.string;
       }
       await dispose();
     });

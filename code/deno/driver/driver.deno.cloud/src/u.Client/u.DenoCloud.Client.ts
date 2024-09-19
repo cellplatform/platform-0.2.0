@@ -30,7 +30,7 @@ export const client: t.DenoCloudClientLib['client'] = (base, options = {}) => {
       async info() {
         const url = api.url.join('/subhosting');
         const raw = await client.get(url);
-        const res = await Http.toResponse<t.SubhostingResponse>(raw);
+        const res = await Http.toResponse<t.SubhostingInfo>(raw);
         return res;
       },
     },
