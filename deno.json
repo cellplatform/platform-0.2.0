@@ -1,9 +1,9 @@
 {
   "tasks": {
     "info": "deno run -R script.deno/cmd.info.ts",
-    "test": "deno run -R --allow-run script.deno/cmd.test.ts",
+    "test": "deno run -RE --allow-run script.deno/cmd.test.ts",
     "dry": "deno run -R --allow-run script.deno/cmd.dry.ts",
-    "ci": "deno run -R --allow-run script.deno/cmd.ci.ts",
+    "ci": "deno run -RE --allow-run script.deno/cmd.ci.ts",
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
