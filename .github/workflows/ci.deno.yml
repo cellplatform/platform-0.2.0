@@ -24,8 +24,8 @@ jobs:
           deno --version
           deno task info
 
-      - name: CI → tests
-        run: deno task test
-
       - name: CI → type check (publish --dry-run)
         run: deno task dry
+
+      - name: CI → tests
+        run: deno task test
