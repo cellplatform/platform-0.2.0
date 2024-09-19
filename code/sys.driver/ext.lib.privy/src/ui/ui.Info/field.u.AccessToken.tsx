@@ -16,7 +16,7 @@ export function accessToken(args: Args): t.PropListItem | undefined {
   };
   const value = (
     <div {...styles.base}>
-      {jwt ? `jwt: ${Hash.shorten(jwt, 4)}` : undefined}
+      {jwt ? `JWT → ${Hash.shorten(jwt, 4)}` : undefined}
       {jwt ? <Icons.Shield size={14} margin={[0, 0, 0, 6]} /> : '-'}
     </div>
   );

@@ -222,7 +222,7 @@ export default Dev.describe(name, (e) => {
       const forcePublic = e.state.forcePublicUrl;
       const data = {
         origin: DenoHttp.origin({ forcePublic }),
-        accessToken: !jwt ? null : `jwt:${Hash.shorten(jwt, 4)} (${jwt.length})`,
+        accessToken: !jwt ? null : `JWT:${Hash.shorten(jwt, 4)} (${jwt.length})`,
         props: { ...props, code: props.code?.slice(0, 30) },
         deno,
       };
