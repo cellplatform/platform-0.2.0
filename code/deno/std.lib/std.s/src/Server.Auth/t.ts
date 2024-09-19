@@ -17,6 +17,7 @@ export type AuthCtx = {
  */
 export type AuthVerification = {
   verified: boolean;
+  user: string;
   claims?: t.AuthTokenClaims;
   error?: string;
 };

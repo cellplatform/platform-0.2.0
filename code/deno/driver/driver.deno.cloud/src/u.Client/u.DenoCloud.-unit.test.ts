@@ -8,15 +8,36 @@ describe('DenoCloud (client)', () => {
     expect(client.url.toString()).to.eql('https://foo.com/');
   });
 
-  it('client: root', async () => {
-    const { client, dispose } = testSetup();
-    const res = await client.root();
-    expect(res.ok).to.eql(true);
-    expect(res.error).to.eql(undefined);
-    if (res.ok) {
-      const { name, version } = Pkg;
-      expect(res.data.module).to.eql({ name, version });
-    }
-    await dispose();
+  describe('/', () => {
+    it('GET root info', async () => {
+      const { client, dispose } = testSetup();
+      const res = await client.info();
+
+      expect(res.ok).to.eql(true);
+      expect(res.error).to.eql(undefined);
+      if (res.ok) {
+        const data = res.data;
+        expect(data.module).to.eql({ name: Pkg.name, version: Pkg.version });
+      }
+      await dispose();
+    });
+  });
+
+  describe('/subhosting', () => {
+    it('GET root info', async () => {
+      const { client, dispose } = testSetup();
+      const res = await client.subhosting.info();
+
+      expect(res.ok).to.eql(true);
+      expect(res.error).to.eql(undefined);
+      if (res.ok) {
+        const data = res.data;
+        expect(data.description).to.include('deno:subhosting™️');
+        expect(data.module).to.eql({ name: Pkg.name, version: Pkg.version });
+        expect(data.auth.user).to.eql('');
+        expect(data.auth.verified).to.eql(false);
+      }
+      await dispose();
+    });
   });
 });

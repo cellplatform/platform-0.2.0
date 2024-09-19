@@ -15,6 +15,11 @@ export type DenoCloudClientOptions = { accessToken?: t.StringJwt };
  * HTTP client for working with the Deno cloud.
  */
 export type DenoCloudClient = {
-  url: t.HttpUrl;
-  root(): Promise<t.HttpClientResponse<t.RootResponse>>;
+  readonly url: t.HttpUrl;
+  readonly subhosting: DenoCloudClientSubhosting;
+  info(): Promise<t.HttpClientResponse<t.RootResponse>>;
+};
+
+export type DenoCloudClientSubhosting = {
+  info(): Promise<t.HttpClientResponse<t.SubhostingResponse>>;
 };

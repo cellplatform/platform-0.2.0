@@ -8,7 +8,7 @@ export const Auth: t.ServerAuth = {
    * Factory: create an Auth context helper.
    */
   ctx(appId, appSecret) {
-    const client = new PrivyClient(appId, appSecret);
+    const privy = new PrivyClient(appId, appSecret);
     return {
       /**
        * Verify a user's access token (JWT)
@@ -16,13 +16,14 @@ export const Auth: t.ServerAuth = {
        */
       async verify(input): Promise<t.AuthVerification> {
         const token = wrangle.accessToken(input);
-        if (!token) return { verified: false };
+        if (!token) return { verified: false, user: '' };
         try {
-          const claims = await client.verifyAuthToken(token);
-          return { verified: true, claims };
+          const claims = await privy.verifyAuthToken(token);
+          const user = claims.userId || '';
+          return { verified: true, user, claims };
         } catch (err: unknown) {
           const error = (err as Error).message;
-          return { verified: false, error };
+          return { verified: false, user: '', error };
         }
       },
     };
