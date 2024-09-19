@@ -1,8 +1,24 @@
 import { DotEnv } from './u.Server/mod.ts';
+const env = await DotEnv.load();
 
-const values = await DotEnv.load();
-const id = values['PRIVY_APP_ID'] ?? '';
-const secret = values['PRIVY_APP_SECRET'] ?? '';
-const privy = { id, secret };
+export const EnvVars = {
+  /**
+   * Deno Cloud
+   */
+  deno: {
+    /**
+     * Organization: "sys" (Subhosting)
+     * https://docs.deno.com/subhosting/manual
+     */
+    accessToken: env['DENO_SYS_DEPLOY_ACCESS_TOKEN'],
+    orgId: env['DENO_SYS_DEPLOY_ORG_ID'],
+  },
 
-export const env = { privy };
+  /**
+   * Auth: Privy
+   */
+  privy: {
+    appId: env['PRIVY_APP_ID'],
+    appSecret: env['PRIVY_APP_SECRET'],
+  },
+};
