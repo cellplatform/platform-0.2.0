@@ -37,4 +37,4 @@ jobs:
 
       - name: CI → tests
         # run: deno task test --allow-env
-        run: cd code/deno/driver/driver.deno.cloud && deno test -RWNE src/mode.-unit.test.ts
+        run: cd code/deno/driver/driver.deno.cloud && deno test -RWNE src/mod.-unit.test.ts
