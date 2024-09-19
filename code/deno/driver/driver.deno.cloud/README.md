@@ -20,3 +20,17 @@ DENO_SYS_DEPLOY_ORG_ID
 PRIVY_APP_ID
 PRIVY_APP_SECRET
 ```
+
+
+### Example
+
+```ts
+import { Pkg } from './mod.ts';
+import { DenoCloud, Server } from 'jsr:@sys/driver-deno-cloud';
+
+const app = DenoCloud.server({ env });
+const options = Server.options(8080, Pkg)
+Deno.serve(options, app.fetch);
+```
+
+

@@ -12,7 +12,7 @@ Surfaces, and lightly augments when helpful, the audited deno [@std](https://jsr
 #### Example
 
 ```ts
-import { Path } from '@sys/std';
+import { Path } from 'jsr:@sys/std';
 ```
 
 
