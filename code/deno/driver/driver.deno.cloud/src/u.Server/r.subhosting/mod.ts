@@ -20,7 +20,10 @@ export const Subhosting = {
     app.get(path, async (c) => {
       const auth = await ctx.auth.verify(c.req.raw);
       const verified = auth.verified;
-      const organization = await subhosting.organizations.get(EnvVars.deno.orgId);
+      // const organization = await subhosting.organizations.get(env.deno.orgId);
+
+      console.log('auth', auth);
+      // if (!auth.verified) return c.json({ error: 'Unauthorized' }, 401);
 
       const { name, version } = Pkg;
       const module = { name, version };
@@ -32,6 +35,22 @@ export const Subhosting = {
         auth: { identity, verified },
       };
 
+      return c.json(res);
+    });
+
+    /**
+     * GET: /orgs
+     */
+    app.get(join(path, '/projects'), async (c) => {
+
+      const projects = await subhosting.organizations.projects.list(orgId);
+
+      // subhosting.organizations.domains.
+
+      // subhosting.projects
+      // console.log('m', m);
+
+      const res: t.SubhostingProjectsInfo = { projects };
       return c.json(res);
     });
   },
