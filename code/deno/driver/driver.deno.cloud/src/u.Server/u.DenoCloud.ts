@@ -1,4 +1,4 @@
-import { env } from '../env.ts';
+import { EnvVars } from '../env.ts';
 import { DenoCloudClient, Server, type t } from './common/mod.ts';
 import { Root } from './r.root/mod.ts';
 import { Subhosting } from './r.subhosting/mod.ts';
@@ -26,11 +26,11 @@ export const DenoCloud: t.DenoCloudServerLib = {
 const wrangle = {
   privy(options: Opt) {
     if (typeof options.privy === 'object') return options.privy;
-    return env.privy;
+    return EnvVars.privy;
   },
 
   auth(options: Opt) {
     const privy = wrangle.privy(options);
-    return Server.Auth.ctx(privy.id, privy.secret);
+    return Server.Auth.ctx(privy.appId, privy.appSecret);
   },
 } as const;

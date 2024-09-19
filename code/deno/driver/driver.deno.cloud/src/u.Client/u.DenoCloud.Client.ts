@@ -1,8 +1,10 @@
 import { Http, type t } from './common/mod.ts';
 
 /**
- * Factory: create a strongly typed HTTP client for working
- *          against a DenoCloud server HTTP endpoint.
+ * Factory: Client Library
+ *
+ *      A strongly typed HTTP client for working against
+ *      a DenoCloud (Deploy™️ or Subhosting™️) server HTTP endpoint.
  *
  * - https://deno.com/deploy
  * - https://docs.deno.com/subhosting/manual

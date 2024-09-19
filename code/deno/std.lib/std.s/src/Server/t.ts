@@ -30,3 +30,11 @@ export type ServerCreateOptions = {
  */
 export type HonoApp = Hono<Env, BlankSchema, '/'>;
 export type { HonoContext };
+
+/**
+ * Route
+ */
+export type RouteContext = {
+  readonly app: t.HonoApp;
+  readonly auth: t.AuthCtx;
+};

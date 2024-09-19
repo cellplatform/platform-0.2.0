@@ -16,13 +16,5 @@ export type DenoCloudServerLib = {
 };
 
 export type DenoCloudServerOptions = {
-  privy?: { id: string; secret: string };
-};
-
-/**
- * Routes
- */
-export type RouteContext = {
-  readonly app: t.HonoApp;
-  readonly auth: t.AuthCtx;
+  privy?: { appId: string; appSecret: string };
 };
