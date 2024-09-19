@@ -1,4 +1,4 @@
-import { EnvVars as env } from '../-start.env.ts';
+import { env } from '../-start.env.ts';
 import { Http, Pkg, describe, expect, it } from './common/mod.ts';
 import { DenoCloud } from './mod.ts';
 

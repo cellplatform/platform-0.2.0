@@ -1,5 +1,5 @@
 import { DenoCloud, Pkg, Server } from './u.Server/mod.ts';
-import { EnvVars as env } from './-start.env';
+import { env } from './-start.env';
 
 /**
  * Start
