@@ -12,13 +12,17 @@ Tools for working with [Deno cloud](https://deno.com/deploy).
 ### .env File
 
 ```bash
-// Deno: Subhosting Dashboard
-DENO_SYS_DEPLOY_ACCESS_TOKEN
-DENO_SYS_DEPLOY_ORG_ID
+# Loaded from: src/env.ts
 
-// Privy Dashboard
-PRIVY_APP_ID
-PRIVY_APP_SECRET
+# https://dash.deno.com/subhosting
+# Deno: Subhosting → Settings → Access Tokens
+DENO_SUBHOSTING_ACCESS_TOKEN="****"
+DENO_SUBHOSTING_DEPLOY_ORG_ID="****"
+
+# https://dashboard.privy.io
+# Privy: Dashboard → Settings → Basics
+PRIVY_APP_ID="****"
+PRIVY_APP_SECRET="****"
 ```
 
 
