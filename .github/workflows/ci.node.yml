@@ -1,6 +1,13 @@
 name: ci.node
 
 on:
+  workflow_dispatch:
+    inputs:
+      skip:
+        description: 'Skip the workflow'
+        required: false
+        default: 'false'
+
   push:
     branches: ['main']
   pull_request:
