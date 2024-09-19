@@ -8,7 +8,7 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./testing": "./src/Testing/mod.ts",
-    "./types": "./src/t.ts"
+    "./types": "./src/t.ts",
+    "./testing": "./src/Testing/mod.ts"
   }
 }

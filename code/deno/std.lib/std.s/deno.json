@@ -8,6 +8,9 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./types": "./src/t.ts"
+    "./types": "./src/t.ts",
+    "./fs": "./src/Filesystem/mod.ts",
+    "./process": "./src/Process/mod.ts",
+    "./server": "./src/Server.hono/mod.ts"
   }
 }
