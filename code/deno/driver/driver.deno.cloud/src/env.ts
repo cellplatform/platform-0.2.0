@@ -1,5 +1,7 @@
 import { DotEnv } from './u.Server/mod.ts';
+
 const dotenv = await DotEnv.load();
+const read = (key: string) => dotenv[key] || Deno.env.get(key);
 
 export const env = {
   /**
@@ -10,15 +12,15 @@ export const env = {
      * Organization: "sys" (Subhosting)
      * https://docs.deno.com/subhosting/manual
      */
-    accessToken: dotenv['DENO_SUBHOSTING_ACCESS_TOKEN'],
-    orgId: dotenv['DENO_SUBHOSTING_DEPLOY_ORG_ID'],
+    accessToken: read('DENO_SUBHOSTING_ACCESS_TOKEN'),
+    orgId: read('DENO_SUBHOSTING_DEPLOY_ORG_ID'),
   },
 
   /**
    * Auth: Privy
    */
   privy: {
-    appId: dotenv['PRIVY_APP_ID'],
-    appSecret: dotenv['PRIVY_APP_SECRET'],
+    appId: read('PRIVY_APP_ID'),
+    appSecret: read('PRIVY_APP_SECRET'),
   },
 };
