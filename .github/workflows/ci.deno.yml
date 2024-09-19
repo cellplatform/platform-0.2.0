@@ -19,7 +19,7 @@ jobs:
       - name: Version Info
         run: |
           deno --version
-          deno run -RE script.deno/cmd.info.ts
+          deno task info
 
       - name: Continuous Integration (CI)
         run: |

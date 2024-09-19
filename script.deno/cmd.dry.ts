@@ -16,5 +16,5 @@ await run('code/deno/driver/driver.deno.cloud');
 /**
  * Output.
  */
-const success = Log.output(results, { title: 'Publish (--dry-run)', pad: true });
+const success = Log.output(results, { title: 'Check (publish --dry-run)', pad: true });
 if (!success) Deno.exit(1);

@@ -19,5 +19,5 @@ await run('code/deno/driver/driver.deno.cloud', '-RWN');
 /**
  * Output.
  */
-const success = Log.output(results, { title: 'Test Results', pad: true });
+const success = Log.output(results, { title: 'Tests', pad: true });
 if (!success) Deno.exit(1);
