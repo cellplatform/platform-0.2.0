@@ -22,4 +22,7 @@ jobs:
           deno run -RE script.deno/cmd.info.ts
 
       - name: Continuous Integration (CI)
-        run: deno task ci
+        run: |
+          deno task test
+          deno task dry
+          deno task info
