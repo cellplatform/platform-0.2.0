@@ -1,4 +1,4 @@
-import { DenoSubhostingAPI, EnvVars, Pkg, type t } from '../common/mod.ts';
+import { DenoSubhostingAPI, Path, Pkg, type t } from '../common/mod.ts';
 
 /**
  * Helpers for working with the Deno sub-hosting system.
@@ -9,12 +9,13 @@ export const Subhosting = {
    * Setup routes for deploying and managing sub-hosting instances.
    */
   routes(path: string, ctx: t.RouteContext) {
-    const { app } = ctx;
-
-    const subhosting = new DenoSubhostingAPI({ bearerToken: EnvVars.deno.accessToken });
+    const { app, env } = ctx;
+    const subhosting = new DenoSubhostingAPI({ bearerToken: env.deno.accessToken });
+    const orgId = env.deno.orgId;
+    const join = Path.join;
 
     /**
-     * GET root info.
+     * GET: root info.
      */
     app.get(path, async (c) => {
       const auth = await ctx.auth.verify(c.req.raw);
@@ -29,7 +30,6 @@ export const Subhosting = {
         description,
         module,
         auth: { identity, verified },
-        organization,
       };
 
       return c.json(res);

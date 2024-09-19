@@ -1,8 +1,12 @@
+import { EnvVars as env } from '../-start.env.ts';
 import { Http, Pkg, describe, expect, it } from './common/mod.ts';
 import { DenoCloud } from './mod.ts';
 
+/**
+ * Setup a server
+ */
 export function testSetup() {
-  const app = DenoCloud.server();
+  const app = DenoCloud.server({ env });
   const listener = Deno.serve({ port: 0 }, app.fetch);
 
   const dispose = () => listener.shutdown();

@@ -22,4 +22,5 @@ export type DenoCloudClient = {
 
 export type DenoCloudClientSubhosting = {
   info(): Promise<t.HttpClientResponse<t.SubhostingInfo>>;
+  projects(): Promise<t.HttpClientResponse<t.SubhostingProjectsInfo>>;
 };
