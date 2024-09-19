@@ -1,7 +1,7 @@
 import { DotEnv } from './u.Server/mod.ts';
 
 const dotenv = await DotEnv.load();
-const read = (key: string) => dotenv[key] || Deno.env.get(key);
+const read = (key: string) => dotenv[key] || Deno.env.get(key) || '';
 
 export const env = {
   /**

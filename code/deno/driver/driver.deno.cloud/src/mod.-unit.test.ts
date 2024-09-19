@@ -6,12 +6,15 @@ describe('DenoCloud (client)', () => {
     const expectValue = <T>(obj: T, ns: string, key: keyof T) => {
       const value = obj[key];
       expect(value).to.be.string;
+
       const text = String(value);
-      console.log(`> ${String(key)}:`, '*'.repeat(text.length), `(${text.length})`);
-      console.log(`> ${String(key)}:`, text.substring(0, 3), `(${text.length})`);
-      expect(text.length).to.be.greaterThan(5, `missing secret value for {${ns}.${String(key)}}`);
+      const length = text.length;
+      console.info(`> ${String(key)}:`, '*'.repeat(Math.min(length, 10)), `(${length})`);
+
+      expect(text.length).to.be.greaterThan(10, `missing secret value for {${ns}.${String(key)}}`);
     };
 
+    console.info('.env (secrets)');
     expectValue(env.privy, 'privy', 'appId');
     expectValue(env.privy, 'privy', 'appSecret');
 
