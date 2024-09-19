@@ -10,14 +10,11 @@ const run = async (path: string, args = '') => {
 };
 
 // Std Libs.
-// await run('code/deno/std.lib/std', '-RWN');
-// await run('code/deno/std.lib/std.s', '-RWN --allow-run');
+await run('code/deno/std.lib/std', '-RWN');
+await run('code/deno/std.lib/std.s', '-RWN');
 
 // Drivers.
 await run('code/deno/driver/driver.deno.cloud', '-RWNE');
-/**
- * TODO 🐷 FIX ↑ make work in CI on github. Secrets/ENV_VARS issue.
- */
 
 /**
  * Output.
