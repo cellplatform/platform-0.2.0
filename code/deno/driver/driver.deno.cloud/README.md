@@ -15,13 +15,13 @@ Ensure you have a `.env` file or have the following `ENV_VARS` available to the 
 ```bash
 # Loaded from: src/env.ts
 
-# https://dash.deno.com/subhosting
 # Deno: Subhosting → Settings → Access Tokens
+#       https://dash.deno.com/subhosting
 DENO_SUBHOSTING_ACCESS_TOKEN="****"
 DENO_SUBHOSTING_DEPLOY_ORG_ID="****"
 
-# https://dashboard.privy.io
 # Privy: Dashboard → Settings → Basics
+#        https://dashboard.privy.io
 PRIVY_APP_ID="****"
 PRIVY_APP_SECRET="****"
 ```
