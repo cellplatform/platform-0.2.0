@@ -18,4 +18,4 @@ await run('code/deno/driver/driver.deno.cloud');
  */
 const title = `Code Check ${c.gray('(publish --dry-run)')}`;
 const success = Log.output(results, { title, pad: true });
-// if (!success) throw new Error('Checks/Dry-Run Failed');
+if (!success) throw new Error('Checks/Dry-Run Failed');

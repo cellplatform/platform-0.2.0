@@ -23,4 +23,4 @@ await run('code/deno/driver/driver.deno.cloud', '-RWNE');
  * Output.
  */
 const success = Log.output(results, { title: 'Tests', pad: true });
-// if (!success) throw new Error('Tests Failed');
+if (!success) throw new Error('Tests Failed');
