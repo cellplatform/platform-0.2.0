@@ -271,9 +271,18 @@ export default Dev.describe(name, (e) => {
         const res = await method({ text }).promise();
         console.log('res', res);
       });
+
+      dev.button(['tmp: authToken (JWT)', ':8080'], async () => {
+        /**
          * TODO 🐷
          */
-        // const accessToken =
+        const accessToken = State.debug.current.accessToken ?? '';
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const url = 'http://localhost:8080/subhosting';
+        const res = await fetch(url, { headers });
+        const json = await res.json();
+        console.log('json', json);
       });
     });
   });
