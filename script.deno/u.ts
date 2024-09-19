@@ -22,18 +22,18 @@ export const Log = {
     const title = `${(options.title ?? 'Results').replace(/\:$/, '')}:`;
     console.info(title, success ? c.green('success') : c.red('failed'));
 
-    const stdoutEdge = (prefix: string, path: string) => {
+    const fmtBanner = (prefix: string, path: string) => {
       prefix = ` ${prefix.replace(/\:*$/, '')} `;
-      prefix = c.bgRed(prefix);
+      prefix = c.bgRed(c.white(prefix));
       return c.bold(`${c.red(prefix)} ${c.yellow(path)}`);
     };
 
     results
       .filter((item) => !item.output.success)
       .forEach((item) => {
-        console.info(stdoutEdge('↓ MODULE', item.path));
+        console.info(fmtBanner('↓ MODULE', item.path));
         console.info(item.output.text.stdout);
-        console.info(stdoutEdge('↑ MODULE', item.path));
+        console.info(fmtBanner('↑ MODULE', item.path));
         console.log('');
       });
 
