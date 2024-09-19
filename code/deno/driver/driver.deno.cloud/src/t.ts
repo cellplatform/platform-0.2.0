@@ -1,5 +1,3 @@
-export type * from './t.deno.ts';
-
 export type * from './u.Client/t.ts';
 
 export type * from './u.Server/t.ts';
