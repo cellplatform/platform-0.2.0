@@ -2,7 +2,7 @@ import { describe, expect, it } from './common/mod.ts';
 import { env } from './env.ts';
 
 describe('DenoCloud (client)', () => {
-  it('.env contains values', () => {
+  it('.env contains values ← secrets', () => {
     const expectValue = <T>(obj: T, ns: string, key: keyof T) => {
       const value = obj[key];
       expect(value).to.be.string;
