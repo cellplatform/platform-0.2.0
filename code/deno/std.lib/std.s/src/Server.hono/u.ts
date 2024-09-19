@@ -15,6 +15,7 @@ export const print: t.Server['print'] = (addr, pkg) => {
   } else {
     console.info(c.gray(`Listening on ${host}`));
   }
+  console.info('');
 };
 
 /**
