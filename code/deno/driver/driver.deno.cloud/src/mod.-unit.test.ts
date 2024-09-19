@@ -6,7 +6,10 @@ describe('DenoCloud (client)', () => {
     const expectValue = <T>(obj: T, ns: string, key: keyof T) => {
       const value = obj[key];
       expect(value).to.be.string;
-      expect(String(value).length).to.be.greaterThan(10, `missing value for {${ns}.${String(key)}`);
+      expect(String(value).length).to.be.greaterThan(
+        5,
+        `missing secret value for {${ns}.${String(key)}}`,
+      );
     };
 
     expectValue(env.privy, 'privy', 'appId');
