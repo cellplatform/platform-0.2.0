@@ -1,9 +1,9 @@
-import { Cmd, Log, type CmdOutput } from './u.ts';
+import { Cmd, Log, type CmdResult } from './u.ts';
 
 /**
  * Run all tests across the mono-repo.
  */
-const results: CmdOutput[] = [];
+const results: CmdResult[] = [];
 const run = async (path: string, args = '') => {
   const output = await Cmd.sh({ silent: true, path }).run(`deno test ${args}`);
   results.push({ output, path });
@@ -11,10 +11,10 @@ const run = async (path: string, args = '') => {
 
 // Std Libs.
 await run('code/deno/std.lib/std', '-RWN');
-await run('code/deno/std.lib/std.s', '-RW');
+await run('code/deno/std.lib/std.s', '-RWN --allow-run');
 
 // Drivers.
-await run('code/deno/driver/driver.deno.cloud', '-RW');
+await run('code/deno/driver/driver.deno.cloud', '-RWN');
 
 /**
  * Output.
