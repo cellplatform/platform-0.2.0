@@ -13,6 +13,8 @@ jobs:
     env:
       DENO_SYS_DEPLOY_ACCESS_TOKEN: ${{ secrets.DENO_SYS_DEPLOY_ACCESS_TOKEN }}
       DENO_SYS_DEPLOY_ORG_ID: ${{ secrets.DENO_SYS_DEPLOY_ORG_ID }}
+      PRIVY_APP_ID: ${{ secrets.PRIVY_APP_ID }}
+      PRIVY_APP_SECRET: ${{ secrets.PRIVY_APP_SECRET }}
 
     steps:
       - uses: actions/checkout@v3
@@ -20,10 +22,10 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Debug Secrets
-        run: |
-          # echo "Deploy token length: ${#DENO_SYS_DEPLOY_ACCESS_TOKEN}"
-          echo "Org ID length: ${#DENO_SYS_DEPLOY_ORG_ID}"
+      # - name: Debug Secrets
+      #   run: |
+      #     # echo "Deploy token length: ${#DENO_SYS_DEPLOY_ACCESS_TOKEN}"
+      #     echo "Org ID length: ${#DENO_SYS_DEPLOY_ORG_ID}"
 
       - name: Version Info
         run: |
