@@ -29,3 +29,10 @@ jobs:
           deno task test
           deno task dry
           deno task info
+
+      - name: CI: test
+        run: deno task test
+
+      - name: CI: check (publish --dry-run)
+        run: deno task dry
+
