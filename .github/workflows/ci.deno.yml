@@ -23,7 +23,7 @@ jobs:
 
       - name: DEBUG Secrets 🐷
         run: |
-          # echo "Deploy token length: ${#DENO_SUBHOSTING_ACCESS_TOKEN}"
+          # echo "Deploy token length: ${#DENO_SUBHOSTING_DEPLOY_ORG_ID}"
           echo "Org ID length: ${#DENO_SUBHOSTING_DEPLOY_ORG_ID}"
 
       - name: Version Info
