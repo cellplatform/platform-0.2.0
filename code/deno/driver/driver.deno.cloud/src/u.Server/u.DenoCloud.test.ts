@@ -32,7 +32,10 @@ describe('DenoCloud (Server)', () => {
     const res = await client.root();
     expect(res.ok).to.eql(true);
     expect(res.error).to.eql(undefined);
-    if (res.ok) expect(res.data).to.eql({ module: { name: Pkg.name, version: Pkg.version } });
+    if (res.ok) {
+      const { name, version } = Pkg;
+      expect(res.data.module).to.eql({ name, version });
+    }
     await dispose();
   });
 });

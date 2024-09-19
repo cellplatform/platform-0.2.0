@@ -3,8 +3,8 @@
   "version": "0.0.4",
   "license": "MIT",
   "tasks": {
-    "start": "deno run -RN ./src/server.ts",
-    "dev": "deno run -RN --watch ./src/server.start.ts",
+    "start": "deno run -RNE ./src/server.start.ts",
+    "dev": "deno run -RNE --watch ./src/server.start.ts",
     "test": "deno test -RWN --watch",
     "dry": "deno publish --allow-dirty --dry-run"
   },

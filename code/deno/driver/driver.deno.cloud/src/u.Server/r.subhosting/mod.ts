@@ -14,10 +14,13 @@ export const Subhosting = {
     /**
      * GET root info.
      */
-    app.get(path, (c) => {
+    app.get(path, async (c) => {
       const { name, version } = Pkg;
+      const module = { name, version };
       const about = `deno:subhosting`;
-      const res: t.SubhostingResponse = { about, module: { name, version } };
+      const auth = await ctx.auth.verify(c.req.raw);
+      const user = auth.claims?.userId;
+      const res: t.SubhostingResponse = { about, module, user };
       return c.json(res);
     });
   },
