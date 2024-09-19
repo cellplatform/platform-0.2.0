@@ -9,7 +9,8 @@ Tools for working with [Deno cloud](https://deno.com/deploy).
 - [Privy: Verifying JWT authToken](https://docs.privy.io/guide/server/authorization/verification#verifying-the-user-s-access-token)
 
 
-### .env File
+### .env
+Ensure you have a `.env` file or have the following `ENV_VARS` available to the process.
 
 ```bash
 # Loaded from: src/env.ts
