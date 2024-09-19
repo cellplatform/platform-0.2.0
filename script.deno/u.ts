@@ -1,7 +1,7 @@
 import type { CmdOutput } from '@sys/std-s/types';
 
 import { c } from '@sys/std-s';
-export { Cmd } from '@sys/std-s';
+export { Cmd, c } from '@sys/std-s';
 
 export type CmdResult = {
   output: CmdOutput;

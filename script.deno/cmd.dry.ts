@@ -1,4 +1,4 @@
-import { Cmd, Log, type CmdResult } from './u.ts';
+import { c, Cmd, Log, type CmdResult } from './u.ts';
 
 const results: CmdResult[] = [];
 const run = async (path: string) => {
@@ -16,5 +16,6 @@ await run('code/deno/driver/driver.deno.cloud');
 /**
  * Output.
  */
-const success = Log.output(results, { title: 'Check (publish --dry-run)', pad: true });
+const title = `Code Check ${c.gray('(publish --dry-run)')}`;
+const success = Log.output(results, { title, pad: true });
 if (!success) throw new Error('Checks/Dry-Run Failed');
