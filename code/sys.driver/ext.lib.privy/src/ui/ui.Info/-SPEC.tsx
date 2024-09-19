@@ -25,7 +25,7 @@ type D = {
 
 /**
  * Spec
- * https://docs.privy.io/
+ * https://docs.privy.io
  */
 const name = DEFAULTS.displayName;
 
@@ -277,7 +277,9 @@ export default Dev.describe(name, (e) => {
          * TODO 🐷
          */
         const accessToken = State.debug.current.accessToken ?? '';
-        const headers = { Authorization: `Bearer ${accessToken}` };
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
 
         const url = 'http://localhost:8080/subhosting';
         const res = await fetch(url, { headers });
