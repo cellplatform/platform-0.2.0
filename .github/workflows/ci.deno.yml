@@ -22,10 +22,10 @@ jobs:
         with:
           deno-version: v1.x
 
-      # - name: Debug Secrets
-      #   run: |
-      #     # echo "Deploy token length: ${#DENO_SYS_DEPLOY_ACCESS_TOKEN}"
-      #     echo "Org ID length: ${#DENO_SYS_DEPLOY_ORG_ID}"
+      - name: DEBUG Secrets 🐷
+        run: |
+          # echo "Deploy token length: ${#DENO_SYS_DEPLOY_ACCESS_TOKEN}"
+          echo "Org ID length: ${#DENO_SYS_DEPLOY_ORG_ID}"
 
       - name: Version Info
         run: |
