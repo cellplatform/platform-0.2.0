@@ -31,5 +31,5 @@ jobs:
       - name: publish module → "@sys/std-s"
         run: |
           cd code/deno/std.lib/std.s
-          deno test -RWN
+          deno test -RWN --allow-run
           deno publish
