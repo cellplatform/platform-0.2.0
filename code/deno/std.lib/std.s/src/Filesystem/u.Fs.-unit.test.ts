@@ -1,4 +1,5 @@
-import { describe, expect, Fs, it } from '../mod.ts';
+import { describe, expect, it } from '../mod.ts';
+import { Fs } from './mod.ts';
 
 describe('Fs: filesystem', () => {
   it('glob', async () => {

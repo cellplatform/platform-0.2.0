@@ -1,4 +1,5 @@
-import { describe, expect, Fs, it, Path } from '../mod.ts';
+import { describe, expect, it } from '../mod.ts';
+import { Fs, Path } from './mod.ts';
 
 describe('Path', () => {
   it('filesystem extensions', () => {
