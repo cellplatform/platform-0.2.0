@@ -24,15 +24,8 @@ jobs:
           deno --version
           deno task info
 
-      - name: Continuous Integration (CI)
-        run: |
-          deno task test
-          deno task dry
-          deno task info
-
-      - name: CI: test
+      - name: CI → tests
         run: deno task test
 
-      - name: CI: check (publish --dry-run)
+      - name: CI → type check (publish --dry-run)
         run: deno task dry
-
