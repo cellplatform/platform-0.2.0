@@ -14,7 +14,7 @@
       "jsr:@std/semver": "jsr:@std/semver@1.0.3",
       "jsr:@std/semver@1.0.3": "jsr:@std/semver@1.0.3",
       "jsr:@std/testing@1.0.2": "jsr:@std/testing@1.0.2",
-      "npm:@privy-io/server-auth": "npm:@privy-io/server-auth@1.12.0",
+      "npm:@privy-io/server-auth@1.12.2": "npm:@privy-io/server-auth@1.12.2",
       "npm:chai@5.1.1": "npm:chai@5.1.1",
       "npm:create-vite@latest": "npm:create-vite@5.5.2",
       "npm:hono": "npm:hono@4.5.11",
@@ -61,14 +61,14 @@
       }
     },
     "npm": {
-      "@privy-io/server-auth@1.12.0": {
-        "integrity": "sha512-p7OOOr6UavsAuyfpNK/ehh2NSfx8UPkiGt9FBmuI26an55WdQwKxMg9VILGcEOWHoruwFLkuirAXPPYkusfIvw==",
+      "@privy-io/server-auth@1.12.2": {
+        "integrity": "sha512-r6t6VQhLNY/Sw0zK+u3JUldtluUbjcoWg9DjdBaroZiWzthN+3wWSr05n9MgroFtTjnZTrg958HZdjsWiOGF9Q==",
         "dependencies": {
           "dotenv": "dotenv@16.4.5",
           "jose": "jose@4.15.9",
           "node-fetch-native": "node-fetch-native@1.6.4",
           "redaxios": "redaxios@0.5.1",
-          "svix": "svix@1.32.0",
+          "svix": "svix@1.35.0",
           "ts-case-convert": "ts-case-convert@2.0.7",
           "type-fest": "type-fest@3.13.1"
         }
@@ -376,8 +376,8 @@
           "whatwg-fetch": "whatwg-fetch@3.6.20"
         }
       },
-      "svix@1.32.0": {
-        "integrity": "sha512-jVGsyQlqXoypkQRp+4Qsp/WSDB6liSa45I03EGIhbEQrqsnVMb2I1Pu9ujFRUJ4rhwTUfpfnNKtwd6eM/YmFaw==",
+      "svix@1.35.0": {
+        "integrity": "sha512-YXocwu/isOywSnzcoZsIZddz6g4BVRIZJVSiM+g6EpaFLt8SOt2r+iAuqIy95LTl+3TdxhHB1Ba5vjiOF2m7Ow==",
         "dependencies": {
           "@stablelib/base64": "@stablelib/base64@1.0.1",
           "es6-promise": "es6-promise@4.2.8",
@@ -608,7 +608,7 @@
       "jsr:@std/path@1.0.4",
       "jsr:@std/semver@1.0.3",
       "jsr:@std/testing@1.0.2",
-      "npm:@privy-io/server-auth",
+      "npm:@privy-io/server-auth@1.12.2",
       "npm:chai@5.1.1",
       "npm:ramda@0.30.1",
       "npm:rxjs@7.8.1"
