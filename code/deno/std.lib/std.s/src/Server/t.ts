@@ -1,3 +1,5 @@
+import type { t } from './common.ts';
+
 import type { Hono, Context as HonoContext } from '@hono/hono';
 import type { cors } from '@hono/hono/cors';
 import type { serveStatic } from '@hono/hono/deno';
@@ -8,7 +10,8 @@ type Pkg = { name: string; version: string };
 /**
  * Webserver.
  */
-export type Server = {
+export type ServerLib = {
+  readonly Auth: t.ServerAuth;
   readonly Hono: typeof Hono;
   readonly cors: typeof cors;
   readonly static: typeof serveStatic;
@@ -27,10 +30,3 @@ export type ServerCreateOptions = {
  */
 export type HonoApp = Hono<Env, BlankSchema, '/'>;
 export type { HonoContext };
-
-/**
- * Routes
- */
-export type RouteContext = {
-  readonly app: HonoApp;
-};

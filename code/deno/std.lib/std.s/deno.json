@@ -11,6 +11,6 @@
     "./types": "./src/t.ts",
     "./fs": "./src/Filesystem/mod.ts",
     "./process": "./src/Process/mod.ts",
-    "./server": "./src/Server.hono/mod.ts"
+    "./server": "./src/Server/mod.ts"
   }
 }
