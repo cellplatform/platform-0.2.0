@@ -3,17 +3,22 @@
   "packages": {
     "specifiers": {
       "jsr:@hono/hono@4.6.2": "jsr:@hono/hono@4.6.2",
-      "jsr:@std/assert@1.0.4": "jsr:@std/assert@1.0.4",
+      "jsr:@std/datetime": "jsr:@std/datetime@0.225.2",
       "jsr:@std/datetime@0.225.2": "jsr:@std/datetime@0.225.2",
+      "jsr:@std/dotenv": "jsr:@std/dotenv@0.225.2",
       "jsr:@std/dotenv@0.225.2": "jsr:@std/dotenv@0.225.2",
+      "jsr:@std/fmt": "jsr:@std/fmt@1.0.2",
       "jsr:@std/fmt@1.0.2": "jsr:@std/fmt@1.0.2",
+      "jsr:@std/fs": "jsr:@std/fs@1.0.3",
       "jsr:@std/fs@1.0.3": "jsr:@std/fs@1.0.3",
-      "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
+      "jsr:@std/path": "jsr:@std/path@1.0.4",
       "jsr:@std/path@1.0.4": "jsr:@std/path@1.0.4",
       "jsr:@std/path@^1.0.4": "jsr:@std/path@1.0.4",
       "jsr:@std/semver": "jsr:@std/semver@1.0.3",
       "jsr:@std/semver@1.0.3": "jsr:@std/semver@1.0.3",
+      "jsr:@std/testing": "jsr:@std/testing@1.0.2",
       "jsr:@std/testing@1.0.2": "jsr:@std/testing@1.0.2",
+      "npm:@privy-io/server-auth": "npm:@privy-io/server-auth@1.12.2",
       "npm:@privy-io/server-auth@1.12.2": "npm:@privy-io/server-auth@1.12.2",
       "npm:chai@5.1.1": "npm:chai@5.1.1",
       "npm:create-vite@latest": "npm:create-vite@5.5.2",
@@ -27,12 +32,6 @@
     "jsr": {
       "@hono/hono@4.6.2": {
         "integrity": "35fcf3be4687825080b01bed7bbe2ac66f8d8b8939f0bad459661bf3b46d916f"
-      },
-      "@std/assert@1.0.4": {
-        "integrity": "d4c767ea578e5bc09c15b6e503376003e5b2d1f4c0cdf08524a92101ff4d7b96",
-        "dependencies": [
-          "jsr:@std/internal@^1.0.3"
-        ]
       },
       "@std/datetime@0.225.2": {
         "integrity": "45f0100554a912cd65f48089ef0a33aa1eb6ea21f08090840b539ab582827eaa"
@@ -48,9 +47,6 @@
         "dependencies": [
           "jsr:@std/path@^1.0.4"
         ]
-      },
-      "@std/internal@1.0.3": {
-        "integrity": "208e9b94a3d5649bd880e9ca38b885ab7651ab5b5303a56ed25de4755fb7b11e"
       },
       "@std/path@1.0.4": {
         "integrity": "48dd5d8389bcfcd619338a01bdf862cb7799933390146a54ae59356a0acc7105"
@@ -679,7 +675,6 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@4.6.2",
-      "jsr:@std/assert@1.0.4",
       "jsr:@std/datetime@0.225.2",
       "jsr:@std/dotenv@0.225.2",
       "jsr:@std/fmt@1.0.2",
