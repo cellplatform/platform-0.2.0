@@ -1,4 +1,4 @@
-import { type t } from './common.ts';
+import type { t } from './common.ts';
 import { Client } from './u.Http.Client.ts';
 import { HttpUrl as Url } from './u.Http.Url.ts';
 import { Is } from './u.Is.ts';

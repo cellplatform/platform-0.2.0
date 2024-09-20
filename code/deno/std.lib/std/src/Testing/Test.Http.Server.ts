@@ -1,4 +1,4 @@
-import { type t } from '../common/mod.ts';
+import type { t } from '../common/mod.ts';
 import { HttpUrl } from '../Http/u.Http.Url.ts';
 
 type M = 'GET' | 'PUT' | 'POST' | 'DELETE';

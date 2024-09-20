@@ -1,4 +1,4 @@
-import { type t } from './common.ts';
+import type { t } from './common.ts';
 import { TestServer } from './Test.Http.Server.ts';
 
 /**
