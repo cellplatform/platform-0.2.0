@@ -9,4 +9,9 @@ export { c, Env, Pkg, Server } from './common/mod.ts';
 export const DenoCloud: t.DenoCloudServerLib = {
   client: DenoCloudClient.client,
   server,
+
+  async env() {
+    const { env } = await import('../env.ts');
+    return env;
+  },
 };

@@ -20,6 +20,7 @@ export type RouteContext = RouteContextBase & { env: EnvVars };
 export type DenoCloudServerLib = {
   client: t.DenoCloudClientLib['client'];
   server(args: t.DenoCloudServerArgs): t.HonoApp;
+  env(): Promise<t.EnvVars>;
 };
 
 export type DenoCloudServerArgs = {
