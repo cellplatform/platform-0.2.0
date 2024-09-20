@@ -1,4 +1,4 @@
-import { type t } from '../common/mod.ts';
+import type { t } from '../common/mod.ts';
 
 /**
  * Unix child process.
@@ -8,7 +8,7 @@ export const Cmd: t.Cmd = {
   /**
    * Run an <shell> command.
    */
-  sh(...input: any[]) {
+  sh(...input: unknown[]) {
     const options = wrangle.shellOptions(input);
     const path = options.path ?? '';
     return {
@@ -81,10 +81,10 @@ export const Cmd: t.Cmd = {
  * Helpers
  */
 const wrangle = {
-  shellOptions(input: any[]): t.ShellCmdOptions {
+  shellOptions(input: unknown[]): t.ShellCmdOptions {
     if (input.length === 0) return {};
     if (typeof input[0] === 'string') return { path: input[0] };
-    if (typeof input[0] === 'object') return input[0];
+    if (typeof input[0] === 'object') return input[0] as t.ShellCmdOptions;
     return {};
   },
 } as const;

@@ -45,7 +45,7 @@ export type HttpClientLib = {
 };
 
 export type HttpIs = {
-  netaddr(input: any): input is Deno.NetAddr;
+  netaddr(input: unknown): input is Deno.NetAddr;
 };
 
 /**

@@ -2,7 +2,7 @@ import { describe, expect, it } from './mod.ts';
 
 describe('foo', () => {
   describe('bar', () => {
-    it('does thing', async () => {
+    it('does thing', () => {
       expect(123).to.eql(123);
     });
   });

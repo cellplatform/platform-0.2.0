@@ -1,4 +1,4 @@
-import { type t } from '../common/mod.ts';
+import type { t } from '../common/mod.ts';
 import { Path } from '../Path/mod.ts';
 import { Is } from './u.Is.ts';
 
@@ -49,7 +49,7 @@ const wrangle = {
     try {
       const url = new URL(base);
       return { url };
-    } catch (err: any) {
+    } catch (err: unknown) {
       const error = new Error(`Invalid base URL: ${String(base)}`);
       return { error };
     }

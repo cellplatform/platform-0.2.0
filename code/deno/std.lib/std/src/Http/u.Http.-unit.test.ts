@@ -2,7 +2,7 @@ import { describe, expect, it } from '../common/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http', () => {
-  it('Http.toHeaders', async () => {
+  it('Http.toHeaders', () => {
     const input = new Headers();
     input.set('x-foo', 'foo');
     expect(Http.toHeaders(input)).to.eql({ 'x-foo': 'foo' });
