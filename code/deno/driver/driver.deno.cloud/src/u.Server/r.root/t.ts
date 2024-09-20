@@ -1,3 +1,3 @@
 export type RootResponse = {
-  module: { name: string; version: string };
+  pkg: { name: string; version: string };
 };

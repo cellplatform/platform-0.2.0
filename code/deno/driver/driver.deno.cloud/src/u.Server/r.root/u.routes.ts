@@ -11,8 +11,8 @@ export function routes(ctx: t.RouteContext) {
    */
   app.get('/', (c) => {
     const { name, version } = Pkg;
-    const module = { name, version };
-    const res: t.RootResponse = { module };
+    const pkg = { name, version };
+    const res: t.RootResponse = { pkg };
     return c.json(res);
   });
 }

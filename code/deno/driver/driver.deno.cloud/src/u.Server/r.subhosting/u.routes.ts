@@ -23,7 +23,7 @@ export function routes(path: string, ctx: t.RouteContext) {
 
     const res: t.SubhostingInfo = {
       description,
-      module,
+      pkg,
       auth: { identity, verified },
     };
 
