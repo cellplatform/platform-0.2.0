@@ -13,26 +13,16 @@ export function routes(path: string, ctx: t.RouteContext) {
    * GET: root info.
    */
   app.get(path, async (c) => {
-    const auth = await ctx.auth.verify(c.req.raw);
-    const verified = auth.verified;
-    // const organization = await subhosting.organizations.get(env.deno.orgId);
-
-    /**
-     * TODO 🐷 Auth
-     * - put in middleware, enabled/disabled
-     * - handle {err} in client
-     */
-    console.log('auth', auth);
-    // if (!auth.verified) return c.json({ error: 'Unauthorized' }, 401);
-
     const { name, version } = Pkg;
     const module = { name, version };
     const description = `deno:subhosting™️ controller`;
+    const auth = await ctx.auth.verify(c.req.raw);
     const identity = auth.claims?.userId ?? '';
+
     const res: t.SubhostingInfo = {
       description,
       module,
-      auth: { identity, verified },
+      auth: { identity, verified: auth.verified },
     };
 
     return c.json(res);
@@ -42,20 +32,13 @@ export function routes(path: string, ctx: t.RouteContext) {
    * GET: /orgs
    */
   app.get(join(path, '/projects'), async (c) => {
-    //
     /**
-     * TODO 🐷 Auth
+     * TODO 🐷
+     * - tests: - success
+     *          - failure
      */
 
-    // const organization = await subhosting.organizations.get(env.deno.orgId);
-
     const projects = await subhosting.organizations.projects.list(orgId);
-
-    // subhosting.organizations.domains.
-
-    // subhosting.projects
-    // console.log('m', m);
-
     const res: t.SubhostingProjectsInfo = { projects };
     return c.json(res);
   });

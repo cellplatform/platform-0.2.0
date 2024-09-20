@@ -5,8 +5,12 @@ import { DenoCloud } from './mod.ts';
 /**
  * Setup a server
  */
-export function testSetup() {
-  const app = DenoCloud.server({ env });
+export function testSetup(options: { authEnabled?: boolean } = {}) {
+  const {
+    authEnabled = false, // NB: by default, auth checks not performed during testing.
+  } = options;
+
+  const app = DenoCloud.server({ env, authEnabled });
   const listener = Deno.serve({ port: 0 }, app.fetch);
 
   const dispose = () => listener.shutdown();

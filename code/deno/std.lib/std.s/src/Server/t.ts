@@ -1,9 +1,14 @@
 import type { t } from './common.ts';
 
-import type { Hono, Context as HonoContext } from '@hono/hono';
+import type {
+  Hono,
+  Context as HonoContext,
+  MiddlewareHandler as HonoMiddlewareHandler,
+  Schema as HonoSchema,
+} from '@hono/hono';
 import type { cors } from '@hono/hono/cors';
 import type { serveStatic } from '@hono/hono/deno';
-import type { BlankSchema, Env } from '@hono/hono/types';
+import type { BlankSchema as HonoBlankSchema, Env as HonoEnv } from '@hono/hono/types';
 
 type Pkg = { name: string; version: string };
 
@@ -28,8 +33,8 @@ export type ServerCreateOptions = {
 /**
  * Hono Server (application instnace).
  */
-export type HonoApp = Hono<Env, BlankSchema, '/'>;
-export type { HonoContext };
+export type HonoApp = Hono<HonoEnv, HonoBlankSchema, '/'>;
+export type { HonoBlankSchema, HonoContext, HonoEnv, HonoMiddlewareHandler, HonoSchema };
 
 /**
  * Route

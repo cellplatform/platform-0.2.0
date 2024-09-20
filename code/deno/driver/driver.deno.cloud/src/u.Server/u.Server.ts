@@ -1,17 +1,24 @@
 import { Server, type t } from './common/mod.ts';
-import { Root } from './r.root/mod.ts';
-import { Subhosting } from './r.subhosting/mod.ts';
+import { Auth } from './u.Auth.ts';
+import { Routes } from './u.Routes.ts';
+
+type A = t.DenoCloudServerArgs;
 
 /**
  * Initialize a new HTTP server.
  */
-export function server(args: t.DenoCloudServerArgs) {
+export function server(args: A) {
   const { env } = args;
   const app = Server.create();
   const auth = wrangle.auth(args);
   const ctx: t.RouteContext = { app, auth, env };
-  Root.routes(ctx);
-  Subhosting.routes('/subhosting', ctx);
+
+  // Configure HTTP server.
+  app.use('*', wrangle.authMiddleware(args, ctx));
+  Routes.root(ctx);
+  Routes.subhosting('/subhosting', ctx);
+
+  // Finish up.
   return app;
 }
 
@@ -19,8 +26,13 @@ export function server(args: t.DenoCloudServerArgs) {
  * Helpers
  */
 const wrangle = {
-  auth(options: t.DenoCloudServerArgs) {
-    const privy = options.env.privy;
+  auth(args: A) {
+    const privy = args.env.privy;
     return Server.Auth.ctx(privy.appId, privy.appSecret);
+  },
+
+  authMiddleware(args: A, ctx: t.RouteContext) {
+    const enabled = args.authEnabled ?? true;
+    return Auth.middleware(ctx, { enabled });
   },
 } as const;

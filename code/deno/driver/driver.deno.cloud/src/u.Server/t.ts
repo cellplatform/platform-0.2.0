@@ -15,18 +15,23 @@ export type EnvVars = {
 export type RouteContext = RouteContextBase & { env: EnvVars };
 
 /**
- * Server for working with the Deno cloud.
+ * Library: Server for working with the Deno cloud.
  */
 export type DenoCloudServerLib = {
-  /**
-   * Factory to create a new HTTP client.
-   */
   client: t.DenoCloudClientLib['client'];
-
-  /**
-   * Factory to create a new HTTP server.
-   */
   server(args: t.DenoCloudServerArgs): t.HonoApp;
 };
 
-export type DenoCloudServerArgs = { env: EnvVars };
+export type DenoCloudServerArgs = {
+  env: EnvVars;
+  authEnabled?: boolean;
+};
+
+/**
+ * Library: Auth
+ */
+export type AuthLib = {
+  middleware(ctx: t.RouteContext, options?: { enabled?: boolean }): t.AuthMiddleware;
+};
+
+export type AuthMiddleware = t.HonoMiddlewareHandler<t.HonoEnv, '*'>;
