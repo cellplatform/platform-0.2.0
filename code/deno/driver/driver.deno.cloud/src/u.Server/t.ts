@@ -26,7 +26,7 @@ export type DenoCloudServerLib = {
   /**
    * Factory to create a new HTTP server.
    */
-  server(args: t.DenoCloudServerOptions): t.HonoApp;
+  server(args: t.DenoCloudServerArgs): t.HonoApp;
 };
 
-export type DenoCloudServerOptions = { env: EnvVars };
+export type DenoCloudServerArgs = { env: EnvVars };
