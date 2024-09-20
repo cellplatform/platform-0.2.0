@@ -1,37 +1,44 @@
-import { env } from '../env.ts';
 import { Http, Pkg, describe, expect, it } from './common/mod.ts';
-import { DenoCloud } from './mod.ts';
-
-/**
- * Setup a server
- */
-export function testSetup(options: { authEnabled?: boolean } = {}) {
-  const {
-    authEnabled = false, // NB: by default, auth checks not performed during testing.
-  } = options;
-
-  const app = DenoCloud.server({ env, authEnabled });
-  const listener = Deno.serve({ port: 0 }, app.fetch);
-
-  const dispose = () => listener.shutdown();
-  const url = Http.url(listener.addr);
-  const client = DenoCloud.client(url.base);
-
-  return { app, client, url, dispose } as const;
-}
+import { testSetup } from './mod.-testSetup.ts';
 
 describe('DenoCloud (Server)', () => {
   it('server: start → req/res → dispose', async () => {
-    const { url, dispose } = testSetup();
+    const test = testSetup();
     const client = Http.client();
 
-    const res = await client.get(url.base);
+    const res = await client.get(test.url.base);
     expect(res.status).to.eql(200);
 
     const body = await res.json();
     expect(body.module.name).to.eql(Pkg.name);
     expect(body.module.version).to.eql(Pkg.version);
 
-    await dispose();
+    await test.dispose();
+  });
+
+  describe('middleware', () => {
+    it('auth: disabled', async () => {
+      const test = testSetup();
+      const { client, log, dispose } = test;
+      expect(log.count).to.eql(0);
+
+      await client.info();
+      expect(log.count).to.eql(1);
+      expect(log.items[0].status).to.eql('Skipped:Disabled');
+
+      await dispose();
+    });
+
+    it('auth: enabled → allowed path', async () => {
+      const test = testSetup({ authEnabled: true });
+      const { client, log, dispose } = test;
+      expect(log.count).to.eql(0);
+
+      await client.info();
+      expect(log.count).to.eql(1);
+      expect(log.items[0].status).to.eql('Skipped:Allowed');
+
+      await dispose();
+    });
   });
 });

@@ -25,13 +25,24 @@ export type DenoCloudServerLib = {
 export type DenoCloudServerArgs = {
   env: EnvVars;
   authEnabled?: boolean;
+  authLogger?: t.AuthLogger;
 };
 
 /**
- * Library: Auth
+ * Library: Auth.
  */
 export type AuthLib = {
-  middleware(ctx: t.RouteContext, options?: { enabled?: boolean }): t.AuthMiddleware;
+  middleware(ctx: t.RouteContext, options?: t.AuthMiddlewareOptions): t.AuthMiddleware;
 };
 
 export type AuthMiddleware = t.HonoMiddlewareHandler<t.HonoEnv, '*'>;
+export type AuthMiddlewareOptions = {
+  enabled?: boolean;
+  logger?: t.AuthLogger;
+};
+
+export type AuthLogger = (e: AuthLogEntry) => void;
+export type AuthLogEntry = {
+  status: 'OK' | 'Skipped:Disabled' | 'Skipped:Allowed';
+  path: string;
+};

@@ -33,6 +33,7 @@ const wrangle = {
 
   authMiddleware(args: A, ctx: t.RouteContext) {
     const enabled = args.authEnabled ?? true;
-    return Auth.middleware(ctx, { enabled });
+    const logger = args.authLogger;
+    return Auth.middleware(ctx, { enabled, logger });
   },
 } as const;
