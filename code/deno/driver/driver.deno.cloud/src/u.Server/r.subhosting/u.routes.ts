@@ -14,7 +14,7 @@ export function routes(path: string, ctx: t.RouteContext) {
    */
   app.get(path, async (c) => {
     const { name, version } = Pkg;
-    const module = { name, version };
+    const pkg = { name, version };
     const description = `deno:subhosting™️ controller`;
 
     const auth = await ctx.auth.verify(c.req.raw);

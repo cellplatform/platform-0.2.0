@@ -34,7 +34,7 @@ describe('Http.Url', () => {
 
     it('throw: invalid URL', () => {
       const NON = ['foo', 123, false, null, undefined, {}, [], Symbol('foo'), BigInt(0)];
-      NON.forEach((input: unknown) => {
+      NON.forEach((input: any) => {
         const fn = () => Http.url(input);
         expect(fn).to.throw(/Invalid base URL/);
       });

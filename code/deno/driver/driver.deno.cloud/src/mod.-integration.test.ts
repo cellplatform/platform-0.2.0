@@ -12,7 +12,7 @@ describe('DenoCloud: HTTP Server Routes ← ClientLib', () => {
 
       if (res.ok) {
         const data = res.data;
-        expect(data.module).to.eql({ name: Pkg.name, version: Pkg.version });
+        expect(data.pkg).to.eql({ name: Pkg.name, version: Pkg.version });
       }
 
       await dispose();
@@ -30,7 +30,7 @@ describe('DenoCloud: HTTP Server Routes ← ClientLib', () => {
       if (res.ok) {
         const data = res.data;
         expect(data.description).to.include('deno:subhosting™️');
-        expect(data.module).to.eql({ name: Pkg.name, version: Pkg.version });
+        expect(data.pkg).to.eql({ name: Pkg.name, version: Pkg.version });
         expect(data.auth.identity).to.eql('');
         expect(data.auth.verified).to.eql(false);
       }

@@ -10,8 +10,8 @@ describe('DenoCloud (Server)', () => {
     expect(res.status).to.eql(200);
 
     const body = await res.json();
-    expect(body.module.name).to.eql(Pkg.name);
-    expect(body.module.version).to.eql(Pkg.version);
+    expect(body.pkg.name).to.eql(Pkg.name);
+    expect(body.pkg.version).to.eql(Pkg.version);
 
     await test.dispose();
   });
