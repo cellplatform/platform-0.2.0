@@ -16,13 +16,15 @@ export function routes(path: string, ctx: t.RouteContext) {
     const { name, version } = Pkg;
     const module = { name, version };
     const description = `deno:subhosting™️ controller`;
+
     const auth = await ctx.auth.verify(c.req.raw);
     const identity = auth.claims?.userId ?? '';
+    const verified = auth.verified;
 
     const res: t.SubhostingInfo = {
       description,
       module,
-      auth: { identity, verified: auth.verified },
+      auth: { identity, verified },
     };
 
     return c.json(res);
