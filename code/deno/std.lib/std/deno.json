@@ -4,6 +4,7 @@
   "license": "MIT",
   "tasks": {
     "test": "deno test -RWN --watch",
+    "lint": "deno lint",
     "dry": "deno publish --allow-dirty --dry-run"
   },
   "exports": {
