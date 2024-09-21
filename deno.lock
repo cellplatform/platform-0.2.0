@@ -837,6 +837,13 @@
             "npm:vite@5.4.6"
           ]
         }
+      },
+      "deploy/api.db.team": {
+        "dependencies": [
+          "jsr:@sys/driver-deno-cloud",
+          "jsr:@sys/std-s@0.0.2",
+          "jsr:@sys/std@0.0.7"
+        ]
       }
     }
   }
