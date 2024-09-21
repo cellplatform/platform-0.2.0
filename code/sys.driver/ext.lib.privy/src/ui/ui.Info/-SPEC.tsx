@@ -46,6 +46,7 @@ export default Dev.describe(name, (e) => {
   const getData = (): t.InfoData => {
     const debug = State.debug.current;
     const jwt = debug.accessToken;
+
     return {
       provider: AuthEnv.provider,
       accessToken: { jwt },
