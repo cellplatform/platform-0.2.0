@@ -1,4 +1,4 @@
-import { type t } from './common/mod.ts';
+import type { t } from './common/mod.ts';
 import { client } from './u.Client.ts';
 
 export { Pkg } from './common/mod.ts';

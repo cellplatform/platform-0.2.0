@@ -1,4 +1,4 @@
-import { type t } from './common/mod.ts';
+import type { t } from './common/mod.ts';
 
 export const Auth: t.AuthLib = {
   /**
@@ -6,6 +6,7 @@ export const Auth: t.AuthLib = {
    */
   middleware(ctx: t.RouteContext, options = {}) {
     const { enabled = true, logger } = options;
+    const _auth = ctx.auth;
 
     const allowedPaths = ['/'];
     const isAllowedPath = (path: string) => allowedPaths.find((v) => path.startsWith(v));
