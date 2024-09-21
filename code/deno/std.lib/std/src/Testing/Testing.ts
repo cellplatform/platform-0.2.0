@@ -11,4 +11,5 @@ export { describe, expect, it };
  */
 export const Testing: t.Testing = {
   Http: TestHttp,
+  Bdd: { describe, expect, it },
 };
