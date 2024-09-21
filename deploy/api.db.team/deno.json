@@ -2,7 +2,7 @@
   "tasks": {
     "start": "deno run -RNE --watch ./main.ts",
     "check": "deno check ./main.ts",
-    "deploy": "deno task check && deployctl deploy --project=tdb --save-config"
+    "deploy": "deno task check && deployctl deploy --project=tdb"
   },
   "imports": {
     "@sys/driver-deno-cloud": "jsr:@sys/driver-deno-cloud",
@@ -11,11 +11,7 @@
   },
   "deploy": {
     "project": "3f7f1461-6c90-4191-aa70-9052ceb13af9",
-    "exclude": [
-      "**/node_modules",
-      "**/node_modules",
-      "**/node_modules"
-    ],
+    "exclude": ["**/node_modules"],
     "include": [],
     "entrypoint": "main.ts"
   }
