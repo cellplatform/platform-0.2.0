@@ -1,1 +1,1 @@
-export * as DateTime from '@std/datetime';
+export * from './DateTime.ts';
