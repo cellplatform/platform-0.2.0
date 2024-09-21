@@ -1,11 +1,21 @@
 import type { t } from '../common/mod.ts';
-import { HttpUrl } from '../Http/Http.Url.ts';
+import { HttpUrl } from '../Http/u.Http.Url.ts';
 
 type M = 'GET' | 'PUT' | 'POST' | 'DELETE';
 type H = { method: M; handler: Deno.ServeHandler };
 
 /**
  * HTTP test server
+ * NOTE:
+ *    A basic HTTP testing server is available within @sys/std
+ *    ahead of more comprehenvive server tools in @sys/std-s (← "server")
+ *    so that HTTP client tools can be end-to-end tested.
+ *
+ *    Not exposed from the root {exports} of the module.
+ *    Example:
+ *
+ *        import { Testing } from '@sys/std/testing';
+ *
  */
 export const TestingHttpServer = {
   /**
