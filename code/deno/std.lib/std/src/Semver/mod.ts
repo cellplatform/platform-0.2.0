@@ -1,1 +1,1 @@
-export * as Semver from '@std/semver';
+export * from './Semver.ts';

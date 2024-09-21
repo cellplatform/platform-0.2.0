@@ -1,7 +1,7 @@
 export { Pkg } from './common/mod.ts';
 
-export * from './DateTime/mod.ts';
-export * from './Fmt/mod.ts';
-export * from './Http/mod.ts';
-export * from './Path/mod.ts';
-export * from './Semver/mod.ts';
+export { DateTime, Time } from './DateTime/mod.ts';
+export { Color, c } from './Fmt/mod.ts';
+export { Http } from './Http/mod.ts';
+export { Path } from './Path/mod.ts';
+export { Semver } from './Semver/mod.ts';

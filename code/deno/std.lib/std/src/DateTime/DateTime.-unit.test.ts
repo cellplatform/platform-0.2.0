@@ -1,5 +1,6 @@
 import { describe, expect, it } from '../common.ts';
-import { DateTime, dayOfYear, difference, HOUR, isLeap, MINUTE, SECOND } from './mod.ts';
+import { DateTime } from '../mod.ts';
+import { dayOfYear, difference, HOUR, isLeap, MINUTE, SECOND } from './mod.ts';
 
 describe('DateTime ← "@std/datetime"', () => {
   it('DateTime (lib)', () => {

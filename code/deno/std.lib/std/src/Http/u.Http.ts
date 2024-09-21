@@ -4,8 +4,6 @@ import { HttpUrl as Url } from './u.Http.Url.ts';
 import { Is } from './u.Is.ts';
 import { toError, toHeaders, toResponse } from './u.ts';
 
-type O = Record<string, unknown>;
-
 /**
  * Http fetch helper.
  */
