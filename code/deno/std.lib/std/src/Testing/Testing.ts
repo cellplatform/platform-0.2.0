@@ -12,4 +12,11 @@ export { describe, expect, it };
 export const Testing: t.Testing = {
   Http: TestHttp,
   Bdd: { describe, expect, it },
+
+  /**
+   * Wait for
+   */
+  wait(msecs): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, msecs));
+  },
 };

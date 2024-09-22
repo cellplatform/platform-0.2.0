@@ -8,6 +8,7 @@ import type { expect } from 'npm:chai';
 export type Testing = {
   readonly Http: TestHttp;
   readonly Bdd: TestingBdd;
+  wait(delay: t.Msecs): Promise<void>;
 };
 
 export type TestingBdd = {
