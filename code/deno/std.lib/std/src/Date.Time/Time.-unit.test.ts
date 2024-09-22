@@ -79,5 +79,5 @@ describe('Time', () => {
       expect(calcDiff(startedAt)).to.be.closeTo(0, 5); // NB: cancel stops the delay.
       expect(res.is).to.eql({ completed: false, cancelled: true, done: true });
     });
-
+  });
 });
