@@ -12,6 +12,6 @@
     "./t": "./src/types.ts",
     "./types": "./src/types.ts",
     "./testing": "./src/Testing/mod.ts",
-    "./datetime": "./src/DateTime/mod.ts"
+    "./date": "./src/Date/mod.ts"
   }
 }
