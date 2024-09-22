@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "jsr:@hono/hono@4.6.2": "jsr:@hono/hono@4.6.2",
+      "jsr:@std/async@1.0.5": "jsr:@std/async@1.0.5",
       "jsr:@std/datetime": "jsr:@std/datetime@0.225.2",
       "jsr:@std/datetime@0.225.2": "jsr:@std/datetime@0.225.2",
       "jsr:@std/dotenv": "jsr:@std/dotenv@0.225.2",
@@ -27,11 +28,15 @@
       "npm:openai": "npm:openai@4.60.0",
       "npm:ramda": "npm:ramda@0.30.1",
       "npm:ramda@0.30.1": "npm:ramda@0.30.1",
+      "npm:rxjs@7.8.1": "npm:rxjs@7.8.1",
       "npm:subhosting@0.1.0-alpha.1": "npm:subhosting@0.1.0-alpha.1"
     },
     "jsr": {
       "@hono/hono@4.6.2": {
         "integrity": "35fcf3be4687825080b01bed7bbe2ac66f8d8b8939f0bad459661bf3b46d916f"
+      },
+      "@std/async@1.0.5": {
+        "integrity": "31d68214bfbb31bd4c6022401d484e3964147c76c9220098baa703a39b6c2da6"
       },
       "@std/datetime@0.225.2": {
         "integrity": "45f0100554a912cd65f48089ef0a33aa1eb6ea21f08090840b539ab582827eaa"
@@ -406,6 +411,12 @@
         "integrity": "sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==",
         "dependencies": {}
       },
+      "rxjs@7.8.1": {
+        "integrity": "sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==",
+        "dependencies": {
+          "tslib": "tslib@2.7.0"
+        }
+      },
       "set-function-length@1.2.2": {
         "integrity": "sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==",
         "dependencies": {
@@ -463,6 +474,10 @@
       },
       "ts-case-convert@2.0.7": {
         "integrity": "sha512-Kqj8wrkuduWsKUOUNRczrkdHCDt4ZNNd6HKjVw42EnMIGHQUABS4pqfy0acETVLwUTppc1fzo/yi11+uMTaqzw==",
+        "dependencies": {}
+      },
+      "tslib@2.7.0": {
+        "integrity": "sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==",
         "dependencies": {}
       },
       "type-fest@3.13.1": {
@@ -675,6 +690,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@4.6.2",
+      "jsr:@std/async@1.0.5",
       "jsr:@std/datetime@0.225.2",
       "jsr:@std/dotenv@0.225.2",
       "jsr:@std/fmt@1.0.2",
