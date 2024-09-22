@@ -15,7 +15,7 @@ describe('Http.Url', () => {
     });
 
     it('create: from net-addr', async () => {
-      const server = TestHttp.server((req) => new Response('foo'));
+      const server = TestHttp.server(() => new Response('foo'));
       const addr = server.addr;
       const url = Http.Url.fromAddr(addr);
       expect(url.base).to.eql(`http://0.0.0.0:${addr.port}/`);

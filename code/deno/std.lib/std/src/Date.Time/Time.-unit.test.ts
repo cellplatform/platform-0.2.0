@@ -6,7 +6,7 @@ describe('Time', () => {
   const calcDiff = (a: Date, b: Date = new Date()) => b.getTime() - a.getTime();
 
   describe('Time.delay( n-milliseconds )', () => {
-    it('TimeDelayPromise: response structure', async () => {
+    it('TimeDelayPromise: response structure', () => {
       const res = Time.delay(0);
       expect(typeof res.cancel).to.eql('function');
       expect(res.is).to.eql({ cancelled: false, completed: false, done: false });

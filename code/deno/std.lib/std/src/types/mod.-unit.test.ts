@@ -10,9 +10,9 @@ describe('Types', () => {
       /**
        * NB: without the "@ts-ignore" supressions, the error checking proves the type.
        */
-      // @ts-ignore
+      // @ts-ignore: test
       obj.foo = 123;
-      // @ts-ignore
+      // @ts-ignore: test
       obj.child.bar = 456;
     });
   });

@@ -49,7 +49,7 @@ const wrangle = {
     try {
       const url = new URL(base);
       return { url };
-    } catch (err: unknown) {
+    } catch (_err: unknown) {
       const error = new Error(`Invalid base URL: ${String(base)}`);
       return { error };
     }
