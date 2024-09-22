@@ -9,7 +9,8 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./types": "./src/t.ts",
+    "./t": "./src/types.ts",
+    "./types": "./src/types.ts",
     "./testing": "./src/Testing/mod.ts",
     "./datetime": "./src/DateTime/mod.ts"
   }
