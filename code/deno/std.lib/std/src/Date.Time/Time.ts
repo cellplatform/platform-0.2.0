@@ -23,6 +23,7 @@ export const Time: t.TimeLib = {
         resolve();
       };
 
+      signal.onabort = done;
       const complete = () => {
         fn?.();
         is.completed = true;
@@ -37,6 +38,10 @@ export const Time: t.TimeLib = {
     promise.is = is;
     promise.timeout = msecs;
     return promise as T;
+  },
+
+  wait(msecs) {
+    return Time.delay(msecs);
   },
 };
 

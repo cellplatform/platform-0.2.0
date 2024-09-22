@@ -5,7 +5,7 @@ import { Time } from '../mod.ts';
 describe('Time', () => {
   const calcDiff = (a: Date, b: Date = new Date()) => b.getTime() - a.getTime();
 
-  describe('Time.delay( n-milliseconds )', () => {
+  describe('Time.delay( )', () => {
     it('TimeDelayPromise: response structure', () => {
       const res = Time.delay(0);
       expect(typeof res.cancel).to.eql('function');
@@ -56,10 +56,28 @@ describe('Time', () => {
       const res = Time.delay(5, () => fired++);
       res.cancel();
 
-      await Testing.wait(30);
-
-      expect(fired).to.eql(0);
+      await Testing.wait(20);
+      expect(fired).to.eql(0); // NB: not fired.
       expect(res.is).to.eql({ cancelled: true, completed: false, done: true });
     });
   });
+
+  describe('Time.wait( )', () => {
+    it('wait: msecs', async () => {
+      const startedAt = new Date();
+      expect(calcDiff(startedAt)).to.be.closeTo(0, 10);
+      const res = Time.wait(15);
+      await res;
+      expect(calcDiff(startedAt)).to.be.greaterThan(14);
+      expect(res.is).to.eql({ completed: true, cancelled: false, done: true });
+    });
+
+    it('wait: cancelled', async () => {
+      const startedAt = new Date();
+      const res = Time.wait(15);
+      res.cancel();
+      expect(calcDiff(startedAt)).to.be.closeTo(0, 5); // NB: cancel stops the delay.
+      expect(res.is).to.eql({ completed: false, cancelled: true, done: true });
+    });
+
 });
