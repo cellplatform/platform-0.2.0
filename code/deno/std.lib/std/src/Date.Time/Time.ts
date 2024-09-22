@@ -1,4 +1,4 @@
-import { type t } from '../common.ts';
+import type { t } from '../common.ts';
 import { delay } from '@std/async';
 
 
@@ -16,27 +16,27 @@ export const Time: t.TimeLib = {
     const cancel = () => controller.abort('delay cancelled');
     const is: t.DeepMutable<T['is']> = { completed: false, cancelled: false, done: false };
 
-    const res: any = new Promise<void>(async (resolve) => {
-      const complete = () => {
+    const promise: any = new Promise<void>((resolve) => {
+      const done = () => {
         is.done = true;
         is.cancelled = signal.aborted;
         resolve();
       };
-      try {
-        await delay(msecs, { signal });
+
+      const complete = () => {
         fn?.();
         is.completed = true;
-        complete();
-      } catch (error) {
-        complete();
-      }
+        done();
+      };
+
+      delay(msecs, { signal }).then(complete).catch(done);
     });
 
-    // Decorate the promise with extra fields.
-    res.cancel = cancel;
-    res.is = is;
-    res.timeout = msecs;
-    return res as T;
+    // Decorate the promise with extra time/delay controller fields.
+    promise.cancel = cancel;
+    promise.is = is;
+    promise.timeout = msecs;
+    return promise as T;
   },
 };
 
