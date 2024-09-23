@@ -1,13 +1,6 @@
 import { default as Pkg } from '../../deno.json' with { type: 'json' };
 
-/**
- * @ext
- */
-export { describe, expect, it } from '@sys/std/testing';
-
-/**
- * @module
- */
-export type * as t from './t.ts';
+export * from './libs.ts';
 export { Pkg };
 
+export type * as t from './t.ts';
