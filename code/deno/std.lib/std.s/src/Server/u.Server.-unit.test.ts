@@ -1,5 +1,5 @@
-import { describe, expect, Http, it } from '../common/mod.ts';
-import { Server } from './mod.ts';
+import { Http, Server } from '../mod.ts';
+import { describe, expect, it } from '../test.ts';
 
 describe('Server', () => {
   it('app: start → req/res → dispose', async () => {

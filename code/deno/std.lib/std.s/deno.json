@@ -10,9 +10,11 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./types": "./src/t.ts",
+    "./t": "./src/types.ts",
+    "./types": "./src/types.ts",
     "./fs": "./src/Filesystem/mod.ts",
     "./process": "./src/Process/mod.ts",
-    "./server": "./src/Server/mod.ts"
+    "./server": "./src/Server/mod.ts",
+    "./testing": "./src/Testing/mod.ts"
   }
 }
