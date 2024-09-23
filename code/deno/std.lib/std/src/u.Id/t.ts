@@ -3,8 +3,8 @@ import type { t } from '../common.ts';
 export type IdLib = {
   readonly Is: t.IdIsLib;
   readonly Length: { cuid: number; slug: number };
-  cuid(): string;
-  slug(): string;
+  readonly cuid: t.IdGenerator;
+  readonly slug: t.IdGenerator;
 
   init(length: number): {
     readonly length: number;
@@ -12,6 +12,8 @@ export type IdLib = {
     is(input: any): boolean;
   };
 };
+
+export type IdGenerator = () => string;
 
 export type IdIsLib = {
   cuid(input: any): boolean;
