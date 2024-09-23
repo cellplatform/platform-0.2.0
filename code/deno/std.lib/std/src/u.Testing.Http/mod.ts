@@ -1,9 +1,8 @@
 import type { t } from '../common.ts';
 import { Testing as Base } from '../u.Testing/mod.ts';
-import { TestHttp as Http } from './Test.Http.ts';
+import { TestHttp as Http } from './u.Http.ts';
 
-const { describe, expect, it } = Base.Bdd;
-export { describe, expect, it };
+export { describe, expect, it } from '../u.Testing/mod.ts';
 
 /**
  * Testing helpers including light-weight HTTP server helpers (Deno).

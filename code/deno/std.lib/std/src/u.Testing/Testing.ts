@@ -1,15 +1,13 @@
-import { describe, it } from '@std/testing/bdd';
-import { expect } from 'npm:chai';
-
 import type { t } from '../common.ts';
+import { Bdd } from './Testing.Bdd.ts';
 
-export { describe, expect, it };
+export { describe, expect, it } from './Testing.Bdd.ts';
 
 /**
  * Testing helpers.
  */
 export const Testing: t.Testing = {
-  Bdd: { describe, expect, it },
+  Bdd,
 
   /**
    * Wait for

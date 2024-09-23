@@ -1,5 +1,5 @@
 import type { t } from '../common.ts';
-import { TestServer } from './Test.Http.Server.ts';
+import { TestServer } from './u.Http.Server.ts';
 
 /**
  * HTTP test helpers.
