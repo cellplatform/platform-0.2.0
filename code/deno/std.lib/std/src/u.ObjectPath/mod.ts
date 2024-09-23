@@ -1,1 +1,1 @@
-export * from './ObjectPath';
+export * from './ObjectPath.ts';

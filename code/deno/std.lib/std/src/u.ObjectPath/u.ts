@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t } from './common.ts';
 
 /**
  * Read into an object and return the resulting value at the given path.
