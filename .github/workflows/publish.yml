@@ -46,3 +46,9 @@ jobs:
           cd code/deno/driver/driver.deno.cloud
           deno test -RWNE --allow-run
           deno publish
+
+      - name: publish module → "@sys/driver-deno-cloud"
+        run: |
+          cd code/deno/driver/driver.automerge
+          deno task test
+          deno publish --dry-run
