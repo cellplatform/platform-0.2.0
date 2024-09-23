@@ -12,7 +12,7 @@ export type * from './u.ObjectPath/t.ts';
 export type * from './u.Observable/t.ts';
 export type * from './u.Path/t.ts';
 export type * from './u.Semver/t.ts';
-export type * from './u.Testing.Http/t.ts';
+export type * from './u.Testing.HttpServer/t.ts';
 export type * from './u.Testing/t.ts';
 
 export type * from './t.types/mod.ts';

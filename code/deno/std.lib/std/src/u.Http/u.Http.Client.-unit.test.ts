@@ -1,10 +1,10 @@
-import { Testing, describe, expect, it } from '../u.Testing.Http/mod.ts';
+import { Testing, describe, expect, it } from '../u.Testing.HttpServer/mod.ts';
 import { DEFAULTS } from './common.ts';
 import { Http } from './mod.ts';
 
 describe('Http.client', () => {
   const ApplicationJson = DEFAULTS.contentType;
-  const TestHttp = Testing.Http;
+  const TestHttp = Testing.HttpServer;
 
   describe('headers', () => {
     it('headers: (default)', () => {

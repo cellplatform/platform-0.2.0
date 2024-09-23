@@ -1,8 +1,8 @@
-import { Testing, describe, expect, it } from '../u.Testing.Http/mod.ts';
+import { Testing, describe, expect, it } from '../u.Testing.HttpServer/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http.Url', () => {
-  const TestHttp = Testing.Http;
+  const TestHttp = Testing.HttpServer;
 
   describe('create', () => {
     it('create: factory methods', () => {

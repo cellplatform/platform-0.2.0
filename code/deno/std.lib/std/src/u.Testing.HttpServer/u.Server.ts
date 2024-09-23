@@ -11,7 +11,7 @@ export const TestServer = {
   /**
    * Create and start a new HTTP test server.
    */
-  create(defaultHandler?: Deno.ServeHandler): t.TestHttpServer {
+  create(defaultHandler?: Deno.ServeHandler): t.TestHttpServerInstance {
     let _disposed = false;
     const handlers = new Set<H>();
 
@@ -25,7 +25,7 @@ export const TestServer = {
     const addr = server.addr;
     const url = HttpUrl.fromAddr(addr);
 
-    const api: t.TestHttpServer = {
+    const api: t.TestHttpServerInstance = {
       addr,
       url,
       get disposed() {

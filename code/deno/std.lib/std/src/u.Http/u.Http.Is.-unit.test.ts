@@ -1,8 +1,8 @@
-import { Testing, describe, expect, it } from '../u.Testing.Http/mod.ts';
+import { Testing, describe, expect, it } from '../u.Testing.HttpServer/mod.ts';
 import { Http } from './mod.ts';
 
 describe('Http.Is', () => {
-  const TestHttp = Testing.Http;
+  const TestHttp = Testing.HttpServer;
 
   it('Is.netaddr: false', () => {
     const NON = ['foo', 123, false, null, undefined, {}, [], Symbol('foo'), BigInt(0)];

@@ -1,11 +1,11 @@
 import type { t } from '../common/mod.ts';
 
 export type TestingHttp = t.Testing & {
-  readonly Http: t.TestHttp;
+  readonly HttpServer: t.TestHttpServer;
 };
 
-export type TestHttp = {
-  server(defaultHandler?: Deno.ServeHandler): t.TestHttpServer;
+export type TestHttpServer = {
+  server(defaultHandler?: Deno.ServeHandler): t.TestHttpServerInstance;
   json(body: unknown): Response;
   json(req: Request, body: unknown): Response;
 };
@@ -13,7 +13,7 @@ export type TestHttp = {
 /**
  * A test HTTP server.
  */
-export type TestHttpServer = {
+export type TestHttpServerInstance = {
   readonly url: t.HttpUrl;
   readonly addr: Deno.NetAddr;
   readonly disposed: boolean;

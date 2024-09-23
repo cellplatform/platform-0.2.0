@@ -1,10 +1,10 @@
 import type { t } from '../common.ts';
-import { TestServer } from './u.Http.Server.ts';
+import { TestServer } from './u.Server.ts';
 
 /**
  * HTTP test helpers.
  */
-export const TestHttp: t.TestHttp = {
+export const TestHttpServer: t.TestHttpServer = {
   /**
    * Factory: create and start an HTTP test server.
    */
