@@ -7,7 +7,8 @@ type Args = t.InfoFieldArgs & {
   hasAccount?: boolean;
   hasSigner?: boolean;
 };
-const DEFAULT = DEFAULTS.data.farcaster as t.InfoDataFarcaster;
+const DEF = DEFAULTS.props;
+const DEFAULT = DEF.data.farcaster as t.InfoDataFarcaster;
 
 /**
  * https://docs.privy.io/guide/guides/farcaster-login

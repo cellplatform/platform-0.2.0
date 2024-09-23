@@ -1,5 +1,7 @@
 import { DEFAULTS, type t } from './common';
 
+const DEF = DEFAULTS.props;
+
 export const Wrangle = {
   toStatus(privy: t.PrivyInterface): t.AuthStatus {
     const { authenticated, ready } = privy;
@@ -32,7 +34,7 @@ export const Wrangle = {
   },
 
   chain(data: t.InfoData) {
-    return (data.chain?.selected ?? DEFAULTS.data.chain!.selected!) as t.EvmChainName;
+    return (data.chain?.selected ?? DEF.data.chain!.selected!) as t.EvmChainName;
   },
 
   loginMethods(fields: t.InfoField[] = []): t.AuthProviderLoginMethods {

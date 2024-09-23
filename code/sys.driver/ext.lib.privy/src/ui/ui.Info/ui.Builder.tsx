@@ -6,10 +6,11 @@ import { Field } from './field';
 import { Wrangle } from './u';
 import { useFarcaster } from './use.Farcaster';
 
+const DEF = DEFAULTS.props;
 const short = (val?: string, length = 4) => Hash.shorten(val ?? '-', length);
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
-  const { enabled = true, clipboard = DEFAULTS.clipboard, data = DEFAULTS.data, theme } = props;
+  const { enabled = true, clipboard = DEF.clipboard, data = DEF.data, theme } = props;
   const fields = PropList.fields(props.fields, DEFAULTS.fields.default);
 
   const refreshRef$ = useRef<rx.Subject<void>>(new rx.Subject());

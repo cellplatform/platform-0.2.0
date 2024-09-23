@@ -6,7 +6,7 @@ const Mime = Http.Headers.Mime;
 
 /**
  * NOTE: Ensure the deno test-server is running.
- * See:  /src.deno/
+ * See:  /src.deno/ (NB: archived)
  */
 export default Test.describe('Http', (e) => {
   e.describe('methods', (e) => {

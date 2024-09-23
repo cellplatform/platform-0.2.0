@@ -6,6 +6,7 @@ export type Msecs = number;
  */
 import type { Hono, Context as HonoContext } from 'npm:hono';
 import type { BlankSchema, Env } from 'npm:hono/types';
+
 export type HonoApp = Hono<Env, BlankSchema, '/'>;
 export { HonoContext };
 

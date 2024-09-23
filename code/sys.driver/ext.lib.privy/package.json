@@ -8,8 +8,7 @@
     "serve": "cd dist && serve",
     "test": "tsx ../../../script.node/cmd.test.ts",
     "build": "tsx ../../../script.node/cmd.build.ts",
-    "clean": "tsx ../../../script.node/cmd.clean.ts",
-    "tmp": "tsx   ./script.node/tmp.mts"
+    "clean": "tsx ../../../script.node/cmd.clean.ts"
   },
   "dependencies": {
     "@privy-io/react-auth": "1.83.1",
@@ -19,7 +18,7 @@
     "sys.cmd": "0.0.0",
     "sys.util": "0.0.0",
     "sys.ui.react.common": "0.0.0",
-    "viem": "2.21.6"
+    "viem": "2.21.8"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

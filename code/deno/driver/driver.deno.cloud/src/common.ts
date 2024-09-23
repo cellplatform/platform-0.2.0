@@ -1,1 +1,1 @@
-export { describe, expect, it } from '@sys/std/testing';
+export * from './common/mod.ts';

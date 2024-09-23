@@ -1,28 +1,27 @@
 {
   "tasks": {
-    "info": "deno run -R script.deno/info.ts",
-    "test": "deno run -R --allow-run script.deno/test.ts",
-    "ci": "deno task test && deno task info",
+    "info": "deno run -R script.deno/cmd.info.ts",
+    "test": "deno run -RE --allow-run script.deno/cmd.test.ts",
+    "lint": "deno run -E --allow-run script.deno/cmd.lint.ts",
+    "dry": "deno run -RE --allow-run script.deno/cmd.dry.ts",
+    "ci": "deno run -RE --allow-run script.deno/cmd.ci.ts",
     "tmp": "deno run -A script.deno/-tmp.ts"
   },
   "compilerOptions": { "strict": true },
   "nodeModules": false,
   "workspace": [
+    "./deploy/api.db.team",
     "./code/deno/std.lib/std",
     "./code/deno/std.lib/std.s",
     "./code/deno/driver/driver.deno.cloud",
+    "./code/deno/driver/driver.automerge",
     "./code/compiler.samples/deno.vite",
     "./code/spikes/deno.000"
   ],
-  "imports": {
-    "@std/assert": "jsr:@std/assert@1.0.4",
-    "@std/datetime": "jsr:@std/datetime@0.225.2",
-    "@std/dotenv": "jsr:@std/dotenv@0.225.2",
-    "@std/fmt": "jsr:@std/fmt@1.0.2",
-    "@std/fs": "jsr:@std/fs@1.0.3",
-    "@std/path": "jsr:@std/path@1.0.4",
-    "@std/semver": "jsr:@std/semver@1.0.3",
-    "@std/testing": "jsr:@std/testing@1.0.2",
-    "npm:chai": "npm:chai@5.1.1"
+  "importMap": "./deno.imports.json",
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
   }
 }

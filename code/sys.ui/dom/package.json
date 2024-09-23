@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "sys.util": "0.0.0",
-    "ua-parser-js": "1.0.38"
+    "ua-parser-js": "1.0.39"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

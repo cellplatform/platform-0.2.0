@@ -7,6 +7,7 @@ export type {
   CssValue,
   DevCtxState,
   KeyboardModifierFlags,
+  PropListFieldSelectorProps,
   PropListItem,
   PropListProps,
 } from 'sys.ui.react.common/src/types';

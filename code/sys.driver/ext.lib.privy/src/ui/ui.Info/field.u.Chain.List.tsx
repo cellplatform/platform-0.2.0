@@ -2,13 +2,14 @@ import { Chain, DEFAULTS, Value, type t } from './common';
 import { ChainRow } from './ui.Row.Chain';
 
 type Args = t.InfoFieldArgs;
+const DEF = DEFAULTS.props;
 
 export function chainList(args: Args): t.PropListItem[] {
   const { privy, modifiers, fields, data, theme } = args;
   const enabled = privy.ready ? args.enabled : false;
   if (!privy.authenticated) return [];
 
-  let chains = data.chain?.names ?? DEFAULTS.data.chain!.names!;
+  let chains = data.chain?.names ?? DEF.data.chain!.names!;
   if (!fields.includes('Chain.List.Testnets')) {
     const notTestnet = (name: t.EvmChainName) => !Chain.is.testnet(name);
     chains = chains.filter(notTestnet);

@@ -9,9 +9,11 @@ export type ChainRowProps = {
   style?: t.CssValue;
 };
 
+const DEF = DEFAULTS.props;
+
 export const ChainRow: React.FC<ChainRowProps> = (props) => {
   const { enabled = true, chain, modifiers, theme } = props;
-  const data = props.data.chain ?? DEFAULTS.data.chain!;
+  const data = props.data.chain ?? DEF.data.chain!;
 
   const name = Chain.displayName(chain);
   const is = {

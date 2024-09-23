@@ -4,9 +4,24 @@ export { useFarcasterSigner, usePrivy, useWallets } from '@privy-io/react-auth';
 export { Farcaster } from '../../u.farcaster';
 export * from '../common';
 
+type P = t.InfoProps;
+
 /**
  * Constants
  */
+const name = 'Info';
+const props: t.PickRequired<P, 'theme' | 'enabled' | 'fields' | 'clipboard' | 'data'> = {
+  theme: 'Light',
+  enabled: true,
+  clipboard: true,
+  get fields() {
+    return fields.default;
+  },
+  get data() {
+    return { ...data };
+  },
+};
+
 const loginMethods: t.AuthProviderLoginMethods = ['sms'];
 
 const fields = {
@@ -50,10 +65,10 @@ const data: t.InfoData = {
 };
 
 export const DEFAULTS = {
-  displayName: `${Pkg.name}:Info`,
+  name,
+  displayName: `${Pkg.name}:${name}`,
   query: { dev: 'dev' },
+  props,
   fields,
-  data,
-  clipboard: true,
   loginMethods,
 } as const;

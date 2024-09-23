@@ -20,7 +20,7 @@ export const Pkg: ModuleDef = {
     'sys.cmd': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'viem': '2.21.6',
+    'viem': '2.21.8',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
