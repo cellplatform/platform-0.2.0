@@ -72,7 +72,7 @@ describe('Time', () => {
       expect(res.is).to.eql({ completed: true, cancelled: false, done: true });
     });
 
-    it('wait: cancelled', async () => {
+    it('wait: cancelled', () => {
       const startedAt = new Date();
       const res = Time.wait(15);
       res.cancel();
