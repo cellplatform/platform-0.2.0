@@ -12,6 +12,11 @@ export type StringHttpHeaderName = string;
 export type StringUrl = string;
 
 /**
+ * Numbers
+ */
+export type Index = number;
+
+/**
  * Time.
  */
 export type Msecs = number;
