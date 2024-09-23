@@ -12,7 +12,13 @@ Surfaces, and lightly augments when helpful, the audited deno [@std](https://jsr
 #### Example
 
 ```ts
+import { Async } from 'jsr:@sys/std';
+import { Color, c } from 'jsr:@sys/std';
+import { DateTime, Time } from 'jsr:@sys/std';
+import { Dispose } from 'jsr:@sys/std';
+import { Http } from 'jsr:@sys/std';
 import { Path } from 'jsr:@sys/std';
+import { Semver } from 'jsr:@sys/std';
 ```
 
 
