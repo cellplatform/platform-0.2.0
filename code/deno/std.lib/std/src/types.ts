@@ -14,4 +14,4 @@ export type * from './u.Semver/t.ts';
 export type * from './u.Testing.Http/t.ts';
 export type * from './u.Testing/t.ts';
 
-export type * from './types/mod.ts';
+export type * from './t.types/mod.ts';
