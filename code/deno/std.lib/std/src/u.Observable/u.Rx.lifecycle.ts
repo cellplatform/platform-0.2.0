@@ -1,6 +1,5 @@
-import type { t } from '../common';
+import { take, type t } from './common.ts';
 import { Dispose } from '../u.Dispose/mod.ts';
-import { take } from './u.rx.libs.ts';
 
 /**
  * Generates the base mechanism of an disposable observable.

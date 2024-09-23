@@ -10,6 +10,7 @@ export type RxLib = Rxjs & {
   readonly Is: RxIs;
   readonly distinctWhile: typeof rxjs.distinctUntilChanged;
   readonly noop$: rxjs.Subject<any>;
+  readonly asPromise: t.RxAsPromise;
 
   subject<T = void>(): rxjs.Subject<T>;
   event<E extends Event>($: t.Observable<unknown>, type: E['type']): t.Observable<E>;
@@ -18,6 +19,21 @@ export type RxLib = Rxjs & {
   disposable(until$?: t.UntilObservable): t.Disposable;
   lifecycle(until$?: t.UntilObservable): t.Lifecycle;
   done(dispose$?: t.Subject<void>): void;
+};
+
+/**
+ * Promise converstion helpers.
+ */
+export type RxAsPromise = {
+  first<E extends Event>(
+    ob$: t.Observable<E['payload']>,
+    options?: { op?: string; timeout?: t.Msecs },
+  ): Promise<RxPromiseResponse<E>>;
+};
+export type RxPromiseError = { code: 'timeout' | 'completed' | 'unknown'; message: string };
+export type RxPromiseResponse<E extends Event> = {
+  payload?: E['payload'];
+  error?: t.RxPromiseError;
 };
 
 /**

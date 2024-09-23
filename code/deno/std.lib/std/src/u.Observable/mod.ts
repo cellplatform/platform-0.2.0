@@ -1,2 +1,2 @@
-export { Is } from './u.rx.Is.ts';
-export { Rx, rx } from './u.rx.ts';
+export { Is } from './u.Rx.Is.ts';
+export { Rx, rx } from './u.Rx.ts';
