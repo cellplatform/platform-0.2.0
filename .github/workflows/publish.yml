@@ -32,21 +32,18 @@ jobs:
       - name: publish module → "@sys/std"
         run: |
           cd code/deno/std.lib/std
-          # deno test -RWN
           deno task test
           deno publish
 
       - name: publish module → "@sys/std-s"
         run: |
           cd code/deno/std.lib/std.s
-          # deno test -RWNE --allow-run
           deno task test
           deno publish
 
       - name: publish module → "@sys/driver-deno-cloud"
         run: |
           cd code/deno/driver/driver.deno.cloud
-          # deno test -RWNE --allow-run
           deno task test
           deno publish
 
