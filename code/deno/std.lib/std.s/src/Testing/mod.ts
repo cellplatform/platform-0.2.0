@@ -1,2 +1,2 @@
 export { describe, expect, it } from '@sys/std/testing';
-export { Testing } from '@sys/std/testing.http';
+export { Testing } from '@sys/std/testing/http';
