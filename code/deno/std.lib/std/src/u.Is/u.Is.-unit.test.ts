@@ -16,7 +16,7 @@ describe('Is (common flags)', () => {
     };
 
     const myPromise = () => new Promise<void>((resolve) => resolve());
-    const wait = async () => await Testing.wait(0);
+    const wait = async () => await myPromise();
 
     test(undefined, false);
     test(123, false);
