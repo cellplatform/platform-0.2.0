@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../-test.ts';
-import { Delete } from './mod';
+import { Delete } from './mod.ts';
 
 describe('Delete', () => {
   describe('deleteUndefined', () => {
