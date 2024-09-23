@@ -1,5 +1,5 @@
 import type { t } from '../common/mod.ts';
-import { Path } from '../Path/mod.ts';
+import { Path } from '../u.Path/mod.ts';
 import { Is } from './u.Is.ts';
 
 /**

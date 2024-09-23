@@ -1,4 +1,5 @@
-import { describe, expect, it } from '../common.ts';
+import { describe, expect, it } from '../test.ts';
+
 import { DateTime } from '../mod.ts';
 import { dayOfYear, difference, HOUR, isLeap, MINUTE, SECOND } from './mod.ts';
 

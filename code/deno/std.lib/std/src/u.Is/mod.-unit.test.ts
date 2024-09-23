@@ -1,5 +1,6 @@
-import { describe, expect, it } from '../common.ts';
-import { Rx } from '../Observable/mod.ts';
+import { describe, expect, it } from '../test.ts';
+
+import { Rx } from '../u.Observable/mod.ts';
 import { Is } from './mod.ts';
 
 describe('Is (common flags)', () => {
