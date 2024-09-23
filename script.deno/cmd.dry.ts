@@ -12,6 +12,7 @@ await run('code/deno/std.lib/std.s');
 
 // Drivers.
 await run('code/deno/driver/driver.deno.cloud');
+await run('code/deno/driver/driver.automerge');
 
 /**
  * Output.
