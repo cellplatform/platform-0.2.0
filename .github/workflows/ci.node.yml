@@ -2,9 +2,15 @@ name: ci.node
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    branches:
+      - main
+      # - phil-work
+
+# on:
+#   push:
+#     branches: ['main']
+#   pull_request:
+# branches: ['main']
 
 jobs:
   build:
