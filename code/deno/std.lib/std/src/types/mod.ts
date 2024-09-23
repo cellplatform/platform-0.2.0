@@ -1,4 +1,5 @@
 export type * from './t.Dispose.ts';
+export type * from './t.Object.ts';
 export type * from './t.Observable.ts';
 export type * from './t.Readonly.ts';
 
