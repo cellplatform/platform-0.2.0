@@ -1,5 +1,9 @@
 name: ci.node
 
+#
+# NB: While working in "deno land" only need to run the
+#     node.js/Vite CI when PR is merged (temporary).
+#
 on:
   push:
     branches:
