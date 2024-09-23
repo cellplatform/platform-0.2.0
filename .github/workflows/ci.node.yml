@@ -24,7 +24,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
 
-      - name: Enable corepack and set Yarn to version 4.5.0
+      # Enable Corepack for the correct Yarn version
+      - name: Enable Corepack and set Yarn to version 4.5.0
         run: |
           corepack enable
           corepack prepare yarn@4.5.0 --activate
