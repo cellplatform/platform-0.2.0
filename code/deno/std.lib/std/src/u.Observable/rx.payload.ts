@@ -1,6 +1,6 @@
 import type { t } from '../common.ts';
 import { Is } from './rx.Is.ts';
-import { filter, map } from './rxjs.lib.ts';
+import { filter, map } from './rx.libs.ts';
 
 type Event = { type: string; payload: unknown };
 

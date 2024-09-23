@@ -66,4 +66,70 @@ describe('Observable/rx', () => {
       expect(fired[0]).to.eql({ count: 123 });
     });
   });
+
+  describe('rx.disposable', () => {
+    it('method: dispose', () => {
+      const { dispose$, dispose } = rx.disposable();
+
+      let count = 0;
+      dispose$.subscribe(() => count++);
+
+      dispose();
+      dispose();
+      dispose();
+
+      expect(count).to.eql(1); // NB: Multiple calls only fire the observable event once.
+    });
+
+    it('until$', () => {
+      const until$ = rx.subject<number>();
+      const { dispose$ } = rx.disposable(until$);
+
+      let count = 0;
+      dispose$.subscribe(() => count++);
+      expect(count).to.eql(0);
+
+      until$.next(123);
+      until$.next(456);
+      expect(count).to.eql(1);
+    });
+
+    it('lifecycle', () => {
+      const until$ = rx.subject<number>();
+      const lifecycleA = rx.lifecycle([undefined, [undefined, [undefined, [until$]]]]);
+      const lifecycleB = rx.lifecycle();
+
+      const count = { a: 0, b: 0 };
+      lifecycleA.dispose$.subscribe(() => count.a++);
+      lifecycleB.dispose$.subscribe(() => count.b++);
+
+      expect(lifecycleA.disposed).to.eql(false);
+      expect(lifecycleB.disposed).to.eql(false);
+
+      until$.next(123);
+      expect(lifecycleA.disposed).to.eql(true);
+      expect(lifecycleB.disposed).to.eql(false);
+      expect(count).to.eql({ a: 1, b: 0 });
+
+      lifecycleA.dispose(); // NB: No effect.
+      lifecycleB.dispose();
+
+      expect(lifecycleA.disposed).to.eql(true);
+      expect(lifecycleB.disposed).to.eql(true);
+      expect(count).to.eql({ a: 1, b: 1 });
+    });
+
+    it('rx.done() - fires and completes the subject', () => {
+      const dispose$ = rx.subject<void>();
+
+      let count = 0;
+      dispose$.subscribe((e) => count++);
+
+      rx.done(dispose$);
+      rx.done(dispose$);
+      rx.done(dispose$);
+
+      expect(count).to.eql(1);
+    });
+  });
 });

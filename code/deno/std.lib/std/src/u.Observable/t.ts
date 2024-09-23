@@ -10,9 +10,14 @@ export type RxLib = Rxjs & {
   readonly Is: RxIs;
   readonly distinctWhile: typeof rxjs.distinctUntilChanged;
   readonly noop$: rxjs.Subject<any>;
+
   subject<T = void>(): rxjs.Subject<T>;
   event<E extends Event>($: t.Observable<unknown>, type: E['type']): t.Observable<E>;
   payload<E extends Event>($: t.Observable<unknown>, type: E['type']): t.Observable<E['payload']>;
+
+  disposable(until$?: t.UntilObservable): t.Disposable;
+  lifecycle(until$?: t.UntilObservable): t.Lifecycle;
+  done(dispose$?: t.Subject<void>): void;
 };
 
 /**
