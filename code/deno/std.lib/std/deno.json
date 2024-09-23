@@ -1,6 +1,6 @@
 {
   "name": "@sys/std",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "license": "MIT",
   "tasks": {
     "test": "deno test -RWN --watch",
@@ -12,6 +12,7 @@
     "./t": "./src/types.ts",
     "./types": "./src/types.ts",
     "./date": "./src/u.Date/mod.ts",
+    "./immutable": "./src/u.Immutable/mod.ts",
     "./testing": "./src/u.Testing/mod.ts",
     "./testing/http": "./src/u.Testing.Http/mod.ts"
   }
