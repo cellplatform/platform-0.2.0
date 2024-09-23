@@ -1,9 +1,9 @@
-import { Http, Server } from '../mod.ts';
+import { Http, HttpServer } from '../mod.ts';
 import { describe, expect, it } from '../-test.ts';
 
 describe('Server', () => {
   it('app: start → req/res → dispose', async () => {
-    const app = Server.create();
+    const app = HttpServer.create();
     const listener = Deno.serve({ port: 0 }, app.fetch);
 
     app.get('/', (c) => c.json({ count: 123 }));

@@ -4,7 +4,7 @@ export type {
   HonoBlankSchema,
   HonoEnv,
   HonoMiddlewareHandler,
-  ServerLib,
+  HttpServerLib,
 } from '@sys/std-s/types';
 export type { AuthTokenClaims } from 'npm:privy/server-auth';
 

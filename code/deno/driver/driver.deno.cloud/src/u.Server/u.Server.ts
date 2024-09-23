@@ -1,4 +1,4 @@
-import { Server, type t } from './common/mod.ts';
+import { HttpServer, type t } from './common/mod.ts';
 import { Auth } from './u.Auth.ts';
 import { Routes } from './u.Routes.ts';
 
@@ -9,7 +9,7 @@ type A = t.DenoCloudServerArgs;
  */
 export function server(args: A) {
   const { env } = args;
-  const app = Server.create();
+  const app = HttpServer.create();
   const auth = wrangle.auth(args);
   const ctx: t.RouteContext = { app, auth, env };
 
@@ -28,7 +28,7 @@ export function server(args: A) {
 const wrangle = {
   auth(args: A) {
     const privy = args.env.privy;
-    return Server.Auth.ctx(privy.appId, privy.appSecret);
+    return HttpServer.Auth.ctx(privy.appId, privy.appSecret);
   },
 
   authMiddleware(args: A, ctx: t.RouteContext) {

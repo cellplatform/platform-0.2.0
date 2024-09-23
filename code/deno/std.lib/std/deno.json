@@ -11,9 +11,9 @@
     ".": "./src/mod.ts",
     "./t": "./src/types.ts",
     "./types": "./src/types.ts",
-    "./date": "./src/u.Date/mod.ts",
-    "./immutable": "./src/u.Immutable/mod.ts",
-    "./testing": "./src/u.Testing/mod.ts",
-    "./testing/http": "./src/u.Testing.Http/mod.ts"
+    "./Date": "./src/u.Date/mod.ts",
+    "./Immutable": "./src/u.Immutable/mod.ts",
+    "./Testing": "./src/u.Testing/mod.ts",
+    "./Testing/Http": "./src/u.Testing.Http/mod.ts"
   }
 }

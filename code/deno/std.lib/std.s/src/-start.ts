@@ -1,10 +1,10 @@
-import { Pkg, Server } from './mod.ts';
+import { Pkg, HttpServer } from './mod.ts';
 
 /**
  * HTTP Web-Server
  */
-const app = Server.create();
-Deno.serve(Server.options(8000, Pkg), app.fetch);
+const app = HttpServer.create();
+Deno.serve(HttpServer.options(8000, Pkg), app.fetch);
 
 /**
  * Routes

@@ -15,17 +15,17 @@ type Pkg = { name: string; version: string };
 /**
  * Webserver.
  */
-export type ServerLib = {
+export type HttpServerLib = {
   readonly Auth: t.ServerAuth;
   readonly Hono: typeof Hono;
   readonly cors: typeof cors;
   readonly static: typeof serveStatic;
-  create(options?: ServerCreateOptions): HonoApp;
+  create(options?: HttpServerCreateOptions): HonoApp;
   options(port?: number, pkg?: Pkg): Deno.ServeOptions;
   print(addr: Deno.NetAddr, pkg?: Pkg): void;
 };
 
-export type ServerCreateOptions = {
+export type HttpServerCreateOptions = {
   cors?: boolean;
   static?: boolean;
 };

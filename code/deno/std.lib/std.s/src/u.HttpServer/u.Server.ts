@@ -6,7 +6,7 @@ import { options, print } from './u.ts';
 /**
  * Server Lib.
  */
-export const Server: t.ServerLib = {
+export const HttpServer: t.HttpServerLib = {
   Auth,
   Hono,
   cors,
