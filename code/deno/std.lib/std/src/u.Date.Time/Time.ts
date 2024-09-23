@@ -1,7 +1,5 @@
-import type { t } from '../common.ts';
 import { delay } from '@std/async';
-
-/**
+import type { t } from '../common.ts';
 
 /**
  * Helpers for working with time/delays.
