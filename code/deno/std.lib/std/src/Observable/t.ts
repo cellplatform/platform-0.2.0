@@ -15,8 +15,13 @@ export type RxLib = Rxjs & {
   payload<E extends Event>($: t.Observable<unknown>, type: E['type']): t.Observable<E['payload']>;
 };
 
+/**
+ * Flags
+ */
 export type RxIs = {
   event(input: any, type?: string | { startsWith: string }): boolean;
+  observable<T = unknown>(input?: any): input is t.Observable<T>;
+  subject<T = unknown>(input?: any): input is t.Subject<T>;
 };
 
 /**

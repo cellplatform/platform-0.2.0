@@ -1,6 +1,6 @@
 import type { t } from '../common.ts';
+import { Is } from './rx.Is.ts';
 import { event, payload } from './rx.payload.ts';
-import { Is } from './rxjs.Is.ts';
 import * as lib from './rxjs.lib.ts';
 
 export const rx: t.RxLib = {

@@ -3,6 +3,24 @@ import type { t } from '../common.ts';
 type Event = { type: string; payload: unknown };
 
 export const Is: t.RxIs = {
+  /**
+   * Determine if the given input is an Observable.
+   */
+  observable<T = unknown>(input?: any): input is t.Observable<T> {
+    return typeof input === 'object' && typeof input?.subscribe === 'function';
+  },
+
+  /**
+   * Determine if the given input is an observable Subject.
+   */
+  subject<T = unknown>(input?: any): input is t.Subject<T> {
+    return Is.observable(input) && typeof (input as any)?.next === 'function';
+  },
+
+  /**
+   * Determine if the object structure matches that of the
+   * canonical {type/payload} event object shape.
+   */
   event(input, type) {
     if (
       !(
