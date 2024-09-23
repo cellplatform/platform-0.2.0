@@ -23,13 +23,14 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Version Info
-        run: |
-          deno --version
-          deno task info
+      - name: Info (Deno Version)
+        run: deno --version
 
       - name: CI → type check (publish --dry-run)
         run: deno task dry
 
       - name: CI → tests
         run: deno task test
+
+      - name: Info (monorepo)
+        run: deno task info
