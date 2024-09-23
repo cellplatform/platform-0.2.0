@@ -1,5 +1,5 @@
-import { describe, expect, it, Testing } from './-test.ts';
-import { A, Repo } from './common.ts';
+import { describe, expect, it, Testing } from '../-test.ts';
+import { A, Repo } from '../common.ts';
 
 describe('Automerge', () => {
   type D = { count: number };
@@ -38,12 +38,10 @@ describe('Automerge', () => {
     });
   });
 
-  it('|→ wait for timers', { sanitizeOps: false }, async () => {
-    /**
-     * NOTE: The upstream [automerge-repo] library leaks timers.
-     *       Waiting on this final test, with [sanitizeOps:false] prevents
-     *       the entire failing because of these leaked timers.
-     */
-    await Testing.wait(100);
-  });
+  /**
+   * NOTE: The upstream [automerge-repo] library leaks timers.
+   *       Waiting on this final test, with [sanitizeOps:false] prevents
+   *       the entire failing because of these leaked timers.
+   */
+  it('|→ wait for timers', { sanitizeOps: false }, () => Testing.wait(100));
 });
