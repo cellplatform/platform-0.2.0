@@ -24,10 +24,12 @@
       "npm:chai@5.1.1": "npm:chai@5.1.1",
       "npm:create-vite@latest": "npm:create-vite@5.5.2",
       "npm:deno": "npm:deno@0.1.1",
+      "npm:fast-json-patch@3.1.1": "npm:fast-json-patch@3.1.1",
       "npm:hono": "npm:hono@4.5.11",
       "npm:openai": "npm:openai@4.60.0",
       "npm:ramda": "npm:ramda@0.30.1",
       "npm:ramda@0.30.1": "npm:ramda@0.30.1",
+      "npm:rxjs": "npm:rxjs@7.8.1",
       "npm:rxjs@7.8.1": "npm:rxjs@7.8.1",
       "npm:subhosting@0.1.0-alpha.1": "npm:subhosting@0.1.0-alpha.1"
     },
@@ -224,6 +226,10 @@
       },
       "event-target-shim@5.0.1": {
         "integrity": "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==",
+        "dependencies": {}
+      },
+      "fast-json-patch@3.1.1": {
+        "integrity": "sha512-vf6IHUX2SBcA+5/+4883dsIjpBTqmfBjmYiWK1savxQmFk4JfBMLa7ynTYOs1Rolp/T1betJxHiGD3g1Mn8lUQ==",
         "dependencies": {}
       },
       "fast-sha256@1.3.0": {
@@ -700,6 +706,7 @@
       "jsr:@std/testing@1.0.2",
       "npm:@privy-io/server-auth@1.12.2",
       "npm:chai@5.1.1",
+      "npm:fast-json-patch@3.1.1",
       "npm:ramda@0.30.1",
       "npm:rxjs@7.8.1",
       "npm:subhosting@0.1.0-alpha.1"

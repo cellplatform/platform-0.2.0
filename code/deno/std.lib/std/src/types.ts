@@ -1,6 +1,7 @@
 export type * from './u.Async/t.ts';
 export type * from './u.Date.DateTime/t.ts';
 export type * from './u.Date.Time/t.ts';
+export type * from './u.Delete/t.ts';
 export type * from './u.Dispose/t.ts';
 export type * from './u.Fmt/t.ts';
 export type * from './u.Http/t.ts';

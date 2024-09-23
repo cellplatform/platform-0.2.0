@@ -1,4 +1,7 @@
+export type * from './external.ts';
+
 export type * from './t.Dispose.ts';
+export type * from './t.Immutable.ts';
 export type * from './t.Object.ts';
 export type * from './t.Observable.ts';
 export type * from './t.Readonly.ts';
