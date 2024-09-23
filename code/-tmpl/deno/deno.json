@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "tasks": {
-    "test": "deno test -RW --watch",
+    "test": "deno test -RW",
     "lint": "deno lint",
     "dry": "deno publish --allow-dirty --dry-run"
   },
