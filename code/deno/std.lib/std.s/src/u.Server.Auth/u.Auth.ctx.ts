@@ -15,11 +15,22 @@ export const ctx: t.ServerAuth['ctx'] = (appId, appSecret) => {
       if (!token) return { verified: false, user: '' };
       try {
         const claims = await privy.verifyAuthToken(token);
+
+        /**
+         * Auth roles/rules as meta-data.
+         * https://docs.privy.io/guide/server/users/set-custom-metadata#setting-custom-metadata-for-a-single-user
+         */
+        // privy.setCustomMetadata()
+        // const did = 'did:xxx'
+        // const u = privy.getUser(did)
+
         const user = claims.userId || '';
-        return { verified: true, user, claims };
+        const verified = true;
+        return { verified, user, claims };
       } catch (err: unknown) {
         const error = (err as Error).message;
-        return { verified: false, user: '', error };
+        const verified = false;
+        return { verified, user: '', error };
       }
     },
   };

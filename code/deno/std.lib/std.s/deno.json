@@ -12,9 +12,9 @@
     ".": "./src/mod.ts",
     "./t": "./src/types.ts",
     "./types": "./src/types.ts",
-    "./fs": "./src/Filesystem/mod.ts",
-    "./process": "./src/Process/mod.ts",
-    "./server": "./src/Server/mod.ts",
-    "./testing": "./src/Testing/mod.ts"
+    "./fs": "./src/u.Filesystem/mod.ts",
+    "./process": "./src/u.Process/mod.ts",
+    "./server": "./src/u.Server/mod.ts",
+    "./testing": "./src/u.Testing/mod.ts"
   }
 }
