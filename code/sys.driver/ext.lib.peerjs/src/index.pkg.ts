@@ -17,9 +17,9 @@ export const Pkg: ModuleDef = {
     'peerjs': '1.5.4',
     'react': '18.3.1',
     'react-dom': '18.3.1',
-    'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.common.list': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

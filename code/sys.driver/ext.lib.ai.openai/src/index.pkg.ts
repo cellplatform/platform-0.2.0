@@ -13,13 +13,13 @@ export const Pkg: ModuleDef = {
   name: 'ext.lib.ai.openai',
   version: '0.0.0',
   dependencies: {
-    'react': '18.3.1',
-    'react-dom': '18.3.1',
     'ext.lib.automerge': '0.0.0',
     'ext.lib.monaco': '0.0.0',
     'ext.lib.monaco.crdt': '0.0.0',
-    'sys.util': '0.0.0',
+    'react': '18.3.1',
+    'react-dom': '18.3.1',
     'sys.ui.react.common': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

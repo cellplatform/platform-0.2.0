@@ -16,9 +16,9 @@
     "ua-parser-js": "1.0.39"
   },
   "devDependencies": {
+    "@types/ua-parser-js": "0.7.39",
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0",
-    "@types/ua-parser-js": "0.7.39"
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,

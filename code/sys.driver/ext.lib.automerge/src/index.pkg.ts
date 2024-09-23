@@ -23,9 +23,9 @@ export const Pkg: ModuleDef = {
     'react-dom': '18.3.1',
     'sys.cmd': '0.0.0',
     'sys.data.indexeddb': '0.0.0',
-    'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.common.list': '0.0.0',
+    'sys.util': '0.0.0',
     'uuid': '10.0.0',
   },
   toString() {
