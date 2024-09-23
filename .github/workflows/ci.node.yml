@@ -2,7 +2,9 @@ name: ci.node
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
+      - phil-work
   pull_request:
     branches: ['main']
 
