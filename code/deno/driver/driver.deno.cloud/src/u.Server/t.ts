@@ -23,13 +23,18 @@ export type DenoCloudServerLib = {
   env(): Promise<t.EnvVars>;
   client: t.DenoCloudClientLib['client'];
   server(args: t.DenoCloudServerArgs): t.HonoApp;
-  serve(options?: { port?: number; Pkg?: t.Pkg; env?: t.EnvVars }): Promise<DenoHttpServer>;
+  serve(options?: t.DenoCloudServeOptions): Promise<DenoHttpServer>;
 };
 
 export type DenoCloudServerArgs = {
   env: EnvVars;
   authEnabled?: boolean;
   authLogger?: t.AuthLogger;
+};
+export type DenoCloudServeOptions = {
+  port?: number;
+  Pkg?: t.Pkg;
+  env?: t.EnvVars;
 };
 
 /**
