@@ -1,8 +1,6 @@
+/**
+ * System Driver for Automerge
+ */
 import { Pkg } from './common/mod.ts';
 
-export {
-  /**
-   * Module info
-   */
-  Pkg,
-};
+export { Pkg };
