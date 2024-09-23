@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     name: node.ci
+    # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     strategy:
       matrix:
