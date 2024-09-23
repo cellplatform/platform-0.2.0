@@ -10,4 +10,3 @@ Standardised API wrapper around [`automerge`](https://github.com/automerge) and 
 import { Pkg } from './mod.ts';
 ```
 
-
