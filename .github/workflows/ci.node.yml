@@ -4,17 +4,17 @@ name: ci.node
 # NB: While working in "deno land" only need to run the
 #     node.js/Vite CI when PR is merged (temporary).
 #
-on:
-  push:
-    branches:
-      - main
-      # - phil-work
-
 # on:
 #   push:
-#     branches: ['main']
-#   pull_request:
-# branches: ['main']
+#     branches:
+#       - main
+# - phil-work
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
 
 jobs:
   build:

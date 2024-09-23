@@ -32,5 +32,5 @@ jobs:
       - name: CI → tests
         run: deno task test
 
-      - name: Info (monorepo)
+      - name: Info (Monorepo)
         run: deno task info
