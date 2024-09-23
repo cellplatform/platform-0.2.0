@@ -5,6 +5,7 @@ export type * from './u.Delete/t.ts';
 export type * from './u.Dispose/t.ts';
 export type * from './u.Fmt/t.ts';
 export type * from './u.Http/t.ts';
+export type * from './u.Immutable/t.ts';
 export type * from './u.Id/t.ts';
 export type * from './u.Is/t.ts';
 export type * from './u.ObjectPath/t.ts';

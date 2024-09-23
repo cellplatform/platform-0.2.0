@@ -4,8 +4,8 @@ import { default as Pkg } from '../../deno.json' with { type: 'json' };
 /**
  * @ext
  */
-import { equals, uniq } from 'npm:ramda';
-export const R = { equals , uniq};
+import { clone, equals, uniq } from 'npm:ramda';
+export const R = { clone, equals , uniq};
 
 
 /**
