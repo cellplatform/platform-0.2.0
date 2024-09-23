@@ -1,9 +1,9 @@
 import type { t } from '../common.ts';
-import * as lib from './rx.libs.ts';
+import * as lib from './u.rx.libs.ts';
 
-import { Is } from './rx.Is.ts';
-import { disposable, done, lifecycle } from './rx.lifecycle.ts';
-import { event, payload } from './rx.payload.ts';
+import { Is } from './u.rx.Is.ts';
+import { disposable, done, lifecycle } from './u.rx.lifecycle.ts';
+import { event, payload } from './u.rx.payload.ts';
 
 /**
  * Tools for working with Observables (via the [rxjs] library).

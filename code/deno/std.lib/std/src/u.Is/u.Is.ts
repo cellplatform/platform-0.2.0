@@ -1,5 +1,5 @@
 import type { t } from '../common.ts';
-import { Is as RxIs } from '../u.Observable/rx.Is.ts';
+import { Is as RxIs } from '../u.Observable/mod.ts';
 
 const { observable, subject } = RxIs;
 
