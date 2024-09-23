@@ -1,6 +1,8 @@
 import type { RouteContext as RouteContextBase } from '@sys/std-s/types';
 import type { t } from './common/mod.ts';
 
+type DenoHttpServer = Deno.HttpServer<Deno.NetAddr>;
+
 /**
  * Map of the environment variables retrieved from the process ENV variables or a [.env] file.
  */
@@ -18,9 +20,10 @@ export type RouteContext = RouteContextBase & { env: EnvVars };
  * Library: Server for working with the Deno cloud.
  */
 export type DenoCloudServerLib = {
+  env(): Promise<t.EnvVars>;
   client: t.DenoCloudClientLib['client'];
   server(args: t.DenoCloudServerArgs): t.HonoApp;
-  env(): Promise<t.EnvVars>;
+  serve(options?: { port?: number; Pkg?: t.Pkg; env?: t.EnvVars }): Promise<DenoHttpServer>;
 };
 
 export type DenoCloudServerArgs = {
