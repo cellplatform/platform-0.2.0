@@ -60,7 +60,7 @@ describe('Disposable', () => {
     const obj1 = Dispose.create();
     const $1 = new Subject<void>();
     const $2 = new Subject<void>();
-    const obj2 = Dispose.until(obj1, [$1, undefined, [undefined, [undefined, $2]]]);
+    Dispose.until(obj1, [$1, undefined, [undefined, [undefined, $2]]]);
 
     let count = 0;
     obj1.dispose$.subscribe(() => count++);
@@ -74,7 +74,7 @@ describe('Disposable', () => {
     const dispose$ = new Subject<void>();
 
     let count = 0;
-    dispose$.subscribe((e) => count++);
+    dispose$.subscribe(() => count++);
 
     Dispose.done(dispose$);
     Dispose.done(dispose$);

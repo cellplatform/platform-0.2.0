@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../-test.ts';
+import { Testing, describe, expect, it } from '../-test.ts';
 
 import { Rx } from '../u.Observable/mod.ts';
 import { Is } from './mod.ts';
@@ -16,7 +16,7 @@ describe('Is (common flags)', () => {
     };
 
     const myPromise = () => new Promise<void>((resolve) => resolve());
-    const wait = async () => null;
+    const wait = async () => await Testing.wait(0);
 
     test(undefined, false);
     test(123, false);

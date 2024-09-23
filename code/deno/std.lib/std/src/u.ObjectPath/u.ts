@@ -1,4 +1,4 @@
-import { type t } from './common.ts';
+import type { t } from './common.ts';
 
 /**
  * Read into an object and return the resulting value at the given path.
@@ -8,7 +8,7 @@ export function resolve<T>(root: unknown | unknown[], path: t.ObjectPath): T | u
   if (!path || path.length === 0) return root as T;
 
   let current: any = root;
-  for (let key of path) {
+  for (const key of path) {
     if (current[key] === undefined) return undefined;
     current = current[key];
   }

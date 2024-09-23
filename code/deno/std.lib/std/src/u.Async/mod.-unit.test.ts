@@ -1,5 +1,5 @@
+import { describe, expect, it, Testing } from '../-test.ts';
 import { Async, Time } from '../mod.ts';
-import { describe, expect, it, type t } from '../-test.ts';
 
 describe('Async', () => {
   it('exposes the Time.delay function', () => {
@@ -28,9 +28,12 @@ describe('Async', () => {
     it('works first time', async () => {
       const test = testSetup();
       const res1 = await Async.retry(test.fn);
-      const res2 = await Async.retry(async () => test.fn()); // NB: async response.
+      const res2 = await Async.retry(async () => {
+        await Testing.wait(0);
+        return test.fn();
+      });
       expect(res1).to.eql(1);
-      expect(res2).to.eql(2);
+      expect(res2).to.eql(2); // NB: async response.
     });
 
     it('fails twice, then works', async () => {

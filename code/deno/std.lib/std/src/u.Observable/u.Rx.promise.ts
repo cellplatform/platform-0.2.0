@@ -1,4 +1,4 @@
-import { catchError, Observable, of, take, timeout, type t } from './common.ts';
+import { catchError, of, take, timeout, type t } from './common.ts';
 
 type Event = { type: string; payload: unknown };
 type Milliseconds = number;
@@ -11,7 +11,7 @@ export const asPromise: t.RxAsPromise = {
    * Retrieves the first event from the given observable.
    */
   first<E extends Event>(
-    ob$: Observable<E['payload']>,
+    ob$: t.Observable<E['payload']>,
     options: { op?: string; timeout?: Milliseconds } = {},
   ) {
     type T = t.RxPromiseResponse<E>;

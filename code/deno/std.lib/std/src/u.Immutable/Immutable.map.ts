@@ -85,7 +85,7 @@ export const Map: t.ImmutableMapLib = {
             type P = t.ImmutableMappingArray<O, unknown>;
             const path = ObjectPath.from(p.key);
             const prop = wrangle.propFromArray(p.key, ObjectPath.resolve<P>(mapped.mapping, path));
-            return !!prop ? p?.doc === prop?.doc : false;
+            return prop ? p?.doc === prop?.doc : false;
           });
 
         if (!match) return undefined;

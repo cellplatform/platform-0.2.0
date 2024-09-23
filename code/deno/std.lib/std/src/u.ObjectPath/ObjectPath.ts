@@ -25,7 +25,7 @@ export const ObjectPath: t.ObjectPathLib = {
     if (!path || path.length === 0) return root as T;
 
     let current: any = root;
-    for (let key of path) {
+    for (const key of path) {
       if (current[key] === undefined) return undefined;
       current = current[key];
     }

@@ -123,7 +123,7 @@ describe('Observable/rx', () => {
       const dispose$ = rx.subject<void>();
 
       let count = 0;
-      dispose$.subscribe((e) => count++);
+      dispose$.subscribe(() => count++);
 
       rx.done(dispose$);
       rx.done(dispose$);

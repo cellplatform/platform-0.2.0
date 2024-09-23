@@ -7,7 +7,7 @@ type Patch = t.PatchOperation;
 
 export const Wrangle = {
   patches<T>(prev: T, next: T) {
-    return FastJsonPatch.default.compare(prev as Object, next as Object);
+    return FastJsonPatch.default.compare(prev as object, next as object);
   },
 
   options<P = Patch>(input?: t.ImmutableChangeOptionsInput<P>): t.ImmutableChangeOptions<P> {

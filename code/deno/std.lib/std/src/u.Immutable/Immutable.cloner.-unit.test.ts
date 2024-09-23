@@ -56,7 +56,7 @@ describe('Immutable', () => {
   });
 
   describe('Immutable.clonerRef', () => {
-    it('defaults', async () => {
+    it('defaults', () => {
       const initial = { count: 0 };
       const obj = Immutable.clonerRef<D>(initial);
       expect(obj.current).to.not.equal(initial);
@@ -67,7 +67,7 @@ describe('Immutable', () => {
       expect(obj.instance).to.be.a.string;
     });
 
-    it('change (patches)', async () => {
+    it('change (patches)', () => {
       const initial = { count: 0 };
       const obj = Immutable.clonerRef<D>(initial);
       expect(obj.current).to.not.equal(initial);
@@ -86,7 +86,7 @@ describe('Immutable', () => {
       ]);
     });
 
-    it('events', async () => {
+    it('events', () => {
       const life = rx.disposable();
       const initial = { count: 0 };
       const obj = Immutable.clonerRef<D>(initial);
