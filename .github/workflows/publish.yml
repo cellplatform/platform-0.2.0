@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-      # - phil-work
+      - phil-work
 
 jobs:
   deno:
