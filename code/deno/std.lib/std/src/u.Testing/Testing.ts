@@ -1,8 +1,7 @@
 import { describe, it } from '@std/testing/bdd';
 import { expect } from 'npm:chai';
 
-import type { t } from '../common/mod.ts';
-import { TestHttp } from './Test.Http.ts';
+import type { t } from '../common.ts';
 
 export { describe, expect, it };
 
@@ -10,7 +9,6 @@ export { describe, expect, it };
  * Testing helpers.
  */
 export const Testing: t.Testing = {
-  Http: TestHttp,
   Bdd: { describe, expect, it },
 
   /**

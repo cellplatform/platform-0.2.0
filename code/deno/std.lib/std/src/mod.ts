@@ -7,3 +7,4 @@ export { Color, c } from './u.Fmt/mod.ts';
 export { Http } from './u.Http/mod.ts';
 export { Path } from './u.Path/mod.ts';
 export { Semver } from './u.Semver/mod.ts';
+export { Testing } from './u.Testing/mod.ts';
