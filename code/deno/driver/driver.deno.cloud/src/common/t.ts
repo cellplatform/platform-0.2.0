@@ -5,4 +5,5 @@ export type {
   StringJwt,
   StringUrl,
 } from '@sys/std/types';
-export type * from '../t.ts';
+
+export type * from '../types.ts';
