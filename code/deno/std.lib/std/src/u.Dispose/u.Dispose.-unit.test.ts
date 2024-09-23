@@ -1,5 +1,5 @@
 import { Subject } from 'npm:rxjs';
-import { describe, expect, it } from '../test.ts';
+import { describe, expect, it } from '../-test.ts';
 import { Dispose } from './mod.ts';
 
 describe('Disposable', () => {

@@ -1,5 +1,5 @@
 import { Async, Time } from '../mod.ts';
-import { describe, expect, it, type t } from '../test.ts';
+import { describe, expect, it, type t } from '../-test.ts';
 
 describe('Async', () => {
   it('exposes the Time.delay function', () => {

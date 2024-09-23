@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../test.ts';
+import { describe, expect, it } from '../-test.ts';
 import { rx, Rx } from './mod.ts';
 
 describe('Observable/rx', () => {
