@@ -32,7 +32,10 @@
     "@types/qrcode": "1.5.5",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
-    "sys.ui.react.dev": "0.0.0"
+    "sys.ui.react.dev": "0.0.0",
+    "tsx": "4.19.1",
+    "vite": "5.4.6",
+    "vitest": "2.1.1"
   },
   "license": "MIT",
   "private": true,

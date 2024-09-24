@@ -5889,6 +5889,9 @@ __metadata:
     sys.ui.react.media.image: "npm:0.0.0"
     sys.ui.react.media.video: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
     yaml: "npm:2.5.1"
   languageName: unknown
   linkType: soft
@@ -6739,6 +6742,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6751,6 +6757,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6779,6 +6788,9 @@ __metadata:
     sys.ui.react.common: "npm:0.0.0"
     sys.ui.react.media.image: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6802,7 +6814,10 @@ __metadata:
     sys.ui.react.common: "npm:0.0.0"
     sys.ui.react.common.list: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
     uuid: "npm:10.0.0"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6823,6 +6838,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6838,6 +6856,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6853,6 +6874,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6866,6 +6890,9 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6884,6 +6911,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6900,6 +6930,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6917,6 +6950,9 @@ __metadata:
     sys.ui.react.common: "npm:0.0.0"
     sys.ui.react.common.list: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6934,7 +6970,10 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
     viem: "npm:2.21.8"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6950,6 +6989,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6962,6 +7004,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6978,6 +7023,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -6992,6 +7040,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
     zod: "npm:3.23.8"
   languageName: unknown
   linkType: soft
@@ -9816,6 +9867,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -11869,6 +11923,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12343,6 +12400,9 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12357,6 +12417,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12380,8 +12443,11 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
     unified: "npm:11.0.5"
     unist-util-select: "npm:5.1.0"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
     yaml: "npm:2.5.1"
   languageName: unknown
   linkType: soft
@@ -12397,6 +12463,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12407,6 +12476,9 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12416,6 +12488,9 @@ __metadata:
   dependencies:
     chai: "npm:5.1.1"
     sys.types: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12428,6 +12503,7 @@ __metadata:
     ts-essentials: "npm:10.0.2"
     tsx: "npm:4.19.1"
     vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12439,7 +12515,10 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
     ua-parser-js: "npm:1.0.39"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12456,6 +12535,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12482,6 +12564,9 @@ __metadata:
     sys.ui.react.dev: "npm:0.0.0"
     sys.ui.react.util: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12491,6 +12576,9 @@ __metadata:
   dependencies:
     sys.test: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12508,6 +12596,9 @@ __metadata:
     sys.ui.react.css: "npm:0.0.0"
     sys.ui.react.util: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12523,6 +12614,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12539,6 +12633,9 @@ __metadata:
     sys.types: "npm:0.0.0"
     sys.ui.react.common: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12557,6 +12654,9 @@ __metadata:
     sys.ui.react.css: "npm:0.0.0"
     sys.ui.react.util: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12568,6 +12668,9 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12583,6 +12686,9 @@ __metadata:
     pretty-bytes: "npm:6.1.1"
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12593,6 +12699,9 @@ __metadata:
     sys.test: "npm:0.0.0"
     sys.types: "npm:0.0.0"
     sys.util: "npm:0.0.0"
+    tsx: "npm:4.19.1"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
@@ -12630,6 +12739,8 @@ __metadata:
   dependencies:
     "@tauri-apps/api": "npm:1.6.0"
     "@tauri-apps/cli": "npm:1.6.2"
+    vite: "npm:5.4.6"
+    vitest: "npm:2.1.1"
   languageName: unknown
   linkType: soft
 
