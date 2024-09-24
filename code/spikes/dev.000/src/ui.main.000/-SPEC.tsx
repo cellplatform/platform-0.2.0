@@ -105,6 +105,7 @@ export default Dev.describe(name, async (e) => {
     harness$.pipe(rx.debounceTime(50)).subscribe(updateDebugPanelWidth);
     updateDebugPanelWidth();
 
+    ctx.debug.width(340);
     ctx.subject
       .size('fill', 80)
       .display('grid')
@@ -182,6 +183,7 @@ export default Dev.describe(name, async (e) => {
       const current = state.current;
       return (
         <Auth.Info
+          title={['Trust', 'Identity']}
           fields={[
             'Login',
             'Login.Farcaster',
