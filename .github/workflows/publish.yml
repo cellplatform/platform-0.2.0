@@ -43,12 +43,12 @@ jobs:
 
       - name: publish module → "@sys/driver-deno-cloud"
         run: |
-          cd code/deno/driver/driver.deno.cloud
+          cd code/deno/driver/driver-deno-cloud
           deno task test
           deno publish
 
       - name: publish module → "@sys/driver-automerge"
         run: |
-          cd code/deno/driver/driver.automerge
+          cd code/deno/driver/driver-automerge
           deno task test
           deno publish
