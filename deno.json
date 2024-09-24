@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "info": "deno run -R script.deno/cmd.info.ts",
+    "info": "deno run -RE script.deno/cmd.info.ts",
     "test": "deno run -RE --allow-run script.deno/cmd.test.ts",
     "lint": "deno run -E --allow-run script.deno/cmd.lint.ts",
     "dry": "deno run -RE --allow-run script.deno/cmd.dry.ts",
