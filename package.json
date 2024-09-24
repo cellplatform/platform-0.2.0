@@ -4,7 +4,7 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "ci": "yarn audit && yarn build && yarn test && yarn count",
+    "ci": "yarn npm audit && yarn build && yarn test && yarn count",
     "prepare": "cp code/compiler/tsconfig/tsconfig.json ./tsconfig.json",
     "build": "tsx script.node/cmd.all.build.ts",
     "test": "tsx script.node/cmd.all.test.ts",

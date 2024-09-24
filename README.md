@@ -183,7 +183,7 @@ A security audit on the up-stream dependencies is performed on each CI cycle.
 
 ```bash
 
-$ yarn audit     <= security checks
+$ yarn npm audit     <= security checks
 $ yarn build
 $ yarn test
 
