@@ -6,7 +6,6 @@
     "dev": "vc dev",
     "deploy": "vc deploy --prod"
   },
-  "dependencies": {},
   "sideEffects": false,
   "private": true,
   "license": "MIT"

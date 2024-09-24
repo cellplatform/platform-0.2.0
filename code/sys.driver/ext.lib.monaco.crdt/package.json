@@ -11,11 +11,11 @@
     "tmp": "tsx   ./script.node/tmp.ts"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
     "ext.lib.automerge": "0.0.0",
     "ext.lib.immer": "0.0.0",
     "ext.lib.monaco": "0.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "sys.cmd": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.util": "0.0.0"
@@ -23,7 +23,10 @@
   "devDependencies": {
     "sys.test": "0.0.0",
     "sys.test.spec": "0.0.0",
-    "sys.types": "0.0.0"
+    "sys.types": "0.0.0",
+    "tsx": "4.19.1",
+    "vite": "5.4.6",
+    "vitest": "2.1.1"
   },
   "license": "MIT",
   "private": true,

@@ -12,18 +12,21 @@
     "tmp": "tsx   ./script.node/tmp.mts"
   },
   "dependencies": {
-    "react-inspector": "6.0.2",
-    "sys.util": "0.0.0",
-    "sys.data.text": "0.0.0",
-    "sys.ui.react.util": "0.0.0",
-    "sys.ui.react.css": "0.0.0",
-    "sys.test.spec": "0.0.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-inspector": "6.0.2",
+    "sys.data.text": "0.0.0",
+    "sys.test.spec": "0.0.0",
+    "sys.ui.react.css": "0.0.0",
+    "sys.ui.react.util": "0.0.0",
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0"
+    "sys.types": "0.0.0",
+    "tsx": "4.19.1",
+    "vite": "5.4.6",
+    "vitest": "2.1.1"
   },
   "license": "MIT",
   "private": true,

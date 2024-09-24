@@ -10,12 +10,12 @@ const run = async (path: string, args = '') => {
 };
 
 // Std Libs.
-await run('code/deno/std.lib/std', '-RWN');
-await run('code/deno/std.lib/std.s', '-RWNE --allow-run');
+await run('code/deno/sys/std', '-RWN');
+await run('code/deno/sys/std-s', '-RWNE --allow-run');
 
 // Drivers.
-await run('code/deno/driver/driver.deno.cloud', '-RWNE');
-await run('code/deno/driver/driver.automerge', '-RWE');
+await run('code/deno/driver/driver-deno-cloud', '-RWNE');
+await run('code/deno/driver/driver-automerge', '-RWE');
 
 /**
  * Output.

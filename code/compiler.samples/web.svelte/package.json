@@ -11,8 +11,6 @@
     "build": "tsx ../../../script.node/cmd.build.ts",
     "clean": "tsx ../../../script.node/cmd.clean.ts"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.html.d.html",

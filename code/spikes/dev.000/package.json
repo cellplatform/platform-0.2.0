@@ -11,7 +11,7 @@
     "clean": "tsx ../../../script.node/cmd.clean.ts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare-vercel": "sh script.sh/vercel-file.sh",
-    "deploy": "yarn audit && yarn patch && yarn build && yarn prepare-vercel && vc --prod"
+    "deploy": "yarn npm audit && yarn patch && yarn build && yarn prepare-vercel && vc --prod"
   },
   "dependencies": {
     "@automerge/automerge": "2.2.8",
@@ -49,7 +49,10 @@
   },
   "devDependencies": {
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0"
+    "sys.types": "0.0.0",
+    "tsx": "4.19.1",
+    "vite": "5.4.6",
+    "vitest": "2.1.1"
   },
   "license": "MIT",
   "private": true,

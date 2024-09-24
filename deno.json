@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "info": "deno run -R script.deno/cmd.info.ts",
+    "info": "deno run -RE script.deno/cmd.info.ts",
     "test": "deno run -RE --allow-run script.deno/cmd.test.ts",
     "lint": "deno run -E --allow-run script.deno/cmd.lint.ts",
     "dry": "deno run -RE --allow-run script.deno/cmd.dry.ts",
@@ -11,10 +11,10 @@
   "nodeModules": false,
   "workspace": [
     "./deploy/api.db.team",
-    "./code/deno/std.lib/std",
-    "./code/deno/std.lib/std.s",
-    "./code/deno/driver/driver.deno.cloud",
-    "./code/deno/driver/driver.automerge",
+    "./code/deno/sys/std",
+    "./code/deno/sys/std-s",
+    "./code/deno/driver/driver-deno-cloud",
+    "./code/deno/driver/driver-automerge",
     "./code/compiler.samples/deno.vite",
     "./code/spikes/deno.000"
   ],

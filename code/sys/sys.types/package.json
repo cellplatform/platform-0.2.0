@@ -7,12 +7,15 @@
     "dev": "vite",
     "test": "tsx ../../../script.node/cmd.test.ts",
     "build": "tsx ../../../script.node/cmd.build.ts",
-    "clean": "tsx ../../../script.node/cmd.clean.ts",
-    "tmp": "vitest"
+    "clean": "tsx ../../../script.node/cmd.clean.ts"
   },
   "devDependencies": {
+    "@sys/std": "npm:@jsr/sys__std@^0.0.14",
     "rxjs": "7.8.1",
-    "ts-essentials": "10.0.2"
+    "ts-essentials": "10.0.2",
+    "tsx": "4.19.1",
+    "vite": "5.4.6",
+    "vitest": "2.1.1"
   },
   "license": "MIT",
   "private": true,

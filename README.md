@@ -7,7 +7,7 @@
 
 
 
-Monorepo comprising the core set of shared `/sys` system modules that flexibly compose into varying arrangements of (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
+Monorepo comprising the core set of shared `/sys` "system" modules that flexibly compose into varying arrangements of (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
 - [compilation](/code/compiler/) toolchain (output → W3C standards)
 - modules: [sys](/code/sys/) 
@@ -183,7 +183,7 @@ A security audit on the up-stream dependencies is performed on each CI cycle.
 
 ```bash
 
-$ yarn audit     <= security checks
+$ yarn npm audit     <= security checks
 $ yarn build
 $ yarn test
 
