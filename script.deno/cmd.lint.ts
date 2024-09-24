@@ -10,8 +10,8 @@ const run = async (path: string) => {
 };
 
 // Std Libs.
-await run('code/deno/std.lib/std');
-await run('code/deno/std.lib/std.s');
+await run('code/deno/sys/std');
+await run('code/deno/sys/std-s');
 
 // Drivers.
 await run('code/deno/driver/driver-deno-cloud');

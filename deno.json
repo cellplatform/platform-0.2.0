@@ -11,8 +11,8 @@
   "nodeModules": false,
   "workspace": [
     "./deploy/api.db.team",
-    "./code/deno/std.lib/std",
-    "./code/deno/std.lib/std.s",
+    "./code/deno/sys/std",
+    "./code/deno/sys/std-s",
     "./code/deno/driver/driver-deno-cloud",
     "./code/deno/driver/driver-automerge",
     "./code/compiler.samples/deno.vite",

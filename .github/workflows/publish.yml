@@ -31,13 +31,13 @@ jobs:
 
       - name: publish module → "@sys/std"
         run: |
-          cd code/deno/std.lib/std
+          cd code/deno/sys/std
           deno task test
           deno publish
 
       - name: publish module → "@sys/std-s"
         run: |
-          cd code/deno/std.lib/std.s
+          cd code/deno/sys/std-s
           deno task test
           deno publish
 
