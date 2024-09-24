@@ -36,6 +36,7 @@
     "@preact/signals-react": "2.2.0",
     "@privy-io/react-auth": "1.83.1",
     "@standard-crypto/farcaster-js": "7.4.0",
+    "@sys/std": "npm:@jsr/sys__std@^0.0.13",
     "@tauri-apps/api": "1.6.0",
     "@tauri-apps/cli": "1.6.2",
     "@vercel/edge": "1.1.2",
@@ -107,6 +108,7 @@
   "devDependencies": {
     "@eslint/js": "9.10.0",
     "@sveltejs/vite-plugin-svelte": "3.1.2",
+    "@sys/std": "npm:@jsr/sys__std@^0.0.14",
     "@tsconfig/svelte": "5.0.4",
     "@types/diff": "5.2.2",
     "@types/fs-extra": "11.0.4",
