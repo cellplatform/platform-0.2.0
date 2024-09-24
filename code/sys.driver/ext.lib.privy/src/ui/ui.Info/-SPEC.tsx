@@ -265,7 +265,7 @@ export default Dev.describe(name, (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button(['tmp: send cast', 'farcaster'], async () => {
+      dev.button(['sent test cast', '"hello world 👋"'], async () => {
         const method = fc.method('send:cast', 'send:cast:res');
         const text = 'hello world 👋';
         console.log('send cast:', text);
